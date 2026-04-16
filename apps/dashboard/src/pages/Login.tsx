@@ -11,6 +11,7 @@ import {
 
 // Import the abstracted service
 import { login } from '../api/auth';
+import { setAuthToken } from '@sellio/api-client';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -28,12 +29,15 @@ export default function Login() {
     // Create the logic as a promise for Sonner's toast.promise
     const loginAction = async () => {
       const { data } = await login({ email, password });
-      const token = data.token || data.access_token;
+      const token = data.data.token || data.data.access_token;
       
       if (!token) throw new Error("Authentication failed: No token received.");
 
+      // Set globally for the monorepo engine
+      setAuthToken(token);
+
       localStorage.setItem('token', token);
-      localStorage.setItem('user', JSON.stringify(data.user));
+      localStorage.setItem('user', JSON.stringify(data.data.user));
       
       // Small delay so the user sees the success state before redirecting
       await new Promise(resolve => setTimeout(resolve, 800));

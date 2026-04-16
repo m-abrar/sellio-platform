@@ -1,6 +1,4 @@
-// src/api/categories.ts
-
-import api from './axios';
+import client from '@sellio/api-client';
 
 export const flattenCategories = (items: any[], prefix = '') => {
     let list: any[] = [];
@@ -15,6 +13,6 @@ export const flattenCategories = (items: any[], prefix = '') => {
 };
 
 export const getCategories = async () => {
-    const response = await api.get('/categories');
+    const response = await client.get('/v1/categories');
     return flattenCategories(response.data.data);
 };

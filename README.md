@@ -5,15 +5,17 @@ Welcome to the Sellio SaaS platform, a scalable monorepo architecture designed f
 ## 📁 Repository Structure
 
 - `apps/`
-  - `core/`: Laravel backend (API, Admin Dashboard).
-  - `partner-panel/`: React/Vite dashboard for marketplace partners.
-  - `storefront/`: Next.js dynamic runtime engine for customer-facing shops.
+  - `backend/`: Laravel API
+  - `dashboard/`: React admin panel
+  - `mobile/`: Mobile application
+  - `web/`: Next.js storefront
 - `packages/`
-  - `types/`: Shared TypeScript interfaces and vertical definitions.
-  - `api-client/`: Unified Axios client for cross-app communication.
-  - `config/`: Shared constants and configuration.
-  - `ui/`: Common UI components (shared across partner-panel and storefront).
-- `infrastructure/`: Deployment scripts and configurations.
+  - `api-client/`: Unified Axios client for cross-app communication
+  - `applications/`: Vertical-specific logic (Real Estate, Automotive, etc.)
+  - `config/`: Shared constants and configuration
+  - `types/`: Shared TypeScript interfaces and vertical definitions
+  - `ui/`: Common UI components (shared across dashboard and web)
+- `infrastructure/`: Deployment scripts and configurations
 
 ## 🚀 Getting Started
 

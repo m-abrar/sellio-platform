@@ -1,8 +1,5 @@
-// src/api/auth.ts
+import { api } from '@sellio/api-client';
 
-import api from './axios';
-
-export const logout = () => api.post('/logout');
-export const login = (data: any) => api.post('/login', data);
-export const me = () => api.get('/me');
-
+export const login = (credentials: any) => api.auth.login(credentials);
+export const logout = () => api.auth.logout();
+export const me = () => api.auth.me();

@@ -1,11 +1,28 @@
 import axios, { AxiosInstance } from 'axios';
-import { User, Application, Listing } from '@sellio/types';
+import { User, Application, Product, Property } from '@sellio/types';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
+const API_BASE_URL = typeof window !== 'undefined' 
+  ? (import.meta as any).env?.VITE_API_BASE_URL || 'http://localhost:8000/api'
+  : process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
+
+export interface ApiResponse<T> {
+  success: boolean;
+  message: string;
+  data: T;
+  meta?: {
+    current_page?: number;
+    last_page?: number;
+    total?: number;
+    per_page?: number;
+    links?: any[];
+  };
+  errors?: Record<string, string[]>;
+}
 
 const client: AxiosInstance = axios.create({
   baseURL: API_BASE_URL,
   headers: {
+    'Accept': 'application/json',
     'Content-Type': 'application/json',
   },
 });
@@ -26,28 +43,59 @@ export const setAppKey = (appKey: string) => {
 
 export const api = {
   auth: {
-    login: (credentials: any) => client.post('/login', credentials),
-    register: (data: any) => client.post('/register', data),
-    me: () => client.get<User>('/user'),
-    logout: () => client.post('/logout'),
+    login: (credentials: any) => client.post<ApiResponse<any>>('/auth/login', credentials),
+    register: (data: any) => client.post<ApiResponse<any>>('/auth/register', data),
+    me: () => client.get<ApiResponse<User>>('/auth/me'),
+    logout: () => client.post<ApiResponse<any>>('/auth/logout'),
   },
   
   applications: {
-    list: () => client.get<Application[]>('/applications'),
-    get: (id: string | number) => client.get<Application>(`/applications/${id}`),
-    active: () => client.get<Application>('/applications/active'), // Fetches current app based on domain/header
+    list: () => client.get<ApiResponse<Application[]>>('/applications'),
+    get: (id: string | number) => client.get<ApiResponse<Application>>(`/applications/${id}`),
+    active: () => client.get<ApiResponse<Application>>('/applications/active'), 
   },
 
-  listings: {
-    search: (params: any) => client.get<{ data: Listing[] }>('/search', { params }),
-    get: (vertical: string, slug: string) => client.get<Listing>(`/listings/${vertical}/${slug}`),
-    featured: () => client.get<Listing[]>('/listings/featured'),
+  products: {
+    list: (params?: any) => client.get<ApiResponse<Product[]>>('/v1/products', { params }),
+    get: (slug: string) => client.get<ApiResponse<Product>>(`/v1/products/${slug}`),
+  },
+
+  properties: {
+    list: (params?: any) => client.get<ApiResponse<Property[]>>('/v1/properties', { params }),
+    get: (slug: string) => client.get<ApiResponse<Property>>(`/v1/properties/${slug}`),
+  },
+
+  dashboard: {
+    partner: {
+      properties: {
+        list: () => client.get<ApiResponse<Property[]>>('/dashboard/partner/properties'),
+        get: (id: number) => client.get<ApiResponse<Property>>(`/dashboard/partner/properties/${id}`),
+        create: (data: FormData) => client.post<ApiResponse<Property>>('/dashboard/partner/properties', data, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        }),
+        update: (id: number, data: FormData) => client.post<ApiResponse<Property>>(`/dashboard/partner/properties/${id}/update`, data, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        }),
+        delete: (id: number) => client.delete<ApiResponse<any>>(`/dashboard/partner/properties/${id}`),
+      },
+      products: {
+        list: () => client.get<ApiResponse<Product[]>>('/dashboard/partner/products'),
+        get: (id: number) => client.get<ApiResponse<Product>>(`/dashboard/partner/products/${id}`),
+        create: (data: FormData) => client.post<ApiResponse<Product>>('/dashboard/partner/products', data, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        }),
+        update: (id: number, data: FormData) => client.post<ApiResponse<Product>>(`/dashboard/partner/products/${id}/update`, data, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        }),
+        delete: (id: number) => client.delete<ApiResponse<any>>(`/dashboard/partner/products/${id}`),
+      }
+    }
   },
 
   orders: {
-    list: () => client.get('/orders'),
-    get: (id: number) => client.get(`/orders/${id}`),
-    create: (data: any) => client.post('/orders', data),
+    list: () => client.get<ApiResponse<any[]>>('/v1/orders'),
+    get: (id: number) => client.get<ApiResponse<any>>(`/v1/orders/${id}`),
+    create: (data: any) => client.post<ApiResponse<any>>('/v1/orders', data),
   }
 };
 

@@ -1,20 +1,7 @@
-// src/api/products.ts
+import { api } from '@sellio/api-client';
 
-import api from './axios';
-
-export const getProducts = () => api.get('/dashboard/partner/products');
-export const getProduct = (id: number) => api.get(`/dashboard/partner/products/${id}`);
-
-export const getProductBySlug = (slug: string) => api.get(`/dashboard/partner/products/${slug}`);
-
-export const createProduct = (formData: FormData) => 
-    api.post('/dashboard/partner/products', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-    });
-
-export const updateProduct = (id: number, formData: FormData) => 
-    api.post(`/dashboard/partner/products/${id}/update`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-    });
-
-export const deleteProduct = (id: number) => api.delete(`/dashboard/partner/products/edit/${id}`);
+export const getProducts = () => api.dashboard.partner.products.list();
+export const getProduct = (id: number) => api.dashboard.partner.products.get(id);
+export const createProduct = (formData: FormData) => api.dashboard.partner.products.create(formData);
+export const updateProduct = (id: number, formData: FormData) => api.dashboard.partner.products.update(id, formData);
+export const deleteProduct = (id: number) => api.dashboard.partner.products.delete(id);
