@@ -34,8 +34,8 @@ class AppServiceProvider extends ServiceProvider
                 'adminlte.logo_img' => $faviconUrl, // Sidebar Icon
                 'adminlte.logo_img_alt' => $siteName,
                 'adminlte.preloader.img.path' => $faviconUrl,
-                'adminlte.use_full_favicon' => true,
-                'adminlte.use_ico_only' => false,
+                'adminlte.use_full_favicon' => false,
+                'adminlte.use_ico_only' => true,
             ]);
         }
 
