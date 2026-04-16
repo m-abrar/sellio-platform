@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *
  * @property int $id
  * @property string $app_key
- * @property string $name
+ * @property string $title
  * @property string $location_key
  * @property bool $is_active
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -30,7 +30,7 @@ class Menu extends Model
      */
     protected $fillable = [
         'app_key',
-        'name',
+        'title',
         'location_key',
         'is_active',
     ];
