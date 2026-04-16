@@ -7,8 +7,8 @@ export function middleware(request: NextRequest) {
 
   // In a real SaaS, we would look up the app_key by hostname.
   // For development, we can use a header or a default.
-  const appKey = hostname.split('.')[0] === 'localhost:3000' 
-    ? 'default_ecommerce' 
+  const appKey = hostname.split('.')[0] === 'localhost' || hostname === 'localhost:3000' 
+    ? 'ecommerce_basic' 
     : hostname.split('.')[0];
 
   // Pass the detected appKey to the request headers
