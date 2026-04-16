@@ -15,7 +15,8 @@
     "axios": "^1.6.0",
     "@sellio/api-client": "workspace:*",
     "@sellio/types": "workspace:*",
-    "@sellio/config": "workspace:*"
+    "@sellio/config": "workspace:*",
+    "@sellio/ui": "workspace:*"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
