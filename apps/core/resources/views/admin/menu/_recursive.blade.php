@@ -1,0 +1,43 @@
+{{-- 
+    Recursive partial to display nested menu items using Nestable structure.
+    NOTE: The root container will be defined in the edit view as <div class="dd">.
+--}}
+@foreach ($items as $item)
+    {{-- Nestable item structure --}}
+    <li class="dd-item" 
+        data-id="{{ $item->id }}" 
+        data-title="{{ $item->title }}" 
+        data-url="{{ $item->url }}">
+        
+        {{-- Handle for dragging --}}
+        <div class="dd-handle">
+            <i class="fas fa-arrows-alt mr-2 text-muted"></i>
+            <span class="item-title font-weight-bold">{{ $item->title }}</span> 
+            <span class="item-url ml-2 text-muted small">({{ $item->url }})</span>
+        </div>
+        
+        {{-- Actions must be placed outside the dd-handle --}}
+        <div class="dd-actions">
+            {{-- Edit Button (Triggers Modal via JS) --}}
+            <button type="button" class="btn btn-info btn-xs edit-item-btn" 
+                    title="Edit Item Details">
+                <i class="fas fa-pen"></i>
+            </button>
+            
+            {{-- Delete Item Button (Handled by JS to submit the global delete form) --}}
+            <button type="button" class="btn btn-danger btn-xs" 
+                    title="Delete Item" 
+                    data-id="{{ $item->id }}" 
+                    data-action="delete">
+                <i class="fas fa-trash"></i>
+            </button>
+        </div>
+        
+        {{-- Recursively render children in a Nestable list (<ol>) --}}
+        @if ($item->children->isNotEmpty())
+            <ol class="dd-list">
+                @include('admin.menu._recursive', ['items' => $item->children, 'level' => $level + 1])
+            </ol>
+        @endif
+    </li>
+@endforeach

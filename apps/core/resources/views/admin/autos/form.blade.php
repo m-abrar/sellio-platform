@@ -1,0 +1,276 @@
+@extends('adminlte::page')
+
+@section('title', (isset($auto) ? 'Edit' : 'Create') . ' Auto')
+
+@section('content_header')
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark font-weight-bold">
+                    <i class="fas fa-car mr-2 text-primary"></i> 
+                    {{ isset($auto) ? 'Modify Auto' : 'New Auto Listing' }}
+                </h1>
+            </div>
+            <div class="col-sm-6 text-right">
+                <a href="{{ route('admin.autos.index') }}" class="btn btn-default btn-flat btn-sm shadow-sm">
+                    <i class="fas fa-arrow-left mr-1"></i> Back to Listings
+                </a>
+            </div>
+        </div>
+    </div>
+@stop
+
+@section('content')
+<div class="container-fluid">
+    @include('admin.alert')
+
+    <form action="{{ isset($auto) ? route('admin.autos.update', $auto->id) : route('admin.autos.store') }}" 
+          method="POST" 
+          enctype="multipart/form-data">
+        @csrf
+        @if(isset($auto)) @method('PATCH') @endif
+
+        <div class="row">
+            {{-- Main Content Column --}}
+            <div class="col-md-8">
+                {{-- Basic Information --}}
+                <div class="card card-primary card-outline shadow-sm">
+                    <div class="card-header border-0 bg-white py-3">
+                        <h3 class="card-title font-weight-bold text-dark">General Information</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group mb-4">
+                            <label class="font-weight-600">Listing Title <span class="text-danger">*</span></label>
+                            <input type="text" name="title" id="title" class="form-control form-control-lg form-control-border @error('title') is-invalid @enderror" value="{{ old('title', $auto->title ?? '') }}" required>
+                            @error('title') <span class="invalid-feedback">{{ $message }}</span> @enderror
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label for="slug" class="font-weight-600">URL Slug</label>
+                            <input type="text" name="slug" id="slug" class="form-control form-control-lg form-control-border @error('slug') is-invalid @enderror" placeholder="auto-generated-slug" value="{{ old('slug', $auto->slug ?? '') }}">
+                            @error('slug') <span class="invalid-feedback">{{ $message }}</span> @enderror
+                        </div>
+
+                        <div class="form-group mb-0">
+                            <label class="font-weight-600">Full Description <span class="text-danger">*</span></label>
+                            <textarea name="description" rows="6" class="form-control @error('description') is-invalid @enderror" placeholder="Describe the vehicle's history, condition, and options...">{{ old('description', $auto->description ?? '') }}</textarea>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Vehicle Specifications --}}
+                <div class="card shadow-sm border-0">
+                    <div class="card-header border-0 bg-light">
+                        <h3 class="card-title font-weight-600 text-muted small text-uppercase">Vehicle Specifications</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group"><label>Make <span class="text-danger">*</span></label><input type="text" name="make" class="form-control" value="{{ old('make', $auto->make ?? '') }}" required></div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group"><label>Model <span class="text-danger">*</span></label><input type="text" name="model" class="form-control" value="{{ old('model', $auto->model ?? '') }}" required></div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group"><label>Year <span class="text-danger">*</span></label><input type="number" name="year" class="form-control" value="{{ old('year', $auto->year ?? '') }}" required></div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group"><label>Stock <span class="text-danger">*</span></label><input type="number" name="stock_quantity" class="form-control" value="{{ old('stock_quantity', $auto->stock_quantity ?? 1) }}"></div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-2">
+                            <div class="col-md-3">
+                                <div class="form-group"><label>Mileage <span class="text-danger">*</span></label><input type="number" name="mileage_value" class="form-control" value="{{ old('mileage_value', $auto->mileage_value ?? '') }}" required></div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group"><label>Mileage Unit</label><select name="mileage_units" class="form-control"><option value="km" {{ old('mileage_units', $auto->mileage_units ?? 'km') == 'km' ? 'selected' : '' }}>Kilometers (KM)</option><option value="mi" {{ old('mileage_units', $auto->mileage_units ?? 'km') == 'mi' ? 'selected' : '' }}>Miles (Mi)</option></select></div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group"><label>Transmission <span class="text-danger">*</span></label><input type="text" name="transmission" class="form-control" placeholder="Automatic/Manual" value="{{ old('transmission', $auto->transmission ?? '') }}"></div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group"><label>Engine Type <span class="text-danger">*</span></label><input type="text" name="engine_type" class="form-control" placeholder="V6, 2.0L" value="{{ old('engine_type', $auto->engine_type ?? '') }}"></div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-2">
+                            <div class="col-md-3">
+                                <div class="form-group"><label>Drivetrain</label><input type="text" name="drivetrain" class="form-control" placeholder="AWD/FWD/RWD" value="{{ old('drivetrain', $auto->drivetrain ?? '') }}"></div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group"><label>Exterior Color</label><input type="text" name="exterior_color" class="form-control" value="{{ old('exterior_color', $auto->exterior_color ?? '') }}"></div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group"><label>Fuel Economy</label><input type="text" name="fuel_economy" class="form-control" placeholder="e.g. 10L/100km" value="{{ old('fuel_economy', $auto->fuel_economy ?? '') }}"></div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group"><label>VIN Number</label><input type="text" name="vin_number" class="form-control" value="{{ old('vin_number', $auto->vin_number ?? '') }}"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Pricing --}}
+                <div class="card shadow-sm border-0">
+                    <div class="card-header border-0 bg-light">
+                        <h3 class="card-title font-weight-600 text-muted small text-uppercase">Pricing</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group"><label>Base Price <span class="text-danger">*</span></label><input type="number" name="base_price" class="form-control" value="{{ old('base_price', $auto->base_price ?? '') }}" required></div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group"><label>Discounted Price</label><input type="number" name="sale_price" class="form-control" value="{{ old('sale_price', $auto->sale_price ?? '') }}"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                {{-- Gallery --}}
+                <div class="card shadow-sm border-0">
+                    <div class="card-body p-0">
+                        @include('admin._partials._image-uploader', [
+                            'name' => \App\Models\Auto::GALLERY_MEDIA,
+                            'label' => 'Auto Gallery Photos',
+                            'multiple' => true,
+                            'model' => \App\Models\Auto::class,
+                            'id' => $auto->id ?? null,
+                        ])
+                    </div>
+                </div>
+
+                @if(isset($auto))
+                {{-- Recent Inquiries --}}
+                <div class="card shadow-sm border-0 mt-4">
+                    <div class="card-header bg-white"><h3 class="card-title font-weight-bold text-dark"><i class="fas fa-envelope mr-2 text-info"></i> Recent Inquiries</h3></div>
+                    <div class="card-body p-0">
+                        <table class="table table-sm table-hover mb-0">
+                            <thead><tr><th>User</th><th>Message</th><th>Date</th></tr></thead>
+                            <tbody>
+                                @forelse($recentInquiries ?? [] as $inq)
+                                    <tr><td>{{ $inq->user_name ?? 'Guest' }}</td><td>{{ Str::limit($inq->message, 40) }}</td><td>{{ $inq->created_at->format('M d') }}</td></tr>
+                                @empty
+                                    <tr><td colspan="3" class="text-center py-3 text-muted">No inquiries yet</td></tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                @endif
+                {{-- Display & Billing Options --}}
+                <div class="card shadow-sm border-0 mt-4">
+                    <div class="card-header bg-white"><h3 class="card-title font-weight-bold text-dark"><i class="fas fa-cog mr-2 text-secondary"></i> Display & Pricing Options</h3></div>
+                    <div class="card-body">
+                        <div class="row">
+                            @php
+                                $toggles = [
+                                    ['name' => 'is_selling', 'id' => 'isSelling', 'label' => 'For Selling', 'status' => 'Purchase', 'checked' => old('is_selling', $auto->is_selling ?? true)],
+                                    ['name' => 'is_lease', 'id' => 'isLease', 'label' => 'For Lease', 'status' => 'Lease', 'checked' => old('is_lease', $auto->is_lease ?? false)],
+                                ];
+                            @endphp
+                            @foreach($toggles as $t)
+                                <div class="col-md-6 mb-3">
+                                    <label class="w-100 cursor-pointer mb-0">
+                                        <input type="hidden" name="{{ $t['name'] }}" value="0">
+                                        <input type="checkbox" name="{{ $t['name'] }}" value="1" id="{{ $t['id'] }}" class="d-none toggle-input" {{ $t['checked'] ? 'checked' : '' }}>
+                                        <div class="border rounded px-3 py-3 d-flex justify-content-between align-items-center h-100 toggle-card shadow-sm">
+                                            <div>
+                                                <div class="font-weight-bold text-dark small">{{ $t['label'] }}</div>
+                                                <div class="small toggle-status text-muted">{{ $t['status'] ?? 'Option' }}</div>
+                                            </div>
+                                            <div class="toggle-indicator"></div>
+                                        </div>
+                                    </label>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Sidebar Column --}}
+            <div class="col-md-4">
+                {{-- Action Card --}}
+                @include('admin.autos.partials.action-buttons')
+
+                {{-- Primary Media --}}
+                <div class="card shadow-sm border-0 mt-4">
+                    <div class="card-header bg-white">
+                        <h3 class="card-title font-weight-600 small text-uppercase">Primary Image</h3>
+                    </div>
+                    <div class="card-body p-0">
+                        @include('admin._partials._image-uploader', [
+                            'name' => \App\Models\Auto::PRIMARY_MEDIA,
+                            'label' => 'Main Listing Image',
+                            'multiple' => false,
+                            'model' => \App\Models\Auto::class,
+                            'id' => $auto->id ?? null,
+                        ])
+                    </div>
+                </div>
+
+                {{-- Classification --}}
+                <div class="card shadow-sm border-0 mt-4">
+                    <div class="card-header bg-white"><h3 class="card-title font-weight-600 small text-uppercase">Classification</h3></div>
+                    <div class="card-body">
+                        <div class="form-group"><label class="small font-weight-bold">Category</label><select name="category_id" class="form-control select2" required><option value="">Select Category</option>@foreach($categories ?? [] as $cat)<option value="{{ $cat->id }}" {{ (old('category_id', $auto->category_id ?? '') == $cat->id) ? 'selected' : '' }}>{{ $cat->title }}</option>@endforeach</select></div>
+                        <div class="form-group"><label class="small font-weight-bold">Brand</label><select name="brand_id" class="form-control select2"><option value="">Select Brand</option>@foreach($brands ?? [] as $b)<option value="{{ $b->id }}" {{ (old('brand_id', $auto->brand_id ?? '') == $b->id) ? 'selected' : '' }}>{{ $b->name }}</option>@endforeach</select></div>
+                        <div class="form-group"><label class="small font-weight-bold">Location</label><select name="location_id" class="form-control select2"><option value="">Select Location</option>@foreach($locations ?? [] as $loc)<option value="{{ $loc->id }}" {{ (old('location_id', $auto->location_id ?? '') == $loc->id) ? 'selected' : '' }}>{{ $loc->name }}</option>@endforeach</select></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+@endsection
+
+@push('js')
+<script>
+    $(document).ready(function () { 
+        $('.select2').select2({ theme: 'bootstrap4', width: '100%' }); 
+
+        const titleInput = $('#title');
+        const slugInput = $('#slug');
+
+        titleInput.on('input', function () {
+            if(!slugInput.data('edited')){
+                let slug = $(this).val().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+                slugInput.val(slug);
+            }
+        });
+
+        slugInput.on('change', function() { $(this).data('edited', true); });
+    });
+</script>
+@include('admin._partials._toggle-card-css')
+@endpush
+
+@if(isset($auto))
+    <form id="delete-form" action="{{ route('admin.autos.destroy', $auto->id) }}" method="POST" class="d-none">
+        @csrf @method('DELETE')
+    </form>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function triggerDelete() {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Permanently delete this auto listing?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('delete-form').submit();
+                }
+            })
+        }
+    </script>
+@endif

@@ -1,0 +1,115 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
+use App\Traits\HasBookingAttributes;
+
+/**
+ * App\Models\EventBooking
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property int $event_id
+ * @property string $booking_reference
+ * @property string $status
+ * @property float $total_price
+ * @property int $quantity
+ * @property \Illuminate\Support\Carbon|null $viewed_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ */
+class EventBooking extends Model
+{
+    use HasFactory;
+    use LogsActivity;
+    use HasBookingAttributes;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'user_id',
+        'event_id',
+        'event_occurrence_id',
+        'occurrence_ticket_id',
+        'event_ticket_type_id',
+        'quantity',
+        'total_price',
+        'status',
+        'booking_reference',
+        'viewed_at',
+    ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'total_price' => 'decimal:2',
+        'viewed_at'   => 'datetime',
+        'created_at'  => 'datetime',
+        'updated_at'  => 'datetime',
+    ];
+
+    /**
+     * Get the options for logging activity.
+     */
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
+
+    // --- Relationships ---
+
+    /**
+     * Get the user who made the booking.
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get the parent event for this booking.
+     */
+    public function event(): BelongsTo
+    {
+        return $this->belongsTo(Event::class);
+    }
+
+    /**
+     * Get the specific event occurrence.
+     */
+    public function occurrence(): BelongsTo
+    {
+        return $this->belongsTo(EventOccurrence::class, 'event_occurrence_id');
+    }
+
+    /**
+     * Get the associated ticket type.
+     */
+    public function ticketType(): BelongsTo
+    {
+        return $this->belongsTo(EventTicketType::class, 'event_ticket_type_id');
+    }
+
+    /**
+     * Get all payments associated with this booking.
+     */
+    public function payments(): MorphMany
+    {
+        return $this->morphMany(Payment::class, 'payable');
+    }
+}

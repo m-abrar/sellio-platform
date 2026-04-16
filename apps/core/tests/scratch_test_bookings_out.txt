@@ -1,0 +1,10 @@
+--- Testing Unified Bookings ---
+All Bookings Total: 521
+Sample Relation Names in 'all':
+ - service
+
+--- Testing Type 'property' ---
+Property Bookings Total: 74
+
+--- Testing Type 'service' ---
+Service Bookings Total: 87

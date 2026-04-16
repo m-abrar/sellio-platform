@@ -1,0 +1,4 @@
+RESTful Compliance Issues (Including Dashboard):
+================================================
+
+No obvious RESTful naming discrepancies found in API paths.

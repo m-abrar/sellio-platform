@@ -1,0 +1,105 @@
+@extends('adminlte::page')
+
+@section('title', isset($transaction) ? 'Edit Transaction' : 'Add Transaction')
+
+@section('content_header')
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark font-weight-bold">
+                     {{ isset($transaction) ? 'Edit Transaction' : 'Add Transaction' }}
+                </h1>
+            </div>
+        </div>
+    </div>
+@stop
+
+@section('content')
+
+@include('admin.alert')
+
+<form action="{{ isset($transaction) ? route('admin.transactions.update', $transaction->id) : route('admin.transactions.store') }}" method="POST" enctype="multipart/form-data">
+    @csrf
+    @if(isset($transaction)) @method('PATCH') @endif
+
+    <div class="row">
+        <!-- Left Column (Main Form) -->
+        <div class="col-md-8">
+            <div class="card card-primary card-outline shadow-sm border-0">
+                <div class="card-header border-0 bg-white py-3"><h3 class="card-title">Transaction Details</h3></div>
+                <div class="card-body">
+                    
+                    <div class="form-group">
+                        <label for="reference_number">Reference Number <span class="text-danger">*</span></label>
+                        <input type="text" name="reference_number" id="reference_number" class="form-control @error('reference_number') is-invalid @enderror" 
+                               value="{{ old('reference_number', $transaction->reference_number ?? '') }}" required>
+                        @error('reference_number') <span class="invalid-feedback">{{ $message }}</span> @enderror
+                    </div>
+
+                    <div class="form-group">
+                        <label for="amount">Amount <span class="text-danger">*</span></label>
+                        <input type="number" name="amount" id="amount" class="form-control @error('amount') is-invalid @enderror"
+                               value="{{ old('amount', $transaction->amount ?? '') }}" required>
+                        @error('amount') <span class="invalid-feedback">{{ $message }}</span> @enderror
+                    </div>
+
+                    <div class="form-group">
+                        <label for="status">Status</label>
+                        <select name="status" id="status" class="form-control @error('status') is-invalid @enderror">
+                            <option value="completed" {{ old('status', $transaction->status ?? '') == 'completed' ? 'selected' : '' }}>Completed</option>
+                            <option value="pending" {{ old('status', $transaction->status ?? '') == 'pending' ? 'selected' : '' }}>Pending</option>
+                            <option value="failed" {{ old('status', $transaction->status ?? '') == 'failed' ? 'selected' : '' }}>Failed</option>
+                        </select>
+                        @error('status') <span class="invalid-feedback">{{ $message }}</span> @enderror
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea name="description" class="form-control @error('description') is-invalid @enderror">{{ old('description', $transaction->description ?? '') }}</textarea>
+                        @error('description') <span class="invalid-feedback">{{ $message }}</span> @enderror
+                    </div>
+
+                    <div class="text-right">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Save Transaction
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="col-md-4">
+        
+            @include('admin.transactions.partials.booking')
+
+            <!-- Transaction Screenshot -->
+            @include('admin._partials._image-uploader', [
+                'name' => \App\Models\Transaction::PRIMARY_MEDIA,
+                'label' => 'Transaction Screenshot',
+                'multiple' => false,
+                'model' => \App\Models\Transaction::class,
+                'id' => $transaction->id ?? null,
+            ])
+
+        </div>
+    </div>
+</form>
+
+@endsection
+
+@push('js')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Handle Amount Format
+        document.getElementById('amount').addEventListener('input', function () {
+            let amount = parseFloat(this.value).toFixed(2);
+            this.value = amount;
+        });
+    });
+</script>
+@endpush
+
+@push('css')
+    
+@endpush

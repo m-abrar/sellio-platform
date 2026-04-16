@@ -1,0 +1,1 @@
+@include('frontend.classifieds.search')

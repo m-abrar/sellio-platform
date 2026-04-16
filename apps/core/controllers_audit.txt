@@ -1,0 +1,117 @@
+FILE: D:\Sellio\laravel\app\Http\Controllers\Api\V1\ApiAutoController.php
+  - show (17 lines) []
+----------------------------------------
+FILE: D:\Sellio\laravel\app\Http\Controllers\Api\V1\ApiBlogController.php
+  - index (16 lines) []
+  - show (19 lines) []
+----------------------------------------
+FILE: D:\Sellio\laravel\app\Http\Controllers\Api\V1\ApiClassifiedController.php
+  - show (18 lines) []
+----------------------------------------
+FILE: D:\Sellio\laravel\app\Http\Controllers\Api\V1\ApiEventController.php
+  - show (24 lines) []
+----------------------------------------
+FILE: D:\Sellio\laravel\app\Http\Controllers\Api\V1\ApiJobController.php
+  - show (17 lines) []
+----------------------------------------
+FILE: D:\Sellio\laravel\app\Http\Controllers\Api\V1\ApiProductController.php
+  - store (17 lines) [Direct Creation]
+  - update (16 lines) [Direct Update]
+  - show (20 lines) []
+----------------------------------------
+FILE: D:\Sellio\laravel\app\Http\Controllers\Api\V1\ApiPropertyController.php
+  - show (22 lines) []
+----------------------------------------
+FILE: D:\Sellio\laravel\app\Http\Controllers\Api\V1\ApiServiceController.php
+  - show (20 lines) []
+----------------------------------------
+FILE: D:\Sellio\laravel\app\Http\Controllers\Api\V1\Auth\AuthController.php
+  - login (24 lines) []
+  - register (26 lines) [Direct Creation]
+----------------------------------------
+FILE: D:\Sellio\laravel\app\Http\Controllers\Api\V1\Auth\PasswordResetController.php
+  - reset (20 lines) []
+----------------------------------------
+FILE: D:\Sellio\laravel\app\Http\Controllers\Api\V1\Auth\ProfileController.php
+  - update (20 lines) [Direct Update]
+  - updatePassword (14 lines) [Direct Update]
+----------------------------------------
+FILE: D:\Sellio\laravel\app\Http\Controllers\Api\V1\Dashboard\Partner\ActivityController.php
+  - index (306 lines) []
+----------------------------------------
+FILE: D:\Sellio\laravel\app\Http\Controllers\Api\V1\Dashboard\Partner\AnalyticsController.php
+  - index (50 lines) []
+----------------------------------------
+FILE: D:\Sellio\laravel\app\Http\Controllers\Api\V1\Dashboard\Partner\AutoInquiryController.php
+  - index (17 lines) []
+  - markAsRead (7 lines) [Direct Update]
+----------------------------------------
+FILE: D:\Sellio\laravel\app\Http\Controllers\Api\V1\Dashboard\Partner\ClassifiedController.php
+  - store (16 lines) []
+  - update (18 lines) []
+----------------------------------------
+FILE: D:\Sellio\laravel\app\Http\Controllers\Api\V1\Dashboard\Partner\DashboardController.php
+  - index (29 lines) []
+----------------------------------------
+FILE: D:\Sellio\laravel\app\Http\Controllers\Api\V1\Dashboard\Partner\JobApplicationController.php
+  - index (17 lines) []
+  - updateStatus (8 lines) [Direct Update]
+----------------------------------------
+FILE: D:\Sellio\laravel\app\Http\Controllers\Api\V1\Dashboard\Partner\MessageController.php
+  - show (20 lines) []
+  - sendMessage (28 lines) []
+----------------------------------------
+FILE: D:\Sellio\laravel\app\Http\Controllers\Api\V1\Dashboard\Partner\ProductController.php
+  - index (19 lines) []
+  - store (17 lines) [Direct Creation]
+  - update (16 lines) [Direct Update]
+  - edit (20 lines) []
+----------------------------------------
+FILE: D:\Sellio\laravel\app\Http\Controllers\Api\V1\Dashboard\Partner\ProfileController.php
+  - destroy (17 lines) []
+----------------------------------------
+FILE: D:\Sellio\laravel\app\Http\Controllers\Api\V1\Dashboard\Partner\PropertyBookingController.php
+  - index (17 lines) []
+  - updateStatus (7 lines) [Direct Update]
+----------------------------------------
+FILE: D:\Sellio\laravel\app\Http\Controllers\Api\V1\Dashboard\Partner\PropertyController.php
+  - store (28 lines) []
+  - update (23 lines) []
+----------------------------------------
+FILE: D:\Sellio\laravel\app\Http\Controllers\Api\V1\Dashboard\Partner\PropertyVisitController.php
+  - show (14 lines) [Direct Update]
+----------------------------------------
+FILE: D:\Sellio\laravel\app\Http\Controllers\Api\V1\Dashboard\Partner\ServiceAppointmentController.php
+  - index (17 lines) []
+  - updateStatus (8 lines) [Direct Update]
+----------------------------------------
+FILE: D:\Sellio\laravel\app\Http\Controllers\Api\V1\Dashboard\Partner\ServiceQuoteController.php
+  - index (17 lines) []
+  - update (7 lines) [Direct Update]
+----------------------------------------
+FILE: D:\Sellio\laravel\app\Http\Controllers\Api\V1\Dashboard\Partner\SubscriptionController.php
+  - store (71 lines) [Direct DB Facade, Direct Creation, Direct Update]
+  - scheduleDowngrade (33 lines) [Direct DB Facade, Direct Update]
+----------------------------------------
+FILE: D:\Sellio\laravel\app\Http\Controllers\Api\V1\Dashboard\Partner\WalletController.php
+  - overview (27 lines) []
+  - processWithdrawal (40 lines) [Direct DB Facade, Direct Creation, Transaction logic]
+----------------------------------------
+FILE: D:\Sellio\laravel\app\Http\Controllers\Api\V1\Dashboard\User\BookingController.php
+  - index (64 lines) []
+----------------------------------------
+FILE: D:\Sellio\laravel\app\Http\Controllers\Api\V1\Dashboard\User\ClassifiedInquiryController.php
+  - index (22 lines) []
+----------------------------------------
+FILE: D:\Sellio\laravel\app\Http\Controllers\Api\V1\Dashboard\User\DashboardController.php
+  - welcome (22 lines) []
+  - updateProfile (9 lines) [Direct Update]
+----------------------------------------
+FILE: D:\Sellio\laravel\app\Http\Controllers\Api\V1\Dashboard\User\MessageController.php
+  - index (33 lines) []
+  - sendMessage (30 lines) [Direct Creation]
+----------------------------------------
+FILE: D:\Sellio\laravel\app\Http\Controllers\Api\V1\Dashboard\User\ReviewController.php
+  - index (20 lines) []
+  - update (11 lines) [Direct Update]
+----------------------------------------

@@ -1,0 +1,49 @@
+/* --- VARIABLES --- */
+:root {
+    --admin-bar-height: 32px;
+    --admin-bar-bg: #23282d;
+    --admin-link-color: #00a0d2;
+    --admin-link-hover: #00b9eb;
+}
+
+/* --- ADMIN BAR LAYOUT --- */
+#admin-bar {
+    background: var(--admin-bar-bg);
+    color: #ccc;
+    height: var(--admin-bar-height);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1040;
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    font-size: 13px;
+}
+
+#admin-bar a {
+    color: var(--admin-link-color);
+    text-decoration: none;
+    padding: 0 8px;
+    transition: color 0.15s ease;
+}
+
+#admin-bar a:hover {
+    color: var(--admin-link-hover);
+}
+
+#admin-bar .separator {
+    color: #444;
+}
+
+/* Layout Adjustments for Admin Bar */
+body {
+    padding-top: var(--admin-bar-height); 
+}
+
+/* Overwrite Bootstrap fixed-top to respect admin bar */
+.fixed-top {
+    top: var(--admin-bar-height) !important;
+}

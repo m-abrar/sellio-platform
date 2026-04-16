@@ -1,0 +1,29 @@
+/* 1. Fonts First */
+@import "@fontsource/inter/300.css";
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/600.css";
+@import "@fontsource/inter/700.css";
+
+/* 2. Frameworks & Libraries */
+@import 'bootstrap/dist/css/bootstrap.min.css';
+@import 'bootstrap-icons/font/bootstrap-icons.css';
+@import '@fortawesome/fontawesome-free/css/all.min.css';
+@import 'aos/dist/aos.css';
+@import 'flatpickr/dist/flatpickr.min.css';
+
+/* 3. Variables and Custom Styles MUST come after imports */
+:root {
+    --primary-font: 'Inter', sans-serif;
+}
+
+/** * AOS UX Hygiene
+ * Ensures content is visible if the user has JavaScript disabled.
+ */
+.no-js [data-aos],
+noscript [data-aos] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+}
+
+/* Any other custom CSS goes here */

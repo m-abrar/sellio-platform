@@ -1,0 +1,2726 @@
+openapi: 3.1.0
+info:
+  title: Sellio Marketplace API
+  description: |
+    RESTful API for the Sellio multi-vertical marketplace platform.
+    Covers public listing browsing, cart/checkout, support tickets,
+    and authenticated partner/user dashboards.
+
+    ## Authentication
+    Protected endpoints require a `Bearer` token obtained via `/auth/login`.
+    Send the token in the `Authorization` header: `Authorization: Bearer <token>`.
+
+    ## Response Format
+    All responses follow a unified envelope:
+    ```json
+    { "success": true, "message": "...", "data": {}, "meta": {}, "errors": null }
+    ```
+  version: 2.0.0
+  contact:
+    name: Sellio Support
+
+servers:
+  - url: /api/v1
+    description: V1 API Endpoint
+
+tags:
+  - name: Authentication
+    description: Register, login, logout, and profile
+  - name: Categories
+    description: Listing categories (hierarchical)
+  - name: Types
+    description: Listing types
+  - name: Brands
+    description: Brands / manufacturers
+  - name: Locations
+    description: Geographic locations
+  - name: Tags
+    description: Content tags
+  - name: Amenities
+    description: Property amenities
+  - name: Features
+    description: Listing features
+  - name: Blogs
+    description: Blog articles
+  - name: Products
+    description: E-commerce products
+  - name: Properties
+    description: Real-estate listings
+  - name: Vehicles
+    description: Automotive listings
+  - name: Events
+    description: Event listings
+  - name: Jobs
+    description: Job listings
+  - name: Services
+    description: Service listings
+  - name: Classifieds
+    description: Classified ads
+  - name: Cart
+    description: Shopping cart (guest + auth)
+  - name: Orders
+    description: Order placement & tracking (auth)
+  - name: Tickets
+    description: Support ticket system (auth)
+  - name: Partner Dashboard
+    description: Seller/partner dashboard endpoints (auth)
+  - name: User Dashboard
+    description: Buyer/user dashboard endpoints (auth)
+
+components:
+  securitySchemes:
+    SanctumAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    # ---- Envelope Schemas ----
+    SuccessResponse:
+      type: object
+      required: [success, message, errors]
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+        data:
+          type: object
+          nullable: true
+        meta:
+          type: object
+          nullable: true
+        errors:
+          type: "null"
+
+    PaginatedResponse:
+      type: object
+      required: [success, message, data, meta, errors]
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+        data:
+          type: array
+          items:
+            type: object
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+        errors:
+          type: "null"
+
+    ErrorResponse:
+      type: object
+      required: [success, message, errors]
+      properties:
+        success:
+          type: boolean
+          example: false
+        message:
+          type: string
+        errors:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+
+    PaginationMeta:
+      type: object
+      properties:
+        current_page:
+          type: integer
+        last_page:
+          type: integer
+        per_page:
+          type: integer
+        total:
+          type: integer
+
+    # ---- Data Models ----
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+        roles:
+          type: array
+          items:
+            type: string
+
+    Category:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        slug:
+          type: string
+        description:
+          type: string
+        icon:
+          type: string
+        thumbnail_url:
+          type: string
+        cover_url:
+          type: string
+        parent_id:
+          type: integer
+          nullable: true
+        listings_count:
+          type: integer
+        flags:
+          type: object
+          properties:
+            is_property:
+              type: boolean
+            is_auto:
+              type: boolean
+            is_job:
+              type: boolean
+            is_service:
+              type: boolean
+            is_event:
+              type: boolean
+            is_classified:
+              type: boolean
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/Category'
+
+    SimpleAttribute:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        slug:
+          type: string
+        description:
+          type: string
+          nullable: true
+        icon:
+          type: string
+          nullable: true
+        image_url:
+          type: string
+          nullable: true
+
+    Blog:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        slug:
+          type: string
+        content:
+          type: string
+        excerpt:
+          type: string
+        featured_image:
+          type: string
+        category:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        author:
+          type: object
+          properties:
+            name:
+              type: string
+            avatar:
+              type: string
+              nullable: true
+        view_count:
+          type: integer
+        published_at:
+          type: string
+        created_at:
+          type: string
+
+    Product:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        slug:
+          type: string
+        description:
+          type: string
+        pricing:
+          type: object
+          properties:
+            base_price:
+              type: number
+            sale_price:
+              type: number
+            current_price:
+              type: number
+            formatted:
+              type: string
+            on_sale:
+              type: boolean
+            currency_symbol:
+              type: string
+        inventory:
+          type: object
+          properties:
+            in_stock:
+              type: boolean
+            stock_quantity:
+              type: integer
+            is_digital:
+              type: boolean
+        media:
+          type: object
+          properties:
+            featured_image:
+              type: string
+            gallery:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  url:
+                    type: string
+                  thumbnail:
+                    type: string
+        taxonomy:
+          type: object
+          properties:
+            category:
+              type: object
+              properties:
+                id:
+                  type: integer
+                title:
+                  type: string
+                slug:
+                  type: string
+            brand:
+              type: object
+              properties:
+                id:
+                  type: integer
+                title:
+                  type: string
+            tags:
+              type: array
+              items:
+                type: string
+        vendor:
+          type: object
+          properties:
+            id:
+              type: integer
+            name:
+              type: string
+        status:
+          type: object
+          properties:
+            is_published:
+              type: boolean
+            is_featured:
+              type: boolean
+            rating:
+              type: number
+            review_count:
+              type: integer
+        created_at:
+          type: string
+
+    Property:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        slug:
+          type: string
+        description:
+          type: string
+        pricing:
+          type: object
+          properties:
+            base_price:
+              type: number
+            sale_price:
+              type: number
+            price_per_night:
+              type: number
+            active_price:
+              type: number
+            price_formatted:
+              type: string
+            currency_symbol:
+              type: string
+        specs:
+          type: object
+          properties:
+            bedrooms:
+              type: integer
+            bathrooms:
+              type: integer
+            max_guests:
+              type: integer
+            area_sq_ft:
+              type: number
+            year_built:
+              type: integer
+        location:
+          type: object
+          properties:
+            address:
+              type: string
+            city:
+              type: string
+            state:
+              type: string
+            country:
+              type: string
+            latitude:
+              type: number
+            longitude:
+              type: number
+        status:
+          type: object
+          properties:
+            is_published:
+              type: boolean
+            is_featured:
+              type: boolean
+            is_rental:
+              type: boolean
+            is_sale:
+              type: boolean
+        created_at:
+          type: string
+
+    Vehicle:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        slug:
+          type: string
+        description:
+          type: string
+        pricing:
+          type: object
+          properties:
+            base_price:
+              type: number
+            sale_price:
+              type: number
+            formatted:
+              type: string
+        specs:
+          type: object
+          properties:
+            year:
+              type: integer
+            make:
+              type: string
+            model:
+              type: string
+            mileage:
+              type: string
+            engine:
+              type: string
+            transmission:
+              type: string
+            drivetrain:
+              type: string
+            exterior_color:
+              type: string
+        media:
+          type: object
+          properties:
+            main_photo:
+              type: string
+            gallery:
+              type: array
+              items:
+                type: object
+        location:
+          type: object
+          properties:
+            address:
+              type: string
+            city:
+              type: string
+            state:
+              type: string
+        created_at:
+          type: string
+
+    Event:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        slug:
+          type: string
+        description:
+          type: string
+        schedule:
+          type: object
+          properties:
+            start_at:
+              type: string
+            end_at:
+              type: string
+            is_virtual:
+              type: boolean
+        ticketing:
+          type: object
+          properties:
+            is_paid:
+              type: boolean
+            base_price:
+              type: number
+            sale_price:
+              type: number
+            price_formatted:
+              type: string
+            max_attendees:
+              type: integer
+        location:
+          type: object
+          properties:
+            address:
+              type: string
+            city:
+              type: string
+        organizer:
+          type: object
+          properties:
+            id:
+              type: integer
+            name:
+              type: string
+        created_at:
+          type: string
+
+    JobListing:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        slug:
+          type: string
+        description:
+          type: string
+        company_name:
+          type: string
+        job_type:
+          type: string
+        experience_level:
+          type: string
+        salary_range:
+          type: string
+        location:
+          type: object
+          properties:
+            city:
+              type: string
+            state:
+              type: string
+            is_remote:
+              type: boolean
+        created_at:
+          type: string
+
+    Service:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        slug:
+          type: string
+        description:
+          type: string
+        pricing:
+          type: object
+          properties:
+            base_price:
+              type: number
+            price_formatted:
+              type: string
+        provider:
+          type: object
+          properties:
+            id:
+              type: integer
+            name:
+              type: string
+        created_at:
+          type: string
+
+    Classified:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        slug:
+          type: string
+        description:
+          type: string
+        pricing:
+          type: object
+          properties:
+            base_price:
+              type: number
+            price_formatted:
+              type: string
+            condition:
+              type: string
+        location:
+          type: object
+          properties:
+            city:
+              type: string
+            state:
+              type: string
+        created_at:
+          type: string
+
+    Ticket:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+          enum: [open, in_progress, closed]
+        priority:
+          type: string
+          enum: [low, medium, high]
+        viewed_at:
+          type: string
+          nullable: true
+        created_at:
+          type: string
+        updated_at:
+          type: string
+        user:
+          $ref: '#/components/schemas/User'
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/TicketMessage'
+
+    TicketMessage:
+      type: object
+      properties:
+        id:
+          type: integer
+        body:
+          type: string
+        user:
+          $ref: '#/components/schemas/User'
+        created_at:
+          type: string
+
+    Cart:
+      type: object
+      properties:
+        id:
+          type: integer
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CartItem'
+        total:
+          type: number
+        item_count:
+          type: integer
+        currency_symbol:
+          type: string
+
+    CartItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        quantity:
+          type: integer
+        unit_price:
+          type: number
+        total_price:
+          type: number
+        product:
+          type: object
+          properties:
+            id:
+              type: integer
+            title:
+              type: string
+            slug:
+              type: string
+            price:
+              type: number
+            image:
+              type: string
+              nullable: true
+        attribute_ids:
+          type: array
+          items:
+            type: integer
+        addon_ids:
+          type: array
+          items:
+            type: integer
+
+    Order:
+      type: object
+      properties:
+        id:
+          type: integer
+        order_number:
+          type: string
+        status:
+          type: string
+          enum: [pending, processing, shipped, delivered, cancelled]
+        payment_status:
+          type: string
+          enum: [unpaid, paid, refunded]
+        payment_method:
+          type: string
+        pricing:
+          type: object
+          properties:
+            subtotal:
+              type: number
+            shipping_cost:
+              type: number
+            tax_amount:
+              type: number
+            discount_amount:
+              type: number
+            total_amount:
+              type: number
+            currency_symbol:
+              type: string
+        shipping:
+          type: object
+          properties:
+            name:
+              type: string
+            address:
+              type: string
+            city:
+              type: string
+            state:
+              type: string
+            zip:
+              type: string
+            country:
+              type: string
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItem'
+        created_at:
+          type: string
+        updated_at:
+          type: string
+
+    OrderItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        product_name:
+          type: string
+        quantity:
+          type: integer
+        unit_price:
+          type: number
+        total_price:
+          type: number
+        product:
+          type: object
+          properties:
+            id:
+              type: integer
+            title:
+              type: string
+            slug:
+              type: string
+            image:
+              type: string
+              nullable: true
+        selected_attributes:
+          type: array
+        selected_addons:
+          type: array
+
+# ======================================================================
+# PATHS
+# ======================================================================
+paths:
+  # ---- Authentication ----
+  /auth/register:
+    post:
+      tags: [Authentication]
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, email, password, role]
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+                password_confirmation:
+                  type: string
+                  format: password
+                role:
+                  type: string
+                  enum: [user, partner]
+      responses:
+        '201':
+          description: Registration successful
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - properties:
+                      data:
+                        type: object
+                        properties:
+                          access_token:
+                            type: string
+                          token_type:
+                            type: string
+                          user:
+                            $ref: '#/components/schemas/User'
+
+  /auth/login:
+    post:
+      tags: [Authentication]
+      summary: Log in user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - properties:
+                      data:
+                        type: object
+                        properties:
+                          access_token:
+                            type: string
+                          token_type:
+                            type: string
+                          user:
+                            $ref: '#/components/schemas/User'
+
+  /auth/logout:
+    post:
+      tags: [Authentication]
+      summary: Log out current user
+      security:
+        - SanctumAuth: []
+      responses:
+        '200':
+          description: Logout successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  /auth/me:
+    get:
+      tags: [Authentication]
+      summary: Get authenticated user profile
+      security:
+        - SanctumAuth: []
+      responses:
+        '200':
+          description: User retrieved
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - properties:
+                      data:
+                        $ref: '#/components/schemas/User'
+
+  /auth/refresh-token:
+    post:
+      tags: [Authentication]
+      summary: Refresh authentication token
+      security:
+        - SanctumAuth: []
+      responses:
+        '200':
+          description: Token refreshed
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - properties:
+                      data:
+                        type: object
+                        properties:
+                          access_token:
+                            type: string
+                          token_type:
+                            type: string
+
+  /auth/password/email:
+    post:
+      tags: [Authentication]
+      summary: Send password reset link
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email]
+              properties:
+                email:
+                  type: string
+                  format: email
+      responses:
+        '200':
+          description: Reset link sent
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  /auth/password/reset:
+    post:
+      tags: [Authentication]
+      summary: Reset password with token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [token, email, password, password_confirmation]
+              properties:
+                token:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+                password_confirmation:
+                  type: string
+                  format: password
+      responses:
+        '200':
+          description: Password reset successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  # ---- Categories ----
+  /categories:
+    get:
+      tags: [Categories]
+      summary: List all categories
+      responses:
+        '200':
+          description: Categories retrieved
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Category'
+
+  /categories/{slug}:
+    get:
+      tags: [Categories]
+      summary: Get category by slug
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Category details
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - properties:
+                      data:
+                        $ref: '#/components/schemas/Category'
+
+  # ---- Types ----
+  /types:
+    get:
+      tags: [Types]
+      summary: List all types
+      responses:
+        '200':
+          description: Types retrieved
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/SimpleAttribute'
+
+  /types/{slug}:
+    get:
+      tags: [Types]
+      summary: Get type by slug
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Type details
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - properties:
+                      data:
+                        $ref: '#/components/schemas/SimpleAttribute'
+
+  # ---- Brands ----
+  /brands:
+    get:
+      tags: [Brands]
+      summary: List all brands
+      responses:
+        '200':
+          description: Brands retrieved
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/SimpleAttribute'
+
+  /brands/{slug}:
+    get:
+      tags: [Brands]
+      summary: Get brand by slug
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Brand details
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - properties:
+                      data:
+                        $ref: '#/components/schemas/SimpleAttribute'
+
+  # ---- Locations ----
+  /locations:
+    get:
+      tags: [Locations]
+      summary: List all locations
+      responses:
+        '200':
+          description: Locations retrieved
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/SimpleAttribute'
+
+  /locations/{slug}:
+    get:
+      tags: [Locations]
+      summary: Get location by slug
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Location details
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - properties:
+                      data:
+                        $ref: '#/components/schemas/SimpleAttribute'
+
+  # ---- Tags ----
+  /tags:
+    get:
+      tags: [Tags]
+      summary: List all tags
+      responses:
+        '200':
+          description: Tags retrieved
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/SimpleAttribute'
+
+  /tags/{slug}:
+    get:
+      tags: [Tags]
+      summary: Get tag by slug
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Tag details
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - properties:
+                      data:
+                        $ref: '#/components/schemas/SimpleAttribute'
+
+  # ---- Amenities ----
+  /amenities:
+    get:
+      tags: [Amenities]
+      summary: List all amenities
+      responses:
+        '200':
+          description: Amenities retrieved
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/SimpleAttribute'
+
+  /amenities/{slug}:
+    get:
+      tags: [Amenities]
+      summary: Get amenity by slug
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Amenity details
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - properties:
+                      data:
+                        $ref: '#/components/schemas/SimpleAttribute'
+
+  # ---- Features ----
+  /features:
+    get:
+      tags: [Features]
+      summary: List all features
+      responses:
+        '200':
+          description: Features retrieved
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/SimpleAttribute'
+
+  /features/{slug}:
+    get:
+      tags: [Features]
+      summary: Get feature by slug
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Feature details
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - properties:
+                      data:
+                        $ref: '#/components/schemas/SimpleAttribute'
+
+  # ---- Blogs ----
+  /blogs:
+    get:
+      tags: [Blogs]
+      summary: List all blog posts
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Blog posts retrieved
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/PaginatedResponse'
+                  - properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Blog'
+
+  /blogs/category/{categorySlug}:
+    get:
+      tags: [Blogs]
+      summary: List blog posts by category
+      parameters:
+        - name: categorySlug
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Blog posts filtered by category
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/PaginatedResponse'
+                  - properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Blog'
+
+  /blogs/{slug}:
+    get:
+      tags: [Blogs]
+      summary: Get blog post by slug
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Blog post details
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - properties:
+                      data:
+                        $ref: '#/components/schemas/Blog'
+
+  # ---- Products ----
+  /products:
+    get:
+      tags: [Products]
+      summary: List / search products with sidebar filter metadata
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: category
+          in: query
+          schema:
+            type: string
+        - name: brand
+          in: query
+          schema:
+            type: string
+        - name: price_min
+          in: query
+          schema:
+            type: number
+        - name: price_max
+          in: query
+          schema:
+            type: number
+        - name: sort
+          in: query
+          schema:
+            type: string
+            enum: [latest, price_asc, price_desc]
+      responses:
+        '200':
+          description: Products with sidebar metadata
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/PaginatedResponse'
+                  - properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Product'
+                      sidebar:
+                        type: object
+                        properties:
+                          categories:
+                            type: array
+                          brands:
+                            type: array
+                          types:
+                            type: array
+                          features:
+                            type: array
+                          max_allowed_price:
+                            type: number
+                          filters:
+                            type: object
+
+  /products/category/{categorySlug}:
+    get:
+      tags: [Products]
+      summary: Filter products by category slug
+      parameters:
+        - name: categorySlug
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Products filtered by category
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponse'
+
+  /products/{slug}:
+    get:
+      tags: [Products]
+      summary: Get product details with related products
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Product details
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - properties:
+                      data:
+                        $ref: '#/components/schemas/Product'
+                      meta:
+                        type: object
+                        properties:
+                          related_products:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/Product'
+                          attributes:
+                            type: array
+                          addons:
+                            type: array
+
+  /products/{product}/calculate-price:
+    post:
+      tags: [Products]
+      summary: Calculate product price with selected attributes and addons
+      parameters:
+        - name: product
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                attribute_ids:
+                  type: array
+                  items:
+                    type: integer
+                addon_ids:
+                  type: array
+                  items:
+                    type: integer
+                quantity:
+                  type: integer
+                  default: 1
+      responses:
+        '200':
+          description: Calculated price
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  # ---- Properties ----
+  /properties:
+    get:
+      tags: [Properties]
+      summary: List / search properties with sidebar filter metadata
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: category
+          in: query
+          schema:
+            type: string
+        - name: location
+          in: query
+          schema:
+            type: string
+        - name: price_min
+          in: query
+          schema:
+            type: number
+        - name: price_max
+          in: query
+          schema:
+            type: number
+      responses:
+        '200':
+          description: Properties with sidebar metadata
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/PaginatedResponse'
+                  - properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Property'
+                      sidebar:
+                        type: object
+
+  /properties/category/{categorySlug}:
+    get:
+      tags: [Properties]
+      summary: Filter properties by category
+      parameters:
+        - name: categorySlug
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Properties filtered by category
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponse'
+
+  /properties/{slug}:
+    get:
+      tags: [Properties]
+      summary: Get property details with related properties
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Property details
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - properties:
+                      data:
+                        $ref: '#/components/schemas/Property'
+
+  /properties/{property}/calculate-lodging-price:
+    post:
+      tags: [Properties]
+      summary: Calculate estimated lodging price for date range
+      parameters:
+        - name: property
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [check_in, check_out]
+              properties:
+                check_in:
+                  type: string
+                  format: date
+                check_out:
+                  type: string
+                  format: date
+      responses:
+        '200':
+          description: Price calculation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  # ---- Vehicles ----
+  /vehicles:
+    get:
+      tags: [Vehicles]
+      summary: List / search vehicles
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: category
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Vehicle listings
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/PaginatedResponse'
+                  - properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Vehicle'
+
+  /vehicles/category/{categorySlug}:
+    get:
+      tags: [Vehicles]
+      summary: Filter vehicles by category
+      parameters:
+        - name: categorySlug
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Filtered vehicles
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponse'
+
+  /vehicles/{slug}:
+    get:
+      tags: [Vehicles]
+      summary: Get vehicle details
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Vehicle details
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - properties:
+                      data:
+                        $ref: '#/components/schemas/Vehicle'
+
+  # ---- Events ----
+  /events:
+    get:
+      tags: [Events]
+      summary: List / search events
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: category
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Event listings
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/PaginatedResponse'
+                  - properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Event'
+
+  /events/category/{categorySlug}:
+    get:
+      tags: [Events]
+      summary: Filter events by category
+      parameters:
+        - name: categorySlug
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Filtered events
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponse'
+
+  /events/{slug}:
+    get:
+      tags: [Events]
+      summary: Get event details
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Event details
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - properties:
+                      data:
+                        $ref: '#/components/schemas/Event'
+
+  # ---- Jobs ----
+  /jobs:
+    get:
+      tags: [Jobs]
+      summary: List / search job listings
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: category
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Job listings
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/PaginatedResponse'
+                  - properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/JobListing'
+
+  /jobs/category/{categorySlug}:
+    get:
+      tags: [Jobs]
+      summary: Filter jobs by category
+      parameters:
+        - name: categorySlug
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Filtered jobs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponse'
+
+  /jobs/{slug}:
+    get:
+      tags: [Jobs]
+      summary: Get job listing details
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Job details
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - properties:
+                      data:
+                        $ref: '#/components/schemas/JobListing'
+
+  # ---- Services ----
+  /services:
+    get:
+      tags: [Services]
+      summary: List / search services
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: category
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Service listings
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/PaginatedResponse'
+                  - properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Service'
+
+  /services/category/{categorySlug}:
+    get:
+      tags: [Services]
+      summary: Filter services by category
+      parameters:
+        - name: categorySlug
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Filtered services
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponse'
+
+  /services/{slug}:
+    get:
+      tags: [Services]
+      summary: Get service details
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Service details
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - properties:
+                      data:
+                        $ref: '#/components/schemas/Service'
+
+  # ---- Classifieds ----
+  /classifieds:
+    get:
+      tags: [Classifieds]
+      summary: List / search classified ads
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: category
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Classified listings
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/PaginatedResponse'
+                  - properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Classified'
+
+  /classifieds/category/{categorySlug}:
+    get:
+      tags: [Classifieds]
+      summary: Filter classifieds by category
+      parameters:
+        - name: categorySlug
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Filtered classifieds
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponse'
+
+  /classifieds/{slug}:
+    get:
+      tags: [Classifieds]
+      summary: Get classified ad details
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Classified details
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - properties:
+                      data:
+                        $ref: '#/components/schemas/Classified'
+
+  # ---- Cart ----
+  /cart:
+    get:
+      tags: [Cart]
+      summary: View current cart (guest or authenticated)
+      responses:
+        '200':
+          description: Cart contents
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - properties:
+                      data:
+                        $ref: '#/components/schemas/Cart'
+
+  /cart/add/{product}:
+    post:
+      tags: [Cart]
+      summary: Add a product to cart
+      parameters:
+        - name: product
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [quantity]
+              properties:
+                quantity:
+                  type: integer
+                  minimum: 1
+                  maximum: 100
+                attribute_ids:
+                  type: array
+                  items:
+                    type: integer
+                addon_ids:
+                  type: array
+                  items:
+                    type: integer
+      responses:
+        '200':
+          description: Item added, returns updated cart
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - properties:
+                      data:
+                        $ref: '#/components/schemas/Cart'
+
+  /cart/{id}:
+    patch:
+      tags: [Cart]
+      summary: Update cart item quantity
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Cart item ID
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [quantity]
+              properties:
+                quantity:
+                  type: integer
+                  minimum: 1
+                  maximum: 100
+      responses:
+        '200':
+          description: Cart updated
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - properties:
+                      data:
+                        $ref: '#/components/schemas/Cart'
+
+    delete:
+      tags: [Cart]
+      summary: Remove item from cart
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Cart item ID
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Item removed, returns updated cart
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - properties:
+                      data:
+                        $ref: '#/components/schemas/Cart'
+
+  # ---- Orders ----
+  /orders:
+    get:
+      tags: [Orders]
+      summary: List authenticated user's orders
+      security:
+        - SanctumAuth: []
+      parameters:
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [pending, processing, shipped, delivered, cancelled]
+        - name: per_page
+          in: query
+          schema:
+            type: integer
+            default: 15
+      responses:
+        '200':
+          description: Orders retrieved
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/PaginatedResponse'
+                  - properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Order'
+
+    post:
+      tags: [Orders]
+      summary: Place a new order from cart
+      security:
+        - SanctumAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [shipping_name, shipping_address, shipping_city, shipping_zip, shipping_country, payment_method]
+              properties:
+                shipping_name:
+                  type: string
+                shipping_address:
+                  type: string
+                shipping_city:
+                  type: string
+                shipping_state:
+                  type: string
+                shipping_zip:
+                  type: string
+                shipping_country:
+                  type: string
+                payment_method:
+                  type: string
+      responses:
+        '201':
+          description: Order placed successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - properties:
+                      data:
+                        $ref: '#/components/schemas/Order'
+        '422':
+          description: Cart is empty
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /orders/{orderNumber}:
+    get:
+      tags: [Orders]
+      summary: Get order details by order number
+      security:
+        - SanctumAuth: []
+      parameters:
+        - name: orderNumber
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Order details
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - properties:
+                      data:
+                        $ref: '#/components/schemas/Order'
+
+  # ---- Tickets ----
+  /tickets:
+    get:
+      tags: [Tickets]
+      summary: List authenticated user's tickets
+      security:
+        - SanctumAuth: []
+      responses:
+        '200':
+          description: Tickets retrieved
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/PaginatedResponse'
+                  - properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Ticket'
+
+    post:
+      tags: [Tickets]
+      summary: Create a new support ticket
+      security:
+        - SanctumAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [title, description]
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                priority:
+                  type: string
+                  enum: [low, medium, high]
+                  default: low
+      responses:
+        '201':
+          description: Ticket created
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - properties:
+                      data:
+                        $ref: '#/components/schemas/Ticket'
+
+  /tickets/{ticket}:
+    get:
+      tags: [Tickets]
+      summary: Get ticket thread details
+      security:
+        - SanctumAuth: []
+      parameters:
+        - name: ticket
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Ticket with messages
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - properties:
+                      data:
+                        $ref: '#/components/schemas/Ticket'
+
+  /tickets/{ticket}/reply:
+    post:
+      tags: [Tickets]
+      summary: Reply to a ticket thread
+      security:
+        - SanctumAuth: []
+      parameters:
+        - name: ticket
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [body]
+              properties:
+                body:
+                  type: string
+      responses:
+        '200':
+          description: Reply submitted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  # ---- Partner Dashboard ----
+  /partner/welcome:
+    get:
+      tags: [Partner Dashboard]
+      summary: Partner dashboard overview
+      security:
+        - SanctumAuth: []
+      responses:
+        '200':
+          description: Dashboard data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  /partner/analytics:
+    get:
+      tags: [Partner Dashboard]
+      summary: Partner analytics data
+      security:
+        - SanctumAuth: []
+      responses:
+        '200':
+          description: Analytics data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  /partner/activities:
+    get:
+      tags: [Partner Dashboard]
+      summary: Recent partner activity feed
+      security:
+        - SanctumAuth: []
+      responses:
+        '200':
+          description: Activity list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  /partner/leads/properties/bookings:
+    get:
+      tags: [Partner Dashboard]
+      summary: Property booking leads
+      security:
+        - SanctumAuth: []
+      responses:
+        '200':
+          description: Property bookings
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponse'
+
+  /partner/leads/autos/inquiries:
+    get:
+      tags: [Partner Dashboard]
+      summary: Auto inquiry leads
+      security:
+        - SanctumAuth: []
+      responses:
+        '200':
+          description: Auto inquiries
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponse'
+
+  /partner/leads/events/bookings:
+    get:
+      tags: [Partner Dashboard]
+      summary: Event booking leads
+      security:
+        - SanctumAuth: []
+      responses:
+        '200':
+          description: Event bookings
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponse'
+
+  /partner/leads/services/quotes:
+    get:
+      tags: [Partner Dashboard]
+      summary: Service quote leads
+      security:
+        - SanctumAuth: []
+      responses:
+        '200':
+          description: Service quotes
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponse'
+
+  /partner/leads/joblistings/applications:
+    get:
+      tags: [Partner Dashboard]
+      summary: Job application leads
+      security:
+        - SanctumAuth: []
+      responses:
+        '200':
+          description: Job applications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponse'
+
+  /partner/{resource}:
+    get:
+      tags: [Partner Dashboard]
+      summary: List partner listings (products, properties, autos, events, services, joblistings, classifieds)
+      security:
+        - SanctumAuth: []
+      parameters:
+        - name: resource
+          in: path
+          required: true
+          schema:
+            type: string
+            enum: [products, properties, autos, events, services, joblistings, classifieds]
+      responses:
+        '200':
+          description: Listings retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponse'
+    post:
+      tags: [Partner Dashboard]
+      summary: Create a new listing
+      security:
+        - SanctumAuth: []
+      parameters:
+        - name: resource
+          in: path
+          required: true
+          schema:
+            type: string
+            enum: [products, properties, autos, events, services, joblistings, classifieds]
+      responses:
+        '201':
+          description: Listing created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  /partner/payments:
+    get:
+      tags: [Partner Dashboard]
+      summary: Partner payment history
+      security:
+        - SanctumAuth: []
+      responses:
+        '200':
+          description: Payments
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponse'
+
+  /partner/wallet/overview:
+    get:
+      tags: [Partner Dashboard]
+      summary: Wallet balance & summary
+      security:
+        - SanctumAuth: []
+      responses:
+        '200':
+          description: Wallet overview
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  /partner/wallet/history:
+    get:
+      tags: [Partner Dashboard]
+      summary: Wallet transaction history
+      security:
+        - SanctumAuth: []
+      responses:
+        '200':
+          description: Transaction history
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponse'
+
+  /partner/wallet/withdraw:
+    post:
+      tags: [Partner Dashboard]
+      summary: Request a wallet withdrawal
+      security:
+        - SanctumAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [amount]
+              properties:
+                amount:
+                  type: number
+      responses:
+        '200':
+          description: Withdrawal requested
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  /partner/reviews:
+    get:
+      tags: [Partner Dashboard]
+      summary: Reviews received on partner listings
+      security:
+        - SanctumAuth: []
+      responses:
+        '200':
+          description: Reviews list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponse'
+
+  /partner/messages:
+    get:
+      tags: [Partner Dashboard]
+      summary: List message conversations
+      security:
+        - SanctumAuth: []
+      responses:
+        '200':
+          description: Conversations
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  /partner/profile:
+    get:
+      tags: [Partner Dashboard]
+      summary: Get partner profile
+      security:
+        - SanctumAuth: []
+      responses:
+        '200':
+          description: Profile data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+    patch:
+      tags: [Partner Dashboard]
+      summary: Update partner profile
+      security:
+        - SanctumAuth: []
+      responses:
+        '200':
+          description: Profile updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  # ---- User Dashboard ----
+  /user/welcome:
+    get:
+      tags: [User Dashboard]
+      summary: User dashboard welcome data
+      security:
+        - SanctumAuth: []
+      responses:
+        '200':
+          description: Dashboard data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  /user/favorites:
+    get:
+      tags: [User Dashboard]
+      summary: List user favorites
+      security:
+        - SanctumAuth: []
+      responses:
+        '200':
+          description: Favorites
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponse'
+
+  /user/favorites/{favorite}:
+    delete:
+      tags: [User Dashboard]
+      summary: Remove a favorite
+      security:
+        - SanctumAuth: []
+      parameters:
+        - name: favorite
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Favorite removed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  /user/bookings:
+    get:
+      tags: [User Dashboard]
+      summary: Unified list of all user bookings (upcoming & past)
+      security:
+        - SanctumAuth: []
+      responses:
+        '200':
+          description: Bookings grouped by upcoming/past
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - properties:
+                      data:
+                        type: object
+                        properties:
+                          upcomingBookings:
+                            type: array
+                          pastBookings:
+                            type: array
+
+  /user/reviews:
+    get:
+      tags: [User Dashboard]
+      summary: List user's reviews
+      security:
+        - SanctumAuth: []
+      responses:
+        '200':
+          description: Reviews list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponse'
+
+  /user/inquiries/applications:
+    get:
+      tags: [User Dashboard]
+      summary: User's job applications
+      security:
+        - SanctumAuth: []
+      responses:
+        '200':
+          description: Applications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponse'
+
+  /user/inquiries/auto-inquiries:
+    get:
+      tags: [User Dashboard]
+      summary: User's auto inquiries
+      security:
+        - SanctumAuth: []
+      responses:
+        '200':
+          description: Auto inquiries
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponse'
+
+  /user/inquiries/service-quotes:
+    get:
+      tags: [User Dashboard]
+      summary: User's service quotes
+      security:
+        - SanctumAuth: []
+      responses:
+        '200':
+          description: Service quotes
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponse'
+
+  /user/inquiries/classified-inquiries:
+    get:
+      tags: [User Dashboard]
+      summary: User's classified inquiries
+      security:
+        - SanctumAuth: []
+      responses:
+        '200':
+          description: Classified inquiries
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponse'
+
+  /user/messages:
+    get:
+      tags: [User Dashboard]
+      summary: List user message conversations
+      security:
+        - SanctumAuth: []
+      responses:
+        '200':
+          description: Conversations
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'

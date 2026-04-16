@@ -1,0 +1,51 @@
+# Monorepo Root
+node_modules/
+.pnpm-store/
+pnpm-lock.yaml
+
+# OS Files
+.DS_Store
+Thumbs.db
+*.zip
+*.log
+
+# IDEs
+.idea/
+.vscode/
+.nova/
+.zed/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Laravel Specific (apps/core)
+/apps/core/vendor/
+/apps/core/public/build/
+/apps/core/public/hot/
+/apps/core/public/storage
+/apps/core/storage/*.key
+/apps/core/storage/pail/
+/apps/core/.phpunit.result.cache
+/apps/core/auth.json
+
+# Next.js Specific (apps/storefront)
+/apps/storefront/.next/
+/apps/storefront/out/
+/apps/storefront/build/
+/apps/storefront/.vercel/
+/apps/storefront/*.tsbuildinfo
+
+# Vite Specific (apps/partner-panel)
+/apps/partner-panel/dist/
+/apps/partner-panel/dist-ssr/
+
+# Shared Packages
+/packages/*/node_modules/
+/packages/*/dist/

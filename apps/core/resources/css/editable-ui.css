@@ -1,0 +1,108 @@
+/* --- VARIABLES --- */
+:root {
+    --edit-accent: #4f46e5;
+    --edit-bg: rgba(79, 70, 229, 0.04);
+    --edit-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* --- ANIMATIONS --- */
+
+/* Pulse & Ripple Effect */
+@keyframes attention-pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.6), 0 4px 12px rgba(79, 70, 229, 0.3);
+    }
+    70% {
+        box-shadow: 0 0 0 12px rgba(79, 70, 229, 0), 0 4px 12px rgba(79, 70, 229, 0.3);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(79, 70, 229, 0), 0 4px 12px rgba(79, 70, 229, 0.3);
+    }
+}
+
+/* Premium Wiggle Animation */
+@keyframes premium-wiggle {
+    0%, 100% { transform: scale(1) rotate(0deg); }
+    25% { transform: scale(1.1) rotate(-12deg); }
+    75% { transform: scale(1.1) rotate(12deg); }
+}
+
+/* --- EDITABLE UI COMPONENTS --- */
+
+.edit-link {
+    text-decoration: none !important;
+    color: inherit !important;
+    display: inline-flex; /* Changed from contents to ensure target area exists */
+}
+
+.editable-group {
+    position: relative;
+    transition: var(--transition-smooth);
+    cursor: pointer;
+    border-radius: 8px;
+    display: inline-flex; 
+    align-items: center;
+    max-width: 100%;
+    border: 1px solid transparent;
+    padding: 2px 8px;
+}
+
+.editable-group:hover {
+    background-color: var(--edit-bg);
+    border-color: rgba(79, 70, 229, 0.1);
+    box-shadow: var(--edit-shadow);
+    transform: translateY(-1px);
+}
+
+/* FIXED CIRCLE ICON: Width and Height are equal */
+.edit-icon {
+    opacity: 0;
+    margin-left: 10px;
+    font-size: 0.7rem;
+    color: white;
+    background: var(--edit-accent);
+    
+    /* Ensure perfect circle */
+    width: 28px;   
+    height: 28px;  
+    line-height: 28px;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    
+    transition: var(--transition-smooth);
+    transform: scale(0);
+    position: relative;
+    z-index: 2;
+    flex-shrink: 0; /* Prevents the circle from squishing */
+}
+
+.editable-group:hover .edit-icon {
+    opacity: 1;
+    transform: scale(1);
+    animation: 
+        attention-pulse 1.5s cubic-bezier(0.24, 0, 0.38, 1) infinite,
+        premium-wiggle 0.6s ease-in-out infinite alternate;
+}
+
+/* Interactive underline indicator */
+.editable-group::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: var(--edit-accent);
+    transition: var(--transition-smooth);
+    opacity: 0;
+    transform: translateX(-50%);
+}
+
+.editable-group:hover::after {
+    width: 80%;
+    opacity: 0.3;
+}

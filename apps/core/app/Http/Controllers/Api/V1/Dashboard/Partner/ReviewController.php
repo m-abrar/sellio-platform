@@ -1,0 +1,73 @@
+<?php
+
+namespace App\Http\Controllers\Api\V1\Dashboard\Partner;
+
+use App\Http\Controllers\Controller;
+use App\Models\Review;
+use App\Services\Partner\ReviewService;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
+
+/**
+ * Class ReviewController
+ * Manages customer feedback for a partner's multi-category listings.
+ */
+class ReviewController extends Controller
+{
+    /**
+     * @var ReviewService
+     */
+    protected $reviewService;
+
+    /**
+     * ReviewController constructor.
+     *
+     * @param ReviewService $reviewService
+     */
+    public function __construct(ReviewService $reviewService)
+    {
+        $this->reviewService = $reviewService;
+    }
+
+    /**
+     * Display a listing of reviews for the partner's items.
+     *
+     * @return View
+     */
+    public function index() {
+        $reviews = $this->reviewService->getReviewsForPartner(Auth::user());
+
+        return ReviewResource::collection($reviews);
+    }
+
+    /**
+     * Display the specified review and mark it as viewed.
+     *
+     * @param Review $review
+     * @return View
+     */
+    public function show(Review $review) {
+        $this->authorizeOwner($review);
+
+        // Mark as viewed when the partner opens the review
+        $this->reviewService->markAsViewed($review);
+
+        return $this->successResponse(new ReviewResource($review->load(['user', 'reviewable'])));
+    }
+
+    /**
+     * Ensure the partner is the owner of the listing being reviewed.
+     *
+     * @param Review $review
+     * @return void
+     */
+    protected function authorizeOwner(Review $review): void
+    {
+        /** * Logic: $review->reviewable is the listing (Property, Auto, etc.).
+         * We check if that listing's user_id matches the authenticated partner.
+         */
+        if ($review->reviewable->user_id !== Auth::id()) {
+            abort(403, __('Unauthorized access to this review.'));
+        }
+    }
+}

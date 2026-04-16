@@ -1,0 +1,105 @@
+<?php
+
+namespace App\Services\Admin;
+
+use Illuminate\Support\Facades\DB;
+use Illuminate\Pagination\LengthAwarePaginator;
+use App\Models\{PropertyBooking, AutoInquiry, EventBooking, JobApplication, ServiceQuote, ServiceAppointment, ClassifiedInquiry};
+
+class BookingManagementService
+{
+    /**
+     * Define the map of models and their specific related listing relationships.
+     */
+
+    public const MODEL_MAP = [
+        PropertyBooking::class    => ['relation' => 'property', 'table' => 'property_bookings', 'foreign_key' => 'property_id'],
+        AutoInquiry::class        => ['relation' => 'auto', 'table' => 'auto_inquiries', 'foreign_key' => 'auto_id'],
+        EventBooking::class       => ['relation' => 'event', 'table' => 'event_bookings', 'foreign_key' => 'event_id'],
+        JobApplication::class     => ['relation' => 'job', 'table' => 'job_applications', 'foreign_key' => 'job_listing_id'], // Corrected here
+        ServiceQuote::class       => ['relation' => 'service', 'table' => 'service_quotes', 'foreign_key' => 'service_id'],
+        ServiceAppointment::class => ['relation' => 'service', 'table' => 'service_appointments', 'foreign_key' => 'service_id'],
+        ClassifiedInquiry::class  => ['relation' => 'classifiedAd', 'table' => 'classified_inquiries', 'foreign_key' => 'classified_id'],
+    ];
+
+    /**
+     * Get a unified, paginated list of all bookings using a UNION query.
+     */
+    public function getUnifiedBookings(string $status = 'all', string $type = 'all', int $perPage = 20): LengthAwarePaginator
+    {
+        $query = null;
+
+        foreach (self::MODEL_MAP as $modelClass => $config) {
+            // Filter by item category/type if requested
+            if ($type !== 'all' && $config['relation'] !== $type) {
+                continue;
+            }
+
+            $subQuery = DB::table($config['table'])
+                ->select(
+                    'id',
+                    'user_id',
+                    'status',
+                    'created_at',
+                    $config['foreign_key'] . " as item_id", // Uses 'job_listing_id' correctly now
+                    DB::raw("'" . class_basename($modelClass) . "' as booking_type"),
+                    DB::raw("'" . $config['relation'] . "' as relation_name"),
+                    DB::raw("'" . $config['foreign_key'] . "' as actual_foreign_key") // Pass this to hydration
+                );
+
+            if ($status !== 'all') {
+                $subQuery->where('status', $status);
+            }
+
+            if (request('item_id')) {
+                $subQuery->where($config['foreign_key'], request('item_id'));
+            }
+
+            $query = ($query === null) ? $subQuery : $query->unionAll($subQuery);
+        }
+
+        // Handle case where query is completely empty because no model matched the type filter
+        if ($query === null) {
+            return new LengthAwarePaginator([], 0, $perPage);
+        }
+
+        $results = $query->orderByDesc('created_at')->paginate($perPage);
+
+        return $this->hydrateBookings($results);
+    }
+
+
+    protected function hydrateBookings(LengthAwarePaginator $paginator): LengthAwarePaginator
+    {
+        $models = $paginator->getCollection()->map(function ($raw) {
+            $fullClassName = "App\\Models\\" . $raw->booking_type;
+            $model = new $fullClassName();
+            
+            $data = (array) $raw;
+            // Map item_id back to job_listing_id (or whatever the real key is)
+            $data[$raw->actual_foreign_key] = $raw->item_id;
+
+            $model->setRawAttributes($data, true);
+            $model->exists = true; 
+            $model->booking_type = $raw->booking_type;
+            $model->relation_name = $raw->relation_name;
+
+            if ($raw->created_at) {
+                $model->created_at = \Illuminate\Support\Carbon::parse($raw->created_at);
+            }
+
+            return $model;
+        });
+
+        $items = new \Illuminate\Database\Eloquent\Collection($models);
+        
+        // Eager load relationships
+        $items->load('user');
+        $groupedByRelation = $items->groupBy('relation_name');
+        foreach ($groupedByRelation as $relation => $group) {
+            $group->load($relation);
+        }
+
+        return $paginator->setCollection($items);
+    }
+}

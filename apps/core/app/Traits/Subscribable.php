@@ -1,0 +1,83 @@
+<?php
+
+namespace App\Traits;
+
+use App\Models\Plan;
+use App\Models\Subscription; 
+
+trait Subscribable
+{
+    /**
+     * Get the active subscription plan object.
+     * Assumes the model (e.g., User) has a 'subscription' relationship to the Subscription model.
+     */
+    public function getPlan(): ?Plan
+    {
+        // Use optional chaining to safely access the plan through the subscription relationship
+        return $this->subscription?->plan;
+    }
+
+    /**
+     * Check if the user is on a specific plan name (e.g., 'Pro Plan').
+     */
+    public function onPlan(string $planName): bool
+    {
+        return $this->getPlan()?->title === $planName;
+    }
+
+    /**
+     * Check if the user has access to a specific feature or limit.
+     * * Since features are now individual columns on the Plan model, 
+     * this method checks the property directly.
+     * * @param string $feature The plan column name (e.g., 'max_listings', 'priority_support').
+     * @param mixed $value The value to check against (e.g., 5, or true).
+     * @return bool
+     */
+    public function subscribesTo(string $feature, $value = true): bool
+    {
+        $plan = $this->getPlan();
+
+        // If no active plan, return false
+        if (!$plan) {
+            return false;
+        }
+
+        // Check if the plan actually has the property (column)
+        if (!property_exists($plan, $feature) && !isset($plan->$feature)) {
+            // The requested feature is not a column on the Plan model
+            return false;
+        }
+
+        $planValue = $plan->$feature;
+
+        // 1. Check for simple boolean features (e.g., 'priority_support' => true)
+        if (is_bool($value)) {
+            // Use strict comparison for booleans
+            return (bool)$planValue === $value;
+        }
+
+        // 2. Check for numerical limits (e.g., 'max_listings' >= 5)
+        // Ensure both values are treated as integers for comparison
+        return (int)$planValue >= (int)$value;
+    }
+    
+    // The getPlanFeatures() method is removed as features are no longer in a single array.
+
+
+    /**
+     * Check if the user currently has an active, non-expired subscription.
+     */
+    public function isSubscribed(): bool
+    {
+        // Use the existing 'subscription' relationship (which fetches the 'default' one)
+        return $this->subscription()
+                    ->where(function ($query) {
+                        // The subscription is active if:
+                        $query->whereNull('ends_at') // 1. It is set for auto-renewal (no end date)
+                              ->orWhere('ends_at', '>', now()); // 2. OR its end date is still in the future
+                    })
+                    ->exists(); // Check if a record matching these criteria exists
+    }
+
+    
+}
