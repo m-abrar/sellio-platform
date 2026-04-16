@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect, useState } from 'react';
 import { api } from '@sellio/api-client';
 import { Product, Property, Application } from '@sellio/types';
