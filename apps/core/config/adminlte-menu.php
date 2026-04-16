@@ -497,7 +497,7 @@ return [
             ],
             [
                 'text' => 'Theme Settings',
-                'url'  => 'admin/themes',
+                'url'  => 'admin/applications',
                 'icon' => 'fas fa-palette',
             ],
             [

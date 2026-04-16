@@ -198,7 +198,7 @@ Route::prefix('admin')
 
         Route::resource('users', UserController::class)->middleware('can:manage-users');
 
-        Route::middleware('role:super-admin')->group(function () {
+        Route::middleware('can:app-settings')->group(function () {
             Route::resource('roles', RoleController::class);
             Route::resource('permissions', PermissionController::class);
 
@@ -311,7 +311,7 @@ Route::prefix('admin')
         );
         Route::get('payments-report', [ReportController::class , 'payments'])->name('payments_report');
 
-        Route::controller(ApplicationController::class)->middleware('can:manage-applications')->prefix('applications')->name('applications.')->group(function () {
+        Route::controller(ApplicationController::class)->middleware('can:app-settings')->prefix('applications')->name('applications.')->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/{application}/edit', 'edit')->name('edit');
             Route::post('/{application}/update', 'update')->name('update');
