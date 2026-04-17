@@ -7,7 +7,7 @@
         <div class="row mb-2">
             <div class="col-sm-6">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-palette mr-2 text-primary"></i> Visual Theme Manager
+                    <i class="fas fa-palette mr-2 text-primary"></i> Theme Customization Engine
                 </h1>
             </div>
             <div class="col-sm-6">
@@ -24,92 +24,165 @@
 <div class="container-fluid">
     @include('admin.alert')
 
-    {{-- Strategy Section --}}
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="card bg-white border-0 shadow-sm overflow-hidden" style="border-radius: 12px;">
-                <div class="card-body p-0">
-                    <div class="d-flex align-items-center">
-                        <div class="bg-indigo px-4 d-flex align-items-center justify-content-center" style="align-self: stretch;">
-                            <i class="fas fa-wand-magic-sparkles text-white fa-2x"></i>
+    {{-- SECTION 1: ACTIVE THEME --}}
+    @if($activeTheme)
+    <div class="mb-5">
+        <div class="section-title-modern">
+            <span class="badge badge-primary px-3 py-2 mb-2">CURRENTLY ACTIVE</span>
+            <h4 class="font-weight-bold">Active Storefront Identity</h4>
+        </div>
+        <div class="card active-theme-hero shadow-lg border-0 overflow-hidden">
+            <div class="row no-gutters">
+                <div class="col-md-5">
+                    <div class="position-relative h-100">
+                        <img src="{{ asset('frontend/images/preview.png') }}" class="img-fluid h-100 w-100" style="object-fit: cover;" alt="{{ $activeTheme->title }}">
+                        <div class="active-status-overlay">
+                            <i class="fas fa-check-circle mr-1"></i> LIVE NOW
                         </div>
-                        <div class="p-3">
-                            <h5 class="mb-1 font-weight-bold">UI Customization Engine</h5>
-                            <p class="mb-0 text-muted small">Hot-swap the frontend identity. Activating a theme updates CSS variables, layout structures, and blade component mappings globally.</p>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <div class="card-body p-4 d-flex flex-column h-100">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div>
+                                <h2 class="font-weight-bold text-dark mb-1">{{ $activeTheme->title }}</h2>
+                                <span class="badge badge-light border px-3 text-uppercase small font-weight-bold">
+                                    {{ $activeTheme->vertical ?? 'Unified / General' }}
+                                </span>
+                            </div>
+                            <code class="bg-dark text-white px-3 py-1 rounded shadow-sm">{{ $activeTheme->theme_key }}</code>
+                        </div>
+                        
+                        <p class="text-muted flex-grow-1" style="font-size: 1.1rem; line-height: 1.6;">
+                            {{ $activeTheme->description ?? 'This theme is driving your storefront. It utilizes a ' . ($activeTheme->vertical ?? 'unified') . ' layout system with specialized components for ' . ($activeTheme->vertical ?? 'all business operations') . '.' }}
+                        </p>
+
+                        <div class="mt-4 pt-3 border-top d-flex align-items-center">
+                            <a href="{{ url('/') }}" target="_blank" class="btn btn-primary px-4 font-weight-bold mr-3 shadow">
+                                <i class="fas fa-external-link-alt mr-2"></i> View Site
+                            </a>
+                            <a href="{{ route('admin.themes.edit', $activeTheme->id) }}" class="btn btn-outline-dark px-4 font-weight-bold">
+                                <i class="fas fa-cog mr-2"></i> Theme Settings
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    @endif
 
-    
-
-    <div class="row">
-        @forelse($themes as $theme)
-            <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
-                <div class="card h-100 theme-card shadow-sm border-0 {{ $theme->is_active ? 'active-border' : '' }}">
-                    {{-- Theme Preview Thumbnail --}}
-                    <div class="position-relative overflow-hidden theme-thumbnail-container">
-                        <img src="{{ asset('frontend/images/preview.png') }}"
-                             class="card-img-top" 
-                             alt="{{ $theme->title }}"
-                             style="height: 220px; object-fit: cover; transition: all 0.5s ease;">
-                        
+    {{-- SECTION 2: RECENTLY USED --}}
+    @if($recentThemes->count() > 0)
+    <div class="mb-5">
+        <div class="section-title-modern">
+            <h5 class="font-weight-bold text-muted"><i class="fas fa-history mr-2"></i> Recently Used</h5>
+        </div>
+        <div class="row">
+            @foreach($recentThemes as $theme)
+            <div class="col-md-3">
+                <div class="card theme-card-sm shadow-sm border-0">
+                    <div class="position-relative">
+                        <img src="{{ asset('frontend/images/preview.png') }}" class="card-img-top" style="height: 120px; object-fit: cover;" alt="{{ $theme->title }}">
                         <div class="theme-overlay">
-                             <a href="{{ url('/?theme=' . $theme->theme_key) }}" target="_blank" class="btn btn-light btn-sm font-weight-bold px-3 shadow">
-                                <i class="fas fa-eye mr-1"></i> Live Preview
-                             </a>
-                        </div>
-
-                        @if($theme->is_active)
-                            <div class="active-status-ribbon">
-                                <i class="fas fa-check-circle mr-1"></i> ACTIVE
-                            </div>
-                        @endif
-                    </div>
-
-                    <div class="card-body py-3">
-                        <div class="d-flex justify-content-between align-items-start mb-2">
-                            <h6 class="font-weight-bold text-dark mb-0">{{ $theme->title }}</h6>
-                            <code class="text-xs px-2 py-0 bg-light border rounded">{{ $theme->theme_key }}</code>
-                        </div>
-                        <p class="text-muted mb-0" style="font-size: 0.8rem; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
-                            {{ $theme->description ?? 'Standard UI skin with optimized layout components and responsive design grids.' }}
-                        </p>
-                    </div>
-
-                    <div class="card-footer bg-white border-0 pt-0 pb-3">
-                        <div class="d-flex align-items-center">
-                            @if(!$theme->is_active)
-                                <form action="{{ route('admin.themes.activate', $theme->id) }}" method="POST" class="flex-grow-1 mr-2">
-                                    @csrf
-                                    <button class="btn btn-primary btn-sm btn-block font-weight-bold shadow-xs" type="submit">
-                                        Activate Theme
-                                    </button>
-                                </form>
-                            @else
-                                <button class="btn btn-success btn-sm btn-block font-weight-bold shadow-xs flex-grow-1 mr-2" disabled>
-                                    <i class="fas fa-check mr-1"></i> Selected
+                            <form action="{{ route('admin.themes.activate', $theme->id) }}" method="POST">
+                                @csrf
+                                <button type="submit" class="btn btn-light btn-xs font-weight-bold px-3 shadow">
+                                    <i class="fas fa-bolt mr-1"></i> Activate
                                 </button>
-                            @endif
+                            </form>
+                        </div>
+                    </div>
+                    <div class="card-body p-2 text-center">
+                        <h6 class="font-weight-bold mb-0 text-truncate">{{ $theme->title }}</h6>
+                        <small class="text-muted text-xs">Used {{ $theme->last_activated_at->diffForHumans() }}</small>
+                    </div>
+                </div>
+            </div>
+            @endforeach
+        </div>
+    </div>
+    @endif
 
-                            <a href="{{ route('admin.themes.edit', $theme->id) }}" 
-                               class="btn btn-outline-secondary btn-sm" 
-                               data-toggle="tooltip" title="Theme Settings">
-                                <i class="fas fa-cog"></i>
-                            </a>
+    {{-- SECTION 3: BROWSE BY VERTICAL --}}
+    <div class="mb-5">
+        <div class="section-title-modern d-flex align-items-center justify-content-between">
+            <h5 class="font-weight-bold text-muted"><i class="fas fa-layer-group mr-2"></i> Theme Library</h5>
+            {{-- Search could go here --}}
+        </div>
+
+        <div class="card border-0 shadow-sm" style="border-radius: 15px;">
+            <div class="card-body p-0">
+                <div class="row no-gutters">
+                    <div class="col-md-3 border-right">
+                        <div class="nav flex-column nav-pills vertical-theme-nav p-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                            @php $first = true; @endphp
+                            @foreach($themesByVertical as $vertical => $group)
+                                <a class="nav-link mb-2 {{ $first ? 'active' : '' }}" 
+                                   id="v-pills-{{ Str::slug($vertical ?: 'general') }}-tab" 
+                                   data-toggle="pill" 
+                                   href="#v-pills-{{ Str::slug($vertical ?: 'general') }}" 
+                                   role="tab">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-circle mr-2 text-xs {{ $vertical ? 'text-primary' : 'text-indigo' }}"></i>
+                                        <span class="text-capitalize">{{ $vertical ?: 'Unified Pack' }}</span>
+                                        <span class="badge badge-light ml-auto">{{ $group->count() }}</span>
+                                    </div>
+                                </a>
+                                @php $first = false; @endphp
+                            @endforeach
+                        </div>
+                    </div>
+                    <div class="col-md-9 bg-light rounded-right">
+                        <div class="tab-content p-4" id="v-pills-tabContent">
+                            @php $first = true; @endphp
+                            @foreach($themesByVertical as $vertical => $group)
+                                <div class="tab-pane fade {{ $first ? 'show active' : '' }}" 
+                                     id="v-pills-{{ Str::slug($vertical ?: 'general') }}" 
+                                     role="tabpanel">
+                                     
+                                     <div class="d-flex align-items-center mb-4">
+                                         <h4 class="font-weight-bold mb-0 text-capitalize">{{ $vertical ?: 'Unified Themes' }}</h4>
+                                         <div class="ml-3 h-px bg-secondary flex-grow-1 opacity-25"></div>
+                                     </div>
+
+                                     <div class="row">
+                                         @foreach($group as $theme)
+                                             <div class="col-md-4 mb-4">
+                                                 <div class="card h-100 theme-card shadow-xs border-0">
+                                                     <div class="position-relative overflow-hidden theme-thumbnail-container">
+                                                         <img src="{{ asset('frontend/images/preview.png') }}" class="card-img-top" style="height: 160px; object-fit: cover;" alt="{{ $theme->title }}">
+                                                         <div class="theme-overlay">
+                                                              <a href="{{ route('admin.themes.edit', $theme->id) }}" class="btn btn-light btn-sm font-weight-bold px-3 shadow mr-2">
+                                                                 <i class="fas fa-cog"></i>
+                                                              </a>
+                                                              <form action="{{ route('admin.themes.activate', $theme->id) }}" method="POST">
+                                                                  @csrf
+                                                                  <button type="submit" class="btn btn-primary btn-sm font-weight-bold px-3 shadow">
+                                                                     Activate
+                                                                  </button>
+                                                              </form>
+                                                         </div>
+                                                     </div>
+                                                     <div class="card-body p-3">
+                                                         <h6 class="font-weight-bold text-dark mb-1">{{ $theme->title }}</h6>
+                                                         <code class="text-xs mb-2 d-block">{{ $theme->theme_key }}</code>
+                                                         <p class="text-muted small mb-0 line-clamp-2">
+                                                             {{ $theme->description ?? 'optimized ' . ($theme->vertical ?: 'unified') . ' layout components.' }}
+                                                         </p>
+                                                     </div>
+                                                 </div>
+                                             </div>
+                                         @endforeach
+                                     </div>
+                                </div>
+                                @php $first = false; @endphp
+                            @endforeach
                         </div>
                     </div>
                 </div>
             </div>
-        @empty
-            <div class="col-12 text-center py-5">
-                <i class="fas fa-fill-drip fa-4x text-light mb-3"></i>
-                <h5 class="text-muted font-weight-bold">No Themes Available</h5>
-                <p class="text-secondary small">Ensure themes are correctly symlinked to the public storage directory.</p>
-            </div>
-        @endforelse
+        </div>
     </div>
 </div>
 @endsection
@@ -117,65 +190,67 @@
 @section('css')
 <style>
     .bg-indigo { background-color: #6610f2; }
-    .shadow-xs { box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
-    .text-xs { font-size: 0.7rem; }
-    
-    .theme-card {
-        border-radius: 12px;
-        transition: all 0.3s cubic-bezier(.25,.8,.25,1);
-        background: #fff;
+    .h-px { height: 1px; }
+    .opacity-25 { opacity: 0.25; }
+    .btn-xs { padding: 0.25rem 0.5rem; font-size: 0.75rem; }
+    .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+    /* Modern Headers */
+    .section-title-modern { margin-bottom: 1.5rem; }
+
+    /* Active Theme Hero */
+    .active-theme-hero { border-radius: 20px; transition: transform 0.3s ease; }
+    .active-theme-hero:hover { transform: translateY(-3px); }
+    .active-status-overlay {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        background: #28a745;
+        color: #fff;
+        padding: 5px 15px;
+        border-radius: 30px;
+        font-size: 0.75rem;
+        font-weight: 800;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     }
 
-    .theme-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 35px rgba(0,0,0,0.1) !important;
+    /* Small Recent Cards */
+    .theme-card-sm { border-radius: 12px; transition: all 0.2s; overflow: hidden; }
+    .theme-card-sm:hover { transform: scale(1.02); box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important; }
+
+    /* Library Cards */
+    .theme-card { border-radius: 15px; transition: all 0.3s; }
+    .theme-card:hover { transform: translateY(-5px); box-shadow: 0 12px 25px rgba(0,0,0,0.1) !important; }
+    .theme-thumbnail-container { border-radius: 15px 15px 0 0; }
+
+    /* Navigation */
+    .vertical-theme-nav .nav-link {
+        border-radius: 10px;
+        color: #495057;
+        font-weight: 600;
+        transition: all 0.2s;
+        border: 1px solid transparent;
+    }
+    .vertical-theme-nav .nav-link:hover { background: rgba(0,0,0,0.03); }
+    .vertical-theme-nav .nav-link.active {
+        background: #fff !important;
+        color: #007bff !important;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        border-color: #dee2e6;
     }
 
-    .active-border {
-        border: 2px solid #007bff !important;
-    }
-
-    .theme-thumbnail-container {
-        border-top-left-radius: 12px;
-        border-top-right-radius: 12px;
-    }
-
-    /* Hover Overlay Effect */
+    /* Actions Overlay */
     .theme-overlay {
         position: absolute;
         top: 0; left: 0; width: 100%; height: 100%;
-        background: rgba(0,0,0,0.4);
+        background: rgba(0,0,0,0.5);
         display: flex;
         align-items: center;
         justify-content: center;
         opacity: 0;
         transition: opacity 0.3s ease;
     }
-
-    .theme-card:hover .theme-overlay {
-        opacity: 1;
-    }
-
-    .theme-card:hover .card-img-top {
-        transform: scale(1.05);
-    }
-
-    /* Active Ribbon */
-    .active-status-ribbon {
-        position: absolute;
-        bottom: 12px;
-        left: 12px;
-        background: #28a745;
-        color: #fff;
-        padding: 4px 12px;
-        border-radius: 30px;
-        font-size: 0.65rem;
-        font-weight: 800;
-        letter-spacing: 0.5px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.15);
-    }
-
-    .btn-block { border-radius: 8px; }
+    .card:hover .theme-overlay { opacity: 1; }
 </style>
 @endsection
 
@@ -183,6 +258,12 @@
 <script>
     $(function () {
         $('[data-toggle="tooltip"]').tooltip();
+        
+        // Ensure active tab is visible if deep-linked (future-proofing)
+        var hash = window.location.hash;
+        if (hash) {
+            $('.nav-pills a[href="' + hash + '"]').tab('show');
+        }
     });
 </script>
 @endsection

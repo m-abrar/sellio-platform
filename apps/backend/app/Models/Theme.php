@@ -26,6 +26,7 @@ class Theme extends Model implements HasMedia
         'title',     // e.g., 'Properties Classic'
         'order',
         'is_active',
+        'last_activated_at',
         'variables', // JSON: visual styling (colors, fonts, radii)
         'config',    // JSON: modular logic/features
     ];
@@ -34,6 +35,7 @@ class Theme extends Model implements HasMedia
         'variables' => 'array',
         'config'    => 'array',
         'is_active' => 'boolean',
+        'last_activated_at' => 'datetime',
     ];
 
     // --- Scopes ---

@@ -12,8 +12,26 @@ class ThemeController extends Controller
     public function index()
     {
         $this->authorize('viewAny', Theme::class);
-        $themes = Theme::orderBy('order')->get();
-        return view('admin.themes.index', compact('themes'));
+
+        $activeTheme = Theme::where('is_active', true)->first();
+        
+        $recentThemes = Theme::where('is_active', false)
+            ->whereNotNull('last_activated_at')
+            ->orderBy('last_activated_at', 'desc')
+            ->limit(4)
+            ->get();
+
+        $recentIds = $recentThemes->pluck('id')->toArray();
+        if ($activeTheme) {
+            $recentIds[] = $activeTheme->id;
+        }
+
+        $themesByVertical = Theme::whereNotIn('id', $recentIds)
+            ->orderBy('order')
+            ->get()
+            ->groupBy('vertical');
+
+        return view('admin.themes.index', compact('activeTheme', 'recentThemes', 'themesByVertical'));
     }
 
     public function edit(Theme $theme)
@@ -46,7 +64,10 @@ class ThemeController extends Controller
 
         DB::transaction(function () use ($theme) {
             Theme::query()->update(['is_active' => false]);
-            $theme->update(['is_active' => true]);
+            $theme->update([
+                'is_active' => true,
+                'last_activated_at' => now(),
+            ]);
 
             Setting::updateOrCreate(
                 ['key' => 'site_home'],
