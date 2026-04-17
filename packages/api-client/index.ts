@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
-import { User, Application, Product, Property } from '@sellio/types';
+import { User, Theme, Product, Property } from '@sellio/types';
 
 const API_BASE_URL = typeof window !== 'undefined' 
   ? (import.meta as any).env?.VITE_API_BASE_URL || 'http://localhost:8000/api'
@@ -36,9 +36,9 @@ export const setAuthToken = (token: string | null) => {
   }
 };
 
-// Helper to set application key for tenant identification
-export const setAppKey = (appKey: string) => {
-  client.defaults.headers.common['X-App-Key'] = appKey;
+// Helper to set theme key for tenant identification
+export const setThemeKey = (themeKey: string) => {
+  client.defaults.headers.common['X-Theme-Key'] = themeKey;
 };
 
 export const api = {
@@ -49,10 +49,10 @@ export const api = {
     logout: () => client.post<ApiResponse<any>>('/auth/logout'),
   },
   
-  applications: {
-    list: () => client.get<ApiResponse<Application[]>>('/applications'),
-    get: (id: string | number) => client.get<ApiResponse<Application>>(`/applications/${id}`),
-    active: () => client.get<ApiResponse<Application>>('/applications/active'), 
+  themes: {
+    list: () => client.get<ApiResponse<Theme[]>>('/themes'),
+    get: (id: string | number) => client.get<ApiResponse<Theme>>(`/themes/${id}`),
+    active: () => client.get<ApiResponse<Theme>>('/themes/active'),
   },
 
   products: {

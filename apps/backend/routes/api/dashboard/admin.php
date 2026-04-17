@@ -53,6 +53,7 @@ use App\Http\Controllers\Admin\{
     PageBuilderController,
     ContentController,
     MenuController,
+    ApplicationController,
     ThemeController,
     EmailTemplateController,
     AdvertisementController,
@@ -233,7 +234,7 @@ Route::name('dashboard.admin.')->group(function () {
     });
     Route::get('payments-report', [ReportController::class, 'payments'])->name('payments_report');
 
-    Route::controller(ApplicationController::class)->prefix('applications')->name('applications.')->group(function () {
+    Route::controller(ThemeController::class)->prefix('themes')->name('themes.')->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/{id}/edit', 'edit')->name('edit');
         Route::post('/{id}/update', 'update')->name('update');

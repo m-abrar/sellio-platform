@@ -55,7 +55,7 @@ PageController,
 PageBuilderController,
 ContentController,
 MenuController,
-ApplicationController,
+ThemeController,
 EmailTemplateController,
 AdvertisementController,
 NewsletterSubscriberController,
@@ -311,11 +311,11 @@ Route::prefix('admin')
         );
         Route::get('payments-report', [ReportController::class , 'payments'])->name('payments_report');
 
-        Route::controller(ApplicationController::class)->middleware('can:app-settings')->prefix('applications')->name('applications.')->group(function () {
+        Route::controller(ThemeController::class)->middleware('can:app-settings')->prefix('themes')->name('themes.')->group(function () {
             Route::get('/', 'index')->name('index');
-            Route::get('/{application}/edit', 'edit')->name('edit');
-            Route::post('/{application}/update', 'update')->name('update');
-            Route::post('/{application}/activate', 'activate')->name('activate');
+            Route::get('/{theme}/edit', 'edit')->name('edit');
+            Route::post('/{theme}/update', 'update')->name('update');
+            Route::post('/{theme}/activate', 'activate')->name('activate');
         }
         );
 

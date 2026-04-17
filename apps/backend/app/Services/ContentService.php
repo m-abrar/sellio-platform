@@ -10,11 +10,11 @@ use Illuminate\Http\Request;
 class ContentService
 {
     protected const FILE_COLLECTION = 'page_content';
-    protected ?string $activeApp;
+    protected ?string $activeTheme;
 
     public function __construct(Request $request)
     {
-        $this->activeApp = $request->get('appKey') ?? Config::get('app.default_app', 'default');
+        $this->activeTheme = $request->get('themeKey') ?? Config::get('app.default_theme', 'default');
     }
 
     public function get(string $keyString, $default = null): mixed
@@ -34,7 +34,7 @@ class ContentService
 
         // 2. Admin Path
         $setting = PageContent::firstOrCreate([
-            'app_key'     => $this->activeApp,
+            'theme_key'     => $this->activeTheme,
             'page'        => $page,
             'section'     => $section,
             'content_key' => $key,
@@ -62,7 +62,7 @@ class ContentService
     protected function fetchFromDb($page, $section, $key, $default)
     {
         $setting = PageContent::where([
-            'app_key'     => $this->activeApp,
+            'theme_key'     => $this->activeTheme,
             'page'        => $page,
             'section'     => $section,
             'content_key' => $key,
@@ -73,6 +73,6 @@ class ContentService
 
     protected function generateCacheKey($page, $section, $key): string
     {
-        return "page_content.{$this->activeApp}.{$page}.{$section}.{$key}";
+        return "page_content.{$this->activeTheme}.{$page}.{$section}.{$key}";
     }
 }

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { headers } from 'next/headers';
-import { api, setAppKey } from '@sellio/api-client';
+import { api, setThemeKey } from '@sellio/api-client';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,11 +16,11 @@ const geistMono = Geist_Mono({
 
 export async function generateMetadata(): Promise<Metadata> {
   const headerList = await headers();
-  const appKey = headerList.get('x-app-key') || 'default_ecommerce';
+  const themeKey = headerList.get('x-theme-key') || 'unifieds_default';
   
   try {
-    setAppKey(appKey);
-    const { data: app } = await api.applications.active();
+    setThemeKey(themeKey);
+    const { data: app } = await api.themes.active();
     return {
       title: app.title,
       description: `Marketplace for ${app.vertical}`,
@@ -39,12 +39,12 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const headerList = await headers();
-  const appKey = headerList.get('x-app-key') || 'default_ecommerce';
+  const themeKey = headerList.get('x-theme-key') || 'unifieds_default';
 
   let appConfig = null;
   try {
-    setAppKey(appKey);
-    const { data: app } = await api.applications.active();
+    setThemeKey(themeKey);
+    const { data: app } = await api.themes.active();
     appConfig = app;
   } catch (e) {
     console.error("Failed to load app config", e);

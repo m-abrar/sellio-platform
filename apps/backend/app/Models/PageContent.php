@@ -14,7 +14,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * App\Models\PageContent
  *
  * @property int $id
- * @property string $app_key
+ * @property string $theme_key
  * @property string $page
  * @property string $section
  * @property string $content_key
@@ -48,7 +48,7 @@ class PageContent extends Model implements HasMedia
      * @var array<int, string>
      */
     protected $fillable = [
-        'app_key',
+        'theme_key',
         'page',
         'section',
         'content_key',
@@ -72,12 +72,12 @@ class PageContent extends Model implements HasMedia
     /**
      * Scope a query to filter content by theme and page.
      */
-    public function scopeForPage(Builder $query, string $page, ?string $appKey = null): Builder
+    public function scopeForPage(Builder $query, string $page, ?string $themeKey = null): Builder
     {
         $query->where('page', $page);
         
-        if ($appKey) {
-            $query->where('app_key', $appKey);
+        if ($themeKey) {
+            $query->where('theme_key', $themeKey);
         }
 
         return $query;

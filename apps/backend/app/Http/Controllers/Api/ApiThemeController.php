@@ -1,0 +1,66 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+
+use App\Http\Controllers\Controller;
+use App\Models\Theme;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+
+class ApiThemeController extends Controller
+{
+    /**
+     * Get the currently active theme based on x-theme-key header,
+     * or fallback to the globally active theme in the database.
+     */
+    public function active(Request $request): JsonResponse
+    {
+        $themeKey = $request->header('X-Theme-Key');
+
+        $theme = null;
+
+        if ($themeKey) {
+            $theme = Theme::where('theme_key', $themeKey)->where('is_active', true)->first();
+        }
+
+        if (!$theme) {
+            $theme = Theme::active()->first();
+        }
+
+        if (!$theme) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No active theme found',
+                'data'    => null,
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Active theme retrieved',
+            'data'    => $theme,
+        ]);
+    }
+
+    /**
+     * List all themes, with optional vertical and active_only filters.
+     */
+    public function index(Request $request): JsonResponse
+    {
+        $query = Theme::orderBy('order');
+
+        if ($request->has('vertical')) {
+            $query->where('vertical', $request->query('vertical'));
+        }
+
+        if ($request->boolean('active_only')) {
+            $query->where('is_active', true);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Themes retrieved',
+            'data'    => $query->get(),
+        ]);
+    }
+}

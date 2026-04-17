@@ -2,11 +2,11 @@
 
 import React, { useEffect, useState } from 'react';
 import { api } from '@sellio/api-client';
-import { Product, Property, Application } from '@sellio/types';
+import { Product, Property, Theme } from '@sellio/types';
 import { Button, Card } from '@sellio/ui';
 
 interface LayoutProps {
-  appConfig: Application | null;
+  appConfig: Theme | null;
 }
 
 /**

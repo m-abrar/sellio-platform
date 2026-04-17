@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Setting;
 use App\Models\Page;
-use App\Models\Application;
+use App\Models\Theme;
 use Illuminate\Support\Facades\DB; 
 
 class SettingController extends Controller
@@ -18,10 +18,10 @@ class SettingController extends Controller
     {
         $settings = Setting::pluck('value', 'key')->toArray(); 
         $pages = Page::where('type','page')->get();
-        // Load all applications for potential use in the index/explorer view
-        $applications = Application::all();
+        // Load all themes for potential use in the index/explorer view
+        $themes = Theme::all();
         
-        return view('admin.settings.index', compact('settings', 'pages', 'applications'));
+        return view('admin.settings.index', compact('settings', 'pages', 'themes'));
     }
 
     /**
@@ -41,15 +41,15 @@ class SettingController extends Controller
         if ($section === 'pages') {
             $pages = Page::where('type', 'page')->get();
             
-            // Load specific application subsets based on app_key prefix
-            $applications['all'] = Application::all(); // Keep all applications just in case you need a full list
-            $applications['unifieds'] = $this->getFilteredApplications('unified');
-            $applications['properties'] = $this->getFilteredApplications('prop');
-            $applications['autos'] = $this->getFilteredApplications('auto');
-            $applications['events'] = $this->getFilteredApplications('event');
-            $applications['jobs'] = $this->getFilteredApplications('job');
-            $applications['services'] = $this->getFilteredApplications('service');
-            $applications['classifieds'] = $this->getFilteredApplications('classified');
+            // Load specific theme subsets based on theme_key prefix
+            $themes['all'] = Theme::all(); 
+            $themes['unifieds'] = $this->getFilteredThemes('unified');
+            $themes['properties'] = $this->getFilteredThemes('prop');
+            $themes['autos'] = $this->getFilteredThemes('auto');
+            $themes['events'] = $this->getFilteredThemes('event');
+            $themes['jobs'] = $this->getFilteredThemes('job');
+            $themes['services'] = $this->getFilteredThemes('service');
+            $themes['classifieds'] = $this->getFilteredThemes('classified');
         }
         
         // Safety check
@@ -58,7 +58,7 @@ class SettingController extends Controller
         }
 
         // Returns the dedicated view, which includes the layout and the form.
-        return view($viewPath, compact('settings', 'pages', 'applications'));
+        return view($viewPath, compact('settings', 'pages', 'themes'));
     }
 
     /**
@@ -156,15 +156,15 @@ class SettingController extends Controller
             ],
         ];
 
-        // Dynamic Validation for Listing Archive App Keys (Requires Application::pluck to run)
+        // Dynamic Validation for Listing Archive Theme Keys (Requires Theme::pluck to run)
         if ($section === 'pages') {
-            $availableAppKeys = Application::pluck('app_key')->toArray();
+            $availableThemeKeys = Theme::pluck('theme_key')->toArray();
             
-            // Add an empty string for the "-- Default Application --" option
-            $appValidationRule = 'nullable|string|in:' . implode(',', array_merge([''], $availableAppKeys));
+            // Add an empty string for the "-- Default Theme --" option
+            $themeValidationRule = 'nullable|string|in:' . implode(',', array_merge([''], $availableThemeKeys));
 
-            // App keys for listing archives
-            $appKeysToValidate = [
+            // Theme keys for listing archives
+            $themeKeysToValidate = [
                 'app_unifieds',
                 'app_properties',
                 'app_autos',
@@ -174,11 +174,11 @@ class SettingController extends Controller
                 'app_classifieds',
             ];
             
-            // Add validation for 'site_home' and the archive apps
-            $allAppKeysToValidate = array_merge($appKeysToValidate, ['site_home']);
+            // Add validation for 'site_home' and the archive themes
+            $allThemeKeysToValidate = array_merge($themeKeysToValidate, ['site_home']);
 
-            foreach ($allAppKeysToValidate as $key) {
-                $rules['pages'][$key] = $appValidationRule;
+            foreach ($allThemeKeysToValidate as $key) {
+                $rules['pages'][$key] = $themeValidationRule;
             }
         }
 
@@ -186,37 +186,37 @@ class SettingController extends Controller
     }
     
     /**
-     * Helper function to fetch applications based on an app_key prefix.
+     * Helper function to fetch themes based on a theme_key prefix.
      */
-    private function getFilteredApplications(string $prefix)
+    private function getFilteredThemes(string $prefix)
     {
-        // Use LIKE to match app_keys starting with the prefix, followed by an underscore
-        return Application::where('app_key', 'LIKE', $prefix . '_%')->get();
+        // Use LIKE to match theme_keys starting with the prefix, followed by an underscore
+        return Theme::where('theme_key', 'LIKE', $prefix . '_%')->get();
     }
     
     /**
-     * Helper function to activate an application by its key and update the site_home setting.
+     * Helper function to activate a theme by its key and update the site_home setting.
      * This logic is the canonical activation method used by the SettingController.
      *
-     * @param string|null $appKey The app_key to activate.
+     * @param string|null $themeKey The theme_key to activate.
      * @return void
      */
-    private function activateApplicationByKey(?string $appKey): void
+    private function activateThemeByKey(?string $themeKey): void
     {
-        // 1. Deactivate all applications
-        Application::query()->update(['is_active' => false]);
+        // 1. Deactivate all themes
+        Theme::query()->update(['is_active' => false]);
         
-        // 2. If a key is provided, find and activate the application
-        if (!empty($appKey)) {
-            $application = Application::where('app_key', $appKey)->first();
+        // 2. If a key is provided, find and activate the theme
+        if (!empty($themeKey)) {
+            $theme = Theme::where('theme_key', $themeKey)->first();
 
-            if ($application) {
-                Application::where('id', $application->id)->update(['is_active' => true]);
+            if ($theme) {
+                Theme::where('id', $theme->id)->update(['is_active' => true]);
             }
         }
         
-        // 3. Save the application key to the 'site_home' setting (even if null/empty)
-        Setting::updateOrCreate(['key' => 'site_home'], ['value' => $appKey ?? '']);
+        // 3. Save the theme key to the 'site_home' setting (even if null/empty)
+        Setting::updateOrCreate(['key' => 'site_home'], ['value' => $themeKey ?? '']);
     }
 
     /**
@@ -234,10 +234,10 @@ class SettingController extends Controller
         foreach ($validKeys as $key) {
             $value = $request->input($key);
             
-            // --- A. Handle Application Activation for site_home (Use the helper method) ---
+            // --- A. Handle Theme Activation for site_home (Use the helper method) ---
             if ($section === 'pages' && $key === 'site_home') {
-                $this->activateApplicationByKey($value);
-                // We handled saving the setting inside activateApplicationByKey, so we continue
+                $this->activateThemeByKey($value);
+                // We handled saving the setting inside activateThemeByKey, so we continue
                 continue; 
             }
             

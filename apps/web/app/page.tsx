@@ -1,17 +1,17 @@
 import { headers } from 'next/headers';
-import { api, setAppKey } from '@sellio/api-client';
+import { api, setThemeKey } from '@sellio/api-client';
 import { EcommerceLayout, RealEstateLayout, VacationRentalLayout } from '../components/verticals/Layouts';
 
 export default async function Home() {
   const headerList = await headers();
-  const appKey = headerList.get('x-app-key') || 'ecommerce_basic';
+  const themeKey = headerList.get('x-theme-key') || 'unifieds_default';
 
   let appConfig = null;
   let dynamicStyles = {};
   
   try {
-    setAppKey(appKey);
-    const { data: response } = await api.applications.active();
+    setThemeKey(themeKey);
+    const { data: response } = await api.themes.active();
     appConfig = response.data;
 
     // Map Application variables to CSS Variables

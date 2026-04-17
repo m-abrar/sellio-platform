@@ -9,17 +9,21 @@ export interface User {
   phone?: string;
 }
 
-export interface Application {
+export interface Theme {
   id: number;
-  app_key: string;
-  vertical: Vertical;
+  theme_key: string;
+  vertical: Vertical | null;
   title: string;
+  order: number;
   is_active: boolean;
   variables: Record<string, any>; // Visual styling (colors, fonts)
   config: Record<string, any>;    // Operational config (features enabled, etc.)
   created_at: string;
   updated_at: string;
 }
+
+/** @deprecated Use Theme instead */
+export type Application = Theme;
 
 export interface Media {
   id: number;

@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * App\Models\Menu
  *
  * @property int $id
- * @property string $app_key
+ * @property string $theme_key
  * @property string $title
  * @property string $location_key
  * @property bool $is_active
@@ -29,7 +29,7 @@ class Menu extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'app_key',
+        'theme_key',
         'title',
         'location_key',
         'is_active',

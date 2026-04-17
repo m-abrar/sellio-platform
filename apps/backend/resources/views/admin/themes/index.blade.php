@@ -46,23 +46,23 @@
     
 
     <div class="row">
-        @forelse($applications as $application)
+        @forelse($themes as $theme)
             <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
-                <div class="card h-100 theme-card shadow-sm border-0 {{ $application->is_active ? 'active-border' : '' }}">
+                <div class="card h-100 theme-card shadow-sm border-0 {{ $theme->is_active ? 'active-border' : '' }}">
                     {{-- Theme Preview Thumbnail --}}
                     <div class="position-relative overflow-hidden theme-thumbnail-container">
                         <img src="{{ asset('frontend/images/preview.png') }}"
                              class="card-img-top" 
-                             alt="{{ $application->title }}"
+                             alt="{{ $theme->title }}"
                              style="height: 220px; object-fit: cover; transition: all 0.5s ease;">
                         
                         <div class="theme-overlay">
-                             <a href="{{ url('/?theme=' . $application->app_key) }}" target="_blank" class="btn btn-light btn-sm font-weight-bold px-3 shadow">
+                             <a href="{{ url('/?theme=' . $theme->theme_key) }}" target="_blank" class="btn btn-light btn-sm font-weight-bold px-3 shadow">
                                 <i class="fas fa-eye mr-1"></i> Live Preview
                              </a>
                         </div>
 
-                        @if($application->is_active)
+                        @if($theme->is_active)
                             <div class="active-status-ribbon">
                                 <i class="fas fa-check-circle mr-1"></i> ACTIVE
                             </div>
@@ -71,18 +71,18 @@
 
                     <div class="card-body py-3">
                         <div class="d-flex justify-content-between align-items-start mb-2">
-                            <h6 class="font-weight-bold text-dark mb-0">{{ $application->title }}</h6>
-                            <code class="text-xs px-2 py-0 bg-light border rounded">{{ $application->app_key }}</code>
+                            <h6 class="font-weight-bold text-dark mb-0">{{ $theme->title }}</h6>
+                            <code class="text-xs px-2 py-0 bg-light border rounded">{{ $theme->theme_key }}</code>
                         </div>
                         <p class="text-muted mb-0" style="font-size: 0.8rem; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
-                            {{ $application->description ?? 'Standard UI skin with optimized layout components and responsive design grids.' }}
+                            {{ $theme->description ?? 'Standard UI skin with optimized layout components and responsive design grids.' }}
                         </p>
                     </div>
 
                     <div class="card-footer bg-white border-0 pt-0 pb-3">
                         <div class="d-flex align-items-center">
-                            @if(!$application->is_active)
-                                <form action="{{ route('admin.applications.activate', $application->id) }}" method="POST" class="flex-grow-1 mr-2">
+                            @if(!$theme->is_active)
+                                <form action="{{ route('admin.themes.activate', $theme->id) }}" method="POST" class="flex-grow-1 mr-2">
                                     @csrf
                                     <button class="btn btn-primary btn-sm btn-block font-weight-bold shadow-xs" type="submit">
                                         Activate Theme
@@ -94,7 +94,7 @@
                                 </button>
                             @endif
 
-                            <a href="{{ route('admin.applications.edit', $application->id) }}" 
+                            <a href="{{ route('admin.themes.edit', $theme->id) }}" 
                                class="btn btn-outline-secondary btn-sm" 
                                data-toggle="tooltip" title="Theme Settings">
                                 <i class="fas fa-cog"></i>

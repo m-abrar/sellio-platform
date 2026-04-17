@@ -19,6 +19,7 @@ use App\Http\Controllers\Api\V1\ApiClassifiedController;
 use App\Http\Controllers\Api\V1\ApiCartController;
 use App\Http\Controllers\Api\V1\ApiOrderController;
 use App\Http\Controllers\Api\V1\Auth\AuthController;
+use App\Http\Controllers\Api\ApiThemeController;
 use Illuminate\Http\Request;
 
 /*
@@ -26,6 +27,11 @@ use Illuminate\Http\Request;
 | API Routes
 |--------------------------------------------------------------------------
 */
+
+Route::prefix('themes')->group(function () {
+    Route::get('/', [ApiThemeController::class, 'index']);
+    Route::get('/active', [ApiThemeController::class, 'active']);
+});
 
 Route::prefix('v1')->group(function () {
 

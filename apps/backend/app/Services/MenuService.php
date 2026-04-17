@@ -14,15 +14,15 @@ class MenuService
     /**
      * Use nullable string to prevent TypeErrors during early boot or CLI tasks.
      */
-    protected ?string $activeApp;
+    protected ?string $activeTheme;
     protected string $currentPath;
 
     public function __construct(Request $request)
     {
-        // 1. Resolve active app with a reliable fallback
-        $this->activeApp = $request->get('app_key') 
-            ?? $request->appKey 
-            ?? Config::get('app.default_app', 'default');
+        // 1. Resolve active theme with a reliable fallback
+        $this->activeTheme = $request->get('theme_key') 
+            ?? $request->themeKey 
+            ?? Config::get('app.default_theme', 'default');
 
         // 2. Normalize current path for comparison
         $this->currentPath = trim($request->path(), '/'); 
@@ -39,7 +39,7 @@ class MenuService
         $items = Cache::rememberForever($cacheKey, function () use ($locationKey) {
             
             $menu = Menu::firstOrCreate([
-                'app_key' => $this->activeApp,
+                'theme_key' => $this->activeTheme,
                 'location_key' => $locationKey,
             ], [
                 'title' => Str::of($locationKey)->replace('_', ' ')->title() . ' Menu',
@@ -135,7 +135,7 @@ class MenuService
             
             // Find the parent Menu Location record, or create it if not found
             $menu = Menu::firstOrCreate([
-                'app_key' => $this->activeApp,
+                'theme_key' => $this->activeTheme,
                 'location_key' => $locationKey,
             ], [
                 // Use the provided default name or the generated one
@@ -155,8 +155,8 @@ class MenuService
         $cacheKey = $this->generateMenusListCacheKey();
 
         return Cache::rememberForever($cacheKey, function () {
-            // Fetch all menus that belong to the active application
-            return Menu::where('app_key', $this->activeApp)
+            // Fetch all menus that belong to the active theme
+            return Menu::where('theme_key', $this->activeTheme)
                 ->orderBy('title')
                 ->get();
         });
@@ -185,16 +185,16 @@ class MenuService
 
     protected function generateCacheKey(string $locationKey): string
     {
-        return "menu.{$this->activeApp}.{$locationKey}"; // Cache key for menu items
+        return "menu.{$this->activeTheme}.{$locationKey}"; // Cache key for menu items
     }
     
     protected function generateMenuNameCacheKey(string $locationKey): string
     {
-        return "menu.name.{$this->activeApp}.{$locationKey}"; // Cache key for menu name
+        return "menu.name.{$this->activeTheme}.{$locationKey}"; // Cache key for menu name
     }
 
     protected function generateMenusListCacheKey(): string
     {
-        return "menu.list.{$this->activeApp}"; // Cache key for the list of all menus in this app
+        return "menu.list.{$this->activeTheme}"; // Cache key for the list of all menus in this theme
     }
 }
