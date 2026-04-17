@@ -36,6 +36,7 @@ class Theme extends Model implements HasMedia
         'config'    => 'array',
         'is_active' => 'boolean',
         'last_activated_at' => 'datetime',
+        'last_activated_at' => 'datetime',
     ];
 
     // --- Scopes ---

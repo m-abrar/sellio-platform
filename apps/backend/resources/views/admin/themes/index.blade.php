@@ -108,7 +108,6 @@
     <div class="mb-5">
         <div class="section-title-modern d-flex align-items-center justify-content-between">
             <h5 class="font-weight-bold text-muted"><i class="fas fa-layer-group mr-2"></i> Theme Library</h5>
-            {{-- Search could go here --}}
         </div>
 
         <div class="card border-0 shadow-sm" style="border-radius: 15px;">

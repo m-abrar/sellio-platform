@@ -7,7 +7,7 @@
         <div class="row mb-2">
             <div class="col-sm-6">
                 <h1 class="m-0 text-dark font-weight-bold">
-                     Edit Application: <small class="text-capitalize">{{ $application->title }}</small>
+                     Edit Theme: <small class="text-capitalize">{{ $theme->title }}</small>
                 </h1>
             </div>
         </div>

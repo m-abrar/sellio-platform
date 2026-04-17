@@ -1,0 +1,14 @@
+TODO
+
+
+D:\Sellio\apps\backend\storage\app\public\259\placeholder-(1).jpeg
+The file actually exists but does not open in browser:
+http://127.0.0.1:8000/storage/259/placeholder-(1).jpeg
+http://localhost:8000/storage/259/placeholder-(1).jpeg
+
+We also have a module in the settings to refresh the app cache and generate/fix the storage folder link.
+
+
+
+
+

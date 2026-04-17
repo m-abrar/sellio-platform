@@ -78,11 +78,11 @@
                         <div class="card-body p-2">
                             <div class="row no-gutters">
                                 <div class="col-6 p-1">
-                                    <img src="{{asset('admin/diagram-home-page.png')}}" alt="Home" class="img-fluid border rounded shadow-xs">
+                                    <img src="{{asset('admin-assets/diagram-home-page.png')}}" alt="Home" class="img-fluid border rounded shadow-xs">
                                     <small class="d-block text-center mt-1 text-muted">Home</small>
                                 </div>
                                 <div class="col-6 p-1">
-                                    <img src="{{asset('admin/diagram-search-page.png')}}" alt="Search" class="img-fluid border rounded shadow-xs">
+                                    <img src="{{asset('admin-assets/diagram-search-page.png')}}" alt="Search" class="img-fluid border rounded shadow-xs">
                                     <small class="d-block text-center mt-1 text-muted">Search</small>
                                 </div>
                             </div>

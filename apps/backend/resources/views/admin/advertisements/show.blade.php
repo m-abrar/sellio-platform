@@ -155,10 +155,10 @@
             {{-- Guide Images (Mini Reference) --}}
             <div class="row mt-4">
                 <div class="col-6">
-                    <img src="{{asset('admin/diagram-home-page.png')}}" class="img-fluid border rounded grayscale shadow-xs">
+                    <img src="{{asset('admin-assets/diagram-home-page.png')}}" class="img-fluid border rounded grayscale shadow-xs">
                 </div>
                 <div class="col-6">
-                    <img src="{{asset('admin/diagram-search-page.png')}}" class="img-fluid border rounded grayscale shadow-xs">
+                    <img src="{{asset('admin-assets/diagram-search-page.png')}}" class="img-fluid border rounded grayscale shadow-xs">
                 </div>
             </div>
         </div>

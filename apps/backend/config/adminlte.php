@@ -64,7 +64,7 @@ return [
     */
 
     'logo' => '<b>Listing</b>Pro',
-    'logo_img' => 'images/app-logo.webp',
+    'logo_img' => 'admin-assets/app-logo.webp',
     'logo_img_class' => 'brand-image img-circle elevation-3',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs',
@@ -86,7 +86,7 @@ return [
     'auth_logo' => [
         'enabled' => false,
         'img' => [
-            'path' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
+            'path' => 'admin-assets/AdminLTELogo.png',
             'alt' => 'Auth Logo',
             'class' => '',
             'width' => 50,
@@ -113,7 +113,7 @@ return [
         'enabled' => true,
         'mode' => 'fullscreen',
         'img' => [
-            'path' => 'images/preloader.webp',
+            'path' => 'admin-assets/preloader.webp',
             'alt' => 'Dashboard Preloader Image',
             'effect' => 'animation__shake',
             'width' => 60,
@@ -343,7 +343,7 @@ return [
                 [
                     'type' => 'css',
                     'asset' => true,
-                    'location' => 'admin/style.css',
+                    'location' => 'admin-assets/style.css',
                 ],
             ],
         ],
