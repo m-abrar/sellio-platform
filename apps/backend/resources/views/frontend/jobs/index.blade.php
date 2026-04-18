@@ -70,9 +70,7 @@
                 @endforelse
             </div>
             @if($jobs->hasPages())
-                <div class="mt-5 d-flex justify-content-center">
-                    {{ $jobs->links('frontend.jobs._partials._pagination-links') }}
-                </div>
+                {{ $jobs->links('frontend._partials._pagination') }}
             @endif
         </div>
     </div>

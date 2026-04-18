@@ -17,6 +17,11 @@ return [
         'url'  => '/',
         'icon' => 'fas fa-external-link-alt',
         'topnav_right' => true,
+        'attributes' => [
+            'title' => 'View Website',
+            'data-toggle' => 'tooltip',
+            'data-placement' => 'bottom',
+        ],
     ],
 
     [

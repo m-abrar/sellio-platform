@@ -30,7 +30,12 @@
                     {{ $key }}: {{ $value }};
                 @endforeach
                 {{-- Map theme variables to local auth variables --}}
-                --primary-color: {{ $activeTheme->variables['--color-primary'] ?? 'hsl(240, 75%, 60%)' }};
+                @php 
+                    $pColor = $activeTheme->variables['--color-primary'] ?? 'hsl(240, 75%, 60%)';
+                    $pColorRgb = hexToRgb($pColor);
+                @endphp
+                --primary-color: {{ $pColor }};
+                --primary-color-rgb: {{ $pColorRgb }};
                 --primary-dark: {{ $activeTheme->variables['--color-primary-dark'] ?? 'hsl(240, 70%, 50%)' }};
             @else
                 --primary-color: hsl(240, 75%, 60%); 
@@ -43,7 +48,7 @@
         }
 
         body {
-            font-family: {{ $activeTheme->variables['--font-family-base'] ?? "'Inter', sans-serif" }};
+            font-family: {!! $activeTheme->variables['--font-family-base'] ?? "'Inter', sans-serif" !!};
             color: var(--text-dark);
             min-height: 100vh;
             background-color: #ffffff;

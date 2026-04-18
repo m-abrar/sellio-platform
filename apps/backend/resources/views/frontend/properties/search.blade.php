@@ -19,9 +19,8 @@
             
             @if($properties->total() > 0)
                 <div class="results-count">
-                    <span class="badge bg-white text-primary border shadow-sm px-4 py-2 rounded-pill fs-6 fw-bold">
-                        {{-- Restored the Icon --}}
-                        <i class="bi bi-check-circle-fill me-1 text-primary"></i>
+                    <span class="badge bg-white text-primary border shadow-sm px-4 py-2 rounded-pill fs-6 fw-bold border-opacity-50">
+                        <i class="bi bi-houses-fill me-1 text-primary"></i>
                         
                         {{-- Restored the detailed text logic --}}
                         <span class="d-inline-block">
@@ -71,9 +70,7 @@
 
             {{-- Pagination --}}
             @if($properties->hasPages())
-                <div class="mt-5 d-flex justify-content-center">
-                    {{ $properties->appends(request()->query())->links('frontend.properties._partials._pagination') }}
-                </div>
+                {{ $properties->appends(request()->query())->links('frontend._partials._pagination') }}
             @endif
         </div>
     </div>

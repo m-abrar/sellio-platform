@@ -234,26 +234,34 @@ footer{
     -webkit-backdrop-filter:blur(20px)
 }
 .filter-sidebar{
-    background-color:var(--bg-glass-heavy);
+    background-color:rgba(255, 255, 255, 0.8);
     box-shadow:var(--shadow-subtle);
     border:1px solid var(--border-color);
     backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
     border-radius:var(--card-radius);
     padding:20px;
     position:sticky;
-    top:5rem
+    top:5.5rem;
+    z-index: 10;
 }
 .filter-heading{
     font-weight:700;
     text-transform:uppercase;
-    font-size:.875rem
+    font-size:.875rem;
+    color: var(--primary-color);
 }
-.filter-label{
+.filter-label, .metric-label{
     display:block;
     font-size:.65rem;
     font-weight:700;
     text-transform:uppercase;
-    color:var(--text-muted)
+    color:var(--text-muted);
+    letter-spacing: 0.5px;
+}
+.metric-value {
+    color: var(--text-dark);
+    font-size: clamp(.8rem, 1.5vw, 1.1rem);
 }
 .btn-filter-tab{
     font-size:.875rem;

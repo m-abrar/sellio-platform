@@ -71,9 +71,7 @@
             </div>
             {{-- Pagination --}}
             @if($autos->hasPages())
-                <div class="mt-5 d-flex justify-content-center">
-                    {{ $autos->links('frontend._partials._pagination_links') }}
-                </div>
+                {{ $autos->links('frontend._partials._pagination') }}
             @endif
         </div>
     </div>

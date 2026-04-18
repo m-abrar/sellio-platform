@@ -25,6 +25,36 @@
 
     @yield('head_extra')
     @stack('styles')
+
+    <style>
+        :root {
+            @if(isset($activeTheme) && $activeTheme->variables)
+                @foreach($activeTheme->variables as $key => $value)
+                    {{ $key }}: {{ $value }};
+                @endforeach
+                {{-- Map theme variables to standard names and generate RGB --}}
+                @php 
+                    $pColor = $activeTheme->variables['--color-primary'] ?? '#5a57d9';
+                    $pColorRgb = hexToRgb($pColor);
+                @endphp
+                --primary-color: {{ $pColor }};
+                --primary-color-rgb: {{ $pColorRgb }};
+                --secondary-color: {{ $activeTheme->variables['--color-secondary'] ?? '#6c757d' }};
+                --text-main: {{ $activeTheme->variables['--color-text'] ?? '#1f2937' }};
+            @endif
+        }
+        
+        @if(isset($activeTheme) && isset($activeTheme->variables['--font-family-base']))
+            body {
+                font-family: {!! $activeTheme->variables['--font-family-base'] !!}, 'Inter', sans-serif !important;
+            }
+        @endif
+        @if(isset($activeTheme) && isset($activeTheme->variables['--font-family-heading']))
+            h1, h2, h3, h4, h5, h6, .navbar-brand, .section-title {
+                font-family: {!! $activeTheme->variables['--font-family-heading'] !!}, 'Inter', sans-serif !important;
+            }
+        @endif
+    </style>
 </head>
 
 <body class="no-js antialiased @yield('body_class')">
