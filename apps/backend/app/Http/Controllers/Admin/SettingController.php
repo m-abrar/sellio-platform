@@ -37,6 +37,7 @@ class SettingController extends Controller
         // --- Conditionally load extra data (like pages and FILTERED applications) ---
         $pages = [];
         $applications = []; 
+        $themes = []; 
         
         if ($section === 'pages') {
             $pages = Page::where('type', 'page')->get();
