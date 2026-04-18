@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Button } from '@sellio/ui';
+import { Button } from '@/components/ui';
 
 interface HeaderProps {
   appConfig: any; // Using any for now to handle dynamic settings payload

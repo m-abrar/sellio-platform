@@ -1,5 +1,5 @@
 import { headers } from 'next/headers';
-import { api, setThemeKey } from '@sellio/api-client';
+import { api, setThemeKey } from '@/lib/api-client';
 import { EcommerceLayout, RealEstateLayout, VacationRentalLayout } from '../components/verticals/Layouts';
 
 export default async function Home() {

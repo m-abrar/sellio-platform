@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
-import { User, Theme, Product, Property } from '@sellio/types';
+import { User, Theme, Product, Property } from '@/types';
 
 const API_BASE_URL = typeof window !== 'undefined' 
   ? (import.meta as any).env?.VITE_API_BASE_URL || 'http://localhost:8000/api'

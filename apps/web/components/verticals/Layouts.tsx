@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import { api } from '@sellio/api-client';
-import { Product, Property, Theme } from '@sellio/types';
-import { Button, Card } from '@sellio/ui';
+import { api } from '@/lib/api-client';
+import { Product, Property, Theme } from '@/types';
+import { Button, Card } from '@/components/ui';
 
 interface LayoutProps {
   appConfig: Theme | null;

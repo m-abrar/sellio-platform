@@ -11,7 +11,7 @@ import {
 
 // Import the abstracted service
 import { login } from '../api/auth';
-import { setAuthToken } from '@sellio/api-client';
+import { setAuthToken } from '@/lib/api-client';
 
 export default function Login() {
   const [email, setEmail] = useState('');

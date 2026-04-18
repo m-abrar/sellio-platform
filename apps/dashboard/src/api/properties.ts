@@ -1,4 +1,4 @@
-import { api } from '@sellio/api-client';
+import { api } from '@/lib/api-client';
 
 export const getProperties = () => api.dashboard.partner.properties.list();
 export const getProperty = (id: number) => api.dashboard.partner.properties.get(id);

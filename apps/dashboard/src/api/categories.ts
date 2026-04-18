@@ -1,4 +1,4 @@
-import client from '@sellio/api-client';
+import client from '@/lib/api-client';
 
 export const flattenCategories = (items: any[], prefix = '') => {
     let list: any[] = [];
