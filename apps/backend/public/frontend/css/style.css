@@ -1989,3 +1989,16 @@ footer{
 .evc-z-date{
     z-index:2
 }
+
+/* Dynamic Global Effects */
+.has-body-glow {
+    position: relative;
+}
+.has-body-glow::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(circle at 10% 20%, rgba(var(--primary-color-rgb), 0.05) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: -1;
+}

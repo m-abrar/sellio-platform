@@ -56,7 +56,7 @@
 
         @forelse($settings_groups as $group)
             <div class="col-lg-4 col-md-6 mb-4">
-                <div class="card h-100 card-premium shadow-sm border-0">
+                <div class="card h-100 card-premium shadow-sm border-0 position-relative">
                     <div class="card-body">
                         <div class="d-flex align-items-start mb-3">
                             <div class="icon-square shadow-xs mr-3 {{ $group['color'] }}">
@@ -72,7 +72,7 @@
                     </div>
                     <div class="card-footer bg-light border-0 py-2 px-3 text-right">
                         <a href="{{ route('admin.settings.group', ['section' => $group['id']]) }}" 
-                           class="btn btn-link btn-sm font-weight-bold text-decoration-none">
+                           class="btn btn-link btn-sm font-weight-bold text-decoration-none stretched-link">
                             Edit Configuration <i class="fas fa-arrow-right ml-1 text-xs"></i>
                         </a>
                     </div>

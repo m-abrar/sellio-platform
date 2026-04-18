@@ -237,9 +237,9 @@ class SettingController extends Controller
         foreach ($validKeys as $key) {
             $value = $request->input($key);
 
-            // --- A. Handle Boolean Fields (Checkboxes that might be missing from request if unchecked) ---
+            // --- A. Handle Boolean Fields (Properly evaluate truthy values from checkboxes) ---
             if (in_array($key, $booleanKeys)) {
-                $value = $request->has($key) ? '1' : '0';
+                $value = $request->boolean($key) ? '1' : '0';
             }
             
             // --- B. Handle Theme Activation for site_home ---

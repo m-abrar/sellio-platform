@@ -74,7 +74,7 @@
     </style>
 </head>
 
-<body class="no-js antialiased @yield('body_class')">
+<body class="no-js antialiased has-body-glow @yield('body_class')">
 
     @auth
         @can('manage-pages')

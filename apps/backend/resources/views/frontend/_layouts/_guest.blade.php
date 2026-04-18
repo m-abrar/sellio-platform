@@ -99,11 +99,11 @@
 
         .has-body-glow::before {
             content: '';
-            position: absolute;
+            position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: radial-gradient(circle at 10% 20%, rgba(90, 87, 217, 0.05) 0%, transparent 50%);
+            background: radial-gradient(circle at 10% 20%, rgba(var(--primary-color-rgb), 0.05) 0%, transparent 50%);
             pointer-events: none;
-            z-index: 0;
+            z-index: -1;
         }
     </style>
 </head>
