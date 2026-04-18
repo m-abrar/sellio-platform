@@ -26,25 +26,13 @@
 - [x] **Settings Logic Fix:** Corrected boolean evaluation for checkboxes (Frontend editing/Hide site name).
 - [x] **Global Body Glow:** Ambient background glow now dynamic and synchronized with theme primary color.
 
----
-
 - [x] **Fresh DB Migration:** Successfully performed `migrate:fresh --seed` to reset the environment.
+- [x] **Logout 419 Error:** Replaced GET links with secure POST forms (`_adminbar.blade.php`, `_header.blade.php`) to fix CSRF token failure on logout.
+- [x] **Frontend Image 404:** Updated `APP_URL` from `localhost:8000` to `http://127.0.0.1:8000` to fix Spatie Media URL domain generation.
 
 ---
+
 
 ## 🟡 LONG-TERM
 
 - [ ] **Multi-Tenant Deployment:** Prepare for horizontal scaling.
-
-
-http://127.0.0.1:8000/logout
-419
-Page Expired
-
-
-
-The app is here
-http://127.0.0.1:8000/
-but it tries to load image from
-http://localhost:8000/storage/30/24.webp
-and therefore a 404 is shown for the image

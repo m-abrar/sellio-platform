@@ -101,9 +101,13 @@
       
       <span class="separator">|</span>
       
-      <a href="{{ route('logout') }}" class="text-danger fw-semibold">
+      <a href="{{ route('logout') }}" class="text-danger fw-semibold" onclick="event.preventDefault(); document.getElementById('admin-logout-form').submit();">
         <i class="fas fa-sign-out-alt me-1"></i>{{ __('Logout') }}
       </a>
+      <form id="admin-logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+        @csrf
+      </form>
+
     </div>
     
   </div>

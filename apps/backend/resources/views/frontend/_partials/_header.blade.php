@@ -81,10 +81,14 @@ Features: Responsive menu, auth-aware actions, and cart integration.
                                 <hr class="dropdown-divider">
                             </li>
                             <li>
-                                <a class="dropdown-item text-danger rounded-2 text-uppercase" href="{{ route('signout') }}">
+                                <a class="dropdown-item text-danger rounded-2 text-uppercase" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('frontend-logout-form').submit();">
                                     <i class="bi bi-box-arrow-right me-2"></i> {{ __('Logout') }}
                                 </a>
+                                <form id="frontend-logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                    @csrf
+                                </form>
                             </li>
+
                         </ul>
                     </div>
                 @else
