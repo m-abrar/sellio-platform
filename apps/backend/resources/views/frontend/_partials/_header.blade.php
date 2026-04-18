@@ -15,9 +15,11 @@ Features: Responsive menu, auth-aware actions, and cart integration.
             <img src="{{ page_content('global.header.brand_logo', setting('site_logo') ? Storage::url(setting('site_logo')) : asset('images/app-logo.webp')) }}"
                  alt="{{ setting('site_name') }}" style="max-height: 40px;" />
 
-            <span class="fw-bold ms-2 d-none d-sm-inline-block text-uppercase">
-                @editable('global.header.brand_text', setting('site_name', config('app.name')))
-            </span>
+            @if(!setting('hide_site_name'))
+                <span class="fw-bold ms-2 d-none d-sm-inline-block text-uppercase">
+                    @editable('global.header.brand_text', setting('site_name', config('app.name')))
+                </span>
+            @endif
         </a>
 
         {{-- Mobile Interface Toggler --}}

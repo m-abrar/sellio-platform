@@ -47,16 +47,18 @@ class AppServiceProvider extends ServiceProvider
             }
         });
 
-        // 3. Global View Composer
-        View::composer('frontend._layouts._app', function ($view) use ($cartService) {
+        // 3. Global View Composer (Common Branding)
+        View::composer(['frontend._layouts._app', 'frontend._layouts._guest'], function ($view) use ($cartService) {
             $faviconPath = setting('site_favicon');
             $logoPath = setting('site_logo');
+            $activeTheme = Cache::rememberForever('active_theme_model', fn() => \App\Models\Theme::where('is_active', 1)->first());
 
             $view->with([
                 'cartCount'         => $cartService->getCount(),
                 'notificationCount' => $this->getNotificationCount(),
                 'siteName'          => Cache::rememberForever('site_name', fn() => setting('site_name', config('app.name'))),
                 'siteFavicon'       => $faviconPath ? Storage::url($faviconPath) : ($logoPath ? Storage::url($logoPath) : asset('images/app-logo.webp')),
+                'activeTheme'       => $activeTheme,
             ]);
         });
 

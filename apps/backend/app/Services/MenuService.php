@@ -20,8 +20,10 @@ class MenuService
     public function __construct(Request $request)
     {
         // 1. Resolve active theme with a reliable fallback
+        // We check request, then falling back to the DB's active theme, then finally config.
         $this->activeTheme = $request->get('theme_key') 
             ?? $request->themeKey 
+            ?? \App\Models\Theme::where('is_active', 1)->value('theme_key')
             ?? Config::get('app.default_theme', 'default');
 
         // 2. Normalize current path for comparison

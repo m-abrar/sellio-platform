@@ -1,64 +1,39 @@
 # SELLIO PLATFORM - TOTAL TODO
 
-## ✅ COMPLETED (Phases 1 & 2)
-- [x] **Fallback Images:** Resolved via root-relative paths.
+## ✅ COMPLETED
+- [x] **Fallback Images:** Resolved via absolute `asset()` paths in `HasImageAccess.php`.
 - [x] **SettingController Crash:** Fixed `$themes` undefined bug.
-- [x] **Header Configuration:** `hide_site_name` logic & UI added.
-- [x] **Frontend Navigation:** Added `Header.tsx` to `apps/web`.
-- [x] **Theme Library:** Fixed visibility and added icons.
+- [x] **Header Configuration (Next.js):** `hide_site_name` logic & UI added.
+- [x] **Frontend Navigation (Next.js):** Added `Header.tsx` to `apps/web`.
+- [x] **Theme Library:** Fixed visibility and added icons to vertical tabs.
 - [x] **DevOps:** Root `.gitignore` updated.
-
----
-
-## ✅ COMPLETED (All Phases)
-- [x] **Architectural Refactor:** Actions (Approve/Edit/Delete) moved to dedicated controllers.
-- [x] **DB connection Safety:** Professional polished error screen implemented.
-- [x] **Ecommerce Expansion:** 10 new niche themes added to Seeder.
+- [x] **Maintenance Alerts:** Feedback alerts added to maintenance page.
 - [x] **Architecture Doc:** Created `STRUCTURE.md`.
-- [x] **Maintenance:** Added feedback alerts to maintenance page.
-- [x] **Trait Fix:** absolute URLs restored in `HasImageAccess`.
 - [x] **Listing Fix:** Resolved `edit()` method runtime error.
+- [x] **DB Error Screen:** Professional glassmorphic error view + `bootstrap/app.php` handler.
+- [x] **Architectural Refactor:** Approve/Disapprove/Edit/Delete decentralized to dedicated vertical controllers.
+- [x] **Ecommerce Expansion:** 10 niche ecommerce themes seeded.
 
 ---
 
-## 🟠 PHASE 5: INFRASTRUCTURE & UI POLISHING
-- [ ] **Professional DB Error Screen:**
-    - Catch `QueryException` in `bootstrap/app.php`.
-    - Create premium `errors/db-error.blade.php` for MySQL connection failures.
+## 🔴 PENDING (Easiest First)
+
+- [x] **Admin → Frontend Link:** Add a quick-access link in the admin dashboard.
+- [x] **Laravel Frontend Header:** Menu items are not showing. Investigate and fix.
+- [x] **Login & Register UIUX:** Login/Register screens don't match current admin theme. Fixed via theme variable injection.
+- [x] **`hide_site_name` for Laravel Frontend:** Applied logic to Laravel Blade-based header.
+- [ ] **Laravel Frontend UIUX Audit:** Scan all Blade views for theme balance and UIUX consistency. Identify and fix broken layouts. [/]
 
 ---
 
-## 🔴 PHASE 6: ARCHITECTURAL REFACTOR
-- [ ] **Dedicated Vertical Controllers:**
-    - Transition unified listings from `ListingController` to vertical-specific controllers (`AutoController`, `PropertyController`, etc.).
-    - Update Blade views to link directly to vertical routes.
+## 🟡 LONG-TERM
 
-
-    
-------------------
-
-can you fresh migrate the DB and start over?
-
---------------------
-
-in the admin dashboard, i need a link to click and open frontend.
-
---------------------
-
-`hide_site_name` logic was added to nextjs only, but we have a laravel based frontend as well in this project. Please always remember that our application has two frontends, one is nextjs app (switchable themes) and one is laravel views.
-
---------------------
-
-The login and register screens are not matching with current UIUX layout/theme, do they? if not please fix.
+- [ ] **Fresh DB Migration:** User asked "can you fresh migrate the DB and start over?" — requires explicit confirmation before running.
 
 ----------------
 
-The laravel frontend blade views, let's scan for theme balance, UIUX consistency.
+this goes to website frontend, i don't want to show the text, but icon only.
 
---------------------
-
-The laravel frontend, header does not show menu items, check why?
+'text' => 'View Website',
 
 ----------------
-
-

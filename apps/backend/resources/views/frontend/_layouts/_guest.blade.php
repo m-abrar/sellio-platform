@@ -25,17 +25,25 @@
 
     <style>
         :root {
-            --primary-hue: 240; 
-            --primary-color: hsl(var(--primary-hue), 75%, 60%); 
-            --primary-dark: hsl(var(--primary-hue), 70%, 50%);
-            --primary-light: hsl(var(--primary-hue), 85%, 95%); 
+            @if(isset($activeTheme) && $activeTheme->variables)
+                @foreach($activeTheme->variables as $key => $value)
+                    {{ $key }}: {{ $value }};
+                @endforeach
+                {{-- Map theme variables to local auth variables --}}
+                --primary-color: {{ $activeTheme->variables['--color-primary'] ?? 'hsl(240, 75%, 60%)' }};
+                --primary-dark: {{ $activeTheme->variables['--color-primary-dark'] ?? 'hsl(240, 70%, 50%)' }};
+            @else
+                --primary-color: hsl(240, 75%, 60%); 
+                --primary-dark: hsl(240, 70%, 50%);
+            @endif
+            
             --text-dark: #1f2937; 
             --text-muted: #6b7280; 
             --card-radius: 20px; 
         }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: {{ $activeTheme->variables['--font-family-base'] ?? "'Inter', sans-serif" }};
             color: var(--text-dark);
             min-height: 100vh;
             background-color: #ffffff;

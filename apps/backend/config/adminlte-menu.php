@@ -13,6 +13,13 @@ return [
     ],
 
     [
+        'text' => '',
+        'url'  => '/',
+        'icon' => 'fas fa-external-link-alt',
+        'topnav_right' => true,
+    ],
+
+    [
         'type' => 'navbar-notification',
         'icon' => 'fas fa-bell',
         'id' => 'notifications_menu',
