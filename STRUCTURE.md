@@ -1,17 +1,15 @@
-# Sellio Platform - Monorepo Architecture
+# Sellio Platform - Independent Applications
 
-## 📂 Repository Structure
-Sellio is managed as a **pnpm monorepo**, ensuring tight synchronization between the backend API and various frontend clients.
+## 📂 Project Structure
+Sellio is a collection of **standalone applications**, each managed independently for maximum flexibility and clear separation of concerns (React for Dashboard, Next.js for Storefront).
 
 ```text
 /apps
   ├── /backend      # Laravel 12 Engine (API, Admin Dashboard, Auth)
   ├── /web          # Next.js Storefront (Dynamic Vertical Engine)
-  ├── /dashboard    # Next.js Merchant/User Portal
-  └── /mobile       # React Native Application
-/packages
-  ├── /api-client   # Shared TypeScript API definitions
-  └── /ui           # Shared React Component Library
+  ├── /dashboard    # React/Vite Merchant Portal
+  └── /mobile       # Mobile Application (Standalone)
+/_lab               # Development resources and backups
 ```
 
 ## 🎨 Theme & Vertical Management
