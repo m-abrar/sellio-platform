@@ -12,9 +12,26 @@
     <link rel="canonical" href="{{ url()->current() }}">
     
     <link rel="icon" type="image/x-icon" href="{{ $siteFavicon }}">
+    @if(isset($activeTheme) && $activeTheme->variables)
+        @php
+            $fonts = [];
+            foreach (['--font-family-base', '--font-family-heading'] as $key) {
+                if (isset($activeTheme->variables[$key])) {
+                    if (preg_match("/'([^']+)'/", $activeTheme->variables[$key], $matches)) {
+                        $fonts[] = str_replace(' ', '+', $matches[1]) . ':wght@400;500;600;700;800';
+                    }
+                }
+            }
+            $fontQuery = implode('&family=', array_unique($fonts));
+        @endphp
+        @if($fontQuery)
+            <link href="https://fonts.googleapis.com/css2?family={{ $fontQuery }}&display=swap" rel="stylesheet">
+        @endif
+    @endif
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    
     <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}">
     
     @auth

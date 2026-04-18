@@ -38,7 +38,7 @@
             @endforeach
 
             {{-- Next Page Link --}}
-            <li class="page-item custom-page-item @if($paginator->hasMorePages()) enabled @else disabled @endendif">
+            <li class="page-item custom-page-item @if($paginator->hasMorePages()) enabled @else disabled @endif">
                 <a class="page-link custom-page-link border-0 rounded-circle d-flex align-items-center justify-content-center" 
                    href="{{ $paginator->nextPageUrl() }}" 
                    rel="next" 
