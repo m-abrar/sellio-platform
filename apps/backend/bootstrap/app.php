@@ -102,4 +102,21 @@ return Application::configure(basePath: dirname(__DIR__))
             }
         });
 
+        // Database Connection Error — Dedicated Polish Screen
+        $exceptions->render(function (\Illuminate\Database\QueryException $e, Request $request) {
+            $isConnectionError = str_contains($e->getMessage(), '[2002]') || 
+                               str_contains($e->getMessage(), 'Connection refused');
+            
+            if ($isConnectionError) {
+                if ($request->expectsJson() || $request->is('api/*')) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Database service is currently unavailable. Please try again later.',
+                        'code' => 'DB_CONNECTION_REFUSED'
+                    ], 503);
+                }
+                return response()->view('errors.db-error', [], 503);
+            }
+        });
+
     })->create();

@@ -11,8 +11,14 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
+use App\Traits\ManagesApproval;
+
 class JobController extends Controller
 {
+    use ManagesApproval;
+
+    protected $modelClass = JobListing::class;
+
     public function index(Request $request): View
     {
         $categories = Category::all();

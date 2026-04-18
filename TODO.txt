@@ -1,70 +1,64 @@
-# SELLIO PLATFORM - MODERN TODO
+# SELLIO PLATFORM - TOTAL TODO
 
-## 🔴 CRITICAL: IMAGE SYSTEM
-- [x] **Fix Fallback Images:** Images not showing in Admin Dashboard for most pages.
-  * *Status:* Resolved by converting to root-relative paths in `HasImageAccess.php`.
+## ✅ COMPLETED (Phases 1 & 2)
+- [x] **Fallback Images:** Resolved via root-relative paths.
+- [x] **SettingController Crash:** Fixed `$themes` undefined bug.
+- [x] **Header Configuration:** `hide_site_name` logic & UI added.
+- [x] **Frontend Navigation:** Added `Header.tsx` to `apps/web`.
+- [x] **Theme Library:** Fixed visibility and added icons.
+- [x] **DevOps:** Root `.gitignore` updated.
 
-## 🟠 BACKEND STABILITY
-- [x] **Reset SettingController:** Ensure `compact(): Undefined variable $themes` is fully resolved.
-  * *Status:* Patched with robust initialization in Phase 1.
-- [x] **Header Configuration:**
-  * Add `hide_site_name` toggle in Backend Settings (General).
-  * Update validation rules in `SettingController`.
-  * Add UI switch in `general.blade.php`.
+---
 
-## 🟡 FRONTEND & STOREFRONT (apps/web)
-- [x] **Navigation Restoration:**
-  * Create `Header.tsx` component with dynamic branding logic.
-  * Integrate Header into `RootLayout`.
-  * Restore Primary Navigation Menu (Marketplace, Products, Real Estate, etc.).
+## ✅ COMPLETED (All Phases)
+- [x] **Architectural Refactor:** Actions (Approve/Edit/Delete) moved to dedicated controllers.
+- [x] **DB connection Safety:** Professional polished error screen implemented.
+- [x] **Ecommerce Expansion:** 10 new niche themes added to Seeder.
+- [x] **Architecture Doc:** Created `STRUCTURE.md`.
+- [x] **Maintenance:** Added feedback alerts to maintenance page.
+- [x] **Trait Fix:** absolute URLs restored in `HasImageAccess`.
+- [x] **Listing Fix:** Resolved `edit()` method runtime error.
 
-## 🔵 THEME MANAGER
-- [x] **Library Optimization:**
-  * Remove "Recently Used" exclusion from the Theme Library.
-  * Add dedicated "Ecommerce/Shop" categories and industry sub-niches with branding icons.
+---
 
-## 🟢 MONOREPO HYGIENE
-- [x] **Git Cleanup:** Update root `.gitignore` and ignore `TODO.txt`.
-- [x] **Logistics:** Moved `TODO.txt` to root.
+## 🟠 PHASE 5: INFRASTRUCTURE & UI POLISHING
+- [ ] **Professional DB Error Screen:**
+    - Catch `QueryException` in `bootstrap/app.php`.
+    - Create premium `errors/db-error.blade.php` for MySQL connection failures.
 
+---
 
-----------------------
-
-
-Admin Images -> Fallbacks now load using relative paths.
-NO, can you make it absolute? in the trait getFallbackImage()
-
+## 🔴 PHASE 6: ARCHITECTURAL REFACTOR
+- [ ] **Dedicated Vertical Controllers:**
+    - Transition unified listings from `ListingController` to vertical-specific controllers (`AutoController`, `PropertyController`, etc.).
+    - Update Blade views to link directly to vertical routes.
 
 
-----------------------
+    
+------------------
+
+can you fresh migrate the DB and start over?
+
+--------------------
+
+in the admin dashboard, i need a link to click and open frontend.
+
+--------------------
+
+`hide_site_name` logic was added to nextjs only, but we have a laravel based frontend as well in this project. Please always remember that our application has two frontends, one is nextjs app (switchable themes) and one is laravel views.
+
+--------------------
+
+The login and register screens are not matching with current UIUX layout/theme, do they? if not please fix.
+
+----------------
+
+The laravel frontend blade views, let's scan for theme balance, UIUX consistency.
+
+--------------------
+
+The laravel frontend, header does not show menu items, check why?
+
+----------------
 
 
-when mysql server is down, we see this error, can you show a professional polished screen?
-
-Illuminate\Database\QueryException
-vendor\laravel\framework\src\Illuminate\Database\Connection.php:826
-SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it (Connection: mysql, SQL: select `value` from `settings` where `key` = site_name limit 1)
-
-----------------------
-
-http://127.0.0.1:8000/admin/system/maintenance
-i want to see success / error alerts on this page
-
-
--------------------------
-
-Do we have dedicated blade/view and controllers for each module?
-why are you on the common module/controller?
-
-http://127.0.0.1:8000/admin/listings/auto/30
-
-Error
-vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php:46
-Call to undefined method App\Http\Controllers\Admin\ListingController::edit()
-
-
------------------------------
-
-Do you have separate folders for each nextjs app in this monorepo?
-
---------------------------

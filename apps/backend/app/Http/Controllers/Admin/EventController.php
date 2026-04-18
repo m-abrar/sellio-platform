@@ -12,8 +12,14 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
+use App\Traits\ManagesApproval;
+
 class EventController extends Controller
 {
+    use ManagesApproval;
+
+    protected $modelClass = Event::class;
+
     public function index(Request $request): View
     {
         $categories = Category::all();

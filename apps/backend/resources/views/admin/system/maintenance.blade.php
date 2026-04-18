@@ -13,7 +13,10 @@
 @stop
 
 @section('content')
-    <div class="row">
+    <div class="container-fluid">
+        @include('admin.alert')
+
+        <div class="row">
         {{-- Row 1: Quick Actions & Optimization --}}
         <div class="col-md-8">
             <div class="card card-outline card-danger shadow-sm mb-4" style="border-radius: 12px;">

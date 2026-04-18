@@ -12,8 +12,14 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
+use App\Traits\ManagesApproval;
+
 class ClassifiedController extends Controller
 {
+    use ManagesApproval;
+
+    protected $modelClass = Classified::class;
+
     public function index(Request $request): View
     {
         $categories = Category::all();

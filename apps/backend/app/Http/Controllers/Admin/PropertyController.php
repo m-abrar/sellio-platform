@@ -17,8 +17,14 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 
+use App\Traits\ManagesApproval;
+
 class PropertyController extends Controller
 {
+    use ManagesApproval;
+
+    protected $modelClass = Property::class;
+
     public function index()
     {
         $categories = Category::all();
@@ -28,7 +34,7 @@ class PropertyController extends Controller
             ->when(request('name'), fn($q) => $q->where('title', 'like', '%' . request('name') . '%'))
             ->when(request('location_id'), fn($q) => $q->where('location_id', request('location_id')))
             ->when(request('category_id'), fn($q) => $q->where('category_id', request('category_id')))
-            ->when(request('only_active'), fn($q) => $q->where('status', 1))
+            ->when(request('only_active'), fn($q) => $q->where('is_published', 1))
             ->with(['location', 'category'])
             ->get();
 

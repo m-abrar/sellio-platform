@@ -171,8 +171,15 @@
                                     <td class="text-right align-middle px-4">
                                         {{-- Standardized premium action group --}}
                                         <div class="btn-group btn-group-premium shadow-sm">
+                                            @php
+                                                $typeKey = strtolower($listing->listing_type);
+                                                $pluralMap = ['joblisting' => 'jobs'];
+                                                $vertical = $pluralMap[$typeKey] ?? \Illuminate\Support\Str::plural($typeKey);
+                                                $routePrefix = "admin." . $vertical;
+                                            @endphp
+
                                             @if (!$listing->approved_at)
-                                                <form action="{{ route('admin.listings.approve', ['type' => strtolower($listing->listing_type), 'id' => $listing->id]) }}" method="POST">
+                                                <form action="{{ route($routePrefix . '.approve', $listing->id) }}" method="POST">
                                                     @csrf
                                                     <button type="submit" class="btn btn-default btn-sm text-success" 
                                                             data-toggle="tooltip" title="Approve Listing"
@@ -181,7 +188,7 @@
                                                     </button>
                                                 </form>
                                             @else
-                                                <form action="{{ route('admin.listings.disapprove', ['type' => strtolower($listing->listing_type), 'id' => $listing->id]) }}" method="POST">
+                                                <form action="{{ route($routePrefix . '.disapprove', $listing->id) }}" method="POST">
                                                     @csrf
                                                     <button type="submit" class="btn btn-default btn-sm text-info" 
                                                             data-toggle="tooltip" title="Send back to Pending"
@@ -191,13 +198,13 @@
                                                 </form>
                                             @endif
 
-                                            <a href="{{ route('admin.listings.edit', ['type' => strtolower($listing->listing_type), 'id' => $listing->id]) }}" 
+                                            <a href="{{ route($routePrefix . '.edit', $listing->id) }}" 
                                                class="btn btn-default btn-sm text-warning" 
                                                data-toggle="tooltip" title="Edit Listing">
                                                 <i class="fas fa-pencil-alt"></i>
                                             </a>
                                             
-                                            <form action="{{ route('admin.listings.destroy', ['type' => strtolower($listing->listing_type), 'id' => $listing->id]) }}" method="POST" class="d-inline">
+                                            <form action="{{ route($routePrefix . '.destroy', $listing->id) }}" method="POST" class="d-inline">
                                                 @csrf @method('DELETE')
                                                 <button type="submit" class="btn btn-default btn-sm text-danger" 
                                                         data-toggle="tooltip" title="Delete Listing"

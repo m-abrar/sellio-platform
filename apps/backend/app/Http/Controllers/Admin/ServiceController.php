@@ -12,8 +12,14 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
+use App\Traits\ManagesApproval;
+
 class ServiceController extends Controller
 {
+    use ManagesApproval;
+
+    protected $modelClass = Service::class;
+
     public function index(Request $request): View
     {
         $categories = Category::all();

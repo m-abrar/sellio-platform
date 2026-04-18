@@ -113,25 +113,48 @@ Route::prefix('admin')
         );
 
         // Dedicated Vertical List Pages
-        // Route::get('autos/{status?}', [ListingController::class , 'index'])->defaults('type', 'auto')->name('autos.index');
-        Route::get('autos/{auto}/duplicate', [\App\Http\Controllers\Admin\AutoController::class, 'duplicate'])->name('autos.duplicate')->middleware('module:autos');
+        Route::controller(\App\Http\Controllers\Admin\AutoController::class)->prefix('autos')->name('autos.')->group(function () {
+            Route::post('/{auto}/approve', 'approve')->name('approve');
+            Route::post('/{auto}/disapprove', 'disapprove')->name('disapprove');
+            Route::get('/{auto}/duplicate', 'duplicate')->name('duplicate');
+        });
         Route::resource('autos', \App\Http\Controllers\Admin\AutoController::class)->middleware('module:autos');
-        // Route::get('events/{status?}', [ListingController::class , 'index'])->defaults('type', 'event')->name('events.index');
-        Route::get('events/{event}/duplicate', [\App\Http\Controllers\Admin\EventController::class, 'duplicate'])->name('events.duplicate')->middleware('module:events');
-        Route::resource('events', \App\Http\Controllers\Admin\EventController::class)->middleware('module:events');
-        // Route::get('jobs/{status?}', [ListingController::class , 'index'])->defaults('type', 'joblisting')->name('jobs.index');
-        Route::get('jobs/{job}/duplicate', [\App\Http\Controllers\Admin\JobController::class, 'duplicate'])->name('jobs.duplicate')->middleware('module:jobs');
-        Route::resource('jobs', \App\Http\Controllers\Admin\JobController::class)->middleware('module:jobs');
-        // Route::get('services/{status?}', [ListingController::class , 'index'])->defaults('type', 'service')->name('services.index');
-        Route::get('services/{service}/duplicate', [\App\Http\Controllers\Admin\ServiceController::class, 'duplicate'])->name('services.duplicate')->middleware('module:services');
-        Route::resource('services', \App\Http\Controllers\Admin\ServiceController::class)->middleware('module:services');
-        // Route::get('classifieds/{status?}', [ListingController::class , 'index'])->defaults('type', 'classified')->name('classifieds.index');
-        Route::get('classifieds/{classified}/duplicate', [\App\Http\Controllers\Admin\ClassifiedController::class, 'duplicate'])->name('classifieds.duplicate')->middleware('module:classifieds');
-        Route::resource('classifieds', \App\Http\Controllers\Admin\ClassifiedController::class)->middleware('module:classifieds');
-        // Route::get('properties/{status?}', [ListingController::class , 'index'])->defaults('type', 'property')->name('properties.index');
 
-        Route::get('properties/{property}/duplicate', [PropertyController::class , 'duplicate'])->name('properties.duplicate')->middleware('module:properties');
+        Route::controller(\App\Http\Controllers\Admin\EventController::class)->prefix('events')->name('events.')->group(function () {
+            Route::post('/{event}/approve', 'approve')->name('approve');
+            Route::post('/{event}/disapprove', 'disapprove')->name('disapprove');
+            Route::get('/{event}/duplicate', 'duplicate')->name('duplicate');
+        });
+        Route::resource('events', \App\Http\Controllers\Admin\EventController::class)->middleware('module:events');
+
+        Route::controller(\App\Http\Controllers\Admin\JobController::class)->prefix('jobs')->name('jobs.')->group(function () {
+            Route::post('/{job}/approve', 'approve')->name('approve');
+            Route::post('/{job}/disapprove', 'disapprove')->name('disapprove');
+            Route::get('/{job}/duplicate', 'duplicate')->name('duplicate');
+        });
+        Route::resource('jobs', \App\Http\Controllers\Admin\JobController::class)->middleware('module:jobs');
+
+        Route::controller(\App\Http\Controllers\Admin\ServiceController::class)->prefix('services')->name('services.')->group(function () {
+            Route::post('/{service}/approve', 'approve')->name('approve');
+            Route::post('/{service}/disapprove', 'disapprove')->name('disapprove');
+            Route::get('/{service}/duplicate', 'duplicate')->name('duplicate');
+        });
+        Route::resource('services', \App\Http\Controllers\Admin\ServiceController::class)->middleware('module:services');
+
+        Route::controller(\App\Http\Controllers\Admin\ClassifiedController::class)->prefix('classifieds')->name('classifieds.')->group(function () {
+            Route::post('/{classified}/approve', 'approve')->name('approve');
+            Route::post('/{classified}/disapprove', 'disapprove')->name('disapprove');
+            Route::get('/{classified}/duplicate', 'duplicate')->name('duplicate');
+        });
+        Route::resource('classifieds', \App\Http\Controllers\Admin\ClassifiedController::class)->middleware('module:classifieds');
+
+        Route::controller(\App\Http\Controllers\Admin\PropertyController::class)->prefix('properties')->name('properties.')->group(function () {
+            Route::post('/{property}/approve', 'approve')->name('approve');
+            Route::post('/{property}/disapprove', 'disapprove')->name('disapprove');
+            Route::get('/{property}/duplicate', 'duplicate')->name('duplicate');
+        });
         Route::resource('properties', PropertyController::class)->middleware('module:properties');
+
         Route::resource('products', ProductController::class)->middleware('module:products');
         
         Route::controller(OrderController::class)->prefix('product-orders')->name('product-orders.')->middleware('module:products')->group(function () {

@@ -108,15 +108,15 @@ trait HasImageAccess
 
     public function getFallbackImage(string $type = 'default'): string
     {
-        $basePath = '/images/fallbacks/';
+        $basePath = 'images/fallbacks/';
 
         $fallbacks = [
-            'avatar' => $basePath . 'default-avatar.png',
-            'thumb'  => $basePath . 'default-square.jpg',
-            'card'   => $basePath . 'default-card.jpg',
-            'detail' => $basePath . 'default-detail.jpg',
-            'hero'   => $basePath . 'default-hero.jpg',
-            'default'=> $basePath . 'default.jpg',
+            'avatar' => asset($basePath . 'default-avatar.png'),
+            'thumb'  => asset($basePath . 'default-square.jpg'),
+            'card'   => asset($basePath . 'default-card.jpg'),
+            'detail' => asset($basePath . 'default-detail.jpg'),
+            'hero'   => asset($basePath . 'default-hero.jpg'),
+            'default'=> asset($basePath . 'default.jpg'),
         ];
         
         return $fallbacks[$type] ?? $fallbacks['default'];

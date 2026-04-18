@@ -13,8 +13,14 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
+use App\Traits\ManagesApproval;
+
 class AutoController extends Controller
 {
+    use ManagesApproval;
+
+    protected $modelClass = Auto::class;
+
     public function index(Request $request): View
     {
         $categories = Category::all();
