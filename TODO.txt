@@ -40,3 +40,26 @@ Look into the TODO folder for screenshots for instructions, complains, issues, p
 
 ----------------
 
+Can we improve this UIUX? in the admin dashboard?
+http://127.0.0.1:8000/admin/themes/[id]/edit
+can we see live font preview?
+
+-----------------
+
+http://127.0.0.1:8000/admin/settings
+we have 7 cards here, i want to enable full card click, not the hyperlink on bottom right
+
+------------------------
+
+Settings -> General
+Enable Frontend Editing
+i want to uncheck and save, but families
+
+---------------------
+
+The page body has a glow in the background
+can you make it dynamic colors? So it matched with the colors in the settings.
+or add another field in the settings to control this?
+
+------------------------------
+

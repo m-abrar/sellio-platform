@@ -688,7 +688,11 @@ footer{
 .hero-section{
     padding-top:100px!important;
     padding-bottom:120px;
-    background:linear-gradient(135deg,#f5f7ff 0,#e8e8ff 50%,#fdf2ff 100%);
+    background: linear-gradient(135deg, 
+        rgba(var(--primary-color-rgb), 0.05) 0%, 
+        rgba(var(--primary-color-rgb), 0.1) 50%, 
+        white 100%
+    );
     min-height:80vh;
     display:flex;
     align-items:center;
@@ -736,10 +740,10 @@ footer{
     justify-content:center
 }
 .hero-section .nav-pills .nav-link.active{
-    background:#5a57d9!important;
+    background:var(--primary-color)!important;
     color:#fff!important;
     transform:translateY(-5px);
-    box-shadow:0 15px 30px rgba(90,87,217,.35)
+    box-shadow:0 15px 30px rgba(var(--primary-color-rgb),.35)
 }
 .custom-pill-input{
     height:60px;
@@ -752,7 +756,7 @@ footer{
 .btn-search-pill{
     height:60px;
     border-radius:50px!important;
-    background:#5a57d9;
+    background:var(--primary-color);
     color:#fff;
     font-weight:700;
     padding:0 35px;

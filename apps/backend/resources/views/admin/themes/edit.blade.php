@@ -68,15 +68,21 @@
           ========================== --}}
           <h5 class="mb-3"><i class="fas fa-font"></i> Typography</h5>
           <div class="row">
-            <div class="col-md-6 form-group">
+            <div class="col-md-5 form-group">
               <label>Base Font (font-family)</label>
-              <input type="text" name="variables[--font-family-base]" class="form-control" value="{{ $theme->variables['--font-family-base'] ?? 'Inter, sans-serif' }}">
+              <input type="text" id="font-family-base" name="variables[--font-family-base]" class="form-control" value="{{ $theme->variables['--font-family-base'] ?? 'Inter, sans-serif' }}">
               <small class="form-text text-muted">Example: "Inter, sans-serif" or "Roboto, sans-serif"</small>
             </div>
-            <div class="col-md-6 form-group">
+            <div class="col-md-5 form-group">
               <label>Heading Font (font-family)</label>
-              <input type="text" name="variables[--font-family-heading]" class="form-control" value="{{ $theme->variables['--font-family-heading'] ?? 'Poppins, sans-serif' }}">
+              <input type="text" id="font-family-heading" name="variables[--font-family-heading]" class="form-control" value="{{ $theme->variables['--font-family-heading'] ?? 'Poppins, sans-serif' }}">
               <small class="form-text text-muted">Example: "Poppins, sans-serif" or "Montserrat, sans-serif"</small>
+            </div>
+            <div class="col-md-2 d-flex align-items-end mb-3">
+               <div class="p-3 border rounded w-100 text-center bg-light shadow-sm" style="min-height: 80px;">
+                  <h6 id="preview-heading" class="mb-1" style="font-size: 1rem;">Heading Preview</h6>
+                  <p id="preview-base" class="mb-0" style="font-size: 0.8rem;">Body text preview.</p>
+               </div>
             </div>
           </div>
 
@@ -131,6 +137,53 @@
 </form>
 @endsection
 
-@push('css')
+@push('js')
+<script>
+    $(document).ready(function() {
+        const baseInput = $('#font-family-base');
+        const headingInput = $('#font-family-heading');
+        const basePreview = $('#preview-base');
+        const headingPreview = $('#preview-heading');
 
+        function extractFontName(fontString) {
+            let name = fontString.split(',')[0].trim();
+            return name.replace(/['"]/g, '');
+        }
+
+        function loadGoogleFont(fontName) {
+            if (!fontName || ['serif', 'sans-serif', 'monospace', 'cursive', 'system-ui'].includes(fontName.toLowerCase())) return;
+            
+            const fontId = 'google-font-' + fontName.replace(/\s+/g, '-').toLowerCase();
+            if ($('#' + fontId).length === 0) {
+                const link = `<link id="${fontId}" href="https://fonts.googleapis.com/css2?family=${fontName.replace(/\s+/g, '+')}:wght@400;700&display=swap" rel="stylesheet">`;
+                $('head').append(link);
+            }
+        }
+
+        function updatePreview() {
+            const baseFont = baseInput.val();
+            const headingFont = headingInput.val();
+            const baseName = extractFontName(baseFont);
+            const headingName = extractFontName(headingFont);
+
+            loadGoogleFont(baseName);
+            loadGoogleFont(headingName);
+
+            basePreview.css('font-family', baseFont);
+            headingPreview.css('font-family', headingFont);
+        }
+
+        let timeout = null;
+        baseInput.on('input', function() {
+            clearTimeout(timeout);
+            timeout = setTimeout(updatePreview, 500);
+        });
+        headingInput.on('input', function() {
+            clearTimeout(timeout);
+            timeout = setTimeout(updatePreview, 500);
+        });
+
+        updatePreview();
+    });
+</script>
 @endpush
