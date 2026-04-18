@@ -33,6 +33,8 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 
+import { Header } from "@/components/layout/Header";
+
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -59,9 +61,10 @@ export default async function RootLayout({
           '--accent-color': appConfig?.variables?.accent_color || '#3b82f6',
         } as React.CSSProperties}
       >
-        <div className={`theme-${appConfig?.vertical || 'ecommerce'}`}>
+        <Header appConfig={appConfig} />
+        <main className={`theme-${appConfig?.vertical || 'ecommerce'}`}>
           {children}
-        </div>
+        </main>
       </body>
     </html>
   );

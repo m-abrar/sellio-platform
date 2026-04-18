@@ -1,30 +1,43 @@
-# SELLIO PLATFORM - TODO LIST
+# SELLIO PLATFORM - MODERN TODO
 
-## 🔴 CRITICAL FIXES
-- [/] **Fix SettingController Crash:** Resolve `compact(): Undefined variable $themes` error.
-  * *Status:* Variable initialized in `SettingController@getSection`, but needs verification that `admin/settings/group/modules` loads correctly.
-- [/] **Frontend Navigation:** Resolve why the menu is not showing on the storefront.
-  * *Status:* Pending investigation of `apps/web` menu components.
+## 🔴 CRITICAL: IMAGE SYSTEM
+- [x] **Fix Fallback Images:** Images not showing in Admin Dashboard for most pages.
+  * *Status:* Resolved by converting to root-relative paths in `HasImageAccess.php`.
 
-## 🎨 THEME MANAGER (ADMIN)
-- [ ] **Library Visibility:** Show all themes in the "Themes Library" tab.
-  * *Context:* Currently, themes in "Recently Used" are filtered out of the library.
-- [ ] **New "Ecommerce" Category:** Add a dedicated "Shop" tab in the Theme library.
-- [ ] **Theme Sub-niches:** Categorize eCommerce themes by industry:
-  * Sports, Clothing, Medical, Bakery, Dental Instruments, etc.
+## 🟠 BACKEND STABILITY
+- [x] **Reset SettingController:** Ensure `compact(): Undefined variable $themes` is fully resolved.
+  * *Status:* Patched with robust initialization in Phase 1.
+- [x] **Header Configuration:**
+  * Add `hide_site_name` toggle in Backend Settings (General).
+  * Update validation rules in `SettingController`.
+  * Add UI switch in `general.blade.php`.
 
-## 🌐 FRONTEND UX & SETTINGS
-- [ ] **Logo vs Text Toggle:** Provide a backend setting to hide "Company Name" text if a "Logo Image" is present in the header.
-  * *Context:* Avoid irrelevant duplication in the header.
-- [ ] **Dashboard Access:** Add a button/link in the Admin Dashboard to quickly "Open Frontend".
-can you do it for the laravel blades first? then the nextjs frontend later.
+## 🟡 FRONTEND & STOREFRONT (apps/web)
+- [x] **Navigation Restoration:**
+  * Create `Header.tsx` component with dynamic branding logic.
+  * Integrate Header into `RootLayout`.
+  * Restore Primary Navigation Menu (Marketplace, Products, Real Estate, etc.).
 
-## 🏗️ MONOREPO & DEVOPS
-- [x] **Monorepo Migration:** Apps moved to `apps/` (backend, web, dashboard, mobile).
-- [x] **File Management:** Moved `TODO.txt` to the root directory.
-- [ ] **Git Configuration:** Update `.gitignore` for the new structure and ignore `TODO.txt`.
+## 🔵 THEME MANAGER
+- [x] **Library Optimization:**
+  * Remove "Recently Used" exclusion from the Theme Library.
+  * Add dedicated "Ecommerce/Shop" categories and industry sub-niches with branding icons.
 
-------------------
+## 🟢 MONOREPO HYGIENE
+- [x] **Git Cleanup:** Update root `.gitignore` and ignore `TODO.txt`.
+- [x] **Logistics:** Moved `TODO.txt` to root.
+
+
+----------------------
+
+
+Admin Images -> Fallbacks now load using relative paths.
+NO, can you make it absolute? in the trait getFallbackImage()
+
+
+
+----------------------
+
 
 when mysql server is down, we see this error, can you show a professional polished screen?
 
@@ -49,19 +62,6 @@ Error
 vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php:46
 Call to undefined method App\Http\Controllers\Admin\ListingController::edit()
 
------------------------------
-
-Please check why fallback image is not showing in the admin dashboard for most of the pages?
-
-$model->thumbnail_url
-
-From the HasImageAccess.php trait, we have
-public function getThumbnailUrlAttribute(): string
-    {
-        return $this->getImageUrl(conversion: 'thumb');
-    }
-
-getFallbackImage()
 
 -----------------------------
 

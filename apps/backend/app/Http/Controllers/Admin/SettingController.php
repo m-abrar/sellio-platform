@@ -105,6 +105,7 @@ class SettingController extends Controller
                 'timezone' => 'required|string',
                 'frontend_edit' => 'nullable|boolean',
                 'currency_code' => 'required|string|max:10',
+                'hide_site_name' => 'nullable|boolean',
                 'site_logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
                 'site_favicon' => 'nullable|image|mimes:ico,png,webp|max:100',
                 
@@ -231,11 +232,17 @@ class SettingController extends Controller
         // Define keys that require special handling
         $fileKeys = ['site_logo', 'site_favicon'];
         $arrayKeys = ['is_section'];
+        $booleanKeys = ['frontend_edit', 'hide_site_name'];
         
         foreach ($validKeys as $key) {
             $value = $request->input($key);
+
+            // --- A. Handle Boolean Fields (Checkboxes that might be missing from request if unchecked) ---
+            if (in_array($key, $booleanKeys)) {
+                $value = $request->has($key) ? '1' : '0';
+            }
             
-            // --- A. Handle Theme Activation for site_home (Use the helper method) ---
+            // --- B. Handle Theme Activation for site_home ---
             if ($section === 'pages' && $key === 'site_home') {
                 $this->activateThemeByKey($value);
                 // We handled saving the setting inside activateThemeByKey, so we continue

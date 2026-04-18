@@ -35,10 +35,14 @@ class ApiThemeController extends Controller
             ], 404);
         }
 
+        $settings = \App\Models\Setting::whereIn('key', ['site_name', 'site_logo', 'hide_site_name'])->pluck('value', 'key');
+
         return response()->json([
             'success' => true,
             'message' => 'Active theme retrieved',
-            'data'    => $theme,
+            'data'    => array_merge($theme->toArray(), [
+                'app_settings' => $settings
+            ]),
         ]);
     }
 

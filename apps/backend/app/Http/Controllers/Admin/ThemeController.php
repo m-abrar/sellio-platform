@@ -26,8 +26,7 @@ class ThemeController extends Controller
             $recentIds[] = $activeTheme->id;
         }
 
-        $themesByVertical = Theme::whereNotIn('id', $recentIds)
-            ->orderBy('order')
+        $themesByVertical = Theme::orderBy('order')
             ->get()
             ->groupBy('vertical');
 

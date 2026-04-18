@@ -23,6 +23,13 @@
                                 <input type="text" name="site_name" class="form-control"
                                     value="{{ old('site_name', $settings['site_name'] ?? '') }}">
                             </div>
+                            <div class="custom-control custom-checkbox mt-2">
+                                <input type="checkbox" name="hide_site_name" class="custom-control-input" id="hideSiteName"
+                                    value="1" {{ (old('hide_site_name', $settings['hide_site_name'] ?? '0') == '1') ? 'checked' : '' }}>
+                                <label class="custom-control-label small text-muted" for="hideSiteName">
+                                    {{ __('Hide Company Name text in header (if logo is present)') }}
+                                </label>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-6">

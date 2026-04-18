@@ -1,51 +1,44 @@
-# Monorepo Root
+# MONOREPO ROOT
 node_modules/
 .pnpm-store/
 pnpm-lock.yaml
+TODO.txt
 
-# OS Files
+# OS FILES
 .DS_Store
 Thumbs.db
 *.zip
 *.log
 
-# IDEs
+# IDES
 .idea/
 .vscode/
 .nova/
 .zed/
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
 *.sw?
 
-# Environment
+# ENVIRONMENT
 .env
 .env.*
 !.env.example
 
-# Laravel Specific (apps/core)
-/apps/core/vendor/
-/apps/core/public/build/
-/apps/core/public/hot/
-/apps/core/public/storage
-/apps/core/storage/*.key
-/apps/core/storage/pail/
-/apps/core/.phpunit.result.cache
-/apps/core/auth.json
+# APPS
+/apps/backend/vendor/
+/apps/backend/public/build/
+/apps/backend/public/hot/
+/apps/backend/public/storage
+/apps/backend/storage/*.key
+/apps/backend/storage/pail/
+/apps/backend/.phpunit.result.cache
 
-# Next.js Specific (apps/storefront)
-/apps/storefront/.next/
-/apps/storefront/out/
-/apps/storefront/build/
-/apps/storefront/.vercel/
-/apps/storefront/*.tsbuildinfo
+/apps/web/.next/
+/apps/web/out/
+/apps/web/build/
+/apps/web/*.tsbuildinfo
 
-# Vite Specific (apps/partner-panel)
-/apps/partner-panel/dist/
-/apps/partner-panel/dist-ssr/
+/apps/dashboard/dist/
+/apps/dashboard/build/
 
-# Shared Packages
+# PACKAGES
 /packages/*/node_modules/
 /packages/*/dist/

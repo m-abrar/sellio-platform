@@ -117,14 +117,37 @@
                         <div class="nav flex-column nav-pills vertical-theme-nav p-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                             @php $first = true; @endphp
                             @foreach($themesByVertical as $vertical => $group)
+                                @php
+                                    $iconClass = match($vertical) {
+                                        'ecommerce' => 'fa-shopping-cart text-success',
+                                        'properties' => 'fa-home text-primary',
+                                        'autos' => 'fa-car text-orange',
+                                        'events' => 'fa-calendar-alt text-indigo',
+                                        'jobs' => 'fa-briefcase text-teal',
+                                        'services' => 'fa-tools text-info',
+                                        'classifieds' => 'fa-tags text-muted',
+                                        default => 'fa-circle text-secondary'
+                                    };
+                                    $label = match($vertical) {
+                                        'ecommerce' => 'Online Shop / Retail',
+                                        'properties' => 'Real Estate',
+                                        'autos' => 'Automotive',
+                                        'events' => 'Events & Tickets',
+                                        'jobs' => 'Job Board',
+                                        'services' => 'Service Marketplace',
+                                        'classifieds' => 'Classifieds',
+                                        null, '' => 'Unified / Multi-Purpose',
+                                        default => ucfirst($vertical)
+                                    };
+                                @endphp
                                 <a class="nav-link mb-2 {{ $first ? 'active' : '' }}" 
                                    id="v-pills-{{ Str::slug($vertical ?: 'general') }}-tab" 
                                    data-toggle="pill" 
                                    href="#v-pills-{{ Str::slug($vertical ?: 'general') }}" 
                                    role="tab">
                                     <div class="d-flex align-items-center">
-                                        <i class="fas fa-circle mr-2 text-xs {{ $vertical ? 'text-primary' : 'text-indigo' }}"></i>
-                                        <span class="text-capitalize">{{ $vertical ?: 'Unified Pack' }}</span>
+                                        <i class="fas {{ $iconClass }} mr-2 text-xs"></i>
+                                        <span class="text-capitalize">{{ $label }}</span>
                                         <span class="badge badge-light ml-auto">{{ $group->count() }}</span>
                                     </div>
                                 </a>
