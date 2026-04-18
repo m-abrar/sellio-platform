@@ -34,12 +34,12 @@
                                class="nav-link py-2 @if($currentSection == $section) active shadow-sm @endif">
                                 <i class="fas fa-{{ match(strtolower($section)) { 
                                     'general' => 'cog', 
-                                    'modules' => 'cubes', 
-                                    'contact' => 'address-book', 
-                                    'seo' => 'search-dollar', 
-                                    'social' => 'share-nodes', 
-                                    'pages' => 'file-lines', 
-                                    'apis' => 'microchip', 
+                                    'modules' => 'boxes', 
+                                    'contact' => 'envelope', 
+                                    'seo' => 'chart-line', 
+                                    'social' => 'share-alt', 
+                                    'pages' => 'file-alt', 
+                                    'apis' => 'code', 
                                     default => 'circle' 
                                 } }} mr-2"></i>
                                 {{ ucwords(str_replace('-', ' ', $section)) }}

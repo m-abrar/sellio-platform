@@ -74,7 +74,7 @@
             {{-- Pagination --}}
             @if($services->hasPages())
                 <div class="mt-5 d-flex justify-content-center">
-                    {{ $services->links('frontend.services._partials._pagination') }}
+                    {{ $services->links('frontend._partials._pagination') }}
                 </div>
             @endif
 

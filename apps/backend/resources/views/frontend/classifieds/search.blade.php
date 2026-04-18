@@ -73,7 +73,7 @@
             {{-- Pagination --}}
             @if($classifieds->hasPages())
                 <div class="mt-5 d-flex justify-content-center">
-                    {{ $classifieds->links('frontend.classifieds._partials._pagination') }}
+                    {{ $classifieds->links('frontend._partials._pagination') }}
                 </div>
             @endif
 

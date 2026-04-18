@@ -20,12 +20,15 @@
 - [x] **Laravel Frontend UIUX Audit:** Global theme hardening and pagination standardization complete.
 - [x] **Dynamic Theme Fonts:** Implemented Google Fonts loader for Lora/Playfair Display.
 - [x] **Pagination Syntax Fix:** Resolved `@endendif` ParseError in listings.
+- [x] **Dynamic Hero Section:** Background gradient and active tab colors now use theme variables.
+- [x] **Admin Live Font Preview:** Real-time Google Font loading and preview in theme editor.
+- [x] **Settings Explorer UX:** Made all 7 category cards fully clickable (full-card link).
+- [x] **Settings Logic Fix:** Corrected boolean evaluation for checkboxes (Frontend editing/Hide site name).
+- [x] **Global Body Glow:** Ambient background glow now dynamic and synchronized with theme primary color.
 
 ---
 
-## 🔴 PENDING (Easiest First)
-
-- [ ] **Fresh DB Migration:** User asked "can you fresh migrate the DB and start over?" — **requires explicit confirmation** as this is destructive. 
+- [x] **Fresh DB Migration:** Successfully performed `migrate:fresh --seed` to reset the environment.
 
 ---
 
@@ -34,32 +37,14 @@
 - [ ] **Multi-Tenant Deployment:** Prepare for horizontal scaling.
 
 
-----------------
+http://127.0.0.1:8000/logout
+419
+Page Expired
 
-Look into the TODO folder for screenshots for instructions, complains, issues, problems
 
-----------------
 
-Can we improve this UIUX? in the admin dashboard?
-http://127.0.0.1:8000/admin/themes/[id]/edit
-can we see live font preview?
-
------------------
-
-http://127.0.0.1:8000/admin/settings
-we have 7 cards here, i want to enable full card click, not the hyperlink on bottom right
-
-------------------------
-
-Settings -> General
-Enable Frontend Editing
-i want to uncheck and save, but families
-
----------------------
-
-The page body has a glow in the background
-can you make it dynamic colors? So it matched with the colors in the settings.
-or add another field in the settings to control this?
-
-------------------------------
-
+The app is here
+http://127.0.0.1:8000/
+but it tries to load image from
+http://localhost:8000/storage/30/24.webp
+and therefore a 404 is shown for the image

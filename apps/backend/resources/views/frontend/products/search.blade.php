@@ -97,7 +97,7 @@
             {{-- Pagination --}}
             @if($products->hasPages())
                 <div class="mt-5 d-flex justify-content-center" role="navigation" aria-label="Pagination">
-                    {{ $products->appends(request()->query())->links('frontend.products._partials._pagination') }}
+                    {{ $products->appends(request()->query())->links('frontend._partials._pagination') }}
                 </div>
             @endif
         </main>

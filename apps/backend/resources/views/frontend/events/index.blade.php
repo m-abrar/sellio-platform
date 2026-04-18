@@ -73,7 +73,7 @@
             {{-- Pagination --}}
             @if($events->hasPages())
                 <div class="mt-5 d-flex justify-content-center">
-                    {{ $events->links('frontend.events._partials._pagination-links') }}
+                    {{ $events->links('frontend._partials._pagination') }}
                 </div>
             @endif
         </div>
