@@ -27,8 +27,8 @@ class PropertyController extends Controller
 
     public function index()
     {
-        $categories = Category::all();
-        $locations = Location::all();
+        $categories = Category::where('is_property', 1)->get();
+        $locations = Location::where('is_property', 1)->get();
 
         $properties = Property::query()
             ->when(request('name'), fn($q) => $q->where('title', 'like', '%' . request('name') . '%'))
@@ -36,7 +36,9 @@ class PropertyController extends Controller
             ->when(request('category_id'), fn($q) => $q->where('category_id', request('category_id')))
             ->when(request('only_active'), fn($q) => $q->where('is_published', 1))
             ->with(['location', 'category'])
-            ->get();
+            ->latest()
+            ->paginate(15)
+            ->withQueryString();
 
         return view('admin.properties.index', compact('properties', 'locations', 'categories'));
     }

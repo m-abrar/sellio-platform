@@ -65,13 +65,18 @@
     <div class="card card-primary card-outline shadow-sm">
         <div class="card-header border-0 bg-white py-3">
             <h3 class="card-title font-weight-600 text-muted">Event Schedule</h3>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="maximize">
+                    <i class="fas fa-expand"></i>
+                </button>
+            </div>
         </div>
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table id="events-table" class="table table-hover table-premium mb-0">
                     <thead class="thead-light">
                         <tr>
-                            <th class="text-center" style="width: 70px">ID</th>
+                            <th class="text-center" style="width: 70px">Media</th>
                             <th>Event Details</th>
                             <th>Schedule</th>
                             <th>Pricing</th>
@@ -83,16 +88,21 @@
                     <tbody>
                         @forelse ($events as $event)
                             <tr>
-                                <td class="text-center align-middle font-weight-bold text-muted small">#{{ $event->id }}</td>
-                                
+                                <td class="text-center align-middle">
+                                    <div class="table-img-preview shadow-xs">
+                                        <img src="{{ $event->thumbnail_url ?? asset('images/placeholder.png') }}">
+                                    </div>
+                                </td>
                                 <td class="align-middle">
                                     <div class="d-flex align-items-center">
-                                        <div class="icon-shape mr-3 bg-light border rounded overflow-hidden shadow-xs" style="width:50px; height:40px;">
-                                            <img src="{{ $event->thumbnail_url ?? asset('images/placeholder.png') }}" class="w-100 h-100" style="object-fit: cover;">
-                                        </div>
                                         <div>
                                             <span class="d-block font-weight-bold text-dark mb-0">{{ $event->title }}</span>
-                                            <small class="text-muted">By: {{ $event->user->name ?? 'Admin' }}</small>
+                                            <div class="d-flex align-items-center mt-1">
+                                                <small class="badge badge-light border text-muted mr-2">ID: {{ $event->id }}</small>
+                                                <small class="text-muted">
+                                                    <i class="fas fa-user mr-1"></i> {{ $event->user->name ?? 'Admin' }}
+                                                </small>
+                                            </div>
                                         </div>
                                     </div>
                                 </td>
@@ -104,10 +114,10 @@
 
                                 <td class="align-middle">
                                     @if($event->is_paid)
-                                        <span class="badge bg-danger text-white px-2">PAID</span>
+                                        <span class="badge badge-danger-light px-2 py-1">PAID</span>
                                         <div class="small font-weight-bold mt-1">{{ setting('currency_symbol', '$') }}{{ number_format($event->base_price, 2) }}</div>
                                     @else
-                                        <span class="badge bg-success text-white px-2">FREE</span>
+                                        <span class="badge badge-success-light px-2 py-1">FREE</span>
                                     @endif
                                 </td>
 
@@ -145,6 +155,14 @@
                 </table>
             </div>
         </div>
+
+        @if($events->hasPages())
+            <div class="card-footer bg-white border-0 py-3">
+                <div class="float-right">
+                    {{ $events->appends(request()->query())->links('pagination::bootstrap-4') }}
+                </div>
+            </div>
+        @endif
     </div>
 </div>
 @include('admin._partials._sweetalert-delete')

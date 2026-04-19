@@ -10,15 +10,13 @@
             <div class="col-sm-6">
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-calendar-check mr-2 text-primary"></i>
-                    {{ __('Property Bookings') }}
+                    Property Bookings
                 </h1>
             </div>
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}">{{ __('Dashboard') }}</a></li>
-                    <li class="breadcrumb-item"><a href="{{ route('admin.bookings.index') }}">{{ __('Bookings') }}</a></li>
-                    <li class="breadcrumb-item active">{{ __('Properties') }}</li>
-                </ol>
+            <div class="col-sm-6 text-right">
+                <a href="{{ route('admin.property-bookings.create') }}" class="btn btn-primary btn-flat shadow-sm">
+                    <i class="fas fa-plus mr-1"></i> Add Booking
+                </a>
             </div>
         </div>
     </div>
@@ -79,20 +77,12 @@
         {{-- Main Table --}}
         <div class="card card-primary card-outline shadow-sm">
             <div class="card-header border-0 bg-white py-3">
-                <h3 class="card-title font-weight-600 text-muted">
-                    <i class="fas fa-bed mr-1 text-primary"></i> {{ __('All Property Bookings') }}
-                </h3>
-                <div class="card-tools">
-                    <a href="{{ route('admin.property-bookings.create') }}"
-                       class="btn btn-primary btn-sm shadow-sm">
-                        <i class="fas fa-plus mr-1"></i> {{ __('New Booking') }}
-                    </a>
-                </div>
+                <h3 class="card-title font-weight-600 text-muted">All Property Bookings</h3>
             </div>
 
             <div class="card-body p-0">
                 <div class="table-responsive">
-                    <table id="bookings-table" class="table table-hover mb-0">
+                    <table id="bookings-table" class="table table-hover table-premium mb-0">
                         <thead class="thead-light">
                             <tr>
                                 <th style="width: 60px" class="text-center">{{ __('ID') }}</th>
@@ -121,7 +111,12 @@
                                         <span class="text-muted font-weight-bold text-monospace">#{{ $booking->id }}</span>
                                     </td>
                                     <td class="text-center align-middle">
-                                        <img src="{{ $booking->property->thumbnail_url ?? asset('images/fallbacks/default.jpg') }}" class="img-thumbnail shadow-xs" style="width: 40px; height: 40px; object-fit: cover; border-radius: 6px;" onerror="this.src='{{ asset('images/fallbacks/default.jpg') }}'">
+                                        <div class="product-img-preview shadow-xs" style="width: 50px; height: 50px; border-radius: 6px; overflow:hidden; margin: auto; border: 1px solid #eee;">
+                                            <img src="{{ $booking->property->thumbnail_url ?? asset('images/fallbacks/default.jpg') }}" 
+                                                 alt="{{ $booking->property->title }}"
+                                                 class="w-100 h-100"
+                                                 style="object-fit: cover;">
+                                        </div>
                                     </td>
 
                                     <td class="align-middle">
@@ -151,14 +146,14 @@
                                     </td>
 
                                     <td class="text-center align-middle">
-                                        <span class="badge badge-{{ $statusClass }} px-3 py-1 text-uppercase shadow-xs"
+                                        <span class="badge badge-{{ $statusClass }}-light px-3 py-1 text-uppercase shadow-xs"
                                               style="font-size: 0.7rem; letter-spacing: 0.5px;">
                                             {{ $booking->status }}
                                         </span>
                                     </td>
 
                                     <td class="text-right align-middle px-4">
-                                        <div class="btn-group shadow-sm">
+                                        <div class="btn-group btn-group-premium shadow-sm">
                                             <a href="{{ route('admin.property-bookings.show', $booking->id) }}"
                                                class="btn btn-default btn-sm text-info"
                                                data-toggle="tooltip" title="{{ __('View') }}">
@@ -183,16 +178,7 @@
                                     </td>
                                 </tr>
                             @empty
-                                <tr>
-                                    <td colspan="8" class="text-center py-5">
-                                        <i class="fas fa-calendar-times fa-3x text-muted mb-3 d-block"></i>
-                                        <h5 class="text-muted font-weight-bold">{{ __('No Property Bookings Found') }}</h5>
-                                        <p class="text-secondary small">{{ __('Try clearing the filters or create a new booking.') }}</p>
-                                        <a href="{{ route('admin.property-bookings.create') }}" class="btn btn-primary btn-sm mt-2">
-                                            <i class="fas fa-plus mr-1"></i> {{ __('Add Booking') }}
-                                        </a>
-                                    </td>
-                                </tr>
+                                {{-- Handled by DataTables --}}
                             @endforelse
                         </tbody>
                     </table>

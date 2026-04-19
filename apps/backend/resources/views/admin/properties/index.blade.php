@@ -2,14 +2,13 @@
 
 @section('title', 'Properties')
 
-@section('plugins.Datatables', true)
-
 @section('content_header')
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-building mr-2 text-primary"></i> Property Listings
+                    <i class="fas fa-building mr-2 text-primary"></i>
+                    Properties
                 </h1>
             </div>
             <div class="col-sm-6 text-right">
@@ -44,7 +43,7 @@
                         <select name="location_id" class="form-control select2 shadow-xs">
                             <option value="">All Locations</option>
                             @foreach($locations ?? [] as $loc)
-                                <option value="{{ $loc->id }}" {{ request('location_id') == $loc->id ? 'selected' : '' }}>{{ $loc->name }}</option>
+                                <option value="{{ $loc->id }}" {{ request('location_id') == $loc->id ? 'selected' : '' }}>{{ $loc->title }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -74,13 +73,18 @@
     <div class="card card-primary card-outline shadow-sm">
         <div class="card-header border-0 bg-white py-3">
             <h3 class="card-title font-weight-600 text-muted">Properties List</h3>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="maximize">
+                    <i class="fas fa-expand"></i>
+                </button>
+            </div>
         </div>
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table id="properties-table" class="table table-hover table-premium mb-0">
                     <thead class="thead-light">
                         <tr>
-                            <th class="text-center" style="width: 70px">ID</th>
+                            <th class="text-center" style="width: 70px">Media</th>
                             <th>Property Info</th>
                             <th>Type/Structure</th>
                             <th>Pricing</th>
@@ -92,18 +96,22 @@
                     <tbody>
                         @forelse ($properties as $property)
                             <tr>
-                                <td class="text-center align-middle font-weight-bold text-muted small">
-                                    #{{ $property->id }}
+                                <td class="text-center align-middle">
+                                    <div class="table-img-preview shadow-xs">
+                                        <img src="{{ $property->thumbnail_url ?? asset('images/placeholder.png') }}">
+                                    </div>
                                 </td>
                                 
                                 <td class="align-middle">
                                     <div class="d-flex align-items-center">
-                                        <div class="icon-shape mr-3 bg-light border rounded overflow-hidden shadow-xs" style="width:50px; height:40px;">
-                                            <img src="{{ $property->thumbnail_url ?? asset('images/placeholder.png') }}" class="w-100 h-100" style="object-fit: cover;">
-                                        </div>
                                         <div>
                                             <span class="d-block font-weight-bold text-dark mb-0">{{ $property->title }}</span>
-                                            <small class="text-muted">By: {{ $property->user->name ?? 'Admin' }}</small>
+                                            <div class="d-flex align-items-center mt-1">
+                                                <small class="badge badge-light border text-muted mr-2">ID: {{ $property->id }}</small>
+                                                <small class="text-muted">
+                                                    <i class="fas fa-user mr-1"></i> {{ $property->user->name ?? 'Admin' }}
+                                                </small>
+                                            </div>
                                         </div>
                                     </div>
                                 </td>
@@ -117,10 +125,10 @@
 
                                 <td class="align-middle">
                                     @if($property->is_rental)
-                                        <span class="badge bg-warning text-dark px-2">RENTAL</span>
+                                        <span class="badge badge-warning-light px-2 py-1">RENTAL</span>
                                         <div class="small font-weight-bold mt-1">{{ setting('currency_symbol', '$') }}{{ number_format($property->price_per_night, 2) }} / night</div>
                                     @else
-                                        <span class="badge bg-danger text-white px-2">SALE</span>
+                                        <span class="badge badge-danger-light px-2 py-1">SALE</span>
                                         <div class="small font-weight-bold mt-1">{{ setting('currency_symbol', '$') }}{{ number_format($property->base_price, 2) }}</div>
                                     @endif
                                 </td>
@@ -178,6 +186,14 @@
                 </table>
             </div>
         </div>
+
+        @if($properties->hasPages())
+            <div class="card-footer bg-white border-0 py-3">
+                <div class="float-right">
+                    {{ $properties->appends(request()->query())->links('pagination::bootstrap-4') }}
+                </div>
+            </div>
+        @endif
     </div>
 </div>
 @include('admin._partials._sweetalert-delete')
@@ -196,18 +212,6 @@
     $(function () {
         $('.select2').select2({ theme: 'bootstrap4', width: '100%' });
         $('[data-toggle="tooltip"]').tooltip();
-        
-        if ($('#properties-table tbody tr:not(.empty-state)').length > 0) {
-            $('#properties-table').DataTable({
-                "paging": true,
-                "lengthChange": true,
-                "searching": false, {{-- using custom form --}}
-                "ordering": true,
-                "info": true,
-                "autoWidth": false,
-                "responsive": true,
-            });
-        }
     });
 </script>
 @endsection

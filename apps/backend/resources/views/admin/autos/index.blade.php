@@ -44,7 +44,7 @@
                         <select name="brand_id" class="form-control select2 shadow-xs">
                             <option value="">All Brands</option>
                             @foreach($brands ?? [] as $b)
-                                <option value="{{ $b->id }}" {{ request('brand_id') == $b->id ? 'selected' : '' }}>{{ $b->name }}</option>
+                                <option value="{{ $b->id }}" {{ request('brand_id') == $b->id ? 'selected' : '' }}>{{ $b->title }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -74,13 +74,18 @@
     <div class="card card-primary card-outline shadow-sm">
         <div class="card-header border-0 bg-white py-3">
             <h3 class="card-title font-weight-600 text-muted">Auto Inventory</h3>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="maximize">
+                    <i class="fas fa-expand"></i>
+                </button>
+            </div>
         </div>
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table id="autos-table" class="table table-hover table-premium mb-0">
                     <thead class="thead-light">
                         <tr>
-                            <th class="text-center" style="width: 70px">ID</th>
+                            <th class="text-center" style="width: 70px">Media</th>
                             <th>Auto Info</th>
                             <th>Year & Brand</th>
                             <th>Pricing</th>
@@ -92,16 +97,22 @@
                     <tbody>
                         @forelse ($autos as $auto)
                             <tr>
-                                <td class="text-center align-middle font-weight-bold text-muted small">#{{ $auto->id }}</td>
+                                <td class="text-center align-middle">
+                                    <div class="table-img-preview shadow-xs">
+                                        <img src="{{ $auto->thumbnail_url ?? asset('images/placeholder.png') }}">
+                                    </div>
+                                </td>
                                 
                                 <td class="align-middle">
                                     <div class="d-flex align-items-center">
-                                        <div class="icon-shape mr-3 bg-light border rounded overflow-hidden shadow-xs" style="width:50px; height:40px;">
-                                            <img src="{{ $auto->thumbnail_url ?? asset('images/placeholder.png') }}" class="w-100 h-100" style="object-fit: cover;">
-                                        </div>
                                         <div>
                                             <span class="d-block font-weight-bold text-dark mb-0">{{ $auto->title }}</span>
-                                            <small class="text-muted">By: {{ $auto->user->name ?? 'Admin' }}</small>
+                                            <div class="d-flex align-items-center mt-1">
+                                                <small class="badge badge-light border text-muted mr-2">ID: {{ $auto->id }}</small>
+                                                <small class="text-muted">
+                                                    <i class="fas fa-user mr-1"></i> {{ $auto->user->name ?? 'Admin' }}
+                                                </small>
+                                            </div>
                                         </div>
                                     </div>
                                 </td>
@@ -113,10 +124,10 @@
 
                                 <td class="align-middle">
                                     @if($auto->is_lease)
-                                        <span class="badge bg-warning text-dark px-2">LEASE</span>
+                                        <span class="badge badge-warning-light px-2 py-1">LEASE</span>
                                         <div class="small font-weight-bold mt-1">{{ setting('currency_symbol', '$') }}{{ number_format($auto->base_price, 2) }} / mo</div>
                                     @else
-                                        <span class="badge bg-danger text-white px-2">SALE</span>
+                                        <span class="badge badge-danger-light px-2 py-1">SALE</span>
                                         <div class="small font-weight-bold mt-1">{{ setting('currency_symbol', '$') }}{{ number_format($auto->base_price, 2) }}</div>
                                     @endif
                                 </td>
@@ -154,6 +165,14 @@
                 </table>
             </div>
         </div>
+
+        @if($autos->hasPages())
+            <div class="card-footer bg-white border-0 py-3">
+                <div class="float-right">
+                    {{ $autos->appends(request()->query())->links('pagination::bootstrap-4') }}
+                </div>
+            </div>
+        @endif
     </div>
 </div>
 @include('admin._partials._sweetalert-delete')

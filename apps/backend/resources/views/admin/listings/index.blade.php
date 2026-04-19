@@ -65,7 +65,6 @@
         <div class="card card-primary card-outline shadow-sm">
             <div class="card-header border-0 bg-white py-3">
                 <h3 class="card-title font-weight-600 text-muted">
-                    <i class="fas fa-search mr-1 text-warning"></i> 
                     {{ $type !== 'all' ? 'Filtering results for ' . \Illuminate\Support\Str::title($type) : 'Listing results from all Categories' }}
                 </h3>
                 <div class="card-tools">
@@ -78,10 +77,10 @@
             <div class="card-body p-0">
                 <div class="table-responsive">
                     {{-- Standardized premium table class --}}
-                    <table id="listings-table" class="table table-striped table-hover table-premium mb-0">
-                        <thead class="thead-light">
+                    <table id="listings-table" class="table table-hover table-premium mb-0">
+<thead class="thead-light">
                             <tr>
-                                <th style="width: 80px" class="text-center">ID</th>
+                                <th class="text-center" style="width: 70px">Media</th>
                                 <th>Listing Info</th>
                                 <th>Submitted By</th>
                                 @if($type === 'all')
@@ -95,18 +94,20 @@
                             @forelse ($listings as $listing)
                                 <tr>
                                     <td class="text-center align-middle">
-                                        <span class="text-muted small font-weight-bold text-monospace">#{{ $listing->id }}</span>
+                                        <div class="table-img-preview shadow-xs">
+                                            <img src="{{ $listing->thumbnail_url ?? asset('images/placeholder.png') }}">
+                                        </div>
                                     </td>
                                     <td class="align-middle">
                                         <div class="d-flex align-items-center">
-                                            {{-- Premium shadow and border-radius for thumbnails --}}
-                                            <div class="listing-img mr-3 shadow-xs border rounded overflow-hidden" style="width: 50px; height: 42px; background: #f8f9fa;">
-                                                <img src="{{ $listing->thumbnail_url ?? asset('images/placeholder.png') }}" 
-                                                     class="w-100 h-100" style="object-fit: cover;">
-                                            </div>
                                             <div>
                                                 <span class="d-block font-weight-bold text-dark mb-0">{{ $listing->title ?? 'Untitled' }}</span>
-                                                <small class="text-muted"><i class="fas fa-map-marker-alt mr-1"></i>{{ $listing->location->name ?? 'Global' }}</small>
+                                                <div class="d-flex align-items-center mt-1">
+                                                    <small class="badge badge-light border text-muted mr-2">ID: {{ $listing->id }}</small>
+                                                    <small class="text-muted">
+                                                        <i class="fas fa-map-marker-alt mr-1"></i>{{ $listing->location->title ?? 'Global' }}
+                                                    </small>
+                                                </div>
                                             </div>
                                         </div>
                                     </td>
@@ -217,7 +218,7 @@
                                 </tr>
                             @empty
                                 <tr class="empty-state">
-                                    <td colspan="7" class="py-5 text-center">
+                                    <td colspan="{{ $type === 'all' ? '6' : '5' }}" class="py-5 text-center">
                                         <i class="fas fa-layer-group fa-3x text-muted mb-3 d-block"></i>
                                         <h5 class="text-muted font-weight-bold">No Listings Found</h5>
                                         <p class="text-secondary small">There are no listings in the system matching this status.</p>

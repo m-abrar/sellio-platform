@@ -25,7 +25,8 @@ class ProductController extends Controller
             ->when(request('status') !== null, fn($q) => $q->where('is_published', request('status')))
             ->with(['category'])
             ->latest()
-            ->get();
+            ->paginate(15)
+            ->withQueryString();
 
         return view('admin.products.index', compact('products', 'categories'));
     }

@@ -33,7 +33,7 @@
                 <span class="badge badge-light border ml-2 px-2" style="font-weight: 500;">{{ count($users) }} total</span>
             </h3>
             <div class="card-tools">
-                <a href="{{ route('admin.users.create') }}" class="btn btn-success btn-flat shadow-sm px-3">
+                <a href="{{ route('admin.users.create') }}" class="btn btn-primary btn-flat shadow-sm px-3">
                     <i class="fas fa-plus-circle mr-1"></i> Add New User
                 </a>
                 <button type="button" class="btn btn-tool" data-card-widget="maximize">

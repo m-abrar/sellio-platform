@@ -76,6 +76,11 @@
     <div class="card card-primary card-outline shadow-sm">
         <div class="card-header border-0 bg-white py-3">
             <h3 class="card-title font-weight-600 text-muted">Product Catalog</h3>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="maximize">
+                    <i class="fas fa-expand"></i>
+                </button>
+            </div>
         </div>
 
         <div class="card-body p-0">
@@ -95,11 +100,9 @@
                         @forelse ($products as $product)
                             <tr>
                                 <td class="text-center align-middle">
-                                    <div class="product-img-preview shadow-xs" style="width: 50px; height: 50px; border-radius: 6px; overflow:hidden; margin: auto; border: 1px solid #eee;">
-                                        {{-- Using Spatie MediaLibrary with the Trait --}}
+                                    <div class="table-img-preview shadow-xs">
                                         <img src="{{ $product->getFirstMediaUrl('main_image', 'product_thumbnail') ?: asset('assets/defaults/placeholder.png') }}" 
                                              alt="{{ $product->title }}"
-                                             class="w-100 h-100"
                                              style="object-fit: cover;">
                                     </div>
                                 </td>
@@ -171,7 +174,11 @@
                                            data-toggle="tooltip" title="Edit Product">
                                             <i class="fas fa-pencil-alt"></i>
                                         </a>
-                                        
+                                        <a href="{{ route('admin.products.duplicate', $product->id) }}" 
+                                           class="btn btn-default btn-sm text-success" 
+                                           data-toggle="tooltip" title="Clone Product">
+                                            <i class="fas fa-copy"></i>
+                                        </a>
                                         <form action="{{ route('admin.products.destroy', $product->id) }}" 
                                               method="POST" 
                                               class="d-inline"
@@ -193,6 +200,14 @@
                 </table>
             </div>
         </div>
+
+        @if($products->hasPages())
+            <div class="card-footer bg-white border-0 py-3">
+                <div class="float-right">
+                    {{ $products->appends(request()->query())->links('pagination::bootstrap-4') }}
+                </div>
+            </div>
+        @endif
     </div>
 </div>
 @endsection

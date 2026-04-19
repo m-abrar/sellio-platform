@@ -22,8 +22,8 @@ class ClassifiedController extends Controller
 
     public function index(Request $request): View
     {
-        $categories = Category::all();
-        $locations = Location::all();
+        $categories = Category::where('is_classified', 1)->get();
+        $locations = Location::where('is_classified', 1)->get();
 
         $classifieds = Classified::query()
             ->when($request->title, fn($q) => $q->where('title', 'like', '%' . $request->title . '%'))

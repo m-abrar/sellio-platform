@@ -22,8 +22,8 @@ class ServiceController extends Controller
 
     public function index(Request $request): View
     {
-        $categories = Category::all();
-        $locations = Location::all();
+        $categories = Category::where('is_service', 1)->get();
+        $locations = Location::where('is_service', 1)->get();
 
         $services = Service::query()
             ->when($request->title, fn($q) => $q->where('title', 'like', '%' . $request->title . '%'))

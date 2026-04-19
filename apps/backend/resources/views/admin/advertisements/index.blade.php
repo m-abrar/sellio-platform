@@ -29,7 +29,7 @@
         <div class="card-header border-0 bg-white py-3">
             <h3 class="card-title font-weight-600 text-muted">Active Creative Registry</h3>
             <div class="card-tools">
-                <a href="{{ route('admin.advertisements.create') }}" class="btn btn-success btn-flat shadow-sm px-3">
+                <a href="{{ route('admin.advertisements.create') }}" class="btn btn-primary btn-flat shadow-sm px-3">
                     <i class="fas fa-plus-circle mr-1"></i> Add Advertisement
                 </a>
             </div>

@@ -23,9 +23,9 @@ class AutoController extends Controller
 
     public function index(Request $request): View
     {
-        $categories = Category::all();
-        $brands = Brand::all();
-        $locations = Location::all();
+        $categories = Category::where('is_auto', 1)->get();
+        $brands = Brand::where('is_auto', 1)->get();
+        $locations = Location::where('is_auto', 1)->get();
 
         $autos = Auto::query()
             ->when($request->title, fn($q) => $q->where('title', 'like', '%' . $request->title . '%'))
