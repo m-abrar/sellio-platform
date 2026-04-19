@@ -12,7 +12,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  *
  * A switchable storefront theme/template instance.
  * Defines the business vertical, visual configurations,
- * and operational settings for the Next.js storefront.
+ * and operational settings for the storefront.
  */
 class Theme extends Model implements HasMedia
 {
