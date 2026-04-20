@@ -129,14 +129,14 @@
                                             <i class="fas fa-pencil-alt"></i>
                                         </a>
                                         
-                                        <form action="{{ route('admin.amenities.destroy', $amenity->id) }}" 
+                                        <form id="delete-amenity-{{ $amenity->id }}" action="{{ route('admin.amenities.destroy', $amenity->id) }}" 
                                               method="POST" 
-                                              class="d-inline"
-                                              onsubmit="return confirm('Permanently remove this amenity?')">
+                                              class="d-inline">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-default btn-sm text-danger" 
-                                                    data-toggle="tooltip" title="Delete Amenity">
+                                            <button type="button" class="btn btn-default btn-sm text-danger" 
+                                                    data-toggle="tooltip" title="Delete Amenity"
+                                                    onclick="confirmDelete('delete-amenity-{{ $amenity->id }}')">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
                                         </form>
@@ -167,6 +167,7 @@
             </div>
         </div>
 
+        @include('admin._partials._sweetalert')
         @if(method_exists($amenities, 'hasPages') && $amenities->hasPages())
             <div class="card-footer bg-white py-3 border-top border-light">
                 <div class="d-flex justify-content-between align-items-center">

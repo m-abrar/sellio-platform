@@ -203,6 +203,5 @@
         $('[data-toggle="tooltip"]').tooltip();
     });
 </script>
-@endsection
-
 @include('admin._partials._sweetalert-delete')
+@endsection

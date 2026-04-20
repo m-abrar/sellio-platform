@@ -128,7 +128,7 @@
                                         @if($firstItem)
                                             <div class="text-xs text-muted mt-1">
                                                 {{ $firstItem->quantity }} x ${{ number_format($firstItem->unit_price, 2) }}
-                                                @if(!empty($firstItem->selected_attributes))
+                                                @if($firstItem->selected_attributes && is_array($firstItem->selected_attributes))
                                                     <br>
                                                     <span class="text-info">
                                                         @foreach($firstItem->selected_attributes as $key => $value)
