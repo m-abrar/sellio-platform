@@ -1,6 +1,5 @@
 <!-- SweetAlert2 integration for admin delete confirmations -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" />
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+@push('js')
 <script>
 function confirmDelete(formId, title = 'Are you sure?', text = 'This action cannot be undone.', confirmBtn = 'Yes, delete it!') {
     Swal.fire({
@@ -18,3 +17,4 @@ function confirmDelete(formId, title = 'Are you sure?', text = 'This action cann
     });
 }
 </script>
+@endpush

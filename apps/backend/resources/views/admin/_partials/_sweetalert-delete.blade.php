@@ -1,5 +1,4 @@
 @push('js')
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
 $(document).ready(function() {
     // Select all buttons inside actions form that use onclick="return confirm"

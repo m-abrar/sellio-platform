@@ -39,7 +39,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($addons as $addon)
+                @forelse ($addons as $addon)
                     <tr>
                         <td>{{ $addon->title }}</td>
                         <td>{{ $addon->description ?? '—' }}</td>
@@ -64,7 +64,9 @@
                             </form>
                         </td>
                     </tr>
-                @endforeach
+                @empty
+                    <tr><td colspan="5" class="text-center py-4">No addons found</td></tr>
+                @endforelse
             </tbody>
         </table>
     </div>
@@ -74,8 +76,8 @@
 
 
 @section('js')
-    
-    
+@include('admin._partials._sweetalert-delete')
+
     <script>
         $(document).ready(function () {
             $('#addons-table').DataTable({
