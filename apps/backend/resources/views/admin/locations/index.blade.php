@@ -27,24 +27,11 @@
     @include('admin.alert')
 
     <div class="card card-primary card-outline shadow-sm">
-        <div class="card-header border-0 bg-white py-3">
-            <h3 class="card-title font-weight-600 text-muted">Geographic Operation Areas / Location Groups</h3>
-            <div class="card-tools d-flex">
-                <form action="{{ route('admin.locations.index') }}" method="GET" class="mr-3">
-                    <div class="input-group input-group-sm" style="width: 250px;">
-                        <input type="text" name="search" class="form-control shadow-xs border-0 bg-light" 
-                               placeholder="Search locations..." value="{{ request('search') }}">
-                        <div class="input-group-append">
-                            <button type="submit" class="btn btn-default shadow-xs border-0 bg-light">
-                                <i class="fas fa-search text-muted"></i>
-                            </button>
-                        </div>
-                    </div>
-                </form>
-                <a href="{{ route('admin.locations.create') }}" class="btn btn-primary btn-flat shadow-sm px-4">
-                    <i class="fas fa-plus-circle mr-1"></i> Add Location
-                </a>
-            </div>
+        <div class="card-header border-0 bg-white py-3 d-flex justify-content-between align-items-center">
+            <h3 class="card-title font-weight-600 text-muted mb-0">Geographic Operation Areas / Location Groups</h3>
+            <a href="{{ route('admin.locations.create') }}" class="btn btn-primary btn-flat shadow-sm px-4">
+                <i class="fas fa-plus-circle mr-1"></i> Add Location
+            </a>
         </div>
         
         <div class="card-body p-0">
@@ -193,6 +180,7 @@
                 $('#locations-table').DataTable({
                     "responsive": true,
                     "autoWidth": false,
+                    "dom": '<"row px-4 pb-3"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
                     "order": [[1, "asc"]],
                     "columnDefs": [
                         { "orderable": false, "targets": [0, 3, 5] }

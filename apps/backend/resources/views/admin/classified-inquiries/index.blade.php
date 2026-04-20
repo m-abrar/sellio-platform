@@ -32,7 +32,11 @@
             <div class="card-body py-4">
                 <form method="GET" action="{{ route('admin.classified-inquiries.index') }}">
                     <div class="row align-items-end">
-                        <div class="col-md-3">
+                        <div class="col-md-2">
+                            <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Ad Name</label>
+                            <input type="text" name="ad_name" class="form-control shadow-xs" placeholder="Search ad..." value="{{ request('ad_name') }}">
+                        </div>
+                        <div class="col-md-2">
                             <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Classified Ad</label>
                             <select name="classifiedad" class="form-control shadow-xs select2">
                                 <option value="">All Ads</option>
@@ -52,7 +56,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Status</label>
                             <select name="status" class="form-control shadow-xs">
                                 <option value="">All Statuses</option>

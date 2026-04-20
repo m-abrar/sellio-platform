@@ -32,7 +32,11 @@
             <div class="card-body py-4">
                 <form method="GET" action="{{ route('admin.auto-inquiries.index') }}">
                     <div class="row align-items-end">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
+                            <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Search</label>
+                            <input type="text" name="search" class="form-control shadow-xs" placeholder="Name or Vehicle..." value="{{ request('search') }}">
+                        </div>
+                        <div class="col-md-3">
                             <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Vehicle</label>
                             <select name="auto" class="form-control shadow-xs">
                                 <option value="">All Vehicles</option>

@@ -35,6 +35,10 @@
                             <input type="text" name="order_number" class="form-control shadow-xs" placeholder="Search Order Number..." value="{{ request('order_number') }}">
                         </div>
                         <div class="col-md-3">
+                            <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Product Name</label>
+                            <input type="text" name="product_name" class="form-control shadow-xs" placeholder="Search Product..." value="{{ request('product_name') }}">
+                        </div>
+                        <div class="col-md-3">
                             <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Status</label>
                             <select name="status" class="form-control shadow-xs">
                                 <option value="">All Statuses</option>

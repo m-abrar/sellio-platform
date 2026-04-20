@@ -23,6 +23,11 @@ class AutoInquiryController extends Controller
 
         $inquiries = AutoInquiry::with(['auto', 'user'])
             ->when($request->auto, fn($q) => $q->where('auto_id', $request->auto))
+            ->when($request->search, fn($q) => $q->where(function($query) use ($request) {
+                $query->where('full_name', 'LIKE', "%{$request->search}%")
+                    ->orWhereHas('user', fn($uq) => $uq->where('name', 'LIKE', "%{$request->search}%"))
+                    ->orWhereHas('auto', fn($aq) => $aq->where('title', 'LIKE', "%{$request->search}%"));
+            }))
             ->when($status !== 'all', fn($q) => $q->where('status', $status))
             ->latest()
             ->paginate(15)

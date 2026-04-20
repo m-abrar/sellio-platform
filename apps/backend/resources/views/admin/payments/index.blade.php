@@ -76,7 +76,7 @@
                     <i class="fas fa-list-ul mr-1 text-primary"></i> Transaction Ledger
                 </h3>
                 <div class="card-tools">
-                    <a href="{{ route('admin.payments.create') }}" class="btn btn-success btn-sm font-weight-bold px-3 shadow-xs">
+                    <a href="{{ route('admin.payments.create') }}" class="btn btn-primary btn-flat shadow-sm px-4 font-weight-bold">
                         <i class="fas fa-plus-circle mr-1"></i> Log Offline Payment
                     </a>
                 </div>
@@ -87,7 +87,6 @@
                     <table id="payments-table" class="table table-hover table-premium mb-0">
                         <thead class="thead-light">
                             <tr>
-                                <th class="text-center" style="width: 80px">ID</th>
                                 <th>Client</th> 
                                 <th>Purpose & Gateway</th> 
                                 <th>Date / Time</th> 
@@ -107,8 +106,6 @@
                                     };
                                 @endphp
                                 <tr>
-                                    <td class="text-center align-middle font-weight-bold text-monospace text-muted">#{{ $payment->id }}</td>
-                                    
                                     <td class="align-middle">
                                         @if($payment->user)
                                             <div class="d-flex align-items-center">

@@ -26,6 +26,7 @@ class ServiceQuoteController extends Controller
             'user'    => fn ($q) => $q->select('id', 'name', 'email'),
         ])
             ->when($request->service, fn($q) => $q->where('service_id', $request->service))
+            ->when($request->service_name, fn($q) => $q->whereHas('service', fn($s) => $s->where('title', 'LIKE', "%{$request->service_name}%")))
             ->when($request->category, function($q) use ($request) {
                 $q->whereHas('service', fn($s) => $s->where('category_id', $request->category));
             })

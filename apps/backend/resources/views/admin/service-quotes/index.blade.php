@@ -32,7 +32,11 @@
             <div class="card-body py-4">
                 <form method="GET" action="{{ route('admin.service-quotes.index') }}">
                     <div class="row align-items-end">
-                        <div class="col-md-3">
+                        <div class="col-md-2">
+                            <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Service Name</label>
+                            <input type="text" name="service_name" class="form-control shadow-xs" placeholder="Search service..." value="{{ request('service_name') }}">
+                        </div>
+                        <div class="col-md-2">
                             <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Service</label>
                             <select name="service" class="form-control shadow-xs select2">
                                 <option value="">All Services</option>
@@ -61,7 +65,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="col-md-3 d-flex align-items-end" style="gap: 10px;">
+                        <div class="col-md-2 d-flex align-items-end" style="gap: 10px;">
                             <button type="submit" class="btn btn-primary flex-fill font-weight-bold shadow-xs">
                                 <i class="fas fa-filter mr-1"></i> APPLY
                             </button>

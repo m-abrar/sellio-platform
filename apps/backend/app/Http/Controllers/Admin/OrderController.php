@@ -18,7 +18,7 @@ class OrderController extends Controller
 
         $orders = Order::with(['user', 'items.product'])
             ->when($request->order_number, fn($q) => $q->where('order_number', 'LIKE', "%{$request->order_number}%"))
-            ->when($status !== 'all', fn($q) => $q->where('status', $status))
+            ->when($request->product_name, fn($q) => $q->whereHas('items.product', fn($pq) => $pq->where('name', 'LIKE', "%{$request->product_name}%")))->when($status !== 'all', fn($q) => $q->where('status', $status))
             ->when($request->payment_status, fn($q) => $q->where('payment_status', $request->payment_status))
             ->latest()
             ->paginate(15)

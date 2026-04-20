@@ -32,7 +32,11 @@
             <div class="card-body py-4">
                 <form method="GET" action="{{ route('admin.event-bookings.index') }}">
                     <div class="row align-items-end">
-                        <div class="col-md-3">
+                        <div class="col-md-2">
+                            <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Event Name</label>
+                            <input type="text" name="event_name" class="form-control shadow-xs" placeholder="Search event..." value="{{ request('event_name') }}">
+                        </div>
+                        <div class="col-md-2">
                             <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Event</label>
                             <select name="event" class="form-control shadow-xs select2">
                                 <option value="">All Events</option>
@@ -52,7 +56,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Status</label>
                             <select name="status" class="form-control shadow-xs">
                                 <option value="">All Statuses</option>

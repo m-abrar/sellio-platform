@@ -22,7 +22,7 @@
                 @csrf
                 @if(isset($payment)) @method('PATCH') @endif
 
-                <ul class="nav nav-pills mb-3" id="paymentTabs" role="tablist">
+                <ul class="nav nav-pills card-secondary shadow-sm mb-3" id="paymentTabs" role="tablist">
                     <li class="nav-item">
                         <a class="nav-link active py-3" id="details-tab" data-toggle="tab" href="#details" role="tab">
                             <i class="fas fa-info-circle mr-1"></i> Payment Details

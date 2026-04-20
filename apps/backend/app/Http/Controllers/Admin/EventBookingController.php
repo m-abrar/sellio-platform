@@ -17,6 +17,7 @@ class EventBookingController extends Controller
     {
         $bookings = EventBooking::with(['event.category', 'event.location', 'user', 'payments'])
             ->when($request->event, fn($q) => $q->where('event_id', $request->event))
+            ->when($request->event_name, fn($q) => $q->whereHas('event', fn($ev) => $ev->where('title', 'LIKE', "%{$request->event_name}%")))
             ->when($request->category, function($q) use ($request) {
                 $q->whereHas('event', fn($ev) => $ev->where('category_id', $request->category));
             })

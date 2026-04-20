@@ -19,6 +19,7 @@ class ClassifiedInquiryController extends Controller
 
         $inquiries = ClassifiedInquiry::with(['classifiedAd.category', 'classifiedAd.location', 'user'])
             ->when($request->classifiedad, fn($q) => $q->where('classified_id', $request->classifiedad))
+            ->when($request->ad_name, fn($q) => $q->whereHas('classifiedAd', fn($c) => $c->where('title', 'LIKE', "%{$request->ad_name}%")))
             ->when($request->category, function($q) use ($request) {
                 $q->whereHas('classifiedAd', fn($c) => $c->where('category_id', $request->category));
             })

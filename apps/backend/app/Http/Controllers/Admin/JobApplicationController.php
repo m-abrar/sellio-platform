@@ -17,6 +17,7 @@ class JobApplicationController extends Controller
     {
         $applications = JobApplication::with(['job.category', 'job.location', 'user'])
             ->when($request->job, fn($q) => $q->where('job_listing_id', $request->job))
+            ->when($request->job_title, fn($q) => $q->whereHas('job', fn($j) => $j->where('title', 'LIKE', "%{$request->job_title}%")))
             ->when($request->category, function($q) use ($request) {
                 $q->whereHas('job', fn($j) => $j->where('category_id', $request->category));
             })

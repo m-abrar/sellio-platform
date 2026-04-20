@@ -32,7 +32,11 @@
             <div class="card-body py-4">
                 <form method="GET" action="{{ route('admin.job-applications.index') }}">
                     <div class="row align-items-end">
-                        <div class="col-md-3">
+                        <div class="col-md-2">
+                            <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Job Title</label>
+                            <input type="text" name="job_title" class="form-control shadow-xs" placeholder="Search job..." value="{{ request('job_title') }}">
+                        </div>
+                        <div class="col-md-2">
                             <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Job</label>
                             <select name="job" class="form-control shadow-xs select2">
                                 <option value="">All Jobs</option>
@@ -52,7 +56,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Status</label>
                             <select name="status" class="form-control shadow-xs">
                                 <option value="">All Statuses</option>
