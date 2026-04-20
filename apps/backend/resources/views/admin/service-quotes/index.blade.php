@@ -41,11 +41,10 @@
 
             <div class="card-body p-0">
                 <div class="table-responsive">
-                    <table id="quotes-table" class="table table-hover mb-0">
+                    <table id="quotes-table" class="table table-hover table-premium mb-0">
                         <thead class="thead-light">
                             <tr>
-                                <th style="width: 60px" class="text-center">{{ __('ID') }}</th>
-                                <th style="width: 60px" class="text-center">{{ __('Item') }}</th>
+                                <th class="text-center" style="width: 70px">Media</th>
                                 <th>{{ __('Service') }}</th>
                                 <th>{{ __('Customer') }}</th>
                                 <th>{{ __('Scope') }}</th>
@@ -68,17 +67,16 @@
                                 @endphp
                                 <tr>
                                     <td class="text-center align-middle">
-                                        <span class="text-muted font-weight-bold text-monospace">#{{ $quote->id }}</span>
-                                    </td>
-                                    <td class="text-center align-middle">
-                                        <img src="{{ $quote->service->thumbnail_url ?? asset('images/fallbacks/default.jpg') }}" class="img-thumbnail shadow-xs" style="width: 40px; height: 40px; object-fit: cover; border-radius: 6px;" onerror="this.src='{{ asset('images/fallbacks/default.jpg') }}'">
+                                        <div class="table-img-preview shadow-xs">
+                                            <img src="{{ $quote->service->thumbnail_url ?? asset('images/fallbacks/default.jpg') }}" alt="Service" onerror="this.src='{{ asset('images/fallbacks/default.jpg') }}'">
+                                        </div>
                                     </td>
 
                                     <td class="align-middle">
                                         <span class="d-block font-weight-bold text-dark mb-0">
                                             {{ $quote->service->title ?? __('N/A') }}
                                         </span>
-                                        <small class="text-muted">ID: #{{ $quote->service_id }}</small>
+                                        <small class="badge badge-light border text-muted">ID: {{ $quote->id }}</small>
                                     </td>
 
                                     <td class="align-middle">

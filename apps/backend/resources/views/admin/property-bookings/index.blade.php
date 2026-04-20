@@ -85,8 +85,7 @@
                     <table id="bookings-table" class="table table-hover table-premium mb-0">
                         <thead class="thead-light">
                             <tr>
-                                <th style="width: 60px" class="text-center">{{ __('ID') }}</th>
-                                <th style="width: 60px" class="text-center">{{ __('Item') }}</th>
+                                <th style="width: 70px" class="text-center">Media</th>
                                 <th>{{ __('Property') }}</th>
                                 <th>{{ __('Guest') }}</th>
                                 <th>{{ __('Check-In') }}</th>
@@ -108,14 +107,9 @@
                                 @endphp
                                 <tr>
                                     <td class="text-center align-middle">
-                                        <span class="text-muted font-weight-bold text-monospace">#{{ $booking->id }}</span>
-                                    </td>
-                                    <td class="text-center align-middle">
-                                        <div class="product-img-preview shadow-xs" style="width: 50px; height: 50px; border-radius: 6px; overflow:hidden; margin: auto; border: 1px solid #eee;">
+                                        <div class="table-img-preview shadow-xs">
                                             <img src="{{ $booking->property->thumbnail_url ?? asset('images/fallbacks/default.jpg') }}" 
-                                                 alt="{{ $booking->property->title }}"
-                                                 class="w-100 h-100"
-                                                 style="object-fit: cover;">
+                                                 alt="{{ $booking->property->title }}">
                                         </div>
                                     </td>
 
@@ -123,7 +117,7 @@
                                         <span class="d-block font-weight-bold text-dark mb-0">
                                             {{ $booking->property->title ?? __('N/A') }}
                                         </span>
-                                        <small class="text-muted">ID: #{{ $booking->property_id }}</small>
+                                        <small class="badge badge-light border text-muted mt-1">ID: {{ $booking->id }}</small>
                                     </td>
 
                                     <td class="align-middle">
@@ -199,23 +193,6 @@
 @section('js')
 <script>
     $(function () {
-        if ($('#bookings-table tbody tr').length > 0 && !$('#bookings-table tbody tr td[colspan]').length) {
-            $('#bookings-table').DataTable({
-                "paging": false,
-                "searching": true,
-                "ordering": true,
-                "info": false,
-                "autoWidth": false,
-                "responsive": true,
-                "order": [[0, "desc"]],
-                dom: '<"d-flex justify-content-start ml-3 mb-3"f>rt',
-                "language": {
-                    "search": "",
-                    "searchPlaceholder": "{{ __('Search bookings...') }}"
-                },
-                "columnDefs": [{ "orderable": false, "targets": [7] }]
-            });
-        }
         $('[data-toggle="tooltip"]').tooltip();
     });
 </script>

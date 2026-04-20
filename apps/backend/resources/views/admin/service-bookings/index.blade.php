@@ -55,10 +55,10 @@
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
-                    <table id="bookings-table" class="table table-hover mb-0">
+                    <table id="bookings-table" class="table table-hover table-premium mb-0">
                         <thead class="thead-light">
                             <tr>
-                                <th style="width: 60px" class="text-center">ID</th>
+                                <th class="text-center" style="width: 70px">Media</th>
                                 <th>Service</th>
                                 <th>Customer</th>
                                 <th>Date</th>
@@ -69,8 +69,15 @@
                         <tbody>
                             @forelse ($bookings as $booking)
                                 <tr>
-                                    <td class="text-center">#{{ $booking->id }}</td>
-                                    <td>{{ $booking->service->title ?? 'N/A' }}</td>
+                                    <td class="text-center align-middle">
+                                        <div class="table-img-preview shadow-xs">
+                                            <img src="{{ $booking->service->thumbnail_url ?? asset('images/fallbacks/default.jpg') }}" alt="Service" onerror="this.src='{{ asset('images/fallbacks/default.jpg') }}'">
+                                        </div>
+                                    </td>
+                                    <td class="align-middle">
+                                        <span class="d-block font-weight-bold text-dark mb-0">{{ $booking->service->title ?? 'N/A' }}</span>
+                                        <small class="text-muted">ID: {{ $booking->id }}</small>
+                                    </td>
                                     <td>{{ $booking->user->name ?? 'Guest' }}</td>
                                     <td>{{ $booking->created_at->format('M d, Y') }}</td>
                                     <td class="text-center"><span class="badge badge-info">{{ $booking->status ?? 'Received' }}</span></td>

@@ -69,11 +69,10 @@
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
-                    <table id="inquiries-table" class="table table-hover mb-0">
+                    <table id="inquiries-table" class="table table-hover table-premium mb-0">
                         <thead class="thead-light">
                             <tr>
-                                <th style="width: 60px" class="text-center">ID</th>
-                                <th style="width: 60px" class="text-center">{{ __('Item') }}</th>
+                                <th class="text-center" style="width: 70px">Media</th>
                                 <th>Vehicle</th>
                                 <th>Inquirer</th>
                                 <th>Date</th>
@@ -85,10 +84,9 @@
                             @forelse ($inquiries as $inquiry)
                                 <tr>
                                     <td class="text-center align-middle">
-                                        <span class="text-muted font-weight-bold text-monospace">#{{ $inquiry->id }}</span>
-                                    </td>
-                                    <td class="text-center align-middle">
-                                        <img src="{{ $inquiry->auto->thumbnail_url ?? asset('images/fallbacks/default.jpg') }}" class="img-thumbnail shadow-xs" style="width: 40px; height: 40px; object-fit: cover; border-radius: 6px;" onerror="this.src='{{ asset('images/fallbacks/default.jpg') }}'">
+                                        <div class="table-img-preview shadow-xs">
+                                            <img src="{{ $inquiry->auto->thumbnail_url ?? asset('images/fallbacks/default.jpg') }}" alt="Vehicle" onerror="this.src='{{ asset('images/fallbacks/default.jpg') }}'">
+                                        </div>
                                     </td>
                                     <td class="align-middle">
                                         <span class="d-block font-weight-bold text-dark mb-0">
@@ -131,7 +129,7 @@
                                     </td>
                                 </tr>
                             @empty
-                                <tr><td colspan="6" class="text-center">No inquiries found</td></tr>
+                                <tr><td colspan="6" class="text-center py-5"><i class="fas fa-inbox fa-3x text-muted mb-3 d-block"></i><h5 class="text-muted font-weight-bold">No Inquiries Found</h5></td></tr>
                             @endforelse
                         </tbody>
                     </table>

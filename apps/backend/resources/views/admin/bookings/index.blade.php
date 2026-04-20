@@ -85,8 +85,7 @@
                     <table id="bookings-table" class="table table-hover table-premium mb-0">
                         <thead class="thead-light">
                             <tr>
-                                <th style="width: 80px" class="text-center">{{ __('ID') }}</th>
-                                <th style="width: 60px" class="text-center">{{ __('Item') }}</th>
+                                <th style="width: 70px" class="text-center">Media</th>
                                 <th>{{ __('Related Item') }}</th>
                                 <th>{{ __('Customer') }}</th>
                                 <th>{{ __('Module') }}</th>
@@ -99,15 +98,14 @@
                             @forelse ($bookings as $booking)
                                 <tr>
                                     <td class="text-center align-middle">
-                                        <span class="text-muted font-weight-bold text-monospace">#{{ $booking->id }}</span>
-                                    </td>
-                                    <td class="text-center align-middle">
-                                        <img src="{{ $booking->item_thumbnail }}" class="img-thumbnail shadow-xs" style="width: 40px; height: 40px; object-fit: cover; border-radius: 6px;" onerror="this.src='{{ asset('images/fallbacks/default.jpg') }}'">
+                                        <div class="table-img-preview shadow-xs">
+                                            <img src="{{ $booking->item_thumbnail }}" onerror="this.src='{{ asset('images/fallbacks/default.jpg') }}'">
+                                        </div>
                                     </td>
                                     
                                     <td class="align-middle">
                                         <span class="d-block font-weight-bold text-dark mb-0">{{ $booking->item_title }}</span>
-                                        <small class="text-muted text-monospace text-xs" style="letter-spacing: 0.5px;">REF: {{ strtoupper(substr(md5($booking->id), 0, 8)) }}</small>
+                                        <small class="badge badge-light border text-muted mt-1">ID: {{ $booking->id }}</small>
                                     </td> 
 
                                     <td class="align-middle">
@@ -202,26 +200,10 @@
 @section('js')
 <script>
     $(function () {
-        if ($('#bookings-table tbody tr:not(.empty-state)').length > 0) {
-            $('#bookings-table').DataTable({
-                "paging": false,
-                "searching": true,
-                "ordering": true,
-                "info": false,
-                "autoWidth": false,
-                "responsive": true,
-                "order": [[4, "desc"]],
-                dom: '<"d-flex justify-content-start ml-3 mb-3"f>rt',
-                "language": {
-                    "search": "",
-                    "searchPlaceholder": "Search {{ $status ?? 'all' }} transactions..."
-                },
-                "columnDefs": [
-                    { "orderable": false, "targets": [6] }
-                ]
-            });
-        }
         $('[data-toggle="tooltip"]').tooltip();
     });
 </script>
+@endsection
+
+@include('admin._partials._sweetalert-delete')
 @endsection

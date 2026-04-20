@@ -72,11 +72,10 @@
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
-                    <table class="table table-hover mb-0">
+                    <table class="table table-hover table-premium mb-0">
                         <thead class="thead-light">
                             <tr>
-                                <th style="width: 60px" class="text-center">ID</th>
-                                <th style="width: 60px" class="text-center">{{ __('Item') }}</th>
+                                <th class="text-center" style="width: 70px">Media</th>
                                 <th>Order Number</th>
                                 <th>Customer</th>
                                 <th>Total</th>
@@ -89,13 +88,14 @@
                         <tbody>
                             @forelse ($orders as $order)
                                 <tr>
-                                    <td class="text-center">#{{ $order->id }}</td>
                                     <td class="text-center align-middle">
                                         @php
                                             $firstItem = $order->items->first();
                                             $thumbnail = $firstItem && $firstItem->product ? $firstItem->product->thumbnail_url : asset('images/fallbacks/default.jpg');
                                         @endphp
-                                        <img src="{{ $thumbnail }}" class="img-thumbnail shadow-sm" style="width: 40px; height: 40px; object-fit: cover; border-radius: 6px;" onerror="this.src='{{ asset('images/fallbacks/default.jpg') }}'">
+                                        <div class="table-img-preview shadow-xs">
+                                            <img src="{{ $thumbnail }}" alt="Order item" onerror="this.src='{{ asset('images/fallbacks/default.jpg') }}'">
+                                        </div>
                                     </td>
                                     <td><strong>{{ $order->order_number }}</strong></td>
                                     <td>{{ $order->user->name ?? 'N/A' }}</td>

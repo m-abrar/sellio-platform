@@ -244,25 +244,6 @@
 @section('js')
 <script>
     $(function () {
-        if ($('#listings-table tbody tr:not(.empty-state)').length > 0) {
-            $('#listings-table').DataTable({
-                "paging": false,
-                "searching": true,
-                "ordering": true,
-                "info": false,
-                "autoWidth": false,
-                "responsive": true,
-                "order": [[4, "desc"]],
-                dom: '<"d-flex justify-content-start ml-3 mb-3"f>rt',
-                "language": {
-                    "search": "",
-                    "searchPlaceholder": "Search {{ $status ?? 'all' }} listings..."
-                },
-                "columnDefs": [
-                    { "orderable": false, "targets": [0, 1, 6] }
-                ]
-            });
-        }
         $('[data-toggle="tooltip"]').tooltip();
     });
 </script>

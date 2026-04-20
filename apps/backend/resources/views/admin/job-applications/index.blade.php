@@ -69,11 +69,10 @@
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
-                    <table id="applications-table" class="table table-hover mb-0">
+                    <table id="applications-table" class="table table-hover table-premium mb-0">
                         <thead class="thead-light">
                             <tr>
-                                <th style="width: 60px" class="text-center">ID</th>
-                                <th style="width: 60px" class="text-center">{{ __('Item') }}</th>
+                                <th class="text-center" style="width: 70px">Media</th>
                                 <th>Job Title</th>
                                 <th>Applicant</th>
                                 <th>Applied At</th>
@@ -85,10 +84,9 @@
                             @forelse ($applications as $app)
                                 <tr>
                                     <td class="text-center align-middle">
-                                        <span class="text-muted font-weight-bold text-monospace">#{{ $app->id }}</span>
-                                    </td>
-                                    <td class="text-center align-middle">
-                                        <img src="{{ $app->job->thumbnail_url ?? asset('images/fallbacks/default.jpg') }}" class="img-thumbnail shadow-xs" style="width: 40px; height: 40px; object-fit: cover; border-radius: 6px;" onerror="this.src='{{ asset('images/fallbacks/default.jpg') }}'">
+                                        <div class="table-img-preview shadow-xs">
+                                            <img src="{{ $app->job->thumbnail_url ?? asset('images/fallbacks/default.jpg') }}" alt="Job" onerror="this.src='{{ asset('images/fallbacks/default.jpg') }}'">
+                                        </div>
                                     </td>
                                     <td class="align-middle">
                                         <span class="d-block font-weight-bold text-dark mb-0">

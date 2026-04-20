@@ -69,11 +69,10 @@
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
-                    <table id="inquiries-table" class="table table-hover mb-0">
+                    <table id="inquiries-table" class="table table-hover table-premium mb-0">
                         <thead class="thead-light">
                             <tr>
-                                <th style="width: 60px" class="text-center">{{ __('ID') }}</th>
-                                <th style="width: 60px" class="text-center">{{ __('Item') }}</th>
+                                <th class="text-center" style="width: 70px">Media</th>
                                 <th>{{ __('Classified Ad') }}</th>
                                 <th>{{ __('Inquirer') }}</th>
                                 <th>{{ __('Date') }}</th>
@@ -85,10 +84,9 @@
                             @forelse ($inquiries as $inquiry)
                                 <tr>
                                     <td class="text-center align-middle">
-                                        <span class="text-muted font-weight-bold text-monospace">#{{ $inquiry->id }}</span>
-                                    </td>
-                                    <td class="text-center align-middle">
-                                        <img src="{{ $inquiry->classifiedAd->thumbnail_url ?? asset('images/fallbacks/default.jpg') }}" class="img-thumbnail shadow-xs" style="width: 40px; height: 40px; object-fit: cover; border-radius: 6px;" onerror="this.src='{{ asset('images/fallbacks/default.jpg') }}'">
+                                        <div class="table-img-preview shadow-xs">
+                                            <img src="{{ $inquiry->classifiedAd->thumbnail_url ?? asset('images/fallbacks/default.jpg') }}" alt="Classified" onerror="this.src='{{ asset('images/fallbacks/default.jpg') }}'">
+                                        </div>
                                     </td>
                                     <td class="align-middle">
                                         <span class="d-block font-weight-bold text-dark mb-0">
