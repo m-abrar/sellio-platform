@@ -155,18 +155,6 @@
         </div>
 
         @include('admin._partials._sweetalert')
-        @if(method_exists($amenities, 'hasPages') && $amenities->hasPages())
-            <div class="card-footer bg-white py-3 border-top border-light">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div class="text-muted small">
-                        Showing <strong>{{ $amenities->firstItem() }}</strong> to <strong>{{ $amenities->lastItem() }}</strong> of <strong>{{ $amenities->total() }}</strong> amenities
-                    </div>
-                    <div>
-                        {{ $amenities->links('pagination::bootstrap-4') }}
-                    </div>
-                </div>
-            </div>
-        @endif
     </div>
 </div>
 @endsection
@@ -178,13 +166,15 @@
                 $('#amenities-table').DataTable({
                     "responsive": true,
                     "autoWidth": false,
-                    "dom": '<"row px-4 pb-3"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+                    "dom": '<"row px-4 pt-2"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-3"l><"col-sm-12 col-md-3"p>>t<"row px-4 pb-3"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
+                    "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
                     "columnDefs": [
                         { "orderable": false, "targets": [0, 2, 4] }
                     ],
                     "language": {
                         "search": "",
-                        "searchPlaceholder": "Filter features..."
+                        "searchPlaceholder": "Filter...",
+                        "lengthMenu": "_MENU_ per page"
                     }
                 });
             }

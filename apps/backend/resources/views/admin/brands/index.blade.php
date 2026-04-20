@@ -150,18 +150,7 @@
             </div>
         </div>
 
-        @if(method_exists($brands, 'hasPages') && $brands->hasPages())
-            <div class="card-footer bg-white py-3 border-top border-light">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div class="text-muted small">
-                        Showing <strong>{{ $brands->firstItem() }}</strong> to <strong>{{ $brands->lastItem() }}</strong> of <strong>{{ $brands->total() }}</strong> brands
-                    </div>
-                    <div>
-                        {{ $brands->links('pagination::bootstrap-4') }}
-                    </div>
-                </div>
-            </div>
-        @endif
+        
     </div>
 </div>
 @endsection
@@ -177,11 +166,13 @@
                 $('#brands-table').DataTable({
                     "responsive": true,
                     "autoWidth": false,
-                    "dom": '<"row px-4 pb-3"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+                    "dom": '<"row px-4 pt-2"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-3"l><"col-sm-12 col-md-3"p>>t<"row px-4 pb-3"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
+                    "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
                     "order": [[1, "asc"]],
                     "language": {
                         "search": "",
-                        "searchPlaceholder": "Quick Search..."
+                        "searchPlaceholder": "Filter...",
+                        "lengthMenu": "_MENU_ per page"
                     },
                     "columnDefs": [
                         { "orderable": false, "targets": [0, 4] }

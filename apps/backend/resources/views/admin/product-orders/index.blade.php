@@ -27,43 +27,41 @@
 
         {{-- Premium Filter Card --}}
         <div class="card card-outline card-secondary shadow-sm mb-4">
-            <div class="card-body py-4">
-                <form method="GET" action="{{ route('admin.product-orders.index') }}">
-                    <div class="row align-items-end">
-                        <div class="col-md-3">
-                            <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Order #</label>
-                            <input type="text" name="order_number" class="form-control shadow-xs" placeholder="Search Order Number..." value="{{ request('order_number') }}">
-                        </div>
-                        <div class="col-md-3">
-                            <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Product Name</label>
-                            <input type="text" name="product_name" class="form-control shadow-xs" placeholder="Search Product..." value="{{ request('product_name') }}">
-                        </div>
-                        <div class="col-md-3">
-                            <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Status</label>
-                            <select name="status" class="form-control shadow-xs">
-                                <option value="">All Statuses</option>
-                                <option value="pending" {{ $status == 'pending' ? 'selected' : '' }}>Pending</option>
-                                <option value="processing" {{ $status == 'processing' ? 'selected' : '' }}>Processing</option>
-                                <option value="completed" {{ $status == 'completed' ? 'selected' : '' }}>Completed</option>
-                                <option value="cancelled" {{ $status == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3">
-                            <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Payment Status</label>
-                            <select name="payment_status" class="form-control shadow-xs">
-                                <option value="">All Payments</option>
-                                <option value="paid" {{ request('payment_status') == 'paid' ? 'selected' : '' }}>Paid</option>
-                                <option value="unpaid" {{ request('payment_status') == 'unpaid' ? 'selected' : '' }}>Unpaid</option>
-                            </select>
-                        </div>
-                        <div class="col-md-2 d-flex align-items-end" style="gap: 10px;">
-                            <button type="submit" class="btn btn-primary flex-fill font-weight-bold shadow-xs">
-                                <i class="fas fa-filter mr-1"></i> APPLY
-                            </button>
-                            <a href="{{ route('admin.product-orders.index') }}" class="btn btn-default font-weight-bold shadow-xs">
-                                <i class="fas fa-undo"></i>
-                            </a>
-                        </div>
+            <div class="card-body py-3">
+                <form method="GET" action="{{ route('admin.product-orders.index') }}" class="row justify-content-center">
+                    <div class="col-auto">
+                        <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Order #</label>
+                        <input type="text" name="order_number" class="form-control shadow-xs" placeholder="Search..." value="{{ request('order_number') }}">
+                    </div>
+                    <div class="col-auto">
+                        <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Product</label>
+                        <input type="text" name="product_name" class="form-control shadow-xs" placeholder="Search..." value="{{ request('product_name') }}">
+                    </div>
+                    <div class="col-auto">
+                        <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Status</label>
+                        <select name="status" class="form-control shadow-xs">
+                            <option value="">All</option>
+                            <option value="pending" {{ $status == 'pending' ? 'selected' : '' }}>Pending</option>
+                            <option value="processing" {{ $status == 'processing' ? 'selected' : '' }}>Processing</option>
+                            <option value="completed" {{ $status == 'completed' ? 'selected' : '' }}>Completed</option>
+                            <option value="cancelled" {{ $status == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
+                        </select>
+                    </div>
+                    <div class="col-auto">
+                        <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Payment</label>
+                        <select name="payment_status" class="form-control shadow-xs">
+                            <option value="">All</option>
+                            <option value="paid" {{ request('payment_status') == 'paid' ? 'selected' : '' }}>Paid</option>
+                            <option value="unpaid" {{ request('payment_status') == 'unpaid' ? 'selected' : '' }}>Unpaid</option>
+                        </select>
+                    </div>
+                    <div class="col-auto d-flex align-items-end" style="gap: 8px;">
+                        <button type="submit" class="btn btn-primary font-weight-bold shadow-xs">
+                            <i class="fas fa-filter mr-1"></i> FILTER
+                        </button>
+                        <a href="{{ route('admin.product-orders.index') }}" class="btn btn-default font-weight-bold shadow-xs">
+                            <i class="fas fa-undo"></i>
+                        </a>
                     </div>
                 </form>
             </div>

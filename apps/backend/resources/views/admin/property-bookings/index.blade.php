@@ -28,47 +28,45 @@
 
         {{-- Premium Filter Card --}}
         <div class="card card-outline card-secondary shadow-sm mb-4">
-            <div class="card-body py-4">
-                <form method="GET" action="{{ route('admin.property-bookings.index') }}">
-                    <div class="row align-items-end">
-                        <div class="col-md-3">
-                            <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Property</label>
-                            <select name="property" class="form-control shadow-xs">
-                                <option value="">All Properties</option>
-                                @foreach ($properties as $p)
-                                    <option value="{{ $p->id }}" {{ request('property') == $p->id ? 'selected' : '' }}>
-                                        {{ $p->title }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-md-2">
-                            <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Status</label>
-                            <select name="status" class="form-control shadow-xs">
-                                <option value="">All Statuses</option>
-                                @foreach (['pending', 'confirmed', 'cancelled'] as $s)
-                                    <option value="{{ $s }}" {{ $status == $s ? 'selected' : '' }}>
-                                        {{ Str::title($s) }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-md-2">
-                            <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Check-In From</label>
-                            <input type="date" name="start_date" class="form-control shadow-xs" value="{{ request('start_date') }}">
-                        </div>
-                        <div class="col-md-2">
-                            <label class="small text-muted font-weight-bold uppercase letter-spacing-1">To</label>
-                            <input type="date" name="end_date" class="form-control shadow-xs" value="{{ request('end_date') }}">
-                        </div>
-                        <div class="col-md-3 d-flex align-items-end" style="gap: 10px;">
-                            <button type="submit" class="btn btn-primary flex-fill font-weight-bold shadow-xs">
-                                <i class="fas fa-filter mr-1"></i> APPLY
-                            </button>
-                            <a href="{{ route('admin.property-bookings.index') }}" class="btn btn-default font-weight-bold shadow-xs">
-                                <i class="fas fa-undo"></i>
-                            </a>
-                        </div>
+            <div class="card-body py-3">
+                <form method="GET" action="{{ route('admin.property-bookings.index') }}" class="row justify-content-center">
+                    <div class="col-auto">
+                        <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Property</label>
+                        <select name="property" class="form-control shadow-xs">
+                            <option value="">All</option>
+                            @foreach ($properties as $p)
+                                <option value="{{ $p->id }}" {{ request('property') == $p->id ? 'selected' : '' }}>
+                                    {{ $p->title }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-auto">
+                        <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Status</label>
+                        <select name="status" class="form-control shadow-xs">
+                            <option value="">All</option>
+                            @foreach (['pending', 'confirmed', 'cancelled'] as $s)
+                                <option value="{{ $s }}" {{ $status == $s ? 'selected' : '' }}>
+                                    {{ Str::title($s) }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-auto">
+                        <label class="small text-muted font-weight-bold uppercase letter-spacing-1">From</label>
+                        <input type="date" name="start_date" class="form-control shadow-xs" value="{{ request('start_date') }}">
+                    </div>
+                    <div class="col-auto">
+                        <label class="small text-muted font-weight-bold uppercase letter-spacing-1">To</label>
+                        <input type="date" name="end_date" class="form-control shadow-xs" value="{{ request('end_date') }}">
+                    </div>
+                    <div class="col-auto d-flex align-items-end" style="gap: 8px;">
+                        <button type="submit" class="btn btn-primary font-weight-bold shadow-xs">
+                            <i class="fas fa-filter mr-1"></i> FILTER
+                        </button>
+                        <a href="{{ route('admin.property-bookings.index') }}" class="btn btn-default font-weight-bold shadow-xs">
+                            <i class="fas fa-undo"></i>
+                        </a>
                     </div>
                 </form>
             </div>
