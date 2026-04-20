@@ -31,14 +31,14 @@ class TagController extends Controller
         $this->tagService = $tagService;
     }
 
-    /**
-     * Display a listing of tags.
-     *
-     * @return View
-     */
-    public function index(): View
+    public function index(\Illuminate\Http\Request $request): View
     {
-        $tags = Tag::latest()->get();
+        $tags = Tag::latest()
+            ->when($request->search, function($q) use ($request) {
+                $q->where('title', 'like', "%{$request->search}%");
+            })
+            ->paginate(15)
+            ->withQueryString();
 
         return view('admin.tags.index', compact('tags'));
     }

@@ -31,14 +31,15 @@ class CategoryController extends Controller
         $this->categoryService = $categoryService;
     }
 
-    /**
-     * Display a listing of categories.
-     *
-     * @return View
-     */
-    public function index(): View
+    public function index(\Illuminate\Http\Request $request): View
     {
-        $categories = Category::latest()->get();
+        $categories = Category::with('parent')
+            ->latest()
+            ->when($request->search, function($q) use ($request) {
+                $q->where('title', 'like', "%{$request->search}%");
+            })
+            ->paginate(15)
+            ->withQueryString();
 
         return view('admin.categories.index', compact('categories'));
     }

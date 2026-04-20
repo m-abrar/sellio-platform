@@ -30,7 +30,18 @@
     <div class="card card-primary card-outline shadow-sm">
         <div class="card-header border-0 bg-white py-3">
             <h3 class="card-title font-weight-600 text-muted">Brand Management</h3>
-            <div class="card-tools">
+            <div class="card-tools d-flex">
+                <form action="{{ route('admin.brands.index') }}" method="GET" class="mr-3">
+                    <div class="input-group input-group-sm" style="width: 250px;">
+                        <input type="text" name="search" class="form-control shadow-xs border-0 bg-light" 
+                               placeholder="Search brands..." value="{{ request('search') }}">
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-default shadow-xs border-0 bg-light">
+                                <i class="fas fa-search text-muted"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
                 <a href="{{ route('admin.brands.create') }}" class="btn btn-primary btn-flat shadow-sm px-4">
                     <i class="fas fa-plus-circle mr-1"></i> Add Brand
                 </a>
@@ -133,11 +144,16 @@
                                 <td colspan="5" class="text-center py-5">
                                     <div class="py-4">
                                         <i class="fas fa-copyright fa-4x text-muted mb-3 opacity-25"></i>
-                                        <h5 class="text-muted font-weight-bold">No Brands Added</h5>
-                                        <p class="text-secondary small mb-3">Define manufacturer and brand names for better structure.</p>
-                                        <a href="{{ route('admin.brands.create') }}" class="btn btn-primary btn-sm btn-flat px-4">
-                                            <i class="fas fa-plus mr-1"></i> Add Brand
-                                        </a>
+                                        <h5 class="text-muted font-weight-bold">No Brands Found</h5>
+                                        @if(request('search'))
+                                            <p class="text-secondary small mb-3">No results matching "<strong>{{ request('search') }}</strong>".</p>
+                                            <a href="{{ route('admin.brands.index') }}" class="btn btn-default btn-sm px-4">Clear Search</a>
+                                        @else
+                                            <p class="text-secondary small mb-3">Define manufacturer and brand names for better structure.</p>
+                                            <a href="{{ route('admin.brands.create') }}" class="btn btn-primary btn-sm btn-flat px-4">
+                                                <i class="fas fa-plus mr-1"></i> Add Brand
+                                            </a>
+                                        @endif
                                     </div>
                                 </td>
                             </tr>
@@ -148,9 +164,14 @@
         </div>
 
         @if(method_exists($brands, 'hasPages') && $brands->hasPages())
-            <div class="card-footer bg-white border-0 py-3">
-                <div class="float-right">
-                    {{ $brands->links('pagination::bootstrap-4') }}
+            <div class="card-footer bg-white py-3 border-top border-light">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="text-muted small">
+                        Showing <strong>{{ $brands->firstItem() }}</strong> to <strong>{{ $brands->lastItem() }}</strong> of <strong>{{ $brands->total() }}</strong> brands
+                    </div>
+                    <div>
+                        {{ $brands->links('pagination::bootstrap-4') }}
+                    </div>
                 </div>
             </div>
         @endif

@@ -29,7 +29,18 @@
     <div class="card card-primary card-outline shadow-sm">
         <div class="card-header border-0 bg-white py-3">
             <h3 class="card-title font-weight-600 text-muted">Global Categorization Types</h3>
-            <div class="card-tools">
+            <div class="card-tools d-flex">
+                <form action="{{ route('admin.types.index') }}" method="GET" class="mr-3">
+                    <div class="input-group input-group-sm" style="width: 250px;">
+                        <input type="text" name="search" class="form-control shadow-xs border-0 bg-light" 
+                               placeholder="Search types..." value="{{ request('search') }}">
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-default shadow-xs border-0 bg-light">
+                                <i class="fas fa-search text-muted"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
                 <a href="{{ route('admin.types.create') }}" class="btn btn-primary btn-flat shadow-sm px-4">
                     <i class="fas fa-plus-circle mr-1"></i> Add New Type
                 </a>
@@ -59,7 +70,7 @@
                                 </td>
 
                                 <td class="align-middle">
-                                    <span class="d-block font-weight-bold text-dark mb-0">{{ $type->title }}</span>
+                                    <span class="d-block font-weight-bold text-dark mb-0">{{ $type->title ?? 'N/A' }}</span>
                                     <small class="text-muted text-monospace" style="font-size: 0.7rem;">UID: #TYP-{{ $type->id }}</small>
                                 </td>
 
@@ -120,15 +131,20 @@
                                 </td>
                             </tr>
                         @empty
-                            <tr>
+                            <tr class="empty-state">
                                 <td colspan="5" class="text-center py-5">
-                                    <div class="empty-state">
+                                    <div class="py-4">
                                         <i class="fas fa-layer-group fa-3x text-muted mb-3 d-block"></i>
-                                        <h5 class="text-muted font-weight-bold">No Types Defined</h5>
-                                        <p class="text-secondary small mb-3">Organize your ecosystem by creating your first listing type.</p>
-                                        <a href="{{ route('admin.types.create') }}" class="btn btn-primary btn-sm btn-flat px-4">
-                                            <i class="fas fa-plus mr-1"></i> Create First Type
-                                        </a>
+                                        <h5 class="text-muted font-weight-bold">No Types Found</h5>
+                                        @if(request('search'))
+                                            <p class="text-secondary small mb-3">No results matching "<strong>{{ request('search') }}</strong>".</p>
+                                            <a href="{{ route('admin.types.index') }}" class="btn btn-default btn-sm px-4">Clear Search</a>
+                                        @else
+                                            <p class="text-secondary small mb-3">Organize your ecosystem by creating your first listing type.</p>
+                                            <a href="{{ route('admin.types.create') }}" class="btn btn-primary btn-sm btn-flat px-4">
+                                                <i class="fas fa-plus mr-1"></i> Create First Type
+                                            </a>
+                                        @endif
                                     </div>
                                 </td>
                             </tr>
@@ -139,9 +155,14 @@
         </div>
 
         @if(method_exists($types, 'hasPages') && $types->hasPages())
-            <div class="card-footer bg-white py-3 border-top-0 clearfix">
-                <div class="float-right">
-                    {{ $types->links('pagination::bootstrap-4') }}
+            <div class="card-footer bg-white py-3 border-top border-light">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="text-muted small">
+                        Showing <strong>{{ $types->firstItem() }}</strong> to <strong>{{ $types->lastItem() }}</strong> of <strong>{{ $types->total() }}</strong> types
+                    </div>
+                    <div>
+                        {{ $types->links('pagination::bootstrap-4') }}
+                    </div>
                 </div>
             </div>
         @endif

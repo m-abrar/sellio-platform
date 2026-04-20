@@ -44,7 +44,7 @@
                             <input type="text" name="title" id="title" 
                                    class="form-control form-control-lg form-control-border @error('title') is-invalid @enderror" 
                                    placeholder="e.g. Residential, Full-Time, Workshop"
-                                   value="{{ old('title', $type->title ?? '') }}" required>
+                                   value="{{ old('title', $type?->title ?? '') }}" required>
                             @error('title') <span class="invalid-feedback">{{ $message }}</span> @enderror
                         </div>
 
@@ -58,7 +58,7 @@
                                     </div>
                                     <input type="text" name="slug" id="slug" 
                                            class="form-control form-control-monospace @error('slug') is-invalid @enderror"
-                                           value="{{ old('slug', $type->slug ?? '') }}">
+                                           value="{{ old('slug', $type?->slug ?? '') }}">
                                 </div>
                                 @error('slug') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
                             </div>
@@ -69,13 +69,13 @@
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text bg-light border-right-0" id="icon-preview-addon">
-                                            <i class="{{ old('icon', $type->icon ?? 'fas fa-icons') }} text-primary"></i>
+                                            <i class="{{ old('icon', $type?->icon ?? 'fas fa-icons') }} text-primary"></i>
                                         </span>
                                     </div>
                                     <input type="text" name="icon" id="icon" 
                                            class="form-control form-control-monospace @error('icon') is-invalid @enderror"
                                            placeholder="fas fa-tag"
-                                           value="{{ old('icon', $type->icon ?? '') }}">
+                                           value="{{ old('icon', $type?->icon ?? '') }}">
                                 </div>
                                 @error('icon') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
                             </div>
@@ -86,7 +86,7 @@
                             <label for="description" class="font-weight-600">Description</label>
                             <textarea name="description" rows="3" 
                                       class="form-control form-control-border @error('description') is-invalid @enderror" 
-                                      placeholder="Briefly describe what this type represents...">{{ old('description', $type->description ?? '') }}</textarea>
+                                      placeholder="Briefly describe what this type represents...">{{ old('description', $type?->description ?? '') }}</textarea>
                             @error('description') <span class="invalid-feedback">{{ $message }}</span> @enderror
                         </div>
                     </div>

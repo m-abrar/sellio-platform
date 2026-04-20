@@ -31,14 +31,14 @@ class BrandController extends Controller
         $this->brandService = $brandService;
     }
 
-    /**
-     * Display a listing of brands.
-     *
-     * @return View
-     */
-    public function index(): View
+    public function index(\Illuminate\Http\Request $request): View
     {
-        $brands = Brand::latest()->get();
+        $brands = Brand::latest()
+            ->when($request->search, function($q) use ($request) {
+                $q->where('title', 'like', "%{$request->search}%");
+            })
+            ->paginate(15)
+            ->withQueryString();
 
         return view('admin.brands.index', compact('brands'));
     }

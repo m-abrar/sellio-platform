@@ -30,7 +30,18 @@
     <div class="card card-primary card-outline shadow-sm">
         <div class="card-header border-0 bg-white py-3">
             <h3 class="card-title font-weight-600 text-muted">Management of Listing Features</h3>
-            <div class="card-tools mr-2">
+            <div class="card-tools d-flex">
+                <form action="{{ route('admin.features.index') }}" method="GET" class="mr-3">
+                    <div class="input-group input-group-sm" style="width: 250px;">
+                        <input type="text" name="search" class="form-control shadow-xs border-0 bg-light" 
+                               placeholder="Search features..." value="{{ request('search') }}">
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-default shadow-xs border-0 bg-light">
+                                <i class="fas fa-search text-muted"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
                 <a href="{{ route('admin.features.create') }}" class="btn btn-primary btn-flat shadow-sm px-4">
                     <i class="fas fa-plus-circle mr-1"></i> Add Feature
                 </a>
@@ -141,11 +152,16 @@
                                 <td colspan="5" class="text-center py-5">
                                     <div class="py-4">
                                         <i class="fas fa-layer-group fa-4x text-muted mb-3 opacity-25"></i>
-                                        <h5 class="text-muted font-weight-bold">Feature Library Empty</h5>
-                                        <p class="text-secondary small mb-3">Define characteristics like "Fuel Type", "Experience Level", or "Property Age".</p>
-                                        <a href="{{ route('admin.features.create') }}" class="btn btn-primary btn-sm btn-flat px-4">
-                                            <i class="fas fa-plus mr-1"></i> Add Your Initial Feature
-                                        </a>
+                                        <h5 class="text-muted font-weight-bold">No Features Found</h5>
+                                        @if(request('search'))
+                                            <p class="text-secondary small mb-3">No results matching "<strong>{{ request('search') }}</strong>".</p>
+                                            <a href="{{ route('admin.features.index') }}" class="btn btn-default btn-sm px-4">Clear Search</a>
+                                        @else
+                                            <p class="text-secondary small mb-3">Define characteristics like "Fuel Type", "Experience Level", or "Property Age".</p>
+                                            <a href="{{ route('admin.features.create') }}" class="btn btn-primary btn-sm btn-flat px-4">
+                                                <i class="fas fa-plus mr-1"></i> Add Your Initial Feature
+                                            </a>
+                                        @endif
                                     </div>
                                 </td>
                             </tr>
@@ -156,9 +172,14 @@
         </div>
 
         @if(method_exists($features, 'hasPages') && $features->hasPages())
-            <div class="card-footer bg-white border-top-0 py-3 clearfix">
-                <div class="float-right">
-                    {{ $features->links('pagination::bootstrap-4') }}
+            <div class="card-footer bg-white py-3 border-top border-light">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="text-muted small">
+                        Showing <strong>{{ $features->firstItem() }}</strong> to <strong>{{ $features->lastItem() }}</strong> of <strong>{{ $features->total() }}</strong> features
+                    </div>
+                    <div>
+                        {{ $features->links('pagination::bootstrap-4') }}
+                    </div>
                 </div>
             </div>
         @endif

@@ -31,14 +31,14 @@ class LocationController extends Controller
         $this->locationService = $locationService;
     }
 
-    /**
-     * Display a listing of locations.
-     *
-     * @return View
-     */
-    public function index(): View
+    public function index(\Illuminate\Http\Request $request): View
     {
-        $locations = Location::latest()->get();
+        $locations = Location::latest()
+            ->when($request->search, function($q) use ($request) {
+                $q->where('title', 'like', "%{$request->search}%");
+            })
+            ->paginate(15)
+            ->withQueryString();
 
         return view('admin.locations.index', compact('locations'));
     }

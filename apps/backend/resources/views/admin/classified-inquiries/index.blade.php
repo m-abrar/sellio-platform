@@ -32,12 +32,23 @@
             <div class="card-body py-4">
                 <form method="GET" action="{{ route('admin.classified-inquiries.index') }}">
                     <div class="row align-items-end">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Classified Ad</label>
-                            <select name="classifiedad" class="form-control shadow-xs">
+                            <select name="classifiedad" class="form-control shadow-xs select2">
                                 <option value="">All Ads</option>
                                 @foreach ($classifieds as $c)
-                                    <option value="{{ $c->id }}" {{ request('classifiedad') == $c->id ? 'selected' : '' }}>{{ $c->title }}</option>
+                                    <option value="{{ $c->id }}" {{ request('classifiedad') == $c->id ? 'selected' : '' }}>
+                                        {{ $c->title }} {{ $c->category ? '('.$c->category->title.')' : '' }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Category</label>
+                            <select name="category" class="form-control shadow-xs">
+                                <option value="">All Categories</option>
+                                @foreach ($categories as $c)
+                                    <option value="{{ $c->id }}" {{ request('category') == $c->id ? 'selected' : '' }}>{{ $c->title }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -92,7 +103,15 @@
                                         <span class="d-block font-weight-bold text-dark mb-0">
                                             {{ $inquiry->classifiedAd->title ?? 'N/A' }}
                                         </span>
-                                        <small class="text-muted">ID: #{{ $inquiry->classified_id }}</small>
+                                        <div class="text-xs text-muted mt-1">
+                                            @if($inquiry->classifiedAd && $inquiry->classifiedAd->category)
+                                                <i class="fas fa-tag mr-1"></i>{{ $inquiry->classifiedAd->category->title }}
+                                            @endif
+                                            @if($inquiry->classifiedAd && $inquiry->classifiedAd->location)
+                                                <span class="mx-1">|</span>
+                                                <i class="fas fa-map-marker-alt mr-1 text-danger"></i>{{ $inquiry->classifiedAd->location->title }}
+                                            @endif
+                                        </div>
                                     </td>
                                     <td class="align-middle">
                                         @if($inquiry->user)
@@ -137,4 +156,15 @@
             </div>
         </div>
     </div>
+@stop
+@section('js')
+<script>
+    $(document).ready(function() {
+        $('.select2').select2({
+            theme: 'bootstrap4',
+            placeholder: 'Select an option'
+        });
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
 @stop

@@ -31,14 +31,14 @@ class FeatureController extends Controller
         $this->featureService = $featureService;
     }
 
-    /**
-     * Display a listing of features.
-     *
-     * @return View
-     */
-    public function index(): View
+    public function index(\Illuminate\Http\Request $request): View
     {
-        $features = Feature::latest()->get();
+        $features = Feature::latest()
+            ->when($request->search, function($q) use ($request) {
+                $q->where('title', 'like', "%{$request->search}%");
+            })
+            ->paginate(15)
+            ->withQueryString();
 
         return view('admin.features.index', compact('features'));
     }

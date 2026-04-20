@@ -97,9 +97,48 @@
                                             <img src="{{ $thumbnail }}" alt="Order item" onerror="this.src='{{ asset('images/fallbacks/default.jpg') }}'">
                                         </div>
                                     </td>
-                                    <td><strong>{{ $order->order_number }}</strong></td>
-                                    <td>{{ $order->user->name ?? 'N/A' }}</td>
-                                    <td>${{ number_format($order->total_amount, 2) }}</td>
+                                    <td class="align-middle">
+                                        <strong>{{ $order->order_number }}</strong>
+                                        @if($firstItem)
+                                            <div class="text-xs text-muted mt-1">
+                                                <i class="fas fa-box-open mr-1"></i> {{ $firstItem->product_name }}
+                                                @if($order->items->count() > 1)
+                                                    <span class="badge badge-secondary ml-1">+{{ $order->items->count() - 1 }} more</span>
+                                                @endif
+                                            </div>
+                                        @endif
+                                    </td>
+                                    <td class="align-middle">
+                                        <div class="d-flex align-items-center">
+                                            <div class="avatar-xs mr-2 bg-light rounded-circle text-center border shadow-xs" style="width:28px; height:28px; line-height:26px;">
+                                                <i class="fas fa-user text-muted text-xs"></i>
+                                            </div>
+                                            <div>
+                                                <span class="d-block font-weight-bold text-dark mb-0">{{ $order->user->name ?? 'N/A' }}</span>
+                                                <div class="text-xs text-muted">
+                                                    {{ $order->user->email ?? '' }}
+                                                    <span class="mx-1">|</span>
+                                                    ID: #{{ $order->user_id }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="align-middle">
+                                        <div class="font-weight-bold">${{ number_format($order->total_amount, 2) }}</div>
+                                        @if($firstItem)
+                                            <div class="text-xs text-muted mt-1">
+                                                {{ $firstItem->quantity }} x ${{ number_format($firstItem->unit_price, 2) }}
+                                                @if(!empty($firstItem->selected_attributes))
+                                                    <br>
+                                                    <span class="text-info">
+                                                        @foreach($firstItem->selected_attributes as $key => $value)
+                                                            {{ $key }}: {{ is_array($value) ? implode(', ', $value) : $value }}@if(!$loop->last), @endif
+                                                        @endforeach
+                                                    </span>
+                                                @endif
+                                            </div>
+                                        @endif
+                                    </td>
                                     <td>
                                         <span class="badge {{ $order->payment_status === 'paid' ? 'badge-success' : 'badge-warning' }}">
                                             {{ ucfirst($order->payment_status) }}

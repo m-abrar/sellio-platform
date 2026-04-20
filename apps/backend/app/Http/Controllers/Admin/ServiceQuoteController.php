@@ -15,21 +15,28 @@ use Illuminate\View\View;
  */
 class ServiceQuoteController extends Controller
 {
-    /**
-     * Display a listing of all service quote requests.
-     *
-     * @return View
-     */
-    public function index(): View
+    public function index(\Illuminate\Http\Request $request): View
     {
+        $status = $request->status ?: 'all';
+
         $serviceQuotes = ServiceQuote::with([
-            'service' => fn ($q) => $q->select('id', 'title', 'slug'),
+            'service.category',
+            'service.location',
             'user'    => fn ($q) => $q->select('id', 'name', 'email'),
         ])
+            ->when($request->service, fn($q) => $q->where('service_id', $request->service))
+            ->when($request->category, function($q) use ($request) {
+                $q->whereHas('service', fn($s) => $s->where('category_id', $request->category));
+            })
+            ->when($status !== 'all', fn($q) => $q->where('status', $status))
             ->latest()
-            ->paginate(15);
+            ->paginate(15)
+            ->withQueryString();
 
-        return view('admin.service-quotes.index', compact('serviceQuotes'));
+        $services = Service::select('id', 'title', 'category_id')->with('category:id,title')->get();
+        $categories = \App\Models\Category::where('is_service', true)->select('id', 'title')->get();
+
+        return view('admin.service-quotes.index', compact('serviceQuotes', 'services', 'categories', 'status'));
     }
 
     /**

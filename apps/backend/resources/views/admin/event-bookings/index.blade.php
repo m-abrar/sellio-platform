@@ -32,12 +32,23 @@
             <div class="card-body py-4">
                 <form method="GET" action="{{ route('admin.event-bookings.index') }}">
                     <div class="row align-items-end">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Event</label>
-                            <select name="event" class="form-control shadow-xs">
+                            <select name="event" class="form-control shadow-xs select2">
                                 <option value="">All Events</option>
                                 @foreach ($events as $e)
-                                    <option value="{{ $e->id }}" {{ request('event') == $e->id ? 'selected' : '' }}>{{ $e->title }}</option>
+                                    <option value="{{ $e->id }}" {{ request('event') == $e->id ? 'selected' : '' }}>
+                                        {{ $e->title }} {{ $e->category ? '('.$e->category->title.')' : '' }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Category</label>
+                            <select name="category" class="form-control shadow-xs">
+                                <option value="">All Categories</option>
+                                @foreach ($categories as $c)
+                                    <option value="{{ $c->id }}" {{ request('category') == $c->id ? 'selected' : '' }}>{{ $c->title }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -77,6 +88,7 @@
                                 <th>Event</th>
                                 <th>Guest</th>
                                 <th>Date</th>
+                                <th class="text-right">Value</th>
                                 <th class="text-center">Status</th>
                                 <th class="text-right px-4">Actions</th>
                             </tr>
@@ -93,7 +105,15 @@
                                         <span class="d-block font-weight-bold text-dark mb-0">
                                             {{ $booking->event->title ?? 'N/A' }}
                                         </span>
-                                        <small class="text-muted">ID: #{{ $booking->event_id }}</small>
+                                        <div class="text-xs text-muted mt-1">
+                                            @if($booking->event && $booking->event->category)
+                                                <i class="fas fa-tag mr-1"></i>{{ $booking->event->category->title }}
+                                            @endif
+                                            @if($booking->event && $booking->event->location)
+                                                <span class="mx-1">|</span>
+                                                <i class="fas fa-map-marker-alt mr-1 text-danger"></i>{{ $booking->event->location->title }}
+                                            @endif
+                                        </div>
                                     </td>
                                     <td class="align-middle">
                                         @if($booking->user)
@@ -113,6 +133,12 @@
                                     <td class="align-middle">
                                         <div class="font-weight-600 mb-0">{{ $booking->created_at->format('M d, Y') }}</div>
                                         <small class="text-muted"><i class="far fa-clock mr-1 text-xs"></i>{{ $booking->created_at->format('H:i') }}</small>
+                                    </td>
+                                    <td class="align-middle text-right font-weight-bold text-primary">
+                                        ${{ number_format($booking->total_price, 2) }}
+                                        @if($booking->quantity > 1)
+                                            <div class="text-xs text-muted font-weight-normal">{{ $booking->quantity }} x ${{ number_format($booking->total_price / $booking->quantity, 2) }}</div>
+                                        @endif
                                     </td>
                                     @php
                                         $statusClass = 'secondary';
@@ -138,4 +164,14 @@
             </div>
         </div>
     </div>
+@stop
+@section('js')
+<script>
+    $(document).ready(function() {
+        $('.select2').select2({
+            theme: 'bootstrap4',
+            placeholder: 'Select an option'
+        });
+    });
+</script>
 @stop

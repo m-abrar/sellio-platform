@@ -117,12 +117,25 @@
                                         <span class="d-block font-weight-bold text-dark mb-0">
                                             {{ $booking->property->title ?? __('N/A') }}
                                         </span>
-                                        <small class="badge badge-light border text-muted mt-1">ID: {{ $booking->id }}</small>
+                                        <div class="text-xs text-muted mt-1">
+                                            @if($booking->property && $booking->property->category)
+                                                <i class="fas fa-tag mr-1 text-xs"></i>{{ $booking->property->category->title }}
+                                            @endif
+                                            @if($booking->property && $booking->property->location)
+                                                <span class="mx-1">|</span>
+                                                <i class="fas fa-map-marker-alt mr-1 text-xs text-danger"></i>{{ $booking->property->location->title }}
+                                            @endif
+                                        </div>
                                     </td>
 
                                     <td class="align-middle">
-                                        <span class="d-block font-weight-bold text-dark mb-0">{{ $booking->full_name }}</span>
-                                        <small class="text-muted">{{ $booking->email }}</small>
+                                        <span class="d-block font-weight-bold text-dark mb-0">
+                                            {{ $booking->full_name ?: ($booking->user->name ?? __('Unknown Guest')) }}
+                                        </span>
+                                        <small class="text-muted d-block">{{ $booking->email ?: ($booking->user->email ?? '') }}</small>
+                                        @if($booking->user_id)
+                                            <span class="badge badge-light-primary border text-xs" style="font-size: 0.65rem;">Registered User (#{{ $booking->user_id }})</span>
+                                        @endif
                                     </td>
 
                                     <td class="align-middle">

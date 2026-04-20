@@ -206,4 +206,3 @@
 @endsection
 
 @include('admin._partials._sweetalert-delete')
-@endsection

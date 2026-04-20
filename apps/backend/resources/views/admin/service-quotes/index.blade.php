@@ -26,6 +26,53 @@
 @section('content')
     <div class="container-fluid">
         @include('admin.alert')
+        
+        {{-- Premium Filter Card --}}
+        <div class="card card-outline card-secondary shadow-sm mb-4">
+            <div class="card-body py-4">
+                <form method="GET" action="{{ route('admin.service-quotes.index') }}">
+                    <div class="row align-items-end">
+                        <div class="col-md-3">
+                            <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Service</label>
+                            <select name="service" class="form-control shadow-xs select2">
+                                <option value="">All Services</option>
+                                @foreach ($services as $s)
+                                    <option value="{{ $s->id }}" {{ request('service') == $s->id ? 'selected' : '' }}>
+                                        {{ $s->title }} {{ $s->category ? '('.$s->category->title.')' : '' }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Category</label>
+                            <select name="category" class="form-control shadow-xs">
+                                <option value="">All Categories</option>
+                                @foreach ($categories as $c)
+                                    <option value="{{ $c->id }}" {{ request('category') == $c->id ? 'selected' : '' }}>{{ $c->title }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Status</label>
+                            <select name="status" class="form-control shadow-xs">
+                                <option value="">All Statuses</option>
+                                @foreach (['pending', 'quoted', 'accepted', 'rejected'] as $st)
+                                    <option value="{{ $st }}" {{ $status == $st ? 'selected' : '' }}>{{ Str::title($st) }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-3 d-flex align-items-end" style="gap: 10px;">
+                            <button type="submit" class="btn btn-primary flex-fill font-weight-bold shadow-xs">
+                                <i class="fas fa-filter mr-1"></i> APPLY
+                            </button>
+                            <a href="{{ route('admin.service-quotes.index') }}" class="btn btn-default font-weight-bold shadow-xs">
+                                <i class="fas fa-undo"></i>
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
 
         <div class="card card-primary card-outline shadow-sm">
             <div class="card-header border-0 bg-white py-3">
@@ -76,7 +123,15 @@
                                         <span class="d-block font-weight-bold text-dark mb-0">
                                             {{ $quote->service->title ?? __('N/A') }}
                                         </span>
-                                        <small class="badge badge-light border text-muted">ID: {{ $quote->id }}</small>
+                                        <div class="text-xs text-muted mt-1">
+                                            @if($quote->service && $quote->service->category)
+                                                <i class="fas fa-tag mr-1 text-xs"></i>{{ $quote->service->category->title }}
+                                            @endif
+                                            @if($quote->service && $quote->service->location)
+                                                <span class="mx-1">|</span>
+                                                <i class="fas fa-map-marker-alt mr-1 text-xs text-danger"></i>{{ $quote->service->location->title }}
+                                            @endif
+                                        </div>
                                     </td>
 
                                     <td class="align-middle">
@@ -178,25 +233,12 @@
 
 @section('js')
 <script>
-    $(function () {
-        if ($('#quotes-table tbody tr').length > 0 && !$('#quotes-table tbody tr td[colspan]').length) {
-            $('#quotes-table').DataTable({
-                "paging":    false,
-                "searching": true,
-                "ordering":  true,
-                "info":      false,
-                "autoWidth": false,
-                "responsive": true,
-                "order": [[0, "desc"]],
-                dom: '<"d-flex justify-content-start ml-3 mb-3"f>rt',
-                "language": {
-                    "search": "",
-                    "searchPlaceholder": "{{ __('Search quotes...') }}"
-                },
-                "columnDefs": [{ "orderable": false, "targets": [7] }]
-            });
-        }
+    $(document).ready(function() {
+        $('.select2').select2({
+            theme: 'bootstrap4',
+            placeholder: 'Select an option'
+        });
         $('[data-toggle="tooltip"]').tooltip();
     });
 </script>
-@endsection
+@stop

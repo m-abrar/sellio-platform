@@ -15,18 +15,20 @@ class EventBookingController extends Controller
      */
     public function index(Request $request, string $status = 'all'): View
     {
-        $status = $request->route('status') ?: ($request->status ?: 'all');
-
-        $bookings = EventBooking::with(['event', 'user', 'payments'])
+        $bookings = EventBooking::with(['event.category', 'event.location', 'user', 'payments'])
             ->when($request->event, fn($q) => $q->where('event_id', $request->event))
+            ->when($request->category, function($q) use ($request) {
+                $q->whereHas('event', fn($ev) => $ev->where('category_id', $request->category));
+            })
             ->when($status !== 'all', fn($q) => $q->where('status', $status))
             ->latest()
             ->paginate(15)
             ->withQueryString();
 
-        $events = Event::select('id', 'title')->get();
+        $events = Event::select('id', 'title', 'category_id')->with('category:id,title')->get();
+        $categories = \App\Models\Category::where('is_event', true)->select('id', 'title')->get();
 
-        return view('admin.event-bookings.index', compact('bookings', 'events', 'status'));
+        return view('admin.event-bookings.index', compact('bookings', 'events', 'categories', 'status'));
     }
 
     /**

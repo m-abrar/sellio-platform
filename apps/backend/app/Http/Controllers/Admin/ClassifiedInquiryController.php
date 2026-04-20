@@ -17,16 +17,20 @@ class ClassifiedInquiryController extends Controller
     {
         $status = $request->route('status') ?: ($request->status ?: 'all');
 
-        $inquiries = ClassifiedInquiry::with(['classifiedAd', 'user'])
+        $inquiries = ClassifiedInquiry::with(['classifiedAd.category', 'classifiedAd.location', 'user'])
             ->when($request->classifiedad, fn($q) => $q->where('classified_id', $request->classifiedad))
+            ->when($request->category, function($q) use ($request) {
+                $q->whereHas('classifiedAd', fn($c) => $c->where('category_id', $request->category));
+            })
             ->when($status !== 'all', fn($q) => $q->where('status', $status))
             ->latest()
             ->paginate(15)
             ->withQueryString();
 
-        $classifieds = Classified::select('id', 'title')->get();
+        $classifieds = Classified::select('id', 'title', 'category_id')->with('category:id,title')->get();
+        $categories = \App\Models\Category::where('is_classified', true)->select('id', 'title')->get();
 
-        return view('admin.classified-inquiries.index', compact('inquiries', 'classifieds', 'status'));
+        return view('admin.classified-inquiries.index', compact('inquiries', 'classifieds', 'categories', 'status'));
     }
 
     /**

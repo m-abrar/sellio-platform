@@ -30,7 +30,18 @@
     <div class="card card-primary card-outline shadow-sm">
         <div class="card-header border-0 bg-white py-3">
             <h3 class="card-title font-weight-600 text-muted">Global Features & Amenities</h3>
-            <div class="card-tools mr-2">
+            <div class="card-tools d-flex">
+                <form action="{{ route('admin.amenities.index') }}" method="GET" class="mr-3">
+                    <div class="input-group input-group-sm" style="width: 250px;">
+                        <input type="text" name="search" class="form-control shadow-xs border-0 bg-light" 
+                               placeholder="Search amenities..." value="{{ request('search') }}">
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-default shadow-xs border-0 bg-light">
+                                <i class="fas fa-search text-muted"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
                 <a href="{{ route('admin.amenities.create') }}" class="btn btn-primary btn-flat shadow-sm px-4">
                     <i class="fas fa-plus-circle mr-1"></i> Add Amenity
                 </a>
@@ -66,7 +77,7 @@
                                 </td>
 
                                 <td class="align-middle">
-                                    <span class="d-block font-weight-bold text-dark mb-0">{{ $amenity->title }}</span>
+                                    <span class="d-block font-weight-bold text-dark mb-0">{{ $amenity->title ?? 'N/A' }}</span>
                                     <small class="text-muted text-monospace" style="font-size: 0.7rem;">REF: #AMN-{{ str_pad($amenity->id, 4, '0', STR_PAD_LEFT) }}</small>
                                 </td>
 
@@ -137,11 +148,16 @@
                                 <td colspan="5" class="text-center py-5">
                                     <div class="py-4">
                                         <i class="fas fa-concierge-bell fa-4x text-muted mb-3 opacity-25"></i>
-                                        <h5 class="text-muted font-weight-bold">No Amenities Configured</h5>
-                                        <p class="text-secondary small mb-3">Enhance your listings by adding features like "WiFi", "Parking", or "Pet Friendly".</p>
-                                        <a href="{{ route('admin.amenities.create') }}" class="btn btn-primary btn-sm btn-flat px-4">
-                                            <i class="fas fa-plus mr-1"></i> Create First Amenity
-                                        </a>
+                                        <h5 class="text-muted font-weight-bold">No Amenities Found</h5>
+                                        @if(request('search'))
+                                            <p class="text-secondary small mb-3">No results matching "<strong>{{ request('search') }}</strong>".</p>
+                                            <a href="{{ route('admin.amenities.index') }}" class="btn btn-default btn-sm px-4">Clear Search</a>
+                                        @else
+                                            <p class="text-secondary small mb-3">Enhance your listings by adding features like "WiFi", "Parking", or "Pet Friendly".</p>
+                                            <a href="{{ route('admin.amenities.create') }}" class="btn btn-primary btn-sm btn-flat px-4">
+                                                <i class="fas fa-plus mr-1"></i> Create First Amenity
+                                            </a>
+                                        @endif
                                     </div>
                                 </td>
                             </tr>
@@ -152,9 +168,14 @@
         </div>
 
         @if(method_exists($amenities, 'hasPages') && $amenities->hasPages())
-            <div class="card-footer bg-white py-3 border-top-0 clearfix">
-                <div class="float-right">
-                    {{ $amenities->links('pagination::bootstrap-4') }}
+            <div class="card-footer bg-white py-3 border-top border-light">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="text-muted small">
+                        Showing <strong>{{ $amenities->firstItem() }}</strong> to <strong>{{ $amenities->lastItem() }}</strong> of <strong>{{ $amenities->total() }}</strong> amenities
+                    </div>
+                    <div>
+                        {{ $amenities->links('pagination::bootstrap-4') }}
+                    </div>
                 </div>
             </div>
         @endif

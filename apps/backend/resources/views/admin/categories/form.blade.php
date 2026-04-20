@@ -44,7 +44,7 @@
                             <input type="text" name="title" id="title" 
                                    class="form-control form-control-lg form-control-border @error('title') is-invalid @enderror" 
                                    placeholder="e.g. Residential Apartments"
-                                   value="{{ old('title', $category->title ?? '') }}" required>
+                                   value="{{ old('title', $category?->title ?? '') }}" required>
                             @error('title') <span class="invalid-feedback">{{ $message }}</span> @enderror
                         </div>
 
@@ -58,7 +58,7 @@
                                 <input type="text" name="slug" id="slug" 
                                        class="form-control form-control-monospace @error('slug') is-invalid @enderror"
                                        placeholder="automatic-slug-generation"
-                                       value="{{ old('slug', $category->slug ?? '') }}">
+                                       value="{{ old('slug', $category?->slug ?? '') }}">
                             </div>
                             @error('slug') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
                         </div>
@@ -72,7 +72,7 @@
                                 @foreach($categories as $item)
                                     {{-- Prevent assigning itself as parent when editing --}}
                                     @if(!isset($category) || $category->id !== $item->id)
-                                        <option value="{{ $item->id }}" {{ old('parent_id', $category->parent_id ?? '') == $item->id ? 'selected' : '' }}>
+                                        <option value="{{ $item->id }}" {{ old('parent_id', $category?->parent_id ?? '') == $item->id ? 'selected' : '' }}>
                                             {{ $item->title }} 
                                             @if($item->is_blog) [Blog] @elseif($item->is_product) [Product] @endif
                                         </option>
@@ -87,7 +87,7 @@
                             <label for="description" class="font-weight-600">Internal Description</label>
                             <textarea name="description" id="description" rows="4" 
                                       class="form-control form-control-border @error('description') is-invalid @enderror" 
-                                      placeholder="Briefly describe the purpose of this category...">{{ old('description', $category->description ?? '') }}</textarea>
+                                      placeholder="Briefly describe the purpose of this category...">{{ old('description', $category?->description ?? '') }}</textarea>
                             @error('description') <span class="invalid-feedback">{{ $message }}</span> @enderror
                         </div>
                     </div>

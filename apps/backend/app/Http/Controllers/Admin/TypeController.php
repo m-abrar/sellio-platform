@@ -31,14 +31,14 @@ class TypeController extends Controller
         $this->typeService = $typeService;
     }
 
-    /**
-     * Display a listing of types.
-     *
-     * @return View
-     */
-    public function index(): View
+    public function index(\Illuminate\Http\Request $request): View
     {
-        $types = Type::latest()->get();
+        $types = Type::latest()
+            ->when($request->search, function($q) use ($request) {
+                $q->where('title', 'like', "%{$request->search}%");
+            })
+            ->paginate(15)
+            ->withQueryString();
 
         return view('admin.types.index', compact('types'));
     }

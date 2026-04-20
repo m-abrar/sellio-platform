@@ -32,12 +32,23 @@
             <div class="card-body py-4">
                 <form method="GET" action="{{ route('admin.job-applications.index') }}">
                     <div class="row align-items-end">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Job</label>
-                            <select name="job" class="form-control shadow-xs">
+                            <select name="job" class="form-control shadow-xs select2">
                                 <option value="">All Jobs</option>
                                 @foreach ($jobs as $j)
-                                    <option value="{{ $j->id }}" {{ request('job') == $j->id ? 'selected' : '' }}>{{ $j->title }}</option>
+                                    <option value="{{ $j->id }}" {{ request('job') == $j->id ? 'selected' : '' }}>
+                                        {{ $j->title }} {{ $j->category ? '('.$j->category->title.')' : '' }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Category</label>
+                            <select name="category" class="form-control shadow-xs">
+                                <option value="">All Categories</option>
+                                @foreach ($categories as $c)
+                                    <option value="{{ $c->id }}" {{ request('category') == $c->id ? 'selected' : '' }}>{{ $c->title }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -92,7 +103,17 @@
                                         <span class="d-block font-weight-bold text-dark mb-0">
                                             {{ $app->job->title ?? 'N/A' }}
                                         </span>
-                                        <small class="text-muted">ID: #{{ $app->job_id }}</small>
+                                        <div class="text-xs text-muted mt-1">
+                                            @if($app->job && $app->job->category)
+                                                <i class="fas fa-tag mr-1"></i>{{ $app->job->category->title }}
+                                            @endif
+                                            @if($app->job && $app->job->location)
+                                                <span class="mx-1">|</span>
+                                                <i class="fas fa-map-marker-alt mr-1 text-danger"></i>{{ $app->job->location->title }}
+                                            @endif
+                                            <span class="mx-1">|</span>
+                                            ID: #{{ $app->id }}
+                                        </div>
                                     </td>
                                     <td class="align-middle">
                                         @if($app->user)
@@ -138,4 +159,14 @@
             </div>
         </div>
     </div>
+@stop
+@section('js')
+<script>
+    $(document).ready(function() {
+        $('.select2').select2({
+            theme: 'bootstrap4',
+            placeholder: 'Select an option'
+        });
+    });
+</script>
 @stop

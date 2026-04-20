@@ -29,7 +29,18 @@
     <div class="card card-primary card-outline shadow-sm">
         <div class="card-header border-0 bg-white py-3">
             <h3 class="card-title font-weight-600 text-muted">Taxonomy Management</h3>
-            <div class="card-tools">
+            <div class="card-tools d-flex">
+                <form action="{{ route('admin.categories.index') }}" method="GET" class="mr-3">
+                    <div class="input-group input-group-sm" style="width: 250px;">
+                        <input type="text" name="search" class="form-control shadow-xs border-0 bg-light" 
+                               placeholder="Search categories..." value="{{ request('search') }}">
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-default shadow-xs border-0 bg-light">
+                                <i class="fas fa-search text-muted"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
                 <a href="{{ route('admin.categories.create') }}" class="btn btn-primary btn-flat shadow-sm px-4">
                     <i class="fas fa-plus-circle mr-1"></i> Add Category
                 </a>
@@ -151,11 +162,16 @@
                                 <td colspan="5" class="text-center py-5">
                                     <div class="py-4">
                                         <i class="fas fa-tags fa-4x text-muted mb-3 opacity-25"></i>
-                                        <h5 class="text-muted font-weight-bold">No Categories Configured</h5>
-                                        <p class="text-secondary small mb-3">Organize your marketplace items by creating your first category.</p>
-                                        <a href="{{ route('admin.categories.create') }}" class="btn btn-primary btn-sm btn-flat px-4">
-                                            <i class="fas fa-plus mr-1"></i> Create First Category
-                                        </a>
+                                        <h5 class="text-muted font-weight-bold">No Categories Found</h5>
+                                        @if(request('search'))
+                                            <p class="text-secondary small mb-3">No results matching "<strong>{{ request('search') }}</strong>".</p>
+                                            <a href="{{ route('admin.categories.index') }}" class="btn btn-default btn-sm px-4">Clear search</a>
+                                        @else
+                                            <p class="text-secondary small mb-3">Organize your marketplace items by creating your first category.</p>
+                                            <a href="{{ route('admin.categories.create') }}" class="btn btn-primary btn-sm btn-flat px-4">
+                                                <i class="fas fa-plus mr-1"></i> Create First Category
+                                            </a>
+                                        @endif
                                     </div>
                                 </td>
                             </tr>
@@ -164,6 +180,19 @@
                 </table>
             </div>
         </div>
+
+        @if(method_exists($categories, 'hasPages') && $categories->hasPages())
+            <div class="card-footer bg-white py-3 border-top border-light">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="text-muted small">
+                        Showing <strong>{{ $categories->firstItem() }}</strong> to <strong>{{ $categories->lastItem() }}</strong> of <strong>{{ $categories->total() }}</strong> categories
+                    </div>
+                    <div>
+                        {{ $categories->links('pagination::bootstrap-4') }}
+                    </div>
+                </div>
+            </div>
+        @endif
     </div>
 </div>
 @endsection

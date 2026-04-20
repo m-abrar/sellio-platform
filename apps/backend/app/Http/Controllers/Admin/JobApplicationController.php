@@ -15,18 +15,20 @@ class JobApplicationController extends Controller
      */
     public function index(Request $request, string $status = 'all'): View
     {
-        $status = $request->route('status') ?: ($request->status ?: 'all');
-
-        $applications = JobApplication::with(['job', 'user'])
+        $applications = JobApplication::with(['job.category', 'job.location', 'user'])
             ->when($request->job, fn($q) => $q->where('job_listing_id', $request->job))
+            ->when($request->category, function($q) use ($request) {
+                $q->whereHas('job', fn($j) => $j->where('category_id', $request->category));
+            })
             ->when($status !== 'all', fn($q) => $q->where('status', $status))
             ->latest()
             ->paginate(15)
             ->withQueryString();
 
-        $jobs = JobListing::select('id', 'title')->get();
+        $jobs = JobListing::select('id', 'title', 'category_id')->with('category:id,title')->get();
+        $categories = \App\Models\Category::where('is_job', true)->select('id', 'title')->get();
 
-        return view('admin.job-applications.index', compact('applications', 'jobs', 'status'));
+        return view('admin.job-applications.index', compact('applications', 'jobs', 'categories', 'status'));
     }
 
     /**

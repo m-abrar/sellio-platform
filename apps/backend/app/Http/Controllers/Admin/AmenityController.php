@@ -31,14 +31,14 @@ class AmenityController extends Controller
         $this->amenityService = $amenityService;
     }
 
-    /**
-     * Display a listing of amenities.
-     *
-     * @return View
-     */
-    public function index(): View
+    public function index(\Illuminate\Http\Request $request): View
     {
-        $amenities = Amenity::latest()->get();
+        $amenities = Amenity::latest()
+            ->when($request->search, function($q) use ($request) {
+                $q->where('title', 'like', "%{$request->search}%");
+            })
+            ->paginate(15)
+            ->withQueryString();
 
         return view('admin.amenities.index', compact('amenities'));
     }

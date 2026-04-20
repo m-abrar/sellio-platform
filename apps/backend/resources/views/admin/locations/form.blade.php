@@ -44,7 +44,7 @@
                             <input type="text" name="title" id="title" 
                                    class="form-control form-control-lg form-control-border @error('title') is-invalid @enderror" 
                                    placeholder="e.g. Downtown District"
-                                   value="{{ old('title', $location->title ?? '') }}" required>
+                                   value="{{ old('title', $location?->title ?? '') }}" required>
                             @error('title') <span class="invalid-feedback">{{ $message }}</span> @enderror
                         </div>
 
@@ -58,7 +58,7 @@
                                 <input type="text" name="slug" id="slug" 
                                        class="form-control form-control-monospace @error('slug') is-invalid @enderror"
                                        placeholder="automatic-slug-generation"
-                                       value="{{ old('slug', $location->slug ?? '') }}">
+                                       value="{{ old('slug', $location?->slug ?? '') }}">
                             </div>
                             @error('slug') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
                         </div>
@@ -68,19 +68,19 @@
                             <div class="col-md-4 mb-4">
                                 <label class="font-weight-600">State / Province</label>
                                 <input type="text" name="state" class="form-control form-control-border @error('state') is-invalid @enderror"
-                                       value="{{ old('state', $location->state ?? '') }}" placeholder="California">
+                                       value="{{ old('state', $location?->state ?? '') }}" placeholder="California">
                                 @error('state') <span class="invalid-feedback">{{ $message }}</span> @enderror
                             </div>
                             <div class="col-md-4 mb-4">
                                 <label class="font-weight-600">Country <span class="text-danger">*</span></label>
                                 <input type="text" name="country" class="form-control form-control-border @error('country') is-invalid @enderror"
-                                       value="{{ old('country', $location->country ?? '') }}" placeholder="United States">
+                                       value="{{ old('country', $location?->country ?? '') }}" placeholder="United States">
                                 @error('country') <span class="invalid-feedback">{{ $message }}</span> @enderror
                             </div>
                             <div class="col-md-4 mb-4">
                                 <label class="font-weight-600">ZIP Code</label>
                                 <input type="text" name="zip_code" class="form-control form-control-border @error('zip_code') is-invalid @enderror"
-                                       value="{{ old('zip_code', $location->zip_code ?? '') }}" placeholder="90210">
+                                       value="{{ old('zip_code', $location?->zip_code ?? '') }}" placeholder="90210">
                                 @error('zip_code') <span class="invalid-feedback">{{ $message }}</span> @enderror
                             </div>
                         </div>
@@ -90,13 +90,13 @@
                             <div class="col-md-6 mb-4">
                                 <label class="font-weight-600 text-muted small"><i class="fas fa-arrows-alt-v mr-1"></i> Latitude</label>
                                 <input type="text" id="latitude" name="latitude" class="form-control form-control-border @error('latitude') is-invalid @enderror"
-                                       value="{{ old('latitude', $location->latitude ?? '') }}">
+                                       value="{{ old('latitude', $location?->latitude ?? '') }}">
                                 @error('latitude') <span class="invalid-feedback">{{ $message }}</span> @enderror
                             </div>
                             <div class="col-md-6 mb-4">
                                 <label class="font-weight-600 text-muted small"><i class="fas fa-arrows-alt-h mr-1"></i> Longitude</label>
                                 <input type="text" id="longitude" name="longitude" class="form-control form-control-border @error('longitude') is-invalid @enderror"
-                                       value="{{ old('longitude', $location->longitude ?? '') }}">
+                                       value="{{ old('longitude', $location?->longitude ?? '') }}">
                                 @error('longitude') <span class="invalid-feedback">{{ $message }}</span> @enderror
                             </div>
                         </div>
@@ -106,7 +106,7 @@
                             <label for="description" class="font-weight-600">Location Description</label>
                             <textarea name="description" rows="4" 
                                       class="form-control form-control-border @error('description') is-invalid @enderror" 
-                                      placeholder="Describe regional highlights or operation details...">{{ old('description', $location->description ?? '') }}</textarea>
+                                      placeholder="Describe regional highlights or operation details...">{{ old('description', $location?->description ?? '') }}</textarea>
                             @error('description') <span class="invalid-feedback">{{ $message }}</span> @enderror
                         </div>
                     </div>
