@@ -4,9 +4,14 @@
     </div>
     <div class="card-body">
         <div class="form-group">
-            <label>Plan Title <span class="text-danger">*</span></label>
+            <label><i class="fas fa-heading mr-1 text-primary"></i> Plan Title <span class="text-danger">*</span></label>
             <input type="text" name="title" class="form-control @error('title') is-invalid @enderror" 
-                   value="{{ old('title', $plan->title ?? '') }}" required placeholder="e.g., Premium Monthly">
+                   value="{{ old('title', $plan->title ?? '') }}" required placeholder="e.g., Premium Monthly" list="plan-title-suggestions">
+            <datalist id="plan-title-suggestions">
+                @foreach(\App\Models\Plan::select('title')->distinct()->limit(20)->pluck('title') as $title)
+                    <option value="{{ $title }}">
+                @endforeach
+            </datalist>
             @error('title')<span class="invalid-feedback">{{ $message }}</span>@enderror
         </div>
 

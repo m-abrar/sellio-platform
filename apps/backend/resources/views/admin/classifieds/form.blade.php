@@ -40,8 +40,13 @@
                     </div>
                     <div class="card-body">
                         <div class="form-group mb-4">
-                            <label class="font-weight-600">Item Title <span class="text-danger">*</span></label>
-                            <input type="text" name="title" id="title" class="form-control form-control-lg form-control-border @error('title') is-invalid @enderror" value="{{ old('title', $classified->title ?? '') }}" required>
+                            <label class="font-weight-600"><i class="fas fa-tag mr-1 text-primary"></i> Item Title <span class="text-danger">*</span></label>
+                            <input type="text" name="title" id="title" class="form-control form-control-lg form-control-border @error('title') is-invalid @enderror" value="{{ old('title', $classified->title ?? '') }}" required list="classified-title-suggestions">
+                            <datalist id="classified-title-suggestions">
+                                @foreach(\App\Models\Classified::select('title')->distinct()->limit(20)->pluck('title') as $title)
+                                    <option value="{{ $title }}">
+                                @endforeach
+                            </datalist>
                             @error('title') <span class="invalid-feedback">{{ $message }}</span> @enderror
                         </div>
 

@@ -37,6 +37,34 @@
 
 - [ ] can we add multiple themes in the nextjs app?
 
+---
+
+## NEW ITEMS FROM TODO.TXT
+
+### Completed
+- [x] Attributes pages - DataTable pagination (Amenities, Categories, Features, Locations, Types, Tags, Brands)
+- [x] Search forms - one row centered (Product Orders, Property Bookings, Auto Inquiries, Event Bookings, Job Applications, Service Quotes, Classified Inquiries)
+- [x] Remove ID column from Payments and Subscriptions pages
+- [x] Reports pages - match main dashboard design
+- [x] Add New button right-aligned on taxonomy pages
+
+### Completed (continued)
+- [x] Title field auto-fill/combobox across all forms (datalist)
+- [x] Add icons to labels - Properties, Products, Autos, Events, Jobs, Services, Classifieds
+- [x] Add icons to labels - Blog, Features, Brands, Categories, Types, Locations, Amenities, Tags, Plans, Withdrawals, etc.
+- [x] Add icons to labels - Tickets, Subscriptions, Payment Gateways, Pages, Advertisements, Addons
+
+### Completed (All tasks done)
+- [x] Remove ID column - payments, subscriptions, users, roles, permissions, newsletter, tickets
+- [x] DataTable alignment - blogs, newsletter, payment-gateways
+- [x] Tab pills UI consistency - plans/create pattern applied
+- [x] Search forms - one-row centered layout (7 pages)
+- [x] Gallery search form - theme coloring
+- [x] Email templates - button styling
+- [x] Roles/Permissions Add New button theme
+- [x] Tickets Add New button added
+- [x] Blog create - comment toggle UI polish
+
 ## 📋 NEXT ACTIONS
 
 ### Bookings & Inquiries

@@ -168,17 +168,20 @@
                 "info": false,
                 "autoWidth": false,
                 "responsive": true,
-                "dom": '<"row px-4 pt-2"<"col-sm-12"f>>' + '<"row"<"col-sm-12"tr>>' + '<"row px-4 pb-3"<"col-sm-12"p>>',
+                "dom": '<"row px-4 pt-2"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-3"l>>t<"row px-4 pb-3"<"col-sm-12"p>>',
+                "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
                 "language": {
                     "search": "",
-                    "searchPlaceholder": "Filter processors...",
+                    "searchPlaceholder": "Filter...",
+                    "lengthMenu": "_MENU_ per page",
                     "paginate": {
                         "previous": "<i class='fas fa-angle-left'></i>",
                         "next": "<i class='fas fa-angle-right'></i>"
                     }
                 }
             });
-            $('.dataTables_filter input').addClass('form-control shadow-none border-light').css('width', '250px');
+            $('.dataTables_filter input').addClass('form-control shadow-xs border').css('max-width', '200px');
+            $('.dataTables_length select').addClass('form-control form-control-sm shadow-xs');
         }
     });
 </script>

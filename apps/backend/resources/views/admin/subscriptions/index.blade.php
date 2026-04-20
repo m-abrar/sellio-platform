@@ -81,7 +81,6 @@
                 <table id="subscriptions-table" class="table table-hover table-premium mb-0">
                     <thead class="thead-light">
                         <tr>
-                            <th class="text-center" style="width: 80px">ID</th>
                             <th>Subscriber</th>
                             <th>Plan Details</th>
                             <th>Active Timeline</th>
@@ -102,10 +101,6 @@
                                 $badgeClass = $statusMap[$subscription->status] ?? 'badge-dark-light';
                             @endphp
                             <tr>
-                                <td class="text-center align-middle font-weight-bold text-muted text-monospace small">
-                                    #{{ $subscription->id }}
-                                </td>
-                                
                                 <td class="align-middle">
                                     <div class="d-flex align-items-center">
                                         <div class="avatar-circle mr-3 bg-light border d-flex align-items-center justify-content-center shadow-xs" style="width:40px; height:40px; border-radius: 10px;">

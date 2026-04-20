@@ -168,19 +168,20 @@
         
         if ($('#blogs-table tbody tr').length > 0 && !$('.empty-state').length) {
             $('#blogs-table').DataTable({
-                "paging": false, // Handled by Laravel pagination
+                "paging": false,
                 "info": false,
                 "searching": true,
                 "ordering": true,
                 "autoWidth": false,
                 "responsive": true,
-                "dom": '<"row px-4 pt-3"<"col-sm-12"f>>t',
+                "dom": '<"row px-4 pt-2"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-6"l>>t',
                 "language": {
                     "search": "",
-                    "searchPlaceholder": "Search articles..."
+                    "searchPlaceholder": "Search...",
+                    "lengthMenu": "_MENU_ per page"
                 }
             });
-            $('.dataTables_filter input').addClass('form-control shadow-none border-light').css('width', '100%');
+            $('.dataTables_filter input').addClass('form-control shadow-xs border').css('max-width', '250px');
         }
     });
 </script>

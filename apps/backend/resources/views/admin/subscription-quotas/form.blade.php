@@ -23,13 +23,12 @@
                 @if(isset($subscriptionQuota)) @method('PATCH') @endif
 
                 <!-- Tabs Navigation -->
-                <ul class="nav nav-pills mb-3" id="subscriptionTabs" role="tablist">
+                <ul class="nav nav-pills mb-3 p-1 bg-white shadow-sm rounded-pill" id="subscriptionTabs" role="tablist" style="width: fit-content;">
                     <li class="nav-item">
-                        <a class="nav-link active py-3" id="details-tab" data-toggle="tab" href="#details" role="tab">
+                        <a class="nav-link active px-4 py-2 rounded-pill" id="details-tab" data-toggle="tab" href="#details" role="tab">
                             <i class="fas fa-info-circle mr-1"></i> Usage Details
                         </a>
                     </li>
-
                 </ul>
 
                 <!-- Tabs Content -->

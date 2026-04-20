@@ -29,50 +29,48 @@
 
         {{-- Premium Filter Card --}}
         <div class="card card-outline card-secondary shadow-sm mb-4">
-            <div class="card-body py-4">
-                <form method="GET" action="{{ route('admin.event-bookings.index') }}">
-                    <div class="row align-items-end">
-                        <div class="col-md-2">
-                            <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Event Name</label>
-                            <input type="text" name="event_name" class="form-control shadow-xs" placeholder="Search event..." value="{{ request('event_name') }}">
-                        </div>
-                        <div class="col-md-2">
-                            <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Event</label>
-                            <select name="event" class="form-control shadow-xs select2">
-                                <option value="">All Events</option>
-                                @foreach ($events as $e)
-                                    <option value="{{ $e->id }}" {{ request('event') == $e->id ? 'selected' : '' }}>
-                                        {{ $e->title }} {{ $e->category ? '('.$e->category->title.')' : '' }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-md-2">
-                            <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Category</label>
-                            <select name="category" class="form-control shadow-xs">
-                                <option value="">All Categories</option>
-                                @foreach ($categories as $c)
-                                    <option value="{{ $c->id }}" {{ request('category') == $c->id ? 'selected' : '' }}>{{ $c->title }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-md-2">
-                            <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Status</label>
-                            <select name="status" class="form-control shadow-xs">
-                                <option value="">All Statuses</option>
-                                <option value="pending" {{ $status == 'pending' ? 'selected' : '' }}>Pending</option>
-                                <option value="confirmed" {{ $status == 'confirmed' ? 'selected' : '' }}>Confirmed</option>
-                                <option value="cancelled" {{ $status == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
-                            </select>
-                        </div>
-                        <div class="col-md-2 d-flex align-items-end" style="gap: 10px;">
-                            <button type="submit" class="btn btn-primary flex-fill font-weight-bold shadow-xs">
-                                <i class="fas fa-filter mr-1"></i> APPLY
-                            </button>
-                            <a href="{{ route('admin.event-bookings.index') }}" class="btn btn-default font-weight-bold shadow-xs">
-                                <i class="fas fa-undo"></i>
-                            </a>
-                        </div>
+            <div class="card-body py-3">
+                <form method="GET" action="{{ route('admin.event-bookings.index') }}" class="row justify-content-center">
+                    <div class="col-auto">
+                        <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Event Name</label>
+                        <input type="text" name="event_name" class="form-control shadow-xs" placeholder="Search..." value="{{ request('event_name') }}">
+                    </div>
+                    <div class="col-auto">
+                        <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Event</label>
+                        <select name="event" class="form-control shadow-xs select2">
+                            <option value="">All</option>
+                            @foreach ($events as $e)
+                                <option value="{{ $e->id }}" {{ request('event') == $e->id ? 'selected' : '' }}>
+                                    {{ $e->title }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-auto">
+                        <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Category</label>
+                        <select name="category" class="form-control shadow-xs">
+                            <option value="">All</option>
+                            @foreach ($categories as $c)
+                                <option value="{{ $c->id }}" {{ request('category') == $c->id ? 'selected' : '' }}>{{ $c->title }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-auto">
+                        <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Status</label>
+                        <select name="status" class="form-control shadow-xs">
+                            <option value="">All</option>
+                            <option value="pending" {{ $status == 'pending' ? 'selected' : '' }}>Pending</option>
+                            <option value="confirmed" {{ $status == 'confirmed' ? 'selected' : '' }}>Confirmed</option>
+                            <option value="cancelled" {{ $status == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
+                        </select>
+                    </div>
+                    <div class="col-auto d-flex align-items-end" style="gap: 8px;">
+                        <button type="submit" class="btn btn-primary font-weight-bold shadow-xs">
+                            <i class="fas fa-filter mr-1"></i> FILTER
+                        </button>
+                        <a href="{{ route('admin.event-bookings.index') }}" class="btn btn-default font-weight-bold shadow-xs">
+                            <i class="fas fa-undo"></i>
+                        </a>
                     </div>
                 </form>
             </div>

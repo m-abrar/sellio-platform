@@ -29,49 +29,47 @@
 
         {{-- Premium Filter Card --}}
         <div class="card card-outline card-secondary shadow-sm mb-4">
-            <div class="card-body py-4">
-                <form method="GET" action="{{ route('admin.job-applications.index') }}">
-                    <div class="row align-items-end">
-                        <div class="col-md-2">
-                            <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Job Title</label>
-                            <input type="text" name="job_title" class="form-control shadow-xs" placeholder="Search job..." value="{{ request('job_title') }}">
-                        </div>
-                        <div class="col-md-2">
-                            <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Job</label>
-                            <select name="job" class="form-control shadow-xs select2">
-                                <option value="">All Jobs</option>
-                                @foreach ($jobs as $j)
-                                    <option value="{{ $j->id }}" {{ request('job') == $j->id ? 'selected' : '' }}>
-                                        {{ $j->title }} {{ $j->category ? '('.$j->category->title.')' : '' }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-md-2">
-                            <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Category</label>
-                            <select name="category" class="form-control shadow-xs">
-                                <option value="">All Categories</option>
-                                @foreach ($categories as $c)
-                                    <option value="{{ $c->id }}" {{ request('category') == $c->id ? 'selected' : '' }}>{{ $c->title }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-md-2">
-                            <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Status</label>
-                            <select name="status" class="form-control shadow-xs">
-                                <option value="">All Statuses</option>
-                                <option value="submitted" {{ $status == 'submitted' ? 'selected' : '' }}>Submitted</option>
-                                <option value="reviewed" {{ $status == 'reviewed' ? 'selected' : '' }}>Reviewed</option>
-                            </select>
-                        </div>
-                        <div class="col-md-2 d-flex align-items-end" style="gap: 10px;">
-                            <button type="submit" class="btn btn-primary flex-fill font-weight-bold shadow-xs">
-                                <i class="fas fa-filter mr-1"></i> APPLY
-                            </button>
-                            <a href="{{ route('admin.job-applications.index') }}" class="btn btn-default font-weight-bold shadow-xs">
-                                <i class="fas fa-undo"></i>
-                            </a>
-                        </div>
+            <div class="card-body py-3">
+                <form method="GET" action="{{ route('admin.job-applications.index') }}" class="row justify-content-center">
+                    <div class="col-auto">
+                        <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Job Title</label>
+                        <input type="text" name="job_title" class="form-control shadow-xs" placeholder="Search..." value="{{ request('job_title') }}">
+                    </div>
+                    <div class="col-auto">
+                        <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Job</label>
+                        <select name="job" class="form-control shadow-xs select2">
+                            <option value="">All</option>
+                            @foreach ($jobs as $j)
+                                <option value="{{ $j->id }}" {{ request('job') == $j->id ? 'selected' : '' }}>
+                                    {{ $j->title }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-auto">
+                        <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Category</label>
+                        <select name="category" class="form-control shadow-xs">
+                            <option value="">All</option>
+                            @foreach ($categories as $c)
+                                <option value="{{ $c->id }}" {{ request('category') == $c->id ? 'selected' : '' }}>{{ $c->title }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-auto">
+                        <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Status</label>
+                        <select name="status" class="form-control shadow-xs">
+                            <option value="">All</option>
+                            <option value="submitted" {{ $status == 'submitted' ? 'selected' : '' }}>Submitted</option>
+                            <option value="reviewed" {{ $status == 'reviewed' ? 'selected' : '' }}>Reviewed</option>
+                        </select>
+                    </div>
+                    <div class="col-auto d-flex align-items-end" style="gap: 8px;">
+                        <button type="submit" class="btn btn-primary font-weight-bold shadow-xs">
+                            <i class="fas fa-filter mr-1"></i> FILTER
+                        </button>
+                        <a href="{{ route('admin.job-applications.index') }}" class="btn btn-default font-weight-bold shadow-xs">
+                            <i class="fas fa-undo"></i>
+                        </a>
                     </div>
                 </form>
             </div>

@@ -22,21 +22,21 @@
                 @csrf
                 @if(isset($payment)) @method('PATCH') @endif
 
-                <ul class="nav nav-pills card-secondary shadow-sm mb-3" id="paymentTabs" role="tablist">
+                <ul class="nav nav-pills mb-3 p-1 bg-white shadow-sm rounded-pill" id="paymentTabs" role="tablist" style="width: fit-content;">
                     <li class="nav-item">
-                        <a class="nav-link active py-3" id="details-tab" data-toggle="tab" href="#details" role="tab">
+                        <a class="nav-link active px-4 py-2 rounded-pill" id="details-tab" data-toggle="tab" href="#details" role="tab">
                             <i class="fas fa-info-circle mr-1"></i> Payment Details
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link py-3" id="metadata-tab" data-toggle="tab" href="#metadata" role="tab">
+                        <a class="nav-link px-4 py-2 rounded-pill" id="metadata-tab" data-toggle="tab" href="#metadata" role="tab">
                             <i class="fas fa-box mr-1"></i> Metadata / Gateway Data
                         </a>
                     </li>
                     {{-- Only show history on edit page --}}
                     @if(isset($payment))
                     <li class="nav-item">
-                        <a class="nav-link py-3" id="history-tab" data-toggle="tab" href="#history" role="tab">
+                        <a class="nav-link px-4 py-2 rounded-pill" id="history-tab" data-toggle="tab" href="#history" role="tab">
                             <i class="fas fa-history mr-1"></i> Related Payments
                         </a>
                     </li>

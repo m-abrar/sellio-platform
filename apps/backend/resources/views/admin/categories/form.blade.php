@@ -40,11 +40,16 @@
                     </div>
                     <div class="card-body">
                         <div class="form-group mb-4">
-                            <label for="title" class="font-weight-600">Category Name <span class="text-danger">*</span></label>
+                            <label for="title" class="font-weight-600"><i class="fas fa-folder mr-1 text-primary"></i> Category Name <span class="text-danger">*</span></label>
                             <input type="text" name="title" id="title" 
                                    class="form-control form-control-lg form-control-border @error('title') is-invalid @enderror" 
                                    placeholder="e.g. Residential Apartments"
-                                   value="{{ old('title', $category?->title ?? '') }}" required>
+                                   value="{{ old('title', $category?->title ?? '') }}" required list="category-title-suggestions">
+                            <datalist id="category-title-suggestions">
+                                @foreach(\App\Models\Category::select('title')->distinct()->limit(20)->pluck('title') as $title)
+                                    <option value="{{ $title }}">
+                                @endforeach
+                            </datalist>
                             @error('title') <span class="invalid-feedback">{{ $message }}</span> @enderror
                         </div>
 

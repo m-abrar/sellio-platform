@@ -15,9 +15,15 @@
         </div>
 
         <div class="form-group">
-            <div class="custom-control custom-checkbox">
-                <input type="checkbox" name="allow_comments" class="custom-control-input" id="allow_comments" value="1" {{ old('allow_comments', $blog->allow_comments ?? true) ? 'checked' : '' }}>
-                <label class="custom-control-label text-muted" for="allow_comments">Enable readers to comment on this post</label>
+            <div class="card border shadow-sm" style="border-radius: 8px;">
+                <div class="card-body py-3">
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" name="allow_comments" class="custom-control-input" id="allow_comments" value="1" {{ old('allow_comments', $blog->allow_comments ?? true) ? 'checked' : '' }}>
+                        <label class="custom-control-label font-weight-bold text-dark" for="allow_comments">
+                            <i class="fas fa-comments mr-2 text-primary"></i>Enable readers to comment on this post
+                        </label>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

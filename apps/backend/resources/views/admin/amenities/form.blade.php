@@ -42,11 +42,16 @@
                         <div class="row">
                             <div class="col-md-7">
                                 <div class="form-group mb-4">
-                                    <label for="title" class="font-weight-600">Amenity Name <span class="text-danger">*</span></label>
+                                    <label for="title" class="font-weight-600"><i class="fas fa-check-circle mr-1 text-primary"></i> Amenity Name <span class="text-danger">*</span></label>
                                     <input type="text" name="title" id="title" 
                                            class="form-control form-control-lg form-control-border @error('title') is-invalid @enderror" 
                                            placeholder="e.g. Swimming Pool, Air Conditioning"
-                                           value="{{ old('title', $amenity->title ?? '') }}" required>
+                                           value="{{ old('title', $amenity->title ?? '') }}" required list="amenity-title-suggestions">
+                                    <datalist id="amenity-title-suggestions">
+                                        @foreach(\App\Models\Amenity::select('title')->distinct()->limit(20)->pluck('title') as $title)
+                                            <option value="{{ $title }}">
+                                        @endforeach
+                                    </datalist>
                                     @error('title') <span class="invalid-feedback">{{ $message }}</span> @enderror
                                 </div>
                             </div>

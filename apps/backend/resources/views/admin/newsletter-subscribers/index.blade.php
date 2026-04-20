@@ -44,7 +44,6 @@
                 <table id="subscribers-table" class="table table-hover table-premium mb-0">
                     <thead class="thead-light">
                         <tr>
-                            <th class="text-center px-3" style="width: 80px">ID</th>
                             <th>Subscriber Identity</th>
                             <th>Acquisition Source</th>
                             <th>Subscription Date</th>
@@ -54,11 +53,7 @@
                     </thead>
                     <tbody>
                         @forelse ($subscribers as $subscriber)
-                            <tr>
-                                <td class="text-center align-middle font-weight-bold text-muted text-monospace" style="font-size: 0.85rem;">
-                                    #{{ $subscriber->id }}
-                                </td>
-
+<tr>
                                 <td class="align-middle">
                                     <div class="d-flex align-items-center">
                                         <div class="icon-shape mr-3 bg-light border rounded-circle d-flex align-items-center justify-content-center shadow-xs" style="width:40px; height:40px;">
@@ -171,20 +166,24 @@
         
         // Refined Search UI for DataTables
         if ($('#subscribers-table tbody tr').length > 1) {
-            let table = $('#subscribers-table').DataTable({
+            $('#subscribers-table').DataTable({
                 "paging": false,
                 "info": false,
                 "searching": true,
                 "ordering": true,
                 "autoWidth": false,
                 "responsive": true,
+                "dom": '<"row px-4 pt-2"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-3"l>>t',
+                "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
                 "language": {
                     "search": "",
-                    "searchPlaceholder": "Filter audience..."
+                    "searchPlaceholder": "Filter...",
+                    "lengthMenu": "_MENU_ per page"
                 }
             });
             
-            $('.dataTables_filter input').addClass('form-control shadow-none border-light mb-3').css('width', '250px');
+            $('.dataTables_filter input').addClass('form-control shadow-xs border').css('max-width', '200px');
+            $('.dataTables_length select').addClass('form-control form-control-sm shadow-xs');
         }
     });
 </script>

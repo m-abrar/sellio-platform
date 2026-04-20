@@ -47,7 +47,6 @@
                 <table id="users-table" class="table table-hover table-premium mb-0">
                     <thead class="thead-light">
                         <tr>
-                            <th class="text-center px-3" style="width: 80px">ID</th>
                             <th>User Identity</th>
                             <th>Email Address</th>
                             <th>Assigned Roles</th>
@@ -57,9 +56,6 @@
                     <tbody>
                         @forelse($users as $user)
                             <tr>
-                                <td class="text-center align-middle text-muted text-monospace" style="font-size: 0.85rem;">
-                                    #{{ $user->id }}
-                                </td>
                                 <td class="align-middle">
                                     <div class="d-flex align-items-center">
                                         <div class="avatar-wrapper mr-3">

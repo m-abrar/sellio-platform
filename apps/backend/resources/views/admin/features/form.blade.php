@@ -40,11 +40,16 @@
                     </div>
                     <div class="card-body">
                         <div class="form-group mb-4">
-                            <label for="title" class="font-weight-600">Feature Name <span class="text-danger">*</span></label>
+                            <label for="title" class="font-weight-600"><i class="fas fa-list-ul mr-1 text-primary"></i> Feature Name <span class="text-danger">*</span></label>
                             <input type="text" name="title" id="title" 
                                    class="form-control form-control-lg form-control-border @error('title') is-invalid @enderror" 
                                    placeholder="e.g. Engine Capacity or Experience Level"
-                                   value="{{ old('title', $feature->title ?? '') }}" required>
+                                   value="{{ old('title', $feature->title ?? '') }}" required list="feature-title-suggestions">
+                            <datalist id="feature-title-suggestions">
+                                @foreach(\App\Models\Feature::select('title')->distinct()->limit(20)->pluck('title') as $title)
+                                    <option value="{{ $title }}">
+                                @endforeach
+                            </datalist>
                             @error('title') <span class="invalid-feedback">{{ $message }}</span> @enderror
                         </div>
 

@@ -24,18 +24,18 @@
 <div class="container-fluid">
     @include('admin.alert')
 
-    {{-- Template Table Card --}}
-    <div class="card card-primary card-outline shadow-sm border-0">
-        <div class="card-header border-0 bg-white py-3">
-            <h3 class="card-title font-weight-600 text-muted">
-                System Email Registry <span class="badge badge-light border ml-2 px-2" style="font-weight: 500;">{{ count($templates) }} Definitions</span>
-            </h3>
-            <div class="card-tools">
-                <button type="button" class="btn btn-tool" data-card-widget="maximize">
-                    <i class="fas fa-expand"></i>
-                </button>
+{{-- Template Table Card --}}
+        <div class="card card-primary card-outline shadow-sm border-0">
+            <div class="card-header border-0 bg-white py-3 d-flex justify-content-between align-items-center">
+                <h3 class="card-title font-weight-600 text-muted mb-0">
+                    System Email Registry <span class="badge badge-light border ml-2 px-2" style="font-weight: 500;">{{ count($templates) }} Definitions</span>
+                </h3>
+                <div class="card-tools">
+                    <a href="{{ route('admin.email-templates.create') }}" class="btn btn-primary btn-flat shadow-sm px-4 font-weight-bold" style="border-radius: 8px;">
+                        <i class="fas fa-plus-circle mr-1"></i> Add Template
+                    </a>
+                </div>
             </div>
-        </div>
 
         <div class="card-body p-0">
             <div class="table-responsive">

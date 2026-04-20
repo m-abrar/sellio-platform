@@ -32,7 +32,7 @@
         <div class="card-header border-0 bg-white py-3">
             <h3 class="card-title font-weight-600 text-muted">Permission Registry</h3>
             <div class="card-tools">
-                <a href="{{ route('admin.permissions.create') }}" class="btn btn-success shadow-sm px-3">
+                <a href="{{ route('admin.permissions.create') }}" class="btn btn-primary btn-flat shadow-sm px-4 font-weight-bold">
                     <i class="fas fa-plus-circle mr-1"></i> Add New Permission
                 </a>
                 <button type="button" class="btn btn-tool" data-card-widget="maximize">
@@ -46,7 +46,6 @@
                 <table id="permissions-table" class="table table-hover table-premium mb-0">
                     <thead class="thead-light">
                         <tr>
-                            <th class="text-center px-3" style="width: 80px">ID</th>
                             <th>Permission Identifier</th>
                             <th>Guard Type</th>
                             <th class="text-right px-4">Actions</th>
@@ -55,9 +54,6 @@
                     <tbody>
                         @forelse($permissions as $permission)
                             <tr>
-                                <td class="text-center align-middle text-muted text-monospace" style="font-size: 0.85rem;">
-                                    #{{ $permission->id }}
-                                </td>
                                 <td class="align-middle">
                                     <div class="d-flex align-items-center">
                                         <div class="icon-box mr-3 bg-light border rounded d-flex align-items-center justify-content-center shadow-xs" style="width:38px; height:38px;">

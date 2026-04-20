@@ -40,11 +40,16 @@
                     <div class="card-body">
                         {{-- Title Field --}}
                         <div class="form-group mb-4">
-                            <label for="title" class="font-weight-600">Location Name <span class="text-danger">*</span></label>
+                            <label for="title" class="font-weight-600"><i class="fas fa-map-marker-alt mr-1 text-primary"></i> Location Name <span class="text-danger">*</span></label>
                             <input type="text" name="title" id="title" 
                                    class="form-control form-control-lg form-control-border @error('title') is-invalid @enderror" 
                                    placeholder="e.g. Downtown District"
-                                   value="{{ old('title', $location?->title ?? '') }}" required>
+                                   value="{{ old('title', $location?->title ?? '') }}" required list="location-title-suggestions">
+                            <datalist id="location-title-suggestions">
+                                @foreach(\App\Models\Location::select('title')->distinct()->limit(20)->pluck('title') as $title)
+                                    <option value="{{ $title }}">
+                                @endforeach
+                            </datalist>
                             @error('title') <span class="invalid-feedback">{{ $message }}</span> @enderror
                         </div>
 

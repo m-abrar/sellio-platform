@@ -42,11 +42,16 @@
                         <div class="row">
                             <div class="col-md-7">
                                 <div class="form-group mb-4">
-                                    <label for="title" class="font-weight-600">Tag Name <span class="text-danger">*</span></label>
+                                    <label for="title" class="font-weight-600"><i class="fas fa-tags mr-1 text-primary"></i> Tag Name <span class="text-danger">*</span></label>
                                     <input type="text" name="title" id="title" 
                                            class="form-control form-control-lg form-control-border @error('title') is-invalid @enderror" 
                                            placeholder="e.g. Featured, Hot Deal, New"
-                                           value="{{ old('title', $tag->title ?? '') }}" required>
+                                           value="{{ old('title', $tag->title ?? '') }}" required list="tag-title-suggestions">
+                                    <datalist id="tag-title-suggestions">
+                                        @foreach(\App\Models\Tag::select('title')->distinct()->limit(20)->pluck('title') as $title)
+                                            <option value="{{ $title }}">
+                                        @endforeach
+                                    </datalist>
                                     @error('title') <span class="invalid-feedback">{{ $message }}</span> @enderror
                                 </div>
                             </div>

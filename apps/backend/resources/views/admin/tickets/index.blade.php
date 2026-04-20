@@ -9,8 +9,13 @@
     <div class="row mb-2">
         <div class="col-sm-6">
             <h1 class="m-0 text-dark font-weight-bold">
-                <i class="fas fa-ticket-alt mr-2 text-success"></i>Support Tickets
+                <i class="fas fa-ticket-alt mr-2 text-success"></i> Support Tickets
             </h1>
+        </div>
+        <div class="col-sm-6 text-right">
+            <a href="{{ route('admin.tickets.create') }}" class="btn btn-primary btn-flat shadow-sm px-4 font-weight-bold">
+                <i class="fas fa-plus-circle mr-1"></i> New Ticket
+            </a>
         </div>
     </div>
 </div>
@@ -64,7 +69,6 @@
                 <table id="tickets-table" class="table table-hover table-premium mb-0">
                     <thead class="thead-light">
                         <tr>
-                            <th class="text-center px-3" style="width: 80px">ID</th>
                             <th>Subject / Description</th>
                             <th>User</th>
                             <th>Status & Priority</th>
@@ -75,9 +79,6 @@
                     <tbody>
                         @forelse($tickets as $ticket)
                         <tr>
-                            <td class="text-center align-middle text-muted text-monospace" style="font-size: 0.85rem;">
-                                #{{ $ticket->id }}
-                            </td>
                             <td class="align-middle">
                                 <a href="{{ route('admin.tickets.show', $ticket->id) }}" class="font-weight-bold text-dark d-block">
                                     {{ $ticket->title }}

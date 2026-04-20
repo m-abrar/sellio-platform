@@ -31,7 +31,7 @@
         <div class="card-header border-0 bg-white py-3">
             <h3 class="card-title font-weight-600 text-muted">System Role Registry</h3>
             <div class="card-tools">
-                <a href="{{ route('admin.roles.create') }}" class="btn btn-success shadow-sm px-3">
+                <a href="{{ route('admin.roles.create') }}" class="btn btn-primary btn-flat shadow-sm px-4 font-weight-bold">
                     <i class="fas fa-plus-circle mr-1"></i> Add New Role
                 </a>
                 <button type="button" class="btn btn-tool" data-card-widget="maximize">
@@ -45,7 +45,6 @@
                 <table id="roles-table" class="table table-hover table-premium mb-0">
                     <thead class="thead-light">
                         <tr>
-                            <th class="text-center px-3" style="width: 80px">ID</th>
                             <th style="width: 25%">Role Identity</th>
                             <th>Permission Blueprint</th>
                             <th class="text-right px-4">Actions</th>
@@ -54,9 +53,6 @@
                     <tbody>
                         @forelse($roles as $role)
                             <tr>
-                                <td class="text-center align-middle text-muted text-monospace" style="font-size: 0.85rem;">
-                                    #{{ $role->id }}
-                                </td>
                                 <td class="align-middle">
                                     <div class="d-flex align-items-center">
                                         <div class="icon-shape mr-3 bg-primary-light border rounded-circle d-flex align-items-center justify-content-center shadow-xs" style="width:42px; height:42px;">

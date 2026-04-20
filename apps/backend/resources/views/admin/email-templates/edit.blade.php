@@ -82,7 +82,7 @@
                                 </label>
                             </div>
 
-                            <button type="submit" class="btn btn-primary btn-block py-2 mb-2 shadow-sm rounded-pill">
+                            <button type="submit" class="btn btn-primary btn-flat btn-block py-3 font-weight-bold shadow-sm" style="border-radius: 8px;">
                                 <i class="fas fa-save mr-2"></i> <strong>Save Template</strong>
                             </button>
                         </div>

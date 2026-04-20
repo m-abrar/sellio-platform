@@ -16,14 +16,14 @@
 @stop
 
 @section('content')
-    {{-- Filtering & Search Bar --}}
-    <div class="card border-0 shadow-sm mb-4" style="border-radius: 12px;">
+    {{-- Premium Filter Card --}}
+    <div class="card card-outline card-secondary shadow-sm mb-4">
         <div class="card-body py-3">
-            <form action="{{ route('admin.gallery.index') }}" method="GET" class="row align-items-end">
-                <div class="col-md-3">
-                    <label class="small font-weight-bold text-muted mb-1">Source Module</label>
-                    <select name="source" class="form-control" onchange="this.form.submit()">
-                        <option value="">All Sources (Everything)</option>
+            <form action="{{ route('admin.gallery.index') }}" method="GET" class="row align-items-end justify-content-center">
+                <div class="col-auto">
+                    <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Source</label>
+                    <select name="source" class="form-control shadow-xs" onchange="this.form.submit()">
+                        <option value="">All Sources</option>
                         @foreach($sources as $source)
                             <option value="{{ $source }}" {{ request('source') == $source ? 'selected' : '' }}>
                                 {{ $source }}
@@ -31,21 +31,21 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-md-5">
-                    <label class="small font-weight-bold text-muted mb-1">Search File/Collection</label>
-                    <div class="input-group">
-                        <input type="text" name="search" class="form-control" placeholder="Search filename or collection..." value="{{ request('search') }}">
+                <div class="col-auto">
+                    <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Search</label>
+                    <div class="input-group shadow-xs">
+                        <input type="text" name="search" class="form-control" placeholder="Search filename..." value="{{ request('search') }}">
                         <div class="input-group-append">
-                            <button class="btn btn-indigo" type="submit">
+                            <button class="btn btn-primary" type="submit">
                                 <i class="fas fa-search"></i>
                             </button>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-2">
+                <div class="col-auto d-flex align-items-end">
                     @if(request()->anyFilled(['source', 'search']))
-                        <a href="{{ route('admin.gallery.index') }}" class="btn btn-link text-muted small p-0 mb-2">
-                            <i class="fas fa-times-circle mr-1"></i> Clear filters
+                        <a href="{{ route('admin.gallery.index') }}" class="btn btn-link text-muted small">
+                            <i class="fas fa-times-circle mr-1"></i> Clear
                         </a>
                     @endif
                 </div>

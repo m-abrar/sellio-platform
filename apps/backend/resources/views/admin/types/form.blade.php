@@ -40,11 +40,16 @@
                     <div class="card-body">
                         {{-- Type Name --}}
                         <div class="form-group mb-4">
-                            <label for="title" class="font-weight-600">Type Name <span class="text-danger">*</span></label>
+                            <label for="title" class="font-weight-600"><i class="fas fa-tag mr-1 text-primary"></i> Type Name <span class="text-danger">*</span></label>
                             <input type="text" name="title" id="title" 
                                    class="form-control form-control-lg form-control-border @error('title') is-invalid @enderror" 
                                    placeholder="e.g. Residential, Full-Time, Workshop"
-                                   value="{{ old('title', $type?->title ?? '') }}" required>
+                                   value="{{ old('title', $type?->title ?? '') }}" required list="type-title-suggestions">
+                            <datalist id="type-title-suggestions">
+                                @foreach(\App\Models\Type::select('title')->distinct()->limit(20)->pluck('title') as $title)
+                                    <option value="{{ $title }}">
+                                @endforeach
+                            </datalist>
                             @error('title') <span class="invalid-feedback">{{ $message }}</span> @enderror
                         </div>
 

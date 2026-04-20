@@ -57,8 +57,13 @@
                             {{-- Tab 1: General Information --}}
                             <div class="tab-pane fade show active" id="general" role="tabpanel">
                                 <div class="form-group mb-4">
-                                    <label for="title" class="font-weight-600">Product Title <span class="text-danger">*</span></label>
-                                    <input type="text" name="title" id="title" class="form-control form-control-lg form-control-border @error('title') is-invalid @enderror" placeholder="Enter product name" value="{{ old('title', $product->title ?? '') }}" required>
+                                    <label for="title" class="font-weight-600"><i class="fas fa-heading mr-1 text-primary"></i> Product Title <span class="text-danger">*</span></label>
+                                    <input type="text" name="title" id="title" class="form-control form-control-lg form-control-border @error('title') is-invalid @enderror" placeholder="Enter product name" value="{{ old('title', $product->title ?? '') }}" required list="product-title-suggestions">
+                                    <datalist id="product-title-suggestions">
+                                        @foreach(\App\Models\Product::select('title')->distinct()->limit(20)->pluck('title') as $title)
+                                            <option value="{{ $title }}">
+                                        @endforeach
+                                    </datalist>
                                     @error('title') <span class="invalid-feedback">{{ $message }}</span> @enderror
                                 </div>
 
