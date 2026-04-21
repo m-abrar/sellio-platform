@@ -30,7 +30,7 @@
         {{-- Premium Filter Card --}}
         <div class="card card-outline card-secondary shadow-sm mb-4">
             <div class="card-body py-3">
-                <form method="GET" action="{{ route('admin.job-applications.index') }}" class="row justify-content-center">
+                <form method="GET" action="{{ route('admin.job-applications.index') }}" class="row align-items-end justify-content-center">
                     <div class="col-auto">
                         <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Job Title</label>
                         <input type="text" name="job_title" class="form-control shadow-xs" placeholder="Search..." value="{{ request('job_title') }}">
@@ -64,10 +64,10 @@
                         </select>
                     </div>
                     <div class="col-auto d-flex align-items-end" style="gap: 8px;">
-                        <button type="submit" class="btn btn-primary font-weight-bold shadow-xs">
+                        <button type="submit" class="btn btn-primary font-weight-bold shadow-xs" style="height: 38px;">
                             <i class="fas fa-filter mr-1"></i> FILTER
                         </button>
-                        <a href="{{ route('admin.job-applications.index') }}" class="btn btn-default font-weight-bold shadow-xs">
+                        <a href="{{ route('admin.job-applications.index') }}" class="btn btn-default font-weight-bold shadow-xs" style="height: 38px;">
                             <i class="fas fa-undo"></i>
                         </a>
                     </div>

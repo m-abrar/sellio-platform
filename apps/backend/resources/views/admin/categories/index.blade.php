@@ -177,25 +177,34 @@
     <script>
         $(function () {
             if ($('#categories-table tbody tr:not(.empty-state)').length > 0) {
-                if ($.fn.DataTable.isDataTable('#categories-table')) {
-                    $('#categories-table').DataTable().destroy();
-                }
-
                 $('#categories-table').DataTable({
-                    "responsive": true,
+                    "paging": true,
+                    "lengthChange": true,
+                    "searching": true,
+                    "ordering": true,
+                    "info": true,
                     "autoWidth": false,
-                    "dom": '<"row px-4 pt-2"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-3"l><"col-sm-12 col-md-3"p>>t<"row px-4 pb-3"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
+                    "responsive": true,
+                    "dom": '<"row px-4 pt-3"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-6"l>>' +
+                           '<"row"<"col-sm-12"tr>>' +
+                           '<"row px-4 pb-3"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
                     "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
                     "order": [[1, "asc"]],
-                    "language": {
-                        "search": "",
-                        "searchPlaceholder": "Filter...",
-                        "lengthMenu": "_MENU_ per page"
-                    },
                     "columnDefs": [
                         { "orderable": false, "targets": [0, 4] }
-                    ]
+                    ],
+                    "language": {
+                        "search": "",
+                        "searchPlaceholder": "Search categories...",
+                        "paginate": {
+                            "previous": "<i class='fas fa-angle-left'></i>",
+                            "next": "<i class='fas fa-angle-right'></i>"
+                        },
+                        "lengthMenu": "_MENU_ per page"
+                    }
                 });
+                $('.dataTables_filter input').addClass('form-control shadow-none border-light').css('width', '250px');
+                $('.dataTables_length select').addClass('form-control form-control-sm shadow-none border-light').css('width', '70px');
             }
             
             $('[data-toggle="tooltip"]').tooltip();

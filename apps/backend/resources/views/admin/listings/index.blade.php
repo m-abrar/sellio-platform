@@ -30,35 +30,32 @@
 
         <div class="row mb-3">
             <div class="col-12">
-                <div class="bg-white rounded shadow-sm p-2 d-flex align-items-center" style="gap: 10px; width: fit-content; border: 1px solid #e9ecef;">
-                    <span class="text-muted font-weight-bold ml-2 mr-1"><i class="fas fa-filter mr-1 text-warning"></i> Status:</span>
-                    <ul class="nav nav-pills">
-                        <li class="nav-item">
-                            <a class="nav-link {{ $status === 'all' ? 'active bg-primary font-weight-bold' : 'text-secondary' }} px-3 py-1 text-sm mr-1" 
-                               href="{{ route(Route::currentRouteName(), ['status' => 'all']) }}">
-                               All
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {{ $status === 'active' ? 'active bg-success font-weight-bold' : 'text-secondary' }} px-3 py-1 text-sm mr-1" 
-                               href="{{ route(Route::currentRouteName(), ['status' => 'active']) }}">
-                               Active
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {{ $status === 'pending' ? 'active bg-warning font-weight-bold' : 'text-secondary' }} px-3 py-1 text-sm mr-1" 
-                               href="{{ route(Route::currentRouteName(), ['status' => 'pending']) }}">
-                               Pending
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {{ $status === 'expired' ? 'active bg-danger font-weight-bold' : 'text-secondary' }} px-3 py-1 text-sm" 
-                               href="{{ route(Route::currentRouteName(), ['status' => 'expired']) }}">
-                               Expired
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+                <ul class="nav nav-pills mb-3 p-1 bg-white shadow-sm rounded-pill" id="statusTabs" role="tablist" style="width: fit-content;">
+                    <li class="nav-item">
+                        <a class="nav-link {{ $status === 'all' ? 'active' : '' }} px-4 py-2 rounded-pill" 
+                           href="{{ route(Route::currentRouteName(), ['status' => 'all']) }}">
+                            <i class="fas fa-list mr-1"></i> All
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ $status === 'active' ? 'active' : '' }} px-4 py-2 rounded-pill" 
+                           href="{{ route(Route::currentRouteName(), ['status' => 'active']) }}">
+                            <i class="fas fa-check-circle mr-1"></i> Active
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ $status === 'pending' ? 'active' : '' }} px-4 py-2 rounded-pill" 
+                           href="{{ route(Route::currentRouteName(), ['status' => 'pending']) }}">
+                            <i class="fas fa-hourglass-start mr-1"></i> Pending
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ $status === 'expired' ? 'active' : '' }} px-4 py-2 rounded-pill" 
+                           href="{{ route(Route::currentRouteName(), ['status' => 'expired']) }}">
+                            <i class="fas fa-calendar-times mr-1"></i> Expired
+                        </a>
+                    </li>
+                </ul>
             </div>
         </div>
 
@@ -239,6 +236,14 @@
             @endif
         </div>
     </div>
+@endsection
+
+@section('css')
+<style>
+    #statusTabs.nav-pills .nav-link { color: #6c757d; font-weight: 500; transition: all 0.3s ease; }
+    #statusTabs.nav-pills .nav-link.active { background-color: var(--primary); color: #fff !important; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    #statusTabs.nav-pills .nav-link:hover:not(.active) { background-color: #f8f9fa; }
+</style>
 @endsection
 
 @section('js')

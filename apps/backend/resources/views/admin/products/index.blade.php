@@ -9,7 +9,7 @@
         <div class="row mb-2">
             <div class="col-sm-6">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-box-open mr-2 text-primary"></i> Inventory & Products
+                    <i class="fas fa-boxes mr-2 text-primary"></i> Inventory & Products
                 </h1>
             </div>
             <div class="col-sm-6 text-right">
@@ -201,14 +201,7 @@
             </div>
         </div>
 
-        @if($products->hasPages())
-            <div class="card-footer bg-white border-0 py-3">
-                <div class="float-right">
-                    {{ $products->appends(request()->query())->links('pagination::bootstrap-4') }}
-                </div>
-            </div>
-        @endif
-    </div>
+        </div>
 </div>
 @endsection
 
@@ -222,12 +215,27 @@
                 $('#products-table').DataTable({
                     "paging": true,
                     "lengthChange": true,
-                    "searching": false, {{-- using custom form --}}
+                    "searching": true,
                     "ordering": true,
                     "info": true,
                     "autoWidth": false,
                     "responsive": true,
+                    "dom": '<"row px-4 pt-3"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-6"l>>' +
+                           '<"row"<"col-sm-12"tr>>' +
+                           '<"row px-4 pb-3"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+                    "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                    "language": {
+                        "search": "",
+                        "searchPlaceholder": "Search products...",
+                        "paginate": {
+                            "previous": "<i class='fas fa-angle-left'></i>",
+                            "next": "<i class='fas fa-angle-right'></i>"
+                        },
+                        "lengthMenu": "_MENU_ per page"
+                    }
                 });
+                $('.dataTables_filter input').addClass('form-control shadow-none border-light').css('width', '250px');
+                $('.dataTables_length select').addClass('form-control form-control-sm shadow-none border-light').css('width', '70px');
             }
         });
     </script>

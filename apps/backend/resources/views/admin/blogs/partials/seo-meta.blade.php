@@ -14,8 +14,8 @@
             <small class="text-muted">Optimal length: 155 characters.</small>
         </div>
 
-        <div class="form-group">
-            <div class="card border shadow-sm" style="border-radius: 8px;">
+        <div class="form-group mb-0">
+            <div class="card border shadow-sm" style="border-radius: 8px; background-color: #f8f9fa;">
                 <div class="card-body py-3">
                     <div class="custom-control custom-switch">
                         <input type="checkbox" name="allow_comments" class="custom-control-input" id="allow_comments" value="1" {{ old('allow_comments', $blog->allow_comments ?? true) ? 'checked' : '' }}>

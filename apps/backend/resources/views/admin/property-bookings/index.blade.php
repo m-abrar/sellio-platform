@@ -29,7 +29,7 @@
         {{-- Premium Filter Card --}}
         <div class="card card-outline card-secondary shadow-sm mb-4">
             <div class="card-body py-3">
-                <form method="GET" action="{{ route('admin.property-bookings.index') }}" class="row justify-content-center">
+                <form method="GET" action="{{ route('admin.property-bookings.index') }}" class="row align-items-end justify-content-center">
                     <div class="col-auto">
                         <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Property</label>
                         <select name="property" class="form-control shadow-xs">
@@ -61,10 +61,10 @@
                         <input type="date" name="end_date" class="form-control shadow-xs" value="{{ request('end_date') }}">
                     </div>
                     <div class="col-auto d-flex align-items-end" style="gap: 8px;">
-                        <button type="submit" class="btn btn-primary font-weight-bold shadow-xs">
+                        <button type="submit" class="btn btn-primary font-weight-bold shadow-xs" style="height: 38px;">
                             <i class="fas fa-filter mr-1"></i> FILTER
                         </button>
-                        <a href="{{ route('admin.property-bookings.index') }}" class="btn btn-default font-weight-bold shadow-xs">
+                        <a href="{{ route('admin.property-bookings.index') }}" class="btn btn-default font-weight-bold shadow-xs" style="height: 38px;">
                             <i class="fas fa-undo"></i>
                         </a>
                     </div>
