@@ -1,6 +1,14 @@
-# Completed Tasks
+# TODO List
 
-All tasks have been completed:
+## New Tasks
+
+- [ ] Title/name field - combine input and select into combobox for bookings pages (events, jobs, services, classifieds)
+- [ ] Attributes pages - move Add New button to right side
+- [ ] Attributes pages - move search to left, per page to right
+- [ ] Fix PHP error on email-templates page
+- [ ] Fix PHP error on tickets page
+
+## Completed
 
 1. Attributes pages - use dataTable pagination (not server-side)
 2. Add icons to labels for: Products, Properties, Autos, Events, Jobs, Services, Classifieds

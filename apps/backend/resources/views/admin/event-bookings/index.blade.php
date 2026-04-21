@@ -32,19 +32,13 @@
             <div class="card-body py-3">
                 <form method="GET" action="{{ route('admin.event-bookings.index') }}" class="row align-items-end justify-content-center">
                     <div class="col-auto">
-                        <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Event Name</label>
-                        <input type="text" name="event_name" class="form-control shadow-xs" placeholder="Search..." value="{{ request('event_name') }}">
-                    </div>
-                    <div class="col-auto">
                         <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Event</label>
-                        <select name="event" class="form-control shadow-xs select2">
-                            <option value="">All</option>
-                            @foreach ($events as $e)
-                                <option value="{{ $e->id }}" {{ request('event') == $e->id ? 'selected' : '' }}>
-                                    {{ $e->title }}
-                                </option>
+                        <input type="text" name="event_name" class="form-control shadow-xs" placeholder="Select or type event..." list="event-suggestions" value="{{ request('event_name') }}">
+                        <datalist id="event-suggestions">
+                            @foreach($events as $e)
+                                <option value="{{ $e->title }}">
                             @endforeach
-                        </select>
+                        </datalist>
                     </div>
                     <div class="col-auto">
                         <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Category</label>

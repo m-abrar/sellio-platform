@@ -32,19 +32,13 @@
             <div class="card-body py-3">
                 <form method="GET" action="{{ route('admin.classified-inquiries.index') }}" class="row align-items-end justify-content-center">
                     <div class="col-auto">
-                        <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Ad Name</label>
-                        <input type="text" name="ad_name" class="form-control shadow-xs" placeholder="Search..." value="{{ request('ad_name') }}">
-                    </div>
-                    <div class="col-auto">
-                        <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Classified Ad</label>
-                        <select name="classifiedad" class="form-control shadow-xs select2">
-                            <option value="">All</option>
-                            @foreach ($classifieds as $c)
-                                <option value="{{ $c->id }}" {{ request('classifiedad') == $c->id ? 'selected' : '' }}>
-                                    {{ $c->title }}
-                                </option>
+                        <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Classified</label>
+                        <input type="text" name="ad_name" class="form-control shadow-xs" placeholder="Select or type ad..." list="classified-suggestions" value="{{ request('ad_name') }}">
+                        <datalist id="classified-suggestions">
+                            @foreach($classifieds as $c)
+                                <option value="{{ $c->title }}">
                             @endforeach
-                        </select>
+                        </datalist>
                     </div>
                     <div class="col-auto">
                         <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Category</label>

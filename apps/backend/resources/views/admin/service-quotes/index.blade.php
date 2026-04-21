@@ -32,19 +32,13 @@
             <div class="card-body py-3">
                 <form method="GET" action="{{ route('admin.service-quotes.index') }}" class="row align-items-end justify-content-center">
                     <div class="col-auto">
-                        <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Service Name</label>
-                        <input type="text" name="service_name" class="form-control shadow-xs" placeholder="Search..." value="{{ request('service_name') }}">
-                    </div>
-                    <div class="col-auto">
                         <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Service</label>
-                        <select name="service" class="form-control shadow-xs select2">
-                            <option value="">All</option>
-                            @foreach ($services as $s)
-                                <option value="{{ $s->id }}" {{ request('service') == $s->id ? 'selected' : '' }}>
-                                    {{ $s->title }}
-                                </option>
+                        <input type="text" name="service_name" class="form-control shadow-xs" placeholder="Select or type service..." list="service-suggestions" value="{{ request('service_name') }}">
+                        <datalist id="service-suggestions">
+                            @foreach($services as $s)
+                                <option value="{{ $s->title }}">
                             @endforeach
-                        </select>
+                        </datalist>
                     </div>
                     <div class="col-auto">
                         <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Category</label>

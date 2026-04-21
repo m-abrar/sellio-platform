@@ -32,19 +32,13 @@
             <div class="card-body py-3">
                 <form method="GET" action="{{ route('admin.job-applications.index') }}" class="row align-items-end justify-content-center">
                     <div class="col-auto">
-                        <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Job Title</label>
-                        <input type="text" name="job_title" class="form-control shadow-xs" placeholder="Search..." value="{{ request('job_title') }}">
-                    </div>
-                    <div class="col-auto">
                         <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Job</label>
-                        <select name="job" class="form-control shadow-xs select2">
-                            <option value="">All</option>
-                            @foreach ($jobs as $j)
-                                <option value="{{ $j->id }}" {{ request('job') == $j->id ? 'selected' : '' }}>
-                                    {{ $j->title }}
-                                </option>
+                        <input type="text" name="job_title" class="form-control shadow-xs" placeholder="Select or type job..." list="job-suggestions" value="{{ request('job_title') }}">
+                        <datalist id="job-suggestions">
+                            @foreach($jobs as $j)
+                                <option value="{{ $j->title }}">
                             @endforeach
-                        </select>
+                        </datalist>
                     </div>
                     <div class="col-auto">
                         <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Category</label>
