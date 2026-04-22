@@ -31,9 +31,7 @@
                     System Email Registry <span class="badge badge-light border ml-2 px-2" style="font-weight: 500;">{{ count($templates) }} Definitions</span>
                 </h3>
                 <div class="card-tools">
-                    <a href="{{ route('admin.email-templates.create') }}" class="btn btn-primary btn-flat shadow-sm px-4 font-weight-bold" style="border-radius: 8px;">
-                        <i class="fas fa-plus-circle mr-1"></i> Add Template
-                    </a>
+                    {{-- Templates are seeded via system migration --}}
                 </div>
             </div>
 
@@ -146,6 +144,10 @@
     /* Action Buttons Style */
     .btn-group-premium .btn { border: 1px solid #e9ecef; background: #fff; padding: 0.25rem 0.75rem; }
     .btn-group-premium .btn:hover { background: #f8f9fa; }
+
+    .dataTables_filter { float: left !important; text-align: left !important; }
+    .dataTables_filter input { margin-left: 0 !important; }
+    .dataTables_length { float: right !important; text-align: right !important; }
 </style>
 @endsection
 

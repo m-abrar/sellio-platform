@@ -33,12 +33,12 @@
                 <form method="GET" action="{{ route('admin.service-bookings.index') }}" class="form-inline flex-wrap gap-2">
                     <div class="form-group mr-2 mb-2">
                         <label class="mr-1 text-muted small">{{ __('Service') }}</label>
-                        <select name="service" class="form-control form-control-sm">
-                            <option value="">{{ __('All Services') }}</option>
+                        <input type="text" name="service_name" class="form-control form-control-sm" placeholder="Select or type service..." list="service-suggestions" value="{{ request('service_name') }}">
+                        <datalist id="service-suggestions">
                             @foreach ($services as $s)
-                                <option value="{{ $s->id }}" {{ request('service') == $s->id ? 'selected' : '' }}>{{ $s->title }}</option>
+                                <option value="{{ $s->title }}">
                             @endforeach
-                        </select>
+                        </datalist>
                     </div>
                     <div class="mb-2">
                         <button type="submit" class="btn btn-primary btn-sm mr-1"><i class="fas fa-filter mr-1"></i> {{ __('Filter') }}</button>

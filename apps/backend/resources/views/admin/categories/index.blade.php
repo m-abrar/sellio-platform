@@ -173,6 +173,15 @@
 </div>
 @endsection
 
+@section('css')
+<style>
+    .dataTables_filter { float: left !important; text-align: left !important; }
+    .dataTables_filter input { margin-left: 0 !important; }
+    .dataTables_length { float: right !important; text-align: right !important; }
+</style>
+@endsection
+
+
 @section('js')
     <script>
         $(function () {
@@ -188,6 +197,7 @@
                     "dom": '<"row px-4 pt-3"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-6"l>>' +
                            '<"row"<"col-sm-12"tr>>' +
                            '<"row px-4 pb-3"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+
                     "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
                     "order": [[1, "asc"]],
                     "columnDefs": [

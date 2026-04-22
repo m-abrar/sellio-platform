@@ -13,9 +13,7 @@
             </h1>
         </div>
         <div class="col-sm-6 text-right">
-            <a href="{{ route('admin.tickets.create') }}" class="btn btn-primary btn-flat shadow-sm px-4 font-weight-bold">
-                <i class="fas fa-plus-circle mr-1"></i> New Ticket
-            </a>
+            {{-- Ticket creation handled via user frontend or support dashboard --}}
         </div>
     </div>
 </div>

@@ -158,7 +158,11 @@
     .btn-group-premium .btn { border: 1px solid #e9ecef; background: #fff; }
     .btn-group-premium .btn:hover { background: #f8f9fa; }
     .font-weight-600 { font-weight: 600 !important; }
+    .dataTables_filter { float: left !important; text-align: left !important; }
+    .dataTables_filter input { margin-left: 0 !important; }
+    .dataTables_length { float: right !important; text-align: right !important; }
 </style>
+
 @endsection
 
 @section('js')

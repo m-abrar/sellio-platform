@@ -32,17 +32,13 @@
             <div class="card-body py-3">
                 <form method="GET" action="{{ route('admin.auto-inquiries.index') }}" class="row align-items-end justify-content-center">
                     <div class="col-auto">
-                        <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Search</label>
-                        <input type="text" name="search" class="form-control shadow-xs" placeholder="Name or Vehicle..." value="{{ request('search') }}">
-                    </div>
-                    <div class="col-auto">
                         <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Vehicle</label>
-                        <select name="auto" class="form-control shadow-xs">
-                            <option value="">All</option>
-                            @foreach ($autos as $a)
-                                <option value="{{ $a->id }}" {{ request('auto') == $a->id ? 'selected' : '' }}>{{ $a->title }}</option>
+                        <input type="text" name="auto_name" class="form-control shadow-xs" placeholder="Select or type vehicle..." list="auto-suggestions" value="{{ request('auto_name') }}">
+                        <datalist id="auto-suggestions">
+                            @foreach($autos as $a)
+                                <option value="{{ $a->title }}">
                             @endforeach
-                        </select>
+                        </datalist>
                     </div>
                     <div class="col-auto">
                         <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Status</label>

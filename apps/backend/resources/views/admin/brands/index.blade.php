@@ -155,6 +155,15 @@
 </div>
 @endsection
 
+@section('css')
+<style>
+    .dataTables_filter { float: left !important; text-align: left !important; }
+    .dataTables_filter input { margin-left: 0 !important; }
+    .dataTables_length { float: right !important; text-align: right !important; }
+</style>
+@endsection
+
+
 @section('js')
     <script>
         $(function () {

@@ -53,7 +53,7 @@
                     </thead>
                     <tbody>
                         @forelse ($subscribers as $subscriber)
-<tr>
+                            <tr>
                                 <td class="align-middle">
                                     <div class="d-flex align-items-center">
                                         <div class="icon-shape mr-3 bg-light border rounded-circle d-flex align-items-center justify-content-center shadow-xs" style="width:40px; height:40px;">
@@ -156,6 +156,10 @@
     /* Action Buttons Style */
     .btn-group-premium .btn { border: 1px solid #e9ecef; background: #fff; }
     .btn-group-premium .btn:hover { background: #f8f9fa; }
+
+    .dataTables_filter { float: left !important; text-align: left !important; }
+    .dataTables_filter input { margin-left: 0 !important; }
+    .dataTables_length { float: right !important; text-align: right !important; }
 </style>
 @endsection
 
@@ -173,7 +177,7 @@
                 "ordering": true,
                 "autoWidth": false,
                 "responsive": true,
-                "dom": '<"row px-4 pt-2"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-3"l>>t',
+                "dom": '<"row px-4 pt-2"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-6"l>>t',
                 "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
                 "language": {
                     "search": "",
