@@ -134,7 +134,12 @@
     .nav-pills-premium { padding: 1px; }
     .nav-pills-premium .nav-link { border-radius: 20px !important; font-size: 0.85rem; color: #6c757d; font-weight: 500; transition: all 0.3s ease; }
     .nav-pills-premium .nav-link.active { background-color: #007bff !important; color: #fff !important; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+
+    .dataTables_filter { float: left !important; text-align: left !important; }
+    .dataTables_filter input { margin-left: 0 !important; }
+    .dataTables_length { float: right !important; text-align: right !important; }
 </style>
+
 @stop
 
 @section('js')

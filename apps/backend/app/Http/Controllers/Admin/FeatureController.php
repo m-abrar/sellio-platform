@@ -49,7 +49,8 @@ class FeatureController extends Controller
      */
     public function create(): View
     {
-        return view('admin.features.form');
+        $feature = new Feature();
+        return view('admin.features.form', compact('feature'));
     }
 
     /**

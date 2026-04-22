@@ -112,31 +112,39 @@
                                     </td>
                                     <td class="align-middle">
                                         <div class="d-flex align-items-center">
-                                            <div class="avatar-xs mr-2 bg-light rounded-circle text-center border shadow-xs" style="width:28px; height:28px; line-height:26px;">
+                                            <div class="avatar-xs mr-2 bg-light rounded-circle text-center border shadow-xs" style="width:32px; height:32px; line-height:30px;">
                                                 <i class="fas fa-user text-muted text-xs"></i>
                                             </div>
                                             <div>
                                                 <span class="d-block font-weight-bold text-dark mb-0">{{ $order->user->name ?? 'N/A' }}</span>
                                                 <div class="text-xs text-muted">
-                                                    {{ $order->user->email ?? '' }}
-                                                    <span class="mx-1">|</span>
-                                                    ID: #{{ $order->user_id }}
+                                                    <a href="mailto:{{ $order->user->email ?? '' }}" class="text-info">{{ $order->user->email ?? '' }}</a>
+                                                    @if($order->user->phone)
+                                                        <span class="mx-1">|</span>
+                                                        <i class="fas fa-phone-alt mr-1 text-xs"></i>{{ $order->user->phone }}
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="align-middle">
-                                        <div class="font-weight-bold">${{ number_format($order->total_amount, 2) }}</div>
+                                        <div class="font-weight-bold text-lg text-primary">${{ number_format($order->total_amount, 2) }}</div>
                                         @if($firstItem)
-                                            <div class="text-xs text-muted mt-1">
-                                                {{ $firstItem->quantity }} x ${{ number_format($firstItem->unit_price, 2) }}
-                                                @if($firstItem->selected_attributes && is_array($firstItem->selected_attributes))
-                                                    <br>
-                                                    <span class="text-info">
-                                                        @foreach($firstItem->selected_attributes as $key => $value)
-                                                            {{ $key }}: {{ is_array($value) ? implode(', ', $value) : $value }}@if(!$loop->last), @endif
+                                            <div class="text-xs text-muted mt-1 bg-light p-1 rounded border shadow-none" style="width: fit-content;">
+                                                <span class="font-weight-bold">{{ $firstItem->quantity }}</span> x ${{ number_format($firstItem->unit_price, 2) }}
+                                                @php
+                                                    $attributes = $firstItem->selected_attributes;
+                                                    if (is_string($attributes)) {
+                                                        $attributes = json_decode($attributes, true) ?: [];
+                                                    }
+                                                @endphp
+                                                @if(is_array($attributes) && count($attributes) > 0)
+                                                    <div class="mt-1 border-top pt-1">
+                                                        @foreach($attributes as $key => $value)
+                                                            <span class="text-secondary font-weight-600">{{ ucfirst($key) }}:</span> 
+                                                            <span class="text-dark">{{ is_array($value) ? implode(', ', $value) : $value }}</span>@if(!$loop->last) <span class="mx-1">|</span> @endif
                                                         @endforeach
-                                                    </span>
+                                                    </div>
                                                 @endif
                                             </div>
                                         @endif

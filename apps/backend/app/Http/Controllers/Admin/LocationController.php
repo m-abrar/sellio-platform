@@ -49,7 +49,8 @@ class LocationController extends Controller
      */
     public function create(): View
     {
-        return view('admin.locations.form');
+        $location = new Location();
+        return view('admin.locations.form', compact('location'));
     }
 
     /**

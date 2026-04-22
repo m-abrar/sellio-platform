@@ -49,7 +49,8 @@ class TagController extends Controller
      */
     public function create(): View
     {
-        return view('admin.tags.form');
+        $tag = new Tag();
+        return view('admin.tags.form', compact('tag'));
     }
 
     /**

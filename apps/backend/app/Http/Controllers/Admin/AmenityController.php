@@ -49,7 +49,8 @@ class AmenityController extends Controller
      */
     public function create(): View
     {
-        return view('admin.amenities.form');
+        $amenity = new Amenity();
+        return view('admin.amenities.form', compact('amenity'));
     }
 
     /**

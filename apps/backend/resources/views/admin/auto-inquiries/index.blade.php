@@ -33,7 +33,7 @@
                 <form method="GET" action="{{ route('admin.auto-inquiries.index') }}" class="row align-items-end justify-content-center">
                     <div class="col-auto">
                         <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Vehicle</label>
-                        <input type="text" name="auto_name" class="form-control shadow-xs" placeholder="Select or type vehicle..." list="auto-suggestions" value="{{ request('auto_name') }}">
+                        <input type="text" name="search" class="form-control shadow-xs" placeholder="Select or type vehicle..." list="auto-suggestions" value="{{ request('search') }}">
                         <datalist id="auto-suggestions">
                             @foreach($autos as $a)
                                 <option value="{{ $a->title }}">
@@ -135,4 +135,46 @@
             </div>
         </div>
     </div>
+@stop
+
+@section('css')
+<style>
+    .dataTables_filter { float: left !important; text-align: left !important; }
+    .dataTables_filter input { margin-left: 0 !important; }
+    .dataTables_length { float: right !important; text-align: right !important; }
+</style>
+@endsection
+
+@section('js')
+<script>
+    $(document).ready(function() {
+        if ($('#inquiries-table tbody tr:not(.empty-state)').length > 0) {
+            $('#inquiries-table').DataTable({
+                "paging": true,
+                "lengthChange": true,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": true,
+                "dom": '<"row px-4 pt-3"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-6"l>>' +
+                       '<"row"<"col-sm-12"tr>>' +
+                       '<"row px-4 pb-3"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+                "language": {
+                    "search": "",
+                    "searchPlaceholder": "Search inquiries...",
+                    "paginate": {
+                        "previous": "<i class='fas fa-angle-left'></i>",
+                        "next": "<i class='fas fa-angle-right'></i>"
+                    }
+                }
+            });
+            $('.dataTables_filter input').addClass('form-control shadow-none border-light').css('width', '250px');
+        }
+        $('.select2').select2({
+            theme: 'bootstrap4',
+            placeholder: 'Select an option'
+        });
+    });
+</script>
 @stop

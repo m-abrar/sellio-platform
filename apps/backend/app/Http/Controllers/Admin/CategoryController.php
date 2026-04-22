@@ -50,8 +50,9 @@ class CategoryController extends Controller
      */
     public function create(): View
     {
+        $category = new Category();
         $categories = Category::orderBy('title')->get();
-        return view('admin.categories.form', compact('categories'));
+        return view('admin.categories.form', compact('category', 'categories'));
     }
 
     /**
