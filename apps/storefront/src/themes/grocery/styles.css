@@ -1,0 +1,61 @@
+.grocery-theme {
+  --groc-primary: #2d6a4f;
+  --groc-secondary: #95d5b2;
+  --groc-bg: #ffffff;
+  --groc-text: #1b4332;
+  --groc-light: #f8fdfa;
+  
+  background-color: var(--groc-bg);
+  color: var(--groc-text);
+  font-family: 'Outfit', sans-serif;
+  min-height: 100vh;
+}
+
+.grocery-header {
+  padding: 1rem 10%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #edf7f1;
+}
+
+.grocery-logo {
+  font-weight: 700;
+  color: var(--groc-primary);
+  font-size: 1.5rem;
+}
+
+.grocery-hero {
+  padding: 5rem 10%;
+  background-color: var(--groc-light);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+.grocery-badge {
+  background: var(--groc-secondary);
+  color: var(--groc-primary);
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  display: inline-block;
+  margin-bottom: 1.5rem;
+}
+
+.grocery-btn {
+  background: var(--groc-primary);
+  color: white;
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.grocery-btn:hover {
+  transform: translateY(-2px);
+}

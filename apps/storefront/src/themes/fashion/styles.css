@@ -1,0 +1,76 @@
+.fashion-theme {
+  --fashion-bg: #ffffff;
+  --fashion-text: #1a1a1a;
+  --fashion-accent: #000000;
+  --fashion-muted: #f4f4f4;
+  --fashion-font-serif: 'Playfair Display', serif;
+  --fashion-font-sans: 'Inter', sans-serif;
+  
+  background-color: var(--fashion-bg);
+  color: var(--fashion-text);
+  font-family: var(--fashion-font-sans);
+  min-height: 100vh;
+}
+
+.fashion-theme h1, 
+.fashion-theme h2, 
+.fashion-theme h3 {
+  font-family: var(--fashion-font-serif);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 400;
+}
+
+.fashion-header {
+  padding: 2rem 5%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+}
+
+.fashion-nav a {
+  margin-left: 2rem;
+  text-decoration: none;
+  color: inherit;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.fashion-hero {
+  position: relative;
+  height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.fashion-hero-content {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  color: white;
+  padding: 2rem;
+}
+
+.fashion-hero-content h1 {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.fashion-btn {
+  background: black;
+  color: white;
+  padding: 1rem 2.5rem;
+  border: none;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.fashion-btn:hover {
+  background: #333;
+}

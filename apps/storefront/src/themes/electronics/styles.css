@@ -1,0 +1,63 @@
+.electronics-theme {
+  --elec-bg: #050505;
+  --elec-text: #ffffff;
+  --elec-accent: #00f2ff;
+  --elec-accent-glow: rgba(0, 242, 255, 0.5);
+  --elec-glass: rgba(255, 255, 255, 0.05);
+  --elec-glass-border: rgba(255, 255, 255, 0.1);
+  
+  background-color: var(--elec-bg);
+  color: var(--elec-text);
+  font-family: 'Orbitron', sans-serif;
+  min-height: 100vh;
+}
+
+.electronics-header {
+  padding: 1.5rem 5%;
+  background: var(--elec-glass);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--elec-glass-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.electronics-logo {
+  font-weight: 900;
+  color: var(--elec-accent);
+  text-shadow: 0 0 10px var(--elec-accent-glow);
+  font-size: 1.5rem;
+}
+
+.electronics-hero {
+  height: 90vh;
+  display: flex;
+  align-items: center;
+  background-size: cover;
+  background-position: center;
+}
+
+.electronics-glass-card {
+  background: var(--elec-glass);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--elec-glass-border);
+  padding: 3rem;
+  border-radius: 20px;
+  max-width: 600px;
+  margin-left: 5%;
+}
+
+.electronics-btn {
+  background: var(--elec-accent);
+  color: black;
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  text-transform: uppercase;
+  box-shadow: 0 0 20px var(--elec-accent-glow);
+  cursor: pointer;
+}
