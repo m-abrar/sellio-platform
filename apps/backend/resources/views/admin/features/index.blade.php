@@ -14,10 +14,11 @@
                 </h1>
             </div>
             <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Features</li>
-                </ol>
+                <div class="float-sm-right">
+                    <a href="{{ route('admin.features.create') }}" class="btn btn-primary btn-flat shadow-sm px-4 text-white font-weight-bold">
+                        <i class="fas fa-plus-circle mr-1"></i> Add Feature
+                    </a>
+                </div>
             </div>
         </div>
     </div>
@@ -30,9 +31,6 @@
     <div class="card card-primary card-outline shadow-sm">
         <div class="card-header border-0 bg-white py-3 d-flex justify-content-between align-items-center">
             <h3 class="card-title font-weight-600 text-muted mb-0">Management of Listing Features</h3>
-            <a href="{{ route('admin.features.create') }}" class="btn btn-primary btn-flat shadow-sm px-4">
-                <i class="fas fa-plus-circle mr-1"></i> Add Feature
-            </a>
         </div>
         
         <div class="card-body p-0">
