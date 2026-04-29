@@ -1,0 +1,19 @@
+{
+  "name": "sellio-platform",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Multi-platform e-commerce and vertical marketplace engine",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:storefront": "npm run dev --workspace=apps/storefront",
+    "dev:seller": "npm run dev --workspace=apps/seller",
+    "build:all": "npm run build --workspaces",
+    "lint:all": "npm run lint --workspaces"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

@@ -1,25 +1,55 @@
-export type ThemeKey = 'fashion' | 'electronics' | 'grocery';
+import { Theme } from "@sellio/types";
 
-export interface ThemeConfig {
-  key: ThemeKey;
-  name: string;
+export type IndustryLayout = 'fashion' | 'electronics' | 'grocery';
+
+export interface ResolvedTheme {
+  theme: Theme;
+  layout: IndustryLayout;
 }
 
-// In a real application, this would come from an environment variable, 
-// a database setting via API, or a subdomain check.
-export const activeTheme: ThemeKey = (process.env.NEXT_PUBLIC_THEME as ThemeKey) || 'fashion';
+/**
+ * Resolves a database theme key to one of our 3 core industry layouts.
+ * This is the "Mapping Logic" that connects the backend seeders to the frontend designs.
+ */
+export function resolveIndustryLayout(themeKey: string): IndustryLayout {
+  const key = themeKey.toLowerCase();
+  
+  // Pattern matching for industry resolution
+  if (key.includes('fashion') || key.includes('luxury') || key.includes('properties_classic')) {
+    return 'fashion';
+  }
+  
+  if (key.includes('tech') || key.includes('electronics') || key.includes('autos') || key.includes('modern')) {
+    return 'electronics';
+  }
+  
+  if (key.includes('grocery') || key.includes('fresh') || key.includes('bakery')) {
+    return 'grocery';
+  }
 
-export const themes: Record<ThemeKey, ThemeConfig> = {
-  fashion: {
-    key: 'fashion',
-    name: 'LeBrince Fashion',
-  },
-  electronics: {
-    key: 'electronics',
-    name: 'Sellio Tech',
-  },
-  grocery: {
-    key: 'grocery',
-    name: 'FreshMarket',
-  },
-};
+  // Fallback to fashion for high-contrast default or you could add a 'unified' layout
+  return 'fashion'; 
+}
+
+/**
+ * Mocking a dynamic fetch for now, but this would use the @sellio/api-client
+ */
+export async function getActiveTheme(keyFromUrl?: string): Promise<ResolvedTheme> {
+  // In a real app, we fetch from API: await api.getTheme(keyFromUrl || 'unifieds_default')
+  
+  // For demonstration, we simulate the DB record that matches the Seeder
+  const mockDbTheme: Theme = {
+    id: 1,
+    theme_key: keyFromUrl || 'ecommerce_fashion',
+    title: 'Dynamic Theme from DB',
+    is_active: true,
+    variables: {
+      "--fashion-accent": "#ff0000", // Dynamic override example
+    }
+  };
+
+  return {
+    theme: mockDbTheme,
+    layout: resolveIndustryLayout(mockDbTheme.theme_key)
+  };
+}
