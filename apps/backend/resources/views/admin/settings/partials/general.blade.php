@@ -8,25 +8,27 @@
         enctype="multipart/form-data">
         @csrf
 
-        <div class="card shadow-sm border-0">
-            <div class="card-header bg-white py-3">
-                <h3 class="card-title font-weight-bold text-dark">{{ __('Identity & Localization') }}</h3>
+        <div class="card border-0 shadow-premium">
+            <div class="card-header bg-white py-4 px-4 border-0">
+                <h3 class="card-title font-weight-bold text-dark mb-0">{{ __('Identity & Localization') }}</h3>
+                <p class="text-muted small mb-0 mt-1">Configure your marketplace name, branding, and regional preferences.</p>
             </div>
-            <div class="card-body">
+            <div class="card-body px-4 pb-4">
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label class="small font-weight-bold">{{ __('Site Name') }}</label>
+                            <label class="small font-weight-bold text-uppercase text-secondary mb-2" style="letter-spacing: 0.5px;">{{ __('Site Name') }}</label>
                             <div class="input-group">
-                                <div class="input-group-prepend"><span class="input-group-text bg-light"><i
-                                            class="fas fa-globe"></i></span></div>
-                                <input type="text" name="site_name" class="form-control"
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text bg-light border-right-0"><i class="fas fa-globe text-primary"></i></span>
+                                </div>
+                                <input type="text" name="site_name" class="form-control border-left-0" style="border-radius: 0 10px 10px 0;"
                                     value="{{ old('site_name', $settings['site_name'] ?? '') }}">
                             </div>
-                            <div class="custom-control custom-checkbox mt-2">
+                            <div class="custom-control custom-checkbox mt-3">
                                 <input type="checkbox" name="hide_site_name" class="custom-control-input" id="hideSiteName"
                                     value="1" {{ (old('hide_site_name', $settings['hide_site_name'] ?? '0') == '1') ? 'checked' : '' }}>
-                                <label class="custom-control-label small text-muted" for="hideSiteName">
+                                <label class="custom-control-label small text-muted font-weight-500" for="hideSiteName">
                                     {{ __('Hide Company Name text in header (if logo is present)') }}
                                 </label>
                             </div>
@@ -34,18 +36,16 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label class="small font-weight-bold">{{ __('Site Tagline') }}</label>
-                            <input type="text" name="site_tagline" class="form-control"
+                            <label class="small font-weight-bold text-uppercase text-secondary mb-2" style="letter-spacing: 0.5px;">{{ __('Site Tagline') }}</label>
+                            <input type="text" name="site_tagline" class="form-control" style="border-radius: 10px;"
                                 value="{{ old('site_tagline', $settings['site_tagline'] ?? '') }}">
                         </div>
                     </div>
                 </div>
 
-                <hr class="my-4">
-
-                <div class="row">
-                    <div class="col-md-6 text-center border-right">
-                        <label class="d-block small font-weight-bold mb-3">{{ __('Main Brand Logo') }}</label>
+                <div class="row mt-4 pt-4 border-top">
+                    <div class="col-md-6 text-center border-right border-light">
+                        <label class="d-block small font-weight-bold text-uppercase text-secondary mb-3" style="letter-spacing: 0.5px;">{{ __('Main Brand Logo') }}</label>
                         
                         <div x-data="{ 
                             imageUrl: '{{ isset($settings['site_logo']) ? asset('storage/' . $settings['site_logo']) : '' }}',
@@ -68,32 +68,35 @@
                         @dragover.prevent="dragover = true" 
                         @dragleave.prevent="dragover = false" 
                         @drop.prevent="handleDrop($event)"
-                        class="dropzone-wrapper move-pointer mb-3 p-3 rounded"
-                        :class="dragover ? 'dropzone-dragover' : 'bg-light border-dashed'">
+                        class="dropzone-wrapper move-pointer mb-3 p-4 rounded-xl"
+                        style="border-radius: 20px; border: 2px dashed #e2e8f0; transition: all 0.3s ease;"
+                        :class="dragover ? 'bg-primary-soft border-primary' : 'bg-light'">
                             
                             <div class="preview-container d-flex flex-column align-items-center justify-content-center" 
-                                 style="min-height: 120px;" 
+                                 style="min-height: 140px;" 
                                  @click="$refs.logoInput.click()">
                                 <template x-if="imageUrl">
-                                    <img :src="imageUrl" class="img-fluid drop-shadow-sm mb-2" style="max-height: 70px;" alt="Logo Preview">
+                                    <img :src="imageUrl" class="img-fluid drop-shadow-sm mb-3" style="max-height: 80px;" alt="Logo Preview">
                                 </template>
                                 <template x-if="!imageUrl">
                                     <div class="text-center py-2">
-                                        <i class="fas fa-cloud-upload-alt fa-2x text-muted opacity-50 mb-2"></i>
-                                        <p class="text-muted small mb-0">{{ __('Drag & Drop Logo here') }}</p>
+                                        <div class="icon-circle bg-white shadow-xs mx-auto mb-3" style="width: 60px; height: 60px; border-radius: 50%;">
+                                            <i class="fas fa-cloud-upload-alt text-primary fa-lg"></i>
+                                        </div>
+                                        <p class="text-dark font-weight-bold mb-1">{{ __('Upload Platform Logo') }}</p>
+                                        <p class="text-muted small mb-0">{{ __('SVG, PNG or JPG (Max 2MB)') }}</p>
                                     </div>
                                 </template>
 
-                                <div class="mt-2">
-                                    <span class="btn btn-xs btn-outline-primary px-3 rounded-pill shadow-xs">
-                                        <i class="fas fa-folder-open mr-1"></i> {{ __('Choose File') }}
+                                <div class="mt-3">
+                                    <span class="btn btn-sm btn-white rounded-pill px-4 font-weight-bold shadow-xs border">
+                                        <i class="fas fa-search mr-1 text-primary"></i> {{ __('Browse Files') }}
                                     </span>
                                 </div>
                             </div>
                             
                             <input type="file" name="site_logo" x-ref="logoInput" class="d-none" @change="handleFile($event)" accept="image/*">
                         </div>
-                        <p class="text-muted smallest mt-n1">{{ __('Or') }} <a href="javascript:void(0)" @click="$refs.logoInput.click()" class="text-primary font-weight-bold">{{ __('Browse') }}</a> {{ __('to upload logo') }}</p>
                     </div>
 
                     <div class="col-md-6 text-center"
@@ -115,47 +118,46 @@
                                 this.dragover = false;
                             }
                         }">
-                        <label class="d-block small font-weight-bold mb-3">{{ __('Browser Favicon') }}</label>
+                        <label class="d-block small font-weight-bold text-uppercase text-secondary mb-3" style="letter-spacing: 0.5px;">{{ __('Browser Favicon') }}</label>
                         
                         <div @dragover.prevent="dragover = true" 
                              @dragleave.prevent="dragover = false" 
                              @drop.prevent="handleDrop($event)"
                              @click="$refs.faviconInput.click()"
-                             class="dropzone-wrapper move-pointer mb-3 p-3 rounded mx-auto"
-                             :class="dragover ? 'dropzone-dragover' : 'bg-light border-dashed'"
-                             style="width: 140px;">
+                             class="dropzone-wrapper move-pointer mb-3 p-4 rounded-xl mx-auto"
+                             style="width: 180px; border-radius: 20px; border: 2px dashed #e2e8f0; transition: all 0.3s ease;"
+                             :class="dragover ? 'bg-info-soft border-info' : 'bg-light'">
                             
-                            <div class="preview-container d-flex flex-column align-items-center justify-content-center" style="height: 100px;">
+                            <div class="preview-container d-flex flex-column align-items-center justify-content-center" style="height: 140px;">
                                 <template x-if="imageUrl">
-                                    <img :src="imageUrl" width="48" height="48" class="drop-shadow-sm" alt="Favicon Preview">
+                                    <img :src="imageUrl" width="56" height="56" class="drop-shadow-sm rounded shadow-xs" alt="Favicon Preview">
                                 </template>
                                 <template x-if="!imageUrl">
                                     <div class="text-center">
-                                        <i class="fas fa-icons fa-lg text-muted opacity-50 mb-1"></i>
-                                        <p class="text-muted smallest mb-0">{{ __('Drop Icon') }}</p>
+                                        <div class="icon-circle bg-white shadow-xs mx-auto mb-3" style="width: 50px; height: 50px; border-radius: 50%;">
+                                            <i class="fas fa-icons text-info"></i>
+                                        </div>
+                                        <p class="text-dark font-weight-bold mb-1" style="font-size: 0.8rem;">{{ __('Favicon') }}</p>
                                     </div>
                                 </template>
 
-                                <div class="mt-2">
-                                    <span class="btn btn-xs btn-outline-info px-2 rounded-pill shadow-xs" style="font-size: 10px;">
-                                        <i class="fas fa-search mr-1"></i> {{ __('Browse') }}
+                                <div class="mt-3">
+                                    <span class="btn btn-xs btn-white rounded-pill px-3 font-weight-bold shadow-xs border">
+                                        {{ __('Browse') }}
                                     </span>
                                 </div>
                             </div>
                             
                             <input type="file" name="site_favicon" x-ref="faviconInput" class="d-none" @change="handleFile($event)" accept="image/*">
                         </div>
-                        <p class="text-muted smallest mt-1"><a href="javascript:void(0)" @click="$refs.faviconInput.click()" class="text-info font-weight-bold">{{ __('Browse') }}</a> {{ __('for favicon') }}</p>
                     </div>
                 </div>
 
-                <hr class="my-4">
-
-                <div class="row">
+                <div class="row mt-4 pt-4 border-top">
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label class="small font-weight-bold">{{ __('Default Language') }}</label>
-                            <select name="default_language" class="form-control select2">
+                            <label class="small font-weight-bold text-uppercase text-secondary mb-2">{{ __('Default Language') }}</label>
+                            <select name="default_language" class="form-control select2 shadow-xs">
                                 @foreach(['en' => 'English', 'fr' => 'French', 'es' => 'Spanish'] as $code => $label)
                                     <option value="{{ $code }}" {{ (old('default_language', $settings['default_language'] ?? '') == $code) ? 'selected' : '' }}>{{ $label }}</option>
                                 @endforeach
@@ -164,115 +166,107 @@
                     </div>
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label class="small font-weight-bold">{{ __('Timezone') }}</label>
+                            <label class="small font-weight-bold text-uppercase text-secondary mb-2">{{ __('Timezone') }}</label>
                             <input type="text" name="timezone" class="form-control"
                                 value="{{ old('timezone', $settings['timezone'] ?? 'UTC') }}">
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label class="small font-weight-bold">{{ __('Currency Symbol') }}</label>
+                            <label class="small font-weight-bold text-uppercase text-secondary mb-2">{{ __('Currency Symbol') }}</label>
                             <input type="text" name="currency_symbol" class="form-control"
                                 value="{{ old('currency_symbol', $settings['currency_symbol'] ?? '$') }}">
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label class="small font-weight-bold">{{ __('Currency Code') }}</label>
-                            <div class="input-group-append">
-                                <input type="text" name="currency_code" class="form-control"
-                                    value="{{ old('currency_code', $settings['currency_code'] ?? 'USD') }}">
-                            </div>
+                            <label class="small font-weight-bold text-uppercase text-secondary mb-2">{{ __('Currency Code') }}</label>
+                            <input type="text" name="currency_code" class="form-control"
+                                value="{{ old('currency_code', $settings['currency_code'] ?? 'USD') }}">
                         </div>
                     </div>
                 </div>
 
-                <hr class="my-4">
-
-                <div class="row">
+                <div class="row mt-4 pt-4 border-top">
                     <div class="col-md-12 mb-3">
-                        <h5 class="font-weight-bold text-secondary small text-uppercase"><i class="fas fa-link mr-1"></i>
-                            {{ __('External Application URLs') }}</h5>
+                        <h5 class="font-weight-bold text-dark text-uppercase small" style="letter-spacing: 1px;"><i class="fas fa-link mr-2 text-primary"></i>
+                            {{ __('Platform Ecosystem URLs') }}</h5>
                         <p class="text-muted small">
-                            {{ __('Configure absolute domains or paths to direct users to separate React/subdomain portals accurately.') }}
+                            {{ __('Configure the absolute domains for your distributed application components.') }}
                         </p>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label class="small font-weight-bold">{{ __('Frontend / Public URL') }}</label>
+                            <label class="small font-weight-bold text-secondary">{{ __('Public Storefront URL') }}</label>
                             <input type="url" name="url_frontend" class="form-control"
                                 value="{{ old('url_frontend', $settings['url_frontend'] ?? 'http://127.0.0.1:8000') }}">
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label class="small font-weight-bold">{{ __('Backend / Admin URL') }}</label>
+                            <label class="small font-weight-bold text-secondary">{{ __('Admin Control Panel URL') }}</label>
                             <input type="url" name="url_admin" class="form-control"
                                 value="{{ old('url_admin', $settings['url_admin'] ?? 'http://127.0.0.1:8000/admin') }}">
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label class="small font-weight-bold">{{ __('Partner / Seller Portal URL') }}</label>
+                            <label class="small font-weight-bold text-secondary">{{ __('Partner Portal URL') }}</label>
                             <input type="url" name="url_partner" class="form-control"
-                                placeholder="https://sellers.example.com"
+                                placeholder="https://sellers.lebrince.com"
                                 value="{{ old('url_partner', $settings['url_partner'] ?? '') }}">
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label class="small font-weight-bold">{{ __('User / Buyer Portal URL') }}</label>
+                            <label class="small font-weight-bold text-secondary">{{ __('Customer App URL') }}</label>
                             <input type="url" name="url_user" class="form-control"
-                                placeholder="https://app.example.com"
+                                placeholder="https://app.lebrince.com"
                                 value="{{ old('url_user', $settings['url_user'] ?? '') }}">
                         </div>
                     </div>
                 </div>
 
-                <hr class="my-4">
-
-                <div class="row">
+                <div class="row mt-4 pt-4 border-top">
                     <div class="col-md-12 mb-3">
                         <div class="form-group">
                             <label class="small font-weight-bold d-block mb-1 text-uppercase text-secondary"
-                                style="letter-spacing: 0.5px;">{{ __('Built-in Public Website') }}</label>
+                                style="letter-spacing: 0.5px;">{{ __('Built-in Website Accessibility') }}</label>
                             <p class="text-muted small mb-3">
-                                {{ __('Control whether visitors can access the built-in Laravel pages. Disable this if you are using a separate React frontend to avoid duplicate public pages.') }}
+                                {{ __('Determine if visitors can access the standard Laravel storefront pages.') }}
                             </p>
                             <select name="built_in_website_status" class="form-control select2 shadow-xs">
                                 <option value="active" {{ (old('built_in_website_status', $settings['built_in_website_status'] ?? 'active') == 'active') ? 'selected' : '' }}>
-                                    <i class="fas fa-check-circle mr-1"></i>
-                                    {{ __('Active (Built-in Website is Accessible)') }}
+                                    {{ __('Full Access (Standard Laravel Front)') }}
                                 </option>
                                 <option value="redirect" {{ (old('built_in_website_status', $settings['built_in_website_status'] ?? 'active') == 'redirect') ? 'selected' : '' }}>
-                                    <i class="fas fa-external-link-alt mr-1"></i>
-                                    {{ __('Smart Redirect (Sends Users to their assigned Dashboards)') }}
+                                    {{ __('Intelligent Redirect (Sends Users to their Portals)') }}
                                 </option>
                             </select>
                         </div>
                     </div>
 
                     <div class="col-md-12 mt-2">
-                        <div class="form-group">
-                            <div class="custom-control custom-checkbox">
+                        <div class="bg-light p-3 rounded-xl border">
+                            <div class="custom-control custom-switch">
                                 <input type="hidden" name="frontend_edit" value="0">
                                 <input type="checkbox" name="frontend_edit" class="custom-control-input" id="frontendEdit"
                                     value="1" {{ (old('frontend_edit', $settings['frontend_edit'] ?? '0') == '1') ? 'checked' : '' }}>
                                 <label class="custom-control-label font-weight-bold text-dark" for="frontendEdit">
-                                    {{ __('Enable Frontend Editing') }}
+                                    {{ __('Enable In-Context Frontend Editing') }}
                                 </label>
-                                <small class="form-text text-muted">
-                                    {{ __('Allow administrators to edit content directly from the public-facing website.') }}
-                                </small>
+                                <p class="text-muted small mb-0 mt-1">
+                                    {{ __('Allows super-admins to modify page content directly from the public storefront while logged in.') }}
+                                </p>
                             </div>
                         </div>
                     </div>
                 </div>
 
             </div>
-            <div class="card-footer bg-white text-right">
-                <button type="submit" class="btn btn-primary px-4 shadow-sm font-weight-bold">
-                    <i class="fas fa-save mr-1"></i> {{ __('Save Changes') }}
+            <div class="card-footer bg-light py-4 px-4 border-0 text-right">
+                <button type="submit" class="btn btn-primary btn-lg rounded-pill px-5 shadow-lg font-weight-bold">
+                    <i class="fas fa-save mr-2"></i> {{ __('Save Configuration') }}
                 </button>
             </div>
         </div>
@@ -281,26 +275,24 @@
 
 @push('css')
 <style>
-    .border-dashed { border: 2px dashed #dee2e6 !important; }
-    .dropzone-wrapper { 
-        cursor: pointer; 
-        transition: all 0.3s ease; 
-        position: relative;
-        border: 2px dashed #cbd5e0;
-    }
+    .rounded-xl { border-radius: 16px !important; }
     .dropzone-wrapper:hover { 
-        border-color: #007bff; 
-        background-color: #f8fbff !important;
-        transform: translateY(-2px);
+        border-color: var(--primary) !important; 
+        background-color: var(--primary-soft) !important;
+        transform: translateY(-3px);
+        box-shadow: var(--premium-shadow);
     }
-    .dropzone-dragover { 
-        border-color: #007bff !important; 
-        background-color: #e7f3ff !important; 
-        box-shadow: 0 0 0 4px rgba(0,123,255,0.1);
+    .form-control {
+        height: 48px;
+        padding: 10px 16px;
+        border-radius: 10px;
+        border: 1px solid #e2e8f0;
+        transition: all 0.3s ease;
     }
-    .move-pointer { cursor: pointer; }
-    .smallest { font-size: 0.75rem; }
-    .drop-shadow-sm { filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
-    .transition-all { transition: all 0.2s ease-in-out; }
+    .form-control:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 4px var(--primary-soft);
+        background: #fff;
+    }
 </style>
 @endpush

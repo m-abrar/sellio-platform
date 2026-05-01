@@ -157,28 +157,10 @@
 
 @section('css')
 <style>
-    /* Premium Blueprint Styles */
-    .table-premium thead th { border-top: none; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px; color: #6c757d; }
-    .shadow-xs { box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
-    .text-monospace { font-family: monospace; }
-    .font-weight-600 { font-weight: 600 !important; }
-
-    /* Identity Specifics */
-    .badge-info-light { background-color: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
-    .badge-success-light { background-color: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; }
-    .badge-warning-light { background-color: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
-    .badge-primary-light { background-color: #dbeafe; color: #1e3a8a; border: 1px solid #bfdbfe; }
+    /* User Identity Specifics */
     .avatar-wrapper img { transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
     .avatar-wrapper img:hover { transform: scale(1.15); z-index: 10; position: relative; }
-
-    /* Action Buttons Style */
-    .btn-group-premium .btn { border: 1px solid #e9ecef; background: #fff; padding: 0.25rem 0.75rem; }
-    .btn-group-premium .btn:hover { background: #f8f9fa; }
-    .dataTables_filter { float: left !important; text-align: left !important; }
-    .dataTables_filter input { margin-left: 0 !important; }
-    .dataTables_length { float: right !important; text-align: right !important; }
 </style>
-
 @endsection
 
 @section('js')

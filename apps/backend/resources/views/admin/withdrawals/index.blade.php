@@ -1,20 +1,20 @@
 @extends('adminlte::page')
 
-@section('title', 'Withdrawals: ' . ucfirst($filter_status))
+@section('title', 'Payout Management | Financials')
 
 @section('plugins.Datatables', true)
 
 @section('content_header')
     <div class="container-fluid">
-        <div class="row mb-2">
+        <div class="row mb-4 align-items-end">
             <div class="col-sm-6">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-hand-holding-usd mr-2 text-primary"></i> Payout Requests
-                    <small class="text-muted text-sm ml-2 font-weight-normal">({{ ucfirst($filter_status) }})</small>
+                    <i class="fas fa-hand-holding-usd mr-2 text-primary"></i> Payout Management
                 </h1>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Review and process fund withdrawal requests from marketplace partners.</p>
             </div>
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
+            <div class="col-sm-6 text-right">
+                <ol class="breadcrumb float-sm-right bg-transparent p-0 mt-3">
                     <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}">Dashboard</a></li>
                     <li class="breadcrumb-item active">Withdrawals</li>
                 </ol>
@@ -24,30 +24,30 @@
 @stop
 
 @section('content')
-<div class="container-fluid">
+<div class="container-fluid pb-5">
     @include('admin.alert') 
 
-    <div class="row mb-3">
+    <div class="row mb-4">
         <div class="col-12">
-            <div class="bg-white rounded shadow-sm p-2 d-flex align-items-center" style="gap: 10px; width: fit-content; border: 1px solid #e9ecef;">
-                <span class="text-muted font-weight-bold ml-2 mr-1"><i class="fas fa-filter mr-1 text-primary"></i> {{ __('Status') }}:</span>
+            <div class="glass-card shadow-sm p-2 d-flex align-items-center bg-white" style="gap: 15px; width: fit-content; border-radius: 16px;">
+                <span class="text-muted small font-weight-bold ml-3 mr-1"><i class="fas fa-filter mr-2 text-primary"></i> QUEUE STATUS:</span>
                 <ul class="nav nav-pills">
                     <li class="nav-item">
-                        <a class="nav-link {{ $filter_status === 'pending' ? 'active bg-warning font-weight-bold' : 'text-secondary' }} px-3 py-1 text-sm mr-1" 
-                           href="{{ route('admin.withdrawals.index', ['status' => 'pending']) }}">
-                           {{ __('Pending') }}
+                        <a class="nav-link px-4 py-1 small font-weight-bold {{ $filter_status === 'pending' ? 'active shadow-sm' : 'text-muted' }}" 
+                           href="{{ route('admin.withdrawals.index', ['status' => 'pending']) }}" style="border-radius: 10px;">
+                           {{ __('PENDING') }}
+                        </a>
+                    </li>
+                    <li class="nav-item mx-1">
+                        <a class="nav-link px-4 py-1 small font-weight-bold {{ $filter_status === 'approved' ? 'active shadow-sm' : 'text-muted' }}" 
+                           href="{{ route('admin.withdrawals.index', ['status' => 'approved']) }}" style="border-radius: 10px;">
+                           {{ __('APPROVED') }}
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ $filter_status === 'approved' ? 'active bg-success font-weight-bold' : 'text-secondary' }} px-3 py-1 text-sm mr-1" 
-                           href="{{ route('admin.withdrawals.index', ['status' => 'approved']) }}">
-                           {{ __('Approved') }}
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ $filter_status === 'rejected' ? 'active bg-danger font-weight-bold' : 'text-secondary' }} px-3 py-1 text-sm" 
-                           href="{{ route('admin.withdrawals.index', ['status' => 'rejected']) }}">
-                           {{ __('Rejected') }}
+                        <a class="nav-link px-4 py-1 small font-weight-bold {{ $filter_status === 'rejected' ? 'active shadow-sm' : 'text-muted' }}" 
+                           href="{{ route('admin.withdrawals.index', ['status' => 'rejected']) }}" style="border-radius: 10px;">
+                           {{ __('REJECTED') }}
                         </a>
                     </li>
                 </ul>
@@ -55,25 +55,25 @@
         </div>
     </div>
 
-    <div class="card card-primary card-outline shadow-sm border-0">
-        <div class="card-header border-0 bg-white py-3">
-            <h3 class="card-title font-weight-600 text-muted">
-                <i class="fas fa-stream mr-1"></i> {{ ucfirst($filter_status) }} Queue
+    <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
+        <div class="card-header border-0 bg-white py-4 px-4">
+            <h3 class="card-title font-weight-bold text-dark mb-0">
+                <i class="fas fa-stream mr-2 text-primary opacity-50"></i> {{ ucfirst($filter_status) }} Requests
             </h3>
         </div>
 
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table id="withdrawals-table" class="table table-hover table-premium mb-0">
-                    <thead class="thead-light">
+                    <thead>
                         <tr>
-                            <th class="px-4">User Details</th>
-                            <th>Amount</th>
-                            <th>Method</th>
-                            <th style="width: 25%;">Transfer Details</th>
-                            <th class="text-center">Status</th>
-                            <th>Date Requested</th>
-                            <th class="text-right px-4">Actions</th>
+                            <th class="px-4">PARTNER DETAILS</th>
+                            <th>TOTAL AMOUNT</th>
+                            <th>METHOD</th>
+                            <th style="width: 25%;">DESTINATION DATA</th>
+                            <th class="text-center">STATUS</th>
+                            <th>SUBMISSION DATE</th>
+                            <th class="text-right px-4">OPERATIONS</th>
                         </tr>
                     </thead>
 
@@ -82,36 +82,36 @@
                             <tr>
                                 <td class="align-middle px-4">
                                     <div class="d-flex align-items-center">
-                                        <div class="bg-light rounded-circle d-flex align-items-center justify-content-center mr-3 border shadow-xs" style="width:38px; height:38px;">
-                                            <i class="fas fa-user text-primary text-xs"></i>
+                                        <div class="icon-box-soft bg-primary-soft text-primary mr-3 shadow-xs" style="width:42px; height:42px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                            <i class="fas fa-user text-sm"></i>
                                         </div>
                                         <div>
                                             <span class="d-block font-weight-bold text-dark mb-0">{{ $withdrawal->user->name ?? 'N/A (Deleted)' }}</span>
-                                            <small class="text-muted text-monospace" style="font-size: 0.7rem;">UID: #{{ $withdrawal->user_id }}</small>
+                                            <small class="text-muted font-weight-bold" style="font-size: 0.65rem; letter-spacing: 0.5px;">ACCOUNT #{{ $withdrawal->user_id }}</small>
                                         </div>
                                     </div>
                                 </td>
 
                                 <td class="align-middle">
-                                    <div class="text-lg font-weight-bold text-dark">
-                                        <span class="text-xs font-weight-normal opacity-7 mr-1">$</span>{{ number_format($withdrawal->amount_dollars, 2) }}
+                                    <div class="text-dark font-weight-bold" style="font-size: 1.1rem;">
+                                        <span class="text-primary mr-1" style="font-size: 0.8rem;">$</span>{{ number_format($withdrawal->amount_dollars, 2) }}
                                     </div>
                                 </td>
                                 
                                 <td class="align-middle">
-                                    <span class="badge badge-light border px-2 py-1 font-weight-normal">
-                                        <i class="fas fa-university mr-1 text-muted text-xs"></i> {{ ucfirst($withdrawal->method ?? 'Other') }}
+                                    <span class="badge badge-secondary-light text-muted px-2 py-1 font-weight-bold" style="font-size: 0.7rem;">
+                                        <i class="fas fa-university mr-1 opacity-50"></i> {{ strtoupper($withdrawal->method ?? 'OTHER') }}
                                     </span>
                                 </td>
 
                                 <td class="align-middle">
-                                    <div class="small text-dark font-weight-500" style="line-height: 1.4;">
+                                    <div class="small text-dark font-weight-600" style="line-height: 1.5;">
                                         {{ $withdrawal->details ?: '—' }}
                                     </div>
                                     @if ($withdrawal->admin_note)
                                         <div class="mt-2">
-                                            <div class="badge badge-danger-light text-danger text-xs p-2 border-left" style="border-left-width: 3px !important; white-space: normal; text-align: left;">
-                                                <i class="fas fa-comment-dots mr-1"></i> <strong>Admin Note:</strong> {{ $withdrawal->admin_note }}
+                                            <div class="badge badge-danger-light text-danger text-xs p-2 border-left" style="border-left: 3px solid var(--danger) !important; white-space: normal; text-align: left; border-radius: 4px 8px 8px 4px;">
+                                                <i class="fas fa-info-circle mr-1"></i> <strong>NOTE:</strong> {{ $withdrawal->admin_note }}
                                             </div>
                                         </div>
                                     @endif
@@ -126,61 +126,59 @@
                                             default => 'secondary'
                                         };
                                     @endphp
-                                    <span class="badge badge-{{ $statusClass }}-light px-3 py-1 shadow-xs text-uppercase" style="font-size: 0.7rem; letter-spacing: 0.5px;">
-                                        {{ $withdrawal->status }}
+                                    <span class="badge badge-{{ $statusClass }}-light text-{{ $statusClass }} px-3 py-1 shadow-xs text-uppercase" style="font-size: 0.65rem; letter-spacing: 0.5px; border-radius: 20px;">
+                                        <i class="fas fa-circle mr-1" style="font-size: 0.4rem; vertical-align: middle;"></i> {{ $withdrawal->status }}
                                     </span>
                                     @if($withdrawal->status !== 'pending')
-                                        <div class="text-xs text-muted mt-1 opacity-7">
-                                            {{ ($withdrawal->approved_at ?? $withdrawal->rejected_at)?->format('d M, Y') }}
+                                        <div class="smallest text-muted mt-2 font-weight-bold">
+                                            {{ ($withdrawal->approved_at ?? $withdrawal->rejected_at)?->format('M d, Y') }}
                                         </div>
                                     @endif
                                 </td>
 
                                 <td class="align-middle">
-                                    <div class="text-dark font-weight-600 mb-0" style="font-size: 0.9rem;">
+                                    <div class="text-dark font-weight-bold mb-0" style="font-size: 0.85rem;">
                                         {{ $withdrawal->created_at->format('M d, Y') }}
                                     </div>
-                                    <div class="text-muted small">
-                                        <i class="far fa-clock mr-1 text-xs"></i>{{ $withdrawal->created_at->format('H:i') }}
+                                    <div class="text-muted smallest font-weight-bold mt-1">
+                                        <i class="far fa-clock mr-1 opacity-50"></i>{{ $withdrawal->created_at->format('H:i') }}
                                     </div>
                                 </td>
 
                                 <td class="text-right align-middle px-4">
                                     @if ($withdrawal->status === 'pending')
-                                        <div class="btn-group">
+                                        <div class="btn-group shadow-sm" style="border-radius: 10px; overflow: hidden;">
                                             <form action="{{ route('admin.withdrawals.approve', $withdrawal) }}" method="POST" class="m-0">
                                                 @csrf
-                                                <button type="submit" class="btn btn-success btn-xs px-2" 
+                                                <button type="submit" class="btn btn-success btn-sm px-3 border-0" 
                                                         title="{{ __('Approve') }}" 
-                                                        style="border-top-right-radius: 0; border-bottom-right-radius: 0; height: 30px"
-                                                        onclick="return confirm('Are you sure you want to approve this withdrawal of ${{ number_format($withdrawal->amount_dollars, 2) }}?')">
-                                                    <i class="fas fa-check mr-1"></i> {{ __('Approve') }}
+                                                        onclick="return confirm('Confirm payout of ${{ number_format($withdrawal->amount_dollars, 2) }}?')">
+                                                    <i class="fas fa-check"></i>
                                                 </button>
                                             </form>
 
-                                            <button type="button" class="btn btn-danger btn-xs px-2" 
+                                            <button type="button" class="btn btn-danger btn-sm px-3 border-0" 
                                                     title="{{ __('Reject') }}" 
-                                                    style="border-top-left-radius: 0; border-bottom-left-radius: 0; height: 30px"
                                                     data-toggle="modal" 
                                                     data-target="#rejectModal" 
                                                     data-withdrawal-route="{{ route('admin.withdrawals.reject', $withdrawal) }}">
-                                                <i class="fas fa-times mr-1"></i> {{ __('Reject') }}
+                                                <i class="fas fa-times"></i>
                                             </button>
                                         </div>
                                     @else
-                                        <span class="badge badge-light border text-muted px-3 py-1">
-                                            <i class="fas fa-lock mr-1 opacity-5"></i> Archived
+                                        <span class="badge badge-light text-muted px-3 py-1 font-weight-bold" style="font-size: 0.65rem; border-radius: 20px; border: 1px solid #eee;">
+                                            <i class="fas fa-archive mr-1 opacity-50"></i> ARCHIVED
                                         </span>
                                     @endif
                                 </td>
                             </tr>
                         @empty
-                            <tr class="empty-state">
+                            <tr>
                                 <td colspan="7" class="text-center py-5">
-                                    <div class="py-4">
-                                        <i class="fas fa-inbox fa-3x text-muted opacity-3 mb-3 d-block"></i>
-                                        <h5 class="text-muted font-weight-bold">No {{ $filter_status }} requests found</h5>
-                                        <p class="small text-secondary">New payout requests will appear here for review.</p>
+                                    <div class="py-5">
+                                        <i class="fas fa-file-invoice-dollar fa-4x text-muted opacity-25 mb-4"></i>
+                                        <h5 class="text-muted font-weight-bold">Zero Requests Found</h5>
+                                        <p class="small text-secondary">New payouts in the "{{ $filter_status }}" queue will appear here.</p>
                                     </div>
                                 </td>
                             </tr>
@@ -191,10 +189,10 @@
         </div>
 
         @if($withdrawals->hasPages())
-            <div class="card-footer bg-white border-0 py-3">
+            <div class="card-footer bg-white border-0 py-4 px-4">
                 <div class="d-flex justify-content-between align-items-center">
-                    <span class="text-muted small font-weight-600">
-                        Showing page {{ $withdrawals->currentPage() }} of {{ $withdrawals->lastPage() }}
+                    <span class="text-muted small font-weight-bold text-uppercase letter-spacing-1">
+                        Registry: Page {{ $withdrawals->currentPage() }} of {{ $withdrawals->lastPage() }}
                     </span>
                     <div>
                         {{ $withdrawals->appends(request()->except('page'))->links('pagination::bootstrap-4') }}
@@ -208,33 +206,33 @@
 {{-- REJECT MODAL --}}
 <div class="modal fade" id="rejectModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content border-0 shadow-lg">
-            <div class="modal-header bg-danger text-white border-0">
-                <h5 class="modal-title font-weight-bold"><i class="fas fa-ban mr-2"></i> Reject Payout</h5>
-                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+        <div class="modal-content">
+            <div class="modal-header border-0 bg-danger px-4 py-4" style="border-radius: 24px 24px 0 0;">
+                <h5 class="modal-title text-white font-weight-bold"><i class="fas fa-ban mr-2"></i> REJECT PAYOUT REQUEST</h5>
+                <button type="button" class="close text-white opacity-100" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <form id="rejectForm" method="POST">
                 @csrf
-                <div class="modal-body py-4">
-                    <div class="d-flex align-items-center mb-3">
-                        <div class="bg-danger-light rounded-circle p-3 mr-3 text-danger">
-                            <i class="fas fa-exclamation-triangle fa-lg"></i>
+                <div class="modal-body p-4">
+                    <div class="d-flex align-items-center p-3 mb-4 rounded-xl" style="background: rgba(220,53,69,0.05); border: 1px solid rgba(220,53,69,0.1);">
+                        <div class="icon-box-soft bg-white text-danger mr-3 shadow-xs" style="min-width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-exclamation-triangle"></i>
                         </div>
-                        <p class="mb-0 text-muted small">
-                            Rejecting this request will automatically refund the <strong>full amount</strong> back to the user's wallet.
+                        <p class="mb-0 text-dark small font-weight-500">
+                            Rejecting this request will immediately refund the <strong>full balance</strong> back to the partner's account wallet.
                         </p>
                     </div>
-                    <div class="form-group">
-                        <label class="small text-muted font-weight-bold uppercase mb-2">Rejection Reason <span class="text-danger">*</span></label>
-                        <textarea name="admin_note" id="admin_note" rows="4" class="form-control shadow-xs" 
-                                  placeholder="e.g., Invalid bank details or suspicious activity..." required></textarea> 
+                    <div class="form-group mb-0">
+                        <label class="small text-muted font-weight-bold text-uppercase mb-2" style="letter-spacing: 1px;">Internal Rejection Reason <span class="text-danger">*</span></label>
+                        <textarea name="admin_note" id="admin_note" rows="4" class="form-control" 
+                                  placeholder="Provide clarity for the partner (e.g., Invalid bank details)..." required style="border-radius: 12px;"></textarea> 
                     </div>
                 </div>
-                <div class="modal-footer bg-light border-0">
-                    <button type="button" class="btn btn-link text-muted font-weight-bold" data-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-danger px-4 font-weight-bold shadow-sm">Confirm Rejection</button>
+                <div class="modal-footer border-0 p-4 pt-0">
+                    <button type="button" class="btn btn-light rounded-pill px-4 font-weight-bold mr-2" data-dismiss="modal">CANCEL</button>
+                    <button type="submit" class="btn btn-danger rounded-pill px-4 font-weight-bold shadow-lg">CONFIRM REJECTION</button>
                 </div>
             </form>
         </div>
@@ -245,31 +243,26 @@
 @section('js')
     <script>
         $(document).ready(function () {
-             if ($('#withdrawals-table tbody tr:not(.empty-state)').length > 0) {
+             if ($('#withdrawals-table tbody tr').length > 0) {
                  $('#withdrawals-table').DataTable({
-                     "paging": true,
+                     "paging": false,
                      "searching": true,
                      "ordering": true,
-                     "info": true,
+                     "info": false,
                      "autoWidth": false,
                      "responsive": true,
-                     "order": [[5, "desc"]], // Date column
-                     dom: '<"row px-4 pt-3"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-6"l>>' +
-                            '<"row"<"col-sm-12"tr>>' +
-                            '<"row px-4 pb-3"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+                     "order": [[5, "desc"]],
+                     dom: '<"row px-4 pt-4 pb-2"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-6"l>>' +
+                            '<"row"<"col-sm-12"tr>>',
                     "language": {
                         "search": "",
-                        "searchPlaceholder": "Search payouts...",
-                        "paginate": {
-                            "previous": "<i class='fas fa-angle-left'></i>",
-                            "next": "<i class='fas fa-angle-right'></i>"
-                        }
+                        "searchPlaceholder": "Search requests...",
                     },
                     "columnDefs": [
                         { "orderable": false, "targets": [6] }
                     ]
                  });
-                 $('.dataTables_filter input').addClass('form-control shadow-none border-light').css('width', '220px');
+                 $('.dataTables_filter input').addClass('form-control shadow-xs').css({'width': '280px', 'border-radius': '10px'});
              }
 
             $('#rejectModal').on('show.bs.modal', function (event) {

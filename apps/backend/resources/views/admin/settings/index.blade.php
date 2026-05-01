@@ -4,15 +4,15 @@
 
 @section('content_header')
     <div class="container-fluid">
-        <div class="row mb-2">
+        <div class="row mb-4 align-items-end">
             <div class="col-sm-6">
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-sliders-h mr-2 text-primary"></i> System Configuration
                 </h1>
-                <p class="text-muted mt-2 small text-uppercase letter-spacing-1">Manage global system variables and environment parameters.</p>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Manage global system variables, environment parameters, and platform logic.</p>
             </div>
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right bg-transparent p-0">
+            <div class="col-sm-6 text-right">
+                <ol class="breadcrumb float-sm-right bg-transparent p-0 mt-3 small">
                     <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}">Dashboard</a></li>
                     <li class="breadcrumb-item active">Settings Explorer</li>
                 </ol>
@@ -24,10 +24,10 @@
 @section('content')
 <div class="container-fluid pb-5">
     {{-- Unified Layout Greeting --}}
-    <div class="card glass-card shadow-sm mb-5 border-0 overflow-hidden">
+    <div class="card glass-card shadow-premium mb-5 border-0 overflow-hidden" style="border-radius: 24px; background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.7) 100%); backdrop-filter: blur(15px);">
         <div class="card-body p-0">
             <div class="d-flex align-items-stretch">
-                <div class="bg-primary px-5 d-flex align-items-center justify-content-center">
+                <div class="bg-primary px-5 d-flex align-items-center justify-content-center" style="min-width: 120px;">
                     <i class="fas fa-microchip text-white fa-2x shadow-sm"></i>
                 </div>
                 <div class="p-4">
@@ -53,23 +53,23 @@
 
         @forelse($settings_groups as $group)
             <div class="col-lg-4 col-md-6 mb-4">
-                <div class="card h-100 glass-card shadow-sm border-0 stat-card">
+                <div class="card h-100 glass-card shadow-sm border-0 stat-card" style="border-radius: 20px; transition: all 0.3s ease;">
                     <div class="card-body p-4">
                         <div class="d-flex align-items-start mb-4">
-                            <div class="icon-circle bg-{{ $group['color'] }}-soft text-{{ $group['color'] == 'indigo' ? 'purple' : $group['color'] }} mr-3 shadow-sm">
+                            <div class="icon-circle bg-{{ $group['color'] }}-soft text-{{ $group['color'] == 'indigo' ? 'purple' : $group['color'] }} mr-3 shadow-xs" style="width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
                                 <i class="fas {{ $group['icon'] }}"></i>
                             </div>
                             <div class="flex-grow-1">
-                                <h6 class="font-weight-bold text-dark mb-2 text-uppercase letter-spacing-1">{{ $group['title'] }}</h6>
-                                <p class="text-muted small mb-0" style="line-height: 1.6;">
+                                <h6 class="font-weight-bold text-dark mb-2 text-uppercase letter-spacing-1" style="font-size: 0.85rem;">{{ $group['title'] }}</h6>
+                                <p class="text-muted small mb-0" style="line-height: 1.6; font-size: 0.75rem;">
                                     {{ $group['desc'] }}
                                 </p>
                             </div>
                         </div>
                         <div class="mt-4 pt-3 border-top d-flex align-items-center justify-content-between">
-                            <span class="small text-muted font-weight-bold text-uppercase" style="font-size: 0.65rem;">Registry: {{ strtoupper($group['id']) }}</span>
+                            <span class="small text-muted font-weight-bold text-uppercase" style="font-size: 0.6rem; letter-spacing: 0.5px;">REGISTRY: {{ strtoupper($group['id']) }}</span>
                             <a href="{{ route('admin.settings.group', ['section' => $group['id']]) }}" 
-                               class="btn btn-sm btn-primary-soft rounded-pill px-3 font-weight-bold stretched-link">
+                               class="btn btn-sm btn-primary-soft rounded-pill px-3 font-weight-bold stretched-link" style="font-size: 0.7rem;">
                                 CONFIGURE <i class="fas fa-chevron-right ml-1 small"></i>
                             </a>
                         </div>
@@ -88,45 +88,9 @@
 
 @section('css')
 <style>
-    :root {
-        --primary: #46a5ac;
-        --primary-soft: rgba(70, 165, 172, 0.1);
-        --success-soft: rgba(16, 185, 129, 0.1);
-        --info-soft: rgba(14, 165, 233, 0.1);
-        --warning-soft: rgba(245, 158, 11, 0.1);
-        --danger-soft: rgba(239, 68, 68, 0.1);
-        --secondary-soft: rgba(100, 116, 139, 0.1);
-        --indigo-soft: rgba(99, 102, 241, 0.1);
-    }
-
-    .glass-card {
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
-        border-radius: 20px;
-    }
-
-    .stat-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-    .stat-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,0.08) !important; }
-
-    .bg-primary-soft { background: var(--primary-soft); }
-    .bg-success-soft { background: var(--success-soft); }
-    .bg-info-soft { background: var(--info-soft); }
-    .bg-warning-soft { background: var(--warning-soft); }
-    .bg-danger-soft { background: var(--danger-soft); }
-    .bg-secondary-soft { background: var(--secondary-soft); }
-    .bg-indigo-soft { background: var(--indigo-soft); }
-    
+    .stat-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-premium) !important; border-color: rgba(70, 165, 172, 0.2); }
     .text-purple { color: #6366f1; }
-
-    .icon-circle { width: 52px; height: 52px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; }
-    
-    .btn-primary-soft { background: var(--primary-soft); color: var(--primary); border: none; transition: all 0.3s ease; }
-    .btn-primary-soft:hover { background: var(--primary); color: #fff; }
-
-    .letter-spacing-1 { letter-spacing: 1px; }
-    .opacity-25 { opacity: 0.25; }
+    .bg-indigo-soft { background: rgba(99, 102, 241, 0.1); }
 </style>
 @stop
 

@@ -24,30 +24,25 @@
         <!-- Add Listing Dropdown -->
         <div class="col-6 col-md-3 px-1">
             <div class="dropdown">
-                <button class="btn btn-primary d-flex align-items-center justify-content-center py-3 w-100 shadow-sm font-weight-bold" type="button" data-toggle="dropdown" style="border-radius: 12px; background: linear-gradient(135deg, #FF3366, #ff6a00) !important; border: none !important; color: #fff !important;">
-                    <i class="fas fa-plus-circle mr-2"></i> Add Listing <i class="fas fa-caret-down ml-2"></i>
+                <button class="btn btn-primary d-flex align-items-center justify-content-center py-3 w-100 shadow-premium font-weight-bold" type="button" data-toggle="dropdown" style="border-radius: 12px; border: none !important;">
+                    <i class="fas fa-plus-circle mr-2"></i> ADD LISTING <i class="fas fa-caret-down ml-2"></i>
                 </button>
-                <div class="dropdown-menu dropdown-menu-right shadow-lg border-0" style="border-radius: 12px; min-width: 220px;">
+                <div class="dropdown-menu dropdown-menu-right shadow-lg border-0 animate__animated animate__fadeInUp" style="border-radius: 20px; min-width: 240px; padding: 12px; background: rgba(255,255,255,0.95); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.2) !important;">
+                    <div class="px-3 py-2 small text-muted font-weight-bold text-uppercase letter-spacing-1 mb-1">Catalog Engines</div>
                     @if(module_enabled('products'))
-                        <a class="dropdown-item py-2" href="{{ route('admin.products.create') }}"><i class="fas fa-shopping-bag mr-2 text-success"></i> Create Product</a>
+                        <a class="dropdown-item py-2 px-3 rounded-lg font-weight-600 mb-1" href="{{ route('admin.products.create') }}"><i class="fas fa-shopping-bag mr-2 text-success"></i> Create Product</a>
                     @endif
                     @if(module_enabled('properties'))
-                        <a class="dropdown-item py-2" href="{{ route('admin.properties.create') }}"><i class="fas fa-building mr-2 text-info"></i> Create Property</a>
+                        <a class="dropdown-item py-2 px-3 rounded-lg font-weight-600 mb-1" href="{{ route('admin.properties.create') }}"><i class="fas fa-building mr-2 text-info"></i> Create Property</a>
                     @endif
                     @if(module_enabled('autos'))
-                        <a class="dropdown-item py-2" href="{{ route('admin.autos.create') }}"><i class="fas fa-car mr-2 text-primary"></i> Create Auto</a>
+                        <a class="dropdown-item py-2 px-3 rounded-lg font-weight-600 mb-1" href="{{ route('admin.autos.create') }}"><i class="fas fa-car mr-2 text-primary"></i> Create Auto</a>
                     @endif
                     @if(module_enabled('events'))
-                        <a class="dropdown-item py-2" href="{{ route('admin.events.create') }}"><i class="fas fa-calendar-check mr-2 text-warning"></i> Create Event</a>
+                        <a class="dropdown-item py-2 px-3 rounded-lg font-weight-600 mb-1" href="{{ route('admin.events.create') }}"><i class="fas fa-calendar-check mr-2 text-warning"></i> Create Event</a>
                     @endif
                     @if(module_enabled('jobs'))
-                        <a class="dropdown-item py-2" href="{{ route('admin.jobs.create') }}"><i class="fas fa-briefcase mr-2 text-purple"></i> Create Job</a>
-                    @endif
-                    @if(module_enabled('services'))
-                        <a class="dropdown-item py-2" href="{{ route('admin.services.create') }}"><i class="fas fa-hand-holding-heart mr-2 text-maroon"></i> Create Service</a>
-                    @endif
-                    @if(module_enabled('classifieds'))
-                        <a class="dropdown-item py-2" href="{{ route('admin.classifieds.create') }}"><i class="fas fa-bullhorn mr-2 text-orange"></i> Create Classified</a>
+                        <a class="dropdown-item py-2 px-3 rounded-lg font-weight-600 mb-1" href="{{ route('admin.jobs.create') }}"><i class="fas fa-briefcase mr-2 text-purple"></i> Create Job</a>
                     @endif
                 </div>
             </div>
@@ -56,21 +51,22 @@
         <!-- Add Booking Dropdown -->
         <div class="col-6 col-md-3 px-1">
             <div class="dropdown">
-                <button class="btn btn-default d-flex align-items-center justify-content-center py-3 w-100 shadow-sm font-weight-bold" type="button" data-toggle="dropdown" style="border-radius: 12px; border: 1px solid #dee2e6; background: #fff; color: #495057 !important;">
-                    <i class="fas fa-calendar-plus mr-2 text-primary"></i> Add Booking <i class="fas fa-caret-down ml-2"></i>
+                <button class="btn btn-default d-flex align-items-center justify-content-center py-3 w-100 shadow-sm font-weight-bold bg-white border-light" type="button" data-toggle="dropdown" style="border-radius: 12px; color: var(--dark-muted) !important;">
+                    <i class="fas fa-calendar-plus mr-2 text-primary"></i> ADD BOOKING <i class="fas fa-caret-down ml-2"></i>
                 </button>
-                <div class="dropdown-menu dropdown-menu-right shadow-lg border-0" style="border-radius: 12px; min-width: 220px;">
+                <div class="dropdown-menu dropdown-menu-right shadow-lg border-0 animate__animated animate__fadeInUp" style="border-radius: 20px; min-width: 240px; padding: 12px; background: rgba(255,255,255,0.95); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.2) !important;">
+                    <div class="px-3 py-2 small text-muted font-weight-bold text-uppercase letter-spacing-1 mb-1">Operational Flow</div>
                     @if(module_enabled('properties'))
-                        <a class="dropdown-item py-2" href="{{ route('admin.property-bookings.create') }}"><i class="fas fa-building mr-2 text-info"></i> Book Property</a>
+                        <a class="dropdown-item py-2 px-3 rounded-lg font-weight-600 mb-1" href="{{ route('admin.property-bookings.create') }}"><i class="fas fa-building mr-2 text-info"></i> Book Property</a>
                     @endif
                     @if(module_enabled('events'))
-                        <a class="dropdown-item py-2" href="{{ route('admin.event-bookings.create') }}"><i class="fas fa-calendar-check mr-2 text-warning"></i> Book Event</a>
+                        <a class="dropdown-item py-2 px-3 rounded-lg font-weight-600 mb-1" href="{{ route('admin.event-bookings.create') }}"><i class="fas fa-calendar-check mr-2 text-warning"></i> Book Event</a>
                     @endif
                     @if(module_enabled('autos'))
-                        <a class="dropdown-item py-2" href="{{ route('admin.auto-inquiries.create') }}"><i class="fas fa-car mr-2 text-primary"></i> Auto Inquiry</a>
+                        <a class="dropdown-item py-2 px-3 rounded-lg font-weight-600 mb-1" href="{{ route('admin.auto-inquiries.create') }}"><i class="fas fa-car mr-2 text-primary"></i> Auto Inquiry</a>
                     @endif
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item py-2" href="{{ route('admin.bookings.index') }}"><i class="fas fa-layer-group mr-2 text-secondary"></i> All Bookings & Leads</a>
+                    <a class="dropdown-item py-2 px-3 rounded-lg font-weight-600" href="{{ route('admin.bookings.index') }}"><i class="fas fa-layer-group mr-2 text-secondary"></i> All Bookings & Leads</a>
                 </div>
             </div>
         </div>
@@ -92,34 +88,28 @@
         @foreach($sections as $section)
             <div class="section-header {{ !$loop->first ? 'mt-5' : '' }}">
                 <span class="dot {{ $section['pulse'] ? 'pulse' : '' }} bg-{{ $section['dot'] }}"></span>
-                <h5 class="text-uppercase font-weight-bold text-secondary">{{ $section['title'] }}</h5>
+                <h5 class="text-uppercase font-weight-bold text-secondary smallest" style="letter-spacing: 1.5px;">{{ $section['title'] }}</h5>
             </div>
             @include('admin.dashboard.partials.' . $section['partial'], ['metrics' => $metrics])
         @endforeach
     </div>
 @stop
 
-
 @section('css')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
     <style>
         /* Sectioning & Layout */
         .section-header { display: flex; align-items: center; margin-bottom: 1.5rem; }
-        .section-header .dot { width: 12px; height: 12px; border-radius: 50%; margin-right: 12px; transition: transform 0.3s; }
-        .section-header h5 { margin: 0; letter-spacing: 1.2px; font-size: 0.85rem; opacity: 0.8; }
+        .section-header .dot { width: 10px; height: 10px; border-radius: 50%; margin-right: 12px; transition: transform 0.3s; }
         
         /* Modern Card kit */
-        .dashboard-blueprint .card { border-radius: 20px; border: none; transition: all 0.25s ease; box-shadow: 0 4px 6px rgba(0,0,0,0.03); border: 1px solid rgba(255,255,255,0.4); background: rgba(255,255,255,0.8); backdrop-filter: blur(10px); }
-        .dashboard-blueprint .card:hover { transform: translateY(-5px); box-shadow: var(--shadow-premium) !important; border-color: rgba(70, 165, 172, 0.2); }
+        .dashboard-blueprint .card { border-radius: 20px; border: none; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: var(--premium-shadow); border: 1px solid rgba(255,255,255,0.4); background: rgba(255,255,255,0.8); backdrop-filter: blur(15px); }
+        .dashboard-blueprint .card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,0.08) !important; border-color: rgba(70, 165, 172, 0.2); }
 
-        /* Color Utility Factory */
-        .bg-primary-light { background: rgba(70, 165, 172, 0.1) !important; }
-        .bg-success-light { background: rgba(40, 167, 69, 0.1) !important; }
-        .bg-danger-light  { background: rgba(220,53,69,0.1) !important; }
-        .bg-info-light    { background: rgba(23,162,184,0.1) !important; }
-        
-        .icon-circle { width: 56px; height: 56px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; }
+        .icon-circle { width: 56px; height: 56px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; transition: all 0.3s ease; }
+        .card:hover .icon-circle { transform: scale(1.1) rotate(5deg); }
 
         /* Global Pulse Animation */
         .pulse { animation: pulse-shadow 2s infinite; }
@@ -131,11 +121,13 @@
         
         #master-calendar { background: transparent; padding: 1.5rem; border-radius: 12px; }
         .fc { font-family: 'Outfit', sans-serif !important; }
-        .fc .fc-toolbar-title { font-weight: 700; color: #1e293b; }
-        .fc .fc-button-primary { background-color: var(--primary); border-color: var(--primary); border-radius: 10px; font-weight: 600; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; }
+        .fc .fc-toolbar-title { font-weight: 700; color: #1e293b; font-size: 1.25rem !important; }
+        .fc .fc-button-primary { background-color: var(--primary); border-color: var(--primary); border-radius: 10px; font-weight: 600; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 0.5px; padding: 8px 16px; }
+        
+        .dropdown-item { transition: all 0.2s ease; }
+        .dropdown-item:hover { background: var(--primary-soft) !important; color: var(--primary) !important; transform: translateX(5px); }
     </style>
 @stop
-
 
 @section('js')
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

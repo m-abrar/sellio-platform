@@ -12,22 +12,25 @@
 <div class="row">
     {{-- Main Financial Dashboard card --}}
     <div class="col-lg-4">
-        <div class="card border-0 shadow-lg bg-primary overflow-hidden h-100" style="min-height: 240px; border-radius: 16px; background: linear-gradient(135deg, #0072ff, #2b32b2) !important;">
+        <div class="card border-0 shadow-lg bg-primary overflow-hidden h-100" style="min-height: 240px; border-radius: 24px; background: linear-gradient(135deg, #1e293b 0%, #46a5ac 100%) !important;">
             <div class="card-body position-relative z-index-1 d-flex flex-column justify-content-center px-4">
-                <p class="text-white-50 text-uppercase small font-weight-bold mb-1" style="letter-spacing: 0.8px;">Platform Net Earnings (YTD)</p>
-                <h1 class="text-white display-4 font-weight-bold mb-2">{{ $metrics['system_kpis']['earnings'] }}</h1>
+                <p class="text-white-50 text-uppercase small font-weight-bold mb-1" style="letter-spacing: 1.2px; font-size: 0.7rem;">Platform Net Revenue (YTD)</p>
+                <h1 class="text-white display-4 font-weight-bold mb-2" style="font-family: 'Outfit', sans-serif;">{{ $metrics['system_kpis']['earnings'] }}</h1>
                 @if(isset($metrics['system_kpis']['yoy_change']))
-                <p class="text-white small italic mb-0">
-                    <i class="fas fa-chart-line mr-1 text-warning"></i> <strong>{{ $metrics['system_kpis']['yoy_change'] }}</strong> vs last year
-                </p>
+                <div class="d-flex align-items-center">
+                    <span class="badge badge-pill badge-light mr-2 text-success font-weight-bold px-3 py-1 shadow-sm">
+                        <i class="fas fa-arrow-up mr-1"></i> {{ $metrics['system_kpis']['yoy_change'] }}
+                    </span>
+                    <span class="text-white-50 small italic mb-0">vs previous year</span>
+                </div>
                 @endif
                 <div class="mt-4">
-                    <a href="{{ route('admin.payments.index')}}" class="btn btn-sm btn-light rounded-pill px-4 font-weight-bold shadow-sm" style="background: rgba(255,255,255,0.9);">
-                        Analytics Center <i class="fas fa-angle-right ml-1"></i>
+                    <a href="{{ route('admin.payments.index')}}" class="btn btn-sm btn-light rounded-pill px-4 font-weight-bold shadow-sm" style="background: rgba(255,255,255,0.9); color: #1e293b;">
+                        Financial Report <i class="fas fa-angle-right ml-1"></i>
                     </a>
                 </div>
             </div>
-            <i class="fas fa-coins position-absolute" style="bottom: -20px; right: -10px; font-size: 8rem; opacity: 0.08; color: #fff;"></i>
+            <i class="fas fa-chart-pie position-absolute" style="bottom: -20px; right: -10px; font-size: 9rem; opacity: 0.1; color: #fff;"></i>
         </div>
     </div>
     
