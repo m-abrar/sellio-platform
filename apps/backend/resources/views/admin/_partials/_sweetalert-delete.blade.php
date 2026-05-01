@@ -1,10 +1,14 @@
 @push('js')
 <script>
 $(document).ready(function() {
-    // Select all buttons inside actions form that use onclick="return confirm"
-    document.querySelectorAll('.btn-group-premium form button[onclick]').forEach(function(btn) {
+    /**
+     * Automatic Sellio-Themed Confirmation for Delete Buttons
+     * Scans for buttons with standard 'onclick="return confirm(...)"' and 
+     * replaces them with premium SweetAlert2 modals.
+     */
+    document.querySelectorAll('form button[onclick*="confirm"]').forEach(function(btn) {
         let onClickText = btn.getAttribute('onclick');
-        let message = 'Are you sure you want to delete this listing?';
+        let message = 'Are you sure you want to proceed with this deletion?';
 
         // Extract message from confirm('...')
         if (onClickText) {
@@ -17,23 +21,23 @@ $(document).ready(function() {
         // Nullify native confirm to prevent browser popup
         btn.removeAttribute('onclick');
 
-        // Add SweetAlert2 handler
+        // Add Premium SweetAlert2 handler
         btn.addEventListener('click', function(e) {
-            e.preventDefault(); // Stop immediate trigger
+            e.preventDefault();
             const form = btn.closest('form');
 
-            Swal.fire({
-                title: 'Confirm Operation',
+            SellioAlert.fire({
+                title: 'Confirm Deletion',
                 text: message,
                 icon: 'warning',
+                iconColor: '#f59e0b',
                 showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Yes, proceed',
-                cancelButtonText: 'Cancel'
+                confirmButtonText: '<i class="fas fa-trash-alt mr-2"></i> Yes, Delete It',
+                cancelButtonText: 'Cancel',
+                reverseButtons: true
             }).then((result) => {
                 if (result.isConfirmed) {
-                    form.submit(); // Submit actual form back
+                    form.submit();
                 }
             });
         });

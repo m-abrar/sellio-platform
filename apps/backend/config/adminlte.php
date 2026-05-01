@@ -345,6 +345,11 @@ return [
                     'asset' => true,
                     'location' => 'admin-assets/style.css',
                 ],
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'admin-assets/global.js',
+                ],
             ],
         ],
         // -------------------------------------

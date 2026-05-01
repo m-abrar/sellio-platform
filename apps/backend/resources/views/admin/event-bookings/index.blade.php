@@ -6,15 +6,16 @@
 
 @section('content_header')
     <div class="container-fluid">
-        <div class="row mb-2">
+        <div class="row mb-4 align-items-end">
             <div class="col-sm-6">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-calendar-check mr-2 text-primary"></i>
-                    {{ __('Event Bookings') }}
+                    <i class="fas fa-ticket-alt mr-2 text-primary"></i>
+                    {{ __('Event Ticketing') }}
                 </h1>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Monitor ticket sales, attendee lists, and event registration metrics.</p>
             </div>
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
+            <div class="col-sm-6 text-right">
+                <ol class="breadcrumb float-sm-right bg-transparent p-0 mt-3 small">
                     <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}">{{ __('Dashboard') }}</a></li>
                     <li class="breadcrumb-item active">{{ __('Event Bookings') }}</li>
                 </ol>

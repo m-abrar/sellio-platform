@@ -6,18 +6,21 @@
 
 @section('content_header')
     <div class="container-fluid">
-        <div class="row mb-2">
+        <div class="row mb-4 align-items-end">
             <div class="col-sm-6">
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-layer-group mr-2 text-primary"></i> Listing Types
                 </h1>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Define specific classifications and business models for listing entries.</p>
             </div>
-            <div class="col-sm-6">
-                <div class="float-sm-right">
-                    <a href="{{ route('admin.types.create') }}" class="btn btn-primary btn-flat shadow-sm px-4 text-white font-weight-bold">
-                        <i class="fas fa-plus-circle mr-1"></i> Add Type
-                    </a>
-                </div>
+            <div class="col-sm-6 text-right">
+                <a href="{{ route('admin.types.create') }}" class="btn btn-primary btn-sm rounded-pill px-4 font-weight-bold shadow-lg">
+                    <i class="fas fa-plus-circle mr-1"></i> ADD TYPE
+                </a>
+                <ol class="breadcrumb float-sm-right bg-transparent p-0 mt-3 small">
+                    <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Types</li>
+                </ol>
             </div>
         </div>
     </div>

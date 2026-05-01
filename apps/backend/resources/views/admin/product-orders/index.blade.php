@@ -4,15 +4,15 @@
 
 @section('content_header')
     <div class="container-fluid">
-        <div class="row mb-2">
+        <div class="row mb-4 align-items-end">
             <div class="col-sm-6">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-shopping-bag mr-2 text-primary"></i>
-                    {{ __('Product Orders') }}
+                    <i class="fas fa-shopping-bag mr-2 text-primary"></i> {{ __('Sales & Orders') }}
                 </h1>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Track marketplace transactions, fulfillment status, and customer shipments.</p>
             </div>
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
+            <div class="col-sm-6 text-right">
+                <ol class="breadcrumb float-sm-right bg-transparent p-0 small">
                     <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}">{{ __('Dashboard') }}</a></li>
                     <li class="breadcrumb-item active">{{ __('Product Orders') }}</li>
                 </ol>
@@ -131,24 +131,23 @@
                                     <td class="align-middle">
                                         <div class="font-weight-bold text-lg text-primary">${{ number_format($order->total_amount, 2) }}</div>
                                         @if($firstItem)
-                                            <div class="text-xs text-muted mt-1 bg-light p-2 rounded border shadow-none" style="width: fit-content; min-width: 120px;">
-                                                <div class="d-flex justify-content-between border-bottom pb-1 mb-1">
-                                                    <span class="font-weight-bold text-dark">{{ $firstItem->quantity }} qty</span>
-                                                    <span>${{ number_format($firstItem->unit_price, 2) }} ea</span>
+                                            <div class="text-xs text-muted mt-2 glass-card-soft p-2 rounded-lg border shadow-xs" style="width: fit-content; min-width: 150px;">
+                                                <div class="d-flex justify-content-between border-bottom border-light pb-1 mb-1">
+                                                    <span class="font-weight-bold text-dark">{{ $firstItem->quantity }} × UNIT</span>
+                                                    <span class="text-primary font-weight-bold">${{ number_format($firstItem->unit_price, 2) }}</span>
                                                 </div>
                                                 @php
                                                     $attributes = $firstItem->selected_attributes;
                                                     if (is_string($attributes)) {
                                                         $attributes = json_decode($attributes, true);
                                                     }
-                                                    $attributes = is_array($attributes) ? $attributes : [];
                                                 @endphp
-                                                @if(count($attributes) > 0)
+                                                @if(is_array($attributes) && count($attributes) > 0)
                                                     <div class="mt-1">
                                                         @foreach($attributes as $key => $value)
-                                                            <div class="mb-0">
-                                                                <span class="text-secondary font-weight-600">{{ ucfirst(str_replace('_', ' ', $key)) }}:</span> 
-                                                                <span class="text-dark">{{ is_array($value) ? implode(', ', $value) : $value }}</span>
+                                                            <div class="mb-0 d-flex justify-content-between">
+                                                                <span class="text-muted" style="font-size: 0.65rem;">{{ strtoupper(str_replace('_', ' ', $key)) }}:</span> 
+                                                                <span class="text-dark font-weight-600" style="font-size: 0.65rem;">{{ is_array($value) ? implode(', ', $value) : $value }}</span>
                                                             </div>
                                                         @endforeach
                                                     </div>
@@ -156,15 +155,27 @@
                                             </div>
                                         @endif
                                     </td>
-                                    <td>
-                                        <span class="badge {{ $order->payment_status === 'paid' ? 'badge-success' : 'badge-warning' }}">
+                                    <td class="align-middle">
+                                        <span class="badge {{ $order->payment_status === 'paid' ? 'badge-success-light text-success' : 'badge-warning-light text-warning' }} px-3 py-1 text-uppercase" style="font-size: 0.7rem; border-radius: 6px;">
                                             {{ ucfirst($order->payment_status) }}
                                         </span>
                                     </td>
-                                    <td class="text-center">
-                                        <span class="badge badge-info">{{ ucfirst($order->status) }}</span>
+                                    <td class="text-center align-middle">
+                                        @php
+                                            $statusColors = [
+                                                'pending' => 'badge-warning-light text-warning',
+                                                'processing' => 'badge-info-light text-info',
+                                                'completed' => 'badge-success-light text-success',
+                                                'cancelled' => 'badge-danger-light text-danger'
+                                            ];
+                                            $statusColor = $statusColors[$order->status] ?? 'badge-secondary-light text-secondary';
+                                        @endphp
+                                        <span class="badge {{ $statusColor }} px-3 py-1 text-uppercase" style="font-size: 0.7rem; border-radius: 6px;">{{ ucfirst($order->status) }}</span>
                                     </td>
-                                    <td>{{ $order->created_at->format('M d, Y') }}</td>
+                                    <td class="align-middle">
+                                        <span class="d-block font-weight-bold text-dark">{{ $order->created_at->format('M d, Y') }}</span>
+                                        <small class="text-muted">{{ $order->created_at->format('h:i A') }}</small>
+                                    </td>
                                     <td class="text-right px-4">
                                         <a href="{{ route('admin.product-orders.show', $order->id) }}" class="btn btn-default btn-sm text-info"><i class="fas fa-eye"></i></a>
                                     </td>

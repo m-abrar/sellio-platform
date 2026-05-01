@@ -4,12 +4,17 @@
 
 @section('content_header')
     <div class="d-flex align-items-center justify-content-between mb-2">
-        <h1 class="font-weight-bold text-dark">
-            <i class="fas fa-chart-line mr-2 text-primary"></i> 
-            Dashboard Overview
-            <small class="d-block d-md-inline-block ml-md-3 text-muted lead">Manage your platform and activity</small>
-        </h1>
-        <!-- Live Sync Removed -->
+        <div>
+            <h1 class="font-weight-bold text-dark mb-0">
+                <i class="fas fa-chart-line mr-2 text-primary"></i> 
+                Command Center
+            </h1>
+            <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Welcome back, {{ auth()->user()->name }}. Performance metrics are live for <span class="text-primary font-weight-bold">{{ now()->format('F d, Y') }}</span>.</p>
+        </div>
+        <div class="d-none d-md-block text-right">
+            <div id="dashboard-clock" class="h4 font-weight-bold text-dark mb-0">00:00:00</div>
+            <div class="text-muted small uppercase letter-spacing-1">{{ now()->format('l') }}</div>
+        </div>
     </div>
 @stop
 
@@ -105,26 +110,29 @@
         .section-header h5 { margin: 0; letter-spacing: 1.2px; font-size: 0.85rem; opacity: 0.8; }
         
         /* Modern Card kit */
-        .dashboard-blueprint .card { border-radius: 12px; border: none; transition: all 0.25s ease; box-shadow: 0 4px 6px rgba(0,0,0,0.03); }
-        .dashboard-blueprint .card:hover { transform: translateY(-3px); box-shadow: 0 12px 20px rgba(0,0,0,0.08) !important; }
+        .dashboard-blueprint .card { border-radius: 20px; border: none; transition: all 0.25s ease; box-shadow: 0 4px 6px rgba(0,0,0,0.03); border: 1px solid rgba(255,255,255,0.4); background: rgba(255,255,255,0.8); backdrop-filter: blur(10px); }
+        .dashboard-blueprint .card:hover { transform: translateY(-5px); box-shadow: var(--shadow-premium) !important; border-color: rgba(70, 165, 172, 0.2); }
 
         /* Color Utility Factory */
-        .bg-primary-light { background: rgba(0,123,255,0.1) !important; }
-        .bg-success-light { background: rgba(40,167,69,0.1) !important; }
+        .bg-primary-light { background: rgba(70, 165, 172, 0.1) !important; }
+        .bg-success-light { background: rgba(40, 167, 69, 0.1) !important; }
         .bg-danger-light  { background: rgba(220,53,69,0.1) !important; }
         .bg-info-light    { background: rgba(23,162,184,0.1) !important; }
         
-        .icon-circle { width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+        .icon-circle { width: 56px; height: 56px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; }
 
         /* Global Pulse Animation */
         .pulse { animation: pulse-shadow 2s infinite; }
         @keyframes pulse-shadow {
-            0% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.6); transform: scale(0.95); }
-            70% { box-shadow: 0 0 0 10px rgba(220, 53, 69, 0); transform: scale(1); }
-            100% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0); transform: scale(0.95); }
+            0% { box-shadow: 0 0 0 0 rgba(70, 165, 172, 0.6); transform: scale(0.95); }
+            70% { box-shadow: 0 0 0 10px rgba(70, 165, 172, 0); transform: scale(1); }
+            100% { box-shadow: 0 0 0 0 rgba(70, 165, 172, 0); transform: scale(0.95); }
         }
         
-        #master-calendar { background: #fff; padding: 1.5rem; border-radius: 12px; border: 1px solid #edf2f7; }
+        #master-calendar { background: transparent; padding: 1.5rem; border-radius: 12px; }
+        .fc { font-family: 'Outfit', sans-serif !important; }
+        .fc .fc-toolbar-title { font-weight: 700; color: #1e293b; }
+        .fc .fc-button-primary { background-color: var(--primary); border-color: var(--primary); border-radius: 10px; font-weight: 600; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; }
     </style>
 @stop
 
@@ -139,11 +147,19 @@
         document.addEventListener('DOMContentLoaded', function () {
             const data = @json($metrics['js_data']);
             
+            // Dashboard Clock
+            function updateClock() {
+                const now = new Date();
+                document.getElementById('dashboard-clock').textContent = now.toLocaleTimeString();
+            }
+            setInterval(updateClock, 1000);
+            updateClock();
+
             // DRY Chart Configuration
             const baseOptions = {
                 responsive: true,
                 maintainAspectRatio: false,
-                plugins: { legend: { display: true, position: 'bottom', labels: { usePointStyle: true, padding: 20 } } }
+                plugins: { legend: { display: true, position: 'bottom', labels: { usePointStyle: true, padding: 20, font: { family: "'Outfit', sans-serif", size: 11 } } } }
             };
 
             // 1. Revenue Analytics
@@ -152,8 +168,8 @@
                 data: {
                     labels: data.revenue_chart.labels,
                     datasets: [
-                        { label: 'Gross', data: data.revenue_chart.gross_earnings, borderColor: '#28a745', backgroundColor: 'rgba(40,167,69,0.05)', fill: true, tension: 0.4 },
-                        { label: 'Outflow', data: data.revenue_chart.total_payouts, borderColor: '#007bff', borderDash: [5, 5], fill: false }
+                        { label: 'Gross Revenue', data: data.revenue_chart.gross_earnings, borderColor: '#46a5ac', backgroundColor: 'rgba(70, 165, 172, 0.1)', fill: true, tension: 0.4, borderWidth: 3, pointRadius: 4, pointBackgroundColor: '#fff', pointBorderColor: '#46a5ac', pointBorderWidth: 2 },
+                        { label: 'Platform Outflow', data: data.revenue_chart.total_payouts, borderColor: '#1e293b', borderDash: [5, 5], fill: false, tension: 0.4, borderWidth: 2 }
                     ]
                 },
                 options: baseOptions
@@ -164,10 +180,9 @@
                 type: 'doughnut',
                 data: {
                     labels: data.type_chart.labels,
-                    datasets: [{ data: data.type_chart.data, backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#858796'] }]
+                    datasets: [{ data: data.type_chart.data, backgroundColor: ['#46a5ac', '#1e293b', '#64748b', '#94a3b8', '#cbd5e1'], borderWidth: 0, hoverOffset: 15 }]
                 },
-                options: { ...baseOptions, scales: {
-                    // This explicitly hides any background grid/axes
+                options: { ...baseOptions, cutout: '70%', scales: {
                     x: { display: false },
                     y: { display: false }
                 } }
@@ -179,13 +194,14 @@
                 themeSystem: 'bootstrap',
                 headerToolbar: { left: 'prev,next today', center: 'title', right: 'dayGridMonth,timeGridWeek' },
                 events: data.calendar_events,
-                height: 'auto'
+                height: 'auto',
+                eventColor: '#46a5ac'
             }).render();
 
             // 4. Geospatial Heatmap
             const map = L.map('heatmap', { scrollWheelZoom: false }).setView([30.3753, 69.3451], 5);
             L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png').addTo(map);
-            L.heatLayer(data.heatmap_data, { radius: 20, blur: 15 }).addTo(map);
+            L.heatLayer(data.heatmap_data, { radius: 25, blur: 15, gradient: {0.4: '#46a5ac', 0.65: '#1e293b', 1: '#000'} }).addTo(map);
         });
     </script>
 @stop

@@ -7,18 +7,21 @@
 
 @section('content_header')
     <div class="container-fluid">
-        <div class="row mb-2">
+        <div class="row mb-4 align-items-end">
             <div class="col-sm-6">
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-swimming-pool mr-2 text-primary"></i> Amenities
                 </h1>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Manage global features, facility offerings, and comfort options.</p>
             </div>
-            <div class="col-sm-6">
-                <div class="float-sm-right">
-                    <a href="{{ route('admin.amenities.create') }}" class="btn btn-primary btn-flat shadow-sm px-4 text-white font-weight-bold">
-                        <i class="fas fa-plus-circle mr-1"></i> Add Amenity
-                    </a>
-                </div>
+            <div class="col-sm-6 text-right">
+                <a href="{{ route('admin.amenities.create') }}" class="btn btn-primary btn-sm rounded-pill px-4 font-weight-bold shadow-lg">
+                    <i class="fas fa-plus-circle mr-1"></i> ADD AMENITY
+                </a>
+                <ol class="breadcrumb float-sm-right bg-transparent p-0 mt-3 small">
+                    <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Amenities</li>
+                </ol>
             </div>
         </div>
     </div>

@@ -6,16 +6,27 @@
 
 @section('content_header')
     <div class="container-fluid">
-        <div class="row mb-2">
+        <div class="row mb-4 align-items-end">
             <div class="col-sm-6">
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-key mr-2 text-primary"></i> Granular Permissions
                 </h1>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Manage system-wide permissions and low-level access gates.</p>
             </div>
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
+            <div class="col-sm-6 text-right">
+                <div class="d-flex justify-content-end align-items-center" style="gap: 10px;">
+                    <a href="{{ route('admin.users.index') }}" class="btn btn-outline-primary btn-sm rounded-pill px-3 font-weight-bold shadow-sm">
+                        <i class="fas fa-users mr-1"></i> USERS
+                    </a>
+                    <a href="{{ route('admin.roles.index') }}" class="btn btn-outline-info btn-sm rounded-pill px-3 font-weight-bold shadow-sm">
+                        <i class="fas fa-user-shield mr-1"></i> ROLES
+                    </a>
+                    <a href="{{ route('admin.permissions.create') }}" class="btn btn-primary btn-sm rounded-pill px-4 font-weight-bold shadow-lg ml-2">
+                        <i class="fas fa-plus-circle mr-1"></i> ADD PERMISSION
+                    </a>
+                </div>
+                <ol class="breadcrumb float-sm-right bg-transparent p-0 mt-3 small">
                     <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item"><a href="{{ route('admin.roles.index') }}">Access Control</a></li>
                     <li class="breadcrumb-item active">Permissions</li>
                 </ol>
             </div>
@@ -29,16 +40,9 @@
 
     {{-- Permissions Table Card --}}
     <div class="card card-primary card-outline shadow-sm border-0">
-        <div class="card-header border-0 bg-white py-3">
-            <h3 class="card-title font-weight-600 text-muted">Permission Registry</h3>
-            <div class="card-tools">
-                <a href="{{ route('admin.permissions.create') }}" class="btn btn-primary btn-flat shadow-sm px-4 font-weight-bold">
-                    <i class="fas fa-plus-circle mr-1"></i> Add New Permission
-                </a>
-                <button type="button" class="btn btn-tool" data-card-widget="maximize">
-                    <i class="fas fa-expand"></i>
-                </button>
-            </div>
+        <div class="card-header border-0 bg-white py-3 d-flex align-items-center">
+            <h3 class="card-title font-weight-600 text-dark mb-0">Permission Registry</h3>
+            <span class="badge badge-pill badge-secondary-soft text-secondary ml-3 px-3 py-1 border" style="font-weight: 700; font-size: 0.7rem;">{{ count($permissions) }} GATES</span>
         </div>
 
         <div class="card-body p-0">
