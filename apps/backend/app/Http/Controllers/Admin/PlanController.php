@@ -36,7 +36,8 @@ class PlanController extends Controller
     }
 
     public function create() {
-        return view('admin.plans.form');
+        $plan = new Plan();
+        return view('admin.plans.form', compact('plan'));
     }
 
     public function store(Request $request) {

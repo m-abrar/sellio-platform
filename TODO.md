@@ -8,7 +8,7 @@
     - [ ] Revenue & Payments
     - [ ] Booking Summary
     - [ ] Property Occupancy
-- [ ] **Admin Theme Colors**: Apply theme colors to the Gallery page (`/admin/gallery`).
+- [x] **Admin Theme Colors**: Apply theme colors to the Gallery page (`/admin/gallery`).
 - [ ] **Navigation & Breadcrumbs**: Move "Add New User", "Roles", and "Permissions" buttons to the top right and replace/augment breadcrumbs.
 - [ ] **SweetAlerts Integration**: Implement SweetAlerts across the entire admin dashboard for professional feedback.
 - [ ] **Attributes UI Polish**: For all attribute pages (Locations, Categories, etc.), ensure the "Add New" button position and font color are consistent.
@@ -100,31 +100,16 @@
 
 
 http://127.0.0.1:8000/admin/plans/create
-
-ErrorException
-resources\views\admin\plans\form.blade.php:3
-Undefined variable $plan
-
-
---------------
-
+[x] Fixed: Undefined variable $plan
 
 http://127.0.0.1:8000/admin/blogs/create
-
-
-ErrorException
-resources\views\admin\blogs\form.blade.php:3
-Undefined variable $blog
-
---------------------
+[x] Fixed: Undefined variable $blog
 
 http://127.0.0.1:8000/admin/gallery
-This page needs to be updated for theme colors
-
----------------------
+[x] Updated for theme colors
 
 http://127.0.0.1:8000/admin/payment-gateways
-The status column needs better presentation
+[x] Status column presentation improved
 
 ---------------------
 

@@ -93,12 +93,15 @@
                                     @endif
                                 </td>
                                 <td class="align-middle text-center">
-                                    <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="status-{{ $gateway->id }}" {{ $gateway->is_active ? 'checked' : '' }} disabled>
-                                        <label class="custom-control-label small font-weight-bold {{ $gateway->is_active ? 'text-success' : 'text-muted' }}" for="status-{{ $gateway->id }}">
-                                            {{ $gateway->is_active ? 'Active' : 'Inactive' }}
-                                        </label>
-                                    </div>
+                                    @if($gateway->is_active)
+                                        <span class="badge badge-success-soft border border-success text-success px-3 py-1" style="border-radius: 20px; font-size: 0.7rem; letter-spacing: 0.5px;">
+                                            <i class="fas fa-check-circle mr-1"></i> ACTIVE
+                                        </span>
+                                    @else
+                                        <span class="badge badge-secondary-soft border border-secondary text-secondary px-3 py-1" style="border-radius: 20px; font-size: 0.7rem; letter-spacing: 0.5px;">
+                                            <i class="fas fa-times-circle mr-1"></i> INACTIVE
+                                        </span>
+                                    @endif
                                 </td>
                                 <td class="text-right align-middle px-4">
                                     <a href="{{ route('admin.payment-gateways.edit', $gateway->id) }}" 
@@ -144,6 +147,7 @@
     /* Soft Badges */
     .badge-success-soft { background-color: #f0fdf4; color: #166534; }
     .badge-warning-soft { background-color: #fffbeb; color: #92400e; }
+    .badge-secondary-soft { background-color: #f8fafc; color: #64748b; }
     
     /* Custom Toggles */
     .custom-switch .custom-control-label::before { height: 1.25rem; width: 2.25rem; border-radius: 1rem; }

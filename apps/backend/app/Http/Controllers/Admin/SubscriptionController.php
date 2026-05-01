@@ -30,9 +30,10 @@ class SubscriptionController extends Controller
 
     public function create()
     {
+        $subscription = new Subscription();
         $users = User::all();
         $plans = Plan::all();
-        return view('admin.subscriptions.form', compact('users', 'plans'));
+        return view('admin.subscriptions.form', compact('subscription', 'users', 'plans'));
     }
 
     public function store(Request $request)

@@ -21,7 +21,8 @@ class AdvertisementController extends Controller
 
     public function create()
     {
-        return view('admin.advertisements.form');
+        $advertisement = new Advertisement();
+        return view('admin.advertisements.form', compact('advertisement'));
     }
 
     public function edit(Advertisement $advertisement)

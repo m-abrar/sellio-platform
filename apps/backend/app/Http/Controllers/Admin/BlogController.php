@@ -32,11 +32,12 @@ class BlogController extends Controller
      */
     public function create()
     {
+        $blog = new Blog();
         // Only fetch categories and tags flagged for the blog module
         $categories = Category::where('is_blog', true)->get();
         $tags = Tag::where('is_blog', true)->get();
         
-        return view('admin.blogs.form', compact('categories', 'tags'));
+        return view('admin.blogs.form', compact('blog', 'categories', 'tags'));
     }
 
     /**

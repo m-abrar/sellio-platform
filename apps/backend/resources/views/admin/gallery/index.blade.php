@@ -5,11 +5,11 @@
 @section('content_header')
     <div class="d-flex align-items-center justify-content-between mb-4">
         <h1 class="text-dark font-weight-bold">
-            <i class="fas fa-photo-video mr-2 text-indigo"></i> 
+            <i class="fas fa-photo-video mr-2 text-primary"></i> 
             Central Media Manager
             <small class="lead d-block d-md-inline-block ml-md-3 text-muted">All images across all modules</small>
         </h1>
-        <button type="button" class="btn btn-indigo shadow-sm font-weight-bold" data-toggle="modal" data-target="#uploadModal" style="border-radius: 10px;">
+        <button type="button" class="btn btn-primary shadow-sm font-weight-bold" data-toggle="modal" data-target="#uploadModal" style="border-radius: 10px;">
             <i class="fas fa-plus-circle mr-2"></i> Add Standalone Asset
         </button>
     </div>
@@ -76,7 +76,7 @@
                                     </button>
                                 </form>
                                 <a href="{{ $media->getUrl() }}" target="_blank" class="btn btn-light btn-sm mx-1 rounded-circle shadow-sm" title="Fullscreen">
-                                    <i class="fas fa-expand text-indigo"></i>
+                                    <i class="fas fa-expand text-primary"></i>
                                 </a>
                             </div>
 
@@ -86,7 +86,7 @@
                         </div>
                         <div class="card-body p-3">
                             <div class="mb-2">
-                                <span class="badge badge-indigo small mb-1">{{ Str::afterLast($media->model_type, '\\') }} #{{ $media->model_id }}</span>
+                                <span class="badge badge-primary small mb-1">{{ Str::afterLast($media->model_type, '\\') }} #{{ $media->model_id }}</span>
                                 <span class="badge badge-secondary small ml-1">{{ $media->collection_name }}</span>
                             </div>
                             <h6 class="font-weight-bold text-truncate small mb-1" title="{{ $media->file_name }}">{{ $media->file_name }}</h6>
@@ -127,7 +127,7 @@
                                 </div>
                                 <div class="modal-footer border-0 pt-0">
                                     <button type="button" class="btn btn-light font-weight-bold" data-dismiss="modal">Cancel</button>
-                                    <button type="submit" class="btn btn-indigo font-weight-bold">Update File Everywhere</button>
+                                    <button type="submit" class="btn btn-primary font-weight-bold">Update File Everywhere</button>
                                 </div>
                             </form>
                         </div>
@@ -164,7 +164,7 @@
                     <div class="modal-body p-4">
                         <div class="form-group mb-3 text-center">
                             <div class="upload-area p-5 border-dashed rounded" style="border: 2px dashed #dee2e6; cursor: pointer;" onclick="document.getElementById('newAssetFile').click();">
-                                <i class="fas fa-cloud-upload-alt fa-3x text-indigo mb-2"></i>
+                                <i class="fas fa-cloud-upload-alt fa-3x text-primary mb-2"></i>
                                 <p class="mb-0 font-weight-bold">Click to Upload</p>
                                 <small class="text-muted">Will be stored under "Gallery"</small>
                             </div>
@@ -178,7 +178,7 @@
                     </div>
                     <div class="modal-footer border-0 pt-0">
                         <button type="button" class="btn btn-light font-weight-bold" data-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-indigo font-weight-bold">Upload to Gallery</button>
+                        <button type="submit" class="btn btn-primary font-weight-bold">Upload to Gallery</button>
                     </div>
                 </form>
             </div>
@@ -188,10 +188,10 @@
 
 @section('css')
     <style>
-        .btn-indigo { background-color: #6610f2; color: #fff; border: none; }
-        .btn-indigo:hover { background-color: #520dc2; color: #fff; }
-        .badge-indigo { background-color: #6610f2; color: #fff; }
-        .text-indigo { color: #6610f2; }
+        .btn-primary { background-color: var(--primary); border-color: var(--primary); color: #fff; }
+        .btn-primary:hover { background-color: var(--primary); filter: brightness(90%); border-color: var(--primary); color: #fff; }
+        .badge-primary { background-color: var(--primary); color: #fff; }
+        .text-primary { color: var(--primary) !important; }
         .border-dashed { border-style: dashed !important; }
         
         .gallery-card { position: relative; transition: all 0.3s ease; }
@@ -205,7 +205,7 @@
         }
         .gallery-card:hover .gallery-overlay { opacity: 1; }
         
-        .upload-area:hover { background-color: #f8f9fa; border-color: #6610f2 !important; }
+        .upload-area:hover { background-color: #f8f9fa; border-color: var(--primary) !important; }
         .opacity-25 { opacity: 0.25; }
         .opacity-75 { opacity: 0.75; }
     </style>
