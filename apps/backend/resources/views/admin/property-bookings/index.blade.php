@@ -120,25 +120,37 @@
                                         <span class="d-block font-weight-bold text-dark mb-0">
                                             {{ $booking->property->title ?? __('N/A') }}
                                         </span>
-                                        <div class="text-xs text-muted mt-1">
+                                        <div class="text-xs mt-1">
                                             @if($booking->property && $booking->property->category)
-                                                <i class="fas fa-tag mr-1 text-xs"></i>{{ $booking->property->category->title }}
+                                                <span class="badge badge-primary-light text-primary px-2 py-1 mr-1" style="font-size: 0.6rem; border-radius: 4px;">
+                                                    <i class="fas fa-tag mr-1"></i>{{ strtoupper($booking->property->category->title) }}
+                                                </span>
                                             @endif
                                             @if($booking->property && $booking->property->location)
-                                                <span class="mx-1">|</span>
-                                                <i class="fas fa-map-marker-alt mr-1 text-xs text-danger"></i>{{ $booking->property->location->title }}
+                                                <span class="text-muted" style="font-size: 0.7rem;">
+                                                    <i class="fas fa-map-marker-alt mr-1 text-danger opacity-75"></i>{{ $booking->property->location->title }}
+                                                </span>
                                             @endif
                                         </div>
                                     </td>
 
                                     <td class="align-middle">
-                                        <span class="d-block font-weight-bold text-dark mb-0">
-                                            {{ $booking->full_name ?: ($booking->user->name ?? __('Unknown Guest')) }}
-                                        </span>
-                                        <small class="text-muted d-block">{{ $booking->email ?: ($booking->user->email ?? '') }}</small>
-                                        @if($booking->user_id)
-                                            <span class="badge badge-light-primary border text-xs" style="font-size: 0.65rem;">Registered User (#{{ $booking->user_id }})</span>
-                                        @endif
+                                        <div class="d-flex align-items-center">
+                                            <div class="avatar-xs mr-2 bg-light rounded-circle text-center border shadow-xs d-flex align-items-center justify-content-center" style="width:32px; height:32px;">
+                                                <i class="fas fa-user-circle text-muted"></i>
+                                            </div>
+                                            <div>
+                                                <span class="d-block font-weight-bold text-dark mb-0" style="font-size: 0.9rem;">
+                                                    {{ $booking->full_name ?: ($booking->user->name ?? __('Guest User')) }}
+                                                </span>
+                                                <div class="text-xs text-muted">
+                                                    {{ $booking->email ?: ($booking->user->email ?? 'no-email@provided.com') }}
+                                                    @if($booking->user_id)
+                                                        <i class="fas fa-check-circle ml-1 text-success" title="Verified Account"></i>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
                                     </td>
 
                                     <td class="align-middle">

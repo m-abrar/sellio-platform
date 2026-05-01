@@ -104,8 +104,11 @@
                                         @if($firstItem)
                                             <div class="text-xs text-muted mt-1">
                                                 <i class="fas fa-box-open mr-1"></i> {{ $firstItem->product_name }}
+                                                @if($firstItem->product && $firstItem->product->sku)
+                                                    <span class="text-uppercase text-secondary opacity-75 font-weight-bold ml-1" style="font-size: 0.6rem;">[{{ $firstItem->product->sku }}]</span>
+                                                @endif
                                                 @if($order->items->count() > 1)
-                                                    <span class="badge badge-secondary ml-1">+{{ $order->items->count() - 1 }} more</span>
+                                                    <span class="badge badge-secondary ml-1" style="font-size: 0.6rem;">+{{ $order->items->count() - 1 }} MORE</span>
                                                 @endif
                                             </div>
                                         @endif
@@ -119,9 +122,9 @@
                                                 <span class="d-block font-weight-bold text-dark mb-0">{{ $order->user->name ?? 'N/A' }}</span>
                                                 <div class="text-xs text-muted">
                                                     <a href="mailto:{{ $order->user->email ?? '' }}" class="text-info"><i class="fas fa-envelope mr-1"></i>{{ $order->user->email ?? 'N/A' }}</a>
-                                                    @if($order->user->phone)
-                                                        <div class="mt-1">
-                                                            <i class="fas fa-phone-alt mr-1 text-xs"></i>{{ $order->user->phone }}
+                                                    @if($order->shipping_city)
+                                                        <div class="mt-1 opacity-75">
+                                                            <i class="fas fa-map-marker-alt mr-1 text-xs text-danger"></i>{{ $order->shipping_city }}, {{ $order->shipping_country }}
                                                         </div>
                                                     @endif
                                                 </div>
@@ -129,31 +132,33 @@
                                         </div>
                                     </td>
                                     <td class="align-middle">
-                                        <div class="font-weight-bold text-lg text-primary">${{ number_format($order->total_amount, 2) }}</div>
-                                        @if($firstItem)
-                                            <div class="text-xs text-muted mt-2 glass-card-soft p-2 rounded-lg border shadow-xs" style="width: fit-content; min-width: 150px;">
-                                                <div class="d-flex justify-content-between border-bottom border-light pb-1 mb-1">
-                                                    <span class="font-weight-bold text-dark">{{ $firstItem->quantity }} × UNIT</span>
-                                                    <span class="text-primary font-weight-bold">${{ number_format($firstItem->unit_price, 2) }}</span>
-                                                </div>
-                                                @php
-                                                    $attributes = $firstItem->selected_attributes;
-                                                    if (is_string($attributes)) {
-                                                        $attributes = json_decode($attributes, true);
-                                                    }
-                                                @endphp
-                                                @if(is_array($attributes) && count($attributes) > 0)
-                                                    <div class="mt-1">
-                                                        @foreach($attributes as $key => $value)
-                                                            <div class="mb-0 d-flex justify-content-between">
-                                                                <span class="text-muted" style="font-size: 0.65rem;">{{ strtoupper(str_replace('_', ' ', $key)) }}:</span> 
-                                                                <span class="text-dark font-weight-600" style="font-size: 0.65rem;">{{ is_array($value) ? implode(', ', $value) : $value }}</span>
-                                                            </div>
-                                                        @endforeach
+                                        <div class="font-weight-bold text-lg text-primary mb-1">${{ number_format($order->total_amount, 2) }}</div>
+                                        <div class="item-details-stack">
+                                            @foreach($order->items as $item)
+                                                <div class="text-xs text-muted mb-1 glass-card-soft p-2 rounded-lg border shadow-xs" style="width: fit-content; min-width: 180px; background: rgba(248, 249, 250, 0.5);">
+                                                    <div class="d-flex justify-content-between border-bottom border-light pb-1 mb-1">
+                                                        <span class="font-weight-bold text-dark">{{ $item->quantity }} × {{ Str::limit($item->product_name, 15) }}</span>
+                                                        <span class="text-primary font-weight-bold">${{ number_format($item->unit_price, 2) }}</span>
                                                     </div>
-                                                @endif
-                                            </div>
-                                        @endif
+                                                    @php
+                                                        $itemAttrs = $item->selected_attributes;
+                                                        if (is_string($itemAttrs)) {
+                                                            $itemAttrs = json_decode($itemAttrs, true);
+                                                        }
+                                                    @endphp
+                                                    @if(is_array($itemAttrs) && count($itemAttrs) > 0)
+                                                        <div class="mt-1">
+                                                            @foreach($itemAttrs as $key => $value)
+                                                                <div class="mb-0 d-flex justify-content-between">
+                                                                    <span class="text-muted" style="font-size: 0.6rem; opacity: 0.8;">{{ strtoupper(str_replace('_', ' ', $key)) }}:</span> 
+                                                                    <span class="text-dark font-weight-600 ml-2" style="font-size: 0.6rem;">{{ is_array($value) ? implode(', ', $value) : $value }}</span>
+                                                                </div>
+                                                            @endforeach
+                                                         </div>
+                                                    @endif
+                                                </div>
+                                            @endforeach
+                                        </div>
                                     </td>
                                     <td class="align-middle">
                                         <span class="badge {{ $order->payment_status === 'paid' ? 'badge-success-light text-success' : 'badge-warning-light text-warning' }} px-3 py-1 text-uppercase" style="font-size: 0.7rem; border-radius: 6px;">

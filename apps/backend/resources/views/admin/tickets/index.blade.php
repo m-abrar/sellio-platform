@@ -1,118 +1,145 @@
-@extends('adminlte::page')
-
-@section('title', 'Support Tickets')
-
-@section('plugins.Datatables', true)
+@section('title', 'Support Tickets | Admin Ops')
 
 @section('content_header')
-<div class="container-fluid">
-    <div class="row mb-2">
-        <div class="col-sm-6">
-            <h1 class="m-0 text-dark font-weight-bold">
-                <i class="fas fa-ticket-alt mr-2 text-success"></i> Support Tickets
-            </h1>
-        </div>
-        <div class="col-sm-6 text-right">
-            {{-- Ticket creation handled via user frontend or support dashboard --}}
+    <div class="container-fluid">
+        <div class="row mb-4 align-items-center">
+            <div class="col-sm-8">
+                <h1 class="m-0 text-dark font-weight-bold">
+                    <i class="fas fa-ticket-alt mr-2 text-primary"></i> 
+                    Customer Support Queue
+                </h1>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">
+                    Monitor user inquiries, resolve platform issues, and manage ticket priority.
+                </p>
+            </div>
+            <div class="col-sm-4 text-right">
+                <a href="{{ route('admin.welcome') }}" class="btn btn-back shadow-sm">
+                    <i class="fas fa-arrow-left mr-1"></i> Back to Dashboard
+                </a>
+            </div>
         </div>
     </div>
-</div>
 @stop
 
 @section('content')
-<div class="container-fluid">
+<div class="container-fluid pb-5">
     @include('admin.alert')
 
-    <div class="row mb-3">
+    <div class="row mb-4">
         <div class="col-12">
-            <div class="bg-white rounded shadow-sm p-2 d-flex align-items-center" style="gap: 10px; width: fit-content; border: 1px solid #e9ecef;">
-                <span class="text-muted font-weight-bold ml-2 mr-1"><i class="fas fa-filter mr-1 text-primary"></i> Status:</span>
-                <ul class="nav nav-pills">
-                    <li class="nav-item">
-                        <a class="nav-link {{ $status === 'open' ? 'active bg-success font-weight-bold' : 'text-secondary' }} px-3 py-1 text-sm mr-1" 
-                           href="{{ route('admin.tickets.index', ['status' => 'open']) }}">
-                           Open
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ $status === 'in-progress' ? 'active bg-info font-weight-bold' : 'text-secondary' }} px-3 py-1 text-sm mr-1" 
-                           href="{{ route('admin.tickets.index', ['status' => 'in-progress']) }}">
-                           In Progress
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ $status === 'closed' ? 'active bg-dark font-weight-bold' : 'text-secondary' }} px-3 py-1 text-sm" 
-                           href="{{ route('admin.tickets.index', ['status' => 'closed']) }}">
-                           Closed
-                        </a>
-                    </li>
-                </ul>
+            <div class="card border-0 shadow-premium" style="border-radius: 20px;">
+                <div class="card-body p-2 d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center">
+                        <span class="text-muted smallest font-weight-bold ml-3 mr-3 text-uppercase letter-spacing-1">
+                            <i class="fas fa-filter mr-1 text-primary"></i> Filter By Status:
+                        </span>
+                        <ul class="nav nav-pills p-1 bg-light rounded-pill">
+                            @php
+                                $statusFilters = [
+                                    'open'        => ['label' => 'Open Queue', 'color' => 'success'],
+                                    'in-progress' => ['label' => 'In Resolution', 'color' => 'info'],
+                                    'closed'      => ['label' => 'Archive', 'color' => 'dark'],
+                                ];
+                            @endphp
+                            @foreach($statusFilters as $key => $filter)
+                                <li class="nav-item">
+                                    <a class="nav-link {{ $status === $key ? 'active bg-'.$filter['color'].' shadow-sm' : 'text-muted' }} px-4 py-1 smallest font-weight-bold rounded-pill transition-all" 
+                                       href="{{ route('admin.tickets.index', ['status' => $key]) }}">
+                                       {{ strtoupper($filter['label']) }}
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    <div class="pr-3">
+                        <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest">
+                            {{ $tickets->total() }} REQUESTS FOUND
+                        </span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="card card-primary card-outline shadow-sm border-0">
-        <div class="card-header border-0 bg-white py-3">
-            <h3 class="card-title font-weight-600 text-muted">
-                Ticket Queue
-                <span class="badge badge-light border ml-2 px-2" style="font-weight: 500;">{{ $tickets->total() }} total</span>
-            </h3>
-            <div class="card-tools">
-                <button type="button" class="btn btn-tool" data-card-widget="maximize"><i class="fas fa-expand"></i></button>
-            </div>
+    <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
+        <div class="card-header border-0 bg-white py-4 px-4">
+            <h3 class="card-title font-weight-bold text-dark text-uppercase smallest" style="letter-spacing: 1px;">Ticket Registry</h3>
         </div>
         
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table id="tickets-table" class="table table-hover table-premium mb-0">
-                    <thead class="thead-light">
+                    <thead class="bg-light text-uppercase smallest font-weight-bold">
                         <tr>
-                            <th>Subject / Description</th>
-                            <th>User</th>
-                            <th>Status & Priority</th>
-                            <th>Created</th>
-                            <th class="text-right px-4">Actions</th>
+                            <th class="pl-4 py-3 border-0">Subject & Identification</th>
+                            <th class="py-3 border-0">User Profile</th>
+                            <th class="py-3 border-0">Status & Priority</th>
+                            <th class="py-3 border-0">Age</th>
+                            <th class="text-right pr-4 py-3 border-0">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse($tickets as $ticket)
                         <tr>
-                            <td class="align-middle">
-                                <a href="{{ route('admin.tickets.show', $ticket->id) }}" class="font-weight-bold text-dark d-block">
+                            <td class="align-middle pl-4 py-4">
+                                <a href="{{ route('admin.tickets.show', $ticket->id) }}" class="font-weight-bold text-dark d-block mb-1" style="font-size: 0.95rem;">
                                     {{ $ticket->title }}
                                 </a>
-                                <small class="text-muted d-block text-truncate" style="max-width: 250px;">{{ $ticket->description }}</small>
-                            </td>
-                            <td class="align-middle">{{ $ticket->user->name ?? 'Guest' }}</td>
-                            <td class="align-middle">
-                                <span class="badge badge-{{ match($ticket->status) {
-                                    'open' => 'success',
-                                    'in-progress' => 'info',
-                                    'closed' => 'dark',
-                                    default => 'warning'
-                                } }} px-2 mb-1 d-inline-block">{{ ucfirst($ticket->status) }}</span>
-                                <br>
-                                <small class="text-{{ match($ticket->priority) {
-                                    'urgent' => 'danger',
-                                    'high' => 'orange',
-                                    'medium' => 'primary',
-                                    default => 'secondary'
-                                } }} font-weight-bold text-uppercase" style="font-size: 0.7rem;">
-                                    {{ ucfirst($ticket->priority) }} Priority
-                                </small>
-                            </td>
-                            <td class="align-middle small">{{ $ticket->created_at->diffForHumans() }}</td>
-                            <td class="text-right align-middle px-4">
-                                <div class="btn-group btn-group-premium shadow-sm">
-                                    <a href="{{ route('admin.tickets.show', $ticket->id) }}" class="btn btn-default btn-sm text-primary" data-toggle="tooltip" title="View Ticket">
-                                        <i class="fas fa-eye"></i>
-                                    </a>
+                                <div class="d-flex align-items-center">
+                                    <span class="badge badge-light border text-muted smallest px-2 mr-2" style="font-weight: 500;">ID: #{{ $ticket->id }}</span>
+                                    <p class="text-muted smallest mb-0 text-truncate" style="max-width: 300px; opacity: 0.7;">{{ $ticket->description }}</p>
                                 </div>
+                            </td>
+                            <td class="align-middle py-4">
+                                <div class="d-flex align-items-center">
+                                    <div class="icon-circle bg-light border text-muted mr-3 shadow-xs" style="width: 38px; height: 38px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                        <i class="fas fa-user-circle"></i>
+                                    </div>
+                                    <div>
+                                        <span class="d-block font-weight-bold text-dark smallest">{{ $ticket->user->name ?? 'Guest User' }}</span>
+                                        <span class="text-muted smallest">{{ $ticket->user->email ?? 'Direct Submission' }}</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="align-middle py-4">
+                                @php
+                                    $statusColor = match($ticket->status) {
+                                        'open' => 'success',
+                                        'in-progress' => 'info',
+                                        'closed' => 'dark',
+                                        default => 'warning'
+                                    };
+                                    $priorityColor = match($ticket->priority) {
+                                        'urgent' => 'danger',
+                                        'high' => 'warning',
+                                        'medium' => 'primary',
+                                        default => 'secondary'
+                                    };
+                                @endphp
+                                <span class="badge badge-{{ $statusColor }}-light text-{{ $statusColor }} px-3 py-1 smallest font-weight-bold mb-1 rounded-pill">{{ strtoupper($ticket->status) }}</span>
+                                <br>
+                                <span class="text-{{ $priorityColor }} font-weight-bold text-uppercase" style="font-size: 0.65rem; letter-spacing: 0.5px;">
+                                    <i class="fas fa-bolt mr-1"></i> {{ $ticket->priority }} Priority
+                                </span>
+                            </td>
+                            <td class="align-middle py-4">
+                                <div class="font-weight-600 text-dark smallest">{{ $ticket->created_at->diffForHumans(null, true) }} ago</div>
+                                <small class="text-muted smallest">{{ $ticket->created_at->format('M d, Y') }}</small>
+                            </td>
+                            <td class="text-right align-middle pr-4 py-4">
+                                <a href="{{ route('admin.tickets.show', $ticket->id) }}" class="btn btn-primary-soft rounded-pill px-4 smallest font-weight-bold">
+                                    MANAGE <i class="fas fa-arrow-right ml-1"></i>
+                                </a>
                             </td>
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="6" class="text-center py-4 text-muted">No tickets found for status "{{ ucfirst($status) }}"</td>
+                            <td colspan="5" class="text-center py-5">
+                                <div class="py-4">
+                                    <i class="fas fa-inbox fa-3x text-light mb-3"></i>
+                                    <p class="text-muted font-weight-bold mb-0">No active tickets found for this queue.</p>
+                                </div>
+                            </td>
                         </tr>
                         @endforelse
                     </tbody>
@@ -120,7 +147,7 @@
             </div>
 
             @if($tickets->hasPages())
-                <div class="card-footer bg-white py-3">
+                <div class="card-footer bg-white py-4 border-top">
                     {{ $tickets->appends(['status' => $status])->links() }}
                 </div>
             @endif
@@ -129,38 +156,36 @@
 </div>
 @stop
 
-@section('css')
+@push('css')
 <style>
-    .nav-pills-premium { padding: 1px; }
-    .nav-pills-premium .nav-link { border-radius: 20px !important; font-size: 0.85rem; color: #6c757d; font-weight: 500; transition: all 0.3s ease; }
-    .nav-pills-premium .nav-link.active { background-color: #007bff !important; color: #fff !important; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-
-    .dataTables_filter { float: left !important; text-align: left !important; }
-    .dataTables_filter input { margin-left: 0 !important; }
-    .dataTables_length { float: right !important; text-align: right !important; }
+    .transition-all { transition: all 0.25s ease-in-out; }
+    .nav-pills .nav-link:not(.active):hover { background: rgba(0,0,0,0.03); color: var(--primary) !important; }
+    #tickets-table thead th { letter-spacing: 1px; color: #8898aa; }
+    .btn-primary-soft { background: rgba(70, 165, 172, 0.1); color: #46a5ac; border: 1px solid rgba(70, 165, 172, 0.2); }
+    .btn-primary-soft:hover { background: #46a5ac; color: #fff; }
 </style>
-
-@stop
+@endpush
 
 @section('js')
 <script>
     $(function () {
         $('[data-toggle="tooltip"]').tooltip();
-        if ($('#tickets-table tbody tr').length > 1 || $('#tickets-table tbody tr').text().indexOf('No tickets') === -1) {
+        if ($('#tickets-table tbody tr:not(.empty-state)').length > 0 && $('#tickets-table').find('i.fa-inbox').length === 0) {
             $('#tickets-table').DataTable({
-                "paging": false, /* Kept false if using server side pagination appends footer links */
+                "paging": false, 
                 "lengthChange": false,
                 "searching": true,
                 "ordering": true,
                 "info": false,
                 "autoWidth": false,
                 "responsive": true,
+                "dom": '<"row px-4 pt-3"<"col-sm-12"f>>t',
                 "language": {
                     "search": "",
-                    "searchPlaceholder": "Filter table items..."
+                    "searchPlaceholder": "Search within this queue..."
                 }
             });
-            $('.dataTables_filter input').addClass('form-control shadow-none border-light').css('width', '200px');
+            $('.dataTables_filter input').addClass('form-control form-control-premium shadow-none border-light mb-3').css('width', '250px');
         }
     });
 </script>

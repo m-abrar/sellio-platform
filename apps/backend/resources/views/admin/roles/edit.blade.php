@@ -4,23 +4,20 @@
 
 @section('content_header')
     <div class="container-fluid">
-        <div class="row mb-4 align-items-end">
-            <div class="col-sm-6">
+        <div class="row mb-4 align-items-center">
+            <div class="col-sm-8">
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-user-tag mr-2 text-primary"></i> 
                     Modify Role Spectrum
                 </h1>
-                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Adjusting authority identifiers and granular permissions for <span class="text-primary font-weight-bold">{{ strtoupper($role->name) }}</span>.</p>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">
+                    Adjusting authority identifiers and granular permissions for <span class="text-primary font-weight-bold">{{ strtoupper($role->name) }}</span>.
+                </p>
             </div>
-            <div class="col-sm-6 text-right">
-                <button type="submit" form="roleUpdateForm" class="btn btn-primary btn-sm rounded-pill px-4 font-weight-bold shadow-lg">
-                    <i class="fas fa-save mr-1"></i> COMMIT UPDATES
-                </button>
-                <ol class="breadcrumb float-sm-right bg-transparent p-0 mt-3 small">
-                    <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item"><a href="{{ route('admin.roles.index') }}">Access Control</a></li>
-                    <li class="breadcrumb-item active">Editor</li>
-                </ol>
+            <div class="col-sm-4 text-right">
+                <a href="{{ route('admin.roles.index') }}" class="btn btn-back shadow-sm">
+                    <i class="fas fa-arrow-left mr-1"></i> Back to Registry
+                </a>
             </div>
         </div>
     </div>

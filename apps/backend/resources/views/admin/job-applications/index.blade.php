@@ -32,28 +32,28 @@
         <div class="card card-outline card-secondary shadow-sm mb-4">
             <div class="card-body py-3">
                 <form method="GET" action="{{ route('admin.job-applications.index') }}" class="row align-items-end justify-content-center">
-                    <div class="col-auto">
-                        <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Job</label>
-                        <input type="text" name="job_title" class="form-control shadow-xs" placeholder="Select or type job..." list="job-suggestions" value="{{ request('job_title') }}">
-                        <datalist id="job-suggestions">
+                    <div class="col-md-3">
+                        <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Job Search</label>
+                        <select name="job_id" class="form-control select2 shadow-xs">
+                            <option value="">All Jobs</option>
                             @foreach($jobs as $j)
-                                <option value="{{ $j->title }}">
+                                <option value="{{ $j->id }}" {{ request('job_id') == $j->id ? 'selected' : '' }}>{{ $j->title }}</option>
                             @endforeach
-                        </datalist>
+                        </select>
                     </div>
-                    <div class="col-auto">
+                    <div class="col-md-2">
                         <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Category</label>
                         <select name="category" class="form-control shadow-xs">
-                            <option value="">All</option>
+                            <option value="">All Categories</option>
                             @foreach ($categories as $c)
                                 <option value="{{ $c->id }}" {{ request('category') == $c->id ? 'selected' : '' }}>{{ $c->title }}</option>
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-auto">
+                    <div class="col-md-2">
                         <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Status</label>
                         <select name="status" class="form-control shadow-xs">
-                            <option value="">All</option>
+                            <option value="">All Statuses</option>
                             <option value="submitted" {{ $status == 'submitted' ? 'selected' : '' }}>Submitted</option>
                             <option value="reviewed" {{ $status == 'reviewed' ? 'selected' : '' }}>Reviewed</option>
                         </select>
@@ -81,8 +81,8 @@
                         <thead class="thead-light">
                             <tr>
                                 <th class="text-center" style="width: 70px">Media</th>
-                                <th>Job Title</th>
-                                <th>Applicant</th>
+                                <th>Job Details</th>
+                                <th>Applicant Profile</th>
                                 <th>Applied At</th>
                                 <th class="text-center">Status</th>
                                 <th class="text-right px-4">Actions</th>
@@ -100,16 +100,13 @@
                                         <span class="d-block font-weight-bold text-dark mb-0">
                                             {{ $app->job->title ?? 'N/A' }}
                                         </span>
-                                        <div class="text-xs text-muted mt-1">
+                                        <div class="text-xs mt-1">
                                             @if($app->job && $app->job->category)
-                                                <i class="fas fa-tag mr-1"></i>{{ $app->job->category->title }}
+                                                <span class="badge badge-primary-light text-primary px-2 py-1 mr-1" style="font-size: 0.6rem; border-radius: 4px;">
+                                                    <i class="fas fa-tag mr-1"></i>{{ strtoupper($app->job->category->title) }}
+                                                </span>
                                             @endif
-                                            @if($app->job && $app->job->location)
-                                                <span class="mx-1">|</span>
-                                                <i class="fas fa-map-marker-alt mr-1 text-danger"></i>{{ $app->job->location->title }}
-                                            @endif
-                                            <span class="mx-1">|</span>
-                                            <span class="badge badge-light border text-muted" style="font-size: 0.65rem;">ID: #{{ $app->id }}</span>
+                                            <span class="badge badge-light border text-muted smallest px-2" style="font-weight: 500;">ID: #{{ $app->id }}</span>
                                         </div>
                                     </td>
                                     <td class="align-middle">

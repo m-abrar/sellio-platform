@@ -45,7 +45,7 @@
                             <th>Name</th>
                             <th>Regional Details</th>
                             <th>Module Applicability</th>
-                            <th class="text-center">Status</th>
+                            <th class="text-right">Status</th>
                             <th class="text-right px-4">Actions</th>
                         </tr>
                     </thead>
@@ -105,7 +105,7 @@
                                     </div>
                                 </td>
                                 
-                                <td class="text-center align-middle">
+                                <td class="text-right align-middle">
                                     {{-- DRY: Using premium light status badges --}}
                                     <span class="badge {{ $location->is_published ? 'badge-success-light' : 'badge-danger-light' }} px-3 py-1 text-uppercase" style="font-size: 0.7rem; letter-spacing: 0.5px;">
                                         {{ $location->is_published ? 'Active' : 'Draft' }}

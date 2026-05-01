@@ -6,15 +6,18 @@
 
 @section('content_header')
     <div class="container-fluid">
-        <div class="row mb-2">
-            <div class="col-sm-6">
+        <div class="row mb-4 align-items-center">
+            <div class="col-sm-8">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-tag mr-2 text-primary"></i> 
+                    <i class="fas fa-folder-open mr-2 text-primary"></i> 
                     {{ $category->exists ? 'Modify Category' : 'New Category' }}
                 </h1>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">
+                    {{ $category->exists ? 'Update hierarchy, labels, and module applicability for this grouping.' : 'Define a new taxonomy level to organize marketplace assets and content.' }}
+                </p>
             </div>
-            <div class="col-sm-6 text-right">
-                <a href="{{ route('admin.categories.index') }}" class="btn btn-default btn-flat btn-sm shadow-sm">
+            <div class="col-sm-4 text-right">
+                <a href="{{ route('admin.categories.index') }}" class="btn btn-back shadow-sm">
                     <i class="fas fa-arrow-left mr-1"></i> Back to List
                 </a>
             </div>
@@ -36,15 +39,15 @@
         <div class="row">
             {{-- Primary Data Column --}}
             <div class="col-md-8">
-                <div class="card card-primary card-outline shadow-sm">
-                    <div class="card-header border-0 bg-white py-3">
-                        <h3 class="card-title font-weight-bold text-dark">Basic Configuration</h3>
+                <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
+                    <div class="card-header border-0 bg-white py-3 px-4">
+                        <h3 class="card-title font-weight-bold text-dark text-uppercase small" style="letter-spacing: 1px;">Basic Configuration</h3>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body p-4">
                         <div class="form-group mb-4">
                             <label for="title" class="font-weight-600"><i class="fas fa-folder mr-1 text-primary"></i> Category Name <span class="text-danger">*</span></label>
                             <input type="text" name="title" id="title" 
-                                   class="form-control form-control-lg form-control-border @error('title') is-invalid @enderror" 
+                                   class="form-control form-control-lg @error('title') is-invalid @enderror" 
                                    placeholder="e.g. Residential Apartments"
                                    value="{{ old('title', $category?->title ?? '') }}" required list="category-title-suggestions">
                             <datalist id="category-title-suggestions">
@@ -57,8 +60,8 @@
 
                         {{-- DRY: Applied form-control-monospace class --}}
                         <div class="form-group mb-4">
-                            <label for="slug" class="font-weight-600">URL Slug</label>
-                            <div class="input-group">
+                            <label for="slug" class="font-weight-600 text-muted small">URL Slug</label>
+                            <div class="input-group shadow-xs">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text bg-light border-right-0"><i class="fas fa-link fa-xs text-muted"></i></span>
                                 </div>
@@ -93,7 +96,7 @@
                         <div class="form-group mb-0">
                             <label for="description" class="font-weight-600">Internal Description</label>
                             <textarea name="description" id="description" rows="4" 
-                                      class="form-control form-control-border @error('description') is-invalid @enderror" 
+                                      class="form-control @error('description') is-invalid @enderror" 
                                       placeholder="Briefly describe the purpose of this category...">{{ old('description', $category?->description ?? '') }}</textarea>
                             @error('description') <span class="invalid-feedback">{{ $message }}</span> @enderror
                         </div>
@@ -101,11 +104,11 @@
                 </div>
 
                 {{-- Module Assignments --}}
-                <div class="card shadow-sm border-0">
-                    <div class="card-header border-0 bg-light">
+                <div class="card shadow-premium border-0 overflow-hidden mt-4" style="border-radius: 20px;">
+                    <div class="card-header border-0 bg-white py-3 px-4">
                         <h3 class="card-title font-weight-600 text-muted small text-uppercase" style="letter-spacing: 1px;">Feature Applicability</h3>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body p-4">
                         <div class="row">
                             @php
                                 $modules = [
@@ -126,11 +129,14 @@
                 </div>
 
                 {{-- Gallery Partial --}}
-                <div class="card shadow-sm border-0">
+                <div class="card shadow-premium border-0 overflow-hidden mt-4" style="border-radius: 20px;">
+                    <div class="card-header border-0 bg-white py-3 px-4">
+                        <h3 class="card-title font-weight-600 text-muted small text-uppercase" style="letter-spacing: 1px;">Gallery Collection</h3>
+                    </div>
                     <div class="card-body p-0">
                         @include('admin._partials._image-uploader', [
                             'name' => 'gallery',
-                            'label' => 'Gallery Collection',
+                            'label' => 'Select Gallery Images',
                             'multiple' => true,
                             'model' => \App\Models\Category::class,
                             'id' => $category->id ?? null,
@@ -144,16 +150,16 @@
                 @include('admin.categories.partials.action-buttons')
 
                 {{-- Featured Image Partial --}}
-                <div class="card shadow-sm mt-4 border-0">
-                    <div class="card-header bg-white border-bottom">
-                        <h3 class="card-title font-weight-600 text-muted small text-uppercase">
-                            <i class="fas fa-image mr-1 text-primary"></i> Primary Image
+                <div class="card border-0 shadow-premium mb-4" style="border-radius: 20px; overflow: hidden;">
+                    <div class="card-header bg-white border-0 py-3 px-4">
+                        <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
+                            <i class="fas fa-camera mr-2 text-primary opacity-50"></i> Visual Identity
                         </h3>
                     </div>
                     <div class="card-body p-0">
                         @include('admin._partials._image-uploader', [
                             'name' => 'thumbnail',
-                            'label' => 'Main Icon',
+                            'label' => 'Main Icon / Badge',
                             'multiple' => false,
                             'model' => \App\Models\Category::class,
                             'id' => $category->id ?? null,

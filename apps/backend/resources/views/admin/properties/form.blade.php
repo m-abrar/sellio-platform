@@ -6,12 +6,18 @@
 
 @section('content_header')
     <div class="container-fluid">
-        <div class="row mb-2">
-            <div class="col-sm-6">
+        <div class="row mb-4 align-items-center">
+            <div class="col-sm-8">
+                <h1 class="m-0 text-dark font-weight-bold">
+                    <i class="fas fa-home mr-2 text-primary"></i> 
                     {{ $property->exists ? 'Modify Property' : 'New Property Listing' }}
+                </h1>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">
+                    {{ $property->exists ? 'Update property details, pricing, and availability for this listing.' : 'Draft a new real estate listing with detailed specifications and media.' }}
+                </p>
             </div>
-            <div class="col-sm-6 text-right">
-                <a href="{{ route('admin.listings.index', ['type' => 'property']) }}" class="btn btn-default btn-flat btn-sm shadow-sm">
+            <div class="col-sm-4 text-right">
+                <a href="{{ route('admin.listings.index', ['type' => 'property']) }}" class="btn btn-back shadow-sm">
                     <i class="fas fa-arrow-left mr-1"></i> Back to Listings
                 </a>
             </div>
@@ -34,15 +40,15 @@
             {{-- Main Content Column --}}
             <div class="col-md-8">
                 {{-- Basic Information --}}
-                <div class="card card-primary card-outline shadow-sm">
-                    <div class="card-header border-0 bg-white py-3">
-                        <h3 class="card-title font-weight-bold text-dark">General Information</h3>
+                <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
+                    <div class="card-header border-0 bg-white py-3 px-4">
+                        <h3 class="card-title font-weight-bold text-dark text-uppercase small" style="letter-spacing: 1px;">General Information</h3>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body p-4">
                         <div class="form-group mb-4">
                             <label for="title" class="font-weight-600"><i class="fas fa-heading mr-1 text-primary"></i> Property Title <span class="text-danger">*</span></label>
                             <input type="text" name="title" id="title" 
-                                   class="form-control form-control-lg form-control-border @error('title') is-invalid @enderror" 
+                                   class="form-control form-control-lg @error('title') is-invalid @enderror" 
                                    placeholder="Enter property name/heading"
                                    value="{{ old('title', $property->title ?? '') }}" required list="property-title-suggestions">
                             <datalist id="property-title-suggestions">
@@ -54,7 +60,7 @@
                         </div>
 
                         <div class="form-group mb-4">
-                            <label for="slug" class="font-weight-600">URL Slug</label>
+                            <label for="slug" class="font-weight-600 text-muted small">URL Slug</label>
                             <input type="text" name="slug" id="slug" 
                                    class="form-control form-control-monospace @error('slug') is-invalid @enderror"
                                    value="{{ old('slug', $property->slug ?? '') }}" placeholder="Auto-generated if left blank">
@@ -70,11 +76,11 @@
                 </div>
 
                 {{-- Property Details --}}
-                <div class="card shadow-sm border-0">
-                    <div class="card-header border-0 bg-light">
-                        <h3 class="card-title font-weight-600 text-muted small text-uppercase">Specifications & Areas</h3>
+                <div class="card shadow-premium border-0 overflow-hidden mt-4" style="border-radius: 20px;">
+                    <div class="card-header border-0 bg-white py-3 px-4">
+                        <h3 class="card-title font-weight-600 text-muted small text-uppercase" style="letter-spacing: 1px;">Specifications & Areas</h3>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body p-4">
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="form-group">
@@ -126,11 +132,11 @@
                 </div>
 
                 {{-- Pricing --}}
-                <div class="card shadow-sm border-0">
-                    <div class="card-header border-0 bg-light">
-                        <h3 class="card-title font-weight-600 text-muted small text-uppercase">Pricing Setup</h3>
+                <div class="card shadow-premium border-0 overflow-hidden mt-4" style="border-radius: 20px;">
+                    <div class="card-header border-0 bg-white py-3 px-4">
+                        <h3 class="card-title font-weight-600 text-muted small text-uppercase" style="letter-spacing: 1px;">Pricing Setup</h3>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body p-4">
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
@@ -163,11 +169,11 @@
                 </div>
 
                 {{-- Location Address --}}
-                <div class="card shadow-sm border-0">
-                    <div class="card-header border-0 bg-light">
-                        <h3 class="card-title font-weight-600 text-muted small text-uppercase">Map & Location</h3>
+                <div class="card shadow-premium border-0 overflow-hidden mt-4" style="border-radius: 20px;">
+                    <div class="card-header border-0 bg-white py-3 px-4">
+                        <h3 class="card-title font-weight-600 text-muted small text-uppercase" style="letter-spacing: 1px;">Map & Location</h3>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body p-4">
                         <div class="form-group">
                             <label class="font-weight-600">Street Address</label>
                             <input type="text" name="address" class="form-control" value="{{ old('address', $property->address ?? '') }}">
@@ -184,11 +190,14 @@
 
 
                 {{-- Gallery Collection --}}
-                <div class="card shadow-sm border-0">
+                <div class="card shadow-premium border-0 overflow-hidden mt-4" style="border-radius: 20px;">
+                    <div class="card-header border-0 bg-white py-3 px-4">
+                        <h3 class="card-title font-weight-600 text-muted small text-uppercase" style="letter-spacing: 1px;">Property Gallery Photos</h3>
+                    </div>
                     <div class="card-body p-0">
                         @include('admin._partials._image-uploader', [
                             'name' => \App\Models\Property::GALLERY_MEDIA,
-                            'label' => 'Property Gallery Photos',
+                            'label' => 'Select Gallery Images',
                             'multiple' => true,
                             'model' => \App\Models\Property::class,
                             'id' => $property->id ?? null,
@@ -199,15 +208,15 @@
                 @if($property->exists)
                 @if($property->is_rental)
                 {{-- Recent Bookings --}}
-                <div class="card shadow-sm border-0 mt-4">
-                    <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                        <h3 class="card-title font-weight-bold text-dark mb-0"><i class="fas fa-calendar-check mr-2 text-warning"></i> Recent Bookings</h3>
-                        <a href="{{ route('admin.bookings.properties') }}?item_id={{ $property->id }}" class="btn btn-xs btn-outline-primary px-2">View All</a>
+                <div class="card border-0 shadow-premium overflow-hidden mt-4" style="border-radius: 24px;">
+                    <div class="card-header border-0 bg-white py-4 px-4 d-flex justify-content-between align-items-center">
+                        <h3 class="card-title font-weight-bold text-dark mb-0"><i class="fas fa-calendar-check mr-2 text-warning opacity-50"></i> Recent Bookings</h3>
+                        <a href="{{ route('admin.bookings.properties') }}?item_id={{ $property->id }}" class="btn btn-xs btn-outline-primary px-2 rounded-pill small">View All</a>
                     </div>
                     <div class="card-body p-0">
                         <div class="table-responsive">
-                            <table class="table table-sm table-hover mb-0">
-                                <thead class="thead-light">
+                            <table class="table table-premium mb-0">
+                                <thead>
                                     <tr>
                                         <th>User</th>
                                         <th>Dates</th>
@@ -218,19 +227,19 @@
                                 <tbody>
                                     @forelse($recentBookings ?? [] as $bk)
                                         <tr>
-                                            <td class="align-middle small font-weight-bold">{{ $bk->user->name ?? 'Guest' }}</td>
-                                            <td class="align-middle small">
+                                            <td class="align-middle font-weight-bold">{{ $bk->user->name ?? 'Guest' }}</td>
+                                            <td class="align-middle">
                                                 {{ \Carbon\Carbon::parse($bk->check_in_date)->format('M d') }} - {{ \Carbon\Carbon::parse($bk->check_out_date)->format('M d') }}
                                             </td>
                                             <td class="align-middle">
-                                                <span class="badge badge-{{ $bk->status === 'confirmed' ? 'success' : 'warning' }} px-2 py-1 text-xs">{{ ucfirst($bk->status) }}</span>
+                                                <span class="badge badge-{{ $bk->status === 'confirmed' ? 'success' : 'warning' }} px-3 py-2 rounded-pill font-weight-bold smallest">{{ ucfirst($bk->status) }}</span>
                                             </td>
                                             <td class="text-right align-middle">
-                                                <a href="{{ url('/admin/bookings/show/PropertyBooking/' . $bk->id) }}" class="btn btn-xs btn-default text-info"><i class="fas fa-eye"></i></a>
+                                                <a href="{{ url('/admin/bookings/show/PropertyBooking/' . $bk->id) }}" class="btn btn-xs btn-light text-primary rounded-circle"><i class="fas fa-eye"></i></a>
                                             </td>
                                         </tr>
                                     @empty
-                                        <tr><td colspan="4" class="text-center text-muted small py-3">No bookings yet</td></tr>
+                                        <tr><td colspan="4" class="text-center text-muted py-5">No bookings yet</td></tr>
                                     @endforelse
                                 </tbody>
                             </table>
@@ -241,15 +250,14 @@
 
                 @if($property->is_sale)
                 {{-- Tour Requests / Inquiries --}}
-                <div class="card shadow-sm border-0 mt-4">
-                    <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                        <h3 class="card-title font-weight-bold text-dark mb-0"><i class="fas fa-eye mr-2 text-info"></i> Tour Requests (Inquiries)</h3>
-                        <button class="btn btn-xs btn-outline-secondary px-2" disabled>View All</button>
+                <div class="card border-0 shadow-premium overflow-hidden mt-4" style="border-radius: 24px;">
+                    <div class="card-header border-0 bg-white py-4 px-4 d-flex justify-content-between align-items-center">
+                        <h3 class="card-title font-weight-bold text-dark mb-0"><i class="fas fa-eye mr-2 text-info opacity-50"></i> Tour Requests</h3>
                     </div>
                     <div class="card-body p-0">
                         <div class="table-responsive">
-                            <table class="table table-sm table-hover mb-0">
-                                <thead class="thead-light">
+                            <table class="table table-premium mb-0">
+                                <thead>
                                     <tr>
                                         <th>Name</th>
                                         <th>Schedule</th>
@@ -260,20 +268,20 @@
                                 <tbody>
                                     @forelse($recentVisits ?? [] as $visit)
                                         <tr>
-                                            <td class="align-middle small font-weight-bold">
+                                            <td class="align-middle font-weight-bold">
                                                 {{ $visit->full_name }}
                                                 <div class="small text-muted">{{ $visit->email }}</div>
                                             </td>
-                                            <td class="align-middle small">{{ \Carbon\Carbon::parse($visit->scheduled_at)->format('M d, g:i A') }}</td>
+                                            <td class="align-middle">{{ \Carbon\Carbon::parse($visit->scheduled_at)->format('M d, g:i A') }}</td>
                                             <td class="align-middle">
-                                                <span class="badge badge-{{ $visit->status === 'confirmed' ? 'success' : 'warning' }} px-2 py-1 text-xs">{{ ucfirst($visit->status) }}</span>
+                                                <span class="badge badge-{{ $visit->status === 'confirmed' ? 'success' : 'warning' }} px-3 py-2 rounded-pill font-weight-bold smallest">{{ ucfirst($visit->status) }}</span>
                                             </td>
                                             <td class="text-right align-middle">
-                                                <button class="btn btn-xs btn-default text-muted" disabled><i class="fas fa-eye"></i></button>
+                                                <button class="btn btn-xs btn-light text-muted rounded-circle" disabled><i class="fas fa-eye"></i></button>
                                             </td>
                                         </tr>
                                     @empty
-                                        <tr><td colspan="4" class="text-center text-muted small py-3">No inquiries yet</td></tr>
+                                        <tr><td colspan="4" class="text-center text-muted py-5">No inquiries yet</td></tr>
                                     @endforelse
                                 </tbody>
                             </table>
@@ -283,9 +291,11 @@
                 @endif
                 @endif
                 {{-- Display & Billing Options --}}
-                <div class="card shadow-sm border-0 mt-4">
-                    <div class="card-header bg-white"><h3 class="card-title font-weight-bold text-dark"><i class="fas fa-cog mr-2 text-secondary"></i> Display & Pricing Options</h3></div>
-                    <div class="card-body">
+                <div class="card shadow-premium border-0 mt-4 overflow-hidden" style="border-radius: 20px;">
+                    <div class="card-header border-0 bg-white py-3 px-4">
+                        <h3 class="card-title font-weight-bold text-dark text-uppercase small" style="letter-spacing: 1px;"><i class="fas fa-cog mr-2 text-secondary"></i> Display & Pricing Options</h3>
+                    </div>
+                    <div class="card-body p-4">
                         <div class="row">
                             @php
                                 $toggles = [
@@ -319,9 +329,11 @@
                 @include('admin.properties.partials.action-buttons')
 
                 {{-- Primary Media --}}
-                <div class="card shadow-sm border-0 mt-4">
-                    <div class="card-header bg-white">
-                        <h3 class="card-title font-weight-600 small text-uppercase">Primary Image</h3>
+                <div class="card border-0 shadow-premium mb-4" style="border-radius: 20px; overflow: hidden;">
+                    <div class="card-header bg-white border-0 py-3 px-4">
+                        <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
+                            <i class="fas fa-camera mr-2 text-primary opacity-50"></i> Visual Identity
+                        </h3>
                     </div>
                     <div class="card-body p-0">
                         @include('admin._partials._image-uploader', [
@@ -335,11 +347,15 @@
                 </div>
 
                 {{-- Classification --}}
-                <div class="card shadow-sm border-0 mt-4">
-                    <div class="card-header bg-white"><h3 class="card-title font-weight-600 small text-uppercase">Classification</h3></div>
-                    <div class="card-body">
-                        <div class="form-group">
-                            <label class="small font-weight-bold">Category</label>
+                <div class="card border-0 shadow-premium mb-4 overflow-hidden" style="border-radius: 20px;">
+                    <div class="card-header bg-white border-0 py-3 px-4">
+                        <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
+                            <i class="fas fa-sitemap mr-2 text-primary opacity-50"></i> Classification
+                        </h3>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="form-group mb-4">
+                            <label class="small font-weight-bold text-muted text-uppercase">Marketplace Category</label>
                             <select name="category_id" class="form-control select2">
                                 <option value="">Select Category</option>
                                 @foreach($categories ?? [] as $cat)
@@ -347,8 +363,8 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="form-group">
-                            <label class="small font-weight-bold">Location Group</label>
+                        <div class="form-group mb-0">
+                            <label class="small font-weight-bold text-muted text-uppercase">Regional Hub</label>
                             <select name="location_id" class="form-control select2">
                                 <option value="">Select Location</option>
                                 @foreach($locations ?? [] as $loc)
@@ -356,22 +372,6 @@
                                 @endforeach
                             </select>
                         </div>
-                    </div>
-                </div>
-
-                {{-- Primary Media --}}
-                <div class="card shadow-sm border-0">
-                    <div class="card-header bg-white">
-                        <h3 class="card-title font-weight-600 small text-uppercase">Featured Image</h3>
-                    </div>
-                    <div class="card-body p-0">
-                        @include('admin._partials._image-uploader', [
-                            'name' => \App\Models\Property::PRIMARY_MEDIA,
-                            'label' => 'Main Display Image',
-                            'multiple' => false,
-                            'model' => \App\Models\Property::class,
-                            'id' => $property->id ?? null,
-                        ])
                     </div>
                 </div>
             </div>

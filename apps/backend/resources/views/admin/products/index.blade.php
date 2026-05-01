@@ -6,15 +6,20 @@
 
 @section('content_header')
     <div class="container-fluid">
-        <div class="row mb-2">
-            <div class="col-sm-6">
+        <div class="row mb-4 align-items-center">
+            <div class="col-sm-8">
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-boxes mr-2 text-primary"></i> Inventory & Products
                 </h1>
+                <ol class="breadcrumb bg-transparent p-0 mt-2 small">
+                    <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Products</li>
+                </ol>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Track and manage physical inventory, digital goods, and retail listings.</p>
             </div>
-            <div class="col-sm-6 text-right">
-                <a href="{{ route('admin.products.create') }}" class="btn btn-primary btn-flat shadow-sm">
-                    <i class="fas fa-plus mr-1"></i> Add Product
+            <div class="col-sm-4 text-right">
+                <a href="{{ route('admin.products.create') }}" class="btn btn-primary btn-sm rounded-pill px-4 font-weight-bold shadow-premium">
+                    <i class="fas fa-plus-circle mr-1"></i> ADD PRODUCT
                 </a>
             </div>
         </div>
@@ -92,7 +97,7 @@
                             <th>Product Info</th>
                             <th>Retail Details</th>
                             <th>Inventory</th>
-                            <th class="text-center">Status</th>
+                            <th class="text-right">Status</th>
                             <th class="text-right px-4">Actions</th>
                         </tr>
                     </thead>
@@ -152,7 +157,7 @@
                                     </small>
                                 </td>
 
-                                <td class="text-center align-middle">
+                                <td class="text-right align-middle">
                                     <div class="mb-1">
                                         <span class="badge {{ $product->is_published ? 'badge-success-light' : 'badge-danger-light' }} px-2 py-1">
                                             {{ $product->is_published ? 'Published' : 'Draft' }}

@@ -4,122 +4,138 @@
 
 @section('content_header')
     <div class="container-fluid">
-        <div class="row mb-2">
-            <div class="col-sm-6">
+        <div class="row mb-4 align-items-center">
+            <div class="col-sm-8">
                 <h1 class="m-0 text-dark font-weight-bold">
-                     Configure {{ $gateway->title }} Gateway
+                    <i class="fas fa-credit-card mr-2 text-primary"></i> 
+                    Configure {{ $gateway->title }}
                 </h1>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">
+                    Adjusting gateway credentials, operational modes, and security handshakes.
+                </p>
+            </div>
+            <div class="col-sm-4 text-right">
+                <a href="{{ route('admin.payment-gateways.index') }}" class="btn btn-back shadow-sm">
+                    <i class="fas fa-arrow-left mr-1"></i> Back to Providers
+                </a>
             </div>
         </div>
     </div>
 @stop
 
 @section('content')
+<div class="container-fluid">
+    @include('admin.alert')
 
-@include('admin.alert')
+    <form action="{{ route('admin.payment-gateways.update', $gateway->id) }}" method="POST">
+        @csrf
+        @method('PUT')
 
-{{-- NOTE: Action uses the explicit route name defined in routes/admin.php --}}
-<form action="{{ route('admin.payment-gateways.update', $gateway->id) }}" method="POST">
-    @csrf
-    @method('PUT')
+        <div class="row">
+            {{-- Main Configuration Column --}}
+            <div class="col-md-8">
+                <div class="card border-0 shadow-premium overflow-hidden mb-4" style="border-radius: 24px;">
+                    <div class="card-header border-0 bg-white py-3 px-4">
+                        <h3 class="card-title font-weight-bold text-dark text-uppercase small" style="letter-spacing: 1px;">Connection Logic</h3>
+                    </div>
+                    <div class="card-body p-4">
+                        {{-- Global Status Controls --}}
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <label class="font-weight-600 small text-muted text-uppercase mb-2 d-block">Operational Mode</label>
+                                <select name="mode" id="mode" class="form-control form-control-lg @error('mode') is-invalid @enderror" style="border-radius: 12px;">
+                                    <option value="sandbox" {{ old('mode', $gateway->mode) === 'sandbox' ? 'selected' : '' }}>
+                                        Sandbox (Testing Environment)
+                                    </option>
+                                    <option value="live" {{ old('mode', $gateway->mode) === 'live' ? 'selected' : '' }}>
+                                        Live (Production Environment)
+                                    </option>
+                                </select>
+                                @error('mode') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
+                            </div>
+                            <div class="col-md-6 d-flex align-items-center pt-4">
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="activeSwitch" name="is_active" value="1" 
+                                           {{ old('is_active', $gateway->is_active) ? 'checked' : '' }} />
+                                    <label class="custom-control-label font-weight-bold text-dark" for="activeSwitch">
+                                        {{ $gateway->is_active ? 'ENABLED' : 'DISABLED' }}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
 
-    <div class="row">
-        <div class="col-md-8">
-            <div class="card card-primary card-outline shadow-sm border-0">
-                <div class="card-header border-0 bg-white py-3">
-                    <h3 class="card-title">Connection Settings</h3>
-                </div>
-                <div class="card-body">
+                        <hr class="my-4">
 
-                    {{-- 1. Global Status Controls --}}
-                    <div class="form-group row">
-                        <label class="col-sm-3 col-form-label">Gateway Status</label>
-                        <div class="col-sm-9 pt-2">
-                            <div class="custom-control custom-switch">
-                                <input type="checkbox" class="custom-control-input" id="activeSwitch" name="is_active" value="1" 
-                                       {{ old('is_active', $gateway->is_active) ? 'checked' : '' }} />
-                                <label class="custom-control-label" for="activeSwitch">
-                                    {{ $gateway->is_active ? 'ENABLED (Transactions are LIVE/Sandbox)' : 'DISABLED' }}
-                                </label>
+                        {{-- Tabbed Configuration Forms (Live vs. Sandbox) --}}
+                        <ul class="nav nav-pills mb-4 shadow-xs p-1 bg-light rounded-pill" id="configTabs" role="tablist" style="width: fit-content;">
+                            <li class="nav-item">
+                                <a class="nav-link active rounded-pill px-4 font-weight-bold small text-uppercase" data-toggle="pill" href="#live-config">
+                                    <i class="fas fa-lock mr-2"></i> Live Credentials
+                                </a>
+                            </li>
+                            <li class="nav-item mx-1">
+                                <a class="nav-link rounded-pill px-4 font-weight-bold small text-uppercase" data-toggle="pill" href="#sandbox-config">
+                                    <i class="fas fa-flask mr-2"></i> Sandbox
+                                </a>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content" id="custom-tabs-content">
+                            {{-- Live Tab Content --}}
+                            <div class="tab-pane fade show active" id="live-config" role="tabpanel">
+                                @include('admin.payment-gateways._config_form', [
+                                    'config' => $liveConfig, 
+                                    'environment' => 'live',
+                                    'blueprints' => $blueprints 
+                                ])
+                            </div>
+                            {{-- Sandbox Tab Content --}}
+                            <div class="tab-pane fade" id="sandbox-config" role="tabpanel">
+                                @include('admin.payment-gateways._config_form', [
+                                    'config' => $sandboxConfig, 
+                                    'environment' => 'sandbox',
+                                    'blueprints' => $blueprints
+                                ])
                             </div>
                         </div>
                     </div>
-
-                    <div class="form-group row">
-                        <label for="mode" class="col-sm-3 col-form-label">Operational Mode</label>
-                        <div class="col-sm-9">
-                            <select name="mode" id="mode" class="form-control @error('mode') is-invalid @enderror">
-                                <option value="sandbox" {{ old('mode', $gateway->mode) === 'sandbox' ? 'selected' : '' }}>
-                                    Sandbox (Testing Mode)
-                                </option>
-                                <option value="live" {{ old('mode', $gateway->mode) === 'live' ? 'selected' : '' }}>
-                                    Live (Production Mode)
-                                </option>
-                            </select>
-                            @error('mode') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
-                        </div>
+                    <div class="card-footer bg-white border-0 py-4 px-4 text-right">
+                        <button type="submit" class="btn btn-primary rounded-pill px-5 shadow-premium font-weight-bold">
+                            <i class="fas fa-save mr-2"></i> COMMIT PROVIDER CONFIGURATION
+                        </button>
                     </div>
+                </div>
+            </div>
 
-                    <hr>
-
-                    {{-- 2. Tabbed Configuration Forms (Live vs. Sandbox) --}}
-                    <ul class="nav nav-tabs" id="configTabs" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active" data-toggle="pill" href="#live-config">
-                                <i class="fas fa-lock"></i> Live Credentials
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-toggle="pill" href="#sandbox-config">
-                                <i class="fas fa-flask"></i> Sandbox Credentials
-                            </a>
-                        </li>
-                    </ul>
-
-                    <div class="tab-content" id="custom-tabs-content">
-                        {{-- Live Tab Content --}}
-                        <div class="tab-pane fade show active" id="live-config" role="tabpanel">
-                            @include('admin.payment-gateways._config_form', [
-                                'config' => $liveConfig, 
-                                'environment' => 'live',
-                                'blueprints' => $blueprints // Pass the blueprint
-                            ])
+            {{-- Sidebar Column --}}
+            <div class="col-md-4">
+                <div class="card border-0 shadow-premium mb-4" style="border-radius: 20px; overflow: hidden;">
+                    <div class="card-header bg-white border-0 py-3 px-4">
+                        <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
+                            <i class="fas fa-info-circle mr-2 text-primary opacity-50"></i> Registry Details
+                        </h3>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="mb-3 pb-3 border-bottom">
+                            <label class="smallest text-muted font-weight-bold text-uppercase d-block mb-1">Service Class</label>
+                            <code class="text-primary small font-weight-bold">{{ $gateway->class_name }}</code>
                         </div>
-                        {{-- Sandbox Tab Content --}}
-                        <div class="tab-pane fade" id="sandbox-config" role="tabpanel">
-                            @include('admin.payment-gateways._config_form', [
-                                'config' => $sandboxConfig, 
-                                'environment' => 'sandbox',
-                                'blueprints' => $blueprints
-                            ])
+                        <div class="mb-0">
+                            <label class="smallest text-muted font-weight-bold text-uppercase d-block mb-1">System ID (Slug)</label>
+                            <code class="text-dark small font-weight-bold">{{ $gateway->slug }}</code>
+                            <p class="text-muted smallest mt-2 mb-0">Use this identifier to reference this provider in custom checkout logic or billing middleware.</p>
                         </div>
                     </div>
                 </div>
-                <div class="card-footer text-right">
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-save"></i> Save {{ $gateway->title }} Configuration
-                    </button>
-                    <a href="{{ route('admin.payment-gateways.index') }}" class="btn btn-default">
-                        Cancel
-                    </a>
-                </div>
             </div>
         </div>
-
-        <div class="col-md-4">
-            <div class="card card-outline card-info">
-                <div class="card-header"><h3 class="card-title">Gateway Information</h3></div>
-                <div class="card-body">
-                    <p><strong>Service Class:</strong> <code>{{ $gateway->class_name }}</code></p>
-                    <p><strong>Slug:</strong> <code>{{ $gateway->slug }}</code></p>
-                    <p class="text-muted">Use the slug to reference this gateway in your application logic (e.g., when resolving the service).</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</form>
+    </form>
+</div>
 @endsection
 
-@section('css')
-    
-@endsection
+@push('css')
+<style>
+    .nav-pills .nav-link.active { background-color: var(--primary) !important; color: #fff !important; }
+    .nav-pills .nav-link:not(.active) { color: var(--dark-muted); }
+</style>
+@endpush

@@ -12,7 +12,7 @@
                 </h1>
             </div>
             <div class="col-sm-6 text-right">
-                <a href="{{ route('admin.brands.index') }}" class="btn btn-default btn-flat btn-sm shadow-sm">
+                <a href="{{ route('admin.brands.index') }}" class="btn btn-back">
                     <i class="fas fa-arrow-left mr-1"></i> Back to List
                 </a>
             </div>

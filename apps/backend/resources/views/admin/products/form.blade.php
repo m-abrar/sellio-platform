@@ -6,12 +6,17 @@
 
 @section('content_header')
     <div class="container-fluid">
-        <div class="row mb-2">
-            <div class="col-sm-6">
-                    {{ $product->exists ? 'Modify Product' : 'New Product Listing' }}
+        <div class="row mb-4 align-items-center">
+            <div class="col-sm-8">
+                <h1 class="m-0 text-dark font-weight-bold">
+                    <i class="fas fa-boxes mr-2 text-primary"></i> {{ $product->exists ? 'Modify Product' : 'New Product Listing' }}
+                </h1>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">
+                    {{ $product->exists ? 'Update inventory details and retail pricing for this item.' : 'Define technical specifications and commercial attributes for a new listing.' }}
+                </p>
             </div>
-            <div class="col-sm-6 text-right">
-                <a href="{{ route('admin.products.index') }}" class="btn btn-default btn-flat btn-sm shadow-sm">
+            <div class="col-sm-4 text-right">
+                <a href="{{ route('admin.products.index') }}" class="btn btn-back shadow-sm">
                     <i class="fas fa-arrow-left mr-1"></i> Back to Catalog
                 </a>
             </div>
@@ -33,20 +38,20 @@
         <div class="row">
             {{-- Main Content Column --}}
             <div class="col-md-9">
-                <div class="card card-primary card-outline card-outline-tabs shadow-sm border-0">
-                    <div class="card-header p-0 border-bottom-0">
-                        <ul class="nav nav-tabs" id="productTab" role="tablist">
+                <div class="card shadow-sm border-0" style="border-radius: 16px; overflow: hidden;">
+                    <div class="card-header p-0 bg-white border-0">
+                        <ul class="nav nav-tabs-premium" id="productTab" role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link active py-3 px-4 font-weight-bold" id="general-tab" data-toggle="pill" href="#general" role="tab"><i class="fas fa-info-circle mr-2"></i> General Information</a>
+                                <a class="nav-link active" id="general-tab" data-toggle="tab" href="#general" role="tab"><i class="fas fa-info-circle mr-2"></i> General</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link py-3 px-4 font-weight-bold" id="variations-tab" data-toggle="pill" href="#variations" role="tab"><i class="fas fa-layer-group mr-2"></i> Variations & Sizing</a>
+                                <a class="nav-link" id="variations-tab" data-toggle="tab" href="#variations" role="tab"><i class="fas fa-layer-group mr-2"></i> Variations</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link py-3 px-4 font-weight-bold" id="addons-tab" data-toggle="pill" href="#addons" role="tab"><i class="fas fa-plus-circle mr-2"></i> Add-on Options</a>
+                                <a class="nav-link" id="addons-tab" data-toggle="tab" href="#addons" role="tab"><i class="fas fa-plus-circle mr-2"></i> Add-ons</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link py-3 px-4 font-weight-bold" id="logistics-tab" data-toggle="pill" href="#logistics" role="tab"><i class="fas fa-truck mr-2"></i> Shipping & Logistics</a>
+                                <a class="nav-link" id="logistics-tab" data-toggle="tab" href="#logistics" role="tab"><i class="fas fa-truck mr-2"></i> Logistics</a>
                             </li>
                         </ul>
                     </div>
@@ -251,8 +256,12 @@
                 @include('admin.products.partials.action-buttons')
 
                 {{-- Primary Media --}}
-                <div class="card shadow-sm border-0 mt-0">
-                    <div class="card-header bg-white"><h3 class="card-title font-weight-600 small text-uppercase">Primary Listing Image</h3></div>
+                <div class="card border-0 shadow-premium mb-4" style="border-radius: 20px; overflow: hidden;">
+                    <div class="card-header bg-white border-0 py-3 px-4">
+                        <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
+                            <i class="fas fa-camera mr-2 text-primary opacity-50"></i> Visual Identity
+                        </h3>
+                    </div>
                     <div class="card-body p-0">
                         @include('admin._partials._image-uploader', [
                             'name' => \App\Models\Product::PRIMARY_MEDIA,
@@ -265,9 +274,13 @@
                 </div>
 
                 {{-- Settings --}}
-                <div class="card shadow-sm border-0">
-                    <div class="card-header bg-white"><h3 class="card-title font-weight-bold text-muted small text-uppercase">Toggles & Status</h3></div>
-                    <div class="card-body">
+                <div class="card border-0 shadow-premium mb-4 overflow-hidden" style="border-radius: 20px;">
+                    <div class="card-header bg-white border-0 py-3 px-4">
+                        <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
+                            <i class="fas fa-cog mr-2 text-primary opacity-50"></i> Configuration
+                        </h3>
+                    </div>
+                    <div class="card-body p-4">
                         @php
                             $toggles = [
                                 ['name' => 'is_published', 'id' => 'isPublished', 'label' => 'Published', 'checked' => old('is_published', $product->is_published ?? true)],
@@ -278,21 +291,25 @@
                             ];
                         @endphp
                         @foreach($toggles as $t)
-                            <div class="custom-control custom-switch mb-2">
+                            <div class="custom-control custom-switch mb-3">
                                 <input type="hidden" name="{{ $t['name'] }}" value="0">
                                 <input type="checkbox" name="{{ $t['name'] }}" value="1" class="custom-control-input" id="{{ $t['id'] }}" {{ $t['checked'] ? 'checked' : '' }}>
-                                <label class="custom-control-label font-weight-normal" for="{{ $t['id'] }}">{{ $t['label'] }}</label>
+                                <label class="custom-control-label font-weight-bold text-dark small" for="{{ $t['id'] }}" style="padding-top: 2px;">{{ $t['label'] }}</label>
                             </div>
                         @endforeach
                     </div>
                 </div>
 
                 {{-- Classification --}}
-                <div class="card shadow-sm border-0">
-                    <div class="card-header bg-white"><h3 class="card-title font-weight-600 small text-uppercase">Categories & Brand</h3></div>
-                    <div class="card-body">
-                        <div class="form-group">
-                            <label class="small font-weight-bold">Category</label>
+                <div class="card border-0 shadow-premium mb-4 overflow-hidden" style="border-radius: 20px;">
+                    <div class="card-header bg-white border-0 py-3 px-4">
+                        <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
+                            <i class="fas fa-sitemap mr-2 text-primary opacity-50"></i> Taxonomy
+                        </h3>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="form-group mb-4">
+                            <label class="small font-weight-bold text-muted text-uppercase">Collection / Category</label>
                             <select name="category_id" class="form-control select2">
                                 <option value="">Select Category</option>
                                 @foreach($categories as $cat)
@@ -300,8 +317,8 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="form-group">
-                            <label class="small font-weight-bold">Brand</label>
+                        <div class="form-group mb-4">
+                            <label class="small font-weight-bold text-muted text-uppercase">Brand Authority</label>
                             <select name="brand_id" class="form-control select2">
                                 <option value="">Select Brand</option>
                                 @foreach($brands ?? [] as $brand)
@@ -309,8 +326,8 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="form-group">
-                            <label class="small font-weight-bold">Tags</label>
+                        <div class="form-group mb-0">
+                            <label class="small font-weight-bold text-muted text-uppercase">Search Tags</label>
                             <select name="tags[]" class="form-control select2" multiple="multiple">
                                 @foreach($tags ?? [] as $tag)
                                     <option value="{{ $tag->id }}" {{ (collect(old('tags', optional($product ?? null)->tags ? $product->tags->pluck('id')->toArray() : []))->contains($tag->id)) ? 'selected' : '' }}>{{ $tag->name }}</option>

@@ -6,21 +6,21 @@
 
 @section('content_header')
     <div class="container-fluid">
-        <div class="row mb-4 align-items-end">
-            <div class="col-sm-6">
+        <div class="row mb-4 align-items-center">
+            <div class="col-sm-8">
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-tags mr-2 text-primary"></i> Taxonomy Architecture
                 </h1>
-                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Define and organize hierarchal categories across all marketplace verticals.</p>
-            </div>
-            <div class="col-sm-6 text-right">
-                <a href="{{ route('admin.categories.create') }}" class="btn btn-primary btn-sm rounded-pill px-4 font-weight-bold shadow-lg">
-                    <i class="fas fa-plus-circle mr-1"></i> ADD SEGMENT
-                </a>
-                <ol class="breadcrumb float-sm-right bg-transparent p-0 mt-3 small">
+                <ol class="breadcrumb bg-transparent p-0 mt-2 small">
                     <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}">Dashboard</a></li>
                     <li class="breadcrumb-item active">Taxonomy</li>
                 </ol>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Define and organize hierarchal categories across all marketplace verticals.</p>
+            </div>
+            <div class="col-sm-4 text-right">
+                <a href="{{ route('admin.categories.create') }}" class="btn btn-primary btn-sm rounded-pill px-4 font-weight-bold shadow-premium">
+                    <i class="fas fa-plus-circle mr-1"></i> ADD SEGMENT
+                </a>
             </div>
         </div>
     </div>
@@ -44,8 +44,8 @@
                             <th class="text-center pl-4" style="width: 80px;">Icon</th>
                             <th>Segment Identity</th>
                             <th>Module Applicability Spectrum</th>
-                            <th class="text-center">Lifecycle</th>
-                            <th class="text-right pr-4">Metrics</th>
+                            <th class="text-right">Lifecycle</th>
+                            <th class="text-right pr-4">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -109,7 +109,7 @@
                                     </div>
                                 </td>
 
-                                <td class="text-center align-middle">
+                                <td class="text-right align-middle">
                                     @if($category->is_published)
                                         <span class="badge badge-success-light px-3 py-2 rounded-pill font-weight-bold smallest uppercase animate-pulse">ACTIVE</span>
                                     @else

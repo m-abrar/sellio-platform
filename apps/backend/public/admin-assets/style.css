@@ -270,6 +270,12 @@ textarea.form-control {
     background: #0f172a !important; /* Slate 900 */
     width: 280px !important; /* Increased width for more premium feel */
     transition: width 0.3s ease-in-out !important;
+    height: 100vh !important;
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    overflow-y: auto;
+    z-index: 1040 !important;
 }
 
 /* Adjust content wrapper for wider sidebar */
@@ -589,7 +595,7 @@ textarea.form-control {
     position: fixed !important;
     left: 0;
     right: 0;
-    z-index: 1030 !important;
+    z-index: 1030 !important; /* Below sidebar (1040) but above content */
 }
 
 /* Adjust for collapsed state */
@@ -609,9 +615,10 @@ textarea.form-control {
 
 .content-wrapper {
     background-color: #f1f5f9 !important;
-    padding-top: 100px !important; /* Buffer for floating header */
+    padding-top: 110px !important; /* Buffer for floating header + gap */
     padding-left: 15px !important;
     padding-right: 15px !important;
+    min-height: 100vh !important;
 }
 
 /* Fix Content Header Overlap */
@@ -797,10 +804,101 @@ a:focus-visible, button:focus-visible {
 }
 
 /* Small Pagination */
-.pagination-sm .page-link {
-    padding: 5px 10px !important;
-    font-size: 0.75rem !important;
+
+/* --- 20. BACK BUTTON PREMIUM --- */
+.btn-back {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    color: #475569 !important;
+    font-weight: 600 !important;
+    border-radius: 8px !important;
+    padding: 8px 16px !important;
+    font-size: 0.85rem !important;
+    transition: all 0.3s ease !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05) !important;
+}
+
+.btn-back:hover {
+    background: #f8fafc !important;
+    color: var(--primary) !important;
+    border-color: var(--primary) !important;
+    transform: translateX(-4px);
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1) !important;
+}
+
+.btn-back i {
+    transition: transform 0.3s ease;
+}
+
+.btn-back:hover i {
+    transform: scale(1.1);
 }
 
 
+/* --- 21. PREMIUM TABS --- */
+.nav-tabs-premium {
+    border-bottom: 2px solid var(--border-color) !important;
+    gap: 2rem;
+    padding: 0 1.5rem !important;
+}
+
+.nav-tabs-premium .nav-item {
+    margin-bottom: -2px;
+}
+
+.nav-tabs-premium .nav-link {
+    border: none !important;
+    background: transparent !important;
+    color: var(--dark-muted) !important;
+    font-weight: 700 !important;
+    font-size: 0.85rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    padding: 1.25rem 0.5rem !important;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.nav-tabs-premium .nav-link i {
+    font-size: 1rem;
+    opacity: 0.7;
+    transition: all 0.3s ease;
+}
+
+.nav-tabs-premium .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 3px;
+    background: var(--primary);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 10px 10px 0 0;
+}
+
+.nav-tabs-premium .nav-link.active {
+    color: var(--primary) !important;
+}
+
+.nav-tabs-premium .nav-link.active i {
+    color: var(--primary) !important;
+    opacity: 1;
+    transform: translateY(-1px);
+}
+
+.nav-tabs-premium .nav-link.active::after {
+    width: 100%;
+}
+
+.nav-tabs-premium .nav-link:hover:not(.active) {
+    color: var(--dark) !important;
+}
+
+.nav-tabs-premium .nav-link:hover:not(.active)::after {
+    width: 30%;
+    opacity: 0.5;
+}
 

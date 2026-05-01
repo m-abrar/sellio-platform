@@ -32,28 +32,28 @@
         <div class="card card-outline card-secondary shadow-sm mb-4">
             <div class="card-body py-3">
                 <form method="GET" action="{{ route('admin.event-bookings.index') }}" class="row align-items-end justify-content-center">
-                    <div class="col-auto">
-                        <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Event</label>
-                        <input type="text" name="event_name" class="form-control shadow-xs" placeholder="Select or type event..." list="event-suggestions" value="{{ request('event_name') }}">
-                        <datalist id="event-suggestions">
+                    <div class="col-md-3">
+                        <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Event Search</label>
+                        <select name="event_id" class="form-control select2 shadow-xs">
+                            <option value="">All Events</option>
                             @foreach($events as $e)
-                                <option value="{{ $e->title }}">
+                                <option value="{{ $e->id }}" {{ request('event_id') == $e->id ? 'selected' : '' }}>{{ $e->title }}</option>
                             @endforeach
-                        </datalist>
+                        </select>
                     </div>
-                    <div class="col-auto">
+                    <div class="col-md-2">
                         <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Category</label>
                         <select name="category" class="form-control shadow-xs">
-                            <option value="">All</option>
+                            <option value="">All Categories</option>
                             @foreach ($categories as $c)
                                 <option value="{{ $c->id }}" {{ request('category') == $c->id ? 'selected' : '' }}>{{ $c->title }}</option>
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-auto">
+                    <div class="col-md-2">
                         <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Status</label>
                         <select name="status" class="form-control shadow-xs">
-                            <option value="">All</option>
+                            <option value="">All Statuses</option>
                             <option value="pending" {{ $status == 'pending' ? 'selected' : '' }}>Pending</option>
                             <option value="confirmed" {{ $status == 'confirmed' ? 'selected' : '' }}>Confirmed</option>
                             <option value="cancelled" {{ $status == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
@@ -102,13 +102,16 @@
                                         <span class="d-block font-weight-bold text-dark mb-0">
                                             {{ $booking->event->title ?? 'N/A' }}
                                         </span>
-                                        <div class="text-xs text-muted mt-1">
+                                        <div class="text-xs mt-1">
                                             @if($booking->event && $booking->event->category)
-                                                <i class="fas fa-tag mr-1"></i>{{ $booking->event->category->title }}
+                                                <span class="badge badge-primary-light text-primary px-2 py-1 mr-1" style="font-size: 0.6rem; border-radius: 4px;">
+                                                    <i class="fas fa-tag mr-1"></i>{{ strtoupper($booking->event->category->title) }}
+                                                </span>
                                             @endif
                                             @if($booking->event && $booking->event->location)
-                                                <span class="mx-1">|</span>
-                                                <i class="fas fa-map-marker-alt mr-1 text-danger"></i>{{ $booking->event->location->title }}
+                                                <span class="text-muted" style="font-size: 0.7rem;">
+                                                    <i class="fas fa-map-marker-alt mr-1 text-danger opacity-75"></i>{{ $booking->event->location->title }}
+                                                </span>
                                             @endif
                                         </div>
                                     </td>

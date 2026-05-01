@@ -3,21 +3,24 @@
 @section('title', ($page->exists ? 'Edit' : 'Add') . ' Content')
 
 @section('content_header')
-<div class="container-fluid">
-    <div class="row mb-2">
-        <div class="col-sm-6">
-            <h1 class="m-0 text-dark font-weight-bold">
-                <i class="fas fa-file-alt mr-2 text-primary"></i> 
-                {{ $page->exists ? 'Edit Content: ' . $page->title : 'Create New Content' }}
-            </h1>
-        </div>
-        <div class="col-sm-6 text-right">
-            <a href="{{ route('admin.pages.index') }}" class="btn btn-default btn-flat btn-sm shadow-sm">
-                <i class="fas fa-arrow-left mr-1"></i> Back to List
-            </a>
+    <div class="container-fluid">
+        <div class="row mb-4 align-items-center">
+            <div class="col-sm-8">
+                <h1 class="m-0 text-dark font-weight-bold">
+                    <i class="fas fa-file-alt mr-2 text-primary"></i> 
+                    {{ $page->exists ? 'Modify Content: ' . $page->title : 'Create New Content' }}
+                </h1>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">
+                    {{ $page->exists ? 'Update page content, layout structure, and SEO configurations.' : 'Draft a new informative page with rich layout blocks and meta optimization.' }}
+                </p>
+            </div>
+            <div class="col-sm-4 text-right">
+                <a href="{{ route('admin.pages.index') }}" class="btn btn-back shadow-sm">
+                    <i class="fas fa-arrow-left mr-1"></i> Back to List
+                </a>
+            </div>
         </div>
     </div>
-</div>
 @stop
 
 @section('content')
@@ -43,10 +46,10 @@
                 <div class="sticky-top" style="top: 20px; z-index: 10;">
                     @include('admin.pages.partials.action-buttons')
 
-                    <div class="card shadow-sm border-0 mt-4 overflow-hidden rounded-3">
-                        <div class="card-header bg-white border-bottom">
-                            <h3 class="card-title font-weight-bold text-muted small text-uppercase">
-                                <i class="fas fa-image mr-1 text-primary"></i> Featured Image
+                    <div class="card border-0 shadow-premium mb-4" style="border-radius: 20px; overflow: hidden;">
+                        <div class="card-header bg-white border-0 py-3 px-4">
+                            <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
+                                <i class="fas fa-camera mr-2 text-primary opacity-50"></i> Visual Identity
                             </h3>
                         </div>
                         <div class="card-body p-0">

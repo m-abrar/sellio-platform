@@ -6,17 +6,21 @@
 
 @section('content_header')
     <div class="container-fluid">
-        <div class="row mb-2">
-            <div class="col-sm-6">
+        <div class="row mb-4 align-items-center">
+            <div class="col-sm-8">
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-blog mr-2 text-primary"></i> Blog Articles
                 </h1>
-            </div>
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
+                <ol class="breadcrumb bg-transparent p-0 mt-2 small">
                     <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}">Dashboard</a></li>
                     <li class="breadcrumb-item active">Blogs</li>
                 </ol>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Compose and curate editorial content for your marketplace community.</p>
+            </div>
+            <div class="col-sm-4 text-right">
+                <a href="{{ route('admin.blogs.create') }}" class="btn btn-primary btn-sm rounded-pill px-4 font-weight-bold shadow-premium">
+                    <i class="fas fa-plus-circle mr-1"></i> WRITE NEW POST
+                </a>
             </div>
         </div>
     </div>
@@ -32,11 +36,6 @@
             <h3 class="card-title font-weight-600 text-muted">
                 Article Registry <span class="badge badge-light border ml-2 px-2" style="font-weight: 500;">{{ $blogs->total() }} Total</span>
             </h3>
-            <div class="card-tools">
-                <a href="{{ route('admin.blogs.create') }}" class="btn btn-primary shadow-sm px-4">
-                    <i class="fas fa-plus-circle mr-1"></i> Write New Post
-                </a>
-            </div>
         </div>
 
         <div class="card-body p-0">
@@ -46,8 +45,8 @@
                         <tr>
                             <th class="px-4" style="width: 35%">Article Info</th>
                             <th style="width: 20%">Category & Tags</th>
-                            <th class="text-center">Status</th>
-                            <th class="text-center">Stats</th>
+                            <th class="text-right">Stats</th>
+                            <th class="text-right">Status</th>
                             <th class="text-right px-4">Actions</th>
                         </tr>
                     </thead>
@@ -77,25 +76,25 @@
                                     </div>
                                 </td>
 
-                                <td class="text-center align-middle">
-                                    @if($blog->is_published)
-                                        <span class="badge badge-success-light px-3 py-1 text-uppercase" style="font-size: 0.7rem; min-width: 95px;">
-                                            <i class="fas fa-check-circle mr-1"></i> Published
-                                        </span>
-                                    @else
-                                        <span class="badge badge-warning-light px-3 py-1 text-uppercase" style="font-size: 0.7rem; min-width: 95px;">
-                                            <i class="fas fa-clock mr-1"></i> Draft
-                                        </span>
-                                    @endif
-                                </td>
-
-                                <td class="text-center align-middle">
+                                <td class="text-right align-middle">
                                     <div class="text-xs font-weight-bold">
                                         <i class="far fa-eye text-info mr-1"></i> {{ number_format($blog->view_count) }}
                                     </div>
                                     <small class="text-muted" title="Reading Time">
                                         <i class="far fa-clock mr-1"></i> {{ $blog->reading_time ?? '5' }}m
                                     </small>
+                                </td>
+
+                                <td class="text-right align-middle">
+                                    @if($blog->is_published)
+                                        <span class="badge badge-success-light px-3 py-1 text-uppercase" style="font-size: 0.7rem;">
+                                            <i class="fas fa-check-circle mr-1"></i> Published
+                                        </span>
+                                    @else
+                                        <span class="badge badge-warning-light px-3 py-1 text-uppercase" style="font-size: 0.7rem;">
+                                            <i class="fas fa-clock mr-1"></i> Draft
+                                        </span>
+                                    @endif
                                 </td>
 
                                 <td class="text-right align-middle px-4">

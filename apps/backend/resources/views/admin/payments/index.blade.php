@@ -228,9 +228,9 @@
                 "autoWidth": false,
                 "responsive": true,
                 "order": [[3, "desc"]], // Date / Time column
-                dom: '<"row px-4 pt-3"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-6"l>>' +
+                dom: '<"row pt-3"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-6"l>>' +
                        '<"row"<"col-sm-12"tr>>' +
-                       '<"row px-4 pb-3"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+                       '<"row pb-3"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
                 "language": {
                     "search": "",
                     "searchPlaceholder": "Search ledger...",
