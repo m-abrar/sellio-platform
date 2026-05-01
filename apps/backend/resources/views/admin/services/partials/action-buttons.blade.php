@@ -13,7 +13,7 @@
                 <div class="border rounded px-3 py-2 d-flex justify-content-between align-items-center toggle-card shadow-sm">
                     <div>
                         <div class="fw-bold small text-dark">Publishing Status</div>
-                        <div class="small toggle-status text-muted">{{ (isset($service) && $service->is_published) ? 'Visible to public' : 'Draft Mode' }}</div>
+                        <div class="small toggle-status text-muted">{{ ($service->exists && $service->is_published) ? 'Visible to public' : 'Draft Mode' }}</div>
                     </div>
                     <div class="toggle-indicator"></div>
                 </div>
@@ -27,7 +27,7 @@
                 <div class="border rounded px-3 py-2 d-flex justify-content-between align-items-center toggle-card shadow-sm">
                     <div>
                         <div class="fw-bold small text-dark">Promotions</div>
-                        <div class="small toggle-status text-muted">{{ (isset($service) && $service->is_featured) ? 'Featured' : 'Standard' }}</div>
+                        <div class="small toggle-status text-muted">{{ ($service->exists && $service->is_featured) ? 'Featured' : 'Standard' }}</div>
                     </div>
                     <div class="toggle-indicator"></div>
                 </div>
@@ -35,10 +35,10 @@
         </div>
         <hr class="my-3">
         <button type="submit" class="btn btn-primary btn-block btn-lg btn-flat shadow-sm font-weight-bold mb-2">
-            <i class="fas fa-save mr-2"></i> {{ isset($service) ? 'UPDATE SERVICE' : 'CREATE SERVICE' }}
+            <i class="fas fa-save mr-2"></i> {{ $service->exists ? 'UPDATE SERVICE' : 'CREATE SERVICE' }}
         </button>
 
-        @if(isset($service))
+        @if($service->exists)
             <div class="row gx-1">
                 <div class="col-6">
                     @if(Route::has('admin.services.duplicate'))

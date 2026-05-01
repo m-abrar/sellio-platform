@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', (isset($plan) ? 'Edit' : 'Create') . ' Plan')
+@section('title', ($plan->exists ? 'Edit' : 'Create') . ' Plan')
 
 @section('content_header')
 <div class="container-fluid">
@@ -8,7 +8,7 @@
         <div class="col-sm-6">
             <h1 class="m-0 text-dark font-weight-bold">
                 <i class="fas fa-boxes mr-2 text-primary"></i> 
-                {{ isset($plan) ? 'Edit Plan: ' . $plan->title : 'Add New Plan' }}
+                {{ $plan->exists ? 'Edit Plan: ' . $plan->title : 'Add New Plan' }}
             </h1>
         </div>
         <div class="col-sm-6 text-right">
@@ -25,11 +25,11 @@
     @include('admin.alert')
 
     <form id="plan-form" 
-          action="{{ isset($plan) ? route('admin.plans.update', $plan->id) : route('admin.plans.store') }}" 
+          action="{{ $plan->exists ? route('admin.plans.update', $plan->id) : route('admin.plans.store') }}" 
           method="POST"
           enctype="multipart/form-data">
         @csrf
-        @if(isset($plan)) @method('PATCH') @endif
+        @if($plan->exists) @method('PATCH') @endif
 
         <div class="row pb-5">
             {{-- Left Column --}}
@@ -85,7 +85,7 @@
         </div>
     </form>
 
-    @if(isset($plan))
+    @if($plan->exists)
     {{-- Hidden Delete Form outside main form --}}
     <form id="delete-plan-form" action="{{ route('admin.plans.destroy', $plan->id) }}" method="POST" style="display: none;">
         @csrf

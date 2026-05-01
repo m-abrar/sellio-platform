@@ -1,15 +1,14 @@
 @extends('adminlte::page')
 
-@section('title', (isset($blog) ? 'Edit' : 'Add') . ' Blog Post')
+@section('title', ($blog->exists ? 'Edit' : 'Add') . ' Blog Post')
+
+@section('plugins.Select2', true)
 
 @section('content_header')
 <div class="container-fluid">
     <div class="row mb-2">
         <div class="col-sm-6">
-            <h1 class="m-0 text-dark font-weight-bold">
-                <i class="fas fa-blog mr-2 text-primary"></i> 
-                {{ isset($blog) ? 'Edit Post: ' . $blog->title : 'Create New Blog Post' }}
-            </h1>
+                {{ $blog->exists ? 'Edit Post: ' . $blog->title : 'Create New Blog Post' }}
         </div>
         <div class="col-sm-6 text-right">
             <a href="{{ route('admin.blogs.index') }}" class="btn btn-default btn-flat btn-sm shadow-sm">
@@ -25,11 +24,11 @@
     @include('admin.alert')
 
     <form id="blog-form" 
-          action="{{ isset($blog) ? route('admin.blogs.update', $blog->id) : route('admin.blogs.store') }}" 
+          action="{{ $blog->exists ? route('admin.blogs.update', $blog->id) : route('admin.blogs.store') }}" 
           method="POST" 
           enctype="multipart/form-data">
         @csrf
-        @if(isset($blog)) @method('PATCH') @endif
+        @if($blog->exists) @method('PATCH') @endif
 
         <div class="row pb-5">
             {{-- Left Column: Content & SEO --}}
@@ -93,6 +92,8 @@
 @push('js')
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        $('.select2').select2({ theme: 'bootstrap4', width: '100%' });
+
         // Auto-generate Slug from Title
         const titleInput = document.getElementById('title');
         const slugInput = document.getElementById('slug');
@@ -100,7 +101,7 @@
         if (titleInput && slugInput) {
             titleInput.addEventListener('input', function () {
                 // Only auto-generate if the slug is empty or we are creating new
-                @if(!isset($blog))
+                @if(!$blog->exists)
                     let slug = this.value.toLowerCase()
                         .replace(/[^a-z0-9]+/g, '-')
                         .replace(/^-|-$/g, '');

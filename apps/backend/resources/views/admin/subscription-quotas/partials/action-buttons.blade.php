@@ -15,7 +15,7 @@
                 </button>
             </div>
             <div class="d-flex align-items-center mt-3 mt-md-0">
-                @if(isset($subscriptionQuota->subscription->user))
+                @if($subscriptionQuota->exists && $subscriptionQuota->subscription && $subscriptionQuota->subscription->user)
                     <img src="{{ $subscriptionQuota->user->avatar ?? 'https://picsum.photos/40' }}"
                          alt="Avatar" class="rounded-circle mr-2" width="40" height="40">
                     <div>
@@ -28,7 +28,7 @@
 
 
         {{-- Meta Info --}}
-        @if(isset($subscriptionQuota))
+        @if($subscriptionQuota->exists)
             <div class="border-top pt-3 mt-3 text-muted small">
                 <div class="d-flex justify-content-between mb-1">
                     <span>Created:</span>

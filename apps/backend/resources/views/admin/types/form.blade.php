@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', (isset($type) ? 'Edit' : 'Add') . ' Listing Type')
+@section('title', ($type->exists ? 'Edit' : 'Add') . ' Listing Type')
 
 @section('content_header')
     <div class="container-fluid">
@@ -8,7 +8,7 @@
             <div class="col-sm-6">
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-layer-group mr-2 text-primary"></i>
-                    {{ isset($type) ? 'Modify Listing Type' : 'New Listing Type' }}
+                    {{ $type->exists ? 'Modify Listing Type' : 'New Listing Type' }}
                 </h1>
             </div>
             <div class="col-sm-6 text-right">
@@ -24,11 +24,11 @@
 <div class="container-fluid">
     @include('admin.alert')
 
-    <form action="{{ isset($type) ? route('admin.types.update', $type->id) : route('admin.types.store') }}" 
+    <form action="{{ $type->exists ? route('admin.types.update', $type->id) : route('admin.types.store') }}" 
           method="POST" 
           enctype="multipart/form-data">
         @csrf
-        @if(isset($type)) @method('PATCH') @endif
+        @if($type->exists) @method('PATCH') @endif
 
         <div class="row">
             {{-- Primary Configuration --}}
@@ -195,7 +195,7 @@
 
 @include('admin._partials._toggle-card-css')
 
-@if(isset($type))
+@if($type->exists)
     <form id="delete-form" action="{{ route('admin.types.destroy', $type->id) }}" method="POST" class="d-none">
         @csrf @method('DELETE')
     </form>

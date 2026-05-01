@@ -1,9 +1,9 @@
 @extends('adminlte::page')
 
-@section('title', isset($payment) ? 'Edit Payment' : 'Add Payment')
+@section('title', $payment->exists ? 'Edit Payment' : 'Add Payment')
 
 @section('content_header')
-    <h1>{{ isset($payment) ? 'Edit Payment' : 'Add Payment' }}</h1>
+    <h1>{{ $payment->exists ? 'Edit Payment' : 'Add Payment' }}</h1>
 @stop
 
 @section('content')
@@ -17,10 +17,10 @@
         <div class="position-sticky">
 
             <form id="payment-form" 
-                  action="{{ isset($payment) ? route('admin.payments.update', $payment->id) : route('admin.payments.store') }}" 
+                  action="{{ $payment->exists ? route('admin.payments.update', $payment->id) : route('admin.payments.store') }}" 
                   method="POST">
                 @csrf
-                @if(isset($payment)) @method('PATCH') @endif
+                @if($payment->exists) @method('PATCH') @endif
 
                 <ul class="nav nav-pills mb-3 p-1 bg-white shadow-sm rounded-pill" id="paymentTabs" role="tablist" style="width: fit-content;">
                     <li class="nav-item">
@@ -34,7 +34,7 @@
                         </a>
                     </li>
                     {{-- Only show history on edit page --}}
-                    @if(isset($payment))
+                    @if($payment->exists)
                     <li class="nav-item">
                         <a class="nav-link px-4 py-2 rounded-pill" id="history-tab" data-toggle="tab" href="#history" role="tab">
                             <i class="fas fa-history mr-1"></i> Related Payments
@@ -180,7 +180,7 @@
                                 <div class="form-group">
                                     <label>Metadata</label>
                                     <textarea name="metadata" class="form-control" rows="10"
-                                        placeholder="Enter raw JSON or payment gateway response data here.">{{ old('metadata', isset($payment) ? json_encode($payment->metadata, JSON_PRETTY_PRINT) : '') }}</textarea>
+                                        placeholder="Enter raw JSON or payment gateway response data here.">{{ old('metadata', $payment->exists ? json_encode($payment->metadata, JSON_PRETTY_PRINT) : '') }}</textarea>
                                     <small class="text-muted">This field stores the raw JSON response from the payment gateway.</small>
                                 </div>
                             </div>
@@ -188,7 +188,7 @@
                     </div>
 
                     {{-- This tab only makes sense when editing an existing payment --}}
-                    @if(isset($payment) && $payment->payable && method_exists($payment->payable, 'payments'))
+                    @if($payment->exists && $payment->payable && method_exists($payment->payable, 'payments'))
                     <div class="tab-pane fade" id="history" role="tabpanel">
                         <div class="card shadow-sm rounded-3 mb-4">
                             <div class="card-header border-bottom fw-bold">

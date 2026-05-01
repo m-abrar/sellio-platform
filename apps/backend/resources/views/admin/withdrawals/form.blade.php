@@ -1,14 +1,12 @@
 @extends('adminlte::page')
 
-@section('title', isset($location) ? 'Edit Location' : 'Add Location')
+@section('title', $location->exists ? 'Edit Location' : 'Add Location')
 
 @section('content_header')
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0 text-dark font-weight-bold">
-                     {{ isset($location) ? 'Edit Location' : 'Add Location' }}
-                </h1>
+                     {{ $location->exists ? 'Edit Location' : 'Add Location' }}
             </div>
         </div>
     </div>
@@ -18,9 +16,9 @@
 
 @include('admin.alert')
 
-<form action="{{ isset($location) ? route('admin.locations.update', $location->id) : route('admin.locations.store') }}" method="POST" enctype="multipart/form-data">
+<form action="{{ $location->exists ? route('admin.locations.update', $location->id) : route('admin.locations.store') }}" method="POST" enctype="multipart/form-data">
     @csrf
-    @if(isset($location)) @method('PATCH') @endif
+    @if($location->exists) @method('PATCH') @endif
 
     <div class="row">
         <div class="col-md-8">

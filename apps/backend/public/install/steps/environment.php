@@ -158,23 +158,32 @@ include __DIR__ . '/../layout/header.php';
             value="<?= htmlspecialchars($_POST['db_pass'] ?? $existingEnv['DB_PASSWORD'] ?? '') ?>">
     </div>
 
-    <div class="d-flex justify-content-between align-items-center pt-3 border-top">
-        <?php if (file_exists($envPath)): ?>
-            <div class="form-check me-3">
-                <input class="form-check-input" type="checkbox" name="overwrite_env" value="1" id="overwrite_env_check">
-                <label class="form-check-label text-muted small" for="overwrite_env_check">
-                    Overwrite **.env**
+    <div class="mt-4 pt-3 border-top d-flex justify-content-between align-items-center">
+        <a href="?step=requirements" class="btn btn-outline-secondary px-4">
+            <i class="fa-solid fa-arrow-left me-2"></i>Back
+        </a>
+
+        <div class="d-flex align-items-center">
+            <?php if (file_exists($envPath)): ?>
+                <div class="form-check me-4 mb-0">
+                    <input class="form-check-input" type="checkbox" name="overwrite_env" value="1" id="overwrite_env_check">
+                    <label class="form-check-label text-muted small" for="overwrite_env_check">
+                        Overwrite **.env**
+                    </label>
+                </div>
+            <?php endif; ?>
+            
+            <div class="form-check me-4 mb-0">
+                <input class="form-check-input" type="checkbox" name="overwrite_db" value="1" id="overwrite_db_check">
+                <label class="form-check-label text-muted small" for="overwrite_db_check">
+                    Overwrite tables
                 </label>
             </div>
-        <?php endif; ?>
-        
-        <div class="form-check me-3">
-            <input class="form-check-input" type="checkbox" name="overwrite_db" value="1" id="overwrite_db_check">
-            <label class="form-check-label text-muted small" for="overwrite_db_check">
-                Overwrite existing tables
-            </label>
         </div>
-        <button type="submit" class="btn btn-primary btn-lg px-4">Save & Test Connection</button>
+
+        <button type="submit" class="btn btn-primary btn-lg px-4 shadow">
+            Save & Test Connection <i class="fa-solid fa-chevron-right ms-2"></i>
+        </button>
     </div>
 
 </form>

@@ -13,7 +13,7 @@
                 <div class="border rounded px-3 py-2 d-flex justify-content-between align-items-center toggle-card shadow-sm">
                     <div>
                         <div class="fw-bold small text-dark">Publishing Status</div>
-                        <div class="small toggle-status text-muted">{{ (isset($job) && $job->is_published) ? 'Visible to public' : 'Draft Mode' }}</div>
+                        <div class="small toggle-status text-muted">{{ ($job->exists && $job->is_published) ? 'Visible to public' : 'Draft Mode' }}</div>
                     </div>
                     <div class="toggle-indicator"></div>
                 </div>
@@ -27,7 +27,7 @@
                 <div class="border rounded px-3 py-2 d-flex justify-content-between align-items-center toggle-card shadow-sm">
                     <div>
                         <div class="fw-bold small text-dark">Promotions</div>
-                        <div class="small toggle-status text-muted">{{ (isset($job) && $job->is_featured) ? 'Featured' : 'Standard' }}</div>
+                        <div class="small toggle-status text-muted">{{ ($job->exists && $job->is_featured) ? 'Featured' : 'Standard' }}</div>
                     </div>
                     <div class="toggle-indicator"></div>
                 </div>
@@ -35,10 +35,10 @@
         </div>
         <hr class="my-3">
         <button type="submit" class="btn btn-primary btn-block btn-lg btn-flat shadow-sm font-weight-bold mb-2">
-            <i class="fas fa-save mr-2"></i> {{ isset($job) ? 'UPDATE JOB' : 'CREATE JOB' }}
+            <i class="fas fa-save mr-2"></i> {{ $job->exists ? 'UPDATE JOB' : 'CREATE JOB' }}
         </button>
 
-        @if(isset($job))
+        @if($job->exists)
             <div class="row gx-1">
                 <div class="col-6">
                     @if(Route::has('admin.jobs.duplicate'))

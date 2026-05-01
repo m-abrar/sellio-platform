@@ -1,15 +1,14 @@
 @extends('adminlte::page')
 
-@section('title', (isset($property) ? 'Edit' : 'Create') . ' Property')
+@section('title', ($property->exists ? 'Edit' : 'Create') . ' Property')
+
+@section('plugins.Select2', true)
 
 @section('content_header')
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-building mr-2 text-primary"></i> 
-                    {{ isset($property) ? 'Modify Property' : 'New Property Listing' }}
-                </h1>
+                    {{ $property->exists ? 'Modify Property' : 'New Property Listing' }}
             </div>
             <div class="col-sm-6 text-right">
                 <a href="{{ route('admin.listings.index', ['type' => 'property']) }}" class="btn btn-default btn-flat btn-sm shadow-sm">
@@ -24,12 +23,12 @@
 <div class="container-fluid">
     @include('admin.alert')
 
-    <form action="{{ isset($property) ? route('admin.properties.update', $property->id) : route('admin.properties.store') }}" 
+    <form action="{{ $property->exists ? route('admin.properties.update', $property->id) : route('admin.properties.store') }}" 
           method="POST" 
           enctype="multipart/form-data"
           id="propertyMainForm">
         @csrf
-        @if(isset($property)) @method('PATCH') @endif
+        @if($property->exists) @method('PATCH') @endif
 
         <div class="row">
             {{-- Main Content Column --}}
@@ -197,7 +196,7 @@
                     </div>
                 </div> {{-- End Gallery Card --}}
 
-                @if(isset($property))
+                @if($property->exists)
                 @if($property->is_rental)
                 {{-- Recent Bookings --}}
                 <div class="card shadow-sm border-0 mt-4">
@@ -399,7 +398,7 @@
 @include('admin._partials._toggle-card-css')
 @endpush
 
-@if(isset($property))
+@if($property->exists)
     <form id="delete-form" action="{{ route('admin.properties.destroy', $property->id) }}" method="POST" class="d-none">
         @csrf @method('DELETE')
     </form>

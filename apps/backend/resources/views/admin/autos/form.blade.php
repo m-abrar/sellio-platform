@@ -1,6 +1,16 @@
 @extends('adminlte::page')
 
-@section('title', (isset($auto) ? 'Edit' : 'Create') . ' Auto')
+@section('title', ($auto->exists ? 'Edit' : 'Create') . ' Auto')
+
+@section('plugins.Select2', true)
+
+@section('js')
+<script>
+    $(document).ready(function() {
+        $('.select2').select2();
+    });
+</script>
+@stop
 
 @section('content_header')
     <div class="container-fluid">
@@ -8,7 +18,7 @@
             <div class="col-sm-6">
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-car mr-2 text-primary"></i> 
-                    {{ isset($auto) ? 'Modify Auto' : 'New Auto Listing' }}
+                    {{ $auto->exists ? 'Modify Auto' : 'New Auto Listing' }}
                 </h1>
             </div>
             <div class="col-sm-6 text-right">
@@ -24,11 +34,11 @@
 <div class="container-fluid">
     @include('admin.alert')
 
-    <form action="{{ isset($auto) ? route('admin.autos.update', $auto->id) : route('admin.autos.store') }}" 
+    <form action="{{ $auto->exists ? route('admin.autos.update', $auto->id) : route('admin.autos.store') }}" 
           method="POST" 
           enctype="multipart/form-data">
         @csrf
-        @if(isset($auto)) @method('PATCH') @endif
+        @if($auto->exists) @method('PATCH') @endif
 
         <div class="row">
             {{-- Main Content Column --}}
@@ -148,7 +158,7 @@
                     </div>
                 </div>
 
-                @if(isset($auto))
+                @if($auto->exists)
                 {{-- Recent Inquiries --}}
                 <div class="card shadow-sm border-0 mt-4">
                     <div class="card-header bg-white"><h3 class="card-title font-weight-bold text-dark"><i class="fas fa-envelope mr-2 text-info"></i> Recent Inquiries</h3></div>
@@ -254,7 +264,7 @@
 @include('admin._partials._toggle-card-css')
 @endpush
 
-@if(isset($auto))
+@if($auto->exists)
     <form id="delete-form" action="{{ route('admin.autos.destroy', $auto->id) }}" method="POST" class="d-none">
         @csrf @method('DELETE')
     </form>

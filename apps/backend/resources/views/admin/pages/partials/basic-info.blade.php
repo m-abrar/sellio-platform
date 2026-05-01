@@ -22,7 +22,7 @@
             @error('slug') <span class="invalid-feedback">{{ $message }}</span> @enderror
         </div>
 
-        @if(isset($page) && $page->id)
+        @if($page->exists)
             <div class="bg-light p-3 rounded mb-4 text-center border">
                 <p class="small text-muted mb-2">Use the visual builder to design your content</p>
                 <a href="{{ route('admin.page-builder.edit', $page->id) }}" target="_blank" class="btn btn-outline-primary px-4">

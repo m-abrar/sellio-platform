@@ -28,9 +28,9 @@
     <div class="container-fluid">
         @include('admin.alert')
 
-<div class="row mb-3">
+        <div class="row mb-3">
             <div class="col-12">
-<ul class="nav nav-pills mb-3 p-1 bg-white shadow-sm rounded-pill" id="statusTabs" role="tablist" style="width: fit-content;">
+                <ul class="nav nav-pills mb-3 p-1 bg-white shadow-sm rounded-pill" id="statusTabs" role="tablist" style="width: fit-content;">
                     <li class="nav-item">
                         <a class="nav-link {{ $status === 'all' ? 'active' : '' }} px-4 py-2 rounded-pill" 
                            href="{{ route(Route::currentRouteName(), ['status' => 'all']) }}">
@@ -200,7 +200,7 @@
     #statusTabs.nav-pills .nav-link.active { background-color: var(--primary); color: #fff !important; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
     #statusTabs.nav-pills .nav-link:hover:not(.active) { background-color: #f8f9fa; }
 </style>
-@endsection
+@stop
 
 @section('js')
 <script>
@@ -208,5 +208,6 @@
         $('[data-toggle="tooltip"]').tooltip();
     });
 </script>
+@stop
+
 @include('admin._partials._sweetalert-delete')
-@endsection

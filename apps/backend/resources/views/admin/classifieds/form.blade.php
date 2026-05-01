@@ -1,15 +1,14 @@
 @extends('adminlte::page')
 
-@section('title', (isset($classified) ? 'Edit' : 'Create') . ' Ad')
+@section('title', ($classified->exists ? 'Edit' : 'Create') . ' Ad')
+
+@section('plugins.Select2', true)
 
 @section('content_header')
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-tags mr-2 text-primary"></i> 
-                    {{ isset($classified) ? 'Modify Ad' : 'New Classified Ad' }}
-                </h1>
+                    {{ $classified->exists ? 'Modify Ad' : 'New Classified Ad' }}
             </div>
             <div class="col-sm-6 text-right">
                 <a href="{{ route('admin.classifieds.index') }}" class="btn btn-default btn-flat btn-sm shadow-sm">
@@ -24,11 +23,11 @@
 <div class="container-fluid">
     @include('admin.alert')
 
-    <form action="{{ isset($classified) ? route('admin.classifieds.update', $classified->id) : route('admin.classifieds.store') }}" 
+    <form action="{{ $classified->exists ? route('admin.classifieds.update', $classified->id) : route('admin.classifieds.store') }}" 
           method="POST" 
           enctype="multipart/form-data">
         @csrf
-        @if(isset($classified)) @method('PATCH') @endif
+        @if($classified->exists) @method('PATCH') @endif
 
         <div class="row">
             {{-- Main Content Column --}}
@@ -124,7 +123,7 @@
                     </div>
                 </div>
 
-                @if(isset($classified))
+                @if($classified->exists)
                 {{-- Recent Inquiries --}}
                 <div class="card shadow-sm border-0 mt-4">
                     <div class="card-header bg-white"><h3 class="card-title font-weight-bold text-dark"><i class="fas fa-comments mr-2 text-warning"></i> Recent Inquiries</h3></div>
@@ -229,7 +228,7 @@
 @include('admin._partials._toggle-card-css')
 @endpush
 
-@if(isset($classified))
+@if($classified->exists)
     <form id="delete-form" action="{{ route('admin.classifieds.destroy', $classified->id) }}" method="POST" class="d-none">
         @csrf @method('DELETE')
     </form>

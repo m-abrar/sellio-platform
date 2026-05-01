@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', (isset($newsletterSubscriber) ? 'Edit' : 'Add') . ' Subscriber')
+@section('title', ($newsletterSubscriber->exists ? 'Edit' : 'Add') . ' Subscriber')
 
 @section('content_header')
 <div class="container-fluid">
@@ -8,7 +8,7 @@
         <div class="col-sm-6">
             <h1 class="m-0 text-dark font-weight-bold">
                 <i class="fas fa-envelope-open-text mr-2 text-primary"></i> 
-                {{ isset($newsletterSubscriber) ? 'Edit Subscriber' : 'New Subscriber' }}
+                {{ $newsletterSubscriber->exists ? 'Edit Subscriber' : 'New Subscriber' }}
             </h1>
         </div>
         <div class="col-sm-6 text-right">
@@ -25,10 +25,10 @@
     @include('admin.alert')
 
     <form id="subscriber-form" 
-          action="{{ isset($newsletterSubscriber) ? route('admin.newsletter-subscribers.update', $newsletterSubscriber->id) : route('admin.newsletter-subscribers.store') }}" 
+          action="{{ $newsletterSubscriber->exists ? route('admin.newsletter-subscribers.update', $newsletterSubscriber->id) : route('admin.newsletter-subscribers.store') }}" 
           method="POST">
         @csrf
-        @if(isset($newsletterSubscriber)) @method('PATCH') @endif
+        @if($newsletterSubscriber->exists) @method('PATCH') @endif
 
         <div class="row pb-5">
             {{-- Left Column: Main Data --}}
@@ -93,13 +93,13 @@
                             </div>
 
                             <button type="submit" class="btn btn-primary btn-block py-2 mb-3 shadow-sm rounded-pill">
-                                <i class="fas fa-save mr-2"></i> <strong>{{ isset($newsletterSubscriber) ? 'Update' : 'Save' }} Subscriber</strong>
+                                <i class="fas fa-save mr-2"></i> <strong>{{ $newsletterSubscriber->exists ? 'Update' : 'Save' }} Subscriber</strong>
                             </button>
                         </div>
                     </div>
 
                     {{-- Metadata Card (Only on Edit) --}}
-                    @if(isset($newsletterSubscriber))
+                    @if($newsletterSubscriber->exists)
                     <div class="card shadow-sm border-0 rounded-3">
                         <div class="card-body small text-muted">
                             <div class="d-flex justify-content-between mb-2">

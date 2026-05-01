@@ -1,15 +1,14 @@
 @extends('adminlte::page')
 
-@section('title', (isset($job) ? 'Edit' : 'Create') . ' Job')
+@section('title', ($job->exists ? 'Edit' : 'Create') . ' Job')
+
+@section('plugins.Select2', true)
 
 @section('content_header')
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-briefcase mr-2 text-primary"></i> 
-                    {{ isset($job) ? 'Modify Job' : 'New Job Position' }}
-                </h1>
+                    {{ $job->exists ? 'Modify Job' : 'New Job Position' }}
             </div>
             <div class="col-sm-6 text-right">
                 <a href="{{ route('admin.jobs.index') }}" class="btn btn-default btn-flat btn-sm shadow-sm">
@@ -24,11 +23,11 @@
 <div class="container-fluid">
     @include('admin.alert')
 
-    <form action="{{ isset($job) ? route('admin.jobs.update', $job->id) : route('admin.jobs.store') }}" 
+    <form action="{{ $job->exists ? route('admin.jobs.update', $job->id) : route('admin.jobs.store') }}" 
           method="POST" 
           enctype="multipart/form-data">
         @csrf
-        @if(isset($job)) @method('PATCH') @endif
+        @if($job->exists) @method('PATCH') @endif
 
         <div class="row">
             {{-- Main Content Column --}}
@@ -97,7 +96,7 @@
                                 <div class="form-group"><label>Experience Level</label><input type="text" name="experience_level" class="form-control" placeholder="Junior / Mid / Senior" value="{{ old('experience_level', $job->experience_level ?? '') }}"></div>
                             </div>
                             <div class="col-md-4">
-                                <div class="form-group"><label>Deadline</label><input type="date" name="application_deadline" class="form-control" value="{{ old('application_deadline', isset($job->application_deadline) ? $job->application_deadline->format('Y-m-d') : '') }}"></div>
+                                <div class="form-group"><label>Deadline</label><input type="date" name="application_deadline" class="form-control" value="{{ old('application_deadline', $job->exists && $job->application_deadline ? $job->application_deadline->format('Y-m-d') : '') }}"></div>
                             </div>
                         </div>
 
@@ -130,7 +129,7 @@
                     </div>
                 </div>
 
-                @if(isset($job))
+                @if($job->exists)
                 {{-- Recent Applications --}}
                 <div class="card shadow-sm border-0 mt-4">
                     <div class="card-header bg-white"><h3 class="card-title font-weight-bold text-dark"><i class="fas fa-file-invoice mr-2 text-success"></i> Recent Applications ({{ $applicationsCount ?? 0 }})</h3></div>
@@ -226,7 +225,7 @@
 @include('admin._partials._toggle-card-css')
 @endpush
 
-@if(isset($job))
+@if($job->exists)
     <form id="delete-form" action="{{ route('admin.jobs.destroy', $job->id) }}" method="POST" class="d-none">
         @csrf @method('DELETE')
     </form>

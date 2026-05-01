@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', (isset($page) ? 'Edit' : 'Add') . ' Content')
+@section('title', ($page->exists ? 'Edit' : 'Add') . ' Content')
 
 @section('content_header')
 <div class="container-fluid">
@@ -8,7 +8,7 @@
         <div class="col-sm-6">
             <h1 class="m-0 text-dark font-weight-bold">
                 <i class="fas fa-file-alt mr-2 text-primary"></i> 
-                {{ isset($page) ? 'Edit Content: ' . $page->title : 'Create New Content' }}
+                {{ $page->exists ? 'Edit Content: ' . $page->title : 'Create New Content' }}
             </h1>
         </div>
         <div class="col-sm-6 text-right">
@@ -25,11 +25,11 @@
     @include('admin.alert')
 
     <form id="page-form" 
-          action="{{ isset($page) ? route('admin.pages.update', $page->id) : route('admin.pages.store') }}" 
+          action="{{ $page->exists ? route('admin.pages.update', $page->id) : route('admin.pages.store') }}" 
           method="POST" 
           enctype="multipart/form-data">
         @csrf
-        @if(isset($page)) @method('PATCH') @endif
+        @if($page->exists) @method('PATCH') @endif
 
         <div class="row pb-5">
             {{-- Left Column: Content & SEO --}}

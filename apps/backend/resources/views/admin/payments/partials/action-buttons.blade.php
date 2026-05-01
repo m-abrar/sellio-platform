@@ -13,7 +13,7 @@
                 </button>
             </div>
             <div class="d-flex align-items-center mt-3 mt-md-0">
-                @if(isset($payment->creator))
+                @if($payment->exists && $payment->creator)
                     <img src="{{ $payment->creator->avatar_url }}" alt="Avatar" class="rounded-circle mr-2" width="40" height="40">
                     <div>
                         <div class="small text-muted">Created By</div>
@@ -26,7 +26,7 @@
         {{-- Action Buttons --}}
         <div class="d-flex flex-wrap align-items-stretch mb-4 justify-content-between">
             <div class="d-flex">
-                @if(isset($payment))
+                @if($payment->exists)
                     <a href="{{ route('admin.payments.show', $payment->id) }}" target="_blank"
                        class="btn btn-outline-info btn-sm d-flex align-items-center mr-2 mb-2">
                         <i class="fas fa-eye mr-1"></i> Preview
@@ -40,7 +40,7 @@
             </div>
 
             <div class="d-flex">
-                @if(isset($payment))
+                @if($payment->exists)
                     <form action="{{ route('admin.payments.destroy', $payment->id) }}" method="POST"
                           onsubmit="return confirm('Are you sure you want to delete this payment?');" class="d-flex mb-2">
                         @csrf
@@ -54,7 +54,7 @@
         </div>
 
         {{-- Payment Statistics --}}
-        @if(isset($payment))
+        @if($payment->exists)
         <div class="row text-center">
             <div class="col-md-4 mb-3">
                 <div class="bg-light border rounded p-3">
@@ -80,13 +80,13 @@
         {{-- Status Display --}}
         <div class="d-flex justify-content-between align-items-center border rounded bg-white p-3 mb-3">
             <span class="text-muted">Status</span>
-            <span class="badge {{ isset($payment) && $payment->status=='completed' ? 'bg-success' : (isset($payment) && $payment->status=='pending' ? 'bg-warning' : 'bg-danger') }}">
-                {{ isset($payment) ? ucfirst($payment->status) : 'N/A' }}
+            <span class="badge {{ $payment->exists && $payment->status=='completed' ? 'bg-success' : ($payment->exists && $payment->status=='pending' ? 'bg-warning' : 'bg-danger') }}">
+                {{ $payment->exists ? ucfirst($payment->status) : 'N/A' }}
             </span>
         </div>
 
         {{-- Meta Info --}}
-        @if(isset($payment))
+        @if($payment->exists)
             <div class="border-top pt-3 mt-3 text-muted small">
                 <div class="d-flex justify-content-between mb-1">
                     <span>Created:</span>

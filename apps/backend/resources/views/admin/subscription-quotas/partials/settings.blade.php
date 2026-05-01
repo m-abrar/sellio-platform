@@ -10,10 +10,10 @@
             <div class="row row-cols-1 row-cols-md-2 g-3">
                 @php
                     $switches = [
-                        ['name' => 'status', 'id' => 'statusSwitch', 'label' => 'Active', 'value' => 1, 'checked' => isset($plan) && $plan->status],
-                        ['name' => 'is_featured', 'id' => 'featuredSwitch', 'label' => 'Featured', 'value' => 1, 'checked' => isset($plan) && $plan->is_featured],
-                        ['name' => 'trial_available', 'id' => 'trialSwitch', 'label' => 'Trial Available', 'value' => 1, 'checked' => isset($plan) && $plan->trial_available],
-                        ['name' => 'is_popular', 'id' => 'popularSwitch', 'label' => 'Popular Plan', 'value' => 1, 'checked' => isset($plan) && $plan->is_popular],
+                        ['name' => 'status', 'id' => 'statusSwitch', 'label' => 'Active', 'value' => 1, 'checked' => $plan->exists && $plan->status],
+                        ['name' => 'is_featured', 'id' => 'featuredSwitch', 'label' => 'Featured', 'value' => 1, 'checked' => $plan->exists && $plan->is_featured],
+                        ['name' => 'trial_available', 'id' => 'trialSwitch', 'label' => 'Trial Available', 'value' => 1, 'checked' => $plan->exists && $plan->trial_available],
+                        ['name' => 'is_popular', 'id' => 'popularSwitch', 'label' => 'Popular Plan', 'value' => 1, 'checked' => $plan->exists && $plan->is_popular],
                     ];
                 @endphp
 

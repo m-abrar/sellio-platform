@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', (isset($tag) ? 'Modify' : 'New') . ' Tag')
+@section('title', ($tag->exists ? 'Modify' : 'New') . ' Tag')
 
 @section('content_header')
     <div class="container-fluid">
@@ -8,7 +8,7 @@
             <div class="col-sm-6">
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-tags mr-2 text-primary"></i>
-                    {{ isset($tag) ? 'Modify Tag' : 'New Tag' }}
+                    {{ $tag->exists ? 'Modify Tag' : 'New Tag' }}
                 </h1>
             </div>
             <div class="col-sm-6 text-right">
@@ -24,11 +24,11 @@
 <div class="container-fluid">
     @include('admin.alert')
 
-    <form action="{{ isset($tag) ? route('admin.tags.update', $tag->id) : route('admin.tags.store') }}" 
+    <form action="{{ $tag->exists ? route('admin.tags.update', $tag->id) : route('admin.tags.store') }}" 
           method="POST" 
           enctype="multipart/form-data">
         @csrf
-        @if(isset($tag)) @method('PATCH') @endif
+        @if($tag->exists) @method('PATCH') @endif
 
         <div class="row">
             {{-- Main Content Section --}}
@@ -154,7 +154,7 @@
 </script>
 @endpush
 
-@if(isset($tag))
+@if($tag->exists)
     <form id="delete-form" action="{{ route('admin.tags.destroy', $tag->id) }}" method="POST" class="d-none">
         @csrf @method('DELETE')
     </form>

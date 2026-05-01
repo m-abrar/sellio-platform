@@ -12,14 +12,12 @@
                 <input type="hidden" name="status" value="inactive">
                 <input type="checkbox" name="status" value="active" 
                        class="d-none toggle-input" 
-                       {{ (isset($page) && $page->status == 'active') || !isset($page) ? 'checked' : '' }}>
+                       {{ ($page->exists && $page->status == 'active') || !$page->exists ? 'checked' : '' }}>
                 
                 <div class="border rounded px-3 py-2 d-flex justify-content-between align-items-center toggle-card shadow-sm">
                     <div>
                         <div class="fw-bold small text-dark">Page Status</div>
-                        <div class="small toggle-status text-muted">
-                            {{ (isset($page) && $page->status == 'active') || !isset($page) ? 'Active' : 'Inactive' }}
-                        </div>
+                            {{ ($page->exists && $page->status == 'active') || !$page->exists ? 'Active' : 'Inactive' }}
                     </div>
                     <div class="toggle-indicator"></div>
                 </div>
@@ -30,7 +28,7 @@
             <i class="fas fa-save mr-2"></i> <strong>Save Changes</strong>
         </button>
 
-        @if(isset($page))
+        @if($page->exists)
             <div class="d-flex justify-content-between align-items-center border-top pt-3">
                 <a href="{{ url($page->slug ?? '/') }}" target="_blank" class="btn btn-link btn-sm text-primary p-0">
                     <i class="fas fa-external-link-alt mr-1"></i> Preview Page

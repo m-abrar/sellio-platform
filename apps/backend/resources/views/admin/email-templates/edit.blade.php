@@ -26,7 +26,7 @@
 
     <form id="template-form" action="{{ route('admin.email-templates.update', $template->id) }}" method="POST">
         @csrf
-        @if(isset($template)) @method('PATCH') @endif
+        @if($template->exists) @method('PATCH') @endif
 
         <div class="row pb-5">
             {{-- Left Column: Editor --}}

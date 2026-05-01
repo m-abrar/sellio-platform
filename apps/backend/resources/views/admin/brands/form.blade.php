@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', (isset($brand) ? 'Edit' : 'Create') . ' Brand')
+@section('title', ($brand->exists ? 'Edit' : 'Create') . ' Brand')
 
 @section('content_header')
     <div class="container-fluid">
@@ -8,7 +8,7 @@
             <div class="col-sm-6">
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-award mr-2 text-primary"></i> 
-                    {{ isset($brand) ? 'Modify Brand' : 'New Brand' }}
+                    {{ $brand->exists ? 'Modify Brand' : 'New Brand' }}
                 </h1>
             </div>
             <div class="col-sm-6 text-right">
@@ -24,12 +24,12 @@
 <div class="container-fluid">
     @include('admin.alert')
 
-    <form action="{{ isset($brand) ? route('admin.brands.update', $brand->id) : route('admin.brands.store') }}" 
+    <form action="{{ $brand->exists ? route('admin.brands.update', $brand->id) : route('admin.brands.store') }}" 
           method="POST" 
           enctype="multipart/form-data"
           id="brandMainForm">
         @csrf
-        @if(isset($brand)) @method('PATCH') @endif
+        @if($brand->exists) @method('PATCH') @endif
 
         <div class="row">
             {{-- Primary Data Column --}}
@@ -168,7 +168,7 @@
 </script>
 @endpush
 
-@if(isset($brand))
+@if($brand->exists)
     <form id="delete-form" action="{{ route('admin.brands.destroy', $brand->id) }}" method="POST" class="d-none">
         @csrf @method('DELETE')
     </form>

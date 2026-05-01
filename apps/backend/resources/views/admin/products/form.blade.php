@@ -1,15 +1,14 @@
 @extends('adminlte::page')
 
-@section('title', (isset($product) ? 'Edit' : 'Create') . ' Product')
+@section('title', ($product->exists ? 'Edit' : 'Create') . ' Product')
+
+@section('plugins.Select2', true)
 
 @section('content_header')
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-box mr-2 text-primary"></i> 
-                    {{ isset($product) ? 'Modify Product' : 'New Product Listing' }}
-                </h1>
+                    {{ $product->exists ? 'Modify Product' : 'New Product Listing' }}
             </div>
             <div class="col-sm-6 text-right">
                 <a href="{{ route('admin.products.index') }}" class="btn btn-default btn-flat btn-sm shadow-sm">
@@ -24,12 +23,12 @@
 <div class="container-fluid">
     @include('admin.alert')
 
-    <form action="{{ isset($product) ? route('admin.products.update', $product->id) : route('admin.products.store') }}" 
+    <form action="{{ $product->exists ? route('admin.products.update', $product->id) : route('admin.products.store') }}" 
           method="POST" 
           enctype="multipart/form-data"
           id="productMainForm">
         @csrf
-        @if(isset($product)) @method('PATCH') @endif
+        @if($product->exists) @method('PATCH') @endif
 
         <div class="row">
             {{-- Main Content Column --}}
@@ -137,7 +136,7 @@
                                         </thead>
                                         <tbody>
                                             @php $vIndex = 0; @endphp
-                                            @if(isset($product) && $product->attributes->count() > 0)
+                                            @if($product->exists && $product->attributes->count() > 0)
                                                 @foreach($product->attributes as $attr)
                                                     <tr data-index="{{ $vIndex }}">
                                                         <td><input type="text" name="attributes[{{ $vIndex }}][name]" value="{{ $attr->name }}" class="form-control form-control-sm" required></td>
@@ -184,7 +183,7 @@
                                         </thead>
                                         <tbody>
                                             @php $aIndex = 0; @endphp
-                                            @if(isset($product) && $product->addons->count() > 0)
+                                            @if($product->exists && $product->addons->count() > 0)
                                                 @foreach($product->addons as $addon)
                                                     <tr data-index="{{ $aIndex }}">
                                                         <td><input type="text" name="addons[{{ $aIndex }}][title]" value="{{ $addon->title }}" class="form-control form-control-sm" required></td>
@@ -393,7 +392,7 @@
 @include('admin._partials._toggle-card-css')
 @endpush
 
-@if(isset($product))
+@if($product->exists)
     <form id="delete-form" action="{{ route('admin.products.destroy', $product->id) }}" method="POST" class="d-none">
         @csrf @method('DELETE')
     </form>

@@ -12,14 +12,12 @@
                 <input type="hidden" name="is_published" value="0">
                 <input type="checkbox" name="is_published" value="1" 
                        class="d-none toggle-input" 
-                       {{ (isset($blog) && $blog->is_published) || !isset($blog) ? 'checked' : '' }}>
+                       {{ ($blog->exists && $blog->is_published) || !$blog->exists ? 'checked' : '' }}>
                 
                 <div class="border rounded px-3 py-2 d-flex justify-content-between align-items-center toggle-card shadow-sm">
                     <div>
                         <div class="fw-bold small text-dark">Article Visibility</div>
-                        <div class="small toggle-status text-muted">
-                            {{ (isset($blog) && $blog->is_published) || !isset($blog) ? 'Published' : 'Draft' }}
-                        </div>
+                            {{ ($blog->exists && $blog->is_published) || !$blog->exists ? 'Published' : 'Draft' }}
                     </div>
                     <div class="toggle-indicator"></div>
                 </div>
@@ -35,10 +33,10 @@
         </div>
 
         <button form="blog-form" type="submit" class="btn btn-primary btn-block py-2 mb-3 shadow-sm rounded-pill">
-            <i class="fas fa-save mr-2"></i> <strong>{{ isset($blog) ? 'Update Post' : 'Publish Article' }}</strong>
+            <i class="fas fa-save mr-2"></i> <strong>{{ $blog->exists ? 'Update Post' : 'Publish Article' }}</strong>
         </button>
 
-        @if(isset($blog))
+        @if($blog->exists)
             <div class="d-flex justify-content-between align-items-center border-top pt-3">
                 <a href="{{ url('blog/' . $blog->slug) }}" target="_blank" class="btn btn-link btn-sm text-primary p-0 font-weight-bold">
                     <i class="fas fa-external-link-alt mr-1"></i> View Live

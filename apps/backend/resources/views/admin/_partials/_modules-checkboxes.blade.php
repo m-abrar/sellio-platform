@@ -21,15 +21,13 @@
     <label class="w-100 cursor-pointer mb-0">
         <input type="hidden" name="{{ $column }}" value="0">
         <input type="checkbox" name="{{ $column }}" value="1" id="check_{{ $column }}" class="d-none toggle-input" 
-               {{ old($column, isset($model) && $model->$column ? true : false) ? 'checked' : '' }}>
+               {{ old($column, $model->exists && $model->$column ? true : false) ? 'checked' : '' }}>
         <div class="border rounded px-3 py-3 d-flex justify-content-between align-items-center h-100 toggle-card shadow-sm">
             <div>
                 <div class="font-weight-bold text-dark small">
                     <i class="{{ $meta['icon'] }} mr-1 text-muted"></i> {{ $meta['label'] }}
                 </div>
-                <div class="small toggle-status text-muted">
-                    {{ old($column, isset($model) && $model->$column ? true : false) ? 'Enabled' : 'Disabled' }}
-                </div>
+                    {{ old($column, $model->exists && $model->$column ? true : false) ? 'Enabled' : 'Disabled' }}
             </div>
             <div class="toggle-indicator"></div>
         </div>

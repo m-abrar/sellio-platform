@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', (isset($amenity) ? 'Modify' : 'New') . ' Amenity')
+@section('title', ($amenity->exists ? 'Modify' : 'New') . ' Amenity')
 
 @section('content_header')
     <div class="container-fluid">
@@ -8,7 +8,7 @@
             <div class="col-sm-6">
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-star mr-2 text-primary"></i> 
-                    {{ isset($amenity) ? 'Modify Amenity' : 'New Amenity' }}
+                    {{ $amenity->exists ? 'Modify Amenity' : 'New Amenity' }}
                 </h1>
             </div>
             <div class="col-sm-6 text-right">
@@ -24,12 +24,12 @@
 <div class="container-fluid">
     @include('admin.alert')
 
-    <form action="{{ isset($amenity) ? route('admin.amenities.update', $amenity->id) : route('admin.amenities.store') }}" 
+    <form action="{{ $amenity->exists ? route('admin.amenities.update', $amenity->id) : route('admin.amenities.store') }}" 
           method="POST" 
           enctype="multipart/form-data"
           id="amenityMainForm">
         @csrf
-        @if(isset($amenity)) @method('PATCH') @endif
+        @if($amenity->exists) @method('PATCH') @endif
 
         <div class="row">
             {{-- Primary Data Column --}}
@@ -175,7 +175,7 @@
 </script>
 @endpush
 
-@if(isset($amenity))
+@if($amenity->exists)
     <form id="delete-form" action="{{ route('admin.amenities.destroy', $amenity->id) }}" method="POST" class="d-none">
         @csrf @method('DELETE')
     </form>

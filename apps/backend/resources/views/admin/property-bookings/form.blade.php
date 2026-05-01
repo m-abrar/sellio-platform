@@ -1,7 +1,8 @@
 @extends('adminlte::page')
+@section('plugins.Select2', true)
 
 @php
-    $isEdit = isset($booking);
+    $isEdit = $booking->exists;
     $title = $isEdit ? __('Edit Booking') . ' #' . $booking->id : __('Create New Booking');
 @endphp
 
@@ -115,7 +116,7 @@
                                 <div class="col-md-6 form-group">
                                     <label for="check_in_date">{{ __('Check-In Date') }} <span class="text-danger">*</span></label>
                                     <input type="date" name="check_in_date" id="check_in_date" class="form-control @error('check_in_date') is-invalid @enderror" 
-                                           value="{{ old('check_in_date', isset($booking) ? $booking->check_in_date->format('Y-m-01') : '') }}" required>
+                                           value="{{ old('check_in_date', $booking->exists ? $booking->check_in_date->format('Y-m-d') : '') }}" required>
                                     @error('check_in_date')<span class="error invalid-feedback">{{ $message }}</span>@enderror
                                 </div>
 
@@ -123,7 +124,7 @@
                                 <div class="col-md-6 form-group">
                                     <label for="check_out_date">{{ __('Check-Out Date') }} <span class="text-danger">*</span></label>
                                     <input type="date" name="check_out_date" id="check_out_date" class="form-control @error('check_out_date') is-invalid @enderror" 
-                                           value="{{ old('check_out_date', isset($booking) ? $booking->check_out_date->format('Y-m-01') : '') }}" required>
+                                           value="{{ old('check_out_date', $booking->exists ? $booking->check_out_date->format('Y-m-d') : '') }}" required>
                                     @error('check_out_date')<span class="error invalid-feedback">{{ $message }}</span>@enderror
                                 </div>
                             </div>
@@ -198,12 +199,32 @@
 
 @section('css')
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
+    <style>
+        .select2-container--default .select2-selection--single {
+            height: 38px !important;
+            border: 1px solid #ced4da !important;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: 38px !important;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 36px !important;
+        }
+    </style>
 @stop
 
 @section('js')
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
     <script>
         $(document).ready(function() {
+            // Initialize Select2
+            $('.select2').select2({
+                theme: 'default',
+                width: '100%',
+                placeholder: "{{ __('Search or select...') }}",
+                allowClear: true
+            });
+
             @if(isset($calendarEvents))
                 const calendarEl = document.getElementById('calendar');
                 const calendar = new FullCalendar.Calendar(calendarEl, {

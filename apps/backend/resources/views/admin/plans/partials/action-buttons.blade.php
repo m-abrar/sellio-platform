@@ -10,11 +10,11 @@
         <div class="mb-3 pb-2 border-bottom">
             <label class="w-100 cursor-pointer mb-0">
                 <input type="hidden" name="is_active" value="0">
-                <input type="checkbox" name="is_active" value="1" id="isActiveSwitch" class="d-none toggle-input" {{ (isset($plan) && $plan->is_active) || !isset($plan) ? 'checked' : '' }}>
+                <input type="checkbox" name="is_active" value="1" id="isActiveSwitch" class="d-none toggle-input" {{ ($plan->exists && $plan->is_active) || !$plan->exists ? 'checked' : '' }}>
                 <div class="border rounded px-3 py-2 d-flex justify-content-between align-items-center toggle-card shadow-sm">
                     <div>
                         <div class="fw-bold small text-dark">Plan Status</div>
-                        <div class="small toggle-status text-muted">{{ (isset($plan) && $plan->is_active) || !isset($plan) ? 'Active' : 'Inactive' }}</div>
+                        <div class="small toggle-status text-muted">{{ ($plan->exists && $plan->is_active) || !$plan->exists ? 'Active' : 'Inactive' }}</div>
                     </div>
                     <div class="toggle-indicator"></div>
                 </div>
@@ -22,10 +22,10 @@
         </div>
 
         <button type="submit" class="btn btn-primary btn-block btn-lg btn-flat shadow-sm font-weight-bold mb-2">
-            <i class="fas fa-save mr-2"></i> {{ isset($plan) ? 'UPDATE PLAN' : 'CREATE PLAN' }}
+            <i class="fas fa-save mr-2"></i> {{ $plan->exists ? 'UPDATE PLAN' : 'CREATE PLAN' }}
         </button>
 
-        @if(isset($plan))
+        @if($plan->exists)
             <div class="row gx-1">
                 <div class="col-6">
                     @if(Route::has('admin.plans.duplicate'))

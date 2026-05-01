@@ -6,8 +6,8 @@
         <div class="row g-3">
             @php
                 $displaySwitches = [
-                    ['name' => 'is_featured', 'id' => 'featuredSwitch', 'label' => 'Featured on Pricing', 'value' => 1, 'checked' => isset($plan) && $plan->is_featured],
-                    ['name' => 'is_popular', 'id' => 'popularSwitch', 'label' => 'Popular Plan Tag', 'value' => 1, 'checked' => isset($plan) && $plan->is_popular],
+                    ['name' => 'is_featured', 'id' => 'featuredSwitch', 'label' => 'Featured on Pricing', 'value' => 1, 'checked' => $plan->exists && $plan->is_featured],
+                    ['name' => 'is_popular', 'id' => 'popularSwitch', 'label' => 'Popular Plan Tag', 'value' => 1, 'checked' => $plan->exists && $plan->is_popular],
                 ];
             @endphp
 

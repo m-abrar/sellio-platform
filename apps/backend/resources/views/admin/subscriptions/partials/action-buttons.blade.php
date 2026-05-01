@@ -22,7 +22,7 @@
             <i class="fas fa-save mr-2"></i> <strong>Save Subscription</strong>
         </button>
 
-        @if(isset($subscription))
+        @if($subscription->exists)
             <hr>
             {{-- Renewal Quick Action --}}
             <div class="p-3 border rounded bg-light mb-3">
@@ -52,7 +52,7 @@
     </div>
 </div>
 
-@if(isset($subscription) && $subscription->user)
+@if($subscription->exists && $subscription->user)
 <div class="card shadow-sm border-0 mt-4 rounded-3 overflow-hidden">
     <div class="card-body p-3">
         <div class="d-flex align-items-center">

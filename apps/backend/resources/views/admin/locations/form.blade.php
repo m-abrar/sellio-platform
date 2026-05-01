@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', (isset($location) ? 'Edit' : 'Add') . ' Location')
+@section('title', ($location->exists ? 'Edit' : 'Add') . ' Location')
 
 @section('content_header')
     <div class="container-fluid">
@@ -8,7 +8,7 @@
             <div class="col-sm-6">
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-map-marker-alt mr-2 text-primary"></i>
-                    {{ isset($location) ? 'Modify Location' : 'New Location' }}
+                    {{ $location->exists ? 'Modify Location' : 'New Location' }}
                 </h1>
             </div>
             <div class="col-sm-6 text-right">
@@ -24,11 +24,11 @@
 <div class="container-fluid">
     @include('admin.alert')
 
-    <form action="{{ isset($location) ? route('admin.locations.update', $location->id) : route('admin.locations.store') }}" 
+    <form action="{{ $location->exists ? route('admin.locations.update', $location->id) : route('admin.locations.store') }}" 
           method="POST" 
           enctype="multipart/form-data">
         @csrf
-        @if(isset($location)) @method('PATCH') @endif
+        @if($location->exists) @method('PATCH') @endif
 
         <div class="row">
             {{-- Main Configuration Column --}}
@@ -207,7 +207,7 @@
 </script>
 @endpush
 
-@if(isset($location))
+@if($location->exists)
     <form id="delete-form" action="{{ route('admin.locations.destroy', $location->id) }}" method="POST" class="d-none">
         @csrf @method('DELETE')
     </form>

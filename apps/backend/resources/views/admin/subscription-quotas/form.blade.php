@@ -1,9 +1,9 @@
 @extends('adminlte::page')
 
-@section('title', isset($subscriptionQuota) ? 'Edit Subscription Quotas' : 'Add Subscription Quotas')
+@section('title', $subscriptionQuota->exists ? 'Edit Subscription Quotas' : 'Add Subscription Quotas')
 
 @section('content_header')
-    <h1>{{ isset($subscription) ? 'Edit Subscription Quotas' : 'Add Subscription' }}</h1>
+    <h1>{{ $subscriptionQuota->exists ? 'Edit Subscription Quotas' : 'Add Subscription' }}</h1>
 @stop
 
 @section('content')
@@ -17,10 +17,10 @@
         <div class="position-sticky">
 
             <form id="subscriptionQuota-form" 
-                action="{{ isset($subscriptionQuota) ? route('admin.subscription-quotas.update', $subscriptionQuota->id) : route('admin.subscription-quotas.store') }}" 
+                action="{{ $subscriptionQuota->exists ? route('admin.subscription-quotas.update', $subscriptionQuota->id) : route('admin.subscription-quotas.store') }}" 
                 method="POST">
                 @csrf
-                @if(isset($subscriptionQuota)) @method('PATCH') @endif
+                @if($subscriptionQuota->exists) @method('PATCH') @endif
 
                 <!-- Tabs Navigation -->
                 <ul class="nav nav-pills mb-3 p-1 bg-white shadow-sm rounded-pill" id="subscriptionTabs" role="tablist" style="width: fit-content;">

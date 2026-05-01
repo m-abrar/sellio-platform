@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', (isset($advertisement) ? 'Edit' : 'Add') . ' Advertisement')
+@section('title', ($advertisement->exists ? 'Edit' : 'Add') . ' Advertisement')
 
 @section('content_header')
 <div class="container-fluid">
@@ -8,7 +8,7 @@
         <div class="col-sm-6">
             <h1 class="m-0 text-dark font-weight-bold">
                 <i class="fas fa-ad mr-2 text-primary"></i> 
-                {{ isset($advertisement) ? 'Edit Advertisement' : 'Create New Ad' }}
+                {{ $advertisement->exists ? 'Edit Advertisement' : 'Create New Ad' }}
             </h1>
         </div>
         <div class="col-sm-6 text-right">
@@ -25,11 +25,11 @@
     @include('admin.alert')
 
     <form id="ad-form" 
-          action="{{ isset($advertisement) ? route('admin.advertisements.update', $advertisement->id) : route('admin.advertisements.store') }}" 
+          action="{{ $advertisement->exists ? route('admin.advertisements.update', $advertisement->id) : route('admin.advertisements.store') }}" 
           method="POST" 
           enctype="multipart/form-data">
         @csrf
-        @if(isset($advertisement)) @method('PATCH') @endif
+        @if($advertisement->exists) @method('PATCH') @endif
 
         <div class="row pb-5">
             {{-- Left Column: Ad Details & Targeting --}}

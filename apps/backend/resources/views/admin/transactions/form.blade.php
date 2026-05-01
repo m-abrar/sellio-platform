@@ -1,14 +1,12 @@
 @extends('adminlte::page')
 
-@section('title', isset($transaction) ? 'Edit Transaction' : 'Add Transaction')
+@section('title', $transaction->exists ? 'Edit Transaction' : 'Add Transaction')
 
 @section('content_header')
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0 text-dark font-weight-bold">
-                     {{ isset($transaction) ? 'Edit Transaction' : 'Add Transaction' }}
-                </h1>
+                     {{ $transaction->exists ? 'Edit Transaction' : 'Add Transaction' }}
             </div>
         </div>
     </div>
@@ -18,9 +16,9 @@
 
 @include('admin.alert')
 
-<form action="{{ isset($transaction) ? route('admin.transactions.update', $transaction->id) : route('admin.transactions.store') }}" method="POST" enctype="multipart/form-data">
+<form action="{{ $transaction->exists ? route('admin.transactions.update', $transaction->id) : route('admin.transactions.store') }}" method="POST" enctype="multipart/form-data">
     @csrf
-    @if(isset($transaction)) @method('PATCH') @endif
+    @if($transaction->exists) @method('PATCH') @endif
 
     <div class="row">
         <!-- Left Column (Main Form) -->

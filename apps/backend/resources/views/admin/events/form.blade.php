@@ -1,15 +1,14 @@
 @extends('adminlte::page')
 
-@section('title', (isset($event) ? 'Edit' : 'Create') . ' Event')
+@section('title', ($event->exists ? 'Edit' : 'Create') . ' Event')
+
+@section('plugins.Select2', true)
 
 @section('content_header')
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-calendar-alt mr-2 text-primary"></i> 
-                    {{ isset($event) ? 'Modify Event' : 'New Event Listing' }}
-                </h1>
+                    {{ $event->exists ? 'Modify Event' : 'New Event Listing' }}
             </div>
             <div class="col-sm-6 text-right">
                 <a href="{{ route('admin.events.index') }}" class="btn btn-default btn-flat btn-sm shadow-sm">
@@ -24,11 +23,11 @@
 <div class="container-fluid">
     @include('admin.alert')
 
-    <form action="{{ isset($event) ? route('admin.events.update', $event->id) : route('admin.events.store') }}" 
+    <form action="{{ $event->exists ? route('admin.events.update', $event->id) : route('admin.events.store') }}" 
           method="POST" 
           enctype="multipart/form-data">
         @csrf
-        @if(isset($event)) @method('PATCH') @endif
+        @if($event->exists) @method('PATCH') @endif
 
         <div class="row">
             {{-- Main Content Column --}}
@@ -71,10 +70,10 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="form-group"><label>Start Date & Time <span class="text-danger">*</span></label><input type="datetime-local" name="start_date_time" class="form-control" value="{{ old('start_date_time', isset($event) ? \Carbon\Carbon::parse($event->start_date_time)->format('Y-m-d\TH:i') : '') }}" required></div>
+                                <div class="form-group"><label>Start Date & Time <span class="text-danger">*</span></label><input type="datetime-local" name="start_date_time" class="form-control" value="{{ old('start_date_time', $event->exists ? \Carbon\Carbon::parse($event->start_date_time)->format('Y-m-d\TH:i') : '') }}" required></div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-group"><label>End Date & Time <span class="text-danger">*</span></label><input type="datetime-local" name="end_date_time" class="form-control" value="{{ old('end_date_time', isset($event) ? \Carbon\Carbon::parse($event->end_date_time)->format('Y-m-d\TH:i') : '') }}" required></div>
+                                <div class="form-group"><label>End Date & Time <span class="text-danger">*</span></label><input type="datetime-local" name="end_date_time" class="form-control" value="{{ old('end_date_time', $event->exists ? \Carbon\Carbon::parse($event->end_date_time)->format('Y-m-d\TH:i') : '') }}" required></div>
                             </div>
                         </div>
 
@@ -121,7 +120,7 @@
                     </div>
                 </div>
 
-                @if(isset($event))
+                @if($event->exists)
                 {{-- Recent Bookings --}}
                 <div class="card shadow-sm border-0 mt-4">
                     <div class="card-header bg-white"><h3 class="card-title font-weight-bold text-dark"><i class="fas fa-ticket-alt mr-2 text-warning"></i> Recent Bookings</h3></div>
@@ -225,7 +224,7 @@
 @include('admin._partials._toggle-card-css')
 @endpush
 
-@if(isset($event))
+@if($event->exists)
     <form id="delete-form" action="{{ route('admin.events.destroy', $event->id) }}" method="POST" class="d-none">
         @csrf @method('DELETE')
     </form>

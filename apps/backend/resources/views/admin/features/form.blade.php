@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', (isset($feature) ? 'Modify' : 'New') . ' Feature')
+@section('title', ($feature->exists ? 'Modify' : 'New') . ' Feature')
 
 @section('content_header')
     <div class="container-fluid">
@@ -8,7 +8,7 @@
             <div class="col-sm-6">
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-star mr-2 text-primary"></i> 
-                    {{ isset($feature) ? 'Modify Feature' : 'New Feature' }}
+                    {{ $feature->exists ? 'Modify Feature' : 'New Feature' }}
                 </h1>
             </div>
             <div class="col-sm-6 text-right">
@@ -24,12 +24,12 @@
 <div class="container-fluid">
     @include('admin.alert')
 
-    <form action="{{ isset($feature) ? route('admin.features.update', $feature->id) : route('admin.features.store') }}" 
+    <form action="{{ $feature->exists ? route('admin.features.update', $feature->id) : route('admin.features.store') }}" 
           method="POST" 
           enctype="multipart/form-data"
           id="featureMainForm">
         @csrf
-        @if(isset($feature)) @method('PATCH') @endif
+        @if($feature->exists) @method('PATCH') @endif
 
         <div class="row">
             {{-- Primary Data Column --}}
@@ -172,7 +172,7 @@
 </script>
 @endpush
 
-@if(isset($feature))
+@if($feature->exists)
     <form id="delete-form" action="{{ route('admin.features.destroy', $feature->id) }}" method="POST" class="d-none">
         @csrf @method('DELETE')
     </form>

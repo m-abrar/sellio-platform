@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', (isset($subscription) ? 'Edit' : 'Add') . ' Subscription')
+@section('title', ($subscription->exists ? 'Edit' : 'Add') . ' Subscription')
 
 @section('content_header')
 <div class="container-fluid">
@@ -8,7 +8,7 @@
         <div class="col-sm-6">
             <h1 class="m-0 text-dark font-weight-bold">
                 <i class="fas fa-file-invoice-dollar mr-2 text-primary"></i> 
-                {{ isset($subscription) ? 'Edit Subscription' : 'Add Subscription' }}
+                {{ $subscription->exists ? 'Edit Subscription' : 'Add Subscription' }}
             </h1>
         </div>
         <div class="col-sm-6 text-right">
@@ -25,10 +25,10 @@
     @include('admin.alert')
 
     <form id="subscription-form" 
-          action="{{ isset($subscription) ? route('admin.subscriptions.update', $subscription->id) : route('admin.subscriptions.store') }}" 
+          action="{{ $subscription->exists ? route('admin.subscriptions.update', $subscription->id) : route('admin.subscriptions.store') }}" 
           method="POST">
         @csrf
-        @if(isset($subscription)) @method('PATCH') @endif
+        @if($subscription->exists) @method('PATCH') @endif
 
         <div class="row pb-5">
             {{-- Left Column --}}
@@ -44,7 +44,7 @@
                             <i class="fas fa-cogs mr-1"></i> Configuration
                         </a>
                     </li>
-                    @if(isset($subscription))
+                    @if($subscription->exists)
                     <li class="nav-item">
                         <a class="nav-link px-4 py-2 rounded-pill" id="payments-tab" data-toggle="tab" href="#payments" role="tab">
                             <i class="fas fa-history mr-1"></i> Payment History
@@ -96,13 +96,13 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>Starts At <span class="text-danger">*</span></label>
-                                            <input type="datetime-local" name="starts_at" class="form-control" value="{{ old('starts_at', isset($subscription) && $subscription->starts_at ? $subscription->starts_at->format('Y-m-d\TH:i') : now()->format('Y-m-d\TH:i')) }}" required>
+                                            <input type="datetime-local" name="starts_at" class="form-control" value="{{ old('starts_at', $subscription->exists && $subscription->starts_at ? $subscription->starts_at->format('Y-m-d\TH:i') : now()->format('Y-m-d\TH:i')) }}" required>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>Ends At (Optional)</label>
-                                            <input type="datetime-local" name="ends_at" class="form-control" value="{{ old('ends_at', isset($subscription) && $subscription->ends_at ? $subscription->ends_at->format('Y-m-d\TH:i') : '') }}">
+                                            <input type="datetime-local" name="ends_at" class="form-control" value="{{ old('ends_at', $subscription->exists && $subscription->ends_at ? $subscription->ends_at->format('Y-m-d\TH:i') : '') }}">
                                         </div>
                                     </div>
                                 </div>
@@ -114,7 +114,7 @@
                         @include('admin.subscriptions.partials.settings')
                     </div>
 
-                    @if(isset($subscription))
+                    @if($subscription->exists)
                     <div class="tab-pane fade" id="payments" role="tabpanel">
                          {{-- Payment History logic here --}}
                          @include('admin.subscriptions.partials.payments-history')

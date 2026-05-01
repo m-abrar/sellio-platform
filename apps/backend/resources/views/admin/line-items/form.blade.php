@@ -1,14 +1,12 @@
 @extends('adminlte::page')
 
-@section('title', isset($LineItem) ? 'Edit Line Item' : 'Add Line Item')
+@section('title', $LineItem->exists ? 'Edit Line Item' : 'Add Line Item')
 
 @section('content_header')
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0 text-dark font-weight-bold">
-                     {{ isset($LineItem) ? 'Edit Line Item' : 'Add Line Item' }}
-                </h1>
+                     {{ $LineItem->exists ? 'Edit Line Item' : 'Add Line Item' }}
             </div>
         </div>
     </div>
@@ -18,9 +16,9 @@
 
 @include('admin.alert')
 
-<form action="{{ isset($LineItem) ? route('admin.line-items.update', $LineItem->id) : route('admin.line-items.store') }}" method="POST">
+<form action="{{ $LineItem->exists ? route('admin.line-items.update', $LineItem->id) : route('admin.line-items.store') }}" method="POST">
     @csrf
-    @if(isset($LineItem)) @method('PATCH') @endif
+    @if($LineItem->exists) @method('PATCH') @endif
 
     <div class="row">
         <!-- Left Column (Main Form) -->
@@ -66,7 +64,7 @@
                         <label>Status</label>
                         <div class="custom-control custom-switch">
                             <input type="checkbox" class="custom-control-input" id="statusSwitch" name="status" value="active" 
-                                   {{ isset($LineItem) && $LineItem->status == 'active' ? 'checked' : '' }}>
+                                   {{ $LineItem->exists && $LineItem->status == 'active' ? 'checked' : '' }}>
                             <label class="custom-control-label" for="statusSwitch">Active</label>
                         </div>
                     </div>

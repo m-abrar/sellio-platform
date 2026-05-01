@@ -1,6 +1,8 @@
 @extends('adminlte::page')
 
-@section('title', (isset($category) ? 'Edit' : 'Create') . ' Category')
+@section('title', ($category->exists ? 'Edit' : 'Create') . ' Category')
+
+@section('plugins.Select2', true)
 
 @section('content_header')
     <div class="container-fluid">
@@ -8,7 +10,7 @@
             <div class="col-sm-6">
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-tag mr-2 text-primary"></i> 
-                    {{ isset($category) ? 'Modify Category' : 'New Category' }}
+                    {{ $category->exists ? 'Modify Category' : 'New Category' }}
                 </h1>
             </div>
             <div class="col-sm-6 text-right">
@@ -24,12 +26,12 @@
 <div class="container-fluid">
     @include('admin.alert')
 
-    <form action="{{ isset($category) ? route('admin.categories.update', $category->id) : route('admin.categories.store') }}" 
+    <form action="{{ $category->exists ? route('admin.categories.update', $category->id) : route('admin.categories.store') }}" 
           method="POST" 
           enctype="multipart/form-data"
           id="categoryMainForm">
         @csrf
-        @if(isset($category)) @method('PATCH') @endif
+        @if($category->exists) @method('PATCH') @endif
 
         <div class="row">
             {{-- Primary Data Column --}}
@@ -76,7 +78,7 @@
                                 <option value="">-- None (Root Category) --</option>
                                 @foreach($categories as $item)
                                     {{-- Prevent assigning itself as parent when editing --}}
-                                    @if(!isset($category) || $category->id !== $item->id)
+                                    @if(!$category->exists || $category->id !== $item->id)
                                         <option value="{{ $item->id }}" {{ old('parent_id', $category?->parent_id ?? '') == $item->id ? 'selected' : '' }}>
                                             {{ $item->title }} 
                                             @if($item->is_blog) [Blog] @elseif($item->is_product) [Product] @endif
@@ -187,12 +189,18 @@
             $(this).data('edited', true);
         });
 
+        $('.select2').select2({
+            theme: 'bootstrap4',
+            width: '100%',
+            placeholder: 'Search or select...'
+        });
+
         $('[data-toggle="tooltip"]').tooltip();
     });
 </script>
 @endpush
 
-@if(isset($category))
+@if($category->exists)
     <form id="delete-form" action="{{ route('admin.categories.destroy', $category->id) }}" method="POST" class="d-none">
         @csrf @method('DELETE')
     </form>

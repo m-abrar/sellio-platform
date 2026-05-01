@@ -1,14 +1,12 @@
 @extends('adminlte::page')
 
-@section('title', isset($addon) ? 'Edit Addon' : 'Add Addon')
+@section('title', $addon->exists ? 'Edit Addon' : 'Add Addon')
 
 @section('content_header')
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0 text-dark font-weight-bold">
-                     {{ isset($addon) ? 'Edit Addon' : 'Add Addon' }}
-                </h1>
+                     {{ $addon->exists ? 'Edit Addon' : 'Add Addon' }}
             </div>
         </div>
     </div>
@@ -18,9 +16,9 @@
 
 @include('admin.alert')
 
-<form action="{{ isset($addon) ? route('admin.addons.update', $addon->id) : route('admin.addons.store') }}" method="POST">
+<form action="{{ $addon->exists ? route('admin.addons.update', $addon->id) : route('admin.addons.store') }}" method="POST">
     @csrf
-    @if(isset($addon)) @method('PATCH') @endif
+    @if($addon->exists) @method('PATCH') @endif
 
     <div class="row">
         <!-- Left Column (Main Form) -->
@@ -54,7 +52,7 @@
                         <label>Status</label>
                         <div class="custom-control custom-switch">
                             <input type="checkbox" class="custom-control-input" id="statusSwitch" name="status" value="active" 
-                                   {{ isset($addon) && $addon->status == 'active' ? 'checked' : '' }}>
+                                   {{ $addon->exists && $addon->status == 'active' ? 'checked' : '' }}>
                             <label class="custom-control-label" for="statusSwitch">Active</label>
                         </div>
                     </div>

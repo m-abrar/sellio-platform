@@ -11,14 +11,12 @@
                 <input type="hidden" name="status" value="0">
                 <input type="checkbox" name="status" value="1" id="statusSwitch"
                        class="d-none toggle-input" 
-                       {{ (isset($advertisement) && $advertisement->status) ? 'checked' : '' }}>
+                       {{ ($advertisement->exists && $advertisement->status) ? 'checked' : '' }}>
                 
                 <div class="border rounded px-3 py-2 d-flex justify-content-between align-items-center toggle-card shadow-sm">
                     <div>
                         <div class="fw-bold small text-dark">Ad Status</div>
-                        <div class="small toggle-status text-muted">
-                            {{ (isset($advertisement) && $advertisement->status) ? 'Active' : 'Inactive' }}
-                        </div>
+                            {{ ($advertisement->exists && $advertisement->status) ? 'Active' : 'Inactive' }}
                     </div>
                     <div class="toggle-indicator"></div>
                 </div>
@@ -29,7 +27,7 @@
             <i class="fas fa-save mr-2"></i> <strong>Save Advertisement</strong>
         </button>
 
-        @if(isset($advertisement))
+        @if($advertisement->exists)
             <form action="{{ route('admin.advertisements.destroy', $advertisement->id) }}" method="POST" onsubmit="return confirm('Delete this ad?');">
                 @csrf @method('DELETE')
                 <button type="submit" class="btn btn-outline-danger btn-sm btn-block">

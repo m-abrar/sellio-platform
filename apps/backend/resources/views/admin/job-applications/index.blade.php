@@ -108,7 +108,7 @@
                                                 <i class="fas fa-map-marker-alt mr-1 text-danger"></i>{{ $app->job->location->title }}
                                             @endif
                                             <span class="mx-1">|</span>
-                                            ID: #{{ $app->id }}
+                                            <span class="badge badge-light border text-muted" style="font-size: 0.65rem;">ID: #{{ $app->id }}</span>
                                         </div>
                                     </td>
                                     <td class="align-middle">

@@ -112,16 +112,17 @@
                                     </td>
                                     <td class="align-middle">
                                         <div class="d-flex align-items-center">
-                                            <div class="avatar-xs mr-2 bg-light rounded-circle text-center border shadow-xs" style="width:32px; height:32px; line-height:30px;">
-                                                <i class="fas fa-user text-muted text-xs"></i>
+                                            <div class="avatar-xs mr-3 bg-light rounded-circle text-center border shadow-xs d-flex align-items-center justify-content-center" style="width:38px; height:38px;">
+                                                <i class="fas fa-user text-muted"></i>
                                             </div>
                                             <div>
                                                 <span class="d-block font-weight-bold text-dark mb-0">{{ $order->user->name ?? 'N/A' }}</span>
                                                 <div class="text-xs text-muted">
-                                                    <a href="mailto:{{ $order->user->email ?? '' }}" class="text-info">{{ $order->user->email ?? '' }}</a>
+                                                    <a href="mailto:{{ $order->user->email ?? '' }}" class="text-info"><i class="fas fa-envelope mr-1"></i>{{ $order->user->email ?? 'N/A' }}</a>
                                                     @if($order->user->phone)
-                                                        <span class="mx-1">|</span>
-                                                        <i class="fas fa-phone-alt mr-1 text-xs"></i>{{ $order->user->phone }}
+                                                        <div class="mt-1">
+                                                            <i class="fas fa-phone-alt mr-1 text-xs"></i>{{ $order->user->phone }}
+                                                        </div>
                                                     @endif
                                                 </div>
                                             </div>
@@ -130,19 +131,25 @@
                                     <td class="align-middle">
                                         <div class="font-weight-bold text-lg text-primary">${{ number_format($order->total_amount, 2) }}</div>
                                         @if($firstItem)
-                                            <div class="text-xs text-muted mt-1 bg-light p-1 rounded border shadow-none" style="width: fit-content;">
-                                                <span class="font-weight-bold">{{ $firstItem->quantity }}</span> x ${{ number_format($firstItem->unit_price, 2) }}
+                                            <div class="text-xs text-muted mt-1 bg-light p-2 rounded border shadow-none" style="width: fit-content; min-width: 120px;">
+                                                <div class="d-flex justify-content-between border-bottom pb-1 mb-1">
+                                                    <span class="font-weight-bold text-dark">{{ $firstItem->quantity }} qty</span>
+                                                    <span>${{ number_format($firstItem->unit_price, 2) }} ea</span>
+                                                </div>
                                                 @php
                                                     $attributes = $firstItem->selected_attributes;
                                                     if (is_string($attributes)) {
-                                                        $attributes = json_decode($attributes, true) ?: [];
+                                                        $attributes = json_decode($attributes, true);
                                                     }
+                                                    $attributes = is_array($attributes) ? $attributes : [];
                                                 @endphp
-                                                @if(is_array($attributes) && count($attributes) > 0)
-                                                    <div class="mt-1 border-top pt-1">
+                                                @if(count($attributes) > 0)
+                                                    <div class="mt-1">
                                                         @foreach($attributes as $key => $value)
-                                                            <span class="text-secondary font-weight-600">{{ ucfirst($key) }}:</span> 
-                                                            <span class="text-dark">{{ is_array($value) ? implode(', ', $value) : $value }}</span>@if(!$loop->last) <span class="mx-1">|</span> @endif
+                                                            <div class="mb-0">
+                                                                <span class="text-secondary font-weight-600">{{ ucfirst(str_replace('_', ' ', $key)) }}:</span> 
+                                                                <span class="text-dark">{{ is_array($value) ? implode(', ', $value) : $value }}</span>
+                                                            </div>
                                                         @endforeach
                                                     </div>
                                                 @endif

@@ -14,7 +14,7 @@
                 <div class="border rounded px-3 py-2 d-flex justify-content-between align-items-center toggle-card shadow-sm">
                     <div>
                         <div class="fw-bold small text-dark">Publishing Status</div>
-                        <div class="small toggle-status text-muted">{{ (isset($product) && $product->is_published) ? 'Visible to public' : 'Draft Mode' }}</div>
+                        <div class="small toggle-status text-muted">{{ ($product->exists && $product->is_published) ? 'Visible to public' : 'Draft Mode' }}</div>
                     </div>
                     <div class="toggle-indicator"></div>
                 </div>
@@ -28,7 +28,7 @@
                 <div class="border rounded px-3 py-2 d-flex justify-content-between align-items-center toggle-card shadow-sm">
                     <div>
                         <div class="fw-bold small text-dark">Promotions</div>
-                        <div class="small toggle-status text-muted">{{ (isset($product) && $product->is_featured) ? 'Featured' : 'Standard' }}</div>
+                        <div class="small toggle-status text-muted">{{ ($product->exists && $product->is_featured) ? 'Featured' : 'Standard' }}</div>
                     </div>
                     <div class="toggle-indicator"></div>
                 </div>
@@ -36,10 +36,10 @@
         </div>
         <hr class="my-3">
         <button type="submit" class="btn btn-primary btn-block btn-lg btn-flat shadow-sm font-weight-bold mb-2">
-            <i class="fas fa-save mr-2"></i> {{ isset($product) ? 'UPDATE PRODUCT' : 'CREATE PRODUCT' }}
+            <i class="fas fa-save mr-2"></i> {{ $product->exists ? 'UPDATE PRODUCT' : 'CREATE PRODUCT' }}
         </button>
 
-        @if(isset($product))
+        @if($product->exists)
             <div class="row gx-1">
                 <div class="col-6">
                     @if(Route::has('admin.products.duplicate'))

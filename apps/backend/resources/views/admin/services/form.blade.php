@@ -1,15 +1,14 @@
 @extends('adminlte::page')
 
-@section('title', (isset($service) ? 'Edit' : 'Create') . ' Service')
+@section('title', ($service->exists ? 'Edit' : 'Create') . ' Service')
+
+@section('plugins.Select2', true)
 
 @section('content_header')
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-concierge-bell mr-2 text-primary"></i> 
-                    {{ isset($service) ? 'Modify Service' : 'New Service Listing' }}
-                </h1>
+                    {{ $service->exists ? 'Modify Service' : 'New Service Listing' }}
             </div>
             <div class="col-sm-6 text-right">
                 <a href="{{ route('admin.services.index') }}" class="btn btn-default btn-flat btn-sm shadow-sm">
@@ -24,11 +23,11 @@
 <div class="container-fluid">
     @include('admin.alert')
 
-    <form action="{{ isset($service) ? route('admin.services.update', $service->id) : route('admin.services.store') }}" 
+    <form action="{{ $service->exists ? route('admin.services.update', $service->id) : route('admin.services.store') }}" 
           method="POST" 
           enctype="multipart/form-data">
         @csrf
-        @if(isset($service)) @method('PATCH') @endif
+        @if($service->exists) @method('PATCH') @endif
 
         <div class="row">
             {{-- Main Content Column --}}
@@ -124,7 +123,7 @@
                     </div>
                 </div>
 
-                @if(isset($service))
+                @if($service->exists)
                 {{-- Recent Quotes --}}
                 <div class="card shadow-sm border-0 mt-4">
                     <div class="card-header bg-white"><h3 class="card-title font-weight-bold text-dark"><i class="fas fa-file-invoice-dollar mr-2 text-info"></i> Recent Leads/Quotes</h3></div>
@@ -229,7 +228,7 @@
 @include('admin._partials._toggle-card-css')
 @endpush
 
-@if(isset($service))
+@if($service->exists)
     <form id="delete-form" action="{{ route('admin.services.destroy', $service->id) }}" method="POST" class="d-none">
         @csrf @method('DELETE')
     </form>
