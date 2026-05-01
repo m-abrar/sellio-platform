@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Categories')
+@section('title', 'Taxonomy Architecture | Market Segments')
 
 @section('plugins.Datatables', true)
 
@@ -9,17 +9,17 @@
         <div class="row mb-4 align-items-end">
             <div class="col-sm-6">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-tags mr-2 text-primary"></i> Taxonomy
+                    <i class="fas fa-tags mr-2 text-primary"></i> Taxonomy Architecture
                 </h1>
-                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Define and organize categories across all marketplace verticals.</p>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Define and organize hierarchal categories across all marketplace verticals.</p>
             </div>
             <div class="col-sm-6 text-right">
                 <a href="{{ route('admin.categories.create') }}" class="btn btn-primary btn-sm rounded-pill px-4 font-weight-bold shadow-lg">
-                    <i class="fas fa-plus-circle mr-1"></i> ADD CATEGORY
+                    <i class="fas fa-plus-circle mr-1"></i> ADD SEGMENT
                 </a>
                 <ol class="breadcrumb float-sm-right bg-transparent p-0 mt-3 small">
                     <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Categories</li>
+                    <li class="breadcrumb-item active">Taxonomy</li>
                 </ol>
             </div>
         </div>
@@ -27,55 +27,51 @@
 @stop
 
 @section('content')
-<div class="container-fluid">
+<div class="container-fluid pb-5">
     @include('admin.alert')
 
-    <div class="card card-primary card-outline shadow-sm">
-        <div class="card-header border-0 bg-white py-3 d-flex justify-content-between align-items-center">
-            <h3 class="card-title font-weight-600 text-muted mb-0">Taxonomy Management</h3>
+    <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
+        <div class="card-header border-0 bg-white py-4 px-4 d-flex justify-content-between align-items-center">
+            <h3 class="card-title font-weight-bold text-dark mb-0">Marketplace Taxonomy Registry</h3>
+            <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest">{{ count($categories) }} SEGMENTS DEFINED</span>
         </div>
 
         <div class="card-body p-0">
             <div class="table-responsive">
-                {{-- DRY: Added 'table-premium' class for the hover effect --}}
                 <table id="categories-table" class="table table-hover table-premium mb-0">
                     <thead class="thead-light">
                         <tr>
-                            <th class="text-center" style="width: 70px;">Icon</th>
-                            <th>Category Details</th>
-                            <th>Module Applicability</th>
-                            <th class="text-center">Status</th>
-                            <th class="text-right px-4">Actions</th>
+                            <th class="text-center pl-4" style="width: 80px;">Icon</th>
+                            <th>Segment Identity</th>
+                            <th>Module Applicability Spectrum</th>
+                            <th class="text-center">Lifecycle</th>
+                            <th class="text-right pr-4">Metrics</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse ($categories as $category)
                             <tr>
-                                <td class="text-center align-middle">
-                                    <div class="icon-box-preview shadow-xs" style="width: 45px; height: 45px; border-radius: 8px; overflow:hidden; margin: auto;">
-                                        <img src="{{ $category->thumbnail_url }}" 
-                                             alt="{{ $category->title }}"
-                                             class="w-100 h-100"
-                                             style="object-fit: cover;">
+                                <td class="text-center align-middle pl-4">
+                                    <div class="table-img-preview shadow-xs rounded-lg overflow-hidden border" style="width: 45px; height: 45px; margin: auto;">
+                                        <img src="{{ $category->thumbnail_url }}" alt="{{ $category->title }}" class="w-100 h-100 object-fit-cover">
                                     </div>
                                 </td>
 
                                 <td class="align-middle">
                                     <div class="d-flex align-items-center">
                                         @if($category->parent_id)
-                                            <div class="mr-2 text-muted">
-                                                {{-- Visual indicator for sub-category --}}
-                                                <i class="fas fa-level-up-alt fa-rotate-90 fa-xs"></i>
+                                            <div class="mr-2 text-primary opacity-50">
+                                                <i class="fas fa-level-up-alt fa-rotate-90 fa-sm"></i>
                                             </div>
                                         @endif
                                         <div>
-                                            <span class="d-block font-weight-bold text-dark mb-0">
+                                            <span class="d-block font-weight-bold text-dark mb-0" style="font-size: 1rem;">
                                                 {{ $category->title ?? 'N/A' }}
                                             </span>
-                                            <small class="text-muted text-monospace" style="font-size: 0.75rem;">
+                                            <small class="text-muted font-weight-bold uppercase smallest letter-spacing-1">
                                                 @if($category->parent)
-                                                    <span class="text-primary">{{ $category->parent->title }}</span> 
-                                                    <i class="fas fa-chevron-right mx-1 fa-xs"></i>
+                                                    <span class="text-primary">{{ strtoupper($category->parent->title) }}</span> 
+                                                    <i class="fas fa-chevron-right mx-1 smallest opacity-50"></i>
                                                 @endif
                                                 /{{ $category->slug }}
                                             </small>
@@ -84,15 +80,15 @@
                                 </td>
 
                                 <td class="align-middle">
-                                    <div class="d-flex flex-wrap">
+                                    <div class="d-flex flex-wrap" style="gap: 6px;">
                                         @php
                                             $modules = [
-                                                'is_property'   => ['title' => 'Property',   'icon' => 'fa-home',     'color' => 'bg-indigo'],
-                                                'is_event'      => ['title' => 'Event',      'icon' => 'fa-calendar', 'color' => 'bg-olive'],
-                                                'is_job'        => ['title' => 'Job',        'icon' => 'fa-briefcase','color' => 'bg-navy'],
-                                                'is_auto'       => ['title' => 'Auto',       'icon' => 'fa-car',      'color' => 'bg-lightblue'],
-                                                'is_service'    => ['title' => 'Service',    'icon' => 'fa-tools',    'color' => 'bg-maroon'],
-                                                'is_classified' => ['title' => 'Classified', 'icon' => 'fa-tag',      'color' => 'bg-orange'],
+                                                'is_property'   => ['title' => 'Property',   'icon' => 'fa-home',     'text' => 'primary'],
+                                                'is_event'      => ['title' => 'Event',      'icon' => 'fa-calendar', 'text' => 'success'],
+                                                'is_job'        => ['title' => 'Job',        'icon' => 'fa-briefcase','text' => 'dark'],
+                                                'is_auto'       => ['title' => 'Auto',       'icon' => 'fa-car',      'text' => 'info'],
+                                                'is_service'    => ['title' => 'Service',    'icon' => 'fa-tools',    'text' => 'danger'],
+                                                'is_classified' => ['title' => 'Classified', 'icon' => 'fa-tag',      'text' => 'warning'],
                                             ];
                                             $hasModule = false;
                                         @endphp
@@ -100,45 +96,42 @@
                                         @foreach($modules as $column => $data)
                                             @if($category->$column)
                                                 @php $hasModule = true; @endphp
-                                                <span class="badge {{ $data['color'] }} text-xs mr-1 mb-1 shadow-xs px-2 py-1" 
-                                                      data-toggle="tooltip" title="{{ $data['title'] }} Module">
-                                                    <i class="fas {{ $data['icon'] }} fa-xs mr-1"></i> {{ $data['title'] }}
+                                                <span class="badge badge-{{ $data['text'] }}-light px-2 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 border-0" 
+                                                      data-toggle="tooltip" title="{{ $data['title'] }} Engine">
+                                                    <i class="fas {{ $data['icon'] }} mr-1"></i> {{ $data['title'] }}
                                                 </span>
                                             @endif
                                         @endforeach
 
                                         @if(!$hasModule)
-                                            <span class="text-muted small italic">General / Unassigned</span>
+                                            <span class="text-muted smallest font-weight-bold uppercase italic opacity-50">Global Segment</span>
                                         @endif
                                     </div>
                                 </td>
 
                                 <td class="text-center align-middle">
-                                    {{-- DRY: Using reusable light badge classes --}}
-                                    <span class="badge {{ $category->is_published ? 'badge-success-light' : 'badge-danger-light' }} px-3 py-1 text-uppercase" style="font-size: 0.7rem; letter-spacing: 0.5px;">
-                                        {{ $category->is_published ? 'Active' : 'Inactive' }}
-                                    </span>
+                                    @if($category->is_published)
+                                        <span class="badge badge-success-light px-3 py-2 rounded-pill font-weight-bold smallest uppercase animate-pulse">ACTIVE</span>
+                                    @else
+                                        <span class="badge badge-danger-light px-3 py-2 rounded-pill font-weight-bold smallest uppercase">OFFLINE</span>
+                                    @endif
                                 </td>
 
-                                
-
-                                <td class="text-right align-middle px-4">
-                                    {{-- DRY: Using 'btn-group-premium' for standardized look --}}
-                                    <div class="btn-group btn-group-premium shadow-sm">
+                                <td class="text-right align-middle pr-4">
+                                    <div class="btn-group btn-group-premium shadow-xs rounded-pill border overflow-hidden">
                                         <a href="{{ route('admin.categories.edit', $category->id) }}" 
-                                           class="btn btn-default btn-sm text-info" 
-                                           data-toggle="tooltip" title="Modify Settings">
+                                           class="btn btn-white btn-sm text-info py-2 px-3 border-right" 
+                                           data-toggle="tooltip" title="Modify Configuration">
                                             <i class="fas fa-pencil-alt"></i>
                                         </a>
                                         
                                         <form action="{{ route('admin.categories.destroy', $category->id) }}" 
                                               method="POST" 
                                               class="d-inline"
-                                              onsubmit="return confirm('Are you sure you want to delete this category?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-default btn-sm text-danger" 
-                                                    data-toggle="tooltip" title="Delete Category">
+                                              onsubmit="return confirm('Permanently purge this taxonomy segment?')">
+                                            @csrf @method('DELETE')
+                                            <button type="submit" class="btn btn-white btn-sm text-danger py-2 px-3" 
+                                                    data-toggle="tooltip" title="Purge Segment">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
                                         </form>
@@ -149,17 +142,9 @@
                             <tr class="empty-state">
                                 <td colspan="5" class="text-center py-5">
                                     <div class="py-4">
-                                        <i class="fas fa-tags fa-4x text-muted mb-3 opacity-25"></i>
-                                        <h5 class="text-muted font-weight-bold">No Categories Found</h5>
-                                        @if(request('search'))
-                                            <p class="text-secondary small mb-3">No results matching "<strong>{{ request('search') }}</strong>".</p>
-                                            <a href="{{ route('admin.categories.index') }}" class="btn btn-default btn-sm px-4">Clear search</a>
-                                        @else
-                                            <p class="text-secondary small mb-3">Organize your marketplace items by creating your first category.</p>
-                                            <a href="{{ route('admin.categories.create') }}" class="btn btn-primary btn-sm btn-flat px-4">
-                                                <i class="fas fa-plus mr-1"></i> Create First Category
-                                            </a>
-                                        @endif
+                                        <i class="fas fa-tags fa-4x text-muted opacity-25 mb-3 d-block"></i>
+                                        <h5 class="text-muted font-weight-bold">Taxonomy Is Unmapped</h5>
+                                        <p class="text-secondary small">Organize your marketplace items by creating your first segment.</p>
                                     </div>
                                 </td>
                             </tr>
@@ -168,22 +153,11 @@
                 </table>
             </div>
         </div>
-
-        
     </div>
 </div>
 @endsection
 
-@section('css')
-<style>
-    .dataTables_filter { float: left !important; text-align: left !important; }
-    .dataTables_filter input { margin-left: 0 !important; }
-    .dataTables_length { float: right !important; text-align: right !important; }
-</style>
-@endsection
-
-
-@section('js')
+@push('js')
     <script>
         $(function () {
             if ($('#categories-table tbody tr:not(.empty-state)').length > 0) {
@@ -198,27 +172,22 @@
                     "dom": '<"row px-4 pt-3"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-6"l>>' +
                            '<"row"<"col-sm-12"tr>>' +
                            '<"row px-4 pb-3"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
-
                     "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
                     "order": [[1, "asc"]],
-                    "columnDefs": [
-                        { "orderable": false, "targets": [0, 4] }
-                    ],
+                    "columnDefs": [ { "orderable": false, "targets": [0, 4] } ],
                     "language": {
                         "search": "",
-                        "searchPlaceholder": "Search categories...",
+                        "searchPlaceholder": "Filter segments...",
                         "paginate": {
                             "previous": "<i class='fas fa-angle-left'></i>",
                             "next": "<i class='fas fa-angle-right'></i>"
-                        },
-                        "lengthMenu": "_MENU_ per page"
+                        }
                     }
                 });
                 $('.dataTables_filter input').addClass('form-control shadow-none border-light').css('width', '250px');
-                $('.dataTables_length select').addClass('form-control form-control-sm shadow-none border-light').css('width', '70px');
+                $('.dataTables_length select').addClass('form-control form-control-sm shadow-none border-light').css('width', '80px');
             }
-            
             $('[data-toggle="tooltip"]').tooltip();
         });
     </script>
-@endsection
+@endpush

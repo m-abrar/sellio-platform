@@ -1,11 +1,15 @@
-<div class="card shadow-sm border-0">
-    <div class="card-header bg-white">
-        <h3 class="card-title font-weight-bold">Module Permissions</h3>
+<div class="card border-0 shadow-premium" style="border-radius: 24px; overflow: hidden;">
+    <div class="card-header bg-white py-4 px-4 border-0 d-flex align-items-center justify-content-between">
+        <h3 class="card-title font-weight-bold text-dark mb-0">
+            <i class="fas fa-key mr-2 text-primary opacity-50"></i> Permission Spectrum
+        </h3>
         <div class="card-tools">
-            <button type="button" class="btn btn-xs btn-outline-secondary" id="globalToggle">Toggle All</button>
+            <button type="button" class="btn btn-outline-primary btn-sm rounded-pill px-3 font-weight-bold shadow-xs" id="globalToggle">
+                <i class="fas fa-sync-alt mr-1"></i> TOGGLE ALL
+            </button>
         </div>
     </div>
-    <div class="card-body">
+    <div class="card-body p-4 bg-light-soft">
         @php
             $grouped = $permissions->groupBy(function($p) {
                 return explode('-', $p->name)[0]; 
@@ -14,26 +18,30 @@
 
         <div class="row">
             @foreach($grouped as $group => $items)
-                <div class="col-md-6 mb-3">
-                    <div class="p-3 border rounded bg-light">
-                        <div class="d-flex justify-content-between align-items-center mb-2 border-bottom pb-1">
-                            <h6 class="font-weight-bold text-primary text-uppercase small mb-0">{{ $group }}</h6>
-                            <div class="custom-control custom-checkbox">
+                <div class="col-md-6 col-xl-4 mb-4">
+                    <div class="bg-white p-3 rounded-xl border shadow-xs h-100 transition-all hover-shadow-premium">
+                        <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
+                            <h6 class="font-weight-bold text-dark smallest text-uppercase letter-spacing-1 mb-0">
+                                <i class="fas fa-folder-open mr-2 text-primary opacity-50"></i> {{ $group }}
+                            </h6>
+                            <div class="custom-control custom-switch custom-switch-sm">
                                 <input type="checkbox" class="custom-control-input group-toggler" id="group_{{ $group }}">
-                                <label class="custom-control-label small" for="group_{{ $group }}">All</label>
+                                <label class="custom-control-label smallest font-weight-bold text-muted" for="group_{{ $group }}">FULL ACCESS</label>
                             </div>
                         </div>
-                        @foreach($items as $permission)
-                            <div class="custom-control custom-checkbox mb-1">
-                                <input type="checkbox" name="permissions[]" value="{{ $permission->id }}" 
-                                    class="custom-control-input permission-item"
-                                    id="perm_{{ $permission->id }}"
-                                    @if(isset($currentRole) && $currentRole->hasPermissionTo($permission->name)) checked @endif>
-                                <label class="custom-control-label font-weight-normal" for="perm_{{ $permission->id }}">
-                                    {{ ucwords(str_replace(['-', $group], [' ', ''], $permission->name)) }}
-                                </label>
-                            </div>
-                        @endforeach
+                        <div class="permission-items pl-1">
+                            @foreach($items as $permission)
+                                <div class="custom-control custom-checkbox mb-2">
+                                    <input type="checkbox" name="permissions[]" value="{{ $permission->id }}" 
+                                        class="custom-control-input permission-item"
+                                        id="perm_{{ $permission->id }}"
+                                        @if(isset($currentRole) && $currentRole->hasPermissionTo($permission->name)) checked @endif>
+                                    <label class="custom-control-label font-weight-600 text-secondary" for="perm_{{ $permission->id }}" style="font-size: 0.85rem; cursor: pointer;">
+                                        {{ ucwords(str_replace(['-', $group], [' ', ''], $permission->name)) }}
+                                    </label>
+                                </div>
+                            @endforeach
+                        </div>
                     </div>
                 </div>
             @endforeach
@@ -41,12 +49,12 @@
     </div>
 </div>
 
-@section('js')
+@push('js')
 <script>
     $(function() {
         // Toggle specific group
         $('.group-toggler').on('change', function() {
-            $(this).closest('.p-3').find('.permission-item').prop('checked', $(this).prop('checked'));
+            $(this).closest('.rounded-xl').find('.permission-item').prop('checked', $(this).prop('checked'));
         });
 
         // Global toggle
@@ -56,4 +64,14 @@
         });
     });
 </script>
-@stop
+@endpush
+
+@push('css')
+<style>
+    .bg-light-soft { background: rgba(0,0,0,0.02); }
+    .hover-shadow-premium:hover { box-shadow: var(--premium-shadow); transform: translateY(-4px); border-color: var(--primary-glow) !important; }
+    .custom-switch-sm .custom-control-label::before { height: 1.2rem; width: 2.1rem; border-radius: 1rem; }
+    .custom-switch-sm .custom-control-label::after { width: calc(1.2rem - 4px); height: calc(1.2rem - 4px); border-radius: 1rem; }
+    .custom-switch-sm .custom-control-input:checked ~ .custom-control-label::after { transform: translateX(0.9rem); }
+</style>
+@endpush

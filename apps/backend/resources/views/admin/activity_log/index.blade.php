@@ -2,269 +2,221 @@
 
 @section('plugins.Datatables', true)
 
-@section('title', 'Activity Log')
+@section('title', 'System Heartbeat | Activity Timeline')
 
 @section('content_header')
     <div class="container-fluid">
-        <div class="row mb-2">
+        <div class="row mb-4 align-items-end">
             <div class="col-sm-6">
                 <h1 class="m-0 text-dark font-weight-bold">
-                     Activity Logs
+                    <i class="fas fa-history mr-2 text-primary"></i> System Heartbeat
                 </h1>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Chronological audit trail of all administrative and system-level interactions.</p>
+            </div>
+            <div class="col-sm-6 text-right">
+                <div class="dropdown d-inline-block">
+                    <button type="button" class="btn btn-primary btn-sm rounded-pill px-4 font-weight-bold shadow-lg dropdown-toggle" data-toggle="dropdown">
+                        <i class="fas fa-filter mr-1"></i> {{ strtoupper(str_replace('_', ' ', $currentFilter)) }}
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right shadow-premium border-0" style="border-radius: 16px; padding: 10px;">
+                        <div class="dropdown-header smallest font-weight-bold text-muted text-uppercase">Filter Streams</div>
+                        @foreach ($filters as $key => $filter)
+                            <a class="dropdown-item rounded-lg py-2 px-3 mb-1 {{ $key == $currentFilter ? 'bg-primary-soft text-primary active' : '' }}" 
+                               href="{{ route('admin.activity-log.index', ['filter' => $key]) }}">
+                               <i class="fas fa-stream mr-2 opacity-50"></i> {{ is_array($filter) ? $filter['label'] : $filter }}
+                            </a>
+                        @endforeach
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item rounded-lg py-2 px-3 text-danger" href="{{ route('admin.activity-log.index', ['filter' => 'all']) }}">
+                            <i class="fas fa-globe mr-2 opacity-50"></i> All Operational Data
+                        </a>
+                    </div>
+                </div>
+                <ol class="breadcrumb float-sm-right bg-transparent p-0 mt-3 small">
+                    <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Activity Timeline</li>
+                </ol>
             </div>
         </div>
     </div>
 @stop
 
 @section('content')
+<div class="container-fluid pb-5">
+    @include('admin.alert') 
 
-{{-- Include your standard admin alerts --}}
-@include('admin.alert') 
-
-<div class="card card-primary card-outline shadow-sm border-0">
-    <div class="card-header border-0 bg-white py-3">
-        <h3 class="card-title">System Activity Timeline</h3>
-        
-        {{-- START FILTER DROPDOWN --}}
-        <div class="btn-group float-right">
-            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-filter"></i> Filter: {{ ucwords(str_replace('_', ' ', $currentFilter)) }}
-            </button>
-            <div class="dropdown-menu dropdown-menu-right">
-                @foreach ($filters as $key => $filter)
-                    @if (is_array($filter))
-                        <a class="dropdown-item" href="{{ route('admin.activity-log.index', ['filter' => $key]) }}">
-                            <i class="fas fa-list-alt"></i> {{ $filter['label'] }}
-                        </a>
-                    @else
-                        <a class="dropdown-item @if ($key == $currentFilter) active @endif" 
-                           href="{{ route('admin.activity-log.index', ['filter' => $key]) }}">
-                           {{ $filter }}
-                        </a>
-                    @endif
-                @endforeach
-                <div class="dropdown-divider"></div>
-                 <a class="dropdown-item" href="{{ route('admin.activity-log.index', ['filter' => 'all']) }}">
-                    <i class="fas fa-globe"></i> All Activities
-                </a>
+    <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
+        <div class="card-header bg-white border-0 py-4 px-4">
+            <h3 class="card-title font-weight-bold text-dark mb-0">Operational Logs</h3>
+            <div class="card-tools">
+                <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest">
+                    LIVE STREAMING
+                </span>
             </div>
         </div>
-        {{-- END FILTER DROPDOWN --}}
-        
-    </div>
-    <div class="card-body">
-        <table id="activity-log-table" class="table table-hover table-premium mb-0">
-            <thead class="thead-light">
-                <tr>
-                    <th>Time</th>
-                    <th>User (Causer)</th>
-                    <th>Event</th>
-                    <th>Description</th>
-                    <th>Subject</th>
-                    <th>Details</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($activityLogs as $activity)
-                    <tr>
-                        {{-- 1. Time --}}
-                        <td>
-                            {{ $activity->created_at->format('M d, Y') }}<br>
-                            <small class="text-muted">{{ $activity->created_at->format('h:i:s A') }}</small>
-                        </td>
-                        
-                        {{-- 2. Causer (User who performed the action) --}}
-                        <td>
-                            @if ($activity->causer)
-                                <span class="badge bg-info" title="User ID: {{ $activity->causer->id }}">
-                                    <i class="fas fa-user"></i> {{ $activity->causer->name ?? $activity->causer->email }}
-                                </span>
-                            @else
-                                <span class="badge bg-secondary">System/Guest</span>
-                            @endif
-                        </td>
-
-                        {{-- 3. Event Type --}}
-                        <td>
-                            @php
-                                $event = $activity->event ?? 'manual';
-                                $badgeClass = match($event) {
-                                    'created', 'login' => 'bg-success',
-                                    'updated' => 'bg-warning',
-                                    'deleted', 'logout' => 'bg-danger',
-                                    default => 'bg-primary',
-                                };
-                            @endphp
-                            <span class="badge {{ $badgeClass }}">{{ ucwords($event) }}</span>
-                        </td>
-                        
-                        {{-- 4. Description --}}
-                        <td>
-                            {{ $activity->description }}
-                        </td>
-
-                        {{-- 5. Subject (The model that was acted upon) --}}
-                        <td>
-                            {{-- Check if subject_type is set (applies to all model-related logs, even if the subject is deleted) --}}
-                            @if ($activity->subject_type)
-                                @php
-                                    // Get the class name without the namespace (e.g., 'App\Models\Property' -> 'Property')
-                                    $modelName = (new \ReflectionClass($activity->subject_type))->getShortName();
-                                @endphp
-
-                                <span class="badge bg-dark" title="{{ $activity->subject_type }}">
-                                    <i class="fas fa-cube"></i> {{ $modelName }}
-                                </span> 
-                                <br>
-
-                                {{-- If the subject relationship exists (model is NOT deleted), display its identifying attribute (e.g., name/title) --}}
-                                @if ($activity->subject)
-                                    <small class="text-info">
-                                        @if (isset($activity->subject->name))
-                                            {{ Str::limit($activity->subject->name, 30) }}
-                                        @elseif (isset($activity->subject->title))
-                                            {{ Str::limit($activity->subject->title, 30) }}
-                                        @else
-                                            Model ID: {{ $activity->subject_id }}
-                                        @endif
-                                    </small>
-                                @else
-                                    {{-- If the subject relationship is NULL (because the item was deleted) --}}
-                                    <small class="text-danger">
-                                        <i class="fas fa-trash-alt"></i> Deleted (ID: {{ $activity->subject_id }})
-                                    </small>
-                                @endif
-                                
-                            @else
-                                {{-- For manual logs (like login/logout) where subject_type is NULL --}}
-                                <span class="text-muted">N/A</span>
-                            @endif
-                        </td>
-                        
-                        {{-- 6. Details (Custom properties and changes) --}}
-                        <td>
-                            @if ($activity->properties->isNotEmpty())
-                                <button type="button" class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#detailsModal-{{ $activity->id }}">
-                                    <i class="fas fa-search-plus"></i> View Details
-                                </button>
-                            @else
-                                <span class="text-muted">None</span>
-                            @endif
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
-
-    <div class="card-footer clearfix">
-        {{ $activityLogs->appends(request()->except('page'))->links() }}
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table id="activity-log-table" class="table table-hover table-premium mb-0">
+                    <thead class="thead-light">
+                        <tr>
+                            <th class="pl-4">Timestamp</th>
+                            <th>Identity</th>
+                            <th>Operation</th>
+                            <th>Description</th>
+                            <th>Target Model</th>
+                            <th class="text-right pr-4">Metrics</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($activityLogs as $activity)
+                            <tr>
+                                <td class="align-middle pl-4">
+                                    <span class="d-block font-weight-bold text-dark">{{ $activity->created_at->format('M d, Y') }}</span>
+                                    <span class="smallest font-weight-bold text-muted uppercase letter-spacing-1">{{ $activity->created_at->format('h:i:s A') }}</span>
+                                </td>
+                                <td class="align-middle">
+                                    @if ($activity->causer)
+                                        <div class="d-flex align-items-center">
+                                            <div class="bg-primary-soft rounded-circle mr-2 d-flex align-items-center justify-content-center" style="width:32px; height:32px;">
+                                                <i class="fas fa-user-circle text-primary"></i>
+                                            </div>
+                                            <span class="font-weight-bold text-dark">{{ $activity->causer->name ?? $activity->causer->email }}</span>
+                                        </div>
+                                    @else
+                                        <span class="badge badge-secondary-soft text-secondary px-3 py-1 rounded-pill smallest font-weight-bold">INTERNAL SYSTEM</span>
+                                    @endif
+                                </td>
+                                <td class="align-middle">
+                                    @php
+                                        $event = $activity->event ?? 'manual';
+                                        $style = match($event) {
+                                            'created', 'login' => ['bg' => 'success-soft', 'text' => 'success', 'icon' => 'plus'],
+                                            'updated' => ['bg' => 'warning-soft', 'text' => 'warning', 'icon' => 'edit'],
+                                            'deleted', 'logout' => ['bg' => 'danger-soft', 'text' => 'danger', 'icon' => 'trash-alt'],
+                                            default => ['bg' => 'primary-soft', 'text' => 'primary', 'icon' => 'terminal'],
+                                        };
+                                    @endphp
+                                    <span class="badge badge-{{ $style['text'] }}-light px-3 py-2 rounded-pill font-weight-bold smallest uppercase">
+                                        <i class="fas fa-{{ $style['icon'] }} mr-1"></i> {{ $event }}
+                                    </span>
+                                </td>
+                                <td class="align-middle">
+                                    <span class="text-muted font-weight-600" style="font-size: 0.9rem;">{{ $activity->description }}</span>
+                                </td>
+                                <td class="align-middle">
+                                    @if ($activity->subject_type)
+                                        @php $modelName = (new \ReflectionClass($activity->subject_type))->getShortName(); @endphp
+                                        <div class="d-flex align-items-center">
+                                            <div class="icon-box-soft bg-dark-soft mr-2 d-flex align-items-center justify-content-center shadow-none border" style="width:28px; height:28px; border-radius: 8px;">
+                                                <i class="fas fa-cube text-dark smallest"></i>
+                                            </div>
+                                            <div>
+                                                <span class="font-weight-bold text-dark d-block" style="font-size: 0.8rem;">{{ $modelName }}</span>
+                                                <small class="text-muted font-weight-bold uppercase" style="font-size: 0.6rem;">ID: {{ $activity->subject_id }}</small>
+                                            </div>
+                                        </div>
+                                    @else
+                                        <span class="text-muted smallest font-weight-bold">N/A</span>
+                                    @endif
+                                </td>
+                                <td class="text-right align-middle pr-4">
+                                    @if ($activity->properties->isNotEmpty())
+                                        <button type="button" class="btn btn-default btn-sm rounded-pill px-3 font-weight-bold shadow-xs border" data-toggle="modal" data-target="#detailsModal-{{ $activity->id }}">
+                                            <i class="fas fa-database mr-1 text-primary"></i> DATA
+                                        </button>
+                                    @else
+                                        <span class="text-muted smallest font-weight-bold">STATIC</span>
+                                    @endif
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer bg-white border-0 py-4 px-4 d-flex justify-content-between align-items-center">
+            <div class="text-muted smallest font-weight-bold uppercase">Showing {{ $activityLogs->firstItem() }} to {{ $activityLogs->lastItem() }} of {{ $activityLogs->total() }} events</div>
+            <div>{{ $activityLogs->appends(request()->except('page'))->links() }}</div>
+        </div>
     </div>
 </div>
 
 {{-- MODALS FOR DETAILS --}}
 @foreach ($activityLogs as $activity)
-<div class="modal fade" id="detailsModal-{{ $activity->id }}" tabindex="-1" role="dialog" aria-labelledby="detailsModalLabel-{{ $activity->id }}" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="detailsModalLabel-{{ $activity->id }}">Activity Details (ID: {{ $activity->id }})</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<div class="modal fade" id="detailsModal-{{ $activity->id }}" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content border-0 shadow-premium" style="border-radius: 24px;">
+            <div class="modal-header border-0 bg-dark py-4 px-4" style="border-top-left-radius: 24px; border-top-right-radius: 24px;">
+                <h5 class="modal-title text-white font-weight-bold" id="detailsModalLabel-{{ $activity->id }}">
+                    <i class="fas fa-fingerprint mr-2 text-primary"></i> Data Signature (ID: {{ $activity->id }})
+                </h5>
+                <button type="button" class="close text-white opacity-50" data-dismiss="alert" data-dismiss="modal">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <h6>Custom Properties (IP, Email, etc.)</h6>
-                <pre class="bg-light p-2">{{ json_encode($activity->properties->except(['old', 'attributes'])->toArray(), JSON_PRETTY_PRINT) }}</pre>
+            <div class="modal-body p-4 bg-light">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h6 class="smallest font-weight-bold text-primary text-uppercase letter-spacing-1 mb-3">Contextual Metadata</h6>
+                        <div class="bg-white p-3 rounded-xl border mb-4">
+                            <pre class="mb-0 small text-dark font-weight-600" style="white-space: pre-wrap;">{{ json_encode($activity->properties->except(['old', 'attributes'])->toArray(), JSON_PRETTY_PRINT) }}</pre>
+                        </div>
 
-                {{-- ** START: LOGIC FOR DELETED/UPDATED/CREATED CHANGES ** --}}
-                @php
-                    // Determine which array holds the data we need to iterate over
-                    $dataToIterate = [];
-                    $isDeletion = ($activity->event == 'deleted');
+                        @php
+                            $isDeletion = ($activity->event == 'deleted');
+                            $dataToIterate = $isDeletion ? ($activity->properties['old'] ?? []) : ($activity->properties['attributes'] ?? []);
+                        @endphp
 
-                    if ($isDeletion) {
-                        // For a deleted event, iterate over the 'old' properties
-                        $dataToIterate = $activity->properties['old'] ?? [];
-                    } else {
-                        // For created/updated events, iterate over the 'attributes' (new) properties
-                        $dataToIterate = $activity->properties['attributes'] ?? [];
-                    }
-                @endphp
-
-                @if (!empty($dataToIterate))
-                    <h6>Changes</h6>
-                    <table class="table table-sm table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Attribute</th>
-                                <th>Old Value</th>
-                                <th>New Value</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($dataToIterate as $key => $value)
-                                @php
-                                    $oldValue = $activity->properties['old'][$key] ?? null;
-                                    $newValue = $activity->properties['attributes'][$key] ?? null;
-
-                                    if ($isDeletion) {
-                                        // If deleted, Old Value is the current value, New Value is 'DELETED'
-                                        $displayOldValue = $oldValue;
-                                        $displayNewValue = '<span class="badge bg-danger">DELETED</span>';
-                                        $rowClass = 'table-danger';
-                                    } else {
-                                        // For updated/created
-                                        $displayOldValue = $oldValue ?? '<span class="text-success">N/A (Created)</span>';
-                                        $displayNewValue = $newValue;
-                                        $rowClass = ($oldValue !== $newValue) ? 'table-warning' : '';
-                                    }
-
-                                    // Handle array/object values for display
-                                    if (is_array($displayOldValue) || is_object($displayOldValue)) $displayOldValue = json_encode($displayOldValue);
-                                    if (is_array($displayNewValue) || is_object($displayNewValue)) $displayNewValue = json_encode($displayNewValue);
-                                @endphp
-                                
-                                <tr class="{{ $rowClass }}">
-                                    <td><strong>{{ $key }}</strong></td>
-                                    <td>{!! $displayOldValue !!}</td>
-                                    <td>{!! $displayNewValue !!}</td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                @endif
-                {{-- ** END: LOGIC FOR DELETED/UPDATED/CREATED CHANGES ** --}}
-
+                        @if (!empty($dataToIterate))
+                            <h6 class="smallest font-weight-bold text-primary text-uppercase letter-spacing-1 mb-3">Data Mutation Spectrum</h6>
+                            <div class="table-responsive rounded-xl border overflow-hidden">
+                                <table class="table table-sm table-hover mb-0 bg-white">
+                                    <thead class="bg-light">
+                                        <tr>
+                                            <th class="px-3 py-2 smallest font-weight-bold">Attribute</th>
+                                            <th class="px-3 py-2 smallest font-weight-bold">Historical State</th>
+                                            <th class="px-3 py-2 smallest font-weight-bold">Modified State</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($dataToIterate as $key => $value)
+                                            @php
+                                                $oldValue = $activity->properties['old'][$key] ?? null;
+                                                $newValue = $activity->properties['attributes'][$key] ?? null;
+                                                
+                                                if (is_array($oldValue) || is_object($oldValue)) $oldValue = json_encode($oldValue);
+                                                if (is_array($newValue) || is_object($newValue)) $newValue = json_encode($newValue);
+                                            @endphp
+                                            <tr>
+                                                <td class="px-3 py-2 align-middle"><strong class="text-dark small uppercase">{{ $key }}</strong></td>
+                                                <td class="px-3 py-2 align-middle text-muted small">{!! $oldValue ?? '<span class="opacity-50">INITIAL</span>' !!}</td>
+                                                <td class="px-3 py-2 align-middle font-weight-bold text-dark small">{!! $isDeletion ? '<span class="badge badge-danger-light text-danger">PURGED</span>' : $newValue !!}</td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        @endif
+                    </div>
+                </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <div class="modal-footer border-0 p-4">
+                <button type="button" class="btn btn-default btn-block rounded-pill font-weight-bold py-2 shadow-sm border" data-dismiss="modal">DISMISS SIGNATURE</button>
             </div>
         </div>
     </div>
 </div>
 @endforeach
 
-@endsection
+@stop
 
 @section('css')
-    {{-- Include your standard CSS, the table styling should be handled by adminlte and datatables --}}
-    
-@endsection
-
-@section('js')
-    
-    
-    <script>
-        $(document).ready(function () {
-            // Initialize DataTable, but DISABLE ordering/searching/paging since we are using server-side pagination ($activityLogs->links())
-            $('#activity-log-table').DataTable({
-                paging: false,      // Disabled: using Laravel pagination
-                searching: false,   // Disabled: using filter buttons
-                ordering: false,    // Disabled
-                info: false,        // Disabled
-                responsive: true
-            });
-        });
-    </script>
-@endsection
+<style>
+    .bg-dark-soft { background: rgba(30, 41, 59, 0.05); }
+    .badge-success-light { background: rgba(16, 185, 129, 0.1); color: #059669; }
+    .badge-danger-light { background: rgba(239, 68, 68, 0.1); color: #dc2626; }
+    .badge-warning-light { background: rgba(245, 158, 11, 0.1); color: #d97706; }
+    .badge-primary-light { background: rgba(70, 165, 172, 0.1); color: #3d8f95; }
+    .badge-secondary-soft { background: #f1f5f9; color: #64748b; }
+</style>
+@stop

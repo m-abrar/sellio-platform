@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Access Control - Permissions')
+@section('title', 'Security Gates | Granular Permissions')
 
 @section('plugins.Datatables', true)
 
@@ -9,25 +9,22 @@
         <div class="row mb-4 align-items-end">
             <div class="col-sm-6">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-key mr-2 text-primary"></i> Granular Permissions
+                    <i class="fas fa-fingerprint mr-2 text-primary"></i> Granular Permissions
                 </h1>
-                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Manage system-wide permissions and low-level access gates.</p>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">High-fidelity mapping of system gates and low-level access protocols.</p>
             </div>
             <div class="col-sm-6 text-right">
                 <div class="d-flex justify-content-end align-items-center" style="gap: 10px;">
-                    <a href="{{ route('admin.users.index') }}" class="btn btn-outline-primary btn-sm rounded-pill px-3 font-weight-bold shadow-sm">
-                        <i class="fas fa-users mr-1"></i> USERS
-                    </a>
-                    <a href="{{ route('admin.roles.index') }}" class="btn btn-outline-info btn-sm rounded-pill px-3 font-weight-bold shadow-sm">
+                    <a href="{{ route('admin.roles.index') }}" class="btn btn-outline-primary btn-sm rounded-pill px-3 font-weight-bold shadow-xs border">
                         <i class="fas fa-user-shield mr-1"></i> ROLES
                     </a>
                     <a href="{{ route('admin.permissions.create') }}" class="btn btn-primary btn-sm rounded-pill px-4 font-weight-bold shadow-lg ml-2">
-                        <i class="fas fa-plus-circle mr-1"></i> ADD PERMISSION
+                        <i class="fas fa-plus-circle mr-1"></i> ADD GATED RESOURCE
                     </a>
                 </div>
                 <ol class="breadcrumb float-sm-right bg-transparent p-0 mt-3 small">
                     <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Permissions</li>
+                    <li class="breadcrumb-item active">Permission Registry</li>
                 </ol>
             </div>
         </div>
@@ -35,14 +32,13 @@
 @stop
 
 @section('content')
-<div class="container-fluid">
+<div class="container-fluid pb-5">
     @include('admin.alert')
 
-    {{-- Permissions Table Card --}}
-    <div class="card card-primary card-outline shadow-sm border-0">
-        <div class="card-header border-0 bg-white py-3 d-flex align-items-center">
-            <h3 class="card-title font-weight-600 text-dark mb-0">Permission Registry</h3>
-            <span class="badge badge-pill badge-secondary-soft text-secondary ml-3 px-3 py-1 border" style="font-weight: 700; font-size: 0.7rem;">{{ count($permissions) }} GATES</span>
+    <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
+        <div class="card-header bg-white border-0 py-4 px-4 d-flex align-items-center justify-content-between">
+            <h3 class="card-title font-weight-bold text-dark mb-0">Security Gate Registry</h3>
+            <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest">{{ count($permissions) }} ACTIVE PROTOCOLS</span>
         </div>
 
         <div class="card-body p-0">
@@ -50,44 +46,44 @@
                 <table id="permissions-table" class="table table-hover table-premium mb-0">
                     <thead class="thead-light">
                         <tr>
-                            <th>Permission Identifier</th>
-                            <th>Guard Type</th>
-                            <th class="text-right px-4">Actions</th>
+                            <th class="pl-4">Resource Identifier</th>
+                            <th>Guard Protocol</th>
+                            <th class="text-right pr-4">Metrics</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse($permissions as $permission)
                             <tr>
-                                <td class="align-middle">
+                                <td class="align-middle pl-4">
                                     <div class="d-flex align-items-center">
-                                        <div class="icon-box mr-3 bg-light border rounded d-flex align-items-center justify-content-center shadow-xs" style="width:38px; height:38px;">
-                                            <i class="fas fa-code text-xs text-muted"></i>
+                                        <div class="icon-box-soft bg-primary-soft mr-3 d-flex align-items-center justify-content-center" style="width:42px; height:42px; border-radius: 12px;">
+                                            <i class="fas fa-code text-primary smallest"></i>
                                         </div>
                                         <div>
-                                            <code class="premium-code text-primary">{{ $permission->name }}</code>
+                                            <code class="text-primary font-weight-bold" style="font-size: 0.95rem; background: transparent; border: none; padding: 0;">{{ $permission->name }}</code>
                                             <small class="d-block text-muted text-uppercase font-weight-bold mt-1" style="font-size: 0.6rem; letter-spacing: 0.8px;">
-                                                System Gate / API Resource
+                                                System Gate Architecture
                                             </small>
                                         </div>
                                     </div>
                                 </td>
                                 <td class="align-middle">
-                                    <span class="badge badge-secondary-light border px-2 py-1 text-monospace" style="font-size: 0.75rem;">
-                                        <i class="fas fa-shield-alt mr-1 text-xs opacity-50"></i>{{ $permission->guard_name ?? 'web' }}
+                                    <span class="badge badge-secondary-soft text-secondary px-3 py-2 rounded-pill font-weight-bold text-monospace" style="font-size: 0.7rem;">
+                                        <i class="fas fa-shield-alt mr-1 opacity-50"></i>{{ strtoupper($permission->guard_name ?? 'WEB') }}
                                     </span>
                                 </td>
-                                <td class="text-right align-middle px-4">
-                                    <div class="btn-group btn-group-premium shadow-sm">
+                                <td class="text-right align-middle pr-4">
+                                    <div class="btn-group btn-group-premium shadow-xs rounded-pill border overflow-hidden">
                                         <a href="{{ route('admin.permissions.edit', $permission->id) }}" 
-                                           class="btn btn-default btn-sm text-info" 
+                                           class="btn btn-white btn-sm text-info py-2" 
                                            data-toggle="tooltip" title="Modify Identifier">
                                             <i class="fas fa-pencil-alt"></i>
                                         </a>
                                         
                                         <form action="{{ route('admin.permissions.destroy', $permission->id) }}" method="POST" class="d-inline">
                                             @csrf @method('DELETE')
-                                            <button type="submit" class="btn btn-default btn-sm text-danger" 
-                                                    data-toggle="tooltip" title="Revoke Permission"
+                                            <button type="submit" class="btn btn-white btn-sm text-danger py-2" 
+                                                    data-toggle="tooltip" title="Revoke Protocol"
                                                     onclick="return confirm('Deleting this will remove this permission from all associated roles. Continue?')">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
@@ -97,10 +93,12 @@
                             </tr>
                         @empty
                             <tr class="empty-state">
-                                <td colspan="4" class="text-center py-5">
-                                    <i class="fas fa-fingerprint fa-4x text-light mb-3"></i>
-                                    <h5 class="text-muted font-weight-bold">No Permissions Seeded</h5>
-                                    <p class="small text-secondary">Individual permissions define granular user capabilities within the system logic.</p>
+                                <td colspan="3" class="text-center py-5">
+                                    <div class="py-4">
+                                        <i class="fas fa-lock fa-4x text-muted opacity-25 mb-3"></i>
+                                        <h5 class="text-muted font-weight-bold">Registry Is Vacant</h5>
+                                        <p class="small text-secondary">Individual permissions define granular user capabilities within the system logic.</p>
+                                    </div>
                                 </td>
                             </tr>
                         @endforelse
@@ -112,37 +110,7 @@
 </div>
 @endsection
 
-@section('css')
-<style>
-    /* Premium Architecture Styles */
-    .table-premium thead th { border-top: none; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px; color: #6c757d; padding: 1rem; }
-    .shadow-xs { box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
-    .text-monospace { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
-    .font-weight-600 { font-weight: 600 !important; }
-
-    /* Code Identifier Styling */
-    .premium-code {
-        background-color: #f1f5f9;
-        color: #2563eb !important;
-        padding: 0.2rem 0.5rem;
-        border-radius: 4px;
-        font-weight: 600;
-        font-size: 0.85rem;
-        border: 1px solid #e2e8f0;
-    }
-
-    /* Guard Badge */
-    .badge-secondary-light { background-color: #f8fafc; color: #475569; border: 1px solid #e2e8f0 !important; }
-
-    /* Action Buttons Style */
-    .btn-group-premium .btn { border: 1px solid #e9ecef; background: #fff; padding: 0.25rem 0.75rem; }
-    .btn-group-premium .btn:hover { background: #f8f9fa; }
-    
-    .opacity-50 { opacity: 0.5; }
-</style>
-@endsection
-
-@section('js')
+@push('js')
 <script>
     $(function () {
         $('[data-toggle="tooltip"]').tooltip();
@@ -172,4 +140,4 @@
         }
     });
 </script>
-@endsection
+@endpush

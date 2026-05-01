@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Access Control - Roles')
+@section('title', 'Access Architecture | Authority Registry')
 
 @section('plugins.Datatables', true)
 
@@ -11,18 +11,15 @@
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-user-shield mr-2 text-primary"></i> Access Control
                 </h1>
-                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Define system access levels and map granular permissions to roles.</p>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Manage system-wide authority levels and map granular permissions to security roles.</p>
             </div>
             <div class="col-sm-6 text-right">
                 <div class="d-flex justify-content-end align-items-center" style="gap: 10px;">
-                    <a href="{{ route('admin.users.index') }}" class="btn btn-outline-primary btn-sm rounded-pill px-3 font-weight-bold shadow-sm">
-                        <i class="fas fa-users mr-1"></i> USERS
-                    </a>
-                    <a href="{{ route('admin.permissions.index') }}" class="btn btn-outline-info btn-sm rounded-pill px-3 font-weight-bold shadow-sm">
+                    <a href="{{ route('admin.permissions.index') }}" class="btn btn-outline-info btn-sm rounded-pill px-3 font-weight-bold shadow-xs border">
                         <i class="fas fa-key mr-1"></i> PERMISSIONS
                     </a>
                     <a href="{{ route('admin.roles.create') }}" class="btn btn-primary btn-sm rounded-pill px-4 font-weight-bold shadow-lg ml-2">
-                        <i class="fas fa-plus-circle mr-1"></i> ADD ROLE
+                        <i class="fas fa-plus-circle mr-1"></i> ADD SECURITY ROLE
                     </a>
                 </div>
                 <ol class="breadcrumb float-sm-right bg-transparent p-0 mt-3 small">
@@ -35,14 +32,13 @@
 @stop
 
 @section('content')
-<div class="container-fluid">
+<div class="container-fluid pb-5">
     @include('admin.alert')
 
-    {{-- Roles Registry Card --}}
-    <div class="card card-primary card-outline shadow-sm border-0">
-        <div class="card-header border-0 bg-white py-3 d-flex align-items-center">
-            <h3 class="card-title font-weight-600 text-dark mb-0">System Role Registry</h3>
-            <span class="badge badge-pill badge-secondary-soft text-secondary ml-3 px-3 py-1 border" style="font-weight: 700; font-size: 0.7rem;">{{ count($roles) }} ROLES</span>
+    <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
+        <div class="card-header bg-white border-0 py-4 px-4 d-flex align-items-center justify-content-between">
+            <h3 class="card-title font-weight-bold text-dark mb-0">System Authority Registry</h3>
+            <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest">{{ count($roles) }} ACTIVE ROLES</span>
         </div>
 
         <div class="card-body p-0">
@@ -50,52 +46,52 @@
                 <table id="roles-table" class="table table-hover table-premium mb-0">
                     <thead class="thead-light">
                         <tr>
-                            <th style="width: 25%">Role Identity</th>
+                            <th class="pl-4" style="width: 25%">Authority Identity</th>
                             <th>Permission Blueprint</th>
-                            <th class="text-right px-4">Actions</th>
+                            <th class="text-right pr-4">Metrics</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse($roles as $role)
                             <tr>
-                                <td class="align-middle">
+                                <td class="align-middle pl-4">
                                     <div class="d-flex align-items-center">
-                                        <div class="icon-shape mr-3 bg-primary-light border rounded-circle d-flex align-items-center justify-content-center shadow-xs" style="width:42px; height:42px;">
+                                        <div class="icon-box-soft bg-primary-soft mr-3 d-flex align-items-center justify-content-center shadow-xs" style="width:45px; height:45px; border-radius: 12px;">
                                             <i class="fas fa-fingerprint text-primary"></i>
                                         </div>
                                         <div>
-                                            <span class="d-block font-weight-bold text-dark text-capitalize mb-0">{{ $role->name }}</span>
-                                            <small class="text-muted text-uppercase font-weight-bold" style="font-size: 0.6rem; letter-spacing: 0.5px;">
-                                                Security Tier: {{ $loop->iteration }}
+                                            <span class="d-block font-weight-bold text-dark text-capitalize mb-0" style="font-size: 1rem;">{{ $role->name }}</span>
+                                            <small class="text-muted text-uppercase font-weight-bold smallest letter-spacing-1">
+                                                Tier Identifier: {{ strtoupper(Str::random(4)) }}
                                             </small>
                                         </div>
                                     </div>
                                 </td>
                                 <td class="align-middle">
-                                    <div class="d-flex flex-wrap" style="gap: 6px;">
+                                    <div class="d-flex flex-wrap" style="gap: 8px;">
                                         @forelse($role->permissions as $permission)
-                                            <span class="badge badge-info-light text-info px-2 py-1 text-uppercase" style="font-size: 0.65rem; letter-spacing: 0.3px;">
-                                                <i class="fas fa-check-double mr-1 text-xs"></i> {{ $permission->name }}
+                                            <span class="badge badge-info-light text-info px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 border-0 shadow-none">
+                                                <i class="fas fa-check-circle mr-1 opacity-50"></i> {{ $permission->name }}
                                             </span>
                                         @empty
-                                            <span class="text-muted small italic opacity-75">
-                                                <i class="fas fa-info-circle mr-1"></i> No specific permissions assigned
+                                            <span class="text-muted small font-italic opacity-50">
+                                                <i class="fas fa-exclamation-circle mr-1"></i> No specific permissions mapped
                                             </span>
                                         @endforelse
                                     </div>
                                 </td>
-                                <td class="text-right align-middle px-4">
-                                    <div class="btn-group btn-group-premium shadow-sm">
+                                <td class="text-right align-middle pr-4">
+                                    <div class="btn-group btn-group-premium shadow-xs rounded-pill border overflow-hidden">
                                         <a href="{{ route('admin.roles.edit', $role->id) }}" 
-                                           class="btn btn-default btn-sm text-info" 
-                                           data-toggle="tooltip" title="Edit Permissions">
-                                            <i class="fas fa-shield-alt mr-1"></i> Edit
+                                           class="btn btn-white btn-sm text-info py-2" 
+                                           data-toggle="tooltip" title="Edit Spectrum">
+                                            <i class="fas fa-shield-alt mr-1"></i> EDIT
                                         </a>
                                         
                                         <form action="{{ route('admin.roles.destroy', $role->id) }}" method="POST" class="d-inline">
                                             @csrf @method('DELETE')
-                                            <button type="submit" class="btn btn-default btn-sm text-danger" 
-                                                    data-toggle="tooltip" title="Delete Role"
+                                            <button type="submit" class="btn btn-white btn-sm text-danger py-2" 
+                                                    data-toggle="tooltip" title="Purge Role"
                                                     onclick="return confirm('Deleting this role may affect users assigned to it. Proceed?')">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
@@ -105,10 +101,12 @@
                             </tr>
                         @empty
                             <tr class="empty-state">
-                                <td colspan="4" class="text-center py-5">
-                                    <i class="fas fa-user-lock fa-4x text-light mb-3"></i>
-                                    <h5 class="text-muted font-weight-bold">No Roles Defined</h5>
-                                    <p class="small text-secondary">Configure your system's access hierarchy here.</p>
+                                <td colspan="3" class="text-center py-5">
+                                    <div class="py-4">
+                                        <i class="fas fa-user-lock fa-4x text-muted opacity-25 mb-3"></i>
+                                        <h5 class="text-muted font-weight-bold">Hierarchy Is Empty</h5>
+                                        <p class="small text-secondary">Configure your system's access hierarchy here.</p>
+                                    </div>
                                 </td>
                             </tr>
                         @endforelse
@@ -118,45 +116,21 @@
         </div>
     </div>
 
-    {{-- Bottom Security Note --}}
-    <div class="card bg-white border shadow-xs mt-4 overflow-hidden" style="border-radius: 8px;">
-        <div class="card-body p-0">
-            <div class="d-flex">
-                <div class="bg-warning px-3 d-flex align-items-center">
-                    <i class="fas fa-shield-virus text-white fa-lg"></i>
-                </div>
-                <div class="p-3">
-                    <p class="mb-0 small font-weight-600 text-dark">Security Protocol</p>
-                    <p class="mb-0 small text-muted">Roles define the fundamental access level for users. Changes to permission blueprints are applied in real-time to all active sessions holding this role.</p>
-                </div>
+    <div class="bg-primary-soft p-4 rounded-xl border border-primary-soft mt-4">
+        <div class="d-flex align-items-center">
+            <div class="icon-box bg-primary rounded-circle mr-3 d-flex align-items-center justify-content-center shadow-lg" style="width: 48px; height: 48px;">
+                <i class="fas fa-shield-virus text-white"></i>
+            </div>
+            <div>
+                <h6 class="font-weight-bold text-primary mb-1 smallest uppercase letter-spacing-1">Security Architecture Protocol</h6>
+                <p class="text-muted mb-0 small font-weight-600">Roles define the fundamental access level for users. Changes to permission blueprints are applied in real-time to all active sessions holding this role.</p>
             </div>
         </div>
     </div>
 </div>
 @endsection
 
-@section('css')
-<style>
-    /* Premium Table & Layout */
-    .table-premium thead th { border-top: none; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px; color: #6c757d; padding: 1rem; }
-    .shadow-xs { box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
-    .text-monospace { font-family: monospace; }
-    .font-weight-600 { font-weight: 600 !important; }
-
-    /* Custom Color Accents */
-    .bg-primary-light { background-color: #eff6ff; }
-    .badge-info-light { background-color: #f0f9ff; color: #0369a1; border: 1px solid #e0f2fe; }
-    
-    /* Action Buttons Style */
-    .btn-group-premium .btn { border: 1px solid #e9ecef; background: #fff; padding: 0.25rem 0.75rem; font-size: 0.85rem; }
-    .btn-group-premium .btn:hover { background: #f8f9fa; }
-
-    .italic { font-style: italic; }
-    .opacity-75 { opacity: 0.75; }
-</style>
-@endsection
-
-@section('js')
+@push('js')
 <script>
     $(function () {
         $('[data-toggle="tooltip"]').tooltip();
@@ -186,4 +160,4 @@
         }
     });
 </script>
-@endsection
+@endpush

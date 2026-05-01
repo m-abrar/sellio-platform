@@ -1,64 +1,71 @@
-{{-- Success Message --}}
-@if(session('success'))
-    <div class="alert alert-success d-flex align-items-center" role="alert">
-        <i class="fas fa-check-circle fa-2x pr-3"></i>
-        <p class="mb-0">{{ session('success') }}</p>
-    </div>
-@endif
+{{-- Modern Animated Alerts for Sellio Admin --}}
 
-{{-- Error Message --}}
-@if(session('error'))
-    <div class="alert alert-danger d-flex align-items-center" role="alert">
-        <i class="fas fa-times-circle fa-2x pr-3"></i>
-        <p class="mb-0">{{ session('error') }}</p>
-    </div>
-@endif
+@php
+    $alerts = [
+        ['key' => 'success', 'type' => 'success', 'icon' => 'check-circle'],
+        ['key' => 'error', 'type' => 'danger', 'icon' => 'times-circle'],
+        ['key' => 'warning', 'type' => 'warning', 'icon' => 'exclamation-triangle'],
+        ['key' => 'status', 'type' => 'success', 'icon' => 'info-circle'],
+    ];
+@endphp
 
-{{-- Warning Message --}}
-@if(session('warning'))
-    <div class="alert alert-warning d-flex align-items-center" role="alert">
-        <i class="fas fa-exclamation-triangle fa-2x pr-3"></i>
-        <p class="mb-0">{{ session('warning') }}</p>
-    </div>
-@endif
+@foreach($alerts as $alert)
+    @if(session($alert['key']))
+        <div class="alert alert-{{ $alert['type'] }}-light animate__animated animate__fadeInDown border-0 shadow-sm d-flex align-items-center p-3 mb-4" role="alert" style="border-radius: 16px; border-left: 5px solid var(--{{ $alert['type'] }}) !important; background: rgba(255,255,255,0.9); backdrop-filter: blur(10px);">
+            <div class="icon-box-soft bg-{{ $alert['type'] }}-soft text-{{ $alert['type'] }} mr-3 shadow-xs" style="width: 48px; height: 48px; min-width: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                <i class="fas fa-{{ $alert['icon'] }} fa-lg"></i>
+            </div>
+            <div class="alert-content">
+                <h6 class="font-weight-bold text-dark mb-1 smallest text-uppercase letter-spacing-1">{{ strtoupper($alert['key']) }} NOTIFICATION</h6>
+                <p class="mb-0 text-secondary small font-weight-600">
+                    @if($alert['key'] === 'status')
+                        @switch(session('status'))
+                            @case('profile-updated') {{ __('Your profile has been successfully updated!') }} @break
+                            @case('password-updated') {{ __('Your password has been successfully changed!') }} @break
+                            @case('avatar-updated') {{ __('Your avatar has been successfully updated!') }} @break
+                            @case('verification-link-sent') {{ __('A new verification link has been sent to your email address.') }} @break
+                            @case('account-deleted') {{ __('Your account has been deleted.') }} @break
+                            @default {{ session('status') }}
+                        @endswitch
+                    @else
+                        {{ session($alert['key']) }}
+                    @endif
+                </p>
+            </div>
+            <button type="button" class="close ml-auto opacity-50" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
+@endforeach
 
-{{-- Multiple Errors --}}
+{{-- Validation Errors --}}
 @if($errors->any())
-    <div class="alert alert-danger d-flex align-items-center" role="alert">
-        <i class="fas fa-exclamation-circle fa-2x pr-3"></i>
-        @if($errors->count() > 1)
-            <ul class="mb-0">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        @else
-            <p class="mb-0">{{ $errors->first() }}</p>
-        @endif
+    <div class="alert alert-danger-light animate__animated animate__shakeX border-0 shadow-sm d-flex align-items-start p-3 mb-4" role="alert" style="border-radius: 16px; border-left: 5px solid var(--danger) !important; background: rgba(255,255,255,0.9); backdrop-filter: blur(10px);">
+        <div class="icon-box-soft bg-danger-soft text-danger mr-3 shadow-xs" style="width: 48px; height: 48px; min-width: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+            <i class="fas fa-exclamation-circle fa-lg"></i>
+        </div>
+        <div class="alert-content">
+            <h6 class="font-weight-bold text-dark mb-1 smallest text-uppercase letter-spacing-1">VALIDATION ERRORS</h6>
+            @if($errors->count() > 1)
+                <ul class="mb-0 text-secondary small font-weight-600 ps-0 list-unstyled">
+                    @foreach ($errors->all() as $error)
+                        <li><i class="fas fa-caret-right mr-1 opacity-50"></i> {{ $error }}</li>
+                    @endforeach
+                </ul>
+            @else
+                <p class="mb-0 text-secondary small font-weight-600">{{ $errors->first() }}</p>
+            @endif
+        </div>
+        <button type="button" class="close ml-auto opacity-50" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
 @endif
 
-
-{{-- Profile Success Messages --}}
-@if (session('status'))
-    <div class="alert alert-success d-flex align-items-center" role="alert">
-        <i class="fas fa-check-circle fa-2x pr-3"></i>
-        @switch(session('status'))
-            @case('profile-updated')
-                {{ __('Your profile has been successfully updated!') }}
-                @break
-            @case('password-updated')
-                {{ __('Your password has been successfully changed!') }}
-                @break
-            @case('avatar-updated')
-                {{ __('Your avatar has been successfully updated!') }}
-                @break
-            @case('verification-link-sent')
-                {{ __('A new verification link has been sent to your email address.') }}
-                @break
-            @case('account-deleted')
-                {{ __('Your account has been deleted.') }}
-                @break
-        @endswitch
-    </div>
-@endif
+<style>
+    .alert-success-light { background: rgba(16, 185, 129, 0.05) !important; }
+    .alert-danger-light { background: rgba(239, 68, 68, 0.05) !important; }
+    .alert-warning-light { background: rgba(245, 158, 11, 0.05) !important; }
+    .alert-info-light { background: rgba(14, 165, 233, 0.05) !important; }
+</style>

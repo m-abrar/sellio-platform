@@ -12,9 +12,12 @@
             <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Welcome back, {{ auth()->user()->name }}. Performance metrics are live for <span class="text-primary font-weight-bold">{{ now()->format('F d, Y') }}</span>.</p>
         </div>
         <div class="d-none d-md-block text-right">
-            <div id="dashboard-clock" class="h4 font-weight-bold text-dark mb-0">00:00:00</div>
-            <div class="text-muted small uppercase letter-spacing-1">{{ now()->format('l') }}</div>
+            <div class="bg-dark px-3 py-2 rounded-xl shadow-premium border border-white border-opacity-10 d-inline-block">
+                <div id="dashboard-clock" class="h4 font-weight-bold text-primary mb-0" style="letter-spacing: 2px; font-family: 'Outfit', sans-serif;">00:00:00</div>
+                <div class="text-white smallest font-weight-bold uppercase letter-spacing-1 opacity-50">{{ now()->format('l, d M Y') }}</div>
+            </div>
         </div>
+
     </div>
 @stop
 

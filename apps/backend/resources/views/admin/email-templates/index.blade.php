@@ -1,17 +1,18 @@
 @extends('adminlte::page')
 
-@section('title', 'Email Templates')
+@section('title', 'Communication Assets | Automated Blueprints')
 
 @section('content_header')
     <div class="container-fluid">
-        <div class="row mb-2">
+        <div class="row mb-4 align-items-end">
             <div class="col-sm-6">
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-paper-plane mr-2 text-primary"></i> Communication Assets
                 </h1>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Manage automated system triggers and high-fidelity email notification blueprints.</p>
             </div>
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
+            <div class="col-sm-6 text-right">
+                <ol class="breadcrumb float-sm-right bg-transparent p-0 mt-3 small">
                     <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}">Dashboard</a></li>
                     <li class="breadcrumb-item active">Email Templates</li>
                 </ol>
@@ -21,82 +22,77 @@
 @stop
 
 @section('content')
-<div class="container-fluid">
+<div class="container-fluid pb-5">
     @include('admin.alert')
 
-{{-- Template Table Card --}}
-        <div class="card card-primary card-outline shadow-sm border-0">
-            <div class="card-header border-0 bg-white py-3 d-flex justify-content-between align-items-center">
-                <h3 class="card-title font-weight-600 text-muted mb-0">
-                    System Email Registry <span class="badge badge-light border ml-2 px-2" style="font-weight: 500;">{{ count($templates) }} Definitions</span>
-                </h3>
-                <div class="card-tools">
-                    {{-- Templates are seeded via system migration --}}
-                </div>
-            </div>
+    <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
+        <div class="card-header bg-white border-0 py-4 px-4 d-flex align-items-center justify-content-between">
+            <h3 class="card-title font-weight-bold text-dark mb-0">System Notification Registry</h3>
+            <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest">{{ count($templates) }} ACTIVE BLUEPRINTS</span>
+        </div>
 
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table id="email-templates-table" class="table table-hover table-premium mb-0">
                     <thead class="thead-light">
                         <tr>
-                            <th class="px-4" style="width: 45%">Subject & Blueprint</th>
-                            <th style="width: 20%">Identifier</th>
-                            <th class="text-center">Operational Status</th>
-                            <th class="text-right px-4">Actions</th>
+                            <th class="pl-4" style="width: 45%">Subject & Logic Spectrum</th>
+                            <th style="width: 20%">Identifier Key</th>
+                            <th class="text-center">Operational Heartbeat</th>
+                            <th class="text-right pr-4">Metrics</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse ($templates as $template)
                             <tr>
-                                <td class="align-middle px-4">
+                                <td class="align-middle pl-4">
                                     <div class="d-flex align-items-center">
-                                        <div class="icon-shape mr-3 bg-light border rounded d-flex align-items-center justify-content-center shadow-xs" style="width:45px; height:45px; border-radius: 8px !important;">
-                                            <i class="fas fa-envelope-open-text text-primary"></i>
+                                        <div class="icon-box-soft bg-primary-soft mr-3 d-flex align-items-center justify-content-center" style="width:50px; height:50px; border-radius: 14px;">
+                                            <i class="fas fa-envelope-open-text text-primary fa-lg"></i>
                                         </div>
                                         <div>
-                                            <span class="d-block font-weight-bold text-dark mb-0">{{ $template->subject }}</span>
-                                            <small class="text-muted italic">
-                                                <i class="fas fa-bolt mr-1 text-xs text-warning"></i> Automated system trigger
+                                            <span class="d-block font-weight-bold text-dark mb-0" style="font-size: 1rem;">{{ $template->subject }}</span>
+                                            <small class="text-muted font-weight-bold uppercase smallest letter-spacing-1">
+                                                <i class="fas fa-bolt mr-1 text-warning"></i> Automated Trigger Logic
                                             </small>
                                         </div>
                                     </div>
                                 </td>
 
                                 <td class="align-middle">
-                                    <code class="text-xs text-primary bg-primary-light px-2 py-1 rounded border-0 text-monospace font-weight-bold">
+                                    <code class="text-primary font-weight-bold bg-primary-soft px-3 py-1 rounded-pill border-0 smallest letter-spacing-1">
                                         {{ $template->key }}
                                     </code>
                                 </td>
 
                                 <td class="text-center align-middle">
                                     @if($template->is_active === true)
-                                        <span class="badge badge-success-light px-3 py-1 text-uppercase" style="font-size: 0.7rem; letter-spacing: 0.5px;">
-                                            <i class="fas fa-check-circle mr-1"></i> Enabled
+                                        <span class="badge badge-success-light px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1">
+                                            <i class="fas fa-check-circle mr-1 animate-pulse"></i> ACTIVE
                                         </span>
                                     @else
-                                        <span class="badge badge-secondary-light px-3 py-1 text-uppercase" style="font-size: 0.7rem; letter-spacing: 0.5px;">
-                                            <i class="fas fa-pause-circle mr-1"></i> Disabled
+                                        <span class="badge badge-secondary-soft text-secondary px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1">
+                                            <i class="fas fa-pause-circle mr-1"></i> STANDBY
                                         </span>
                                     @endif
                                 </td>
 
-                                <td class="text-right align-middle px-4">
-                                    <div class="btn-group btn-group-premium shadow-sm">
+                                <td class="text-right align-middle pr-4">
+                                    <div class="btn-group btn-group-premium shadow-xs rounded-pill border overflow-hidden">
                                         <a href="{{ route('admin.email-templates.edit', $template->id) }}" 
-                                           class="btn btn-default btn-sm text-info" 
+                                           class="btn btn-white btn-sm text-info py-2 px-3 font-weight-bold smallest uppercase" 
                                            data-toggle="tooltip" title="Configure Template">
-                                            <i class="fas fa-cog mr-1"></i> Configure
+                                            <i class="fas fa-cog mr-1"></i> CONFIG
                                         </a>
                                     </div>
                                 </td>
                             </tr>
                         @empty
-                            <tr>
+                            <tr class="empty-state">
                                 <td colspan="4" class="text-center py-5">
                                     <div class="py-4">
-                                        <i class="fas fa-mail-bulk fa-3x text-muted mb-3 d-block"></i>
-                                        <h5 class="text-muted font-weight-bold">No Templates Defined</h5>
+                                        <i class="fas fa-mail-bulk fa-4x text-muted opacity-25 mb-3 d-block"></i>
+                                        <h5 class="text-muted font-weight-bold">Notification Engine Is Idle</h5>
                                         <p class="text-secondary small">System email templates will appear here once seeded.</p>
                                     </div>
                                 </td>
@@ -108,50 +104,27 @@
         </div>
     </div>
 
-    {{-- Dynamic Variable Helper Tip --}}
-    <div class="card border-0 shadow-sm mt-3" style="border-left: 4px solid #17a2b8 !important;">
-        <div class="card-body py-3">
-            <div class="d-flex align-items-center">
-                <i class="fas fa-lightbulb text-warning mr-3 fa-lg"></i>
-                <div>
-                    <h6 class="mb-1 font-weight-bold text-dark">Templating Quick Tip</h6>
-                    <span class="small text-muted">Inject dynamic data using placeholders: 
-                        <code class="mx-1 text-danger font-weight-bold">@{{user_name}}</code>, 
-                        <code class="mx-1 text-danger font-weight-bold">@{{order_id}}</code>, or 
-                        <code class="mx-1 text-danger font-weight-bold">@{{site_name}}</code>.
-                    </span>
-                </div>
+    {{-- Intelligence Tip --}}
+    <div class="bg-dark p-4 rounded-xl shadow-premium border border-white border-opacity-10 mt-4">
+        <div class="d-flex align-items-center">
+            <div class="bg-primary-soft rounded-circle mr-3 d-flex align-items-center justify-content-center shadow-lg" style="width: 48px; height: 48px;">
+                <i class="fas fa-lightbulb text-primary"></i>
+            </div>
+            <div>
+                <h6 class="font-weight-bold text-white mb-1 smallest uppercase letter-spacing-1">Data Injection Protocol</h6>
+                <p class="text-white opacity-50 mb-0 small font-weight-600">
+                    Inject dynamic context using placeholders: 
+                    <code class="mx-1 text-primary font-weight-bold">@{{user_name}}</code>, 
+                    <code class="mx-1 text-primary font-weight-bold">@{{order_id}}</code>, or 
+                    <code class="mx-1 text-primary font-weight-bold">@{{site_name}}</code>.
+                </p>
             </div>
         </div>
     </div>
 </div>
 @endsection
 
-@section('css')
-<style>
-    /* Blueprint Layout Utilities */
-    .table-premium thead th { border-top: none; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px; color: #6c757d; }
-    .shadow-xs { box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
-    .text-monospace { font-family: 'SFMono-Regular', Consolas, monospace !important; }
-    .font-weight-600 { font-weight: 600 !important; }
-    .italic { font-style: italic; }
-
-    /* Blueprint Light Badge Classes */
-    .badge-success-light { background-color: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
-    .badge-secondary-light { background-color: #f3f4f6; color: #374151; border: 1px solid #e5e7eb; }
-    .badge-primary-light { background-color: #e0f2fe; color: #0369a1; }
-
-    /* Action Buttons Style */
-    .btn-group-premium .btn { border: 1px solid #e9ecef; background: #fff; padding: 0.25rem 0.75rem; }
-    .btn-group-premium .btn:hover { background: #f8f9fa; }
-
-    .dataTables_filter { float: left !important; text-align: left !important; }
-    .dataTables_filter input { margin-left: 0 !important; }
-    .dataTables_length { float: right !important; text-align: right !important; }
-</style>
-@endsection
-
-@section('js')
+@push('js')
 <script>
     $(function () {
         $('[data-toggle="tooltip"]').tooltip();
@@ -170,7 +143,7 @@
                        '<"row px-4 pb-3"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
                 "language": {
                     "search": "",
-                    "searchPlaceholder": "Search templates...",
+                    "searchPlaceholder": "Filter blueprints...",
                     "paginate": {
                         "previous": "<i class='fas fa-angle-left'></i>",
                         "next": "<i class='fas fa-angle-right'></i>"
@@ -181,4 +154,4 @@
         }
     });
 </script>
-@endsection
+@endpush

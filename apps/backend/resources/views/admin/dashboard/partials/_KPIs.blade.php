@@ -7,117 +7,92 @@
     ];
 @endphp
 
-
-
 <div class="row">
     {{-- Main Financial Dashboard card --}}
-    <div class="col-lg-4">
-        <div class="card border-0 shadow-lg bg-primary overflow-hidden h-100" style="min-height: 240px; border-radius: 24px; background: linear-gradient(135deg, #1e293b 0%, #46a5ac 100%) !important;">
+    <div class="col-lg-4 mb-4">
+        <div class="card border-0 shadow-premium bg-dark overflow-hidden h-100" style="min-height: 240px; border-radius: 24px; background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;">
             <div class="card-body position-relative z-index-1 d-flex flex-column justify-content-center px-4">
-                <p class="text-white-50 text-uppercase small font-weight-bold mb-1" style="letter-spacing: 1.2px; font-size: 0.7rem;">Platform Net Revenue (YTD)</p>
-                <h1 class="text-white display-4 font-weight-bold mb-2" style="font-family: 'Outfit', sans-serif;">{{ $metrics['system_kpis']['earnings'] }}</h1>
+                <p class="text-white-50 text-uppercase smallest font-weight-bold mb-2 letter-spacing-1">Platform Net Revenue (YTD)</p>
+                <h1 class="text-white display-4 font-weight-bold mb-3" style="font-family: 'Outfit', sans-serif; letter-spacing: -2px;">{{ $metrics['system_kpis']['earnings'] }}</h1>
                 @if(isset($metrics['system_kpis']['yoy_change']))
                 <div class="d-flex align-items-center">
-                    <span class="badge badge-pill badge-light mr-2 text-success font-weight-bold px-3 py-1 shadow-sm">
-                        <i class="fas fa-arrow-up mr-1"></i> {{ $metrics['system_kpis']['yoy_change'] }}
+                    <span class="badge badge-success-light border-0 mr-2 font-weight-bold px-3 py-2 rounded-pill smallest">
+                        <i class="fas fa-arrow-up mr-1"></i> {{ $metrics['system_kpis']['yoy_change'] }} YoY
                     </span>
-                    <span class="text-white-50 small italic mb-0">vs previous year</span>
+                    <span class="text-white-50 smallest font-weight-bold uppercase letter-spacing-1">Analytics Stream</span>
                 </div>
                 @endif
                 <div class="mt-4">
-                    <a href="{{ route('admin.payments.index')}}" class="btn btn-sm btn-light rounded-pill px-4 font-weight-bold shadow-sm" style="background: rgba(255,255,255,0.9); color: #1e293b;">
-                        Financial Report <i class="fas fa-angle-right ml-1"></i>
+                    <a href="{{ route('admin.payments.index')}}" class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-lg smallest letter-spacing-1">
+                        FINANCIAL REPORT <i class="fas fa-chevron-right ml-1"></i>
                     </a>
                 </div>
             </div>
-            <i class="fas fa-chart-pie position-absolute" style="bottom: -20px; right: -10px; font-size: 9rem; opacity: 0.1; color: #fff;"></i>
+            <i class="fas fa-chart-pie position-absolute" style="bottom: -20px; right: -10px; font-size: 9rem; opacity: 0.05; color: #fff;"></i>
         </div>
     </div>
     
     {{-- Urgent Actions mesh cards --}}
-    <div class="col-lg-8">
+    <div class="col-lg-8 mb-4">
         <div class="row h-100">
             @foreach($urgent as $u)
                 @php
                     $valNumeric = is_numeric($u['val']) ? $u['val'] : (float) filter_var($u['val'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
                     $hasAlert = $valNumeric > 0;
                 @endphp
-                <div class="col-md-3">
-                    <div class="card gradient-action-card h-100 bg-gradient-{{ $u['color'] }} shadow-sm">
-                        <div class="card-body p-3 flex-grow-1 d-flex flex-column">
-                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                <small class="text-white-50 font-weight-bold uppercase" style="font-size: 9px; letter-spacing: 0.5px;">{{ $u['label'] }}</small>
+                <div class="col-md-3 mb-4 mb-md-0">
+                    <div class="card gradient-action-card h-100 bg-gradient-{{ $u['color'] }} shadow-premium border-0">
+                        <div class="card-body p-4 flex-grow-1 d-flex flex-column">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <small class="text-white-50 font-weight-bold uppercase smallest letter-spacing-1">{{ $u['label'] }}</small>
                                 @if ($hasAlert)
                                     <span class="action-badge-pulsing d-flex align-items-center">
-                                        <span class="pulse-glow-dot bg-white mr-1"></span> Action
+                                        <span class="pulse-glow-dot bg-white mr-1"></span> ACTION
                                     </span>
                                 @endif
                             </div>
 
                             <div class="my-auto">
-                                <h1 class="font-weight-bold mb-1 text-white" style="font-size: 2.2rem; letter-spacing: -1px;">{{ $u['val'] }}</h1>
-                                <p class="text-white-50 mb-3 small">Required Approval</p>
+                                <h1 class="font-weight-bold mb-0 text-white" style="font-size: 2.4rem; letter-spacing: -1.5px; font-family: 'Outfit', sans-serif;">{{ $u['val'] }}</h1>
+                                <p class="text-white-50 mb-0 smallest font-weight-bold uppercase letter-spacing-1">Pending Audit</p>
                             </div>
 
                             <i class="fas {{ $u['icon'] }} glassmorphic-glow-icon"></i>
                             <a href="{{ route($u['route']) }}" class="stretched-link"></a>
                         </div>
-                        <div class="card-footer-action d-flex align-items-center justify-content-between">
-                            <span>Manage Records</span>
-                            <i class="fas fa-arrow-right small transition-transform" style="transition: transform 0.2s;"></i>
+                        <div class="card-footer-action d-flex align-items-center justify-content-between border-0" style="background: rgba(0,0,0,0.15);">
+                            <span>MANAGE RECORDS</span>
+                            <i class="fas fa-chevron-right smallest"></i>
                         </div>
                     </div>
                 </div>
             @endforeach
             
             {{-- Metrics stats bottom row --}}
-            <div class="col-12 mt-3">
+            <div class="col-12 mt-4">
                 <div class="row">
-                    <div class="col-md-4">
-                        <div class="card glass-premium-card border-0 shadow-sm">
-                            <div class="card-body py-2 px-3">
-                                <div class="d-flex align-items-center justify-content-between mb-2">
-                                    <span class="text-muted small font-weight-bold text-uppercase" style="letter-spacing: 0.8px; font-size: 10px;">Active Partners</span>
-                                    <div class="icon-box-soft bg-success-soft" style="width: 34px; height: 34px; font-size: 0.9rem; border-radius: 8px;">
-                                        <i class="fas fa-user-shield"></i>
-                                    </div>
-                                </div>
+                    @php
+                        $secondary = [
+                            ['label' => 'Active Partners', 'val' => $metrics['secondary_metrics']['active_partners'], 'icon' => 'fa-user-shield', 'bg' => 'success'],
+                            ['label' => 'Live Listings', 'val' => $metrics['secondary_metrics']['live_properties'], 'icon' => 'fa-globe', 'bg' => 'info'],
+                            ['label' => 'New Leads (24H)', 'val' => $metrics['secondary_metrics']['new_leads_24h'], 'icon' => 'fa-bolt', 'bg' => 'warning'],
+                        ];
+                    @endphp
+                    @foreach($secondary as $s)
+                    <div class="col-md-4 mb-3 mb-md-0">
+                        <div class="card border-0 shadow-premium" style="border-radius: 18px;">
+                            <div class="card-body py-3 px-4 d-flex align-items-center justify-content-between">
                                 <div>
-                                    <h2 class="font-weight-bold mb-0 text-dark" style="font-size: 1.6rem; letter-spacing: -0.5px;">{{ $metrics['secondary_metrics']['active_partners'] }}</h2>
+                                    <span class="text-muted smallest font-weight-bold text-uppercase letter-spacing-1 mb-1 d-block">{{ $s['label'] }}</span>
+                                    <h3 class="font-weight-bold mb-0 text-dark" style="font-size: 1.6rem; letter-spacing: -1px; font-family: 'Outfit', sans-serif;">{{ $s['val'] }}</h3>
+                                </div>
+                                <div class="icon-box-soft bg-{{ $s['bg'] }}-soft text-{{ $s['bg'] }} shadow-xs" style="width: 48px; height: 48px; font-size: 1.2rem; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas {{ $s['icon'] }}"></i>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="card glass-premium-card border-0 shadow-sm">
-                            <div class="card-body py-2 px-3">
-                                <div class="d-flex align-items-center justify-content-between mb-2">
-                                    <span class="text-muted small font-weight-bold text-uppercase" style="letter-spacing: 0.8px; font-size: 10px;">Live Listings</span>
-                                    <div class="icon-box-soft bg-info-soft" style="width: 34px; height: 34px; font-size: 0.9rem; border-radius: 8px;">
-                                        <i class="fas fa-globe"></i>
-                                    </div>
-                                </div>
-                                <div>
-                                    <h2 class="font-weight-bold mb-0 text-dark" style="font-size: 1.6rem; letter-spacing: -0.5px;">{{ $metrics['secondary_metrics']['live_properties'] }}</h2>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card glass-premium-card border-0 shadow-sm">
-                            <div class="card-body py-2 px-3">
-                                <div class="d-flex align-items-center justify-content-between mb-2">
-                                    <span class="text-muted small font-weight-bold text-uppercase" style="letter-spacing: 0.8px; font-size: 10px;">New Leads (24H)</span>
-                                    <div class="icon-box-soft bg-warning-soft" style="width: 34px; height: 34px; font-size: 0.9rem; border-radius: 8px;">
-                                        <i class="fas fa-bolt"></i>
-                                    </div>
-                                </div>
-                                <div>
-                                    <h2 class="font-weight-bold mb-0 text-dark" style="font-size: 1.6rem; letter-spacing: -0.5px;">{{ $metrics['secondary_metrics']['new_leads_24h'] }}</h2>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>

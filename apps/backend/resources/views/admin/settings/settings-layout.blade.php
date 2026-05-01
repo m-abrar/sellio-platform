@@ -1,15 +1,15 @@
 @extends('adminlte::page')
 
-@section('title', 'System Settings')
+@section('title', 'Platform Logic | Master Configuration')
 
 @section('content_header')
     <div class="container-fluid">
         <div class="row mb-4 align-items-end">
             <div class="col-sm-6">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-sliders-h mr-2 text-primary"></i> {{ __('System Configuration') }}
+                    <i class="fas fa-microchip mr-2 text-primary"></i> {{ __('Master Configuration') }}
                 </h1>
-                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Fine-tune platform engines, security protocols, and branding assets.</p>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Adjusting foundational platform engines and security protocols.</p>
             </div>
             <div class="col-sm-6 text-right">
                 <ol class="breadcrumb float-sm-right bg-transparent p-0 mt-3 small">
@@ -28,9 +28,9 @@
 
     <div class="row">
         <div class="col-md-3">
-            <div class="card glass-card shadow-sm border-0 sticky-top" style="top: 20px; border-radius: 20px;">
-                <div class="card-header bg-white border-0 py-3">
-                    <h3 class="card-title font-weight-bold text-dark text-uppercase small" style="letter-spacing: 1px;">{{ __('Registry Navigation') }}</h3>
+            <div class="card border-0 shadow-premium sticky-top" style="top: 100px; border-radius: 24px; background: rgba(255,255,255,0.9); backdrop-filter: blur(15px);">
+                <div class="card-header bg-dark border-0 py-3 px-4" style="border-top-left-radius: 24px; border-top-right-radius: 24px; border-bottom: 4px solid var(--primary) !important;">
+                    <h3 class="card-title font-weight-bold text-white smallest text-uppercase letter-spacing-1 mb-0">{{ __('Management Streams') }}</h3>
                 </div>
                 <div class="card-body p-3">
                     <ul class="nav nav-pills flex-column settings-nav">
@@ -39,19 +39,24 @@
                         @foreach(['general', 'modules', 'contact', 'SEO', 'social', 'pages', 'apis'] as $section)
                         <li class="nav-item mb-2">
                             <a href="{{ route('admin.settings.group', ['section' => $section]) }}" 
-                               class="nav-link py-2 px-3 @if($currentSection == $section) active shadow-sm @endif"
-                               style="border-radius: 12px; transition: all 0.3s ease;">
-                                <i class="fas fa-{{ match(strtolower($section)) { 
-                                    'general' => 'cog', 
-                                    'modules' => 'boxes', 
-                                    'contact' => 'envelope', 
-                                    'seo' => 'chart-line', 
-                                    'social' => 'share-alt', 
-                                    'pages' => 'file-alt', 
-                                    'apis' => 'code', 
-                                    default => 'circle' 
-                                } }} mr-2 {{ $currentSection == $section ? '' : 'text-primary' }}"></i>
-                                <span class="font-weight-600">{{ ucwords(str_replace('-', ' ', $section)) }}</span>
+                               class="nav-link py-3 px-3 d-flex align-items-center @if(strtolower($currentSection) == strtolower($section)) active shadow-lg @endif"
+                               style="border-radius: 16px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);">
+                                <div class="icon-box-soft {{ strtolower($currentSection) == strtolower($section) ? 'bg-white bg-opacity-20' : 'bg-primary-soft' }} rounded-circle mr-3 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; min-width: 32px;">
+                                    <i class="fas fa-{{ match(strtolower($section)) { 
+                                        'general' => 'cog', 
+                                        'modules' => 'boxes', 
+                                        'contact' => 'envelope', 
+                                        'seo' => 'chart-line', 
+                                        'social' => 'share-alt', 
+                                        'pages' => 'file-alt', 
+                                        'apis' => 'code', 
+                                        default => 'circle' 
+                                    } }} {{ strtolower($currentSection) == strtolower($section) ? 'text-white' : 'text-primary' }} smallest"></i>
+                                </div>
+                                <span class="font-weight-bold text-uppercase smallest letter-spacing-1">{{ str_replace('-', ' ', $section) }}</span>
+                                @if(strtolower($currentSection) == strtolower($section))
+                                    <i class="fas fa-chevron-right ml-auto smallest opacity-50"></i>
+                                @endif
                             </a>
                         </li>
                         @endforeach
@@ -61,7 +66,7 @@
         </div>
 
         <div class="col-md-9">
-            <div class="settings-content-wrapper">
+            <div class="settings-content-wrapper animate__animated animate__fadeIn">
                 @yield('setting-form-content')
             </div>
         </div>
@@ -71,8 +76,8 @@
 
 @push('css')
 <style>
-    .settings-nav .nav-link { color: var(--dark-muted); font-weight: 500; }
-    .settings-nav .nav-link:hover:not(.active) { background: var(--primary-soft); color: var(--primary); }
+    .settings-nav .nav-link { color: var(--dark-muted); }
+    .settings-nav .nav-link:hover:not(.active) { background: var(--primary-soft); color: var(--primary); transform: translateX(5px); }
     .settings-nav .nav-link.active { background: var(--primary) !important; color: #fff !important; }
     
     .settings-content-wrapper .card {
@@ -80,7 +85,10 @@
         overflow: hidden;
         border: none;
         box-shadow: var(--premium-shadow);
+        background: rgba(255,255,255,0.8);
+        backdrop-filter: blur(10px);
     }
-    .form-control:focus { border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-soft); }
+    
+    .bg-opacity-20 { background: rgba(255,255,255,0.2) !important; }
 </style>
 @endpush
