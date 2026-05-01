@@ -837,68 +837,69 @@ a:focus-visible, button:focus-visible {
 }
 
 
-/* --- 21. PREMIUM TABS --- */
+/* --- 21. PREMIUM TABS (SELLIO STYLE) --- */
 .nav-tabs-premium {
-    border-bottom: 2px solid var(--border-color) !important;
-    gap: 2rem;
-    padding: 0 1.5rem !important;
+    border-bottom: none !important;
+    gap: 10px;
+    padding: 0.75rem 1.25rem !important;
+    background: #f8fafc;
+    border-radius: 12px 12px 0 0;
 }
 
 .nav-tabs-premium .nav-item {
-    margin-bottom: -2px;
+    margin-bottom: 0;
 }
 
 .nav-tabs-premium .nav-link {
     border: none !important;
     background: transparent !important;
     color: var(--dark-muted) !important;
-    font-weight: 700 !important;
-    font-size: 0.85rem !important;
+    font-weight: 600 !important;
+    font-size: 0.8rem !important;
     text-transform: uppercase !important;
-    letter-spacing: 0.5px !important;
-    padding: 1.25rem 0.5rem !important;
-    position: relative;
-    transition: all 0.3s ease;
+    letter-spacing: 0.8px !important;
+    padding: 0.6rem 1.25rem !important;
+    border-radius: 10px !important;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .nav-tabs-premium .nav-link i {
-    font-size: 1rem;
-    opacity: 0.7;
-    transition: all 0.3s ease;
-}
-
-.nav-tabs-premium .nav-link::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 0;
-    height: 3px;
-    background: var(--primary);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    border-radius: 10px 10px 0 0;
+    font-size: 0.9rem;
+    opacity: 0.6;
+    transition: all 0.25s ease;
 }
 
 .nav-tabs-premium .nav-link.active {
+    background: white !important;
     color: var(--primary) !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03) !important;
 }
 
 .nav-tabs-premium .nav-link.active i {
     color: var(--primary) !important;
     opacity: 1;
-    transform: translateY(-1px);
-}
-
-.nav-tabs-premium .nav-link.active::after {
-    width: 100%;
+    transform: scale(1.1);
 }
 
 .nav-tabs-premium .nav-link:hover:not(.active) {
+    background: rgba(0,0,0,0.03) !important;
     color: var(--dark) !important;
 }
 
-.nav-tabs-premium .nav-link:hover:not(.active)::after {
-    width: 30%;
-    opacity: 0.5;
+.nav-tabs-premium .nav-link:hover:not(.active) i {
+    opacity: 1;
+}
+
+/* Tab Content Transitions */
+.tab-pane {
+    animation: fadeInTab 0.4s ease-out;
+}
+
+@keyframes fadeInTab {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 

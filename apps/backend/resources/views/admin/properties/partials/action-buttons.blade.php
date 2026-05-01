@@ -1,55 +1,57 @@
-<div class="card shadow-sm border-0 sticky-top" style="top: 20px; z-index: 1000;">
-    <div class="card-header bg-dark d-flex align-items-center py-3" style="border-bottom: 3px solid var(--brand-primary) !important;">
-        <h3 class="card-title text-white mb-0 font-weight-bold">
-            <i class="fas fa-cog mr-2 text-primary"></i> Status & Actions
+<div class="card border-0 shadow-premium sticky-top overflow-hidden" style="top: 20px; border-radius: 20px; z-index: 1000;">
+    <div class="card-header bg-dark d-flex align-items-center py-3" style="border-bottom: 3px solid var(--primary) !important;">
+        <h3 class="card-title text-white mb-0 font-weight-bold smallest text-uppercase letter-spacing-1">
+            <i class="fas fa-rocket mr-2 text-primary"></i> {{ __('Protocol & Actions') }}
         </h3>
     </div>
-    <div class="card-body bg-white">
-        {{-- Sidebar Status Toggles --}}
-        <div class="mb-3 pb-2 border-bottom">
-            <label class="w-100 cursor-pointer mb-0">
-                <input type="hidden" name="is_published" value="0">
-                <input type="checkbox" name="is_published" value="1" id="pubSwitch" class="d-none toggle-input" {{ old('is_published', $property->is_published ?? '0') == '1' ? 'checked' : '' }}>
-                <div class="border rounded px-3 py-2 d-flex justify-content-between align-items-center toggle-card shadow-sm">
-                    <div>
-                        <div class="fw-bold small text-dark">Publishing Status</div>
-                        <div class="small toggle-status text-muted">{{ ($property->exists && $property->is_published) ? 'Visible to public' : 'Draft Mode' }}</div>
+    <div class="card-body bg-white p-4">
+        {{-- Status Registry --}}
+        <div class="mb-4">
+            <label class="smallest text-uppercase font-weight-bold text-muted mb-3 d-block">{{ __('State Management') }}</label>
+            
+            <div class="mb-3">
+                <label class="w-100 cursor-pointer mb-0">
+                    <input type="hidden" name="is_published" value="0">
+                    <input type="checkbox" name="is_published" value="1" id="pubSwitch" class="d-none toggle-input" {{ old('is_published', $property->is_published ?? '0') == '1' ? 'checked' : '' }}>
+                    <div class="border rounded-xl px-3 py-2 d-flex justify-content-between align-items-center toggle-card shadow-xs">
+                        <div>
+                            <div class="font-weight-bold smallest text-dark">{{ __('Public Visibility') }}</div>
+                            <div class="smallest toggle-status text-muted">{{ ($property->exists && $property->is_published) ? __('LIVE') : __('DRAFT') }}</div>
+                        </div>
+                        <div class="toggle-indicator"></div>
                     </div>
-                    <div class="toggle-indicator"></div>
-                </div>
-            </label>
-        </div>
-        
-        <div class="mb-3">
-            <label class="w-100 cursor-pointer mb-0">
-                <input type="hidden" name="is_featured" value="0">
-                <input type="checkbox" name="is_featured" value="1" id="featSwitch" class="d-none toggle-input" {{ old('is_featured', $property->is_featured ?? '0') == '1' ? 'checked' : '' }}>
-                <div class="border rounded px-3 py-2 d-flex justify-content-between align-items-center toggle-card shadow-sm">
-                    <div>
-                        <div class="fw-bold small text-dark">Promotions</div>
-                        <div class="small toggle-status text-muted">{{ ($property->exists && $property->is_featured) ? 'Featured' : 'Standard' }}</div>
+                </label>
+            </div>
+            
+            <div class="mb-0">
+                <label class="w-100 cursor-pointer mb-0">
+                    <input type="hidden" name="is_featured" value="0">
+                    <input type="checkbox" name="is_featured" value="1" id="featSwitch" class="d-none toggle-input" {{ old('is_featured', $property->is_featured ?? '0') == '1' ? 'checked' : '' }}>
+                    <div class="border rounded-xl px-3 py-2 d-flex justify-content-between align-items-center toggle-card shadow-xs">
+                        <div>
+                            <div class="font-weight-bold smallest text-dark">{{ __('Featured Asset') }}</div>
+                            <div class="smallest toggle-status text-muted">{{ ($property->exists && $property->is_featured) ? __('PROMOTED') : __('STANDARD') }}</div>
+                        </div>
+                        <div class="toggle-indicator"></div>
                     </div>
-                    <div class="toggle-indicator"></div>
-                </div>
-            </label>
+                </label>
+            </div>
         </div>
-        <hr class="my-3">
-        <button type="submit" class="btn btn-primary btn-block btn-lg btn-flat shadow-sm font-weight-bold mb-2">
-            <i class="fas fa-save mr-2"></i> {{ $property->exists ? 'UPDATE PROPERTY' : 'CREATE PROPERTY' }}
+
+        <hr class="my-4 border-light">
+
+        <button type="submit" class="btn btn-primary btn-block rounded-pill font-weight-bold shadow-lg py-3 smallest mb-3">
+            <i class="fas fa-save mr-2"></i> {{ $property->exists ? __('SYNCHRONIZE RECORD') : __('INITIALIZE LISTING') }}
         </button>
 
         @if($property->exists)
-            <div class="row gx-1">
-                <div class="col-6">
-                    @if(Route::has('admin.properties.duplicate'))
-                        <a href="{{ route('admin.properties.duplicate', $property->id) }}" class="btn btn-default btn-block btn-flat btn-sm text-secondary"><i class="fas fa-copy mr-1"></i> Duplicate</a>
-                    @else
-                        <button class="btn btn-default btn-block btn-flat btn-sm text-secondary" disabled><i class="fas fa-copy mr-1"></i> Duplicate</button>
-                    @endif
-                </div>
-                <div class="col-6">
-                    <button type="button" class="btn btn-default btn-block btn-flat btn-sm text-danger" onclick="triggerDelete()"><i class="fas fa-trash-alt mr-1"></i> Delete</button>
-                </div>
+            <div class="d-flex" style="gap: 8px;">
+                <button type="button" class="btn btn-light flex-grow-1 rounded-pill font-weight-bold smallest py-2 text-muted border">
+                    <i class="fas fa-copy mr-1"></i> {{ __('CLONE') }}
+                </button>
+                <button type="button" class="btn btn-light flex-grow-1 rounded-pill font-weight-bold smallest py-2 text-danger border" onclick="triggerDelete()">
+                    <i class="fas fa-trash-alt mr-1"></i> {{ __('PURGE') }}
+                </button>
             </div>
         @endif
     </div>
