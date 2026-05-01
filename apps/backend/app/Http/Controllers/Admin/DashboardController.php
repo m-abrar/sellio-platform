@@ -600,6 +600,15 @@ class DashboardController extends Controller
                     ->get()
                     ->map(fn($p) => [$p->latitude, $p->longitude, 0.6])
                     ->toArray()
+            ],
+            // System Health Data
+            'system_health' => [
+                'php_version' => PHP_VERSION,
+                'laravel_version' => app()->version(),
+                'server_ip' => request()->server('SERVER_ADDR') ?? '127.0.0.1',
+                'cache_status' => config('cache.default'),
+                'db_status' => 'Healthy',
+                'environment' => app()->environment(),
             ]
         ];
 

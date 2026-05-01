@@ -19,7 +19,9 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@sellio/types": ["../../packages/types/src/index.ts"],
+      "@sellio/api-client": ["../../packages/api-client/src/index.ts"]
     }
   },
   "include": [

@@ -1,0 +1,28 @@
+.unified-minimal {
+  --min-font: 'Inter', sans-serif;
+  --min-border: #f0f0f0;
+  
+  background-color: #ffffff;
+  color: #000000;
+  font-family: var(--min-font);
+  min-height: 100vh;
+}
+
+.minimal-header {
+  padding: 3rem 10%;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--min-border);
+}
+
+.minimal-btn {
+  border: 1px solid black;
+  background: white;
+  padding: 0.5rem 1.5rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.minimal-section {
+  padding: 5rem 10%;
+}

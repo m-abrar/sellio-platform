@@ -10,8 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@sellio/types": "workspace:*",
-    "@sellio/api-client": "workspace:*",
+    "@sellio/types": "*",
+    "@sellio/api-client": "*",
     "react": "^19.2.5",
     "react-dom": "^19.2.5"
   },

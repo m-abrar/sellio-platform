@@ -1,34 +1,42 @@
 import type { Metadata } from "next";
 import { getActiveTheme } from "@/lib/theme";
-import FashionLayout from "@/themes/fashion/Layout";
-import ElectronicsLayout from "@/themes/electronics/Layout";
-import GroceryLayout from "@/themes/grocery/Layout";
+import FashionLayout from "@/themes/ecommerce/fashion/Layout";
+import ElectronicsLayout from "@/themes/ecommerce/electronics/Layout";
+import GroceryLayout from "@/themes/ecommerce/grocery/Layout";
+import UnifiedDefaultLayout from "@/themes/unified/default/Layout";
+import UnifiedModernLayout from "@/themes/unified/modern/Layout";
+import UnifiedMinimalLayout from "@/themes/unified/minimal/Layout";
+
 import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 import "./globals.css";
 
-export const metadata: Metadata = {
-  title: "Sellio Multi-Theme Storefront",
-  description: "A premium multi-platform storefront engine",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { theme } = await getActiveTheme();
+  return {
+    title: theme.app_settings?.site_name || "Sellio Platform",
+    description: "A premium multi-platform storefront engine",
+  };
+}
 
 export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  // 1. Resolve Theme
   const { theme, layout } = await getActiveTheme();
   
-  // 2. Select Layout Component
+  // Select Layout Component
   let IndustryLayout;
   switch (layout) {
-    case 'electronics': IndustryLayout = ElectronicsLayout; break;
-    case 'grocery': IndustryLayout = GroceryLayout; break;
-    case 'fashion': 
-    default: IndustryLayout = FashionLayout; break;
+    case 'ecommerce/electronics': IndustryLayout = ElectronicsLayout; break;
+    case 'ecommerce/grocery': IndustryLayout = GroceryLayout; break;
+    case 'ecommerce/fashion': IndustryLayout = FashionLayout; break;
+    case 'unified/modern': IndustryLayout = UnifiedModernLayout; break;
+    case 'unified/minimal': IndustryLayout = UnifiedMinimalLayout; break;
+    case 'unified/default': 
+    default: IndustryLayout = UnifiedDefaultLayout; break;
   }
 
-  // 3. Prepare Dynamic Styles (Injected from DB variables)
   const dynamicStyles = theme.variables ? Object.entries(theme.variables)
     .map(([key, value]) => `${key}: ${value};`)
     .join(' ') : '';
@@ -38,7 +46,7 @@ export default async function RootLayout({
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Playfair+Display:wght@400;700&family=Orbitron:wght@400;900&family=Outfit:wght@400;700&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&family=Playfair+Display:wght@400;700&family=Orbitron:wght@400;900&family=Outfit:wght@400;700&family=Montserrat:wght@400;900&display=swap" rel="stylesheet" />
         {dynamicStyles && (
           <style dangerouslySetInnerHTML={{ __html: `:root { ${dynamicStyles} }` }} />
         )}

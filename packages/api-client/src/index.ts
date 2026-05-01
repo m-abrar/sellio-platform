@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
-import { Product, Category, Theme } from '@sellio/types';
+import { Product, Category, Theme, ApiResponse } from '@sellio/types';
 
 export class SellioAPI {
   private client: AxiosInstance;
@@ -14,24 +14,26 @@ export class SellioAPI {
     });
   }
 
+  private async request<T>(url: string, options: any = {}): Promise<T> {
+    const response = await this.client.get<ApiResponse<T>>(url, options);
+    return response.data.data;
+  }
+
   async getProducts(): Promise<Product[]> {
-    const response = await this.client.get('/products');
-    return response.data;
+    return this.request<Product[]>('/v1/products');
   }
 
   async getCategories(): Promise<Category[]> {
-    const response = await this.client.get('/categories');
-    return response.data;
+    return this.request<Category[]>('/v1/categories');
   }
 
   async getThemes(): Promise<Theme[]> {
-    const response = await this.client.get('/themes');
-    return response.data;
+    return this.request<Theme[]>('/themes');
   }
 
-  async getTheme(key: string): Promise<Theme> {
-    const response = await this.client.get(`/themes/${key}`);
-    return response.data;
+  async getActiveTheme(key?: string): Promise<Theme> {
+    const options = key ? { headers: { 'X-Theme-Key': key } } : {};
+    return this.request<Theme>('/themes/active', options);
   }
 }
 

@@ -1,21 +1,19 @@
 .fashion-theme {
-  --fashion-bg: #ffffff;
-  --fashion-text: #1a1a1a;
-  --fashion-accent: #000000;
-  --fashion-muted: #f4f4f4;
-  --fashion-font-serif: 'Playfair Display', serif;
-  --fashion-font-sans: 'Inter', sans-serif;
+  /* Fallbacks if API variables are missing */
+  --fashion-primary: var(--primary-color, #1a1a1a);
+  --fashion-accent: var(--accent-color, #000000);
+  --fashion-font: var(--font-family, 'Playfair Display', serif);
   
-  background-color: var(--fashion-bg);
-  color: var(--fashion-text);
-  font-family: var(--fashion-font-sans);
+  background-color: #ffffff;
+  color: var(--fashion-primary);
+  font-family: var(--fashion-font);
   min-height: 100vh;
 }
 
 .fashion-theme h1, 
 .fashion-theme h2, 
 .fashion-theme h3 {
-  font-family: var(--fashion-font-serif);
+  font-family: var(--fashion-font);
   text-transform: uppercase;
   letter-spacing: 0.1em;
   font-weight: 400;
@@ -61,7 +59,7 @@
 }
 
 .fashion-btn {
-  background: black;
+  background: var(--fashion-accent);
   color: white;
   padding: 1rem 2.5rem;
   border: none;
@@ -72,5 +70,5 @@
 }
 
 .fashion-btn:hover {
-  background: #333;
+  filter: brightness(1.2);
 }

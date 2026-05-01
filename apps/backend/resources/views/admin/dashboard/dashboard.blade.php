@@ -75,6 +75,7 @@
         @php
             $sections = [
                 ['id' => 'kpi', 'title' => 'Overview & Vital Stats', 'dot' => 'danger', 'pulse' => true, 'partial' => '_KPIs'],
+                ['id' => 'system', 'title' => 'System Health & Heartbeat', 'dot' => 'success', 'pulse' => true, 'partial' => '_system_status'],
                 ['id' => 'finance', 'title' => 'Finance & Market Trends', 'dot' => 'success', 'pulse' => false, 'partial' => '_financial_performance'],
                 ['id' => 'ecosystem', 'title' => 'Listings & Partner Health', 'dot' => 'dark', 'pulse' => false, 'partial' => '_content_ecosystem'],
                 ['id' => 'growth', 'title' => 'Platform Growth & Traffic', 'dot' => 'info', 'pulse' => false, 'partial' => '_growth_metrics'],

@@ -1,6 +1,20 @@
 import { Theme } from "@sellio/types";
+import { api } from "@sellio/api-client";
+import { headers } from "next/headers";
 
-export type IndustryLayout = 'fashion' | 'electronics' | 'grocery';
+export type IndustryLayout = 
+  | 'ecommerce/fashion' 
+  | 'ecommerce/electronics' 
+  | 'ecommerce/grocery' 
+  | 'properties'
+  | 'events'
+  | 'autos'
+  | 'services'
+  | 'jobs'
+  | 'classifieds'
+  | 'unified/default'
+  | 'unified/modern'
+  | 'unified/minimal';
 
 export interface ResolvedTheme {
   theme: Theme;
@@ -8,48 +22,63 @@ export interface ResolvedTheme {
 }
 
 /**
- * Resolves a database theme key to one of our 3 core industry layouts.
- * This is the "Mapping Logic" that connects the backend seeders to the frontend designs.
+ * Resolves a database theme key and vertical to a specific Industry Layout path.
  */
-export function resolveIndustryLayout(themeKey: string): IndustryLayout {
-  const key = themeKey.toLowerCase();
+export function resolveIndustryLayout(theme: Theme): IndustryLayout {
+  const vertical = theme.vertical?.toLowerCase();
+  const key = theme.theme_key.toLowerCase();
   
-  // Pattern matching for industry resolution
-  if (key.includes('fashion') || key.includes('luxury') || key.includes('properties_classic')) {
-    return 'fashion';
-  }
-  
-  if (key.includes('tech') || key.includes('electronics') || key.includes('autos') || key.includes('modern')) {
-    return 'electronics';
-  }
-  
-  if (key.includes('grocery') || key.includes('fresh') || key.includes('bakery')) {
-    return 'grocery';
+  // 1. Handle Ecommerce Vertical
+  if (vertical === 'ecommerce') {
+    if (key.includes('fashion') || key.includes('luxury')) return 'ecommerce/fashion';
+    if (key.includes('tech') || key.includes('electronics')) return 'ecommerce/electronics';
+    if (key.includes('grocery') || key.includes('fresh')) return 'ecommerce/grocery';
+    return 'unified/default';
   }
 
-  // Fallback to fashion for high-contrast default or you could add a 'unified' layout
-  return 'fashion'; 
+  // 2. Handle Unified Series
+  if (key.includes('unifieds_')) {
+    if (key.includes('modern')) return 'unified/modern';
+    if (key.includes('minimal')) return 'unified/minimal';
+    return 'unified/default';
+  }
+
+  // 3. Vertical Fallbacks
+  if (vertical === 'properties') return 'properties' as any; // Map to base vertical
+  if (vertical === 'events') return 'events' as any;
+  if (vertical === 'autos') return 'autos' as any;
+  
+  return 'unified/default';
 }
 
 /**
- * Mocking a dynamic fetch for now, but this would use the @sellio/api-client
+ * Fetches the active theme from the Laravel API.
  */
-export async function getActiveTheme(keyFromUrl?: string): Promise<ResolvedTheme> {
-  // In a real app, we fetch from API: await api.getTheme(keyFromUrl || 'unifieds_default')
-  
-  // For demonstration, we simulate the DB record that matches the Seeder
-  const mockDbTheme: Theme = {
-    id: 1,
-    theme_key: keyFromUrl || 'ecommerce_fashion',
-    title: 'Dynamic Theme from DB',
-    is_active: true,
-    variables: {
-      "--fashion-accent": "#ff0000", // Dynamic override example
-    }
-  };
+export async function getActiveTheme(): Promise<ResolvedTheme> {
+  const headerList = await headers();
+  const cookieHeader = headerList.get("cookie") || "";
+  const themeOverride = cookieHeader.match(/theme=([^;]+)/)?.[1];
 
-  return {
-    theme: mockDbTheme,
-    layout: resolveIndustryLayout(mockDbTheme.theme_key)
-  };
+  try {
+    const theme = await api.getActiveTheme(themeOverride);
+    
+    return {
+      theme,
+      layout: resolveIndustryLayout(theme)
+    };
+  } catch (error) {
+    console.error("Failed to fetch theme from API", error);
+    
+    return {
+      theme: {
+        id: 0,
+        theme_key: 'unifieds_default',
+        title: 'Unified Default',
+        is_active: true,
+        variables: {},
+        app_settings: { site_name: 'Sellio', site_logo: '', hide_site_name: '0' }
+      },
+      layout: 'unified/default'
+    };
+  }
 }

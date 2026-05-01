@@ -1,0 +1,69 @@
+.unified-theme {
+  --uni-primary: #1e4d4e;
+  --uni-secondary: #f4f2ed;
+  --uni-text: #333333;
+  --uni-light: #f8f9fa;
+  --uni-border: #e9ecef;
+  --uni-font-sans: 'Inter', sans-serif;
+  
+  background-color: #ffffff;
+  color: var(--uni-text);
+  font-family: var(--uni-font-sans);
+  min-height: 100vh;
+}
+
+.unified-header {
+  padding: 1.25rem 5%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--uni-border);
+  background: white;
+}
+
+.unified-logo {
+  font-weight: 800;
+  font-size: 1.4rem;
+  letter-spacing: -0.02em;
+  color: var(--uni-primary);
+}
+
+.unified-hero {
+  padding: 6rem 5%;
+  background: var(--uni-secondary);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+.unified-hero h1 {
+  font-size: 3.5rem;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+  color: var(--uni-primary);
+}
+
+.unified-btn {
+  background: var(--uni-primary);
+  color: white;
+  padding: 0.8rem 2rem;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.unified-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 1px solid var(--uni-border);
+  transition: all 0.3s ease;
+}
+
+.unified-card:hover {
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  transform: translateY(-5px);
+}
