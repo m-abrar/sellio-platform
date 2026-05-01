@@ -37,9 +37,10 @@ class JobController extends Controller
 
     public function create(): View
     {
+        $job = new JobListing();
         $categories = Category::all();
         $locations = Location::all();
-        return view('admin.jobs.form', compact('categories', 'locations'));
+        return view('admin.jobs.form', compact('job', 'categories', 'locations'));
     }
 
     public function store(JobListingRequest $request): RedirectResponse

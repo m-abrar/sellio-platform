@@ -17,9 +17,10 @@ class PageController extends Controller
 
     public function create()
     {
+        $page = new Page();
         $headers = Page::where('type', 'header')->get();
         $footers = Page::where('type', 'footer')->get();
-        return view('admin.pages.form', compact('headers', 'footers'));
+        return view('admin.pages.form', compact('page', 'headers', 'footers'));
     }
 
     public function store(Request $request)

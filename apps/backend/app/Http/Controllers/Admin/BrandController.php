@@ -49,7 +49,8 @@ class BrandController extends Controller
      */
     public function create(): View
     {
-        return view('admin.brands.form');
+        $brand = new Brand();
+        return view('admin.brands.form', compact('brand'));
     }
 
     /**

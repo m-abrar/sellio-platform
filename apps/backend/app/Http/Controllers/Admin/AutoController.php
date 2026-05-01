@@ -41,10 +41,11 @@ class AutoController extends Controller
 
     public function create(): View
     {
+        $auto = new Auto();
         $categories = Category::all();
         $brands = Brand::all();
         $locations = Location::all();
-        return view('admin.autos.form', compact('categories', 'brands', 'locations'));
+        return view('admin.autos.form', compact('auto', 'categories', 'brands', 'locations'));
     }
 
     public function store(AutoRequest $request): RedirectResponse

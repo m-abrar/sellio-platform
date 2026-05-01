@@ -38,9 +38,10 @@ class ServiceController extends Controller
 
     public function create(): View
     {
+        $service = new Service();
         $categories = Category::all();
         $locations = Location::all();
-        return view('admin.services.form', compact('categories', 'locations'));
+        return view('admin.services.form', compact('service', 'categories', 'locations'));
     }
 
     public function store(ServiceRequest $request): RedirectResponse

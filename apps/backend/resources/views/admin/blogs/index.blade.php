@@ -178,7 +178,7 @@
                 "ordering": true,
                 "autoWidth": false,
                 "responsive": true,
-                "dom": '<"row px-4 pt-2"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-6"l>>t',
+                "dom": '<"row pt-2"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-6"l>>t',
                 "language": {
                     "search": "",
                     "searchPlaceholder": "Search...",

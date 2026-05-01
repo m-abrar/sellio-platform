@@ -35,7 +35,7 @@ class ProductController extends Controller
         $categories = Category::where('is_product', 1)->get();
         $brands = Brand::all();
         $tags = Tag::all();
-        $product = null;
+        $product = new Product();
 
         return view('admin.products.form', compact('product', 'categories', 'brands', 'tags'));
     }

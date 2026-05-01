@@ -1,38 +1,35 @@
 <div class="row">
     @php
         $growthItems = [
-            ['val' => $metrics['user_metrics']['total_users'] ?? 0, 'label' => 'Registered Users', 'pct' => $metrics['user_metrics']['users_growth_percent'] ?? 0, 'desc' => $metrics['user_metrics']['users_growth_desc'] ?? '', 'color' => 'success', 'icon' => 'fa-users'],
-            ['val' => $metrics['user_metrics']['newsletter_subscribers'] ?? 0, 'label' => 'Subscribers (Wk)', 'pct' => $metrics['user_metrics']['newsletter_conversion'] ?? 0, 'desc' => $metrics['user_metrics']['newsletter_desc'] ?? '', 'color' => 'purple', 'icon' => 'fa-mail-bulk'],
-
-            ['val' => $metrics['user_metrics']['active_subscriptions'] ?? 0, 'label' => 'Active Members', 'pct' => $metrics['user_metrics']['subscriptions_percent'] ?? 0, 'desc' => $metrics['user_metrics']['subscriptions_desc'] ?? '', 'color' => 'info', 'icon' => 'fa-id-card'],
+            ['val' => $metrics['user_metrics']['total_users'] ?? 0, 'label' => 'Global User Base', 'pct' => $metrics['user_metrics']['users_growth_percent'] ?? 0, 'desc' => 'Total registered ecosystem accounts', 'color' => 'success', 'icon' => 'fa-users'],
+            ['val' => $metrics['user_metrics']['newsletter_subscribers'] ?? 0, 'label' => 'Network Reach', 'pct' => $metrics['user_metrics']['newsletter_conversion'] ?? 0, 'desc' => 'Newsletter & communication reach', 'color' => 'primary', 'icon' => 'fa-paper-plane'],
+            ['val' => $metrics['user_metrics']['active_subscriptions'] ?? 0, 'label' => 'Elite Membership', 'pct' => $metrics['user_metrics']['subscriptions_percent'] ?? 0, 'desc' => 'Active recurring premium accounts', 'color' => 'info', 'icon' => 'fa-crown'],
         ];
     @endphp
     
     @foreach($growthItems as $g)
-    <div class="col-lg-4">
-        <div class="card glass-premium-card border-0 shadow-sm">
-            <div class="card-body py-2 px-3">
-                <div class="d-flex align-items-center justify-content-between mb-1">
-                    <span class="text-muted small font-weight-bold text-uppercase" style="letter-spacing: 0.8px; font-size: 10px;">{{ $g['label'] }}</span>
-                    <div class="icon-box-soft bg-{{ $g['color'] }}-soft" style="width: 34px; height: 34px; font-size: 0.9rem; border-radius: 8px;">
+    <div class="col-lg-4 mb-4">
+        <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center justify-content-between mb-4">
+                    <div class="icon-box-soft bg-{{ $g['color'] }}-soft text-{{ $g['color'] }} shadow-xs" style="width: 52px; height: 52px; font-size: 1.4rem; border-radius: 14px; display: flex; align-items: center; justify-content: center;">
                         <i class="fas {{ $g['icon'] }}"></i>
                     </div>
-                </div>
-
-                <div class="d-flex align-items-baseline mb-2">
-                    <h2 class="font-weight-bold mb-0 text-dark mr-2" style="font-size: 1.8rem; letter-spacing: -0.5px;">{{ $g['val'] }}</h2>
-                    <span class="badge badge-{{ $g['color'] }}-light text-{{ $g['color'] }} px-2 py-0" style="font-size: 0.65rem; font-weight: 700; border-radius: 4px;">
-                        {{ $g['pct'] }}%
+                    <span class="badge badge-{{ $g['color'] }}-light px-3 py-2 rounded-pill font-weight-bold smallest uppercase">
+                        <i class="fas fa-arrow-up mr-1"></i> {{ $g['pct'] }}% GROWTH
                     </span>
                 </div>
 
-                <div class="progress mb-1" style="height: 4px; background: rgba(0,0,0,0.03); border-radius: 4px;">
-                    <div class="progress-bar bg-{{ $g['color'] }}" style="width: {{ $g['pct'] }}%; border-radius: 4px;"></div>
+                <div class="mb-3">
+                    <span class="text-muted smallest font-weight-bold text-uppercase letter-spacing-1 d-block mb-1">{{ $g['label'] }}</span>
+                    <h2 class="font-weight-bold mb-0 text-dark" style="font-size: 2.2rem; letter-spacing: -1.5px; font-family: 'Outfit', sans-serif;">{{ $g['val'] }}</h2>
                 </div>
 
-                <p class="small text-muted mb-0 font-italic" style="font-size: 10.5px; opacity: 0.8;">{{ $g['desc'] }}</p>
+                <div class="progress mb-3" style="height: 6px; background: rgba(0,0,0,0.03); border-radius: 6px; overflow: hidden;">
+                    <div class="progress-bar bg-{{ $g['color'] }}" style="width: {{ min($g['pct'], 100) }}%; border-radius: 6px;"></div>
+                </div>
 
-
+                <p class="smallest text-muted mb-0 font-weight-bold uppercase letter-spacing-1 opacity-50">{{ $g['desc'] }}</p>
             </div>
         </div>
     </div>

@@ -50,7 +50,7 @@ class PropertyController extends Controller
         $types = Type::all();
         $tags = Tag::all();
         $categories = Category::all();
-        $property = null;
+        $property = new Property();
         $locations = Location::all();
 
         return view('admin.properties.form', compact('property', 'amenities', 'features', 'types', 'tags', 'categories', 'locations'));

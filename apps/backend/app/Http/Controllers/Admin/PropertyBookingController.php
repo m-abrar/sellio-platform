@@ -84,9 +84,10 @@ class PropertyBookingController extends Controller
      */
     public function create(): View
     {
+        $booking = new PropertyBooking();
         $properties = Property::all();
         $users = User::all();
-        return view('admin.property-bookings.form', compact('properties', 'users'));
+        return view('admin.property-bookings.form', compact('booking', 'properties', 'users'));
     }
 
     /**

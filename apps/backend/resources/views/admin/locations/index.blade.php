@@ -6,21 +6,21 @@
 
 @section('content_header')
     <div class="container-fluid">
-        <div class="row mb-4 align-items-end">
-            <div class="col-sm-6">
+        <div class="row mb-4 align-items-center">
+            <div class="col-sm-8">
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-map-marker-alt mr-2 text-primary"></i> Geographic Areas
                 </h1>
-                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Manage regions, cities, and operational zones across all modules.</p>
-            </div>
-            <div class="col-sm-6 text-right">
-                <a href="{{ route('admin.locations.create') }}" class="btn btn-primary btn-sm rounded-pill px-4 font-weight-bold shadow-lg">
-                    <i class="fas fa-plus-circle mr-1"></i> ADD LOCATION
-                </a>
-                <ol class="breadcrumb float-sm-right bg-transparent p-0 mt-3 small">
+                <ol class="breadcrumb bg-transparent p-0 mt-2 small">
                     <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}">Dashboard</a></li>
                     <li class="breadcrumb-item active">Locations</li>
                 </ol>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Manage regions, cities, and operational zones across all modules.</p>
+            </div>
+            <div class="col-sm-4 text-right">
+                <a href="{{ route('admin.locations.create') }}" class="btn btn-primary btn-sm rounded-pill px-4 font-weight-bold shadow-premium">
+                    <i class="fas fa-plus-circle mr-1"></i> ADD LOCATION
+                </a>
             </div>
         </div>
     </div>
@@ -183,9 +183,9 @@
                     "info": true,
                     "autoWidth": false,
                     "responsive": true,
-                    "dom": '<"row px-4 pt-3"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-6"l>>' +
+                    "dom": '<"row pt-3"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-6"l>>' +
                            '<"row"<"col-sm-12"tr>>' +
-                           '<"row px-4 pb-3"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+                           '<"row pb-3"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
                     "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
                     "order": [[1, "asc"]],
                     "columnDefs": [

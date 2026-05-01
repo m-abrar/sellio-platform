@@ -38,9 +38,10 @@ class EventController extends Controller
 
     public function create(): View
     {
+        $event = new Event();
         $categories = Category::all();
         $locations = Location::all();
-        return view('admin.events.form', compact('categories', 'locations'));
+        return view('admin.events.form', compact('event', 'categories', 'locations'));
     }
 
     public function store(EventRequest $request): RedirectResponse

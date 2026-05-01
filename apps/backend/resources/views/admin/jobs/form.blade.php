@@ -42,7 +42,7 @@
                             <label class="font-weight-600"><i class="fas fa-briefcase mr-1 text-primary"></i> Job Title <span class="text-danger">*</span></label>
                             <input type="text" name="title" id="title" class="form-control form-control-lg form-control-border @error('title') is-invalid @enderror" value="{{ old('title', $job->title ?? '') }}" required list="job-title-suggestions">
                             <datalist id="job-title-suggestions">
-                                @foreach(\App\Models\Job::select('title')->distinct()->limit(20)->pluck('title') as $title)
+                                @foreach(\App\Models\JobListing::select('title')->distinct()->limit(20)->pluck('title') as $title)
                                     <option value="{{ $title }}">
                                 @endforeach
                             </datalist>

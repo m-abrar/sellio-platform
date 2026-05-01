@@ -70,11 +70,18 @@ h1, h2, h3, h4, h5, h6, .brand-text {
     background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%) !important;
     border: none !important;
     color: #ffffff !important;
-    padding: 10px 20px;
-    border-radius: 10px;
-    font-weight: 600;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 4px 14px 0 var(--primary-glow);
+    height: 48px !important; /* Matched to form-control height */
+    padding: 12px 24px !important;
+    border-radius: 12px !important; /* Matched to form-control radius */
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+    font-size: 0.75rem !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    box-shadow: 0 4px 14px 0 var(--primary-glow) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
 }
 
 .btn-primary:hover {
@@ -90,19 +97,26 @@ h1, h2, h3, h4, h5, h6, .brand-text {
     color: var(--dark-muted);
     font-weight: 600;
     padding: 8px 16px;
+    height: 40px !important; /* Registry buttons can be slightly smaller */
     transition: all 0.2s ease;
 }
 
-.btn-group-premium .btn:hover {
-    background: var(--light-bg);
-    color: var(--primary);
-    z-index: 1;
-}
-
-.btn-group-premium .btn.btn-danger-soft:hover {
-    background: #fee2e2;
-    color: var(--danger);
-    border-color: #fecaca !important;
+/* Secondary Action Buttons (Matches Inputs) */
+.btn-default.shadow-xs,
+.btn-secondary-premium {
+    height: 48px !important;
+    border-radius: 12px !important;
+    padding: 12px 24px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+    font-size: 0.75rem !important;
+    border: 1px solid var(--border-color) !important;
+    background: #fff !important;
+    color: var(--dark-muted) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
 }
 
 /* --- 4. DATA TABLES & LISTINGS --- */
@@ -201,6 +215,41 @@ h1, h2, h3, h4, h5, h6, .brand-text {
     transform: translateY(-1px);
 }
 
+/* Premium Input Groups */
+.input-group.shadow-xs,
+.input-group-premium {
+    border-radius: 12px !important;
+    overflow: hidden;
+    border: 1px solid var(--border-color) !important;
+    background: #fff !important;
+    transition: all 0.3s ease;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05) !important;
+}
+
+.input-group.shadow-xs:focus-within,
+.input-group-premium:focus-within {
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 0 4px var(--primary-soft) !important;
+    transform: translateY(-1px);
+}
+
+.input-group.shadow-xs .input-group-text,
+.input-group-premium .input-group-text {
+    background: transparent !important;
+    border: none !important;
+    padding-left: 15px;
+    padding-right: 0;
+    color: var(--dark-muted);
+}
+
+.input-group.shadow-xs .form-control,
+.input-group-premium .form-control {
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    height: 46px !important; /* Slightly smaller to fit inside border */
+}
+
 textarea.form-control {
     height: auto !important;
     min-height: 120px !important;
@@ -219,13 +268,63 @@ textarea.form-control {
 /* --- 7. SIDEBAR & NAVIGATION --- */
 .main-sidebar {
     background: #0f172a !important; /* Slate 900 */
+    width: 280px !important; /* Increased width for more premium feel */
+    transition: width 0.3s ease-in-out !important;
+}
+
+/* Adjust content wrapper for wider sidebar */
+.content-wrapper, 
+.main-footer, 
+.main-header {
+    margin-left: 280px !important;
+}
+
+/* Handle collapsed state */
+.sidebar-collapse .main-sidebar {
+    width: 73px !important;
+}
+.sidebar-collapse .content-wrapper, 
+.sidebar-collapse .main-footer, 
+.sidebar-collapse .main-header {
+    margin-left: 73px !important;
+}
+
+.sidebar {
+    padding-right: 12px !important; /* Increased buffer */
 }
 
 .nav-sidebar .nav-link {
-    border-radius: 10px !important;
-    margin: 4px 12px !important;
-    font-weight: 500;
+    border-radius: 12px !important;
+    margin: 4px 12px 4px 15px !important; /* Asymmetric margin: more space on left, clear on right */
+    padding: 12px 18px !important; /* Generous internal padding */
+    font-weight: 600;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    display: flex;
+    align-items: center;
 }
+
+.nav-sidebar .nav-link p {
+    margin-bottom: 0;
+    margin-left: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-grow: 1;
+}
+
+.nav-sidebar .nav-link .right {
+    position: absolute;
+    right: 1.25rem;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    transition: transform 0.3s ease !important;
+    margin-top: 0 !important; /* Remove any legacy margin-top offsets */
+}
+
+.nav-item.menu-open > .nav-link .right {
+    transform: translateY(-50%) rotate(-90deg) !important;
+}
+
 
 .nav-sidebar .nav-link.active {
     background: var(--primary) !important;
@@ -233,7 +332,12 @@ textarea.form-control {
 }
 
 .nav-header {
-    color: #475569 !important; /* Slate 600 */
+    color: #94a3b8 !important; /* Slate 400 - Better contrast on dark sidebar */
+    font-size: 0.65rem !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1.5px !important;
+    opacity: 0.7 !important; /* Increased from 0.4 */
 }
 
 /* --- 8. SELECT2 PREMIUM STYLING --- */
@@ -259,7 +363,23 @@ textarea.form-control {
 }
 
 .select2-container--default .select2-selection--single .select2-selection__arrow {
-    height: 46px !important;
+    height: 100% !important;
+    top: 0 !important;
+    right: 18px !important; /* Increased from 12px for better spacing */
+    width: 30px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+
+.select2-container--default .select2-selection--single .select2-selection__arrow b {
+    border-color: var(--dark-muted) transparent transparent transparent !important;
+    border-width: 5px 4px 0 4px !important;
+    margin-left: 0 !important;
+    margin-top: 0 !important;
+    position: relative !important;
+    top: 1px !important;
 }
 
 .select2-dropdown {
@@ -373,8 +493,15 @@ textarea.form-control {
 /* --- 13. BRANDING & SIDEBAR --- */
 .brand-link {
     border-bottom: 1px solid rgba(255,255,255,0.05) !important;
-    padding: 1rem 1.5rem !important;
+    padding: 1.25rem 1.5rem !important;
+    width: 280px !important;
+    transition: width 0.3s ease-in-out !important;
 }
+
+.sidebar-collapse .brand-link {
+    width: 73px !important;
+}
+
 
 .user-panel {
     border-bottom: 1px solid rgba(255,255,255,0.05) !important;
@@ -453,11 +580,23 @@ textarea.form-control {
     border: none !important;
     background: rgba(255, 255, 255, 0.7) !important;
     backdrop-filter: blur(15px) !important;
-    margin: 15px 20px 0 20px !important;
+    margin-top: 15px !important;
+    margin-left: calc(280px + 25px) !important; /* Offset by Sidebar + Buffer */
+    margin-right: 25px !important;
     border-radius: 16px !important;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03) !important;
-    transition: all 0.3s ease !important;
+    transition: all 0.3s ease-in-out !important;
+    position: fixed !important;
+    left: 0;
+    right: 0;
+    z-index: 1030 !important;
 }
+
+/* Adjust for collapsed state */
+.sidebar-collapse .main-header {
+    margin-left: calc(73px + 25px) !important;
+}
+
 
 .main-header.navbar-light .navbar-nav .nav-link {
     color: var(--dark-muted) !important;
@@ -470,18 +609,42 @@ textarea.form-control {
 
 .content-wrapper {
     background-color: #f1f5f9 !important;
-    padding-top: 25px !important;
+    padding-top: 100px !important; /* Buffer for floating header */
+    padding-left: 15px !important;
+    padding-right: 15px !important;
 }
+
+/* Fix Content Header Overlap */
+.content-header {
+    padding: 15px 0.5rem !important;
+    margin-bottom: 10px !important;
+}
+
+.content-header .breadcrumb {
+    background: transparent !important;
+    margin-top: 0.5rem !important;
+    padding: 0 !important;
+    float: none !important;
+    font-size: 0.8rem !important;
+}
+
+.content-header h1 {
+    font-size: 1.8rem !important;
+    font-weight: 800 !important;
+    color: var(--dark-primary) !important;
+    letter-spacing: -0.5px !important;
+}
+
 
 
 /* Extra Polish for Sidebar Items */
 .nav-sidebar .nav-item > .nav-link {
-    transition: transform 0.2s ease, background 0.2s ease !important;
+    transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease !important;
 }
 
 .nav-sidebar .nav-item > .nav-link:hover:not(.active) {
-    background: rgba(255,255,255,0.05) !important;
-    transform: translateX(5px);
+    background: rgba(255,255,255,0.08) !important;
+    transform: translateX(4px);
 }
 /* --- 17. SPACING & RHYTHM --- */
 .gap-1 { gap: 4px !important; }
@@ -585,5 +748,59 @@ a:focus-visible, button:focus-visible {
 .card-header {
     padding: 1.25rem 1.5rem !important;
 }
+
+/* --- 19. PAGINATION PREMIUM --- */
+.pagination {
+    gap: 5px;
+    margin: 0;
+}
+
+.pagination .page-item .page-link {
+    border: 1px solid var(--border-color) !important;
+    border-radius: 10px !important;
+    color: var(--dark-muted) !important;
+    font-weight: 700 !important;
+    padding: 8px 16px !important;
+    font-size: 0.85rem !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    background: #fff !important;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.03) !important;
+}
+
+.pagination .page-item.active .page-link {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%) !important;
+    border-color: transparent !important;
+    color: #fff !important;
+    box-shadow: 0 8px 15px var(--primary-glow) !important;
+    transform: translateY(-2px);
+    z-index: 3;
+}
+
+.pagination .page-item .page-link:hover:not(.active) {
+    background: var(--light-bg) !important;
+    color: var(--primary) !important;
+    border-color: var(--primary) !important;
+    transform: translateY(-1px);
+}
+
+.pagination .page-item.disabled .page-link {
+    background: #f8fafc !important;
+    color: #cbd5e1 !important;
+    border-color: #f1f5f9 !important;
+    opacity: 0.6;
+}
+
+/* Pagination Icons */
+.pagination .page-link [aria-hidden="true"] {
+    font-size: 1.2rem;
+    line-height: 1;
+}
+
+/* Small Pagination */
+.pagination-sm .page-link {
+    padding: 5px 10px !important;
+    font-size: 0.75rem !important;
+}
+
 
 

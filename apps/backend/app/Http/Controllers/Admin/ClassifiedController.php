@@ -38,9 +38,10 @@ class ClassifiedController extends Controller
 
     public function create(): View
     {
+        $classified = new Classified();
         $categories = Category::all();
         $locations = Location::all();
-        return view('admin.classifieds.form', compact('categories', 'locations'));
+        return view('admin.classifieds.form', compact('classified', 'categories', 'locations'));
     }
 
     public function store(ClassifiedRequest $request): RedirectResponse

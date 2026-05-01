@@ -94,9 +94,10 @@ class PaymentController extends Controller
 
     public function create()
     {
+        $payment = new Payment();
         $users = User::all();
         $subscriptions = Subscription::all();
-        return view('admin.payments.form', compact('users', 'subscriptions'));
+        return view('admin.payments.form', compact('payment', 'users', 'subscriptions'));
     }
 
     public function store(Request $request)
