@@ -2,21 +2,23 @@
 
 @section('title', 'Settings Explorer')
 
+@section('breadcrumbs')
+@stop
+
 @section('content_header')
-    <div class="container-fluid">
-        <div class="row mb-4 align-items-end">
-            <div class="col-sm-6">
-                <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-sliders-h mr-2 text-primary"></i> System Configuration
-                </h1>
-                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Manage global system variables, environment parameters, and platform logic.</p>
-            </div>
-            <div class="col-sm-6 text-right">
-                <ol class="breadcrumb float-sm-right bg-transparent p-0 mt-3 small">
-                    <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Settings Explorer</li>
-                </ol>
-            </div>
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <div>
+            <h1 class="font-weight-bold text-dark mb-0">
+                <i class="fas fa-sliders-h mr-2 text-primary"></i> System Configuration
+            </h1>
+            <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">
+                Manage global system variables, environment parameters, and platform logic.
+            </p>
+        </div>
+        <div class="text-right">
+            <a href="{{ route('admin.welcome') }}" class="btn btn-back shadow-sm px-4">
+                <i class="fas fa-arrow-left mr-1"></i> Dashboard
+            </a>
         </div>
     </div>
 @stop

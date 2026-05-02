@@ -2,22 +2,23 @@
 
 @section('title', 'Platform Logic | Master Configuration')
 
+@section('breadcrumbs')
+@stop
+
 @section('content_header')
-    <div class="container-fluid">
-        <div class="row mb-4 align-items-center">
-            <div class="col-sm-8">
-                <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-microchip mr-2 text-primary"></i> Master Configuration
-                </h1>
-                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">
-                    Adjusting foundational platform engines and security protocols.
-                </p>
-            </div>
-            <div class="col-sm-4 text-right">
-                <a href="{{ route('admin.settings.index') }}" class="btn btn-back shadow-sm">
-                    <i class="fas fa-arrow-left mr-1"></i> Back to Explorer
-                </a>
-            </div>
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <div>
+            <h1 class="font-weight-bold text-dark mb-0">
+                <i class="fas fa-microchip mr-2 text-primary"></i> Master Configuration
+            </h1>
+            <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">
+                Adjusting foundational platform engines and security protocols.
+            </p>
+        </div>
+        <div class="text-right">
+            <a href="{{ route('admin.settings.index') }}" class="btn btn-back shadow-sm px-4">
+                <i class="fas fa-arrow-left mr-1"></i> Back to Explorer
+            </a>
         </div>
     </div>
 @stop

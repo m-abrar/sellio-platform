@@ -58,3 +58,23 @@
 - [x] **Global Glassmorphism**: Injected glassmorphism tokens into `style.css` for system-wide consistency.
 - [x] **Dynamic Dashboard**: E-commerce analytics now pull from live Eloquent models.
 - [x] **Platform Orchestration**: Standardized Theme Manager, Menu System, and Ad Campaigns with premium UI.
+
+--------------
+update the tasks right in the same order i pasted here and add new tasks as i give them to you and don't remove any tasks 
+------------
+the image widget shows card border two times, please fix
+---------------
+
+http://127.0.0.1:8000/admin/dashboard/ecommerce
+
+BadMethodCallException
+vendor\laravel\framework\src\Illuminate\Support\Traits\ForwardsCalls.php:67
+Call to undefined method App\Models\Category::products()
+
+
+BadMethodCallException
+vendor\laravel\framework\src\Illuminate\Support\Traits\ForwardsCalls.php:67
+Call to undefined method App\Models\Category::products()
+
+
+--------------
