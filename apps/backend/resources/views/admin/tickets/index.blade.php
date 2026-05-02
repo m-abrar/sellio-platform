@@ -1,3 +1,5 @@
+@extends('adminlte::page')
+
 @section('title', 'Support Tickets | Admin Ops')
 
 @section('content_header')
@@ -8,6 +10,10 @@
                     <i class="fas fa-ticket-alt mr-2 text-primary"></i> 
                     Customer Support Queue
                 </h1>
+                <ol class="breadcrumb bg-transparent p-0 mt-2 small">
+                    <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Support Queue</li>
+                </ol>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">
                     Monitor user inquiries, resolve platform issues, and manage ticket priority.
                 </p>
