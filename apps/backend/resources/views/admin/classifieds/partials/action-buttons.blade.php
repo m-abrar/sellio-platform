@@ -1,7 +1,7 @@
-<div class="card shadow-sm border-0 sticky-top" style="top: 20px;">
-    <div class="card-header bg-dark d-flex align-items-center py-3" style="border-bottom: 3px solid var(--brand-primary) !important;">
-        <h3 class="card-title text-white mb-0 font-weight-bold">
-            <i class="fas fa-cog mr-2 text-primary"></i> Status & Actions
+<div class="card card-premium sticky-top overflow-hidden" style="top: 20px;">
+    <div class="card-header bg-dark d-flex align-items-center py-3" style="border-bottom: 3px solid var(--primary) !important; background: #1e293b !important;">
+        <h3 class="card-title text-white mb-0 font-weight-bold smallest text-uppercase letter-spacing-1">
+            <i class="fas fa-rocket mr-2 text-primary"></i> {{ __('Protocol & Actions') }}
         </h3>
     </div>
     <div class="card-body">
@@ -34,23 +34,21 @@
             </label>
         </div>
         <hr class="my-3">
-        <button type="submit" class="btn btn-primary btn-block btn-lg btn-flat shadow-sm font-weight-bold mb-2">
-            <i class="fas fa-save mr-2"></i> {{ $classified->exists ? 'UPDATE AD' : 'CREATE AD' }}
-        </button>
+        <div class="action-buttons-group">
+            <button type="submit" class="btn btn-primary btn-block rounded-pill font-weight-bold shadow-lg py-3 smallest mb-3">
+                <i class="fas fa-save mr-2"></i> {{ $classified->exists ? __('SYNCHRONIZE RECORD') : __('INITIALIZE LISTING') }}
+            </button>
 
-        @if($classified->exists)
-            <div class="row gx-1">
-                <div class="col-6">
-                    @if(Route::has('admin.classifieds.duplicate'))
-                        <a href="{{ route('admin.classifieds.duplicate', $classified->id) }}" class="btn btn-default btn-block btn-flat btn-sm text-secondary"><i class="fas fa-copy mr-1"></i> Duplicate</a>
-                    @else
-                        <button class="btn btn-default btn-block btn-flat btn-sm text-secondary" disabled><i class="fas fa-copy mr-1"></i> Duplicate</button>
-                    @endif
+            @if($classified->exists)
+                <div class="d-flex" style="gap: 8px;">
+                    <button type="button" class="btn btn-light flex-grow-1 rounded-pill font-weight-bold smallest py-2 text-muted border">
+                        <i class="fas fa-copy mr-1"></i> {{ __('CLONE') }}
+                    </button>
+                    <button type="button" class="btn btn-light flex-grow-1 rounded-pill font-weight-bold smallest py-2 text-danger border" onclick="triggerDelete()">
+                        <i class="fas fa-trash-alt mr-1"></i> {{ __('PURGE') }}
+                    </button>
                 </div>
-                <div class="col-6">
-                    <button type="button" class="btn btn-default btn-block btn-flat btn-sm text-danger" onclick="triggerDelete()"><i class="fas fa-trash-alt mr-1"></i> Delete</button>
-                </div>
-            </div>
-        @endif
+            @endif
+        </div>
     </div>
 </div>

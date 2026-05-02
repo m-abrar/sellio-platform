@@ -1,7 +1,7 @@
-<div class="card shadow-sm border-0 overflow-hidden sticky-top" style="top: 20px;">
-    <div class="card-header bg-dark d-flex align-items-center py-3" style="border-bottom: 3px solid var(--brand-primary) !important;">
-        <h3 class="card-title text-white mb-0 font-weight-bold">
-            <i class="fas fa-cog mr-2 text-primary"></i> Brand Settings
+<div class="card card-premium sticky-top overflow-hidden" style="top: 20px;">
+    <div class="card-header bg-dark d-flex align-items-center py-3" style="border-bottom: 3px solid var(--primary) !important; background: #1e293b !important;">
+        <h3 class="card-title text-white mb-0 font-weight-bold smallest text-uppercase letter-spacing-1">
+            <i class="fas fa-rocket mr-2 text-primary"></i> {{ __('Protocol & Actions') }}
         </h3>
     </div>
     
@@ -22,39 +22,19 @@
         </div>
 
         <div class="action-buttons-group">
+            <button type="submit" class="btn btn-primary btn-block rounded-pill font-weight-bold shadow-lg py-3 smallest mb-3">
+                <i class="fas fa-save mr-2"></i> {{ $brand->exists ? __('SYNCHRONIZE RECORD') : __('INITIALIZE BRAND') }}
+            </button>
+
             @if($brand->exists)
-                <div class="row no-gutters shadow-sm rounded overflow-hidden" style="border: 1px solid #dee2e6;">
-                    <div class="col-7">
-                        <button type="submit" class="btn btn-primary btn-block btn-lg btn-flat font-weight-bold h-100">
-                            <i class="fas fa-save mr-1"></i> UPDATE
-                        </button>
-                    </div>
-                    <div class="col-2" style="flex: 0 0 20.833%; max-width: 20.833%;">
-                        @if(Route::has('admin.brands.duplicate'))
-                            <a href="{{ route('admin.brands.duplicate', $brand->id) }}" 
-                               class="btn btn-default btn-block btn-flat h-100 d-flex align-items-center justify-content-center text-secondary"
-                               data-toggle="tooltip" title="Duplicate">
-                                <i class="fas fa-copy"></i>
-                            </a>
-                        @else
-                            <button class="btn btn-default btn-block btn-flat h-100 d-flex align-items-center justify-content-center text-muted" disabled>
-                                <i class="fas fa-copy"></i>
-                            </button>
-                        @endif
-                    </div>
-                    <div class="col-3" style="flex: 0 0 20.833%; max-width: 20.833%;">
-                        <button type="button" 
-                                class="btn btn-default btn-block btn-flat h-100 d-flex align-items-center justify-content-center text-danger"
-                                onclick="triggerDelete()"
-                                data-toggle="tooltip" title="Delete">
-                            <i class="fas fa-trash-alt"></i>
-                        </button>
-                    </div>
+                <div class="d-flex" style="gap: 8px;">
+                    <button type="button" class="btn btn-light flex-grow-1 rounded-pill font-weight-bold smallest py-2 text-muted border">
+                        <i class="fas fa-copy mr-1"></i> {{ __('CLONE') }}
+                    </button>
+                    <button type="button" class="btn btn-light flex-grow-1 rounded-pill font-weight-bold smallest py-2 text-danger border" onclick="triggerDelete()">
+                        <i class="fas fa-trash-alt mr-1"></i> {{ __('PURGE') }}
+                    </button>
                 </div>
-            @else
-                <button type="submit" class="btn btn-primary btn-block btn-lg btn-flat shadow-sm font-weight-bold">
-                    <i class="fas fa-save mr-2"></i> CREATE BRAND
-                </button>
             @endif
         </div>
     </div>

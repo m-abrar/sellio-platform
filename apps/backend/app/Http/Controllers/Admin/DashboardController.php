@@ -16,6 +16,9 @@ use App\Models\JobListing;
 use App\Models\Service; 
 use App\Models\Classified; 
 use App\Models\Product; 
+use App\Models\Category; 
+use App\Models\OrderItem; 
+use App\Models\Campaign; 
 
 // Transaction/Booking Models (used for Metrics and Charts)
 use App\Models\PropertyBooking; 
@@ -511,10 +514,22 @@ class DashboardController extends Controller
                 ];
             });
 
-        // --- 5.4 Combine All Calendar Data ---
+        // --- 5.4 Marketing Campaigns ---
+        $marketingCampaigns = Campaign::where('is_active', true)
+            ->get()
+            ->map(fn($c) => [
+                'title' => $c->title . ' (Campaign)',
+                'start' => $c->start_date->toIso8601String(),
+                'end' => $c->end_date->toIso8601String(),
+                'color' => $c->color,
+                'allDay' => $c->start_date->format('H:i') == '00:00' && $c->end_date->format('H:i') == '00:00',
+            ]);
+
+        // --- 5.5 Combine All Calendar Data ---
         $calendarEvents = $propertyBookings
             ->merge($eventBookings)
             ->merge($serviceAppointments)
+            ->merge($marketingCampaigns)
             ->sortBy('start') // Sort by start date for a coherent calendar list
             ->values()
             ->toArray();
@@ -621,87 +636,209 @@ class DashboardController extends Controller
     public function ecommerceIndex()
     {
         // ====================================================================
-        // PRESENTATION DUMMY DATA (High Fidelity)
+        // SECTION 1: CONSTANTS & DATE RANGES
         // ====================================================================
+        $today = now();
+        $lastMonth = $today->copy()->subMonth();
+        $previousMonth = $lastMonth->copy()->subMonth();
+        $currentYear = $today->year;
+        $limit = 5;
+
+        // ====================================================================
+        // SECTION 2: NORTH STAR KPIs (Earnings & YoY)
+        // ====================================================================
+        $totalEarned = Order::where('payment_status', 'paid')->sum('total_amount');
+        
+        $currentYearEarnings = Order::where('payment_status', 'paid')->whereYear('created_at', $currentYear)->sum('total_amount');
+        $lastYearEarnings = Order::where('payment_status', 'paid')->whereYear('created_at', $currentYear - 1)->sum('total_amount');
+
+        $yoyChangePercent = 0;
+        if ($lastYearEarnings > 0) {
+            $yoyChangePercent = round((($currentYearEarnings - $lastYearEarnings) / $lastYearEarnings) * 100, 1);
+        } else {
+            $yoyChangePercent = $currentYearEarnings > 0 ? 100 : 0;
+        }
+        $yoyChange = ($yoyChangePercent >= 0 ? '+' : '-') . abs($yoyChangePercent) . '%';
+
+        // ====================================================================
+        // SECTION 3: URGENT ACTIONS
+        // ====================================================================
+        $pendingOrdersCount = Order::where('status', Order::STATUS_PENDING)->count();
+        $lowStockCount = Product::where('manage_stock', true)
+            ->whereRaw('stock_quantity <= low_stock_threshold')
+            ->count();
+        $pendingPayoutsAmount = Withdrawal::where('status', 'pending')->sum('amount') / 100;
+        $unresolvedTicketsCount = Ticket::unresolved()->count();
+
+        // ====================================================================
+        // SECTION 4: SECONDARY METRICS
+        // ====================================================================
+        $totalCustomers = User::role('user')->count() ?: User::count();
+        $liveProductsCount = Product::where('is_published', true)->count();
+        
+        // Conversion Rate: Paid Orders / Total Users (Basic Proxy)
+        $conversionRate = 0;
+        if ($totalCustomers > 0) {
+            $paidOrdersCount = Order::where('payment_status', 'paid')->count();
+            $conversionRate = round(($paidOrdersCount / $totalCustomers) * 100, 1);
+        }
+
+        // ====================================================================
+        // SECTION 5: LISTS (RECENT ORDERS & TOP SELLERS)
+        // ====================================================================
+        $recentOrders = Order::with('user')
+            ->orderByDesc('created_at')
+            ->limit($limit)
+            ->get()
+            ->map(function($order) {
+                $statusClass = 'success';
+                if ($order->payment_status === 'pending') $statusClass = 'warning';
+                if ($order->payment_status === 'failed') $statusClass = 'danger';
+                
+                return [
+                    'title' => "Order #{$order->order_number} ({$order->payment_status})",
+                    'tag' => 'Order',
+                    'icon_class' => "fa fa-shopping-cart text-{$statusClass}",
+                    'tag_class' => "bg-{$statusClass}",
+                ];
+            });
+
+        $topSellersRaw = OrderItem::select('product_id', 'product_name', DB::raw('SUM(quantity) as total_sales'))
+            ->groupBy('product_id', 'product_name')
+            ->orderByDesc('total_sales')
+            ->limit($limit)
+            ->get();
+
+        $topSellers = $topSellersRaw->map(function($item, $index) {
+            return [
+                'rank' => '#' . ($index + 1),
+                'title' => $item->product_name,
+                'bookings' => $item->total_sales . ' Sales',
+            ];
+        });
+
+        // ====================================================================
+        // SECTION 6: USER METRICS (GROWTH & SUBS)
+        // ====================================================================
+        $totalUsers = User::count();
+        $usersLastMonth = User::where('created_at', '>=', $lastMonth)->count();
+        $usersPrevMonth = User::where('created_at', '>=', $previousMonth)->where('created_at', '<', $lastMonth)->count();
+        
+        $userGrowthPercent = 0;
+        if ($usersPrevMonth > 0) {
+            $userGrowthPercent = round((($usersLastMonth - $usersPrevMonth) / $usersPrevMonth) * 100);
+        }
+
+        $newNewsletterSubscribers = class_exists(NewsletterSubscriber::class) 
+            ? NewsletterSubscriber::where('created_at', '>=', $lastMonth)->count() 
+            : 0;
+            
+        $newsletterConversion = ($usersLastMonth > 0) ? round(($newNewsletterSubscribers / $usersLastMonth) * 100) : 0;
+
+        $activeSubscriptions = class_exists(Subscription::class) ? Subscription::where('status', 'active')->count() : 0;
+        $subPercent = ($totalUsers > 0) ? round(($activeSubscriptions / $totalUsers) * 100) : 0;
+
+        // ====================================================================
+        // SECTION 7: CHART DATA
+        // ====================================================================
+        $monthlyRevenue = Order::select(
+                DB::raw('MONTH(created_at) as month'),
+                DB::raw('SUM(total_amount) as total')
+            )
+            ->where('payment_status', 'paid')
+            ->whereYear('created_at', $currentYear)
+            ->groupBy('month')
+            ->pluck('total', 'month')
+            ->toArray();
+
+        $monthlyCosts = Withdrawal::select(
+                DB::raw('MONTH(approved_at) as month'),
+                DB::raw('SUM(amount) / 100 as total')
+            )
+            ->where('status', 'approved')
+            ->whereYear('approved_at', $currentYear)
+            ->groupBy('month')
+            ->pluck('total', 'month')
+            ->toArray();
+
+        $revData = [];
+        $costData = [];
+        foreach (range(1, 12) as $m) {
+            $revData[] = round($monthlyRevenue[$m] ?? 0);
+            $costData[] = round($monthlyCosts[$m] ?? 0);
+        }
+
+        $categoryDist = Category::withCount('products')
+            ->orderByDesc('products_count')
+            ->limit(5)
+            ->get();
+
+        // Heatmap: Map paid orders to coordinates if available, else fallback to randomish distribution based on shipping cities
+        // Since we don't have lat/long on orders, we'll pick up locations from existing Properties as a proxy for activity regions
+        $heatmapData = Property::where('is_published', true)
+            ->whereNotNull('latitude')
+            ->whereNotNull('longitude')
+            ->limit(50)
+            ->get()
+            ->map(fn($p) => [$p->latitude, $p->longitude, 0.5])
+            ->toArray();
 
         $metrics = [
-            // ROW 1: North Star (Ecommerce Only)
             'system_kpis' => [
-                'earnings' => '$124,590', 
-                'yoy_change' => '+18.4%', 
+                'earnings' => '$' . number_format($totalEarned, 0),
+                'yoy_change' => $yoyChange,
             ],
-            
-            // Urgent Actions (Ecommerce Focus)
             'urgent_actions' => [
-                'pending_orders' => 42,
-                'low_stock_alerts' => 12,
-                'pending_payouts' => '$4,250',
-                'unresolved_tickets' => 8, 
+                'pending_orders' => $pendingOrdersCount,
+                'low_stock_alerts' => $lowStockCount,
+                'pending_payouts' => '$' . number_format($pendingPayoutsAmount, 0),
+                'unresolved_tickets' => $unresolvedTicketsCount,
             ],
-            
-            // Secondary Metrics (Ecommerce)
             'secondary_metrics' => [
-                'active_customers' => '8,420', 
-                'live_products' => '1,240',
-                'conversion_rate' => '3.8%',
+                'active_customers' => number_format($totalCustomers),
+                'live_products' => number_format($liveProductsCount),
+                'conversion_rate' => $conversionRate . '%',
             ],
-            
-            // Lists (Ecommerce)
             'recent_orders' => [
-                'count' => 5, 
-                'items' => [
-                    ['title' => 'New Order: #ORD-9421 (Paid)', 'tag' => 'Order', 'icon_class' => 'fa fa-shopping-cart text-success', 'tag_class' => 'bg-success'],
-                    ['title' => 'New Order: #ORD-9420 (Pending)', 'tag' => 'Order', 'icon_class' => 'fa fa-shopping-cart text-warning', 'tag_class' => 'bg-warning'],
-                    ['title' => 'New Order: #ORD-9419 (Paid)', 'tag' => 'Order', 'icon_class' => 'fa fa-shopping-cart text-success', 'tag_class' => 'bg-success'],
-                    ['title' => 'New Order: #ORD-9418 (Paid)', 'tag' => 'Order', 'icon_class' => 'fa fa-shopping-cart text-success', 'tag_class' => 'bg-success'],
-                    ['title' => 'New Order: #ORD-9417 (Failed)', 'tag' => 'Order', 'icon_class' => 'fa fa-shopping-cart text-danger', 'tag_class' => 'bg-danger'],
-                ]
+                'count' => $recentOrders->count(),
+                'items' => $recentOrders->toArray()
             ],
             'top_sellers' => [
-                'period' => 'Top Products (L30D)',
-                'items' => [
-                    ['rank' => '#1', 'title' => 'Ultra Slim Wireless Keyboard', 'bookings' => '142 Sales'],
-                    ['rank' => '#2', 'title' => 'Ergonomic Gaming Mouse', 'bookings' => '98 Sales'],
-                    ['rank' => '#3', 'title' => '4K Ultra HD Monitor', 'bookings' => '54 Sales'],
-                    ['rank' => '#4', 'title' => 'Noise Cancelling Headphones', 'bookings' => '41 Sales'],
-                    ['rank' => '#5', 'title' => 'Portable Power Bank 20000mAh', 'bookings' => '38 Sales'],
-                ]
+                'period' => 'Top Products (All Time)',
+                'items' => $topSellers->toArray()
             ],
             'user_metrics' => [
-                'total_users' => '12,450',
-                'users_growth_percent' => 12,
-                'users_growth_desc' => '+12% Growth (L30D)',
-                'newsletter_subscribers' => '+240',
-                'newsletter_conversion' => 18,
-                'newsletter_desc' => '18% Subscriber Conversion (L30D)',
-                'active_subscriptions' => '1,120',
-                'subscriptions_percent' => 9,
-                'subscriptions_desc' => '9% of Total Users are Active Subscribers',
+                'total_users' => number_format($totalUsers),
+                'users_growth_percent' => abs($userGrowthPercent),
+                'users_growth_desc' => ($userGrowthPercent >= 0 ? '+' : '-') . abs($userGrowthPercent) . '% Growth (L30D)',
+                'newsletter_subscribers' => '+' . number_format($newNewsletterSubscribers),
+                'newsletter_conversion' => $newsletterConversion,
+                'newsletter_desc' => $newsletterConversion . '% Subscriber Conversion (L30D)',
+                'active_subscriptions' => number_format($activeSubscriptions),
+                'subscriptions_percent' => $subPercent,
+                'subscriptions_desc' => $subPercent . '% of Total Users are Active Subscribers',
             ],
-            
-            // Chart Data (Ecommerce Specific)
             'js_data' => [
                 'revenue_chart' => [
                     'labels' => ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                    'gross_earnings' => [4500, 5200, 4800, 6100, 7200, 6800, 8500, 9200, 8800, 10500, 11200, 12500],
-                    'total_payouts' => [3200, 3800, 3500, 4200, 5100, 4800, 6100, 6500, 6200, 7400, 8100, 9200],
+                    'gross_earnings' => $revData,
+                    'total_payouts' => $costData,
                 ],
                 'type_chart' => [ 
-                    'labels' => ['Electronics', 'Home & Kitchen', 'Fashion', 'Sports', 'Books'],
-                    'data' => [450, 320, 240, 180, 110], 
+                    'labels' => $categoryDist->pluck('name')->toArray(),
+                    'data' => $categoryDist->pluck('products_count')->toArray(), 
                 ],
-                'calendar_events' => [
-                    ['title' => 'Campaign: Summer Sale Launch', 'start' => now()->startOfMonth()->addDays(5), 'end' => now()->startOfMonth()->addDays(10), 'color' => '#FF3366', 'allDay' => true],
-                    ['title' => 'Flash Sale: Tech Monday', 'start' => now()->startOfMonth()->addDays(15), 'end' => now()->startOfMonth()->addDays(15), 'color' => '#ff6a00'],
-                    ['title' => 'Inventory Audit', 'start' => now()->startOfMonth()->addDays(22), 'end' => now()->startOfMonth()->addDays(22), 'color' => '#6c757d'],
-                ],
-                'heatmap_data' => [
-                    [40.7128, -74.0060, 0.8], // New York
-                    [34.0522, -118.2437, 0.7], // LA
-                    [41.8781, -87.6298, 0.6], // Chicago
-                    [29.7604, -95.3698, 0.5], // Houston
-                    [33.7490, -84.3880, 0.4], // Atlanta
-                ]
+                'calendar_events' => Campaign::where('is_active', true)
+                    ->get()
+                    ->map(fn($c) => [
+                        'title' => $c->title,
+                        'start' => $c->start_date->toIso8601String(),
+                        'end' => $c->end_date->toIso8601String(),
+                        'color' => $c->color,
+                        'allDay' => $c->start_date->format('H:i') == '00:00' && $c->end_date->format('H:i') == '00:00',
+                    ])
+                    ->toArray(),
+                'heatmap_data' => $heatmapData ?: [[30.3753, 69.3451, 0.5]]
             ]
         ];
 

@@ -39,7 +39,7 @@
         <div class="row">
             {{-- Primary Data Column --}}
             <div class="col-md-8">
-                <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
+                <div class="card card-premium overflow-hidden">
                     <div class="card-header border-0 bg-white py-3 px-4">
                         <h3 class="card-title font-weight-bold text-dark text-uppercase small" style="letter-spacing: 1px;">Basic Configuration</h3>
                     </div>
@@ -104,7 +104,7 @@
                 </div>
 
                 {{-- Module Assignments --}}
-                <div class="card shadow-premium border-0 overflow-hidden mt-4" style="border-radius: 20px;">
+                <div class="card card-premium overflow-hidden mt-4">
                     <div class="card-header border-0 bg-white py-3 px-4">
                         <h3 class="card-title font-weight-600 text-muted small text-uppercase" style="letter-spacing: 1px;">Feature Applicability</h3>
                     </div>
@@ -129,7 +129,7 @@
                 </div>
 
                 {{-- Gallery Partial --}}
-                <div class="card shadow-premium border-0 overflow-hidden mt-4" style="border-radius: 20px;">
+                <div class="card card-premium overflow-hidden mt-4">
                     <div class="card-header border-0 bg-white py-3 px-4">
                         <h3 class="card-title font-weight-600 text-muted small text-uppercase" style="letter-spacing: 1px;">Gallery Collection</h3>
                     </div>
@@ -150,7 +150,7 @@
                 @include('admin.categories.partials.action-buttons')
 
                 {{-- Featured Image Partial --}}
-                <div class="card border-0 shadow-premium mb-4" style="border-radius: 20px; overflow: hidden;">
+                <div class="card card-premium mb-4 overflow-hidden">
                     <div class="card-header bg-white border-0 py-3 px-4">
                         <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
                             <i class="fas fa-camera mr-2 text-primary opacity-50"></i> Visual Identity

@@ -1,9 +1,9 @@
-<div class="card border-0 shadow-none mb-0">
-    <div class="card-header">
-        <h4 class="card-title">{{ $label ?? 'Upload Images' }}</h4>
+<div class="card card-premium overflow-hidden mb-0">
+    <div class="card-header border-0 bg-white py-3 px-4">
+        <h4 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">{{ $label ?? 'Upload Images' }}</h4>
     </div>
 
-    <div class="card-body text-center">
+    <div class="card-body text-center p-4">
         @php
             $imageUrls = [];
 
@@ -21,30 +21,53 @@
         @endphp
 
         <div id="{{ $name }}-dropzone"
-             class="dropzone border rounded p-4 d-flex align-items-center justify-content-center flex-column {{ $isEdit ? '' : 'bg-light text-muted' }}"
-             style="{{ $isEdit ? '' : 'pointer-events: none; opacity: 0.6;' }}">
-            <i class="fas fa-cloud-upload-alt fa-2x text-primary"></i>
-            <p class="mt-2">
+             class="dropzone border-dashed rounded-xl p-5 d-flex align-items-center justify-content-center flex-column {{ $isEdit ? 'cursor-pointer' : 'bg-light text-muted' }}"
+             style="{{ $isEdit ? 'border: 2px dashed rgba(70, 165, 172, 0.3); background: rgba(70, 165, 172, 0.02);' : 'pointer-events: none; opacity: 0.6;' }}">
+            <div class="upload-icon-wrapper mb-3 shadow-sm rounded-circle bg-white d-flex align-items-center justify-content-center" style="width: 64px; height: 64px;">
+                <i class="fas fa-cloud-upload-alt fa-2x text-primary"></i>
+            </div>
+            <h6 class="font-weight-bold text-dark mb-1">
                 @if($isEdit)
-                    Drag & drop {{ $multiple ? 'images' : 'image' }} here or click to upload.
+                    Drag & drop {{ $multiple ? 'images' : 'image' }} here
                 @else
-                    Please save the {{ strtolower(class_basename($model)) }} first to upload images.
+                    Record Initialization Required
+                @endif
+            </h6>
+            <p class="text-muted smallest mb-0 px-4">
+                @if($isEdit)
+                    Or click to browse from your device. Supported: JPG, PNG, WEBP.
+                @else
+                    Please save the {{ strtolower(class_basename($model)) }} record before attaching media assets.
                 @endif
             </p>
         </div>
 
-        <div class="mt-3 text-center" id="{{ $name }}-preview">
+        <div class="mt-4 d-flex flex-wrap justify-content-center" id="{{ $name }}-preview" style="gap: 12px;">
             @foreach($imageUrls as $img)
-                <div class="image-container d-inline-block position-relative">
-                    <img src="{{ $img }}" class="img-thumbnail shadow-sm rounded">
-                    <button type="button" class="btn btn-danger btn-sm remove-image" data-image="{{ $img }}">
-                        <i class="fas fa-trash-alt"></i>
+                <div class="image-container position-relative group">
+                    <img src="{{ $img }}" class="img-thumbnail border-0 shadow-premium rounded-lg" style="width: 100px; height: 100px; object-fit: cover;">
+                    <button type="button" class="btn btn-danger btn-xs remove-image position-absolute" 
+                            style="top: -8px; right: -8px; border-radius: 50%; width: 24px; height: 24px; padding: 0;"
+                            data-image="{{ $img }}">
+                        <i class="fas fa-times"></i>
                     </button>
                 </div>
             @endforeach
         </div>
     </div>
 </div>
+
+<style>
+    .border-dashed { border-style: dashed !important; transition: all 0.3s ease; }
+    .dropzone:hover { border-color: var(--primary) !important; background: rgba(70, 165, 172, 0.05) !important; }
+    .rounded-xl { border-radius: 16px !important; }
+    .image-container .remove-image { 
+        opacity: 0; 
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    .image-container:hover .remove-image { opacity: 1; transform: scale(1.1); }
+</style>
 
 
 <script>

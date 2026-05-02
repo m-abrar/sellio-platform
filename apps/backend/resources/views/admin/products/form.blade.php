@@ -38,7 +38,7 @@
         <div class="row">
             {{-- Main Content Column --}}
             <div class="col-md-9">
-                <div class="card shadow-sm border-0" style="border-radius: 16px; overflow: hidden;">
+                <div class="card card-premium overflow-hidden">
                     <div class="card-header p-0 bg-white border-0">
                         <ul class="nav nav-tabs-premium" id="productTab" role="tablist">
                             <li class="nav-item">
@@ -256,7 +256,7 @@
                 @include('admin.products.partials.action-buttons')
 
                 {{-- Primary Media --}}
-                <div class="card border-0 shadow-premium mb-4" style="border-radius: 20px; overflow: hidden;">
+                <div class="card card-premium mb-4 overflow-hidden">
                     <div class="card-header bg-white border-0 py-3 px-4">
                         <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
                             <i class="fas fa-camera mr-2 text-primary opacity-50"></i> Visual Identity
@@ -274,7 +274,7 @@
                 </div>
 
                 {{-- Settings --}}
-                <div class="card border-0 shadow-premium mb-4 overflow-hidden" style="border-radius: 20px;">
+                <div class="card card-premium mb-4 overflow-hidden">
                     <div class="card-header bg-white border-0 py-3 px-4">
                         <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
                             <i class="fas fa-cog mr-2 text-primary opacity-50"></i> Configuration
@@ -301,7 +301,7 @@
                 </div>
 
                 {{-- Classification --}}
-                <div class="card border-0 shadow-premium mb-4 overflow-hidden" style="border-radius: 20px;">
+                <div class="card card-premium mb-4 overflow-hidden">
                     <div class="card-header bg-white border-0 py-3 px-4">
                         <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
                             <i class="fas fa-sitemap mr-2 text-primary opacity-50"></i> Taxonomy

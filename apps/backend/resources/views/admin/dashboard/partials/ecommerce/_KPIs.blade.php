@@ -10,7 +10,7 @@
 <div class="row">
     {{-- Main Financial Dashboard card --}}
     <div class="col-lg-4">
-        <div class="card border-0 shadow-lg bg-primary overflow-hidden h-100" style="min-height: 240px; border-radius: 16px; background: linear-gradient(135deg, #FF3366, #ba264b) !important;">
+        <div class="card border-0 shadow-lg bg-primary overflow-hidden h-100" style="min-height: 240px; border-radius: 16px; background: linear-gradient(135deg, #46a5ac, #2d7d83) !important;">
             <div class="card-body position-relative z-index-1 d-flex flex-column justify-content-center px-4">
                 <p class="text-white-50 text-uppercase small font-weight-bold mb-1" style="letter-spacing: 0.8px;">Ecommerce Gross Sales (YTD)</p>
                 <h1 class="text-white display-4 font-weight-bold mb-2">{{ $metrics['system_kpis']['earnings'] }}</h1>
@@ -38,12 +38,12 @@
                     $hasAlert = $valNumeric > 0;
                 @endphp
                 <div class="col-md-3">
-                    <div class="card gradient-action-card h-100 bg-gradient-{{ $u['color'] }} shadow-sm">
+                    <div class="card gradient-action-card h-100 shadow-sm" style="background: linear-gradient(45deg, #1e293b, #334155); border: none;">
                         <div class="card-body p-3 flex-grow-1 d-flex flex-column">
                             <div class="d-flex justify-content-between align-items-center mb-2">
                                 <small class="text-white-50 font-weight-bold uppercase" style="font-size: 9px; letter-spacing: 0.5px;">{{ $u['label'] }}</small>
                                 @if ($hasAlert)
-                                    <span class="action-badge-pulsing d-flex align-items-center">
+                                    <span class="action-badge-pulsing d-flex align-items-center" style="background: #46a5ac;">
                                         <span class="pulse-glow-dot bg-white mr-1"></span> !
                                     </span>
                                 @endif
@@ -54,7 +54,7 @@
                                 <p class="text-white-50 mb-3 small">Urgent Attention</p>
                             </div>
 
-                            <i class="fas {{ $u['icon'] }} glassmorphic-glow-icon"></i>
+                            <i class="fas {{ $u['icon'] }} glassmorphic-glow-icon" style="color: #46a5ac; opacity: 0.3;"></i>
                             <a href="{{ route($u['route']) }}" class="stretched-link"></a>
                         </div>
                     </div>

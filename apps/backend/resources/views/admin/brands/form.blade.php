@@ -34,9 +34,9 @@
         <div class="row">
             {{-- Primary Data Column --}}
             <div class="col-md-8">
-                <div class="card card-primary card-outline shadow-sm">
-                    <div class="card-header border-0 bg-white py-3">
-                        <h3 class="card-title font-weight-bold text-dark">Brand Identity</h3>
+                <div class="card card-premium overflow-hidden">
+                    <div class="card-header border-0 bg-white py-3 px-4">
+                        <h3 class="card-title font-weight-bold text-dark text-uppercase small" style="letter-spacing: 1px;">Brand Identity</h3>
                     </div>
                     <div class="card-body">
                         <div class="form-group mb-4">
@@ -78,8 +78,8 @@
                 </div>
 
                 {{-- Module Assignments (Enhanced Blueprint UI) --}}
-                <div class="card shadow-sm border-0">
-                    <div class="card-header border-0 bg-light">
+                <div class="card card-premium overflow-hidden mt-4">
+                    <div class="card-header border-0 bg-white py-3 px-4">
                         <h3 class="card-title font-weight-600 text-muted small text-uppercase" style="letter-spacing: 1px;">Market Reach</h3>
                     </div>
                     <div class="card-body">
@@ -103,7 +103,7 @@
                 </div>
 
                 {{-- Gallery Partial --}}
-                <div class="card shadow-sm border-0">
+                <div class="card card-premium overflow-hidden mt-4">
                     <div class="card-body p-0">
                         @include('admin._partials._image-uploader', [
                             'name' => \App\Models\Brand::GALLERY_MEDIA,
@@ -121,10 +121,10 @@
                 @include('admin.brands.partials.action-buttons')
 
                 {{-- Featured Image Partial --}}
-                <div class="card shadow-sm mt-4 border-0">
-                    <div class="card-header bg-white border-bottom">
-                        <h3 class="card-title font-weight-600 text-muted small text-uppercase">
-                            <i class="fas fa-image mr-1 text-primary"></i> Brand Logo
+                <div class="card card-premium mb-4 overflow-hidden">
+                    <div class="card-header bg-white border-0 py-3 px-4">
+                        <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
+                            <i class="fas fa-camera mr-2 text-primary opacity-50"></i> Brand Logo
                         </h3>
                     </div>
                     <div class="card-body p-0">

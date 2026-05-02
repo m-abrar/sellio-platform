@@ -4,17 +4,19 @@
 
 @section('content_header')
     <div class="container-fluid">
-        <div class="row mb-2">
-            <div class="col-sm-6">
+        <div class="row mb-4 align-items-center">
+            <div class="col-sm-8">
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-palette mr-2 text-primary"></i> Theme Customization Engine
                 </h1>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">
+                    Manage storefront identities and vertical-specific visual architectures.
+                </p>
             </div>
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Theme Manager</li>
-                </ol>
+            <div class="col-sm-4 text-right">
+                <a href="{{ route('admin.welcome') }}" class="btn btn-back shadow-sm">
+                    <i class="fas fa-arrow-left mr-1"></i> Dashboard
+                </a>
             </div>
         </div>
     </div>
@@ -28,10 +30,10 @@
     @if($activeTheme)
     <div class="mb-5">
         <div class="section-title-modern">
-            <span class="badge badge-primary px-3 py-2 mb-2">CURRENTLY ACTIVE</span>
-            <h4 class="font-weight-bold">Active Storefront Identity</h4>
+            <span class="badge badge-primary-light text-primary px-3 py-2 mb-2 rounded-pill font-weight-bold smallest">CURRENTLY ACTIVE</span>
+            <h4 class="font-weight-bold text-dark">Active Storefront Identity</h4>
         </div>
-        <div class="card active-theme-hero shadow-lg border-0 overflow-hidden">
+        <div class="card card-premium active-theme-hero overflow-hidden">
             <div class="row no-gutters">
                 <div class="col-md-5">
                     <div class="position-relative h-100">
@@ -107,10 +109,10 @@
     {{-- SECTION 3: BROWSE BY VERTICAL --}}
     <div class="mb-5">
         <div class="section-title-modern d-flex align-items-center justify-content-between">
-            <h5 class="font-weight-bold text-muted"><i class="fas fa-layer-group mr-2"></i> Theme Library</h5>
+            <h5 class="font-weight-bold text-muted small text-uppercase letter-spacing-1"><i class="fas fa-layer-group mr-2"></i> Theme Library</h5>
         </div>
 
-        <div class="card border-0 shadow-sm" style="border-radius: 15px;">
+        <div class="card card-premium overflow-hidden">
             <div class="card-body p-0">
                 <div class="row no-gutters">
                     <div class="col-md-3 border-right">

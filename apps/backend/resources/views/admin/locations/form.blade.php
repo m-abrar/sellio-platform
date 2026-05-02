@@ -36,7 +36,7 @@
         <div class="row">
             {{-- Main Configuration Column --}}
             <div class="col-md-8">
-                <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
+                <div class="card card-premium overflow-hidden">
                     <div class="card-header border-0 bg-white py-3 px-4">
                         <h3 class="card-title font-weight-bold text-dark text-uppercase small" style="letter-spacing: 1px;">Location Configuration</h3>
                     </div>
@@ -121,7 +121,7 @@
                 </div>
 
                 {{-- DRY: Module Applicability Grid --}}
-                <div class="card shadow-premium border-0 overflow-hidden mt-4" style="border-radius: 20px;">
+                <div class="card card-premium overflow-hidden mt-4">
                     <div class="card-header border-0 bg-white py-3 px-4">
                         <h3 class="card-title font-weight-600 text-muted small text-uppercase" style="letter-spacing: 1px;">Service Availability</h3>
                     </div>
@@ -146,7 +146,7 @@
                 </div>
 
                 {{-- Gallery Partial --}}
-                <div class="card shadow-premium border-0 overflow-hidden mt-4" style="border-radius: 20px;">
+                <div class="card card-premium overflow-hidden mt-4">
                     <div class="card-header border-0 bg-white py-3 px-4">
                         <h3 class="card-title font-weight-600 text-muted small text-uppercase" style="letter-spacing: 1px;">Regional Gallery Collection</h3>
                     </div>
@@ -168,7 +168,7 @@
                 @include('admin.locations.partials.map-card')
 
                 {{-- Featured Image Partial --}}
-                <div class="card border-0 shadow-premium mb-4" style="border-radius: 20px; overflow: hidden;">
+                <div class="card card-premium mb-4 overflow-hidden">
                     <div class="card-header bg-white border-0 py-3 px-4">
                         <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
                             <i class="fas fa-camera mr-2 text-primary opacity-50"></i> Visual Identity

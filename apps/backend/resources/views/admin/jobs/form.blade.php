@@ -39,7 +39,7 @@
             {{-- Main Content Column --}}
             <div class="col-md-8">
                 {{-- Basic Information --}}
-                <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
+                <div class="card card-premium overflow-hidden">
                     <div class="card-header border-0 bg-white py-3 px-4">
                         <h3 class="card-title font-weight-bold text-dark text-uppercase small" style="letter-spacing: 1px;">General Information</h3>
                     </div>
@@ -69,7 +69,7 @@
                 </div>
 
                 {{-- Salary & Benefits --}}
-                <div class="card shadow-premium border-0 overflow-hidden mt-4" style="border-radius: 20px;">
+                <div class="card card-premium overflow-hidden mt-4">
                     <div class="card-header border-0 bg-white py-3 px-4">
                         <h3 class="card-title font-weight-600 text-muted small text-uppercase" style="letter-spacing: 1px;">Compensation</h3>
                     </div>
@@ -89,7 +89,7 @@
                 </div>
 
                 {{-- Requirements --}}
-                <div class="card shadow-premium border-0 overflow-hidden mt-4" style="border-radius: 20px;">
+                <div class="card card-premium overflow-hidden mt-4">
                     <div class="card-header border-0 bg-white py-3 px-4">
                         <h3 class="card-title font-weight-600 text-muted small text-uppercase" style="letter-spacing: 1px;">Job Specs & Workspace</h3>
                     </div>
@@ -120,7 +120,7 @@
 
 
                 {{-- Gallery Collection --}}
-                <div class="card shadow-premium border-0 overflow-hidden mt-4" style="border-radius: 20px;">
+                <div class="card card-premium overflow-hidden mt-4">
                     <div class="card-header border-0 bg-white py-3 px-4">
                         <h3 class="card-title font-weight-600 text-muted small text-uppercase" style="letter-spacing: 1px;">Office Photos</h3>
                     </div>
@@ -137,7 +137,7 @@
 
                 @if($job->exists)
                 {{-- Recent Applications --}}
-                <div class="card border-0 shadow-premium overflow-hidden mt-4" style="border-radius: 24px;">
+                <div class="card card-premium overflow-hidden mt-4">
                     <div class="card-header border-0 bg-white py-4 px-4 d-flex justify-content-between align-items-center">
                         <h3 class="card-title font-weight-bold text-dark mb-0"><i class="fas fa-file-invoice mr-2 text-success opacity-50"></i> Recent Applications ({{ $applicationsCount ?? 0 }})</h3>
                     </div>
@@ -147,7 +147,7 @@
                 </div>
                 @endif
                 {{-- Display & Billing Options --}}
-                <div class="card shadow-premium border-0 mt-4 overflow-hidden" style="border-radius: 20px;">
+                <div class="card card-premium mt-4 overflow-hidden">
                     <div class="card-header border-0 bg-white py-3 px-4">
                         <h3 class="card-title font-weight-bold text-dark text-uppercase small" style="letter-spacing: 1px;"><i class="fas fa-cog mr-2 text-secondary"></i> Display & Billing Options</h3>
                     </div>
@@ -185,7 +185,7 @@
                 @include('admin.jobs.partials.action-buttons')
 
                 {{-- Primary Media --}}
-                <div class="card border-0 shadow-premium mb-4" style="border-radius: 20px; overflow: hidden;">
+                <div class="card card-premium mb-4 overflow-hidden">
                     <div class="card-header bg-white border-0 py-3 px-4">
                         <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
                             <i class="fas fa-camera mr-2 text-primary opacity-50"></i> Visual Identity
@@ -203,7 +203,7 @@
                 </div>
 
                 {{-- Classification --}}
-                <div class="card border-0 shadow-premium mb-4 overflow-hidden" style="border-radius: 20px;">
+                <div class="card card-premium mb-4 overflow-hidden">
                     <div class="card-header bg-white border-0 py-3 px-4">
                         <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
                             <i class="fas fa-sitemap mr-2 text-primary opacity-50"></i> Classification

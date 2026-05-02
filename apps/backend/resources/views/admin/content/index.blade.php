@@ -4,17 +4,19 @@
 
 @section('content_header')
     <div class="container-fluid">
-        <div class="row mb-2">
-            <div class="col-sm-6">
+        <div class="row mb-4 align-items-center">
+            <div class="col-sm-8">
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-edit mr-2 text-primary"></i> Page Content Manager
                 </h1>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">
+                    Theme-specific content orchestration for dynamic platform verticals.
+                </p>
             </div>
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Content Pages</li>
-                </ol>
+            <div class="col-sm-4 text-right">
+                <a href="{{ route('admin.welcome') }}" class="btn btn-back shadow-sm">
+                    <i class="fas fa-arrow-left mr-1"></i> Dashboard
+                </a>
             </div>
         </div>
     </div>
@@ -39,14 +41,9 @@
         </div>
     </div>
 
-    <div class="card card-primary card-outline shadow-sm border-0">
-        <div class="card-header border-0 bg-white py-3">
-            <h3 class="card-title font-weight-bold text-muted">Editable Page Sections</h3>
-            <div class="card-tools">
-                <button type="button" class="btn btn-tool" data-card-widget="maximize">
-                    <i class="fas fa-expand"></i>
-                </button>
-            </div>
+    <div class="card card-premium overflow-hidden">
+        <div class="card-header border-0 bg-white py-3 px-4">
+            <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">Editable Page Sections</h3>
         </div>
 
         <div class="card-body p-0">

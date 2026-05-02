@@ -11,10 +11,11 @@
             </h1>
             <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Real-time revenue metrics and inventory intelligence for <span class="text-primary font-weight-bold">{{ now()->format('F d, Y') }}</span>.</p>
         </div>
-        <div class="d-flex align-items-center">
-            <span class="badge badge-success-light text-success px-3 py-2 rounded-pill shadow-sm border-0 font-weight-bold" style="font-size: 0.7rem; letter-spacing: 0.5px;">
-                <i class="fas fa-sync-alt fa-spin mr-1"></i> LIVE MARKET DATA
-            </span>
+        <div class="d-none d-md-block text-right">
+            <div class="bg-dark px-3 py-2 rounded-xl shadow-premium border border-white border-opacity-10 d-inline-block text-center" style="min-width: 220px;">
+                <div id="dashboard-clock" class="h4 font-weight-bold text-primary mb-0" style="letter-spacing: 2px; font-family: 'Outfit', sans-serif; font-variant-numeric: tabular-nums;">00:00:00</div>
+                <div class="text-white smallest font-weight-bold uppercase letter-spacing-1 opacity-50">{{ now()->format('l, d M Y') }}</div>
+            </div>
         </div>
     </div>
 @stop
@@ -23,12 +24,12 @@
     {{-- Quick Actions Row (Ecommerce Focus) --}}
     <div class="row mb-4 mx-1">
         <div class="col-6 col-md-3 px-1">
-            <a href="{{ route('admin.products.create') }}" class="btn btn-primary d-flex align-items-center justify-content-center py-3 w-100 shadow-sm font-weight-bold" style="border-radius: 12px;">
+            <a href="{{ route('admin.products.create') }}" class="btn btn-primary d-flex align-items-center justify-content-center py-3 w-100 shadow-sm font-weight-bold" style="border-radius: 12px; min-height: 62px;">
                 <i class="fas fa-plus-circle mr-2"></i> NEW PRODUCT
             </a>
         </div>
         <div class="col-6 col-md-3 px-1">
-             <a href="{{ route('admin.product-orders.index') }}" class="btn btn-default d-flex align-items-center justify-content-center py-3 w-100 shadow-sm font-weight-bold border-light bg-white" style="border-radius: 12px; color: var(--dark-muted) !important;">
+             <a href="{{ route('admin.product-orders.index') }}" class="btn btn-default d-flex align-items-center justify-content-center py-3 w-100 shadow-sm font-weight-bold border-light bg-white" style="border-radius: 12px; color: var(--dark-muted) !important; min-height: 62px;">
                 <i class="fas fa-truck mr-2 text-primary"></i> MANAGE ORDERS
             </a>
         </div>
@@ -66,8 +67,8 @@
         .section-header h5 { margin: 0; letter-spacing: 1.2px; font-size: 0.85rem; opacity: 0.8; }
         
         /* Modern Card kit */
-        .dashboard-blueprint .card { border-radius: 20px; border: 1px solid rgba(255,255,255,0.4); background: rgba(255,255,255,0.8); backdrop-filter: blur(10px); transition: all 0.25s ease; box-shadow: 0 4px 6px rgba(0,0,0,0.03); }
-        .dashboard-blueprint .card:hover { transform: translateY(-5px); box-shadow: var(--shadow-premium) !important; border-color: rgba(70, 165, 172, 0.2); }
+        .dashboard-blueprint .card { border-radius: 20px; border: none; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: var(--premium-shadow); border: 1px solid rgba(255,255,255,0.4); background: rgba(255,255,255,0.8); backdrop-filter: blur(15px); }
+        .dashboard-blueprint .card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,0.08) !important; border-color: rgba(70, 165, 172, 0.2); }
 
         /* Color Utility Factory */
         .bg-primary-light { background: rgba(70, 165, 172, 0.1) !important; }
@@ -99,6 +100,14 @@
         document.addEventListener('DOMContentLoaded', function () {
             const data = @json($metrics['js_data']);
             
+            // Dashboard Clock
+            function updateClock() {
+                const now = new Date();
+                document.getElementById('dashboard-clock').textContent = now.toLocaleTimeString();
+            }
+            setInterval(updateClock, 1000);
+            updateClock();
+
             // DRY Chart Configuration
             const baseOptions = {
                 responsive: true,

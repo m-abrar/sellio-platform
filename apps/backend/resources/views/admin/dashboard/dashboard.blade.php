@@ -12,8 +12,8 @@
             <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Welcome back, {{ auth()->user()->name }}. Performance metrics are live for <span class="text-primary font-weight-bold">{{ now()->format('F d, Y') }}</span>.</p>
         </div>
         <div class="d-none d-md-block text-right">
-            <div class="bg-dark px-3 py-2 rounded-xl shadow-premium border border-white border-opacity-10 d-inline-block">
-                <div id="dashboard-clock" class="h4 font-weight-bold text-primary mb-0" style="letter-spacing: 2px; font-family: 'Outfit', sans-serif;">00:00:00</div>
+            <div class="bg-dark px-3 py-2 rounded-xl shadow-premium border border-white border-opacity-10 d-inline-block text-center" style="min-width: 220px;">
+                <div id="dashboard-clock" class="h4 font-weight-bold text-primary mb-0" style="letter-spacing: 2px; font-family: 'Outfit', sans-serif; font-variant-numeric: tabular-nums;">00:00:00</div>
                 <div class="text-white smallest font-weight-bold uppercase letter-spacing-1 opacity-50">{{ now()->format('l, d M Y') }}</div>
             </div>
         </div>
@@ -27,7 +27,7 @@
         <!-- Add Listing Dropdown -->
         <div class="col-6 col-md-3 px-1">
             <div class="dropdown">
-                <button class="btn btn-primary d-flex align-items-center justify-content-center py-3 w-100 shadow-premium font-weight-bold" type="button" data-toggle="dropdown" style="border-radius: 12px; border: none !important;">
+                <button class="btn btn-primary d-flex align-items-center justify-content-center py-3 w-100 shadow-premium font-weight-bold" type="button" data-toggle="dropdown" style="border-radius: 12px; border: none !important; min-height: 62px;">
                     <i class="fas fa-plus-circle mr-2"></i> ADD LISTING <i class="fas fa-caret-down ml-2"></i>
                 </button>
                 <div class="dropdown-menu dropdown-menu-right shadow-lg border-0 animate__animated animate__fadeInUp" style="border-radius: 20px; min-width: 240px; padding: 12px; background: rgba(255,255,255,0.95); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.2) !important;">
@@ -54,7 +54,7 @@
         <!-- Add Booking Dropdown -->
         <div class="col-6 col-md-3 px-1">
             <div class="dropdown">
-                <button class="btn btn-default d-flex align-items-center justify-content-center py-3 w-100 shadow-sm font-weight-bold bg-white border-light" type="button" data-toggle="dropdown" style="border-radius: 12px; color: var(--dark-muted) !important;">
+                <button class="btn btn-default d-flex align-items-center justify-content-center py-3 w-100 shadow-sm font-weight-bold bg-white border-light" type="button" data-toggle="dropdown" style="border-radius: 12px; color: var(--dark-muted) !important; min-height: 62px;">
                     <i class="fas fa-calendar-plus mr-2 text-primary"></i> ADD BOOKING <i class="fas fa-caret-down ml-2"></i>
                 </button>
                 <div class="dropdown-menu dropdown-menu-right shadow-lg border-0 animate__animated animate__fadeInUp" style="border-radius: 20px; min-width: 240px; padding: 12px; background: rgba(255,255,255,0.95); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.2) !important;">

@@ -1,7 +1,7 @@
-<div class="card shadow-sm border-0 sticky-top" style="top: 20px;">
-    <div class="card-header bg-dark d-flex align-items-center py-3" style="border-bottom: 3px solid var(--brand-primary) !important;">
-        <h3 class="card-title text-white mb-0 font-weight-bold">
-            <i class="fas fa-cog mr-2 text-primary"></i> Status & Actions
+<div class="card card-premium shadow-sm border-0 sticky-top overflow-hidden" style="top: 20px;">
+    <div class="card-header bg-dark d-flex align-items-center py-3" style="border-bottom: 3px solid var(--primary) !important; background: #1e293b !important;">
+        <h3 class="card-title text-white mb-0 font-weight-bold smallest text-uppercase letter-spacing-1">
+            <i class="fas fa-rocket mr-2 text-primary"></i> {{ __('Protocol & Actions') }}
         </h3>
     </div>
     <div class="card-body">
