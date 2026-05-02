@@ -11,10 +11,10 @@
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Track marketplace transactions, fulfillment status, and customer shipments.</p>
             </div>
-            <div class="col-sm-6 text-right">
-                <ol class="breadcrumb float-sm-right bg-transparent p-0 small">
-                    <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}">{{ __('Dashboard') }}</a></li>
-                    <li class="breadcrumb-item active">{{ __('Product Orders') }}</li>
+            <div class="col-sm-6 d-flex flex-column align-items-end justify-content-center">
+                <ol class="breadcrumb bg-transparent p-0 mb-0 smallest font-weight-bold text-uppercase letter-spacing-1">
+                    <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}" class="text-primary">Dashboard</a></li>
+                    <li class="breadcrumb-item active text-muted">Product Orders</li>
                 </ol>
             </div>
         </div>

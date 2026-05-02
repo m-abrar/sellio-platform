@@ -6,7 +6,7 @@
                     <h6 class="m-0 font-weight-bold text-secondary text-uppercase small" style="letter-spacing: 1px;">Revenue Analytics</h6>
                     <p class="text-muted small mb-0">Monthly Gross vs Fulfillment Costs</p>
                 </div>
-                <div class="dropdown no-arrow">
+                <div class="dropdown no-arrow ml-auto">
                     <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
                     </a>

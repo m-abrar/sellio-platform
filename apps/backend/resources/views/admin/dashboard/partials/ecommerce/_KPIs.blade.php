@@ -64,42 +64,42 @@
             {{-- Metrics stats bottom row --}}
             <div class="col-12 mt-3">
                 <div class="row">
-                    <div class="col-md-4">
-                        <div class="card glass-premium-card border-0 shadow-sm">
-                            <div class="card-body py-2 px-3">
-                                <div class="d-flex align-items-center justify-content-between mb-2">
-                                    <span class="text-muted small font-weight-bold text-uppercase" style="letter-spacing: 0.8px; font-size: 10px;">Active Customers</span>
-                                    <div class="icon-box-soft bg-success-soft" style="width: 34px; height: 34px; font-size: 0.9rem; border-radius: 8px;">
-                                        <i class="fas fa-users text-success"></i>
-                                    </div>
+                    <div class="col-md-4 mb-3 mb-md-0">
+                        <div class="card border-0 shadow-premium" style="border-radius: 20px;">
+                            <div class="card-body py-3 px-4 d-flex align-items-center justify-content-between">
+                                <div>
+                                    <span class="text-muted smallest font-weight-bold text-uppercase letter-spacing-1 mb-1 d-block">Active Customers</span>
+                                    <h3 class="font-weight-bold mb-0 text-dark" style="font-size: 1.6rem; letter-spacing: -1px; font-family: 'Outfit', sans-serif;">{{ $metrics['secondary_metrics']['active_customers'] }}</h3>
                                 </div>
-                                <h2 class="font-weight-bold mb-0 text-dark" style="font-size: 1.6rem; letter-spacing: -0.5px;">{{ $metrics['secondary_metrics']['active_customers'] }}</h2>
+                                <div class="icon-box-soft ml-auto bg-success-soft text-success shadow-xs" style="width: 48px; height: 48px; font-size: 1.2rem; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-users"></i>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="card glass-premium-card border-0 shadow-sm">
-                            <div class="card-body py-2 px-3">
-                                <div class="d-flex align-items-center justify-content-between mb-2">
-                                    <span class="text-muted small font-weight-bold text-uppercase" style="letter-spacing: 0.8px; font-size: 10px;">Live Products</span>
-                                    <div class="icon-box-soft bg-info-soft" style="width: 34px; height: 34px; font-size: 0.9rem; border-radius: 8px;">
-                                        <i class="fas fa-shopping-bag text-info"></i>
-                                    </div>
+                    <div class="col-md-4 mb-3 mb-md-0">
+                        <div class="card border-0 shadow-premium" style="border-radius: 20px;">
+                            <div class="card-body py-3 px-4 d-flex align-items-center justify-content-between">
+                                <div>
+                                    <span class="text-muted smallest font-weight-bold text-uppercase letter-spacing-1 mb-1 d-block">Live Products</span>
+                                    <h3 class="font-weight-bold mb-0 text-dark" style="font-size: 1.6rem; letter-spacing: -1px; font-family: 'Outfit', sans-serif;">{{ $metrics['secondary_metrics']['live_products'] }}</h3>
                                 </div>
-                                <h2 class="font-weight-bold mb-0 text-dark" style="font-size: 1.6rem; letter-spacing: -0.5px;">{{ $metrics['secondary_metrics']['live_products'] }}</h2>
+                                <div class="icon-box-soft ml-auto bg-info-soft text-info shadow-xs" style="width: 48px; height: 48px; font-size: 1.2rem; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-shopping-bag"></i>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="card glass-premium-card border-0 shadow-sm">
-                            <div class="card-body py-2 px-3">
-                                <div class="d-flex align-items-center justify-content-between mb-2">
-                                    <span class="text-muted small font-weight-bold text-uppercase" style="letter-spacing: 0.8px; font-size: 10px;">Conversion Rate</span>
-                                    <div class="icon-box-soft bg-warning-soft" style="width: 34px; height: 34px; font-size: 0.9rem; border-radius: 8px;">
-                                        <i class="fas fa-funnel-dollar text-warning"></i>
-                                    </div>
+                    <div class="col-md-4 mb-3 mb-md-0">
+                        <div class="card border-0 shadow-premium" style="border-radius: 20px;">
+                            <div class="card-body py-3 px-4 d-flex align-items-center justify-content-between">
+                                <div>
+                                    <span class="text-muted smallest font-weight-bold text-uppercase letter-spacing-1 mb-1 d-block">Conversion Rate</span>
+                                    <h3 class="font-weight-bold mb-0 text-dark" style="font-size: 1.6rem; letter-spacing: -1px; font-family: 'Outfit', sans-serif;">{{ $metrics['secondary_metrics']['conversion_rate'] }}</h3>
                                 </div>
-                                <h2 class="font-weight-bold mb-0 text-dark" style="font-size: 1.6rem; letter-spacing: -0.5px;">{{ $metrics['secondary_metrics']['conversion_rate'] }}</h2>
+                                <div class="icon-box-soft ml-auto bg-warning-soft text-warning shadow-xs" style="width: 48px; height: 48px; font-size: 1.2rem; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-funnel-dollar"></i>
+                                </div>
                             </div>
                         </div>
                     </div>

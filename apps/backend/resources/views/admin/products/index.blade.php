@@ -11,11 +11,6 @@
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-boxes mr-2 text-primary"></i> Inventory & Products
                 </h1>
-                <ol class="breadcrumb bg-transparent p-0 mt-2 small">
-                    <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Products</li>
-                </ol>
-                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Track and manage physical inventory, digital goods, and retail listings.</p>
             </div>
             <div class="col-sm-4 text-right">
                 <a href="{{ route('admin.products.create') }}" class="btn btn-primary btn-sm rounded-pill px-4 font-weight-bold shadow-premium">
@@ -79,9 +74,9 @@
     </div>
 
     <div class="card card-primary card-outline shadow-sm">
-        <div class="card-header border-0 bg-white py-3">
-            <h3 class="card-title font-weight-600 text-muted">Product Catalog</h3>
-            <div class="card-tools">
+        <div class="card-header border-0 bg-white py-4 px-4 d-flex justify-content-between align-items-center">
+            <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1">Product Catalog</h3>
+            <div class="card-tools d-flex align-items-center">
                 <button type="button" class="btn btn-tool" data-card-widget="maximize">
                     <i class="fas fa-expand"></i>
                 </button>

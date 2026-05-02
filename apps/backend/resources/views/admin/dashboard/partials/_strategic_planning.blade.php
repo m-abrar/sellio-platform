@@ -52,7 +52,7 @@
                 <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1">
                     <i class="fas fa-map-marked-alt mr-2 text-primary opacity-50"></i> Geospatial Demand Heatmap
                 </h3>
-                <span class="badge badge-primary-light px-3 py-2 rounded-pill font-weight-bold smallest uppercase animate-pulse">Live Transmission</span>
+                <span class="badge badge-primary-light ml-auto px-3 py-2 rounded-pill font-weight-bold smallest uppercase animate-pulse">Live Transmission</span>
             </div>
             <div class="card-body p-0">
                 <div id="heatmap" style="height: 400px; filter: grayscale(0.2) contrast(1.1);"></div> 

@@ -159,6 +159,7 @@ Route::prefix('admin')
         Route::get('products/{product}/duplicate', [ProductController::class, 'duplicate'])->name('products.duplicate')->middleware('module:products');
         
         Route::controller(OrderController::class)->prefix('product-orders')->name('product-orders.')->middleware('module:products')->group(function () {
+            Route::post('/bulk-update', 'bulkUpdate')->name('bulk-update');
             Route::post('/{order}/status', 'updateStatus')->name('update-status');
         });
         Route::resource('product-orders', OrderController::class)->middleware('module:products');

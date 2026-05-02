@@ -81,7 +81,42 @@ class OrderController extends Controller
         if ($oldStatus !== $order->status && $order->user) {
             $order->user->notify(new \App\Notifications\OrderStatusChanged($order));
         }
-
         return redirect()->back()->with('success', 'Order status updated successfully.');
+    }
+
+    public function bulkUpdate(Request $request)
+    {
+        $validated = $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'exists:orders,id',
+            'bulk_status' => 'required|string',
+        ]);
+
+        $orders = Order::whereIn('id', $validated['ids'])->get();
+        $count = 0;
+
+        foreach ($orders as $order) {
+            $oldStatus = $order->status;
+            $order->status = $validated['bulk_status'];
+            
+            // Set timestamps based on status
+            if ($order->status === Order::STATUS_SHIPPED && !$order->shipped_at) {
+                $order->shipped_at = now();
+            }
+
+            if ($order->status === Order::STATUS_DELIVERED && !$order->delivered_at) {
+                $order->delivered_at = now();
+            }
+
+            $order->save();
+            $count++;
+
+            // Notify customer if status changed
+            if ($oldStatus !== $order->status && $order->user) {
+                $order->user->notify(new \App\Notifications\OrderStatusChanged($order));
+            }
+        }
+
+        return redirect()->back()->with('success', $count . ' orders updated successfully.');
     }
 }

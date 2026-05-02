@@ -46,7 +46,7 @@
         <div class="card border-0 shadow-premium h-100 overflow-hidden" style="border-radius: 24px;">
             <div class="card-header bg-white border-0 py-4 px-4 d-flex justify-content-between align-items-center">
                 <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1">Revenue Analytics</h3>
-                <span class="badge badge-success-light px-3 py-2 rounded-pill font-weight-bold smallest uppercase">MoM TREND</span>
+                <span class="badge badge-success-light ml-auto px-3 py-2 rounded-pill font-weight-bold smallest uppercase">MoM TREND</span>
             </div>
             <div class="card-body py-2 px-4 d-flex flex-column justify-content-center">
                 <div style="height: 280px;"><canvas id="revenueChart"></canvas></div>

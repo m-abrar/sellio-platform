@@ -86,7 +86,7 @@
                                     <span class="text-muted smallest font-weight-bold text-uppercase letter-spacing-1 mb-1 d-block">{{ $s['label'] }}</span>
                                     <h3 class="font-weight-bold mb-0 text-dark" style="font-size: 1.6rem; letter-spacing: -1px; font-family: 'Outfit', sans-serif;">{{ $s['val'] }}</h3>
                                 </div>
-                                <div class="icon-box-soft bg-{{ $s['bg'] }}-soft text-{{ $s['bg'] }} shadow-xs" style="width: 48px; height: 48px; font-size: 1.2rem; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <div class="icon-box-soft ml-auto bg-{{ $s['bg'] }}-soft text-{{ $s['bg'] }} shadow-xs" style="width: 48px; height: 48px; font-size: 1.2rem; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
                                     <i class="fas {{ $s['icon'] }}"></i>
                                 </div>
                             </div>
