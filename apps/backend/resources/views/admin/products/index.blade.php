@@ -74,9 +74,9 @@
     </div>
 
     <div class="card card-primary card-outline shadow-sm">
-        <div class="card-header border-0 bg-white py-4 px-4 d-flex justify-content-between align-items-center">
-            <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1">Product Catalog</h3>
-            <div class="card-tools d-flex align-items-center">
+        <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
+            <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">Product Catalog</h3>
+            <div class="card-tools d-flex align-items-center ml-auto">
                 <button type="button" class="btn btn-tool" data-card-widget="maximize">
                     <i class="fas fa-expand"></i>
                 </button>

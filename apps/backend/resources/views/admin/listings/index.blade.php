@@ -14,11 +14,79 @@
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Audit marketplace submissions, moderation statuses, and lifecycle states.</p>
             </div>
-            <div class="col-sm-5 d-flex flex-column align-items-end justify-content-center">
-                <ol class="breadcrumb bg-transparent p-0 mb-0 smallest font-weight-bold text-uppercase letter-spacing-1">
-                    <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}" class="text-primary">Dashboard</a></li>
-                    <li class="breadcrumb-item active text-muted">Marketplace</li>
-                </ol>
+            <div class="col-sm-5 d-flex align-items-center justify-content-end">
+                <div class="dropdown">
+                    <button class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-premium dropdown-toggle" type="button" id="addListingDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-plus-circle mr-1"></i> ADD NEW ASSET
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right shadow-lg border-0 animate__animated animate__fadeInUp" aria-labelledby="addListingDropdown" style="border-radius: 15px; min-width: 240px;">
+                        <h6 class="dropdown-header text-uppercase smallest letter-spacing-1 font-weight-bold text-muted mb-2">Select Listing Vertical</h6>
+                        
+                        @if(module_enabled('properties'))
+                        <a class="dropdown-item d-flex align-items-center py-2 px-4 transition-all" href="{{ route('admin.properties.create') }}">
+                            <div class="icon-box-soft bg-success-soft text-success mr-3 rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; min-width: 32px;">
+                                <i class="fas fa-home smallest"></i>
+                            </div>
+                            <span class="font-weight-bold small">Property Listing</span>
+                        </a>
+                        @endif
+
+                        @if(module_enabled('autos'))
+                        <a class="dropdown-item d-flex align-items-center py-2 px-4 transition-all" href="{{ route('admin.autos.create') }}">
+                            <div class="icon-box-soft bg-primary-soft text-primary mr-3 rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; min-width: 32px;">
+                                <i class="fas fa-car smallest"></i>
+                            </div>
+                            <span class="font-weight-bold small">Automotive Asset</span>
+                        </a>
+                        @endif
+
+                        @if(module_enabled('events'))
+                        <a class="dropdown-item d-flex align-items-center py-2 px-4 transition-all" href="{{ route('admin.events.create') }}">
+                            <div class="icon-box-soft bg-info-soft text-info mr-3 rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; min-width: 32px;">
+                                <i class="fas fa-calendar-alt smallest"></i>
+                            </div>
+                            <span class="font-weight-bold small">Event / Ticket</span>
+                        </a>
+                        @endif
+
+                        @if(module_enabled('jobs'))
+                        <a class="dropdown-item d-flex align-items-center py-2 px-4 transition-all" href="{{ route('admin.jobs.create') }}">
+                            <div class="icon-box-soft bg-warning-soft text-warning mr-3 rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; min-width: 32px;">
+                                <i class="fas fa-briefcase smallest"></i>
+                            </div>
+                            <span class="font-weight-bold small">Job Opportunity</span>
+                        </a>
+                        @endif
+
+                        @if(module_enabled('services'))
+                        <a class="dropdown-item d-flex align-items-center py-2 px-4 transition-all" href="{{ route('admin.services.create') }}">
+                            <div class="icon-box-soft bg-danger-soft text-danger mr-3 rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; min-width: 32px;">
+                                <i class="fas fa-tools smallest"></i>
+                            </div>
+                            <span class="font-weight-bold small">Professional Service</span>
+                        </a>
+                        @endif
+
+                        @if(module_enabled('classifieds'))
+                        <a class="dropdown-item d-flex align-items-center py-2 px-4 transition-all" href="{{ route('admin.classifieds.create') }}">
+                            <div class="icon-box-soft bg-secondary-soft text-secondary mr-3 rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; min-width: 32px;">
+                                <i class="fas fa-tags smallest"></i>
+                            </div>
+                            <span class="font-weight-bold small">General Classified</span>
+                        </a>
+                        @endif
+
+                        @if(module_enabled('products'))
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item d-flex align-items-center py-2 px-4 transition-all" href="{{ route('admin.products.create') }}">
+                            <div class="icon-box-soft bg-dark-soft text-dark mr-3 rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; min-width: 32px;">
+                                <i class="fas fa-shopping-bag smallest"></i>
+                            </div>
+                            <span class="font-weight-bold small">Retail Product</span>
+                        </a>
+                        @endif
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -70,11 +138,11 @@
         </div>
 
         <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
-            <div class="card-header border-0 bg-white py-4 px-4 d-flex justify-content-between align-items-center">
-                <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0" style="letter-spacing: 1px;">
+            <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
+                <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none" style="letter-spacing: 1px;">
                     {{ $type !== 'all' ? 'Filtering for ' . \Illuminate\Support\Str::title($type) : 'Marketplace Catalog' }}
                 </h3>
-                <div class="card-tools d-flex align-items-center">
+                <div class="card-tools d-flex align-items-center ml-auto">
                     <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase mr-2">
                         <i class="fas fa-database mr-1"></i> {{ $listings->total() }} ASSETS FOUND
                     </span>
@@ -229,6 +297,11 @@
 @push('css')
 <style>
     .transition-all { transition: all 0.25s ease-in-out; }
+    .dropdown-item.transition-all:hover {
+        background-color: #f8f9fa;
+        transform: translateX(5px);
+        color: var(--primary);
+    }
 </style>
 @endpush
 
