@@ -13,7 +13,7 @@
                 </h1>
             </div>
             <div class="col-sm-4 text-right">
-                <a href="{{ route('admin.products.create') }}" class="btn btn-primary btn-sm rounded-pill px-4 font-weight-bold shadow-premium">
+                <a href="{{ route('admin.products.create') }}" class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-premium">
                     <i class="fas fa-plus-circle mr-1"></i> ADD PRODUCT
                 </a>
             </div>

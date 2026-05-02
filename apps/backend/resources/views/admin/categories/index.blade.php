@@ -11,13 +11,11 @@
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-tags mr-2 text-primary"></i> Taxonomy Architecture
                 </h1>
-                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Define and organize hierarchal categories across all marketplace verticals.</p>
             </div>
-            <div class="col-sm-4 d-flex flex-column align-items-end justify-content-center">
-                <ol class="breadcrumb bg-transparent p-0 mb-0 smallest font-weight-bold text-uppercase letter-spacing-1">
-                    <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}" class="text-primary">Dashboard</a></li>
-                    <li class="breadcrumb-item active text-muted">Categories</li>
-                </ol>
+            <div class="col-sm-4 text-right">
+                <a href="{{ route('admin.categories.create') }}" class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-premium">
+                    <i class="fas fa-plus-circle mr-1"></i> ADD CATEGORY
+                </a>
             </div>
         </div>
     </div>
@@ -34,9 +32,6 @@
                 <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase mr-3">
                     <i class="fas fa-sitemap mr-1"></i> {{ count($categories) }} CATEGORIES FOUND
                 </span>
-                <a href="{{ route('admin.categories.create') }}" class="btn btn-primary btn-sm rounded-pill px-4 font-weight-bold shadow-sm mr-2">
-                    <i class="fas fa-plus-circle mr-1"></i> ADD CATEGORY
-                </a>
                 <button type="button" class="btn btn-tool text-muted" data-card-widget="maximize">
                     <i class="fas fa-expand"></i>
                 </button>
