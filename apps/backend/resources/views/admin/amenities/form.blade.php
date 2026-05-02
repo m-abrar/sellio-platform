@@ -117,6 +117,7 @@
                             'multiple' => true,
                             'model' => \App\Models\Amenity::class,
                             'id' => $amenity->id ?? null,
+                            'noCard' => true,
                         ])
                     </div>
                 </div>
@@ -140,6 +141,7 @@
                             'multiple' => false,
                             'model' => \App\Models\Amenity::class,
                             'id' => $amenity->id ?? null,
+                            'noCard' => true,
                         ])
                     </div>
                 </div>

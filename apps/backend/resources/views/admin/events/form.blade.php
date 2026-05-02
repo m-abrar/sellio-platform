@@ -125,6 +125,7 @@
                             'multiple' => true,
                             'model' => \App\Models\Event::class,
                             'id' => $event->id ?? null,
+                            'noCard' => true,
                         ])
                     </div>
                 </div>
@@ -202,6 +203,7 @@
                             'multiple' => false,
                             'model' => \App\Models\Event::class,
                             'id' => $event->id ?? null,
+                            'noCard' => true,
                         ])
                     </div>
                 </div>

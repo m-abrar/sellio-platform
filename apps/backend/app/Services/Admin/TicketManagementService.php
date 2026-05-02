@@ -36,4 +36,12 @@ class TicketManagementService
         
         return $ticket;
     }
+
+    /**
+     * Bulk update ticket status or priority.
+     */
+    public function bulkUpdate(array $ids, string $type, string $value): void
+    {
+        Ticket::whereIn('id', $ids)->update([$type => $value]);
+    }
 }

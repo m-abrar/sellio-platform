@@ -6,26 +6,26 @@
 
 @section('content_header')
     <div class="container-fluid">
-        <div class="row mb-4 align-items-end">
-            <div class="col-sm-6">
+        <div class="row mb-4 align-items-center">
+            <div class="col-sm-7">
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-user-shield mr-2 text-primary"></i> Access Control
                 </h1>
-                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Manage system-wide authority levels and map granular permissions to security roles.</p>
-            </div>
-            <div class="col-sm-6 text-right">
-                <div class="d-flex justify-content-end align-items-center" style="gap: 10px;">
-                    <a href="{{ route('admin.permissions.index') }}" class="btn btn-outline-info btn-sm rounded-pill px-3 font-weight-bold shadow-xs border">
-                        <i class="fas fa-key mr-1"></i> PERMISSIONS
-                    </a>
-                    <a href="{{ route('admin.roles.create') }}" class="btn btn-primary btn-sm rounded-pill px-4 font-weight-bold shadow-lg ml-2">
-                        <i class="fas fa-plus-circle mr-1"></i> ADD SECURITY ROLE
-                    </a>
-                </div>
-                <ol class="breadcrumb float-sm-right bg-transparent p-0 mt-3 small">
+                <ol class="breadcrumb bg-transparent p-0 mt-2 small">
                     <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}">Dashboard</a></li>
                     <li class="breadcrumb-item active">Access Control</li>
                 </ol>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Manage system-wide authority levels and map granular permissions to security roles.</p>
+            </div>
+            <div class="col-sm-5 text-right">
+                <div class="d-flex justify-content-end align-items-center" style="gap: 12px;">
+                    <a href="{{ route('admin.permissions.index') }}" class="btn btn-back shadow-sm px-3 rounded-pill">
+                        <i class="fas fa-key mr-1"></i> Permissions
+                    </a>
+                    <a href="{{ route('admin.roles.create') }}" class="btn btn-primary btn-sm rounded-pill px-4 font-weight-bold shadow-lg">
+                        <i class="fas fa-plus-circle mr-1"></i> ADD SECURITY ROLE
+                    </a>
+                </div>
             </div>
         </div>
     </div>

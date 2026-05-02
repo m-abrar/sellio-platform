@@ -111,6 +111,7 @@
                             'multiple' => true,
                             'model' => \App\Models\Brand::class,
                             'id' => $brand->id ?? null,
+                            'noCard' => true,
                         ])
                     </div>
                 </div>
@@ -134,6 +135,7 @@
                             'multiple' => false,
                             'model' => \App\Models\Brand::class,
                             'id' => $brand->id ?? null,
+                            'noCard' => true,
                         ])
                     </div>
                 </div>

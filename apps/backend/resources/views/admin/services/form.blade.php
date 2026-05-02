@@ -128,6 +128,7 @@
                             'multiple' => true,
                             'model' => \App\Models\Service::class,
                             'id' => $service->id ?? null,
+                            'noCard' => true,
                         ])
                     </div>
                 </div>
@@ -206,6 +207,7 @@
                             'multiple' => false,
                             'model' => \App\Models\Service::class,
                             'id' => $service->id ?? null,
+                            'noCard' => true,
                         ])
                     </div>
                 </div>

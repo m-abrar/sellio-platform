@@ -201,6 +201,7 @@
                             'multiple' => true,
                             'model' => \App\Models\Property::class,
                             'id' => $property->id ?? null,
+                            'noCard' => true,
                         ])
                     </div>
                 </div> {{-- End Gallery Card --}}
@@ -342,6 +343,7 @@
                             'multiple' => false,
                             'model' => \App\Models\Property::class,
                             'id' => $property->id ?? null,
+                            'noCard' => true,
                         ])
                     </div>
                 </div>

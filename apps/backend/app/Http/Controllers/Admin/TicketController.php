@@ -69,4 +69,21 @@ class TicketController extends Controller
 
         return redirect()->back()->with('success', 'Ticket status updated to ' . $request->status);
     }
+
+    /**
+     * Bulk update tickets status or priority.
+     */
+    public function bulkUpdate(Request $request)
+    {
+        $validated = $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'exists:tickets,id',
+            'type' => 'required|string|in:status,priority',
+            'value' => 'required|string',
+        ]);
+
+        $this->ticketService->bulkUpdate($validated['ids'], $validated['type'], $validated['value']);
+
+        return redirect()->back()->with('success', 'Bulk update completed successfully.');
+    }
 }

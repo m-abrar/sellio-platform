@@ -131,6 +131,7 @@
                             'multiple' => true,
                             'model' => \App\Models\JobListing::class,
                             'id' => $job->id ?? null,
+                            'noCard' => true,
                         ])
                     </div>
                 </div>
@@ -198,6 +199,7 @@
                             'multiple' => false,
                             'model' => \App\Models\JobListing::class,
                             'id' => $job->id ?? null,
+                            'noCard' => true,
                         ])
                     </div>
                 </div>

@@ -1,9 +1,13 @@
+@if(!($noCard ?? false))
 <div class="card card-premium overflow-hidden mb-0">
     <div class="card-header border-0 bg-white py-3 px-4">
         <h4 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">{{ $label ?? 'Upload Images' }}</h4>
     </div>
 
     <div class="card-body text-center p-4">
+@else
+    <div class="image-uploader-content text-center p-4">
+@endif
         @php
             $imageUrls = [];
 
@@ -54,8 +58,12 @@
                 </div>
             @endforeach
         </div>
+@if(!($noCard ?? false))
     </div>
 </div>
+@else
+    </div>
+@endif
 
 <style>
     .border-dashed { border-style: dashed !important; transition: all 0.3s ease; }

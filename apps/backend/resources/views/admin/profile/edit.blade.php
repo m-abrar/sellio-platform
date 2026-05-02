@@ -24,9 +24,9 @@
                 </div>
             </div>
             <div class="col-sm-4 text-right">
-                <button type="submit" form="profileUpdateForm" class="btn btn-primary btn-sm rounded-pill px-4 font-weight-bold shadow-lg">
-                    <i class="fas fa-check-circle mr-1"></i> UPDATE MY IDENTITY
-                </button>
+                <a href="{{ route('admin.welcome') }}" class="btn btn-back shadow-sm rounded-pill px-4">
+                    <i class="fas fa-arrow-left mr-1"></i> DASHBOARD
+                </a>
             </div>
         </div>
     </div>
@@ -98,6 +98,25 @@
 
             {{-- Sidebar Column --}}
             <div class="col-md-4">
+                {{-- Standardized Action Card --}}
+                <div class="card card-premium sticky-top overflow-hidden mb-4 shadow-premium" style="top: 20px; border-radius: 20px;">
+                    <div class="card-header bg-dark d-flex align-items-center py-3" style="border-bottom: 3px solid var(--primary) !important; background: #1e293b !important;">
+                        <h3 class="card-title text-white mb-0 font-weight-bold smallest text-uppercase letter-spacing-1">
+                            <i class="fas fa-rocket mr-2 text-primary"></i> Protocol & Actions
+                        </h3>
+                    </div>
+                    <div class="card-body bg-white py-4">
+                        <button type="submit" form="profileUpdateForm" class="btn btn-primary btn-block rounded-pill font-weight-bold shadow-lg py-3 smallest">
+                            <i class="fas fa-check-circle mr-2"></i> UPDATE MY IDENTITY
+                        </button>
+                    </div>
+                    <div class="card-footer bg-light-blue py-2 text-center border-0">
+                        <small class="text-muted smallest font-weight-bold">
+                            <i class="fas fa-shield-alt mr-1"></i> IDENTITY SECURED
+                        </small>
+                    </div>
+                </div>
+
                 {{-- Account Metadata --}}
                 <div class="card border-0 shadow-premium mb-4 overflow-hidden" style="border-radius: 20px;">
                     <div class="card-header bg-dark py-3 px-4 border-0">

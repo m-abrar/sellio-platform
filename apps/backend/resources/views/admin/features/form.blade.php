@@ -114,6 +114,7 @@
                             'multiple' => true,
                             'model' => \App\Models\Feature::class,
                             'id' => $feature->id ?? null,
+                            'noCard' => true,
                         ])
                     </div>
                 </div>
@@ -137,6 +138,7 @@
                             'multiple' => false,
                             'model' => \App\Models\Feature::class,
                             'id' => $feature->id ?? null,
+                            'noCard' => true,
                         ])
                     </div>
                 </div>

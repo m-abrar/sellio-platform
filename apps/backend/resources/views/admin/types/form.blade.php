@@ -130,6 +130,7 @@
                             'multiple' => true,
                             'model' => \App\Models\Type::class,
                             'id' => $type->id ?? null,
+                            'noCard' => true,
                         ])
                     </div>
                 </div>
@@ -154,6 +155,7 @@
                             'multiple' => false,
                             'model' => \App\Models\Type::class,
                             'id' => $type->id ?? null,
+                            'noCard' => true,
                         ])
                     </div>
                 </div>

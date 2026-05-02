@@ -157,6 +157,7 @@
                             'multiple' => true,
                             'model' => \App\Models\Location::class,
                             'id' => $location->id ?? null,
+                            'noCard' => true,
                         ])
                     </div>
                 </div>
@@ -181,6 +182,7 @@
                             'multiple' => false,
                             'model' => \App\Models\Location::class,
                             'id' => $location->id ?? null,
+                            'noCard' => true,
                         ])
                     </div>
                 </div>

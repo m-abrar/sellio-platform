@@ -160,6 +160,7 @@
                             'multiple' => true,
                             'model' => \App\Models\Auto::class,
                             'id' => $auto->id ?? null,
+                            'noCard' => true,
                         ])
                     </div>
                 </div>
@@ -234,6 +235,7 @@
                             'multiple' => false,
                             'model' => \App\Models\Auto::class,
                             'id' => $auto->id ?? null,
+                            'noCard' => true,
                         ])
                     </div>
                 </div>

@@ -140,6 +140,7 @@
                             'multiple' => true,
                             'model' => \App\Models\Category::class,
                             'id' => $category->id ?? null,
+                            'noCard' => true,
                         ])
                     </div>
                 </div>
@@ -163,6 +164,7 @@
                             'multiple' => false,
                             'model' => \App\Models\Category::class,
                             'id' => $category->id ?? null,
+                            'noCard' => true,
                         ])
                     </div>
                 </div>

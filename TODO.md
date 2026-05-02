@@ -78,3 +78,27 @@ Call to undefined method App\Models\Category::products()
 
 
 --------------
+
+http://127.0.0.1:8000/admin/tickets
+Symfony\Component\Routing\Exception\RouteNotFoundException
+vendor\laravel\framework\src\Illuminate\Routing\UrlGenerator.php:526
+Route [admin.tickets.bulk-update] not defined.
+
+------------------
+
+http://127.0.0.1:8000/admin/permissions
+the roles button is not matching the theme
+the breadcrumbs position is not aligned
+----------------
+
+http://127.0.0.1:8000/admin/profile/edit
+the form submit button position, need to be rechecked, does it match with the rest of pages?
+
+-------------------
+
+
+remove the left and right margin to match with the table below it
+
+<div class="row px-4 pt-3"><div class="col-sm-12 col-md-6"><div id="permissions-table_filter" class="dataTables_filter"><label><input type="search" class="form-control form-control-sm form-control-premium shadow-none border-light" placeholder="Search records..." aria-controls="permissions-table" style="width: 220px;"></label></div></div><div class="col-sm-12 col-md-6"></div></div>
+
+---------------------------

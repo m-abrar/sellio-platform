@@ -237,7 +237,10 @@
                 </div>
 
                 {{-- Gallery Collection --}}
-                <div class="card shadow-sm border-0 mt-4">
+                <div class="card card-premium shadow-sm mt-4">
+                    <div class="card-header border-0 bg-white py-3 px-4">
+                        <h3 class="card-title font-weight-600 text-muted small text-uppercase" style="letter-spacing: 1px;">Product Gallery</h3>
+                    </div>
                     <div class="card-body p-0">
                         @include('admin._partials._image-uploader', [
                             'name' => \App\Models\Product::GALLERY_MEDIA,
@@ -245,6 +248,7 @@
                             'multiple' => true,
                             'model' => \App\Models\Product::class,
                             'id' => $product->id ?? null,
+                            'noCard' => true,
                         ])
                     </div>
                 </div>
@@ -269,6 +273,7 @@
                             'multiple' => false,
                             'model' => \App\Models\Product::class,
                             'id' => $product->id ?? null,
+                            'noCard' => true,
                         ])
                     </div>
                 </div>

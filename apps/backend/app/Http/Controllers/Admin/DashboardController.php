@@ -825,7 +825,7 @@ class DashboardController extends Controller
                     'total_payouts' => $costData,
                 ],
                 'type_chart' => [ 
-                    'labels' => $categoryDist->pluck('name')->toArray(),
+                    'labels' => $categoryDist->pluck('title')->toArray(),
                     'data' => $categoryDist->pluck('products_count')->toArray(), 
                 ],
                 'calendar_events' => Campaign::where('is_active', true)

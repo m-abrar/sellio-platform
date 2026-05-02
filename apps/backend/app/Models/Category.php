@@ -181,6 +181,11 @@ class Category extends Model implements HasMedia
         return $this->hasMany(Auto::class);
     }
 
+    public function products(): HasMany
+    {
+        return $this->hasMany(Product::class);
+    }
+
     // --- Scopes ---
 
     /**
@@ -210,7 +215,8 @@ class Category extends Model implements HasMedia
                         'jobs', 
                         'services', 
                         'classifieds', 
-                        'autos'
+                        'autos',
+                        'products'
                     ];
 
                     $count = 0;

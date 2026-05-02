@@ -348,6 +348,7 @@ Route::prefix('admin')
          */
         Route::controller(TicketController::class)->prefix('tickets')->name('tickets.')->group(function () {
             Route::get('/', 'index')->name('index');
+            Route::post('/bulk-update', 'bulkUpdate')->name('bulk-update');
             Route::get('/{ticket}', 'show')->name('show');
             Route::post('/{ticket}/reply', 'reply')->name('reply');
             Route::post('/{ticket}/status', 'updateStatus')->name('status');

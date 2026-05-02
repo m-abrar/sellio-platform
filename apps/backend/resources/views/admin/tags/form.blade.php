@@ -116,6 +116,7 @@
                             'multiple' => true,
                             'model' => \App\Models\Tag::class,
                             'id' => $tag->id ?? null,
+                            'noCard' => true,
                         ])
                     </div>
                 </div>
@@ -139,6 +140,7 @@
                             'multiple' => false,
                             'model' => \App\Models\Tag::class,
                             'id' => $tag->id ?? null,
+                            'noCard' => true,
                         ])
                     </div>
                 </div>
