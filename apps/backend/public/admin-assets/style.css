@@ -456,6 +456,17 @@ textarea.form-control {
 .badge-danger-light  { background-color: rgba(239, 68, 68, 0.1); color: var(--danger-dark); border: 1px solid rgba(239, 68, 68, 0.2); }
 .badge-secondary-light { background-color: rgba(100, 116, 139, 0.1); color: var(--dark); border: 1px solid rgba(100, 116, 139, 0.2); }
 
+/* Fix Notification Badge Overlap */
+.navbar-badge {
+    top: 5px !important;
+    right: 4px !important;
+    padding: 2px 5px !important;
+    font-size: 0.65rem !important;
+    font-weight: 800 !important;
+    border: 1.5px solid #fff !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
 /* --- 11. UTILITIES --- */
 .shadow-xs { box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
 .letter-spacing-1 { letter-spacing: 1px; }
@@ -640,6 +651,9 @@ textarea.form-control {
     padding: 0 !important;
     float: none !important;
     font-size: 0.8rem !important;
+    position: relative !important;
+    top: auto !important;
+    right: auto !important;
 }
 
 .content-header h1 {

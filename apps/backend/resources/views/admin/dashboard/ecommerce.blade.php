@@ -24,12 +24,12 @@
     {{-- Quick Actions Row (Ecommerce Focus) --}}
     <div class="row mb-4 mx-1">
         <div class="col-6 col-md-3 px-1">
-            <a href="{{ route('admin.products.create') }}" class="btn btn-primary d-flex align-items-center justify-content-center py-3 w-100 shadow-sm font-weight-bold" style="border-radius: 12px; min-height: 62px;">
+            <a href="{{ route('admin.products.create') }}" class="btn btn-primary d-flex align-items-center justify-content-center py-3 w-100 shadow-sm font-weight-bold" style="border-radius: 12px; min-height: 62px; font-size: 0.85rem; letter-spacing: 0.5px;">
                 <i class="fas fa-plus-circle mr-2"></i> NEW PRODUCT
             </a>
         </div>
         <div class="col-6 col-md-3 px-1">
-             <a href="{{ route('admin.product-orders.index') }}" class="btn btn-default d-flex align-items-center justify-content-center py-3 w-100 shadow-sm font-weight-bold border-light bg-white" style="border-radius: 12px; color: var(--dark-muted) !important; min-height: 62px;">
+             <a href="{{ route('admin.product-orders.index') }}" class="btn btn-default d-flex align-items-center justify-content-center py-3 w-100 shadow-sm font-weight-bold border-light bg-white" style="border-radius: 12px; color: var(--dark-muted) !important; min-height: 62px; font-size: 0.85rem; letter-spacing: 0.5px;">
                 <i class="fas fa-truck mr-2 text-primary"></i> MANAGE ORDERS
             </a>
         </div>

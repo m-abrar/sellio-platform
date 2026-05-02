@@ -6,17 +6,21 @@
 
 @section('content_header')
     <div class="container-fluid">
-        <div class="row mb-2">
-            <div class="col-sm-6">
+        <div class="row mb-4 align-items-center">
+            <div class="col-sm-8">
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-envelope-open-text mr-2 text-primary"></i> Newsletter Audience
                 </h1>
-            </div>
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
+                <ol class="breadcrumb bg-transparent p-0 mt-2 small">
                     <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}">Dashboard</a></li>
                     <li class="breadcrumb-item active">Subscribers</li>
                 </ol>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Audience registry for multi-channel marketing and prospect engagement.</p>
+            </div>
+            <div class="col-sm-4 text-right">
+                <a href="{{ route('admin.newsletter-subscribers.export') }}" class="btn btn-back shadow-sm rounded-pill px-4">
+                    <i class="fas fa-file-export mr-1"></i> EXPORT AUDIENCE
+                </a>
             </div>
         </div>
     </div>
@@ -169,25 +173,28 @@
         $('[data-toggle="tooltip"]').tooltip();
         
         // Refined Search UI for DataTables
-        if ($('#subscribers-table tbody tr').length > 1) {
+        if ($('#subscribers-table tbody tr:not(.empty-state)').length > 0) {
             $('#subscribers-table').DataTable({
-                "paging": false,
-                "info": false,
+                "paging": true,
+                "info": true,
                 "searching": true,
                 "ordering": true,
                 "autoWidth": false,
                 "responsive": true,
-                "dom": '<"row px-4 pt-2"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-6"l>>t',
-                "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                "dom": '<"row pt-3"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-6"l>>' +
+                       '<"row"<"col-sm-12"tr>>' +
+                       '<"row pb-3"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
                 "language": {
                     "search": "",
-                    "searchPlaceholder": "Filter...",
-                    "lengthMenu": "_MENU_ per page"
+                    "searchPlaceholder": "Search records...",
+                    "paginate": {
+                        "previous": "<i class='fas fa-angle-left'></i>",
+                        "next": "<i class='fas fa-angle-right'></i>"
+                    }
                 }
             });
             
-            $('.dataTables_filter input').addClass('form-control shadow-xs border').css('max-width', '200px');
-            $('.dataTables_length select').addClass('form-control form-control-sm shadow-xs');
+            $('.dataTables_filter input').addClass('form-control form-control-sm form-control-premium shadow-none border-light').css('width', '220px');
         }
     });
 </script>
