@@ -7,17 +7,18 @@
 
 @section('content_header')
     <div class="container-fluid">
-        <div class="row mb-2">
-            <div class="col-sm-6">
-                <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-file-invoice-dollar mr-2 text-primary"></i>
+        <div class="row align-items-center mb-4">
+            <div class="col-sm-7">
+                <h1 class="m-0 text-dark font-weight-bold d-inline-block">
+                    <i class="fas fa-file-invoice-dollar mr-2 text-primary opacity-50"></i>
                     {{ Str::title($status) }} {{ __('Bookings & Inquiries') }}
                 </h1>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Manage customer reservations, lead generation, and operational transaction flow.</p>
             </div>
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Bookings</li>
+            <div class="col-sm-5 d-flex flex-column align-items-end justify-content-center">
+                <ol class="breadcrumb bg-transparent p-0 mb-0 smallest font-weight-bold text-uppercase letter-spacing-1">
+                    <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}" class="text-primary">Dashboard</a></li>
+                    <li class="breadcrumb-item active text-muted">Bookings</li>
                 </ol>
             </div>
         </div>
@@ -28,50 +29,63 @@
     <div class="container-fluid">
         @include('admin.alert')
 
-        <div class="row mb-3">
-            <div class="col-12">
-                <ul class="nav nav-pills mb-3 p-1 bg-white shadow-sm rounded-pill" id="statusTabs" role="tablist" style="width: fit-content;">
-                    <li class="nav-item">
-                        <a class="nav-link {{ $status === 'all' ? 'active' : '' }} px-4 py-2 rounded-pill" 
-                           href="{{ route(Route::currentRouteName(), ['status' => 'all']) }}">
-                            <i class="fas fa-list mr-1"></i> {{ __('All') }}
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ $status === 'pending' ? 'active' : '' }} px-4 py-2 rounded-pill" 
-                           href="{{ route(Route::currentRouteName(), ['status' => 'pending']) }}">
-                            <i class="fas fa-hourglass-start mr-1"></i> {{ __('Pending') }}
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ $status === 'confirmed' ? 'active' : '' }} px-4 py-2 rounded-pill" 
-                           href="{{ route(Route::currentRouteName(), ['status' => 'confirmed']) }}">
-                            <i class="fas fa-check-circle mr-1"></i> {{ __('Confirmed') }}
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ $status === 'cancelled' ? 'active' : '' }} px-4 py-2 rounded-pill" 
-                           href="{{ route(Route::currentRouteName(), ['status' => 'cancelled']) }}">
-                            <i class="fas fa-times-circle mr-1"></i> {{ __('Cancelled') }}
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ $status === 'completed' ? 'active' : '' }} px-4 py-2 rounded-pill" 
-                           href="{{ route(Route::currentRouteName(), ['status' => 'completed']) }}">
-                            <i class="fas fa-check-double mr-1"></i> {{ __('Completed') }}
-                        </a>
-                    </li>
-                </ul>
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card border-0 shadow-premium" style="border-radius: 20px;">
+                <div class="card-body p-2 d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center">
+                        <span class="text-muted smallest font-weight-bold ml-3 mr-3 text-uppercase letter-spacing-1">
+                            <i class="fas fa-filter mr-1 text-primary"></i> Filter Registry:
+                        </span>
+                        <ul class="nav nav-pills p-1 bg-light rounded-pill">
+                                <li class="nav-item">
+                                    <a class="nav-link {{ $status === 'all' ? 'active bg-primary shadow-sm' : 'text-muted' }} px-4 py-1 smallest font-weight-bold rounded-pill transition-all" 
+                                       href="{{ route(Route::currentRouteName(), ['status' => 'all']) }}">
+                                       <i class="fas fa-list-ul mr-2"></i> ALL QUEUES
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link {{ $status === 'pending' ? 'active bg-warning shadow-sm' : 'text-muted' }} px-4 py-1 smallest font-weight-bold rounded-pill transition-all" 
+                                       href="{{ route(Route::currentRouteName(), ['status' => 'pending']) }}">
+                                       <i class="fas fa-hourglass-start mr-2"></i> PENDING
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link {{ $status === 'confirmed' ? 'active bg-success shadow-sm' : 'text-muted' }} px-4 py-1 smallest font-weight-bold rounded-pill transition-all" 
+                                       href="{{ route(Route::currentRouteName(), ['status' => 'confirmed']) }}">
+                                       <i class="fas fa-check-circle mr-2"></i> CONFIRMED
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link {{ $status === 'cancelled' ? 'active bg-danger shadow-sm' : 'text-muted' }} px-4 py-1 smallest font-weight-bold rounded-pill transition-all" 
+                                       href="{{ route(Route::currentRouteName(), ['status' => 'cancelled']) }}">
+                                       <i class="fas fa-times-circle mr-2"></i> CANCELLED
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link {{ $status === 'completed' ? 'active bg-dark shadow-sm' : 'text-muted' }} px-4 py-1 smallest font-weight-bold rounded-pill transition-all" 
+                                       href="{{ route(Route::currentRouteName(), ['status' => 'completed']) }}">
+                                       <i class="fas fa-archive mr-2"></i> ARCHIVED
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+    </div>
 
-        <div class="card card-primary card-outline shadow-sm">
-            <div class="card-header border-0 bg-white py-3">
-                <h3 class="card-title font-weight-600 text-muted">
-                    <i class="fas fa-exchange-alt mr-1 text-primary"></i> {{ __('Activities History') }}
+        <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
+            <div class="card-header border-0 bg-white py-4 px-4">
+                <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0" style="letter-spacing: 1px;">
+                    Operational Registry
                 </h3>
                 <div class="card-tools">
-                    <button type="button" class="btn btn-tool" data-card-widget="maximize">
+                    <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase mr-2">
+                        <i class="fas fa-chart-pie mr-1"></i> {{ $bookings->total() }} OPERATIONS FOUND
+                    </span>
+                    <button type="button" class="btn btn-tool text-muted" data-card-widget="maximize">
                         <i class="fas fa-expand"></i>
                     </button>
                 </div>
@@ -80,15 +94,15 @@
             <div class="card-body p-0">
                 <div class="table-responsive">
                     <table id="bookings-table" class="table table-hover table-premium mb-0">
-                        <thead class="thead-light">
+                        <thead class="bg-light text-uppercase smallest font-weight-bold">
                             <tr>
-                                <th style="width: 70px" class="text-center">Media</th>
-                                <th>{{ __('Related Item') }}</th>
-                                <th>{{ __('Customer') }}</th>
-                                <th>{{ __('Module') }}</th>
-                                <th>{{ __('Date & Time') }}</th>
-                                <th class="text-center">{{ __('Status') }}</th>
-                                <th class="text-right px-4">{{ __('Actions') }}</th>
+                                <th style="width: 70px" class="text-center py-3 border-0">Media</th>
+                                <th class="py-3 border-0">{{ __('Related Item') }}</th>
+                                <th class="py-3 border-0">{{ __('Customer') }}</th>
+                                <th class="py-3 border-0">{{ __('Module') }}</th>
+                                <th class="py-3 border-0">{{ __('Date & Time') }}</th>
+                                <th class="text-center py-3 border-0">{{ __('Status') }}</th>
+                                <th class="text-right px-4 py-3 border-0">{{ __('Actions') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -105,20 +119,20 @@
                                         <small class="badge badge-light border text-muted mt-1">ID: {{ $booking->id }}</small>
                                     </td> 
 
-                                    <td class="align-middle">
+                                    <td class="align-middle py-4">
                                         @if ($booking->user)
                                             <div class="d-flex align-items-center">
-                                                <div class="avatar-sm mr-2 bg-light rounded-circle text-center border shadow-xs" style="width:32px; height:32px; line-height:30px;">
-                                                    <i class="fas fa-user text-muted text-xs"></i>
+                                                <div class="icon-circle bg-light border text-muted mr-3 shadow-xs" style="width: 38px; height: 38px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                                    <i class="fas fa-user-circle"></i>
                                                 </div>
                                                 <div>
-                                                    <span class="d-block text-sm font-weight-bold text-dark mb-0">{{ $booking->user->name }}</span>
-                                                    <small class="text-muted text-monospace" style="font-size: 0.7rem;">ID: #{{ $booking->user_id }}</small>
+                                                    <span class="d-block font-weight-bold text-dark smallest">{{ $booking->user->name }}</span>
+                                                    <span class="text-muted smallest">ID: #{{ $booking->user_id }}</span>
                                                 </div>
                                             </div>
                                         @else
-                                            <span class="badge badge-danger-light border px-2">
-                                                <i class="fas fa-user-slash mr-1"></i> {{ __('Deleted User') }}
+                                            <span class="badge badge-danger-light border px-2 smallest font-weight-bold uppercase">
+                                                <i class="fas fa-user-slash mr-1"></i> {{ __('Deleted') }}
                                             </span>
                                         @endif
                                     </td>
@@ -129,40 +143,33 @@
                                         </span>
                                     </td>
                                     
-                                    <td class="align-middle"> 
-                                        <div class="text-dark font-weight-600 mb-0" style="font-size: 0.9rem;">{{ $booking->created_at->format('M d, Y') }}</div>
-                                        <div class="small text-muted"><i class="far fa-clock mr-1 text-xs"></i>{{ $booking->created_at->format('H:i') }}</div>
+                                    <td class="align-middle py-4"> 
+                                        <div class="font-weight-600 text-dark smallest">{{ $booking->created_at->diffForHumans(null, true) }} ago</div>
+                                        <small class="text-muted smallest">{{ $booking->created_at->format('M d, Y') }}</small>
                                     </td>
 
-                                    <td class="text-center align-middle">
-                                        {{-- Dynamic Light Badges for Status --}}
+                                    <td class="text-center align-middle py-4">
                                         @php
-                                            $statusClass = 'secondary';
-                                            if($booking->status == 'confirmed') $statusClass = 'success';
-                                            if($booking->status == 'pending') $statusClass = 'warning';
-                                            if($booking->status == 'cancelled') $statusClass = 'danger';
+                                            $statusClass = match($booking->status) {
+                                                'confirmed' => 'success',
+                                                'pending' => 'warning',
+                                                'cancelled' => 'danger',
+                                                default => 'secondary'
+                                            };
                                         @endphp
-                                        <span class="badge badge-{{ $statusClass }}-light px-3 py-1 text-uppercase shadow-xs" style="font-size: 0.7rem; letter-spacing: 0.5px;">
-                                            {{ $booking->status }}
-                                        </span>
+                                        <span class="badge badge-{{ $statusClass }}-light text-{{ $statusClass }} px-3 py-1 smallest font-weight-bold rounded-pill">{{ strtoupper($booking->status) }}</span>
                                     </td>
 
-                                    <td class="text-right align-middle px-4">
-                                        <div class="btn-group btn-group-premium shadow-sm">
+                                    <td class="text-right align-middle pr-4 py-4">
+                                        <div class="btn-group btn-group-premium shadow-xs rounded-pill border overflow-hidden">
                                             <a href="{{ ($booking->booking_type && $booking->id) ? route('admin.bookings.show', ['type' => $booking->booking_type, 'id' => $booking->id]) : '#' }}" 
-                                               class="btn btn-default btn-sm text-info {{ (!$booking->booking_type || !$booking->id) ? 'disabled' : '' }}" 
-                                               data-toggle="tooltip" title="{{ __('View Details') }}">
+                                               class="btn btn-white btn-sm text-primary py-2 px-3 border-right {{ (!$booking->booking_type || !$booking->id) ? 'disabled' : '' }}" 
+                                               data-toggle="tooltip" title="View Registry Details">
                                                 <i class="fas fa-eye"></i>
                                             </a>
-                                            
-                                            <form action="{{ route('admin.bookings.destroy', ['type' => $booking->booking_type, 'id' => $booking->id]) }}" 
-                                                  method="POST" 
-                                                  class="d-inline"
-                                                  onsubmit="return confirm('Permanently delete this transaction record?')">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-default btn-sm text-danger" 
-                                                        data-toggle="tooltip" title="{{ __('Delete') }}">
+                                            <form action="{{ ($booking->booking_type && $booking->id) ? route('admin.bookings.destroy', [$booking->booking_type, $booking->id]) : '#' }}" method="POST" class="d-inline">
+                                                @csrf @method('DELETE')
+                                                <button type="submit" class="btn btn-white btn-sm text-danger py-2 px-3" data-toggle="tooltip" title="Purge Record" onclick="return confirm('Permanently delete booking?')">
                                                     <i class="fas fa-trash-alt"></i>
                                                 </button>
                                             </form>
@@ -172,9 +179,10 @@
                             @empty
                                 <tr class="empty-state">
                                     <td colspan="7" class="text-center py-5">
-                                        <i class="fas fa-receipt fa-3x text-muted mb-3 d-block"></i>
-                                        <h5 class="text-muted font-weight-bold">{{ __('No Bookings Found') }}</h5>
-                                        <p class="text-secondary small">{{ __('There are no transactions matching the status') }}: <strong>{{ $status }}</strong></p>
+                                        <div class="py-4">
+                                            <i class="fas fa-receipt fa-3x text-light mb-3"></i>
+                                            <p class="text-muted font-weight-bold mb-0">No operational records found for this queue.</p>
+                                        </div>
                                     </td>
                                 </tr>
                             @endforelse
@@ -206,6 +214,25 @@
 <script>
     $(function () {
         $('[data-toggle="tooltip"]').tooltip();
+
+        // DataTables Premium Initialization
+        if ($('#bookings-table tbody tr:not(.empty-state)').length > 0) {
+            $('#bookings-table').DataTable({
+                "paging": false,
+                "lengthChange": false,
+                "searching": true,
+                "ordering": true,
+                "info": false,
+                "autoWidth": false,
+                "responsive": true,
+                "dom": '<"row pt-3"<"col-sm-12"f>>t',
+                "language": {
+                    "search": "",
+                    "searchPlaceholder": "Search bookings registry..."
+                }
+            });
+            $('.dataTables_filter input').addClass('form-control form-control-premium shadow-none border-light mb-3').css('width', '250px');
+        }
     });
 </script>
 @stop

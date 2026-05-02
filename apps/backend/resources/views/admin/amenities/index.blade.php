@@ -14,13 +14,10 @@
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Manage global features, facility offerings, and comfort options.</p>
             </div>
-            <div class="col-sm-6 text-right">
-                <a href="{{ route('admin.amenities.create') }}" class="btn btn-primary btn-sm rounded-pill px-4 font-weight-bold shadow-lg">
-                    <i class="fas fa-plus-circle mr-1"></i> ADD AMENITY
-                </a>
-                <ol class="breadcrumb float-sm-right bg-transparent p-0 mt-3 small">
-                    <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Amenities</li>
+            <div class="col-sm-6 d-flex flex-column align-items-end justify-content-center">
+                <ol class="breadcrumb bg-transparent p-0 mb-0 smallest font-weight-bold text-uppercase letter-spacing-1">
+                    <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}" class="text-primary">Dashboard</a></li>
+                    <li class="breadcrumb-item active text-muted">Amenities</li>
                 </ol>
             </div>
         </div>
@@ -31,9 +28,20 @@
 <div class="container-fluid">
     @include('admin.alert')
 
-    <div class="card card-primary card-outline shadow-sm">
-        <div class="card-header border-0 bg-white py-3 d-flex justify-content-between align-items-center">
-            <h3 class="card-title font-weight-600 text-muted mb-0">Global Features & Amenities</h3>
+    <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
+        <div class="card-header border-0 bg-white py-4 px-4 d-flex justify-content-between align-items-center">
+            <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1">Global Amenities Manifest</h3>
+            <div class="card-tools d-flex align-items-center">
+                <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase mr-3">
+                    <i class="fas fa-concierge-bell mr-1"></i> {{ count($amenities) }} AMENITIES FOUND
+                </span>
+                <a href="{{ route('admin.amenities.create') }}" class="btn btn-primary btn-sm rounded-pill px-4 font-weight-bold shadow-sm mr-2">
+                    <i class="fas fa-plus-circle mr-1"></i> ADD AMENITY
+                </a>
+                <button type="button" class="btn btn-tool text-muted" data-card-widget="maximize">
+                    <i class="fas fa-expand"></i>
+                </button>
+            </div>
         </div>
         
         <div class="card-body p-0">
@@ -73,12 +81,12 @@
                                     <div class="d-flex flex-wrap">
                                         @php
                                             $modules = [
-                                                'is_property'   => ['title' => 'Property',   'icon' => 'fas fa-home',         'color' => 'bg-indigo'],
-                                                'is_event'      => ['title' => 'Event',      'icon' => 'fas fa-calendar-alt', 'color' => 'bg-olive'],
-                                                'is_job'        => ['title' => 'Job',        'icon' => 'fas fa-briefcase',    'color' => 'bg-navy'],
-                                                'is_auto'       => ['title' => 'Auto',       'icon' => 'fas fa-car',          'color' => 'bg-lightblue'],
-                                                'is_service'    => ['title' => 'Service',    'icon' => 'fas fa-tools',        'color' => 'bg-maroon'],
-                                                'is_classified' => ['title' => 'Classified', 'icon' => 'fas fa-tag',          'color' => 'bg-orange'],
+                                                'is_property'   => ['title' => 'Property',   'icon' => 'fas fa-home',         'color' => 'badge-indigo-light'],
+                                                'is_event'      => ['title' => 'Event',      'icon' => 'fas fa-calendar-alt', 'color' => 'badge-olive-light'],
+                                                'is_job'        => ['title' => 'Job',        'icon' => 'fas fa-briefcase',    'color' => 'badge-navy-light'],
+                                                'is_auto'       => ['title' => 'Auto',       'icon' => 'fas fa-car',          'color' => 'badge-lightblue-light'],
+                                                'is_service'    => ['title' => 'Service',    'icon' => 'fas fa-tools',        'color' => 'badge-maroon-light'],
+                                                'is_classified' => ['title' => 'Classified', 'icon' => 'fas fa-tag',          'color' => 'badge-orange-light'],
                                             ];
                                             $hasModule = false;
                                         @endphp
@@ -86,9 +94,9 @@
                                         @foreach($modules as $column => $data)
                                             @if($amenity->$column)
                                                 @php $hasModule = true; @endphp
-                                                <span class="badge {{ $data['color'] }} text-xs mr-1 mb-1 shadow-xs px-2 py-1" 
+                                                <span class="badge {{ $data['color'] }} px-2 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 border-0 mr-1 mb-1" 
                                                       data-toggle="tooltip" title="{{ $data['title'] }} Module">
-                                                    <i class="{{ $data['icon'] }} fa-xs mr-1"></i> {{ $data['title'] }}
+                                                    <i class="{{ $data['icon'] }} mr-1"></i> {{ $data['title'] }}
                                                 </span>
                                             @endif
                                         @endforeach
@@ -110,11 +118,11 @@
 
                                 <td class="text-right align-middle px-4">
                                     {{-- Refined: Standardized premium action group --}}
-                                    <div class="btn-group btn-group-premium shadow-sm">
+                                    <div class="btn-group btn-group-premium shadow-xs rounded-pill border overflow-hidden">
                                         <a href="{{ route('admin.amenities.edit', $amenity->id) }}" 
-                                           class="btn btn-default btn-sm text-info" 
+                                           class="btn btn-white btn-sm text-info py-2 px-3 border-right" 
                                            data-toggle="tooltip" title="Modify Feature">
-                                            <i class="fas fa-pencil-alt"></i>
+                                             <i class="fas fa-pencil-alt"></i>
                                         </a>
                                         
                                         <form id="delete-amenity-{{ $amenity->id }}" action="{{ route('admin.amenities.destroy', $amenity->id) }}" 
@@ -122,7 +130,7 @@
                                               class="d-inline">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="button" class="btn btn-default btn-sm text-danger" 
+                                            <button type="button" class="btn btn-white btn-sm text-danger py-2 px-3" 
                                                     data-toggle="tooltip" title="Delete Amenity"
                                                     onclick="confirmDelete('delete-amenity-{{ $amenity->id }}')">
                                                 <i class="fas fa-trash-alt"></i>

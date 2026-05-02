@@ -86,4 +86,13 @@ class TicketController extends Controller
 
         return redirect()->back()->with('success', 'Bulk update completed successfully.');
     }
+
+    /**
+     * Remove the specified ticket from storage.
+     */
+    public function destroy(Ticket $ticket)
+    {
+        $ticket->delete();
+        return redirect()->back()->with('success', 'Ticket purged successfully.');
+    }
 }

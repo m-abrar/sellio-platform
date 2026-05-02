@@ -455,6 +455,12 @@ textarea.form-control {
 .badge-warning-light { background-color: rgba(245, 158, 11, 0.1); color: var(--warning-dark); border: 1px solid rgba(245, 158, 11, 0.2); }
 .badge-danger-light  { background-color: rgba(239, 68, 68, 0.1); color: var(--danger-dark); border: 1px solid rgba(239, 68, 68, 0.2); }
 .badge-secondary-light { background-color: rgba(100, 116, 139, 0.1); color: var(--dark); border: 1px solid rgba(100, 116, 139, 0.2); }
+.badge-indigo-light    { background-color: rgba(102, 16, 242, 0.1); color: #6610f2; border: 1px solid rgba(102, 16, 242, 0.2); }
+.badge-olive-light     { background-color: rgba(61, 153, 112, 0.1); color: #3d9970; border: 1px solid rgba(61, 153, 112, 0.2); }
+.badge-navy-light      { background-color: rgba(0, 31, 63, 0.1); color: #001f3f; border: 1px solid rgba(0, 31, 63, 0.2); }
+.badge-lightblue-light { background-color: rgba(60, 141, 188, 0.1); color: #3c8dbc; border: 1px solid rgba(60, 141, 188, 0.2); }
+.badge-maroon-light    { background-color: rgba(216, 27, 96, 0.1); color: #d81b60; border: 1px solid rgba(216, 27, 96, 0.2); }
+.badge-orange-light    { background-color: rgba(255, 133, 27, 0.1); color: #ff851b; border: 1px solid rgba(255, 133, 27, 0.2); }
 
 /* Fix Notification Badge Overlap */
 .navbar-badge {

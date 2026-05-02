@@ -13,13 +13,10 @@
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Define specific classifications and business models for listing entries.</p>
             </div>
-            <div class="col-sm-6 text-right">
-                <a href="{{ route('admin.types.create') }}" class="btn btn-primary btn-sm rounded-pill px-4 font-weight-bold shadow-lg">
-                    <i class="fas fa-plus-circle mr-1"></i> ADD TYPE
-                </a>
-                <ol class="breadcrumb float-sm-right bg-transparent p-0 mt-3 small">
-                    <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Types</li>
+            <div class="col-sm-6 d-flex flex-column align-items-end justify-content-center">
+                <ol class="breadcrumb bg-transparent p-0 mb-0 smallest font-weight-bold text-uppercase letter-spacing-1">
+                    <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}" class="text-primary">Dashboard</a></li>
+                    <li class="breadcrumb-item active text-muted">Listing Types</li>
                 </ol>
             </div>
         </div>
@@ -30,9 +27,20 @@
 <div class="container-fluid">
     @include('admin.alert')
 
-    <div class="card card-primary card-outline shadow-sm">
-        <div class="card-header border-0 bg-white py-3 d-flex justify-content-between align-items-center">
-            <h3 class="card-title font-weight-600 text-muted mb-0">Global Categorization Types</h3>
+    <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
+        <div class="card-header border-0 bg-white py-4 px-4 d-flex justify-content-between align-items-center">
+            <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1">Listing Type Registry</h3>
+            <div class="card-tools d-flex align-items-center">
+                <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase mr-3">
+                    <i class="fas fa-layer-group mr-1"></i> {{ count($types) }} TYPES FOUND
+                </span>
+                <a href="{{ route('admin.types.create') }}" class="btn btn-primary btn-sm rounded-pill px-4 font-weight-bold shadow-sm mr-2">
+                    <i class="fas fa-plus-circle mr-1"></i> ADD TYPE
+                </a>
+                <button type="button" class="btn btn-tool text-muted" data-card-widget="maximize">
+                    <i class="fas fa-expand"></i>
+                </button>
+            </div>
         </div>
         
         <div class="card-body p-0">
@@ -66,22 +74,22 @@
                                     <div class="d-flex flex-wrap">
                                         @php
                                             $activeModules = array_filter([
-                                                'Property'   => [$type->is_property, 'fas fa-home', 'bg-indigo'],
-                                                'Event'      => [$type->is_event, 'fas fa-calendar-alt', 'bg-olive'],
-                                                'Job'        => [$type->is_job, 'fas fa-briefcase', 'bg-navy'],
-                                                'Auto'       => [$type->is_auto, 'fas fa-car', 'bg-lightblue'],
-                                                'Service'    => [$type->is_service, 'fas fa-tools', 'bg-maroon'],
-                                                'Classified' => [$type->is_classified, 'fas fa-tag', 'bg-orange'],
+                                                'Property'   => [$type->is_property, 'fas fa-home', 'badge-indigo-light'],
+                                                'Event'      => [$type->is_event, 'fas fa-calendar-alt', 'badge-olive-light'],
+                                                'Job'        => [$type->is_job, 'fas fa-briefcase', 'badge-navy-light'],
+                                                'Auto'       => [$type->is_auto, 'fas fa-car', 'badge-lightblue-light'],
+                                                'Service'    => [$type->is_service, 'fas fa-tools', 'badge-maroon-light'],
+                                                'Classified' => [$type->is_classified, 'fas fa-tag', 'badge-orange-light'],
                                             ], fn($m) => $m[0]);
                                         @endphp
 
                                         @forelse($activeModules as $title => $data)
-                                            <span class="badge {{ $data[2] }} text-xs mr-1 mb-1 shadow-xs px-2 py-1" 
+                                            <span class="badge {{ $data[2] }} px-2 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 border-0 mr-1 mb-1" 
                                                   data-toggle="tooltip" title="{{ $title }} Module">
-                                                <i class="{{ $data[1] }} fa-xs mr-1"></i> {{ $title }}
+                                                <i class="{{ $data[1] }} mr-1"></i> {{ $title }}
                                             </span>
                                         @empty
-                                            <span class="badge badge-secondary-light text-xs px-2 py-1">
+                                            <span class="badge badge-secondary-light px-2 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 border-0 mr-1 mb-1">
                                                 <i class="fas fa-info-circle mr-1"></i> Unassigned
                                             </span>
                                         @endforelse
@@ -97,11 +105,11 @@
 
                                 <td class="text-right align-middle px-4">
                                     {{-- Refined: Standardized premium action group --}}
-                                    <div class="btn-group btn-group-premium shadow-sm">
+                                    <div class="btn-group btn-group-premium shadow-xs rounded-pill border overflow-hidden">
                                         <a href="{{ route('admin.types.edit', $type->id) }}" 
-                                           class="btn btn-default btn-sm text-info" 
+                                           class="btn btn-white btn-sm text-info py-2 px-3 border-right" 
                                            data-toggle="tooltip" title="Modify Details">
-                                            <i class="fas fa-pencil-alt"></i>
+                                             <i class="fas fa-pencil-alt"></i>
                                         </a>
                                         
                                         <form action="{{ route('admin.types.destroy', $type->id) }}" 
@@ -110,7 +118,7 @@
                                               onsubmit="return confirm('Permanently delete this type?')">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-default btn-sm text-danger" 
+                                            <button type="submit" class="btn btn-white btn-sm text-danger py-2 px-3" 
                                                     data-toggle="tooltip" title="Remove Type">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>

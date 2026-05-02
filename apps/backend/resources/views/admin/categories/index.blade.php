@@ -11,16 +11,13 @@
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-tags mr-2 text-primary"></i> Taxonomy Architecture
                 </h1>
-                <ol class="breadcrumb bg-transparent p-0 mt-2 small">
-                    <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Taxonomy</li>
-                </ol>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Define and organize hierarchal categories across all marketplace verticals.</p>
             </div>
-            <div class="col-sm-4 text-right">
-                <a href="{{ route('admin.categories.create') }}" class="btn btn-primary btn-sm rounded-pill px-4 font-weight-bold shadow-premium">
-                    <i class="fas fa-plus-circle mr-1"></i> ADD SEGMENT
-                </a>
+            <div class="col-sm-4 d-flex flex-column align-items-end justify-content-center">
+                <ol class="breadcrumb bg-transparent p-0 mb-0 smallest font-weight-bold text-uppercase letter-spacing-1">
+                    <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}" class="text-primary">Dashboard</a></li>
+                    <li class="breadcrumb-item active text-muted">Categories</li>
+                </ol>
             </div>
         </div>
     </div>
@@ -32,8 +29,18 @@
 
     <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
         <div class="card-header border-0 bg-white py-4 px-4 d-flex justify-content-between align-items-center">
-            <h3 class="card-title font-weight-bold text-dark mb-0">Marketplace Taxonomy Registry</h3>
-            <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest">{{ count($categories) }} SEGMENTS DEFINED</span>
+            <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1">Global Taxonomy Registry</h3>
+            <div class="card-tools d-flex align-items-center">
+                <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase mr-3">
+                    <i class="fas fa-sitemap mr-1"></i> {{ count($categories) }} CATEGORIES FOUND
+                </span>
+                <a href="{{ route('admin.categories.create') }}" class="btn btn-primary btn-sm rounded-pill px-4 font-weight-bold shadow-sm mr-2">
+                    <i class="fas fa-plus-circle mr-1"></i> ADD CATEGORY
+                </a>
+                <button type="button" class="btn btn-tool text-muted" data-card-widget="maximize">
+                    <i class="fas fa-expand"></i>
+                </button>
+            </div>
         </div>
 
         <div class="card-body p-0">
@@ -83,12 +90,12 @@
                                     <div class="d-flex flex-wrap" style="gap: 6px;">
                                         @php
                                             $modules = [
-                                                'is_property'   => ['title' => 'Property',   'icon' => 'fa-home',     'text' => 'primary'],
-                                                'is_event'      => ['title' => 'Event',      'icon' => 'fa-calendar', 'text' => 'success'],
-                                                'is_job'        => ['title' => 'Job',        'icon' => 'fa-briefcase','text' => 'dark'],
-                                                'is_auto'       => ['title' => 'Auto',       'icon' => 'fa-car',      'text' => 'info'],
-                                                'is_service'    => ['title' => 'Service',    'icon' => 'fa-tools',    'text' => 'danger'],
-                                                'is_classified' => ['title' => 'Classified', 'icon' => 'fa-tag',      'text' => 'warning'],
+                                                'is_property'   => ['title' => 'Property',   'icon' => 'fas fa-home',         'text' => 'indigo-light'],
+                                                'is_event'      => ['title' => 'Event',      'icon' => 'fas fa-calendar-alt', 'text' => 'olive-light'],
+                                                'is_job'        => ['title' => 'Job',        'icon' => 'fas fa-briefcase',    'text' => 'navy-light'],
+                                                'is_auto'       => ['title' => 'Auto',       'icon' => 'fas fa-car',          'text' => 'lightblue-light'],
+                                                'is_service'    => ['title' => 'Service',    'icon' => 'fas fa-tools',        'text' => 'maroon-light'],
+                                                'is_classified' => ['title' => 'Classified', 'icon' => 'fas fa-tag',          'text' => 'orange-light'],
                                             ];
                                             $hasModule = false;
                                         @endphp
@@ -96,9 +103,9 @@
                                         @foreach($modules as $column => $data)
                                             @if($category->$column)
                                                 @php $hasModule = true; @endphp
-                                                <span class="badge badge-{{ $data['text'] }}-light px-2 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 border-0" 
+                                                <span class="badge badge-{{ $data['text'] }} px-2 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 border-0 mr-1 mb-1" 
                                                       data-toggle="tooltip" title="{{ $data['title'] }} Engine">
-                                                    <i class="fas {{ $data['icon'] }} mr-1"></i> {{ $data['title'] }}
+                                                    <i class="{{ $data['icon'] }} mr-1"></i> {{ $data['title'] }}
                                                 </span>
                                             @endif
                                         @endforeach

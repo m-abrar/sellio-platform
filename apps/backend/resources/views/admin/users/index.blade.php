@@ -97,12 +97,12 @@
                                     @endif
                                 </td>
                                 <td class="text-right align-middle px-4">
-                                    <div class="btn-group btn-group-premium shadow-sm">
+                                    <div class="btn-group btn-group-premium shadow-xs rounded-pill border overflow-hidden">
                                         {{-- Approve Button for Pending Partners --}}
                                         @if($user->is_partner && !$user->hasRole('partner'))
                                         <form action="{{ route('admin.users.approve', $user->id) }}" method="POST" class="d-inline">
                                             @csrf
-                                            <button type="submit" class="btn btn-default btn-sm text-success" 
+                                            <button type="submit" class="btn btn-white btn-sm text-success py-2 px-3 border-right" 
                                                     data-toggle="tooltip" title="Approve Partner">
                                                 <i class="fas fa-check-circle"></i>
                                             </button>
@@ -111,14 +111,14 @@
 
                                         {{-- New: Show/Preview Button --}}
                                         <a href="{{ route('admin.users.show', $user->id) }}" 
-                                        class="btn btn-default btn-sm text-primary" 
+                                        class="btn btn-white btn-sm text-primary py-2 px-3 border-right" 
                                         data-toggle="tooltip" title="View Details">
                                             <i class="fas fa-eye"></i>
                                         </a>
 
                                         {{-- Edit Button --}}
                                         <a href="{{ route('admin.users.edit', $user->id) }}" 
-                                        class="btn btn-default btn-sm text-info" 
+                                        class="btn btn-white btn-sm text-info py-2 px-3 border-right" 
                                         data-toggle="tooltip" title="Edit Profile">
                                             <i class="fas fa-user-edit"></i>
                                         </a>
@@ -126,7 +126,7 @@
                                         {{-- Delete Button --}}
                                         <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="d-inline">
                                             @csrf @method('DELETE')
-                                            <button type="submit" class="btn btn-default btn-sm text-danger" 
+                                            <button type="submit" class="btn btn-white btn-sm text-danger py-2 px-3" 
                                                     data-toggle="tooltip" title="Delete User"
                                                     onclick="return confirm('Permanently delete this user account?')">
                                                 <i class="fas fa-trash-alt"></i>

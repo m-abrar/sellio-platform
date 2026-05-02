@@ -352,6 +352,7 @@ Route::prefix('admin')
             Route::get('/{ticket}', 'show')->name('show');
             Route::post('/{ticket}/reply', 'reply')->name('reply');
             Route::post('/{ticket}/status', 'updateStatus')->name('status');
+            Route::delete('/{ticket}', 'destroy')->name('destroy');
         }
         );
 

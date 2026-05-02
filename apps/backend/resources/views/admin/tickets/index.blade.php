@@ -4,24 +4,21 @@
 
 @section('content_header')
     <div class="container-fluid">
-        <div class="row mb-4 align-items-center">
-            <div class="col-sm-8">
-                <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-ticket-alt mr-2 text-primary"></i> 
+        <div class="row align-items-center mb-4">
+            <div class="col-sm-7">
+                <h1 class="m-0 text-dark font-weight-bold d-inline-block">
+                    <i class="fas fa-ticket-alt mr-2 text-primary opacity-50"></i> 
                     Customer Support Queue
                 </h1>
-                <ol class="breadcrumb bg-transparent p-0 mt-2 small">
-                    <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Support Queue</li>
-                </ol>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">
                     Monitor user inquiries, resolve platform issues, and manage ticket priority.
                 </p>
             </div>
-            <div class="col-sm-4 text-right">
-                <a href="{{ route('admin.welcome') }}" class="btn btn-back shadow-sm">
-                    <i class="fas fa-arrow-left mr-1"></i> Back to Dashboard
-                </a>
+            <div class="col-sm-5 d-flex flex-column align-items-end justify-content-center">
+                <ol class="breadcrumb bg-transparent p-0 mb-0 smallest font-weight-bold text-uppercase letter-spacing-1">
+                    <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}" class="text-primary">Dashboard</a></li>
+                    <li class="breadcrumb-item active text-muted">Support</li>
+                </ol>
             </div>
         </div>
     </div>
@@ -34,42 +31,49 @@
     <div class="row mb-4">
         <div class="col-12">
             <div class="card border-0 shadow-premium" style="border-radius: 20px;">
-                <div class="card-body p-2 d-flex align-items-center justify-content-between">
-                    <div class="d-flex align-items-center">
-                        <span class="text-muted smallest font-weight-bold ml-3 mr-3 text-uppercase letter-spacing-1">
-                            <i class="fas fa-filter mr-1 text-primary"></i> Filter By Status:
-                        </span>
-                        <ul class="nav nav-pills p-1 bg-light rounded-pill">
-                            @php
-                                $statusFilters = [
-                                    'open'        => ['label' => 'Open Queue', 'color' => 'success'],
-                                    'in-progress' => ['label' => 'In Resolution', 'color' => 'info'],
-                                    'closed'      => ['label' => 'Archive', 'color' => 'dark'],
-                                ];
-                            @endphp
-                            @foreach($statusFilters as $key => $filter)
-                                <li class="nav-item">
-                                    <a class="nav-link {{ $status === $key ? 'active bg-'.$filter['color'].' shadow-sm' : 'text-muted' }} px-4 py-1 smallest font-weight-bold rounded-pill transition-all" 
-                                       href="{{ route('admin.tickets.index', ['status' => $key]) }}">
-                                       {{ strtoupper($filter['label']) }}
-                                    </a>
-                                </li>
-                            @endforeach
-                        </ul>
-                    </div>
-                    <div class="pr-3">
-                        <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest">
-                            {{ $tickets->total() }} REQUESTS FOUND
-                        </span>
-                    </div>
+                <div class="card-body p-2 d-flex align-items-center">
+                    <span class="text-muted smallest font-weight-bold ml-3 mr-3 text-uppercase letter-spacing-1">
+                        <i class="fas fa-filter mr-1 text-primary"></i> Filter By Status:
+                    </span>
+                    <ul class="nav nav-pills p-1 bg-light rounded-pill">
+                        <li class="nav-item">
+                            <a class="nav-link {{ $status === 'open' ? 'active bg-success shadow-sm' : 'text-muted' }} px-4 py-1 smallest font-weight-bold rounded-pill transition-all" 
+                               href="{{ route('admin.tickets.index', ['status' => 'open']) }}">
+                               <i class="fas fa-envelope-open mr-2"></i> OPEN QUEUE
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ $status === 'in-progress' ? 'active bg-info shadow-sm' : 'text-muted' }} px-4 py-1 smallest font-weight-bold rounded-pill transition-all" 
+                               href="{{ route('admin.tickets.index', ['status' => 'in-progress']) }}">
+                               <i class="fas fa-spinner mr-2"></i> IN RESOLUTION
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ $status === 'closed' ? 'active bg-dark shadow-sm' : 'text-muted' }} px-4 py-1 smallest font-weight-bold rounded-pill transition-all" 
+                               href="{{ route('admin.tickets.index', ['status' => 'closed']) }}">
+                               <i class="fas fa-archive mr-2"></i> ARCHIVE
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
     </div>
+    </div>
 
     <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
-        <div class="card-header border-0 bg-white py-4 px-4 d-flex justify-content-between align-items-center">
-            <h3 class="card-title font-weight-bold text-dark text-uppercase smallest" style="letter-spacing: 1px;">Ticket Registry</h3>
+        <div class="card-header border-0 bg-white py-4 px-4">
+            <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0" style="letter-spacing: 1px;">
+                Active Support Queue
+            </h3>
+            <div class="card-tools">
+                <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase mr-2">
+                    <i class="fas fa-headset mr-1"></i> {{ $tickets->total() }} REQUESTS FOUND
+                </span>
+                <button type="button" class="btn btn-tool text-muted" data-card-widget="maximize">
+                    <i class="fas fa-expand"></i>
+                </button>
+            </div>
             <div id="bulk-actions-container" class="d-none animate__animated animate__fadeIn">
                 <div class="dropdown d-inline-block">
                     <button class="btn btn-primary btn-sm dropdown-toggle rounded-pill px-4 shadow-sm font-weight-bold" type="button" data-toggle="dropdown">
@@ -166,9 +170,17 @@
                                     <small class="text-muted smallest">{{ $ticket->created_at->format('M d, Y') }}</small>
                                 </td>
                                 <td class="text-right align-middle pr-4 py-4">
-                                    <a href="{{ route('admin.tickets.show', $ticket->id) }}" class="btn btn-primary-soft rounded-pill px-4 smallest font-weight-bold">
-                                        MANAGE <i class="fas fa-arrow-right ml-1"></i>
-                                    </a>
+                                    <div class="btn-group btn-group-premium shadow-xs rounded-pill border overflow-hidden">
+                                        <a href="{{ route('admin.tickets.show', $ticket->id) }}" class="btn btn-white btn-sm text-primary py-2 px-3 border-right" data-toggle="tooltip" title="Open Ticket">
+                                            <i class="fas fa-envelope-open-text"></i>
+                                        </a>
+                                        <form action="{{ route('admin.tickets.destroy', $ticket->id) }}" method="POST" class="d-inline">
+                                            @csrf @method('DELETE')
+                                            <button type="submit" class="btn btn-white btn-sm text-danger py-2 px-3" data-toggle="tooltip" title="Purge Ticket" onclick="return confirm('Permanently delete ticket?')">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                             @empty
@@ -221,7 +233,7 @@
                 "info": false,
                 "autoWidth": false,
                 "responsive": true,
-                "dom": '<"row px-4 pt-3"<"col-sm-12"f>>t',
+                "dom": '<"row pt-3"<"col-sm-12"f>>t',
                 "language": {
                     "search": "",
                     "searchPlaceholder": "Search within this queue..."

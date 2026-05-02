@@ -14,13 +14,10 @@
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Manage keywords and searchable labels for granular item categorization.</p>
             </div>
-            <div class="col-sm-6 text-right">
-                <a href="{{ route('admin.tags.create') }}" class="btn btn-primary btn-sm rounded-pill px-4 font-weight-bold shadow-lg">
-                    <i class="fas fa-plus-circle mr-1"></i> ADD TAG
-                </a>
-                <ol class="breadcrumb float-sm-right bg-transparent p-0 mt-3 small">
-                    <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Tags</li>
+            <div class="col-sm-6 d-flex flex-column align-items-end justify-content-center">
+                <ol class="breadcrumb bg-transparent p-0 mb-0 smallest font-weight-bold text-uppercase letter-spacing-1">
+                    <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}" class="text-primary">Dashboard</a></li>
+                    <li class="breadcrumb-item active text-muted">Tags</li>
                 </ol>
             </div>
         </div>
@@ -31,9 +28,20 @@
 <div class="container-fluid">
     @include('admin.alert')
 
-    <div class="card card-primary card-outline shadow-sm">
-        <div class="card-header border-0 bg-white py-3 d-flex justify-content-between align-items-center">
-            <h3 class="card-title font-weight-600 text-muted mb-0">Taxonomy Management</h3>
+    <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
+        <div class="card-header border-0 bg-white py-4 px-4 d-flex justify-content-between align-items-center">
+            <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1">Listing Tags Catalog</h3>
+            <div class="card-tools d-flex align-items-center">
+                <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase mr-3">
+                    <i class="fas fa-hashtag mr-1"></i> {{ count($tags) }} TAGS FOUND
+                </span>
+                <a href="{{ route('admin.tags.create') }}" class="btn btn-primary btn-sm rounded-pill px-4 font-weight-bold shadow-sm mr-2">
+                    <i class="fas fa-plus-circle mr-1"></i> ADD TAG
+                </a>
+                <button type="button" class="btn btn-tool text-muted" data-card-widget="maximize">
+                    <i class="fas fa-expand"></i>
+                </button>
+            </div>
         </div>
         
         <div class="card-body p-0">
@@ -69,12 +77,12 @@
                                     <div class="d-flex flex-wrap">
                                         @php
                                             $modules = [
-                                                'is_property'   => ['title' => 'Property',   'icon' => 'fa-home',         'color' => 'bg-indigo'],
-                                                'is_event'      => ['title' => 'Event',      'icon' => 'fa-calendar-alt', 'color' => 'bg-olive'],
-                                                'is_job'        => ['title' => 'Job',        'icon' => 'fa-briefcase',    'color' => 'bg-navy'],
-                                                'is_auto'       => ['title' => 'Auto',       'icon' => 'fa-car',          'color' => 'bg-lightblue'],
-                                                'is_service'    => ['title' => 'Service',    'icon' => 'fa-tools',        'color' => 'bg-maroon'],
-                                                'is_classified' => ['title' => 'Classified', 'icon' => 'fa-tag',          'color' => 'bg-orange'],
+                                                'is_property'   => ['title' => 'Property',   'icon' => 'fa-home',         'color' => 'badge-indigo-light'],
+                                                'is_event'      => ['title' => 'Event',      'icon' => 'fa-calendar-alt', 'color' => 'badge-olive-light'],
+                                                'is_job'        => ['title' => 'Job',        'icon' => 'fa-briefcase',    'color' => 'badge-navy-light'],
+                                                'is_auto'       => ['title' => 'Auto',       'icon' => 'fa-car',          'color' => 'badge-lightblue-light'],
+                                                'is_service'    => ['title' => 'Service',    'icon' => 'fa-tools',        'color' => 'badge-maroon-light'],
+                                                'is_classified' => ['title' => 'Classified', 'icon' => 'fa-tag',          'color' => 'badge-orange-light'],
                                             ];
                                             $hasModule = false;
                                         @endphp
@@ -82,10 +90,10 @@
                                         @foreach($modules as $column => $data)
                                             @if($tag->$column)
                                                 @php $hasModule = true; @endphp
-                                                <span class="badge {{ $data['color'] }} text-xs mr-1 mb-1 shadow-xs px-2 py-1" 
+                                                <span class="badge {{ $data['color'] }} px-2 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 border-0 mr-1 mb-1" 
                                                       data-toggle="tooltip" 
                                                       title="{{ $data['title'] }} Module">
-                                                    <i class="fas {{ $data['icon'] }} fa-xs mr-1"></i> {{ $data['title'] }}
+                                                    <i class="fas {{ $data['icon'] }} mr-1"></i> {{ $data['title'] }}
                                                 </span>
                                             @endif
                                         @endforeach
@@ -103,11 +111,11 @@
                                 </td>
 
                                 <td class="text-right align-middle px-4">
-                                    <div class="btn-group btn-group-premium shadow-sm">
+                                    <div class="btn-group btn-group-premium shadow-xs rounded-pill border overflow-hidden">
                                         <a href="{{ route('admin.tags.edit', $tag->id) }}" 
-                                           class="btn btn-default btn-sm text-info" 
+                                           class="btn btn-white btn-sm text-info py-2 px-3 border-right" 
                                            data-toggle="tooltip" title="Modify Settings">
-                                            <i class="fas fa-pencil-alt"></i>
+                                             <i class="fas fa-pencil-alt"></i>
                                         </a>
                                         
                                         <form action="{{ route('admin.tags.destroy', $tag->id) }}" 
@@ -116,7 +124,7 @@
                                               onsubmit="return confirm('Are you sure you want to delete this tag?')">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-default btn-sm text-danger" 
+                                            <button type="submit" class="btn btn-white btn-sm text-danger py-2 px-3" 
                                                     data-toggle="tooltip" title="Delete Tag">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
