@@ -124,19 +124,19 @@
                 "info": true,
                 "autoWidth": false,
                 "responsive": true,
-                "dom": '<"row px-4 pt-3"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-6"l>>' +
+                "dom": '<"row pt-3"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-6"l>>' +
                        '<"row"<"col-sm-12"tr>>' +
-                       '<"row px-4 pb-3"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+                       '<"row pb-3"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
                 "language": {
                     "search": "",
-                    "searchPlaceholder": "Filter identifiers...",
+                    "searchPlaceholder": "Search records...",
                     "paginate": {
                         "previous": "<i class='fas fa-angle-left'></i>",
                         "next": "<i class='fas fa-angle-right'></i>"
                     }
                 }
             });
-            $('.dataTables_filter input').addClass('form-control shadow-none border-light').css('width', '220px');
+            $('.dataTables_filter input').addClass('form-control form-control-sm form-control-premium shadow-none border-light').css('width', '220px');
         }
     });
 </script>

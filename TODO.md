@@ -63,6 +63,7 @@
 update the tasks right in the same order i pasted here and add new tasks as i give them to you and don't remove any tasks 
 ------------
 the image widget shows card border two times, please fix
+- [x] Fixed by adding `noCard => true` to image uploader components across all admin forms.
 ---------------
 
 http://127.0.0.1:8000/admin/dashboard/ecommerce
@@ -71,11 +72,7 @@ BadMethodCallException
 vendor\laravel\framework\src\Illuminate\Support\Traits\ForwardsCalls.php:67
 Call to undefined method App\Models\Category::products()
 
-
-BadMethodCallException
-vendor\laravel\framework\src\Illuminate\Support\Traits\ForwardsCalls.php:67
-Call to undefined method App\Models\Category::products()
-
+- [x] Implemented `products()` relationship in `Category` model and fixed chart labels in `DashboardController`.
 
 --------------
 
@@ -84,20 +81,25 @@ Symfony\Component\Routing\Exception\RouteNotFoundException
 vendor\laravel\framework\src\Illuminate\Routing\UrlGenerator.php:526
 Route [admin.tickets.bulk-update] not defined.
 
+- [x] Added `admin.tickets.bulk-update` route and implemented `bulkUpdate` in `TicketController` and `TicketManagementService`.
+
 ------------------
 
 http://127.0.0.1:8000/admin/permissions
 the roles button is not matching the theme
 the breadcrumbs position is not aligned
+- [x] Standardized header layout, breadcrumbs, and button styling.
 ----------------
 
 http://127.0.0.1:8000/admin/profile/edit
 the form submit button position, need to be rechecked, does it match with the rest of pages?
+- [x] Standardized submit button to match the sidebar "Protocol & Actions" card pattern used in other CRUD forms.
 
 -------------------
 
 
 remove the left and right margin to match with the table below it
+- [x] Removed `px-4` from DataTables wrapper and applied `form-control-premium` styling to the filter input.
 
 <div class="row px-4 pt-3"><div class="col-sm-12 col-md-6"><div id="permissions-table_filter" class="dataTables_filter"><label><input type="search" class="form-control form-control-sm form-control-premium shadow-none border-light" placeholder="Search records..." aria-controls="permissions-table" style="width: 220px;"></label></div></div><div class="col-sm-12 col-md-6"></div></div>
 
