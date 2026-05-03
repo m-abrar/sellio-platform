@@ -6,12 +6,18 @@
     <div class="container-fluid pt-4">
         <div class="row mb-4 align-items-center">
             <div class="col-sm-8 d-flex align-items-center">
-                <div class="avatar-wrapper mr-4 position-relative">
+                <div class="avatar-wrapper mr-4 position-relative group cursor-pointer">
                     <div class="avatar-glow position-absolute" style="top: -5px; left: -5px; right: -5px; bottom: -5px; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); border-radius: 50%; opacity: 0.15; filter: blur(8px);"></div>
-                    <img src="{{ $user->getFirstMediaUrl(\App\Models\User::PRIMARY_MEDIA) ?: asset('images/fallbacks/avatar.jpg') }}" 
-                         alt="Avatar" 
-                         class="rounded-circle shadow-lg border-white border-4 position-relative" 
-                         style="width: 100px; height: 100px; object-fit: cover; z-index: 1;">
+                    <div class="position-relative overflow-hidden rounded-circle shadow-lg border-white border-4" style="width: 100px; height: 100px; z-index: 1;">
+                        <img src="{{ $user->getFirstMediaUrl(\App\Models\User::PRIMARY_MEDIA) ?: asset('images/fallbacks/avatar.jpg') }}" 
+                             alt="Avatar" 
+                             class="w-100 h-100 transition-all duration-300 group-hover:scale-110 group-hover:brightness-75" 
+                             style="object-fit: cover;">
+                        <div class="avatar-overlay position-absolute d-flex align-items-center justify-content-center transition-all duration-300 opacity-0 group-hover:opacity-100" 
+                             style="top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.3);">
+                            <i class="fas fa-camera text-white fa-lg"></i>
+                        </div>
+                    </div>
                     <div class="status-indicator bg-success position-absolute shadow-sm" style="width: 18px; height: 18px; border-radius: 50%; bottom: 8px; right: 8px; border: 3px solid #fff; z-index: 2;"></div>
                 </div>
                 <div>
@@ -25,9 +31,7 @@
                 </div>
             </div>
             <div class="col-sm-4 text-right">
-                <a href="{{ route('admin.welcome') }}" class="btn btn-back shadow-sm">
-                    <i class="fas fa-chevron-left"></i> Dashboard
-                </a>
+                @include('admin._partials._back-button')
             </div>
         </div>
     </div>
@@ -156,8 +160,9 @@
 
 @push('css')
 <style>
-    .border-white { border-color: #fff !important; }
-    .border-4 { border-width: 4px !important; }
-    .form-control-premium { background: #fcfdfe !important; }
+    .avatar-wrapper:hover img { transform: scale(1.1); filter: brightness(0.75); }
+    .avatar-wrapper .avatar-overlay { opacity: 0; transition: all 0.3s ease; }
+    .avatar-wrapper:hover .avatar-overlay { opacity: 1; }
+    .transition-all { transition: all 0.3s ease !important; }
 </style>
 @endpush

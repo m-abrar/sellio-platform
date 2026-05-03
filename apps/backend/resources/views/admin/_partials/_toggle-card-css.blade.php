@@ -548,41 +548,56 @@
 
     /* Premium Back Button */
     .btn-back {
-        background: rgba(255, 255, 255, 0.7) !important;
-        backdrop-filter: blur(12px) saturate(180%);
-        -webkit-backdrop-filter: blur(12px) saturate(180%);
+        background: #fff !important;
         color: #475569 !important;
-        border: 1px solid rgba(255, 255, 255, 0.4) !important;
+        border: 1px solid #e2e8f0 !important;
         border-radius: 50px !important;
-        padding: 0.5rem 1.4rem !important;
-        font-weight: 700 !important;
-        font-size: 0.7rem !important;
+        padding: 0.55rem 1.6rem !important;
+        font-weight: 800 !important;
+        font-size: 0.65rem !important;
         text-transform: uppercase !important;
-        letter-spacing: 1px !important;
-        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+        letter-spacing: 1.2px !important;
         display: inline-flex !important;
         align-items: center !important;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04), inset 0 0 0 1px rgba(255, 255, 255, 0.5) !important;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03) !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
         position: relative;
+        overflow: hidden;
     }
 
     .btn-back:hover {
         background: #fff !important;
         color: var(--primary) !important;
         border-color: var(--primary-soft) !important;
-        transform: translateX(-5px) !important;
-        box-shadow: 0 10px 25px rgba(var(--primary-rgb), 0.12) !important;
+        transform: translateY(-2px) scale(1.02) !important;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
     }
 
     .btn-back i {
-        margin-right: 10px;
-        transition: transform 0.4s ease;
-        font-size: 0.75rem;
+        margin-right: 12px;
+        transition: transform 0.3s ease;
+        font-size: 0.8rem;
         color: var(--primary);
     }
 
     .btn-back:hover i {
-        transform: translateX(-4px) scale(1.1);
+        transform: translateX(-4px);
+    }
+
+    .btn-back::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(120deg, transparent, rgba(var(--primary-rgb), 0.05), transparent);
+        transform: translateX(-100%);
+        transition: 0.6s;
+    }
+
+    .btn-back:hover::after {
+        transform: translateX(100%);
     }
 
     /* Premium Input Groups */

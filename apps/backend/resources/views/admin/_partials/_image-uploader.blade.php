@@ -26,22 +26,22 @@
 
         <div id="{{ $name }}-dropzone"
              class="dropzone border-dashed rounded-xl p-5 d-flex align-items-center justify-content-center flex-column {{ $isEdit ? 'cursor-pointer' : 'bg-light text-muted' }}"
-             style="{{ $isEdit ? 'border: 2px dashed rgba(70, 165, 172, 0.3); background: rgba(70, 165, 172, 0.02);' : 'pointer-events: none; opacity: 0.6;' }}">
-            <div class="upload-icon-wrapper mb-3 shadow-sm rounded-circle bg-white d-flex align-items-center justify-content-center" style="width: 64px; height: 64px;">
-                <i class="fas fa-cloud-upload-alt fa-2x text-primary"></i>
+             style="{{ $isEdit ? 'border: 2px dashed rgba(var(--primary-rgb), 0.2); background: rgba(var(--primary-rgb), 0.01); transition: all 0.3s ease;' : 'pointer-events: none; opacity: 0.6;' }}">
+            <div class="upload-icon-wrapper mb-3 shadow-premium rounded-circle bg-white d-flex align-items-center justify-content-center" style="width: 70px; height: 70px; border: 1px solid #edf2f7;">
+                <i class="fas fa-cloud-upload-alt fa-2x text-primary opacity-75"></i>
             </div>
             <h6 class="font-weight-bold text-dark mb-1">
                 @if($isEdit)
-                    Drag & drop {{ $multiple ? 'images' : 'image' }} here
+                    Quick Image Sync
                 @else
-                    Record Initialization Required
+                    System Lock: Initialization Required
                 @endif
             </h6>
-            <p class="text-muted smallest mb-0 px-4">
+            <p class="text-muted smallest mb-0 px-4 font-weight-bold uppercase opacity-50" style="letter-spacing: 0.5px;">
                 @if($isEdit)
-                    Or click to browse from your device. Supported: JPG, PNG, WEBP.
+                    Drag & Drop or Click to Explore
                 @else
-                    Please save the {{ strtolower(class_basename($model)) }} record before attaching media assets.
+                    Establish record persistence before attaching assets.
                 @endif
             </p>
         </div>
@@ -66,27 +66,42 @@
 @endif
 
 <style>
-    .border-dashed { border-style: dashed !important; transition: all 0.3s ease; }
-    .dropzone { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important; }
+    .border-dashed { border-style: dashed !important; }
+    .dropzone { 
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important; 
+        position: relative;
+        overflow: hidden;
+    }
     .dropzone:hover { 
         border-color: var(--primary) !important; 
         background: rgba(var(--primary-rgb), 0.05) !important; 
         transform: translateY(-2px);
-        box-shadow: 0 10px 20px rgba(var(--primary-rgb), 0.05);
     }
+    .dropzone::before {
+        content: '';
+        position: absolute;
+        top: 0; left: -100%; width: 50%; height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+        transition: 0.5s;
+        pointer-events: none;
+    }
+    .dropzone:hover::before { left: 150%; }
+    
     .rounded-xl { border-radius: 16px !important; }
     .image-container .remove-image { 
         opacity: 0; 
         transform: scale(0.8);
         transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        background: rgba(220, 38, 38, 0.9) !important;
+        backdrop-filter: blur(4px);
     }
     .image-container:hover .remove-image { 
         opacity: 1; 
         transform: scale(1); 
     }
     .image-container:hover img {
-        filter: brightness(0.9);
-        transform: scale(1.02);
+        filter: brightness(0.8) grayscale(0.2);
+        transform: scale(1.05);
     }
 </style>
 

@@ -46,3 +46,33 @@ All identified UI/UX inconsistencies and functional gaps have been resolved to m
 ---
 **Status:** PRODUCTION READY
 **Phase:** Finalization & Premium Polish Phase Completed.
+
+---------------------------------
+
+
+http://127.0.0.1:8000/admin/properties/create
+the select location is not showing anything
+and also only show related taxonomy data only
+same for categories
+
+
+-----------------
+
+http://127.0.0.1:8000/admin/profile/edit
+the back button needs polish
+the picture showing in image widget needs UIUX polish
+--------------
+
+http://127.0.0.1:8000/admin/payment-gateways
+http://127.0.0.1:8000/admin/content
+need softer shadow
+
+http://127.0.0.1:8000/admin/payment-gateways
+http://127.0.0.1:8000/admin/settings
+need same size of icon in header card
+---------------
+http://127.0.0.1:8000/admin/payment-gateways
+http://127.0.0.1:8000/admin/themes
+back button is ugly
+
+-------------------

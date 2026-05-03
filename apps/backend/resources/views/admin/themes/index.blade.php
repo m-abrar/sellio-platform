@@ -14,9 +14,7 @@
                 </p>
             </div>
             <div class="col-sm-4 text-right">
-                <a href="{{ route('admin.welcome') }}" class="btn btn-back shadow-sm">
-                    <i class="fas fa-chevron-left"></i> Dashboard
-                </a>
+                @include('admin._partials._back-button')
             </div>
         </div>
     </div>

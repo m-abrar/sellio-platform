@@ -12,9 +12,7 @@
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Manage platform-wide financial processors and secure transaction gateways.</p>
             </div>
             <div class="col-sm-5 d-flex align-items-center justify-content-end">
-                <a href="{{ route('admin.welcome') }}" class="btn btn-back shadow-sm">
-                    <i class="fas fa-chevron-left"></i> Dashboard
-                </a>
+                @include('admin._partials._back-button')
             </div>
         </div>
     </div>
