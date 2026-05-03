@@ -13,13 +13,9 @@
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Aggregate storage for marketplace listings, brand assets, and user uploads.</p>
             </div>
             <div class="col-sm-6 text-right">
-                <button type="button" class="btn btn-primary btn-sm rounded-pill px-4 font-weight-bold shadow-lg" data-toggle="modal" data-target="#uploadModal">
+                <button type="button" class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-premium" data-toggle="modal" data-target="#uploadModal">
                     <i class="fas fa-plus-circle mr-1"></i> ADD STANDALONE ASSET
                 </button>
-                <ol class="breadcrumb float-sm-right bg-transparent p-0 mt-3 small">
-                    <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Media Gallery</li>
-                </ol>
             </div>
         </div>
     </div>
@@ -79,10 +75,10 @@
                                     <button type="button" class="btn btn-white btn-sm mx-1 rounded-circle shadow-lg" data-toggle="modal" data-target="#replaceModal{{ $media->id }}" title="Replace Asset" style="width: 38px; height: 38px;">
                                         <i class="fas fa-sync-alt text-primary"></i>
                                     </button>
-                                    <form action="{{ route('admin.gallery.destroy', $media->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Delete this media permanently?')">
+                                    <form id="delete-form-{{ $media->id }}" action="{{ route('admin.gallery.destroy', $media->id) }}" method="POST" class="d-inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-white btn-sm mx-1 rounded-circle shadow-lg" title="Delete" style="width: 38px; height: 38px;">
+                                        <button type="button" class="btn btn-white btn-sm mx-1 rounded-circle shadow-lg" title="Delete" style="width: 38px; height: 38px;" onclick="confirmDelete({{ $media->id }})">
                                             <i class="fas fa-trash text-danger"></i>
                                         </button>
                                     </form>
@@ -140,7 +136,7 @@
                                     </div>
                                     <div class="modal-footer border-0">
                                         <button type="button" class="btn btn-light rounded-pill px-4 font-weight-bold" data-dismiss="modal">CANCEL</button>
-                                        <button type="submit" class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-lg">UPDATE ASSET</button>
+                                        <button type="submit" class="btn btn-primary rounded-pill px-4 font-weight-bold">UPDATE ASSET</button>
                                     </div>
                                 </form>
                             </div>
@@ -194,7 +190,7 @@
                     </div>
                     <div class="modal-footer border-0">
                         <button type="button" class="btn btn-light rounded-pill px-4 font-weight-bold" data-dismiss="modal">CANCEL</button>
-                        <button type="submit" class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-lg">START UPLOAD</button>
+                        <button type="submit" class="btn btn-primary rounded-pill px-4 font-weight-bold">START UPLOAD</button>
                     </div>
                 </form>
             </div>
@@ -232,5 +228,22 @@
             var fileName = $(this).val().split("\\").pop();
             $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
         });
+
+        function confirmDelete(id) {
+            Swal.fire({
+                title: 'Delete Asset?',
+                text: "This operation is permanent and may break linked listings!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#64748b',
+                confirmButtonText: 'Yes, delete it',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('delete-form-' + id).submit();
+                }
+            })
+        }
     </script>
 @stop

@@ -6,19 +6,19 @@
 @stop
 
 @section('content_header')
-    <div class="d-flex align-items-center justify-content-between mb-4">
-        <div>
-            <h1 class="font-weight-bold text-dark mb-0">
-                <i class="fas fa-sliders-h mr-2 text-primary"></i> System Configuration
-            </h1>
-            <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">
-                Manage global system variables, environment parameters, and platform logic.
-            </p>
-        </div>
-        <div class="text-right">
-            <a href="{{ route('admin.welcome') }}" class="btn btn-back shadow-sm px-4">
-                <i class="fas fa-arrow-left mr-1"></i> Dashboard
-            </a>
+    <div class="container-fluid pt-4">
+        <div class="row mb-4 align-items-center">
+            <div class="col-sm-7">
+                <h1 class="m-0 text-dark font-weight-bold">
+                    <i class="fas fa-sliders-h mr-2 text-primary opacity-50"></i> System Architecture
+                </h1>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Manage global system variables, environment parameters, and platform logic.</p>
+            </div>
+            <div class="col-sm-5 d-flex align-items-center justify-content-end">
+                <a href="{{ route('admin.welcome') }}" class="btn btn-default shadow-sm rounded-pill px-4 font-weight-bold smallest">
+                    <i class="fas fa-arrow-left mr-1"></i> BACK TO PULSE
+                </a>
+            </div>
         </div>
     </div>
 @stop
@@ -26,15 +26,16 @@
 @section('content')
 <div class="container-fluid pb-5">
     {{-- Unified Layout Greeting --}}
-    <div class="card glass-card shadow-premium mb-5 border-0 overflow-hidden" style="border-radius: 24px; background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.7) 100%); backdrop-filter: blur(15px);">
+    {{-- Global Registry Greeting --}}
+    <div class="card border-0 shadow-premium mb-5 overflow-hidden" style="border-radius: 24px;">
         <div class="card-body p-0">
             <div class="d-flex align-items-stretch">
-                <div class="bg-primary px-5 d-flex align-items-center justify-content-center" style="min-width: 120px;">
+                <div class="bg-primary px-5 d-flex align-items-center justify-content-center" style="min-width: 120px; opacity: 0.9;">
                     <i class="fas fa-microchip text-white fa-2x shadow-sm"></i>
                 </div>
                 <div class="p-4">
                     <h5 class="mb-1 font-weight-bold text-dark">Configuration Control Center</h5>
-                    <p class="mb-0 text-muted small letter-spacing-1">Centralized management for core system engines, branding assets, and security protocols.</p>
+                    <p class="mb-0 text-muted smallest font-weight-bold text-uppercase letter-spacing-1">Centralized management for core system engines, branding assets, and security protocols.</p>
                 </div>
             </div>
         </div>
@@ -55,7 +56,7 @@
 
         @forelse($settings_groups as $group)
             <div class="col-lg-4 col-md-6 mb-4">
-                <div class="card h-100 glass-card shadow-sm border-0 stat-card" style="border-radius: 20px; transition: all 0.3s ease;">
+                <div class="card h-100 border-0 shadow-premium stat-card" style="border-radius: 20px; transition: all 0.3s ease;">
                     <div class="card-body p-4">
                         <div class="d-flex align-items-start mb-4">
                             <div class="icon-circle bg-{{ $group['color'] }}-soft text-{{ $group['color'] == 'indigo' ? 'purple' : $group['color'] }} mr-3 shadow-xs" style="width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
@@ -88,13 +89,14 @@
 </div>
 @endsection
 
-@section('css')
+@push('css')
+@include('admin._partials._toggle-card-css')
 <style>
-    .stat-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-premium) !important; border-color: rgba(70, 165, 172, 0.2); }
+    .stat-card:hover { transform: translateY(-8px); box-shadow: 0 15px 45px rgba(0,0,0,0.06) !important; border-color: var(--primary) !important; }
     .text-purple { color: #6366f1; }
     .bg-indigo-soft { background: rgba(99, 102, 241, 0.1); }
 </style>
-@stop
+@endpush
 
 @section('js')
 <script>

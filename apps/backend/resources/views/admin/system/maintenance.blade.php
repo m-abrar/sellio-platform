@@ -7,7 +7,7 @@
         <div class="row mb-4 align-items-center">
             <div class="col-sm-8">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-tools mr-2 text-primary"></i> 
+                    <i class="fas fa-tools mr-2 text-primary opacity-50"></i> 
                     System Maintenance
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">
@@ -15,8 +15,8 @@
                 </p>
             </div>
             <div class="col-sm-4 text-right">
-                <a href="{{ route('admin.welcome') }}" class="btn btn-back shadow-sm">
-                    <i class="fas fa-arrow-left mr-1"></i> Back to Dashboard
+                <a href="{{ route('admin.welcome') }}" class="btn btn-back shadow-sm px-4">
+                    <i class="fas fa-arrow-left mr-1"></i> BACK TO DASHBOARD
                 </a>
             </div>
         </div>
@@ -31,8 +31,10 @@
         {{-- Main Operations Column --}}
         <div class="col-md-8">
             <div class="card border-0 shadow-premium overflow-hidden mb-4" style="border-radius: 24px;">
-                <div class="card-header border-0 bg-white py-3 px-4">
-                    <h3 class="card-title font-weight-bold text-dark text-uppercase small" style="letter-spacing: 1px;">Foundational Optimization</h3>
+                <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
+                    <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">
+                        <i class="fas fa-cogs mr-1 text-primary opacity-50"></i> Foundational Optimization
+                    </h3>
                 </div>
                 <div class="card-body p-4">
                     <div class="d-flex align-items-start mb-4 p-3 rounded-xl" style="background: rgba(70, 165, 172, 0.05); border: 1px solid rgba(70, 165, 172, 0.1);">
@@ -49,7 +51,7 @@
                     <div class="d-flex flex-wrap align-items-center">
                         <form action="{{ route('admin.system.optimize') }}" method="POST" class="mr-3 mb-2">
                             @csrf
-                            <button type="submit" class="btn btn-primary rounded-pill px-4 shadow-premium font-weight-bold">
+                            <button type="submit" class="btn btn-primary rounded-pill px-4 font-weight-bold">
                                 <i class="fas fa-bolt mr-2"></i> OPTIMIZE & CACHE ALL
                             </button>
                         </form>
@@ -111,7 +113,7 @@
                                 <div class="col-md-3 text-right">
                                     <form action="{{ route('admin.system.media.regenerate') }}" method="POST">
                                         @csrf
-                                        <button type="submit" class="btn btn-primary rounded-pill px-4 font-weight-bold smallest shadow-sm">
+                                        <button type="submit" class="btn btn-primary rounded-pill px-4 font-weight-bold smallest">
                                             REGENERATE
                                         </button>
                                     </form>
@@ -125,28 +127,31 @@
 
         {{-- Sidebar Insights --}}
         <div class="col-md-4">
-            <div class="card border-0 shadow-premium bg-dark mb-4" style="border-radius: 24px;">
-                <div class="card-body p-4">
-                    <h5 class="font-weight-bold text-white mb-3 small text-uppercase letter-spacing-1">
+            <div class="card border-0 shadow-premium bg-dark mb-4 overflow-hidden" style="border-radius: 24px;">
+                <div class="card-body p-4 position-relative" style="z-index: 1;">
+                    <div class="position-absolute" style="top: -20px; right: -20px; opacity: 0.05; font-size: 8rem; transform: rotate(-15deg);">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <h5 class="font-weight-bold text-white mb-3 smallest text-uppercase letter-spacing-1">
                         <i class="fas fa-info-circle mr-2 text-warning"></i> Operational Guide
                     </h5>
-                    <p class="smallest text-white-50 mb-3" style="line-height: 1.6;">
-                        These tools manage the foundational buffers of the platform. Use them to resolve:
+                    <p class="smallest text-white-50 mb-3 font-weight-bold uppercase" style="line-height: 1.6;">
+                        These tools manage the platform's foundational buffers. Use them to resolve:
                     </p>
-                    <ul class="smallest text-white-50 pl-3 mb-4">
-                        <li class="mb-2">Environment (<code>.env</code>) sync issues.</li>
-                        <li class="mb-2">Broken media assets or symlinks.</li>
-                        <li class="mb-2">Routing conflicts or missing definitions.</li>
-                        <li class="mb-2">Legacy UI rendering in Blade files.</li>
+                    <ul class="smallest text-white-50 pl-3 mb-4 font-weight-bold uppercase" style="list-style: none;">
+                        <li class="mb-2"><i class="fas fa-check-circle mr-2 text-success"></i> Environment (.env) sync issues</li>
+                        <li class="mb-2"><i class="fas fa-check-circle mr-2 text-success"></i> Broken media or symlinks</li>
+                        <li class="mb-2"><i class="fas fa-check-circle mr-2 text-success"></i> Routing conflicts or missing keys</li>
+                        <li class="mb-2"><i class="fas fa-check-circle mr-2 text-success"></i> Compiled template legacy issues</li>
                     </ul>
                     <div class="p-3 bg-white bg-opacity-10 rounded-xl border border-white border-opacity-10 smallest">
                         <div class="d-flex justify-content-between mb-2">
-                            <span class="text-white-50">Environment</span>
-                            <span class="font-weight-bold text-warning text-uppercase">{{ config('app.env') }}</span>
+                            <span class="text-white-50 uppercase font-weight-bold">Environment</span>
+                            <span class="font-weight-bold text-warning text-uppercase letter-spacing-1">{{ config('app.env') }}</span>
                         </div>
                         <div class="d-flex justify-content-between">
-                            <span class="text-white-50">Timezone</span>
-                            <span class="font-weight-bold text-white">{{ config('app.timezone') }}</span>
+                            <span class="text-white-50 uppercase font-weight-bold">Timezone</span>
+                            <span class="font-weight-bold text-white uppercase">{{ config('app.timezone') }}</span>
                         </div>
                     </div>
                 </div>

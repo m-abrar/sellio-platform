@@ -14,10 +14,10 @@
             </div>
             <div class="col-sm-6 text-right">
                 <div class="d-flex justify-content-end align-items-center" style="gap: 12px;">
-                    <a href="{{ route('admin.product-orders.index') }}" class="btn btn-default shadow-sm rounded-pill px-4 font-weight-bold smallest">
+                    <a href="{{ route('admin.product-orders.index') }}" class="btn btn-default shadow-sm rounded-pill px-4 font-weight-bold smallest print-hide">
                         <i class="fas fa-arrow-left mr-1"></i> BACK TO REGISTRY
                     </a>
-                    <button type="button" class="btn btn-primary shadow-premium rounded-pill px-4 font-weight-bold smallest" onclick="window.print()">
+                    <button type="button" class="btn btn-primary shadow-premium rounded-pill px-4 font-weight-bold smallest print-hide" onclick="window.print()">
                         <i class="fas fa-print mr-1"></i> GENERATE INVOICE
                     </button>
                 </div>
@@ -44,7 +44,7 @@
                             <table class="table table-hover table-premium mb-0">
                                 <thead class="thead-light">
                                     <tr>
-                                        <th class="pl-4">Item Details</th>
+                                        <th class="pl-4 text-left" style="width: 50%;">{{ __('Item Details') }}</th>
                                         <th class="text-center">Rate</th>
                                         <th class="text-center">Quantity</th>
                                         <th class="text-right pr-4">Line Total</th>
@@ -141,7 +141,7 @@
             {{-- Right Column: Customer & Shipping --}}
             <div class="col-md-4">
                 {{-- Status Management Card --}}
-                <div class="card border-0 shadow-premium mb-4 overflow-hidden" style="border-radius: 24px;">
+                <div class="card border-0 shadow-premium mb-4 overflow-hidden print-hide" style="border-radius: 24px;">
                     <div class="card-header border-0 bg-info py-3 px-4">
                         <h3 class="card-title font-weight-bold text-white smallest text-uppercase letter-spacing-1 mb-0">
                             <i class="fas fa-tasks mr-1"></i> Sync Lifecycle
@@ -179,7 +179,7 @@
                 </div>
 
                 {{-- Visual Timeline --}}
-                <div class="card border-0 shadow-premium mb-4 overflow-hidden" style="border-radius: 24px;">
+                <div class="card border-0 shadow-premium mb-4 overflow-hidden print-hide" style="border-radius: 24px;">
                     <div class="card-header border-0 bg-dark py-3 px-4">
                         <h3 class="card-title font-weight-bold text-white smallest text-uppercase letter-spacing-1 mb-0">
                             <i class="fas fa-history mr-1 opacity-50"></i> Logistics Timeline
@@ -261,37 +261,38 @@
     </div>
 @stop
 
-@push('js')
-<script>
-    $(document).ready(function() {
-        $('.select2').select2({
-            theme: 'bootstrap4',
-            width: '100%'
-        });
-
-        $('#statusSelect').on('change', function() {
-            const status = $(this).val();
-            const trackingStatuses = ['shipped', 'out_for_delivery', 'delivered'];
-            
-            if (trackingStatuses.includes(status)) {
-                $('#trackingGroup').removeClass('d-none').hide().fadeIn();
-            } else {
-                $('#trackingGroup').fadeOut(function() {
-                    $(this).addClass('d-none');
-                });
-            }
-        });
-    });
-</script>
+@push('css')
+@include('admin._partials._toggle-card-css')
+<style>
+    @media print {
+        .main-sidebar, .main-header, .btn, .card-header .btn, .sync-lifecycle-card, .logistics-timeline-card, .sync-lifecycle-section {
+            display: none !important;
+        }
+        .content-wrapper {
+            margin-left: 0 !important;
+            padding-top: 0 !important;
+        }
+        .card {
+            border: 1px solid #eee !important;
+            box-shadow: none !important;
+        }
+        .container-fluid {
+            width: 100% !important;
+            padding: 0 !important;
+        }
+    }
+</style>
 @endpush
 
 @push('js')
 <script>
     $(document).ready(function() {
-        $('.select2').select2({
-            theme: 'bootstrap4',
-            width: '100%'
-        });
+        if (typeof $.fn.select2 !== 'undefined') {
+            $('.select2').select2({
+                theme: 'bootstrap4',
+                width: '100%'
+            });
+        }
 
         $('#statusSelect').on('change', function() {
             const status = $(this).val();

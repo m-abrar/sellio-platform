@@ -4,17 +4,17 @@
 
 @section('content_header')
     <div class="container-fluid pt-4">
-        <div class="row mb-2">
-            <div class="col-sm-6">
+        <div class="row mb-4 align-items-center">
+            <div class="col-sm-7">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-wallet mr-2 text-primary"></i> Payment Gateways
+                    <i class="fas fa-wallet mr-2 text-primary opacity-50"></i> Payment Gateways
                 </h1>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Manage platform-wide financial processors and secure transaction gateways.</p>
             </div>
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Payment Gateways</li>
-                </ol>
+            <div class="col-sm-5 d-flex align-items-center justify-content-end">
+                <a href="{{ route('admin.welcome') }}" class="btn btn-back shadow-sm px-4">
+                    <i class="fas fa-arrow-left mr-1"></i> BACK TO DASHBOARD
+                </a>
             </div>
         </div>
     </div>
@@ -24,16 +24,16 @@
 <div class="container-fluid">
     @include('admin.alert')
 
-    {{-- Information Alert for Financial Security --}}
-    <div class="card bg-white border-0 shadow-sm mb-4 overflow-hidden" style="border-radius: 10px;">
+    {{-- Financial Security Protocol --}}
+    <div class="card border-0 shadow-premium mb-4 overflow-hidden" style="border-radius: 20px;">
         <div class="card-body p-0">
-            <div class="d-flex">
-                <div class="bg-success px-4 d-flex align-items-center">
-                    <i class="fas fa-shield-alt text-white fa-2x"></i>
+            <div class="d-flex align-items-stretch">
+                <div class="bg-success px-4 d-flex align-items-center justify-content-center" style="min-width: 80px; opacity: 0.9;">
+                    <i class="fas fa-shield-alt text-white fa-2x shadow-sm"></i>
                 </div>
-                <div class="p-3">
-                    <h6 class="mb-1 font-weight-bold text-dark">Transaction Security Protocol</h6>
-                    <p class="mb-0 text-muted small">All API keys are encrypted at rest. Switch to <span class="badge badge-success px-2 py-0">Live Mode</span> only after verifying sandbox transactions in the debugger.</p>
+                <div class="p-4">
+                    <h6 class="mb-1 font-weight-bold text-dark smallest text-uppercase letter-spacing-1">Transaction Security Protocol</h6>
+                    <p class="mb-0 text-muted smallest font-weight-bold uppercase">All API keys are encrypted at rest. Switch to <span class="badge badge-success-light text-success px-2 py-0 font-weight-bold">Live Mode</span> only after verifying sandbox transactions.</p>
                 </div>
             </div>
         </div>
@@ -42,26 +42,28 @@
     
 
     {{-- Installed Processors Card --}}
-    <div class="card card-primary card-outline shadow-sm border-0">
-        <div class="card-header border-0 bg-white py-3">
-            <h3 class="card-title font-weight-600 text-muted">Installed Processors</h3>
-            <div class="card-tools">
-                <button type="button" class="btn btn-tool" data-card-widget="maximize">
-                    <i class="fas fa-expand"></i>
-                </button>
+    <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
+        <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
+            <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">
+                <i class="fas fa-network-wired mr-1 text-primary opacity-50"></i> Active Integration Ledger
+            </h3>
+            <div class="card-tools ml-auto">
+                <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase mr-2">
+                    <i class="fas fa-plug mr-1"></i> {{ $gateways->count() }} CONNECTED
+                </span>
             </div>
         </div>
 
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table id="gateways-table" class="table table-hover table-premium mb-0">
-                    <thead class="thead-light">
+                    <thead class="bg-light text-uppercase smallest font-weight-bold">
                         <tr>
-                            <th class="px-4">Gateway & Integration</th>
-                            <th>Identifier</th>
-                            <th class="text-center">Environment</th>
-                            <th class="text-center">Status</th>
-                            <th class="text-right px-4">Actions</th>
+                            <th class="py-3 border-0 px-4">Gateway & Integration</th>
+                            <th class="py-3 border-0">Technical Identifier</th>
+                            <th class="py-3 border-0 text-center">Environment</th>
+                            <th class="py-3 border-0 text-center">Lifecycle</th>
+                            <th class="py-3 border-0 text-right px-4">Operations</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -105,8 +107,8 @@
                                 </td>
                                 <td class="text-right align-middle px-4">
                                     <a href="{{ route('admin.payment-gateways.edit', $gateway->id) }}" 
-                                       class="btn btn-primary btn-sm btn-flat shadow-xs px-3 font-weight-bold">
-                                        <i class="fas fa-cog mr-1"></i> Configure
+                                       class="btn btn-primary rounded-pill shadow-premium px-4 font-weight-bold smallest">
+                                        <i class="fas fa-cog mr-1"></i> CONFIGURE
                                     </a>
                                 </td>
                             </tr>
@@ -123,10 +125,10 @@
                 </table>
             </div>
         </div>
-        <div class="card-footer bg-light border-0 py-3">
+        <div class="card-footer bg-white border-0 py-4 px-4">
              <div class="d-flex justify-content-between align-items-center">
-                 <p class="mb-0 text-muted small"><i class="fas fa-info-circle mr-1"></i> System currently supports <strong>{{ $gateways->count() }}</strong> active integrations.</p>
-                 <span class="text-xs text-uppercase font-weight-bold text-muted" style="letter-spacing: 1px;">Security Tier: Level 4</span>
+                 <p class="mb-0 text-muted smallest font-weight-bold uppercase letter-spacing-1"><i class="fas fa-info-circle mr-1 text-info"></i> SECURE Financial Tier: Level 4 Active</p>
+                 <span class="badge badge-light border smallest px-3 py-1 font-weight-bold uppercase">PROCESSORS: {{ $gateways->count() }}</span>
              </div>
         </div>
     </div>

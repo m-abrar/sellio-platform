@@ -243,12 +243,27 @@
     }
 
     /* Select2 Premium Refinement */
-    .select2-container--bootstrap4 .select2-selection {
+    .select2-container--bootstrap4 .select2-selection--single {
         border-radius: 12px !important;
         border: 1.5px solid #edf2f7 !important;
-        height: auto !important;
-        padding: 0.5rem 0.8rem !important;
+        height: 50px !important;
+        padding: 0.5rem 1rem !important;
         transition: all 0.2s ease !important;
+        display: flex !important;
+        align-items: center !important;
+        background-color: #fff !important;
+    }
+
+    .select2-container--bootstrap4 .select2-selection--single .select2-selection__rendered {
+        color: #334155 !important;
+        font-weight: 500 !important;
+        line-height: normal !important;
+        padding-left: 0 !important;
+    }
+
+    .select2-container--bootstrap4 .select2-selection--single .select2-selection__arrow {
+        height: 48px !important;
+        right: 12px !important;
     }
 
     .select2-container--bootstrap4.select2-container--focus .select2-selection {
@@ -257,34 +272,125 @@
     }
 
     .select2-dropdown {
-        border-radius: 16px !important;
-        border: none !important;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important;
+        border-radius: 20px !important;
+        border: 1px solid rgba(0,0,0,0.05) !important;
+        box-shadow: 0 15px 45px rgba(0,0,0,0.12) !important;
         overflow: hidden !important;
-        margin-top: 5px !important;
+        margin-top: 8px !important;
+        background: rgba(255, 255, 255, 0.98) !important;
+        backdrop-filter: blur(10px);
+        z-index: 1061 !important;
+    }
+
+    .select2-search--dropdown .select2-search__field {
+        border-radius: 10px !important;
+        padding: 10px 15px !important;
+        border: 1.5px solid #edf2f7 !important;
+        margin: 10px !important;
+        width: calc(100% - 20px) !important;
     }
 
     .select2-results__option {
-        padding: 10px 15px !important;
-        font-size: 0.85rem !important;
+        padding: 12px 20px !important;
+        font-size: 0.9rem !important;
+        color: #475569 !important;
+        transition: all 0.2s ease;
     }
 
     .select2-container--bootstrap4 .select2-results__option--highlighted {
-        background-color: var(--primary) !important;
+        background-color: var(--primary-soft) !important;
+        color: var(--primary) !important;
     }
 
-    /* Datepicker Premium */
-    .datepicker {
-        border-radius: 16px !important;
-        padding: 15px !important;
-        border: none !important;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important;
-        margin-top: 5px !important;
+    .select2-container--bootstrap4 .select2-results__option[aria-selected=true] {
+        background-color: var(--primary) !important;
+        color: #fff !important;
     }
 
-    .datepicker table tr td.active {
-        background-color: var(--primary) !important;
+    /* Modern Date Input Styling */
+    input[type="date"] {
+        appearance: none;
+        -webkit-appearance: none;
+        color: #334155;
+        font-family: inherit;
+        font-weight: 500;
+        border-radius: 12px !important;
+        border: 1.5px solid #edf2f7 !important;
+        padding: 0.6rem 1rem !important;
+    }
+
+    /* Premium Checkbox Refinement for "Feature Applicability" */
+    .custom-control-premium {
+        padding-left: 2.5rem !important;
+        min-height: 1.5rem !important;
+    }
+
+    .custom-control-premium .custom-control-label::before {
+        left: -2.5rem !important;
+        width: 1.5rem !important;
+        height: 1.5rem !important;
         border-radius: 8px !important;
+        border: 1.5px solid #e2e8f0 !important;
+        background-color: #f8fafc !important;
+        transition: all 0.2s ease !important;
+        top: 0 !important;
+    }
+
+    .custom-control-premium .custom-control-label::after {
+        left: -2.5rem !important;
+        width: 1.5rem !important;
+        height: 1.5rem !important;
+        top: 0 !important;
+        background-size: 60% 60% !important;
+    }
+
+    .custom-control-input:checked ~ .custom-control-label::before {
+        border-color: var(--primary) !important;
+        background-color: var(--primary) !important;
+    }
+
+    .custom-control-input:focus ~ .custom-control-label::before {
+        box-shadow: 0 0 0 0.2rem var(--primary-soft) !important;
+    }
+
+    /* Global Print Optimization */
+    @media print {
+        .main-sidebar, 
+        .main-header, 
+        .content-header, 
+        .btn, 
+        .card-header .card-tools,
+        .print-hide {
+            display: none !important;
+        }
+        
+        body, .content-wrapper {
+            background: #fff !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        .container-fluid {
+            max-width: 100% !important;
+            padding: 0 !important;
+        }
+
+        .card {
+            border: none !important;
+            box-shadow: none !important;
+            break-inside: avoid;
+        }
+
+        .card-header {
+            background: #f8fafc !important;
+            border-bottom: 2px solid #334155 !important;
+        }
+
+        .table thead th {
+            background-color: #f1f5f9 !important;
+            color: #000 !important;
+            border-bottom: 2px solid #000 !important;
+        }
     }
 
     /* Premium Button Styling */
@@ -302,7 +408,7 @@
     .btn-submit-premium {
         background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%) !important;
         color: white !important;
-        box-shadow: 0 4px 15px rgba(var(--primary-rgb), 0.3) !important;
+        box-shadow: none !important;
         position: relative;
         overflow: hidden;
     }
@@ -324,7 +430,7 @@
 
     .btn-submit-premium:hover {
         transform: translateY(-2px) scale(1.02) !important;
-        box-shadow: 0 8px 25px rgba(var(--primary-rgb), 0.4) !important;
+        box-shadow: none !important;
         background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-hover) 100%) !important;
     }
 
@@ -336,24 +442,36 @@
     .btn-primary {
         border-radius: 12px !important;
         font-weight: 700 !important;
-        box-shadow: 0 8px 20px rgba(var(--primary-rgb), 0.2) !important;
+        box-shadow: none !important;
         transition: all 0.2s ease !important;
         border: none !important;
     }
 
     .btn-primary:hover {
         transform: translateY(-2px) !important;
-        box-shadow: 0 12px 25px rgba(var(--primary-rgb), 0.3) !important;
+        box-shadow: none !important;
         background-color: var(--primary-hover) !important;
     }
 
-    /* Premium Shadow Utility */
+    /* Premium Shadow Utility - Note: Removed from submit buttons */
     .shadow-premium {
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04) !important;
     }
     
     .shadow-premium-lg {
         box-shadow: 0 15px 35px rgba(var(--primary-rgb), 0.2) !important;
+    }
+
+    button[type="submit"], 
+    .btn-primary[type="submit"],
+    .btn-submit-premium {
+        box-shadow: none !important;
+    }
+
+    button[type="submit"]:hover, 
+    .btn-primary[type="submit"]:hover,
+    .btn-submit-premium:hover {
+        box-shadow: none !important;
     }
 
     /* Premium Back Button */
@@ -519,4 +637,20 @@
         background-color: #f8fafc !important;
     }
 </style>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Global listener for premium toggles
+        document.body.addEventListener('change', function(e) {
+            if (e.target && e.target.classList.contains('toggle-input')) {
+                const card = e.target.closest('label');
+                if (card) {
+                    const statusText = card.querySelector('.toggle-status');
+                    if (statusText) {
+                        statusText.textContent = e.target.checked ? 'ENABLED' : 'DISABLED';
+                    }
+                }
+            }
+        });
+    });
+</script>
 @endpush

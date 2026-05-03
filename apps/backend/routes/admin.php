@@ -158,11 +158,15 @@ Route::prefix('admin')
         Route::resource('products', ProductController::class)->middleware('module:products');
         Route::get('products/{product}/duplicate', [ProductController::class, 'duplicate'])->name('products.duplicate')->middleware('module:products');
         
+        // Product Orders Management
         Route::controller(OrderController::class)->prefix('product-orders')->name('product-orders.')->middleware('module:products')->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/create', 'create')->name('create');
+            Route::post('/', 'store')->name('store');
+            Route::get('/{order}', 'show')->name('show');
             Route::post('/bulk-update', 'bulkUpdate')->name('bulk-update');
             Route::post('/{order}/status', 'updateStatus')->name('update-status');
         });
-        Route::resource('product-orders', OrderController::class)->middleware('module:products');
 
         /**
      * 3. SALES, BOOKINGS & FINANCE

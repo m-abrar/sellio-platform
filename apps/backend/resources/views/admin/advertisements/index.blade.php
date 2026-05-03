@@ -7,15 +7,15 @@
         <div class="row mb-4 align-items-center">
             <div class="col-sm-8">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-ad mr-2 text-primary"></i> Ad Campaigns
+                    <i class="fas fa-ad mr-2 text-primary opacity-50"></i> Ad Campaigns
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">
                     Creative management and impression orchestration for marketplace promotions.
                 </p>
             </div>
             <div class="col-sm-4 text-right">
-                <a href="{{ route('admin.welcome') }}" class="btn btn-back shadow-sm">
-                    <i class="fas fa-arrow-left mr-1"></i> Dashboard
+                <a href="{{ route('admin.welcome') }}" class="btn btn-back shadow-sm rounded-pill px-4">
+                    <i class="fas fa-arrow-left mr-1"></i> BACK TO DASHBOARD
                 </a>
             </div>
         </div>
@@ -27,7 +27,7 @@
     @include('admin.alert')
 
     {{-- Ad Management Card --}}
-    <div class="card card-premium overflow-hidden">
+    <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
         <div class="card-header border-0 bg-white py-3 px-4">
             <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">Active Creative Registry</h3>
             <div class="card-tools">
@@ -112,7 +112,7 @@
                                 </td>
 
                                 <td class="text-right align-middle px-4">
-                                    <div class="btn-group btn-group-premium shadow-xs rounded-pill border overflow-hidden">
+                                    <div class="btn-group btn-group-premium shadow-sm border overflow-hidden rounded-pill bg-white">
                                         <a href="{{ route('admin.advertisements.show', $advertisement) }}" 
                                            class="btn btn-white btn-sm text-primary py-2 px-3 border-right" 
                                            data-toggle="tooltip" title="View Details">
@@ -125,11 +125,11 @@
                                             <i class="fas fa-pencil-alt"></i>
                                         </a>
 
-                                        <form action="{{ route('admin.advertisements.destroy', $advertisement) }}" method="POST" class="d-inline">
+                                        <form id="delete-form-{{ $advertisement->id }}" action="{{ route('admin.advertisements.destroy', $advertisement) }}" method="POST" class="d-inline">
                                             @csrf @method('DELETE')
-                                            <button type="submit" class="btn btn-white btn-sm text-danger py-2 px-3" 
+                                            <button type="button" class="btn btn-white btn-sm text-danger py-2 px-3" 
                                                     data-toggle="tooltip" title="Archive Campaign"
-                                                    onclick="return confirm('Archive this advertisement campaign?')">
+                                                    onclick="confirmDelete({{ $advertisement->id }})">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
                                         </form>
@@ -175,4 +175,27 @@
     .btn-group-premium .btn { border: 1px solid #e9ecef; background: #fff; padding: 0.25rem 0.75rem; }
     .btn-group-premium .btn:hover { background: #f8f9fa; }
 </style>
+@section('js')
+<script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+
+    function confirmDelete(id) {
+        Swal.fire({
+            title: 'Archive Campaign?',
+            text: "This creative will be removed from all active placements.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#ef4444',
+            cancelButtonColor: '#64748b',
+            confirmButtonText: 'Yes, archive it',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('delete-form-' + id).submit();
+            }
+        })
+    }
+</script>
 @endsection

@@ -6,17 +6,17 @@
 
 @section('content_header')
     <div class="container-fluid pt-4">
-        <div class="row mb-2">
-            <div class="col-sm-6">
+        <div class="row mb-4 align-items-center">
+            <div class="col-sm-7">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-sync-alt mr-2 text-primary"></i> User Subscriptions
+                    <i class="fas fa-sync-alt mr-2 text-primary opacity-50"></i> {{ __('Enrollment Registry') }}
                 </h1>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Track platform memberships, trial states, and recurring revenue pipelines.</p>
             </div>
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Subscriptions</li>
-                </ol>
+            <div class="col-sm-5 d-flex align-items-center justify-content-end">
+                <a href="{{ route('admin.subscriptions.create') }}" class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-premium">
+                    <i class="fas fa-plus-circle mr-1"></i> MANUAL ENROLLMENT
+                </a>
             </div>
         </div>
     </div>
@@ -26,14 +26,9 @@
 <div class="container-fluid">
     @include('admin.alert')
 
-    {{-- Filter Card: Blueprint Standard --}}
-    <div class="card card-outline card-secondary shadow-sm mb-4 border-0">
-        <div class="card-header bg-white">
-            <h3 class="card-title text-muted font-weight-bold small text-uppercase">
-                <i class="fas fa-filter mr-1"></i> Filter Registry
-            </h3>
-        </div>
-        <div class="card-body">
+    {{-- Filter Card --}}
+    <div class="card border-0 shadow-premium mb-4" style="border-radius: 20px;">
+        <div class="card-body py-4 px-4">
             <form method="GET" action="{{ route('admin.subscriptions.index') }}">
                 <div class="row align-items-end">
                     <div class="col-md-4">
@@ -65,27 +60,29 @@
         </div>
     </div>
 
-    {{-- Main Table: Blueprint Table-Premium Standard --}}
-    <div class="card card-primary card-outline shadow-sm border-0">
-        <div class="card-header border-0 bg-white py-3">
-            <h3 class="card-title font-weight-600 text-muted">Enrollment Registry</h3>
-            <div class="card-tools">
-                <a href="{{ route('admin.subscriptions.create') }}" class="btn btn-primary rounded-pill shadow-premium px-4">
-                    <i class="fas fa-plus-circle mr-1"></i> Manual Subscription
-                </a>
+    {{-- Main Table --}}
+    <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
+        <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
+            <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">
+                <i class="fas fa-id-badge mr-1 text-primary opacity-50"></i> Global Enrollment Ledger
+            </h3>
+            <div class="card-tools ml-auto">
+                <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase">
+                    <i class="fas fa-users mr-1"></i> {{ $subscriptions->total() }} ACTIVE SEATS
+                </span>
             </div>
         </div>
 
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table id="subscriptions-table" class="table table-hover table-premium mb-0">
-                    <thead class="thead-light">
+                    <thead class="bg-light text-uppercase smallest font-weight-bold">
                         <tr>
-                            <th>Subscriber</th>
-                            <th>Plan Details</th>
-                            <th>Active Timeline</th>
-                            <th class="text-center">Status</th>
-                            <th class="text-right px-4">Actions</th>
+                            <th class="py-3 border-0 pl-4">Subscriber Identity</th>
+                            <th class="py-3 border-0">Service Tier</th>
+                            <th class="py-3 border-0">Access Timeline</th>
+                            <th class="py-3 border-0 text-center">Lifecycle</th>
+                            <th class="py-3 border-0 text-right px-4">Operations</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -171,16 +168,10 @@
             </div>
         </div>
 
-        @if(method_exists($subscriptions, 'links') && $subscriptions->hasPages())
-            <div class="card-footer bg-white border-top py-3">
-                <div class="d-flex justify-content-between align-items-center">
-                    <span class="text-muted small font-weight-bold text-uppercase">
-                        Showing summary records
-                    </span>
-                    <div>
-                        {{ $subscriptions->appends(request()->query())->links('pagination::bootstrap-4') }}
-                    </div>
-                </div>
+        @if(method_exists($subscriptions, 'hasPages') && $subscriptions->hasPages())
+            <div class="card-footer bg-white border-0 py-4 px-4 d-flex justify-content-between align-items-center">
+                <div class="text-muted smallest font-weight-bold uppercase">Displaying {{ $subscriptions->firstItem() }} - {{ $subscriptions->lastItem() }} of {{ $subscriptions->total() }} records</div>
+                <div>{{ $subscriptions->appends(request()->except('page'))->links('pagination::bootstrap-4') }}</div>
             </div>
         @endif
     </div>

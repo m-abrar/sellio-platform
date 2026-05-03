@@ -35,7 +35,7 @@
         </div>
 
         <div class="action-buttons-group">
-            <button type="submit" class="btn btn-submit-premium btn-block rounded-pill font-weight-bold shadow-lg py-3 smallest mb-3 uppercase letter-spacing-1">
+            <button type="submit" class="btn btn-primary btn-block rounded-pill font-weight-bold py-3 smallest mb-3 uppercase letter-spacing-1">
                 <i class="fas fa-save mr-2"></i> {{ $isEdit ? "SYNCHRONIZE $label" : "INITIALIZE $label" }}
             </button>
 

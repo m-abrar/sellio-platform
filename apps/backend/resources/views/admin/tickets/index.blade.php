@@ -6,7 +6,7 @@
     <div class="container-fluid pt-4">
         <div class="row align-items-center mb-4">
             <div class="col-sm-7">
-                <h1 class="m-0 text-dark font-weight-bold d-inline-block">
+                <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-ticket-alt mr-2 text-primary opacity-50"></i> 
                     Customer Support Queue
                 </h1>
@@ -14,11 +14,10 @@
                     Monitor user inquiries, resolve platform issues, and manage ticket priority.
                 </p>
             </div>
-            <div class="col-sm-5 d-flex flex-column align-items-end justify-content-center">
-                <ol class="breadcrumb bg-transparent p-0 mb-0 smallest font-weight-bold text-uppercase letter-spacing-1">
-                    <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}" class="text-primary">Dashboard</a></li>
-                    <li class="breadcrumb-item active text-muted">Support</li>
-                </ol>
+            <div class="col-sm-5 d-flex align-items-center justify-content-end">
+                <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase shadow-sm">
+                    <i class="fas fa-headset mr-1"></i> {{ $tickets->total() }} REQUESTS QUEUED
+                </span>
             </div>
         </div>
     </div>
@@ -33,25 +32,25 @@
             <div class="card border-0 shadow-premium" style="border-radius: 20px;">
                 <div class="card-body p-2 d-flex align-items-center">
                     <span class="text-muted smallest font-weight-bold ml-3 mr-3 text-uppercase letter-spacing-1">
-                        <i class="fas fa-filter mr-1 text-primary"></i> Filter By Status:
+                        <i class="fas fa-filter mr-1 text-primary"></i> Queue Filter:
                     </span>
                     <ul class="nav nav-pills p-1 bg-light rounded-pill">
                         <li class="nav-item">
-                            <a class="nav-link {{ $status === 'open' ? 'active bg-success shadow-sm' : 'text-muted' }} px-4 py-1 smallest font-weight-bold rounded-pill transition-all" 
+                            <a class="nav-link {{ $status === 'open' ? 'active bg-primary shadow-sm' : 'text-muted' }} px-4 py-1 smallest font-weight-bold rounded-pill transition-all" 
                                href="{{ route('admin.tickets.index', ['status' => 'open']) }}">
-                               <i class="fas fa-envelope-open mr-2"></i> OPEN QUEUE
+                               {{ __('OPEN QUEUE') }}
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {{ $status === 'in-progress' ? 'active bg-info shadow-sm' : 'text-muted' }} px-4 py-1 smallest font-weight-bold rounded-pill transition-all" 
+                            <a class="nav-link {{ $status === 'in-progress' ? 'active bg-primary shadow-sm' : 'text-muted' }} px-4 py-1 smallest font-weight-bold rounded-pill transition-all" 
                                href="{{ route('admin.tickets.index', ['status' => 'in-progress']) }}">
-                               <i class="fas fa-spinner mr-2"></i> IN RESOLUTION
+                               {{ __('IN RESOLUTION') }}
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {{ $status === 'closed' ? 'active bg-dark shadow-sm' : 'text-muted' }} px-4 py-1 smallest font-weight-bold rounded-pill transition-all" 
+                            <a class="nav-link {{ $status === 'closed' ? 'active bg-primary shadow-sm' : 'text-muted' }} px-4 py-1 smallest font-weight-bold rounded-pill transition-all" 
                                href="{{ route('admin.tickets.index', ['status' => 'closed']) }}">
-                               <i class="fas fa-archive mr-2"></i> ARCHIVE
+                               {{ __('ARCHIVE') }}
                             </a>
                         </li>
                     </ul>
@@ -62,17 +61,14 @@
     </div>
 
     <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
-        <div class="card-header border-0 bg-white py-4 px-4">
-            <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0" style="letter-spacing: 1px;">
-                Active Support Queue
+        <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
+            <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">
+                Support Operations Ledger
             </h3>
-            <div class="card-tools">
+            <div class="card-tools ml-auto">
                 <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase mr-2">
-                    <i class="fas fa-headset mr-1"></i> {{ $tickets->total() }} REQUESTS FOUND
+                    <i class="fas fa-history mr-1"></i> LOGGED CASES
                 </span>
-                <button type="button" class="btn btn-tool text-muted" data-card-widget="maximize">
-                    <i class="fas fa-expand"></i>
-                </button>
             </div>
             <div id="bulk-actions-container" class="d-none animate__animated animate__fadeIn">
                 <div class="dropdown d-inline-block">
@@ -103,7 +99,7 @@
                         <thead class="bg-light text-uppercase smallest font-weight-bold">
                             <tr>
                                 <th class="text-center py-3 border-0" style="width: 50px">
-                                    <div class="custom-control custom-checkbox">
+                                    <div class="custom-control custom-control-premium custom-checkbox">
                                         <input type="checkbox" class="custom-control-input" id="selectAll">
                                         <label class="custom-control-label" for="selectAll"></label>
                                     </div>
@@ -119,7 +115,7 @@
                             @forelse($tickets as $ticket)
                             <tr>
                                 <td class="text-center align-middle py-4">
-                                    <div class="custom-control custom-checkbox">
+                                    <div class="custom-control custom-control-premium custom-checkbox">
                                         <input type="checkbox" name="ids[]" value="{{ $ticket->id }}" class="custom-control-input ticket-checkbox" id="check-{{ $ticket->id }}">
                                         <label class="custom-control-label" for="check-{{ $ticket->id }}"></label>
                                     </div>
@@ -198,9 +194,10 @@
                 </form>
             </div>
 
-            @if($tickets->hasPages())
-                <div class="card-footer bg-white py-4 border-top">
-                    {{ $tickets->appends(['status' => $status])->links() }}
+            @if(method_exists($tickets, 'hasPages') && $tickets->hasPages())
+                <div class="card-footer bg-white border-0 py-4 px-4 d-flex justify-content-between align-items-center">
+                    <div class="text-muted smallest font-weight-bold uppercase">Displaying {{ $tickets->firstItem() }} - {{ $tickets->lastItem() }} of {{ $tickets->total() }} records</div>
+                    <div>{{ $tickets->appends(request()->except('page'))->links('pagination::bootstrap-4') }}</div>
                 </div>
             @endif
         </div>
@@ -248,28 +245,31 @@
 
         // Bulk Selection Logic
         const $selectAll = $('#selectAll');
-        const $ticketCheckboxes = $('.ticket-checkbox');
         const $bulkContainer = $('#bulk-actions-container');
         const $selectedCount = $('#selected-count');
 
         function updateBulkUI() {
             const checkedCount = $('.ticket-checkbox:checked').length;
             if (checkedCount > 0) {
-                $bulkContainer.removeClass('d-none');
+                $bulkContainer.removeClass('d-none').addClass('animate__fadeIn');
                 $selectedCount.text(checkedCount);
             } else {
                 $bulkContainer.addClass('d-none');
             }
         }
 
-        $selectAll.on('change', function() {
+        // Delegated Select All
+        $(document).on('change', '#selectAll', function() {
             $('.ticket-checkbox').prop('checked', this.checked);
             updateBulkUI();
         });
 
+        // Delegated Individual Checkbox
         $(document).on('change', '.ticket-checkbox', function() {
-            if (!this.checked) $selectAll.prop('checked', false);
-            if ($('.ticket-checkbox:checked').length === $('.ticket-checkbox').length) $selectAll.prop('checked', true);
+            const total = $('.ticket-checkbox').length;
+            const checked = $('.ticket-checkbox:checked').length;
+            
+            $('#selectAll').prop('checked', total === checked && total > 0);
             updateBulkUI();
         });
 

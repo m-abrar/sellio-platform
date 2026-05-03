@@ -7,15 +7,15 @@
         <div class="row mb-4 align-items-center">
             <div class="col-sm-8">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-sitemap mr-2 text-primary"></i> Navigation Systems
+                    <i class="fas fa-sitemap mr-2 text-primary opacity-50"></i> Navigation Systems
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">
                     Orchestrate multi-level navigation structures across platform verticals.
                 </p>
             </div>
             <div class="col-sm-4 text-right">
-                <a href="{{ route('admin.welcome') }}" class="btn btn-back shadow-sm">
-                    <i class="fas fa-arrow-left mr-1"></i> Dashboard
+                <a href="{{ route('admin.welcome') }}" class="btn btn-back shadow-sm px-4">
+                    <i class="fas fa-arrow-left mr-1"></i> BACK TO DASHBOARD
                 </a>
             </div>
         </div>
@@ -27,12 +27,14 @@
     @include('admin.alert')
 
     {{-- Structural Overview --}}
-    <div class="card card-premium overflow-hidden">
-        <div class="card-header border-0 bg-white py-3 px-4">
-            <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">Navigation Registry</h3>
-            <div class="card-tools">
-                <span class="badge badge-light border px-3 py-2 shadow-xs">
-                    <i class="fas fa-network-wired mr-1 text-primary"></i> Registered Slots: {{ $menus->count() }}
+    <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
+        <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
+            <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">
+                <i class="fas fa-map mr-1 text-primary opacity-50"></i> Navigation Registry
+            </h3>
+            <div class="card-tools ml-auto">
+                <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase">
+                    <i class="fas fa-network-wired mr-1"></i> {{ $menus->count() }} SLOTS
                 </span>
             </div>
         </div>
@@ -40,13 +42,13 @@
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table id="menu-locations-table" class="table table-hover table-premium mb-0">
-                    <thead>
+                    <thead class="bg-light text-uppercase smallest font-weight-bold">
                         <tr>
-                            <th class="px-4">Structure Name</th>
-                            <th>Technical Key</th>
-                            <th>Assigned Theme</th>
-                            <th>Last Modification</th>
-                            <th class="text-right px-4">Actions</th>
+                            <th class="py-3 border-0 px-4">Structure Name</th>
+                            <th class="py-3 border-0">Technical Key</th>
+                            <th class="py-3 border-0">Assigned Theme</th>
+                            <th class="py-3 border-0">Last Modification</th>
+                            <th class="py-3 border-0 text-right px-4">Operations</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -83,8 +85,8 @@
                                 
                                 <td class="text-right align-middle px-4">
                                     <a href="{{ route('admin.menu.edit', $menu) }}" 
-                                       class="btn btn-primary btn-sm btn-flat shadow-xs font-weight-bold px-3">
-                                        <i class="fas fa-layer-group mr-1"></i> Configure Links
+                                       class="btn btn-primary rounded-pill shadow-premium px-4 font-weight-bold smallest">
+                                        <i class="fas fa-layer-group mr-1"></i> CONFIGURE LINKS
                                     </a>
                                 </td>
                             </tr>
@@ -101,10 +103,9 @@
                 </table>
             </div>
         </div>
-        <div class="card-footer bg-white border-0 py-3 text-center">
-             <p class="mb-0 text-muted small">
-                <i class="fas fa-info-circle mr-1 text-info"></i> 
-                Looking to add a new location? Navigation placements are hard-coded in the **Theme Definition** files.
+        <div class="card-footer bg-white border-0 py-4 px-4 text-center">
+             <p class="mb-0 text-muted smallest font-weight-bold uppercase letter-spacing-1">
+                <i class="fas fa-info-circle mr-1 text-info"></i> Navigation slots are defined within theme asset manifest files
             </p>
         </div>
     </div>

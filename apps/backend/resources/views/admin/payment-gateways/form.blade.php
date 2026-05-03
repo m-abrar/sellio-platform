@@ -15,8 +15,8 @@
                 </p>
             </div>
             <div class="col-sm-4 text-right">
-                <a href="{{ route('admin.payment-gateways.index') }}" class="btn btn-back shadow-sm">
-                    <i class="fas fa-arrow-left mr-1"></i> Back to Providers
+                <a href="{{ route('admin.payment-gateways.index') }}" class="btn btn-back shadow-sm px-4">
+                    <i class="fas fa-arrow-left mr-1"></i> BACK TO PROVIDERS
                 </a>
             </div>
         </div>
@@ -100,7 +100,7 @@
                         </div>
                     </div>
                     <div class="card-footer bg-white border-0 py-4 px-4 text-right">
-                        <button type="submit" class="btn btn-primary rounded-pill px-5 shadow-premium font-weight-bold">
+                        <button type="submit" class="btn btn-primary rounded-pill px-5 font-weight-bold">
                             <i class="fas fa-save mr-2"></i> COMMIT PROVIDER CONFIGURATION
                         </button>
                     </div>

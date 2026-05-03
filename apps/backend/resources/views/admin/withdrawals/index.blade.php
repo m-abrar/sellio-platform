@@ -6,18 +6,17 @@
 
 @section('content_header')
     <div class="container-fluid pt-4">
-        <div class="row mb-4 align-items-end">
-            <div class="col-sm-6">
+        <div class="row mb-4 align-items-center">
+            <div class="col-sm-7">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-hand-holding-usd mr-2 text-primary"></i> Payout Management
+                    <i class="fas fa-hand-holding-usd mr-2 text-primary opacity-50"></i> Payout Management
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Review and process fund withdrawal requests from marketplace partners.</p>
             </div>
-            <div class="col-sm-6 text-right">
-                <ol class="breadcrumb float-sm-right bg-transparent p-0 mt-3">
-                    <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Withdrawals</li>
-                </ol>
+            <div class="col-sm-5 d-flex align-items-center justify-content-end">
+                <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase shadow-sm">
+                    <i class="fas fa-clock mr-1"></i> {{ $withdrawals->total() }} REQUESTS QUEUED
+                </span>
             </div>
         </div>
     </div>
@@ -33,28 +32,34 @@
 
     <div class="row mb-4">
         <div class="col-12">
-            <div class="glass-card shadow-premium p-2 d-flex align-items-center bg-white" style="gap: 15px; width: fit-content; border-radius: 16px;">
-                <span class="text-muted small font-weight-bold ml-3 mr-1"><i class="fas fa-filter mr-2 text-primary"></i> QUEUE STATUS:</span>
-                <ul class="nav nav-pills">
-                    <li class="nav-item">
-                        <a class="nav-link px-4 py-1 small font-weight-bold {{ $filter_status === 'pending' ? 'active shadow-sm' : 'text-muted' }}" 
-                           href="{{ route('admin.withdrawals.index', ['status' => 'pending']) }}" style="border-radius: 10px;">
-                           {{ __('PENDING') }}
-                        </a>
-                    </li>
-                    <li class="nav-item mx-1">
-                        <a class="nav-link px-4 py-1 small font-weight-bold {{ $filter_status === 'approved' ? 'active shadow-sm' : 'text-muted' }}" 
-                           href="{{ route('admin.withdrawals.index', ['status' => 'approved']) }}" style="border-radius: 10px;">
-                           {{ __('APPROVED') }}
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link px-4 py-1 small font-weight-bold {{ $filter_status === 'rejected' ? 'active shadow-sm' : 'text-muted' }}" 
-                           href="{{ route('admin.withdrawals.index', ['status' => 'rejected']) }}" style="border-radius: 10px;">
-                           {{ __('REJECTED') }}
-                        </a>
-                    </li>
-                </ul>
+            <div class="card border-0 shadow-premium" style="border-radius: 20px;">
+                <div class="card-body p-2 d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center">
+                        <span class="text-muted smallest font-weight-bold ml-3 mr-3 text-uppercase letter-spacing-1">
+                            <i class="fas fa-filter mr-1 text-primary"></i> Queue Filter:
+                        </span>
+                        <ul class="nav nav-pills p-1 bg-light rounded-pill">
+                            <li class="nav-item">
+                                <a class="nav-link {{ $filter_status === 'pending' ? 'active bg-primary shadow-sm' : 'text-muted' }} px-4 py-1 smallest font-weight-bold rounded-pill transition-all" 
+                                   href="{{ route('admin.withdrawals.index', ['status' => 'pending']) }}">
+                                   {{ __('PENDING') }}
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{ $filter_status === 'approved' ? 'active bg-primary shadow-sm' : 'text-muted' }} px-4 py-1 smallest font-weight-bold rounded-pill transition-all" 
+                                   href="{{ route('admin.withdrawals.index', ['status' => 'approved']) }}">
+                                   {{ __('APPROVED') }}
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{ $filter_status === 'rejected' ? 'active bg-primary shadow-sm' : 'text-muted' }} px-4 py-1 smallest font-weight-bold rounded-pill transition-all" 
+                                   href="{{ route('admin.withdrawals.index', ['status' => 'rejected']) }}">
+                                   {{ __('REJECTED') }}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -69,15 +74,15 @@
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table id="withdrawals-table" class="table table-hover table-premium mb-0">
-                    <thead>
+                    <thead class="bg-light text-uppercase smallest font-weight-bold">
                         <tr>
-                            <th class="px-4">PARTNER DETAILS</th>
-                            <th>TOTAL AMOUNT</th>
-                            <th>METHOD</th>
-                            <th style="width: 25%;">DESTINATION DATA</th>
-                            <th class="text-center">STATUS</th>
-                            <th>SUBMISSION DATE</th>
-                            <th class="text-right px-4">OPERATIONS</th>
+                            <th class="py-3 border-0 px-4">Partner Details</th>
+                            <th class="py-3 border-0">Total Amount</th>
+                            <th class="py-3 border-0">Method</th>
+                            <th class="py-3 border-0" style="width: 25%;">Destination Data</th>
+                            <th class="py-3 border-0 text-center">Status</th>
+                            <th class="py-3 border-0">Submission Date</th>
+                            <th class="py-3 border-0 text-right px-4">Operations</th>
                         </tr>
                     </thead>
 
@@ -130,8 +135,8 @@
                                             default => 'secondary'
                                         };
                                     @endphp
-                                    <span class="badge badge-{{ $statusClass }}-light text-{{ $statusClass }} px-3 py-1 shadow-xs text-uppercase" style="font-size: 0.65rem; letter-spacing: 0.5px; border-radius: 20px;">
-                                        <i class="fas fa-circle mr-1" style="font-size: 0.4rem; vertical-align: middle;"></i> {{ $withdrawal->status }}
+                                    <span class="badge badge-premium badge-{{ $statusClass }}-light">
+                                        {{ strtoupper($withdrawal->status) }}
                                     </span>
                                     @if($withdrawal->status !== 'pending')
                                         <div class="smallest text-muted mt-2 font-weight-bold">
@@ -192,16 +197,10 @@
             </div>
         </div>
 
-        @if($withdrawals->hasPages())
-            <div class="card-footer bg-white border-0 py-4 px-4">
-                <div class="d-flex justify-content-between align-items-center">
-                    <span class="text-muted small font-weight-bold text-uppercase letter-spacing-1">
-                        Registry: Page {{ $withdrawals->currentPage() }} of {{ $withdrawals->lastPage() }}
-                    </span>
-                    <div>
-                        {{ $withdrawals->appends(request()->except('page'))->links('pagination::bootstrap-4') }}
-                    </div>
-                </div>
+        @if(method_exists($withdrawals, 'hasPages') && $withdrawals->hasPages())
+            <div class="card-footer bg-white border-0 py-4 px-4 d-flex justify-content-between align-items-center">
+                <div class="text-muted smallest font-weight-bold uppercase">Displaying {{ $withdrawals->firstItem() }} - {{ $withdrawals->lastItem() }} of {{ $withdrawals->total() }} records</div>
+                <div>{{ $withdrawals->appends(request()->except('page'))->links('pagination::bootstrap-4') }}</div>
             </div>
         @endif
     </div>
@@ -236,7 +235,7 @@
                 </div>
                 <div class="modal-footer border-0 p-4 pt-0">
                     <button type="button" class="btn btn-light rounded-pill px-4 font-weight-bold mr-2" data-dismiss="modal">CANCEL</button>
-                    <button type="submit" class="btn btn-danger rounded-pill px-4 font-weight-bold shadow-lg">CONFIRM REJECTION</button>
+                    <button type="submit" class="btn btn-danger rounded-pill px-4 font-weight-bold">CONFIRM REJECTION</button>
                 </div>
             </form>
         </div>

@@ -28,11 +28,83 @@ class OrderController extends Controller
     }
 
     /**
+     * Show the form for creating a new order.
+     */
+    public function create(): View
+    {
+        $users = \App\Models\User::all();
+        $products = \App\Models\Product::where('is_published', 1)->get();
+        
+        return view('admin.product-orders.create', compact('users', 'products'));
+    }
+
+    /**
+     * Store a newly created order in storage.
+     */
+    public function store(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'items' => 'required|array|min:1',
+            'items.*.product_id' => 'required|exists:products,id',
+            'items.*.quantity' => 'required|integer|min:1',
+            'items.*.unit_price' => 'required|numeric',
+            'status' => 'required|string',
+            'shipping_name' => 'required|string',
+            'shipping_address' => 'required|string',
+            'shipping_city' => 'required|string',
+            'shipping_zip' => 'required|string',
+        ]);
+
+        try {
+            \Illuminate\Support\Facades\DB::transaction(function () use ($request) {
+                $order = Order::create([
+                    'order_number' => 'ORD-' . strtoupper(\Illuminate\Support\Str::random(10)),
+                    'user_id' => $request->user_id,
+                    'status' => $request->status,
+                    'payment_status' => 'paid', // Assuming manual entry usually implies payment received
+                    'payment_method' => 'manual',
+                    'subtotal' => $request->subtotal,
+                    'shipping_cost' => $request->shipping_cost,
+                    'total_amount' => $request->total_amount,
+                    'shipping_name' => $request->shipping_name,
+                    'shipping_address' => $request->shipping_address,
+                    'shipping_city' => $request->shipping_city,
+                    'shipping_zip' => $request->shipping_zip,
+                    'notes' => $request->notes,
+                ]);
+
+                foreach ($request->items as $item) {
+                    $product = \App\Models\Product::find($item['product_id']);
+                    
+                    \App\Models\OrderItem::create([
+                        'order_id' => $order->id,
+                        'product_id' => $item['product_id'],
+                        'product_name' => $product->name,
+                        'quantity' => $item['quantity'],
+                        'unit_price' => $item['unit_price'],
+                        'total_price' => $item['unit_price'] * $item['quantity'],
+                    ]);
+
+                    // Inventory adjustment if applicable
+                    if ($product->manage_stock) {
+                        $product->decrement('stock_quantity', $item['quantity']);
+                    }
+                }
+            });
+
+            return redirect()->route('admin.product-orders.index')->with('success', 'Manual order has been successfully initialized and synchronized.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Critical synchronization error: ' . $e->getMessage());
+        }
+    }
+
+    /**
      * Display the specified order.
      */
-    public function show($id): View
+    public function show(Order $order): View
     {
-        $order = Order::with(['user', 'items.product'])->findOrFail($id);
+        $order->load(['user', 'items.product']);
         
         $statuses = [
             Order::STATUS_PENDING => 'Pending',

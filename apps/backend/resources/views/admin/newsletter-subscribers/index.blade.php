@@ -9,12 +9,8 @@
         <div class="row mb-4 align-items-center">
             <div class="col-sm-8">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-envelope-open-text mr-2 text-primary"></i> Newsletter Audience
+                    <i class="fas fa-envelope-open-text mr-2 text-primary opacity-50"></i> Newsletter Audience
                 </h1>
-                <ol class="breadcrumb bg-transparent p-0 mt-2 small">
-                    <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Subscribers</li>
-                </ol>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Audience registry for multi-channel marketing and prospect engagement.</p>
             </div>
             <div class="col-sm-4 text-right">
@@ -31,7 +27,7 @@
     @include('admin.alert')
 
     {{-- Subscriber Management Card --}}
-    <div class="card card-primary card-outline shadow-sm border-0">
+    <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
         <div class="card-header border-0 bg-white py-3">
             <h3 class="card-title font-weight-600 text-muted">
                 Audience Registry <span class="badge badge-light border ml-2 px-2" style="font-weight: 500;">{{ $subscribers->total() }} Total</span>
@@ -95,17 +91,17 @@
                                 </td>
 
                                 <td class="text-right align-middle px-4">
-                                    <div class="btn-group btn-group-premium shadow-sm">
+                                    <div class="btn-group btn-group-premium shadow-sm border overflow-hidden rounded-pill bg-white">
                                         <a href="{{ route('admin.newsletter-subscribers.edit', $subscriber->id) }}" 
-                                           class="btn btn-default btn-sm text-info" 
+                                           class="btn btn-white btn-sm text-info py-2 px-3" 
                                            data-toggle="tooltip" title="Edit Detail">
                                             <i class="fas fa-pencil-alt"></i>
                                         </a>
-                                        <form action="{{ route('admin.newsletter-subscribers.destroy', $subscriber->id) }}" method="POST" class="d-inline">
+                                        <form id="delete-form-{{ $subscriber->id }}" action="{{ route('admin.newsletter-subscribers.destroy', $subscriber->id) }}" method="POST" class="d-inline">
                                             @csrf @method('DELETE')
-                                            <button type="submit" class="btn btn-default btn-sm text-danger" 
+                                            <button type="button" class="btn btn-white btn-sm text-danger py-2 px-3 border-left" 
                                                     data-toggle="tooltip" title="Unsubscribe"
-                                                    onclick="return confirm('Remove this subscriber from the audience registry?')">
+                                                    onclick="confirmDelete({{ $subscriber->id }})">
                                                 <i class="fas fa-user-minus"></i>
                                             </button>
                                         </form>
@@ -197,5 +193,22 @@
             $('.dataTables_filter input').addClass('form-control form-control-sm form-control-premium shadow-none border-light').css('width', '220px');
         }
     });
+
+    function confirmDelete(id) {
+        Swal.fire({
+            title: 'Unsubscribe?',
+            text: "This user will be removed from the newsletter registry.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#ef4444',
+            cancelButtonColor: '#64748b',
+            confirmButtonText: 'Yes, remove',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('delete-form-' + id).submit();
+            }
+        })
+    }
 </script>
-@endsection
+@stop

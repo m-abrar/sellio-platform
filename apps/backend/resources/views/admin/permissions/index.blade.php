@@ -9,20 +9,16 @@
         <div class="row mb-4 align-items-center">
             <div class="col-sm-7">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-fingerprint mr-2 text-primary"></i> Granular Permissions
+                    <i class="fas fa-fingerprint mr-2 text-primary opacity-50"></i> Granular Permissions
                 </h1>
-                <ol class="breadcrumb bg-transparent p-0 mt-2 small">
-                    <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Permission Registry</li>
-                </ol>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">High-fidelity mapping of system gates and low-level access protocols.</p>
             </div>
-            <div class="col-sm-5 text-right">
+            <div class="col-sm-5 d-flex align-items-center justify-content-end">
                 <div class="d-flex justify-content-end align-items-center" style="gap: 12px;">
-                    <a href="{{ route('admin.roles.index') }}" class="btn btn-back shadow-sm px-3 rounded-pill">
-                        <i class="fas fa-user-shield mr-1"></i> Access Roles
+                    <a href="{{ route('admin.roles.index') }}" class="btn btn-back shadow-sm px-3">
+                        <i class="fas fa-user-shield mr-1"></i> ACCESS ROLES
                     </a>
-                    <a href="{{ route('admin.permissions.create') }}" class="btn btn-primary btn-sm rounded-pill px-4 font-weight-bold shadow-premium">
+                    <a href="{{ route('admin.permissions.create') }}" class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-premium">
                         <i class="fas fa-plus-circle mr-1"></i> ADD GATED RESOURCE
                     </a>
                 </div>

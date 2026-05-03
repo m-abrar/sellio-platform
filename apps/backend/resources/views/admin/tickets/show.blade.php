@@ -95,7 +95,7 @@
                             <div class="form-group mb-0">
                                 <label class="text-uppercase smallest font-weight-bold letter-spacing-1 text-muted mb-2">Internal Agency Response</label>
                                 <textarea name="body" class="form-control form-control-premium shadow-none border-light mb-3" rows="4" placeholder="Draft your professional response..." required></textarea>
-                                <button type="submit" class="btn btn-primary rounded-pill px-5 shadow-lg font-weight-bold">
+                                <button type="submit" class="btn btn-primary rounded-pill px-5 font-weight-bold">
                                     <i class="fas fa-paper-plane mr-2"></i> TRANSMIT REPLY
                                 </button>
                             </div>
@@ -157,7 +157,7 @@
                                     <option value="reopened" @if($ticket->status === 'reopened') selected @endif>Re-Verify (Reopen)</option>
                                 </select>
                             </div>
-                            <button type="submit" class="btn btn-white btn-sm btn-block rounded-pill shadow-xs border font-weight-bold uppercase smallest py-2">
+                            <button type="submit" class="btn btn-white btn-sm btn-block rounded-pill border font-weight-bold uppercase smallest py-2">
                                 EXECUTE STATE CHANGE
                             </button>
                         </form>

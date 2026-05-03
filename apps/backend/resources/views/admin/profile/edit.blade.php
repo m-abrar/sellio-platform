@@ -24,8 +24,8 @@
                 </div>
             </div>
             <div class="col-sm-4 text-right">
-                <a href="{{ route('admin.welcome') }}" class="btn btn-back shadow-sm rounded-pill px-4">
-                    <i class="fas fa-arrow-left mr-1"></i> DASHBOARD
+                <a href="{{ route('admin.welcome') }}" class="btn btn-back shadow-sm px-4">
+                    <i class="fas fa-arrow-left mr-1"></i> BACK TO DASHBOARD
                 </a>
             </div>
         </div>
@@ -143,6 +143,7 @@
                             'multiple' => false,
                             'model' => \App\Models\User::class,
                             'id' => $user->id ?? null,
+                            'noCard' => true
                         ])
                     </div>
                 </div>

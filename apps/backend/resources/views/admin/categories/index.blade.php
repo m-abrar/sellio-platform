@@ -9,14 +9,14 @@
         <div class="row mb-4 align-items-center">
             <div class="col-md-8">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-folder-open mr-2 text-primary"></i> Taxonomy Architecture
+                    <i class="fas fa-folder-open mr-2 text-primary opacity-50"></i> Taxonomy Architecture
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">
                     Organize platform listings into a logical hierarchy and taxonomy.
                 </p>
             </div>
             <div class="col-md-4 text-right">
-                <a href="{{ route('admin.categories.create') }}" class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-premium">
+                <a href="{{ route('admin.categories.create') }}" class="btn btn-primary rounded-pill px-4 font-weight-bold">
                     <i class="fas fa-plus-circle mr-1"></i> ADD CATEGORY
                 </a>
             </div>

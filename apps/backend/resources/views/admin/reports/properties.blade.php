@@ -6,18 +6,19 @@
 
 @section('content_header')
     <div class="container-fluid pt-4">
-        <div class="row mb-2">
-            <div class="col-sm-6">
+        <div class="row mb-4 align-items-center">
+            <div class="col-sm-7">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-building mr-2 text-primary"></i> {{ $reportTitle }}
+                    <i class="fas fa-building mr-2 text-primary opacity-50"></i> {{ $reportTitle ?? 'Property Utilization Analytics' }}
                 </h1>
-                <p class="text-muted mt-2 small text-uppercase letter-spacing-1">Monitor property utilization, asset availability, and unit performance.</p>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Monitor property availability, asset performance, and real-time occupancy metrics.</p>
             </div>
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right bg-transparent p-0">
-                    <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active">{{ $reportTitle }}</li>
-                </ol>
+            <div class="col-sm-5 d-flex align-items-center justify-content-end">
+                <div class="btn-group btn-group-premium shadow-sm rounded-pill overflow-hidden border">
+                    <button class="btn btn-white btn-sm px-4 py-2 font-weight-bold smallest" onclick="window.print()">
+                        <i class="fas fa-print mr-1"></i> EXPORT TO PDF
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -32,27 +33,27 @@
     <div class="card glass-card shadow-sm mb-5 border-0 overflow-hidden">
         <div class="card-body p-4">
             <form action="{{ route('admin.reports.properties') }}" method="GET" class="row align-items-end">
-                <div class="col-md-4 mb-3 mb-md-0">
-                    <label class="small font-weight-bold text-muted text-uppercase mb-2 d-block">Start Date</label>
-                    <div class="input-group premium-input">
+                <div class="col-md-5 mb-3 mb-md-0">
+                    <label class="smallest font-weight-bold text-muted text-uppercase mb-2 d-block letter-spacing-1">Audit Period (Start)</label>
+                    <div class="input-group premium-input shadow-xs">
                         <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-calendar-alt text-primary"></i></span>
+                            <span class="input-group-text bg-transparent border-0"><i class="fas fa-calendar-alt text-primary opacity-50"></i></span>
                         </div>
-                        <input type="date" name="start_date" class="form-control" value="{{ $startDateFormatted ?? '' }}">
+                        <input type="date" name="start_date" class="form-control border-0 bg-transparent" value="{{ $startDateFormatted ?? '' }}" style="height: 48px;">
                     </div>
                 </div>
-                <div class="col-md-4 mb-3 mb-md-0">
-                    <label class="small font-weight-bold text-muted text-uppercase mb-2 d-block">End Date</label>
-                    <div class="input-group premium-input">
+                <div class="col-md-5 mb-3 mb-md-0">
+                    <label class="smallest font-weight-bold text-muted text-uppercase mb-2 d-block letter-spacing-1">Audit Period (End)</label>
+                    <div class="input-group premium-input shadow-xs">
                         <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-calendar-check text-primary"></i></span>
+                            <span class="input-group-text bg-transparent border-0"><i class="fas fa-calendar-check text-primary opacity-50"></i></span>
                         </div>
-                        <input type="date" name="end_date" class="form-control" value="{{ $endDateFormatted ?? '' }}">
+                        <input type="date" name="end_date" class="form-control border-0 bg-transparent" value="{{ $endDateFormatted ?? '' }}" style="height: 48px;">
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <button type="submit" class="btn btn-primary btn-block py-2 font-weight-bold shadow-lg premium-btn">
-                        <i class="fas fa-search-location mr-2"></i> SCAN AVAILABILITY
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary btn-block font-weight-bold" style="height: 48px; border-radius: 12px;">
+                        <i class="fas fa-sync-alt mr-2"></i> SCAN
                     </button>
                 </div>
             </form>

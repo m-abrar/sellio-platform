@@ -5,22 +5,23 @@
 @section('plugins.Datatables', true)
 
 @section('content_header')
-    <div class="container-fluid">
+    <div class="container-fluid pt-4">
         <div class="row mb-4 align-items-center">
-            <div class="col-sm-8">
+            <div class="col-sm-7">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-blog mr-2 text-primary"></i> Blog Articles
+                    <i class="fas fa-blog mr-2 text-primary opacity-50"></i> Blog Articles
                 </h1>
-                <ol class="breadcrumb bg-transparent p-0 mt-2 small">
-                    <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Blogs</li>
-                </ol>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Compose and curate editorial content for your marketplace community.</p>
             </div>
-            <div class="col-sm-4 text-right">
-                <a href="{{ route('admin.blogs.create') }}" class="btn btn-primary btn-sm rounded-pill px-4 font-weight-bold shadow-premium">
-                    <i class="fas fa-plus-circle mr-1"></i> WRITE NEW POST
-                </a>
+            <div class="col-sm-5 d-flex align-items-center justify-content-end">
+                <div class="d-flex justify-content-end align-items-center" style="gap: 12px;">
+                    <a href="{{ route('admin.welcome') }}" class="btn btn-back shadow-sm px-4">
+                        <i class="fas fa-arrow-left mr-1"></i> BACK TO DASHBOARD
+                    </a>
+                    <a href="{{ route('admin.blogs.create') }}" class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-premium">
+                        <i class="fas fa-plus-circle mr-1"></i> WRITE NEW POST
+                    </a>
+                </div>
             </div>
         </div>
     </div>
@@ -31,11 +32,16 @@
     @include('admin.alert')
 
     {{-- Main Table Card --}}
-    <div class="card card-primary card-outline shadow-sm border-0">
-        <div class="card-header border-0 bg-white py-3">
-            <h3 class="card-title font-weight-600 text-muted">
-                Article Registry <span class="badge badge-light border ml-2 px-2" style="font-weight: 500;">{{ $blogs->total() }} Total</span>
+    <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
+        <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
+            <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">
+                <i class="fas fa-feather mr-1 text-primary opacity-50"></i> Article Registry
             </h3>
+            <div class="card-tools ml-auto">
+                <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase">
+                    <i class="fas fa-database mr-1"></i> {{ $blogs->total() }} POSTS
+                </span>
+            </div>
         </div>
 
         <div class="card-body p-0">

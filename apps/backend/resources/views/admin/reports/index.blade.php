@@ -14,8 +14,8 @@
                 </p>
             </div>
             <div class="col-sm-4 text-right">
-                <a href="{{ route('admin.welcome') }}" class="btn btn-back shadow-sm">
-                    <i class="fas fa-arrow-left mr-1"></i> Back to Dashboard
+                <a href="{{ route('admin.welcome') }}" class="btn btn-back shadow-sm rounded-pill px-4">
+                    <i class="fas fa-arrow-left mr-1"></i> BACK TO DASHBOARD
                 </a>
             </div>
         </div>
@@ -32,22 +32,22 @@
                 [
                     'route' => 'admin.reports.bookings',
                     'icon' => 'fa-calendar-check',
-                    'title' => 'Booking Analytics',
-                    'desc' => 'Track reservation trends, cancellation rates, and volume growth across all modules.',
+                    'title' => 'Booking Velocity Analytics',
+                    'desc' => 'Track reservation trends, cancellation rates, and volume growth across all marketplace modules.',
                     'color' => 'primary'
                 ],
                 [
                     'route' => 'admin.reports.properties',
                     'icon' => 'fa-home',
-                    'title' => 'Occupancy Metrics',
-                    'desc' => 'Analyze property performance, average nightly rates, and regional demand hotspots.',
+                    'title' => 'Property Utilization Analytics',
+                    'desc' => 'Analyze property performance, availability trends, and regional occupancy hotspots.',
                     'color' => 'success'
                 ],
                 [
                     'route' => 'admin.reports.payments',
                     'icon' => 'fa-wallet',
-                    'title' => 'Financial Overview',
-                    'desc' => 'Audit revenue streams, payment gateway performance, and marketplace fee collection.',
+                    'title' => 'Payments & Revenue Analytics',
+                    'desc' => 'Audit revenue streams, payment gateway performance, and marketplace fee collection ledger.',
                     'color' => 'info'
                 ]
             ];

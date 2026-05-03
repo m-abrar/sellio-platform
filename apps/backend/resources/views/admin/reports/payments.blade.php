@@ -6,18 +6,19 @@
 
 @section('content_header')
     <div class="container-fluid pt-4">
-        <div class="row mb-2">
-            <div class="col-sm-6">
+        <div class="row mb-4 align-items-center">
+            <div class="col-sm-7">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-dollar-sign mr-2 text-primary"></i> {{ $reportTitle ?? 'Payments Report' }}
+                    <i class="fas fa-chart-line mr-2 text-primary opacity-50"></i> {{ $reportTitle ?? 'Payments & Revenue Analytics' }}
                 </h1>
-                <p class="text-muted mt-2 small text-uppercase letter-spacing-1">Analyze revenue trends, payment methods, and transaction history.</p>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">High-fidelity analysis of marketplace inflow, revenue trends, and settled transactions.</p>
             </div>
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right bg-transparent p-0">
-                    <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Payments Report</li>
-                </ol>
+            <div class="col-sm-5 d-flex align-items-center justify-content-end">
+                <div class="btn-group btn-group-premium shadow-sm rounded-pill overflow-hidden border">
+                    <button class="btn btn-white btn-sm px-4 py-2 font-weight-bold smallest" onclick="window.print()">
+                        <i class="fas fa-print mr-1"></i> EXPORT TO PDF
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -29,30 +30,30 @@
 <div class="container-fluid pb-5">
     
     {{-- Filter Section --}}
-    <div class="card glass-card shadow-sm mb-5 border-0 overflow-hidden">
+    <div class="card border-0 shadow-premium mb-5 overflow-hidden" style="border-radius: 24px;">
         <div class="card-body p-4">
             <form action="{{ route('admin.reports.payments') }}" method="GET" class="row align-items-end">
-                <div class="col-md-4 mb-3 mb-md-0">
-                    <label class="small font-weight-bold text-muted text-uppercase mb-2 d-block">Start Date</label>
-                    <div class="input-group premium-input">
+                <div class="col-md-5 mb-3 mb-md-0">
+                    <label class="smallest font-weight-bold text-muted text-uppercase mb-2 d-block letter-spacing-1">Analytics Period (Start)</label>
+                    <div class="input-group premium-input shadow-xs">
                         <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-calendar-alt text-primary"></i></span>
+                            <span class="input-group-text bg-transparent border-0"><i class="fas fa-calendar-alt text-primary opacity-50"></i></span>
                         </div>
-                        <input type="date" name="start_date" class="form-control" value="{{ $startDateFormatted ?? '' }}">
+                        <input type="date" name="start_date" class="form-control border-0 bg-transparent" value="{{ $startDateFormatted ?? '' }}" style="height: 48px;">
                     </div>
                 </div>
-                <div class="col-md-4 mb-3 mb-md-0">
-                    <label class="small font-weight-bold text-muted text-uppercase mb-2 d-block">End Date</label>
-                    <div class="input-group premium-input">
+                <div class="col-md-5 mb-3 mb-md-0">
+                    <label class="smallest font-weight-bold text-muted text-uppercase mb-2 d-block letter-spacing-1">Analytics Period (End)</label>
+                    <div class="input-group premium-input shadow-xs">
                         <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-calendar-check text-primary"></i></span>
+                            <span class="input-group-text bg-transparent border-0"><i class="fas fa-calendar-check text-primary opacity-50"></i></span>
                         </div>
-                        <input type="date" name="end_date" class="form-control" value="{{ $endDateFormatted ?? '' }}">
+                        <input type="date" name="end_date" class="form-control border-0 bg-transparent" value="{{ $endDateFormatted ?? '' }}" style="height: 48px;">
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <button type="submit" class="btn btn-primary btn-block py-2 font-weight-bold shadow-lg premium-btn">
-                        <i class="fas fa-chart-pie mr-2"></i> ANALYZE REVENUE
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary btn-block font-weight-bold" style="height: 48px; border-radius: 12px;">
+                        <i class="fas fa-sync-alt mr-2"></i> REFRESH
                     </button>
                 </div>
             </form>
@@ -69,60 +70,51 @@
     {{-- Stats Row --}}
     <div class="row mb-5">
         <div class="col-lg-4 col-md-6 mb-4">
-            <div class="card h-100 border-0 shadow-sm glass-card overflow-hidden stat-card">
+            <div class="card h-100 border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center mb-3">
-                        <div class="icon-circle bg-success-soft text-success mr-3 shadow-sm">
-                            <i class="fas fa-sack-dollar"></i>
+                        <div class="icon-box-soft bg-success-soft text-success mr-3 shadow-xs" style="width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-money-bill-wave text-lg"></i>
                         </div>
-                        <span class="text-uppercase small font-weight-bold text-muted letter-spacing-1">Total Revenue</span>
+                        <span class="text-uppercase smallest font-weight-bold text-muted letter-spacing-1">Total Revenue</span>
                     </div>
                     <div class="d-flex align-items-baseline">
                         <h2 class="font-weight-bold text-dark mb-0 mr-1">${{ $totalRevenue ?? '0.00' }}</h2>
-                        <span class="text-muted small">Gross</span>
-                    </div>
-                    <div class="progress mt-3" style="height: 4px; border-radius: 2px; background: rgba(0,0,0,0.05);">
-                        <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                        <span class="text-muted smallest font-weight-bold">GROSS</span>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="col-lg-4 col-md-6 mb-4">
-            <div class="card h-100 border-0 shadow-sm glass-card overflow-hidden stat-card">
+            <div class="card h-100 border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center mb-3">
-                        <div class="icon-circle bg-info-soft text-info mr-3 shadow-sm">
-                            <i class="fas fa-hand-holding-dollar"></i>
+                        <div class="icon-box-soft bg-info-soft text-info mr-3 shadow-xs" style="width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-chart-pie text-lg"></i>
                         </div>
-                        <span class="text-uppercase small font-weight-bold text-muted letter-spacing-1">Avg Transaction</span>
+                        <span class="text-uppercase smallest font-weight-bold text-muted letter-spacing-1">Avg Transaction</span>
                     </div>
                     <div class="d-flex align-items-baseline">
                         <h2 class="font-weight-bold text-dark mb-0 mr-1">${{ number_format($avgTransactionValue ?? 0, 2) }}</h2>
-                        <span class="text-muted small">Mean</span>
-                    </div>
-                    <div class="progress mt-3" style="height: 4px; border-radius: 2px; background: rgba(0,0,0,0.05);">
-                        <div class="progress-bar bg-info" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                        <span class="text-muted smallest font-weight-bold">MEAN</span>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="col-lg-4 col-md-6 mb-4">
-            <div class="card h-100 border-0 shadow-sm glass-card overflow-hidden stat-card">
+            <div class="card h-100 border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center mb-3">
-                        <div class="icon-circle bg-primary-soft text-primary mr-3 shadow-sm">
-                            <i class="fas fa-check-circle"></i>
+                        <div class="icon-box-soft bg-primary-soft text-primary mr-3 shadow-xs" style="width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-check-double text-lg"></i>
                         </div>
-                        <span class="text-uppercase small font-weight-bold text-muted letter-spacing-1">Transactions</span>
+                        <span class="text-uppercase smallest font-weight-bold text-muted letter-spacing-1">Transactions</span>
                     </div>
                     <div class="d-flex align-items-baseline">
                         <h2 class="font-weight-bold text-dark mb-0 mr-1">{{ number_format($successfulTransactions ?? 0) }}</h2>
-                        <span class="text-success small font-weight-600"><i class="fas fa-shield-alt ml-1"></i></span>
-                    </div>
-                    <div class="progress mt-3" style="height: 4px; border-radius: 2px; background: rgba(0,0,0,0.05);">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                        <span class="text-success smallest font-weight-bold uppercase ml-1">SETTLED</span>
                     </div>
                 </div>
             </div>
@@ -207,75 +199,14 @@
 </div>
 @stop
 
-@section('css')
+@push('css')
+@include('admin._partials._toggle-card-css')
 <style>
-    :root {
-        --primary: #46a5ac; /* Sellio Teal */
-        --primary-soft: rgba(70, 165, 172, 0.1);
-        --success: #28a745;
-        --success-soft: rgba(40, 167, 69, 0.1);
-        --info: #17a2b8;
-        --info-soft: rgba(23, 162, 184, 0.1);
-        --warning: #ffc107;
-        --warning-soft: rgba(255, 193, 7, 0.1);
-        --danger: #dc3545;
-        --danger-soft: rgba(220, 53, 69, 0.1);
-        --secondary-soft: rgba(108, 117, 125, 0.1);
-    }
-
-    /* Glassmorphism Effect */
-    .glass-card {
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
-    }
-
-    .stat-card { transition: all 0.3s ease; }
-    .stat-card:hover { transform: translateY(-5px); box-shadow: 0 15px 45px rgba(0,0,0,0.1) !important; }
-
-    /* Premium Input Styles */
-    .premium-input { border-radius: 12px; overflow: hidden; border: 1px solid #e2e8f0; background: #fff; transition: all 0.3s ease; }
-    .premium-input:focus-within { border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-soft); }
-    .premium-input .input-group-text { background: transparent; border: none; padding-right: 0; }
-    .premium-input .form-control { border: none; height: 48px; font-weight: 500; }
-    .premium-input .form-control:focus { box-shadow: none; }
-
-    /* Buttons */
-    .premium-btn { border-radius: 12px; height: 48px; text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s ease; background: var(--primary); border: none; }
-    .premium-btn:hover { background: var(--primary); filter: brightness(90%); transform: translateY(-1px); }
-
-    /* Soft Badges & Icons */
-    .badge-primary-soft { background: var(--primary-soft); color: var(--primary); }
-    .badge-success-soft { background: var(--success-soft); color: var(--success); }
-    .badge-info-soft { background: var(--info-soft); color: var(--info); }
-    .badge-warning-soft { background: var(--warning-soft); color: var(--warning); }
-    .badge-danger-soft { background: var(--danger-soft); color: var(--danger); }
-    .badge-secondary-soft { background: var(--secondary-soft); color: #6c757d; }
-    
-    .btn-primary-soft { background: var(--primary-soft); color: var(--primary); border: none; transition: all 0.3s ease; }
-    .btn-primary-soft:hover { background: var(--primary); color: #fff; }
-
-    .icon-circle { width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; }
-    .icon-square { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
-
-    /* Table Styling */
-    .table-premium thead th { 
-        background: #f8fafc; 
-        text-transform: uppercase; 
-        font-size: 0.75rem; 
-        letter-spacing: 1px; 
-        font-weight: 700; 
-        color: #64748b; 
-        border-bottom: 1px solid #e2e8f0; 
-        padding: 1.25rem 1rem;
-    }
-    .table-premium tbody td { padding: 1.25rem 1rem; border-bottom: 1px solid #f1f5f9; }
-
-    .letter-spacing-1 { letter-spacing: 1px; }
-    .opacity-25 { opacity: 0.25; }
+    .premium-input { border-radius: 12px; background: #fff; transition: all 0.3s ease; border: 1.5px solid #edf2f7 !important; }
+    .premium-input:focus-within { border-color: var(--primary) !important; box-shadow: 0 10px 20px rgba(var(--primary-rgb), 0.05) !important; }
 </style>
-@stop
+@endpush
+
 
 @section('js')
 <script>

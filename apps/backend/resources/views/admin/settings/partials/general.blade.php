@@ -265,7 +265,7 @@
 
             </div>
             <div class="card-footer bg-light py-4 px-4 border-0 text-right">
-                <button type="submit" class="btn btn-primary btn-lg rounded-pill px-5 shadow-lg font-weight-bold">
+                <button type="submit" class="btn btn-primary btn-lg rounded-pill px-5 font-weight-bold">
                     <i class="fas fa-save mr-2"></i> {{ __('Save Configuration') }}
                 </button>
             </div>
