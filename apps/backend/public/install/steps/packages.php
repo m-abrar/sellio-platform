@@ -36,18 +36,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = 'Installing Packages';
     include __DIR__ . '/../layout/header.php';
     ?>
-    <h2 class="mb-4">Installing Composer Packages</h2>
-    <p class="mb-3">Preparing your Laravel environment. This process installs all core dependencies.</p>
-
-    <div class="alert alert-warning small mb-4 shadow-sm">
-        <i class="fa-solid fa-spinner fa-spin me-2"></i> <strong>Running Composer...</strong> Please stay on this page until
-        the process finishes.
+    <div class="mb-5">
+        <h2 class="fw-bold text-dark">Initializing Application Core</h2>
+        <p class="text-muted">Orchestrating system dependencies. This process may take a minute depending on your connection.</p>
     </div>
 
-    <div class="bg-dark rounded p-3 shadow-inner mb-4">
-        <pre class="text-light mb-0"
-            style="max-height:500px; overflow:auto; font-size: 0.85em; font-family: monospace; white-space: pre-wrap;">
-    <?php
+    <div class="p-3 mb-4 rounded-4 shadow-sm border border-warning-subtle" style="background: rgba(245, 158, 11, 0.05);">
+        <div class="d-flex align-items-center">
+            <div class="spinner-grow text-warning me-3" role="status" style="width: 1.5rem; height: 1.5rem;">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <div class="fw-bold text-warning-emphasis">
+                <i class="fas fa-terminal me-2"></i> EXECUTING COMPOSER PIPELINE...
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-dark rounded-4 p-0 shadow-lg border border-secondary mb-4 overflow-hidden">
+        <div class="bg-secondary bg-opacity-25 px-3 py-2 border-bottom border-secondary d-flex align-items-center">
+            <div class="d-flex gap-1 me-3">
+                <div style="width: 10px; height: 10px; border-radius: 50%; background: #ef4444;"></div>
+                <div style="width: 10px; height: 10px; border-radius: 50%; background: #f59e0b;"></div>
+                <div style="width: 10px; height: 10px; border-radius: 50%; background: #10b981;"></div>
+            </div>
+            <span class="text-muted smallest fw-bold uppercase letter-spacing-1">Terminal Session: composer_install.log</span>
+        </div>
+        <pre class="text-light mb-0 p-4" style="max-height:450px; overflow:auto; font-family: 'Fira Code', monospace; font-size: 0.8rem; line-height: 1.6; white-space: pre-wrap; background: #0f172a;">
+<?php
     flush();
     chdir($basePath);
 
@@ -63,12 +78,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $phpBinary = get_php_binary();
     $composerPhar = $basePath . '/composer.phar';
 
-    // Determine the composer command with a fallback for LSAPI/LiteSpeed
     $cmdWithFlags = "{$phpBinary} -d register_argc_argv=Off -d memory_limit=-1 {$composerPhar}";
     $cmdWithoutFlags = "{$phpBinary} {$composerPhar}";
     
     if (file_exists($composerPhar)) {
-        // Pre-test: Verify if the binary supports CLI flags (-d)
         $testOut = [];
         $testRes = -1;
         exec("{$cmdWithFlags} --version 2>&1", $testOut, $testRes);
@@ -83,7 +96,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $composerCmd = "composer";
     }
 
-    // We include dev dependencies (no --no-dev) to ensure Faker is available for seeders
     $flags = "--no-interaction --prefer-dist --optimize-autoloader";
 
     if (function_exists('passthru')) {
@@ -100,8 +112,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $message = '✅ All packages installed successfully!';
         $success = true;
     }
-    echo "\n--- COMPOSER FINISHED ---";
-    ?>
+    echo "\n--- COMPOSER PIPELINE FINISHED ---";
+?>
         </pre>
     </div>
     <?php
@@ -109,9 +121,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         display_message($message, $error);
     if ($success):
         ?>
-        <div class="text-center mt-4 pt-3 border-top">
-            <a href="?step=migration" class="btn btn-primary btn-lg px-5">
-                Next: Import Database <i class="fa-solid fa-chevron-right ms-2"></i>
+        <div class="text-center mt-5 pt-4 border-top">
+            <a href="?step=migration" class="btn btn-primary btn-lg px-5 shadow-lg">
+                Next: Data Structure Import <i class="fa-solid fa-chevron-right ms-2"></i>
             </a>
         </div>
     <?php
@@ -123,26 +135,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $title = 'Composer Packages';
 include __DIR__ . '/../layout/header.php';
 ?>
-<h2 class="mb-4">Composer Packages</h2>
-<p class="mb-4 text-muted">Install the required Laravel dependencies to initialize the application.</p>
+<div class="mb-5">
+    <h2 class="fw-bold text-dark">Dependency Registry</h2>
+    <p class="text-muted">The platform requires several core libraries to be initialized before it can operate.</p>
+</div>
 
-<div class="card border-0 shadow-sm mb-4">
-    <div class="card-body">
-        <h3 class="h6 fw-bold mb-3">Core Dependencies to Install:</h3>
-        <div class="bg-light p-3 rounded small" style="max-height:150px; overflow-y:auto;">
+<div class="card border-0 shadow-sm mb-5 overflow-hidden" style="border-radius: 20px;">
+    <div class="card-header bg-light py-3 border-0">
+        <h3 class="h6 fw-bold mb-0 text-dark uppercase letter-spacing-1 small">
+            <i class="fas fa-boxes me-2 text-primary"></i> Required Package Audit
+        </h3>
+    </div>
+    <div class="card-body p-4">
+        <div class="row g-3" style="max-height:280px; overflow-y:auto;">
             <?php foreach ($packages as $pkg): ?>
-                <div class="text-muted mb-1"><i
-                        class="fa-solid fa-check me-2 text-success"></i><?= htmlspecialchars($pkg) ?></div>
+                <div class="col-md-6">
+                    <div class="d-flex align-items-center p-2 rounded-3 bg-light bg-opacity-50 border border-light">
+                        <i class="fa-solid fa-check-circle me-2 text-success" style="font-size: 0.8rem;"></i>
+                        <code class="smallest text-dark" style="font-family: 'Fira Code', monospace;"><?= htmlspecialchars($pkg) ?></code>
+                    </div>
+                </div>
             <?php endforeach; ?>
         </div>
     </div>
 </div>
 
-<div class="text-center mt-4 pt-3 border-top">
+<div class="text-center">
     <form method="post">
-        <button type="submit" class="btn btn-primary btn-lg px-5 shadow">
-            <i class="fa-solid fa-terminal me-2"></i> Install Dependencies
+        <button type="submit" class="btn btn-primary btn-lg px-5 shadow-lg">
+            <i class="fas fa-play-circle me-2"></i> Execute Package Installation
         </button>
     </form>
+    <p class="text-muted smallest mt-3 fw-bold uppercase letter-spacing-1">Warning: Ensure your internet connection is stable.</p>
 </div>
 <?php include __DIR__ . '/../layout/footer.php'; ?>

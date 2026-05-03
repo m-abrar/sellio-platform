@@ -52,7 +52,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$errorMessage) {
             $isEnabled = isset($_POST['module_' . $key]) ? '1' : '0';
             $settingKey = 'is_section.' . $key;
             
-            // Update or Insert the setting
             $stmt = $pdo->prepare("INSERT INTO settings (`key`, `value`) VALUES (?, ?) ON DUPLICATE KEY UPDATE `value` = ?");
             $stmt->execute([$settingKey, $isEnabled, $isEnabled]);
         }
@@ -65,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$errorMessage) {
     }
 }
 
-// 4. Fetch Current Settings (Default to enabled if not found)
+// 4. Fetch Current Settings
 $currentSettings = [];
 if (!$errorMessage) {
     try {
@@ -74,9 +73,7 @@ if (!$errorMessage) {
             $key = str_replace('is_section.', '', $row['key']);
             $currentSettings[$key] = $row['value'];
         }
-    } catch (Exception $e) {
-        // Table might not exist yet if migration failed, but we should handle it gracefully
-    }
+    } catch (Exception $e) {}
 }
 
 $title = 'Configure Modules';
@@ -85,28 +82,31 @@ $title = 'Configure Modules';
 include __DIR__ . '/../layout/header.php';
 ?>
 
-<h2 class="mb-4">Module Configuration</h2>
-<p class="mb-4 text-muted">Select the marketplace modules you want to enable for your platform. You can always change these later in the Admin Dashboard.</p>
+<div class="mb-5">
+    <h2 class="fw-bold text-dark">Platform Specialization</h2>
+    <p class="text-muted">Select the marketplace verticals you wish to activate. These can be adjusted anytime via the admin dashboard.</p>
+</div>
 
 <?php if ($errorMessage) display_message($errorMessage, true); ?>
 
-<form method="post" class="mx-auto" style="max-width:650px;">
+<form method="post" class="mx-auto" style="max-width:750px;">
     
-    <div class="row g-3 mb-4">
+    <div class="row g-4 mb-5">
         <?php foreach ($modules as $key => $data): ?>
             <?php 
                 $isChecked = (!isset($currentSettings[$key]) || $currentSettings[$key] === '1');
             ?>
             <div class="col-md-6">
-                <div class="card h-100 border shadow-sm hover-shadow transition-all">
+                <div class="card h-100 border-0 shadow-sm transition-all" style="border-radius: 20px; background: rgba(255,255,255,0.6); backdrop-filter: blur(5px);">
                     <div class="card-body d-flex align-items-center p-3">
-                        <div class="flex-shrink-0 me-3 bg-light rounded-circle d-flex align-items-center justify-content-center" style="width: 45px; height: 45px;">
+                        <div class="flex-shrink-0 me-3 bg-white shadow-xs rounded-4 d-flex align-items-center justify-content-center" style="width: 54px; height: 54px; border: 1px solid #e2e8f0;">
                             <i class="fa-solid <?= $data['icon'] ?> text-primary fs-5"></i>
                         </div>
                         <div class="flex-grow-1">
-                            <h4 class="h6 mb-0 fw-bold"><?= htmlspecialchars($data['title']) ?></h4>
+                            <h4 class="h6 mb-0 fw-bold text-dark"><?= htmlspecialchars($data['title']) ?></h4>
+                            <small class="text-muted smallest fw-bold uppercase letter-spacing-1">Module Active</small>
                         </div>
-                        <div class="form-check form-switch fs-5">
+                        <div class="form-check form-switch custom-switch-premium">
                             <input class="form-check-input" type="checkbox" role="switch" 
                                    name="module_<?= $key ?>" id="module_<?= $key ?>" 
                                    <?= $isChecked ? 'checked' : '' ?>>
@@ -117,25 +117,28 @@ include __DIR__ . '/../layout/header.php';
         <?php endforeach; ?>
     </div>
 
-    <div class="text-center mt-5 pt-3 border-top">
-        <button type="submit" class="btn btn-primary btn-lg px-5 shadow">
-            Continue to Import Demos <i class="fa-solid fa-chevron-right ms-2"></i>
+    <div class="text-center mt-5 pt-4 border-top">
+        <button type="submit" class="btn btn-primary btn-lg px-5 shadow-lg">
+            Finalize Configuration <i class="fa-solid fa-chevron-right ms-2"></i>
         </button>
     </div>
 
 </form>
 
 <style>
-    .hover-shadow:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 20px rgba(0,0,0,0.1) !important;
+    .card:hover {
+        transform: translateY(-5px);
+        background: #fff !important;
+        box-shadow: 0 15px 30px rgba(0,0,0,0.08) !important;
     }
-    .transition-all {
-        transition: all 0.3s ease;
+    .custom-switch-premium .form-check-input {
+        width: 3rem;
+        height: 1.5rem;
+        cursor: pointer;
     }
-    .form-check-input:checked {
-        background-color: var(--primary-color);
-        border-color: var(--primary-color);
+    .custom-switch-premium .form-check-input:checked {
+        background-color: var(--primary);
+        border-color: var(--primary);
     }
 </style>
 

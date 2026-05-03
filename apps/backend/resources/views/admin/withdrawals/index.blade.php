@@ -252,7 +252,7 @@
                      "autoWidth": false,
                      "responsive": true,
                      "order": [[5, "desc"]],
-                     dom: '<"row px-4 pt-4 pb-2"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-6"l>>' +
+                     dom: '<"row px-0 pt-4 pb-2"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-6"l>>' +
                             '<"row"<"col-sm-12"tr>>',
                     "language": {
                         "search": "",

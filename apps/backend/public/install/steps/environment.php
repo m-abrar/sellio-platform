@@ -105,84 +105,100 @@ $title = 'Database Connection';
 include __DIR__ . '/../layout/header.php';
 ?>
 
-<h2 class="mb-4">Environment Setup</h2>
-<p class="mb-4 text-muted">Configure your application settings and database connection details below.</p>
+<div class="mb-5">
+    <h2 class="fw-bold text-dark">Environment Setup</h2>
+    <p class="text-muted">Configure your platform settings and establish a secure database link.</p>
+</div>
 
 <?php if ($errorMessage) display_message($errorMessage, true); ?>
 
-<form method="post" class="mx-auto" style="max-width:550px;">
+<form method="post" class="mx-auto" style="max-width:650px;">
     
-    <div class="mb-3">
-        <label for="app_name" class="form-label">App Name:</label>
-        <input type="text" id="app_name" name="app_name" class="form-control"
-            value="<?= htmlspecialchars($_POST['app_name'] ?? $existingEnv['APP_NAME'] ?? 'Sellio') ?>" required>
-    </div>
-
-    <div class="mb-4">
-        <label for="app_url" class="form-label">App URL:</label>
-        <input type="url" id="app_url" name="app_url" class="form-control"
-            value="<?= htmlspecialchars($_POST['app_url'] ?? $existingEnv['APP_URL'] ?? $appUrl) ?>" required>
-    </div>
-
-    <h3 class="h5 mb-3 pt-3 border-top fw-bold" style="color: var(--primary-color);">Database Configuration</h3>
-    
-    <div class="row g-3">
+    <div class="row g-4 mb-4">
         <div class="col-md-6">
-            <label for="db_host" class="form-label">DB Host:</label>
-            <input type="text" id="db_host" name="db_host" class="form-control"
-                value="<?= htmlspecialchars($_POST['db_host'] ?? $existingEnv['DB_HOST'] ?? '127.0.0.1') ?>" required>
+            <label for="app_name" class="form-label">Application Name</label>
+            <div class="input-group">
+                <span class="input-group-text bg-white border-end-0"><i class="fas fa-building text-muted"></i></span>
+                <input type="text" id="app_name" name="app_name" class="form-control border-start-0"
+                    value="<?= htmlspecialchars($_POST['app_name'] ?? $existingEnv['APP_NAME'] ?? 'Sellio') ?>" required>
+            </div>
         </div>
 
         <div class="col-md-6">
-            <label for="db_port" class="form-label">DB Port:</label>
-            <input type="text" id="db_port" name="db_port" class="form-control"
-                value="<?= htmlspecialchars($_POST['db_port'] ?? $existingEnv['DB_PORT'] ?? '3306') ?>" required>
+            <label for="app_url" class="form-label">Base Application URL</label>
+            <div class="input-group">
+                <span class="input-group-text bg-white border-end-0"><i class="fas fa-link text-muted"></i></span>
+                <input type="url" id="app_url" name="app_url" class="form-control border-start-0"
+                    value="<?= htmlspecialchars($_POST['app_url'] ?? $existingEnv['APP_URL'] ?? $appUrl) ?>" required>
+            </div>
         </div>
     </div>
 
-    <div class="mb-3 mt-3">
-        <label for="db_name" class="form-label">DB Name:</label>
-        <input type="text" id="db_name" name="db_name" class="form-control"
-            value="<?= htmlspecialchars($_POST['db_name'] ?? $existingEnv['DB_DATABASE'] ?? 'sellio') ?>" required>
+    <div class="p-4 rounded-4 mb-4" style="background: rgba(99, 102, 241, 0.05); border: 1px solid rgba(99, 102, 241, 0.1);">
+        <h3 class="h6 mb-4 fw-bold text-uppercase letter-spacing-1" style="color: var(--primary-dark);">
+            <i class="fas fa-database me-2"></i> Database Configuration
+        </h3>
+        
+        <div class="row g-3 mb-3">
+            <div class="col-md-8">
+                <label for="db_host" class="form-label">Host Address</label>
+                <input type="text" id="db_host" name="db_host" class="form-control"
+                    value="<?= htmlspecialchars($_POST['db_host'] ?? $existingEnv['DB_HOST'] ?? '127.0.0.1') ?>" required>
+            </div>
+
+            <div class="col-md-4">
+                <label for="db_port" class="form-label">Port</label>
+                <input type="text" id="db_port" name="db_port" class="form-control"
+                    value="<?= htmlspecialchars($_POST['db_port'] ?? $existingEnv['DB_PORT'] ?? '3306') ?>" required>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="db_name" class="form-label">Database Name</label>
+            <input type="text" id="db_name" name="db_name" class="form-control"
+                value="<?= htmlspecialchars($_POST['db_name'] ?? $existingEnv['DB_DATABASE'] ?? 'sellio') ?>" required>
+        </div>
+
+        <div class="row g-3 mb-2">
+            <div class="col-md-6">
+                <label for="db_user" class="form-label">Username</label>
+                <input type="text" id="db_user" name="db_user" class="form-control"
+                    value="<?= htmlspecialchars($_POST['db_user'] ?? $existingEnv['DB_USERNAME'] ?? 'root') ?>" required>
+            </div>
+            <div class="col-md-6">
+                <label for="db_pass" class="form-label">Password</label>
+                <input type="password" id="db_pass" name="db_pass" class="form-control"
+                    placeholder="••••••••"
+                    value="<?= htmlspecialchars($_POST['db_pass'] ?? $existingEnv['DB_PASSWORD'] ?? '') ?>">
+            </div>
+        </div>
     </div>
 
-    <div class="mb-3">
-        <label for="db_user" class="form-label">DB User:</label>
-        <input type="text" id="db_user" name="db_user" class="form-control"
-            value="<?= htmlspecialchars($_POST['db_user'] ?? $existingEnv['DB_USERNAME'] ?? 'root') ?>" required>
+    <div class="d-flex flex-wrap align-items-center justify-content-center gap-4 mb-5">
+        <?php if (file_exists($envPath)): ?>
+            <div class="form-check custom-check">
+                <input class="form-check-input" type="checkbox" name="overwrite_env" value="1" id="overwrite_env_check">
+                <label class="form-check-label text-muted small fw-bold" for="overwrite_env_check">
+                    OVERWRITE .ENV
+                </label>
+            </div>
+        <?php endif; ?>
+        
+        <div class="form-check custom-check">
+            <input class="form-check-input" type="checkbox" name="overwrite_db" value="1" id="overwrite_db_check">
+            <label class="form-check-label text-muted small fw-bold" for="overwrite_db_check">
+                OVERWRITE TABLES
+            </label>
+        </div>
     </div>
 
-    <div class="mb-4">
-        <label for="db_pass" class="form-label">DB Password:</label>
-        <input type="password" id="db_pass" name="db_pass" class="form-control"
-            value="<?= htmlspecialchars($_POST['db_pass'] ?? $existingEnv['DB_PASSWORD'] ?? '') ?>">
-    </div>
-
-    <div class="mt-4 pt-3 border-top d-flex justify-content-between align-items-center">
+    <div class="mt-4 pt-4 border-top d-flex justify-content-between align-items-center">
         <a href="?step=requirements" class="btn btn-outline-secondary px-4">
             <i class="fa-solid fa-arrow-left me-2"></i>Back
         </a>
 
-        <div class="d-flex align-items-center">
-            <?php if (file_exists($envPath)): ?>
-                <div class="form-check me-4 mb-0">
-                    <input class="form-check-input" type="checkbox" name="overwrite_env" value="1" id="overwrite_env_check">
-                    <label class="form-check-label text-muted small" for="overwrite_env_check">
-                        Overwrite **.env**
-                    </label>
-                </div>
-            <?php endif; ?>
-            
-            <div class="form-check me-4 mb-0">
-                <input class="form-check-input" type="checkbox" name="overwrite_db" value="1" id="overwrite_db_check">
-                <label class="form-check-label text-muted small" for="overwrite_db_check">
-                    Overwrite tables
-                </label>
-            </div>
-        </div>
-
-        <button type="submit" class="btn btn-primary btn-lg px-4 shadow">
-            Save & Test Connection <i class="fa-solid fa-chevron-right ms-2"></i>
+        <button type="submit" class="btn btn-primary btn-lg px-4 shadow-lg">
+            Connect & Initialize <i class="fa-solid fa-chevron-right ms-2"></i>
         </button>
     </div>
 

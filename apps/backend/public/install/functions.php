@@ -95,9 +95,12 @@ function redirect(string $step): void
 function display_message(?string $message, bool $isError = false): void
 {
     if ($message) {
-        // Use Bootstrap classes, but custom colors are defined in CSS variables
-        $class = $isError ? 'alert-danger' : 'alert-success';
-        echo "<div class='alert {$class}' role='alert'>" . htmlspecialchars($message) . "</div>";
+        $class = $isError ? 'border-danger-subtle bg-danger-subtle text-danger' : 'border-success-subtle bg-success-subtle text-success';
+        $icon = $isError ? 'fa-circle-xmark' : 'fa-circle-check';
+        echo "<div class='alert {$class} rounded-4 d-flex align-items-center mb-4 px-4 py-3' style='border: 1px solid !important;' role='alert'>
+                <i class='fa-solid {$icon} fs-4 me-3'></i>
+                <div class='fw-bold'>{$message}</div>
+              </div>";
     }
 }
 

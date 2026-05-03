@@ -172,7 +172,7 @@
                 "info": false,
                 "autoWidth": false,
                 "responsive": true,
-                "dom": '<"row px-4 pt-2"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-3"l>>t<"row px-4 pb-3"<"col-sm-12"p>>',
+                "dom": '<"row px-0 pt-2"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-3"l>>t<"row px-0 pb-3"<"col-sm-12"p>>',
                 "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
                 "language": {
                     "search": "",

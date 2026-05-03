@@ -152,3 +152,26 @@ Let's make all of the create/edit forms UIUX symmetry for the following pages
 - [x] **Brands**
 
 --------------------------------
+
+### DataTables Layout Standardization
+- [x] Remove horizontal margins (`px-4`) from filter/length controls for perfect alignment.
+    - [x] Amenities Index
+    - [x] Features Index
+    - [x] Brands Index
+    - [x] Job Applications Index
+    - [x] Event Bookings Index
+    - [x] Email Templates Index
+    - [x] Classified Inquiries Index
+    - [x] Auto Inquiries Index
+    - [x] Payment Gateways Index
+    - [x] Menu Index
+    - [x] Content Index
+    - [x] Withdrawals Index
+
+------------------------------
+
+- [x] Go to: `D:\Sellio\apps\backend\public\install` and make the UIUX consistent.
+
+------------------------------
+
+

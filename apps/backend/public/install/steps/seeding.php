@@ -8,7 +8,6 @@ global $basePath;
 // --- PHP LOGIC START ---
 set_time_limit(0);
 
-// 1. Fetch Enabled Modules for UI Feedback
 $enabledModules = [];
 try {
     $envPath = $basePath . '/.env';
@@ -30,9 +29,7 @@ try {
             $enabledModules[] = ucfirst($key);
         }
     }
-} catch (Exception $e) {
-    // Graceful fail if DB not ready
-}
+} catch (Exception $e) {}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (ob_get_level())
@@ -43,19 +40,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = 'Importing Demo Demos';
     include __DIR__ . '/../layout/header.php';
     ?>
-    <h2 class="mb-4">Importing Demo Data</h2>
-    <p class="mb-4 text-muted">Populating your selected modules with sample listings, categories, and initial
-        configurations.</p>
-
-    <div class="alert alert-info small mb-4 shadow-sm">
-        <i class="fa-solid fa-seedling fa-beat me-2"></i> <strong>Seeding Database...</strong> This may take a minute
-        depending on your server speed.
+    <div class="mb-5">
+        <h2 class="fw-bold text-dark">Data Orchestration</h2>
+        <p class="text-muted">Populating your environment with high-fidelity sample data and initial configurations.</p>
     </div>
 
-    <div class="bg-dark rounded p-3 shadow-inner mb-4">
-        <pre class="text-light mb-0"
-            style="max-height:500px; overflow:auto; font-size: 0.85em; font-family: monospace; white-space: pre-wrap;">
-    <?php
+    <div class="p-3 mb-4 rounded-4 shadow-sm border border-success-subtle" style="background: rgba(16, 185, 129, 0.05);">
+        <div class="d-flex align-items-center">
+            <div class="spinner-grow text-success me-3" role="status" style="width: 1.5rem; height: 1.5rem;">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <div class="fw-bold text-success">
+                <i class="fas fa-seedling me-2"></i> PLANTING DATA SEEDS...
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-dark rounded-4 p-0 shadow-lg border border-secondary mb-4 overflow-hidden">
+        <div class="bg-secondary bg-opacity-25 px-3 py-2 border-bottom border-secondary d-flex align-items-center">
+            <div class="d-flex gap-1 me-3">
+                <div style="width: 10px; height: 10px; border-radius: 50%; background: #ef4444;"></div>
+                <div style="width: 10px; height: 10px; border-radius: 50%; background: #f59e0b;"></div>
+                <div style="width: 10px; height: 10px; border-radius: 50%; background: #10b981;"></div>
+            </div>
+            <span class="text-muted smallest fw-bold uppercase letter-spacing-1">Terminal Session: database_seeding.log</span>
+        </div>
+        <pre class="text-light mb-0 p-4" style="max-height:450px; overflow:auto; font-family: 'Fira Code', monospace; font-size: 0.8rem; line-height: 1.6; white-space: pre-wrap; background: #0f172a;">
+<?php
     flush();
     chdir($basePath);
 
@@ -71,7 +82,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $error = ($status !== 0);
     
-    // --- POST-SEEDING VERIFICATION ---
     if (!$error) {
         try {
             $envPath = $basePath . '/.env';
@@ -87,11 +97,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $dsn = "mysql:host={$dbConfig['DB_HOST']};port={$dbConfig['DB_PORT']};dbname={$dbConfig['DB_DATABASE']};charset=utf8mb4";
                 $pdo = new PDO($dsn, $dbConfig['DB_USERNAME'], $dbConfig['DB_PASSWORD']);
                 
-                // Check if the 'settings' table contains data
                 $res = $pdo->query("SELECT COUNT(*) FROM settings");
                 if ($res->fetchColumn() == 0) {
                     $error = true;
-                    $message = "❌ False Success: The seeding command finished, but no demo data was populated. This is usually due to a PHP binary incompatibility (LSAPI/CGI issues).";
+                    $message = "❌ False Success: The seeding command finished, but no demo data was populated. Check binary compatibility.";
                 }
             }
         } catch (Exception $e) {
@@ -103,23 +112,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!$error) {
         $message = "✅ All demo data successfully imported!";
     } else if (empty($message)) {
-        $message = "❌ Demo data import failed. The PHP binary may not be compatible or there was a database error.";
+        $message = "❌ Demo data import failed. Check terminal logs for technical errors.";
     }
 
-    echo "\n--- SEEDING FINISHED ---";
-    ?>
+    echo "\n--- SEEDING PIPELINE FINISHED ---";
+?>
         </pre>
     </div>
     <?php
     display_message($message, $error);
     if (!$error):
         ?>
-        <div class="text-center mt-5 pt-3 border-top">
-            <h4 class="mb-3 text-success"><i class="fa-solid fa-circle-check fw-bold me-2"></i> Ready for the Final Step!</h4>
-            <p class="text-muted mb-4 small">Redirecting you automatically to the Admin setup in <span id="countdown">3</span>
-                seconds...</p>
-            <a href="?step=admin" class="btn btn-primary btn-lg px-5 py-3 shadow">
-                Next: Create Admin Account <i class="fa-solid fa-circle-arrow-right ms-2"></i>
+        <div class="text-center mt-5 pt-4 border-top animate__animated animate__fadeInUp">
+            <h4 class="mb-3 text-success fw-bold"><i class="fas fa-check-double me-2"></i> Environment Ready!</h4>
+            <p class="text-muted mb-4 small">Redirecting to administrator account provisioning in <span id="countdown" class="fw-bold text-dark">3</span> seconds...</p>
+            <a href="?step=admin" class="btn btn-primary btn-lg px-5 py-3 shadow-lg">
+                Proceed to Final Step <i class="fas fa-arrow-right ms-2"></i>
             </a>
         </div>
         <script>
@@ -144,33 +152,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $title = 'Import Demo Content';
 include __DIR__ . '/../layout/header.php';
 ?>
-<h2 class="mb-4">Import Demo Data</h2>
-<p class="mb-4 text-muted">This step will populate the enabled modules with realistic demo content to help you get
-    started quickly.</p>
+<div class="mb-5">
+    <h2 class="fw-bold text-dark">Mock Content Injection</h2>
+    <p class="text-muted">Populate your new marketplace with realistic sample data to visualize the platform's full potential.</p>
+</div>
 
-<div class="card border-0 shadow-sm mb-4">
-    <div class="card-body p-4 bg-light">
-        <h3 class="h6 fw-bold mb-3"><i class="fa-solid fa-list-check me-2 text-primary"></i> Selected Content to Import:
+<div class="card border-0 shadow-sm mb-5 overflow-hidden" style="border-radius: 24px; background: #fff;">
+    <div class="card-body p-5">
+        <h3 class="h6 fw-bold mb-4 text-dark uppercase letter-spacing-1 small">
+            <i class="fas fa-layer-group me-2 text-primary"></i> Planned Data Packages:
         </h3>
-        <div class="d-flex flex-wrap gap-2 mb-4">
-            <span class="badge bg-secondary px-3 py-2">Core Settings</span>
-            <span class="badge bg-secondary px-3 py-2">Roles & Permissions</span>
-            <span class="badge bg-secondary px-3 py-2">Blog Posts</span>
+        <div class="d-flex flex-wrap gap-3 mb-5">
+            <span class="badge bg-indigo-soft text-indigo px-4 py-2 border border-indigo-subtle rounded-pill">Core Settings Registry</span>
+            <span class="badge bg-indigo-soft text-indigo px-4 py-2 border border-indigo-subtle rounded-pill">ACL Roles & Permissions</span>
+            <span class="badge bg-indigo-soft text-indigo px-4 py-2 border border-indigo-subtle rounded-pill">Editorial Blog Content</span>
             <?php foreach ($enabledModules as $mod): ?>
-                <span class="badge bg-primary px-3 py-2"><?= htmlspecialchars($mod) ?> Marketplace</span>
+                <span class="badge bg-primary-soft text-primary px-4 py-2 border border-primary-subtle rounded-pill"><?= htmlspecialchars($mod) ?> Ecosystem</span>
             <?php endforeach; ?>
         </div>
 
-        <p class="text-muted small mb-0">The importer will intelligently skip any modules you disabled in the previous
-            step.</p>
+        <div class="p-3 rounded-4 bg-light bg-opacity-50 d-flex align-items-center">
+            <i class="fas fa-magic-wand-sparkles text-primary me-3"></i>
+            <p class="text-muted smallest mb-0 fw-bold">The intelligent importer will only seed data for your activated marketplace verticals.</p>
+        </div>
     </div>
 </div>
 
-<div class="text-center mt-4 pt-3 border-top">
+<div class="text-center">
     <form method="post">
-        <button type="submit" class="btn btn-primary btn-lg px-5 shadow">
-            <i class="fa-solid fa-rocket me-2"></i> Start Importing Demos
+        <button type="submit" class="btn btn-primary btn-lg px-5 shadow-lg">
+            <i class="fas fa-rocket me-2"></i> Launch Data Import Pipeline
         </button>
     </form>
 </div>
+
+<style>
+    .bg-indigo-soft { background: rgba(99, 102, 241, 0.08); }
+    .text-indigo { color: #4f46e5; }
+    .border-indigo-subtle { border-color: rgba(99, 102, 241, 0.2) !important; }
+    .bg-primary-soft { background: rgba(13, 148, 136, 0.08); }
+</style>
 <?php include __DIR__ . '/../layout/footer.php'; ?>

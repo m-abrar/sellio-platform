@@ -171,7 +171,7 @@
                 "info": false,
                 "autoWidth": false,
                 "responsive": true,
-                "dom": '<"row px-4 pt-2"<"col-sm-12"f>>' + '<"row"<"col-sm-12"tr>>' + '<"row px-4 pb-3"<"col-sm-12"p>>',
+                "dom": '<"row px-0 pt-2"<"col-sm-12"f>>' + '<"row"<"col-sm-12"tr>>' + '<"row px-0 pb-3"<"col-sm-12"p>>',
                 "language": {
                     "search": "",
                     "searchPlaceholder": "Search content keys...",

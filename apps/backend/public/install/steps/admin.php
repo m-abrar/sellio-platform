@@ -28,7 +28,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         chdir($basePath);
         $phpBinary = get_php_binary();
 
-        // Using Artisan Tinker to execute PHP code directly for user creation
         $tinkerCmd = sprintf(
             'artisan tinker --execute="\\App\\Models\\User::updateOrCreate([\'id\' => 1], [\'name\' => \'%s\', \'email\' => \'%s\', \'password\' => bcrypt(\'%s\'), \'is_admin\' => true]);"',
             addslashes($name),
@@ -58,32 +57,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $title = 'Create Admin Account';
 include __DIR__ . '/../layout/header.php';
 ?>
-<h2 class="mb-4">Admin Account</h2>
-<p class="mb-4 text-muted">Create your primary administrator account to manage your Sellio store.</p>
+<div class="mb-5">
+    <h2 class="fw-bold text-dark">Administrator Provisioning</h2>
+    <p class="text-muted">Establish the primary supervisor account with full platform access and management rights.</p>
+</div>
 
 <?php if ($message) display_message($message, $error); ?>
 
-<div class="card border-0 shadow-sm mx-auto" style="max-width: 480px;">
-    <div class="card-body p-4">
+<div class="card border-0 shadow-premium mx-auto mb-5 overflow-hidden" style="max-width: 550px; border-radius: 24px; background: rgba(255,255,255,0.7); backdrop-filter: blur(10px);">
+    <div class="card-body p-5">
         <form method="post">
-            <div class="mb-3">
-                <label class="form-label fw-bold small">Full Name</label>
-                <input type="text" name="name" class="form-control" placeholder="Admin Name" value="<?= htmlspecialchars($_POST['name'] ?? '') ?>" required>
-            </div>
-            <div class="mb-3">
-                <label class="form-label fw-bold small">Email Address</label>
-                <input type="email" name="email" class="form-control" placeholder="admin@domain.com" value="<?= htmlspecialchars($_POST['email'] ?? '') ?>" required>
-            </div>
-            <div class="mb-3">
-                <label class="form-label fw-bold small">Password</label>
-                <input type="password" name="password" class="form-control" required>
-            </div>
             <div class="mb-4">
-                <label class="form-label fw-bold small">Confirm Password</label>
-                <input type="password" name="password_confirmation" class="form-control" required>
+                <label class="form-label">Full Name</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-white border-end-0 text-muted"><i class="fas fa-id-card"></i></span>
+                    <input type="text" name="name" class="form-control border-start-0" placeholder="e.g. John Doe" value="<?= htmlspecialchars($_POST['name'] ?? '') ?>" required>
+                </div>
             </div>
-            <button type="submit" class="btn btn-primary w-100 py-2">
-                Create Admin & Finish <i class="fa-solid fa-arrow-right ms-2"></i>
+            
+            <div class="mb-4">
+                <label class="form-label">Email Address</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-white border-end-0 text-muted"><i class="fas fa-envelope"></i></span>
+                    <input type="email" name="email" class="form-control border-start-0" placeholder="admin@sellio.com" value="<?= htmlspecialchars($_POST['email'] ?? '') ?>" required>
+                </div>
+            </div>
+
+            <div class="row g-4 mb-5">
+                <div class="col-md-6">
+                    <label class="form-label">Password</label>
+                    <input type="password" name="password" class="form-control" placeholder="••••••••" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Confirm Password</label>
+                    <input type="password" name="password_confirmation" class="form-control" placeholder="••••••••" required>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 py-3 shadow-lg">
+                <i class="fas fa-user-shield me-2"></i> Create Account & Finish Setup
             </button>
         </form>
     </div>
@@ -91,8 +103,10 @@ include __DIR__ . '/../layout/header.php';
 
 <?php if ($output): ?>
 <div class="mt-4">
-    <h3 class="h6 text-muted">Execution Log:</h3>
-    <pre class="bg-dark text-light p-3 rounded small"><?= htmlspecialchars($output) ?></pre>
+    <h6 class="text-muted fw-bold uppercase letter-spacing-1 smallest mb-3">
+        <i class="fas fa-terminal me-2"></i> System Output Log
+    </h6>
+    <pre class="bg-dark text-light p-4 rounded-4 small border border-secondary shadow-lg" style="font-family: 'Fira Code', monospace; line-height: 1.6;"><?= htmlspecialchars($output) ?></pre>
 </div>
 <?php endif; ?>
 
