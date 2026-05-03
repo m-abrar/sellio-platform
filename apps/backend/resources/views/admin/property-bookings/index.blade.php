@@ -5,8 +5,8 @@
 @section('plugins.Datatables', true)
 
 @section('content_header')
-    <div class="container-fluid pt-4">
-        <div class="row mb-4 align-items-end">
+    <div class="container-fluid">
+        <div class="row mb-2 align-items-center">
             <div class="col-sm-6">
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-calendar-check mr-2 text-primary"></i>
@@ -14,14 +14,11 @@
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Manage property reservations, guest arrivals, and short-term stay schedules.</p>
             </div>
-            <div class="col-sm-6 d-flex flex-column align-items-end justify-content-end">
-                <a href="{{ route('admin.property-bookings.create') }}" class="btn btn-primary btn-sm rounded-pill px-4 font-weight-bold shadow-premium mb-3">
+            <div class="col-sm-6 text-right">
+                <a href="{{ route('admin.property-bookings.create') }}" class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-premium mr-2">
                     <i class="fas fa-plus-circle mr-1"></i> ADD BOOKING
                 </a>
-                <ol class="breadcrumb bg-transparent p-0 m-0 smallest font-weight-bold text-uppercase letter-spacing-1">
-                    <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}" class="text-primary">Dashboard</a></li>
-                    <li class="breadcrumb-item active text-muted">Property Bookings</li>
-                </ol>
+                @include('admin._partials._back-button')
             </div>
         </div>
     </div>

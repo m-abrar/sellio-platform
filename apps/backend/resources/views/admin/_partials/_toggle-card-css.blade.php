@@ -79,10 +79,7 @@
     body.dark-mode .select2-selection__rendered { color: #f1f5f9 !important; }
     body.dark-mode .select2-dropdown { background-color: #1e293b !important; border-color: #334155 !important; }
 
-    /* Transitions */
-    body, .content-wrapper, .card, .form-control, .input-group-text {
-        transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease !important;
-    }
+
 
     /* Form Controls */
     .form-control {
@@ -658,7 +655,6 @@
 
     /* Premium Table Architecture */
     .table-premium {
-        width: 100% !important;
         border-collapse: separate !important;
         border-spacing: 0 !important;
     }

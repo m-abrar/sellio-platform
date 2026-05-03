@@ -299,33 +299,52 @@ textarea.form-control {
 
 
 /* --- 7. SIDEBAR & NAVIGATION --- */
-.main-sidebar {
-    background: #0f172a !important; /* Slate 900 */
-    width: 280px !important; /* Increased width for more premium feel */
-    transition: width 0.3s ease-in-out !important;
-    height: 100vh !important;
-    position: fixed !important;
-    top: 0;
-    left: 0;
-    overflow-y: auto;
-    z-index: 1040 !important;
+@media (min-width: 992px) {
+    .main-sidebar {
+        background: #0f172a !important; /* Slate 900 */
+        width: 280px !important; /* Increased width for more premium feel */
+        transition: width 0.3s ease-in-out !important;
+        height: 100vh !important;
+        position: fixed !important;
+        top: 0;
+        left: 0;
+        overflow-y: auto;
+        z-index: 1040 !important;
+    }
+
+    /* Adjust content wrapper for wider sidebar */
+    .content-wrapper, 
+    .main-footer, 
+    .main-header {
+        margin-left: 280px !important;
+        transition: margin-left 0.3s ease-in-out !important;
+    }
+
+    /* Handle collapsed state */
+    .sidebar-collapse .main-sidebar {
+        width: 73px !important;
+    }
+    .sidebar-collapse .content-wrapper, 
+    .sidebar-collapse .main-footer, 
+    .sidebar-collapse .main-header {
+        margin-left: 73px !important;
+    }
 }
 
-/* Adjust content wrapper for wider sidebar */
-.content-wrapper, 
-.main-footer, 
-.main-header {
-    margin-left: 280px !important;
-}
-
-/* Handle collapsed state */
-.sidebar-collapse .main-sidebar {
-    width: 73px !important;
-}
-.sidebar-collapse .content-wrapper, 
-.sidebar-collapse .main-footer, 
-.sidebar-collapse .main-header {
-    margin-left: 73px !important;
+@media (max-width: 991.98px) {
+    .main-sidebar {
+        background: #0f172a !important;
+        width: 280px !important;
+        z-index: 1040 !important;
+        margin-left: -280px !important; /* Standard AdminLTE hide logic */
+        transition: margin-left 0.3s ease-in-out !important;
+    }
+    .sidebar-open .main-sidebar {
+        margin-left: 0 !important; /* Show when open */
+    }
+    .content-wrapper, .main-footer, .main-header {
+        margin-left: 0 !important;
+    }
 }
 
 .sidebar {

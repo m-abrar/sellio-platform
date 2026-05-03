@@ -82,3 +82,72 @@ the purge button css needs fixes
 
 --------------------------
 
+
+
+http://127.0.0.1:8000/admin/properties/create
+the select location is not showing anything
+and also only show related taxonomy data only
+same for categories
+
+
+-----------------
+
+http://127.0.0.1:8000/admin/profile/edit
+the back button needs polish
+the picture showing in image widget needs UIUX polish
+--------------
+
+http://127.0.0.1:8000/admin/payment-gateways
+http://127.0.0.1:8000/admin/content
+need softer shadow
+
+http://127.0.0.1:8000/admin/payment-gateways
+http://127.0.0.1:8000/admin/settings
+need same size of icon in header card
+---------------
+http://127.0.0.1:8000/admin/payment-gateways
+http://127.0.0.1:8000/admin/themes
+back button is ugly
+
+-------------------
+
+
+http://127.0.0.1:8000/admin/bookings/autos
+fix the old ugly layout and replace with new layout design
+
+
+http://127.0.0.1:8000/admin/bookings/events
+fix the overlaping of sidebar and body content
+
+
+
+http://127.0.0.1:8000/admin/bookings/jobs
+fix the old ugly layout and replace with new layout design
+
+
+
+http://127.0.0.1:8000/admin/bookings/services
+fix the old ugly layout and replace with new layout design
+
+
+http://127.0.0.1:8000/admin/bookings/classifieds
+fix the old ugly layout and replace with new layout design
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
