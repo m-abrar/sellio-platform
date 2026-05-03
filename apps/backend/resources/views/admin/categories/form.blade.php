@@ -147,8 +147,13 @@
             </div>
 
             {{-- High Contrast Sidebar --}}
+            {{-- High Contrast Sidebar --}}
             <div class="col-md-4">
-                @include('admin.categories.partials.action-buttons')
+                @include('admin._partials._form-actions', [
+                    'model' => $category,
+                    'title' => 'CATEGORY',
+                    'duplicate' => 'admin.categories.duplicate'
+                ])
 
                 {{-- Featured Image Partial --}}
                 <div class="card card-premium mb-4 overflow-hidden">

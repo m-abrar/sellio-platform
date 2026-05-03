@@ -124,7 +124,11 @@
 
             {{-- High Contrast Sidebar --}}
             <div class="col-md-4">
-                @include('admin.tags.partials.action-buttons')
+                @include('admin._partials._form-actions', [
+                    'model' => $tag,
+                    'title' => 'TAG',
+                    'duplicate' => 'admin.tags.duplicate'
+                ])
 
                 {{-- Featured Image Partial --}}
                 <div class="card card-premium mb-4 overflow-hidden">
@@ -152,21 +156,24 @@
 
 @push('js')
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const titleInput = document.getElementById('title');
-        const slugInput = document.getElementById('slug');
+    $(document).ready(function () {
+        const titleInput = $('#title');
+        const slugInput = $('#slug');
 
         // Auto-generate Slug
-        titleInput.addEventListener('input', function () {
-            if(!slugInput.dataset.edited) {
-                let slug = this.value.toLowerCase()
+        titleInput.on('input', function () {
+            if(!slugInput.data('edited')) {
+                let slug = $(this).val()
+                    .toLowerCase()
                     .replace(/[^a-z0-9]+/g, '-')
                     .replace(/^-|-$/g, '');
-                slugInput.value = slug;
+                slugInput.val(slug);
             }
         });
 
-        slugInput.addEventListener('change', () => slugInput.dataset.edited = "true");
+        slugInput.on('change', function() {
+            $(this).data('edited', true);
+        });
     });
 </script>
 @endpush

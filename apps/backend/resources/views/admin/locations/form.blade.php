@@ -165,7 +165,11 @@
 
             {{-- High Contrast Sidebar --}}
             <div class="col-md-4">
-                @include('admin.locations.partials.action-buttons')
+                @include('admin._partials._form-actions', [
+                    'model' => $location,
+                    'title' => 'LOCATION',
+                    'duplicate' => 'admin.locations.duplicate'
+                ])
                 @include('admin.locations.partials.map-card')
 
                 {{-- Featured Image Partial --}}
@@ -194,22 +198,23 @@
 
 @push('js')
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    $(document).ready(function () {
         // Auto-generate Slug Logic
-        const titleInput = document.getElementById('title');
-        const slugInput = document.getElementById('slug');
+        const titleInput = $('#title');
+        const slugInput = $('#slug');
 
-        titleInput.addEventListener('input', function () {
-            if(!slugInput.dataset.edited){
-                let slug = this.value.toLowerCase()
+        titleInput.on('input', function () {
+            if(!slugInput.data('edited')){
+                let slug = $(this).val()
+                    .toLowerCase()
                     .replace(/[^a-z0-9]+/g, '-')
                     .replace(/^-|-$/g, '');
-                slugInput.value = slug;
+                slugInput.val(slug);
             }
         });
 
-        slugInput.addEventListener('change', function() {
-            this.dataset.edited = "true";
+        slugInput.on('change', function() {
+            $(this).data('edited', true);
         });
     });
 </script>

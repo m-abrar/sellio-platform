@@ -189,12 +189,12 @@ return [
             [
                 'text' => 'Categories',
                 'url' => 'admin/categories',
-                'icon' => 'fas fa-tags',
+                'icon' => 'fas fa-folder-open',
             ],
             [
                 'text' => 'Types',
                 'url' => 'admin/types',
-                'icon' => 'fas fa-home',
+                'icon' => 'fas fa-layer-group',
             ],
             [
                 'text' => 'Amenities',
@@ -209,12 +209,12 @@ return [
             [
                 'text' => 'Tags',
                 'url' => 'admin/tags',
-                'icon' => 'fas fa-hashtag',
+                'icon' => 'fas fa-tags',
             ],
             [
                 'text' => 'Brands',
                 'url' => 'admin/brands',
-                'icon' => 'fas fa-gem',
+                'icon' => 'fas fa-award',
             ],
         ],
     ],

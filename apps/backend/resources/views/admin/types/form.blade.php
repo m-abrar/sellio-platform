@@ -144,7 +144,11 @@
 
             {{-- High Contrast Sidebar --}}
             <div class="col-md-4">
-                @include('admin.types.partials.action-buttons')
+                @include('admin._partials._form-actions', [
+                    'model' => $type,
+                    'title' => 'LISTING TYPE',
+                    'duplicate' => 'admin.types.duplicate'
+                ])
 
                 {{-- Featured Image Partial --}}
                 <div class="card card-premium mb-4 overflow-hidden">

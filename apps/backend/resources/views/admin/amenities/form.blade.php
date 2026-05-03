@@ -7,7 +7,7 @@
         <div class="row mb-4 align-items-center">
             <div class="col-sm-8">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-star mr-2 text-primary"></i> 
+                    <i class="fas fa-bath mr-2 text-primary"></i> 
                     {{ $amenity->exists ? 'Modify Amenity' : 'New Amenity' }}
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">
@@ -125,7 +125,11 @@
 
             {{-- High Contrast Sidebar --}}
             <div class="col-md-4">
-                @include('admin.amenities.partials.action-buttons')
+                @include('admin._partials._form-actions', [
+                    'model' => $amenity,
+                    'title' => 'AMENITY',
+                    'duplicate' => 'admin.amenities.duplicate'
+                ])
 
                 {{-- Featured Image Partial --}}
                 <div class="card card-premium mb-4 overflow-hidden">
