@@ -49,9 +49,9 @@ class PropertyController extends Controller
         $features = Feature::all();
         $types = Type::all();
         $tags = Tag::all();
-        $categories = Category::all();
+        $categories = Category::where('is_property', 1)->get();
         $property = new Property();
-        $locations = Location::all();
+        $locations = Location::where('is_property', 1)->get();
 
         return view('admin.properties.form', compact('property', 'amenities', 'features', 'types', 'tags', 'categories', 'locations'));
     }
@@ -117,8 +117,8 @@ class PropertyController extends Controller
         $features = Feature::all();
         $tags = Tag::all();
         $types = Type::all();
-        $categories = Category::all();
-        $locations = Location::all();
+        $categories = Category::where('is_property', 1)->get();
+        $locations = Location::where('is_property', 1)->get();
 
         $statusColors = [
             'confirmed' => '#ef4444',

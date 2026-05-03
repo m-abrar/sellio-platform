@@ -75,7 +75,7 @@
                     <button class="btn btn-primary btn-sm dropdown-toggle rounded-pill px-4 shadow-sm font-weight-bold" type="button" data-toggle="dropdown">
                         <i class="fas fa-tasks mr-1"></i> BULK ACTIONS (<span id="selected-count">0</span>)
                     </button>
-                    <div class="dropdown-menu dropdown-menu-right shadow-lg border-0" style="border-radius: 12px; min-width: 200px;">
+                    <div class="dropdown-menu dropdown-menu-right shadow-premium border-0" style="border-radius: 12px; min-width: 200px;">
                         <h6 class="dropdown-header text-uppercase smallest letter-spacing-1">Update Status</h6>
                         <a class="dropdown-item py-2 smallest font-weight-bold" href="#" onclick="handleBulkUpdate('status', 'open')"><i class="fas fa-envelope-open mr-2 text-success"></i> Mark as Open</a>
                         <a class="dropdown-item py-2 smallest font-weight-bold" href="#" onclick="handleBulkUpdate('status', 'in-progress')"><i class="fas fa-spinner mr-2 text-info"></i> Mark In-Progress</a>

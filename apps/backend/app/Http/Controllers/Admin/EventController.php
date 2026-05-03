@@ -39,8 +39,8 @@ class EventController extends Controller
     public function create(): View
     {
         $event = new Event();
-        $categories = Category::all();
-        $locations = Location::all();
+        $categories = Category::where('is_event', 1)->get();
+        $locations = Location::where('is_event', 1)->get();
         return view('admin.events.form', compact('event', 'categories', 'locations'));
     }
 
@@ -61,8 +61,8 @@ class EventController extends Controller
 
     public function edit(Event $event): View
     {
-        $categories = Category::all();
-        $locations = Location::all();
+        $categories = Category::where('is_event', 1)->get();
+        $locations = Location::where('is_event', 1)->get();
         
         $recentBookings = EventBooking::where('event_id', $event->id)->with('user')->latest()->take(5)->get();
 

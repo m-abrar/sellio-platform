@@ -39,8 +39,8 @@ class ClassifiedController extends Controller
     public function create(): View
     {
         $classified = new Classified();
-        $categories = Category::all();
-        $locations = Location::all();
+        $categories = Category::where('is_classified', 1)->get();
+        $locations = Location::where('is_classified', 1)->get();
         return view('admin.classifieds.form', compact('classified', 'categories', 'locations'));
     }
 
@@ -62,8 +62,8 @@ class ClassifiedController extends Controller
 
     public function edit(Classified $classified): View
     {
-        $categories = Category::all();
-        $locations = Location::all();
+        $categories = Category::where('is_classified', 1)->get();
+        $locations = Location::where('is_classified', 1)->get();
         
         $recentInquiries = ClassifiedInquiry::where('classified_id', $classified->id)->latest()->take(5)->get();
 

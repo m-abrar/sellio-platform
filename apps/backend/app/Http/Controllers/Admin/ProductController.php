@@ -33,7 +33,7 @@ class ProductController extends Controller
     public function create()
     {
         $categories = Category::where('is_product', 1)->get();
-        $brands = Brand::all();
+        $brands = Brand::where('is_product', 1)->get();
         $tags = Tag::all();
         $product = new Product();
 
@@ -85,7 +85,7 @@ class ProductController extends Controller
     {
         $product->load(['attributes', 'addons', 'tags']);
         $categories = Category::where('is_product', 1)->get();
-        $brands = Brand::all();
+        $brands = Brand::where('is_product', 1)->get();
         $tags = Tag::all();
 
         return view('admin.products.form', compact('product', 'categories', 'brands', 'tags'));

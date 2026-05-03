@@ -20,7 +20,7 @@
                     <button class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-premium dropdown-toggle" type="button" id="addOperationDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-plus-circle mr-1"></i> INITIALIZE OPERATION
                     </button>
-                    <div class="dropdown-menu dropdown-menu-right shadow-lg border-0 animate__animated animate__fadeInUp" aria-labelledby="addOperationDropdown" style="border-radius: 16px;">
+                    <div class="dropdown-menu dropdown-menu-right shadow-premium border-0 animate__animated animate__fadeInUp" aria-labelledby="addOperationDropdown" style="border-radius: 16px;">
                         <h6 class="dropdown-header smallest font-weight-bold text-muted uppercase letter-spacing-1">Real Estate</h6>
                         <a class="dropdown-item py-2 px-4 smallest font-weight-bold" href="{{ route('admin.property-bookings.create') }}">
                             <i class="fas fa-home mr-2 text-primary opacity-50"></i> Property Booking

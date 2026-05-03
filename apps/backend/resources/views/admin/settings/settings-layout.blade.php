@@ -40,7 +40,7 @@
                         @foreach(['general', 'modules', 'contact', 'SEO', 'social', 'pages', 'apis'] as $section)
                         <li class="nav-item mb-2">
                             <a href="{{ route('admin.settings.group', ['section' => $section]) }}" 
-                               class="nav-link py-3 px-3 d-flex align-items-center @if(strtolower($currentSection) == strtolower($section)) active shadow-lg @endif"
+                               class="nav-link py-3 px-3 d-flex align-items-center @if(strtolower($currentSection) == strtolower($section)) active shadow-sm @endif"
                                style="border-radius: 16px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);">
                                 <div class="icon-box-soft {{ strtolower($currentSection) == strtolower($section) ? 'bg-white bg-opacity-20' : 'bg-primary-soft' }} rounded-circle mr-3 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; min-width: 32px;">
                                     <i class="fas fa-{{ match(strtolower($section)) { 

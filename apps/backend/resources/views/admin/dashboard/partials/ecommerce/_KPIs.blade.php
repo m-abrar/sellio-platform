@@ -10,7 +10,7 @@
 <div class="row">
     {{-- Main Financial Dashboard card --}}
     <div class="col-lg-4">
-        <div class="card border-0 shadow-lg bg-primary overflow-hidden h-100" style="min-height: 240px; border-radius: 16px; background: linear-gradient(135deg, #46a5ac, #2d7d83) !important;">
+        <div class="card border-0 shadow-premium bg-primary overflow-hidden h-100" style="min-height: 240px; border-radius: 16px; background: linear-gradient(135deg, #46a5ac, #2d7d83) !important;">
             <div class="card-body position-relative z-index-1 d-flex flex-column justify-content-center px-4">
                 <p class="text-white-50 text-uppercase small font-weight-bold mb-1" style="letter-spacing: 0.8px;">Ecommerce Gross Sales (YTD)</p>
                 <h1 class="text-white display-4 font-weight-bold mb-2">{{ $metrics['system_kpis']['earnings'] }}</h1>

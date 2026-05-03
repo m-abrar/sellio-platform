@@ -42,9 +42,9 @@ class AutoController extends Controller
     public function create(): View
     {
         $auto = new Auto();
-        $categories = Category::all();
-        $brands = Brand::all();
-        $locations = Location::all();
+        $categories = Category::where('is_auto', 1)->get();
+        $brands = Brand::where('is_auto', 1)->get();
+        $locations = Location::where('is_auto', 1)->get();
         return view('admin.autos.form', compact('auto', 'categories', 'brands', 'locations'));
     }
 
@@ -64,9 +64,9 @@ class AutoController extends Controller
 
     public function edit(Auto $auto): View
     {
-        $categories = Category::all();
-        $brands = Brand::all();
-        $locations = Location::all();
+        $categories = Category::where('is_auto', 1)->get();
+        $brands = Brand::where('is_auto', 1)->get();
+        $locations = Location::where('is_auto', 1)->get();
         
         $recentInquiries = AutoInquiry::where('auto_id', $auto->id)->latest()->take(5)->get();
 

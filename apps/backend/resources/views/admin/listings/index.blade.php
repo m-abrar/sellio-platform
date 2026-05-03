@@ -19,7 +19,7 @@
                     <button class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-premium dropdown-toggle" type="button" id="addListingDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-plus-circle mr-1"></i> ADD NEW ASSET
                     </button>
-                    <div class="dropdown-menu dropdown-menu-right shadow-lg border-0 animate__animated animate__fadeInUp" aria-labelledby="addListingDropdown" style="border-radius: 15px; min-width: 240px;">
+                    <div class="dropdown-menu dropdown-menu-right shadow-premium border-0 animate__animated animate__fadeInUp" aria-labelledby="addListingDropdown" style="border-radius: 15px; min-width: 240px;">
                         <h6 class="dropdown-header text-uppercase smallest letter-spacing-1 font-weight-bold text-muted mb-2">Select Listing Vertical</h6>
                         
                         @if(module_enabled('properties'))

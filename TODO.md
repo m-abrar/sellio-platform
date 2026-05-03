@@ -8,7 +8,7 @@ All identified UI/UX inconsistencies and functional gaps have been resolved to m
 - [x] **Select2 Normalization**: Replaced default browser dropdowns with high-fidelity, glassmorphic Select2 components globally.
 - [x] **Premium Checkboxes**: Implemented `.custom-control-premium` for all feature-applicability and priority checkboxes.
 - [x] **Shadow & Spacing Protocol**: Unified all module cards with `.shadow-premium` and standardized `.container-fluid` padding.
-- [x] **Softer Shadow Mandate**: Refined the global `.shadow-premium` token (0 5px 20px rgba(0,0,0,0.03)) and replaced aggressive `shadow-lg` on all cards and action bars.
+- [x] **Softer Shadow Mandate**: Refined the global `.shadow-premium` token (0 5px 20px rgba(0,0,0,0.03)) and replaced aggressive `shadow-lg` on all cards, action bars, and dropdown menus across the entire dashboard.
 - [x] **Action Buttons**: Unified all "Add New", "Back", and "Submit" buttons with rounded-pill aesthetics and consistent typography, enforcing a shadow-less primary button protocol.
 - [x] **Breadcrumb Protocol**: Removed redundant breadcrumbs across all modules in favor of the standardized `content_header` layout.
 - [x] **Dark Mode Synchronization**: Implemented a global color synchronization protocol where the entire page body (not just sidebar/header) responds to the theme switch.
@@ -45,4 +45,4 @@ All identified UI/UX inconsistencies and functional gaps have been resolved to m
 
 ---
 **Status:** PRODUCTION READY
-**Phase:** Standardization & High-Fidelity Audit Completed.
+**Phase:** Finalization & Premium Polish Phase Completed.

@@ -132,7 +132,7 @@
                         <button class="btn btn-primary btn-sm dropdown-toggle rounded-pill px-4 shadow-sm" type="button" data-toggle="dropdown">
                             <i class="fas fa-tasks mr-1"></i> BULK ACTIONS (<span id="selected-count">0</span>)
                         </button>
-                        <div class="dropdown-menu dropdown-menu-right shadow-lg border-0" style="border-radius: 12px;">
+                        <div class="dropdown-menu dropdown-menu-right shadow-premium border-0" style="border-radius: 12px;">
                             <h6 class="dropdown-header text-uppercase smallest letter-spacing-1">Update Status</h6>
                             <a class="dropdown-item py-2" href="#" onclick="handleBulkStatus('pending')"><i class="fas fa-clock mr-2 text-warning"></i> Mark as Pending</a>
                             <a class="dropdown-item py-2" href="#" onclick="handleBulkStatus('processing')"><i class="fas fa-sync mr-2 text-info"></i> Mark as Processing</a>

@@ -30,7 +30,7 @@
                 <button class="btn btn-primary d-flex align-items-center justify-content-center py-3 w-100 shadow-premium font-weight-bold" type="button" data-toggle="dropdown" style="border-radius: 12px; border: none !important; min-height: 62px; font-size: 0.85rem; letter-spacing: 0.5px;">
                     <i class="fas fa-plus-circle mr-2"></i> ADD LISTING <i class="fas fa-caret-down ml-2 opacity-50"></i>
                 </button>
-                <div class="dropdown-menu dropdown-menu-right shadow-lg border-0 animate__animated animate__fadeInUp" style="border-radius: 20px; min-width: 240px; padding: 12px; background: rgba(255,255,255,0.95); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.2) !important;">
+                <div class="dropdown-menu dropdown-menu-right shadow-premium border-0 animate__animated animate__fadeInUp" style="border-radius: 20px; min-width: 240px; padding: 12px; background: rgba(255,255,255,0.95); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.2) !important;">
                     <div class="px-3 py-2 small text-muted font-weight-bold text-uppercase letter-spacing-1 mb-1">Catalog Engines</div>
                     @if(module_enabled('products'))
                         <a class="dropdown-item py-2 px-3 rounded-lg font-weight-600 mb-1" href="{{ route('admin.products.create') }}"><i class="fas fa-shopping-bag mr-2 text-success"></i> Create Product</a>
@@ -57,7 +57,7 @@
                 <button class="btn btn-default d-flex align-items-center justify-content-center py-3 w-100 shadow-premium font-weight-bold bg-white border-light" type="button" data-toggle="dropdown" style="border-radius: 12px; color: var(--dark-muted) !important; min-height: 62px; font-size: 0.85rem; letter-spacing: 0.5px;">
                     <i class="fas fa-calendar-plus mr-2 text-primary"></i> ADD BOOKING <i class="fas fa-caret-down ml-2 opacity-50"></i>
                 </button>
-                <div class="dropdown-menu dropdown-menu-right shadow-lg border-0 animate__animated animate__fadeInUp" style="border-radius: 20px; min-width: 240px; padding: 12px; background: rgba(255,255,255,0.95); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.2) !important;">
+                <div class="dropdown-menu dropdown-menu-right shadow-premium border-0 animate__animated animate__fadeInUp" style="border-radius: 20px; min-width: 240px; padding: 12px; background: rgba(255,255,255,0.95); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.2) !important;">
                     <div class="px-3 py-2 small text-muted font-weight-bold text-uppercase letter-spacing-1 mb-1">Operational Flow</div>
                     @if(module_enabled('properties'))
                         <a class="dropdown-item py-2 px-3 rounded-lg font-weight-600 mb-1" href="{{ route('admin.property-bookings.create') }}"><i class="fas fa-building mr-2 text-info"></i> Book Property</a>

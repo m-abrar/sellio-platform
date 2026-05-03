@@ -391,7 +391,7 @@
                             <select name="location_id" class="form-control select2">
                                 <option value="">Select Location</option>
                                 @foreach($locations ?? [] as $loc)
-                                    <option value="{{ $loc->id }}" {{ (old('location_id', $property->location_id ?? '') == $loc->id) ? 'selected' : '' }}>{{ $loc->name }}</option>
+                                    <option value="{{ $loc->id }}" {{ (old('location_id', $property->location_id ?? '') == $loc->id) ? 'selected' : '' }}>{{ $loc->title }}</option>
                                 @endforeach
                             </select>
                         </div>

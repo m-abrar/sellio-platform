@@ -38,8 +38,8 @@ class JobController extends Controller
     public function create(): View
     {
         $job = new JobListing();
-        $categories = Category::all();
-        $locations = Location::all();
+        $categories = Category::where('is_job', 1)->get();
+        $locations = Location::where('is_job', 1)->get();
         return view('admin.jobs.form', compact('job', 'categories', 'locations'));
     }
 
@@ -63,8 +63,8 @@ class JobController extends Controller
     {
         // Explicitly load the model to plural name if route parameter is plural
         // But Laravel will pass single model bound object if bound correctly
-        $categories = Category::all();
-        $locations = Location::all();
+        $categories = Category::where('is_job', 1)->get();
+        $locations = Location::where('is_job', 1)->get();
         
         // Count applications manually
         $applicationsCount = $job->applications()->count();

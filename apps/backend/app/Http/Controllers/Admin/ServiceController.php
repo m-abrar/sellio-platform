@@ -39,8 +39,8 @@ class ServiceController extends Controller
     public function create(): View
     {
         $service = new Service();
-        $categories = Category::all();
-        $locations = Location::all();
+        $categories = Category::where('is_service', 1)->get();
+        $locations = Location::where('is_service', 1)->get();
         return view('admin.services.form', compact('service', 'categories', 'locations'));
     }
 
@@ -62,8 +62,8 @@ class ServiceController extends Controller
 
     public function edit(Service $service): View
     {
-        $categories = Category::all();
-        $locations = Location::all();
+        $categories = Category::where('is_service', 1)->get();
+        $locations = Location::where('is_service', 1)->get();
         
         $recentQuotes = ServiceQuote::where('service_id', $service->id)->latest()->take(5)->get();
 
