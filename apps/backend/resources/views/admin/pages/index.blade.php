@@ -33,7 +33,7 @@
                 Page Registry <span class="badge badge-light border ml-2 px-2" style="font-weight: 500;">{{ count($pages) }} Total</span>
             </h3>
             <div class="card-tools">
-                <a href="{{ route('admin.pages.create') }}" class="btn btn-primary shadow-sm px-4">
+                <a href="{{ route('admin.pages.create') }}" class="btn btn-primary shadow-premium px-4 rounded-pill">
                     <i class="fas fa-plus-circle mr-1"></i> Add Content
                 </a>
             </div>
@@ -123,6 +123,7 @@
 @endsection
 
 @section('css')
+@include('admin._partials._toggle-card-css')
 <style>
     /* Blueprint Layout Utilities */
     .table-premium thead th { border-top: none; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px; color: #6c757d; }

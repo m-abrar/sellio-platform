@@ -7,20 +7,20 @@
 
 @section('content_header')
     <div class="container-fluid pt-4">
-        <div class="row mb-4 align-items-end">
+        <div class="row align-items-center mb-4">
             <div class="col-sm-7">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-file-invoice-dollar mr-2 text-primary"></i>
+                    <i class="fas fa-file-invoice-dollar mr-2 text-primary opacity-50"></i>
                     {{ Str::title($status) }} {{ __('Operations Queue') }}
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Cross-module operational registry and transaction oversight.</p>
             </div>
-            <div class="col-sm-5 text-right">
-                <div class="dropdown d-inline-block">
+            <div class="col-sm-5 d-flex flex-column align-items-end justify-content-center">
+                <div class="dropdown mb-2">
                     <button class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-premium dropdown-toggle" type="button" id="addOperationDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-plus-circle mr-1"></i> INITIALIZE OPERATION
                     </button>
-                    <div class="dropdown-menu dropdown-menu-right shadow-lg border-0 mt-2" aria-labelledby="addOperationDropdown" style="border-radius: 16px;">
+                    <div class="dropdown-menu dropdown-menu-right shadow-lg border-0 animate__animated animate__fadeInUp" aria-labelledby="addOperationDropdown" style="border-radius: 16px;">
                         <h6 class="dropdown-header smallest font-weight-bold text-muted uppercase letter-spacing-1">Real Estate</h6>
                         <a class="dropdown-item py-2 px-4 smallest font-weight-bold" href="{{ route('admin.property-bookings.create') }}">
                             <i class="fas fa-home mr-2 text-primary opacity-50"></i> Property Booking
@@ -39,6 +39,10 @@
                         </a>
                     </div>
                 </div>
+                <ol class="breadcrumb bg-transparent p-0 m-0 smallest font-weight-bold text-uppercase letter-spacing-1">
+                    <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}" class="text-primary">Dashboard</a></li>
+                    <li class="breadcrumb-item active text-muted">Operations Queue</li>
+                </ol>
             </div>
         </div>
     </div>
@@ -48,8 +52,11 @@
     <div class="container-fluid pb-5">
         @include('admin.alert')
 
-    <div class="row mb-4">
-        <div class="col-12">
+        <div class="row">
+            <div class="col-12">
+                {{-- Filter Card --}}
+                <div class="row mb-4">
+                    <div class="col-12">
             <div class="card border-0 shadow-premium" style="border-radius: 20px;">
                 <div class="card-body p-2 d-flex align-items-center justify-content-between">
                     <div class="d-flex align-items-center">
@@ -111,16 +118,16 @@
                 
                 <div class="card-body p-0">
                     <div class="table-responsive">
-                        <table id="bookings-table" class="table table-hover table-premium mb-0" style="width: 100%;">
-                            <thead>
+                        <table id="bookings-table" class="table table-hover table-premium mb-0">
+                            <thead class="bg-light text-uppercase smallest font-weight-bold">
                                 <tr>
-                                    <th style="width: 70px" class="text-center">Media</th>
-                                    <th>{{ __('Related Item') }}</th>
-                                    <th>{{ __('Customer') }}</th>
-                                    <th>{{ __('Module') }}</th>
-                                    <th>{{ __('Date & Time') }}</th>
-                                    <th class="text-center">{{ __('Status') }}</th>
-                                    <th class="text-right px-4">{{ __('Actions') }}</th>
+                                    <th class="py-3 border-0 text-center" style="width: 80px">Media</th>
+                                    <th class="py-3 border-0">{{ __('Related Item') }}</th>
+                                    <th class="py-3 border-0">{{ __('Customer') }}</th>
+                                    <th class="py-3 border-0">{{ __('Module') }}</th>
+                                    <th class="py-3 border-0">{{ __('Date & Time') }}</th>
+                                    <th class="py-3 border-0 text-center">{{ __('Status') }}</th>
+                                    <th class="py-3 border-0 text-right px-4">{{ __('Actions') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -209,24 +216,26 @@
                     </div>
                 </div>
                 
-                @if($bookings->hasPages())
-                    <div class="card-footer bg-white border-0 py-3">
-                        <div class="float-right">
-                            {{ $bookings->appends(['status' => $status])->links('pagination::bootstrap-4') }}
-                        </div>
-                    </div>
-                @endif
+            @if(method_exists($bookings, 'hasPages') && $bookings->hasPages())
+                <div class="card-footer bg-white border-0 py-4 px-4 d-flex justify-content-between align-items-center">
+                    <div class="text-muted smallest font-weight-bold uppercase">Displaying {{ $bookings->firstItem() }} - {{ $bookings->lastItem() }} of {{ $bookings->total() }} records</div>
+                    <div>{{ $bookings->appends(['status' => $status])->links('pagination::bootstrap-4') }}</div>
+                </div>
+            @endif
             </div>
+        </div>
     </div>
+</div>
 @stop
 
-@section('css')
+@push('css')
+@include('admin._partials._toggle-card-css')
 <style>
     #statusTabs.nav-pills .nav-link { color: #6c757d; font-weight: 500; transition: all 0.3s ease; }
     #statusTabs.nav-pills .nav-link.active { background-color: var(--primary); color: #fff !important; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
     #statusTabs.nav-pills .nav-link:hover:not(.active) { background-color: #f8f9fa; }
 </style>
-@stop
+@endpush
 
 @section('js')
 <script>

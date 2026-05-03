@@ -54,7 +54,7 @@
         <!-- Add Booking Dropdown -->
         <div class="col-6 col-md-3 px-1">
             <div class="dropdown">
-                <button class="btn btn-default d-flex align-items-center justify-content-center py-3 w-100 shadow-sm font-weight-bold bg-white border-light" type="button" data-toggle="dropdown" style="border-radius: 12px; color: var(--dark-muted) !important; min-height: 62px; font-size: 0.85rem; letter-spacing: 0.5px;">
+                <button class="btn btn-default d-flex align-items-center justify-content-center py-3 w-100 shadow-premium font-weight-bold bg-white border-light" type="button" data-toggle="dropdown" style="border-radius: 12px; color: var(--dark-muted) !important; min-height: 62px; font-size: 0.85rem; letter-spacing: 0.5px;">
                     <i class="fas fa-calendar-plus mr-2 text-primary"></i> ADD BOOKING <i class="fas fa-caret-down ml-2 opacity-50"></i>
                 </button>
                 <div class="dropdown-menu dropdown-menu-right shadow-lg border-0 animate__animated animate__fadeInUp" style="border-radius: 20px; min-width: 240px; padding: 12px; background: rgba(255,255,255,0.95); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.2) !important;">
@@ -99,6 +99,7 @@
 @stop
 
 @section('css')
+    @include('admin._partials._toggle-card-css')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />

@@ -15,7 +15,7 @@
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Manage property reservations, guest arrivals, and short-term stay schedules.</p>
             </div>
             <div class="col-sm-6 d-flex flex-column align-items-end justify-content-end">
-                <a href="{{ route('admin.property-bookings.create') }}" class="btn btn-primary btn-sm rounded-pill px-4 font-weight-bold shadow-lg mb-3">
+                <a href="{{ route('admin.property-bookings.create') }}" class="btn btn-primary btn-sm rounded-pill px-4 font-weight-bold shadow-premium mb-3">
                     <i class="fas fa-plus-circle mr-1"></i> ADD BOOKING
                 </a>
                 <ol class="breadcrumb bg-transparent p-0 m-0 smallest font-weight-bold text-uppercase letter-spacing-1">
@@ -213,6 +213,8 @@
             @endif
         </div>
     </div>
+@section('css')
+    @include('admin._partials._toggle-card-css')
 @stop
 
 @section('js')

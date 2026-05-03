@@ -4,18 +4,17 @@
 
 @section('content_header')
     <div class="container-fluid pt-4">
-        <div class="row mb-4 align-items-end">
-            <div class="col-sm-6">
+        <div class="row mb-4 align-items-center">
+            <div class="col-sm-7">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-shopping-bag mr-2 text-primary"></i> {{ __('Sales & Orders') }}
+                    <i class="fas fa-shopping-bag mr-2 text-primary opacity-50"></i> {{ __('Sales & Orders') }}
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Track marketplace transactions, fulfillment status, and customer shipments.</p>
             </div>
-            <div class="col-sm-6 d-flex flex-column align-items-end justify-content-center">
-                <ol class="breadcrumb bg-transparent p-0 mb-0 smallest font-weight-bold text-uppercase letter-spacing-1">
-                    <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}" class="text-primary">Dashboard</a></li>
-                    <li class="breadcrumb-item active text-muted">Product Orders</li>
-                </ol>
+            <div class="col-sm-5 d-flex align-items-center justify-content-end">
+                <a href="{{ route('admin.product-orders.create') }}" class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-premium">
+                    <i class="fas fa-plus-circle mr-1"></i> ADD ORDER
+                </a>
             </div>
         </div>
     </div>
@@ -149,22 +148,22 @@
                         @csrf
                         <input type="hidden" name="bulk_status" id="bulk-status-input">
                         <table class="table table-hover table-premium mb-0">
-                            <thead class="thead-light">
+                            <thead class="bg-light text-uppercase smallest font-weight-bold">
                                 <tr>
-                                    <th class="text-center" style="width: 50px">
+                                    <th class="py-3 border-0 text-center" style="width: 50px">
                                         <div class="custom-control custom-checkbox">
                                             <input type="checkbox" class="custom-control-input" id="selectAll">
                                             <label class="custom-control-label" for="selectAll"></label>
                                         </div>
                                     </th>
-                                    <th class="text-center" style="width: 70px">Media</th>
-                                    <th>Order Number</th>
-                                    <th>Customer</th>
-                                    <th>Total</th>
-                                    <th>Payment</th>
-                                    <th class="text-center">Status</th>
-                                    <th>Date</th>
-                                    <th class="text-right px-4">Actions</th>
+                                    <th class="py-3 border-0 text-center" style="width: 70px">Media</th>
+                                    <th class="py-3 border-0">Order Number</th>
+                                    <th class="py-3 border-0">Customer</th>
+                                    <th class="py-3 border-0">Total</th>
+                                    <th class="py-3 border-0">Payment</th>
+                                    <th class="py-3 border-0 text-center">Status</th>
+                                    <th class="py-3 border-0">Date</th>
+                                    <th class="py-3 border-0 text-right px-4">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -250,9 +249,10 @@
                     </form>
                 </div>
             </div>
-            @if ($orders->hasPages())
-                <div class="card-footer border-0 bg-white">
-                    {{ $orders->links() }}
+            @if(method_exists($orders, 'hasPages') && $orders->hasPages())
+                <div class="card-footer bg-white border-0 py-4 px-4 d-flex justify-content-between align-items-center">
+                    <div class="text-muted smallest font-weight-bold uppercase">Displaying {{ $orders->firstItem() }} - {{ $orders->lastItem() }} of {{ $orders->total() }} records</div>
+                    <div>{{ $orders->links('pagination::bootstrap-4') }}</div>
                 </div>
             @endif
         </div>

@@ -335,14 +335,25 @@
     /* Modernizing standard primary buttons */
     .btn-primary {
         border-radius: 12px !important;
-        font-weight: 600 !important;
-        box-shadow: 0 4px 12px rgba(var(--primary-rgb, 59, 130, 246), 0.15) !important;
+        font-weight: 700 !important;
+        box-shadow: 0 8px 20px rgba(var(--primary-rgb), 0.2) !important;
         transition: all 0.2s ease !important;
+        border: none !important;
     }
 
     .btn-primary:hover {
-        transform: translateY(-1px) !important;
-        box-shadow: 0 6px 15px rgba(var(--primary-rgb, 59, 130, 246), 0.25) !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 12px 25px rgba(var(--primary-rgb), 0.3) !important;
+        background-color: var(--primary-hover) !important;
+    }
+
+    /* Premium Shadow Utility */
+    .shadow-premium {
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04) !important;
+    }
+    
+    .shadow-premium-lg {
+        box-shadow: 0 15px 35px rgba(var(--primary-rgb), 0.2) !important;
     }
 
     /* Premium Back Button */

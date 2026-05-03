@@ -22,35 +22,36 @@
             </div>
         </div>
     </div>
-@stop
+@section('css')
+    @include('admin._partials._toggle-card-css')
+@endsection
 
 @section('content')
     <div class="container-fluid">
         @include('admin.alert')
 
         {{-- Filter Bar --}}
-        <div class="card card-outline card-secondary shadow-sm mb-3">
-            <div class="card-body py-2">
-                <form method="GET" action="{{ route('admin.service-bookings.index') }}" class="form-inline flex-wrap gap-2">
-                    <div class="form-group mr-2 mb-2">
-                        <label class="mr-1 text-muted small">{{ __('Service') }}</label>
-                        <input type="text" name="service_name" class="form-control form-control-sm" placeholder="Select or type service..." list="service-suggestions" value="{{ request('service_name') }}">
-                        <datalist id="service-suggestions">
-                            @foreach ($services as $s)
-                                <option value="{{ $s->title }}">
-                            @endforeach
-                        </datalist>
+        <div class="card border-0 shadow-premium mb-4" style="border-radius: 20px;">
+            <div class="card-body py-4 px-4">
+                <form method="GET" action="{{ route('admin.service-bookings.index') }}" class="row align-items-end">
+                    <div class="col-md-4">
+                        <label class="small text-muted font-weight-bold uppercase letter-spacing-1">{{ __('Service') }}</label>
+                        <div class="input-group shadow-xs">
+                            <input type="text" name="service_name" class="form-control" placeholder="Search service..." list="service-suggestions" value="{{ request('service_name') }}">
+                        </div>
                     </div>
-                    <div class="mb-2">
-                        <button type="submit" class="btn btn-primary btn-sm mr-1"><i class="fas fa-filter mr-1"></i> {{ __('Filter') }}</button>
-                        <a href="{{ route('admin.service-bookings.index') }}" class="btn btn-default btn-sm"><i class="fas fa-times"></i> {{ __('Clear') }}</a>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary font-weight-bold shadow-xs btn-block"><i class="fas fa-filter mr-1"></i> {{ __('FILTER') }}</button>
+                    </div>
+                    <div class="col-md-2">
+                        <a href="{{ route('admin.service-bookings.index') }}" class="btn btn-default font-weight-bold shadow-xs btn-block"><i class="fas fa-undo mr-1"></i> {{ __('RESET') }}</a>
                     </div>
                 </form>
             </div>
         </div>
 
         {{-- Main Table --}}
-        <div class="card card-primary card-outline shadow-sm">
+        <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
             <div class="card-header border-0 bg-white py-3">
                 <h3 class="card-title font-weight-600 text-muted"><i class="fas fa-clipboard-list mr-1 text-primary"></i> {{ __('All Bookings') }}</h3>
             </div>

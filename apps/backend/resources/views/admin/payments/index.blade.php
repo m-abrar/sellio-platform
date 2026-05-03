@@ -76,7 +76,7 @@
                     <i class="fas fa-list-ul mr-1 text-primary"></i> Transaction Ledger
                 </h3>
                 <div class="card-tools">
-                    <a href="{{ route('admin.payments.create') }}" class="btn btn-primary btn-flat shadow-sm px-4 font-weight-bold">
+                    <a href="{{ route('admin.payments.create') }}" class="btn btn-primary rounded-pill shadow-premium px-4 font-weight-bold">
                         <i class="fas fa-plus-circle mr-1"></i> Log Offline Payment
                     </a>
                 </div>
@@ -215,6 +215,10 @@
         </div>
     </div>
 @endsection
+
+@section('css')
+    @include('admin._partials._toggle-card-css')
+@stop
 
 @section('js')
 <script>

@@ -22,7 +22,7 @@
                     <a href="{{ route('admin.roles.index') }}" class="btn btn-back shadow-sm px-3 rounded-pill">
                         <i class="fas fa-user-shield mr-1"></i> Access Roles
                     </a>
-                    <a href="{{ route('admin.permissions.create') }}" class="btn btn-primary btn-sm rounded-pill px-4 font-weight-bold shadow-lg">
+                    <a href="{{ route('admin.permissions.create') }}" class="btn btn-primary btn-sm rounded-pill px-4 font-weight-bold shadow-premium">
                         <i class="fas fa-plus-circle mr-1"></i> ADD GATED RESOURCE
                     </a>
                 </div>
@@ -109,6 +109,10 @@
     </div>
 </div>
 @endsection
+
+@push('css')
+    @include('admin._partials._toggle-card-css')
+@endpush
 
 @push('js')
 <script>

@@ -158,6 +158,7 @@
 @endsection
 
 @section('css')
+@include('admin._partials._toggle-card-css')
 <style>
     .dataTables_filter { float: left !important; text-align: left !important; }
     .dataTables_filter input { margin-left: 0 !important; }

@@ -76,7 +76,7 @@
                 Product Catalog <span class="badge badge-light border ml-2 px-2" style="font-weight: 500;">{{ count($plans) }} Total</span>
             </h3>
             <div class="card-tools">
-                <a href="{{ route('admin.plans.create') }}" class="btn btn-primary btn-flat shadow-sm px-4">
+                <a href="{{ route('admin.plans.create') }}" class="btn btn-primary rounded-pill shadow-premium px-4">
                     <i class="fas fa-plus-circle mr-1"></i> Create New Plan
                 </a>
             </div>
@@ -186,6 +186,7 @@
 @endsection
 
 @section('css')
+@include('admin._partials._toggle-card-css')
 <style>
     /* Blueprint Layout Utilities */
     .table-premium thead th { border-top: none; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px; color: #6c757d; }

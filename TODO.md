@@ -239,3 +239,36 @@ Cannot end a section without first starting one.
 - [x] **Premium Interactive Feedback**: Refined hover states, transitions, and button pill-styling across the administrative backend.
 
 **FINAL STATUS**: The administrative backend is now 100% visually and structurally standardized. All legacy modules have been successfully migrated to the Sellio Premium Glassmorphic Design System. Ready for final CodeCanyon quality audit.
+
+
+
+--------------------
+
+
+
+
+apply the theme on these pages
+http://127.0.0.1:8000/admin/bookings/services
+http://127.0.0.1:8000/admin/bookings/jobs
+http://127.0.0.1:8000/admin/bookings/autos
+http://127.0.0.1:8000/admin/bookings/properties
+
+
+fix the body overflow with the sidebar
+http://127.0.0.1:8000/admin/bookings/events
+
+
+replace the breadcrumbs button with "add new"
+http://127.0.0.1:8000/admin/product-orders
+
+---------------
+
+Error
+vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php:46
+Call to undefined method App\Http\Controllers\Admin\OrderController::create()
+
+----------------
+
+
+http://127.0.0.1:8000/admin/listings scan the layout, for spacing, margin, padding, shadows
+http://127.0.0.1:8000/admin/bookings apply to this one and all over the admin dashboard

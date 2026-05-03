@@ -15,21 +15,23 @@
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Monitor ticket sales, attendee lists, and event registration metrics.</p>
             </div>
             <div class="col-sm-6 text-right">
-                <a href="{{ route('admin.event-bookings.create') }}" class="btn btn-primary shadow-sm px-4 font-weight-bold">
+                <a href="{{ route('admin.event-bookings.create') }}" class="btn btn-primary rounded-pill shadow-premium px-4 font-weight-bold">
                     <i class="fas fa-plus mr-1"></i> {{ __('Register Guest') }}
                 </a>
             </div>
         </div>
     </div>
-@stop
+@section('css')
+    @include('admin._partials._toggle-card-css')
+@endsection
 
 @section('content')
     <div class="container-fluid">
         @include('admin.alert')
 
         {{-- Premium Filter Card --}}
-        <div class="card card-outline card-secondary shadow-sm mb-4">
-            <div class="card-body py-3">
+        <div class="card border-0 shadow-premium mb-4" style="border-radius: 20px;">
+            <div class="card-body py-4 px-4">
                 <form method="GET" action="{{ route('admin.event-bookings.index') }}" class="row align-items-end justify-content-center">
                     <div class="col-md-3">
                         <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Event Search</label>
@@ -71,7 +73,7 @@
         </div>
 
         {{-- Main Table --}}
-        <div class="card card-primary card-outline shadow-sm">
+        <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
             <div class="card-header border-0 bg-white py-3">
                 <h3 class="card-title font-weight-600 text-muted"><i class="fas fa-calendar-alt mr-1 text-primary"></i> {{ __('All Bookings') }}</h3>
             </div>

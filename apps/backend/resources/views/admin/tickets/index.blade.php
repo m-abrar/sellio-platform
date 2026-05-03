@@ -209,6 +209,7 @@
 @stop
 
 @push('css')
+@include('admin._partials._toggle-card-css')
 <style>
     .transition-all { transition: all 0.25s ease-in-out; }
     .nav-pills .nav-link:not(.active):hover { background: rgba(0,0,0,0.03); color: var(--primary) !important; }

@@ -23,13 +23,17 @@
     </div>
 @stop
 
+@push('css')
+    @include('admin._partials._toggle-card-css')
+@endpush
+
 @section('content')
 <div class="container-fluid pb-5">
     @include('admin.alert') 
 
     <div class="row mb-4">
         <div class="col-12">
-            <div class="glass-card shadow-sm p-2 d-flex align-items-center bg-white" style="gap: 15px; width: fit-content; border-radius: 16px;">
+            <div class="glass-card shadow-premium p-2 d-flex align-items-center bg-white" style="gap: 15px; width: fit-content; border-radius: 16px;">
                 <span class="text-muted small font-weight-bold ml-3 mr-1"><i class="fas fa-filter mr-2 text-primary"></i> QUEUE STATUS:</span>
                 <ul class="nav nav-pills">
                     <li class="nav-item">

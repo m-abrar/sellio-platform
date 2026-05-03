@@ -21,7 +21,7 @@
                     <a href="{{ route('admin.permissions.index') }}" class="btn btn-outline-info btn-sm rounded-pill px-3 font-weight-bold shadow-sm">
                         <i class="fas fa-key mr-1"></i> PERMISSIONS
                     </a>
-                    <a href="{{ route('admin.users.create') }}" class="btn btn-primary btn-sm rounded-pill px-4 font-weight-bold shadow-lg ml-2">
+                    <a href="{{ route('admin.users.create') }}" class="btn btn-primary btn-sm rounded-pill px-4 font-weight-bold shadow-premium ml-2">
                         <i class="fas fa-plus-circle mr-1"></i> ADD USER
                     </a>
                 </div>
@@ -156,6 +156,7 @@
 @endsection
 
 @section('css')
+@include('admin._partials._toggle-card-css')
 <style>
     /* User Identity Specifics */
     .avatar-wrapper img { transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1); }

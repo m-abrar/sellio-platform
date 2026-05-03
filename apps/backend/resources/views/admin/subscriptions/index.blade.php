@@ -70,7 +70,7 @@
         <div class="card-header border-0 bg-white py-3">
             <h3 class="card-title font-weight-600 text-muted">Enrollment Registry</h3>
             <div class="card-tools">
-                <a href="{{ route('admin.subscriptions.create') }}" class="btn btn-primary btn-flat shadow-sm px-4">
+                <a href="{{ route('admin.subscriptions.create') }}" class="btn btn-primary rounded-pill shadow-premium px-4">
                     <i class="fas fa-plus-circle mr-1"></i> Manual Subscription
                 </a>
             </div>
@@ -188,6 +188,7 @@
 @endsection
 
 @section('css')
+@include('admin._partials._toggle-card-css')
 <style>
     .table-premium thead th { border-top: none; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px; color: #6c757d; }
     .shadow-xs { box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
