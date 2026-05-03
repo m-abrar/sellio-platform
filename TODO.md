@@ -76,3 +76,9 @@ http://127.0.0.1:8000/admin/themes
 back button is ugly
 
 -------------------
+
+http://127.0.0.1:8000/admin/system/maintenance
+the purge button css needs fixes
+
+--------------------------
+

@@ -84,8 +84,8 @@
                             <p class="smallest text-muted mb-3">{{ $item['desc'] }}</p>
                             <form action="{{ route('admin.system.' . $item['id'] . '.clear') }}" method="POST">
                                 @csrf
-                                <button type="submit" class="btn btn-{{ $item['color'] }}-soft btn-block rounded-pill py-2 font-weight-bold smallest">
-                                    PURGE {{ strtoupper($item['id']) }}
+                                <button type="submit" class="btn btn-{{ $item['color'] }}-soft btn-purge shadow-sm">
+                                    <i class="fas fa-trash-alt"></i> PURGE {{ strtoupper($item['id']) }}
                                 </button>
                             </form>
                         </div>
@@ -179,6 +179,7 @@
 @endpush
 
 @section('css')
+    @include('admin._partials._toggle-card-css')
     <style>
         .card { transition: transform 0.2s, box-shadow 0.2s; }
         .card:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important; }

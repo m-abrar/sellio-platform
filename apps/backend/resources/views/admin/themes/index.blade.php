@@ -210,6 +210,7 @@
 @endsection
 
 @section('css')
+@include('admin._partials._toggle-card-css')
 <style>
     .bg-indigo { background-color: #6610f2; }
     .h-px { height: 1px; }

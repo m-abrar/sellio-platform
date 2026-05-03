@@ -16,9 +16,7 @@
             </p>
         </div>
         <div class="text-right">
-            <a href="{{ route('admin.settings.index') }}" class="btn btn-back shadow-sm px-4">
-                <i class="fas fa-arrow-left mr-1"></i> BACK TO EXPLORER
-            </a>
+            @include('admin._partials._back-button', ['route' => 'admin.settings.index', 'label' => 'EXPLORER'])
         </div>
     </div>
 @stop

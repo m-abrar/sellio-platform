@@ -90,6 +90,32 @@ h1, h2, h3, h4, h5, h6, .brand-text {
     filter: brightness(1.1);
 }
 
+.btn-purge {
+    border-radius: 50px !important;
+    padding: 0.65rem 1.2rem !important;
+    font-weight: 800 !important;
+    font-size: 0.65rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.8px !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    border: 1px solid rgba(0,0,0,0.05) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+}
+
+.btn-purge:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 15px rgba(0,0,0,0.08) !important;
+    filter: brightness(0.95);
+}
+
+.btn-purge i {
+    margin-right: 8px;
+    font-size: 0.75rem;
+}
+
 /* Premium Button Group */
 .btn-group-premium .btn {
     border: 1px solid var(--border-color) !important;
@@ -837,26 +863,33 @@ a:focus-visible, button:focus-visible {
     background: #ffffff !important;
     border: 1px solid #e2e8f0 !important;
     color: #475569 !important;
-    font-weight: 600 !important;
-    border-radius: 8px !important;
-    padding: 8px 16px !important;
-    font-size: 0.85rem !important;
-    transition: all 0.3s ease !important;
+    font-weight: 800 !important;
+    border-radius: 50px !important;
+    padding: 0.5rem 1.6rem !important;
+    font-size: 0.65rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1.2px !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
     display: inline-flex !important;
     align-items: center !important;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.05) !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03) !important;
+    position: relative;
+    overflow: hidden;
 }
 
 .btn-back:hover {
-    background: #f8fafc !important;
+    background: #ffffff !important;
     color: var(--primary) !important;
-    border-color: var(--primary) !important;
-    transform: translateX(-4px);
-    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1) !important;
+    border-color: var(--primary-soft) !important;
+    transform: translateY(-2px) scale(1.02) !important;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
 }
 
 .btn-back i {
+    margin-right: 12px;
     transition: transform 0.3s ease;
+    font-size: 0.8rem;
+    color: var(--primary);
 }
 
 .btn-back:hover i {
@@ -928,5 +961,34 @@ a:focus-visible, button:focus-visible {
 @keyframes fadeInTab {
     from { opacity: 0; transform: translateY(4px); }
     to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- 21. MAINTENANCE PURGE BUTTONS --- */
+.btn-purge {
+    border-radius: 50px !important;
+    padding: 0.65rem 1.2rem !important;
+    font-weight: 800 !important;
+    font-size: 0.65rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.8px !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    border: 1px solid rgba(0,0,0,0.05) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-purge:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 15px rgba(0,0,0,0.08) !important;
+    filter: brightness(0.95);
+}
+
+.btn-purge i {
+    margin-right: 8px;
+    font-size: 0.75rem;
 }
 

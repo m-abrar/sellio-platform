@@ -15,9 +15,7 @@
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Manage global system variables, environment parameters, and platform logic.</p>
             </div>
             <div class="col-sm-5 d-flex align-items-center justify-content-end">
-                <a href="{{ route('admin.welcome') }}" class="btn btn-default shadow-sm rounded-pill px-4 font-weight-bold smallest">
-                    <i class="fas fa-arrow-left mr-1"></i> BACK TO PULSE
-                </a>
+                @include('admin._partials._back-button', ['label' => 'DASHBOARD'])
             </div>
         </div>
     </div>

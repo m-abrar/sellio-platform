@@ -134,6 +134,7 @@
 @endsection
 
 @section('css')
+@include('admin._partials._toggle-card-css')
 <style>
     /* Premium FinTech UI Accents */
     .table-premium thead th { border-top: none; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px; color: #6c757d; padding: 1.25rem 1rem; }

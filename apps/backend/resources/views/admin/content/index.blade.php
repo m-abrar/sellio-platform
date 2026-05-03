@@ -126,6 +126,7 @@
 @endsection
 
 @section('css')
+@include('admin._partials._toggle-card-css')
 <style>
     /* Premium Table Styling */
     .table-premium thead th { 
