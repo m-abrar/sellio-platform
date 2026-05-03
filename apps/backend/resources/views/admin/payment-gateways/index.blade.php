@@ -13,7 +13,7 @@
             </div>
             <div class="col-sm-5 d-flex align-items-center justify-content-end">
                 <a href="{{ route('admin.welcome') }}" class="btn btn-back shadow-sm">
-                    <i class="fas fa-arrow-left"></i> BACK TO DASHBOARD
+                    <i class="fas fa-chevron-left"></i> Dashboard
                 </a>
             </div>
         </div>

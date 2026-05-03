@@ -25,8 +25,8 @@
                 </div>
             </div>
             <div class="col-sm-4 text-right">
-                <a href="{{ route('admin.welcome') }}" class="btn btn-back shadow-sm px-4">
-                    <i class="fas fa-arrow-left mr-1"></i> BACK TO DASHBOARD
+                <a href="{{ route('admin.welcome') }}" class="btn btn-back shadow-sm">
+                    <i class="fas fa-chevron-left"></i> Dashboard
                 </a>
             </div>
         </div>

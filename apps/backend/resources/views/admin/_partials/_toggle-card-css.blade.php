@@ -548,39 +548,41 @@
 
     /* Premium Back Button */
     .btn-back {
-        background: #fff !important;
+        background: rgba(255, 255, 255, 0.7) !important;
+        backdrop-filter: blur(12px) saturate(180%);
+        -webkit-backdrop-filter: blur(12px) saturate(180%);
         color: #475569 !important;
-        border: 1px solid #e2e8f0 !important;
-        border-radius: 100px !important;
-        padding: 0.55rem 1.4rem !important;
-        font-weight: 800 !important;
-        font-size: 0.65rem !important;
+        border: 1px solid rgba(255, 255, 255, 0.4) !important;
+        border-radius: 50px !important;
+        padding: 0.5rem 1.4rem !important;
+        font-weight: 700 !important;
+        font-size: 0.7rem !important;
         text-transform: uppercase !important;
-        letter-spacing: 1.2px !important;
+        letter-spacing: 1px !important;
         transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
         display: inline-flex !important;
         align-items: center !important;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02) !important;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04), inset 0 0 0 1px rgba(255, 255, 255, 0.5) !important;
+        position: relative;
     }
 
     .btn-back:hover {
         background: #fff !important;
         color: var(--primary) !important;
-        border-color: var(--primary) !important;
-        transform: translateY(-2px) !important;
-        box-shadow: 0 10px 20px rgba(var(--primary-rgb), 0.1) !important;
-        padding-right: 1.6rem !important;
+        border-color: var(--primary-soft) !important;
+        transform: translateX(-5px) !important;
+        box-shadow: 0 10px 25px rgba(var(--primary-rgb), 0.12) !important;
     }
 
     .btn-back i {
         margin-right: 10px;
-        transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        transition: transform 0.4s ease;
         font-size: 0.75rem;
         color: var(--primary);
     }
 
     .btn-back:hover i {
-        transform: translateX(-5px) scale(1.1);
+        transform: translateX(-4px) scale(1.1);
     }
 
     /* Premium Input Groups */
