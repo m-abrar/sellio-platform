@@ -15,7 +15,7 @@
             </div>
             <div class="col-sm-6 text-right">
                 <div class="dropdown d-inline-block">
-                    <button type="button" class="btn btn-primary btn-sm rounded-pill px-4 font-weight-bold shadow-lg dropdown-toggle" data-toggle="dropdown">
+                    <button type="button" class="btn btn-primary btn-sm rounded-pill px-4 font-weight-bold dropdown-toggle" data-toggle="dropdown">
                         <i class="fas fa-filter mr-1"></i> {{ strtoupper(str_replace('_', ' ', $currentFilter)) }}
                     </button>
                     <div class="dropdown-menu dropdown-menu-right shadow-premium border-0" style="border-radius: 16px; padding: 10px;">

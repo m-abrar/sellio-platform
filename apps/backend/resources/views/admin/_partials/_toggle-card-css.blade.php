@@ -14,6 +14,74 @@
         --warning-soft: rgba(234, 179, 8, 0.12);
         --danger-soft: rgba(239, 68, 68, 0.12);
         --secondary-soft: rgba(107, 114, 128, 0.12);
+
+        /* Light Theme Surface Colors */
+        --bg-surface: #fff;
+        --bg-body: #f4f6f9;
+        --text-main: #334155;
+        --border-color: #edf2f7;
+    }
+
+    body.dark-mode {
+        --bg-surface: #1e293b;
+        --bg-body: #0f172a;
+        --text-main: #f1f5f9;
+        --border-color: #334155;
+        --primary-soft: rgba(var(--primary-rgb), 0.25);
+    }
+
+    body.dark-mode .content-wrapper {
+        background-color: var(--bg-body) !important;
+    }
+
+    body.dark-mode .card:not(.bg-dark):not(.bg-primary):not(.bg-success):not(.bg-info):not(.bg-warning):not(.bg-danger) {
+        background-color: var(--bg-surface) !important;
+        color: var(--text-main) !important;
+        border: 1px solid var(--border-color) !important;
+    }
+
+    body.dark-mode .card-header {
+        border-bottom-color: var(--border-color) !important;
+        background-color: transparent !important;
+    }
+
+    body.dark-mode .card-footer {
+        border-top-color: var(--border-color) !important;
+        background-color: rgba(255,255,255,0.02) !important;
+    }
+
+    body.dark-mode .text-dark { color: #f1f5f9 !important; }
+    body.dark-mode .text-muted { color: #94a3b8 !important; }
+    body.dark-mode .bg-white { background-color: var(--bg-surface) !important; }
+    body.dark-mode .bg-light { background-color: rgba(255,255,255,0.05) !important; }
+    body.dark-mode .border { border-color: var(--border-color) !important; }
+    body.dark-mode .table td, body.dark-mode .table th { border-top-color: var(--border-color) !important; color: #cbd5e0 !important; }
+    body.dark-mode .table-premium thead th { background-color: rgba(255,255,255,0.02) !important; border-bottom-color: var(--border-color) !important; }
+
+    body.dark-mode .form-control {
+        background-color: #0f172a !important;
+        border-color: #334155 !important;
+        color: #f1f5f9 !important;
+    }
+
+    body.dark-mode .input-group-text {
+        background-color: #1e293b !important;
+        border-color: #334155 !important;
+        color: #94a3b8 !important;
+    }
+
+    body.dark-mode .select2-container--bootstrap4 .select2-selection {
+        background-color: #0f172a !important;
+        border-color: #334155 !important;
+        color: #f1f5f9 !important;
+    }
+
+    body.dark-mode .select2-selection__rendered { color: #f1f5f9 !important; }
+    body.dark-mode .select2-dropdown { background-color: #1e293b !important; border-color: #334155 !important; }
+
+    /* Transitions */
+    body, .content-wrapper, .card, .form-control, .input-group-text {
+        transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease !important;
     }
 
     /* Form Controls */
@@ -455,11 +523,11 @@
 
     /* Premium Shadow Utility - Note: Removed from submit buttons */
     .shadow-premium {
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04) !important;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.03) !important;
     }
     
     .shadow-premium-lg {
-        box-shadow: 0 15px 35px rgba(var(--primary-rgb), 0.2) !important;
+        box-shadow: 0 10px 30px rgba(var(--primary-rgb), 0.15) !important;
     }
 
     button[type="submit"], 

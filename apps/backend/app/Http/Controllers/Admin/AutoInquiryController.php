@@ -39,6 +39,15 @@ class AutoInquiryController extends Controller
     }
 
     /**
+     * Display the specified auto inquiry.
+     */
+    public function show(int $id): View
+    {
+        $inquiry = AutoInquiry::with(['auto', 'user'])->findOrFail($id);
+        return view('admin.auto-inquiries.show', compact('inquiry'));
+    }
+
+    /**
      * Show the form for creating a new auto inquiry.
      */
     public function create(): View

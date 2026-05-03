@@ -23,7 +23,7 @@
                 </div>
                 @endif
                 <div class="mt-4">
-                    <a href="{{ route('admin.payments.index')}}" class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-lg smallest letter-spacing-1">
+                    <a href="{{ route('admin.payments.index')}}" class="btn btn-primary rounded-pill px-4 font-weight-bold smallest letter-spacing-1">
                         FINANCIAL REPORT <i class="fas fa-chevron-right ml-1"></i>
                     </a>
                 </div>

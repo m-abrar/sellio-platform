@@ -230,7 +230,7 @@
                 <div class="card card-premium mb-4 overflow-hidden">
                     <div class="card-header bg-white border-0 py-3 px-4">
                         <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
-                            <i class="fas fa-toggle-on mr-2 text-primary opacity-50"></i> Listing Controls
+                            <i class="fas fa-sliders-h mr-2 text-primary opacity-50"></i> Listing Controls
                         </h3>
                     </div>
                     <div class="card-body p-4">

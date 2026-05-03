@@ -1,4 +1,4 @@
-<div class="card card-premium sticky-top shadow-lg overflow-hidden" style="top: 20px;">
+<div class="card card-premium sticky-top shadow-premium overflow-hidden" style="top: 20px;">
     <div class="card-header border-0 bg-white py-3 px-4">
         <h3 class="card-title font-weight-bold text-dark text-uppercase small letter-spacing-1 mb-0">
             <i class="fas fa-bolt mr-2 text-primary"></i> Finalize Actions

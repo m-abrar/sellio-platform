@@ -171,7 +171,7 @@
                                 </div>
                             </div>
 
-                            <button type="submit" class="btn btn-info btn-block rounded-pill font-weight-bold shadow-lg py-3 smallest">
+                            <button type="submit" class="btn btn-info btn-block rounded-pill font-weight-bold py-3 smallest">
                                 <i class="fas fa-sync-alt mr-2"></i> UPDATE TRANSACTION STATE
                             </button>
                         </form>

@@ -39,10 +39,7 @@
                         </a>
                     </div>
                 </div>
-                <ol class="breadcrumb bg-transparent p-0 m-0 smallest font-weight-bold text-uppercase letter-spacing-1">
-                    <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}" class="text-primary">Dashboard</a></li>
-                    <li class="breadcrumb-item active text-muted">Operations Queue</li>
-                </ol>
+
             </div>
         </div>
     </div>

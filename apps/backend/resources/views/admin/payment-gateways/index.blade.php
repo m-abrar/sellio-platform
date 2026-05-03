@@ -107,7 +107,7 @@
                                 </td>
                                 <td class="text-right align-middle px-4">
                                     <a href="{{ route('admin.payment-gateways.edit', $gateway->id) }}" 
-                                       class="btn btn-primary rounded-pill shadow-premium px-4 font-weight-bold smallest">
+                                       class="btn btn-primary rounded-pill px-4 font-weight-bold smallest">
                                         <i class="fas fa-cog mr-1"></i> CONFIGURE
                                     </a>
                                 </td>

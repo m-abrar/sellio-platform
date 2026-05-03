@@ -72,17 +72,17 @@
                                      style="height: 200px; object-fit: cover;">
                                 
                                 <div class="gallery-overlay d-flex align-items-center justify-content-center">
-                                    <button type="button" class="btn btn-white btn-sm mx-1 rounded-circle shadow-lg" data-toggle="modal" data-target="#replaceModal{{ $media->id }}" title="Replace Asset" style="width: 38px; height: 38px;">
+                                    <button type="button" class="btn btn-white btn-sm mx-1 rounded-circle shadow-sm" data-toggle="modal" data-target="#replaceModal{{ $media->id }}" title="Replace Asset" style="width: 38px; height: 38px;">
                                         <i class="fas fa-sync-alt text-primary"></i>
                                     </button>
                                     <form id="delete-form-{{ $media->id }}" action="{{ route('admin.gallery.destroy', $media->id) }}" method="POST" class="d-inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="button" class="btn btn-white btn-sm mx-1 rounded-circle shadow-lg" title="Delete" style="width: 38px; height: 38px;" onclick="confirmDelete({{ $media->id }})">
+                                        <button type="button" class="btn btn-white btn-sm mx-1 rounded-circle shadow-sm" title="Delete" style="width: 38px; height: 38px;" onclick="confirmDelete({{ $media->id }})">
                                             <i class="fas fa-trash text-danger"></i>
                                         </button>
                                     </form>
-                                    <a href="{{ $media->getUrl() }}" target="_blank" class="btn btn-white btn-sm mx-1 rounded-circle shadow-lg" title="Fullscreen" style="width: 38px; height: 38px;">
+                                    <a href="{{ $media->getUrl() }}" target="_blank" class="btn btn-white btn-sm mx-1 rounded-circle shadow-sm" title="Fullscreen" style="width: 38px; height: 38px;">
                                         <i class="fas fa-expand text-primary"></i>
                                     </a>
                                 </div>

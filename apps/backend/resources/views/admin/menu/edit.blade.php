@@ -13,7 +13,7 @@
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Structural editor for <span class="text-primary font-weight-bold">{{ $menu->title }}</span> ({{ $menu->theme_key }} • {{ $menu->location_key }})</p>
             </div>
             <div class="col-sm-6 text-right">
-                <button type="submit" form="menu-update-form" class="btn btn-primary btn-sm rounded-pill px-4 font-weight-bold shadow-lg">
+                <button type="submit" form="menu-update-form" class="btn btn-primary btn-sm rounded-pill px-4 font-weight-bold">
                     <i class="fas fa-save mr-1"></i> DEPLOY STRUCTURE
                 </button>
                 <ol class="breadcrumb float-sm-right bg-transparent p-0 mt-3 small">
@@ -120,7 +120,7 @@
             </div>
             <div class="modal-footer border-0">
                 <button type="button" class="btn btn-light rounded-pill px-4 font-weight-bold" data-dismiss="modal">CANCEL</button>
-                <button type="submit" form="edit-item-form" class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-lg">UPDATE COMPONENT</button>
+                <button type="submit" form="edit-item-form" class="btn btn-primary rounded-pill px-4 font-weight-bold">UPDATE COMPONENT</button>
             </div>
         </div>
     </div>

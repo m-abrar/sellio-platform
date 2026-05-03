@@ -11,7 +11,7 @@
     $label = $title ?? 'RECORD';
 @endphp
 
-<div class="card card-premium overflow-hidden shadow-lg">
+<div class="card card-premium overflow-hidden shadow-premium">
     <div class="card-header bg-white d-flex align-items-center py-3 px-4 border-0">
         <h3 class="card-title text-dark mb-0 font-weight-bold smallest text-uppercase letter-spacing-1">
             <i class="fas fa-rocket mr-2 text-primary opacity-50"></i> Protocol & Actions
