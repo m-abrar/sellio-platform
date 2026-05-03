@@ -23,10 +23,13 @@ class PropertyRequest extends FormRequest
         $propertyId = $this->property ? $this->property->id : null;
 
         return [
-            'name' => 'required|string|max:255|unique:properties,name,' . $propertyId,
-            'slug' => 'nullable|string|max:255|regex:/^[a-z0-9-]+$/',
-            'description' => 'nullable|string',
+            'title' => 'required|string|max:255|unique:properties,title,' . $propertyId,
+            'slug' => 'nullable|string|max:255|unique:properties,slug,' . $propertyId . '|regex:/^[a-z0-9-]+$/',
+            'description' => 'required|string',
             'base_price' => 'nullable|numeric|min:0',
+            'sale_price' => 'nullable|numeric|min:0',
+            'price_per_night' => 'nullable|numeric|min:0',
+            'hoa' => 'nullable|numeric|min:0',
 
             'status' => 'nullable|boolean',
             'is_featured' => 'nullable|boolean',
@@ -43,12 +46,20 @@ class PropertyRequest extends FormRequest
             'types.*' => 'exists:types,id',
             'category_id' => 'nullable|exists:categories,id',
             'location_id' => 'nullable|exists:locations,id',
-            'minimum_stay' => 'nullable|numeric|min:1',
-            'maximum_guests' => 'nullable|numeric|min:1',
-            'bedrooms' => 'nullable|integer|min:0',
-            'bathrooms' => 'nullable|integer|min:0',
-            'garages' => 'nullable|integer|min:0',
-            'area' => 'nullable|numeric|min:0',
+            
+            'number_of_bedrooms' => 'nullable|integer|min:0',
+            'number_of_bathrooms' => 'nullable|numeric|min:0',
+            'number_of_parking_spots' => 'nullable|integer|min:0',
+            'maximum_guests' => 'nullable|integer|min:0',
+            'area_sq_ft' => 'nullable|numeric|min:0',
+            'area_sq_m' => 'nullable|numeric|min:0',
+            'year_built' => 'nullable|integer|min:1800|max:' . (date('Y') + 5),
+
+            'address' => 'nullable|string|max:255',
+            'city' => 'required|string|max:100',
+            'state' => 'nullable|string|max:100',
+            'country' => 'required|string|max:100',
+            'zip_code' => 'nullable|string|max:20',
 
             'seasonal_prices' => 'nullable|array',
             'seasonal_prices.*.name' => 'required|string|max:255',

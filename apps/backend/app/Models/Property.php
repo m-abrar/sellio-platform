@@ -23,7 +23,53 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * App\Models\Property
- * * The core engine of the Real Estate vertical. Handles polymorphic features, 
+ *
+ * @property int $id
+ * @property int|null $user_id
+ * @property int|null $category_id
+ * @property int|null $type_id
+ * @property int|null $brand_id
+ * @property int|null $location_id
+ * @property string $title
+ * @property string $slug
+ * @property string $description
+ * @property float $base_price
+ * @property float|null $sale_price
+ * @property float|null $price_per_night
+ * @property int $total_units
+ * @property int $number_of_bedrooms
+ * @property int $number_of_bathrooms
+ * @property int $maximum_guests
+ * @property int $minimum_rental_days
+ * @property int $maximum_rental_days
+ * @property float|null $area_sq_ft
+ * @property float|null $area_sq_m
+ * @property string|null $number_of_parking_spots
+ * @property float|null $hoa
+ * @property string|null $rules
+ * @property string|null $policies
+ * @property int|null $year_built
+ * @property string|null $video
+ * @property string|null $virtual_tour
+ * @property string|null $address
+ * @property string $city
+ * @property string|null $state
+ * @property string $country
+ * @property string|null $zip_code
+ * @property float|null $latitude
+ * @property float|null $longitude
+ * @property bool $is_published
+ * @property bool $is_featured
+ * @property bool $is_rental
+ * @property bool $is_sale
+ * @property string|null $meta_title
+ * @property string|null $meta_description
+ * @property \Illuminate\Support\Carbon|null $approved_at
+ * @property \Illuminate\Support\Carbon|null $expires_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ *
+ * The core engine of the Real Estate vertical. Handles polymorphic features, 
  * dual-pricing (Sale/Rental), and comprehensive lead tracking.
  */
 class Property extends Model implements HasMedia

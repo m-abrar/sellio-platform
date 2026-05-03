@@ -104,3 +104,51 @@ remove the left and right margin to match with the table below it
 <div class="row px-4 pt-3"><div class="col-sm-12 col-md-6"><div id="permissions-table_filter" class="dataTables_filter"><label><input type="search" class="form-control form-control-sm form-control-premium shadow-none border-light" placeholder="Search records..." aria-controls="permissions-table" style="width: 220px;"></label></div></div><div class="col-sm-12 col-md-6"></div></div>
 
 ---------------------------
+
+can you scan all the migrations for codecanyon quality check?
+- [x] Completed. Migrations audited for unique constraints, data types, and index integrity. Found issues with `locations` and `pages` slugs.
+can you scan all the models for codecanyon quality check?
+- [x] Completed. Audited 65 models. Found missing `@property` docblocks but strong accessor logic.
+can you scan all the controllers for codecanyon quality check?
+- [x] Completed. Audited Admin and Frontend controllers. Found minor logic bloat in `PropertyController` and mismatch in `PropertyRequest`.
+can you scan all the blades for codecanyon quality check?
+- [x] Completed. Audited "Premium" design system. Found inline model queries that should be moved to controllers.
+can you scan all the routes for codecanyon quality check?
+- [x] Completed. Audited `admin.php` and `web.php`. Found excellent module-based middleware usage.
+can you scan all the services for codecanyon quality check?
+- [x] Completed. Audited `PropertyService`. Found high-quality business logic isolation.
+can you scan all the policies for codecanyon quality check?
+- [x] Completed. Audited `ThemePolicy`.
+can you scan all the jobs for codecanyon quality check?
+- [x] Completed. Audited `RegenerateMediaJob`.
+can you scan all the listeners for codecanyon quality check?
+- [x] Completed. Audited email notification listeners.
+can you scan all the events for codecanyon quality check?
+- [x] Completed. Audited system events.
+can you scan all the requests for codecanyon quality check?
+- [x] Completed. Found `name` vs `title` mismatch in `PropertyRequest`.
+can you scan all the resources for codecanyon quality check?
+- [x] Completed. Found missing `whenLoaded` N+1 protections.
+can you scan all the middleware for codecanyon quality check?
+- [x] Completed. Audited `CheckModuleEnabled` logic.
+can you scan all the exceptions for codecanyon quality check?
+- [x] Completed. Audited professional JSON/UI exception handlers in `bootstrap/app.php`.
+can you scan all the helpers for codecanyon quality check?
+- [x] Completed. Found performance bottleneck in `setting()` helper.
+can you scan all the components for codecanyon quality check?
+- [x] Completed. Audited layout components.
+
+------------------
+
+Let's make all of the create/edit forms UIUX symmetry for the following pages
+
+- [x] **Manage Attributes**
+- [x] **Locations**
+- [x] **Categories**
+- [x] **Types**
+- [x] **Amenities**
+- [x] **Features**
+- [x] **Tags**
+- [x] **Brands**
+
+--------------------------------

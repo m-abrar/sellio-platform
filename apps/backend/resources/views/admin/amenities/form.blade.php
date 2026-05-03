@@ -11,7 +11,7 @@
                     {{ $amenity->exists ? 'Modify Amenity' : 'New Amenity' }}
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">
-                    {{ $amenity->exists ? 'Update classification label and associated metadata.' : 'Define a new taxonomy element for resource categorization.' }}
+                    {{ $amenity->exists ? 'Update classification labels, icons, and module applicability for this group.' : 'Define a new taxonomy element to classify marketplace assets and content.' }}
                 </p>
             </div>
             <div class="col-sm-4 text-right">
@@ -37,53 +37,53 @@
         <div class="row">
             {{-- Primary Data Column --}}
             <div class="col-md-8">
-                <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
+                <div class="card card-premium overflow-hidden">
                     <div class="card-header border-0 bg-white py-3 px-4">
-                        <h3 class="card-title font-weight-bold text-dark text-uppercase small" style="letter-spacing: 1px;">Amenity Specifications</h3>
+                        <h3 class="card-title font-weight-bold text-dark text-uppercase small" style="letter-spacing: 1px;">Basic Configuration</h3>
                     </div>
                     <div class="card-body p-4">
-                        <div class="row">
-                            <div class="col-md-7">
-                                <div class="form-group mb-4">
-                                    <label for="title" class="font-weight-600"><i class="fas fa-check-circle mr-1 text-primary"></i> Amenity Name <span class="text-danger">*</span></label>
-                                    <input type="text" name="title" id="title" 
-                                           class="form-control form-control-lg @error('title') is-invalid @enderror" 
-                                           placeholder="e.g. Swimming Pool, Air Conditioning"
-                                           value="{{ old('title', $amenity->title ?? '') }}" required list="amenity-title-suggestions">
-                                    <datalist id="amenity-title-suggestions">
-                                        @foreach(\App\Models\Amenity::select('title')->distinct()->limit(20)->pluck('title') as $title)
-                                            <option value="{{ $title }}">
-                                        @endforeach
-                                    </datalist>
-                                    @error('title') <span class="invalid-feedback">{{ $message }}</span> @enderror
+                        <div class="form-group mb-4">
+                            <label for="title" class="font-weight-600"><i class="fas fa-check-circle mr-1 text-primary"></i> Amenity Name <span class="text-danger">*</span></label>
+                            <input type="text" name="title" id="title" 
+                                   class="form-control form-control-lg @error('title') is-invalid @enderror" 
+                                   placeholder="e.g. Swimming Pool, Air Conditioning"
+                                   value="{{ old('title', $amenity->title ?? '') }}" required list="amenity-title-suggestions">
+                            <datalist id="amenity-title-suggestions">
+                                @foreach(\App\Models\Amenity::select('title')->distinct()->limit(20)->pluck('title') as $title)
+                                    <option value="{{ $title }}">
+                                @endforeach
+                            </datalist>
+                            @error('title') <span class="invalid-feedback">{{ $message }}</span> @enderror
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label for="slug" class="font-weight-600 text-muted small">URL Identifier (Slug)</label>
+                            <div class="input-group shadow-xs">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text bg-light border-right-0"><i class="fas fa-link fa-xs text-muted"></i></span>
                                 </div>
+                                <input type="text" name="slug" id="slug" 
+                                       class="form-control form-control-monospace @error('slug') is-invalid @enderror"
+                                       placeholder="automatic-slug-generation"
+                                       value="{{ old('slug', $amenity->slug ?? '') }}">
                             </div>
-                            <div class="col-md-5">
-                                <div class="form-group mb-4">
-                                    <label for="slug" class="font-weight-600 text-muted small">URL Slug</label>
-                                    <input type="text" name="slug" id="slug" 
-                                           class="form-control form-control-monospace @error('slug') is-invalid @enderror"
-                                           placeholder="automatic-slug"
-                                           value="{{ old('slug', $amenity->slug ?? '') }}">
-                                    @error('slug') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
-                                </div>
-                            </div>
+                            @error('slug') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
                         </div>
 
                         <div class="form-group mb-0">
-                            <label for="description" class="font-weight-600">Public Description <span class="text-danger">*</span></label>
+                            <label for="description" class="font-weight-600">Internal Description</label>
                             <textarea name="description" id="description" rows="4" 
                                       class="form-control @error('description') is-invalid @enderror" 
-                                      placeholder="Explain what this amenity covers..." required>{{ old('description', $amenity->description ?? '') }}</textarea>
+                                      placeholder="Briefly describe the purpose of this amenity...">{{ old('description', $amenity->description ?? '') }}</textarea>
                             @error('description') <span class="invalid-feedback">{{ $message }}</span> @enderror
                         </div>
                     </div>
                 </div>
 
                 {{-- Module Assignments --}}
-                <div class="card shadow-premium border-0 mt-4 overflow-hidden" style="border-radius: 20px;">
+                <div class="card card-premium overflow-hidden mt-4">
                     <div class="card-header border-0 bg-white py-3 px-4">
-                        <h3 class="card-title font-weight-600 text-muted small text-uppercase" style="letter-spacing: 1px;">Module Applicability</h3>
+                        <h3 class="card-title font-weight-600 text-muted small text-uppercase" style="letter-spacing: 1px;">Feature Applicability</h3>
                     </div>
                     <div class="card-body p-4">
                         <div class="row">
@@ -105,15 +105,15 @@
                     </div>
                 </div>
 
-                {{-- Additional Images Gallery --}}
-                <div class="card shadow-premium border-0 mt-4 overflow-hidden" style="border-radius: 20px;">
+                {{-- Gallery Partial --}}
+                <div class="card card-premium overflow-hidden mt-4">
                     <div class="card-header border-0 bg-white py-3 px-4">
                         <h3 class="card-title font-weight-600 text-muted small text-uppercase" style="letter-spacing: 1px;">Gallery Collection</h3>
                     </div>
                     <div class="card-body p-0">
                         @include('admin._partials._image-uploader', [
                             'name' => \App\Models\Amenity::GALLERY_MEDIA,
-                            'label' => 'Supporting Images',
+                            'label' => 'Select Gallery Images',
                             'multiple' => true,
                             'model' => \App\Models\Amenity::class,
                             'id' => $amenity->id ?? null,
@@ -127,8 +127,8 @@
             <div class="col-md-4">
                 @include('admin.amenities.partials.action-buttons')
 
-                {{-- Featured Image Sidebar --}}
-                <div class="card border-0 shadow-premium mb-4" style="border-radius: 20px; overflow: hidden;">
+                {{-- Featured Image Partial --}}
+                <div class="card card-premium mb-4 overflow-hidden">
                     <div class="card-header bg-white border-0 py-3 px-4">
                         <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
                             <i class="fas fa-camera mr-2 text-primary opacity-50"></i> Visual Identity
@@ -137,7 +137,7 @@
                     <div class="card-body p-0">
                         @include('admin._partials._image-uploader', [
                             'name' => \App\Models\Amenity::PRIMARY_MEDIA,
-                            'label' => 'Featured Icon',
+                            'label' => 'Main Icon / Badge',
                             'multiple' => false,
                             'model' => \App\Models\Amenity::class,
                             'id' => $amenity->id ?? null,

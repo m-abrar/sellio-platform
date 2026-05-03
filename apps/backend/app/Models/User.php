@@ -25,6 +25,29 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Permission\Traits\HasRoles;
 use Laravel\Sanctum\HasApiTokens; 
 
+/**
+ * App\Models\User
+ *
+ * @property int $id
+ * @property string $name
+ * @property string $email
+ * @property string|null $phone
+ * @property string|null $username
+ * @property string|null $company
+ * @property string|null $bio
+ * @property string|null $years_of_experience
+ * @property string|null $social_avatar_url
+ * @property string|null $date_of_birth
+ * @property \Illuminate\Support\Carbon|null $email_verified_at
+ * @property string $password
+ * @property bool $is_admin
+ * @property bool $is_partner
+ * @property bool $is_buyer
+ * @property bool $is_verified
+ * @property string|null $remember_token
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ */
 class User extends Authenticatable implements Wallet, Customer, HasMedia, MustVerifyEmail
 {
     use HasFactory, Notifiable, HasRoles, Subscribable;

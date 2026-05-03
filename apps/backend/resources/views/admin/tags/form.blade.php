@@ -11,7 +11,7 @@
                     {{ $tag->exists ? 'Modify Tag' : 'New Tag' }}
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">
-                    {{ $tag->exists ? 'Update classification label and associated metadata.' : 'Define a new taxonomy element for resource categorization.' }}
+                    {{ $tag->exists ? 'Update classification labels and module applicability for this group.' : 'Define a new taxonomy element to classify marketplace assets and content.' }}
                 </p>
             </div>
             <div class="col-sm-4 text-right">
@@ -29,61 +29,61 @@
 
     <form action="{{ $tag->exists ? route('admin.tags.update', $tag->id) : route('admin.tags.store') }}" 
           method="POST" 
-          enctype="multipart/form-data">
+          enctype="multipart/form-data"
+          id="tagMainForm">
         @csrf
         @if($tag->exists) @method('PATCH') @endif
 
         <div class="row">
-            {{-- Main Content Section --}}
+            {{-- Primary Data Column --}}
             <div class="col-md-8">
-                <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
+                <div class="card card-premium overflow-hidden">
                     <div class="card-header border-0 bg-white py-3 px-4">
-                        <h3 class="card-title font-weight-bold text-dark text-uppercase small" style="letter-spacing: 1px;">Tag Configuration</h3>
+                        <h3 class="card-title font-weight-bold text-dark text-uppercase small" style="letter-spacing: 1px;">Basic Configuration</h3>
                     </div>
                     <div class="card-body p-4">
-                        {{-- Name & Slug Row --}}
-                        <div class="row">
-                            <div class="col-md-7">
-                                <div class="form-group mb-4">
-                                    <label for="title" class="font-weight-600"><i class="fas fa-tags mr-1 text-primary"></i> Tag Name <span class="text-danger">*</span></label>
-                                    <input type="text" name="title" id="title" 
-                                           class="form-control form-control-lg @error('title') is-invalid @enderror" 
-                                           placeholder="e.g. Featured, Hot Deal, New"
-                                           value="{{ old('title', $tag->title ?? '') }}" required list="tag-title-suggestions">
-                                    <datalist id="tag-title-suggestions">
-                                        @foreach(\App\Models\Tag::select('title')->distinct()->limit(20)->pluck('title') as $title)
-                                            <option value="{{ $title }}">
-                                        @endforeach
-                                    </datalist>
-                                    @error('title') <span class="invalid-feedback">{{ $message }}</span> @enderror
-                                </div>
-                            </div>
-                            <div class="col-md-5">
-                                <div class="form-group mb-4">
-                                    <label for="slug" class="font-weight-600 text-muted small">URL Slug</label>
-                                    <input type="text" name="slug" id="slug" 
-                                           class="form-control form-control-monospace @error('slug') is-invalid @enderror"
-                                           value="{{ old('slug', $tag->slug ?? '') }}">
-                                    @error('slug') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
-                                </div>
-                            </div>
+                        <div class="form-group mb-4">
+                            <label for="title" class="font-weight-600"><i class="fas fa-tags mr-1 text-primary"></i> Tag Name <span class="text-danger">*</span></label>
+                            <input type="text" name="title" id="title" 
+                                   class="form-control form-control-lg @error('title') is-invalid @enderror" 
+                                   placeholder="e.g. Featured, Hot Deal, New"
+                                   value="{{ old('title', $tag->title ?? '') }}" required list="tag-title-suggestions">
+                            <datalist id="tag-title-suggestions">
+                                @foreach(\App\Models\Tag::select('title')->distinct()->limit(20)->pluck('title') as $title)
+                                    <option value="{{ $title }}">
+                                @endforeach
+                            </datalist>
+                            @error('title') <span class="invalid-feedback">{{ $message }}</span> @enderror
                         </div>
 
-                        {{-- Description --}}
+                        <div class="form-group mb-4">
+                            <label for="slug" class="font-weight-600 text-muted small">URL Identifier (Slug)</label>
+                            <div class="input-group shadow-xs">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text bg-light border-right-0"><i class="fas fa-link fa-xs text-muted"></i></span>
+                                </div>
+                                <input type="text" name="slug" id="slug" 
+                                       class="form-control form-control-monospace @error('slug') is-invalid @enderror"
+                                       placeholder="automatic-slug-generation"
+                                       value="{{ old('slug', $tag->slug ?? '') }}">
+                            </div>
+                            @error('slug') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
+                        </div>
+
                         <div class="form-group mb-0">
-                            <label for="description" class="font-weight-600">Description</label>
-                            <textarea name="description" rows="3" 
+                            <label for="description" class="font-weight-600">Internal Description</label>
+                            <textarea name="description" id="description" rows="4" 
                                       class="form-control @error('description') is-invalid @enderror" 
-                                      placeholder="Briefly describe what this tag represents...">{{ old('description', $tag->description ?? '') }}</textarea>
+                                      placeholder="Briefly describe the purpose of this tag group...">{{ old('description', $tag->description ?? '') }}</textarea>
                             @error('description') <span class="invalid-feedback">{{ $message }}</span> @enderror
                         </div>
                     </div>
                 </div>
 
-                {{-- Interactive Module Selection --}}
-                <div class="card shadow-premium border-0 mt-4 overflow-hidden" style="border-radius: 20px;">
+                {{-- Interactive Module Grid --}}
+                <div class="card card-premium overflow-hidden mt-4">
                     <div class="card-header border-0 bg-white py-3 px-4">
-                        <h3 class="card-title font-weight-600 text-muted small text-uppercase" style="letter-spacing: 1px;">Scope of Application</h3>
+                        <h3 class="card-title font-weight-600 text-muted small text-uppercase" style="letter-spacing: 1px;">Feature Applicability</h3>
                     </div>
                     <div class="card-body p-4">
                         <div class="row">
@@ -104,10 +104,10 @@
                     </div>
                 </div>
 
-                {{-- Gallery Section --}}
-                <div class="card shadow-premium border-0 mt-4 overflow-hidden" style="border-radius: 20px;">
+                {{-- Gallery Partial --}}
+                <div class="card card-premium overflow-hidden mt-4">
                     <div class="card-header border-0 bg-white py-3 px-4">
-                        <h3 class="card-title font-weight-600 text-muted small text-uppercase" style="letter-spacing: 1px;">Additional Tag Visuals</h3>
+                        <h3 class="card-title font-weight-600 text-muted small text-uppercase" style="letter-spacing: 1px;">Gallery Collection</h3>
                     </div>
                     <div class="card-body p-0">
                         @include('admin._partials._image-uploader', [
@@ -122,12 +122,12 @@
                 </div>
             </div>
 
-            {{-- Controls Sidebar --}}
+            {{-- High Contrast Sidebar --}}
             <div class="col-md-4">
                 @include('admin.tags.partials.action-buttons')
 
-                {{-- Featured Image Sidebar --}}
-                <div class="card border-0 shadow-premium mb-4" style="border-radius: 20px; overflow: hidden;">
+                {{-- Featured Image Partial --}}
+                <div class="card card-premium mb-4 overflow-hidden">
                     <div class="card-header bg-white border-0 py-3 px-4">
                         <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
                             <i class="fas fa-camera mr-2 text-primary opacity-50"></i> Visual Identity

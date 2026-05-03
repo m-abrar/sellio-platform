@@ -19,6 +19,15 @@ class Setting extends Model
      * @var array<int, string>
      */
     protected $fillable = ['key', 'value'];
+    
+    /**
+     * The "booted" method of the model.
+     */
+    protected static function booted(): void
+    {
+        static::saved(fn () => \Illuminate\Support\Facades\Cache::forget('settings_all'));
+        static::deleted(fn () => \Illuminate\Support\Facades\Cache::forget('settings_all'));
+    }
 
     /**
      * Retrieve a setting value by its key.

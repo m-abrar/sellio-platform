@@ -49,8 +49,8 @@ class PropertyResource extends JsonResource
                 'area_formatted'  => $this->area_formatted,
                 'year_built'      => $this->year_built,
                 'parking_spots'   => $this->number_of_parking_spots,
-                'property_type'   => $this->type?->title, 
-                'category'        => $this->category?->title,
+                'property_type'   => $this->whenLoaded('type', fn() => $this->type->title), 
+                'category'        => $this->whenLoaded('category', fn() => $this->category->title),
             ],
 
             // Spatie Media (Using Model Constants)
@@ -70,7 +70,7 @@ class PropertyResource extends JsonResource
 
             // Location Meta
             'location' => [
-                'title'     => $this->location?->title,
+                'title'     => $this->whenLoaded('location', fn() => $this->location->title),
                 'address'   => $this->address,
                 'city'      => $this->city,
                 'state'     => $this->state,
@@ -81,16 +81,8 @@ class PropertyResource extends JsonResource
             ],
 
             // Relationships
-            'amenities' => $this->amenities->map(fn($amenity) => [
-                'id'    => $amenity->id,
-                'title' => $amenity->title,
-                'icon'  => $amenity->icon,
-            ]),
-            'owner' => [
-                'name'   => $this->user?->name,
-                'avatar' => $this->user?->avatar_url ?? null,
-                'phone'  => $this->user?->phone,
-            ],
+            'amenities' => AmenityResource::collection($this->whenLoaded('amenities')),
+            'owner' => new UserResource($this->whenLoaded('user')),
 
             // Status & Meta
             'status' => [

@@ -59,17 +59,18 @@ if (!function_exists('themepages')) {
 if (!function_exists('setting')) {
     function setting($key, $default = null)
     {
-        // Exact match
-        $setting = Setting::where('key', $key)->value('value');
+        $settings = \Illuminate\Support\Facades\Cache::rememberForever('settings_all', function () {
+            return \App\Models\Setting::pluck('value', 'key')->toArray();
+        });
 
-        if ($setting !== null) {
-            $decoded = json_decode($setting, true);
-            return (json_last_error() === JSON_ERROR_NONE) ? $decoded : $setting;
+        $value = \Illuminate\Support\Arr::get($settings, $key, $default);
+
+        if (is_string($value)) {
+            $decoded = json_decode($value, true);
+            return (json_last_error() === JSON_ERROR_NONE) ? $decoded : $value;
         }
 
-        // Support nested dot keys (like config helper does)
-        $all = Setting::pluck('value', 'key')->toArray();
-        return \Illuminate\Support\Arr::get($all, $key, $default);
+        return $value;
     }
 }
 
