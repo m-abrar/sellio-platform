@@ -82,59 +82,65 @@
     /* Premium Toggle Card Styling */
     .toggle-card { 
         transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); 
-        background-color: #ffffff; 
+        background-color: #fff; 
         border: 1.5px solid #edf2f7 !important;
-        border-radius: 20px;
+        border-radius: 16px;
         cursor: pointer; 
         position: relative;
-        overflow: hidden;
+        padding: 0.85rem 1.25rem !important;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.02) !important;
     }
     
     .toggle-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.06) !important;
-        border-color: #cbd5e0 !important;
+        border-color: var(--primary-soft) !important;
+        background-color: #f8fafc;
+        transform: translateY(-2px);
     }
 
     .toggle-input:checked + .toggle-card { 
-        background-color: #f0fdf4; 
-        border-color: #22c55e !important; 
-        box-shadow: 0 4px 12px rgba(34, 197, 94, 0.1) !important;
+        background-color: #fff;
+        border-color: var(--primary) !important;
+        box-shadow: 0 10px 25px rgba(var(--primary-rgb), 0.08) !important;
     }
 
     .toggle-card .toggle-indicator {
-        width: 44px;
-        height: 24px;
+        width: 40px;
+        height: 20px;
         background-color: #e2e8f0;
-        border-radius: 30px;
+        border-radius: 50px;
         position: relative;
-        transition: all 0.3s ease;
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
     .toggle-card .toggle-indicator::after {
         content: '';
         position: absolute;
-        width: 18px;
-        height: 18px;
+        width: 14px;
+        height: 14px;
         background-color: #fff;
         border-radius: 50%;
         top: 3px;
         left: 3px;
-        transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        box-shadow: 0 2px 5px rgba(0,0,0,0.15);
     }
 
     .toggle-input:checked + .toggle-card .toggle-indicator { 
-        background-color: #22c55e; 
+        background-color: var(--primary); 
     }
 
     .toggle-input:checked + .toggle-card .toggle-indicator::after { 
         transform: translateX(20px); 
     }
 
+    .toggle-input:checked + .toggle-card .text-dark {
+        color: var(--primary) !important;
+    }
+
     .toggle-input:checked + .toggle-card .toggle-status {
-        color: #166534 !important;
-        font-weight: 700;
+        color: var(--primary) !important;
+        font-weight: 600;
+        opacity: 0.8;
     }
 
     /* Premium Custom Switch Styling */
@@ -337,6 +343,97 @@
     .btn-primary:hover {
         transform: translateY(-1px) !important;
         box-shadow: 0 6px 15px rgba(var(--primary-rgb, 59, 130, 246), 0.25) !important;
+    }
+
+    /* Premium Back Button */
+    .btn-back {
+        background: #fff !important;
+        color: #64748b !important;
+        border: 1.5px solid #edf2f7 !important;
+        border-radius: 12px !important;
+        padding: 0.6rem 1.2rem !important;
+        font-weight: 700 !important;
+        font-size: 0.75rem !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.8px !important;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05) !important;
+    }
+
+    .btn-back:hover {
+        background: #f8fafc !important;
+        color: var(--primary) !important;
+        border-color: var(--primary-soft) !important;
+        transform: translateX(-4px) !important;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    .btn-back i {
+        margin-right: 8px;
+        transition: transform 0.3s ease;
+        font-size: 0.8rem;
+    }
+
+    .btn-back:hover i {
+        transform: translateX(-3px);
+    }
+
+    /* Premium Input Groups */
+    .input-group {
+        border-radius: 12px !important;
+        transition: all 0.2s ease !important;
+    }
+
+    .input-group .form-control {
+        border-radius: 0 !important;
+        border-left: none !important;
+        z-index: 1 !important;
+    }
+
+    .input-group-prepend .input-group-text,
+    .input-group-append .input-group-text {
+        background-color: #f8fafc !important;
+        border: 1.5px solid #edf2f7 !important;
+        color: #94a3b8 !important;
+        font-size: 0.85rem !important;
+        padding: 0 1.1rem !important;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 48px;
+    }
+
+    .input-group-prepend {
+        margin-right: -1.5px;
+        z-index: 2;
+    }
+
+    .input-group-prepend .input-group-text {
+        border-radius: 12px 0 0 12px !important;
+        border-right: none !important;
+    }
+
+    .input-group-append .input-group-text {
+        border-radius: 0 12px 12px 0 !important;
+        border-left: none !important;
+    }
+
+    .input-group:focus-within {
+        box-shadow: 0 0 0 4px var(--primary-soft) !important;
+        border-radius: 12px !important;
+    }
+
+    .input-group:focus-within .input-group-text {
+        border-color: var(--primary) !important;
+        color: var(--primary) !important;
+        background-color: #fff !important;
+    }
+
+    .input-group:focus-within .form-control {
+        border-color: var(--primary) !important;
     }
 </style>
 @endpush

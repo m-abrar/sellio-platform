@@ -82,9 +82,9 @@
                                     <label class="font-weight-600">Ticket Quantity <span class="text-danger">*</span></label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text bg-light border-right-0"><i class="fas fa-users text-muted"></i></span>
+                                            <span class="input-group-text"><i class="fas fa-users"></i></span>
                                         </div>
-                                        <input type="number" name="quantity" id="quantity" class="form-control border-left-0 @error('quantity') is-invalid @enderror" 
+                                        <input type="number" name="quantity" id="quantity" class="form-control @error('quantity') is-invalid @enderror" 
                                                value="{{ old('quantity', $booking->quantity ?? 1) }}" min="1" required>
                                     </div>
                                     @error('quantity') <span class="invalid-feedback">{{ $message }}</span> @enderror
@@ -95,9 +95,9 @@
                                     <label class="font-weight-600">Total Price ($) <span class="text-danger">*</span></label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text bg-light border-right-0 font-weight-bold">$</span>
+                                            <span class="input-group-text font-weight-bold">$</span>
                                         </div>
-                                        <input type="number" step="0.01" name="total_price" id="total_price" class="form-control border-left-0 @error('total_price') is-invalid @enderror" 
+                                        <input type="number" step="0.01" name="total_price" id="total_price" class="form-control @error('total_price') is-invalid @enderror" 
                                                value="{{ old('total_price', $booking->total_price ?? 0.00) }}" required>
                                     </div>
                                     @error('total_price') <span class="invalid-feedback">{{ $message }}</span> @enderror

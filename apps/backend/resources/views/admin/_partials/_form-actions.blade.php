@@ -12,9 +12,9 @@
 @endphp
 
 <div class="card card-premium sticky-top overflow-hidden shadow-lg" style="top: 20px;">
-    <div class="card-header bg-dark d-flex align-items-center py-3" style="border-bottom: 3px solid var(--primary) !important; background: #1e293b !important;">
-        <h3 class="card-title text-white mb-0 font-weight-bold smallest text-uppercase letter-spacing-1">
-            <i class="fas fa-rocket mr-2 text-primary"></i> Protocol & Actions
+    <div class="card-header bg-white d-flex align-items-center py-3 px-4 border-0">
+        <h3 class="card-title text-dark mb-0 font-weight-bold smallest text-uppercase letter-spacing-1">
+            <i class="fas fa-rocket mr-2 text-primary opacity-50"></i> Protocol & Actions
         </h3>
     </div>
     
@@ -24,7 +24,7 @@
             <label class="w-100 cursor-pointer mb-0">
                 <input type="hidden" name="is_published" value="0">
                 <input type="checkbox" name="is_published" value="1" id="publishedSwitch" class="d-none toggle-input" {{ old('is_published', $model->is_published ?? true) ? 'checked' : '' }}>
-                <div class="border rounded px-3 py-2 d-flex justify-content-between align-items-center toggle-card shadow-sm">
+                <div class="d-flex justify-content-between align-items-center toggle-card">
                     <div>
                         <div class="fw-bold small text-dark">Publishing Status</div>
                         <div class="small toggle-status text-muted">{{ ($isEdit && $model->is_published) ? 'Visible to public' : 'Draft Mode' }}</div>
