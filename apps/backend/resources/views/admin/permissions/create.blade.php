@@ -24,46 +24,59 @@
     @include('admin.alert')
 
     <div class="row">
-        <div class="col-md-6">
-            <div class="card shadow-sm border-0">
-                <div class="card-body">
-                    <form action="{{ route('admin.permissions.store') }}" method="POST">
+        <div class="col-md-8">
+            <div class="card border-0 shadow-premium" style="border-radius: 24px;">
+                <div class="card-header bg-white py-4 px-4 border-0">
+                    <h3 class="card-title font-weight-bold text-dark mb-0">
+                        <i class="fas fa-fingerprint mr-2 text-primary opacity-50"></i> Define Protocol
+                    </h3>
+                </div>
+                <div class="card-body p-4">
+                    <form action="{{ route('admin.permissions.store') }}" method="POST" id="permissionForm">
                         @csrf
-                        <div class="form-group">
-                            <label class="font-weight-bold">Permission Name <span class="text-danger">*</span></label>
-                            <input type="text" name="name" class="form-control" placeholder="e.g. property-delete" required>
-                            <small class="form-text text-muted mt-2">
-                                <i class="fas fa-info-circle mr-1"></i> 
-                                Use lowercase and hyphens. Recommended format: <strong>module-action</strong>
-                            </small>
+                        <div class="form-group mb-0">
+                            <label class="font-weight-bold text-muted small uppercase">Unique Permission Name <span class="text-danger">*</span></label>
+                            <input type="text" name="name" class="form-control form-control-lg" placeholder="e.g. property-delete" required>
+                            <div class="p-3 bg-light rounded-xl border mt-4">
+                                <h6 class="font-weight-bold text-dark smallest uppercase mb-2">Naming Convention</h6>
+                                <p class="text-muted mb-0 small">
+                                    Use lowercase and hyphens. Recommended format: <strong>module-action</strong> (e.g., <code class="text-primary">listings-approve</code>).
+                                </p>
+                            </div>
                         </div>
-                        
-                        <hr>
-                        
-                        <button type="submit" class="btn btn-success px-4 font-weight-bold shadow-sm">
-                            <i class="fas fa-plus-circle mr-1"></i> Create Permission
-                        </button>
                     </form>
+                </div>
+            </div>
+
+            <div class="card bg-primary-soft border-0 shadow-sm mt-4" style="border-radius: 20px;">
+                <div class="card-body p-4">
+                    <h5 class="font-weight-bold text-primary smallest uppercase mb-3"><i class="fas fa-lightbulb mr-2"></i>Security Blueprint Architecture</h5>
+                    <p class="small text-muted mb-3">
+                        Permissions are the atomic building blocks of your security. Once created, you can assign them to 
+                        <strong>Roles</strong> in the Role Management section.
+                    </p>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <code class="d-block mb-2 p-2 bg-white rounded border small text-center text-primary">module-list</code>
+                        </div>
+                        <div class="col-md-4">
+                            <code class="d-block mb-2 p-2 bg-white rounded border small text-center text-primary">module-create</code>
+                        </div>
+                        <div class="col-md-4">
+                            <code class="d-block mb-2 p-2 bg-white rounded border small text-center text-primary">module-edit</code>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        {{-- Helper Card --}}
-        <div class="col-md-6">
-            <div class="card bg-light border-0 shadow-sm">
-                <div class="card-body">
-                    <h5 class="font-weight-bold text-primary"><i class="fas fa-lightbulb mr-2"></i>Quick Tip</h5>
-                    <p class="small text-muted">
-                        Permissions are the atomic building blocks of your security. Once created, you can assign them to 
-                        <strong>Roles</strong> in the Role Management section.
-                    </p>
-                    <ul class="small text-muted pl-3">
-                        <li><strong>property-list:</strong> View the list</li>
-                        <li><strong>property-create:</strong> Add new items</li>
-                        <li><strong>property-edit:</strong> Update details</li>
-                    </ul>
-                </div>
-            </div>
+        <div class="col-md-4">
+            {{-- Action Card --}}
+            @include('admin._partials._form-actions', [
+                'model' => $permission ?? (new \App\Models\Permission()),
+                'title' => 'PERMISSION',
+                'back' => 'admin.permissions.index'
+            ])
         </div>
     </div>
 </div>

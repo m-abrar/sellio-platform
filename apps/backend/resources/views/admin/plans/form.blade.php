@@ -65,9 +65,14 @@
             {{-- Right Column --}}
             <div class="col-md-4">
                 <div class="sticky-top" style="top: 20px; z-index: 10;">
-                    @include('admin.plans.partials.action-buttons')
+                    {{-- Action Card --}}
+                    @include('admin._partials._form-actions', [
+                        'model' => $plan,
+                        'title' => 'PLAN TIER',
+                        'back' => 'admin.plans.index'
+                    ])
 
-                    <div class="card border-0 shadow-premium mb-4" style="border-radius: 20px; overflow: hidden;">
+                    <div class="card card-premium shadow-premium mt-4 mb-4 overflow-hidden">
                         <div class="card-header bg-white border-0 py-3 px-4">
                             <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
                                 <i class="fas fa-camera mr-2 text-primary opacity-50"></i> Visual Identity
@@ -80,6 +85,7 @@
                                 'multiple' => false,
                                 'model' => \App\Models\Plan::class,
                                 'id' => $plan->id ?? null,
+                                'noCard' => true,
                             ])
                         </div>
                     </div>

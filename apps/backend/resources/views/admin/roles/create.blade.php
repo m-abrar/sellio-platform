@@ -30,8 +30,19 @@
     <form action="{{ route('admin.roles.store') }}" method="POST" id="roleCreateForm">
         @csrf
         <div class="row">
+            <div class="col-md-8">
+                @include('admin.roles.partials._permission_grid', ['currentRole' => null])
+            </div>
+
             <div class="col-md-4">
-                <div class="card border-0 shadow-premium mb-4" style="border-radius: 20px;">
+                {{-- Action Card --}}
+                @include('admin._partials._form-actions', [
+                    'model' => $role ?? (new \App\Models\Role()),
+                    'title' => 'ROLE',
+                    'back' => 'admin.roles.index'
+                ])
+
+                <div class="card border-0 shadow-premium mt-4" style="border-radius: 20px;">
                     <div class="card-header bg-white border-0 py-3 px-4">
                         <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">Identity Blueprint</h3>
                     </div>
@@ -50,14 +61,6 @@
                         </div>
                     </div>
                 </div>
-
-                <a href="{{ route('admin.roles.index') }}" class="btn btn-default btn-block rounded-pill font-weight-bold py-2 shadow-xs border">
-                    <i class="fas fa-arrow-left mr-1"></i> BACK TO REGISTRY
-                </a>
-            </div>
-
-            <div class="col-md-8">
-                @include('admin.roles.partials._permission_grid', ['currentRole' => null])
             </div>
         </div>
     </form>

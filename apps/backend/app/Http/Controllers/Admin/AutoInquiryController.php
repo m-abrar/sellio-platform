@@ -39,22 +39,89 @@ class AutoInquiryController extends Controller
     }
 
     /**
-     * Display the specified auto inquiry details.
-     *
-     * @param int $id
-     * @return View
+     * Show the form for creating a new auto inquiry.
      */
-    public function show(int $id): View
+    public function create(): View
     {
-        // Eager load the vehicle/listing and the potential buyer
-        $inquiry = AutoInquiry::with(['auto', 'user'])
-            ->findOrFail($id);
+        $inquiry = new AutoInquiry();
+        $autos = Auto::select('id', 'title')->get();
+        $users = \App\Models\User::select('id', 'name', 'email')->get();
+        
+        return view('admin.auto-inquiries.form', compact('inquiry', 'autos', 'users'));
+    }
 
-        // Mark as viewed if it's the first time an admin is opening it
-        if (isset($inquiry->viewed_at) && !$inquiry->viewed_at) {
-            $inquiry->update(['viewed_at' => now()]);
-        }
+    /**
+     * Store a newly created auto inquiry.
+     */
+    public function store(Request $request): \Illuminate\Http\RedirectResponse
+    {
+        $validated = $request->validate([
+            'auto_id' => 'required|exists:autos,id',
+            'user_id' => 'required|exists:users,id',
+            'full_name' => 'required|string|max:255',
+            'email' => 'required|email',
+            'phone' => 'nullable|string|max:20',
+            'preferred_date' => 'nullable|date',
+            'preferred_time' => 'nullable|string',
+            'message' => 'nullable|string',
+            'status' => 'required|string',
+        ]);
 
-        return view('admin.auto-inquiries.show', compact('inquiry'));
+        AutoInquiry::create($validated);
+
+        return redirect()
+            ->route('admin.auto-inquiries.index')
+            ->with('success', __('Inquiry created successfully.'));
+    }
+
+    /**
+     * Show the form for editing the specified auto inquiry.
+     */
+    public function edit(int $id): View
+    {
+        $inquiry = AutoInquiry::findOrFail($id);
+        $autos = Auto::select('id', 'title')->get();
+        $users = \App\Models\User::select('id', 'name', 'email')->get();
+
+        return view('admin.auto-inquiries.form', compact('inquiry', 'autos', 'users'));
+    }
+
+    /**
+     * Update the specified auto inquiry.
+     */
+    public function update(Request $request, int $id): \Illuminate\Http\RedirectResponse
+    {
+        $inquiry = AutoInquiry::findOrFail($id);
+
+        $validated = $request->validate([
+            'auto_id' => 'required|exists:autos,id',
+            'user_id' => 'required|exists:users,id',
+            'full_name' => 'required|string|max:255',
+            'email' => 'required|email',
+            'phone' => 'nullable|string|max:20',
+            'preferred_date' => 'nullable|date',
+            'preferred_time' => 'nullable|string',
+            'message' => 'nullable|string',
+            'status' => 'required|string',
+        ]);
+
+        $inquiry->update($validated);
+
+        return redirect()
+            ->route('admin.auto-inquiries.index')
+            ->with('success', __('Inquiry updated successfully.'));
+    }
+
+    /**
+     * Remove the specified auto inquiry.
+     */
+    public function destroy(int $id): \Illuminate\Http\RedirectResponse
+    {
+        $inquiry = AutoInquiry::findOrFail($id);
+        $inquiry->delete();
+
+        return redirect()
+            ->route('admin.auto-inquiries.index')
+            ->with('success', __('Inquiry deleted successfully.'));
     }
 }

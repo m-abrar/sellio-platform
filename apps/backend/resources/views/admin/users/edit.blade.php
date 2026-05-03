@@ -96,17 +96,19 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-footer bg-light-blue border-0 py-3 px-4 text-right">
-                        <button type="submit" class="btn btn-primary shadow-premium rounded-pill px-5 font-weight-bold">
-                            <i class="fas fa-save mr-2"></i> COMMIT CHANGES
-                        </button>
-                    </div>
                 </div>
             </div>
 
-            <!-- Right Column (Avatar Sidebar) -->
+            <!-- Right Column (Sidebar) -->
             <div class="col-md-4">
-                <div class="card border-0 shadow-premium mb-4" style="border-radius: 20px; overflow: hidden;">
+                {{-- Action Card --}}
+                @include('admin._partials._form-actions', [
+                    'model' => $user,
+                    'title' => 'USER',
+                    'back' => 'admin.users.index'
+                ])
+
+                <div class="card border-0 shadow-premium mt-4 mb-4" style="border-radius: 20px; overflow: hidden;">
                     <div class="card-header bg-white border-0 py-3 px-4">
                         <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
                             <i class="fas fa-camera mr-2 text-primary opacity-50"></i> Visual Identity
@@ -119,6 +121,7 @@
                             'multiple' => false,
                             'model' => \App\Models\User::class,
                             'id' => $user->id ?? null,
+                            'noCard' => true,
                         ])
                     </div>
                 </div>

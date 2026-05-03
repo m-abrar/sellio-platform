@@ -44,7 +44,20 @@
             {{-- Right Column: Actions & Media --}}
             <div class="col-md-4">
                 <div class="sticky-top" style="top: 20px; z-index: 10;">
-                    @include('admin.pages.partials.action-buttons')
+                    {{-- Action Card --}}
+                    @include('admin._partials._form-actions', [
+                        'model' => $page,
+                        'title' => 'PAGE',
+                        'back' => 'admin.pages.index'
+                    ])
+
+                    @if($page->exists)
+                        <div class="mt-2 mb-4 px-2">
+                            <a href="{{ url($page->slug) }}" target="_blank" class="btn btn-light btn-block btn-sm rounded-pill font-weight-bold text-primary border shadow-xs">
+                                <i class="fas fa-external-link-alt mr-1"></i> VIEW LIVE PAGE
+                            </a>
+                        </div>
+                    @endif
 
                     <div class="card border-0 shadow-premium mb-4" style="border-radius: 20px; overflow: hidden;">
                         <div class="card-header bg-white border-0 py-3 px-4">

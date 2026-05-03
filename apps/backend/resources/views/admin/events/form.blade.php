@@ -187,7 +187,12 @@
             {{-- Sidebar Column --}}
             <div class="col-md-4">
                 {{-- Action Card --}}
-                @include('admin.events.partials.action-buttons')
+                @include('admin._partials._form-actions', [
+                    'model' => $event,
+                    'title' => 'EVENT',
+                    'back' => 'admin.events.index',
+                    'duplicate' => 'admin.events.duplicate'
+                ])
 
                 {{-- Listing Controls --}}
                 <div class="card card-premium mb-4 overflow-hidden">
@@ -197,11 +202,6 @@
                         </h3>
                     </div>
                     <div class="card-body p-4">
-                        <div class="custom-control custom-switch custom-switch-premium mb-3">
-                            <input type="hidden" name="is_published" value="0">
-                            <input type="checkbox" name="is_published" value="1" class="custom-control-input" id="isPublished" {{ old('is_published', $event->is_published ?? true) ? 'checked' : '' }}>
-                            <label class="custom-control-label font-weight-bold text-dark small" for="isPublished">Publicly Visible</label>
-                        </div>
                         <div class="custom-control custom-switch custom-switch-premium">
                             <input type="hidden" name="is_featured" value="0">
                             <input type="checkbox" name="is_featured" value="1" class="custom-control-input" id="isFeatured" {{ old('is_featured', $event->is_featured ?? false) ? 'checked' : '' }}>

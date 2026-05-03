@@ -5,12 +5,13 @@
      * @param $model      Model instance
      * @param $title      Upper-case label (e.g. 'CATEGORY')
      * @param $duplicate  Route name for duplication (optional)
+     * @param $back       Route name for cancel (optional)
      */
     $isEdit = $model->exists;
     $label = $title ?? 'RECORD';
 @endphp
 
-<div class="card card-premium sticky-top overflow-hidden" style="top: 20px;">
+<div class="card card-premium sticky-top overflow-hidden shadow-lg" style="top: 20px;">
     <div class="card-header bg-dark d-flex align-items-center py-3" style="border-bottom: 3px solid var(--primary) !important; background: #1e293b !important;">
         <h3 class="card-title text-white mb-0 font-weight-bold smallest text-uppercase letter-spacing-1">
             <i class="fas fa-rocket mr-2 text-primary"></i> Protocol & Actions
@@ -38,26 +39,32 @@
                 <i class="fas fa-save mr-2"></i> {{ $isEdit ? "SYNCHRONIZE $label" : "INITIALIZE $label" }}
             </button>
 
-            @if($isEdit)
-                <div class="d-flex" style="gap: 8px;">
+            <div class="d-flex" style="gap: 8px;">
+                @if(isset($back))
+                    <a href="{{ route($back) }}" class="btn btn-light flex-grow-1 rounded-pill font-weight-bold smallest py-2 text-muted border uppercase">
+                        <i class="fas fa-times mr-1"></i> Cancel
+                    </a>
+                @endif
+                
+                @if($isEdit)
                     @if(isset($duplicate))
                         <a href="{{ route($duplicate, $model->id) }}" class="btn btn-light flex-grow-1 rounded-pill font-weight-bold smallest py-2 text-muted border uppercase">
-                            <i class="fas fa-copy mr-1"></i> CLONE
+                            <i class="fas fa-copy mr-1"></i> Clone
                         </a>
                     @endif
                     <button type="button" class="btn btn-light flex-grow-1 rounded-pill font-weight-bold smallest py-2 text-danger border uppercase" onclick="triggerDelete()">
-                        <i class="fas fa-trash-alt mr-1"></i> PURGE
+                        <i class="fas fa-trash-alt mr-1"></i> Purge
                     </button>
-                </div>
-            @endif
+                @endif
+            </div>
         </div>
     </div>
 
     @if($isEdit && isset($model->updated_at))
-        <div class="card-footer bg-light border-top-0 text-center">
-            <small class="text-muted">
+        <div class="card-footer bg-light border-top-0 text-center py-2">
+            <small class="text-muted smallest text-uppercase letter-spacing-1">
                 <i class="far fa-clock mr-1"></i> 
-                Last Sync: {{ $model->updated_at->format('M d, Y H:i') }}
+                Last Sync: {{ $model->updated_at->format('M d, H:i') }}
             </small>
         </div>
     @endif

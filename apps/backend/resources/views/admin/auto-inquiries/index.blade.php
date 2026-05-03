@@ -13,11 +13,10 @@
                     {{ __('Auto Inquiries') }}
                 </h1>
             </div>
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}">{{ __('Dashboard') }}</a></li>
-                    <li class="breadcrumb-item active">{{ __('Auto Inquiries') }}</li>
-                </ol>
+            <div class="col-sm-6 text-right">
+                <a href="{{ route('admin.auto-inquiries.create') }}" class="btn btn-primary shadow-sm px-4 font-weight-bold">
+                    <i class="fas fa-plus mr-1"></i> {{ __('Log New Lead') }}
+                </a>
             </div>
         </div>
     </div>
@@ -123,7 +122,14 @@
                                         </span>
                                     </td>
                                     <td class="text-right px-4">
-                                        <a href="{{ route('admin.auto-inquiries.show', $inquiry->id) }}" class="btn btn-default btn-sm text-info"><i class="fas fa-eye"></i></a>
+                                        <div class="btn-group">
+                                            <a href="{{ route('admin.auto-inquiries.show', $inquiry->id) }}" class="btn btn-default btn-sm text-info mr-1 shadow-xs" title="View Inquiry">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            <a href="{{ route('admin.auto-inquiries.edit', $inquiry->id) }}" class="btn btn-default btn-sm text-primary shadow-xs" title="Edit Inquiry">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                        </div>
                                     </td>
                                 </tr>
                             @empty

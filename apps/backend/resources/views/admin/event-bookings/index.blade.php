@@ -15,10 +15,9 @@
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Monitor ticket sales, attendee lists, and event registration metrics.</p>
             </div>
             <div class="col-sm-6 text-right">
-                <ol class="breadcrumb float-sm-right bg-transparent p-0 mt-3 small">
-                    <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}">{{ __('Dashboard') }}</a></li>
-                    <li class="breadcrumb-item active">{{ __('Event Bookings') }}</li>
-                </ol>
+                <a href="{{ route('admin.event-bookings.create') }}" class="btn btn-primary shadow-sm px-4 font-weight-bold">
+                    <i class="fas fa-plus mr-1"></i> {{ __('Register Guest') }}
+                </a>
             </div>
         </div>
     </div>
@@ -152,7 +151,14 @@
                                         </span>
                                     </td>
                                     <td class="text-right px-4">
-                                        <a href="{{ route('admin.event-bookings.show', $booking->id) }}" class="btn btn-default btn-sm text-info"><i class="fas fa-eye"></i></a>
+                                        <div class="btn-group">
+                                            <a href="{{ route('admin.event-bookings.show', $booking->id) }}" class="btn btn-default btn-sm text-info mr-1 shadow-xs" title="View Details">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            <a href="{{ route('admin.event-bookings.edit', $booking->id) }}" class="btn btn-default btn-sm text-primary shadow-xs" title="Edit Booking">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                        </div>
                                     </td>
                                 </tr>
                             @empty

@@ -3,17 +3,20 @@
 @section('title', ($advertisement->exists ? 'Edit' : 'Add') . ' Advertisement')
 
 @section('content_header')
-<div class="container-fluid">
-    <div class="row mb-2">
-        <div class="col-sm-6">
+<div class="container-fluid pt-4">
+    <div class="row mb-4 align-items-center">
+        <div class="col-sm-8">
             <h1 class="m-0 text-dark font-weight-bold">
                 <i class="fas fa-ad mr-2 text-primary"></i> 
-                {{ $advertisement->exists ? 'Edit Advertisement' : 'Create New Ad' }}
+                {{ $advertisement->exists ? 'Edit Advertisement' : 'Create New Campaign' }}
             </h1>
+            <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">
+                {{ $advertisement->exists ? 'Modify campaign parameters, creative assets, and targeting logic.' : 'Initialize a new marketing campaign with custom creative and placement rules.' }}
+            </p>
         </div>
-        <div class="col-sm-6 text-right">
-            <a href="{{ route('admin.advertisements.index') }}" class="btn btn-default btn-flat btn-sm shadow-sm">
-                <i class="fas fa-arrow-left mr-1"></i> Back to List
+        <div class="col-sm-4 text-right">
+            <a href="{{ route('admin.advertisements.index') }}" class="btn btn-back shadow-sm">
+                <i class="fas fa-arrow-left mr-1"></i> Back to Campaigns
             </a>
         </div>
     </div>
@@ -42,13 +45,17 @@
                 <div class="sticky-top" style="top: 20px; z-index: 10;">
                     
                     {{-- Action Card --}}
-                    @include('admin.advertisements.partials.action-buttons')
+                    @include('admin._partials._form-actions', [
+                        'model' => $advertisement,
+                        'title' => 'AD',
+                        'back' => 'admin.advertisements.index'
+                    ])
 
                     {{-- Image Upload Card --}}
-                    <div class="card shadow-sm border-0 mt-4 overflow-hidden rounded-3">
-                        <div class="card-header bg-white border-bottom">
-                            <h3 class="card-title font-weight-bold text-muted small text-uppercase">
-                                <i class="fas fa-image mr-1 text-primary"></i> Banner Image
+                    <div class="card card-premium shadow-premium mt-4 overflow-hidden">
+                        <div class="card-header bg-white border-0 py-3 px-4">
+                            <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
+                                <i class="fas fa-image mr-2 text-primary opacity-50"></i> Creative Banner
                             </h3>
                         </div>
                         <div class="card-body p-0">
@@ -71,9 +78,9 @@
                     </div>
 
                     {{-- Visual Guides Card --}}
-                    <div class="card shadow-sm border-0 mt-4 rounded-3 overflow-hidden">
-                        <div class="card-header bg-white border-bottom">
-                            <h3 class="card-title font-weight-bold text-muted small text-uppercase">Placement Guide</h3>
+                    <div class="card card-premium shadow-premium mt-4 overflow-hidden">
+                        <div class="card-header bg-white border-0 py-3 px-4">
+                            <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">Placement Guide</h3>
                         </div>
                         <div class="card-body p-2">
                             <div class="row no-gutters">

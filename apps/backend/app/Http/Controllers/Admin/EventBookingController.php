@@ -33,14 +33,85 @@ class EventBookingController extends Controller
     }
 
     /**
-     * Display the specified event booking.
+     * Show the form for creating a new event booking.
      */
-    public function show(int $id): View
+    public function create(): View
     {
-        // Eager load the event details and the attendee (user)
-        $booking = EventBooking::with(['event', 'user', 'payments'])
-            ->findOrFail($id);
+        $booking = new EventBooking();
+        $events = Event::select('id', 'title', 'base_price')->get();
+        $users = \App\Models\User::select('id', 'name', 'email')->get();
+        
+        return view('admin.event-bookings.form', compact('booking', 'events', 'users'));
+    }
 
-        return view('admin.event-bookings.show', compact('booking'));
+    /**
+     * Store a newly created event booking.
+     */
+    public function store(Request $request): \Illuminate\Http\RedirectResponse
+    {
+        $validated = $request->validate([
+            'event_id' => 'required|exists:events,id',
+            'user_id' => 'required|exists:users,id',
+            'quantity' => 'required|integer|min:1',
+            'total_price' => 'required|numeric|min:0',
+            'status' => 'required|string',
+            'admin_note' => 'nullable|string',
+        ]);
+
+        $validated['booking_reference'] = 'EVT-' . strtoupper(\Illuminate\Support\Str::random(8));
+
+        $booking = EventBooking::create($validated);
+
+        return redirect()
+            ->route('admin.event-bookings.index')
+            ->with('success', __('Booking created successfully. Reference: :ref', ['ref' => $booking->booking_reference]));
+    }
+
+    /**
+     * Show the form for editing the specified event booking.
+     */
+    public function edit(int $id): View
+    {
+        $booking = EventBooking::findOrFail($id);
+        $events = Event::select('id', 'title', 'base_price')->get();
+        $users = \App\Models\User::select('id', 'name', 'email')->get();
+
+        return view('admin.event-bookings.form', compact('booking', 'events', 'users'));
+    }
+
+    /**
+     * Update the specified event booking.
+     */
+    public function update(Request $request, int $id): \Illuminate\Http\RedirectResponse
+    {
+        $booking = EventBooking::findOrFail($id);
+
+        $validated = $request->validate([
+            'event_id' => 'required|exists:events,id',
+            'user_id' => 'required|exists:users,id',
+            'quantity' => 'required|integer|min:1',
+            'total_price' => 'required|numeric|min:0',
+            'status' => 'required|string',
+            'admin_note' => 'nullable|string',
+        ]);
+
+        $booking->update($validated);
+
+        return redirect()
+            ->route('admin.event-bookings.index')
+            ->with('success', __('Booking updated successfully.'));
+    }
+
+    /**
+     * Remove the specified event booking.
+     */
+    public function destroy(int $id): \Illuminate\Http\RedirectResponse
+    {
+        $booking = EventBooking::findOrFail($id);
+        $booking->delete();
+
+        return redirect()
+            ->route('admin.event-bookings.index')
+            ->with('success', __('Booking deleted successfully.'));
     }
 }

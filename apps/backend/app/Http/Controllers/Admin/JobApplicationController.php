@@ -33,13 +33,85 @@ class JobApplicationController extends Controller
     }
 
     /**
-     * Display the specified job application.
+     * Show the form for creating a new job application.
      */
-    public function show(int $id): View
+    public function create(): View
     {
-        $application = JobApplication::with(['job', 'user'])
-            ->findOrFail($id);
+        $application = new JobApplication();
+        $jobs = JobListing::select('id', 'title')->get();
+        $users = \App\Models\User::select('id', 'name', 'email')->get();
+        
+        return view('admin.job-applications.form', compact('application', 'jobs', 'users'));
+    }
 
-        return view('admin.job-applications.show', compact('application'));
+    /**
+     * Store a newly created job application.
+     */
+    public function store(Request $request): \Illuminate\Http\RedirectResponse
+    {
+        $validated = $request->validate([
+            'job_listing_id' => 'required|exists:job_listings,id',
+            'user_id' => 'required|exists:users,id',
+            'full_name' => 'required|string|max:255',
+            'email' => 'required|email',
+            'phone' => 'nullable|string|max:20',
+            'cover_letter' => 'nullable|string',
+            'status' => 'required|string',
+        ]);
+
+        JobApplication::create($validated);
+
+        return redirect()
+            ->route('admin.job-applications.index')
+            ->with('success', __('Application logged successfully.'));
+    }
+
+    /**
+     * Show the form for editing the specified job application.
+     */
+    public function edit(int $id): View
+    {
+        $application = JobApplication::findOrFail($id);
+        $jobs = JobListing::select('id', 'title')->get();
+        $users = \App\Models\User::select('id', 'name', 'email')->get();
+
+        return view('admin.job-applications.form', compact('application', 'jobs', 'users'));
+    }
+
+    /**
+     * Update the specified job application.
+     */
+    public function update(Request $request, int $id): \Illuminate\Http\RedirectResponse
+    {
+        $application = JobApplication::findOrFail($id);
+
+        $validated = $request->validate([
+            'job_listing_id' => 'required|exists:job_listings,id',
+            'user_id' => 'required|exists:users,id',
+            'full_name' => 'required|string|max:255',
+            'email' => 'required|email',
+            'phone' => 'nullable|string|max:20',
+            'cover_letter' => 'nullable|string',
+            'status' => 'required|string',
+        ]);
+
+        $application->update($validated);
+
+        return redirect()
+            ->route('admin.job-applications.index')
+            ->with('success', __('Application updated successfully.'));
+    }
+
+    /**
+     * Remove the specified job application.
+     */
+    public function destroy(int $id): \Illuminate\Http\RedirectResponse
+    {
+        $application = JobApplication::findOrFail($id);
+        $application->delete();
+
+        return redirect()
+            ->route('admin.job-applications.index')
+            ->with('success', __('Application deleted successfully.'));
     }
 }

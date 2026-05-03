@@ -49,8 +49,20 @@
             <div class="col-md-4">
                 <div class="sticky-top" style="top: 20px; z-index: 10;">
                     
-                    {{-- Action Buttons (Save, Publish Toggle, Featured Toggle) --}}
-                    @include('admin.blogs.partials.action-buttons')
+                    {{-- Action Card --}}
+                    @include('admin._partials._form-actions', [
+                        'model' => $blog,
+                        'title' => 'ARTICLE',
+                        'back' => 'admin.blogs.index'
+                    ])
+
+                    @if($blog->exists)
+                        <div class="mt-2 mb-4 px-2">
+                            <a href="{{ url('blog/' . $blog->slug) }}" target="_blank" class="btn btn-light btn-block btn-sm rounded-pill font-weight-bold text-primary border shadow-xs">
+                                <i class="fas fa-external-link-alt mr-1"></i> VIEW LIVE ARTICLE
+                            </a>
+                        </div>
+                    @endif
 
                     {{-- Featured Image (Spatie Media Integration) --}}
                     <div class="card border-0 shadow-premium mb-4" style="border-radius: 20px; overflow: hidden;">
@@ -79,9 +91,14 @@
                             </h3>
                         </div>
                         <div class="card-body p-4">
-                            <div class="form-group mb-0">
+                            <div class="form-group mb-4">
                                 <label class="small font-weight-bold text-muted text-uppercase">Est. Reading Time (Mins)</label>
                                 <input type="number" name="reading_time" class="form-control" value="{{ old('reading_time', $blog->reading_time ?? 5) }}">
+                            </div>
+
+                            <div class="custom-control custom-switch custom-switch-premium">
+                                <input type="checkbox" name="is_featured" class="custom-control-input" id="is_featured" value="1" {{ old('is_featured', $blog->is_featured ?? false) ? 'checked' : '' }}>
+                                <label class="custom-control-label font-weight-bold text-dark small" for="is_featured">Featured Post</label>
                             </div>
                         </div>
                     </div>

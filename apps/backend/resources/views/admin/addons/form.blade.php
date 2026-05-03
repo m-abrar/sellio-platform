@@ -3,11 +3,11 @@
 @section('title', ($addon->exists ? 'Edit' : 'Create') . ' Addon')
 
 @section('content_header')
-    <div class="container-fluid">
+    <div class="container-fluid pt-4">
         <div class="row mb-4 align-items-center">
             <div class="col-sm-8">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-plus-circle mr-2 text-primary"></i> 
+                    <i class="fas fa-puzzle-piece mr-2 text-primary"></i> 
                     {{ $addon->exists ? 'Modify Addon' : 'New Service Addon' }}
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">
@@ -76,23 +76,20 @@
                             @error('description') <span class="invalid-feedback">{{ $message }}</span> @enderror
                         </div>
                     </div>
-                    <div class="card-footer bg-light border-0 py-3 px-4 d-flex justify-content-between align-items-center">
-                        <div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input" id="statusSwitch" name="status" value="active" 
-                                   {{ ($addon->exists && $addon->status == 'active') || !$addon->exists ? 'checked' : '' }}>
-                            <label class="custom-control-label font-weight-bold text-muted small text-uppercase" for="statusSwitch">Active Status</label>
-                        </div>
-                        <button type="submit" class="btn btn-primary rounded-pill px-4 shadow-premium font-weight-bold">
-                            <i class="fas fa-save mr-1"></i> COMMIT CHANGES
-                        </button>
-                    </div>
                 </div>
             </div>
 
             {{-- Sidebar Column --}}
             <div class="col-md-4">
+                {{-- Action Card --}}
+                @include('admin._partials._form-actions', [
+                    'model' => $addon,
+                    'title' => 'ADDON',
+                    'back' => 'admin.addons.index'
+                ])
+
                 {{-- Visual Identity Card --}}
-                <div class="card border-0 shadow-premium mb-4" style="border-radius: 20px; overflow: hidden;">
+                <div class="card border-0 shadow-premium mt-4 mb-4" style="border-radius: 20px; overflow: hidden;">
                     <div class="card-header bg-white border-0 py-3 px-4">
                         <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
                             <i class="fas fa-camera mr-2 text-primary opacity-50"></i> Visual Identity
@@ -105,6 +102,7 @@
                             'multiple' => false,
                             'model' => \App\Models\PropertyAddon::class,
                             'id' => $addon->id ?? null,
+                            'noCard' => true,
                         ])
                     </div>
                 </div>

@@ -267,7 +267,12 @@
             {{-- Sidebar Column --}}
             <div class="col-md-3">
                 {{-- Action Card --}}
-                @include('admin.products.partials.action-buttons')
+                @include('admin._partials._form-actions', [
+                    'model' => $product,
+                    'title' => 'PRODUCT',
+                    'back' => 'admin.products.index',
+                    'duplicate' => 'admin.products.duplicate'
+                ])
 
                 {{-- Primary Media --}}
                 <div class="card card-premium mb-4 overflow-hidden">
@@ -298,7 +303,6 @@
                     <div class="card-body p-4">
                         @php
                             $toggles = [
-                                ['name' => 'is_published', 'id' => 'isPublished', 'label' => 'Published', 'checked' => old('is_published', $product->is_published ?? true)],
                                 ['name' => 'is_featured', 'id' => 'isFeatured', 'label' => 'Featured', 'checked' => old('is_featured', $product->is_featured ?? false)],
                                 ['name' => 'on_sale', 'id' => 'onSale', 'label' => 'On Sale', 'checked' => old('on_sale', $product->on_sale ?? false)],
                                 ['name' => 'manage_stock', 'id' => 'manageStock', 'label' => 'Manage Stock', 'checked' => old('manage_stock', $product->manage_stock ?? true)],

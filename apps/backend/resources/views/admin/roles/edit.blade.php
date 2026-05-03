@@ -31,8 +31,19 @@
         @csrf 
         @method('PUT')
         <div class="row">
+            <div class="col-md-8">
+                @include('admin.roles.partials._permission_grid', ['currentRole' => $role])
+            </div>
+
             <div class="col-md-4">
-                <div class="card border-0 shadow-premium mb-4" style="border-radius: 20px;">
+                {{-- Action Card --}}
+                @include('admin._partials._form-actions', [
+                    'model' => $role,
+                    'title' => 'ROLE',
+                    'back' => 'admin.roles.index'
+                ])
+
+                <div class="card border-0 shadow-premium mt-4" style="border-radius: 20px;">
                     <div class="card-header bg-white border-0 py-3 px-4">
                         <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">Authority Identity</h3>
                     </div>
@@ -43,7 +54,7 @@
                             <small class="text-muted d-block mt-2 font-italic">Renaming this role will propagate through all assigned user accounts instantly.</small>
                         </div>
                         
-                        <div class="p-3 bg-dark-soft rounded-xl border">
+                        <div class="p-3 bg-light rounded-xl border">
                             <h6 class="font-weight-bold text-dark smallest uppercase mb-2">Security Statistics</h6>
                             <div class="d-flex justify-content-between align-items-center mb-1">
                                 <span class="text-muted small">Active Permissions:</span>
@@ -56,14 +67,6 @@
                         </div>
                     </div>
                 </div>
-
-                <a href="{{ route('admin.roles.index') }}" class="btn btn-default btn-block rounded-pill font-weight-bold py-2 shadow-xs border">
-                    <i class="fas fa-arrow-left mr-1"></i> BACK TO REGISTRY
-                </a>
-            </div>
-
-            <div class="col-md-8">
-                @include('admin.roles.partials._permission_grid', ['currentRole' => $role])
             </div>
         </div>
     </form>
