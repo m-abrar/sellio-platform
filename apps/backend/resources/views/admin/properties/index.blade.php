@@ -97,8 +97,8 @@
                         @forelse ($properties as $property)
                             <tr>
                                 <td class="text-center align-middle">
-                                    <div class="table-img-preview shadow-xs">
-                                        <img src="{{ $property->thumbnail_url ?? asset('images/placeholder.png') }}">
+                                    <div class="table-img-preview shadow-xs rounded-lg overflow-hidden border" style="width: 50px; height: 50px; margin: 0 auto;">
+                                        <img src="{{ $property->thumbnail_url ?? asset('images/placeholder.png') }}" style="width: 100%; height: 100%; object-fit: cover;">
                                     </div>
                                 </td>
                                 
@@ -107,7 +107,7 @@
                                         <div>
                                             <span class="d-block font-weight-bold text-dark mb-0">{{ $property->title }}</span>
                                             <div class="d-flex align-items-center mt-1">
-                                                <small class="badge badge-light border text-muted mr-2">ID: {{ $property->id }}</small>
+                                                <small class="badge badge-secondary-light mr-2" style="font-size: 0.65rem;">ID: {{ $property->id }}</small>
                                                 <small class="text-muted">
                                                     <i class="fas fa-user mr-1"></i> {{ $property->user->name ?? 'Admin' }}
                                                 </small>
@@ -118,53 +118,53 @@
 
                                 <td class="align-middle">
                                     <span class="d-block font-weight-600 text-sm text-dark">{{ $property->category->title ?? 'Uncategorized' }}</span>
-                                    <small class="text-muted">
+                                    <small class="text-muted text-xs">
                                         {{ $property->number_of_bedrooms ?? 0 }} Beds | {{ $property->number_of_bathrooms ?? 0 }} Baths
                                     </small>
                                 </td>
 
                                 <td class="align-middle">
                                     @if($property->is_rental)
-                                        <span class="badge badge-warning-light px-2 py-1">RENTAL</span>
-                                        <div class="small font-weight-bold mt-1">{{ setting('currency_symbol', '$') }}{{ number_format($property->price_per_night, 2) }} / night</div>
+                                        <span class="badge badge-premium badge-warning-light">RENTAL</span>
+                                        <div class="small font-weight-bold mt-1 text-dark">{{ setting('currency_symbol', '$') }}{{ number_format($property->price_per_night, 2) }} / night</div>
                                     @else
-                                        <span class="badge badge-danger-light px-2 py-1">SALE</span>
-                                        <div class="small font-weight-bold mt-1">{{ setting('currency_symbol', '$') }}{{ number_format($property->base_price, 2) }}</div>
+                                        <span class="badge badge-premium badge-danger-light">SALE</span>
+                                        <div class="small font-weight-bold mt-1 text-dark">{{ setting('currency_symbol', '$') }}{{ number_format($property->base_price, 2) }}</div>
                                     @endif
                                 </td>
 
-                                <td class="align-middle small">
-                                    <i class="fas fa-map-marker-alt text-muted mr-1"></i>
+                                <td class="align-middle small text-muted">
+                                    <i class="fas fa-map-marker-alt text-primary opacity-50 mr-1"></i>
                                     {{ $property->location->name ?? $property->city ?? 'Global' }}
                                 </td>
 
                                 <td class="align-middle">
                                     <div class="mb-1">
                                         @if ($property->is_published && $property->approved_at)
-                                            <span class="badge badge-success-light px-2 py-1 text-uppercase" style="font-size: 0.65rem;">Active</span>
+                                            <span class="badge badge-premium badge-success-light">Active</span>
                                         @elseif ($property->is_published && !$property->approved_at)
-                                            <span class="badge badge-warning-light px-2 py-1 text-uppercase" style="font-size: 0.65rem;">Pending</span>
+                                            <span class="badge badge-premium badge-warning-light">Pending</span>
                                         @else
-                                            <span class="badge badge-secondary-light px-2 py-1 text-uppercase" style="font-size: 0.65rem;">Draft</span>
+                                            <span class="badge badge-premium badge-secondary-light">Draft</span>
                                         @endif
                                     </div>
                                 </td>
 
                                 <td class="text-right align-middle px-4">
-                                    <div class="btn-group btn-group-premium shadow-sm">
+                                    <div class="btn-group btn-group-premium shadow-sm rounded-pill border overflow-hidden bg-white">
                                         <a href="{{ route('admin.properties.edit', $property->id) }}" 
-                                           class="btn btn-default btn-sm text-info" 
+                                           class="btn btn-white btn-sm text-info py-2 px-3 border-right" 
                                            data-toggle="tooltip" title="Edit Detail">
                                             <i class="fas fa-pencil-alt"></i>
                                         </a>
                                         <a href="{{ route('admin.properties.duplicate', $property->id) }}" 
-                                           class="btn btn-default btn-sm text-success" 
+                                           class="btn btn-white btn-sm text-success py-2 px-3 border-right" 
                                            data-toggle="tooltip" title="Duplicate">
                                             <i class="fas fa-copy"></i>
                                         </a>
                                         <form action="{{ route('admin.properties.destroy', $property->id) }}" method="POST" class="d-inline">
                                             @csrf @method('DELETE')
-                                            <button type="submit" class="btn btn-default btn-sm text-danger" 
+                                            <button type="submit" class="btn btn-white btn-sm text-danger py-2 px-3" 
                                                     data-toggle="tooltip" title="Delete Listing"
                                                     onclick="return confirm('Permanently delete this property listing?')">
                                                 <i class="fas fa-trash-alt"></i>
@@ -176,7 +176,7 @@
                         @empty
                             <tr>
                                 <td colspan="7" class="text-center py-5">
-                                    <i class="fas fa-building fa-3x text-muted mb-3 d-block"></i>
+                                    <i class="fas fa-building fa-3x text-light mb-3 d-block"></i>
                                     <h5 class="text-muted font-weight-bold">No Properties Found</h5>
                                     <p class="text-secondary small">Add a new property to get started.</p>
                                 </td>
@@ -200,11 +200,7 @@
 @endsection
 
 @section('css')
-<style>
-    .badge-success-light { background-color: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
-    .badge-warning-light { background-color: #fef9c3; color: #854d0e; border: 1px solid #fef08a; }
-    .badge-secondary-light { background-color: #f3f4f6; color: #374151; border: 1px solid #e5e7eb; }
-</style>
+@include('admin._partials._toggle-card-css')
 @endsection
 
 @section('js')

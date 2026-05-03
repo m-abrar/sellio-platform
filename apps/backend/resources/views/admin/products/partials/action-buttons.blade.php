@@ -1,58 +1,52 @@
-<div class="card card-premium sticky-top overflow-hidden" style="top: 20px;">
-    <div class="card-header bg-dark d-flex align-items-center py-3" style="border-bottom: 3px solid var(--primary) !important; background: #1e293b !important;">
-        <h3 class="card-title text-white mb-0 font-weight-bold smallest text-uppercase letter-spacing-1">
-            <i class="fas fa-rocket mr-2 text-primary"></i> {{ __('Protocol & Actions') }}
+<div class="card card-premium sticky-top shadow-lg overflow-hidden" style="top: 20px;">
+    <div class="card-header border-0 bg-white py-3 px-4">
+        <h3 class="card-title font-weight-bold text-dark text-uppercase small letter-spacing-1 mb-0">
+            <i class="fas fa-bolt mr-2 text-primary"></i> Finalize Actions
         </h3>
     </div>
-    <div class="card-body bg-white p-4">
-        {{-- Status Registry --}}
-        <div class="mb-4">
-            <label class="smallest text-uppercase font-weight-bold text-muted mb-3 d-block">{{ __('State Management') }}</label>
+    <div class="card-body p-4 pt-0">
+        <p class="text-muted small mb-4">Confirm your changes and update the product listing on the platform.</p>
+        
+        <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-submit-premium btn-block py-3 rounded-xl font-weight-bold mb-3" style="font-size: 0.9rem; letter-spacing: 0.5px;">
+                <i class="fas fa-check-circle mr-2"></i> 
+                {{ $product->exists ? 'SAVE CHANGES' : 'PUBLISH PRODUCT' }}
+            </button>
             
-            <div class="mb-3">
-                <label class="w-100 cursor-pointer mb-0">
-                    <input type="hidden" name="is_published" value="0">
-                    <input type="checkbox" name="is_published" value="1" id="pubSwitch" class="d-none toggle-input" {{ old('is_published', $product->is_published ?? '0') == '1' ? 'checked' : '' }}>
-                    <div class="border rounded-xl px-3 py-2 d-flex justify-content-between align-items-center toggle-card shadow-xs">
-                        <div>
-                            <div class="font-weight-bold smallest text-dark">{{ __('Public Visibility') }}</div>
-                            <div class="smallest toggle-status text-muted">{{ ($product->exists && $product->is_published) ? __('LIVE') : __('DRAFT') }}</div>
-                        </div>
-                        <div class="toggle-indicator"></div>
-                    </div>
-                </label>
+            <div class="row no-gutters">
+                <div class="col-6 pr-1">
+                    <a href="{{ route('admin.products.index') }}" class="btn btn-light btn-block py-2 rounded-lg text-muted small font-weight-bold">
+                        <i class="fas fa-times mr-1"></i> Cancel
+                    </a>
+                </div>
+                <div class="col-6 pl-1">
+                    @if($product->exists)
+                        <button type="button" class="btn btn-outline-danger btn-block py-2 rounded-lg small font-weight-bold" onclick="triggerDelete()">
+                            <i class="fas fa-trash-alt mr-1"></i> Delete
+                        </button>
+                    @else
+                        <button type="button" class="btn btn-light btn-block py-2 rounded-lg text-muted small font-weight-bold opacity-50" disabled>
+                            <i class="fas fa-trash-alt mr-1"></i> Delete
+                        </button>
+                    @endif
+                </div>
             </div>
-            
-            <div class="mb-0">
-                <label class="w-100 cursor-pointer mb-0">
-                    <input type="hidden" name="is_featured" value="0">
-                    <input type="checkbox" name="is_featured" value="1" id="featSwitch" class="d-none toggle-input" {{ old('is_featured', $product->is_featured ?? '0') == '1' ? 'checked' : '' }}>
-                    <div class="border rounded-xl px-3 py-2 d-flex justify-content-between align-items-center toggle-card shadow-xs">
-                        <div>
-                            <div class="font-weight-bold smallest text-dark">{{ __('Featured Asset') }}</div>
-                            <div class="smallest toggle-status text-muted">{{ ($product->exists && $product->is_featured) ? __('PROMOTED') : __('STANDARD') }}</div>
-                        </div>
-                        <div class="toggle-indicator"></div>
-                    </div>
-                </label>
-            </div>
+
+            @if($product->exists)
+                <div class="mt-3">
+                    @if(Route::has('admin.products.duplicate'))
+                        <a href="{{ route('admin.products.duplicate', $product->id) }}" class="btn btn-link btn-block text-primary small font-weight-bold p-0">
+                            <i class="fas fa-copy mr-1"></i> Duplicate this listing
+                        </a>
+                    @endif
+                </div>
+            @endif
         </div>
-
-        <hr class="my-4 border-light">
-
-        <button type="submit" class="btn btn-primary btn-block rounded-pill font-weight-bold shadow-lg py-3 smallest mb-3">
-            <i class="fas fa-save mr-2"></i> {{ $product->exists ? __('SYNCHRONIZE RECORD') : __('INITIALIZE LISTING') }}
-        </button>
-
-        @if($product->exists)
-            <div class="d-flex" style="gap: 8px;">
-                <button type="button" class="btn btn-light flex-grow-1 rounded-pill font-weight-bold smallest py-2 text-muted border">
-                    <i class="fas fa-copy mr-1"></i> {{ __('CLONE') }}
-                </button>
-                <button type="button" class="btn btn-light flex-grow-1 rounded-pill font-weight-bold smallest py-2 text-danger border" onclick="triggerDelete()">
-                    <i class="fas fa-trash-alt mr-1"></i> {{ __('PURGE') }}
-                </button>
-            </div>
-        @endif
     </div>
 </div>
+
+<style>
+    .rounded-xl { border-radius: 16px !important; }
+    .rounded-lg { border-radius: 12px !important; }
+    .letter-spacing-1 { letter-spacing: 1px !important; }
+</style>

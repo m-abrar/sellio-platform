@@ -150,8 +150,13 @@
                                                         <td><input type="text" name="attributes[{{ $vIndex }}][sku_extension]" value="{{ $attr->sku_extension }}" class="form-control form-control-sm"></td>
                                                         <td><input type="number" name="attributes[{{ $vIndex }}][stock_quantity]" value="{{ $attr->stock_quantity }}" class="form-control form-control-sm"></td>
                                                         <td class="text-center">
-                                                            <input type="hidden" name="attributes[{{ $vIndex }}][is_variation]" value="0">
-                                                            <input type="checkbox" name="attributes[{{ $vIndex }}][is_variation]" value="1" {{ $attr->is_variation ? 'checked' : '' }}>
+                                                            <div class="d-flex justify-content-center">
+                                                                <label class="checkbox-premium">
+                                                                    <input type="hidden" name="attributes[{{ $vIndex }}][is_variation]" value="0">
+                                                                    <input type="checkbox" name="attributes[{{ $vIndex }}][is_variation]" value="1" {{ $attr->is_variation ? 'checked' : '' }}>
+                                                                    <span class="checkmark shadow-sm"></span>
+                                                                </label>
+                                                            </div>
                                                         </td>
                                                         <td class="text-center"><button type="button" class="btn btn-danger btn-xs" onclick="removeRow(this)"><i class="fas fa-trash"></i></button></td>
                                                     </tr>
@@ -201,8 +206,13 @@
                                                         </td>
                                                         <td><input type="text" name="addons[{{ $aIndex }}][description]" value="{{ $addon->description }}" class="form-control form-control-sm"></td>
                                                         <td class="text-center">
-                                                            <input type="hidden" name="addons[{{ $aIndex }}][is_required]" value="0">
-                                                            <input type="checkbox" name="addons[{{ $aIndex }}][is_required]" value="1" {{ $addon->is_required ? 'checked' : '' }}>
+                                                            <div class="d-flex justify-content-center">
+                                                                <label class="checkbox-premium">
+                                                                    <input type="hidden" name="addons[{{ $aIndex }}][is_required]" value="0">
+                                                                    <input type="checkbox" name="addons[{{ $aIndex }}][is_required]" value="1" {{ $addon->is_required ? 'checked' : '' }}>
+                                                                    <span class="checkmark shadow-sm"></span>
+                                                                </label>
+                                                            </div>
                                                         </td>
                                                         <td class="text-center"><button type="button" class="btn btn-danger btn-xs" onclick="removeRow(this)"><i class="fas fa-trash"></i></button></td>
                                                     </tr>
@@ -296,7 +306,7 @@
                             ];
                         @endphp
                         @foreach($toggles as $t)
-                            <div class="custom-control custom-switch mb-3">
+                            <div class="custom-control custom-switch custom-switch-premium mb-3">
                                 <input type="hidden" name="{{ $t['name'] }}" value="0">
                                 <input type="checkbox" name="{{ $t['name'] }}" value="1" class="custom-control-input" id="{{ $t['id'] }}" {{ $t['checked'] ? 'checked' : '' }}>
                                 <label class="custom-control-label font-weight-bold text-dark small" for="{{ $t['id'] }}" style="padding-top: 2px;">{{ $t['label'] }}</label>
@@ -361,8 +371,13 @@
                 <td><input type="text" name="attributes[${variationIndex}][sku_extension]" class="form-control form-control-sm" placeholder="-RED"></td>
                 <td><input type="number" name="attributes[${variationIndex}][stock_quantity]" class="form-control form-control-sm" value="0"></td>
                 <td class="text-center">
-                    <input type="hidden" name="attributes[${variationIndex}][is_variation]" value="0">
-                    <input type="checkbox" name="attributes[${variationIndex}][is_variation]" value="1" checked>
+                    <div class="d-flex justify-content-center">
+                        <label class="checkbox-premium">
+                            <input type="hidden" name="attributes[${variationIndex}][is_variation]" value="0">
+                            <input type="checkbox" name="attributes[${variationIndex}][is_variation]" value="1" checked>
+                            <span class="checkmark shadow-sm"></span>
+                        </label>
+                    </div>
                 </td>
                 <td class="text-center"><button type="button" class="btn btn-danger btn-xs" onclick="removeRow(this)"><i class="fas fa-trash"></i></button></td>
             </tr>
@@ -384,8 +399,13 @@
                 </td>
                 <td><input type="text" name="addons[${addonIndex}][description]" class="form-control form-control-sm" placeholder="Add beautiful gift box"></td>
                 <td class="text-center">
-                    <input type="hidden" name="addons[${addonIndex}][is_required]" value="0">
-                    <input type="checkbox" name="addons[${addonIndex}][is_required]" value="1">
+                    <div class="d-flex justify-content-center">
+                        <label class="checkbox-premium">
+                            <input type="hidden" name="addons[${addonIndex}][is_required]" value="0">
+                            <input type="checkbox" name="addons[${addonIndex}][is_required]" value="1">
+                            <span class="checkmark shadow-sm"></span>
+                        </label>
+                    </div>
                 </td>
                 <td class="text-center"><button type="button" class="btn btn-danger btn-xs" onclick="removeRow(this)"><i class="fas fa-trash"></i></button></td>
             </tr>

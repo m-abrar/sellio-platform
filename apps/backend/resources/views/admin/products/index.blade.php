@@ -101,10 +101,10 @@
                         @forelse ($products as $product)
                             <tr>
                                 <td class="text-center align-middle">
-                                    <div class="table-img-preview shadow-xs">
+                                    <div class="table-img-preview shadow-xs rounded-lg overflow-hidden border" style="width: 50px; height: 50px; margin: 0 auto;">
                                         <img src="{{ $product->getFirstMediaUrl('main_image', 'product_thumbnail') ?: asset('assets/defaults/placeholder.png') }}" 
                                              alt="{{ $product->title }}"
-                                             style="object-fit: cover;">
+                                             style="width: 100%; height: 100%; object-fit: cover;">
                                     </div>
                                 </td>
 
@@ -116,7 +116,7 @@
                                         @endif
                                     </span>
                                     <div class="d-flex align-items-center mt-1">
-                                        <small class="badge badge-light border text-muted mr-2">{{ $product->sku ?? 'NO-SKU' }}</small>
+                                        <small class="badge badge-secondary-light mr-2" style="font-size: 0.65rem;">{{ $product->sku ?? 'NO-SKU' }}</small>
                                         <small class="text-muted">
                                             <i class="fas fa-folder-open mr-1"></i> {{ $product->category->title ?? 'Uncategorized' }}
                                         </small>
@@ -132,7 +132,7 @@
                                             <span class="text-dark font-weight-bold">{{ $product->price_formatted }}</span>
                                         @endif
                                     </div>
-                                    <small class="text-muted d-block">
+                                    <small class="text-muted d-block text-xs">
                                         <i class="fas fa-weight-hanging mr-1 fa-xs"></i> {{ $product->weight ?? 0 }}kg | 
                                         <i class="fas fa-ruler-combined mr-1 fa-xs"></i> {{ $product->dimensions_formatted }}
                                     </small>
@@ -142,41 +142,43 @@
                                     @php
                                         $stockStatus = $product->stock_quantity > ($product->low_stock_threshold ?? 5) ? 'text-success' : 'text-danger';
                                     @endphp
-                                    <div class="{{ $stockStatus }} font-weight-bold">
+                                    <div class="{{ $stockStatus }} font-weight-bold small">
                                         {{ $product->stock_quantity }} in stock
                                     </div>
-                                    <small class="text-muted">
+                                    <small class="text-muted text-xs">
                                         {{ $product->manage_stock ? 'Auto-managed' : 'Manual Entry' }}
                                         @if($product->is_digital)
-                                            <span class="ml-1 text-indigo"><i class="fas fa-cloud-download-alt"></i> Digital</span>
+                                            <span class="ml-1 text-primary"><i class="fas fa-cloud-download-alt"></i> Digital</span>
                                         @endif
                                     </small>
                                 </td>
 
                                 <td class="text-right align-middle">
                                     <div class="mb-1">
-                                        <span class="badge {{ $product->is_published ? 'badge-success-light' : 'badge-danger-light' }} px-2 py-1">
-                                            {{ $product->is_published ? 'Published' : 'Draft' }}
-                                        </span>
+                                        @if($product->is_published)
+                                            <span class="badge badge-premium badge-success-light">Active</span>
+                                        @else
+                                            <span class="badge badge-premium badge-secondary-light">Draft</span>
+                                        @endif
                                     </div>
                                     @if($product->approved_at)
                                         <small class="text-muted" style="font-size: 0.65rem;">
-                                            Approved: {{ $product->approved_at->format('M d, Y') }}
+                                            Approved: {{ $product->approved_at->format('M d') }}
                                         </small>
                                     @else
-                                        <span class="badge badge-warning text-xs">Pending Review</span>
+                                        <span class="badge badge-premium badge-warning-light">Pending</span>
                                     @endif
                                 </td>
 
                                 <td class="text-right align-middle px-4">
-                                    <div class="btn-group btn-group-premium shadow-sm">
+                                    <div class="btn-group btn-group-premium shadow-sm rounded-pill border overflow-hidden bg-white">
                                         <a href="{{ route('admin.products.edit', $product->id) }}" 
-                                           class="btn btn-default btn-sm text-info" 
+                                           class="btn btn-white btn-sm text-info py-2 px-3 border-right" 
                                            data-toggle="tooltip" title="Edit Product">
                                             <i class="fas fa-pencil-alt"></i>
                                         </a>
                                         <a href="{{ route('admin.products.duplicate', $product->id) }}" 
-                                           class="btn btn-default btn-sm text-success" 
+                                           class="btn btn-white btn-sm text-success py-2 px-3 border-right" 
                                            data-toggle="tooltip" title="Clone Product">
                                             <i class="fas fa-copy"></i>
                                         </a>
@@ -186,7 +188,7 @@
                                               onsubmit="return confirm('Archive this product and remove from catalog?')">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-default btn-sm text-danger" 
+                                            <button type="submit" class="btn btn-white btn-sm text-danger py-2 px-3" 
                                                     data-toggle="tooltip" title="Delete Product">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
@@ -195,7 +197,7 @@
                                 </td>
                             </tr>
                         @empty
-                            {{-- Handled by DataTables --}}
+                            <tr><td colspan="6" class="text-center py-5"><h5 class="text-muted">No Products Found</h5></td></tr>
                         @endforelse
                     </tbody>
                 </table>
@@ -204,6 +206,10 @@
 
         </div>
 </div>
+@endsection
+
+@section('css')
+@include('admin._partials._toggle-card-css')
 @endsection
 
 @section('js')

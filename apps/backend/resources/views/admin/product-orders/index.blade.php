@@ -21,6 +21,10 @@
     </div>
 @stop
 
+@section('css')
+@include('admin._partials._toggle-card-css')
+@endsection
+
 @section('js')
 <script>
     $(function () {
@@ -167,7 +171,7 @@
                                 @forelse ($orders as $order)
                                     <tr>
                                         <td class="text-center align-middle">
-                                            <div class="custom-control custom-checkbox">
+                                            <div class="custom-control custom-checkbox custom-checkbox-premium">
                                                 <input type="checkbox" name="ids[]" value="{{ $order->id }}" class="custom-control-input order-checkbox" id="check-{{ $order->id }}">
                                                 <label class="custom-control-label" for="check-{{ $order->id }}"></label>
                                             </div>
@@ -177,94 +181,65 @@
                                                 $firstItem = $order->items->first();
                                                 $thumbnail = $firstItem && $firstItem->product ? $firstItem->product->thumbnail_url : asset('images/fallbacks/default.jpg');
                                             @endphp
-                                            <div class="table-img-preview shadow-xs">
-                                                <img src="{{ $thumbnail }}" alt="Order item" onerror="this.src='{{ asset('images/fallbacks/default.jpg') }}'">
+                                            <div class="table-img-preview shadow-xs rounded-lg overflow-hidden border" style="width: 50px; height: 50px; margin: 0 auto;">
+                                                <img src="{{ $thumbnail }}" alt="Order item" onerror="this.src='{{ asset('images/fallbacks/default.jpg') }}'" style="width: 100%; height: 100%; object-fit: cover;">
                                             </div>
                                         </td>
                                         <td class="align-middle">
-                                            <strong>{{ $order->order_number }}</strong>
+                                            <strong class="text-dark">{{ $order->order_number }}</strong>
                                             @if($firstItem)
                                                 <div class="text-xs text-muted mt-1">
                                                     <i class="fas fa-box-open mr-1"></i> {{ $firstItem->product_name }}
-                                                    @if($firstItem->product && $firstItem->product->sku)
-                                                        <span class="text-uppercase text-secondary opacity-75 font-weight-bold ml-1" style="font-size: 0.6rem;">[{{ $firstItem->product->sku }}]</span>
-                                                    @endif
                                                     @if($order->items->count() > 1)
-                                                        <span class="badge badge-secondary ml-1" style="font-size: 0.6rem;">+{{ $order->items->count() - 1 }} MORE</span>
+                                                        <span class="badge badge-secondary-light ml-1" style="font-size: 0.6rem;">+{{ $order->items->count() - 1 }} MORE</span>
                                                     @endif
                                                 </div>
                                             @endif
                                         </td>
                                         <td class="align-middle">
                                             <div class="d-flex align-items-center">
-                                                <div class="avatar-xs mr-3 bg-light rounded-circle text-center border shadow-xs d-flex align-items-center justify-content-center" style="width:38px; height:38px;">
-                                                    <i class="fas fa-user text-muted"></i>
+                                                <div class="avatar-xs mr-3 bg-light rounded-circle text-center border shadow-xs d-flex align-items-center justify-content-center" style="width:34px; height:34px; min-width:34px;">
+                                                    <i class="fas fa-user text-muted smallest"></i>
                                                 </div>
                                                 <div>
-                                                    <span class="d-block font-weight-bold text-dark mb-0">{{ $order->user->name ?? 'N/A' }}</span>
-                                                    <div class="text-xs text-muted">
-                                                        <a href="mailto:{{ $order->user->email ?? '' }}" class="text-info"><i class="fas fa-envelope mr-1"></i>{{ $order->user->email ?? 'N/A' }}</a>
-                                                        @if($order->shipping_city)
-                                                            <div class="mt-1 opacity-75">
-                                                                <i class="fas fa-map-marker-alt mr-1 text-xs text-danger"></i>{{ $order->shipping_city }}, {{ $order->shipping_country }}
-                                                            </div>
-                                                        @endif
+                                                    <span class="d-block font-weight-bold text-dark smallest mb-0">{{ $order->user->name ?? 'Guest' }}</span>
+                                                    <div class="text-xs text-muted opacity-75">
+                                                        <i class="fas fa-envelope mr-1"></i>{{ Str::limit($order->user->email ?? 'N/A', 15) }}
                                                     </div>
                                                 </div>
                                             </div>
                                         </td>
                                         <td class="align-middle">
-                                            <div class="font-weight-bold text-lg text-primary mb-1">${{ number_format($order->total_amount, 2) }}</div>
-                                            <div class="item-details-stack">
-                                                @foreach($order->items as $item)
-                                                    <div class="text-xs text-muted mb-1 glass-card-soft p-2 rounded-lg border shadow-xs" style="width: fit-content; min-width: 180px; background: rgba(248, 249, 250, 0.5);">
-                                                        <div class="d-flex justify-content-between border-bottom border-light pb-1 mb-1">
-                                                            <span class="font-weight-bold text-dark">{{ $item->quantity }} × {{ Str::limit($item->product_name, 15) }}</span>
-                                                            <span class="text-primary font-weight-bold">${{ number_format($item->unit_price, 2) }}</span>
-                                                        </div>
-                                                        @php
-                                                            $itemAttrs = $item->selected_attributes;
-                                                            if (is_string($itemAttrs)) {
-                                                                $itemAttrs = json_decode($itemAttrs, true);
-                                                            }
-                                                        @endphp
-                                                        @if(is_array($itemAttrs) && count($itemAttrs) > 0)
-                                                            <div class="mt-1">
-                                                                @foreach($itemAttrs as $key => $value)
-                                                                    <div class="mb-0 d-flex justify-content-between">
-                                                                        <span class="text-muted" style="font-size: 0.6rem; opacity: 0.8;">{{ strtoupper(str_replace('_', ' ', $key)) }}:</span> 
-                                                                        <span class="text-dark font-weight-600 ml-2" style="font-size: 0.6rem;">{{ is_array($value) ? implode(', ', $value) : $value }}</span>
-                                                                    </div>
-                                                                @endforeach
-                                                            </div>
-                                                        @endif
-                                                    </div>
-                                                @endforeach
-                                            </div>
+                                            <div class="font-weight-bold text-dark mb-0">{{ setting('currency_symbol', '$') }}{{ number_format($order->total_amount, 2) }}</div>
+                                            <small class="text-muted text-xs">{{ $order->items->count() }} {{ Str::plural('item', $order->items->count()) }}</small>
                                         </td>
                                         <td class="align-middle">
-                                            <span class="badge {{ $order->payment_status === 'paid' ? 'badge-success-light text-success' : 'badge-warning-light text-warning' }} px-3 py-1 text-uppercase" style="font-size: 0.7rem; border-radius: 6px;">
+                                            <span class="badge badge-premium {{ $order->payment_status === 'paid' ? 'badge-success-light' : 'badge-warning-light' }}">
                                                 {{ ucfirst($order->payment_status) }}
                                             </span>
                                         </td>
                                         <td class="text-center align-middle">
                                             @php
                                                 $statusColors = [
-                                                    'pending' => 'badge-warning-light text-warning',
-                                                    'processing' => 'badge-info-light text-info',
-                                                    'completed' => 'badge-success-light text-success',
-                                                    'cancelled' => 'badge-danger-light text-danger'
+                                                    'pending' => 'badge-warning-light',
+                                                    'processing' => 'badge-info-light',
+                                                    'completed' => 'badge-success-light',
+                                                    'cancelled' => 'badge-danger-light'
                                                 ];
-                                                $statusColor = $statusColors[$order->status] ?? 'badge-secondary-light text-secondary';
+                                                $statusColor = $statusColors[$order->status] ?? 'badge-secondary-light';
                                             @endphp
-                                            <span class="badge {{ $statusColor }} px-3 py-1 text-uppercase" style="font-size: 0.7rem; border-radius: 6px;">{{ ucfirst($order->status) }}</span>
+                                            <span class="badge badge-premium {{ $statusColor }}">{{ ucfirst($order->status) }}</span>
                                         </td>
-                                        <td class="align-middle">
-                                            <span class="d-block font-weight-bold text-dark">{{ $order->created_at->format('M d, Y') }}</span>
-                                            <small class="text-muted">{{ $order->created_at->format('h:i A') }}</small>
+                                        <td class="align-middle text-muted">
+                                            <span class="d-block font-weight-bold text-dark smallest">{{ $order->created_at->format('M d, Y') }}</span>
+                                            <small class="text-xs">{{ $order->created_at->format('h:i A') }}</small>
                                         </td>
-                                        <td class="text-right px-4">
-                                            <a href="{{ route('admin.product-orders.show', $order->id) }}" class="btn btn-default btn-sm text-info" data-toggle="tooltip" title="View Order"><i class="fas fa-eye"></i></a>
+                                        <td class="text-right px-4 align-middle">
+                                            <div class="btn-group btn-group-premium shadow-sm rounded-pill border overflow-hidden bg-white">
+                                                <a href="{{ route('admin.product-orders.show', $order->id) }}" class="btn btn-white btn-sm text-info py-2 px-3" data-toggle="tooltip" title="View Order">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                            </div>
                                         </td>
                                     </tr>
                                 @empty

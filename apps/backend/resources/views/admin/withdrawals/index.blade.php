@@ -147,17 +147,17 @@
 
                                 <td class="text-right align-middle px-4">
                                     @if ($withdrawal->status === 'pending')
-                                        <div class="btn-group shadow-sm" style="border-radius: 10px; overflow: hidden;">
+                                        <div class="btn-group btn-group-premium shadow-xs rounded-pill border overflow-hidden">
                                             <form action="{{ route('admin.withdrawals.approve', $withdrawal) }}" method="POST" class="m-0">
                                                 @csrf
-                                                <button type="submit" class="btn btn-success btn-sm px-3 border-0" 
+                                                <button type="submit" class="btn btn-white btn-sm text-success py-2 px-3 border-right" 
                                                         title="{{ __('Approve') }}" 
                                                         onclick="return confirm('Confirm payout of ${{ number_format($withdrawal->amount_dollars, 2) }}?')">
                                                     <i class="fas fa-check"></i>
                                                 </button>
                                             </form>
 
-                                            <button type="button" class="btn btn-danger btn-sm px-3 border-0" 
+                                            <button type="button" class="btn btn-white btn-sm text-danger py-2 px-3" 
                                                     title="{{ __('Reject') }}" 
                                                     data-toggle="modal" 
                                                     data-target="#rejectModal" 

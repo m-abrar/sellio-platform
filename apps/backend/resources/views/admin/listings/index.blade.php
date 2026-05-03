@@ -295,6 +295,7 @@
 @stop
 
 @push('css')
+@include('admin._partials._toggle-card-css')
 <style>
     .transition-all { transition: all 0.25s ease-in-out; }
     .dropdown-item.transition-all:hover {

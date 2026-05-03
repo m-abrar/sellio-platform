@@ -90,8 +90,8 @@
                         @forelse ($classifieds as $ad)
                             <tr>
                                 <td class="text-center align-middle">
-                                    <div class="table-img-preview shadow-xs">
-                                        <img src="{{ $ad->thumbnail_url ?? asset('images/placeholder.png') }}">
+                                    <div class="table-img-preview shadow-xs rounded-lg overflow-hidden border" style="width: 50px; height: 50px; margin: 0 auto;">
+                                        <img src="{{ $ad->thumbnail_url ?? asset('images/placeholder.png') }}" style="width: 100%; height: 100%; object-fit: cover;">
                                     </div>
                                 </td>
                                 <td class="align-middle">
@@ -99,7 +99,7 @@
                                         <div>
                                             <span class="d-block font-weight-bold text-dark mb-0">{{ $ad->title }}</span>
                                             <div class="d-flex align-items-center mt-1">
-                                                <small class="badge badge-light border text-muted mr-2">ID: {{ $ad->id }}</small>
+                                                <small class="badge badge-secondary-light mr-2" style="font-size: 0.65rem;">ID: {{ $ad->id }}</small>
                                                 <small class="text-muted">
                                                     <i class="fas fa-folder mr-1"></i> {{ $ad->category->title ?? 'General' }}
                                                 </small>
@@ -108,38 +108,39 @@
                                     </div>
                                 </td>
 
-                                <td class="align-middle small">
+                                <td class="align-middle small text-muted">
+                                    <i class="fas fa-map-marker-alt mr-1 text-primary opacity-50"></i>
                                     {{ $ad->city ?? 'Remote' }}{{ isset($ad->country) ? ', ' . $ad->country : '' }}
                                 </td>
 
                                 <td class="align-middle">
-                                    <div class="font-weight-bold text-sm">{{ $ad->price_formatted ?? '$0.00' }}</div>
+                                    <div class="font-weight-bold text-dark">{{ $ad->price_formatted ?? '$0.00' }}</div>
                                     @if($ad->is_sale && $ad->is_for_rent) <small class="text-muted">Sale & Rent</small> @endif
                                 </td>
 
-                                <td class="align-middle small">
-                                    <span class="badge badge-secondary-light px-2 py-1">{{ $ad->condition_label ?? 'Used' }}</span>
+                                <td class="align-middle">
+                                    <span class="badge badge-premium badge-secondary-light">{{ $ad->condition_label ?? 'Used' }}</span>
                                 </td>
 
                                 <td class="align-middle">
                                     <div class="mb-1">
                                         @if ($ad->is_published && $ad->approved_at)
-                                            <span class="badge badge-success-light px-2 py-1 text-uppercase" style="font-size: 0.65rem;">Active</span>
+                                            <span class="badge badge-premium badge-success-light">Active</span>
                                         @elseif ($ad->is_published && !$ad->approved_at)
-                                            <span class="badge badge-warning-light px-2 py-1 text-uppercase" style="font-size: 0.65rem;">Pending</span>
+                                            <span class="badge badge-premium badge-warning-light">Pending</span>
                                         @else
-                                            <span class="badge badge-secondary-light px-2 py-1 text-uppercase" style="font-size: 0.65rem;">Draft</span>
+                                            <span class="badge badge-premium badge-secondary-light">Draft</span>
                                         @endif
                                     </div>
                                 </td>
 
                                 <td class="text-right align-middle px-4">
-                                    <div class="btn-group btn-group-premium shadow-sm">
-                                        <a href="{{ route('admin.classifieds.edit', $ad->id) }}" class="btn btn-default btn-sm text-info"><i class="fas fa-pencil-alt"></i></a>
-                                        <a href="{{ route('admin.classifieds.duplicate', $ad->id) }}" class="btn btn-default btn-sm text-success"><i class="fas fa-copy"></i></a>
+                                    <div class="btn-group btn-group-premium shadow-sm rounded-pill border overflow-hidden bg-white">
+                                        <a href="{{ route('admin.classifieds.edit', $ad->id) }}" class="btn btn-white btn-sm text-info py-2 px-3 border-right" data-toggle="tooltip" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+                                        <a href="{{ route('admin.classifieds.duplicate', $ad->id) }}" class="btn btn-white btn-sm text-success py-2 px-3 border-right" data-toggle="tooltip" title="Duplicate"><i class="fas fa-copy"></i></a>
                                         <form action="{{ route('admin.classifieds.destroy', $ad->id) }}" method="POST" class="d-inline">
                                             @csrf @method('DELETE')
-                                            <button type="submit" class="btn btn-default btn-sm text-danger" onclick="return confirm('Permanently delete this classified ad?')"><i class="fas fa-trash-alt"></i></button>
+                                            <button type="submit" class="btn btn-white btn-sm text-danger py-2 px-3" data-toggle="tooltip" title="Delete" onclick="return confirm('Permanently delete this classified ad?')"><i class="fas fa-trash-alt"></i></button>
                                         </form>
                                     </div>
                                 </td>
@@ -165,9 +166,5 @@
 @endsection
 
 @section('css')
-<style>
-    .badge-success-light { background-color: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
-    .badge-warning-light { background-color: #fef9c3; color: #854d0e; border: 1px solid #fef08a; }
-    .badge-secondary-light { background-color: #f3f4f6; color: #374151; border: 1px solid #e5e7eb; }
-</style>
+@include('admin._partials._toggle-card-css')
 @endsection

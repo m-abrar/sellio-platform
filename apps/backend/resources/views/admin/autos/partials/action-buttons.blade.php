@@ -1,56 +1,52 @@
-<div class="card card-premium shadow-sm border-0 sticky-top overflow-hidden" style="top: 20px;">
-    <div class="card-header bg-dark d-flex align-items-center py-3" style="border-bottom: 3px solid var(--primary) !important; background: #1e293b !important;">
-        <h3 class="card-title text-white mb-0 font-weight-bold smallest text-uppercase letter-spacing-1">
-            <i class="fas fa-rocket mr-2 text-primary"></i> {{ __('Protocol & Actions') }}
+<div class="card card-premium sticky-top shadow-lg overflow-hidden" style="top: 20px;">
+    <div class="card-header border-0 bg-white py-3 px-4">
+        <h3 class="card-title font-weight-bold text-dark text-uppercase small letter-spacing-1 mb-0">
+            <i class="fas fa-bolt mr-2 text-primary"></i> Finalize Actions
         </h3>
     </div>
-    <div class="card-body">
-        {{-- Sidebar Status Toggles --}}
-        <div class="mb-3 pb-2 border-bottom">
-            <label class="w-100 cursor-pointer mb-0">
-                <input type="hidden" name="is_published" value="0">
-                <input type="checkbox" name="is_published" value="1" id="pubSwitch" class="d-none toggle-input" {{ old('is_published', $auto->is_published ?? '0') == '1' ? 'checked' : '' }}>
-                <div class="border rounded px-3 py-2 d-flex justify-content-between align-items-center toggle-card shadow-sm">
-                    <div>
-                        <div class="fw-bold small text-dark">Publishing Status</div>
-                        <div class="small toggle-status text-muted">{{ ($auto->exists && $auto->is_published) ? 'Visible to public' : 'Draft Mode' }}</div>
-                    </div>
-                    <div class="toggle-indicator"></div>
-                </div>
-            </label>
-        </div>
+    <div class="card-body p-4 pt-0">
+        <p class="text-muted small mb-4">Confirm your changes and update the auto listing on the platform.</p>
         
-        <div class="mb-3">
-            <label class="w-100 cursor-pointer mb-0">
-                <input type="hidden" name="is_featured" value="0">
-                <input type="checkbox" name="is_featured" value="1" id="featSwitch" class="d-none toggle-input" {{ old('is_featured', $auto->is_featured ?? '0') == '1' ? 'checked' : '' }}>
-                <div class="border rounded px-3 py-2 d-flex justify-content-between align-items-center toggle-card shadow-sm">
-                    <div>
-                        <div class="fw-bold small text-dark">Promotions</div>
-                        <div class="small toggle-status text-muted">{{ ($auto->exists && $auto->is_featured) ? 'Featured' : 'Standard' }}</div>
-                    </div>
-                    <div class="toggle-indicator"></div>
+        <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-submit-premium btn-block py-3 rounded-xl font-weight-bold mb-3" style="font-size: 0.9rem; letter-spacing: 0.5px;">
+                <i class="fas fa-check-circle mr-2"></i> 
+                {{ $auto->exists ? 'SAVE CHANGES' : 'PUBLISH LISTING' }}
+            </button>
+            
+            <div class="row no-gutters">
+                <div class="col-6 pr-1">
+                    <a href="{{ route('admin.listings.index', ['type' => 'auto']) }}" class="btn btn-light btn-block py-2 rounded-lg text-muted small font-weight-bold">
+                        <i class="fas fa-times mr-1"></i> Cancel
+                    </a>
                 </div>
-            </label>
-        </div>
-        <hr class="my-3">
-        <button type="submit" class="btn btn-primary btn-block btn-lg btn-flat shadow-sm font-weight-bold mb-2">
-            <i class="fas fa-save mr-2"></i> {{ $auto->exists ? 'UPDATE AUTO' : 'CREATE AUTO' }}
-        </button>
-
-        @if($auto->exists)
-            <div class="row gx-1">
-                <div class="col-6">
-                    @if(Route::has('admin.autos.duplicate'))
-                        <a href="{{ route('admin.autos.duplicate', $auto->id) }}" class="btn btn-default btn-block btn-flat btn-sm text-secondary"><i class="fas fa-copy mr-1"></i> Duplicate</a>
+                <div class="col-6 pl-1">
+                    @if($auto->exists)
+                        <button type="button" class="btn btn-outline-danger btn-block py-2 rounded-lg small font-weight-bold" onclick="triggerDelete()">
+                            <i class="fas fa-trash-alt mr-1"></i> Delete
+                        </button>
                     @else
-                        <button class="btn btn-default btn-block btn-flat btn-sm text-secondary" disabled><i class="fas fa-copy mr-1"></i> Duplicate</button>
+                        <button type="button" class="btn btn-light btn-block py-2 rounded-lg text-muted small font-weight-bold opacity-50" disabled>
+                            <i class="fas fa-trash-alt mr-1"></i> Delete
+                        </button>
                     @endif
                 </div>
-                <div class="col-6">
-                    <button type="button" class="btn btn-default btn-block btn-flat btn-sm text-danger" onclick="triggerDelete()"><i class="fas fa-trash-alt mr-1"></i> Delete</button>
-                </div>
             </div>
-        @endif
+
+            @if($auto->exists)
+                <div class="mt-3">
+                    @if(Route::has('admin.autos.duplicate'))
+                        <a href="{{ route('admin.autos.duplicate', $auto->id) }}" class="btn btn-link btn-block text-primary small font-weight-bold p-0">
+                            <i class="fas fa-copy mr-1"></i> Duplicate this listing
+                        </a>
+                    @endif
+                </div>
+            @endif
+        </div>
     </div>
 </div>
+
+<style>
+    .rounded-xl { border-radius: 16px !important; }
+    .rounded-lg { border-radius: 12px !important; }
+    .letter-spacing-1 { letter-spacing: 1px !important; }
+</style>

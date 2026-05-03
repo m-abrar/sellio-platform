@@ -1,54 +1,52 @@
-<div class="card card-premium sticky-top overflow-hidden" style="top: 20px;">
-    <div class="card-header bg-dark d-flex align-items-center py-3" style="border-bottom: 3px solid var(--primary) !important; background: #1e293b !important;">
-        <h3 class="card-title text-white mb-0 font-weight-bold smallest text-uppercase letter-spacing-1">
-            <i class="fas fa-rocket mr-2 text-primary"></i> {{ __('Protocol & Actions') }}
+<div class="card card-premium sticky-top shadow-lg overflow-hidden" style="top: 20px;">
+    <div class="card-header border-0 bg-white py-3 px-4">
+        <h3 class="card-title font-weight-bold text-dark text-uppercase small letter-spacing-1 mb-0">
+            <i class="fas fa-bolt mr-2 text-primary"></i> Finalize Actions
         </h3>
     </div>
-    <div class="card-body">
-        {{-- Sidebar Status Toggles --}}
-        <div class="mb-3 pb-2 border-bottom">
-            <label class="w-100 cursor-pointer mb-0">
-                <input type="hidden" name="is_published" value="0">
-                <input type="checkbox" name="is_published" value="1" id="pubSwitch" class="d-none toggle-input" {{ old('is_published', $classified->is_published ?? '0') == '1' ? 'checked' : '' }}>
-                <div class="border rounded px-3 py-2 d-flex justify-content-between align-items-center toggle-card shadow-sm">
-                    <div>
-                        <div class="fw-bold small text-dark">Publishing Status</div>
-                        <div class="small toggle-status text-muted">{{ ($classified->exists && $classified->is_published) ? 'Visible to public' : 'Draft Mode' }}</div>
-                    </div>
-                    <div class="toggle-indicator"></div>
-                </div>
-            </label>
-        </div>
+    <div class="card-body p-4 pt-0">
+        <p class="text-muted small mb-4">Confirm your changes and update the classified listing on the platform.</p>
         
-        <div class="mb-3">
-            <label class="w-100 cursor-pointer mb-0">
-                <input type="hidden" name="is_featured" value="0">
-                <input type="checkbox" name="is_featured" value="1" id="featSwitch" class="d-none toggle-input" {{ old('is_featured', $classified->is_featured ?? '0') == '1' ? 'checked' : '' }}>
-                <div class="border rounded px-3 py-2 d-flex justify-content-between align-items-center toggle-card shadow-sm">
-                    <div>
-                        <div class="fw-bold small text-dark">Promotions</div>
-                        <div class="small toggle-status text-muted">{{ ($classified->exists && $classified->is_featured) ? 'Featured' : 'Standard' }}</div>
-                    </div>
-                    <div class="toggle-indicator"></div>
-                </div>
-            </label>
-        </div>
-        <hr class="my-3">
-        <div class="action-buttons-group">
-            <button type="submit" class="btn btn-primary btn-block rounded-pill font-weight-bold shadow-lg py-3 smallest mb-3">
-                <i class="fas fa-save mr-2"></i> {{ $classified->exists ? __('SYNCHRONIZE RECORD') : __('INITIALIZE LISTING') }}
+        <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-submit-premium btn-block py-3 rounded-xl font-weight-bold mb-3" style="font-size: 0.9rem; letter-spacing: 0.5px;">
+                <i class="fas fa-check-circle mr-2"></i> 
+                {{ $classified->exists ? 'SAVE CHANGES' : 'PUBLISH LISTING' }}
             </button>
+            
+            <div class="row no-gutters">
+                <div class="col-6 pr-1">
+                    <a href="{{ route('admin.classifieds.index') }}" class="btn btn-light btn-block py-2 rounded-lg text-muted small font-weight-bold">
+                        <i class="fas fa-times mr-1"></i> Cancel
+                    </a>
+                </div>
+                <div class="col-6 pl-1">
+                    @if($classified->exists)
+                        <button type="button" class="btn btn-outline-danger btn-block py-2 rounded-lg small font-weight-bold" onclick="triggerDelete()">
+                            <i class="fas fa-trash-alt mr-1"></i> Delete
+                        </button>
+                    @else
+                        <button type="button" class="btn btn-light btn-block py-2 rounded-lg text-muted small font-weight-bold opacity-50" disabled>
+                            <i class="fas fa-trash-alt mr-1"></i> Delete
+                        </button>
+                    @endif
+                </div>
+            </div>
 
             @if($classified->exists)
-                <div class="d-flex" style="gap: 8px;">
-                    <button type="button" class="btn btn-light flex-grow-1 rounded-pill font-weight-bold smallest py-2 text-muted border">
-                        <i class="fas fa-copy mr-1"></i> {{ __('CLONE') }}
-                    </button>
-                    <button type="button" class="btn btn-light flex-grow-1 rounded-pill font-weight-bold smallest py-2 text-danger border" onclick="triggerDelete()">
-                        <i class="fas fa-trash-alt mr-1"></i> {{ __('PURGE') }}
-                    </button>
+                <div class="mt-3">
+                    @if(Route::has('admin.classifieds.duplicate'))
+                        <a href="{{ route('admin.classifieds.duplicate', $classified->id) }}" class="btn btn-link btn-block text-primary small font-weight-bold p-0">
+                            <i class="fas fa-copy mr-1"></i> Duplicate this listing
+                        </a>
+                    @endif
                 </div>
             @endif
         </div>
     </div>
 </div>
+
+<style>
+    .rounded-xl { border-radius: 16px !important; }
+    .rounded-lg { border-radius: 12px !important; }
+    .letter-spacing-1 { letter-spacing: 1px !important; }
+</style>

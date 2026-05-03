@@ -146,15 +146,15 @@
                                 </td>
 
                                 <td class="text-right align-middle px-4">
-                                    <div class="btn-group btn-group-premium shadow-sm">
+                                    <div class="btn-group btn-group-premium shadow-xs rounded-pill border overflow-hidden">
                                         <a href="{{ route('admin.plans.edit', $plan->id) }}" 
-                                           class="btn btn-default btn-sm text-info" 
+                                           class="btn btn-white btn-sm text-info py-2 px-3 border-right" 
                                            data-toggle="tooltip" title="Modify Plan">
                                             <i class="fas fa-pencil-alt"></i>
                                         </a>
                                         <form action="{{ route('admin.plans.destroy', $plan->id) }}" method="POST" class="d-inline">
                                             @csrf @method('DELETE')
-                                            <button type="submit" class="btn btn-default btn-sm text-danger" 
+                                            <button type="submit" class="btn btn-white btn-sm text-danger py-2 px-3" 
                                                     data-toggle="tooltip" title="Delete Plan"
                                                     onclick="return confirm('Permanently delete the {{ $plan->title }} plan?')">
                                                 <i class="fas fa-trash-alt"></i>

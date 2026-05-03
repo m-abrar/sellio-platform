@@ -173,12 +173,12 @@
                                     <label class="w-100 cursor-pointer mb-0">
                                         <input type="hidden" name="{{ $t['name'] }}" value="0">
                                         <input type="checkbox" name="{{ $t['name'] }}" value="1" id="{{ $t['id'] }}" class="d-none toggle-input" {{ $t['checked'] ? 'checked' : '' }}>
-                                        <div class="border rounded px-3 py-3 d-flex justify-content-between align-items-center h-100 toggle-card shadow-sm">
+                                        <div class="d-flex justify-content-between align-items-center h-100 toggle-card shadow-sm px-3 py-3">
                                             <div>
                                                 <div class="font-weight-bold text-dark small">{{ $t['label'] }}</div>
                                                 <div class="small toggle-status text-muted">{{ $t['status'] ?? 'Option' }}</div>
                                             </div>
-                                            <div class="toggle-indicator"></div>
+                                            <div class="toggle-indicator shadow-sm"></div>
                                         </div>
                                     </label>
                                 </div>
@@ -192,6 +192,27 @@
             <div class="col-md-4">
                 {{-- Action Card --}}
                 @include('admin.classifieds.partials.action-buttons')
+
+                {{-- Listing Controls --}}
+                <div class="card card-premium mb-4 overflow-hidden">
+                    <div class="card-header bg-white border-0 py-3 px-4">
+                        <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
+                            <i class="fas fa-toggle-on mr-2 text-primary opacity-50"></i> Listing Controls
+                        </h3>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="custom-control custom-switch custom-switch-premium mb-3">
+                            <input type="hidden" name="is_published" value="0">
+                            <input type="checkbox" name="is_published" value="1" class="custom-control-input" id="isPublished" {{ old('is_published', $classified->is_published ?? true) ? 'checked' : '' }}>
+                            <label class="custom-control-label font-weight-bold text-dark small" for="isPublished">Publicly Visible</label>
+                        </div>
+                        <div class="custom-control custom-switch custom-switch-premium">
+                            <input type="hidden" name="is_featured" value="0">
+                            <input type="checkbox" name="is_featured" value="1" class="custom-control-input" id="isFeatured" {{ old('is_featured', $classified->is_featured ?? false) ? 'checked' : '' }}>
+                            <label class="custom-control-label font-weight-bold text-dark small" for="isFeatured">Featured Listing</label>
+                        </div>
+                    </div>
+                </div>
 
                 {{-- Primary Media --}}
                 <div class="card card-premium mb-4 overflow-hidden">

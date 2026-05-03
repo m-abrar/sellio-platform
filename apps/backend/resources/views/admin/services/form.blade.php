@@ -39,7 +39,7 @@
             {{-- Main Content Column --}}
             <div class="col-md-8">
                 {{-- Basic Information --}}
-                <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
+                <div class="card card-premium overflow-hidden">
                     <div class="card-header border-0 bg-white py-3 px-4">
                         <h3 class="card-title font-weight-bold text-dark text-uppercase small" style="letter-spacing: 1px;">General Information</h3>
                     </div>
@@ -69,7 +69,7 @@
                 </div>
 
                 {{-- Schedule & Terms --}}
-                <div class="card shadow-premium border-0 overflow-hidden mt-4" style="border-radius: 20px;">
+                <div class="card card-premium overflow-hidden mt-4">
                     <div class="card-header border-0 bg-white py-3 px-4">
                         <h3 class="card-title font-weight-600 text-muted small text-uppercase" style="letter-spacing: 1px;">Operating Hours & Capacity</h3>
                     </div>
@@ -98,7 +98,7 @@
                 </div>
 
                 {{-- Pricing --}}
-                <div class="card shadow-premium border-0 overflow-hidden mt-4" style="border-radius: 20px;">
+                <div class="card card-premium overflow-hidden mt-4">
                     <div class="card-header border-0 bg-white py-3 px-4">
                         <h3 class="card-title font-weight-600 text-muted small text-uppercase" style="letter-spacing: 1px;">Pricing Setup</h3>
                     </div>
@@ -117,7 +117,7 @@
 
 
                 {{-- Gallery --}}
-                <div class="card shadow-premium border-0 overflow-hidden mt-4" style="border-radius: 20px;">
+                <div class="card card-premium overflow-hidden mt-4">
                     <div class="card-header border-0 bg-white py-3 px-4">
                         <h3 class="card-title font-weight-600 text-muted small text-uppercase" style="letter-spacing: 1px;">Service Gallery Photos</h3>
                     </div>
@@ -135,7 +135,7 @@
 
                 @if($service->exists)
                 {{-- Recent Quotes --}}
-                <div class="card border-0 shadow-premium overflow-hidden mt-4" style="border-radius: 24px;">
+                <div class="card card-premium overflow-hidden mt-4">
                     <div class="card-header border-0 bg-white py-4 px-4 d-flex justify-content-between align-items-center">
                         <h3 class="card-title font-weight-bold text-dark mb-0"><i class="fas fa-file-invoice-dollar mr-2 text-info opacity-50"></i> Recent Leads/Quotes</h3>
                     </div>
@@ -156,7 +156,7 @@
                 </div>
                 @endif
                 {{-- Display & Billing Options --}}
-                <div class="card shadow-premium border-0 mt-4 overflow-hidden" style="border-radius: 20px;">
+                <div class="card card-premium mt-4 overflow-hidden">
                     <div class="card-header border-0 bg-white py-3 px-4">
                         <h3 class="card-title font-weight-bold text-dark text-uppercase small" style="letter-spacing: 1px;"><i class="fas fa-cog mr-2 text-secondary"></i> Display & Billing Options</h3>
                     </div>
@@ -173,12 +173,12 @@
                                     <label class="w-100 cursor-pointer mb-0">
                                         <input type="hidden" name="{{ $t['name'] }}" value="0">
                                         <input type="checkbox" name="{{ $t['name'] }}" value="1" id="{{ $t['id'] }}" class="d-none toggle-input" {{ $t['checked'] ? 'checked' : '' }}>
-                                        <div class="border rounded px-3 py-3 d-flex justify-content-between align-items-center h-100 toggle-card shadow-sm">
+                                        <div class="d-flex justify-content-between align-items-center h-100 toggle-card shadow-sm px-3 py-3">
                                             <div>
                                                 <div class="font-weight-bold text-dark small">{{ $t['label'] }}</div>
                                                 <div class="small toggle-status text-muted">{{ $t['status'] ?? 'Option' }}</div>
                                             </div>
-                                            <div class="toggle-indicator"></div>
+                                            <div class="toggle-indicator shadow-sm"></div>
                                         </div>
                                     </label>
                                 </div>
@@ -193,8 +193,29 @@
                 {{-- Action Card --}}
                 @include('admin.services.partials.action-buttons')
 
+                {{-- Listing Controls --}}
+                <div class="card card-premium mb-4 overflow-hidden">
+                    <div class="card-header bg-white border-0 py-3 px-4">
+                        <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
+                            <i class="fas fa-toggle-on mr-2 text-primary opacity-50"></i> Listing Controls
+                        </h3>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="custom-control custom-switch custom-switch-premium mb-3">
+                            <input type="hidden" name="is_published" value="0">
+                            <input type="checkbox" name="is_published" value="1" class="custom-control-input" id="isPublished" {{ old('is_published', $service->is_published ?? true) ? 'checked' : '' }}>
+                            <label class="custom-control-label font-weight-bold text-dark small" for="isPublished">Publicly Visible</label>
+                        </div>
+                        <div class="custom-control custom-switch custom-switch-premium">
+                            <input type="hidden" name="is_featured" value="0">
+                            <input type="checkbox" name="is_featured" value="1" class="custom-control-input" id="isFeatured" {{ old('is_featured', $service->is_featured ?? false) ? 'checked' : '' }}>
+                            <label class="custom-control-label font-weight-bold text-dark small" for="isFeatured">Featured Listing</label>
+                        </div>
+                    </div>
+                </div>
+
                 {{-- Primary Media --}}
-                <div class="card border-0 shadow-premium mb-4" style="border-radius: 20px; overflow: hidden;">
+                <div class="card card-premium mb-4 overflow-hidden">
                     <div class="card-header bg-white border-0 py-3 px-4">
                         <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
                             <i class="fas fa-camera mr-2 text-primary opacity-50"></i> Visual Identity
@@ -213,7 +234,7 @@
                 </div>
 
                 {{-- Classification --}}
-                <div class="card border-0 shadow-premium mb-4 overflow-hidden" style="border-radius: 20px;">
+                <div class="card card-premium mb-4 overflow-hidden">
                     <div class="card-header bg-white border-0 py-3 px-4">
                         <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
                             <i class="fas fa-sitemap mr-2 text-primary opacity-50"></i> Classification

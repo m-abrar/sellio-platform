@@ -112,23 +112,22 @@
                                 </td>
 
                                 <td class="text-right align-middle px-4">
-                                    <div class="btn-group btn-group-premium shadow-sm">
-                                        {{-- ADDED: Show Link --}}
+                                    <div class="btn-group btn-group-premium shadow-xs rounded-pill border overflow-hidden">
                                         <a href="{{ route('admin.advertisements.show', $advertisement) }}" 
-                                           class="btn btn-default btn-sm text-primary" 
+                                           class="btn btn-white btn-sm text-primary py-2 px-3 border-right" 
                                            data-toggle="tooltip" title="View Details">
                                             <i class="fas fa-search"></i>
                                         </a>
 
                                         <a href="{{ route('admin.advertisements.edit', $advertisement) }}" 
-                                           class="btn btn-default btn-sm text-info" 
+                                           class="btn btn-white btn-sm text-info py-2 px-3 border-right" 
                                            data-toggle="tooltip" title="Modify Creative">
                                             <i class="fas fa-pencil-alt"></i>
                                         </a>
 
                                         <form action="{{ route('admin.advertisements.destroy', $advertisement) }}" method="POST" class="d-inline">
                                             @csrf @method('DELETE')
-                                            <button type="submit" class="btn btn-default btn-sm text-danger" 
+                                            <button type="submit" class="btn btn-white btn-sm text-danger py-2 px-3" 
                                                     data-toggle="tooltip" title="Archive Campaign"
                                                     onclick="return confirm('Archive this advertisement campaign?')">
                                                 <i class="fas fa-trash-alt"></i>

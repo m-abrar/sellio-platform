@@ -22,6 +22,10 @@
     </div>
 @stop
 
+@section('css')
+@include('admin._partials._toggle-card-css')
+@endsection
+
 @section('content')
 <div class="container-fluid">
     @include('admin.alert')
@@ -99,8 +103,8 @@
                         @forelse ($autos as $auto)
                             <tr>
                                 <td class="text-center align-middle">
-                                    <div class="table-img-preview shadow-xs">
-                                        <img src="{{ $auto->thumbnail_url ?? asset('images/placeholder.png') }}">
+                                    <div class="table-img-preview shadow-xs rounded-lg overflow-hidden border" style="width: 50px; height: 50px; margin: 0 auto;">
+                                        <img src="{{ $auto->thumbnail_url ?? asset('images/placeholder.png') }}" style="width: 100%; height: 100%; object-fit: cover;">
                                     </div>
                                 </td>
                                 
@@ -109,7 +113,7 @@
                                         <div>
                                             <span class="d-block font-weight-bold text-dark mb-0">{{ $auto->title }}</span>
                                             <div class="d-flex align-items-center mt-1">
-                                                <small class="badge badge-light border text-muted mr-2">ID: {{ $auto->id }}</small>
+                                                <small class="badge badge-secondary-light mr-2" style="font-size: 0.65rem;">ID: {{ $auto->id }}</small>
                                                 <small class="text-muted">
                                                     <i class="fas fa-user mr-1"></i> {{ $auto->user->name ?? 'Admin' }}
                                                 </small>
@@ -120,41 +124,42 @@
 
                                 <td class="align-middle">
                                     <span class="d-block font-weight-600 text-sm text-dark">{{ $auto->brand->name ?? 'Unknown' }}</span>
-                                    <small class="text-muted">Model: {{ $auto->model ?? 'N/A' }} | Year: {{ $auto->year ?? 'N/A' }}</small>
+                                    <small class="text-muted text-xs">Model: {{ $auto->model ?? 'N/A' }} | Year: {{ $auto->year ?? 'N/A' }}</small>
                                 </td>
 
                                 <td class="align-middle">
                                     @if($auto->is_lease)
-                                        <span class="badge badge-warning-light px-2 py-1">LEASE</span>
-                                        <div class="small font-weight-bold mt-1">{{ setting('currency_symbol', '$') }}{{ number_format($auto->base_price, 2) }} / mo</div>
+                                        <span class="badge badge-premium badge-warning-light">LEASE</span>
+                                        <div class="small font-weight-bold mt-1 text-dark">{{ setting('currency_symbol', '$') }}{{ number_format($auto->base_price, 2) }} / mo</div>
                                     @else
-                                        <span class="badge badge-danger-light px-2 py-1">SALE</span>
-                                        <div class="small font-weight-bold mt-1">{{ setting('currency_symbol', '$') }}{{ number_format($auto->base_price, 2) }}</div>
+                                        <span class="badge badge-premium badge-danger-light">SALE</span>
+                                        <div class="small font-weight-bold mt-1 text-dark">{{ setting('currency_symbol', '$') }}{{ number_format($auto->base_price, 2) }}</div>
                                     @endif
                                 </td>
 
-                                <td class="align-middle small">
+                                <td class="align-middle small text-muted">
+                                    <i class="fas fa-tachometer-alt mr-1"></i>
                                     {{ $auto->mileage_value ?? 0 }} {{ $auto->mileage_units ?? 'km' }}
                                 </td>
 
                                 <td class="align-middle">
                                     <div class="mb-1">
                                         @if ($auto->is_published && $auto->approved_at)
-                                            <span class="badge badge-success-light px-2 py-1 text-uppercase" style="font-size: 0.65rem;">Active</span>
+                                            <span class="badge badge-premium badge-success-light">Active</span>
                                         @elseif ($auto->is_published && !$auto->approved_at)
-                                            <span class="badge badge-warning-light px-2 py-1 text-uppercase" style="font-size: 0.65rem;">Pending</span>
+                                            <span class="badge badge-premium badge-warning-light">Pending</span>
                                         @else
-                                            <span class="badge badge-secondary-light px-2 py-1 text-uppercase" style="font-size: 0.65rem;">Draft</span>
+                                            <span class="badge badge-premium badge-secondary-light">Draft</span>
                                         @endif
                                     </div>
                                 </td>
 
                                 <td class="text-right align-middle px-4">
-                                    <div class="btn-group btn-group-premium shadow-sm">
-                                        <a href="{{ route('admin.autos.edit', $auto->id) }}" class="btn btn-default btn-sm text-info"><i class="fas fa-pencil-alt"></i></a>
+                                    <div class="btn-group btn-group-premium shadow-sm rounded-pill border overflow-hidden bg-white">
+                                        <a href="{{ route('admin.autos.edit', $auto->id) }}" class="btn btn-white btn-sm text-info py-2 px-3 border-right" data-toggle="tooltip" title="Edit"><i class="fas fa-pencil-alt"></i></a>
                                         <form action="{{ route('admin.autos.destroy', $auto->id) }}" method="POST" class="d-inline">
                                             @csrf @method('DELETE')
-                                            <button type="submit" class="btn btn-default btn-sm text-danger" onclick="return confirm('Permanently delete this auto listing?')"><i class="fas fa-trash-alt"></i></button>
+                                            <button type="submit" class="btn btn-white btn-sm text-danger py-2 px-3" data-toggle="tooltip" title="Delete" onclick="return confirm('Permanently delete this auto listing?')"><i class="fas fa-trash-alt"></i></button>
                                         </form>
                                     </div>
                                 </td>
