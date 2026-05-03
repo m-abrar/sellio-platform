@@ -3,7 +3,7 @@
 @section('title', __('Product Orders'))
 
 @section('content_header')
-    <div class="container-fluid">
+    <div class="container-fluid pt-4">
         <div class="row mb-4 align-items-end">
             <div class="col-sm-6">
                 <h1 class="m-0 text-dark font-weight-bold">
@@ -79,8 +79,8 @@
         @include('admin.alert')
 
         {{-- Premium Filter Card --}}
-        <div class="card card-outline card-secondary shadow-sm mb-4">
-            <div class="card-body py-3">
+        <div class="card border-0 shadow-premium mb-4" style="border-radius: 20px;">
+            <div class="card-body py-4 px-4">
                 <form method="GET" action="{{ route('admin.product-orders.index') }}" class="row align-items-end justify-content-center">
                     <div class="col-auto">
                         <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Order #</label>
@@ -121,9 +121,9 @@
         </div>
 
         {{-- Main Table --}}
-        <div class="card card-primary card-outline shadow-sm">
-            <div class="card-header border-0 bg-white py-3 d-flex justify-content-between align-items-center">
-                <h3 class="card-title font-weight-600 text-muted"><i class="fas fa-list mr-1 text-primary"></i> {{ __('All Orders') }}</h3>
+        <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
+            <div class="card-header border-0 bg-white py-4 px-4 d-flex justify-content-between align-items-center">
+                <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">{{ __('All Orders') }}</h3>
                 <div id="bulk-actions-container" class="d-none animate__animated animate__fadeIn">
                     <div class="dropdown d-inline-block">
                         <button class="btn btn-primary btn-sm dropdown-toggle rounded-pill px-4 shadow-sm" type="button" data-toggle="dropdown">

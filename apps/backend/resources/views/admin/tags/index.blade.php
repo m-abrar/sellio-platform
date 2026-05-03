@@ -6,14 +6,17 @@
 @section('plugins.Datatables', true)
 
 @section('content_header')
-    <div class="container-fluid">
-        <div class="row mb-4 align-items-end">
-            <div class="col-sm-6">
+    <div class="container-fluid pt-4">
+        <div class="row mb-4 align-items-center">
+            <div class="col-md-8">
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-tags mr-2 text-primary"></i> Listing Tags
                 </h1>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">
+                    Manage high-level classification labels for quick filtering and discovery.
+                </p>
             </div>
-            <div class="col-sm-6 text-right">
+            <div class="col-md-4 text-right">
                 <a href="{{ route('admin.tags.create') }}" class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-premium">
                     <i class="fas fa-plus-circle mr-1"></i> ADD TAG
                 </a>

@@ -3,7 +3,7 @@
 @section('title', __('Order Details') . ' #' . $order->order_number)
 
 @section('content_header')
-    <div class="container-fluid">
+    <div class="container-fluid pt-4">
         <div class="row mb-4 align-items-center">
             <div class="col-sm-6">
                 <h1 class="m-0 text-dark font-weight-bold">

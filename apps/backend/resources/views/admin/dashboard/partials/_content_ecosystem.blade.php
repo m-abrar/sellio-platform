@@ -51,7 +51,7 @@
                 </div>
                 @endforeach
             </div>
-            <div class="card-footer bg-white bg-opacity-10 border-0 text-center py-3">
+            <div class="card-footer border-0 text-center py-3" style="background: rgba(0,0,0,0.2) !important;">
                 <p class="mb-0 smallest text-white-50 font-weight-bold uppercase letter-spacing-1">Secured Operational Stream</p>
             </div>
         </div>

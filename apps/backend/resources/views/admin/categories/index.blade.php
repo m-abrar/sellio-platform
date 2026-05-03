@@ -7,12 +7,15 @@
 @section('content_header')
     <div class="container-fluid">
         <div class="row mb-4 align-items-center">
-            <div class="col-sm-8">
+            <div class="col-md-8">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-tags mr-2 text-primary"></i> Taxonomy Architecture
+                    <i class="fas fa-folder-open mr-2 text-primary"></i> Taxonomy Architecture
                 </h1>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">
+                    Organize platform listings into a logical hierarchy and taxonomy.
+                </p>
             </div>
-            <div class="col-sm-4 text-right">
+            <div class="col-md-4 text-right">
                 <a href="{{ route('admin.categories.create') }}" class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-premium">
                     <i class="fas fa-plus-circle mr-1"></i> ADD CATEGORY
                 </a>
@@ -43,17 +46,17 @@
                 <table id="categories-table" class="table table-hover table-premium mb-0">
                     <thead class="thead-light">
                         <tr>
-                            <th class="text-center pl-4" style="width: 80px;">Icon</th>
+                            <th class="text-center" style="width: 80px;">Icon</th>
                             <th>Segment Identity</th>
                             <th>Module Applicability Spectrum</th>
                             <th class="text-right">Lifecycle</th>
-                            <th class="text-right pr-4">Actions</th>
+                            <th class="text-right px-4">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse ($categories as $category)
                             <tr>
-                                <td class="text-center align-middle pl-4">
+                                <td class="text-center align-middle">
                                     <div class="table-img-preview shadow-xs rounded-lg overflow-hidden border" style="width: 45px; height: 45px; margin: auto;">
                                         <img src="{{ $category->thumbnail_url }}" alt="{{ $category->title }}" class="w-100 h-100 object-fit-cover">
                                     </div>
@@ -119,7 +122,7 @@
                                     @endif
                                 </td>
 
-                                <td class="text-right align-middle pr-4">
+                                <td class="text-right align-middle px-4">
                                     <div class="btn-group btn-group-premium shadow-xs rounded-pill border overflow-hidden">
                                         <a href="{{ route('admin.categories.edit', $category->id) }}" 
                                            class="btn btn-white btn-sm text-info py-2 px-3 border-right" 
@@ -159,7 +162,15 @@
 </div>
 @endsection
 
-@push('js')
+@section('css')
+<style>
+    .dataTables_filter { float: left !important; text-align: left !important; }
+    .dataTables_filter input { margin-left: 0 !important; }
+    .dataTables_length { float: right !important; text-align: right !important; }
+</style>
+@endsection
+
+@section('js')
     <script>
         $(function () {
             if ($('#categories-table tbody tr:not(.empty-state)').length > 0) {
@@ -192,4 +203,4 @@
             $('[data-toggle="tooltip"]').tooltip();
         });
     </script>
-@endpush
+@stop

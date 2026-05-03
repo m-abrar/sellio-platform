@@ -3,7 +3,7 @@
 @section('title', $transaction->exists ? 'Edit Transaction' : 'Add Transaction')
 
 @section('content_header')
-    <div class="container-fluid">
+    <div class="container-fluid pt-4">
         <div class="row mb-2">
             <div class="col-sm-6">
                      {{ $transaction->exists ? 'Edit Transaction' : 'Add Transaction' }}

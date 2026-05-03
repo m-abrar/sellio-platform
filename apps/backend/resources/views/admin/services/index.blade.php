@@ -5,16 +5,17 @@
 @section('plugins.Datatables', true)
 
 @section('content_header')
-    <div class="container-fluid">
-        <div class="row mb-2">
-            <div class="col-sm-6">
+    <div class="container-fluid pt-4">
+        <div class="row mb-4 align-items-center">
+            <div class="col-sm-8">
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-concierge-bell mr-2 text-primary"></i> Service Listings
                 </h1>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Manage professional service offerings and appointment configurations.</p>
             </div>
-            <div class="col-sm-6 text-right">
-                <a href="{{ route('admin.services.create') }}" class="btn btn-primary btn-flat shadow-sm">
-                    <i class="fas fa-plus mr-1"></i> Add Service
+            <div class="col-sm-4 text-right">
+                <a href="{{ route('admin.services.create') }}" class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-premium">
+                    <i class="fas fa-plus-circle mr-1"></i> ADD SERVICE
                 </a>
             </div>
         </div>
@@ -26,8 +27,8 @@
     @include('admin.alert')
 
     {{-- Premium Filter Card --}}
-    <div class="card card-outline card-secondary shadow-sm mb-4">
-        <div class="card-body py-4">
+    <div class="card border-0 shadow-premium mb-4" style="border-radius: 20px;">
+        <div class="card-body py-4 px-4">
             <form action="{{ route('admin.services.index') }}" method="GET">
                 <div class="row align-items-end">
                     <div class="col-md-4">
@@ -62,10 +63,10 @@
     </div>
 
     {{-- Table Card --}}
-    <div class="card card-primary card-outline shadow-sm">
-        <div class="card-header border-0 bg-white py-3">
-            <h3 class="card-title font-weight-600 text-muted">Our Services</h3>
-            <div class="card-tools">
+    <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
+        <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
+            <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">Service Catalog</h3>
+            <div class="card-tools d-flex align-items-center ml-auto">
                 <button type="button" class="btn btn-tool" data-card-widget="maximize">
                     <i class="fas fa-expand"></i>
                 </button>

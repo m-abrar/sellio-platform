@@ -5,14 +5,17 @@
 @section('plugins.Datatables', true)
 
 @section('content_header')
-    <div class="container-fluid">
+    <div class="container-fluid pt-4">
         <div class="row mb-4 align-items-center">
-            <div class="col-sm-8">
+            <div class="col-md-8">
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-map-marker-alt mr-2 text-primary"></i> Geographic Areas
                 </h1>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">
+                    Manage regional operational hubs and service availability boundaries.
+                </p>
             </div>
-            <div class="col-sm-4 text-right">
+            <div class="col-md-4 text-right">
                 <a href="{{ route('admin.locations.create') }}" class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-premium">
                     <i class="fas fa-plus-circle mr-1"></i> ADD LOCATION
                 </a>

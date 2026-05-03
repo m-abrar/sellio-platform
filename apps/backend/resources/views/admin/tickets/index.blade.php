@@ -3,7 +3,7 @@
 @section('title', 'Support Tickets | Admin Ops')
 
 @section('content_header')
-    <div class="container-fluid">
+    <div class="container-fluid pt-4">
         <div class="row align-items-center mb-4">
             <div class="col-sm-7">
                 <h1 class="m-0 text-dark font-weight-bold d-inline-block">

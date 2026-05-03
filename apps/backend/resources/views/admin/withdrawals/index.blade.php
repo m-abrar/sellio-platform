@@ -5,7 +5,7 @@
 @section('plugins.Datatables', true)
 
 @section('content_header')
-    <div class="container-fluid">
+    <div class="container-fluid pt-4">
         <div class="row mb-4 align-items-end">
             <div class="col-sm-6">
                 <h1 class="m-0 text-dark font-weight-bold">
@@ -56,9 +56,9 @@
     </div>
 
     <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
-        <div class="card-header border-0 bg-white py-4 px-4">
-            <h3 class="card-title font-weight-bold text-dark mb-0">
-                <i class="fas fa-stream mr-2 text-primary opacity-50"></i> {{ ucfirst($filter_status) }} Requests
+        <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
+            <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">
+                {{ ucfirst($filter_status) }} Requests
             </h3>
         </div>
 

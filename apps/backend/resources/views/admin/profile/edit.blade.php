@@ -3,7 +3,7 @@
 @section('title', 'Account Intelligence | Personal Settings')
 
 @section('content_header')
-    <div class="container-fluid">
+    <div class="container-fluid pt-4">
         <div class="row mb-4 align-items-center">
             <div class="col-sm-8 d-flex align-items-center">
                 <div class="avatar-wrapper mr-4 position-relative">

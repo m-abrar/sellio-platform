@@ -175,3 +175,30 @@ Let's make all of the create/edit forms UIUX symmetry for the following pages
 ------------------------------
 
 
+Scan these pages for UIUX consistency and fix (also restore the short description below the heading)
+Fix the top spacing for all page headings from top to be consistent.
+
+- [x] Listings
+
+- [x] All Unified
+
+- [x] Pending Approval
+
+- [x] Products
+
+- [x] Properties
+
+- [x] Autos
+
+- [x] Events
+
+- [x] Jobs
+
+- [x] Services
+
+- [x] Classifieds
+
+
+http://127.0.0.1:8000/admin/products
+
+is this consistent layout with other pages?

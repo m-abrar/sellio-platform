@@ -3,7 +3,7 @@
 @section('title', $location->exists ? 'Edit Location' : 'Add Location')
 
 @section('content_header')
-    <div class="container-fluid">
+    <div class="container-fluid pt-4">
         <div class="row mb-2">
             <div class="col-sm-6">
                      {{ $location->exists ? 'Edit Location' : 'Add Location' }}

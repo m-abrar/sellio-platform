@@ -5,12 +5,13 @@
 @section('plugins.Datatables', true)
 
 @section('content_header')
-    <div class="container-fluid">
+    <div class="container-fluid pt-4">
         <div class="row mb-4 align-items-center">
             <div class="col-sm-8">
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-boxes mr-2 text-primary"></i> Inventory & Products
                 </h1>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Manage retail inventory, product pricing, and stock levels.</p>
             </div>
             <div class="col-sm-4 text-right">
                 <a href="{{ route('admin.products.create') }}" class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-premium">
@@ -26,8 +27,8 @@
     @include('admin.alert')
 
     {{-- Premium Filter Card --}}
-    <div class="card card-outline card-secondary shadow-sm mb-4">
-        <div class="card-body py-4">
+    <div class="card border-0 shadow-premium mb-4" style="border-radius: 20px;">
+        <div class="card-body py-4 px-4">
             <form action="{{ route('admin.products.index') }}" method="GET">
                 <div class="row align-items-end">
                     <div class="col-md-3">
@@ -73,7 +74,7 @@
         </div>
     </div>
 
-    <div class="card card-primary card-outline shadow-sm">
+    <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
             <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">Product Catalog</h3>
             <div class="card-tools d-flex align-items-center ml-auto">

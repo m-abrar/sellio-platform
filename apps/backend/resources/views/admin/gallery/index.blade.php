@@ -3,7 +3,7 @@
 @section('title', 'Global Media Manager | Admin Assets')
 
 @section('content_header')
-    <div class="container-fluid">
+    <div class="container-fluid pt-4">
         <div class="row mb-4 align-items-end">
             <div class="col-sm-6">
                 <h1 class="m-0 text-dark font-weight-bold">
