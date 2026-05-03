@@ -7,11 +7,12 @@
         <div class="row mb-4 align-items-center">
             <div class="col-sm-8 d-flex align-items-center">
                 <div class="avatar-wrapper mr-4 position-relative">
+                    <div class="avatar-glow position-absolute" style="top: -5px; left: -5px; right: -5px; bottom: -5px; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); border-radius: 50%; opacity: 0.15; filter: blur(8px);"></div>
                     <img src="{{ $user->getFirstMediaUrl(\App\Models\User::PRIMARY_MEDIA) ?: asset('images/fallbacks/avatar.jpg') }}" 
                          alt="Avatar" 
-                         class="rounded-circle shadow-premium border-white border-4" 
-                         style="width: 80px; height: 80px; object-fit: cover;">
-                    <div class="status-indicator bg-success position-absolute" style="width: 15px; height: 15px; border-radius: 50%; bottom: 5px; right: 5px; border: 2px solid #fff;"></div>
+                         class="rounded-circle shadow-lg border-white border-4 position-relative" 
+                         style="width: 100px; height: 100px; object-fit: cover; z-index: 1;">
+                    <div class="status-indicator bg-success position-absolute shadow-sm" style="width: 18px; height: 18px; border-radius: 50%; bottom: 8px; right: 8px; border: 3px solid #fff; z-index: 2;"></div>
                 </div>
                 <div>
                     <h1 class="m-0 text-dark font-weight-bold">

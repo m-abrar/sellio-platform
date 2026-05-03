@@ -15,7 +15,7 @@
             </div>
             <div class="col-sm-4 text-right">
                 <a href="{{ route('admin.welcome') }}" class="btn btn-back shadow-sm">
-                    <i class="fas fa-arrow-left mr-1"></i> Dashboard
+                    <i class="fas fa-arrow-left"></i> BACK TO DASHBOARD
                 </a>
             </div>
         </div>

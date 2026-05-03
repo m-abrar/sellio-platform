@@ -108,7 +108,7 @@
     .card-premium {
         border-radius: 24px !important;
         border: none !important;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04) !important;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02) !important;
         transition: transform 0.3s ease, box-shadow 0.3s ease;
         background: #fff !important;
     }
@@ -523,7 +523,11 @@
 
     /* Premium Shadow Utility - Note: Removed from submit buttons */
     .shadow-premium {
-        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.03) !important;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02) !important;
+    }
+    
+    .shadow-sm {
+        box-shadow: 0 .125rem .25rem rgba(0,0,0,.02) !important;
     }
     
     .shadow-premium-lg {
@@ -545,36 +549,38 @@
     /* Premium Back Button */
     .btn-back {
         background: #fff !important;
-        color: #64748b !important;
-        border: 1.5px solid #edf2f7 !important;
-        border-radius: 12px !important;
-        padding: 0.6rem 1.2rem !important;
-        font-weight: 700 !important;
-        font-size: 0.75rem !important;
+        color: #475569 !important;
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 100px !important;
+        padding: 0.55rem 1.4rem !important;
+        font-weight: 800 !important;
+        font-size: 0.65rem !important;
         text-transform: uppercase !important;
-        letter-spacing: 0.8px !important;
-        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+        letter-spacing: 1.2px !important;
+        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
         display: inline-flex !important;
         align-items: center !important;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05) !important;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02) !important;
     }
 
     .btn-back:hover {
-        background: #f8fafc !important;
+        background: #fff !important;
         color: var(--primary) !important;
-        border-color: var(--primary-soft) !important;
-        transform: translateX(-4px) !important;
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
+        border-color: var(--primary) !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 10px 20px rgba(var(--primary-rgb), 0.1) !important;
+        padding-right: 1.6rem !important;
     }
 
     .btn-back i {
-        margin-right: 8px;
-        transition: transform 0.3s ease;
-        font-size: 0.8rem;
+        margin-right: 10px;
+        transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        font-size: 0.75rem;
+        color: var(--primary);
     }
 
     .btn-back:hover i {
-        transform: translateX(-3px);
+        transform: translateX(-5px) scale(1.1);
     }
 
     /* Premium Input Groups */

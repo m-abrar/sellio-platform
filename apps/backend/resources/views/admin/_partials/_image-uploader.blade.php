@@ -46,14 +46,14 @@
             </p>
         </div>
 
-        <div class="mt-4 d-flex flex-wrap justify-content-center" id="{{ $name }}-preview" style="gap: 12px;">
+        <div class="mt-4 d-flex flex-wrap justify-content-center" id="{{ $name }}-preview" style="gap: 16px;">
             @foreach($imageUrls as $img)
                 <div class="image-container position-relative group">
-                    <img src="{{ $img }}" class="img-thumbnail border-0 shadow-premium rounded-lg" style="width: 100px; height: 100px; object-fit: cover;">
-                    <button type="button" class="btn btn-danger btn-xs remove-image position-absolute" 
-                            style="top: -8px; right: -8px; border-radius: 50%; width: 24px; height: 24px; padding: 0;"
+                    <img src="{{ $img }}" class="img-thumbnail border-0 shadow-premium rounded-xl" style="width: 110px; height: 110px; object-fit: cover; transition: all 0.3s ease;">
+                    <button type="button" class="btn btn-danger btn-xs remove-image position-absolute d-flex align-items-center justify-content-center shadow-sm" 
+                            style="top: -8px; right: -8px; border-radius: 50%; width: 26px; height: 26px; padding: 0; border: 2px solid #fff; transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);"
                             data-image="{{ $img }}">
-                        <i class="fas fa-times"></i>
+                        <i class="fas fa-times smallest"></i>
                     </button>
                 </div>
             @endforeach
@@ -67,14 +67,27 @@
 
 <style>
     .border-dashed { border-style: dashed !important; transition: all 0.3s ease; }
-    .dropzone:hover { border-color: var(--primary) !important; background: rgba(70, 165, 172, 0.05) !important; }
+    .dropzone { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important; }
+    .dropzone:hover { 
+        border-color: var(--primary) !important; 
+        background: rgba(var(--primary-rgb), 0.05) !important; 
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(var(--primary-rgb), 0.05);
+    }
     .rounded-xl { border-radius: 16px !important; }
     .image-container .remove-image { 
         opacity: 0; 
-        transition: all 0.2s ease;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        transform: scale(0.8);
+        transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
-    .image-container:hover .remove-image { opacity: 1; transform: scale(1.1); }
+    .image-container:hover .remove-image { 
+        opacity: 1; 
+        transform: scale(1); 
+    }
+    .image-container:hover img {
+        filter: brightness(0.9);
+        transform: scale(1.02);
+    }
 </style>
 
 
@@ -114,14 +127,16 @@
                     }
 
                     let imageHtml = `
-                        <div class="image-container d-inline-block position-relative">
-                            <img src="${data.url}" class="img-thumbnail shadow-sm rounded">
-                            <button type="button" class="btn btn-danger btn-sm remove-image" data-image="${data.url}">
-                                <i class="fas fa-trash-alt"></i>
+                        <div class="image-container position-relative group">
+                            <img src="${data.url}" class="img-thumbnail border-0 shadow-premium rounded-xl" style="width: 110px; height: 110px; object-fit: cover; transition: all 0.3s ease;">
+                            <button type="button" class="btn btn-danger btn-xs remove-image position-absolute d-flex align-items-center justify-content-center shadow-sm" 
+                                    style="top: -8px; right: -8px; border-radius: 50%; width: 26px; height: 26px; padding: 0; border: 2px solid #fff; transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);"
+                                    data-image="${data.url}">
+                                <i class="fas fa-times smallest"></i>
                             </button>
                         </div>`;
 
-                    previewContainer.innerHTML += imageHtml;
+                    previewContainer.insertAdjacentHTML('beforeend', imageHtml);
                     attachRemoveEvents();
                 } else {
                     alert(data.message || "Upload failed.");

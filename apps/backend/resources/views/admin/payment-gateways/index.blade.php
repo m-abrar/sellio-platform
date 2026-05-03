@@ -12,8 +12,8 @@
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Manage platform-wide financial processors and secure transaction gateways.</p>
             </div>
             <div class="col-sm-5 d-flex align-items-center justify-content-end">
-                <a href="{{ route('admin.welcome') }}" class="btn btn-back shadow-sm px-4">
-                    <i class="fas fa-arrow-left mr-1"></i> BACK TO DASHBOARD
+                <a href="{{ route('admin.welcome') }}" class="btn btn-back shadow-sm">
+                    <i class="fas fa-arrow-left"></i> BACK TO DASHBOARD
                 </a>
             </div>
         </div>
@@ -139,7 +139,7 @@
 <style>
     /* Premium FinTech UI Accents */
     .table-premium thead th { border-top: none; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px; color: #6c757d; padding: 1.25rem 1rem; }
-    .shadow-xs { box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+    .shadow-xs { box-shadow: 0 1px 2px rgba(0,0,0,0.02); }
     .font-weight-600 { font-weight: 600 !important; }
     .font-monospace { font-family: 'SFMono-Regular', Consolas, monospace; }
 

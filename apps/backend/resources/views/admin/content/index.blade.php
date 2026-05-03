@@ -14,8 +14,8 @@
                 </p>
             </div>
             <div class="col-sm-4 text-right">
-                <a href="{{ route('admin.welcome') }}" class="btn btn-back shadow-sm px-4">
-                    <i class="fas fa-arrow-left mr-1"></i> BACK TO DASHBOARD
+                <a href="{{ route('admin.welcome') }}" class="btn btn-back shadow-sm">
+                    <i class="fas fa-arrow-left"></i> BACK TO DASHBOARD
                 </a>
             </div>
         </div>
@@ -140,7 +140,7 @@
         background-color: #fcfcfc;
     }
     
-    .shadow-xs { box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+    .shadow-xs { box-shadow: 0 1px 2px rgba(0,0,0,0.02); }
     .font-weight-600 { font-weight: 600 !important; }
     .font-monospace { font-family: 'SFMono-Regular', Consolas, monospace; }
     
