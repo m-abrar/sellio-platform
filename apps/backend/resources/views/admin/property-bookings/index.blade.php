@@ -14,13 +14,13 @@
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Manage property reservations, guest arrivals, and short-term stay schedules.</p>
             </div>
-            <div class="col-sm-6 text-right">
-                <a href="{{ route('admin.property-bookings.create') }}" class="btn btn-primary btn-sm rounded-pill px-4 font-weight-bold shadow-lg">
+            <div class="col-sm-6 d-flex flex-column align-items-end justify-content-end">
+                <a href="{{ route('admin.property-bookings.create') }}" class="btn btn-primary btn-sm rounded-pill px-4 font-weight-bold shadow-lg mb-3">
                     <i class="fas fa-plus-circle mr-1"></i> ADD BOOKING
                 </a>
-                <ol class="breadcrumb float-sm-right bg-transparent p-0 mt-3 small">
-                    <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}">{{ __('Dashboard') }}</a></li>
-                    <li class="breadcrumb-item active">{{ __('Property Bookings') }}</li>
+                <ol class="breadcrumb bg-transparent p-0 m-0 smallest font-weight-bold text-uppercase letter-spacing-1">
+                    <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}" class="text-primary">Dashboard</a></li>
+                    <li class="breadcrumb-item active text-muted">Property Bookings</li>
                 </ol>
             </div>
         </div>
@@ -86,7 +86,7 @@
             <div class="card-body p-0">
                 <div class="table-responsive">
                     <table id="bookings-table" class="table table-hover table-premium mb-0">
-                        <thead class="thead-light">
+                        <thead>
                             <tr>
                                 <th style="width: 70px" class="text-center">Media</th>
                                 <th>{{ __('Property') }}</th>
@@ -145,9 +145,6 @@
                                                 </span>
                                                 <div class="text-xs text-muted">
                                                     {{ $booking->email ?: ($booking->user->email ?? 'no-email@provided.com') }}
-                                                    @if($booking->user_id)
-                                                        <i class="fas fa-check-circle ml-1 text-success" title="Verified Account"></i>
-                                                    @endif
                                                 </div>
                                             </div>
                                         </div>

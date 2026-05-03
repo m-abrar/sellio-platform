@@ -149,28 +149,30 @@
             {{-- High Contrast Sidebar --}}
             {{-- High Contrast Sidebar --}}
             <div class="col-md-4">
-                @include('admin._partials._form-actions', [
-                    'model' => $category,
-                    'title' => 'CATEGORY',
-                    'duplicate' => 'admin.categories.duplicate'
-                ])
+                <div class="sticky-top" style="top: 24px; z-index: 10;">
+                    @include('admin._partials._form-actions', [
+                        'model' => $category,
+                        'title' => 'CATEGORY',
+                        'duplicate' => 'admin.categories.duplicate'
+                    ])
 
-                {{-- Featured Image Partial --}}
-                <div class="card card-premium mb-4 overflow-hidden">
-                    <div class="card-header bg-white border-0 py-3 px-4">
-                        <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
-                            <i class="fas fa-camera mr-2 text-primary opacity-50"></i> Visual Identity
-                        </h3>
-                    </div>
-                    <div class="card-body p-0">
-                        @include('admin._partials._image-uploader', [
-                            'name' => 'thumbnail',
-                            'label' => 'Main Icon / Badge',
-                            'multiple' => false,
-                            'model' => \App\Models\Category::class,
-                            'id' => $category->id ?? null,
-                            'noCard' => true,
-                        ])
+                    {{-- Featured Image Partial --}}
+                    <div class="card card-premium mb-4 overflow-hidden mt-4">
+                        <div class="card-header bg-white border-0 py-3 px-4">
+                            <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
+                                <i class="fas fa-camera mr-2 text-primary opacity-50"></i> Visual Identity
+                            </h3>
+                        </div>
+                        <div class="card-body p-0">
+                            @include('admin._partials._image-uploader', [
+                                'name' => 'thumbnail',
+                                'label' => 'Main Icon / Badge',
+                                'multiple' => false,
+                                'model' => \App\Models\Category::class,
+                                'id' => $category->id ?? null,
+                                'noCard' => true,
+                            ])
+                        </div>
                     </div>
                 </div>
             </div>

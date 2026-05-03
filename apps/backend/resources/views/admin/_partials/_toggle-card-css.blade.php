@@ -435,5 +435,77 @@
     .input-group:focus-within .form-control {
         border-color: var(--primary) !important;
     }
+
+    /* Premium Table Architecture */
+    .table-premium {
+        width: 100% !important;
+        border-collapse: separate !important;
+        border-spacing: 0 !important;
+    }
+
+    .table-premium thead th {
+        background-color: #f8fafc !important;
+        border-bottom: 1.5px solid #edf2f7 !important;
+        border-top: none !important;
+        padding: 1rem 1rem !important;
+        font-weight: 700 !important;
+        color: #64748b !important;
+        text-transform: uppercase !important;
+        font-size: 0.7rem !important;
+        letter-spacing: 0.05em !important;
+    }
+
+    .table-premium tbody td {
+        padding: 1.25rem 1rem !important;
+        vertical-align: middle !important;
+        border-bottom: 1px solid #f1f5f9 !important;
+        transition: all 0.2s ease !important;
+        color: #334155;
+    }
+
+    .table-premium tbody tr:hover td {
+        background-color: rgba(var(--primary-rgb), 0.02) !important;
+    }
+
+    /* Table Media Previews */
+    .table-img-preview {
+        width: 44px;
+        height: 44px;
+        border-radius: 10px;
+        overflow: hidden;
+        border: 2px solid #fff;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        background: #f1f5f9;
+        margin: auto;
+    }
+
+    .table-img-preview img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    /* Button Group Premium */
+    .btn-group-premium {
+        background: #fff;
+        border-radius: 10px !important;
+        overflow: hidden;
+        border: 1.5px solid #edf2f7 !important;
+    }
+
+    .btn-group-premium .btn {
+        border: none !important;
+        border-right: 1.5px solid #edf2f7 !important;
+        padding: 0.5rem 0.85rem !important;
+        background: transparent !important;
+    }
+
+    .btn-group-premium .btn:last-child {
+        border-right: none !important;
+    }
+
+    .btn-group-premium .btn:hover {
+        background-color: #f8fafc !important;
+    }
 </style>
 @endpush
