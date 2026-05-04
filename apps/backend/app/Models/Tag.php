@@ -104,6 +104,15 @@ class Tag extends Model implements HasMedia
         return $query->where('is_published', true);
     }
 
+    /**
+     * Scope a query to filter by type.
+     */
+    public function scopeForType(Builder $query, string $type): Builder
+    {
+        $column = 'is_' . $type;
+        return $query->where($column, true);
+    }
+
     // --- Polymorphic Relationships (Morphed By Many) ---
     
     
@@ -121,7 +130,7 @@ class Tag extends Model implements HasMedia
      * Aggregates the total number of active listings across all verticals.
      * Use with caution in high-traffic loops; consider using 'withCount' in controllers.
      */
-    protected function listingsCount(): Attribute
+    public function listingsCount(): Attribute
     {
         return Attribute::make(
             get: function () {

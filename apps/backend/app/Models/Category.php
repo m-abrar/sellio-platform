@@ -196,12 +196,21 @@ class Category extends Model implements HasMedia
         return $query->where('is_published', true);
     }
 
+    /**
+     * Scope a query to filter categories by type (e.g., jobs, properties).
+     */
+    public function scopeForType(Builder $query, string $type): Builder
+    {
+        $column = 'is_' . $type;
+        return $query->where($column, true);
+    }
+
     // --- Accessors & Mutators ---
 
     /**
      * Calculate the total count of all published listings within this category.
      */
-    protected function listingsCount(): Attribute
+    public function listingsCount(): Attribute
     {
         return Attribute::make(
             get: function () {

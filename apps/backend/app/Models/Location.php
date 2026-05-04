@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Traits\HasImageAccess;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -195,7 +196,7 @@ class Location extends Model implements HasMedia
      * Aggregates active listings count across all verticals for this location.
      * Cached to handle high-traffic location-based filtering.
      */
-    protected function listingsCount(): Attribute
+    public function listingsCount(): Attribute
     {
         return Attribute::make(
             get: function () {

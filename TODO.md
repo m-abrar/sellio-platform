@@ -55,6 +55,57 @@ the select location is not showing anything
 and also only show related taxonomy data only
 same for categories
 
+-------------
+
+on the dashboard we have a button saying "create new listing" make sure it does not miss any module, we have 7 active modules but it shows 5 only
+
+same for booking button with dropdown options
+
+----------------
+
+http://127.0.0.1:8000/admin/classifieds/create
+http://127.0.0.1:8000/admin/services/create
+
+For all of these forms below, can you add placeholders?
+
+Products
+
+Properties
+
+Autos
+
+Events
+
+Jobs
+
+Services
+
+Classifieds
+
+---------------------
+
+
+for Listings, we need rounded ( oval shape) corners for action buttons
+
+All Unified
+
+Pending Approval
+
+Products
+
+Properties
+
+Autos
+
+Events
+
+Jobs
+
+Services
+
+Classifieds
+
+
 
 -----------------
 

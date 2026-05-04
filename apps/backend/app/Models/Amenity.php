@@ -121,6 +121,15 @@ class Amenity extends Model implements HasMedia
     }
 
     /**
+     * Scope a query to filter by type.
+     */
+    public function scopeForType(Builder $query, string $type): Builder
+    {
+        $column = 'is_' . $type;
+        return $query->where($column, true);
+    }
+
+    /**
      * Register media collections.
      *
      * @return void

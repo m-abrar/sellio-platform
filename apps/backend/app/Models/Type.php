@@ -94,6 +94,15 @@ class Type extends Model implements HasMedia
     {
         return $query->where('is_published', true);
     }
+
+    /**
+     * Scope a query to filter by type.
+     */
+    public function scopeForType(Builder $query, string $type): Builder
+    {
+        $column = 'is_' . $type;
+        return $query->where($column, true);
+    }
     
     // --- Relationships ---
     
@@ -113,7 +122,7 @@ class Type extends Model implements HasMedia
      * Returns a combined count of all active items across verticals.
      * Essential for showing "Properties (45)" in sidebar navigation.
      */
-    protected function listingsCount(): Attribute
+    public function listingsCount(): Attribute
     {
         return Attribute::make(
             get: function () {

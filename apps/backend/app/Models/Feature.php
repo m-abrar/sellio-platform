@@ -130,4 +130,13 @@ class Feature extends Model implements HasMedia
     {
         return $query->where('is_published', true);
     }
+
+    /**
+     * Scope a query to filter by type.
+     */
+    public function scopeForType(Builder $query, string $type): Builder
+    {
+        $column = 'is_' . $type;
+        return $query->where($column, true);
+    }
 }

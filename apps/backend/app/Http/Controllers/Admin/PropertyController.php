@@ -27,8 +27,8 @@ class PropertyController extends Controller
 
     public function index()
     {
-        $categories = Category::where('is_property', 1)->get();
-        $locations = Location::where('is_property', 1)->get();
+        $categories = Category::active()->forType('property')->get();
+        $locations = Location::active()->forType('property')->get();
 
         $properties = Property::query()
             ->when(request('name'), fn($q) => $q->where('title', 'like', '%' . request('name') . '%'))
@@ -45,13 +45,13 @@ class PropertyController extends Controller
 
     public function create()
     {
-        $amenities = Amenity::all();
-        $features = Feature::all();
-        $types = Type::all();
-        $tags = Tag::all();
-        $categories = Category::where('is_property', 1)->get();
+        $amenities = Amenity::active()->forType('property')->get();
+        $features = Feature::active()->forType('property')->get();
+        $types = Type::active()->forType('property')->get();
+        $tags = Tag::active()->forType('property')->get();
+        $categories = Category::active()->forType('property')->get();
         $property = new Property();
-        $locations = Location::where('is_property', 1)->get();
+        $locations = Location::active()->forType('property')->get();
 
         return view('admin.properties.form', compact('property', 'amenities', 'features', 'types', 'tags', 'categories', 'locations'));
     }
@@ -113,12 +113,12 @@ class PropertyController extends Controller
         $property->load('features');
         $property->load('neighborhoods');
 
-        $amenities = Amenity::all();
-        $features = Feature::all();
-        $tags = Tag::all();
-        $types = Type::all();
-        $categories = Category::where('is_property', 1)->get();
-        $locations = Location::where('is_property', 1)->get();
+        $amenities = Amenity::active()->forType('property')->get();
+        $features = Feature::active()->forType('property')->get();
+        $tags = Tag::active()->forType('property')->get();
+        $types = Type::active()->forType('property')->get();
+        $categories = Category::active()->forType('property')->get();
+        $locations = Location::active()->forType('property')->get();
 
         $statusColors = [
             'confirmed' => '#ef4444',
