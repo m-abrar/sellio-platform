@@ -36,8 +36,8 @@
         <div class="row pb-5">
             {{-- Left Column --}}
             <div class="col-md-8">
-                <div class="card card-premium shadow-premium mb-4 overflow-hidden">
-                    <div class="card-header bg-white border-0 py-3 px-4">
+                <div class="card card-premium shadow-premium mb-4 border-0 overflow-hidden" style="border-radius: 24px;">
+                    <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
                         <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
                             <i class="fas fa-info-circle mr-2 text-primary opacity-50"></i> Booking Parameters
                         </h3>
@@ -136,7 +136,7 @@
                         'back' => 'admin.event-bookings.index'
                     ])
 
-                    <div class="card card-premium shadow-premium mt-4 overflow-hidden border-primary-soft" style="border: 1px solid rgba(70, 165, 172, 0.2);">
+                    <div class="card card-premium shadow-premium mt-4 border-0 overflow-hidden border-primary-soft" style="border: 1px solid rgba(70, 165, 172, 0.2); border-radius: 24px;">
                         <div class="card-body p-4 bg-primary-soft">
                             <h6 class="font-weight-bold text-primary mb-3 smallest text-uppercase letter-spacing-1">Financial Integrity</h6>
                             <p class="text-muted small mb-0" style="line-height: 1.6;">

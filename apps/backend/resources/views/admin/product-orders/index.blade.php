@@ -29,42 +29,52 @@
     <div class="container-fluid pb-5">
         @include('admin.alert')
 
-        {{-- Glass Filter Card --}}
-        <div class="card card-premium shadow-sm mb-4 border-0">
+        <div class="card card-premium shadow-premium mb-4 border-0" style="border-radius: 20px;">
             <div class="card-body py-4 px-4">
                 <form method="GET" action="{{ route('admin.product-orders.index') }}">
                     <div class="row align-items-end">
                         <div class="col-md-3">
-                            <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Order Tracking #</label>
-                            <div class="input-group border rounded shadow-xs bg-white" style="height: 46px; padding: 2px;">
-                                <input type="text" name="order_number" class="form-control border-0 shadow-none bg-white h-100 py-0 smallest font-weight-bold" 
+                            <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Order Tracking #</label>
+                            <div class="input-group shadow-xs">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text bg-white border-right-0"><i class="fas fa-hashtag text-primary text-xs"></i></span>
+                                </div>
+                                <input type="text" name="order_number" class="form-control border-left-0 font-weight-bold" 
                                        placeholder="Enter order reference..." value="{{ request('order_number') }}">
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Inventory Identification</label>
-                            <div class="input-group border rounded shadow-xs bg-white" style="height: 46px; padding: 2px;">
-                                <input type="text" name="product_name" class="form-control border-0 shadow-none bg-white h-100 py-0 smallest font-weight-bold" 
+                            <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Inventory Identification</label>
+                            <div class="input-group shadow-xs">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text bg-white border-right-0"><i class="fas fa-box text-primary text-xs"></i></span>
+                                </div>
+                                <input type="text" name="product_name" class="form-control border-left-0 font-weight-bold" 
                                        placeholder="Search products..." value="{{ request('product_name') }}">
                             </div>
                         </div>
                         <div class="col-md-2">
-                            <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Fulfillment</label>
-                            <select name="status" class="form-control shadow-xs" style="height: 46px;">
-                                <option value="">All Statuses</option>
-                                <option value="pending" {{ $status == 'pending' ? 'selected' : '' }}>Pending</option>
-                                <option value="processing" {{ $status == 'processing' ? 'selected' : '' }}>Processing</option>
-                                <option value="completed" {{ $status == 'completed' ? 'selected' : '' }}>Completed</option>
-                                <option value="cancelled" {{ $status == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
-                            </select>
+                            <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Fulfillment</label>
+                            <div class="input-group shadow-xs">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text bg-white border-right-0"><i class="fas fa-truck text-primary text-xs"></i></span>
+                                </div>
+                                <select name="status" class="form-control border-left-0 select2">
+                                    <option value="">All Statuses</option>
+                                    <option value="pending" {{ $status == 'pending' ? 'selected' : '' }}>Pending</option>
+                                    <option value="processing" {{ $status == 'processing' ? 'selected' : '' }}>Processing</option>
+                                    <option value="completed" {{ $status == 'completed' ? 'selected' : '' }}>Completed</option>
+                                    <option value="cancelled" {{ $status == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
+                                </select>
+                            </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="btn-group w-100 shadow-sm rounded-pill overflow-hidden border" style="height: 46px;">
-                                <button type="submit" class="btn btn-primary font-weight-bold smallest uppercase d-flex align-items-center justify-content-center flex-grow-1">
+                            <div class="d-flex" style="gap: 10px;">
+                                <button type="submit" class="btn btn-primary flex-grow-1 font-weight-bold shadow-xs rounded-pill smallest uppercase">
                                     <i class="fas fa-sync-alt mr-2"></i> REFRESH REGISTRY
                                 </button>
-                                <a href="{{ route('admin.product-orders.index') }}" class="btn btn-white px-3 border-left d-flex align-items-center justify-content-center">
-                                    <i class="fas fa-undo text-danger"></i>
+                                <a href="{{ route('admin.product-orders.index') }}" class="btn btn-default shadow-xs rounded-pill px-3 d-flex align-items-center justify-content-center" data-toggle="tooltip" title="Reset Filters">
+                                    <i class="fas fa-undo text-danger m-0"></i>
                                 </a>
                             </div>
                         </div>
@@ -74,9 +84,9 @@
         </div>
 
         {{-- Main Table --}}
-        <div class="card card-premium overflow-hidden">
+        <div class="card card-premium shadow-premium border-0 overflow-hidden" style="border-radius: 24px;">
             <div class="card-header border-0 bg-white py-4 px-4 d-flex justify-content-between align-items-center">
-                <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1">
+                <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">
                     <i class="fas fa-list-ul mr-2 text-primary opacity-50"></i> Commerce Ledger
                 </h3>
                 
@@ -184,11 +194,11 @@
                                             </span>
                                         </td>
                                         <td class="text-right align-middle pr-4">
-                                            <div class="btn-group btn-group-premium shadow-xs rounded-pill border overflow-hidden">
+                                            <div class="btn-group btn-group-premium shadow-sm rounded-pill border overflow-hidden bg-white">
                                                 <a href="{{ route('admin.product-orders.show', $order->id) }}"
                                                    class="btn btn-white text-info py-2 px-3 d-inline-flex align-items-center"
                                                    data-toggle="tooltip" title="Inspect Order">
-                                                    <i class="fas fa-eye mr-2"></i> Inspect
+                                                    <i class="fas fa-eye mr-1"></i> Inspect
                                                 </a>
                                             </div>
                                         </td>
@@ -233,6 +243,12 @@
 <script>
     $(function () {
         $('[data-toggle="tooltip"]').tooltip();
+        
+        $('.select2').select2({
+            theme: 'bootstrap4',
+            width: '100%',
+            placeholder: 'All Statuses'
+        });
 
         const $selectAll = $('#selectAll');
         const $orderCheckboxes = $('.order-checkbox');

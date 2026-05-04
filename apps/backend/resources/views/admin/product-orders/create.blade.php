@@ -31,7 +31,7 @@
                 {{-- Left Column: Customer & Items --}}
                 <div class="col-md-8">
                     {{-- Customer Selection Card --}}
-                    <div class="card card-premium shadow-premium overflow-hidden mb-4 border-0">
+                    <div class="card card-premium shadow-premium overflow-hidden mb-4 border-0" style="border-radius: 24px;">
                         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
                             <h3 class="card-title font-weight-bold text-dark mb-0 text-uppercase letter-spacing-1" style="font-size: 1.1rem;">
                                 <i class="fas fa-user-circle mr-2 text-primary opacity-50"></i> Customer Identification
@@ -57,7 +57,7 @@
                     </div>
 
                     {{-- Order Items Card --}}
-                    <div class="card card-premium shadow-premium overflow-hidden mb-4 border-0">
+                    <div class="card card-premium shadow-premium overflow-hidden mb-4 border-0" style="border-radius: 24px;">
                         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
                             <h3 class="card-title font-weight-bold text-dark mb-0 text-uppercase letter-spacing-1" style="font-size: 1.1rem;">
                                 <i class="fas fa-list-ul mr-2 text-primary opacity-50"></i> Item Manifest
@@ -117,7 +117,7 @@
                 {{-- Right Column: Shipping & Summary --}}
                 <div class="col-md-4">
                     {{-- Summary Card --}}
-                    <div class="card card-premium shadow-premium overflow-hidden mb-4">
+                    <div class="card card-premium shadow-premium overflow-hidden mb-4 border-0" style="border-radius: 24px;">
                         <div class="card-header bg-dark d-flex align-items-center py-3 px-4 border-0" style="background: #0f172a !important; border-bottom: 3px solid var(--primary) !important;">
                             <h3 class="card-title text-white mb-0 font-weight-bold smallest text-uppercase letter-spacing-1">
                                 <i class="fas fa-receipt mr-1 text-primary"></i> Order Summary
@@ -148,7 +148,7 @@
 
                             <div class="form-group mb-4">
                                 <label class="smallest text-uppercase font-weight-bold text-muted mb-2">Transaction Status</label>
-                                <select name="status" class="form-control shadow-xs" required>
+                                <select name="status" class="form-control select2 shadow-xs" required>
                                     <option value="pending">PENDING</option>
                                     <option value="processing">PROCESSING</option>
                                     <option value="shipped">SHIPPED</option>
@@ -156,14 +156,14 @@
                                 </select>
                             </div>
 
-                            <button type="submit" class="btn btn-submit-premium btn-block py-3 rounded-pill font-weight-bold smallest">
+                            <button type="submit" class="btn btn-primary btn-block py-3 rounded-pill font-weight-bold shadow-xs smallest text-uppercase letter-spacing-1">
                                 <i class="fas fa-check-double mr-2"></i> AUTHORIZE & SYNC ORDER
                             </button>
                         </div>
                     </div>
 
                     {{-- Logistics Details Card --}}
-                    <div class="card card-premium shadow-premium overflow-hidden mb-4 border-0">
+                    <div class="card card-premium shadow-premium overflow-hidden mb-4 border-0" style="border-radius: 24px;">
                         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
                             <h3 class="card-title font-weight-bold text-dark mb-0 text-uppercase letter-spacing-1" style="font-size: 1.1rem;">
                                 <i class="fas fa-truck mr-1 text-primary opacity-50"></i> Logistics Destination

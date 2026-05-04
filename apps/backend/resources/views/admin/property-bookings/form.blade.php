@@ -16,7 +16,7 @@
             </div>
             <div class="col-sm-4 text-right">
                 <a href="{{ route('admin.property-bookings.index') }}" class="btn btn-back shadow-sm rounded-pill px-4">
-                    <i class="fas fa-arrow-left mr-1"></i> BACK TO LEDGER
+                    <i class="fas fa-arrow-left mr-1"></i> Back to Ledger
                 </a>
             </div>
         </div>
@@ -36,13 +36,13 @@
         <div class="row pb-5">
             {{-- Intelligence Column --}}
             <div class="col-md-8">
-                <div class="card card-premium shadow-sm mb-4 border-0 overflow-hidden">
+                <div class="card card-premium shadow-premium mb-4 border-0 overflow-hidden" style="border-radius: 24px;">
                     <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
-                        <h3 class="card-title font-weight-bold text-dark mb-0 text-uppercase letter-spacing-1" style="font-size: 1.1rem;">
+                        <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
                             <i class="fas fa-info-circle mr-2 text-primary opacity-50"></i> Reservation Intelligence
                         </h3>
                     </div>
-                    <div class="card-body px-4 pb-4">
+                    <div class="card-body p-4">
                         <div class="row">
                             <div class="col-md-6 mb-4">
                                 <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Target Inventory Asset</label>
@@ -163,13 +163,13 @@
                 </div>
 
                 {{-- Availability Calendar --}}
-                <div class="card card-premium shadow-sm overflow-hidden border-0">
+                <div class="card card-premium shadow-premium border-0 overflow-hidden" style="border-radius: 24px;">
                     <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
-                        <h3 class="card-title font-weight-bold text-dark mb-0 text-uppercase letter-spacing-1" style="font-size: 1.1rem;">
+                        <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
                             <i class="fas fa-calendar-check mr-2 text-primary opacity-50"></i> Availability Visualizer
                         </h3>
                     </div>
-                    <div class="card-body px-4 pb-4">
+                    <div class="card-body p-4">
                         @if(isset($calendarEvents))
                             <div id="calendar" class="fc-modern"></div>
                             <div class="mt-4 d-flex flex-wrap" style="gap: 15px;">
@@ -198,13 +198,13 @@
                         'back' => 'admin.property-bookings.index'
                     ])
 
-                    <div class="card card-premium shadow-sm mt-4 border-0 overflow-hidden">
+                    <div class="card card-premium shadow-premium mt-4 border-0 overflow-hidden" style="border-radius: 24px;">
                         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
-                            <h3 class="card-title font-weight-bold text-dark mb-0 text-uppercase letter-spacing-1" style="font-size: 1.1rem;">
+                            <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
                                 <i class="fas fa-file-invoice-dollar mr-2 text-primary opacity-50"></i> Financial Oversight
                             </h3>
                         </div>
-                        <div class="card-body px-4 pb-4">
+                        <div class="card-body p-4">
                             <div class="mb-4">
                                 <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Settlement Status</label>
                                 <div class="input-group border rounded shadow-xs bg-white" style="height: 46px; padding: 2px;">

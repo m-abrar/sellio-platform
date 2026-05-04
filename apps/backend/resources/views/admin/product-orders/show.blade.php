@@ -33,7 +33,7 @@
         <div class="row">
             {{-- Left Column: Manifest & Summary --}}
             <div class="col-md-8">
-                <div class="card card-premium shadow-premium overflow-hidden mb-4">
+                <div class="card card-premium shadow-premium overflow-hidden mb-4 border-0" style="border-radius: 24px;">
                     <div class="card-header bg-dark d-flex align-items-center py-3 px-4 border-0" style="background: #0f172a !important; border-bottom: 3px solid var(--primary) !important;">
                         <h3 class="card-title text-white mb-0 font-weight-bold smallest text-uppercase letter-spacing-1">
                             <i class="fas fa-box-open mr-2 text-primary"></i> {{ __('Fulfillment Manifest') }}
@@ -95,7 +95,7 @@
                 </div>
 
                 {{-- Fiscal Summary --}}
-                <div class="card card-premium shadow-premium overflow-hidden mb-4">
+                <div class="card card-premium shadow-premium overflow-hidden mb-4 border-0" style="border-radius: 24px;">
                     <div class="card-body p-4">
                         <div class="row">
                             <div class="col-md-6">
@@ -144,7 +144,7 @@
             {{-- Right Column: Intelligence & Registry --}}
             <div class="col-md-4">
                 {{-- Lifecycle Management --}}
-                <div class="card card-premium shadow-premium overflow-hidden mb-4 print-hide">
+                <div class="card card-premium shadow-premium overflow-hidden mb-4 print-hide border-0" style="border-radius: 24px;">
                     <div class="card-header bg-dark d-flex align-items-center py-3 px-4 border-0" style="background: #0f172a !important; border-bottom: 3px solid var(--primary) !important;">
                         <h3 class="card-title text-white mb-0 font-weight-bold smallest text-uppercase letter-spacing-1">
                             <i class="fas fa-tasks mr-2 text-primary"></i> Sync Lifecycle
@@ -181,7 +181,7 @@
                 </div>
 
                 {{-- Logistics Timeline --}}
-                <div class="card card-premium shadow-premium overflow-hidden mb-4 print-hide">
+                <div class="card card-premium shadow-premium overflow-hidden mb-4 print-hide border-0" style="border-radius: 24px;">
                     <div class="card-header bg-dark d-flex align-items-center py-3 px-4 border-0" style="background: #0f172a !important; border-bottom: 3px solid var(--primary) !important;">
                         <h3 class="card-title text-white mb-0 font-weight-bold smallest text-uppercase letter-spacing-1">
                             <i class="fas fa-history mr-2 text-primary"></i> Logistics Timeline
@@ -229,7 +229,7 @@
                 </div>
 
                 {{-- Client Registry --}}
-                <div class="card card-premium shadow-premium overflow-hidden">
+                <div class="card card-premium shadow-premium overflow-hidden border-0" style="border-radius: 24px;">
                     <div class="card-header bg-dark d-flex align-items-center py-3 px-4 border-0" style="background: #0f172a !important; border-bottom: 3px solid var(--primary) !important;">
                         <h3 class="card-title text-white mb-0 font-weight-bold smallest text-uppercase letter-spacing-1">
                             <i class="fas fa-id-card mr-2 text-primary"></i> Client Intelligence
