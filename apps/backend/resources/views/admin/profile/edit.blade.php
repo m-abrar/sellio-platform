@@ -7,11 +7,11 @@
         <div class="row mb-4 align-items-center">
             <div class="col-sm-8 d-flex align-items-center">
                 <div class="avatar-wrapper mr-4 position-relative group cursor-pointer">
-                    <div class="avatar-glow position-absolute" style="top: -5px; left: -5px; right: -5px; bottom: -5px; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); border-radius: 50%; opacity: 0.15; filter: blur(8px);"></div>
-                    <div class="position-relative overflow-hidden rounded-circle shadow-lg border-white border-4" style="width: 100px; height: 100px; z-index: 1;">
+                    <div class="avatar-glow position-absolute" style="top: -5px; left: -5px; right: -5px; bottom: -5px; background: rgba(var(--primary-rgb), 0.1); border-radius: 50%; filter: blur(10px);"></div>
+                    <div class="position-relative overflow-hidden rounded-circle shadow-premium border-white border-4" style="width: 100px; height: 100px; z-index: 1; border: 4px solid #fff !important;">
                         <img src="{{ $user->getFirstMediaUrl(\App\Models\User::PRIMARY_MEDIA) ?: asset('images/fallbacks/avatar.jpg') }}" 
                              alt="Avatar" 
-                             class="w-100 h-100 transition-all duration-300 group-hover:scale-110 group-hover:brightness-75" 
+                             class="w-100 h-100 transition-all duration-300 group-hover:scale-110" 
                              style="object-fit: cover;">
                         <div class="avatar-overlay position-absolute d-flex align-items-center justify-content-center transition-all duration-300 opacity-0 group-hover:opacity-100" 
                              style="top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.3);">
@@ -21,12 +21,12 @@
                     <div class="status-indicator bg-success position-absolute shadow-sm" style="width: 18px; height: 18px; border-radius: 50%; bottom: 8px; right: 8px; border: 3px solid #fff; z-index: 2;"></div>
                 </div>
                 <div>
-                    <h1 class="m-0 text-dark font-weight-bold">
+                    <h1 class="m-0 text-dark font-weight-bold letter-spacing-tight">
                         Welcome, {{ explode(' ', $user->name)[0] }}
                     </h1>
-                    <p class="text-muted mt-1 small text-uppercase letter-spacing-1 mb-0">
+                    <p class="text-muted mt-1 small text-uppercase font-weight-bold letter-spacing-2 mb-0 opacity-75">
                         <i class="fas fa-shield-alt mr-1 text-primary"></i> 
-                        Managing Master Identity & Security Protocol
+                        Identity Protocol Active
                     </p>
                 </div>
             </div>
@@ -160,9 +160,8 @@
 
 @push('css')
 <style>
-    .avatar-wrapper:hover img { transform: scale(1.1); filter: brightness(0.75); }
-    .avatar-wrapper .avatar-overlay { opacity: 0; transition: all 0.3s ease; }
-    .avatar-wrapper:hover .avatar-overlay { opacity: 1; }
+    .avatar-wrapper:hover img { transform: scale(1.1); }
+    .avatar-wrapper .avatar-overlay { transition: all 0.3s ease; }
     .transition-all { transition: all 0.3s ease !important; }
 </style>
 @endpush

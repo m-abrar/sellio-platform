@@ -83,17 +83,26 @@ http://127.0.0.1:8000/admin/services/create
 -----------------
 
 http://127.0.0.1:8000/admin/profile/edit
-the back button needs polish
-the picture showing in image widget needs UIUX polish
+- [x] **Back Button**: Applied premium `btn-back` styling.
+- [x] **Image Widget**: Polished image uploader UI/UX (Avatar glow simplified for clarity).
+
+
 --------------
 
-http://127.0.0.1:8000/admin/payment-gateways
-http://127.0.0.1:8000/admin/content
-need softer shadow
+- [x] **Softer Shadows**: Refined `shadow-premium` and `shadow-xs` to be more ethereal/faint.
+
 
 http://127.0.0.1:8000/admin/payment-gateways
 http://127.0.0.1:8000/admin/settings
 need same size of icon in header card
+
+------------------------
+
+update the theme layout to something professional and premium, that we are already using in other places, and replace the old ugly layout.
+
+http://127.0.0.1:8000/admin/content/home/default
+
+
 ---------------
 http://127.0.0.1:8000/admin/payment-gateways
 http://127.0.0.1:8000/admin/themes

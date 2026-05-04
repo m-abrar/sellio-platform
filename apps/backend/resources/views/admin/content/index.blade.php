@@ -139,7 +139,7 @@
         background-color: #fcfcfc;
     }
     
-    .shadow-xs { box-shadow: 0 1px 2px rgba(0,0,0,0.02); }
+    .shadow-xs { box-shadow: 0 5px 10px rgba(0,0,0,0.01); }
     .font-weight-600 { font-weight: 600 !important; }
     .font-monospace { font-family: 'SFMono-Regular', Consolas, monospace; }
     

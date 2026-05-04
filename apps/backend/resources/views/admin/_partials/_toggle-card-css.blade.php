@@ -524,17 +524,17 @@
         background-color: var(--primary-hover) !important;
     }
 
-    /* Premium Shadow Utility - Note: Removed from submit buttons */
+    /* Premium Shadow Utility - More ethereal/softer feel */
     .shadow-premium {
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02) !important;
+        box-shadow: 0 15px 45px rgba(0, 0, 0, 0.01) !important;
     }
     
     .shadow-sm {
-        box-shadow: 0 .125rem .25rem rgba(0,0,0,.02) !important;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.01) !important;
     }
     
     .shadow-premium-lg {
-        box-shadow: 0 10px 30px rgba(var(--primary-rgb), 0.15) !important;
+        box-shadow: 0 25px 60px rgba(var(--primary-rgb), 0.1) !important;
     }
 
     button[type="submit"], 
