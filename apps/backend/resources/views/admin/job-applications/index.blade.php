@@ -1,24 +1,23 @@
 @extends('adminlte::page')
 
-@section('title', __('Job Applications'))
-
-@section('plugins.Datatables', true)
+@section('title', __('Job Applications | Talent Acquisition'))
 
 @section('content_header')
-    <div class="container-fluid">
-        <div class="row mb-4 align-items-end">
-            <div class="col-sm-6">
+    <div class="container-fluid pt-4">
+        <div class="row mb-4 align-items-center">
+            <div class="col-sm-8">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-file-signature mr-2 text-primary"></i>
+                    <i class="fas fa-file-signature mr-2 text-primary opacity-50"></i>
                     {{ __('Talent Acquisition') }}
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Review candidate submissions, resume profiles, and hiring pipeline progress.</p>
             </div>
-            <div class="col-sm-6 text-right">
-                <ol class="breadcrumb float-sm-right bg-transparent p-0 mt-3 small">
-                    <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}">{{ __('Dashboard') }}</a></li>
-                    <li class="breadcrumb-item active">{{ __('Job Applications') }}</li>
-                </ol>
+            <div class="col-sm-4 text-right">
+                <div class="d-flex justify-content-end align-items-center" style="gap: 12px;">
+                    <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">
+                        <i class="fas fa-th-large"></i> Dashboard
+                    </a>
+                </div>
             </div>
         </div>
     </div>
@@ -28,169 +27,208 @@
     <div class="container-fluid">
         @include('admin.alert')
 
-        {{-- Premium Filter Card --}}
-        <div class="card card-outline card-secondary shadow-sm mb-4">
-            <div class="card-body py-3">
-                <form method="GET" action="{{ route('admin.job-applications.index') }}" class="row align-items-end justify-content-center">
-                    <div class="col-md-3">
-                        <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Job Search</label>
-                        <select name="job_id" class="form-control select2 shadow-xs">
-                            <option value="">All Jobs</option>
-                            @foreach($jobs as $j)
-                                <option value="{{ $j->id }}" {{ request('job_id') == $j->id ? 'selected' : '' }}>{{ $j->title }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-md-2">
-                        <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Category</label>
-                        <select name="category" class="form-control shadow-xs">
-                            <option value="">All Categories</option>
-                            @foreach ($categories as $c)
-                                <option value="{{ $c->id }}" {{ request('category') == $c->id ? 'selected' : '' }}>{{ $c->title }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-md-2">
-                        <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Status</label>
-                        <select name="status" class="form-control shadow-xs">
-                            <option value="">All Statuses</option>
-                            <option value="submitted" {{ $status == 'submitted' ? 'selected' : '' }}>Submitted</option>
-                            <option value="reviewed" {{ $status == 'reviewed' ? 'selected' : '' }}>Reviewed</option>
-                        </select>
-                    </div>
-                    <div class="col-auto d-flex align-items-end" style="gap: 8px;">
-                        <button type="submit" class="btn btn-primary font-weight-bold shadow-xs" style="height: 38px;">
-                            <i class="fas fa-filter mr-1"></i> FILTER
-                        </button>
-                        <a href="{{ route('admin.job-applications.index') }}" class="btn btn-default font-weight-bold shadow-xs" style="height: 38px;">
-                            <i class="fas fa-undo"></i>
-                        </a>
+        {{-- Glass Filter Card --}}
+        <div class="card card-premium shadow-sm mb-4 border-0">
+            <div class="card-body py-4 px-4">
+                <form method="GET" action="{{ route('admin.job-applications.index') }}">
+                    <div class="row align-items-end">
+                        <div class="col-md-3">
+                            <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Target Position</label>
+                            <div class="input-group border rounded shadow-xs bg-white" style="height: 46px; padding: 2px;">
+                                <div class="input-group-prepend border-0">
+                                    <span class="input-group-text bg-white border-0 py-0"><i class="fas fa-briefcase text-primary"></i></span>
+                                </div>
+                                <select name="job_id" class="form-control border-0 custom-select shadow-none bg-white h-100 py-0 select2">
+                                    <option value="">All Active Listings</option>
+                                    @foreach($jobs as $j)
+                                        <option value="{{ $j->id }}" {{ request('job_id') == $j->id ? 'selected' : '' }}>{{ $j->title }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Sector Category</label>
+                            <div class="input-group border rounded shadow-xs bg-white" style="height: 46px; padding: 2px;">
+                                <div class="input-group-prepend border-0">
+                                    <span class="input-group-text bg-white border-0 py-0"><i class="fas fa-tags text-primary"></i></span>
+                                </div>
+                                <select name="category" class="form-control border-0 custom-select shadow-none bg-white h-100 py-0">
+                                    <option value="">All Sectors</option>
+                                    @foreach ($categories as $c)
+                                        <option value="{{ $c->id }}" {{ request('category') == $c->id ? 'selected' : '' }}>{{ $c->title }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Pipeline Status</label>
+                            <div class="input-group border rounded shadow-xs bg-white" style="height: 46px; padding: 2px;">
+                                <div class="input-group-prepend border-0">
+                                    <span class="input-group-text bg-white border-0 py-0"><i class="fas fa-filter text-primary"></i></span>
+                                </div>
+                                <select name="status" class="form-control border-0 custom-select shadow-none bg-white h-100 py-0">
+                                    <option value="">All States</option>
+                                    <option value="submitted" {{ $status == 'submitted' ? 'selected' : '' }}>Submitted</option>
+                                    <option value="reviewed" {{ $status == 'reviewed' ? 'selected' : '' }}>Reviewed</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="btn-group w-100 shadow-sm rounded-pill overflow-hidden border" style="height: 46px;">
+                                <button type="submit" class="btn btn-primary font-weight-bold smallest uppercase d-flex align-items-center justify-content-center">
+                                    <i class="fas fa-sync-alt mr-2"></i> UPDATE
+                                </button>
+                                <a href="{{ route('admin.job-applications.index') }}" class="btn btn-white px-3 border-left d-flex align-items-center justify-content-center">
+                                    <i class="fas fa-undo text-danger"></i>
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>
         </div>
 
         {{-- Main Table --}}
-        <div class="card card-primary card-outline shadow-sm">
-            <div class="card-header border-0 bg-white py-3">
-                <h3 class="card-title font-weight-600 text-muted"><i class="fas fa-copy mr-1 text-primary"></i> {{ __('All Applications') }}</h3>
+        <div class="card card-premium overflow-hidden">
+            <div class="card-header border-0 bg-white py-4 px-4">
+                <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1">
+                    <i class="fas fa-copy mr-2 text-primary opacity-50"></i> {{ __('Talent Registry') }}
+                </h3>
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
                     <table id="applications-table" class="table table-hover table-premium mb-0">
                         <thead class="thead-light">
                             <tr>
-                                <th class="text-center" style="width: 70px">Media</th>
-                                <th>Job Details</th>
-                                <th>Applicant Profile</th>
+                                <th class="text-center pl-4" style="width: 80px">Asset</th>
+                                <th>Listing Intelligence</th>
+                                <th>Candidate Profile</th>
                                 <th>Applied At</th>
-                                <th class="text-center">Status</th>
-                                <th class="text-right px-4">Actions</th>
+                                <th class="text-center">Pipeline</th>
+                                <th class="text-right pr-4">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse ($applications as $app)
                                 <tr>
-                                    <td class="text-center align-middle">
-                                        <div class="table-img-preview shadow-xs">
-                                            <img src="{{ $app->job->thumbnail_url ?? asset('images/fallbacks/default.jpg') }}" alt="Job" onerror="this.src='{{ asset('images/fallbacks/default.jpg') }}'">
+                                    <td class="text-center align-middle pl-4">
+                                        <div class="icon-box-soft bg-primary-soft mx-auto d-flex align-items-center justify-content-center shadow-xs overflow-hidden" style="width:50px; height:50px; border-radius: 12px;">
+                                            <img src="{{ $app->job->thumbnail_url ?? asset('images/fallbacks/default.jpg') }}" alt="Job" class="img-fluid" style="object-fit: cover; width: 100%; height: 100%;" onerror="this.src='{{ asset('images/fallbacks/default.jpg') }}'">
                                         </div>
                                     </td>
                                     <td class="align-middle">
-                                        <span class="d-block font-weight-bold text-dark mb-0">
+                                        <span class="d-block font-weight-bold text-dark mb-0" style="font-size: 0.95rem;">
                                             {{ $app->job->title ?? 'N/A' }}
                                         </span>
-                                        <div class="text-xs mt-1">
+                                        <div class="d-flex align-items-center mt-1" style="gap: 6px;">
                                             @if($app->job && $app->job->category)
-                                                <span class="badge badge-primary-light text-primary px-2 py-1 mr-1" style="font-size: 0.6rem; border-radius: 4px;">
-                                                    <i class="fas fa-tag mr-1"></i>{{ strtoupper($app->job->category->title) }}
+                                                <span class="badge badge-primary-soft text-primary px-2 py-1 font-weight-bold smallest uppercase" style="border-radius: 6px;">
+                                                    <i class="fas fa-tag mr-1 opacity-50"></i>{{ $app->job->category->title }}
                                                 </span>
                                             @endif
-                                            <span class="badge badge-light border text-muted smallest px-2" style="font-weight: 500;">ID: #{{ $app->id }}</span>
+                                            <span class="badge badge-light border text-muted smallest uppercase font-weight-bold px-2">ID: #{{ $app->id }}</span>
                                         </div>
                                     </td>
                                     <td class="align-middle">
                                         @if($app->user)
                                             <div class="d-flex align-items-center">
-                                                <div class="mr-2 bg-light rounded-circle text-center border shadow-sm" style="width:32px; height:32px; line-height:30px; flex-shrink:0;">
-                                                    <i class="fas fa-user text-muted text-xs"></i>
+                                                <div class="icon-box-soft bg-light mr-3 d-flex align-items-center justify-content-center shadow-xs" style="width:36px; height:36px; border-radius: 10px;">
+                                                    <span class="smallest font-weight-bold text-primary">{{ strtoupper(substr($app->user->name ?? 'C', 0, 1)) }}</span>
                                                 </div>
                                                 <div>
                                                     <span class="d-block font-weight-bold text-dark mb-0">{{ $app->user->name }}</span>
-                                                    <small class="text-muted" style="font-size: 0.7rem;">{{ $app->user->email }}</small>
+                                                    <small class="text-muted text-monospace smallest">{{ $app->user->email }}</small>
                                                 </div>
                                             </div>
                                         @else
-                                            <span class="badge badge-secondary px-2">{{ __('Guest') }}</span>
+                                            <span class="badge badge-secondary-soft text-secondary px-3 py-1 rounded-pill font-weight-bold smallest uppercase">{{ __('External Applicant') }}</span>
                                         @endif
                                     </td>
                                     <td class="align-middle">
-                                        <div class="font-weight-600 mb-0">{{ $app->created_at->format('M d, Y') }}</div>
-                                        <small class="text-muted"><i class="far fa-clock mr-1 text-xs"></i>{{ $app->created_at->format('H:i') }}</small>
+                                        <div class="smallest text-dark font-weight-bold uppercase letter-spacing-1 mb-1">
+                                            <i class="far fa-calendar-alt mr-2 text-primary opacity-50"></i>{{ $app->created_at->format('M d, Y') }}
+                                        </div>
+                                        <div class="smallest text-muted font-weight-bold uppercase letter-spacing-1">
+                                            <i class="far fa-clock mr-2 opacity-50"></i>{{ $app->created_at->format('H:i') }}
+                                        </div>
                                     </td>
                                     @php
-                                        $statusClass = 'secondary';
-                                        if($app->status == 'pending' || $app->status == 'submitted') $statusClass = 'warning';
-                                        elseif($app->status == 'reviewed') $statusClass = 'info';
-                                        elseif($app->status == 'accepted' || $app->status == 'hired') $statusClass = 'success';
-                                        elseif($app->status == 'rejected') $statusClass = 'danger';
+                                        $statusMap = [
+                                            'submitted' => 'badge-warning-light text-warning',
+                                            'reviewed'  => 'badge-info-light text-info',
+                                            'accepted'  => 'badge-success-light text-success',
+                                            'hired'     => 'badge-success-light text-success',
+                                            'rejected'  => 'badge-danger-light text-danger',
+                                        ];
+                                        $statusClass = $statusMap[$app->status] ?? 'badge-secondary-light text-secondary';
                                     @endphp
                                     <td class="text-center align-middle">
-                                        <span class="badge badge-{{ $statusClass }}-light px-3 py-1 text-uppercase shadow-xs" style="font-size: 0.7rem; letter-spacing: 0.5px;">
+                                        <span class="badge {{ $statusClass }} px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 shadow-xs" style="min-width: 100px;">
                                             {{ $app->status ?? 'Submitted' }}
                                         </span>
                                     </td>
-                                    <td class="text-right px-4">
-                                        <a href="{{ route('admin.job-applications.show', $app->id) }}" class="btn btn-default btn-sm text-info"><i class="fas fa-eye"></i></a>
+                                    <td class="text-right align-middle pr-4">
+                                        <div class="btn-group btn-group-premium shadow-xs rounded-pill border overflow-hidden">
+                                            <a href="{{ route('admin.job-applications.show', $app->id) }}" 
+                                               class="btn btn-white text-info py-2 px-3 d-inline-flex align-items-center" 
+                                               data-toggle="tooltip" title="View Application">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            <form id="delete-form-{{ $app->id }}" action="{{ route('admin.job-applications.destroy', $app->id) }}" method="POST" class="d-inline">
+                                                @csrf @method('DELETE')
+                                                <button type="button" class="btn btn-white text-danger py-2 px-3 border-left d-inline-flex align-items-center" 
+                                                        data-toggle="tooltip" title="Purge Record"
+                                                        onclick="confirmDelete('delete-form-{{ $app->id }}', 'Purge Application?', 'This action will permanently remove the candidate record from the talent registry.', 'Confirm')">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            </form>
+                                        </div>
                                     </td>
                                 </tr>
                             @empty
-                                <tr><td colspan="6" class="text-center">No applications found</td></tr>
+                                <tr class="empty-state">
+                                    <td colspan="6" class="text-center py-5">
+                                        <div class="py-4">
+                                            <i class="fas fa-file-signature fa-4x text-muted opacity-25 mb-3 d-block"></i>
+                                            <h5 class="text-muted font-weight-bold">No Applications Detected</h5>
+                                            <p class="text-secondary small mb-0">Candidate submissions for your job listings will materialize here.</p>
+                                        </div>
+                                    </td>
+                                </tr>
                             @endforelse
                         </tbody>
                     </table>
                 </div>
             </div>
+
+            @if(method_exists($applications, 'hasPages') && $applications->hasPages())
+                <div class="card-footer bg-white border-top py-4 px-4 d-flex justify-content-between align-items-center">
+                    <div class="text-muted smallest font-weight-bold uppercase letter-spacing-1">Displaying {{ $applications->firstItem() }} - {{ $applications->lastItem() }} of {{ $applications->total() }} records</div>
+                    <div>{{ $applications->appends(request()->except('page'))->links('pagination::bootstrap-4') }}</div>
+                </div>
+            @endif
         </div>
     </div>
 @stop
+
 @section('css')
 <style>
-    .dataTables_filter { float: left !important; text-align: left !important; }
-    .dataTables_filter input { margin-left: 0 !important; }
-    .dataTables_length { float: right !important; text-align: right !important; }
+    .text-monospace { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace !important; }
+    .select2-container--bootstrap4 .select2-selection--single { height: 100% !important; border: 0 !important; background: transparent !important; }
+    .select2-container--bootstrap4 .select2-selection--single .select2-selection__rendered { line-height: 40px !important; padding-left: 0 !important; font-weight: 600 !important; font-size: 0.85rem !important; }
+    .select2-container--bootstrap4 .select2-selection--single .select2-selection__arrow { top: 50% !important; transform: translateY(-50%) !important; }
 </style>
 @endsection
 
 @section('js')
+@include('admin._partials._sweetalert')
 <script>
     $(document).ready(function() {
-        if ($('#applications-table tbody tr:not(.empty-state)').length > 0) {
-            $('#applications-table').DataTable({
-                "paging": true,
-                "lengthChange": true,
-                "searching": true,
-                "ordering": true,
-                "info": true,
-                "autoWidth": false,
-                "responsive": true,
-                "dom": '<"row px-0 pt-3"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-6"l>>' +
-                       '<"row"<"col-sm-12"tr>>' +
-                       '<"row px-0 pb-3"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
-                "language": {
-                    "search": "",
-                    "searchPlaceholder": "Search applications...",
-                    "paginate": {
-                        "previous": "<i class='fas fa-angle-left'></i>",
-                        "next": "<i class='fas fa-angle-right'></i>"
-                    }
-                }
-            });
-            $('.dataTables_filter input').addClass('form-control shadow-none border-light').css('width', '250px');
-        }
+        $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2({
             theme: 'bootstrap4',
-            placeholder: 'Select an option'
+            width: '100%',
+            placeholder: 'All Active Listings'
         });
     });
 </script>

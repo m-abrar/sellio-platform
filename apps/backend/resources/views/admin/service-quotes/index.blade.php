@@ -1,23 +1,23 @@
 @extends('adminlte::page')
 
-@section('title', __('Service Quotes'))
-
-@section('plugins.Datatables', true)
+@section('title', __('Service Quotes | Revenue Intelligence'))
 
 @section('content_header')
     <div class="container-fluid pt-4">
-        <div class="row mb-2">
-            <div class="col-sm-6">
+        <div class="row mb-4 align-items-center">
+            <div class="col-sm-8">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-file-invoice mr-2 text-primary"></i>
-                    {{ __('Service Quote Requests') }}
+                    <i class="fas fa-file-invoice mr-2 text-primary opacity-50"></i>
+                    {{ __('Service Quotes') }}
                 </h1>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Track customer inquiries, scope requests, and estimated revenue across services.</p>
             </div>
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}">{{ __('Dashboard') }}</a></li>
-                    <li class="breadcrumb-item active">{{ __('Service Quotes') }}</li>
-                </ol>
+            <div class="col-sm-4 text-right">
+                <div class="d-flex justify-content-end align-items-center" style="gap: 12px;">
+                    <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">
+                        <i class="fas fa-th-large"></i> Dashboard
+                    </a>
+                </div>
             </div>
         </div>
     </div>
@@ -27,59 +27,73 @@
     <div class="container-fluid">
         @include('admin.alert')
         
-        {{-- Premium Filter Card --}}
-        <div class="card card-outline card-secondary shadow-sm mb-4">
-            <div class="card-body py-3">
-                <form method="GET" action="{{ route('admin.service-quotes.index') }}" class="row align-items-end justify-content-center">
-                    <div class="col-auto">
-                        <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Service</label>
-                        <input type="text" name="service_name" class="form-control shadow-xs" placeholder="Select or type service..." list="service-suggestions" value="{{ request('service_name') }}">
-                        <datalist id="service-suggestions">
-                            @foreach($services as $s)
-                                <option value="{{ $s->title }}">
-                            @endforeach
-                        </datalist>
-                    </div>
-                    <div class="col-auto">
-                        <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Category</label>
-                        <select name="category" class="form-control shadow-xs">
-                            <option value="">All</option>
-                            @foreach ($categories as $c)
-                                <option value="{{ $c->id }}" {{ request('category') == $c->id ? 'selected' : '' }}>{{ $c->title }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-auto">
-                        <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Status</label>
-                        <select name="status" class="form-control shadow-xs">
-                            <option value="">All</option>
-                            @foreach (['pending', 'quoted', 'accepted', 'rejected'] as $st)
-                                <option value="{{ $st }}" {{ $status == $st ? 'selected' : '' }}>{{ Str::title($st) }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-auto d-flex align-items-end" style="gap: 8px;">
-                        <button type="submit" class="btn btn-primary font-weight-bold shadow-xs" style="height: 38px;">
-                            <i class="fas fa-filter mr-1"></i> FILTER
-                        </button>
-                        <a href="{{ route('admin.service-quotes.index') }}" class="btn btn-default font-weight-bold shadow-xs" style="height: 38px;">
-                            <i class="fas fa-undo"></i>
-                        </a>
+        {{-- Glass Filter Card --}}
+        <div class="card card-premium shadow-sm mb-4 border-0">
+            <div class="card-body py-4 px-4">
+                <form method="GET" action="{{ route('admin.service-quotes.index') }}">
+                    <div class="row align-items-end">
+                        <div class="col-md-3">
+                            <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Target Service</label>
+                            <div class="input-group border rounded shadow-xs bg-white" style="height: 46px; padding: 2px;">
+                                <div class="input-group-prepend border-0">
+                                    <span class="input-group-text bg-white border-0 py-0"><i class="fas fa-concierge-bell text-primary"></i></span>
+                                </div>
+                                <select name="service" class="form-control border-0 custom-select shadow-none bg-white h-100 py-0 select2">
+                                    <option value="">All Services</option>
+                                    @foreach($services as $s)
+                                        <option value="{{ $s->id }}" {{ request('service') == $s->id ? 'selected' : '' }}>{{ $s->title }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Service Sector</label>
+                            <div class="input-group border rounded shadow-xs bg-white" style="height: 46px; padding: 2px;">
+                                <div class="input-group-prepend border-0">
+                                    <span class="input-group-text bg-white border-0 py-0"><i class="fas fa-tags text-primary"></i></span>
+                                </div>
+                                <select name="category" class="form-control border-0 custom-select shadow-none bg-white h-100 py-0">
+                                    <option value="">All Sectors</option>
+                                    @foreach ($categories as $c)
+                                        <option value="{{ $c->id }}" {{ request('category') == $c->id ? 'selected' : '' }}>{{ $c->title }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Quote Status</label>
+                            <div class="input-group border rounded shadow-xs bg-white" style="height: 46px; padding: 2px;">
+                                <div class="input-group-prepend border-0">
+                                    <span class="input-group-text bg-white border-0 py-0"><i class="fas fa-traffic-light text-primary"></i></span>
+                                </div>
+                                <select name="status" class="form-control border-0 custom-select shadow-none bg-white h-100 py-0">
+                                    <option value="">All Lifecycle States</option>
+                                    @foreach (['pending' => 'Awaiting Review', 'quoted' => 'Quote Issued', 'accepted' => 'Accepted', 'rejected' => 'Rejected'] as $val => $label)
+                                        <option value="{{ $val }}" {{ $status == $val ? 'selected' : '' }}>{{ $label }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="btn-group w-100 shadow-sm rounded-pill overflow-hidden border" style="height: 46px;">
+                                <button type="submit" class="btn btn-primary font-weight-bold smallest uppercase d-flex align-items-center justify-content-center">
+                                    <i class="fas fa-sync-alt mr-2"></i> UPDATE
+                                </button>
+                                <a href="{{ route('admin.service-quotes.index') }}" class="btn btn-white px-3 border-left d-flex align-items-center justify-content-center">
+                                    <i class="fas fa-undo text-danger"></i>
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>
         </div>
 
-        <div class="card card-primary card-outline shadow-sm">
-            <div class="card-header border-0 bg-white py-3">
-                <h3 class="card-title font-weight-600 text-muted">
-                    <i class="fas fa-clipboard-list mr-1 text-primary"></i> {{ __('All Quote Requests') }}
+        <div class="card card-premium overflow-hidden">
+            <div class="card-header border-0 bg-white py-4 px-4">
+                <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1">
+                    <i class="fas fa-clipboard-list mr-2 text-primary opacity-50"></i> {{ __('Revenue Opportunities') }}
                 </h3>
-                <div class="card-tools">
-                    <button type="button" class="btn btn-tool" data-card-widget="maximize">
-                        <i class="fas fa-expand"></i>
-                    </button>
-                </div>
             </div>
 
             <div class="card-body p-0">
@@ -87,45 +101,38 @@
                     <table id="quotes-table" class="table table-hover table-premium mb-0">
                         <thead class="thead-light">
                             <tr>
-                                <th class="text-center" style="width: 70px">Media</th>
-                                <th>{{ __('Service') }}</th>
-                                <th>{{ __('Customer') }}</th>
-                                <th>{{ __('Scope') }}</th>
-                                <th>{{ __('Requested Date') }}</th>
-                                <th>{{ __('Quoted Price') }}</th>
-                                <th class="text-center">{{ __('Status') }}</th>
-                                <th class="text-right px-4">{{ __('Actions') }}</th>
+                                <th class="text-center pl-4" style="width: 80px">Asset</th>
+                                <th>Service Intelligence</th>
+                                <th>Customer Profile</th>
+                                <th>Scope</th>
+                                <th>Engagement</th>
+                                <th class="text-center">Lifecycle</th>
+                                <th class="text-right pr-4">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse ($serviceQuotes as $quote)
-                                @php
-                                    $statusMap = [
-                                        'pending'  => ['class' => 'warning',   'icon' => 'fa-clock'],
-                                        'quoted'   => ['class' => 'info',      'icon' => 'fa-tag'],
-                                        'accepted' => ['class' => 'success',   'icon' => 'fa-check-circle'],
-                                        'rejected' => ['class' => 'danger',    'icon' => 'fa-times-circle'],
-                                    ];
-                                    $badge = $statusMap[$quote->status] ?? ['class' => 'secondary', 'icon' => 'fa-circle'];
-                                @endphp
                                 <tr>
-                                    <td class="text-center align-middle">
-                                        <div class="table-img-preview shadow-xs">
-                                            <img src="{{ $quote->service->thumbnail_url ?? asset('images/fallbacks/default.jpg') }}" alt="Service" onerror="this.src='{{ asset('images/fallbacks/default.jpg') }}'">
+                                    <td class="text-center align-middle pl-4">
+                                        <div class="icon-box-soft bg-primary-soft mx-auto d-flex align-items-center justify-content-center shadow-xs overflow-hidden" style="width:50px; height:50px; border-radius: 12px;">
+                                            <img src="{{ $quote->service->thumbnail_url ?? asset('images/fallbacks/default.jpg') }}" alt="Service" class="img-fluid" style="object-fit: cover; width: 100%; height: 100%;" onerror="this.src='{{ asset('images/fallbacks/default.jpg') }}'">
                                         </div>
                                     </td>
 
                                     <td class="align-middle">
-                                        <span class="d-block font-weight-bold text-dark mb-0">
+                                        <span class="d-block font-weight-bold text-dark mb-0" style="font-size: 0.95rem;">
                                             {{ $quote->service->title ?? __('N/A') }}
                                         </span>
-                                        <div class="text-xs text-muted mt-1">
+                                        <div class="d-flex align-items-center mt-1" style="gap: 6px;">
                                             @if($quote->service && $quote->service->category)
-                                                <i class="fas fa-tag mr-1 text-xs"></i>{{ $quote->service->category->title }}
+                                                <span class="badge badge-primary-soft text-primary px-2 py-1 font-weight-bold smallest uppercase" style="border-radius: 6px;">
+                                                    <i class="fas fa-tag mr-1 opacity-50"></i>{{ $quote->service->category->title }}
+                                                </span>
                                             @endif
                                             @if($quote->service && $quote->service->location)
-                                                <span class="mx-1">|</span>
-                                                <i class="fas fa-map-marker-alt mr-1 text-xs text-danger"></i>{{ $quote->service->location->title }}
+                                                <span class="badge badge-light border text-muted smallest uppercase font-weight-bold px-2">
+                                                    <i class="fas fa-map-marker-alt mr-1 text-danger opacity-50"></i>{{ $quote->service->location->title }}
+                                                </span>
                                             @endif
                                         </div>
                                     </td>
@@ -133,69 +140,65 @@
                                     <td class="align-middle">
                                         @if($quote->user)
                                             <div class="d-flex align-items-center">
-                                                <div class="mr-2 bg-light rounded-circle text-center border shadow-xs"
-                                                     style="width:32px; height:32px; line-height:30px; flex-shrink:0;">
-                                                    <i class="fas fa-user text-muted text-xs"></i>
+                                                <div class="icon-box-soft bg-light mr-3 d-flex align-items-center justify-content-center shadow-xs" style="width:36px; height:36px; border-radius: 10px;">
+                                                    <span class="smallest font-weight-bold text-primary">{{ strtoupper(substr($quote->user->name ?? 'C', 0, 1)) }}</span>
                                                 </div>
                                                 <div>
                                                     <span class="d-block font-weight-bold text-dark mb-0">{{ $quote->user->name }}</span>
-                                                    <small class="text-muted" style="font-size: 0.7rem;">{{ $quote->user->email }}</small>
+                                                    <small class="text-muted text-monospace smallest">{{ $quote->user->email }}</small>
                                                 </div>
                                             </div>
                                         @else
-                                            <span class="badge badge-secondary px-2">{{ __('Guest') }}</span>
+                                            <span class="badge badge-secondary-soft text-secondary px-3 py-1 rounded-pill font-weight-bold smallest uppercase">{{ __('Guest Prospect') }}</span>
                                         @endif
                                     </td>
 
                                     <td class="align-middle">
                                         @if($quote->scope_size)
-                                            <span class="badge badge-light border text-capitalize px-2">
+                                            <span class="badge badge-light border text-dark uppercase font-weight-bold px-3 py-2 rounded-xl smallest letter-spacing-1 shadow-xs">
                                                 {{ $quote->scope_size }}
                                             </span>
                                         @else
-                                            <span class="text-muted">—</span>
+                                            <span class="text-muted smallest uppercase font-weight-bold opacity-50">Standard</span>
                                         @endif
                                     </td>
 
                                     <td class="align-middle">
-                                        @if($quote->requested_date)
-                                            <div class="font-weight-600 mb-0">{{ $quote->requested_date->format('M d, Y') }}</div>
-                                        @else
-                                            <span class="text-muted">{{ __('Flexible') }}</span>
-                                        @endif
-                                        <small class="text-muted">{{ $quote->created_at->diffForHumans() }}</small>
+                                        <div class="smallest text-dark font-weight-bold uppercase letter-spacing-1 mb-1">
+                                            <i class="far fa-calendar-alt mr-2 text-primary opacity-50"></i>{{ $quote->requested_date ? $quote->requested_date->format('M d, Y') : 'Flexible' }}
+                                        </div>
+                                        <div class="smallest text-muted font-weight-bold uppercase letter-spacing-1">
+                                            <i class="far fa-clock mr-2 opacity-50"></i>{{ $quote->created_at->diffForHumans() }}
+                                        </div>
                                     </td>
 
-                                    <td class="align-middle font-weight-bold">
-                                        @if($quote->quoted_price)
-                                            <span class="text-success">${{ number_format($quote->quoted_price, 2) }}</span>
-                                        @else
-                                            <span class="text-muted">{{ __('Pending') }}</span>
-                                        @endif
-                                    </td>
-
+                                    @php
+                                        $statusMap = [
+                                            'pending'  => 'badge-warning-light text-warning',
+                                            'quoted'   => 'badge-info-light text-info',
+                                            'accepted' => 'badge-success-light text-success',
+                                            'rejected' => 'badge-danger-light text-danger',
+                                        ];
+                                        $statusClass = $statusMap[$quote->status] ?? 'badge-secondary-light text-secondary';
+                                    @endphp
                                     <td class="text-center align-middle">
-                                        <span class="badge badge-{{ $badge['class'] }} px-3 py-1 text-uppercase shadow-xs"
-                                              style="font-size: 0.7rem; letter-spacing: 0.5px;">
-                                            <i class="fas {{ $badge['icon'] }} mr-1"></i>
+                                        <span class="badge {{ $statusClass }} px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 shadow-xs" style="min-width: 100px;">
                                             {{ $quote->status }}
                                         </span>
                                     </td>
 
-                                    <td class="text-right align-middle px-4">
-                                        <div class="btn-group shadow-sm">
+                                    <td class="text-right align-middle pr-4">
+                                        <div class="btn-group btn-group-premium shadow-xs rounded-pill border overflow-hidden">
                                             <a href="{{ route('admin.service-quotes.show', $quote->id) }}"
-                                               class="btn btn-default btn-sm text-info"
-                                               data-toggle="tooltip" title="{{ __('View Details') }}">
+                                               class="btn btn-white text-info py-2 px-3 d-inline-flex align-items-center"
+                                               data-toggle="tooltip" title="Review Details">
                                                 <i class="fas fa-eye"></i>
                                             </a>
-                                            <form action="{{ route('admin.service-quotes.destroy', $quote->id) }}"
-                                                  method="POST" class="d-inline"
-                                                  onsubmit="return confirm('{{ __('Delete this quote request permanently?') }}')">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-default btn-sm text-danger"
-                                                        data-toggle="tooltip" title="{{ __('Delete') }}">
+                                            <form id="delete-form-{{ $quote->id }}" action="{{ route('admin.service-quotes.destroy', $quote->id) }}" method="POST" class="d-inline">
+                                                @csrf @method('DELETE')
+                                                <button type="button" class="btn btn-white text-danger py-2 px-3 border-left d-inline-flex align-items-center" 
+                                                        data-toggle="tooltip" title="Purge Lead"
+                                                        onclick="confirmDelete('delete-form-{{ $quote->id }}', 'Purge Request?', 'This action will permanently remove the service lead from the revenue records.', 'Confirm')">
                                                     <i class="fas fa-trash-alt"></i>
                                                 </button>
                                             </form>
@@ -203,11 +206,13 @@
                                     </td>
                                 </tr>
                             @empty
-                                <tr>
-                                    <td colspan="8" class="text-center py-5">
-                                        <i class="fas fa-file-invoice fa-3x text-muted mb-3 d-block"></i>
-                                        <h5 class="text-muted font-weight-bold">{{ __('No Quote Requests Yet') }}</h5>
-                                        <p class="text-secondary small">{{ __('Service quote requests submitted by customers will appear here.') }}</p>
+                                <tr class="empty-state">
+                                    <td colspan="7" class="text-center py-5">
+                                        <div class="py-4">
+                                            <i class="fas fa-file-invoice fa-4x text-muted opacity-25 mb-3 d-block"></i>
+                                            <h5 class="text-muted font-weight-bold">No Leads Detected</h5>
+                                            <p class="text-secondary small mb-0">Customer scope requests and revenue inquiries will materialize here.</p>
+                                        </div>
                                     </td>
                                 </tr>
                             @endforelse
@@ -217,24 +222,34 @@
             </div>
 
             @if($serviceQuotes->hasPages())
-                <div class="card-footer bg-white border-0 py-3">
-                    <div class="float-right">
-                        {{ $serviceQuotes->links('pagination::bootstrap-4') }}
-                    </div>
+                <div class="card-footer bg-white border-top py-4 px-4 d-flex justify-content-between align-items-center">
+                    <div class="text-muted smallest font-weight-bold uppercase letter-spacing-1">Displaying {{ $serviceQuotes->firstItem() }} - {{ $serviceQuotes->lastItem() }} of {{ $serviceQuotes->total() }} records</div>
+                    <div>{{ $serviceQuotes->appends(request()->except('page'))->links('pagination::bootstrap-4') }}</div>
                 </div>
             @endif
         </div>
     </div>
 @stop
 
+@section('css')
+<style>
+    .text-monospace { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace !important; }
+    .select2-container--bootstrap4 .select2-selection--single { height: 100% !important; border: 0 !important; background: transparent !important; }
+    .select2-container--bootstrap4 .select2-selection--single .select2-selection__rendered { line-height: 40px !important; padding-left: 0 !important; font-weight: 600 !important; font-size: 0.85rem !important; }
+    .select2-container--bootstrap4 .select2-selection--single .select2-selection__arrow { top: 50% !important; transform: translateY(-50%) !important; }
+</style>
+@endsection
+
 @section('js')
+@include('admin._partials._sweetalert')
 <script>
     $(document).ready(function() {
+        $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2({
             theme: 'bootstrap4',
-            placeholder: 'Select an option'
+            width: '100%',
+            placeholder: 'All Services'
         });
-        $('[data-toggle="tooltip"]').tooltip();
     });
 </script>
 @stop

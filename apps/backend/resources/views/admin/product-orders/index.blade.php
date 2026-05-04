@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', __('Product Orders'))
+@section('title', __('Product Orders | Commerce Intelligence'))
 
 @section('content_header')
     <div class="container-fluid pt-4">
@@ -11,17 +11,222 @@
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Track marketplace transactions, fulfillment status, and customer shipments.</p>
             </div>
-            <div class="col-sm-5 d-flex align-items-center justify-content-end">
-                <a href="{{ route('admin.product-orders.create') }}" class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-premium">
-                    <i class="fas fa-plus-circle mr-1"></i> ADD ORDER
-                </a>
+            <div class="col-sm-5 text-right">
+                <div class="d-flex justify-content-end align-items-center" style="gap: 12px;">
+                    <a href="{{ route('admin.product-orders.create') }}" class="btn btn-primary rounded-pill px-4 py-2 font-weight-bold shadow-premium smallest uppercase letter-spacing-1">
+                        <i class="fas fa-plus-circle mr-2"></i> Add Order
+                    </a>
+                    <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">
+                        <i class="fas fa-th-large mr-2"></i> Dashboard
+                    </a>
+                </div>
             </div>
         </div>
     </div>
 @stop
 
+@section('content')
+    <div class="container-fluid pb-5">
+        @include('admin.alert')
+
+        {{-- Glass Filter Card --}}
+        <div class="card card-premium shadow-sm mb-4 border-0">
+            <div class="card-body py-4 px-4">
+                <form method="GET" action="{{ route('admin.product-orders.index') }}">
+                    <div class="row align-items-end">
+                        <div class="col-md-3">
+                            <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Order Tracking #</label>
+                            <div class="input-group border rounded shadow-xs bg-white" style="height: 46px; padding: 2px;">
+                                <input type="text" name="order_number" class="form-control border-0 shadow-none bg-white h-100 py-0 smallest font-weight-bold" 
+                                       placeholder="Enter order reference..." value="{{ request('order_number') }}">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Inventory Identification</label>
+                            <div class="input-group border rounded shadow-xs bg-white" style="height: 46px; padding: 2px;">
+                                <input type="text" name="product_name" class="form-control border-0 shadow-none bg-white h-100 py-0 smallest font-weight-bold" 
+                                       placeholder="Search products..." value="{{ request('product_name') }}">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Fulfillment</label>
+                            <select name="status" class="form-control shadow-xs" style="height: 46px;">
+                                <option value="">All Statuses</option>
+                                <option value="pending" {{ $status == 'pending' ? 'selected' : '' }}>Pending</option>
+                                <option value="processing" {{ $status == 'processing' ? 'selected' : '' }}>Processing</option>
+                                <option value="completed" {{ $status == 'completed' ? 'selected' : '' }}>Completed</option>
+                                <option value="cancelled" {{ $status == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="btn-group w-100 shadow-sm rounded-pill overflow-hidden border" style="height: 46px;">
+                                <button type="submit" class="btn btn-primary font-weight-bold smallest uppercase d-flex align-items-center justify-content-center flex-grow-1">
+                                    <i class="fas fa-sync-alt mr-2"></i> REFRESH REGISTRY
+                                </button>
+                                <a href="{{ route('admin.product-orders.index') }}" class="btn btn-white px-3 border-left d-flex align-items-center justify-content-center">
+                                    <i class="fas fa-undo text-danger"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        {{-- Main Table --}}
+        <div class="card card-premium overflow-hidden">
+            <div class="card-header border-0 bg-white py-4 px-4 d-flex justify-content-between align-items-center">
+                <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1">
+                    <i class="fas fa-list-ul mr-2 text-primary opacity-50"></i> Commerce Ledger
+                </h3>
+                
+                <div id="bulk-actions-container" class="d-none animate__animated animate__fadeIn">
+                    <div class="dropdown">
+                        <button class="btn btn-primary-soft rounded-pill px-4 py-2 shadow-xs smallest font-weight-bold uppercase letter-spacing-1 dropdown-toggle" type="button" data-toggle="dropdown">
+                            <i class="fas fa-bolt mr-2"></i> Bulk Intelligence (<span id="selected-count">0</span>)
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right shadow-premium border-0 py-2" style="border-radius: 12px; min-width: 200px;">
+                            <h6 class="dropdown-header text-uppercase smallest letter-spacing-1 text-muted mb-2">Transition Lifecycle</h6>
+                            <a class="dropdown-item py-2 smallest font-weight-bold uppercase letter-spacing-1" href="#" onclick="handleBulkStatus('pending')"><i class="fas fa-clock mr-2 text-warning"></i> Pending</a>
+                            <a class="dropdown-item py-2 smallest font-weight-bold uppercase letter-spacing-1" href="#" onclick="handleBulkStatus('processing')"><i class="fas fa-sync mr-2 text-info"></i> Processing</a>
+                            <a class="dropdown-item py-2 smallest font-weight-bold uppercase letter-spacing-1" href="#" onclick="handleBulkStatus('completed')"><i class="fas fa-check-circle mr-2 text-success"></i> Completed</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item py-2 smallest font-weight-bold uppercase letter-spacing-1 text-danger" href="#" onclick="handleBulkStatus('cancelled')"><i class="fas fa-times-circle mr-2"></i> Cancelled</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <form id="bulk-action-form" action="{{ route('admin.product-orders.bulk-update') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="bulk_status" id="bulk-status-input">
+                        <table class="table table-hover table-premium mb-0">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th class="text-center pl-4" style="width: 50px">
+                                        <div class="custom-control custom-checkbox custom-checkbox-premium">
+                                            <input type="checkbox" class="custom-control-input" id="selectAll">
+                                            <label class="custom-control-label" for="selectAll"></label>
+                                        </div>
+                                    </th>
+                                    <th class="text-center" style="width: 70px">Media</th>
+                                    <th>Commerce Protocol</th>
+                                    <th>Client Principal</th>
+                                    <th>Aggregate</th>
+                                    <th>Settlement</th>
+                                    <th class="text-center">Lifecycle</th>
+                                    <th class="text-right pr-4">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($orders as $order)
+                                    <tr>
+                                        <td class="text-center align-middle pl-4">
+                                            <div class="custom-control custom-checkbox custom-checkbox-premium">
+                                                <input type="checkbox" name="ids[]" value="{{ $order->id }}" class="custom-control-input order-checkbox" id="check-{{ $order->id }}">
+                                                <label class="custom-control-label" for="check-{{ $order->id }}"></label>
+                                            </div>
+                                        </td>
+                                        <td class="text-center align-middle">
+                                            @php
+                                                $firstItem = $order->items->first();
+                                                $thumbnail = $firstItem && $firstItem->product ? $firstItem->product->thumbnail_url : asset('images/fallbacks/default.jpg');
+                                            @endphp
+                                            <div class="icon-box-preview shadow-xs rounded overflow-hidden" style="width: 50px; height: 50px; margin: 0 auto;">
+                                                <img src="{{ $thumbnail }}" class="w-100 h-100 object-fit-cover" alt="Item" onerror="this.src='{{ asset('images/fallbacks/default.jpg') }}'">
+                                            </div>
+                                        </td>
+                                        <td class="align-middle">
+                                            <span class="d-block font-weight-bold text-dark mb-1 text-monospace">#{{ $order->order_number }}</span>
+                                            @if($firstItem)
+                                                <div class="smallest text-muted font-weight-bold uppercase letter-spacing-1">
+                                                    <i class="fas fa-box-open mr-1 text-primary opacity-50"></i> {{ Str::limit($firstItem->product_name, 25) }}
+                                                    @if($order->items->count() > 1)
+                                                        <span class="badge badge-primary-light text-primary ml-1" style="font-size: 0.6rem;">+{{ $order->items->count() - 1 }} UNIT(S)</span>
+                                                    @endif
+                                                </div>
+                                            @endif
+                                        </td>
+                                        <td class="align-middle">
+                                            <div class="d-flex align-items-center">
+                                                <div class="icon-box-soft bg-primary-soft mr-3 d-flex align-items-center justify-content-center shadow-xs" style="width:34px; height:34px; border-radius: 8px;">
+                                                    <i class="fas fa-user-tie text-primary smallest"></i>
+                                                </div>
+                                                <div>
+                                                    <span class="d-block font-weight-bold text-dark mb-0 smallest uppercase letter-spacing-1">{{ $order->user->name ?? 'Guest' }}</span>
+                                                    <div class="smallest text-muted text-monospace">{{ Str::limit($order->user->email ?? 'no-email@provided.com', 20) }}</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="align-middle">
+                                            <div class="font-weight-bold text-dark mb-0 text-monospace h6">${{ number_format($order->total_amount, 2) }}</div>
+                                            <div class="smallest text-muted font-weight-bold uppercase letter-spacing-1">{{ $order->items->count() }} {{ Str::plural('UNIT', $order->items->count()) }}</div>
+                                        </td>
+                                        <td class="align-middle">
+                                            <span class="badge {{ $order->payment_status === 'paid' ? 'badge-success-light text-success' : 'badge-warning-light text-warning' }} px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 shadow-xs">
+                                                {{ $order->payment_status }}
+                                            </span>
+                                        </td>
+                                        <td class="text-center align-middle">
+                                            @php
+                                                $statusMap = [
+                                                    'pending' => 'badge-warning-light text-warning',
+                                                    'processing' => 'badge-info-light text-info',
+                                                    'completed' => 'badge-success-light text-success',
+                                                    'cancelled' => 'badge-danger-light text-danger'
+                                                ];
+                                                $statusClass = $statusMap[$order->status] ?? 'badge-secondary-light text-secondary';
+                                            @endphp
+                                            <span class="badge {{ $statusClass }} px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 shadow-xs" style="min-width: 100px;">
+                                                {{ $order->status }}
+                                            </span>
+                                        </td>
+                                        <td class="text-right align-middle pr-4">
+                                            <div class="btn-group btn-group-premium shadow-xs rounded-pill border overflow-hidden">
+                                                <a href="{{ route('admin.product-orders.show', $order->id) }}"
+                                                   class="btn btn-white text-info py-2 px-3 d-inline-flex align-items-center"
+                                                   data-toggle="tooltip" title="Inspect Order">
+                                                    <i class="fas fa-eye mr-2"></i> Inspect
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr class="empty-state">
+                                        <td colspan="8" class="text-center py-5">
+                                            <div class="py-4">
+                                                <i class="fas fa-shopping-bag fa-4x text-muted opacity-25 mb-3 d-block"></i>
+                                                <h5 class="text-muted font-weight-bold">No Commerce Records Detected</h5>
+                                                <p class="small text-secondary mb-0">The order ledger is currently awaiting synchronized marketplace entries.</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+
+            @if(method_exists($orders, 'hasPages') && $orders->hasPages())
+                <div class="card-footer bg-white border-top py-4 px-4 d-flex justify-content-between align-items-center">
+                    <div class="text-muted smallest font-weight-bold uppercase letter-spacing-1">Displaying {{ $orders->firstItem() }} - {{ $orders->lastItem() }} of {{ $orders->total() }} records</div>
+                    <div>{{ $orders->withQueryString()->links('pagination::bootstrap-4') }}</div>
+                </div>
+            @endif
+        </div>
+    </div>
+@endsection
+
 @section('css')
-@include('admin._partials._toggle-card-css')
+<style>
+    .text-monospace { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace !important; }
+    .object-fit-cover { object-fit: cover; }
+    .bg-primary-soft { background: rgba(70, 165, 172, 0.1) !important; }
+    .badge-info-light { background: rgba(23, 162, 184, 0.1) !important; }
+</style>
 @endsection
 
 @section('js')
@@ -29,7 +234,6 @@
     $(function () {
         $('[data-toggle="tooltip"]').tooltip();
 
-        // Bulk Selection Logic
         const $selectAll = $('#selectAll');
         const $orderCheckboxes = $('.order-checkbox');
         const $bulkContainer = $('#bulk-actions-container');
@@ -56,16 +260,16 @@
             updateBulkUI();
         });
 
-        // Handle Bulk Status Update
         window.handleBulkStatus = function(status) {
             Swal.fire({
                 title: 'Update ' + $('.order-checkbox:checked').length + ' orders?',
-                text: "Status will be set to " + status.toUpperCase(),
+                text: "Lifecycle status will be transitioned to " + status.toUpperCase(),
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: 'var(--primary)',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, update all'
+                confirmButtonText: 'TRANSITION ALL',
+                cancelButtonText: 'ABORT'
             }).then((result) => {
                 if (result.isConfirmed) {
                     $('#bulk-status-input').val(status);
@@ -75,186 +279,4 @@
         };
     });
 </script>
-@stop
-
-@section('content')
-    <div class="container-fluid">
-        @include('admin.alert')
-
-        {{-- Premium Filter Card --}}
-        <div class="card border-0 shadow-premium mb-4" style="border-radius: 20px;">
-            <div class="card-body py-4 px-4">
-                <form method="GET" action="{{ route('admin.product-orders.index') }}" class="row align-items-end justify-content-center">
-                    <div class="col-auto">
-                        <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Order #</label>
-                        <input type="text" name="order_number" class="form-control shadow-xs" placeholder="Search..." value="{{ request('order_number') }}">
-                    </div>
-                    <div class="col-auto">
-                        <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Product</label>
-                        <input type="text" name="product_name" class="form-control shadow-xs" placeholder="Search..." value="{{ request('product_name') }}">
-                    </div>
-                    <div class="col-auto">
-                        <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Status</label>
-                        <select name="status" class="form-control shadow-xs">
-                            <option value="">All</option>
-                            <option value="pending" {{ $status == 'pending' ? 'selected' : '' }}>Pending</option>
-                            <option value="processing" {{ $status == 'processing' ? 'selected' : '' }}>Processing</option>
-                            <option value="completed" {{ $status == 'completed' ? 'selected' : '' }}>Completed</option>
-                            <option value="cancelled" {{ $status == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
-                        </select>
-                    </div>
-                    <div class="col-auto">
-                        <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Payment</label>
-                        <select name="payment_status" class="form-control shadow-xs">
-                            <option value="">All</option>
-                            <option value="paid" {{ request('payment_status') == 'paid' ? 'selected' : '' }}>Paid</option>
-                            <option value="unpaid" {{ request('payment_status') == 'unpaid' ? 'selected' : '' }}>Unpaid</option>
-                        </select>
-                    </div>
-                    <div class="col-auto d-flex align-items-end" style="gap: 8px;">
-                        <button type="submit" class="btn btn-primary font-weight-bold shadow-xs" style="height: 38px;">
-                            <i class="fas fa-filter mr-1"></i> FILTER
-                        </button>
-                        <a href="{{ route('admin.product-orders.index') }}" class="btn btn-default font-weight-bold shadow-xs" style="height: 38px;">
-                            <i class="fas fa-undo"></i>
-                        </a>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        {{-- Main Table --}}
-        <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
-            <div class="card-header border-0 bg-white py-4 px-4 d-flex justify-content-between align-items-center">
-                <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">{{ __('All Orders') }}</h3>
-                <div id="bulk-actions-container" class="d-none animate__animated animate__fadeIn">
-                    <div class="dropdown d-inline-block">
-                        <button class="btn btn-primary btn-sm dropdown-toggle rounded-pill px-4 shadow-sm" type="button" data-toggle="dropdown">
-                            <i class="fas fa-tasks mr-1"></i> BULK ACTIONS (<span id="selected-count">0</span>)
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-right shadow-premium border-0" style="border-radius: 12px;">
-                            <h6 class="dropdown-header text-uppercase smallest letter-spacing-1">Update Status</h6>
-                            <a class="dropdown-item py-2" href="#" onclick="handleBulkStatus('pending')"><i class="fas fa-clock mr-2 text-warning"></i> Mark as Pending</a>
-                            <a class="dropdown-item py-2" href="#" onclick="handleBulkStatus('processing')"><i class="fas fa-sync mr-2 text-info"></i> Mark as Processing</a>
-                            <a class="dropdown-item py-2" href="#" onclick="handleBulkStatus('completed')"><i class="fas fa-check-circle mr-2 text-success"></i> Mark as Completed</a>
-                            <a class="dropdown-item py-2" href="#" onclick="handleBulkStatus('cancelled')"><i class="fas fa-times-circle mr-2 text-danger"></i> Mark as Cancelled</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="card-body p-0">
-                <div class="table-responsive">
-                    <form id="bulk-action-form" action="{{ route('admin.product-orders.bulk-update') }}" method="POST">
-                        @csrf
-                        <input type="hidden" name="bulk_status" id="bulk-status-input">
-                        <table class="table table-hover table-premium mb-0">
-                            <thead class="bg-light text-uppercase smallest font-weight-bold">
-                                <tr>
-                                    <th class="py-3 border-0 text-center" style="width: 50px">
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="selectAll">
-                                            <label class="custom-control-label" for="selectAll"></label>
-                                        </div>
-                                    </th>
-                                    <th class="py-3 border-0 text-center" style="width: 70px">Media</th>
-                                    <th class="py-3 border-0">Order Number</th>
-                                    <th class="py-3 border-0">Customer</th>
-                                    <th class="py-3 border-0">Total</th>
-                                    <th class="py-3 border-0">Payment</th>
-                                    <th class="py-3 border-0 text-center">Status</th>
-                                    <th class="py-3 border-0">Date</th>
-                                    <th class="py-3 border-0 text-right px-4">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse ($orders as $order)
-                                    <tr>
-                                        <td class="text-center align-middle">
-                                            <div class="custom-control custom-checkbox custom-checkbox-premium">
-                                                <input type="checkbox" name="ids[]" value="{{ $order->id }}" class="custom-control-input order-checkbox" id="check-{{ $order->id }}">
-                                                <label class="custom-control-label" for="check-{{ $order->id }}"></label>
-                                            </div>
-                                        </td>
-                                        <td class="text-center align-middle">
-                                            @php
-                                                $firstItem = $order->items->first();
-                                                $thumbnail = $firstItem && $firstItem->product ? $firstItem->product->thumbnail_url : asset('images/fallbacks/default.jpg');
-                                            @endphp
-                                            <div class="table-img-preview shadow-xs rounded-lg overflow-hidden border" style="width: 50px; height: 50px; margin: 0 auto;">
-                                                <img src="{{ $thumbnail }}" alt="Order item" onerror="this.src='{{ asset('images/fallbacks/default.jpg') }}'" style="width: 100%; height: 100%; object-fit: cover;">
-                                            </div>
-                                        </td>
-                                        <td class="align-middle">
-                                            <strong class="text-dark">{{ $order->order_number }}</strong>
-                                            @if($firstItem)
-                                                <div class="text-xs text-muted mt-1">
-                                                    <i class="fas fa-box-open mr-1"></i> {{ $firstItem->product_name }}
-                                                    @if($order->items->count() > 1)
-                                                        <span class="badge badge-secondary-light ml-1" style="font-size: 0.6rem;">+{{ $order->items->count() - 1 }} MORE</span>
-                                                    @endif
-                                                </div>
-                                            @endif
-                                        </td>
-                                        <td class="align-middle">
-                                            <div class="d-flex align-items-center">
-                                                <div class="avatar-xs mr-3 bg-light rounded-circle text-center border shadow-xs d-flex align-items-center justify-content-center" style="width:34px; height:34px; min-width:34px;">
-                                                    <i class="fas fa-user text-muted smallest"></i>
-                                                </div>
-                                                <div>
-                                                    <span class="d-block font-weight-bold text-dark smallest mb-0">{{ $order->user->name ?? 'Guest' }}</span>
-                                                    <div class="text-xs text-muted opacity-75">
-                                                        <i class="fas fa-envelope mr-1"></i>{{ Str::limit($order->user->email ?? 'N/A', 15) }}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="align-middle">
-                                            <div class="font-weight-bold text-dark mb-0">{{ setting('currency_symbol', '$') }}{{ number_format($order->total_amount, 2) }}</div>
-                                            <small class="text-muted text-xs">{{ $order->items->count() }} {{ Str::plural('item', $order->items->count()) }}</small>
-                                        </td>
-                                        <td class="align-middle">
-                                            <span class="badge badge-premium {{ $order->payment_status === 'paid' ? 'badge-success-light' : 'badge-warning-light' }}">
-                                                {{ ucfirst($order->payment_status) }}
-                                            </span>
-                                        </td>
-                                        <td class="text-center align-middle">
-                                            @php
-                                                $statusColors = [
-                                                    'pending' => 'badge-warning-light',
-                                                    'processing' => 'badge-info-light',
-                                                    'completed' => 'badge-success-light',
-                                                    'cancelled' => 'badge-danger-light'
-                                                ];
-                                                $statusColor = $statusColors[$order->status] ?? 'badge-secondary-light';
-                                            @endphp
-                                            <span class="badge badge-premium {{ $statusColor }}">{{ ucfirst($order->status) }}</span>
-                                        </td>
-                                        <td class="align-middle text-muted">
-                                            <span class="d-block font-weight-bold text-dark smallest">{{ $order->created_at->format('M d, Y') }}</span>
-                                            <small class="text-xs">{{ $order->created_at->format('h:i A') }}</small>
-                                        </td>
-                                        <td class="text-right px-4 align-middle">
-                                            <div class="btn-group btn-group-premium shadow-sm rounded-pill border overflow-hidden bg-white">
-                                                <a href="{{ route('admin.product-orders.show', $order->id) }}" class="btn btn-white btn-sm text-info py-2 px-3" data-toggle="tooltip" title="View Order">
-                                                    <i class="fas fa-eye"></i>
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr><td colspan="9" class="text-center py-4">No orders found</td></tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </form>
-                </div>
-            </div>
-            @if(method_exists($orders, 'hasPages') && $orders->hasPages())
-                <div class="card-footer bg-white border-0 py-4 px-4 d-flex justify-content-between align-items-center">
-                    <div class="text-muted smallest font-weight-bold uppercase">Displaying {{ $orders->firstItem() }} - {{ $orders->lastItem() }} of {{ $orders->total() }} records</div>
-                    <div>{{ $orders->links('pagination::bootstrap-4') }}</div>
-                </div>
-            @endif
-        </div>
-    </div>
-@stop
+@endsection

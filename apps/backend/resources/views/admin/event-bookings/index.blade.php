@@ -1,216 +1,248 @@
 @extends('adminlte::page')
 
-@section('title', __('Event Bookings'))
-
-@section('plugins.Datatables', true)
+@section('title', __('Event Ticketing | Registry Intelligence'))
 
 @section('content_header')
-    <div class="container-fluid">
-        <div class="row mb-4 align-items-end">
+    <div class="container-fluid pt-4">
+        <div class="row mb-4 align-items-center">
             <div class="col-sm-6">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-ticket-alt mr-2 text-primary"></i>
+                    <i class="fas fa-ticket-alt mr-2 text-primary opacity-50"></i>
                     {{ __('Event Ticketing') }}
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Monitor ticket sales, attendee lists, and event registration metrics.</p>
             </div>
             <div class="col-sm-6 text-right">
-                <a href="{{ route('admin.event-bookings.create') }}" class="btn btn-primary rounded-pill shadow-premium px-4 font-weight-bold">
-                    <i class="fas fa-plus mr-1"></i> {{ __('Register Guest') }}
-                </a>
+                <div class="d-flex justify-content-end align-items-center" style="gap: 12px;">
+                    <a href="{{ route('admin.event-bookings.create') }}" class="btn btn-primary rounded-pill px-4 py-2 font-weight-bold shadow-premium smallest uppercase letter-spacing-1">
+                        <i class="fas fa-plus mr-2"></i> Register Guest
+                    </a>
+                    <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">
+                        <i class="fas fa-th-large mr-2"></i> Dashboard
+                    </a>
+                </div>
             </div>
         </div>
     </div>
-@section('css')
-    @include('admin._partials._toggle-card-css')
-@endsection
+@stop
 
 @section('content')
-    <div class="container-fluid">
+    <div class="container-fluid pb-5">
         @include('admin.alert')
 
         {{-- Premium Filter Card --}}
-        <div class="card border-0 shadow-premium mb-4" style="border-radius: 20px;">
+        <div class="card card-premium shadow-sm mb-4 border-0">
             <div class="card-body py-4 px-4">
-                <form method="GET" action="{{ route('admin.event-bookings.index') }}" class="row align-items-end justify-content-center">
-                    <div class="col-md-3">
-                        <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Event Search</label>
-                        <select name="event_id" class="form-control select2 shadow-xs">
-                            <option value="">All Events</option>
-                            @foreach($events as $e)
-                                <option value="{{ $e->id }}" {{ request('event_id') == $e->id ? 'selected' : '' }}>{{ $e->title }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-md-2">
-                        <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Category</label>
-                        <select name="category" class="form-control shadow-xs">
-                            <option value="">All Categories</option>
-                            @foreach ($categories as $c)
-                                <option value="{{ $c->id }}" {{ request('category') == $c->id ? 'selected' : '' }}>{{ $c->title }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-md-2">
-                        <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Status</label>
-                        <select name="status" class="form-control shadow-xs">
-                            <option value="">All Statuses</option>
-                            <option value="pending" {{ $status == 'pending' ? 'selected' : '' }}>Pending</option>
-                            <option value="confirmed" {{ $status == 'confirmed' ? 'selected' : '' }}>Confirmed</option>
-                            <option value="cancelled" {{ $status == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
-                        </select>
-                    </div>
-                    <div class="col-auto d-flex align-items-end" style="gap: 8px;">
-                        <button type="submit" class="btn btn-primary font-weight-bold shadow-xs" style="height: 38px;">
-                            <i class="fas fa-filter mr-1"></i> FILTER
-                        </button>
-                        <a href="{{ route('admin.event-bookings.index') }}" class="btn btn-default font-weight-bold shadow-xs" style="height: 38px;">
-                            <i class="fas fa-undo"></i>
-                        </a>
+                <form method="GET" action="{{ route('admin.event-bookings.index') }}">
+                    <div class="row align-items-end">
+                        <div class="col-md-3">
+                            <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Event Identification</label>
+                            <select name="event_id" class="form-control select2 shadow-xs" style="height: 46px;">
+                                <option value="">All Events Intelligence</option>
+                                @foreach($events as $e)
+                                    <option value="{{ $e->id }}" {{ request('event_id') == $e->id ? 'selected' : '' }}>{{ $e->title }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Classification</label>
+                            <select name="category" class="form-control shadow-xs" style="height: 46px;">
+                                <option value="">All Categories</option>
+                                @foreach ($categories as $c)
+                                    <option value="{{ $c->id }}" {{ request('category') == $c->id ? 'selected' : '' }}>{{ $c->title }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Lifecycle Status</label>
+                            <select name="status" class="form-control shadow-xs" style="height: 46px;">
+                                <option value="">All Statuses</option>
+                                <option value="pending" {{ $status == 'pending' ? 'selected' : '' }}>Pending</option>
+                                <option value="confirmed" {{ $status == 'confirmed' ? 'selected' : '' }}>Confirmed</option>
+                                <option value="cancelled" {{ $status == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
+                            </select>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="btn-group w-100 shadow-sm rounded-pill overflow-hidden border" style="height: 46px;">
+                                <button type="submit" class="btn btn-primary font-weight-bold smallest uppercase d-flex align-items-center justify-content-center flex-grow-1">
+                                    <i class="fas fa-sync-alt mr-2"></i> REFRESH REGISTRY
+                                </button>
+                                <a href="{{ route('admin.event-bookings.index') }}" class="btn btn-white px-3 border-left d-flex align-items-center justify-content-center">
+                                    <i class="fas fa-undo text-danger"></i>
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>
         </div>
 
         {{-- Main Table --}}
-        <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
-            <div class="card-header border-0 bg-white py-3">
-                <h3 class="card-title font-weight-600 text-muted"><i class="fas fa-calendar-alt mr-1 text-primary"></i> {{ __('All Bookings') }}</h3>
+        <div class="card card-premium overflow-hidden">
+            <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
+                <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1">
+                    <i class="fas fa-list-ul mr-2 text-primary opacity-50"></i> Ticketing Ledger
+                </h3>
             </div>
+
             <div class="card-body p-0">
                 <div class="table-responsive">
                     <table id="bookings-table" class="table table-hover table-premium mb-0">
                         <thead class="thead-light">
                             <tr>
-                                <th class="text-center" style="width: 70px">Media</th>
-                                <th>Event</th>
-                                <th>Guest</th>
-                                <th>Date</th>
-                                <th class="text-right">Value</th>
-                                <th class="text-center">Status</th>
-                                <th class="text-right px-4">Actions</th>
+                                <th class="pl-4" style="width: 70px">Media</th>
+                                <th>Event Specification</th>
+                                <th>Attendee Principal</th>
+                                <th>Registry Date</th>
+                                <th class="text-right">Settlement</th>
+                                <th class="text-center">Lifecycle</th>
+                                <th class="text-right pr-4">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse ($bookings as $booking)
                                 <tr>
-                                    <td class="text-center align-middle">
-                                        <div class="table-img-preview shadow-xs">
-                                            <img src="{{ $booking->event->thumbnail_url ?? asset('images/fallbacks/default.jpg') }}" alt="Event" onerror="this.src='{{ asset('images/fallbacks/default.jpg') }}'">
+                                    <td class="text-center align-middle pl-4">
+                                        <div class="icon-box-preview shadow-xs rounded overflow-hidden" style="width: 54px; height: 54px;">
+                                            <img src="{{ $booking->event->thumbnail_url ?? asset('images/fallbacks/default.jpg') }}" 
+                                                 class="w-100 h-100 object-fit-cover"
+                                                 alt="{{ $booking->event->title ?? 'Event' }}"
+                                                 onerror="this.src='{{ asset('images/fallbacks/default.jpg') }}'">
                                         </div>
                                     </td>
+
                                     <td class="align-middle">
-                                        <span class="d-block font-weight-bold text-dark mb-0">
-                                            {{ $booking->event->title ?? 'N/A' }}
+                                        <span class="d-block font-weight-bold text-dark mb-1">
+                                            {{ $booking->event->title ?? __('N/A') }}
                                         </span>
-                                        <div class="text-xs mt-1">
+                                        <div class="d-flex align-items-center">
                                             @if($booking->event && $booking->event->category)
-                                                <span class="badge badge-primary-light text-primary px-2 py-1 mr-1" style="font-size: 0.6rem; border-radius: 4px;">
-                                                    <i class="fas fa-tag mr-1"></i>{{ strtoupper($booking->event->category->title) }}
+                                                <span class="badge badge-primary-light text-primary px-2 py-1 mr-2 rounded-pill smallest font-weight-bold uppercase letter-spacing-1 shadow-xs">
+                                                    {{ $booking->event->category->title }}
                                                 </span>
                                             @endif
                                             @if($booking->event && $booking->event->location)
-                                                <span class="text-muted" style="font-size: 0.7rem;">
-                                                    <i class="fas fa-map-marker-alt mr-1 text-danger opacity-75"></i>{{ $booking->event->location->title }}
+                                                <span class="text-muted smallest font-weight-bold uppercase letter-spacing-1">
+                                                    <i class="fas fa-map-marker-alt mr-1 text-danger opacity-50"></i>{{ $booking->event->location->title }}
                                                 </span>
                                             @endif
                                         </div>
                                     </td>
+
                                     <td class="align-middle">
                                         @if($booking->user)
                                             <div class="d-flex align-items-center">
-                                                <div class="mr-2 bg-light rounded-circle text-center border shadow-sm" style="width:32px; height:32px; line-height:30px; flex-shrink:0;">
-                                                    <i class="fas fa-user text-muted text-xs"></i>
+                                                <div class="icon-box-soft bg-primary-soft mr-3 d-flex align-items-center justify-content-center shadow-xs" style="width:36px; height:36px; border-radius: 8px;">
+                                                    <i class="fas fa-user-tie text-primary smallest"></i>
                                                 </div>
                                                 <div>
-                                                    <span class="d-block font-weight-bold text-dark mb-0">{{ $booking->user->name }}</span>
-                                                    <small class="text-muted" style="font-size: 0.7rem;">{{ $booking->user->email }}</small>
+                                                    <span class="d-block font-weight-bold text-dark mb-0 smallest uppercase letter-spacing-1">
+                                                        {{ $booking->user->name }}
+                                                    </span>
+                                                    <div class="smallest text-muted text-monospace">
+                                                        {{ $booking->user->email }}
+                                                    </div>
                                                 </div>
                                             </div>
                                         @else
-                                            <span class="badge badge-secondary px-2">{{ __('Guest') }}</span>
+                                            <span class="badge badge-secondary-light text-secondary px-3 py-1 rounded-pill smallest font-weight-bold uppercase letter-spacing-1">
+                                                {{ __('Guest Attendee') }}
+                                            </span>
                                         @endif
                                     </td>
+
                                     <td class="align-middle">
-                                        <div class="font-weight-600 mb-0">{{ $booking->created_at->format('M d, Y') }}</div>
-                                        <small class="text-muted"><i class="far fa-clock mr-1 text-xs"></i>{{ $booking->created_at->format('H:i') }}</small>
+                                        <div class="smallest font-weight-bold text-dark uppercase letter-spacing-1">
+                                            {{ $booking->created_at->format('d M, Y') }}
+                                        </div>
+                                        <small class="text-muted smallest uppercase letter-spacing-1">
+                                            <i class="far fa-clock mr-1 text-primary opacity-50"></i> {{ $booking->created_at->format('H:i') }}
+                                        </small>
                                     </td>
-                                    <td class="align-middle text-right font-weight-bold text-primary">
-                                        ${{ number_format($booking->total_price, 2) }}
+
+                                    <td class="align-middle text-right">
+                                        <div class="h6 font-weight-bold text-primary mb-0 text-monospace">
+                                            ${{ number_format($booking->total_price, 2) }}
+                                        </div>
                                         @if($booking->quantity > 1)
-                                            <div class="text-xs text-muted font-weight-normal">{{ $booking->quantity }} x ${{ number_format($booking->total_price / $booking->quantity, 2) }}</div>
+                                            <div class="smallest text-muted font-weight-bold uppercase letter-spacing-1">
+                                                {{ $booking->quantity }} Tickets
+                                            </div>
                                         @endif
                                     </td>
+
                                     @php
-                                        $statusClass = 'secondary';
-                                        if($booking->status == 'pending') $statusClass = 'warning';
-                                        elseif($booking->status == 'confirmed') $statusClass = 'success';
-                                        elseif($booking->status == 'cancelled') $statusClass = 'danger';
+                                        $statusMap = [
+                                            'pending' => 'badge-warning-light text-warning',
+                                            'confirmed' => 'badge-success-light text-success',
+                                            'cancelled' => 'badge-danger-light text-danger'
+                                        ];
+                                        $statusClass = $statusMap[$booking->status] ?? 'badge-info-light text-info';
                                     @endphp
                                     <td class="text-center align-middle">
-                                        <span class="badge badge-{{ $statusClass }}-light px-3 py-1 text-uppercase shadow-xs" style="font-size: 0.7rem; letter-spacing: 0.5px;">
+                                        <span class="badge {{ $statusClass }} px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 shadow-xs" style="min-width: 100px;">
                                             {{ $booking->status ?? 'Confirmed' }}
                                         </span>
                                     </td>
-                                    <td class="text-right px-4">
-                                        <div class="btn-group">
-                                            <a href="{{ route('admin.event-bookings.show', $booking->id) }}" class="btn btn-default btn-sm text-info mr-1 shadow-xs" title="View Details">
+
+                                    <td class="text-right align-middle pr-4">
+                                        <div class="btn-group btn-group-premium shadow-xs rounded-pill border overflow-hidden">
+                                            <a href="{{ route('admin.event-bookings.show', $booking->id) }}"
+                                               class="btn btn-white text-info py-2 px-3 d-inline-flex align-items-center border-right"
+                                               data-toggle="tooltip" title="Inspect Record">
                                                 <i class="fas fa-eye"></i>
                                             </a>
-                                            <a href="{{ route('admin.event-bookings.edit', $booking->id) }}" class="btn btn-default btn-sm text-primary shadow-xs" title="Edit Booking">
+                                            <a href="{{ route('admin.event-bookings.edit', $booking->id) }}"
+                                               class="btn btn-white text-primary py-2 px-3 d-inline-flex align-items-center"
+                                               data-toggle="tooltip" title="Modify Record">
                                                 <i class="fas fa-edit"></i>
                                             </a>
                                         </div>
                                     </td>
                                 </tr>
                             @empty
-                                <tr><td colspan="6" class="text-center">No bookings found</td></tr>
+                                <tr class="empty-state">
+                                    <td colspan="7" class="text-center py-5">
+                                        <div class="py-4">
+                                            <i class="fas fa-ticket-alt fa-4x text-muted opacity-25 mb-3 d-block"></i>
+                                            <h5 class="text-muted font-weight-bold">No Ticketing Records Found</h5>
+                                            <p class="small text-secondary mb-0">The registration ledger is currently awaiting synchronized entries.</p>
+                                        </div>
+                                    </td>
+                                </tr>
                             @endforelse
                         </tbody>
                     </table>
                 </div>
             </div>
+
+            @if($bookings->hasPages())
+                <div class="card-footer bg-white border-top py-4 px-4 d-flex justify-content-between align-items-center">
+                    <div class="text-muted smallest font-weight-bold uppercase letter-spacing-1">Displaying {{ $bookings->firstItem() }} - {{ $bookings->lastItem() }} of {{ $bookings->total() }} records</div>
+                    <div>{{ $bookings->withQueryString()->links('pagination::bootstrap-4') }}</div>
+                </div>
+            @endif
         </div>
     </div>
-@stop
+@endsection
+
 @section('css')
 <style>
-    .dataTables_filter { float: left !important; text-align: left !important; }
-    .dataTables_filter input { margin-left: 0 !important; }
-    .dataTables_length { float: right !important; text-align: right !important; }
+    .text-monospace { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace !important; }
+    .object-fit-cover { object-fit: cover; }
+    .bg-primary-soft { background: rgba(70, 165, 172, 0.1) !important; }
+    .badge-info-light { background: rgba(23, 162, 184, 0.1) !important; }
 </style>
 @endsection
 
 @section('js')
 <script>
     $(document).ready(function() {
-        if ($('#bookings-table tbody tr:not(.empty-state)').length > 0) {
-            $('#bookings-table').DataTable({
-                "paging": true,
-                "lengthChange": true,
-                "searching": true,
-                "ordering": true,
-                "info": true,
-                "autoWidth": false,
-                "responsive": true,
-                "dom": '<"row px-0 pt-3"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-6"l>>' +
-                       '<"row"<"col-sm-12"tr>>' +
-                       '<"row px-0 pb-3"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
-                "language": {
-                    "search": "",
-                    "searchPlaceholder": "Search bookings...",
-                    "paginate": {
-                        "previous": "<i class='fas fa-angle-left'></i>",
-                        "next": "<i class='fas fa-angle-right'></i>"
-                    }
-                }
-            });
-            $('.dataTables_filter input').addClass('form-control shadow-none border-light').css('width', '250px');
-        }
+        $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2({
             theme: 'bootstrap4',
-            placeholder: 'Select an option'
+            placeholder: 'Select identification'
         });
     });
 </script>
-@stop
+@endsection

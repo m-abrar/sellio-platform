@@ -1,21 +1,24 @@
 @extends('adminlte::page')
 
-@section('title', __('Booking Details') . ' #' . $booking->id)
+@section('title', __('Booking Details') . ' #' . $booking->id . ' | Real Estate Intelligence')
 
 @section('content_header')
     <div class="container-fluid pt-4">
         <div class="row mb-4 align-items-center">
             <div class="col-sm-6">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-key mr-2 text-primary"></i>
-                    {{ __('Reservation Protocol') }} <small class="text-muted font-weight-bold opacity-75">#{{ $booking->id }}</small>
+                    <i class="fas fa-key mr-2 text-primary opacity-50"></i>
+                    {{ __('Reservation Protocol') }} <small class="text-muted font-weight-bold opacity-75 text-monospace">#{{ $booking->id }}</small>
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Managed hospitality registry for property lodgings and guest stays.</p>
             </div>
             <div class="col-sm-6 text-right">
                 <div class="d-flex justify-content-end align-items-center" style="gap: 12px;">
-                    <a href="{{ route('admin.bookings.index') }}" class="btn btn-default shadow-sm rounded-pill px-4 font-weight-bold smallest">
-                        <i class="fas fa-arrow-left mr-1"></i> BACK TO REGISTRY
+                    <a href="{{ route('admin.property-bookings.edit', $booking->id) }}" class="btn btn-primary rounded-pill px-4 py-2 font-weight-bold shadow-premium smallest uppercase letter-spacing-1">
+                        <i class="fas fa-edit mr-2"></i> Modify Record
+                    </a>
+                    <a href="{{ route('admin.property-bookings.index') }}" class="btn-back shadow-sm">
+                        <i class="fas fa-receipt mr-2"></i> Back to Ledger
                     </a>
                 </div>
             </div>
@@ -28,207 +31,220 @@
         @include('admin.alert')
 
         <div class="row">
-            {{-- Left Column: Core Data --}}
+            {{-- Intelligence Column --}}
             <div class="col-md-8">
-                <div class="card border-0 shadow-premium overflow-hidden mb-4" style="border-radius: 24px;">
+                <div class="card card-premium shadow-sm mb-4 border-0 overflow-hidden">
                     <div class="card-header border-0 bg-white py-4 px-4 d-flex justify-content-between align-items-center">
-                        <h3 class="card-title font-weight-bold text-dark mb-0">
+                        <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1">
                             <i class="fas fa-info-circle mr-2 text-primary opacity-50"></i> {{ __('Lodging Specifications') }}
                         </h3>
-                        <span class="badge {{ method_exists($booking, 'getStatusBadgeClass') ? $booking->getStatusBadgeClass() : 'badge-secondary-light text-secondary' }} px-3 py-2 rounded-pill font-weight-bold smallest text-uppercase">
+                        @php
+                            $statusMap = ['confirmed' => 'badge-success-light text-success', 'pending' => 'badge-warning-light text-warning', 'cancelled' => 'badge-danger-light text-danger'];
+                            $statusClass = $statusMap[$booking->status] ?? 'badge-secondary-light text-secondary';
+                        @endphp
+                        <span class="badge {{ $statusClass }} px-3 py-2 rounded-pill font-weight-bold smallest text-uppercase letter-spacing-1 shadow-xs">
                             {{ $booking->status }}
                         </span>
                     </div>
-                    <div class="card-body p-4">
-                        <div class="row mb-4 pb-4 border-bottom border-light">
+                    <div class="card-body px-4 pb-4">
+                        <div class="row mb-4 pb-4 border-bottom">
                             <div class="col-sm-7">
-                                <label class="smallest text-uppercase font-weight-bold text-muted mb-2 d-block">{{ __('Property Entity') }}</label>
+                                <label class="smallest text-uppercase font-weight-bold text-muted mb-2 d-block letter-spacing-1">{{ __('Property Entity') }}</label>
                                 <div class="d-flex align-items-center">
-                                    <div class="icon-box-soft bg-primary-soft mr-3" style="width: 50px; height: 50px;">
+                                    <div class="icon-box-soft bg-primary-soft mr-3 shadow-xs d-flex align-items-center justify-content-center" style="width: 54px; height: 54px; border-radius: 12px;">
                                         <i class="fas fa-building text-primary"></i>
                                     </div>
-                                    <p class="h5 font-weight-bold text-dark mb-0">{{ $booking->property->title ?? __('N/A') }}</p>
+                                    <div>
+                                        <p class="h6 font-weight-bold text-dark mb-1">{{ $booking->property->title ?? __('N/A') }}</p>
+                                        <span class="text-muted smallest font-weight-bold uppercase letter-spacing-1">
+                                            <i class="fas fa-map-marker-alt mr-1 text-danger opacity-50"></i> {{ $booking->property->location->title ?? 'Location Pending' }}
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-sm-5 text-sm-right">
-                                <label class="smallest text-uppercase font-weight-bold text-muted mb-2 d-block">{{ __('Registry Timestamp') }}</label>
-                                <p class="text-dark font-weight-600 mb-0"><i class="far fa-clock mr-1 text-muted"></i> {{ $booking->created_at->format('M d, Y • H:i') }}</p>
+                                <label class="smallest text-uppercase font-weight-bold text-muted mb-2 d-block letter-spacing-1">{{ __('Registry Timestamp') }}</label>
+                                <p class="text-dark font-weight-bold mb-0 smallest uppercase letter-spacing-1">
+                                    <i class="far fa-clock mr-1 text-primary opacity-50"></i> {{ $booking->created_at->format('M d, Y') }} 
+                                    <span class="text-muted ml-1 text-monospace">{{ $booking->created_at->format('H:i') }}</span>
+                                </p>
                             </div>
                         </div>
 
                         <div class="row mt-4">
                             <div class="col-md-6 border-right">
-                                <h5 class="smallest text-uppercase font-weight-bold text-muted letter-spacing-1 mb-3">
-                                    <i class="fas fa-calendar-alt mr-2 text-primary"></i> {{ __('Stay Architecture') }}
+                                <h5 class="smallest text-uppercase font-weight-bold text-dark letter-spacing-1 mb-4">
+                                    <i class="fas fa-calendar-alt mr-2 text-primary opacity-50"></i> {{ __('Stay Architecture') }}
                                 </h5>
-                                <div class="p-3 rounded-xl bg-light">
+                                <div class="p-3 rounded-xl bg-light border shadow-xs">
                                     <table class="table table-sm table-borderless mb-0">
                                         <tr>
-                                            <th class="smallest text-muted py-1" style="width: 40%">{{ __('Check-in') }}</th>
-                                            <td class="small font-weight-bold py-1">{{ $booking->check_in_date->format('l, M d, Y') }}</td>
+                                            <th class="smallest text-muted py-2 letter-spacing-1 uppercase" style="width: 40%">{{ __('Arrival') }}</th>
+                                            <td class="smallest font-weight-bold text-dark py-2 letter-spacing-1 uppercase">{{ $booking->check_in_date->format('l, M d, Y') }}</td>
                                         </tr>
                                         <tr>
-                                            <th class="smallest text-muted py-1">{{ __('Check-out') }}</th>
-                                            <td class="small font-weight-bold py-1">{{ $booking->check_out_date->format('l, M d, Y') }}</td>
+                                            <th class="smallest text-muted py-2 letter-spacing-1 uppercase">{{ __('Departure') }}</th>
+                                            <td class="smallest font-weight-bold text-dark py-2 letter-spacing-1 uppercase">{{ $booking->check_out_date->format('l, M d, Y') }}</td>
                                         </tr>
                                         <tr>
-                                            <th class="smallest text-muted py-1">{{ __('Duration') }}</th>
-                                            <td class="py-1">
-                                                <span class="badge badge-primary-light text-primary px-3 py-1 rounded-pill font-weight-bold">
-                                                    {{ $booking->check_in_date->diffInDays($booking->check_out_date) }} NIGHTS
+                                            <th class="smallest text-muted py-2 letter-spacing-1 uppercase">{{ __('Duration') }}</th>
+                                            <td class="py-2">
+                                                <span class="badge badge-primary-light text-primary px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 shadow-xs">
+                                                    {{ $booking->check_in_date->diffInDays($booking->check_out_date) }} Nights
                                                 </span>
                                             </td>
                                         </tr>
                                     </table>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <h5 class="smallest text-uppercase font-weight-bold text-muted letter-spacing-1 mb-3">
-                                    <i class="fas fa-users mr-2 text-primary"></i> {{ __('Guest Logistics') }}
+                            <div class="col-md-6 pl-md-4">
+                                <h5 class="smallest text-uppercase font-weight-bold text-dark letter-spacing-1 mb-4">
+                                    <i class="fas fa-users mr-2 text-primary opacity-50"></i> {{ __('Guest Logistics') }}
                                 </h5>
                                 <div class="d-flex align-items-center mb-3">
-                                    <div class="avatar-xs bg-dark-soft text-dark rounded-pill mr-2 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
-                                        <i class="fas fa-user smallest"></i>
+                                    <div class="icon-box-soft bg-dark-soft text-dark mr-3 shadow-xs d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; border-radius: 10px;">
+                                        <i class="fas fa-user-tie smallest"></i>
                                     </div>
-                                    <span class="font-weight-bold text-dark">{{ $booking->full_name }}</span>
-                                    <span class="badge badge-light border text-muted ml-2 smallest px-2">{{ $booking->guests }} GUESTS</span>
+                                    <div>
+                                        <span class="font-weight-bold text-dark smallest uppercase letter-spacing-1 d-block mb-1">{{ $booking->full_name }}</span>
+                                        <span class="badge badge-light border text-muted smallest px-2 py-1 rounded-pill uppercase letter-spacing-1">{{ $booking->guests }} GUESTS</span>
+                                    </div>
                                 </div>
-                                <p class="mb-1 text-muted small"><i class="fas fa-envelope fa-fw mr-2 opacity-50"></i> {{ $booking->email }}</p>
-                                <p class="mb-1 text-muted small"><i class="fas fa-phone fa-fw mr-2 opacity-50"></i> {{ $booking->phone ?? __('N/A') }}</p>
+                                <div class="ml-1">
+                                    <p class="mb-2 text-muted smallest font-weight-bold letter-spacing-1 text-monospace"><i class="fas fa-envelope fa-fw mr-2 text-primary opacity-50"></i> {{ $booking->email }}</p>
+                                    <p class="mb-0 text-muted smallest font-weight-bold letter-spacing-1 text-monospace"><i class="fas fa-phone fa-fw mr-2 text-primary opacity-50"></i> {{ $booking->phone ?? __('N/A') }}</p>
+                                </div>
                             </div>
                         </div>
 
                         @if($booking->message)
-                            <div class="mt-4 p-4 rounded-xl border-0 shadow-xs" style="background: rgba(70, 165, 172, 0.05);">
-                                <h6 class="smallest text-uppercase font-weight-bold text-primary mb-2">
-                                    <i class="fas fa-comment-dots mr-2"></i> {{ __('Client Memo') }}
+                            <div class="mt-4 p-4 rounded-xl border-0 shadow-xs" style="background: rgba(70, 165, 172, 0.04); border-left: 4px solid var(--primary) !important;">
+                                <h6 class="smallest text-uppercase font-weight-bold text-primary mb-3 letter-spacing-1">
+                                    <i class="fas fa-comment-dots mr-2"></i> {{ __('Client Special Directives') }}
                                 </h6>
-                                <p class="mb-0 text-dark font-italic" style="line-height: 1.6;">"{{ $booking->message }}"</p>
+                                <p class="mb-0 text-dark font-italic small" style="line-height: 1.6;">"{{ $booking->message }}"</p>
                             </div>
                         @endif
                     </div>
-                    <div class="card-footer bg-white border-top-0 px-4 py-3">
-                        <a href="{{ route('admin.property-bookings.edit', $booking->id) }}" class="btn btn-outline-primary rounded-pill px-4 font-weight-bold smallest">
-                            <i class="fas fa-edit mr-1"></i> {{ __('MODIFY RECORD') }}
-                        </a>
-                    </div>
                 </div>
 
-                {{-- Financial Details --}}
-                <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
-                    <div class="card-header border-0 bg-white py-4 px-4">
-                        <h3 class="card-title font-weight-bold text-dark mb-0">
+                {{-- Financial Ledger --}}
+                <div class="card card-premium shadow-sm border-0 overflow-hidden">
+                    <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
+                        <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1">
                             <i class="fas fa-receipt mr-2 text-primary opacity-50"></i> {{ __('Fiscal Reconciliation') }}
                         </h3>
                     </div>
                     <div class="card-body p-0">
-                        <table class="table table-hover table-premium mb-0">
-                            <thead class="thead-light">
-                                <tr class="smallest text-uppercase font-weight-bold">
-                                    <th class="pl-4 py-3 border-0">{{ __('Description') }}</th>
-                                    <th class="text-right pr-4 py-3 border-0">{{ __('Amount') }}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse($booking->transactionLines as $line)
+                        <div class="table-responsive">
+                            <table class="table table-hover table-premium mb-0">
+                                <thead class="thead-light">
                                     <tr>
-                                        <td class="pl-4 py-3 text-dark font-weight-600">{{ $line->description }}</td>
-                                        <td class="text-right pr-4 font-weight-bold text-dark">${{ number_format($line->amount, 2) }}</td>
+                                        <th class="pl-4 py-3 smallest text-uppercase font-weight-bold letter-spacing-1 text-secondary border-0">{{ __('Service Description') }}</th>
+                                        <th class="text-right pr-4 py-3 smallest text-uppercase font-weight-bold letter-spacing-1 text-secondary border-0">{{ __('Settlement Amount') }}</th>
                                     </tr>
-                                @empty
+                                </thead>
+                                <tbody>
+                                    @forelse($booking->transactionLines as $line)
+                                        <tr>
+                                            <td class="pl-4 py-3 text-dark font-weight-bold smallest uppercase letter-spacing-1">{{ $line->description }}</td>
+                                            <td class="text-right pr-4 font-weight-bold text-dark h6 mb-0">${{ number_format($line->amount, 2) }}</td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td class="pl-4 py-4 text-dark font-weight-bold smallest uppercase letter-spacing-1">
+                                                <i class="fas fa-bed mr-2 text-primary opacity-50"></i> Standard Lodging Rate
+                                            </td>
+                                            <td class="text-right pr-4 font-weight-bold text-dark h6 mb-0">${{ number_format($booking->total_price, 2) }}</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                                <tfoot class="bg-light">
                                     <tr>
-                                        <td class="pl-4 py-3 text-dark font-weight-600">{{ __('Standard Lodging Rate') }}</td>
-                                        <td class="text-right pr-4 font-weight-bold text-dark">${{ number_format($booking->total_price, 2) }}</td>
+                                        <th class="pl-4 py-4 text-uppercase smallest font-weight-bold letter-spacing-2 text-dark">{{ __('Aggregate Revenue Protocol') }}</th>
+                                        <th class="text-right pr-4 py-4 text-xl font-weight-bold text-success">${{ number_format($booking->total_price, 2) }}</th>
                                     </tr>
-                                @endforelse
-                            </tbody>
-                            <tfoot class="bg-light">
-                                <tr>
-                                    <th class="pl-4 py-4 text-uppercase smallest font-weight-bold letter-spacing-1">{{ __('Final Collection Total') }}</th>
-                                    <th class="text-right pr-4 py-4 text-xl font-weight-bold text-success">${{ number_format($booking->total_price, 2) }}</th>
-                                </tr>
-                            </tfoot>
-                        </table>
+                                </tfoot>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            {{-- Right Column: Side Cards --}}
+            {{-- Oversight Column --}}
             <div class="col-md-4">
-                {{-- Customer Card --}}
-                <div class="card border-0 shadow-premium mb-4 overflow-hidden" style="border-radius: 24px;">
+                {{-- Account Integrity --}}
+                <div class="card card-premium shadow-sm mb-4 border-0 overflow-hidden text-center">
                     <div class="card-header border-0 bg-white py-3 px-4 border-bottom">
                         <h3 class="card-title font-weight-bold text-dark smallest text-uppercase letter-spacing-1 mb-0">
-                            <i class="fas fa-user-circle mr-1 text-primary"></i> Account Link
+                            <i class="fas fa-user-shield mr-2 text-primary opacity-50"></i> Principal Integrity
                         </h3>
                     </div>
-                    <div class="card-body text-center p-4">
+                    <div class="card-body p-4">
                         @if($booking->user)
-                            <div class="mb-3 d-inline-block p-1 rounded-circle border shadow-xs">
-                                <img src="https://ui-avatars.com/api/?name={{ urlencode($booking->user->name) }}&background=46a5ac&color=fff" class="rounded-circle" style="width: 70px; height: 70px;">
+                            <div class="mb-4 d-inline-block p-1 rounded-circle border shadow-sm bg-white">
+                                <img src="https://ui-avatars.com/api/?name={{ urlencode($booking->user->name) }}&background=46a5ac&color=fff&bold=true" class="rounded-circle" style="width: 72px; height: 72px;">
                             </div>
-                            <h5 class="font-weight-bold text-dark mb-1">{{ $booking->user->name }}</h5>
-                            <p class="text-muted small mb-4 font-weight-600">{{ $booking->user->email }}</p>
-                            <a href="{{ route('admin.users.show', $booking->user_id) }}" class="btn btn-primary-soft rounded-pill btn-block font-weight-bold smallest py-2">
-                                <i class="fas fa-external-link-alt mr-1"></i> VIEW PROFILE
+                            <h6 class="font-weight-bold text-dark mb-1 smallest uppercase letter-spacing-1">{{ $booking->user->name }}</h6>
+                            <p class="text-muted smallest font-weight-bold letter-spacing-1 text-monospace mb-4">{{ $booking->user->email }}</p>
+                            <a href="{{ route('admin.users.show', $booking->user_id) }}" class="btn btn-primary-soft rounded-pill btn-block font-weight-bold smallest py-2 letter-spacing-1 uppercase shadow-xs">
+                                <i class="fas fa-external-link-alt mr-2"></i> Inspect Profile
                             </a>
                         @else
-                            <div class="text-muted py-3 text-center">
-                                <div class="icon-box-soft bg-light mx-auto mb-3" style="width: 60px; height: 60px;">
+                            <div class="text-muted py-4 text-center">
+                                <div class="icon-box-soft bg-light mx-auto mb-3 shadow-xs d-flex align-items-center justify-content-center" style="width: 64px; height: 64px; border-radius: 16px;">
                                     <i class="fas fa-user-slash text-muted h4 mb-0"></i>
                                 </div>
-                                <p class="font-weight-bold text-muted smallest text-uppercase letter-spacing-1 mb-0">{{ __('Guest Submission') }}</p>
+                                <p class="font-weight-bold text-muted smallest text-uppercase letter-spacing-2 mb-0">{{ __('External Guest submission') }}</p>
+                                <p class="smallest text-muted mt-2 opacity-75">No synchronized platform account found.</p>
                             </div>
                         @endif
                     </div>
                 </div>
 
-                {{-- Payment Status --}}
+                {{-- Collection Intelligence --}}
                 @php
                     $totalPaid = $booking->payments->sum('amount');
                     $balance = $booking->total_price - $totalPaid;
                     $paymentPercent = $booking->total_price > 0 ? ($totalPaid / $booking->total_price) * 100 : 0;
                 @endphp
                 
-                <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
+                <div class="card card-premium shadow-sm border-0 overflow-hidden">
                     <div class="card-header border-0 bg-white py-3 px-4 border-bottom">
                         <h3 class="card-title font-weight-bold text-dark smallest text-uppercase letter-spacing-1 mb-0">
-                            <i class="fas fa-wallet mr-1 text-primary"></i> Collection Progress
+                            <i class="fas fa-wallet mr-2 text-primary opacity-50"></i> Collection Status
                         </h3>
                     </div>
                     <div class="card-body p-4">
-                        <div class="d-flex justify-content-between mb-2">
-                            <span class="smallest font-weight-bold text-muted text-uppercase letter-spacing-1">{{ __('Paid Status') }}</span>
-                            <span class="font-weight-bold text-dark">{{ round($paymentPercent) }}%</span>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="smallest font-weight-bold text-muted text-uppercase letter-spacing-1">{{ __('Paid Capital') }}</span>
+                            <span class="font-weight-bold text-dark smallest uppercase letter-spacing-1">{{ round($paymentPercent) }}%</span>
                         </div>
-                        <div class="progress progress-sm active mb-4 shadow-xs" style="height: 10px; border-radius: 10px;">
-                            <div class="progress-bar bg-success progress-bar-striped progress-bar-animated" 
-                                 role="progressbar" 
-                                 style="width: {{ $paymentPercent }}%">
-                            </div>
+                        <div class="progress progress-sm mb-4 shadow-xs" style="height: 8px; border-radius: 10px; background: #f1f5f9;">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: {{ $paymentPercent }}%; border-radius: 10px;"></div>
                         </div>
                         
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item px-0 py-2 border-0 d-flex justify-content-between align-items-center">
-                                <span class="small font-weight-bold text-muted">{{ __('Received') }}</span>
-                                <span class="text-success font-weight-bold h6 mb-0">${{ number_format($totalPaid, 2) }}</span>
-                            </li>
-                            <li class="list-group-item px-0 py-2 border-0 d-flex justify-content-between align-items-center">
-                                <span class="small font-weight-bold text-muted">{{ __('Outstanding') }}</span>
-                                <span class="{{ $balance > 0 ? 'text-danger' : 'text-success' }} font-weight-bold h6 mb-0">${{ number_format($balance, 2) }}</span>
-                            </li>
-                        </ul>
+                        <div class="p-3 rounded-xl bg-light border shadow-xs">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="smallest font-weight-bold text-secondary uppercase letter-spacing-1">{{ __('Settle Capital') }}</span>
+                                <span class="text-success font-weight-bold smallest uppercase letter-spacing-1 text-monospace">${{ number_format($totalPaid, 2) }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mb-0 pb-0">
+                                <span class="smallest font-weight-bold text-secondary uppercase letter-spacing-1">{{ __('Outstanding') }}</span>
+                                <span class="{{ $balance > 0 ? 'text-danger' : 'text-success' }} font-weight-bold smallest uppercase letter-spacing-1 text-monospace">${{ number_format($balance, 2) }}</span>
+                            </div>
+                        </div>
 
                         @if($balance > 0)
-                            <div class="mt-4 p-3 bg-danger-soft rounded-xl text-center">
-                                <p class="mb-0 smallest font-weight-bold text-danger text-uppercase letter-spacing-1">
-                                    <i class="fas fa-exclamation-triangle mr-1"></i> AWAITING COLLECTION
+                            <div class="mt-4 p-3 bg-danger-soft rounded-xl text-center border-danger-soft">
+                                <p class="mb-0 smallest font-weight-bold text-danger text-uppercase letter-spacing-2">
+                                    <i class="fas fa-exclamation-circle mr-2"></i> Collection Pending
                                 </p>
                             </div>
                         @else
-                            <div class="mt-4 p-3 bg-success-soft rounded-xl text-center">
-                                <p class="mb-0 smallest font-weight-bold text-success text-uppercase letter-spacing-1">
-                                    <i class="fas fa-check-double mr-1"></i> FULLY SETTLED
+                            <div class="mt-4 p-3 bg-success-soft rounded-xl text-center border-success-soft">
+                                <p class="mb-0 smallest font-weight-bold text-success text-uppercase letter-spacing-2">
+                                    <i class="fas fa-check-double mr-2"></i> Revenue Secured
                                 </p>
                             </div>
                         @endif
@@ -238,3 +254,15 @@
         </div>
     </div>
 @stop
+
+@section('css')
+<style>
+    .text-monospace { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace !important; }
+    .letter-spacing-2 { letter-spacing: 2px !important; }
+    .bg-primary-soft { background: rgba(70, 165, 172, 0.1) !important; }
+    .bg-dark-soft { background: rgba(30, 41, 59, 0.05) !important; }
+    .bg-danger-soft { background: rgba(239, 68, 68, 0.08) !important; border: 1px solid rgba(239, 68, 68, 0.1); }
+    .bg-success-soft { background: rgba(34, 197, 94, 0.08) !important; border: 1px solid rgba(34, 197, 94, 0.1); }
+    .rounded-xl { border-radius: 12px !important; }
+</style>
+@endsection

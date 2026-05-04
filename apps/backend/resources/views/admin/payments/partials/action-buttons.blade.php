@@ -1,114 +1,83 @@
-<div class="card shadow-sm border-0 rounded-lg card-actions mb-4">
-    <div class="card-header bg-white border-bottom d-flex justify-content-between align-items-center">
-        <h5 class="mb-0"><i class="fas fa-credit-card text-muted mr-2"></i>Manage Payment</h5>
+<div class="card card-premium shadow-sm border-0 mb-4 overflow-hidden">
+    <div class="card-header bg-white border-0 py-4 px-4">
+        <h3 class="card-title font-weight-bold text-dark smallest text-uppercase letter-spacing-1">
+            <i class="fas fa-cog mr-2 text-primary opacity-50"></i> Lifecycle Management
+        </h3>
     </div>
 
-    <div class="card-body p-4">
-
-        {{-- Save Box with Metadata --}}
-        <div class="border rounded p-3 mb-4 bg-light d-flex flex-wrap justify-content-between align-items-center">
-            <div class="d-flex align-items-center">
-                <button form="payment-form" type="submit" class="btn btn-primary d-flex align-items-center mr-3">
-                    <i class="fas fa-save mr-2"></i> Save Payment
-                </button>
-            </div>
-            <div class="d-flex align-items-center mt-3 mt-md-0">
-                @if($payment->exists && $payment->creator)
-                    <img src="{{ $payment->creator->avatar_url }}" alt="Avatar" class="rounded-circle mr-2" width="40" height="40">
-                    <div>
-                        <div class="small text-muted">Created By</div>
-                        <div>{{ $payment->creator->name }}</div>
-                    </div>
-                @endif
-            </div>
+    <div class="card-body px-4 pb-4">
+        {{-- Primary Action --}}
+        <div class="p-3 mb-4 rounded-xl bg-light border shadow-xs d-flex align-items-center justify-content-between">
+            <button form="payment-form" type="submit" class="btn btn-primary btn-block font-weight-bold smallest uppercase letter-spacing-1 py-3 shadow-sm kinetic-hover">
+                <i class="fas fa-save mr-2"></i> {{ $payment->exists ? 'Update Record' : 'Commit Transaction' }}
+            </button>
         </div>
 
-        {{-- Action Buttons --}}
-        <div class="d-flex flex-wrap align-items-stretch mb-4 justify-content-between">
-            <div class="d-flex">
-                @if($payment->exists)
-                    <a href="{{ route('admin.payments.show', $payment->id) }}" target="_blank"
-                       class="btn btn-outline-info btn-sm d-flex align-items-center mr-2 mb-2">
-                        <i class="fas fa-eye mr-1"></i> Preview
-                    </a>
-
-                    <a href="{{ route('admin.payments.duplicate', $payment->id) }}"
-                       class="btn btn-outline-warning btn-sm d-flex align-items-center mr-2 mb-2">
-                        <i class="fas fa-copy mr-1"></i> Duplicate
-                    </a>
-                @endif
-            </div>
-
-            <div class="d-flex">
-                @if($payment->exists)
-                    <form action="{{ route('admin.payments.destroy', $payment->id) }}" method="POST"
-                          onsubmit="return confirm('Are you sure you want to delete this payment?');" class="d-flex mb-2">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger btn-sm d-flex align-items-center justify-content-center rounded-circle" style="width: 30px; height: 30px;">
-                            <i class="fas fa-trash-alt text-white" style="font-size: 14px;"></i>
-                        </button>
-                    </form>
-                @endif
-            </div>
-        </div>
-
-        {{-- Payment Statistics --}}
+        {{-- Action Group --}}
         @if($payment->exists)
-        <div class="row text-center">
-            <div class="col-md-4 mb-3">
-                <div class="bg-light border rounded p-3">
-                    <div class="text-muted small">Total Payments</div>
-                    <h4 class="mb-0">{{ $payment->subscription->payments_count ?? 0 }}</h4>
+        <div class="row mb-4 px-2">
+            <div class="col-6 px-1">
+                <a href="{{ route('admin.payments.index') }}" class="btn btn-white btn-block border shadow-xs py-2 smallest font-weight-bold uppercase letter-spacing-1 kinetic-hover">
+                    <i class="fas fa-undo mr-1 text-warning"></i> Revert
+                </a>
+            </div>
+            <div class="col-6 px-1">
+                <form id="delete-form-{{ $payment->id }}" action="{{ route('admin.payments.destroy', $payment->id) }}" method="POST">
+                    @csrf @method('DELETE')
+                    <button type="button" class="btn btn-white btn-block border shadow-xs py-2 smallest font-weight-bold uppercase letter-spacing-1 kinetic-hover text-danger"
+                            onclick="confirmDelete('delete-form-{{ $payment->id }}', 'Void Transaction?', 'This will permanently remove this financial record from the ledger.', 'Confirm')">
+                        <i class="fas fa-trash-alt mr-1"></i> Void
+                    </button>
+                </form>
+            </div>
+        </div>
+        @endif
+
+        {{-- Financial Context Widgets --}}
+        @if($payment->exists && $payment->payable && method_exists($payment->payable, 'payments'))
+        <div class="space-y-3">
+            <div class="p-3 border rounded-xl shadow-xs bg-white d-flex align-items-center mb-3">
+                <div class="icon-box-soft bg-primary-soft mr-3 shadow-xs d-flex align-items-center justify-content-center" style="width: 42px; height: 42px; border-radius: 10px;">
+                    <i class="fas fa-layer-group text-primary smallest"></i>
+                </div>
+                <div>
+                    <div class="smallest text-muted font-weight-bold uppercase letter-spacing-1">Activity Volume</div>
+                    <div class="font-weight-bold text-dark h5 mb-0">{{ $payment->payable->payments->count() }} <span class="smallest text-muted">Records</span></div>
                 </div>
             </div>
-            <div class="col-md-4 mb-3">
-                <div class="bg-light border rounded p-3">
-                    <div class="text-muted small">Total Revenue</div>
-                    <h4 class="mb-0">{{ setting('currency_symbol') }}{{ number_format($payment->subscription?->payments?->sum('amount') ?? 0, 2) }}</h4>
+
+            <div class="p-3 border rounded-xl shadow-xs bg-white d-flex align-items-center mb-3">
+                <div class="icon-box-soft bg-success-soft mr-3 shadow-xs d-flex align-items-center justify-content-center" style="width: 42px; height: 42px; border-radius: 10px;">
+                    <i class="fas fa-money-bill-wave text-success smallest"></i>
                 </div>
-            </div>
-            <div class="col-md-4 mb-3">
-                <div class="bg-light border rounded p-3">
-                    <div class="text-muted small">Avg. Payment Amount</div>
-                    <h4 class="mb-0">{{ setting('currency_symbol') }}{{ number_format($payment->subscription?->payments?->avg('amount') ?? 0, 2) }}</h4>
+                <div>
+                    <div class="smallest text-muted font-weight-bold uppercase letter-spacing-1">Aggregate Revenue</div>
+                    <div class="font-weight-bold text-dark h5 mb-0">{{ $payment->currency }} {{ number_format($payment->payable->payments->where('status', 'completed')->sum('amount'), 2) }}</div>
                 </div>
             </div>
         </div>
         @endif
 
-        {{-- Status Display --}}
-        <div class="d-flex justify-content-between align-items-center border rounded bg-white p-3 mb-3">
-            <span class="text-muted">Status</span>
-            <span class="badge {{ $payment->exists && $payment->status=='completed' ? 'bg-success' : ($payment->exists && $payment->status=='pending' ? 'bg-warning' : 'bg-danger') }}">
-                {{ $payment->exists ? ucfirst($payment->status) : 'N/A' }}
-            </span>
-        </div>
-
-        {{-- Meta Info --}}
+        {{-- Meta Intelligence --}}
         @if($payment->exists)
-            <div class="border-top pt-3 mt-3 text-muted small">
-                <div class="d-flex justify-content-between mb-1">
-                    <span>Created:</span>
-                    <span>{{ $payment->created_at->format('d M Y') ?? '-' }}</span>
-                </div>
-                <div class="d-flex justify-content-between">
-                    <span>Last Updated:</span>
-                    <span>{{ $payment->updated_at->format('d M Y') ?? '-' }}</span>
-                </div>
+        <div class="mt-4 pt-4 border-top">
+            <div class="d-flex justify-content-between mb-2">
+                <span class="smallest text-muted font-weight-bold uppercase letter-spacing-1">Origination</span>
+                <span class="smallest text-dark font-weight-bold uppercase letter-spacing-1">{{ $payment->created_at->format('d M Y') }}</span>
             </div>
+            <div class="d-flex justify-content-between">
+                <span class="smallest text-muted font-weight-bold uppercase letter-spacing-1">Last Update</span>
+                <span class="smallest text-dark font-weight-bold uppercase letter-spacing-1">{{ $payment->updated_at->diffForHumans() }}</span>
+            </div>
+        </div>
         @endif
-
     </div>
 </div>
 
 <style>
-.card-actions .btn {
-    transition: all 0.2s ease;
-}
-.card-actions .btn:hover,
-.card-actions .btn:focus {
-    transform: translateY(-4px);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-}
+    .rounded-xl { border-radius: 12px !important; }
+    .bg-primary-soft { background: rgba(0, 123, 255, 0.08) !important; }
+    .bg-success-soft { background: rgba(40, 167, 69, 0.08) !important; }
+    .kinetic-hover { transition: all 0.2s ease-in-out; }
+    .kinetic-hover:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important; }
 </style>
