@@ -3,35 +3,40 @@
 @section('setting-form-content')
 <form action="{{ route('admin.settings.update.group', ['section' => 'contact']) }}" method="POST">
     @csrf
-    <div class="card shadow-sm border-0">
-        <div class="card-header bg-white py-3">
-            <h3 class="card-title font-weight-bold">{{ __('Contact Channels') }}</h3>
+    <div class="card border-0 shadow-premium" style="border-radius: 24px;">
+        <div class="card-header bg-white py-4 px-4 border-0">
+            <h3 class="card-title font-weight-bold text-dark mb-0">{{ __('Contact Channels & Intelligence') }}</h3>
+            <p class="text-muted small mb-0 mt-1">Configure support communication protocols and official platform contact points.</p>
         </div>
-        <div class="card-body">
+        <div class="card-body px-4">
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label class="small font-weight-bold text-muted">{{ __('Public Support Email') }}</label>
-                        <div class="input-group border rounded p-1">
-                            <div class="input-group-prepend border-0"><span class="input-group-text bg-white border-0"><i class="fas fa-envelope text-primary"></i></span></div>
-                            <input type="email" name="email_contact" class="form-control border-0" value="{{ old('email_contact', $settings['email_contact'] ?? '') }}">
+                        <label class="small font-weight-bold text-uppercase text-secondary mb-2" style="letter-spacing: 0.5px;">{{ __('Public Support Email') }}</label>
+                        <div class="input-group shadow-xs">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-envelope text-primary"></i></span>
+                            </div>
+                            <input type="email" name="email_contact" class="form-control" value="{{ old('email_contact', $settings['email_contact'] ?? '') }}">
                         </div>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label class="small font-weight-bold text-muted">{{ __('Official Business Phone') }}</label>
-                        <div class="input-group border rounded p-1">
-                            <div class="input-group-prepend border-0"><span class="input-group-text bg-white border-0"><i class="fas fa-phone text-success"></i></span></div>
-                            <input type="text" name="phone_contact" class="form-control border-0" value="{{ old('phone_contact', $settings['phone_contact'] ?? '') }}">
+                        <label class="small font-weight-bold text-uppercase text-secondary mb-2" style="letter-spacing: 0.5px;">{{ __('Official Business Phone') }}</label>
+                        <div class="input-group shadow-xs">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-phone text-success"></i></span>
+                            </div>
+                            <input type="text" name="phone_contact" class="form-control" value="{{ old('phone_contact', $settings['phone_contact'] ?? '') }}">
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card-footer bg-white text-right">
-            <button type="submit" class="btn btn-primary px-4 font-weight-bold shadow-sm">
-                <i class="fas fa-save mr-1"></i> {{ __('Save Contact Details') }}
+        <div class="card-footer bg-light py-4 px-4 border-0 text-right">
+            <button type="submit" class="btn btn-primary rounded-pill px-5 font-weight-bold shadow-sm">
+                <i class="fas fa-save mr-2"></i> {{ __('Save Contact Details') }}
             </button>
         </div>
     </div>

@@ -90,7 +90,7 @@
 
                 @foreach($cacheItems as $item)
                 <div class="col-md-6 mb-4">
-                    <div class="card h-100 border-0 shadow-premium" style="border-radius: 20px;">
+                    <div class="card h-100 border-0 shadow-premium overflow-hidden" style="border-radius: 20px;">
                         <div class="card-body p-4 text-center">
                             <div class="icon-circle bg-{{ $item['color'] }}-soft text-{{ $item['color'] }} mx-auto mb-3 shadow-xs" style="width: 60px; height: 60px; border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
                                 <i class="fas {{ $item['icon'] }}"></i>
@@ -170,7 +170,7 @@
                 </div>
             </div>
 
-            <div class="card border-0 shadow-premium" style="border-radius: 20px;">
+            <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 20px;">
                 <div class="card-body p-4 d-flex align-items-center">
                     <div class="mr-3">
                         <i class="fas fa-shield-alt fa-2x text-primary opacity-25"></i>
@@ -212,5 +212,150 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.05) !important;
             border-color: rgba(0,0,0,0.1) !important;
         }
+        .swal2-popup {
+            backdrop-filter: blur(20px) saturate(180%);
+            background: rgba(255, 255, 255, 0.85) !important;
+            border: 1px solid rgba(255, 255, 255, 0.3) !important;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15) !important;
+            padding: 2.5rem !important;
+            border-radius: 32px !important;
+        }
+        .swal2-title {
+            font-family: 'Outfit', sans-serif !important;
+            color: #1a1a1a !important;
+            font-size: 1.5rem !important;
+            letter-spacing: -0.02em !important;
+        }
+        .swal2-confirm {
+            background: linear-gradient(135deg, #46a5ac 0%, #3d8f95 100%) !important;
+            box-shadow: 0 10px 20px -5px rgba(70, 165, 172, 0.4) !important;
+            border: none !important;
+            font-weight: 700 !important;
+        }
+        .swal2-confirm:hover {
+            box-shadow: 0 15px 30px -5px rgba(70, 165, 172, 0.5) !important;
+            transform: translateY(-2px);
+        }
+        .swal2-cancel {
+            background: rgba(0, 0, 0, 0.05) !important;
+            color: #666 !important;
+            border: 1px solid rgba(0, 0, 0, 0.05) !important;
+        }
+        .swal2-icon {
+            border-width: 2px !important;
+            transform: scale(1.1);
+            margin-bottom: 2rem !important;
+        }
     </style>
+@stop
+
+@section('js')
+    <script>
+        $(function() {
+            // Premium Swal Configuration
+            const premiumSwal = {
+                backdrop: `rgba(15, 23, 42, 0.2)`,
+                borderRadius: '32px',
+                buttonsStyling: false,
+                customClass: {
+                    popup: 'border-0',
+                    title: 'swal2-title',
+                    htmlContainer: 'text-muted small uppercase letter-spacing-1 font-weight-bold opacity-75 mt-3',
+                    confirmButton: 'btn btn-primary rounded-pill px-5 py-3 mx-2 swal2-confirm',
+                    cancelButton: 'btn btn-light rounded-pill px-5 py-3 mx-2 swal2-cancel'
+                },
+                showClass: {
+                    popup: 'animate__animated animate__fadeInUp animate__faster'
+                },
+                hideClass: {
+                    popup: 'animate__animated animate__fadeOutDown animate__faster'
+                }
+            };
+
+            // Success Alerts
+            @if(session('success'))
+                Swal.fire({
+                    ...premiumSwal,
+                    icon: 'success',
+                    title: 'SYSTEM INTELLIGENCE',
+                    text: "{{ session('success') }}",
+                    iconColor: '#46a5ac',
+                });
+            @endif
+
+            // Error Alerts
+            @if(session('error'))
+                Swal.fire({
+                    ...premiumSwal,
+                    icon: 'error',
+                    title: 'MISSION INTERRUPTED',
+                    text: "{{ session('error') }}",
+                    iconColor: '#ef4444',
+                });
+            @endif
+
+            // AJAX Execution for Maintenance Tasks
+            $('.btn-purge, button[type="submit"]').on('click', function(e) {
+                const $button = $(this);
+                const $form = $button.closest('form');
+                const actionName = $button.text().trim();
+                const url = $form.attr('action');
+                const method = $form.attr('method') || 'POST';
+                
+                if ($button.hasClass('btn-back')) return;
+
+                e.preventDefault();
+
+                Swal.fire({
+                    ...premiumSwal,
+                    title: 'AUTHORIZE OPERATION?',
+                    text: `SYSTEM WILL EXECUTE: ${actionName}. PROCEED WITH CAUTION.`,
+                    icon: 'warning',
+                    iconColor: '#f59e0b',
+                    showCancelButton: true,
+                    confirmButtonText: 'Execute Action',
+                    cancelButtonText: 'Abort Mission',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Show Loading State
+                        Swal.fire({
+                            ...premiumSwal,
+                            title: 'EXECUTING...',
+                            text: 'Please wait while the system optimizes foundational buffers.',
+                            allowOutsideClick: false,
+                            allowEscapeKey: false,
+                            didOpen: () => {
+                                Swal.showLoading();
+                            }
+                        });
+
+                        $.ajax({
+                            url: url,
+                            type: method,
+                            data: $form.serialize(),
+                            success: function(response) {
+                                Swal.fire({
+                                    ...premiumSwal,
+                                    icon: 'success',
+                                    title: 'SYSTEM INTELLIGENCE',
+                                    text: 'OPERATION COMPLETED SUCCESSFULLY.',
+                                    iconColor: '#46a5ac',
+                                });
+                            },
+                            error: function(xhr) {
+                                const errorMsg = xhr.responseJSON?.message || 'AN UNKNOWN ERROR OCCURRED DURING EXECUTION.';
+                                Swal.fire({
+                                    ...premiumSwal,
+                                    icon: 'error',
+                                    title: 'MISSION INTERRUPTED',
+                                    text: errorMsg.toUpperCase(),
+                                    iconColor: '#ef4444',
+                                });
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
 @stop

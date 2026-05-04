@@ -4,22 +4,25 @@
 <form action="{{ route('admin.settings.update.group', ['section' => 'pages']) }}" method="POST" enctype="multipart/form-data">
     @csrf
 
-    {{-- 1. GENERAL CORE PAGES --}}
-    <div class="card shadow-sm border-0 mb-4 overflow-hidden">
-        <div class="card-header bg-white py-3">
-            <h5 class="mb-0 font-weight-bold text-dark">
-                <i class="fas fa-globe-americas mr-2 text-primary"></i>Core Navigation Pages
-            </h5>
+    {{-- 1. CORE NAVIGATION PAGES --}}
+    <div class="card border-0 shadow-premium mb-4" style="border-radius: 24px;">
+        <div class="card-header bg-white py-4 px-4 border-0">
+            <div class="d-flex align-items-center">
+                <div class="bg-primary-soft rounded-circle d-flex align-items-center justify-content-center mr-3" style="width: 46px; height: 46px;">
+                    <i class="fas fa-compass text-primary fa-lg"></i>
+                </div>
+                <div>
+                    <h5 class="font-weight-bold text-dark mb-0">{{ __('Core Navigation Pages') }}</h5>
+                    <p class="text-muted small mb-0 mt-1">Bind primary platform touchpoints to specific CMS content pages.</p>
+                </div>
+            </div>
         </div>
-        <div class="card-body bg-light-gray p-4">
+        <div class="card-body px-4 pb-4">
             <div class="row">
-                {{-- Home/Front Page Theme --}}
                 <div class="col-md-4 mb-4">
-                    <div class="form-group mb-0 p-3 bg-white rounded shadow-xs border">
-                        <label for="site_home" class="font-weight-bold small text-uppercase text-muted d-block mb-2">
-                            Home/Front Page <span class="text-primary">Theme</span>
-                        </label>
-                        <select name="site_home" class="form-control custom-select border-0 bg-light">
+                    <div class="form-group">
+                        <label class="small font-weight-bold text-secondary mb-2 text-uppercase" style="letter-spacing: 0.5px;">Home/Front Theme</label>
+                        <select name="site_home" class="form-control select2">
                             <option value="">-- Default Theme --</option>
                             @foreach($themes['all'] as $theme)
                                 <option value="{{ $theme->theme_key }}" {{ old('site_home', $settings['site_home'] ?? '') == $theme->theme_key ? 'selected' : '' }}>
@@ -27,20 +30,12 @@
                                 </option>
                             @endforeach
                         </select>
-                        <div class="mt-2 small text-muted italic">
-                            <i class="fas fa-info-circle mr-1"></i> Activates the theme globally for the landing page.
-                        </div>
-                        @error('site_home')
-                            <span class="text-danger small">{{ $message }}</span>
-                        @enderror
                     </div>
                 </div>
-
-                {{-- Blog Archive --}}
                 <div class="col-md-4 mb-4">
-                    <div class="form-group mb-0 p-3 bg-white rounded shadow-xs border">
-                        <label for="site_blog_archive" class="font-weight-bold small text-uppercase text-muted d-block mb-2">Blog Archive</label>
-                        <select name="site_blog_archive" class="form-control custom-select border-0 bg-light">
+                    <div class="form-group">
+                        <label class="small font-weight-bold text-secondary mb-2 text-uppercase" style="letter-spacing: 0.5px;">Blog Archive</label>
+                        <select name="site_blog_archive" class="form-control select2">
                             <option value="">-- Default Page --</option>
                             @foreach($pages as $page)
                                 <option value="{{ $page->id }}" {{ old('site_blog_archive', $settings['site_blog_archive'] ?? '') == $page->id ? 'selected' : '' }}>
@@ -50,12 +45,10 @@
                         </select>
                     </div>
                 </div>
-
-                {{-- Contact Page --}}
                 <div class="col-md-4 mb-4">
-                    <div class="form-group mb-0 p-3 bg-white rounded shadow-xs border">
-                        <label for="site_contact" class="font-weight-bold small text-uppercase text-muted d-block mb-2">Contact Page</label>
-                        <select name="site_contact" class="form-control custom-select border-0 bg-light">
+                    <div class="form-group">
+                        <label class="small font-weight-bold text-secondary mb-2 text-uppercase" style="letter-spacing: 0.5px;">Contact Page</label>
+                        <select name="site_contact" class="form-control select2">
                             <option value="">-- Select Page --</option>
                             @foreach($pages as $page)
                                 <option value="{{ $page->id }}" {{ old('site_contact', $settings['site_contact'] ?? '') == $page->id ? 'selected' : '' }}>
@@ -65,12 +58,10 @@
                         </select>
                     </div>
                 </div>
-
-                {{-- About Page --}}
-                <div class="col-md-4 mb-3 mb-md-0">
-                    <div class="form-group mb-0 p-3 bg-white rounded shadow-xs border">
-                        <label for="site_about" class="font-weight-bold small text-uppercase text-muted d-block mb-2">About Page</label>
-                        <select name="site_about" class="form-control custom-select border-0 bg-light">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="small font-weight-bold text-secondary mb-2 text-uppercase" style="letter-spacing: 0.5px;">About Platform</label>
+                        <select name="site_about" class="form-control select2">
                             <option value="">-- Select Page --</option>
                             @foreach($pages as $page)
                                 <option value="{{ $page->id }}" {{ old('site_about', $settings['site_about'] ?? '') == $page->id ? 'selected' : '' }}>
@@ -80,12 +71,10 @@
                         </select>
                     </div>
                 </div>
-
-                {{-- FAQs Page --}}
-                <div class="col-md-4">
-                    <div class="form-group mb-0 p-3 bg-white rounded shadow-xs border">
-                        <label for="site_faqs" class="font-weight-bold small text-uppercase text-muted d-block mb-2">FAQs Page</label>
-                        <select name="site_faqs" class="form-control custom-select border-0 bg-light">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="small font-weight-bold text-secondary mb-2 text-uppercase" style="letter-spacing: 0.5px;">FAQs Center</label>
+                        <select name="site_faqs" class="form-control select2">
                             <option value="">-- Select Page --</option>
                             @foreach($pages as $page)
                                 <option value="{{ $page->id }}" {{ old('site_faqs', $settings['site_faqs'] ?? '') == $page->id ? 'selected' : '' }}>
@@ -99,15 +88,20 @@
         </div>
     </div>
 
-    {{-- 2. THEMES TO SEGMENTS --}}
-    <div class="card shadow-sm border-0 mb-4 overflow-hidden">
-        <div class="card-header bg-white py-3">
-            <h5 class="mb-0 font-weight-bold text-dark">
-                <i class="fas fa-palette mr-2 text-info"></i>Themes to Segments
-            </h5>
+    {{-- 2. SEGMENT ENGINE THEMES --}}
+    <div class="card border-0 shadow-premium mb-4" style="border-radius: 24px;">
+        <div class="card-header bg-white py-4 px-4 border-0">
+            <div class="d-flex align-items-center">
+                <div class="bg-info-soft rounded-circle d-flex align-items-center justify-content-center mr-3" style="width: 46px; height: 46px;">
+                    <i class="fas fa-palette text-info fa-lg"></i>
+                </div>
+                <div>
+                    <h5 class="font-weight-bold text-dark mb-0">{{ __('Segment Engine Themes') }}</h5>
+                    <p class="text-muted small mb-0 mt-1">Assign specific design languages and skins to individual marketplace segments.</p>
+                </div>
+            </div>
         </div>
-        <div class="card-body bg-light-gray p-4">
-            {{-- Segment Grid --}}
+        <div class="card-body px-4 pb-2">
             <div class="row">
                 @php
                     $themeSegments = [
@@ -123,20 +117,19 @@
 
                 @foreach($themeSegments as $segment)
                 <div class="col-md-4 mb-4">
-                    <div class="card border-0 shadow-xs h-100">
-                        <div class="card-body p-3">
-                            <label for="{{ $segment['id'] }}" class="font-weight-bold small text-muted">
-                                <i class="{{ $segment['icon'] }} {{ $segment['color'] }} mr-1"></i> {{ $segment['label'] }}
-                            </label>
-                            <select name="{{ $segment['id'] }}" class="form-control border-light-gray mt-1">
-                                <option value="">-- Default Theme --</option>
-                                @foreach($themes[$segment['key']] as $theme)
-                                    <option value="{{ $theme->theme_key }}" {{ old($segment['id'], $settings[$segment['id']] ?? '') == $theme->theme_key ? 'selected' : '' }}>
-                                        {{ $theme->title }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
+                    <div class="form-group mb-0">
+                        <label class="small font-weight-bold text-secondary mb-2 d-flex align-items-center">
+                            <i class="{{ $segment['icon'] }} {{ $segment['color'] }} mr-2 opacity-75"></i> 
+                            {{ $segment['label'] }}
+                        </label>
+                        <select name="{{ $segment['id'] }}" class="form-control select2">
+                            <option value="">-- Default Theme --</option>
+                            @foreach($themes[$segment['key']] as $theme)
+                                <option value="{{ $theme->theme_key }}" {{ old($segment['id'], $settings[$segment['id']] ?? '') == $theme->theme_key ? 'selected' : '' }}>
+                                    {{ $theme->title }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
                 @endforeach
@@ -144,20 +137,25 @@
         </div>
     </div>
 
-    {{-- 3. LEGAL PAGES --}}
-    <div class="card shadow-sm border-0 mb-4 overflow-hidden">
-        <div class="card-header bg-white py-3">
-            <h5 class="mb-0 font-weight-bold text-dark">
-                <i class="fas fa-balance-scale mr-2 text-secondary"></i>Legal Compliance Pages
-            </h5>
+    {{-- 3. LEGAL COMPLIANCE MAPPING --}}
+    <div class="card border-0 shadow-premium mb-4" style="border-radius: 24px;">
+        <div class="card-header bg-white py-4 px-4 border-0">
+            <div class="d-flex align-items-center">
+                <div class="bg-secondary-soft rounded-circle d-flex align-items-center justify-content-center mr-3" style="width: 46px; height: 46px;">
+                    <i class="fas fa-balance-scale text-secondary fa-lg"></i>
+                </div>
+                <div>
+                    <h5 class="font-weight-bold text-dark mb-0">{{ __('Legal Compliance Mapping') }}</h5>
+                    <p class="text-muted small mb-0 mt-1">Ensure mandatory regulatory and agreement pages are correctly routed.</p>
+                </div>
+            </div>
         </div>
-        <div class="card-body bg-light-gray p-4">
+        <div class="card-body px-4 pb-4">
             <div class="row">
-                {{-- Terms & Conditions --}}
-                <div class="col-md-6 mb-3 mb-md-0">
-                    <div class="p-3 bg-white rounded shadow-xs border">
-                        <label for="site_terms" class="font-weight-bold small text-uppercase text-muted d-block mb-2">Terms & Conditions</label>
-                        <select name="site_terms" class="form-control custom-select border-0 bg-light">
+                <div class="col-md-6">
+                    <div class="form-group mb-0">
+                        <label class="small font-weight-bold text-secondary mb-2 text-uppercase" style="letter-spacing: 0.5px;">Terms & Conditions Page</label>
+                        <select name="site_terms" class="form-control select2">
                             <option value="">-- Select Page --</option>
                             @foreach($pages as $page)
                                 <option value="{{ $page->id }}" {{ old('site_terms', $settings['site_terms'] ?? '') == $page->id ? 'selected' : '' }}>
@@ -167,12 +165,10 @@
                         </select>
                     </div>
                 </div>
-
-                {{-- Privacy Policy --}}
                 <div class="col-md-6">
-                    <div class="p-3 bg-white rounded shadow-xs border">
-                        <label for="site_privacy" class="font-weight-bold small text-uppercase text-muted d-block mb-2">Privacy Policy</label>
-                        <select name="site_privacy" class="form-control custom-select border-0 bg-light">
+                    <div class="form-group mb-0">
+                        <label class="small font-weight-bold text-secondary mb-2 text-uppercase" style="letter-spacing: 0.5px;">Privacy Policy Page</label>
+                        <select name="site_privacy" class="form-control select2">
                             <option value="">-- Select Page --</option>
                             @foreach($pages as $page)
                                 <option value="{{ $page->id }}" {{ old('site_privacy', $settings['site_privacy'] ?? '') == $page->id ? 'selected' : '' }}>
@@ -186,20 +182,9 @@
         </div>
     </div>
 
-    {{-- SAVE BUTTON --}}
     <div class="text-right pb-5">
-        <button type="submit" class="btn btn-primary btn-lg px-5 rounded-pill shadow font-weight-bold">
-            <i class="fas fa-save mr-2"></i> Save Page Settings
+        <button type="submit" class="btn btn-primary btn-lg rounded-pill px-5 font-weight-bold shadow-premium">
+            <i class="fas fa-save mr-2"></i> {{ __('Save Configuration') }}
         </button>
     </div>
-</form>
-
-{{-- Minimal Inline Styles for this View --}}
-<style>
-    .bg-light-gray { background-color: #f4f7f6 !important; }
-    .shadow-xs { box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
-    .border-light-gray { border-color: #e9ecef !important; }
-    .italic { font-style: italic; }
-    .custom-select:focus { box-shadow: none; border-color: transparent; }
-</style>
 @endsection

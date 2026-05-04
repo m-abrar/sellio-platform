@@ -528,6 +528,48 @@
         background-color: var(--primary-hover) !important;
     }
 
+    /* Premium Soft Button Variants */
+    .btn-primary-soft {
+        background-color: var(--primary-soft) !important;
+        color: var(--primary) !important;
+        border: 1px solid rgba(var(--primary-rgb), 0.2) !important;
+        transition: all 0.3s ease !important;
+    }
+    .btn-primary-soft:hover {
+        background-color: var(--primary) !important;
+        color: #fff !important;
+        box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.2) !important;
+        transform: translateY(-1px);
+    }
+
+    .btn-success-soft {
+        background-color: var(--success-soft) !important;
+        color: #22c55e !important;
+        border: 1px solid rgba(34, 197, 94, 0.2) !important;
+    }
+    .btn-success-soft:hover {
+        background-color: #22c55e !important;
+        color: #fff !important;
+    }
+
+    .btn-info-soft {
+        background-color: rgba(14, 165, 233, 0.1) !important;
+        color: #0ea5e9 !important;
+        border: 1px solid rgba(14, 165, 233, 0.2) !important;
+    }
+
+    .btn-warning-soft {
+        background-color: var(--warning-soft) !important;
+        color: #eab308 !important;
+        border: 1px solid rgba(234, 179, 8, 0.2) !important;
+    }
+
+    .btn-danger-soft {
+        background-color: var(--danger-soft) !important;
+        color: #ef4444 !important;
+        border: 1px solid rgba(239, 68, 68, 0.2) !important;
+    }
+
     /* Premium Shadow Utility - More ethereal/softer feel */
     .shadow-premium {
         box-shadow: 0 15px 45px rgba(0, 0, 0, 0.01) !important;

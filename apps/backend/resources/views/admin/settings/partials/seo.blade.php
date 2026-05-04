@@ -3,31 +3,39 @@
 @section('setting-form-content')
 <form action="{{ route('admin.settings.update.group', ['section' => 'seo']) }}" method="POST">
     @csrf
-    <div class="card shadow-sm border-0">
-        <div class="card-header bg-white py-3">
-            <h3 class="card-title font-weight-bold text-dark">
-                <i class="fas fa-search mr-2 text-success"></i>{{ __('Search Engine Optimization') }}
+    <div class="card border-0 shadow-premium" style="border-radius: 24px;">
+        <div class="card-header bg-white py-4 px-4 border-0">
+            <h3 class="card-title font-weight-bold text-dark mb-0">
+                <i class="fas fa-search mr-2 text-primary opacity-50"></i>{{ __('Search Engine Optimization') }}
             </h3>
+            <p class="text-muted small mb-0 mt-1">Optimize how your marketplace appears in global search results and social shares.</p>
         </div>
-        <div class="card-body bg-light-gray p-4">
-            <div class="card border-0 shadow-xs mb-4">
-                <div class="card-body">
+        <div class="card-body px-4 pb-4">
+            <div class="row">
+                <div class="col-md-12">
                     <div class="form-group mb-4">
-                        <label class="font-weight-bold">Meta Title</label>
-                        <input type="text" name="meta_title" class="form-control border-light-gray" value="{{ old('meta_title', $settings['meta_title'] ?? '') }}" placeholder="Primary Title for Search Engines">
-                        <small class="text-muted">Recommended: 50-60 characters.</small>
+                        <label class="small font-weight-bold text-uppercase text-secondary mb-2" style="letter-spacing: 0.5px;">{{ __('Global Meta Title') }}</label>
+                        <input type="text" name="meta_title" class="form-control" value="{{ old('meta_title', $settings['meta_title'] ?? '') }}" placeholder="Primary Title for Search Engines">
+                        <div class="d-flex justify-content-between mt-2">
+                            <small class="text-muted smallest font-weight-bold text-uppercase letter-spacing-1">Target Length: 50-60 characters</small>
+                            <small class="text-primary smallest font-weight-bold">{{ strlen($settings['meta_title'] ?? '') }} chars</small>
+                        </div>
                     </div>
+                    
                     <div class="form-group mb-0">
-                        <label class="font-weight-bold">Meta Description</label>
-                        <textarea name="meta_description" class="form-control border-light-gray" rows="4" placeholder="Brief summary of your platform...">{{ old('meta_description', $settings['meta_description'] ?? '') }}</textarea>
-                        <small class="text-muted">Recommended: 150-160 characters.</small>
+                        <label class="small font-weight-bold text-uppercase text-secondary mb-2" style="letter-spacing: 0.5px;">{{ __('Global Meta Description') }}</label>
+                        <textarea name="meta_description" class="form-control" rows="4" style="height: auto !important;" placeholder="Brief summary of your platform...">{{ old('meta_description', $settings['meta_description'] ?? '') }}</textarea>
+                        <div class="d-flex justify-content-between mt-2">
+                            <small class="text-muted smallest font-weight-bold text-uppercase letter-spacing-1">Target Length: 150-160 characters</small>
+                            <small class="text-primary smallest font-weight-bold">{{ strlen($settings['meta_description'] ?? '') }} chars</small>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card-footer bg-white text-right">
-            <button type="submit" class="btn btn-primary px-5 rounded-pill font-weight-bold">
-                <i class="fas fa-check-circle mr-1"></i> {{ __('Update SEO Meta') }}
+        <div class="card-footer bg-light py-4 px-4 border-0 text-right">
+            <button type="submit" class="btn btn-primary rounded-pill px-5 font-weight-bold">
+                <i class="fas fa-rocket mr-2"></i> {{ __('Deploy SEO Assets') }}
             </button>
         </div>
     </div>

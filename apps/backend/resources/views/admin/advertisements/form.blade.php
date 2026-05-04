@@ -15,8 +15,8 @@
             </p>
         </div>
         <div class="col-sm-4 text-right">
-            <a href="{{ route('admin.advertisements.index') }}" class="btn btn-back shadow-sm">
-                <i class="fas fa-arrow-left mr-1"></i> Back to Campaigns
+            <a href="{{ route('admin.advertisements.index') }}" class="btn-back shadow-sm">
+                <i class="fas fa-arrow-left"></i> Back to Ledger
             </a>
         </div>
     </div>
@@ -85,12 +85,12 @@
                         <div class="card-body p-2">
                             <div class="row no-gutters">
                                 <div class="col-6 p-1">
-                                    <img src="{{asset('admin-assets/diagram-home-page.png')}}" alt="Home" class="img-fluid border rounded shadow-xs">
-                                    <small class="d-block text-center mt-1 text-muted">Home</small>
+                                    <img src="{{asset('admin-assets/diagram-home-page.png')}}" alt="Home" class="img-fluid border guide-img shadow-xs">
+                                    <small class="d-block text-center mt-1 text-muted smallest font-weight-bold uppercase letter-spacing-1">Home Feed</small>
                                 </div>
                                 <div class="col-6 p-1">
-                                    <img src="{{asset('admin-assets/diagram-search-page.png')}}" alt="Search" class="img-fluid border rounded shadow-xs">
-                                    <small class="d-block text-center mt-1 text-muted">Search</small>
+                                    <img src="{{asset('admin-assets/diagram-search-page.png')}}" alt="Search" class="img-fluid border guide-img shadow-xs">
+                                    <small class="d-block text-center mt-1 text-muted smallest font-weight-bold uppercase letter-spacing-1">Search Ops</small>
                                 </div>
                             </div>
                         </div>
@@ -102,3 +102,19 @@
     </form>
 </div>
 @endsection
+@section('css')
+@include('admin._partials._toggle-card-css')
+<style>
+    .sticky-top { transition: all 0.3s ease; }
+    .guide-img { border-radius: 16px !important; transition: transform 0.3s ease; }
+    .guide-img:hover { transform: scale(1.05); z-index: 5; }
+</style>
+@stop
+
+@section('js')
+<script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
+@stop

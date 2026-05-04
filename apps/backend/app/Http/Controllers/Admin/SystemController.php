@@ -21,108 +21,98 @@ class SystemController extends Controller
     /**
      * Clear the application cache.
      */
-    public function clearCache()
+    public function clearCache(Request $request)
     {
         try {
             Artisan::call('cache:clear');
-            return back()->with('success', '🏆 Application cache cleared successfully!');
+            $msg = '🏆 Application cache cleared successfully!';
+            return $request->ajax() ? response()->json(['success' => true, 'message' => $msg]) : back()->with('success', $msg);
         } catch (\Exception $e) {
             Log::error("System Maintenance - Cache Clear Error: " . $e->getMessage());
-            return back()->with('error', '❌ Failed to clear application cache: ' . $e->getMessage());
+            $msg = '❌ Failed to clear application cache: ' . $e->getMessage();
+            return $request->ajax() ? response()->json(['success' => false, 'message' => $msg], 500) : back()->with('error', $msg);
         }
     }
 
-    /**
-     * Clear the configuration cache.
-     */
-    public function clearConfig()
+    public function clearConfig(Request $request)
     {
         try {
             Artisan::call('config:clear');
-            return back()->with('success', '⚙️ Configuration cache cleared successfully!');
+            $msg = '⚙️ Configuration cache cleared successfully!';
+            return $request->ajax() ? response()->json(['success' => true, 'message' => $msg]) : back()->with('success', $msg);
         } catch (\Exception $e) {
             Log::error("System Maintenance - Config Clear Error: " . $e->getMessage());
-            return back()->with('error', '❌ Failed to clear configuration cache.');
+            $msg = '❌ Failed to clear configuration cache.';
+            return $request->ajax() ? response()->json(['success' => false, 'message' => $msg], 500) : back()->with('error', $msg);
         }
     }
 
-    /**
-     * Clear the route cache.
-     */
-    public function clearRoute()
+    public function clearRoute(Request $request)
     {
         try {
             Artisan::call('route:clear');
-            return back()->with('success', '🛣️ Route cache cleared successfully!');
+            $msg = '🛣️ Route cache cleared successfully!';
+            return $request->ajax() ? response()->json(['success' => true, 'message' => $msg]) : back()->with('success', $msg);
         } catch (\Exception $e) {
             Log::error("System Maintenance - Route Clear Error: " . $e->getMessage());
-            return back()->with('error', '❌ Failed to clear route cache.');
+            $msg = '❌ Failed to clear route cache.';
+            return $request->ajax() ? response()->json(['success' => false, 'message' => $msg], 500) : back()->with('error', $msg);
         }
     }
 
-    /**
-     * Clear the view cache.
-     */
-    public function clearView()
+    public function clearView(Request $request)
     {
         try {
             Artisan::call('view:clear');
-            return back()->with('success', '📄 View cache cleared successfully!');
+            $msg = '📄 View cache cleared successfully!';
+            return $request->ajax() ? response()->json(['success' => true, 'message' => $msg]) : back()->with('success', $msg);
         } catch (\Exception $e) {
             Log::error("System Maintenance - View Clear Error: " . $e->getMessage());
-            return back()->with('error', '❌ Failed to clear view cache.');
+            $msg = '❌ Failed to clear view cache.';
+            return $request->ajax() ? response()->json(['success' => false, 'message' => $msg], 500) : back()->with('error', $msg);
         }
     }
 
-    /**
-     * Optimize the application (Clear and Cache everything).
-     */
-    public function optimize()
+    public function optimize(Request $request)
     {
         try {
-            // We clear everything first to be safe
+            Log::info("System Maintenance - Starting full optimization.");
             Artisan::call('optimize:clear');
-            
-            // Then we optimize
             Artisan::call('optimize');
             
-            return back()->with('success', '🚀 Application optimized and cached successfully!');
+            Log::info("System Maintenance - Optimization complete.");
+            $msg = '🚀 Application optimized and cached successfully!';
+            return $request->ajax() ? response()->json(['success' => true, 'message' => $msg]) : redirect()->route('admin.system.maintenance')->with('success', $msg);
         } catch (\Exception $e) {
             Log::error("System Maintenance - Optimize Error: " . $e->getMessage());
-            return back()->with('error', '❌ Failed to optimize application.');
+            $msg = '❌ Failed to optimize application: ' . $e->getMessage();
+            return $request->ajax() ? response()->json(['success' => false, 'message' => $msg], 500) : redirect()->route('admin.system.maintenance')->with('error', $msg);
         }
     }
 
-    /**
-     * Create the storage link.
-     */
-    public function storageLink()
+    public function storageLink(Request $request)
     {
         try {
-            // Check if link already exists
-            if (public_path('storage')) {
-                // If it exists but might be broken, we could tell the user, but usually Artisan handle it.
-            }
             Artisan::call('storage:link');
-            return back()->with('success', '🔗 Storage symbolic link created successfully!');
+            $msg = '🔗 Storage symbolic link created successfully!';
+            return $request->ajax() ? response()->json(['success' => true, 'message' => $msg]) : back()->with('success', $msg);
         } catch (\Exception $e) {
             Log::error("System Maintenance - Storage Link Error: " . $e->getMessage());
-            return back()->with('error', '❌ Failed to create storage link.');
+            $msg = '❌ Failed to create storage link.';
+            return $request->ajax() ? response()->json(['success' => false, 'message' => $msg], 500) : back()->with('error', $msg);
         }
     }
 
-    /**
-     * Regenerate missing media library conversions in the background.
-     */
-    public function regenerateMedia()
+    public function regenerateMedia(Request $request)
     {
         try {
             RegenerateMediaJob::dispatch();
-            
-            return back()->with('success', '🖼️ Media regeneration task has been queued! Please ensure your queue worker is running.');
+            $msg = '🖼️ Media regeneration task has been queued!';
+            return $request->ajax() ? response()->json(['success' => true, 'message' => $msg]) : back()->with('success', $msg);
         } catch (\Exception $e) {
             Log::error("System Maintenance - Media Regeneration Error: " . $e->getMessage());
-            return back()->with('error', '❌ Failed to queue media regeneration.');
+            $msg = '❌ Failed to queue media regeneration.';
+            return $request->ajax() ? response()->json(['success' => false, 'message' => $msg], 500) : back()->with('error', $msg);
         }
     }
 }

@@ -4,12 +4,17 @@
 
 @section('content_header')
     <div class="container-fluid">
-        <div class="row mb-4 align-items-end">
+        <div class="row mb-4 align-items-center">
             <div class="col-sm-8">
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-paper-plane mr-2 text-primary opacity-50"></i> Communication Assets
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Manage automated system triggers and high-fidelity email notification blueprints.</p>
+            </div>
+            <div class="col-sm-4 text-right">
+                <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">
+                    <i class="fas fa-th-large"></i> Dashboard
+                </a>
             </div>
         </div>
     </div>
@@ -20,9 +25,13 @@
     @include('admin.alert')
 
     <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
-        <div class="card-header bg-white border-0 py-4 px-4 d-flex align-items-center justify-content-between">
-            <h3 class="card-title font-weight-bold text-dark mb-0">System Notification Registry</h3>
-            <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest">{{ count($templates) }} ACTIVE BLUEPRINTS</span>
+        <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center justify-content-between">
+            <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">
+                <i class="fas fa-paper-plane mr-2 text-primary opacity-50"></i> System Notification Registry
+            </h3>
+            <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase ml-auto">
+                {{ count($templates) }} ACTIVE BLUEPRINTS
+            </span>
         </div>
 
         <div class="card-body p-0">
@@ -74,7 +83,7 @@
                                 <td class="text-right align-middle pr-4">
                                     <div class="btn-group btn-group-premium shadow-xs rounded-pill border overflow-hidden">
                                         <a href="{{ route('admin.email-templates.edit', $template->id) }}" 
-                                           class="btn btn-white btn-sm text-info py-2 px-3 font-weight-bold smallest uppercase" 
+                                           class="btn btn-white text-info py-2 px-3 font-weight-bold smallest uppercase d-inline-flex align-items-center" 
                                            data-toggle="tooltip" title="Configure Template">
                                             <i class="fas fa-cog mr-1"></i> CONFIG
                                         </a>

@@ -73,10 +73,10 @@
                         </p>
 
                         <div class="mt-4 pt-3 border-top d-flex align-items-center">
-                            <a href="{{ url('/') }}" target="_blank" class="btn btn-primary px-4 font-weight-bold mr-3 shadow">
+                            <a href="{{ url('/') }}" target="_blank" class="btn btn-primary px-4 py-2 font-weight-bold mr-3 shadow d-inline-flex align-items-center">
                                 <i class="fas fa-external-link-alt mr-2"></i> View Site
                             </a>
-                            <a href="{{ route('admin.themes.edit', $activeTheme->id) }}" class="btn btn-outline-dark px-4 font-weight-bold">
+                            <a href="{{ route('admin.themes.edit', $activeTheme->id) }}" class="btn btn-primary-soft px-4 py-2 font-weight-bold d-inline-flex align-items-center">
                                 <i class="fas fa-cog mr-2"></i> Theme Settings
                             </a>
                         </div>

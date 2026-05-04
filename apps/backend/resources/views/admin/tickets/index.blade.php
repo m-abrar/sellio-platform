@@ -16,7 +16,11 @@
                     Monitor user inquiries, resolve platform issues, and manage ticket priority.
                 </p>
             </div>
-            <div class="col-sm-5 d-flex align-items-center justify-content-end">
+            <div class="col-sm-5 d-flex align-items-center justify-content-end" style="gap: 12px;">
+                <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">
+                    <i class="fas fa-th-large"></i> Dashboard
+                </a>
+
                 <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase shadow-sm">
                     <i class="fas fa-headset mr-1"></i> {{ $tickets->total() }} REQUESTS QUEUED
                 </span>
@@ -155,9 +159,9 @@
                                         <a href="{{ route('admin.tickets.show', $ticket->id) }}" class="btn btn-white btn-sm text-primary py-2 px-3 border-right" data-toggle="tooltip" title="Open Ticket">
                                             <i class="fas fa-envelope-open-text"></i>
                                         </a>
-                                        <form action="{{ route('admin.tickets.destroy', $ticket->id) }}" method="POST" class="d-inline">
+                                        <form id="delete-ticket-{{ $ticket->id }}" action="{{ route('admin.tickets.destroy', $ticket->id) }}" method="POST" class="d-inline">
                                             @csrf @method('DELETE')
-                                            <button type="submit" class="btn btn-white btn-sm text-danger py-2 px-3" data-toggle="tooltip" title="Purge Ticket" onclick="return confirm('Permanently delete ticket?')">
+                                            <button type="button" class="btn btn-white btn-sm text-danger py-2 px-3" data-toggle="tooltip" title="Purge Ticket" onclick="confirmDelete('delete-ticket-{{ $ticket->id }}', 'Purge Support Ticket?', 'This will permanently remove the ticket from the system database.', 'Purge Ticket')">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
                                         </form>
@@ -360,6 +364,8 @@
 @endpush
 
 @section('js')
+@include('admin._partials._sweetalert')
+
 <script>
     $(function () {
         $('[data-toggle="tooltip"]').tooltip();
@@ -438,7 +444,7 @@
         const count = $('.ticket-checkbox:checked').length;
         if (count === 0) return;
 
-        Swal.fire({
+        SellioAlert.fire({
             title: 'Bulk Action Confirmation',
             text: `Apply "${value.toUpperCase()}" ${type} to ${count} selected tickets?`,
             icon: 'warning',

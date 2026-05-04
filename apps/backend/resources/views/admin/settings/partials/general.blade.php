@@ -18,17 +18,17 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label class="small font-weight-bold text-uppercase text-secondary mb-2" style="letter-spacing: 0.5px;">{{ __('Site Name') }}</label>
-                            <div class="input-group">
+                            <div class="input-group shadow-xs">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text bg-light border-right-0"><i class="fas fa-globe text-primary"></i></span>
+                                    <span class="input-group-text"><i class="fas fa-globe text-primary"></i></span>
                                 </div>
-                                <input type="text" name="site_name" class="form-control border-left-0" style="border-radius: 0 10px 10px 0;"
+                                <input type="text" name="site_name" class="form-control"
                                     value="{{ old('site_name', $settings['site_name'] ?? '') }}">
                             </div>
-                            <div class="custom-control custom-checkbox mt-3">
+                            <div class="custom-control custom-checkbox custom-control-premium mt-3">
                                 <input type="checkbox" name="hide_site_name" class="custom-control-input" id="hideSiteName"
                                     value="1" {{ (old('hide_site_name', $settings['hide_site_name'] ?? '0') == '1') ? 'checked' : '' }}>
-                                <label class="custom-control-label small text-muted font-weight-500" for="hideSiteName">
+                                <label class="custom-control-label small text-muted font-weight-bold" for="hideSiteName">
                                     {{ __('Hide Company Name text in header (if logo is present)') }}
                                 </label>
                             </div>
@@ -281,18 +281,6 @@
         background-color: var(--primary-soft) !important;
         transform: translateY(-3px);
         box-shadow: var(--premium-shadow);
-    }
-    .form-control {
-        height: 48px;
-        padding: 10px 16px;
-        border-radius: 10px;
-        border: 1px solid #e2e8f0;
-        transition: all 0.3s ease;
-    }
-    .form-control:focus {
-        border-color: var(--primary);
-        box-shadow: 0 0 0 4px var(--primary-soft);
-        background: #fff;
     }
 </style>
 @endpush

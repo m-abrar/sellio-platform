@@ -1,23 +1,25 @@
 {{-- Section 1: Basic Info --}}
-<div class="card shadow-sm rounded-3 border-0 mb-4">
-    <div class="card-header bg-white border-bottom">
-        <h3 class="card-title font-weight-bold">General Information</h3>
+<div class="card card-premium mb-4">
+    <div class="card-header border-0 bg-white py-4 px-4">
+        <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1">
+            <i class="fas fa-info-circle mr-2 text-primary opacity-50"></i> Campaign Identity
+        </h3>
     </div>
-    <div class="card-body">
+    <div class="card-body p-4">
         <div class="form-group mb-4">
-            <label for="title">Advertisement Title <span class="text-danger">*</span></label>
-            <input type="text" name="title" id="title" class="form-control form-control-lg @error('title') is-invalid @enderror" 
-                   value="{{ old('title', $advertisement->title ?? '') }}" placeholder="e.g. Summer Sale Banner">
+            <label class="small font-weight-bold text-secondary mb-2 text-uppercase" style="letter-spacing: 0.5px;">Advertisement Title <span class="text-danger">*</span></label>
+            <input type="text" name="title" id="title" class="form-control form-control-lg shadow-xs @error('title') is-invalid @enderror" 
+                   value="{{ old('title', $advertisement->title ?? '') }}" placeholder="e.g. Summer Sale Banner" required>
             @error('title') <span class="invalid-feedback">{{ $message }}</span> @enderror
         </div>
 
         <div class="form-group mb-0">
-            <label for="link">Click-through URL (Link)</label>
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <span class="input-group-text bg-light"><i class="fas fa-link text-muted"></i></span>
+            <label class="small font-weight-bold text-secondary mb-2 text-uppercase" style="letter-spacing: 0.5px;">Click-through URL (Link)</label>
+            <div class="input-group border rounded p-1 shadow-xs bg-white">
+                <div class="input-group-prepend border-0">
+                    <span class="input-group-text bg-white border-0"><i class="fas fa-link text-primary"></i></span>
                 </div>
-                <input type="url" name="link" id="link" class="form-control @error('link') is-invalid @enderror"
+                <input type="url" name="link" id="link" class="form-control border-0 @error('link') is-invalid @enderror"
                        value="{{ old('link', $advertisement->link ?? '') }}" placeholder="https://example.com/promo">
             </div>
             @error('link') <span class="invalid-feedback">{{ $message }}</span> @enderror
@@ -26,65 +28,68 @@
 </div>
 
 {{-- Section 2: Geo-Targeting --}}
-<div class="card shadow-sm rounded-3 border-0 mb-4">
-    <div class="card-header bg-white border-bottom">
-        <h3 class="card-title font-weight-bold">Location Targeting</h3>
+<div class="card card-premium mb-4">
+    <div class="card-header border-0 bg-white py-4 px-4">
+        <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1">
+            <i class="fas fa-map-marker-alt mr-2 text-primary opacity-50"></i> Geospatial Targeting
+        </h3>
     </div>
-    <div class="card-body">
-        <div class="row">
+    <div class="card-body p-4">
+        <div class="row mb-4">
             <div class="col-md-6 form-group">
-                <label>Latitude</label>
-                <input type="text" name="latitude" class="form-control" value="{{ old('latitude', $advertisement->latitude ?? '') }}">
+                <label class="small font-weight-bold text-secondary mb-2 text-uppercase" style="letter-spacing: 0.5px;">Latitude</label>
+                <input type="text" name="latitude" class="form-control shadow-xs" value="{{ old('latitude', $advertisement->latitude ?? '') }}" placeholder="0.000000">
             </div>
             <div class="col-md-6 form-group">
-                <label>Longitude</label>
-                <input type="text" name="longitude" class="form-control" value="{{ old('longitude', $advertisement->longitude ?? '') }}">
+                <label class="small font-weight-bold text-secondary mb-2 text-uppercase" style="letter-spacing: 0.5px;">Longitude</label>
+                <input type="text" name="longitude" class="form-control shadow-xs" value="{{ old('longitude', $advertisement->longitude ?? '') }}" placeholder="0.000000">
             </div>
         </div>
 
-        <div class="form-group bg-light p-3 rounded border">
-            <label for="radius">Target Radius: <span id="radius-display" class="text-primary font-weight-bold">{{ old('radius', $advertisement->radius ?? 5) }} KM</span></label>
-            <input type="range" name="radius" id="radius" class="form-control-range" min="1" max="100" value="{{ old('radius', $advertisement->radius ?? 5) }}">
+        <div class="form-group bg-light p-4 mb-4" style="border-radius: 20px; border: 1px solid rgba(0,0,0,0.03);">
+            <label class="small font-weight-bold text-dark mb-3 text-uppercase d-block" style="letter-spacing: 0.5px;">
+                Target Radius: <span id="radius-display" class="text-primary font-weight-bold ml-1">{{ old('radius', $advertisement->radius ?? 5) }} KM</span>
+            </label>
+            <input type="range" name="radius" id="radius" class="custom-range custom-range-primary" min="1" max="100" value="{{ old('radius', $advertisement->radius ?? 5) }}">
         </div>
 
-        <div class="form-group">
-            <label for="cities">Specific Cities (Comma Separated)</label>
+        <div class="form-group mb-4">
+            <label class="small font-weight-bold text-secondary mb-2 text-uppercase" style="letter-spacing: 0.5px;">Specific Cities</label>
             <input type="text" name="cities" id="cities" 
-                class="form-control {{ $errors->has('cities') ? 'is-invalid' : '' }}" 
+                class="form-control shadow-xs {{ $errors->has('cities') ? 'is-invalid' : '' }}" 
                 placeholder="e.g., New York, Los Angeles, Chicago" 
                 value="{{ old('cities', is_array($advertisement->cities ?? null) ? implode(', ', $advertisement->cities) : ($advertisement->cities ?? '')) }}">
             @error('cities') <div class="invalid-feedback">{{ $message }}</div> @enderror
         </div>
 
-        <div class="form-group">
-            <label for="zipcodes">Specific Zip Codes (Comma Separated)</label>
+        <div class="form-group mb-4">
+            <label class="small font-weight-bold text-secondary mb-2 text-uppercase" style="letter-spacing: 0.5px;">Specific Zip Codes</label>
             <input type="text" name="zipcodes" id="zipcodes" 
-                class="form-control {{ $errors->has('zipcodes') ? 'is-invalid' : '' }}" 
+                class="form-control shadow-xs {{ $errors->has('zipcodes') ? 'is-invalid' : '' }}" 
                 placeholder="e.g., 10001, 90001, 60601" 
                 value="{{ old('zipcodes', is_array($advertisement->zipcodes ?? null) ? implode(', ', $advertisement->zipcodes) : ($advertisement->zipcodes ?? '')) }}">
             @error('zipcodes') <div class="invalid-feedback">{{ $message }}</div> @enderror
         </div>
 
-        <div class="form-group">
-            <label for="regions">Specific Regions (Comma Separated)</label>
+        <div class="form-group mb-0">
+            <label class="small font-weight-bold text-secondary mb-2 text-uppercase" style="letter-spacing: 0.5px;">Specific Regions</label>
             <input type="text" name="regions" id="regions" 
-                class="form-control {{ $errors->has('regions') ? 'is-invalid' : '' }}" 
+                class="form-control shadow-xs {{ $errors->has('regions') ? 'is-invalid' : '' }}" 
                 placeholder="e.g., Northeast, Midwest, West" 
                 value="{{ old('regions', is_array($advertisement->regions ?? null) ? implode(', ', $advertisement->regions) : ($advertisement->regions ?? '')) }}">
             @error('regions') <div class="invalid-feedback">{{ $message }}</div> @enderror
         </div>
-        
     </div>
 </div>
 
 {{-- Section 3: Visual Orientations --}}
-<div class="card shadow-sm rounded-3 border-0">
-    <div class="card-header bg-white border-bottom">
-        <h3 class="card-title font-weight-bold">
-            <i class="fas fa-layer-group mr-1 text-primary"></i> Display Placements
+<div class="card card-premium">
+    <div class="card-header border-0 bg-white py-4 px-4">
+        <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1">
+            <i class="fas fa-layer-group mr-2 text-primary opacity-50"></i> Placement Strategy
         </h3>
     </div>
-    <div class="card-body">
+    <div class="card-body p-4">
         <div class="row orientation-grid text-center">
             @foreach ([
                 'header' => 'header-tile',
@@ -101,102 +106,94 @@
                                {{ in_array($orientation, old('orientations', $advertisement->orientations ?? [])) ? 'checked' : '' }}>
                         
                         <div class="tile-box {{ $class }} shadow-sm">
-                            <div class="tile-check-icon"><i class="fas fa-check-circle"></i></div>
+                            <div class="tile-check-icon shadow-sm"><i class="fas fa-check-circle"></i></div>
                             <span class="tile-label">{{ strtoupper(str_replace('-', ' ', $orientation)) }}</span>
                         </div>
                     </label>
                 </div>
             @endforeach
         </div>
-        @error('orientations') <div class="text-danger small mt-2">{{ $message }}</div> @enderror
+        @error('orientations') <div class="text-danger small mt-2 font-weight-bold">{{ $message }}</div> @enderror
     </div>
 </div>
+
 @push('css')
 <style>
-/* Container Grid */
-.orientation-grid { padding: 10px; }
+    /* Hidden Checkbox Logic */
+    .orientation-selector input[type="checkbox"]:checked + .tile-box {
+        border: 2px solid #22c55e !important;
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(34, 197, 94, 0.15) !important;
+    }
 
-/* Hidden Checkbox Logic */
-.orientation-selector input[type="checkbox"]:checked + .tile-box {
-    border: 2px solid #28a745 !important;
-    transform: translateY(-3px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2) !important;
-}
+    .orientation-selector input[type="checkbox"]:checked + .tile-box .tile-check-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 
-.orientation-selector input[type="checkbox"]:checked + .tile-box .tile-check-icon {
-    display: block;
-}
+    /* Base Tile Styling */
+    .tile-box {
+        position: relative;
+        padding: 24px 12px;
+        border-radius: 16px;
+        border: 2px solid transparent;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        min-height: 90px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f8fafc;
+    }
 
-/* Base Tile Styling */
-.tile-box {
-    position: relative;
-    padding: 20px 10px;
-    border-radius: 8px;
-    border: 2px solid transparent;
-    transition: all 0.2s ease;
-    min-height: 80px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #f4f6f9;
-}
+    .tile-label {
+        font-weight: 800;
+        font-size: 0.7rem;
+        color: #fff;
+        letter-spacing: 0.5px;
+        text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    }
 
-.tile-label {
-    font-weight: 800;
-    font-size: 0.75rem;
-    color: #fff;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-}
+    .tile-check-icon {
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        color: #22c55e;
+        background: #fff;
+        border-radius: 50%;
+        display: none;
+        width: 24px;
+        height: 24px;
+        font-size: 1.1rem;
+        z-index: 5;
+    }
 
-.tile-check-icon {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    color: #28a745;
-    background: #fff;
-    border-radius: 50%;
-    display: none;
-    font-size: 1.2rem;
-}
+    /* Color Mapping */
+    .header-tile { background: linear-gradient(135deg, #f472b6, #db2777) !important; }
+    .home-tile { background: linear-gradient(135deg, #fbbf24, #d97706) !important; }
+    .search-tile { background: linear-gradient(135deg, #a78bfa, #7c3aed) !important; }
+    .sidebar-tile { background: linear-gradient(135deg, #60a5fa, #2563eb) !important; }
+    .footer-tile { background: linear-gradient(135deg, #2dd4bf, #0d9488) !important; }
+    .general-tile { background: linear-gradient(135deg, #94a3b8, #475569) !important; }
 
-/* Color Mapping from your Diagrams */
-.header-tile { background-color: #e85597 !important; } /* Pink */
-.home-tile { background-color: #f1bc6a !important; }   /* Orange/Mustard */
-.search-tile { background-color: #a55eea !important; } /* Purple */
-.sidebar-tile { background-color: #4b7bec !important; }/* Blue */
-.footer-tile { background-color: #4ecdc4 !important; } /* Cyan/Teal */
-.general-tile { background-color: #778ca3 !important; }/* Grey */
-
-.tile-box:hover { opacity: 0.9; }
+    .tile-box:hover { transform: translateY(-3px); opacity: 0.95; }
+    
+    /* Custom Range Styling */
+    .custom-range-primary::-webkit-slider-thumb { background-color: var(--primary); }
+    .custom-range-primary::-moz-range-thumb { background-color: var(--primary); }
+    .custom-range-primary::-ms-thumb { background-color: var(--primary); }
 </style>
 @endpush
 
 @push('js')
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // 1. Live Radius Display Update
         const radiusInput = document.getElementById('radius');
         const radiusDisplay = document.getElementById('radius-display');
         
         if (radiusInput && radiusDisplay) {
             radiusInput.addEventListener('input', function() {
                 radiusDisplay.textContent = this.value + ' KM';
-            });
-        }
-
-        // 2. Handle Status Toggle Text & Value
-        const statusSwitch = document.getElementById('statusSwitch');
-        const statusText = document.querySelector('.toggle-status');
-        
-        if (statusSwitch) {
-            statusSwitch.addEventListener('change', function () {
-                // Update the hidden value for the form submission
-                this.value = this.checked ? '1' : '0';
-                
-                // Update the UI text label if it exists
-                if (statusText) {
-                    statusText.textContent = this.checked ? 'Active' : 'Inactive';
-                }
             });
         }
     });

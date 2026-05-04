@@ -15,8 +15,11 @@
             </div>
             <div class="col-sm-5 d-flex align-items-center justify-content-end">
                 <div class="d-flex justify-content-end align-items-center" style="gap: 12px;">
-                    <a href="{{ route('admin.permissions.index') }}" class="btn btn-back shadow-sm px-3">
-                        <i class="fas fa-key mr-1"></i> PERMISSIONS
+                    <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">
+                        <i class="fas fa-th-large"></i> Dashboard
+                    </a>
+                    <a href="{{ route('admin.permissions.index') }}" class="btn-back shadow-sm">
+                        <i class="fas fa-key"></i> Permissions
                     </a>
                     <a href="{{ route('admin.roles.create') }}" class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-premium">
                         <i class="fas fa-plus-circle mr-1"></i> ADD SECURITY ROLE
@@ -32,9 +35,13 @@
     @include('admin.alert')
 
     <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
-        <div class="card-header bg-white border-0 py-4 px-4 d-flex align-items-center justify-content-between">
-            <h3 class="card-title font-weight-bold text-dark mb-0">System Authority Registry</h3>
-            <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest">{{ count($roles) }} ACTIVE ROLES</span>
+        <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center justify-content-between">
+            <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">
+                <i class="fas fa-layer-group mr-2 text-primary opacity-50"></i> System Authority Registry
+            </h3>
+            <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase ml-auto">
+                {{ count($roles) }} ACTIVE ROLES
+            </span>
         </div>
 
         <div class="card-body p-0">
@@ -84,11 +91,11 @@
                                             <i class="fas fa-shield-alt mr-1"></i> EDIT
                                         </a>
                                         
-                                        <form action="{{ route('admin.roles.destroy', $role->id) }}" method="POST" class="d-inline">
+                                        <form id="delete-role-{{ $role->id }}" action="{{ route('admin.roles.destroy', $role->id) }}" method="POST" class="d-inline">
                                             @csrf @method('DELETE')
-                                            <button type="submit" class="btn btn-white btn-sm text-danger py-2" 
+                                            <button type="button" class="btn btn-white btn-sm text-danger py-2 px-3" 
                                                     data-toggle="tooltip" title="Purge Role"
-                                                    onclick="return confirm('Deleting this role may affect users assigned to it. Proceed?')">
+                                                    onclick="confirmDelete('delete-role-{{ $role->id }}', 'Purge Security Role?', 'This may affect users assigned to this hierarchy tier.', 'Purge Role')">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
                                         </form>
@@ -131,6 +138,7 @@
 @endpush
 
 @push('js')
+@include('admin._partials._sweetalert')
 <script>
     $(function () {
         $('[data-toggle="tooltip"]').tooltip();
