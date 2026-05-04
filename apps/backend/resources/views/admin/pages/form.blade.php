@@ -1,13 +1,13 @@
 @extends('adminlte::page')
 
-@section('title', ($page->exists ? 'Edit' : 'Add') . ' Content')
+@section('title', ($page->exists ? 'Edit' : 'Add') . ' Content | Page Architect')
 
 @section('content_header')
     <div class="container-fluid pt-4">
         <div class="row mb-4 align-items-center">
             <div class="col-sm-8">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-file-alt mr-2 text-primary"></i> 
+                    <i class="fas fa-file-alt mr-2 text-primary opacity-50"></i> 
                     {{ $page->exists ? 'Modify Content: ' . $page->title : 'Create New Content' }}
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">
@@ -15,9 +15,14 @@
                 </p>
             </div>
             <div class="col-sm-4 text-right">
-                <a href="{{ route('admin.pages.index') }}" class="btn btn-back shadow-sm">
-                    <i class="fas fa-arrow-left mr-1"></i> Back to List
-                </a>
+                <div class="d-flex justify-content-end align-items-center" style="gap: 12px;">
+                    <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">
+                        <i class="fas fa-th-large"></i> Dashboard
+                    </a>
+                    <a href="{{ route('admin.pages.index') }}" class="btn-back shadow-sm">
+                        <i class="fas fa-arrow-left"></i> Back to List
+                    </a>
+                </div>
             </div>
         </div>
     </div>
@@ -53,15 +58,15 @@
 
                     @if($page->exists)
                         <div class="mt-2 mb-4 px-2">
-                            <a href="{{ url($page->slug) }}" target="_blank" class="btn btn-light btn-block btn-sm rounded-pill font-weight-bold text-primary border shadow-xs">
+                            <a href="{{ url($page->slug) }}" target="_blank" class="btn btn-primary-soft btn-block py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 shadow-sm">
                                 <i class="fas fa-external-link-alt mr-1"></i> VIEW LIVE PAGE
                             </a>
                         </div>
                     @endif
 
-                    <div class="card border-0 shadow-premium mb-4" style="border-radius: 20px; overflow: hidden;">
+                    <div class="card card-premium shadow-premium mb-4">
                         <div class="card-header bg-white border-0 py-3 px-4">
-                            <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
+                            <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1">
                                 <i class="fas fa-camera mr-2 text-primary opacity-50"></i> Visual Identity
                             </h3>
                         </div>
@@ -82,16 +87,15 @@
 </div>
 @endsection
 
-@push('css')
+@section('css')
+@include('admin._partials._toggle-card-css')
 <style>
     .sticky-top { top: 20px; }
-    .rounded-3 { border-radius: 0.6rem !important; }
     .form-control:focus { border-color: var(--primary); box-shadow: none; }
-    label { font-weight: 600; color: #495057; font-size: 0.9rem; }
 </style>
-@endpush
+@endsection
 
-@push('js')
+@section('js')
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         // Auto-generate Slug from Title
@@ -108,4 +112,4 @@
         }
     });
 </script>
-@endpush
+@endsection

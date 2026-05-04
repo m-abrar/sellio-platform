@@ -1,20 +1,25 @@
 @extends('adminlte::page')
 
-@section('title', 'Subscription Plans')
+@section('title', 'Subscription Plans | Tier Registry')
 
 @section('content_header')
     <div class="container-fluid pt-4">
-        <div class="row mb-2">
-            <div class="col-sm-6">
+        <div class="row mb-4 align-items-center">
+            <div class="col-sm-8">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-boxes mr-2 text-primary"></i> Subscription Plans
+                    <i class="fas fa-boxes mr-2 text-primary opacity-50"></i> Tier Architect & Plans
                 </h1>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Manage marketplace subscription tiers, billing structures, and service quotas.</p>
             </div>
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Plans</li>
-                </ol>
+            <div class="col-sm-4 text-right">
+                <div class="d-flex justify-content-end align-items-center" style="gap: 12px;">
+                    <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">
+                        <i class="fas fa-th-large"></i> Dashboard
+                    </a>
+                    <a href="{{ route('admin.plans.create') }}" class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-premium">
+                        <i class="fas fa-plus-circle mr-1"></i> ADD TIER
+                    </a>
+                </div>
             </div>
         </div>
     </div>
@@ -24,42 +29,42 @@
 <div class="container-fluid">
     @include('admin.alert')
 
-    {{-- Filter Card: Blueprint Standard --}}
-    <div class="card card-outline card-secondary shadow-sm mb-4 border-0">
-        <div class="card-header bg-white">
-            <h3 class="card-title text-muted font-weight-bold small text-uppercase">
-                <i class="fas fa-filter mr-1"></i> Search Catalog
-            </h3>
-        </div>
-        <div class="card-body">
+    {{-- Glass Filter Card --}}
+    <div class="card card-premium shadow-sm mb-4 border-0">
+        <div class="card-body py-4 px-4">
             <form method="GET" action="{{ route('admin.plans.index') }}">
                 <div class="row align-items-end">
                     <div class="col-md-5">
-                        <label class="small text-muted font-weight-bold text-uppercase">Plan Identity</label>
-                        <div class="input-group shadow-xs">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text bg-white border-right-0"><i class="fas fa-search text-xs text-muted"></i></span>
+                        <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Search Identifier</label>
+                        <div class="input-group border rounded shadow-xs bg-white" style="height: 46px; padding: 2px;">
+                            <div class="input-group-prepend border-0">
+                                <span class="input-group-text bg-white border-0 py-0"><i class="fas fa-search text-primary"></i></span>
                             </div>
-                            <input type="text" name="name" class="form-control border-left-0 shadow-none" 
-                                   placeholder="Search by plan name or description..." value="{{ request('name') }}">
+                            <input type="text" name="name" class="form-control border-0 shadow-none h-100 py-0" 
+                                   placeholder="Filter by tier name or label..." value="{{ request('name') }}">
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <label class="small text-muted font-weight-bold text-uppercase">Billing Cycle</label>
-                        <select name="billing_period" class="form-control select2 shadow-none">
-                            <option value="">All Cycles</option>
-                            <option value="monthly" {{ request('billing_period') == 'monthly' ? 'selected' : '' }}>Monthly</option>
-                            <option value="annually" {{ request('billing_period') == 'annually' ? 'selected' : '' }}>Annually</option>
-                        </select>
+                        <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Billing Cycle</label>
+                        <div class="input-group border rounded shadow-xs bg-white" style="height: 46px; padding: 2px;">
+                            <div class="input-group-prepend border-0">
+                                <span class="input-group-text bg-white border-0 py-0"><i class="fas fa-calendar-alt text-primary"></i></span>
+                            </div>
+                            <select name="billing_period" class="form-control border-0 custom-select shadow-none bg-white h-100 py-0">
+                                <option value="">All Temporal Cycles</option>
+                                <option value="monthly" {{ request('billing_period') == 'monthly' ? 'selected' : '' }}>Monthly Tiers</option>
+                                <option value="annually" {{ request('billing_period') == 'annually' ? 'selected' : '' }}>Annual Tiers</option>
+                            </select>
+                        </div>
                     </div>
                     <div class="col-md-3">
-                        <div class="btn-group w-100 shadow-sm">
-                            <button type="submit" class="btn btn-primary font-weight-bold">
+                        <div class="btn-group w-100 shadow-sm rounded-pill overflow-hidden border" style="height: 46px;">
+                            <button type="submit" class="btn btn-primary font-weight-bold smallest uppercase d-flex align-items-center justify-content-center">
                                 <i class="fas fa-sync-alt mr-1"></i> APPLY
                             </button>
                             @if(request()->hasAny(['name', 'billing_period']))
-                                <a href="{{ route('admin.plans.index') }}" class="btn btn-default border-left">
-                                    <i class="fas fa-undo text-muted"></i>
+                                <a href="{{ route('admin.plans.index') }}" class="btn btn-white px-3 border-left d-flex align-items-center justify-content-center">
+                                    <i class="fas fa-undo text-danger"></i>
                                 </a>
                             @endif
                         </div>
@@ -70,16 +75,14 @@
     </div>
 
     {{-- Main Table Card --}}
-    <div class="card card-primary card-outline shadow-sm border-0">
-        <div class="card-header border-0 bg-white py-3">
-            <h3 class="card-title font-weight-600 text-muted">
-                Product Catalog <span class="badge badge-light border ml-2 px-2" style="font-weight: 500;">{{ count($plans) }} Total</span>
+    <div class="card card-premium overflow-hidden">
+        <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center justify-content-between">
+            <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">
+                <i class="fas fa-layer-group mr-2 text-primary opacity-50"></i> Product Catalog
             </h3>
-            <div class="card-tools">
-                <a href="{{ route('admin.plans.create') }}" class="btn btn-primary rounded-pill shadow-premium px-4">
-                    <i class="fas fa-plus-circle mr-1"></i> Create New Plan
-                </a>
-            </div>
+            <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase ml-auto">
+                {{ count($plans) }} ACTIVE TIERS
+            </span>
         </div>
 
         <div class="card-body p-0">
@@ -87,26 +90,26 @@
                 <table id="plans-table" class="table table-hover table-premium mb-0">
                     <thead class="thead-light">
                         <tr>
-                            <th class="px-4">Name & Label</th>
+                            <th class="pl-4">Tier Identity</th>
                             <th>Cost Analysis</th>
-                            <th class="text-center">Active Status</th>
+                            <th class="text-center">Visibility</th>
                             <th>Resource Quotas</th>
-                            <th class="text-right px-4">Actions</th>
+                            <th class="text-right pr-4">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse ($plans as $plan)
                             <tr>
-                                <td class="align-middle px-4">
+                                <td class="align-middle pl-4">
                                     <div class="d-flex align-items-center">
-                                        <div class="icon-shape mr-3 bg-light border rounded d-flex align-items-center justify-content-center shadow-xs" style="width:45px; height:45px; border-radius: 8px !important;">
-                                            <i class="fas fa-layer-group text-primary"></i>
+                                        <div class="icon-box-soft bg-primary-soft mr-3 d-flex align-items-center justify-content-center" style="width:45px; height:45px; border-radius: 12px;">
+                                            <i class="fas fa-boxes text-primary"></i>
                                         </div>
                                         <div>
-                                            <span class="d-block font-weight-bold text-dark mb-0">{{ $plan->title }}</span>
+                                            <span class="d-block font-weight-bold text-dark mb-0" style="font-size: 0.95rem;">{{ $plan->title }}</span>
                                             @if($plan->label_text)
-                                                <span class="badge badge-primary-light text-primary text-xs px-2 mt-1">
-                                                    {{ strtoupper($plan->label_text) }}
+                                                <span class="badge badge-primary-light text-primary px-2 py-1 rounded-pill font-weight-bold smallest uppercase mt-1">
+                                                    {{ $plan->label_text }}
                                                 </span>
                                             @else
                                                 <small class="text-muted italic">{{ Str::limit($plan->description, 35) }}</small>
@@ -119,44 +122,48 @@
                                     <div class="text-dark font-weight-bold" style="font-size: 1.05rem;">
                                         {{ setting('currency_symbol', '$') }}{{ number_format($plan->price, 2) }}
                                     </div>
-                                    <small class="text-muted text-uppercase font-weight-bold text-monospace" style="font-size: 0.65rem; letter-spacing: 0.5px;">
-                                        Per {{ $plan->billing_period }}
-                                    </small>
+                                    <div class="smallest text-muted text-uppercase font-weight-bold letter-spacing-1 mt-1">
+                                        PER {{ $plan->billing_period }}
+                                    </div>
                                 </td>
 
                                 <td class="text-center align-middle">
-                                    <span class="badge {{ $plan->is_active ? 'badge-success-light' : 'badge-danger-light' }} px-3 py-1 text-uppercase" style="font-size: 0.7rem; letter-spacing: 0.5px; min-width: 85px;">
-                                        {{ $plan->is_active ? 'Active' : 'Inactive' }}
-                                    </span>
+                                    @if($plan->is_active)
+                                        <span class="badge badge-success-light px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1">
+                                            <i class="fas fa-check-circle mr-1"></i> ACTIVE
+                                        </span>
+                                    @else
+                                        <span class="badge badge-secondary-soft text-secondary px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1">
+                                            <i class="fas fa-eye-slash mr-1"></i> DISABLED
+                                        </span>
+                                    @endif
                                 </td>
 
-                                <td class="align-middle small">
-                                    <div class="d-flex flex-column">
-                                        <div class="mb-1 text-dark">
-                                            <i class="fas fa-list-ul mr-2 text-muted" style="width: 15px;"></i>
-                                            <strong>Listings:</strong> 
-                                            {!! $plan->max_listings === null ? '<span class="text-primary font-weight-bold">Unlimited</span>' : $plan->max_listings !!}
+                                <td class="align-middle">
+                                    <div class="d-flex flex-column" style="gap: 4px;">
+                                        <div class="smallest text-dark font-weight-bold uppercase letter-spacing-1">
+                                            <i class="fas fa-th-list mr-2 text-primary opacity-50" style="width: 15px;"></i>
+                                            Assets: {!! $plan->max_listings === null ? '<span class="text-primary">∞</span>' : $plan->max_listings !!}
                                         </div>
-                                        <div class="text-dark">
+                                        <div class="smallest text-dark font-weight-bold uppercase letter-spacing-1">
                                             <i class="fas fa-star mr-2 text-warning" style="width: 15px;"></i>
-                                            <strong>Featured:</strong> 
-                                            {!! $plan->max_featured_listings === null ? '<span class="text-primary font-weight-bold">Unlimited</span>' : $plan->max_featured_listings !!}
+                                            Priority: {!! $plan->max_featured_listings === null ? '<span class="text-primary">∞</span>' : $plan->max_featured_listings !!}
                                         </div>
                                     </div>
                                 </td>
 
-                                <td class="text-right align-middle px-4">
+                                <td class="text-right align-middle pr-4">
                                     <div class="btn-group btn-group-premium shadow-xs rounded-pill border overflow-hidden">
                                         <a href="{{ route('admin.plans.edit', $plan->id) }}" 
-                                           class="btn btn-white btn-sm text-info py-2 px-3 border-right" 
-                                           data-toggle="tooltip" title="Modify Plan">
+                                           class="btn btn-white text-info py-2 px-3 d-inline-flex align-items-center" 
+                                           data-toggle="tooltip" title="Modify Tier">
                                             <i class="fas fa-pencil-alt"></i>
                                         </a>
-                                        <form action="{{ route('admin.plans.destroy', $plan->id) }}" method="POST" class="d-inline">
+                                        <form id="delete-form-{{ $plan->id }}" action="{{ route('admin.plans.destroy', $plan->id) }}" method="POST" class="d-inline">
                                             @csrf @method('DELETE')
-                                            <button type="submit" class="btn btn-white btn-sm text-danger py-2 px-3" 
-                                                    data-toggle="tooltip" title="Delete Plan"
-                                                    onclick="return confirm('Permanently delete the {{ $plan->title }} plan?')">
+                                            <button type="button" class="btn btn-white text-danger py-2 px-3 border-left d-inline-flex align-items-center" 
+                                                    data-toggle="tooltip" title="Decommission"
+                                                    onclick="confirmDelete('delete-form-{{ $plan->id }}', 'Decommission Tier?', 'All subscriptions tied to this tier will be affected.', 'Confirm')">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
                                         </form>
@@ -164,7 +171,18 @@
                                 </td>
                             </tr>
                         @empty
-                            {{-- Handled by generic empty state script --}}
+                            <tr class="empty-state">
+                                <td colspan="5" class="text-center py-5">
+                                    <div class="py-4">
+                                        <i class="fas fa-boxes fa-4x text-muted opacity-25 mb-3 d-block"></i>
+                                        <h5 class="text-muted font-weight-bold">No Tiers Architected</h5>
+                                        <p class="text-secondary small mb-3">Initialize your monetization engine by creating your first plan.</p>
+                                        <a href="{{ route('admin.plans.create') }}" class="btn btn-primary btn-sm px-4 rounded-pill font-weight-bold">
+                                            <i class="fas fa-plus mr-1"></i> CREATE FIRST TIER
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
                         @endforelse
                     </tbody>
                 </table>
@@ -172,9 +190,9 @@
         </div>
 
         @if(method_exists($plans, 'links') && $plans->hasPages())
-            <div class="card-footer bg-white border-top py-3">
+            <div class="card-footer bg-white border-top py-3 px-4">
                 <div class="d-flex justify-content-between align-items-center">
-                    <span class="text-muted small font-weight-bold text-uppercase">Catalog Pagination</span>
+                    <span class="smallest text-muted font-weight-bold text-uppercase letter-spacing-1">Catalog Pagination</span>
                     <div>
                         {{ $plans->appends(request()->query())->links('pagination::bootstrap-4') }}
                     </div>
@@ -188,24 +206,12 @@
 @section('css')
 @include('admin._partials._toggle-card-css')
 <style>
-    /* Blueprint Layout Utilities */
-    .table-premium thead th { border-top: none; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px; color: #6c757d; }
-    .shadow-xs { box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
-    .text-monospace { font-family: 'SFMono-Regular', Consolas, monospace !important; }
     .italic { font-style: italic; }
-
-    /* Blueprint Light Badge Classes */
-    .badge-success-light { background-color: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
-    .badge-danger-light { background-color: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
-    .badge-primary-light { background-color: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
-
-    /* Button Group Premium Style */
-    .btn-group-premium .btn { border: 1px solid #e9ecef; background: #fff; }
-    .btn-group-premium .btn:hover { background: #f8f9fa; }
 </style>
 @endsection
 
 @section('js')
+@include('admin._partials._sweetalert')
 <script>
     $(function () {
         $('[data-toggle="tooltip"]').tooltip();

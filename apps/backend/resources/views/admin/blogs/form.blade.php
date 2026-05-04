@@ -1,24 +1,29 @@
 @extends('adminlte::page')
 
-@section('title', ($blog->exists ? 'Edit' : 'Add') . ' Blog Post')
+@section('title', ($blog->exists ? 'Edit' : 'Add') . ' Blog Post | Editorial Desk')
 
 @section('plugins.Select2', true)
 
 @section('content_header')
-    <div class="container-fluid">
+    <div class="container-fluid pt-4">
         <div class="row mb-4 align-items-center">
             <div class="col-sm-8">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-blog mr-2 text-primary"></i> {{ $blog->exists ? 'Edit Article' : 'Compose New Article' }}
+                    <i class="fas fa-blog mr-2 text-primary opacity-50"></i> {{ $blog->exists ? 'Edit Article' : 'Compose New Article' }}
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">
                     {{ $blog->exists ? 'Modify existing content, SEO metadata, and publication status.' : 'Draft a new editorial piece with rich media and optimized meta tags.' }}
                 </p>
             </div>
             <div class="col-sm-4 text-right">
-                <a href="{{ route('admin.blogs.index') }}" class="btn btn-back shadow-sm">
-                    <i class="fas fa-arrow-left mr-1"></i> Back to Articles
-                </a>
+                <div class="d-flex justify-content-end align-items-center" style="gap: 12px;">
+                    <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">
+                        <i class="fas fa-th-large"></i> Dashboard
+                    </a>
+                    <a href="{{ route('admin.blogs.index') }}" class="btn-back shadow-sm">
+                        <i class="fas fa-arrow-left"></i> Back to Articles
+                    </a>
+                </div>
             </div>
         </div>
     </div>
@@ -58,21 +63,20 @@
 
                     @if($blog->exists)
                         <div class="mt-2 mb-4 px-2">
-                            <a href="{{ url('blog/' . $blog->slug) }}" target="_blank" class="btn btn-light btn-block btn-sm rounded-pill font-weight-bold text-primary border shadow-xs">
+                            <a href="{{ url('blog/' . $blog->slug) }}" target="_blank" class="btn btn-primary-soft btn-block py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 shadow-sm">
                                 <i class="fas fa-external-link-alt mr-1"></i> VIEW LIVE ARTICLE
                             </a>
                         </div>
                     @endif
 
                     {{-- Featured Image (Spatie Media Integration) --}}
-                    <div class="card border-0 shadow-premium mb-4" style="border-radius: 20px; overflow: hidden;">
+                    <div class="card card-premium shadow-premium mb-4">
                         <div class="card-header bg-white border-0 py-3 px-4">
-                            <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
+                            <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1">
                                 <i class="fas fa-camera mr-2 text-primary opacity-50"></i> Visual Identity
                             </h3>
                         </div>
                         <div class="card-body p-0">
-                            {{-- Using your custom Spatie Media uploader partial --}}
                             @include('admin._partials._image-uploader', [
                                 'name' => 'featured_image',
                                 'label' => 'Select Featured Image',
@@ -84,21 +88,28 @@
                     </div>
 
                     {{-- Additional Meta (Reading Time, Video Link, etc) --}}
-                    <div class="card border-0 shadow-premium mb-4 overflow-hidden" style="border-radius: 20px;">
+                    <div class="card card-premium shadow-premium mb-4">
                         <div class="card-header bg-white border-0 py-3 px-4">
-                            <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
+                            <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1">
                                 <i class="fas fa-clock mr-2 text-primary opacity-50"></i> Meta Metrics
                             </h3>
                         </div>
                         <div class="card-body p-4">
                             <div class="form-group mb-4">
-                                <label class="small font-weight-bold text-muted text-uppercase">Est. Reading Time (Mins)</label>
-                                <input type="number" name="reading_time" class="form-control" value="{{ old('reading_time', $blog->reading_time ?? 5) }}">
+                                <label class="small font-weight-bold text-secondary mb-2 text-uppercase" style="letter-spacing: 0.5px;">Est. Reading Time (Mins)</label>
+                                <div class="input-group border rounded p-1 shadow-xs bg-white">
+                                    <div class="input-group-prepend border-0">
+                                        <span class="input-group-text bg-white border-0"><i class="fas fa-hourglass-half text-primary"></i></span>
+                                    </div>
+                                    <input type="number" name="reading_time" class="form-control border-0" value="{{ old('reading_time', $blog->reading_time ?? 5) }}">
+                                </div>
                             </div>
 
-                            <div class="custom-control custom-switch custom-switch-premium">
-                                <input type="checkbox" name="is_featured" class="custom-control-input" id="is_featured" value="1" {{ old('is_featured', $blog->is_featured ?? false) ? 'checked' : '' }}>
-                                <label class="custom-control-label font-weight-bold text-dark small" for="is_featured">Featured Post</label>
+                            <div class="bg-light p-3 rounded-xl border">
+                                <div class="custom-control custom-switch custom-switch-premium">
+                                    <input type="checkbox" name="is_featured" class="custom-control-input" id="is_featured" value="1" {{ old('is_featured', $blog->is_featured ?? false) ? 'checked' : '' }}>
+                                    <label class="custom-control-label font-weight-bold text-dark smallest uppercase letter-spacing-1" for="is_featured" style="padding-top: 2px;">Featured Editorial</label>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -109,14 +120,15 @@
 </div>
 @endsection
 
-@push('css')
+@section('css')
+@include('admin._partials._toggle-card-css')
 <style>
-    .rounded-3 { border-radius: 0.6rem !important; }
-    label { font-weight: 600; color: #495057; font-size: 0.9rem; }
+    .sticky-top { top: 20px; }
+    .form-control:focus { border-color: var(--primary); box-shadow: none; }
 </style>
-@endpush
+@endsection
 
-@push('js')
+@section('js')
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         $('.select2').select2({ theme: 'bootstrap4', width: '100%' });
@@ -127,7 +139,6 @@
         
         if (titleInput && slugInput) {
             titleInput.addEventListener('input', function () {
-                // Only auto-generate if the slug is empty or we are creating new
                 @if(!$blog->exists)
                     let slug = this.value.toLowerCase()
                         .replace(/[^a-z0-9]+/g, '-')
@@ -138,4 +149,4 @@
         }
     });
 </script>
-@endpush
+@endsection

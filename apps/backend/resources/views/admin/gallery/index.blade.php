@@ -13,9 +13,14 @@
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Aggregate storage for marketplace listings, brand assets, and user uploads.</p>
             </div>
             <div class="col-sm-6 text-right">
-                <button type="button" class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-premium" data-toggle="modal" data-target="#uploadModal">
-                    <i class="fas fa-plus-circle mr-1"></i> ADD STANDALONE ASSET
-                </button>
+                <div class="d-flex justify-content-end align-items-center" style="gap: 12px;">
+                    <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">
+                        <i class="fas fa-th-large"></i> Dashboard
+                    </a>
+                    <button type="button" class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-premium" data-toggle="modal" data-target="#uploadModal">
+                        <i class="fas fa-plus-circle mr-1"></i> ADD STANDALONE ASSET
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -23,6 +28,7 @@
 
 @section('content')
     <div class="container-fluid">
+        @include('admin.alert')
         {{-- Premium Filter Card --}}
         <div class="card glass-card shadow-sm mb-4 border-0" style="border-radius: 20px;">
             <div class="card-body py-3">
@@ -78,7 +84,8 @@
                                     <form id="delete-form-{{ $media->id }}" action="{{ route('admin.gallery.destroy', $media->id) }}" method="POST" class="d-inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="button" class="btn btn-white btn-sm mx-1 rounded-circle shadow-sm" title="Delete" style="width: 38px; height: 38px;" onclick="confirmDelete({{ $media->id }})">
+                                        <button type="button" class="btn btn-white btn-sm mx-1 rounded-circle shadow-sm" title="Delete" style="width: 38px; height: 38px;" 
+                                                onclick="confirmDelete('delete-form-{{ $media->id }}', 'Delete Asset?', 'This operation is permanent and may break linked listings!', 'Delete It')">
                                             <i class="fas fa-trash text-danger"></i>
                                         </button>
                                     </form>
@@ -93,8 +100,8 @@
                             </div>
                             <div class="card-body p-3">
                                 <div class="mb-2">
-                                    <span class="badge badge-primary-light text-primary small mb-1 px-2 py-1">{{ Str::afterLast($media->model_type, '\\') }} #{{ $media->model_id }}</span>
-                                    <span class="badge badge-secondary-light text-muted small ml-1 px-2 py-1">{{ $media->collection_name }}</span>
+                                    <span class="badge badge-primary-light text-primary px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1">{{ Str::afterLast($media->model_type, '\\') }} #{{ $media->model_id }}</span>
+                                    <span class="badge badge-secondary-soft text-muted px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 ml-1">{{ $media->collection_name }}</span>
                                 </div>
                                 <h6 class="font-weight-bold text-truncate text-dark mb-1" style="font-size: 0.85rem;" title="{{ $media->file_name }}">{{ $media->file_name }}</h6>
                                 <p class="small text-muted mb-0 opacity-75">
@@ -199,51 +206,36 @@
 @stop
 
 @section('css')
-    <style>
-        .gallery-card { position: relative; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-        .gallery-card:hover { transform: translateY(-10px); box-shadow: var(--premium-shadow) !important; }
-        
-        .gallery-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(15, 23, 42, 0.6); opacity: 0;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(4px);
-        }
-        .gallery-card:hover .gallery-overlay { opacity: 1; }
-        
-        .upload-area:hover { border-color: var(--primary) !important; background-color: var(--primary-soft) !important; transform: scale(1.02); }
-        .btn-white { background: #fff; color: var(--dark); border: none; }
-        .rounded-xl { border-radius: 20px !important; }
-    </style>
+@include('admin._partials._toggle-card-css')
+<style>
+    .gallery-card { position: relative; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+    .gallery-card:hover { transform: translateY(-10px); box-shadow: var(--premium-shadow) !important; }
+    
+    .gallery-overlay {
+        position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(15, 23, 42, 0.6); opacity: 0;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(4px);
+    }
+    .gallery-card:hover .gallery-overlay { opacity: 1; }
+    
+    .upload-area:hover { border-color: var(--primary) !important; background-color: var(--primary-soft) !important; transform: scale(1.02); }
+    .btn-white { background: #fff; color: var(--dark); border: none; }
+    .rounded-xl { border-radius: 20px !important; }
+</style>
 @stop
 
 @section('js')
-    <script>
-        function updateFileName(input) {
-            const fileName = input.files[0] ? input.files[0].name : '';
-            document.getElementById('fileNameDisplay').innerHTML = fileName ? '<i class="fas fa-check-circle mr-1"></i> Ready: ' + fileName : '';
-        }
-        
-        $(".custom-file-input").on("change", function() {
-            var fileName = $(this).val().split("\\").pop();
-            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
-        });
-
-        function confirmDelete(id) {
-            Swal.fire({
-                title: 'Delete Asset?',
-                text: "This operation is permanent and may break linked listings!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#ef4444',
-                cancelButtonColor: '#64748b',
-                confirmButtonText: 'Yes, delete it',
-                cancelButtonText: 'Cancel'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById('delete-form-' + id).submit();
-                }
-            })
-        }
-    </script>
+@include('admin._partials._sweetalert')
+<script>
+    function updateFileName(input) {
+        const fileName = input.files[0] ? input.files[0].name : '';
+        document.getElementById('fileNameDisplay').innerHTML = fileName ? '<i class="fas fa-check-circle mr-1"></i> Ready: ' + fileName : '';
+    }
+    
+    $(".custom-file-input").on("change", function() {
+        var fileName = $(this).val().split("\\").pop();
+        $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+    });
+</script>
 @stop

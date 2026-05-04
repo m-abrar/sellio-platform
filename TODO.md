@@ -172,7 +172,8 @@ fix the old ugly layout and replace with new layout design
 
 
 
-
+http://127.0.0.1:8000/admin/payments/create
+fix the poor layout, replace with new layout design
 
 
 

@@ -23,7 +23,7 @@ class SubscriptionController extends Controller
                 });
             })
             ->with(['user', 'plan'])
-            ->get();
+            ->paginate(15);
 
         return view('admin.subscriptions.index', compact('subscriptions', 'status'));
     }

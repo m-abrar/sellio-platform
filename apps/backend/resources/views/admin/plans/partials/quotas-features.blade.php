@@ -1,44 +1,63 @@
-<div class="card shadow-sm rounded-3 mb-4 border-0">
-    <div class="card-header bg-white border-bottom">
-        <h3 class="card-title font-weight-bold">Usage Limits</h3>
+<div class="card card-premium mb-4">
+    <div class="card-header bg-white border-0 py-4 px-4">
+        <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
+            <i class="fas fa-list-ol mr-2 text-primary opacity-50"></i> Allocation Quotas
+        </h3>
     </div>
-    <div class="card-body">
-        <div class="alert alert-light border small text-muted">
-            <i class="fas fa-info-circle mr-1"></i> Leave fields empty for <strong>unlimited</strong> usage.
+    <div class="card-body p-4">
+        <div class="alert bg-light border-0 rounded-xl p-3 mb-4 d-flex align-items-center">
+            <i class="fas fa-info-circle text-primary mr-3 fa-lg"></i>
+            <span class="smallest font-weight-bold text-muted uppercase letter-spacing-1">Leave fields empty to designate <strong>Unlimited</strong> resource allocation.</span>
         </div>
+        
         <div class="row">
             <div class="col-md-6">
-                <div class="form-group">
-                    <label>Max Total Listings</label>
-                    <input type="number" name="max_listings" class="form-control" value="{{ old('max_listings', $plan->max_listings ?? '') }}">
+                <div class="form-group mb-0">
+                    <label class="small font-weight-bold text-secondary mb-2 text-uppercase" style="letter-spacing: 0.5px;">Max Total Assets</label>
+                    <div class="input-group border rounded p-1 shadow-xs bg-white">
+                        <div class="input-group-prepend border-0">
+                            <span class="input-group-text bg-white border-0"><i class="fas fa-th-list text-primary"></i></span>
+                        </div>
+                        <input type="number" name="max_listings" class="form-control border-0" value="{{ old('max_listings', $plan->max_listings ?? '') }}" placeholder="∞">
+                    </div>
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="form-group">
-                    <label>Max Featured Listings</label>
-                    <input type="number" name="max_featured_listings" class="form-control" value="{{ old('max_featured_listings', $plan->max_featured_listings ?? '') }}">
+                <div class="form-group mb-0">
+                    <label class="small font-weight-bold text-secondary mb-2 text-uppercase" style="letter-spacing: 0.5px;">Max Priority Slots</label>
+                    <div class="input-group border rounded p-1 shadow-xs bg-white">
+                        <div class="input-group-prepend border-0">
+                            <span class="input-group-text bg-white border-0"><i class="fas fa-star text-warning"></i></span>
+                        </div>
+                        <input type="number" name="max_featured_listings" class="form-control border-0" value="{{ old('max_featured_listings', $plan->max_featured_listings ?? '') }}" placeholder="∞">
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<div class="card shadow-sm rounded-3 border-0">
-    <div class="card-header bg-white border-bottom">
-        <h3 class="card-title font-weight-bold">Premium Privileges</h3>
+<div class="card card-premium">
+    <div class="card-header bg-white border-0 py-4 px-4">
+        <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
+            <i class="fas fa-award mr-2 text-primary opacity-50"></i> Premium Entitlements
+        </h3>
     </div>
-    <div class="card-body">
-        <div class="form-group">
-            <label>Analytics Access</label>
-            <select name="analytics_access" class="form-control">
-                <option value="none" {{ ($plan->analytics_access ?? '') == 'none' ? 'selected' : '' }}>None</option>
-                <option value="basic" {{ ($plan->analytics_access ?? '') == 'basic' ? 'selected' : '' }}>Basic</option>
-                <option value="advanced" {{ ($plan->analytics_access ?? '') == 'advanced' ? 'selected' : '' }}>Advanced</option>
+    <div class="card-body p-4">
+        <div class="form-group mb-4">
+            <label class="small font-weight-bold text-secondary mb-2 text-uppercase" style="letter-spacing: 0.5px;">Analytics Depth</label>
+            <select name="analytics_access" class="form-control custom-select shadow-xs" style="border-radius: 10px;">
+                <option value="none" {{ ($plan->analytics_access ?? '') == 'none' ? 'selected' : '' }}>Disabled (No Access)</option>
+                <option value="basic" {{ ($plan->analytics_access ?? '') == 'basic' ? 'selected' : '' }}>Standard (Basic Metrics)</option>
+                <option value="advanced" {{ ($plan->analytics_access ?? '') == 'advanced' ? 'selected' : '' }}>Advanced (Full Intelligence)</option>
             </select>
         </div>
-        <div class="custom-control custom-switch mb-2">
-            <input type="checkbox" class="custom-control-input" id="priority_support" name="priority_support" value="1" {{ ($plan->priority_support ?? false) ? 'checked' : '' }}>
-            <label class="custom-control-label" for="priority_support">Priority Support</label>
+        
+        <div class="bg-light p-3 rounded-xl border">
+            <div class="custom-control custom-switch custom-switch-premium">
+                <input type="checkbox" class="custom-control-input" id="priority_support" name="priority_support" value="1" {{ ($plan->priority_support ?? false) ? 'checked' : '' }}>
+                <label class="custom-control-label font-weight-bold text-dark smallest uppercase letter-spacing-1" for="priority_support" style="padding-top: 2px;">Dedicated Priority Support</label>
+            </div>
         </div>
     </div>
 </div>

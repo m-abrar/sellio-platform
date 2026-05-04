@@ -1,49 +1,58 @@
-<div class="card shadow-sm rounded-3 border-0">
-    <div class="card-header bg-white border-bottom d-flex justify-content-between align-items-center">
-        <h3 class="card-title font-weight-bold text-dark">Transaction Records</h3>
-        <span class="badge badge-pill badge-light border px-3 py-2">
-            Total Revenue: {{ setting('currency_symbol', '$') }}{{ number_format($subscription->payments->sum('amount') ?? 0, 2) }}
+<div class="card card-premium shadow-sm border-0">
+    <div class="card-header bg-white border-0 py-4 px-4 d-flex justify-content-between align-items-center">
+        <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
+            <i class="fas fa-receipt mr-2 text-primary opacity-50"></i> Transaction Ledger
+        </h3>
+        <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1">
+            <i class="fas fa-money-bill-wave mr-1 opacity-50"></i> Total Yield: {{ setting('currency_symbol', '$') }}{{ number_format($subscription->payments->sum('amount') ?? 0, 2) }}
         </span>
     </div>
     <div class="card-body p-0">
         @if($subscription->payments && $subscription->payments->count() > 0)
             <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
-                    <thead class="bg-light">
+                <table class="table table-hover table-premium mb-0">
+                    <thead class="thead-light">
                         <tr>
-                            <th class="border-0 text-uppercase small font-weight-bold py-3 pl-4">ID</th>
-                            <th class="border-0 text-uppercase small font-weight-bold py-3">Amount</th>
-                            <th class="border-0 text-uppercase small font-weight-bold py-3">Status</th>
-                            <th class="border-0 text-uppercase small font-weight-bold py-3">Method</th>
-                            <th class="border-0 text-uppercase small font-weight-bold py-3 pr-4">Date</th>
+                            <th class="pl-4">Reference</th>
+                            <th>Amount</th>
+                            <th class="text-center">Lifecycle</th>
+                            <th>Method</th>
+                            <th class="pr-4 text-right">Timestamp</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($subscription->payments as $payment)
                             <tr>
-                                <td class="pl-4 py-3 text-muted">#{{ $payment->id }}</td>
-                                <td class="py-3 font-weight-bold text-dark">
+                                <td class="pl-4 align-middle">
+                                    <span class="smallest font-weight-bold text-secondary uppercase letter-spacing-1">#{{ $payment->id }}</span>
+                                </td>
+                                <td class="align-middle font-weight-bold text-dark">
                                     {{ setting('currency_symbol', '$') }}{{ number_format($payment->amount, 2) }}
                                 </td>
-                                <td class="py-3">
+                                <td class="text-center align-middle">
                                     @php
-                                        $statusClass = [
-                                            'completed' => 'badge-success',
-                                            'pending'   => 'badge-warning',
-                                            'failed'    => 'badge-danger',
-                                            'refunded'  => 'badge-info'
-                                        ][$payment->status] ?? 'badge-secondary';
+                                        $statusMap = [
+                                            'completed' => 'badge-success-light text-success',
+                                            'pending'   => 'badge-warning-light text-warning',
+                                            'failed'    => 'badge-danger-light text-danger',
+                                            'refunded'  => 'badge-info-light text-info'
+                                        ];
+                                        $statusClass = $statusMap[$payment->status] ?? 'badge-secondary-light text-secondary';
                                     @endphp
-                                    <span class="badge {{ $statusClass }} px-2 py-1">
-                                        {{ ucfirst($payment->status) }}
+                                    <span class="badge {{ $statusClass }} px-3 py-2 rounded-pill smallest font-weight-bold uppercase letter-spacing-1" style="min-width: 90px;">
+                                        {{ $payment->status }}
                                     </span>
                                 </td>
-                                <td class="py-3 text-muted">
-                                    <i class="fas fa-credit-card mr-1 small"></i> 
-                                    {{ $payment->method ?? 'Manual' }}
+                                <td class="align-middle">
+                                    <div class="d-flex align-items-center">
+                                        <div class="icon-box-soft bg-light mr-2 d-flex align-items-center justify-content-center" style="width:24px; height:24px; border-radius: 6px;">
+                                            <i class="fas fa-credit-card smallest text-primary"></i>
+                                        </div>
+                                        <span class="smallest font-weight-bold text-dark uppercase letter-spacing-1">{{ $payment->method ?? 'Manual' }}</span>
+                                    </div>
                                 </td>
-                                <td class="py-3 pr-4 text-muted small">
-                                    {{ $payment->created_at->format('d M Y, H:i') }}
+                                <td class="pr-4 text-right align-middle">
+                                    <span class="smallest font-weight-bold text-muted uppercase letter-spacing-1">{{ $payment->created_at->format('d M Y, H:i') }}</span>
                                 </td>
                             </tr>
                         @endforeach
@@ -52,27 +61,15 @@
             </div>
         @else
             <div class="text-center py-5">
-                <i class="fas fa-receipt fa-3x text-light mb-3"></i>
-                <p class="text-muted">No payments have been recorded for this subscription yet.</p>
+                <i class="fas fa-sync-alt fa-4x text-muted opacity-25 mb-3 d-block"></i>
+                <h5 class="text-muted font-weight-bold">No Transactions Detected</h5>
+                <p class="text-secondary small">Financial records for this enrollment will be architected here.</p>
             </div>
         @endif
     </div>
     @if($subscription->payments && $subscription->payments->count() > 0)
-        <div class="card-footer bg-white border-top text-right">
-            <small class="text-muted">Showing {{ $subscription->payments->count() }} transaction(s)</small>
+        <div class="card-footer bg-white border-top py-3 px-4">
+            <div class="text-muted smallest font-weight-bold uppercase letter-spacing-1">Ledger Depth: {{ $subscription->payments->count() }} transaction(s) recorded</div>
         </div>
     @endif
 </div>
-
-<style>
-    .table thead th {
-        letter-spacing: 0.05em;
-        color: #8898aa;
-    }
-    .table tbody tr {
-        transition: background-color 0.2s ease;
-    }
-    .table tbody tr:hover {
-        background-color: #f8f9fe;
-    }
-</style>
