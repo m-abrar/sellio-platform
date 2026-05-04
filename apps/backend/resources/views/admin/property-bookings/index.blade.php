@@ -30,16 +30,15 @@
     <div class="container-fluid">
         @include('admin.alert')
 
-        {{-- Glass Filter Card --}}
-        <div class="card card-premium shadow-sm mb-4 border-0">
+        <div class="card card-premium shadow-premium mb-4 border-0" style="border-radius: 20px;">
             <div class="card-body py-4 px-4">
                 <form method="GET" action="{{ route('admin.property-bookings.index') }}">
                     <div class="row align-items-end">
                         <div class="col-md-3">
-                            <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Property Focus</label>
+                            <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Property Focus</label>
                             <div class="input-group shadow-xs">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text bg-white border-right-0"><i class="fas fa-home text-primary"></i></span>
+                                    <span class="input-group-text bg-white border-right-0"><i class="fas fa-home text-primary text-xs"></i></span>
                                 </div>
                                 <select name="property" class="form-control border-left-0 select2">
                                     <option value="">All Inventory</option>
@@ -52,12 +51,12 @@
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Booking Lifecycle</label>
+                            <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Booking Lifecycle</label>
                             <div class="input-group shadow-xs">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text bg-white border-right-0"><i class="fas fa-traffic-light text-primary"></i></span>
+                                    <span class="input-group-text bg-white border-right-0"><i class="fas fa-traffic-light text-primary text-xs"></i></span>
                                 </div>
-                                <select name="status" class="form-control border-left-0">
+                                <select name="status" class="form-control border-left-0 select2">
                                     <option value="">All Statuses</option>
                                     @foreach (['pending', 'confirmed', 'cancelled'] as $s)
                                         <option value="{{ $s }}" {{ request('status') == $s ? 'selected' : '' }}>
@@ -68,23 +67,23 @@
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Temporal Range</label>
+                            <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Temporal Range</label>
                             <div class="d-flex align-items-center" style="gap: 10px;">
                                 <div class="input-group shadow-xs flex-grow-1">
-                                    <input type="date" name="start_date" class="form-control smallest font-weight-bold" value="{{ request('start_date') }}">
+                                    <input type="date" name="start_date" class="form-control font-weight-bold" value="{{ request('start_date') }}">
                                 </div>
                                 <span class="text-muted smallest font-weight-bold uppercase letter-spacing-1">to</span>
                                 <div class="input-group shadow-xs flex-grow-1">
-                                    <input type="date" name="end_date" class="form-control smallest font-weight-bold" value="{{ request('end_date') }}">
+                                    <input type="date" name="end_date" class="form-control font-weight-bold" value="{{ request('end_date') }}">
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="d-flex" style="gap: 10px;">
-                                <button type="submit" class="btn btn-primary flex-grow-1 font-weight-bold smallest uppercase">
+                                <button type="submit" class="btn btn-primary flex-grow-1 font-weight-bold shadow-xs rounded-pill smallest uppercase">
                                     <i class="fas fa-sync-alt mr-2"></i> UPDATE
                                 </button>
-                                <a href="{{ route('admin.property-bookings.index') }}" class="btn btn-back px-3 border shadow-sm d-flex align-items-center justify-content-center" data-toggle="tooltip" title="Reset Filters">
+                                <a href="{{ route('admin.property-bookings.index') }}" class="btn btn-default shadow-xs rounded-pill px-3 d-flex align-items-center justify-content-center" data-toggle="tooltip" title="Reset Filters">
                                     <i class="fas fa-undo text-danger m-0"></i>
                                 </a>
                             </div>

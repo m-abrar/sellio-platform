@@ -182,6 +182,26 @@ fix the poor layout, replace with new layout design
 
 
 
+http://127.0.0.1:8000/admin/bookings/jobs
+http://127.0.0.1:8000/admin/bookings/services
+http://127.0.0.1:8000/admin/bookings/classifieds
+fix the search form input fields and buttons styling
 
+
+http://127.0.0.1:8000/admin/product-orders/create
+the primary card needs to recheck theme colors for header background and bottom border, etc.
+
+
+
+
+http://127.0.0.1:8000/admin/products/create
+can you make the sidebar same width as other pages?
+
+
+http://127.0.0.1:8000/admin/products/create
+the addons tab, has old design "Add New Addo-on" button, update it.
+
+http://127.0.0.1:8000/admin/permissions/create
+can you recheck if it matches our theme layout?
 
 

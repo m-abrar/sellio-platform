@@ -28,15 +28,15 @@
         @include('admin.alert')
         
         {{-- Glass Filter Card --}}
-        <div class="card card-premium shadow-sm mb-4 border-0">
+        <div class="card card-premium shadow-premium mb-4 border-0" style="border-radius: 20px;">
             <div class="card-body py-4 px-4">
                 <form method="GET" action="{{ route('admin.service-quotes.index') }}">
                     <div class="row align-items-end">
                         <div class="col-md-3">
-                            <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Target Service</label>
+                            <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Target Service</label>
                             <div class="input-group shadow-xs">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text bg-white border-right-0"><i class="fas fa-concierge-bell text-primary"></i></span>
+                                    <span class="input-group-text bg-white border-right-0"><i class="fas fa-concierge-bell text-primary text-xs"></i></span>
                                 </div>
                                 <select name="service" class="form-control border-left-0 select2">
                                     <option value="">All Services</option>
@@ -47,12 +47,12 @@
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Service Sector</label>
+                            <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Service Sector</label>
                             <div class="input-group shadow-xs">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text bg-white border-right-0"><i class="fas fa-tags text-primary"></i></span>
+                                    <span class="input-group-text bg-white border-right-0"><i class="fas fa-tags text-primary text-xs"></i></span>
                                 </div>
-                                <select name="category" class="form-control border-left-0">
+                                <select name="category" class="form-control border-left-0 select2">
                                     <option value="">All Sectors</option>
                                     @foreach ($categories as $c)
                                         <option value="{{ $c->id }}" {{ request('category') == $c->id ? 'selected' : '' }}>{{ $c->title }}</option>
@@ -61,12 +61,12 @@
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Quote Status</label>
+                            <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Quote Status</label>
                             <div class="input-group shadow-xs">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text bg-white border-right-0"><i class="fas fa-traffic-light text-primary"></i></span>
+                                    <span class="input-group-text bg-white border-right-0"><i class="fas fa-traffic-light text-primary text-xs"></i></span>
                                 </div>
-                                <select name="status" class="form-control border-left-0">
+                                <select name="status" class="form-control border-left-0 select2">
                                     <option value="">All Lifecycle States</option>
                                     @foreach (['pending' => 'Awaiting Review', 'quoted' => 'Quote Issued', 'accepted' => 'Accepted', 'rejected' => 'Rejected'] as $val => $label)
                                         <option value="{{ $val }}" {{ $status == $val ? 'selected' : '' }}>{{ $label }}</option>
@@ -76,10 +76,10 @@
                         </div>
                         <div class="col-md-3">
                             <div class="d-flex" style="gap: 10px;">
-                                <button type="submit" class="btn btn-primary flex-grow-1 font-weight-bold smallest uppercase">
+                                <button type="submit" class="btn btn-primary flex-grow-1 font-weight-bold shadow-xs rounded-pill smallest uppercase">
                                     <i class="fas fa-sync-alt mr-2"></i> UPDATE
                                 </button>
-                                <a href="{{ route('admin.service-quotes.index') }}" class="btn btn-back px-3 border shadow-sm d-flex align-items-center justify-content-center" data-toggle="tooltip" title="Reset Filters">
+                                <a href="{{ route('admin.service-quotes.index') }}" class="btn btn-default shadow-xs rounded-pill px-3 d-flex align-items-center justify-content-center" data-toggle="tooltip" title="Reset Filters">
                                     <i class="fas fa-undo text-danger m-0"></i>
                                 </a>
                             </div>

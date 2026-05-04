@@ -50,11 +50,8 @@ class JobApplicationController extends Controller
     public function store(Request $request): \Illuminate\Http\RedirectResponse
     {
         $validated = $request->validate([
-            'job_listing_id' => 'required|exists:job_listings,id',
+            'job_listing_id' => 'required|exists:joblistings,id',
             'user_id' => 'required|exists:users,id',
-            'full_name' => 'required|string|max:255',
-            'email' => 'required|email',
-            'phone' => 'nullable|string|max:20',
             'cover_letter' => 'nullable|string',
             'status' => 'required|string',
         ]);
@@ -86,11 +83,8 @@ class JobApplicationController extends Controller
         $application = JobApplication::findOrFail($id);
 
         $validated = $request->validate([
-            'job_listing_id' => 'required|exists:job_listings,id',
+            'job_listing_id' => 'required|exists:joblistings,id',
             'user_id' => 'required|exists:users,id',
-            'full_name' => 'required|string|max:255',
-            'email' => 'required|email',
-            'phone' => 'nullable|string|max:20',
             'cover_letter' => 'nullable|string',
             'status' => 'required|string',
         ]);

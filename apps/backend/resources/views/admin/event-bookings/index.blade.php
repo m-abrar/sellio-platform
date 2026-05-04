@@ -30,16 +30,15 @@
     <div class="container-fluid pb-5">
         @include('admin.alert')
 
-        {{-- Premium Filter Card --}}
-        <div class="card card-premium shadow-sm mb-4 border-0">
+        <div class="card card-premium shadow-premium mb-4 border-0" style="border-radius: 20px;">
             <div class="card-body py-4 px-4">
                 <form method="GET" action="{{ route('admin.event-bookings.index') }}">
                     <div class="row align-items-end">
                         <div class="col-md-3">
-                            <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Event Identification</label>
+                            <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Event Identification</label>
                             <div class="input-group shadow-xs">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text bg-white border-right-0"><i class="fas fa-ticket-alt text-primary"></i></span>
+                                    <span class="input-group-text bg-white border-right-0"><i class="fas fa-ticket-alt text-primary text-xs"></i></span>
                                 </div>
                                 <select name="event_id" class="form-control border-left-0 select2">
                                     <option value="">All Events Intelligence</option>
@@ -50,12 +49,12 @@
                             </div>
                         </div>
                         <div class="col-md-2">
-                            <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Classification</label>
+                            <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Classification</label>
                             <div class="input-group shadow-xs">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text bg-white border-right-0"><i class="fas fa-tags text-primary"></i></span>
+                                    <span class="input-group-text bg-white border-right-0"><i class="fas fa-tags text-primary text-xs"></i></span>
                                 </div>
-                                <select name="category" class="form-control border-left-0">
+                                <select name="category" class="form-control border-left-0 select2">
                                     <option value="">All Categories</option>
                                     @foreach ($categories as $c)
                                         <option value="{{ $c->id }}" {{ request('category') == $c->id ? 'selected' : '' }}>{{ $c->title }}</option>
@@ -64,12 +63,12 @@
                             </div>
                         </div>
                         <div class="col-md-2">
-                            <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Lifecycle Status</label>
+                            <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Lifecycle Status</label>
                             <div class="input-group shadow-xs">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text bg-white border-right-0"><i class="fas fa-filter text-primary"></i></span>
+                                    <span class="input-group-text bg-white border-right-0"><i class="fas fa-filter text-primary text-xs"></i></span>
                                 </div>
-                                <select name="status" class="form-control border-left-0">
+                                <select name="status" class="form-control border-left-0 select2">
                                     <option value="">All Statuses</option>
                                     <option value="pending" {{ $status == 'pending' ? 'selected' : '' }}>Pending</option>
                                     <option value="confirmed" {{ $status == 'confirmed' ? 'selected' : '' }}>Confirmed</option>
@@ -79,10 +78,10 @@
                         </div>
                         <div class="col-md-5">
                             <div class="d-flex" style="gap: 10px;">
-                                <button type="submit" class="btn btn-primary flex-grow-1 font-weight-bold smallest uppercase">
+                                <button type="submit" class="btn btn-primary flex-grow-1 font-weight-bold shadow-xs rounded-pill smallest uppercase">
                                     <i class="fas fa-sync-alt mr-2"></i> REFRESH REGISTRY
                                 </button>
-                                <a href="{{ route('admin.event-bookings.index') }}" class="btn btn-back px-3 border shadow-sm d-flex align-items-center justify-content-center" data-toggle="tooltip" title="Reset Filters">
+                                <a href="{{ route('admin.event-bookings.index') }}" class="btn btn-default shadow-xs rounded-pill px-3 d-flex align-items-center justify-content-center" data-toggle="tooltip" title="Reset Filters">
                                     <i class="fas fa-undo text-danger m-0"></i>
                                 </a>
                             </div>

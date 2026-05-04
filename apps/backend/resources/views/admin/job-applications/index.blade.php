@@ -28,31 +28,31 @@
         @include('admin.alert')
 
         {{-- Glass Filter Card --}}
-        <div class="card card-premium shadow-sm mb-4 border-0">
+        <div class="card card-premium shadow-premium mb-4 border-0" style="border-radius: 20px;">
             <div class="card-body py-4 px-4">
                 <form method="GET" action="{{ route('admin.job-applications.index') }}">
                     <div class="row align-items-end">
                         <div class="col-md-3">
-                            <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Target Position</label>
+                            <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Target Position</label>
                             <div class="input-group shadow-xs">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text bg-white border-right-0"><i class="fas fa-briefcase text-primary"></i></span>
+                                    <span class="input-group-text bg-white border-right-0"><i class="fas fa-briefcase text-primary text-xs"></i></span>
                                 </div>
-                                <select name="job_id" class="form-control border-left-0 select2">
+                                <select name="job" class="form-control border-left-0 select2">
                                     <option value="">All Active Listings</option>
                                     @foreach($jobs as $j)
-                                        <option value="{{ $j->id }}" {{ request('job_id') == $j->id ? 'selected' : '' }}>{{ $j->title }}</option>
+                                        <option value="{{ $j->id }}" {{ request('job') == $j->id ? 'selected' : '' }}>{{ $j->title }}</option>
                                     @endforeach
                                 </select>
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Sector Category</label>
+                            <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Sector Category</label>
                             <div class="input-group shadow-xs">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text bg-white border-right-0"><i class="fas fa-tags text-primary"></i></span>
+                                    <span class="input-group-text bg-white border-right-0"><i class="fas fa-tags text-primary text-xs"></i></span>
                                 </div>
-                                <select name="category" class="form-control border-left-0">
+                                <select name="category" class="form-control border-left-0 select2">
                                     <option value="">All Sectors</option>
                                     @foreach ($categories as $c)
                                         <option value="{{ $c->id }}" {{ request('category') == $c->id ? 'selected' : '' }}>{{ $c->title }}</option>
@@ -61,24 +61,26 @@
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Pipeline Status</label>
+                            <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Pipeline Status</label>
                             <div class="input-group shadow-xs">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text bg-white border-right-0"><i class="fas fa-filter text-primary"></i></span>
+                                    <span class="input-group-text bg-white border-right-0"><i class="fas fa-filter text-primary text-xs"></i></span>
                                 </div>
-                                <select name="status" class="form-control border-left-0">
+                                <select name="status" class="form-control border-left-0 select2">
                                     <option value="">All States</option>
                                     <option value="submitted" {{ $status == 'submitted' ? 'selected' : '' }}>Submitted</option>
                                     <option value="reviewed" {{ $status == 'reviewed' ? 'selected' : '' }}>Reviewed</option>
+                                    <option value="accepted" {{ $status == 'accepted' ? 'selected' : '' }}>Accepted</option>
+                                    <option value="rejected" {{ $status == 'rejected' ? 'selected' : '' }}>Rejected</option>
                                 </select>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="d-flex" style="gap: 10px;">
-                                <button type="submit" class="btn btn-primary flex-grow-1 font-weight-bold smallest uppercase">
+                                <button type="submit" class="btn btn-primary flex-grow-1 font-weight-bold shadow-xs rounded-pill smallest uppercase">
                                     <i class="fas fa-sync-alt mr-2"></i> UPDATE
                                 </button>
-                                <a href="{{ route('admin.job-applications.index') }}" class="btn btn-back px-3 border shadow-sm d-flex align-items-center justify-content-center" data-toggle="tooltip" title="Reset Filters">
+                                <a href="{{ route('admin.job-applications.index') }}" class="btn btn-default shadow-xs rounded-pill px-3 d-flex align-items-center justify-content-center" data-toggle="tooltip" title="Reset Filters">
                                     <i class="fas fa-undo text-danger m-0"></i>
                                 </a>
                             </div>

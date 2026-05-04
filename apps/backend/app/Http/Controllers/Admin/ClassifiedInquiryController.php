@@ -35,19 +35,94 @@ class ClassifiedInquiryController extends Controller
     }
 
     /**
+     * Show the form for creating a new inquiry.
+     */
+    public function create(): View
+    {
+        $inquiry = new ClassifiedInquiry();
+        $classifieds = Classified::select('id', 'title')->get();
+        $users = \App\Models\User::select('id', 'name', 'email')->get();
+        
+        return view('admin.classified-inquiries.form', compact('inquiry', 'classifieds', 'users'));
+    }
+
+    /**
+     * Store a newly created inquiry.
+     */
+    public function store(Request $request): \Illuminate\Http\RedirectResponse
+    {
+        $validated = $request->validate([
+            'classified_id' => 'required|exists:classifieds,id',
+            'user_id' => 'required|exists:users,id',
+            'status' => 'required|string',
+            'message' => 'nullable|string',
+        ]);
+
+        ClassifiedInquiry::create($validated);
+
+        return redirect()
+            ->route('admin.classified-inquiries.index')
+            ->with('success', __('Inquiry logged successfully.'));
+    }
+
+    /**
      * Display the specified classified inquiry.
      */
     public function show(int $id): View
     {
-        // Eager load the listing being inquired about and the sender
         $inquiry = ClassifiedInquiry::with(['classifiedAd', 'user'])
             ->findOrFail($id);
 
-        // Update viewed status if the column exists
         if (isset($inquiry->viewed_at) && !$inquiry->viewed_at) {
             $inquiry->update(['viewed_at' => now()]);
         }
 
         return view('admin.classified-inquiries.show', compact('inquiry'));
+    }
+
+    /**
+     * Show the form for editing the inquiry.
+     */
+    public function edit(int $id): View
+    {
+        $inquiry = ClassifiedInquiry::findOrFail($id);
+        $classifieds = Classified::select('id', 'title')->get();
+        $users = \App\Models\User::select('id', 'name', 'email')->get();
+
+        return view('admin.classified-inquiries.form', compact('inquiry', 'classifieds', 'users'));
+    }
+
+    /**
+     * Update the specified inquiry.
+     */
+    public function update(Request $request, int $id): \Illuminate\Http\RedirectResponse
+    {
+        $inquiry = ClassifiedInquiry::findOrFail($id);
+
+        $validated = $request->validate([
+            'classified_id' => 'required|exists:classifieds,id',
+            'user_id' => 'required|exists:users,id',
+            'status' => 'required|string',
+            'message' => 'nullable|string',
+        ]);
+
+        $inquiry->update($validated);
+
+        return redirect()
+            ->route('admin.classified-inquiries.index')
+            ->with('success', __('Inquiry updated successfully.'));
+    }
+
+    /**
+     * Remove the specified inquiry.
+     */
+    public function destroy(int $id): \Illuminate\Http\RedirectResponse
+    {
+        $inquiry = ClassifiedInquiry::findOrFail($id);
+        $inquiry->delete();
+
+        return redirect()
+            ->route('admin.classified-inquiries.index')
+            ->with('success', __('Inquiry deleted successfully.'));
     }
 }
