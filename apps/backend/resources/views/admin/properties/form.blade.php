@@ -85,25 +85,25 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label class="font-weight-600">Bedrooms</label>
-                                    <input type="number" name="number_of_bedrooms" class="form-control" value="{{ old('number_of_bedrooms', $property->number_of_bedrooms ?? '') }}">
+                                    <input type="number" name="number_of_bedrooms" class="form-control" value="{{ old('number_of_bedrooms', $property->number_of_bedrooms ?? '') }}" placeholder="e.g. 3">
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label class="font-weight-600">Bathrooms</label>
-                                    <input type="number" step="0.5" name="number_of_bathrooms" class="form-control" value="{{ old('number_of_bathrooms', $property->number_of_bathrooms ?? '') }}">
+                                    <input type="number" step="0.5" name="number_of_bathrooms" class="form-control" value="{{ old('number_of_bathrooms', $property->number_of_bathrooms ?? '') }}" placeholder="e.g. 2.5">
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label class="font-weight-600">Parking Spots</label>
-                                    <input type="number" name="number_of_parking_spots" class="form-control" value="{{ old('number_of_parking_spots', $property->number_of_parking_spots ?? '') }}">
+                                    <input type="number" name="number_of_parking_spots" class="form-control" value="{{ old('number_of_parking_spots', $property->number_of_parking_spots ?? '') }}" placeholder="e.g. 2">
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label class="font-weight-600">Max Guests</label>
-                                    <input type="number" name="maximum_guests" class="form-control" value="{{ old('maximum_guests', $property->maximum_guests ?? '') }}">
+                                    <input type="number" name="maximum_guests" class="form-control" value="{{ old('maximum_guests', $property->maximum_guests ?? '') }}" placeholder="e.g. 6">
                                 </div>
                             </div>
                         </div>
@@ -112,13 +112,13 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label class="font-weight-600">Area (Sq Ft)</label>
-                                    <input type="number" name="area_sq_ft" class="form-control" value="{{ old('area_sq_ft', $property->area_sq_ft ?? '') }}">
+                                    <input type="number" name="area_sq_ft" class="form-control" value="{{ old('area_sq_ft', $property->area_sq_ft ?? '') }}" placeholder="e.g. 2400">
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label class="font-weight-600">Area (Sq M)</label>
-                                    <input type="number" name="area_sq_m" class="form-control" value="{{ old('area_sq_m', $property->area_sq_m ?? '') }}">
+                                    <input type="number" name="area_sq_m" class="form-control" value="{{ old('area_sq_m', $property->area_sq_m ?? '') }}" placeholder="e.g. 220">
                                 </div>
                             </div>
                             <div class="col-md-4">
@@ -141,19 +141,19 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label class="font-weight-600">Base Price (Sale)</label>
-                                    <input type="number" step="0.01" name="base_price" class="form-control" value="{{ old('base_price', $property->base_price ?? '') }}">
+                                    <input type="number" step="0.01" name="base_price" class="form-control" value="{{ old('base_price', $property->base_price ?? '') }}" placeholder="0.00">
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label class="font-weight-600">Discounted Price (Sale)</label>
-                                    <input type="number" step="0.01" name="sale_price" class="form-control" value="{{ old('sale_price', $property->sale_price ?? '') }}">
+                                    <input type="number" step="0.01" name="sale_price" class="form-control" value="{{ old('sale_price', $property->sale_price ?? '') }}" placeholder="0.00">
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label class="font-weight-600">Price Per Night (Rental)</label>
-                                    <input type="number" step="0.01" name="price_per_night" class="form-control" value="{{ old('price_per_night', $property->price_per_night ?? '') }}">
+                                    <input type="number" step="0.01" name="price_per_night" class="form-control" value="{{ old('price_per_night', $property->price_per_night ?? '') }}" placeholder="0.00">
                                 </div>
                             </div>
                         </div>
@@ -161,7 +161,7 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label class="font-weight-600">HOA Fees (Monthly)</label>
-                                    <input type="number" step="0.01" name="hoa" class="form-control" value="{{ old('hoa', $property->hoa ?? '') }}">
+                                    <input type="number" step="0.01" name="hoa" class="form-control" value="{{ old('hoa', $property->hoa ?? '') }}" placeholder="0.00">
                                 </div>
                             </div>
                         </div>
@@ -176,7 +176,7 @@
                     <div class="card-body p-4">
                         <div class="form-group">
                             <label class="font-weight-600">Street Address</label>
-                            <input type="text" name="address" class="form-control" value="{{ old('address', $property->address ?? '') }}">
+                            <input type="text" name="address" class="form-control" value="{{ old('address', $property->address ?? '') }}" placeholder="e.g. 123 Luxury Ave">
                         </div>
                         <div class="row">
                             <div class="col-md-3"><input type="text" name="city" placeholder="City" class="form-control mb-2" value="{{ old('city', $property->city ?? '') }}"></div>

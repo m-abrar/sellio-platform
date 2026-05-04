@@ -46,7 +46,7 @@
                     <div class="card-body p-4">
                         <div class="form-group mb-4">
                             <label class="font-weight-600"><i class="fas fa-tag mr-1 text-primary"></i> Item Title <span class="text-danger">*</span></label>
-                            <input type="text" name="title" id="title" class="form-control form-control-lg @error('title') is-invalid @enderror" value="{{ old('title', $classified->title ?? '') }}" required list="classified-title-suggestions">
+                            <input type="text" name="title" id="title" class="form-control form-control-lg @error('title') is-invalid @enderror" value="{{ old('title', $classified->title ?? '') }}" required list="classified-title-suggestions" placeholder="e.g. Vintage Leather Sofa">
                             <datalist id="classified-title-suggestions">
                                 @foreach(\App\Models\Classified::select('title')->distinct()->limit(20)->pluck('title') as $title)
                                     <option value="{{ $title }}">
@@ -82,7 +82,7 @@
                                 <div class="form-group"><label>Year / Age</label><input type="number" name="item_year_age" class="form-control" placeholder="e.g. 2023" value="{{ old('item_year_age', $classified->item_year_age ?? '') }}"></div>
                             </div>
                             <div class="col-md-4">
-                                <div class="form-group"><label>Quantity</label><input type="number" name="item_quantity" class="form-control" value="{{ old('item_quantity', $classified->item_quantity ?? '1') }}"></div>
+                                <div class="form-group"><label>Quantity</label><input type="number" name="item_quantity" class="form-control" value="{{ old('item_quantity', $classified->item_quantity ?? '1') }}" placeholder="1"></div>
                             </div>
                         </div>
 
@@ -91,7 +91,7 @@
                                 <div class="form-group"><label>Dimensions</label><input type="text" name="item_dimensions" class="form-control" placeholder="e.g. 10x20x15 cm" value="{{ old('item_dimensions', $classified->item_dimensions ?? '') }}"></div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-group"><label>Warranty (Months)</label><input type="number" name="warranty_months" class="form-control" value="{{ old('warranty_months', $classified->warranty_months ?? '') }}"></div>
+                                <div class="form-group"><label>Warranty (Months)</label><input type="number" name="warranty_months" class="form-control" value="{{ old('warranty_months', $classified->warranty_months ?? '') }}" placeholder="e.g. 12"></div>
                             </div>
                         </div>
                     </div>
@@ -105,10 +105,10 @@
                     <div class="card-body p-4">
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="form-group"><label>Base Price <span class="text-danger">*</span></label><input type="number" step="0.01" name="base_price" class="form-control" value="{{ old('base_price', $classified->base_price ?? '0') }}" required></div>
+                                <div class="form-group"><label>Base Price <span class="text-danger">*</span></label><input type="number" step="0.01" name="base_price" class="form-control" value="{{ old('base_price', $classified->base_price ?? '0') }}" required placeholder="0.00"></div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-group"><label>Discounted Price</label><input type="number" step="0.01" name="sale_price" class="form-control" value="{{ old('sale_price', $classified->sale_price ?? '') }}"></div>
+                                <div class="form-group"><label>Discounted Price</label><input type="number" step="0.01" name="sale_price" class="form-control" value="{{ old('sale_price', $classified->sale_price ?? '') }}" placeholder="0.00"></div>
                             </div>
                         </div>
                     </div>

@@ -49,6 +49,12 @@
                     @if(module_enabled('jobs'))
                         <a class="dropdown-item py-2 px-3 rounded-lg font-weight-600 mb-1" href="{{ route('admin.jobs.create') }}"><i class="fas fa-briefcase mr-2 text-purple"></i> Create Job</a>
                     @endif
+                    @if(module_enabled('services'))
+                        <a class="dropdown-item py-2 px-3 rounded-lg font-weight-600 mb-1" href="{{ route('admin.services.create') }}"><i class="fas fa-concierge-bell mr-2 text-teal"></i> Create Service</a>
+                    @endif
+                    @if(module_enabled('classifieds'))
+                        <a class="dropdown-item py-2 px-3 rounded-lg font-weight-600 mb-1" href="{{ route('admin.classifieds.create') }}"><i class="fas fa-tags mr-2 text-secondary"></i> Create Classified</a>
+                    @endif
                 </div>
             </div>
         </div>
@@ -69,6 +75,15 @@
                     @endif
                     @if(module_enabled('autos'))
                         <a class="dropdown-item py-2 px-3 rounded-lg font-weight-600 mb-1" href="{{ route('admin.auto-inquiries.create') }}"><i class="fas fa-car mr-2 text-primary"></i> Auto Inquiry</a>
+                    @endif
+                    @if(module_enabled('services'))
+                        <a class="dropdown-item py-2 px-3 rounded-lg font-weight-600 mb-1" href="{{ route('admin.service-appointments.create') }}"><i class="fas fa-clock mr-2 text-teal"></i> Service Appt</a>
+                    @endif
+                    @if(module_enabled('jobs'))
+                        <a class="dropdown-item py-2 px-3 rounded-lg font-weight-600 mb-1" href="{{ route('admin.job-applications.create') }}"><i class="fas fa-file-contract mr-2 text-purple"></i> Job Application</a>
+                    @endif
+                    @if(module_enabled('classifieds'))
+                        <a class="dropdown-item py-2 px-3 rounded-lg font-weight-600 mb-1" href="{{ route('admin.classified-inquiries.create') }}"><i class="fas fa-comment-alt mr-2 text-secondary"></i> Item Inquiry</a>
                     @endif
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item py-2 px-3 rounded-lg font-weight-600" href="{{ route('admin.bookings.index') }}"><i class="fas fa-layer-group mr-2 text-secondary"></i> All Bookings & Leads</a>

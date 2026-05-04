@@ -62,10 +62,10 @@
                         </select>
                     </div>
                     <div class="col-md-2 d-flex align-items-end" style="gap: 10px;">
-                        <button type="submit" class="btn btn-primary flex-fill font-weight-bold shadow-xs">
+                        <button type="submit" class="btn btn-primary flex-fill font-weight-bold shadow-xs rounded-pill">
                             <i class="fas fa-filter mr-1"></i> APPLY
                         </button>
-                        <a href="{{ route('admin.products.index') }}" class="btn btn-default font-weight-bold shadow-xs">
+                        <a href="{{ route('admin.products.index') }}" class="btn btn-default font-weight-bold shadow-xs rounded-pill">
                             <i class="fas fa-undo"></i>
                         </a>
                     </div>

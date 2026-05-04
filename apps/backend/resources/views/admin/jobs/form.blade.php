@@ -46,7 +46,7 @@
                     <div class="card-body p-4">
                         <div class="form-group mb-4">
                             <label class="font-weight-600"><i class="fas fa-briefcase mr-1 text-primary"></i> Job Title <span class="text-danger">*</span></label>
-                            <input type="text" name="title" id="title" class="form-control form-control-lg @error('title') is-invalid @enderror" value="{{ old('title', $job->title ?? '') }}" required list="job-title-suggestions">
+                            <input type="text" name="title" id="title" class="form-control form-control-lg @error('title') is-invalid @enderror" value="{{ old('title', $job->title ?? '') }}" required list="job-title-suggestions" placeholder="e.g. Senior Software Engineer">
                             <datalist id="job-title-suggestions">
                                 @foreach(\App\Models\JobListing::select('title')->distinct()->limit(20)->pluck('title') as $title)
                                     <option value="{{ $title }}">
@@ -76,10 +76,10 @@
                     <div class="card-body p-4">
                         <div class="row">
                             <div class="col-md-4">
-                                <div class="form-group"><label>Min Salary</label><input type="number" step="0.01" name="salary_min" class="form-control" value="{{ old('salary_min', $job->salary_min ?? '') }}"></div>
+                                <div class="form-group"><label>Min Salary</label><input type="number" step="0.01" name="salary_min" class="form-control" value="{{ old('salary_min', $job->salary_min ?? '') }}" placeholder="e.g. 50000"></div>
                             </div>
                             <div class="col-md-4">
-                                <div class="form-group"><label>Max Salary</label><input type="number" step="0.01" name="salary_max" class="form-control" value="{{ old('salary_max', $job->salary_max ?? '') }}"></div>
+                                <div class="form-group"><label>Max Salary</label><input type="number" step="0.01" name="salary_max" class="form-control" value="{{ old('salary_max', $job->salary_max ?? '') }}" placeholder="e.g. 80000"></div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group"><label>Frequency</label><select name="salary_frequency" class="form-control"><option value="yearly" {{ old('salary_frequency', $job->salary_frequency ?? '') == 'yearly' ? 'selected' : '' }}>Yearly (yr)</option><option value="monthly" {{ old('salary_frequency', $job->salary_frequency ?? '') == 'monthly' ? 'selected' : '' }}>Monthly (mo)</option><option value="weekly" {{ old('salary_frequency', $job->salary_frequency ?? '') == 'weekly' ? 'selected' : '' }}>Weekly (wk)</option><option value="hourly" {{ old('salary_frequency', $job->salary_frequency ?? '') == 'hourly' ? 'selected' : '' }}>Hourly (hr)</option></select></div>
@@ -108,10 +108,10 @@
 
                         <div class="row mt-2">
                             <div class="col-md-6">
-                                <div class="form-group"><label>City</label><input type="text" name="city" class="form-control" value="{{ old('city', $job->city ?? '') }}"></div>
+                                <div class="form-group"><label>City</label><input type="text" name="city" class="form-control" value="{{ old('city', $job->city ?? '') }}" placeholder="e.g. New York"></div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-group"><label>Country</label><input type="text" name="country" class="form-control" value="{{ old('country', $job->country ?? '') }}"></div>
+                                <div class="form-group"><label>Country</label><input type="text" name="country" class="form-control" value="{{ old('country', $job->country ?? '') }}" placeholder="e.g. USA"></div>
                             </div>
                         </div>
                     </div>

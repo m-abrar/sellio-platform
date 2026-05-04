@@ -54,7 +54,7 @@
                     <div class="card-body p-4">
                         <div class="form-group mb-4">
                             <label class="font-weight-600"><i class="fas fa-car mr-1 text-primary"></i> Listing Title <span class="text-danger">*</span></label>
-                            <input type="text" name="title" id="title" class="form-control form-control-lg @error('title') is-invalid @enderror" value="{{ old('title', $auto->title ?? '') }}" required list="auto-title-suggestions">
+                            <input type="text" name="title" id="title" class="form-control form-control-lg @error('title') is-invalid @enderror" value="{{ old('title', $auto->title ?? '') }}" required list="auto-title-suggestions" placeholder="e.g. 2024 Tesla Model 3 Long Range">
                             <datalist id="auto-title-suggestions">
                                 @foreach(\App\Models\Auto::select('title')->distinct()->limit(20)->pluck('title') as $title)
                                     <option value="{{ $title }}">
@@ -84,22 +84,22 @@
                     <div class="card-body p-4">
                         <div class="row">
                             <div class="col-md-4">
-                                <div class="form-group"><label>Make <span class="text-danger">*</span></label><input type="text" name="make" class="form-control" value="{{ old('make', $auto->make ?? '') }}" required></div>
+                                <div class="form-group"><label>Make <span class="text-danger">*</span></label><input type="text" name="make" class="form-control" value="{{ old('make', $auto->make ?? '') }}" required placeholder="e.g. Tesla"></div>
                             </div>
                             <div class="col-md-4">
-                                <div class="form-group"><label>Model <span class="text-danger">*</span></label><input type="text" name="model" class="form-control" value="{{ old('model', $auto->model ?? '') }}" required></div>
+                                <div class="form-group"><label>Model <span class="text-danger">*</span></label><input type="text" name="model" class="form-control" value="{{ old('model', $auto->model ?? '') }}" required placeholder="e.g. Model 3"></div>
                             </div>
                             <div class="col-md-2">
-                                <div class="form-group"><label>Year <span class="text-danger">*</span></label><input type="number" name="year" class="form-control" value="{{ old('year', $auto->year ?? '') }}" required></div>
+                                <div class="form-group"><label>Year <span class="text-danger">*</span></label><input type="number" name="year" class="form-control" value="{{ old('year', $auto->year ?? '') }}" required placeholder="2024"></div>
                             </div>
                             <div class="col-md-2">
-                                <div class="form-group"><label>Stock <span class="text-danger">*</span></label><input type="number" name="stock_quantity" class="form-control" value="{{ old('stock_quantity', $auto->stock_quantity ?? 1) }}"></div>
+                                <div class="form-group"><label>Stock <span class="text-danger">*</span></label><input type="number" name="stock_quantity" class="form-control" value="{{ old('stock_quantity', $auto->stock_quantity ?? 1) }}" placeholder="1"></div>
                             </div>
                         </div>
 
                         <div class="row mt-2">
                             <div class="col-md-3">
-                                <div class="form-group"><label>Mileage <span class="text-danger">*</span></label><input type="number" name="mileage_value" class="form-control" value="{{ old('mileage_value', $auto->mileage_value ?? '') }}" required></div>
+                                <div class="form-group"><label>Mileage <span class="text-danger">*</span></label><input type="number" name="mileage_value" class="form-control" value="{{ old('mileage_value', $auto->mileage_value ?? '') }}" required placeholder="e.g. 15000"></div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group"><label>Mileage Unit</label><select name="mileage_units" class="form-control"><option value="km" {{ old('mileage_units', $auto->mileage_units ?? 'km') == 'km' ? 'selected' : '' }}>Kilometers (KM)</option><option value="mi" {{ old('mileage_units', $auto->mileage_units ?? 'km') == 'mi' ? 'selected' : '' }}>Miles (Mi)</option></select></div>
@@ -117,13 +117,13 @@
                                 <div class="form-group"><label>Drivetrain</label><input type="text" name="drivetrain" class="form-control" placeholder="AWD/FWD/RWD" value="{{ old('drivetrain', $auto->drivetrain ?? '') }}"></div>
                             </div>
                             <div class="col-md-3">
-                                <div class="form-group"><label>Exterior Color</label><input type="text" name="exterior_color" class="form-control" value="{{ old('exterior_color', $auto->exterior_color ?? '') }}"></div>
+                                <div class="form-group"><label>Exterior Color</label><input type="text" name="exterior_color" class="form-control" value="{{ old('exterior_color', $auto->exterior_color ?? '') }}" placeholder="e.g. Midnight Silver"></div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group"><label>Fuel Economy</label><input type="text" name="fuel_economy" class="form-control" placeholder="e.g. 10L/100km" value="{{ old('fuel_economy', $auto->fuel_economy ?? '') }}"></div>
                             </div>
                             <div class="col-md-3">
-                                <div class="form-group"><label>VIN Number</label><input type="text" name="vin_number" class="form-control" value="{{ old('vin_number', $auto->vin_number ?? '') }}"></div>
+                                <div class="form-group"><label>VIN Number</label><input type="text" name="vin_number" class="form-control" value="{{ old('vin_number', $auto->vin_number ?? '') }}" placeholder="17-digit VIN"></div>
                             </div>
                         </div>
                     </div>
@@ -137,10 +137,10 @@
                     <div class="card-body p-4">
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="form-group"><label>Base Price <span class="text-danger">*</span></label><input type="number" name="base_price" class="form-control" value="{{ old('base_price', $auto->base_price ?? '') }}" required></div>
+                                <div class="form-group"><label>Base Price <span class="text-danger">*</span></label><input type="number" name="base_price" class="form-control" value="{{ old('base_price', $auto->base_price ?? '') }}" required placeholder="0.00"></div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-group"><label>Discounted Price</label><input type="number" name="sale_price" class="form-control" value="{{ old('sale_price', $auto->sale_price ?? '') }}"></div>
+                                <div class="form-group"><label>Discounted Price</label><input type="number" name="sale_price" class="form-control" value="{{ old('sale_price', $auto->sale_price ?? '') }}" placeholder="0.00"></div>
                             </div>
                         </div>
                     </div>

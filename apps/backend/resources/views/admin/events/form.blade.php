@@ -46,7 +46,7 @@
                     <div class="card-body p-4">
                         <div class="form-group mb-4">
                             <label class="font-weight-600"><i class="fas fa-calendar-alt mr-1 text-primary"></i> Event Title <span class="text-danger">*</span></label>
-                            <input type="text" name="title" id="title" class="form-control form-control-lg @error('title') is-invalid @enderror" value="{{ old('title', $event->title ?? '') }}" required list="event-title-suggestions">
+                            <input type="text" name="title" id="title" class="form-control form-control-lg @error('title') is-invalid @enderror" value="{{ old('title', $event->title ?? '') }}" required list="event-title-suggestions" placeholder="e.g. Global Tech Summit 2024">
                             <datalist id="event-title-suggestions">
                                 @foreach(\App\Models\Event::select('title')->distinct()->limit(20)->pluck('title') as $title)
                                     <option value="{{ $title }}">
@@ -85,10 +85,10 @@
 
                         <div class="row mt-2">
                             <div class="col-md-6">
-                                <div class="form-group"><label>Max Attendees</label><input type="number" name="max_attendees" class="form-control" placeholder="Unlimited if blank" value="{{ old('max_attendees', $event->max_attendees ?? '') }}"></div>
+                                <div class="form-group"><label>Max Attendees</label><input type="number" name="max_attendees" class="form-control" placeholder="e.g. 500" value="{{ old('max_attendees', $event->max_attendees ?? '') }}"></div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-group"><label>Venue Address</label><input type="text" name="address" class="form-control" placeholder="Street layout" value="{{ old('address', $event->address ?? '') }}"></div>
+                                <div class="form-group"><label>Venue Address</label><input type="text" name="address" class="form-control" placeholder="e.g. Grand Ballroom, Hilton" value="{{ old('address', $event->address ?? '') }}"></div>
                             </div>
                         </div>
                     </div>
@@ -102,10 +102,10 @@
                     <div class="card-body p-4">
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="form-group"><label>Base Ticket Price <span class="text-danger">*</span></label><input type="number" step="0.01" name="base_price" class="form-control" value="{{ old('base_price', $event->base_price ?? '0') }}" required></div>
+                                <div class="form-group"><label>Base Ticket Price <span class="text-danger">*</span></label><input type="number" step="0.01" name="base_price" class="form-control" value="{{ old('base_price', $event->base_price ?? '0') }}" required placeholder="0.00"></div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-group"><label>Discounted Price</label><input type="number" step="0.01" name="sale_price" class="form-control" value="{{ old('sale_price', $event->sale_price ?? '') }}"></div>
+                                <div class="form-group"><label>Discounted Price</label><input type="number" step="0.01" name="sale_price" class="form-control" value="{{ old('sale_price', $event->sale_price ?? '') }}" placeholder="0.00"></div>
                             </div>
                         </div>
                     </div>

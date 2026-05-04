@@ -101,6 +101,12 @@
         padding: 0.8rem 1.2rem !important;
     }
 
+    .form-control-premium {
+        border-radius: 50px !important;
+        padding-left: 1.5rem !important;
+        padding-right: 1.5rem !important;
+    }
+
     /* Premium Card Styling */
     .card-premium {
         border-radius: 24px !important;
@@ -704,7 +710,7 @@
     /* Button Group Premium */
     .btn-group-premium {
         background: #fff;
-        border-radius: 10px !important;
+        border-radius: 50px !important;
         overflow: hidden;
         border: 1.5px solid #edf2f7 !important;
     }

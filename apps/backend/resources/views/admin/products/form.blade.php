@@ -90,19 +90,19 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label class="font-weight-600 text-primary">Base Price ({{ setting('currency_symbol', '$') }})</label>
-                                            <input type="number" step="0.01" name="base_price" class="form-control form-control-lg bg-light-blue" value="{{ old('base_price', $product->base_price ?? '') }}" required>
+                                            <input type="number" step="0.01" name="base_price" class="form-control form-control-lg bg-light-blue" value="{{ old('base_price', $product->base_price ?? '') }}" required placeholder="0.00">
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label class="font-weight-600 text-success">Sale Price</label>
-                                            <input type="number" step="0.01" name="sale_price" class="form-control form-control-lg border-success" value="{{ old('sale_price', $product->sale_price ?? '') }}">
+                                            <input type="number" step="0.01" name="sale_price" class="form-control form-control-lg border-success" value="{{ old('sale_price', $product->sale_price ?? '') }}" placeholder="0.00">
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label class="font-weight-600">Initial Stock</label>
-                                            <input type="number" name="stock_quantity" class="form-control form-control-lg" value="{{ old('stock_quantity', $product->stock_quantity ?? 0) }}">
+                                            <input type="number" name="stock_quantity" class="form-control form-control-lg" value="{{ old('stock_quantity', $product->stock_quantity ?? 0) }}" placeholder="0">
                                         </div>
                                     </div>
                                 </div>
@@ -114,7 +114,7 @@
 
                                 <div class="form-group mb-0">
                                     <label class="font-weight-600">Full Description <span class="text-danger">*</span></label>
-                                    <textarea name="description" id="description" rows="8" class="form-control">{{ old('description', $product->description ?? '') }}</textarea>
+                                    <textarea name="description" id="description" rows="8" class="form-control" placeholder="Detailed technical specs and features...">{{ old('description', $product->description ?? '') }}</textarea>
                                 </div>
                             </div>
 

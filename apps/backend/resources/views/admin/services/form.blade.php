@@ -46,7 +46,7 @@
                     <div class="card-body p-4">
                         <div class="form-group mb-4">
                             <label class="font-weight-600"><i class="fas fa-concierge-bell mr-1 text-primary"></i> Service Name <span class="text-danger">*</span></label>
-                            <input type="text" name="title" id="title" class="form-control form-control-lg @error('title') is-invalid @enderror" value="{{ old('title', $service->title ?? '') }}" required list="service-title-suggestions">
+                            <input type="text" name="title" id="title" class="form-control form-control-lg @error('title') is-invalid @enderror" value="{{ old('title', $service->title ?? '') }}" required list="service-title-suggestions" placeholder="e.g. Professional Interior Design">
                             <datalist id="service-title-suggestions">
                                 @foreach(\App\Models\Service::select('title')->distinct()->limit(20)->pluck('title') as $title)
                                     <option value="{{ $title }}">
@@ -88,10 +88,10 @@
                                 <div class="form-group"><label>Scale / Level</label><select name="expertise_level" class="form-control"><option value="1" {{ old('expertise_level', $service->expertise_level ?? 1) == 1 ? 'selected' : '' }}>Tier 1 (Beginner)</option><option value="2" {{ old('expertise_level', $service->expertise_level ?? '') == 2 ? 'selected' : '' }}>Tier 2</option><option value="3" {{ old('expertise_level', $service->expertise_level ?? '') == 3 ? 'selected' : '' }}>Tier 3</option><option value="4" {{ old('expertise_level', $service->expertise_level ?? '') == 4 ? 'selected' : '' }}>Tier 4</option><option value="5" {{ old('expertise_level', $service->expertise_level ?? '') == 5 ? 'selected' : '' }}>Tier 5 (Expert)</option></select></div>
                             </div>
                             <div class="col-md-4">
-                                <div class="form-group"><label>Radius (km)</label><input type="number" name="service_radius" class="form-control" value="{{ old('service_radius', $service->service_radius ?? '') }}"></div>
+                                <div class="form-group"><label>Radius (km)</label><input type="number" name="service_radius" class="form-control" value="{{ old('service_radius', $service->service_radius ?? '') }}" placeholder="e.g. 25"></div>
                             </div>
                             <div class="col-md-4">
-                                <div class="form-group"><label>Max Client Slots</label><input type="number" name="max_client_slots" class="form-control" value="{{ old('max_client_slots', $service->max_client_slots ?? '') }}"></div>
+                                <div class="form-group"><label>Max Client Slots</label><input type="number" name="max_client_slots" class="form-control" value="{{ old('max_client_slots', $service->max_client_slots ?? '') }}" placeholder="e.g. 10"></div>
                             </div>
                         </div>
                     </div>
@@ -105,10 +105,10 @@
                     <div class="card-body p-4">
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="form-group"><label>Base Price <span class="text-danger">*</span></label><input type="number" step="0.01" name="base_price" class="form-control" value="{{ old('base_price', $service->base_price ?? '0') }}" required></div>
+                                <div class="form-group"><label>Base Price <span class="text-danger">*</span></label><input type="number" step="0.01" name="base_price" class="form-control" value="{{ old('base_price', $service->base_price ?? '0') }}" required placeholder="0.00"></div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-group"><label>Discounted Price</label><input type="number" step="0.01" name="sale_price" class="form-control" value="{{ old('sale_price', $service->sale_price ?? '') }}"></div>
+                                <div class="form-group"><label>Discounted Price</label><input type="number" step="0.01" name="sale_price" class="form-control" value="{{ old('sale_price', $service->sale_price ?? '') }}" placeholder="0.00"></div>
                             </div>
                         </div>
                     </div>
