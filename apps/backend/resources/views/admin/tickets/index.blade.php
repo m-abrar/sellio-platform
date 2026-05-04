@@ -1,6 +1,8 @@
 @extends('adminlte::page')
 
-@section('title', 'Support Tickets | Admin Ops')
+@section('title', 'Support Tickets Management')
+
+@section('plugins.Datatables', true)
 
 @section('content_header')
     <div class="container-fluid pt-4">
@@ -74,7 +76,7 @@
         
         <div class="card-body p-0">
             <div class="table-responsive">
-                <form id="bulk-action-form" action="{{ route('admin.tickets.bulk-update') }}" method="POST">
+                <form id="tickets-mass-action-form" action="{{ route('admin.tickets.bulk-update') }}" method="POST">
                     @csrf
                     <input type="hidden" name="type" id="bulk-type-input">
                     <input type="hidden" name="value" id="bulk-value-input">
@@ -261,13 +263,21 @@
         width: 90%;
         max-width: 900px;
         height: 80px;
-        background: rgba(15, 23, 42, 0.9);
+        background: rgba(15, 23, 42, 0.95);
         backdrop-filter: blur(15px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
         border-radius: 40px;
-        z-index: 1060;
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        z-index: 9999;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
         color: #fff;
+        display: flex;
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    
+    .bulk-floating-bar.d-none {
+        display: none !important;
+        opacity: 0;
+        transform: translate(-50%, 40px);
     }
 
     .selection-count-badge {
@@ -354,83 +364,97 @@
     $(function () {
         $('[data-toggle="tooltip"]').tooltip();
         
-        // DataTables Initialization
-        if ($('#tickets-table tbody tr:not(.empty-state)').length > 0 && $('#tickets-table').find('i.fa-inbox').length === 0) {
-            $('#tickets-table').DataTable({
-                "paging": false, 
-                "lengthChange": false,
-                "searching": true,
-                "ordering": true,
-                "info": false,
-                "autoWidth": false,
-                "responsive": true,
-                "dom": '<"row pt-3"<"col-sm-12"f>>t',
-                "language": {
-                    "search": "",
-                    "searchPlaceholder": "Search within this queue..."
-                },
-                "columnDefs": [
-                    { "orderable": false, "targets": 0 }
-                ]
-            });
-            $('.dataTables_filter input').addClass('form-control form-control-premium shadow-none border-light mb-3').css('width', '250px');
-        }
-
-        // Bulk Selection Logic
-        const $selectAll = $('#selectAll');
-        const $bulkBar = $('#bulk-floating-bar');
-        const $selectedCount = $('#selected-count');
-
-        function updateBulkUI() {
-            const checkedCount = $('.ticket-checkbox:checked').length;
-            if (checkedCount > 0) {
-                $bulkBar.removeClass('d-none').addClass('animate__fadeInUpCustom');
-                $selectedCount.text(checkedCount);
-            } else {
-                $bulkBar.addClass('d-none');
-            }
-        }
-
-        // Delegated Select All
-        $(document).on('change', '#selectAll', function() {
-            $('.ticket-checkbox').prop('checked', this.checked);
-            updateBulkUI();
-        });
-
-        // Deselect All Button in Bar
-        $(document).on('click', '#deselectAll', function() {
-            $('.ticket-checkbox').prop('checked', false);
-            $('#selectAll').prop('checked', false);
-            updateBulkUI();
-        });
-
-        // Delegated Individual Checkbox
-        $(document).on('change', '.ticket-checkbox', function() {
-            const total = $('.ticket-checkbox').length;
-            const checked = $('.ticket-checkbox:checked').length;
-            
-            $('#selectAll').prop('checked', total === checked && total > 0);
-            updateBulkUI();
-        });
-
-        // Handle Bulk Update
-        window.handleBulkUpdate = function(type, value) {
-            Swal.fire({
-                title: 'Mass update ' + $('.ticket-checkbox:checked').length + ' tickets?',
-                text: "Updating " + type + " to " + value.toUpperCase(),
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: 'var(--primary)',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Confirm Update'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $('#bulk-type-input').val(type);
-                    $('#bulk-value-input').val(value);
-                    $('#bulk-action-form').submit();
+        // DataTables Initialization (Resilient)
+        if (typeof $.fn.DataTable === 'function') {
+            if ($('#tickets-table tbody tr:not(.empty-state)').length > 0 && $('#tickets-table').find('i.fa-inbox').length === 0) {
+                try {
+                    $('#tickets-table').DataTable({
+                        "paging": false, 
+                        "lengthChange": false,
+                        "searching": true,
+                        "ordering": true,
+                        "info": false,
+                        "autoWidth": false,
+                        "responsive": true,
+                        "dom": '<"row pt-3"<"col-sm-12"f>>t',
+                        "language": {
+                            "search": "",
+                            "searchPlaceholder": "Search within this queue..."
+                        },
+                        "columnDefs": [
+                            { "orderable": false, "targets": 0 }
+                        ]
+                    });
+                    $('.dataTables_filter input').addClass('form-control form-control-premium shadow-none border-light mb-3').css('width', '250px');
+                } catch (e) {
+                    console.warn("DataTable initialization failed:", e);
                 }
-            });
-        };
+            }
+        } else {
+            console.warn("DataTable plugin not loaded.");
+        }
+
+    // Bulk Selection Logic
+    const $selectAll = $('#selectAll');
+    const $bulkBar = $('#bulk-floating-bar');
+    const $selectedCount = $('#selected-count');
+
+    function updateBulkUI() {
+        const checkedCount = $('.ticket-checkbox:checked').length;
+        if (checkedCount > 0) {
+            $selectedCount.text(checkedCount);
+            if ($bulkBar.hasClass('d-none')) {
+                $bulkBar.removeClass('d-none').addClass('animate__fadeInUpCustom');
+            }
+        } else {
+            $bulkBar.addClass('d-none').removeClass('animate__fadeInUpCustom');
+        }
+    }
+
+    // Delegated Select All
+    $(document).on('change', '#selectAll', function() {
+        $('.ticket-checkbox').prop('checked', this.checked);
+        updateBulkUI();
     });
+
+    // Deselect All Button in Bar
+    $(document).on('click', '#deselectAll', function() {
+        $('.ticket-checkbox').prop('checked', false);
+        $('#selectAll').prop('checked', false);
+        updateBulkUI();
+    });
+
+    // Delegated Individual Checkbox
+    $(document).on('change', '.ticket-checkbox', function() {
+        const total = $('.ticket-checkbox').length;
+        const checked = $('.ticket-checkbox:checked').length;
+        
+        $('#selectAll').prop('checked', total === checked && total > 0);
+        updateBulkUI();
+    });
+
+    // Handle Bulk Update
+    window.handleBulkUpdate = function(type, value) {
+        const count = $('.ticket-checkbox:checked').length;
+        if (count === 0) return;
+
+        Swal.fire({
+            title: 'Bulk Action Confirmation',
+            text: `Apply "${value.toUpperCase()}" ${type} to ${count} selected tickets?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: 'var(--primary)',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Execute Action',
+            backdrop: `rgba(15, 23, 42, 0.4)`
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $('#bulk-type-input').val(type);
+                $('#bulk-value-input').val(value);
+                $('#tickets-mass-action-form').submit();
+            }
+        });
+    };
+});
 </script>
 @stop

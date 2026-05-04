@@ -70,6 +70,8 @@ GalleryController
 // Global Dashboard Controllers
 use App\Http\Controllers\Dashboard\MediaController;
 
+Route::get('test-reach', function() { return "Global Reach Works"; });
+
 /* |-------------------------------------------------------------------------- | Admin Dashboard Routes |-------------------------------------------------------------------------- */
 
 Route::prefix('admin')
@@ -348,18 +350,18 @@ Route::prefix('admin')
         }
         );
 
+        Route::match(['get', 'post', 'delete'], 'mass-ticket-process', [TicketController::class, 'bulkUpdate'])->name('tickets.bulk-update');
+
         /**
          * 7. SUPPORT TICKETS
          */
         Route::controller(TicketController::class)->prefix('tickets')->name('tickets.')->group(function () {
             Route::get('/', 'index')->name('index');
-            Route::post('/bulk-update', 'bulkUpdate')->name('bulk-update');
-            Route::get('/{ticket}', 'show')->name('show');
-            Route::post('/{ticket}/reply', 'reply')->name('reply');
-            Route::post('/{ticket}/status', 'updateStatus')->name('status');
-            Route::delete('/{ticket}', 'destroy')->name('destroy');
-        }
-        );
+            Route::get('{ticket}', 'show')->name('show');
+            Route::post('{ticket}/reply', 'reply')->name('reply');
+            Route::post('{ticket}/status', 'updateStatus')->name('status');
+            Route::delete('{ticket}', 'destroy')->name('destroy');
+        });
 
         /**
      * 8. GLOBAL ATTRIBUTES
