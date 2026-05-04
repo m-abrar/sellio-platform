@@ -5,6 +5,31 @@
 
 $(function() {
     /**
+     * 0. SweetAlert2 Premium Configuration
+     */
+    if (window.Swal) {
+        window.PremiumToast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        });
+        
+        window.PremiumConfirm = Swal.mixin({
+            customClass: {
+                confirmButton: 'btn btn-primary rounded-pill px-4 py-2 font-weight-bold mx-2',
+                cancelButton: 'btn btn-light rounded-pill px-4 py-2 font-weight-bold mx-2 border'
+            },
+            buttonsStyling: false
+        });
+    }
+
+    /**
      * 1. Global DataTables Defaults
      * Ensures all tables follow the premium layout: Search Left, Show Per Page Right.
      */
@@ -116,4 +141,41 @@ $(function() {
      */
     $('.nav-sidebar .nav-link.active').parent().parents('.nav-item').addClass('menu-open');
     $('.nav-sidebar .nav-link.active').closest('.nav-treeview').siblings('.nav-link').addClass('active');
+
+    /**
+     * 4. Premium Toggle Switch Listener
+     */
+    $(document).on('change', '.toggle-input', function() {
+        const card = $(this).closest('label');
+        const statusText = card.find('.toggle-status');
+        if (statusText.length) {
+            statusText.text($(this).is(':checked') ? 'ENABLED' : 'DISABLED');
+        }
+    });
+
+    /**
+     * 5. Form Submission Micro-interactions
+     * Prevents double submission and provides visual feedback.
+     */
+    $('form').on('submit', function() {
+        const btn = $(this).find('button[type="submit"]');
+        if (btn.hasClass('btn-submit-premium')) {
+            btn.prop('disabled', true);
+            btn.data('original-html', btn.html());
+            btn.html('<i class="fas fa-circle-notch fa-spin mr-2"></i> PROCESSING...');
+        }
+    });
+
+    /**
+     * 6. Smooth Scrolling for Anchor Links
+     */
+    $('a[href^="#"]:not([href="#"])').on('click', function(event) {
+        var target = $(this.getAttribute('href'));
+        if (target.length) {
+            event.preventDefault();
+            $('html, body').stop().animate({
+                scrollTop: target.offset().top - 100
+            }, 800);
+        }
+    });
 });

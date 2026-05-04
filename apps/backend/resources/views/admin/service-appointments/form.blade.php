@@ -1,13 +1,13 @@
 @extends('adminlte::page')
 
-@section('title', ($appointment->exists ? 'Modify' : 'Create') . ' Service Appointment')
+@section('title', ($appointment->exists ? 'Modify' : 'Create') . ' Service Appointment | Executive Registry')
 
 @section('content_header')
     <div class="container-fluid pt-4">
         <div class="row mb-4 align-items-center">
             <div class="col-sm-8">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-calendar-check mr-2 text-primary"></i> 
+                    <i class="fas fa-calendar-check mr-2 text-primary opacity-50"></i> 
                     {{ $appointment->exists ? 'Update Appointment: #' . $appointment->id : 'New Service Booking' }}
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">
@@ -34,9 +34,9 @@
         @if($appointment->exists) @method('PATCH') @endif
 
         <div class="row pb-5">
-            {{-- Left Column --}}
+            {{-- Primary column --}}
             <div class="col-md-8">
-                <div class="card card-premium shadow-premium mb-4 overflow-hidden border-0">
+                <div class="card card-premium shadow-premium mb-4 border-0 overflow-hidden">
                     <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
                         <h3 class="card-title font-weight-bold text-dark mb-0 text-uppercase letter-spacing-1" style="font-size: 1.1rem;">
                             <i class="fas fa-info-circle mr-2 text-primary opacity-50"></i> Booking Parameters
@@ -46,7 +46,7 @@
                         <div class="row">
                             <div class="col-md-6 mb-4">
                                 <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Target Service</label>
-                                <div class="input-group border rounded shadow-xs bg-white" style="height: 46px; padding: 2px;">
+                                <div class="input-group input-group-premium shadow-xs">
                                     <div class="input-group-prepend border-0">
                                         <span class="input-group-text bg-white border-0 py-0"><i class="fas fa-concierge-bell text-primary"></i></span>
                                     </div>
@@ -63,7 +63,7 @@
                             </div>
                             <div class="col-md-6 mb-4">
                                 <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Client Principal</label>
-                                <div class="input-group border rounded shadow-xs bg-white" style="height: 46px; padding: 2px;">
+                                <div class="input-group input-group-premium shadow-xs">
                                     <div class="input-group-prepend border-0">
                                         <span class="input-group-text bg-white border-0 py-0"><i class="fas fa-user-tie text-primary"></i></span>
                                     </div>
@@ -83,7 +83,7 @@
                         <div class="row mt-2">
                             <div class="col-md-4 mb-4">
                                 <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Client Full Name</label>
-                                <div class="input-group border rounded shadow-xs bg-white" style="height: 46px; padding: 2px;">
+                                <div class="input-group input-group-premium shadow-xs">
                                     <div class="input-group-prepend border-0">
                                         <span class="input-group-text bg-white border-0 py-0"><i class="fas fa-id-card text-primary"></i></span>
                                     </div>
@@ -94,7 +94,7 @@
                             </div>
                             <div class="col-md-4 mb-4">
                                 <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Electronic Mail</label>
-                                <div class="input-group border rounded shadow-xs bg-white" style="height: 46px; padding: 2px;">
+                                <div class="input-group input-group-premium shadow-xs">
                                     <div class="input-group-prepend border-0">
                                         <span class="input-group-text bg-white border-0 py-0"><i class="fas fa-envelope text-primary"></i></span>
                                     </div>
@@ -105,7 +105,7 @@
                             </div>
                             <div class="col-md-4 mb-4">
                                 <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Phone Contact</label>
-                                <div class="input-group border rounded shadow-xs bg-white" style="height: 46px; padding: 2px;">
+                                <div class="input-group input-group-premium shadow-xs">
                                     <div class="input-group-prepend border-0">
                                         <span class="input-group-text bg-white border-0 py-0"><i class="fas fa-phone text-primary"></i></span>
                                     </div>
@@ -117,9 +117,9 @@
                         </div>
 
                         <div class="row mt-2">
-                            <div class="col-md-6 mb-4">
+                            <div class="col-md-4 mb-4">
                                 <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Scheduled Timeline</label>
-                                <div class="input-group border rounded shadow-xs bg-white" style="height: 46px; padding: 2px;">
+                                <div class="input-group input-group-premium shadow-xs">
                                     <div class="input-group-prepend border-0">
                                         <span class="input-group-text bg-white border-0 py-0"><i class="fas fa-calendar-day text-primary"></i></span>
                                     </div>
@@ -128,9 +128,9 @@
                                 </div>
                                 @error('scheduled_at') <small class="text-danger font-weight-bold mt-1 d-block">{{ $message }}</small> @enderror
                             </div>
-                            <div class="col-md-6 mb-4">
+                            <div class="col-md-4 mb-4">
                                 <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Booking Topic</label>
-                                <div class="input-group border rounded shadow-xs bg-white" style="height: 46px; padding: 2px;">
+                                <div class="input-group input-group-premium shadow-xs">
                                     <div class="input-group-prepend border-0">
                                         <span class="input-group-text bg-white border-0 py-0"><i class="fas fa-tag text-primary"></i></span>
                                     </div>
@@ -138,6 +138,22 @@
                                            value="{{ old('topic', $appointment->topic) }}" placeholder="e.g. Initial Consultation">
                                 </div>
                                 @error('topic') <small class="text-danger font-weight-bold mt-1 d-block">{{ $message }}</small> @enderror
+                            </div>
+                            <div class="col-md-4 mb-4">
+                                <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Lifecycle Status</label>
+                                <div class="input-group input-group-premium shadow-xs">
+                                    <div class="input-group-prepend border-0">
+                                        <span class="input-group-text bg-white border-0 py-0"><i class="fas fa-traffic-light text-primary"></i></span>
+                                    </div>
+                                    <select name="status" class="form-control border-0 custom-select shadow-none bg-white h-100 py-0" required>
+                                        @foreach(['pending', 'confirmed', 'completed', 'cancelled'] as $st)
+                                            <option value="{{ $st }}" {{ old('status', $appointment->status ?? 'pending') == $st ? 'selected' : '' }}>
+                                                {{ strtoupper($st) }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                @error('status') <small class="text-danger font-weight-bold mt-1 d-block">{{ $message }}</small> @enderror
                             </div>
                         </div>
 
@@ -152,48 +168,22 @@
                 </div>
             </div>
 
-            {{-- Right Column --}}
+            {{-- Sidebar column --}}
             <div class="col-md-4">
                 <div class="sticky-top" style="top: 20px; z-index: 10;">
                     {{-- Action Card --}}
-                    <div class="card card-premium shadow-premium border-0 overflow-hidden mb-4">
-                        <div class="card-header border-0 bg-white py-4 px-4">
-                            <h3 class="card-title font-weight-bold text-dark mb-0 text-uppercase letter-spacing-1" style="font-size: 1.1rem;">
-                                <i class="fas fa-bolt mr-2 text-warning opacity-50"></i> Booking Actions
-                            </h3>
-                        </div>
-                        <div class="card-body p-4">
-                            <button type="submit" class="btn btn-primary btn-block rounded-pill py-3 font-weight-bold shadow-xs text-uppercase letter-spacing-1 mb-3">
-                                <i class="fas fa-save mr-2"></i> {{ $appointment->exists ? 'Update Appointment' : 'Confirm Booking' }}
-                            </button>
-                            <a href="{{ route('admin.service-appointments.index') }}" class="btn btn-default btn-block rounded-pill py-3 font-weight-bold border shadow-none text-uppercase letter-spacing-1">
-                                <i class="fas fa-times mr-2 text-danger"></i> Discard Changes
-                            </a>
-                        </div>
-                    </div>
+                    @include('admin._partials._form-actions', [
+                        'model' => $appointment,
+                        'title' => 'SERVICE BOOKING',
+                        'back' => 'admin.service-appointments.index'
+                    ])
 
-                    <div class="card card-premium shadow-premium border-0 overflow-hidden">
-                        <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
-                            <h3 class="card-title font-weight-bold text-dark mb-0 text-uppercase letter-spacing-1" style="font-size: 1.1rem;">
-                                <i class="fas fa-project-diagram mr-2 text-primary opacity-50"></i> Lifecycle Status
-                            </h3>
-                        </div>
-                        <div class="card-body p-4">
-                            <div class="form-group mb-0">
-                                <select name="status" class="form-control @error('status') is-invalid @enderror" required>
-                                    @foreach(['pending', 'confirmed', 'completed', 'cancelled'] as $st)
-                                        <option value="{{ $st }}" {{ old('status', $appointment->status ?? 'pending') == $st ? 'selected' : '' }}>
-                                            {{ strtoupper($st) }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                @error('status') <span class="invalid-feedback">{{ $message }}</span> @enderror
-                            </div>
-                            <div class="mt-3 p-3 bg-light rounded-xl border border-light">
-                                <p class="smallest text-muted mb-0 font-italic">
-                                    <i class="fas fa-info-circle mr-1"></i> Changing status sends automated notifications to the client.
-                                </p>
-                            </div>
+                    <div class="card card-premium shadow-premium mt-4 border-0 overflow-hidden">
+                        <div class="card-body p-4 bg-primary-soft">
+                            <h6 class="font-weight-bold text-primary mb-3 smallest text-uppercase letter-spacing-1">Service Protocol</h6>
+                            <p class="text-muted small mb-0" style="line-height: 1.6;">
+                                Confirming this appointment will trigger an automated confirmation email to the client principal. Ensure the <strong>Scheduled Timeline</strong> is verified with the service provider.
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -208,7 +198,7 @@
     $(document).ready(function() {
         if (typeof $('.select2').select2 === 'function') {
             $('.select2').select2({
-                theme: 'bootstrap4',
+                theme: 'default',
                 width: '100%'
             });
         }

@@ -205,3 +205,45 @@ http://127.0.0.1:8000/admin/permissions/create
 can you recheck if it matches our theme layout?
 
 
+
+
+
+
+http://127.0.0.1:8000/admin/event-bookings/create icon missing for field Select Target Event
+
+
+http://127.0.0.1:8000/admin/service-appointments/create
+http://127.0.0.1:8000/admin/job-applications/create
+http://127.0.0.1:8000/admin/classified-inquiries/create
+
+
+http://127.0.0.1:8000/admin/product-orders apply the shadows, radious and spacing as per the other pages in theme
+http://127.0.0.1:8000/admin/bookings/properties apply the shadows and spacing  as per the theme
+http://127.0.0.1:8000/admin/bookings/autos  apply the shadows and spacing as per the theme, fix the index table styling.
+http://127.0.0.1:8000/admin/bookings/events apply the shadows and spacing as per the theme
+http://127.0.0.1:8000/admin/bookings/jobs
+http://127.0.0.1:8000/admin/bookings/services
+http://127.0.0.1:8000/admin/bookings/classifieds
+http://127.0.0.1:8000/admin/bookings/events apply the search form input fields sizes as per other pages
+http://127.0.0.1:8000/admin/bookings/properties
+http://127.0.0.1:8000/admin/product-orders fix the search form input fields styling
+
+
+
+
+http://127.0.0.1:8000/admin/property-bookings/create
+is the shadow, radious and other layout standards same as other pages?
+
+
+
+
+http://127.0.0.1:8000/admin/service-appointments/create
+
+http://127.0.0.1:8000/admin/job-applications/create
+
+http://127.0.0.1:8000/admin/classified-inquiries/create
+
+
+
+
+

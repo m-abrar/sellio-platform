@@ -8,15 +8,15 @@
             <div class="col-sm-8">
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-calendar-alt mr-2 text-primary opacity-50"></i> 
-                    {{ $booking->exists ? __('Modify Stay Record') : __('Record Reservation') }}
+                    {{ $booking->exists ? 'Modify Stay: ' . $booking->id : 'Create Manual Entry' }}
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">
-                    {{ $booking->exists ? 'Update occupancy intelligence, guest profiles, and financial ledger records.' : 'Initialize a new property reservation for an incoming guest principal.' }}
+                    {{ $booking->exists ? 'Update occupancy intelligence, guest profiles, and financial ledger records.' : 'Register a new property reservation for an incoming guest principal.' }}
                 </p>
             </div>
             <div class="col-sm-4 text-right">
                 <a href="{{ route('admin.property-bookings.index') }}" class="btn btn-back shadow-sm rounded-pill px-4">
-                    <i class="fas fa-arrow-left mr-1"></i> Back to Ledger
+                    <i class="fas fa-arrow-left mr-1"></i> BACK TO QUEUE
                 </a>
             </div>
         </div>
@@ -36,17 +36,17 @@
         <div class="row pb-5">
             {{-- Intelligence Column --}}
             <div class="col-md-8">
-                <div class="card card-premium shadow-premium mb-4 border-0 overflow-hidden" style="border-radius: 24px;">
+                <div class="card card-premium shadow-premium mb-4 border-0 overflow-hidden">
                     <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
-                        <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
-                            <i class="fas fa-info-circle mr-2 text-primary opacity-50"></i> Reservation Intelligence
+                        <h3 class="card-title font-weight-bold text-dark mb-0 text-uppercase letter-spacing-1" style="font-size: 1.1rem;">
+                            <i class="fas fa-info-circle mr-2 text-primary opacity-50"></i> Booking Parameters
                         </h3>
                     </div>
                     <div class="card-body p-4">
                         <div class="row">
                             <div class="col-md-6 mb-4">
                                 <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Target Inventory Asset</label>
-                                <div class="input-group border rounded shadow-xs bg-white" style="height: 46px; padding: 2px;">
+                                <div class="input-group input-group-premium shadow-xs">
                                     <div class="input-group-prepend border-0">
                                         <span class="input-group-text bg-white border-0 py-0"><i class="fas fa-home text-primary"></i></span>
                                     </div>
@@ -64,7 +64,7 @@
 
                             <div class="col-md-6 mb-4">
                                 <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Associated Principal</label>
-                                <div class="input-group border rounded shadow-xs bg-white" style="height: 46px; padding: 2px;">
+                                <div class="input-group input-group-premium shadow-xs">
                                     <div class="input-group-prepend border-0">
                                         <span class="input-group-text bg-white border-0 py-0"><i class="fas fa-user-tie text-primary"></i></span>
                                     </div>
@@ -82,7 +82,7 @@
 
                             <div class="col-md-4 mb-4">
                                 <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Guest Full Identity</label>
-                                <div class="input-group border rounded shadow-xs bg-white" style="height: 46px; padding: 2px;">
+                                <div class="input-group input-group-premium shadow-xs">
                                     <div class="input-group-prepend border-0">
                                         <span class="input-group-text bg-white border-0 py-0"><i class="fas fa-id-card text-primary"></i></span>
                                     </div>
@@ -94,7 +94,7 @@
 
                             <div class="col-md-4 mb-4">
                                 <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Electronic Contact</label>
-                                <div class="input-group border rounded shadow-xs bg-white" style="height: 46px; padding: 2px;">
+                                <div class="input-group input-group-premium shadow-xs">
                                     <div class="input-group-prepend border-0">
                                         <span class="input-group-text bg-white border-0 py-0"><i class="fas fa-envelope text-primary"></i></span>
                                     </div>
@@ -106,7 +106,7 @@
 
                             <div class="col-md-4 mb-4">
                                 <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Telephonic Contact</label>
-                                <div class="input-group border rounded shadow-xs bg-white" style="height: 46px; padding: 2px;">
+                                <div class="input-group input-group-premium shadow-xs">
                                     <div class="input-group-prepend border-0">
                                         <span class="input-group-text bg-white border-0 py-0"><i class="fas fa-phone text-primary"></i></span>
                                     </div>
@@ -118,7 +118,7 @@
 
                             <div class="col-md-4 mb-4">
                                 <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Check-In Chronology</label>
-                                <div class="input-group border rounded shadow-xs bg-white" style="height: 46px; padding: 2px;">
+                                <div class="input-group input-group-premium shadow-xs">
                                     <div class="input-group-prepend border-0">
                                         <span class="input-group-text bg-white border-0 py-0"><i class="fas fa-sign-in-alt text-primary"></i></span>
                                     </div>
@@ -130,7 +130,7 @@
 
                             <div class="col-md-4 mb-4">
                                 <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Check-Out Chronology</label>
-                                <div class="input-group border rounded shadow-xs bg-white" style="height: 46px; padding: 2px;">
+                                <div class="input-group input-group-premium shadow-xs">
                                     <div class="input-group-prepend border-0">
                                         <span class="input-group-text bg-white border-0 py-0"><i class="fas fa-sign-out-alt text-primary"></i></span>
                                     </div>
@@ -142,7 +142,7 @@
 
                             <div class="col-md-4 mb-4">
                                 <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Aggregate Guests</label>
-                                <div class="input-group border rounded shadow-xs bg-white" style="height: 46px; padding: 2px;">
+                                <div class="input-group input-group-premium shadow-xs">
                                     <div class="input-group-prepend border-0">
                                         <span class="input-group-text bg-white border-0 py-0"><i class="fas fa-users text-primary"></i></span>
                                     </div>
@@ -150,6 +150,34 @@
                                            value="{{ old('guests', $booking->guests ?? 1) }}" required>
                                 </div>
                                 @error('guests') <small class="text-danger font-weight-bold mt-1 d-block">{{ $message }}</small> @enderror
+                            </div>
+
+                            <div class="col-md-4 mb-4">
+                                <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Settlement Status</label>
+                                <div class="input-group input-group-premium shadow-xs">
+                                    <div class="input-group-prepend border-0">
+                                        <span class="input-group-text bg-white border-0 py-0"><i class="fas fa-traffic-light text-primary"></i></span>
+                                    </div>
+                                    <select name="status" class="form-control border-0 custom-select shadow-none bg-white h-100 py-0" required>
+                                        @foreach(['pending', 'confirmed', 'cancelled'] as $st)
+                                            <option value="{{ $st }}" {{ old('status', $booking->status ?? 'pending') == $st ? 'selected' : '' }}>
+                                                {{ strtoupper($st) }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                @error('status') <small class="text-danger font-weight-bold mt-1 d-block">{{ $message }}</small> @enderror
+                            </div>
+                            <div class="col-md-4 mb-4">
+                                <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Aggregate Revenue ($)</label>
+                                <div class="input-group border rounded shadow-xs bg-white overflow-hidden" style="height: 46px; padding: 2px;">
+                                    <div class="input-group-prepend border-0">
+                                        <span class="input-group-text bg-white border-0 py-0 font-weight-bold text-primary">$</span>
+                                    </div>
+                                    <input type="number" step="0.01" name="total_price" class="form-control border-0 shadow-none bg-white h-100 py-0 font-weight-bold text-success" 
+                                           value="{{ old('total_price', $booking->total_price ?? '0.00') }}" required placeholder="0.00">
+                                </div>
+                                @error('total_price') <small class="text-danger font-weight-bold mt-1 d-block">{{ $message }}</small> @enderror
                             </div>
 
                             <div class="col-12 mb-0">
@@ -163,9 +191,9 @@
                 </div>
 
                 {{-- Availability Calendar --}}
-                <div class="card card-premium shadow-premium border-0 overflow-hidden" style="border-radius: 24px;">
+                <div class="card card-premium shadow-premium border-0 overflow-hidden">
                     <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
-                        <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
+                        <h3 class="card-title font-weight-bold text-dark mb-0 text-uppercase letter-spacing-1" style="font-size: 1.1rem;">
                             <i class="fas fa-calendar-check mr-2 text-primary opacity-50"></i> Availability Visualizer
                         </h3>
                     </div>
@@ -198,41 +226,12 @@
                         'back' => 'admin.property-bookings.index'
                     ])
 
-                    <div class="card card-premium shadow-premium mt-4 border-0 overflow-hidden" style="border-radius: 24px;">
-                        <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
-                            <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
-                                <i class="fas fa-file-invoice-dollar mr-2 text-primary opacity-50"></i> Financial Oversight
-                            </h3>
-                        </div>
-                        <div class="card-body p-4">
-                            <div class="mb-4">
-                                <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Settlement Status</label>
-                                <div class="input-group border rounded shadow-xs bg-white" style="height: 46px; padding: 2px;">
-                                    <div class="input-group-prepend border-0">
-                                        <span class="input-group-text bg-white border-0 py-0"><i class="fas fa-traffic-light text-primary"></i></span>
-                                    </div>
-                                    <select name="status" class="form-control border-0 custom-select shadow-none bg-white h-100 py-0" required>
-                                        @foreach(['pending', 'confirmed', 'cancelled'] as $st)
-                                            <option value="{{ $st }}" {{ old('status', $booking->status ?? 'pending') == $st ? 'selected' : '' }}>
-                                                {{ strtoupper($st) }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="mb-0">
-                                <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Aggregate Revenue ($)</label>
-                                <div class="input-group border rounded shadow-xs bg-white overflow-hidden" style="height: 46px; padding: 2px;">
-                                    <div class="input-group-prepend border-0">
-                                        <span class="input-group-text bg-white border-0 py-0 font-weight-bold text-primary">$</span>
-                                    </div>
-                                    <input type="number" step="0.01" name="total_price" class="form-control border-0 shadow-none bg-white h-100 py-0 font-weight-bold text-success" 
-                                           value="{{ old('total_price', $booking->total_price ?? '0.00') }}" required placeholder="0.00">
-                                </div>
-                                <p class="text-muted smallest mt-2 mb-0 uppercase letter-spacing-1 opacity-75">
-                                    <i class="fas fa-info-circle mr-1"></i> Total gross value including service fees.
-                                </p>
-                            </div>
+                    <div class="card card-premium shadow-premium mt-4 border-0 overflow-hidden">
+                        <div class="card-body p-4 bg-primary-soft">
+                            <h6 class="font-weight-bold text-primary mb-3 smallest text-uppercase letter-spacing-1">Financial Integrity</h6>
+                            <p class="text-muted small mb-0" style="line-height: 1.6;">
+                                Manually creating a stay record will skip the payment gateway logic. Ensure you verify physical fund transfers before marking the status as <strong>CONFIRMED</strong>.
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -240,7 +239,7 @@
         </div>
     </form>
 </div>
-@endsection
+@stop
 
 @section('css')
 <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
@@ -259,14 +258,14 @@
     .select2-container--bootstrap4 .select2-selection--single .select2-selection__arrow { top: 50% !important; transform: translateY(-50%) !important; }
     .rounded-xl { border-radius: 12px !important; }
 </style>
-@endsection
+@stop
 
-@section('js')
+@push('js')
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
 <script>
     $(document).ready(function() {
         $('.select2').select2({
-            theme: 'bootstrap4',
+            theme: 'default',
             width: '100%',
             placeholder: "Select Principal"
         });
@@ -290,4 +289,4 @@
         @endif
     });
 </script>
-@endsection
+@endpush
