@@ -1,5 +1,5 @@
 <div class="card card-premium sticky-top overflow-hidden" style="top: 20px;">
-    <div class="card-header bg-dark d-flex align-items-center py-3" style="border-bottom: 3px solid var(--primary) !important; background: #1e293b !important;">
+    <div class="card-header bg-dark d-flex align-items-center py-3 px-4 border-0" style="background: #0f172a !important; border-bottom: 3px solid var(--primary) !important;">
         <h3 class="card-title text-white mb-0 font-weight-bold smallest text-uppercase letter-spacing-1">
             <i class="fas fa-rocket mr-2 text-primary"></i> {{ __('Protocol & Actions') }}
         </h3>

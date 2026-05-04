@@ -15,8 +15,8 @@
                 </p>
             </div>
             <div class="col-sm-4 text-right">
-                <a href="{{ route('admin.auto-inquiries.index') }}" class="btn btn-back shadow-sm">
-                    <i class="fas fa-arrow-left mr-1"></i> Back to Queue
+                <a href="{{ route('admin.auto-inquiries.index') }}" class="btn btn-back shadow-sm rounded-pill px-4">
+                    <i class="fas fa-arrow-left mr-1"></i> BACK TO QUEUE
                 </a>
             </div>
         </div>
@@ -36,93 +36,116 @@
         <div class="row pb-5">
             {{-- Left Column --}}
             <div class="col-md-8">
-                <div class="card card-premium shadow-premium mb-4 overflow-hidden">
-                    <div class="card-header bg-white border-0 py-3 px-4">
-                        <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
+                <div class="card card-premium shadow-premium mb-4 overflow-hidden border-0">
+                    <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
+                        <h3 class="card-title font-weight-bold text-dark mb-0 text-uppercase letter-spacing-1" style="font-size: 1.1rem;">
                             <i class="fas fa-info-circle mr-2 text-primary opacity-50"></i> Lead Parameters
                         </h3>
                     </div>
                     <div class="card-body p-4">
                         <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group mb-4">
-                                    <label class="font-weight-600">Interested Vehicle <span class="text-danger">*</span></label>
-                                    <select name="auto_id" class="form-control select2 @error('auto_id') is-invalid @enderror" required>
-                                        <option value="">-- Select Auto Listing --</option>
+                            <div class="col-md-6 mb-4">
+                                <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Interested Vehicle Asset</label>
+                                <div class="input-group border rounded shadow-xs bg-white" style="height: 46px; padding: 2px;">
+                                    <div class="input-group-prepend border-0">
+                                        <span class="input-group-text bg-white border-0 py-0"><i class="fas fa-car text-primary"></i></span>
+                                    </div>
+                                    <select name="auto_id" class="form-control border-0 custom-select shadow-none bg-white h-100 py-0 select2" required>
+                                        <option value="">Select Vehicle</option>
                                         @foreach($autos as $auto)
                                             <option value="{{ $auto->id }}" {{ old('auto_id', $inquiry->auto_id) == $auto->id ? 'selected' : '' }}>
-                                                {{ $auto->title }} (ID: #{{ $auto->id }})
+                                                {{ $auto->title }}
                                             </option>
                                         @endforeach
                                     </select>
-                                    @error('auto_id') <span class="invalid-feedback">{{ $message }}</span> @enderror
                                 </div>
+                                @error('auto_id') <small class="text-danger font-weight-bold mt-1 d-block">{{ $message }}</small> @enderror
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-group mb-4">
-                                    <label class="font-weight-600">Platform Account <span class="text-danger">*</span></label>
-                                    <select name="user_id" class="form-control select2 @error('user_id') is-invalid @enderror" required>
-                                        <option value="">-- Associate User --</option>
+                            <div class="col-md-6 mb-4">
+                                <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Platform Account Principal</label>
+                                <div class="input-group border rounded shadow-xs bg-white" style="height: 46px; padding: 2px;">
+                                    <div class="input-group-prepend border-0">
+                                        <span class="input-group-text bg-white border-0 py-0"><i class="fas fa-user-tie text-primary"></i></span>
+                                    </div>
+                                    <select name="user_id" class="form-control border-0 custom-select shadow-none bg-white h-100 py-0 select2" required>
+                                        <option value="">Associate User</option>
                                         @foreach($users as $user)
                                             <option value="{{ $user->id }}" {{ old('user_id', $inquiry->user_id) == $user->id ? 'selected' : '' }}>
                                                 {{ $user->name }} ({{ $user->email }})
                                             </option>
                                         @endforeach
                                     </select>
-                                    @error('user_id') <span class="invalid-feedback">{{ $message }}</span> @enderror
                                 </div>
+                                @error('user_id') <small class="text-danger font-weight-bold mt-1 d-block">{{ $message }}</small> @enderror
                             </div>
                         </div>
 
                         <div class="row mt-2">
-                            <div class="col-md-4">
-                                <div class="form-group mb-4">
-                                    <label class="font-weight-600">Full Name <span class="text-danger">*</span></label>
-                                    <input type="text" name="full_name" class="form-control @error('full_name') is-invalid @enderror" 
+                            <div class="col-md-4 mb-4">
+                                <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Full Identity Name</label>
+                                <div class="input-group border rounded shadow-xs bg-white" style="height: 46px; padding: 2px;">
+                                    <div class="input-group-prepend border-0">
+                                        <span class="input-group-text bg-white border-0 py-0"><i class="fas fa-id-card text-primary"></i></span>
+                                    </div>
+                                    <input type="text" name="full_name" class="form-control border-0 shadow-none bg-white h-100 py-0 font-weight-bold" 
                                            value="{{ old('full_name', $inquiry->full_name) }}" required placeholder="e.g. Robert Smith">
-                                    @error('full_name') <span class="invalid-feedback">{{ $message }}</span> @enderror
                                 </div>
+                                @error('full_name') <small class="text-danger font-weight-bold mt-1 d-block">{{ $message }}</small> @enderror
                             </div>
-                            <div class="col-md-4">
-                                <div class="form-group mb-4">
-                                    <label class="font-weight-600">Contact Email <span class="text-danger">*</span></label>
-                                    <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" 
+                            <div class="col-md-4 mb-4">
+                                <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Electronic Contact</label>
+                                <div class="input-group border rounded shadow-xs bg-white" style="height: 46px; padding: 2px;">
+                                    <div class="input-group-prepend border-0">
+                                        <span class="input-group-text bg-white border-0 py-0"><i class="fas fa-envelope text-primary"></i></span>
+                                    </div>
+                                    <input type="email" name="email" class="form-control border-0 shadow-none bg-white h-100 py-0 text-monospace" 
                                            value="{{ old('email', $inquiry->email) }}" required placeholder="robert@example.com">
-                                    @error('email') <span class="invalid-feedback">{{ $message }}</span> @enderror
                                 </div>
+                                @error('email') <small class="text-danger font-weight-bold mt-1 d-block">{{ $message }}</small> @enderror
                             </div>
-                            <div class="col-md-4">
-                                <div class="form-group mb-4">
-                                    <label class="font-weight-600">Contact Phone</label>
-                                    <input type="text" name="phone" class="form-control @error('phone') is-invalid @enderror" 
+                            <div class="col-md-4 mb-4">
+                                <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Telephonic Contact</label>
+                                <div class="input-group border rounded shadow-xs bg-white" style="height: 46px; padding: 2px;">
+                                    <div class="input-group-prepend border-0">
+                                        <span class="input-group-text bg-white border-0 py-0"><i class="fas fa-phone text-primary"></i></span>
+                                    </div>
+                                    <input type="text" name="phone" class="form-control border-0 shadow-none bg-white h-100 py-0" 
                                            value="{{ old('phone', $inquiry->phone) }}" placeholder="+1 234 567 890">
-                                    @error('phone') <span class="invalid-feedback">{{ $message }}</span> @enderror
                                 </div>
+                                @error('phone') <small class="text-danger font-weight-bold mt-1 d-block">{{ $message }}</small> @enderror
                             </div>
                         </div>
 
                         <div class="row mt-2">
-                            <div class="col-md-6">
-                                <div class="form-group mb-4">
-                                    <label class="font-weight-600">Preferred Viewing Date</label>
-                                    <input type="date" name="preferred_date" class="form-control @error('preferred_date') is-invalid @enderror" 
+                            <div class="col-md-6 mb-4">
+                                <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Preferred Viewing Chronology</label>
+                                <div class="input-group border rounded shadow-xs bg-white" style="height: 46px; padding: 2px;">
+                                    <div class="input-group-prepend border-0">
+                                        <span class="input-group-text bg-white border-0 py-0"><i class="fas fa-calendar-day text-primary"></i></span>
+                                    </div>
+                                    <input type="date" name="preferred_date" class="form-control border-0 shadow-none bg-white h-100 py-0 smallest font-weight-bold" 
                                            value="{{ old('preferred_date', $inquiry->preferred_date) }}">
-                                    @error('preferred_date') <span class="invalid-feedback">{{ $message }}</span> @enderror
                                 </div>
+                                @error('preferred_date') <small class="text-danger font-weight-bold mt-1 d-block">{{ $message }}</small> @enderror
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-group mb-4">
-                                    <label class="font-weight-600">Preferred Time Window</label>
-                                    <input type="text" name="preferred_time" class="form-control @error('preferred_time') is-invalid @enderror" 
+                            <div class="col-md-6 mb-4">
+                                <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Target Time Window</label>
+                                <div class="input-group border rounded shadow-xs bg-white" style="height: 46px; padding: 2px;">
+                                    <div class="input-group-prepend border-0">
+                                        <span class="input-group-text bg-white border-0 py-0"><i class="fas fa-clock text-primary"></i></span>
+                                    </div>
+                                    <input type="text" name="preferred_time" class="form-control border-0 shadow-none bg-white h-100 py-0" 
                                            value="{{ old('preferred_time', $inquiry->preferred_time) }}" placeholder="e.g. Afternoon, 3 PM">
-                                    @error('preferred_time') <span class="invalid-feedback">{{ $message }}</span> @enderror
                                 </div>
+                                @error('preferred_time') <small class="text-danger font-weight-bold mt-1 d-block">{{ $message }}</small> @enderror
                             </div>
                         </div>
 
-                        <div class="form-group mb-0">
-                            <label class="font-weight-600">Inquiry Message</label>
-                            <textarea name="message" class="form-control" rows="4" placeholder="Lead details or special requests...">{{ old('message', $inquiry->message) }}</textarea>
+                        <div class="col-12 mb-0">
+                            <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Inquiry Narrative / Lead Context</label>
+                            <textarea name="message" class="form-control border shadow-xs bg-white p-3" rows="4"
+                                style="border-radius: 12px; font-size: 0.9rem;"
+                                placeholder="Lead details or special requests...">{{ old('message', $inquiry->message) }}</textarea>
                         </div>
                     </div>
                 </div>
@@ -138,9 +161,11 @@
                         'back' => 'admin.auto-inquiries.index'
                     ])
 
-                    <div class="card card-premium shadow-premium mt-4 overflow-hidden border-primary-soft">
-                        <div class="card-header bg-white border-0 py-3 px-4">
-                            <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">Pipeline Status</h3>
+                    <div class="card card-premium shadow-premium mt-4 border-0 overflow-hidden">
+                        <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
+                            <h3 class="card-title font-weight-bold text-dark mb-0 text-uppercase letter-spacing-1" style="font-size: 1.1rem;">
+                                <i class="fas fa-project-diagram mr-2 text-primary opacity-50"></i> Pipeline Status
+                            </h3>
                         </div>
                         <div class="card-body p-4">
                             <div class="form-group mb-0">

@@ -37,38 +37,53 @@
                     <div class="row align-items-end">
                         <div class="col-md-3">
                             <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Event Identification</label>
-                            <select name="event_id" class="form-control select2 shadow-xs" style="height: 46px;">
-                                <option value="">All Events Intelligence</option>
-                                @foreach($events as $e)
-                                    <option value="{{ $e->id }}" {{ request('event_id') == $e->id ? 'selected' : '' }}>{{ $e->title }}</option>
-                                @endforeach
-                            </select>
+                            <div class="input-group shadow-xs">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text bg-white border-right-0"><i class="fas fa-ticket-alt text-primary"></i></span>
+                                </div>
+                                <select name="event_id" class="form-control border-left-0 select2">
+                                    <option value="">All Events Intelligence</option>
+                                    @foreach($events as $e)
+                                        <option value="{{ $e->id }}" {{ request('event_id') == $e->id ? 'selected' : '' }}>{{ $e->title }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
                         <div class="col-md-2">
                             <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Classification</label>
-                            <select name="category" class="form-control shadow-xs" style="height: 46px;">
-                                <option value="">All Categories</option>
-                                @foreach ($categories as $c)
-                                    <option value="{{ $c->id }}" {{ request('category') == $c->id ? 'selected' : '' }}>{{ $c->title }}</option>
-                                @endforeach
-                            </select>
+                            <div class="input-group shadow-xs">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text bg-white border-right-0"><i class="fas fa-tags text-primary"></i></span>
+                                </div>
+                                <select name="category" class="form-control border-left-0">
+                                    <option value="">All Categories</option>
+                                    @foreach ($categories as $c)
+                                        <option value="{{ $c->id }}" {{ request('category') == $c->id ? 'selected' : '' }}>{{ $c->title }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
                         <div class="col-md-2">
                             <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Lifecycle Status</label>
-                            <select name="status" class="form-control shadow-xs" style="height: 46px;">
-                                <option value="">All Statuses</option>
-                                <option value="pending" {{ $status == 'pending' ? 'selected' : '' }}>Pending</option>
-                                <option value="confirmed" {{ $status == 'confirmed' ? 'selected' : '' }}>Confirmed</option>
-                                <option value="cancelled" {{ $status == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
-                            </select>
+                            <div class="input-group shadow-xs">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text bg-white border-right-0"><i class="fas fa-filter text-primary"></i></span>
+                                </div>
+                                <select name="status" class="form-control border-left-0">
+                                    <option value="">All Statuses</option>
+                                    <option value="pending" {{ $status == 'pending' ? 'selected' : '' }}>Pending</option>
+                                    <option value="confirmed" {{ $status == 'confirmed' ? 'selected' : '' }}>Confirmed</option>
+                                    <option value="cancelled" {{ $status == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
+                                </select>
+                            </div>
                         </div>
                         <div class="col-md-5">
-                            <div class="btn-group w-100 shadow-sm rounded-pill overflow-hidden border" style="height: 46px;">
-                                <button type="submit" class="btn btn-primary font-weight-bold smallest uppercase d-flex align-items-center justify-content-center flex-grow-1">
+                            <div class="d-flex" style="gap: 10px;">
+                                <button type="submit" class="btn btn-primary flex-grow-1 font-weight-bold smallest uppercase">
                                     <i class="fas fa-sync-alt mr-2"></i> REFRESH REGISTRY
                                 </button>
-                                <a href="{{ route('admin.event-bookings.index') }}" class="btn btn-white px-3 border-left d-flex align-items-center justify-content-center">
-                                    <i class="fas fa-undo text-danger"></i>
+                                <a href="{{ route('admin.event-bookings.index') }}" class="btn btn-back px-3 border shadow-sm d-flex align-items-center justify-content-center" data-toggle="tooltip" title="Reset Filters">
+                                    <i class="fas fa-undo text-danger m-0"></i>
                                 </a>
                             </div>
                         </div>

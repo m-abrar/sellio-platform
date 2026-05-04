@@ -12,9 +12,9 @@
 @endphp
 
 <div class="card card-premium overflow-hidden shadow-premium">
-    <div class="card-header bg-white d-flex align-items-center py-3 px-4 border-0">
-        <h3 class="card-title text-dark mb-0 font-weight-bold smallest text-uppercase letter-spacing-1">
-            <i class="fas fa-rocket mr-2 text-primary opacity-50"></i> Protocol & Actions
+    <div class="card-header bg-dark d-flex align-items-center py-3 px-4 border-0" style="background: #0f172a !important; border-bottom: 3px solid var(--primary) !important;">
+        <h3 class="card-title text-white mb-0 font-weight-bold smallest text-uppercase letter-spacing-1">
+            <i class="fas fa-rocket mr-2 text-primary"></i> Protocol & Actions
         </h3>
     </div>
     

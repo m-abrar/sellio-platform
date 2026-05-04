@@ -34,11 +34,11 @@
                     <div class="row align-items-end">
                         <div class="col-md-3">
                             <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Target Position</label>
-                            <div class="input-group border rounded shadow-xs bg-white" style="height: 46px; padding: 2px;">
-                                <div class="input-group-prepend border-0">
-                                    <span class="input-group-text bg-white border-0 py-0"><i class="fas fa-briefcase text-primary"></i></span>
+                            <div class="input-group shadow-xs">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text bg-white border-right-0"><i class="fas fa-briefcase text-primary"></i></span>
                                 </div>
-                                <select name="job_id" class="form-control border-0 custom-select shadow-none bg-white h-100 py-0 select2">
+                                <select name="job_id" class="form-control border-left-0 select2">
                                     <option value="">All Active Listings</option>
                                     @foreach($jobs as $j)
                                         <option value="{{ $j->id }}" {{ request('job_id') == $j->id ? 'selected' : '' }}>{{ $j->title }}</option>
@@ -48,11 +48,11 @@
                         </div>
                         <div class="col-md-3">
                             <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Sector Category</label>
-                            <div class="input-group border rounded shadow-xs bg-white" style="height: 46px; padding: 2px;">
-                                <div class="input-group-prepend border-0">
-                                    <span class="input-group-text bg-white border-0 py-0"><i class="fas fa-tags text-primary"></i></span>
+                            <div class="input-group shadow-xs">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text bg-white border-right-0"><i class="fas fa-tags text-primary"></i></span>
                                 </div>
-                                <select name="category" class="form-control border-0 custom-select shadow-none bg-white h-100 py-0">
+                                <select name="category" class="form-control border-left-0">
                                     <option value="">All Sectors</option>
                                     @foreach ($categories as $c)
                                         <option value="{{ $c->id }}" {{ request('category') == $c->id ? 'selected' : '' }}>{{ $c->title }}</option>
@@ -62,11 +62,11 @@
                         </div>
                         <div class="col-md-3">
                             <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Pipeline Status</label>
-                            <div class="input-group border rounded shadow-xs bg-white" style="height: 46px; padding: 2px;">
-                                <div class="input-group-prepend border-0">
-                                    <span class="input-group-text bg-white border-0 py-0"><i class="fas fa-filter text-primary"></i></span>
+                            <div class="input-group shadow-xs">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text bg-white border-right-0"><i class="fas fa-filter text-primary"></i></span>
                                 </div>
-                                <select name="status" class="form-control border-0 custom-select shadow-none bg-white h-100 py-0">
+                                <select name="status" class="form-control border-left-0">
                                     <option value="">All States</option>
                                     <option value="submitted" {{ $status == 'submitted' ? 'selected' : '' }}>Submitted</option>
                                     <option value="reviewed" {{ $status == 'reviewed' ? 'selected' : '' }}>Reviewed</option>
@@ -74,12 +74,12 @@
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <div class="btn-group w-100 shadow-sm rounded-pill overflow-hidden border" style="height: 46px;">
-                                <button type="submit" class="btn btn-primary font-weight-bold smallest uppercase d-flex align-items-center justify-content-center">
+                            <div class="d-flex" style="gap: 10px;">
+                                <button type="submit" class="btn btn-primary flex-grow-1 font-weight-bold smallest uppercase">
                                     <i class="fas fa-sync-alt mr-2"></i> UPDATE
                                 </button>
-                                <a href="{{ route('admin.job-applications.index') }}" class="btn btn-white px-3 border-left d-flex align-items-center justify-content-center">
-                                    <i class="fas fa-undo text-danger"></i>
+                                <a href="{{ route('admin.job-applications.index') }}" class="btn btn-back px-3 border shadow-sm d-flex align-items-center justify-content-center" data-toggle="tooltip" title="Reset Filters">
+                                    <i class="fas fa-undo text-danger m-0"></i>
                                 </a>
                             </div>
                         </div>

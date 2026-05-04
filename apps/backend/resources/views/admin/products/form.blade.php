@@ -37,8 +37,8 @@
 
         <div class="row">
             {{-- Main Content Column --}}
-            <div class="col-md-9">
-                <div class="card card-premium overflow-hidden">
+            <div class="col-md-8">
+                <div class="card card-premium overflow-hidden border-0">
                     <div class="card-header p-0 bg-white border-0">
                         <ul class="nav nav-tabs-premium" id="productTab" role="tablist">
                             <li class="nav-item">
@@ -122,8 +122,8 @@
                             <div class="tab-pane fade" id="variations" role="tabpanel">
                                 <div class="d-flex justify-content-between align-items-center mb-3">
                                     <h5 class="mb-0 font-weight-bold text-dark">Product Attributes & Variations</h5>
-                                    <button type="button" class="btn btn-primary btn-sm btn-flat shadow-sm" onclick="addVariationRow()">
-                                        <i class="fas fa-plus mr-1"></i> Add Attribute
+                                    <button type="button" class="btn btn-primary btn-sm rounded-pill px-3 font-weight-bold shadow-sm" onclick="addVariationRow()">
+                                        <i class="fas fa-plus-circle mr-1"></i> ADD ATTRIBUTE
                                     </button>
                                 </div>
                                 <div class="table-responsive">
@@ -175,8 +175,8 @@
                             <div class="tab-pane fade" id="addons" role="tabpanel">
                                 <div class="d-flex justify-content-between align-items-center mb-3">
                                     <h5 class="mb-0 font-weight-bold text-dark">Optional Extra Services</h5>
-                                    <button type="button" class="btn btn-success btn-sm btn-flat shadow-sm" onclick="addAddonRow()">
-                                        <i class="fas fa-plus mr-1"></i> Add New Add-on
+                                    <button type="button" class="btn btn-primary btn-sm rounded-pill px-3 font-weight-bold shadow-sm" onclick="addAddonRow()">
+                                        <i class="fas fa-plus-circle mr-1"></i> ADD NEW ADD-ON
                                     </button>
                                 </div>
                                 <div class="table-responsive">
@@ -265,7 +265,7 @@
             </div>
 
             {{-- Sidebar Column --}}
-            <div class="col-md-3">
+            <div class="col-md-4">
                 {{-- Action Card --}}
                 @include('admin._partials._form-actions', [
                     'model' => $product,
@@ -275,7 +275,7 @@
                 ])
 
                 {{-- Primary Media --}}
-                <div class="card card-premium mb-4 overflow-hidden">
+                <div class="card card-premium mb-4 overflow-hidden border-0">
                     <div class="card-header bg-white border-0 py-3 px-4">
                         <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
                             <i class="fas fa-camera mr-2 text-primary opacity-50"></i> Visual Identity
@@ -294,7 +294,7 @@
                 </div>
 
                 {{-- Settings --}}
-                <div class="card card-premium mb-4 overflow-hidden">
+                <div class="card card-premium mb-4 overflow-hidden border-0">
                     <div class="card-header bg-white border-0 py-3 px-4">
                         <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
                             <i class="fas fa-cog mr-2 text-primary opacity-50"></i> Configuration
@@ -320,7 +320,7 @@
                 </div>
 
                 {{-- Classification --}}
-                <div class="card card-premium mb-4 overflow-hidden">
+                <div class="card card-premium mb-4 overflow-hidden border-0">
                     <div class="card-header bg-white border-0 py-3 px-4">
                         <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
                             <i class="fas fa-sitemap mr-2 text-primary opacity-50"></i> Taxonomy

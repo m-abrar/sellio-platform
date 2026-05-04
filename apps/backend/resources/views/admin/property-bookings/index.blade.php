@@ -37,11 +37,11 @@
                     <div class="row align-items-end">
                         <div class="col-md-3">
                             <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Property Focus</label>
-                            <div class="input-group border rounded shadow-xs bg-white" style="height: 46px; padding: 2px;">
-                                <div class="input-group-prepend border-0">
-                                    <span class="input-group-text bg-white border-0 py-0"><i class="fas fa-home text-primary"></i></span>
+                            <div class="input-group shadow-xs">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text bg-white border-right-0"><i class="fas fa-home text-primary"></i></span>
                                 </div>
-                                <select name="property" class="form-control border-0 custom-select shadow-none bg-white h-100 py-0 select2">
+                                <select name="property" class="form-control border-left-0 select2">
                                     <option value="">All Inventory</option>
                                     @foreach ($properties as $p)
                                         <option value="{{ $p->id }}" {{ request('property') == $p->id ? 'selected' : '' }}>
@@ -53,11 +53,11 @@
                         </div>
                         <div class="col-md-3">
                             <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Booking Lifecycle</label>
-                            <div class="input-group border rounded shadow-xs bg-white" style="height: 46px; padding: 2px;">
-                                <div class="input-group-prepend border-0">
-                                    <span class="input-group-text bg-white border-0 py-0"><i class="fas fa-traffic-light text-primary"></i></span>
+                            <div class="input-group shadow-xs">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text bg-white border-right-0"><i class="fas fa-traffic-light text-primary"></i></span>
                                 </div>
-                                <select name="status" class="form-control border-0 custom-select shadow-none bg-white h-100 py-0">
+                                <select name="status" class="form-control border-left-0">
                                     <option value="">All Statuses</option>
                                     @foreach (['pending', 'confirmed', 'cancelled'] as $s)
                                         <option value="{{ $s }}" {{ request('status') == $s ? 'selected' : '' }}>
@@ -70,22 +70,22 @@
                         <div class="col-md-4">
                             <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Temporal Range</label>
                             <div class="d-flex align-items-center" style="gap: 10px;">
-                                <div class="input-group border rounded shadow-xs bg-white flex-grow-1" style="height: 46px; padding: 2px;">
-                                    <input type="date" name="start_date" class="form-control border-0 shadow-none bg-white h-100 py-0 smallest" value="{{ request('start_date') }}">
+                                <div class="input-group shadow-xs flex-grow-1">
+                                    <input type="date" name="start_date" class="form-control smallest font-weight-bold" value="{{ request('start_date') }}">
                                 </div>
                                 <span class="text-muted smallest font-weight-bold uppercase letter-spacing-1">to</span>
-                                <div class="input-group border rounded shadow-xs bg-white flex-grow-1" style="height: 46px; padding: 2px;">
-                                    <input type="date" name="end_date" class="form-control border-0 shadow-none bg-white h-100 py-0 smallest" value="{{ request('end_date') }}">
+                                <div class="input-group shadow-xs flex-grow-1">
+                                    <input type="date" name="end_date" class="form-control smallest font-weight-bold" value="{{ request('end_date') }}">
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-2">
-                            <div class="btn-group w-100 shadow-sm rounded-pill overflow-hidden border" style="height: 46px;">
-                                <button type="submit" class="btn btn-primary font-weight-bold smallest uppercase d-flex align-items-center justify-content-center">
+                            <div class="d-flex" style="gap: 10px;">
+                                <button type="submit" class="btn btn-primary flex-grow-1 font-weight-bold smallest uppercase">
                                     <i class="fas fa-sync-alt mr-2"></i> UPDATE
                                 </button>
-                                <a href="{{ route('admin.property-bookings.index') }}" class="btn btn-white px-3 border-left d-flex align-items-center justify-content-center">
-                                    <i class="fas fa-undo text-danger"></i>
+                                <a href="{{ route('admin.property-bookings.index') }}" class="btn btn-back px-3 border shadow-sm d-flex align-items-center justify-content-center" data-toggle="tooltip" title="Reset Filters">
+                                    <i class="fas fa-undo text-danger m-0"></i>
                                 </a>
                             </div>
                         </div>

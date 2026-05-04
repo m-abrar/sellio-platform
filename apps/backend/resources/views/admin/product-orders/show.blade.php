@@ -33,10 +33,10 @@
         <div class="row">
             {{-- Left Column: Manifest & Summary --}}
             <div class="col-md-8">
-                <div class="card card-premium shadow-sm border-0 overflow-hidden mb-4">
-                    <div class="card-header border-0 bg-white py-4 px-4 d-flex justify-content-between align-items-center">
-                        <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1">
-                            <i class="fas fa-box-open mr-2 text-primary opacity-50"></i> {{ __('Fulfillment Manifest') }}
+                <div class="card card-premium shadow-premium overflow-hidden mb-4">
+                    <div class="card-header bg-dark d-flex align-items-center py-3 px-4 border-0" style="background: #0f172a !important; border-bottom: 3px solid var(--primary) !important;">
+                        <h3 class="card-title text-white mb-0 font-weight-bold smallest text-uppercase letter-spacing-1">
+                            <i class="fas fa-box-open mr-2 text-primary"></i> {{ __('Fulfillment Manifest') }}
                         </h3>
                     </div>
                     <div class="card-body p-0">
@@ -95,7 +95,7 @@
                 </div>
 
                 {{-- Fiscal Summary --}}
-                <div class="card card-premium shadow-sm border-0 mb-4">
+                <div class="card card-premium shadow-premium overflow-hidden mb-4">
                     <div class="card-body p-4">
                         <div class="row">
                             <div class="col-md-6">
@@ -144,10 +144,10 @@
             {{-- Right Column: Intelligence & Registry --}}
             <div class="col-md-4">
                 {{-- Lifecycle Management --}}
-                <div class="card card-premium shadow-sm border-0 mb-4 overflow-hidden print-hide">
-                    <div class="card-header border-0 bg-primary py-3 px-4">
-                        <h3 class="card-title font-weight-bold text-white smallest text-uppercase letter-spacing-1 mb-0">
-                            <i class="fas fa-tasks mr-2"></i> Sync Lifecycle
+                <div class="card card-premium shadow-premium overflow-hidden mb-4 print-hide">
+                    <div class="card-header bg-dark d-flex align-items-center py-3 px-4 border-0" style="background: #0f172a !important; border-bottom: 3px solid var(--primary) !important;">
+                        <h3 class="card-title text-white mb-0 font-weight-bold smallest text-uppercase letter-spacing-1">
+                            <i class="fas fa-tasks mr-2 text-primary"></i> Sync Lifecycle
                         </h3>
                     </div>
                     <div class="card-body p-4 bg-white">
@@ -181,10 +181,10 @@
                 </div>
 
                 {{-- Logistics Timeline --}}
-                <div class="card card-premium shadow-sm border-0 mb-4 overflow-hidden print-hide">
-                    <div class="card-header border-0 bg-dark py-3 px-4">
-                        <h3 class="card-title font-weight-bold text-white smallest text-uppercase letter-spacing-1 mb-0">
-                            <i class="fas fa-history mr-2 opacity-50"></i> Logistics Timeline
+                <div class="card card-premium shadow-premium overflow-hidden mb-4 print-hide">
+                    <div class="card-header bg-dark d-flex align-items-center py-3 px-4 border-0" style="background: #0f172a !important; border-bottom: 3px solid var(--primary) !important;">
+                        <h3 class="card-title text-white mb-0 font-weight-bold smallest text-uppercase letter-spacing-1">
+                            <i class="fas fa-history mr-2 text-primary"></i> Logistics Timeline
                         </h3>
                     </div>
                     <div class="card-body p-0">
@@ -229,10 +229,10 @@
                 </div>
 
                 {{-- Client Registry --}}
-                <div class="card card-premium shadow-sm border-0 overflow-hidden">
-                    <div class="card-header border-0 bg-white py-3 px-4 border-bottom">
-                        <h3 class="card-title font-weight-bold text-dark smallest text-uppercase letter-spacing-1 mb-0">
-                            <i class="fas fa-id-card mr-2 text-primary opacity-50"></i> Client Intelligence
+                <div class="card card-premium shadow-premium overflow-hidden">
+                    <div class="card-header bg-dark d-flex align-items-center py-3 px-4 border-0" style="background: #0f172a !important; border-bottom: 3px solid var(--primary) !important;">
+                        <h3 class="card-title text-white mb-0 font-weight-bold smallest text-uppercase letter-spacing-1">
+                            <i class="fas fa-id-card mr-2 text-primary"></i> Client Intelligence
                         </h3>
                     </div>
                     <div class="card-body p-4">

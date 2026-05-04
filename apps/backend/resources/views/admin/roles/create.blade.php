@@ -7,7 +7,7 @@
         <div class="row mb-4 align-items-center">
             <div class="col-sm-8">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-plus-circle mr-2 text-primary"></i> 
+                    <i class="fas fa-plus-circle mr-2 text-primary opacity-50"></i> 
                     Architect New Role
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">
@@ -33,18 +33,20 @@
             <div class="col-md-8">
                 @include('admin.roles.partials._permission_grid', ['currentRole' => null])
             </div>
-
+            
             <div class="col-md-4">
                 {{-- Action Card --}}
                 @include('admin._partials._form-actions', [
-                    'model' => $role ?? (new \App\Models\Role()),
+                    'model' => $role ?? (new \Spatie\Permission\Models\Role()),
                     'title' => 'ROLE',
                     'back' => 'admin.roles.index'
                 ])
 
-                <div class="card border-0 shadow-premium mt-4" style="border-radius: 20px;">
-                    <div class="card-header bg-white border-0 py-3 px-4">
-                        <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">Identity Blueprint</h3>
+                <div class="card card-premium shadow-premium overflow-hidden border-0 mt-4">
+                    <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
+                        <h3 class="card-title font-weight-bold text-dark mb-0 text-uppercase letter-spacing-1" style="font-size: 1.1rem;">
+                            <i class="fas fa-fingerprint mr-2 text-primary opacity-50"></i> Identity Blueprint
+                        </h3>
                     </div>
                     <div class="card-body p-4">
                         <div class="form-group mb-4">
@@ -54,7 +56,7 @@
                         </div>
                         
                         <div class="p-3 bg-primary-soft rounded-xl border border-primary-soft">
-                            <h6 class="font-weight-bold text-primary smallest uppercase mb-2">Protocol Note</h6>
+                            <h6 class="font-weight-bold text-primary text-uppercase mb-2 letter-spacing-1" style="font-size: 0.85rem;"><i class="fas fa-shield-alt mr-2 opacity-75"></i>Protocol Note</h6>
                             <p class="text-muted mb-0 small font-weight-600">
                                 Once created, this role can be assigned to multiple users. Changes to the permission grid will affect all users instantly.
                             </p>
@@ -65,4 +67,8 @@
         </div>
     </form>
 </div>
+@stop
+
+@section('css')
+@include('admin._partials._toggle-card-css')
 @stop

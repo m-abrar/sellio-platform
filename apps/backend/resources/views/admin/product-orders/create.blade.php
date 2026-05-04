@@ -31,9 +31,9 @@
                 {{-- Left Column: Customer & Items --}}
                 <div class="col-md-8">
                     {{-- Customer Selection Card --}}
-                    <div class="card border-0 shadow-premium mb-4" style="border-radius: 24px;">
-                        <div class="card-header border-0 bg-white py-4 px-4">
-                            <h3 class="card-title font-weight-bold text-dark smallest text-uppercase letter-spacing-1 float-none">
+                    <div class="card card-premium shadow-premium overflow-hidden mb-4 border-0">
+                        <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
+                            <h3 class="card-title font-weight-bold text-dark mb-0 text-uppercase letter-spacing-1" style="font-size: 1.1rem;">
                                 <i class="fas fa-user-circle mr-2 text-primary opacity-50"></i> Customer Identification
                             </h3>
                         </div>
@@ -57,9 +57,9 @@
                     </div>
 
                     {{-- Order Items Card --}}
-                    <div class="card border-0 shadow-premium mb-4" style="border-radius: 24px;">
+                    <div class="card card-premium shadow-premium overflow-hidden mb-4 border-0">
                         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
-                            <h3 class="card-title font-weight-bold text-dark smallest text-uppercase letter-spacing-1 float-none mb-0">
+                            <h3 class="card-title font-weight-bold text-dark mb-0 text-uppercase letter-spacing-1" style="font-size: 1.1rem;">
                                 <i class="fas fa-list-ul mr-2 text-primary opacity-50"></i> Item Manifest
                             </h3>
                             <button type="button" class="btn btn-primary btn-sm rounded-pill px-3 ml-auto font-weight-bold smallest" onclick="addItemRow()">
@@ -117,10 +117,10 @@
                 {{-- Right Column: Shipping & Summary --}}
                 <div class="col-md-4">
                     {{-- Summary Card --}}
-                    <div class="card border-0 shadow-premium mb-4 overflow-hidden" style="border-radius: 24px;">
-                        <div class="card-header border-0 bg-dark py-3 px-4">
-                            <h3 class="card-title font-weight-bold text-white smallest text-uppercase letter-spacing-1 mb-0">
-                                <i class="fas fa-receipt mr-1 opacity-50"></i> Order Summary
+                    <div class="card card-premium shadow-premium overflow-hidden mb-4">
+                        <div class="card-header bg-dark d-flex align-items-center py-3 px-4 border-0" style="background: #0f172a !important; border-bottom: 3px solid var(--primary) !important;">
+                            <h3 class="card-title text-white mb-0 font-weight-bold smallest text-uppercase letter-spacing-1">
+                                <i class="fas fa-receipt mr-1 text-primary"></i> Order Summary
                             </h3>
                         </div>
                         <div class="card-body p-4">
@@ -163,10 +163,10 @@
                     </div>
 
                     {{-- Logistics Details Card --}}
-                    <div class="card border-0 shadow-premium mb-4" style="border-radius: 24px;">
-                        <div class="card-header border-0 bg-white py-3 px-4 border-bottom">
-                            <h3 class="card-title font-weight-bold text-dark smallest text-uppercase letter-spacing-1 mb-0">
-                                <i class="fas fa-truck mr-1 text-primary"></i> Logistics Destination
+                    <div class="card card-premium shadow-premium overflow-hidden mb-4 border-0">
+                        <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
+                            <h3 class="card-title font-weight-bold text-dark mb-0 text-uppercase letter-spacing-1" style="font-size: 1.1rem;">
+                                <i class="fas fa-truck mr-1 text-primary opacity-50"></i> Logistics Destination
                             </h3>
                         </div>
                         <div class="card-body p-4">

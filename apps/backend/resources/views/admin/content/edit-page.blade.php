@@ -86,9 +86,9 @@
                 <div class="sticky-top" style="top: 20px;">
                     {{-- Deployment Intelligence --}}
                     <div class="card card-premium border-0 shadow-premium overflow-hidden mb-4">
-                        <div class="card-header bg-white py-3 px-4 border-0">
-                            <h3 class="card-title text-dark font-weight-bold text-uppercase smallest mb-0" style="letter-spacing: 1px;">
-                                <i class="fas fa-rocket mr-2 text-primary opacity-50"></i> Protocol & Actions
+                        <div class="card-header bg-dark py-3 px-4 border-0 d-flex align-items-center" style="background: #0f172a !important; border-bottom: 3px solid var(--primary) !important;">
+                            <h3 class="card-title text-white font-weight-bold text-uppercase smallest mb-0" style="letter-spacing: 1px;">
+                                <i class="fas fa-rocket mr-2 text-primary"></i> Protocol & Actions
                             </h3>
                         </div>
                         <div class="card-body bg-white py-4 px-4">
@@ -105,8 +105,8 @@
                                 </button>
                                 
                                 <a href="{{ route('admin.content.index') }}" class="btn btn-light btn-block rounded-pill font-weight-bold smallest py-2 text-muted border uppercase">
-                                    <i class="fas fa-times mr-1"></i> Cancel Changes
-                                </a>
+                                     <i class="fas fa-times mr-1"></i> Cancel Changes
+                                 </a>
                              </div>
                         </div>
                         <div class="card-footer bg-light border-0 text-center py-2">
