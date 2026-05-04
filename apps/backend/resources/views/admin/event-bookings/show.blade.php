@@ -30,11 +30,11 @@
         <div class="row">
             {{-- Admission Specifications --}}
             <div class="col-md-8">
-                <div class="card card-premium shadow-sm border-0 overflow-hidden mb-4">
+                <div class="card card-premium shadow-premium border-0 overflow-hidden mb-4" style="border-radius: 24px;">
                     <div class="card-header border-0 bg-white py-4 px-4 d-flex justify-content-between align-items-center">
-                        <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1">
+                        <h5 class="card-title font-weight-bold text-dark mb-0 text-uppercase letter-spacing-1">
                             <i class="fas fa-id-card-alt mr-2 text-primary opacity-50"></i> {{ __('Admission Intelligence') }}
-                        </h3>
+                        </h5>
                         @php
                             $statusMap = [
                                 'pending' => 'badge-warning-light text-warning',
@@ -89,11 +89,11 @@
                 </div>
 
                 {{-- Financial Ledger --}}
-                <div class="card card-premium shadow-sm border-0 overflow-hidden">
+                <div class="card card-premium shadow-premium border-0 overflow-hidden" style="border-radius: 24px;">
                     <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
-                        <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1">
+                        <h5 class="card-title font-weight-bold text-dark mb-0 text-uppercase letter-spacing-1">
                             <i class="fas fa-money-check-alt mr-2 text-primary opacity-50"></i> {{ __('Financial Reconciliation') }}
-                        </h3>
+                        </h5>
                     </div>
                     <div class="card-body p-0">
                         <div class="table-responsive">
@@ -144,11 +144,11 @@
 
             {{-- Participant Profile --}}
             <div class="col-md-4">
-                <div class="card card-premium shadow-sm border-0 overflow-hidden mb-4 text-center">
+                <div class="card card-premium shadow-premium border-0 overflow-hidden mb-4 text-center" style="border-radius: 24px;">
                     <div class="card-header border-0 bg-white py-3 px-4 border-bottom">
-                        <h3 class="card-title font-weight-bold text-dark smallest text-uppercase letter-spacing-1 mb-0">
+                        <h5 class="card-title font-weight-bold text-dark smallest text-uppercase letter-spacing-1 mb-0">
                             <i class="fas fa-user-shield mr-2 text-primary opacity-50"></i> {{ __('Principal Identity') }}
-                        </h3>
+                        </h5>
                     </div>
                     <div class="card-body p-4">
                         <div class="mb-4 d-inline-block p-1 rounded-circle border shadow-sm bg-white">
@@ -172,8 +172,8 @@
                     </div>
                 </div>
 
-                <div class="card card-premium shadow-sm border-0">
-                    <div class="card-body p-4 d-flex align-items-center bg-white" style="border-radius: 12px;">
+                <div class="card card-premium shadow-premium border-0">
+                    <div class="card-body p-4 d-flex align-items-center bg-white" style="border-radius: 24px;">
                         <div class="mr-3 icon-box-soft bg-primary-soft text-primary shadow-xs d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; border-radius: 12px;">
                             <i class="fas fa-fingerprint h5 mb-0"></i>
                         </div>

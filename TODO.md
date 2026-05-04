@@ -167,7 +167,9 @@ fix the old ugly layout and replace with new layout design
 
 
 
+http://127.0.0.1:8000/admin/payments/create
 
+the heading font size for the body has to be bigger and sidebar smaller
 
 
 

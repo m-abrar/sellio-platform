@@ -3,185 +3,236 @@
 @section('title', __('Service Quote') . ' #' . $quote->id)
 
 @section('content_header')
-    <div class="d-flex justify-content-between align-items-center">
-        <h1>
-            <i class="fas fa-file-invoice text-warning mr-2"></i>
-            {{ __('Quote Request') }} <small class="text-muted">#{{ $quote->id }}</small>
-        </h1>
-        <a href="{{ route('admin.service-quotes.index') }}" class="btn btn-default btn-sm">
-            <i class="fas fa-arrow-left"></i> {{ __('Back to List') }}
-        </a>
+    <div class="container-fluid pt-4">
+        <div class="row mb-4 align-items-center">
+            <div class="col-sm-8">
+                <h1 class="m-0 text-dark font-weight-bold">
+                    <i class="fas fa-file-invoice mr-2 text-primary"></i> {{ __('Quote Manifest') }} <small class="text-muted ml-2">#{{ $quote->id }}</small>
+                </h1>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Review service scope, pricing estimates, and customer requirements for operational fulfillment.</p>
+            </div>
+            <div class="col-sm-4 text-right">
+                <a href="{{ route('admin.bookings.services') }}" class="btn btn-back shadow-sm rounded-pill px-4 py-2 font-weight-bold smallest uppercase letter-spacing-1">
+                    <i class="fas fa-arrow-left mr-1"></i> Return to Registry
+                </a>
+            </div>
+        </div>
     </div>
 @stop
 
+@section('content_header_breadcrumbs')
+@stop
+
 @section('content')
-    @include('admin.alert')
+    <div class="container-fluid pb-5">
+        @include('admin.alert')
 
-    <div class="row">
-        {{-- Left Column: Quote & Service Details --}}
-        <div class="col-md-8">
+        <div class="row">
+            {{-- Left Column: Quote & Service Details --}}
+            <div class="col-md-8">
 
-            {{-- Quote Details Card --}}
-            <div class="card card-outline card-warning">
-                <div class="card-header">
-                    <h3 class="card-title"><i class="fas fa-tools mr-1"></i> {{ __('Service & Scope') }}</h3>
-                    <div class="card-tools">
-                        @php
-                            $statusMap = [
-                                'pending'  => 'badge-warning',
-                                'quoted'   => 'badge-info',
-                                'accepted' => 'badge-success',
-                                'rejected' => 'badge-danger',
-                            ];
-                        @endphp
-                        <span class="badge {{ $statusMap[$quote->status] ?? 'badge-secondary' }} px-3 py-2">
-                            {{ Str::upper($quote->status) }}
-                        </span>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-sm-7">
-                            <label class="text-muted mb-0">{{ __('Service Requested') }}</label>
-                            <h4 class="text-warning font-weight-bold">
-                                {{ $quote->service->title ?? __('N/A') }}
-                            </h4>
-                            <p class="text-muted small">ID: #{{ $quote->service_id }}</p>
-                        </div>
-                        <div class="col-sm-5 text-sm-right border-left">
-                            <label class="text-muted mb-0">{{ __('Submitted On') }}</label>
-                            <p class="font-weight-bold">{{ $quote->created_at->format('M d, Y @ H:i') }}</p>
-                            @if($quote->requested_date)
-                                <label class="text-muted mb-0">{{ __('Desired Start Date') }}</label>
-                                <p>{{ $quote->requested_date->format('M d, Y') }}</p>
-                            @endif
-                        </div>
-                    </div>
-
-                    @if($quote->scope_size)
-                        <div class="mt-3">
-                            <label class="text-muted mb-1">{{ __('Project Scope') }}</label>
-                            <span class="badge badge-secondary px-3 py-2 text-capitalize" style="font-size: 0.85rem;">
-                                <i class="fas fa-ruler-combined mr-1"></i> {{ $quote->scope_size }}
+                {{-- Quote Details Card --}}
+                <div class="card card-premium shadow-premium border-0 overflow-hidden mb-4" style="border-radius: 24px;">
+                    <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center justify-content-between">
+                        <h5 class="card-title font-weight-bold text-dark text-uppercase mb-0" style="letter-spacing: 1px;">
+                            <i class="fas fa-tools mr-2 text-primary opacity-50"></i> {{ __('Service & Scope') }}
+                        </h5>
+                        <div class="card-tools">
+                            @php
+                                $statusMap = [
+                                    'pending'  => 'badge-warning',
+                                    'quoted'   => 'badge-info',
+                                    'accepted' => 'badge-success',
+                                    'rejected' => 'badge-danger',
+                                ];
+                                $statusClass = $statusMap[$quote->status] ?? 'badge-secondary';
+                            @endphp
+                            <span class="badge {{ $statusClass }}-light text-{{ str_replace('badge-', '', $statusClass) }} px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 shadow-xs">
+                                {{ strtoupper($quote->status) }}
                             </span>
                         </div>
-                    @endif
+                    </div>
+                    <div class="card-body px-4 pb-4">
+                        <div class="row mb-4">
+                            <div class="col-sm-7">
+                                <label class="smallest font-weight-bold text-muted text-uppercase letter-spacing-1 mb-2 d-block">{{ __('Service Requested') }}</label>
+                                <h4 class="text-primary font-weight-bold mb-1">
+                                    {{ $quote->service->title ?? __('N/A') }}
+                                </h4>
+                                <span class="badge badge-light border text-muted smallest uppercase font-weight-bold px-2">ID: #{{ $quote->service_id }}</span>
+                            </div>
+                            <div class="col-sm-5 text-sm-right border-left pl-md-4">
+                                <div class="mb-3">
+                                    <label class="smallest font-weight-bold text-muted text-uppercase letter-spacing-1 mb-1 d-block">{{ __('Submission Intelligence') }}</label>
+                                    <p class="font-weight-bold text-dark mb-0 smallest">{{ $quote->created_at->format('M d, Y @ H:i') }}</p>
+                                </div>
+                                @if($quote->requested_date)
+                                    <div>
+                                        <label class="smallest font-weight-bold text-muted text-uppercase letter-spacing-1 mb-1 d-block">{{ __('Desired Start Date') }}</label>
+                                        <span class="badge badge-primary-soft text-primary px-3 py-1 rounded-pill font-weight-bold smallest uppercase">{{ $quote->requested_date->format('M d, Y') }}</span>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
 
-                    <hr>
+                        @if($quote->scope_size)
+                            <div class="p-3 bg-light rounded-xl border mb-4 d-inline-flex align-items-center">
+                                <i class="fas fa-ruler-combined mr-3 text-primary opacity-50"></i>
+                                <div>
+                                    <label class="smallest font-weight-bold text-muted text-uppercase letter-spacing-1 mb-0 d-block">{{ __('Project Scope') }}</label>
+                                    <span class="font-weight-bold text-dark text-capitalize">{{ $quote->scope_size }}</span>
+                                </div>
+                            </div>
+                        @endif
 
-                    <h5><i class="fas fa-comment-alt text-muted mr-2"></i>{{ __('Project Details / Requirements') }}</h5>
-                    <div class="p-3 bg-light rounded border">
-                        @if($quote->details)
-                            {!! nl2br(e($quote->details)) !!}
+                        <div class="bg-primary-soft p-4 rounded-xl border border-primary-soft mt-2">
+                            <h6 class="font-weight-bold text-primary text-uppercase smallest letter-spacing-1 mb-3">
+                                <i class="fas fa-comment-alt mr-2"></i> {{ __('Requirements & Details') }}
+                            </h6>
+                            <div class="text-dark font-weight-500" style="line-height: 1.8; font-size: 1.05rem; white-space: pre-wrap;">
+                                @if($quote->details)
+                                    {!! nl2br(e($quote->details)) !!}
+                                @else
+                                    <em class="text-muted smallest uppercase letter-spacing-1">{{ __('No specific functional requirements provided.') }}</em>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Quoted Price Card --}}
+                <div class="card card-premium shadow-premium border-0 overflow-hidden mb-4" style="border-radius: 24px;">
+                    <div class="card-header border-0 bg-white py-4 px-4">
+                        <h5 class="card-title font-weight-bold text-dark text-uppercase mb-0" style="letter-spacing: 1px;">
+                            <i class="fas fa-dollar-sign mr-2 text-primary opacity-50"></i> {{ __('Financial Estimate') }}
+                        </h5>
+                    </div>
+                    <div class="card-body px-4 pb-4">
+                        @if($quote->quoted_price)
+                            <div class="text-center py-4 bg-success-soft rounded-xl border border-success-soft shadow-xs">
+                                <p class="smallest font-weight-bold text-success text-uppercase letter-spacing-1 mb-2">{{ __('Current Quoted Price') }}</p>
+                                <h2 class="text-success font-weight-bold mb-0" style="font-size: 3.5rem; letter-spacing: -2px;">
+                                    ${{ number_format($quote->quoted_price, 2) }}
+                                </h2>
+                                <p class="text-muted smallest font-weight-bold uppercase mt-3 mb-0">
+                                    <i class="fas fa-check-circle mr-1"></i> {{ __('Proposal transmitted to customer') }}
+                                </p>
+                            </div>
                         @else
-                            <em class="text-muted">{{ __('No specific details provided.') }}</em>
+                            <div class="text-center py-5 bg-light rounded-xl border border-dashed shadow-xs">
+                                <div class="icon-circle bg-white text-muted mx-auto mb-3 shadow-xs" style="width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-hourglass-half fa-lg"></i>
+                                </div>
+                                <h6 class="font-weight-bold text-dark mb-1">{{ __('Awaiting Financial Proposal') }}</h6>
+                                <p class="text-muted smallest uppercase letter-spacing-1 mb-0">{{ __('The service partner has not yet issued a formal quote.') }}</p>
+                            </div>
                         @endif
                     </div>
                 </div>
+
             </div>
 
-            {{-- Quoted Price Card --}}
-            <div class="card card-outline {{ $quote->quoted_price ? 'card-success' : 'card-secondary' }}">
-                <div class="card-header">
-                    <h3 class="card-title"><i class="fas fa-dollar-sign mr-1"></i> {{ __('Quote & Pricing') }}</h3>
+            {{-- Right Sidebar: Customer Information --}}
+            <div class="col-md-4">
+                <div class="card card-premium shadow-premium border-0 overflow-hidden mb-4" style="border-radius: 24px;">
+                    <div class="card-header border-0 bg-white py-4 px-4">
+                        <h5 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0" style="letter-spacing: 1px;">
+                            <i class="fas fa-user-tag mr-2 text-primary opacity-50"></i> {{ __('Client Identity') }}
+                        </h5>
+                    </div>
+                    <div class="card-body px-4 pb-4 text-center">
+                        @if($quote->user)
+                            <div class="position-relative d-inline-block mb-3">
+                                <img src="https://ui-avatars.com/api/?name={{ urlencode($quote->user->name) }}&background=46a5ac&color=fff&size=200" 
+                                     class="img-circle shadow-premium border border-white" 
+                                     style="width: 90px; height: 90px; border-width: 4px !important;">
+                            </div>
+                            <h5 class="font-weight-bold text-dark mb-1">{{ $quote->user->name }}</h5>
+                            <p class="text-muted smallest font-weight-bold uppercase letter-spacing-1 mb-4">{{ $quote->user->email }}</p>
+                            
+                            <div class="text-left mb-4">
+                                <div class="px-3 py-2 bg-light rounded-xl border mb-2 d-flex justify-content-between align-items-center">
+                                    <span class="smallest font-weight-bold text-muted uppercase">Client ID</span>
+                                    <span class="smallest font-weight-bold text-dark text-monospace">#USER-{{ str_pad($quote->user_id, 4, '0', STR_PAD_LEFT) }}</span>
+                                </div>
+                                <div class="px-3 py-2 bg-light rounded-xl border d-flex justify-content-between align-items-center">
+                                    <span class="smallest font-weight-bold text-muted uppercase">Onboarded</span>
+                                    <span class="smallest font-weight-bold text-dark">{{ $quote->user->created_at->format('M Y') }}</span>
+                                </div>
+                            </div>
+                            
+                            <a href="{{ route('admin.users.show', $quote->user_id) }}" class="btn btn-white btn-block rounded-pill shadow-xs font-weight-bold smallest uppercase letter-spacing-1 py-2">
+                                <i class="fas fa-external-link-alt mr-1 text-primary"></i> {{ __('View Deep Profile') }}
+                            </a>
+                        @else
+                            <div class="text-center py-4 text-muted">
+                                <i class="fas fa-user-slash fa-3x mb-3 d-block text-gray"></i>
+                                <p class="smallest font-weight-bold uppercase letter-spacing-1">{{ __('Guest / Inactive Account') }}</p>
+                            </div>
+                        @endif
+                    </div>
                 </div>
-                <div class="card-body">
-                    @if($quote->quoted_price)
-                        <div class="text-center py-3">
-                            <p class="text-muted mb-1">{{ __('Quoted Price') }}</p>
-                            <h2 class="text-success font-weight-bold display-4">
-                                ${{ number_format($quote->quoted_price, 2) }}
-                            </h2>
-                            <p class="text-muted small">{{ __('Estimate provided by service partner') }}</p>
-                        </div>
-                    @else
-                        <div class="text-center py-4 text-muted">
-                            <i class="fas fa-hourglass-half fa-3x mb-3 d-block text-secondary"></i>
-                            <p>{{ __('No price has been quoted yet.') }}</p>
-                            <p class="small">{{ __('The partner has not responded to this request.') }}</p>
-                        </div>
-                    @endif
-                </div>
-            </div>
 
-        </div>
-
-        {{-- Right Sidebar: Customer Information --}}
-        <div class="col-md-4">
-            <div class="card card-outline card-dark">
-                <div class="card-header">
-                    <h3 class="card-title"><i class="fas fa-user-tag mr-1"></i> {{ __('Client Information') }}</h3>
-                </div>
-                <div class="card-body">
-                    @if($quote->user)
-                        <div class="text-center mb-3">
-                            <img src="https://ui-avatars.com/api/?name={{ urlencode($quote->user->name) }}&background=ffc107&color=fff"
-                                 class="img-circle elevation-2" style="width: 80px;" alt="{{ $quote->user->name }}">
-                            <h5 class="mt-2 mb-0">{{ $quote->user->name }}</h5>
-                            <small class="text-muted">{{ $quote->user->email }}</small>
+                {{-- Meta Info Card --}}
+                <div class="card card-premium shadow-premium border-0 overflow-hidden mb-4" style="border-radius: 24px;">
+                    <div class="card-header border-0 bg-white py-4 px-4">
+                        <h5 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0" style="letter-spacing: 1px;">
+                            <i class="fas fa-info-circle mr-2 text-primary opacity-50"></i> {{ __('Audit & Meta') }}
+                        </h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="px-4 py-3 border-bottom d-flex justify-content-between align-items-center">
+                            <span class="smallest font-weight-bold text-muted uppercase">Service Tier</span>
+                            <span class="smallest font-weight-bold text-dark">{{ $quote->service_package_id ? '#' . $quote->service_package_id : __('Standard') }}</span>
                         </div>
-                        <ul class="list-group list-group-unbordered mb-3">
-                            <li class="list-group-item">
-                                <b>{{ __('User ID') }}</b>
-                                <span class="float-right text-monospace">#{{ $quote->user_id }}</span>
-                            </li>
-                            <li class="list-group-item">
-                                <b>{{ __('Member Since') }}</b>
-                                <span class="float-right">{{ $quote->user->created_at->format('M Y') }}</span>
-                            </li>
-                        </ul>
-                        <a href="{{ route('admin.users.show', $quote->user_id) }}"
-                           class="btn btn-warning btn-block btn-sm">
-                            <i class="fas fa-external-link-alt"></i> {{ __('View User Profile') }}
-                        </a>
-                    @else
-                        <div class="text-center py-4 text-muted">
-                            <i class="fas fa-user-slash fa-3x mb-3 d-block text-gray"></i>
-                            <p>{{ __('Guest / Account Deleted') }}</p>
-                        </div>
-                    @endif
-                </div>
-            </div>
-
-            {{-- Meta Info Card --}}
-            <div class="card card-outline card-secondary">
-                <div class="card-header">
-                    <h3 class="card-title"><i class="fas fa-info-circle mr-1"></i> {{ __('Meta') }}</h3>
-                </div>
-                <div class="card-body p-0">
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item d-flex justify-content-between">
-                            <span class="text-muted">{{ __('Package') }}</span>
-                            <span>{{ $quote->service_package_id ? '#' . $quote->service_package_id : __('N/A') }}</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between">
-                            <span class="text-muted">{{ __('Viewed') }}</span>
+                        <div class="px-4 py-3 border-bottom d-flex justify-content-between align-items-center">
+                            <span class="smallest font-weight-bold text-muted uppercase">Review State</span>
                             <span>
                                 @if($quote->viewed_at)
-                                    <i class="fas fa-check text-success"></i> {{ $quote->viewed_at->diffForHumans() }}
+                                    <span class="badge badge-success-light text-success px-2 py-1 rounded-pill smallest font-weight-bold">
+                                        <i class="fas fa-check mr-1"></i> {{ $quote->viewed_at->diffForHumans() }}
+                                    </span>
                                 @else
-                                    <span class="badge badge-warning">{{ __('Unread') }}</span>
+                                    <span class="badge badge-warning-light text-warning px-2 py-1 rounded-pill smallest font-weight-bold">
+                                        <i class="fas fa-clock mr-1"></i> {{ __('Awaiting Review') }}
+                                    </span>
                                 @endif
                             </span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between">
-                            <span class="text-muted">{{ __('Last Updated') }}</span>
-                            <span>{{ $quote->updated_at->format('M d, Y') }}</span>
-                        </li>
-                    </ul>
-                </div>
-                <div class="card-footer bg-white">
-                    <form action="{{ route('admin.service-quotes.destroy', $quote->id) }}"
-                          method="POST"
-                          onsubmit="return confirm('{{ __('Permanently delete this quote request?') }}')">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-outline-danger btn-sm btn-block">
-                            <i class="fas fa-trash-alt"></i> {{ __('Delete Quote') }}
-                        </button>
-                    </form>
+                        </div>
+                        <div class="px-4 py-3 border-bottom d-flex justify-content-between align-items-center">
+                            <span class="smallest font-weight-bold text-muted uppercase">Last Pulse</span>
+                            <span class="smallest font-weight-bold text-dark">{{ $quote->updated_at->format('M d, Y') }}</span>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white border-0 py-4 px-4">
+                        <form action="{{ route('admin.service-quotes.destroy', $quote->id) }}"
+                              method="POST"
+                              id="delete-quote-form">
+                            @csrf
+                            @method('DELETE')
+                            <button type="button" class="btn btn-white btn-block rounded-pill border font-weight-bold smallest uppercase text-danger py-2" 
+                                    onclick="confirmDelete('delete-quote-form', 'Purge Quote Request?', 'This will permanently remove the inquiry from the registry.', 'Purge')">
+                                <i class="fas fa-trash-alt mr-1"></i> {{ __('Purge Registry Record') }}
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+@stop
+
+@push('css')
+<style>
+    .rounded-xl { border-radius: 16px !important; }
+    .bg-primary-soft { background: rgba(70, 165, 172, 0.05); }
+    .bg-success-soft { background: rgba(40, 167, 69, 0.05); }
+    .border-primary-soft { border-color: rgba(70, 165, 172, 0.1) !important; }
+    .border-success-soft { border-color: rgba(40, 167, 69, 0.1) !important; }
+    .text-monospace { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace !important; }
+</style>
+@endpush
+
+@section('js')
+@include('admin._partials._sweetalert')
 @stop

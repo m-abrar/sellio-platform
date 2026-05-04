@@ -44,9 +44,9 @@
                     {{-- Card 1: Principal & Entity Intelligence --}}
                     <div class="card card-premium shadow-premium border-0 mb-4" style="border-radius: 24px;">
                         <div class="card-header border-0 bg-white py-4 px-4">
-                            <h3 class="card-title font-weight-bold text-dark smallest text-uppercase letter-spacing-1 float-none">
+                            <h5 class="card-title font-weight-bold text-dark text-uppercase letter-spacing-1 float-none">
                                 <i class="fas fa-id-card mr-2 text-primary opacity-50"></i> Principal & Entity Linkage
-                            </h3>
+                            </h5>
                         </div>
                         <div class="card-body p-4 pt-0">
                             <div class="row">
@@ -110,9 +110,9 @@
                     {{-- Card 2: Financial Specification --}}
                     <div class="card card-premium shadow-premium border-0 mb-4" style="border-radius: 24px;">
                         <div class="card-header border-0 bg-white py-4 px-4">
-                            <h3 class="card-title font-weight-bold text-dark smallest text-uppercase letter-spacing-1 float-none">
+                            <h5 class="card-title font-weight-bold text-dark text-uppercase letter-spacing-1 float-none">
                                 <i class="fas fa-money-check-alt mr-2 text-primary opacity-50"></i> Transaction Specifications
-                            </h3>
+                            </h5>
                         </div>
                         <div class="card-body p-4 pt-0">
                             <div class="row">
@@ -195,9 +195,9 @@
                     {{-- Card 3: Internal Context & Raw Data --}}
                     <div class="card card-premium shadow-premium border-0" style="border-radius: 24px;">
                         <div class="card-header border-0 bg-white py-4 px-4">
-                            <h3 class="card-title font-weight-bold text-dark smallest text-uppercase letter-spacing-1 float-none">
+                            <h5 class="card-title font-weight-bold text-dark text-uppercase letter-spacing-1 float-none">
                                 <i class="fas fa-file-invoice mr-2 text-primary opacity-50"></i> Internal Context & Intelligence
-                            </h3>
+                            </h5>
                         </div>
                         <div class="card-body p-4 pt-0">
                             <div class="form-group mb-4">
@@ -231,7 +231,7 @@
                                 <div class="icon-circle bg-success-soft text-success mx-auto mb-3" style="width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
                                     <i class="fas fa-check-circle fa-2x"></i>
                                 </div>
-                                <h6 class="font-weight-bold text-dark text-uppercase letter-spacing-1 mb-1">Settled & Captured</h6>
+                                <h5 class="font-weight-bold text-dark text-uppercase smallest letter-spacing-1 mb-1">Settled & Captured</h5>
                                 <p class="text-muted smallest uppercase letter-spacing-1 mb-0">{{ $payment->paid_at->format('M d, Y @ H:i') }}</p>
                             </div>
                         </div>

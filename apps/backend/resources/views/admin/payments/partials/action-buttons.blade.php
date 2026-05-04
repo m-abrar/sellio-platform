@@ -1,8 +1,8 @@
 <div class="card card-premium shadow-sm border-0 mb-4 overflow-hidden">
     <div class="card-header bg-white border-0 py-4 px-4">
-        <h3 class="card-title font-weight-bold text-dark smallest text-uppercase letter-spacing-1">
+        <h5 class="card-title font-weight-bold text-dark smallest text-uppercase letter-spacing-1">
             <i class="fas fa-cog mr-2 text-primary opacity-50"></i> Lifecycle Management
-        </h3>
+        </h5>
     </div>
 
     <div class="card-body px-4 pb-4">

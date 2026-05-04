@@ -9,20 +9,18 @@
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-ticket-alt mr-2 text-primary"></i> Support Manifest #{{ $ticket->id }}
                 </h1>
-                <ol class="breadcrumb bg-transparent p-0 mt-2 small">
-                    <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item"><a href="{{ route('admin.tickets.index') }}">Support Queue</a></li>
-                    <li class="breadcrumb-item active">Ticket Details</li>
-                </ol>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Unified thread for resolution tracking, stakeholder communication, and audit logging.</p>
             </div>
             <div class="col-sm-4 text-right">
-                <a href="{{ route('admin.tickets.index') }}" class="btn btn-back shadow-sm rounded-pill px-4">
+                <a href="{{ route('admin.tickets.index') }}" class="btn btn-back shadow-sm rounded-pill px-4 py-2 font-weight-bold smallest uppercase letter-spacing-1">
                     <i class="fas fa-arrow-left mr-1"></i> Return to Queue
                 </a>
             </div>
         </div>
     </div>
+@stop
+
+@section('content_header_breadcrumbs')
 @stop
 
 @section('content')
@@ -34,9 +32,9 @@
         <div class="col-md-8">
             <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
                 <div class="card-header border-0 bg-white py-4 px-4">
-                    <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0" style="letter-spacing: 1px;">
+                    <h5 class="card-title font-weight-bold text-dark text-uppercase mb-0" style="letter-spacing: 1px;">
                         <i class="fas fa-comments mr-2 text-primary opacity-50"></i> Resolution Thread
-                    </h3>
+                    </h5>
                 </div>
                 <div class="card-body px-4 pb-4">
                     <!-- Issue Definition -->
@@ -110,9 +108,9 @@
             {{-- Protocol & Identity Card --}}
             <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
                 <div class="card-header border-0 bg-white py-4 px-4">
-                    <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0" style="letter-spacing: 1px;">
+                    <h5 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0" style="letter-spacing: 1px;">
                         <i class="fas fa-shield-alt mr-2 text-primary opacity-50"></i> Protocol & Meta
-                    </h3>
+                    </h5>
                 </div>
                 <div class="card-body p-0">
                     <div class="px-4 py-3 border-bottom d-flex justify-content-between align-items-center">

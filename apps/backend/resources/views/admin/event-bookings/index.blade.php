@@ -78,9 +78,9 @@
         </div>
 
         {{-- Main Table --}}
-        <div class="card card-premium overflow-hidden">
-            <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
-                <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1">
+        <div class="card card-premium shadow-premium border-0 overflow-hidden">
+            <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center justify-content-between">
+                <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">
                     <i class="fas fa-list-ul mr-2 text-primary opacity-50"></i> Ticketing Ledger
                 </h3>
             </div>
