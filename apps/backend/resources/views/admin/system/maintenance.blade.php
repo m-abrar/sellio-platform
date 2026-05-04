@@ -25,12 +25,27 @@
 <div class="container-fluid pb-5">
     @include('admin.alert')
 
+    {{-- System Maintenance Greeting --}}
+    <div class="card border-0 shadow-premium mb-5 overflow-hidden" style="border-radius: 24px;">
+        <div class="card-body p-0">
+            <div class="d-flex align-items-center p-3">
+                <div class="bg-primary d-flex align-items-center justify-content-center shadow-premium-lg" style="width: 100px; height: 100px; min-width: 100px; border-radius: 20px; opacity: 0.9;">
+                    <i class="fas fa-terminal text-white fa-2x"></i>
+                </div>
+                <div class="px-4">
+                    <h5 class="mb-1 font-weight-bold text-dark">Core Infrastructure Maintenance</h5>
+                    <p class="mb-0 text-muted smallest font-weight-bold text-uppercase letter-spacing-1">Execute foundational optimizations, atomic cache purging, and platform integrity checks.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="row">
         {{-- Main Operations Column --}}
         <div class="col-md-8">
             <div class="card border-0 shadow-premium overflow-hidden mb-4" style="border-radius: 24px;">
                 <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
-                    <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">
+                    <h3 class="card-title font-weight-bold text-dark text-uppercase small mb-0" style="letter-spacing: 1px;">
                         <i class="fas fa-cogs mr-1 text-primary opacity-50"></i> Foundational Optimization
                     </h3>
                 </div>
@@ -49,14 +64,14 @@
                     <div class="d-flex flex-wrap align-items-center">
                         <form action="{{ route('admin.system.optimize') }}" method="POST" class="mr-3 mb-2">
                             @csrf
-                            <button type="submit" class="btn btn-primary rounded-pill px-4 font-weight-bold">
-                                <i class="fas fa-bolt mr-2"></i> OPTIMIZE & CACHE ALL
+                            <button type="submit" class="btn btn-primary rounded-pill px-4 font-weight-bold smallest uppercase letter-spacing-1">
+                                <i class="fas fa-bolt mr-2"></i> Optimize & Cache All
                             </button>
                         </form>
                         <form action="{{ route('admin.system.storage.link') }}" method="POST" class="mb-2">
                             @csrf
-                            <button type="submit" class="btn btn-outline-dark rounded-pill px-4 font-weight-bold">
-                                <i class="fas fa-link mr-2"></i> FIX STORAGE LINK
+                            <button type="submit" class="btn btn-outline-dark rounded-pill px-4 font-weight-bold smallest uppercase letter-spacing-1">
+                                <i class="fas fa-link mr-2"></i> Fix Storage Link
                             </button>
                         </form>
                     </div>
@@ -84,8 +99,8 @@
                             <p class="smallest text-muted mb-3">{{ $item['desc'] }}</p>
                             <form action="{{ route('admin.system.' . $item['id'] . '.clear') }}" method="POST">
                                 @csrf
-                                <button type="submit" class="btn btn-{{ $item['color'] }}-soft btn-purge shadow-sm">
-                                    <i class="fas fa-trash-alt"></i> PURGE {{ strtoupper($item['id']) }}
+                                <button type="submit" class="btn btn-{{ $item['color'] }}-soft btn-purge rounded-pill px-4 font-weight-bold smallest uppercase letter-spacing-1">
+                                    <i class="fas fa-trash-alt mr-1"></i> Purge {{ $item['id'] }}
                                 </button>
                             </form>
                         </div>
@@ -111,8 +126,8 @@
                                 <div class="col-md-3 text-right">
                                     <form action="{{ route('admin.system.media.regenerate') }}" method="POST">
                                         @csrf
-                                        <button type="submit" class="btn btn-primary rounded-pill px-4 font-weight-bold smallest">
-                                            REGENERATE
+                                        <button type="submit" class="btn btn-primary rounded-pill px-4 font-weight-bold smallest uppercase letter-spacing-1">
+                                            <i class="fas fa-sync-alt mr-1"></i> Regenerate
                                         </button>
                                     </form>
                                 </div>
@@ -130,7 +145,7 @@
                     <div class="position-absolute" style="top: -20px; right: -20px; opacity: 0.05; font-size: 8rem; transform: rotate(-15deg);">
                         <i class="fas fa-tools"></i>
                     </div>
-                    <h5 class="font-weight-bold text-white mb-3 smallest text-uppercase letter-spacing-1">
+                    <h5 class="font-weight-bold text-white mb-3 small text-uppercase" style="letter-spacing: 1px;">
                         <i class="fas fa-info-circle mr-2 text-warning"></i> Operational Guide
                     </h5>
                     <p class="smallest text-white-50 mb-3 font-weight-bold uppercase" style="line-height: 1.6;">
@@ -185,5 +200,17 @@
         .card:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important; }
         .bg-dark-light { background: rgba(255,255,255,0.05); }
         .opacity-75 { opacity: 0.75; }
+        
+        .btn-purge {
+            border: 1px solid rgba(0,0,0,0.05) !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02) !important;
+        }
+        .btn-purge:hover {
+            transform: translateY(-2px);
+            filter: brightness(0.98);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05) !important;
+            border-color: rgba(0,0,0,0.1) !important;
+        }
     </style>
 @stop

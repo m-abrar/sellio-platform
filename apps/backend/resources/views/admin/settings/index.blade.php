@@ -27,11 +27,11 @@
     {{-- Global Registry Greeting --}}
     <div class="card border-0 shadow-premium mb-5 overflow-hidden" style="border-radius: 24px;">
         <div class="card-body p-0">
-            <div class="d-flex align-items-stretch">
-                <div class="bg-primary px-5 d-flex align-items-center justify-content-center" style="min-width: 120px; opacity: 0.9;">
-                    <i class="fas fa-microchip text-white fa-2x shadow-sm"></i>
+            <div class="d-flex align-items-center p-3">
+                <div class="bg-primary d-flex align-items-center justify-content-center shadow-premium-lg" style="width: 100px; height: 100px; min-width: 100px; border-radius: 20px; opacity: 0.9;">
+                    <i class="fas fa-microchip text-white fa-2x"></i>
                 </div>
-                <div class="p-4">
+                <div class="px-4">
                     <h5 class="mb-1 font-weight-bold text-dark">Configuration Control Center</h5>
                     <p class="mb-0 text-muted smallest font-weight-bold text-uppercase letter-spacing-1">Centralized management for core system engines, branding assets, and security protocols.</p>
                 </div>

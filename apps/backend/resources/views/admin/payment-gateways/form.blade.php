@@ -15,9 +15,7 @@
                 </p>
             </div>
             <div class="col-sm-4 text-right">
-                <a href="{{ route('admin.payment-gateways.index') }}" class="btn btn-back shadow-sm px-4">
-                    <i class="fas fa-arrow-left mr-1"></i> BACK TO PROVIDERS
-                </a>
+                @include('admin._partials._back-button', ['route' => 'admin.payment-gateways.index', 'label' => 'PROVIDERS'])
             </div>
         </div>
     </div>
@@ -100,8 +98,8 @@
                         </div>
                     </div>
                     <div class="card-footer bg-white border-0 py-4 px-4 text-right">
-                        <button type="submit" class="btn btn-primary rounded-pill px-5 font-weight-bold">
-                            <i class="fas fa-save mr-2"></i> COMMIT PROVIDER CONFIGURATION
+                        <button type="submit" class="btn btn-primary rounded-pill px-5 font-weight-bold smallest uppercase letter-spacing-1">
+                            <i class="fas fa-save mr-2"></i> Commit Provider Configuration
                         </button>
                     </div>
                 </div>
@@ -111,7 +109,7 @@
             <div class="col-md-4">
                 <div class="card border-0 shadow-premium mb-4" style="border-radius: 20px; overflow: hidden;">
                     <div class="card-header bg-white border-0 py-3 px-4">
-                        <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
+                        <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1">
                             <i class="fas fa-info-circle mr-2 text-primary opacity-50"></i> Registry Details
                         </h3>
                     </div>

@@ -12,15 +12,8 @@
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Structural editor for <span class="text-primary font-weight-bold">{{ $menu->title }}</span> ({{ $menu->theme_key }} • {{ $menu->location_key }})</p>
             </div>
-            <div class="col-sm-6 text-right">
-                <button type="submit" form="menu-update-form" class="btn btn-primary btn-sm rounded-pill px-4 font-weight-bold">
-                    <i class="fas fa-save mr-1"></i> DEPLOY STRUCTURE
-                </button>
-                <ol class="breadcrumb float-sm-right bg-transparent p-0 mt-3 small">
-                    <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item"><a href="{{ route('admin.menu.index') }}">Menu Registry</a></li>
-                    <li class="breadcrumb-item active">Architect</li>
-                </ol>
+            <div class="col-sm-6 d-flex align-items-center justify-content-end">
+                @include('admin._partials._back-button', ['label' => 'REGISTRY'])
             </div>
         </div>
     </div>
@@ -35,10 +28,35 @@
         @csrf
         @method('DELETE')
     </form>
-
     <div class="row">
-        {{-- Card for Existing Menu Items (Structure Editor) --}}
         <div class="col-md-8">
+            <div class="card card-premium shadow-premium mb-4 overflow-hidden">
+                <div class="card-header bg-white border-0 py-3 px-4">
+                    <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">Add Link Component</h3>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="form-group mb-0">
+                                <label class="smallest font-weight-bold text-secondary text-uppercase mb-2">Display Label</label>
+                                <input type="text" id="new_title" class="form-control" placeholder="e.g. Contact Support" style="border-radius: 12px; height: 45px;">
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group mb-0">
+                                <label class="smallest font-weight-bold text-secondary text-uppercase mb-2">Target URL / Route</label>
+                                <input type="text" id="new_url" class="form-control" placeholder="e.g. /support or https://..." style="border-radius: 12px; height: 45px;">
+                            </div>
+                        </div>
+                        <div class="col-md-2 d-flex align-items-end">
+                            <button type="button" id="add-new-item" class="btn btn-primary btn-block rounded-pill h-45 font-weight-bold shadow-sm" style="height: 45px;">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
                 <div class="card-header bg-white py-4 px-4 border-0">
                     <h3 class="card-title font-weight-bold text-dark mb-0">
@@ -64,26 +82,38 @@
             </div>
         </div>
         
-        {{-- Card for Adding New Menu Items --}}
+        {{-- Right Sidebar Actions --}}
         <div class="col-md-4">
-            <div class="card border-0 shadow-sm glass-card mb-4" style="border-radius: 20px;">
-                <div class="card-header bg-white border-0 py-3 px-4">
-                    <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">Add Link Component</h3>
+            <div class="sticky-top" style="top: 20px;">
+                {{-- Deployment Intelligence Card --}}
+                <div class="card card-premium overflow-hidden shadow-premium mb-4">
+                <div class="card-header bg-white d-flex align-items-center py-3 px-4 border-0">
+                    <h3 class="card-title text-dark mb-0 font-weight-bold smallest text-uppercase letter-spacing-1">
+                        <i class="fas fa-rocket mr-2 text-primary opacity-50"></i> Protocol & Actions
+                    </h3>
                 </div>
-                <div class="card-body p-4">
-                    <div class="form-group mb-3">
-                        <label class="small font-weight-bold text-secondary text-uppercase mb-2">Display Label</label>
-                        <input type="text" id="new_title" class="form-control" placeholder="e.g. Contact Support" style="border-radius: 12px; height: 45px;">
+                
+                <div class="card-body bg-white py-4 px-4">
+                    <div class="action-buttons-group">
+                        <button type="submit" form="menu-update-form" class="btn btn-primary btn-block rounded-pill font-weight-bold py-3 smallest mb-3 uppercase letter-spacing-1 shadow-premium-lg">
+                            <i class="fas fa-save mr-2"></i> SYNCHRONIZE STRUCTURE
+                        </button>
                     </div>
-                    <div class="form-group mb-4">
-                        <label class="small font-weight-bold text-secondary text-uppercase mb-2">Target URL / Route</label>
-                        <input type="text" id="new_url" class="form-control" placeholder="e.g. /support or https://..." style="border-radius: 12px; height: 45px;">
-                    </div>
-                    <button type="button" id="add-new-item" class="btn btn-primary btn-block rounded-pill py-2 font-weight-bold shadow-sm">
-                        <i class="fas fa-plus-circle mr-2"></i> STAGE TO CANVAS
-                    </button>
+                    <p class="text-muted smallest mt-2 mb-0 text-center">
+                        <i class="fas fa-info-circle mr-1"></i> Finalize all hierarchical changes before deployment.
+                    </p>
                 </div>
+
+                @if(isset($menu->updated_at))
+                    <div class="card-footer bg-light border-top-0 text-center py-2">
+                        <small class="text-muted smallest text-uppercase letter-spacing-1">
+                            <i class="far fa-clock mr-1"></i> 
+                            Last Sync: {{ $menu->updated_at->format('M d, H:i') }}
+                        </small>
+                    </div>
+                @endif
             </div>
+
 
             <div class="bg-primary-soft p-4 rounded-xl border border-primary-soft shadow-xs">
                 <h6 class="font-weight-bold text-primary mb-2 text-uppercase smallest letter-spacing-1">Editor Intelligence</h6>
@@ -93,13 +123,14 @@
             </div>
         </div>
     </div>
+    </div>
 </div>
 
 {{-- MODAL FOR EDITING SINGLE MENU ITEM --}}
 <div class="modal fade" id="editItemModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
+        <div class="modal-content border-0 shadow-premium" style="border-radius: 24px;">
+            <div class="modal-header border-0 pt-4 px-4">
                 <h5 class="modal-title">Edit Component Details</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>

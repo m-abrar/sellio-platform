@@ -98,9 +98,8 @@ need same size of icon in header card
 
 ------------------------
 
-update the theme layout to something professional and premium, that we are already using in other places, and replace the old ugly layout.
+- [x] **Content Engine Layout**: Upgraded to premium `card-premium` architecture with standardized headers and deployment intelligence sidebar.
 
-http://127.0.0.1:8000/admin/content/home/default
 
 
 ---------------
@@ -111,7 +110,7 @@ back button is ugly
 -------------------
 
 http://127.0.0.1:8000/admin/system/maintenance
-the purge button css needs fixes
+the purge button styling  needs fixes
 
 --------------------------
 
@@ -134,9 +133,8 @@ http://127.0.0.1:8000/admin/payment-gateways
 http://127.0.0.1:8000/admin/content
 need softer shadow
 
-http://127.0.0.1:8000/admin/payment-gateways
 http://127.0.0.1:8000/admin/settings
-need same size of icon in header card
+need same size of icon in header card as the other pages
 ---------------
 http://127.0.0.1:8000/admin/payment-gateways
 http://127.0.0.1:8000/admin/themes

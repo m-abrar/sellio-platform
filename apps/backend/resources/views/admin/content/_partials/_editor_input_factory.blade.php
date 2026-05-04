@@ -4,7 +4,7 @@
         <textarea 
             name="values[{{ $item->id }}]" 
             id="setting-{{ $item->id }}"
-            class="form-control border-light-gray"
+            class="form-control form-control-premium border-light"
             rows="3" 
             placeholder="Enter content..."
         >{{ old('values.'.$item->id, $item->value) }}</textarea>
@@ -13,21 +13,22 @@
     @case('logo')
     @case('file')
     @case('image')
-        <div class="bg-light p-3 rounded border border-dashed">
+        <div class="bg-light-soft p-2 rounded-xl border border-dashed border-light">
             @include('admin._partials._image-uploader', [
                 'name' => \App\Models\PageContent::PRIMARY_MEDIA,
                 'label' => 'Upload Asset',
                 'multiple' => false,
                 'model' => \App\Models\PageContent::class,
                 'id' => $item->id ?? null,
+                'noCard' => true
             ])
         </div>
         @break
 
     @case('color')
-        <div class="d-flex align-items-center">
-            <input type="color" name="values[{{ $item->id }}]" value="{{ old('values.'.$item->id, $item->value) }}" class="form-control form-control-color mr-3 border-0">
-            <code class="text-muted">{{ old('values.'.$item->id, $item->value) }}</code>
+        <div class="d-flex align-items-center bg-light p-2 rounded-pill px-3" style="width: fit-content;">
+            <input type="color" name="values[{{ $item->id }}]" value="{{ old('values.'.$item->id, $item->value) }}" class="form-control form-control-color border-0 p-0 mr-3" style="width: 32px; height: 32px; border-radius: 50%;">
+            <code class="text-primary font-weight-bold smallest">{{ old('values.'.$item->id, $item->value) }}</code>
         </div>
         @break
 
@@ -37,7 +38,7 @@
             name="values[{{ $item->id }}]" 
             value="{{ old('values.'.$item->id, $item->value) }}"
             id="setting-{{ $item->id }}"
-            class="form-control border-light-gray"
+            class="form-control form-control-premium border-light"
             placeholder="Enter value..."
         >
 @endswitch

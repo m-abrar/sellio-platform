@@ -25,13 +25,13 @@
     {{-- Financial Security Protocol --}}
     <div class="card border-0 shadow-premium mb-4 overflow-hidden" style="border-radius: 20px;">
         <div class="card-body p-0">
-            <div class="d-flex align-items-stretch">
-                <div class="bg-success px-4 d-flex align-items-center justify-content-center" style="min-width: 80px; opacity: 0.9;">
-                    <i class="fas fa-shield-alt text-white fa-2x shadow-sm"></i>
+            <div class="d-flex align-items-center p-3">
+                <div class="bg-success d-flex align-items-center justify-content-center shadow-premium-lg" style="width: 100px; height: 100px; min-width: 100px; border-radius: 20px; opacity: 0.9;">
+                    <i class="fas fa-shield-alt text-white fa-2x"></i>
                 </div>
-                <div class="p-4">
-                    <h6 class="mb-1 font-weight-bold text-dark smallest text-uppercase letter-spacing-1">Transaction Security Protocol</h6>
-                    <p class="mb-0 text-muted smallest font-weight-bold uppercase">All API keys are encrypted at rest. Switch to <span class="badge badge-success-light text-success px-2 py-0 font-weight-bold">Live Mode</span> only after verifying sandbox transactions.</p>
+                <div class="px-4">
+                    <h5 class="mb-1 font-weight-bold text-dark">Transaction Security Protocol</h5>
+                    <p class="mb-0 text-muted smallest font-weight-bold text-uppercase letter-spacing-1">All API keys are encrypted at rest. Switch to <span class="text-success font-weight-bold">Live Mode</span> only after verifying sandbox handshakes.</p>
                 </div>
             </div>
         </div>
@@ -42,7 +42,7 @@
     {{-- Installed Processors Card --}}
     <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
-            <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">
+            <h3 class="card-title font-weight-bold text-dark text-uppercase small mb-0" style="letter-spacing: 1px;">
                 <i class="fas fa-network-wired mr-1 text-primary opacity-50"></i> Active Integration Ledger
             </h3>
             <div class="card-tools ml-auto">

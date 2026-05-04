@@ -61,31 +61,14 @@
     </div>
 
     <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
-        <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
+        <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center justify-content-between">
             <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">
-                Support Operations Ledger
+                <i class="fas fa-layer-group mr-2 text-primary opacity-50"></i> Support Operations Ledger
             </h3>
             <div class="card-tools ml-auto">
-                <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase mr-2">
-                    <i class="fas fa-history mr-1"></i> LOGGED CASES
+                <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase">
+                    <i class="fas fa-history mr-1"></i> LOGGED CASES: {{ $tickets->total() }}
                 </span>
-            </div>
-            <div id="bulk-actions-container" class="d-none animate__animated animate__fadeIn">
-                <div class="dropdown d-inline-block">
-                    <button class="btn btn-primary btn-sm dropdown-toggle rounded-pill px-4 shadow-sm font-weight-bold" type="button" data-toggle="dropdown">
-                        <i class="fas fa-tasks mr-1"></i> BULK ACTIONS (<span id="selected-count">0</span>)
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-right shadow-premium border-0" style="border-radius: 12px; min-width: 200px;">
-                        <h6 class="dropdown-header text-uppercase smallest letter-spacing-1">Update Status</h6>
-                        <a class="dropdown-item py-2 smallest font-weight-bold" href="#" onclick="handleBulkUpdate('status', 'open')"><i class="fas fa-envelope-open mr-2 text-success"></i> Mark as Open</a>
-                        <a class="dropdown-item py-2 smallest font-weight-bold" href="#" onclick="handleBulkUpdate('status', 'in-progress')"><i class="fas fa-spinner mr-2 text-info"></i> Mark In-Progress</a>
-                        <a class="dropdown-item py-2 smallest font-weight-bold" href="#" onclick="handleBulkUpdate('status', 'closed')"><i class="fas fa-archive mr-2 text-dark"></i> Mark as Closed</a>
-                        <div class="dropdown-divider"></div>
-                        <h6 class="dropdown-header text-uppercase smallest letter-spacing-1">Change Priority</h6>
-                        <a class="dropdown-item py-2 smallest font-weight-bold text-danger" href="#" onclick="handleBulkUpdate('priority', 'urgent')"><i class="fas fa-fire mr-2"></i> Set Urgent</a>
-                        <a class="dropdown-item py-2 smallest font-weight-bold text-warning" href="#" onclick="handleBulkUpdate('priority', 'high')"><i class="fas fa-bolt mr-2"></i> Set High</a>
-                    </div>
-                </div>
             </div>
         </div>
         
@@ -203,6 +186,61 @@
         </div>
     </div>
 </div>
+
+{{-- Premium Floating Action Bar --}}
+<div id="bulk-floating-bar" class="bulk-floating-bar d-none">
+    <div class="container-fluid h-100">
+        <div class="d-flex align-items-center justify-content-between h-100 px-4">
+            <div class="d-flex align-items-center">
+                <div class="selection-count-badge mr-4">
+                    <span id="selected-count">0</span> SELECTED
+                </div>
+                <div class="divider-v"></div>
+                <div class="d-flex" style="gap: 15px;">
+                    <div class="btn-group dropup">
+                        <button type="button" class="btn btn-action-pill dropdown-toggle" data-toggle="dropdown">
+                            <i class="fas fa-toggle-on mr-2"></i> STATUS
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right shadow-premium-lg border-0 mb-3" style="border-radius: 15px;">
+                            <a class="dropdown-item py-3 px-4 font-weight-bold smallest uppercase letter-spacing-1" href="javascript:void(0)" onclick="handleBulkUpdate('status', 'open')">
+                                <i class="fas fa-envelope-open mr-2 text-success"></i> Re-Open Tickets
+                            </a>
+                            <a class="dropdown-item py-3 px-4 font-weight-bold smallest uppercase letter-spacing-1" href="javascript:void(0)" onclick="handleBulkUpdate('status', 'in-progress')">
+                                <i class="fas fa-spinner mr-2 text-info"></i> Shift to In-Progress
+                            </a>
+                            <a class="dropdown-item py-3 px-4 font-weight-bold smallest uppercase letter-spacing-1" href="javascript:void(0)" onclick="handleBulkUpdate('status', 'closed')">
+                                <i class="fas fa-archive mr-2 text-dark"></i> Close & Archive
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="btn-group dropup">
+                        <button type="button" class="btn btn-action-pill dropdown-toggle" data-toggle="dropdown">
+                            <i class="fas fa-bolt mr-2"></i> PRIORITY
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right shadow-premium-lg border-0 mb-3" style="border-radius: 15px;">
+                            <a class="dropdown-item py-3 px-4 font-weight-bold smallest uppercase letter-spacing-1 text-danger" href="javascript:void(0)" onclick="handleBulkUpdate('priority', 'urgent')">
+                                <i class="fas fa-fire mr-2"></i> Escalate to Urgent
+                            </a>
+                            <a class="dropdown-item py-3 px-4 font-weight-bold smallest uppercase letter-spacing-1 text-warning" href="javascript:void(0)" onclick="handleBulkUpdate('priority', 'high')">
+                                <i class="fas fa-arrow-up mr-2"></i> Elevate to High
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="d-flex align-items-center">
+                <button type="button" class="btn btn-danger-pill mr-3" onclick="handleBulkUpdate('action', 'delete')">
+                    <i class="fas fa-trash-alt mr-2"></i> PURGE SELECTION
+                </button>
+                <button type="button" class="btn btn-close-bar" id="deselectAll">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 @stop
 
 @push('css')
@@ -213,6 +251,101 @@
     #tickets-table thead th { letter-spacing: 1px; color: #8898aa; }
     .btn-primary-soft { background: rgba(70, 165, 172, 0.1); color: #46a5ac; border: 1px solid rgba(70, 165, 172, 0.2); }
     .btn-primary-soft:hover { background: #46a5ac; color: #fff; }
+
+    /* Floating Action Bar Styling */
+    .bulk-floating-bar {
+        position: fixed;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 90%;
+        max-width: 900px;
+        height: 80px;
+        background: rgba(15, 23, 42, 0.9);
+        backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 40px;
+        z-index: 1060;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        color: #fff;
+    }
+
+    .selection-count-badge {
+        background: var(--primary);
+        color: #fff;
+        padding: 8px 20px;
+        border-radius: 30px;
+        font-weight: 800;
+        font-size: 0.75rem;
+        letter-spacing: 1px;
+    }
+
+    .divider-v {
+        width: 1px;
+        height: 30px;
+        background: rgba(255, 255, 255, 0.1);
+        margin: 0 25px;
+    }
+
+    .btn-action-pill {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #fff;
+        border-radius: 30px;
+        padding: 8px 25px;
+        font-weight: 700;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        transition: all 0.3s ease;
+    }
+
+    .btn-action-pill:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-danger-pill {
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.2);
+        color: #ef4444;
+        border-radius: 30px;
+        padding: 8px 25px;
+        font-weight: 700;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        transition: all 0.3s ease;
+    }
+
+    .btn-danger-pill:hover {
+        background: #ef4444;
+        color: #fff;
+    }
+
+    .btn-close-bar {
+        background: transparent;
+        border: none;
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 1.2rem;
+        transition: color 0.3s ease;
+        padding: 10px;
+    }
+
+    .btn-close-bar:hover {
+        color: #fff;
+    }
+
+    /* Animation */
+    .animate__fadeInUpCustom {
+        animation: fadeInUpCustom 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes fadeInUpCustom {
+        from { opacity: 0; transform: translate(-50%, 50px); }
+        to { opacity: 1; transform: translate(-50%, 0); }
+    }
 </style>
 @endpush
 
@@ -245,22 +378,29 @@
 
         // Bulk Selection Logic
         const $selectAll = $('#selectAll');
-        const $bulkContainer = $('#bulk-actions-container');
+        const $bulkBar = $('#bulk-floating-bar');
         const $selectedCount = $('#selected-count');
 
         function updateBulkUI() {
             const checkedCount = $('.ticket-checkbox:checked').length;
             if (checkedCount > 0) {
-                $bulkContainer.removeClass('d-none').addClass('animate__fadeIn');
+                $bulkBar.removeClass('d-none').addClass('animate__fadeInUpCustom');
                 $selectedCount.text(checkedCount);
             } else {
-                $bulkContainer.addClass('d-none');
+                $bulkBar.addClass('d-none');
             }
         }
 
         // Delegated Select All
         $(document).on('change', '#selectAll', function() {
             $('.ticket-checkbox').prop('checked', this.checked);
+            updateBulkUI();
+        });
+
+        // Deselect All Button in Bar
+        $(document).on('click', '#deselectAll', function() {
+            $('.ticket-checkbox').prop('checked', false);
+            $('#selectAll').prop('checked', false);
             updateBulkUI();
         });
 

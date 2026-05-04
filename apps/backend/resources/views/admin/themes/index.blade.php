@@ -24,6 +24,21 @@
 <div class="container-fluid">
     @include('admin.alert')
 
+    {{-- Theme Engine Greeting --}}
+    <div class="card border-0 shadow-premium mb-5 overflow-hidden" style="border-radius: 24px;">
+        <div class="card-body p-0">
+            <div class="d-flex align-items-center p-3">
+                <div class="bg-indigo d-flex align-items-center justify-content-center shadow-premium-lg" style="width: 100px; height: 100px; min-width: 100px; border-radius: 20px; opacity: 0.9;">
+                    <i class="fas fa-magic text-white fa-2x"></i>
+                </div>
+                <div class="px-4">
+                    <h5 class="mb-1 font-weight-bold text-dark">Visual Identity Engine</h5>
+                    <p class="mb-0 text-muted smallest font-weight-bold text-uppercase letter-spacing-1">Manage vertical-specific storefront architectures, liquid templates, and multi-tenant skins.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     {{-- SECTION 1: ACTIVE THEME --}}
     @if($activeTheme)
     <div class="mb-5">
@@ -248,18 +263,29 @@
 
     /* Navigation */
     .vertical-theme-nav .nav-link {
-        border-radius: 10px;
-        color: #495057;
-        font-weight: 600;
-        transition: all 0.2s;
+        border-radius: 14px;
+        color: #64748b;
+        font-weight: 700;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         border: 1px solid transparent;
+        padding: 0.8rem 1.2rem;
+        margin-bottom: 8px;
     }
-    .vertical-theme-nav .nav-link:hover { background: rgba(0,0,0,0.03); }
-    .vertical-theme-nav .nav-link.active {
+    .vertical-theme-nav .nav-link:hover { 
         background: #fff !important;
-        color: #007bff !important;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-        border-color: #dee2e6;
+        color: var(--primary) !important;
+        box-shadow: 0 10px 15px -3px rgba(var(--primary-rgb), 0.1), 0 4px 6px -2px rgba(var(--primary-rgb), 0.05) !important;
+        border-color: var(--primary-soft) !important;
+        transform: translateX(5px);
+    }
+    .vertical-theme-nav .nav-link.active {
+        background: var(--primary-soft) !important;
+        color: var(--primary) !important;
+        box-shadow: none !important;
+        transform: translateX(8px);
+    }
+    .vertical-theme-nav .nav-link.active i {
+        transform: scale(1.2);
     }
 
     /* Actions Overlay */

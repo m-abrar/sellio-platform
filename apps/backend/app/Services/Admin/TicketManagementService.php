@@ -42,6 +42,10 @@ class TicketManagementService
      */
     public function bulkUpdate(array $ids, string $type, string $value): void
     {
-        Ticket::whereIn('id', $ids)->update([$type => $value]);
+        if ($type === 'action' && $value === 'delete') {
+            Ticket::whereIn('id', $ids)->delete();
+        } else {
+            Ticket::whereIn('id', $ids)->update([$type => $value]);
+        }
     }
 }

@@ -4,22 +4,29 @@
 @section('title', 'Content Engine | ' . Str::of($theme_key)->replace('_', ' ')->title())
 
 @section('content_header')
-    <div class="d-flex align-items-center justify-content-between mb-2">
-        <h1 class="font-weight-bold text-dark">
-            <i class="fas fa-edit mr-2 text-primary"></i> 
-            Content Engine: {{ ucfirst($page) }}
-            <small class="d-block d-md-inline-block ml-md-3 text-muted lead">Theme Architecture</small>
-        </h1>
-        <div class="d-none d-md-block">
-            <a href="{{ route('admin.content.index') }}" class="btn btn-outline-secondary btn-sm rounded-pill px-3 shadow-sm transition-hover">
-                <i class="fas fa-arrow-left mr-1"></i> Back to Fleet
-            </a>
+    <div class="container-fluid pt-4">
+        <div class="row mb-4 align-items-center">
+            <div class="col-sm-8">
+                <h1 class="m-0 text-dark font-weight-bold">
+                    <i class="fas fa-edit mr-2 text-primary opacity-50"></i> Content Engine: {{ ucfirst($page) }}
+                </h1>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">
+                    <i class="fas fa-palette mr-1 text-primary"></i> Theme Architecture | {{ Str::of($theme_key)->replace('_', ' ')->title() }}
+                </p>
+            </div>
+            <div class="col-sm-4 text-right">
+                @include('admin._partials._back-button', ['route' => 'admin.content.index', 'label' => 'FLEET MANAGER'])
+            </div>
         </div>
     </div>
 @stop
 
+@section('css')
+@include('admin._partials._toggle-card-css')
+@endsection
+
 @section('content')
-<div class="dashboard-blueprint pb-5">
+<div class="container-fluid pb-5">
     @include('admin.alert')
 
     <form method="POST" action="{{ route('admin.content.bulk_update') }}" enctype="multipart/form-data">
@@ -30,17 +37,15 @@
             <div class="col-md-8">
                 {{-- Loop through settings grouped by section --}}
                 @foreach ($settings as $sectionName => $sectionSettings)
-                    <div class="section-header {{ !$loop->first ? 'mt-5' : '' }}">
-                        <span class="dot bg-primary"></span>
-                        <h5 class="text-uppercase font-weight-bold text-secondary">
-                            {{ ucfirst(str_replace('_', ' ', $sectionName)) }} Configuration
-                        </h5>
-                    </div>
-
-                    <div class="card border-0 shadow-sm mb-4 overflow-hidden">
+                    <div class="card card-premium border-0 shadow-premium overflow-hidden mb-5">
+                        <div class="card-header bg-white py-4 px-4 border-0 d-flex align-items-center">
+                            <h3 class="card-title font-weight-bold text-dark text-uppercase small mb-0" style="letter-spacing: 1px;">
+                                <i class="fas fa-layer-group mr-2 text-primary opacity-50"></i> {{ str_replace('_', ' ', $sectionName) }} Configuration
+                            </h3>
+                        </div>
                         <div class="card-body p-0">
                             <div class="table-responsive">
-                                <table class="table table-hover align-middle mb-0">
+                                <table class="table table-hover table-premium align-middle mb-0">
                                     <thead class="bg-light">
                                         <tr>
                                             <th style="width: 35%" class="border-0 text-uppercase small font-weight-bold text-muted px-4 py-3">Property</th>
@@ -49,10 +54,10 @@
                                     </thead>
                                     <tbody>
                                         @foreach ($sectionSettings as $item)
-                                            <tr class="transition-hover">
+                                            <tr class="transition-all">
                                                 <td class="px-4 py-4 border-0">
                                                     <div class="d-flex align-items-center">
-                                                        <div class="icon-circle bg-primary-light text-primary mr-3" style="width: 35px; height: 35px; font-size: 0.8rem;">
+                                                        <div class="icon-square bg-light text-primary mr-3 shadow-xs d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; border-radius: 10px;">
                                                             <i class="fas {{ $item->input_type === 'textarea' ? 'fa-align-left' : ($item->input_type === 'image' ? 'fa-image' : 'fa-pen-fancy') }}"></i>
                                                         </div>
                                                         <div>
@@ -79,39 +84,46 @@
             {{-- SIDEBAR CONTROL PANEL --}}
             <div class="col-md-4">
                 <div class="sticky-top" style="top: 20px;">
-                    <div class="card border-0 shadow-sm bg-dark overflow-hidden mb-4">
-                        <div class="card-header border-0 bg-transparent py-3" style="border-bottom: 3px solid #3498db !important;">
-                            <h6 class="m-0 font-weight-bold text-white text-uppercase" style="letter-spacing: 1px;">
-                                <i class="fas fa-layer-group mr-2 text-info"></i>Deployment Context
-                            </h6>
+                    {{-- Deployment Intelligence --}}
+                    <div class="card card-premium border-0 shadow-premium overflow-hidden mb-4">
+                        <div class="card-header bg-white py-3 px-4 border-0">
+                            <h3 class="card-title text-dark font-weight-bold text-uppercase smallest mb-0" style="letter-spacing: 1px;">
+                                <i class="fas fa-rocket mr-2 text-primary opacity-50"></i> Protocol & Actions
+                            </h3>
                         </div>
-                        <div class="card-body bg-white py-4 text-center">
-                             <div class="mb-3">
-                                <span class="badge badge-pill badge-primary-light text-primary px-4 py-2 border">
-                                    {{ Str::of($theme_key)->replace('_', ' ')->title() }}
+                        <div class="card-body bg-white py-4 px-4">
+                             <div class="mb-4 pb-2 border-bottom">
+                                <label class="d-block smallest font-weight-bold text-muted mb-2 text-uppercase letter-spacing-1">Active Architecture</label>
+                                <span class="badge badge-primary-light text-primary px-3 py-2 font-weight-bold rounded-pill" style="font-size: 0.7rem;">
+                                    <i class="fas fa-palette mr-1"></i> {{ strtoupper(str_replace('_', ' ', $theme_key)) }}
                                 </span>
                              </div>
-                             <p class="text-muted small">You are currently editing the global content for the <strong>{{ $page }}</strong> view.</p>
-                             
-                             <hr>
 
-                             <button type="submit" class="btn btn-primary btn-block btn-lg shadow-sm font-weight-bold py-3 text-uppercase" style="letter-spacing: 1px;">
-                                <i class="fas fa-save mr-2"></i> Publish Changes
-                            </button>
+                             <div class="action-buttons-group">
+                                <button type="submit" class="btn btn-primary btn-block rounded-pill font-weight-bold py-3 smallest mb-3 uppercase letter-spacing-1">
+                                    <i class="fas fa-save mr-2"></i> DEPLOY GLOBAL CONTENT
+                                </button>
+                                
+                                <a href="{{ route('admin.content.index') }}" class="btn btn-light btn-block rounded-pill font-weight-bold smallest py-2 text-muted border uppercase">
+                                    <i class="fas fa-times mr-1"></i> Cancel Changes
+                                </a>
+                             </div>
                         </div>
                         <div class="card-footer bg-light border-0 text-center py-2">
-                            <small class="text-muted font-weight-bold uppercase" style="font-size: 10px;">
-                                <i class="fas fa-info-circle mr-1"></i> Live Mode Active
+                            <small class="text-muted smallest font-weight-bold uppercase letter-spacing-1">
+                                <i class="fas fa-info-circle mr-1 text-info"></i> Protocol: Production Mode
                             </small>
                         </div>
                     </div>
 
-                    {{-- Helper Card --}}
-                    <div class="card border-0 shadow-sm">
-                        <div class="card-body p-3 d-flex align-items-center bg-primary-light rounded">
-                            <i class="fas fa-lightbulb text-primary mr-3"></i>
-                            <p class="mb-0 small text-primary font-weight-bold">
-                                Quick Tip: Images are automatically optimized upon upload to ensure fast page speeds.
+                    {{-- Performance Tip --}}
+                    <div class="card border-0 shadow-premium mb-4" style="border-radius: 16px; background: rgba(var(--primary-rgb), 0.03);">
+                        <div class="card-body p-4 d-flex align-items-center">
+                            <div class="icon-circle bg-white shadow-xs text-primary mr-3 d-flex align-items-center justify-content-center" style="width: 44px; height: 44px; min-width: 44px; border-radius: 12px;">
+                                <i class="fas fa-lightbulb"></i>
+                            </div>
+                            <p class="mb-0 smallest font-weight-bold text-dark uppercase letter-spacing-1 opacity-75" style="line-height: 1.4;">
+                                Assets are automatically optimized upon deployment to ensure peak platform velocity.
                             </p>
                         </div>
                     </div>

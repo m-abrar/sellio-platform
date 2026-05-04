@@ -78,7 +78,7 @@ class TicketController extends Controller
         $validated = $request->validate([
             'ids' => 'required|array',
             'ids.*' => 'exists:tickets,id',
-            'type' => 'required|string|in:status,priority',
+            'type' => 'required|string|in:status,priority,action',
             'value' => 'required|string',
         ]);
 

@@ -373,6 +373,10 @@
         color: var(--primary) !important;
     }
 
+    .bg-primary-light { background-color: rgba(var(--primary-rgb), 0.08) !important; }
+    .bg-light-soft { background-color: #f8fafc !important; }
+    .text-primary { color: var(--primary) !important; }
+
     .select2-container--bootstrap4 .select2-results__option[aria-selected=true] {
         background-color: var(--primary) !important;
         color: #fff !important;
