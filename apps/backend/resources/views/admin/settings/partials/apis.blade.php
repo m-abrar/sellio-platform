@@ -6,15 +6,10 @@
     {{-- 1. GOOGLE ECOSYSTEM INTEGRATIONS --}}
     <div class="card border-0 shadow-premium mb-4" style="border-radius: 24px;">
         <div class="card-header bg-white py-4 px-4 border-0">
-            <div class="d-flex align-items-center">
-                <div class="bg-danger-soft rounded-circle d-flex align-items-center justify-content-center mr-3" style="width: 46px; height: 46px;">
-                    <i class="fab fa-google text-danger fa-lg"></i>
-                </div>
-                <div>
-                    <h5 class="font-weight-bold text-dark mb-0">{{ __('Google Ecosystem Integrations') }}</h5>
-                    <p class="text-muted small mb-0 mt-1">Configure mapping engines and intelligent tracking protocols.</p>
-                </div>
-            </div>
+            <h5 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1 float-none d-block">
+                <i class="fab fa-google mr-2 text-primary opacity-50"></i> {{ __('Google Ecosystem Integrations') }}
+            </h5>
+            <p class="text-muted smallest font-weight-bold text-uppercase letter-spacing-1 mb-0 mt-1">Configure mapping engines and intelligent tracking protocols.</p>
         </div>
         <div class="card-body px-4 pb-4">
             <div class="row">
@@ -43,15 +38,10 @@
     {{-- 2. CUSTOM CODE INJECTION --}}
     <div class="card border-0 shadow-premium mb-4" style="border-radius: 24px;">
         <div class="card-header bg-white py-4 px-4 border-0">
-            <div class="d-flex align-items-center">
-                <div class="bg-info-soft rounded-circle d-flex align-items-center justify-content-center mr-3" style="width: 46px; height: 46px;">
-                    <i class="fas fa-terminal text-info fa-lg"></i>
-                </div>
-                <div>
-                    <h5 class="font-weight-bold text-dark mb-0">{{ __('Custom Script Injection') }}</h5>
-                    <p class="text-muted small mb-0 mt-1">Inject custom meta tags, CSS overrides, or JavaScript snippets into the platform.</p>
-                </div>
-            </div>
+            <h5 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1 float-none d-block">
+                <i class="fas fa-terminal mr-2 text-primary opacity-50"></i> {{ __('Custom Script Injection') }}
+            </h5>
+            <p class="text-muted smallest font-weight-bold text-uppercase letter-spacing-1 mb-0 mt-1">Inject custom meta tags, CSS overrides, or JavaScript snippets into the platform.</p>
         </div>
         <div class="card-body px-4 pb-4">
             <div class="row">

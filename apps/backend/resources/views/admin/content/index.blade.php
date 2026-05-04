@@ -40,10 +40,10 @@
     </div>
 
     <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
-        <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
-            <h3 class="card-title font-weight-bold text-dark text-uppercase small mb-0" style="letter-spacing: 1px;">
-                <i class="fas fa-file-invoice mr-1 text-primary opacity-50"></i> Editable Page Sections
-            </h3>
+        <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center justify-content-between">
+            <h5 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">
+                <i class="fas fa-file-invoice mr-2 text-primary opacity-50"></i> Editable Page Sections
+            </h5>
             <div class="card-tools ml-auto">
                 <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase">
                     <i class="fas fa-cubes mr-1"></i> {{ $contentPages->count() }} FRAGMENTS

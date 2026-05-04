@@ -10,8 +10,10 @@
 
         <div class="card border-0 shadow-premium">
             <div class="card-header bg-white py-4 px-4 border-0">
-                <h3 class="card-title font-weight-bold text-dark mb-1 float-none d-block">{{ __('Identity & Localization') }}</h3>
-                <p class="text-muted small mb-0 mt-0">Configure your marketplace name, branding, and regional preferences.</p>
+                <h3 class="card-title font-weight-bold text-dark mb-1 float-none d-block small text-uppercase letter-spacing-1">
+                    <i class="fas fa-id-card mr-2 text-primary opacity-50"></i> {{ __('Identity & Localization') }}
+                </h3>
+                <p class="text-muted smallest font-weight-bold text-uppercase letter-spacing-1 mb-0 mt-0">Configure your marketplace name, branding, and regional preferences.</p>
             </div>
             <div class="card-body px-4 pb-4">
                 <div class="row">

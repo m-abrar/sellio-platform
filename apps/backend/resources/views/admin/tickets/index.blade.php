@@ -86,18 +86,18 @@
                     <table id="tickets-table" class="table table-hover table-premium mb-0">
                         <thead class="bg-light text-uppercase smallest font-weight-bold">
                             <tr>
-                                <th class="text-center py-3 border-0" style="width: 50px">
-                                    <div class="custom-control custom-control-premium custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="selectAll">
-                                        <label class="custom-control-label" for="selectAll"></label>
-                                    </div>
-                                </th>
-                                <th class="py-3 border-0">Subject & Identification</th>
-                                <th class="py-3 border-0">User Profile</th>
-                                <th class="py-3 border-0">Status & Priority</th>
-                                <th class="py-3 border-0">Age</th>
-                                <th class="text-right pr-4 py-3 border-0">Actions</th>
-                            </tr>
+                            <th class="py-3 border-0 px-4" style="width: 60px;">
+                                <div class="custom-control custom-checkbox custom-control-premium">
+                                    <input type="checkbox" class="custom-control-input" id="check-all">
+                                    <label class="custom-control-label" for="check-all"></label>
+                                </div>
+                            </th>
+                            <th class="py-3 border-0" style="width: 35%;">Subject & Identification</th>
+                            <th class="py-3 border-0" style="width: 20%;">User Profile</th>
+                            <th class="py-3 border-0" style="width: 15%;">Status & Priority</th>
+                            <th class="py-3 border-0" style="width: 15%;">Ticket Age</th>
+                            <th class="py-3 border-0 text-right px-4" style="width: 140px;">Actions</th>
+                        </tr>
                         </thead>
                         <tbody>
                             @forelse($tickets as $ticket)
@@ -109,12 +109,12 @@
                                     </div>
                                 </td>
                                 <td class="align-middle py-4">
-                                    <a href="{{ route('admin.tickets.show', $ticket->id) }}" class="font-weight-bold text-dark d-block mb-1" style="font-size: 0.95rem;">
+                                    <a href="{{ route('admin.tickets.show', $ticket->id) }}" class="font-weight-bold text-dark d-block mb-1 text-truncate" style="font-size: 0.95rem; max-width: 350px;" title="{{ $ticket->title }}">
                                         {{ $ticket->title }}
                                     </a>
-                                    <div class="d-flex align-items-center">
-                                        <span class="badge badge-light border text-muted smallest px-2 mr-2" style="font-weight: 500;">ID: #{{ $ticket->id }}</span>
-                                        <p class="text-muted smallest mb-0 text-truncate" style="max-width: 300px; opacity: 0.7;">{{ $ticket->description }}</p>
+                                    <div class="d-flex align-items-center overflow-hidden">
+                                        <span class="badge badge-light border text-muted smallest px-2 mr-2" style="font-weight: 500; flex-shrink: 0;">ID: #{{ $ticket->id }}</span>
+                                        <p class="text-muted smallest mb-0 text-truncate" style="max-width: 250px; opacity: 0.7;">{{ $ticket->description }}</p>
                                     </div>
                                 </td>
                                 <td class="align-middle py-4">
@@ -122,9 +122,9 @@
                                         <div class="icon-circle bg-light border text-muted mr-3 shadow-xs" style="width: 38px; height: 38px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
                                             <i class="fas fa-user-circle"></i>
                                         </div>
-                                        <div>
-                                            <span class="d-block font-weight-bold text-dark smallest">{{ $ticket->user->name ?? 'Guest User' }}</span>
-                                            <span class="text-muted smallest">{{ $ticket->user->email ?? 'Direct Submission' }}</span>
+                                        <div class="overflow-hidden">
+                                            <span class="d-block font-weight-bold text-dark smallest text-truncate" style="max-width: 150px;">{{ $ticket->user->name ?? 'Guest User' }}</span>
+                                            <span class="text-muted smallest text-truncate d-block" style="max-width: 150px;">{{ $ticket->user->email ?? 'Direct Submission' }}</span>
                                         </div>
                                     </div>
                                 </td>
@@ -253,6 +253,24 @@
 <style>
     .transition-all { transition: all 0.25s ease-in-out; }
     .nav-pills .nav-link:not(.active):hover { background: rgba(0,0,0,0.03); color: var(--primary) !important; }
+    
+    .table-premium { 
+        table-layout: fixed !important;
+        width: 100% !important;
+    }
+    
+    .table-premium td {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    
+    /* Allow wrapping for specific items if needed, but ensure base cell doesn't expand */
+    .table-premium td .text-truncate {
+        max-width: 100% !important;
+    }
+
+    .badge-primary-light { background-color: var(--primary-soft); color: var(--primary); }
     #tickets-table thead th { letter-spacing: 1px; color: #8898aa; }
     .btn-primary-soft { background: rgba(70, 165, 172, 0.1); color: #46a5ac; border: 1px solid rgba(70, 165, 172, 0.2); }
     .btn-primary-soft:hover { background: #46a5ac; color: #fff; }
@@ -400,7 +418,7 @@
         }
 
     // Bulk Selection Logic
-    const $selectAll = $('#selectAll');
+    const $selectAll = $('#check-all');
     const $bulkBar = $('#bulk-floating-bar');
     const $selectedCount = $('#selected-count');
 
@@ -417,7 +435,7 @@
     }
 
     // Delegated Select All
-    $(document).on('change', '#selectAll', function() {
+    $(document).on('change', '#check-all', function() {
         $('.ticket-checkbox').prop('checked', this.checked);
         updateBulkUI();
     });
@@ -425,7 +443,7 @@
     // Deselect All Button in Bar
     $(document).on('click', '#deselectAll', function() {
         $('.ticket-checkbox').prop('checked', false);
-        $('#selectAll').prop('checked', false);
+        $('#check-all').prop('checked', false);
         updateBulkUI();
     });
 
@@ -434,7 +452,7 @@
         const total = $('.ticket-checkbox').length;
         const checked = $('.ticket-checkbox:checked').length;
         
-        $('#selectAll').prop('checked', total === checked && total > 0);
+        $('#check-all').prop('checked', total === checked && total > 0);
         updateBulkUI();
     });
 

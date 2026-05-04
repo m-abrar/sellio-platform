@@ -5,8 +5,10 @@
     @csrf
     <div class="card border-0 shadow-premium" style="border-radius: 24px;">
         <div class="card-header bg-white py-4 px-4 border-0">
-            <h3 class="card-title font-weight-bold text-dark mb-0">{{ __('Contact Channels & Intelligence') }}</h3>
-            <p class="text-muted small mb-0 mt-1">Configure support communication protocols and official platform contact points.</p>
+            <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1 float-none d-block">
+                <i class="fas fa-headset mr-2 text-primary opacity-50"></i> {{ __('Contact Channels & Intelligence') }}
+            </h3>
+            <p class="text-muted smallest font-weight-bold text-uppercase letter-spacing-1 mb-0 mt-1">Configure support communication protocols and official platform contact points.</p>
         </div>
         <div class="card-body px-4">
             <div class="row">

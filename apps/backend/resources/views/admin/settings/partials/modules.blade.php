@@ -4,9 +4,9 @@
 <form action="{{ route('admin.settings.update.group', ['section' => 'modules']) }}" method="POST">
     @csrf
     <div class="card shadow-sm border-0 overflow-hidden">
-        <div class="card-header bg-white py-3">
-            <h3 class="card-title font-weight-bold text-dark">
-                <i class="fas fa-cubes mr-2 text-primary"></i>{{ __('Module Control Center') }}
+        <div class="card-header bg-white py-4 px-4 border-0">
+            <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1 float-none d-block">
+                <i class="fas fa-cubes mr-2 text-primary opacity-50"></i> {{ __('Module Control Center') }}
             </h3>
         </div>
         

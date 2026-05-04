@@ -7,15 +7,10 @@
     {{-- 1. CORE NAVIGATION PAGES --}}
     <div class="card border-0 shadow-premium mb-4" style="border-radius: 24px;">
         <div class="card-header bg-white py-4 px-4 border-0">
-            <div class="d-flex align-items-center">
-                <div class="bg-primary-soft rounded-circle d-flex align-items-center justify-content-center mr-3" style="width: 46px; height: 46px;">
-                    <i class="fas fa-compass text-primary fa-lg"></i>
-                </div>
-                <div>
-                    <h5 class="font-weight-bold text-dark mb-0">{{ __('Core Navigation Pages') }}</h5>
-                    <p class="text-muted small mb-0 mt-1">Bind primary platform touchpoints to specific CMS content pages.</p>
-                </div>
-            </div>
+            <h5 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1 float-none d-block">
+                <i class="fas fa-compass mr-2 text-primary opacity-50"></i> {{ __('Core Navigation Pages') }}
+            </h5>
+            <p class="text-muted smallest font-weight-bold text-uppercase letter-spacing-1 mb-0 mt-1">Bind primary platform touchpoints to specific CMS content pages.</p>
         </div>
         <div class="card-body px-4 pb-4">
             <div class="row">
@@ -91,15 +86,10 @@
     {{-- 2. SEGMENT ENGINE THEMES --}}
     <div class="card border-0 shadow-premium mb-4" style="border-radius: 24px;">
         <div class="card-header bg-white py-4 px-4 border-0">
-            <div class="d-flex align-items-center">
-                <div class="bg-info-soft rounded-circle d-flex align-items-center justify-content-center mr-3" style="width: 46px; height: 46px;">
-                    <i class="fas fa-palette text-info fa-lg"></i>
-                </div>
-                <div>
-                    <h5 class="font-weight-bold text-dark mb-0">{{ __('Segment Engine Themes') }}</h5>
-                    <p class="text-muted small mb-0 mt-1">Assign specific design languages and skins to individual marketplace segments.</p>
-                </div>
-            </div>
+            <h5 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1 float-none d-block">
+                <i class="fas fa-palette mr-2 text-primary opacity-50"></i> {{ __('Segment Engine Themes') }}
+            </h5>
+            <p class="text-muted smallest font-weight-bold text-uppercase letter-spacing-1 mb-0 mt-1">Assign specific design languages and skins to individual marketplace segments.</p>
         </div>
         <div class="card-body px-4 pb-2">
             <div class="row">
@@ -140,15 +130,10 @@
     {{-- 3. LEGAL COMPLIANCE MAPPING --}}
     <div class="card border-0 shadow-premium mb-4" style="border-radius: 24px;">
         <div class="card-header bg-white py-4 px-4 border-0">
-            <div class="d-flex align-items-center">
-                <div class="bg-secondary-soft rounded-circle d-flex align-items-center justify-content-center mr-3" style="width: 46px; height: 46px;">
-                    <i class="fas fa-balance-scale text-secondary fa-lg"></i>
-                </div>
-                <div>
-                    <h5 class="font-weight-bold text-dark mb-0">{{ __('Legal Compliance Mapping') }}</h5>
-                    <p class="text-muted small mb-0 mt-1">Ensure mandatory regulatory and agreement pages are correctly routed.</p>
-                </div>
-            </div>
+            <h5 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1 float-none d-block">
+                <i class="fas fa-balance-scale mr-2 text-primary opacity-50"></i> {{ __('Legal Compliance Mapping') }}
+            </h5>
+            <p class="text-muted smallest font-weight-bold text-uppercase letter-spacing-1 mb-0 mt-1">Ensure mandatory regulatory and agreement pages are correctly routed.</p>
         </div>
         <div class="card-body px-4 pb-4">
             <div class="row">
