@@ -58,13 +58,13 @@
         </div>
 
         @if (session('status'))
-            <div class="alert alert-success border-0 shadow-sm small mb-4 py-3 rounded-4" role="alert">
+            <div class="alert alert-success border-0 shadow-premium small mb-4 py-3 rounded-xl" role="alert">
                 <i class="bi bi-check-circle-fill me-2"></i> {{ session('status') }}
             </div>
         @endif
 
         @if ($errors->any())
-            <div class="alert alert-danger border-0 shadow-sm small mb-4 py-3 rounded-4" role="alert">
+            <div class="alert alert-danger border-0 shadow-premium small mb-4 py-3 rounded-xl" role="alert">
                 <ul class="mb-0 ps-3">
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
@@ -77,18 +77,18 @@
             @csrf
             
             <div class="mb-3">
-                <label for="email" class="form-label fw-semibold">{{ __('Email Address') }}</label>
-                <input type="email" @class(['form-control bg-light border-0 px-4', 'is-invalid' => $errors->has('email')]) id="email" name="email" value="{{ old('email') }}" placeholder="{{ __('name@example.com') }}" required autofocus>
+                <label for="email" class="form-label fw-semibold small">{{ __('Email Address') }}</label>
+                <input type="email" @class(['form-control bg-light border-0 px-4 rounded-pill', 'is-invalid' => $errors->has('email')]) id="email" name="email" value="{{ old('email') }}" placeholder="{{ __('name@example.com') }}" required autofocus style="height: 48px;">
             </div>
 
             <div class="mb-3">
                 <div class="d-flex justify-content-between align-items-center mb-2">
-                    <label for="password" class="form-label fw-semibold mb-0">{{ __('Password') }}</label>
+                    <label for="password" class="form-label fw-semibold small mb-0">{{ __('Password') }}</label>
                     @if (Route::has('password.request'))
-                        <a href="{{ route('password.request') }}" class="small fw-bold text-decoration-none" style="color: var(--primary-color);">{{ __('Forgot password?') }}</a>
+                        <a href="{{ route('password.request') }}" class="small fw-bold text-decoration-none" style="color: var(--primary);">{{ __('Forgot password?') }}</a>
                     @endif
                 </div>
-                <input type="password" @class(['form-control bg-light border-0 px-4', 'is-invalid' => $errors->has('password')]) id="password" name="password" placeholder="••••••••" required autocomplete="current-password">
+                <input type="password" @class(['form-control bg-light border-0 px-4 rounded-pill', 'is-invalid' => $errors->has('password')]) id="password" name="password" placeholder="••••••••" required autocomplete="current-password" style="height: 48px;">
             </div>
             
             <div class="mb-4">
@@ -101,7 +101,7 @@
             </div>
 
             <div class="d-grid mb-4">
-                <button type="submit" class="btn btn-primary btn-lg fw-bold py-3 shadow-sm border-0">
+                <button type="submit" class="btn btn-primary btn-lg fw-bold py-3 shadow-sm border-0 rounded-pill">
                     {{ page_content('auth.login.submit_btn', __('Sign In to Dashboard')) }}
                 </button>
             </div>
@@ -119,7 +119,7 @@
                 {{-- Google Button --}}
                 <div class="col-6">
                     <a href="{{ route('login.social', 'google') }}" 
-                    class="btn btn-outline-light text-dark border shadow-sm w-100 py-2 fw-semibold d-flex align-items-center justify-content-center gap-2 social-btn text-decoration-none">
+                    class="btn btn-outline-light text-dark border shadow-sm w-100 py-2 fw-semibold d-flex align-items-center justify-content-center gap-2 social-btn text-decoration-none rounded-pill">
                         <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18" height="18" alt="Google">
                         <span class="small">{{ __('Google') }}</span>
                     </a>
@@ -128,7 +128,7 @@
                 {{-- Facebook Button --}}
                 <div class="col-6">
                     <a href="{{ route('login.social', 'facebook') }}" 
-                    class="btn btn-outline-light text-dark border shadow-sm w-100 py-2 fw-semibold d-flex align-items-center justify-content-center gap-2 social-btn text-decoration-none">
+                    class="btn btn-outline-light text-dark border shadow-sm w-100 py-2 fw-semibold d-flex align-items-center justify-content-center gap-2 social-btn text-decoration-none rounded-pill">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#1877F2" class="bi bi-facebook" viewBox="0 0 16 16">
                             <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951"/>
                         </svg>
@@ -141,7 +141,7 @@
         <div class="text-center">
             <p class="mb-0 small text-muted">
                 {{ page_content('auth.login.footer_text', __("Don't have an account yet?")) }} 
-                <a href="{{ route('register') }}" class="fw-bold text-decoration-none ms-1" style="color: var(--primary-color);">
+                <a href="{{ route('register') }}" class="fw-bold text-decoration-none ms-1" style="color: var(--primary);">
                     {{ __('Create an account') }}
                 </a>
             </p>
@@ -160,15 +160,21 @@
     .fw-800 { font-weight: 800; }
     
     .social-btn {
-        transition: all 0.2s ease;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         background-color: #ffffff;
     }
 
     .social-btn:hover {
         background-color: #f8f9fa !important;
-        border-color: #d1d5db !important;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+        border-color: var(--primary) !important;
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-glow) !important;
+    }
+
+    .form-control:focus {
+        background-color: #fff !important;
+        box-shadow: 0 0 0 4px var(--primary-soft) !important;
+        border-color: var(--primary) !important;
     }
 
     @media (min-width: 992px) {

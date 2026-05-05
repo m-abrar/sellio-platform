@@ -100,12 +100,12 @@
             </div>
 
             <div class="d-grid gap-3">
-                <button type="submit" class="btn btn-primary btn-lg fw-bold py-3 shadow-sm border-0 d-flex align-items-center justify-content-center gap-2">
+                <button type="submit" class="btn btn-primary btn-lg fw-bold py-3 rounded-pill shadow-premium border-0 d-flex align-items-center justify-content-center gap-2">
                     <i class="bi bi-send-check-fill"></i>
                     {{ __('Email Password Reset Link') }}
                 </button>
                 
-                <a href="{{ route('login') }}" class="btn btn-light btn-lg fw-bold text-muted border-0 d-flex align-items-center justify-content-center gap-2">
+                <a href="{{ route('login') }}" class="btn btn-light btn-lg fw-bold text-muted border-0 d-flex align-items-center justify-content-center gap-2 rounded-pill">
                     <i class="bi bi-arrow-left"></i>
                     {{ __('Back to Login') }}
                 </a>
@@ -132,25 +132,26 @@
     
     .form-control {
         min-height: 52px;
-        border-radius: 12px;
+        border-radius: 50px !important;
+        padding-left: 1.5rem !important;
+        padding-right: 1.5rem !important;
         transition: all 0.3s ease;
     }
 
     .form-control:focus {
         background-color: #fff !important;
-        box-shadow: 0 0 0 4px hsla(var(--primary-hue), 75%, 60%, 0.1);
-        border-color: var(--primary-color);
+        box-shadow: 0 0 0 4px var(--primary-soft) !important;
+        border-color: var(--primary);
     }
 
     .btn-lg {
         min-height: 58px;
-        border-radius: 12px;
         transition: all 0.3s ease;
     }
 
     .btn-primary:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-glow) !important;
     }
 </style>
 @endpush

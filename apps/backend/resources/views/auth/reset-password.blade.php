@@ -124,7 +124,7 @@
             </div>
 
             <div class="d-grid">
-                <button type="submit" class="btn btn-primary btn-lg fw-bold py-3 shadow-sm border-0 d-flex align-items-center justify-content-center gap-2">
+                <button type="submit" class="btn btn-primary btn-lg fw-bold py-3 rounded-pill shadow-premium border-0 d-flex align-items-center justify-content-center gap-2">
                     <i class="bi bi-check2-all"></i>
                     {{ __('Reset Password') }}
                 </button>
@@ -157,26 +157,26 @@
     .fw-800 { font-weight: 800; }
     
     .hover-primary:hover {
-        color: var(--primary-color) !important;
+        color: var(--primary) !important;
         transition: color 0.2s ease;
     }
 
-    /* Standardized Form Inputs for Premium feel */
     .form-control {
         min-height: 52px;
-        border-radius: 12px;
+        border-radius: 50px !important;
+        padding-left: 1.5rem !important;
+        padding-right: 1.5rem !important;
         transition: all 0.3s ease;
     }
 
     .form-control:focus {
         background-color: #fff !important;
-        box-shadow: 0 0 0 4px hsla(var(--primary-hue), 75%, 60%, 0.1);
-        border-color: var(--primary-color);
+        box-shadow: 0 0 0 4px var(--primary-soft) !important;
+        border-color: var(--primary);
     }
 
     .btn-lg {
         min-height: 58px;
-        border-radius: 12px;
     }
 </style>
 @endpush

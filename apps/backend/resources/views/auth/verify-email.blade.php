@@ -60,7 +60,7 @@
         </div>
 
         {{-- Main Instruction Alert --}}
-        <div @class(['alert alert-info border-0 shadow-sm small mb-4 py-3 rounded-4 d-flex align-items-start gap-3']) role="alert">
+        <div @class(['alert alert-info border-0 shadow-premium small mb-4 py-3 rounded-xl d-flex align-items-start gap-3']) role="alert">
             <i class="bi bi-envelope-check-fill fs-4 text-info"></i>
             <div>
                 {{ __('Thanks for signing up! Please check your email for a verification link. If you didn\'t receive it, you can request a new one below.') }}
@@ -69,7 +69,7 @@
 
         {{-- Session Status (Success message after resending the link) --}}
         @if (session('status') == 'verification-link-sent')
-            <div @class(['alert alert-success border-0 shadow-sm small mb-4 py-3 rounded-4']) role="alert">
+            <div @class(['alert alert-success border-0 shadow-premium small mb-4 py-3 rounded-xl']) role="alert">
                 <i class="bi bi-check-circle-fill me-2"></i> 
                 {{ __('A new verification link has been sent to the email address you provided during registration.') }}
             </div>
@@ -79,7 +79,7 @@
             {{-- Form to Resend Verification Email --}}
             <form method="POST" action="{{ route('verification.send') }}" class="d-grid mb-4">
                 @csrf
-                <button type="submit" class="btn btn-primary btn-lg fw-bold py-3 shadow-sm border-0 d-flex align-items-center justify-content-center gap-2">
+                <button type="submit" class="btn btn-primary btn-lg fw-bold py-3 rounded-pill shadow-premium border-0 d-flex align-items-center justify-content-center gap-2">
                     <i class="bi bi-send-fill"></i>
                     {{ __('Resend Verification Email') }}
                 </button>
@@ -95,7 +95,7 @@
                 @csrf
                 <p class="small text-muted mb-0">
                     {{ __('Need to change accounts?') }}
-                    <button type="submit" class="btn btn-link p-0 small fw-bold text-decoration-none ms-1" style="color: var(--primary-color);">
+                    <button type="submit" class="btn btn-link p-0 small fw-bold text-decoration-none ms-1" style="color: var(--primary);">
                         {{ __('Log Out of this Account') }}
                     </button>
                 </p>
@@ -120,19 +120,20 @@
 <style>
     .fw-800 { font-weight: 800; }
     
-    /* Ensure the split screen layout works correctly within the layout's grid */
+    .btn-lg {
+        min-height: 58px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-glow) !important;
+    }
+
     @media (min-width: 992px) {
         .auth-wrapper .row {
             height: 100vh;
         }
-    }
-
-    /* Custom touch target optimization */
-    .btn-lg {
-        min-height: 58px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
     }
 </style>
 @endpush

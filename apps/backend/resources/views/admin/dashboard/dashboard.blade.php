@@ -29,7 +29,7 @@
         <!-- Add Listing Dropdown -->
         <div class="col-6 col-md-3">
             <div class="dropdown">
-                <button class="btn btn-submit-premium btn-premium-action d-flex align-items-center justify-content-center py-3 w-100 shadow-premium font-weight-bold rounded-md" type="button" data-toggle="dropdown">
+                <button class="btn btn-submit-premium btn-premium-action d-flex align-items-center justify-content-center py-3 w-100 shadow-premium font-weight-bold rounded-pill" type="button" data-toggle="dropdown">
                     <i class="fas fa-plus-circle mr-2"></i> ADD LISTING <i class="fas fa-caret-down ml-2 opacity-50"></i>
                 </button>
                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-premium border-0 animate__animated animate__fadeInUp rounded-xl">
@@ -62,7 +62,7 @@
         <!-- Add Booking Dropdown -->
         <div class="col-6 col-md-3">
             <div class="dropdown">
-                <button class="btn btn-default btn-premium-action d-flex align-items-center justify-content-center py-3 w-100 shadow-premium font-weight-bold bg-white border-light rounded-md text-dark-muted" type="button" data-toggle="dropdown">
+                <button class="btn btn-default btn-premium-action d-flex align-items-center justify-content-center py-3 w-100 shadow-premium font-weight-bold bg-white border-light rounded-pill text-dark-muted" type="button" data-toggle="dropdown">
                     <i class="fas fa-calendar-plus mr-2 text-primary"></i> ADD BOOKING <i class="fas fa-caret-down ml-2 opacity-50"></i>
                 </button>
                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-premium border-0 animate__animated animate__fadeInUp rounded-xl">

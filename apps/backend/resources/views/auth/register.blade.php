@@ -88,23 +88,23 @@
 
             <div class="row g-3 mb-4">
                 <div class="col-md-6">
-                    <label for="password" class="form-label fw-semibold">{{ __('Password') }}</label>
-                    <input type="password" @class(['form-control bg-light border-0 px-4', 'is-invalid' => $errors->has('password')]) id="password" name="password" placeholder="••••••••" required autocomplete="new-password">
+                    <label for="password" class="form-label fw-semibold small">{{ __('Password') }}</label>
+                    <input type="password" @class(['form-control bg-light border-0 px-4 rounded-pill', 'is-invalid' => $errors->has('password')]) id="password" name="password" placeholder="••••••••" required autocomplete="new-password" style="height: 48px;">
                 </div>
                 <div class="col-md-6">
-                    <label for="password_confirmation" class="form-label fw-semibold">{{ __('Confirm') }}</label>
-                    <input type="password" class="form-control bg-light border-0 px-4" id="password_confirmation" name="password_confirmation" placeholder="••••••••" required>
+                    <label for="password_confirmation" class="form-label fw-semibold small">{{ __('Confirm') }}</label>
+                    <input type="password" class="form-control bg-light border-0 px-4 rounded-pill" id="password_confirmation" name="password_confirmation" placeholder="••••••••" required style="height: 48px;">
                 </div>
                 <div class="col-12">
-                    <p class="text-muted small mb-0">
-                        <i class="bi bi-info-circle me-1"></i> {!! page_content('auth.register.password_hint', __('Must be at least 8 characters.')) !!}
+                    <p class="text-muted smallest mb-0">
+                        <i class="bi bi-info-circle me-1 text-primary"></i> {!! page_content('auth.register.password_hint', __('Must be at least 8 characters.')) !!}
                     </p>
                 </div>
             </div>
             
             {{-- Submit and Social Actions --}}
             <div class="d-grid gap-3">
-                <button type="submit" class="btn btn-primary btn-lg fw-bold py-3">
+                <button type="submit" class="btn btn-primary btn-lg fw-bold py-3 rounded-pill shadow-premium border-0">
                     {!! page_content('auth.register.submit_btn', __('Create Account')) !!}
                 </button>
                 
@@ -118,13 +118,13 @@
                 {{-- Social Grid --}}
                 <div class="row g-3">
                     <div class="col-6">
-                        <a href="{{ route('login.social', 'google') }}" class="btn btn-outline-light text-dark border shadow-sm w-100 py-2 fw-semibold d-flex align-items-center justify-content-center gap-2 social-btn">
+                        <a href="{{ route('login.social', 'google') }}" class="btn btn-outline-light text-dark border shadow-sm w-100 py-2 fw-semibold d-flex align-items-center justify-content-center gap-2 social-btn rounded-pill">
                             <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18" height="18" alt="Google">
                             <span class="small">{{ __('Google') }}</span>
                         </a>
                     </div>
                     <div class="col-6">
-                        <a href="{{ route('login.social', 'facebook') }}" class="btn btn-outline-light text-dark border shadow-sm w-100 py-2 fw-semibold d-flex align-items-center justify-content-center gap-2 social-btn">
+                        <a href="{{ route('login.social', 'facebook') }}" class="btn btn-outline-light text-dark border shadow-sm w-100 py-2 fw-semibold d-flex align-items-center justify-content-center gap-2 social-btn rounded-pill">
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#1877F2" class="bi bi-facebook" viewBox="0 0 16 16">
                                 <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951"/>
                             </svg>
@@ -160,20 +160,39 @@
     .fw-800 { font-weight: 800; }
     
     .social-btn {
-        transition: all 0.2s ease;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         background-color: #ffffff;
     }
 
     .social-btn:hover {
         background-color: #f8f9fa !important;
-        border-color: #d1d5db !important;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+        border-color: var(--primary) !important;
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-glow) !important;
+    }
+
+    .input-group {
+        border-radius: 50px !important;
+        overflow: hidden !important;
+        background: #f8f9fa !important;
+        border: 1px solid transparent !important;
+        transition: all 0.3s ease;
+    }
+
+    .input-group:focus-within {
+        background: #fff !important;
+        border-color: var(--primary) !important;
+        box-shadow: 0 0 0 4px var(--primary-soft) !important;
     }
 
     .input-group-text {
-        border-top-left-radius: 12px !important;
-        border-bottom-left-radius: 12px !important;
+        border: none !important;
+        background: transparent !important;
+    }
+
+    .input-group .form-control {
+        background: transparent !important;
+        height: 48px !important;
     }
 
     @media (min-width: 992px) {
