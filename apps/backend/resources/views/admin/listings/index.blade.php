@@ -96,42 +96,40 @@
     <div class="container-fluid pb-5">
         @include('admin.alert')
 
-        {{-- Filtration Protocol --}}
-        <div class="row mb-4">
-            <div class="col-12">
-                <div class="card registry-card-premium registry-filter-card mb-4">
-                    <div class="card-body d-flex align-items-center justify-content-between">
-                        <div class="d-flex align-items-center">
-                            <span class="form-label-premium mb-0 mr-3">
-                                <i class="fas fa-filter mr-1 text-primary"></i> Filter Vertical:
-                            </span>
-                            <ul class="nav nav-pills nav-pills-premium">
-                                <li class="nav-item">
-                                    <a class="nav-link {{ $status === 'all' ? 'active' : '' }}" 
-                                       href="{{ route(Route::currentRouteName(), ['status' => 'all']) }}">
-                                       <i class="fas fa-th-large mr-2"></i> ALL ASSETS
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link {{ $status === 'active' ? 'active' : '' }}" 
-                                       href="{{ route(Route::currentRouteName(), ['status' => 'active']) }}">
-                                       <i class="fas fa-check-circle mr-2"></i> ACTIVE
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link {{ $status === 'pending' ? 'active' : '' }}" 
-                                       href="{{ route(Route::currentRouteName(), ['status' => 'pending']) }}">
-                                       <i class="fas fa-hourglass-half mr-2"></i> PENDING
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link {{ $status === 'expired' ? 'active' : '' }}" 
-                                       href="{{ route(Route::currentRouteName(), ['status' => 'expired']) }}">
-                                       <i class="fas fa-calendar-times mr-2"></i> EXPIRED
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
+        {{-- Filter Protocol --}}
+        <div class="card registry-card-premium registry-filter-card mb-4">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center">
+                        <span class="form-label-premium mb-0 mr-4">
+                            <i class="fas fa-filter mr-2 text-primary"></i> Lifecycle State:
+                        </span>
+                        <ul class="nav nav-pills nav-pills-premium">
+                            <li class="nav-item">
+                                <a class="nav-link {{ $status === 'all' ? 'active' : '' }}" 
+                                   href="{{ route(Route::currentRouteName(), ['status' => 'all']) }}">
+                                   <i class="fas fa-th-large mr-2"></i> ALL ASSETS
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{ $status === 'active' ? 'active' : '' }}" 
+                                   href="{{ route(Route::currentRouteName(), ['status' => 'active']) }}">
+                                   <i class="fas fa-check-circle mr-2"></i> ACTIVE
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{ $status === 'pending' ? 'active' : '' }}" 
+                                   href="{{ route(Route::currentRouteName(), ['status' => 'pending']) }}">
+                                   <i class="fas fa-hourglass-half mr-2"></i> PENDING
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{ $status === 'expired' ? 'active' : '' }}" 
+                                   href="{{ route(Route::currentRouteName(), ['status' => 'expired']) }}">
+                                   <i class="fas fa-calendar-times mr-2"></i> EXPIRED
+                                </a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -139,7 +137,7 @@
 
         <div class="card registry-table-card">
             <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
-                <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none">
+                <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none" style="letter-spacing: 1px;">
                     {{ $type !== 'all' ? 'Filtering for ' . \Illuminate\Support\Str::title($type) : 'Marketplace Catalog' }}
                 </h3>
                 <div class="card-tools d-flex align-items-center ml-auto">
@@ -155,52 +153,52 @@
             <div class="card-body p-0">
                 <div class="table-responsive">
                     <table id="listings-table" class="table table-hover table-premium mb-0">
-                        <thead class="bg-light text-uppercase smallest font-weight-bold">
+                        <thead class="thead-light">
                             <tr>
-                                <th class="text-center py-3 border-0" style="width: 80px">Asset</th>
-                                <th class="py-3 border-0">Identity & Location</th>
-                                <th class="py-3 border-0">Proprietor</th>
+                                <th class="text-center pl-4" style="width: 80px">Asset</th>
+                                <th>Identity & Location</th>
+                                <th>Proprietor</th>
                                 @if($type === 'all')
-                                    <th class="py-3 border-0 text-center">Vertical</th>
+                                    <th class="text-center">Vertical</th>
                                 @endif
-                                <th class="py-3 border-0">State & Sync</th>
-                                <th class="text-right pr-4 py-3 border-0">Actions</th>
+                                <th>State & Sync</th>
+                                <th class="text-right pr-4">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse ($listings as $listing)
                                 <tr>
-                                    <td class="text-center align-middle py-4">
-                                        <div class="table-img-preview shadow-sm">
+                                    <td class="text-center align-middle pl-4">
+                                        <div class="table-img-preview shadow-sm mx-auto">
                                             <img src="{{ $listing->thumbnail_url ?? asset('images/placeholder.png') }}" onerror="this.src='{{ asset('images/fallbacks/default.jpg') }}'">
                                         </div>
                                     </td>
-                                    <td class="align-middle py-4">
-                                        <span class="d-block font-weight-bold text-dark mb-0" style="font-size: 1rem;">{{ $listing->title ?? 'Untitled Asset' }}</span>
-                                        <div class="d-flex align-items-center mt-1">
-                                            <span class="smallest font-weight-bold text-muted mr-3">#{{ str_pad($listing->id, 5, '0', STR_PAD_LEFT) }}</span>
-                                            <small class="text-muted font-weight-600">
-                                                <i class="fas fa-map-marker-alt mr-1 text-danger"></i>{{ $listing->location->title ?? 'Global' }}
-                                            </small>
+                                    <td class="align-middle">
+                                        <span class="d-block font-weight-bold text-dark mb-0" style="font-size: 0.95rem;">{{ $listing->title ?? 'Untitled Asset' }}</span>
+                                        <div class="d-flex align-items-center mt-1" style="gap: 10px;">
+                                            <span class="smallest font-weight-bold text-muted text-monospace">ID: #{{ str_pad($listing->id, 5, '0', STR_PAD_LEFT) }}</span>
+                                            <span class="text-muted smallest font-weight-bold uppercase letter-spacing-1">
+                                                <i class="fas fa-map-marker-alt mr-1 text-danger opacity-50"></i>{{ $listing->location->title ?? 'Global' }}
+                                            </span>
                                         </div>
                                     </td>
-                                    <td class="align-middle py-4">
+                                    <td class="align-middle">
                                         @if ($listing->user)
                                             <div class="d-flex align-items-center">
-                                                <div class="icon-circle bg-light border text-muted mr-3 shadow-xs" style="width: 38px; height: 38px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
-                                                    <i class="fas fa-user-circle"></i>
+                                                <div class="icon-box-soft bg-primary-soft mr-3 d-flex align-items-center justify-content-center shadow-xs" style="width:34px; height:34px; border-radius: 8px;">
+                                                    <i class="fas fa-user-tie text-primary smallest"></i>
                                                 </div>
                                                 <div>
-                                                    <span class="d-block font-weight-bold text-dark smallest">{{ $listing->user->name }}</span>
-                                                    <span class="text-muted smallest">UID: #{{ $listing->user->id }}</span>
+                                                    <span class="d-block font-weight-bold text-dark mb-0 smallest uppercase letter-spacing-1">{{ $listing->user->name }}</span>
+                                                    <div class="smallest text-muted text-monospace">UID: #{{ $listing->user->id }}</div>
                                                 </div>
                                             </div>
                                         @else
-                                            <span class="badge badge-secondary-light border px-2 smallest font-weight-bold uppercase">LEGACY ACCOUNT</span>
+                                            <span class="badge badge-secondary-light px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1">Legacy Account</span>
                                         @endif
                                     </td>
                                     @if($type === 'all')
-                                        <td class="align-middle text-center py-4">
+                                        <td class="align-middle text-center">
                                             @php
                                                 $styles = [
                                                     'Property'   => ['bg' => 'primary-soft', 'text' => 'primary', 'icon' => 'building'],
@@ -212,27 +210,29 @@
                                                 ];
                                                 $style = $styles[$listing->listing_type] ?? ['bg' => 'secondary-soft', 'text' => 'secondary', 'icon' => 'cube'];
                                             @endphp
-                                            <span class="badge badge-{{ $style['text'] }}-light px-3 py-1 rounded-pill smallest font-weight-bold uppercase">
-                                                <i class="fas fa-{{ $style['icon'] }} mr-1"></i> {{ $listing->listing_type }}
+                                            <span class="badge badge-{{ $style['text'] }}-light px-3 py-1 rounded-pill smallest font-weight-bold uppercase letter-spacing-1">
+                                                <i class="fas fa-{{ $style['icon'] }} mr-1 opacity-50"></i> {{ $listing->listing_type }}
                                             </span>
                                         </td>
                                     @endif
-                                    <td class="align-middle py-4">
+                                    <td class="align-middle">
                                         <div class="mb-1">
                                             @if ($listing->expires_at && $listing->expires_at->isPast())
-                                                <span class="badge badge-danger-light px-3 py-1 rounded-pill font-weight-bold smallest uppercase">EXPIRED</span>
+                                                <span class="badge badge-danger-light px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1">Expired</span>
                                             @elseif ($listing->is_published && $listing->approved_at)
-                                                <span class="badge badge-success-light px-3 py-1 rounded-pill font-weight-bold smallest uppercase">ACTIVE</span>
+                                                <span class="badge badge-success-light px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1">Active</span>
                                             @elseif ($listing->is_published && !$listing->approved_at)
-                                                <span class="badge badge-warning-light px-3 py-1 rounded-pill font-weight-bold smallest uppercase">PENDING</span>
+                                                <span class="badge badge-warning-light px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1">Pending</span>
                                             @else
-                                                <span class="badge badge-secondary-soft text-secondary px-3 py-1 rounded-pill font-weight-bold smallest uppercase">DRAFT</span>
+                                                <span class="badge badge-secondary-light px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1">Draft</span>
                                             @endif
                                         </div>
-                                        <div class="font-weight-600 text-dark smallest">{{ $listing->created_at->diffForHumans(null, true) }} ago</div>
+                                        <div class="smallest text-muted font-weight-bold uppercase letter-spacing-1">
+                                            <i class="far fa-clock mr-1 text-primary opacity-50"></i>{{ $listing->created_at->diffForHumans(null, true) }} ago
+                                        </div>
                                     </td>
-                                    <td class="text-right align-middle pr-4 py-4">
-                                        <div class="btn-group btn-group-premium shadow-xs rounded-pill border overflow-hidden">
+                                    <td class="text-right align-middle pr-4">
+                                        <div class="btn-group btn-group-premium">
                                             @php
                                                 $typeKey = strtolower($listing->listing_type);
                                                 $pluralMap = ['joblisting' => 'jobs'];
@@ -241,28 +241,28 @@
                                             @endphp
 
                                             @if (!$listing->approved_at)
-                                                <form action="{{ route($routePrefix . '.approve', $listing->id) }}" method="POST">
+                                                <form action="{{ route($routePrefix . '.approve', $listing->id) }}" method="POST" class="d-inline">
                                                     @csrf
-                                                    <button type="submit" class="btn btn-white btn-sm text-success py-2 px-3 border-right" data-toggle="tooltip" title="Approve">
+                                                    <button type="submit" class="btn text-success" data-toggle="tooltip" title="Approve Entry">
                                                         <i class="fas fa-check-double"></i>
                                                     </button>
                                                 </form>
                                             @else
-                                                <form action="{{ route($routePrefix . '.disapprove', $listing->id) }}" method="POST">
+                                                <form action="{{ route($routePrefix . '.disapprove', $listing->id) }}" method="POST" class="d-inline">
                                                     @csrf
-                                                    <button type="submit" class="btn btn-white btn-sm text-warning py-2 px-3 border-right" data-toggle="tooltip" title="Rollback">
+                                                    <button type="submit" class="btn text-warning" data-toggle="tooltip" title="Rollback Status">
                                                         <i class="fas fa-undo-alt"></i>
                                                     </button>
                                                 </form>
                                             @endif
 
-                                            <a href="{{ route($routePrefix . '.edit', $listing->id) }}" class="btn btn-white btn-sm text-primary py-2 px-3 border-right" data-toggle="tooltip" title="Modify">
+                                            <a href="{{ route($routePrefix . '.edit', $listing->id) }}" class="btn text-primary" data-toggle="tooltip" title="Modify Asset">
                                                 <i class="fas fa-pencil-alt"></i>
                                             </a>
                                             
                                             <form action="{{ route($routePrefix . '.destroy', $listing->id) }}" method="POST" class="d-inline">
                                                 @csrf @method('DELETE')
-                                                <button type="submit" class="btn btn-white btn-sm text-danger py-2 px-3" data-toggle="tooltip" title="Purge" onclick="return confirm('Permanently delete listing?')">
+                                                <button type="submit" class="btn text-danger" data-toggle="tooltip" title="Purge Record" onclick="return confirm('Permanently delete asset?')">
                                                     <i class="fas fa-trash-alt"></i>
                                                 </button>
                                             </form>
@@ -271,10 +271,11 @@
                                 </tr>
                             @empty
                                 <tr class="empty-state">
-                                    <td colspan="7" class="py-5 text-center">
+                                    <td colspan="{{ $type === 'all' ? '7' : '6' }}" class="py-5 text-center">
                                         <div class="py-4">
-                                            <i class="fas fa-layer-group fa-4x text-light mb-3 d-block"></i>
-                                            <p class="text-muted font-weight-bold mb-0">No active listings found for this catalog.</p>
+                                            <i class="fas fa-layer-group fa-4x text-muted opacity-25 mb-3 d-block"></i>
+                                            <h5 class="text-muted font-weight-bold">No active listings found for this catalog.</h5>
+                                            <p class="text-secondary small">Synchronize your marketplace catalog or initialize new entries.</p>
                                         </div>
                                     </td>
                                 </tr>
@@ -285,26 +286,14 @@
             </div>
 
             @if(method_exists($listings, 'hasPages') && $listings->hasPages())
-                <div class="card-footer bg-white border-0 py-4 px-4 d-flex justify-content-between align-items-center">
-                    <div class="text-muted smallest font-weight-bold uppercase">Displaying {{ $listings->firstItem() }} - {{ $listings->lastItem() }} of {{ $listings->total() }} records</div>
-                    <div>{{ $listings->links('pagination::bootstrap-4') }}</div>
+                <div class="card-footer bg-white border-top py-4 px-4 d-flex justify-content-between align-items-center">
+                    <div class="text-muted smallest font-weight-bold uppercase letter-spacing-1">Displaying {{ $listings->firstItem() }} - {{ $listings->lastItem() }} of {{ $listings->total() }} records</div>
+                    <div>{{ $listings->appends(request()->except('page'))->links('pagination::bootstrap-4') }}</div>
                 </div>
             @endif
         </div>
     </div>
 @stop
-
-@push('css')
-@include('admin._partials._toggle-card-css')
-<style>
-    .transition-all { transition: all 0.25s ease-in-out; }
-    .dropdown-item.transition-all:hover {
-        background-color: #f8f9fa;
-        transform: translateX(5px);
-        color: var(--primary);
-    }
-</style>
-@endpush
 
 @push('js')
 <script>

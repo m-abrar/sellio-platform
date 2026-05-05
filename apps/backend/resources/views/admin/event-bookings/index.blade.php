@@ -30,17 +30,18 @@
     <div class="container-fluid pb-5">
         @include('admin.alert')
 
-        <div class="card card-premium shadow-premium mb-4 border-0" style="border-radius: 20px;">
-            <div class="card-body py-4 px-4">
-                <form method="GET" action="{{ route('admin.event-bookings.index') }}">
+        {{-- Filter Protocol --}}
+        <div class="card registry-card-premium registry-filter-card mb-4">
+            <div class="card-body">
+                <form method="GET" action="{{ url()->current() }}">
                     <div class="row align-items-end">
                         <div class="col-md-3">
-                            <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Event Identification</label>
-                            <div class="input-group shadow-xs">
+                            <label class="form-label-premium">Event Identification</label>
+                            <div class="input-group input-group-premium">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text bg-white border-right-0"><i class="fas fa-ticket-alt text-primary text-xs"></i></span>
+                                    <span class="input-group-text"><i class="fas fa-ticket-alt text-xs"></i></span>
                                 </div>
-                                <select name="event_id" class="form-control border-left-0 select2">
+                                <select name="event_id" class="form-control select2">
                                     <option value="">All Events Intelligence</option>
                                     @foreach($events as $e)
                                         <option value="{{ $e->id }}" {{ request('event_id') == $e->id ? 'selected' : '' }}>{{ $e->title }}</option>
@@ -48,13 +49,13 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-2">
-                            <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Classification</label>
-                            <div class="input-group shadow-xs">
+                        <div class="col-md-3">
+                            <label class="form-label-premium">Classification</label>
+                            <div class="input-group input-group-premium">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text bg-white border-right-0"><i class="fas fa-tags text-primary text-xs"></i></span>
+                                    <span class="input-group-text"><i class="fas fa-tags text-xs"></i></span>
                                 </div>
-                                <select name="category" class="form-control border-left-0 select2">
+                                <select name="category" class="form-control select2">
                                     <option value="">All Categories</option>
                                     @foreach ($categories as $c)
                                         <option value="{{ $c->id }}" {{ request('category') == $c->id ? 'selected' : '' }}>{{ $c->title }}</option>
@@ -62,27 +63,27 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-2">
-                            <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Lifecycle Status</label>
-                            <div class="input-group shadow-xs">
+                        <div class="col-md-3">
+                            <label class="form-label-premium">Lifecycle Status</label>
+                            <div class="input-group input-group-premium">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text bg-white border-right-0"><i class="fas fa-filter text-primary text-xs"></i></span>
+                                    <span class="input-group-text"><i class="fas fa-filter text-xs"></i></span>
                                 </div>
-                                <select name="status" class="form-control border-left-0 select2">
-                                    <option value="">All Statuses</option>
-                                    <option value="pending" {{ $status == 'pending' ? 'selected' : '' }}>Pending</option>
-                                    <option value="confirmed" {{ $status == 'confirmed' ? 'selected' : '' }}>Confirmed</option>
+                                <select name="status" class="form-control select2">
+                                    <option value="all">All Lifecycle States</option>
+                                    <option value="pending" {{ $status == 'pending' ? 'selected' : '' }}>Awaiting Confirmation</option>
+                                    <option value="confirmed" {{ $status == 'confirmed' ? 'selected' : '' }}>Confirmed Entry</option>
                                     <option value="cancelled" {{ $status == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-5">
-                            <div class="d-flex" style="gap: 10px;">
-                                <button type="submit" class="btn btn-primary flex-grow-1 font-weight-bold shadow-xs rounded-pill smallest uppercase">
-                                    <i class="fas fa-sync-alt mr-2"></i> REFRESH REGISTRY
+                        <div class="col-md-3">
+                            <div class="d-flex align-items-center justify-content-end" style="gap: 12px;">
+                                <button type="submit" class="btn-filter-premium flex-grow-1">
+                                    <i class="fas fa-sync-alt mr-2"></i> UPDATE
                                 </button>
-                                <a href="{{ route('admin.event-bookings.index') }}" class="btn btn-default shadow-xs rounded-pill px-3 d-flex align-items-center justify-content-center" data-toggle="tooltip" title="Reset Filters">
-                                    <i class="fas fa-undo text-danger m-0"></i>
+                                <a href="{{ url()->current() }}" class="btn-reset-premium" data-toggle="tooltip" title="Reset Filters">
+                                    <i class="fas fa-undo"></i>
                                 </a>
                             </div>
                         </div>
@@ -92,19 +93,24 @@
         </div>
 
         {{-- Main Table --}}
-        <div class="card card-premium shadow-premium border-0 overflow-hidden">
-            <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center justify-content-between">
-                <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">
-                    <i class="fas fa-list-ul mr-2 text-primary opacity-50"></i> Ticketing Ledger
-                </h3>
+        <div class="card registry-table-card">
+            <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
+                <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none" style="letter-spacing: 1px;">Attendee Registry</h3>
+                <div class="card-tools d-flex align-items-center ml-auto">
+                    <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase mr-2">
+                        <i class="fas fa-id-card mr-1"></i> {{ $bookings->total() }} ENTRIES FOUND
+                    </span>
+                    <button type="button" class="btn btn-tool text-muted" data-card-widget="maximize">
+                        <i class="fas fa-expand"></i>
+                    </button>
+                </div>
             </div>
-
             <div class="card-body p-0">
                 <div class="table-responsive">
                     <table id="bookings-table" class="table table-hover table-premium mb-0">
                         <thead class="thead-light">
                             <tr>
-                                <th class="pl-4" style="width: 70px">Media</th>
+                                <th class="pl-4" style="width: 80px">Media</th>
                                 <th>Event Specification</th>
                                 <th>Attendee Principal</th>
                                 <th>Registry Date</th>
@@ -117,100 +123,52 @@
                             @forelse ($bookings as $booking)
                                 <tr>
                                     <td class="text-center align-middle pl-4">
-                                        <div class="icon-box-preview shadow-xs rounded overflow-hidden" style="width: 54px; height: 54px;">
-                                            <img src="{{ $booking->event->thumbnail_url ?? asset('images/fallbacks/default.jpg') }}" 
-                                                 class="w-100 h-100 object-fit-cover"
-                                                 alt="{{ $booking->event->title ?? 'Event' }}"
-                                                 onerror="this.src='{{ asset('images/fallbacks/default.jpg') }}'">
+                                        <div class="table-img-preview shadow-sm mx-auto">
+                                            <img src="{{ $booking->event->thumbnail_url ?? asset('images/fallbacks/default.jpg') }}" onerror="this.src='{{ asset('images/fallbacks/default.jpg') }}'">
                                         </div>
                                     </td>
-
                                     <td class="align-middle">
-                                        <span class="d-block font-weight-bold text-dark mb-1">
-                                            {{ $booking->event->title ?? __('N/A') }}
-                                        </span>
-                                        <div class="d-flex align-items-center">
+                                        <span class="d-block font-weight-bold text-dark mb-0">{{ $booking->event->title ?? __('N/A') }}</span>
+                                        <div class="d-flex align-items-center mt-1" style="gap: 10px;">
                                             @if($booking->event && $booking->event->category)
-                                                <span class="badge badge-primary-light text-primary px-2 py-1 mr-2 rounded-pill smallest font-weight-bold uppercase letter-spacing-1 shadow-xs">
+                                                <span class="badge badge-primary-light text-primary px-2 py-1 rounded-pill smallest font-weight-bold uppercase">
                                                     {{ $booking->event->category->title }}
                                                 </span>
                                             @endif
                                             @if($booking->event && $booking->event->location)
-                                                <span class="text-muted smallest font-weight-bold uppercase letter-spacing-1">
+                                                <span class="text-muted smallest font-weight-bold uppercase">
                                                     <i class="fas fa-map-marker-alt mr-1 text-danger opacity-50"></i>{{ $booking->event->location->title }}
                                                 </span>
                                             @endif
                                         </div>
                                     </td>
-
                                     <td class="align-middle">
-                                        @if($booking->user)
-                                            <div class="d-flex align-items-center">
-                                                <div class="icon-box-soft bg-primary-soft mr-3 d-flex align-items-center justify-content-center shadow-xs" style="width:36px; height:36px; border-radius: 8px;">
-                                                    <i class="fas fa-user-tie text-primary smallest"></i>
-                                                </div>
-                                                <div>
-                                                    <span class="d-block font-weight-bold text-dark mb-0 smallest uppercase letter-spacing-1">
-                                                        {{ $booking->user->name }}
-                                                    </span>
-                                                    <div class="smallest text-muted text-monospace">
-                                                        {{ $booking->user->email }}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @else
-                                            <span class="badge badge-secondary-light text-secondary px-3 py-1 rounded-pill smallest font-weight-bold uppercase letter-spacing-1">
-                                                {{ __('Guest Attendee') }}
-                                            </span>
-                                        @endif
+                                        <span class="d-block font-weight-bold text-dark mb-0 smallest uppercase letter-spacing-1">{{ $booking->user->name ?? 'Guest Attendee' }}</span>
+                                        <div class="smallest text-muted text-monospace">{{ $booking->user->email ?? 'no-email' }}</div>
                                     </td>
-
                                     <td class="align-middle">
-                                        <div class="smallest font-weight-bold text-dark uppercase letter-spacing-1">
-                                            {{ $booking->created_at->format('d M, Y') }}
-                                        </div>
-                                        <small class="text-muted smallest uppercase letter-spacing-1">
-                                            <i class="far fa-clock mr-1 text-primary opacity-50"></i> {{ $booking->created_at->format('H:i') }}
-                                        </small>
+                                        <div class="font-weight-bold text-dark mb-0 smallest uppercase letter-spacing-1">{{ $booking->created_at->format('d M, Y') }}</div>
+                                        <small class="text-muted smallest uppercase font-weight-bold"><i class="far fa-clock mr-1 text-primary opacity-50"></i> {{ $booking->created_at->format('H:i') }}</small>
                                     </td>
-
                                     <td class="align-middle text-right">
-                                        <div class="h6 font-weight-bold text-primary mb-0 text-monospace">
-                                            ${{ number_format($booking->total_price, 2) }}
-                                        </div>
+                                        <div class="font-weight-bold text-primary mb-0 text-monospace h6">${{ number_format($booking->total_price, 2) }}</div>
                                         @if($booking->quantity > 1)
-                                            <div class="smallest text-muted font-weight-bold uppercase letter-spacing-1">
-                                                {{ $booking->quantity }} Tickets
-                                            </div>
+                                            <div class="smallest text-muted font-weight-bold uppercase letter-spacing-1">{{ $booking->quantity }} Tickets</div>
                                         @endif
                                     </td>
-
                                     @php
-                                        $statusMap = [
-                                            'pending' => 'badge-warning-light text-warning',
-                                            'confirmed' => 'badge-success-light text-success',
-                                            'cancelled' => 'badge-danger-light text-danger'
-                                        ];
-                                        $statusClass = $statusMap[$booking->status] ?? 'badge-info-light text-info';
+                                        $statusMap = ['pending' => 'badge-warning-light', 'confirmed' => 'badge-success-light', 'cancelled' => 'badge-danger-light'];
+                                        $statusClass = $statusMap[$booking->status] ?? 'badge-secondary-light';
                                     @endphp
                                     <td class="text-center align-middle">
-                                        <span class="badge {{ $statusClass }} px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 shadow-xs" style="min-width: 100px;">
+                                        <span class="badge {{ $statusClass }} px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1" style="min-width: 90px;">
                                             {{ $booking->status ?? 'Confirmed' }}
                                         </span>
                                     </td>
-
                                     <td class="text-right align-middle pr-4">
-                                        <div class="btn-group btn-group-premium shadow-xs rounded-pill border overflow-hidden">
-                                            <a href="{{ route('admin.event-bookings.show', $booking->id) }}"
-                                               class="btn btn-white text-info py-2 px-3 d-inline-flex align-items-center border-right"
-                                               data-toggle="tooltip" title="Inspect Record">
-                                                <i class="fas fa-eye"></i>
-                                            </a>
-                                            <a href="{{ route('admin.event-bookings.edit', $booking->id) }}"
-                                               class="btn btn-white text-primary py-2 px-3 d-inline-flex align-items-center"
-                                               data-toggle="tooltip" title="Modify Record">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
+                                        <div class="btn-group btn-group-premium">
+                                            <a href="{{ route('admin.event-bookings.show', $booking->id) }}" class="btn text-info" data-toggle="tooltip" title="Inspect Record"><i class="fas fa-eye"></i></a>
+                                            <a href="{{ route('admin.event-bookings.edit', $booking->id) }}" class="btn text-primary" data-toggle="tooltip" title="Modify Record"><i class="fas fa-edit"></i></a>
                                         </div>
                                     </td>
                                 </tr>
@@ -242,21 +200,36 @@
 
 @section('css')
 <style>
-    .text-monospace { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace !important; }
-    .object-fit-cover { object-fit: cover; }
-    .bg-primary-soft { background: rgba(70, 165, 172, 0.1) !important; }
-    .badge-info-light { background: rgba(23, 162, 184, 0.1) !important; }
+    .input-group-premium .select2-container { flex: 1 1 auto !important; width: 1% !important; }
+    .input-group-premium .select2-container .select2-selection--single { height: 46px !important; border: 0 !important; padding-top: 10px !important; border-radius: 0 12px 12px 0 !important; }
 </style>
 @endsection
 
 @section('js')
 <script>
     $(document).ready(function() {
+        if (typeof $.fn.select2 === 'function') {
+            $('.select2').select2({ theme: 'bootstrap4', width: '100%' });
+        }
         $('[data-toggle="tooltip"]').tooltip();
-        $('.select2').select2({
-            theme: 'bootstrap4',
-            placeholder: 'Select identification'
-        });
+
+        if ($('#bookings-table tbody tr:not(.empty-state)').length > 0) {
+            $('#bookings-table').DataTable({
+                "paging": false,
+                "lengthChange": false,
+                "searching": true,
+                "ordering": true,
+                "info": false,
+                "autoWidth": false,
+                "responsive": true,
+                "dom": '<"row pt-3"<"col-sm-12"f>>t',
+                "language": {
+                    "search": "",
+                    "searchPlaceholder": "Search attendee registry..."
+                }
+            });
+            $('.dataTables_filter input').addClass('form-control form-control-premium shadow-none border-light mb-3').css('width', '250px');
+        }
     });
 </script>
 @endsection

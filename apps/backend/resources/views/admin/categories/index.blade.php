@@ -85,33 +85,7 @@
                                 </td>
 
                                 <td class="align-middle">
-                                    <div class="d-flex flex-wrap" style="gap: 6px;">
-                                        @php
-                                            $modules = [
-                                                'is_property'   => ['title' => 'Property',   'icon' => 'fas fa-home',         'text' => 'indigo-light'],
-                                                'is_event'      => ['title' => 'Event',      'icon' => 'fas fa-calendar-alt', 'text' => 'olive-light'],
-                                                'is_job'        => ['title' => 'Job',        'icon' => 'fas fa-briefcase',    'text' => 'navy-light'],
-                                                'is_auto'       => ['title' => 'Auto',       'icon' => 'fas fa-car',          'text' => 'lightblue-light'],
-                                                'is_service'    => ['title' => 'Service',    'icon' => 'fas fa-tools',        'text' => 'maroon-light'],
-                                                'is_classified' => ['title' => 'Classified', 'icon' => 'fas fa-tag',          'text' => 'orange-light'],
-                                            ];
-                                            $hasModule = false;
-                                        @endphp
-
-                                        @foreach($modules as $column => $data)
-                                            @if($category->$column)
-                                                @php $hasModule = true; @endphp
-                                                <span class="badge badge-{{ $data['text'] }} px-2 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 border-0 mr-1 mb-1" 
-                                                      data-toggle="tooltip" title="{{ $data['title'] }} Engine">
-                                                    <i class="{{ $data['icon'] }} mr-1"></i> {{ $data['title'] }}
-                                                </span>
-                                            @endif
-                                        @endforeach
-
-                                        @if(!$hasModule)
-                                            <span class="text-muted smallest font-weight-bold uppercase italic opacity-50">Global Segment</span>
-                                        @endif
-                                    </div>
+                                    @include('admin._partials._taxonomy-spectrum', ['model' => $category])
                                 </td>
 
                                 <td class="text-right align-middle">
@@ -123,22 +97,11 @@
                                 </td>
 
                                 <td class="text-right align-middle px-4">
-                                    <div class="btn-group btn-group-premium shadow-xs rounded-pill border overflow-hidden">
-                                        <a href="{{ route('admin.categories.edit', $category->id) }}" 
-                                           class="btn btn-white btn-sm text-info py-2 px-3 border-right" 
-                                           data-toggle="tooltip" title="Modify Configuration">
-                                            <i class="fas fa-pencil-alt"></i>
-                                        </a>
-                                        
-                                        <form action="{{ route('admin.categories.destroy', $category->id) }}" 
-                                              method="POST" 
-                                              class="d-inline"
-                                              onsubmit="return confirm('Permanently purge this taxonomy segment?')">
+                                    <div class="btn-group btn-group-premium">
+                                        <a href="{{ route('admin.categories.edit', $category->id) }}" class="btn text-info" data-toggle="tooltip" title="Modify Configuration"><i class="fas fa-edit"></i></a>
+                                        <form id="delete-category-{{ $category->id }}" action="{{ route('admin.categories.destroy', $category->id) }}" method="POST" class="d-inline">
                                             @csrf @method('DELETE')
-                                            <button type="submit" class="btn btn-white btn-sm text-danger py-2 px-3" 
-                                                    data-toggle="tooltip" title="Purge Segment">
-                                                <i class="fas fa-trash-alt"></i>
-                                            </button>
+                                            <button type="button" class="btn text-danger" data-toggle="tooltip" title="Purge Segment" onclick="confirmDelete('delete-category-{{ $category->id }}', 'Purge Taxonomy?', 'This segment and its associations will be removed.')"><i class="fas fa-trash-alt"></i></button>
                                         </form>
                                     </div>
                                 </td>
@@ -158,6 +121,7 @@
                 </table>
             </div>
         </div>
+        @include('admin._partials._sweetalert')
     </div>
 </div>
 @endsection

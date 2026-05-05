@@ -24,21 +24,21 @@
 @stop
 
 @section('content')
-    <div class="container-fluid">
+    <div class="container-fluid pb-5">
         @include('admin.alert')
 
-        {{-- Glass Filter Card --}}
-        <div class="card card-premium shadow-premium mb-4 border-0" style="border-radius: 20px;">
-            <div class="card-body py-4 px-4">
-                <form method="GET" action="{{ route('admin.classified-inquiries.index') }}">
+        {{-- Filter Protocol --}}
+        <div class="card registry-card-premium registry-filter-card mb-4">
+            <div class="card-body">
+                <form method="GET" action="{{ url()->current() }}">
                     <div class="row align-items-end">
                         <div class="col-md-3">
-                            <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Target Asset</label>
-                            <div class="input-group shadow-xs">
+                            <label class="form-label-premium">Target Asset</label>
+                            <div class="input-group input-group-premium">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text bg-white border-right-0"><i class="fas fa-search-dollar text-primary text-xs"></i></span>
+                                    <span class="input-group-text"><i class="fas fa-search-dollar text-xs"></i></span>
                                 </div>
-                                <select name="classifiedad" class="form-control border-left-0 select2">
+                                <select name="classifiedad" class="form-control select2">
                                     <option value="">All Classifieds</option>
                                     @foreach($classifieds as $c)
                                         <option value="{{ $c->id }}" {{ request('classifiedad') == $c->id ? 'selected' : '' }}>{{ $c->title }}</option>
@@ -47,12 +47,12 @@
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Market Category</label>
-                            <div class="input-group shadow-xs">
+                            <label class="form-label-premium">Market Category</label>
+                            <div class="input-group input-group-premium">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text bg-white border-right-0"><i class="fas fa-tags text-primary text-xs"></i></span>
+                                    <span class="input-group-text"><i class="fas fa-tags text-xs"></i></span>
                                 </div>
-                                <select name="category" class="form-control border-left-0 select2">
+                                <select name="category" class="form-control select2">
                                     <option value="">All Categories</option>
                                     @foreach ($categories as $c)
                                         <option value="{{ $c->id }}" {{ request('category') == $c->id ? 'selected' : '' }}>{{ $c->title }}</option>
@@ -61,27 +61,27 @@
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Inquiry Status</label>
-                            <div class="input-group shadow-xs">
+                            <label class="form-label-premium">Inquiry Status</label>
+                            <div class="input-group input-group-premium">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text bg-white border-right-0"><i class="fas fa-filter text-primary text-xs"></i></span>
+                                    <span class="input-group-text"><i class="fas fa-filter text-xs"></i></span>
                                 </div>
-                                <select name="status" class="form-control border-left-0 select2">
-                                    <option value="">All Statuses</option>
+                                <select name="status" class="form-control select2">
+                                    <option value="all">All Lifecycle States</option>
                                     <option value="pending" {{ $status == 'pending' ? 'selected' : '' }}>Awaiting Review</option>
-                                    <option value="viewed" {{ $status == 'viewed' ? 'selected' : '' }}>Viewed</option>
-                                    <option value="contacted" {{ $status == 'contacted' ? 'selected' : '' }}>Contacted</option>
-                                    <option value="replied" {{ $status == 'replied' ? 'selected' : '' }}>Replied</option>
+                                    <option value="viewed" {{ $status == 'viewed' ? 'selected' : '' }}>Lead Viewed</option>
+                                    <option value="contacted" {{ $status == 'contacted' ? 'selected' : '' }}>Contact Established</option>
+                                    <option value="replied" {{ $status == 'replied' ? 'selected' : '' }}>Response Dispatched</option>
                                 </select>
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <div class="d-flex" style="gap: 10px;">
-                                <button type="submit" class="btn btn-primary flex-grow-1 font-weight-bold shadow-xs rounded-pill smallest uppercase">
+                            <div class="d-flex align-items-center justify-content-end" style="gap: 12px;">
+                                <button type="submit" class="btn-filter-premium flex-grow-1">
                                     <i class="fas fa-sync-alt mr-2"></i> UPDATE
                                 </button>
-                                <a href="{{ route('admin.classified-inquiries.index') }}" class="btn btn-default shadow-xs rounded-pill px-3 d-flex align-items-center justify-content-center" data-toggle="tooltip" title="Reset Filters">
-                                    <i class="fas fa-undo text-danger m-0"></i>
+                                <a href="{{ url()->current() }}" class="btn-reset-premium" data-toggle="tooltip" title="Reset Filters">
+                                    <i class="fas fa-undo"></i>
                                 </a>
                             </div>
                         </div>
@@ -91,11 +91,17 @@
         </div>
 
         {{-- Main Table --}}
-        <div class="card card-premium shadow-premium border-0 overflow-hidden">
-            <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center justify-content-between">
-                <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">
-                    <i class="fas fa-exchange-alt mr-2 text-primary opacity-50"></i> {{ __('Interaction Registry') }}
-                </h3>
+        <div class="card registry-table-card">
+            <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
+                <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none" style="letter-spacing: 1px;">Marketplace Registry</h3>
+                <div class="card-tools d-flex align-items-center ml-auto">
+                    <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase mr-2">
+                        <i class="fas fa-bullhorn mr-1"></i> {{ $inquiries->total() }} INQUIRIES
+                    </span>
+                    <button type="button" class="btn btn-tool text-muted" data-card-widget="maximize">
+                        <i class="fas fa-expand"></i>
+                    </button>
+                </div>
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
@@ -104,7 +110,7 @@
                             <tr>
                                 <th class="text-center pl-4" style="width: 80px">Asset</th>
                                 <th>Ad Intelligence</th>
-                                <th>Inquirer Profile</th>
+                                <th>Inquirer Principal</th>
                                 <th>Engagement Date</th>
                                 <th class="text-center">Lifecycle</th>
                                 <th class="text-right pr-4">Actions</th>
@@ -114,71 +120,45 @@
                             @forelse ($inquiries as $inquiry)
                                 <tr>
                                     <td class="text-center align-middle pl-4">
-                                        <div class="icon-box-soft bg-primary-soft mx-auto d-flex align-items-center justify-content-center shadow-xs overflow-hidden" style="width:50px; height:50px; border-radius: 12px;">
-                                            <img src="{{ $inquiry->classifiedAd->thumbnail_url ?? asset('images/fallbacks/default.jpg') }}" alt="Classified" class="img-fluid" style="object-fit: cover; width: 100%; height: 100%;" onerror="this.src='{{ asset('images/fallbacks/default.jpg') }}'">
+                                        <div class="table-img-preview shadow-sm mx-auto">
+                                            <img src="{{ $inquiry->classifiedAd->thumbnail_url ?? asset('images/fallbacks/default.jpg') }}" onerror="this.src='{{ asset('images/fallbacks/default.jpg') }}'">
                                         </div>
                                     </td>
                                     <td class="align-middle">
-                                        <span class="d-block font-weight-bold text-dark mb-0" style="font-size: 0.95rem;">
-                                            {{ $inquiry->classifiedAd->title ?? 'N/A' }}
-                                        </span>
+                                        <span class="d-block font-weight-bold text-dark mb-0">{{ $inquiry->classifiedAd->title ?? 'N/A' }}</span>
                                         <div class="d-flex align-items-center mt-1" style="gap: 6px;">
                                             @if($inquiry->classifiedAd && $inquiry->classifiedAd->category)
-                                                <span class="badge badge-primary-soft text-primary px-2 py-1 font-weight-bold smallest uppercase" style="border-radius: 6px;">
-                                                    <i class="fas fa-tag mr-1 opacity-50"></i>{{ $inquiry->classifiedAd->category->title }}
+                                                <span class="badge badge-primary-light text-primary px-2 py-1 rounded-pill smallest font-weight-bold uppercase">
+                                                    {{ $inquiry->classifiedAd->category->title }}
                                                 </span>
                                             @endif
-                                            @if($inquiry->classifiedAd && $inquiry->classifiedAd->location)
-                                                <span class="badge badge-light border text-muted smallest uppercase font-weight-bold px-2">
-                                                    <i class="fas fa-map-marker-alt mr-1 text-danger opacity-50"></i>{{ $inquiry->classifiedAd->location->title }}
-                                                </span>
-                                            @endif
+                                            <span class="text-muted smallest font-weight-bold uppercase">ID: #{{ $inquiry->id }}</span>
                                         </div>
                                     </td>
                                     <td class="align-middle">
-                                        @if($inquiry->user)
-                                            <div class="d-flex align-items-center">
-                                                <div class="icon-box-soft bg-light mr-3 d-flex align-items-center justify-content-center shadow-xs" style="width:36px; height:36px; border-radius: 10px;">
-                                                    <span class="smallest font-weight-bold text-primary">{{ strtoupper(substr($inquiry->user->name ?? 'P', 0, 1)) }}</span>
-                                                </div>
-                                                <div>
-                                                    <span class="d-block font-weight-bold text-dark mb-0">{{ $inquiry->user->name }}</span>
-                                                    <small class="text-muted text-monospace smallest">{{ $inquiry->user->email }}</small>
-                                                </div>
-                                            </div>
-                                        @else
-                                            <span class="badge badge-secondary-soft text-secondary px-3 py-1 rounded-pill font-weight-bold smallest uppercase">{{ __('Guest Lead') }}</span>
-                                        @endif
+                                        <span class="d-block font-weight-bold text-dark mb-0 smallest uppercase letter-spacing-1">{{ $inquiry->user->name ?? 'Guest Lead' }}</span>
+                                        <div class="smallest text-muted text-monospace">{{ $inquiry->user->email ?? 'no-email' }}</div>
                                     </td>
                                     <td class="align-middle">
-                                        <div class="smallest text-dark font-weight-bold uppercase letter-spacing-1 mb-1">
-                                            <i class="far fa-calendar-alt mr-2 text-primary opacity-50"></i>{{ $inquiry->created_at->format('M d, Y') }}
+                                        <div class="font-weight-bold text-dark mb-0 smallest uppercase letter-spacing-1">
+                                            {{ $inquiry->created_at->format('d M, Y') }}
                                         </div>
-                                        <div class="smallest text-muted font-weight-bold uppercase letter-spacing-1">
-                                            <i class="far fa-clock mr-2 opacity-50"></i>{{ $inquiry->created_at->format('H:i') }}
-                                        </div>
+                                        <small class="text-muted smallest uppercase font-weight-bold">
+                                            <i class="far fa-clock mr-1 text-primary opacity-50"></i>{{ $inquiry->created_at->format('H:i') }}
+                                        </small>
                                     </td>
                                     @php
-                                        $statusMap = [
-                                            'pending'   => 'badge-warning-light text-warning',
-                                            'viewed'    => 'badge-info-light text-info',
-                                            'contacted' => 'badge-success-light text-success',
-                                            'replied'   => 'badge-success-light text-success',
-                                        ];
-                                        $statusClass = $statusMap[$inquiry->status] ?? 'badge-secondary-light text-secondary';
+                                        $statusMap = ['pending' => 'badge-warning-light', 'viewed' => 'badge-info-light', 'contacted' => 'badge-success-light', 'replied' => 'badge-success-light'];
+                                        $statusClass = $statusMap[$inquiry->status] ?? 'badge-secondary-light';
                                     @endphp
                                     <td class="text-center align-middle">
-                                        <span class="badge {{ $statusClass }} px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 shadow-xs" style="min-width: 100px;">
+                                        <span class="badge {{ $statusClass }} px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1" style="min-width: 90px;">
                                             {{ $inquiry->status ?? 'Received' }}
                                         </span>
                                     </td>
                                     <td class="text-right align-middle pr-4">
-                                        <div class="btn-group btn-group-premium shadow-xs rounded-pill border overflow-hidden">
-                                            <a href="{{ route('admin.classified-inquiries.show', $inquiry->id) }}" 
-                                               class="btn btn-white text-info py-2 px-4 d-inline-flex align-items-center"
-                                               data-toggle="tooltip" title="Inspect Inquiry">
-                                                <i class="fas fa-eye mr-1"></i> VIEW
-                                            </a>
+                                        <div class="btn-group btn-group-premium">
+                                            <a href="{{ route('admin.classified-inquiries.show', $inquiry->id) }}" class="btn text-info" data-toggle="tooltip" title="Inspect Record"><i class="fas fa-eye"></i></a>
                                         </div>
                                     </td>
                                 </tr>
@@ -206,26 +186,40 @@
             @endif
         </div>
     </div>
-@stop
+@endsection
 
 @section('css')
 <style>
-    .text-monospace { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace !important; }
-    .select2-container--bootstrap4 .select2-selection--single { height: 100% !important; border: 0 !important; background: transparent !important; }
-    .select2-container--bootstrap4 .select2-selection--single .select2-selection__rendered { line-height: 40px !important; padding-left: 0 !important; font-weight: 600 !important; font-size: 0.85rem !important; }
-    .select2-container--bootstrap4 .select2-selection--single .select2-selection__arrow { top: 50% !important; transform: translateY(-50%) !important; }
+    .input-group-premium .select2-container { flex: 1 1 auto !important; width: 1% !important; }
+    .input-group-premium .select2-container .select2-selection--single { height: 46px !important; border: 0 !important; padding-top: 10px !important; border-radius: 0 12px 12px 0 !important; }
 </style>
 @endsection
 
 @section('js')
 <script>
     $(document).ready(function() {
+        if (typeof $.fn.select2 === 'function') {
+            $('.select2').select2({ theme: 'bootstrap4', width: '100%' });
+        }
         $('[data-toggle="tooltip"]').tooltip();
-        $('.select2').select2({
-            theme: 'bootstrap4',
-            width: '100%',
-            placeholder: 'All Classifieds'
-        });
+
+        if ($('#inquiries-table tbody tr:not(.empty-state)').length > 0) {
+            $('#inquiries-table').DataTable({
+                "paging": false,
+                "lengthChange": false,
+                "searching": true,
+                "ordering": true,
+                "info": false,
+                "autoWidth": false,
+                "responsive": true,
+                "dom": '<"row pt-3"<"col-sm-12"f>>t',
+                "language": {
+                    "search": "",
+                    "searchPlaceholder": "Search marketplace registry..."
+                }
+            });
+            $('.dataTables_filter input').addClass('form-control form-control-premium shadow-none border-light mb-3').css('width', '250px');
+        }
     });
 </script>
-@stop
+@endsection

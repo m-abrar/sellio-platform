@@ -72,34 +72,8 @@
                                     <small class="text-muted text-monospace" style="font-size: 0.75rem;">/{{ $brand->slug }}</small>
                                 </td>
 
-                                <td class="align-middle"> 
-                                    <div class="d-flex flex-wrap">
-                                        @php
-                                            $modules = [
-                                                'is_property'   => ['title' => 'Property',   'icon' => 'fas fa-home',         'color' => 'badge-indigo-light'],
-                                                'is_event'      => ['title' => 'Event',      'icon' => 'fas fa-calendar-alt', 'color' => 'badge-olive-light'],
-                                                'is_job'        => ['title' => 'Job',        'icon' => 'fas fa-briefcase',    'color' => 'badge-navy-light'],
-                                                'is_auto'       => ['title' => 'Auto',       'icon' => 'fas fa-car',          'color' => 'badge-lightblue-light'],
-                                                'is_service'    => ['title' => 'Service',    'icon' => 'fas fa-tools',        'color' => 'badge-maroon-light'],
-                                                'is_classified' => ['title' => 'Classified', 'icon' => 'fas fa-tag',          'color' => 'badge-orange-light'],
-                                            ];
-                                            $hasModule = false;
-                                        @endphp
-
-                                        @foreach($modules as $column => $data)
-                                            @if($brand->$column)
-                                                @php $hasModule = true; @endphp
-                                                <span class="badge {{ $data['color'] }} px-2 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 border-0 mr-1 mb-1" 
-                                                      data-toggle="tooltip" title="{{ $data['title'] }} Module">
-                                                    <i class="{{ $data['icon'] }} mr-1"></i> {{ $data['title'] }}
-                                                </span>
-                                            @endif
-                                        @endforeach
-                                        
-                                        @if(!$hasModule)
-                                            <span class="text-muted small italic">General / Unassigned</span>
-                                        @endif
-                                    </div>
+                                <td class="align-middle">
+                                    @include('admin._partials._taxonomy-spectrum', ['model' => $brand])
                                 </td>
 
                                 <td class="text-center align-middle">
@@ -109,24 +83,11 @@
                                 </td>
 
                                 <td class="text-right align-middle px-4">
-                                    {{-- Standardized premium button group --}}
-                                    <div class="btn-group btn-group-premium shadow-xs rounded-pill border overflow-hidden">
-                                        <a href="{{ route('admin.brands.edit', $brand->id) }}" 
-                                           class="btn btn-white btn-sm text-info py-2 px-3 border-right" 
-                                           data-toggle="tooltip" title="Modify Settings">
-                                             <i class="fas fa-pencil-alt"></i>
-                                        </a>
-                                        
-                                        <form action="{{ route('admin.brands.destroy', $brand->id) }}" 
-                                              method="POST" 
-                                              class="d-inline"
-                                              onsubmit="return confirm('Are you sure you want to delete this brand?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-white btn-sm text-danger py-2 px-3" 
-                                                    data-toggle="tooltip" title="Delete Brand">
-                                                <i class="fas fa-trash-alt"></i>
-                                            </button>
+                                    <div class="btn-group btn-group-premium">
+                                        <a href="{{ route('admin.brands.edit', $brand->id) }}" class="btn text-info" data-toggle="tooltip" title="Modify Identity"><i class="fas fa-edit"></i></a>
+                                        <form id="delete-brand-{{ $brand->id }}" action="{{ route('admin.brands.destroy', $brand->id) }}" method="POST" class="d-inline">
+                                            @csrf @method('DELETE')
+                                            <button type="button" class="btn text-danger" data-toggle="tooltip" title="Remove Brand" onclick="confirmDelete('delete-brand-{{ $brand->id }}')"><i class="fas fa-trash-alt"></i></button>
                                         </form>
                                     </div>
                                 </td>
@@ -156,6 +117,7 @@
         </div>
 
         
+        @include('admin._partials._sweetalert')
     </div>
 </div>
 @endsection

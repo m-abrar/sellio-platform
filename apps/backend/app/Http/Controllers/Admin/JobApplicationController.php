@@ -15,6 +15,8 @@ class JobApplicationController extends Controller
      */
     public function index(Request $request, string $status = 'all'): View
     {
+        $status = $request->get('status', $status);
+        
         $applications = JobApplication::with(['job.category', 'job.location', 'user'])
             ->when($request->job, fn($q) => $q->where('job_listing_id', $request->job))
             ->when($request->job_title, fn($q) => $q->whereHas('job', fn($j) => $j->where('title', 'LIKE', "%{$request->job_title}%")))
@@ -107,5 +109,14 @@ class JobApplicationController extends Controller
         return redirect()
             ->route('admin.job-applications.index')
             ->with('success', __('Application deleted successfully.'));
+    }
+
+    /**
+     * Display the specified job application.
+     */
+    public function show(int $id): View
+    {
+        $application = JobApplication::with(['job.category', 'user'])->findOrFail($id);
+        return view('admin.job-applications.show', compact('application'));
     }
 }

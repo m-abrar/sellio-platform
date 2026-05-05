@@ -33,38 +33,39 @@
     <div class="container-fluid pb-5">
         @include('admin.alert')
 
-        <div class="card card-premium shadow-premium mb-4 border-0" style="border-radius: 20px;">
-            <div class="card-body py-4 px-4">
-                <form method="GET" action="{{ route('admin.product-orders.index') }}">
+        {{-- Filter Protocol --}}
+        <div class="card registry-card-premium registry-filter-card mb-4">
+            <div class="card-body">
+                <form method="GET" action="{{ url()->current() }}">
                     <div class="row align-items-end">
                         <div class="col-md-3">
-                            <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Order Tracking #</label>
-                            <div class="input-group shadow-xs">
+                            <label class="form-label-premium">Order Tracking #</label>
+                            <div class="input-group input-group-premium">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text bg-white border-right-0"><i class="fas fa-hashtag text-primary text-xs"></i></span>
+                                    <span class="input-group-text"><i class="fas fa-hashtag text-xs"></i></span>
                                 </div>
-                                <input type="text" name="order_number" class="form-control border-left-0 font-weight-bold" 
-                                       placeholder="Enter order reference..." value="{{ request('order_number') }}">
+                                <input type="text" name="order_number" class="form-control" 
+                                       placeholder="Enter reference..." value="{{ request('order_number') }}">
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Inventory Identification</label>
-                            <div class="input-group shadow-xs">
+                            <label class="form-label-premium">Inventory Identification</label>
+                            <div class="input-group input-group-premium">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text bg-white border-right-0"><i class="fas fa-box text-primary text-xs"></i></span>
+                                    <span class="input-group-text"><i class="fas fa-box text-xs"></i></span>
                                 </div>
-                                <input type="text" name="product_name" class="form-control border-left-0 font-weight-bold" 
-                                       placeholder="Search products..." value="{{ request('product_name') }}">
+                                <input type="text" name="product_name" class="form-control" 
+                                       placeholder="Search items..." value="{{ request('product_name') }}">
                             </div>
                         </div>
                         <div class="col-md-2">
-                            <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Fulfillment</label>
-                            <div class="input-group shadow-xs">
+                            <label class="form-label-premium">Fulfillment Lifecycle</label>
+                            <div class="input-group input-group-premium">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text bg-white border-right-0"><i class="fas fa-truck text-primary text-xs"></i></span>
+                                    <span class="input-group-text"><i class="fas fa-truck text-xs"></i></span>
                                 </div>
-                                <select name="status" class="form-control border-left-0 select2">
-                                    <option value="">All Statuses</option>
+                                <select name="status" class="form-control select2">
+                                    <option value="all">All States</option>
                                     <option value="pending" {{ $status == 'pending' ? 'selected' : '' }}>Pending</option>
                                     <option value="processing" {{ $status == 'processing' ? 'selected' : '' }}>Processing</option>
                                     <option value="completed" {{ $status == 'completed' ? 'selected' : '' }}>Completed</option>
@@ -72,13 +73,26 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="d-flex" style="gap: 10px;">
-                                <button type="submit" class="btn btn-primary flex-grow-1 font-weight-bold shadow-xs rounded-pill smallest uppercase">
-                                    <i class="fas fa-sync-alt mr-2"></i> REFRESH REGISTRY
+                        <div class="col-md-2">
+                            <label class="form-label-premium">Settlement State</label>
+                            <div class="input-group input-group-premium">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-credit-card text-xs"></i></span>
+                                </div>
+                                <select name="payment_status" class="form-control select2">
+                                    <option value="">All Payments</option>
+                                    <option value="paid" {{ request('payment_status') == 'paid' ? 'selected' : '' }}>Paid</option>
+                                    <option value="pending" {{ request('payment_status') == 'pending' ? 'selected' : '' }}>Pending</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="d-flex align-items-center justify-content-end" style="gap: 12px;">
+                                <button type="submit" class="btn-filter-premium flex-grow-1">
+                                    <i class="fas fa-sync-alt mr-2"></i> UPDATE
                                 </button>
-                                <a href="{{ route('admin.product-orders.index') }}" class="btn btn-default shadow-xs rounded-pill px-3 d-flex align-items-center justify-content-center" data-toggle="tooltip" title="Reset Filters">
-                                    <i class="fas fa-undo text-danger m-0"></i>
+                                <a href="{{ url()->current() }}" class="btn-reset-premium" data-toggle="tooltip" title="Reset Filters">
+                                    <i class="fas fa-undo"></i>
                                 </a>
                             </div>
                         </div>
@@ -88,20 +102,24 @@
         </div>
 
         {{-- Main Table --}}
-        <div class="card card-premium shadow-premium border-0 overflow-hidden" style="border-radius: 24px;">
-            <div class="card-header border-0 bg-white py-4 px-4 d-flex justify-content-between align-items-center">
-                <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">
-                    <i class="fas fa-list-ul mr-2 text-primary opacity-50"></i> Commerce Ledger
-                </h3>
-                
+        <div class="card registry-table-card">
+            <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
+                <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none" style="letter-spacing: 1px;">Commerce Registry</h3>
+                <div class="card-tools d-flex align-items-center ml-auto">
+                    <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase mr-2">
+                        <i class="fas fa-database mr-1"></i> {{ $orders->total() }} TRANSACTIONS
+                    </span>
+                    <button type="button" class="btn btn-tool text-muted" data-card-widget="maximize">
+                        <i class="fas fa-expand"></i>
+                    </button>
+                </div>
             </div>
-
             <div class="card-body p-0">
                 <div class="table-responsive">
                     <form id="bulk-action-form" action="{{ route('admin.product-orders.bulk-update') }}" method="POST">
                         @csrf
                         <input type="hidden" name="bulk_status" id="bulk-status-input">
-                        <table class="table table-hover table-premium mb-0">
+                        <table id="orders-table" class="table table-hover table-premium mb-0">
                             <thead class="thead-light">
                                 <tr>
                                     <th class="text-center pl-4" style="width: 50px">
@@ -111,8 +129,8 @@
                                         </div>
                                     </th>
                                     <th class="text-center" style="width: 80px">Media</th>
-                                    <th>Commerce Protocol</th>
-                                    <th>Client Principal</th>
+                                    <th>Protocol</th>
+                                    <th>Principal</th>
                                     <th>Aggregate</th>
                                     <th>Settlement</th>
                                     <th class="text-center">Lifecycle</th>
@@ -133,62 +151,50 @@
                                                 $firstItem = $order->items->first();
                                                 $thumbnail = $firstItem && $firstItem->product ? $firstItem->product->thumbnail_url : asset('images/fallbacks/default.jpg');
                                             @endphp
-                                            <div class="table-img-preview shadow-sm">
-                                                <img src="{{ $thumbnail }}" alt="Item" onerror="this.src='{{ asset('images/fallbacks/default.jpg') }}'">
+                                            <div class="table-img-preview shadow-sm mx-auto">
+                                                <img src="{{ $thumbnail }}" onerror="this.src='{{ asset('images/fallbacks/default.jpg') }}'">
                                             </div>
                                         </td>
                                         <td class="align-middle">
-                                            <span class="d-block font-weight-bold text-dark mb-1 text-monospace">#{{ $order->order_number }}</span>
+                                            <span class="d-block font-weight-bold text-dark mb-0 text-monospace">#{{ $order->order_number }}</span>
                                             @if($firstItem)
-                                                <div class="smallest text-muted font-weight-bold uppercase letter-spacing-1">
-                                                    <i class="fas fa-box-open mr-1 text-primary opacity-50"></i> {{ Str::limit($firstItem->product_name, 25) }}
-                                                    @if($order->items->count() > 1)
-                                                        <span class="badge badge-primary-light text-primary ml-1" style="font-size: 0.6rem;">+{{ $order->items->count() - 1 }} UNIT(S)</span>
-                                                    @endif
+                                                <div class="smallest text-muted font-weight-bold uppercase letter-spacing-1 mt-1">
+                                                    <i class="fas fa-box-open mr-1 text-primary opacity-50"></i> {{ Str::limit($firstItem->product_name, 20) }}
                                                 </div>
                                             @endif
                                         </td>
                                         <td class="align-middle">
-                                            <div class="d-flex align-items-center">
-                                                <div class="icon-box-soft bg-primary-soft mr-3 d-flex align-items-center justify-content-center shadow-xs" style="width:34px; height:34px; border-radius: 8px;">
-                                                    <i class="fas fa-user-tie text-primary smallest"></i>
-                                                </div>
-                                                <div>
-                                                    <span class="d-block font-weight-bold text-dark mb-0 smallest uppercase letter-spacing-1">{{ $order->user->name ?? 'Guest' }}</span>
-                                                    <div class="smallest text-muted text-monospace">{{ Str::limit($order->user->email ?? 'no-email@provided.com', 20) }}</div>
-                                                </div>
-                                            </div>
+                                            <span class="d-block font-weight-bold text-dark mb-0 smallest uppercase letter-spacing-1">{{ $order->user->name ?? 'Guest' }}</span>
+                                            <div class="smallest text-muted text-monospace">{{ Str::limit($order->user->email ?? 'no-email', 20) }}</div>
                                         </td>
                                         <td class="align-middle">
                                             <div class="font-weight-bold text-dark mb-0 text-monospace h6">${{ number_format($order->total_amount, 2) }}</div>
                                             <div class="smallest text-muted font-weight-bold uppercase letter-spacing-1">{{ $order->items->count() }} {{ Str::plural('UNIT', $order->items->count()) }}</div>
                                         </td>
                                         <td class="align-middle">
-                                            <span class="badge {{ $order->payment_status === 'paid' ? 'badge-success-light text-success' : 'badge-warning-light text-warning' }} px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 shadow-xs">
-                                                {{ $order->payment_status }}
-                                            </span>
+                                            @if($order->payment_status === 'paid')
+                                                <span class="badge badge-success-light px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1">Paid</span>
+                                            @else
+                                                <span class="badge badge-warning-light px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1">Unsettled</span>
+                                            @endif
                                         </td>
                                         <td class="text-center align-middle">
                                             @php
                                                 $statusMap = [
-                                                    'pending' => 'badge-warning-light text-warning',
-                                                    'processing' => 'badge-info-light text-info',
-                                                    'completed' => 'badge-success-light text-success',
-                                                    'cancelled' => 'badge-danger-light text-danger'
+                                                    'pending' => 'badge-warning-light',
+                                                    'processing' => 'badge-info-light',
+                                                    'completed' => 'badge-success-light',
+                                                    'cancelled' => 'badge-danger-light'
                                                 ];
-                                                $statusClass = $statusMap[$order->status] ?? 'badge-secondary-light text-secondary';
+                                                $statusClass = $statusMap[$order->status] ?? 'badge-secondary-light';
                                             @endphp
-                                            <span class="badge {{ $statusClass }} px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 shadow-xs" style="min-width: 100px;">
+                                            <span class="badge {{ $statusClass }} px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1" style="min-width: 90px;">
                                                 {{ $order->status }}
                                             </span>
                                         </td>
                                         <td class="text-right align-middle pr-4">
-                                            <div class="btn-group btn-group-premium shadow-sm rounded-pill border overflow-hidden bg-white">
-                                                <a href="{{ route('admin.product-orders.show', $order->id) }}"
-                                                   class="btn btn-white text-info py-2 px-3 d-inline-flex align-items-center"
-                                                   data-toggle="tooltip" title="Inspect Order">
-                                                    <i class="fas fa-eye mr-1"></i> Inspect
-                                                </a>
+                                            <div class="btn-group btn-group-premium">
+                                                <a href="{{ route('admin.product-orders.show', $order->id) }}" class="btn text-info" data-toggle="tooltip" title="Inspect Order"><i class="fas fa-eye"></i></a>
                                             </div>
                                         </td>
                                     </tr>
@@ -353,6 +359,9 @@
         from { opacity: 0; transform: translate(-50%, 50px); }
         to { opacity: 1; transform: translate(-50%, 0); }
     }
+    /* Fix Select2 in Premium Input Groups */
+    .input-group-premium .select2-container { flex: 1 1 auto !important; width: 1% !important; }
+    .input-group-premium .select2-container .select2-selection--single { height: 46px !important; border: 0 !important; padding-top: 10px !important; border-radius: 0 12px 12px 0 !important; }
 </style>
 @endsection
 
@@ -360,16 +369,10 @@
 @include('admin._partials._sweetalert')
 <script>
     $(function () {
-        $('[data-toggle="tooltip"]').tooltip();
-        
-        // Resilient Select2 Loader
         if (typeof $.fn.select2 === 'function') {
-            $('.select2').select2({
-                theme: 'bootstrap4',
-                width: '100%',
-                placeholder: 'All Statuses'
-            });
+            $('.select2').select2({ theme: 'bootstrap4', width: '100%' });
         }
+        $('[data-toggle="tooltip"]').tooltip();
 
         const $bulkBar = $('#bulk-floating-bar');
         const $selectedCount = $('#selected-count');
@@ -419,6 +422,24 @@
                 }
             });
         };
+
+        if ($('#orders-table tbody tr:not(.empty-state)').length > 0) {
+            $('#orders-table').DataTable({
+                "paging": false,
+                "lengthChange": false,
+                "searching": true,
+                "ordering": true,
+                "info": false,
+                "autoWidth": false,
+                "responsive": true,
+                "dom": '<"row pt-3"<"col-sm-12"f>>t',
+                "language": {
+                    "search": "",
+                    "searchPlaceholder": "Search commerce registry..."
+                }
+            });
+            $('.dataTables_filter input').addClass('form-control form-control-premium shadow-none border-light mb-3').css('width', '250px');
+        }
     });
 </script>
 @endsection

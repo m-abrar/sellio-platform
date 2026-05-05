@@ -68,30 +68,8 @@
                                     <small class="text-muted text-monospace" style="font-size: 0.7rem;">UID: #TYP-{{ $type->id }}</small>
                                 </td>
 
-                                <td class="align-middle"> 
-                                    <div class="d-flex flex-wrap">
-                                        @php
-                                            $activeModules = array_filter([
-                                                'Property'   => [$type->is_property, 'fas fa-home', 'badge-indigo-light'],
-                                                'Event'      => [$type->is_event, 'fas fa-calendar-alt', 'badge-olive-light'],
-                                                'Job'        => [$type->is_job, 'fas fa-briefcase', 'badge-navy-light'],
-                                                'Auto'       => [$type->is_auto, 'fas fa-car', 'badge-lightblue-light'],
-                                                'Service'    => [$type->is_service, 'fas fa-tools', 'badge-maroon-light'],
-                                                'Classified' => [$type->is_classified, 'fas fa-tag', 'badge-orange-light'],
-                                            ], fn($m) => $m[0]);
-                                        @endphp
-
-                                        @forelse($activeModules as $title => $data)
-                                            <span class="badge {{ $data[2] }} px-2 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 border-0 mr-1 mb-1" 
-                                                  data-toggle="tooltip" title="{{ $title }} Module">
-                                                <i class="{{ $data[1] }} mr-1"></i> {{ $title }}
-                                            </span>
-                                        @empty
-                                            <span class="badge badge-secondary-light px-2 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 border-0 mr-1 mb-1">
-                                                <i class="fas fa-info-circle mr-1"></i> Unassigned
-                                            </span>
-                                        @endforelse
-                                    </div>
+                                <td class="align-middle">
+                                    @include('admin._partials._taxonomy-spectrum', ['model' => $type])
                                 </td>
 
                                 <td class="text-center align-middle">
@@ -101,24 +79,11 @@
                                 </td>
 
                                 <td class="text-right align-middle px-4">
-                                    {{-- Refined: Standardized premium action group --}}
-                                    <div class="btn-group btn-group-premium shadow-xs rounded-pill border overflow-hidden">
-                                        <a href="{{ route('admin.types.edit', $type->id) }}" 
-                                           class="btn btn-white btn-sm text-info py-2 px-3 border-right" 
-                                           data-toggle="tooltip" title="Modify Details">
-                                             <i class="fas fa-pencil-alt"></i>
-                                        </a>
-                                        
-                                        <form action="{{ route('admin.types.destroy', $type->id) }}" 
-                                              method="POST" 
-                                              class="d-inline"
-                                              onsubmit="return confirm('Permanently delete this type?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-white btn-sm text-danger py-2 px-3" 
-                                                    data-toggle="tooltip" title="Remove Type">
-                                                <i class="fas fa-trash-alt"></i>
-                                            </button>
+                                    <div class="btn-group btn-group-premium">
+                                        <a href="{{ route('admin.types.edit', $type->id) }}" class="btn text-info" data-toggle="tooltip" title="Modify Details"><i class="fas fa-edit"></i></a>
+                                        <form id="delete-type-{{ $type->id }}" action="{{ route('admin.types.destroy', $type->id) }}" method="POST" class="d-inline">
+                                            @csrf @method('DELETE')
+                                            <button type="button" class="btn text-danger" data-toggle="tooltip" title="Remove Type" onclick="confirmDelete('delete-type-{{ $type->id }}')"><i class="fas fa-trash-alt"></i></button>
                                         </form>
                                     </div>
                                 </td>
@@ -148,6 +113,7 @@
         </div>
 
         
+        @include('admin._partials._sweetalert')
     </div>
 </div>
 @endsection
