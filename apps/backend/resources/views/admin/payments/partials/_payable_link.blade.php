@@ -44,7 +44,7 @@
     }
 @endphp
 
-<a href="{{ $linkUrl }}" class="fw-medium {{ $color }}">
-    <i class="{{ $icon }} me-1"></i>
+<a href="{{ $linkUrl }}" class="font-weight-bold {{ $color }}">
+    <i class="{{ $icon }} mr-1"></i>
     {{ $linkText }}
 </a>

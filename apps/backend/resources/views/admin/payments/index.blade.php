@@ -17,6 +17,9 @@
                     <a href="{{ route('admin.payments.create') }}" class="btn btn-primary rounded-pill px-4 py-2 font-weight-bold shadow-premium smallest uppercase letter-spacing-1">
                         <i class="fas fa-plus-circle mr-2"></i> Log Transaction
                     </a>
+                    <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">
+                        <i class="fas fa-th-large"></i> Dashboard
+                    </a>
                 </div>
             </div>
         </div>
@@ -24,30 +27,30 @@
 @stop
 
 @section('content')
-    <div class="container-fluid">
+    <div class="container-fluid pb-5">
         @include('admin.alert')
 
-        {{-- Glass Filter Card --}}
-        <div class="card card-premium shadow-sm mb-4 border-0">
+        {{-- Premium Filter Card --}}
+        <div class="card card-premium shadow-premium mb-4 border-0" style="border-radius: 20px;">
             <div class="card-body py-4 px-4">
                 <form method="GET" action="{{ route('admin.payments.index') }}">
                     <div class="row align-items-end">
                         <div class="col-md-3">
-                            <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Client Intelligence</label>
-                            <div class="input-group border rounded shadow-xs bg-white" style="height: 46px; padding: 2px;">
-                                <div class="input-group-prepend border-0">
-                                    <span class="input-group-text bg-white border-0 py-0"><i class="fas fa-search text-primary"></i></span>
+                            <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Client Intelligence</label>
+                            <div class="input-group input-group-premium">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-search text-xs"></i></span>
                                 </div>
-                                <input type="text" name="user_name" class="form-control border-0 shadow-none bg-white h-100 py-0" placeholder="Name or Identity" value="{{ request('user_name') }}">
+                                <input type="text" name="user_name" class="form-control" placeholder="Name or Identity" value="{{ request('user_name') }}">
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Settlement Status</label>
-                            <div class="input-group border rounded shadow-xs bg-white" style="height: 46px; padding: 2px;">
-                                <div class="input-group-prepend border-0">
-                                    <span class="input-group-text bg-white border-0 py-0"><i class="fas fa-traffic-light text-primary"></i></span>
+                            <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Settlement Status</label>
+                            <div class="input-group input-group-premium">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-traffic-light text-xs"></i></span>
                                 </div>
-                                <select name="status" class="form-control border-0 custom-select shadow-none bg-white h-100 py-0 select2">
+                                <select name="status" class="form-control select2">
                                     <option value="">All Lifecycle States</option>
                                     <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Awaiting Capture</option>
                                     <option value="completed" {{ request('status') == 'completed' ? 'selected' : '' }}>Settled</option>
@@ -57,25 +60,26 @@
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Financial Protocol</label>
-                            <div class="input-group border rounded shadow-xs bg-white" style="height: 46px; padding: 2px;">
-                                <div class="input-group-prepend border-0">
-                                    <span class="input-group-text bg-white border-0 py-0"><i class="fas fa-network-wired text-primary"></i></span>
+                            <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Financial Protocol</label>
+                            <div class="input-group input-group-premium">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-network-wired text-xs"></i></span>
                                 </div>
-                                <select name="method" class="form-control border-0 custom-select shadow-none bg-white h-100 py-0 select2">
+                                <select name="method" class="form-control select2">
                                     <option value="">All Gateways</option>
                                     <option value="stripe" {{ request('method') == 'stripe' ? 'selected' : '' }}>Stripe Intelligence</option>
                                     <option value="paypal" {{ request('method') == 'paypal' ? 'selected' : '' }}>PayPal Express</option>
+                                    <option value="manual" {{ request('method') == 'manual' ? 'selected' : '' }}>Manual Settlement</option>
                                 </select>
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <div class="btn-group w-100 shadow-sm rounded-pill overflow-hidden border" style="height: 46px;">
-                                <button type="submit" class="btn btn-primary font-weight-bold smallest uppercase d-flex align-items-center justify-content-center">
-                                    <i class="fas fa-sync-alt mr-2"></i> UPDATE
+                            <div class="d-flex" style="gap: 10px;">
+                                <button type="submit" class="btn btn-primary flex-grow-1 font-weight-bold shadow-xs rounded-pill smallest uppercase" style="height: 46px;">
+                                    <i class="fas fa-sync-alt mr-2"></i> Update Registry
                                 </button>
-                                <a href="{{ route('admin.payments.index') }}" class="btn btn-white px-3 border-left d-flex align-items-center justify-content-center">
-                                    <i class="fas fa-undo text-danger"></i>
+                                <a href="{{ route('admin.payments.index') }}" class="btn btn-default shadow-xs rounded-pill px-3 d-flex align-items-center justify-content-center" data-toggle="tooltip" title="Reset Filters" style="height: 46px;">
+                                    <i class="fas fa-undo text-danger m-0"></i>
                                 </a>
                             </div>
                         </div>
@@ -85,11 +89,19 @@
         </div>
 
         {{-- Payments Table Card --}}
-        <div class="card card-premium overflow-hidden">
-            <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
-                <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1">
+        <div class="card card-premium shadow-premium border-0 overflow-hidden" style="border-radius: 24px;">
+            <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center justify-content-between">
+                <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">
                     <i class="fas fa-receipt mr-2 text-primary opacity-50"></i> Transaction Ledger
                 </h3>
+                <div class="card-tools d-flex align-items-center ml-auto">
+                    <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase mr-3">
+                        <i class="fas fa-chart-line mr-1"></i> {{ count($payments) }} TRANSACTIONS FOUND
+                    </span>
+                    <button type="button" class="btn btn-tool text-muted" data-card-widget="maximize">
+                        <i class="fas fa-expand"></i>
+                    </button>
+                </div>
             </div>
             
             <div class="card-body p-0">
@@ -111,12 +123,12 @@
                                     <td class="align-middle pl-4">
                                         @if($payment->user)
                                             <div class="d-flex align-items-center">
-                                                <div class="icon-box-soft bg-primary-soft mr-3 d-flex align-items-center justify-content-center shadow-xs" style="width:40px; height:40px; border-radius: 10px;">
+                                                <div class="icon-box-soft bg-primary-soft mr-3 d-flex align-items-center justify-content-center shadow-xs" style="width:38px; height:38px; border-radius: 10px;">
                                                     <span class="smallest font-weight-bold text-primary">{{ strtoupper(substr($payment->user->name, 0, 1)) }}</span>
                                                 </div>
                                                 <div>
-                                                    <span class="d-block font-weight-bold text-dark mb-0">{{ $payment->user->name }}</span>
-                                                    <small class="text-muted text-monospace smallest">{{ $payment->user->email }}</small>
+                                                    <span class="d-block font-weight-bold text-dark mb-0 smallest uppercase letter-spacing-1">{{ $payment->user->name }}</span>
+                                                    <small class="text-muted text-monospace smallest" style="font-size: 0.7rem;">{{ $payment->user->email }}</small>
                                                 </div>
                                             </div>
                                         @else
@@ -153,24 +165,24 @@
                                     </td>
 
                                     <td class="text-right align-middle">
-                                        <div class="font-weight-bold text-lg {{ $payment->status == 'completed' ? 'text-success' : 'text-dark' }}">
+                                        <div class="font-weight-bold text-dark mb-0">
                                             <span class="smallest font-weight-normal opacity-50 mr-1">{{ $payment->currency }}</span>{{ number_format($payment->amount, 2) }}
                                         </div>
-                                        <div class="text-monospace smallest text-muted opacity-50" title="Gateway Reference">
-                                            {{ Str::limit($payment->transaction_id ?? '---', 12) }}
+                                        <div class="text-monospace smallest text-muted opacity-50" title="Gateway Reference" style="font-size: 0.65rem;">
+                                            #{{ Str::limit($payment->transaction_id ?? '---', 12) }}
                                         </div>
                                     </td>
 
-                                    @php
-                                        $statusMap = [
-                                            'completed' => 'badge-success-light text-success',
-                                            'failed'    => 'badge-danger-light text-danger',
-                                            'refunded'  => 'badge-info-light text-info',
-                                            'pending'   => 'badge-warning-light text-warning',
-                                        ];
-                                        $statusClass = $statusMap[$payment->status] ?? 'badge-secondary-light text-secondary';
-                                    @endphp
                                     <td class="text-center align-middle">
+                                        @php
+                                            $statusMap = [
+                                                'completed' => 'badge-success-light text-success',
+                                                'failed'    => 'badge-danger-light text-danger',
+                                                'refunded'  => 'badge-info-light text-info',
+                                                'pending'   => 'badge-warning-light text-warning',
+                                            ];
+                                            $statusClass = $statusMap[$payment->status] ?? 'badge-secondary-light text-secondary';
+                                        @endphp
                                         <span class="badge {{ $statusClass }} px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 shadow-xs" style="min-width: 100px;">
                                             {{ $payment->status }}
                                         </span>
@@ -179,7 +191,7 @@
                                     <td class="text-right align-middle pr-4">
                                         <div class="btn-group btn-group-premium shadow-xs rounded-pill border overflow-hidden">
                                             <a href="{{ route('admin.payments.edit', $payment->id) }}" 
-                                               class="btn btn-white text-warning py-2 px-3 d-inline-flex align-items-center" 
+                                               class="btn btn-white text-info py-2 px-3 d-inline-flex align-items-center" 
                                                data-toggle="tooltip" title="Modify Record">
                                                 <i class="fas fa-edit"></i>
                                             </a>

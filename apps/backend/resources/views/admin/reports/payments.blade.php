@@ -13,12 +13,15 @@
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">High-fidelity analysis of marketplace inflow, revenue trends, and settled transactions.</p>
             </div>
-            <div class="col-sm-5 d-flex align-items-center justify-content-end">
+            <div class="col-sm-5 d-flex align-items-center justify-content-end" style="gap: 12px;">
                 <div class="btn-group btn-group-premium shadow-sm rounded-pill overflow-hidden border">
-                    <button class="btn btn-white btn-sm px-4 py-2 font-weight-bold smallest" onclick="window.print()">
-                        <i class="fas fa-print mr-1"></i> EXPORT TO PDF
+                    <button class="btn btn-white btn-sm px-4 py-2 font-weight-bold smallest uppercase letter-spacing-1" onclick="window.print()">
+                        <i class="fas fa-print mr-2"></i> Export Report
                     </button>
                 </div>
+                <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">
+                    <i class="fas fa-th-large"></i> Dashboard
+                </a>
             </div>
         </div>
     </div>
@@ -29,38 +32,38 @@
 
 <div class="container-fluid pb-5">
     
-    {{-- Filter Section --}}
-    <div class="card border-0 shadow-premium mb-5 overflow-hidden" style="border-radius: 24px;">
+    {{-- Premium Filter Card --}}
+    <div class="card card-premium shadow-premium mb-5 border-0 overflow-hidden" style="border-radius: 20px;">
         <div class="card-body p-4">
             <form action="{{ route('admin.reports.payments') }}" method="GET" class="row align-items-end">
-                <div class="col-md-5 mb-3 mb-md-0">
-                    <label class="smallest font-weight-bold text-muted text-uppercase mb-2 d-block letter-spacing-1">Analytics Period (Start)</label>
-                    <div class="input-group premium-input shadow-xs">
+                <div class="col-md-5">
+                    <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Analytics Period (Start)</label>
+                    <div class="input-group input-group-premium">
                         <div class="input-group-prepend">
-                            <span class="input-group-text bg-transparent border-0"><i class="fas fa-calendar-alt text-primary opacity-50"></i></span>
+                            <span class="input-group-text"><i class="fas fa-calendar-alt text-xs"></i></span>
                         </div>
-                        <input type="date" name="start_date" class="form-control border-0 bg-transparent" value="{{ $startDateFormatted ?? '' }}" style="height: 48px;">
+                        <input type="date" name="start_date" class="form-control" value="{{ $startDateFormatted ?? '' }}">
                     </div>
                 </div>
-                <div class="col-md-5 mb-3 mb-md-0">
-                    <label class="smallest font-weight-bold text-muted text-uppercase mb-2 d-block letter-spacing-1">Analytics Period (End)</label>
-                    <div class="input-group premium-input shadow-xs">
+                <div class="col-md-5">
+                    <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Analytics Period (End)</label>
+                    <div class="input-group input-group-premium">
                         <div class="input-group-prepend">
-                            <span class="input-group-text bg-transparent border-0"><i class="fas fa-calendar-check text-primary opacity-50"></i></span>
+                            <span class="input-group-text"><i class="fas fa-calendar-check text-xs"></i></span>
                         </div>
-                        <input type="date" name="end_date" class="form-control border-0 bg-transparent" value="{{ $endDateFormatted ?? '' }}" style="height: 48px;">
+                        <input type="date" name="end_date" class="form-control" value="{{ $endDateFormatted ?? '' }}">
                     </div>
                 </div>
                 <div class="col-md-2">
-                    <button type="submit" class="btn btn-primary btn-block font-weight-bold" style="height: 48px; border-radius: 12px;">
-                        <i class="fas fa-sync-alt mr-2"></i> REFRESH
+                    <button type="submit" class="btn btn-primary btn-block font-weight-bold rounded-pill shadow-xs smallest uppercase" style="height: 46px;">
+                        <i class="fas fa-sync-alt mr-2"></i> UPDATE
                     </button>
                 </div>
             </form>
             @if(isset($startDateFormatted) && isset($endDateFormatted))
-                <div class="mt-3 text-center">
-                    <span class="badge badge-pill badge-primary-soft px-3 py-2">
-                        <i class="fas fa-coins mr-1"></i> Analyzing period: {{ $startDateFormatted }} — {{ $endDateFormatted }}
+                <div class="mt-3">
+                    <span class="badge badge-pill badge-primary-soft text-primary px-3 py-2 font-weight-bold smallest uppercase letter-spacing-1">
+                        <i class="fas fa-coins mr-1"></i> ANALYZING PERIOD: {{ $startDateFormatted }} — {{ $endDateFormatted }}
                     </span>
                 </div>
             @endif
@@ -122,12 +125,12 @@
     </div>
 
     {{-- Trend Analysis --}}
-    <div class="card glass-card shadow-sm mb-5 border-0 overflow-hidden">
-        <div class="card-header border-0 bg-transparent pt-4 px-4 d-flex align-items-center">
-            <div class="icon-square bg-success-soft text-success mr-3">
+    <div class="card card-premium shadow-premium mb-5 border-0 overflow-hidden" style="border-radius: 24px;">
+        <div class="card-header border-0 bg-white pt-4 px-4 d-flex align-items-center">
+            <div class="icon-square-soft bg-success-soft text-success mr-3 d-flex align-items-center justify-content-center shadow-xs" style="width: 40px; height: 40px; border-radius: 10px;">
                 <i class="fas fa-chart-line"></i>
             </div>
-            <h3 class="card-title font-weight-bold text-dark mb-0">Monthly Inflow Trend</h3>
+            <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">Monthly Inflow Trend</h3>
         </div>
         <div class="card-body p-4">
             <div class="chart-responsive" style="height: 380px;">
@@ -137,59 +140,79 @@
     </div>
 
     {{-- Transaction History --}}
-    <div class="card glass-card shadow-sm border-0 mb-4 overflow-hidden">
-        <div class="card-header border-0 bg-transparent pt-4 px-4 d-flex justify-content-between align-items-center">
+    <div class="card card-premium shadow-premium border-0 mb-5 overflow-hidden" style="border-radius: 24px;">
+        <div class="card-header border-0 bg-white pt-4 px-4 d-flex justify-content-between align-items-center">
             <div class="d-flex align-items-center">
-                <div class="icon-square bg-info-soft text-info mr-3">
+                <div class="icon-square-soft bg-info-soft text-info mr-3 d-flex align-items-center justify-content-center shadow-xs" style="width: 40px; height: 40px; border-radius: 10px;">
                     <i class="fas fa-file-invoice-dollar"></i>
                 </div>
-                <h3 class="card-title font-weight-bold text-dark mb-0">Recent Transactions</h3>
+                <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">Recent Transactions</h3>
             </div>
-            <a href="{{ route('admin.payments.index') }}" class="btn btn-sm btn-primary-soft rounded-pill px-4 font-weight-bold">
-                VIEW FULL LEDGER <i class="fas fa-arrow-right ml-1 small"></i>
+            <a href="{{ route('admin.payments.index') }}" class="btn btn-primary-soft text-primary rounded-pill px-4 py-2 font-weight-bold smallest uppercase letter-spacing-1 shadow-xs">
+                View Ledger <i class="fas fa-arrow-right ml-2"></i>
             </a>
         </div>
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table class="table table-hover table-premium m-0">
-                    <thead>
+                    <thead class="thead-light">
                         <tr>
-                            <th class="px-4">ID</th>
-                            <th>Amount</th>
-                            <th>Method</th>
-                            <th>Status</th>
-                            <th>Payable Item</th>
-                            <th class="text-right px-4">Date</th>
+                            <th class="px-4">Reference</th>
+                            <th>Value</th>
+                            <th>Protocol</th>
+                            <th class="text-center">Lifecycle</th>
+                            <th>Intelligence</th>
+                            <th class="text-right px-4">Temporal Data</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse ($recentTransactions ?? [] as $transaction)
                         <tr>
-                            <td class="px-4 text-muted small align-middle">#{{ $transaction->id }}</td>
-                            <td class="align-middle font-weight-bold text-dark">${{ number_format($transaction->amount, 2) }}</td>
-                            <td class="align-middle"><span class="text-muted small text-uppercase font-weight-bold">{{ $transaction->method }}</span></td> 
+                            <td class="px-4 align-middle">
+                                <span class="text-monospace smallest text-muted font-weight-bold">#{{ $transaction->id }}</span>
+                            </td>
                             <td class="align-middle">
+                                <div class="font-weight-bold text-dark">${{ number_format($transaction->amount, 2) }}</div>
+                            </td>
+                            <td class="align-middle">
+                                <span class="smallest font-weight-bold uppercase letter-spacing-1 text-muted">
+                                    <i class="fas fa-wallet mr-1"></i> {{ $transaction->method }}
+                                </span>
+                            </td> 
+                            <td class="align-middle text-center">
                                 @php
                                     $statusStyle = [
-                                        'completed' => ['bg' => 'success-soft', 'text' => 'success', 'icon' => 'fa-check-circle'],
-                                        'pending'   => ['bg' => 'warning-soft', 'text' => 'warning', 'icon' => 'fa-clock'],
-                                        'failed'    => ['bg' => 'danger-soft', 'text' => 'danger', 'icon' => 'fa-exclamation-circle'],
-                                    ][strtolower($transaction->status)] ?? ['bg' => 'secondary-soft', 'text' => 'secondary', 'icon' => 'fa-info-circle'];
+                                        'completed' => ['bg' => 'success-light', 'text' => 'success'],
+                                        'pending'   => ['bg' => 'warning-light', 'text' => 'warning'],
+                                        'failed'    => ['bg' => 'danger-light', 'text' => 'danger'],
+                                    ][strtolower($transaction->status)] ?? ['bg' => 'secondary-light', 'text' => 'secondary'];
                                 @endphp
-                                <span class="badge badge-pill badge-{{ $statusStyle['bg'] }} text-{{ $statusStyle['text'] }} border border-{{ $statusStyle['text'] }} px-3 py-1 text-uppercase" style="font-size: 0.65rem; letter-spacing: 0.5px;">
-                                    <i class="fas {{ $statusStyle['icon'] }} mr-1"></i> {{ $transaction->status }}
+                                <span class="badge badge-premium badge-{{ $statusStyle['bg'] }} text-{{ $statusStyle['text'] }} px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 shadow-xs" style="min-width: 90px;">
+                                    {{ $transaction->status }}
                                 </span>
                             </td>
                             <td class="align-middle">
-                                @include('admin.reports.partials._payable_link', ['payable' => $transaction->payable])
+                                <div class="smallest font-weight-bold uppercase letter-spacing-1">
+                                    @include('admin.reports.partials._payable_link', ['payable' => $transaction->payable])
+                                </div>
                             </td>
-                            <td class="text-right px-4 align-middle text-muted small">{{ $transaction->paid_at?->format('M d, Y H:i') }}</td>
+                            <td class="text-right px-4 align-middle">
+                                <div class="smallest text-dark font-weight-bold uppercase letter-spacing-1 mb-1">
+                                    {{ $transaction->paid_at?->format('M d, Y') }}
+                                </div>
+                                <div class="smallest text-muted uppercase letter-spacing-1">
+                                    <i class="far fa-clock mr-1"></i> {{ $transaction->paid_at?->format('H:i') }}
+                                </div>
+                            </td>
                         </tr>
                         @empty
-                        <tr><td colspan="6" class="text-center py-5">
-                            <i class="fas fa-box-open fa-3x text-muted opacity-25 mb-3"></i>
-                            <p class="text-muted">No financial data in this range</p>
-                        </td></tr>
+                        <tr>
+                            <td colspan="6" class="text-center py-5">
+                                <i class="fas fa-receipt fa-4x text-muted opacity-25 mb-3 d-block"></i>
+                                <h5 class="text-muted font-weight-bold uppercase letter-spacing-1">No Transactions Detected</h5>
+                                <p class="small text-secondary mb-0">Financial activity in this range is currently dormant.</p>
+                            </td>
+                        </tr>
                         @endforelse
                     </tbody>
                 </table>
@@ -292,4 +315,4 @@
         }
     });
 </script>
-@stopt>
+@endsection

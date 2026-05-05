@@ -724,21 +724,65 @@ h1, h2, h3, h4, h5, h6, .brand-text {
     letter-spacing: 1px !important;
 }
 
+/* --- 10. EXECUTIVE INPUT SYSTEM --- */
+.form-control-premium {
+    height: 46px !important;
+    border-radius: 12px !important;
+    background-color: #f8fafc !important;
+    border: 1.5px solid #edf2f7 !important;
+    font-size: 0.875rem !important;
+    font-weight: 600 !important;
+    color: var(--dark) !important;
+    transition: all 0.3s ease !important;
+    padding: 0.75rem 1.25rem !important;
+}
+
+.form-control-premium:focus {
+    background-color: #ffffff !important;
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 0 4px rgba(var(--primary-rgb), 0.08) !important;
+}
+
+.input-group-premium {
+    background: #f8fafc;
+    border: 1.5px solid #edf2f7;
+    border-radius: 12px !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+}
+
+.input-group-premium .input-group-text {
+    background: transparent !important;
+    border: none !important;
+    color: var(--primary);
+    padding-left: 1rem;
+    padding-right: 0.5rem;
+}
+
+.input-group-premium .form-control {
+    background: transparent !important;
+    border: none !important;
+    height: 44px !important;
+    font-weight: 600 !important;
+    box-shadow: none !important;
+    padding-left: 0.5rem !important;
+}
+
+.input-group-premium:focus-within {
+    background: #ffffff;
+    border-color: var(--primary);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+}
+
 .dataTables_wrapper .form-control-premium {
     height: 40px !important;
     border-radius: 10px !important;
-    font-weight: 600 !important;
-    background-color: #f8fafc !important;
-    border: 1px solid #e2e8f0 !important;
 }
 
-.dataTables_filter input {
-    width: 250px !important;
-}
-
-.dataTables_length select {
-    width: 80px !important;
-}
+.dataTables_filter input { width: 250px !important; }
+.dataTables_length select { width: 80px !important; }
 
 /* --- 10. ALERTS & CALLOUTS --- */
 .alert {
@@ -993,3 +1037,101 @@ body.dark-mode .form-control {
     box-shadow: var(--shadow-glow) !important;
 }
 
+
+/* --- 14. NAVIGATION & CONTROL TOKENS --- */
+.btn-back {
+    display: inline-flex;
+    align-items: center;
+    background: #ffffff !important;
+    color: var(--dark) !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: var(--radius-pill) !important;
+    padding: 0.6rem 1.5rem !important;
+    font-weight: 700 !important;
+    font-size: var(--text-smallest) !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    text-decoration: none !important;
+    cursor: pointer;
+}
+
+.btn-back i {
+    margin-right: 10px;
+    font-size: 0.9rem;
+    color: var(--primary);
+    transition: transform 0.3s ease;
+}
+
+.btn-back:hover {
+    background: #f8fafc !important;
+    border-color: var(--primary) !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05) !important;
+    color: var(--primary) !important;
+    text-decoration: none !important;
+}
+
+.btn-back:hover i {
+    transform: translateX(-4px);
+}
+
+/* --- 15. EXECUTIVE FILTER & SEARCH TOKENS --- */
+.nav-pills-premium {
+    background-color: #f8fafc !important;
+    padding: 4px !important;
+    border-radius: var(--radius-pill) !important;
+    display: inline-flex !important;
+}
+
+.nav-pills-premium .nav-link {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    border-radius: var(--radius-pill) !important;
+    color: var(--dark-muted) !important;
+}
+
+.nav-pills-premium .nav-link:not(.active):hover {
+    color: var(--primary) !important;
+    background-color: var(--primary-soft) !important;
+}
+
+.nav-pills-premium .nav-link.active {
+    background: var(--grad-primary) !important;
+    color: #ffffff !important;
+    box-shadow: var(--shadow-glow) !important;
+}
+
+.input-group-oval {
+    border-radius: var(--radius-pill) !important;
+    overflow: hidden !important;
+    border: 1px solid var(--border-color) !important;
+    background: #ffffff !important;
+    transition: all 0.3s ease !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+.input-group-oval:focus-within {
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 0 4px var(--primary-soft) !important;
+}
+
+.input-group-oval .input-group-prepend,
+.input-group-oval .input-group-text {
+    background-color: transparent !important;
+    border: none !important;
+    padding-left: 1.2rem !important;
+    padding-right: 0 !important;
+}
+
+.input-group-oval .form-control {
+    border: none !important;
+    padding-left: 0.8rem !important;
+    padding-right: 1.5rem !important;
+    height: 46px !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+.input-group-oval .form-control:focus {
+    box-shadow: none !important;
+}

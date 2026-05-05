@@ -15,10 +15,19 @@ class WithdrawalController extends Controller
         return Withdrawal::with('user')->latest();
     }
     
-    public function index()
+    public function index(Request $request)
     {
-        $withdrawals = $this->getWithdrawalsQuery()->paginate(20);
-        $filter_status = 'all';
+        $status = $request->get('status');
+        $query = $this->getWithdrawalsQuery();
+        
+        if ($status && in_array($status, ['pending', 'approved', 'rejected'])) {
+            $query->where('status', $status);
+            $filter_status = $status;
+        } else {
+            $filter_status = 'all';
+        }
+        
+        $withdrawals = $query->paginate(20);
         return view('admin.withdrawals.index', compact('withdrawals', 'filter_status'));
     }
 

@@ -33,28 +33,33 @@
                 <div class="row align-items-end">
                     <div class="col-md-4">
                         <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Service Title</label>
-                        <div class="input-group shadow-xs">
+                        <div class="input-group input-group-premium">
                             <div class="input-group-prepend">
-                                <span class="input-group-text bg-white border-right-0"><i class="fas fa-search text-muted text-xs"></i></span>
+                                <span class="input-group-text"><i class="fas fa-search text-xs"></i></span>
                             </div>
-                            <input type="text" name="title" class="form-control border-left-0" placeholder="Filter by Title..." value="{{ request('title') }}">
+                            <input type="text" name="title" class="form-control" placeholder="Filter by Title..." value="{{ request('title') }}">
                         </div>
                     </div>
                     <div class="col-md-4">
                         <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Category</label>
-                        <select name="category_id" class="form-control select2 shadow-xs">
-                            <option value="">All Categories</option>
-                            @foreach($categories ?? [] as $cat)
-                                <option value="{{ $cat->id }}" {{ request('category_id') == $cat->id ? 'selected' : '' }}>{{ $cat->title }}</option>
-                            @endforeach
-                        </select>
+                        <div class="input-group input-group-premium">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-folder-open text-xs"></i></span>
+                            </div>
+                            <select name="category_id" class="form-control select2">
+                                <option value="">All Categories</option>
+                                @foreach($categories ?? [] as $cat)
+                                    <option value="{{ $cat->id }}" {{ request('category_id') == $cat->id ? 'selected' : '' }}>{{ $cat->title }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
                     <div class="col-md-4 d-flex align-items-end" style="gap: 10px;">
-                        <button type="submit" class="btn btn-primary flex-fill font-weight-bold shadow-xs rounded-pill">
-                            <i class="fas fa-filter mr-1"></i> APPLY FILTERS
+                        <button type="submit" class="btn btn-primary flex-fill font-weight-bold shadow-xs rounded-pill smallest uppercase" style="height: 46px;">
+                            <i class="fas fa-filter mr-2"></i> Apply Filters
                         </button>
-                        <a href="{{ route('admin.services.index') }}" class="btn btn-default font-weight-bold shadow-xs rounded-pill">
-                            <i class="fas fa-undo mr-1"></i> RESET
+                        <a href="{{ route('admin.services.index') }}" class="btn btn-default font-weight-bold shadow-xs rounded-pill px-3 d-flex align-items-center justify-content-center" style="height: 46px;">
+                            <i class="fas fa-undo text-danger m-0"></i>
                         </a>
                     </div>
                 </div>
