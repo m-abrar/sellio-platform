@@ -8,9 +8,9 @@
 
 {{-- Left Side: Executive Marketing Hero --}}
 <div class="col-lg-6 d-none d-lg-flex auth-split-marketing text-white">
-    <div class="auth-glow" style="top: 20%; left: 20%; opacity: 0.4;"></div>
+    <div class="auth-glow auth-glow-tl"></div>
     
-    <div class="position-relative z-1" style="max-width: 520px;">
+    <div class="auth-marketing-content">
         <div class="mb-5 d-inline-block">
             <div class="p-3 rounded-xl bg-white bg-opacity-10 backdrop-blur-md shadow-premium border border-white border-opacity-10">
                 <i class="bi bi-shield-check text-primary display-4"></i>

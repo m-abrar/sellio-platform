@@ -7,9 +7,9 @@
 
 {{-- Left Side: Executive Marketing Hero --}}
 <div class="col-lg-6 d-none d-lg-flex auth-split-marketing text-white">
-    <div class="auth-glow" style="top: 20%; right: -10%; opacity: 0.5;"></div>
+    <div class="auth-glow auth-glow-tr"></div>
     
-    <div class="position-relative z-1" style="max-width: 520px;">
+    <div class="auth-marketing-content">
         <div class="mb-5 d-inline-block">
             <div class="p-3 rounded-xl bg-white bg-opacity-10 backdrop-blur-md shadow-premium border border-white border-opacity-10">
                 <i class="bi bi-person-plus text-primary display-4"></i>
@@ -124,7 +124,7 @@
                 
                 <div class="position-relative my-5">
                     <hr class="text-muted opacity-25">
-                    <span class="position-absolute top-50 start-50 translate-middle px-3 py-1 bg-white border rounded-pill shadow-sm small text-muted fw-bold text-uppercase" style="font-size: 0.6rem; letter-spacing: 1.5px; white-space: nowrap;">
+                    <span class="position-absolute top-50 start-50 translate-middle px-3 py-1 bg-white border rounded-pill shadow-sm small text-muted fw-bold text-uppercase divider-badge">
                         {{ __('Secure Social Gateway') }}
                     </span>
                 </div>

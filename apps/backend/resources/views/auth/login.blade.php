@@ -8,10 +8,10 @@
 {{-- Left Side: Executive Marketing Hero --}}
 <div class="col-lg-6 d-none d-lg-flex auth-split-marketing text-white">
     {{-- Decorative Glows --}}
-    <div class="auth-glow" style="top: -10%; left: -10%; opacity: 0.6;"></div>
-    <div class="auth-glow" style="bottom: -10%; right: -10%; opacity: 0.4;"></div>
+    <div class="auth-glow auth-glow-tl"></div>
+    <div class="auth-glow auth-glow-br"></div>
     
-    <div class="position-relative z-1" style="max-width: 520px;">
+    <div class="auth-marketing-content">
         <div class="mb-5 d-inline-block">
             <div class="p-3 rounded-xl bg-white bg-opacity-10 backdrop-blur-md shadow-premium border border-white border-opacity-10">
                 <i class="bi bi-rocket-takeoff text-primary display-4"></i>
@@ -112,8 +112,8 @@
             
             <div class="mb-5">
                 <div class="form-check custom-check d-flex align-items-center gap-3 py-1">
-                    <input class="form-check-input flex-shrink-0" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }} style="width: 20px; height: 20px; cursor: pointer; border-radius: 6px;">
-                    <label class="form-check-label small text-muted fw-bold mb-0" for="remember" style="cursor: pointer; user-select: none; line-height: 1;">
+                    <input class="form-check-input flex-shrink-0 custom-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
+                    <label class="form-check-label small text-muted fw-bold mb-0 custom-check-label" for="remember">
                         {{ page_content('auth.login.remember_text', __('Keep me signed in for 30 days')) }}
                     </label>
                 </div>
@@ -128,7 +128,7 @@
             {{-- Divider --}}
             <div class="position-relative my-5">
                 <hr class="text-muted opacity-25">
-                <span class="position-absolute top-50 start-50 translate-middle px-3 py-1 bg-white border rounded-pill shadow-sm small text-muted fw-bold text-uppercase" style="font-size: 0.6rem; letter-spacing: 1.5px; white-space: nowrap;">
+                <span class="position-absolute top-50 start-50 translate-middle px-3 py-1 bg-white border rounded-pill shadow-sm small text-muted fw-bold text-uppercase divider-badge">
                     {{ __('Secure Social Gateway') }}
                 </span>
             </div>
@@ -167,26 +167,5 @@
 
 @endsection
 
-@push('styles')
-<style>
-    /* Custom Checkbox Style - Premium Variant */
-    .form-check-input {
-        border: 2px solid #e2e8f0 !important;
-        transition: all 0.2s ease;
-    }
-    .form-check-input:checked {
-        background-color: var(--primary) !important;
-        border-color: var(--primary) !important;
-        box-shadow: 0 0 0 4px var(--primary-soft) !important;
-    }
-    
-    /* Ensure input backgrounds are forced white/light even with autofill */
-    .form-control:-webkit-autofill,
-    .form-control:-webkit-autofill:hover, 
-    .form-control:-webkit-autofill:focus {
-        -webkit-box-shadow: 0 0 0px 1000px var(--surface-white) inset !important;
-        -webkit-text-fill-color: var(--text-main) !important;
-        transition: background-color 5000s ease-in-out 0s;
-    }
-</style>
+@push('scripts')
 @endpush

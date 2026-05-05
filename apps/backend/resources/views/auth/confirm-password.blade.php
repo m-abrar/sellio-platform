@@ -1,145 +1,117 @@
 @extends('frontend._layouts._guest')
 
 @section('title', __('Confirm Password'))
-
 @section('body_class', 'has-body-glow')
 
 @section('content')
 
-{{-- Left Side: Marketing & Security Visuals --}}
-<div class="col-lg-6 d-none d-lg-flex flex-column align-items-center justify-content-center position-relative p-5 text-white overflow-hidden" 
-     style="background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);">
+{{-- Left Side: Executive Security Marketing --}}
+<div class="col-lg-6 d-none d-lg-flex auth-split-marketing text-white">
+    <div class="auth-glow auth-glow-tl"></div>
+    <div class="auth-glow auth-glow-br"></div>
     
-    <div class="position-absolute translate-middle" style="top: 20%; left: 20%; width: 500px; height: 500px; background: rgba(255,255,255,0.1); filter: blur(120px); border-radius: 50%;"></div>
-    
-    <div class="position-relative z-1 text-center" style="max-width: 480px;">
-        <div class="mb-4 d-inline-block p-3 bg-white bg-opacity-10 rounded-4 shadow-sm">
-            <i class="bi bi-shield-lock-fill text-white display-4"></i>
+    <div class="auth-marketing-content">
+        <div class="mb-5 d-inline-block">
+            <div class="p-3 rounded-xl bg-white bg-opacity-10 backdrop-blur-md shadow-premium border border-white border-opacity-10">
+                <i class="bi bi-shield-lock-fill text-primary display-4"></i>
+            </div>
         </div>
         
-        <h1 class="display-5 fw-800 mb-3">
-            {{ __('Secure Access') }}
+        <h1 class="display-4 fw-800 mb-4 lh-sm">
+            {!! __('Secure <span class="text-gradient">Access</span> Protocol') !!}
         </h1>
         
-        <p class="lead opacity-75 mb-5">
+        <p class="lead opacity-80 mb-5 fs-5 fw-medium">
             {{ __('For your protection, please verify your identity before accessing this sensitive area of your marketplace dashboard.') }}
         </p>
 
-        <div class="row g-4 text-start mt-4">
-            <div class="col-6">
-                <div class="d-flex align-items-center gap-2">
+        <div class="vstack gap-4 mt-2">
+            <div class="d-flex align-items-center gap-4">
+                <div class="icon-box-soft bg-white bg-opacity-10 rounded-circle flex-shrink-0">
                     <i class="bi bi-fingerprint fs-4"></i>
-                    <span class="small fw-medium">{{ __('Identity Verified') }}</span>
+                </div>
+                <div>
+                    <h5 class="mb-0 fw-bold">{{ __('Identity Verified') }}</h5>
+                    <p class="small opacity-60 mb-0">{{ __('Multi-layer biometric security standards.') }}</p>
                 </div>
             </div>
-            <div class="col-6">
-                <div class="d-flex align-items-center gap-2">
+            
+            <div class="d-flex align-items-center gap-4">
+                <div class="icon-box-soft bg-white bg-opacity-10 rounded-circle flex-shrink-0">
                     <i class="bi bi-incognito fs-4"></i>
-                    <span class="small fw-medium">{{ __('Encrypted Session') }}</span>
+                </div>
+                <div>
+                    <h5 class="mb-0 fw-bold">{{ __('Encrypted Session') }}</h5>
+                    <p class="small opacity-60 mb-0">{{ __('End-to-end credential shielding.') }}</p>
                 </div>
             </div>
         </div>
     </div>
+
+    <div class="position-absolute bottom-0 start-0 w-100 p-5 pb-5">
+        <p class="auth-footer-copyright mb-0 text-white opacity-50">&copy; {{ date('Y') }} {{ setting('site_name', config('app.name')) }}. Security Layer v2.4.0</p>
+    </div>
 </div>
 
-{{-- Right Side: Functional Confirmation Form --}}
-<div class="col-12 col-lg-6 d-flex align-items-center justify-content-center bg-white py-5 position-relative">
-    <div class="w-100 px-4 px-md-5" style="max-width: 520px;">
-        
-        {{-- Brand Logo for Mobile --}}
-        <div class="mb-5">
-            <div class="d-lg-none mb-4 text-center">
-                <div class="d-inline-flex align-items-center gap-2 text-primary fw-bolder fs-3 mb-2">
+{{-- Right Side: High-Fidelity Confirmation Card --}}
+<div class="col-12 col-lg-6 d-flex align-items-center justify-content-center py-5 px-3">
+    <div class="auth-card">
+        <div class="text-center mb-5">
+            <div class="d-lg-none mb-4">
+                <div class="d-inline-flex align-items-center gap-2 text-primary fw-bolder fs-2">
                     <i class="bi bi-rocket-takeoff"></i>
                     <span>{!! setting('site_name', config('app.name')) !!}</span>
                 </div>
             </div>
-            
-            <h2 class="h3 fw-bold text-dark mb-2">{{ __('Confirm Access') }}</h2>
-            <p class="text-muted">{{ __('Please re-enter your password to continue.') }}</p>
+            <h2 class="fw-800 text-dark mb-2 fs-2">{{ __('Confirm Access') }}</h2>
+            <p class="text-muted fw-medium text-uppercase divider-badge">{{ __('Identity Verification Required') }}</p>
         </div>
 
-        {{-- Security Notice --}}
-        <div @class(['alert alert-info border-0 shadow-sm small mb-4 py-3 rounded-4 d-flex align-items-center gap-3']) role="alert">
-            <i class="bi bi-info-circle-fill fs-5 text-info"></i>
-            <div>
-                {{ __('This is a secure area of the application. Please confirm your password before continuing.') }}
+        <div class="alert alert-info d-flex align-items-start gap-3">
+            <i class="bi bi-info-circle-fill fs-5 mt-1"></i>
+            <div class="fw-medium">
+                {{ __('This is a secure area. Please confirm your password before continuing to sensitive settings.') }}
             </div>
         </div>
 
-        {{-- Validation Errors --}}
         @if ($errors->any())
-            <div @class(['alert alert-danger border-0 shadow-sm small mb-4 py-3 rounded-4']) role="alert">
-                <ul class="mb-0 ps-3">
-                    @forelse ($errors->all() as $error)
+            <div class="alert alert-danger">
+                <ul class="mb-0 ps-3 small fw-medium">
+                    @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
-                    @empty
-                        <li>{{ __('An unexpected error occurred.') }}</li>
-                    @endforelse
+                    @endforeach
                 </ul>
             </div>
         @endif
 
         <form method="POST" action="{{ route('password.confirm') }}" class="mb-4">
             @csrf
-
-            {{-- Password Input --}}
-            <div class="mb-4">
-                <label for="passwordInput" class="form-label fw-semibold">{{ __('Password') }}</label>
-                <div class="position-relative">
-                    <input id="passwordInput" 
-                           @class(['form-control bg-light border-0 px-4', 'is-invalid' => $errors->has('password')]) 
-                           type="password" 
-                           name="password" 
-                           placeholder="••••••••" 
-                           required 
-                           autocomplete="current-password" 
-                           autofocus />
-                    <i class="bi bi-key position-absolute top-50 end-0 translate-middle-y me-3 text-muted"></i>
+            
+            <div class="mb-5">
+                <label for="password" class="form-label fw-bold small text-dark opacity-75 ms-1">{{ __('PASSWORD') }}</label>
+                <div class="form-icon-group">
+                    <input type="password" @class(['form-control', 'rounded-pill', 'is-invalid' => $errors->has('password')]) id="password" name="password" placeholder="••••••••" required autofocus>
+                    <i class="bi bi-shield-lock input-icon"></i>
                 </div>
             </div>
 
-            <div class="d-grid">
-                <button type="submit" class="btn btn-primary btn-lg fw-bold py-3 shadow-sm border-0 d-flex align-items-center justify-content-center gap-2">
+            <div class="d-grid mb-4">
+                <button type="submit" class="btn btn-primary btn-lg py-3 fs-6 d-flex align-items-center justify-content-center gap-2">
                     <i class="bi bi-check-circle-fill"></i>
                     {{ __('Confirm Identity') }}
                 </button>
             </div>
         </form>
 
-        {{-- Footer Copyright for Mobile --}}
-        <div class="mt-5 pt-4 text-center d-lg-none">
-            <span class="text-muted small">&copy; {{ date('Y') }} {{ setting('site_name', config('app.name')) }}.</span>
+        <div class="text-center">
+            <a href="{{ route('login') }}" class="small fw-bold text-decoration-none text-gradient">
+                <i class="bi bi-arrow-left me-1"></i> {{ __('Back to Safety') }}
+            </a>
         </div>
-    </div>
-
-    {{-- Absolute positioned footer for Desktop --}}
-    <div class="position-absolute bottom-0 start-0 w-100 p-4 text-center d-none d-lg-block">
-        <span class="text-muted small">&copy; {{ date('Y') }} {{ setting('site_name', config('app.name')) }}. {{ __('All rights reserved.') }}</span>
     </div>
 </div>
 
 @endsection
 
 @push('styles')
-<style>
-    .fw-800 { font-weight: 800; }
-    
-    /* Ensure the split screen layout works correctly within the layout's grid */
-    @media (min-width: 992px) {
-        .auth-wrapper .row {
-            height: 100vh;
-        }
-    }
-
-    /* Custom touch target optimization */
-    .btn-lg {
-        min-height: 58px;
-    }
-
-    .form-control {
-        min-height: 52px;
-        transition: all 0.2s ease-in-out;
-    }
-</style>
 @endpush
