@@ -101,10 +101,9 @@
                         @forelse ($products as $product)
                             <tr>
                                 <td class="text-center align-middle">
-                                    <div class="table-img-preview shadow-xs rounded-lg overflow-hidden border" style="width: 50px; height: 50px; margin: 0 auto;">
+                                    <div class="table-img-preview shadow-sm">
                                         <img src="{{ $product->getFirstMediaUrl('main_image', 'product_thumbnail') ?: asset('assets/defaults/placeholder.png') }}" 
-                                             alt="{{ $product->title }}"
-                                             style="width: 100%; height: 100%; object-fit: cover;">
+                                             alt="{{ $product->title }}">
                                     </div>
                                 </td>
 

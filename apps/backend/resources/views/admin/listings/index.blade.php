@@ -171,8 +171,8 @@
                             @forelse ($listings as $listing)
                                 <tr>
                                     <td class="text-center align-middle py-4">
-                                        <div class="table-img-preview shadow-xs rounded-lg overflow-hidden border" style="width: 50px; height: 50px;">
-                                            <img src="{{ $listing->thumbnail_url ?? asset('images/placeholder.png') }}" onerror="this.src='{{ asset('images/fallbacks/default.jpg') }}'" class="w-100 h-100 object-fit-cover">
+                                        <div class="table-img-preview shadow-sm">
+                                            <img src="{{ $listing->thumbnail_url ?? asset('images/placeholder.png') }}" onerror="this.src='{{ asset('images/fallbacks/default.jpg') }}'">
                                         </div>
                                     </td>
                                     <td class="align-middle py-4">

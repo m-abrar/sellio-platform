@@ -9,10 +9,10 @@
     
     @foreach($growthItems as $g)
     <div class="col-lg-4 mb-4">
-        <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
+        <div class="card border-0 shadow-premium overflow-hidden rounded-xl">
             <div class="card-body p-4">
                 <div class="d-flex align-items-center justify-content-between mb-4">
-                    <div class="icon-box-soft bg-{{ $g['color'] }}-soft text-{{ $g['color'] }} shadow-xs" style="width: 52px; height: 52px; font-size: 1.4rem; border-radius: 14px; display: flex; align-items: center; justify-content: center;">
+                    <div class="icon-box-soft bg-{{ $g['color'] }}-soft text-{{ $g['color'] }} shadow-xs rounded-lg" style="width: 52px; height: 52px; font-size: 1.4rem; display: flex; align-items: center; justify-content: center;">
                         <i class="fas {{ $g['icon'] }}"></i>
                     </div>
                     <span class="badge badge-{{ $g['color'] }}-light px-3 py-2 rounded-pill font-weight-bold smallest uppercase">

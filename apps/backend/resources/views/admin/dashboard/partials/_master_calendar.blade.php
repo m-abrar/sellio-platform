@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-12 mb-4"> 
-        <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
+        <div class="card border-0 shadow-premium overflow-hidden rounded-xl">
             <div class="card-header bg-white py-4 px-4 border-0 d-flex justify-content-between align-items-center">
                 <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1">
                     <i class="fas fa-calendar-alt mr-2 text-primary opacity-50"></i> Operational Schedule
@@ -12,7 +12,7 @@
                 </div>
             </div>
             <div class="card-body p-4 bg-white">
-                <div id="master-calendar" style="border-radius: 16px; overflow: hidden; background: #fff;"></div>
+                <div id="master-calendar" class="rounded-lg" style="overflow: hidden; background: #fff;"></div>
             </div>
         </div>
     </div>

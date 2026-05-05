@@ -29,10 +29,10 @@
         <!-- Add Listing Dropdown -->
         <div class="col-6 col-md-3">
             <div class="dropdown">
-                <button class="btn btn-primary d-flex align-items-center justify-content-center py-3 w-100 shadow-premium font-weight-bold" type="button" data-toggle="dropdown" style="border-radius: 12px; border: none !important; min-height: 62px; font-size: 0.85rem; letter-spacing: 0.5px;">
+                <button class="btn btn-primary d-flex align-items-center justify-content-center py-3 w-100 shadow-premium font-weight-bold rounded-md" type="button" data-toggle="dropdown" style="border: none !important; min-height: 62px; font-size: 0.85rem; letter-spacing: 0.5px;">
                     <i class="fas fa-plus-circle mr-2"></i> ADD LISTING <i class="fas fa-caret-down ml-2 opacity-50"></i>
                 </button>
-                <div class="dropdown-menu dropdown-menu-right shadow-premium border-0 animate__animated animate__fadeInUp" style="border-radius: 20px; min-width: 240px; padding: 12px; background: rgba(255,255,255,0.95); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.2) !important;">
+                <div class="dropdown-menu dropdown-menu-right shadow-premium border-0 animate__animated animate__fadeInUp rounded-xl" style="min-width: 240px; padding: 12px; background: rgba(255,255,255,0.95); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.2) !important;">
                     <div class="px-3 py-2 small text-muted font-weight-bold text-uppercase letter-spacing-1 mb-1">Catalog Engines</div>
                     @if(module_enabled('products'))
                         <a class="dropdown-item py-2 px-3 rounded-lg font-weight-600 mb-1" href="{{ route('admin.products.create') }}"><i class="fas fa-shopping-bag mr-2 text-success"></i> Create Product</a>
@@ -62,10 +62,10 @@
         <!-- Add Booking Dropdown -->
         <div class="col-6 col-md-3">
             <div class="dropdown">
-                <button class="btn btn-default d-flex align-items-center justify-content-center py-3 w-100 shadow-premium font-weight-bold bg-white border-light" type="button" data-toggle="dropdown" style="border-radius: 12px; color: var(--dark-muted) !important; min-height: 62px; font-size: 0.85rem; letter-spacing: 0.5px;">
+                <button class="btn btn-default d-flex align-items-center justify-content-center py-3 w-100 shadow-premium font-weight-bold bg-white border-light rounded-md" type="button" data-toggle="dropdown" style="color: var(--dark-muted) !important; min-height: 62px; font-size: 0.85rem; letter-spacing: 0.5px;">
                     <i class="fas fa-calendar-plus mr-2 text-primary"></i> ADD BOOKING <i class="fas fa-caret-down ml-2 opacity-50"></i>
                 </button>
-                <div class="dropdown-menu dropdown-menu-right shadow-premium border-0 animate__animated animate__fadeInUp" style="border-radius: 20px; min-width: 240px; padding: 12px; background: rgba(255,255,255,0.95); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.2) !important;">
+                <div class="dropdown-menu dropdown-menu-right shadow-premium border-0 animate__animated animate__fadeInUp rounded-xl" style="min-width: 240px; padding: 12px; background: rgba(255,255,255,0.95); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.2) !important;">
                     <div class="px-3 py-2 small text-muted font-weight-bold text-uppercase letter-spacing-1 mb-1">Operational Flow</div>
                     @if(module_enabled('properties'))
                         <a class="dropdown-item py-2 px-3 rounded-lg font-weight-600 mb-1" href="{{ route('admin.property-bookings.create') }}"><i class="fas fa-building mr-2 text-info"></i> Book Property</a>
@@ -126,11 +126,9 @@
         .section-header { display: flex; align-items: center; margin-bottom: 1.5rem; }
         .section-header .dot { width: 10px; height: 10px; border-radius: 50%; margin-right: 12px; transition: transform 0.3s; }
         
-        /* Modern Card kit */
-        .dashboard-blueprint .card { border-radius: 20px; border: none; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: var(--premium-shadow); border: 1px solid rgba(255,255,255,0.4); background: rgba(255,255,255,0.8); backdrop-filter: blur(15px); }
-        .dashboard-blueprint .card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,0.08) !important; border-color: rgba(70, 165, 172, 0.2); }
+        .card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,0.08) !important; }
 
-        .icon-circle { width: 56px; height: 56px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; transition: all 0.3s ease; }
+        .icon-circle { width: 56px; height: 56px; border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; transition: all 0.3s ease; }
         .card:hover .icon-circle { transform: scale(1.1) rotate(5deg); }
 
         /* Global Pulse Animation */
@@ -141,10 +139,9 @@
             100% { box-shadow: 0 0 0 0 rgba(70, 165, 172, 0); transform: scale(0.95); }
         }
         
-        #master-calendar { background: transparent; padding: 1.5rem; border-radius: 12px; }
-        .fc { font-family: 'Outfit', sans-serif !important; }
-        .fc .fc-toolbar-title { font-weight: 700; color: #1e293b; font-size: 1.25rem !important; }
-        .fc .fc-button-primary { background-color: var(--primary); border-color: var(--primary); border-radius: 10px; font-weight: 600; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 0.5px; padding: 8px 16px; }
+        #master-calendar { background: transparent; padding: 1.5rem; border-radius: var(--radius-md); }
+        .fc { font-family: var(--font-heading) !important; }
+        .fc .fc-toolbar-title { font-weight: 700; color: var(--dark); font-size: 1.25rem !important; }
         
         .dropdown-item { transition: all 0.2s ease; }
         .dropdown-item:hover { background: var(--primary-soft) !important; color: var(--primary) !important; transform: translateX(5px); }

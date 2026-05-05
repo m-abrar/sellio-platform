@@ -1,7 +1,7 @@
 <div class="row">
     {{-- 1. LIVE TRANSACTIONS --}}
     <div class="col-lg-4 mb-4">
-        <div class="card border-0 shadow-premium h-100 overflow-hidden" style="border-radius: 24px;">
+        <div class="card border-0 shadow-premium h-100 overflow-hidden rounded-xl">
             <div class="card-header bg-white border-0 py-4 px-4">
                 <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1">
                     <i class="fas fa-history mr-2 text-primary opacity-50"></i> Live Transactions
@@ -14,7 +14,7 @@
                             @foreach ($metrics['recent_bookings']['items'] as $item)
                             <tr>
                                 <td class="pl-4" width="60">
-                                    <div class="icon-box-soft bg-primary-soft text-primary shadow-xs" style="width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                    <div class="icon-box-soft bg-primary-soft text-primary shadow-xs rounded-md" style="width: 42px; height: 42px; display: flex; align-items: center; justify-content: center;">
                                         <i class="fas {{ $item['icon_class'] }}"></i>
                                     </div>
                                 </td>
@@ -43,7 +43,7 @@
     
     {{-- 2. REVENUE ANALYTICS --}}
     <div class="col-lg-4 mb-4">
-        <div class="card border-0 shadow-premium h-100 overflow-hidden" style="border-radius: 24px;">
+        <div class="card border-0 shadow-premium h-100 overflow-hidden rounded-xl">
             <div class="card-header bg-white border-0 py-4 px-4 d-flex justify-content-between align-items-center">
                 <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1">Revenue Analytics</h3>
                 <span class="badge badge-success-light ml-auto px-3 py-2 rounded-pill font-weight-bold smallest uppercase">MoM TREND</span>
@@ -59,7 +59,7 @@
 
     {{-- 3. MARKET DISTRIBUTION --}}
     <div class="col-lg-4 mb-4">
-        <div class="card border-0 shadow-premium h-100 overflow-hidden" style="border-radius: 24px;">
+        <div class="card border-0 shadow-premium h-100 overflow-hidden rounded-xl">
             <div class="card-header bg-white border-0 py-4 px-4">
                 <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1">Market Segment Mix</h3>
             </div>

@@ -144,8 +144,8 @@
                                                 $firstItem = $order->items->first();
                                                 $thumbnail = $firstItem && $firstItem->product ? $firstItem->product->thumbnail_url : asset('images/fallbacks/default.jpg');
                                             @endphp
-                                            <div class="icon-box-preview shadow-xs rounded overflow-hidden" style="width: 50px; height: 50px; margin: 0 auto;">
-                                                <img src="{{ $thumbnail }}" class="w-100 h-100 object-fit-cover" alt="Item" onerror="this.src='{{ asset('images/fallbacks/default.jpg') }}'">
+                                            <div class="table-img-preview shadow-sm">
+                                                <img src="{{ $thumbnail }}" alt="Item" onerror="this.src='{{ asset('images/fallbacks/default.jpg') }}'">
                                             </div>
                                         </td>
                                         <td class="align-middle">

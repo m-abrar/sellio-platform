@@ -131,7 +131,7 @@
                                 @forelse ($bookings as $booking)
                                     <tr>
                                         <td class="text-center align-middle">
-                                            <div class="table-img-preview shadow-xs">
+                                            <div class="table-img-preview shadow-sm">
                                                 <img src="{{ $booking->item_thumbnail }}" onerror="this.src='{{ asset('images/fallbacks/default.jpg') }}'">
                                             </div>
                                         </td>

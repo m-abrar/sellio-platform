@@ -1,7 +1,7 @@
 <div class="row">
     {{-- 1. PERFORMANCE INVENTORY --}}
     <div class="col-lg-5 mb-4"> 
-        <div class="card border-0 shadow-premium h-100 overflow-hidden" style="border-radius: 24px;">
+        <div class="card border-0 shadow-premium h-100 overflow-hidden rounded-xl">
             <div class="card-header bg-white py-4 px-4 border-0">
                 <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1">
                     <i class="fas fa-award mr-2 text-success opacity-50"></i> High Performance Inventory
@@ -47,7 +47,7 @@
 
     {{-- 2. GEOSPATIAL HEATMAP --}}
     <div class="col-lg-7 mb-4"> 
-        <div class="card border-0 shadow-premium h-100 overflow-hidden" style="border-radius: 24px;">
+        <div class="card border-0 shadow-premium h-100 overflow-hidden rounded-xl">
             <div class="card-header bg-white py-4 px-4 border-0 d-flex align-items-center justify-content-between">
                 <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1">
                     <i class="fas fa-map-marked-alt mr-2 text-primary opacity-50"></i> Geospatial Demand Heatmap

@@ -1,7 +1,7 @@
 <div class="row">
     {{-- 1. SUBMISSIONS QUEUE --}}
     <div class="col-lg-4 mb-4">
-        <div class="card border-0 shadow-premium h-100 overflow-hidden" style="border-radius: 24px;">
+        <div class="card border-0 shadow-premium h-100 overflow-hidden rounded-xl">
             <div class="card-header bg-white py-4 px-4 border-0 d-flex align-items-center justify-content-between">
                 <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1">
                     <i class="fas fa-file-signature mr-2 text-warning opacity-50"></i> Submissions Queue
@@ -11,7 +11,7 @@
                 <div class="list-group list-group-flush">
                     @foreach ($metrics['recent_listings']['items'] as $item)
                     <div class="list-group-item bg-transparent border-0 py-3 px-4 border-bottom d-flex align-items-center transition-all hover-shadow-sm">
-                        <div class="icon-box-soft bg-light-soft text-muted mr-3 shadow-xs" style="width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                        <div class="icon-box-soft bg-light-soft text-muted mr-3 shadow-xs rounded-md" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
                             <i class="fas {{ $item['icon_class'] }}"></i>
                         </div>
                         <div class="flex-grow-1">
@@ -32,7 +32,7 @@
 
     {{-- 2. SYSTEM INTELLIGENCE --}}
     <div class="col-lg-4 mb-4">
-        <div class="card border-0 shadow-premium h-100 bg-dark overflow-hidden" style="border-radius: 24px;">
+        <div class="card border-0 shadow-premium h-100 bg-dark overflow-hidden rounded-xl">
             <div class="card-header border-0 bg-transparent py-4 px-4">
                 <h3 class="card-title font-weight-bold text-white mb-0 smallest text-uppercase letter-spacing-1">
                     <i class="fas fa-shield-alt mr-2 text-danger opacity-50"></i> Intelligence Pulse
@@ -59,7 +59,7 @@
 
     {{-- 3. PERFORMANCE LEADERS --}}
     <div class="col-lg-4 mb-4">
-        <div class="card border-0 shadow-premium h-100 overflow-hidden" style="border-radius: 24px;">
+        <div class="card border-0 shadow-premium h-100 overflow-hidden rounded-xl">
             <div class="card-header bg-white py-4 px-4 border-0">
                 <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1">
                     <i class="fas fa-crown mr-2 text-warning opacity-50"></i> Ecosystem Leaders
@@ -68,7 +68,7 @@
             <div class="card-body p-0">
                 {{-- Top Partner --}}
                 <div class="px-4 py-3 bg-light-soft border-bottom d-flex align-items-center">
-                    <div class="icon-box-soft bg-success-soft text-success mr-3 shadow-xs" style="width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                    <div class="icon-box-soft bg-success-soft text-success mr-3 shadow-xs rounded-md" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
                         <i class="fas fa-user-tie fa-lg"></i>
                     </div>
                     <div class="flex-grow-1">
@@ -84,7 +84,7 @@
 
                 {{-- Elite Listing --}}
                 <div class="px-4 py-3 bg-white border-bottom d-flex align-items-center">
-                    <div class="icon-box-soft bg-primary-soft text-primary mr-3 shadow-xs" style="width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                    <div class="icon-box-soft bg-primary-soft text-primary mr-3 shadow-xs rounded-md" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
                         <i class="fas fa-award fa-lg"></i>
                     </div>
                     <div class="flex-grow-1">
@@ -100,7 +100,7 @@
 
                 {{-- Volume Leader --}}
                 <div class="px-4 py-3 bg-white d-flex align-items-center">
-                    <div class="icon-box-soft bg-info-soft text-info mr-3 shadow-xs" style="width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                    <div class="icon-box-soft bg-info-soft text-info mr-3 shadow-xs rounded-md" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
                         <i class="fas fa-chart-line fa-lg"></i>
                     </div>
                     <div class="flex-grow-1">

@@ -1,11 +1,11 @@
 <div class="row">
     <div class="col-12 mb-4">
-        <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.5);">
+        <div class="card border-0 shadow-premium overflow-hidden rounded-xl" style="background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.5);">
             <div class="card-body p-4">
                 <div class="row align-items-center">
                     <div class="col-md-3 border-right border-light-soft">
                         <div class="d-flex align-items-center">
-                            <div class="icon-box-soft bg-primary-soft text-primary mr-3 shadow-xs" style="width: 60px; height: 60px; font-size: 1.8rem; border-radius: 16px; display: flex; align-items: center; justify-content: center;">
+                            <div class="icon-box-soft bg-primary-soft text-primary mr-3 shadow-xs rounded-lg" style="width: 60px; height: 60px; font-size: 1.8rem; display: flex; align-items: center; justify-content: center;">
                                 <i class="fas fa-server"></i>
                             </div>
                             <div>

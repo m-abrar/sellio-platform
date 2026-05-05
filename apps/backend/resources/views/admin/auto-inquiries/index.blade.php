@@ -95,7 +95,7 @@
                             @forelse ($inquiries as $inquiry)
                                 <tr>
                                     <td class="text-center align-middle">
-                                        <div class="table-img-preview shadow-xs">
+                                        <div class="table-img-preview shadow-sm">
                                             <img src="{{ $inquiry->auto->thumbnail_url ?? asset('images/fallbacks/default.jpg') }}" alt="Vehicle" onerror="this.src='{{ asset('images/fallbacks/default.jpg') }}'">
                                         </div>
                                     </td>
