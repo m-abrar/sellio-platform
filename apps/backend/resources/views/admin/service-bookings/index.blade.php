@@ -27,35 +27,8 @@
     <div class="container-fluid">
         @include('admin.alert')
 
-        {{-- Glass Filter Card --}}
-        <div class="card card-premium shadow-sm mb-4 border-0">
-            <div class="card-body py-4 px-4">
-                <form method="GET" action="{{ route('admin.service-bookings.index') }}">
-                    <div class="row align-items-end">
-                        <div class="col-md-8">
-                            <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Service Search / Identification</label>
-                            <div class="input-group shadow-xs">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text bg-white border-right-0"><i class="fas fa-search text-primary"></i></span>
-                                </div>
-                                <input type="text" name="service_name" class="form-control border-left-0 smallest font-weight-bold" 
-                                       placeholder="Enter service title, technician name, or booking ID..." value="{{ request('service_name') }}">
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="d-flex" style="gap: 10px;">
-                                <button type="submit" class="btn btn-primary flex-grow-1 font-weight-bold smallest uppercase">
-                                    <i class="fas fa-sync-alt mr-2"></i> REFRESH REGISTRY
-                                </button>
-                                <a href="{{ route('admin.service-bookings.index') }}" class="btn btn-back px-3 border shadow-sm d-flex align-items-center justify-content-center" data-toggle="tooltip" title="Reset Filters">
-                                    <i class="fas fa-undo text-danger m-0"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
+        {{-- Filter Protocol --}}
+        @include('admin.service-bookings._filter')
 
         {{-- Main Table --}}
         <div class="card card-premium overflow-hidden">

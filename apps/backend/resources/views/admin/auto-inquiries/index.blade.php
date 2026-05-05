@@ -5,8 +5,8 @@
 @section('plugins.Datatables', true)
 
 @section('content_header')
-    <div class="container-fluid">
-        <div class="row mb-2">
+    <div class="container-fluid pt-4">
+        <div class="row mb-4 align-items-center">
             <div class="col-sm-6">
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-car mr-2 text-primary"></i>
@@ -32,52 +32,7 @@
         @include('admin.alert')
 
         {{-- Filter Protocol --}}
-        <div class="card registry-card-premium registry-filter-card mb-4">
-            <div class="card-body">
-                <form method="GET" action="{{ url()->current() }}">
-                    <div class="row align-items-end">
-                        <div class="col-md-5">
-                            <label class="form-label-premium">Vehicle Asset</label>
-                            <div class="input-group input-group-premium">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="fas fa-car text-xs"></i></span>
-                                </div>
-                                <input type="text" name="search" class="form-control" placeholder="Select or type vehicle..." list="auto-suggestions" value="{{ request('search') }}">
-                                <datalist id="auto-suggestions">
-                                    @foreach($autos as $a)
-                                        <option value="{{ $a->title }}">
-                                    @endforeach
-                                </datalist>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label-premium">Inquiry Status</label>
-                            <div class="input-group input-group-premium">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="fas fa-filter text-xs"></i></span>
-                                </div>
-                                <select name="status" class="form-control select2">
-                                    <option value="all">All Lifecycle States</option>
-                                    <option value="pending" {{ $status == 'pending' ? 'selected' : '' }}>Pending</option>
-                                    <option value="viewed" {{ $status == 'viewed' ? 'selected' : '' }}>Viewed</option>
-                                    <option value="contacted" {{ $status == 'contacted' ? 'selected' : '' }}>Contacted</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="d-flex align-items-center justify-content-end" style="gap: 12px;">
-                                <button type="submit" class="btn-filter-premium flex-grow-1">
-                                    <i class="fas fa-sync-alt mr-2"></i> UPDATE
-                                </button>
-                                <a href="{{ url()->current() }}" class="btn-reset-premium" data-toggle="tooltip" title="Reset Filters">
-                                    <i class="fas fa-undo"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
+        @include('admin.auto-inquiries._filter')
 
         {{-- Main Table --}}
         <div class="card registry-table-card">

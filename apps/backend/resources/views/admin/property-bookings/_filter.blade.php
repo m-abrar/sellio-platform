@@ -1,0 +1,62 @@
+{{-- Filter Protocol --}}
+<div class="card registry-card-premium registry-filter-card mb-4">
+    <div class="card-body">
+        <form method="GET" action="{{ url()->current() }}">
+            <div class="row align-items-end">
+                <div class="col-md-3">
+                    <label class="form-label-premium">Property Focus</label>
+                    <div class="input-group input-group-premium">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-home text-xs"></i></span>
+                        </div>
+                        <select name="property" class="form-control select2">
+                            <option value="">All Inventory</option>
+                            @foreach ($properties as $p)
+                                <option value="{{ $p->id }}" {{ request('property') == $p->id ? 'selected' : '' }}>
+                                    {{ $p->title }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label-premium">Booking Lifecycle</label>
+                    <div class="input-group input-group-premium">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-traffic-light text-xs"></i></span>
+                        </div>
+                        <select name="status" class="form-control select2">
+                            <option value="all">All Lifecycle States</option>
+                            @foreach (['pending' => 'Pending Review', 'confirmed' => 'Confirmed Stay', 'cancelled' => 'Cancelled'] as $val => $label)
+                                <option value="{{ $val }}" {{ request('status') == $val ? 'selected' : '' }}>
+                                    {{ $label }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label-premium">Temporal Range</label>
+                    <div class="d-flex align-items-center" style="gap: 10px;">
+                        <div class="input-group input-group-premium flex-grow-1">
+                            <input type="date" name="start_date" class="form-control" value="{{ request('start_date') }}">
+                        </div>
+                        <div class="input-group input-group-premium flex-grow-1">
+                            <input type="date" name="end_date" class="form-control" value="{{ request('end_date') }}">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="d-flex align-items-center justify-content-end" style="gap: 12px;">
+                        <button type="submit" class="btn-filter-premium flex-grow-1">
+                            <i class="fas fa-sync-alt mr-2"></i> UPDATE
+                        </button>
+                        <a href="{{ url()->current() }}" class="btn-reset-premium" data-toggle="tooltip" title="Reset Filters">
+                            <i class="fas fa-undo"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
