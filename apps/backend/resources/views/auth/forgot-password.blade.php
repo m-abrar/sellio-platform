@@ -6,76 +6,79 @@
 
 @section('content')
 
-{{-- Left Side: Marketing & Recovery Visuals (Consistent with the Brand) --}}
-<div class="col-lg-6 d-none d-lg-flex flex-column align-items-center justify-content-center position-relative p-5 text-white overflow-hidden" 
-     style="background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);">
+{{-- Left Side: Executive Marketing Hero --}}
+<div class="col-lg-6 d-none d-lg-flex auth-split-marketing text-white">
+    <div class="auth-glow" style="top: 0%; left: 0%; opacity: 0.4;"></div>
     
-    <div class="position-absolute translate-middle" style="top: 20%; left: 20%; width: 500px; height: 500px; background: rgba(255,255,255,0.1); filter: blur(120px); border-radius: 50%;"></div>
-    
-    <div class="position-relative z-1 text-center" style="max-width: 480px;">
-        <div class="mb-4 d-inline-block p-3 bg-white bg-opacity-10 rounded-4 shadow-sm">
-            <i class="bi bi-key-fill text-white display-4"></i>
+    <div class="position-relative z-1" style="max-width: 520px;">
+        <div class="mb-5 d-inline-block">
+            <div class="p-3 rounded-xl bg-white bg-opacity-10 backdrop-blur-md shadow-premium border border-white border-opacity-10">
+                <i class="bi bi-shield-lock text-primary display-4"></i>
+            </div>
         </div>
         
-        <h1 class="display-5 fw-800 mb-3">
-            {{ __('Account Recovery') }}
+        <h1 class="display-4 fw-800 mb-4 lh-sm">
+            {!! __('Account <span class="text-gradient">Recovery</span> Hub') !!}
         </h1>
         
-        <p class="lead opacity-75 mb-5">
-            {{ __('Don’t worry! It happens to the best of us. Simply enter your email and we’ll help you get back to your dashboard in no time.') }}
+        <p class="lead opacity-80 mb-5 fs-5 fw-medium">
+            {{ __('Securely regain access to your business environment. We use advanced verification to protect your ecosystem.') }}
         </p>
 
-        <div class="row g-4 text-start mt-4">
-            <div class="col-6">
-                <div class="d-flex align-items-center gap-2">
-                    <i class="bi bi-lightning-charge fs-4"></i>
-                    <span class="small fw-medium">{{ __('Instant Reset Link') }}</span>
+        <div class="vstack gap-4 mt-2">
+            <div class="d-flex align-items-center gap-4">
+                <div class="icon-box-soft bg-white bg-opacity-10 rounded-circle flex-shrink-0">
+                    <i class="bi bi-lightning fs-4"></i>
+                </div>
+                <div>
+                    <h5 class="mb-0 fw-bold">{{ __('Instant Link') }}</h5>
+                    <p class="small opacity-60 mb-0">{{ __('Get back to work in seconds.') }}</p>
                 </div>
             </div>
-            <div class="col-6">
-                <div class="d-flex align-items-center gap-2">
-                    <i class="bi bi-shield-lock fs-4"></i>
-                    <span class="small fw-medium">{{ __('Secure Recovery') }}</span>
+            
+            <div class="d-flex align-items-center gap-4">
+                <div class="icon-box-soft bg-white bg-opacity-10 rounded-circle flex-shrink-0">
+                    <i class="bi bi-shield-check fs-4"></i>
+                </div>
+                <div>
+                    <h5 class="mb-0 fw-bold">{{ __('Encrypted Reset') }}</h5>
+                    <p class="small opacity-60 mb-0">{{ __('Your security is our top priority.') }}</p>
                 </div>
             </div>
         </div>
     </div>
+    <div class="position-absolute bottom-0 start-0 w-100 p-5 pb-5">
+        <p class="auth-footer-copyright mb-0 text-white opacity-50">&copy; {{ date('Y') }} {{ setting('site_name', config('app.name')) }}. Platform Intelligence v2.4.0</p>
+    </div>
 </div>
 
 {{-- Right Side: Functional Reset Link Request --}}
-<div class="col-12 col-lg-6 d-flex align-items-center justify-content-center bg-white py-5 position-relative">
-    <div class="w-100 px-4 px-md-5" style="max-width: 520px;">
-        
-        {{-- Mobile Logo --}}
-        <div class="mb-5">
-            <div class="d-lg-none mb-4 text-center">
-                <div class="d-inline-flex align-items-center gap-2 text-primary fw-bolder fs-3 mb-2">
+<div class="col-12 col-lg-6 d-flex align-items-center justify-content-center py-5 px-3">
+    <div class="auth-card">
+        <div class="text-center mb-5">
+            <div class="d-lg-none mb-4">
+                <div class="d-inline-flex align-items-center gap-2 text-primary fw-bolder fs-2">
                     <i class="bi bi-rocket-takeoff"></i>
                     <span>{!! setting('site_name', config('app.name')) !!}</span>
                 </div>
             </div>
-            
-            <h2 class="h3 fw-bold text-dark mb-2">{{ __('Forgot Your Password?') }}</h2>
-            <p class="text-muted">{{ __('No problem. We\'ll email you a link to reset it.') }}</p>
+            <h2 class="fw-800 text-dark mb-2 fs-2">{{ __('Lost Access?') }}</h2>
+            <p class="text-muted fw-medium">{{ __('Enter your email to receive a secure recovery link.') }}</p>
         </div>
 
-        {{-- Session Status (Success message after sending email) --}}
         @if (session('status'))
-            <div @class(['alert alert-success border-0 shadow-sm small mb-4 py-3 rounded-4 d-flex align-items-center gap-3']) role="alert">
+            <div class="alert alert-success border-0 shadow-premium small mb-4 py-3 rounded-xl d-flex align-items-center gap-3">
                 <i class="bi bi-check-circle-fill fs-5 text-success"></i>
                 <div>{{ session('status') }}</div>
             </div>
         @endif
 
-        {{-- Validation Errors --}}
         @if ($errors->any())
-            <div @class(['alert alert-danger border-0 shadow-sm small mb-4 py-3 rounded-4']) role="alert">
+            <div class="alert alert-danger border-0 shadow-premium small mb-4 py-3 rounded-xl">
                 <ul class="mb-0 ps-3">
-                    @forelse ($errors->all() as $error)
+                    @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
-                    @empty
-                        <li>{{ __('Something went wrong.') }}</li>
-                    @endforelse
+                    @endforeach
                 </ul>
             </div>
         @endif
@@ -83,75 +86,31 @@
         <form method="POST" action="{{ route('password.email') }}">
             @csrf
 
-            {{-- Email Address Input --}}
-            <div class="mb-4">
-                <label for="email" class="form-label fw-semibold small text-dark">{{ __('Email Address') }}</label>
-                <div class="position-relative">
-                    <input id="email" 
-                           @class(['form-control bg-light border-0 px-4', 'is-invalid' => $errors->has('email')]) 
-                           type="email" 
-                           name="email" 
-                           value="{{ old('email') }}" 
-                           placeholder="{{ __('name@example.com') }}" 
-                           required 
-                           autofocus />
-                    <i class="bi bi-envelope position-absolute top-50 end-0 translate-middle-y me-3 text-muted"></i>
+            <div class="mb-5">
+                <label for="email" class="form-label fw-bold small text-dark opacity-75 ms-1">{{ __('EMAIL ADDRESS') }}</label>
+                <div class="form-icon-group">
+                    <input id="email" @class(['form-control', 'rounded-pill', 'is-invalid' => $errors->has('email')]) type="email" name="email" value="{{ old('email') }}" placeholder="name@company.com" required autofocus />
+                    <i class="bi bi-envelope input-icon"></i>
                 </div>
             </div>
 
             <div class="d-grid gap-3">
-                <button type="submit" class="btn btn-primary btn-lg fw-bold py-3 rounded-pill shadow-premium border-0 d-flex align-items-center justify-content-center gap-2">
-                    <i class="bi bi-send-check-fill"></i>
-                    {{ __('Email Password Reset Link') }}
+                <button type="submit" class="btn btn-primary btn-lg py-3 fs-6 d-flex align-items-center justify-content-center gap-2">
+                    <i class="bi bi-send-check"></i>
+                    {{ __('Send Recovery Link') }}
                 </button>
                 
-                <a href="{{ route('login') }}" class="btn btn-light btn-lg fw-bold text-muted border-0 d-flex align-items-center justify-content-center gap-2 rounded-pill">
+                <a href="{{ route('login') }}" class="btn btn-light btn-lg py-3 fs-6 text-muted border-0 d-flex align-items-center justify-content-center gap-2">
                     <i class="bi bi-arrow-left"></i>
                     {{ __('Back to Login') }}
                 </a>
             </div>
         </form>
-
-        {{-- Mobile Footer --}}
-        <div class="mt-5 pt-4 text-center d-lg-none">
-            <span class="text-muted small">&copy; {{ date('Y') }} {{ setting('site_name', config('app.name')) }}.</span>
-        </div>
-    </div>
-
-    {{-- Desktop Footer --}}
-    <div class="position-absolute bottom-0 start-0 w-100 p-4 text-center d-none d-lg-block">
-        <span class="text-muted small">&copy; {{ date('Y') }} {{ setting('site_name', config('app.name')) }}. {{ __('All rights reserved.') }}</span>
     </div>
 </div>
 
 @endsection
 
 @push('styles')
-<style>
-    .fw-800 { font-weight: 800; }
-    
-    .form-control {
-        min-height: 52px;
-        border-radius: 50px !important;
-        padding-left: 1.5rem !important;
-        padding-right: 1.5rem !important;
-        transition: all 0.3s ease;
-    }
-
-    .form-control:focus {
-        background-color: #fff !important;
-        box-shadow: 0 0 0 4px var(--primary-soft) !important;
-        border-color: var(--primary);
-    }
-
-    .btn-lg {
-        min-height: 58px;
-        transition: all 0.3s ease;
-    }
-
-    .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: var(--shadow-glow) !important;
-    }
-</style>
+{{-- Page specific styles (if any) --}}
 @endpush

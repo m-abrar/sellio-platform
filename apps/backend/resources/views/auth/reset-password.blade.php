@@ -6,177 +6,110 @@
 
 @section('content')
 
-{{-- Left Side: Marketing & Visuals (Consistent Branding) --}}
-<div class="col-lg-6 d-none d-lg-flex flex-column align-items-center justify-content-center position-relative p-5 text-white overflow-hidden" 
-     style="background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);">
+{{-- Left Side: Executive Marketing Hero --}}
+<div class="col-lg-6 d-none d-lg-flex auth-split-marketing text-white">
+    <div class="auth-glow" style="top: 20%; left: 20%; opacity: 0.4;"></div>
     
-    <div class="position-absolute translate-middle" style="top: 20%; left: 20%; width: 500px; height: 500px; background: rgba(255,255,255,0.1); filter: blur(120px); border-radius: 50%;"></div>
-    
-    <div class="position-relative z-1 text-center" style="max-width: 480px;">
-        <div class="mb-4 d-inline-block p-3 bg-white bg-opacity-10 rounded-4 shadow-sm">
-            <i class="bi bi-arrow-repeat text-white display-4"></i>
+    <div class="position-relative z-1" style="max-width: 520px;">
+        <div class="mb-5 d-inline-block">
+            <div class="p-3 rounded-xl bg-white bg-opacity-10 backdrop-blur-md shadow-premium border border-white border-opacity-10">
+                <i class="bi bi-shield-check text-primary display-4"></i>
+            </div>
         </div>
         
-        <h1 class="display-5 fw-800 mb-3">
-            {{ __('New Credentials') }}
+        <h1 class="display-4 fw-800 mb-4 lh-sm">
+            {!! __('New <span class="text-gradient">Credentials</span> Protocol') !!}
         </h1>
         
-        <p class="lead opacity-75 mb-5">
-            {{ __('Secure your account by choosing a strong, unique password. Your safety is our priority in this marketplace.') }}
+        <p class="lead opacity-80 mb-5 fs-5 fw-medium">
+            {{ __('Finalize your account recovery by establishing a high-security password. Your data integrity is our core priority.') }}
         </p>
 
-        <div class="row g-4 text-start mt-4">
-            <div class="col-6">
-                <div class="d-flex align-items-center gap-2">
-                    <i class="bi bi-check2-circle fs-4"></i>
-                    <span class="small fw-medium">{{ __('Strong Encryption') }}</span>
-                </div>
-            </div>
-            <div class="col-6">
-                <div class="d-flex align-items-center gap-2">
+        <div class="vstack gap-4 mt-2">
+            <div class="d-flex align-items-center gap-4">
+                <div class="icon-box-soft bg-white bg-opacity-10 rounded-circle flex-shrink-0">
                     <i class="bi bi-shield-lock fs-4"></i>
-                    <span class="small fw-medium">{{ __('Account Safety') }}</span>
+                </div>
+                <div>
+                    <h5 class="mb-0 fw-bold">{{ __('Military-Grade Encryption') }}</h5>
+                    <p class="small opacity-60 mb-0">{{ __('Your credentials never leave our secure layer.') }}</p>
                 </div>
             </div>
         </div>
     </div>
+    <div class="position-absolute bottom-0 start-0 w-100 p-5 pb-5">
+        <p class="auth-footer-copyright mb-0 text-white opacity-50">&copy; {{ date('Y') }} {{ setting('site_name', config('app.name')) }}. Platform Intelligence v2.4.0</p>
+    </div>
 </div>
 
 {{-- Right Side: Functional Password Reset Form --}}
-<div class="col-12 col-lg-6 d-flex align-items-center justify-content-center bg-white py-5 position-relative">
-    <div class="w-100 px-4 px-md-5" style="max-width: 520px;">
-        
-        {{-- Mobile Logo --}}
-        <div class="mb-5">
-            <div class="d-lg-none mb-4 text-center">
-                <div class="d-inline-flex align-items-center gap-2 text-primary fw-bolder fs-3 mb-2">
+<div class="col-12 col-lg-6 d-flex align-items-center justify-content-center py-5 px-3">
+    <div class="auth-card">
+        <div class="text-center mb-5">
+            <div class="d-lg-none mb-4">
+                <div class="d-inline-flex align-items-center gap-2 text-primary fw-bolder fs-2">
                     <i class="bi bi-rocket-takeoff"></i>
                     <span>{!! setting('site_name', config('app.name')) !!}</span>
                 </div>
             </div>
-            
-            <h2 class="h3 fw-bold text-dark mb-2">{{ __('Choose a New Password') }}</h2>
-            <p class="text-muted">{{ __('Enter and confirm your new credentials below.') }}</p>
+            <h2 class="fw-800 text-dark mb-2 fs-2">{{ __('Reset Password') }}</h2>
+            <p class="text-muted fw-medium">{{ __('Complete the verification to secure your access.') }}</p>
         </div>
 
-        {{-- Validation Errors --}}
         @if ($errors->any())
-            <div @class(['alert alert-danger border-0 shadow-sm small mb-4 py-3 rounded-4']) role="alert">
+            <div class="alert alert-danger border-0 shadow-premium small mb-4 py-3 rounded-xl">
                 <ul class="mb-0 ps-3">
-                    @forelse ($errors->all() as $error)
+                    @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
-                    @empty
-                        <li>{{ __('Something went wrong, please try again.') }}</li>
-                    @endforelse
+                    @endforeach
                 </ul>
             </div>
         @endif
 
         <form method="POST" action="{{ route('password.store') }}">
             @csrf
-
-            {{-- Password Reset Token (Hidden) --}}
             <input type="hidden" name="token" value="{{ $request->route('token') }}">
 
-            {{-- Email Address (Read-only or Pre-filled) --}}
-            <div class="mb-3">
-                <label for="emailInput" class="form-label fw-semibold small">{{ __('Email Address') }}</label>
-                <div class="position-relative">
-                    <input type="email" 
-                           @class(['form-control bg-light border-0 px-4', 'is-invalid' => $errors->has('email')]) 
-                           id="emailInput" 
-                           name="email" 
-                           value="{{ old('email', $request->email) }}" 
-                           placeholder="{{ __('name@example.com') }}" 
-                           required 
-                           autofocus />
-                    <i class="bi bi-envelope position-absolute top-50 end-0 translate-middle-y me-3 text-muted"></i>
-                </div>
-            </div>
-
-            {{-- New Password Input --}}
-            <div class="mb-3">
-                <label for="passwordInput" class="form-label fw-semibold small">{{ __('New Password') }}</label>
-                <div class="position-relative">
-                    <input type="password" 
-                           @class(['form-control bg-light border-0 px-4', 'is-invalid' => $errors->has('password')]) 
-                           id="passwordInput" 
-                           name="password" 
-                           placeholder="••••••••" 
-                           required 
-                           autocomplete="new-password" />
-                    <i class="bi bi-lock position-absolute top-50 end-0 translate-middle-y me-3 text-muted"></i>
-                </div>
-            </div>
-
-            {{-- Confirm Password Input --}}
             <div class="mb-4">
-                <label for="confirmPasswordInput" class="form-label fw-semibold small">{{ __('Confirm New Password') }}</label>
-                <div class="position-relative">
-                    <input type="password" 
-                           @class(['form-control bg-light border-0 px-4']) 
-                           id="confirmPasswordInput" 
-                           name="password_confirmation" 
-                           placeholder="••••••••" 
-                           required />
-                    <i class="bi bi-shield-check position-absolute top-50 end-0 translate-middle-y me-3 text-muted"></i>
+                <label for="email" class="form-label fw-bold small text-dark opacity-75 ms-1">{{ __('EMAIL ADDRESS') }}</label>
+                <div class="form-icon-group">
+                    <input type="email" @class(['form-control', 'rounded-pill', 'is-invalid' => $errors->has('email')]) id="email" name="email" value="{{ old('email', $request->email) }}" required autofocus>
+                    <i class="bi bi-envelope input-icon"></i>
                 </div>
             </div>
 
-            <div class="d-grid">
-                <button type="submit" class="btn btn-primary btn-lg fw-bold py-3 rounded-pill shadow-premium border-0 d-flex align-items-center justify-content-center gap-2">
-                    <i class="bi bi-check2-all"></i>
-                    {{ __('Reset Password') }}
+            <div class="mb-4">
+                <label for="password" class="form-label fw-bold small text-dark opacity-75 ms-1">{{ __('NEW PASSWORD') }}</label>
+                <div class="form-icon-group">
+                    <input type="password" @class(['form-control', 'rounded-pill', 'is-invalid' => $errors->has('password')]) id="password" name="password" placeholder="••••••••" required autocomplete="new-password">
+                    <i class="bi bi-shield-lock input-icon"></i>
+                </div>
+            </div>
+
+            <div class="mb-5">
+                <label for="password_confirmation" class="form-label fw-bold small text-dark opacity-75 ms-1">{{ __('CONFIRM PASSWORD') }}</label>
+                <div class="form-icon-group">
+                    <input type="password" class="form-control rounded-pill" id="password_confirmation" name="password_confirmation" placeholder="••••••••" required>
+                    <i class="bi bi-shield-check input-icon"></i>
+                </div>
+            </div>
+
+            <div class="d-grid gap-3">
+                <button type="submit" class="btn btn-primary btn-lg py-3 fs-6">
+                    {{ __('Finalize Password Reset') }}
                 </button>
+                
+                <a href="{{ route('login') }}" class="btn btn-light btn-lg py-3 fs-6 text-muted border-0 d-flex align-items-center justify-content-center gap-2">
+                    <i class="bi bi-arrow-left"></i>
+                    {{ __('Back to Login') }}
+                </a>
             </div>
         </form>
-
-        {{-- Back to Login --}}
-        <div class="text-center mt-4">
-            <a href="{{ route('login') }}" class="text-muted small fw-semibold text-decoration-none hover-primary">
-                <i class="bi bi-arrow-left me-1"></i> {{ __('Return to Login') }}
-            </a>
-        </div>
-        
-        {{-- Mobile Footer --}}
-        <div class="mt-5 pt-4 text-center d-lg-none">
-            <span class="text-muted small">&copy; {{ date('Y') }} {{ setting('site_name', config('app.name')) }}.</span>
-        </div>
-    </div>
-
-    {{-- Desktop Footer --}}
-    <div class="position-absolute bottom-0 start-0 w-100 p-4 text-center d-none d-lg-block">
-        <span class="text-muted small">&copy; {{ date('Y') }} {{ setting('site_name', config('app.name')) }}. {{ __('All rights reserved.') }}</span>
     </div>
 </div>
 
 @endsection
 
 @push('styles')
-<style>
-    .fw-800 { font-weight: 800; }
-    
-    .hover-primary:hover {
-        color: var(--primary) !important;
-        transition: color 0.2s ease;
-    }
-
-    .form-control {
-        min-height: 52px;
-        border-radius: 50px !important;
-        padding-left: 1.5rem !important;
-        padding-right: 1.5rem !important;
-        transition: all 0.3s ease;
-    }
-
-    .form-control:focus {
-        background-color: #fff !important;
-        box-shadow: 0 0 0 4px var(--primary-soft) !important;
-        border-color: var(--primary);
-    }
-
-    .btn-lg {
-        min-height: 58px;
-    }
-</style>
+{{-- Page specific styles (if any) --}}
 @endpush
