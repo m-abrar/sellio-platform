@@ -62,7 +62,7 @@
         <!-- Add Booking Dropdown -->
         <div class="col-6 col-md-3">
             <div class="dropdown">
-                <button class="btn btn-default btn-premium-action d-flex align-items-center justify-content-center py-3 w-100 shadow-premium font-weight-bold bg-white border-light rounded-md" type="button" data-toggle="dropdown" style="color: var(--dark-muted) !important;">
+                <button class="btn btn-default btn-premium-action d-flex align-items-center justify-content-center py-3 w-100 shadow-premium font-weight-bold bg-white border-light rounded-md text-dark-muted" type="button" data-toggle="dropdown">
                     <i class="fas fa-calendar-plus mr-2 text-primary"></i> ADD BOOKING <i class="fas fa-caret-down ml-2 opacity-50"></i>
                 </button>
                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-premium border-0 animate__animated animate__fadeInUp rounded-xl">
@@ -108,7 +108,7 @@
         @foreach($sections as $section)
             <div class="section-header-premium {{ !$loop->first ? 'mt-5' : '' }}">
                 <span class="dot {{ $section['pulse'] ? 'pulse-glow-dot' : '' }} bg-{{ $section['dot'] }}"></span>
-                <h5 class="text-uppercase font-weight-bold text-secondary smallest mb-0" style="letter-spacing: 1.5px;">{{ $section['title'] }}</h5>
+                <h5 class="text-uppercase font-weight-bold text-secondary smallest mb-0">{{ $section['title'] }}</h5>
             </div>
             @include('admin.dashboard.partials.' . $section['partial'], ['metrics' => $metrics])
         @endforeach
@@ -125,9 +125,6 @@
         #master-calendar { background: transparent; padding: 1.5rem; border-radius: var(--radius-md); }
         .fc { font-family: var(--font-heading) !important; }
         .fc .fc-toolbar-title { font-weight: 700; color: var(--dark); font-size: 1.25rem !important; }
-        
-        .dropdown-item { transition: all 0.2s ease; }
-        .dropdown-item:hover { background: var(--primary-soft) !important; color: var(--primary) !important; transform: translateX(5px); }
     </style>
 @stop
 

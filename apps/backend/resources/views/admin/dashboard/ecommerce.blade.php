@@ -44,7 +44,7 @@
             </a>
         </div>
         <div class="col-6 col-md-3">
-             <a href="{{ route('admin.product-orders.index') }}" class="btn btn-default btn-premium-action d-flex align-items-center justify-content-center py-3 w-100 shadow-premium font-weight-bold border-light bg-white rounded-md" style="color: var(--dark-muted) !important;">
+             <a href="{{ route('admin.product-orders.index') }}" class="btn btn-default btn-premium-action d-flex align-items-center justify-content-center py-3 w-100 shadow-premium font-weight-bold border-light bg-white rounded-md text-dark-muted">
                 <i class="fas fa-truck mr-2 text-primary"></i> MANAGE ORDERS
             </a>
         </div>
@@ -65,7 +65,7 @@
         @foreach($sections as $section)
             <div class="section-header-premium {{ !$loop->first ? 'mt-5' : '' }}">
                 <span class="dot {{ $section['pulse'] ? 'pulse-glow-dot' : '' }} bg-{{ $section['dot'] }}"></span>
-                <h5 class="text-uppercase font-weight-bold text-secondary smallest mb-0" style="letter-spacing: 1.5px;">{{ $section['title'] }}</h5>
+                <h5 class="text-uppercase font-weight-bold text-secondary smallest mb-0">{{ $section['title'] }}</h5>
             </div>
             @include('admin.dashboard.partials.ecommerce.' . $section['partial'], ['metrics' => $metrics])
         @endforeach
