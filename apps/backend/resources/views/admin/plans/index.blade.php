@@ -16,8 +16,8 @@
                     <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">
                         <i class="fas fa-th-large"></i> Dashboard
                     </a>
-                    <a href="{{ route('admin.plans.create') }}" class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-premium">
-                        <i class="fas fa-plus-circle mr-1"></i> ADD TIER
+                    <a href="{{ route('admin.plans.create') }}" class="btn btn-primary btn-registry-add">
+                        <i class="fas fa-plus-circle mr-2"></i> ADD TIER
                     </a>
                 </div>
             </div>
@@ -29,50 +29,8 @@
 <div class="container-fluid">
     @include('admin.alert')
 
-    {{-- Glass Filter Card --}}
-    <div class="card card-premium shadow-sm mb-4 border-0">
-        <div class="card-body py-4 px-4">
-            <form method="GET" action="{{ route('admin.plans.index') }}">
-                <div class="row align-items-end">
-                    <div class="col-md-5">
-                        <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Search Identifier</label>
-                        <div class="input-group border rounded shadow-xs bg-white" style="height: 46px; padding: 2px;">
-                            <div class="input-group-prepend border-0">
-                                <span class="input-group-text bg-white border-0 py-0"><i class="fas fa-search text-primary"></i></span>
-                            </div>
-                            <input type="text" name="name" class="form-control border-0 shadow-none h-100 py-0" 
-                                   placeholder="Filter by tier name or label..." value="{{ request('name') }}">
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Billing Cycle</label>
-                        <div class="input-group border rounded shadow-xs bg-white" style="height: 46px; padding: 2px;">
-                            <div class="input-group-prepend border-0">
-                                <span class="input-group-text bg-white border-0 py-0"><i class="fas fa-calendar-alt text-primary"></i></span>
-                            </div>
-                            <select name="billing_period" class="form-control border-0 custom-select shadow-none bg-white h-100 py-0">
-                                <option value="">All Temporal Cycles</option>
-                                <option value="monthly" {{ request('billing_period') == 'monthly' ? 'selected' : '' }}>Monthly Tiers</option>
-                                <option value="annually" {{ request('billing_period') == 'annually' ? 'selected' : '' }}>Annual Tiers</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="btn-group w-100 shadow-sm rounded-pill overflow-hidden border" style="height: 46px;">
-                            <button type="submit" class="btn btn-primary font-weight-bold smallest uppercase d-flex align-items-center justify-content-center">
-                                <i class="fas fa-sync-alt mr-1"></i> APPLY
-                            </button>
-                            @if(request()->hasAny(['name', 'billing_period']))
-                                <a href="{{ route('admin.plans.index') }}" class="btn btn-white px-3 border-left d-flex align-items-center justify-content-center">
-                                    <i class="fas fa-undo text-danger"></i>
-                                </a>
-                            @endif
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
+    {{-- Filter Protocol --}}
+    @include('admin.plans._filter')
 
     {{-- Main Table Card --}}
     <div class="card card-premium overflow-hidden">
@@ -177,8 +135,8 @@
                                         <i class="fas fa-boxes fa-4x text-muted opacity-25 mb-3 d-block"></i>
                                         <h5 class="text-muted font-weight-bold">No Tiers Architected</h5>
                                         <p class="text-secondary small mb-3">Initialize your monetization engine by creating your first plan.</p>
-                                        <a href="{{ route('admin.plans.create') }}" class="btn btn-primary btn-sm px-4 rounded-pill font-weight-bold">
-                                            <i class="fas fa-plus mr-1"></i> CREATE FIRST TIER
+                                        <a href="{{ route('admin.plans.create') }}" class="btn btn-primary btn-registry-add">
+                                            <i class="fas fa-plus mr-2"></i> CREATE FIRST TIER
                                         </a>
                                     </div>
                                 </td>

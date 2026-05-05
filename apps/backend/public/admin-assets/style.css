@@ -213,6 +213,10 @@ h1, h2, h3, h4, h5, h6, .brand-text {
     z-index: 1040 !important;
 }
 
+.main-sidebar .sidebar {
+    padding-bottom: 5rem !important; /* Buffer for last menu item visibility */
+}
+
 .brand-link {
     padding: 2.25rem 1.5rem !important;
     border-bottom: none !important;
@@ -1390,6 +1394,32 @@ body.dark-mode .form-control {
     box-shadow: var(--premium-shadow) !important;
 }
 
+.btn-premium-soft {
+    border-radius: var(--radius-pill) !important;
+    padding: 0.6rem 1.5rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.8px !important;
+    text-transform: uppercase !important;
+    font-size: var(--text-smallest) !important;
+    border: none !important;
+    transition: all 0.3s ease !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.btn-premium-soft-primary {
+    background: var(--primary-soft) !important;
+    color: var(--primary) !important;
+}
+
+.btn-premium-soft-primary:hover {
+    background: var(--primary) !important;
+    color: #fff !important;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm) !important;
+}
+
 .table-img-preview {
     width: 54px;
     height: 54px;
@@ -1561,13 +1591,23 @@ body.dark-mode .form-control {
 .btn-group-premium .btn {
     border: none !important;
     border-radius: 0 !important;
-    padding: 0.6rem 1.1rem !important;
-    font-size: 0.85rem !important;
+    padding: 0.6rem 1.4rem !important;
+    font-size: var(--text-smallest) !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
     transition: all 0.2s ease !important;
     background: transparent !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
+}
+
+.btn-action-label {
+    font-size: var(--text-smallest) !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
 }
 
 .btn-group-premium .btn:not(:last-child),

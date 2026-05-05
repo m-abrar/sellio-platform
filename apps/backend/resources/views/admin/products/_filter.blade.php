@@ -1,5 +1,5 @@
 {{-- Product Filter Protocol --}}
-<div class="card registry-card-premium registry-filter-card mb-4">
+<div class="card registry-card-premium registry-filter-card select2-premium mb-4">
     <div class="card-body">
         <form action="{{ route('admin.products.index') }}" method="GET">
             <div class="row align-items-end">

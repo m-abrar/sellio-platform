@@ -2,6 +2,13 @@
 
 @section('plugins.Chartjs', true) 
 
+@section('css')
+<style>
+    .stat-card { transition: all 0.3s ease; }
+    .stat-card:hover { transform: translateY(-5px); box-shadow: 0 15px 45px rgba(0,0,0,0.1) !important; }
+</style>
+@stop
+
 @section('title', 'Payments | Admin')
 
 @section('content_header')
@@ -13,16 +20,7 @@
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">High-fidelity analysis of marketplace inflow, revenue trends, and settled transactions.</p>
             </div>
-            <div class="col-sm-5 d-flex align-items-center justify-content-end" style="gap: 12px;">
-                <div class="btn-group btn-group-premium shadow-sm rounded-pill overflow-hidden border">
-                    <button class="btn btn-white btn-sm px-4 py-2 font-weight-bold smallest uppercase letter-spacing-1" onclick="window.print()">
-                        <i class="fas fa-print mr-2"></i> Export Report
-                    </button>
-                </div>
-                <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">
-                    <i class="fas fa-th-large"></i> Dashboard
-                </a>
-            </div>
+            @include('admin.reports._header_actions', ['exportText' => 'Export Report'])
         </div>
     </div>
 @stop
@@ -32,43 +30,8 @@
 
 <div class="container-fluid pb-5">
     
-    {{-- Premium Filter Card --}}
-    <div class="card card-premium shadow-premium mb-5 border-0 overflow-hidden" style="border-radius: 20px;">
-        <div class="card-body p-4">
-            <form action="{{ route('admin.reports.payments') }}" method="GET" class="row align-items-end">
-                <div class="col-md-5">
-                    <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Analytics Period (Start)</label>
-                    <div class="input-group input-group-premium">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-calendar-alt text-xs"></i></span>
-                        </div>
-                        <input type="date" name="start_date" class="form-control" value="{{ $startDateFormatted ?? '' }}">
-                    </div>
-                </div>
-                <div class="col-md-5">
-                    <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Analytics Period (End)</label>
-                    <div class="input-group input-group-premium">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-calendar-check text-xs"></i></span>
-                        </div>
-                        <input type="date" name="end_date" class="form-control" value="{{ $endDateFormatted ?? '' }}">
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <button type="submit" class="btn btn-primary btn-block font-weight-bold rounded-pill shadow-xs smallest uppercase" style="height: 46px;">
-                        <i class="fas fa-sync-alt mr-2"></i> UPDATE
-                    </button>
-                </div>
-            </form>
-            @if(isset($startDateFormatted) && isset($endDateFormatted))
-                <div class="mt-3">
-                    <span class="badge badge-pill badge-primary-soft text-primary px-3 py-2 font-weight-bold smallest uppercase letter-spacing-1">
-                        <i class="fas fa-coins mr-1"></i> ANALYZING PERIOD: {{ $startDateFormatted }} — {{ $endDateFormatted }}
-                    </span>
-                </div>
-            @endif
-        </div>
-    </div>
+    {{-- Filter Protocol --}}
+    @include('admin.reports._payments_filter')
 
     {{-- Stats Row --}}
     <div class="row mb-5">
@@ -125,9 +88,9 @@
     </div>
 
     {{-- Trend Analysis --}}
-    <div class="card card-premium shadow-premium mb-5 border-0 overflow-hidden" style="border-radius: 24px;">
+        <div class="card card-premium shadow-premium mb-5 border-0 overflow-hidden">
         <div class="card-header border-0 bg-white pt-4 px-4 d-flex align-items-center">
-            <div class="icon-square-soft bg-success-soft text-success mr-3 d-flex align-items-center justify-content-center shadow-xs" style="width: 40px; height: 40px; border-radius: 10px;">
+            <div class="icon-box-soft bg-success-soft text-success mr-3 d-flex align-items-center justify-content-center shadow-xs" style="width: 40px; height: 40px; border-radius: 10px;">
                 <i class="fas fa-chart-line"></i>
             </div>
             <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">Monthly Inflow Trend</h3>
@@ -140,15 +103,15 @@
     </div>
 
     {{-- Transaction History --}}
-    <div class="card card-premium shadow-premium border-0 mb-5 overflow-hidden" style="border-radius: 24px;">
+    <div class="card card-premium shadow-premium border-0 mb-5 overflow-hidden">
         <div class="card-header border-0 bg-white pt-4 px-4 d-flex justify-content-between align-items-center">
             <div class="d-flex align-items-center">
-                <div class="icon-square-soft bg-info-soft text-info mr-3 d-flex align-items-center justify-content-center shadow-xs" style="width: 40px; height: 40px; border-radius: 10px;">
+                <div class="icon-box-soft bg-info-soft text-info mr-3 d-flex align-items-center justify-content-center shadow-xs" style="width: 40px; height: 40px; border-radius: 10px;">
                     <i class="fas fa-file-invoice-dollar"></i>
                 </div>
                 <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">Recent Transactions</h3>
             </div>
-            <a href="{{ route('admin.payments.index') }}" class="btn btn-primary-soft text-primary rounded-pill px-4 py-2 font-weight-bold smallest uppercase letter-spacing-1 shadow-xs">
+            <a href="{{ route('admin.payments.index') }}" class="btn btn-premium-soft btn-premium-soft-primary">
                 View Ledger <i class="fas fa-arrow-right ml-2"></i>
             </a>
         </div>
@@ -224,10 +187,6 @@
 
 @push('css')
 @include('admin._partials._toggle-card-css')
-<style>
-    .premium-input { border-radius: 12px; background: #fff; transition: all 0.3s ease; border: 1.5px solid #edf2f7 !important; }
-    .premium-input:focus-within { border-color: var(--primary) !important; box-shadow: 0 10px 20px rgba(var(--primary-rgb), 0.05) !important; }
-</style>
 @endpush
 
 

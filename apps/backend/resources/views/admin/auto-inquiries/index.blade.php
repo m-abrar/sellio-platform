@@ -12,6 +12,7 @@
                     <i class="fas fa-car mr-2 text-primary"></i>
                     {{ __('Auto Inquiries') }}
                 </h1>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Track vehicle inquiries, buyer engagement, and automotive lead conversion metrics.</p>
             </div>
             <div class="col-sm-6 text-right">
                 <div class="d-flex justify-content-end align-items-center" style="gap: 12px;">

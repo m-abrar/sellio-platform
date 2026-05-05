@@ -16,8 +16,8 @@
                     <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">
                         <i class="fas fa-th-large"></i> Dashboard
                     </a>
-                    <a href="{{ route('admin.subscriptions.create') }}" class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-premium">
-                        <i class="fas fa-plus-circle mr-1"></i> ENROLL USER
+                    <a href="{{ route('admin.subscriptions.create') }}" class="btn btn-primary btn-registry-add">
+                        <i class="fas fa-plus-circle mr-2"></i> ENROLL USER
                     </a>
                 </div>
             </div>
@@ -29,44 +29,8 @@
 <div class="container-fluid">
     @include('admin.alert')
 
-    {{-- Glass Filter Card --}}
-    <div class="card card-premium shadow-sm mb-4 border-0">
-        <div class="card-body py-4 px-4">
-            <form method="GET" action="{{ route('admin.subscriptions.index') }}">
-                <div class="row align-items-end">
-                    <div class="col-md-4">
-                        <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Subscriber Identifier</label>
-                        <div class="input-group border rounded shadow-xs bg-white" style="height: 46px; padding: 2px;">
-                            <div class="input-group-prepend border-0">
-                                <span class="input-group-text bg-white border-0 py-0"><i class="fas fa-search text-primary"></i></span>
-                            </div>
-                            <input type="text" name="user" class="form-control border-0 shadow-none h-100 py-0" 
-                                   placeholder="Name or email address..." value="{{ request('user') }}">
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <label class="smallest font-weight-bold text-secondary text-uppercase mb-2 letter-spacing-1">Lifecycle Status</label>
-                        <div class="input-group border rounded shadow-xs bg-white" style="height: 46px; padding: 2px;">
-                            <div class="input-group-prepend border-0">
-                                <span class="input-group-text bg-white border-0 py-0"><i class="fas fa-filter text-primary"></i></span>
-                            </div>
-                            <select name="status" class="form-control border-0 custom-select shadow-none bg-white h-100 py-0">
-                                <option value="">All Lifecycle States</option>
-                                @foreach(['active' => 'Active Access', 'on_trial' => 'Trial Period', 'past_due' => 'Payment Due', 'cancelled' => 'Cancelled', 'expired' => 'Terminated'] as $val => $label)
-                                    <option value="{{ $val }}" {{ request('status') == $val ? 'selected' : '' }}>{{ $label }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <button type="submit" class="btn btn-primary btn-block font-weight-bold smallest uppercase shadow-sm" style="height: 46px;">
-                            <i class="fas fa-sync-alt mr-1"></i> REFRESH REGISTRY
-                        </button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
+    {{-- Filter Protocol --}}
+    @include('admin.subscriptions._filter')
 
     {{-- Main Table --}}
     <div class="card card-premium overflow-hidden">
@@ -174,8 +138,8 @@
                                         <i class="fas fa-sync-alt fa-4x text-muted opacity-25 mb-3 d-block"></i>
                                         <h5 class="text-muted font-weight-bold">No Enrollments Detected</h5>
                                         <p class="text-secondary small mb-3">New user subscriptions will be architected here.</p>
-                                        <a href="{{ route('admin.subscriptions.create') }}" class="btn btn-primary btn-sm px-4 rounded-pill font-weight-bold">
-                                            <i class="fas fa-plus mr-1"></i> INITIALIZE ENROLLMENT
+                                        <a href="{{ route('admin.subscriptions.create') }}" class="btn btn-primary btn-registry-add">
+                                            <i class="fas fa-plus mr-2"></i> INITIALIZE ENROLLMENT
                                         </a>
                                     </div>
                                 </td>

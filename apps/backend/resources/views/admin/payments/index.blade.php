@@ -14,7 +14,7 @@
             </div>
             <div class="col-sm-5 text-right">
                 <div class="d-flex justify-content-end align-items-center" style="gap: 12px;">
-                    <a href="{{ route('admin.payments.create') }}" class="btn btn-primary rounded-pill px-4 py-2 font-weight-bold shadow-premium smallest uppercase letter-spacing-1">
+                    <a href="{{ route('admin.payments.create') }}" class="btn btn-primary btn-registry-add">
                         <i class="fas fa-plus-circle mr-2"></i> Log Transaction
                     </a>
                     <a href="{{ route('admin.welcome') }}" class="btn btn-white rounded-pill px-4 py-2 font-weight-bold shadow-sm smallest uppercase letter-spacing-1 border">
@@ -30,63 +30,8 @@
     <div class="container-fluid pb-5">
         @include('admin.alert')
 
-        {{-- Premium Filter Card --}}
-        <div class="card card-premium shadow-premium mb-4 border-0" style="border-radius: 20px;">
-            <div class="card-body py-4 px-4">
-                <form method="GET" action="{{ route('admin.payments.index') }}">
-                    <div class="row align-items-end">
-                        <div class="col-md-3">
-                            <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Client Intelligence</label>
-                            <div class="input-group input-group-premium">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="fas fa-search text-xs"></i></span>
-                                </div>
-                                <input type="text" name="user_name" class="form-control" placeholder="Name or Identity" value="{{ request('user_name') }}">
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Settlement Status</label>
-                            <div class="input-group input-group-premium">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="fas fa-traffic-light text-xs"></i></span>
-                                </div>
-                                <select name="status" class="form-control select2">
-                                    <option value="">All Lifecycle States</option>
-                                    <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Awaiting Capture</option>
-                                    <option value="completed" {{ request('status') == 'completed' ? 'selected' : '' }}>Settled</option>
-                                    <option value="failed" {{ request('status') == 'failed' ? 'selected' : '' }}>Terminated</option>
-                                    <option value="refunded" {{ request('status') == 'refunded' ? 'selected' : '' }}>Reversed</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Financial Protocol</label>
-                            <div class="input-group input-group-premium">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="fas fa-network-wired text-xs"></i></span>
-                                </div>
-                                <select name="method" class="form-control select2">
-                                    <option value="">All Gateways</option>
-                                    <option value="stripe" {{ request('method') == 'stripe' ? 'selected' : '' }}>Stripe Intelligence</option>
-                                    <option value="paypal" {{ request('method') == 'paypal' ? 'selected' : '' }}>PayPal Express</option>
-                                    <option value="manual" {{ request('method') == 'manual' ? 'selected' : '' }}>Manual Settlement</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="d-flex" style="gap: 10px;">
-                                <button type="submit" class="btn btn-primary flex-grow-1 font-weight-bold shadow-xs rounded-pill smallest uppercase" style="height: 46px;">
-                                    <i class="fas fa-sync-alt mr-2"></i> Update Registry
-                                </button>
-                                <a href="{{ route('admin.payments.index') }}" class="btn btn-default shadow-xs rounded-pill px-3 d-flex align-items-center justify-content-center" data-toggle="tooltip" title="Reset Filters" style="height: 46px;">
-                                    <i class="fas fa-undo text-danger m-0"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
+        {{-- Filter Protocol --}}
+        @include('admin.payments._filter')
 
         {{-- Payments Table Card --}}
         <div class="card card-premium shadow-premium border-0 overflow-hidden" style="border-radius: 24px;">
