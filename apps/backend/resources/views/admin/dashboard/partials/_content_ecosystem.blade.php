@@ -11,7 +11,7 @@
                 <div class="list-group list-group-flush">
                     @foreach ($metrics['recent_listings']['items'] as $item)
                     <div class="list-group-item bg-transparent border-0 py-3 px-4 border-bottom d-flex align-items-center transition-all hover-shadow-sm">
-                        <div class="icon-box-soft bg-light-soft text-muted mr-3 shadow-xs rounded-md" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+                        <div class="icon-box-soft md bg-light-soft text-muted mr-3 shadow-xs">
                             <i class="fas {{ $item['icon_class'] }}"></i>
                         </div>
                         <div class="flex-grow-1">
@@ -41,7 +41,7 @@
             <div class="card-body p-0">
                 @foreach ($metrics['notifications']['items'] as $item)
                 <div class="px-4 py-3 border-bottom border-white border-opacity-10 d-flex align-items-center transition-all" style="background: rgba(255,255,255,0.02);">
-                    <div class="icon-box-soft bg-danger-soft text-danger mr-3" style="width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                    <div class="icon-box-soft md bg-danger-soft text-danger mr-3">
                         <i class="fas {{ $item['icon_class'] }}"></i>
                     </div>
                     <div>
@@ -66,53 +66,31 @@
                 </h3>
             </div>
             <div class="card-body p-0">
-                {{-- Top Partner --}}
-                <div class="px-4 py-3 bg-light-soft border-bottom d-flex align-items-center">
-                    <div class="icon-box-soft bg-success-soft text-success mr-3 shadow-xs rounded-md" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
-                        <i class="fas fa-user-tie fa-lg"></i>
-                    </div>
-                    <div class="flex-grow-1">
-                        <small class="text-muted smallest font-weight-bold uppercase letter-spacing-1">Top Performing Partner</small>
-                        <span class="font-weight-bold text-dark d-block">{{ $metrics['top_partners']['partner_name'] }}</span>
-                        <div class="d-flex align-items-center mt-1">
-                            <span class="badge badge-success-light px-2 py-1 rounded-pill font-weight-bold smallest">
-                                <i class="fas fa-star mr-1"></i>{{ $metrics['top_partners']['partner_rating'] }} RATING
-                            </span>
-                        </div>
-                    </div>
-                </div>
+                {{-- Leader Item Helper Pattern --}}
+                @php
+                    $leaders = [
+                        ['label' => 'Top Performing Partner', 'val' => $metrics['top_partners']['partner_name'], 'sub' => $metrics['top_partners']['partner_rating'] . ' RATING', 'icon' => 'fa-user-tie', 'bg' => 'success'],
+                        ['label' => 'Elite Marketplace Asset', 'val' => $metrics['top_partners']['listing_title'], 'sub' => $metrics['top_partners']['listing_rating'] . ' SCORE', 'icon' => 'fa-award', 'bg' => 'primary'],
+                        ['label' => 'Peak Volume Engine', 'val' => $metrics['top_partners']['booked_listing'], 'sub' => $metrics['top_partners']['booked_count'] . ' BOOKINGS', 'icon' => 'fa-chart-line', 'bg' => 'info'],
+                    ];
+                @endphp
 
-                {{-- Elite Listing --}}
-                <div class="px-4 py-3 bg-white border-bottom d-flex align-items-center">
-                    <div class="icon-box-soft bg-primary-soft text-primary mr-3 shadow-xs rounded-md" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
-                        <i class="fas fa-award fa-lg"></i>
+                @foreach($leaders as $l)
+                <div class="px-4 py-3 {{ $loop->first ? 'bg-light-soft' : 'bg-white' }} {{ !$loop->last ? 'border-bottom' : '' }} d-flex align-items-center">
+                    <div class="icon-box-soft md bg-{{ $l['bg'] }}-soft text-{{ $l['bg'] }} mr-3 shadow-xs">
+                        <i class="fas {{ $l['icon'] }} fa-lg"></i>
                     </div>
                     <div class="flex-grow-1">
-                        <small class="text-muted smallest font-weight-bold uppercase letter-spacing-1">Elite Marketplace Asset</small>
-                        <span class="font-weight-bold text-dark d-block text-truncate" style="max-width: 200px;">{{ $metrics['top_partners']['listing_title'] }}</span>
+                        <small class="text-muted smallest font-weight-bold uppercase letter-spacing-1">{{ $l['label'] }}</small>
+                        <span class="font-weight-bold text-dark d-block text-truncate" style="max-width: 220px;">{{ $l['val'] }}</span>
                         <div class="d-flex align-items-center mt-1">
-                            <span class="badge badge-primary-light px-2 py-1 rounded-pill font-weight-bold smallest">
-                                <i class="fas fa-medal mr-1"></i>{{ $metrics['top_partners']['listing_rating'] }} SCORE
+                            <span class="badge badge-{{ $l['bg'] }}-light px-2 py-1 rounded-pill font-weight-bold smallest text-uppercase">
+                                <i class="fas fa-check-circle mr-1"></i>{{ $l['sub'] }}
                             </span>
                         </div>
                     </div>
                 </div>
-
-                {{-- Volume Leader --}}
-                <div class="px-4 py-3 bg-white d-flex align-items-center">
-                    <div class="icon-box-soft bg-info-soft text-info mr-3 shadow-xs rounded-md" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
-                        <i class="fas fa-chart-line fa-lg"></i>
-                    </div>
-                    <div class="flex-grow-1">
-                        <small class="text-muted smallest font-weight-bold uppercase letter-spacing-1">Peak Volume Engine</small>
-                        <span class="font-weight-bold text-dark d-block">{{ $metrics['top_partners']['booked_listing'] }}</span>
-                        <div class="d-flex align-items-center mt-1">
-                            <span class="badge badge-info-light px-2 py-1 rounded-pill font-weight-bold smallest uppercase">
-                                <i class="fas fa-calendar-check mr-1"></i>{{ $metrics['top_partners']['booked_count'] }} BOOKINGS
-                            </span>
-                        </div>
-                    </div>
-                </div>
+                @endforeach
             </div>
         </div>
     </div>

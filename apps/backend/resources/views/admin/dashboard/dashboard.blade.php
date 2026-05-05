@@ -106,9 +106,9 @@
         @endphp
 
         @foreach($sections as $section)
-            <div class="section-header {{ !$loop->first ? 'mt-5' : '' }}">
-                <span class="dot {{ $section['pulse'] ? 'pulse' : '' }} bg-{{ $section['dot'] }}"></span>
-                <h5 class="text-uppercase font-weight-bold text-secondary smallest" style="letter-spacing: 1.5px;">{{ $section['title'] }}</h5>
+            <div class="section-header-premium {{ !$loop->first ? 'mt-5' : '' }}">
+                <span class="dot {{ $section['pulse'] ? 'pulse-glow-dot' : '' }} bg-{{ $section['dot'] }}"></span>
+                <h5 class="text-uppercase font-weight-bold text-secondary smallest mb-0" style="letter-spacing: 1.5px;">{{ $section['title'] }}</h5>
             </div>
             @include('admin.dashboard.partials.' . $section['partial'], ['metrics' => $metrics])
         @endforeach
@@ -122,23 +122,6 @@
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
     <style>
-        /* Sectioning & Layout */
-        .section-header { display: flex; align-items: center; margin-bottom: 1.5rem; }
-        .section-header .dot { width: 10px; height: 10px; border-radius: 50%; margin-right: 12px; transition: transform 0.3s; }
-        
-        .card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,0.08) !important; }
-
-        .icon-circle { width: 56px; height: 56px; border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; transition: all 0.3s ease; }
-        .card:hover .icon-circle { transform: scale(1.1) rotate(5deg); }
-
-        /* Global Pulse Animation */
-        .pulse { animation: pulse-shadow 2s infinite; }
-        @keyframes pulse-shadow {
-            0% { box-shadow: 0 0 0 0 rgba(70, 165, 172, 0.6); transform: scale(0.95); }
-            70% { box-shadow: 0 0 0 10px rgba(70, 165, 172, 0); transform: scale(1); }
-            100% { box-shadow: 0 0 0 0 rgba(70, 165, 172, 0); transform: scale(0.95); }
-        }
-        
         #master-calendar { background: transparent; padding: 1.5rem; border-radius: var(--radius-md); }
         .fc { font-family: var(--font-heading) !important; }
         .fc .fc-toolbar-title { font-weight: 700; color: var(--dark); font-size: 1.25rem !important; }

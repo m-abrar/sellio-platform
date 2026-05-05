@@ -1135,3 +1135,116 @@ body.dark-mode .form-control {
 .input-group-oval .form-control:focus {
     box-shadow: none !important;
 }
+
+/* --- 16. DASHBOARD & COMMAND CENTER TOKENS --- */
+.card-glass {
+    background: var(--glass-bg) !important;
+    backdrop-filter: blur(var(--glass-blur)) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: var(--radius-xl) !important;
+}
+
+.card-premium-dark {
+    background: var(--grad-dark) !important;
+    border-radius: var(--radius-xl) !important;
+    border: none !important;
+    overflow: hidden !important;
+    position: relative;
+}
+
+.gradient-action-card {
+    border-radius: var(--radius-xl) !important;
+    border: none !important;
+    overflow: hidden !important;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease !important;
+}
+
+.gradient-action-card:hover {
+    transform: translateY(-8px) !important;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.12) !important;
+}
+
+.glassmorphic-glow-icon {
+    position: absolute;
+    bottom: -15px;
+    right: -15px;
+    font-size: 8rem;
+    opacity: 0.1;
+    transform: rotate(-15deg);
+    color: #ffffff;
+}
+
+.icon-box-soft {
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.icon-box-soft.sm { width: 32px; height: 32px; font-size: 0.85rem; border-radius: var(--radius-sm); }
+.icon-box-soft.md { width: 44px; height: 44px; font-size: 1.2rem; }
+.icon-box-soft.lg { width: 60px; height: 60px; font-size: 1.8rem; }
+
+.card:hover .icon-box-soft {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.bg-primary-soft { background: var(--primary-soft) !important; color: var(--primary) !important; }
+.bg-success-soft { background: rgba(16, 185, 129, 0.08) !important; color: var(--success) !important; }
+.bg-info-soft { background: rgba(14, 165, 233, 0.08) !important; color: var(--info) !important; }
+.bg-warning-soft { background: rgba(245, 158, 11, 0.08) !important; color: var(--warning) !important; }
+.bg-danger-soft { background: rgba(239, 68, 68, 0.08) !important; color: var(--danger) !important; }
+.bg-purple-soft { background: rgba(168, 85, 247, 0.08) !important; color: #a855f7 !important; }
+.bg-teal-soft { background: rgba(20, 184, 166, 0.08) !important; color: #14b8a6 !important; }
+
+.badge-success-light { background: rgba(16, 185, 129, 0.15) !important; color: var(--success) !important; }
+.badge-primary-soft { background: var(--primary-soft) !important; color: var(--primary) !important; }
+
+.action-badge-pulsing {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(5px);
+    padding: 4px 10px;
+    border-radius: 50px;
+    font-size: 0.6rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    color: #ffffff;
+}
+
+.pulse-glow-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+    animation: dot-pulse 2s infinite;
+}
+
+@keyframes dot-pulse {
+    0% { transform: scale(0.9); opacity: 0.7; }
+    50% { transform: scale(1.2); opacity: 1; }
+    100% { transform: scale(0.9); opacity: 0.7; }
+}
+
+.section-header-premium {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.section-header-premium .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 12px;
+}
+
+.animate-pulse-soft {
+    animation: pulse-soft 2s infinite;
+}
+
+@keyframes pulse-soft {
+    0% { opacity: 1; }
+    50% { opacity: 0.6; }
+    100% { opacity: 1; }
+}
