@@ -8,7 +8,7 @@
             <div class="col-sm-7">
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-wallet mr-2 text-primary opacity-50"></i>
-                    {{ __('Financial Registry') }}
+                    {{ $pageTitle ?? __('Financial Registry') }}
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Monitor marketplace cashflow, transaction history, and gateway settlements.</p>
             </div>
@@ -17,8 +17,8 @@
                     <a href="{{ route('admin.payments.create') }}" class="btn btn-primary rounded-pill px-4 py-2 font-weight-bold shadow-premium smallest uppercase letter-spacing-1">
                         <i class="fas fa-plus-circle mr-2"></i> Log Transaction
                     </a>
-                    <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">
-                        <i class="fas fa-th-large"></i> Dashboard
+                    <a href="{{ route('admin.welcome') }}" class="btn btn-white rounded-pill px-4 py-2 font-weight-bold shadow-sm smallest uppercase letter-spacing-1 border">
+                        <i class="fas fa-th-large mr-2"></i> Dashboard
                     </a>
                 </div>
             </div>
@@ -189,19 +189,11 @@
                                     </td>
                                     
                                     <td class="text-right align-middle pr-4">
-                                        <div class="btn-group btn-group-premium shadow-xs rounded-pill border overflow-hidden">
-                                            <a href="{{ route('admin.payments.edit', $payment->id) }}" 
-                                               class="btn btn-white text-info py-2 px-3 d-inline-flex align-items-center" 
-                                               data-toggle="tooltip" title="Modify Record">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
+                                        <div class="btn-group btn-group-premium">
+                                            <a href="{{ route('admin.payments.edit', $payment->id) }}" class="btn text-info" data-toggle="tooltip" title="Modify Record"><i class="fas fa-edit"></i></a>
                                             <form id="delete-form-{{ $payment->id }}" action="{{ route('admin.payments.destroy', $payment->id) }}" method="POST" class="d-inline">
                                                 @csrf @method('DELETE')
-                                                <button type="button" class="btn btn-white text-danger py-2 px-3 border-left d-inline-flex align-items-center" 
-                                                        data-toggle="tooltip" title="Void Record"
-                                                        onclick="confirmDelete('delete-form-{{ $payment->id }}', 'Void Transaction?', 'This action will permanently remove this financial record from the ledger.', 'Confirm')">
-                                                    <i class="fas fa-trash-alt"></i>
-                                                </button>
+                                                <button type="button" class="btn text-danger" data-toggle="tooltip" title="Void Record" onclick="confirmDelete('delete-form-{{ $payment->id }}', 'Void Transaction?', 'This action will permanently remove this financial record from the ledger.', 'Confirm')"><i class="fas fa-trash-alt"></i></button>
                                             </form>
                                         </div>
                                     </td>
@@ -238,6 +230,10 @@
     .select2-container--bootstrap4 .select2-selection--single { height: 100% !important; border: 0 !important; background: transparent !important; }
     .select2-container--bootstrap4 .select2-selection--single .select2-selection__rendered { line-height: 40px !important; padding-left: 0 !important; font-weight: 600 !important; font-size: 0.85rem !important; }
     .select2-container--bootstrap4 .select2-selection--single .select2-selection__arrow { top: 50% !important; transform: translateY(-50%) !important; }
+    
+    /* Executive Premium Select2 Fix */
+    .input-group-premium .select2-container { flex: 1 1 auto !important; width: 1% !important; }
+    .input-group-premium .select2-container .select2-selection--single { height: 46px !important; display: flex !important; align-items: center !important; }
 </style>
 @endsection
 

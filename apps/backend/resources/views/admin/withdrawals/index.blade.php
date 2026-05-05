@@ -17,8 +17,8 @@
                 <span class="badge badge-primary-light px-3 py-2 rounded-pill font-weight-bold smallest uppercase mr-2">
                     <i class="fas fa-clock mr-1"></i> {{ $withdrawals->total() }} REQUESTS QUEUED
                 </span>
-                <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">
-                    <i class="fas fa-th-large"></i> Dashboard
+                <a href="{{ route('admin.welcome') }}" class="btn btn-white rounded-pill px-4 py-2 font-weight-bold shadow-sm smallest uppercase letter-spacing-1 border">
+                    <i class="fas fa-th-large mr-2"></i> Dashboard
                 </a>
             </div>
         </div>
@@ -174,11 +174,11 @@
                                 <td class="text-right align-middle pr-4">
                                     @if ($withdrawal->status === 'pending')
                                         <div class="btn-group btn-group-premium">
-                                             <form action="{{ route('admin.withdrawals.approve', $withdrawal) }}" method="POST" class="m-0">
+                                             <form id="approve-form-{{ $withdrawal->id }}" action="{{ route('admin.withdrawals.approve', $withdrawal) }}" method="POST" class="m-0">
                                                  @csrf
-                                                 <button type="submit" class="btn text-success" 
-                                                         title="{{ __('Approve') }}" 
-                                                         onclick="return confirm('Confirm payout of ${{ number_format($withdrawal->amount_dollars, 2) }}?')">
+                                                 <button type="button" class="btn text-success" 
+                                                         title="{{ __('Approve Payout') }}" 
+                                                         onclick="confirmDelete('approve-form-{{ $withdrawal->id }}', 'Approve Payout?', 'Confirming this will process the settlement of ${{ number_format($withdrawal->amount_dollars, 2) }} to the partner.', 'Approve Now')">
                                                      <i class="fas fa-check"></i>
                                                  </button>
                                              </form>
@@ -260,6 +260,7 @@
 @endsection
 
 @section('js')
+    @include('admin._partials._sweetalert')
     <script>
         $(document).ready(function () {
              if ($('#withdrawals-table tbody tr:not(.empty-state)').length > 0) {
