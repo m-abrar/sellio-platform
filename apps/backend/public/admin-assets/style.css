@@ -285,11 +285,17 @@ h1, h2, h3, h4, h5, h6, .brand-text {
     position: absolute !important;
     right: 1.25rem !important;
     top: 50% !important;
-    transform: translateY(-50%) !important;
     margin: 0 !important;
+    width: 20px !important;
+    height: 20px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
     font-size: 0.8rem !important;
     opacity: 0.4;
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease, right 0.3s ease !important;
+    transform: translateY(-50%) rotate(0deg) !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    transform-origin: center center !important;
 }
 
 .nav-item.menu-is-opening > .nav-link i.right,
@@ -564,6 +570,7 @@ h1, h2, h3, h4, h5, h6, .brand-text {
     letter-spacing: 1.2px !important;
     display: inline-flex !important;
     align-items: center !important;
+    gap: 12px !important;
     transition: all 0.3s ease !important;
 }
 
@@ -628,6 +635,7 @@ h1, h2, h3, h4, h5, h6, .brand-text {
 
 .table-premium tbody tr:hover td {
     background-color: #fff !important;
+    border-color: transparent !important;
     box-shadow: 0 4px 12px rgba(0,0,0,0.03) !important;
 }
 
@@ -636,9 +644,9 @@ h1, h2, h3, h4, h5, h6, .brand-text {
 }
 
 .table-img-preview {
-    width: 48px;
-    height: 48px;
-    border-radius: var(--radius-md) !important;
+    width: 60px;
+    height: 60px;
+    border-radius: var(--radius-lg) !important;
     overflow: hidden !important;
     border: 1px solid var(--border-color) !important;
     display: flex !important;
@@ -679,6 +687,57 @@ h1, h2, h3, h4, h5, h6, .brand-text {
     background-color: #f8fafc;
     color: var(--primary);
     transform: translateY(-2px);
+}
+
+/* --- 10. DATATABLES PREMIUM CONTROLS --- */
+.dataTables_wrapper .row:first-of-type,
+.dataTables_wrapper .row:last-of-type {
+    padding: 1.5rem 1.75rem !important;
+    margin: 0 !important;
+    align-items: center !important;
+    background: #ffffff;
+}
+
+.dataTables_wrapper .row:first-of-type {
+    border-bottom: 1px solid var(--border-color) !important;
+}
+
+.dataTables_wrapper .row:last-of-type {
+    border-top: 1px solid var(--border-color) !important;
+}
+
+.dataTables_filter label, 
+.dataTables_length label {
+    margin-bottom: 0 !important;
+    font-weight: 600 !important;
+    color: var(--dark-muted) !important;
+    font-size: var(--text-smallest) !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+}
+
+.dataTables_info {
+    font-weight: 700 !important;
+    color: var(--dark-muted) !important;
+    font-size: var(--text-smallest) !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+}
+
+.dataTables_wrapper .form-control-premium {
+    height: 40px !important;
+    border-radius: 10px !important;
+    font-weight: 600 !important;
+    background-color: #f8fafc !important;
+    border: 1px solid #e2e8f0 !important;
+}
+
+.dataTables_filter input {
+    width: 250px !important;
+}
+
+.dataTables_length select {
+    width: 80px !important;
 }
 
 /* --- 10. ALERTS & CALLOUTS --- */

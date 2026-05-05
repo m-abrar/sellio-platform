@@ -19,7 +19,7 @@
             <div class="col-sm-4 text-right">
                 <div class="d-flex justify-content-end align-items-center" style="gap: 12px;">
                     <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">
-                        <i class="fas fa-th-large mr-2"></i> Dashboard
+                        <i class="fas fa-th-large"></i> Dashboard
                     </a>
                 </div>
             </div>

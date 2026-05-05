@@ -17,8 +17,8 @@
                 </p>
             </div>
             <div class="col-md-4 text-right">
-                <a href="{{ route('admin.amenities.create') }}" class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-premium">
-                    <i class="fas fa-plus-circle mr-1"></i> ADD AMENITY
+                <a href="{{ route('admin.amenities.create') }}" class="btn btn-primary rounded-pill px-4 py-2 font-weight-bold shadow-premium smallest uppercase letter-spacing-1">
+                    <i class="fas fa-plus-circle mr-2"></i> Add Amenity
                 </a>
             </div>
         </div>
@@ -59,19 +59,17 @@
                         @forelse ($amenities as $amenity)
                             <tr>
                                 <td class="text-center align-middle">
-                                    {{-- Brand Identity Box --}}
-                                    <div class="icon-box-preview bg-light shadow-xs d-flex align-items-center justify-content-center mx-auto" 
-                                         style="width: 40px; height: 40px; border-radius: 8px; border: 1px solid #eee;">
+                                    <div class="table-img-preview shadow-sm">
                                         @if(!empty($amenity->icon))
-                                            <i class="{{ $amenity->icon }} fa-lg text-primary"></i> 
+                                            <i class="{{ $amenity->icon }} text-primary"></i> 
                                         @else
-                                            <i class="fas fa-question fa-sm text-muted"></i>
+                                            <i class="fas fa-concierge-bell text-muted opacity-50"></i>
                                         @endif
                                     </div>
                                 </td>
 
                                 <td class="align-middle">
-                                    <span class="d-block font-weight-bold text-dark mb-0">{{ $amenity->title ?? 'N/A' }}</span>
+                                    <span class="d-block font-weight-bold text-dark mb-0 smallest uppercase letter-spacing-1">{{ $amenity->title ?? 'N/A' }}</span>
                                     <small class="text-muted text-monospace" style="font-size: 0.7rem;">REF: #AMN-{{ str_pad($amenity->id, 4, '0', STR_PAD_LEFT) }}</small>
                                 </td>
 
@@ -108,8 +106,7 @@
                                 </td>
 
                                 <td class="text-center align-middle">
-                                    {{-- Applied: Premium light status badges --}}
-                                    <span class="badge {{ ($amenity->is_published ?? false) ? 'badge-success-light' : 'badge-secondary-light' }} px-3 py-1 text-uppercase" style="font-size: 0.7rem; letter-spacing: 0.5px;">
+                                    <span class="badge {{ ($amenity->is_published ?? false) ? 'badge-success-light text-success' : 'badge-secondary-light text-secondary' }} px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 shadow-xs">
                                         {{ ($amenity->is_published ?? false) ? 'Active' : 'Draft' }}
                                     </span>
                                 </td>
@@ -148,8 +145,8 @@
                                             <a href="{{ route('admin.amenities.index') }}" class="btn btn-default btn-sm px-4">Clear Search</a>
                                         @else
                                             <p class="text-secondary small mb-3">Enhance your listings by adding features like "WiFi", "Parking", or "Pet Friendly".</p>
-                                            <a href="{{ route('admin.amenities.create') }}" class="btn btn-primary btn-sm btn-flat px-4">
-                                                <i class="fas fa-plus mr-1"></i> Create First Amenity
+                                            <a href="{{ route('admin.amenities.create') }}" class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-premium smallest uppercase letter-spacing-1">
+                                                <i class="fas fa-plus mr-2"></i> Create First Amenity
                                             </a>
                                         @endif
                                     </div>
@@ -188,9 +185,9 @@
                     "info": true,
                     "autoWidth": false,
                     "responsive": true,
-                    "dom": '<"row px-0 pt-3"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-6"l>>' +
+                    "dom": '<"row"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-6"l>>' +
                            '<"row"<"col-sm-12"tr>>' +
-                           '<"row px-0 pb-3"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+                           '<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
                     "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
                     "columnDefs": [
                         { "orderable": false, "targets": [0, 2, 4] }
@@ -205,8 +202,8 @@
                         "lengthMenu": "_MENU_ per page"
                     }
                 });
-                $('.dataTables_filter input').addClass('form-control shadow-none border-light').css('width', '250px');
-                $('.dataTables_length select').addClass('form-control form-control-sm shadow-none border-light').css('width', '70px');
+                $('.dataTables_filter input').addClass('form-control form-control-premium shadow-none border-light');
+                $('.dataTables_length select').addClass('form-control form-control-premium shadow-none border-light');
             }
             $('[data-toggle="tooltip"]').tooltip();
         });

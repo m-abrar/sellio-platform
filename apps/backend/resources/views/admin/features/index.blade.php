@@ -17,8 +17,8 @@
                 </p>
             </div>
             <div class="col-md-4 text-right">
-                <a href="{{ route('admin.features.create') }}" class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-premium">
-                    <i class="fas fa-plus-circle mr-1"></i> ADD FEATURE
+                <a href="{{ route('admin.features.create') }}" class="btn btn-primary rounded-pill px-4 py-2 font-weight-bold shadow-premium smallest uppercase letter-spacing-1">
+                    <i class="fas fa-plus-circle mr-2"></i> Add Feature
                 </a>
             </div>
         </div>
@@ -59,24 +59,19 @@
                         @forelse ($features as $feature)
                             <tr>
                                 <td class="text-center align-middle">
-                                    {{-- Feature Image Wrapper --}}
-                                    <div class="feature-preview-container shadow-xs border rounded bg-light overflow-hidden mx-auto" 
-                                         style="width: 50px; height: 50px;">
+                                    <div class="table-img-preview shadow-sm">
                                         @if($feature->thumbnail_url)
                                             <img src="{{ $feature->thumbnail_url }}" 
                                                  alt="{{ $feature->title }}" 
-                                                 class="img-fluid h-100 w-100" 
-                                                 style="object-fit: cover;">
+                                                 onerror="this.src='{{ asset('images/fallbacks/default.jpg') }}'">
                                         @else
-                                            <div class="d-flex align-items-center justify-content-center h-100">
-                                                <i class="fas fa-image text-muted opacity-50"></i>
-                                            </div>
+                                            <i class="fas fa-star text-muted opacity-50"></i>
                                         @endif
                                     </div>
                                 </td>
 
                                 <td class="align-middle">
-                                    <span class="d-block font-weight-bold text-dark">{{ $feature->title ?? 'Untitled' }}</span>
+                                    <span class="d-block font-weight-bold text-dark smallest uppercase letter-spacing-1">{{ $feature->title ?? 'Untitled' }}</span>
                                     <small class="text-muted font-italic">{{ Str::limit($feature->description, 40) }}</small>
                                 </td>
 
@@ -113,8 +108,7 @@
                                 </td>
 
                                 <td class="text-center align-middle">
-                                    {{-- Light-style Status Badges --}}
-                                    <span class="badge {{ $feature->is_published ? 'badge-success-light' : 'badge-secondary-light' }} px-3 py-1 text-uppercase" style="font-size: 0.7rem;">
+                                    <span class="badge {{ $feature->is_published ? 'badge-success-light text-success' : 'badge-secondary-light text-secondary' }} px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 shadow-xs">
                                         {{ $feature->is_published ? 'Active' : 'Inactive' }}
                                     </span>
                                 </td>
@@ -152,8 +146,8 @@
                                             <a href="{{ route('admin.features.index') }}" class="btn btn-default btn-sm px-4">Clear Search</a>
                                         @else
                                             <p class="text-secondary small mb-3">Define characteristics like "Fuel Type", "Experience Level", or "Property Age".</p>
-                                            <a href="{{ route('admin.features.create') }}" class="btn btn-primary btn-sm btn-flat px-4">
-                                                <i class="fas fa-plus mr-1"></i> Add Your Initial Feature
+                                            <a href="{{ route('admin.features.create') }}" class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-premium smallest uppercase letter-spacing-1">
+                                                <i class="fas fa-plus mr-2"></i> Add Your Initial Feature
                                             </a>
                                         @endif
                                     </div>
@@ -192,9 +186,9 @@
                     "info": true,
                     "autoWidth": false,
                     "responsive": true,
-                    "dom": '<"row px-0 pt-3"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-6"l>>' +
+                    "dom": '<"row"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-6"l>>' +
                            '<"row"<"col-sm-12"tr>>' +
-                           '<"row px-0 pb-3"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+                           '<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
                     "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
                     "order": [[1, "asc"]],
                     "columnDefs": [
@@ -210,8 +204,8 @@
                         "lengthMenu": "_MENU_ per page"
                     }
                 });
-                $('.dataTables_filter input').addClass('form-control shadow-none border-light').css('width', '250px');
-                $('.dataTables_length select').addClass('form-control form-control-sm shadow-none border-light').css('width', '70px');
+                $('.dataTables_filter input').addClass('form-control form-control-premium shadow-none border-light');
+                $('.dataTables_length select').addClass('form-control form-control-premium shadow-none border-light');
             }
             $('[data-toggle="tooltip"]').tooltip();
         });

@@ -16,27 +16,32 @@
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Cross-module operational registry and transaction oversight.</p>
             </div>
             <div class="col-sm-5 d-flex flex-column align-items-end justify-content-center">
-                <div class="dropdown mb-2">
-                    <button class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-premium dropdown-toggle" type="button" id="addOperationDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-plus-circle mr-1"></i> INITIALIZE OPERATION
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-right shadow-premium border-0 animate__animated animate__fadeInUp" aria-labelledby="addOperationDropdown" style="border-radius: 16px;">
-                        <h6 class="dropdown-header smallest font-weight-bold text-muted uppercase letter-spacing-1">Real Estate</h6>
-                        <a class="dropdown-item py-2 px-4 smallest font-weight-bold" href="{{ route('admin.property-bookings.create') }}">
-                            <i class="fas fa-home mr-2 text-primary opacity-50"></i> Property Booking
-                        </a>
-                        
-                        <div class="dropdown-divider"></div>
-                        <h6 class="dropdown-header smallest font-weight-bold text-muted uppercase letter-spacing-1">Ticketing & Events</h6>
-                        <a class="dropdown-item py-2 px-4 smallest font-weight-bold" href="{{ route('admin.event-bookings.create') }}">
-                            <i class="fas fa-ticket-alt mr-2 text-success opacity-50"></i> Event Registration
-                        </a>
-
-                        <div class="dropdown-divider"></div>
-                        <h6 class="dropdown-header smallest font-weight-bold text-muted uppercase letter-spacing-1">Leads & Inquiries</h6>
-                        <a class="dropdown-item py-2 px-4 smallest font-weight-bold" href="{{ route('admin.auto-inquiries.create') }}">
-                            <i class="fas fa-car mr-2 text-info opacity-50"></i> Auto Lead Entry
-                        </a>
+                <div class="d-flex align-items-center" style="gap: 12px;">
+                    <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">
+                        <i class="fas fa-th-large"></i> Dashboard
+                    </a>
+                    <div class="dropdown">
+                        <button class="btn btn-primary rounded-pill px-4 py-2 font-weight-bold shadow-premium dropdown-toggle smallest uppercase letter-spacing-1" type="button" id="addOperationDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-plus-circle mr-2"></i> INITIALIZE OPERATION
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right shadow-premium border-0 animate__animated animate__fadeInUp" aria-labelledby="addOperationDropdown" style="border-radius: 16px;">
+                            <h6 class="dropdown-header smallest font-weight-bold text-muted uppercase letter-spacing-1">Real Estate</h6>
+                            <a class="dropdown-item py-2 px-4 smallest font-weight-bold" href="{{ route('admin.property-bookings.create') }}">
+                                <i class="fas fa-home mr-2 text-primary opacity-50"></i> Property Booking
+                            </a>
+                            
+                            <div class="dropdown-divider"></div>
+                            <h6 class="dropdown-header smallest font-weight-bold text-muted uppercase letter-spacing-1">Ticketing & Events</h6>
+                            <a class="dropdown-item py-2 px-4 smallest font-weight-bold" href="{{ route('admin.event-bookings.create') }}">
+                                <i class="fas fa-ticket-alt mr-2 text-success opacity-50"></i> Event Registration
+                            </a>
+    
+                            <div class="dropdown-divider"></div>
+                            <h6 class="dropdown-header smallest font-weight-bold text-muted uppercase letter-spacing-1">Leads & Inquiries</h6>
+                            <a class="dropdown-item py-2 px-4 smallest font-weight-bold" href="{{ route('admin.auto-inquiries.create') }}">
+                                <i class="fas fa-car mr-2 text-info opacity-50"></i> Auto Lead Entry
+                            </a>
+                        </div>
                     </div>
                 </div>
 
@@ -255,7 +260,7 @@
                     "searchPlaceholder": "Search bookings registry..."
                 }
             });
-            $('.dataTables_filter input').addClass('form-control form-control-premium shadow-none border-light mb-3').css('width', '250px');
+            $('.dataTables_filter input').addClass('form-control form-control-premium shadow-none border-light');
         }
     });
 </script>

@@ -16,8 +16,8 @@
                 </p>
             </div>
             <div class="col-md-4 text-right">
-                <a href="{{ route('admin.categories.create') }}" class="btn btn-primary rounded-pill px-4 font-weight-bold">
-                    <i class="fas fa-plus-circle mr-1"></i> ADD CATEGORY
+                <a href="{{ route('admin.categories.create') }}" class="btn btn-primary rounded-pill px-4 py-2 font-weight-bold shadow-premium smallest uppercase letter-spacing-1">
+                    <i class="fas fa-plus-circle mr-2"></i> Add Category
                 </a>
             </div>
         </div>
@@ -182,9 +182,9 @@
                     "info": true,
                     "autoWidth": false,
                     "responsive": true,
-                    "dom": '<"row pt-3"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-6"l>>' +
+                    "dom": '<"row"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-6"l>>' +
                            '<"row"<"col-sm-12"tr>>' +
-                           '<"row pb-3"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+                           '<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
                     "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
                     "order": [[1, "asc"]],
                     "columnDefs": [ { "orderable": false, "targets": [0, 4] } ],
@@ -197,8 +197,8 @@
                         }
                     }
                 });
-                $('.dataTables_filter input').addClass('form-control shadow-none border-light').css('width', '250px');
-                $('.dataTables_length select').addClass('form-control form-control-sm shadow-none border-light').css('width', '80px');
+                $('.dataTables_filter input').addClass('form-control form-control-premium shadow-none border-light');
+                $('.dataTables_length select').addClass('form-control form-control-premium shadow-none border-light');
             }
             $('[data-toggle="tooltip"]').tooltip();
         });

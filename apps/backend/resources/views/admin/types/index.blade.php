@@ -16,8 +16,8 @@
                 </p>
             </div>
             <div class="col-md-4 text-right">
-                <a href="{{ route('admin.types.create') }}" class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-premium">
-                    <i class="fas fa-plus-circle mr-1"></i> ADD TYPE
+                <a href="{{ route('admin.types.create') }}" class="btn btn-primary rounded-pill px-4 py-2 font-weight-bold shadow-premium smallest uppercase letter-spacing-1">
+                    <i class="fas fa-plus-circle mr-2"></i> Add Type
                 </a>
             </div>
         </div>
@@ -58,13 +58,13 @@
                         @forelse ($types as $type)
                             <tr>
                                 <td class="text-center align-middle">
-                                    <div class="icon-box-preview bg-light shadow-xs d-flex align-items-center justify-content-center mx-auto" style="width: 40px; height: 40px; border-radius: 8px;">
-                                        <i class="{{ $type->icon ?? 'fas fa-question' }} fa-lg text-primary"></i>
+                                    <div class="table-img-preview shadow-sm">
+                                        <i class="{{ $type->icon ?? 'fas fa-layer-group' }} text-primary"></i>
                                     </div>
                                 </td>
 
                                 <td class="align-middle">
-                                    <span class="d-block font-weight-bold text-dark mb-0">{{ $type->title ?? 'N/A' }}</span>
+                                    <span class="d-block font-weight-bold text-dark mb-0 smallest uppercase letter-spacing-1">{{ $type->title ?? 'N/A' }}</span>
                                     <small class="text-muted text-monospace" style="font-size: 0.7rem;">UID: #TYP-{{ $type->id }}</small>
                                 </td>
 
@@ -95,8 +95,7 @@
                                 </td>
 
                                 <td class="text-center align-middle">
-                                    {{-- Applied: Premium light status badges --}}
-                                    <span class="badge {{ $type->is_published ? 'badge-success-light' : 'badge-secondary-light' }} px-3 py-1 text-uppercase" style="font-size: 0.7rem; letter-spacing: 0.5px;">
+                                    <span class="badge {{ $type->is_published ? 'badge-success-light text-success' : 'badge-secondary-light text-secondary' }} px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 shadow-xs">
                                         {{ $type->is_published ? 'Active' : 'Draft' }}
                                     </span>
                                 </td>
@@ -135,8 +134,8 @@
                                             <a href="{{ route('admin.types.index') }}" class="btn btn-default btn-sm px-4">Clear Search</a>
                                         @else
                                             <p class="text-secondary small mb-3">Organize your ecosystem by creating your first listing type.</p>
-                                            <a href="{{ route('admin.types.create') }}" class="btn btn-primary btn-sm btn-flat px-4">
-                                                <i class="fas fa-plus mr-1"></i> Create First Type
+                                            <a href="{{ route('admin.types.create') }}" class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-premium smallest uppercase letter-spacing-1">
+                                                <i class="fas fa-plus mr-2"></i> Create First Type
                                             </a>
                                         @endif
                                     </div>
@@ -175,9 +174,9 @@
                     "info": true,
                     "autoWidth": false,
                     "responsive": true,
-                    "dom": '<"row pt-3"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-6"l>>' +
+                    "dom": '<"row"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-6"l>>' +
                            '<"row"<"col-sm-12"tr>>' +
-                           '<"row pb-3"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+                           '<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
                     "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
                     "columnDefs": [
                         { "orderable": false, "targets": [0, 2, 4] }
@@ -192,8 +191,8 @@
                         "lengthMenu": "_MENU_ per page"
                     }
                 });
-                $('.dataTables_filter input').addClass('form-control shadow-none border-light').css('width', '250px');
-                $('.dataTables_length select').addClass('form-control form-control-sm shadow-none border-light').css('width', '70px');
+                $('.dataTables_filter input').addClass('form-control form-control-premium shadow-none border-light');
+                $('.dataTables_length select').addClass('form-control form-control-premium shadow-none border-light');
             }
             $('[data-toggle="tooltip"]').tooltip();
         });

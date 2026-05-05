@@ -15,11 +15,11 @@
             </div>
             <div class="col-sm-6 text-right">
                 <div class="d-flex justify-content-end align-items-center" style="gap: 12px;">
-                    <a href="{{ route('admin.auto-inquiries.create') }}" class="btn btn-primary shadow-sm px-4 font-weight-bold">
-                        <i class="fas fa-plus mr-1"></i> {{ __('Log New Lead') }}
+                    <a href="{{ route('admin.auto-inquiries.create') }}" class="btn btn-primary rounded-pill px-4 py-2 font-weight-bold shadow-premium smallest uppercase letter-spacing-1">
+                        <i class="fas fa-plus-circle mr-2"></i> Log New Lead
                     </a>
                     <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">
-                        <i class="fas fa-th-large mr-2"></i> Dashboard
+                        <i class="fas fa-th-large"></i> Dashboard
                     </a>
                 </div>
             </div>
@@ -194,7 +194,7 @@
                     }
                 }
             });
-            $('.dataTables_filter input').addClass('form-control shadow-none border-light').css('width', '250px');
+            $('.dataTables_filter input').addClass('form-control form-control-premium shadow-none border-light');
         }
         $('.select2').select2({
             theme: 'bootstrap4',

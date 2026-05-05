@@ -17,8 +17,8 @@
                 </p>
             </div>
             <div class="col-md-4 text-right">
-                <a href="{{ route('admin.brands.create') }}" class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-premium">
-                    <i class="fas fa-plus-circle mr-1"></i> ADD BRAND
+                <a href="{{ route('admin.brands.create') }}" class="btn btn-primary rounded-pill px-4 py-2 font-weight-bold shadow-premium smallest uppercase letter-spacing-1">
+                    <i class="fas fa-plus-circle mr-2"></i> Add Brand
                 </a>
             </div>
         </div>
@@ -60,16 +60,15 @@
                             <tr>
 
                                 <td class="text-center align-middle">
-                                    <div class="icon-box-preview shadow-xs" style="width: 45px; height: 45px; border-radius: 8px; overflow:hidden; margin: auto;">
+                                    <div class="table-img-preview shadow-sm">
                                         <img src="{{ $brand->thumbnail_url }}" 
-                                             alt="{{ $brand->title }}"
-                                             class="w-100 h-100"
-                                             style="object-fit: cover;">
+                                             alt="{{ $brand->title }}" 
+                                             onerror="this.src='{{ asset('images/fallbacks/default.jpg') }}'">
                                     </div>
                                 </td>
 
                                 <td class="align-middle">
-                                    <span class="d-block font-weight-bold text-dark mb-0">{{ $brand->title ?? 'N/A' }}</span>
+                                    <span class="d-block font-weight-bold text-dark mb-0 smallest uppercase letter-spacing-1">{{ $brand->title ?? 'N/A' }}</span>
                                     <small class="text-muted text-monospace" style="font-size: 0.75rem;">/{{ $brand->slug }}</small>
                                 </td>
 
@@ -104,8 +103,7 @@
                                 </td>
 
                                 <td class="text-center align-middle">
-                                    {{-- Light badge style for a modern look --}}
-                                    <span class="badge {{ $brand->is_published ? 'badge-success-light' : 'badge-danger-light' }} px-3 py-1 text-uppercase" style="font-size: 0.7rem; letter-spacing: 0.5px;">
+                                    <span class="badge {{ $brand->is_published ? 'badge-success-light text-success' : 'badge-danger-light text-danger' }} px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 shadow-xs">
                                         {{ $brand->is_published ? 'Active' : 'Inactive' }}
                                     </span>
                                 </td>
@@ -144,8 +142,8 @@
                                             <a href="{{ route('admin.brands.index') }}" class="btn btn-default btn-sm px-4">Clear Search</a>
                                         @else
                                             <p class="text-secondary small mb-3">Define manufacturer and brand names for better structure.</p>
-                                            <a href="{{ route('admin.brands.create') }}" class="btn btn-primary btn-sm btn-flat px-4">
-                                                <i class="fas fa-plus mr-1"></i> Add Brand
+                                            <a href="{{ route('admin.brands.create') }}" class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-premium smallest uppercase letter-spacing-1">
+                                                <i class="fas fa-plus mr-2"></i> Add Brand
                                             </a>
                                         @endif
                                     </div>
@@ -184,9 +182,9 @@
                     "info": true,
                     "autoWidth": false,
                     "responsive": true,
-                    "dom": '<"row px-0 pt-3"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-6"l>>' +
+                    "dom": '<"row"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-6"l>>' +
                            '<"row"<"col-sm-12"tr>>' +
-                           '<"row px-0 pb-3"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+                           '<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
                     "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
                     "order": [[1, "asc"]],
                     "columnDefs": [
@@ -202,8 +200,8 @@
                         "lengthMenu": "_MENU_ per page"
                     }
                 });
-                $('.dataTables_filter input').addClass('form-control shadow-none border-light').css('width', '250px');
-                $('.dataTables_length select').addClass('form-control form-control-sm shadow-none border-light').css('width', '70px');
+                $('.dataTables_filter input').addClass('form-control form-control-premium shadow-none border-light');
+                $('.dataTables_length select').addClass('form-control form-control-premium shadow-none border-light');
             }
             
             $('[data-toggle="tooltip"]').tooltip();

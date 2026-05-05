@@ -21,7 +21,7 @@
                         <i class="fas fa-plus-circle mr-2"></i> Add Order
                     </a>
                     <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">
-                        <i class="fas fa-th-large mr-2"></i> Dashboard
+                        <i class="fas fa-th-large"></i> Dashboard
                     </a>
                 </div>
             </div>
@@ -110,7 +110,7 @@
                                             <label class="custom-control-label" for="selectAll"></label>
                                         </div>
                                     </th>
-                                    <th class="text-center" style="width: 70px">Media</th>
+                                    <th class="text-center" style="width: 80px">Media</th>
                                     <th>Commerce Protocol</th>
                                     <th>Client Principal</th>
                                     <th>Aggregate</th>
@@ -357,15 +357,19 @@
 @endsection
 
 @section('js')
+@include('admin._partials._sweetalert')
 <script>
     $(function () {
         $('[data-toggle="tooltip"]').tooltip();
         
-        $('.select2').select2({
-            theme: 'bootstrap4',
-            width: '100%',
-            placeholder: 'All Statuses'
-        });
+        // Resilient Select2 Loader
+        if (typeof $.fn.select2 === 'function') {
+            $('.select2').select2({
+                theme: 'bootstrap4',
+                width: '100%',
+                placeholder: 'All Statuses'
+            });
+        }
 
         const $bulkBar = $('#bulk-floating-bar');
         const $selectedCount = $('#selected-count');
@@ -401,13 +405,11 @@
         });
 
         window.handleBulkStatus = function(status) {
-            Swal.fire({
+            SellioAlert.fire({
                 title: 'Update ' + $('.order-checkbox:checked').length + ' orders?',
                 text: "Lifecycle status will be transitioned to " + status.toUpperCase(),
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonColor: 'var(--primary)',
-                cancelButtonColor: '#d33',
                 confirmButtonText: 'TRANSITION ALL',
                 cancelButtonText: 'ABORT'
             }).then((result) => {

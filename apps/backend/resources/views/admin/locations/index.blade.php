@@ -16,8 +16,8 @@
                 </p>
             </div>
             <div class="col-md-4 text-right">
-                <a href="{{ route('admin.locations.create') }}" class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-premium">
-                    <i class="fas fa-plus-circle mr-1"></i> ADD LOCATION
+                <a href="{{ route('admin.locations.create') }}" class="btn btn-primary rounded-pill px-4 py-2 font-weight-bold shadow-premium smallest uppercase letter-spacing-1">
+                    <i class="fas fa-plus-circle mr-2"></i> Add Location
                 </a>
             </div>
         </div>
@@ -59,17 +59,16 @@
                         @forelse ($locations as $location)
                             <tr>
                                 <td class="text-center align-middle">
-                                    <div class="icon-box-preview shadow-xs overflow-hidden mx-auto" style="width: 45px; height: 45px; border-radius: 8px;">
+                                    <div class="table-img-preview shadow-sm">
                                         <img src="{{ $location->thumbnail_url }}" 
                                              alt="{{ $location->title ?? 'Location' }}" 
-                                             class="w-100 h-100"
-                                             style="object-fit: cover;">
+                                             onerror="this.src='{{ asset('images/fallbacks/default.jpg') }}'">
                                     </div>
                                 </td>
                                 
                                 <td class="align-middle">
-                                    <span class="d-block font-weight-bold text-dark mb-0">{{ $location->title ?? 'N/A' }}</span>
-                                    <small class="text-muted text-monospace" style="font-size: 0.75rem;">ID: #LOC-{{ $location->id }}</small>
+                                    <span class="d-block font-weight-bold text-dark mb-0 smallest uppercase letter-spacing-1">{{ $location->title ?? 'N/A' }}</span>
+                                    <small class="text-muted text-monospace" style="font-size: 0.7rem;">ID: #LOC-{{ $location->id }}</small>
                                 </td>
                                 
                                 <td class="align-middle">
@@ -112,8 +111,7 @@
                                 </td>
                                 
                                 <td class="text-right align-middle">
-                                    {{-- DRY: Using premium light status badges --}}
-                                    <span class="badge {{ $location->is_published ? 'badge-success-light' : 'badge-danger-light' }} px-3 py-1 text-uppercase" style="font-size: 0.7rem; letter-spacing: 0.5px;">
+                                    <span class="badge {{ $location->is_published ? 'badge-success-light text-success' : 'badge-danger-light text-danger' }} px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 shadow-xs">
                                         {{ $location->is_published ? 'Active' : 'Draft' }}
                                     </span>
                                 </td>
@@ -151,8 +149,8 @@
                                         <a href="{{ route('admin.locations.index') }}" class="btn btn-default btn-sm px-4">Clear Search</a>
                                     @else
                                         <p class="text-secondary small mb-3">Define your operation areas to start categorizing entries.</p>
-                                        <a href="{{ route('admin.locations.create') }}" class="btn btn-primary btn-sm btn-flat px-4">
-                                            <i class="fas fa-plus mr-1"></i> Add Your First Location
+                                        <a href="{{ route('admin.locations.create') }}" class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-premium smallest uppercase letter-spacing-1">
+                                            <i class="fas fa-plus mr-2"></i> Add Your First Location
                                         </a>
                                     @endif
                                 </td>
@@ -190,9 +188,9 @@
                     "info": true,
                     "autoWidth": false,
                     "responsive": true,
-                    "dom": '<"row pt-3"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-6"l>>' +
+                    "dom": '<"row"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-6"l>>' +
                            '<"row"<"col-sm-12"tr>>' +
-                           '<"row pb-3"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+                           '<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
                     "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
                     "order": [[1, "asc"]],
                     "columnDefs": [
@@ -208,8 +206,8 @@
                         "lengthMenu": "_MENU_ per page"
                     }
                 });
-                $('.dataTables_filter input').addClass('form-control shadow-none border-light').css('width', '250px');
-                $('.dataTables_length select').addClass('form-control form-control-sm shadow-none border-light').css('width', '70px');
+                $('.dataTables_filter input').addClass('form-control form-control-premium shadow-none border-light');
+                $('.dataTables_length select').addClass('form-control form-control-premium shadow-none border-light');
             }
             $('[data-toggle="tooltip"]').tooltip();
         });

@@ -14,8 +14,8 @@
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Manage job postings, company profiles, and application statuses.</p>
             </div>
             <div class="col-sm-4 text-right">
-                <a href="{{ route('admin.jobs.create') }}" class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-premium">
-                    <i class="fas fa-plus-circle mr-1"></i> ADD JOB
+                <a href="{{ route('admin.jobs.create') }}" class="btn btn-primary rounded-pill px-4 py-2 font-weight-bold shadow-premium smallest uppercase letter-spacing-1">
+                    <i class="fas fa-plus-circle mr-2"></i> Add Job
                 </a>
             </div>
         </div>
