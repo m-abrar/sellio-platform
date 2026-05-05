@@ -99,33 +99,33 @@
         {{-- Filtration Protocol --}}
         <div class="row mb-4">
             <div class="col-12">
-                <div class="card registry-card-premium">
-                    <div class="card-body p-2 d-flex align-items-center justify-content-between">
+                <div class="card registry-card-premium registry-filter-card mb-4">
+                    <div class="card-body d-flex align-items-center justify-content-between">
                         <div class="d-flex align-items-center">
-                            <span class="text-muted smallest font-weight-bold ml-3 mr-3 text-uppercase letter-spacing-1">
+                            <span class="form-label-premium mb-0 mr-3">
                                 <i class="fas fa-filter mr-1 text-primary"></i> Filter Vertical:
                             </span>
-                            <ul class="nav nav-pills p-1 bg-light rounded-pill">
+                            <ul class="nav nav-pills nav-pills-premium">
                                 <li class="nav-item">
-                                    <a class="nav-link {{ $status === 'all' ? 'active bg-primary shadow-sm' : 'text-muted' }} px-4 py-1 smallest font-weight-bold rounded-pill transition-all" 
+                                    <a class="nav-link {{ $status === 'all' ? 'active' : '' }}" 
                                        href="{{ route(Route::currentRouteName(), ['status' => 'all']) }}">
                                        <i class="fas fa-th-large mr-2"></i> ALL ASSETS
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link {{ $status === 'active' ? 'active bg-success shadow-sm' : 'text-muted' }} px-4 py-1 smallest font-weight-bold rounded-pill transition-all" 
+                                    <a class="nav-link {{ $status === 'active' ? 'active' : '' }}" 
                                        href="{{ route(Route::currentRouteName(), ['status' => 'active']) }}">
                                        <i class="fas fa-check-circle mr-2"></i> ACTIVE
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link {{ $status === 'pending' ? 'active bg-warning shadow-sm' : 'text-muted' }} px-4 py-1 smallest font-weight-bold rounded-pill transition-all" 
+                                    <a class="nav-link {{ $status === 'pending' ? 'active' : '' }}" 
                                        href="{{ route(Route::currentRouteName(), ['status' => 'pending']) }}">
                                        <i class="fas fa-hourglass-half mr-2"></i> PENDING
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link {{ $status === 'expired' ? 'active bg-danger shadow-sm' : 'text-muted' }} px-4 py-1 smallest font-weight-bold rounded-pill transition-all" 
+                                    <a class="nav-link {{ $status === 'expired' ? 'active' : '' }}" 
                                        href="{{ route(Route::currentRouteName(), ['status' => 'expired']) }}">
                                        <i class="fas fa-calendar-times mr-2"></i> EXPIRED
                                     </a>

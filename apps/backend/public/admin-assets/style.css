@@ -67,6 +67,14 @@ h1, h2, h3, h4, h5, h6, .brand-text {
 .bg-warning { background: var(--grad-warning) !important; }
 .bg-danger { background: var(--grad-danger) !important; }
 
+/* Soft Semantic Badges */
+.badge-primary-light { background: var(--primary-soft) !important; color: var(--primary) !important; }
+.badge-success-light { background: var(--success-soft) !important; color: var(--success) !important; }
+.badge-warning-light { background: var(--warning-soft) !important; color: var(--warning) !important; }
+.badge-danger-light { background: var(--danger-soft) !important; color: var(--danger) !important; }
+.badge-info-light { background: var(--info-soft) !important; color: var(--info) !important; }
+.badge-secondary-light { background: #f1f5f9 !important; color: #64748b !important; }
+
 /* --- 2. LAYOUT: FLOATING TOPBAR & PREMIUM SIDEBAR --- */
 
 /* Custom Scrollbar for Sidebar */
@@ -1087,6 +1095,11 @@ body.dark-mode .form-control {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
     border-radius: var(--radius-pill) !important;
     color: var(--dark-muted) !important;
+    padding: 0.6rem 1.75rem !important;
+    font-size: var(--text-smallest) !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
 }
 
 .nav-pills-premium .nav-link:not(.active):hover {
@@ -1505,6 +1518,12 @@ body.dark-mode .form-control {
     align-items: center !important;
     padding-left: 12px !important;
     background-color: #fff !important;
+    transition: all 0.3s ease !important;
+}
+
+.select2-premium .select2-container--bootstrap4.select2-container--focus .select2-selection--single {
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 0 4px var(--primary-soft) !important;
 }
 
 .select2-premium .select2-container--bootstrap4 .select2-selection--single .select2-selection__rendered {
@@ -1516,4 +1535,47 @@ body.dark-mode .form-control {
 
 .select2-premium .select2-container--bootstrap4 .select2-selection--single .select2-selection__arrow {
     height: 44px !important;
+}
+
+/* Select2 inside input-group-premium */
+.input-group-premium .select2-container--bootstrap4 .select2-selection--single {
+    border: none !important;
+    height: 44px !important;
+    background: transparent !important;
+}
+
+.input-group-premium .select2-container--bootstrap4.select2-container--focus .select2-selection--single {
+    box-shadow: none !important;
+}
+
+/* --- 24. PREMIUM ACTION GROUPS --- */
+.btn-group-premium {
+    display: inline-flex !important;
+    border-radius: var(--radius-pill) !important;
+    overflow: hidden !important;
+    border: 1px solid var(--border-light) !important;
+    box-shadow: var(--shadow-xs) !important;
+    background: #ffffff !important;
+}
+
+.btn-group-premium .btn {
+    border: none !important;
+    border-radius: 0 !important;
+    padding: 0.6rem 1.1rem !important;
+    font-size: 0.85rem !important;
+    transition: all 0.2s ease !important;
+    background: transparent !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.btn-group-premium .btn:not(:last-child),
+.btn-group-premium form:not(:last-child) .btn {
+    border-right: 1px solid var(--border-light) !important;
+}
+
+.btn-group-premium .btn:hover {
+    background-color: #f8fafc !important;
+    color: var(--primary) !important;
 }

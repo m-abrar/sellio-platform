@@ -57,41 +57,41 @@
         <div class="row">
             <div class="col-12">
                 {{-- Filter Card --}}
-                <div class="row mb-4">
-                    <div class="col-12">
-            <div class="card border-0 shadow-premium" style="border-radius: 20px;">
-                <div class="card-body p-2 d-flex align-items-center justify-content-between">
-                    <div class="d-flex align-items-center">
-                        <span class="text-muted smallest font-weight-bold ml-3 mr-3 text-uppercase letter-spacing-1">
-                            <i class="fas fa-filter mr-1 text-primary"></i> Filter Registry:
-                        </span>
-                        <ul class="nav nav-pills p-1 bg-light rounded-pill">
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card registry-card-premium registry-filter-card">
+                    <div class="card-body d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center">
+                            <span class="form-label-premium mb-0 mr-3">
+                                <i class="fas fa-filter mr-1 text-primary"></i> Filter Registry:
+                            </span>
+                            <ul class="nav nav-pills nav-pills-premium">
                                 <li class="nav-item">
-                                    <a class="nav-link {{ $status === 'all' ? 'active bg-primary shadow-sm' : 'text-muted' }} px-4 py-1 smallest font-weight-bold rounded-pill transition-all" 
+                                    <a class="nav-link {{ $status === 'all' ? 'active' : '' }}" 
                                        href="{{ route(Route::currentRouteName(), ['status' => 'all']) }}">
                                        <i class="fas fa-list-ul mr-2"></i> ALL QUEUES
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link {{ $status === 'pending' ? 'active bg-warning shadow-sm' : 'text-muted' }} px-4 py-1 smallest font-weight-bold rounded-pill transition-all" 
+                                    <a class="nav-link {{ $status === 'pending' ? 'active' : '' }}" 
                                        href="{{ route(Route::currentRouteName(), ['status' => 'pending']) }}">
                                        <i class="fas fa-hourglass-start mr-2"></i> PENDING
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link {{ $status === 'confirmed' ? 'active bg-success shadow-sm' : 'text-muted' }} px-4 py-1 smallest font-weight-bold rounded-pill transition-all" 
+                                    <a class="nav-link {{ $status === 'confirmed' ? 'active' : '' }}" 
                                        href="{{ route(Route::currentRouteName(), ['status' => 'confirmed']) }}">
                                        <i class="fas fa-check-circle mr-2"></i> CONFIRMED
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link {{ $status === 'cancelled' ? 'active bg-danger shadow-sm' : 'text-muted' }} px-4 py-1 smallest font-weight-bold rounded-pill transition-all" 
+                                    <a class="nav-link {{ $status === 'cancelled' ? 'active' : '' }}" 
                                        href="{{ route(Route::currentRouteName(), ['status' => 'cancelled']) }}">
                                        <i class="fas fa-times-circle mr-2"></i> CANCELLED
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link {{ $status === 'completed' ? 'active bg-dark shadow-sm' : 'text-muted' }} px-4 py-1 smallest font-weight-bold rounded-pill transition-all" 
+                                    <a class="nav-link {{ $status === 'completed' ? 'active' : '' }}" 
                                        href="{{ route(Route::currentRouteName(), ['status' => 'completed']) }}">
                                        <i class="fas fa-archive mr-2"></i> ARCHIVED
                                     </a>
@@ -103,7 +103,7 @@
             </div>
         </div>
 
-    <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
+    <div class="card registry-table-card">
         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
             <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none" style="letter-spacing: 1px;">
                 Operational Registry
@@ -184,19 +184,19 @@
                                                     default => 'secondary'
                                                 };
                                             @endphp
-                                            <span class="badge badge-{{ $statusClass }}-light text-{{ $statusClass }} px-3 py-1 smallest font-weight-bold rounded-pill">{{ strtoupper($booking->status) }}</span>
+                                            <span class="badge badge-{{ $statusClass }}-light px-3 py-1 smallest font-weight-bold rounded-pill">{{ strtoupper($booking->status) }}</span>
                                         </td>
 
                                         <td class="text-right align-middle px-4">
-                                            <div class="btn-group btn-group-premium shadow-xs">
+                                            <div class="btn-group btn-group-premium">
                                                 <a href="{{ ($booking->booking_type && $booking->id) ? route('admin.bookings.show', ['type' => $booking->booking_type, 'id' => $booking->id]) : '#' }}" 
-                                                   class="btn btn-default btn-sm text-primary {{ (!$booking->booking_type || !$booking->id) ? 'disabled' : '' }}" 
+                                                   class="btn text-primary {{ (!$booking->booking_type || !$booking->id) ? 'disabled' : '' }}" 
                                                    data-toggle="tooltip" title="View Registry Details">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
                                                 <form action="{{ ($booking->booking_type && $booking->id) ? route('admin.bookings.destroy', [$booking->booking_type, $booking->id]) : '#' }}" method="POST" class="d-inline">
                                                     @csrf @method('DELETE')
-                                                    <button type="submit" class="btn btn-default btn-sm text-danger" data-toggle="tooltip" title="Purge Record" onclick="return confirm('Permanently delete booking?')">
+                                                    <button type="submit" class="btn text-danger" data-toggle="tooltip" title="Purge Record" onclick="return confirm('Permanently delete booking?')">
                                                         <i class="fas fa-trash-alt"></i>
                                                     </button>
                                                 </form>
@@ -232,11 +232,6 @@
 
 @push('css')
 @include('admin._partials._toggle-card-css')
-<style>
-    #statusTabs.nav-pills .nav-link { color: #6c757d; font-weight: 500; transition: all 0.3s ease; }
-    #statusTabs.nav-pills .nav-link.active { background-color: var(--primary); color: #fff !important; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-    #statusTabs.nav-pills .nav-link:hover:not(.active) { background-color: #f8f9fa; }
-</style>
 @endpush
 
 @section('js')

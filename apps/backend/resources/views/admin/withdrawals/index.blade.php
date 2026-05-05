@@ -14,7 +14,7 @@
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Review and process fund withdrawal requests from marketplace partners.</p>
             </div>
             <div class="col-sm-5 d-flex align-items-center justify-content-end" style="gap: 12px;">
-                <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase mr-2">
+                <span class="badge badge-primary-light px-3 py-2 rounded-pill font-weight-bold smallest uppercase mr-2">
                     <i class="fas fa-clock mr-1"></i> {{ $withdrawals->total() }} REQUESTS QUEUED
                 </span>
                 <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">
@@ -34,52 +34,54 @@
     @include('admin.alert') 
 
     {{-- Premium Status Filter --}}
-    <div class="card card-premium shadow-premium border-0 mb-4" style="border-radius: 20px;">
-        <div class="card-body py-2 px-3 d-flex align-items-center justify-content-between">
-            <div class="d-flex align-items-center">
-                <span class="text-muted smallest font-weight-bold ml-2 mr-3 text-uppercase letter-spacing-1">
-                    <i class="fas fa-filter mr-1 text-primary opacity-75"></i> Lifecycle:
-                </span>
-                <ul class="nav nav-pills nav-pills-premium">
-                    <li class="nav-item">
-                        <a class="nav-link {{ $filter_status === 'all' ? 'active' : '' }} px-4 py-2 small font-weight-bold transition-all" 
-                           href="{{ route('admin.withdrawals.index') }}">
-                           ALL
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ $filter_status === 'pending' ? 'active' : '' }} px-4 py-2 small font-weight-bold transition-all" 
-                           href="{{ route('admin.withdrawals.index', ['status' => 'pending']) }}">
-                           PENDING
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ $filter_status === 'approved' ? 'active' : '' }} px-4 py-2 small font-weight-bold transition-all" 
-                           href="{{ route('admin.withdrawals.index', ['status' => 'approved']) }}">
-                           APPROVED
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ $filter_status === 'rejected' ? 'active' : '' }} px-4 py-2 small font-weight-bold transition-all" 
-                           href="{{ route('admin.withdrawals.index', ['status' => 'rejected']) }}">
-                           REJECTED
-                        </a>
-                    </li>
-                </ul>
-            </div>
-            
-            <div class="ml-auto d-flex align-items-center pr-2">
-                <div class="input-group input-group-oval shadow-xs" style="width: 280px;">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fas fa-search text-xs text-primary"></i></span>
+    <div class="card registry-card-premium registry-filter-card mb-4">
+        <div class="card-body">
+            <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center">
+                    <span class="form-label-premium mb-0 mr-3">
+                        <i class="fas fa-filter mr-1 text-primary opacity-75"></i> Lifecycle:
+                    </span>
+                    <ul class="nav nav-pills nav-pills-premium">
+                        <li class="nav-item">
+                            <a class="nav-link {{ $filter_status === 'all' ? 'active' : '' }}" 
+                               href="{{ route('admin.withdrawals.index') }}">
+                               ALL
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ $filter_status === 'pending' ? 'active' : '' }}" 
+                               href="{{ route('admin.withdrawals.index', ['status' => 'pending']) }}">
+                               PENDING
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ $filter_status === 'approved' ? 'active' : '' }}" 
+                               href="{{ route('admin.withdrawals.index', ['status' => 'approved']) }}">
+                               APPROVED
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ $filter_status === 'rejected' ? 'active' : '' }}" 
+                               href="{{ route('admin.withdrawals.index', ['status' => 'rejected']) }}">
+                               REJECTED
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="ml-auto d-flex align-items-center pr-2">
+                    <div class="input-group input-group-premium" style="width: 280px;">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-search text-xs"></i></span>
+                        </div>
+                        <input type="text" id="custom-search" class="form-control" placeholder="Search Intelligence...">
                     </div>
-                    <input type="text" id="custom-search" class="form-control" placeholder="Search Intelligence...">
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="card card-premium shadow-premium border-0 overflow-hidden" style="border-radius: 24px;">
+    <div class="card registry-table-card">
         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center justify-content-between">
             <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">
                 <i class="fas fa-receipt mr-2 text-primary opacity-50"></i> {{ ucfirst($filter_status) }} Requests Registry
@@ -171,26 +173,25 @@
 
                                 <td class="text-right align-middle pr-4">
                                     @if ($withdrawal->status === 'pending')
-                                        <div class="btn-group btn-group-premium shadow-xs rounded-pill border overflow-hidden">
-                                            <form action="{{ route('admin.withdrawals.approve', $withdrawal) }}" method="POST" class="m-0">
-                                                @csrf
-                                                <button type="submit" class="btn btn-white btn-sm text-success py-2 px-3 border-right d-inline-flex align-items-center" 
-                                                        title="{{ __('Approve') }}" 
-                                                        onclick="return confirm('Confirm payout of ${{ number_format($withdrawal->amount_dollars, 2) }}?')">
-                                                    <i class="fas fa-check"></i>
-                                                </button>
-                                            </form>
-
-                                            <button type="button" class="btn btn-white btn-sm text-danger py-2 px-3 d-inline-flex align-items-center" 
-                                                    title="{{ __('Reject') }}" 
-                                                    data-toggle="modal" 
-                                                    data-target="#rejectModal" 
-                                                    data-withdrawal-route="{{ route('admin.withdrawals.reject', $withdrawal) }}">
-                                                <i class="fas fa-times"></i>
-                                            </button>
-                                        </div>
+                                        <div class="btn-group btn-group-premium">
+                                             <form action="{{ route('admin.withdrawals.approve', $withdrawal) }}" method="POST" class="m-0">
+                                                 @csrf
+                                                 <button type="submit" class="btn text-success" 
+                                                         title="{{ __('Approve') }}" 
+                                                         onclick="return confirm('Confirm payout of ${{ number_format($withdrawal->amount_dollars, 2) }}?')">
+                                                     <i class="fas fa-check"></i>
+                                                 </button>
+                                             </form>
+                                             <button type="button" class="btn text-danger" 
+                                                     title="{{ __('Reject') }}" 
+                                                     data-toggle="modal" 
+                                                     data-target="#rejectModal" 
+                                                     data-withdrawal-route="{{ route('admin.withdrawals.reject', $withdrawal) }}">
+                                                 <i class="fas fa-times"></i>
+                                             </button>
+                                         </div>
                                     @else
-                                        <span class="badge badge-secondary-light text-muted px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1">
+                                        <span class="badge badge-secondary-light px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1">
                                             <i class="fas fa-archive mr-1 opacity-50"></i> ARCHIVED
                                         </span>
                                     @endif

@@ -40,7 +40,10 @@
                     </div>
                     <div class="col-md-3">
                         <label class="form-label-premium">Location</label>
-                        <div class="select2-premium">
+                        <div class="input-group input-group-premium">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-map-marker-alt text-xs"></i></span>
+                            </div>
                             <select name="location_id" class="form-control select2">
                                 <option value="">All Locations</option>
                                 @foreach($locations ?? [] as $loc)
@@ -51,7 +54,10 @@
                     </div>
                     <div class="col-md-3">
                         <label class="form-label-premium">Category</label>
-                        <div class="select2-premium">
+                        <div class="input-group input-group-premium">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-folder-open text-xs"></i></span>
+                            </div>
                             <select name="category_id" class="form-control select2">
                                 <option value="">All Categories</option>
                                 @foreach($categories ?? [] as $cat)

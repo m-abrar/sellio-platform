@@ -46,7 +46,10 @@
                     </div>
                     <div class="col-md-3">
                         <label class="form-label-premium">Brand Selection</label>
-                        <div class="select2-premium">
+                        <div class="input-group input-group-premium">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-car-side text-xs"></i></span>
+                            </div>
                             <select name="brand_id" class="form-control select2">
                                 <option value="">All Brands</option>
                                 @foreach($brands ?? [] as $b)
@@ -57,7 +60,10 @@
                     </div>
                     <div class="col-md-3">
                         <label class="form-label-premium">Vertical Category</label>
-                        <div class="select2-premium">
+                        <div class="input-group input-group-premium">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-folder-open text-xs"></i></span>
+                            </div>
                             <select name="category_id" class="form-control select2">
                                 <option value="">All Categories</option>
                                 @foreach($categories ?? [] as $cat)

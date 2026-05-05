@@ -42,7 +42,10 @@
                     </div>
                     <div class="col-md-4">
                         <label class="form-label-premium">Vertical Category</label>
-                        <div class="select2-premium">
+                        <div class="input-group input-group-premium">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-folder-open text-xs"></i></span>
+                            </div>
                             <select name="category_id" class="form-control select2">
                                 <option value="">All Categories</option>
                                 @foreach($categories ?? [] as $cat)
