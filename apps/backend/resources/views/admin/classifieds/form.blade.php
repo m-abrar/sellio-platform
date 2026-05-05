@@ -12,7 +12,7 @@
                     <i class="fas fa-bullhorn mr-2 text-primary"></i> 
                     {{ $classified->exists ? 'Modify Ad' : 'New Classified Ad' }}
                 </h1>
-                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">
+                <p class="text-muted mt-2 small uppercase letter-spacing-1 mb-0">
                     {{ $classified->exists ? 'Update item details, condition, and market pricing for this listing.' : 'Draft a new marketplace advertisement with detailed specifications and media.' }}
                 </p>
             </div>
@@ -26,7 +26,7 @@
 @stop
 
 @section('content')
-<div class="container-fluid">
+<div class="container-fluid pb-5">
     @include('admin.alert')
 
     <form action="{{ $classified->exists ? route('admin.classifieds.update', $classified->id) : route('admin.classifieds.store') }}" 
@@ -39,87 +39,112 @@
             {{-- Main Content Column --}}
             <div class="col-md-8">
                 {{-- Basic Information --}}
-                <div class="card card-premium overflow-hidden">
-                    <div class="card-header border-0 bg-white py-3 px-4">
-                        <h3 class="card-title font-weight-bold text-dark text-uppercase small" style="letter-spacing: 1px;">General Information</h3>
+                <div class="card border-0 shadow-premium rounded-xl overflow-hidden mb-4">
+                    <div class="card-header border-0 bg-white py-4 px-4">
+                        <h3 class="card-title-main">General Information</h3>
                     </div>
-                    <div class="card-body p-4">
+                    <div class="card-body p-4 pt-0">
                         <div class="form-group mb-4">
-                            <label class="font-weight-600"><i class="fas fa-tag mr-1 text-primary"></i> Item Title <span class="text-danger">*</span></label>
-                            <input type="text" name="title" id="title" class="form-control form-control-lg @error('title') is-invalid @enderror" value="{{ old('title', $classified->title ?? '') }}" required list="classified-title-suggestions" placeholder="e.g. Vintage Leather Sofa">
+                            <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Item Title <span class="text-danger">*</span></label>
+                            <input type="text" name="title" id="title" class="form-control form-control-hero @error('title') is-invalid @enderror" value="{{ old('title', $classified->title ?? '') }}" required list="classified-title-suggestions" placeholder="e.g. Vintage Leather Sofa">
                             <datalist id="classified-title-suggestions">
                                 @foreach(\App\Models\Classified::select('title')->distinct()->limit(20)->pluck('title') as $title)
                                     <option value="{{ $title }}">
                                 @endforeach
                             </datalist>
-                            @error('title') <span class="invalid-feedback">{{ $message }}</span> @enderror
+                            @error('title') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
                         </div>
 
                         <div class="form-group mb-4">
-                            <label for="slug" class="font-weight-600 text-muted small">URL Slug</label>
-                            <input type="text" name="slug" id="slug" class="form-control form-control-monospace @error('slug') is-invalid @enderror" placeholder="auto-generated-slug" value="{{ old('slug', $classified->slug ?? '') }}">
-                            @error('slug') <span class="invalid-feedback">{{ $message }}</span> @enderror
+                            <label for="slug" class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">URL Slug</label>
+                            <input type="text" name="slug" id="slug" class="form-control form-control-premium text-monospace small @error('slug') is-invalid @enderror" placeholder="auto-generated-slug" value="{{ old('slug', $classified->slug ?? '') }}">
+                            @error('slug') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
                         </div>
 
                         <div class="form-group mb-0">
-                            <label class="font-weight-600">Item Description <span class="text-danger">*</span></label>
-                            <textarea name="description" rows="6" class="form-control @error('description') is-invalid @enderror" placeholder="Describe the item condition, history, and specifications...">{{ old('description', $classified->description ?? '') }}</textarea>
+                            <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Item Description <span class="text-danger">*</span></label>
+                            <textarea name="description" rows="6" class="form-control @error('description') is-invalid @enderror" style="border-radius: 16px; border: 1px solid var(--border-light);" placeholder="Describe the item condition, history, and specifications...">{{ old('description', $classified->description ?? '') }}</textarea>
+                            @error('description') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
                         </div>
                     </div>
                 </div>
 
                 {{-- Item Specs --}}
-                <div class="card card-premium overflow-hidden mt-4">
-                    <div class="card-header border-0 bg-white py-3 px-4">
-                        <h3 class="card-title font-weight-600 text-muted small text-uppercase" style="letter-spacing: 1px;">Specifications & Condition</h3>
+                <div class="card border-0 shadow-premium rounded-xl overflow-hidden mb-4">
+                    <div class="card-header border-0 bg-white py-4 px-4">
+                        <h3 class="card-title-main">Specifications & Condition</h3>
                     </div>
-                    <div class="card-body p-4">
+                    <div class="card-body p-4 pt-0">
                         <div class="row">
                             <div class="col-md-4">
-                                <div class="form-group"><label>Condition Scale</label><select name="item_condition" class="form-control"><option value="10" {{ old('item_condition', $classified->item_condition ?? '') == '10' ? 'selected' : '' }}>10/10 (Brand New)</option><option value="8" {{ old('item_condition', $classified->item_condition ?? '') == '8' ? 'selected' : '' }}>8/10 (Excellent)</option><option value="5" {{ old('item_condition', $classified->item_condition ?? '') == '5' ? 'selected' : '' }}>5/10 (Fair)</option><option value="3" {{ old('item_condition', $classified->item_condition ?? '') == '3' ? 'selected' : '' }}>3/10 (Defects)</option></select></div>
+                                <div class="form-group mb-4">
+                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Condition Scale</label>
+                                    <select name="item_condition" class="form-control form-control-premium">
+                                        <option value="10" {{ old('item_condition', $classified->item_condition ?? '') == '10' ? 'selected' : '' }}>10/10 (Brand New)</option>
+                                        <option value="8" {{ old('item_condition', $classified->item_condition ?? '') == '8' ? 'selected' : '' }}>8/10 (Excellent)</option>
+                                        <option value="5" {{ old('item_condition', $classified->item_condition ?? '') == '5' ? 'selected' : '' }}>5/10 (Fair)</option>
+                                        <option value="3" {{ old('item_condition', $classified->item_condition ?? '') == '3' ? 'selected' : '' }}>3/10 (Defects)</option>
+                                    </select>
+                                </div>
                             </div>
                             <div class="col-md-4">
-                                <div class="form-group"><label>Year / Age</label><input type="number" name="item_year_age" class="form-control" placeholder="e.g. 2023" value="{{ old('item_year_age', $classified->item_year_age ?? '') }}"></div>
+                                <div class="form-group mb-4">
+                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Year / Age</label>
+                                    <input type="number" name="item_year_age" class="form-control form-control-premium" placeholder="e.g. 2023" value="{{ old('item_year_age', $classified->item_year_age ?? '') }}">
+                                </div>
                             </div>
                             <div class="col-md-4">
-                                <div class="form-group"><label>Quantity</label><input type="number" name="item_quantity" class="form-control" value="{{ old('item_quantity', $classified->item_quantity ?? '1') }}" placeholder="1"></div>
+                                <div class="form-group mb-4">
+                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Quantity</label>
+                                    <input type="number" name="item_quantity" class="form-control form-control-premium" value="{{ old('item_quantity', $classified->item_quantity ?? '1') }}" placeholder="1">
+                                </div>
                             </div>
                         </div>
 
-                        <div class="row mt-2">
+                        <div class="row">
                             <div class="col-md-6">
-                                <div class="form-group"><label>Dimensions</label><input type="text" name="item_dimensions" class="form-control" placeholder="e.g. 10x20x15 cm" value="{{ old('item_dimensions', $classified->item_dimensions ?? '') }}"></div>
+                                <div class="form-group mb-0">
+                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Dimensions</label>
+                                    <input type="text" name="item_dimensions" class="form-control form-control-premium" placeholder="e.g. 10x20x15 cm" value="{{ old('item_dimensions', $classified->item_dimensions ?? '') }}">
+                                </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-group"><label>Warranty (Months)</label><input type="number" name="warranty_months" class="form-control" value="{{ old('warranty_months', $classified->warranty_months ?? '') }}" placeholder="e.g. 12"></div>
+                                <div class="form-group mb-0">
+                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Warranty (Months)</label>
+                                    <input type="number" name="warranty_months" class="form-control form-control-premium" value="{{ old('warranty_months', $classified->warranty_months ?? '') }}" placeholder="e.g. 12">
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 {{-- Pricing --}}
-                <div class="card card-premium overflow-hidden mt-4">
-                    <div class="card-header border-0 bg-white py-3 px-4">
-                        <h3 class="card-title font-weight-600 text-muted small text-uppercase" style="letter-spacing: 1px;">Pricing Setup</h3>
+                <div class="card border-0 shadow-premium rounded-xl overflow-hidden mb-4">
+                    <div class="card-header border-0 bg-white py-4 px-4">
+                        <h3 class="card-title-main">Pricing Setup</h3>
                     </div>
-                    <div class="card-body p-4">
+                    <div class="card-body p-4 pt-0">
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="form-group"><label>Base Price <span class="text-danger">*</span></label><input type="number" step="0.01" name="base_price" class="form-control" value="{{ old('base_price', $classified->base_price ?? '0') }}" required placeholder="0.00"></div>
+                                <div class="form-group mb-0">
+                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Base Price <span class="text-danger">*</span></label>
+                                    <input type="number" step="0.01" name="base_price" class="form-control form-control-premium" value="{{ old('base_price', $classified->base_price ?? '0') }}" required placeholder="0.00">
+                                </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-group"><label>Discounted Price</label><input type="number" step="0.01" name="sale_price" class="form-control" value="{{ old('sale_price', $classified->sale_price ?? '') }}" placeholder="0.00"></div>
+                                <div class="form-group mb-0">
+                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Discounted Price</label>
+                                    <input type="number" step="0.01" name="sale_price" class="form-control form-control-premium" value="{{ old('sale_price', $classified->sale_price ?? '') }}" placeholder="0.00">
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-
-
                 {{-- Gallery --}}
-                <div class="card card-premium overflow-hidden mt-4">
-                    <div class="card-header border-0 bg-white py-3 px-4">
-                        <h3 class="card-title font-weight-600 text-muted small text-uppercase" style="letter-spacing: 1px;">Item Gallery Photos</h3>
+                <div class="card border-0 shadow-premium rounded-xl overflow-hidden mb-4">
+                    <div class="card-header border-0 bg-white py-4 px-4">
+                        <h3 class="card-title-main">Item Gallery Photos</h3>
                     </div>
                     <div class="card-body p-0">
                         @include('admin._partials._image-uploader', [
@@ -135,19 +160,31 @@
 
                 @if($classified->exists)
                 {{-- Recent Inquiries --}}
-                <div class="card card-premium overflow-hidden mt-4">
-                    <div class="card-header border-0 bg-white py-4 px-4 d-flex justify-content-between align-items-center">
-                        <h3 class="card-title font-weight-bold text-dark mb-0"><i class="fas fa-comments mr-2 text-warning opacity-50"></i> Recent Inquiries</h3>
+                <div class="card border-0 shadow-premium rounded-xl overflow-hidden mb-4">
+                    <div class="card-header border-0 bg-white py-4 px-4">
+                        <h3 class="card-title-main">Recent Inquiries</h3>
                     </div>
                     <div class="card-body p-0">
                         <div class="table-responsive">
                             <table class="table table-premium mb-0">
-                                <thead><tr><th>User</th><th>Message</th><th>Date</th></tr></thead>
+                                <thead class="bg-light">
+                                    <tr>
+                                        <th class="px-4 py-3 small uppercase letter-spacing-1">User</th>
+                                        <th class="px-4 py-3 small uppercase letter-spacing-1">Message</th>
+                                        <th class="px-4 py-3 small uppercase letter-spacing-1">Date</th>
+                                    </tr>
+                                </thead>
                                 <tbody>
                                     @forelse($recentInquiries ?? [] as $inq)
-                                        <tr><td>{{ $inq->user->name ?? 'Guest' }}</td><td>{{ Str::limit($inq->message, 40) }}</td><td>{{ $inq->created_at->format('M d') }}</td></tr>
+                                        <tr>
+                                            <td class="px-4 py-3 align-middle font-weight-bold text-dark">{{ $inq->user->name ?? 'Guest' }}</td>
+                                            <td class="px-4 py-3 align-middle text-muted small">{{ Str::limit($inq->message, 40) }}</td>
+                                            <td class="px-4 py-3 align-middle text-muted small">{{ $inq->created_at->format('M d') }}</td>
+                                        </tr>
                                     @empty
-                                        <tr><td colspan="3" class="text-center py-5 text-muted">No inquiries yet</td></tr>
+                                        <tr>
+                                            <td colspan="3" class="text-center py-5 text-muted small uppercase letter-spacing-1">No inquiries yet</td>
+                                        </tr>
                                     @endforelse
                                 </tbody>
                             </table>
@@ -155,12 +192,13 @@
                     </div>
                 </div>
                 @endif
+
                 {{-- Display & Billing Options --}}
-                <div class="card card-premium mt-4 overflow-hidden">
-                    <div class="card-header border-0 bg-white py-3 px-4">
-                        <h3 class="card-title font-weight-bold text-dark text-uppercase small" style="letter-spacing: 1px;"><i class="fas fa-cog mr-2 text-secondary"></i> Display & Pricing Options</h3>
+                <div class="card border-0 shadow-premium rounded-xl overflow-hidden mb-4">
+                    <div class="card-header border-0 bg-white py-4 px-4">
+                        <h3 class="card-title-main">Display & Pricing Options</h3>
                     </div>
-                    <div class="card-body p-4">
+                    <div class="card-body p-4 pt-0">
                         <div class="row">
                             @php
                                 $toggles = [
@@ -173,10 +211,10 @@
                                     <label class="w-100 cursor-pointer mb-0">
                                         <input type="hidden" name="{{ $t['name'] }}" value="0">
                                         <input type="checkbox" name="{{ $t['name'] }}" value="1" id="{{ $t['id'] }}" class="d-none toggle-input" {{ $t['checked'] ? 'checked' : '' }}>
-                                        <div class="d-flex justify-content-between align-items-center h-100 toggle-card shadow-sm px-3 py-3">
+                                        <div class="d-flex justify-content-between align-items-center h-100 toggle-card shadow-sm px-4 py-3 border rounded-xl" style="border-color: var(--border-light) !important;">
                                             <div>
-                                                <div class="font-weight-bold text-dark small">{{ $t['label'] }}</div>
-                                                <div class="small toggle-status text-muted">{{ $t['status'] ?? 'Option' }}</div>
+                                                <div class="font-weight-bold text-dark small uppercase letter-spacing-1">{{ $t['label'] }}</div>
+                                                <div class="small toggle-status text-muted uppercase letter-spacing-1">{{ $t['status'] ?? 'Option' }}</div>
                                             </div>
                                             <div class="toggle-indicator shadow-sm"></div>
                                         </div>
@@ -190,7 +228,6 @@
 
             {{-- Sidebar Column --}}
             <div class="col-md-4">
-                {{-- Action Card --}}
                 @include('admin._partials._form-actions', [
                     'model' => $classified,
                     'title' => 'AD',
@@ -199,25 +236,23 @@
                 ])
 
                 {{-- Listing Controls --}}
-                <div class="card card-premium mb-4 overflow-hidden">
-                    <div class="card-header bg-white border-0 py-3 px-4">
-                        <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
-                            <i class="fas fa-sliders-h mr-2 text-primary opacity-50"></i> Listing Controls
-                        </h3>
+                <div class="card border-0 shadow-premium mb-4 rounded-xl overflow-hidden mt-4">
+                    <div class="card-header border-0 bg-white py-4 px-4">
+                        <h3 class="card-title-side">Listing Controls</h3>
                     </div>
-                    <div class="card-body p-4">
+                    <div class="card-body p-4 pt-0">
                         <div class="custom-control custom-switch custom-switch-premium">
                             <input type="hidden" name="is_featured" value="0">
                             <input type="checkbox" name="is_featured" value="1" class="custom-control-input" id="isFeatured" {{ old('is_featured', $classified->is_featured ?? false) ? 'checked' : '' }}>
-                            <label class="custom-control-label font-weight-bold text-dark small" for="isFeatured">Featured Listing</label>
+                            <label class="custom-control-label small font-weight-bold text-dark uppercase letter-spacing-1" for="isFeatured">Featured Listing</label>
                         </div>
                     </div>
                 </div>
 
                 {{-- Primary Media --}}
-                <div class="card card-premium mb-4 overflow-hidden">
-                    <div class="card-header bg-white border-0 py-3 px-4">
-                        <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
+                <div class="card border-0 shadow-premium mb-4 rounded-xl overflow-hidden">
+                    <div class="card-header border-0 bg-white py-4 px-4">
+                        <h3 class="card-title-side">
                             <i class="fas fa-camera mr-2 text-primary opacity-50"></i> Visual Identity
                         </h3>
                     </div>
@@ -234,15 +269,13 @@
                 </div>
 
                 {{-- Classification --}}
-                <div class="card card-premium mb-4 overflow-hidden">
-                    <div class="card-header bg-white border-0 py-3 px-4">
-                        <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
-                            <i class="fas fa-sitemap mr-2 text-primary opacity-50"></i> Classification
-                        </h3>
+                <div class="card border-0 shadow-premium mb-4 rounded-xl overflow-hidden">
+                    <div class="card-header border-0 bg-white py-4 px-4">
+                        <h3 class="card-title-side">Classification</h3>
                     </div>
-                    <div class="card-body p-4">
+                    <div class="card-body p-4 pt-0">
                         <div class="form-group mb-4">
-                            <label class="small font-weight-bold text-muted text-uppercase">Marketplace Category</label>
+                            <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Marketplace Category</label>
                             <select name="category_id" class="form-control select2" required>
                                 <option value="">Select Category</option>
                                 @foreach($categories ?? [] as $cat)
@@ -251,7 +284,7 @@
                             </select>
                         </div>
                         <div class="form-group mb-0">
-                            <label class="small font-weight-bold text-muted text-uppercase">Regional Hub</label>
+                            <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Regional Hub</label>
                             <select name="location_id" class="form-control select2">
                                 <option value="">Select Location</option>
                                 @foreach($locations ?? [] as $loc)
@@ -285,7 +318,6 @@
         slugInput.on('change', function() { $(this).data('edited', true); });
     });
 </script>
-@include('admin._partials._toggle-card-css')
 @endpush
 
 @if($classified->exists)
@@ -293,8 +325,6 @@
         @csrf @method('DELETE')
     </form>
     
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         function triggerDelete() {
             Swal.fire({
@@ -302,9 +332,14 @@
                 text: "Permanently delete this classified listing?",
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Yes, delete it!'
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#64748b',
+                confirmButtonText: 'Yes, delete it!',
+                customClass: {
+                    popup: 'rounded-xl',
+                    confirmButton: 'rounded-pill px-4',
+                    cancelButton: 'rounded-pill px-4'
+                }
             }).then((result) => {
                 if (result.isConfirmed) {
                     document.getElementById('delete-form').submit();
@@ -313,3 +348,56 @@
         }
     </script>
 @endif
+
+@include('admin._partials._toggle-card-css')
+
+@push('js')
+<script>
+    $(document).ready(function () { 
+        $('.select2').select2({ theme: 'bootstrap4', width: '100%' }); 
+
+        const titleInput = $('#title');
+        const slugInput = $('#slug');
+
+        titleInput.on('input', function () {
+            if(!slugInput.data('edited')){
+                let slug = $(this).val().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+                slugInput.val(slug);
+            }
+        });
+
+        slugInput.on('change', function() { $(this).data('edited', true); });
+    });
+</script>
+@endpush
+
+@if($classified->exists)
+    <form id="delete-form" action="{{ route('admin.classifieds.destroy', $classified->id) }}" method="POST" class="d-none">
+        @csrf @method('DELETE')
+    </form>
+    
+    <script>
+        function triggerDelete() {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Permanently delete this classified listing?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#64748b',
+                confirmButtonText: 'Yes, delete it!',
+                customClass: {
+                    popup: 'rounded-xl',
+                    confirmButton: 'rounded-pill px-4',
+                    cancelButton: 'rounded-pill px-4'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('delete-form').submit();
+                }
+            })
+        }
+    </script>
+@endif
+
+@include('admin._partials._toggle-card-css')

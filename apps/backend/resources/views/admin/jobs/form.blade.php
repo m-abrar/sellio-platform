@@ -179,6 +179,7 @@
                     </div>
                 </div>
                 @endif
+
                 {{-- Display & Billing Options --}}
                 <div class="card border-0 shadow-premium rounded-xl overflow-hidden mb-4">
                     <div class="card-header border-0 bg-white py-4 px-4">
@@ -197,10 +198,10 @@
                                     <label class="w-100 cursor-pointer mb-0">
                                         <input type="hidden" name="{{ $t['name'] }}" value="0">
                                         <input type="checkbox" name="{{ $t['name'] }}" value="1" id="{{ $t['id'] }}" class="d-none toggle-input" {{ $t['checked'] ? 'checked' : '' }}>
-                                        <div class="d-flex justify-content-between align-items-center h-100 toggle-card shadow-sm px-3 py-3" style="border-radius: 12px; border: 1px solid var(--border-light);">
+                                        <div class="d-flex justify-content-between align-items-center h-100 toggle-card shadow-sm px-4 py-3 border rounded-xl" style="border-color: var(--border-light) !important;">
                                             <div>
                                                 <div class="font-weight-bold text-dark small uppercase letter-spacing-1">{{ $t['label'] }}</div>
-                                                <div class="small toggle-status text-muted">{{ $t['status'] ?? 'Option' }}</div>
+                                                <div class="small toggle-status text-muted uppercase letter-spacing-1">{{ $t['status'] ?? 'Option' }}</div>
                                             </div>
                                             <div class="toggle-indicator shadow-sm"></div>
                                         </div>
@@ -285,6 +286,57 @@
     </form>
 </div>
 @endsection
+
+@push('js')
+<script>
+    $(document).ready(function () { 
+        $('.select2').select2({ theme: 'bootstrap4', width: '100%' }); 
+
+        const titleInput = $('#title');
+        const slugInput = $('#slug');
+
+        titleInput.on('input', function () {
+            if(!slugInput.data('edited')){
+                let slug = $(this).val().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+                slugInput.val(slug);
+            }
+        });
+
+        slugInput.on('change', function() { $(this).data('edited', true); });
+    });
+</script>
+@endpush
+
+@if($job->exists)
+    <form id="delete-form" action="{{ route('admin.jobs.destroy', $job->id) }}" method="POST" class="d-none">
+        @csrf @method('DELETE')
+    </form>
+    
+    <script>
+        function triggerDelete() {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Permanently delete this job listing?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#64748b',
+                confirmButtonText: 'Yes, delete it!',
+                customClass: {
+                    popup: 'rounded-xl',
+                    confirmButton: 'rounded-pill px-4',
+                    cancelButton: 'rounded-pill px-4'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('delete-form').submit();
+                }
+            })
+        }
+    </script>
+@endif
+
+@include('admin._partials._toggle-card-css')
 
 @push('js')
 <script>

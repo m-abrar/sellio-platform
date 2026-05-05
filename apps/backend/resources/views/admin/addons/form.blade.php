@@ -10,7 +10,7 @@
                     <i class="fas fa-puzzle-piece mr-2 text-primary"></i> 
                     {{ $addon->exists ? 'Modify Addon' : 'New Service Addon' }}
                 </h1>
-                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">
+                <p class="text-muted mt-2 small uppercase letter-spacing-1 mb-0">
                     {{ $addon->exists ? 'Update addon pricing, availability, and description.' : 'Define a new supplemental service to enhance platform listings.' }}
                 </p>
             </div>
@@ -24,7 +24,7 @@
 @stop
 
 @section('content')
-<div class="container-fluid">
+<div class="container-fluid pb-5">
     @include('admin.alert')
 
     <form action="{{ $addon->exists ? route('admin.addons.update', $addon->id) : route('admin.addons.store') }}" 
@@ -36,44 +36,40 @@
         <div class="row">
             {{-- Main Configuration Column --}}
             <div class="col-md-8">
-                <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
-                    <div class="card-header border-0 bg-white py-3 px-4">
-                        <h3 class="card-title font-weight-bold text-dark text-uppercase small" style="letter-spacing: 1px;">Addon Configuration</h3>
+                <div class="card border-0 shadow-premium rounded-xl overflow-hidden mb-4">
+                    <div class="card-header border-0 bg-white py-4 px-4">
+                        <h3 class="card-title-main">Addon Configuration</h3>
                     </div>
-                    <div class="card-body p-4">
+                    <div class="card-body p-4 pt-0">
                         {{-- Name Field --}}
                         <div class="form-group mb-4">
-                            <label for="name" class="font-weight-600">Addon Name <span class="text-danger">*</span></label>
+                            <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Addon Name <span class="text-danger">*</span></label>
                             <input type="text" name="name" id="name" 
-                                   class="form-control form-control-lg @error('name') is-invalid @enderror" 
+                                   class="form-control form-control-hero @error('name') is-invalid @enderror" 
                                    placeholder="e.g. Premium Insurance"
                                    value="{{ old('name', $addon->title ?? '') }}" required>
-                            @error('name') <span class="invalid-feedback">{{ $message }}</span> @enderror
+                            @error('name') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
                         </div>
 
                         {{-- Price Field --}}
                         <div class="form-group mb-4">
-                            <label for="price" class="font-weight-600">Supplemental Price <span class="text-danger">*</span></label>
-                            <div class="input-group shadow-xs">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text bg-light border-right-0"><i class="fas fa-dollar-sign text-muted"></i></span>
-                                </div>
-                                <input type="number" step="0.01" name="price" id="price" 
-                                       class="form-control @error('price') is-invalid @enderror" 
-                                       placeholder="0.00"
-                                       value="{{ old('price', $addon->price ?? '') }}" required>
-                            </div>
-                            @error('price') <span class="invalid-feedback">{{ $message }}</span> @enderror
+                            <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Supplemental Price <span class="text-danger">*</span></label>
+                            <input type="number" step="0.01" name="price" id="price" 
+                                   class="form-control form-control-premium @error('price') is-invalid @enderror" 
+                                   placeholder="0.00"
+                                   value="{{ old('price', $addon->price ?? '') }}" required>
+                            @error('price') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
                         </div>
 
                         {{-- Description Field --}}
                         <div class="form-group mb-0">
-                            <label for="description" class="font-weight-600">Service Description <span class="text-danger">*</span></label>
+                            <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Service Description <span class="text-danger">*</span></label>
                             <textarea name="description" id="description" rows="5" 
                                       class="form-control @error('description') is-invalid @enderror" 
+                                      style="border-radius: 16px; border: 1px solid var(--border-light);"
                                       placeholder="Describe the benefits and details of this addon..."
                                       required>{{ old('description', $addon->description ?? '') }}</textarea>
-                            @error('description') <span class="invalid-feedback">{{ $message }}</span> @enderror
+                            @error('description') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
                         </div>
                     </div>
                 </div>
@@ -81,7 +77,6 @@
 
             {{-- Sidebar Column --}}
             <div class="col-md-4">
-                {{-- Action Card --}}
                 @include('admin._partials._form-actions', [
                     'model' => $addon,
                     'title' => 'ADDON',
@@ -89,11 +84,9 @@
                 ])
 
                 {{-- Visual Identity Card --}}
-                <div class="card border-0 shadow-premium mt-4 mb-4" style="border-radius: 20px; overflow: hidden;">
-                    <div class="card-header bg-white border-0 py-3 px-4">
-                        <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
-                            <i class="fas fa-camera mr-2 text-primary opacity-50"></i> Visual Identity
-                        </h3>
+                <div class="card border-0 shadow-premium mt-4 mb-4 rounded-xl overflow-hidden">
+                    <div class="card-header border-0 bg-white py-4 px-4">
+                        <h3 class="card-title-side">Visual Identity</h3>
                     </div>
                     <div class="card-body p-0">
                         @include('admin._partials._image-uploader', [

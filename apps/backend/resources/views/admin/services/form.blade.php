@@ -168,12 +168,24 @@
                     <div class="card-body p-0">
                         <div class="table-responsive">
                             <table class="table table-premium mb-0">
-                                <thead><tr><th class="pl-4">Client</th><th>Request</th><th class="pr-4">Date</th></tr></thead>
+                                <thead class="bg-light">
+                                    <tr>
+                                        <th class="px-4 py-3 small uppercase letter-spacing-1">Client</th>
+                                        <th class="px-4 py-3 small uppercase letter-spacing-1">Request</th>
+                                        <th class="px-4 py-3 small uppercase letter-spacing-1">Date</th>
+                                    </tr>
+                                </thead>
                                 <tbody>
                                     @forelse($recentQuotes ?? [] as $qt)
-                                        <tr><td class="pl-4">{{ $qt->user_name ?? 'Guest' }}</td><td>{{ Str::limit($qt->message, 40) }}</td><td class="pr-4">{{ $qt->created_at->format('M d') }}</td></tr>
+                                        <tr>
+                                            <td class="px-4 py-3 align-middle font-weight-bold text-dark">{{ $qt->user_name ?? 'Guest' }}</td>
+                                            <td class="px-4 py-3 align-middle text-muted small">{{ Str::limit($qt->message, 40) }}</td>
+                                            <td class="px-4 py-3 align-middle text-muted small">{{ $qt->created_at->format('M d') }}</td>
+                                        </tr>
                                     @empty
-                                        <tr><td colspan="3" class="text-center py-5 text-muted">No quote requests yet</td></tr>
+                                        <tr>
+                                            <td colspan="3" class="text-center py-5 text-muted small uppercase letter-spacing-1">No quote requests yet</td>
+                                        </tr>
                                     @endforelse
                                 </tbody>
                             </table>
@@ -199,10 +211,10 @@
                                     <label class="w-100 cursor-pointer mb-0">
                                         <input type="hidden" name="{{ $t['name'] }}" value="0">
                                         <input type="checkbox" name="{{ $t['name'] }}" value="1" id="{{ $t['id'] }}" class="d-none toggle-input" {{ $t['checked'] ? 'checked' : '' }}>
-                                        <div class="d-flex justify-content-between align-items-center h-100 toggle-card shadow-sm px-3 py-3" style="border-radius: 12px; border: 1px solid var(--border-light);">
+                                        <div class="d-flex justify-content-between align-items-center h-100 toggle-card shadow-sm px-4 py-3 border rounded-xl" style="border-color: var(--border-light) !important;">
                                             <div>
                                                 <div class="font-weight-bold text-dark small uppercase letter-spacing-1">{{ $t['label'] }}</div>
-                                                <div class="small toggle-status text-muted">{{ $t['status'] ?? 'Option' }}</div>
+                                                <div class="small toggle-status text-muted uppercase letter-spacing-1">{{ $t['status'] ?? 'Option' }}</div>
                                             </div>
                                             <div class="toggle-indicator shadow-sm"></div>
                                         </div>

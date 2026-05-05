@@ -83,46 +83,46 @@
                     <div class="card-body p-4 pt-0">
                         <div class="row">
                             <div class="col-md-3">
-                                <div class="form-group">
+                                <div class="form-group mb-4">
                                     <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Bedrooms</label>
                                     <input type="number" name="number_of_bedrooms" class="form-control form-control-premium" value="{{ old('number_of_bedrooms', $property->number_of_bedrooms ?? '') }}" placeholder="e.g. 3">
                                 </div>
                             </div>
                             <div class="col-md-3">
-                                <div class="form-group">
+                                <div class="form-group mb-4">
                                     <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Bathrooms</label>
                                     <input type="number" step="0.5" name="number_of_bathrooms" class="form-control form-control-premium" value="{{ old('number_of_bathrooms', $property->number_of_bathrooms ?? '') }}" placeholder="e.g. 2.5">
                                 </div>
                             </div>
                             <div class="col-md-3">
-                                <div class="form-group">
+                                <div class="form-group mb-4">
                                     <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Parking Spots</label>
                                     <input type="number" name="number_of_parking_spots" class="form-control form-control-premium" value="{{ old('number_of_parking_spots', $property->number_of_parking_spots ?? '') }}" placeholder="e.g. 2">
                                 </div>
                             </div>
                             <div class="col-md-3">
-                                <div class="form-group">
+                                <div class="form-group mb-4">
                                     <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Max Guests</label>
                                     <input type="number" name="maximum_guests" class="form-control form-control-premium" value="{{ old('maximum_guests', $property->maximum_guests ?? '') }}" placeholder="e.g. 6">
                                 </div>
                             </div>
                         </div>
 
-                        <div class="row mt-3">
+                        <div class="row">
                             <div class="col-md-4">
-                                <div class="form-group">
+                                <div class="form-group mb-0">
                                     <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Area (Sq Ft)</label>
                                     <input type="number" name="area_sq_ft" class="form-control form-control-premium" value="{{ old('area_sq_ft', $property->area_sq_ft ?? '') }}" placeholder="e.g. 2400">
                                 </div>
                             </div>
                             <div class="col-md-4">
-                                <div class="form-group">
+                                <div class="form-group mb-0">
                                     <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Area (Sq M)</label>
                                     <input type="number" name="area_sq_m" class="form-control form-control-premium" value="{{ old('area_sq_m', $property->area_sq_m ?? '') }}" placeholder="e.g. 220">
                                 </div>
                             </div>
                             <div class="col-md-4">
-                                <div class="form-group">
+                                <div class="form-group mb-0">
                                     <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Year Built</label>
                                     <input type="number" name="year_built" class="form-control form-control-premium" value="{{ old('year_built', $property->year_built ?? '') }}" placeholder="YYYY">
                                 </div>
@@ -139,27 +139,27 @@
                     <div class="card-body p-4 pt-0">
                         <div class="row">
                             <div class="col-md-4">
-                                <div class="form-group">
+                                <div class="form-group mb-4">
                                     <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Base Price (Sale)</label>
                                     <input type="number" step="0.01" name="base_price" class="form-control form-control-premium" value="{{ old('base_price', $property->base_price ?? '') }}" placeholder="0.00">
                                 </div>
                             </div>
                             <div class="col-md-4">
-                                <div class="form-group">
+                                <div class="form-group mb-4">
                                     <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Discount Price</label>
                                     <input type="number" step="0.01" name="sale_price" class="form-control form-control-premium text-success font-weight-bold" value="{{ old('sale_price', $property->sale_price ?? '') }}" placeholder="0.00">
                                 </div>
                             </div>
                             <div class="col-md-4">
-                                <div class="form-group">
+                                <div class="form-group mb-4">
                                     <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Price / Night</label>
                                     <input type="number" step="0.01" name="price_per_night" class="form-control form-control-premium text-primary font-weight-bold" value="{{ old('price_per_night', $property->price_per_night ?? '') }}" placeholder="0.00">
                                 </div>
                             </div>
                         </div>
-                        <div class="row mt-2">
+                        <div class="row">
                             <div class="col-md-4">
-                                <div class="form-group">
+                                <div class="form-group mb-0">
                                     <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">HOA Fees (Monthly)</label>
                                     <input type="number" step="0.01" name="hoa" class="form-control form-control-premium" value="{{ old('hoa', $property->hoa ?? '') }}" placeholder="0.00">
                                 </div>
@@ -210,35 +210,35 @@
                 <div class="card border-0 shadow-premium rounded-xl overflow-hidden mb-4">
                     <div class="card-header border-0 bg-white py-4 px-4 d-flex justify-content-between align-items-center">
                         <h3 class="card-title-main mb-0">Recent Bookings</h3>
-                        <a href="{{ route('admin.bookings.properties') }}?item_id={{ $property->id }}" class="btn btn-premium-soft-primary btn-sm px-3">View All</a>
+                        <a href="{{ route('admin.bookings.properties') }}?item_id={{ $property->id }}" class="btn btn-premium-soft-primary btn-sm px-3 uppercase small letter-spacing-1 font-weight-bold">View All</a>
                     </div>
                     <div class="card-body p-0">
                         <div class="table-responsive">
                             <table class="table table-premium mb-0">
-                                <thead>
+                                <thead class="bg-light">
                                     <tr>
-                                        <th class="small uppercase letter-spacing-1">User</th>
-                                        <th class="small uppercase letter-spacing-1">Dates</th>
-                                        <th class="small uppercase letter-spacing-1">Status</th>
-                                        <th class="text-right small uppercase letter-spacing-1">Action</th>
+                                        <th class="px-4 py-3 small uppercase letter-spacing-1">User</th>
+                                        <th class="px-4 py-3 small uppercase letter-spacing-1">Dates</th>
+                                        <th class="px-4 py-3 small uppercase letter-spacing-1">Status</th>
+                                        <th class="px-4 py-3 text-right small uppercase letter-spacing-1">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @forelse($recentBookings ?? [] as $bk)
                                         <tr>
-                                            <td class="align-middle font-weight-bold text-dark">{{ $bk->user->name ?? 'Guest' }}</td>
-                                            <td class="align-middle text-muted small">
+                                            <td class="px-4 py-3 align-middle font-weight-bold text-dark">{{ $bk->user->name ?? 'Guest' }}</td>
+                                            <td class="px-4 py-3 align-middle text-muted small">
                                                 {{ \Carbon\Carbon::parse($bk->check_in_date)->format('M d') }} - {{ \Carbon\Carbon::parse($bk->check_out_date)->format('M d') }}
                                             </td>
-                                            <td class="align-middle">
+                                            <td class="px-4 py-3 align-middle">
                                                 <span class="badge badge-premium-{{ $bk->status === 'confirmed' ? 'success' : 'warning' }} px-3 py-2">{{ ucfirst($bk->status) }}</span>
                                             </td>
-                                            <td class="text-right align-middle">
+                                            <td class="px-4 py-3 text-right align-middle">
                                                 <a href="{{ url('/admin/bookings/show/PropertyBooking/' . $bk->id) }}" class="btn btn-light btn-xs text-primary rounded-circle shadow-sm"><i class="fas fa-eye"></i></a>
                                             </td>
                                         </tr>
                                     @empty
-                                        <tr><td colspan="4" class="text-center text-muted py-5">No bookings yet</td></tr>
+                                        <tr><td colspan="4" class="text-center text-muted py-5 small uppercase letter-spacing-1">No bookings yet</td></tr>
                                     @endforelse
                                 </tbody>
                             </table>
@@ -256,31 +256,31 @@
                     <div class="card-body p-0">
                         <div class="table-responsive">
                             <table class="table table-premium mb-0">
-                                <thead>
+                                <thead class="bg-light">
                                     <tr>
-                                        <th class="small uppercase letter-spacing-1">Inquirer</th>
-                                        <th class="small uppercase letter-spacing-1">Schedule</th>
-                                        <th class="small uppercase letter-spacing-1">Status</th>
-                                        <th class="text-right small uppercase letter-spacing-1">Action</th>
+                                        <th class="px-4 py-3 small uppercase letter-spacing-1">Inquirer</th>
+                                        <th class="px-4 py-3 small uppercase letter-spacing-1">Schedule</th>
+                                        <th class="px-4 py-3 small uppercase letter-spacing-1">Status</th>
+                                        <th class="px-4 py-3 text-right small uppercase letter-spacing-1">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @forelse($recentVisits ?? [] as $visit)
                                         <tr>
-                                            <td class="align-middle">
+                                            <td class="px-4 py-3 align-middle">
                                                 <div class="font-weight-bold text-dark">{{ $visit->full_name }}</div>
                                                 <div class="small text-muted">{{ $visit->email }}</div>
                                             </td>
-                                            <td class="align-middle text-muted small">{{ \Carbon\Carbon::parse($visit->scheduled_at)->format('M d, g:i A') }}</td>
-                                            <td class="align-middle">
+                                            <td class="px-4 py-3 align-middle text-muted small">{{ \Carbon\Carbon::parse($visit->scheduled_at)->format('M d, g:i A') }}</td>
+                                            <td class="px-4 py-3 align-middle">
                                                 <span class="badge badge-premium-{{ $visit->status === 'confirmed' ? 'success' : 'warning' }} px-3 py-2">{{ ucfirst($visit->status) }}</span>
                                             </td>
-                                            <td class="text-right align-middle">
+                                            <td class="px-4 py-3 text-right align-middle">
                                                 <button class="btn btn-light btn-xs text-muted rounded-circle shadow-sm" disabled><i class="fas fa-eye"></i></button>
                                             </td>
                                         </tr>
                                     @empty
-                                        <tr><td colspan="4" class="text-center text-muted py-5">No inquiries yet</td></tr>
+                                        <tr><td colspan="4" class="text-center text-muted py-5 small uppercase letter-spacing-1">No inquiries yet</td></tr>
                                     @endforelse
                                 </tbody>
                             </table>
@@ -308,9 +308,9 @@
                                     <label class="w-100 cursor-pointer mb-0">
                                         <input type="hidden" name="{{ $t['name'] }}" value="0">
                                         <input type="checkbox" name="{{ $t['name'] }}" value="1" id="{{ $t['id'] }}" class="d-none toggle-input" {{ $t['checked'] ? 'checked' : '' }}>
-                                        <div class="d-flex justify-content-between align-items-center h-100 toggle-card shadow-sm px-4 py-3 border rounded-xl">
+                                        <div class="d-flex justify-content-between align-items-center h-100 toggle-card shadow-sm px-4 py-3 border rounded-xl" style="border-color: var(--border-light) !important;">
                                             <div>
-                                                <div class="font-weight-bold text-dark small">{{ $t['label'] }}</div>
+                                                <div class="font-weight-bold text-dark small uppercase letter-spacing-1">{{ $t['label'] }}</div>
                                                 <div class="small toggle-status text-muted uppercase letter-spacing-1">{{ $t['status'] ?? 'Option' }}</div>
                                             </div>
                                             <div class="toggle-indicator shadow-sm"></div>
@@ -325,7 +325,6 @@
 
             {{-- Sidebar Column --}}
             <div class="col-md-4">
-                {{-- Action Card --}}
                 @include('admin._partials._form-actions', [
                     'model' => $property,
                     'title' => 'PROPERTY',
@@ -336,15 +335,13 @@
                 {{-- Listing Controls --}}
                 <div class="card border-0 shadow-premium mb-4 rounded-xl overflow-hidden mt-4">
                     <div class="card-header border-0 bg-white py-4 px-4">
-                        <h3 class="card-title-side">
-                            <i class="fas fa-sliders-h mr-2 text-primary opacity-50"></i> Listing Controls
-                        </h3>
+                        <h3 class="card-title-side">Listing Controls</h3>
                     </div>
                     <div class="card-body p-4 pt-0">
                         <div class="custom-control custom-switch custom-switch-premium">
                             <input type="hidden" name="is_featured" value="0">
                             <input type="checkbox" name="is_featured" value="1" class="custom-control-input" id="isFeatured" {{ old('is_featured', $property->is_featured ?? false) ? 'checked' : '' }}>
-                            <label class="custom-control-label font-weight-bold text-dark small" for="isFeatured">Featured Property</label>
+                            <label class="custom-control-label small font-weight-bold text-dark uppercase letter-spacing-1" for="isFeatured">Featured Property</label>
                         </div>
                     </div>
                 </div>
@@ -371,32 +368,26 @@
                 {{-- Classification --}}
                 <div class="card border-0 shadow-premium mb-4 rounded-xl overflow-hidden">
                     <div class="card-header border-0 bg-white py-4 px-4">
-                        <h3 class="card-title-side">
-                            <i class="fas fa-sitemap mr-2 text-primary opacity-50"></i> Classification
-                        </h3>
+                        <h3 class="card-title-side">Classification</h3>
                     </div>
                     <div class="card-body p-4 pt-0">
                         <div class="form-group mb-4">
                             <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Marketplace Category</label>
-                            <div class="select2-premium">
-                                <select name="category_id" class="form-control select2">
-                                    <option value="">Select Category</option>
-                                    @foreach($categories ?? [] as $cat)
-                                        <option value="{{ $cat->id }}" {{ (old('category_id', $property->category_id ?? '') == $cat->id) ? 'selected' : '' }}>{{ $cat->title }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
+                            <select name="category_id" class="form-control select2">
+                                <option value="">Select Category</option>
+                                @foreach($categories ?? [] as $cat)
+                                    <option value="{{ $cat->id }}" {{ (old('category_id', $property->category_id ?? '') == $cat->id) ? 'selected' : '' }}>{{ $cat->title }}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="form-group mb-0">
                             <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Regional Hub</label>
-                            <div class="select2-premium">
-                                <select name="location_id" class="form-control select2">
-                                    <option value="">Select Location</option>
-                                    @foreach($locations ?? [] as $loc)
-                                        <option value="{{ $loc->id }}" {{ (old('location_id', $property->location_id ?? '') == $loc->id) ? 'selected' : '' }}>{{ $loc->title }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
+                            <select name="location_id" class="form-control select2">
+                                <option value="">Select Location</option>
+                                @foreach($locations ?? [] as $loc)
+                                    <option value="{{ $loc->id }}" {{ (old('location_id', $property->location_id ?? '') == $loc->id) ? 'selected' : '' }}>{{ $loc->title }}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -405,6 +396,53 @@
     </form>
 </div>
 @endsection
+
+@push('js')
+<script>
+    $(document).ready(function () {
+        // Shared Slug Logic
+        const titleInput = $('#title');
+        const slugInput = $('#slug');
+
+        titleInput.on('input', function () {
+            let slug = $(this).val().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+            slugInput.val(slug);
+        });
+
+        $('.select2').select2({ theme: 'bootstrap4', width: '100%' });
+    });
+</script>
+@include('admin._partials._toggle-card-css')
+@endpush
+
+@if($property->exists)
+    <form id="delete-form" action="{{ route('admin.properties.destroy', $property->id) }}" method="POST" class="d-none">
+        @csrf @method('DELETE')
+    </form>
+    
+    <script>
+        function triggerDelete() {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Permanently delete this property listing?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#64748b',
+                confirmButtonText: 'Yes, delete it!',
+                customClass: {
+                    popup: 'rounded-xl',
+                    confirmButton: 'rounded-pill px-4',
+                    cancelButton: 'rounded-pill px-4'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('delete-form').submit();
+                }
+            })
+        }
+    </script>
+@endif
 
 @push('js')
 <script>
