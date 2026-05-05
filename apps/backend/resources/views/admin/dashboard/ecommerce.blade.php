@@ -2,40 +2,55 @@
 
 @section('title', 'Ecommerce Intelligence | Sales Ops')
 
+@section('css')
+    @include('admin._partials._toggle-card-css')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+    <style>
+        #master-calendar { background: transparent; padding: 1.5rem; border-radius: var(--radius-md); }
+        .fc { font-family: var(--font-heading) !important; }
+        .fc .fc-toolbar-title { font-weight: 700; color: var(--dark); font-size: 1.25rem !important; }
+    </style>
+@stop
+
 @section('content_header')
-    <div class="d-flex align-items-center justify-content-between mb-2">
-        <div>
-            <h1 class="font-weight-bold text-dark mb-0">
-                <i class="fas fa-shopping-cart mr-2 text-primary"></i> 
-                Ecommerce Command Center
-            </h1>
-            <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Real-time revenue metrics and inventory intelligence for <span class="text-primary font-weight-bold">{{ now()->format('F d, Y') }}</span>.</p>
-        </div>
-        <div class="d-none d-md-block text-right">
-            <div class="bg-dark px-3 py-2 rounded-xl shadow-premium border border-white border-opacity-10 d-inline-block text-center" style="min-width: 220px;">
-                <div id="dashboard-clock" class="h4 font-weight-bold text-primary mb-0" style="letter-spacing: 2px; font-family: 'Outfit', sans-serif; font-variant-numeric: tabular-nums;">00:00:00</div>
-                <div class="text-white smallest font-weight-bold uppercase letter-spacing-1 opacity-50">{{ now()->format('l, d M Y') }}</div>
+    <div class="container-fluid pt-4">
+        <div class="d-flex align-items-center justify-content-between mb-2">
+            <div>
+                <h1 class="font-weight-bold text-dark mb-0">
+                    <i class="fas fa-shopping-cart mr-2 text-primary"></i> 
+                    Ecommerce Intelligence
+                </h1>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Real-time revenue metrics and inventory intelligence for <span class="text-primary font-weight-bold">{{ now()->format('F d, Y') }}</span>.</p>
+            </div>
+            <div class="d-none d-md-block text-right">
+                <div class="dashboard-clock-wrapper px-3 py-2 shadow-premium d-inline-block text-center">
+                    <div id="dashboard-clock" class="h4 font-weight-bold text-primary mb-0 dashboard-clock-text">00:00:00</div>
+                    <div class="text-white smallest font-weight-bold uppercase letter-spacing-1 opacity-50">{{ now()->format('l, d M Y') }}</div>
+                </div>
             </div>
         </div>
     </div>
 @stop
 
 @section('content')
+<div class="container-fluid pb-5">
     {{-- Quick Actions Row (Ecommerce Focus) --}}
-    <div class="row mb-4 mx-1">
-        <div class="col-6 col-md-3 px-1">
-            <a href="{{ route('admin.products.create') }}" class="btn btn-primary d-flex align-items-center justify-content-center py-3 w-100 shadow-sm font-weight-bold" style="border-radius: 12px; min-height: 62px; font-size: 0.85rem; letter-spacing: 0.5px;">
+    <div class="row mb-4">
+        <div class="col-6 col-md-3">
+            <a href="{{ route('admin.products.create') }}" class="btn btn-submit-premium btn-premium-action d-flex align-items-center justify-content-center py-3 w-100 shadow-premium font-weight-bold rounded-md">
                 <i class="fas fa-plus-circle mr-2"></i> NEW PRODUCT
             </a>
         </div>
-        <div class="col-6 col-md-3 px-1">
-             <a href="{{ route('admin.product-orders.index') }}" class="btn btn-default d-flex align-items-center justify-content-center py-3 w-100 shadow-sm font-weight-bold border-light bg-white" style="border-radius: 12px; color: var(--dark-muted) !important; min-height: 62px; font-size: 0.85rem; letter-spacing: 0.5px;">
+        <div class="col-6 col-md-3">
+             <a href="{{ route('admin.product-orders.index') }}" class="btn btn-default btn-premium-action d-flex align-items-center justify-content-center py-3 w-100 shadow-premium font-weight-bold border-light bg-white rounded-md" style="color: var(--dark-muted) !important;">
                 <i class="fas fa-truck mr-2 text-primary"></i> MANAGE ORDERS
             </a>
         </div>
     </div>
 
-    <div class="dashboard-blueprint pb-5">
+    <div class="dashboard-blueprint">
         @php
             $sections = [
                 ['id' => 'kpi', 'title' => 'Sales & Vital Stats', 'dot' => 'danger', 'pulse' => true, 'partial' => '_KPIs'],
@@ -48,46 +63,14 @@
         @endphp
 
         @foreach($sections as $section)
-            <div class="section-header {{ !$loop->first ? 'mt-5' : '' }}">
-                <span class="dot {{ $section['pulse'] ? 'pulse' : '' }} bg-{{ $section['dot'] }}"></span>
-                <h5 class="text-uppercase font-weight-bold text-secondary">{{ $section['title'] }}</h5>
+            <div class="section-header-premium {{ !$loop->first ? 'mt-5' : '' }}">
+                <span class="dot {{ $section['pulse'] ? 'pulse-glow-dot' : '' }} bg-{{ $section['dot'] }}"></span>
+                <h5 class="text-uppercase font-weight-bold text-secondary smallest mb-0" style="letter-spacing: 1.5px;">{{ $section['title'] }}</h5>
             </div>
             @include('admin.dashboard.partials.ecommerce.' . $section['partial'], ['metrics' => $metrics])
         @endforeach
     </div>
-@stop
-
-@section('css')
-    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
-    <style>
-        /* Sectioning & Layout */
-        .section-header { display: flex; align-items: center; margin-bottom: 1.5rem; }
-        .section-header .dot { width: 12px; height: 12px; border-radius: 50%; margin-right: 12px; transition: transform 0.3s; }
-        .section-header h5 { margin: 0; letter-spacing: 1.2px; font-size: 0.85rem; opacity: 0.8; }
-        
-        /* Modern Card kit */
-        .dashboard-blueprint .card { border-radius: 20px; border: none; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: var(--premium-shadow); border: 1px solid rgba(255,255,255,0.4); background: rgba(255,255,255,0.8); backdrop-filter: blur(15px); }
-        .dashboard-blueprint .card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,0.08) !important; border-color: rgba(70, 165, 172, 0.2); }
-
-        /* Color Utility Factory */
-        .bg-primary-light { background: rgba(70, 165, 172, 0.1) !important; }
-        .bg-success-light { background: rgba(40, 167, 69, 0.1) !important; }
-        .bg-danger-light  { background: rgba(220,53,69,0.1) !important; }
-        .bg-info-light    { background: rgba(23, 162, 184, 0.1) !important; }
-        
-        .icon-circle { width: 56px; height: 56px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; }
-
-        /* Global Pulse Animation */
-        .pulse { animation: pulse-shadow 2s infinite; }
-        @keyframes pulse-shadow {
-            0% { box-shadow: 0 0 0 0 rgba(70, 165, 172, 0.6); transform: scale(0.95); }
-            70% { box-shadow: 0 0 0 10px rgba(70, 165, 172, 0); transform: scale(1); }
-            100% { box-shadow: 0 0 0 0 rgba(70, 165, 172, 0); transform: scale(0.95); }
-        }
-        
-        .fc { font-family: 'Outfit', sans-serif !important; }
-    </style>
+</div>
 @stop
 
 @section('js')

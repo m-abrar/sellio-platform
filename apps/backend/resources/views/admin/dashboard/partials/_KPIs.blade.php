@@ -13,7 +13,7 @@
         <div class="card card-premium-dark h-100">
             <div class="card-body position-relative z-index-1 d-flex flex-column justify-content-center px-4">
                 <p class="text-white-50 text-uppercase smallest font-weight-bold mb-2 letter-spacing-1">Platform Net Revenue (YTD)</p>
-                <h1 class="text-white display-4 font-weight-bold mb-3" style="letter-spacing: -2px;">{{ $metrics['system_kpis']['earnings'] }}</h1>
+                <h1 class="text-white display-4 font-weight-bold mb-3 text-tightest">{{ $metrics['system_kpis']['earnings'] }}</h1>
                 @if(isset($metrics['system_kpis']['yoy_change']))
                 <div class="d-flex align-items-center">
                     <span class="badge badge-success-light border-0 mr-2 font-weight-bold px-3 py-2 rounded-pill smallest">
@@ -53,14 +53,14 @@
                             </div>
 
                             <div class="my-auto">
-                                <h1 class="font-weight-bold mb-0 text-white" style="font-size: 2.4rem; letter-spacing: -1.5px;">{{ $u['val'] }}</h1>
+                                <h1 class="text-white text-display-premium text-tighter mb-0">{{ $u['val'] }}</h1>
                                 <p class="text-white-50 mb-0 smallest font-weight-bold uppercase letter-spacing-1">Pending Audit</p>
                             </div>
 
                             <i class="fas {{ $u['icon'] }} glassmorphic-glow-icon"></i>
                             <a href="{{ route($u['route']) }}" class="stretched-link"></a>
                         </div>
-                        <div class="card-footer d-flex align-items-center justify-content-between border-0 py-3" style="background: rgba(0,0,0,0.15); font-size: var(--text-smallest); font-weight: 700; letter-spacing: 1px;">
+                        <div class="card-footer card-footer-premium d-flex align-items-center justify-content-between py-3">
                             <span>MANAGE RECORDS</span>
                             <i class="fas fa-chevron-right"></i>
                         </div>
@@ -84,7 +84,7 @@
                             <div class="card-body py-3 px-4 d-flex align-items-center justify-content-between">
                                 <div>
                                     <span class="text-muted smallest font-weight-bold text-uppercase letter-spacing-1 mb-1 d-block">{{ $s['label'] }}</span>
-                                    <h3 class="font-weight-bold mb-0 text-dark" style="font-size: 1.6rem; letter-spacing: -1px;">{{ $s['val'] }}</h3>
+                                    <h3 class="font-weight-bold mb-0 text-dark text-stat-premium text-tight">{{ $s['val'] }}</h3>
                                 </div>
                                 <div class="icon-box-soft ml-auto bg-{{ $s['bg'] }}-soft">
                                     <i class="fas {{ $s['icon'] }}"></i>

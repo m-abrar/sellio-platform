@@ -1,7 +1,7 @@
 <div class="row">
     <!-- Top Sellers -->
     <div class="col-lg-8 mb-4">
-        <div class="card border-0 shadow-premium overflow-hidden h-100" style="border-radius: 24px;">
+        <div class="card border-0 shadow-premium overflow-hidden h-100 rounded-xl">
             <div class="card-header bg-white py-4 px-4 border-0">
                 <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1">
                     <i class="fas fa-medal mr-2 text-warning opacity-50"></i> Top Performance Products
@@ -24,7 +24,7 @@
                                     <span class="badge badge-primary-soft text-primary px-3 py-1 rounded-pill font-weight-bold smallest">#{{ $item['rank'] }}</span>
                                 </td>
                                 <td class="py-3">
-                                    <span class="font-weight-bold text-dark d-block" style="font-size: 0.9rem;">{{ $item['title'] }}</span>
+                                    <span class="font-weight-bold text-dark d-block small">{{ $item['title'] }}</span>
                                     <span class="text-muted smallest font-weight-bold uppercase letter-spacing-1">SKU Identity: {{ strtoupper(Str::random(6)) }}</span>
                                 </td>
                                 <td class="text-center pr-4">
@@ -48,14 +48,14 @@
 
     <!-- Category Distribution -->
     <div class="col-lg-4 mb-4">
-        <div class="card border-0 shadow-premium h-100 overflow-hidden" style="border-radius: 24px;">
+        <div class="card border-0 shadow-premium h-100 overflow-hidden rounded-xl">
             <div class="card-header bg-white py-4 px-4 border-0">
                 <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1">
                     <i class="fas fa-chart-pie mr-2 text-info opacity-50"></i> Sales By Category
                 </h3>
             </div>
             <div class="card-body py-4 px-4 d-flex flex-column justify-content-center">
-                <div class="chart-pie" style="height: 280px;">
+                <div class="chart-container-premium">
                     <canvas id="propertyTypeChart"></canvas>
                 </div>
             </div>

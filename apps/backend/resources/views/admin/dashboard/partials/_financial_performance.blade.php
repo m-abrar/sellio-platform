@@ -14,12 +14,12 @@
                             @foreach ($metrics['recent_bookings']['items'] as $item)
                             <tr>
                                 <td class="pl-4" width="60">
-                                    <div class="icon-box-soft bg-primary-soft text-primary shadow-xs rounded-md" style="width: 42px; height: 42px; display: flex; align-items: center; justify-content: center;">
+                                    <div class="icon-box-soft md bg-primary-soft text-primary shadow-xs">
                                         <i class="fas {{ $item['icon_class'] }}"></i>
                                     </div>
                                 </td>
                                 <td class="py-3">
-                                    <span class="d-block font-weight-bold text-dark mb-1" style="font-size: 0.9rem;">{{ Str::limit($item['title'], 25) }}</span>
+                                    <span class="d-block font-weight-bold text-dark mb-1 small">{{ Str::limit($item['title'], 25) }}</span>
                                     <span class="text-muted smallest font-weight-bold uppercase letter-spacing-1">{{ $item['value'] ?? 'OPERATIONAL' }}</span>
                                 </td>
                                 <td class="text-right pr-4">
@@ -49,7 +49,7 @@
                 <span class="badge badge-success-light ml-auto px-3 py-2 rounded-pill font-weight-bold smallest uppercase">MoM TREND</span>
             </div>
             <div class="card-body py-2 px-4 d-flex flex-column justify-content-center">
-                <div style="height: 280px;"><canvas id="revenueChart"></canvas></div>
+                <div class="chart-container-premium"><canvas id="revenueChart"></canvas></div>
             </div>
             <div class="card-footer bg-white border-0 py-3 text-center">
                 <p class="mb-0 smallest text-muted font-weight-bold uppercase letter-spacing-1">Real-time financial data stream</p>
@@ -64,7 +64,7 @@
                 <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1">Market Segment Mix</h3>
             </div>
             <div class="card-body py-2 px-4 d-flex flex-column justify-content-center">
-                <div style="height: 280px;"><canvas id="propertyTypeChart"></canvas></div>
+                <div class="chart-container-premium"><canvas id="propertyTypeChart"></canvas></div>
             </div>
             <div class="card-footer bg-white border-0 py-3 text-center">
                 <p class="mb-0 smallest text-muted font-weight-bold uppercase letter-spacing-1">Inventory distribution across verticals</p>
