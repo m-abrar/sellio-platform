@@ -14,7 +14,7 @@
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Manage retail inventory, product pricing, and stock levels.</p>
             </div>
             <div class="col-sm-4 text-right">
-                <a href="{{ route('admin.products.create') }}" class="btn btn-primary rounded-pill px-4 py-2 font-weight-bold shadow-premium smallest uppercase letter-spacing-1">
+                <a href="{{ route('admin.products.create') }}" class="btn btn-primary btn-registry-add">
                     <i class="fas fa-plus-circle mr-2"></i> Add Product
                 </a>
             </div>
@@ -23,11 +23,11 @@
 @stop
 
 @section('content')
-<div class="container-fluid">
+<div class="container-fluid pb-5">
     @include('admin.alert')
 
     {{-- Premium Filter Card --}}
-    <div class="card border-0 shadow-premium mb-4" style="border-radius: 20px;">
+    <div class="card registry-card-premium mb-4">
         <div class="card-body py-4 px-4">
             <form action="{{ route('admin.products.index') }}" method="GET">
                 <div class="row align-items-end">
@@ -89,7 +89,7 @@
         </div>
     </div>
 
-    <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
+    <div class="card registry-table-card">
         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
             <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">Product Catalog</h3>
             <div class="card-tools d-flex align-items-center ml-auto">

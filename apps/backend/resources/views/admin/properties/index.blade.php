@@ -12,7 +12,7 @@
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Manage real estate listings, property features, and booking availability.</p>
             </div>
             <div class="col-sm-4 text-right">
-                <a href="{{ route('admin.properties.create') }}" class="btn btn-primary rounded-pill px-4 py-2 font-weight-bold shadow-premium smallest uppercase letter-spacing-1">
+                <a href="{{ route('admin.properties.create') }}" class="btn btn-primary btn-registry-add">
                     <i class="fas fa-plus-circle mr-2"></i> Add Property
                 </a>
             </div>
@@ -25,7 +25,7 @@
     @include('admin.alert')
 
     {{-- Premium Filter Card --}}
-    <div class="card border-0 shadow-premium mb-4" style="border-radius: 20px;">
+    <div class="card registry-card-premium mb-4">
         <div class="card-body py-4 px-4">
             <form action="{{ route('admin.properties.index') }}" method="GET">
                 <div class="row align-items-end">

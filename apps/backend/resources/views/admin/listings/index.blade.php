@@ -16,10 +16,10 @@
             </div>
             <div class="col-sm-5 d-flex align-items-center justify-content-end">
                 <div class="dropdown">
-                    <button class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-premium dropdown-toggle" type="button" id="addListingDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <button class="btn btn-primary btn-registry-add dropdown-toggle" type="button" id="addListingDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-plus-circle mr-1"></i> ADD NEW ASSET
                     </button>
-                    <div class="dropdown-menu dropdown-menu-right shadow-premium border-0 animate__animated animate__fadeInUp" aria-labelledby="addListingDropdown" style="border-radius: 15px; min-width: 240px;">
+                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-premium border-0 animate__animated animate__fadeInUp" aria-labelledby="addListingDropdown">
                         <h6 class="dropdown-header text-uppercase smallest letter-spacing-1 font-weight-bold text-muted mb-2">Select Listing Vertical</h6>
                         
                         @if(module_enabled('properties'))
@@ -99,7 +99,7 @@
         {{-- Filtration Protocol --}}
         <div class="row mb-4">
             <div class="col-12">
-                <div class="card border-0 shadow-premium" style="border-radius: 20px;">
+                <div class="card registry-card-premium">
                     <div class="card-body p-2 d-flex align-items-center justify-content-between">
                         <div class="d-flex align-items-center">
                             <span class="text-muted smallest font-weight-bold ml-3 mr-3 text-uppercase letter-spacing-1">
@@ -137,9 +137,9 @@
             </div>
         </div>
 
-        <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
+        <div class="card registry-table-card">
             <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
-                <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none" style="letter-spacing: 1px;">
+                <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none">
                     {{ $type !== 'all' ? 'Filtering for ' . \Illuminate\Support\Str::title($type) : 'Marketplace Catalog' }}
                 </h3>
                 <div class="card-tools d-flex align-items-center ml-auto">
