@@ -57,8 +57,8 @@
                         @forelse ($categories as $category)
                             <tr>
                                 <td class="text-center align-middle">
-                                    <div class="table-img-preview shadow-xs rounded-lg overflow-hidden border" style="width: 45px; height: 45px; margin: auto;">
-                                        <img src="{{ $category->thumbnail_url }}" alt="{{ $category->title }}" class="w-100 h-100 object-fit-cover">
+                                    <div class="table-img-preview shadow-sm">
+                                        <img src="{{ $category->thumbnail_url }}" alt="{{ $category->title }}">
                                     </div>
                                 </td>
 

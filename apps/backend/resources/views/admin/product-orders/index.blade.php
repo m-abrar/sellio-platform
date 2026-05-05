@@ -2,6 +2,10 @@
 
 @section('title', __('Product Orders | Commerce Intelligence'))
 
+@section('plugins.Select2', true)
+@section('plugins.Sweetalert2', true)
+@section('plugins.Datatables', true)
+
 @section('content_header')
     <div class="container-fluid pt-4">
         <div class="row mb-4 align-items-center">
@@ -90,21 +94,6 @@
                     <i class="fas fa-list-ul mr-2 text-primary opacity-50"></i> Commerce Ledger
                 </h3>
                 
-                <div id="bulk-actions-container" class="d-none animate__animated animate__fadeIn">
-                    <div class="dropdown">
-                        <button class="btn btn-primary-soft rounded-pill px-4 py-2 shadow-xs smallest font-weight-bold uppercase letter-spacing-1 dropdown-toggle" type="button" data-toggle="dropdown">
-                            <i class="fas fa-bolt mr-2"></i> Bulk Intelligence (<span id="selected-count">0</span>)
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-right shadow-premium border-0 py-2" style="border-radius: 12px; min-width: 200px;">
-                            <h6 class="dropdown-header text-uppercase smallest letter-spacing-1 text-muted mb-2">Transition Lifecycle</h6>
-                            <a class="dropdown-item py-2 smallest font-weight-bold uppercase letter-spacing-1" href="#" onclick="handleBulkStatus('pending')"><i class="fas fa-clock mr-2 text-warning"></i> Pending</a>
-                            <a class="dropdown-item py-2 smallest font-weight-bold uppercase letter-spacing-1" href="#" onclick="handleBulkStatus('processing')"><i class="fas fa-sync mr-2 text-info"></i> Processing</a>
-                            <a class="dropdown-item py-2 smallest font-weight-bold uppercase letter-spacing-1" href="#" onclick="handleBulkStatus('completed')"><i class="fas fa-check-circle mr-2 text-success"></i> Completed</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item py-2 smallest font-weight-bold uppercase letter-spacing-1 text-danger" href="#" onclick="handleBulkStatus('cancelled')"><i class="fas fa-times-circle mr-2"></i> Cancelled</a>
-                        </div>
-                    </div>
-                </div>
             </div>
 
             <div class="card-body p-0">
@@ -228,6 +217,49 @@
             @endif
         </div>
     </div>
+
+    {{-- Premium Floating Action Bar --}}
+    <div id="bulk-floating-bar" class="bulk-floating-bar d-none">
+        <div class="container-fluid h-100">
+            <div class="d-flex align-items-center justify-content-between h-100 px-4">
+                <div class="d-flex align-items-center">
+                    <div class="selection-count-badge mr-4">
+                        <span id="selected-count">0</span> SELECTED
+                    </div>
+                    <div class="divider-v"></div>
+                    <div class="d-flex" style="gap: 15px;">
+                        <div class="btn-group dropup">
+                            <button type="button" class="btn btn-action-pill dropdown-toggle" data-toggle="dropdown">
+                                <i class="fas fa-sync-alt mr-2"></i> UPDATE STATUS
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right shadow-premium-lg border-0 mb-3" style="border-radius: 15px;">
+                                <h6 class="dropdown-header text-uppercase smallest letter-spacing-1 text-muted mb-2">Transition Lifecycle</h6>
+                                <a class="dropdown-item py-3 px-4 font-weight-bold smallest uppercase letter-spacing-1" href="javascript:void(0)" onclick="handleBulkStatus('pending')">
+                                    <i class="fas fa-clock mr-2 text-warning"></i> Set to Pending
+                                </a>
+                                <a class="dropdown-item py-3 px-4 font-weight-bold smallest uppercase letter-spacing-1" href="javascript:void(0)" onclick="handleBulkStatus('processing')">
+                                    <i class="fas fa-sync mr-2 text-info"></i> Start Processing
+                                </a>
+                                <a class="dropdown-item py-3 px-4 font-weight-bold smallest uppercase letter-spacing-1" href="javascript:void(0)" onclick="handleBulkStatus('completed')">
+                                    <i class="fas fa-check-circle mr-2 text-success"></i> Mark Completed
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item py-3 px-4 font-weight-bold smallest uppercase letter-spacing-1 text-danger" href="javascript:void(0)" onclick="handleBulkStatus('cancelled')">
+                                    <i class="fas fa-times-circle mr-2"></i> Cancel Orders
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="d-flex align-items-center">
+                    <button type="button" class="btn btn-close-bar" id="deselectAll">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('css')
@@ -236,6 +268,91 @@
     .object-fit-cover { object-fit: cover; }
     .bg-primary-soft { background: rgba(70, 165, 172, 0.1) !important; }
     .badge-info-light { background: rgba(23, 162, 184, 0.1) !important; }
+
+    /* Floating Action Bar Styling */
+    .bulk-floating-bar {
+        position: fixed;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 90%;
+        max-width: 800px;
+        height: 80px;
+        background: rgba(15, 23, 42, 0.95);
+        backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 40px;
+        z-index: 9999;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+        color: #fff;
+        display: flex;
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    
+    .bulk-floating-bar.d-none {
+        display: none !important;
+        opacity: 0;
+        transform: translate(-50%, 40px);
+    }
+
+    .selection-count-badge {
+        background: var(--primary);
+        color: #fff;
+        padding: 8px 20px;
+        border-radius: 30px;
+        font-weight: 800;
+        font-size: 0.75rem;
+        letter-spacing: 1px;
+    }
+
+    .divider-v {
+        width: 1px;
+        height: 30px;
+        background: rgba(255, 255, 255, 0.1);
+        margin: 0 25px;
+    }
+
+    .btn-action-pill {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #fff;
+        border-radius: 30px;
+        padding: 8px 25px;
+        font-weight: 700;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        transition: all 0.3s ease;
+    }
+
+    .btn-action-pill:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-close-bar {
+        background: transparent;
+        border: none;
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 1.2rem;
+        transition: color 0.3s ease;
+        padding: 10px;
+    }
+
+    .btn-close-bar:hover {
+        color: #fff;
+    }
+
+    /* Animation */
+    .animate__fadeInUpCustom {
+        animation: fadeInUpCustom 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes fadeInUpCustom {
+        from { opacity: 0; transform: translate(-50%, 50px); }
+        to { opacity: 1; transform: translate(-50%, 0); }
+    }
 </style>
 @endsection
 
@@ -250,29 +367,36 @@
             placeholder: 'All Statuses'
         });
 
-        const $selectAll = $('#selectAll');
-        const $orderCheckboxes = $('.order-checkbox');
-        const $bulkContainer = $('#bulk-actions-container');
+        const $bulkBar = $('#bulk-floating-bar');
         const $selectedCount = $('#selected-count');
 
         function updateBulkUI() {
             const checkedCount = $('.order-checkbox:checked').length;
             if (checkedCount > 0) {
-                $bulkContainer.removeClass('d-none');
                 $selectedCount.text(checkedCount);
+                if ($bulkBar.hasClass('d-none')) {
+                    $bulkBar.removeClass('d-none').addClass('animate__fadeInUpCustom');
+                }
             } else {
-                $bulkContainer.addClass('d-none');
+                $bulkBar.addClass('d-none').removeClass('animate__fadeInUpCustom');
             }
         }
 
-        $selectAll.on('change', function() {
-            $orderCheckboxes.prop('checked', this.checked);
+        $(document).on('change', '#selectAll', function() {
+            $('.order-checkbox').prop('checked', this.checked);
             updateBulkUI();
         });
 
-        $orderCheckboxes.on('change', function() {
-            if (!this.checked) $selectAll.prop('checked', false);
-            if ($('.order-checkbox:checked').length === $orderCheckboxes.length) $selectAll.prop('checked', true);
+        $(document).on('click', '#deselectAll', function() {
+            $('.order-checkbox').prop('checked', false);
+            $('#selectAll').prop('checked', false);
+            updateBulkUI();
+        });
+
+        $(document).on('change', '.order-checkbox', function() {
+            const $orderCheckboxes = $('.order-checkbox');
+            if (!this.checked) $('#selectAll').prop('checked', false);
+            if ($('.order-checkbox:checked').length === $orderCheckboxes.length) $('#selectAll').prop('checked', true);
             updateBulkUI();
         });
 

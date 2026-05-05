@@ -2,6 +2,10 @@
 
 @section('title', __('Job Applications | Talent Acquisition'))
 
+@section('plugins.Select2', true)
+@section('plugins.Sweetalert2', true)
+@section('plugins.Datatables', true)
+
 @section('content_header')
     <div class="container-fluid pt-4">
         <div class="row mb-4 align-items-center">
@@ -15,7 +19,7 @@
             <div class="col-sm-4 text-right">
                 <div class="d-flex justify-content-end align-items-center" style="gap: 12px;">
                     <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">
-                        <i class="fas fa-th-large"></i> Dashboard
+                        <i class="fas fa-th-large mr-2"></i> Dashboard
                     </a>
                 </div>
             </div>
@@ -114,8 +118,8 @@
                             @forelse ($applications as $app)
                                 <tr>
                                     <td class="text-center align-middle pl-4">
-                                        <div class="icon-box-soft bg-primary-soft mx-auto d-flex align-items-center justify-content-center shadow-xs overflow-hidden" style="width:50px; height:50px; border-radius: 12px;">
-                                            <img src="{{ $app->job->thumbnail_url ?? asset('images/fallbacks/default.jpg') }}" alt="Job" class="img-fluid" style="object-fit: cover; width: 100%; height: 100%;" onerror="this.src='{{ asset('images/fallbacks/default.jpg') }}'">
+                                        <div class="table-img-preview shadow-sm">
+                                            <img src="{{ $app->job->thumbnail_url ?? asset('images/fallbacks/default.jpg') }}" alt="Job" onerror="this.src='{{ asset('images/fallbacks/default.jpg') }}'">
                                         </div>
                                     </td>
                                     <td class="align-middle">

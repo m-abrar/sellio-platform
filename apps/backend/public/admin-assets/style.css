@@ -251,6 +251,7 @@ h1, h2, h3, h4, h5, h6, .brand-text {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
     display: flex;
     align-items: center;
+    position: relative !important;
 }
 
 .nav-sidebar .nav-link i {
@@ -276,6 +277,33 @@ h1, h2, h3, h4, h5, h6, .brand-text {
 
 .sidebar-dark-primary .nav-sidebar > .nav-item > .nav-link.active i {
     color: var(--primary) !important;
+}
+
+/* Sidebar Arrow/Chevron Refinement */
+.nav-sidebar .nav-link i.right,
+.nav-sidebar .nav-link p i.right {
+    position: absolute !important;
+    right: 1.25rem !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    margin: 0 !important;
+    font-size: 0.8rem !important;
+    opacity: 0.4;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease, right 0.3s ease !important;
+}
+
+.nav-item.menu-is-opening > .nav-link i.right,
+.nav-item.menu-is-opening > .nav-link p i.right,
+.nav-item.menu-open > .nav-link i.right,
+.nav-item.menu-open > .nav-link p i.right {
+    transform: translateY(-50%) rotate(-90deg) !important;
+    opacity: 0.9;
+}
+
+.nav-sidebar .nav-link:hover i.right,
+.nav-sidebar .nav-link:hover p i.right {
+    opacity: 1;
+    right: 1.1rem !important;
 }
 
 /* Content Frame */

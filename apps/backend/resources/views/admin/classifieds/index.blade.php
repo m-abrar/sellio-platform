@@ -90,8 +90,8 @@
                         @forelse ($classifieds as $ad)
                             <tr>
                                 <td class="text-center align-middle">
-                                    <div class="table-img-preview shadow-xs rounded-lg overflow-hidden border" style="width: 50px; height: 50px; margin: 0 auto;">
-                                        <img src="{{ $ad->thumbnail_url ?? asset('images/placeholder.png') }}" style="width: 100%; height: 100%; object-fit: cover;">
+                                    <div class="table-img-preview shadow-sm">
+                                        <img src="{{ $ad->thumbnail_url ?? asset('images/placeholder.png') }}">
                                     </div>
                                 </td>
                                 <td class="align-middle">

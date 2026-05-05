@@ -14,9 +14,14 @@
                 </h1>
             </div>
             <div class="col-sm-6 text-right">
-                <a href="{{ route('admin.auto-inquiries.create') }}" class="btn btn-primary shadow-sm px-4 font-weight-bold">
-                    <i class="fas fa-plus mr-1"></i> {{ __('Log New Lead') }}
-                </a>
+                <div class="d-flex justify-content-end align-items-center" style="gap: 12px;">
+                    <a href="{{ route('admin.auto-inquiries.create') }}" class="btn btn-primary shadow-sm px-4 font-weight-bold">
+                        <i class="fas fa-plus mr-1"></i> {{ __('Log New Lead') }}
+                    </a>
+                    <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">
+                        <i class="fas fa-th-large mr-2"></i> Dashboard
+                    </a>
+                </div>
             </div>
         </div>
     </div>
