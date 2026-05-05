@@ -14,7 +14,7 @@
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Manage professional service offerings and appointment configurations.</p>
             </div>
             <div class="col-sm-4 text-right">
-                <a href="{{ route('admin.services.create') }}" class="btn btn-primary rounded-pill px-4 py-2 font-weight-bold shadow-premium smallest uppercase letter-spacing-1">
+                <a href="{{ route('admin.services.create') }}" class="btn btn-primary btn-registry-add">
                     <i class="fas fa-plus-circle mr-2"></i> Add Service
                 </a>
             </div>
@@ -23,29 +23,26 @@
 @stop
 
 @section('content')
-<div class="container-fluid">
+<div class="container-fluid pb-5">
     @include('admin.alert')
 
     {{-- Premium Filter Card --}}
-    <div class="card border-0 shadow-premium mb-4" style="border-radius: 20px;">
-        <div class="card-body py-4 px-4">
+    <div class="card registry-card-premium registry-filter-card mb-4">
+        <div class="card-body">
             <form action="{{ route('admin.services.index') }}" method="GET">
                 <div class="row align-items-end">
                     <div class="col-md-4">
-                        <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Service Title</label>
+                        <label class="form-label-premium">Service Search</label>
                         <div class="input-group input-group-premium">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-search text-xs"></i></span>
                             </div>
-                            <input type="text" name="title" class="form-control" placeholder="Filter by Title..." value="{{ request('title') }}">
+                            <input type="text" name="title" class="form-control" placeholder="Search by Title..." value="{{ request('title') }}">
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Category</label>
-                        <div class="input-group input-group-premium">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-folder-open text-xs"></i></span>
-                            </div>
+                        <label class="form-label-premium">Vertical Category</label>
+                        <div class="select2-premium">
                             <select name="category_id" class="form-control select2">
                                 <option value="">All Categories</option>
                                 @foreach($categories ?? [] as $cat)
@@ -55,11 +52,11 @@
                         </div>
                     </div>
                     <div class="col-md-4 d-flex align-items-end" style="gap: 10px;">
-                        <button type="submit" class="btn btn-primary flex-fill font-weight-bold shadow-xs rounded-pill smallest uppercase" style="height: 46px;">
-                            <i class="fas fa-filter mr-2"></i> Apply Filters
+                        <button type="submit" class="btn btn-primary btn-filter-premium flex-fill">
+                            <i class="fas fa-filter mr-2"></i> UPDATE
                         </button>
-                        <a href="{{ route('admin.services.index') }}" class="btn btn-default font-weight-bold shadow-xs rounded-pill px-3 d-flex align-items-center justify-content-center" style="height: 46px;">
-                            <i class="fas fa-undo text-danger m-0"></i>
+                        <a href="{{ route('admin.services.index') }}" class="btn btn-reset-premium" data-toggle="tooltip" title="Reset Filters">
+                            <i class="fas fa-undo"></i>
                         </a>
                     </div>
                 </div>
@@ -68,7 +65,7 @@
     </div>
 
     {{-- Table Card --}}
-    <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
+    <div class="card registry-table-card">
         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
             <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">Service Catalog</h3>
             <div class="card-tools d-flex align-items-center ml-auto">

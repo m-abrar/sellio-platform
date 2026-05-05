@@ -26,13 +26,12 @@
 <div class="container-fluid pb-5">
     @include('admin.alert')
 
-    {{-- Premium Filter Card --}}
-    <div class="card registry-card-premium mb-4">
-        <div class="card-body py-4 px-4">
+    <div class="card registry-card-premium registry-filter-card mb-4">
+        <div class="card-body">
             <form action="{{ route('admin.products.index') }}" method="GET">
                 <div class="row align-items-end">
                     <div class="col-md-3">
-                        <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Product Title</label>
+                        <label class="form-label-premium">Product Title</label>
                         <div class="input-group input-group-premium">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-search text-xs"></i></span>
@@ -41,11 +40,8 @@
                         </div>
                     </div>
                     <div class="col-md-3">
-                        <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Category</label>
-                        <div class="input-group input-group-premium">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-folder-open text-xs"></i></span>
-                            </div>
+                        <label class="form-label-premium">Category</label>
+                        <div class="select2-premium">
                             <select name="category_id" class="form-control select2">
                                 <option value="">All Categories</option>
                                 @foreach($categories ?? [] as $cat)
@@ -55,33 +51,23 @@
                         </div>
                     </div>
                     <div class="col-md-2">
-                        <label class="small text-muted font-weight-bold uppercase letter-spacing-1">SKU Identity</label>
-                        <div class="input-group input-group-premium">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-barcode text-xs"></i></span>
-                            </div>
-                            <input type="text" name="sku" class="form-control" placeholder="SKU" value="{{ request('sku') }}">
-                        </div>
+                        <label class="form-label-premium">SKU Identity</label>
+                        <input type="text" name="sku" class="form-control form-control-premium" placeholder="SKU ID..." value="{{ request('sku') }}">
                     </div>
                     <div class="col-md-2">
-                        <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Status</label>
-                        <div class="input-group input-group-premium">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-eye text-xs"></i></span>
-                            </div>
-                            <select name="status" class="form-control">
-                                <option value="">All</option>
-                                <option value="1" {{ request('status') === '1' ? 'selected' : '' }}>Published</option>
-                                <option value="0" {{ request('status') === '0' ? 'selected' : '' }}>Draft</option>
-                            </select>
-                        </div>
+                        <label class="form-label-premium">Status</label>
+                        <select name="status" class="form-control form-control-premium">
+                            <option value="">All States</option>
+                            <option value="1" {{ request('status') === '1' ? 'selected' : '' }}>Published</option>
+                            <option value="0" {{ request('status') === '0' ? 'selected' : '' }}>Draft</option>
+                        </select>
                     </div>
                     <div class="col-md-2 d-flex align-items-end" style="gap: 10px;">
-                        <button type="submit" class="btn btn-primary flex-fill font-weight-bold shadow-xs rounded-pill smallest uppercase" style="height: 46px;">
-                            <i class="fas fa-filter mr-1"></i> Update
+                        <button type="submit" class="btn btn-primary btn-filter-premium flex-fill">
+                            <i class="fas fa-filter mr-2"></i> UPDATE
                         </button>
-                        <a href="{{ route('admin.products.index') }}" class="btn btn-default font-weight-bold shadow-xs rounded-pill px-3 d-flex align-items-center justify-content-center" style="height: 46px;">
-                            <i class="fas fa-undo text-danger m-0"></i>
+                        <a href="{{ route('admin.products.index') }}" class="btn btn-reset-premium" data-toggle="tooltip" title="Reset Filters">
+                            <i class="fas fa-undo"></i>
                         </a>
                     </div>
                 </div>

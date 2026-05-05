@@ -1356,6 +1356,10 @@ body.dark-mode .form-control {
     overflow: hidden !important;
 }
 
+.registry-filter-card .card-body {
+    padding: 1.5rem 2rem !important;
+}
+
 .registry-table-card {
     border-radius: 24px !important; /* Standard for large index tables */
     border: none !important;
@@ -1387,4 +1391,129 @@ body.dark-mode .form-control {
     width: 100%;
     height: 100%;
     object-fit: cover;
+}
+
+/* --- 22. REGISTRY FILTRATION TOKENS --- */
+.btn-filter-premium {
+    height: 46px !important;
+    border-radius: var(--radius-pill) !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    font-size: var(--text-smallest) !important;
+    letter-spacing: 0.5px !important;
+    padding-left: 1.5rem !important;
+    padding-right: 1.5rem !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border: none !important;
+    box-shadow: var(--shadow-sm) !important;
+    transition: all 0.3s ease !important;
+}
+
+.btn-filter-premium:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-premium);
+}
+
+.btn-reset-premium {
+    height: 46px !important;
+    width: 46px !important;
+    min-width: 46px !important;
+    border-radius: 50% !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: #fff !important;
+    border: 1px solid var(--border-light) !important;
+    color: var(--danger) !important;
+    box-shadow: var(--shadow-sm) !important;
+    padding: 0 !important;
+    transition: all 0.3s ease !important;
+}
+
+.btn-reset-premium:hover {
+    background: var(--danger-soft) !important;
+    transform: rotate(-180deg);
+}
+
+.input-group-premium {
+    border-radius: var(--radius-pill) !important;
+    overflow: hidden !important;
+    border: 1px solid var(--border-light) !important;
+    background: #fff !important;
+    transition: all 0.3s ease !important;
+}
+
+.input-group-premium:focus-within {
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 0 4px var(--primary-soft) !important;
+}
+
+.input-group-premium .input-group-text {
+    background: transparent !important;
+    border: none !important;
+    color: var(--primary) !important;
+    padding-left: 18px !important;
+    padding-right: 5px !important;
+}
+
+.input-group-premium .form-control {
+    border: none !important;
+    height: 44px !important; /* Slightly less to fit inside border */
+    padding-left: 5px !important;
+    box-shadow: none !important;
+    font-size: var(--text-small) !important;
+    background: transparent !important;
+}
+
+/* --- 23. DRY FORM & INPUT TOKENS --- */
+.form-label-premium {
+    display: block !important;
+    font-size: var(--text-smallest) !important;
+    color: var(--secondary) !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+    margin-bottom: 10px !important;
+    opacity: 0.8 !important;
+}
+
+.form-control-premium {
+    height: 46px !important;
+    border-radius: var(--radius-pill) !important;
+    border: 1px solid var(--border-light) !important;
+    font-size: var(--text-small) !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    background-color: #fff !important;
+    box-shadow: none !important;
+    transition: all 0.3s ease !important;
+}
+
+.form-control-premium:focus {
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 0 4px var(--primary-soft) !important;
+}
+
+/* Specific override for Select2 in premium forms */
+.select2-premium .select2-container--bootstrap4 .select2-selection--single {
+    height: 46px !important;
+    border-radius: 23px !important;
+    border: 1px solid var(--border-light) !important;
+    display: flex !important;
+    align-items: center !important;
+    padding-left: 12px !important;
+    background-color: #fff !important;
+}
+
+.select2-premium .select2-container--bootstrap4 .select2-selection--single .select2-selection__rendered {
+    line-height: 44px !important;
+    color: var(--dark) !important;
+    font-size: var(--text-small) !important;
+    font-weight: 500 !important;
+}
+
+.select2-premium .select2-container--bootstrap4 .select2-selection--single .select2-selection__arrow {
+    height: 44px !important;
 }

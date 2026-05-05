@@ -14,7 +14,7 @@
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Manage event tickets, venue details, and attendee registrations.</p>
             </div>
             <div class="col-sm-4 text-right">
-                <a href="{{ route('admin.events.create') }}" class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-premium">
+                <a href="{{ route('admin.events.create') }}" class="btn btn-primary btn-registry-add">
                     <i class="fas fa-plus-circle mr-1"></i> ADD EVENT
                 </a>
             </div>
@@ -23,38 +23,40 @@
 @stop
 
 @section('content')
-<div class="container-fluid">
+<div class="container-fluid pb-5">
     @include('admin.alert')
 
     {{-- Premium Filter Card --}}
-    <div class="card border-0 shadow-premium mb-4" style="border-radius: 20px;">
-        <div class="card-body py-4 px-4">
+    <div class="card registry-card-premium registry-filter-card mb-4">
+        <div class="card-body">
             <form action="{{ route('admin.events.index') }}" method="GET">
                 <div class="row align-items-end">
                     <div class="col-md-4">
-                        <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Event Title</label>
-                        <div class="input-group shadow-xs">
+                        <label class="form-label-premium">Event Search</label>
+                        <div class="input-group input-group-premium">
                             <div class="input-group-prepend">
-                                <span class="input-group-text bg-white border-right-0"><i class="fas fa-search text-muted text-xs"></i></span>
+                                <span class="input-group-text"><i class="fas fa-search text-xs"></i></span>
                             </div>
-                            <input type="text" name="title" class="form-control border-left-0" placeholder="Filter by Title..." value="{{ request('title') }}">
+                            <input type="text" name="title" class="form-control" placeholder="Search by Title..." value="{{ request('title') }}">
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <label class="small text-muted font-weight-bold uppercase letter-spacing-1">Category</label>
-                        <select name="category_id" class="form-control select2 shadow-xs">
-                            <option value="">All Categories</option>
-                            @foreach($categories ?? [] as $cat)
-                                <option value="{{ $cat->id }}" {{ request('category_id') == $cat->id ? 'selected' : '' }}>{{ $cat->title }}</option>
-                            @endforeach
-                        </select>
+                        <label class="form-label-premium">Vertical Category</label>
+                        <div class="select2-premium">
+                            <select name="category_id" class="form-control select2">
+                                <option value="">All Categories</option>
+                                @foreach($categories ?? [] as $cat)
+                                    <option value="{{ $cat->id }}" {{ request('category_id') == $cat->id ? 'selected' : '' }}>{{ $cat->title }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
                     <div class="col-md-4 d-flex align-items-end" style="gap: 10px;">
-                        <button type="submit" class="btn btn-primary flex-fill font-weight-bold shadow-xs rounded-pill">
-                            <i class="fas fa-filter mr-1"></i> APPLY FILTERS
+                        <button type="submit" class="btn btn-primary btn-filter-premium flex-fill">
+                            <i class="fas fa-filter mr-2"></i> UPDATE
                         </button>
-                        <a href="{{ route('admin.events.index') }}" class="btn btn-default font-weight-bold shadow-xs rounded-pill">
-                            <i class="fas fa-undo mr-1"></i> RESET
+                        <a href="{{ route('admin.events.index') }}" class="btn btn-reset-premium" data-toggle="tooltip" title="Reset Filters">
+                            <i class="fas fa-undo"></i>
                         </a>
                     </div>
                 </div>
@@ -63,7 +65,7 @@
     </div>
 
     {{-- Table Card --}}
-    <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
+    <div class="card registry-table-card">
         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
             <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">Event Schedule</h3>
             <div class="card-tools d-flex align-items-center ml-auto">
