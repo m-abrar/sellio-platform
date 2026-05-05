@@ -1060,7 +1060,7 @@ body.dark-mode .form-control {
     border-radius: var(--radius-pill) !important;
     padding: 0.6rem 1.5rem !important;
     font-weight: 700 !important;
-    font-size: var(--text-smallest) !important;
+    font-size: var(--text-small) !important;
     text-transform: uppercase !important;
     letter-spacing: 1px !important;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
@@ -1420,6 +1420,21 @@ body.dark-mode .form-control {
     box-shadow: var(--shadow-sm) !important;
 }
 
+.btn-submit-premium {
+    background: var(--grad-primary) !important;
+    color: #fff !important;
+    border-radius: var(--radius-pill) !important;
+    box-shadow: var(--shadow-glow) !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    border: none !important;
+}
+
+.btn-submit-premium:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(var(--primary-rgb), 0.3) !important;
+    filter: brightness(1.1);
+}
+
 .table-img-preview {
     width: 54px;
     height: 54px;
@@ -1618,4 +1633,166 @@ body.dark-mode .form-control {
 .btn-group-premium .btn:hover {
     background-color: #f8fafc !important;
     color: var(--primary) !important;
+}
+
+/* --- 25. PREMIUM CODE & DATA TOKENS --- */
+.premium-code { 
+    background-color: #f1f5f9 !important; 
+    color: var(--primary) !important; 
+    padding: 0.2rem 0.5rem !important; 
+    border-radius: 6px !important; 
+    font-weight: 700 !important; 
+    font-size: 0.8rem !important; 
+    border: 1px solid var(--border-light) !important;
+    font-family: var(--font-main) !important;
+    letter-spacing: 0.5px !important;
+}
+
+.badge-indigo-soft { 
+    background-color: #f5f3ff !important; 
+    color: #5b21b6 !important; 
+    border: 1px solid #ddd6fe !important; 
+}
+
+/* --- 26. TABLE PREMIUM ARCHITECTURE --- */
+.table-premium thead th { 
+    border-top: none !important; 
+    border-bottom: 1px solid var(--border-light) !important;
+    text-transform: uppercase !important; 
+    font-size: var(--text-smallest) !important; 
+    letter-spacing: 1.2px !important; 
+    color: var(--dark-muted) !important; 
+    padding: 1.25rem 1rem !important; 
+    background-color: #fcfcfc !important;
+    font-weight: 800 !important;
+}
+
+.table-premium tbody td {
+    vertical-align: middle !important;
+    padding: 1rem !important;
+    color: var(--dark) !important;
+    border-bottom: 1px solid rgba(0,0,0,0.03) !important;
+}
+
+.table-premium.table-hover tbody tr:hover {
+    background-color: rgba(var(--primary-rgb), 0.02) !important;
+}
+
+/* Icon Containers */
+.icon-square-premium {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    background: #f8fafc;
+    border: 1px solid var(--border-light);
+    box-shadow: var(--shadow-xs);
+}
+
+tr:hover .icon-square-premium {
+    background: #ffffff !important;
+    transform: scale(1.05) translateY(-2px);
+    box-shadow: var(--shadow-sm) !important;
+    border-color: var(--primary-soft) !important;
+}
+
+
+/* --- 28. TEXT TRANSFORMATION & SPACING --- */
+.uppercase { text-transform: uppercase !important; }
+.letter-spacing-1 { letter-spacing: var(--ls-1) !important; }
+.letter-spacing-2 { letter-spacing: var(--ls-2) !important; }
+
+/* --- 27. TEXT SIZE UTILITIES --- */
+.smallest { font-size: var(--text-smallest) !important; }
+.small { font-size: var(--text-small) !important; }
+.text-base { font-size: var(--text-base) !important; }
+.text-lg { font-size: var(--text-lg) !important; }
+.text-xl { font-size: 1.25rem !important; }
+
+/* --- 29. BORDER RADIUS UTILITIES --- */
+.rounded-lg { border-radius: var(--radius-lg) !important; }
+.rounded-xl { border-radius: var(--radius-xl) !important; }
+.rounded-xxl { border-radius: 32px !important; }
+
+/* --- 30. CARD TYPOGRAPHY ARCHITECTURE --- */
+.card-title-main {
+    font-size: 1.05rem !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1.5px !important;
+    color: var(--dark) !important;
+    margin-bottom: 0 !important;
+}
+
+.card-title-side {
+    font-size: var(--text-small) !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+    color: var(--dark-muted) !important;
+    margin-bottom: 0 !important;
+}
+
+/* Contextual Overrides */
+.bg-dark .card-title-side,
+.card-header.bg-dark .card-title-side {
+    color: #ffffff !important;
+}
+
+/* --- 31. SIDEBAR SPECIALIZED CARDS --- */
+.card-sidebar-premium {
+    border: none !important;
+    border-radius: var(--radius-lg) !important;
+    box-shadow: var(--shadow-premium) !important;
+    overflow: hidden !important;
+}
+
+.card-sidebar-premium .card-header {
+    background: var(--dark-navy) !important;
+    border-bottom: 3px solid var(--primary) !important;
+    padding-top: 1.25rem !important;
+    padding-bottom: 1.25rem !important;
+    padding-left: 1.5rem !important;
+    padding-right: 1.5rem !important;
+}
+
+.card-sidebar-premium .card-header .card-title-side {
+    color: #ffffff !important;
+}
+
+.card-sidebar-premium .card-body {
+    padding: 1.5rem !important;
+    padding-top: 1.75rem !important;
+}
+
+/* --- 32. HERO INPUT FIELD PROTOCOL --- */
+.form-control-hero {
+    height: 52px !important;
+    font-size: 1.15rem !important;
+    font-weight: 800 !important;
+    padding-left: 1.75rem !important;
+    padding-right: 1.75rem !important;
+    border-radius: 50px !important;
+    border-width: 2px !important;
+    border-color: #e2e8f0 !important;
+    background-color: transparent !important;
+    color: var(--dark) !important;
+    box-shadow: none !important;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.form-control-hero:focus {
+    border-color: var(--primary) !important;
+    background-color: #ffffff !important;
+    box-shadow: 0 10px 20px -5px rgba(var(--primary-rgb), 0.1) !important;
+    transform: translateY(-1px);
+}
+
+.form-control-hero::placeholder {
+    font-weight: 500 !important;
+    color: #94a3b8 !important;
+    font-size: 1.05rem !important;
 }

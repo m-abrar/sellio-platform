@@ -55,26 +55,26 @@
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table id="gateways-table" class="table table-hover table-premium mb-0">
-                    <thead class="bg-light text-uppercase smallest font-weight-bold">
+                    <thead>
                         <tr>
-                            <th class="py-3 border-0 px-4">Gateway & Integration</th>
-                            <th class="py-3 border-0">Technical Identifier</th>
-                            <th class="py-3 border-0 text-center">Environment</th>
-                            <th class="py-3 border-0 text-center">Lifecycle</th>
-                            <th class="py-3 border-0 text-right px-4">Operations</th>
+                            <th class="pl-4">Gateway & Integration</th>
+                            <th>Technical Identifier</th>
+                            <th class="text-center">Environment</th>
+                            <th class="text-center">Lifecycle</th>
+                            <th class="text-right pr-4">Operations</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse ($gateways as $gateway)
                             <tr>
-                                <td class="align-middle px-4">
+                                <td class="pl-4">
                                     <div class="d-flex align-items-center">
-                                        <div class="icon-square mr-3 bg-light border d-flex align-items-center justify-content-center shadow-xs" style="width:48px; height:48px; border-radius: 12px;">
-                                            <i class="fas fa-network-wired text-muted"></i>
+                                        <div class="icon-square-premium mr-3">
+                                            <i class="fas fa-network-wired text-muted opacity-75"></i>
                                         </div>
                                         <div>
-                                            <span class="d-block font-weight-bold text-dark mb-0">{{ $gateway->title ?? 'Unknown Gateway' }}</span>
-                                            <small class="text-muted font-monospace opacity-75" style="font-size: 0.7rem;">{{ $gateway->class_name }}</small>
+                                            <span class="d-block font-weight-bold text-dark mb-0 uppercase letter-spacing-1">{{ $gateway->title ?? 'Unknown Gateway' }}</span>
+                                            <small class="text-muted font-weight-bold text-uppercase opacity-75" style="font-size: 0.65rem; letter-spacing: 0.5px;">{{ $gateway->class_name }}</small>
                                         </div>
                                     </div>
                                 </td>
@@ -103,10 +103,10 @@
                                         </span>
                                     @endif
                                 </td>
-                                <td class="text-right align-middle px-4">
+                                <td class="text-right pr-4">
                                     <a href="{{ route('admin.payment-gateways.edit', $gateway->id) }}" 
-                                       class="btn btn-primary rounded-pill px-4 font-weight-bold smallest">
-                                        <i class="fas fa-cog mr-1"></i> CONFIGURE
+                                       class="btn btn-premium-soft btn-premium-soft-primary">
+                                        <i class="fas fa-cog mr-1"></i> Configure
                                     </a>
                                 </td>
                             </tr>
@@ -135,28 +135,6 @@
 
 @section('css')
 @include('admin._partials._toggle-card-css')
-<style>
-    /* Premium FinTech UI Accents */
-    .table-premium thead th { border-top: none; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px; color: #6c757d; padding: 1.25rem 1rem; }
-    .shadow-xs { box-shadow: 0 5px 10px rgba(0,0,0,0.01); }
-    .font-weight-600 { font-weight: 600 !important; }
-    .font-monospace { font-family: 'SFMono-Regular', Consolas, monospace; }
-
-    /* Premium Code styling */
-    .premium-code { background-color: #f1f5f9; color: #2563eb !important; padding: 0.2rem 0.5rem; border-radius: 4px; font-weight: 600; font-size: 0.85rem; border: 1px solid #e2e8f0; }
-
-    /* Soft Badges */
-    .badge-success-soft { background-color: #f0fdf4; color: #166534; }
-    .badge-warning-soft { background-color: #fffbeb; color: #92400e; }
-    .badge-secondary-soft { background-color: #f8fafc; color: #64748b; }
-    
-    /* Custom Toggles */
-    .custom-switch .custom-control-label::before { height: 1.25rem; width: 2.25rem; border-radius: 1rem; }
-    .custom-switch .custom-control-label::after { width: calc(1.25rem - 4px); height: calc(1.25rem - 4px); border-radius: 1rem; }
-    
-    .opacity-75 { opacity: 0.75; }
-    .text-xs { font-size: 0.7rem; }
-</style>
 @endsection
 
 @section('js')

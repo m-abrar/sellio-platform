@@ -40,60 +40,60 @@
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table id="menu-locations-table" class="table table-hover table-premium mb-0">
-                    <thead class="bg-light text-uppercase smallest font-weight-bold">
+                    <thead>
                         <tr>
-                            <th class="py-3 border-0 px-4">Structure Name</th>
-                            <th class="py-3 border-0">Technical Key</th>
-                            <th class="py-3 border-0">Assigned Theme</th>
-                            <th class="py-3 border-0">Last Modification</th>
-                            <th class="py-3 border-0 text-right px-4">Operations</th>
+                            <th class="pl-4">Structure Name</th>
+                            <th>Technical Key</th>
+                            <th>Assigned Theme</th>
+                            <th>Last Modification</th>
+                            <th class="text-right pr-4">Operations</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse ($menus as $menu)
                             <tr>
-                                <td class="align-middle px-4">
+                                <td class="pl-4">
                                     <div class="d-flex align-items-center">
-                                        <div class="icon-square mr-3 bg-light border d-flex align-items-center justify-content-center shadow-xs" style="width:42px; height:42px; border-radius: 10px;">
+                                        <div class="icon-square-premium mr-3">
                                             <i class="fas fa-route text-primary opacity-75"></i>
                                         </div>
                                         <div>
-                                            <span class="d-block font-weight-bold text-dark">{{ $menu->title }}</span>
-                                            <small class="text-muted text-xs font-weight-600 text-uppercase" style="letter-spacing: 0.5px;">Navigation Provider</small>
+                                            <span class="d-block font-weight-bold text-dark uppercase letter-spacing-1">{{ $menu->title }}</span>
+                                            <small class="text-muted text-xs font-weight-bold text-uppercase" style="letter-spacing: 0.5px;">Navigation Provider</small>
                                         </div>
                                     </div>
                                 </td>
                                 
-                                <td class="align-middle">
+                                <td>
                                     <code class="premium-code">{{ $menu->location_key }}</code>
                                 </td>
                                 
-                                <td class="align-middle">
-                                    <span class="badge badge-indigo-soft border border-indigo text-indigo px-3 py-1 text-xs font-weight-bold">
+                                <td>
+                                    <span class="badge badge-indigo-soft px-3 py-1 text-xs font-weight-bold rounded-pill uppercase">
                                         <i class="fas fa-palette mr-1"></i> {{ $menu->theme_key }}
                                     </span>
                                 </td>
                                 
-                                <td class="align-middle">
-                                    <div class="text-muted small d-flex align-items-center">
+                                <td>
+                                    <div class="text-muted smallest font-weight-bold uppercase d-flex align-items-center">
                                         <i class="far fa-clock mr-2 text-warning"></i> 
                                         {{ $menu->updated_at->diffForHumans() }}
                                     </div>
                                 </td>
                                 
-                                <td class="text-right align-middle px-4">
+                                <td class="text-right pr-4">
                                     <a href="{{ route('admin.menu.edit', $menu) }}" 
-                                       class="btn btn-primary rounded-pill shadow-premium px-4 font-weight-bold smallest">
-                                        <i class="fas fa-layer-group mr-1"></i> CONFIGURE LINKS
+                                       class="btn btn-premium-soft btn-premium-soft-primary">
+                                        <i class="fas fa-layer-group mr-1"></i> Configure Links
                                     </a>
                                 </td>
                             </tr>
                         @empty
                             <tr class="empty-state">
                                 <td colspan="5" class="text-center py-5">
-                                    <i class="fas fa-map-signs fa-4x text-light mb-3"></i>
-                                    <h5 class="text-muted font-weight-bold">No Menu Locations Defined</h5>
-                                    <p class="small text-secondary">Registered navigation slots are provided by your active theme assets.</p>
+                                    <i class="fas fa-map-signs fa-4x text-muted opacity-25 mb-3 d-block"></i>
+                                    <h5 class="text-muted font-weight-bold smallest uppercase letter-spacing-1">No Menu Locations Defined</h5>
+                                    <p class="small text-secondary mb-0">Registered navigation slots are provided by your active theme assets.</p>
                                 </td>
                             </tr>
                         @endforelse
@@ -112,43 +112,6 @@
 
 @section('css')
 @include('admin._partials._toggle-card-css')
-<style>
-    /* Premium UI Components */
-    .table-premium thead th { 
-        border-top: none; 
-        text-transform: uppercase; 
-        font-size: 0.7rem; 
-        letter-spacing: 1.2px; 
-        color: #8b959e; 
-        padding: 1.25rem 1rem; 
-        background-color: #fcfcfc;
-    }
-
-    .shadow-xs { box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
-    .font-weight-600 { font-weight: 600 !important; }
-    
-    .premium-code { 
-        background-color: #f1f5f9; 
-        color: #2563eb !important; 
-        padding: 0.2rem 0.5rem; 
-        border-radius: 4px; 
-        font-weight: 600; 
-        font-size: 0.85rem; 
-        border: 1px solid #e2e8f0; 
-    }
-
-    .badge-indigo-soft { background-color: #f5f3ff; color: #5b21b6; border-color: #ddd6fe !important; }
-    .text-indigo { color: #6366f1; }
-    
-    .table-hover tbody tr:hover {
-        background-color: rgba(0, 123, 255, 0.02) !important;
-    }
-
-    .icon-square { transition: all 0.3s ease; }
-    tr:hover .icon-square { background-color: #fff !important; transform: scale(1.05); }
-
-    .btn-flat { border-radius: 6px !important; }
-</style>
 @endsection
 
 @section('js')

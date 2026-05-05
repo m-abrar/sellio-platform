@@ -54,24 +54,24 @@
 
         @forelse($settings_groups as $group)
             <div class="col-lg-4 col-md-6 mb-4">
-                <div class="card h-100 border-0 shadow-premium stat-card" style="border-radius: 20px; transition: all 0.3s ease;">
+                <div class="card h-100 border-0 shadow-premium stat-card" style="border-radius: 20px;">
                     <div class="card-body p-4">
                         <div class="d-flex align-items-start mb-4">
-                            <div class="icon-circle bg-{{ $group['color'] }}-soft text-{{ $group['color'] == 'indigo' ? 'purple' : $group['color'] }} mr-3 shadow-xs" style="width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+                            <div class="icon-square-premium bg-{{ $group['color'] }}-soft mr-3" style="color: {{ $group['color'] == 'indigo' ? '#6366f1' : 'var(--' . $group['color'] . ')' }};">
                                 <i class="fas {{ $group['icon'] }}"></i>
                             </div>
                             <div class="flex-grow-1">
-                                <h6 class="font-weight-bold text-dark mb-2 text-uppercase letter-spacing-1" style="font-size: 0.85rem;">{{ $group['title'] }}</h6>
+                                <h6 class="font-weight-bold text-dark mb-2 small uppercase letter-spacing-1">{{ $group['title'] }}</h6>
                                 <p class="text-muted small mb-0" style="line-height: 1.6; font-size: 0.75rem;">
                                     {{ $group['desc'] }}
                                 </p>
                             </div>
                         </div>
                         <div class="mt-4 pt-3 border-top d-flex align-items-center justify-content-between">
-                            <span class="small text-muted font-weight-bold text-uppercase" style="font-size: 0.6rem; letter-spacing: 0.5px;">REGISTRY: {{ strtoupper($group['id']) }}</span>
+                            <span class="smallest text-muted font-weight-bold uppercase letter-spacing-1">Registry: {{ $group['id'] }}</span>
                             <a href="{{ route('admin.settings.group', ['section' => $group['id']]) }}" 
-                               class="btn btn-sm btn-primary-soft rounded-pill px-3 font-weight-bold stretched-link" style="font-size: 0.7rem;">
-                                CONFIGURE <i class="fas fa-chevron-right ml-1 small"></i>
+                               class="btn btn-premium-soft btn-premium-soft-primary stretched-link">
+                                Configure <i class="fas fa-chevron-right ml-1 small"></i>
                             </a>
                         </div>
                     </div>
@@ -90,9 +90,7 @@
 @push('css')
 @include('admin._partials._toggle-card-css')
 <style>
-    .stat-card:hover { transform: translateY(-8px); box-shadow: 0 15px 45px rgba(0,0,0,0.06) !important; border-color: var(--primary) !important; }
-    .text-purple { color: #6366f1; }
-    .bg-indigo-soft { background: rgba(99, 102, 241, 0.1); }
+    .stat-card:hover { transform: translateY(-8px); box-shadow: 0 15px 45px rgba(0,0,0,0.06) !important; }
 </style>
 @endpush
 

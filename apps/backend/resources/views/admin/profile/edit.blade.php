@@ -24,7 +24,7 @@
                     <h1 class="m-0 text-dark font-weight-bold letter-spacing-tight">
                         Welcome, {{ explode(' ', $user->name)[0] }}
                     </h1>
-                    <p class="text-muted mt-1 small text-uppercase font-weight-bold letter-spacing-2 mb-0 opacity-75">
+                    <p class="text-muted mt-1 small uppercase font-weight-bold letter-spacing-2 mb-0 opacity-75">
                         <i class="fas fa-shield-alt mr-1 text-primary"></i> 
                         Identity Protocol Active
                     </p>
@@ -53,7 +53,7 @@
             <div class="col-md-8">
                 <div class="card border-0 shadow-premium overflow-hidden mb-4" style="border-radius: 24px;">
                     <div class="card-header bg-white py-4 px-4 border-0">
-                        <h3 class="card-title font-weight-bold text-dark mb-0">
+                        <h3 class="card-title-main">
                             <i class="fas fa-fingerprint mr-2 text-primary opacity-50"></i> Profile Credentials
                         </h3>
                     </div>
@@ -61,37 +61,37 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group mb-4">
-                                    <label class="text-uppercase smallest font-weight-bold text-muted mb-2">Display Name</label>
+                                    <label class="uppercase small font-weight-bold text-muted mb-2 letter-spacing-1">Display Name</label>
                                     <input type="text" name="name" class="form-control form-control-premium" value="{{ old('name', $user->name) }}" required>
-                                    @error('name') <span class="text-danger smallest font-weight-bold mt-1 d-block">{{ $message }}</span> @enderror
+                                    @error('name') <span class="text-danger small font-weight-bold mt-1 d-block">{{ $message }}</span> @enderror
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group mb-4">
-                                    <label class="text-uppercase smallest font-weight-bold text-muted mb-2">Primary Email Address</label>
+                                    <label class="uppercase small font-weight-bold text-muted mb-2 letter-spacing-1">Primary Email Address</label>
                                     <input type="email" name="email" class="form-control form-control-premium" value="{{ old('email', $user->email) }}" required>
-                                    @error('email') <span class="text-danger smallest font-weight-bold mt-1 d-block">{{ $message }}</span> @enderror
+                                    @error('email') <span class="text-danger small font-weight-bold mt-1 d-block">{{ $message }}</span> @enderror
                                 </div>
                             </div>
                         </div>
 
                         <div class="p-4 rounded-xl mt-2" style="background: rgba(248, 250, 252, 0.8); border: 1px dashed var(--border-color);">
-                            <h5 class="text-dark font-weight-bold mb-4 smallest text-uppercase letter-spacing-1">
+                            <h5 class="card-title-main mb-4" style="font-size: 0.85rem !important;">
                                 <i class="fas fa-lock-open mr-2 text-warning"></i> Access Security Update
                             </h5>
 
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group mb-0">
-                                        <label class="text-uppercase smallest font-weight-bold text-muted mb-2">New Secret Password</label>
+                                        <label class="uppercase small font-weight-bold text-muted mb-2 letter-spacing-1">New Secret Password</label>
                                         <input type="password" name="password" class="form-control form-control-premium" placeholder="••••••••">
                                         <small class="text-muted mt-2 d-block font-italic opacity-75">Leave empty to keep current access keys.</small>
-                                        @error('password') <span class="text-danger smallest font-weight-bold mt-1 d-block">{{ $message }}</span> @enderror
+                                        @error('password') <span class="text-danger small font-weight-bold mt-1 d-block">{{ $message }}</span> @enderror
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group mb-0">
-                                        <label class="text-uppercase smallest font-weight-bold text-muted mb-2">Confirm New Password</label>
+                                        <label class="uppercase small font-weight-bold text-muted mb-2 letter-spacing-1">Confirm New Password</label>
                                         <input type="password" name="password_confirmation" class="form-control form-control-premium" placeholder="••••••••">
                                     </div>
                                 </div>
@@ -104,7 +104,6 @@
             {{-- Sidebar Column --}}
             <div class="col-md-4">
                 {{-- Standardized Action Card --}}
-                {{-- Standardized Action Card --}}
                 @include('admin._partials._form-actions', [
                     'model' => $user,
                     'title' => 'MY PROFILE',
@@ -114,23 +113,23 @@
                 {{-- Account Metadata --}}
                 <div class="card border-0 shadow-premium mt-4 mb-4 overflow-hidden" style="border-radius: 20px;">
                     <div class="card-header bg-white py-3 px-4 border-0">
-                        <h3 class="card-title text-dark mb-0 font-weight-bold smallest text-uppercase letter-spacing-1">
+                        <h3 class="card-title-side">
                              <i class="fas fa-info-circle mr-2 text-primary opacity-50"></i> Registry Details
                         </h3>
                     </div>
                     <div class="card-body bg-white py-4 px-4">
                         <div class="mb-4">
-                            <label class="d-block smallest font-weight-bold text-muted mb-2 text-uppercase letter-spacing-1">Assigned Authority</label>
+                            <label class="d-block small font-weight-bold text-muted mb-2 uppercase letter-spacing-1">Assigned Authority</label>
                             <span class="badge badge-primary-light text-primary px-3 py-2 font-weight-bold rounded-pill" style="font-size: 0.7rem;">
                                 <i class="fas fa-crown mr-1"></i> {{ strtoupper($user->roles->first()->name ?? 'MASTER ADMIN') }}
                             </span>
                         </div>
 
                         <div class="mb-0 pt-3 border-top">
-                            <label class="d-block smallest font-weight-bold text-muted mb-1 text-uppercase letter-spacing-1">Account Lifespan</label>
+                            <label class="d-block small font-weight-bold text-muted mb-1 uppercase letter-spacing-1">Account Lifespan</label>
                             <div class="d-flex justify-content-between align-items-center mt-2">
                                 <span class="font-weight-bold text-dark small">{{ $user->created_at->format('M d, Y') }}</span>
-                                <span class="badge badge-light border smallest">{{ $user->created_at->diffForHumans() }}</span>
+                                <span class="badge badge-light border small px-2 py-1">{{ $user->created_at->diffForHumans() }}</span>
                             </div>
                         </div>
                     </div>
@@ -139,7 +138,7 @@
                 {{-- Visual Identity --}}
                 <div class="card border-0 shadow-premium mb-4 overflow-hidden" style="border-radius: 20px;">
                     <div class="card-header bg-white border-0 py-3 px-4">
-                        <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1">Update Avatar</h3>
+                        <h3 class="card-title-side">Update Avatar</h3>
                     </div>
                     <div class="card-body p-0">
                         @include('admin._partials._image-uploader', [

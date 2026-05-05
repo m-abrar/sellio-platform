@@ -54,50 +54,50 @@
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table id="content-pages-table" class="table table-hover table-premium mb-0">
-                    <thead class="bg-light text-uppercase smallest font-weight-bold">
+                    <thead>
                         <tr>
-                            <th class="py-3 border-0 px-4">Internal Page Key</th>
-                            <th class="py-3 border-0">Active Theme Skin</th>
-                            <th class="py-3 border-0">Last Modification</th>
-                            <th class="py-3 border-0 text-right px-4">Operations</th>
+                            <th class="pl-4">Internal Page Key</th>
+                            <th>Active Theme Skin</th>
+                            <th>Last Modification</th>
+                            <th class="text-right pr-4">Operations</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse ($contentPages as $contentEntry)
                             <tr>
-                                <td class="align-middle px-4">
+                                <td class="pl-4">
                                     <div class="d-flex align-items-center">
-                                        <div class="icon-square mr-3 bg-light border d-flex align-items-center justify-content-center shadow-xs" style="width:40px; height:40px; border-radius: 10px;">
+                                        <div class="icon-square-premium mr-3">
                                             <i class="fas fa-file-alt text-primary opacity-75"></i>
                                         </div>
                                         <div>
-                                            <span class="d-block font-weight-bold text-dark text-capitalize">{{ str_replace('_', ' ', $contentEntry->page) }}</span>
-                                            <code class="text-xs text-muted font-monospace">{{ $contentEntry->page }}</code>
+                                            <span class="d-block font-weight-bold text-dark text-capitalize uppercase letter-spacing-1">{{ str_replace('_', ' ', $contentEntry->page) }}</span>
+                                            <code class="premium-code">{{ $contentEntry->page }}</code>
                                         </div>
                                     </div>
                                 </td>
                                 
-                                <td class="align-middle">
-                                    <span class="badge badge-indigo-soft border border-indigo text-indigo px-3 py-1 text-uppercase" style="font-size: 0.65rem; letter-spacing: 0.5px;">
+                                <td>
+                                    <span class="badge badge-indigo-soft px-3 py-1 font-weight-bold rounded-pill uppercase">
                                         <i class="fas fa-palette mr-1"></i> {{ $contentEntry->theme_key }}
                                     </span>
                                 </td>
                                 
-                                <td class="align-middle">
-                                    <div class="d-flex align-items-center text-muted small">
+                                <td>
+                                    <div class="d-flex align-items-center text-muted smallest font-weight-bold uppercase">
                                         <i class="far fa-clock mr-2 text-warning"></i>
                                         @isset($contentEntry->latest_update)
-                                            <span class="font-weight-600">{{ \Carbon\Carbon::parse($contentEntry->latest_update)->diffForHumans() }}</span>
+                                            <span>{{ \Carbon\Carbon::parse($contentEntry->latest_update)->diffForHumans() }}</span>
                                         @else
-                                            <span class="text-light-gray italic">No history found</span>
+                                            <span class="opacity-50 italic">No history found</span>
                                         @endisset
                                     </div>
                                 </td>
                                 
-                                <td class="text-right align-middle px-4">
+                                <td class="text-right pr-4">
                                     <a href="{{ route('admin.content.edit', ['page' => $contentEntry->page, 'theme_key' => $contentEntry->theme_key]) }}" 
-                                       class="btn btn-primary rounded-pill shadow-premium px-4 font-weight-bold smallest">
-                                        <i class="fas fa-pencil-alt mr-1"></i> EDIT CONTENT
+                                       class="btn btn-premium-soft btn-premium-soft-primary">
+                                        <i class="fas fa-pencil-alt mr-1"></i> Edit Content
                                     </a>
                                 </td>
                             </tr>
@@ -105,9 +105,9 @@
                             <tr>
                                 <td colspan="4" class="text-center py-5">
                                     <div class="empty-state">
-                                        <i class="fas fa-folder-open fa-4x text-light mb-3"></i>
-                                        <h5 class="text-muted font-weight-bold">No Editable Sections Found</h5>
-                                        <p class="small text-secondary">Ensure your page content registries are seeded correctly in the database.</p>
+                                        <i class="fas fa-folder-open fa-4x text-muted opacity-25 mb-3 d-block"></i>
+                                        <h5 class="text-muted font-weight-bold smallest uppercase letter-spacing-1">No Editable Sections Found</h5>
+                                        <p class="small text-secondary mb-0">Ensure your page content registries are seeded correctly in the database.</p>
                                     </div>
                                 </td>
                             </tr>
@@ -127,39 +127,6 @@
 
 @section('css')
 @include('admin._partials._toggle-card-css')
-<style>
-    /* Premium Table Styling */
-    .table-premium thead th { 
-        border-top: none; 
-        text-transform: uppercase; 
-        font-size: 0.7rem; 
-        letter-spacing: 1.2px; 
-        color: #8b959e; 
-        padding: 1.25rem 1rem; 
-        background-color: #fcfcfc;
-    }
-    
-    .shadow-xs { box-shadow: 0 5px 10px rgba(0,0,0,0.01); }
-    .font-weight-600 { font-weight: 600 !important; }
-    .font-monospace { font-family: 'SFMono-Regular', Consolas, monospace; }
-    
-    .badge-indigo-soft { background-color: #f5f3ff; color: #5b21b6; border-color: #ddd6fe !important; }
-    .text-indigo { color: #6366f1; }
-    
-    .table-hover tbody tr:hover {
-        background-color: rgba(0, 123, 255, 0.02) !important;
-        cursor: default;
-    }
-
-    .icon-square { transition: all 0.3s ease; }
-    tr:hover .icon-square { background-color: #fff !important; transform: scale(1.1); }
-    
-    .btn-warning { color: #fff !important; background-color: #f39c12; border-color: #e67e22; }
-    .btn-warning:hover { background-color: #e67e22; }
-    
-    .text-light-gray { color: #cbd5e0; }
-    .text-xs { font-size: 0.7rem; }
-</style>
 @endsection
 
 @section('js')

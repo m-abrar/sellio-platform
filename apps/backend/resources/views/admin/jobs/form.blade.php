@@ -12,7 +12,7 @@
                     <i class="fas fa-briefcase mr-2 text-primary"></i> 
                     {{ $job->exists ? 'Modify Job' : 'New Job Position' }}
                 </h1>
-                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">
+                <p class="text-muted mt-2 small uppercase letter-spacing-1 mb-0">
                     {{ $job->exists ? 'Update role responsibilities, compensation, and application deadlines.' : 'Define a new career opportunity with detailed specs and requirements.' }}
                 </p>
             </div>
@@ -26,7 +26,7 @@
 @stop
 
 @section('content')
-<div class="container-fluid">
+<div class="container-fluid pb-5">
     @include('admin.alert')
 
     <form action="{{ $job->exists ? route('admin.jobs.update', $job->id) : route('admin.jobs.store') }}" 
@@ -39,90 +39,122 @@
             {{-- Main Content Column --}}
             <div class="col-md-8">
                 {{-- Basic Information --}}
-                <div class="card card-premium overflow-hidden">
-                    <div class="card-header border-0 bg-white py-3 px-4">
-                        <h3 class="card-title font-weight-bold text-dark text-uppercase small" style="letter-spacing: 1px;">General Information</h3>
+                <div class="card border-0 shadow-premium rounded-xl overflow-hidden mb-4">
+                    <div class="card-header border-0 bg-white py-4 px-4">
+                        <h3 class="card-title-main">General Information</h3>
                     </div>
-                    <div class="card-body p-4">
+                    <div class="card-body p-4 pt-0">
                         <div class="form-group mb-4">
-                            <label class="font-weight-600"><i class="fas fa-briefcase mr-1 text-primary"></i> Job Title <span class="text-danger">*</span></label>
-                            <input type="text" name="title" id="title" class="form-control form-control-lg @error('title') is-invalid @enderror" value="{{ old('title', $job->title ?? '') }}" required list="job-title-suggestions" placeholder="e.g. Senior Software Engineer">
+                            <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Job Title <span class="text-danger">*</span></label>
+                            <input type="text" name="title" id="title" class="form-control form-control-hero" value="{{ old('title', $job->title ?? '') }}" required list="job-title-suggestions" placeholder="e.g. Senior Software Engineer">
                             <datalist id="job-title-suggestions">
                                 @foreach(\App\Models\JobListing::select('title')->distinct()->limit(20)->pluck('title') as $title)
                                     <option value="{{ $title }}">
                                 @endforeach
                             </datalist>
-                            @error('title') <span class="invalid-feedback">{{ $message }}</span> @enderror
+                            @error('title') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
                         </div>
 
                         <div class="form-group mb-4">
-                            <label for="slug" class="font-weight-600 text-muted small">URL Slug</label>
-                            <input type="text" name="slug" id="slug" class="form-control form-control-monospace @error('slug') is-invalid @enderror" placeholder="auto-generated-slug" value="{{ old('slug', $job->slug ?? '') }}">
-                            @error('slug') <span class="invalid-feedback">{{ $message }}</span> @enderror
+                            <label for="slug" class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">URL Slug</label>
+                            <input type="text" name="slug" id="slug" class="form-control form-control-premium text-monospace small" placeholder="auto-generated-slug" value="{{ old('slug', $job->slug ?? '') }}">
+                            @error('slug') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
                         </div>
 
                         <div class="form-group mb-0">
-                            <label class="font-weight-600">Job Description <span class="text-danger">*</span></label>
-                            <textarea name="description" rows="6" class="form-control @error('description') is-invalid @enderror" placeholder="Describe the role, responsibilities, and requirements...">{{ old('description', $job->description ?? '') }}</textarea>
+                            <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Job Description <span class="text-danger">*</span></label>
+                            <textarea name="description" rows="6" class="form-control" style="border-radius: 16px; border: 1px solid var(--border-light);" placeholder="Describe the role, responsibilities, and requirements...">{{ old('description', $job->description ?? '') }}</textarea>
+                            @error('description') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
                         </div>
                     </div>
                 </div>
 
                 {{-- Salary & Benefits --}}
-                <div class="card card-premium overflow-hidden mt-4">
-                    <div class="card-header border-0 bg-white py-3 px-4">
-                        <h3 class="card-title font-weight-600 text-muted small text-uppercase" style="letter-spacing: 1px;">Compensation</h3>
+                <div class="card border-0 shadow-premium rounded-xl overflow-hidden mb-4">
+                    <div class="card-header border-0 bg-white py-4 px-4">
+                        <h3 class="card-title-main">Compensation</h3>
                     </div>
-                    <div class="card-body p-4">
+                    <div class="card-body p-4 pt-0">
                         <div class="row">
                             <div class="col-md-4">
-                                <div class="form-group"><label>Min Salary</label><input type="number" step="0.01" name="salary_min" class="form-control" value="{{ old('salary_min', $job->salary_min ?? '') }}" placeholder="e.g. 50000"></div>
+                                <div class="form-group mb-0">
+                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Min Salary</label>
+                                    <input type="number" step="0.01" name="salary_min" class="form-control form-control-premium" value="{{ old('salary_min', $job->salary_min ?? '') }}" placeholder="e.g. 50000">
+                                </div>
                             </div>
                             <div class="col-md-4">
-                                <div class="form-group"><label>Max Salary</label><input type="number" step="0.01" name="salary_max" class="form-control" value="{{ old('salary_max', $job->salary_max ?? '') }}" placeholder="e.g. 80000"></div>
+                                <div class="form-group mb-0">
+                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Max Salary</label>
+                                    <input type="number" step="0.01" name="salary_max" class="form-control form-control-premium" value="{{ old('salary_max', $job->salary_max ?? '') }}" placeholder="e.g. 80000">
+                                </div>
                             </div>
                             <div class="col-md-4">
-                                <div class="form-group"><label>Frequency</label><select name="salary_frequency" class="form-control"><option value="yearly" {{ old('salary_frequency', $job->salary_frequency ?? '') == 'yearly' ? 'selected' : '' }}>Yearly (yr)</option><option value="monthly" {{ old('salary_frequency', $job->salary_frequency ?? '') == 'monthly' ? 'selected' : '' }}>Monthly (mo)</option><option value="weekly" {{ old('salary_frequency', $job->salary_frequency ?? '') == 'weekly' ? 'selected' : '' }}>Weekly (wk)</option><option value="hourly" {{ old('salary_frequency', $job->salary_frequency ?? '') == 'hourly' ? 'selected' : '' }}>Hourly (hr)</option></select></div>
+                                <div class="form-group mb-0">
+                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Frequency</label>
+                                    <select name="salary_frequency" class="form-control form-control-premium">
+                                        <option value="yearly" {{ old('salary_frequency', $job->salary_frequency ?? '') == 'yearly' ? 'selected' : '' }}>Yearly (yr)</option>
+                                        <option value="monthly" {{ old('salary_frequency', $job->salary_frequency ?? '') == 'monthly' ? 'selected' : '' }}>Monthly (mo)</option>
+                                        <option value="weekly" {{ old('salary_frequency', $job->salary_frequency ?? '') == 'weekly' ? 'selected' : '' }}>Weekly (wk)</option>
+                                        <option value="hourly" {{ old('salary_frequency', $job->salary_frequency ?? '') == 'hourly' ? 'selected' : '' }}>Hourly (hr)</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 {{-- Requirements --}}
-                <div class="card card-premium overflow-hidden mt-4">
-                    <div class="card-header border-0 bg-white py-3 px-4">
-                        <h3 class="card-title font-weight-600 text-muted small text-uppercase" style="letter-spacing: 1px;">Job Specs & Workspace</h3>
+                <div class="card border-0 shadow-premium rounded-xl overflow-hidden mb-4">
+                    <div class="card-header border-0 bg-white py-4 px-4">
+                        <h3 class="card-title-main">Job Specs & Workspace</h3>
                     </div>
-                    <div class="card-body p-4">
+                    <div class="card-body p-4 pt-0">
                         <div class="row">
                             <div class="col-md-4">
-                                <div class="form-group"><label>Workplace Type</label><select name="workplace_type" class="form-control"><option value="1" {{ old('workplace_type', $job->workplace_type ?? '') == '1' ? 'selected' : '' }}>Remote</option><option value="2" {{ old('workplace_type', $job->workplace_type ?? '2') == '2' ? 'selected' : '' }}>On-Site</option><option value="3" {{ old('workplace_type', $job->workplace_type ?? '') == '3' ? 'selected' : '' }}>Hybrid</option></select></div>
+                                <div class="form-group mb-4">
+                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Workplace Type</label>
+                                    <select name="workplace_type" class="form-control form-control-premium">
+                                        <option value="1" {{ old('workplace_type', $job->workplace_type ?? '') == '1' ? 'selected' : '' }}>Remote</option>
+                                        <option value="2" {{ old('workplace_type', $job->workplace_type ?? '2') == '2' ? 'selected' : '' }}>On-Site</option>
+                                        <option value="3" {{ old('workplace_type', $job->workplace_type ?? '') == '3' ? 'selected' : '' }}>Hybrid</option>
+                                    </select>
+                                </div>
                             </div>
                             <div class="col-md-4">
-                                <div class="form-group"><label>Experience Level</label><input type="text" name="experience_level" class="form-control" placeholder="Junior / Mid / Senior" value="{{ old('experience_level', $job->experience_level ?? '') }}"></div>
+                                <div class="form-group mb-4">
+                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Experience Level</label>
+                                    <input type="text" name="experience_level" class="form-control form-control-premium" placeholder="Junior / Mid / Senior" value="{{ old('experience_level', $job->experience_level ?? '') }}">
+                                </div>
                             </div>
                             <div class="col-md-4">
-                                <div class="form-group"><label>Deadline</label><input type="date" name="application_deadline" class="form-control" value="{{ old('application_deadline', $job->exists && $job->application_deadline ? $job->application_deadline->format('Y-m-d') : '') }}"></div>
+                                <div class="form-group mb-4">
+                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Deadline</label>
+                                    <input type="date" name="application_deadline" class="form-control form-control-premium" value="{{ old('application_deadline', $job->exists && $job->application_deadline ? $job->application_deadline->format('Y-m-d') : '') }}">
+                                </div>
                             </div>
                         </div>
 
-                        <div class="row mt-2">
+                        <div class="row">
                             <div class="col-md-6">
-                                <div class="form-group"><label>City</label><input type="text" name="city" class="form-control" value="{{ old('city', $job->city ?? '') }}" placeholder="e.g. New York"></div>
+                                <div class="form-group mb-0">
+                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">City</label>
+                                    <input type="text" name="city" class="form-control form-control-premium" value="{{ old('city', $job->city ?? '') }}" placeholder="e.g. New York">
+                                </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-group"><label>Country</label><input type="text" name="country" class="form-control" value="{{ old('country', $job->country ?? '') }}" placeholder="e.g. USA"></div>
+                                <div class="form-group mb-0">
+                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Country</label>
+                                    <input type="text" name="country" class="form-control form-control-premium" value="{{ old('country', $job->country ?? '') }}" placeholder="e.g. USA">
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-
-
                 {{-- Gallery Collection --}}
-                <div class="card card-premium overflow-hidden mt-4">
-                    <div class="card-header border-0 bg-white py-3 px-4">
-                        <h3 class="card-title font-weight-600 text-muted small text-uppercase" style="letter-spacing: 1px;">Office Photos</h3>
+                <div class="card border-0 shadow-premium rounded-xl overflow-hidden mb-4">
+                    <div class="card-header border-0 bg-white py-4 px-4">
+                        <h3 class="card-title-main">Office Photos</h3>
                     </div>
                     <div class="card-body p-0">
                         @include('admin._partials._image-uploader', [
@@ -138,21 +170,21 @@
 
                 @if($job->exists)
                 {{-- Recent Applications --}}
-                <div class="card card-premium overflow-hidden mt-4">
-                    <div class="card-header border-0 bg-white py-4 px-4 d-flex justify-content-between align-items-center">
-                        <h3 class="card-title font-weight-bold text-dark mb-0"><i class="fas fa-file-invoice mr-2 text-success opacity-50"></i> Recent Applications ({{ $applicationsCount ?? 0 }})</h3>
+                <div class="card border-0 shadow-premium rounded-xl overflow-hidden mb-4">
+                    <div class="card-header border-0 bg-white py-4 px-4">
+                        <h3 class="card-title-main">Recent Applications ({{ $applicationsCount ?? 0 }})</h3>
                     </div>
                     <div class="card-body p-5 text-center">
-                        <div class="text-muted small">Application sub-listing grid view leads to unified router tables.</div>
+                        <div class="text-muted small uppercase letter-spacing-1">Application sub-listing grid view leads to unified router tables.</div>
                     </div>
                 </div>
                 @endif
                 {{-- Display & Billing Options --}}
-                <div class="card card-premium mt-4 overflow-hidden">
-                    <div class="card-header border-0 bg-white py-3 px-4">
-                        <h3 class="card-title font-weight-bold text-dark text-uppercase small" style="letter-spacing: 1px;"><i class="fas fa-cog mr-2 text-secondary"></i> Display & Billing Options</h3>
+                <div class="card border-0 shadow-premium rounded-xl overflow-hidden mb-4">
+                    <div class="card-header border-0 bg-white py-4 px-4">
+                        <h3 class="card-title-main">Display & Billing Options</h3>
                     </div>
-                    <div class="card-body p-4">
+                    <div class="card-body p-4 pt-0">
                         <div class="row">
                             @php
                                 $toggles = [
@@ -165,9 +197,9 @@
                                     <label class="w-100 cursor-pointer mb-0">
                                         <input type="hidden" name="{{ $t['name'] }}" value="0">
                                         <input type="checkbox" name="{{ $t['name'] }}" value="1" id="{{ $t['id'] }}" class="d-none toggle-input" {{ $t['checked'] ? 'checked' : '' }}>
-                                        <div class="d-flex justify-content-between align-items-center h-100 toggle-card shadow-sm px-3 py-3">
+                                        <div class="d-flex justify-content-between align-items-center h-100 toggle-card shadow-sm px-3 py-3" style="border-radius: 12px; border: 1px solid var(--border-light);">
                                             <div>
-                                                <div class="font-weight-bold text-dark small">{{ $t['label'] }}</div>
+                                                <div class="font-weight-bold text-dark small uppercase letter-spacing-1">{{ $t['label'] }}</div>
                                                 <div class="small toggle-status text-muted">{{ $t['status'] ?? 'Option' }}</div>
                                             </div>
                                             <div class="toggle-indicator shadow-sm"></div>
@@ -182,7 +214,6 @@
 
             {{-- Sidebar Column --}}
             <div class="col-md-4">
-                {{-- Action Card --}}
                 @include('admin._partials._form-actions', [
                     'model' => $job,
                     'title' => 'JOB',
@@ -191,25 +222,23 @@
                 ])
 
                 {{-- Listing Controls --}}
-                <div class="card card-premium mb-4 overflow-hidden">
-                    <div class="card-header bg-white border-0 py-3 px-4">
-                        <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
-                            <i class="fas fa-sliders-h mr-2 text-primary opacity-50"></i> Listing Controls
-                        </h3>
+                <div class="card border-0 shadow-premium mb-4 rounded-xl overflow-hidden mt-4">
+                    <div class="card-header border-0 bg-white py-4 px-4">
+                        <h3 class="card-title-side">Listing Controls</h3>
                     </div>
-                    <div class="card-body p-4">
+                    <div class="card-body p-4 pt-0">
                         <div class="custom-control custom-switch custom-switch-premium">
                             <input type="hidden" name="is_featured" value="0">
                             <input type="checkbox" name="is_featured" value="1" class="custom-control-input" id="isFeatured" {{ old('is_featured', $job->is_featured ?? false) ? 'checked' : '' }}>
-                            <label class="custom-control-label font-weight-bold text-dark small" for="isFeatured">Featured Listing</label>
+                            <label class="custom-control-label small font-weight-bold text-dark uppercase letter-spacing-1" for="isFeatured">Featured Listing</label>
                         </div>
                     </div>
                 </div>
 
                 {{-- Primary Media --}}
-                <div class="card card-premium mb-4 overflow-hidden">
-                    <div class="card-header bg-white border-0 py-3 px-4">
-                        <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
+                <div class="card border-0 shadow-premium mb-4 rounded-xl overflow-hidden">
+                    <div class="card-header border-0 bg-white py-4 px-4">
+                        <h3 class="card-title-side">
                             <i class="fas fa-camera mr-2 text-primary opacity-50"></i> Visual Identity
                         </h3>
                     </div>
@@ -226,15 +255,13 @@
                 </div>
 
                 {{-- Classification --}}
-                <div class="card card-premium mb-4 overflow-hidden">
-                    <div class="card-header bg-white border-0 py-3 px-4">
-                        <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
-                            <i class="fas fa-sitemap mr-2 text-primary opacity-50"></i> Classification
-                        </h3>
+                <div class="card border-0 shadow-premium mb-4 rounded-xl overflow-hidden">
+                    <div class="card-header border-0 bg-white py-4 px-4">
+                        <h3 class="card-title-side">Classification</h3>
                     </div>
-                    <div class="card-body p-4">
+                    <div class="card-body p-4 pt-0">
                         <div class="form-group mb-4">
-                            <label class="small font-weight-bold text-muted text-uppercase">Marketplace Category</label>
+                            <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Marketplace Category</label>
                             <select name="category_id" class="form-control select2" required>
                                 <option value="">Select Category</option>
                                 @foreach($categories ?? [] as $cat)
@@ -243,7 +270,7 @@
                             </select>
                         </div>
                         <div class="form-group mb-0">
-                            <label class="small font-weight-bold text-muted text-uppercase">Regional Hub</label>
+                            <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Regional Hub</label>
                             <select name="location_id" class="form-control select2">
                                 <option value="">Select Location</option>
                                 @foreach($locations ?? [] as $loc)
@@ -277,7 +304,6 @@
         slugInput.on('change', function() { $(this).data('edited', true); });
     });
 </script>
-@include('admin._partials._toggle-card-css')
 @endpush
 
 @if($job->exists)
@@ -285,8 +311,6 @@
         @csrf @method('DELETE')
     </form>
     
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         function triggerDelete() {
             Swal.fire({
@@ -294,9 +318,14 @@
                 text: "Permanently delete this job listing?",
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Yes, delete it!'
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#64748b',
+                confirmButtonText: 'Yes, delete it!',
+                customClass: {
+                    popup: 'rounded-xl',
+                    confirmButton: 'rounded-pill px-4',
+                    cancelButton: 'rounded-pill px-4'
+                }
             }).then((result) => {
                 if (result.isConfirmed) {
                     document.getElementById('delete-form').submit();
@@ -305,3 +334,5 @@
         }
     </script>
 @endif
+
+@include('admin._partials._toggle-card-css')

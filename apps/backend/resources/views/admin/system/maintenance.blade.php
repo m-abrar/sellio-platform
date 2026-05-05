@@ -45,7 +45,7 @@
         <div class="col-md-8">
             <div class="card border-0 shadow-premium overflow-hidden mb-4" style="border-radius: 24px;">
                 <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
-                    <h3 class="card-title font-weight-bold text-dark text-uppercase small mb-0" style="letter-spacing: 1px;">
+                    <h3 class="card-title-main">
                         <i class="fas fa-cogs mr-1 text-primary opacity-50"></i> Foundational Optimization
                     </h3>
                 </div>
@@ -64,13 +64,13 @@
                     <div class="d-flex flex-wrap align-items-center">
                         <form action="{{ route('admin.system.optimize') }}" method="POST" class="mr-3 mb-2">
                             @csrf
-                            <button type="submit" class="btn btn-primary rounded-pill px-4 font-weight-bold smallest uppercase letter-spacing-1">
+                            <button type="submit" class="btn btn-primary rounded-pill px-5 py-2 font-weight-bold small" style="min-width: 220px; height: 48px;">
                                 <i class="fas fa-bolt mr-2"></i> Optimize & Cache All
                             </button>
                         </form>
                         <form action="{{ route('admin.system.storage.link') }}" method="POST" class="mb-2">
                             @csrf
-                            <button type="submit" class="btn btn-outline-dark rounded-pill px-4 font-weight-bold smallest uppercase letter-spacing-1">
+                            <button type="submit" class="btn btn-outline-dark rounded-pill px-5 py-2 font-weight-bold small" style="min-width: 220px; height: 48px;">
                                 <i class="fas fa-link mr-2"></i> Fix Storage Link
                             </button>
                         </form>
@@ -99,7 +99,7 @@
                             <p class="smallest text-muted mb-3">{{ $item['desc'] }}</p>
                             <form action="{{ route('admin.system.' . $item['id'] . '.clear') }}" method="POST">
                                 @csrf
-                                <button type="submit" class="btn btn-{{ $item['color'] }}-soft btn-purge rounded-pill px-4 font-weight-bold smallest uppercase letter-spacing-1">
+                                <button type="submit" class="btn btn-{{ $item['color'] }}-soft btn-purge rounded-pill px-5 font-weight-bold small" style="height: 44px; min-width: 160px;">
                                     <i class="fas fa-trash-alt mr-1"></i> Purge {{ $item['id'] }}
                                 </button>
                             </form>
@@ -126,7 +126,7 @@
                                 <div class="col-md-3 text-right">
                                     <form action="{{ route('admin.system.media.regenerate') }}" method="POST">
                                         @csrf
-                                        <button type="submit" class="btn btn-primary rounded-pill px-4 font-weight-bold smallest uppercase letter-spacing-1">
+                                        <button type="submit" class="btn btn-primary rounded-pill px-5 py-2 font-weight-bold small" style="height: 48px; min-width: 180px;">
                                             <i class="fas fa-sync-alt mr-1"></i> Regenerate
                                         </button>
                                     </form>
@@ -211,40 +211,6 @@
             filter: brightness(0.98);
             box-shadow: 0 4px 12px rgba(0,0,0,0.05) !important;
             border-color: rgba(0,0,0,0.1) !important;
-        }
-        .swal2-popup {
-            backdrop-filter: blur(20px) saturate(180%);
-            background: rgba(255, 255, 255, 0.85) !important;
-            border: 1px solid rgba(255, 255, 255, 0.3) !important;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15) !important;
-            padding: 2.5rem !important;
-            border-radius: 32px !important;
-        }
-        .swal2-title {
-            font-family: 'Outfit', sans-serif !important;
-            color: #1a1a1a !important;
-            font-size: 1.5rem !important;
-            letter-spacing: -0.02em !important;
-        }
-        .swal2-confirm {
-            background: linear-gradient(135deg, #46a5ac 0%, #3d8f95 100%) !important;
-            box-shadow: 0 10px 20px -5px rgba(70, 165, 172, 0.4) !important;
-            border: none !important;
-            font-weight: 700 !important;
-        }
-        .swal2-confirm:hover {
-            box-shadow: 0 15px 30px -5px rgba(70, 165, 172, 0.5) !important;
-            transform: translateY(-2px);
-        }
-        .swal2-cancel {
-            background: rgba(0, 0, 0, 0.05) !important;
-            color: #666 !important;
-            border: 1px solid rgba(0, 0, 0, 0.05) !important;
-        }
-        .swal2-icon {
-            border-width: 2px !important;
-            transform: scale(1.1);
-            margin-bottom: 2rem !important;
         }
     </style>
 @stop

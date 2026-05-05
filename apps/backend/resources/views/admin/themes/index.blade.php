@@ -73,10 +73,10 @@
                         </p>
 
                         <div class="mt-4 pt-4 border-top d-flex align-items-center" style="gap: 15px;">
-                            <a href="{{ url('/') }}" target="_blank" class="btn btn-primary px-4 rounded-pill font-weight-bold shadow-premium smallest uppercase letter-spacing-1">
+                            <a href="{{ url('/') }}" target="_blank" class="btn btn-primary px-4 rounded-pill font-weight-bold shadow-premium smallest">
                                 <i class="fas fa-external-link-alt mr-2"></i> View Site
                             </a>
-                            <a href="{{ route('admin.themes.edit', $activeTheme->id) }}" class="btn btn-default shadow-xs border px-4 rounded-pill font-weight-bold smallest uppercase letter-spacing-1">
+                            <a href="{{ route('admin.themes.edit', $activeTheme->id) }}" class="btn btn-default shadow-xs border px-4 rounded-pill font-weight-bold smallest">
                                 <i class="fas fa-cog mr-2"></i> Theme Settings
                             </a>
                         </div>
@@ -102,7 +102,7 @@
                         <div class="theme-overlay">
                             <form action="{{ route('admin.themes.activate', $theme->id) }}" method="POST">
                                 @csrf
-                                <button type="submit" class="btn btn-white btn-sm font-weight-bold px-4 rounded-pill shadow smallest uppercase letter-spacing-1">
+                                <button type="submit" class="btn btn-white btn-sm font-weight-bold px-4 rounded-pill shadow smallest">
                                     <i class="fas fa-bolt mr-1 text-primary"></i> Activate
                                 </button>
                             </form>
@@ -199,12 +199,12 @@
                                                               <a href="{{ route('admin.themes.edit', $theme->id) }}" class="btn btn-white btn-sm font-weight-bold px-3 shadow mr-2 rounded-pill">
                                                                  <i class="fas fa-cog text-info"></i>
                                                               </a>
-                                                              <form action="{{ route('admin.themes.activate', $theme->id) }}" method="POST">
-                                                                  @csrf
-                                                                  <button type="submit" class="btn btn-primary btn-sm font-weight-bold px-4 shadow rounded-pill smallest uppercase letter-spacing-1">
-                                                                     Activate
-                                                                  </button>
-                                                              </form>
+                                                            <form action="{{ route('admin.themes.activate', $theme->id) }}" method="POST">
+                                                                @csrf
+                                                                <button type="submit" class="btn btn-primary btn-sm font-weight-bold px-4 shadow rounded-pill smallest">
+                                                                   Activate
+                                                                </button>
+                                                            </form>
                                                          </div>
                                                      </div>
                                                      <div class="card-body p-4 bg-white border-top">
@@ -295,8 +295,6 @@
         transition: all 0.3s ease;
     }
     .card:hover .theme-overlay { opacity: 1; }
-    
-    .badge-light-soft { background: rgba(0,0,0,0.05); }
 </style>
 @endsection
 

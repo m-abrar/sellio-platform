@@ -10,7 +10,7 @@
                     <i class="fas fa-layer-group mr-2 text-primary"></i> 
                     {{ $type->exists ? 'Modify Listing Type' : 'New Listing Type' }}
                 </h1>
-                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">
+                <p class="text-muted mt-2 small uppercase letter-spacing-1 mb-0">
                     {{ $type->exists ? 'Update classification labels, icons, and module applicability for this group.' : 'Define a new taxonomy grouping to classify marketplace assets and content.' }}
                 </p>
             </div>
@@ -24,7 +24,7 @@
 @stop
 
 @section('content')
-<div class="container-fluid">
+<div class="container-fluid pb-5">
     @include('admin.alert')
 
     <form action="{{ $type->exists ? route('admin.types.update', $type->id) : route('admin.types.store') }}" 
@@ -37,15 +37,15 @@
         <div class="row">
             {{-- Primary Data Column --}}
             <div class="col-md-8">
-                <div class="card card-premium overflow-hidden">
-                    <div class="card-header border-0 bg-white py-3 px-4">
-                        <h3 class="card-title font-weight-bold text-dark text-uppercase small" style="letter-spacing: 1px;">Basic Configuration</h3>
+                <div class="card border-0 shadow-premium rounded-xl overflow-hidden mb-4">
+                    <div class="card-header border-0 bg-white py-4 px-4">
+                        <h3 class="card-title-main">Basic Configuration</h3>
                     </div>
-                    <div class="card-body p-4">
+                    <div class="card-body p-4 pt-0">
                         <div class="form-group mb-4">
-                            <label for="title" class="font-weight-600"><i class="fas fa-tag mr-1 text-primary"></i> Type Name <span class="text-danger">*</span></label>
+                            <label for="title" class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Type Name <span class="text-danger">*</span></label>
                             <input type="text" name="title" id="title" 
-                                   class="form-control form-control-lg @error('title') is-invalid @enderror" 
+                                   class="form-control form-control-hero" 
                                    placeholder="e.g. Residential, Workshop, Full-Time"
                                    value="{{ old('title', $type?->title ?? '') }}" required list="type-title-suggestions">
                             <datalist id="type-title-suggestions">
@@ -53,37 +53,32 @@
                                     <option value="{{ $title }}">
                                 @endforeach
                             </datalist>
-                            @error('title') <span class="invalid-feedback">{{ $message }}</span> @enderror
+                            @error('title') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
                         </div>
 
                         <div class="row">
                             {{-- Monospace Slug --}}
                             <div class="col-md-6 mb-4">
-                                <label for="slug" class="font-weight-600 text-muted small">URL Identifier (Slug)</label>
-                                <div class="input-group shadow-xs">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text bg-light border-right-0"><i class="fas fa-link fa-xs text-muted"></i></span>
-                                    </div>
-                                    <input type="text" name="slug" id="slug" 
-                                           class="form-control form-control-monospace @error('slug') is-invalid @enderror"
-                                           placeholder="automatic-slug-generation"
-                                           value="{{ old('slug', $type?->slug ?? '') }}">
-                                </div>
+                                <label for="slug" class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">URL Identifier (Slug)</label>
+                                <input type="text" name="slug" id="slug" 
+                                       class="form-control form-control-premium text-monospace small"
+                                       placeholder="automatic-slug-generation"
+                                       value="{{ old('slug', $type?->slug ?? '') }}">
                                 @error('slug') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
                             </div>
 
                             {{-- Icon Picker Field --}}
                             <div class="col-md-6 mb-4">
-                                <label for="icon" class="font-weight-600 text-muted small">Visual Icon (FontAwesome)</label>
-                                <div class="input-group shadow-xs">
+                                <label for="icon" class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Visual Icon (FontAwesome)</label>
+                                <div class="input-group input-group-premium">
                                     <div class="input-group-prepend">
-                                        <span class="input-group-text bg-light border-right-0" id="icon-preview-addon">
+                                        <span class="input-group-text bg-light border-right-0" id="icon-preview-addon" style="border-radius: 12px 0 0 12px;">
                                             <i class="{{ old('icon', $type?->icon ?? 'fas fa-icons') }} text-primary"></i>
                                         </span>
                                     </div>
                                     <input type="text" name="icon" id="icon" 
-                                           class="form-control form-control-monospace @error('icon') is-invalid @enderror"
-                                           placeholder="fas fa-tag"
+                                           class="form-control form-control-premium text-monospace"
+                                           placeholder="fas fa-tag" style="border-radius: 0 12px 12px 0;"
                                            value="{{ old('icon', $type?->icon ?? '') }}">
                                 </div>
                                 @error('icon') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
@@ -91,43 +86,31 @@
                         </div>
 
                         <div class="form-group mb-0">
-                            <label for="description" class="font-weight-600">Internal Description</label>
+                            <label for="description" class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Internal Description</label>
                             <textarea name="description" id="description" rows="4" 
-                                      class="form-control @error('description') is-invalid @enderror" 
+                                      class="form-control" style="border-radius: 16px; border: 1px solid var(--border-light);"
                                       placeholder="Briefly describe the purpose of this type grouping...">{{ old('description', $type?->description ?? '') }}</textarea>
-                            @error('description') <span class="invalid-feedback">{{ $message }}</span> @enderror
+                            @error('description') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
                         </div>
                     </div>
                 </div>
 
                 {{-- Interactive Module Grid --}}
-                <div class="card card-premium overflow-hidden mt-4">
-                    <div class="card-header border-0 bg-white py-3 px-4">
-                        <h3 class="card-title font-weight-600 text-muted small text-uppercase" style="letter-spacing: 1px;">Feature Applicability</h3>
+                <div class="card border-0 shadow-premium rounded-xl overflow-hidden mb-4">
+                    <div class="card-header border-0 bg-white py-4 px-4">
+                        <h3 class="card-title-main">Feature Applicability</h3>
                     </div>
-                    <div class="card-body p-4">
+                    <div class="card-body p-4 pt-0">
                         <div class="row">
-                            @php 
-                                $modules = [
-                                    'is_property'   => ['icon' => 'fas fa-home',           'label' => 'Real Estate'],
-                                    'is_event'      => ['icon' => 'fas fa-calendar-alt',   'label' => 'Events'],
-                                    'is_job'        => ['icon' => 'fas fa-briefcase',      'label' => 'Job Board'],
-                                    'is_auto'       => ['icon' => 'fas fa-car',            'label' => 'Automotive'],
-                                    'is_service'    => ['icon' => 'fas fa-tools',          'label' => 'Professional Services'],
-                                    'is_classified' => ['icon' => 'fas fa-th-large',       'label' => 'Marketplace'],
-                                    'is_product'    => ['icon' => 'fas fa-shopping-bag',   'label' => 'Product'],
-                                    'is_blog'       => ['icon' => 'fas fa-newspaper',      'label' => 'Blog'],
-                                ];
-                            @endphp
                             @include('admin._partials._modules-checkboxes', ['model' => $type])
                         </div>
                     </div>
                 </div>
 
                 {{-- Gallery Partial --}}
-                <div class="card card-premium overflow-hidden mt-4">
-                    <div class="card-header border-0 bg-white py-3 px-4">
-                        <h3 class="card-title font-weight-600 text-muted small text-uppercase" style="letter-spacing: 1px;">Gallery Collection</h3>
+                <div class="card border-0 shadow-premium rounded-xl overflow-hidden mb-4">
+                    <div class="card-header border-0 bg-white py-4 px-4">
+                        <h3 class="card-title-main">Gallery Collection</h3>
                     </div>
                     <div class="card-body p-0">
                         @include('admin._partials._image-uploader', [
@@ -142,7 +125,7 @@
                 </div>
             </div>
 
-            {{-- High Contrast Sidebar --}}
+            {{-- Sidebar --}}
             <div class="col-md-4">
                 @include('admin._partials._form-actions', [
                     'model' => $type,
@@ -151,9 +134,9 @@
                 ])
 
                 {{-- Featured Image Partial --}}
-                <div class="card card-premium mb-4 overflow-hidden">
-                    <div class="card-header bg-white border-0 py-3 px-4">
-                        <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
+                <div class="card border-0 shadow-premium mb-4 rounded-xl overflow-hidden mt-4">
+                    <div class="card-header border-0 bg-white py-4 px-4">
+                        <h3 class="card-title-side">
                             <i class="fas fa-camera mr-2 text-primary opacity-50"></i> Visual Identity
                         </h3>
                     </div>
@@ -203,15 +186,11 @@
 </script>
 @endpush
 
-@include('admin._partials._toggle-card-css')
-
 @if($type->exists)
     <form id="delete-form" action="{{ route('admin.types.destroy', $type->id) }}" method="POST" class="d-none">
         @csrf @method('DELETE')
     </form>
     
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         function triggerDelete() {
             Swal.fire({
@@ -219,9 +198,14 @@
                 text: "Permanently delete this type?",
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Yes, delete it!'
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#64748b',
+                confirmButtonText: 'Yes, delete it!',
+                customClass: {
+                    popup: 'rounded-xl',
+                    confirmButton: 'rounded-pill px-4',
+                    cancelButton: 'rounded-pill px-4'
+                }
             }).then((result) => {
                 if (result.isConfirmed) {
                     document.getElementById('delete-form').submit();
@@ -230,5 +214,7 @@
         }
     </script>
 @endif
+
+@include('admin._partials._toggle-card-css')
 
 
