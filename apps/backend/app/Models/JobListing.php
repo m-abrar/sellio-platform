@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use App\Models\User;
+use App\Traits\Models\HasStatusModeration;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\HasMedia;
@@ -38,6 +39,7 @@ class JobListing extends Model implements HasMedia
     use InteractsWithMedia;
     use LogsActivity;
     use HasImageAccess;
+    use HasStatusModeration;
 
     public const PRIMARY_MEDIA = 'company_logo';
     public const GALLERY_MEDIA = 'office_photos';

@@ -21,12 +21,14 @@ class ActivityLogSeeder extends Seeder
         $this->command->info('🚀 Starting High-Volume Activity Log Seeder...');
 
         $modelClasses = [
-            'Property'   => Property::class,
-            'Event'      => Event::class,
-            'Auto'       => Auto::class,
-            'Service'    => Service::class,
-            'Joblisting' => Joblisting::class,
-            'Classified' => Classified::class,
+            'Property'   => \App\Models\Property::class,
+            'Event'      => \App\Models\Event::class,
+            'Auto'       => \App\Models\Auto::class,
+            'Service'    => \App\Models\Service::class,
+            'JobListing' => \App\Models\JobListing::class,
+            'Classified' => \App\Models\Classified::class,
+            'Product'    => \App\Models\Product::class,
+            'Blog'       => \App\Models\Blog::class,
         ];
 
         $userIds = User::pluck('id')->toArray();

@@ -36,21 +36,25 @@ class PlanSeeder extends Seeder
         $this->command->info('💲 Starting Plan Module Seeding...');
 
         // 1. Starter Plan (Low-Cost, basic feature access)
-        // Designed for new or casual users needing fundamental features and low listing limits.
         $planStarter = Plan::firstOrCreate(['title' => 'Starter Plan'], [
+            'slug' => 'starter-plan',
             'description' => 'Perfect for a beginner.',
-            'label_text' => 'Best Value', // Highlighted on the pricing page as the most affordable entry point.
+            'label_text' => 'Best Value',
             'price' => 9.99,
+            'color' => '#1e4d4e',
             'billing_period' => 'monthly',
             
-            'max_listings' => 3,    // Limit of 3 active listings at any time.
-            'max_addons' => 5,      // Limited to 5 available feature addons.
-            'priority_support' => false, // Standard support channel access.
+            'max_listings' => 3,
+            'max_addons' => 5,
+            'priority_support' => false,
 
-            'max_featured_listings' => 1,   // Can feature only 1 listing on the homepage or top results.
-            'custom_branding' => false,     // Platform branding remains on the user's content.
-            'analytics_access' => 'basic',  // Provides basic, summarized analytics data.
-            'listing_duration' => 30,   // Listings renew or expire monthly (30 days).
+            'max_featured_listings' => 1,
+            'custom_branding' => false,
+            'analytics_access' => 'basic',
+            'listing_duration' => 30,
+            'status' => 'active',
+            'admin_note' => 'Default system entry plan.',
+            'is_premium' => false,
             'is_active' => true,
         ]);
 
@@ -63,21 +67,25 @@ class PlanSeeder extends Seeder
         }
 
         // 2. Pro Plan (The Standard, essential premium features)
-        // Targeting professional users requiring higher limits and premium access.
         $planPro = Plan::firstOrCreate(['title' => 'Pro Plan'], [
+            'slug' => 'pro-plan',
             'description' => 'Full access for a professional portfolio.',
-            'label_text' => 'Popular', // Recommended plan, visually emphasized to drive conversions.
+            'label_text' => 'Popular',
             'price' => 49.99,
+            'color' => '#3949ab',
             'billing_period' => 'monthly',
             
-            'max_listings' => 10,       // Increased listing capacity.
-            'max_addons' => 50,      // Significant increase in available addons.
-            'priority_support' => true, // Access to priority, faster support channels.
+            'max_listings' => 10,
+            'max_addons' => 50,
+            'priority_support' => true,
 
-            'max_featured_listings' => 3,   // Can feature up to 3 listings concurrently.
-            'custom_branding' => true,      // Allows the removal of platform branding (a key premium feature).
-            'analytics_access' => 'advanced',   // Access to detailed, real-time analytics reports.
-            'listing_duration' => 90,       // Listings renew or expire quarterly (90 days).
+            'max_featured_listings' => 3,
+            'custom_branding' => true,
+            'analytics_access' => 'advanced',
+            'listing_duration' => 90,
+            'status' => 'active',
+            'admin_note' => 'Most popular mid-tier plan.',
+            'is_premium' => true,
             'is_active' => true,
         ]);
 
@@ -90,21 +98,25 @@ class PlanSeeder extends Seeder
         }
 
         // 3. Enterprise Plan (Unlimited, maximum access)
-        // Dedicated tier for large agencies or organizations needing maximum scale.
         $planEnterprise = Plan::firstOrCreate(['title' => 'Enterprise Plan'], [
+            'slug' => 'enterprise-plan',
             'description' => 'For large agencies with unlimited listings.',
-            'label_text' => null, // No specific label needed; its feature set speaks for itself.
+            'label_text' => 'Elite',
             'price' => 199.99,
-            'billing_period' => 'annually', // Annual commitment for better long-term predictability.
+            'color' => '#ff7043',
+            'billing_period' => 'annually',
             
-            'max_listings' => 999,      // Effectively unlimited listings.
-            'max_addons' => 999,                // Effectively unlimited addons.
+            'max_listings' => 999,
+            'max_addons' => 999,
             'priority_support' => true,
 
-            'max_featured_listings' => 10,  // Maximum number of featured listings allowed.
+            'max_featured_listings' => 10,
             'custom_branding' => true,
             'analytics_access' => 'advanced',
-            'listing_duration' => 365,      // Annual renewal period.
+            'listing_duration' => 365,
+            'status' => 'active',
+            'admin_note' => 'High-scale agency tier.',
+            'is_premium' => true,
             'is_active' => true,
         ]);
 

@@ -57,10 +57,12 @@ class SubscriptionSeeder extends Seeder
                     // Set the start date to be before the end date (1 to 6 months before expiry).
                     $expiredStartsAt = $expiredEndsAt->copy()->subMonths(mt_rand(1, 6));
 
-                    Subscription::factory()->create([
+                    Subscription::create([
                         'user_id' => $user->id,
                         'plan_id' => $expiredPlan->id,
                         'title' => 'default_expired_' . $i, // Use a unique title for history subs
+                        'status' => 'expired',
+                        'admin_note' => 'Historical record.',
                         'starts_at' => $expiredStartsAt,
                         'ends_at' => $expiredEndsAt, // Subscription is expired since ends_at < now()
                     ]);
@@ -89,9 +91,11 @@ class SubscriptionSeeder extends Seeder
 
                 // For testing cancellation and renewal warning logic,
                 // randomly set 30% of active subs to end within 1-2 weeks (future date).
+                $status = 'active';
                 if (mt_rand(1, 10) <= 3) {
                     // This simulates a subscription that has been canceled and is running until the end of the current period.
                     $endsAt = now()->addDays(mt_rand(7, 14)); 
+                    $status = 'canceled';
                 }
                 
                 // If endsAt is null (auto-renew), refine the start date to simulate the exact beginning of the current cycle.
@@ -104,10 +108,12 @@ class SubscriptionSeeder extends Seeder
                 }
 
 
-                Subscription::factory()->create([
+                Subscription::create([
                     'user_id' => $user->id,
                     'plan_id' => $plan->id,
                     'title' => 'default', // The standard title for the current active subscription
+                    'status' => $status,
+                    'admin_note' => 'Current active plan.',
                     'starts_at' => $startsAt,
                     'ends_at' => $endsAt, // Null means perpetual/auto-renewing
                 ]);

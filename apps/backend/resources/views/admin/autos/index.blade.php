@@ -96,13 +96,10 @@
 
                                 <td class="align-middle">
                                     <div class="mb-1">
-                                        @if ($auto->is_published && $auto->approved_at)
-                                            <span class="badge badge-success-light px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1">Active</span>
-                                        @elseif ($auto->is_published && !$auto->approved_at)
-                                            <span class="badge badge-warning-light px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1">Pending</span>
-                                        @else
-                                            <span class="badge badge-secondary-light px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1">Draft</span>
-                                        @endif
+                                        @php $status = $auto->getStatusMeta(); @endphp
+                                        <span class="badge badge-{{ $status['color'] }}-light px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1">
+                                            <i class="fas fa-{{ $status['icon'] }} mr-1"></i> {{ $status['label'] }}
+                                        </span>
                                     </div>
                                     <div class="smallest text-muted font-weight-bold uppercase letter-spacing-1">
                                         <i class="fas fa-tachometer-alt mr-1 text-primary opacity-50"></i>{{ $auto->mileage_value ?? 0 }} {{ $auto->mileage_units ?? 'km' }}

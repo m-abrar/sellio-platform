@@ -119,8 +119,8 @@ class MessageSeeder extends Seeder
                 continue;
             }
 
-            $user = User::find($data['user_id'])->title ?? 'Buyer';
-            $partner = User::find($data['partner_id'])->title ?? 'Partner';
+            $user = User::find($data['user_id'])->name ?? 'Buyer';
+            $partner = User::find($data['partner_id'])->name ?? 'Partner';
             $this->command->line("  * Seeding: '{$data['subject']}' ({$user} <-> {$partner})");
 
             // Cleanup: Delete existing conversations between these specific users to ensure uniqueness and clean state
@@ -137,6 +137,8 @@ class MessageSeeder extends Seeder
                 'user_id' => $data['user_id'],
                 'partner_id' => $data['partner_id'],
                 'subject' => $data['subject'], 
+                'status' => 'active',
+                'admin_note' => 'System generated demo conversation.',
                 'created_at' => $data['start_time'],
                 'updated_at' => $data['last_update'],
             ]);

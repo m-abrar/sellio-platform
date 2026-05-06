@@ -52,10 +52,14 @@ class FavoriteSeeder extends Seeder
 
         // Collect all models that can be favorited using their fully qualified class names.
         $favoritableModels = [
-            'App\Models\Property' => Property::all(),
-            'App\Models\JobListing' => JobListing::all(),
-            'App\Models\Service' => Service::all(),
-            'App\Models\Classified' => Classified::all(),
+            'App\Models\Property' => \App\Models\Property::all(),
+            'App\Models\JobListing' => \App\Models\JobListing::all(),
+            'App\Models\Service' => \App\Models\Service::all(),
+            'App\Models\Classified' => \App\Models\Classified::all(),
+            'App\Models\Auto' => \App\Models\Auto::all(),
+            'App\Models\Event' => \App\Models\Event::all(),
+            'App\Models\Product' => \App\Models\Product::all(),
+            'App\Models\Blog' => \App\Models\Blog::all(),
         ];
 
         // Store all favorite records to insert in bulk

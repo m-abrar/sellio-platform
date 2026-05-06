@@ -49,9 +49,9 @@ class NotificationSeeder extends Seeder
                 $this->command->error('❌ Skipping Notification Seeder: No users found in the database.');
                 return;
             }
-            $this->command->line("⚠️ Admin user not found. Defaulting to random user: {$admin->title} (ID: {$admin->id})");
+            $this->command->line("⚠️ Admin user not found. Defaulting to random user: {$admin->name} (ID: {$admin->id})");
         } else {
-            $this->command->info("  👤 Target recipient: {$admin->title} (Admin)");
+            $this->command->info("  👤 Target recipient: {$admin->name} (Admin)");
         }
 
         $this->command->line("\n--- 🚨 Seeding Unread Notifications ---");
@@ -88,6 +88,6 @@ class NotificationSeeder extends Seeder
 
         // --- 3. Output Confirmation ---
         $this->command->info("\n--- 🏁 Notification Seeding Complete ---");
-        $this->command->info("🎉 Successfully seeded {$count} unread notifications for user: {$admin->title}.");
+        $this->command->info("🎉 Successfully seeded {$count} unread notifications for user: {$admin->name}.");
     }
 }

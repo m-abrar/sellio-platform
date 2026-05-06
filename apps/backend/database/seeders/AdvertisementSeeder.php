@@ -40,19 +40,16 @@ class AdvertisementSeeder extends Seeder
             // --- Entry 1: Focused on New York City, USA (Active, Header Placement) ---
             [
                 'title' => 'Exclusive Luxury Lofts in Manhattan',
-                // Mock path for the advertisement banner image
                 'image_path' => '/images/ads/manhattan_lofts.png',
                 'link' => 'https://example.com/manhattan-lofts',
-                'status' => 1, // 1 = Active / Published
-                // Ad orientation/placement spots (stored as JSON array)
+                'status' => 'active',
+                'admin_note' => 'High-conversion header banner.',
                 'orientations' => json_encode(['header']), 
-                // Geographical targeting set via location name, not radius coordinates
                 'latitude' => null, 
                 'longitude' => null,
                 'radius' => null,
-                // Targeting specific cities and zip codes
                 'cities' => json_encode(['New York']),
-                'zipcodes' => json_encode(['10001', '10010']), // Manhattan zip codes
+                'zipcodes' => json_encode(['10001', '10010']), 
                 'regions' => json_encode(['New York', 'New Jersey']),
                 'created_at' => Carbon::now()->subDays(7),
                 'updated_at' => Carbon::now()->subDays(2),
@@ -62,14 +59,14 @@ class AdvertisementSeeder extends Seeder
                 'title' => 'Investment Opportunity: Canary Wharf Development',
                 'image_path' => '/images/ads/canary_wharf_invest.webp',
                 'link' => 'https://example.co.uk/wharf',
-                'status' => 0, // 0 = Inactive / Disabled
+                'status' => 'inactive',
+                'admin_note' => 'Paused for budget review.',
                 'orientations' => json_encode(['sidebar', 'content']),
-                // Geographical targeting set by specific latitude and longitude
-                'latitude' => 51.5055, // Example London Lat
-                'longitude' => -0.0272, // Example London Long
-                'radius' => 20, // 20km radius from the coordinates
+                'latitude' => 51.5055, 
+                'longitude' => -0.0272, 
+                'radius' => 20, 
                 'cities' => json_encode(['London']),
-                'zipcodes' => json_encode(['E14']), // Canary Wharf postcode district
+                'zipcodes' => json_encode(['E14']), 
                 'regions' => json_encode(['Greater London']),
                 'created_at' => Carbon::now()->subWeeks(3),
                 'updated_at' => Carbon::now()->subDays(5),
@@ -77,18 +74,17 @@ class AdvertisementSeeder extends Seeder
             // --- Entry 3: Global Financial Ad, targeting major cities (Active, Footer Placement) ---
             [
                 'title' => 'Global Low-Rate Financing - Apply Now!',
-                'image_path' => null, // Represents a text-only ad slot
+                'image_path' => null, 
                 'link' => 'https://example.com/financing',
-                'status' => 1, // Active
+                'status' => 'active',
+                'admin_note' => 'Global fallback text ad.',
                 'orientations' => json_encode(['footer']),
-                // No radius or precise geo-targeting specified
                 'latitude' => null,
                 'longitude' => null,
                 'radius' => null,
-                // Targeting a broad list of international cities
                 'cities' => json_encode(['Paris', 'Berlin', 'Tokyo']),
                 'zipcodes' => json_encode([]), 
-                'regions' => json_encode([]), // Wide regional reach
+                'regions' => json_encode([]), 
                 'created_at' => Carbon::now()->subDays(1),
                 'updated_at' => Carbon::now(),
             ],

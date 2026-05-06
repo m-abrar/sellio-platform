@@ -106,15 +106,10 @@
                                 </td>
 
                                 <td class="text-center align-middle">
-                                    @if($advertisement->status)
-                                        <span class="badge badge-success-light px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 shadow-xs min-w-100">
-                                            <i class="fas fa-play-circle mr-1"></i> Running
-                                        </span>
-                                    @else
-                                        <span class="badge badge-secondary-soft text-secondary px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 shadow-xs min-w-100">
-                                            <i class="fas fa-pause-circle mr-1"></i> Paused
-                                        </span>
-                                    @endif
+                                    @php $status = $advertisement->getStatusMeta(); @endphp
+                                    <span class="badge badge-{{ $status['color'] }}-light px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 shadow-xs min-w-100">
+                                        <i class="fas fa-{{ $status['icon'] }} mr-1"></i> {{ $status['label'] }}
+                                    </span>
                                 </td>
 
                                 <td class="text-right align-middle px-4">

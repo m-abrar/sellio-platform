@@ -19,94 +19,68 @@ class TagSeeder extends Seeder
         
         $this->command->newLine();
 
+        // Define tags with additional UI metadata
         $tagsData = [
             // --- UNIVERSAL Tags ---
             [
-                'title' => 'New Listing',
+                'title' => 'New Listing', 'color' => '#17a2b8', 'sort_order' => 10,
                 'is_property' => true, 'is_event' => true, 'is_job' => true, 
                 'is_auto' => true, 'is_service' => true, 'is_classified' => true,
                 'is_product' => true, 'is_blog' => true,
             ],
             [
-                'title' => 'Urgent',
+                'title' => 'Urgent', 'color' => '#dc3545', 'sort_order' => 5,
                 'is_job' => true, 'is_auto' => true, 'is_product' => true, 'is_blog' => true,
-                'is_property' => false, 'is_event' => false, 'is_service' => false, 'is_classified' => false,
             ],
-
-            // --- BLOG Specific Tags (New) ---
             [
-                'title' => 'Trending',
+                'title' => 'Trending', 'color' => '#ffc107', 'sort_order' => 15,
                 'is_blog' => true, 'is_product' => true, 'is_classified' => true,
             ],
             [
-                'title' => 'Expert Advice',
+                'title' => 'Expert Advice', 'color' => '#28a745', 'sort_order' => 20,
                 'is_blog' => true, 'is_service' => true,
             ],
             [
-                'title' => 'Long Read',
-                'is_blog' => true,
-            ],
-            [
-                'title' => 'Case Study',
-                'is_blog' => true, 'is_job' => true, 'is_service' => true,
-            ],
-            [
-                'title' => 'Interview',
-                'is_blog' => true, 'is_event' => true,
-            ],
-
-            // --- PRODUCT / SHOP Tags ---
-            [
-                'title' => 'Best Seller',
-                'is_product' => true,
-            ],
-            [
-                'title' => 'On Sale',
-                'is_product' => true, 'is_auto' => true, 'is_classified' => true,
-            ],
-            [
-                'title' => 'Free Shipping',
-                'is_product' => true, 'is_classified' => true,
-            ],
-
-            // --- PROPERTY Tags ---
-            [
-                'title' => 'Luxury',
+                'title' => 'Luxury', 'color' => '#6f42c1', 'sort_order' => 25,
                 'is_property' => true, 'is_auto' => true, 'is_product' => true,
             ],
             [
-                'title' => 'Pet-Friendly',
-                'is_property' => true, 'is_event' => true, 'is_product' => true,
+                'title' => 'Best Seller', 'color' => '#fd7e14', 'sort_order' => 30,
+                'is_product' => true,
+            ],
+            [
+                'title' => 'On Sale', 'color' => '#e83e8c', 'sort_order' => 35,
+                'is_product' => true, 'is_auto' => true, 'is_classified' => true,
             ],
         ];
 
-        // Prepare data for insertion
-        $insertData = collect($tagsData)->map(function ($tag) {
-            return [
-                'title'         => $tag['title'],
-                'slug'          => Str::slug($tag['title']),
-                'is_published'  => true,
-                'is_property'   => $tag['is_property'] ?? false,
-                'is_event'      => $tag['is_event'] ?? false,
-                'is_job'        => $tag['is_job'] ?? false,
-                'is_auto'       => $tag['is_auto'] ?? false,
-                'is_service'    => $tag['is_service'] ?? false,
-                'is_classified' => $tag['is_classified'] ?? false,
-                'is_product'    => $tag['is_product'] ?? false,
-                'is_blog'       => $tag['is_blog'] ?? false,
-                'created_at'    => now(),
-                'updated_at'    => now(),
-            ];
-        })
-        ->unique('slug')
-        ->all();
+        $count = 0;
+        foreach ($tagsData as $data) {
+            Tag::updateOrCreate(
+                ['slug' => Str::slug($data['title']) . '-' . Str::random(5)],
+                [
+                    'title'         => $data['title'],
+                    'color'         => $data['color'] ?? '#6c757d',
+                    'sort_order'    => $data['sort_order'] ?? 0,
+                    'status'        => 'active',
+                    'admin_note'    => 'System default tag.',
+                    'is_premium'    => false,
+                    'is_published'  => true,
+                    'is_property'   => $data['is_property'] ?? false,
+                    'is_event'      => $data['is_event'] ?? false,
+                    'is_job'        => $data['is_job'] ?? false,
+                    'is_auto'       => $data['is_auto'] ?? false,
+                    'is_service'    => $data['is_service'] ?? false,
+                    'is_classified' => $data['is_classified'] ?? false,
+                    'is_product'    => $data['is_product'] ?? false,
+                    'is_blog'       => $data['is_blog'] ?? false,
+                ]
+            );
+            $count++;
+        }
 
-        $this->command->info('Inserting ' . count($insertData) . ' tags into the database...');
-
-        Tag::insert($insertData);
-        
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
-        $this->command->info('✅ Tag seeding complete! ' . count($insertData) . ' tags created.');
+        $this->command->info("✅ Tag seeding complete! {$count} tags created/updated.");
     }
 }

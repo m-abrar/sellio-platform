@@ -35,33 +35,31 @@ class MenuItemSeeder extends Seeder
         $baseMenuItems = [
             // --- Items for 'Main Header Menu' (menu_id: 1 in SQL dump) ---
             // Corresponds to location_key: main_header
-            ['menu_id' => $menus['main_header'], 'title' => 'Properties', 'url' => '/properties', 'parent_id' => null, 'order' => 1],
-            ['menu_id' => $menus['main_header'], 'title' => 'Autos', 'url' => '/autos', 'parent_id' => null, 'order' => 2],
-            ['menu_id' => $menus['main_header'], 'title' => 'Events', 'url' => '/events', 'parent_id' => null, 'order' => 3],
-            ['menu_id' => $menus['main_header'], 'title' => 'Jobs', 'url' => '/jobs', 'parent_id' => null, 'order' => 4],
-            ['menu_id' => $menus['main_header'], 'title' => 'Services', 'url' => '/services', 'parent_id' => null, 'order' => 5],
-            ['menu_id' => $menus['main_header'], 'title' => 'Classifieds', 'url' => '/classifieds', 'parent_id' => null, 'order' => 6],
-            ['menu_id' => $menus['main_header'], 'title' => 'Shop', 'url' => '/products', 'parent_id' => null, 'order' => 7],
+            ['menu_id' => $menus['main_header'], 'title' => 'Properties', 'url' => '/properties', 'parent_id' => null, 'order' => 1, 'status' => 'active', 'admin_note' => 'Main navigation link.'],
+            ['menu_id' => $menus['main_header'], 'title' => 'Autos', 'url' => '/autos', 'parent_id' => null, 'order' => 2, 'status' => 'active', 'admin_note' => 'Main navigation link.'],
+            ['menu_id' => $menus['main_header'], 'title' => 'Events', 'url' => '/events', 'parent_id' => null, 'order' => 3, 'status' => 'active', 'admin_note' => 'Main navigation link.'],
+            ['menu_id' => $menus['main_header'], 'title' => 'Jobs', 'url' => '/jobs', 'parent_id' => null, 'order' => 4, 'status' => 'active', 'admin_note' => 'Main navigation link.'],
+            ['menu_id' => $menus['main_header'], 'title' => 'Services', 'url' => '/services', 'parent_id' => null, 'order' => 5, 'status' => 'active', 'admin_note' => 'Main navigation link.'],
+            ['menu_id' => $menus['main_header'], 'title' => 'Classifieds', 'url' => '/classifieds', 'parent_id' => null, 'order' => 6, 'status' => 'active', 'admin_note' => 'Main navigation link.'],
+            ['menu_id' => $menus['main_header'], 'title' => 'Shop', 'url' => '/products', 'parent_id' => null, 'order' => 7, 'status' => 'active', 'admin_note' => 'Main navigation link.'],
             
             // --- Items for 'Company' Menu (menu_id: 3 in SQL dump) ---
             // Corresponds to location_key: company_footer
-            ['menu_id' => $menus['company_footer'], 'title' => 'About', 'url' => '#', 'parent_id' => null, 'order' => 1],
-            ['menu_id' => $menus['company_footer'], 'title' => 'Careers', 'url' => '#', 'parent_id' => null, 'order' => 2],
-            ['menu_id' => $menus['company_footer'], 'title' => 'Press', 'url' => '#', 'parent_id' => null, 'order' => 3],
+            ['menu_id' => $menus['company_footer'], 'title' => 'About', 'url' => '#', 'parent_id' => null, 'order' => 1, 'status' => 'active', 'admin_note' => 'Footer link.'],
+            ['menu_id' => $menus['company_footer'], 'title' => 'Careers', 'url' => '#', 'parent_id' => null, 'order' => 2, 'status' => 'active', 'admin_note' => 'Footer link.'],
+            ['menu_id' => $menus['company_footer'], 'title' => 'Press', 'url' => '#', 'parent_id' => null, 'order' => 3, 'status' => 'active', 'admin_note' => 'Footer link.'],
             
             // --- Items for 'Support' Menu (menu_id: 4 in SQL dump) ---
             // Corresponds to location_key: support_footer
-            // Note: Your SQL dump shows these items for menu_id=4, which corresponds to 'support_footer' from the MenuSeeder data.
-            ['menu_id' => $menus['support_footer'], 'title' => 'Documentation', 'url' => '#', 'parent_id' => null, 'order' => 9999],
-            ['menu_id' => $menus['support_footer'], 'title' => 'System Status', 'url' => '#', 'parent_id' => null, 'order' => 9999],
-            ['menu_id' => $menus['support_footer'], 'title' => 'Pricing', 'url' => '#', 'parent_id' => null, 'order' => 9999],
+            ['menu_id' => $menus['support_footer'], 'title' => 'Documentation', 'url' => '#', 'parent_id' => null, 'order' => 1, 'status' => 'active', 'admin_note' => 'Footer link.'],
+            ['menu_id' => $menus['support_footer'], 'title' => 'System Status', 'url' => '#', 'parent_id' => null, 'order' => 2, 'status' => 'active', 'admin_note' => 'Footer link.'],
+            ['menu_id' => $menus['support_footer'], 'title' => 'Pricing', 'url' => '#', 'parent_id' => null, 'order' => 3, 'status' => 'active', 'admin_note' => 'Footer link.'],
 
             // --- Items for 'Resources' Menu (menu_id: 5 in SQL dump) ---
             // Corresponds to location_key: resources_footer
-            // Note: Your SQL dump shows these items for menu_id=5, which corresponds to 'resources_footer' from the MenuSeeder data.
-            ['menu_id' => $menus['resources_footer'], 'title' => 'Help Center', 'url' => '#', 'parent_id' => null, 'order' => 9999],
-            ['menu_id' => $menus['resources_footer'], 'title' => 'Contact Support', 'url' => '#', 'parent_id' => null, 'order' => 9999],
-            ['menu_id' => $menus['resources_footer'], 'title' => 'Terms of Service', 'url' => '#', 'parent_id' => null, 'order' => 9999],
+            ['menu_id' => $menus['resources_footer'], 'title' => 'Help Center', 'url' => '#', 'parent_id' => null, 'order' => 1, 'status' => 'active', 'admin_note' => 'Footer link.'],
+            ['menu_id' => $menus['resources_footer'], 'title' => 'Contact Support', 'url' => '#', 'parent_id' => null, 'order' => 2, 'status' => 'active', 'admin_note' => 'Footer link.'],
+            ['menu_id' => $menus['resources_footer'], 'title' => 'Terms of Service', 'url' => '#', 'parent_id' => null, 'order' => 3, 'status' => 'active', 'admin_note' => 'Footer link.'],
         ];
 
         // 3. Prepare data for insertion (adding timestamps)

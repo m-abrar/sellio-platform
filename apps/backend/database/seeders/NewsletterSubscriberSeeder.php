@@ -49,6 +49,8 @@ class NewsletterSubscriberSeeder extends Seeder
                 ],
                 [
                     'is_confirmed' => $faker->boolean(80), // 80% confirmed status for realism
+                    'status' => 'active',
+                    'admin_note' => 'Marketplace demo subscriber.',
                     'source' => $faker->randomElement($sources),
                     'created_at' => $faker->dateTimeBetween('-1 year', 'now'),
                     'updated_at' => now(),

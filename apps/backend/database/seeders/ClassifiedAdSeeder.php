@@ -35,7 +35,8 @@ class ClassifiedAdSeeder extends Seeder
 
         // --- 1. Fetch Foreign Keys ---
         $userIds = User::where('is_partner', true)->pluck('id')->toArray();
-        $locationIds = DB::table('locations')->where('is_classified', true)->pluck('id')->toArray();
+        // Pick only Level 2 locations (Cities) to ensure listing specificity
+        $locationIds = DB::table('locations')->where('level', 2)->pluck('id')->toArray();
         $categoryIds = DB::table('categories')->where('is_classified', true)->pluck('id')->toArray();
         $typeIds = DB::table('types')->where('is_classified', true)->pluck('id')->toArray();
         $brandIds = DB::table('brands')->where('is_classified', true)->pluck('id')->toArray();
@@ -45,10 +46,6 @@ class ClassifiedAdSeeder extends Seeder
         // --- 2. Safety Check ---
         if (empty($userIds) || empty($locationIds) || empty($categoryIds) || $maxUsers < 2) {
             $this->command->line('⚠️ Skipping ClassifiedAdSeeder: Missing base data or not enough users.');
-            // Display counts for debugging/info purposes
-            $this->command->info( '   > Locations: '. count($locationIds) .', Categories: '. count($categoryIds) .', Users: '. count($userIds) );
-            // 🎉 Success Footer (Still print a footer even on skip)
-            $this->command->line('✅ Classified Ad Seeding finished (Skipped).');
             return;
         }
 
@@ -107,7 +104,7 @@ class ClassifiedAdSeeder extends Seeder
                 
                 // Core Data & Pricing
                 'title' => Str::title($title),
-                'slug' => Str::slug($title . '-ad-' . $index),
+                'slug' => Str::slug($title . '-ad-' . $index) . '-' . Str::random(5),
                 'description' => $faker->text(300),
                 'base_price' => $basePrice,
                 'sale_price' => $salePrice,
@@ -133,6 +130,11 @@ class ClassifiedAdSeeder extends Seeder
                 'latitude' => $faker->latitude(30, 50),
                 'longitude' => $faker->longitude(-120, -70),
 
+                // Hardened Moderation & Status
+                'status'                => 'approved',
+                'admin_note'            => 'Automatically approved classified listing.',
+                'is_verified_seller'    => $faker->boolean(40),
+
                 // Status/Type Flags
                 'is_published' => true,
                 'is_featured' => $faker->boolean(5),
@@ -141,7 +143,7 @@ class ClassifiedAdSeeder extends Seeder
                 'is_for_sale' => true,
 
                 // Dates
-                'approved_at'       => $faker->boolean(80) ? now() : null,
+                'approved_at'       => now(),
                 'created_at' => $createdAt,
                 'updated_at' => $createdAt,
             ]);
@@ -213,14 +215,19 @@ class ClassifiedAdSeeder extends Seeder
             $inquirerIds = array_map(fn($key) => $availableInquirers[$key], $randomKeys);
             
             foreach ($inquirerIds as $inquirerId) {
+                $isGuest = $faker->boolean(40);
                 // Collect inquiry data for bulk insertion later
                 $inquiriesToInsert[] = [
                     'classified_id' => $classified->id,
-                    'user_id' => $inquirerId,
-                    'status' => $faker->randomElement($inquiryStatuses),
-                    'message' => $faker->paragraphs(1, true),
-                    'created_at' => $faker->dateTimeBetween($classified->created_at, 'now'),
-                    'updated_at' => now(), 
+                    'user_id'       => $isGuest ? null : $inquirerId,
+                    'guest_name'    => $isGuest ? $faker->name : null,
+                    'guest_email'   => $isGuest ? $faker->email : null,
+                    'guest_phone'   => $isGuest ? $faker->phoneNumber : null,
+                    'status'        => $faker->randomElement($inquiryStatuses),
+                    'message'       => $faker->paragraphs(1, true),
+                    'admin_note'    => $faker->boolean(30) ? 'High interest buyer.' : null,
+                    'created_at'    => $faker->dateTimeBetween($classified->created_at, 'now'),
+                    'updated_at'    => now(), 
                 ];
             }
         }

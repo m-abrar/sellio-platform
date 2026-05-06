@@ -94,13 +94,10 @@
 
                                 <td class="text-center align-middle">
                                     <div class="mb-1">
-                                        @if ($service->is_published && $service->approved_at)
-                                            <span class="badge badge-success-light px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1">Active</span>
-                                        @elseif ($service->is_published && !$service->approved_at)
-                                            <span class="badge badge-warning-light px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1">Pending</span>
-                                        @else
-                                            <span class="badge badge-secondary-light px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1">Draft</span>
-                                        @endif
+                                        @php $status = $service->getStatusMeta(); @endphp
+                                        <span class="badge badge-{{ $status['color'] }}-light px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1">
+                                            <i class="fas fa-{{ $status['icon'] }} mr-1"></i> {{ $status['label'] }}
+                                        </span>
                                     </div>
                                 </td>
 

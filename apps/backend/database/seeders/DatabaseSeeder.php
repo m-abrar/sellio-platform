@@ -37,6 +37,7 @@ class DatabaseSeeder extends Seeder
         $this->command->newLine();
 
         $this->call([
+            RolesAndPermissionsSeeder::class,
             UserSeeder::class,
             SettingSeeder::class,
             PageSeeder::class,
@@ -129,7 +130,6 @@ class DatabaseSeeder extends Seeder
             TagSeeder::class,
             FavoriteSeeder::class,
             RelationSeeder::class,
-            RolesAndPermissionsSeeder::class,
             MessageSeeder::class,
             NewsletterSubscriberSeeder::class,
             EmailTemplateSeeder::class,

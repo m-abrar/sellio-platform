@@ -21,6 +21,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use App\Traits\Models\HasStatusModeration;
 
 /**
  * App\Models\Property
@@ -75,7 +76,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  */
 class Property extends Model implements HasMedia
 {
-    use LogsActivity, HasAnalytics, HasFactory, InteractsWithMedia, HasImageAccess, SoftDeletes;
+    use LogsActivity, HasAnalytics, HasFactory, InteractsWithMedia, HasImageAccess, SoftDeletes, HasStatusModeration;
 
     /**
      * Eager load common relationships to prevent N+1 performance issues

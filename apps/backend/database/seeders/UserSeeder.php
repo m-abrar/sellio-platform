@@ -76,7 +76,7 @@ class UserSeeder extends Seeder
         $adminName = 'Admin User';
         $admin = User::create([
             'name' => $adminName,
-            'email' => 'super.admin@example.com',
+            'email' => 'admin@sellio-platform.test',
             'email_verified_at' => now(),
             // Securely hash a standard password for easy development access.
             'password' => Hash::make('admin123'),
@@ -85,6 +85,9 @@ class UserSeeder extends Seeder
 
             'username' => 'super_admin', // Fixed, non-generated username for easy recall
             'bio' => 'The site administrator. Responsible for managing users, content, and system settings.',
+            'status' => 'active',
+            'is_premium' => true,
+            'admin_note' => 'System root administrator.',
             'is_partner' => false,
             'is_verified' => true, // Admins are automatically verified
             'date_of_birth' => $faker->dateTimeBetween('-50 years', '-30 years')->format('Y-m-d'),
@@ -95,13 +98,13 @@ class UserSeeder extends Seeder
             'updated_at' => now(),
         ]);
         $users[] = $admin;
-        $this->command->info('  - Created Admin User: super.admin@example.com (admin123)');
+        $this->command->info('  - Created Admin User: admin@sellio-platform.test (admin123)');
 
         // 2. Create a Key Partner User for testing commission and marketplace features
         $partnerName = 'Partner One';
         $partner = User::create([
             'name' => $partnerName,
-            'email' => 'partner@example.com',
+            'email' => 'partner@sellio-platform.test',
             'email_verified_at' => now(),
             'password' => Hash::make('partner123'),
             'phone' => $faker->phoneNumber,
@@ -111,6 +114,9 @@ class UserSeeder extends Seeder
             // Partner users have an associated company name
             'company' => $faker->unique()->company() . ' Partner Co.',
             'bio' => 'A dedicated business partner on the platform.',
+            'status' => 'active',
+            'is_premium' => false,
+            'admin_note' => 'Verified marketplace partner.',
             'is_partner' => true, // Explicitly set as a partner
             'is_verified' => true,
             'date_of_birth' => $faker->dateTimeBetween('-45 years', '-25 years')->format('Y-m-d'),
@@ -121,13 +127,13 @@ class UserSeeder extends Seeder
             'updated_at' => now(),
         ]);
         $users[] = $partner;
-        $this->command->info('  - Created Partner User: partner@example.com (partner123)');
+        $this->command->info('  - Created Partner User: partner@sellio-platform.test (partner123)');
 
         // 3. Create a Key Buyer User for testing purchase and review features
         $buyerName = 'Buyer Example';
         $buyer = User::create([
             'name' => $buyerName,
-            'email' => 'buyer@example.com',
+            'email' => 'buyer@sellio-platform.test',
             'email_verified_at' => now(),
             'password' => Hash::make('buyer123'),
             'phone' => $faker->phoneNumber,
@@ -136,6 +142,9 @@ class UserSeeder extends Seeder
             'username' => $generateUniqueUsername($buyerName),
             'company' => null, // Buyers typically do not have a listed company
             'bio' => 'An active buyer interested in various services.',
+            'status' => 'active',
+            'is_premium' => false,
+            'admin_note' => 'Standard marketplace buyer.',
             'is_partner' => false,
             'is_buyer' => true, // Flag this user as a primary buyer
             'is_verified' => true,
@@ -147,7 +156,7 @@ class UserSeeder extends Seeder
             'updated_at' => now(),
         ]);
         $users[] = $buyer;
-        $this->command->info('  - Created Buyer User: buyer@example.com (buyer123)');
+        $this->command->info('  - Created Buyer User: buyer@sellio-platform.test (buyer123)');
         $this->command->newLine();
 
         // 4. Create 10 Regular Users with randomized attributes
@@ -160,7 +169,7 @@ class UserSeeder extends Seeder
 
             $regularUser = User::create([
                 'name' => $userName,
-                'email' => 'user' . $index . '@example.com',
+                'email' => 'user' . $index . '@sellio-platform.test',
                 'email_verified_at' => now(),
                 'password' => Hash::make('password'),
                 'phone' => $faker->phoneNumber,
@@ -170,6 +179,9 @@ class UserSeeder extends Seeder
                 // Only partners receive a company attribute
                 'company' => $isPartner ? $faker->unique()->company() : null,
                 'bio' => $faker->paragraph(2),
+                'status' => 'active',
+                'is_premium' => $faker->boolean(10),
+                'admin_note' => 'Randomized marketplace user.',
                 'is_partner' => $isPartner,
                 'is_buyer' => $faker->boolean(70),
                 'is_verified' => $faker->boolean(80),

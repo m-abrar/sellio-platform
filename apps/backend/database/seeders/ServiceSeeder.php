@@ -40,7 +40,8 @@ class ServiceSeeder extends Seeder
         // 1. Get IDs from base tables
         // Retrieve IDs for necessary foreign keys and relationship targets.
         $userIds = User::where('is_partner', true)->pluck('id')->toArray();
-        $locationIds = DB::table('locations')->where('is_service', true)->pluck('id')->toArray();
+        // Pick only Level 2 locations (Cities) to ensure listing specificity
+        $locationIds = DB::table('locations')->where('level', 2)->pluck('id')->toArray();
         $typeIds = DB::table('types')->where('is_service', true)->pluck('id')->toArray();
 
         $categoryIds = DB::table('categories')->where('is_service', true)->pluck('id')->toArray();
@@ -53,8 +54,6 @@ class ServiceSeeder extends Seeder
         // Conditional check to ensure required foreign keys exist before proceeding.
         if (empty($userIds) || empty($locationIds) || empty($categoryIds)) {
             $this->command->line('⚠️ Skipping ServiceSeeder: Missing base data (Users, Locations, or Categories).');
-            $this->command->info( ' locations '. count($locationIds) .' categoryIds '. count($categoryIds) .' users '. count($userIds) );
-
             return;
         }
 
@@ -87,10 +86,15 @@ class ServiceSeeder extends Seeder
 
                 // Core Data
                 'title' => $title,
-                'slug' => Str::slug($title . '-' . $index),
+                'slug' => Str::slug($title . '-' . $index) . '-' . Str::random(5),
                 'description' => $faker->text(800),
                 'base_price' => $basePrice,
                 'sale_price' => $salePrice,
+
+                // Hardened Moderation & Status
+                'status'                => 'approved',
+                'admin_note'            => 'Automatically approved service listing.',
+                'is_verified_provider'  => $faker->boolean(50),
 
                 // Service Specifics (Using defined Enum IDs)
                 'expertise_level' => $faker->randomElement($expertiseLevels),
@@ -115,7 +119,7 @@ class ServiceSeeder extends Seeder
                 'is_featured' => $faker->boolean(10), // Only 10% are featured
                 'is_subscription' => $faker->boolean(30),
                 'is_project_based' => $faker->boolean(50),
-                'approved_at'       => $faker->boolean(80) ? now() : null,
+                'approved_at'       => now(),
                 'created_at' => $createdAt,
                 'updated_at' => $createdAt,
             ]);
@@ -165,12 +169,17 @@ class ServiceSeeder extends Seeder
             // Create the quotes
             foreach ($customerIds as $customerId) {
                 $status = $faker->randomElement($quoteStatuses);
+                $isGuest = $faker->boolean(40);
 
                 $service->quotes()->create([
-                    'user_id' => $customerId,
-                    'details' => $faker->text(200),
+                    'user_id'       => $isGuest ? null : $customerId,
+                    'guest_name'    => $isGuest ? $faker->name : null,
+                    'guest_email'   => $isGuest ? $faker->email : null,
+                    'guest_phone'   => $isGuest ? $faker->phoneNumber : null,
+                    'details'       => $faker->text(200),
                     'requested_date' => $faker->dateTimeBetween('now', '+2 months'),
-                    'status' => $status,
+                    'status'        => $status,
+                    'admin_note'    => $faker->boolean(30) ? 'Customer is looking for urgent assistance.' : null,
                     // Only assign a quoted price if the status is 'quoted' or 'accepted'
                     'quoted_price' => ($status === 'quoted' || $status === 'accepted')
                                             ? $faker->numberBetween(500, 5000)

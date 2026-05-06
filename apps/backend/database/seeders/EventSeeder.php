@@ -48,7 +48,8 @@ class EventSeeder extends Seeder
 
         // Fetch required foreign keys from prerequisite seeders.
         $userIds = DB::table('users')->where('is_partner', true)->pluck('id')->toArray();
-        $locationIds = DB::table('locations')->pluck('id')->toArray();
+        // Pick only Level 2 locations (Cities) to ensure listing specificity
+        $locationIds = DB::table('locations')->where('level', 2)->pluck('id')->toArray();
         
         $categoryIds = DB::table('categories')->where('is_event', true)->pluck('id')->toArray();
         $typeIds = DB::table('types')->where('is_event', true)->pluck('id')->toArray();
@@ -94,7 +95,7 @@ class EventSeeder extends Seeder
                 
                 // Core Data
                 'title' => $title,
-                'slug' => Str::slug($title),
+                'slug' => Str::slug($title) . '-' . Str::random(5),
                 'description' => $faker->text(500),
 
                 'address'   => $faker->streetAddress(),
@@ -105,6 +106,13 @@ class EventSeeder extends Seeder
                 'latitude'  => $faker->latitude(),
                 'longitude' => $faker->longitude(),
                 
+                // Hardened Organizer Metadata
+                'organizer_email' => $faker->email(),
+                'organizer_phone' => $faker->phoneNumber(),
+                'is_verified'     => $faker->boolean(70),
+                'status'          => 'approved',
+                'admin_note'      => 'Automatically approved for event marketplace demo.',
+
                 // Pricing and Timing
                 'base_price' => $isPaid ? $faker->randomFloat(2, 10, 200) : 0.00,
                 'sale_price' => $isPaid && $faker->boolean(15) ? $faker->randomFloat(2, 5, 150) : null,
@@ -117,11 +125,11 @@ class EventSeeder extends Seeder
                 'venue_size' => $faker->randomFloat(2, 1000, 10000), 
 
                 // Status Flags
-                'is_published' => $faker->boolean(80),
+                'is_published' => true,
                 'is_featured' => $faker->boolean(10),
                 'is_virtual' => $faker->boolean(20),
                 'is_paid' => $isPaid,
-                'approved_at'       => $faker->boolean(80) ? now() : null,
+                'approved_at'       => now(),
                 'created_at' => $faker->dateTimeThisYear(),
                 'updated_at' => now(),
             ]);
@@ -234,6 +242,10 @@ class EventSeeder extends Seeder
                     $booking->event_ticket_type_id = $combo['event_ticket_type_id'];
                     $booking->quantity = $quantity;
                     
+                    // Hardened Transactional Metadata
+                    $booking->transaction_id = 'TRX-' . Str::upper(Str::random(10));
+                    $booking->payment_status = $faker->randomElement(['paid', 'pending']);
+
                     // Recalculate total_price based on the selected unit price and quantity.
                     $booking->total_price = $quantity * $combo['unit_price']; 
 

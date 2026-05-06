@@ -19,6 +19,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use App\Traits\Models\HasStatusModeration;
 
 /**
  * App\Models\Product
@@ -27,7 +28,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  */
 class Product extends Model implements HasMedia
 {
-    use LogsActivity, HasAnalytics, HasFactory, InteractsWithMedia, HasImageAccess;
+    use LogsActivity, HasAnalytics, HasFactory, InteractsWithMedia, HasImageAccess, HasStatusModeration;
 
     /**
      * Constants for media collections.

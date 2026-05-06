@@ -166,6 +166,7 @@ class PaymentSeeder extends Seeder
             'transaction_id' => $isPaid ? 'TRN-' . $faker->uuid() : null, // Only assign a transaction ID if a transaction occurred.
             'payment_method' => $faker->randomElement(['credit_card', 'paypal', 'bank_transfer', 'wallet']),
             'status' => $status,
+            'admin_note' => 'System generated payment record.',
             'paid_at' => $isPaid ? $faker->dateTimeBetween('-12 months', 'now') : null,
             // Set up the polymorphic relationship keys
             'payable_type' => $type,

@@ -39,7 +39,7 @@ class MediaSeeder extends Seeder
             'Event'      => Event::class,
             'Auto'       => Auto::class,
             'Service'    => Service::class,
-            'Joblisting' => Joblisting::class,
+            'JobListing' => JobListing::class,
             'Classified' => Classified::class,
             'Product'    => Product::class,
         ];

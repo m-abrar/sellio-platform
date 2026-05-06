@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
+use App\Traits\Models\HasStatusModeration;
 
 /**
  * App\Models\Campaign
@@ -23,7 +24,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
  */
 class Campaign extends Model
 {
-    use HasFactory, LogsActivity;
+    use HasFactory, LogsActivity, HasStatusModeration;
 
     /**
      * The attributes that are mass assignable.
@@ -80,26 +81,5 @@ class Campaign extends Model
             });
     }
 
-    // --- UI Helpers ---
-
-    /**
-     * Get a human-readable status label with CSS classes.
-     */
-    public function getStatusMeta(): array
-    {
-        if (!$this->is_active) {
-            return ['label' => 'Inactive', 'color' => 'secondary'];
-        }
-
-        $now = now();
-        if ($this->start_date && $this->start_date->isFuture()) {
-            return ['label' => 'Scheduled', 'color' => 'info'];
-        }
-
-        if ($this->end_date && $this->end_date->isPast()) {
-            return ['label' => 'Expired', 'color' => 'danger'];
-        }
-
-        return ['label' => 'Running', 'color' => 'success'];
-    }
+    // Centralized status logic provided by HasStatusModeration trait
 }

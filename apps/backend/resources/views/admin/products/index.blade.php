@@ -108,18 +108,15 @@
 
                                 <td class="text-center align-middle">
                                     <div class="mb-1">
-                                        @if($product->is_published)
-                                            <span class="badge badge-success-light px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1">Active</span>
-                                        @else
-                                            <span class="badge badge-secondary-light px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1">Draft</span>
-                                        @endif
+                                        @php $status = $product->getStatusMeta(); @endphp
+                                        <span class="badge badge-{{ $status['color'] }}-light px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1">
+                                            <i class="fas fa-{{ $status['icon'] }} mr-1"></i> {{ $status['label'] }}
+                                        </span>
                                     </div>
                                     @if($product->approved_at)
                                         <div class="smallest text-muted font-weight-bold uppercase letter-spacing-1">
-                                            <i class="far fa-check-circle mr-1 text-success"></i>{{ $product->approved_at->format('M d, Y') }}
+                                            <i class="far fa-calendar-alt mr-1"></i>{{ $product->approved_at->format('M d, Y') }}
                                         </div>
-                                    @else
-                                        <span class="badge badge-warning-light px-2 py-1 rounded-pill font-weight-bold smallest uppercase">Pending Audit</span>
                                     @endif
                                 </td>
 

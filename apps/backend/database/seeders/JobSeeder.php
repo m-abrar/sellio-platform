@@ -57,10 +57,12 @@ class JobSeeder extends Seeder
 
         // 1. Get IDs from base tables required for foreign key relationships
         
+        // 1. Get IDs from base tables required for foreign key relationships
+        
         // Jobs must be posted by users designated as 'partners' (e.g., companies/recruiters)
         $userIds = DB::table('users')->where('is_partner', true)->pluck('id')->toArray();
-        // Get all available location IDs
-        $locationIds = DB::table('locations')->pluck('id')->toArray();
+        // Pick only Level 2 locations (Cities) to ensure listing specificity
+        $locationIds = DB::table('locations')->where('level', 2)->pluck('id')->toArray();
         
         // Ensure we only grab job-specific categories, types, and brands using module flags
         $categoryIds = DB::table('categories')->where('is_job', true)->pluck('id')->toArray();
@@ -105,7 +107,7 @@ class JobSeeder extends Seeder
                 
                 // Core Data
                 'title' => $title,
-                'slug' => Str::slug($title . '-' . $index),
+                'slug' => Str::slug($title . '-' . $index) . '-' . Str::random(5),
                 'description' => $faker->text(800),
                 'salary_min' => $salaryMin,
                 'salary_max' => $salaryMax,
@@ -126,12 +128,17 @@ class JobSeeder extends Seeder
                 'latitude' => $faker->latitude(30, 50),
                 'longitude' => $faker->longitude(-120, -70),
 
+                // Hardened Moderation & Status
+                'status'        => 'approved',
+                'admin_note'    => 'Automatically approved job listing.',
+                'is_verified'   => $faker->boolean(60),
+
                 // Status/Visibility Flags
-                'is_published' => $faker->boolean(70),
+                'is_published' => true,
                 'is_featured' => $faker->boolean(10),
                 'is_contract' => $faker->boolean(30),
                 'is_full_time' => true,
-                'approved_at'       => $faker->boolean(80) ? now() : null,
+                'approved_at'       => now(),
                 'created_at' => $createdAt,
                 'updated_at' => $createdAt,
             ]);
@@ -187,6 +194,9 @@ class JobSeeder extends Seeder
                     'user_id' => $applicantId,
                     'status' => $faker->randomElement($applicationStatuses),
                     'cover_letter' => $faker->paragraphs(1, true),
+                    'resume_path' => 'resumes/demo-resume-' . $index . '.pdf',
+                    'portfolio_url' => $faker->url(),
+                    'admin_note'    => $faker->boolean(30) ? 'Strong candidate based on initial review.' : null,
                     'created_at' => $faker->dateTimeBetween($job->created_at, 'now'),
                 ]);
                 $applicationsCreatedCount++;

@@ -17,6 +17,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use App\Traits\Models\HasStatusModeration;
 
 /**
  * App\Models\Blog
@@ -24,7 +25,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  */
 class Blog extends Model implements HasMedia
 {
-    use LogsActivity, HasAnalytics, HasFactory, InteractsWithMedia, HasImageAccess;
+    use LogsActivity, HasAnalytics, HasFactory, InteractsWithMedia, HasImageAccess, HasStatusModeration;
 
     /**
      * Constants for Spatie media collections.

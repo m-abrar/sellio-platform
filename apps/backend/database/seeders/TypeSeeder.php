@@ -192,11 +192,14 @@ class TypeSeeder extends Seeder
         ];
 
         $count = 0;
+        $colors = ['#1e4d4e', '#3949ab', '#ff7043', '#0891b2', '#059669', '#d4af37'];
+        
         foreach ($types as $type) {
             $inserted = DB::table('types')->insertOrIgnore([
                 'title' => $type['title'],
-                'slug' => Str::slug($type['title']),
+                'slug' => Str::slug($type['title']) . '-' . Str::random(5),
                 'icon' => $type['icon'],
+                'color' => collect($colors)->random(),
 
                 // Module Flags
                 'is_property' => $type['is_property'] ?? false,
@@ -208,6 +211,10 @@ class TypeSeeder extends Seeder
                 'is_product' => $type['is_product'] ?? false,
                 'is_blog' => $type['is_blog'] ?? false,
 
+                // Hardened Metadata
+                'status' => 'active',
+                'admin_note' => 'System default listing type.',
+                'is_premium' => false,
                 'is_published' => true,
                 'created_at' => now(),
                 'updated_at' => now(),

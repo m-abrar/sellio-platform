@@ -68,17 +68,20 @@ class ServiceAppointmentSeeder extends Seeder
             // 3. Set price based on package, otherwise fallback to service base_price
             $finalPrice = $package ? $package->price : ($service->sale_price ?? $service->base_price);
 
+            $isGuest = rand(0, 10) > 8; // 20% chance of guest lead
+
             ServiceAppointment::create([
-                'user_id'            => $user->id,
+                'user_id'            => $isGuest ? null : $user->id,
                 'service_id'         => $service->id,
                 'service_package_id' => $package ? $package->id : null, // Set the package
-                'name'               => $user->name,
-                'email'              => $user->email,
-                'phone'              => $user->phone,
+                'name'               => $isGuest ? 'Guest User ' . rand(100, 999) : $user->name,
+                'email'              => $isGuest ? 'guest' . rand(100, 999) . '@example.com' : $user->email,
+                'phone'              => $isGuest ? '+1 (555) ' . rand(100, 999) . '-' . rand(1000, 9999) : $user->phone,
                 'topic'              => $package ? $package->title : $randomTopic, 
                 'scheduled_at'       => $randomDate,
                 'status'             => $statuses[array_rand($statuses)],
                 'notes'              => $randomNote,
+                'admin_note'         => 'Seeded demographic record for marketplace simulation.',
                 'price'              => $finalPrice,
             ]);
         }

@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use App\Models\User;
+use App\Traits\Models\HasStatusModeration;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\HasMedia;
@@ -26,7 +27,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  */
 class Service extends Model implements HasMedia
 {
-    use HasFactory, InteractsWithMedia, LogsActivity, HasImageAccess;
+    use HasFactory, InteractsWithMedia, LogsActivity, HasImageAccess, HasStatusModeration;
 
     /**
      * Constants for media management.

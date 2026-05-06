@@ -126,12 +126,18 @@ class CategorySeeder extends Seeder
 
         $flags[$activeFlag] = true;
 
+        $colors = ['#1e4d4e', '#3949ab', '#ff7043', '#0891b2', '#059669', '#d4af37'];
+
         return array_merge([
             'parent_id'    => $parentId,
             'title'        => $title,
             'slug'         => Str::slug($title) . '-' . Str::random(5),
             'icon'         => $icon,
+            'color'        => collect($colors)->random(),
             'description'  => "Category for " . str_replace('is_', '', $activeFlag) . ": $title",
+            'status'       => 'active',
+            'admin_note'   => 'System default category.',
+            'is_premium'   => false,
             'is_published' => true,
             'created_at'   => now(),
             'updated_at'   => now(),

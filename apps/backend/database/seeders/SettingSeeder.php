@@ -34,63 +34,69 @@ class SettingSeeder extends Seeder
 
         // Define the array of default settings *without* timestamps for cleaner data definition.
         $baseSettings = [
-            // --- Core Site Identity & Configuration ---
-            ['key' => 'site_name', 'value' => 'Sellio'],
-            ['key' => 'site_tagline', 'value' => 'All in One Listing and Booking Management'],
-            ['key' => 'default_language', 'value' => 'en'],
-            ['key' => 'timezone', 'value' => 'UTC'],
-            ['key' => 'frontend_edit', 'value' => '1'],
+            // --- Core Site Identity & Configuration (Group: general) ---
+            ['group' => 'general', 'key' => 'site_name', 'value' => 'Sellio'],
+            ['group' => 'general', 'key' => 'site_tagline', 'value' => 'Premium Multi-Vendor Marketplace Platform'],
+            ['group' => 'general', 'key' => 'default_language', 'value' => 'en'],
+            ['group' => 'general', 'key' => 'timezone', 'value' => 'UTC'],
+            ['group' => 'general', 'key' => 'frontend_edit', 'value' => '1'],
             
-            // --- External Application URLs ---
-            ['key' => 'url_frontend', 'value' => 'http://127.0.0.1:8000'],
-            ['key' => 'url_admin', 'value' => 'http://127.0.0.1:8000/admin'],
-            ['key' => 'url_partner', 'value' => 'http://127.0.0.1:8000/seller'],
-            ['key' => 'url_user', 'value' => 'http://127.0.0.1:8000/buyer'],
+            // --- External Application URLs (Group: general) ---
+            ['group' => 'general', 'key' => 'url_frontend', 'value' => env('APP_URL', 'http://localhost')],
+            ['group' => 'general', 'key' => 'url_admin', 'value' => env('APP_URL', 'http://localhost') . '/admin'],
+            ['group' => 'general', 'key' => 'url_partner', 'value' => env('APP_URL', 'http://localhost') . '/seller'],
+            ['group' => 'general', 'key' => 'url_user', 'value' => env('APP_URL', 'http://localhost') . '/buyer'],
 
-            // --- Contact & API Keys ---
-            ['key' => 'email_contact', 'value' => 'm.abrar.hassan@gmail.com'],
-            ['key' => 'phone_contact', 'value' => '123456789'],
-            ['key' => 'google_map_api_key', 'value' => null], // NULL for the initial value, must be configured by admin
+            // --- Contact & API Keys (Group: contact / api) ---
+            ['group' => 'contact', 'key' => 'email_contact', 'value' => 'support@sellio-platform.test'],
+            ['group' => 'contact', 'key' => 'phone_contact', 'value' => '+1 (555) 000-0000'],
+            ['group' => 'api', 'key' => 'google_map_api_key', 'value' => null],
 
-            // --- Theme Specific Settings (Placeholder Defaults) ---
-            ['key' => 'theme_unifieds', 'value' => 'default'],
-            ['key' => 'theme_properties', 'value' => 'default'],
-            ['key' => 'theme_autos', 'value' => 'default'],
-            ['key' => 'theme_events', 'value' => 'default'],
-            ['key' => 'theme_jobs', 'value' => 'default'],
-            ['key' => 'theme_services', 'value' => 'default'],
-            ['key' => 'theme_classifieds', 'value' => 'default'],
-            ['key' => 'theme_blog', 'value' => 'default'],
+            // --- Theme Specific Settings (Group: theme) ---
+            ['group' => 'theme', 'key' => 'theme_property', 'value' => 'default'],
+            ['group' => 'theme', 'key' => 'theme_auto', 'value' => 'default'],
+            ['group' => 'theme', 'key' => 'theme_event', 'value' => 'default'],
+            ['group' => 'theme', 'key' => 'theme_job', 'value' => 'default'],
+            ['group' => 'theme', 'key' => 'theme_service', 'value' => 'default'],
+            ['group' => 'theme', 'key' => 'theme_classified', 'value' => 'default'],
+            ['group' => 'theme', 'key' => 'theme_blog', 'value' => 'default'],
+            ['group' => 'theme', 'key' => 'active_theme', 'value' => 'unifieds_default'],
 
-            // --- Content, Layout & SEO Defaults ---
-            ['key' => 'site_search_results', 'value' => '1'],
-            ['key' => 'site_terms', 'value' => '1'], // ID reference to a static page/post for Terms
-            ['key' => 'site_privacy', 'value' => '1'], // ID reference to a static page/post for Privacy Policy
-            ['key' => 'site_logo', 'value' => 'settings/logo.png'],
-            ['key' => 'site_favicon', 'value' => 'settings/favicon.ico'],
-            ['key' => 'currency_code', 'value' => 'USD'],
-            ['key' => 'currency_symbol', 'value' => '$'],
-            ['key' => 'active_theme', 'value' => 'unifieds_default'],
-            ['key' => 'meta_title', 'value' => null], // Placeholder for SEO title
-            ['key' => 'meta_description', 'value' => null], // Placeholder for SEO description
+            // --- Content, Layout & SEO Defaults (Group: content / seo / commerce) ---
+            ['group' => 'content', 'key' => 'site_search_results', 'value' => '1'],
+            ['group' => 'content', 'key' => 'site_terms', 'value' => '1'],
+            ['group' => 'content', 'key' => 'site_privacy', 'value' => '1'],
+            ['group' => 'content', 'key' => 'site_logo', 'value' => 'settings/logo.png'],
+            ['group' => 'content', 'key' => 'site_favicon', 'value' => 'settings/favicon.ico'],
+            ['group' => 'commerce', 'key' => 'currency_code', 'value' => 'USD'],
+            ['group' => 'commerce', 'key' => 'currency_symbol', 'value' => '$'],
+            ['group' => 'seo', 'key' => 'meta_title', 'value' => 'Sellio - Ultimate Multi-Vertical Marketplace'],
+            ['group' => 'seo', 'key' => 'meta_description', 'value' => 'Sellio is a highly scalable, multi-vertical marketplace solution for real estate, automotive, jobs, services, and more.'],
             
-            // --- Social Links ---
-            ['key' => 'facebook_url', 'value' => 'https://facebook.com/#my_company_profile'],
-            ['key' => 'twitter_url', 'value' => 'https://x.com/#my_company_profile'],
-            ['key' => 'instagram_url', 'value' => 'https://instagram.com/#my_company_profile'],
-            ['key' => 'linkedin_url', 'value' => null],
-            ['key' => 'youtube_url', 'value' => null],
+            // --- Social Links (Group: social) ---
+            ['group' => 'social', 'key' => 'facebook_url', 'value' => 'https://facebook.com/sellio'],
+            ['group' => 'social', 'key' => 'twitter_url', 'value' => 'https://x.com/sellio'],
+            ['group' => 'social', 'key' => 'instagram_url', 'value' => 'https://instagram.com/sellio'],
+            ['group' => 'social', 'key' => 'linkedin_url', 'value' => null],
+            ['group' => 'social', 'key' => 'youtube_url', 'value' => null],
 
-            // --- Custom Code Injection / Analytics ---
-            ['key' => 'google_analytics', 'value' => null], // Placeholder for Google Analytics tracking ID
-            ['key' => 'custom_head_code', 'value' => null], // Allows injecting custom code into the <head> tag
-            ['key' => 'custom_footer_code', 'value' => null], // Allows injecting custom code before the closing </body> tag
+            // --- Custom Code Injection / Analytics (Group: scripts) ---
+            ['group' => 'scripts', 'key' => 'google_analytics', 'value' => null],
+            ['group' => 'scripts', 'key' => 'custom_head_code', 'value' => null],
+            ['group' => 'scripts', 'key' => 'custom_footer_code', 'value' => null],
 
-            // --- Homepage Configuration ---
-            ['key' => 'site_home', 'value' => 'unifieds_default'],
-            // ['key' => 'site_home_type', 'value' => 'global'], // Controls whether the homepage is set globally or per-theme
-            // ['key' => 'active_home', 'value' => 'home-one'], // Reference to the specific active home layout template
-            // ['key' => 'default_homepage', 'value' => 'unifieds_default'], // The key defining the currently selected homepage template/theme
+            // --- Homepage Configuration (Group: theme) ---
+            ['group' => 'theme', 'key' => 'site_home', 'value' => 'unifieds_default'],
+
+            // --- Module Activation Flags (Group: general) ---
+            ['group' => 'general', 'key' => 'is_section.properties', 'value' => '1'],
+            ['group' => 'general', 'key' => 'is_section.autos', 'value' => '1'],
+            ['group' => 'general', 'key' => 'is_section.events', 'value' => '1'],
+            ['group' => 'general', 'key' => 'is_section.jobs', 'value' => '1'],
+            ['group' => 'general', 'key' => 'is_section.services', 'value' => '1'],
+            ['group' => 'general', 'key' => 'is_section.classifieds', 'value' => '1'],
+            ['group' => 'general', 'key' => 'is_section.products', 'value' => '1'],
+            ['group' => 'general', 'key' => 'is_section.blog', 'value' => '1'],
         ];
 
         $settings = [];

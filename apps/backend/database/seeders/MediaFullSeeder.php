@@ -10,7 +10,7 @@ use App\Models\Property;
 use App\Models\Event;
 use App\Models\Auto;
 use App\Models\Service;
-use App\Models\Joblisting;
+use App\Models\JobListing;
 use App\Models\Classified;
 use App\Models\Product;
 use App\Models\Blog;
@@ -79,7 +79,7 @@ class MediaFullSeeder extends Seeder
             'Event' => Event::class,
             'Auto' => Auto::class,
             'Service' => Service::class,
-            'Joblisting' => Joblisting::class,
+            'JobListing' => JobListing::class,
             'Classified' => Classified::class,
             'Product' => Product::class,
             'Blog' => Blog::class,

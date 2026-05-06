@@ -53,6 +53,19 @@ class RolesAndPermissionsSeeder extends Seeder
             'manage-withdrawals',    // Permission to process and manage user withdrawal requests
             'manage-users',          // High-level permission to view/manage all users (typically for Admin)
             'app-settings',          // Super high-level permission to modify core application configurations (Super Admin only)
+            
+            // Module Specific Management
+            'manage-property',
+            'manage-auto',
+            'manage-event',
+            'manage-job',
+            'manage-service',
+            'manage-product',
+            'manage-classified',
+            'manage-blog',
+            'manage-pages',
+            'manage-menus',
+            'manage-themes',
         ];
 
         foreach ($permissions as $permission) {

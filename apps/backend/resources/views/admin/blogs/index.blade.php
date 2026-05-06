@@ -92,15 +92,10 @@
                                 </td>
 
                                 <td class="text-right align-middle">
-                                    @if($blog->is_published)
-                                        <span class="badge badge-success-light px-3 py-1 text-uppercase smallest-0-7">
-                                            <i class="fas fa-check-circle mr-1"></i> Published
-                                        </span>
-                                    @else
-                                        <span class="badge badge-warning-light px-3 py-1 text-uppercase smallest-0-7">
-                                            <i class="fas fa-clock mr-1"></i> Draft
-                                        </span>
-                                    @endif
+                                    @php $status = $blog->getStatusMeta(); @endphp
+                                    <span class="badge badge-{{ $status['color'] }}-light px-3 py-1 text-uppercase smallest-0-7">
+                                        <i class="fas fa-{{ $status['icon'] }} mr-1"></i> {{ $status['label'] }}
+                                    </span>
                                 </td>
 
                                 <td class="text-right align-middle px-4">

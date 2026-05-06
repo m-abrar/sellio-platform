@@ -30,15 +30,18 @@ class WalletSeeder extends Seeder
         // 1. Find or Create the designated Test Partner User
         /** @var User $partner */
         $partner = User::query()
-            ->where('email', 'partner@example.com')
+            ->where('email', 'partner@sellio-platform.test')
             ->first();
 
         // If the partner doesn't exist, create a basic one to ensure the seeding can proceed.
         if (!$partner) {
-            $partner = User::factory()->create([
+            $partner = User::create([
                 'name' => 'Test Partner',
-                'email' => 'partner@example.com',
-                'password' => bcrypt('password'), // Use a standard password for easy login
+                'email' => 'partner@sellio-platform.test',
+                'password' => bcrypt('password'),
+                'status' => 'active',
+                'admin_note' => 'System generated financial test account.',
+                'email_verified_at' => now(),
             ]);
             $this->command->info('  Created new Test Partner user.');
         }

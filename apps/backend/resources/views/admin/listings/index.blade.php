@@ -217,15 +217,10 @@
                                     @endif
                                     <td class="align-middle">
                                         <div class="mb-1">
-                                            @if ($listing->expires_at && $listing->expires_at->isPast())
-                                                <span class="badge badge-danger-light px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1">Expired</span>
-                                            @elseif ($listing->is_published && $listing->approved_at)
-                                                <span class="badge badge-success-light px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1">Active</span>
-                                            @elseif ($listing->is_published && !$listing->approved_at)
-                                                <span class="badge badge-warning-light px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1">Pending</span>
-                                            @else
-                                                <span class="badge badge-secondary-light px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1">Draft</span>
-                                            @endif
+                                            @php $status = $listing->getStatusMeta(); @endphp
+                                            <span class="badge badge-{{ $status['color'] }}-light px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1">
+                                                <i class="fas fa-{{ $status['icon'] }} mr-1"></i> {{ $status['label'] }}
+                                            </span>
                                         </div>
                                         <div class="smallest text-muted font-weight-bold uppercase letter-spacing-1">
                                             <i class="far fa-clock mr-1 text-primary opacity-50"></i>{{ $listing->created_at->diffForHumans(null, true) }} ago

@@ -88,13 +88,10 @@
 
                                 <td class="text-center align-middle">
                                     <div class="mb-1">
-                                        @if ($ad->is_published && $ad->approved_at)
-                                            <span class="badge badge-success-light px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1">Active</span>
-                                        @elseif ($ad->is_published && !$ad->approved_at)
-                                            <span class="badge badge-warning-light px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1">Pending</span>
-                                        @else
-                                            <span class="badge badge-secondary-light px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1">Draft</span>
-                                        @endif
+                                        @php $status = $ad->getStatusMeta(); @endphp
+                                        <span class="badge badge-{{ $status['color'] }}-light px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1">
+                                            <i class="fas fa-{{ $status['icon'] }} mr-1"></i> {{ $status['label'] }}
+                                        </span>
                                     </div>
                                 </td>
 

@@ -21,13 +21,12 @@ class MenuSeeder extends Seeder
 
         // Data for the 'menus' table
         $baseMenus = [
-            // Note: Removed the 'id' field as it is auto-incremented
-            ['theme_key' => 'unifieds_default', 'location_key' => 'main_header', 'title' => 'Main Header Menu'],
-            ['theme_key' => 'unifieds_default', 'location_key' => 'social_footer', 'title' => 'Social Footer Menu'],
-            ['theme_key' => 'unifieds_default', 'location_key' => 'company_footer', 'title' => 'Company'],
-            ['theme_key' => 'unifieds_default', 'location_key' => 'support_footer', 'title' => 'Support'],
-            ['theme_key' => 'unifieds_default', 'location_key' => 'resources_footer', 'title' => 'Resources'],
-            ['theme_key' => 'unifieds_default', 'location_key' => 'settings_footer', 'title' => 'Settings'],
+            ['theme_key' => 'unifieds_default', 'location_key' => 'main_header', 'title' => 'Main Header Menu', 'status' => 'active', 'admin_note' => 'Primary navigation.', 'is_system' => true],
+            ['theme_key' => 'unifieds_default', 'location_key' => 'social_footer', 'title' => 'Social Footer Menu', 'status' => 'active', 'admin_note' => 'Social media links.', 'is_system' => false],
+            ['theme_key' => 'unifieds_default', 'location_key' => 'company_footer', 'title' => 'Company', 'status' => 'active', 'admin_note' => 'Company information.', 'is_system' => true],
+            ['theme_key' => 'unifieds_default', 'location_key' => 'support_footer', 'title' => 'Support', 'status' => 'active', 'admin_note' => 'Customer support links.', 'is_system' => true],
+            ['theme_key' => 'unifieds_default', 'location_key' => 'resources_footer', 'title' => 'Resources', 'status' => 'active', 'admin_note' => 'Platform resources.', 'is_system' => false],
+            ['theme_key' => 'unifieds_default', 'location_key' => 'settings_footer', 'title' => 'Settings', 'status' => 'active', 'admin_note' => 'User settings links.', 'is_system' => false],
         ];
 
         $menus = [];

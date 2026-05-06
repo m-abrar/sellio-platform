@@ -32,7 +32,8 @@ class AutoSeeder extends Seeder
 
         // --- 1. Fetch Foreign Keys ---
         $userIds = DB::table('users')->where('is_partner', true)->pluck('id')->toArray();
-        $locationIds = DB::table('locations')->pluck('id')->toArray();
+        // Pick only Level 2 locations (Cities) to ensure listing specificity
+        $locationIds = DB::table('locations')->where('level', 2)->pluck('id')->toArray();
         
         $categoryIds = DB::table('categories')->where('is_auto', true)->pluck('id')->toArray();
         $brandIds = DB::table('brands')->where('is_auto', true)->pluck('id')->toArray();
@@ -84,7 +85,7 @@ class AutoSeeder extends Seeder
                 
                 // Core Data
                 'title' => $title,
-                'slug' => Str::slug($title . '-' . $index),
+                'slug' => Str::slug($title . '-' . $index) . '-' . Str::random(5),
                 'description' => $faker->text(500),
                 'base_price' => $faker->randomFloat(2, 5000, 75000),
                 'sale_price' => $faker->boolean(20) ? $faker->randomFloat(2, 4500, 70000) : null,
@@ -103,7 +104,7 @@ class AutoSeeder extends Seeder
                 
                 // Inventory and Condition
                 'condition_rating' => $faker->numberBetween(5, 10),
-                'vin_number' => Str::random(17),
+                'vin_number' => Str::upper(Str::random(17)),
                 'warranty_months' => $faker->boolean(50) ? $faker->numberBetween(6, 48) : null,
                 'stock_quantity' => $faker->numberBetween(1, 3),
 
@@ -116,12 +117,17 @@ class AutoSeeder extends Seeder
                 'latitude' => $faker->latitude(30, 50),
                 'longitude' => $faker->longitude(-120, -70),
 
+                // Hardened Moderation & Certification
+                'status'        => 'approved',
+                'admin_note'    => 'Automatically approved vehicle listing.',
+                'is_certified'  => $faker->boolean(40),
+
                 // Status/Type Flags
                 'is_published' => true,
                 'is_featured' => $faker->boolean(10),
                 'is_lease' => $faker->boolean(15),
                 'is_selling' => true,
-                'approved_at'       => $faker->boolean(80) ? now() : null,
+                'approved_at'       => now(),
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

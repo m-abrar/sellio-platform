@@ -25,6 +25,8 @@ class TransactionLineFactory extends Factory
             'description' => $this->faker->randomElement($type === 'revenue' ? $revenueDesc : $expenseDesc),
             'amount' => $this->faker->randomFloat(2, $type === 'revenue' ? 100 : 10, $type === 'revenue' ? 3000 : 500),
             'type' => $type,
+            'status' => 'active',
+            'admin_note' => 'System generated financial record.',
             'transaction_date' => $this->faker->dateTimeBetween('-6 months', 'now')->format('Y-m-d'),
         ];
     }

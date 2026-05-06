@@ -11,6 +11,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
+use App\Traits\Models\HasStatusModeration;
 
 /**
  * Class Advertisement
@@ -36,7 +37,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
  */
 class Advertisement extends Model implements HasMedia
 {
-    use HasFactory, InteractsWithMedia, HasImageAccess, LogsActivity;
+    use HasFactory, InteractsWithMedia, HasImageAccess, LogsActivity, HasStatusModeration;
 
     /**
      * Media collection constants for Spatie Media Library.
@@ -126,19 +127,5 @@ class Advertisement extends Model implements HasMedia
         return $query->where('status', self::STATUS_ACTIVE);
     }
 
-    // --- UI Helpers ---
-
-    /**
-     * Get a human-readable status label with CSS classes.
-     */
-    public function getStatusMeta(): array
-    {
-        return match ($this->status) {
-            self::STATUS_ACTIVE    => ['label' => 'Active', 'color' => 'success'],
-            self::STATUS_INACTIVE  => ['label' => 'Inactive', 'color' => 'secondary'],
-            self::STATUS_SCHEDULED => ['label' => 'Scheduled', 'color' => 'info'],
-            self::STATUS_EXPIRED   => ['label' => 'Expired', 'color' => 'danger'],
-            default               => ['label' => 'Unknown', 'color' => 'dark'],
-        };
-    }
+    // Centralized status logic provided by HasStatusModeration trait
 }

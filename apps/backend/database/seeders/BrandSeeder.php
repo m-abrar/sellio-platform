@@ -63,7 +63,7 @@ class BrandSeeder extends Seeder
             foreach ($brandNames as $brandName) {
                 $brandData = [
                     'title' => $brandName,
-                    'slug' => Str::slug($brandName),
+                    'slug' => Str::slug($brandName) . '-' . Str::random(5),
                     'description' => 'Brand associated with the ' . str_replace('is_', '', $moduleFlag) . ' module.',
 
                     // Module Flags (set default to false)
@@ -76,6 +76,9 @@ class BrandSeeder extends Seeder
                     'is_product'    => false,
                     'is_blog'       => false,
 
+                    'status'        => 'active',
+                    'admin_note'    => 'System default brand.',
+                    'is_premium'    => false,
                     'is_published'  => true,
                     'created_at'    => now(),
                     'updated_at'    => now(),

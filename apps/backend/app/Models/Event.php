@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\HasImageAccess;
+use App\Traits\Models\HasStatusModeration;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -37,6 +38,7 @@ class Event extends Model implements HasMedia
     use InteractsWithMedia;
     use LogsActivity;
     use HasImageAccess;
+    use HasStatusModeration;
 
     public const PRIMARY_MEDIA = 'poster_image';
     public const GALLERY_MEDIA = 'event_gallery';

@@ -80,7 +80,7 @@ class ProductSeeder extends Seeder
 
                 // Basic Info
                 'title'       => ucfirst($name),
-                'slug'        => Str::slug($name) . '-' . $faker->unique()->numberBetween(100, 999),
+                'slug'        => Str::slug($name) . '-' . $faker->unique()->numberBetween(100, 999) . '-' . Str::random(5),
                 'sku'         => strtoupper($faker->bothify('??-####-???')),
                 'description' => $faker->paragraphs(2, true),
                 'short_description' => $faker->sentence(12),
@@ -106,8 +106,13 @@ class ProductSeeder extends Seeder
                 'video'       => $videoUrl,
                 'main_image'  => null, // Handled later by MediaSeeder or manual upload
 
+                // Hardened Moderation & Status
+                'status'                => 'approved',
+                'admin_note'            => 'Automatically approved shop product.',
+                'is_verified_seller'    => $faker->boolean(60),
+
                 // Status/Flags (Renamed to match migration)
-                'is_published' => $faker->boolean(90),
+                'is_published' => true,
                 'is_featured'  => $faker->boolean(15),
                 'on_sale'      => $onSale,
                 'is_digital'   => $faker->boolean(10),
@@ -117,7 +122,7 @@ class ProductSeeder extends Seeder
                 'meta_description' => $faker->sentence(),
 
                 // Timestamps
-                'approved_at' => $faker->boolean(80) ? now() : null,
+                'approved_at' => now(),
                 'created_at'  => $createdAt,
                 'updated_at'  => $createdAt, 
             ]);

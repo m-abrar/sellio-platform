@@ -66,7 +66,7 @@ class BlogSeeder extends Seeder
 
                 // Content
                 'title'       => $title,
-                'slug'        => Str::slug($title),
+                'slug'        => Str::slug($title) . '-' . Str::random(5),
                 'subtitle'    => $faker->sentence(10),
                 'content'     => $faker->paragraphs(8, true),
                 
@@ -75,8 +75,13 @@ class BlogSeeder extends Seeder
                 'view_count'   => $faker->numberBetween(50, 5000),
                 'video'        => $videoData,
 
+                // Hardened Moderation & Status
+                'status'                => 'published',
+                'admin_note'            => 'Automatically approved editorial post.',
+                'is_verified_author'    => $faker->boolean(70),
+
                 // Status Flags
-                'is_published'   => $faker->boolean(90),
+                'is_published'   => true,
                 'is_featured'    => $faker->boolean(20),
                 'allow_comments' => $faker->boolean(80),
 
@@ -85,7 +90,7 @@ class BlogSeeder extends Seeder
                 'meta_description' => $faker->sentence(20),
 
                 // Timestamp Consistency
-                'published_at' => $faker->boolean(90) ? $createdAt : null,
+                'published_at' => now(),
                 'created_at'   => $createdAt,
                 'updated_at'   => $createdAt, 
             ]);

@@ -24,6 +24,8 @@ class TicketFactory extends Factory
     {
         // Define the possible statuses based on your migration
         $statuses = ['open', 'in-progress', 'closed', 'reopened'];
+        $priorities = ['low', 'medium', 'high', 'urgent'];
+        $categories = ['Technical', 'Billing', 'Account', 'Feature Request', 'General Inquiry'];
 
         return [
             'user_id' => User::factory(), // Automatically creates a User if one doesn't exist
@@ -34,8 +36,10 @@ class TicketFactory extends Factory
             // Generate a realistic paragraph for the description
             'description' => $this->faker->optional()->paragraph(rand(2, 5)),
             
-            // Randomly select one of the allowed statuses
             'status' => $this->faker->randomElement($statuses),
+            'priority' => $this->faker->randomElement($priorities),
+            'category' => $this->faker->randomElement($categories),
+            'admin_note' => $this->faker->optional()->sentence(),
             
             // Ensure timestamps are realistic
             'created_at' => $this->faker->dateTimeBetween('-1 year', 'now'),

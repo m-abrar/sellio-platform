@@ -33,12 +33,15 @@ class ListingController extends Controller
         $userIds = $listings->pluck('user_id')->unique();
         $users = \App\Models\User::whereIn('id', $userIds)->get()->keyBy('id');
 
-        foreach ($listings as $listing) {
-            $listing->setRelation('user', $users->get($listing->user_id));
-            if ($listing->expires_at) {
-                $listing->expires_at = \Illuminate\Support\Carbon::parse($listing->expires_at);
+        $listings->getCollection()->transform(function ($listing) use ($users) {
+            $modelClass = ListingQueryService::MODEL_MAP[strtolower($listing->listing_type)] ?? null;
+            if ($modelClass) {
+                $instance = (new $modelClass)->newFromBuilder($listing);
+                $instance->setRelation('user', $users->get($listing->user_id));
+                return $instance;
             }
-        }
+            return $listing;
+        });
 
         return view('admin.listings.index', compact('listings', 'status', 'type'));
     }

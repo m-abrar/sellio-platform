@@ -19,6 +19,15 @@
     </div>
     
     <div class="card-body">
+        @if($isEdit && method_exists($model, 'getStatusMeta'))
+            @php $statusMeta = $model->getStatusMeta(); @endphp
+            <div class="mb-4 text-center">
+                <span class="badge badge-{{ $statusMeta['color'] }}-light px-4 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 shadow-xs w-100">
+                    <i class="fas fa-{{ $statusMeta['icon'] }} mr-1"></i> {{ $statusMeta['label'] }}
+                </span>
+            </div>
+        @endif
+
         {{-- Publishing Switch --}}
         <div class="mb-4 pb-2 border-bottom">
             <label class="w-100 cursor-pointer mb-0">

@@ -19,6 +19,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use App\Traits\Models\HasStatusModeration;
 
 /**
  * App\Models\Auto
@@ -38,6 +39,7 @@ class Auto extends Model implements HasMedia
     use HasFactory;
     use LogsActivity;
     use HasImageAccess;
+    use HasStatusModeration;
 
     public const PRIMARY_MEDIA = 'main_photo';
     public const GALLERY_MEDIA = 'auto_gallery';

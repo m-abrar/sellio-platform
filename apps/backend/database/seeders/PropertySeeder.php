@@ -38,7 +38,8 @@ class PropertySeeder extends Seeder
 
         // 1. Fetch Necessary IDs from Related Tables
         $userIds = DB::table('users')->where('is_partner', true)->pluck('id')->toArray();
-        $locationIds = DB::table('locations')->pluck('id')->toArray();
+        // Pick only Level 2 locations (Cities) to ensure listing specificity
+        $locationIds = DB::table('locations')->where('level', 2)->pluck('id')->toArray();
         $categoryIds = DB::table('categories')->where('is_property', true)->pluck('id')->toArray();
         $typeIds = DB::table('types')->where('is_property', true)->pluck('id')->toArray();
         $brandIds = DB::table('brands')->where('is_property', true)->pluck('id')->toArray();
@@ -100,7 +101,7 @@ class PropertySeeder extends Seeder
 
                 // Core Data
                 'title'        => $title,
-                'slug'        => Str::slug($title),
+                'slug'        => Str::slug($title) . '-' . Str::random(5),
                 'description' => $faker->paragraphs(3, true),
 
                 // Conditional Pricing
@@ -135,14 +136,18 @@ class PropertySeeder extends Seeder
                 'latitude'  => $faker->latitude(30, 50),
                 'longitude' => $faker->longitude(-120, -70),
 
+                // Status & Moderation (Hardened Schema)
+                'status'        => 'approved',
+                'admin_note'    => 'Automatically approved for initial marketplace seeding.',
+
                 // Status Flags
-                'is_published'  => $faker->boolean(80),
+                'is_published'  => true,
                 'is_featured'   => $faker->boolean(15),
                 'is_rental'     => $isRental,
                 'is_sale'       => $isSale,
 
                 // Timestamp Consistency
-                'approved_at' => $faker->boolean(80) ? now() : null,
+                'approved_at' => now(),
                 'created_at' => $createdAt,
                 'updated_at' => $createdAt, 
             ]);

@@ -19,6 +19,8 @@ class CampaignSeeder extends Seeder
             'end_date' => now()->startOfMonth()->addDays(12),
             'type' => 'promotion',
             'color' => '#FF3366',
+            'status' => 'active',
+            'admin_note' => 'Primary seasonal promotion.',
             'is_active' => true,
         ]);
 
@@ -29,6 +31,8 @@ class CampaignSeeder extends Seeder
             'end_date' => now()->startOfMonth()->addDays(15)->setHour(21)->setMinute(0),
             'type' => 'flash_sale',
             'color' => '#ff6a00',
+            'status' => 'active',
+            'admin_note' => 'High-intensity engagement campaign.',
             'is_active' => true,
         ]);
 
@@ -39,6 +43,8 @@ class CampaignSeeder extends Seeder
             'end_date' => now()->startOfMonth()->addDays(22)->setHour(18)->setMinute(0),
             'type' => 'operation',
             'color' => '#6c757d',
+            'status' => 'active',
+            'admin_note' => 'Internal maintenance task.',
             'is_active' => true,
         ]);
 
@@ -49,6 +55,8 @@ class CampaignSeeder extends Seeder
             'end_date' => now()->addMonth()->startOfMonth()->addDays(15),
             'type' => 'promotion',
             'color' => '#46a5ac',
+            'status' => 'active',
+            'admin_note' => 'Future scheduled clearance.',
             'is_active' => true,
         ]);
     }

@@ -109,9 +109,15 @@ class FeatureSeeder extends Seeder
      */
     private function getBaseFeatureData(string $title): array
     {
+        $colors = ['#1e4d4e', '#3949ab', '#ff7043', '#0891b2', '#059669', '#d4af37'];
+        
         return [
             'title'         => $title,
-            'slug'          => Str::slug($title),
+            'slug'          => Str::slug($title) . '-' . Str::random(5),
+            'color'         => collect($colors)->random(),
+            'status'        => 'active',
+            'admin_note'    => 'System default feature.',
+            'is_premium'    => false,
             'is_property'   => false,
             'is_event'      => false,
             'is_job'        => false,
