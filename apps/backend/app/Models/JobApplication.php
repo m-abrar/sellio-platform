@@ -29,12 +29,23 @@ class JobApplication extends Model
     use LogsActivity;
     use HasBookingAttributes;
 
+    // --- Status Constants ---
+    public const STATUS_PENDING   = 'pending';
+    public const STATUS_REVIEWING = 'reviewing';
+    public const STATUS_ACCEPTED  = 'accepted';
+    public const STATUS_REJECTED  = 'rejected';
+
     /**
      * The table associated with the model.
      *
      * @var string
      */
     protected $table = 'job_applications';
+
+    /**
+     * The relationships that should always be eager loaded.
+     */
+    protected $with = ['job', 'user'];
 
     /**
      * The attributes that are mass assignable.
@@ -87,5 +98,21 @@ class JobApplication extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    // --- UI Helpers ---
+
+    /**
+     * Get a human-readable status label with CSS classes.
+     */
+    public function getStatusMeta(): array
+    {
+        return match ($this->status) {
+            self::STATUS_PENDING   => ['label' => 'Pending', 'color' => 'warning'],
+            self::STATUS_REVIEWING => ['label' => 'Reviewing', 'color' => 'info'],
+            self::STATUS_ACCEPTED  => ['label' => 'Accepted', 'color' => 'success'],
+            self::STATUS_REJECTED  => ['label' => 'Rejected', 'color' => 'danger'],
+            default               => ['label' => 'Unknown', 'color' => 'dark'],
+        };
     }
 }

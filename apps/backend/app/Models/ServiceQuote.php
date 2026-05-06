@@ -12,22 +12,33 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
  * App\Models\ServiceQuote
- * * Manages the Request for Quote (RFQ) process.
+ *
+ * Manages the Request for Quote (RFQ) process.
  * Allows potential clients to submit project details and service providers 
  * to respond with estimated pricing and timelines.
  */
 class ServiceQuote extends Model
 {
     use HasBookingAttributes;
-
     use HasFactory, LogsActivity;
+
+    // --- Status Constants ---
+    public const STATUS_PENDING  = 'pending';
+    public const STATUS_QUOTED   = 'quoted';
+    public const STATUS_ACCEPTED = 'accepted';
+    public const STATUS_REJECTED = 'rejected';
 
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'service_quotes'; 
+    protected $table = 'service_quotes';
+
+    /**
+     * The relationships that should always be eager loaded.
+     */
+    protected $with = ['service', 'user'];
 
     /**
      * The attributes that are mass assignable.
@@ -37,8 +48,8 @@ class ServiceQuote extends Model
     protected $fillable = [
         'service_id',
         'user_id',
-        'service_package_id', // Add this
-        'scope_size',         // Add this
+        'service_package_id',
+        'scope_size',
         'details',        // The project requirements submitted by the user
         'requested_date',  // Desired start date for the service
         'quoted_price',    // The estimate provided by the service provider
@@ -85,5 +96,21 @@ class ServiceQuote extends Model
             ->logAll()
             ->logOnlyDirty() 
             ->dontSubmitEmptyLogs();
+    }
+
+    // --- UI Helpers ---
+
+    /**
+     * Get a human-readable status label with CSS classes.
+     */
+    public function getStatusMeta(): array
+    {
+        return match ($this->status) {
+            self::STATUS_PENDING  => ['label' => 'Pending', 'color' => 'warning'],
+            self::STATUS_QUOTED   => ['label' => 'Quoted', 'color' => 'info'],
+            self::STATUS_ACCEPTED => ['label' => 'Accepted', 'color' => 'success'],
+            self::STATUS_REJECTED => ['label' => 'Rejected', 'color' => 'danger'],
+            default              => ['label' => 'Unknown', 'color' => 'dark'],
+        };
     }
 }

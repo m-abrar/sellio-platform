@@ -8,15 +8,34 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-/**
- * App\Models\Ticket
- * * The Helpdesk engine. 
- * Facilitates communication between users and platform administrators 
  * for dispute resolution, technical support, and account inquiries.
+ *
+ * @property int $id
+ * @property string $title
+ * @property string|null $description
+ * @property string $status
+ * @property string $priority
+ * @property int $user_id
+ * @property \Illuminate\Support\Carbon|null $viewed_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
  */
 class Ticket extends Model
 {
     use HasFactory;
+
+    // --- Status Constants ---
+    public const STATUS_OPEN     = 'open';
+    public const STATUS_PENDING  = 'pending';
+    public const STATUS_RESOLVED = 'resolved';
+    public const STATUS_CLOSED   = 'closed';
+    public const STATUS_REOPENED = 'reopened';
+
+    // --- Priority Constants ---
+    public const PRIORITY_LOW    = 'low';
+    public const PRIORITY_MEDIUM = 'medium';
+    public const PRIORITY_HIGH   = 'high';
+    public const PRIORITY_URGENT = 'urgent';
 
     /**
      * The attributes that are mass assignable.
@@ -69,7 +88,11 @@ class Ticket extends Model
      */
     public function scopeUnresolved(Builder $query): Builder
     {
-        return $query->whereIn('status', ['open', 'reopened', 'pending']);
+        return $query->whereIn('status', [
+            self::STATUS_OPEN, 
+            self::STATUS_REOPENED, 
+            self::STATUS_PENDING
+        ]);
     }
 
     /**
@@ -77,7 +100,10 @@ class Ticket extends Model
      */
     public function scopeResolved(Builder $query): Builder
     {
-        return $query->whereIn('status', ['resolved', 'closed']);
+        return $query->whereIn('status', [
+            self::STATUS_RESOLVED, 
+            self::STATUS_CLOSED
+        ]);
     }
 
     /**
@@ -85,6 +111,23 @@ class Ticket extends Model
      */
     public function scopeUrgent(Builder $query): Builder
     {
-        return $query->where('priority', 'urgent');
+        return $query->where('priority', self::PRIORITY_URGENT);
+    }
+
+    // --- UI Helpers ---
+
+    /**
+     * Get a human-readable status label with CSS classes.
+     */
+    public function getStatusMeta(): array
+    {
+        return match ($this->status) {
+            self::STATUS_OPEN     => ['label' => 'Open', 'color' => 'success'],
+            self::STATUS_PENDING  => ['label' => 'Pending', 'color' => 'warning'],
+            self::STATUS_RESOLVED => ['label' => 'Resolved', 'color' => 'info'],
+            self::STATUS_CLOSED   => ['label' => 'Closed', 'color' => 'secondary'],
+            self::STATUS_REOPENED => ['label' => 'Reopened', 'color' => 'primary'],
+            default               => ['label' => 'Unknown', 'color' => 'dark'],
+        };
     }
 }

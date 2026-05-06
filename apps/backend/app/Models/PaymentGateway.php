@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 /**
  * App\Models\PaymentGateway
@@ -26,6 +27,10 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class PaymentGateway extends Model
 {
     use HasFactory;
+
+    // --- Mode Constants ---
+    public const MODE_SANDBOX = 'sandbox';
+    public const MODE_LIVE    = 'live';
 
     /**
      * The attributes that are mass assignable.
@@ -73,18 +78,21 @@ class PaymentGateway extends Model
 
     /**
      * Retrieve the configuration array based on the current gateway mode (sandbox/live).
-     * This is useful for initializing Payment Service classes.
      */
-    public function getActiveConfigAttribute(): array
+    protected function activeConfig(): Attribute
     {
-        if (!$this->relationLoaded('credentials') && !$this->credentials) {
-            return [];
-        }
+        return Attribute::make(
+            get: function () {
+                if (!$this->relationLoaded('credentials') && !$this->credentials) {
+                    return [];
+                }
 
-        $configKey = "{$this->mode}_config";
-        $configData = $this->credentials->{$configKey};
+                $configKey = "{$this->mode}_config";
+                $configData = $this->credentials->{$configKey};
 
-        return is_array($configData) ? $configData : [];
+                return is_array($configData) ? $configData : [];
+            }
+        );
     }
 
     // --- Scopes ---

@@ -223,16 +223,16 @@ class Event extends Model implements HasMedia
 
     // --- Accessors & Mutators ---
 
-    /**
-     * Get the events left.
-     */
     protected function ticketsLeft(): Attribute
     {
         return Attribute::make(
             get: function () {
-                return 100; //TODO complete this
+                return (int) $this->ticketTypes()
+                    ->withSum('inventoryRecords', 'available_quantity')
+                    ->get()
+                    ->sum('inventory_records_sum_available_quantity');
             }
-        );
+        )->shouldCache();
     }
 
     /**

@@ -6,17 +6,43 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * App\Models\Cart
+ *
+ * @property int $id
+ * @property int|null $user_id
+ * @property string|null $session_id
+ * @property float $temp_total
+ */
 class Cart extends Model
 {
     use HasFactory;
 
+    /**
+     * The relationships that should always be eager loaded.
+     */
+    protected $with = ['items'];
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
     protected $fillable = ['user_id', 'session_id', 'temp_total'];
 
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
     protected $casts = [
         'temp_total' => 'decimal:2',
     ];
+
+    // --- Relationships ---
 
     public function user(): BelongsTo
     {
@@ -28,14 +54,19 @@ class Cart extends Model
         return $this->hasMany(CartItem::class);
     }
 
+    // --- Accessors ---
+
     /**
-     * Optimized total calculation via Database
+     * Optimized total calculation via Database.
      */
-    public function getTotalAttribute(): float
+    protected function total(): Attribute
     {
-        // Assuming CartItem has a 'total_price' or 'subtotal' column
-        return (float) $this->items()->sum('total_price');
+        return Attribute::make(
+            get: fn () => (float) $this->items->sum('total_price')
+        );
     }
+
+    // --- Logic ---
 
     /**
      * Merge a guest cart into the authenticated user's cart.

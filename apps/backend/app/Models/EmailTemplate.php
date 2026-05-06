@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
  * App\Models\EmailTemplate
@@ -14,13 +16,12 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $title
  * @property string $subject
  * @property string $body
+ * @property bool $is_active
  * @property string|null $description
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
  */
 class EmailTemplate extends Model
 {
-    use HasFactory;
+    use HasFactory, LogsActivity;
 
     /**
      * The table associated with the model.
@@ -43,9 +44,25 @@ class EmailTemplate extends Model
         'description',
     ];
 
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
     protected $casts = [
         'is_active' => 'boolean',
     ];
+
+    /**
+     * Get the options for logging activity.
+     */
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
 
     // --- Scopes ---
 
@@ -55,5 +72,13 @@ class EmailTemplate extends Model
     public function scopeByKey(Builder $query, string $key): Builder
     {
         return $query->where('key', $key);
+    }
+
+    /**
+     * Scope a query to only include active templates.
+     */
+    public function scopeActive(Builder $query): Builder
+    {
+        return $query->where('is_active', true);
     }
 }

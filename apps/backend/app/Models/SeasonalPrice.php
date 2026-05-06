@@ -49,4 +49,16 @@ class SeasonalPrice extends Model
     {
         return $this->belongsTo(Property::class);
     }
+
+    // --- Scopes ---
+
+    /**
+     * Scope a query to only include seasonal prices that are currently active.
+     */
+    public function scopeActive($query)
+    {
+        $today = now()->toDateString();
+        return $query->where('start_date', '<=', $today)
+                     ->where('end_date', '>=', $today);
+    }
 }

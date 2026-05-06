@@ -30,6 +30,17 @@ class EventBooking extends Model
     use LogsActivity;
     use HasBookingAttributes;
 
+    // --- Status Constants ---
+    public const STATUS_PENDING   = 'pending';
+    public const STATUS_CONFIRMED = 'confirmed';
+    public const STATUS_CANCELLED = 'cancelled';
+    public const STATUS_COMPLETED = 'completed';
+
+    /**
+     * The relationships that should always be eager loaded.
+     */
+    protected $with = ['event', 'user'];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -111,5 +122,21 @@ class EventBooking extends Model
     public function payments(): MorphMany
     {
         return $this->morphMany(Payment::class, 'payable');
+    }
+
+    // --- UI Helpers ---
+
+    /**
+     * Get a human-readable status label with CSS classes.
+     */
+    public function getStatusMeta(): array
+    {
+        return match ($this->status) {
+            self::STATUS_PENDING   => ['label' => 'Pending', 'color' => 'warning'],
+            self::STATUS_CONFIRMED => ['label' => 'Confirmed', 'color' => 'success'],
+            self::STATUS_CANCELLED => ['label' => 'Cancelled', 'color' => 'danger'],
+            self::STATUS_COMPLETED => ['label' => 'Completed', 'color' => 'info'],
+            default               => ['label' => 'Unknown', 'color' => 'dark'],
+        };
     }
 }

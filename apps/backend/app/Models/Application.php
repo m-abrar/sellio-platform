@@ -8,15 +8,31 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
+
 /**
  * App\Models\Application
  * * The core engine of a Sellio application instance.
  * Defines the business vertical, visual configurations, 
  * and operational settings.
+ *
+ * @property int $id
+ * @property string $app_key
+ * @property string $vertical
+ * @property string $title
+ * @property bool $is_active
+ * @property array|null $variables
+ * @property array|null $config
  */
 class Application extends Model implements HasMedia
 {
-    use HasFactory, InteractsWithMedia;
+    use HasFactory, InteractsWithMedia, LogsActivity;
+
+    /**
+     * The relationships that should always be eager loaded.
+     */
+    protected $with = ['media'];
 
     /**
      * The attributes that are mass assignable.

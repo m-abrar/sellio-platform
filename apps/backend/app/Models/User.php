@@ -24,6 +24,8 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Permission\Traits\HasRoles;
 use Laravel\Sanctum\HasApiTokens; 
+use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Traits\Models\HasMarketplaceMetrics;
 
 /**
  * App\Models\User
@@ -50,8 +52,8 @@ use Laravel\Sanctum\HasApiTokens;
  */
 class User extends Authenticatable implements Wallet, Customer, HasMedia, MustVerifyEmail
 {
-    use HasFactory, Notifiable, HasRoles, Subscribable;
-    use LogsActivity, HasWallet, CanPay;
+    use HasFactory, Notifiable, HasRoles, Subscribable, SoftDeletes;
+    use LogsActivity, HasWallet, CanPay, HasMarketplaceMetrics;
     use HasImageAccess, InteractsWithMedia;
     use HasApiTokens;
 
@@ -86,6 +88,9 @@ class User extends Authenticatable implements Wallet, Customer, HasMedia, MustVe
             'email_verified_at' => 'datetime',
             'password'          => 'hashed',
             'is_buyer'          => 'boolean',
+            'is_admin'          => 'boolean',
+            'is_partner'        => 'boolean',
+            'is_verified'       => 'boolean',
         ];
     }
 
@@ -179,42 +184,7 @@ class User extends Authenticatable implements Wallet, Customer, HasMedia, MustVe
     public function subscriptions(): HasMany { return $this->hasMany(Subscription::class); }
     public function subscription(): HasOne  { return $this->hasOne(Subscription::class)->where('title', 'default'); }
 
-    protected function listingsActiveCount(): Attribute
-    {
-        return Attribute::make(
-            get: fn () => $this->properties()->where('is_published', true)->count() +
-                         $this->events()->where('is_published', true)->count() +
-                         $this->jobs()->where('is_published', true)->count() +
-                         $this->services()->where('is_published', true)->count() +
-                         $this->classifieds()->where('is_published', true)->count() +
-                         $this->autos()->where('is_published', true)->count(),
-        );
-    }
-
-    // Lead Counts for Sellers
-    protected function propertiesBookingsNewCount(): Attribute { return Attribute::make(get: fn () => $this->properties()->withCount('bookingsNew')->get()->sum('bookings_new_count')); }
-    protected function propertiesVisitsNewCount(): Attribute { return Attribute::make(get: fn () => $this->properties()->withCount('visitsNew')->get()->sum('visits_new_count')); }
-    protected function eventsBookingsNewCount(): Attribute { return Attribute::make(get: fn () => $this->events()->withCount('bookingsNew')->get()->sum('bookings_new_count')); }
-    protected function jobsApplicationsNewCount(): Attribute { return Attribute::make(get: fn () => $this->jobs()->withCount('applicationsNew')->get()->sum('applications_new_count')); }
-    protected function servicesQuotesNewCount(): Attribute { return Attribute::make(get: fn () => $this->services()->withCount('quotesNew')->get()->sum('quotes_new_count')); }
-    protected function servicesAppointmentsNewCount(): Attribute { return Attribute::make(get: fn () => $this->services()->withCount('appointmentsNew')->get()->sum('appointments_new_count')); }
-    protected function autosInquiriesNewCount(): Attribute { return Attribute::make(get: fn () => $this->autos()->withCount('inquiriesNew')->get()->sum('inquiries_new_count')); }
-    protected function classifiedsInquiriesNewCount(): Attribute { return Attribute::make(get: fn () => $this->classifieds()->withCount('inquiriesNew')->get()->sum('inquiries_new_count')); }
-
-    protected function totalNewActivities(): Attribute
-    {
-        return Attribute::make(
-            get: fn () =>
-                $this->properties_bookings_new_count +
-                $this->properties_visits_new_count +
-                $this->events_bookings_new_count +
-                $this->jobs_applications_new_count +
-                $this->services_quotes_new_count +
-                $this->services_appointments_new_count + 
-                $this->autos_inquiries_new_count +
-                $this->classifieds_inquiries_new_count
-        );
-    }
+    // Marketplace metrics and dashboard calculations moved to App\Traits\Models\HasMarketplaceMetrics
 
     // =========================================================================
     // SECTION 4: BUYER DASHBOARD (USER AS CUSTOMER LOGIC)
@@ -235,54 +205,7 @@ class User extends Authenticatable implements Wallet, Customer, HasMedia, MustVe
             ->withTimestamps();
     }
 
-    // --- PENDING COUNTS (For Notification Badges) ---
-    protected function pendingBookingsCount(): Attribute { return Attribute::make(get: fn () => $this->propertyBookings()->where('status', 'pending')->count() + $this->eventBookings()->where('status', 'pending')->count()); }
-    protected function pendingApplicationsCount(): Attribute { return Attribute::make(get: fn () => $this->jobApplications()->where('status', 'pending')->count()); }
-    protected function pendingQuotesCount(): Attribute { return Attribute::make(get: fn () => $this->serviceQuotes()->where('status', 'pending')->count()); }
-    protected function pendingAppointmentsCount(): Attribute { return Attribute::make(get: fn () => $this->serviceAppointments()->where('status', 'pending')->count()); }
-    protected function pendingInquiriesCount(): Attribute { return Attribute::make(get: fn () => $this->classifiedInquiries()->wherePivot('status', 'pending')->count()); }
-
-    // --- TOTAL SENT COUNTS (For Dashboard Stat Cards) ---
-    protected function totalApplicationsCount(): Attribute { return Attribute::make(get: fn () => $this->jobApplications()->count()); }
-    protected function totalQuotesCount(): Attribute { return Attribute::make(get: fn () => $this->serviceQuotes()->count()); }
-    protected function totalAppointmentsCount(): Attribute { return Attribute::make(get: fn () => $this->serviceAppointments()->count()); }
-    protected function totalInquiriesCount(): Attribute { return Attribute::make(get: fn () => $this->classifiedInquiries()->count()); }
-
-    // --- BOOKING METRICS (TIME SENSITIVE) ---
-    protected function futureBookingsCount(): Attribute
-    {
-        return Attribute::make(
-            get: function () {
-                $activeStatuses = ['confirmed', 'pending'];
-                $now = now();
-                $futureProperties = $this->propertyBookings()->whereIn('status', $activeStatuses)->where('check_in_date', '>=', $now->toDateTimeString())->count();
-                $futureEvents = $this->eventBookings()->whereIn('status', $activeStatuses)->whereHas('occurrence', function (Builder $query) use ($now) {
-                        $query->where('start_date_time', '>', $now);
-                })->count();
-                return $futureProperties + $futureEvents;
-            }
-        );
-    }
-
-    protected function activeBookingsCount(): Attribute
-    {
-        return Attribute::make(
-            get: fn () => $this->propertyBookings()->whereIn('status', ['confirmed', 'pending'])->count() + 
-                         $this->eventBookings()->whereIn('status', ['confirmed', 'pending'])->count()
-        );
-    }
-
-    protected function totalBuyerActivitiesCount(): Attribute
-    {
-        return Attribute::make(
-            get: fn () =>
-                $this->pending_bookings_count +
-                $this->pending_applications_count +
-                $this->pending_quotes_count +
-                $this->pending_appointments_count +
-                $this->pending_inquiries_count
-        );
-    }
+    // Buyer dashboard calculations moved to App\Traits\Models\HasMarketplaceMetrics
 
     // =========================================================================
     // SECTION 5: ADMINLTE & MISC HELPERS
@@ -312,7 +235,8 @@ class User extends Authenticatable implements Wallet, Customer, HasMedia, MustVe
 
                 // 3. Third Priority: UI-Avatars (Dynamic name-based)
                 if (!empty($this->name)) {
-                    return 'https://ui-avatars.com/api/?name=' . urlencode($this->name) . '&background=6366f1&color=fff&size=150&font-size=0.35';
+                    $color = config('ui.avatar_color', '6366f1');
+                    return "https://ui-avatars.com/api/?name=" . urlencode($this->name) . "&background={$color}&color=fff&size=150&font-size=0.35";
                 }
 
                 // 4. Final Priority: Static Fallback from Trait

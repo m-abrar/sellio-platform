@@ -26,6 +26,12 @@ class ClassifiedInquiry extends Pivot
     use LogsActivity;
     use HasBookingAttributes;
 
+    // --- Status Constants ---
+    public const STATUS_PENDING   = 'pending';
+    public const STATUS_CONTACTED = 'contacted';
+    public const STATUS_SOLD      = 'sold';
+    public const STATUS_CANCELLED = 'cancelled';
+
     /**
      * The table associated with the model.
      *
@@ -35,9 +41,14 @@ class ClassifiedInquiry extends Pivot
 
     /**
      * Indicates if the IDs are auto-incrementing.
-     * * @var bool
+     * @var bool
      */
     public $incrementing = true;
+
+    /**
+     * The relationships that should always be eager loaded.
+     */
+    protected $with = ['classifiedAd', 'user'];
 
     /**
      * The attributes that are mass assignable.
@@ -88,5 +99,21 @@ class ClassifiedInquiry extends Pivot
     public function classifiedAd(): BelongsTo
     {
         return $this->belongsTo(Classified::class, 'classified_id');
+    }
+
+    // --- UI Helpers ---
+
+    /**
+     * Get a human-readable status label with CSS classes.
+     */
+    public function getStatusMeta(): array
+    {
+        return match ($this->status) {
+            self::STATUS_PENDING   => ['label' => 'Pending', 'color' => 'warning'],
+            self::STATUS_CONTACTED => ['label' => 'Contacted', 'color' => 'info'],
+            self::STATUS_SOLD      => ['label' => 'Sold', 'color' => 'success'],
+            self::STATUS_CANCELLED => ['label' => 'Cancelled', 'color' => 'danger'],
+            default               => ['label' => 'Unknown', 'color' => 'dark'],
+        };
     }
 }

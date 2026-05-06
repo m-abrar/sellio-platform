@@ -25,6 +25,13 @@ class Message extends Model
     use HasFactory;
 
     /**
+     * All of the relationships to be touched.
+     *
+     * @var array
+     */
+    protected $touches = ['conversation'];
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>

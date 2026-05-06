@@ -8,16 +8,45 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
+/**
+ * @property int $id
+ * @property int $user_id
+ * @property int $property_id
+ * @property \Illuminate\Support\Carbon $check_in_date
+ * @property \Illuminate\Support\Carbon $check_out_date
+ * @property int $guests
+ * @property float $total_price
+ * @property string $status
+ * @property string $full_name
+ * @property string $email
+ * @property string $phone
+ * @property string|null $message
+ * @property \Illuminate\Support\Carbon|null $viewed_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ */
 class PropertyBooking extends Model
 {
     use HasFactory;
     use HasBookingAttributes;
     use LogsActivity;
 
+    // --- Status Constants ---
+    public const STATUS_PENDING   = 'pending';
+    public const STATUS_CONFIRMED = 'confirmed';
+    public const STATUS_CANCELLED = 'cancelled';
+    public const STATUS_COMPLETED = 'completed';
+
     protected $table = 'property_bookings';
+
+    /**
+     * The relationships that should always be eager loaded.
+     */
+    protected $with = ['property', 'user'];
 
     protected $fillable = [
         'user_id',
@@ -44,66 +73,90 @@ class PropertyBooking extends Model
     // --- Accessors & Helpers for Blade ---
 
     /**
-     * Calculate the number of nights.
-     * Usage: $booking->duration_nights
+     * The table associated with the model.
+     *
+     * @var string
      */
-    public function getDurationNightsAttribute(): int
+    public function isPending(): bool
     {
-        return $this->check_in_date->diffInDays($this->check_out_date) ?: 1;
+        return $this->status === self::STATUS_PENDING;
+    }
+
+    // --- Modern Accessors ---
+
+    /**
+     * Calculate the number of nights.
+     */
+    protected function durationNights(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->check_in_date->diffInDays($this->check_out_date) ?: 1
+        );
     }
 
     /**
      * Get formatted total price.
-     * Usage: $booking->formatted_total
      */
-    public function getFormattedTotalAttribute(): string
+    protected function formattedTotal(): Attribute
     {
-        return number_format($this->total_price, 2);
+        return Attribute::make(
+            get: fn () => number_format($this->total_price, 2)
+        );
     }
 
     /**
      * Calculate Add-ons total from transaction lines starting with "Add-on:"
-     * Usage: $booking->addons_total_price
      */
-    public function getAddonsTotalPriceAttribute(): float
+    protected function addonsTotalPrice(): Attribute
     {
-        return (float) $this->transactionLines()
-            ->where('description', 'LIKE', 'Add-on:%')
-            ->sum('amount');
+        return Attribute::make(
+            get: fn () => (float) $this->transactionLines()
+                ->where('description', 'LIKE', 'Add-on:%')
+                ->sum('amount')
+        );
     }
 
     /**
      * Get the subtotal for the base rental.
-     * Usage: $booking->base_rental_amount
      */
-    public function getBaseRentalAmountAttribute(): float
+    protected function baseRentalAmount(): Attribute
     {
-        $lineSum = $this->transactionLines()
-            ->where('description', 'LIKE', '%Base Rental%')
-            ->sum('amount');
+        return Attribute::make(
+            get: function () {
+                $lineSum = $this->transactionLines()
+                    ->where('description', 'LIKE', '%Base Rental%')
+                    ->sum('amount');
 
-        // Fallback logic if lines are missing: total - addons
-        return $lineSum > 0 ? (float) $lineSum : (float) ($this->total_price - $this->addons_total_price);
+                return $lineSum > 0 ? (float) $lineSum : (float) ($this->total_price - $this->addons_total_price);
+            }
+        );
     }
 
     /**
      * Get the Taxes & Service fees (anything not Base Rental and not Add-on)
-     * Usage: $booking->fees_and_taxes_amount
      */
-    public function getFeesAndTaxesAmountAttribute(): float
+    protected function feesAndTaxesAmount(): Attribute
     {
-        return (float) $this->transactionLines()
-            ->where('description', 'NOT LIKE', 'Add-on:%')
-            ->where('description', 'NOT LIKE', '%Base Rental%')
-            ->sum('amount');
+        return Attribute::make(
+            get: fn () => (float) $this->transactionLines()
+                ->where('description', 'NOT LIKE', 'Add-on:%')
+                ->where('description', 'NOT LIKE', '%Base Rental%')
+                ->sum('amount')
+        );
     }
 
     /**
-     * Determine if the booking is currently "pending"
+     * Get a human-readable status label with CSS classes.
      */
-    public function isPending(): bool
+    public function getStatusMeta(): array
     {
-        return $this->status === 'pending';
+        return match ($this->status) {
+            self::STATUS_PENDING   => ['label' => 'Pending', 'color' => 'warning'],
+            self::STATUS_CONFIRMED => ['label' => 'Confirmed', 'color' => 'success'],
+            self::STATUS_CANCELLED => ['label' => 'Cancelled', 'color' => 'danger'],
+            self::STATUS_COMPLETED => ['label' => 'Completed', 'color' => 'info'],
+            default               => ['label' => 'Unknown', 'color' => 'dark'],
+        };
     }
 
     // --- Relationships ---
@@ -132,7 +185,7 @@ class PropertyBooking extends Model
 
     public function scopeConfirmed($query)
     {
-        return $query->where('status', 'confirmed');
+        return $query->where('status', self::STATUS_CONFIRMED);
     }
 
     public function scopeUpcoming($query)

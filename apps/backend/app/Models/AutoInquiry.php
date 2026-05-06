@@ -26,6 +26,16 @@ class AutoInquiry extends Model
     use LogsActivity;
     use HasBookingAttributes;
 
+    // --- Status Constants ---
+    public const STATUS_PENDING   = 'pending';
+    public const STATUS_CONTACTED = 'contacted';
+    public const STATUS_RESOLVED  = 'resolved';
+
+    /**
+     * The relationships that should always be eager loaded.
+     */
+    protected $with = ['auto'];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -81,5 +91,20 @@ class AutoInquiry extends Model
     public function auto(): BelongsTo
     {
         return $this->belongsTo(Auto::class);
+    }
+
+    // --- UI Helpers ---
+
+    /**
+     * Get a human-readable status label with CSS classes.
+     */
+    public function getStatusMeta(): array
+    {
+        return match ($this->status) {
+            self::STATUS_PENDING   => ['label' => 'Pending', 'color' => 'warning'],
+            self::STATUS_CONTACTED => ['label' => 'Contacted', 'color' => 'info'],
+            self::STATUS_RESOLVED  => ['label' => 'Resolved', 'color' => 'success'],
+            default               => ['label' => 'Unknown', 'color' => 'dark'],
+        };
     }
 }

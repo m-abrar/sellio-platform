@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Builder;
 
 /**
  * App\Models\Review
@@ -17,7 +19,13 @@ use Spatie\Activitylog\Traits\LogsActivity;
  */
 class Review extends Model
 {
-    use HasFactory, LogsActivity;
+    use HasFactory, LogsActivity, SoftDeletes;
+
+    public const MAX_RATING = 5;
+
+    public const STATUS_PENDING  = 'pending';
+    public const STATUS_APPROVED = 'approved';
+    public const STATUS_REJECTED = 'rejected';
 
     /**
      * The attributes that are mass assignable.
@@ -42,8 +50,6 @@ class Review extends Model
     protected $casts = [
         'rating'     => 'integer',
         'viewed_at'  => 'datetime',
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
     ];
 
     // --- Relationships ---
@@ -62,6 +68,33 @@ class Review extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    // --- Scopes ---
+
+    public function scopeApproved(Builder $query): Builder
+    {
+        return $query->where('status', self::STATUS_APPROVED);
+    }
+
+    public function scopePending(Builder $query): Builder
+    {
+        return $query->where('status', self::STATUS_PENDING);
+    }
+
+    public function scopeRejected(Builder $query): Builder
+    {
+        return $query->where('status', self::STATUS_REJECTED);
+    }
+
+    public function scopeByRating(Builder $query, int $rating): Builder
+    {
+        return $query->where('rating', $rating);
+    }
+
+    public function scopeNew(Builder $query): Builder
+    {
+        return $query->whereNull('viewed_at');
     }
 
     // --- Activity Log Configuration ---

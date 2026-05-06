@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
  * App\Models\PageContent
@@ -20,14 +22,10 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property string $content_key
  * @property string $input_type (text, textarea, editor, image, toggle)
  * @property string|null $value
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
  */
 class PageContent extends Model implements HasMedia
 {
-    use HasFactory;
-    use InteractsWithMedia;
-    use HasImageAccess;
+    use HasFactory, InteractsWithMedia, HasImageAccess, LogsActivity;
 
     /**
      * Constants to define media collections used by the HasImageAccess trait.
@@ -55,6 +53,17 @@ class PageContent extends Model implements HasMedia
         'input_type',
         'value',
     ];
+
+    /**
+     * Get the options for logging activity.
+     */
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
 
     // --- Media Management ---
 

@@ -21,12 +21,23 @@ class ServiceAppointment extends Model
     use HasBookingAttributes;
     use LogsActivity;
 
+    // --- Status Constants ---
+    public const STATUS_PENDING   = 'pending';
+    public const STATUS_CONFIRMED = 'confirmed';
+    public const STATUS_COMPLETED = 'completed';
+    public const STATUS_CANCELLED = 'cancelled';
+
     /**
      * The table associated with the model.
      *
      * @var string
      */
     protected $table = 'service_appointments';
+
+    /**
+     * The relationships that should always be eager loaded.
+     */
+    protected $with = ['service', 'user'];
     
     /**
      * The attributes that are mass assignable.
@@ -97,5 +108,21 @@ class ServiceAppointment extends Model
             ->logAll()
             ->logOnlyDirty() 
             ->dontSubmitEmptyLogs();
+    }
+
+    // --- UI Helpers ---
+
+    /**
+     * Get a human-readable status label with CSS classes.
+     */
+    public function getStatusMeta(): array
+    {
+        return match ($this->status) {
+            self::STATUS_PENDING   => ['label' => 'Pending', 'color' => 'warning'],
+            self::STATUS_CONFIRMED => ['label' => 'Confirmed', 'color' => 'info'],
+            self::STATUS_COMPLETED => ['label' => 'Completed', 'color' => 'success'],
+            self::STATUS_CANCELLED => ['label' => 'Cancelled', 'color' => 'danger'],
+            default               => ['label' => 'Unknown', 'color' => 'dark'],
+        };
     }
 }

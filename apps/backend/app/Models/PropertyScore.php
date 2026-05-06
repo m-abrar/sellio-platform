@@ -9,9 +9,17 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 
 /**
  * App\Models\PropertyScore
- * * Represents performance or lifestyle metrics for a property.
+ *
+ * Represents performance or lifestyle metrics for a property.
  * Commonly used for Walk Scores, Bike Scores, Energy Efficiency (EPC), 
  * or Safety ratings.
+ *
+ * @property int $id
+ * @property int $property_id
+ * @property string $title
+ * @property string|null $description
+ * @property float $score
+ * @property string|null $units
  */
 class PropertyScore extends Model
 {
@@ -60,12 +68,26 @@ class PropertyScore extends Model
 
     /**
      * Combines the score and units for a professional UI display.
-     * Example: "85 / 100" or "A++ Grade"
      */
     protected function fullScore(): Attribute
     {
         return Attribute::make(
             get: fn () => rtrim(rtrim($this->score, '0'), '.') . ' ' . $this->units
+        );
+    }
+
+    /**
+     * Get a color for the score based on its value (assuming 1-100 scale).
+     */
+    protected function scoreColor(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                $score = (float) $this->score;
+                if ($score >= 80) return 'success';
+                if ($score >= 50) return 'warning';
+                return 'danger';
+            }
         );
     }
 }

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\Builder;
 
 /**
  * App\Models\Favorite
@@ -32,6 +33,36 @@ class Favorite extends Model
         'favoritable_id',
         'favoritable_type',
     ];
+
+    /**
+     * The relationships that should always be eager loaded.
+     *
+     * @var array<int, string>
+     */
+    protected $with = ['favoritable'];
+
+    // --- Scopes ---
+
+    /**
+     * Scope a query to only include favorites for a specific user.
+     */
+    public function scopeForUser(Builder $query, User|int $user): Builder
+    {
+        $userId = $user instanceof User ? $user->id : $user;
+        return $query->where('user_id', $userId);
+    }
+
+    /**
+     * Scope a query to only include favorites of a specific type.
+     */
+    public function scopeOfType(Builder $query, string $type): Builder
+    {
+        // Normalize type if it's a class name
+        if (str_contains($type, '\\')) {
+            $type = strtolower(class_basename($type));
+        }
+        return $query->where('favoritable_type', $type);
+    }
 
     // --- Relationships ---
 

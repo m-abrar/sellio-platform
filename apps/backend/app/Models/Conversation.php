@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 /**
  * App\Models\Conversation
@@ -90,5 +91,32 @@ class Conversation extends Model
             $q->where('user_id', $userId)
               ->orWhere('partner_id', $userId);
         });
+    }
+
+    /**
+     * Scope a query to find a conversation between two specific users.
+     */
+    public function scopeBetween(Builder $query, int $userA, int $userB): Builder
+    {
+        return $query->where(function (Builder $q) use ($userA, $userB) {
+            $q->where('user_id', $userA)->where('partner_id', $userB);
+        })->orWhere(function (Builder $q) use ($userA, $userB) {
+            $q->where('user_id', $userB)->where('partner_id', $userA);
+        });
+    }
+
+    // --- Attributes ---
+
+    /**
+     * Get the count of unread messages for the authenticated user.
+     */
+    protected function unreadMessagesCount(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->messages()
+                ->where('sender_id', '!=', auth()->id())
+                ->unread()
+                ->count()
+        )->shouldCache();
     }
 }

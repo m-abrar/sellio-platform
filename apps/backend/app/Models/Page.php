@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
  * App\Models\Page
@@ -24,13 +26,15 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @property string $status (active, inactive, draft)
  * @property int|null $header_id
  * @property int|null $footer_id
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
  */
 class Page extends Model implements HasMedia
 {
-    use HasFactory;
-    use InteractsWithMedia;
+    use HasFactory, InteractsWithMedia, LogsActivity;
+
+    // --- Status Constants ---
+    public const STATUS_ACTIVE   = 'active';
+    public const STATUS_INACTIVE = 'inactive';
+    public const STATUS_DRAFT    = 'draft';
 
     public const PRIMARY_MEDIA = 'featured_image';
     public const GALLERY_MEDIA = 'album';
@@ -65,6 +69,17 @@ class Page extends Model implements HasMedia
                 $model->slug = Str::slug($model->title);
             }
         });
+    }
+
+    /**
+     * Get the options for logging activity.
+     */
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
     }
 
     // --- Media Management ---
@@ -104,7 +119,7 @@ class Page extends Model implements HasMedia
      */
     public function scopeActive(Builder $query): Builder
     {
-        return $query->where('status', 'active');
+        return $query->where('status', self::STATUS_ACTIVE);
     }
 
     /**
@@ -113,5 +128,20 @@ class Page extends Model implements HasMedia
     public function scopeOfType(Builder $query, string $type): Builder
     {
         return $query->where('type', $type);
+    }
+
+    // --- UI Helpers ---
+
+    /**
+     * Get a human-readable status label with CSS classes.
+     */
+    public function getStatusMeta(): array
+    {
+        return match ($this->status) {
+            self::STATUS_ACTIVE   => ['label' => 'Active', 'color' => 'success'],
+            self::STATUS_INACTIVE => ['label' => 'Inactive', 'color' => 'secondary'],
+            self::STATUS_DRAFT    => ['label' => 'Draft', 'color' => 'warning'],
+            default              => ['label' => 'Unknown', 'color' => 'dark'],
+        };
     }
 }

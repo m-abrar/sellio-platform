@@ -33,6 +33,17 @@ class Payment extends Model
     use HasFactory;
     use LogsActivity;
 
+    // --- Status Constants ---
+    public const STATUS_PENDING   = 'pending';
+    public const STATUS_COMPLETED = 'completed';
+    public const STATUS_FAILED    = 'failed';
+    public const STATUS_REFUNDED  = 'refunded';
+
+    /**
+     * The relationships that should always be eager loaded.
+     */
+    protected $with = ['user'];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -96,7 +107,7 @@ class Payment extends Model
      */
     public function scopeCompleted(Builder $query): Builder
     {
-        return $query->where('status', 'completed');
+        return $query->where('status', self::STATUS_COMPLETED);
     }
 
     /**
@@ -104,7 +115,23 @@ class Payment extends Model
      */
     public function scopePending(Builder $query): Builder
     {
-        return $query->where('status', 'pending');
+        return $query->where('status', self::STATUS_PENDING);
+    }
+
+    // --- UI Helpers ---
+
+    /**
+     * Get a human-readable status label with CSS classes.
+     */
+    public function getStatusMeta(): array
+    {
+        return match ($this->status) {
+            self::STATUS_PENDING   => ['label' => 'Pending', 'color' => 'warning'],
+            self::STATUS_COMPLETED => ['label' => 'Completed', 'color' => 'success'],
+            self::STATUS_FAILED    => ['label' => 'Failed', 'color' => 'danger'],
+            self::STATUS_REFUNDED  => ['label' => 'Refunded', 'color' => 'info'],
+            default               => ['label' => 'Unknown', 'color' => 'dark'],
+        };
     }
 
     /**

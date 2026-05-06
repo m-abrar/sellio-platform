@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
  * App\Models\Setting
@@ -13,6 +15,8 @@ use Illuminate\Support\Facades\Cache;
  */
 class Setting extends Model
 {
+    use LogsActivity;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -25,46 +29,52 @@ class Setting extends Model
      */
     protected static function booted(): void
     {
-        static::saved(fn () => \Illuminate\Support\Facades\Cache::forget('settings_all'));
-        static::deleted(fn () => \Illuminate\Support\Facades\Cache::forget('settings_all'));
+        static::saved(fn () => Cache::forget('settings_all'));
+        static::deleted(fn () => Cache::forget('settings_all'));
     }
 
     /**
-     * Retrieve a setting value by its key.
-     * * @param string $key
-     * @param mixed $default
-     * @return mixed
+     * Get the options for logging activity.
+     */
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
+
+    /**
+     * Retrieve a setting value by its key with production-grade caching.
      */
     public static function get(string $key, mixed $default = null): mixed
     {
-        // Marketplace Tip: In production, consider wrapping this in 
-        // Cache::remember to reduce database load on every page hit.
-        return self::where('key', $key)->value('value') ?? $default;
+        $settings = Cache::rememberForever('settings_all', function () {
+            return self::pluck('value', 'key')->all();
+        });
+
+        return $settings[$key] ?? $default;
     }
 
     /**
      * Set or update a configuration value.
-     *
-     * @param string $key
-     * @param mixed $value
-     * @return \App\Models\Setting
      */
     public static function set(string $key, mixed $value): Setting
     {
         $setting = self::updateOrCreate(['key' => $key], ['value' => $value]);
         
-        // Clear specific cache if you implement a caching layer
-        // Cache::forget("setting_{$key}");
+        Cache::forget('settings_all');
 
         return $setting;
     }
 
     /**
      * Helper to retrieve multiple settings at once.
-     * Useful for initializing the front-end configuration in a single query.
      */
     public static function getAllGrouped(): array
     {
-        return self::pluck('value', 'key')->toArray();
+        return Cache::rememberForever('settings_all', function () {
+            return self::pluck('value', 'key')->all();
+        });
     }
 }
