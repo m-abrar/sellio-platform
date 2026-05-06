@@ -12,7 +12,7 @@
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Track platform memberships, trial states, and recurring revenue pipelines.</p>
             </div>
             <div class="col-sm-4 text-right">
-                <div class="d-flex justify-content-end align-items-center" style="gap: 12px;">
+                <div class="d-flex justify-content-end align-items-center gap-12">
                     <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">
                         <i class="fas fa-th-large"></i> Dashboard
                     </a>
@@ -72,11 +72,11 @@
                             <tr>
                                 <td class="align-middle pl-4">
                                     <div class="d-flex align-items-center">
-                                        <div class="icon-box-soft bg-primary-soft mr-3 d-flex align-items-center justify-content-center" style="width:40px; height:40px; border-radius: 10px;">
+                                        <div class="icon-box-soft bg-primary-soft mr-3 d-flex align-items-center justify-content-center icon-box-40 rounded-10">
                                             <span class="smallest font-weight-bold text-primary">{{ strtoupper(substr($subscription->user->name ?? 'N', 0, 1)) }}</span>
                                         </div>
                                         <div>
-                                            <span class="d-block font-weight-bold text-dark mb-0" style="font-size: 0.95rem;">{{ $subscription->user->name ?? 'Unknown User' }}</span>
+                                            <span class="d-block font-weight-bold text-dark mb-0 font-0-95">{{ $subscription->user->name ?? 'Unknown User' }}</span>
                                             <small class="text-muted text-monospace smallest">{{ $subscription->user->email ?? 'N/A' }}</small>
                                         </div>
                                     </div>
@@ -90,17 +90,17 @@
                                 </td>
 
                                 <td class="align-middle">
-                                    <div class="d-flex flex-column" style="gap: 4px;">
+                                    <div class="d-flex flex-column gap-4-p">
                                         <div class="smallest text-dark font-weight-bold uppercase letter-spacing-1">
-                                            <i class="far fa-calendar-check mr-2 text-success" style="width: 15px;"></i>
+                                            <i class="far fa-calendar-check mr-2 text-success icon-box-15"></i>
                                             Started: {{ $subscription->starts_at->format('M d, Y') }}
                                         </div>
                                         <div class="smallest text-dark font-weight-bold uppercase letter-spacing-1">
                                             @if(!$subscription->ends_at)
-                                                <i class="fas fa-infinity mr-2 text-primary" style="width: 15px;"></i>
+                                                <i class="fas fa-infinity mr-2 text-primary icon-box-15"></i>
                                                 Access: <span class="text-primary">PERPETUAL</span>
                                             @else
-                                                <i class="far fa-calendar-times mr-2 text-danger" style="width: 15px;"></i>
+                                                <i class="far fa-calendar-times mr-2 text-danger icon-box-15"></i>
                                                 Until: {{ $subscription->ends_at->format('M d, Y') }}
                                             @endif
                                         </div>
@@ -108,7 +108,7 @@
                                 </td>
 
                                 <td class="text-center align-middle">
-                                    <span class="badge {{ $badgeClass }} px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1" style="min-width: 90px;">
+                                    <span class="badge {{ $badgeClass }} px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 min-w-90">
                                         {{ str_replace('_', ' ', $subscription->status) }}
                                     </span>
                                 </td>
@@ -160,11 +160,6 @@
 </div>
 @endsection
 
-@section('css')
-@include('admin._partials._toggle-card-css')
-<style>
-    .text-monospace { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace !important; }
-</style>
 @endsection
 
 @section('js')

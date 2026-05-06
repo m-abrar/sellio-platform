@@ -13,7 +13,7 @@
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Monitor marketplace cashflow, transaction history, and gateway settlements.</p>
             </div>
             <div class="col-sm-5 text-right">
-                <div class="d-flex justify-content-end align-items-center" style="gap: 12px;">
+                <div class="d-flex justify-content-end align-items-center gap-12">
                     <a href="{{ route('admin.payments.create') }}" class="btn btn-primary btn-registry-add">
                         <i class="fas fa-plus-circle mr-2"></i> Log Transaction
                     </a>
@@ -34,7 +34,7 @@
         @include('admin.payments._filter')
 
         {{-- Payments Table Card --}}
-        <div class="card card-premium shadow-premium border-0 overflow-hidden" style="border-radius: 24px;">
+        <div class="card card-premium shadow-premium border-0 overflow-hidden rounded-24">
             <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center justify-content-between">
                 <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">
                     <i class="fas fa-receipt mr-2 text-primary opacity-50"></i> Transaction Ledger
@@ -68,12 +68,12 @@
                                     <td class="align-middle pl-4">
                                         @if($payment->user)
                                             <div class="d-flex align-items-center">
-                                                <div class="icon-box-soft bg-primary-soft mr-3 d-flex align-items-center justify-content-center shadow-xs" style="width:38px; height:38px; border-radius: 10px;">
+                                                <div class="icon-box-soft bg-primary-soft mr-3 d-flex align-items-center justify-content-center shadow-xs icon-box-38 rounded-10">
                                                     <span class="smallest font-weight-bold text-primary">{{ strtoupper(substr($payment->user->name, 0, 1)) }}</span>
                                                 </div>
                                                 <div>
                                                     <span class="d-block font-weight-bold text-dark mb-0 smallest uppercase letter-spacing-1">{{ $payment->user->name }}</span>
-                                                    <small class="text-muted text-monospace smallest" style="font-size: 0.7rem;">{{ $payment->user->email }}</small>
+                                                    <small class="text-muted text-monospace smallest smallest-0-7">{{ $payment->user->email }}</small>
                                                 </div>
                                             </div>
                                         @else
@@ -113,7 +113,7 @@
                                         <div class="font-weight-bold text-dark mb-0">
                                             <span class="smallest font-weight-normal opacity-50 mr-1">{{ $payment->currency }}</span>{{ number_format($payment->amount, 2) }}
                                         </div>
-                                        <div class="text-monospace smallest text-muted opacity-50" title="Gateway Reference" style="font-size: 0.65rem;">
+                                        <div class="text-monospace smallest text-muted opacity-50 smallest-0-65" title="Gateway Reference">
                                             #{{ Str::limit($payment->transaction_id ?? '---', 12) }}
                                         </div>
                                     </td>
@@ -128,7 +128,7 @@
                                             ];
                                             $statusClass = $statusMap[$payment->status] ?? 'badge-secondary-light text-secondary';
                                         @endphp
-                                        <span class="badge {{ $statusClass }} px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 shadow-xs" style="min-width: 100px;">
+                                        <span class="badge {{ $statusClass }} px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 shadow-xs min-w-100">
                                             {{ $payment->status }}
                                         </span>
                                     </td>
@@ -169,17 +169,6 @@
     </div>
 @endsection
 
-@section('css')
-<style>
-    .text-monospace { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace !important; }
-    .select2-container--bootstrap4 .select2-selection--single { height: 100% !important; border: 0 !important; background: transparent !important; }
-    .select2-container--bootstrap4 .select2-selection--single .select2-selection__rendered { line-height: 40px !important; padding-left: 0 !important; font-weight: 600 !important; font-size: 0.85rem !important; }
-    .select2-container--bootstrap4 .select2-selection--single .select2-selection__arrow { top: 50% !important; transform: translateY(-50%) !important; }
-    
-    /* Executive Premium Select2 Fix */
-    .input-group-premium .select2-container { flex: 1 1 auto !important; width: 1% !important; }
-    .input-group-premium .select2-container .select2-selection--single { height: 46px !important; display: flex !important; align-items: center !important; }
-</style>
 @endsection
 
 @section('js')

@@ -6,7 +6,7 @@
     </div>
     <div class="card-body p-4">
         <div class="form-group mb-4">
-            <label class="small font-weight-bold text-secondary mb-2 text-uppercase" style="letter-spacing: 0.5px;">Plan Designation <span class="text-danger">*</span></label>
+            <label class="small font-weight-bold text-secondary mb-2 text-uppercase ls-0-5">Plan Designation <span class="text-danger">*</span></label>
             <div class="input-group border rounded p-1 shadow-xs bg-white">
                 <div class="input-group-prepend border-0">
                     <span class="input-group-text bg-white border-0"><i class="fas fa-heading text-primary"></i></span>
@@ -23,8 +23,8 @@
         </div>
 
         <div class="form-group mb-4">
-            <label class="small font-weight-bold text-secondary mb-2 text-uppercase" style="letter-spacing: 0.5px;">Billing Cycle <span class="text-danger">*</span></label>
-            <select name="billing_period" class="form-control custom-select shadow-xs @error('billing_period') is-invalid @enderror" style="border-radius: 10px;" required>
+            <label class="small font-weight-bold text-secondary mb-2 text-uppercase ls-0-5">Billing Cycle <span class="text-danger">*</span></label>
+            <select name="billing_period" class="form-control custom-select shadow-xs @error('billing_period') is-invalid @enderror rounded-10" required>
                 <option value="" disabled {{ !old('billing_period', $plan->billing_period ?? '') ? 'selected' : '' }}>Select Cycle...</option>
                 <option value="monthly" {{ old('billing_period', $plan->billing_period ?? '') == 'monthly' ? 'selected' : '' }}>Monthly Billing</option>
                 <option value="annually" {{ old('billing_period', $plan->billing_period ?? '') == 'annually' ? 'selected' : '' }}>Annual Billing</option>
@@ -35,7 +35,7 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group mb-0">
-                    <label class="small font-weight-bold text-secondary mb-2 text-uppercase" style="letter-spacing: 0.5px;">Price ({{ setting('currency_symbol', '$') }})</label>
+                    <label class="small font-weight-bold text-secondary mb-2 text-uppercase ls-0-5">Price ({{ setting('currency_symbol', '$') }})</label>
                     <div class="input-group border rounded p-1 shadow-xs bg-white">
                         <div class="input-group-prepend border-0">
                             <span class="input-group-text bg-white border-0"><i class="fas fa-tag text-success"></i></span>
@@ -47,7 +47,7 @@
             </div>
             <div class="col-md-6">
                 <div class="form-group mb-0">
-                    <label class="small font-weight-bold text-secondary mb-2 text-uppercase" style="letter-spacing: 0.5px;">Validity (Days) <span class="text-danger">*</span></label>
+                    <label class="small font-weight-bold text-secondary mb-2 text-uppercase ls-0-5">Validity (Days) <span class="text-danger">*</span></label>
                     <div class="input-group border rounded p-1 shadow-xs bg-white">
                         <div class="input-group-prepend border-0">
                             <span class="input-group-text bg-white border-0"><i class="fas fa-calendar-day text-primary"></i></span>

@@ -13,7 +13,7 @@
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Review and process fund withdrawal requests from marketplace partners.</p>
             </div>
-            <div class="col-sm-5 d-flex align-items-center justify-content-end" style="gap: 12px;">
+            <div class="col-sm-5 d-flex align-items-center justify-content-end gap-12">
                 <span class="badge badge-primary-light px-3 py-2 rounded-pill font-weight-bold smallest uppercase mr-2">
                     <i class="fas fa-clock mr-1"></i> {{ $withdrawals->total() }} REQUESTS QUEUED
                 </span>
@@ -70,7 +70,7 @@
                 </div>
                 
                 <div class="ml-auto d-flex align-items-center pr-2">
-                    <div class="input-group input-group-premium" style="width: 280px;">
+                    <div class="input-group input-group-premium col-media-280">
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-search text-xs"></i></span>
                         </div>
@@ -101,7 +101,7 @@
                             <th class="pl-4">Partner Intelligence</th>
                             <th class="text-right">Settlement Value</th>
                             <th>Protocol</th>
-                            <th style="width: 25%;">Destination Data</th>
+                            <th class="w-25-p">Destination Data</th>
                             <th class="text-center">Lifecycle</th>
                             <th>Temporal Data</th>
                             <th class="text-right pr-4">Operations</th>
@@ -113,12 +113,12 @@
                             <tr>
                                 <td class="align-middle pl-4">
                                     <div class="d-flex align-items-center">
-                                        <div class="icon-box-soft bg-primary-soft text-primary mr-3 shadow-xs" style="width:38px; height:38px; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                                        <div class="icon-box-soft bg-primary-soft text-primary mr-3 shadow-xs icon-box-38 rounded-10 d-flex align-items-center justify-content-center">
                                             <span class="smallest font-weight-bold">{{ strtoupper(substr($withdrawal->user->name ?? '?', 0, 1)) }}</span>
                                         </div>
                                         <div>
                                             <span class="d-block font-weight-bold text-dark mb-0 smallest uppercase letter-spacing-1">{{ $withdrawal->user->name ?? 'N/A (Deleted)' }}</span>
-                                            <small class="text-muted text-monospace smallest" style="font-size: 0.7rem;">ACCOUNT #{{ $withdrawal->user_id }}</small>
+                                            <small class="text-muted text-monospace smallest smallest-0-7">ACCOUNT #{{ $withdrawal->user_id }}</small>
                                         </div>
                                     </div>
                                 </td>
@@ -136,12 +136,12 @@
                                 </td>
 
                                 <td class="align-middle">
-                                    <div class="smallest text-dark font-weight-bold uppercase letter-spacing-1" style="line-height: 1.5;">
+                                    <div class="smallest text-dark font-weight-bold uppercase letter-spacing-1 leading-1-5">
                                         {{ $withdrawal->details ?: '—' }}
                                     </div>
                                     @if ($withdrawal->admin_note)
                                         <div class="mt-2">
-                                            <div class="badge badge-danger-light text-danger smallest p-2 border-left" style="border-left: 3px solid var(--danger) !important; white-space: normal; text-align: left; border-radius: 4px 8px 8px 4px; letter-spacing: 0.5px;">
+                                            <div class="badge badge-danger-light text-danger smallest p-2 border-left-premium-danger" style="white-space: normal; text-align: left; border-radius: 4px 8px 8px 4px; letter-spacing: 0.5px;">
                                                 <i class="fas fa-info-circle mr-1"></i> <strong>NOTE:</strong> {{ $withdrawal->admin_note }}
                                             </div>
                                         </div>
@@ -157,7 +157,7 @@
                                             default => 'badge-secondary-light text-secondary'
                                         };
                                     @endphp
-                                    <span class="badge {{ $statusClass }} px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 shadow-xs" style="min-width: 90px;">
+                                    <span class="badge {{ $statusClass }} px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 shadow-xs min-w-90">
                                         {{ $withdrawal->status }}
                                     </span>
                                 </td>
@@ -225,7 +225,7 @@
 {{-- REJECT MODAL --}}
 <div class="modal fade" id="rejectModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content border-0 shadow-premium" style="border-radius: 24px;">
+        <div class="modal-content border-0 shadow-premium rounded-24">
             <div class="modal-header border-0 bg-white px-4 pt-4 pb-0">
                 <h5 class="modal-title text-dark font-weight-bold smallest uppercase letter-spacing-1"><i class="fas fa-ban mr-2 text-danger"></i> Reject Payout Request</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -235,8 +235,8 @@
             <form id="rejectForm" method="POST">
                 @csrf
                 <div class="modal-body p-4">
-                    <div class="d-flex align-items-center p-3 mb-4 rounded-xl shadow-xs" style="background: #fff5f5; border: 1px solid #fed7d7;">
-                        <div class="icon-box-soft bg-white text-danger mr-3 shadow-xs" style="min-width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                    <div class="d-flex align-items-center p-3 mb-4 rounded-xl shadow-xs bg-fff5f5 border-fed7d7">
+                        <div class="icon-box-soft bg-white text-danger mr-3 shadow-xs icon-box-40 rounded-10 d-flex align-items-center justify-content-center">
                             <i class="fas fa-exclamation-triangle"></i>
                         </div>
                         <p class="mb-0 text-danger smallest font-weight-bold uppercase letter-spacing-1">
@@ -249,7 +249,7 @@
                                   placeholder="Provide clarity for the partner (e.g., Invalid bank details)..." required></textarea> 
                     </div>
                 </div>
-                <div class="modal-footer border-0 p-4 pt-0 d-flex" style="gap: 12px;">
+                <div class="modal-footer border-0 p-4 pt-0 d-flex gap-12">
                     <button type="button" class="btn btn-default shadow-xs rounded-pill px-4 py-2 flex-grow-1 font-weight-bold smallest uppercase" data-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-danger shadow-xs rounded-pill px-4 py-2 flex-grow-1 font-weight-bold smallest uppercase">Confirm Rejection</button>
                 </div>

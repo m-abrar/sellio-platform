@@ -8,6 +8,16 @@
         'is_classified' => 'classifieds',
         'is_product'    => 'products',
     ];
+
+    $modules = [
+        'is_property'   => ['label' => 'Property',   'icon' => 'fas fa-home'],
+        'is_event'      => ['label' => 'Event',      'icon' => 'fas fa-calendar-alt'],
+        'is_job'        => ['label' => 'Job',        'icon' => 'fas fa-briefcase'],
+        'is_auto'       => ['label' => 'Auto',       'icon' => 'fas fa-car'],
+        'is_service'    => ['label' => 'Service',    'icon' => 'fas fa-tools'],
+        'is_classified' => ['label' => 'Classified', 'icon' => 'fas fa-tag'],
+        'is_product'    => ['label' => 'Product',    'icon' => 'fas fa-shopping-bag'],
+    ];
 @endphp
 
 @foreach($modules as $column => $meta)

@@ -15,7 +15,7 @@
                 </p>
             </div>
             <div class="col-sm-4 text-right">
-                <div class="d-flex justify-content-end align-items-center" style="gap: 12px;">
+                <div class="d-flex justify-content-end align-items-center gap-12">
                     <a href="{{ route('admin.payments.index') }}" class="btn-back shadow-sm">
                         <i class="fas fa-arrow-left mr-1"></i> RETURN TO LEDGER
                     </a>
@@ -125,8 +125,8 @@
                                         <input type="number" step="0.01" name="amount" class="form-control font-weight-bold text-success text-lg" 
                                             value="{{ old('amount', $payment->amount ?? '') }}" required placeholder="0.00">
                                         <div class="input-group-append border-0">
-                                            <input type="text" name="currency" class="form-control text-center font-weight-bold small uppercase bg-light border-0" 
-                                                style="width: 80px;" value="{{ old('currency', $payment->currency ?? setting('currency_code', 'USD')) }}" required maxlength="3">
+                                            <input type="text" name="currency" class="form-control text-center font-weight-bold small uppercase bg-light border-0 col-media-80" 
+                                                 value="{{ old('currency', $payment->currency ?? setting('currency_code', 'USD')) }}" required maxlength="3">
                                         </div>
                                     </div>
                                     @error('amount') <small class="text-danger font-weight-bold mt-1 d-block ml-1">{{ $message }}</small> @enderror
@@ -202,16 +202,14 @@
                         <div class="card-body p-4 pt-0">
                             <div class="form-group mb-4">
                                 <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Administrative Notes</label>
-                                <textarea name="description" class="form-control border shadow-xs bg-white p-3" rows="3"
-                                    style="border-radius: 12px; font-size: 0.95rem;"
-                                    placeholder="Provide internal rationale or reconciliation notes...">{{ old('description', $payment->description ?? '') }}</textarea>
+                                <textarea name="description" class="form-control border shadow-xs bg-white p-3 rounded-xl font-0-95" rows="3"
+                                     placeholder="Provide internal rationale or reconciliation notes...">{{ old('description', $payment->description ?? '') }}</textarea>
                             </div>
 
                             <div class="form-group mb-0">
                                 <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Gateway Metadata (JSON Intelligence)</label>
-                                <textarea name="metadata" class="form-control border shadow-xs bg-white text-monospace smallest p-4" rows="8"
-                                    style="border-radius: 15px; background: #fdfdfd !important; line-height: 1.6;"
-                                    placeholder='{ "gateway_response": "..." }'>{{ old('metadata', $payment->exists ? json_encode($payment->metadata, JSON_PRETTY_PRINT) : '') }}</textarea>
+                                <textarea name="metadata" class="form-control border shadow-xs bg-white text-monospace smallest p-4 rounded-15 bg-light-fdfdfd leading-1-6" rows="8"
+                                     placeholder='{ "gateway_response": "..." }'>{{ old('metadata', $payment->exists ? json_encode($payment->metadata, JSON_PRETTY_PRINT) : '') }}</textarea>
                                 <p class="text-muted smallest mt-3 mb-0 uppercase letter-spacing-1 opacity-75">
                                     <i class="fas fa-info-circle mr-1"></i> Original webhook or API response payload from the provider.
                                 </p>
@@ -222,13 +220,13 @@
 
                 {{-- Right Column: Execution & Summary --}}
                 <div class="col-md-4">
-                    <div class="position-sticky" style="top: 100px;">
+                    <div class="position-sticky top-100">
                         @include('admin.payments.partials.action-buttons')
 
                         @if($payment->exists && $payment->paid_at)
                         <div class="card border-0 shadow-premium mt-4 overflow-hidden rounded-xl">
                             <div class="card-body p-4 text-center">
-                                <div class="icon-circle bg-success-soft text-success mx-auto mb-3" style="width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                <div class="icon-circle bg-success-soft text-success mx-auto mb-3 icon-box-60 rounded-circle d-flex align-items-center justify-content-center">
                                     <i class="fas fa-check-circle fa-2x"></i>
                                 </div>
                                 <h5 class="card-title-side mb-1">Settled & Captured</h5>
@@ -243,10 +241,6 @@
     </div>
 @endsection
 
-@section('css')
-<style>
-    .text-monospace { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace !important; }
-</style>
 @endsection
 
 @section('js')

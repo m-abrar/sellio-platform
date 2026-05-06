@@ -22,7 +22,7 @@
                                class="d-none toggle-input"
                                {{ $switch['checked'] ? 'checked' : '' }}>
 
-                        <div class="d-flex justify-content-between align-items-center toggle-card shadow-sm border p-3" style="border-radius: 15px;">
+                        <div class="d-flex justify-content-between align-items-center toggle-card shadow-sm border p-3 rounded-15">
                             <div>
                                 <div class="fw-bold smallest text-dark uppercase letter-spacing-1">{{ $switch['label'] }}</div>
                                 <div class="smallest text-muted uppercase">{{ $switch['desc'] }}</div>

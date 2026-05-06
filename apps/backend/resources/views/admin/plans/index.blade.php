@@ -12,7 +12,7 @@
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Manage marketplace subscription tiers, billing structures, and service quotas.</p>
             </div>
             <div class="col-sm-4 text-right">
-                <div class="d-flex justify-content-end align-items-center" style="gap: 12px;">
+                <div class="d-flex justify-content-end align-items-center gap-12">
                     <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">
                         <i class="fas fa-th-large"></i> Dashboard
                     </a>
@@ -60,11 +60,11 @@
                             <tr>
                                 <td class="align-middle pl-4">
                                     <div class="d-flex align-items-center">
-                                        <div class="icon-box-soft bg-primary-soft mr-3 d-flex align-items-center justify-content-center" style="width:45px; height:45px; border-radius: 12px;">
+                                        <div class="icon-box-soft bg-primary-soft mr-3 d-flex align-items-center justify-content-center icon-box-45 rounded-12">
                                             <i class="fas fa-boxes text-primary"></i>
                                         </div>
                                         <div>
-                                            <span class="d-block font-weight-bold text-dark mb-0" style="font-size: 0.95rem;">{{ $plan->title }}</span>
+                                            <span class="d-block font-weight-bold text-dark mb-0 font-0-95">{{ $plan->title }}</span>
                                             @if($plan->label_text)
                                                 <span class="badge badge-primary-light text-primary px-2 py-1 rounded-pill font-weight-bold smallest uppercase mt-1">
                                                     {{ $plan->label_text }}
@@ -77,7 +77,7 @@
                                 </td>
 
                                 <td class="align-middle">
-                                    <div class="text-dark font-weight-bold" style="font-size: 1.05rem;">
+                                    <div class="text-dark font-weight-bold font-1-05">
                                         {{ setting('currency_symbol', '$') }}{{ number_format($plan->price, 2) }}
                                     </div>
                                     <div class="smallest text-muted text-uppercase font-weight-bold letter-spacing-1 mt-1">
@@ -98,13 +98,13 @@
                                 </td>
 
                                 <td class="align-middle">
-                                    <div class="d-flex flex-column" style="gap: 4px;">
+                                    <div class="d-flex flex-column gap-4-p">
                                         <div class="smallest text-dark font-weight-bold uppercase letter-spacing-1">
-                                            <i class="fas fa-th-list mr-2 text-primary opacity-50" style="width: 15px;"></i>
+                                            <i class="fas fa-th-list mr-2 text-primary opacity-50 icon-box-15"></i>
                                             Assets: {!! $plan->max_listings === null ? '<span class="text-primary">∞</span>' : $plan->max_listings !!}
                                         </div>
                                         <div class="smallest text-dark font-weight-bold uppercase letter-spacing-1">
-                                            <i class="fas fa-star mr-2 text-warning" style="width: 15px;"></i>
+                                            <i class="fas fa-star mr-2 text-warning icon-box-15"></i>
                                             Priority: {!! $plan->max_featured_listings === null ? '<span class="text-primary">∞</span>' : $plan->max_featured_listings !!}
                                         </div>
                                     </div>
@@ -161,11 +161,6 @@
 </div>
 @endsection
 
-@section('css')
-@include('admin._partials._toggle-card-css')
-<style>
-    .italic { font-style: italic; }
-</style>
 @endsection
 
 @section('js')

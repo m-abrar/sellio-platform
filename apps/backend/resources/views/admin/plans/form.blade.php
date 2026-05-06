@@ -15,7 +15,7 @@
                 </p>
             </div>
             <div class="col-sm-4 text-right">
-                <div class="d-flex justify-content-end align-items-center" style="gap: 12px;">
+                <div class="d-flex justify-content-end align-items-center gap-12">
                     <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">
                         <i class="fas fa-th-large"></i> Dashboard
                     </a>
@@ -43,7 +43,7 @@
             {{-- Left Column --}}
             <div class="col-md-8">
                 <div class="nav-pills-wrapper mb-4">
-                    <ul class="nav nav-pills p-1 bg-white shadow-sm rounded-pill border" id="planTabs" role="tablist" style="width: fit-content;">
+                    <ul class="nav nav-pills p-1 bg-white shadow-sm rounded-pill border w-fit" id="planTabs" role="tablist">
                         <li class="nav-item">
                             <a class="nav-link active px-4 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1" id="details-tab" data-toggle="tab" href="#details" role="tab">
                                 <i class="fas fa-info-circle mr-2"></i> Plan Details
@@ -71,7 +71,7 @@
 
             {{-- Right Column --}}
             <div class="col-md-4">
-                <div class="sticky-top" style="top: 20px; z-index: 10;">
+                <div class="sticky-top top-20 z-10">
                     {{-- Action Card --}}
                     @include('admin._partials._form-actions', [
                         'model' => $plan,
@@ -103,7 +103,7 @@
 
     @if($plan->exists)
     {{-- Hidden Delete Form outside main form --}}
-    <form id="delete-plan-form" action="{{ route('admin.plans.destroy', $plan->id) }}" method="POST" style="display: none;">
+    <form id="delete-plan-form" action="{{ route('admin.plans.destroy', $plan->id) }}" method="POST" class="d-none">
         @csrf
         @method('DELETE')
     </form>
@@ -111,13 +111,4 @@
 </div>
 @endsection
 
-@section('css')
-@include('admin._partials._toggle-card-css')
-<style>
-    .sticky-top { top: 20px; }
-    .nav-pills .nav-link { color: #6c757d; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border: 1px solid transparent; }
-    .nav-pills .nav-link.active { background-color: var(--primary) !important; color: #fff !important; box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.25) !important; }
-    .nav-pills .nav-link:not(.active):hover { background-color: #f8f9fa; color: var(--primary); }
-    .form-control:focus { border-color: var(--primary); box-shadow: none; }
-</style>
 @endsection

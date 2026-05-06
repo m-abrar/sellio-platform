@@ -2,11 +2,6 @@
 
 @section('plugins.Chartjs', true) 
 
-@section('css')
-<style>
-    .stat-card { transition: all 0.3s ease; }
-    .stat-card:hover { transform: translateY(-5px); box-shadow: 0 15px 45px rgba(0,0,0,0.1) !important; }
-</style>
 @stop
 
 @section('title', 'Payments | Admin')
@@ -36,10 +31,10 @@
     {{-- Stats Row --}}
     <div class="row mb-5">
         <div class="col-lg-4 col-md-6 mb-4">
-            <div class="card h-100 border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
+            <div class="card h-100 border-0 shadow-premium overflow-hidden rounded-24">
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center mb-3">
-                        <div class="icon-box-soft bg-success-soft text-success mr-3 shadow-xs" style="width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center;">
+                        <div class="icon-box-soft bg-success-soft text-success mr-3 shadow-xs icon-box-48 rounded-14 d-flex align-items-center justify-content-center">
                             <i class="fas fa-money-bill-wave text-lg"></i>
                         </div>
                         <span class="text-uppercase smallest font-weight-bold text-muted letter-spacing-1">Total Revenue</span>
@@ -53,10 +48,10 @@
         </div>
 
         <div class="col-lg-4 col-md-6 mb-4">
-            <div class="card h-100 border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
+            <div class="card h-100 border-0 shadow-premium overflow-hidden rounded-24">
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center mb-3">
-                        <div class="icon-box-soft bg-info-soft text-info mr-3 shadow-xs" style="width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center;">
+                        <div class="icon-box-soft bg-info-soft text-info mr-3 shadow-xs icon-box-48 rounded-14 d-flex align-items-center justify-content-center">
                             <i class="fas fa-chart-pie text-lg"></i>
                         </div>
                         <span class="text-uppercase smallest font-weight-bold text-muted letter-spacing-1">Avg Transaction</span>
@@ -70,10 +65,10 @@
         </div>
 
         <div class="col-lg-4 col-md-6 mb-4">
-            <div class="card h-100 border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
+            <div class="card h-100 border-0 shadow-premium overflow-hidden rounded-24">
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center mb-3">
-                        <div class="icon-box-soft bg-primary-soft text-primary mr-3 shadow-xs" style="width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center;">
+                        <div class="icon-box-soft bg-primary-soft text-primary mr-3 shadow-xs icon-box-48 rounded-14 d-flex align-items-center justify-content-center">
                             <i class="fas fa-check-double text-lg"></i>
                         </div>
                         <span class="text-uppercase smallest font-weight-bold text-muted letter-spacing-1">Transactions</span>
@@ -90,13 +85,13 @@
     {{-- Trend Analysis --}}
         <div class="card card-premium shadow-premium mb-5 border-0 overflow-hidden">
         <div class="card-header border-0 bg-white pt-4 px-4 d-flex align-items-center">
-            <div class="icon-box-soft bg-success-soft text-success mr-3 d-flex align-items-center justify-content-center shadow-xs" style="width: 40px; height: 40px; border-radius: 10px;">
+            <div class="icon-box-soft bg-success-soft text-success mr-3 d-flex align-items-center justify-content-center shadow-xs icon-box-40 rounded-10">
                 <i class="fas fa-chart-line"></i>
             </div>
             <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">Monthly Inflow Trend</h3>
         </div>
         <div class="card-body p-4">
-            <div class="chart-responsive" style="height: 380px;">
+            <div class="chart-responsive h-380-p">
                 <canvas id="revenueChart"></canvas>
             </div>
         </div>
@@ -106,7 +101,7 @@
     <div class="card card-premium shadow-premium border-0 mb-5 overflow-hidden">
         <div class="card-header border-0 bg-white pt-4 px-4 d-flex justify-content-between align-items-center">
             <div class="d-flex align-items-center">
-                <div class="icon-box-soft bg-info-soft text-info mr-3 d-flex align-items-center justify-content-center shadow-xs" style="width: 40px; height: 40px; border-radius: 10px;">
+                <div class="icon-box-soft bg-info-soft text-info mr-3 d-flex align-items-center justify-content-center shadow-xs icon-box-40 rounded-10">
                     <i class="fas fa-file-invoice-dollar"></i>
                 </div>
                 <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">Recent Transactions</h3>
@@ -150,7 +145,7 @@
                                         'failed'    => ['bg' => 'danger-light', 'text' => 'danger'],
                                     ][strtolower($transaction->status)] ?? ['bg' => 'secondary-light', 'text' => 'secondary'];
                                 @endphp
-                                <span class="badge badge-premium badge-{{ $statusStyle['bg'] }} text-{{ $statusStyle['text'] }} px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 shadow-xs" style="min-width: 90px;">
+                                <span class="badge badge-premium badge-{{ $statusStyle['bg'] }} text-{{ $statusStyle['text'] }} px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 shadow-xs min-w-90">
                                     {{ $transaction->status }}
                                 </span>
                             </td>

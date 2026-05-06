@@ -25,20 +25,19 @@
         @endphp
 
         <div id="{{ $name }}-dropzone"
-             class="dropzone border-dashed rounded-xl p-5 d-flex align-items-center justify-content-center flex-column {{ $isEdit ? 'cursor-pointer' : 'bg-light text-muted' }}"
-             style="{{ $isEdit ? 'border: 2px dashed rgba(var(--primary-rgb), 0.3); background: rgba(var(--primary-rgb), 0.02); transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); min-height: 180px;' : 'pointer-events: none; opacity: 0.6;' }}">
-            <div class="dropzone-glow position-absolute" style="width: 100%; height: 100%; background: radial-gradient(circle at center, rgba(var(--primary-rgb), 0.05) 0%, transparent 70%); top: 0; left: 0; z-index: 0; pointer-events: none;"></div>
-            <div class="upload-icon-wrapper mb-3 shadow-premium rounded-circle bg-white d-flex align-items-center justify-content-center transition-all" style="width: 80px; height: 80px; border: 1px solid #edf2f7; z-index: 1;">
+             class="dropzone border-dashed rounded-xl p-5 d-flex align-items-center justify-content-center flex-column {{ $isEdit ? 'cursor-pointer dropzone-premium' : 'bg-light text-muted dropzone-locked' }}">
+            <div class="dropzone-glow position-absolute"></div>
+            <div class="upload-icon-wrapper mb-3 shadow-premium rounded-circle bg-white d-flex align-items-center justify-content-center transition-all">
                 <i class="fas fa-cloud-upload-alt fa-2x text-primary opacity-75"></i>
             </div>
-            <h6 class="font-weight-bold text-dark mb-1 position-relative" style="z-index: 1; letter-spacing: 0.5px;">
+            <h6 class="font-weight-bold text-dark mb-1 position-relative dropzone-title">
                 @if($isEdit)
                     Quick Image Sync
                 @else
                     System Lock: Initialization Required
                 @endif
             </h6>
-            <p class="text-muted smallest mb-0 px-4 font-weight-bold uppercase opacity-50 position-relative" style="letter-spacing: 1px; z-index: 1;">
+            <p class="text-muted smallest mb-0 px-4 font-weight-bold uppercase opacity-50 position-relative dropzone-subtitle">
                 @if($isEdit)
                     Drag & Drop or Click to Explore
                 @else
@@ -47,18 +46,16 @@
             </p>
         </div>
 
-        <div class="mt-4 d-flex flex-wrap justify-content-center" id="{{ $name }}-preview" style="gap: 20px;">
+        <div class="mt-4 d-flex flex-wrap justify-content-center image-preview-container" id="{{ $name }}-preview">
             @foreach($imageUrls as $img)
                 <div class="image-container position-relative group">
-                    <div class="image-shine position-absolute" style="top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%); z-index: 1; border-radius: 16px; pointer-events: none;"></div>
-                    <img src="{{ $img }}" class="img-thumbnail border-0 shadow-premium rounded-xl" style="width: 120px; height: 120px; object-fit: cover; transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); border: 3px solid #fff !important;">
-                    <button type="button" class="btn btn-danger btn-xs remove-image position-absolute d-flex align-items-center justify-content-center shadow-lg" 
-                            style="top: -10px; right: -10px; border-radius: 50%; width: 28px; height: 28px; padding: 0; border: 2px solid #fff; z-index: 2;"
+                    <div class="image-shine position-absolute image-preview-shine"></div>
+                    <img src="{{ $img }}" class="img-thumbnail border-0 shadow-premium rounded-xl image-preview-img">
+                    <button type="button" class="btn btn-danger btn-xs remove-image position-absolute d-flex align-items-center justify-content-center shadow-lg image-preview-remove"
                             data-image="{{ $img }}">
                         <i class="fas fa-times smallest"></i>
                     </button>
-                    <div class="image-overlay position-absolute rounded-xl d-flex align-items-center justify-content-center transition-all opacity-0 group-hover:opacity-100" 
-                         style="top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.2); z-index: 1;">
+                    <div class="image-overlay position-absolute rounded-xl d-flex align-items-center justify-content-center transition-all opacity-0 group-hover:opacity-100 image-preview-overlay">
                         <i class="fas fa-search-plus text-white opacity-75"></i>
                     </div>
                 </div>
@@ -93,7 +90,6 @@
     }
     .dropzone:hover::before { left: 150%; }
     
-    .rounded-xl { border-radius: 16px !important; }
     .image-container .remove-image { 
         opacity: 0; 
         transform: scale(0.5);
@@ -156,9 +152,8 @@
 
                     let imageHtml = `
                         <div class="image-container position-relative group">
-                            <img src="${data.url}" class="img-thumbnail border-0 shadow-premium rounded-xl" style="width: 110px; height: 110px; object-fit: cover; transition: all 0.3s ease;">
-                            <button type="button" class="btn btn-danger btn-xs remove-image position-absolute d-flex align-items-center justify-content-center shadow-sm" 
-                                    style="top: -8px; right: -8px; border-radius: 50%; width: 26px; height: 26px; padding: 0; border: 2px solid #fff; transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);"
+                            <img src="${data.url}" class="img-thumbnail border-0 shadow-premium rounded-xl image-preview-img-sm">
+                            <button type="button" class="btn btn-danger btn-xs remove-image position-absolute d-flex align-items-center justify-content-center shadow-sm image-preview-remove-sm" 
                                     data-image="${data.url}">
                                 <i class="fas fa-times smallest"></i>
                             </button>

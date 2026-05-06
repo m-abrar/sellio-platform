@@ -32,7 +32,7 @@
             <div class="card card-premium h-100 border-0 shadow-premium overflow-hidden">
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center mb-3">
-                        <div class="icon-box-soft bg-info-soft text-info mr-3 shadow-xs" style="width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center;">
+                        <div class="icon-box-soft bg-info-soft text-info mr-3 shadow-xs icon-box-48 rounded-14 d-flex align-items-center justify-content-center">
                             <i class="fas fa-ticket-alt text-lg"></i>
                         </div>
                         <span class="text-uppercase smallest font-weight-bold text-muted letter-spacing-1">Total Bookings</span>
@@ -41,7 +41,7 @@
                         <h2 class="font-weight-bold text-dark mb-0 mr-2">{{ $totalBookings }}</h2>
                         <span class="text-success smallest font-weight-bold"><i class="fas fa-caret-up mr-1"></i>LIVE</span>
                     </div>
-                    <div class="progress mt-3" style="height: 4px; border-radius: 2px; background: rgba(0,0,0,0.05);">
+                    <div class="progress mt-3 h-4 rounded-2 bg-black-0-05">
                         <div class="progress-bar bg-info" role="progressbar" style="width: 100%"></div>
                     </div>
                 </div>
@@ -52,7 +52,7 @@
             <div class="card card-premium h-100 border-0 shadow-premium overflow-hidden">
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center mb-3">
-                        <div class="icon-box-soft bg-success-soft text-success mr-3 shadow-xs" style="width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center;">
+                        <div class="icon-box-soft bg-success-soft text-success mr-3 shadow-xs icon-box-48 rounded-14 d-flex align-items-center justify-content-center">
                             <i class="fas fa-dollar-sign text-lg"></i>
                         </div>
                         <span class="text-uppercase smallest font-weight-bold text-muted letter-spacing-1">Revenue</span>
@@ -61,7 +61,7 @@
                         <h2 class="font-weight-bold text-dark mb-0 mr-1">${{ $totalRevenue }}</h2>
                         <span class="text-muted smallest font-weight-bold uppercase">USD</span>
                     </div>
-                    <div class="progress mt-3" style="height: 4px; border-radius: 2px; background: rgba(0,0,0,0.05);">
+                    <div class="progress mt-3 h-4 rounded-2 bg-black-0-05">
                         <div class="progress-bar bg-success" role="progressbar" style="width: 100%"></div>
                     </div>
                 </div>
@@ -72,7 +72,7 @@
             <div class="card card-premium h-100 border-0 shadow-premium overflow-hidden">
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center mb-3">
-                        <div class="icon-box-soft bg-danger-soft text-danger mr-3 shadow-xs" style="width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center;">
+                        <div class="icon-box-soft bg-danger-soft text-danger mr-3 shadow-xs icon-box-48 rounded-14 d-flex align-items-center justify-content-center">
                             <i class="fas fa-ban text-lg"></i>
                         </div>
                         <span class="text-uppercase smallest font-weight-bold text-muted letter-spacing-1">Cancellation</span>
@@ -81,7 +81,7 @@
                         <h2 class="font-weight-bold text-dark mb-0 mr-1">{{ $cancellationRate }}%</h2>
                         <span class="text-muted smallest font-weight-bold uppercase">RATIO</span>
                     </div>
-                    <div class="progress mt-3" style="height: 4px; border-radius: 2px; background: rgba(0,0,0,0.05);">
+                    <div class="progress mt-3 h-4 rounded-2 bg-black-0-05">
                         <div class="progress-bar bg-danger" role="progressbar" style="width: {{ $cancellationRate }}%"></div>
                     </div>
                 </div>
@@ -92,7 +92,7 @@
             <div class="card card-premium h-100 border-0 shadow-premium overflow-hidden">
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center mb-3">
-                        <div class="icon-box-soft bg-primary-soft text-primary mr-3 shadow-xs" style="width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center;">
+                        <div class="icon-box-soft bg-primary-soft text-primary mr-3 shadow-xs icon-box-48 rounded-14 d-flex align-items-center justify-content-center">
                             <i class="fas fa-wallet text-lg"></i>
                         </div>
                         <span class="text-uppercase smallest font-weight-bold text-muted letter-spacing-1">Avg Value</span>
@@ -101,7 +101,7 @@
                         <h2 class="font-weight-bold text-dark mb-0 mr-1">${{ $avgBookingValue }}</h2>
                         <span class="text-muted smallest font-weight-bold uppercase">/ORDER</span>
                     </div>
-                    <div class="progress mt-3" style="height: 4px; border-radius: 2px; background: rgba(0,0,0,0.05);">
+                    <div class="progress mt-3 h-4 rounded-2 bg-black-0-05">
                         <div class="progress-bar bg-primary" role="progressbar" style="width: 100%"></div>
                     </div>
                 </div>
@@ -112,13 +112,13 @@
     {{-- Trend Analysis --}}
     <div class="card card-premium shadow-premium mb-5 border-0 overflow-hidden">
         <div class="card-header border-0 bg-white pt-4 px-4 d-flex align-items-center">
-            <div class="icon-box-soft bg-primary-soft text-primary mr-3 shadow-xs" style="width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+            <div class="icon-box-soft bg-primary-soft text-primary mr-3 shadow-xs icon-box-40 rounded-10 d-flex align-items-center justify-content-center">
                 <i class="fas fa-chart-area"></i>
             </div>
             <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">Monthly Booking Trend</h3>
         </div>
         <div class="card-body p-4">
-            <div class="chart-responsive" style="height: 380px;">
+            <div class="chart-responsive h-380-p">
                 <canvas id="bookingTrendChart"></canvas>
             </div>
         </div>
@@ -129,7 +129,7 @@
         <div class="col-md-6 mb-4">
             <div class="card card-premium shadow-premium border-0 h-100 overflow-hidden">
                 <div class="card-header border-0 bg-white pt-4 px-4 d-flex align-items-center">
-                    <div class="icon-box-soft bg-warning-soft text-warning mr-3 shadow-xs" style="width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                    <div class="icon-box-soft bg-warning-soft text-warning mr-3 shadow-xs icon-box-40 rounded-10 d-flex align-items-center justify-content-center">
                         <i class="fas fa-star"></i>
                     </div>
                     <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">High-Performers</h3>
@@ -166,7 +166,7 @@
         <div class="col-md-6 mb-4">
             <div class="card card-premium shadow-premium border-0 h-100 overflow-hidden">
                 <div class="card-header border-0 bg-white pt-4 px-4 d-flex align-items-center">
-                    <div class="icon-box-soft bg-info-soft text-info mr-3 shadow-xs" style="width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                    <div class="icon-box-soft bg-info-soft text-info mr-3 shadow-xs icon-box-40 rounded-10 d-flex align-items-center justify-content-center">
                         <i class="fas fa-clock"></i>
                     </div>
                     <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">Recent Activity</h3>
@@ -213,7 +213,7 @@
 
     <div class="row mt-4">
         <div class="col-12 text-center">
-            <div class="card-premium d-inline-block border px-4 py-2 shadow-xs" style="border-radius: 50px; background: #fff;">
+            <div class="card-premium d-inline-block border px-4 py-2 shadow-xs rounded-50 bg-white">
                 <small class="text-muted smallest font-weight-bold uppercase letter-spacing-1">
                     <i class="fas fa-info-circle mr-2 text-primary"></i> 
                     Reporting logic is synchronized with <span class="text-dark">Creation Timestamps</span>.
@@ -224,11 +224,6 @@
 </div>
 @stop
 
-@section('css')
-<style>
-    .stat-card { transition: all 0.3s ease; }
-    .stat-card:hover { transform: translateY(-5px); box-shadow: 0 15px 45px rgba(0,0,0,0.1) !important; }
-</style>
 @stop
 
 @section('js')

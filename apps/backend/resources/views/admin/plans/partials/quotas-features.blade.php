@@ -13,7 +13,7 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group mb-0">
-                    <label class="small font-weight-bold text-secondary mb-2 text-uppercase" style="letter-spacing: 0.5px;">Max Total Assets</label>
+                    <label class="small font-weight-bold text-secondary mb-2 text-uppercase ls-0-5">Max Total Assets</label>
                     <div class="input-group border rounded p-1 shadow-xs bg-white">
                         <div class="input-group-prepend border-0">
                             <span class="input-group-text bg-white border-0"><i class="fas fa-th-list text-primary"></i></span>
@@ -24,7 +24,7 @@
             </div>
             <div class="col-md-6">
                 <div class="form-group mb-0">
-                    <label class="small font-weight-bold text-secondary mb-2 text-uppercase" style="letter-spacing: 0.5px;">Max Priority Slots</label>
+                    <label class="small font-weight-bold text-secondary mb-2 text-uppercase ls-0-5">Max Priority Slots</label>
                     <div class="input-group border rounded p-1 shadow-xs bg-white">
                         <div class="input-group-prepend border-0">
                             <span class="input-group-text bg-white border-0"><i class="fas fa-star text-warning"></i></span>
@@ -45,8 +45,8 @@
     </div>
     <div class="card-body p-4">
         <div class="form-group mb-4">
-            <label class="small font-weight-bold text-secondary mb-2 text-uppercase" style="letter-spacing: 0.5px;">Analytics Depth</label>
-            <select name="analytics_access" class="form-control custom-select shadow-xs" style="border-radius: 10px;">
+            <label class="small font-weight-bold text-secondary mb-2 text-uppercase ls-0-5">Analytics Depth</label>
+            <select name="analytics_access" class="form-control custom-select shadow-xs rounded-10">
                 <option value="none" {{ ($plan->analytics_access ?? '') == 'none' ? 'selected' : '' }}>Disabled (No Access)</option>
                 <option value="basic" {{ ($plan->analytics_access ?? '') == 'basic' ? 'selected' : '' }}>Standard (Basic Metrics)</option>
                 <option value="advanced" {{ ($plan->analytics_access ?? '') == 'advanced' ? 'selected' : '' }}>Advanced (Full Intelligence)</option>
@@ -56,7 +56,7 @@
         <div class="bg-light p-3 rounded-xl border">
             <div class="custom-control custom-switch custom-switch-premium">
                 <input type="checkbox" class="custom-control-input" id="priority_support" name="priority_support" value="1" {{ ($plan->priority_support ?? false) ? 'checked' : '' }}>
-                <label class="custom-control-label font-weight-bold text-dark smallest uppercase letter-spacing-1" for="priority_support" style="padding-top: 2px;">Dedicated Priority Support</label>
+                <label class="custom-control-label font-weight-bold text-dark smallest uppercase letter-spacing-1 pt-2-p" for="priority_support">Dedicated Priority Support</label>
             </div>
         </div>
     </div>

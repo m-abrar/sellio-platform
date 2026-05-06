@@ -55,13 +55,13 @@
 
         @foreach($reports as $report)
         <div class="col-md-4 mb-4">
-            <div class="card h-100 border-0 shadow-premium stat-card" style="border-radius: 24px; transition: all 0.3s ease;">
+            <div class="card h-100 border-0 shadow-premium stat-card rounded-24 transition-0-3">
                 <div class="card-body text-center p-5">
-                    <div class="icon-circle bg-{{ $report['color'] }}-soft text-{{ $report['color'] }} mx-auto mb-4 shadow-xs" style="width: 80px; height: 80px; border-radius: 24px; display: flex; align-items: center; justify-content: center; font-size: 2rem;">
+                    <div class="icon-circle bg-{{ $report['color'] }}-soft text-{{ $report['color'] }} mx-auto mb-4 shadow-xs icon-box-80 rounded-24 d-flex align-items-center justify-content-center font-2-0">
                         <i class="fas {{ $report['icon'] }}"></i>
                     </div>
                     <h4 class="font-weight-bold text-dark mb-3 smallest text-uppercase letter-spacing-1">{{ $report['title'] }}</h4>
-                    <p class="text-muted small px-2 mb-4" style="line-height: 1.6;">
+                    <p class="text-muted small px-2 mb-4 leading-1-6">
                         {{ $report['desc'] }}
                     </p>
                     <a href="{{ route($report['route']) }}" class="btn btn-primary-soft text-primary rounded-pill px-4 py-2 font-weight-bold smallest uppercase letter-spacing-1 stretched-link">
@@ -75,8 +75,4 @@
 </div>
 @endsection
 
-@push('css')
-<style>
-    .stat-card:hover { transform: translateY(-10px); box-shadow: var(--shadow-premium) !important; }
-</style>
 @endpush
