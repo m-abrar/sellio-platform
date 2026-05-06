@@ -1,5 +1,5 @@
-<div id="map-container" class="position-relative shadow-xs border rounded" style="overflow: hidden;">
-    <div id="map" style="width: 100%; height: 320px; background-color: #e9ecef;">
+<div id="map-container" class="position-relative shadow-xs border rounded overflow-hidden">
+    <div id="map" class="map-canvas-default">
         {{-- Loading State Placeholder --}}
         <div class="d-flex align-items-center justify-content-center h-100 text-muted">
             <div class="text-center">

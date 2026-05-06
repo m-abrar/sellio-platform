@@ -107,7 +107,7 @@
                         <div class="form-group mb-0">
                             <label for="description" class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Location Description</label>
                             <textarea name="description" rows="4" 
-                                      class="form-control" style="border-radius: 16px; border: 1px solid var(--border-light);"
+                                      class="form-control rounded-xl border-light"
                                       placeholder="Describe regional highlights or operation details...">{{ old('description', $location?->description ?? '') }}</textarea>
                             @error('description') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
                         </div>

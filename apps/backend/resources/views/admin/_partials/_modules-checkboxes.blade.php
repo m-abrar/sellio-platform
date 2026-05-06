@@ -24,7 +24,7 @@
                {{ old($column, $model->exists && $model->$column ? true : false) ? 'checked' : '' }}>
         <div class="border rounded px-3 py-3 d-flex justify-content-between align-items-center h-100 toggle-card shadow-sm">
             <div class="d-flex align-items-center">
-                <div class="icon-box-soft mr-3 bg-light text-muted d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; border-radius: 12px;">
+                <div class="icon-box-soft mr-3 bg-light text-muted d-flex align-items-center justify-content-center icon-box-40 rounded-xl">
                     <i class="{{ $meta['icon'] }} h5 mb-0 opacity-75"></i>
                 </div>
                 <div>

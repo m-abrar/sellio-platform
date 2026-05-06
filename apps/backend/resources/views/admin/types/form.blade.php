@@ -72,13 +72,13 @@
                                 <label for="icon" class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Visual Icon (FontAwesome)</label>
                                 <div class="input-group input-group-premium">
                                     <div class="input-group-prepend">
-                                        <span class="input-group-text bg-light border-right-0" id="icon-preview-addon" style="border-radius: 12px 0 0 12px;">
+                                        <span class="input-group-text bg-light border-right-0 rounded-l-xl" id="icon-preview-addon">
                                             <i class="{{ old('icon', $type?->icon ?? 'fas fa-icons') }} text-primary"></i>
                                         </span>
                                     </div>
                                     <input type="text" name="icon" id="icon" 
-                                           class="form-control form-control-premium text-monospace"
-                                           placeholder="fas fa-tag" style="border-radius: 0 12px 12px 0;"
+                                           class="form-control form-control-premium text-monospace rounded-r-xl"
+                                           placeholder="fas fa-tag"
                                            value="{{ old('icon', $type?->icon ?? '') }}">
                                 </div>
                                 @error('icon') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
@@ -88,7 +88,7 @@
                         <div class="form-group mb-0">
                             <label for="description" class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Internal Description</label>
                             <textarea name="description" id="description" rows="4" 
-                                      class="form-control" style="border-radius: 16px; border: 1px solid var(--border-light);"
+                                      class="form-control rounded-xl border-light"
                                       placeholder="Briefly describe the purpose of this type grouping...">{{ old('description', $type?->description ?? '') }}</textarea>
                             @error('description') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
                         </div>

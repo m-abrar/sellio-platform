@@ -89,7 +89,7 @@
                         <div class="form-group mb-0">
                             <label for="description" class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Internal Description</label>
                             <textarea name="description" id="description" rows="4" 
-                                      class="form-control" style="border-radius: 16px; border: 1px solid var(--border-light);"
+                                      class="form-control rounded-xl border-light"
                                       placeholder="Briefly describe the purpose of this category...">{{ old('description', $category?->description ?? '') }}</textarea>
                             @error('description') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
                         </div>

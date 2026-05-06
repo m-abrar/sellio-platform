@@ -39,7 +39,7 @@
                 <i class="fas fa-save mr-2"></i> {{ $isEdit ? "SYNCHRONIZE $label" : "INITIALIZE $label" }}
             </button>
 
-            <div class="d-flex" style="gap: 8px;">
+            <div class="d-flex gap-8">
                 @if(isset($back))
                     <a href="{{ route($back) }}" class="btn btn-light flex-grow-1 rounded-pill font-weight-bold small py-2 text-muted border uppercase letter-spacing-1">
                         <i class="fas fa-times mr-1"></i> Cancel

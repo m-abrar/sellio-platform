@@ -11,7 +11,7 @@
     $hasModule = false;
 @endphp
 
-<div class="d-flex flex-wrap" style="gap: 4px;">
+<div class="d-flex flex-wrap gap-4-p">
     @foreach($modules as $column => $data)
         @if($model->$column)
             @php $hasModule = true; @endphp

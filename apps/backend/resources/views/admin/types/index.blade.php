@@ -28,7 +28,7 @@
 <div class="container-fluid">
     @include('admin.alert')
 
-    <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
+    <div class="card border-0 shadow-premium overflow-hidden rounded-24 datatable-premium-layout">
         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
             <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">Listing Type Registry</h3>
             <div class="card-tools d-flex align-items-center ml-auto">
@@ -47,7 +47,7 @@
                 <table id="types-table" class="table table-hover table-premium mb-0">
                     <thead class="thead-light">
                         <tr>
-                            <th class="text-center" style="width: 80px;">Icon</th>
+                            <th class="text-center col-media-80">Icon</th>
                             <th>Name / Identity</th>
                             <th>Module Utilization</th>
                             <th class="text-center">Status</th>
@@ -65,7 +65,7 @@
 
                                 <td class="align-middle">
                                     <span class="d-block font-weight-bold text-dark mb-0 smallest uppercase letter-spacing-1">{{ $type->title ?? 'N/A' }}</span>
-                                    <small class="text-muted text-monospace" style="font-size: 0.7rem;">UID: #TYP-{{ $type->id }}</small>
+                                    <small class="text-muted text-monospace smallest-0-7">UID: #TYP-{{ $type->id }}</small>
                                 </td>
 
                                 <td class="align-middle">
@@ -120,11 +120,6 @@
 
 @section('css')
 @include('admin._partials._toggle-card-css')
-<style>
-    .dataTables_filter { float: left !important; text-align: left !important; }
-    .dataTables_filter input { margin-left: 0 !important; }
-    .dataTables_length { float: right !important; text-align: right !important; }
-</style>
 @endsection
 
 

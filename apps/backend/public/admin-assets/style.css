@@ -1799,16 +1799,23 @@ tr:hover .icon-square-premium {
 
 /* --- 11. UTILITY EXTENSIONS (Migrated from Inline Styles) --- */
 .icon-box-sm { width: 32px !important; height: 32px !important; min-width: 32px !important; }
+.icon-box-40 { width: 40px !important; height: 40px !important; min-width: 40px !important; }
 .icon-box-md { width: 34px !important; height: 34px !important; border-radius: 8px !important; }
 .letter-spacing-1 { letter-spacing: var(--ls-1) !important; }
+.ls-0-5 { letter-spacing: 0.5px !important; }
 .col-media-70 { width: 70px !important; }
 .col-media-80 { width: 80px !important; }
+.col-media-100 { width: 100px !important; }
 .legend-dot-sm { width: 12px !important; height: 12px !important; border-radius: 3px !important; display: inline-block; }
+.gap-4-p { gap: 4px !important; }
 .gap-6 { gap: 6px !important; }
+.gap-8 { gap: 8px !important; }
 .gap-10 { gap: 10px !important; }
 .gap-12 { gap: 12px !important; }
 .gap-15 { gap: 15px !important; }
 .text-0-95 { font-size: 0.95rem !important; }
+.font-0-9 { font-size: 0.9rem !important; }
+.font-1-0 { font-size: 1rem !important; }
 .text-monospace { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace !important; }
 .object-fit-cover { object-fit: cover !important; }
 .leading-relaxed { line-height: 1.625 !important; }
@@ -1816,15 +1823,27 @@ tr:hover .icon-square-premium {
 .badge-min-90 { min-width: 90px !important; }
 .badge-min-110 { min-width: 110px !important; }
 .smallest-0-6 { font-size: 0.6rem !important; }
+.smallest-0-7 { font-size: 0.7rem !important; }
+.smallest-0-75 { font-size: 0.75rem !important; }
 .rounded-20 { border-radius: 20px !important; }
 .rounded-24 { border-radius: 24px !important; }
+.rounded-l-xl { border-radius: 12px 0 0 12px !important; }
+.rounded-r-xl { border-radius: 0 12px 12px 0 !important; }
 .border-dashed { border-style: dashed !important; }
+.border-light { border: 1px solid var(--border-light) !important; }
+.top-20 { top: 20px !important; }
+.map-canvas-default { width: 100% !important; height: 320px !important; background-color: #f1f5f9 !important; }
 .h-46-p-2 { height: 46px !important; padding: 2px !important; }
 .b-5-r-5-w-20-h-20-round-border-3 { position: absolute !important; bottom: 5px !important; right: 5px !important; width: 20px !important; height: 20px !important; border-radius: 50% !important; border: 3px solid #fff !important; }
 
 /* Input Group Premium Select2 Fix */
 .input-group-premium .select2-container { flex: 1 1 auto !important; width: 1% !important; }
 .input-group-premium .select2-container .select2-selection--single { height: 46px !important; border: 0 !important; padding-top: 10px !important; border-radius: 0 12px 12px 0 !important; }
+
+/* DataTable Premium Layout */
+.datatable-premium-layout .dataTables_filter { float: left !important; text-align: left !important; }
+.datatable-premium-layout .dataTables_filter input { margin-left: 0 !important; }
+.datatable-premium-layout .dataTables_length { float: right !important; text-align: right !important; }
 
 /* Premium Header Overrides */
 .card-header-premium-dark { background: #0f172a !important; border-bottom: 3px solid var(--primary) !important; }
