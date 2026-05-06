@@ -31,7 +31,7 @@
     {{-- Main Table --}}
     <div class="card registry-table-card">
         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
-            <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none" style="letter-spacing: 1px;">Event Schedule</h3>
+            <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none letter-spacing-1">Event Schedule</h3>
             <div class="card-tools d-flex align-items-center ml-auto">
                 <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase mr-2">
                     <i class="fas fa-database mr-1"></i> {{ $events->total() }} ASSETS FOUND
@@ -46,7 +46,7 @@
                 <table id="events-table" class="table table-hover table-premium mb-0">
                     <thead class="thead-light">
                         <tr>
-                            <th class="text-center pl-4" style="width: 70px">Media</th>
+                            <th class="text-center pl-4 col-media-70">Media</th>
                             <th>Event Identity</th>
                             <th>Schedule</th>
                             <th>Ticketing</th>
@@ -63,8 +63,8 @@
                                     </div>
                                 </td>
                                 <td class="align-middle">
-                                    <span class="d-block font-weight-bold text-dark mb-0" style="font-size: 0.95rem;">{{ $event->title }}</span>
-                                    <div class="d-flex align-items-center mt-1" style="gap: 10px;">
+                                    <span class="d-block font-weight-bold text-dark mb-0 text-0-95">{{ $event->title }}</span>
+                                    <div class="d-flex align-items-center mt-1 gap-10">
                                         <span class="smallest font-weight-bold text-muted text-monospace">ID: #{{ str_pad($event->id, 5, '0', STR_PAD_LEFT) }}</span>
                                         <span class="text-muted smallest font-weight-bold uppercase letter-spacing-1">
                                             <i class="fas fa-user-tie mr-1 opacity-50"></i> {{ $event->user->name ?? 'Admin' }}
@@ -163,7 +163,7 @@
                     "searchPlaceholder": "Search events schedule..."
                 }
             });
-            $('.dataTables_filter input').addClass('form-control form-control-premium shadow-none border-light mb-3').css('width', '250px');
+            $('.dataTables_filter input').addClass('form-control form-control-premium shadow-none border-light mb-3');
         }
     });
 </script>

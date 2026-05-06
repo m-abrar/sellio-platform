@@ -39,7 +39,7 @@
         {{-- Main Table --}}
         <div class="card registry-table-card">
             <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
-                <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none" style="letter-spacing: 1px;">Commerce Registry</h3>
+                <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none letter-spacing-1">Commerce Registry</h3>
                 <div class="card-tools d-flex align-items-center ml-auto">
                     <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase mr-2">
                         <i class="fas fa-database mr-1"></i> {{ $orders->total() }} TRANSACTIONS
@@ -57,13 +57,13 @@
                         <table id="orders-table" class="table table-hover table-premium mb-0">
                             <thead class="thead-light">
                                 <tr>
-                                    <th class="text-center pl-4" style="width: 50px">
+                                    <th class="text-center pl-4 col-checkbox">
                                         <div class="custom-control custom-checkbox custom-checkbox-premium">
                                             <input type="checkbox" class="custom-control-input" id="selectAll">
                                             <label class="custom-control-label" for="selectAll"></label>
                                         </div>
                                     </th>
-                                    <th class="text-center" style="width: 80px">Media</th>
+                                    <th class="text-center col-media-80">Media</th>
                                     <th>Protocol</th>
                                     <th>Principal</th>
                                     <th>Aggregate</th>
@@ -123,7 +123,7 @@
                                                 ];
                                                 $statusClass = $statusMap[$order->status] ?? 'badge-secondary-light';
                                             @endphp
-                                            <span class="badge {{ $statusClass }} px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1" style="min-width: 90px;">
+                                            <span class="badge {{ $statusClass }} px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 badge-min-90">
                                                 {{ $order->status }}
                                             </span>
                                         </td>
@@ -203,101 +203,6 @@
     </div>
 @endsection
 
-@section('css')
-<style>
-    .text-monospace { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace !important; }
-    .object-fit-cover { object-fit: cover; }
-    .bg-primary-soft { background: rgba(70, 165, 172, 0.1) !important; }
-    .badge-info-light { background: rgba(23, 162, 184, 0.1) !important; }
-
-    /* Floating Action Bar Styling */
-    .bulk-floating-bar {
-        position: fixed;
-        bottom: 30px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 90%;
-        max-width: 800px;
-        height: 80px;
-        background: rgba(15, 23, 42, 0.95);
-        backdrop-filter: blur(15px);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        border-radius: 40px;
-        z-index: 9999;
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
-        color: #fff;
-        display: flex;
-        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    
-    .bulk-floating-bar.d-none {
-        display: none !important;
-        opacity: 0;
-        transform: translate(-50%, 40px);
-    }
-
-    .selection-count-badge {
-        background: var(--primary);
-        color: #fff;
-        padding: 8px 20px;
-        border-radius: 30px;
-        font-weight: 800;
-        font-size: 0.75rem;
-        letter-spacing: 1px;
-    }
-
-    .divider-v {
-        width: 1px;
-        height: 30px;
-        background: rgba(255, 255, 255, 0.1);
-        margin: 0 25px;
-    }
-
-    .btn-action-pill {
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        color: #fff;
-        border-radius: 30px;
-        padding: 8px 25px;
-        font-weight: 700;
-        font-size: 0.7rem;
-        letter-spacing: 1px;
-        text-transform: uppercase;
-        transition: all 0.3s ease;
-    }
-
-    .btn-action-pill:hover {
-        background: rgba(255, 255, 255, 0.1);
-        color: #fff;
-        border-color: rgba(255, 255, 255, 0.2);
-    }
-
-    .btn-close-bar {
-        background: transparent;
-        border: none;
-        color: rgba(255, 255, 255, 0.5);
-        font-size: 1.2rem;
-        transition: color 0.3s ease;
-        padding: 10px;
-    }
-
-    .btn-close-bar:hover {
-        color: #fff;
-    }
-
-    /* Animation */
-    .animate__fadeInUpCustom {
-        animation: fadeInUpCustom 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    @keyframes fadeInUpCustom {
-        from { opacity: 0; transform: translate(-50%, 50px); }
-        to { opacity: 1; transform: translate(-50%, 0); }
-    }
-    /* Fix Select2 in Premium Input Groups */
-    .input-group-premium .select2-container { flex: 1 1 auto !important; width: 1% !important; }
-    .input-group-premium .select2-container .select2-selection--single { height: 46px !important; border: 0 !important; padding-top: 10px !important; border-radius: 0 12px 12px 0 !important; }
-</style>
 @endsection
 
 @section('js')
@@ -373,7 +278,7 @@
                     "searchPlaceholder": "Search commerce registry..."
                 }
             });
-            $('.dataTables_filter input').addClass('form-control form-control-premium shadow-none border-light mb-3').css('width', '250px');
+            $('.dataTables_filter input').addClass('form-control form-control-premium shadow-none border-light mb-3');
         }
     });
 </script>

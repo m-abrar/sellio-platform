@@ -24,7 +24,7 @@
                         
                         @if(module_enabled('properties'))
                         <a class="dropdown-item d-flex align-items-center py-2 px-4 transition-all" href="{{ route('admin.properties.create') }}">
-                            <div class="icon-box-soft bg-success-soft text-success mr-3 rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; min-width: 32px;">
+                            <div class="icon-box-soft bg-success-soft text-success mr-3 rounded-circle d-flex align-items-center justify-content-center icon-box-sm">
                                 <i class="fas fa-home smallest"></i>
                             </div>
                             <span class="font-weight-bold small">Property Listing</span>
@@ -33,7 +33,7 @@
 
                         @if(module_enabled('autos'))
                         <a class="dropdown-item d-flex align-items-center py-2 px-4 transition-all" href="{{ route('admin.autos.create') }}">
-                            <div class="icon-box-soft bg-primary-soft text-primary mr-3 rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; min-width: 32px;">
+                            <div class="icon-box-soft bg-primary-soft text-primary mr-3 rounded-circle d-flex align-items-center justify-content-center icon-box-sm">
                                 <i class="fas fa-car smallest"></i>
                             </div>
                             <span class="font-weight-bold small">Automotive Asset</span>
@@ -42,7 +42,7 @@
 
                         @if(module_enabled('events'))
                         <a class="dropdown-item d-flex align-items-center py-2 px-4 transition-all" href="{{ route('admin.events.create') }}">
-                            <div class="icon-box-soft bg-info-soft text-info mr-3 rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; min-width: 32px;">
+                            <div class="icon-box-soft bg-info-soft text-info mr-3 rounded-circle d-flex align-items-center justify-content-center icon-box-sm">
                                 <i class="fas fa-calendar-alt smallest"></i>
                             </div>
                             <span class="font-weight-bold small">Event / Ticket</span>
@@ -51,7 +51,7 @@
 
                         @if(module_enabled('jobs'))
                         <a class="dropdown-item d-flex align-items-center py-2 px-4 transition-all" href="{{ route('admin.jobs.create') }}">
-                            <div class="icon-box-soft bg-warning-soft text-warning mr-3 rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; min-width: 32px;">
+                            <div class="icon-box-soft bg-warning-soft text-warning mr-3 rounded-circle d-flex align-items-center justify-content-center icon-box-sm">
                                 <i class="fas fa-briefcase smallest"></i>
                             </div>
                             <span class="font-weight-bold small">Job Opportunity</span>
@@ -60,7 +60,7 @@
 
                         @if(module_enabled('services'))
                         <a class="dropdown-item d-flex align-items-center py-2 px-4 transition-all" href="{{ route('admin.services.create') }}">
-                            <div class="icon-box-soft bg-danger-soft text-danger mr-3 rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; min-width: 32px;">
+                            <div class="icon-box-soft bg-danger-soft text-danger mr-3 rounded-circle d-flex align-items-center justify-content-center icon-box-sm">
                                 <i class="fas fa-tools smallest"></i>
                             </div>
                             <span class="font-weight-bold small">Professional Service</span>
@@ -69,7 +69,7 @@
 
                         @if(module_enabled('classifieds'))
                         <a class="dropdown-item d-flex align-items-center py-2 px-4 transition-all" href="{{ route('admin.classifieds.create') }}">
-                            <div class="icon-box-soft bg-secondary-soft text-secondary mr-3 rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; min-width: 32px;">
+                            <div class="icon-box-soft bg-secondary-soft text-secondary mr-3 rounded-circle d-flex align-items-center justify-content-center icon-box-sm">
                                 <i class="fas fa-tags smallest"></i>
                             </div>
                             <span class="font-weight-bold small">General Classified</span>
@@ -79,7 +79,7 @@
                         @if(module_enabled('products'))
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item d-flex align-items-center py-2 px-4 transition-all" href="{{ route('admin.products.create') }}">
-                            <div class="icon-box-soft bg-dark-soft text-dark mr-3 rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; min-width: 32px;">
+                            <div class="icon-box-soft bg-dark-soft text-dark mr-3 rounded-circle d-flex align-items-center justify-content-center icon-box-sm">
                                 <i class="fas fa-shopping-bag smallest"></i>
                             </div>
                             <span class="font-weight-bold small">Retail Product</span>
@@ -137,7 +137,7 @@
 
         <div class="card registry-table-card">
             <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
-                <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none" style="letter-spacing: 1px;">
+                <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none letter-spacing-1">
                     {{ $type !== 'all' ? 'Filtering for ' . \Illuminate\Support\Str::title($type) : 'Marketplace Catalog' }}
                 </h3>
                 <div class="card-tools d-flex align-items-center ml-auto">
@@ -155,7 +155,7 @@
                     <table id="listings-table" class="table table-hover table-premium mb-0">
                         <thead class="thead-light">
                             <tr>
-                                <th class="text-center pl-4" style="width: 80px">Asset</th>
+                                <th class="text-center pl-4 col-media-80">Asset</th>
                                 <th>Identity & Location</th>
                                 <th>Proprietor</th>
                                 @if($type === 'all')
@@ -174,8 +174,8 @@
                                         </div>
                                     </td>
                                     <td class="align-middle">
-                                        <span class="d-block font-weight-bold text-dark mb-0" style="font-size: 0.95rem;">{{ $listing->title ?? 'Untitled Asset' }}</span>
-                                        <div class="d-flex align-items-center mt-1" style="gap: 10px;">
+                                        <span class="d-block font-weight-bold text-dark mb-0 text-0-95">{{ $listing->title ?? 'Untitled Asset' }}</span>
+                                        <div class="d-flex align-items-center mt-1 gap-10">
                                             <span class="smallest font-weight-bold text-muted text-monospace">ID: #{{ str_pad($listing->id, 5, '0', STR_PAD_LEFT) }}</span>
                                             <span class="text-muted smallest font-weight-bold uppercase letter-spacing-1">
                                                 <i class="fas fa-map-marker-alt mr-1 text-danger opacity-50"></i>{{ $listing->location->title ?? 'Global' }}
@@ -185,7 +185,7 @@
                                     <td class="align-middle">
                                         @if ($listing->user)
                                             <div class="d-flex align-items-center">
-                                                <div class="icon-box-soft bg-primary-soft mr-3 d-flex align-items-center justify-content-center shadow-xs" style="width:34px; height:34px; border-radius: 8px;">
+                                                <div class="icon-box-soft bg-primary-soft mr-3 d-flex align-items-center justify-content-center shadow-xs icon-box-md">
                                                     <i class="fas fa-user-tie text-primary smallest"></i>
                                                 </div>
                                                 <div>
@@ -316,7 +316,7 @@
                     "searchPlaceholder": "Search within catalog..."
                 }
             });
-            $('.dataTables_filter input').addClass('form-control form-control-premium shadow-none border-light mb-3').css('width', '250px');
+            $('.dataTables_filter input').addClass('form-control form-control-premium shadow-none border-light mb-3');
         }
     });
 </script>

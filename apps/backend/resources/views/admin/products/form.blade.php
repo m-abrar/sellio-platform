@@ -98,7 +98,7 @@
 
                         <div class="form-group mb-0">
                             <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Full Description <span class="text-danger">*</span></label>
-                            <textarea name="description" id="description" rows="8" class="form-control" placeholder="Detailed technical specs and features..." style="border-radius: 16px; border: 1px solid var(--border-light);">{{ old('description', $product->description ?? '') }}</textarea>
+                            <textarea name="description" id="description" rows="8" class="form-control textarea-premium" placeholder="Detailed technical specs and features...">{{ old('description', $product->description ?? '') }}</textarea>
                         </div>
                     </div>
                 </div>
@@ -107,12 +107,12 @@
                 <div class="card border-0 shadow-premium rounded-xl overflow-hidden mb-4">
                     <div class="card-header border-0 bg-white py-4 px-4 d-flex justify-content-between align-items-center">
                         <h3 class="card-title-main">Attributes & Variations</h3>
-                        <button type="button" class="btn btn-premium-soft-primary btn-sm" onclick="addVariationRow()">
+                        <button type="button" class="btn btn-primary rounded-pill px-3 font-weight-bold shadow-premium smallest uppercase letter-spacing-1" onclick="addVariationRow()">
                             <i class="fas fa-plus-circle mr-1"></i> ADD ATTRIBUTE
                         </button>
                     </div>
                     <div class="card-body p-4 pt-0">
-                        <div class="table-responsive rounded-xl border" style="border-color: var(--border-light) !important;">
+                        <div class="table-responsive rounded-xl border border-light-soft">
                             <table class="table table-premium mb-0" id="variationsTable">
                                 <thead class="bg-light">
                                     <tr>
@@ -157,12 +157,12 @@
                 <div class="card border-0 shadow-premium rounded-xl overflow-hidden mb-4">
                     <div class="card-header border-0 bg-white py-4 px-4 d-flex justify-content-between align-items-center">
                         <h3 class="card-title-main">Optional Extra Services</h3>
-                        <button type="button" class="btn btn-premium-soft-primary btn-sm" onclick="addAddonRow()">
+                        <button type="button" class="btn btn-primary rounded-pill px-3 font-weight-bold shadow-premium smallest uppercase letter-spacing-1" onclick="addAddonRow()">
                             <i class="fas fa-plus-circle mr-1"></i> ADD NEW ADD-ON
                         </button>
                     </div>
                     <div class="card-body p-4 pt-0">
-                        <div class="table-responsive rounded-xl border" style="border-color: var(--border-light) !important;">
+                        <div class="table-responsive rounded-xl border border-light-soft">
                             <table class="table table-premium mb-0" id="addonsTable">
                                 <thead class="bg-light">
                                     <tr>
@@ -222,10 +222,10 @@
                             <div class="col-md-6">
                                 <div class="form-group mb-0">
                                     <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Dimensions (LxWxH cm)</label>
-                                    <div class="input-group-premium d-flex">
-                                        <input type="number" step="0.01" name="length" placeholder="L" class="form-control form-control-premium rounded-0" style="border-radius: 12px 0 0 12px !important;" value="{{ old('length', $product->length ?? '') }}">
+                                    <div class="input-group-premium d-flex dimensions-input-group">
+                                        <input type="number" step="0.01" name="length" placeholder="L" class="form-control form-control-premium rounded-0" value="{{ old('length', $product->length ?? '') }}">
                                         <input type="number" step="0.01" name="width" placeholder="W" class="form-control form-control-premium rounded-0 border-left-0 border-right-0" value="{{ old('width', $product->width ?? '') }}">
-                                        <input type="number" step="0.01" name="height" placeholder="H" class="form-control form-control-premium rounded-0" style="border-radius: 0 12px 12px 0 !important;" value="{{ old('height', $product->height ?? '') }}">
+                                        <input type="number" step="0.01" name="height" placeholder="H" class="form-control form-control-premium rounded-0" value="{{ old('height', $product->height ?? '') }}">
                                     </div>
                                 </div>
                             </div>
@@ -297,7 +297,7 @@
                             <div class="custom-control custom-switch custom-switch-premium mb-3">
                                 <input type="hidden" name="{{ $t['name'] }}" value="0">
                                 <input type="checkbox" name="{{ $t['name'] }}" value="1" class="custom-control-input" id="{{ $t['id'] }}" {{ $t['checked'] ? 'checked' : '' }}>
-                                <label class="custom-control-label small font-weight-bold text-dark uppercase letter-spacing-1" for="{{ $t['id'] }}" style="padding-top: 2px;">{{ $t['label'] }}</label>
+                                <label class="custom-control-label small font-weight-bold text-dark uppercase letter-spacing-1" for="{{ $t['id'] }}">{{ $t['label'] }}</label>
                             </div>
                         @endforeach
                     </div>

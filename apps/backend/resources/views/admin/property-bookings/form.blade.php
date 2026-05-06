@@ -157,8 +157,7 @@
 
                         <div class="form-group mb-0">
                             <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Administrative Intel / Guest Requests</label>
-                            <textarea name="message" class="form-control" rows="3"
-                                style="border-radius: 16px; border: 1px solid var(--border-light);"
+                            <textarea name="message" class="form-control textarea-premium" rows="3"
                                 placeholder="Internal context or manual override rationale...">{{ old('message', $booking->message) }}</textarea>
                             @error('message') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
                         </div>
@@ -180,7 +179,7 @@
                                 <div class="d-flex align-items-center"><span class="legend-dot" style="background-color: #93c5fd; width: 12px; height: 12px; border-radius: 3px;"></span> <span class="small font-weight-bold text-muted uppercase ml-2 letter-spacing-1">Current Focus</span></div>
                             </div>
                         @else
-                            <div class="text-center py-5 bg-light rounded-xl border border-dashed" style="border-color: var(--border-light) !important;">
+                            <div class="text-center py-5 bg-light rounded-xl border border-dashed border-light-soft">
                                 <i class="fas fa-calendar-day fa-3x text-muted mb-3 opacity-25"></i>
                                 <p class="text-muted small font-weight-bold uppercase letter-spacing-1 mb-0">Switch to inspection mode to visualize live occupancy</p>
                             </div>
@@ -203,8 +202,8 @@
                         <h3 class="card-title-side">Financial Integrity</h3>
                     </div>
                     <div class="card-body p-4 pt-0">
-                        <div class="p-3 bg-light rounded-xl border border-light">
-                            <p class="small text-muted mb-0 font-italic" style="line-height: 1.6;">
+                        <div class="p-3 bg-light rounded-xl border border-light leading-relaxed">
+                            <p class="small text-muted mb-0 font-italic">
                                 <i class="fas fa-info-circle mr-1 text-primary"></i> Manually creating a stay record will skip the payment gateway logic. Ensure you verify physical fund transfers before marking the status as <strong>CONFIRMED</strong>.
                             </p>
                         </div>

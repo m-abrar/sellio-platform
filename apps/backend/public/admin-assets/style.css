@@ -1796,3 +1796,118 @@ tr:hover .icon-square-premium {
     color: #94a3b8 !important;
     font-size: 1rem !important;
 }
+
+/* --- 11. UTILITY EXTENSIONS (Migrated from Inline Styles) --- */
+.icon-box-sm { width: 32px !important; height: 32px !important; min-width: 32px !important; }
+.icon-box-md { width: 34px !important; height: 34px !important; border-radius: 8px !important; }
+.letter-spacing-1 { letter-spacing: var(--ls-1) !important; }
+.col-media-70 { width: 70px !important; }
+.col-media-80 { width: 80px !important; }
+.legend-dot-sm { width: 12px !important; height: 12px !important; border-radius: 3px !important; display: inline-block; }
+.gap-10 { gap: 10px !important; }
+.text-0-95 { font-size: 0.95rem !important; }
+.text-monospace { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace !important; }
+.object-fit-cover { object-fit: cover !important; }
+.leading-relaxed { line-height: 1.625 !important; }
+.col-checkbox { width: 50px !important; }
+.badge-min-90 { min-width: 90px !important; }
+
+/* Floating Action Bar Styling */
+.bulk-floating-bar {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 800px;
+    height: 80px;
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 40px;
+    z-index: 9999;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+    color: #fff;
+    display: flex;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.bulk-floating-bar.d-none {
+    display: none !important;
+    opacity: 0;
+    transform: translate(-50%, 40px);
+}
+
+.selection-count-badge {
+    background: var(--primary);
+    color: #fff;
+    padding: 8px 20px;
+    border-radius: 30px;
+    font-weight: 800;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+}
+
+.divider-v {
+    width: 1px;
+    height: 30px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 0 25px;
+}
+
+.btn-action-pill {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border-radius: 30px;
+    padding: 8px 25px;
+    font-weight: 700;
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+}
+
+.btn-action-pill:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.btn-close-bar {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 1.2rem;
+    transition: color 0.3s ease;
+    padding: 10px;
+}
+
+.btn-close-bar:hover {
+    color: #fff;
+}
+
+/* Animations */
+.animate__fadeInUpCustom {
+    animation: fadeInUpCustom 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes fadeInUpCustom {
+    from { opacity: 0; transform: translate(-50%, 50px); }
+    to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+/* Form Specifics */
+.textarea-premium { border-radius: var(--radius-lg) !important; border: 1px solid var(--border-light) !important; }
+.border-light-soft { border-color: var(--border-light) !important; }
+.dimensions-input-group .form-control:first-child { border-radius: var(--radius-md) 0 0 var(--radius-md) !important; }
+.dimensions-input-group .form-control:last-child { border-radius: 0 var(--radius-md) var(--radius-md) 0 !important; }
+.dimensions-input-group .form-control:not(:first-child):not(:last-child) { border-radius: 0 !important; }
+.custom-switch-premium label { padding-top: 2px !important; }
+
+/* DataTable Search Fix - Global Overrides to avoid JS .css() */
+.dataTables_filter input.form-control-premium {
+    width: 250px !important;
+    margin-bottom: 1rem !important;
+}
+
