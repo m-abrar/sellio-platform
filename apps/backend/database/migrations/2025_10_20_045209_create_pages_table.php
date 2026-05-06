@@ -15,20 +15,21 @@ return new class extends Migration
         Schema::create('pages', function (Blueprint $table) {
             $table->id(); // bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, Primary Key
             $table->string('title'); // varchar(255) NOT NULL
-            $table->string('slug')->index(); // varchar(255) NOT NULL, Index for fast lookup
-            $table->string('type')->nullable(); // varchar(255) DEFAULT NULL (e.g., 'page', 'header', 'footer')
+            $table->string('slug')->unique(); 
+            $table->string('type')->nullable()->index(); // varchar(255) DEFAULT NULL (e.g., 'page', 'header', 'footer')
             
-            // These are likely foreign keys referencing other page IDs for headers/footers
-            $table->tinyInteger('header_id')->nullable(); // tinyint(4) DEFAULT NULL
-            $table->tinyInteger('footer_id')->nullable(); // tinyint(4) DEFAULT NULL
+            // Scalability fix: using unsignedBigInteger to avoid the tinyInteger 127-limit
+            $table->unsignedBigInteger('header_id')->nullable(); 
+            $table->unsignedBigInteger('footer_id')->nullable(); 
             
-            $table->text('meta_description')->nullable(); // text DEFAULT NULL
-            $table->text('meta_keywords')->nullable(); // text DEFAULT NULL
+            $table->text('meta_description')->nullable(); 
+            $table->text('meta_keywords')->nullable(); 
             
-            $table->longText('html')->nullable(); // longtext DEFAULT NULL (for page content)
-            $table->text('css')->nullable(); // text DEFAULT NULL (for page styles)
+            $table->longText('html')->nullable(); 
+            $table->text('css')->nullable(); 
             
-            $table->boolean('is_published')->default(false); // tinyint(1) NOT NULL DEFAULT 0
+            $table->boolean('is_published')->default(true)->index(); 
+            $table->boolean('is_system')->default(false)->comment('If true, cannot be deleted via UI');
             $table->timestamps(); // created_at timestamp NULL DEFAULT NULL, updated_at timestamp NULL DEFAULT NULL
         });
     }

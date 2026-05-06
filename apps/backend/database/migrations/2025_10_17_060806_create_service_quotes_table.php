@@ -13,8 +13,13 @@ return new class extends Migration
 
             // Foreign Keys
             $table->foreignId('service_id')->constrained('services')->onDelete('cascade');
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade');
             
+            // Guest Contact Details (if user_id is null)
+            $table->string('name')->nullable();
+            $table->string('email')->nullable();
+            $table->string('phone', 30)->nullable();
+
             // Link to the specific package selected in the sidebar
             $table->foreignId('service_package_id')->nullable()->constrained('service_packages')->onDelete('set null');
 
@@ -24,8 +29,9 @@ return new class extends Migration
             $table->text('details')->nullable(); // Stores additional 'notes' from the user
             
             // Quote Status and Price
-            $table->enum('status', ['pending', 'quoted', 'accepted', 'rejected', 'completed'])->default('pending');
+            $table->string('status', 30)->default('pending')->index();
             $table->decimal('quoted_price', 15, 2)->nullable(); 
+            $table->text('admin_notes')->nullable();
 
             // Analytics & Notifications
             $table->timestamp('viewed_at')->nullable();

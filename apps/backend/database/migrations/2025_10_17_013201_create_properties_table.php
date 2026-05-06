@@ -21,19 +21,19 @@ return new class extends Migration
             $table->text('description');
             $table->decimal('base_price', 15, 2);
             $table->decimal('sale_price', 15, 2)->nullable();
-            $table->decimal('price_per_night', 5, 2)->nullable();
+            $table->decimal('price_per_night', 15, 2)->nullable();
             
             // Property Specifics
             $table->integer('total_units')->default(1);
-            $table->integer('number_of_bedrooms');
-            $table->integer('number_of_bathrooms');
-            $table->integer('maximum_guests');
-            $table->integer('minimum_rental_days');
-            $table->integer('maximum_rental_days');
+            $table->integer('number_of_bedrooms')->default(0);
+            $table->integer('number_of_bathrooms')->default(0);
+            $table->integer('maximum_guests')->default(1);
+            $table->integer('minimum_rental_days')->default(1);
+            $table->integer('maximum_rental_days')->nullable();
             $table->float('area_sq_ft')->nullable();
             $table->float('area_sq_m')->nullable();
             $table->string('number_of_parking_spots', 255)->nullable();
-            $table->decimal('hoa', 10, 2)->nullable()->comment('Home Owners Association (HOA) fee');
+            $table->decimal('hoa', 15, 2)->nullable()->comment('Home Owners Association (HOA) fee');
             $table->text('rules')->nullable()->comment('Specific property rules');
             $table->text('policies')->nullable()->comment('Specific property policies');
             $table->year('year_built')->nullable();

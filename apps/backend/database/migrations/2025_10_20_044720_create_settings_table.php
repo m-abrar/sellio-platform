@@ -15,7 +15,8 @@ return new class extends Migration
         // This table is designed to store key-value configuration settings for the application.
         Schema::create('settings', function (Blueprint $table) {
             $table->id(); // bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, Primary Key
-            $table->string('key')->unique(); // varchar(255) NOT NULL, Unique Index
+            $table->string('group')->default('general')->index(); 
+            $table->string('key')->unique(); 
             $table->text('value')->nullable(); // text DEFAULT NULL
             $table->timestamps(); // created_at timestamp NULL DEFAULT NULL, updated_at timestamp NULL DEFAULT NULL
         });

@@ -16,8 +16,16 @@ return new class extends Migration
 
             // Core Information
             $table->string('title', 100);
-            $table->string('slug', 100);
+            $table->string('slug', 100)->unique();
             $table->text('description')->nullable();
+            
+            // Hierarchical Relationship (Self-Referencing)
+            $table->foreignId('parent_id')
+                  ->nullable()
+                  ->constrained('locations')
+                  ->onDelete('cascade');
+            
+            $table->unsignedTinyInteger('level')->default(1)->comment('1: Country, 2: State, 3: City, 4: Area');
             
             // Geographical Data
             // Precision for Latitude (max 90.00000000)

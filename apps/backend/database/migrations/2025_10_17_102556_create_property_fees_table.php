@@ -19,14 +19,14 @@ return new class extends Migration
             $table->string('title', 100); // e.g., "Cleaning Fee", "Sales Tax"
             
             // --- Fields for Flat Fees ---
-            $table->decimal('amount', 8, 2)->nullable(); // The dollar amount (e.g., 100.00)
-            $table->enum('type', ['refundable', 'non_refundable'])->nullable(); // e.g., 'refundable' for deposit
+            $table->decimal('amount', 15, 2)->nullable(); 
+            $table->string('type', 30)->nullable()->comment('refundable, non_refundable'); 
             
             // --- Fields for Percentage Fees ---
-            $table->decimal('rate', 4, 3)->nullable(); // The percentage rate (e.g., 0.050 for 5%)
+            $table->decimal('rate', 15, 4)->nullable()->comment('The percentage rate (e.g., 0.0500 for 5%)');
             
-            // Discriminator field: 'flat' uses amount/type, 'percentage' uses rate
-            $table->enum('charge_type', ['flat', 'percentage'])->default('flat'); 
+            $table->string('charge_type', 20)->default('flat')->index(); 
+            $table->boolean('is_active')->default(true)->index();
             
             // Ensures a property only has one fee entry with a specific title
             $table->unique(['property_id', 'title']); 

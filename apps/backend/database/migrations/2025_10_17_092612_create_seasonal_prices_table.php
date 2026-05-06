@@ -23,7 +23,9 @@ return new class extends Migration
             // 🆕 New Column: Season Name/Title
             $table->string('title', 100); 
             
-            $table->decimal('price', 8, 2); // Price for this season
+            $table->decimal('price', 15, 2); 
+            $table->boolean('is_active')->default(true)->index();
+            $table->unsignedSmallInteger('priority')->default(1)->comment('Higher number takes precedence in case of overlaps');
             
             $table->timestamps();
             

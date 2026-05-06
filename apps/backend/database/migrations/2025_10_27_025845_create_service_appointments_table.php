@@ -26,10 +26,13 @@ return new class extends Migration
             $table->string('phone')->nullable();
             $table->string('topic')->nullable();
             
-            $table->dateTime('scheduled_at')->nullable(); // Required for ordering/sorting
-            $table->string('status', 50)->default('pending');
-            $table->text('notes')->nullable();
-            $table->decimal('price', 8, 2)->nullable();
+            $table->dateTime('scheduled_at')->nullable()->index(); 
+            $table->string('status', 30)->default('pending')->index();
+            $table->string('payment_status', 20)->default('unpaid')->index();
+            $table->string('transaction_id')->nullable()->index();
+            $table->text('notes')->nullable()->comment('Customer notes');
+            $table->text('admin_notes')->nullable()->comment('Provider notes');
+            $table->decimal('price', 15, 2)->nullable();
             $table->timestamp('viewed_at')->nullable();
             $table->timestamps();
         });

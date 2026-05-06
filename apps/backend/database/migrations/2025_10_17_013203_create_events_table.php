@@ -42,10 +42,16 @@ return new class extends Migration
             $table->boolean('is_published')->default(false)->index();
             $table->boolean('is_featured')->default(false)->index();
             $table->boolean('is_virtual')->default(false)->index();
+            $table->string('virtual_link')->nullable()->comment('URL for Zoom/Meet if is_virtual is true');
             $table->boolean('is_paid')->default(false)->index();
+            $table->string('status', 30)->default('active')->index();
+
+            $table->string('organizer_name')->nullable();
+            $table->string('organizer_email')->nullable();
 
             $table->string('meta_title')->nullable();
             $table->text('meta_description')->nullable();
+            $table->text('admin_note')->nullable();
             $table->timestamp('approved_at')->nullable()->index();
             $table->timestamp('expires_at')->nullable()->index();
             $table->timestamps();

@@ -43,14 +43,17 @@ return new class extends Migration
             $table->decimal('longitude', 11, 8)->nullable();
 
             // Status/Type
+            $table->string('status', 30)->default('active')->index();
             $table->boolean('is_published')->default(false)->index();
             $table->boolean('is_featured')->default(false)->index();
+            $table->boolean('is_negotiable')->default(true)->index();
             $table->boolean('is_for_rent')->default(false)->index();
             $table->boolean('is_for_sale')->default(true)->index();
             $table->boolean('is_shipping')->default(false)->index();
 
             $table->string('meta_title')->nullable();
             $table->text('meta_description')->nullable();
+            $table->text('admin_note')->nullable();
             $table->timestamp('approved_at')->nullable()->index();
             $table->timestamp('expires_at')->nullable()->index();
             $table->timestamps();

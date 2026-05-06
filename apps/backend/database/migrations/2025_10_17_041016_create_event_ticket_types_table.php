@@ -13,13 +13,15 @@ return new class extends Migration
             $table->id();
             $table->foreignId('event_id')->constrained('events')->cascadeOnDelete();
             $table->string('title');
-            $table->decimal('base_price', 10, 2);
+            $table->decimal('base_price', 15, 2);
+            $table->text('description')->nullable();
+            $table->unsignedInteger('max_quantity')->nullable()->comment('NULL for unlimited');
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('event_tickets');
+        Schema::dropIfExists('event_ticket_types');
     }
 };

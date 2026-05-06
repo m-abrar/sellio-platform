@@ -17,15 +17,19 @@ return new class extends Migration
             $table->id();
             
             // Foreign Keys
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); // The user making the inquiry (buyer)
+            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade'); 
             $table->foreignId('classified_id')->constrained('classified_ads')->onDelete('cascade');
             
+            // Guest Contact Details
+            $table->string('name')->nullable();
+            $table->string('email')->nullable();
+            $table->string('phone', 30)->nullable();
+
             // Inquiry Details
-            $table->enum('status', ['pending', 'contacted', 'resolved', 'closed_sale'])->default('pending');
+            $table->string('status', 30)->default('pending')->index();
             $table->text('message')->nullable();
             
-            // Unique Constraint: A user can only submit one *initial* inquiry per ad
-            $table->unique(['user_id', 'classified_id']);
+            $table->index(['user_id', 'classified_id']);
             $table->timestamp('viewed_at')->nullable();
             $table->timestamps();
         });

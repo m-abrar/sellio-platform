@@ -21,8 +21,11 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); // The applicant
 
             // Application details
-            $table->enum('status', ['pending', 'reviewed', 'interview', 'rejected', 'hired'])->default('pending');
+            $table->string('status', 30)->default('pending')->index();
             $table->text('cover_letter')->nullable();
+            $table->string('resume_path')->nullable()->comment('Path to uploaded PDF/Docx');
+            $table->string('portfolio_url')->nullable();
+            $table->text('admin_notes')->nullable()->comment('Internal recruitment notes');
             
             // Unique index: A user can only apply to a job once
             $table->unique(['job_listing_id', 'user_id']); 

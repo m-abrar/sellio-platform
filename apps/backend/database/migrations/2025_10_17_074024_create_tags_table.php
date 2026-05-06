@@ -28,7 +28,9 @@ return new class extends Migration
             $table->boolean('is_product')->default(false);
             $table->boolean('is_blog')->default(false);
 
-            $table->boolean('is_published');
+            $table->boolean('is_published')->default(true)->index();
+            $table->string('color', 20)->default('#6c757d')->comment('Hex color for UI badges');
+            $table->unsignedSmallInteger('sort_order')->default(0);
 
             $table->timestamps();
         });

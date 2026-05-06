@@ -35,9 +35,12 @@ return new class extends Migration
             $table->unsignedInteger('mileage_value');
             $table->string('mileage_units');
             $table->tinyInteger('condition_rating')->nullable(); // 1-10
-            $table->string('vin_number', 50)->nullable();
+            $table->string('vin_number', 50)->nullable()->index();
             $table->unsignedTinyInteger('warranty_months')->nullable();
             $table->unsignedTinyInteger('stock_quantity')->default(1);
+            $table->boolean('is_certified')->default(false)->index();
+            $table->string('status', 30)->default('active')->index();
+            $table->text('admin_note')->nullable();
 
             // Location/Address
             $table->string('address', 255)->nullable();

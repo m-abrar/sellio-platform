@@ -16,11 +16,15 @@ return new class extends Migration
             $table->string('title');
             $table->text('description')->nullable();
             
-            $table->enum('status', ['open', 'in-progress', 'closed', 'reopened'])->default('open');
-            $table->enum('priority', ['low', 'medium', 'high', 'urgent'])->default('low'); // Merged
+            $table->string('status', 30)->default('open')->index();
+            $table->string('priority', 20)->default('low')->index();
+            $table->string('category', 50)->nullable()->index()->comment('e.g. Technical, Billing, General');
             
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->timestamp('viewed_at')->nullable(); // Merged
+            $table->foreignId('assigned_to')->nullable()->constrained('users')->onDelete('set null')->comment('Admin ID');
+            
+            $table->timestamp('viewed_at')->nullable();
+            $table->timestamp('closed_at')->nullable()->index();
             
             $table->timestamps();
         });

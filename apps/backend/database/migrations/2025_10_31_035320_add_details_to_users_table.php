@@ -40,14 +40,16 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            // Drop all the columns added in the 'up' method
             $table->dropColumn([
                 'username',
+                'social_avatar_url',
+                'company',
                 'bio',
-                'phone',
+                'years_of_experience',
                 'date_of_birth',
-                'profile_image_url',
                 'is_verified',
+                'is_partner',
+                'is_buyer',
             ]);
         });
     }

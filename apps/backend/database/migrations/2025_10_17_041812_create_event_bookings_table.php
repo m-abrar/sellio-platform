@@ -20,11 +20,13 @@ return new class extends Migration
             $table->foreignId('event_ticket_type_id')->constrained('event_ticket_types')->cascadeOnDelete();
             $table->foreignId('occurrence_ticket_id')->constrained('event_occurrence_tickets')->cascadeOnDelete();
 
-            $table->integer('quantity');
-            $table->decimal('total_price', 10, 2);
-            $table->string('status', 50)->default('confirmed');
+            $table->integer('quantity')->default(1);
+            $table->decimal('total_price', 15, 2);
+            $table->string('status', 30)->default('confirmed')->index();
+            $table->string('payment_status', 20)->default('unpaid')->index();
+            $table->string('transaction_id')->nullable()->index();
 
-            $table->unique(['user_id', 'event_occurrence_id', 'event_ticket_type_id'], 'user_occurrence_ticket_unique');
+            $table->index(['user_id', 'event_occurrence_id'], 'user_occurrence_index');
             $table->timestamp('viewed_at')->nullable();
             $table->timestamps();
         });

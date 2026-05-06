@@ -25,6 +25,8 @@ return new class extends Migration
             $table->json('generated_conversions');
             $table->json('responsive_images');
             $table->unsignedInteger('order_column')->nullable()->index();
+            $table->string('status', 30)->default('approved')->index()->comment('pending, approved, rejected');
+            $table->text('admin_notes')->nullable();
 
             $table->nullableTimestamps();
         });

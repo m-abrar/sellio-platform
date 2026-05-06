@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('withdrawals', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->bigInteger('amount');
+            $table->decimal('amount', 15, 2);
             $table->string('method')->nullable(); // e.g., PayPal, Bank
             $table->string('details')->nullable(); // JSON or text for account info
-            $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
+            $table->string('status', 30)->default('pending')->index();
             $table->text('admin_note')->nullable();
             $table->timestamp('approved_at')->nullable();
             $table->timestamp('rejected_at')->nullable();
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('withdrawal_requests');
+        Schema::dropIfExists('withdrawals');
     }
 };

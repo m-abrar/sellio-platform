@@ -22,13 +22,13 @@ return new class extends Migration
             // The Partner (Service Provider, Vendor, etc.)
             $table->foreignId('partner_id')->constrained('users')->onDelete('cascade');
             
-            // --- NEW: Subject/Title for the conversation thread ---
             $table->string('subject')->nullable();
             
-            // Ensure a user only has one conversation with a specific partner (optional, but good practice)
-            // Note: If you want to allow a User/Partner pair to have multiple conversation threads (each with a unique subject), 
-            // you might want to remove the unique constraint entirely, or include the subject in it.
-            $table->unique(['user_id', 'partner_id']); 
+            // Link to the item being discussed (Property, Product, etc.)
+            $table->nullableMorphs('inquiriable'); 
+            
+            $table->unique(['user_id', 'partner_id', 'inquiriable_id', 'inquiriable_type'], 'conversation_context_unique'); 
+            $table->index(['user_id', 'partner_id']);
             
             $table->timestamps(); // created_at, updated_at
         });
