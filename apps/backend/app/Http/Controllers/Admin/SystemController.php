@@ -115,4 +115,46 @@ class SystemController extends Controller
             return $request->ajax() ? response()->json(['success' => false, 'message' => $msg], 500) : back()->with('error', $msg);
         }
     }
+
+    /**
+     * Display the System Health & Requirements page.
+     */
+    public function status()
+    {
+        $requirements = [
+            'PHP Version (>= 8.2)' => [
+                'met' => version_compare(PHP_VERSION, '8.2.0', '>='),
+                'value' => PHP_VERSION,
+                'type' => 'version'
+            ],
+            'BCMath Extension' => ['met' => extension_loaded('bcmath'), 'type' => 'extension'],
+            'Ctype Extension' => ['met' => extension_loaded('ctype'), 'type' => 'extension'],
+            'Fileinfo Extension' => ['met' => extension_loaded('fileinfo'), 'type' => 'extension'],
+            'JSON Extension' => ['met' => extension_loaded('json'), 'type' => 'extension'],
+            'Mbstring Extension' => ['met' => extension_loaded('mbstring'), 'type' => 'extension'],
+            'OpenSSL Extension' => ['met' => extension_loaded('openssl'), 'type' => 'extension'],
+            'PDO Extension' => ['met' => extension_loaded('pdo'), 'type' => 'extension'],
+            'Tokenizer Extension' => ['met' => extension_loaded('tokenizer'), 'type' => 'extension'],
+            'XML Extension' => ['met' => extension_loaded('xml'), 'type' => 'extension'],
+            'GD Extension' => ['met' => extension_loaded('gd'), 'type' => 'extension'],
+            'CURL Extension' => ['met' => extension_loaded('curl'), 'type' => 'extension'],
+        ];
+
+        $permissions = [
+            'storage' => [
+                'path' => storage_path(),
+                'met' => is_writable(storage_path()),
+            ],
+            'bootstrap/cache' => [
+                'path' => base_path('bootstrap/cache'),
+                'met' => is_writable(base_path('bootstrap/cache')),
+            ],
+            '.env' => [
+                'path' => base_path('.env'),
+                'met' => is_writable(base_path('.env')),
+            ],
+        ];
+
+        return view('admin.system.status', compact('requirements', 'permissions'));
+    }
 }

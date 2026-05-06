@@ -247,6 +247,7 @@ Route::prefix('admin')
 
         Route::controller(SystemController::class)->prefix('system')->name('system.')->group(function () {
             Route::get('/maintenance', 'maintenance')->name('maintenance');
+            Route::get('/status', 'status')->name('status');
             Route::post('/cache/clear', 'clearCache')->name('cache.clear');
             Route::post('/config/clear', 'clearConfig')->name('config.clear');
             Route::post('/route/clear', 'clearRoute')->name('route.clear');

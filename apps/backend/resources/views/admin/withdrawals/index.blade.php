@@ -149,16 +149,9 @@
                                 </td>
 
                                 <td class="text-center align-middle">
-                                    @php
-                                        $statusClass = match($withdrawal->status) {
-                                            'pending' => 'badge-warning-light text-warning',
-                                            'approved' => 'badge-success-light text-success',
-                                            'rejected' => 'badge-danger-light text-danger',
-                                            default => 'badge-secondary-light text-secondary'
-                                        };
-                                    @endphp
-                                    <span class="badge {{ $statusClass }} px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 shadow-xs min-w-90">
-                                        {{ $withdrawal->status }}
+                                    @php $status = $withdrawal->getStatusMeta(); @endphp
+                                    <span class="badge badge-{{ $status['color'] }}-light text-{{ $status['color'] }} px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 shadow-xs min-w-90">
+                                        {{ $status['label'] }}
                                     </span>
                                 </td>
 

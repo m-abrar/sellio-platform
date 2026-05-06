@@ -39,6 +39,7 @@ class LocationSeeder extends Seeder
                 'New York' => ['Manhattan', 'Brooklyn', 'Queens'],
                 'California' => ['Los Angeles', 'San Francisco', 'San Diego'],
                 'Florida' => ['Miami', 'Orlando', 'Tampa'],
+                'Texas' => ['Austin', 'Houston', 'Dallas'],
             ],
             'UK' => [
                 'England' => ['London', 'Manchester', 'Birmingham'],
@@ -47,6 +48,21 @@ class LocationSeeder extends Seeder
             'France' => [
                 'Ile-de-France' => ['Paris', 'Versailles'],
                 'Provence' => ['Marseille', 'Nice'],
+            ],
+            'Japan' => [
+                'Kanto' => ['Tokyo', 'Yokohama', 'Chiba'],
+                'Kansai' => ['Osaka', 'Kyoto', 'Kobe'],
+            ],
+            'UAE' => [
+                'Dubai' => ['Downtown Dubai', 'Palm Jumeirah', 'Dubai Marina'],
+                'Abu Dhabi' => ['Yas Island', 'Saadiyat Island'],
+            ],
+            'Singapore' => [
+                'Central Region' => ['Marina Bay', 'Orchard Road', 'Raffles Place'],
+            ],
+            'Germany' => [
+                'Bavaria' => ['Munich', 'Nuremberg'],
+                'Berlin' => ['Berlin Mitte', 'Charlottenburg'],
             ],
         ];
 

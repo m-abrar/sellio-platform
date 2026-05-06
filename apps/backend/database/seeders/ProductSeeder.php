@@ -54,21 +54,34 @@ class ProductSeeder extends Seeder
         }
 
         // 2. Create sample products
+        $productNames = [
+            'Pro-X Wireless Headphones', 'Ultra-Slim Mechanical Keyboard', '4K Quantum OLED Monitor',
+            'Smart Home Executive Hub', 'Ergonomic Standing Desk', 'Titanium Explorer Watch',
+            'Noise-Cancelling Studio Mic', 'Compact Mirrorless Camera', 'Leather Executive Briefcase',
+            'Sustainable Bamboo Speaker', 'Mesh Gaming Chair Pro', 'Thermal Coffee Carafe',
+            'Minimalist Desk Lamp', 'Portable Power Station', 'Wireless Charging Pad',
+            'Premium Linen Bedding Set', 'Air Purifier Max', 'Smart Water Bottle',
+            'Electric Commuter Scooter', 'High-Speed Mesh Router', 'Modular Shelving Unit',
+            'Velvet Accent Armchair', 'Ceramic Pour-Over Kit', 'Weighted Gravity Blanket',
+            'Indoor Hydroponic Garden', 'Vertical Ergonomic Mouse', 'Acoustic Wall Panels',
+            'Graphite Drawing Set', 'Digital Canvas Display', 'Pure Silk Sleep Mask'
+        ];
+
         foreach (range(1, $totalProductsToCreate) as $index) {
-            
-            $name = $faker->words(3, true) . ' ' . $faker->colorName;
+            $baseName = $productNames[$index - 1] ?? $faker->words(3, true);
+            $name = $baseName . ' ' . $faker->randomElement(['Edition', 'Pro', 'Series 2', 'Plus', 'Elite']);
 
             // --- Pricing Logic ---
-            $basePrice = $faker->randomFloat(2, 10, 2000);
-            $onSale    = $faker->boolean(30); 
-            $salePrice = $onSale ? $faker->randomFloat(2, 5, $basePrice - 1) : null;
-            $costPrice = $basePrice * 0.6; // Simulating 40% margin
+            $basePrice = $faker->randomFloat(2, 45, 1200);
+            $onSale    = $faker->boolean(25); 
+            $salePrice = $onSale ? $basePrice * 0.85 : null;
+            $costPrice = $basePrice * 0.5; // Simulating 50% margin
             
             // --- Random dates ---
             $createdAt = $faker->dateTimeThisYear();
 
-            // Video Data (Matches 'video' column in migration)
-            $videoUrl = $faker->boolean(40) ? 'https://www.youtube.com/watch?v=' . $faker->bothify('???????????') : null;
+            // Video Data
+            $videoUrl = $faker->boolean(30) ? 'https://www.youtube.com/watch?v=dQw4w9WgXcQ' : null;
 
             // --- Create Product record mapped to Migration columns ---
             $product = Product::create([
@@ -79,47 +92,47 @@ class ProductSeeder extends Seeder
                 'brand_id'    => $faker->randomElement($brandIds),
 
                 // Basic Info
-                'title'       => ucfirst($name),
+                'title'       => $name,
                 'slug'        => Str::slug($name) . '-' . $faker->unique()->numberBetween(100, 999) . '-' . Str::random(5),
-                'sku'         => strtoupper($faker->bothify('??-####-???')),
-                'description' => $faker->paragraphs(2, true),
-                'short_description' => $faker->sentence(12),
+                'sku'         => strtoupper($faker->bothify('PRD-####-??')),
+                'description' => $faker->realText(800), // Professional product description
+                'short_description' => $faker->realText(150),
 
                 // Pricing
                 'base_price'  => $basePrice,
                 'sale_price'  => $salePrice,
                 'cost_price'  => $costPrice,
                 
-                // Inventory Specifics (Renamed to match migration)
-                'stock_quantity'      => $faker->numberBetween(0, 500),
-                'low_stock_threshold' => 10,
+                // Inventory Specifics
+                'stock_quantity'      => $faker->numberBetween(5, 100),
+                'low_stock_threshold' => 5,
                 'manage_stock'        => true,
-                'in_stock'            => $faker->boolean(90),
+                'in_stock'            => true,
 
                 // Physical Attributes
-                'weight'      => $faker->randomFloat(2, 0.1, 20),
-                'length'      => $faker->randomFloat(2, 1, 50),
-                'width'       => $faker->randomFloat(2, 1, 50),
-                'height'      => $faker->randomFloat(2, 1, 50),
+                'weight'      => $faker->randomFloat(2, 0.5, 5),
+                'length'      => $faker->randomFloat(2, 5, 30),
+                'width'       => $faker->randomFloat(2, 5, 20),
+                'height'      => $faker->randomFloat(2, 5, 15),
 
-                // Media (Column is 'video', not 'video_url')
+                // Media
                 'video'       => $videoUrl,
-                'main_image'  => null, // Handled later by MediaSeeder or manual upload
+                'main_image'  => null,
 
                 // Hardened Moderation & Status
                 'status'                => 'approved',
-                'admin_note'            => 'Automatically approved shop product.',
-                'is_verified_seller'    => $faker->boolean(60),
+                'admin_note'            => 'Verified retail inventory.',
+                'is_verified_seller'    => true,
 
-                // Status/Flags (Renamed to match migration)
+                // Status/Flags
                 'is_published' => true,
                 'is_featured'  => $faker->boolean(15),
                 'on_sale'      => $onSale,
-                'is_digital'   => $faker->boolean(10),
+                'is_digital'   => false,
 
                 // SEO
-                'meta_title'       => $name,
-                'meta_description' => $faker->sentence(),
+                'meta_title'       => "$name | Premium Marketplace",
+                'meta_description' => "Shop $name online at our premium marketplace. Quality guaranteed with fast shipping.",
 
                 // Timestamps
                 'approved_at' => now(),

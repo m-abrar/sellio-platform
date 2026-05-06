@@ -58,35 +58,39 @@ class PropertySeeder extends Seeder
         }
 
         // 2. Create sample properties
+        $propertyTitles = [
+            'Ultra-Modern Glass Villa', 'Luxury Penthouse with Skyline View', 'Charming Coastal Cottage',
+            'Contemporary Downtown Loft', 'Rustic Mountain Retreat', 'Elegant Suburban Manor',
+            'Sleek Industrial Studio', 'Secluded Forest Sanctuary', 'Mediterranean Style Estate',
+            'Minimalist Zen House', 'Victorian Heritage Home', 'Panoramic Sea View Apartment',
+            'Sky Garden Residence', 'Grand Lakeside Mansion', 'Urban Executive Suite',
+            'Cozy Scandinavian Flat', 'Majestic Hilltop Chateau', 'Eco-Friendly Smart Home',
+            'Bohemian Artist Loft', 'Regal Colonial Villa', 'Futuristic Smart Apartment',
+            'Traditional Ranch Estate', 'Sophisticated City Terrace', 'Tranquil Riverside Bungalow',
+            'Exquisite Gold Coast Manor', 'Hidden Valley Cabin', 'Metropolitan Grand Suite',
+            'Classic Brick Townhouse', 'Opulent Marble Palace', 'Modernist Prairie House'
+        ];
+
         foreach (range(1, $totalPropertiesToCreate) as $index) {
-            $title = $faker->company . ' Residence ' . $index;
+            $baseTitle = $propertyTitles[$index - 1] ?? $faker->company . ' Residence';
+            $title = $baseTitle . ' ' . $faker->randomElement(['I', 'II', 'Alpha', 'Prime', 'Elite']);
 
             // --- Determine Rental or Sale Status (Mutually Exclusive) ---
             $isRental = $faker->boolean(50); // 50% chance of being a rental
             $isSale   = !$isRental;         // If not rental, it's for sale
 
             // --- Assign Conditional Pricing ---
-            $basePrice      = $faker->randomFloat(2, 50000, 5000000);
-            $pricePerNight  = $isRental ? $faker->randomFloat(2, 100, 1000) : null;
-            $salePrice      = $isSale ? $faker->randomFloat(2, 45000, 4500000) : null;
+            $basePrice      = $isSale ? $faker->randomFloat(2, 250000, 5000000) : $faker->randomFloat(2, 1200, 15000);
+            $pricePerNight  = $isRental ? $faker->randomFloat(2, 150, 1200) : null;
+            $salePrice      = $isSale && $faker->boolean(30) ? $basePrice * 0.9 : null; // 30% chance of discount
             
             // --- Random dates for created_at/updated_at ---
             $createdAt = $faker->dateTimeThisYear();
 
             // Generate sample embedding code or link for videos (60% chance)
             $videoData = $faker->boolean(60) ? $faker->randomElement([
-                // Example of a fake YouTube embed iframe
-                '<iframe width="560" height="315" src="https://www.youtube.com/embed/'. $faker->bothify('???????????') .'" frameborder="0" allowfullscreen></iframe>',
-                // Example of a raw YouTube link
-                'https://www.youtube.com/watch?v=' . $faker->bothify('???????????'),
-            ]) : null;
-
-            // Generate sample embedding code or link for virtual tours (40% chance)
-            $virtualTourData = $faker->boolean(40) ? $faker->randomElement([
-                // Example of a fake virtual tour iframe
-                '<iframe width="100%" height="480" src="'. $faker->url .'/?tour='. $faker->uuid .'" frameborder="0" allowfullscreen></iframe>',
-                // Example of a raw virtual tour link
-                $faker->url . '/virtual-tour/' . $faker->slug(2),
+                '<iframe width="560" height="315" src="https://www.youtube.com/embed/ScMzIvxBSi4" frameborder="0" allowfullscreen></iframe>',
+                'https://www.youtube.com/watch?v=dQw4w9WgXcQ', // Standard placeholder
             ]) : null;
 
             // --- Create Property record ---
@@ -95,14 +99,13 @@ class PropertySeeder extends Seeder
                 'user_id'     => $faker->randomElement($userIds),
                 'category_id' => $faker->randomElement($categoryIds),
                 'type_id'     => $faker->randomElement($typeIds),
-                // brand_id is optional and randomly included if $brandIds is not empty
                 'brand_id'    => !empty($brandIds) ? $faker->randomElement($brandIds) : null,
                 'location_id' => $faker->randomElement($locationIds),
 
                 // Core Data
                 'title'        => $title,
                 'slug'        => Str::slug($title) . '-' . Str::random(5),
-                'description' => $faker->paragraphs(3, true),
+                'description' => $faker->realText(800), // More immersive text
 
                 // Conditional Pricing
                 'base_price'      => $basePrice,
@@ -110,22 +113,22 @@ class PropertySeeder extends Seeder
                 'sale_price'      => $salePrice,
 
                 // Property Details
-                'number_of_bedrooms'      => $faker->numberBetween(1, 5),
-                'number_of_bathrooms'     => $faker->numberBetween(1, 4),
-                'maximum_guests'          => $faker->numberBetween(2, 10),
-                'minimum_rental_days'     => $faker->numberBetween(1, 5),
-                'maximum_rental_days'     => $faker->randomElement([7, 30, 90, 180]),
-                'area_sq_ft'              => $faker->randomFloat(2, 500, 5000),
-                'area_sq_m'               => $faker->randomFloat(2, 500, 5000),
-                'number_of_parking_spots' => $faker->numberBetween(1, 3),
+                'number_of_bedrooms'      => $faker->numberBetween(1, 6),
+                'number_of_bathrooms'     => $faker->numberBetween(1, 5),
+                'maximum_guests'          => $faker->numberBetween(2, 12),
+                'minimum_rental_days'     => $faker->numberBetween(1, 3),
+                'maximum_rental_days'     => $faker->randomElement([7, 14, 30, 90]),
+                'area_sq_ft'              => $faker->numberBetween(800, 8000),
+                'area_sq_m'               => $faker->numberBetween(75, 750),
+                'number_of_parking_spots' => $faker->numberBetween(1, 4),
 
                 // Other Meta Information
-                'hoa'           => $faker->randomFloat(2, 50, 500),
-                'rules'         => $faker->boolean(80) ? $faker->text(250) : null,
-                'policies'      => $faker->boolean(80) ? $faker->text(350) : null,
-                'year_built'    => $faker->year('now'),
+                'hoa'           => $faker->boolean(40) ? $faker->randomFloat(2, 100, 800) : 0,
+                'rules'         => "1. No smoking inside the premises.\n2. Pets allowed upon prior approval.\n3. Respect quiet hours between 10 PM and 8 AM.\n4. No unauthorized events or large gatherings.",
+                'policies'      => "Standard cancellation policy: Full refund if cancelled 48 hours before check-in. Professional cleaning included in service fee. Valid government ID required for all guests.",
+                'year_built'    => $faker->numberBetween(1990, 2024),
                 'video'         => $videoData,
-                'virtual_tour'  => $virtualTourData,
+                'virtual_tour'  => null,
 
                 // Address & Geo-Location Data
                 'address'   => $faker->streetAddress,
@@ -133,16 +136,16 @@ class PropertySeeder extends Seeder
                 'state'     => $faker->stateAbbr,
                 'country'   => $faker->countryCode,
                 'zip_code'  => $faker->postcode,
-                'latitude'  => $faker->latitude(30, 50),
-                'longitude' => $faker->longitude(-120, -70),
+                'latitude'  => $faker->latitude(34, 42), // Focus on specific region
+                'longitude' => $faker->longitude(-118, -74),
 
-                // Status & Moderation (Hardened Schema)
+                // Status & Moderation
                 'status'        => 'approved',
-                'admin_note'    => 'Automatically approved for initial marketplace seeding.',
+                'admin_note'    => 'Verified premium listing.',
 
                 // Status Flags
                 'is_published'  => true,
-                'is_featured'   => $faker->boolean(15),
+                'is_featured'   => $faker->boolean(20),
                 'is_rental'     => $isRental,
                 'is_sale'       => $isSale,
 

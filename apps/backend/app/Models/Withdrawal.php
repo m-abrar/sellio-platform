@@ -111,4 +111,17 @@ class Withdrawal extends Model
     {
         return $this->status === self::STATUS_PENDING;
     }
+
+    /**
+     * Get a human-readable status label with CSS classes.
+     */
+    public function getStatusMeta(): array
+    {
+        return match ($this->status) {
+            self::STATUS_PENDING  => ['label' => 'Pending', 'color' => 'warning'],
+            self::STATUS_APPROVED => ['label' => 'Approved', 'color' => 'success'],
+            self::STATUS_REJECTED => ['label' => 'Rejected', 'color' => 'danger'],
+            default              => ['label' => 'Unknown', 'color' => 'dark'],
+        };
+    }
 }

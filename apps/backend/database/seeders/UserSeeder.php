@@ -73,25 +73,25 @@ class UserSeeder extends Seeder
         $this->command->line('Creating core test users (Admin, Partner, Buyer)...');
 
         // 1. Create a Primary Admin User for system management
-        $adminName = 'Admin User';
+        $adminName = 'Alexander Thorne';
         $admin = User::create([
             'name' => $adminName,
             'email' => 'admin@sellio-platform.test',
             'email_verified_at' => now(),
             // Securely hash a standard password for easy development access.
             'password' => Hash::make('admin123'),
-            'phone' => $faker->phoneNumber,
+            'phone' => '+1 (555) 012-3456',
             'is_admin' => true, // Flag this user as a system administrator
 
             'username' => 'super_admin', // Fixed, non-generated username for easy recall
-            'bio' => 'The site administrator. Responsible for managing users, content, and system settings.',
+            'bio' => 'Senior Platform Administrator with over 15 years of experience in marketplace orchestration and digital ecosystem management. Overseeing global operations and system integrity.',
             'status' => 'active',
             'is_premium' => true,
             'admin_note' => 'System root administrator.',
             'is_partner' => false,
             'is_verified' => true, // Admins are automatically verified
-            'date_of_birth' => $faker->dateTimeBetween('-50 years', '-30 years')->format('Y-m-d'),
-            'years_of_experience' => $faker->numberBetween(10, 30),
+            'date_of_birth' => '1985-05-15',
+            'years_of_experience' => 15,
 
             'remember_token' => Str::random(10),
             'created_at' => now(),
@@ -101,26 +101,26 @@ class UserSeeder extends Seeder
         $this->command->info('  - Created Admin User: admin@sellio-platform.test (admin123)');
 
         // 2. Create a Key Partner User for testing commission and marketplace features
-        $partnerName = 'Partner One';
+        $partnerName = 'Julian Sterling';
         $partner = User::create([
             'name' => $partnerName,
             'email' => 'partner@sellio-platform.test',
             'email_verified_at' => now(),
             'password' => Hash::make('partner123'),
-            'phone' => $faker->phoneNumber,
+            'phone' => '+1 (555) 987-6543',
             'is_admin' => false,
 
-            'username' => $generateUniqueUsername($partnerName),
+            'username' => 'sterling_global',
             // Partner users have an associated company name
-            'company' => $faker->unique()->company() . ' Partner Co.',
-            'bio' => 'A dedicated business partner on the platform.',
+            'company' => 'Sterling Global Real Estate',
+            'bio' => 'Founder of Sterling Global, specialized in luxury property acquisitions and high-end automotive trading. A premier partner since platform inception.',
             'status' => 'active',
-            'is_premium' => false,
-            'admin_note' => 'Verified marketplace partner.',
+            'is_premium' => true,
+            'admin_note' => 'Verified VIP marketplace partner.',
             'is_partner' => true, // Explicitly set as a partner
             'is_verified' => true,
-            'date_of_birth' => $faker->dateTimeBetween('-45 years', '-25 years')->format('Y-m-d'),
-            'years_of_experience' => $faker->numberBetween(1, 20),
+            'date_of_birth' => '1978-11-22',
+            'years_of_experience' => 22,
 
             'remember_token' => Str::random(10),
             'created_at' => now(),
@@ -130,26 +130,26 @@ class UserSeeder extends Seeder
         $this->command->info('  - Created Partner User: partner@sellio-platform.test (partner123)');
 
         // 3. Create a Key Buyer User for testing purchase and review features
-        $buyerName = 'Buyer Example';
+        $buyerName = 'Eleanor Vance';
         $buyer = User::create([
             'name' => $buyerName,
             'email' => 'buyer@sellio-platform.test',
             'email_verified_at' => now(),
             'password' => Hash::make('buyer123'),
-            'phone' => $faker->phoneNumber,
+            'phone' => '+1 (555) 444-5555',
             'is_admin' => false,
 
-            'username' => $generateUniqueUsername($buyerName),
-            'company' => null, // Buyers typically do not have a listed company
-            'bio' => 'An active buyer interested in various services.',
+            'username' => 'vance_curator',
+            'company' => 'Vance Design Studio', // High-end buyers can have companies
+            'bio' => 'International design consultant and frequent collector of premium digital assets and luxury lifestyle products.',
             'status' => 'active',
             'is_premium' => false,
-            'admin_note' => 'Standard marketplace buyer.',
+            'admin_note' => 'High-value marketplace buyer.',
             'is_partner' => false,
             'is_buyer' => true, // Flag this user as a primary buyer
             'is_verified' => true,
-            'date_of_birth' => $faker->dateTimeBetween('-35 years', '-20 years')->format('Y-m-d'),
-            'years_of_experience' => 0, // Not relevant for a typical buyer role
+            'date_of_birth' => '1992-03-08',
+            'years_of_experience' => 8,
 
             'remember_token' => Str::random(10),
             'created_at' => now(),

@@ -66,12 +66,22 @@ class ServiceSeeder extends Seeder
         $services = [];
 
         // 2. CREATE SERVICE LISTINGS & ATTACH FEATURES
+        $serviceTitles = [
+            'Premium SEO & Content Strategy', 'Custom Cloud Architecture Design', 'Executive Leadership Coaching',
+            'Full-Stack Web Development Mastery', 'Professional Interior Design Audit', 'High-Impact Brand Identity Suite',
+            'Strategic Financial Planning', 'Enterprise Cybersecurity Consultation', 'Mobile Experience (UX) Audit',
+            'Advanced Data Analytics & BI', 'Legal Technology Implementation', 'Creative Video Production Suite',
+            'E-commerce Growth Optimization', 'Human Resources Compliance Audit', 'Social Media Management Elite'
+        ];
+
         foreach (range(1, 24) as $index) {
-            $title = $faker->randomElement(['Professional', 'Reliable', 'Top-rated']) . ' ' . $faker->randomElement(['Plumbing', 'Design', 'Tutoring']) . ' Service';
-            // Scale prices to realistic values for service/project costs (e.g., $300 - $1500)
-            $basePrice = $faker->numberBetween(30, 150) * 10;
-            // Sale price represents a minimum fee or required deposit (e.g., $100 - $500)
-            $salePrice = $faker->numberBetween(10, 50) * 10;
+            $baseTitle = $serviceTitles[$index - 1] ?? $faker->randomElement(['Professional', 'Elite', 'Strategic']) . ' ' . $faker->randomElement(['Digital', 'Creative', 'Technical']) . ' Solution';
+            $title = $baseTitle;
+            
+            // Scale prices to realistic values for service/project costs (e.g., $1500 - $15000)
+            $basePrice = $faker->numberBetween(15, 150) * 100;
+            // Sale price represents a minimum fee or required deposit (e.g., $500 - $2500)
+            $salePrice = $faker->numberBetween(5, 25) * 100;
             $createdAt = now()->subDays($faker->numberBetween(1, 60));
 
             $serviceProviderId = $faker->randomElement($userIds);
@@ -87,38 +97,37 @@ class ServiceSeeder extends Seeder
                 // Core Data
                 'title' => $title,
                 'slug' => Str::slug($title . '-' . $index) . '-' . Str::random(5),
-                'description' => $faker->text(800),
+                'description' => $faker->realText(1000), // Agency-style description
                 'base_price' => $basePrice,
                 'sale_price' => $salePrice,
 
                 // Hardened Moderation & Status
                 'status'                => 'approved',
-                'admin_note'            => 'Automatically approved service listing.',
-                'is_verified_provider'  => $faker->boolean(50),
+                'admin_note'            => 'Verified professional agency partner.',
+                'is_verified_provider'  => true,
 
-                // Service Specifics (Using defined Enum IDs)
+                // Service Specifics
                 'expertise_level' => $faker->randomElement($expertiseLevels),
                 'availability_schedule' => $faker->randomElement($availabilitySchedules),
-                // Service radius is often nullable; set it 70% of the time
-                'service_radius' => $faker->boolean(70) ? $faker->numberBetween(5, 50) : null,
-                'licenses_certs' => $faker->randomElement(['Certified Pro', 'Insured/Bonded', null]),
-                'min_contract_months' => $faker->boolean(40) ? $faker->numberBetween(1, 12) : null,
-                'max_client_slots' => $faker->boolean(50) ? $faker->numberBetween(1, 10) : null,
+                'service_radius' => $faker->boolean(50) ? $faker->numberBetween(50, 500) : null,
+                'licenses_certs' => $faker->randomElement(['ISO 9001 Certified', 'Certified Digital Agency', 'Licensed Professional']),
+                'min_contract_months' => $faker->boolean(50) ? $faker->randomElement([3, 6, 12]) : null,
+                'max_client_slots' => $faker->numberBetween(5, 20),
 
-                // Location/Address (used for geo-search)
+                // Location/Address
                 'address' => $faker->streetAddress,
                 'city' => $faker->city,
                 'state' => $faker->stateAbbr,
                 'country' => 'USA',
                 'zip_code' => $faker->postcode,
-                'latitude' => $faker->latitude(30, 50),
-                'longitude' => $faker->longitude(-120, -70),
+                'latitude' => $faker->latitude(34, 42),
+                'longitude' => $faker->longitude(-118, -74),
 
-                // Status/Type Flags (Business Logic)
+                // Status/Type Flags
                 'is_published' => true,
-                'is_featured' => $faker->boolean(10), // Only 10% are featured
-                'is_subscription' => $faker->boolean(30),
-                'is_project_based' => $faker->boolean(50),
+                'is_featured' => $faker->boolean(20),
+                'is_subscription' => $faker->boolean(40),
+                'is_project_based' => true,
                 'approved_at'       => now(),
                 'created_at' => $createdAt,
                 'updated_at' => $createdAt,

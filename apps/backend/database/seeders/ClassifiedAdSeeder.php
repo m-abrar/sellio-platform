@@ -59,40 +59,26 @@ class ClassifiedAdSeeder extends Seeder
         $inquiriesToInsert = [];
 
         // --- 3. CREATE CLASSIFIED LISTINGS (Parent Records) ---
+        $itemTitles = [
+            'Vintage 1970s Film Camera', 'Professional Grade Mountain Bike', 'Limited Edition Vinyl Record Collection',
+            'Mid-Century Modern Lounge Chair', 'Authentic Hand-Woven Persian Rug', 'Rare First Edition Hardcover Book',
+            'Studio-Quality Electric Guitar', 'Antique Brass Telescope', 'Designer Leather Handbag',
+            'High-Performance Drone with 4K Camera', 'Handcrafted Walnut Dining Table', 'Retro Arcade Gaming Machine',
+            'Professional Artist Easel & Set', 'Luxury Watch Travel Case', 'Custom Built Gaming PC (RGB)',
+            'Vintage Typewriter in Working Order', 'Solid Oak Writing Desk', 'High-End Espresso Machine',
+            'Premium Portable Charcoal Grill', 'Nordic Style Ceramic Dinnerware'
+        ];
+
         foreach (range(1, 50) as $index) {
-            $title = $faker->randomElement([
-                'Used', 'Vintage', 'New', 'Rare', 'Exclusive', 
-                'Premium', 'Custom', 'Tested', 'Quick Sale', 'Limited Edition', 
-            ]) . ' ' . $faker->words(2, true);
+            $baseTitle = $faker->randomElement($itemTitles);
+            $title = $faker->randomElement(['Excellent', 'Pristine', 'Authentic', 'Rare']) . ' ' . $baseTitle;
             
-            $basePrice = $faker->randomFloat(2, 5, 5000);
+            $basePrice = $faker->randomFloat(2, 50, 2500);
             $createdAt = now()->subDays($faker->numberBetween(1, 90));
             $sellerId = $faker->randomElement($userIds);
             
-            $hasSalePrice = $faker->boolean(40);
-            $salePrice = null;
-            $saleStartsAt = null;
-            $saleEndsAt = null;
-
-            if ($hasSalePrice) {
-                // Generate sale price (50% to 95% of base price)
-                $salePrice = $faker->randomFloat(2, $basePrice * 0.5, $basePrice * 0.95);
-
-                // Determine a random start date (from creation date up to 30 days in the future)
-                $saleStartsAt = $faker->dateTimeBetween($createdAt, now()->addDays(30)); 
-                
-                // Determine the end date (7 to 60 days after the start date)
-                // Use Carbon::instance() to ensure we can manipulate the DateTime object.
-                $saleEndsAt = $faker->dateTimeBetween(
-                    $saleStartsAt, 
-                    Carbon::instance((clone $saleStartsAt))->addDays(60)
-                );
-                
-                // Final check to ensure sale price is strictly less than base price
-                if ($salePrice >= $basePrice) {
-                    $salePrice = $basePrice * $faker->randomFloat(2, 0.5, 0.95); 
-                }
-            }
+            $hasSalePrice = $faker->boolean(30);
+            $salePrice = $hasSalePrice ? $basePrice * 0.85 : null;
 
             $classified = Classified::create([
                 // Foreign Keys
@@ -105,21 +91,21 @@ class ClassifiedAdSeeder extends Seeder
                 // Core Data & Pricing
                 'title' => Str::title($title),
                 'slug' => Str::slug($title . '-ad-' . $index) . '-' . Str::random(5),
-                'description' => $faker->text(300),
+                'description' => $faker->realText(500),
                 'base_price' => $basePrice,
                 'sale_price' => $salePrice,
                 
                 // Sale Timestamps
-                'sale_starts_at' => $saleStartsAt,
-                'sale_ends_at' => $saleEndsAt,
+                'sale_starts_at' => $hasSalePrice ? now() : null,
+                'sale_ends_at' => $hasSalePrice ? now()->addDays(14) : null,
                 
-                // Specifics (Classified Ad attributes)
-                'item_condition' => $faker->numberBetween(3, 10),
-                'item_year_age' => $faker->numberBetween(1, 10),
-                'item_quantity' => $faker->numberBetween(1, 5),
-                'item_dimensions' => $faker->randomFloat(2, 0.5, 50), 
-                'warranty_months' => $faker->boolean(10) ? $faker->numberBetween(1, 6) : null,
-                'min_ad_duration' => $faker->numberBetween(7, 30),
+                // Specifics
+                'item_condition' => $faker->numberBetween(7, 10),
+                'item_year_age' => $faker->numberBetween(1, 5),
+                'item_quantity' => 1,
+                'item_dimensions' => $faker->randomFloat(2, 10, 100), 
+                'warranty_months' => $faker->boolean(20) ? 6 : null,
+                'min_ad_duration' => 14,
 
                 // Location/Address
                 'address' => $faker->streetAddress,
@@ -127,19 +113,19 @@ class ClassifiedAdSeeder extends Seeder
                 'state' => $faker->stateAbbr,
                 'country' => 'USA',
                 'zip_code' => $faker->postcode,
-                'latitude' => $faker->latitude(30, 50),
-                'longitude' => $faker->longitude(-120, -70),
+                'latitude' => $faker->latitude(34, 42),
+                'longitude' => $faker->longitude(-118, -74),
 
                 // Hardened Moderation & Status
                 'status'                => 'approved',
-                'admin_note'            => 'Automatically approved classified listing.',
-                'is_verified_seller'    => $faker->boolean(40),
+                'admin_note'            => 'Verified community listing.',
+                'is_verified_seller'    => true,
 
                 // Status/Type Flags
                 'is_published' => true,
-                'is_featured' => $faker->boolean(5),
-                'is_for_rent' => $faker->boolean(20),
-                'is_shipping' => $faker->boolean(50),
+                'is_featured' => $faker->boolean(10),
+                'is_for_rent' => false,
+                'is_shipping' => $faker->boolean(70),
                 'is_for_sale' => true,
 
                 // Dates

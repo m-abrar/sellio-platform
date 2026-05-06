@@ -68,10 +68,23 @@ class AutoSeeder extends Seeder
 
         // Loop to create 30 distinct Auto listings.
         $numberOfListings = 30;
+        $autoModels = [
+            'Tesla' => ['Model S Plaid', 'Model X', 'Model 3 Performance', 'Model Y Long Range'],
+            'BMW' => ['M4 Competition', 'X5 M60i', 'i7 xDrive60', 'M8 Gran Coupe'],
+            'Mercedes-Benz' => ['G 63 AMG', 'S 580 4MATIC', 'EQS 580', 'AMG GT 63'],
+            'Audi' => ['RS 6 Avant', 'Q8 e-tron', 'R8 V10 performance', 'A8 L'],
+            'Porsche' => ['911 Turbo S', 'Taycan Turbo S', 'Cayenne Turbo GT', 'Panamera Turbo S'],
+            'Land Rover' => ['Range Rover Autobiography', 'Defender 110 V8', 'Range Rover Sport'],
+            'Lexus' => ['LC 500 Inspiration', 'LX 600 Ultra Luxury', 'RX 500h F SPORT'],
+            'Ford' => ['Mustang Mach-E GT', 'F-150 Lightning Platinum', 'Bronco Raptor'],
+            'Chevrolet' => ['Corvette Z06', 'Silverado EV RST', 'Tahoe High Country'],
+            'Toyota' => ['Land Cruiser 300', 'GR Supra', 'Sequoia Capstone'],
+        ];
+
         foreach (range(1, $numberOfListings) as $index) {
-            $make = $faker->randomElement(['Toyota', 'Honda', 'Ford', 'BMW', 'Tesla', 'Chevrolet', 'Nissan', 'Kia']);
-            $model = $faker->randomElement(['Corolla', 'Civic', 'F-150', 'X5', 'Model 3', 'Tahoe', 'Rogue', 'Sportage']);
-            $year = $faker->numberBetween(2010, 2024);
+            $make = $faker->randomElement(array_keys($autoModels));
+            $model = $faker->randomElement($autoModels[$make]);
+            $year = $faker->numberBetween(2021, 2024);
             $title = "$year $make $model";
 
             // --- 4. CREATE AUTO LISTING (Parent Record) ---
@@ -86,27 +99,27 @@ class AutoSeeder extends Seeder
                 // Core Data
                 'title' => $title,
                 'slug' => Str::slug($title . '-' . $index) . '-' . Str::random(5),
-                'description' => $faker->text(500),
-                'base_price' => $faker->randomFloat(2, 5000, 75000),
-                'sale_price' => $faker->boolean(20) ? $faker->randomFloat(2, 4500, 70000) : null,
+                'description' => $faker->realText(600), // Professional automotive description
+                'base_price' => $faker->randomFloat(2, 45000, 185000),
+                'sale_price' => $faker->boolean(25) ? $faker->randomFloat(2, 40000, 170000) : null,
                 
                 // Specifics (Auto-related attributes)
                 'year' => $year,
                 'make' => $make,
                 'model' => $model,
-                'mileage_value' => $faker->numberBetween(100, 200000),
-                'mileage_units' => $faker->randomElement(['mi', 'km']),
-                'engine_type' => $faker->randomElement(['Gas', 'Diesel', 'Electric', 'Hybrid']),
-                'transmission' => $faker->randomElement(['Automatic', 'Manual']),
-                'fuel_economy' => $faker->randomFloat(1, 15, 50),
-                'drivetrain' => $faker->randomElement(['FWD', 'RWD', 'AWD', '4WD']),
-                'exterior_color' => $faker->randomElement(['Black', 'White', 'Silver', 'Gray', 'Red', 'Blue', 'Green', 'Brown', 'Yellow', 'Orange']),
+                'mileage_value' => $faker->numberBetween(5, 15000), // Low mileage for premium look
+                'mileage_units' => 'mi',
+                'engine_type' => $faker->randomElement(['V8 Biturbo', 'Electric Drive', 'Inline-6 Hybrid', 'V6 Twin-Turbo']),
+                'transmission' => $faker->randomElement(['9-Speed Automatic', '8-Speed Dual-Clutch', 'Single-Speed Direct']),
+                'fuel_economy' => $faker->randomFloat(1, 12, 110), // Mix of high-perf and EV
+                'drivetrain' => $faker->randomElement(['AWD', 'RWD', '4WD']),
+                'exterior_color' => $faker->randomElement(['Obsidian Black', 'Mineral White', 'Selenite Grey', 'Tanzanite Blue', 'San Marino Blue', 'Chalk']),
                 
                 // Inventory and Condition
-                'condition_rating' => $faker->numberBetween(5, 10),
+                'condition_rating' => $faker->numberBetween(8, 10),
                 'vin_number' => Str::upper(Str::random(17)),
-                'warranty_months' => $faker->boolean(50) ? $faker->numberBetween(6, 48) : null,
-                'stock_quantity' => $faker->numberBetween(1, 3),
+                'warranty_months' => $faker->randomElement([36, 48, 60, 72]),
+                'stock_quantity' => $faker->numberBetween(1, 2),
 
                 // Location/Address data
                 'address' => $faker->streetAddress,
@@ -114,8 +127,8 @@ class AutoSeeder extends Seeder
                 'state' => $faker->stateAbbr,
                 'country' => 'USA',
                 'zip_code' => $faker->postcode,
-                'latitude' => $faker->latitude(30, 50),
-                'longitude' => $faker->longitude(-120, -70),
+                'latitude' => $faker->latitude(34, 42),
+                'longitude' => $faker->longitude(-118, -74),
 
                 // Hardened Moderation & Certification
                 'status'        => 'approved',

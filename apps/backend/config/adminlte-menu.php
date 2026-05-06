@@ -528,6 +528,12 @@ return [
                 'icon' => 'fas fa-tools',
                 'color' => 'danger',
             ],
+            [
+                'text' => 'System Health',
+                'url'  => 'admin/system/status',
+                'icon' => 'fas fa-heartbeat',
+                'color' => 'success',
+            ],
         ],
     ],
 

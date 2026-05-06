@@ -89,11 +89,18 @@ class JobSeeder extends Seeder
         $jobs = [];
         
         // 2. CREATE JOB LISTINGS
+        $jobTitles = [
+            'Senior Full-Stack Engineer', 'UX/UI Design Lead', 'Digital Marketing Strategist',
+            'Cloud Solutions Architect', 'Data Scientist (AI/ML)', 'Product Manager',
+            'Cybersecurity Analyst', 'DevOps Engineer', 'Mobile App Developer (iOS/Android)',
+            'Creative Content Director', 'Customer Success Manager', 'Financial Analyst',
+            'Human Resources Business Partner', 'Operations Manager', 'Project Management Officer'
+        ];
+
         foreach (range(1, $numberOfListings) as $index) {
-            // Generate realistic job title and salary range
-            $title = $faker->randomElement(['Senior', 'Junior', 'Lead']) . ' ' . $faker->jobTitle;
-            $salaryMin = $faker->numberBetween(40000, 80000);
-            $salaryMax = $faker->numberBetween($salaryMin + 10000, $salaryMin + 50000);
+            $title = $jobTitles[$index - 1] ?? $faker->jobTitle;
+            $salaryMin = $faker->numberBetween(60000, 110000);
+            $salaryMax = $faker->numberBetween($salaryMin + 20000, $salaryMin + 80000);
             $createdAt = now()->subDays($faker->numberBetween(1, 30));
 
             $job = JobListing::create([ 
@@ -101,23 +108,22 @@ class JobSeeder extends Seeder
                 'user_id' => $faker->randomElement($userIds),
                 'category_id' => $faker->randomElement($categoryIds),
                 'type_id' => $faker->randomElement($typeIds),
-                // Handle potential empty brand IDs safely
                 'brand_id' => !empty($brandIds) ? $faker->randomElement($brandIds) : null,
                 'location_id' => $faker->randomElement($locationIds),
                 
                 // Core Data
                 'title' => $title,
                 'slug' => Str::slug($title . '-' . $index) . '-' . Str::random(5),
-                'description' => $faker->text(800),
+                'description' => $faker->realText(1000), // Professional corporate description
                 'salary_min' => $salaryMin,
                 'salary_max' => $salaryMax,
-                'salary_frequency' => $faker->randomElement(['hourly', 'weekly', 'monthly', 'yearly']),
+                'salary_frequency' => 'yearly',
                 
-                // Job Specifics (using assumed Enum/Key values)
+                // Job Specifics
                 'experience_level' => $faker->randomElement($experienceLevels),
                 'workplace_type' => $faker->randomElement($workplaceTypes),
-                'required_education' => $faker->randomElement(['Bachelors', 'Masters', 'High School']),
-                'application_deadline' => $faker->dateTimeBetween('now +1 week', 'now +3 months'),
+                'required_education' => $faker->randomElement(['Bachelors Degree', 'Masters Degree', 'PhD preferred']),
+                'application_deadline' => $faker->dateTimeBetween('now +1 week', 'now +2 months'),
 
                 // Detailed Location/Address fields
                 'address' => $faker->streetAddress,
@@ -125,18 +131,18 @@ class JobSeeder extends Seeder
                 'state' => $faker->stateAbbr,
                 'country' => 'USA',
                 'zip_code' => $faker->postcode,
-                'latitude' => $faker->latitude(30, 50),
-                'longitude' => $faker->longitude(-120, -70),
+                'latitude' => $faker->latitude(34, 42),
+                'longitude' => $faker->longitude(-118, -74),
 
                 // Hardened Moderation & Status
                 'status'        => 'approved',
-                'admin_note'    => 'Automatically approved job listing.',
-                'is_verified'   => $faker->boolean(60),
+                'admin_note'    => 'Verified corporate recruitment partner.',
+                'is_verified'   => true,
 
                 // Status/Visibility Flags
                 'is_published' => true,
-                'is_featured' => $faker->boolean(10),
-                'is_contract' => $faker->boolean(30),
+                'is_featured' => $faker->boolean(20),
+                'is_contract' => $faker->boolean(20),
                 'is_full_time' => true,
                 'approved_at'       => now(),
                 'created_at' => $createdAt,

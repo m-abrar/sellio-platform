@@ -1,43 +1,68 @@
-# Sellio SaaS Monorepo
+# Sellio: The Ultimate Multi-Tenant Marketplace Suite
+![Sellio Banner](https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=1200)
 
-Welcome to the Sellio SaaS platform, a scalable monorepo architecture designed for multi-tenant marketplaces.
+**Sellio** is a cutting-edge, high-performance monorepo platform designed for building professional SaaS marketplaces. From Real Estate and Automotive portals to Job Boards and Classifieds, Sellio provides a unified, "Executive Premium" experience for buyers, sellers, and administrators.
 
-## 📁 Repository Structure
+---
 
-- `apps/`
-  - `backend/`: Laravel 12 API & Blade Storefront
-  - `dashboard/`: React admin panel (Vite)
-  - `mobile/`: Mobile application
-- `packages/`
-  - `api-client/`: Unified Axios client for cross-app communication
-  - `applications/`: Vertical-specific logic (Real Estate, Automotive, etc.)
-  - `config/`: Shared constants and configuration
-  - `types/`: Shared TypeScript interfaces and vertical definitions
-  - `ui/`: Common UI components (shared across dashboard and web)
-- `infrastructure/`: Deployment scripts and configurations
+## 💎 Core Value Proposition
 
-## 🚀 Getting Started
+-   **Modular Marketplace Engine:** Dynamically enable or disable vertical-specific modules (Property, Auto, Jobs, etc.).
+-   **Executive Premium UI:** A glassmorphic, token-driven design system built for professional-grade administration.
+-   **SaaS-Ready Architecture:** Multi-tenant support with subscription plans and integrated payment gateways.
+-   **Advanced Intelligence:** Built-in analytics, system health diagnostics, and automated maintenance protocols.
 
-This project uses `pnpm` workspaces.
+---
 
-### 1. Installation
+## 📁 Repository Ecosystem
+
+Sellio is built as a unified monorepo for maximum developer efficiency:
+
+-   **`apps/backend`**: Laravel 12.x Core - The brain of the platform. Handles API, SSR Storefront, and Admin Ops.
+-   **`apps/dashboard`**: React + Vite Admin Panel - Modern frontend for partner management.
+-   **`packages/ui`**: Shared Design System - Vanilla CSS tokens and React components.
+-   **`packages/api-client`**: Unified Axios wrapper for cross-app synchronization.
+
+---
+
+## 🛠 Technical Specifications
+
+| Requirement | Specification |
+| :--- | :--- |
+| **PHP** | 8.2+ |
+| **Database** | MySQL 8.0+ / PostgreSQL / SQLite |
+| **Node.js** | 20.x+ (LTS) |
+| **Package Manager** | `pnpm` (Workspace support) |
+| **Frameworks** | Laravel 12, React 18, Vite |
+
+---
+
+## 🚀 Rapid Deployment
+
+### 1. Initialize Workspace
 ```bash
 pnpm install
 ```
 
-### 2. Development
-Run all applications in development mode:
+### 2. Configure Backend
+Navigate to `apps/backend`:
+```bash
+cp .env.example .env
+php artisan key:generate
+php artisan migrate --seed
+```
+
+### 3. Launch Development
 ```bash
 pnpm dev
 ```
 
-### 3. Backend Setup
-Navigate to `apps/core` and follow standard Laravel setup:
-```bash
-php artisan migrate
-php artisan db:seed
-```
+---
 
-## 🏗️ Modular Architecture
+## 🛡 License & Credits
 
-Sellio has transitioned from a fixed-theme approach to a dynamic **Application** architecture. Each vertical (Real Estate, Automotive, etc.) is defined as an `Application` in the database, allowing the storefront to dynamically adapt its logic and visuals based on the detected tenant.
+© 2024 Sellio Platform. All Rights Reserved.
+Designed for professional distribution via CodeCanyon.
+
+> [!IMPORTANT]
+> This repository is optimized for **CodeCanyon Submission Readiness**. All modules are audited for PSR compliance, security integrity, and high-fidelity aesthetics.

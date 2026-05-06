@@ -48,14 +48,27 @@ class BlogSeeder extends Seeder
         }
 
         // 2. Create sample blogs
+        $blogTitles = [
+            '10 Trends Shaping the Future of Marketplaces', 'Mastering the Art of Digital Property Investment',
+            'The Ultimate Guide to Luxury Automotive Care', 'How to Build a High-Performing Remote Team',
+            'Designing for the Modern User: A UX Masterclass', 'Maximizing Your ROI in a Global Economy',
+            'The Rise of Sustainable Living and Eco-Homes', 'Cybersecurity Best Practices for 2024',
+            'Exploring the New Frontier of AI in E-commerce', 'Lifestyle: The Best Travel Destinations for Founders',
+            'The Evolution of Smart Home Technology', 'How to Negotiate Your Next Corporate Contract',
+            'Creative Agency Secrets: Building Iconic Brands', 'Data-Driven Decision Making for Small Business',
+            'The Future of Work: Hybrid Models and Beyond', 'Essential Tech Stacks for Modern Startups',
+            'Navigating the Complexities of International Trade', 'The Art of Minimalist Living in a Busy World',
+            'Health & Wellness: Productivity Hacks for Executives', 'The Impact of Blockchain on Real Estate'
+        ];
+
         foreach (range(1, $totalBlogsToCreate) as $index) {
-            $title = $faker->sentence(6);
+            $title = $blogTitles[$index - 1] ?? $faker->sentence(8);
             $createdAt = $faker->dateTimeThisYear();
 
-            // Video Data (Matching your property logic)
+            // Video Data
             $videoData = $faker->boolean(40) ? $faker->randomElement([
-                '<iframe width="560" height="315" src="https://www.youtube.com/embed/'. $faker->bothify('???????????') .'" frameborder="0" allowfullscreen></iframe>',
-                'https://www.youtube.com/watch?v=' . $faker->bothify('???????????'),
+                '<iframe width="560" height="315" src="https://www.youtube.com/embed/ScMzIvxBSi4" frameborder="0" allowfullscreen></iframe>',
+                'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
             ]) : null;
 
             // --- Create Blog record ---
@@ -67,27 +80,27 @@ class BlogSeeder extends Seeder
                 // Content
                 'title'       => $title,
                 'slug'        => Str::slug($title) . '-' . Str::random(5),
-                'subtitle'    => $faker->sentence(10),
-                'content'     => $faker->paragraphs(8, true),
+                'subtitle'    => $faker->realText(80),
+                'content'     => $faker->realText(2000), // Immersive editorial content
                 
                 // Blog Specifics
-                'reading_time' => $faker->numberBetween(3, 15),
-                'view_count'   => $faker->numberBetween(50, 5000),
+                'reading_time' => $faker->numberBetween(5, 12),
+                'view_count'   => $faker->numberBetween(100, 15000),
                 'video'        => $videoData,
 
                 // Hardened Moderation & Status
                 'status'                => 'published',
-                'admin_note'            => 'Automatically approved editorial post.',
-                'is_verified_author'    => $faker->boolean(70),
+                'admin_note'            => 'Editorial verified content.',
+                'is_verified_author'    => true,
 
                 // Status Flags
                 'is_published'   => true,
-                'is_featured'    => $faker->boolean(20),
-                'allow_comments' => $faker->boolean(80),
+                'is_featured'    => $faker->boolean(25),
+                'allow_comments' => true,
 
                 // SEO
-                'meta_title'       => $title,
-                'meta_description' => $faker->sentence(20),
+                'meta_title'       => "$title | Sellio Insights",
+                'meta_description' => $faker->realText(160),
 
                 // Timestamp Consistency
                 'published_at' => now(),

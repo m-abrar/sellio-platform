@@ -114,17 +114,9 @@
                                             @endif
                                         </td>
                                         <td class="text-center align-middle">
-                                            @php
-                                                $statusMap = [
-                                                    'pending' => 'badge-warning-light',
-                                                    'processing' => 'badge-info-light',
-                                                    'completed' => 'badge-success-light',
-                                                    'cancelled' => 'badge-danger-light'
-                                                ];
-                                                $statusClass = $statusMap[$order->status] ?? 'badge-secondary-light';
-                                            @endphp
-                                            <span class="badge {{ $statusClass }} px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 badge-min-90">
-                                                {{ $order->status }}
+                                            @php $statusMeta = $order->getStatusMeta(); @endphp
+                                            <span class="badge badge-{{ $statusMeta['color'] }}-light px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 badge-min-90">
+                                                {{ $statusMeta['label'] }}
                                             </span>
                                         </td>
                                         <td class="text-right align-middle pr-4">

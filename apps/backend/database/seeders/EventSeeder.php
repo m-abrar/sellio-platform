@@ -83,6 +83,22 @@ class EventSeeder extends Seeder
             // 80% chance the event is paid.
             $isPaid = $faker->boolean(80);
 
+        // 1. CREATE EVENT (Parent Record)
+        $eventTitles = [
+            'Global Tech Summit 2024', 'Creative Arts & Design Expo', 'Annual Wellness & Yoga Retreat',
+            'Future of Fintech Conference', 'Luxury Watch & Jewelry Showcase', 'Executive Leadership Masterclass',
+            'International Film Premiere Night', 'Gourmet Food & Wine Festival', 'Sustainable Living Workshop',
+            'Deep Dive: Artificial Intelligence', 'Immersive VR/AR Experience', 'Urban Street Photography Challenge',
+            'Majestic Symphony Orchestra Live', 'Startup Pitch & Networking Gala', 'Mountain Adventure & Survival Camp'
+        ];
+
+        foreach (range(1, 15) as $index) {
+            $title = $eventTitles[$index - 1] ?? $faker->randomElement($eventPrefixes) . ' ' . $faker->words(2, true);
+
+            $startTime = $faker->dateTimeBetween('now', '+6 months');
+            // 80% chance the event is paid.
+            $isPaid = $faker->boolean(80);
+
             // 1. CREATE EVENT (Parent Record)
             // ---------------------------------------------------------------------
             $event = Event::create([
@@ -96,37 +112,37 @@ class EventSeeder extends Seeder
                 // Core Data
                 'title' => $title,
                 'slug' => Str::slug($title) . '-' . Str::random(5),
-                'description' => $faker->text(500),
+                'description' => $faker->realText(1200), // Immersive description
 
                 'address'   => $faker->streetAddress(),
                 'city'      => $faker->city(),
                 'state'     => $faker->state(),
                 'country'   => $faker->country(),
                 'zip_code'  => $faker->postcode(),
-                'latitude'  => $faker->latitude(),
-                'longitude' => $faker->longitude(),
+                'latitude'  => $faker->latitude(34, 42),
+                'longitude' => $faker->longitude(-118, -74),
                 
                 // Hardened Organizer Metadata
-                'organizer_email' => $faker->email(),
+                'organizer_email' => 'events@' . Str::slug($faker->company) . '.test',
                 'organizer_phone' => $faker->phoneNumber(),
-                'is_verified'     => $faker->boolean(70),
+                'is_verified'     => true,
                 'status'          => 'approved',
-                'admin_note'      => 'Automatically approved for event marketplace demo.',
+                'admin_note'      => 'Verified event organizer partner.',
 
                 // Pricing and Timing
-                'base_price' => $isPaid ? $faker->randomFloat(2, 10, 200) : 0.00,
-                'sale_price' => $isPaid && $faker->boolean(15) ? $faker->randomFloat(2, 5, 150) : null,
+                'base_price' => $isPaid ? $faker->randomFloat(2, 45, 450) : 0.00,
+                'sale_price' => $isPaid && $faker->boolean(15) ? $faker->randomFloat(2, 35, 350) : null,
                 'start_date_time' => $startTime,
-                'duration_hours' => $faker->randomFloat(1, 1, 8),
-                'max_attendees' => $faker->numberBetween(50, 5000),
+                'duration_hours' => $faker->randomElement([2, 4, 8, 24, 48]),
+                'max_attendees' => $faker->numberBetween(100, 5000),
 
                 // Custom Event Fields
-                'event_genre' => $faker->randomElement(['Music', 'Tech', 'Arts', 'Food', 'Sports']),
-                'venue_size' => $faker->randomFloat(2, 1000, 10000), 
+                'event_genre' => $faker->randomElement(['Technology', 'Business', 'Lifestyle', 'Entertainment', 'Education']),
+                'venue_size' => $faker->numberBetween(500, 25000), 
 
                 // Status Flags
                 'is_published' => true,
-                'is_featured' => $faker->boolean(10),
+                'is_featured' => $faker->boolean(20),
                 'is_virtual' => $faker->boolean(20),
                 'is_paid' => $isPaid,
                 'approved_at'       => now(),

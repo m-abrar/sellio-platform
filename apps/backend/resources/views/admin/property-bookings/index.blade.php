@@ -107,13 +107,10 @@
                                         <div class="smallest text-muted uppercase font-weight-bold">Revenue</div>
                                     </td>
 
-                                    @php
-                                        $statusMap = ['confirmed' => 'badge-success-light', 'pending' => 'badge-warning-light', 'cancelled' => 'badge-danger-light'];
-                                        $statusClass = $statusMap[$booking->status] ?? 'badge-secondary-light';
-                                    @endphp
                                     <td class="text-center align-middle">
-                                        <span class="badge {{ $statusClass }} px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 badge-min-90">
-                                            {{ $booking->status }}
+                                        @php $status = $booking->getStatusMeta(); @endphp
+                                        <span class="badge badge-{{ $status['color'] }}-light px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 badge-min-90">
+                                            {{ $status['label'] }}
                                         </span>
                                     </td>
 
