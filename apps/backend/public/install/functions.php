@@ -30,8 +30,9 @@ function get_php_binary(): string {
         'php',
         '/usr/local/bin/php',
         '/usr/bin/php',
-        '/opt/alt/php82/usr/bin/php',
+        '/opt/alt/php84/usr/bin/php',
         '/opt/alt/php83/usr/bin/php',
+        '/opt/alt/php82/usr/bin/php',
         '/opt/alt/php81/usr/bin/php',
         PHP_BINARY, // Use the current PHP binary as a final fallback
     ];

@@ -137,7 +137,12 @@ class SystemController extends Controller
             'Tokenizer Extension' => ['met' => extension_loaded('tokenizer'), 'type' => 'extension'],
             'XML Extension' => ['met' => extension_loaded('xml'), 'type' => 'extension'],
             'GD Extension' => ['met' => extension_loaded('gd'), 'type' => 'extension'],
+            'Intl Extension' => ['met' => extension_loaded('intl'), 'type' => 'extension'],
+            'Zip Extension' => ['met' => extension_loaded('zip'), 'type' => 'extension'],
+            'Exif Extension' => ['met' => extension_loaded('exif'), 'type' => 'extension'],
             'CURL Extension' => ['met' => extension_loaded('curl'), 'type' => 'extension'],
+            'exec() Function' => ['met' => function_exists('exec'), 'type' => 'function'],
+            'passthru() Function' => ['met' => function_exists('passthru'), 'type' => 'function'],
         ];
 
         $permissions = [

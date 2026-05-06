@@ -40,6 +40,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $dbName  = $_POST['db_name'] ?? $existingEnv['DB_DATABASE'] ?? 'sellio';
     $dbUser  = $_POST['db_user'] ?? $existingEnv['DB_USERNAME'] ?? 'root';
     $dbPass  = $_POST['db_pass'] ?? $existingEnv['DB_PASSWORD'] ?? '';
+    
+    $mailMailer = $_POST['mail_mailer'] ?? $existingEnv['MAIL_MAILER'] ?? 'smtp';
+    $mailHost   = $_POST['mail_host'] ?? $existingEnv['MAIL_HOST'] ?? 'smtp.mailtrap.io';
+    $mailPort   = $_POST['mail_port'] ?? $existingEnv['MAIL_PORT'] ?? '2525';
+    $mailUser   = $_POST['mail_user'] ?? $existingEnv['MAIL_USERNAME'] ?? '';
+    $mailPass   = $_POST['mail_pass'] ?? $existingEnv['MAIL_PASSWORD'] ?? '';
+    $mailEnc    = $_POST['mail_enc'] ?? $existingEnv['MAIL_ENCRYPTION'] ?? 'tls';
+    $mailFrom   = $_POST['mail_from'] ?? $existingEnv['MAIL_FROM_ADDRESS'] ?? "no-reply@sellio.com";
 
     // Test DB connection
     try {
@@ -87,6 +95,15 @@ DB_PORT="{$dbPort}"
 DB_DATABASE="{$dbName}"
 DB_USERNAME="{$dbUser}"
 DB_PASSWORD="{$dbPass}"
+
+MAIL_MAILER="{$mailMailer}"
+MAIL_HOST="{$mailHost}"
+MAIL_PORT="{$mailPort}"
+MAIL_USERNAME="{$mailUser}"
+MAIL_PASSWORD="{$mailPass}"
+MAIL_ENCRYPTION="{$mailEnc}"
+MAIL_FROM_ADDRESS="{$mailFrom}"
+MAIL_FROM_NAME="\${APP_NAME}"
 ENV;
             if (file_put_contents($envPath, $content) === false) {
                 $errorMessage = "❌ Failed to write .env file. Please check folder permissions.";
@@ -170,6 +187,61 @@ include __DIR__ . '/../layout/header.php';
                 <input type="password" id="db_pass" name="db_pass" class="form-control"
                     placeholder="••••••••"
                     value="<?= htmlspecialchars($_POST['db_pass'] ?? $existingEnv['DB_PASSWORD'] ?? '') ?>">
+            </div>
+        </div>
+    </div>
+
+    <div class="p-4 rounded-4 mb-4" style="background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.1);">
+        <h3 class="h6 mb-4 fw-bold text-uppercase letter-spacing-1 text-success">
+            <i class="fas fa-envelope me-2"></i> Mail Server Configuration
+        </h3>
+        
+        <div class="row g-3 mb-3">
+            <div class="col-md-6">
+                <label for="mail_mailer" class="form-label">Mailer</label>
+                <select name="mail_mailer" id="mail_mailer" class="form-select">
+                    <option value="smtp" <?= ($existingEnv['MAIL_MAILER'] ?? 'smtp') === 'smtp' ? 'selected' : '' ?>>SMTP</option>
+                    <option value="log" <?= ($existingEnv['MAIL_MAILER'] ?? '') === 'log' ? 'selected' : '' ?>>Log (Dev)</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label for="mail_host" class="form-label">SMTP Host</label>
+                <input type="text" id="mail_host" name="mail_host" class="form-control"
+                    value="<?= htmlspecialchars($_POST['mail_host'] ?? $existingEnv['MAIL_HOST'] ?? 'smtp.mailtrap.io') ?>">
+            </div>
+        </div>
+
+        <div class="row g-3 mb-3">
+            <div class="col-md-4">
+                <label for="mail_port" class="form-label">Port</label>
+                <input type="text" id="mail_port" name="mail_port" class="form-control"
+                    value="<?= htmlspecialchars($_POST['mail_port'] ?? $existingEnv['MAIL_PORT'] ?? '2525') ?>">
+            </div>
+            <div class="col-md-4">
+                <label for="mail_enc" class="form-label">Encryption</label>
+                <select name="mail_enc" id="mail_enc" class="form-select">
+                    <option value="tls" <?= ($existingEnv['MAIL_ENCRYPTION'] ?? 'tls') === 'tls' ? 'selected' : '' ?>>TLS</option>
+                    <option value="ssl" <?= ($existingEnv['MAIL_ENCRYPTION'] ?? '') === 'ssl' ? 'selected' : '' ?>>SSL</option>
+                    <option value="null" <?= ($existingEnv['MAIL_ENCRYPTION'] ?? '') === 'null' ? 'selected' : '' ?>>None</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label for="mail_from" class="form-label">From Address</label>
+                <input type="email" id="mail_from" name="mail_from" class="form-control"
+                    value="<?= htmlspecialchars($_POST['mail_from'] ?? $existingEnv['MAIL_FROM_ADDRESS'] ?? 'no-reply@sellio.com') ?>">
+            </div>
+        </div>
+
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label for="mail_user" class="form-label">Username</label>
+                <input type="text" id="mail_user" name="mail_user" class="form-control"
+                    value="<?= htmlspecialchars($_POST['mail_user'] ?? $existingEnv['MAIL_USERNAME'] ?? '') ?>">
+            </div>
+            <div class="col-md-6">
+                <label for="mail_pass" class="form-label">Password</label>
+                <input type="password" id="mail_pass" name="mail_pass" class="form-control"
+                    value="<?= htmlspecialchars($_POST['mail_pass'] ?? $existingEnv['MAIL_PASSWORD'] ?? '') ?>">
             </div>
         </div>
     </div>
