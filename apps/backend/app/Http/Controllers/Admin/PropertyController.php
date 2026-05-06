@@ -35,7 +35,7 @@ class PropertyController extends Controller
             ->when(request('location_id'), fn($q) => $q->where('location_id', request('location_id')))
             ->when(request('category_id'), fn($q) => $q->where('category_id', request('category_id')))
             ->when(request('only_active'), fn($q) => $q->where('is_published', 1))
-            ->with(['location', 'category'])
+            ->with(['location', 'category', 'user'])
             ->latest()
             ->paginate(15)
             ->withQueryString();

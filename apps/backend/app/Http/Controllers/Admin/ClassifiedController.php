@@ -26,6 +26,7 @@ class ClassifiedController extends Controller
         $locations = Location::where('is_classified', 1)->get();
 
         $classifieds = Classified::query()
+            ->with(['user', 'category', 'location'])
             ->when($request->title, fn($q) => $q->where('title', 'like', '%' . $request->title . '%'))
             ->when($request->category_id, fn($q) => $q->where('category_id', $request->category_id))
             ->when($request->location_id, fn($q) => $q->where('location_id', $request->location_id))

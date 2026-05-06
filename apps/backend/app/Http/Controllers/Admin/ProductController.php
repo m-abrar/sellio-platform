@@ -23,7 +23,7 @@ class ProductController extends Controller
             ->when(request('category_id'), fn($q) => $q->where('category_id', request('category_id')))
             ->when(request('sku'), fn($q) => $q->where('sku', 'like', '%' . request('sku') . '%'))
             ->when(request('status') !== null, fn($q) => $q->where('is_published', request('status')))
-            ->with(['category'])
+            ->with(['category', 'user', 'brand'])
             ->latest()
             ->paginate(15)
             ->withQueryString();

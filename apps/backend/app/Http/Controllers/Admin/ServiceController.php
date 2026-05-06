@@ -26,6 +26,7 @@ class ServiceController extends Controller
         $locations = Location::where('is_service', 1)->get();
 
         $services = Service::query()
+            ->with(['user', 'category', 'location'])
             ->when($request->title, fn($q) => $q->where('title', 'like', '%' . $request->title . '%'))
             ->when($request->category_id, fn($q) => $q->where('category_id', $request->category_id))
             ->when($request->location_id, fn($q) => $q->where('location_id', $request->location_id))

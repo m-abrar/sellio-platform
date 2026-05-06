@@ -28,6 +28,7 @@ class AutoController extends Controller
         $locations = Location::where('is_auto', 1)->get();
 
         $autos = Auto::query()
+            ->with(['user', 'category', 'brand', 'location'])
             ->when($request->title, fn($q) => $q->where('title', 'like', '%' . $request->title . '%'))
             ->when($request->brand_id, fn($q) => $q->where('brand_id', $request->brand_id))
             ->when($request->category_id, fn($q) => $q->where('category_id', $request->category_id))
