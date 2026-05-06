@@ -126,15 +126,12 @@
                                     </td>
                                 </tr>
                             @empty
-                                <tr class="empty-state">
-                                    <td colspan="7" class="text-center py-5">
-                                        <div class="py-4">
-                                            <i class="fas fa-calendar-times fa-4x text-muted opacity-25 mb-3 d-block"></i>
-                                            <h5 class="text-muted font-weight-bold">No Reservation Intelligence Detected</h5>
-                                            <p class="small text-secondary mb-0">The real-estate booking ledger is currently awaiting synchronized entries.</p>
-                                        </div>
-                                    </td>
-                                </tr>
+                                @include('admin._partials._empty-state', [
+                                    'colspan' => 7,
+                                    'icon' => 'fas fa-calendar-times',
+                                    'title' => 'No Reservation Intelligence Detected',
+                                    'description' => 'The real-estate booking ledger is currently awaiting synchronized entries.'
+                                ])
                             @endforelse
                         </tbody>
                     </table>

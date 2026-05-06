@@ -174,24 +174,6 @@
 @section('css')
 <style>
     .bg-primary-soft { background-color: rgba(70, 165, 172, 0.08); }
-    .bg-success-light { background-color: rgba(16, 185, 129, 0.1); color: #10b981; }
-    .bg-danger-light { background-color: rgba(239, 68, 68, 0.1); color: #ef4444; }
     .border-dashed-primary { border: 1.5px dashed rgba(70, 165, 172, 0.4) !important; }
-    .rounded-24 { border-radius: 24px !important; }
-    .rounded-20 { border-radius: 20px !important; }
-    .shadow-premium { box-shadow: 0 10px 30px -10px rgba(0,0,0,0.08) !important; }
-    .table-premium thead th { 
-        background: #f8fafc; 
-        border: none; 
-        font-size: 0.65rem; 
-        text-transform: uppercase; 
-        letter-spacing: 1px; 
-        font-weight: 800; 
-        color: #64748b; 
-        padding-top: 1.25rem; 
-        padding-bottom: 1.25rem; 
-    }
-    .table-premium tbody td { border-top: 1px solid #f1f5f9; padding-top: 1.15rem; padding-bottom: 1.15rem; }
-    .ls-1-p { letter-spacing: 1px; }
 </style>
 @endsection

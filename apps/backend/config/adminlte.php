@@ -346,6 +346,11 @@ return [
                     'location' => 'admin-assets/style.css',
                 ],
                 [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => 'admin/css/sellio-premium.css',
+                ],
+                [
                     'type' => 'js',
                     'asset' => true,
                     'location' => 'admin-assets/global.js',
