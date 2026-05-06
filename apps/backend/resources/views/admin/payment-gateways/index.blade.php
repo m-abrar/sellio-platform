@@ -23,10 +23,10 @@
     @include('admin.alert')
 
     {{-- Financial Security Protocol --}}
-    <div class="card border-0 shadow-premium mb-4 overflow-hidden" style="border-radius: 20px;">
+    <div class="card border-0 shadow-premium mb-4 overflow-hidden rounded-20">
         <div class="card-body p-0">
             <div class="d-flex align-items-center p-3">
-                <div class="bg-success d-flex align-items-center justify-content-center shadow-premium-lg" style="width: 100px; height: 100px; min-width: 100px; border-radius: 20px; opacity: 0.9;">
+                <div class="bg-success d-flex align-items-center justify-content-center shadow-premium-lg icon-box-100 rounded-20 opacity-90">
                     <i class="fas fa-shield-alt text-white fa-2x"></i>
                 </div>
                 <div class="px-4">
@@ -40,7 +40,7 @@
     
 
     {{-- Installed Processors Card --}}
-    <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
+    <div class="card border-0 shadow-premium overflow-hidden rounded-24">
         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center justify-content-between">
             <h5 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">
                 <i class="fas fa-network-wired mr-2 text-primary opacity-50"></i> Active Integration Ledger
@@ -74,7 +74,7 @@
                                         </div>
                                         <div>
                                             <span class="d-block font-weight-bold text-dark mb-0 uppercase letter-spacing-1">{{ $gateway->title ?? 'Unknown Gateway' }}</span>
-                                            <small class="text-muted font-weight-bold text-uppercase opacity-75" style="font-size: 0.65rem; letter-spacing: 0.5px;">{{ $gateway->class_name }}</small>
+                                            <small class="text-muted font-weight-bold text-uppercase opacity-75 smallest-0-65 ls-0-5">{{ $gateway->class_name }}</small>
                                         </div>
                                     </div>
                                 </td>
@@ -83,22 +83,22 @@
                                 </td>
                                 <td class="align-middle text-center">
                                     @if($gateway->mode === 'live')
-                                        <span class="badge badge-success-soft border border-success text-success px-3 py-1 text-uppercase" style="font-size: 0.65rem; letter-spacing: 0.5px;">
+                                        <span class="badge badge-success-soft border border-success text-success px-3 py-1 text-uppercase smallest-0-65 ls-0-5">
                                             <i class="fas fa-bolt mr-1"></i> Live
                                         </span>
                                     @else
-                                        <span class="badge badge-warning-soft border border-warning text-warning px-3 py-1 text-uppercase" style="font-size: 0.65rem; letter-spacing: 0.5px;">
+                                        <span class="badge badge-warning-soft border border-warning text-warning px-3 py-1 text-uppercase smallest-0-65 ls-0-5">
                                             <i class="fas fa-flask mr-1"></i> Sandbox
                                         </span>
                                     @endif
                                 </td>
                                 <td class="align-middle text-center">
                                     @if($gateway->is_active)
-                                        <span class="badge badge-success-soft border border-success text-success px-3 py-1" style="border-radius: 20px; font-size: 0.7rem; letter-spacing: 0.5px;">
+                                        <span class="badge badge-success-soft border border-success text-success px-3 py-1 rounded-20 smallest-0-7 ls-0-5">
                                             <i class="fas fa-check-circle mr-1"></i> ACTIVE
                                         </span>
                                     @else
-                                        <span class="badge badge-secondary-soft border border-secondary text-secondary px-3 py-1" style="border-radius: 20px; font-size: 0.7rem; letter-spacing: 0.5px;">
+                                        <span class="badge badge-secondary-soft border border-secondary text-secondary px-3 py-1 rounded-20 smallest-0-7 ls-0-5">
                                             <i class="fas fa-times-circle mr-1"></i> INACTIVE
                                         </span>
                                     @endif
@@ -163,7 +163,7 @@
                     }
                 }
             });
-            $('.dataTables_filter input').addClass('form-control shadow-xs border').css('max-width', '200px');
+            $('.dataTables_filter input').addClass('form-control shadow-xs border w-max-200');
             $('.dataTables_length select').addClass('form-control form-control-sm shadow-xs');
         }
     });

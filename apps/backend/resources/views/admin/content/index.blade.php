@@ -25,10 +25,10 @@
     @include('admin.alert')
 
     {{-- Content Strategy Alert --}}
-    <div class="card border-0 shadow-premium mb-4 overflow-hidden" style="border-radius: 20px;">
+    <div class="card border-0 shadow-premium mb-4 overflow-hidden rounded-20">
         <div class="card-body p-0">
             <div class="d-flex align-items-center p-3">
-                <div class="bg-warning d-flex align-items-center justify-content-center shadow-premium-lg" style="width: 100px; height: 100px; min-width: 100px; border-radius: 20px; opacity: 0.9;">
+                <div class="bg-warning d-flex align-items-center justify-content-center shadow-premium-lg icon-box-100 rounded-20 opacity-90">
                     <i class="fas fa-layer-group text-white fa-2x"></i>
                 </div>
                 <div class="px-4">
@@ -39,7 +39,7 @@
         </div>
     </div>
 
-    <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
+    <div class="card border-0 shadow-premium overflow-hidden rounded-24">
         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center justify-content-between">
             <h5 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">
                 <i class="fas fa-file-invoice mr-2 text-primary opacity-50"></i> Editable Page Sections
@@ -153,7 +153,7 @@
                     }
                 }
             });
-            $('.dataTables_filter input').addClass('form-control shadow-none border-light').css('width', '220px');
+            $('.dataTables_filter input').addClass('form-control shadow-none border-light w-220-p');
         }
     });
 </script>

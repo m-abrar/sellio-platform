@@ -25,10 +25,10 @@
 <div class="container-fluid pb-5">
     {{-- Unified Layout Greeting --}}
     {{-- Global Registry Greeting --}}
-    <div class="card border-0 shadow-premium mb-5 overflow-hidden" style="border-radius: 24px;">
+    <div class="card border-0 shadow-premium mb-5 overflow-hidden rounded-24">
         <div class="card-body p-0">
             <div class="d-flex align-items-center p-3">
-                <div class="bg-primary d-flex align-items-center justify-content-center shadow-premium-lg" style="width: 100px; height: 100px; min-width: 100px; border-radius: 20px; opacity: 0.9;">
+                <div class="bg-primary d-flex align-items-center justify-content-center shadow-premium-lg icon-box-100 rounded-20 opacity-90">
                     <i class="fas fa-microchip text-white fa-2x"></i>
                 </div>
                 <div class="px-4">
@@ -54,7 +54,7 @@
 
         @forelse($settings_groups as $group)
             <div class="col-lg-4 col-md-6 mb-4">
-                <div class="card h-100 border-0 shadow-premium stat-card" style="border-radius: 20px;">
+                <div class="card h-100 border-0 shadow-premium stat-card rounded-20">
                     <div class="card-body p-4">
                         <div class="d-flex align-items-start mb-4">
                             <div class="icon-square-premium bg-{{ $group['color'] }}-soft mr-3" style="color: {{ $group['color'] == 'indigo' ? '#6366f1' : 'var(--' . $group['color'] . ')' }};">
@@ -62,7 +62,7 @@
                             </div>
                             <div class="flex-grow-1">
                                 <h6 class="font-weight-bold text-dark mb-2 small uppercase letter-spacing-1">{{ $group['title'] }}</h6>
-                                <p class="text-muted small mb-0" style="line-height: 1.6; font-size: 0.75rem;">
+                                <p class="text-muted small mb-0 leading-1-6 smallest-0-75">
                                     {{ $group['desc'] }}
                                 </p>
                             </div>
@@ -87,11 +87,6 @@
 </div>
 @endsection
 
-@push('css')
-@include('admin._partials._toggle-card-css')
-<style>
-    .stat-card:hover { transform: translateY(-8px); box-shadow: 0 15px 45px rgba(0,0,0,0.06) !important; }
-</style>
 @endpush
 
 @section('js')

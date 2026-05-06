@@ -26,10 +26,10 @@
     @include('admin.alert')
 
     {{-- System Maintenance Greeting --}}
-    <div class="card border-0 shadow-premium mb-5 overflow-hidden" style="border-radius: 24px;">
+    <div class="card border-0 shadow-premium mb-5 overflow-hidden rounded-24">
         <div class="card-body p-0">
             <div class="d-flex align-items-center p-3">
-                <div class="bg-primary d-flex align-items-center justify-content-center shadow-premium-lg" style="width: 100px; height: 100px; min-width: 100px; border-radius: 20px; opacity: 0.9;">
+                <div class="bg-primary d-flex align-items-center justify-content-center shadow-premium-lg icon-box-100 rounded-20 opacity-90">
                     <i class="fas fa-terminal text-white fa-2x"></i>
                 </div>
                 <div class="px-4">
@@ -43,19 +43,19 @@
     <div class="row">
         {{-- Main Operations Column --}}
         <div class="col-md-8">
-            <div class="card border-0 shadow-premium overflow-hidden mb-4" style="border-radius: 24px;">
+            <div class="card border-0 shadow-premium overflow-hidden mb-4 rounded-24">
                 <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
                     <h3 class="card-title-main">
                         <i class="fas fa-cogs mr-1 text-primary opacity-50"></i> Foundational Optimization
                     </h3>
                 </div>
                 <div class="card-body p-4">
-                    <div class="d-flex align-items-start mb-4 p-3 rounded-xl" style="background: rgba(70, 165, 172, 0.05); border: 1px solid rgba(70, 165, 172, 0.1);">
-                        <div class="icon-box-soft bg-white text-primary mr-3 shadow-xs" style="min-width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+                    <div class="d-flex align-items-start mb-4 p-3 rounded-xl bg-primary-soft border border-primary-soft">
+                        <div class="icon-box-soft bg-white text-primary mr-3 shadow-xs icon-box-52 rounded-14 d-flex align-items-center justify-content-center font-1-2">
                             <i class="fas fa-rocket"></i>
                         </div>
                         <div>
-                            <p class="text-dark small mb-0" style="line-height: 1.6;">
+                            <p class="text-dark small mb-0 leading-1-6">
                                 Running optimization will clear all existing caches and regenerate configuration, route, and view caches for maximum performance. Recommended after environment updates.
                             </p>
                         </div>
@@ -64,13 +64,13 @@
                     <div class="d-flex flex-wrap align-items-center">
                         <form action="{{ route('admin.system.optimize') }}" method="POST" class="mr-3 mb-2">
                             @csrf
-                            <button type="submit" class="btn btn-primary rounded-pill px-5 py-2 font-weight-bold small" style="min-width: 220px; height: 48px;">
+                            <button type="submit" class="btn btn-primary rounded-pill px-5 py-2 font-weight-bold small min-w-220 h-48-p">
                                 <i class="fas fa-bolt mr-2"></i> Optimize & Cache All
                             </button>
                         </form>
                         <form action="{{ route('admin.system.storage.link') }}" method="POST" class="mb-2">
                             @csrf
-                            <button type="submit" class="btn btn-outline-dark rounded-pill px-5 py-2 font-weight-bold small" style="min-width: 220px; height: 48px;">
+                            <button type="submit" class="btn btn-outline-dark rounded-pill px-5 py-2 font-weight-bold small min-w-220 h-48-p">
                                 <i class="fas fa-link mr-2"></i> Fix Storage Link
                             </button>
                         </form>
@@ -90,16 +90,16 @@
 
                 @foreach($cacheItems as $item)
                 <div class="col-md-6 mb-4">
-                    <div class="card h-100 border-0 shadow-premium overflow-hidden" style="border-radius: 20px;">
+                    <div class="card h-100 border-0 shadow-premium overflow-hidden rounded-20">
                         <div class="card-body p-4 text-center">
-                            <div class="icon-circle bg-{{ $item['color'] }}-soft text-{{ $item['color'] }} mx-auto mb-3 shadow-xs" style="width: 60px; height: 60px; border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+                            <div class="icon-circle bg-{{ $item['color'] }}-soft text-{{ $item['color'] }} mx-auto mb-3 shadow-xs icon-box-60 rounded-18 d-flex align-items-center justify-content-center font-1-5">
                                 <i class="fas {{ $item['icon'] }}"></i>
                             </div>
                             <h5 class="font-weight-bold text-dark mb-1">{{ $item['title'] }}</h5>
                             <p class="smallest text-muted mb-3">{{ $item['desc'] }}</p>
                             <form action="{{ route('admin.system.' . $item['id'] . '.clear') }}" method="POST">
                                 @csrf
-                                <button type="submit" class="btn btn-{{ $item['color'] }}-soft btn-purge rounded-pill px-5 font-weight-bold small" style="height: 44px; min-width: 160px;">
+                                <button type="submit" class="btn btn-{{ $item['color'] }}-soft btn-purge rounded-pill px-5 font-weight-bold small h-44-p min-w-160">
                                     <i class="fas fa-trash-alt mr-1"></i> Purge {{ $item['id'] }}
                                 </button>
                             </form>
@@ -109,11 +109,11 @@
                 @endforeach
 
                 <div class="col-md-12">
-                    <div class="card border-0 shadow-premium mb-4" style="border-radius: 24px; border: 1px dashed rgba(70, 165, 172, 0.2) !important;">
+                    <div class="card border-0 shadow-premium mb-4 rounded-24 border-dashed-primary">
                         <div class="card-body p-4">
                             <div class="row align-items-center">
                                 <div class="col-md-2 text-center">
-                                    <div class="icon-circle bg-primary-soft text-primary mx-auto mb-3 mb-md-0 shadow-xs" style="width: 70px; height: 70px; border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem;">
+                                    <div class="icon-circle bg-primary-soft text-primary mx-auto mb-3 mb-md-0 shadow-xs icon-box-70 rounded-20 d-flex align-items-center justify-content-center font-1-8">
                                         <i class="fas fa-images"></i>
                                     </div>
                                 </div>
@@ -126,7 +126,7 @@
                                 <div class="col-md-3 text-right">
                                     <form action="{{ route('admin.system.media.regenerate') }}" method="POST">
                                         @csrf
-                                        <button type="submit" class="btn btn-primary rounded-pill px-5 py-2 font-weight-bold small" style="height: 48px; min-width: 180px;">
+                                        <button type="submit" class="btn btn-primary rounded-pill px-5 py-2 font-weight-bold small h-48-p min-w-180">
                                             <i class="fas fa-sync-alt mr-1"></i> Regenerate
                                         </button>
                                     </form>
@@ -140,18 +140,18 @@
 
         {{-- Sidebar Insights --}}
         <div class="col-md-4">
-            <div class="card border-0 shadow-premium bg-dark mb-4 overflow-hidden" style="border-radius: 24px;">
-                <div class="card-body p-4 position-relative" style="z-index: 1;">
-                    <div class="position-absolute" style="top: -20px; right: -20px; opacity: 0.05; font-size: 8rem; transform: rotate(-15deg);">
+            <div class="card border-0 shadow-premium bg-dark mb-4 overflow-hidden rounded-24">
+                <div class="card-body p-4 position-relative z-1">
+                    <div class="guide-bg-icon">
                         <i class="fas fa-tools"></i>
                     </div>
-                    <h5 class="font-weight-bold text-white mb-3 small text-uppercase" style="letter-spacing: 1px;">
+                    <h5 class="font-weight-bold text-white mb-3 small text-uppercase ls-1-p">
                         <i class="fas fa-info-circle mr-2 text-warning"></i> Operational Guide
                     </h5>
-                    <p class="smallest text-white-50 mb-3 font-weight-bold uppercase" style="line-height: 1.6;">
+                    <p class="smallest text-white-50 mb-3 font-weight-bold uppercase leading-1-6">
                         These tools manage the platform's foundational buffers. Use them to resolve:
                     </p>
-                    <ul class="smallest text-white-50 pl-3 mb-4 font-weight-bold uppercase" style="list-style: none;">
+                    <ul class="smallest text-white-50 pl-3 mb-4 font-weight-bold uppercase leading-1-6 list-none">
                         <li class="mb-2"><i class="fas fa-check-circle mr-2 text-success"></i> Environment (.env) sync issues</li>
                         <li class="mb-2"><i class="fas fa-check-circle mr-2 text-success"></i> Broken media or symlinks</li>
                         <li class="mb-2"><i class="fas fa-check-circle mr-2 text-success"></i> Routing conflicts or missing keys</li>
@@ -160,7 +160,7 @@
                     <div class="p-3 bg-white bg-opacity-10 rounded-xl border border-white border-opacity-10 smallest">
                         <div class="d-flex justify-content-between mb-2">
                             <span class="text-white-50 uppercase font-weight-bold">Environment</span>
-                            <span class="font-weight-bold text-warning text-uppercase letter-spacing-1">{{ config('app.env') }}</span>
+                            <span class="font-weight-bold text-warning text-uppercase letter-spacing-1 ls-1-p">{{ config('app.env') }}</span>
                         </div>
                         <div class="d-flex justify-content-between">
                             <span class="text-white-50 uppercase font-weight-bold">Timezone</span>
@@ -170,7 +170,7 @@
                 </div>
             </div>
 
-            <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 20px;">
+            <div class="card border-0 shadow-premium overflow-hidden rounded-20">
                 <div class="card-body p-4 d-flex align-items-center">
                     <div class="mr-3">
                         <i class="fas fa-shield-alt fa-2x text-primary opacity-25"></i>
@@ -186,33 +186,8 @@
 </div>
 @endsection
 
-@push('css')
-<style>
-    .bg-white.bg-opacity-10 { background: rgba(255,255,255,0.05) !important; }
-    .border-white.border-opacity-10 { border-color: rgba(255,255,255,0.1) !important; }
-</style>
 @endpush
 
-@section('css')
-    @include('admin._partials._toggle-card-css')
-    <style>
-        .card { transition: transform 0.2s, box-shadow 0.2s; }
-        .card:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important; }
-        .bg-dark-light { background: rgba(255,255,255,0.05); }
-        .opacity-75 { opacity: 0.75; }
-        
-        .btn-purge {
-            border: 1px solid rgba(0,0,0,0.05) !important;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02) !important;
-        }
-        .btn-purge:hover {
-            transform: translateY(-2px);
-            filter: brightness(0.98);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05) !important;
-            border-color: rgba(0,0,0,0.1) !important;
-        }
-    </style>
 @stop
 
 @section('js')

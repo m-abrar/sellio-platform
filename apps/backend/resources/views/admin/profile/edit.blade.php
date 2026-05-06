@@ -7,18 +7,16 @@
         <div class="row mb-4 align-items-center">
             <div class="col-sm-8 d-flex align-items-center">
                 <div class="avatar-wrapper mr-4 position-relative group cursor-pointer">
-                    <div class="avatar-glow position-absolute" style="top: -5px; left: -5px; right: -5px; bottom: -5px; background: rgba(var(--primary-rgb), 0.1); border-radius: 50%; filter: blur(10px);"></div>
-                    <div class="position-relative overflow-hidden rounded-circle shadow-premium border-white border-4" style="width: 100px; height: 100px; z-index: 1; border: 4px solid #fff !important;">
+                    <div class="avatar-glow position-absolute"></div>
+                    <div class="position-relative overflow-hidden rounded-circle shadow-premium border-4-fff icon-box-100 z-1">
                         <img src="{{ $user->getFirstMediaUrl(\App\Models\User::PRIMARY_MEDIA) ?: asset('images/fallbacks/avatar.jpg') }}" 
                              alt="Avatar" 
-                             class="w-100 h-100 transition-all duration-300 group-hover:scale-110" 
-                             style="object-fit: cover;">
-                        <div class="avatar-overlay position-absolute d-flex align-items-center justify-content-center transition-all duration-300 opacity-0 group-hover:opacity-100" 
-                             style="top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.3);">
+                             class="w-100 h-100 transition-all duration-300 group-hover:scale-110 object-fit-cover">
+                        <div class="avatar-overlay position-absolute d-flex align-items-center justify-content-center transition-all duration-300 opacity-0 group-hover:opacity-100">
                             <i class="fas fa-camera text-white fa-lg"></i>
                         </div>
                     </div>
-                    <div class="status-indicator bg-success position-absolute shadow-sm" style="width: 18px; height: 18px; border-radius: 50%; bottom: 8px; right: 8px; border: 3px solid #fff; z-index: 2;"></div>
+                    <div class="status-indicator bg-success position-absolute shadow-sm status-indicator-dot"></div>
                 </div>
                 <div>
                     <h1 class="m-0 text-dark font-weight-bold letter-spacing-tight">
@@ -51,7 +49,7 @@
         <div class="row">
             {{-- Primary Data Column --}}
             <div class="col-md-8">
-                <div class="card border-0 shadow-premium overflow-hidden mb-4" style="border-radius: 24px;">
+                <div class="card border-0 shadow-premium overflow-hidden mb-4 rounded-24">
                     <div class="card-header bg-white py-4 px-4 border-0">
                         <h3 class="card-title-main">
                             <i class="fas fa-fingerprint mr-2 text-primary opacity-50"></i> Profile Credentials
@@ -75,8 +73,8 @@
                             </div>
                         </div>
 
-                        <div class="p-4 rounded-xl mt-2" style="background: rgba(248, 250, 252, 0.8); border: 1px dashed var(--border-color);">
-                            <h5 class="card-title-main mb-4" style="font-size: 0.85rem !important;">
+                        <div class="p-4 rounded-xl mt-2 bg-light-80 border-dashed">
+                            <h5 class="card-title-main mb-4 font-0-85">
                                 <i class="fas fa-lock-open mr-2 text-warning"></i> Access Security Update
                             </h5>
 
@@ -111,7 +109,7 @@
                 ])
 
                 {{-- Account Metadata --}}
-                <div class="card border-0 shadow-premium mt-4 mb-4 overflow-hidden" style="border-radius: 20px;">
+                <div class="card border-0 shadow-premium mt-4 mb-4 overflow-hidden rounded-20">
                     <div class="card-header bg-white py-3 px-4 border-0">
                         <h3 class="card-title-side">
                              <i class="fas fa-info-circle mr-2 text-primary opacity-50"></i> Registry Details
@@ -120,7 +118,7 @@
                     <div class="card-body bg-white py-4 px-4">
                         <div class="mb-4">
                             <label class="d-block small font-weight-bold text-muted mb-2 uppercase letter-spacing-1">Assigned Authority</label>
-                            <span class="badge badge-primary-light text-primary px-3 py-2 font-weight-bold rounded-pill" style="font-size: 0.7rem;">
+                            <span class="badge badge-primary-light text-primary px-3 py-2 font-weight-bold rounded-pill smallest-0-7">
                                 <i class="fas fa-crown mr-1"></i> {{ strtoupper($user->roles->first()->name ?? 'MASTER ADMIN') }}
                             </span>
                         </div>
@@ -136,7 +134,7 @@
                 </div>
 
                 {{-- Visual Identity --}}
-                <div class="card border-0 shadow-premium mb-4 overflow-hidden" style="border-radius: 20px;">
+                <div class="card border-0 shadow-premium mb-4 overflow-hidden rounded-20">
                     <div class="card-header bg-white border-0 py-3 px-4">
                         <h3 class="card-title-side">Update Avatar</h3>
                     </div>
@@ -156,11 +154,3 @@
     </form>
 </div>
 @stop
-
-@push('css')
-<style>
-    .avatar-wrapper:hover img { transform: scale(1.1); }
-    .avatar-wrapper .avatar-overlay { transition: all 0.3s ease; }
-    .transition-all { transition: all 0.3s ease !important; }
-</style>
-@endpush

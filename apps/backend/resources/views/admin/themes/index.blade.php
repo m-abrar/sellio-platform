@@ -25,10 +25,10 @@
     @include('admin.alert')
 
     {{-- Theme Engine Greeting --}}
-    <div class="card border-0 shadow-premium mb-5 overflow-hidden" style="border-radius: 24px;">
+    <div class="card border-0 shadow-premium mb-5 overflow-hidden rounded-24">
         <div class="card-body p-0">
             <div class="d-flex align-items-center p-3">
-                <div class="bg-indigo-light d-flex align-items-center justify-content-center shadow-premium-lg" style="width: 100px; height: 100px; min-width: 100px; border-radius: 20px;">
+                <div class="bg-indigo-light d-flex align-items-center justify-content-center shadow-premium-lg icon-box-100 rounded-20">
                     <i class="fas fa-magic text-indigo fa-2x"></i>
                 </div>
                 <div class="px-4">
@@ -46,11 +46,11 @@
             <span class="badge badge-primary-light text-primary px-3 py-2 mb-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 shadow-xs">CURRENTLY ACTIVE</span>
             <h5 class="font-weight-bold text-dark smallest text-uppercase letter-spacing-1">Active Storefront Identity</h5>
         </div>
-        <div class="card card-premium active-theme-hero overflow-hidden border-0 shadow-premium" style="border-radius: 24px;">
+        <div class="card card-premium active-theme-hero overflow-hidden border-0 shadow-premium rounded-24">
             <div class="row no-gutters">
                 <div class="col-md-5">
                     <div class="position-relative h-100 bg-light">
-                        <img src="{{ asset('frontend/images/preview.png') }}" class="img-fluid h-100 w-100" style="object-fit: cover;" alt="{{ $activeTheme->title }}">
+                        <img src="{{ asset('frontend/images/preview.png') }}" class="img-fluid h-100 w-100 object-fit-cover" alt="{{ $activeTheme->title }}">
                         <div class="active-status-overlay">
                             <i class="fas fa-check-circle mr-1"></i> LIVE NOW
                         </div>
@@ -68,11 +68,11 @@
                             <code class="bg-dark text-white px-3 py-1 rounded-pill smallest font-weight-bold shadow-sm">{{ $activeTheme->theme_key }}</code>
                         </div>
                         
-                        <p class="text-muted flex-grow-1" style="font-size: 1.1rem; line-height: 1.7;">
+                        <p class="text-muted flex-grow-1 font-1-1 leading-1-7">
                             {{ $activeTheme->description ?? 'This theme is driving your storefront. It utilizes a ' . ($activeTheme->vertical ?? 'unified') . ' layout system with specialized components for ' . ($activeTheme->vertical ?? 'all business operations') . '.' }}
                         </p>
 
-                        <div class="mt-4 pt-4 border-top d-flex align-items-center" style="gap: 15px;">
+                        <div class="mt-4 pt-4 border-top d-flex align-items-center gap-15">
                             <a href="{{ url('/') }}" target="_blank" class="btn btn-primary px-4 rounded-pill font-weight-bold shadow-premium smallest">
                                 <i class="fas fa-external-link-alt mr-2"></i> View Site
                             </a>
@@ -96,9 +96,9 @@
         <div class="row">
             @foreach($recentThemes as $theme)
             <div class="col-md-3">
-                <div class="card theme-card-sm shadow-premium border-0 overflow-hidden" style="border-radius: 16px;">
+                <div class="card theme-card-sm shadow-premium border-0 overflow-hidden rounded-16">
                     <div class="position-relative">
-                        <img src="{{ asset('frontend/images/preview.png') }}" class="card-img-top" style="height: 140px; object-fit: cover;" alt="{{ $theme->title }}">
+                        <img src="{{ asset('frontend/images/preview.png') }}" class="card-img-top h-140-p object-fit-cover" alt="{{ $theme->title }}">
                         <div class="theme-overlay">
                             <form action="{{ route('admin.themes.activate', $theme->id) }}" method="POST">
                                 @csrf
@@ -121,7 +121,7 @@
 
     {{-- SECTION 3: BROWSE BY VERTICAL --}}
     <div class="mb-5">
-        <div class="card card-premium overflow-hidden border-0 shadow-premium" style="border-radius: 24px;">
+        <div class="card card-premium overflow-hidden border-0 shadow-premium rounded-24">
             <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center justify-content-between">
                 <h5 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">
                     <i class="fas fa-layer-group mr-2 text-primary opacity-50"></i> Global Theme Library Explorer
@@ -192,9 +192,9 @@
                                      <div class="row">
                                          @foreach($group as $theme)
                                              <div class="col-md-4 mb-4">
-                                                 <div class="card h-100 theme-card shadow-xs border-0 overflow-hidden" style="border-radius: 20px;">
-                                                     <div class="position-relative overflow-hidden theme-thumbnail-container" style="height: 180px;">
-                                                         <img src="{{ asset('frontend/images/preview.png') }}" class="card-img-top w-100 h-100" style="object-fit: cover;" alt="{{ $theme->title }}">
+                                                 <div class="card h-100 theme-card shadow-xs border-0 overflow-hidden rounded-20">
+                                                     <div class="position-relative overflow-hidden theme-thumbnail-container h-180-p">
+                                                         <img src="{{ asset('frontend/images/preview.png') }}" class="card-img-top w-100 h-100 object-fit-cover" alt="{{ $theme->title }}">
                                                          <div class="theme-overlay">
                                                               <a href="{{ route('admin.themes.edit', $theme->id) }}" class="btn btn-white btn-sm font-weight-bold px-3 shadow mr-2 rounded-pill">
                                                                  <i class="fas fa-cog text-info"></i>
@@ -210,7 +210,7 @@
                                                      <div class="card-body p-4 bg-white border-top">
                                                          <h6 class="font-weight-bold text-dark mb-1">{{ $theme->title }}</h6>
                                                          <code class="text-xs text-primary mb-3 d-inline-block font-weight-bold">{{ $theme->theme_key }}</code>
-                                                         <p class="text-muted small mb-0 line-clamp-2" style="min-height: 40px;">
+                                                         <p class="text-muted small mb-0 line-clamp-2 min-h-40-p">
                                                              {{ $theme->description ?? 'optimized ' . ($theme->vertical ?: 'unified') . ' layout components.' }}
                                                          </p>
                                                      </div>
@@ -230,72 +230,6 @@
 </div>
 @endsection
 
-@section('css')
-<style>
-    .bg-light-soft { background-color: #f8fafc; }
-    .bg-indigo-light { background-color: rgba(102, 16, 242, 0.08); }
-    .h-px { height: 1px; }
-    .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-
-    /* Active Theme Hero */
-    .active-theme-hero:hover { transform: translateY(-5px); }
-    .active-status-overlay {
-        position: absolute;
-        top: 25px;
-        left: 25px;
-        background: var(--success);
-        color: #fff;
-        padding: 6px 18px;
-        border-radius: 30px;
-        font-size: 0.7rem;
-        font-weight: 800;
-        box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
-        letter-spacing: 1px;
-    }
-
-    /* Small Recent Cards */
-    .theme-card-sm:hover { transform: translateY(-5px); box-shadow: var(--premium-shadow) !important; }
-
-    /* Library Cards */
-    .theme-card { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-    .theme-card:hover { transform: translateY(-8px); box-shadow: var(--premium-shadow) !important; }
-
-    /* Navigation */
-    .vertical-theme-nav .nav-link {
-        border-radius: 12px;
-        color: var(--dark-muted);
-        transition: all 0.3s ease;
-        padding: 1rem 1.25rem;
-        border: 1px solid transparent;
-    }
-    .vertical-theme-nav .nav-link:hover { 
-        background: #fff !important;
-        color: var(--primary) !important;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
-        transform: translateX(5px);
-    }
-    .vertical-theme-nav .nav-link.active {
-        background: #fff !important;
-        color: var(--primary) !important;
-        border-color: var(--border-color) !important;
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05) !important;
-        transform: translateX(8px);
-    }
-
-    /* Actions Overlay */
-    .theme-overlay {
-        position: absolute;
-        top: 0; left: 0; width: 100%; height: 100%;
-        background: rgba(15, 23, 42, 0.6);
-        backdrop-filter: blur(4px);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        opacity: 0;
-        transition: all 0.3s ease;
-    }
-    .card:hover .theme-overlay { opacity: 1; }
-</style>
 @endsection
 
 @section('js')

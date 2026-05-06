@@ -27,8 +27,8 @@
 
     <div class="row">
         <div class="col-md-3">
-            <div class="card border-0 shadow-premium sticky-top" style="top: 100px; border-radius: 24px; background: rgba(255,255,255,0.9); backdrop-filter: blur(15px);">
-                <div class="card-header bg-dark border-0 py-3 px-4" style="border-top-left-radius: 24px; border-top-right-radius: 24px; border-bottom: 4px solid var(--primary) !important;">
+            <div class="card border-0 shadow-premium sticky-top sticky-top-100 rounded-24 bg-white-90 backdrop-blur-15">
+                <div class="card-header bg-dark border-0 py-3 px-4 rounded-t-24 border-bottom-4-primary">
                     <h3 class="card-title font-weight-bold text-white smallest text-uppercase letter-spacing-1 mb-0">{{ __('Management Streams') }}</h3>
                 </div>
                 <div class="card-body p-3">
@@ -38,9 +38,8 @@
                         @foreach(['general', 'modules', 'contact', 'SEO', 'social', 'pages', 'apis'] as $section)
                         <li class="nav-item mb-2">
                             <a href="{{ route('admin.settings.group', ['section' => $section]) }}" 
-                               class="nav-link py-3 px-3 d-flex align-items-center @if(strtolower($currentSection) == strtolower($section)) active shadow-sm @endif"
-                               style="border-radius: 16px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);">
-                                <div class="icon-box-soft {{ strtolower($currentSection) == strtolower($section) ? 'bg-white bg-opacity-20' : 'bg-primary-soft' }} rounded-circle mr-3 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; min-width: 32px;">
+                             class="nav-link py-3 px-3 d-flex align-items-center @if(strtolower($currentSection) == strtolower($section)) active shadow-sm @endif rounded-16 transition-cubic">
+                                <div class="icon-box-soft {{ strtolower($currentSection) == strtolower($section) ? 'bg-white bg-opacity-20' : 'bg-primary-soft' }} rounded-circle mr-3 d-flex align-items-center justify-content-center icon-box-32">
                                     <i class="fas fa-{{ match(strtolower($section)) { 
                                         'general' => 'cog', 
                                         'modules' => 'boxes', 
@@ -73,21 +72,4 @@
 </div>
 @endsection
 
-@push('css')
-<style>
-    .settings-nav .nav-link { color: var(--dark-muted); }
-    .settings-nav .nav-link:hover:not(.active) { background: var(--primary-soft); color: var(--primary); transform: translateX(5px); }
-    .settings-nav .nav-link.active { background: var(--primary) !important; color: #fff !important; }
-    
-    .settings-content-wrapper .card {
-        border-radius: 24px;
-        overflow: hidden;
-        border: none;
-        box-shadow: var(--premium-shadow);
-        background: rgba(255,255,255,0.8);
-        backdrop-filter: blur(10px);
-    }
-    
-    .bg-opacity-20 { background: rgba(255,255,255,0.2) !important; }
-</style>
 @endpush

@@ -25,7 +25,7 @@
     @include('admin.alert')
 
     {{-- Structural Overview --}}
-    <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
+    <div class="card border-0 shadow-premium overflow-hidden rounded-24">
         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
             <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">
                 <i class="fas fa-map mr-1 text-primary opacity-50"></i> Navigation Registry
@@ -59,7 +59,7 @@
                                         </div>
                                         <div>
                                             <span class="d-block font-weight-bold text-dark uppercase letter-spacing-1">{{ $menu->title }}</span>
-                                            <small class="text-muted text-xs font-weight-bold text-uppercase" style="letter-spacing: 0.5px;">Navigation Provider</small>
+                                            <small class="text-muted text-xs font-weight-bold text-uppercase ls-0-5">Navigation Provider</small>
                                         </div>
                                     </div>
                                 </td>
@@ -138,7 +138,7 @@
                     }
                 }
             });
-            $('.dataTables_filter input').addClass('form-control shadow-none border-light').css('width', '250px');
+            $('.dataTables_filter input').addClass('form-control shadow-none border-light w-250-p');
         }
     });
 </script>
