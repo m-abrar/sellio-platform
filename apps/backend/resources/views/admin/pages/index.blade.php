@@ -14,7 +14,7 @@
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Manage system blueprints, informational assets, and footer navigation layers.</p>
             </div>
             <div class="col-sm-4 text-right">
-                <div class="d-flex justify-content-end align-items-center" style="gap: 12px;">
+                <div class="d-flex justify-content-end align-items-center gap-12">
                     <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">
                         <i class="fas fa-th-large"></i> Dashboard
                     </a>
@@ -47,8 +47,8 @@
                 <table id="pages-table" class="table table-hover table-premium mb-0">
                     <thead class="thead-light">
                         <tr>
-                            <th class="pl-4" style="width: 40%">Title & Identity</th>
-                            <th style="width: 25%">Permanent Link (Slug)</th>
+                            <th class="pl-4 w-40-p">Title & Identity</th>
+                            <th class="w-25-p">Permanent Link (Slug)</th>
                             <th class="text-center">Visibility</th>
                             <th class="text-right pr-4">Actions</th>
                         </tr>
@@ -58,11 +58,11 @@
                             <tr>
                                 <td class="align-middle pl-4">
                                     <div class="d-flex align-items-center">
-                                        <div class="icon-box-soft bg-primary-soft mr-3 d-flex align-items-center justify-content-center" style="width:45px; height:45px; border-radius: 12px;">
+                                        <div class="icon-box-soft bg-primary-soft mr-3 d-flex align-items-center justify-content-center icon-box-45 rounded-12">
                                             <i class="fas {{ $page->type == 'system' ? 'fa-microchip text-warning' : 'fa-feather-alt text-primary' }}"></i>
                                         </div>
                                         <div>
-                                            <span class="d-block font-weight-bold text-dark mb-0" style="font-size: 0.95rem;">{{ $page->title }}</span>
+                                            <span class="d-block font-weight-bold text-dark mb-0 font-0-95">{{ $page->title }}</span>
                                             <span class="badge badge-primary-light text-primary px-2 py-1 rounded-pill font-weight-bold smallest uppercase mt-1">
                                                 <i class="fas fa-tag mr-1 text-xs"></i> {{ $page->type }}
                                             </span>
@@ -130,11 +130,6 @@
 </div>
 @endsection
 
-@section('css')
-@include('admin._partials._toggle-card-css')
-<style>
-    .hover-primary:hover { color: var(--primary) !important; }
-</style>
 @endsection
 
 @section('js')
@@ -164,7 +159,7 @@
                     }
                 }
             });
-            $('.dataTables_filter input').addClass('form-control form-control-premium shadow-none border-light').css('width', '250px');
+            $('.dataTables_filter input').addClass('form-control form-control-premium shadow-none border-light w-250-p');
         }
     });
 </script>

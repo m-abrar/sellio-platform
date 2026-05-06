@@ -14,7 +14,7 @@
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Compose and curate editorial content for your marketplace community.</p>
             </div>
             <div class="col-sm-5 d-flex align-items-center justify-content-end">
-                <div class="d-flex justify-content-end align-items-center" style="gap: 12px;">
+                <div class="d-flex justify-content-end align-items-center gap-12">
                     <a href="{{ route('admin.welcome') }}" class="btn btn-back shadow-sm px-4">
                         <i class="fas fa-arrow-left mr-1"></i> BACK TO DASHBOARD
                     </a>
@@ -32,7 +32,7 @@
     @include('admin.alert')
 
     {{-- Main Table Card --}}
-    <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
+    <div class="card border-0 shadow-premium overflow-hidden rounded-24">
         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
             <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">
                 <i class="fas fa-feather mr-1 text-primary opacity-50"></i> Article Registry
@@ -49,8 +49,8 @@
                 <table id="blogs-table" class="table table-hover table-premium mb-0">
                     <thead class="thead-light">
                         <tr>
-                            <th class="px-4" style="width: 35%">Article Info</th>
-                            <th style="width: 20%">Category & Tags</th>
+                            <th class="px-4 w-35-p">Article Info</th>
+                            <th class="w-20-p">Category & Tags</th>
                             <th class="text-right">Stats</th>
                             <th class="text-right">Status</th>
                             <th class="text-right px-4">Actions</th>
@@ -62,9 +62,9 @@
                                 <td class="align-middle px-4">
                                     <div class="d-flex align-items-center">
                                         {{-- Spatie Media Image Implementation --}}
-                                        <div class="mr-3 border rounded shadow-xs overflow-hidden" style="width:60px; height:45px;">
+                                        <div class="mr-3 border rounded shadow-xs overflow-hidden icon-box-60-45">
                                             <img src="{{ $blog->thumbnail_url }}" 
-                                                 alt="Cover" class="img-fluid w-100 h-100" style="object-fit: cover;">
+                                                 alt="Cover" class="img-fluid w-100 h-100 object-fit-cover">
                                         </div>
                                         <div>
                                             <span class="d-block font-weight-bold text-dark mb-0">{{ Str::limit($blog->title, 40) }}</span>
@@ -93,11 +93,11 @@
 
                                 <td class="text-right align-middle">
                                     @if($blog->is_published)
-                                        <span class="badge badge-success-light px-3 py-1 text-uppercase" style="font-size: 0.7rem;">
+                                        <span class="badge badge-success-light px-3 py-1 text-uppercase smallest-0-7">
                                             <i class="fas fa-check-circle mr-1"></i> Published
                                         </span>
                                     @else
-                                        <span class="badge badge-warning-light px-3 py-1 text-uppercase" style="font-size: 0.7rem;">
+                                        <span class="badge badge-warning-light px-3 py-1 text-uppercase smallest-0-7">
                                             <i class="fas fa-clock mr-1"></i> Draft
                                         </span>
                                     @endif
@@ -149,25 +149,6 @@
 </div>
 @endsection
 
-@section('css')
-<style>
-
-
-    .table-premium thead th { border-top: none; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px; color: #6c757d; }
-    .shadow-xs { box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
-    
-    .badge-success-light { background-color: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
-    .badge-warning-light { background-color: #fef9c3; color: #854d0e; border: 1px solid #fde047; }
-    .badge-primary-light { background-color: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
-
-    .btn-group-premium .btn { border: 1px solid #e9ecef; background: #fff; }
-    .btn-group-premium .btn:hover { background: #f8f9fa; }
-    .font-weight-600 { font-weight: 600 !important; }
-    .dataTables_filter { float: left !important; text-align: left !important; }
-    .dataTables_filter input { margin-left: 0 !important; }
-    .dataTables_length { float: right !important; text-align: right !important; }
-</style>
-
 @endsection
 
 @section('js')
@@ -190,7 +171,7 @@
                     "lengthMenu": "_MENU_ per page"
                 }
             });
-            $('.dataTables_filter input').addClass('form-control shadow-xs border').css('max-width', '250px');
+            $('.dataTables_filter input').addClass('form-control shadow-xs border w-max-250');
         }
     });
 </script>

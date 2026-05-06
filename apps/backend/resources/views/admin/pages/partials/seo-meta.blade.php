@@ -6,13 +6,13 @@
     </div>
     <div class="card-body p-4">
         <div class="form-group mb-4">
-            <label class="small font-weight-bold text-secondary mb-2 text-uppercase" style="letter-spacing: 0.5px;">Search Description</label>
-            <textarea name="meta_description" class="form-control shadow-xs" rows="3" style="border-radius: 12px;" placeholder="Brief summary for search engine indexing...">{{ old('meta_description', $page->meta_description ?? '') }}</textarea>
+            <label class="small font-weight-bold text-secondary mb-2 text-uppercase ls-0-5">Search Description</label>
+            <textarea name="meta_description" class="form-control shadow-xs rounded-12" rows="3" placeholder="Brief summary for search engine indexing...">{{ old('meta_description', $page->meta_description ?? '') }}</textarea>
             <small class="text-muted mt-2 d-block">Recommended density: 150-160 characters for optimal visibility.</small>
         </div>
 
         <div class="form-group mb-0">
-            <label class="small font-weight-bold text-secondary mb-2 text-uppercase" style="letter-spacing: 0.5px;">Meta Keywords</label>
+            <label class="small font-weight-bold text-secondary mb-2 text-uppercase ls-0-5">Meta Keywords</label>
             <div class="input-group border rounded p-1 shadow-xs bg-white">
                 <div class="input-group-prepend border-0">
                     <span class="input-group-text bg-white border-0"><i class="fas fa-key text-primary"></i></span>

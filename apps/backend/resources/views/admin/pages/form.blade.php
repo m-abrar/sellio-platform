@@ -15,7 +15,7 @@
                 </p>
             </div>
             <div class="col-sm-4 text-right">
-                <div class="d-flex justify-content-end align-items-center" style="gap: 12px;">
+                <div class="d-flex justify-content-end align-items-center gap-12">
                     <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">
                         <i class="fas fa-th-large"></i> Dashboard
                     </a>
@@ -48,7 +48,7 @@
 
             {{-- Right Column: Actions & Media --}}
             <div class="col-md-4">
-                <div class="sticky-top" style="top: 20px; z-index: 10;">
+                <div class="sticky-top top-20 z-10">
                     {{-- Action Card --}}
                     @include('admin._partials._form-actions', [
                         'model' => $page,
@@ -89,10 +89,6 @@
 
 @section('css')
 @include('admin._partials._toggle-card-css')
-<style>
-    .sticky-top { top: 20px; }
-    .form-control:focus { border-color: var(--primary); box-shadow: none; }
-</style>
 @endsection
 
 @section('js')

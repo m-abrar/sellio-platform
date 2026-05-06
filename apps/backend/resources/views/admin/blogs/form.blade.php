@@ -16,7 +16,7 @@
                 </p>
             </div>
             <div class="col-sm-4 text-right">
-                <div class="d-flex justify-content-end align-items-center" style="gap: 12px;">
+                <div class="d-flex justify-content-end align-items-center gap-12">
                     <a href="{{ route('admin.welcome') }}" class="btn btn-back shadow-sm">
                         <i class="fas fa-th-large"></i> Dashboard
                     </a>
@@ -61,7 +61,7 @@
 
                 @if($blog->exists)
                     <div class="mt-2 mb-4 px-2">
-                        <a href="{{ url('blog/' . $blog->slug) }}" target="_blank" class="btn btn-primary-soft btn-block py-3 rounded-pill font-weight-bold uppercase letter-spacing-1 shadow-sm" style="font-size: 11px;">
+                        <a href="{{ url('blog/' . $blog->slug) }}" target="_blank" class="btn btn-primary-soft btn-block py-3 rounded-pill font-weight-bold uppercase letter-spacing-1 shadow-sm font-11-p">
                             <i class="fas fa-external-link-alt mr-1"></i> VIEW LIVE ARTICLE
                         </a>
                     </div>
@@ -102,7 +102,7 @@
                         <div class="bg-light p-3 rounded-xl border border-light">
                             <div class="custom-control custom-switch custom-switch-premium">
                                 <input type="checkbox" name="is_featured" class="custom-control-input" id="is_featured" value="1" {{ old('is_featured', $blog->is_featured ?? false) ? 'checked' : '' }}>
-                                <label class="custom-control-label small font-weight-bold text-dark uppercase letter-spacing-1" for="is_featured" style="padding-top: 2px;">Featured Editorial</label>
+                                <label class="custom-control-label small font-weight-bold text-dark uppercase letter-spacing-1 pt-2-p" for="is_featured">Featured Editorial</label>
                             </div>
                         </div>
                     </div>
@@ -115,9 +115,6 @@
 
 @section('css')
 @include('admin._partials._toggle-card-css')
-<style>
-    .form-control:focus { border-color: var(--primary); box-shadow: none; }
-</style>
 @endsection
 
 @section('js')

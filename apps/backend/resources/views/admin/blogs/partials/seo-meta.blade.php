@@ -12,7 +12,7 @@
 
         <div class="form-group mb-4">
             <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Search Snippet (Description)</label>
-            <textarea name="meta_description" class="form-control" rows="3" style="border-radius: 12px; border: 1px solid var(--border-light);" placeholder="Brief summary to show in Google search results...">{{ old('meta_description', $blog->meta_description ?? '') }}</textarea>
+            <textarea name="meta_description" class="form-control rounded-12 border-light" rows="3" placeholder="Brief summary to show in Google search results...">{{ old('meta_description', $blog->meta_description ?? '') }}</textarea>
             <small class="text-muted mt-2 d-block">Optimal length: 155 characters for search engine prominence.</small>
         </div>
 
@@ -22,7 +22,7 @@
                        class="d-none toggle-input" 
                        {{ old('allow_comments', $blog->allow_comments ?? true) ? 'checked' : '' }}>
                 
-                <div class="d-flex justify-content-between align-items-center h-100 toggle-card shadow-sm px-3 py-3" style="border-radius: 12px; border: 1px solid var(--border-light);">
+                <div class="d-flex justify-content-between align-items-center h-100 toggle-card shadow-sm px-3 py-3 rounded-12 border-light">
                     <div>
                         <div class="font-weight-bold text-dark small uppercase letter-spacing-1">Audience Engagement</div>
                         <div class="smallest text-muted uppercase">Enable community comments & discussion</div>

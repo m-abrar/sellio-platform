@@ -1,5 +1,5 @@
 <div class="card shadow-sm border-0 rounded-lg overflow-hidden mb-0">
-    <div class="card-header bg-dark py-3" style="border-bottom: 3px solid #007bff !important;">
+    <div class="card-header bg-dark py-3 border-bottom-3-primary">
         <h3 class="card-title text-white font-weight-bold">
             <i class="fas fa-rocket mr-2 text-primary"></i> Publishing
         </h3>
@@ -44,7 +44,7 @@
                 
                 <form action="{{ route('admin.blogs.destroy', $blog->id) }}" method="POST" onsubmit="return confirm('Delete this article permanently?');">
                     @csrf @method('DELETE')
-                    <button type="submit" class="btn btn-outline-danger btn-sm rounded-circle shadow-sm" style="width: 35px; height: 35px;">
+                    <button type="submit" class="btn btn-outline-danger btn-sm rounded-circle shadow-sm icon-box-35">
                         <i class="fas fa-trash"></i>
                     </button>
                 </form>

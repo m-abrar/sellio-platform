@@ -13,7 +13,7 @@
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Aggregate storage for marketplace listings, brand assets, and user uploads.</p>
             </div>
             <div class="col-sm-6 text-right">
-                <div class="d-flex justify-content-end align-items-center" style="gap: 12px;">
+                <div class="d-flex justify-content-end align-items-center gap-12">
                     <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">
                         <i class="fas fa-th-large"></i> Dashboard
                     </a>
@@ -35,7 +35,7 @@
                 <form action="{{ route('admin.gallery.index') }}" method="GET" class="row align-items-end justify-content-center">
                     <div class="col-auto">
                         <label class="small text-muted font-weight-bold text-uppercase letter-spacing-1 mb-2">Media Source</label>
-                        <select name="source" class="form-control shadow-xs" onchange="this.form.submit()" style="border-radius: 10px;">
+                        <select name="source" class="form-control shadow-xs rounded-10" onchange="this.form.submit()">
                             <option value="">All Storage Collections</option>
                             @foreach($sources as $source)
                                 <option value="{{ $source }}" {{ request('source') == $source ? 'selected' : '' }}>
@@ -47,9 +47,9 @@
                     <div class="col-auto">
                         <label class="small text-muted font-weight-bold text-uppercase letter-spacing-1 mb-2">Keyword Search</label>
                         <div class="input-group shadow-xs">
-                            <input type="text" name="search" class="form-control" placeholder="Filename search..." value="{{ request('search') }}" style="border-radius: 10px 0 0 10px;">
+                            <input type="text" name="search" class="form-control rounded-l-10" placeholder="Filename search..." value="{{ request('search') }}">
                             <div class="input-group-append">
-                                <button class="btn btn-primary px-3" type="submit" style="border-radius: 0 10px 10px 0;">
+                                <button class="btn btn-primary px-3 rounded-r-10" type="submit">
                                     <i class="fas fa-search"></i>
                                 </button>
                             </div>
@@ -73,28 +73,27 @@
                         <div class="card h-100 border-0 shadow-sm gallery-card overflow-hidden" style="border-radius: 20px;">
                             <div class="position-relative">
                                 <img src="{{ $media->getUrl() }}" 
-                                     class="card-img-top img-fluid" 
-                                     alt="{{ $media->name }}" 
-                                     style="height: 200px; object-fit: cover;">
+                                     class="card-img-top img-fluid h-200-p object-fit-cover" 
+                                     alt="{{ $media->name }}">
                                 
                                 <div class="gallery-overlay d-flex align-items-center justify-content-center">
-                                    <button type="button" class="btn btn-white btn-sm mx-1 rounded-circle shadow-sm" data-toggle="modal" data-target="#replaceModal{{ $media->id }}" title="Replace Asset" style="width: 38px; height: 38px;">
+                                    <button type="button" class="btn btn-white btn-sm mx-1 rounded-circle shadow-sm icon-box-38" data-toggle="modal" data-target="#replaceModal{{ $media->id }}" title="Replace Asset">
                                         <i class="fas fa-sync-alt text-primary"></i>
                                     </button>
                                     <form id="delete-form-{{ $media->id }}" action="{{ route('admin.gallery.destroy', $media->id) }}" method="POST" class="d-inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="button" class="btn btn-white btn-sm mx-1 rounded-circle shadow-sm" title="Delete" style="width: 38px; height: 38px;" 
+                                        <button type="button" class="btn btn-white btn-sm mx-1 rounded-circle shadow-sm icon-box-38" title="Delete" 
                                                 onclick="confirmDelete('delete-form-{{ $media->id }}', 'Delete Asset?', 'This operation is permanent and may break linked listings!', 'Delete It')">
                                             <i class="fas fa-trash text-danger"></i>
                                         </button>
                                     </form>
-                                    <a href="{{ $media->getUrl() }}" target="_blank" class="btn btn-white btn-sm mx-1 rounded-circle shadow-sm" title="Fullscreen" style="width: 38px; height: 38px;">
+                                    <a href="{{ $media->getUrl() }}" target="_blank" class="btn btn-white btn-sm mx-1 rounded-circle shadow-sm icon-box-38" title="Fullscreen">
                                         <i class="fas fa-expand text-primary"></i>
                                     </a>
                                 </div>
 
-                                <span class="badge badge-dark position-absolute m-3 px-2 py-1 shadow-sm" style="top:0; right:0; border-radius: 8px; font-size: 0.65rem; opacity: 0.8; letter-spacing: 0.5px;">
+                                <span class="badge badge-dark position-absolute m-3 px-2 py-1 shadow-sm top-0 right-0 rounded-8 smallest-0-65 opacity-80 ls-0-5">
                                     {{ number_format($media->size / 1024, 0) }} KB
                                 </span>
                             </div>
@@ -103,7 +102,7 @@
                                     <span class="badge badge-primary-light text-primary px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1">{{ Str::afterLast($media->model_type, '\\') }} #{{ $media->model_id }}</span>
                                     <span class="badge badge-secondary-soft text-muted px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 ml-1">{{ $media->collection_name }}</span>
                                 </div>
-                                <h6 class="font-weight-bold text-truncate text-dark mb-1" style="font-size: 0.85rem;" title="{{ $media->file_name }}">{{ $media->file_name }}</h6>
+                                <h6 class="font-weight-bold text-truncate text-dark mb-1 font-0-85" title="{{ $media->file_name }}">{{ $media->file_name }}</h6>
                                 <p class="small text-muted mb-0 opacity-75">
                                     <i class="far fa-clock mr-1"></i> {{ $media->created_at->diffForHumans() }}
                                 </p>
@@ -127,14 +126,14 @@
                                     <div class="modal-body p-4">
                                         <div class="p-3 bg-light rounded-xl mb-4 text-center border">
                                             <p class="small text-muted mb-2 font-weight-bold text-uppercase" style="letter-spacing: 1px;">Current Version</p>
-                                            <img src="{{ $media->getUrl() }}" class="img-thumbnail border-0 shadow-sm" style="max-height: 120px; border-radius: 12px;">
+                                            <img src="{{ $media->getUrl() }}" class="img-thumbnail border-0 shadow-sm h-max-120 rounded-12">
                                             <div class="mt-2 small text-dark font-weight-bold">{{ $media->file_name }}</div>
                                         </div>
                                         <div class="form-group mb-0">
                                             <label class="small font-weight-bold text-secondary text-uppercase mb-2">New Media Source</label>
                                             <div class="custom-file">
                                                 <input type="file" name="image" class="custom-file-input" id="replaceFile{{ $media->id }}" required>
-                                                <label class="custom-file-label" for="replaceFile{{ $media->id }}" style="border-radius: 10px;">Select new image...</label>
+                                                <label class="custom-file-label rounded-10" for="replaceFile{{ $media->id }}">Select new image...</label>
                                             </div>
                                             <div class="bg-warning-light text-warning p-3 rounded-lg mt-3 small border border-warning-soft">
                                                 <i class="fas fa-exclamation-triangle mr-1"></i> <strong>Atenntion:</strong> This replacement will propagate to all listings and modules linked to this asset ID.
@@ -180,8 +179,8 @@
                     @csrf
                     <div class="modal-body p-4">
                         <div class="form-group mb-4 text-center">
-                            <div class="upload-area p-5 border-dashed rounded-xl bg-light" style="border: 2px dashed #cbd5e0; cursor: pointer; transition: all 0.3s ease;" onclick="document.getElementById('newAssetFile').click();">
-                                <div class="icon-circle bg-white shadow-sm mx-auto mb-3" style="width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                            <div class="upload-area p-5 border-dashed-2 rounded-xl bg-light transition-0-3" onclick="document.getElementById('newAssetFile').click();">
+                                <div class="icon-circle bg-white shadow-sm mx-auto mb-3 icon-box-60 rounded-circle d-flex align-items-center justify-content-center">
                                     <i class="fas fa-cloud-upload-alt fa-lg text-primary"></i>
                                 </div>
                                 <p class="mb-1 font-weight-bold text-dark">Click to select asset</p>
@@ -192,7 +191,7 @@
                         </div>
                         <div class="form-group mb-0">
                             <label class="small font-weight-bold text-secondary text-uppercase mb-2">Descriptive Title</label>
-                            <input type="text" name="title" class="form-control" placeholder="e.g. Hero Banner Winter 2024" style="border-radius: 10px;">
+                            <input type="text" name="title" class="form-control rounded-10" placeholder="e.g. Hero Banner Winter 2024">
                         </div>
                     </div>
                     <div class="modal-footer border-0">
@@ -205,24 +204,6 @@
     </div>
 @stop
 
-@section('css')
-@include('admin._partials._toggle-card-css')
-<style>
-    .gallery-card { position: relative; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-    .gallery-card:hover { transform: translateY(-10px); box-shadow: var(--premium-shadow) !important; }
-    
-    .gallery-overlay {
-        position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-        background: rgba(15, 23, 42, 0.6); opacity: 0;
-        transition: all 0.3s ease;
-        backdrop-filter: blur(4px);
-    }
-    .gallery-card:hover .gallery-overlay { opacity: 1; }
-    
-    .upload-area:hover { border-color: var(--primary) !important; background-color: var(--primary-soft) !important; transform: scale(1.02); }
-    .btn-white { background: #fff; color: var(--dark); border: none; }
-    .rounded-xl { border-radius: 20px !important; }
-</style>
 @stop
 
 @section('js')
