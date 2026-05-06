@@ -117,18 +117,14 @@
                                 </td>
                             </tr>
                         @empty
-                            <tr class="empty-state">
-                                <td colspan="5" class="text-center py-5">
-                                    <div class="py-4">
-                                        <i class="fas fa-feather fa-3x text-muted mb-3 d-block"></i>
-                                        <h5 class="text-muted font-weight-bold">No Articles Found</h5>
-                                        <p class="text-secondary mb-3">Start sharing news and insights with your audience.</p>
-                                        <a href="{{ route('admin.blogs.create') }}" class="btn btn-primary btn-sm px-4">
-                                            <i class="fas fa-plus mr-1"></i> Create First Post
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
+                            @include('admin._partials._empty-state', [
+                                'colspan' => 5,
+                                'icon' => 'fas fa-feather',
+                                'title' => 'No Articles Found',
+                                'description' => 'Start sharing news and insights with your audience by composing your first editorial piece.',
+                                'button_text' => 'WRITE FIRST POST',
+                                'button_link' => route('admin.blogs.create')
+                            ])
                         @endforelse
                     </tbody>
                 </table>

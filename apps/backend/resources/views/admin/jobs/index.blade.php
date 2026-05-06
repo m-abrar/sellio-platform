@@ -117,15 +117,14 @@
                                 </td>
                             </tr>
                         @empty
-                            <tr class="empty-state">
-                                <td colspan="6" class="py-5 text-center">
-                                    <div class="py-4">
-                                        <i class="fas fa-briefcase fa-4x text-muted opacity-25 mb-3 d-block"></i>
-                                        <h5 class="text-muted font-weight-bold">No vacancies detected in registry.</h5>
-                                        <p class="text-secondary small">Synchronize your recruitment board or initialize new job entries.</p>
-                                    </div>
-                                </td>
-                            </tr>
+                            @include('admin._partials._empty-state', [
+                                'colspan' => 6,
+                                'icon' => 'fas fa-briefcase',
+                                'title' => 'No vacancies detected in registry.',
+                                'description' => 'Synchronize your recruitment board or initialize new job entries to populate this registry.',
+                                'button_text' => 'POST NEW JOB',
+                                'button_link' => route('admin.jobs.create')
+                            ])
                         @endforelse
                     </tbody>
                 </table>

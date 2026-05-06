@@ -198,15 +198,12 @@
                                 </td>
                             </tr>
                         @empty
-                            <tr>
-                                <td colspan="7" class="text-center py-5">
-                                    <div class="py-5">
-                                        <i class="fas fa-file-invoice-dollar fa-4x text-muted opacity-25 mb-4 d-block"></i>
-                                        <h5 class="text-muted font-weight-bold smallest uppercase letter-spacing-1">Zero Requests Found</h5>
-                                        <p class="small text-secondary">New payouts in the "{{ $filter_status }}" queue will appear here.</p>
-                                    </div>
-                                </td>
-                            </tr>
+                            @include('admin._partials._empty-state', [
+                                'colspan' => 7,
+                                'icon' => 'fas fa-file-invoice-dollar',
+                                'title' => 'Zero Requests Found',
+                                'description' => "New payouts in the \"$filter_status\" queue will appear here once requested by marketplace partners.",
+                            ])
                         @endforelse
                     </tbody>
                 </table>

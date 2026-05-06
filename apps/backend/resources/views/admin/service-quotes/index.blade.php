@@ -173,16 +173,13 @@
                                         </div>
                                     </td>
                                 </tr>
-                            @empty
-                                <tr class="empty-state">
-                                    <td colspan="7" class="text-center py-5">
-                                        <div class="py-4">
-                                            <i class="fas fa-file-invoice fa-4x text-muted opacity-25 mb-3 d-block"></i>
-                                            <h5 class="text-muted font-weight-bold">No Leads Detected</h5>
-                                            <p class="text-secondary small mb-0">Customer scope requests and revenue inquiries will materialize here.</p>
-                                        </div>
-                                    </td>
-                                </tr>
+                                @empty
+                                    @include('admin._partials._empty-state', [
+                                        'colspan' => 7,
+                                        'icon' => 'fas fa-file-invoice',
+                                        'title' => 'No Leads Detected',
+                                        'description' => 'Customer scope requests and revenue inquiries will materialize here once synchronized with the professional services catalog.',
+                                    ])
                             @endforelse
                         </tbody>
                     </table>

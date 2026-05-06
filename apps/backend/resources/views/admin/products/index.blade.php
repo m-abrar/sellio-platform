@@ -147,15 +147,14 @@
                                 </td>
                             </tr>
                         @empty
-                            <tr class="empty-state">
-                                <td colspan="6" class="py-5 text-center">
-                                    <div class="py-4">
-                                        <i class="fas fa-boxes fa-4x text-muted opacity-25 mb-3 d-block"></i>
-                                        <h5 class="text-muted font-weight-bold">No retail records detected in catalog.</h5>
-                                        <p class="text-secondary small">Synchronize your inventory or initialize new product entries.</p>
-                                    </div>
-                                </td>
-                            </tr>
+                            @include('admin._partials._empty-state', [
+                                'colspan' => 6,
+                                'icon' => 'fas fa-boxes',
+                                'title' => 'No retail records detected in catalog.',
+                                'description' => 'Synchronize your inventory or initialize new product entries to populate this registry.',
+                                'button_text' => 'INITIALIZE PRODUCT',
+                                'button_link' => route('admin.products.create')
+                            ])
                         @endforelse
                     </tbody>
                 </table>

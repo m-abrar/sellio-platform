@@ -102,17 +102,14 @@
                                         </div>
                                     </td>
                                 </tr>
-                            @empty
-                                <tr class="empty-state">
-                                    <td colspan="6" class="text-center py-5">
-                                        <div class="py-4">
-                                            <i class="fas fa-exchange-alt fa-4x text-muted opacity-25 mb-3 d-block"></i>
-                                            <h5 class="text-muted font-weight-bold">No Inquiries Detected</h5>
-                                            <p class="text-secondary small mb-0">Consumer inquiries for marketplace ads will materialize here.</p>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforelse
+                                @empty
+                                    @include('admin._partials._empty-state', [
+                                        'colspan' => 6,
+                                        'icon' => 'fas fa-bullhorn',
+                                        'title' => 'No Inquiries Detected',
+                                        'description' => 'Consumer inquiries for marketplace ads will materialize here once synchronized with the community listings.',
+                                    ])
+                                @endforelse
                         </tbody>
                     </table>
                 </div>

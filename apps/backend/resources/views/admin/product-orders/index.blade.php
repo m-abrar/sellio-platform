@@ -134,15 +134,14 @@
                                         </td>
                                     </tr>
                                 @empty
-                                    <tr class="empty-state">
-                                        <td colspan="8" class="text-center py-5">
-                                            <div class="py-4">
-                                                <i class="fas fa-shopping-bag fa-4x text-muted opacity-25 mb-3 d-block"></i>
-                                                <h5 class="text-muted font-weight-bold">No Commerce Records Detected</h5>
-                                                <p class="small text-secondary mb-0">The order ledger is currently awaiting synchronized marketplace entries.</p>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                    @include('admin._partials._empty-state', [
+                                        'colspan' => 8,
+                                        'icon' => 'fas fa-shopping-bag',
+                                        'title' => 'No Commerce Records Detected',
+                                        'description' => 'The order ledger is currently awaiting synchronized marketplace entries. Initialize your first order manually if required.',
+                                        'button_text' => 'INITIALIZE ORDER',
+                                        'button_link' => route('admin.product-orders.create')
+                                    ])
                                 @endforelse
                             </tbody>
                         </table>

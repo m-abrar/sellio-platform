@@ -98,15 +98,14 @@
                                     </td>
                                 </tr>
                             @empty
-                                <tr class="empty-state">
-                                    <td colspan="6" class="text-center py-5">
-                                        <div class="py-4">
-                                            <i class="fas fa-car fa-4x text-muted opacity-25 mb-3 d-block"></i>
-                                            <h5 class="text-muted font-weight-bold">No Inquiries Found</h5>
-                                            <p class="small text-secondary mb-0">Vehicle leads will materialize here once synchronized with the marketplace.</p>
-                                        </div>
-                                    </td>
-                                </tr>
+                                @include('admin._partials._empty-state', [
+                                    'colspan' => 6,
+                                    'icon' => 'fas fa-car',
+                                    'title' => 'No Inquiries Found',
+                                    'description' => 'Vehicle leads will materialize here once synchronized with the marketplace. You can also manually log a new lead.',
+                                    'button_text' => 'LOG NEW LEAD',
+                                    'button_link' => route('admin.auto-inquiries.create')
+                                ])
                             @endforelse
                         </tbody>
                     </table>

@@ -124,15 +124,14 @@
                                 </td>
                             </tr>
                         @empty
-                            <tr class="empty-state">
-                                <td colspan="7" class="py-5 text-center">
-                                    <div class="py-4">
-                                        <i class="fas fa-building fa-4x text-muted opacity-25 mb-3 d-block"></i>
-                                        <h5 class="text-muted font-weight-bold">No real-estate assets detected.</h5>
-                                        <p class="text-secondary small">Synchronize your inventory or initialize new property entries.</p>
-                                    </div>
-                                </td>
-                            </tr>
+                            @include('admin._partials._empty-state', [
+                                'colspan' => 6,
+                                'icon' => 'fas fa-building',
+                                'title' => 'No real-estate assets detected.',
+                                'description' => 'Synchronize your inventory or initialize new property entries to populate this registry.',
+                                'button_text' => 'INITIALIZE PROPERTY',
+                                'button_link' => route('admin.properties.create')
+                            ])
                         @endforelse
                     </tbody>
                 </table>

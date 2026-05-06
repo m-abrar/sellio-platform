@@ -109,18 +109,14 @@
                                 </td>
                             </tr>
                         @empty
-                            <tr class="empty-state">
-                                <td colspan="4" class="text-center py-5">
-                                    <div class="py-4">
-                                        <i class="fas fa-file-signature fa-4x text-muted opacity-25 mb-3 d-block"></i>
-                                        <h5 class="text-muted font-weight-bold">Content Library Is Empty</h5>
-                                        <p class="text-secondary small mb-3">No static pages have been architected yet.</p>
-                                        <a href="{{ route('admin.pages.create') }}" class="btn btn-primary btn-sm px-4 rounded-pill font-weight-bold">
-                                            <i class="fas fa-plus mr-1"></i> CREATE FIRST PAGE
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
+                            @include('admin._partials._empty-state', [
+                                'colspan' => 4,
+                                'icon' => 'fas fa-file-signature',
+                                'title' => 'Content Library Is Empty',
+                                'description' => 'No static pages have been architected yet. Initialize your platform informational assets to populate this registry.',
+                                'button_text' => 'INITIALIZE PAGE',
+                                'button_link' => route('admin.pages.create')
+                            ])
                         @endforelse
                     </tbody>
                 </table>

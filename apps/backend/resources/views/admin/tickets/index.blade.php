@@ -168,14 +168,12 @@
                                 </td>
                             </tr>
                             @empty
-                            <tr>
-                                <td colspan="6" class="text-center py-5">
-                                    <div class="py-4">
-                                        <i class="fas fa-inbox fa-3x text-light mb-3"></i>
-                                        <p class="text-muted font-weight-bold mb-0">No active tickets found for this queue.</p>
-                                    </div>
-                                </td>
-                            </tr>
+                                @include('admin._partials._empty-state', [
+                                    'colspan' => 6,
+                                    'icon' => 'fas fa-inbox',
+                                    'title' => 'No active tickets found for this queue.',
+                                    'description' => 'The support queue is currently clear. Customer requests will materialize here once synchronized with the platform.',
+                                ])
                             @endforelse
                         </tbody>
                     </table>

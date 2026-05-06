@@ -135,16 +135,14 @@
                                 </td>
                             </tr>
                         @empty
-                            <tr class="empty-state">
-                                <td colspan="5" class="text-center py-5">
-                                    <i class="fas fa-user-shield fa-4x text-light mb-3"></i>
-                                    <h5 class="text-muted font-weight-bold">No Users Found</h5>
-                                    <p class="small text-secondary">Try adjusting your filters or create a new user.</p>
-                                    <a href="{{ route('admin.users.create') }}" class="btn btn-primary btn-sm btn-flat mt-2">
-                                        Create First User
-                                    </a>
-                                </td>
-                            </tr>
+                            @include('admin._partials._empty-state', [
+                                'colspan' => 4,
+                                'icon' => 'fas fa-user-shield',
+                                'title' => 'No Users Detected',
+                                'description' => 'The participant registry is currently empty. Synchronize your authentication provider or initialize new user profiles.',
+                                'button_text' => 'INITIALIZE USER',
+                                'button_link' => route('admin.users.create')
+                            ])
                         @endforelse
                     </tbody>
                 </table>
