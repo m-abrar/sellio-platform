@@ -1806,14 +1806,20 @@ tr:hover .icon-square-premium {
 .icon-box-48 { width: 48px !important; height: 48px !important; min-width: 48px !important; }
 .icon-box-60 { width: 60px !important; height: 60px !important; min-width: 60px !important; }
 .icon-box-60-45 { width: 60px !important; height: 45px !important; min-width: 60px !important; }
+.icon-box-100 { width: 100px !important; height: 100px !important; min-width: 100px !important; }
 .icon-box-80 { width: 80px !important; height: 80px !important; min-width: 80px !important; }
 .icon-box-70-50 { width: 70px !important; height: 50px !important; min-width: 70px !important; }
 .icon-box-50 { width: 50px !important; height: 50px !important; min-width: 50px !important; }
+.icon-box-45 { width: 45px !important; height: 45px !important; min-width: 45px !important; }
+.icon-box-42 { width: 42px !important; height: 42px !important; min-width: 42px !important; }
+.icon-box-38 { width: 38px !important; height: 38px !important; min-width: 38px !important; }
 .icon-box-15 { width: 15px !important; height: 15px !important; min-width: 15px !important; }
 .icon-box-md { width: 34px !important; height: 34px !important; border-radius: 8px !important; }
 .letter-spacing-1 { letter-spacing: var(--ls-1) !important; }
 .ls-1-p { letter-spacing: 1px !important; }
+.ls-0-8 { letter-spacing: 0.8px !important; }
 .ls-0-5 { letter-spacing: 0.5px !important; }
+.ls-0-3 { letter-spacing: 0.3px !important; }
 .col-media-70 { width: 70px !important; }
 .col-media-80 { width: 80px !important; }
 .col-media-100 { width: 100px !important; }
@@ -1825,10 +1831,24 @@ tr:hover .icon-square-premium {
 .gap-10 { gap: 10px !important; }
 .gap-12 { gap: 12px !important; }
 .gap-15 { gap: 15px !important; }
+.w-60-p { width: 60px !important; }
+.w-140-p { width: 140px !important; }
+.w-250-p { width: 250px !important; }
+.w-220-p { width: 220px !important; }
+.w-35-p { width: 35% !important; }
+.w-20-p { width: 20% !important; }
+.w-15-p { width: 15% !important; }
+.w-max-350 { max-width: 350px !important; }
+.w-max-250 { max-width: 250px !important; }
+.w-max-150 { max-width: 150px !important; }
+.w-max-80-pct { max-width: 80% !important; }
+.h-max-600 { max-height: 600px !important; }
 .text-0-95 { font-size: 0.95rem !important; }
 .font-0-95 { font-size: 0.95rem !important; }
 .font-0-9 { font-size: 0.9rem !important; }
 .font-1-0 { font-size: 1rem !important; }
+.font-1-1 { font-size: 1.1rem !important; }
+.font-1-05 { font-size: 1.05rem !important; }
 .font-2-0 { font-size: 2rem !important; }
 .font-11-p { font-size: 11px !important; }
 .font-0-85 { font-size: 0.85rem !important; }
@@ -1836,12 +1856,15 @@ tr:hover .icon-square-premium {
 .object-fit-cover { object-fit: cover !important; }
 .leading-1-5 { line-height: 1.5 !important; }
 .leading-1-6 { line-height: 1.6 !important; }
+.leading-1-6 { line-height: 1.6 !important; }
+.leading-1-8 { line-height: 1.8 !important; }
 .leading-relaxed { line-height: 1.625 !important; }
 .col-checkbox { width: 50px !important; }
 .min-w-90 { min-width: 90px !important; }
 .min-w-100 { min-width: 100px !important; }
 .badge-min-90 { min-width: 90px !important; }
 .badge-min-110 { min-width: 110px !important; }
+.smallest-0-6 { font-size: 0.6rem !important; }
 .smallest-0-65 { font-size: 0.65rem !important; }
 .smallest-0-7 { font-size: 0.7rem !important; }
 .smallest-0-75 { font-size: 0.75rem !important; }
@@ -1854,6 +1877,8 @@ tr:hover .icon-square-premium {
 .rounded-16 { border-radius: 16px !important; }
 .rounded-20 { border-radius: 20px !important; }
 .rounded-24 { border-radius: 24px !important; }
+.rounded-bubble-admin { border-radius: 20px 20px 4px 20px !important; }
+.rounded-bubble-user { border-radius: 20px 20px 20px 4px !important; }
 .rounded-50 { border-radius: 50px !important; }
 .rounded-l-xl { border-radius: 12px 0 0 12px !important; }
 .rounded-l-10 { border-radius: 10px 0 0 10px !important; }
@@ -1861,6 +1886,9 @@ tr:hover .icon-square-premium {
 .rounded-r-10 { border-radius: 0 10px 10px 0 !important; }
 .border-dashed { border-style: dashed !important; }
 .border-light { border: 1px solid var(--border-light) !important; }
+.border-warning-soft { border: 1px solid rgba(234, 179, 8, 0.2) !important; }
+.border-2-fff { border: 2px solid #fff !important; }
+
 .border-bottom-3-primary { border-bottom: 3px solid var(--primary) !important; }
 .top-20 { top: 20px !important; }
 .top-100 { top: 100px !important; }
@@ -2137,12 +2165,42 @@ tr:hover .icon-square-premium {
 .custom-range-primary::-moz-range-thumb { background-color: var(--primary) !important; }
 .custom-range-primary::-ms-thumb { background-color: var(--primary) !important; }
 
-.grayscale { filter: grayscale(100%) !important; opacity: 0.5 !important; transition: all 0.3s ease !important; }
+.opacity-70 { opacity: 0.7 !important; }
+.grayscale { filter: grayscale(1) !important; opacity: 0.5 !important; transition: all 0.3s ease !important; }
 .grayscale:hover { filter: grayscale(0%) !important; opacity: 1 !important; }
 
 .opacity-100 { opacity: 1 !important; }
 .border-2-success { border: 2px solid #28a745 !important; }
 .rounded-3-rem { border-radius: 0.6rem !important; }
+
+/* User Avatar Specifics */
+.avatar-wrapper img { transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important; }
+.avatar-wrapper img:hover { transform: scale(1.15) !important; z-index: 10 !important; position: relative !important; }
+
+/* Premium Interaction Utilities */
+.premium-checkbox { transition: all 0.2s ease !important; cursor: pointer !important; }
+.premium-checkbox:hover { background-color: var(--primary-soft) !important; border-color: var(--primary) !important; }
+.custom-control-input:checked ~ .premium-checkbox { background-color: var(--primary-soft) !important; border-color: var(--primary) !important; }
+
+.bg-light-soft { background: rgba(0,0,0,0.02) !important; }
+.hover-shadow-premium:hover { box-shadow: var(--premium-shadow) !important; transform: translateY(-4px) !important; border-color: var(--primary-glow) !important; }
+
+/* Custom Switch Utilities */
+.custom-switch-sm .custom-control-label::before { height: 1.2rem !important; width: 2.1rem !important; border-radius: 1rem !important; }
+.custom-switch-sm .custom-control-label::after { width: calc(1.2rem - 4px) !important; height: calc(1.2rem - 4px) !important; border-radius: 1rem !important; }
+.custom-switch-sm .custom-control-input:checked ~ .custom-control-label::after { transform: translateX(0.9rem) !important; }
+
+/* Small Box & Component Utilities */
+.small-box { border-radius: 0.75rem !important; }
+.small-box .inner p { font-size: 0.9rem !important; font-weight: 500 !important; }
+
+/* Support Ticket Specifics */
+.ticket-chat-thread::-webkit-scrollbar { width: 6px !important; }
+.ticket-chat-thread::-webkit-scrollbar-thumb { background-color: #ccc !important; border-radius: 3px !important; }
+
+
+
+
 
 
 

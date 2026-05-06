@@ -14,7 +14,7 @@
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Manage platform authority levels and map granular permissions to security roles.</p>
             </div>
             <div class="col-sm-5 d-flex align-items-center justify-content-end">
-                <div class="d-flex justify-content-end align-items-center" style="gap: 12px;">
+                <div class="d-flex justify-content-end align-items-center gap-12">
                     <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">
                         <i class="fas fa-th-large"></i> Dashboard
                     </a>
@@ -34,7 +34,7 @@
 <div class="container-fluid pb-5">
     @include('admin.alert')
 
-    <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
+    <div class="card border-0 shadow-premium overflow-hidden rounded-24">
         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center justify-content-between">
             <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">
                 <i class="fas fa-layer-group mr-2 text-primary opacity-50"></i> System Authority Registry
@@ -49,7 +49,7 @@
                 <table id="roles-table" class="table table-hover table-premium mb-0">
                     <thead class="thead-light">
                         <tr>
-                            <th class="pl-4" style="width: 25%">Authority Identity</th>
+                            <th class="pl-4 w-25-p">Authority Identity</th>
                             <th>Permission Blueprint</th>
                             <th class="text-right pr-4">Metrics</th>
                         </tr>
@@ -59,11 +59,11 @@
                             <tr>
                                 <td class="align-middle pl-4">
                                     <div class="d-flex align-items-center">
-                                        <div class="icon-box-soft bg-primary-soft mr-3 d-flex align-items-center justify-content-center shadow-xs" style="width:45px; height:45px; border-radius: 12px;">
+                                        <div class="icon-box-soft bg-primary-soft mr-3 d-flex align-items-center justify-content-center shadow-xs icon-box-45 rounded-12">
                                             <i class="fas fa-fingerprint text-primary"></i>
                                         </div>
                                         <div>
-                                            <span class="d-block font-weight-bold text-dark text-capitalize mb-0" style="font-size: 1rem;">{{ $role->name }}</span>
+                                            <span class="d-block font-weight-bold text-dark text-capitalize mb-0 font-1-0">{{ $role->name }}</span>
                                             <small class="text-muted text-uppercase font-weight-bold smallest letter-spacing-1">
                                                 Tier Identifier: {{ strtoupper(Str::random(4)) }}
                                             </small>
@@ -71,7 +71,7 @@
                                     </div>
                                 </td>
                                 <td class="align-middle">
-                                    <div class="d-flex flex-wrap" style="gap: 8px;">
+                                    <div class="d-flex flex-wrap gap-8">
                                         @forelse($role->permissions as $permission)
                                             <span class="badge badge-info-light text-info px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 border-0 shadow-none">
                                                 <i class="fas fa-check-circle mr-1 opacity-50"></i> {{ $permission->name }}
@@ -121,7 +121,7 @@
 
     <div class="bg-primary-soft p-4 rounded-xl border border-primary-soft mt-4">
         <div class="d-flex align-items-center">
-            <div class="icon-box bg-primary rounded-circle mr-3 d-flex align-items-center justify-content-center shadow-lg" style="width: 48px; height: 48px;">
+            <div class="icon-box bg-primary rounded-circle mr-3 d-flex align-items-center justify-content-center shadow-lg icon-box-48">
                 <i class="fas fa-shield-virus text-white"></i>
             </div>
             <div>
@@ -164,7 +164,7 @@
                     }
                 }
             });
-            $('.dataTables_filter input').addClass('form-control form-control-sm form-control-premium shadow-none border-light').css('width', '220px');
+            $('.dataTables_filter input').addClass('form-control form-control-sm form-control-premium shadow-none border-light w-220-p');
         }
     });
 </script>

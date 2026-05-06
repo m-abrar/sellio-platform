@@ -44,7 +44,7 @@
 
                 <div class="card card-premium shadow-premium overflow-hidden border-0 mt-4">
                     <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
-                        <h3 class="card-title font-weight-bold text-dark mb-0 text-uppercase letter-spacing-1" style="font-size: 1.1rem;">
+                        <h3 class="card-title font-weight-bold text-dark mb-0 text-uppercase letter-spacing-1 font-1-1">
                             <i class="fas fa-fingerprint mr-2 text-primary opacity-50"></i> Identity Blueprint
                         </h3>
                     </div>
@@ -56,7 +56,7 @@
                         </div>
                         
                         <div class="p-3 bg-primary-soft rounded-xl border border-primary-soft">
-                            <h6 class="font-weight-bold text-primary text-uppercase mb-2 letter-spacing-1" style="font-size: 0.85rem;"><i class="fas fa-shield-alt mr-2 opacity-75"></i>Protocol Note</h6>
+                            <h6 class="font-weight-bold text-primary text-uppercase mb-2 letter-spacing-1 font-0-85"><i class="fas fa-shield-alt mr-2 opacity-75"></i>Protocol Note</h6>
                             <p class="text-muted mb-0 small font-weight-600">
                                 Once created, this role can be assigned to multiple users. Changes to the permission grid will affect all users instantly.
                             </p>

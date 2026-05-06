@@ -14,7 +14,7 @@
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Manage registered users, authentication profiles, and access tiers.</p>
             </div>
             <div class="col-sm-5 d-flex align-items-center justify-content-end">
-                <div class="d-flex justify-content-end align-items-center" style="gap: 10px;">
+                <div class="d-flex justify-content-end align-items-center gap-10">
                     <a href="{{ route('admin.roles.index') }}" class="btn btn-back shadow-sm px-3">
                         <i class="fas fa-user-shield mr-1"></i> ROLES
                     </a>
@@ -34,7 +34,7 @@
 <div class="container-fluid">
     @include('admin.alert')
 
-    <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
+    <div class="card border-0 shadow-premium overflow-hidden rounded-24">
         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center justify-content-between">
             <h5 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">
                 <i class="fas fa-users mr-2 text-primary opacity-50"></i> {{ $viewTitle ?? 'Registered Users' }} Registry
@@ -65,12 +65,11 @@
                                         <div class="avatar-wrapper mr-3">
                                             <img src="{{ $user->avatar_url }}" 
                                                  alt="{{ $user->name }}" 
-                                                 class="img-circle shadow-xs border" 
-                                                 style="width: 45px; height: 45px; object-fit: cover; border: 2px solid #fff !important;">
+                                                 class="img-circle shadow-xs border icon-box-45 object-fit-cover border-2-fff">
                                         </div>
                                         <div>
                                             <span class="d-block font-weight-bold text-dark mb-0">{{ $user->name }}</span>
-                                            <small class="text-muted text-uppercase font-weight-bold" style="font-size: 0.6rem; letter-spacing: 0.5px;">
+                                            <small class="text-muted text-uppercase font-weight-bold smallest-0-6 ls-0-5">
                                                 Joined {{ $user->created_at->format('M Y') }}
                                             </small>
                                         </div>
@@ -84,14 +83,14 @@
                                 <td class="align-middle">
                                     {{-- 1. Render Assigned Roles --}}
                                     @foreach($user->roles as $role)
-                                        <span class="badge badge-info-light text-info px-2 py-1 text-uppercase mr-1" style="font-size: 0.65rem; letter-spacing: 0.3px;">
+                                        <span class="badge {{ $role->name == 'admin' ? 'badge-info-light' : 'badge-info-light' }} text-info px-2 py-1 text-uppercase mr-1 smallest-0-65 ls-0-3">
                                             <i class="fas fa-shield-alt mr-1 text-xs"></i> {{ $role->name }}
                                         </span>
                                     @endforeach
 
                                     {{-- 2. Pending Approval Notification Badge --}}
                                     @if($user->is_partner && !$user->hasRole('partner'))
-                                        <span class="badge badge-warning-light text-warning px-2 py-1 text-uppercase mr-1" style="font-size: 0.65rem; letter-spacing: 0.3px;">
+                                        <span class="badge badge-warning-light text-warning px-2 py-1 text-uppercase mr-1 smallest-0-65 ls-0-3">
                                             <i class="fas fa-hourglass-half mr-1 text-xs"></i> Pending Partner
                                         </span>
                                     @endif
@@ -155,13 +154,6 @@
 </div>
 @endsection
 
-@section('css')
-@include('admin._partials._toggle-card-css')
-<style>
-    /* User Identity Specifics */
-    .avatar-wrapper img { transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
-    .avatar-wrapper img:hover { transform: scale(1.15); z-index: 10; position: relative; }
-</style>
 @endsection
 
 @section('js')
@@ -190,7 +182,7 @@
                     }
                 }
             });
-            $('.dataTables_filter input').addClass('form-control shadow-none border-light').css('width', '250px');
+            $('.dataTables_filter input').addClass('form-control shadow-none border-light w-250-p');
         }
     });
 </script>

@@ -14,7 +14,7 @@
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">High-fidelity mapping of system gates and low-level access protocols.</p>
             </div>
             <div class="col-sm-5 d-flex align-items-center justify-content-end">
-                <div class="d-flex justify-content-end align-items-center" style="gap: 12px;">
+                <div class="d-flex justify-content-end align-items-center gap-12">
                     <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">
                         <i class="fas fa-th-large"></i> Dashboard
                     </a>
@@ -34,7 +34,7 @@
 <div class="container-fluid pb-5">
     @include('admin.alert')
 
-    <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
+    <div class="card border-0 shadow-premium overflow-hidden rounded-24">
         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center justify-content-between">
             <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">
                 <i class="fas fa-layer-group mr-2 text-primary opacity-50"></i> System Authority Registry
@@ -59,19 +59,19 @@
                             <tr>
                                 <td class="align-middle pl-4">
                                     <div class="d-flex align-items-center">
-                                        <div class="icon-box-soft bg-primary-soft mr-3 d-flex align-items-center justify-content-center" style="width:42px; height:42px; border-radius: 12px;">
+                                        <div class="icon-box-soft bg-primary-soft mr-3 d-flex align-items-center justify-content-center icon-box-42 rounded-12">
                                             <i class="fas fa-code text-primary smallest"></i>
                                         </div>
                                         <div>
-                                            <code class="text-primary font-weight-bold" style="font-size: 0.95rem; background: transparent; border: none; padding: 0;">{{ $permission->name }}</code>
-                                            <small class="d-block text-muted text-uppercase font-weight-bold mt-1" style="font-size: 0.6rem; letter-spacing: 0.8px;">
+                                            <code class="text-primary font-weight-bold font-0-95 bg-transparent border-0 p-0">{{ $permission->name }}</code>
+                                            <small class="d-block text-muted text-uppercase font-weight-bold mt-1 smallest-0-6 ls-0-8">
                                                 System Gate Architecture
                                             </small>
                                         </div>
                                     </div>
                                 </td>
                                 <td class="align-middle">
-                                    <span class="badge badge-secondary-soft text-secondary px-3 py-2 rounded-pill font-weight-bold text-monospace" style="font-size: 0.7rem;">
+                                    <span class="badge badge-secondary-soft text-secondary px-3 py-2 rounded-pill font-weight-bold text-monospace smallest">
                                         <i class="fas fa-shield-alt mr-1 opacity-50"></i>{{ strtoupper($permission->guard_name ?? 'WEB') }}
                                     </span>
                                 </td>
@@ -144,7 +144,7 @@
                     }
                 }
             });
-            $('.dataTables_filter input').addClass('form-control form-control-sm form-control-premium shadow-none border-light').css('width', '220px');
+            $('.dataTables_filter input').addClass('form-control form-control-sm form-control-premium shadow-none border-light w-220-p');
         }
     });
 </script>

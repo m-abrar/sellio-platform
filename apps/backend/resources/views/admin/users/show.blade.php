@@ -27,9 +27,9 @@
             <div class="card card-primary card-outline shadow-sm border-0">
                 <div class="card-body box-profile">
                     <div class="text-center mb-3">
-                        <img class="profile-user-img img-fluid img-circle border-primary shadow-sm"
+                        <img class="profile-user-img img-fluid img-circle border-primary shadow-sm icon-box-100 object-fit-cover"
                              src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&size=128&background=007bff&color=fff"
-                             alt="User profile picture" style="width: 100px; height: 100px; object-fit: cover;">
+                             alt="User profile picture">
                     </div>
 
                     <h3 class="profile-username text-center font-weight-bold">{{ $user->name }}</h3>
@@ -156,13 +156,4 @@
 </div>
 @stop
 
-@push('css')
-<style>
-    .font-weight-600 { font-weight: 600; }
-    .badge-success-light { background-color: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
-    .badge-warning-light { background-color: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
-    .border-dashed { border-style: dashed !important; }
-    .small-box { border-radius: 0.75rem !important; }
-    .small-box .inner p { font-size: 0.9rem; font-weight: 500; }
-</style>
 @endpush

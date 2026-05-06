@@ -30,9 +30,9 @@
     <div class="row">
         <!-- Main Conversation Thread -->
         <div class="col-md-8">
-            <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
+            <div class="card border-0 shadow-premium overflow-hidden rounded-24">
                 <div class="card-header border-0 bg-white py-4 px-4">
-                    <h5 class="card-title font-weight-bold text-dark text-uppercase mb-0" style="letter-spacing: 1px;">
+                    <h5 class="card-title font-weight-bold text-dark text-uppercase mb-0 ls-1-p">
                         <i class="fas fa-comments mr-2 text-primary opacity-50"></i> Resolution Thread
                     </h5>
                 </div>
@@ -41,7 +41,7 @@
                     <div class="bg-primary-soft p-4 rounded-xl border border-primary-soft mb-5">
                         <div class="d-flex justify-content-between align-items-start mb-3">
                             <div class="d-flex align-items-center">
-                                <div class="bg-white rounded-circle shadow-sm mr-3 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; border: 2px solid #fff;">
+                                <div class="bg-white rounded-circle shadow-sm mr-3 d-flex align-items-center justify-content-center icon-box-48 border-2-fff">
                                     <i class="fas fa-user-tag text-primary"></i>
                                 </div>
                                 <div>
@@ -53,18 +53,17 @@
                                 INITIATED {{ $ticket->created_at->format('M d, Y @ H:i') }}
                             </span>
                         </div>
-                        <div class="text-dark font-weight-500" style="line-height: 1.8; font-size: 1.05rem;">
+                        <div class="text-dark font-weight-500 leading-1-8 font-1-05">
                             {!! nl2br(e($ticket->description)) !!}
                         </div>
                     </div>
 
                     <!-- Chat Interface -->
-                    <div class="ticket-chat-thread mb-4 pr-2" style="max-height: 600px; overflow-y: auto;">
+                    <div class="ticket-chat-thread mb-4 pr-2 h-max-600 overflow-y-auto">
                         @forelse($messages as $message)
                             @php $isAdmin = $message->user_id === auth()->id(); @endphp
                             <div class="d-flex mb-4 {{ $isAdmin ? 'justify-content-end' : '' }}">
-                                <div class="p-3 {{ $isAdmin ? 'bg-primary text-white shadow-premium' : 'bg-light border' }}" 
-                                     style="max-width: 80%; border-radius: {{ $isAdmin ? '20px 20px 4px 20px' : '20px 20px 20px 4px' }};">
+                                <div class="p-3 w-max-80-pct {{ $isAdmin ? 'bg-primary text-white shadow-premium rounded-bubble-admin' : 'bg-light border rounded-bubble-user' }}">
                                     <div class="d-flex justify-content-between align-items-center mb-2">
                                         <span class="smallest font-weight-bold {{ $isAdmin ? 'text-white-50' : 'text-primary' }} uppercase letter-spacing-1">
                                             {{ $isAdmin ? 'System Agent' : ($message->user->name ?? 'User') }}
@@ -73,7 +72,7 @@
                                             {{ $message->created_at->format('H:i') }}
                                         </span>
                                     </div>
-                                    <div class="font-weight-500" style="line-height: 1.6;">
+                                    <div class="font-weight-500 leading-1-6">
                                         {!! nl2br(e($message->body)) !!}
                                     </div>
                                 </div>
@@ -106,9 +105,9 @@
         <!-- Meta & Operations Sidebar -->
         <div class="col-md-4">
             {{-- Protocol & Identity Card --}}
-            <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
+            <div class="card border-0 shadow-premium overflow-hidden rounded-24">
                 <div class="card-header border-0 bg-white py-4 px-4">
-                    <h5 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0" style="letter-spacing: 1px;">
+                    <h5 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 ls-1-p">
                         <i class="fas fa-shield-alt mr-2 text-primary opacity-50"></i> Protocol & Meta
                     </h5>
                 </div>
@@ -171,10 +170,3 @@
     </div>
 </div>
 @stop
-
-@push('css')
-<style>
-    .ticket-chat-thread::-webkit-scrollbar { width: 6px; }
-    .ticket-chat-thread::-webkit-scrollbar-thumb { background-color: #ccc; border-radius: 3px; }
-</style>
-@endpush

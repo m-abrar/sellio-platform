@@ -30,7 +30,7 @@
     <div class="row">
         <!-- Left Column (Main Form) -->
         <div class="col-md-8">
-                <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
+                <div class="card border-0 shadow-premium overflow-hidden rounded-24">
                     <div class="card-header bg-white py-4 px-4 border-0">
                         <h3 class="card-title font-weight-bold text-dark mb-0">
                             <i class="fas fa-id-card mr-2 text-primary opacity-50"></i> Authentication & Identity
@@ -106,7 +106,7 @@
                 'back' => 'admin.users.index'
             ])
 
-            <div class="card border-0 shadow-premium mt-4 mb-4" style="border-radius: 20px; overflow: hidden;">
+            <div class="card border-0 shadow-premium mt-4 mb-4 rounded-20 overflow-hidden">
                 <div class="card-header bg-white border-0 py-3 px-4">
                     <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
                         <i class="fas fa-camera mr-2 text-primary opacity-50"></i> Visual Identity

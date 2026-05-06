@@ -16,7 +16,7 @@
                     Monitor user inquiries, resolve platform issues, and manage ticket priority.
                 </p>
             </div>
-            <div class="col-sm-5 d-flex align-items-center justify-content-end" style="gap: 12px;">
+            <div class="col-sm-5 d-flex align-items-center justify-content-end gap-12">
                 <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">
                     <i class="fas fa-th-large"></i> Dashboard
                 </a>
@@ -35,7 +35,7 @@
 
     <div class="row mb-4">
         <div class="col-12">
-            <div class="card border-0 shadow-premium" style="border-radius: 20px;">
+            <div class="card border-0 shadow-premium rounded-20">
                 <div class="card-body p-2 d-flex align-items-center">
                     <span class="text-muted smallest font-weight-bold ml-3 mr-3 text-uppercase letter-spacing-1">
                         <i class="fas fa-filter mr-1 text-primary"></i> Queue Filter:
@@ -65,7 +65,7 @@
         </div>
     </div>
 
-    <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
+    <div class="card border-0 shadow-premium overflow-hidden rounded-24">
         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center justify-content-between">
             <h5 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">
                 <i class="fas fa-layer-group mr-2 text-primary opacity-50"></i> Support Operations Ledger
@@ -86,17 +86,17 @@
                     <table id="tickets-table" class="table table-hover table-premium mb-0">
                         <thead class="bg-light text-uppercase smallest font-weight-bold">
                             <tr>
-                            <th class="py-3 border-0 px-4" style="width: 60px;">
+                            <th class="py-3 border-0 px-4 w-60-p">
                                 <div class="custom-control custom-checkbox custom-control-premium">
                                     <input type="checkbox" class="custom-control-input" id="check-all">
                                     <label class="custom-control-label" for="check-all"></label>
                                 </div>
                             </th>
-                            <th class="py-3 border-0" style="width: 35%;">Subject & Identification</th>
-                            <th class="py-3 border-0" style="width: 20%;">User Profile</th>
-                            <th class="py-3 border-0" style="width: 15%;">Status & Priority</th>
-                            <th class="py-3 border-0" style="width: 15%;">Ticket Age</th>
-                            <th class="py-3 border-0 text-right px-4" style="width: 140px;">Actions</th>
+                            <th class="py-3 border-0 w-35-p">Subject & Identification</th>
+                            <th class="py-3 border-0 w-20-p">User Profile</th>
+                            <th class="py-3 border-0 w-15-p">Status & Priority</th>
+                            <th class="py-3 border-0 w-15-p">Ticket Age</th>
+                            <th class="py-3 border-0 text-right px-4 w-140-p">Actions</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -109,22 +109,22 @@
                                     </div>
                                 </td>
                                 <td class="align-middle py-4">
-                                    <a href="{{ route('admin.tickets.show', $ticket->id) }}" class="font-weight-bold text-dark d-block mb-1 text-truncate" style="font-size: 0.95rem; max-width: 350px;" title="{{ $ticket->title }}">
+                                    <a href="{{ route('admin.tickets.show', $ticket->id) }}" class="font-weight-bold text-dark d-block mb-1 text-truncate font-0-95 w-max-350" title="{{ $ticket->title }}">
                                         {{ $ticket->title }}
                                     </a>
                                     <div class="d-flex align-items-center overflow-hidden">
-                                        <span class="badge badge-light border text-muted smallest px-2 mr-2" style="font-weight: 500; flex-shrink: 0;">ID: #{{ $ticket->id }}</span>
-                                        <p class="text-muted smallest mb-0 text-truncate" style="max-width: 250px; opacity: 0.7;">{{ $ticket->description }}</p>
+                                        <span class="badge badge-light border text-muted smallest px-2 mr-2 font-weight-500 flex-shrink-0">ID: #{{ $ticket->id }}</span>
+                                        <p class="text-muted smallest mb-0 text-truncate w-max-250 opacity-70">{{ $ticket->description }}</p>
                                     </div>
                                 </td>
                                 <td class="align-middle py-4">
                                     <div class="d-flex align-items-center">
-                                        <div class="icon-circle bg-light border text-muted mr-3 shadow-xs" style="width: 38px; height: 38px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                        <div class="icon-circle bg-light border text-muted mr-3 shadow-xs icon-box-38 rounded-12 d-flex align-items-center justify-content-center">
                                             <i class="fas fa-user-circle"></i>
                                         </div>
                                         <div class="overflow-hidden">
-                                            <span class="d-block font-weight-bold text-dark smallest text-truncate" style="max-width: 150px;">{{ $ticket->user->name ?? 'Guest User' }}</span>
-                                            <span class="text-muted smallest text-truncate d-block" style="max-width: 150px;">{{ $ticket->user->email ?? 'Direct Submission' }}</span>
+                                            <span class="d-block font-weight-bold text-dark smallest text-truncate w-max-150">{{ $ticket->user->name ?? 'Guest User' }}</span>
+                                            <span class="text-muted smallest text-truncate d-block w-max-150">{{ $ticket->user->email ?? 'Direct Submission' }}</span>
                                         </div>
                                     </div>
                                 </td>
@@ -145,7 +145,7 @@
                                     @endphp
                                     <span class="badge badge-{{ $statusColor }}-light text-{{ $statusColor }} px-3 py-1 smallest font-weight-bold mb-1 rounded-pill">{{ strtoupper($ticket->status) }}</span>
                                     <br>
-                                    <span class="text-{{ $priorityColor }} font-weight-bold text-uppercase" style="font-size: 0.65rem; letter-spacing: 0.5px;">
+                                    <span class="text-{{ $priorityColor }} font-weight-bold text-uppercase smallest-0-65 ls-0-5">
                                         <i class="fas fa-bolt mr-1"></i> {{ $ticket->priority }} Priority
                                     </span>
                                 </td>
@@ -201,12 +201,12 @@
                     <span id="selected-count">0</span> SELECTED
                 </div>
                 <div class="divider-v"></div>
-                <div class="d-flex" style="gap: 15px;">
+                <div class="d-flex gap-15">
                     <div class="btn-group dropup">
                         <button type="button" class="btn btn-action-pill dropdown-toggle" data-toggle="dropdown">
                             <i class="fas fa-toggle-on mr-2"></i> STATUS
                         </button>
-                        <div class="dropdown-menu dropdown-menu-right shadow-premium-lg border-0 mb-3" style="border-radius: 15px;">
+                        <div class="dropdown-menu dropdown-menu-right shadow-premium-lg border-0 mb-3 rounded-15">
                             <a class="dropdown-item py-3 px-4 font-weight-bold smallest uppercase letter-spacing-1" href="javascript:void(0)" onclick="handleBulkUpdate('status', 'open')">
                                 <i class="fas fa-envelope-open mr-2 text-success"></i> Re-Open Tickets
                             </a>
@@ -223,7 +223,7 @@
                         <button type="button" class="btn btn-action-pill dropdown-toggle" data-toggle="dropdown">
                             <i class="fas fa-bolt mr-2"></i> PRIORITY
                         </button>
-                        <div class="dropdown-menu dropdown-menu-right shadow-premium-lg border-0 mb-3" style="border-radius: 15px;">
+                        <div class="dropdown-menu dropdown-menu-right shadow-premium-lg border-0 mb-3 rounded-15">
                             <a class="dropdown-item py-3 px-4 font-weight-bold smallest uppercase letter-spacing-1 text-danger" href="javascript:void(0)" onclick="handleBulkUpdate('priority', 'urgent')">
                                 <i class="fas fa-fire mr-2"></i> Escalate to Urgent
                             </a>
@@ -248,136 +248,6 @@
 </div>
 @stop
 
-@push('css')
-@include('admin._partials._toggle-card-css')
-<style>
-    .transition-all { transition: all 0.25s ease-in-out; }
-    .nav-pills .nav-link:not(.active):hover { background: rgba(0,0,0,0.03); color: var(--primary) !important; }
-    
-    .table-premium { 
-        table-layout: fixed !important;
-        width: 100% !important;
-    }
-    
-    .table-premium td {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-    
-    /* Allow wrapping for specific items if needed, but ensure base cell doesn't expand */
-    .table-premium td .text-truncate {
-        max-width: 100% !important;
-    }
-
-    .badge-primary-light { background-color: var(--primary-soft); color: var(--primary); }
-    #tickets-table thead th { letter-spacing: 1px; color: #8898aa; }
-    .btn-primary-soft { background: rgba(70, 165, 172, 0.1); color: #46a5ac; border: 1px solid rgba(70, 165, 172, 0.2); }
-    .btn-primary-soft:hover { background: #46a5ac; color: #fff; }
-
-    /* Floating Action Bar Styling */
-    .bulk-floating-bar {
-        position: fixed;
-        bottom: 30px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 90%;
-        max-width: 900px;
-        height: 80px;
-        background: rgba(15, 23, 42, 0.95);
-        backdrop-filter: blur(15px);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        border-radius: 40px;
-        z-index: 9999;
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
-        color: #fff;
-        display: flex;
-        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    
-    .bulk-floating-bar.d-none {
-        display: none !important;
-        opacity: 0;
-        transform: translate(-50%, 40px);
-    }
-
-    .selection-count-badge {
-        background: var(--primary);
-        color: #fff;
-        padding: 8px 20px;
-        border-radius: 30px;
-        font-weight: 800;
-        font-size: 0.75rem;
-        letter-spacing: 1px;
-    }
-
-    .divider-v {
-        width: 1px;
-        height: 30px;
-        background: rgba(255, 255, 255, 0.1);
-        margin: 0 25px;
-    }
-
-    .btn-action-pill {
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        color: #fff;
-        border-radius: 30px;
-        padding: 8px 25px;
-        font-weight: 700;
-        font-size: 0.7rem;
-        letter-spacing: 1px;
-        text-transform: uppercase;
-        transition: all 0.3s ease;
-    }
-
-    .btn-action-pill:hover {
-        background: rgba(255, 255, 255, 0.1);
-        color: #fff;
-        border-color: rgba(255, 255, 255, 0.2);
-    }
-
-    .btn-danger-pill {
-        background: rgba(239, 68, 68, 0.1);
-        border: 1px solid rgba(239, 68, 68, 0.2);
-        color: #ef4444;
-        border-radius: 30px;
-        padding: 8px 25px;
-        font-weight: 700;
-        font-size: 0.7rem;
-        letter-spacing: 1px;
-        text-transform: uppercase;
-        transition: all 0.3s ease;
-    }
-
-    .btn-danger-pill:hover {
-        background: #ef4444;
-        color: #fff;
-    }
-
-    .btn-close-bar {
-        background: transparent;
-        border: none;
-        color: rgba(255, 255, 255, 0.5);
-        font-size: 1.2rem;
-        transition: color 0.3s ease;
-        padding: 10px;
-    }
-
-    .btn-close-bar:hover {
-        color: #fff;
-    }
-
-    /* Animation */
-    .animate__fadeInUpCustom {
-        animation: fadeInUpCustom 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    @keyframes fadeInUpCustom {
-        from { opacity: 0; transform: translate(-50%, 50px); }
-        to { opacity: 1; transform: translate(-50%, 0); }
-    }
-</style>
 @endpush
 
 @section('js')
@@ -408,7 +278,7 @@
                             { "orderable": false, "targets": 0 }
                         ]
                     });
-                    $('.dataTables_filter input').addClass('form-control form-control-premium shadow-none border-light mb-3').css('width', '250px');
+                    $('.dataTables_filter input').addClass('form-control form-control-premium shadow-none border-light mb-3 w-250-p');
                 } catch (e) {
                     console.warn("DataTable initialization failed:", e);
                 }

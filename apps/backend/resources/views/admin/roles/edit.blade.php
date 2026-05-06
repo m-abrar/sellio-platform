@@ -43,7 +43,7 @@
                     'back' => 'admin.roles.index'
                 ])
 
-                <div class="card border-0 shadow-premium mt-4" style="border-radius: 20px;">
+                <div class="card border-0 shadow-premium mt-4 rounded-20">
                     <div class="card-header bg-white border-0 py-3 px-4">
                         <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">Authority Identity</h3>
                     </div>

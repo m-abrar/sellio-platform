@@ -1,4 +1,4 @@
-<div class="card border-0 shadow-premium" style="border-radius: 24px; overflow: hidden;">
+<div class="card border-0 shadow-premium rounded-24 overflow-hidden">
     <div class="card-header bg-white py-4 px-4 border-0 d-flex align-items-center justify-content-between">
         <h3 class="card-title font-weight-bold text-dark mb-0">
             <i class="fas fa-key mr-2 text-primary opacity-50"></i> Permission Spectrum
@@ -36,7 +36,7 @@
                                         class="custom-control-input permission-item"
                                         id="perm_{{ $permission->id }}"
                                         @if(isset($currentRole) && $currentRole->hasPermissionTo($permission->name)) checked @endif>
-                                    <label class="custom-control-label font-weight-600 text-secondary" for="perm_{{ $permission->id }}" style="font-size: 0.85rem; cursor: pointer;">
+                                    <label class="custom-control-label font-weight-600 text-secondary font-0-85 cursor-pointer" for="perm_{{ $permission->id }}">
                                         {{ ucwords(str_replace(['-', $group], [' ', ''], $permission->name)) }}
                                     </label>
                                 </div>
@@ -66,12 +66,4 @@
 </script>
 @endpush
 
-@push('css')
-<style>
-    .bg-light-soft { background: rgba(0,0,0,0.02); }
-    .hover-shadow-premium:hover { box-shadow: var(--premium-shadow); transform: translateY(-4px); border-color: var(--primary-glow) !important; }
-    .custom-switch-sm .custom-control-label::before { height: 1.2rem; width: 2.1rem; border-radius: 1rem; }
-    .custom-switch-sm .custom-control-label::after { width: calc(1.2rem - 4px); height: calc(1.2rem - 4px); border-radius: 1rem; }
-    .custom-switch-sm .custom-control-input:checked ~ .custom-control-label::after { transform: translateX(0.9rem); }
-</style>
 @endpush

@@ -37,10 +37,10 @@
                         @csrf 
                         @method('PUT')
                         <div class="form-group mb-0">
-                            <label class="small font-weight-bold text-secondary mb-2 text-uppercase" style="letter-spacing: 0.5px;">Protocol Name</label>
+                            <label class="small font-weight-bold text-secondary mb-2 text-uppercase ls-0-5">Protocol Name</label>
                             <input type="text" name="name" class="form-control form-control-lg shadow-xs" value="{{ $permission->name }}" required placeholder="e.g. users-create">
                             
-                            <div class="p-4 bg-warning-soft mt-4" style="border-radius: 20px; border: 1px solid rgba(234, 179, 8, 0.2);">
+                            <div class="p-4 bg-warning-soft mt-4 rounded-20 border-warning-soft">
                                 <div class="d-flex align-items-center mb-2">
                                     <i class="fas fa-exclamation-triangle text-warning mr-2"></i>
                                     <h6 class="font-weight-bold text-warning smallest uppercase mb-0 letter-spacing-1">Security Warning</h6>
