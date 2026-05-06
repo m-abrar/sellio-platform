@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
-            $table->string('title'); // Assuming a title field
-            $table->text('description')->nullable(); // Assuming a description field
+            $table->string('title');
+            $table->text('description')->nullable();
             
-            // The critical 'status' column from your query
             $table->enum('status', ['open', 'in-progress', 'closed', 'reopened'])->default('open');
+            $table->enum('priority', ['low', 'medium', 'high', 'urgent'])->default('low'); // Merged
             
-            // Assuming the ticket is assigned to a user
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->timestamp('viewed_at')->nullable(); // Merged
             
             $table->timestamps();
         });

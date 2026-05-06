@@ -11,19 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Creates the 'theme' table for storing theme configurations and settings.
         Schema::create('themes', function (Blueprint $table) {
-            $table->id(); // bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, Primary Key
-            $table->string('theme_key')->unique(); // varchar(255) NOT NULL, Unique Index
-            $table->string('title')->nullable(); // varchar(255) DEFAULT NULL
-            $table->integer('order');
+            $table->id();
+            $table->string('theme_key')->unique();
+            $table->string('vertical')->nullable()->index(); // e.g., 'properties', 'autos'
+            $table->string('title')->nullable();
+            $table->integer('order')->default(0);
             $table->boolean('is_active')->default(false)->index();
             
-            // The 'variables' column is a longtext with a JSON check constraint.
-            // In modern Laravel (8.x+), the json() type handles this efficiently.
-            $table->json('variables')->nullable(); 
+            $table->timestamp('last_activated_at')->nullable();
             
-            $table->timestamps(); // created_at timestamp NULL DEFAULT NULL, updated_at timestamp NULL DEFAULT NULL
+            $table->json('variables')->nullable(); // Visual styling (colors, fonts)
+            $table->json('config')->nullable();    // Modular logic/features
+            
+            $table->timestamps();
         });
     }
 
@@ -32,7 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // Drops the 'theme' table if the migration is rolled back.
         Schema::dropIfExists('themes');
     }
 };

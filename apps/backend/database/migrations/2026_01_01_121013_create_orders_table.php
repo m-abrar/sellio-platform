@@ -13,8 +13,8 @@ return new class extends Migration
             $table->string('order_number')->unique(); // e.g., ORD-2026-0001
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             
-            // Statuses
-            $table->enum('status', ['pending', 'processing', 'shipped', 'delivered', 'cancelled', 'refunded'])->default('pending');
+            // Statuses - Modernized to string for flexibility
+            $table->string('status')->default('pending');
             $table->enum('payment_status', ['unpaid', 'paid', 'failed', 'refunded'])->default('unpaid');
             $table->string('payment_method')->nullable(); // e.g., 'stripe', 'paypal'
             
@@ -25,7 +25,7 @@ return new class extends Migration
             $table->decimal('discount_amount', 15, 2)->default(0.00);
             $table->decimal('total_amount', 15, 2);
             
-            // Shipping Snapshot (Important: Store the address string even if the user changes their profile later)
+            // Shipping Snapshot
             $table->string('shipping_name');
             $table->string('shipping_address');
             $table->string('shipping_city');
@@ -33,6 +33,10 @@ return new class extends Migration
             $table->string('shipping_zip', 20);
             $table->string('shipping_country');
             $table->string('tracking_number')->nullable();
+
+            // Tracking Timestamps (Merged from update migration)
+            $table->timestamp('shipped_at')->nullable();
+            $table->timestamp('delivered_at')->nullable();
 
             $table->text('notes')->nullable()->comment('Customer notes');
             $table->timestamps();

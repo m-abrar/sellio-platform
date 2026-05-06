@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('title', 60)->unique(); 
             $table->text('description')->nullable();
             
-            // NEW COLUMN: Custom marketing label (e.g., "Popular", "Best Value")
             $table->string('label_text', 50)->nullable(); 
             
             $table->decimal('price', 8, 2);
@@ -27,25 +26,21 @@ return new class extends Migration
             $table->unsignedSmallInteger('max_listings')->nullable()->default(1)->comment('Max listings. NULL for unlimited.');
             $table->unsignedSmallInteger('max_addons')->nullable()->default(3)->comment('Max property addons. NULL for unlimited.');
             
-            // NEW FEATURE: Featured Listings Limit
+            // Featured Listings Limit
             $table->unsignedSmallInteger('max_featured_listings')->nullable()->default(0)->comment('Max number of listings that can be featured. NULL for unlimited.');
             
-            // NEW FEATURE: Custom Branding (Boolean)
+            // Branding & Analytics
             $table->boolean('custom_branding')->default(false)->comment('Allows removal of platform branding.');
-            
-            // NEW FEATURE: Analytics Access (Tiered)
-            $table->enum('analytics_access', ['none', 'basic', 'advanced'])
-                  ->default('none')
-                  ->comment('Level of analytics access.');
+            $table->enum('analytics_access', ['none', 'basic', 'advanced'])->default('none');
                   
-            // NEW FEATURE: Listing Renewal Period
-            $table->unsignedSmallInteger('listing_duration')->default(30)->comment('Days a listing remains active before manual renewal is required.');
-            
-            // Existing Premium Feature
-            $table->boolean('priority_support')->default(false)->comment('Whether the plan includes priority support.');
+            $table->unsignedSmallInteger('listing_duration')->default(30)->comment('Days a listing remains active.');
+            $table->boolean('priority_support')->default(false);
             
             // Status/Timestamps
-            $table->boolean('is_active')->default(true)->index()->comment('Whether the plan is currently available for subscription.');
+            $table->boolean('is_active')->default(true)->index();
+            $table->boolean('is_featured')->default(false); // Merged
+            $table->boolean('is_popular')->default(false);  // Merged
+
             $table->timestamps();
         });
     }
