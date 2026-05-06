@@ -37,7 +37,7 @@
             </div>
         </div>
 
-        <div class="form-group bg-light p-4 mb-4" style="border-radius: 16px; border: 1px solid var(--border-light);">
+        <div class="form-group bg-light p-4 mb-4 rounded-16 border-light">
             <label class="small font-weight-bold text-dark mb-3 uppercase letter-spacing-1 d-block">
                 Target Radius: <span id="radius-display" class="text-primary font-weight-bold ml-1">{{ old('radius', $advertisement->radius ?? 5) }} KM</span>
             </label>
@@ -106,72 +106,6 @@
     </div>
 </div>
 
-@push('css')
-<style>
-    /* Hidden Checkbox Logic */
-    .orientation-selector input[type="checkbox"]:checked + .tile-box {
-        border: 2px solid #10b981 !important;
-        transform: translateY(-5px);
-        box-shadow: 0 15px 30px rgba(16, 185, 129, 0.15) !important;
-    }
-
-    .orientation-selector input[type="checkbox"]:checked + .tile-box .tile-check-icon {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    /* Base Tile Styling */
-    .tile-box {
-        position: relative;
-        padding: 24px 12px;
-        border-radius: 16px;
-        border: 2px solid transparent;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        min-height: 90px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: #f8fafc;
-    }
-
-    .tile-label {
-        font-weight: 800;
-        font-size: 0.7rem;
-        color: #fff;
-        letter-spacing: 0.8px;
-        text-shadow: 0 1px 2px rgba(0,0,0,0.1);
-    }
-
-    .tile-check-icon {
-        position: absolute;
-        top: -8px;
-        right: -8px;
-        color: #10b981;
-        background: #fff;
-        border-radius: 50%;
-        display: none;
-        width: 24px;
-        height: 24px;
-        font-size: 1.1rem;
-        z-index: 5;
-    }
-
-    /* Color Mapping */
-    .header-tile { background: linear-gradient(135deg, #f472b6, #db2777) !important; }
-    .home-tile { background: linear-gradient(135deg, #fbbf24, #d97706) !important; }
-    .search-tile { background: linear-gradient(135deg, #a78bfa, #7c3aed) !important; }
-    .sidebar-tile { background: linear-gradient(135deg, #60a5fa, #2563eb) !important; }
-    .footer-tile { background: linear-gradient(135deg, #2dd4bf, #0d9488) !important; }
-    .general-tile { background: linear-gradient(135deg, #94a3b8, #475569) !important; }
-
-    .tile-box:hover { transform: translateY(-3px); opacity: 0.95; }
-    
-    /* Custom Range Styling */
-    .custom-range-primary::-webkit-slider-thumb { background-color: var(--primary); }
-    .custom-range-primary::-moz-range-thumb { background-color: var(--primary); }
-    .custom-range-primary::-ms-thumb { background-color: var(--primary); }
-</style>
 @endpush
 
 @push('js')

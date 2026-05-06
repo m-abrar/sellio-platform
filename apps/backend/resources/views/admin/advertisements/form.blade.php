@@ -99,12 +99,6 @@
 </div>
 @endsection
 
-@section('css')
-@include('admin._partials._toggle-card-css')
-<style>
-    .guide-img { transition: transform 0.3s ease; }
-    .guide-img:hover { transform: scale(1.05); z-index: 5; }
-</style>
 @stop
 
 @section('js')
@@ -114,13 +108,6 @@
     });
 </script>
 @stop
-@section('css')
-@include('admin._partials._toggle-card-css')
-<style>
-    .sticky-top { transition: all 0.3s ease; }
-    .guide-img { border-radius: 16px !important; transition: transform 0.3s ease; }
-    .guide-img:hover { transform: scale(1.05); z-index: 5; }
-</style>
 @stop
 
 @section('js')

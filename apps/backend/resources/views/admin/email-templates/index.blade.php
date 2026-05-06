@@ -24,7 +24,7 @@
 <div class="container-fluid pb-5">
     @include('admin.alert')
 
-    <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
+    <div class="card border-0 shadow-premium overflow-hidden rounded-24">
         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center justify-content-between">
             <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">
                 <i class="fas fa-paper-plane mr-2 text-primary opacity-50"></i> System Notification Registry
@@ -39,8 +39,8 @@
                 <table id="email-templates-table" class="table table-hover table-premium mb-0">
                     <thead class="thead-light">
                         <tr>
-                            <th class="pl-4" style="width: 45%">Subject & Logic Spectrum</th>
-                            <th style="width: 20%">Identifier Key</th>
+                            <th class="pl-4 w-45-p">Subject & Logic Spectrum</th>
+                            <th class="w-20-p">Identifier Key</th>
                             <th class="text-center">Operational Heartbeat</th>
                             <th class="text-right pr-4">Metrics</th>
                         </tr>
@@ -50,11 +50,11 @@
                             <tr>
                                 <td class="align-middle pl-4">
                                     <div class="d-flex align-items-center">
-                                        <div class="icon-box-soft bg-primary-soft mr-3 d-flex align-items-center justify-content-center" style="width:50px; height:50px; border-radius: 14px;">
+                                        <div class="icon-box-soft bg-primary-soft mr-3 d-flex align-items-center justify-content-center icon-box-50 rounded-14">
                                             <i class="fas fa-envelope-open-text text-primary fa-lg"></i>
                                         </div>
                                         <div>
-                                            <span class="d-block font-weight-bold text-dark mb-0" style="font-size: 1rem;">{{ $template->subject }}</span>
+                                            <span class="d-block font-weight-bold text-dark mb-0 font-1-0">{{ $template->subject }}</span>
                                             <small class="text-muted font-weight-bold uppercase smallest letter-spacing-1">
                                                 <i class="fas fa-bolt mr-1 text-warning"></i> Automated Trigger Logic
                                             </small>
@@ -110,7 +110,7 @@
     {{-- Intelligence Tip --}}
     <div class="bg-dark p-4 rounded-xl shadow-premium border border-white border-opacity-10 mt-4">
         <div class="d-flex align-items-center">
-            <div class="bg-primary-soft rounded-circle mr-3 d-flex align-items-center justify-content-center shadow-lg" style="width: 48px; height: 48px;">
+            <div class="bg-primary-soft rounded-circle mr-3 d-flex align-items-center justify-content-center shadow-lg icon-box-48">
                 <i class="fas fa-lightbulb text-primary"></i>
             </div>
             <div>
@@ -153,7 +153,7 @@
                     }
                 }
             });
-            $('.dataTables_filter input').addClass('form-control form-control-premium shadow-none border-light').css('width', '250px');
+            $('.dataTables_filter input').addClass('form-control form-control-premium shadow-none border-light w-250-p');
         }
     });
 </script>

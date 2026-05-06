@@ -14,7 +14,7 @@
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Audience registry for multi-channel marketing and prospect engagement.</p>
             </div>
             <div class="col-sm-4 text-right">
-                <div class="d-flex justify-content-end align-items-center" style="gap: 12px;">
+                <div class="d-flex justify-content-end align-items-center gap-12">
                     <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">
                         <i class="fas fa-th-large"></i> Dashboard
                     </a>
@@ -32,7 +32,7 @@
     @include('admin.alert')
 
     {{-- Subscriber Management Card --}}
-    <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
+    <div class="card border-0 shadow-premium overflow-hidden rounded-24">
         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center justify-content-between">
             <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">
                 <i class="fas fa-users mr-2 text-primary opacity-50"></i> Audience Registry
@@ -59,12 +59,12 @@
                             <tr>
                                 <td class="align-middle">
                                     <div class="d-flex align-items-center">
-                                        <div class="icon-shape mr-3 bg-light border rounded-circle d-flex align-items-center justify-content-center shadow-xs" style="width:40px; height:40px;">
-                                            <i class="fas fa-user-check text-primary" style="font-size: 0.9rem;"></i>
+                                        <div class="icon-shape mr-3 bg-light border rounded-circle d-flex align-items-center justify-content-center shadow-xs icon-box-40">
+                                            <i class="fas fa-user-check text-primary font-0-9"></i>
                                         </div>
                                         <div>
                                             <span class="d-block font-weight-bold text-dark mb-0">{{ $subscriber->email }}</span>
-                                            <small class="text-muted text-uppercase font-weight-bold" style="font-size: 0.65rem; letter-spacing: 0.5px;">
+                                            <small class="text-muted text-uppercase font-weight-bold smallest-0-65 ls-0-5">
                                                 Identity: {{ $subscriber->user_id ? 'Registered (UID:'.$subscriber->user_id.')' : 'Guest Prospect' }}
                                             </small>
                                         </div>
@@ -87,7 +87,7 @@
                                 </td>
 
                                 <td class="text-center align-middle">
-                                    <span class="badge {{ $subscriber->is_confirmed ? 'badge-success-light' : 'badge-warning-light' }} px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1" style="min-width: 100px;">
+                                    <span class="badge {{ $subscriber->is_confirmed ? 'badge-success-light' : 'badge-warning-light' }} px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 min-w-100">
                                         <i class="fas {{ $subscriber->is_confirmed ? 'fa-check-double' : 'fa-hourglass-half' }} mr-1"></i>
                                         {{ $subscriber->is_confirmed ? 'Confirmed' : 'Pending' }}
                                     </span>
@@ -174,7 +174,7 @@
                 }
             });
             
-            $('.dataTables_filter input').addClass('form-control form-control-sm form-control-premium shadow-none border-light').css('width', '220px');
+            $('.dataTables_filter input').addClass('form-control form-control-sm form-control-premium shadow-none border-light w-220-p');
         }
     });
 </script>

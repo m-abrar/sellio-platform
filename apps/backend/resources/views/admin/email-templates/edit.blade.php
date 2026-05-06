@@ -34,7 +34,7 @@
             <div class="col-md-8">
                 <div class="card card-premium overflow-hidden">
                     <div class="card-header border-0 bg-white py-3 px-4">
-                        <h3 class="card-title font-weight-bold text-dark text-uppercase small" style="letter-spacing: 1px;"><i class="fas fa-pen-nib mr-2 text-primary opacity-50"></i> Email Architect</h3>
+                        <h3 class="card-title font-weight-bold text-dark text-uppercase small ls-1-p"><i class="fas fa-pen-nib mr-2 text-primary opacity-50"></i> Email Architect</h3>
                     </div>
                     <div class="card-body p-4">
                         <div class="form-group mb-4">
@@ -142,28 +142,4 @@
 </script>
 @endpush
 
-@push('css')
-<style>
-    .rounded-3 { border-radius: 0.6rem !important; }
-    .sticky-top { top: 20px; }
-    
-    /* Variable helper styling */
-    code {
-        background: #f1f3f9;
-        padding: 4px 8px;
-        border-radius: 4px;
-        font-size: 0.9rem;
-    }
-
-    /* Modern Toggle CSS */
-    .toggle-card { transition: all 0.3s ease; background-color: #f8f9fa; cursor: pointer; border-color: var(--border-color) !important; }
-    .toggle-input:checked + .toggle-card { background-color: rgba(40, 167, 69, 0.05); border-color: #28a745 !important; }
-    .toggle-indicator { width: 36px; height: 20px; border-radius: 10px; background-color: #ccc; position: relative; }
-    .toggle-indicator::after { 
-        content: ''; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; 
-        border-radius: 50%; background-color: white; transition: all 0.3s ease; 
-    }
-    .toggle-input:checked + .toggle-card .toggle-indicator { background-color: #28a745; }
-    .toggle-input:checked + .toggle-card .toggle-indicator::after { transform: translateX(16px); }
-</style>
-@endpush
+@stop

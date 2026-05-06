@@ -13,7 +13,7 @@
             <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Manage audience subscription status and acquisition metrics.</p>
         </div>
         <div class="col-sm-4 text-right">
-            <div class="d-flex justify-content-end align-items-center" style="gap: 12px;">
+            <div class="d-flex justify-content-end align-items-center gap-12">
                 <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">
                     <i class="fas fa-th-large"></i> Dashboard
                 </a>
@@ -47,7 +47,7 @@
                     </div>
                     <div class="card-body p-4">
                         <div class="form-group mb-4">
-                            <label class="small font-weight-bold text-secondary mb-2 text-uppercase" style="letter-spacing: 0.5px;">Email Address <span class="text-danger">*</span></label>
+                            <label class="small font-weight-bold text-secondary mb-2 text-uppercase ls-0-5">Email Address <span class="text-danger">*</span></label>
                             <div class="input-group border rounded p-1 shadow-xs bg-white">
                                 <div class="input-group-prepend border-0">
                                     <span class="input-group-text bg-white border-0"><i class="fas fa-at text-primary"></i></span>
@@ -59,7 +59,7 @@
                         </div>
 
                         <div class="form-group mb-0">
-                            <label class="small font-weight-bold text-secondary mb-2 text-uppercase" style="letter-spacing: 0.5px;">Registration Source</label>
+                            <label class="small font-weight-bold text-secondary mb-2 text-uppercase ls-0-5">Registration Source</label>
                             <div class="input-group border rounded p-1 shadow-xs bg-white">
                                 <div class="input-group-prepend border-0">
                                     <span class="input-group-text bg-white border-0"><i class="fas fa-fingerprint text-primary"></i></span>

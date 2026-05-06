@@ -14,7 +14,7 @@
                 </p>
             </div>
             <div class="col-sm-4 text-right">
-                <div class="d-flex justify-content-end align-items-center" style="gap: 12px;">
+                <div class="d-flex justify-content-end align-items-center gap-12">
                     <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">
                         <i class="fas fa-th-large"></i> Dashboard
                     </a>
@@ -32,7 +32,7 @@
     @include('admin.alert')
 
     {{-- Ad Management Card --}}
-    <div class="card card-premium shadow-premium border-0 overflow-hidden" style="border-radius: 24px;">
+    <div class="card card-premium shadow-premium border-0 overflow-hidden rounded-24">
         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center justify-content-between">
             <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">
                 <i class="fas fa-layer-group mr-2 text-primary opacity-50"></i> Active Creative Registry
@@ -49,7 +49,7 @@
                 <table id="advertisements-table" class="table table-hover table-premium mb-0">
                     <thead class="thead-light">
                         <tr>
-                            <th class="px-4" style="width: 35%">Creative & Title</th>
+                            <th class="px-4 w-35-p">Creative & Title</th>
                             <th>Target URL</th>
                             <th>Placements</th>
                             <th class="text-center">Status</th>
@@ -62,16 +62,16 @@
                                 <td class="align-middle px-4">
                                     <div class="d-flex align-items-center">
                                         {{-- High-quality thumbnail preview --}}
-                                        <div class="mr-3 bg-light border rounded overflow-hidden shadow-xs" style="width:70px; height:50px; border-radius: 12px !important;">
+                                        <div class="mr-3 bg-light border rounded overflow-hidden shadow-xs icon-box-70-50 rounded-12">
                                             <img src="{{ $advertisement->thumbnail_url }}" 
                                                  alt="Ad Preview" 
-                                                 style="width: 100%; height: 100%; object-fit: cover;">
+                                                 class="w-100 h-100 object-fit-cover">
                                         </div>
                                         <div>
                                             <a href="{{ route('admin.advertisements.show', $advertisement) }}" class="d-block font-weight-bold text-dark mb-0 hover-primary">
                                                 {{ $advertisement->title }}
                                             </a>
-                                            <small class="text-muted text-uppercase font-weight-bold text-monospace smallest" style="letter-spacing: 0.5px;">
+                                            <small class="text-muted text-uppercase font-weight-bold text-monospace smallest ls-0-5">
                                                 ID: #AD-{{ $advertisement->id }}
                                             </small>
                                         </div>
@@ -107,11 +107,11 @@
 
                                 <td class="text-center align-middle">
                                     @if($advertisement->status)
-                                        <span class="badge badge-success-light px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 shadow-xs" style="min-width: 100px;">
+                                        <span class="badge badge-success-light px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 shadow-xs min-w-100">
                                             <i class="fas fa-play-circle mr-1"></i> Running
                                         </span>
                                     @else
-                                        <span class="badge badge-secondary-soft text-secondary px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 shadow-xs" style="min-width: 100px;">
+                                        <span class="badge badge-secondary-soft text-secondary px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 shadow-xs min-w-100">
                                             <i class="fas fa-pause-circle mr-1"></i> Paused
                                         </span>
                                     @endif
@@ -164,11 +164,6 @@
 </div>
 @endsection
 
-@section('css')
-<style>
-    .text-monospace { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace !important; }
-    .hover-primary:hover { color: var(--primary) !important; text-decoration: none !important; }
-</style>
 @endsection
 
 @section('js')

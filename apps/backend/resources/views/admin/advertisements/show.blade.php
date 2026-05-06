@@ -28,7 +28,7 @@
         {{-- Left Column: Technical & Targeting Data --}}
         <div class="col-md-8">
             {{-- General Info Card --}}
-            <div class="card shadow-sm rounded-3 border-0 mb-4">
+            <div class="card shadow-sm rounded-10 border-0 mb-4">
                 <div class="card-header bg-white border-bottom">
                     <h3 class="card-title font-weight-bold text-dark">General Information</h3>
                 </div>
@@ -55,7 +55,7 @@
             </div>
 
             {{-- Location Targeting Card --}}
-            <div class="card shadow-sm rounded-3 border-0 mb-4">
+            <div class="card shadow-sm rounded-10 border-0 mb-4">
                 <div class="card-header bg-white border-bottom">
                     <h3 class="card-title font-weight-bold text-dark">Targeting Metrics</h3>
                 </div>
@@ -71,7 +71,7 @@
                         </div>
                         <div class="col-md-4">
                             <label class="text-muted small text-uppercase d-block">Radius</label>
-                            <span class="badge badge-primary px-3 py-2" style="font-size: 1rem;">{{ $advertisement->radius ?? 5 }} KM</span>
+                            <span class="badge badge-primary px-3 py-2 font-1-0"> {{ $advertisement->radius ?? 5 }} KM</span>
                         </div>
                     </div>
                     <hr>
@@ -85,7 +85,7 @@
             </div>
 
             {{-- Visual Orientations Display --}}
-            <div class="card shadow-sm rounded-3 border-0">
+            <div class="card shadow-sm rounded-10 border-0">
                 <div class="card-header bg-white border-bottom">
                     <h3 class="card-title font-weight-bold text-dark">Active Placements</h3>
                 </div>
@@ -100,8 +100,8 @@
                         ] as $orientation => $class)
                             @if(in_array($orientation, $advertisement->orientations ?? []))
                             <div class="col-md-3 col-6 mb-3">
-                                <div class="tile-box {{ $class }} shadow-sm" style="opacity: 1; border: 2px solid #28a745;">
-                                    <div class="tile-check-icon" style="display: block;"><i class="fas fa-check-circle"></i></div>
+                                <div class="tile-box {{ $class }} shadow-sm opacity-100 border-2-success">
+                                    <div class="tile-check-icon d-block"><i class="fas fa-check-circle"></i></div>
                                     <span class="tile-label">{{ strtoupper(str_replace('-', ' ', $orientation)) }}</span>
                                 </div>
                             </div>
@@ -129,7 +129,7 @@
             </div>
 
             {{-- Ad Preview Card --}}
-            <div class="card shadow-sm border-0 rounded-3 overflow-hidden">
+            <div class="card shadow-sm border-0 rounded-10 overflow-hidden">
                 <div class="card-header bg-white border-bottom">
                     <h3 class="card-title font-weight-bold text-muted small text-uppercase">Ad Banner</h3>
                 </div>
@@ -166,29 +166,4 @@
 </div>
 @endsection
 
-@push('css')
-<style>
-    .rounded-3 { border-radius: 0.6rem !important; }
-    .grayscale { filter: grayscale(100%); opacity: 0.5; transition: 0.3s; }
-    .grayscale:hover { filter: grayscale(0%); opacity: 1; }
-    
-    /* Reusing the tile logic from edit but making them smaller for display */
-    .tile-box {
-        position: relative;
-        padding: 15px 5px;
-        border-radius: 8px;
-        min-height: 60px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    .tile-label { font-weight: 800; font-size: 0.65rem; color: #fff; text-shadow: 1px 1px 2px rgba(0,0,0,0.2); }
-    .tile-check-icon { position: absolute; top: 3px; right: 3px; color: #28a745; background: #fff; border-radius: 50%; font-size: 0.8rem; }
-    
-    .header-tile { background-color: #e85597 !important; }
-    .home-tile { background-color: #f1bc6a !important; }
-    .search-tile { background-color: #a55eea !important; }
-    .sidebar-tile { background-color: #4b7bec !important; }
-    .footer-tile { background-color: #4ecdc4 !important; }
-</style>
 @endpush
