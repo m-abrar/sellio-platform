@@ -16,7 +16,7 @@
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Cross-module operational registry and transaction oversight.</p>
             </div>
             <div class="col-sm-5 d-flex flex-column align-items-end justify-content-center">
-                <div class="d-flex align-items-center" style="gap: 12px;">
+                <div class="d-flex align-items-center gap-12">
                     <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">
                         <i class="fas fa-th-large"></i> Dashboard
                     </a>
@@ -24,7 +24,7 @@
                         <button class="btn btn-primary rounded-pill px-4 py-2 font-weight-bold shadow-premium dropdown-toggle smallest uppercase letter-spacing-1" type="button" id="addOperationDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fas fa-plus-circle mr-2"></i> INITIALIZE OPERATION
                         </button>
-                        <div class="dropdown-menu dropdown-menu-right shadow-premium border-0 animate__animated animate__fadeInUp" aria-labelledby="addOperationDropdown" style="border-radius: 16px;">
+                        <div class="dropdown-menu dropdown-menu-right shadow-premium border-0 animate__animated animate__fadeInUp rounded-xl" aria-labelledby="addOperationDropdown">
                             <h6 class="dropdown-header smallest font-weight-bold text-muted uppercase letter-spacing-1">Real Estate</h6>
                             <a class="dropdown-item py-2 px-4 smallest font-weight-bold" href="{{ route('admin.property-bookings.create') }}">
                                 <i class="fas fa-home mr-2 text-primary opacity-50"></i> Property Booking
@@ -105,7 +105,7 @@
 
     <div class="card registry-table-card">
         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
-            <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none" style="letter-spacing: 1px;">
+            <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none letter-spacing-1">
                 Operational Registry
             </h3>
             <div class="card-tools d-flex align-items-center ml-auto">
@@ -123,7 +123,7 @@
                         <table id="bookings-table" class="table table-hover table-premium mb-0">
                             <thead class="bg-light text-uppercase smallest font-weight-bold">
                                 <tr>
-                                    <th class="py-3 border-0 text-center" style="width: 80px">Media</th>
+                                    <th class="py-3 border-0 text-center col-media-80">Media</th>
                                     <th class="py-3 border-0">{{ __('Related Item') }}</th>
                                     <th class="py-3 border-0">{{ __('Customer') }}</th>
                                     <th class="py-3 border-0">{{ __('Module') }}</th>
@@ -149,7 +149,7 @@
                                         <td class="align-middle">
                                             @if ($booking->user)
                                                 <div class="d-flex align-items-center">
-                                                    <div class="icon-circle bg-light border text-muted mr-3 shadow-xs" style="width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                                                    <div class="icon-circle bg-light border text-muted mr-3 shadow-xs icon-box-sm">
                                                         <i class="fas fa-user-circle"></i>
                                                     </div>
                                                     <div>

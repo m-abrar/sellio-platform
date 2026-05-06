@@ -13,7 +13,7 @@
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Marketplace transaction fulfillment and customer logistics interface.</p>
             </div>
             <div class="col-sm-6 text-right">
-                <div class="d-flex justify-content-end align-items-center" style="gap: 12px;">
+                <div class="d-flex justify-content-end align-items-center gap-12">
                     <a href="{{ route('admin.product-orders.index') }}" class="btn-back shadow-sm print-hide">
                         <i class="fas fa-receipt mr-2"></i> Back to Ledger
                     </a>
@@ -33,8 +33,8 @@
         <div class="row">
             {{-- Left Column: Manifest & Summary --}}
             <div class="col-md-8">
-                <div class="card card-premium shadow-premium overflow-hidden mb-4 border-0" style="border-radius: 24px;">
-                    <div class="card-header bg-dark d-flex align-items-center py-3 px-4 border-0" style="background: #0f172a !important; border-bottom: 3px solid var(--primary) !important;">
+                <div class="card card-premium shadow-premium overflow-hidden mb-4 border-0 rounded-24">
+                    <div class="card-header bg-dark d-flex align-items-center py-3 px-4 border-0 card-header-premium-dark">
                         <h3 class="card-title text-white mb-0 font-weight-bold smallest text-uppercase letter-spacing-1">
                             <i class="fas fa-box-open mr-2 text-primary"></i> {{ __('Fulfillment Manifest') }}
                         </h3>
@@ -55,7 +55,7 @@
                                         <tr>
                                             <td class="pl-4 py-4 align-middle">
                                                 <div class="d-flex align-items-center">
-                                                    <div class="icon-box-preview mr-3 shadow-xs border rounded" style="width: 54px; height: 54px;">
+                                                    <div class="icon-box-preview mr-3 shadow-xs border rounded icon-box-md">
                                                         <img src="{{ $item->product->thumbnail_url ?? asset('images/fallbacks/default.jpg') }}" 
                                                              class="w-100 h-100 object-fit-cover" 
                                                              alt="Product" 
@@ -70,7 +70,7 @@
                                                             }
                                                         @endphp
                                                         @if(is_array($itemAttrs) && count($itemAttrs) > 0)
-                                                            <div class="mt-1 d-flex flex-wrap" style="gap: 6px;">
+                                                            <div class="mt-1 d-flex flex-wrap gap-6">
                                                                 @foreach($itemAttrs as $key => $value)
                                                                     <span class="badge badge-light border text-muted smallest px-2 py-1 font-weight-bold uppercase letter-spacing-1 shadow-xs">
                                                                         {{ str_replace('_', ' ', $key) }}: {{ is_array($value) ? implode(', ', $value) : $value }}
@@ -95,15 +95,15 @@
                 </div>
 
                 {{-- Fiscal Summary --}}
-                <div class="card card-premium shadow-premium overflow-hidden mb-4 border-0" style="border-radius: 24px;">
+                <div class="card card-premium shadow-premium overflow-hidden mb-4 border-0 rounded-24">
                     <div class="card-body p-4">
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="p-4 rounded-xl h-100 border bg-light shadow-xs" style="border-style: dashed !important;">
+                                <div class="p-4 rounded-xl h-100 border bg-light shadow-xs border-dashed">
                                     <h6 class="smallest text-uppercase font-weight-bold text-secondary letter-spacing-1 mb-3">
                                         <i class="fas fa-sticky-note mr-2 text-warning opacity-75"></i> Handling Directives
                                     </h6>
-                                    <p class="text-muted smallest font-weight-bold uppercase letter-spacing-1 mb-0" style="line-height: 1.6;">
+                                    <p class="text-muted smallest font-weight-bold uppercase letter-spacing-1 mb-0 leading-relaxed">
                                         {{ $order->notes ?: 'No specific handling instructions or notes provided by the customer for this transaction.' }}
                                     </p>
                                 </div>
@@ -144,8 +144,8 @@
             {{-- Right Column: Intelligence & Registry --}}
             <div class="col-md-4">
                 {{-- Lifecycle Management --}}
-                <div class="card card-premium shadow-premium overflow-hidden mb-4 print-hide border-0" style="border-radius: 24px;">
-                    <div class="card-header bg-dark d-flex align-items-center py-3 px-4 border-0" style="background: #0f172a !important; border-bottom: 3px solid var(--primary) !important;">
+                <div class="card card-premium shadow-premium overflow-hidden mb-4 print-hide border-0 rounded-24">
+                    <div class="card-header bg-dark d-flex align-items-center py-3 px-4 border-0 card-header-premium-dark">
                         <h3 class="card-title text-white mb-0 font-weight-bold smallest text-uppercase letter-spacing-1">
                             <i class="fas fa-tasks mr-2 text-primary"></i> Sync Lifecycle
                         </h3>
@@ -164,7 +164,7 @@
 
                             <div class="form-group mb-4 {{ in_array($order->status, ['shipped', 'out_for_delivery', 'delivered']) ? '' : 'd-none' }}" id="trackingGroup">
                                 <label class="smallest text-uppercase font-weight-bold text-secondary mb-2 letter-spacing-1">Courier Identification</label>
-                                <div class="input-group border rounded shadow-xs bg-white" style="height: 46px; padding: 2px;">
+                                <div class="input-group border rounded shadow-xs bg-white h-46-p-2">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text bg-transparent border-0 px-3"><i class="fas fa-truck text-primary opacity-50"></i></span>
                                     </div>
@@ -181,8 +181,8 @@
                 </div>
 
                 {{-- Logistics Timeline --}}
-                <div class="card card-premium shadow-premium overflow-hidden mb-4 print-hide border-0" style="border-radius: 24px;">
-                    <div class="card-header bg-dark d-flex align-items-center py-3 px-4 border-0" style="background: #0f172a !important; border-bottom: 3px solid var(--primary) !important;">
+                <div class="card card-premium shadow-premium overflow-hidden mb-4 print-hide border-0 rounded-24">
+                    <div class="card-header bg-dark d-flex align-items-center py-3 px-4 border-0 card-header-premium-dark">
                         <h3 class="card-title text-white mb-0 font-weight-bold smallest text-uppercase letter-spacing-1">
                             <i class="fas fa-history mr-2 text-primary"></i> Logistics Timeline
                         </h3>
@@ -210,13 +210,13 @@
                                     $colorClass = $isPassed ? 'text-success' : 'text-muted';
                                 @endphp
                                 <li class="list-group-item d-flex align-items-center py-3 border-0 {{ $isActive ? 'bg-primary-soft' : '' }}">
-                                    <div class="mr-3 icon-box-soft {{ $isPassed ? 'bg-success-soft' : 'bg-light' }} shadow-xs d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; border-radius: 10px;">
+                                    <div class="mr-3 icon-box-soft {{ $isPassed ? 'bg-success-soft' : 'bg-light' }} shadow-xs d-flex align-items-center justify-content-center icon-box-sm">
                                         <i class="fas {{ $step['icon'] }} smallest {{ $colorClass }}"></i>
                                     </div>
                                     <div class="flex-grow-1">
                                         <div class="font-weight-bold smallest uppercase letter-spacing-1 {{ $colorClass }}">{{ $step['label'] }}</div>
                                         @if($isActive)
-                                            <span class="smallest text-primary font-weight-bold uppercase letter-spacing-1" style="font-size: 0.6rem;">CURRENT STATE</span>
+                                            <span class="smallest text-primary font-weight-bold uppercase letter-spacing-1 smallest-0-6">CURRENT STATE</span>
                                         @endif
                                     </div>
                                     @if($isPassed)
@@ -229,15 +229,15 @@
                 </div>
 
                 {{-- Client Registry --}}
-                <div class="card card-premium shadow-premium overflow-hidden border-0" style="border-radius: 24px;">
-                    <div class="card-header bg-dark d-flex align-items-center py-3 px-4 border-0" style="background: #0f172a !important; border-bottom: 3px solid var(--primary) !important;">
+                <div class="card card-premium shadow-premium overflow-hidden border-0 rounded-24">
+                    <div class="card-header bg-dark d-flex align-items-center py-3 px-4 border-0 card-header-premium-dark">
                         <h3 class="card-title text-white mb-0 font-weight-bold smallest text-uppercase letter-spacing-1">
                             <i class="fas fa-id-card mr-2 text-primary"></i> Client Intelligence
                         </h3>
                     </div>
                     <div class="card-body p-4">
                         <div class="d-flex align-items-center mb-4 pb-4 border-bottom">
-                            <div class="icon-box-soft bg-primary-soft mr-3 shadow-xs d-flex align-items-center justify-content-center" style="width: 50px; height: 50px; border-radius: 12px;">
+                            <div class="icon-box-soft bg-primary-soft mr-3 shadow-xs d-flex align-items-center justify-content-center icon-box-md">
                                 <i class="fas fa-user-tie text-primary h5 mb-0"></i>
                             </div>
                             <div>
@@ -263,13 +263,6 @@
 
 @section('css')
 <style>
-    .text-monospace { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace !important; }
-    .letter-spacing-2 { letter-spacing: 2px !important; }
-    .object-fit-cover { object-fit: cover; }
-    .bg-primary-soft { background: rgba(70, 165, 172, 0.1) !important; }
-    .bg-success-soft { background: rgba(40, 167, 69, 0.1) !important; }
-    .rounded-xl { border-radius: 12px !important; }
-
     @media print {
         .main-sidebar, .main-header, .btn, .btn-back, .print-hide, .sync-lifecycle-card {
             display: none !important;

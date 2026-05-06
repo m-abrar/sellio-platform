@@ -16,7 +16,7 @@
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Track marketplace transactions, fulfillment status, and customer shipments.</p>
             </div>
             <div class="col-sm-5 text-right">
-                <div class="d-flex justify-content-end align-items-center" style="gap: 12px;">
+                <div class="d-flex justify-content-end align-items-center gap-12">
                     <a href="{{ route('admin.product-orders.create') }}" class="btn btn-primary rounded-pill px-4 py-2 font-weight-bold shadow-premium smallest uppercase letter-spacing-1">
                         <i class="fas fa-plus-circle mr-2"></i> Add Order
                     </a>
@@ -168,12 +168,12 @@
                         <span id="selected-count">0</span> SELECTED
                     </div>
                     <div class="divider-v"></div>
-                    <div class="d-flex" style="gap: 15px;">
+                    <div class="d-flex gap-15">
                         <div class="btn-group dropup">
                             <button type="button" class="btn btn-action-pill dropdown-toggle" data-toggle="dropdown">
                                 <i class="fas fa-sync-alt mr-2"></i> UPDATE STATUS
                             </button>
-                            <div class="dropdown-menu dropdown-menu-right shadow-premium-lg border-0 mb-3" style="border-radius: 15px;">
+                            <div class="dropdown-menu dropdown-menu-right shadow-premium-lg border-0 mb-3 rounded-xl">
                                 <h6 class="dropdown-header text-uppercase smallest letter-spacing-1 text-muted mb-2">Transition Lifecycle</h6>
                                 <a class="dropdown-item py-3 px-4 font-weight-bold smallest uppercase letter-spacing-1" href="javascript:void(0)" onclick="handleBulkStatus('pending')">
                                     <i class="fas fa-clock mr-2 text-warning"></i> Set to Pending

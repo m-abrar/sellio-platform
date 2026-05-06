@@ -27,9 +27,9 @@
         <div class="row">
             {{-- Vehicle & Inquiry Details --}}
             <div class="col-md-8">
-                <div class="card border-0 shadow-premium overflow-hidden mb-4" style="border-radius: 24px;">
+                <div class="card border-0 shadow-premium overflow-hidden mb-4 rounded-24">
                     <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center justify-content-between">
-                        <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0" style="letter-spacing: 1px;">
+                        <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 letter-spacing-1">
                             <i class="fas fa-search mr-2 text-danger opacity-50"></i> {{ __('Vehicle Interest Intelligence') }}
                         </h3>
                         <span class="badge {{ $inquiry->getStatusBadgeClass() }} px-3 py-2 rounded-pill font-weight-bold smallest">
@@ -60,7 +60,7 @@
                             <h6 class="font-weight-bold text-dark mb-3 smallest text-uppercase letter-spacing-1">
                                 <i class="fas fa-comment-alt mr-2 text-muted"></i>{{ __('Lead Narrative') }}
                             </h6>
-                            <div class="text-muted italic" style="line-height: 1.6; font-style: italic;">
+                            <div class="text-muted italic leading-relaxed font-italic">
                                 @if($inquiry->message)
                                     "{{ $inquiry->message }}"
                                 @else
@@ -72,9 +72,9 @@
                 </div>
 
                 {{-- Operational Intelligence --}}
-                <div class="card border-0 shadow-premium" style="border-radius: 20px;">
+                <div class="card border-0 shadow-premium rounded-20">
                     <div class="card-body p-4 d-flex align-items-center">
-                        <div class="mr-3 icon-circle bg-danger-soft text-danger shadow-xs" style="width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                        <div class="mr-3 icon-circle bg-danger-soft text-danger shadow-xs icon-box-md">
                             <i class="fas fa-shield-alt"></i>
                         </div>
                         <div>
@@ -87,17 +87,16 @@
 
             {{-- Lead Contact Sidebar --}}
             <div class="col-md-4">
-                <div class="card border-0 shadow-premium overflow-hidden mb-4" style="border-radius: 20px;">
+                <div class="card border-0 shadow-premium overflow-hidden mb-4 rounded-20">
                     <div class="card-header border-0 bg-white py-4 px-4">
-                        <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0" style="letter-spacing: 1px;">
+                        <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 letter-spacing-1">
                             <i class="fas fa-user-tag mr-2 text-danger opacity-50"></i> {{ __('Lead Information') }}
                         </h3>
                     </div>
                     <div class="card-body p-4 text-center">
                         <div class="position-relative d-inline-block mb-4">
-                            <img class="rounded-circle shadow-sm border border-white border-4"
-                                 src="https://ui-avatars.com/api/?name={{ urlencode($inquiry->full_name ?? 'Lead') }}&background=dc3545&color=fff"
-                                 style="width: 100px; height: 100px; object-fit: cover;"
+                            <img src="https://ui-avatars.com/api/?name={{ urlencode($inquiry->full_name ?? 'Lead') }}&background=dc3545&color=fff"
+                                 class="rounded-circle shadow-sm border border-white border-4 icon-box-lg"
                                  alt="Avatar">
                             <div class="bg-success position-absolute" style="width: 18px; height: 18px; border-radius: 50%; bottom: 5px; right: 5px; border: 3px solid #fff;"></div>
                         </div>
@@ -129,7 +128,7 @@
                 </div>
 
                 {{-- Action QuickLinks --}}
-                <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 20px;">
+                <div class="card border-0 shadow-premium overflow-hidden rounded-20">
                     <div class="card-body p-0">
                         <a href="mailto:{{ $inquiry->email }}" class="btn btn-block btn-white border-0 py-3 font-weight-bold smallest text-uppercase text-danger">
                             <i class="fas fa-envelope mr-2"></i> {{ __('Transmit Email') }}
@@ -150,9 +149,8 @@
 @push('css')
 @include('admin._partials._toggle-card-css')
 <style>
-    .rounded-xl { border-radius: 16px !important; }
-    .bg-danger-soft { background-color: rgba(220, 53, 69, 0.12) !important; }
     .btn-white { background: #fff !important; color: #334155; }
     .btn-white:hover { background: #f8fafc !important; }
 </style>
+@endpush
 @endpush

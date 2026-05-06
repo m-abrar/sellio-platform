@@ -69,7 +69,7 @@
                         <div class="form-group mb-0">
                             <label for="description" class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Full Description <span class="text-danger">*</span></label>
                             <textarea name="description" id="description" rows="6" 
-                                      class="form-control" style="border-radius: 16px; border: 1px solid var(--border-light);"
+                                      class="form-control textarea-premium"
                                       placeholder="Describe the property, neighborhood, and perks...">{{ old('description', $property->description ?? '') }}</textarea>
                         </div>
                     </div>
@@ -308,7 +308,7 @@
                                     <label class="w-100 cursor-pointer mb-0">
                                         <input type="hidden" name="{{ $t['name'] }}" value="0">
                                         <input type="checkbox" name="{{ $t['name'] }}" value="1" id="{{ $t['id'] }}" class="d-none toggle-input" {{ $t['checked'] ? 'checked' : '' }}>
-                                        <div class="d-flex justify-content-between align-items-center h-100 toggle-card shadow-sm px-4 py-3 border rounded-xl" style="border-color: var(--border-light) !important;">
+                                        <div class="d-flex justify-content-between align-items-center h-100 toggle-card shadow-sm px-4 py-3 border rounded-xl border-light-soft">
                                             <div>
                                                 <div class="font-weight-bold text-dark small uppercase letter-spacing-1">{{ $t['label'] }}</div>
                                                 <div class="small toggle-status text-muted uppercase letter-spacing-1">{{ $t['status'] ?? 'Option' }}</div>

@@ -66,7 +66,7 @@
                         ])
                         <div class="p-4 bg-light border-top">
                             <p class="text-muted mb-2 small uppercase letter-spacing-1"><strong>Recommended Sizes:</strong></p>
-                            <ul class="list-unstyled small text-muted mb-0" style="line-height: 1.8;">
+                            <ul class="list-unstyled small text-muted mb-0 leading-relaxed">
                                 <li>• <strong>General:</strong> 600x300 (2:1)</li>
                                 <li>• <strong>Header/Footer:</strong> 2000x100 (20:1)</li>
                                 <li>• <strong>Sidebar:</strong> 300x600 (1:2)</li>
@@ -83,11 +83,11 @@
                     <div class="card-body p-3">
                         <div class="row no-gutters">
                             <div class="col-6 p-1 text-center">
-                                <img src="{{asset('admin-assets/diagram-home-page.png')}}" alt="Home" class="img-fluid border guide-img shadow-sm" style="border-radius: 12px;">
+                                <img src="{{asset('admin-assets/diagram-home-page.png')}}" alt="Home" class="img-fluid border guide-img shadow-sm rounded-xl">
                                 <small class="d-block mt-2 text-muted smallest uppercase letter-spacing-1">Home Feed</small>
                             </div>
                             <div class="col-6 p-1 text-center">
-                                <img src="{{asset('admin-assets/diagram-search-page.png')}}" alt="Search" class="img-fluid border guide-img shadow-sm" style="border-radius: 12px;">
+                                <img src="{{asset('admin-assets/diagram-search-page.png')}}" alt="Search" class="img-fluid border guide-img shadow-sm rounded-xl">
                                 <small class="d-block mt-2 text-muted smallest uppercase letter-spacing-1">Search Ops</small>
                             </div>
                         </div>

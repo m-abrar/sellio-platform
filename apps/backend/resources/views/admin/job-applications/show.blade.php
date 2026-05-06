@@ -30,9 +30,9 @@
         <div class="row">
             {{-- Left: Candidate & Application Content --}}
             <div class="col-md-8">
-                <div class="card card-premium shadow-premium border-0 overflow-hidden mb-4" style="border-radius: 24px;">
+                <div class="card card-premium shadow-premium border-0 overflow-hidden mb-4 rounded-24">
                     <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center justify-content-between">
-                        <h5 class="card-title font-weight-bold text-dark text-uppercase mb-0" style="letter-spacing: 1px;">
+                        <h5 class="card-title font-weight-bold text-dark text-uppercase mb-0 letter-spacing-1">
                             <i class="fas fa-file-alt mr-2 text-primary opacity-50"></i> {{ __('Submission Dossier') }}
                         </h5>
                         <div class="card-tools">
@@ -56,7 +56,7 @@
                             <h6 class="font-weight-bold text-primary text-uppercase smallest letter-spacing-1 mb-3">
                                 <i class="fas fa-quote-left mr-2"></i> {{ __('Professional Cover Letter') }}
                             </h6>
-                            <div class="text-dark font-weight-500" style="line-height: 1.8; font-size: 1.05rem; white-space: pre-wrap;">
+                            <div class="text-dark font-weight-500 leading-loose font-1-05 pre-wrap">
                                 @if($application->cover_letter)
                                     {{ $application->cover_letter }}
                                 @else
@@ -87,7 +87,7 @@
                                 <button type="button" class="btn btn-white shadow-xs rounded-pill px-4 font-weight-bold smallest uppercase letter-spacing-1 dropdown-toggle" data-toggle="dropdown">
                                     <i class="fas fa-user-edit mr-1 text-primary"></i> {{ __('Advance Pipeline') }}
                                 </button>
-                                <div class="dropdown-menu shadow-premium-lg border-0 py-2" style="border-radius: 15px;">
+                                <div class="dropdown-menu shadow-premium-lg border-0 py-2 rounded-xl">
                                     @foreach(['submitted', 'reviewed', 'interview', 'rejected', 'hired'] as $status)
                                         <a class="dropdown-item py-2 px-4 smallest font-weight-bold text-uppercase letter-spacing-1" href="javascript:void(0)">{{ $status }}</a>
                                     @endforeach
@@ -105,15 +105,15 @@
             {{-- Right: Sidebar Info --}}
             <div class="col-md-4">
                 {{-- Job Info --}}
-                <div class="card card-premium shadow-premium border-0 overflow-hidden mb-4" style="border-radius: 24px;">
+                <div class="card card-premium shadow-premium border-0 overflow-hidden mb-4 rounded-24">
                     <div class="card-header border-0 bg-white py-4 px-4">
-                        <h5 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0" style="letter-spacing: 1px;">
+                        <h5 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 letter-spacing-1">
                             <i class="fas fa-briefcase mr-2 text-primary opacity-50"></i> {{ __('Target Position') }}
                         </h5>
                     </div>
                     <div class="card-body px-4 pb-4">
                         <div class="d-flex align-items-center mb-4">
-                            <div class="icon-circle bg-primary-soft text-primary mr-3 shadow-xs" style="width: 50px; height: 50px; border-radius: 15px; display: flex; align-items: center; justify-content: center;">
+                            <div class="icon-circle bg-primary-soft text-primary mr-3 shadow-xs icon-box-md">
                                 <i class="fas fa-building"></i>
                             </div>
                             <div>
@@ -134,18 +134,17 @@
                 </div>
 
                 {{-- Candidate Info --}}
-                <div class="card card-premium shadow-premium border-0 overflow-hidden mb-4" style="border-radius: 24px;">
+                <div class="card card-premium shadow-premium border-0 overflow-hidden mb-4 rounded-24">
                     <div class="card-header border-0 bg-white py-4 px-4">
-                        <h5 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0" style="letter-spacing: 1px;">
+                        <h5 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 letter-spacing-1">
                             <i class="fas fa-user-tie mr-2 text-primary opacity-50"></i> {{ __('Candidate Identity') }}
                         </h5>
                     </div>
                     <div class="card-body px-4 pb-4 text-center">
                         <div class="position-relative d-inline-block mb-3">
                             <img src="https://ui-avatars.com/api/?name={{ urlencode($application->user->name) }}&background=46a5ac&color=fff&size=200" 
-                                 class="img-circle shadow-premium border border-white" 
-                                 style="width: 100px; height: 100px; border-width: 4px !important;">
-                            <div class="status-indicator bg-success" style="position: absolute; bottom: 5px; right: 5px; width: 20px; height: 20px; border-radius: 50%; border: 3px solid #fff;"></div>
+                                 class="img-circle shadow-premium border border-white icon-box-lg border-4">
+                            <div class="status-indicator bg-success position-absolute b-5-r-5-w-20-h-20-round-border-3"></div>
                         </div>
                         
                         <h5 class="font-weight-bold text-dark mb-1">{{ $application->user->name }}</h5>
@@ -153,13 +152,13 @@
                         
                         <div class="text-left mb-4">
                             <div class="d-flex align-items-center mb-3">
-                                <div class="icon-box-soft bg-light mr-3 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; border-radius: 8px;">
+                                <div class="icon-box-soft bg-light mr-3 d-flex align-items-center justify-content-center icon-box-sm">
                                     <i class="fas fa-phone fa-xs text-muted"></i>
                                 </div>
                                 <span class="smallest font-weight-bold text-dark">{{ $application->user->phone ?? __('Not Provided') }}</span>
                             </div>
                             <div class="d-flex align-items-center">
-                                <div class="icon-box-soft bg-light mr-3 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; border-radius: 8px;">
+                                <div class="icon-box-soft bg-light mr-3 d-flex align-items-center justify-content-center icon-box-sm">
                                     <i class="fas fa-eye fa-xs text-muted"></i>
                                 </div>
                                 <span class="smallest font-weight-bold text-muted uppercase">
@@ -180,9 +179,6 @@
 
 @push('css')
 <style>
-    .rounded-xl { border-radius: 16px !important; }
-    .bg-primary-soft { background: rgba(70, 165, 172, 0.05); }
-    .border-primary-soft { border-color: rgba(70, 165, 172, 0.1) !important; }
-    .text-monospace { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace !important; }
+    /* Print or view specific styles can be added here if needed */
 </style>
 @endpush

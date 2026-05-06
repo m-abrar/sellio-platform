@@ -13,7 +13,7 @@
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Monitor ticket sales, attendee lists, and event registration metrics.</p>
             </div>
             <div class="col-sm-6 text-right">
-                <div class="d-flex justify-content-end align-items-center" style="gap: 12px;">
+                <div class="d-flex justify-content-end align-items-center gap-12">
                     <a href="{{ route('admin.event-bookings.create') }}" class="btn btn-primary rounded-pill px-4 py-2 font-weight-bold shadow-premium smallest uppercase letter-spacing-1">
                         <i class="fas fa-plus mr-2"></i> Register Guest
                     </a>
@@ -36,7 +36,7 @@
         {{-- Main Table --}}
         <div class="card registry-table-card">
             <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
-                <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none" style="letter-spacing: 1px;">Attendee Registry</h3>
+                <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none letter-spacing-1">Attendee Registry</h3>
                 <div class="card-tools d-flex align-items-center ml-auto">
                     <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase mr-2">
                         <i class="fas fa-id-card mr-1"></i> {{ $bookings->total() }} ENTRIES FOUND
@@ -51,7 +51,7 @@
                     <table id="bookings-table" class="table table-hover table-premium mb-0">
                         <thead class="thead-light">
                             <tr>
-                                <th class="pl-4" style="width: 80px">Media</th>
+                                <th class="pl-4 col-media-80">Media</th>
                                 <th>Event Specification</th>
                                 <th>Attendee Principal</th>
                                 <th>Registry Date</th>
@@ -70,7 +70,7 @@
                                     </td>
                                     <td class="align-middle">
                                         <span class="d-block font-weight-bold text-dark mb-0">{{ $booking->event->title ?? __('N/A') }}</span>
-                                        <div class="d-flex align-items-center mt-1" style="gap: 10px;">
+                                        <div class="d-flex align-items-center mt-1 gap-10">
                                             @if($booking->event && $booking->event->category)
                                                 <span class="badge badge-primary-light text-primary px-2 py-1 rounded-pill smallest font-weight-bold uppercase">
                                                     {{ $booking->event->category->title }}
@@ -102,7 +102,7 @@
                                         $statusClass = $statusMap[$booking->status] ?? 'badge-secondary-light';
                                     @endphp
                                     <td class="text-center align-middle">
-                                        <span class="badge {{ $statusClass }} px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1" style="min-width: 90px;">
+                                        <span class="badge {{ $statusClass }} px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 badge-min-90">
                                             {{ $booking->status ?? 'Confirmed' }}
                                         </span>
                                     </td>
@@ -139,12 +139,6 @@
     </div>
 @endsection
 
-@section('css')
-<style>
-    .input-group-premium .select2-container { flex: 1 1 auto !important; width: 1% !important; }
-    .input-group-premium .select2-container .select2-selection--single { height: 46px !important; border: 0 !important; padding-top: 10px !important; border-radius: 0 12px 12px 0 !important; }
-</style>
-@endsection
 
 @section('js')
 <script>
@@ -169,7 +163,7 @@
                     "searchPlaceholder": "Search attendee registry..."
                 }
             });
-            $('.dataTables_filter input').addClass('form-control form-control-premium shadow-none border-light mb-3').css('width', '250px');
+            $('.dataTables_filter input').addClass('form-control form-control-premium shadow-none border-light mb-3');
         }
     });
 </script>

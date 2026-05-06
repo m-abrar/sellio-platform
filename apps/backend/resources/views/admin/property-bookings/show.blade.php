@@ -13,7 +13,7 @@
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Managed hospitality registry for property lodgings and guest stays.</p>
             </div>
             <div class="col-sm-6 text-right">
-                <div class="d-flex justify-content-end align-items-center" style="gap: 12px;">
+                <div class="d-flex justify-content-end align-items-center gap-12">
                     <a href="{{ route('admin.property-bookings.edit', $booking->id) }}" class="btn btn-primary rounded-pill px-4 py-2 font-weight-bold shadow-premium smallest uppercase letter-spacing-1">
                         <i class="fas fa-edit mr-2"></i> Modify Record
                     </a>
@@ -51,7 +51,7 @@
                             <div class="col-sm-7">
                                 <label class="smallest text-uppercase font-weight-bold text-muted mb-2 d-block letter-spacing-1">{{ __('Property Entity') }}</label>
                                 <div class="d-flex align-items-center">
-                                    <div class="icon-box-soft bg-primary-soft mr-3 shadow-xs d-flex align-items-center justify-content-center" style="width: 54px; height: 54px; border-radius: 12px;">
+                                    <div class="icon-box-soft bg-primary-soft mr-3 shadow-xs d-flex align-items-center justify-content-center icon-box-md">
                                         <i class="fas fa-building text-primary"></i>
                                     </div>
                                     <div>
@@ -102,7 +102,7 @@
                                     <i class="fas fa-users mr-2 text-primary opacity-50"></i> {{ __('Guest Logistics') }}
                                 </h5>
                                 <div class="d-flex align-items-center mb-3">
-                                    <div class="icon-box-soft bg-dark-soft text-dark mr-3 shadow-xs d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; border-radius: 10px;">
+                                    <div class="icon-box-soft bg-dark-soft text-dark mr-3 shadow-xs d-flex align-items-center justify-content-center icon-box-sm">
                                         <i class="fas fa-user-tie smallest"></i>
                                     </div>
                                     <div>
@@ -118,11 +118,11 @@
                         </div>
 
                         @if($booking->message)
-                            <div class="mt-4 p-4 rounded-xl border-0 shadow-xs" style="background: rgba(70, 165, 172, 0.04); border-left: 4px solid var(--primary) !important;">
+                            <div class="mt-4 p-4 rounded-xl border-0 shadow-xs premium-note-block">
                                 <h6 class="smallest text-uppercase font-weight-bold text-primary mb-3 letter-spacing-1">
                                     <i class="fas fa-comment-dots mr-2"></i> {{ __('Client Special Directives') }}
                                 </h6>
-                                <p class="mb-0 text-dark font-italic small" style="line-height: 1.6;">"{{ $booking->message }}"</p>
+                                <p class="mb-0 text-dark font-italic small leading-relaxed">"{{ $booking->message }}"</p>
                             </div>
                         @endif
                     </div>
@@ -183,7 +183,7 @@
                     <div class="card-body p-4">
                         @if($booking->user)
                             <div class="mb-4 d-inline-block p-1 rounded-circle border shadow-sm bg-white">
-                                <img src="https://ui-avatars.com/api/?name={{ urlencode($booking->user->name) }}&background=46a5ac&color=fff&bold=true" class="rounded-circle" style="width: 72px; height: 72px;">
+                                <img src="https://ui-avatars.com/api/?name={{ urlencode($booking->user->name) }}&background=46a5ac&color=fff&bold=true" class="rounded-circle icon-box-lg">
                             </div>
                             <h6 class="font-weight-bold text-dark mb-1 smallest uppercase letter-spacing-1">{{ $booking->user->name }}</h6>
                             <p class="text-muted smallest font-weight-bold letter-spacing-1 text-monospace mb-4">{{ $booking->user->email }}</p>
@@ -192,7 +192,7 @@
                             </a>
                         @else
                             <div class="text-muted py-4 text-center">
-                                <div class="icon-box-soft bg-light mx-auto mb-3 shadow-xs d-flex align-items-center justify-content-center" style="width: 64px; height: 64px; border-radius: 16px;">
+                                <div class="icon-box-soft bg-light mx-auto mb-3 shadow-xs d-flex align-items-center justify-content-center icon-box-lg">
                                     <i class="fas fa-user-slash text-muted h4 mb-0"></i>
                                 </div>
                                 <p class="font-weight-bold text-muted smallest text-uppercase letter-spacing-2 mb-0">{{ __('External Guest submission') }}</p>
@@ -220,8 +220,8 @@
                             <span class="smallest font-weight-bold text-muted text-uppercase letter-spacing-1">{{ __('Paid Capital') }}</span>
                             <span class="font-weight-bold text-dark smallest uppercase letter-spacing-1">{{ round($paymentPercent) }}%</span>
                         </div>
-                        <div class="progress progress-sm mb-4 shadow-xs" style="height: 8px; border-radius: 10px; background: #f1f5f9;">
-                            <div class="progress-bar bg-success" role="progressbar" style="width: {{ $paymentPercent }}%; border-radius: 10px;"></div>
+                        <div class="progress progress-sm mb-4 shadow-xs progress-premium">
+                            <div class="progress-bar bg-success rounded-pill" role="progressbar" style="width: {{ $paymentPercent }}%;"></div>
                         </div>
                         
                         <div class="p-3 rounded-xl bg-light border shadow-xs">
@@ -257,12 +257,6 @@
 
 @section('css')
 <style>
-    .text-monospace { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace !important; }
-    .letter-spacing-2 { letter-spacing: 2px !important; }
-    .bg-primary-soft { background: rgba(70, 165, 172, 0.1) !important; }
-    .bg-dark-soft { background: rgba(30, 41, 59, 0.05) !important; }
-    .bg-danger-soft { background: rgba(239, 68, 68, 0.08) !important; border: 1px solid rgba(239, 68, 68, 0.1); }
-    .bg-success-soft { background: rgba(34, 197, 94, 0.08) !important; border: 1px solid rgba(34, 197, 94, 0.1); }
-    .rounded-xl { border-radius: 12px !important; }
+    /* View-specific print overrides can stay, but general layout goes to style.css */
 </style>
 @endsection

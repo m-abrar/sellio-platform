@@ -13,7 +13,7 @@
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Manage service requests, schedule appointments, and track technician fulfillment.</p>
             </div>
             <div class="col-sm-5 text-right">
-                <div class="d-flex justify-content-end align-items-center" style="gap: 12px;">
+                <div class="d-flex justify-content-end align-items-center gap-12">
                     <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">
                         <i class="fas fa-th-large mr-2"></i> Dashboard
                     </a>
@@ -43,7 +43,7 @@
                     <table id="bookings-table" class="table table-hover table-premium mb-0">
                         <thead class="thead-light">
                             <tr>
-                                <th class="pl-4" style="width: 70px">Media</th>
+                                <th class="pl-4 col-media-70">Media</th>
                                 <th>Service Fulfillment</th>
                                 <th>Client Principal</th>
                                 <th>Schedule Date</th>
@@ -55,7 +55,7 @@
                             @forelse ($bookings as $booking)
                                 <tr>
                                     <td class="text-center align-middle pl-4">
-                                        <div class="icon-box-preview shadow-xs rounded overflow-hidden" style="width: 54px; height: 54px;">
+                                        <div class="icon-box-preview shadow-xs rounded overflow-hidden icon-box-md">
                                             <img src="{{ $booking->service->thumbnail_url ?? asset('images/fallbacks/default.jpg') }}" 
                                                  class="w-100 h-100 object-fit-cover"
                                                  alt="{{ $booking->service->title ?? 'Service' }}"
@@ -81,7 +81,7 @@
 
                                     <td class="align-middle">
                                         <div class="d-flex align-items-center">
-                                            <div class="icon-box-soft bg-primary-soft mr-3 d-flex align-items-center justify-content-center shadow-xs" style="width:36px; height:36px; border-radius: 8px;">
+                                            <div class="icon-box-soft bg-primary-soft mr-3 d-flex align-items-center justify-content-center shadow-xs icon-box-md">
                                                 <i class="fas fa-user-tie text-primary smallest"></i>
                                             </div>
                                             <div>
@@ -105,7 +105,7 @@
                                     </td>
 
                                     <td class="text-center align-middle">
-                                        <span class="badge badge-info-light text-info px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 shadow-xs" style="min-width: 110px;">
+                                        <span class="badge badge-info-light text-info px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 shadow-xs badge-min-110">
                                             {{ $booking->status ?? 'Received' }}
                                         </span>
                                     </td>
@@ -146,14 +146,6 @@
     </div>
 @endsection
 
-@section('css')
-<style>
-    .text-monospace { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace !important; }
-    .object-fit-cover { object-fit: cover; }
-    .bg-primary-soft { background: rgba(70, 165, 172, 0.1) !important; }
-    .badge-info-light { background: rgba(23, 162, 184, 0.1) !important; }
-</style>
-@endsection
 
 @section('js')
 <script>

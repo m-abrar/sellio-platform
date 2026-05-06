@@ -13,7 +13,7 @@
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Monitor consumer engagement, ad inquiries, and marketplace lead generation performance.</p>
             </div>
             <div class="col-sm-4 text-right">
-                <div class="d-flex justify-content-end align-items-center" style="gap: 12px;">
+                <div class="d-flex justify-content-end align-items-center gap-12">
                     <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">
                         <i class="fas fa-th-large"></i> Dashboard
                     </a>
@@ -33,7 +33,7 @@
         {{-- Main Table --}}
         <div class="card registry-table-card">
             <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
-                <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none" style="letter-spacing: 1px;">Marketplace Registry</h3>
+                <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none letter-spacing-1">Marketplace Registry</h3>
                 <div class="card-tools d-flex align-items-center ml-auto">
                     <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase mr-2">
                         <i class="fas fa-bullhorn mr-1"></i> {{ $inquiries->total() }} INQUIRIES
@@ -48,7 +48,7 @@
                     <table id="inquiries-table" class="table table-hover table-premium mb-0">
                         <thead class="thead-light">
                             <tr>
-                                <th class="text-center pl-4" style="width: 80px">Asset</th>
+                                <th class="text-center pl-4 col-media-80">Asset</th>
                                 <th>Ad Intelligence</th>
                                 <th>Inquirer Principal</th>
                                 <th>Engagement Date</th>
@@ -66,7 +66,7 @@
                                     </td>
                                     <td class="align-middle">
                                         <span class="d-block font-weight-bold text-dark mb-0">{{ $inquiry->classifiedAd->title ?? 'N/A' }}</span>
-                                        <div class="d-flex align-items-center mt-1" style="gap: 6px;">
+                                        <div class="d-flex align-items-center mt-1 gap-6">
                                             @if($inquiry->classifiedAd && $inquiry->classifiedAd->category)
                                                 <span class="badge badge-primary-light text-primary px-2 py-1 rounded-pill smallest font-weight-bold uppercase">
                                                     {{ $inquiry->classifiedAd->category->title }}
@@ -92,7 +92,7 @@
                                         $statusClass = $statusMap[$inquiry->status] ?? 'badge-secondary-light';
                                     @endphp
                                     <td class="text-center align-middle">
-                                        <span class="badge {{ $statusClass }} px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1" style="min-width: 90px;">
+                                        <span class="badge {{ $statusClass }} px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 badge-min-90">
                                             {{ $inquiry->status ?? 'Received' }}
                                         </span>
                                     </td>
@@ -128,12 +128,6 @@
     </div>
 @endsection
 
-@section('css')
-<style>
-    .input-group-premium .select2-container { flex: 1 1 auto !important; width: 1% !important; }
-    .input-group-premium .select2-container .select2-selection--single { height: 46px !important; border: 0 !important; padding-top: 10px !important; border-radius: 0 12px 12px 0 !important; }
-</style>
-@endsection
 
 @section('js')
 <script>
@@ -158,7 +152,7 @@
                     "searchPlaceholder": "Search marketplace registry..."
                 }
             });
-            $('.dataTables_filter input').addClass('form-control form-control-premium shadow-none border-light mb-3').css('width', '250px');
+            $('.dataTables_filter input').addClass('form-control form-control-premium shadow-none border-light mb-3');
         }
     });
 </script>

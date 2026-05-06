@@ -37,7 +37,7 @@
                 </div>
                 <div class="col-md-3">
                     <label class="form-label-premium">Temporal Range</label>
-                    <div class="d-flex align-items-center" style="gap: 10px;">
+                    <div class="d-flex align-items-center gap-10">
                         <div class="input-group input-group-premium flex-grow-1">
                             <input type="date" name="start_date" class="form-control" value="{{ request('start_date') }}">
                         </div>
@@ -47,7 +47,7 @@
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="d-flex align-items-center justify-content-end" style="gap: 12px;">
+                    <div class="d-flex align-items-center justify-content-end gap-12">
                         <button type="submit" class="btn-filter-premium flex-grow-1">
                             <i class="fas fa-sync-alt mr-2"></i> UPDATE
                         </button>
