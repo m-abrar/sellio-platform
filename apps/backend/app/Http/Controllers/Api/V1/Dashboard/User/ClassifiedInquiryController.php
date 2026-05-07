@@ -12,10 +12,17 @@ use App\Http\Resources\FavoriteResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
+/**
+ * Class ClassifiedInquiryController
+ * Orchestrates the user-facing discovery of classified marketplace inquiries and 
+ * interest metrics, providing centralized access to lead history and favorites.
+ */
 class ClassifiedInquiryController extends Controller
 {
     /**
-     * Display a listing of the user's classified inquiries and recent favorites.
+     * Retrieve a collection of classified inquiries and recent favorites for the authenticated user.
+     *
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index() {
         $user = Auth::user();

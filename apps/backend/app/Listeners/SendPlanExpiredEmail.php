@@ -10,6 +10,11 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
+/**
+ * Class SendPlanExpiredEmail
+ * Orchestrates the automated dispatch of subscription expiration notifications,
+ * integrating dynamic template hydration and asynchronous mail queuing.
+ */
 class SendPlanExpiredEmail implements ShouldQueue
 {
     use InteractsWithQueue;

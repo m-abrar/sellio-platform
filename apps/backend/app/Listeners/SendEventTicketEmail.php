@@ -11,6 +11,11 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage; // Needed for file attachment
 
+/**
+ * Class SendEventTicketEmail
+ * Orchestrates the automated dispatch of event ticket purchases,
+ * integrating dynamic template hydration and asynchronous mail queuing.
+ */
 class SendEventTicketEmail implements ShouldQueue
 {
     use InteractsWithQueue;

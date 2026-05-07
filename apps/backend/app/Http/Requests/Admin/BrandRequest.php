@@ -4,6 +4,11 @@ namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class BrandRequest
+ * Orchestrates the administrative validation for global brands, managing 
+ * cross-module identity (Property, Auto, Job, etc.) and uniqueness constraints.
+ */
 class BrandRequest extends FormRequest
 {
     /**

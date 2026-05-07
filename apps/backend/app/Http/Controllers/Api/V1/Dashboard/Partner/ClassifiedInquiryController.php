@@ -8,8 +8,18 @@ use App\Models\ClassifiedInquiry;
 use App\Http\Resources\ClassifiedInquiryResource;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * Class ClassifiedInquiryController
+ * Orchestrates the administrative discovery and retrieval of inquiries for 
+ * partner classified listings, providing centralized access to lead metadata.
+ */
 class ClassifiedInquiryController extends Controller
 {
+    /**
+     * Retrieve a paginated collection of inquiries for the authenticated partner's listings.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function index()
     {
         $user = Auth::user();

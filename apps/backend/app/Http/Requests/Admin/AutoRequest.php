@@ -4,6 +4,11 @@ namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class AutoRequest
+ * Encapsulates the administrative validation logic for automotive listings,
+ * managing mechanical specifications, valuation parameters, and regional availability.
+ */
 class AutoRequest extends FormRequest
 {
     /**

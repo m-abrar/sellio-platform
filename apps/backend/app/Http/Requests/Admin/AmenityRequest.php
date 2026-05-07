@@ -4,6 +4,11 @@ namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class AmenityRequest
+ * Orchestrates the administrative validation for global amenities, managing 
+ * cross-module applicability (Property, Event, Auto, etc.) and uniqueness constraints.
+ */
 class AmenityRequest extends FormRequest
 {
     /**

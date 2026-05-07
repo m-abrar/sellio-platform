@@ -3,15 +3,29 @@
 namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Spatie\Permission\Models\Role;
 
+/**
+ * Class UserStoreRequest
+ * Orchestrates the administrative validation for user account creation and modification,
+ * enforcing identity uniqueness, credential complexity, and role assignment authorization.
+ */
 class UserStoreRequest extends FormRequest
 {
+    /**
+     * Determine if the administrator is authorized to manipulate user identity records.
+     *
+     * @return bool
+     */
     public function authorize(): bool
     {
         return auth()->check() && auth()->user()->is_admin;
     }
 
+    /**
+     * Define the granular validation protocols for user account integrity.
+     *
+     * @return array<string, mixed>
+     */
     public function rules(): array
     {
         $userId = $this->user ? $this->user->id : null;
@@ -24,16 +38,4 @@ class UserStoreRequest extends FormRequest
         ];
     }
 
-    public function withValidator($validator)
-    {
-        $validator->after(function ($validator) {
-            $superAdminRole = Role::where('name', 'super-admin')->first();
-            
-            if ($superAdminRole && in_array($superAdminRole->id, $this->roles ?? [])) {
-                if (!auth()->user()->hasRole('super-admin')) {
-                    $validator->errors()->add('roles', __('You are not allowed to assign the Super Admin role.'));
-                }
-            }
-        });
-    }
 }

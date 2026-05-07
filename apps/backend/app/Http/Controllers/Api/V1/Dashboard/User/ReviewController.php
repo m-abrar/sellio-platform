@@ -11,10 +11,17 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\Dashboard\User\UpdateReviewRequest;
 use Illuminate\View\View;
 
+/**
+ * Class ReviewController
+ * Orchestrates the user-facing discovery and management of submitted reviews, 
+ * providing centralized access to feedback history and polymorphic entity metadata.
+ */
 class ReviewController extends Controller
 {
     /**
-     * Display a listing of the user's submitted reviews with stats.
+     * Retrieve a paginated collection of reviews submitted by the authenticated user.
+     *
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index() {
         $user = Auth::user();
@@ -38,7 +45,10 @@ class ReviewController extends Controller
     }
 
     /**
-     * Show the form for editing the specified review.
+     * Retrieve a specific review for modification.
+     *
+     * @param  \App\Models\Review  $review
+     * @return \Illuminate\Http\JsonResponse
      */
     public function edit(Review $review) {
         if ($review->user_id !== Auth::id()) {
@@ -51,7 +61,11 @@ class ReviewController extends Controller
     }
 
     /**
-     * Update the specified review in storage.
+     * Persist modifications to an existing review entity.
+     *
+     * @param  \App\Http\Requests\Dashboard\User\UpdateReviewRequest  $request
+     * @param  \App\Models\Review  $review
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(UpdateReviewRequest $request, Review $review) {
         if ($review->user_id !== Auth::id()) {
@@ -66,7 +80,10 @@ class ReviewController extends Controller
     }
 
     /**
-     * Remove the specified review from storage.
+     * Terminate the specified review entity.
+     *
+     * @param  \App\Models\Review  $review
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Review $review) {
         if ($review->user_id !== Auth::id()) {

@@ -10,7 +10,12 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class DynamicEmail extends Mailable implements ShouldQueue // Implement ShouldQueue for better performance
+/**
+ * Class DynamicEmail
+ * A high-fidelity, template-driven mailable that provides system-wide support 
+ * for dynamic HTML email hydration, asynchronous queuing, and polymorphic data injection.
+ */
+class DynamicEmail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 

@@ -4,6 +4,11 @@ namespace App\Http\Requests\Api\Tickets;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class ReplyTicketRequest
+ * Validates the API-driven communication payload for support ticket replies,
+ * ensuring content integrity and adhering to helpdesk character constraints.
+ */
 class ReplyTicketRequest extends FormRequest
 {
     /**

@@ -3,14 +3,27 @@
 namespace App\Listeners;
 
 use App\Events\NewsletterSubscriptionConfirmed;
+use App\Mail\DynamicEmail;
 use App\Models\EmailTemplate;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
+/**
+ * Class SendNewsletterWelcomeEmail
+ * Orchestrates the automated dispatch of newsletter welcome messages,
+ * integrating dynamic template hydration and asynchronous mail queuing.
+ */
 class SendNewsletterWelcomeEmail implements ShouldQueue
 {
+    use InteractsWithQueue;
+
     /**
      * Handle the event.
+     *
+     * @param  \App\Events\NewsletterSubscriptionConfirmed  $event
+     * @return void
      */
     public function handle(NewsletterSubscriptionConfirmed $event): void
     {
@@ -20,21 +33,17 @@ class SendNewsletterWelcomeEmail implements ShouldQueue
         $template = EmailTemplate::where('key', 'newsletter_welcome')->first();
 
         if (!$template || !$subscription->email) {
-            // Handle error: template missing or no email address
+            Log::warning("Email template 'newsletter_welcome' not found or missing recipient email.");
             return;
         }
 
         // 2. Prepare dynamic data for the email
         $data = [
-            'recipient_name' => $subscription->name ?? 'Valued Customer',
-            // Add any other dynamic content specific to your welcome email
-            'unsubscribe_link' => url('/newsletter/unsubscribe/' . $subscription->email), // Always good to include
+            'recipient_name'   => $subscription->name ?? 'Valued Subscriber',
+            'unsubscribe_link' => url('/newsletter/unsubscribe/' . $subscription->email),
         ];
 
-        // 3. Queue the email for sending
-        Mail::send('emails.base', ['template' => $template, 'data' => $data], function ($message) use ($subscription, $template) {
-            $message->to($subscription->email)
-                    ->subject($template->subject);
-        });
+        // 3. Queue the email for sending using the DynamicEmail mailable
+        Mail::to($subscription->email)->queue(new DynamicEmail($template, $data));
     }
 }

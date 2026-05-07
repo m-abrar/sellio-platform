@@ -4,6 +4,11 @@ namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class ClassifiedRequest
+ * Encapsulates the administrative validation logic for classified marketplace listings,
+ * managing item lifecycle, transactional status, and multi-entity relationship integrity.
+ */
 class ClassifiedRequest extends FormRequest
 {
     /**

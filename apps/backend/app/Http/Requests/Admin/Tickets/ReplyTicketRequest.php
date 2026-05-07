@@ -4,6 +4,11 @@ namespace App\Http\Requests\Admin\Tickets;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class ReplyTicketRequest
+ * Orchestrates the administrative validation for support ticket communication, 
+ * ensuring message integrity and content length constraints for helpdesk interactions.
+ */
 class ReplyTicketRequest extends FormRequest
 {
     /**

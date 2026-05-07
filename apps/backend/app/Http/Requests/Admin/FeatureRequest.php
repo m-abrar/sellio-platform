@@ -4,6 +4,11 @@ namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class FeatureRequest
+ * Orchestrates the administrative validation for platform-wide features/attributes, 
+ * managing cross-module identity (Property, Auto, Job, etc.) and uniqueness constraints.
+ */
 class FeatureRequest extends FormRequest
 {
     /**

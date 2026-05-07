@@ -10,10 +10,23 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
+/**
+ * Class ApiAmenityController
+ * Orchestrates the API-driven discovery of platform amenities, providing 
+ * high-performance retrieval and transformation of amenity metadata.
+ */
 class ApiAmenityController extends Controller
 {
+    /**
+     * Internal service coordinator for amenity-related business logic.
+     * @var AmenityService
+     */
     protected AmenityService $amenityService;
 
+    /**
+     * ApiAmenityController constructor.
+     * @param AmenityService $amenityService
+     */
     public function __construct(AmenityService $amenityService)
     {
         $this->amenityService = $amenityService;

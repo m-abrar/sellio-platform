@@ -10,7 +10,12 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail; // Import Mail Facade
 
-class SendWelcomeEmail implements ShouldQueue // Add ShouldQueue here
+/**
+ * Class SendWelcomeEmail
+ * Orchestrates the automated dispatch of platform onboarding messages,
+ * integrating dynamic template hydration and asynchronous mail queuing.
+ */
+class SendWelcomeEmail implements ShouldQueue
 {
     use InteractsWithQueue; // Use InteractsWithQueue when ShouldQueue is implemented
     

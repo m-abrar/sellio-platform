@@ -4,13 +4,28 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class StoreConsultationRequest
+ * Validates the metadata for professional consultation inquiries, ensuring 
+ * participant contact integrity and thematic alignment for service discovery.
+ */
 class StoreConsultationRequest extends FormRequest
 {
+    /**
+     * Determine if the user is authenticated to request professional consultations.
+     *
+     * @return bool
+     */
     public function authorize(): bool
     {
         return auth()->check();
     }
 
+    /**
+     * Define the validation constraints for high-fidelity consultation capture.
+     *
+     * @return array<string, mixed>
+     */
     public function rules(): array
     {
         return [

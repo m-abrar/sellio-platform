@@ -12,10 +12,23 @@ use Illuminate\Http\Request;
 use App\Http\Requests\CalculatePriceRequest;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
+/**
+ * Class ApiProductController
+ * Orchestrates the API-driven discovery and lifecycle of marketplace products,
+ * integrating complex variation pricing, media management, and faceted search.
+ */
 class ApiProductController extends Controller
 {
+    /**
+     * Internal service coordinator for product business logic.
+     * @var ProductService
+     */
     protected ProductService $productService;
 
+    /**
+     * ApiProductController constructor.
+     * @param ProductService $productService
+     */
     public function __construct(ProductService $productService)
     {
         $this->productService = $productService;

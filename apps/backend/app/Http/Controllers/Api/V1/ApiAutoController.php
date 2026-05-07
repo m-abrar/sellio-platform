@@ -10,10 +10,23 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
+/**
+ * Class ApiAutoController
+ * Manages the high-fidelity discovery and retrieval of automotive listings, 
+ * integrating complex filtering, sidebar metadata, and relationship mapping.
+ */
 class ApiAutoController extends Controller
 {
+    /**
+     * Internal service coordinator for automotive business logic.
+     * @var AutoService
+     */
     protected AutoService $autoService;
 
+    /**
+     * ApiAutoController constructor.
+     * @param AutoService $autoService
+     */
     public function __construct(AutoService $autoService)
     {
         $this->autoService = $autoService;

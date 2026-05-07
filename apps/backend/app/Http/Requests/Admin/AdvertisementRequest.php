@@ -4,6 +4,11 @@ namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class AdvertisementRequest
+ * Manages the administrative validation protocols for platform-wide advertisements,
+ * coordinating geo-spatial targeting, orientation mapping, and status lifecycle.
+ */
 class AdvertisementRequest extends FormRequest
 {
     /**

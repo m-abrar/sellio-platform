@@ -4,6 +4,11 @@ namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class PropertyRequest
+ * Orchestrates the complex administrative validation for real estate listings, coordinating
+ * seasonal pricing, neighborhood metrics, amenity mapping, and spatial integrity.
+ */
 class PropertyRequest extends FormRequest
 {
     /**

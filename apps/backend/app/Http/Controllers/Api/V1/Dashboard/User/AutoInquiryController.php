@@ -9,10 +9,17 @@ use App\Http\Resources\AutoInquiryResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
+/**
+ * Class AutoInquiryController
+ * Orchestrates the user-facing retrieval of automotive inquiries, providing 
+ * centralized access to inquiry history and vehicle relationship metadata.
+ */
 class AutoInquiryController extends Controller
 {
     /**
-     * Display a listing of the user's auto inquiries.
+     * Retrieve a paginated collection of automotive inquiries for the authenticated user.
+     *
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index() {
         $user = Auth::user();

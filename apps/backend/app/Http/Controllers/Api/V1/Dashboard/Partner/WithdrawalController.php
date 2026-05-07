@@ -1,39 +1,60 @@
 <?php
 
-// namespace App\Http\Controllers\Api\V1\Dashboard\Partner;
+namespace App\Http\Controllers\Api\V1\Dashboard\Partner;
 
-// use App\Models\Withdrawal;
-// use Illuminate\Http\Request;
-// use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Controller;
+use App\Services\WalletService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
-// class WithdrawalController extends Controller
-// {
-//     public function store(Request $request)
-//     {
-//         dd($request->all());
-//         $validated = $request->validate([
-//             'amount' => 'required|numeric|min:1',
-//             'method' => 'required|string|max:255',
-//             'details' => 'nullable|string',
-//         ]);
+/**
+ * Class WithdrawalController
+ * Orchestrates the partner-facing payout requests, managing balance verification 
+ * and transactional fund reservation via the WalletService.
+ */
+class WithdrawalController extends Controller
+{
+    /**
+     * Internal service coordinator for wallet and payout logic.
+     * @var WalletService
+     */
+    protected WalletService $walletService;
 
-//         dd($validated);
+    /**
+     * WithdrawalController constructor.
+     * @param WalletService $walletService
+     */
+    public function __construct(WalletService $walletService)
+    {
+        $this->walletService = $walletService;
+    }
 
-//         $user = Auth::user();
+    /**
+     * Process a new withdrawal request for the authenticated partner.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function store(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'amount'  => 'required|numeric|min:1',
+            'method'  => 'required|string|max:255',
+            'details' => 'nullable|array',
+        ]);
 
-//         // Check balance before request
-//         if ($user->balance < $validated['amount']) {
-//             return back()->with('error', 'Insufficient balance.');
-//         }
+        try {
+            $this->walletService->processWithdrawal(Auth::user(), $validated);
 
-//         Withdrawal::create([
-//             'user_id' => $user->id,
-//             'amount' => $validated['amount'],
-//             'method' => $validated['method'],
-//             'details' => $validated['details'],
-//             'status' => 'pending',
-//         ]);
-
-//         return back()->with('success', 'Withdrawal request submitted for approval.');
-//     }
-// }
+            return $this->successResponse(
+                null, 
+                __('Withdrawal request submitted successfully for approval.')
+            );
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return $this->errorResponse($e->getMessage(), 422, $e->errors());
+        } catch (\Exception $e) {
+            return $this->errorResponse($e->getMessage(), 500);
+        }
+    }
+}

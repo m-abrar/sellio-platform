@@ -4,6 +4,11 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class StoreQuoteRequest
+ * Facilitates the validation architecture for service quotation requests, managing
+ * complex project parameters, temporal dependencies, and categorical scaling logic.
+ */
 class StoreQuoteRequest extends FormRequest
 {
     /**

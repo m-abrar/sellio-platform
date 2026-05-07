@@ -10,6 +10,11 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
+/**
+ * Class SendListingApprovedEmail
+ * Orchestrates the automated dispatch of listing approval notifications,
+ * integrating dynamic template hydration and asynchronous mail queuing.
+ */
 class SendListingApprovedEmail implements ShouldQueue
 {
     use InteractsWithQueue;

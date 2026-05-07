@@ -7,12 +7,19 @@ use App\Models\Favorite;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\View\View;
+use App\Http\Resources\FavoriteResource;
 
+/**
+ * Class FavoriteController
+ * Orchestrates the user-facing discovery and management of favorited entities,
+ * providing centralized access to interest metrics and polymorphic relationship metadata.
+ */
 class FavoriteController extends Controller
 {
     /**
-     * Display a listing of the user's favorites.
+     * Retrieve a paginated collection of favorites for the authenticated user.
+     *
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
     public function index() {
         $user = Auth::user();
@@ -26,7 +33,10 @@ class FavoriteController extends Controller
     }
 
     /**
-     * Remove the specified favorite from storage.
+     * Terminate the specified favorite relationship.
+     *
+     * @param  \App\Models\Favorite  $favorite
+     * @return \Illuminate\Http\JsonResponse
      */
     public function remove(Favorite $favorite) {
         // Ensure the favorite belongs to the authenticated user

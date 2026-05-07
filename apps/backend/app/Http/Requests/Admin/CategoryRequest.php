@@ -4,6 +4,11 @@ namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class CategoryRequest
+ * Manages the administrative validation protocols for the platform's categorical 
+ * hierarchy, coordinating multi-module assignments and tree-structure integrity.
+ */
 class CategoryRequest extends FormRequest
 {
     /**

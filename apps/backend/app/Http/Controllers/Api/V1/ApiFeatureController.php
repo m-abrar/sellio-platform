@@ -10,10 +10,23 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
+/**
+ * Class ApiFeatureController
+ * Orchestrates the API-driven discovery of platform features and attributes, 
+ * providing high-performance retrieval and transformation of entity metadata.
+ */
 class ApiFeatureController extends Controller
 {
+    /**
+     * Internal service coordinator for feature-related business logic.
+     * @var FeatureService
+     */
     protected FeatureService $featureService;
 
+    /**
+     * ApiFeatureController constructor.
+     * @param FeatureService $featureService
+     */
     public function __construct(FeatureService $featureService)
     {
         $this->featureService = $featureService;

@@ -11,10 +11,23 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * Class ApiOrderController
+ * Orchestrates the API-driven lifecycle of marketplace orders, managing 
+ * transactional processing, order history retrieval, and checkout coordination.
+ */
 class ApiOrderController extends Controller
 {
+    /**
+     * Internal service coordinator for order processing and checkout logic.
+     * @var CheckoutService
+     */
     protected CheckoutService $checkoutService;
 
+    /**
+     * ApiOrderController constructor.
+     * @param CheckoutService $checkoutService
+     */
     public function __construct(CheckoutService $checkoutService)
     {
         $this->checkoutService = $checkoutService;

@@ -3,14 +3,27 @@
 namespace App\Listeners;
 
 use App\Events\NewsletterOptinAttempted;
+use App\Mail\DynamicEmail;
 use App\Models\EmailTemplate;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
+/**
+ * Class SendOptinConfirmationEmail
+ * Orchestrates the automated dispatch of double-opt-in confirmation requests,
+ * integrating dynamic template hydration and asynchronous mail queuing.
+ */
 class SendOptinConfirmationEmail implements ShouldQueue
 {
+    use InteractsWithQueue;
+
     /**
      * Handle the event.
+     *
+     * @param  \App\Events\NewsletterOptinAttempted  $event
+     * @return void
      */
     public function handle(NewsletterOptinAttempted $event): void
     {
@@ -20,24 +33,19 @@ class SendOptinConfirmationEmail implements ShouldQueue
         $template = EmailTemplate::where('key', 'newsletter_optin_confirmation')->first();
 
         if (!$template || !$subscription->email || !$subscription->confirmation_token) {
-            // Handle error: template missing, no email, or token missing (which shouldn't happen)
+            Log::warning("Email template 'newsletter_optin_confirmation' not found or missing subscription metadata.");
             return;
         }
 
-        // 2. Generate the unique confirmation link using the token
-        // This token is later used in a route to confirm the subscription status.
+        // 2. Generate the unique confirmation link
         $confirmationLink = url("/newsletter/confirm/{$subscription->confirmation_token}");
 
         $data = [
-            // We may not have the recipient name yet, so we use a fallback
-            'recipient_name' => $subscription->name ?? 'Valued Customer', 
+            'recipient_name'    => $subscription->name ?? 'Valued Customer', 
             'confirmation_link' => $confirmationLink,
         ];
 
-        // 3. Queue the email for sending
-        Mail::send('emails.base', ['template' => $template, 'data' => $data], function ($message) use ($subscription, $template) {
-            $message->to($subscription->email)
-                    ->subject($template->subject);
-        });
+        // 3. Queue the email for sending using the DynamicEmail mailable
+        Mail::to($subscription->email)->queue(new DynamicEmail($template, $data));
     }
 }

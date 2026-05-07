@@ -9,10 +9,17 @@ use App\Http\Resources\PropertyBookingResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
+/**
+ * Class PropertyBookingController
+ * Orchestrates the user-facing discovery and retrieval of real estate bookings,
+ * managing lodging history and property relationship metadata.
+ */
 class PropertyBookingController extends Controller
 {
     /**
-     * Display a listing of the user's property bookings.
+     * Retrieve a paginated collection of property bookings for the authenticated user.
+     *
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index() {
         $user = Auth::user();

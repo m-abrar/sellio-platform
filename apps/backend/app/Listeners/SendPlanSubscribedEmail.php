@@ -10,6 +10,11 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
+/**
+ * Class SendPlanSubscribedEmail
+ * Orchestrates the automated dispatch of subscription activation confirmations,
+ * integrating dynamic template hydration and asynchronous mail queuing.
+ */
 class SendPlanSubscribedEmail implements ShouldQueue
 {
     use InteractsWithQueue;

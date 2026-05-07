@@ -10,10 +10,23 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
+/**
+ * Class ApiTypeController
+ * Orchestrates the API-driven discovery of platform entity types, providing 
+ * high-performance retrieval and transformation of classification metadata.
+ */
 class ApiTypeController extends Controller
 {
+    /**
+     * Internal service coordinator for type-related business logic.
+     * @var TypeService
+     */
     protected TypeService $typeService;
 
+    /**
+     * ApiTypeController constructor.
+     * @param TypeService $typeService
+     */
     public function __construct(TypeService $typeService)
     {
         $this->typeService = $typeService;

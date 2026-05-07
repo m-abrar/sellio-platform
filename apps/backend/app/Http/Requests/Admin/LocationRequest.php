@@ -4,6 +4,11 @@ namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class LocationRequest
+ * Orchestrates the administrative validation for regional entities, managing 
+ * geo-spatial coordinates, regional taxonomy, and cross-module availability mappings.
+ */
 class LocationRequest extends FormRequest
 {
     /**

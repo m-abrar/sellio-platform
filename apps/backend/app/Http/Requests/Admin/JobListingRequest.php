@@ -4,6 +4,11 @@ namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class JobListingRequest
+ * Orchestrates the administrative validation for recruitment listings, managing 
+ * compensation parameters, employment taxonomy, and temporal application constraints.
+ */
 class JobListingRequest extends FormRequest
 {
     /**

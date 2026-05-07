@@ -13,10 +13,18 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\SendMessageRequest;
 use Illuminate\View\View;
 
+/**
+ * Class MessageController
+ * Orchestrates the user-facing communication channel, managing conversation 
+ * threads, real-time messaging events, and contact synchronization.
+ */
 class MessageController extends Controller
 {
     /**
-     * Display the messaging dashboard with conversations and active chat.
+     * Retrieve a collection of conversations and active message history for the authenticated user.
+     *
+     * @param  int|null  $conversationId
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index($conversationId = null) {
         $user = Auth::user();
@@ -53,7 +61,11 @@ class MessageController extends Controller
     }
 
     /**
-     * Store and broadcast a new message.
+     * Dispatch a new message within an existing conversation thread.
+     *
+     * @param  \App\Http\Requests\SendMessageRequest  $request
+     * @param  int  $conversationId
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
     public function sendMessage(SendMessageRequest $request, $conversationId): JsonResponse|RedirectResponse
     {

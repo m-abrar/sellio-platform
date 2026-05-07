@@ -10,10 +10,23 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
+/**
+ * Class ApiCategoryController
+ * Orchestrates the API-driven delivery of the platform's categorical hierarchy, 
+ * providing tree-structure retrieval, breadcrumb mapping, and relationship metadata.
+ */
 class ApiCategoryController extends Controller
 {
+    /**
+     * Internal service coordinator for categorical business logic.
+     * @var CategoryService
+     */
     protected CategoryService $categoryService;
 
+    /**
+     * ApiCategoryController constructor.
+     * @param CategoryService $categoryService
+     */
     public function __construct(CategoryService $categoryService)
     {
         $this->categoryService = $categoryService;

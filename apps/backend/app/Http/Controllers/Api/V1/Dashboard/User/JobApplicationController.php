@@ -9,10 +9,17 @@ use App\Http\Resources\JobApplicationResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
+/**
+ * Class JobApplicationController
+ * Orchestrates the user-facing discovery and retrieval of job applications, 
+ * managing recruitment history and employer relationship metadata.
+ */
 class JobApplicationController extends Controller
 {
     /**
-     * Display a listing of the user's job applications.
+     * Retrieve a paginated collection of job applications for the authenticated user.
+     *
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index() {
         $user = Auth::user();

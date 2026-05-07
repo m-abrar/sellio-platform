@@ -9,10 +9,17 @@ use App\Http\Resources\EventBookingResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
+/**
+ * Class EventBookingController
+ * Orchestrates the user-facing discovery and retrieval of event ticket bookings,
+ * managing attendance history and ticket relationship metadata.
+ */
 class EventBookingController extends Controller
 {
     /**
-     * Display a listing of the user's event ticket bookings.
+     * Retrieve a paginated collection of event bookings for the authenticated user.
+     *
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index() {
         $user = Auth::user();

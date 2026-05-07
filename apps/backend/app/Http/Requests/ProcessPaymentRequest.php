@@ -4,8 +4,18 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class ProcessPaymentRequest
+ * Validates the transactional data required for processing payment gateway interactions,
+ * ensuring PCI-compliant formatting and integrity of card-based input.
+ */
 class ProcessPaymentRequest extends FormRequest
 {
+    /**
+     * Sanitize input data before validation, purging card number formatting noise.
+     *
+     * @return void
+     */
     protected function prepareForValidation()
     {
         $this->merge([
@@ -13,6 +23,11 @@ class ProcessPaymentRequest extends FormRequest
         ]);
     }
 
+    /**
+     * Define the granular validation protocols for payment processing.
+     *
+     * @return array<string, mixed>
+     */
     public function rules(): array
     {
         return [

@@ -10,10 +10,23 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
+/**
+ * Class ApiBrandController
+ * Orchestrates the API-driven discovery of platform brands, providing
+ * centralized access to brand identity and categorical metrics.
+ */
 class ApiBrandController extends Controller
 {
+    /**
+     * Internal service coordinator for brand business logic.
+     * @var BrandService
+     */
     protected BrandService $brandService;
 
+    /**
+     * ApiBrandController constructor.
+     * @param BrandService $brandService
+     */
     public function __construct(BrandService $brandService)
     {
         // Injecting the BrandService to handle business logic

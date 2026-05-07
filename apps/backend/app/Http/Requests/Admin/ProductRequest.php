@@ -4,6 +4,11 @@ namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class ProductRequest
+ * Manages the complex administrative validation for marketplace products, coordinating
+ * multi-entity variations (Attributes), supplementary offerings (Addons), and inventory integrity.
+ */
 class ProductRequest extends FormRequest
 {
     /**

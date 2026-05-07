@@ -11,10 +11,23 @@ use Illuminate\Http\Request;
 use App\Http\Requests\CalculateLodgingPriceRequest;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
+/**
+ * Class ApiPropertyController
+ * Orchestrates the API-driven discovery and lifecycle of real estate listings, 
+ * integrating complex lodging calculations, amenity mapping, and faceted search.
+ */
 class ApiPropertyController extends Controller
 {
+    /**
+     * Internal service coordinator for real estate business logic.
+     * @var PropertyService
+     */
     protected PropertyService $propertyService;
 
+    /**
+     * ApiPropertyController constructor.
+     * @param PropertyService $propertyService
+     */
     public function __construct(PropertyService $propertyService)
     {
         $this->propertyService = $propertyService;

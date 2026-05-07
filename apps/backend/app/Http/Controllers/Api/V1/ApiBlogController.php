@@ -10,10 +10,23 @@ use App\Services\BlogService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
+/**
+ * Class ApiBlogController
+ * Orchestrates the API-driven content delivery for platform blogs, managing
+ * faceted search, view logging, and related content discovery.
+ */
 class ApiBlogController extends Controller
 {
+    /**
+     * Internal service coordinator for blog content business logic.
+     * @var BlogService
+     */
     protected BlogService $blogService;
 
+    /**
+     * ApiBlogController constructor.
+     * @param BlogService $blogService
+     */
     public function __construct(BlogService $blogService)
     {
         $this->blogService = $blogService;

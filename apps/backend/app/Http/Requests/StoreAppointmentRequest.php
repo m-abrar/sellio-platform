@@ -4,13 +4,28 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class StoreAppointmentRequest
+ * Manages the validation protocols for service-based appointments, coordinating
+ * temporal constraints, package selections, and service-specific inquiry metadata.
+ */
 class StoreAppointmentRequest extends FormRequest
 {
+    /**
+     * Determine if the user is authenticated to initiate a service appointment.
+     *
+     * @return bool
+     */
     public function authorize(): bool
     {
         return auth()->check();
     }
 
+    /**
+     * Define the granular validation rules for appointment scheduling.
+     *
+     * @return array<string, mixed>
+     */
     public function rules(): array
     {
         return [
@@ -22,6 +37,11 @@ class StoreAppointmentRequest extends FormRequest
         ];
     }
 
+    /**
+     * Define custom error messages for service-related validation failures.
+     *
+     * @return array<string, string>
+     */
     public function messages(): array
     {
         return [

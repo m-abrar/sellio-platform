@@ -10,6 +10,11 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
+/**
+ * Class SendListingRejectedEmail
+ * Orchestrates the automated dispatch of listing rejection notifications,
+ * integrating dynamic template hydration and asynchronous mail queuing.
+ */
 class SendListingRejectedEmail implements ShouldQueue
 {
     use InteractsWithQueue;

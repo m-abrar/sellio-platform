@@ -10,10 +10,23 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
+/**
+ * Class ApiTagController
+ * Orchestrates the API-driven discovery of platform tags, providing 
+ * high-performance retrieval and transformation of polymorphic metadata.
+ */
 class ApiTagController extends Controller
 {
+    /**
+     * Internal service coordinator for tag-related business logic.
+     * @var TagService
+     */
     protected TagService $tagService;
 
+    /**
+     * ApiTagController constructor.
+     * @param TagService $tagService
+     */
     public function __construct(TagService $tagService)
     {
         $this->tagService = $tagService;

@@ -14,10 +14,23 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
+/**
+ * Class ApiJobController
+ * Orchestrates the API-driven discovery and retrieval of recruitment listings, 
+ * integrating complex filtering, employment taxonomy, and related entity mapping.
+ */
 class ApiJobController extends Controller
 {
+    /**
+     * Internal service coordinator for recruitment business logic.
+     * @var JobManagementService
+     */
     protected JobManagementService $jobService;
 
+    /**
+     * ApiJobController constructor.
+     * @param JobManagementService $jobService
+     */
     public function __construct(JobManagementService $jobService)
     {
         $this->jobService = $jobService;

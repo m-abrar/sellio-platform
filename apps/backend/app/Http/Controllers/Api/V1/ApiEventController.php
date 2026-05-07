@@ -14,10 +14,23 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
+/**
+ * Class ApiEventController
+ * Orchestrates the API-driven discovery and lifecycle of platform events, 
+ * integrating temporal search, ticket availability, and relationship mapping.
+ */
 class ApiEventController extends Controller
 {
+    /**
+     * Internal service coordinator for event business logic.
+     * @var EventService
+     */
     protected EventService $eventService;
 
+    /**
+     * ApiEventController constructor.
+     * @param EventService $eventService
+     */
     public function __construct(EventService $eventService)
     {
         $this->eventService = $eventService;

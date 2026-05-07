@@ -15,10 +15,23 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
+/**
+ * Class ApiServiceController
+ * Orchestrates the API-driven discovery and retrieval of professional service offerings,
+ * integrating expertise metrics, faceted search, and transactional billing models.
+ */
 class ApiServiceController extends Controller
 {
+    /**
+     * Internal service coordinator for professional service business logic.
+     * @var ServiceManagementService
+     */
     protected ServiceManagementService $serviceManagement;
 
+    /**
+     * ApiServiceController constructor.
+     * @param ServiceManagementService $serviceManagement
+     */
     public function __construct(ServiceManagementService $serviceManagement)
     {
         $this->serviceManagement = $serviceManagement;

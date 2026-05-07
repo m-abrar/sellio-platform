@@ -4,13 +4,28 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class StoreAutoInquiryRequest
+ * Orchestrates the validation logic for automotive purchase and trial inquiries, 
+ * coordinating vehicle availability, scheduling preferences, and prospect metadata.
+ */
 class StoreAutoInquiryRequest extends FormRequest
 {
+    /**
+     * Determine if the user is authorized to submit vehicle-specific inquiries.
+     *
+     * @return bool
+     */
     public function authorize(): bool
     {
         return true;
     }
 
+    /**
+     * Define the data integrity rules for automotive lead capture.
+     *
+     * @return array<string, mixed>
+     */
     public function rules(): array
     {
         return [
@@ -26,6 +41,11 @@ class StoreAutoInquiryRequest extends FormRequest
 
     /**
      * Optional: Custom error messages for the date validation
+     */
+    /**
+     * Define localized error messages for inquiry-specific validation failures.
+     *
+     * @return array<string, string>
      */
     public function messages(): array
     {

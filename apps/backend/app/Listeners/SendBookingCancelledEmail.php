@@ -10,6 +10,11 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
+/**
+ * Class SendBookingCancelledEmail
+ * Orchestrates the automated dispatch of cancellation confirmations, 
+ * integrating dynamic template hydration and asynchronous mail queuing.
+ */
 class SendBookingCancelledEmail implements ShouldQueue
 {
     use InteractsWithQueue;

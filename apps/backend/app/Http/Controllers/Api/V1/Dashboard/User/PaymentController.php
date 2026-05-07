@@ -9,10 +9,17 @@ use App\Http\Resources\PaymentResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
+/**
+ * Class PaymentController
+ * Orchestrates the user-facing discovery and retrieval of payment transactions,
+ * providing centralized access to financial history and polymorphic billing metadata.
+ */
 class PaymentController extends Controller
 {
     /**
-     * Display a listing of the user's payment history.
+     * Retrieve a paginated collection of payment records for the authenticated user.
+     *
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index() {
         $user = Auth::user();

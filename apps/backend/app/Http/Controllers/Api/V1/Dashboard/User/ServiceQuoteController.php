@@ -9,10 +9,17 @@ use App\Http\Resources\ServiceQuoteResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
+/**
+ * Class ServiceQuoteController
+ * Orchestrates the user-facing discovery and retrieval of service quotes, 
+ * managing estimation history and provider relationship metadata.
+ */
 class ServiceQuoteController extends Controller
 {
     /**
-     * Display a listing of the user's service quotes.
+     * Retrieve a paginated collection of service quotes for the authenticated user.
+     *
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index() {
         $user = Auth::user();

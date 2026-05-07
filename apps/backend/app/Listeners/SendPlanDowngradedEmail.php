@@ -10,6 +10,11 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
+/**
+ * Class SendPlanDowngradedEmail
+ * Orchestrates the automated dispatch of subscription downgrade confirmations,
+ * integrating dynamic template hydration and asynchronous mail queuing.
+ */
 class SendPlanDowngradedEmail implements ShouldQueue
 {
     use InteractsWithQueue;

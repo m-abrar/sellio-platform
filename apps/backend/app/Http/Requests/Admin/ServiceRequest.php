@@ -4,6 +4,11 @@ namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class ServiceRequest
+ * Orchestrates the administrative validation for professional service offerings, managing
+ * expertise metrics, operational constraints, and transactional billing models.
+ */
 class ServiceRequest extends FormRequest
 {
     /**

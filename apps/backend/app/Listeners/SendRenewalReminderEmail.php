@@ -10,6 +10,11 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
+/**
+ * Class SendRenewalReminderEmail
+ * Orchestrates the automated dispatch of subscription renewal reminders,
+ * integrating dynamic template hydration and asynchronous mail queuing.
+ */
 class SendRenewalReminderEmail implements ShouldQueue
 {
     use InteractsWithQueue;

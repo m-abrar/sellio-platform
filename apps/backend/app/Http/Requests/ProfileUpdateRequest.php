@@ -6,6 +6,11 @@ use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
+/**
+ * Class ProfileUpdateRequest
+ * Manages the validation constraints for user identity updates, ensuring data 
+ * integrity and unique identifier constraints across the marketplace ecosystem.
+ */
 class ProfileUpdateRequest extends FormRequest
 {
     /**

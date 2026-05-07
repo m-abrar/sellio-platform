@@ -4,6 +4,11 @@ namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class TagRequest
+ * Orchestrates the administrative validation for polymorphic tags, managing 
+ * cross-module identity (Property, Auto, Job, etc.) and uniqueness constraints.
+ */
 class TagRequest extends FormRequest
 {
     /**

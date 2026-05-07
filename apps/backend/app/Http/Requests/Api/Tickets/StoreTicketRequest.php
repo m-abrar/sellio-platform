@@ -4,6 +4,11 @@ namespace App\Http\Requests\Api\Tickets;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class StoreTicketRequest
+ * Orchestrates the validation protocols for initializing API-driven support tickets, 
+ * managing thematic titles, descriptive narratives, and priority level indexing.
+ */
 class StoreTicketRequest extends FormRequest
 {
     /**

@@ -4,6 +4,11 @@ namespace App\Http\Requests\Admin\Tickets;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class UpdateTicketStatusRequest
+ * Orchestrates the administrative validation for support ticket lifecycle updates,
+ * enforcing state transition constraints within the helpdesk ecosystem.
+ */
 class UpdateTicketStatusRequest extends FormRequest
 {
     /**

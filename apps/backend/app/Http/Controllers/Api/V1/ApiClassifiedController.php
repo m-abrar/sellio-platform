@@ -14,10 +14,23 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
+/**
+ * Class ApiClassifiedController
+ * Orchestrates the API-driven discovery and retrieval of classified marketplace listings,
+ * integrating faceted search, sidebar filtering, and related entity mapping.
+ */
 class ApiClassifiedController extends Controller
 {
+    /**
+     * Internal service coordinator for classified marketplace business logic.
+     * @var ClassifiedManagementService
+     */
     protected ClassifiedManagementService $classifiedService;
 
+    /**
+     * ApiClassifiedController constructor.
+     * @param ClassifiedManagementService $classifiedService
+     */
     public function __construct(ClassifiedManagementService $classifiedService)
     {
         $this->classifiedService = $classifiedService;

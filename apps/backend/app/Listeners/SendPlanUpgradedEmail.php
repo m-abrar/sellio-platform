@@ -10,6 +10,11 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
+/**
+ * Class SendPlanUpgradedEmail
+ * Orchestrates the automated dispatch of subscription upgrade confirmations,
+ * integrating dynamic template hydration and asynchronous mail queuing.
+ */
 class SendPlanUpgradedEmail implements ShouldQueue
 {
     use InteractsWithQueue;

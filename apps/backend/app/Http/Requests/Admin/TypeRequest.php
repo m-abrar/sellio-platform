@@ -4,6 +4,11 @@ namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class TypeRequest
+ * Orchestrates the administrative validation for global entity types, managing 
+ * cross-module identity (Property, Auto, Job, etc.) and uniqueness constraints.
+ */
 class TypeRequest extends FormRequest
 {
     /**

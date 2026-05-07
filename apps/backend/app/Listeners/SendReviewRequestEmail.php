@@ -3,14 +3,27 @@
 namespace App\Listeners;
 
 use App\Events\ReviewRequested;
+use App\Mail\DynamicEmail;
 use App\Models\EmailTemplate;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
+/**
+ * Class SendReviewRequestEmail
+ * Orchestrates the automated dispatch of post-interaction review requests,
+ * integrating dynamic template hydration and asynchronous mail queuing.
+ */
 class SendReviewRequestEmail implements ShouldQueue
 {
+    use InteractsWithQueue;
+
     /**
      * Handle the event.
+     *
+     * @param  \App\Events\ReviewRequested  $event
+     * @return void
      */
     public function handle(ReviewRequested $event): void
     {
@@ -18,28 +31,23 @@ class SendReviewRequestEmail implements ShouldQueue
         $template = EmailTemplate::where('key', 'request_a_review')->first();
 
         if (!$template || !$event->recipient->email) {
+            Log::warning("Email template 'request_a_review' not found or missing recipient email.");
             return;
         }
 
-        // 2. Determine the Item Name (use 'name' or 'title' depending on your models)
-        $itemName = $event->reviewable->title ?? $event->reviewable->title ?? 'your recent experience';
+        // 2. Determine the Item Name
+        $itemName = $event->reviewable->title ?? 'your recent experience';
         
-        // 3. Generate the Review Link (Crucial for Review Requests)
-        // In a real app, this link might include a signed URL or token 
-        // to verify the user's eligibility and pre-fill their review form.
-        // For this example, we use a standard route.
+        // 3. Generate the Review Link
         $reviewLink = url("/review/create/{$event->reviewable->id}?type=" . class_basename($event->reviewable));
 
         $data = [
-            'recipient_name' => $event->recipient->title,
-            'item_name' => $itemName,
-            'review_link' => $reviewLink,
+            'recipient_name' => $event->recipient->name ?? 'Valued Customer',
+            'item_name'      => $itemName,
+            'review_link'    => $reviewLink,
         ];
 
-        // 4. Queue the email for sending
-        Mail::send('emails.base', ['template' => $template, 'data' => $data], function ($message) use ($event, $template) {
-            $message->to($event->recipient->email)
-                    ->subject($template->subject);
-        });
+        // 4. Queue the email for sending using the DynamicEmail mailable
+        Mail::to($event->recipient->email)->queue(new DynamicEmail($template, $data));
     }
 }

@@ -10,6 +10,11 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
+/**
+ * Class SendNewListingLeadEmail
+ * Orchestrates the automated dispatch of lead notifications to listing owners,
+ * integrating dynamic template hydration and asynchronous mail queuing.
+ */
 class SendNewListingLeadEmail implements ShouldQueue
 {
     use InteractsWithQueue;

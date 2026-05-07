@@ -4,6 +4,11 @@ namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class EventRequest
+ * Manages the administrative validation protocols for platform events, coordinating
+ * temporal scheduling, attendance constraints, and multi-entity relationship mapping.
+ */
 class EventRequest extends FormRequest
 {
     /**
