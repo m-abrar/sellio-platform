@@ -41,56 +41,54 @@
 | `app\Http\Controllers\WebhookController.php` | **100** | ✅ Elite - Production Ready |
 | `app\Http\Controllers\Admin\ActivityLogController.php` | **75** | 🟠 Warning - Logic Debt |
 | `app\Http\Controllers\Admin\AddonController.php` | **85** | ✅ Good - Inline Validation |
-| `app\Http\Controllers\Admin\AdvertisementController.php` | **100** | ✅ Elite - Production Ready |
+| `app\Http\Controllers\Admin\AdvertisementController.php` | **95** | ✅ Elite - Logic Bloat |
 | `app\Http\Controllers\Admin\AmenityController.php` | **100** | ✅ Elite - Production Ready |
 | `app\Http\Controllers\Admin\AutoController.php` | **72** | 🟠 Warning - Fat Controller |
-| `app\Http\Controllers\Admin\AutoInquiryController.php` | **100** | ✅ Elite - Production Ready |
-| `app\Http\Controllers\Admin\BlogController.php` | **100** | ✅ Elite - Production Ready |
+| `app\Http\Controllers\Admin\AutoInquiryController.php` | **75** | 🟠 Warning - Scale Risk |
+| `app\Http\Controllers\Admin\BlogController.php` | **85** | ✅ Good - Service Extraction Opportunity |
 | `app\Http\Controllers\Admin\BookingController.php` | **75** | 🟠 Warning - Security Debt |
 | `app\Http\Controllers\Admin\BookingLineItemController.php` | **100** | ✅ Elite - Production Ready |
 | `app\Http\Controllers\Admin\BrandController.php` | **100** | ✅ Elite - Production Ready |
 | `app\Http\Controllers\Admin\CategoryController.php` | **95** | ✅ Elite - Service Based |
-| `app\Http\Controllers\Admin\ClassifiedController.php` | **100** | ✅ Elite - Production Ready |
-| `app\Http\Controllers\Admin\ClassifiedInquiryController.php` | **100** | ✅ Elite - Production Ready |
-| `app\Http\Controllers\Admin\ContentController.php` | **100** | ✅ Elite - Production Ready |
+| `app\Http\Controllers\Admin\ClassifiedController.php` | **95** | ✅ Elite - Service Extraction Opportunity |
+| `app\Http\Controllers\Admin\ClassifiedInquiryController.php` | **75** | 🟠 Warning - Scale Risk |
+| `app\Http\Controllers\Admin\ContentController.php` | **85** | ✅ Good - Performance/Validation Debt |
 | `app\Http\Controllers\Admin\DashboardController.php` | **100** | ✅ Elite - Production Ready |
 | `app\Http\Controllers\Admin\EmailTemplateController.php` | **100** | ✅ Elite - Production Ready |
-| `app\Http\Controllers\Admin\EventBookingController.php` | **100** | ✅ Elite - Production Ready |
+| `app\Http\Controllers\Admin\EventBookingController.php` | **75** | 🟠 Warning - Scale Risk |
 | `app\Http\Controllers\Admin\EventController.php` | **72** | 🟠 Warning - Fat Controller |
 | `app\Http\Controllers\Admin\FeatureController.php` | **100** | ✅ Elite - Production Ready |
-| `app\Http\Controllers\Admin\GalleryController.php` | **100** | ✅ Elite - Production Ready |
+| `app\Http\Controllers\Admin\GalleryController.php` | **95** | ✅ Elite - Logic Bloat |
 | `app\Http\Controllers\Admin\JobApplicationController.php` | **100** | ✅ Elite - Production Ready |
 | `app\Http\Controllers\Admin\JobController.php` | **72** | 🟠 Warning - Fat Controller |
-| `app\Http\Controllers\Admin\LineItemController.php` | **100** | ✅ Elite - Production Ready |
+| `app\Http\Controllers\Admin\LineItemController.php` | **95** | ✅ Elite - Logic Bloat |
 | `app\Http\Controllers\Admin\ListingController.php` | **100** | ✅ Elite - Production Ready |
 | `app\Http\Controllers\Admin\LocationController.php` | **95** | ✅ Elite - Service Based |
-| `app\Http\Controllers\Admin\MenuController.php` | **100** | ✅ Elite - Production Ready |
-| `app\Http\Controllers\Admin\NewsletterSubscriberController.php` | **100** | ✅ Elite - Production Ready |
-| `app\Http\Controllers\Admin\NotificationController.php` | **100** | ✅ Elite - Production Ready |
+| `app\Http\Controllers\Admin\MenuController.php` | **85** | ✅ Good - Performance/Logic Debt |
+| `app\Http\Controllers\Admin\NewsletterSubscriberController.php` | **70** | 🟠 Warning - Scale Risk |
+| `app\Http\Controllers\Admin\NotificationController.php` | **85** | ✅ Good - Logic Bloat |
 | `app\Http\Controllers\Admin\OrderController.php` | **70** | 🟠 Warning - Fat Controller |
-| `app\Http\Controllers\Admin\PageBuilderController.php` | **100** | ✅ Elite - Production Ready |
-| `app\Http\Controllers\Admin\PageController.php` | **100** | ✅ Elite - Production Ready |
+| `app\Http\Controllers\Admin\PageBuilderController.php` | **72** | 🟠 Warning - Massive Logic Bloat |
+| `app\Http\Controllers\Admin\PageController.php` | **95** | ✅ Elite - Production Ready |
 | `app\Http\Controllers\Admin\PaymentController.php` | **68** | 🟠 Warning - Rigid Polymorphism |
-| `app\Http\Controllers\Admin\PaymentGatewayController.php` | **100** | ✅ Elite - Production Ready |
+| `app\Http\Controllers\Admin\PaymentGatewayController.php` | **90** | ✅ Elite - Logic Bloat |
 | `app\Http\Controllers\Admin\PermissionController.php` | **100** | ✅ Elite - Security Hardened |
 | `app\Http\Controllers\Admin\PlanController.php` | **72** | 🟠 Warning - Logic Bloat |
 | `app\Http\Controllers\Admin\ProductController.php` | **70** | 🟠 Warning - Fat Controller |
 | `app\Http\Controllers\Admin\ProfileController.php` | **100** | ✅ Elite - Production Ready |
-| `app\Http\Controllers\Admin\PropertyBookingController.php` | **100** | ✅ Elite - Production Ready |
+| `app\Http\Controllers\Admin\PropertyBookingController.php` | **75** | 🟠 Warning - Scale Risk |
 | `app\Http\Controllers\Admin\PropertyController.php` | **72** | 🟠 Warning - Fat Controller |
 | `app\Http\Controllers\Admin\ReportController.php` | **68** | 🟠 Warning - Logic Bloat |
 | `app\Http\Controllers\Admin\RoleController.php` | **90** | ✅ Elite - Security Hardened |
-| `app\Http\Controllers\Admin\ServiceAppointmentController.php` | **100** | ✅ Elite - Production Ready |
+| `app\Http\Controllers\Admin\ServiceAppointmentController.php` | **75** | 🟠 Warning - Scale Risk |
 | `app\Http\Controllers\Admin\ServiceController.php` | **72** | 🟠 Warning - Fat Controller |
-| `app\Http\Controllers\Admin\ServiceQuoteController.php` | **100** | ✅ Elite - Production Ready |
+| `app\Http\Controllers\Admin\ServiceQuoteController.php` | **85** | ✅ Good - Scale Risk |
 | `app\Http\Controllers\Admin\SettingController.php` | **65** | 🟠 Warning - Logic Bloat |
 | `app\Http\Controllers\Admin\SubscriptionController.php` | **72** | 🟠 Warning - Renewal Logic Debt |
-| `app\Http\Controllers\Admin\SubscriptionQuotaController.php` | **85** | ✅ Good - Logic Bloat |
-| `app\Http\Controllers\Admin\SystemController.php` | **75** | 🟠 Warning - Security Debt |
+| `app\Http\Controllers\Admin\SubscriptionQuotaController.php` | **85** | ✅ Good - ServiceExtraction |
+| `app\Http\Controllers\Admin\SystemController.php` | **75** | 🟠 Warning - Policy Debt |
 | `app\Http\Controllers\Admin\TagController.php` | **100** | ✅ Elite - Production Ready |
 | `app\Http\Controllers\Admin\ThemeController.php` | **100** | ✅ Elite - Production Ready |
-| `app\Http\Controllers\Admin\TicketController.php` | **100** | ✅ Elite - Production Ready |
-| `app\Http\Controllers\Admin\TransactionController.php` | **100** | ✅ Elite - Production Ready |
 | `app\Http\Controllers\Admin\TypeController.php` | **100** | ✅ Elite - Production Ready |
 | `app\Http\Controllers\Admin\UserController.php` | **95** | ✅ Elite - Service Based |
 | `app\Http\Controllers\Admin\WithdrawalController.php` | **100** | ✅ Elite - Production Ready |
@@ -98,20 +96,20 @@
 | `app\Http\Controllers\Api\ApiThemeController.php` | **85** | ✅ Good - Resource Debt |
 | `app\Http\Controllers\Api\TicketController.php` | **78** | 🟠 Warning - Protocol Debt |
 | `app\Http\Controllers\Api\V1\ApiAmenityController.php` | **100** | ✅ Elite - Production Ready |
-| `app\Http\Controllers\Api\V1\ApiAutoController.php` | **100** | ✅ Elite - Production Ready |
+| `app\Http\Controllers\Api\V1\ApiAutoController.php` | **95** | ✅ Elite - Service Based |
 | `app\Http\Controllers\Api\V1\ApiBlogController.php` | **100** | ✅ Elite - Production Ready |
 | `app\Http\Controllers\Api\V1\ApiBrandController.php` | **100** | ✅ Elite - Production Ready |
-| `app\Http\Controllers\Api\V1\ApiCartController.php` | **100** | ✅ Elite - Production Ready |
+| `app\Http\Controllers\Api\V1\ApiCartController.php` | **95** | ✅ Elite - Service Based |
 | `app\Http\Controllers\Api\V1\ApiCategoryController.php` | **100** | ✅ Elite - Production Ready |
-| `app\Http\Controllers\Api\V1\ApiClassifiedController.php` | **100** | ✅ Elite - Production Ready |
-| `app\Http\Controllers\Api\V1\ApiEventController.php` | **100** | ✅ Elite - Production Ready |
+| `app\Http\Controllers\Api\V1\ApiClassifiedController.php` | **95** | ✅ Elite - Service Based |
+| `app\Http\Controllers\Api\V1\ApiEventController.php" | **95** | ✅ Elite - Service Based |
 | `app\Http\Controllers\Api\V1\ApiFeatureController.php` | **100** | ✅ Elite - Production Ready |
-| `app\Http\Controllers\Api\V1\ApiJobController.php` | **100** | ✅ Elite - Production Ready |
+| `app\Http\Controllers\Api\V1\ApiJobController.php` | **95** | ✅ Elite - Service Based |
 | `app\Http\Controllers\Api\V1\ApiLocationController.php` | **100** | ✅ Elite - Production Ready |
 | `app\Http\Controllers\Api\V1\ApiOrderController.php` | **100** | ✅ Elite - Production Ready |
-| `app\Http\Controllers\Api\V1\ApiProductController.php` | **92** | ✅ Elite - Security Debt |
-| `app\Http\Controllers\Api\V1\ApiPropertyController.php` | **98** | ✅ Elite - Production Ready |
-| `app\Http\Controllers\Api\V1\ApiServiceController.php` | **100** | ✅ Elite - Production Ready |
+| `app\Http\Controllers\Api\V1\ApiProductController.php` | **95** | ✅ Elite - Service Based |
+| `app\Http\Controllers\Api\V1\ApiPropertyController.php` | **100** | ✅ Elite - Production Ready |
+| `app\Http\Controllers\Api\V1\ApiServiceController.php` | **95** | ✅ Elite - Service Based |
 | `app\Http\Controllers\Api\V1\ApiTagController.php` | **100** | ✅ Elite - Production Ready |
 | `app\Http\Controllers\Api\V1\ApiTypeController.php` | **100** | ✅ Elite - Production Ready |
 | `app\Http\Controllers\Api\V1\Auth\AuthController.php` | **40** | 🔴 Critical - Privilege Escalation Risk |
@@ -1002,7 +1000,7 @@ LOW
 - **Service Layer**: Perfect delegation to `JobManagementService`.
 - **Security**: Robust ownership checks in `confirmation` (L90).
 
-## Controller Audit: app/Http/Controllers/CheckoutController.php
+## Controller Audit: app/Http/Controllers/Admin/PropertyController.php
 
 ### Controller Purpose
 Orchestrates the administrative lifecycle of the Real Estate vertical, managing complex relational data and seasonal pricing.
@@ -1577,7 +1575,789 @@ MEDIUM
 
 ---
 
+## Controller Audit: app/Http/Controllers/Admin/AdvertisementController.php
+
+### Controller Purpose
+Manages the high-fidelity advertisement lifecycle, including inventory control, geographical targeting, and orientation-specific placement.
+
+### Risk Level
+LOW
+
+### Problems Found
+
+### Architecture
+- **Logic Bloat**: Targeting normalization (city, zip, region, orientation) is handled directly in the controller (L74-77, L98-101). This logic belongs in a `TargetingService` or within the `AdvertisementRequest` to keep the controller lean.
+
+### Maintainability
+- **Hardcoded Pagination**: `index` uses a hardcoded `paginate(10)`.
+
+## Controller Audit: app/Http/Controllers/Admin/AmenityController.php
+
+### Controller Purpose
+Orchestrates the administrative management of amenities, providing a standardized interface for property-level features and facilities.
+
+### Risk Level
+LOW
+
+### Architecture
+- **Elite Standards**: Perfect implementation of the Service-Resource pattern. Correct delegation to `AmenityManagementService`.
+
+## Controller Audit: app/Http/Controllers/Admin/AutoInquiryController.php
+
+### Controller Purpose
+Orchestrates administrative lead management for the automotive vertical, including inquiry tracking, status updates, and relationship mapping.
+
+### Risk Level
+MEDIUM-HIGH
+
+### Problems Found
+
+### Performance & Scalability
+- **Unoptimized Selects**: `create` (L68-69) and `edit` (L109-110) methods fetch ALL users and autos from the database (`User::get()`, `Auto::get()`). This will cause a catastrophic failure in production environments with thousands of records.
+- **Solution Needed**: Use AJAX-based searchable dropdowns or paginated lookups.
+
+### Architecture
+- **Validation Debt**: Uses inline `request->validate()` instead of dedicated `FormRequests`.
+- **Missing Abstraction**: Lead management logic is trapped in the controller; should be moved to an `AutoInquiryService`.
+
+## Controller Audit: app/Http/Controllers/Admin/BlogController.php
+
+### Controller Purpose
+Orchestrates the administrative lifecycle for marketplace content (blog posts), managing categories, polymorphic tags, and Spatie-backed media collections.
+
+### Risk Level
+LOW-MEDIUM
+
+### Problems Found
+
+### Architecture
+- **Service Layer Missing**: Logic for slug generation, media handling, and tag synchronization (L81-93) is trapped in the controller.
+- **Validation**: Inline validation used instead of `BlogRequest`.
+
+## Controller Audit: app/Http/Controllers/Admin/BookingLineItemController.php
+
+### Controller Purpose
+Manages the individual financial and descriptive components (line items) associated with a parent booking record.
+
+### Risk Level
+LOW
+
+### Architecture
+- **Production Ready**: Clean implementation of related line item management.
+
+## Controller Audit: app/Http/Controllers/Admin/BrandController.php
+
+### Controller Purpose
+Orchestrates the administrative management of brands, coordinating listing-brand relationships and vertical-specific module assignments.
+
+### Risk Level
+LOW
+
+### Architecture
+- **Elite Standards**: Perfect implementation of the Service-Request pattern. Correct delegation to `BrandManagementService`.
+
+## Controller Audit: app/Http/Controllers/Admin/ClassifiedController.php
+
+### Controller Purpose
+Manages the general classifieds vertical of the marketplace, coordinating listing approval, inventory categorization, and inquiry lifecycle management.
+
+### Risk Level
+LOW-MEDIUM
+
+### Problems Found
+
+### Architecture
+- **Boolean Normalization**: Manual boolean conversion in `store`/`update` (L79-82).
+- **Service Layer Missing**: Listing replication and storage logic should be abstracted into a `ClassifiedService`.
+
+## Controller Audit: app/Http/Controllers/Admin/ClassifiedInquiryController.php
+
+### Controller Purpose
+Orchestrates administrative lead management for the general classifieds vertical, including inquiry tracking, status updates, and view-state persistence.
+
+### Risk Level
+MEDIUM-HIGH
+
+### Problems Found
+
+### Performance & Scalability
+- **Unoptimized Selects**: `index`, `create`, and `edit` methods fetch ALL users and classified ads from the database. This is a critical performance bottleneck for production-scale marketplaces.
+
+### Architecture
+- **Validation Debt**: Uses inline validation.
+- **Cache Management**: `show` method updates `viewed_at` directly on the model; should trigger a cache invalidation event if inquiries are cached.
+
+## Controller Audit: app/Http/Controllers/Admin/ContentController.php
+
+### Controller Purpose
+Orchestrates the administrative CMS interface, managing theme-specific content locations, bulk updates, and sophisticated section-based ordering.
+
+### Risk Level
+LOW-MEDIUM
+
+### Problems Found
+
+### Performance
+- **N+1 Bulk Update**: `bulkUpdate` (L116-129) performs individual database queries and saves within a loop. This should be refactored to a bulk update operation or a single multi-row query.
+
+### Security & Validation
+- **Validation Missing**: No formal validation for the `values` array in `bulkUpdate`.
+
+### Architecture
+- **Raw SQL Logic**: Complex ordering logic (L77-88) is hardcoded in the controller; should be moved to a Model Scope.
+
+## Controller Audit: app/Http/Controllers/Admin/DashboardController.php
+
+### Controller Purpose
+Serves as the primary analytical hub for the administrative backend, orchestrating global marketplace metrics, e-commerce performance, and pending inventory audits.
+
+### Risk Level
+LOW
+
+### Architecture
+- **Elite Standards**: Clean controller that acts solely as a coordinator, delegating all metric aggregation and analytical logic to the `DashboardService`.
+
+## Controller Audit: app/Http/Controllers/Admin/EmailTemplateController.php
+
+### Controller Purpose
+Manages the administrative oversight and customization of system-wide transactional email templates (e.g., Welcome emails, Order confirmations).
+
+### Risk Level
+LOW
+
+### Architecture
+- **Elite Standards**: Correctly enforces a restricted lifecycle. Manual creation and deletion are prohibited (L68-83) to protect system integrity, focusing strictly on content customization.
+
+## Controller Audit: app/Http/Controllers/Admin/EventBookingController.php
+
+### Controller Purpose
+Orchestrates the administrative lifecycle for event ticketing, managing reservations, financial statuses, and relationship mapping between users and occurrences.
+
+### Risk Level
+MEDIUM-HIGH
+
+### Problems Found
+
+### Performance & Scalability
+- **Unoptimized Selects**: `create` and `edit` methods fetch ALL users and events from the database. This will lead to memory exhaustion in production environments.
+
+### Architecture
+- **Validation Debt**: Uses inline validation.
+- **Logic Entrapment**: Unique booking reference generation logic (L79) is hardcoded in the controller; should be moved to a Service or Model Observer.
+
+## Controller Audit: app/Http/Controllers/Admin/FeatureController.php
+
+### Controller Purpose
+Orchestrates the administrative management of features, coordinating listing-feature relationships and vertical-specific module assignments.
+
+### Risk Level
+LOW
+
+### Architecture
+- **Elite Standards**: Perfect implementation of the Service-Request pattern. Correct delegation to `FeatureManagementService`.
+
+## Controller Audit: app/Http/Controllers/Admin/GalleryController.php
+
+### Controller Purpose
+Orchestrates global media inventory management, providing a centralized interface for viewing, uploading, and replacing assets across all Spatie-backed model collections.
+
+### Risk Level
+LOW-MEDIUM
+
+### Problems Found
+
+### Performance
+- **Dynamic Source Resolution**: `index` method (L52-54) performs a `distinct()->pluck()` on the entire media table to resolve sources. This will become extremely slow as the gallery grows.
+
+### Architecture
+- **Manual Atomicity**: Media replacement logic in `update` (L107-108) is handled manually; should be abstracted into a `MediaService` to ensure transaction safety.
+
+## Controller Audit: app/Http/Controllers/Admin/LineItemController.php
+
+### Controller Purpose
+Manages the global templates and configuration for financial line items (e.g., Taxes, Processing Fees, Discounts) that apply across marketplace transactions.
+
+### Risk Level
+LOW
+
+### Problems Found
+
+### Architecture
+- **Validation Debt**: Uses inline validation.
+- **Service Layer Missing**: Financial template management should be abstracted to ensure consistency with the `BookingLineItem` and `Order` modules.
+
+## Controller Audit: app/Http/Controllers/Admin/ListingController.php
+
+### Controller Purpose
+Orchestrates a unified administrative interface for heterogeneous marketplace listings, coordinating Properties, Autos, Events, Jobs, and Classifieds within a single lifecycle.
+
+### Risk Level
+LOW
+
+### Architecture
+- **Elite Standards**: Exceptional implementation of a unified discovery engine. The use of manual relationship hydration (L48-57) to solve union query limitations demonstrates deep Laravel expertise and commitment to performance.
+
+## Controller Audit: app/Http/Controllers/Admin/MenuController.php
+
+### Controller Purpose
+Orchestrates the administrative management of navigation structures, coordinating recursive menu items, theme-specific locations, and structural cache invalidation.
+
+### Risk Level
+LOW-MEDIUM
+
+### Problems Found
+
+### Performance
+- **Recursive Database Hits**: `processNestedItems` (L135-156) performs a `find()` query for every item in the tree. This N+1 recursive pattern will cause performance degradation for large menus.
+
+### Architecture
+- **Service Layer Missing**: The structural transformation and nested item processing logic should be migrated to the `MenuService`.
+
+## Controller Audit: app/Http/Controllers/Admin/NewsletterSubscriberController.php
+
+### Controller Purpose
+Orchestrates administrative audience management, coordinating subscriber verification, metadata updates, and high-volume data exportation.
+
+### Risk Level
+HIGH (Scalability)
+
+### Problems Found
+
+### Performance & Scalability
+- **Memory Exhaustion**: `export` method (L45) calls `NewsletterSubscriber::all()`. This is a critical failure vector. Exporting a production audience (e.g., 50k+ subscribers) will crash the server.
+- **Solution Needed**: Use `chunk()` or `cursor()` for streamed CSV generation.
+
+### Architecture
+- **Validation Debt**: Inline validation in `update`.
+
+## Controller Audit: app/Http/Controllers/Admin/NotificationController.php
+
+### Controller Purpose
+Orchestrates the administrative notification layer, translating polymorphic system alerts into semantic, human-readable UI components with localized tags.
+
+### Risk Level
+LOW
+
+### Problems Found
+
+### Architecture
+- **Logic Bloat**: Notification-to-UI mapping logic (L24-68) is trapped in the controller. This should be moved to a `NotificationResource` or a dedicated View Presenter.
+
+### Performance
+- **Memory Bloat**: `markAllRead` (L93) loads all unread notification objects into memory to mark them.
+- **Solution**: Use `Auth::user()->unreadNotifications()->update(['read_at' => now()])`.
+
+## Controller Audit: app/Http/Controllers/Admin/PageBuilderController.php
+
+### Controller Purpose
+Orchestrates the visual CMS lifecycle, managing the synchronization of HTML/CSS components and the atomic transformation of base64 assets into persistent media records.
+
+### Risk Level
+MEDIUM
+
+### Problems Found
+
+### Architecture
+- **Massive Logic Bloat**: The complex logic for base64 image extraction, regex-based HTML/CSS parsing, and temporary asset initialization (L94-182) is entirely trapped in the controller.
+- **Solution Needed**: This logic is highly reusable and should be extracted into a `VisualCmsService` or `AssetMigrationService`.
+
+## Controller Audit: app/Http/Controllers/Admin/PageController.php
+
+### Controller Purpose
+Orchestrates the administrative lifecycle of CMS pages, managing metadata, layout associations (Headers/Footers), and publishing states across the platform.
+
+### Risk Level
+LOW
+
+### Architecture
+- **Production Ready**: Clean implementation of the CMS page lifecycle. Minor logic debt due to inline validation.
+
+## Controller Audit: app/Http/Controllers/Admin/PaymentGatewayController.php
+
+### Controller Purpose
+Orchestrates the administrative configuration of financial gateways, managing dynamic credential blueprints and environment-specific (Sandbox/Live) security parameters.
+
+### Risk Level
+LOW-MEDIUM
+
+### Problems Found
+
+### Architecture
+- **Logic Bloat**: The complex logic for building dynamic validation rules based on gateway blueprints and the atomic merging of sandbox/live credentials (L63-90) is trapped in the controller.
+- **Solution Needed**: Extract this logic into a `PaymentGatewayService` to improve testability and keep the controller focused on coordination.
+
+## Controller Audit: app/Http/Controllers/Admin/ProfileController.php
+
+### Controller Purpose
+Orchestrates administrative identity management, coordinating profile updates and account security protocols for platform administrators.
+
+### Risk Level
+LOW
+
+### Architecture
+- **Elite Standards**: Concise and secure implementation of the administrative profile lifecycle. Correct use of the `Password` validation rule and secure password hashing.
+
+## Controller Audit: app/Http/Controllers/Admin/PropertyBookingController.php
+
+### Controller Purpose
+Orchestrates administrative reservations for the real estate vertical, managing listing availability, calendar visualization, and financial status reconciliation.
+
+### Risk Level
+MEDIUM-HIGH
+
+### Problems Found
+
+### Performance & Scalability
+- **Unoptimized Selects**: `index`, `create`, and `edit` methods fetch ALL users and properties from the database. This is a critical performance risk.
+
+### Architecture
+- **Logic Bloat**: Calendar event generation logic (L112-130) is hardcoded in the `edit` method; should be moved to a `PropertyBookingService` or a View Presenter.
+
+## Controller Audit: app/Http/Controllers/Admin/ServiceAppointmentController.php
+
+### Controller Purpose
+Orchestrates administrative scheduling for professional services, managing appointment lifecycle, provider coordination, and read-receipt tracking.
+
+### Risk Level
+MEDIUM-HIGH
+
+### Problems Found
+
+### Performance & Scalability
+- **Unoptimized Selects**: `index`, `create`, and `edit` methods fetch ALL users and services from the database.
+
+### Architecture
+- **Validation Debt**: Uses inline validation.
+- **Cache Management**: `show` method updates `viewed_at` directly on the model (L96-98).
+
+## Controller Audit: app/Http/Controllers/Admin/ServiceQuoteController.php
+
+### Controller Purpose
+Orchestrates administrative oversight for professional service inquiries, managing quoting requirements, provider coordination, and engagement tracking.
+
+### Risk Level
+LOW-MEDIUM
+
+### Problems Found
+
+### Performance & Scalability
+- **Unoptimized Selects**: `index` method (L45) fetches ALL services from the database to populate filter dropdowns.
+
+### Architecture
+- **Cache Management**: `show` method updates `viewed_at` directly on the model (L61).
+
+## Controller Audit: app/Http/Controllers/Admin/TagController.php
+
+### Controller Purpose
+Orchestrates the administrative taxonomy of tags, coordinating cross-module polymorphic relationships and semantic metadata assignments.
+
+### Risk Level
+LOW
+
+### Architecture
+- **Elite Standards**: Perfect implementation of the Service-Request pattern. Correct delegation to `TagManagementService`.
+
+## Controller Audit: app/Http/Controllers/Admin/ThemeController.php
+
+### Controller Purpose
+Orchestrates the administrative visual identity, coordinating theme activation, vertical-specific configurations, and global layout synchronization.
+
+### Risk Level
+LOW
+
+### Architecture
+- **Elite Standards**: Robust implementation featuring Policy-based authorization, transaction-safe activation switches (L97-112), and effective global cache invalidation.
+
+## Controller Audit: app/Http/Controllers/Admin/TicketController.php
+
+### Controller Purpose
+Orchestrates administrative support infrastructure, coordinating threaded communications, ticket status transitions, and high-volume bulk governance.
+
+### Risk Level
+LOW
+
+### Architecture
+- **Elite Standards**: Perfect implementation of the Service-Request pattern. Correct handling of bulk operations (L114-126) and read-receipt tracking through a dedicated `TicketManagementService`.
+
+## Controller Audit: app/Http/Controllers/Admin/TransactionController.php
+
+### Controller Purpose
+Orchestrates administrative financial auditing, coordinating ledger entries, status reconciliation, and the management of proof-of-payment assets.
+
+### Risk Level
+MEDIUM
+
+### Problems Found
+
+### Performance & Scalability
+- **Unoptimized Selects**: `create` and `edit` methods (L40, L86) fetch ALL bookings from the database. For a production ledger, this is a catastrophic performance risk.
+
+### Architecture
+- **Logic Bloat**: Multi-file media synchronization and archiving logic (L68-72, L115-120) is trapped in the controller. This should be moved to a `FinancialAuditService`.
+
+## Controller Audit: app/Http/Controllers/Admin/UserController.php
+
+### Controller Purpose
+Orchestrates the administrative lifecycle for platform identities, managing roles, permissions, and specialized profiles for Buyers and Partners.
+
+### Risk Level
+LOW
+
+### Architecture
+- **Elite Standards**: Exceptional delegation to `UserManagementService`. Correct implementation of security protocols for Super Admin protection (L137-139, L155-157).
+- **Scale Risk**: `create` and `edit` methods fetch ALL roles (L97, L123). While usually acceptable for roles, it should be noted if the platform uses highly granular dynamic permissions.
+
+## Controller Audit: app/Http/Controllers/Admin/WithdrawalController.php
+
+### Controller Purpose
+Orchestrates the administrative payout lifecycle, managing fund reservations, bank transfer approvals, and automated wallet reconciliation for rejected requests.
+
+### Risk Level
+LOW-MEDIUM
+
+### Problems Found
+
+### Architecture
+- **Logic Bloat**: The critical business logic for wallet reconciliation, fund reservation verification, and refund orchestration (L93-109, L142-158) is trapped within the controller.
+- **Security Debt**: Transactional financial logic should be moved to a `WithdrawalService` or `WalletService` to ensure atomicity and consistency across all payout modules.
+
+## Controller Audit: app/Http/Controllers/Admin/TypeController.php
+
+### Controller Purpose
+Orchestrates administrative listing types, coordinating cross-module taxonomies and functional visibility settings across platform verticals.
+
+### Risk Level
+LOW
+
+### Architecture
+- **Elite Standards**: Perfect implementation of the Service-Request pattern. Correct delegation to `TypeManagementService`.
+
+## Controller Audit: app/Http/Controllers/Api/V1/ApiAmenityController.php
+
+### Controller Purpose
+Orchestrates the API-driven discovery of platform amenities, providing high-performance retrieval and transformation of amenity metadata.
+
+### Risk Level
+LOW
+
+### Architecture
+- **Elite Standards**: Perfect implementation of the Service-Resource pattern. Correct use of `AmenityResource` for data transformation and `AmenityService` for filtering logic.
+
+## Controller Audit: app/Http/Controllers/Api/V1/ApiAutoController.php
+
+### Controller Purpose
+Manages the high-fidelity discovery and retrieval of automotive listings, integrating complex filtering, sidebar metadata, and relationship mapping.
+
+### Risk Level
+LOW
+
+### Architecture
+- **Elite Standards**: Exceptional use of `additional()` metadata to inject sidebar filters alongside the main resource collection.
+- **Minor Debt**: `show` method contains manual query logic (L60-63) that should ideally be abstracted into the `AutoService`.
+
+## Controller Audit: app/Http/Controllers/Api/V1/ApiBlogController.php
+
+### Controller Purpose
+Orchestrates the API-driven content delivery for platform blogs, managing faceted search, view logging, and related content discovery.
+
+### Risk Level
+LOW
+
+### Architecture
+- **Elite Standards**: Perfect Service-Request-Resource implementation. Successfully delegates analytical logging (L60) and related data discovery to the `BlogService`.
+
+## Controller Audit: app/Http/Controllers/Api/V1/ApiBrandController.php
+
+### Controller Purpose
+Orchestrates the API-driven discovery of platform brands, providing centralized access to brand identity and categorical metrics.
+
+### Risk Level
+LOW
+
+### Architecture
+- **Elite Standards**: Clean implementation using the Service-Resource pattern. Demonstrates effective use of custom stats injection (L62) via the `BrandService`.
+
+## Controller Audit: app/Http/Controllers/Api/V1/ApiCartController.php
+
+### Controller Purpose
+Manages the API lifecycle for the platform's e-commerce shopping cart, coordinating item additions, quantity updates, and relationship-heavy eager loading.
+
+### Risk Level
+LOW
+
+### Architecture
+- **Elite Standards**: Robust implementation leveraging the `CartService` for session/identity-aware cart management. 
+- **Minor Debt**: Uses inline validation in `add` and `update` methods instead of specialized `FormRequest` classes.
+
+## Controller Audit: app/Http/Controllers/Api/V1/ApiCategoryController.php
+
+### Controller Purpose
+Orchestrates the API-driven delivery of the platform's categorical hierarchy, providing tree-structure retrieval, breadcrumb mapping, and relationship metadata.
+
+### Risk Level
+LOW
+
+### Architecture
+- **Elite Standards**: Perfect implementation of recursive tree-structure delivery and breadcrumb generation via the `CategoryService`.
+
+## Controller Audit: app/Http/Controllers/Api/V1/ApiClassifiedController.php
+
+### Controller Purpose
+Orchestrates the API-driven discovery and retrieval of classified marketplace listings, integrating faceted search, sidebar filtering, and related entity mapping.
+
+### Risk Level
+LOW
+
+### Architecture
+- **Elite Standards**: Effective use of the `ClassifiedManagementService` for search and related item discovery.
+- **Minor Debt**: Sidebar metadata fetching (L48-51) uses `get()`, which poses a minor scalability risk if taxonomy size grows significantly.
+
+## Controller Audit: app/Http/Controllers/Api/V1/ApiEventController.php
+
+### Controller Purpose
+Orchestrates the API-driven discovery and lifecycle of platform events, integrating temporal search, ticket availability, and relationship mapping.
+
+### Risk Level
+LOW
+
+### Architecture
+- **Elite Standards**: Exceptional implementation of ticket data formatting (L73) and temporal occurrence eager-loading (L65-69).
+- **Minor Debt**: Faceted search metadata (L48-51) uses `get()`.
+
+## Controller Audit: app/Http/Controllers/Api/V1/ApiFeatureController.php
+
+### Controller Purpose
+Orchestrates the API-driven discovery of platform features and attributes, providing high-performance retrieval and transformation of entity metadata.
+
+### Risk Level
+LOW
+
+### Architecture
+- **Elite Standards**: Perfect implementation of the Service-Resource pattern.
+
+## Controller Audit: app/Http/Controllers/Api/V1/ApiJobController.php
+
+### Controller Purpose
+Orchestrates the API-driven discovery and retrieval of recruitment listings, integrating complex filtering, employment taxonomy, and related entity mapping.
+
+### Risk Level
+LOW
+
+### Architecture
+- **Elite Standards**: Clean implementation leveraging the `JobManagementService` for experience levels and workplace types (L52-53).
+- **Minor Debt**: Faceted search metadata (L48-51) uses `get()`.
+
+## Controller Audit: app/Http/Controllers/Api/V1/ApiLocationController.php
+
+### Controller Purpose
+Orchestrates the API-driven discovery of platform locations, providing geo-spatial retrieval, regional metrics, and high-performance metadata transformation.
+
+### Risk Level
+LOW
+
+### Architecture
+- **Elite Standards**: Perfect implementation of the Service-Resource pattern. Demonstrates effective use of custom region stats (L63) via the `LocationService`.
+
+## Controller Audit: app/Http/Controllers/Api/V1/ApiOrderController.php
+
+### Controller Purpose
+Orchestrates the API-driven lifecycle of marketplace orders, managing transactional processing, order history retrieval, and checkout coordination.
+
+### Risk Level
+LOW
+
+### Architecture
+- **Elite Standards**: Exceptional implementation using the Service-Resource pattern. Correct delegation to `CheckoutService` (L87) for complex transactional logic and secure data transformation via `OrderResource`.
+
+## Controller Audit: app/Http/Controllers/Api/V1/ApiProductController.php
+
+### Controller Purpose
+Orchestrates the API-driven discovery and lifecycle of marketplace products, integrating complex variation pricing, media management, and faceted search.
+
+### Risk Level
+LOW
+
+### Architecture
+- **Elite Standards**: Robust implementation leveraging the `ProductService` for search and detail data.
+- **Minor Debt**: Detailed media synchronization logic in `handleMedia` (L130-160) should ideally be abstracted into the service layer to keep the controller slim.
+
+## Controller Audit: app/Http/Controllers/Api/V1/ApiPropertyController.php
+
+### Controller Purpose
+Orchestrates the API-driven discovery and lifecycle of real estate listings, integrating complex lodging calculations, amenity mapping, and faceted search.
+
+### Risk Level
+LOW
+
+### Architecture
+- **Elite Standards**: Perfect implementation of the Service-Resource pattern. Demonstrates sophisticated use of the `PropertyService` for lodging calculations (L89) and view logging.
+
+## Controller Audit: app/Http/Controllers/Api/V1/ApiServiceController.php
+
+### Controller Purpose
+Orchestrates the API-driven discovery and retrieval of professional service offerings, integrating expertise metrics, faceted search, and transactional billing models.
+
+### Risk Level
+LOW
+
+### Architecture
+- **Elite Standards**: Clean implementation leveraging the `ServiceManagementService`.
+- **Minor Debt**: Sidebar metadata fetching (L49-53) poses a minor scalability risk.
+
+## Controller Audit: app/Http/Controllers/Api/V1/ApiTagController.php
+
+### Controller Purpose
+Orchestrates the API-driven discovery of platform tags, providing high-performance retrieval and transformation of polymorphic metadata.
+
+### Risk Level
+LOW
+
+### Architecture
+- **Elite Standards**: Perfect implementation of the Service-Resource pattern.
+
+## Controller Audit: app/Http/Controllers/Api/V1/ApiTypeController.php
+
+### Controller Purpose
+Orchestrates the API-driven discovery of platform entity types, providing high-performance retrieval and transformation of classification metadata.
+
+### Risk Level
+LOW
+
+### Architecture
+- **Elite Standards**: Perfect implementation of the Service-Resource pattern. Demonstrates effective use of custom relationship counts (L55) via the `TypeService`.
+
+## Controller Audit: app/Http/Controllers/Api/ApiApplicationController.php
+
+### Controller Purpose
+Provides high-level metadata and configuration discovery for the platform's vertical-specific application instances.
+
+### Risk Level
+LOW
+
+### Problems Found
+
+### Architecture
+- **Resource Debt**: Returns raw model data directly (L41, L65) instead of utilizing a dedicated `ApplicationResource`. This limits the ability to transform data for client consumption.
+- **Protocol Debt**: Uses inline JSON responses instead of a centralized API response trait.
+
+## Controller Audit: app/Http/Controllers/Api/ApiThemeController.php
+
+### Controller Purpose
+Manages the discovery and retrieval of active visual themes and associated global application settings.
+
+### Risk Level
+LOW
+
+### Problems Found
+
+### Architecture
+- **Resource Debt**: Missing `ThemeResource`. Returning raw model arrays (L43) is not production grade for public-facing APIs.
+- **Performance Debt**: Fetches settings in a separate query (L38) without eager-loading or caching the resulting configuration.
+
+## Controller Audit: app/Http/Controllers/Api/TicketController.php
+
+### Controller Purpose
+Orchestrates the public-facing API for support ticketing, allowing users to initialize threads and manage communications.
+
+### Risk Level
+LOW-MEDIUM
+
+### Problems Found
+
+### Security
+- **Authorization Debt**: Uses manual ID comparison (L51, L65) instead of Laravel Policies (`$this->authorize('update', $ticket)`).
+
+### Architecture
+- **Protocol Debt**: Uses a non-standard HTTP status code `210` (L42). 
+- **Logic Bloat**: Creation and reply logic is trapped in the controller. This should be offloaded to a `TicketService` to match the administrative implementation.
+
+## Controller Audit: app/Http/Controllers/Api/V1/Auth/AuthController.php
+
+### Controller Purpose
+Orchestrates the public-facing API for platform authentication, managing user registration, login, and token lifecycle.
+
+### Risk Level
+CRITICAL
+
+### Problems Found
+
+### Security
+- **Privilege Escalation**: `register` method (L83) accepts the `role` parameter directly from the request and passes it to Spatie's `assignRole()`. This allows any guest to register as a 'super-admin' or other privileged role.
+
+### Architecture
+- **Logic Bloat**: Manual array mapping for user data (L32-37, L90-95) instead of using a `UserResource`.
+
+## Controller Audit: app/Http/Controllers/Api/V1/Auth/PasswordResetController.php
+
+### Controller Purpose
+Manages the API-driven password recovery lifecycle, leveraging Laravel's native broker for secure token generation and validation.
+
+### Risk Level
+LOW
+
+### Architecture
+- **Elite Standards**: Perfect implementation using Laravel's core authentication infrastructure. Correct use of `FormRequest` for validation.
+
+## Controller Audit: app/Http/Controllers/Api/V1/Auth/ProfileController.php
+
+### Controller Purpose
+Provides public-facing API endpoints for managing the authenticated user's profile and security credentials.
+
+### Risk Level
+LOW
+
+### Problems Found
+
+### Architecture
+- **Resource Debt**: Returns manual arrays for user profile data (L17-25, L38-47) instead of using a `UserResource`. This creates maintenance debt and inconsistent data structures.
+
+## Controller Audit: app/Http/Controllers/Api/V1/Dashboard/Partner/AnalyticsController.php
+
+### Controller Purpose
+Orchestrates the platform's primary analytical engine for partners, calculating revenue, engagement metrics, and temporal performance data.
+
+### Risk Level
+CRITICAL
+
+### Problems Found
+
+### Performance & Scalability
+- **N+1 Performance Killer**: `getDetailedListingPerformance` method (L361-429) executes multiple database queries (ActivityLog, Bookings, Revenue sums) inside nested loops. For a partner with dozens of listings, this will trigger hundreds of database calls per request.
+- **Memory Exhaustion**: Fetches all listings (L58-64) without pagination in the `index` method to build the filter dropdown.
+
+### Architecture
+- **Massive Logic Bloat**: The entire complex analytical engine (434 lines) is trapped within the controller. It handles everything from chart data generation (L93-166) to revenue orchestration (L256-300). This logic is non-testable and violates every SOLID principle.
+
+## Controller Audit: app/Http/Controllers/Api/V1/Dashboard/Partner/DashboardController.php
+
+### Controller Purpose
+Aggregates multi-source listing and performance data to provide a unified overview for partners.
+
+### Risk Level
+LOW-MEDIUM
+
+### Problems Found
+
+### Architecture
+- **Trait Debt**: Relies on heavy traits (`Listings`, `DashboardDataPreparation`) to hide massive data aggregation logic. This is a "fat controller" anti-pattern in disguise and should be migrated to a dedicated `DashboardService`.
+- **Manual Collapsing**: Manually executes and collapses 6 separate listing queries (L65-72) instead of using a unified listing union or optimized eager loading.
+
+---
+
 # Overall Controllers Audit Summary
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## Security Score: 3/10
 ## Architecture Score: 7/10
