@@ -1,3 +1,16 @@
+{{--
+    Administrative Content: Article Registry
+    
+    This view provides the authoritative command center for the editorial 
+    desk. It aggregates article information, category associations, 
+    view statistics, and publication status, facilitating efficient 
+    content auditing and moderation through a responsive data 
+    architecture.
+    
+    @extends adminlte::page
+    @context Blog Module Management
+    @variables Paginator $blogs Paginated collection of Blog model instances.
+--}}
 @extends('adminlte::page')
 
 @section('title', 'Blog Management')

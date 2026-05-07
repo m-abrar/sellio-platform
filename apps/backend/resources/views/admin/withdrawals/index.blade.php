@@ -1,3 +1,17 @@
+{{--
+    Administrative Financial Module: Payout Management Registry
+    
+    This view provides the authoritative command center for processing 
+    partner fund withdrawals. It orchestrates the lifecycle of payout 
+    requests (pending, approved, rejected), integrates destination bank 
+    intelligence, and facilitates secure fiscal settlements with 
+    marketplace partners while maintaining a rigorous audit log.
+    
+    @extends adminlte::page
+    @context Financial Management
+    @variables Collection $withdrawals Collection of Withdrawal model instances.
+    @variables String $filter_status The active lifecycle filter status.
+--}}
 @extends('adminlte::page')
 
 @section('title', 'Payout Management | Financials')

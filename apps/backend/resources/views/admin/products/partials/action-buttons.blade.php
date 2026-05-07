@@ -1,3 +1,15 @@
+{{--
+    Administrative E-Commerce Partial: Lifecycle Action Interface
+    
+    This component provides the primary interaction gateway for product 
+    listing persistence and disposal. It features high-fidelity visual 
+    indicators for status transitions (publish/save), and facilitates 
+    destructive operations (delete) through a premium, sticky interface 
+    designed for rapid administrative workflows.
+    
+    @context E-Commerce Module Management
+    @variables Product $product The product model instance being managed.
+--}}
 <div class="card card-premium sticky-top shadow-premium overflow-hidden" style="top: 20px;">
     <div class="card-header border-0 bg-white py-3 px-4">
         <h3 class="card-title font-weight-bold text-dark text-uppercase small letter-spacing-1 mb-0">

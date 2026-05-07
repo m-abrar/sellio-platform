@@ -1,3 +1,15 @@
+{{--
+    Administrative Taxonomy Partial: Lifecycle Action Interface
+    
+    This component provides the primary interaction gateway for category 
+    persistence and status management. It orchestrates publication 
+    toggles, primary synchronization operations, and facilitates 
+    cloning or destructive disposals through a unified operational 
+    control panel.
+    
+    @context Taxonomy Management
+    @variables Category $category The category model instance.
+--}}
 <div class="card card-premium sticky-top overflow-hidden" style="top: 20px;">
     <div class="card-header bg-dark d-flex align-items-center py-3 px-4 border-0" style="background: #0f172a !important; border-bottom: 3px solid var(--primary) !important;">
         <h3 class="card-title text-white mb-0 font-weight-bold smallest text-uppercase letter-spacing-1">

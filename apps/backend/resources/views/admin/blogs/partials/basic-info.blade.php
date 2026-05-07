@@ -1,3 +1,18 @@
+{{--
+    Administrative Content Partial: Core Editorial Parameters
+    
+    This component encapsulates the foundational attributes of an 
+    article, including title orchestration, permalink generation, 
+    taxonomy association (categories and tags), and the primary 
+    content payload. It ensures data consistency and structural 
+    integrity for the editorial suite.
+    
+    @context Blog Module Management
+    @variables Blog $blog The blog model instance.
+    @variables Collection $categories Editorial categories.
+    @variables Collection $tags Editorial tags.
+    @variables Array $selectedTags Currently associated tags.
+--}}
 <div class="card border-0 shadow-premium rounded-xl overflow-hidden mb-4">
     <div class="card-header border-0 bg-white py-4 px-4">
         <h3 class="card-title-main">

@@ -1,3 +1,14 @@
+{{--
+    Administrative Content Widget: Static Testimonial
+    
+    This component registers a professional social proof block within 
+    the Page Builder ecosystem. It orchestrates individual 
+    testimonials, including principal identities (name), content 
+    manifests (text), and visual avatars, designed for rapid 
+    deployment of community feedback fragments.
+    
+    @context Page Builder Module
+--}}
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         if (typeof grapesjs !== "undefined") {

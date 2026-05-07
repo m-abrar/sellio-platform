@@ -1,3 +1,17 @@
+{{--
+    Administrative Taxonomy: Geographical Location Configuration
+    
+    This view serves as the primary interface for managing geographical 
+    entities and regional operation hubs. It orchestrates labeling, 
+    URI identification, spatial coordinates (latitude/longitude), 
+    visual identities (cover images), and cross-module availability 
+    (properties, products, etc.), ensuring a consistent spatial 
+    taxonomy across all marketplace verticals.
+    
+    @extends adminlte::page
+    @context Taxonomy Management
+    @variables Location $location The location model instance.
+--}}
 @extends('adminlte::page')
 
 @section('title', ($location->exists ? 'Edit' : 'Add') . ' Location')

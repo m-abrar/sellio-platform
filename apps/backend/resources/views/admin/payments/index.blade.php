@@ -1,3 +1,16 @@
+{{--
+    Administrative Financial Module: Transaction Ledger Registry
+    
+    This view provides the authoritative command center for the 
+    platform's financial cashflow. It aggregates transaction records, 
+    settlement statuses, gateway protocols, and fiscal values, 
+    facilitating efficient auditing and moderation of the 
+    marketplace's revenue stream.
+    
+    @extends adminlte::page
+    @context Financial Management
+    @variables Collection $payments Collection of Payment model instances.
+--}}
 @extends('adminlte::page')
 
 @section('title', __('Payments & Revenue | Financial Intelligence'))

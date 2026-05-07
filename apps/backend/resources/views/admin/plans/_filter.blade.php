@@ -1,4 +1,14 @@
-{{-- Filter Protocol --}}
+{{--
+    Administrative Financial Module: Subscription Plan Filter
+    
+    This component provides a granular query interface for the platform's 
+    subscription tier registry. It orchestrates the filtration of plan 
+    records based on tier identification and billing cycle (monthly/annual), 
+    ensuring efficient auditing and moderation of the platform's 
+    monetization strategy.
+    
+    @context Financial Management - Plan Orchestration
+--}}
 <div class="card registry-card-premium registry-filter-card select2-premium mb-4">
     <div class="card-body">
         <form method="GET" action="{{ route('admin.plans.index') }}">

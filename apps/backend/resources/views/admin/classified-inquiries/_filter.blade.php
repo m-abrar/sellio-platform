@@ -1,4 +1,16 @@
-{{-- Filter Protocol --}}
+{{--
+    Administrative Classifieds: Inquiry Filter Protocol
+    
+    This component provides a streamlined search and filtering interface 
+    for the classified ad inquiry registry. It enables precise auditing 
+    across target assets, market categories, and lead lifecycle states 
+    (pending, viewed, contacted, replied), ensuring efficient lead 
+    management and conversion tracking.
+    
+    @context Classified Module Management
+    @variables Collection $classifieds Target classified listings.
+    @variables Collection $categories Market sector categories.
+--}}
 <div class="card registry-card-premium registry-filter-card mb-4">
     <div class="card-body">
         <form method="GET" action="{{ url()->current() }}">

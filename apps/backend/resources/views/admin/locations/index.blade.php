@@ -1,3 +1,17 @@
+{{--
+    Administrative Taxonomy: Geographical Registry
+    
+    This view provides the authoritative command center for managing 
+    regional operation hubs and geographical service boundaries. It 
+    aggregates area identities, regional metadata (state, country), 
+    cross-module applicability, and publication status, facilitating 
+    efficient auditing and moderation of the platform's spatial 
+    taxonomy registry.
+    
+    @extends adminlte::page
+    @context Taxonomy Management
+    @variables Collection $locations Collection of Location model instances.
+--}}
 @extends('adminlte::page')
 
 @section('title', 'Locations')

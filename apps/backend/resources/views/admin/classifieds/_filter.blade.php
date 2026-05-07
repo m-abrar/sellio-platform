@@ -1,4 +1,14 @@
-{{-- Classified Filter Protocol --}}
+{{--
+    Administrative Classifieds: Asset Filter Protocol
+    
+    This component provides a streamlined search and filtering interface 
+    for the community marketplace catalog. It enables precise auditing 
+    across advertisement titles and vertical categories, ensuring 
+    efficient content moderation and catalog oversight.
+    
+    @context Classified Module Management
+    @variables Collection $categories Market vertical categories.
+--}}
 <div class="card registry-card-premium registry-filter-card mb-4">
     <div class="card-body">
         <form action="{{ route('admin.classifieds.index') }}" method="GET">

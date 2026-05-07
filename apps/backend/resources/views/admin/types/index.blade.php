@@ -1,3 +1,15 @@
+{{--
+    Administrative Taxonomy: Listing Type Registry
+    
+    This view provides the authoritative command center for managing high-level 
+    listing classifications. It aggregates type identities, module 
+    utilization, and publication status, facilitating efficient auditing 
+    and moderation of the platform's specialized classification taxonomy.
+    
+    @extends adminlte::page
+    @context Taxonomy Management
+    @variables Collection $types Collection of Type model instances.
+--}}
 @extends('adminlte::page')
 
 @section('title', 'Listing Types')

@@ -1,3 +1,16 @@
+{{--
+    Administrative Services: Global Inventory Registry
+    
+    This view provides the authoritative command center for the 
+    professional services marketplace. It aggregates service focus 
+    areas, vertical classifications, and financial rate configurations 
+    for all service assets. It facilitates efficient lifecycle tracking 
+    and catalog oversight through a responsive data architecture.
+    
+    @extends adminlte::page
+    @context Service Inventory Management
+    @variables Paginator $services Paginated collection of Service model instances.
+--}}
 @extends('adminlte::page')
 
 @section('title', 'Services')

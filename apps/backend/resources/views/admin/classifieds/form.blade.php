@@ -1,3 +1,18 @@
+{{--
+    Administrative Classifieds: Asset Configuration
+    
+    This view serves as the authoritative interface for managing 
+    community marketplace advertisements. It orchestrates complex data 
+    structures including general information, technical specifications, 
+    condition assessments, pricing models (sale vs rent), and 
+    multi-media gallery collections.
+    
+    @extends adminlte::page
+    @context Classified Module Management
+    @variables Classified $classified The classified ad model instance.
+    @variables Collection $categories Market vertical categories.
+    @variables Collection $locations Regional deployment hubs.
+--}}
 @extends('adminlte::page')
 
 @section('title', ($classified->exists ? 'Edit' : 'Create') . ' Ad')
@@ -350,25 +365,6 @@
 @endif
 
 @include('admin._partials._toggle-card-css')
-
-@push('js')
-<script>
-    $(document).ready(function () { 
-        $('.select2').select2({ theme: 'bootstrap4', width: '100%' }); 
-
-        const titleInput = $('#title');
-        const slugInput = $('#slug');
-
-        titleInput.on('input', function () {
-            if(!slugInput.data('edited')){
-                let slug = $(this).val().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-                slugInput.val(slug);
-            }
-        });
-
-        slugInput.on('change', function() { $(this).data('edited', true); });
-    });
-</script>
 @endpush
 
 @if($classified->exists)
@@ -399,5 +395,3 @@
         }
     </script>
 @endif
-
-@include('admin._partials._toggle-card-css')

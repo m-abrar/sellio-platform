@@ -1,3 +1,15 @@
+{{--
+    Administrative Financial Partial: Resource Management Interface
+    
+    This component provides the primary interaction gateway for 
+    subscription quota persistence and usage monitoring. It orchestrates 
+    the commitment of resource limit overrides and provides real-time 
+    subscriber context, ensuring consistent operational control 
+    within the sidebar vertical.
+    
+    @context Financial Management
+    @variables SubscriptionQuota $subscriptionQuota The quota model instance.
+--}}
 <div class="card shadow-sm border-0 rounded-lg card-actions mb-4">
     <div class="card-header bg-white border-bottom d-flex justify-content-between align-items-center">
         <h5 class="mb-0">

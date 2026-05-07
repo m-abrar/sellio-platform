@@ -1,4 +1,14 @@
-{{-- Filter Protocol --}}
+{{--
+    Administrative Financial Module: Payment Transaction Filter
+    
+    This component provides a granular query interface for the financial 
+    ledger. It orchestrates the filtration of transaction records based 
+    on client identity, settlement status (pending, completed, etc.), 
+    and financial protocol (gateways), ensuring efficient auditing 
+    and moderation of the platform's revenue streams.
+    
+    @context Financial Management - Ledger Auditing
+--}}
 <div class="card registry-card-premium registry-filter-card select2-premium mb-4">
     <div class="card-body">
         <form method="GET" action="{{ route('admin.payments.index') }}">

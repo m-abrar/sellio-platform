@@ -1,3 +1,19 @@
+{{--
+    Administrative Financial Module: Payment Provider Configuration
+    
+    This view serves as the primary command center for individual payment 
+    gateway management. It orchestrates environment toggling (live/sandbox), 
+    activation status, and complex credential persistence across multiple 
+    deployment contexts, ensuring secure and reliable financial handshakes 
+    between the platform and third-party processors.
+    
+    @extends adminlte::page
+    @context Financial Management
+    @variables PaymentGateway $gateway The payment gateway model instance.
+    @variables Array $liveConfig Decrypted production credentials.
+    @variables Array $sandboxConfig Decrypted testing credentials.
+    @variables Collection $blueprints Schema definitions for gateway inputs.
+--}}
 @extends('adminlte::page')
 
 @section('title', 'Configure ' . $gateway->title)

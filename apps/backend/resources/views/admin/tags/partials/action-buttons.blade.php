@@ -1,3 +1,15 @@
+{{--
+    Administrative Taxonomy Partial: Lifecycle Action Interface
+    
+    This component provides the primary interaction gateway for tag 
+    persistence and status management. It orchestrates publication 
+    toggles, primary update/creation operations, and facilitates 
+    cloning or destructive disposals through a unified operational 
+    control panel.
+    
+    @context Taxonomy Management
+    @variables Tag $tag The tag model instance.
+--}}
 <div class="card shadow-sm border-0 sticky-top" style="top: 20px;">
     <div class="card-header bg-dark d-flex align-items-center py-3" style="border-bottom: 3px solid var(--brand-primary) !important;">
         <h3 class="card-title text-white mb-0 font-weight-bold">

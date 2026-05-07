@@ -1,3 +1,17 @@
+{{--
+    Administrative Taxonomy: Amenity Configuration
+    
+    This view serves as the primary interface for managing amenity 
+    classifications within the platform. It orchestrates labeling, 
+    URI identification, descriptive metadata, visual identity (icons), 
+    and cross-module applicability (properties, products, etc.), 
+    ensuring a consistent classification system across all marketplace 
+    verticals.
+    
+    @extends adminlte::page
+    @context Taxonomy Management
+    @variables Amenity $amenity The amenity model instance.
+--}}
 @extends('adminlte::page')
 
 @section('title', ($amenity->exists ? 'Modify' : 'New') . ' Amenity')

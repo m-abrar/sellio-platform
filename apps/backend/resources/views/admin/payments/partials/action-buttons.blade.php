@@ -1,3 +1,16 @@
+{{--
+    Administrative Financial Partial: Lifecycle Action Interface
+    
+    This component provides the primary interaction gateway for 
+    transaction persistence and lifecycle management. It orchestrates 
+    ledger commitment, voiding operations, and provides real-time 
+    financial context (revenue aggregation) for the associated 
+    payable entity, ensuring consistent operational control in the 
+    sidebar vertical.
+    
+    @context Financial Management
+    @variables Payment $payment The payment model instance.
+--}}
 <div class="card card-sidebar-premium mb-4">
     <div class="card-header border-0 d-flex align-items-center">
         <h5 class="card-title-side">

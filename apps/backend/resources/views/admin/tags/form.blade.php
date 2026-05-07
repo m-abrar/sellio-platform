@@ -1,3 +1,17 @@
+{{--
+    Administrative Taxonomy: Tag Configuration
+    
+    This view serves as the primary interface for managing meta tags 
+    within the platform. It orchestrates labeling, URI identification, 
+    descriptive metadata, visual identity (badges), and cross-module 
+    applicability (products, classifieds, blog), facilitating 
+    granular classification and filtering across all marketplace 
+    verticals.
+    
+    @extends adminlte::page
+    @context Taxonomy Management
+    @variables Tag $tag The tag model instance.
+--}}
 @extends('adminlte::page')
 
 @section('title', ($tag->exists ? 'Modify' : 'New') . ' Tag')

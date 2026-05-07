@@ -1,3 +1,13 @@
+{{--
+    Administrative Content Widget: Dynamic Testimonials
+    
+    This component registers an advanced testimonial section within the 
+    Page Builder ecosystem. It orchestrates social proof fragments, 
+    allowing administrators to define display counts and skin motifs 
+    (light/dark) through a reactive trait-based architecture.
+    
+    @context Page Builder Module
+--}}
 <script>
 
 

@@ -1,3 +1,19 @@
+{{--
+    Administrative E-Commerce: Product Configuration
+    
+    This view serves as the authoritative interface for managing the 
+    product inventory catalog. It orchestrates complex data structures 
+    including general information, technical variations (attributes), 
+    optional extra services (add-ons), logistics parameters (weight, 
+    dimensions), and multi-media gallery collections.
+    
+    @extends adminlte::page
+    @context E-Commerce Module Management
+    @variables Product $product The product model instance.
+    @variables Collection $categories Product sector categories.
+    @variables Collection $brands Available product brands.
+    @variables Collection $tags Search keywords for registry indexing.
+--}}
 @extends('adminlte::page')
 
 @section('title', ($product->exists ? 'Edit' : 'Create') . ' Product')
@@ -413,13 +429,6 @@
         $('.select2').select2({ theme: 'bootstrap4', width: '100%' });
     });
 </script>
-@endpush
-
-@if($product->exists)
-    <form id="delete-form" action="{{ route('admin.products.destroy', $product->id) }}" method="POST" class="d-none">
-        @csrf @method('DELETE')
-    </form>
-    
     <script>
         function triggerDelete() {
             Swal.fire({

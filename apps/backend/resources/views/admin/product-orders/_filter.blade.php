@@ -1,4 +1,14 @@
-{{-- Filter Protocol --}}
+{{--
+    Administrative E-Commerce: Order Filter Protocol
+    
+    This component provides a streamlined search and filtering interface 
+    for the product order registry. It enables precise auditing across 
+    tracking numbers, inventory identities, fulfillment lifecycles, 
+    and settlement states (payment status), ensuring efficient 
+    oversight of marketplace transactions.
+    
+    @context E-Commerce Module Management
+--}}
 <div class="card registry-card-premium registry-filter-card mb-4">
     <div class="card-body">
         <form method="GET" action="{{ url()->current() }}">

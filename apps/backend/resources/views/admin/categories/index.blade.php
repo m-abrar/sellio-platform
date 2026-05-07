@@ -1,3 +1,16 @@
+{{--
+    Administrative Taxonomy: Category Registry
+    
+    This view provides the authoritative command center for managing the 
+    platform's hierarchical classification system. It aggregates 
+    category identities, parent-child relationships, cross-module 
+    applicability, and publication status, facilitating efficient 
+    auditing and moderation of the multi-dimensional taxonomy registry.
+    
+    @extends adminlte::page
+    @context Taxonomy Management
+    @variables Collection $categories Collection of Category model instances.
+--}}
 @extends('adminlte::page')
 
 @section('title', 'Taxonomy Architecture | Market Segments')

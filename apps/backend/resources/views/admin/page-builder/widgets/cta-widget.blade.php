@@ -1,3 +1,14 @@
+{{--
+    Administrative Content Widget: Call to Action (CTA)
+    
+    This component registers a professional CTA block within the 
+    Page Builder ecosystem. It orchestrates heading typography, 
+    descriptive text, and action buttons with customizable URI 
+    targets, providing a high-conversion interactive fragment 
+    for dynamic landing pages.
+    
+    @context Page Builder Module
+--}}
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         if (typeof grapesjs !== "undefined") {

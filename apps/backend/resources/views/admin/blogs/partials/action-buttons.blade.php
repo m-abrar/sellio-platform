@@ -1,3 +1,14 @@
+{{--
+    Administrative Content Partial: Lifecycle Action Interface
+    
+    This component provides the primary interaction gateway for article 
+    persistence and publication status management. It orchestrates 
+    visibility toggles, featured post designations, and destructive 
+    operations (delete), designed for a streamlined editorial workflow.
+    
+    @context Blog Module Management
+    @variables Blog $blog The blog model instance being managed.
+--}}
 <div class="card shadow-sm border-0 rounded-lg overflow-hidden mb-0">
     <div class="card-header bg-dark py-3 border-bottom-3-primary">
         <h3 class="card-title text-white font-weight-bold">

@@ -1,3 +1,17 @@
+{{--
+    Administrative Content: Global Fragment Ledger
+    
+    This view provides the authoritative index of all editable page 
+    fragments within the platform's content management system. It 
+    facilitates theme-specific content orchestration, tracking active 
+    skins, modification timelines, and internal page keys. It serves 
+    as the primary interaction gateway for launching high-fidelity 
+    content orchestration sessions.
+    
+    @extends adminlte::page
+    @context Content Management Module
+    @variables Collection $contentPages Collection of distinctive page/theme content entries.
+--}}
 @extends('adminlte::page')
 
 @section('title', 'Content Management')

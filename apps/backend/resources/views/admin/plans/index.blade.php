@@ -1,3 +1,16 @@
+{{--
+    Administrative Financial Module: Subscription Plan Registry
+    
+    This view provides the authoritative command center for managing 
+    platform-wide monetization tiers. It aggregates plan identities, 
+    pricing analysis, resource quotas, and publication status, 
+    facilitating efficient auditing and moderation of the 
+    platform's subscription offerings.
+    
+    @extends adminlte::page
+    @context Financial Management
+    @variables Collection $plans Collection of Plan model instances.
+--}}
 @extends('adminlte::page')
 
 @section('title', 'Subscription Plans | Tier Registry')

@@ -1,3 +1,16 @@
+{{--
+    Administrative Content: Page Registry Manifest
+    
+    This view provides the authoritative command center for managing the 
+    platform's informational assets and static content. It aggregates 
+    page identities, URI slugs, and visibility status, facilitating 
+    efficient auditing of the informational layer through a 
+    responsive data architecture and multi-dimensional filtering.
+    
+    @extends adminlte::page
+    @context Content Management Module
+    @variables Collection $pages Collection of Page model instances.
+--}}
 @extends('adminlte::page')
 
 @section('title', 'Content Management | Pages Registry')

@@ -1,3 +1,16 @@
+{{--
+    Administrative Financial Component: Plan Entitlement & Quota Orchestration
+    
+    This component provides the primary interface for managing resource 
+    allocation and feature entitlements within a subscription tier. It 
+    orchestrates the configuration of asset limits (listings), priority 
+    slots (featured), analytics access depth, and premium service perks, 
+    ensuring granular value differentiation across the platform's 
+    monetization tiers.
+    
+    @context Financial Management
+    @variables Plan $plan The plan model instance.
+--}}
 <div class="card card-premium mb-4">
     <div class="card-header bg-white border-0 py-4 px-4">
         <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">

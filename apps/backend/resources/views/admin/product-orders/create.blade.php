@@ -1,3 +1,17 @@
+{{--
+    Administrative E-Commerce: Order Initialization
+    
+    This view facilitates the manual entry of product orders, 
+    supporting offline and telephone sales protocols. It orchestrates 
+    customer identification, multi-line item manifests with dynamic 
+    pricing, and logistics destination parameters. It features a real-time 
+    financial summary and transaction status controls.
+    
+    @extends adminlte::page
+    @context E-Commerce Module Management
+    @variables Collection $users Registered platform customers.
+    @variables Collection $products Available inventory for order mapping.
+--}}
 @extends('adminlte::page')
 
 @section('title', 'Initialize New Manual Order')
@@ -198,6 +212,7 @@
 <style>
     .unit-price-display { font-size: 0.9rem; }
     .row-total-display { font-size: 1rem; }
+    .border-light-soft { border: 1px solid #f1f5f9 !important; }
 </style>
 @endpush
 
@@ -208,6 +223,7 @@
     $(document).ready(function() {
         initSelect2();
         
+        // Auto-fill shipping name when user is selected
         $('#user_id').on('change', function() {
             const selected = $(this).find(':selected');
             if (selected.val()) {
@@ -247,122 +263,6 @@
                 </td>
                 <td class="text-center align-middle">
                     <input type="number" name="items[${rowId}][quantity]" class="form-control form-control-premium text-center quantity-input" value="1" min="1" onchange="calculateTotals()">
-                </td>
-                <td class="text-right align-middle pr-4 font-weight-bold text-primary row-total-display">
-                    $0.00
-                </td>
-                <td class="align-middle text-center pr-4">
-                    <button type="button" class="btn btn-link text-danger p-0" onclick="removeItemRow(this)">
-                        <i class="fas fa-times-circle"></i>
-                    </button>
-                </td>
-            </tr>
-        `;
-        $('#itemsBody').append(template);
-        initSelect2();
-    }
-
-    function removeItemRow(btn) {
-        if ($('.item-row').length > 1) {
-            $(btn).closest('tr').remove();
-            calculateTotals();
-        } else {
-            Swal.fire('Manifest Error', 'Order must contain at least one line item.', 'error');
-        }
-    }
-
-    function updateRowPrice(select) {
-        const selected = $(select).find(':selected');
-        const price = parseFloat(selected.data('price')) || 0;
-        const row = $(select).closest('tr');
-        
-        row.find('.unit-price-display').text('$' + price.toFixed(2));
-        row.find('.unit-price-input').val(price);
-        
-        calculateTotals();
-    }
-
-    function calculateTotals() {
-        let subtotal = 0;
-        
-        $('.item-row').each(function() {
-            const price = parseFloat($(this).find('.unit-price-input').val()) || 0;
-            const qty = parseInt($(this).find('.quantity-input').val()) || 0;
-            const total = price * qty;
-            
-            $(this).find('.row-total-display').text('$' + total.toFixed(2));
-            subtotal += total;
-        });
-        
-        const shipping = parseFloat($('input[name="shipping_cost"]').val()) || 0;
-        const total = subtotal + shipping;
-        
-        $('#summarySubtotal').text('$' + subtotal.toFixed(2));
-        $('#inputSubtotal').val(subtotal.toFixed(2));
-        
-        $('#summaryTotal').text('$' + total.toFixed(2));
-        $('#inputTotal').val(total.toFixed(2));
-    }
-</script>
-@endpush
-
-@push('css')
-<style>
-    .unit-price-display { font-size: 0.9rem; }
-    .row-total-display { font-size: 1rem; }
-    .border-light-soft { border: 1px solid #f1f5f9 !important; }
-</style>
-@endpush
-
-@push('js')
-<script>
-    let itemCount = 1;
-
-    $(document).ready(function() {
-        initSelect2();
-        
-        // Auto-fill shipping name when user is selected
-        $('#user_id').on('change', function() {
-            const selected = $(this).find(':selected');
-            if (selected.val()) {
-                $('#shipping_name').val(selected.data('name'));
-            }
-        });
-    });
-
-    function initSelect2() {
-        $('.select2').each(function() {
-            if (!$(this).hasClass("select2-hidden-accessible")) {
-                $(this).select2({
-                    theme: 'default',
-                    width: '100%'
-                });
-            }
-        });
-    }
-
-    function addItemRow() {
-        const rowId = itemCount++;
-        const template = `
-            <tr class="item-row">
-                <td class="pl-4 py-3 align-middle">
-                    <div class="input-group input-group-premium shadow-none border-light-soft" style="height: 38px;">
-                        <select name="items[${rowId}][product_id]" class="form-control select2 product-select" required onchange="updateRowPrice(this)">
-                            <option value="">-- SELECT PRODUCT --</option>
-                            @foreach($products as $product)
-                                <option value="{{ $product->id }}" data-price="{{ $product->price }}" data-name="{{ $product->name }}">
-                                    {{ $product->name }} ({{ number_format($product->price, 2) }})
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                </td>
-                <td class="text-center align-middle">
-                    <div class="font-weight-bold text-dark unit-price-display">$0.00</div>
-                    <input type="hidden" name="items[${rowId}][unit_price]" class="unit-price-input" value="0">
-                </td>
-                <td class="text-center align-middle">
-                    <input type="number" name="items[${rowId}][quantity]" class="form-control text-center quantity-input" value="1" min="1" onchange="calculateTotals()" style="border-radius: 8px !important; height: 38px !important;">
                 </td>
                 <td class="text-right align-middle pr-4 font-weight-bold text-primary row-total-display">
                     $0.00

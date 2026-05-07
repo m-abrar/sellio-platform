@@ -1,3 +1,17 @@
+{{--
+    Administrative Content Partial: Core Page Parameters
+    
+    This component encapsulates the foundational attributes of a 
+    platform page, including title orchestration, permalink 
+    generation, content layer classification (header, footer, page), 
+    and architectural layout associations. It serves as the primary 
+    metadata configuration block for the page management suite.
+    
+    @context Page Management Module
+    @variables Page $page The page model instance.
+    @variables Collection $headers Available header architectures.
+    @variables Collection $footers Available footer architectures.
+--}}
 <div class="card card-premium mb-4">
     <div class="card-header bg-white border-0 py-4 px-4">
         <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">

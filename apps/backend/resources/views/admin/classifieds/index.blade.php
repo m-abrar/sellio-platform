@@ -1,3 +1,16 @@
+{{--
+    Administrative Classifieds: Global Asset Registry
+    
+    This view provides the authoritative command center for the 
+    community marketplace. It aggregates item identities, engagement 
+    metrics, financial valuations, and lifecycle tracking for all 
+    marketplace assets. It facilitates efficient catalog oversight 
+    through a responsive data architecture and multi-dimensional filtering.
+    
+    @extends adminlte::page
+    @context Classified Module Management
+    @variables Paginator $classifieds Paginated collection of Classified model instances.
+--}}
 @extends('adminlte::page')
 
 @section('title', 'Classified Ads')

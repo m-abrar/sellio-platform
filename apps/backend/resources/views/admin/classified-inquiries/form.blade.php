@@ -1,3 +1,18 @@
+{{--
+    Administrative Classifieds: Inquiry Lead Configuration
+    
+    This view serves as the authoritative interface for managing marketplace 
+    interest leads. It orchestrates the association between target assets 
+    and interested principals, tracks engagement lifecycle transitions 
+    (from pending to replied/closed), and preserves the integrity of the 
+    marketplace audit trail.
+    
+    @extends adminlte::page
+    @context Classified Module Management
+    @variables ClassifiedInquiry $inquiry The inquiry model instance.
+    @variables Collection $classifieds Available marketplace listings.
+    @variables Collection $users Registered marketplace participants.
+--}}
 @extends('adminlte::page')
 
 @section('title', ($inquiry->exists ? 'Modify' : 'Create') . ' Classified Inquiry')

@@ -1,3 +1,16 @@
+{{--
+    Administrative Classifieds: Marketplace Inquiry Registry
+    
+    This view serves as the authoritative command center for monitoring 
+    consumer engagement and lead generation performance. It aggregates 
+    ad intelligence, inquirer principals, and engagement timelines, 
+    facilitating efficient auditing of the marketplace conversion funnel 
+    through a responsive data architecture and multi-dimensional filtering.
+    
+    @extends adminlte::page
+    @context Classified Module Management
+    @variables Paginator $inquiries Paginated collection of ClassifiedInquiry model instances.
+--}}
 @extends('adminlte::page')
 
 @section('title', __('Classified Inquiries | Marketplace Intelligence'))

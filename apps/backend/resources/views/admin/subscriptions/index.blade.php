@@ -1,3 +1,16 @@
+{{--
+    Administrative Financial Module: Subscription Enrollment Registry
+    
+    This view provides the authoritative command center for the 
+    platform's membership ecosystem. It aggregates subscriber 
+    identities, service tier associations, access timelines, and 
+    lifecycle statuses, facilitating efficient auditing and moderation 
+    of the platform's recurring revenue memberships.
+    
+    @extends adminlte::page
+    @context Financial Management
+    @variables Collection $subscriptions Collection of Subscription model instances.
+--}}
 @extends('adminlte::page')
 
 @section('title', 'Subscriptions Management | Enrollment Ledger')

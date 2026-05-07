@@ -1,3 +1,16 @@
+{{--
+    Administrative E-Commerce: Addon Module Registry
+    
+    This view provides a centralized command center for managing 
+    supplemental service addons. It aggregates addon identities, 
+    functional descriptions, and financial valuations across the 
+    platform. It facilitates efficient oversight and lifecycle 
+    tracking of modular platform extensions.
+    
+    @extends adminlte::page
+    @context E-Commerce Module Management
+    @variables Collection $addons Collection of PropertyAddon model instances.
+--}}
 @extends('adminlte::page')
 
 @section('plugins.Datatables', true)

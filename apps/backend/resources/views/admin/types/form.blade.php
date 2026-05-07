@@ -1,3 +1,16 @@
+{{--
+    Administrative Taxonomy: Listing Type Configuration
+    
+    This view serves as the primary interface for managing high-level 
+    listing classifications within the platform. It orchestrates 
+    labeling, URI identification, visual representation (icons/badges), 
+    and cross-module applicability (properties, products, etc.), 
+    ensuring a consistent type taxonomy across all marketplace verticals.
+    
+    @extends adminlte::page
+    @context Taxonomy Management
+    @variables Type $type The type model instance.
+--}}
 @extends('adminlte::page')
 
 @section('title', ($type->exists ? 'Edit' : 'Add') . ' Listing Type')

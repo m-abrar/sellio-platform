@@ -1,4 +1,14 @@
-{{-- Product Filter Protocol --}}
+{{--
+    Administrative E-Commerce: Product Filter Protocol
+    
+    This component provides a streamlined search and filtering interface 
+    for the product inventory registry. It enables precise auditing across 
+    product titles, sector categories, SKU identities, and lifecycle 
+    states (published/draft), ensuring efficient catalog oversight.
+    
+    @context E-Commerce Module Management
+    @variables Collection $categories List of available product categories.
+--}}
 <div class="card registry-card-premium registry-filter-card select2-premium mb-4">
     <div class="card-body">
         <form action="{{ route('admin.products.index') }}" method="GET">

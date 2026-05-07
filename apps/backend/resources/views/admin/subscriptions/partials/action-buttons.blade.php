@@ -1,3 +1,15 @@
+{{--
+    Administrative Financial Partial: Enrollment Action Interface
+    
+    This component provides the primary interaction gateway for 
+    subscription lifecycle management. It orchestrates status 
+    transitions (active, trial, cancelled), enrollment persistence, 
+    and manual renewal extensions, while providing real-time 
+    subscriber context within the sidebar vertical.
+    
+    @context Financial Management
+    @variables Subscription $subscription The subscription model instance.
+--}}
 <div class="card card-premium shadow-sm overflow-hidden border-0 mb-4">
     <div class="card-header bg-white py-4 px-4 border-0">
         <h3 class="card-title text-dark font-weight-bold mb-0 smallest text-uppercase letter-spacing-1">

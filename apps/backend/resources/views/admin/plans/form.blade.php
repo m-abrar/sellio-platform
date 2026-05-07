@@ -1,3 +1,16 @@
+{{--
+    Administrative Financial Module: Subscription Plan Configuration
+    
+    This view serves as the primary architect for the platform's 
+    monetization tiers. It orchestrates the definition of pricing 
+    structures, billing cycles, usage quotas, and feature entitlements, 
+    ensuring a comprehensive and consistent subscription strategy across 
+    the marketplace.
+    
+    @extends adminlte::page
+    @context Financial Management
+    @variables Plan $plan The plan model instance.
+--}}
 @extends('adminlte::page')
 
 @section('title', ($plan->exists ? 'Edit' : 'Create') . ' Plan | Tier Architect')

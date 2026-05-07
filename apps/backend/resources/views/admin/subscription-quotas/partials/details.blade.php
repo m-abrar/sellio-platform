@@ -1,4 +1,15 @@
-{{-- Subscription Quota Information --}}
+{{--
+    Administrative Financial Partial: Resource Utilization Metrics
+    
+    This component provides the interface for managing quantitative 
+    usage metrics for a specific subscription. It orchestrates the 
+    tracking of listing consumption, featured status utilization, and 
+    associated administrative notes, ensuring precise moderation of 
+    platform resource entitlements.
+    
+    @context Financial Management
+    @variables SubscriptionQuota $subscriptionQuota The quota model instance.
+--}}
 <div class="card shadow-sm rounded-3 mb-4">
     <div class="card-header border-bottom fw-bold">
         <h3 class="card-title">Quota Information</h3>

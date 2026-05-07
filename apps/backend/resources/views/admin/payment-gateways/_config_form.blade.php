@@ -1,5 +1,17 @@
-{{-- resources/views/admin/payment-gateways/_config_form.blade.php --}}
-{{-- Variables: $config, $environment, $blueprints --}}
+{{--
+    Administrative Financial Module: Payment Gateway Configuration Factory
+    
+    This component provides a dynamic form generation engine for payment 
+    gateway credentials and environment settings. It orchestrates 
+    the rendering of configuration blueprints, managing input types 
+    (password, textarea, checkbox), sensitive data masking, and 
+    validation feedback for both sandbox and production environments.
+    
+    @context Financial Management
+    @variables Array $config Decrypted configuration parameters.
+    @variables String $environment Target environment (sandbox/production).
+    @variables Collection $blueprints Schema definitions for gateway inputs.
+--}}
 
 <div class="pt-3">
     @foreach ($blueprints as $blueprint)

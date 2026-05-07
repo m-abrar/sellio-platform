@@ -1,4 +1,15 @@
-{{-- Partial: _editor_input_factory.blade.php --}}
+{{--
+    Administrative Content Partial: Input Orchestration Factory
+    
+    This component serves as a polymorphic input generator for the 
+    content management system. It dynamically resolves input types 
+    (textarea, image, color, text) based on the configuration manifest, 
+    ensuring a unified interaction protocol across diverse page content 
+    parameters.
+    
+    @context Content Management Module
+    @variables PageContent $item The content item model defining the input parameters.
+--}}
 @switch($item->input_type)
     @case('textarea')
         <textarea 

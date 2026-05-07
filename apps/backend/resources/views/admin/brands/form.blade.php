@@ -1,3 +1,17 @@
+{{--
+    Administrative Taxonomy: Brand Configuration
+    
+    This view serves as the primary interface for managing brand 
+    identities within the platform. It orchestrates labeling, 
+    URI identification, descriptive metadata, visual identity (logos), 
+    and cross-module applicability (products, classifieds, etc.), 
+    ensuring a consistent branding system across all marketplace 
+    verticals.
+    
+    @extends adminlte::page
+    @context Taxonomy Management
+    @variables Brand $brand The brand model instance.
+--}}
 @extends('adminlte::page')
 
 @section('title', ($brand->exists ? 'Edit' : 'Create') . ' Brand')

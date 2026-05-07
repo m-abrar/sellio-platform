@@ -1,3 +1,16 @@
+{{--
+    Administrative E-Commerce: Global Inventory Registry
+    
+    This view provides the authoritative command center for the 
+    product marketplace. It aggregates inventory status, retail 
+    pricing structures, and lifecycle tracking for all product assets. 
+    It facilitates efficient catalog oversight through a responsive 
+    data architecture and multi-dimensional filtering.
+    
+    @extends adminlte::page
+    @context E-Commerce Module Management
+    @variables Paginator $products Paginated collection of Product model instances.
+--}}
 @extends('adminlte::page')
 
 @section('title', 'Products')

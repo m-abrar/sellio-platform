@@ -1,3 +1,16 @@
+{{--
+    Administrative Taxonomy: Tag Registry
+    
+    This view provides the authoritative command center for managing 
+    platform-wide meta tags. It aggregates tag identities, cross-module 
+    applicability, and publication status, facilitating efficient 
+    auditing and moderation of the platform's granular taxonomy 
+    registry.
+    
+    @extends adminlte::page
+    @context Taxonomy Management
+    @variables Collection $tags Collection of Tag model instances.
+--}}
 @extends('adminlte::page')
 
 @section('title', 'Tags')

@@ -1,3 +1,15 @@
+{{--
+    Administrative Financial Component: Polymorphic Payable Linkage
+    
+    This component provides a dynamic routing interface for polymorphic 
+    payable entities. It orchestrates the mapping of model basenames 
+    to specific administrative routes, descriptive labels, and visual 
+    identifiers (icons/colors), ensuring consistent navigation between 
+    financial records and their underlying business entities.
+    
+    @context Financial Management
+    @variables Model $payable The polymorphic model instance linked to the payment.
+--}}
 @php
     /** @var \Illuminate\Database\Eloquent\Model|null $payable The model associated with the payment (e.g., EventBooking, Subscription) */
     

@@ -1,3 +1,17 @@
+{{--
+    Administrative E-Commerce: Global Order Registry
+    
+    This view provides a central command center for tracking 
+    marketplace transactions. It integrates high-fidelity audit trails 
+    for tracking protocols, customer principals, and financial 
+    aggregates. It facilitates efficient bulk fulfillment oversight 
+    through a responsive floating action interface and multi-dimensional 
+    filtering.
+    
+    @extends adminlte::page
+    @context E-Commerce Module Management
+    @variables Paginator $orders Paginated collection of ProductOrder models.
+--}}
 @extends('adminlte::page')
 
 @section('title', __('Product Orders | Commerce Intelligence'))
@@ -192,8 +206,6 @@
             </div>
         </div>
     </div>
-@endsection
-
 @endsection
 
 @section('js')

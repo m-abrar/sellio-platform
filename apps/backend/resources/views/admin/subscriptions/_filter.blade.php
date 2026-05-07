@@ -1,4 +1,14 @@
-{{-- Filter Protocol --}}
+{{--
+    Administrative Financial Module: Subscription Lifecycle Filter
+    
+    This component provides a granular query interface for the platform's 
+    active subscription registry. It orchestrates the filtration of 
+    subscriber records based on user identity and lifecycle status 
+    (active, trial, past due, etc.), ensuring efficient auditing and 
+    moderation of the platform's recurring revenue streams.
+    
+    @context Financial Management - Subscription Orchestration
+--}}
 <div class="card registry-card-premium registry-filter-card select2-premium mb-4">
     <div class="card-body">
         <form method="GET" action="{{ route('admin.subscriptions.index') }}">

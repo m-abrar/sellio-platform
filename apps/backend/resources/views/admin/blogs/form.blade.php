@@ -1,3 +1,17 @@
+{{--
+    Administrative Content: Editorial Desk Configuration
+    
+    This view serves as the authoritative interface for managing 
+    platform-wide blog content. It orchestrates rich editorial pieces, 
+    associating them with visual identities (featured images), 
+    SEO metadata structures, and publication metrics. It provides 
+    a high-fidelity composition environment for both new drafts and 
+    existing article updates.
+    
+    @extends adminlte::page
+    @context Blog Module Management
+    @variables Blog $blog The blog model instance being managed.
+--}}
 @extends('adminlte::page')
 
 @section('title', ($blog->exists ? 'Edit' : 'Add') . ' Blog Post | Editorial Desk')

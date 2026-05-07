@@ -1,3 +1,16 @@
+{{--
+    Administrative Financial Module: Subscription Resource Orchestration
+    
+    This view serves as the primary interface for managing active 
+    subscription resource quotas. It orchestrates the allocation of 
+    usage limits, entitlement overrides, and real-time usage tracking 
+    for specific user subscriptions, ensuring precise administrative 
+    control over platform resource utilization.
+    
+    @extends adminlte::page
+    @context Financial Management
+    @variables SubscriptionQuota $subscriptionQuota The quota model instance.
+--}}
 @extends('adminlte::page')
 
 @section('title', $subscriptionQuota->exists ? 'Edit Subscription Quotas' : 'Add Subscription Quotas')

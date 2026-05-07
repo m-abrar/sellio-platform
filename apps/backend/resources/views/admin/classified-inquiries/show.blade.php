@@ -1,3 +1,16 @@
+{{--
+    Administrative Classifieds: Inquiry Manifest Visualization
+    
+    This view provides a comprehensive 360-degree visualization of a 
+    specific marketplace inquiry. It aggregates listing context, buyer 
+    communication manifests, contact intelligence (verified vs guest), 
+    and operational metadata. It facilitates in-depth lead auditing and 
+    registry maintenance.
+    
+    @extends adminlte::page
+    @context Classified Module Management
+    @variables ClassifiedInquiry $inquiry The classified inquiry model instance.
+--}}
 @extends('adminlte::page')
 
 @section('title', __('Classified Inquiry') . ' #' . $inquiry->id)

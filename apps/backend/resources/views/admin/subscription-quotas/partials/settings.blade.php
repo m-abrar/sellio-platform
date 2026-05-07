@@ -1,4 +1,15 @@
-{{-- Plan Settings Toggles --}}
+{{--
+    Administrative Financial Partial: Entitlement Configuration
+    
+    This component provides the interface for managing subscription-level 
+    operational flags. It orchestrates the configuration of active 
+    statuses, featured entitlements, trial availabilities, and 
+    marketing visibility (popular plan), ensuring precise administrative 
+    control over service tier behaviors.
+    
+    @context Financial Management
+    @variables Plan $plan The plan model instance.
+--}}
 
 <div class="card shadow-sm rounded-3">
     <div class="card-header border-bottom fw-bold">

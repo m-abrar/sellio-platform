@@ -1,3 +1,16 @@
+{{--
+    Administrative Taxonomy: Brand Registry
+    
+    This view provides the authoritative command center for manufacturer 
+    identities and brand associations. It aggregates brand identities, 
+    cross-module applicability, and publication status, facilitating 
+    efficient auditing and moderation of the platform's manufacturer 
+    taxonomies.
+    
+    @extends adminlte::page
+    @context Taxonomy Management
+    @variables Collection $brands Collection of Brand model instances.
+--}}
 @extends('adminlte::page')
 
 @section('title', 'Brands')

@@ -1,3 +1,16 @@
+{{--
+    Administrative Financial Module: Subscription Resource Registry
+    
+    This view provides the authoritative command center for monitoring 
+    active subscription resource utilization. It aggregates user 
+    identities, plan associations, real-time usage metrics (listings/featured), 
+    and lifecycle statuses, facilitating efficient auditing and 
+    moderation of platform resource consumption.
+    
+    @extends adminlte::page
+    @context Financial Management
+    @variables Collection $quotas Collection of SubscriptionQuota model instances.
+--}}
 @extends('adminlte::page')
 
 @section('plugins.Datatables', true)

@@ -1,3 +1,16 @@
+{{--
+    Administrative Content: Page Architect Configuration
+    
+    This view serves as the primary interface for managing static 
+    platform pages. It orchestrates rich content payloads, visual 
+    identities (featured images), and SEO metadata structures, 
+    facilitating the creation and refinement of informative 
+    platform verticals within a professional editorial environment.
+    
+    @extends adminlte::page
+    @context Page Management Module
+    @variables Page $page The page model instance being managed.
+--}}
 @extends('adminlte::page')
 
 @section('title', ($page->exists ? 'Edit' : 'Add') . ' Content | Page Architect')

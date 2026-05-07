@@ -1,3 +1,14 @@
+{{--
+    Administrative Taxonomy Component: Geospatial Map Interface
+    
+    This component provides a high-fidelity visual interface for spatial 
+    coordinate orchestration. It integrates Google Maps API to 
+    facilitate precise latitude and longitude determination through 
+    interactive marker manipulation, ensuring accurate geographical 
+    persistence for platform location entities.
+    
+    @context Taxonomy Management - Location Module
+--}}
 <div id="map-container" class="position-relative shadow-xs border rounded overflow-hidden">
     <div id="map" class="map-canvas-default">
         {{-- Loading State Placeholder --}}

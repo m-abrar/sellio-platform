@@ -1,3 +1,17 @@
+{{--
+    Administrative E-Commerce: Addon Configuration
+    
+    This view serves as the authoritative interface for managing 
+    supplemental service addons. It orchestrates parameters for 
+    addon naming, financial valuation (price), and functional 
+    descriptions. It also manages visual identity through specialized 
+    media uploads to ensure professional presentation in platform 
+    listings.
+    
+    @extends adminlte::page
+    @context E-Commerce Module Management
+    @variables PropertyAddon $addon The addon model instance.
+--}}
 @extends('adminlte::page')
 
 @section('title', ($addon->exists ? 'Edit' : 'Create') . ' Addon')

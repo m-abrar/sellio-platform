@@ -1,3 +1,18 @@
+{{--
+    Administrative Taxonomy: Category Configuration
+    
+    This view serves as the primary interface for managing hierarchical 
+    category structures within the platform. It orchestrates 
+    parent-child associations, URI identification, visual identity 
+    (thumbnails), and cross-module applicability (blog, products, 
+    classifieds), facilitating a multi-dimensional organization 
+    system for platform assets.
+    
+    @extends adminlte::page
+    @context Taxonomy Management
+    @variables Category $category The category model instance.
+    @variables Collection $categories Available parent categories.
+--}}
 @extends('adminlte::page')
 
 @section('title', ($category->exists ? 'Edit' : 'Create') . ' Category')

@@ -1,3 +1,15 @@
+{{--
+    Administrative Financial Component: Enrollment Feature Entitlements
+    
+    This component provides the interface for managing subscription-level 
+    operational flags. It orchestrates the configuration of auto-renewal 
+    systems, trial period designations, and termination behaviors 
+    (cancel at period end), ensuring precise administrative control 
+    over user membership logic.
+    
+    @context Financial Management
+    @variables Subscription $subscription The subscription model instance.
+--}}
 <div class="card card-premium shadow-sm border-0">
     <div class="card-header bg-white border-0 py-4 px-4">
         <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">

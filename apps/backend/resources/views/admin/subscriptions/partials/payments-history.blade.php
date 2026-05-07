@@ -1,3 +1,15 @@
+{{--
+    Administrative Financial Component: Subscription Revenue Ledger
+    
+    This component provides a historical audit trail for all financial 
+    transactions associated with a specific subscription enrollment. It 
+    orchestrates the display of fiscal yields, transaction references, 
+    settlement statuses, and temporal data, ensuring precise revenue 
+    tracking and moderation for membership-based cashflow.
+    
+    @context Financial Management
+    @variables Subscription $subscription The subscription model instance.
+--}}
 <div class="card card-premium shadow-sm border-0">
     <div class="card-header bg-white border-0 py-4 px-4 d-flex justify-content-between align-items-center">
         <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">

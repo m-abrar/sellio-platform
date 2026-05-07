@@ -1,3 +1,14 @@
+{{--
+    Administrative Content Widget: Feature Engagement Box
+    
+    This component registers a professional feature visualization block 
+    within the Page Builder ecosystem. It orchestrates iconic visual 
+    identity, bold typography, and descriptive content, facilitating 
+    the highlighting of platform-specific advantages through a 
+    modular and reactive interface.
+    
+    @context Page Builder Module
+--}}
 <div id="feature-box-widget">
     <script>
         document.addEventListener("DOMContentLoaded", function () {

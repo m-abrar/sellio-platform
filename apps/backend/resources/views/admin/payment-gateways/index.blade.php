@@ -1,3 +1,16 @@
+{{--
+    Administrative Financial Module: Payment Provider Registry
+    
+    This view provides the authoritative command center for managing 
+    platform-wide financial processors and transaction gateways. It 
+    aggregates provider identities, operational environments (live/sandbox), 
+    and lifecycle statuses, facilitating secure auditing and moderation 
+    of the platform's integration ledger.
+    
+    @extends adminlte::page
+    @context Financial Management
+    @variables Collection $gateways Collection of PaymentGateway model instances.
+--}}
 @extends('adminlte::page')
 
 @section('title', 'Payment Gateways')

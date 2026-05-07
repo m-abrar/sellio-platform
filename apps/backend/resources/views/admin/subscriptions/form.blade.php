@@ -1,3 +1,18 @@
+{{--
+    Administrative Financial Module: Subscription Enrollment Configuration
+    
+    This view serves as the primary interface for managing active user 
+    subscriptions. It orchestrates user account linkage, service tier 
+    assignment (plans), temporal parameters (start/end dates), and 
+    lifecycle status management, ensuring precise administrative 
+    oversight of the platform's recurring revenue memberships.
+    
+    @extends adminlte::page
+    @context Financial Management
+    @variables Subscription $subscription The subscription model instance.
+    @variables Collection $users Available customer accounts.
+    @variables Collection $plans Available service tiers.
+--}}
 @extends('adminlte::page')
 
 @section('title', ($subscription->exists ? 'Edit' : 'Add') . ' Subscription | Enrollment Architect')

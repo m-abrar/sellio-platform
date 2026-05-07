@@ -1,3 +1,15 @@
+{{--
+    Administrative Content Partial: Lifecycle Action Interface
+    
+    This component provides the primary interaction gateway for static 
+    page persistence and publication status management. It orchestrates 
+    visibility toggles, primary persistence operations, and 
+    destructive disposals (delete), designed for a streamlined 
+    editorial workflow.
+    
+    @context Page Management Module
+    @variables Page $page The page model instance being managed.
+--}}
 <div class="card shadow-sm border-0 rounded-lg overflow-hidden mb-0">
     <div class="card-header bg-dark py-3 border-bottom-3-primary">
         <h3 class="card-title text-white font-weight-bold">

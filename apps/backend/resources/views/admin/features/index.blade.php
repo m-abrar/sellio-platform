@@ -1,3 +1,16 @@
+{{--
+    Administrative Taxonomy: Feature Registry
+    
+    This view provides the authoritative command center for managing 
+    technical specifications and attribute groupings. It aggregates 
+    feature identities, cross-module availability, and publication 
+    status, facilitating efficient auditing and moderation of the 
+    platform's descriptive taxonomy registry.
+    
+    @extends adminlte::page
+    @context Taxonomy Management
+    @variables Collection $features Collection of Feature model instances.
+--}}
 @extends('adminlte::page')
 
 @section('title', 'Listing Features')

@@ -1,3 +1,19 @@
+{{--
+    Administrative Content: High-Fidelity Page Orchestration
+    
+    This view serves as the primary engine for configuring dynamic 
+    page content across the active platform architecture. It 
+    facilitates section-based content grouping, asset deployment 
+    (images, color palettes, textual strings), and global content 
+    synchronization. It ensures that content updates adhere to the 
+    defined theme tokens and layout protocols.
+    
+    @extends adminlte::page
+    @context Content Management Module
+    @variables Collection $settings Grouped collection of PageContent models.
+    @variables String $theme_key The active architectural theme identifier.
+    @variables String $page The specific page context being managed.
+--}}
 @extends('adminlte::page')
 
 {{-- Professional Title following the Executive Persona --}}

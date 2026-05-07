@@ -1,3 +1,15 @@
+{{--
+    Administrative Content: High-Fidelity Page Composition Engine
+    
+    This view serves as the primary visual orchestration environment for 
+    dynamic landing pages. It leverages the GrapesJS framework to 
+    provide a professional-grade drag-and-drop experience, integrating 
+    custom platform widgets (CTA, Features, Hero, Testimonials) while 
+    maintaining real-time CSS/HTML persistence.
+    
+    @context Page Builder Module
+    @variables PageBuilder $page The page model being composed.
+--}}
 <!DOCTYPE html>
 <html lang="en">
 <head>

@@ -1,3 +1,18 @@
+{{--
+    Administrative Financial Module: Transaction Configuration
+    
+    This view serves as the primary interface for managing financial 
+    ledger entries. It orchestrates principal account linkage, payable 
+    entity association, specification of fiscal amounts, gateway 
+    reconciliation (transaction IDs), and lifecycle status management, 
+    ensuring precise financial intelligence across all platform 
+    revenue channels.
+    
+    @extends adminlte::page
+    @context Financial Management
+    @variables Payment $payment The payment model instance.
+    @variables Collection $users Available principal accounts.
+--}}
 @extends('adminlte::page')
 
 @section('title', ($payment->exists ? 'Edit Transaction' : 'Record Transaction') . ' | Financial Intelligence')

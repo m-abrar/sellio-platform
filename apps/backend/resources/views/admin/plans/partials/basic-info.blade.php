@@ -1,3 +1,15 @@
+{{--
+    Administrative Financial Component: Plan Core Specification
+    
+    This component provides the primary input interface for subscription 
+    plan identity and billing logic. It orchestrates the definition of 
+    plan designations, billing cycles (monthly/annual), fiscal pricing, 
+    and temporal validity (duration), ensuring accurate financial 
+    parametrization for the platform's monetization engine.
+    
+    @context Financial Management
+    @variables Plan $plan The plan model instance.
+--}}
 <div class="card card-premium mb-4">
     <div class="card-header bg-white border-0 py-4 px-4">
         <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">

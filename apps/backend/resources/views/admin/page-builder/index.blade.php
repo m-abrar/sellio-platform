@@ -1,3 +1,15 @@
+{{--
+    Administrative Content: Page Composition Registry
+    
+    This view provides the authoritative index of composite landing 
+    pages. It tracks publication status, URI slugs, and provides 
+    direct access to the high-fidelity orchestration engine for 
+    visual page design.
+    
+    @extends adminlte::page
+    @context Page Builder Module
+    @variables Collection $pages Collection of PageBuilder model instances.
+--}}
 @extends('adminlte::page')
 
 @section('plugins.Datatables', true)

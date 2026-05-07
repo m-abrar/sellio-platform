@@ -1,3 +1,17 @@
+{{--
+    Administrative Taxonomy: Feature Configuration
+    
+    This view serves as the primary interface for managing technical or 
+    descriptive features within the platform. It orchestrates 
+    labeling, URI identification, descriptive metadata, visual 
+    identity (icons), and cross-module applicability (properties, 
+    products, etc.), ensuring a consistent feature taxonomy across all 
+    marketplace verticals.
+    
+    @extends adminlte::page
+    @context Taxonomy Management
+    @variables Feature $feature The feature model instance.
+--}}
 @extends('adminlte::page')
 
 @section('title', ($feature->exists ? 'Modify' : 'New') . ' Feature')

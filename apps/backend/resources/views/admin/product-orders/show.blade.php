@@ -1,3 +1,17 @@
+{{--
+    Administrative E-Commerce: Order Operational Intelligence
+    
+    This view provides a comprehensive 360-degree visualization of a 
+    specific product order. It aggregates fulfillment manifests, 
+    fiscal summaries (itemization, logistics, taxes), lifecycle 
+    transition controls, and client intelligence parameters. It 
+    facilitates end-to-end logistics tracking and financial auditing.
+    
+    @extends adminlte::page
+    @context E-Commerce Module Management
+    @variables ProductOrder $order The product order model instance.
+    @variables array $statuses List of available lifecycle status labels.
+--}}
 @extends('adminlte::page')
 
 @section('title', __('Order Details') . ' #' . $order->order_number . ' | Commerce Intelligence')

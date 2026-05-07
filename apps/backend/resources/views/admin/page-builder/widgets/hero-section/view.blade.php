@@ -1,3 +1,13 @@
+{{--
+    Administrative Content Widget View: Hero Manifest
+    
+    This fragment defines the visual architecture of the Hero Section. 
+    It orchestrates high-impact gradients, bold typography, and 
+    primary call-to-action elements, serving as the default 
+    compositional template for above-the-fold landing page content.
+    
+    @context Page Builder Module
+--}}
 <div class="hero-section">
     <div class="hero-content">
         <h1>Welcome to Our Website</h1>

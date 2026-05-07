@@ -1,3 +1,16 @@
+{{--
+    Administrative Taxonomy: Amenity Registry
+    
+    This view provides the authoritative command center for the 
+    supplementary features and convenience factors classification. 
+    It aggregates feature identities, cross-module categorizations, 
+    and publication status, facilitating efficient auditing and 
+    moderation of the platform's descriptive taxonomies.
+    
+    @extends adminlte::page
+    @context Taxonomy Management
+    @variables Collection $amenities Collection of Amenity model instances.
+--}}
 @extends('adminlte::page')
 
 @section('title', 'Amenities')
