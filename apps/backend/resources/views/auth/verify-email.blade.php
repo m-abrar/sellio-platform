@@ -1,3 +1,14 @@
+{{--
+    Platform Authentication: Email Verification Gateway
+    
+    This view facilitates the activation of account capabilities 
+    by validating the authenticity of the registered communication 
+    node. It ensures that every entity in the marketplace 
+    network is authenticated and verified.
+    
+    @extends frontend._layouts._guest
+    @context Security Verification Suite
+--}}
 @extends('frontend._layouts._guest')
 
 @section('title', __('Verify Email'))

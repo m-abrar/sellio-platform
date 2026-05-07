@@ -1,3 +1,14 @@
+{{--
+    Platform Authentication: Global Registration Interface
+    
+    This view facilitates the onboarding of new business entities 
+    into the marketplace ecosystem. It integrates persona-based 
+    registration flows with credential establishment and social 
+    onboarding capabilities.
+    
+    @extends frontend._layouts._guest
+    @context Guest Onboarding Suite
+--}}
 @extends('frontend._layouts._guest')
 
 @section('title', page_content('auth.register.seo_title', __('Create Account')))

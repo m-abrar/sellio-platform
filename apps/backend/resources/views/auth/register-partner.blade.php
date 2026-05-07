@@ -1,3 +1,14 @@
+{{--
+    Platform Authentication: Partner Onboarding Interface
+    
+    This view facilitates the registration and onboarding of new 
+    merchant entities. It integrates a multi-step conceptual 
+    onboarding flow with high-fidelity branding and secure 
+    credential establishment.
+    
+    @extends frontend._layouts._guest
+    @context Partner Onboarding Suite
+--}}
 @extends('frontend._layouts._guest')
 
 @section('title', 'Partner Onboarding | Merchant Registration')

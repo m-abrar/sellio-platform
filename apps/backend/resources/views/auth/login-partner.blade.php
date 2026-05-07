@@ -1,3 +1,14 @@
+{{--
+    Platform Authentication: Partner Ecosystem Gateway
+    
+    This view provides the specialized entry point for 
+    authorized merchant entities. It integrates merchant-specific 
+    marketing hero elements with a high-security partner 
+    authentication interface.
+    
+    @extends frontend._layouts._guest
+    @context Partner Authentication Suite
+--}}
 @extends('frontend._layouts._guest')
 
 @section('title', 'Partner Gateway | Login')

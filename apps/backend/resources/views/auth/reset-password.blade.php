@@ -1,3 +1,14 @@
+{{--
+    Platform Authentication: Password Reset Finalization
+    
+    This view provides the final step in the account recovery 
+    protocol. It mandates the establishment of new, high-security 
+    credentials by validating recovery tokens and enforcing 
+    military-grade encryption standards.
+    
+    @extends frontend._layouts._guest
+    @context Guest Recovery Suite
+--}}
 @extends('frontend._layouts._guest')
 
 @section('title', __('Reset Password'))

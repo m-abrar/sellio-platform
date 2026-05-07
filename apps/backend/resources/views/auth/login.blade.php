@@ -1,3 +1,14 @@
+{{--
+    Platform Authentication: Multi-Tenant Login Gateway
+    
+    This view provides the authoritative entry point for the 
+    marketplace ecosystem. It integrates high-fidelity marketing 
+    hero sections with a secure, credentialed access interface. 
+    It supports multi-tenancy and social authentication protocols.
+    
+    @extends frontend._layouts._guest
+    @context Guest Authentication Suite
+--}}
 @extends('frontend._layouts._guest')
 
 @section('title', page_content('auth.login.seo_title', __('Login')))

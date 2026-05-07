@@ -1,3 +1,14 @@
+{{--
+    Platform Authentication: Account Recovery Interface
+    
+    This view facilitates the secure recovery of lost 
+    credentials. It initiates the encrypted reset protocol 
+    by validating identity anchors and dispatching secure 
+    access tokens to registered communication nodes.
+    
+    @extends frontend._layouts._guest
+    @context Guest Recovery Suite
+--}}
 @extends('frontend._layouts._guest')
 
 @section('title', __('Forgot Password'))

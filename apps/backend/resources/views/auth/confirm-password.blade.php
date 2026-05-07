@@ -1,3 +1,14 @@
+{{--
+    Platform Authentication: Identity Verification Protocol
+    
+    This view enforces a secure verification layer before 
+    accessing sensitive account modifications. It mandates 
+    credential re-authentication to ensure data integrity 
+    within the marketplace environment.
+    
+    @extends frontend._layouts._guest
+    @context Security Verification Suite
+--}}
 @extends('frontend._layouts._guest')
 
 @section('title', __('Confirm Password'))
