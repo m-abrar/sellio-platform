@@ -4,6 +4,11 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
+/**
+ * Class CreateActivityLogTable
+ * Provisoning the Spatie Activity Log schema, recording all significant user
+ * and system events for audit, debugging, and compliance across the platform.
+ */
 class CreateActivityLogTable extends Migration
 {
     public function up()

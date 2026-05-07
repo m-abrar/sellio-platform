@@ -5,6 +5,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateEventTicketTypesTable
+ * Provisoning the tiered ticketing schema for the Events module,
+ * supporting dynamic pricing brackets and inventory limits per ticket class.
+ */
 return new class extends Migration
 {
     public function up(): void

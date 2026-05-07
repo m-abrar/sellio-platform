@@ -4,6 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateCampaignsTable
+ * Provisoning the promotional campaign schema, allowing time-bounded
+ * marketing events (flash sales, promotions) to be scheduled and tracked.
+ */
 return new class extends Migration
 {
     /**

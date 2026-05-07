@@ -7,6 +7,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateTransactionsTable
+ * Provisoning the high-precision financial transaction ledger for the Bavix/Wallet system,
+ * supporting polymorphic accounts, deep indexing, and metadata serialization.
+ */
 return new class() extends Migration
 {
     public function up(): void

@@ -4,6 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateCategoriesTable
+ * Provisoning the polymorphic taxonomy schema, supporting nested hierarchies,
+ * SEO metadata, and module-specific filtering for the marketplace entities.
+ */
 return new class extends Migration
 {
     /**

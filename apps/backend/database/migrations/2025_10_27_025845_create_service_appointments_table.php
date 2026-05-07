@@ -6,6 +6,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateServiceAppointmentsTable
+ * Provisoning the scheduled appointment schema for the Professional Services module,
+ * capturing booking slots, customer contact details, and payment status per engagement.
+ */
 return new class extends Migration
 {
     public function up(): void

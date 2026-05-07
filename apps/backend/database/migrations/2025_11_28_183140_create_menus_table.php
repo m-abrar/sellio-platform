@@ -4,6 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateMenusTable
+ * Provisoning the navigation slot registry schema for the CMS,
+ * defining theme-specific menu locations (e.g., header, footer) for dynamic link management.
+ */
 return new class extends Migration
 {
     /**

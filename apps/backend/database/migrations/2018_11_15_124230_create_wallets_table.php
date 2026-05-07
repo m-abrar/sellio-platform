@@ -8,6 +8,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateWalletsTable
+ * Provisoning the polymorphic wallet storage for the Bavix/Wallet system,
+ * supporting multi-wallet accounts, slug-based indexing, and high-precision balances.
+ */
 return new class() extends Migration
 {
     public function up(): void

@@ -4,6 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateServicePackagesTable
+ * Provisoning the tiered pricing schema for the Professional Services module,
+ * supporting recurring billing periods, feature matrices, and popularity highlights.
+ */
 return new class extends Migration
 {
     /**

@@ -4,6 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateNotificationsTable
+ * Provisoning the Laravel database notification schema, enabling
+ * persistent, polymorphic in-app alerts for all platform users.
+ */
 return new class extends Migration
 {
     /**

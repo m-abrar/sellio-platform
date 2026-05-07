@@ -4,6 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreatePagesTable
+ * Provisoning the CMS page building schema,
+ * allowing dynamic creation of HTML/CSS pages, headers, and footers for the storefront.
+ */
 return new class extends Migration
 {
     /**

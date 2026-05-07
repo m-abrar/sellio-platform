@@ -4,6 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateTypeTable
+ * Provisoning the general entity types schema, supporting broad categorization
+ * and module-specific filtering across all marketplace verticals.
+ */
 return new class extends Migration
 {
     /**

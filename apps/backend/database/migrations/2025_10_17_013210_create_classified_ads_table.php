@@ -4,6 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateClassifiedAdsTable
+ * Provisoning the core schema for the Classifieds marketplace module,
+ * capturing item condition ratings, negotiability flags, and temporal listing constraints.
+ */
 return new class extends Migration
 {
     public function up(): void

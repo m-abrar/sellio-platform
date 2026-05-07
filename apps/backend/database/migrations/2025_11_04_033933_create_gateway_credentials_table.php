@@ -6,6 +6,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateGatewayCredentialsTable
+ * Provisoning the encrypted credential store for payment gateways,
+ * securely persisting live and sandbox API configurations per gateway integration.
+ */
 return new class extends Migration
 {
     public function up(): void

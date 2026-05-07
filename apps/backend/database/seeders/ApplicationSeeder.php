@@ -5,6 +5,12 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Application;
 
+/**
+ * Class ApplicationSeeder
+ *
+ * Registers all available frontend application themes (Unified, Properties, Events,
+ * Autos, Services, Jobs, Classifieds) with their CSS variable overrides and vertical bindings.
+ */
 class ApplicationSeeder extends Seeder
 {
     public function run(): void

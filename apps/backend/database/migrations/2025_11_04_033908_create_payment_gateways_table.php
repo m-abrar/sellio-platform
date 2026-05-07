@@ -4,6 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreatePaymentGatewaysTable
+ * Provisoning the gateway registry schema for the Finance module,
+ * cataloging all configurable payment integrations (Stripe, PayPal, etc.) with their class bindings.
+ */
 return new class extends Migration
 {
     public function up(): void

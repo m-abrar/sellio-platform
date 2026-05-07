@@ -4,6 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateSettingsTable
+ * Provisoning the global key-value store for platform configurations,
+ * managing system-wide variables like site name, currency, and API keys.
+ */
 return new class extends Migration
 {
     /**

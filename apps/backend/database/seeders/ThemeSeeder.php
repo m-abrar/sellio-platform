@@ -5,6 +5,13 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Theme;
 
+/**
+ * Class ThemeSeeder
+ *
+ * Registers all available frontend themes (Unified, Properties, Autos, Events,
+ * Jobs, Services, Classifieds, E-Commerce) with CSS variable overrides and
+ * vertical-specific bindings for the storefront theming engine.
+ */
 class ThemeSeeder extends Seeder
 {
     public function run(): void

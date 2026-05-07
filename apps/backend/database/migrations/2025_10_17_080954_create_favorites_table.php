@@ -6,6 +6,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateFavoritesTable
+ * Provisoning the cross-module wishlisting schema, enabling users to save
+ * properties, autos, products, and other platform entities via polymorphic associations.
+ */
 return new class extends Migration
 {
     /**

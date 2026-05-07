@@ -4,6 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateProductsTable
+ * Provisoning the core schema for the E-Commerce marketplace module,
+ * managing SKU tracking, inventory thresholds, and physical shipping dimensions.
+ */
 return new class extends Migration
 {
     public function up(): void

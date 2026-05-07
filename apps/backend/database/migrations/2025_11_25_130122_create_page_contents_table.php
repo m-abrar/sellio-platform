@@ -4,6 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreatePageContentsTable
+ * Provisoning the theme-aware CMS content schema, enabling granular admin overrides
+ * for per-section text, images, and media across different frontend themes.
+ */
 return new class extends Migration
 {
     /**

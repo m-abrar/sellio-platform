@@ -13,6 +13,13 @@ use App\Models\Classified;
 use App\Models\User;
 use Faker\Factory as Faker;
 
+/**
+ * Class ActivityLogSeeder
+ *
+ * Generates high-volume simulated view events across all marketplace verticals
+ * (Property, Event, Auto, Service, Job, Classified, Product, Blog) to populate
+ * the Spatie Activity Log for analytics dashboard testing.
+ */
 class ActivityLogSeeder extends Seeder
 {
     public function run(): void

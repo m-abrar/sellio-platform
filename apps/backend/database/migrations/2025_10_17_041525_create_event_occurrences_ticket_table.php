@@ -5,6 +5,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateEventOccurrencesTicketTable
+ * Provisoning the occurrence-specific ticketing pivot schema,
+ * allowing dynamic pricing overrides and independent capacity tracking per event instance.
+ */
 return new class extends Migration
 {
     public function up(): void

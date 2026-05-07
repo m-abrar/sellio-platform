@@ -5,6 +5,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateEventBookingsTable
+ * Provisoning the ticketing order schema for the Events module,
+ * mapping user transactions to specific event occurrences and ticket tiers.
+ */
 return new class extends Migration
 {
     public function up(): void

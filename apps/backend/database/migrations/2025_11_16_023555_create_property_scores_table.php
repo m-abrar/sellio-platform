@@ -4,6 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreatePropertyScoresTable
+ * Provisoning the analytical rating schema for the Real Estate module,
+ * storing third-party-sourced scores (Walk Score, School Ratings) per property.
+ */
 return new class extends Migration
 {
     public function up(): void

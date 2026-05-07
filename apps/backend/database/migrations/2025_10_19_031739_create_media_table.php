@@ -4,6 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateMediaTable
+ * Provisoning the Spatie Media Library schema, enabling polymorphic 
+ * attachment of images, documents, and other assets to platform entities.
+ */
 return new class extends Migration
 {
     public function up(): void

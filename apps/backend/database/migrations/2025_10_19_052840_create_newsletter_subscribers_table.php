@@ -4,6 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateNewsletterSubscribersTable
+ * Provisoning the audience capture schema for platform marketing,
+ * supporting double opt-in verification and lead source tracking.
+ */
 return new class extends Migration
 {
     /**

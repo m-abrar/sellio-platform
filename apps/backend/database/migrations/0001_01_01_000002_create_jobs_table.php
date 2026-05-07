@@ -4,6 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateJobsTable
+ * Provisoning the database-backed job queue, batching, and failure tracking systems
+ * to support asynchronous background processing and high-availability workload management.
+ */
 return new class extends Migration
 {
     /**

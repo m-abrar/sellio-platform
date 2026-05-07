@@ -7,6 +7,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class ExtraColumnsRemoved
+ * Executes schema optimizations for the Transfer ledger, removing redundant 
+ * polymorphic type columns to streamline query performance and storage efficiency.
+ */
 return new class() extends Migration
 {
     public function up(): void

@@ -6,6 +6,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateFeaturesTable
+ * Provisoning the global features dictionary, enabling polymorphic 
+ * attachment of specific attributes across all marketplace module entities.
+ */
 return new class extends Migration
 {
     /**

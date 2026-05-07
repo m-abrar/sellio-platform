@@ -4,6 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreatePropertiesTable
+ * Provisoning the core schema for the Real Estate marketplace module, 
+ * integrating pricing, geographical mapping, and property-specific physical attributes.
+ */
 return new class extends Migration
 {
     public function up(): void

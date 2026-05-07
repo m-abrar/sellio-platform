@@ -5,6 +5,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateAmenityPropertyTable
+ * Provisoning the Many-to-Many pivot schema for the Real Estate module,
+ * establishing strict composite key linkages between properties and shared amenities.
+ */
 return new class extends Migration
 {
     /**

@@ -7,6 +7,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class AddExtraColumnInTransfer
+ * Retrofits a flexible JSON 'extra' column to the Transfer schema,
+ * allowing for the storage of arbitrary, third-party, or contextual transaction data.
+ */
 return new class() extends Migration
 {
     public function up(): void

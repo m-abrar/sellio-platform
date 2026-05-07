@@ -4,6 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreatePersonalAccessTokensTable
+ * Provisoning the Laravel Sanctum API authentication schema,
+ * managing polymorphic token issuance, capabilities, and expiration for the REST API.
+ */
 return new class extends Migration
 {
     /**

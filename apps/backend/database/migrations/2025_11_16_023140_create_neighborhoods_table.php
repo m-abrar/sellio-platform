@@ -4,6 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateNeighborhoodsTable
+ * Provisoning the points-of-interest schema for the Real Estate module,
+ * cataloging walkability data like transit, schools, and amenities per property.
+ */
 return new class extends Migration
 {
     public function up(): void

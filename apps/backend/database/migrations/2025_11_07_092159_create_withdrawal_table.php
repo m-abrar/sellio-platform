@@ -4,6 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateWithdrawalTable
+ * Provisoning the payout request schema for the Finance module,
+ * tracking vendor withdrawal amounts, methods, and admin approval workflows.
+ */
 return new class extends Migration
 {
     /**

@@ -6,6 +6,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateTagsTable
+ * Provisoning the platform-wide tagging vocabulary, enabling polymorphic 
+ * categorization and filtering across all marketplace entities and blog posts.
+ */
 return new class extends Migration
 {
     /**

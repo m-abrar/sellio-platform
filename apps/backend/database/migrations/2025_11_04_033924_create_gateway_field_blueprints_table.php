@@ -4,6 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateGatewayFieldBlueprintsTable
+ * Provisoning the dynamic form schema for payment gateways,
+ * allowing each integration to declaratively define its required configuration fields.
+ */
 return new class extends Migration
 {
     public function up(): void

@@ -4,6 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreatePropertyVisitsTable
+ * Provisoning the viewing coordination schema for the Real Estate module,
+ * supporting physical/virtual tours for both authenticated users and anonymous guests.
+ */
 return new class extends Migration
 {
     /**

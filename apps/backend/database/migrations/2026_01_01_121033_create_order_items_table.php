@@ -4,6 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateOrderItemsTable
+ * Provisoning the line-item schema for the E-Commerce module,
+ * preserving historical purchase snapshots (name, price, attributes) per fulfilled order.
+ */
 return new class extends Migration
 {
     public function up(): void

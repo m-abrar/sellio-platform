@@ -4,6 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateTicketMessagesTable
+ * Provisoning the threaded reply schema for the Helpdesk module,
+ * storing the communication history for each support ticket conversation.
+ */
 return new class extends Migration
 {
     /**

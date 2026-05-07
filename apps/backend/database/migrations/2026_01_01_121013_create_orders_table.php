@@ -4,6 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateOrdersTable
+ * Provisoning the e-commerce order management schema, capturing customer checkout
+ * snapshots including shipping address, financials, and fulfillment status tracking.
+ */
 return new class extends Migration
 {
     public function up(): void

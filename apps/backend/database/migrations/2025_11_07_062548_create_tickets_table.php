@@ -4,6 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateTicketsTable
+ * Provisoning the support ticket schema for the Helpdesk module,
+ * managing user-reported issues with priority, category, and admin assignment tracking.
+ */
 return new class extends Migration
 {
     /**

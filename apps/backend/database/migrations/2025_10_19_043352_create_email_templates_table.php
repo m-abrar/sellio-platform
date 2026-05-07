@@ -4,6 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateEmailTemplatesTable
+ * Provisoning the dynamic communication schema, enabling administrators to 
+ * customize transactional and marketing email bodies via a UI rather than hardcoding.
+ */
 return new class extends Migration
 {
     /**

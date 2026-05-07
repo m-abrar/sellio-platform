@@ -16,6 +16,13 @@ use App\Models\PropertyVisit;
 use App\Models\PropertyBooking;
 use Carbon\Carbon;
 
+/**
+ * Class PropertyModuleSeeder
+ *
+ * Seeds comprehensive property auxiliary data (fees, addons, neighborhoods, scores,
+ * reviews, visits, and bookings) for existing Property records to simulate
+ * a fully operational real estate marketplace.
+ */
 class PropertyModuleSeeder extends Seeder
 {
     private $faker;

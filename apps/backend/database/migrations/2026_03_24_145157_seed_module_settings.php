@@ -4,6 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class SeedModuleSettings
+ * Data provisoning migration: inserts default 'is_section.*' toggle settings
+ * for each marketplace module, enabling granular platform configuration on fresh installs.
+ */
 return new class extends Migration
 {
     /**

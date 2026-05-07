@@ -6,6 +6,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateTaggablesTable
+ * Provisoning the polymorphic pivot schema for applying dynamic tags 
+ * to any compatible entity (e.g., properties, autos, blog posts) across the platform.
+ */
 return new class extends Migration
 {
     /**

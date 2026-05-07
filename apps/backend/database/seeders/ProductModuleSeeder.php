@@ -13,6 +13,12 @@ use App\Models\OrderItem;
 use App\Models\Review;
 use Carbon\Carbon;
 
+/**
+ * Class ProductModuleSeeder
+ *
+ * Seeds auxiliary e-commerce data (addons, orders, order items, and reviews)
+ * for existing Product records, simulating a live transactional marketplace.
+ */
 class ProductModuleSeeder extends Seeder
 {
     private $faker;

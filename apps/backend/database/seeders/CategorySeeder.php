@@ -6,6 +6,13 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
+/**
+ * Class CategorySeeder
+ *
+ * Seeds the hierarchical category taxonomy across all marketplace modules
+ * (Property, Auto, Event, Job, Service, Classified, Product, Blog) with
+ * recursive parent-child nesting and module-specific flags.
+ */
 class CategorySeeder extends Seeder
 {
     public function run(): void

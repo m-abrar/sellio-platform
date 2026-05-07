@@ -5,6 +5,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateFeaturablesTable
+ * Provisoning the polymorphic pivot schema for attaching global features 
+ * (with optional custom values) to any compatible entity across the platform.
+ */
 return new class extends Migration
 {
     public function up(): void

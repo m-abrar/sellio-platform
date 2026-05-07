@@ -4,6 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateLocationsTable
+ * Provisoning the geographical taxonomy schema, supporting nested locations,
+ * high-precision coordinate tracking, and module-specific geographic filtering.
+ */
 return new class extends Migration
 {
     /**

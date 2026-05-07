@@ -4,6 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreatePropertyAddonsTable
+ * Provisoning the supplementary pricing schema for the Real Estate module,
+ * supporting selectable upsell items (e.g., airport pickup, cleaning) linked to reservations.
+ */
 return new class extends Migration
 {
     public function up(): void

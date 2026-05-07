@@ -4,6 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateProductAddonsTable
+ * Provisoning the supplementary pricing schema for the E-Commerce module,
+ * supporting selectable product variations or cross-sells (e.g., gift wrapping, extended warranty).
+ */
 return new class extends Migration
 {
     public function up(): void

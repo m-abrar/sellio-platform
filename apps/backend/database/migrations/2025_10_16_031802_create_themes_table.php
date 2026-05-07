@@ -4,6 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateThemesTable
+ * Provisoning the frontend personalization schema, supporting modular 
+ * styling variables, vertical-specific configurations, and activation tracking.
+ */
 return new class extends Migration
 {
     /**

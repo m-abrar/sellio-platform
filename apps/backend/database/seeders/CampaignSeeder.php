@@ -5,6 +5,12 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
+/**
+ * Class CampaignSeeder
+ *
+ * Seeds the campaigns table with sample promotional, flash-sale, and operational
+ * calendar events for testing the admin campaign management dashboard.
+ */
 class CampaignSeeder extends Seeder
 {
     /**

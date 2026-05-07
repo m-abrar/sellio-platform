@@ -7,6 +7,12 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use App\Models\Tag;
 
+/**
+ * Class TagSeeder
+ *
+ * Seeds the polymorphic tag taxonomy with module-specific flags, color tokens,
+ * and sort orders for use across all marketplace verticals via the taggables pivot.
+ */
 class TagSeeder extends Seeder
 {
     public function run(): void

@@ -4,6 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreatePaymentsTable
+ * Provisoning the centralized payment processing schema, linking polymorphic
+ * transactions (subscriptions, bookings, product orders) to their gateway records.
+ */
 return new class extends Migration
 {
     /**

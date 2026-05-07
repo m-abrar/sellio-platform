@@ -6,6 +6,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreatePropertyFeesTable
+ * Provisoning the supplemental fee schema for the Real Estate module,
+ * supporting flat or percentage-based surcharges (e.g., cleaning fees, taxes) applied to bookings.
+ */
 return new class extends Migration
 {
     public function up(): void

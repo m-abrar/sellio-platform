@@ -9,6 +9,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class SoftDelete
+ * Implements time-zone aware soft deletion for core Bavix/Wallet entities,
+ * ensuring non-destructive record management and audit trail preservation.
+ */
 return new class() extends Migration
 {
     public function up(): void

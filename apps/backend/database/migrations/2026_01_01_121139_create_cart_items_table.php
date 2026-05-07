@@ -4,6 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateCartItemsTable
+ * Provisoning the cart line-item schema for the E-Commerce module,
+ * tracking quantities, price-lock snapshots, and selected variations per item in a cart.
+ */
 return new class extends Migration
 {
     public function up(): void

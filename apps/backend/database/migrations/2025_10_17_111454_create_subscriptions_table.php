@@ -4,6 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateSubscriptionsTable
+ * Provisoning the tenant subscription schema, managing active vendor plans,
+ * billing cycles, and status tracking (active, past due, expired) across the platform.
+ */
 return new class extends Migration
 {
     public function up(): void

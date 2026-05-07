@@ -5,6 +5,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateEventOccurrencesTable
+ * Provisoning the scheduling schema for the Events module,
+ * supporting recurring instances, variable durations, and specific venue details per occurrence.
+ */
 return new class extends Migration
 {
     public function up(): void

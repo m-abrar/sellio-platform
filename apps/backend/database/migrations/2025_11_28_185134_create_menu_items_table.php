@@ -4,6 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateMenuItemsTable
+ * Provisoning the navigation link schema for the CMS,
+ * supporting hierarchical (submenu) structures via self-referential parent_id relationships.
+ */
 return new class extends Migration
 {
     /**

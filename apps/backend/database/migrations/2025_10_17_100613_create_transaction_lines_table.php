@@ -4,6 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateTransactionLinesTable
+ * Provisoning the detailed financial ledger schema for the Real Estate module,
+ * capturing granular revenue and expense entries linked to properties or specific bookings.
+ */
 return new class extends Migration
 {
     public function up(): void

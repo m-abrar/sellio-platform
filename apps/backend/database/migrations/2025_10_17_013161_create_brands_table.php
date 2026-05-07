@@ -4,6 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateBrandsTable
+ * Provisoning the brand taxonomy schema, supporting SEO metadata
+ * and module-specific filtering for cross-vertical product mapping.
+ */
 return new class extends Migration
 {
     /**

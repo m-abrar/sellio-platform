@@ -5,6 +5,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateEventsTable
+ * Provisoning the core schema for the Events marketplace module,
+ * supporting virtual/physical locations, tiered pricing, and scheduling mechanics.
+ */
 return new class extends Migration
 {
     public function up(): void

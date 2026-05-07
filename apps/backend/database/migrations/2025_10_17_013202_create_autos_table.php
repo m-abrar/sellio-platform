@@ -4,6 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateAutosTable
+ * Provisoning the core schema for the Automotive marketplace module,
+ * integrating vehicle specifications, dealership locations, and pricing variants.
+ */
 return new class extends Migration
 {
     public function up(): void

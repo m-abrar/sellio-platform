@@ -4,6 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class AddDetailsToUsersTable
+ * Schema evolution: extends the core users table with marketplace identity fields,
+ * including username, bio, partner/buyer role flags, and KYC verification status.
+ */
 return new class extends Migration
 {
     /**

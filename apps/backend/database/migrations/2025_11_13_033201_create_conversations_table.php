@@ -6,6 +6,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateConversationsTable
+ * Provisoning the real-time messaging schema, linking users to partners
+ * in contextual threads tied to specific marketplace entities (polymorphic).
+ */
 return new class extends Migration
 {
     /**

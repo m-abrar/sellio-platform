@@ -8,6 +8,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateTransfersTable
+ * Provisoning the internal asset relocation schema for the Bavix/Wallet system,
+ * enabling atomic transfers between polymorphic accounts with fee and discount support.
+ */
 return new class() extends Migration
 {
     public function up(): void

@@ -6,6 +6,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateMessagesTable
+ * Provisoning the in-app message schema for the Messaging module,
+ * storing conversation replies with sender tracking and read-receipt timestamps.
+ */
 return new class extends Migration
 {
     /**

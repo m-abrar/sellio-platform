@@ -4,6 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateAdvertisementsTable
+ * Provisoning the geo-targeted advertising schema, enabling admin-managed banner
+ * campaigns with placement orientation and regional targeting support.
+ */
 return new class extends Migration
 {
     /**

@@ -6,6 +6,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateAutoInquiriesTable
+ * Provisoning the lead generation schema for the Automotive module,
+ * supporting test drive scheduling and direct dealership communication.
+ */
 return new class extends Migration
 {
     public function up(): void

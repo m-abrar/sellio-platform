@@ -4,6 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateSeasonalPricesTable
+ * Provisoning the dynamic pricing schema for the Real Estate module,
+ * supporting temporary rate adjustments based on specific date ranges and priorities.
+ */
 return new class extends Migration
 {
     /**

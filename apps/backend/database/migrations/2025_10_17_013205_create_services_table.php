@@ -4,6 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateServicesTable
+ * Provisoning the core schema for the Professional Services marketplace module,
+ * supporting operational hours, service radii, and project-based pricing structures.
+ */
 return new class extends Migration
 {
     public function up(): void

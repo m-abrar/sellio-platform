@@ -4,6 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateJoblistingsTable
+ * Provisoning the core schema for the Recruitment/Job Board marketplace module,
+ * capturing salary ranges, experience prerequisites, and workplace paradigms (e.g., Remote).
+ */
 return new class extends Migration
 {
     /**

@@ -4,6 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class ProductionHardeningMigration
+ * Cross-module schema evolution: applies platform-wide audit columns (admin_note, is_premium,
+ * color, status) across all core entities to achieve production-grade consistency.
+ */
 return new class extends Migration
 {
     /**

@@ -4,6 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreatePlansTable
+ * Provisoning the subscription tier schema for the platform,
+ * defining billing periods, feature limits, and analytical access levels for vendors.
+ */
 return new class extends Migration
 {
     /**

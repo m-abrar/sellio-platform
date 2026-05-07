@@ -4,6 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateCacheTable
+ * Provisoning the database-backed caching and locking mechanisms
+ * required for high-performance data retrieval and atomic process isolation.
+ */
 return new class extends Migration
 {
     /**

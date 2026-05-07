@@ -4,6 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateBlogsTable
+ * Provisoning the content publishing schema for the Blog module,
+ * supporting SEO metadata, view counters, featured flags, and category associations.
+ */
 return new class extends Migration
 {
     public function up(): void

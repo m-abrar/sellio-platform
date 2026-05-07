@@ -9,6 +9,11 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class UpdateWalletsUuidTable
+ * Orchestrates the retrofitting of UUID identifiers to existing wallet records,
+ * ensuring compatibility with the v7+ Bavix/Wallet architectural standards.
+ */
 return new class() extends Migration
 {
     public function up(): void

@@ -4,6 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateAmenitiesTable
+ * Provisoning the shared amenities dictionary, providing reusable features
+ * (e.g., WiFi, Parking) across all applicable marketplace modules via polymorphic flags.
+ */
 return new class extends Migration
 {
     public function up(): void
