@@ -13,36 +13,49 @@
 | `app\Http\Controllers\AutoController.php` | **98** | ✅ Elite - Production Ready |
 | `app\Http\Controllers\AutoInquiryController.php` | **95** | ✅ Elite - Service Based |
 | `app\Http\Controllers\BlogController.php` | **100** | ✅ Elite - Production Ready |
-| `app\Http\Controllers\BrandController.php` | **100** | ✅ Elite - Production Ready |
+| `app\Http\Controllers\BrandController.php` | **80** | ✅ Good - Basic Logic |
 | `app\Http\Controllers\CartController.php` | **90** | ✅ Elite - Service Based |
-| `app\Http\Controllers\CategoryController.php` | **100** | ✅ Elite - Production Ready |
+| `app\Http\Controllers\CategoryController.php` | **80** | ✅ Good - Basic Logic |
 | `app\Http\Controllers\CheckoutController.php` | **30** | 🔴 Critical - Price Manipulation Risk |
 | `app\Http\Controllers\ClassifiedController.php` | **98** | ✅ Elite - Production Ready |
 | `app\Http\Controllers\Controller.php` | **100** | ✅ Elite - Production Ready |
 | `app\Http\Controllers\ConversationController.php` | **75** | 🟠 Warning - Logic Debt |
 | `app\Http\Controllers\EventBookingController.php` | **30** | 🔴 Critical - Price Manipulation Risk |
 | `app\Http\Controllers\EventController.php` | **98** | ✅ Elite - Production Ready |
-| `app\Http\Controllers\EventTicketController.php` | **100** | ✅ Elite - Production Ready |
+| `app\Http\Controllers\EventTicketController.php` | **90** | ✅ Elite - Production Ready |
 | `app\Http\Controllers\HomeController.php` | **95** | ✅ Elite - Proxy Pattern |
 | `app\Http\Controllers\JobApplicationController.php` | **100** | ✅ Elite - Production Ready |
-| `app\Http\Controllers\JobController.php` | **100** | ✅ Elite - Production Ready |
-| `app\Http\Controllers\OrderController.php` | **100** | ✅ Elite - Production Ready |
+| `app\Http\Controllers\JobController.php` | **90** | ✅ Good - Scalability Risk |
+| `app\Http\Controllers\OrderController.php` | **90** | ✅ Good - Service Based |
 | `app\Http\Controllers\PageController.php` | **60** | 🟠 Warning - Stub Logic |
-| `app\Http\Controllers\PartnerController.php` | **100** | ✅ Elite - Production Ready |
-| `app\Http\Controllers\ProductController.php` | **100** | ✅ Elite - Production Ready |
+| `app\Http\Controllers\PartnerController.php` | **85** | ✅ Good - Proxy Pattern |
+| `app\Http\Controllers\ProductController.php` | **95** | ✅ Elite - Service Based |
 | `app\Http\Controllers\PropertyBookingController.php` | **65** | 🟠 Warning - IDOR Ownership Risk |
 | `app\Http\Controllers\PropertyController.php` | **100** | ✅ Elite - Production Ready |
 | `app\Http\Controllers\PropertyVisitController.php` | **85** | ✅ Good - Service Extraction Opportunity |
-| `app\Http\Controllers\ReviewController.php` | **100** | ✅ Elite - Production Ready |
+| `app\Http\Controllers\ReviewController.php` | **95** | ✅ Elite - Service Based |
 | `app\Http\Controllers\ServiceController.php` | **100** | ✅ Elite - Production Ready |
 | `app\Http\Controllers\TagController.php` | **100** | ✅ Elite - Production Ready |
 | `app\Http\Controllers\TypeController.php` | **100** | ✅ Elite - Production Ready |
-| `app\Http\Controllers\UnifiedHomeController.php` | **98** | ✅ Elite - Production Ready |
+| `app\Http\Controllers\UnifiedHomeController.php` | **95** | ✅ Elite - Production Ready |
 | `app\Http\Controllers\WebhookController.php` | **100** | ✅ Elite - Production Ready |
+| `app\Http\Controllers\Auth\SocialLoginController.php` | **75** | 🟠 Warning - Logic Debt |
+| `app\Http\Controllers\Auth\RegisteredUserController.php` | **85** | ✅ Good - Service Extraction Opportunity |
+| `app\Http\Controllers\Dashboard\DashboardRedirectController.php` | **90** | ✅ Elite - Logic Debt |
+| `app\Http\Controllers\Dashboard\MediaController.php` | **10** | 🔴 Critical - RCE/Injection Risk |
+| `app\Http\Controllers\Auth\AuthenticatedSessionController.php` | **95** | ✅ Elite - Production Ready |
+| `app\Http\Controllers\Auth\ConfirmablePasswordController.php` | **90** | ✅ Good - Production Ready |
+| `app\Http\Controllers\Auth\EmailVerificationNotificationController.php` | **100** | ✅ Elite - Production Ready |
+| `app\Http\Controllers\Auth\EmailVerificationPromptController.php` | **100** | ✅ Elite - Production Ready |
+| `app\Http\Controllers\Auth\LogoutController.php` | **100** | ✅ Elite - Production Ready |
+| `app\Http\Controllers\Auth\NewPasswordController.php` | **95** | ✅ Elite - Production Ready |
+| `app\Http\Controllers\Auth\PasswordController.php` | **95** | ✅ Elite - Production Ready |
+| `app\Http\Controllers\Auth\PasswordResetLinkController.php` | **95** | ✅ Elite - Production Ready |
+| `app\Http\Controllers\Auth\VerifyEmailController.php` | **100** | ✅ Elite - Production Ready |
 | `app\Http\Controllers\Admin\ActivityLogController.php` | **75** | 🟠 Warning - Logic Debt |
 | `app\Http\Controllers\Admin\AddonController.php` | **85** | ✅ Good - Inline Validation |
-| `app\Http\Controllers\Admin\AdvertisementController.php` | **95** | ✅ Elite - Logic Bloat |
-| `app\Http\Controllers\Admin\AmenityController.php` | **100** | ✅ Elite - Production Ready |
+| `app\Http\Controllers\Admin\AdvertisementController.php` | **90** | ✅ Elite - Logic Bloat |
+| `app\Http\Controllers\Admin\AmenityController.php` | **95** | ✅ Elite - Production Ready |
 | `app\Http\Controllers\Admin\AutoController.php` | **72** | 🟠 Warning - Fat Controller |
 | `app\Http\Controllers\Admin\AutoInquiryController.php` | **75** | 🟠 Warning - Scale Risk |
 | `app\Http\Controllers\Admin\BlogController.php` | **85** | ✅ Good - Service Extraction Opportunity |
@@ -92,6 +105,7 @@
 | `app\Http\Controllers\Admin\TypeController.php` | **100** | ✅ Elite - Production Ready |
 | `app\Http\Controllers\Admin\UserController.php` | **95** | ✅ Elite - Service Based |
 | `app\Http\Controllers\Admin\WithdrawalController.php` | **100** | ✅ Elite - Production Ready |
+| `app\Http\Controllers\Admin\TransactionController.php` | **65** | 🟠 Warning - Scale Risk |
 | `app\Http\Controllers\Api\ApiApplicationController.php` | **85** | ✅ Good - Resource Debt |
 | `app\Http\Controllers\Api\ApiThemeController.php` | **85** | ✅ Good - Resource Debt |
 | `app\Http\Controllers\Api\TicketController.php` | **78** | 🟠 Warning - Protocol Debt |
@@ -110,6 +124,11 @@
 | `app\Http\Controllers\Api\V1\ApiProductController.php` | **95** | ✅ Elite - Service Based |
 | `app\Http\Controllers\Api\V1\ApiPropertyController.php` | **100** | ✅ Elite - Production Ready |
 | `app\Http\Controllers\Api\V1\ApiServiceController.php` | **95** | ✅ Elite - Service Based |
+| `app\Http\Controllers\Api\V1\Auth\PasswordResetController.php` | **95** | ✅ Elite - Production Ready |
+| `app\Http\Controllers\Api\V1\Auth\ProfileController.php` | **85** | ✅ Good - Resource Debt |
+| `app\Http\Controllers\Api\V1\Dashboard\Partner\AnalyticsController.php` | **40** | 🔴 Critical - Performance / Fat Controller |
+| `app\Http\Controllers\Api\V1\Dashboard\Partner\DashboardController.php` | **80** | ✅ Good - Trait Debt |
+| `app\Http\Controllers\Api\V1\Dashboard\User\DashboardController.php` | **85** | ✅ Good - Response Inconsistency |
 | `app\Http\Controllers\Api\V1\ApiTagController.php` | **100** | ✅ Elite - Production Ready |
 | `app\Http\Controllers\Api\V1\ApiTypeController.php` | **100** | ✅ Elite - Production Ready |
 | `app\Http\Controllers\Api\V1\Auth\AuthController.php` | **40** | 🔴 Critical - Privilege Escalation Risk |
@@ -122,38 +141,38 @@
 | `app\Http\Controllers\Api\V1\Dashboard\Partner\ClassifiedController.php` | **100** | ✅ Elite - Production Ready |
 | `app\Http\Controllers\Api\V1\Dashboard\Partner\ClassifiedInquiryController.php` | **100** | ✅ Elite - Production Ready |
 | `app\Http\Controllers\Api\V1\Dashboard\Partner\DashboardController.php` | **75** | 🟠 Warning - Trait Debt |
-| `app\Http\Controllers\Api\V1\Dashboard\Partner\EventBookingController.php` | **100** | ✅ Elite - Production Ready |
-| `app\Http\Controllers\Api\V1\Dashboard\Partner\EventController.php` | **100** | ✅ Elite - Production Ready |
-| `app\Http\Controllers\Api\V1\Dashboard\Partner\JobApplicationController.php` | **100** | ✅ Elite - Production Ready |
-| `app\Http\Controllers\Api\V1\Dashboard\Partner\JobListingController.php` | **100** | ✅ Elite - Production Ready |
-| `app\Http\Controllers\Api\V1\Dashboard\Partner\MessageController.php` | **100** | ✅ Elite - Production Ready |
-| `app\Http\Controllers\Api\V1\Dashboard\Partner\PaymentController.php` | **100** | ✅ Elite - Production Ready |
+| `app\Http\Controllers\Api\V1\Dashboard\Partner\EventBookingController.php` | **95** | ✅ Elite - Production Ready |
+| `app\Http\Controllers\Api\V1\Dashboard\Partner\EventController.php` | **90** | ✅ Good - Service Extraction Opportunity |
+| `app\Http\Controllers\Api\V1\Dashboard\Partner\JobApplicationController.php` | **95** | ✅ Elite - Production Ready |
+| `app\Http\Controllers\Api\V1\Dashboard\Partner\JobListingController.php` | **90** | ✅ Good - Service Extraction Opportunity |
+| `app\Http\Controllers\Api\V1\Dashboard\Partner\MessageController.php` | **90** | ✅ Good - Resource Debt |
+| `app\Http\Controllers\Api\V1\Dashboard\Partner\PaymentController.php` | **95** | ✅ Elite - Production Ready |
 | `app\Http\Controllers\Api\V1\Dashboard\Partner\PlanController.php` | **100** | ✅ Elite - Production Ready |
-| `app\Http\Controllers\Api\V1\Dashboard\Partner\ProductController.php` | **100** | ✅ Elite - Production Ready |
-| `app\Http\Controllers\Api\V1\Dashboard\Partner\ProfileController.php` | **100** | ✅ Elite - Production Ready |
-| `app\Http\Controllers\Api\V1\Dashboard\Partner\PropertyBookingController.php` | **100** | ✅ Elite - Production Ready |
-| `app\Http\Controllers\Api\V1\Dashboard\Partner\PropertyController.php` | **88** | ✅ Elite - Manual Auth Debt |
-| `app\Http\Controllers\Api\V1\Dashboard\Partner\PropertyVisitController.php` | **100** | ✅ Elite - Production Ready |
-| `app\Http\Controllers\Api\V1\Dashboard\Partner\ReviewController.php` | **100** | ✅ Elite - Production Ready |
-| `app\Http\Controllers\Api\V1\Dashboard\Partner\ServiceAppointmentController.php` | **100** | ✅ Elite - Production Ready |
-| `app\Http\Controllers\Api\V1\Dashboard\Partner\ServiceController.php` | **100** | ✅ Elite - Production Ready |
-| `app\Http\Controllers\Api\V1\Dashboard\Partner\ServiceQuoteController.php` | **100** | ✅ Elite - Production Ready |
-| `app\Http\Controllers\Api\V1\Dashboard\Partner\SubscriptionController.php` | **100** | ✅ Elite - Production Ready |
-| `app\Http\Controllers\Api\V1\Dashboard\Partner\WalletController.php` | **100** | ✅ Elite - Production Ready |
-| `app\Http\Controllers\Api\V1\Dashboard\Partner\WithdrawalController.php` | **100** | ✅ Elite - Production Ready |
-| `app\Http\Controllers\Api\V1\Dashboard\User\AutoInquiryController.php` | **100** | ✅ Elite - Production Ready |
-| `app\Http\Controllers\Api\V1\Dashboard\User\BookingController.php` | **100** | ✅ Elite - Production Ready |
-| `app\Http\Controllers\Api\V1\Dashboard\User\ClassifiedInquiryController.php` | **100** | ✅ Elite - Production Ready |
-| `app\Http\Controllers\Api\V1\Dashboard\User\DashboardController.php` | **100** | ✅ Elite - Production Ready |
-| `app\Http\Controllers\Api\V1\Dashboard\User\EventBookingController.php` | **100** | ✅ Elite - Production Ready |
+| `app\Http\Controllers\Api\V1\Dashboard\Partner\ProductController.php` | **90** | ✅ Good - Service Extraction Opportunity |
+| `app\Http\Controllers\Api\V1\Dashboard\Partner\ProfileController.php` | **95** | ✅ Elite - Production Ready |
+| `app\Http\Controllers\Api\V1\Dashboard\Partner\PropertyBookingController.php` | **95** | ✅ Elite - Production Ready |
+| `app\Http\Controllers\Api\V1\Dashboard\Partner\PropertyController.php` | **90** | ✅ Good - Media Logic Debt |
+| `app\Http\Controllers\Api\V1\Dashboard\Partner\PropertyVisitController.php` | **95** | ✅ Elite - Production Ready |
+| `app\Http\Controllers\Api\V1\Dashboard\Partner\ReviewController.php` | **95** | ✅ Elite - Production Ready |
+| `app\Http\Controllers\Api\V1\Dashboard\Partner\ServiceAppointmentController.php` | **95** | ✅ Elite - Production Ready |
+| `app\Http\Controllers\Api\V1\Dashboard\Partner\ServiceController.php` | **90** | ✅ Good - Service Extraction Opportunity |
+| `app\Http\Controllers\Api\V1\Dashboard\Partner\ServiceQuoteController.php` | **95** | ✅ Elite - Production Ready |
+| `app\Http\Controllers\Api\V1\Dashboard\Partner\SubscriptionController.php` | **95** | ✅ Elite - Production Ready |
+| `app\Http\Controllers\Api\V1\Dashboard\Partner\WalletController.php` | **95** | ✅ Elite - Production Ready |
+| `app\Http\Controllers\Api\V1\Dashboard\Partner\WithdrawalController.php` | **95** | ✅ Elite - Production Ready |
+| `app\Http\Controllers\Api\V1\Dashboard\User\AutoInquiryController.php` | **95** | ✅ Elite - Production Ready |
+| `app\Http\Controllers\Api\V1\Dashboard\User\BookingController.php` | **85** | ✅ Good - Performance Risk |
+| `app\Http\Controllers\Api\V1\Dashboard\User\ClassifiedInquiryController.php` | **95** | ✅ Elite - Production Ready |
+| `app\Http\Controllers\Api\V1\Dashboard\User\DashboardController.php` | **85** | ✅ Good - Response Inconsistency |
+| `app\Http\Controllers\Api\V1\Dashboard\User\EventBookingController.php` | **95** | ✅ Elite - Production Ready |
 | `app\Http\Controllers\Api\V1\Dashboard\User\FavoriteController.php` | **100** | ✅ Elite - Production Ready |
-| `app\Http\Controllers\Api\V1\Dashboard\User\JobApplicationController.php` | **100** | ✅ Elite - Production Ready |
-| `app\Http\Controllers\Api\V1\Dashboard\User\MessageController.php` | **100** | ✅ Elite - Production Ready |
-| `app\Http\Controllers\Api\V1\Dashboard\User\PaymentController.php` | **100** | ✅ Elite - Production Ready |
-| `app\Http\Controllers\Api\V1\Dashboard\User\PropertyBookingController.php` | **100** | ✅ Elite - Production Ready |
-| `app\Http\Controllers\Api\V1\Dashboard\User\ReviewController.php` | **100** | ✅ Elite - Production Ready |
-| `app\Http\Controllers\Api\V1\Dashboard\User\ServiceAppointmentController.php` | **100** | ✅ Elite - Production Ready |
-| `app\Http\Controllers\Api\V1\Dashboard\User\ServiceQuoteController.php` | **100** | ✅ Elite - Production Ready |
+| `app\Http\Controllers\Api\V1\Dashboard\User\JobApplicationController.php` | **95** | ✅ Elite - Production Ready |
+| `app\Http\Controllers\Api\V1\Dashboard\User\MessageController.php` | **90** | ✅ Good - Resource Debt |
+| `app\Http\Controllers\Api\V1\Dashboard\User\PaymentController.php" | **95** | ✅ Elite - Production Ready |
+| `app\Http\Controllers\Api\V1\Dashboard\User\PropertyBookingController.php` | **95** | ✅ Elite - Production Ready |
+| `app\Http\Controllers\Api\V1\Dashboard\User\ReviewController.php` | **95** | ✅ Elite - Production Ready |
+| `app\Http\Controllers\Api\V1\Dashboard\User\ServiceAppointmentController.php` | **95** | ✅ Elite - Production Ready |
+| `app\Http\Controllers\Api\V1\Dashboard\User\ServiceQuoteController.php` | **95** | ✅ Elite - Production Ready |
 
 ## Events
 
@@ -2344,9 +2363,189 @@ LOW-MEDIUM
 
 ---
 
+## Controller Audit: app/Http/Controllers/Dashboard/MediaController.php
+
+### Controller Purpose
+Handles asynchronous media uploads and deletions across the entire platform via AJAX.
+
+### Risk Level
+CRITICAL / SYSTEMIC RISK
+
+### Problems Found
+
+### Security
+- **Arbitrary Model Creation**: `upload` (L36) uses `$modelClass::create()` if no ID is provided. Since `$modelClass` is taken directly from the request without a whitelist, an attacker can trigger the creation of ANY model in the system that has a blank constructor or fillable attributes.
+- **Unauthorized Deletion**: `delete` (L97) performs no ownership or permission checks. An attacker can delete any media item from any model by simply knowing its URL and the model ID.
+- **Missing Authorization**: Neither `upload` nor `delete` implement any form of authorization beyond basic authentication. There is no check to ensure the user has permission to attach media to the specific model instance.
+
+### Architecture
+- **Unsafe Dynamic Instantiation**: Directly using strings from request parameters to instantiate classes (`new $modelClass`) is a major security anti-pattern (Remote Code Execution / Class Injection risk).
+
+## Controller Audit: app/Http/Controllers/Auth/SocialLoginController.php
+
+### Controller Purpose
+Manages OAuth-based authentication via Laravel Socialite.
+
+### Risk Level
+MEDIUM
+
+### Problems Found
+
+### Security
+- **Email Spoofing Risk**: Relies solely on email matching (L44) to link social accounts to existing users. If a social provider does not guarantee email verification, an attacker could hijack an existing account.
+- **CSRF Risk**: Uses `stateless()` (L30) in a web-based redirect flow, which bypasses state verification.
+
+### Architecture
+- **Logic Debt**: Hardcoded role assignment (`user`) and status (`is_buyer => true`). Should be handled via an `IdentityService` or configuration.
+
+## Controller Audit: app/Http/Controllers/Admin/TransactionController.php
+
+### Controller Purpose
+Administrative financial ledger for manual entry and auditing.
+
+### Risk Level
+MEDIUM
+
+### Problems Found
+
+### Performance & Scalability
+- **Memory Exhaustion Risk**: `create` and `edit` methods (L40, L86) call `Booking::all()`. This will fail as the platform scales.
+
+### Architecture
+- **Logic Bloat**: Media handling and transaction coordination are trapped in the controller.
+
+## Controller Audit: app/Http/Controllers/Auth/AuthenticatedSessionController.php
+
+### Controller Purpose
+Handles the user's primary login/logout session lifecycle, including authentication, session regeneration, and security audit logging.
+
+### Risk Level
+LOW
+
+### Architecture
+- **Elite Standards**: Exceptional security logging. The use of `regenerate()` (L32) correctly mitigates session fixation attacks.
+- **Audit Traceability**: Correct implementation of activity logging for both login and logout events, ensuring the causer is captured even during session termination.
+
+## Controller Audit: app/Http/Controllers/OrderController.php
+
+### Controller Purpose
+Handles the public-facing order placement and historical detail retrieval.
+
+### Risk Level
+LOW-MEDIUM
+
+### Problems Found
+- **Validation**: Uses inline `$request->validate()` (L53). Should be refactored into an `OrderRequest` to maintain architectural consistency with the rest of the platform.
+- **Architecture**: Good delegation to `CheckoutService`.
+
+## Controller Audit: app/Http/Controllers/BrandController.php / CategoryController.php
+
+### Controller Purpose
+Discovery endpoints for marketplace taxonomy.
+
+### Risk Level
+LOW
+
+### Problems Found
+- **Minimal Implementation**: These controllers are purely boilerplate (L17). While safe, they lack the high-performance Service-Resource pattern used in other modules.
+- **Scalability**: No eager loading of relationships; if the views require item counts or related data, this will trigger N+1 issues.
+
+## Controller Audit: app/Http/Controllers/JobController.php
+
+### Controller Purpose
+Discovery and faceted search for recruitment listings.
+
+### Risk Level
+LOW-MEDIUM
+
+### Problems Found
+- **Scalability Risk**: Fetching entire collections for Categories, Locations, Types, and Tags (L55-58) without pagination or limit. This will become a performance bottleneck.
+- **Validation Debt**: Uses raw `Request` instead of a dedicated `SearchJobRequest`.
+
+## Controller Audit: app/Http/Controllers/ReviewController.php
+
+### Controller Purpose
+Polymorphic review management across marketplace verticals.
+
+### Risk Level
+LOW
+
+### Problems Found
+- **Service Layer Incompleteness**: The `index` method (L66) directly executes the query and handles pagination. This logic should be moved to the `ReviewManagementService` to match the `store` pattern.
+
+## Controller Audit: app/Http/Controllers/Api/V1/Dashboard/Partner/AnalyticsController.php
+
+### Controller Purpose
+Aggregates performance metrics, earnings, and view/lead data for the partner portal.
+
+### Risk Level
+CRITICAL / PERFORMANCE RISK
+
+### Problems Found
+
+### Performance
+- **Exponential N+1 Database Queries**: `getDetailedListingPerformance` (L355) executes multiple database queries (Activity logs, leads, revenue) for every single listing owned by the partner within a loop. A partner with a moderate number of listings (e.g., 50) will trigger 150+ queries per request, leading to massive latency and potential DB denial-of-service.
+- **Unoptimized Metric Aggregation**: Relies on raw counting and summing within loops rather than utilizing efficient DB-level grouping or caching.
+
+### Architecture
+- **Fat Controller**: At 434 lines, this controller violates the "Thin Controller" mandate. It handles complex business logic that should reside in an `AnalyticsService`.
+
+## Controller Audit: app/Http/Controllers/Api/V1/Dashboard/Partner/DashboardController.php
+
+### Controller Purpose
+Provides a high-level overview of the partner's account health and recent activities.
+
+### Risk Level
+MEDIUM
+
+### Problems Found
+
+### Architecture
+- **Trait Coupling**: Heavily reliant on PHP Traits (`Listings`, `DashboardDataPreparation`) for core logic. This obscures dependencies and makes unit testing difficult. Logic should be migrated to a dedicated Service class.
+
+## Controller Audit: app/Http/Controllers/Api/V1/Dashboard/User/DashboardController.php
+
+### Controller Purpose
+Manages the buyer/user dashboard and profile updates.
+
+### Risk Level
+MEDIUM
+
+### Problems Found
+
+### Architecture
+- **Response Inconsistency**: `updateProfile` (L65) uses `back()`, which is a web-oriented redirect. In an API context (`Api\V1`), this should return a JSON response to maintain protocol consistency.
+
+## Controller Audit: app/Http/Controllers/Api/V1/Dashboard/Partner/PropertyController.php
+
+### Controller Purpose
+Manages the partner's property listings, including creation, updates, and media synchronization.
+
+### Risk Level
+LOW
+
+### Problems Found
+
+### Architecture
+- **Media Logic Bloat**: The `handleMedia` method (L125) resides directly in the controller. This logic is repetitive and should be abstracted into a `MediaService` or a `MediaSynchronizer` trait to ensure consistency across all listing types (Autos, Events, etc.).
+
+## Controller Audit: app/Http/Controllers/Api/V1/Dashboard/User/BookingController.php
+
+### Controller Purpose
+Aggregates and categorizes all user bookings (Properties, Events, Services) for the dashboard view.
+
+### Risk Level
+MEDIUM / PERFORMANCE RISK
+
+### Problems Found
+
+### Performance
+- **Unbounded Data Aggregation**: The `index` method (L19) fetches ALL bookings across four different models (`PropertyBooking`, `PropertyVisit`, `EventBooking`, `ServiceAppointment`) without pagination. While acceptable for average users, this will cause memory and latency spikes for power users or those with extensive history.
+- **In-Memory Sorting**: Sorting is performed on a merged PHP collection (L49) rather than at the database level.
+
+---
+
 # Overall Controllers Audit Summary
-
-
 
 
 
@@ -2372,9 +2571,13 @@ LOW-MEDIUM
 - `Http\Controllers\CheckoutController.php` (Price Manipulation)
 - `Http\Controllers\EventBookingController.php` (Price Manipulation)
 - `Http\Controllers\PropertyBookingController.php` (IDOR / Ownership)
+- `Dashboard\MediaController.php` (Critical: Arbitrary Model Creation / Deletion)
+- `Api\V1\Dashboard\Partner\AnalyticsController.php` (Critical: Exponential N+1 / Performance)
 - `Api\V1\Auth\AuthController.php` (Fragile Role Assignment)
 - `Admin\SettingController.php` (Logic bloat & Security exposure)
 - `Admin\ReportController.php` (Deep logic debt)
-- `PageController.php` (Stub logic / Incomplete feature)
+- `PageController.php" (Stub logic / Incomplete feature)
 - `Admin\BookingController.php` (Dynamic Model Risk)
 - `Admin\OrderController.php` (Fat Controller / Coupled Inventory)
+- `Admin\TransactionController.php` (Scale Risk / Missing Policies)
+- `Api\V1\Dashboard\User\DashboardController.php` (API/Web Response Leak)
