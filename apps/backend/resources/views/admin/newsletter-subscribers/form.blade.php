@@ -1,3 +1,15 @@
+{{--
+    Administrative Marketing Module: Audience Identity Architect
+    
+    This view provides the primary interface for managing newsletter 
+    subscriber profiles. It facilitates email identity orchestration, 
+    acquisition source attribution, and opt-in status lifecycle 
+    configuration (Verified Lead vs. Pending Opt-in).
+    
+    @extends adminlte::page
+    @context Marketing Management
+    @variables NewsletterSubscriber $newsletterSubscriber The subscriber model instance.
+--}}
 @extends('adminlte::page')
 
 @section('title', ($newsletterSubscriber->exists ? 'Edit' : 'Add') . ' Subscriber')

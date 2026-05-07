@@ -1,3 +1,14 @@
+{{--
+    Administrative Intelligence Component: Booking Filter Protocol
+    
+    This partial facilitates the temporal filtering of booking analytics. 
+    It orchestrates date-range selection and range-badge feedback, 
+    ensuring precise analytical scoping for reservation velocity reports.
+    
+    @context Analytical Reporting
+    @variables string $startDateFormatted The localized start date of the analysis period.
+    @variables string $endDateFormatted The localized end date of the analysis period.
+--}}
 {{-- Filter Protocol --}}
 <div class="card registry-card-premium registry-filter-card mb-5">
     <div class="card-body">

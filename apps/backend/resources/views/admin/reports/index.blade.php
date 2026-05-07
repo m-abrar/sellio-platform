@@ -1,3 +1,14 @@
+{{--
+    Administrative Intelligence: Analytical Command Center
+    
+    This view serves as the primary gateway to the platform's analytical 
+    intelligence. It orchestrates access to modular reporting engines 
+    (Bookings, Revenue, Assets), facilitating high-fidelity auditing 
+    of marketplace performance and operational health.
+    
+    @extends adminlte::page
+    @context Analytical Reporting
+--}}
 @extends('adminlte::page')
 
 @section('title', 'Reports & Intelligence')
@@ -75,4 +86,4 @@
 </div>
 @endsection
 
-@endpush
+@endsection

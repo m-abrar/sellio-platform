@@ -1,3 +1,15 @@
+{{--
+    Administrative Intelligence: Asset Utilization Analytics
+    
+    This view provides real-time visibility into property inventory and 
+    occupancy health. It orchestrates the monitoring of availability 
+    ratios, geographic performance, and resource capacity across 
+    the marketplace property portfolio.
+    
+    @extends adminlte::page
+    @context Analytical Reporting
+    @variables string $reportTitle The localized title of the analytical report.
+--}}
 @extends('adminlte::page')
 
 @section('plugins.Datatables', true)

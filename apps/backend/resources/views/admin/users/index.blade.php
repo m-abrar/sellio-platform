@@ -164,8 +164,6 @@
 </div>
 @endsection
 
-@endsection
-
 @section('js')
 <script>
     $(function () {

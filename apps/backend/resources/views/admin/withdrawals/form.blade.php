@@ -1,3 +1,16 @@
+{{--
+    Administrative Financial Module: Withdrawal Authoring Interface
+    
+    [STATUS: LEGACY PLACEHOLDER]
+    This view serves as a placeholder for manual payout creation logic. 
+    Currently, payouts are orchestrasted via partner-initiated lifecycle 
+    events. This file is retained for architectural continuity but 
+    utilizes legacy location template fragments for UI scaffolding.
+    
+    @extends adminlte::page
+    @context Financial Management
+    @variables Location $location (Legacy mapping)
+--}}
 @extends('adminlte::page')
 
 @section('title', $location->exists ? 'Edit Location' : 'Add Location')

@@ -1,3 +1,14 @@
+{{--
+    Administrative Intelligence Component: Financial Filter Protocol
+    
+    This partial facilitates the temporal scoping of revenue analytics. 
+    It orchestrates date-range definition and validation for transaction 
+    velocity and settlement reports.
+    
+    @context Analytical Reporting
+    @variables string $startDateFormatted The localized start date of the analysis period.
+    @variables string $endDateFormatted The localized end date of the analysis period.
+--}}
 {{-- Filter Protocol --}}
 <div class="card registry-card-premium registry-filter-card mb-5">
     <div class="card-body">

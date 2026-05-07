@@ -1,3 +1,16 @@
+{{--
+    Administrative Infrastructure Component: General Identity Registry
+    
+    This partial orchestrates the foundational site identity and 
+    localization settings. It facilitates the management of brand 
+    assets (logo/favicon), regional preferences (language/timezone/ 
+    currency), and global ecosystem URLs for the platform's 
+    distributed architecture.
+    
+    @extends admin.settings.settings-layout
+    @context Infrastructure Management
+    @variables Array $settings Collection of key-value system settings.
+--}}
 @extends('admin.settings.settings-layout')
 
 @section('setting-form-content')

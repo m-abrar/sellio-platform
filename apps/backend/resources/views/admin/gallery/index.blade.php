@@ -1,3 +1,16 @@
+{{--
+    Administrative Media Module: Global Gallery Registry
+    
+    This view serves as the primary gateway for platform-wide media assets. 
+    It orchestrates the discovery, replacement, and management of 
+    diverse storage collections (listings, profile avatars, brand logos) 
+    through a centralized visual interface.
+    
+    @extends adminlte::page
+    @context Media Asset Management
+    @variables Paginator $mediaItems Paginated collection of Media model instances.
+    @variables Array $sources Array of unique media source collections.
+--}}
 @extends('adminlte::page')
 
 @section('title', 'Global Media Manager | Admin Assets')
@@ -202,8 +215,6 @@
             </div>
         </div>
     </div>
-@stop
-
 @stop
 
 @section('js')

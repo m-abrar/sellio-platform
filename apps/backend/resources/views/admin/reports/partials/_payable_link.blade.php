@@ -1,3 +1,13 @@
+{{--
+    Administrative Intelligence Component: Payable Attribution Protocol
+    
+    This partial orchestrates the visual mapping and navigation links 
+    for transaction-linked entities. It facilitates the discovery of 
+    originating subscriptions, property bookings, or event ticket purchases.
+    
+    @context Analytical Reporting
+    @variables Model $payable The polymorphic entity associated with the transaction.
+--}}
 @php
     /** @var \Illuminate\Database\Eloquent\Model|null $payable The model associated with the payment (e.g., EventBooking, Subscription) */
     

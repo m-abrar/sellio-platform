@@ -1,3 +1,15 @@
+{{--
+    Administrative Marketing Module: Ad Impression Intelligence
+    
+    This view provides a comprehensive audit trail and visual preview 
+    for a specific advertisement. It facilitates the inspection of 
+    technical metadata, geospatial targeting parameters, and placement 
+    orientations, ensuring campaign accuracy before live deployment.
+    
+    @extends adminlte::page
+    @context Marketing Management
+    @variables Advertisement $advertisement The advertisement model instance.
+--}}
 @extends('adminlte::page')
 
 @section('title', 'Ad Details: ' . $advertisement->title)
@@ -165,5 +177,3 @@
     </div>
 </div>
 @endsection
-
-@endpush

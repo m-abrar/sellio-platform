@@ -1,3 +1,17 @@
+{{--
+    Administrative Identity: Activity Stream (System Heartbeat)
+    
+    This view provides a chronological audit trail of all administrative and 
+    system-level interactions. It integrates high-fidelity telemetry from the 
+    Spatie Activity Log package, facilitating security auditing and 
+    operational transparency across the platform's distributed services.
+    
+    @extends adminlte::page
+    @context Security & Audit Logs
+    @variables Paginator $activityLogs Paginated collection of Activity model instances.
+    @variables Array $filters List of available telemetry streams.
+    @variables String $currentFilter The active stream identifier.
+--}}
 @extends('adminlte::page')
 
 @section('plugins.Datatables', true)

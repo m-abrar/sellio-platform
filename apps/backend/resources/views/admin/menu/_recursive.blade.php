@@ -1,6 +1,14 @@
-{{-- 
-    Recursive partial to display nested menu items using Nestable structure.
-    NOTE: The root container will be defined in the edit view as <div class="dd">.
+{{--
+    Administrative Navigation Component: Recursive Node Renderer
+    
+    This partial facilitates the recursive rendering of hierarchical 
+    navigation nodes for the Nestable2 editor. It orchestrates the 
+    visual display of drag-handles, metadata labels (title/URL), and 
+    operational node actions (edit/delete) across nested menu levels.
+    
+    @context Navigation Management
+    @variables Collection $items Collection of MenuItem instances for the current level.
+    @variables integer $level The current recursion depth.
 --}}
 @foreach ($items as $item)
     {{-- Nestable item structure --}}

@@ -1,3 +1,15 @@
+{{--
+    Administrative Aesthetic Module: Visual Token Configuration
+    
+    This view provides a granular interface for modifying a theme's 
+    visual architecture. It facilitates the configuration of brand 
+    color palettes, typography mapping (with real-time Google Font 
+    previews), and layout spacing tokens (radius, width, shadows).
+    
+    @extends adminlte::page
+    @context Aesthetic Management
+    @variables Theme $theme The theme model instance being modified.
+--}}
 @extends('adminlte::page')
 
 @section('title', 'Edit Theme')

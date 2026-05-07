@@ -182,8 +182,6 @@
     </div>
 @endsection
 
-@endsection
-
 @section('js')
 @include('admin._partials._sweetalert')
 <script>

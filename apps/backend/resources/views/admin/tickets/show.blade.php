@@ -1,3 +1,16 @@
+{{--
+    Administrative Communication Module: Support Manifest Audit
+    
+    This view provides a high-fidelity interface for auditing and 
+    responding to specific support tickets. It orchestrates the 
+    conversation thread, facilitates internal agency responses, and 
+    allows for granular state transitions across the support lifecycle.
+    
+    @extends adminlte::page
+    @context Communication Management
+    @variables Ticket $ticket The ticket model instance.
+    @variables Collection $messages Collection of TicketMessage model instances.
+--}}
 @extends('adminlte::page')
 
 @section('title', 'Ticket Details #' . $ticket->id)

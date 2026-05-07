@@ -1,3 +1,18 @@
+{{--
+    Administrative Aesthetic Module: Global Theme Architecture
+    
+    This view serves as the primary orchestration layer for the platform's 
+    visual identities. It facilitates the discovery, configuration, and 
+    deployment of vertical-specific skins (liquid templates) while 
+    maintaining a historical registry of recently utilized storefront 
+    architectures.
+    
+    @extends adminlte::page
+    @context Aesthetic Management
+    @variables Theme|null $activeTheme The currently live theme instance.
+    @variables Collection $recentThemes Collection of recently activated themes.
+    @variables Collection $themesByVertical Grouped collection of available themes.
+--}}
 @extends('adminlte::page')
 
 @section('title', 'Theme Manager')
@@ -228,8 +243,6 @@
         </div>
     </div>
 </div>
-@endsection
-
 @endsection
 
 @section('js')

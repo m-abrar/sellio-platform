@@ -1,3 +1,16 @@
+{{--
+    Administrative Navigation Module: Hierarchical Structure Architect
+    
+    This view provides a high-fidelity visual editor for the platform's 
+    navigation systems. It facilitates the creation of link components, 
+    real-time drag-and-drop hierarchical orchestration (via Nestable2), 
+    and atomic state synchronization for multi-level menu trees.
+    
+    @extends adminlte::page
+    @context Navigation Management
+    @variables Menu $menu The menu location model instance.
+    @variables Collection $items Collection of hierarchical MenuItem instances.
+--}}
 @extends('adminlte::page')
 
 @section('title', 'Architecture: ' . $menu->title)

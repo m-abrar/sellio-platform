@@ -1,3 +1,15 @@
+{{--
+    Administrative Navigation Module: Global Structure Registry
+    
+    This view serves as the primary orchestration layer for the platform's 
+    multi-level navigation systems. It facilitates the discovery and 
+    management of theme-defined navigation slots, ensuring structural 
+    consistency across diverse storefront verticals.
+    
+    @extends adminlte::page
+    @context Navigation Management
+    @variables Collection $menus Collection of menu location descriptors.
+--}}
 @extends('adminlte::page')
 
 @section('title', 'Menu Locations')

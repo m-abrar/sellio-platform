@@ -1,3 +1,16 @@
+{{--
+    Administrative Infrastructure Module: System Health Diagnostics
+    
+    This view provides a comprehensive operational audit of the server 
+    environment. It facilitates the verification of PHP extensions, 
+    directory write permissions, and global environment integrity, 
+    calculating an aggregate health score for platform stability.
+    
+    @extends adminlte::page
+    @context Infrastructure Management
+    @variables Array $requirements Array of server requirement status data.
+    @variables Array $permissions Array of directory permission status data.
+--}}
 @extends('adminlte::page')
 
 @section('title', 'System Health & Requirements')

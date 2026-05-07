@@ -1,3 +1,16 @@
+{{--
+    Administrative Intelligence Module: System Alert Stream
+    
+    This view serves as the primary real-time notification ledger for 
+    administrators. It facilitates the monitoring of marketplace 
+    signals, automated alerts, and user activities, providing a 
+    high-fidelity interface for system-wide lifecycle auditing.
+    
+    @extends adminlte::page
+    @context Intelligence Management
+    @variables Collection $notifications Paginator of raw notification models.
+    @variables Array $styledNotifications Array of UI-formatted notification objects.
+--}}
 @extends('adminlte::page')
 
 @section('title', 'Admin Notifications | Intelligence Pulse')

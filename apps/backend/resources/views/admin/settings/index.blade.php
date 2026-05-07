@@ -1,3 +1,15 @@
+{{--
+    Administrative Infrastructure Module: Global Settings Registry
+    
+    This view serves as the primary gateway for platform-wide 
+    configuration. It facilitates the discovery and orchestration of 
+    diverse setting clusters, including identity, SEO, security, and 
+    integration protocols, via a centralized management interface.
+    
+    @extends adminlte::page
+    @context Infrastructure Management
+    @variables None.
+--}}
 @extends('adminlte::page')
 
 @section('title', 'Settings Explorer')
@@ -86,8 +98,6 @@
     </div>
 </div>
 @endsection
-
-@endpush
 
 @section('js')
 <script>

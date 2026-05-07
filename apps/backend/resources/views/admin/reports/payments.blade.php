@@ -1,3 +1,15 @@
+{{--
+    Administrative Intelligence: Financial Inflow Analytics
+    
+    This view provides a comprehensive audit trail for marketplace revenue. 
+    It facilitates the visualization of settlement trends, transaction 
+    velocity, and payment gateway performance through high-fidelity 
+    data orchestration and trend analysis.
+    
+    @extends adminlte::page
+    @context Analytical Reporting
+    @variables string $reportTitle The localized title of the analytical report.
+--}}
 @extends('adminlte::page')
 
 @section('plugins.Chartjs', true) 

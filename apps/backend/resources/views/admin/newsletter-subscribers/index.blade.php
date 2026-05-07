@@ -1,3 +1,15 @@
+{{--
+    Administrative Marketing Module: Audience Acquisition Registry
+    
+    This view serves as the primary orchestration layer for marketplace 
+    newsletter participants. It facilitates the management of prospect 
+    identities, acquisition source tracking, opt-in lifecycle monitoring, 
+    and bulk audience synchronization (CSV/Excel export protocols).
+    
+    @extends adminlte::page
+    @context Marketing Management
+    @variables Collection $subscribers Collection of NewsletterSubscriber model instances.
+--}}
 @extends('adminlte::page')
 
 @section('title', 'Newsletter Subscribers')

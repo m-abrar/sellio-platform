@@ -1,3 +1,16 @@
+{{--
+    Administrative Communication Module: Support Ticket Registry
+    
+    This view serves as the primary orchestration layer for marketplace 
+    customer support. It facilitates the monitoring of user inquiries, 
+    resolution lifecycle management (Open -> In-Progress -> Closed), 
+    and bulk operational updates for high-volume ticket queues.
+    
+    @extends adminlte::page
+    @context Communication Management
+    @variables Collection $tickets Collection of Ticket model instances.
+    @variables string $status The active status filter context.
+--}}
 @extends('adminlte::page')
 
 @section('title', 'Support Tickets Management')
@@ -245,8 +258,6 @@
     </div>
 </div>
 @stop
-
-@endpush
 
 @section('js')
 @include('admin._partials._sweetalert')

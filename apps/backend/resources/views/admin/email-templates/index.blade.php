@@ -1,3 +1,15 @@
+{{--
+    Administrative Communication Module: Automated Notification Registry
+    
+    This view serves as the primary orchestration layer for system-wide 
+    communication triggers. It facilitates the management of automated 
+    email blueprints, delivery heartbeat monitoring, and dynamic 
+    placeholder injection protocols across the platform's notification engine.
+    
+    @extends adminlte::page
+    @context Communication Management
+    @variables Collection $templates Collection of EmailTemplate model instances.
+--}}
 @extends('adminlte::page')
 
 @section('title', 'Communication Assets | Automated Blueprints')

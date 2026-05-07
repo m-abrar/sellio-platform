@@ -1,3 +1,15 @@
+{{--
+    Administrative Intelligence: Booking Velocity Analysis
+    
+    This view provides high-fidelity insights into marketplace reservation 
+    patterns. It orchestrates the visualization of booking volume, 
+    revenue attribution, and cancellation metrics while facilitating 
+    granular performance auditing across resource categories.
+    
+    @extends adminlte::page
+    @context Analytical Reporting
+    @variables string $reportTitle The localized title of the analytical report.
+--}}
 @extends('adminlte::page')
 
 @section('plugins.Chartjs', true) 
@@ -23,7 +35,18 @@
 
 <div class="container-fluid pb-5">
     
-    {{-- Filter Protocol --}}
+    {{--
+    Administrative Intelligence Component: Booking Filter Protocol
+    
+    This partial facilitates the temporal filtering of booking analytics. 
+    It orchestrates date-range selection and range-badge feedback, 
+    ensuring precise analytical scoping for reservation velocity reports.
+    
+    @context Analytical Reporting
+    @variables string $startDateFormatted The localized start date of the analysis period.
+    @variables string $endDateFormatted The localized end date of the analysis period.
+--}}
+{{-- Filter Protocol --}}
     @include('admin.reports._bookings_filter')
 
     {{-- Stats Row --}}
@@ -190,7 +213,17 @@
                                         </td>
                                         <td class="align-middle font-weight-bold text-primary smallest uppercase">${{ number_format($booking->amount, 2) }}</td>
                                         <td class="text-right pr-4 align-middle">
-                                            @php
+                                            {{--
+    Administrative Intelligence Component: Payable Attribution Protocol
+    
+    This partial orchestrates the visual mapping and navigation links 
+    for transaction-linked entities. It facilitates the discovery of 
+    originating subscriptions, property bookings, or event ticket purchases.
+    
+    @context Analytical Reporting
+    @variables Model $payable The polymorphic entity associated with the transaction.
+--}}
+@php
                                                 $statusStyle = [
                                                     'completed' => 'badge-success-light text-success',
                                                     'pending'   => 'badge-warning-light text-warning',
@@ -222,8 +255,6 @@
         </div>
     </div>
 </div>
-@stop
-
 @stop
 
 @section('js')

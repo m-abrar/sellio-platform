@@ -1,3 +1,14 @@
+{{--
+    Administrative Marketing Component: Ad Parameter Engine
+    
+    This component provides the granular configuration fields for 
+    marketing campaigns. It facilitates identity definition, link 
+    attribution, geospatial targeting logic (radius/city/zip), and 
+    multi-placement strategy orchestration.
+    
+    @context Marketing Management
+    @variables Advertisement $advertisement The advertisement model instance.
+--}}
 {{-- Section 1: Basic Info --}}
 <div class="card border-0 shadow-premium rounded-xl overflow-hidden mb-4">
     <div class="card-header border-0 bg-white py-4 px-4">
@@ -105,8 +116,6 @@
         @error('orientations') <div class="text-danger small mt-2 font-weight-bold">{{ $message }}</div> @enderror
     </div>
 </div>
-
-@endpush
 
 @push('js')
 <script>

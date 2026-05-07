@@ -1,3 +1,15 @@
+{{--
+    Administrative Marketing Module: Ad Campaign Registry
+    
+    This view serves as the primary orchestration layer for platform-wide 
+    promotional assets. It facilitates the management of creative 
+    inventories, placement targeting (json-mapped orientations), and 
+    real-time campaign lifecycle monitoring (impression tracking prep).
+    
+    @extends adminlte::page
+    @context Marketing Management
+    @variables Collection $advertisements Collection of Advertisement model instances.
+--}}
 @extends('adminlte::page')
 
 @section('title', 'Advertisements')
@@ -157,8 +169,6 @@
         </div>
     </div>
 </div>
-@endsection
-
 @endsection
 
 @section('js')

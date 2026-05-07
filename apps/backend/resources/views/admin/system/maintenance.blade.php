@@ -1,3 +1,15 @@
+{{--
+    Administrative Infrastructure Module: System Maintenance Interface
+    
+    This view serves as the primary orchestration layer for low-level 
+    platform optimizations. It facilitates the purging of application, 
+    configuration, route, and view caches, while providing tools for 
+    storage link verification and media conversion regeneration.
+    
+    @extends adminlte::page
+    @context Infrastructure Management
+    @variables None.
+--}}
 @extends('adminlte::page')
 
 @section('title', 'System Maintenance | Admin Ops')
@@ -185,10 +197,6 @@
     </div>
 </div>
 @endsection
-
-@endpush
-
-@stop
 
 @section('js')
     <script>

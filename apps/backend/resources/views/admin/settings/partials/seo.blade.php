@@ -1,3 +1,16 @@
+{{--
+    Administrative Infrastructure Component: SEO Orchestration
+    
+    This partial facilitates the management of global search engine 
+    optimization parameters. It allows for the configuration of meta 
+    titles and descriptions, providing real-time length auditing to 
+    ensure maximum search visibility and high-fidelity social 
+    sharing previews.
+    
+    @extends admin.settings.settings-layout
+    @context Infrastructure Management
+    @variables Array $settings Collection of key-value system settings.
+--}}
 @extends('admin.settings.settings-layout')
 
 @section('setting-form-content')

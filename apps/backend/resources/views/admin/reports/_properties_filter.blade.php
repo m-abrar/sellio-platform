@@ -1,3 +1,14 @@
+{{--
+    Administrative Intelligence Component: Asset Filter Protocol
+    
+    This partial facilitates the temporal filtering of property inventory 
+    metrics. It orchestrates the synchronization of date-range inputs 
+    for occupancy and utilization audit reports.
+    
+    @context Analytical Reporting
+    @variables string $startDateFormatted The localized start date of the analysis period.
+    @variables string $endDateFormatted The localized end date of the analysis period.
+--}}
 {{-- Filter Protocol --}}
 <div class="card registry-card-premium registry-filter-card mb-5">
     <div class="card-body">

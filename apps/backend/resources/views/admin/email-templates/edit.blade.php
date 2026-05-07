@@ -1,3 +1,15 @@
+{{--
+    Administrative Communication Module: Email Blueprint Architect
+    
+    This view serves as the primary authoring interface for system 
+    notifications. It facilitates the definition of delivery subjects, 
+    rich-text body orchestration, and dynamic token mapping for 
+    high-fidelity data injection during automated dispatch.
+    
+    @extends adminlte::page
+    @context Communication Management
+    @variables EmailTemplate $template The email template model instance.
+--}}
 @extends('adminlte::page')
 
 @section('title', 'Edit Email Template')

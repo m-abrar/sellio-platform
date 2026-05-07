@@ -150,5 +150,3 @@
     </form>
 </div>
 @stop
-
-@stop

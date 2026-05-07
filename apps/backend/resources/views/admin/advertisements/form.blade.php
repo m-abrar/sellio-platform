@@ -1,3 +1,15 @@
+{{--
+    Administrative Marketing Module: Ad Configuration Architect
+    
+    This view serves as the primary interface for creating and modifying 
+    marketing campaigns. It orchestrates creative asset allocation, 
+    link attribution, and placement targeting logic while providing 
+    visual layout guides for placement intelligence.
+    
+    @extends adminlte::page
+    @context Marketing Management
+    @variables Advertisement $advertisement The advertisement model instance.
+--}}
 @extends('adminlte::page')
 
 @section('title', ($advertisement->exists ? 'Edit' : 'Add') . ' Advertisement')
@@ -98,17 +110,6 @@
     </form>
 </div>
 @endsection
-
-@stop
-
-@section('js')
-<script>
-    $(function () {
-        $('[data-toggle="tooltip"]').tooltip();
-    });
-</script>
-@stop
-@stop
 
 @section('js')
 <script>

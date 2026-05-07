@@ -1,3 +1,18 @@
+{{--
+    Administrative Marketplace: Unified Asset Registry
+    
+    This view serves as the authoritative command center for all marketplace 
+    verticals (Properties, Autos, Events, Jobs, Services, Classifieds). It 
+    facilitates high-fidelity auditing of submission states, proprietor 
+    identifiers, and lifecycle transitions across the platform's distributed 
+    asset architecture.
+    
+    @extends adminlte::page
+    @context Marketplace Management
+    @variables Paginator $listings Paginated collection of Listing model instances.
+    @variables String $type The active vertical filter (all, properties, etc).
+    @variables String $status The active lifecycle state filter.
+--}}
 @extends('adminlte::page')
 
 @section('title', ($type !== 'all' ? \Illuminate\Support\Str::title($type) : \Illuminate\Support\Str::title($status ?? 'All')) . ' Listings')

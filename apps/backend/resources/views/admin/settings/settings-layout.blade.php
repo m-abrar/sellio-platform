@@ -1,3 +1,15 @@
+{{--
+    Administrative Infrastructure Module: Settings Master Layout
+    
+    This view serves as the structural scaffolding for all configuration 
+    sub-sections. It orchestrates the vertical navigation between 
+    management streams (General, Modules, SEO, etc.) and provides a 
+    standardized interaction pattern for foundational system adjustments.
+    
+    @extends adminlte::page
+    @context Infrastructure Management
+    @variables string $currentSection The active configuration segment identifier.
+--}}
 @extends('adminlte::page')
 
 @section('title', 'Platform Logic | Master Configuration')
@@ -71,5 +83,3 @@
     </div>
 </div>
 @endsection
-
-@endpush

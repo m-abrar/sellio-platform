@@ -1,3 +1,13 @@
+{{--
+    Administrative Marketing Partial: Campaign Control Interface
+    
+    This component provides the operational command center for ad campaigns. 
+    It orchestrates status toggling (active/inactive), persistent storage 
+    actions, and destructive lifecycle management (permanent deletion).
+    
+    @context Marketing Management
+    @variables Advertisement $advertisement The advertisement model instance.
+--}}
 <div class="card shadow-sm border-0 rounded-lg overflow-hidden mb-0">
     <div class="card-header bg-dark py-3" style="border-bottom: 3px solid var(--primary) !important;">
         <h3 class="card-title text-white font-weight-bold">
