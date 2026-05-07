@@ -4,18 +4,35 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\NewsletterSubscriber;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\StreamedResponse;
+use Illuminate\View\View;
 
+/**
+ * Class NewsletterSubscriberController
+ * Orchestrates administrative audience management, coordinating subscriber 
+ * verification, metadata updates, and high-volume data exportation.
+ */
 class NewsletterSubscriberController extends Controller
 {
-    public function index()
+    /**
+     * Display a paginated listing of all registered newsletter subscribers.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function index(): View
     {
         $subscribers = NewsletterSubscriber::latest()->paginate(15);
-
         return view('admin.newsletter-subscribers.index', compact('subscribers'));
     }
 
-    public function export()
+    /**
+     * Export the entire subscriber database to a standardized CSV format for marketing integration.
+     *
+     * @return \Symfony\Component\HttpFoundation\StreamedResponse
+     */
+    public function export(): StreamedResponse
     {
         $headers = [
             "Content-type"        => "text/csv",
@@ -29,14 +46,22 @@ class NewsletterSubscriberController extends Controller
 
         $callback = function() use ($subscribers) {
             $file = fopen('php://output', 'w');
-            fputcsv($file, ['ID', 'Email', 'Source', 'Confirmed', 'Created At']);
+            
+            // Localized CSV Headers
+            fputcsv($file, [
+                __('ID'), 
+                __('Email'), 
+                __('Source'), 
+                __('Confirmed'), 
+                __('Created At')
+            ]);
 
             foreach ($subscribers as $subscriber) {
                 fputcsv($file, [
                     $subscriber->id,
                     $subscriber->email,
-                    $subscriber->source ?? 'Main Website',
-                    $subscriber->is_confirmed ? 'Yes' : 'No',
+                    $subscriber->source ?? __('Main Website'),
+                    $subscriber->is_confirmed ? __('Yes') : __('No'),
                     $subscriber->created_at ? $subscriber->created_at->format('Y-m-d H:i:s') : ''
                 ]);
             }
@@ -47,46 +72,79 @@ class NewsletterSubscriberController extends Controller
         return response()->stream($callback, 200, $headers);
     }
 
-    public function create()
+    /**
+     * Creation Policy: Manual creation is restricted to maintain lead source integrity.
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function create(): RedirectResponse
     {
         return redirect()->route('admin.newsletter-subscribers.index')
-                         ->with('info', 'Newsletter subscribers are added via the front-end only.');
+                         ->with('info', __('Newsletter subscribers are added via the front-end interface only.'));
     }
 
-    public function store(Request $request)
-    {
-        // Intentionally left blank as subscribers are typically created via the front-end
-    }
+    /**
+     * Prohibited: Direct storage of subscriber records is restricted.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return void
+     */
+    public function store(Request $request): never { abort(404); }
 
-    public function show(NewsletterSubscriber $newsletterSubscriber)
+    /**
+     * Display the specific details of a newsletter subscriber.
+     *
+     * @param  \App\Models\NewsletterSubscriber  $newsletterSubscriber
+     * @return \Illuminate\View\View
+     */
+    public function show(NewsletterSubscriber $newsletterSubscriber): View
     {
         return view('admin.newsletter-subscribers.show', compact('newsletterSubscriber'));
     }
 
-    public function edit(NewsletterSubscriber $newsletterSubscriber)
+    /**
+     * Show the form for editing an existing subscriber's configuration.
+     *
+     * @param  \App\Models\NewsletterSubscriber  $newsletterSubscriber
+     * @return \Illuminate\View\View
+     */
+    public function edit(NewsletterSubscriber $newsletterSubscriber): View
     {
         return view('admin.newsletter-subscribers.form', compact('newsletterSubscriber'));
     }
 
-    public function update(Request $request, NewsletterSubscriber $newsletterSubscriber)
+    /**
+     * Update an existing subscriber record in the database.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\NewsletterSubscriber  $newsletterSubscriber
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function update(Request $request, NewsletterSubscriber $newsletterSubscriber): RedirectResponse
     {
         $validatedData = $request->validate([
-            'email' => 'required|email|unique:newsletter_subscribers,email,' . $newsletterSubscriber->id,
+            'email'        => 'required|email|unique:newsletter_subscribers,email,' . $newsletterSubscriber->id,
             'is_confirmed' => 'sometimes|boolean',
-            'source' => 'nullable|string|max:255',
+            'source'       => 'nullable|string|max:255',
         ]);
 
         $newsletterSubscriber->update($validatedData);
 
         return redirect()->route('admin.newsletter-subscribers.index')
-                         ->with('success', 'Subscriber updated successfully.');
+                         ->with('success', __('Subscriber updated successfully.'));
     }
 
-    public function destroy(NewsletterSubscriber $newsletterSubscriber)
+    /**
+     * Remove a subscriber record from the database.
+     *
+     * @param  \App\Models\NewsletterSubscriber  $newsletterSubscriber
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function destroy(NewsletterSubscriber $newsletterSubscriber): RedirectResponse
     {
         $newsletterSubscriber->delete();
 
         return redirect()->route('admin.newsletter-subscribers.index')
-                         ->with('success', 'Subscriber deleted successfully.');
+                         ->with('success', __('Subscriber deleted successfully.'));
     }
 }

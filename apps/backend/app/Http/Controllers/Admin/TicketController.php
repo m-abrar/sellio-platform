@@ -8,91 +8,132 @@ use App\Models\TicketMessage;
 use App\Services\Admin\TicketManagementService;
 use App\Http\Requests\Admin\Tickets\ReplyTicketRequest;
 use App\Http\Requests\Admin\Tickets\UpdateTicketStatusRequest;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
+/**
+ * Class TicketController
+ * Orchestrates administrative support infrastructure, coordinating threaded 
+ * communications, ticket status transitions, and high-volume bulk governance.
+ */
 class TicketController extends Controller
 {
-    protected $ticketService;
+    /**
+     * The ticket management service.
+     *
+     * @var \App\Services\Admin\TicketManagementService
+     */
+    protected TicketManagementService $ticketService;
 
+    /**
+     * TicketController constructor.
+     *
+     * @param  \App\Services\Admin\TicketManagementService  $ticketService
+     */
     public function __construct(TicketManagementService $ticketService)
     {
         $this->ticketService = $ticketService;
     }
+
     /**
-     * Display a listing of support tickets.
+     * Display a filtered and paginated listing of support tickets.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\View\View
      */
-    public function index(Request $request)
+    public function index(Request $request): View
     {
-        $status = $request->get('status', 'open'); // Default to open
+        $status = $request->query('status', 'open');
         
         $tickets = Ticket::with('user')
             ->when($status !== 'all', function ($q) use ($status) {
                 return $q->where('status', $status);
             })
             ->orderBy('created_at', 'desc')
-            ->paginate(15);
+            ->paginate(15)
+            ->withQueryString();
 
         return view('admin.tickets.index', compact('tickets', 'status'));
     }
 
     /**
-     * Display the specified ticket thread.
+     * Display the comprehensive message thread for a specific support ticket.
+     *
+     * @param  \App\Models\Ticket  $ticket
+     * @return \Illuminate\View\View
      */
-    public function show(Ticket $ticket)
+    public function show(Ticket $ticket): View
     {
-        // Mark as viewed by admin if not already viewed
+        // Administrative Read Receipt Tracking
         if (!$ticket->viewed_at) {
             $ticket->update(['viewed_at' => now()]);
         }
 
-         $messages = $ticket->messages()->with('user')->orderBy('created_at', 'asc')->get();
+        $messages = $ticket->messages()->with('user')->orderBy('created_at', 'asc')->get();
 
         return view('admin.tickets.show', compact('ticket', 'messages'));
     }
 
     /**
-     * Store a reply/message in the ticket thread.
+     * Append a reply to the ticket thread and notify associated stakeholders.
+     *
+     * @param  \App\Http\Requests\Admin\Tickets\ReplyTicketRequest  $request
+     * @param  \App\Models\Ticket  $ticket
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function reply(ReplyTicketRequest $request, Ticket $ticket)
+    public function reply(ReplyTicketRequest $request, Ticket $ticket): RedirectResponse
     {
         $this->ticketService->replyToTicket($ticket, $request->validated());
 
-        return redirect()->back()->with('success', 'Reply submitted successfully.');
+        return redirect()->back()->with('success', __('Support reply submitted successfully.'));
     }
 
     /**
-     * Update ticket status.
+     * Update the operational status of a specific support ticket.
+     *
+     * @param  \App\Http\Requests\Admin\Tickets\UpdateTicketStatusRequest  $request
+     * @param  \App\Models\Ticket  $ticket
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function updateStatus(UpdateTicketStatusRequest $request, Ticket $ticket)
+    public function updateStatus(UpdateTicketStatusRequest $request, Ticket $ticket): RedirectResponse
     {
-        $this->ticketService->updateStatus($ticket, $request->status);
+        $this->ticketService->updateStatus($ticket, $request->input('status'));
 
-        return redirect()->back()->with('success', 'Ticket status updated to ' . $request->status);
+        return redirect()->back()->with('success', __('Ticket status updated to :status successfully.', [
+            'status' => $request->input('status')
+        ]));
     }
 
     /**
-     * Bulk update tickets status or priority.
+     * Execute a high-fidelity bulk update on multiple tickets (Status/Priority/Action).
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function bulkUpdate(Request $request)
+    public function bulkUpdate(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'ids' => 'required|array',
+            'ids'   => 'required|array',
             'ids.*' => 'exists:tickets,id',
-            'type' => 'required|string|in:status,priority,action',
+            'type'  => 'required|string|in:status,priority,action',
             'value' => 'required|string',
         ]);
 
         $this->ticketService->bulkUpdate($validated['ids'], $validated['type'], $validated['value']);
 
-        return redirect()->back()->with('success', 'Bulk update completed successfully.');
+        return redirect()->back()->with('success', __('Bulk operations synchronized successfully.'));
     }
 
     /**
-     * Remove the specified ticket from storage.
+     * Permanently remove a ticket thread from the administrative database.
+     *
+     * @param  \App\Models\Ticket  $ticket
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(Ticket $ticket)
+    public function destroy(Ticket $ticket): RedirectResponse
     {
         $ticket->delete();
-        return redirect()->back()->with('success', 'Ticket purged successfully.');
+        return redirect()->back()->with('success', __('Ticket thread purged successfully.'));
     }
 }

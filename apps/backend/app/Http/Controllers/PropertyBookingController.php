@@ -8,28 +8,42 @@ use App\Models\Property;
 use App\Models\PropertyBooking;
 use App\Services\PropertyService;
 use Exception;
-use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
+use Illuminate\View\View;
 
 /**
  * Class PropertyBookingController
- *
- * Handles the booking lifecycle from widget redirection to payment confirmation.
+ * Manages the high-fidelity booking lifecycle for properties, 
+ * coordinating between widget-based entry, checkout breakdown, and final payment confirmation.
  */
 class PropertyBookingController extends Controller
 {
+    /**
+     * The property management service.
+     *
+     * @var \App\Services\PropertyService
+     */
     protected PropertyService $propertyService;
 
+    /**
+     * PropertyBookingController constructor.
+     *
+     * @param  \App\Services\PropertyService  $propertyService
+     */
     public function __construct(PropertyService $propertyService)
     {
         $this->propertyService = $propertyService;
     }
 
     /**
-     * Initial redirect from the property sidebar widget.
+     * Handle the initial redirect from the property sidebar widget to the formal checkout.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Property  $property
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function startFromWidget(Request $request, Property $property): RedirectResponse
     {
@@ -48,7 +62,13 @@ class PropertyBookingController extends Controller
     }
 
     /**
-     * Prepare the booking data and show the final review page.
+     * Compile booking data and present the review/checkout interface.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  string  $slug
+     * @param  string  $start_date
+     * @param  string  $end_date
+     * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse
      */
     public function checkout(Request $request, string $slug, string $start_date, string $end_date): View|RedirectResponse
     {
@@ -77,17 +97,19 @@ class PropertyBookingController extends Controller
     }
 
     /**
-     * Persist the booking to the database as a "Pending" record.
+     * Persist the booking record as a pending reservation.
+     *
+     * @param  \App\Http\Requests\StorePropertyBookingRequest  $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(StorePropertyBookingRequest $request): RedirectResponse
     {
         try {
-            // $request->validated() now includes the 'add_ons' array
             $result = $this->propertyService->createOrRetrieveBooking($request->validated());
 
             $status = $result['isExisting'] ? 'warning' : 'success';
             $message = $result['isExisting']
-                ? __('You already have a PENDING reservation for those dates. Price has been updated with any new selections.')
+                ? __('You already have a PENDING reservation for those dates. Price has been updated.')
                 : __('✨ Your booking has been registered. Please proceed to payment.');
 
             return redirect()->route('property.booking.payment', [
@@ -102,7 +124,11 @@ class PropertyBookingController extends Controller
     }
 
     /**
-     * Process the payment and confirm the booking.
+     * Process final payment and confirm the booking status.
+     *
+     * @param  \App\Http\Requests\ProcessPaymentRequest  $request
+     * @param  \App\Models\PropertyBooking  $booking
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function processPayment(ProcessPaymentRequest $request, PropertyBooking $booking): RedirectResponse
     {
@@ -126,19 +152,39 @@ class PropertyBookingController extends Controller
         }
     }
 
+    /**
+     * Display the payment gateway selection and entry interface.
+     *
+     * @param  \App\Models\Property  $property
+     * @param  \App\Models\PropertyBooking  $booking
+     * @return \Illuminate\View\View
+     */
     public function payment(Property $property, PropertyBooking $booking): View
     {
         $this->authorizeBooking($property, $booking);
         return view('frontend.properties.booking.payment', compact('property', 'booking'));
     }
-    
 
+    /**
+     * Display the final booking confirmation/invoice.
+     *
+     * @param  \App\Models\Property  $property
+     * @param  \App\Models\PropertyBooking  $booking
+     * @return \Illuminate\View\View
+     */
     public function show(Property $property, PropertyBooking $booking): View
     {
         $this->authorizeBooking($property, $booking);
         return view('frontend.properties.booking.confirmation', compact('property', 'booking'));
     }
 
+    /**
+     * Internal: Verify the integrity of the property-booking relationship.
+     *
+     * @param  \App\Models\Property  $property
+     * @param  \App\Models\PropertyBooking  $booking
+     * @return void
+     */
     private function authorizeBooking(Property $property, PropertyBooking $booking): void
     {
         if ($booking->property_id !== $property->id) {

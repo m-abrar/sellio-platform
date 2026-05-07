@@ -2,87 +2,67 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Services\GatewayManager;
+use App\Exceptions\WebhookSignatureException;
 use App\Models\PaymentGateway;
-use Symfony\Component\HttpFoundation\Response; // Use standard Symfony response codes
-use Illuminate\Support\Facades\Log; // Added for explicit Log facade use
-// NOTE: Assuming your service layer might throw a custom exception for signature failure
-// If you don't have this, create it or replace it with a more generic exception.
-use App\Exceptions\WebhookSignatureException; 
+use App\Services\GatewayManager;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Class WebhookController
+ * Serves as the global entry point for asynchronous event notifications from third-party gateways.
+ * Implements strict signature verification and standardized response protocols to manage the event lifecycle.
+ */
 class WebhookController extends Controller
 {
     /**
-     * Handles incoming webhook payloads from any payment gateway.
+     * Handle incoming webhook payloads and delegate to specialized gateway services.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Services\GatewayManager  $manager
+     * @param  string  $gatewaySlug
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function handle(Request $request, GatewayManager $manager, string $gatewaySlug)
+    public function handle(Request $request, GatewayManager $manager, string $gatewaySlug): JsonResponse
     {
-        Log::info("Incoming webhook request for gateway: {$gatewaySlug}");
+        $gateway = PaymentGateway::where('slug', $gatewaySlug)->where('is_active', true)->first();
 
-        // 1. Find the corresponding gateway configuration
-        $gateway = PaymentGateway::where('slug', $gatewaySlug)->first();
-
-        if (!$gateway || !$gateway->is_active) {
-            Log::warning("Webhook gateway not found or inactive.", ['slug' => $gatewaySlug]);
-            // Return 404/403 to the sender to stop retries if the gateway doesn't exist/is inactive
+        if (!$gateway) {
+            Log::warning("Inactive or invalid webhook gateway targeted: {$gatewaySlug}");
             return response()->json(['error' => 'Gateway not configured'], Response::HTTP_NOT_FOUND); 
         }
         
-        // Log key headers for debugging signature verification issues
-        $headersToLog = array_filter(
-            $request->headers->all(), 
-            fn($key) => str_starts_with($key, 'x-') || str_contains($key, 'signature'), 
-            ARRAY_FILTER_USE_KEY
-        );
-        Log::debug("Webhook Headers for {$gatewaySlug}:", $headersToLog);
-        Log::debug("Webhook Payload (first 500 chars): " . substr(json_encode($request->all()), 0, 500) . '...');
-
-
         try {
-            // 2. Resolve the specific service instance (e.g., StripeGatewayService)
             $service = $manager->resolve($gateway);
-            Log::info("Gateway service resolved successfully: " . get_class($service));
             
-            // Try to guess the signature header
+            // Standardize signature retrieval across providers
             $signature = $request->header('stripe-signature') 
                          ?? $request->header('X-Hub-Signature') 
                          ?? $request->header('X-Webhook-Signature');
-            Log::debug("Signature header used: " . ($signature ? 'Present' : 'Missing'));
 
-            // 3. Delegate the handling to the service method
-            // CRITICAL: Some services (like Stripe) require the raw request content, not $request->all() for verification
-            // If your service uses $request->getContent() for verification, ensure it receives the raw data.
+            // Processing raw content for cryptographic verification
             $result = $service->handleWebhook($request->getContent(), $signature); 
             
-            Log::notice("Webhook processed successfully by service.");
-            Log::notice(
-                [
-                    'status' => $result['status'] ?? 'N/A', 
-                    'message' => $result['message'] ?? 'No message provided'
-                ]
-            );
-            // 4. Return 200 OK (important!) to acknowledge receipt and prevent retries
-            return response()->json(['status' => 'success', 'message' => $result['message']], Response::HTTP_OK);
+            Log::info("Webhook processed for {$gatewaySlug}: " . ($result['message'] ?? 'Success'));
+
+            return response()->json([
+                'status'  => 'success', 
+                'message' => $result['message'] ?? 'Event Received'
+            ], Response::HTTP_OK);
 
         } catch (WebhookSignatureException $e) {
-            // Log and return 400 Bad Request/401 Unauthorized for signature failures.
-            Log::error("Webhook SIGNATURE VERIFICATION FAILED for {$gatewaySlug}.", [
-                'error' => $e->getMessage(),
-                'code' => Response::HTTP_BAD_REQUEST
-            ]);
-            return response()->json(['error' => 'Invalid signature or payload'], Response::HTTP_BAD_REQUEST);
+            Log::error("Webhook signature verification failed for {$gatewaySlug}: " . $e->getMessage());
+            return response()->json(['error' => 'Invalid signature'], Response::HTTP_BAD_REQUEST);
 
         } catch (\Exception $e) {
-            // Log the error for internal review.
-            Log::error("General Webhook processing error for {$gatewaySlug}: " . $e->getMessage(), [
-                'file' => $e->getFile(), 
-                'line' => $e->getLine(),
+            Log::error("Webhook processing error for {$gatewaySlug}: " . $e->getMessage(), [
                 'exception' => get_class($e)
             ]);
             
-            // Return 200 OK for general server errors (5xx) to stop retries.
-            return response()->json(['error' => 'Internal server error during webhook processing, issue logged.'], Response::HTTP_OK);
+            // Return 200 OK even on internal failure to stop provider retries if logs are captured.
+            return response()->json(['error' => 'Internal processing error'], Response::HTTP_OK);
         }
     }
 }

@@ -3,29 +3,47 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Config;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class HomeController
- *
- * Acts as a central dispatcher to route requests to theme-specific controllers
+ * Serves as the primary entry point for the marketplace, 
+ * delegating requests to the UnifiedHomeController for multi-theme routing.
  */
 class HomeController extends Controller
 {
-    public function __invoke(Request $request): mixed
+    /**
+     * Invoke the primary landing logic via proxy.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function __invoke(Request $request): Response
     {
-        $controller = app(\App\Http\Controllers\UnifiedHomeController::class);
+        /** @var UnifiedHomeController $controller */
+        $controller = app(UnifiedHomeController::class);
         return $controller->index($request);
     }
 
-    public function landing(string $group, string $type): mixed
+    /**
+     * Handle vertical-specific landing requests.
+     *
+     * @param  string  $group
+     * @param  string  $type
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function landing(string $group, string $type): Response
     {
         return $this->__invoke(request());
     }
 
-    public function index(Request $request): mixed
+    /**
+     * General homepage entry point.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function index(Request $request): Response
     {
         return $this->__invoke($request);
     }

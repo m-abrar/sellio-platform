@@ -7,35 +7,44 @@ use App\Models\Type;
 use App\Http\Requests\Admin\TypeRequest;
 use App\Services\Admin\TypeManagementService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 /**
  * Class TypeController
- *
- * Manages administrative listing types and module visibility.
+ * Orchestrates administrative listing types, coordinating cross-module 
+ * taxonomies and functional visibility settings across platform verticals.
  */
 class TypeController extends Controller
 {
     /**
-     * @var TypeManagementService
+     * The type management service.
+     *
+     * @var \App\Services\Admin\TypeManagementService
      */
-    protected $typeService;
+    protected TypeManagementService $typeService;
 
     /**
      * TypeController constructor.
      *
-     * @param TypeManagementService $typeService
+     * @param  \App\Services\Admin\TypeManagementService  $typeService
      */
     public function __construct(TypeManagementService $typeService)
     {
         $this->typeService = $typeService;
     }
 
-    public function index(\Illuminate\Http\Request $request): View
+    /**
+     * Display a filtered listing of all registered marketplace types.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\View\View
+     */
+    public function index(Request $request): View
     {
         $types = Type::latest()
-            ->when($request->search, function($q) use ($request) {
-                $q->where('title', 'like', "%{$request->search}%");
+            ->when($request->query('search'), function($q) use ($request) {
+                $q->where('title', 'like', "%{$request->query('search')}%");
             })
             ->get();
 
@@ -43,9 +52,9 @@ class TypeController extends Controller
     }
 
     /**
-     * Show the form for creating a new type.
+     * Show the interface for initializing a new listing type.
      *
-     * @return View
+     * @return \Illuminate\View\View
      */
     public function create(): View
     {
@@ -54,24 +63,24 @@ class TypeController extends Controller
     }
 
     /**
-     * Store a newly created type in storage.
+     * Store a newly created listing type and synchronize its functional visibility.
      *
-     * @param TypeRequest $request
-     * @return RedirectResponse
+     * @param  \App\Http\Requests\Admin\TypeRequest  $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(TypeRequest $request): RedirectResponse
     {
         $type = $this->typeService->saveType($request->validated());
 
         return redirect()->route('admin.types.edit', $type->id)
-            ->with('success', __('Type added successfully.'));
+            ->with('success', __('Listing type initialized successfully.'));
     }
 
     /**
-     * Show the form for editing the specified type.
+     * Show the interface for editing an existing listing type.
      *
-     * @param Type $type
-     * @return View
+     * @param  \App\Models\Type  $type
+     * @return \Illuminate\View\View
      */
     public function edit(Type $type): View
     {
@@ -79,31 +88,31 @@ class TypeController extends Controller
     }
 
     /**
-     * Update the specified type in storage.
+     * Update an existing listing type configuration in the database.
      *
-     * @param TypeRequest $request
-     * @param Type $type
-     * @return RedirectResponse
+     * @param  \App\Http\Requests\Admin\TypeRequest  $request
+     * @param  \App\Models\Type  $type
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(TypeRequest $request, Type $type): RedirectResponse
     {
         $this->typeService->saveType($request->validated(), $type);
 
         return redirect()->route('admin.types.index')
-            ->with('success', __('Type updated successfully.'));
+            ->with('success', __('Listing type updated successfully.'));
     }
 
     /**
-     * Remove the specified type from storage.
+     * Remove a listing type from the administrative database.
      *
-     * @param Type $type
-     * @return RedirectResponse
+     * @param  \App\Models\Type  $type
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Type $type): RedirectResponse
     {
         $type->delete();
 
         return redirect()->route('admin.types.index')
-            ->with('success', __('Type deleted successfully.'));
+            ->with('success', __('Listing type removed successfully.'));
     }
 }

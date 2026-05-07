@@ -4,30 +4,23 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use App\Models\EventTicketType;
-use Illuminate\Http\Request;
-use App\Models\EventOccurrenceTicket;
-use App\Models\EventBooking;
-use App\Models\EventOccurrence;
-use Carbon\Carbon;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
+/**
+ * Class EventTicketController
+ * Manages the presentation and availability of event tickets, 
+ * including occurrence-specific filtering and availability checks.
+ */
 class EventTicketController extends Controller
 {
-    public function indexAAAA(Event $event)
-    {
-        $ticketTypes = EventTicketType::where('event_id', $event->id)
-            ->where('is_active', true)
-            ->orderBy('price')
-            ->get();
-
-        $event->load('occurrences');
-
-        return view('events.tickets.index', [
-            'event' => $event,
-            'ticketTypes' => $ticketTypes,
-        ]);
-    }
-
-    public function index(Event $event)
+    /**
+     * Display available ticket types and occurrences for a specific event.
+     *
+     * @param  \App\Models\Event  $event
+     * @return \Illuminate\View\View
+     */
+    public function index(Event $event): View
     {
         $event->load([
             'ticketTypes' => function ($query) {
@@ -39,24 +32,25 @@ class EventTicketController extends Controller
         ]);
 
         return view('frontend.events.tickets.index', [
-            'event' => $event,
+            'event'       => $event,
             'ticketTypes' => $event->ticketTypes,
             'occurrences' => $event->occurrences,
         ]);
     }
 
-    public function indexAAA(Event $event)
+    /**
+     * Display the booking interface for a specific ticket type.
+     *
+     * @param  \App\Models\Event  $event
+     * @param  \App\Models\EventTicketType  $ticket
+     * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse
+     */
+    public function book(Event $event, EventTicketType $ticket): View|RedirectResponse
     {
-        $event->load(['ticketTypes' => fn($q) => $q->active()]);
-
-        return view('events.tickets.index', compact('event'));
-    }
-
-    public function book(Event $event, EventTicketType $ticket)
-    {
-        if ($ticket->status === false || $ticket->quantity <= $ticket->sold_count) {
+        // Availability validation
+        if ($ticket->status === false || ($ticket->quantity > 0 && $ticket->sold_count >= $ticket->quantity)) {
             return redirect()->route('tickets.index', $event->slug)
-                             ->with('error', 'Ticket is no longer available.');
+                             ->with('error', __('Ticket is no longer available.'));
         }
 
         return view('events.tickets.book', compact('event', 'ticket'));

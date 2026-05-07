@@ -2,31 +2,39 @@
 
 namespace App\Http\Controllers;
 
-
-use App\Models\User;
-use Illuminate\Http\Request;
-use Carbon\Carbon;
-use Carbon\CarbonPeriod;
 use App\Models\Conversation;
+use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * Class ConversationController
+ * Manages the initialization and orchestration of messaging threads between buyers and partners.
+ */
 class ConversationController extends Controller
 {
-    public function start(string $username)
+    /**
+     * Start or retrieve an existing conversation with a specific user.
+     *
+     * @param  string  $username
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function start(string $username): RedirectResponse
     {
         if (!Auth::check()) {
-            return redirect()->back()->withErrors(['message' => 'You must be logged in to start a conversation.']);
+            return redirect()->back()->withErrors(['message' => __('You must be logged in to start a conversation.')]);
         }
 
-        $buyerId = Auth::user()->id;
-
+        $buyerId = Auth::id();
         $partner = User::where('username', $username)->firstOrFail();
         $partnerId = $partner->id;
 
+        // Prevent self-messaging
         if ($buyerId === $partnerId) {
-              return redirect()->back()->withErrors(['message' => 'You cannot start a conversation with yourself.']);
+            return redirect()->back()->withErrors(['message' => __('You cannot start a conversation with yourself.')]);
         }
 
+        // Retrieve existing conversation or create a new one
         $conversation = Conversation::where(function ($query) use ($buyerId, $partnerId) {
             $query->where('user_id', $buyerId)
                   ->where('partner_id', $partnerId);
@@ -37,7 +45,7 @@ class ConversationController extends Controller
 
         if (!$conversation) {
             $conversation = Conversation::create([
-                'user_id' => $buyerId,
+                'user_id'    => $buyerId,
                 'partner_id' => $partnerId,
             ]);
         }

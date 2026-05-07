@@ -6,12 +6,26 @@ use App\Http\Controllers\Controller;
 use App\Models\Subscription;
 use App\Models\User;
 use App\Models\Plan;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\View\View;
+use Illuminate\Support\Carbon;
 
+/**
+ * Class SubscriptionController
+ * Orchestrates administrative oversight for user subscriptions, coordinating 
+ * plan assignments, renewal cycles, and platform access control.
+ */
 class SubscriptionController extends Controller
 {
-    public function index($status = null)
+    /**
+     * Display a filtered and paginated listing of all platform subscriptions.
+     *
+     * @param  string|null  $status
+     * @return \Illuminate\View\View
+     */
+    public function index(?string $status = null): View
     {
         $subscriptions = Subscription::query()
             ->when($status, function ($query, $status) {
@@ -23,26 +37,40 @@ class SubscriptionController extends Controller
                 });
             })
             ->with(['user', 'plan'])
-            ->paginate(15);
+            ->latest()
+            ->paginate(15)
+            ->withQueryString();
 
         return view('admin.subscriptions.index', compact('subscriptions', 'status'));
     }
 
-    public function create()
+    /**
+     * Show the interface for initializing a manual subscription for a user.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function create(): View
     {
         $subscription = new Subscription();
-        $users = User::all();
-        $plans = Plan::all();
+        $users = User::select('id', 'name', 'email')->get();
+        $plans = Plan::select('id', 'title', 'price')->get();
+        
         return view('admin.subscriptions.form', compact('subscription', 'users', 'plans'));
     }
 
-    public function store(Request $request)
+    /**
+     * Store a newly created subscription and initialize its platform access.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function store(Request $request): RedirectResponse
     {
         $data = $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'plan_id' => 'required|exists:plans,id',
-            'name' => 'required|string|max:255',
-            'status' => ['required', Rule::in([
+            'user_id'   => 'required|exists:users,id',
+            'plan_id'   => 'required|exists:plans,id',
+            'name'      => 'required|string|max:255',
+            'status'    => ['required', Rule::in([
                 Subscription::STATUS_ACTIVE, 
                 Subscription::STATUS_ON_TRIAL, 
                 Subscription::STATUS_PAST_DUE, 
@@ -50,42 +78,65 @@ class SubscriptionController extends Controller
                 Subscription::STATUS_EXPIRED
             ])],
             'starts_at' => 'required|date',
-            'ends_at' => 'nullable|date|after_or_equal:starts_at', 
+            'ends_at'   => 'nullable|date|after_or_equal:starts_at', 
         ]);
 
         Subscription::create($data);
 
-        return redirect()->route('admin.subscriptions.index')->with('success', 'Subscription created successfully.');
+        return redirect()->route('admin.subscriptions.index')
+            ->with('success', __('Subscription initialized successfully.'));
     }
 
-    public function renew(Subscription $subscription)
+    /**
+     * Manually extend the subscription duration by one month.
+     *
+     * @param  \App\Models\Subscription  $subscription
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function renew(Subscription $subscription): RedirectResponse
     {
-        $new_ends_at = $subscription->ends_at ? 
-                        $subscription->ends_at->addMonth() : 
+        // Standardize renewal window to 1 month from current expiry or today
+        $newEndsAt = $subscription->ends_at ? 
+                        Carbon::parse($subscription->ends_at)->addMonth() : 
                         now()->addMonth();
         
-        $subscription->ends_at = $new_ends_at; 
-        $subscription->status = Subscription::STATUS_ACTIVE;
-        $subscription->save();
+        $subscription->update([
+            'ends_at' => $newEndsAt,
+            'status'  => Subscription::STATUS_ACTIVE,
+        ]);
 
-        return redirect()->back()->with('success', 'Subscription renewed successfully.');
+        return back()->with('success', __('Subscription renewed and access extended successfully.'));
     }
 
-    public function edit(Subscription $subscription)
+    /**
+     * Show the interface for modifying an existing subscription's configuration.
+     *
+     * @param  \App\Models\Subscription  $subscription
+     * @return \Illuminate\View\View
+     */
+    public function edit(Subscription $subscription): View
     {
-        $users = User::all();
-        $plans = Plan::all();
+        $users = User::select('id', 'name', 'email')->get();
+        $plans = Plan::select('id', 'title', 'price')->get();
         $subscription->load('payments');
+        
         return view('admin.subscriptions.form', compact('subscription', 'users', 'plans'));
     }
 
-    public function update(Request $request, Subscription $subscription)
+    /**
+     * Update an existing subscription configuration and synchronize access parameters.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Subscription  $subscription
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function update(Request $request, Subscription $subscription): RedirectResponse
     {
         $data = $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'plan_id' => 'required|exists:plans,id',
-            'name' => 'required|string|max:255',
-            'status' => ['required', Rule::in([
+            'user_id'   => 'required|exists:users,id',
+            'plan_id'   => 'required|exists:plans,id',
+            'name'      => 'required|string|max:255',
+            'status'    => ['required', Rule::in([
                 Subscription::STATUS_ACTIVE, 
                 Subscription::STATUS_ON_TRIAL, 
                 Subscription::STATUS_PAST_DUE, 
@@ -93,17 +144,26 @@ class SubscriptionController extends Controller
                 Subscription::STATUS_EXPIRED
             ])],
             'starts_at' => 'required|date',
-            'ends_at' => 'nullable|date|after_or_equal:starts_at',
+            'ends_at'   => 'nullable|date|after_or_equal:starts_at',
         ]);
 
         $subscription->update($data);
 
-        return redirect()->route('admin.subscriptions.index')->with('success', 'Subscription updated successfully.');
+        return redirect()->route('admin.subscriptions.index')
+            ->with('success', __('Subscription configuration updated successfully.'));
     }
 
-    public function destroy(Subscription $subscription)
+    /**
+     * Remove a subscription record and terminate associated platform access.
+     *
+     * @param  \App\Models\Subscription  $subscription
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function destroy(Subscription $subscription): RedirectResponse
     {
         $subscription->delete();
-        return redirect()->route('admin.subscriptions.index')->with('success', 'Subscription deleted successfully.');
+        
+        return redirect()->route('admin.subscriptions.index')
+            ->with('success', __('Subscription record removed successfully.'));
     }
 }

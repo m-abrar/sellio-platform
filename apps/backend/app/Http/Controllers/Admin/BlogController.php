@@ -6,34 +6,49 @@ use App\Http\Controllers\Controller;
 use App\Models\Blog;
 use App\Models\Category;
 use App\Models\Tag;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
+use Illuminate\View\View;
 
+/**
+ * Class BlogController
+ * Orchestrates the administrative lifecycle for marketplace content (blog posts), 
+ * managing categories, polymorphic tags, and Spatie-backed media collections.
+ */
 class BlogController extends Controller
 {
     /**
-     * Display a listing of blog posts.
+     * Display a paginated list of all blog posts with associated relationships.
+     *
+     * @return \Illuminate\View\View
      */
-    public function index()
+    public function index(): View
     {
-        // Eager load category and user to optimize queries
         $blogs = Blog::with(['category', 'user'])->latest()->paginate(10);
         return view('admin.blogs.index', compact('blogs'));
     }
 
-    public function pending()
+    /**
+     * Display a paginated list of unpublished/draft blog posts.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function pending(): View
     {
         $blogs = Blog::with(['category', 'user'])->where('is_published', false)->latest()->paginate(10);
         return view('admin.blogs.index', compact('blogs'));
     }
+
     /**
-     * Show the form for creating a new blog post.
+     * Show the form for creating a new marketplace blog post.
+     *
+     * @return \Illuminate\View\View
      */
-    public function create()
+    public function create(): View
     {
         $blog = new Blog();
-        // Only fetch categories and tags flagged for the blog module
         $categories = Category::where('is_blog', true)->get();
         $tags = Tag::where('is_blog', true)->get();
         
@@ -41,11 +56,14 @@ class BlogController extends Controller
     }
 
     /**
-     * Store a newly created blog post in storage.
+     * Store a newly created blog post and manage its media and tag associations.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
-        $request->validate([
+        $validated = $request->validate([
             'title'           => 'required|string|max:255',
             'slug'            => 'nullable|string|max:255|unique:blogs,slug',
             'category_id'     => 'required|exists:categories,id',
@@ -56,90 +74,88 @@ class BlogController extends Controller
             'is_published'    => 'boolean',
             'is_featured'     => 'boolean',
             'allow_comments'  => 'boolean',
-            'featured_image'  => 'nullable|image|max:2048', // Validation for Spatie Media
+            'featured_image'  => 'nullable|image|max:2048',
         ]);
 
-        $data = $request->all();
-        $data['user_id'] = Auth::id();
-        $data['slug'] = $request->slug ?: Str::slug($request->title);
-        $data['published_at'] = $request->is_published ? now() : null;
+        $validated['user_id'] = Auth::id();
+        $validated['slug'] = $validated['slug'] ?: Str::slug($validated['title']);
+        $validated['published_at'] = $request->boolean('is_published') ? now() : null;
 
-        $blog = Blog::create($data);
+        $blog = Blog::create($validated);
 
-        // Sync Tags (Polymorphic)
         if ($request->has('tags')) {
             $blog->tags()->sync($request->tags);
         }
 
-        // --- Spatie Media Integration ---
         if ($request->hasFile('featured_image')) {
             $blog->addMediaFromRequest('featured_image')
                  ->toMediaCollection('featured_image');
         }
 
         return redirect()->route('admin.blogs.index')
-            ->with('success', 'Blog post created successfully.');
+            ->with('success', __('Blog post created successfully.'));
     }
 
     /**
-     * Show the form for editing the specified blog post.
+     * Show the form for editing an existing marketplace blog post.
+     *
+     * @param  \App\Models\Blog  $blog
+     * @return \Illuminate\View\View
      */
-    public function edit(Blog $blog)
+    public function edit(Blog $blog): View
     {
         $categories = Category::where('is_blog', true)->get();
         $tags = Tag::where('is_blog', true)->get();
-        
-        // Load existing tag IDs for the form
         $selectedTags = $blog->tags->pluck('id')->toArray();
 
         return view('admin.blogs.form', compact('blog', 'categories', 'tags', 'selectedTags'));
     }
 
     /**
-     * Update the specified blog post in storage.
+     * Update an existing blog post and synchronize its relationships and media.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Blog  $blog
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, Blog $blog)
+    public function update(Request $request, Blog $blog): RedirectResponse
     {
-        $request->validate([
+        $validated = $request->validate([
             'title'           => 'required|string|max:255',
             'slug'            => 'required|string|max:255|unique:blogs,slug,' . $blog->id,
             'category_id'     => 'required|exists:categories,id',
             'content'         => 'required|string',
+            'is_published'    => 'boolean',
             'featured_image'  => 'nullable|image|max:2048',
         ]);
-
-        $data = $request->all();
         
-        // Handle publishing timestamp logic
-        if ($request->is_published && !$blog->is_published) {
-            $data['published_at'] = now();
+        if ($request->boolean('is_published') && !$blog->is_published) {
+            $validated['published_at'] = now();
         }
 
-        $blog->update($data);
-
-        // Update Tags
+        $blog->update($validated);
         $blog->tags()->sync($request->tags ?? []);
 
-        // --- Spatie Media Update ---
         if ($request->hasFile('featured_image')) {
             $blog->addMediaFromRequest('featured_image')
-                 ->toMediaCollection('featured_image'); // Automatically replaces old media in this collection
+                 ->toMediaCollection('featured_image');
         }
 
         return redirect()->route('admin.blogs.index')
-            ->with('success', 'Blog post updated successfully.');
+            ->with('success', __('Blog post updated successfully.'));
     }
 
-
     /**
-     * Remove the specified blog post from storage.
+     * Remove a blog post and its associated media from the database.
+     *
+     * @param  \App\Models\Blog  $blog
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(Blog $blog)
+    public function destroy(Blog $blog): RedirectResponse
     {
-        // Spatie Media handles the deletion of associated files automatically on model delete
         $blog->delete();
 
         return redirect()->route('admin.blogs.index')
-            ->with('success', 'Blog post deleted successfully.');
+            ->with('success', __('Blog post deleted successfully.'));
     }
 }

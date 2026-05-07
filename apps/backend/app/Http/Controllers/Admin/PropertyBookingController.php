@@ -14,41 +14,27 @@ use Illuminate\Support\Carbon;
 
 /**
  * Class PropertyBookingController
- * * Manages administrative tasks for property-specific bookings, including
- * filtering, calendar availability visualization, and status management.
+ * Orchestrates administrative reservations for the real estate vertical, managing 
+ * listing availability, calendar visualization, and financial status reconciliation.
  */
 class PropertyBookingController extends Controller
 {
     /**
-     * @var PropertyBooking
-     */
-    protected $model;
-
-    /**
-     * PropertyBookingController constructor.
-     * * @param PropertyBooking $model
-     */
-    public function __construct(PropertyBooking $model)
-    {
-        $this->model = $model;
-    }
-
-    /**
-     * Display a listing of property bookings with advanced filters.
+     * Display a filtered and paginated listing of all property bookings.
      *
-     * @param Request $request
-     * @param string $status
-     * @return View
+     * @param  \Illuminate\Http\Request  $request
+     * @param  string  $status
+     * @return \Illuminate\View\View
      */
     public function index(Request $request, string $status = 'all'): View
     {
-        $status = $request->route('status') ?: ($request->status ?: 'all');
+        $status = $request->route('status') ?: ($request->query('status') ?: 'all');
 
-        $bookings = $this->model::with(['property', 'user'])
-            ->when($request->property, fn($q) => $q->where('property_id', $request->property))
+        $bookings = PropertyBooking::with(['property', 'user'])
+            ->when($request->query('property'), fn($q) => $q->where('property_id', $request->query('property')))
             ->when($status !== 'all', fn($q) => $q->where('status', $status))
-            ->when($request->start_date, fn($q) => $q->where('check_in_date', '>=', $request->start_date))
-            ->when($request->end_date, fn($q) => $q->where('check_out_date', '<=', $request->end_date))
+            ->when($request->query('start_date'), fn($q) => $q->where('check_in_date', '>=', $request->query('start_date')))
+            ->when($request->query('end_date'), fn($q) => $q->where('check_out_date', '<=', $request->query('end_date')))
             ->latest()
             ->paginate(15)
             ->withQueryString();
@@ -59,61 +45,62 @@ class PropertyBookingController extends Controller
     }
 
     /**
-     * Display the specified property booking details.
-     * * This method eager loads the property, the customer, and any associated 
-     * polymorphic payments or transaction lines to provide a comprehensive 
-     * financial overview in the detail view.
-     * * @param int $id
-     * @return View
+     * Display the comprehensive details and financial ledger of a specific property booking.
+     *
+     * @param  \App\Models\PropertyBooking  $propertyBooking
+     * @return \Illuminate\View\View
      */
-    public function show(int $id): View
+    public function show(PropertyBooking $propertyBooking): View
     {
-        $booking = $this->model::with([
+        $propertyBooking->load([
             'property', 
             'user', 
             'payments', 
-            'transactionLines' // Relationship defined in your model
-        ])->findOrFail($id);
+            'transactionLines'
+        ]);
 
-        return view('admin.property-bookings.show', compact('booking'));
+        return view('admin.property-bookings.show', ['booking' => $propertyBooking]);
     }
 
     /**
-     * Show the form for creating a new property booking.
-     * * @return View
+     * Show the form for creating a manual property reservation record.
+     *
+     * @return \Illuminate\View\View
      */
     public function create(): View
     {
         $booking = new PropertyBooking();
-        $properties = Property::all();
-        $users = User::all();
+        $properties = Property::select('id', 'title')->get();
+        $users = User::select('id', 'name', 'email')->get();
+        
         return view('admin.property-bookings.form', compact('booking', 'properties', 'users'));
     }
 
     /**
-     * Store a newly created property booking.
-     * * @param UpdatePropertyBookingRequest $request
-     * @return RedirectResponse
+     * Store a newly created property booking record in the database.
+     *
+     * @param  \App\Http\Requests\Dashboard\Admin\UpdatePropertyBookingRequest  $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(UpdatePropertyBookingRequest $request): RedirectResponse
     {
-        $booking = $this->model::create($request->validated());
+        $booking = PropertyBooking::create($request->validated());
 
         return redirect()
             ->route('admin.property-bookings.edit', $booking->id)
-            ->with('success', __('Booking created successfully.'));
+            ->with('success', __('Booking initialized successfully.'));
     }
 
     /**
-     * Show the edit form with an availability calendar for the property.
-     * * @param int $id
-     * @return View
+     * Show the form for editing an existing property booking with an integrated availability calendar.
+     *
+     * @param  \App\Models\PropertyBooking  $propertyBooking
+     * @return \Illuminate\View\View
      */
-    public function edit(int $id): View
+    public function edit(PropertyBooking $propertyBooking): View
     {
-        $booking = $this->model::findOrFail($id);
-        $properties = Property::all();
-        $users = User::all();
+        $properties = Property::select('id', 'title')->get();
+        $users = User::select('id', 'name', 'email')->get();
 
         $statusColors = [
             'confirmed' => '#bbf7d0',
@@ -121,9 +108,9 @@ class PropertyBookingController extends Controller
             'cancelled' => '#fecaca',
         ];
 
-        // Fetch sibling bookings to build availability calendar
-        $calendarEvents = $this->model::where('property_id', $booking->property_id)
-            ->where('id', '!=', $booking->id)
+        // Hydrate Sibling Bookings: Build the availability map for the host property
+        $calendarEvents = PropertyBooking::where('property_id', $propertyBooking->property_id)
+            ->where('id', '!=', $propertyBooking->id)
             ->get()
             ->map(function ($b) use ($statusColors) {
                 return [
@@ -134,45 +121,50 @@ class PropertyBookingController extends Controller
                 ];
             });
 
-        // Highlight the current booking being edited
+        // Interactive Highlight: Emphasize the current booking context
         $calendarEvents->push([
-            'start' => Carbon::parse($booking->check_in_date)->toDateString(),
-            'end'   => Carbon::parse($booking->check_out_date)->toDateString(),
-            'color' => '#93c5fd', // Soft Blue
-            'title' => ($booking->full_name ?? __('Current Selection')) . ' ' . __('(Editing)'),
+            'start' => Carbon::parse($propertyBooking->check_in_date)->toDateString(),
+            'end'   => Carbon::parse($propertyBooking->check_out_date)->toDateString(),
+            'color' => '#93c5fd', 
+            'title' => ($propertyBooking->full_name ?? __('Current Selection')) . ' ' . __('(Editing)'),
         ]);
 
-        return view('admin.property-bookings.form', compact('booking', 'properties', 'users', 'calendarEvents'));
+        return view('admin.property-bookings.form', [
+            'booking'        => $propertyBooking, 
+            'properties'     => $properties, 
+            'users'          => $users, 
+            'calendarEvents' => $calendarEvents
+        ]);
     }
 
     /**
-     * Update the specified property booking.
-     * * @param UpdatePropertyBookingRequest $request
-     * @param int $id
-     * @return RedirectResponse
+     * Update an existing property booking and synchronize its reservation parameters.
+     *
+     * @param  \App\Http\Requests\Dashboard\Admin\UpdatePropertyBookingRequest  $request
+     * @param  \App\Models\PropertyBooking  $propertyBooking
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(UpdatePropertyBookingRequest $request, int $id): RedirectResponse
+    public function update(UpdatePropertyBookingRequest $request, PropertyBooking $propertyBooking): RedirectResponse
     {
-        $booking = $this->model::findOrFail($id);
-        $booking->update($request->validated());
+        $propertyBooking->update($request->validated());
 
         return redirect()
             ->route('admin.property-bookings.index')
-            ->with('success', __('Booking updated successfully.'));
+            ->with('success', __('Booking parameters updated successfully.'));
     }
 
     /**
-     * Remove the specified property booking.
-     * * @param int $id
-     * @return RedirectResponse
+     * Remove a property booking record from the database.
+     *
+     * @param  \App\Models\PropertyBooking  $propertyBooking
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(int $id): RedirectResponse
+    public function destroy(PropertyBooking $propertyBooking): RedirectResponse
     {
-        $booking = $this->model::findOrFail($id);
-        $booking->delete();
+        $propertyBooking->delete();
 
         return redirect()
             ->route('admin.property-bookings.index')
-            ->with('success', __('Booking deleted successfully.'));
+            ->with('success', __('Booking record removed successfully.'));
     }
 }

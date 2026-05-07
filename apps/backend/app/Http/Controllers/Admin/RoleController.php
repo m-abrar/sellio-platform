@@ -5,63 +5,123 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
+/**
+ * Class RoleController
+ * Orchestrates administrative security archetypes, coordinating hierarchical 
+ * permission synchronization and system-wide Role-Based Access Control (RBAC).
+ */
 class RoleController extends Controller
 {
-    public function index()
+    /**
+     * Display a comprehensive listing of all registered security roles and their associated permissions.
+     *
+     * @return \Illuminate\View\View
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function index(): View
     {
+        $this->authorize('viewAny', Role::class);
+
         $roles = Role::with('permissions')->get();
         return view('admin.roles.index', compact('roles'));
     }
 
-    public function create()
+    /**
+     * Show the interface for initializing a new security role with granular permission assignments.
+     *
+     * @return \Illuminate\View\View
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function create(): View
     {
+        $this->authorize('create', Role::class);
+        
         $permissions = Permission::all();
         return view('admin.roles.create', compact('permissions'));
     }
 
-    public function store(Request $request)
+    /**
+     * Store a newly created security role and atomically synchronize its permission mapping.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function store(Request $request): RedirectResponse
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'permissions' => 'required|array'
+        $this->authorize('create', Role::class);
+
+        $validated = $request->validate([
+            'name'        => 'required|string|max:255|unique:roles,name',
+            'permissions' => 'required|array',
+            'permissions.*' => 'exists:permissions,id',
         ]);
 
-        $role = Role::create([
-            'name' => $request->name,
-        ]);
+        $role = Role::create(['name' => $validated['name']]);
+        $role->permissions()->sync($validated['permissions']);
 
-        $role->permissions()->sync($request->permissions);
-
-        return redirect()->route('admin.roles.index')->with('success', 'Role created successfully.');
+        return redirect()->route('admin.roles.index')
+            ->with('success', __('Security role initialized and permissions synchronized successfully.'));
     }
 
-    public function edit(Role $role)
+    /**
+     * Show the interface for editing an existing security role and its permission mapping.
+     *
+     * @param  \Spatie\Permission\Models\Role  $role
+     * @return \Illuminate\View\View
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function edit(Role $role): View
     {
+        $this->authorize('update', $role);
+        
         $permissions = Permission::all();
         return view('admin.roles.edit', compact('role', 'permissions'));
     }
 
-    public function update(Request $request, Role $role)
+    /**
+     * Update an existing security role and re-synchronize its granular permission mapping.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Spatie\Permission\Models\Role  $role
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function update(Request $request, Role $role): RedirectResponse
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'permissions' => 'required|array'
+        $this->authorize('update', $role);
+
+        $validated = $request->validate([
+            'name'        => 'required|string|max:255|unique:roles,name,' . $role->id,
+            'permissions' => 'required|array',
+            'permissions.*' => 'exists:permissions,id',
         ]);
 
-        $role->update([
-            'name' => $request->name,
-        ]);
+        $role->update(['name' => $validated['name']]);
+        $role->permissions()->sync($validated['permissions']);
 
-        $role->permissions()->sync($request->permissions);
-
-        return redirect()->route('admin.roles.index')->with('success', 'Role updated successfully.');
+        return redirect()->route('admin.roles.index')
+            ->with('success', __('Security role updated and permissions re-synchronized successfully.'));
     }
 
-    public function destroy(Role $role)
+    /**
+     * Remove a security role from the administrative database.
+     *
+     * @param  \Spatie\Permission\Models\Role  $role
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function destroy(Role $role): RedirectResponse
     {
+        $this->authorize('delete', $role);
+
         $role->delete();
-        return redirect()->route('admin.roles.index')->with('success', 'Role deleted successfully.');
+        
+        return redirect()->route('admin.roles.index')
+            ->with('success', __('Security role removed from database successfully.'));
     }
 }

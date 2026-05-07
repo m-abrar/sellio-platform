@@ -7,35 +7,44 @@ use App\Models\Amenity;
 use App\Http\Requests\Admin\AmenityRequest;
 use App\Services\Admin\AmenityManagementService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 /**
  * Class AmenityController
- *
- * Manages administrative amenities for various listing modules.
+ * Orchestrates the administrative management of amenities, 
+ * providing a standardized interface for property-level features and facilities.
  */
 class AmenityController extends Controller
 {
     /**
-     * @var AmenityManagementService
+     * The amenity management service.
+     *
+     * @var \App\Services\Admin\AmenityManagementService
      */
-    protected $amenityService;
+    protected AmenityManagementService $amenityService;
 
     /**
      * AmenityController constructor.
      *
-     * @param AmenityManagementService $amenityService
+     * @param  \App\Services\Admin\AmenityManagementService  $amenityService
      */
     public function __construct(AmenityManagementService $amenityService)
     {
         $this->amenityService = $amenityService;
     }
 
-    public function index(\Illuminate\Http\Request $request): View
+    /**
+     * Display a filtered listing of all registered amenities.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\View\View
+     */
+    public function index(Request $request): View
     {
         $amenities = Amenity::latest()
-            ->when($request->search, function($q) use ($request) {
-                $q->where('title', 'like', "%{$request->search}%");
+            ->when($request->query('search'), function($q) use ($request) {
+                $q->where('title', 'like', "%{$request->query('search')}%");
             })
             ->get();
 
@@ -43,9 +52,9 @@ class AmenityController extends Controller
     }
 
     /**
-     * Show the form for creating a new amenity.
+     * Show the form for creating a new marketplace amenity.
      *
-     * @return View
+     * @return \Illuminate\View\View
      */
     public function create(): View
     {
@@ -54,10 +63,10 @@ class AmenityController extends Controller
     }
 
     /**
-     * Store a newly created amenity in storage.
+     * Store a newly created amenity and its associated configuration.
      *
-     * @param AmenityRequest $request
-     * @return RedirectResponse
+     * @param  \App\Http\Requests\Admin\AmenityRequest  $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(AmenityRequest $request): RedirectResponse
     {
@@ -68,10 +77,10 @@ class AmenityController extends Controller
     }
 
     /**
-     * Show the form for editing the specified amenity.
+     * Show the form for editing an existing marketplace amenity.
      *
-     * @param Amenity $amenity
-     * @return View
+     * @param  \App\Models\Amenity  $amenity
+     * @return \Illuminate\View\View
      */
     public function edit(Amenity $amenity): View
     {
@@ -79,11 +88,11 @@ class AmenityController extends Controller
     }
 
     /**
-     * Update the specified amenity in storage.
+     * Update an existing marketplace amenity configuration in the database.
      *
-     * @param AmenityRequest $request
-     * @param Amenity $amenity
-     * @return RedirectResponse
+     * @param  \App\Http\Requests\Admin\AmenityRequest  $request
+     * @param  \App\Models\Amenity  $amenity
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(AmenityRequest $request, Amenity $amenity): RedirectResponse
     {
@@ -94,10 +103,10 @@ class AmenityController extends Controller
     }
 
     /**
-     * Remove the specified amenity from storage.
+     * Remove an amenity configuration from the database.
      *
-     * @param Amenity $amenity
-     * @return RedirectResponse
+     * @param  \App\Models\Amenity  $amenity
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Amenity $amenity): RedirectResponse
     {

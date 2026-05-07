@@ -4,35 +4,49 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Services\Admin\BookingManagementService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Route;
+use Illuminate\View\View;
 
 /**
  * Class BookingController
- * * Manages a unified view of inquiries, bookings, and applications across all modules.
+ * Serves as the centralized administrative hub for managing a unified view of inquiries, 
+ * bookings, and applications across all marketplace verticals (Auto, Property, Jobs, etc.).
  */
 class BookingController extends Controller
 {
-    protected $bookingService;
+    /**
+     * The unified booking management service.
+     *
+     * @var \App\Services\Admin\BookingManagementService
+     */
+    protected BookingManagementService $bookingService;
 
+    /**
+     * BookingController constructor.
+     *
+     * @param  \App\Services\Admin\BookingManagementService  $bookingService
+     */
     public function __construct(BookingManagementService $bookingService)
     {
         $this->bookingService = $bookingService;
     }
 
     /**
-     * Display a listing of mixed booking/transaction types.
+     * Display a unified, filtered, and paginated listing of all transaction types.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\View\View
      */
-    public function index(\Illuminate\Http\Request $request): View
+    public function index(Request $request): View
     {
         $status = $request->route('status') ?: 'all';
         $type = $request->route('type') ?: 'all';
 
         $bookings = $this->bookingService->getUnifiedBookings($status, $type, 20);
 
-        // Add display helper for the view
+        // Decorate the unified collection with display-friendly attributes
         $bookings->getCollection()->each(function ($booking) {
             $relation = $booking->relation_name;
             $relatedItem = $booking->{$relation};
@@ -49,7 +63,14 @@ class BookingController extends Controller
         return view('admin.bookings.index', compact('bookings', 'status', 'type'));
     }
 
-    public function show(string $type, int $id)
+    /**
+     * Dynamically resolve and redirect to the specific management view for a booking type.
+     *
+     * @param  string  $type
+     * @param  int  $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function show(string $type, int $id): RedirectResponse
     {
         $modelClass = "App\\Models\\" . $type;
         
@@ -57,24 +78,23 @@ class BookingController extends Controller
             return back()->with('error', __('Invalid booking type.'));
         }
 
-        // 1. Convert "PropertyBooking" to "PropertyBookings" 
-        // (We pluralize the whole class name first)
+        // Resolve route prefix from model name (e.g., PropertyBooking -> property-bookings)
         $pluralName = Str::plural($type); 
-
-        // 2. Convert "PropertyBookings" to "property-bookings"
         $routePrefix = Str::kebab($pluralName);
         
-        // Now results in: "admin.property-bookings.show"
-        // Direct URL Redirect to sub-controller show route (bypasses named route lookup caching bugs)
         $url = url('/admin/' . $routePrefix . '/' . $id);
         
         return redirect($url);
     }
 
     /**
-     * Remove a booking/inquiry.
+     * Remove a booking or inquiry record from the database.
+     *
+     * @param  string  $type
+     * @param  int  $id
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(string $type, int $id)
+    public function destroy(string $type, int $id): RedirectResponse
     {
         $modelClass = "App\\Models\\" . $type;
         

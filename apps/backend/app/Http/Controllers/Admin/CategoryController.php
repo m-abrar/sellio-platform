@@ -7,36 +7,45 @@ use App\Models\Category;
 use App\Http\Requests\Admin\CategoryRequest;
 use App\Services\Admin\CategoryManagementService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 /**
  * Class CategoryController
- *
- * Manages administrative category listings, creation, and updates.
+ * Orchestrates the administrative management of the platform's multi-level taxonomy, 
+ * coordinating hierarchical relationships and vertical-specific categorization.
  */
 class CategoryController extends Controller
 {
     /**
-     * @var CategoryManagementService
+     * The category management service.
+     *
+     * @var \App\Services\Admin\CategoryManagementService
      */
-    protected $categoryService;
+    protected CategoryManagementService $categoryService;
 
     /**
      * CategoryController constructor.
      *
-     * @param CategoryManagementService $categoryService
+     * @param  \App\Services\Admin\CategoryManagementService  $categoryService
      */
     public function __construct(CategoryManagementService $categoryService)
     {
         $this->categoryService = $categoryService;
     }
 
-    public function index(\Illuminate\Http\Request $request): View
+    /**
+     * Display a filtered and hierarchical listing of all registered categories.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\View\View
+     */
+    public function index(Request $request): View
     {
         $categories = Category::with('parent')
             ->latest()
-            ->when($request->search, function($q) use ($request) {
-                $q->where('title', 'like', "%{$request->search}%");
+            ->when($request->query('search'), function($q) use ($request) {
+                $q->where('title', 'like', "%{$request->query('search')}%");
             })
             ->get();
 
@@ -44,22 +53,23 @@ class CategoryController extends Controller
     }
 
     /**
-     * Show the form for creating a new category.
+     * Show the form for creating a new marketplace category.
      *
-     * @return View
+     * @return \Illuminate\View\View
      */
     public function create(): View
     {
         $category = new Category();
         $categories = Category::orderBy('title')->get();
+        
         return view('admin.categories.form', compact('category', 'categories'));
     }
 
     /**
-     * Store a newly created category in storage.
+     * Store a newly created category and its associated configuration.
      *
-     * @param CategoryRequest $request
-     * @return RedirectResponse
+     * @param  \App\Http\Requests\Admin\CategoryRequest  $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(CategoryRequest $request): RedirectResponse
     {
@@ -70,25 +80,24 @@ class CategoryController extends Controller
     }
 
     /**
-     * Show the form for editing the specified category.
+     * Show the form for editing an existing marketplace category.
      *
-     * @param Category $category
-     * @return View
+     * @param  \App\Models\Category  $category
+     * @return \Illuminate\View\View
      */
     public function edit(Category $category): View
     {
+        $categories = Category::where('id', '!=', $category->id)->orderBy('title')->get();
         
-        $categories = Category::orderBy('title')->get();
         return view('admin.categories.form', compact('category', 'categories'));
-
     }
 
     /**
-     * Update the specified category in storage.
+     * Update an existing marketplace category configuration in the database.
      *
-     * @param CategoryRequest $request
-     * @param Category $category
-     * @return RedirectResponse
+     * @param  \App\Http\Requests\Admin\CategoryRequest  $request
+     * @param  \App\Models\Category  $category
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(CategoryRequest $request, Category $category): RedirectResponse
     {
@@ -99,10 +108,10 @@ class CategoryController extends Controller
     }
 
     /**
-     * Remove the specified category from storage.
+     * Remove a category configuration from the database.
      *
-     * @param Category $category
-     * @return RedirectResponse
+     * @param  \App\Models\Category  $category
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Category $category): RedirectResponse
     {

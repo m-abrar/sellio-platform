@@ -4,69 +4,111 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\LineItem;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
+/**
+ * Class LineItemController
+ * Manages the global templates and configuration for financial line items 
+ * (e.g., Taxes, Processing Fees, Discounts) that apply across marketplace transactions.
+ */
 class LineItemController extends Controller
 {
-    public function index()
+    /**
+     * Display a listing of all configured line item templates.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function index(): View
     {
         $lineItems = LineItem::orderBy('order')->get();
         return view('admin.line-items.index', compact('lineItems'));
     }
 
-    public function create()
+    /**
+     * Show the form for creating a new line item template.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function create(): View
     {
         return view('admin.line-items.form');
     }
 
-    public function store(Request $request)
+    /**
+     * Store a newly created line item template in the database.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function store(Request $request): RedirectResponse
     {
         $data = $request->validate([
-            'name' => 'required|string|max:255',
+            'name'        => 'required|string|max:255',
             'description' => 'nullable|string',
-            'amount' => 'required|numeric',
+            'amount'      => 'required|numeric',
             'is_required' => 'boolean',
-            'applies_on' => 'required|string',
-            'type' => 'nullable|string|max:100',
-            'order' => 'nullable|integer',
-            'status' => 'nullable|in:active,inactive',
+            'applies_on'  => 'required|string',
+            'type'        => 'nullable|string|max:100',
+            'order'       => 'nullable|integer',
+            'status'      => 'nullable|in:active,inactive',
         ]);
 
         LineItem::create($data);
 
         return redirect()->route('admin.line-items.index')
-                         ->with('success', 'Template created successfully.');
+                         ->with('success', __('Template created successfully.'));
     }
 
-    public function edit(LineItem $LineItem)
+    /**
+     * Show the form for editing an existing line item template.
+     *
+     * @param  \App\Models\LineItem  $lineItem
+     * @return \Illuminate\View\View
+     */
+    public function edit(LineItem $lineItem): View
     {
-        return view('admin.line-items.form', compact('LineItem'));
+        return view('admin.line-items.form', compact('lineItem'));
     }
 
-    public function update(Request $request, LineItem $LineItem)
+    /**
+     * Update an existing line item template in the database.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\LineItem  $lineItem
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function update(Request $request, LineItem $lineItem): RedirectResponse
     {
         $data = $request->validate([
-            'name' => 'required|string|max:255',
+            'name'        => 'required|string|max:255',
             'description' => 'nullable|string',
-            'amount' => 'required|numeric',
+            'amount'      => 'required|numeric',
             'is_required' => 'boolean',
-            'applies_on' => 'required|string',
-            'type' => 'nullable|string|max:100',
-            'order' => 'nullable|integer',
-            'status' => 'nullable|in:active,inactive',
+            'applies_on'  => 'required|string',
+            'type'        => 'nullable|string|max:100',
+            'order'       => 'nullable|integer',
+            'status'      => 'nullable|in:active,inactive',
         ]);
 
-        $LineItem->update($data);
+        $lineItem->update($data);
 
         return redirect()->route('admin.line-items.index')
-                         ->with('success', 'Template updated successfully.');
+                         ->with('success', __('Template updated successfully.'));
     }
 
-    public function destroy(LineItem $LineItem)
+    /**
+     * Remove a line item template from the database.
+     *
+     * @param  \App\Models\LineItem  $lineItem
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function destroy(LineItem $lineItem): RedirectResponse
     {
-        $LineItem->delete();
+        $lineItem->delete();
 
         return redirect()->route('admin.line-items.index')
-                         ->with('success', 'Template deleted successfully.');
+                         ->with('success', __('Template deleted successfully.'));
     }
 }

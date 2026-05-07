@@ -3,19 +3,31 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\JobApplication;
 use App\Models\JobListing;
+use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
+/**
+ * Class JobApplicationController
+ * Orchestrates administrative recruitment management, 
+ * coordinating job applications, candidate relationship mapping, and status tracking.
+ */
 class JobApplicationController extends Controller
 {
     /**
-     * Display a listing of job applications with advanced filters.
+     * Display a filtered and paginated list of all job applications.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  string  $status
+     * @return \Illuminate\View\View
      */
     public function index(Request $request, string $status = 'all'): View
     {
-        $status = $request->get('status', $status);
+        $status = $request->query('status', $status);
         
         $applications = JobApplication::with(['job.category', 'job.location', 'user'])
             ->when($request->job, fn($q) => $q->where('job_listing_id', $request->job))
@@ -29,33 +41,38 @@ class JobApplicationController extends Controller
             ->withQueryString();
 
         $jobs = JobListing::select('id', 'title', 'category_id')->with('category:id,title')->get();
-        $categories = \App\Models\Category::where('is_job', true)->select('id', 'title')->get();
+        $categories = Category::where('is_job', true)->select('id', 'title')->get();
 
         return view('admin.job-applications.index', compact('applications', 'jobs', 'categories', 'status'));
     }
 
     /**
-     * Show the form for creating a new job application.
+     * Show the form for creating a manual job application record.
+     *
+     * @return \Illuminate\View\View
      */
     public function create(): View
     {
         $application = new JobApplication();
         $jobs = JobListing::select('id', 'title')->get();
-        $users = \App\Models\User::select('id', 'name', 'email')->get();
+        $users = User::select('id', 'name', 'email')->get();
         
         return view('admin.job-applications.form', compact('application', 'jobs', 'users'));
     }
 
     /**
-     * Store a newly created job application.
+     * Store a newly created job application record in the database.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request): \Illuminate\Http\RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'job_listing_id' => 'required|exists:joblistings,id',
-            'user_id' => 'required|exists:users,id',
-            'cover_letter' => 'nullable|string',
-            'status' => 'required|string',
+            'job_listing_id' => 'required|exists:job_listings,id',
+            'user_id'        => 'required|exists:users,id',
+            'cover_letter'   => 'nullable|string',
+            'status'         => 'required|string|max:255',
         ]);
 
         JobApplication::create($validated);
@@ -66,32 +83,52 @@ class JobApplicationController extends Controller
     }
 
     /**
-     * Show the form for editing the specified job application.
+     * Display the specific details of a job application.
+     *
+     * @param  \App\Models\JobApplication  $jobApplication
+     * @return \Illuminate\View\View
      */
-    public function edit(int $id): View
+    public function show(JobApplication $jobApplication): View
     {
-        $application = JobApplication::findOrFail($id);
-        $jobs = JobListing::select('id', 'title')->get();
-        $users = \App\Models\User::select('id', 'name', 'email')->get();
-
-        return view('admin.job-applications.form', compact('application', 'jobs', 'users'));
+        $jobApplication->load(['job.category', 'user']);
+        return view('admin.job-applications.show', ['application' => $jobApplication]);
     }
 
     /**
-     * Update the specified job application.
+     * Show the form for editing an existing job application.
+     *
+     * @param  \App\Models\JobApplication  $jobApplication
+     * @return \Illuminate\View\View
      */
-    public function update(Request $request, int $id): \Illuminate\Http\RedirectResponse
+    public function edit(JobApplication $jobApplication): View
     {
-        $application = JobApplication::findOrFail($id);
+        $jobs = JobListing::select('id', 'title')->get();
+        $users = User::select('id', 'name', 'email')->get();
 
+        return view('admin.job-applications.form', [
+            'application' => $jobApplication, 
+            'jobs'        => $jobs, 
+            'users'       => $users
+        ]);
+    }
+
+    /**
+     * Update an existing job application record in the database.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\JobApplication  $jobApplication
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function update(Request $request, JobApplication $jobApplication): RedirectResponse
+    {
         $validated = $request->validate([
-            'job_listing_id' => 'required|exists:joblistings,id',
-            'user_id' => 'required|exists:users,id',
-            'cover_letter' => 'nullable|string',
-            'status' => 'required|string',
+            'job_listing_id' => 'required|exists:job_listings,id',
+            'user_id'        => 'required|exists:users,id',
+            'cover_letter'   => 'nullable|string',
+            'status'         => 'required|string|max:255',
         ]);
 
-        $application->update($validated);
+        $jobApplication->update($validated);
 
         return redirect()
             ->route('admin.job-applications.index')
@@ -99,24 +136,17 @@ class JobApplicationController extends Controller
     }
 
     /**
-     * Remove the specified job application.
+     * Remove a job application record from the database.
+     *
+     * @param  \App\Models\JobApplication  $jobApplication
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(int $id): \Illuminate\Http\RedirectResponse
+    public function destroy(JobApplication $jobApplication): RedirectResponse
     {
-        $application = JobApplication::findOrFail($id);
-        $application->delete();
+        $jobApplication->delete();
 
         return redirect()
             ->route('admin.job-applications.index')
             ->with('success', __('Application deleted successfully.'));
-    }
-
-    /**
-     * Display the specified job application.
-     */
-    public function show(int $id): View
-    {
-        $application = JobApplication::with(['job.category', 'user'])->findOrFail($id);
-        return view('admin.job-applications.show', compact('application'));
     }
 }

@@ -3,55 +3,76 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Service;
 use App\Models\ServiceAppointment;
+use App\Models\User;
+use App\Models\Category;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
+/**
+ * Class ServiceAppointmentController
+ * Orchestrates administrative scheduling for professional services, 
+ * managing appointment lifecycle, provider coordination, and read-receipt tracking.
+ */
 class ServiceAppointmentController extends Controller
 {
     /**
-     * Display a listing of service appointments with advanced filters.
+     * Display a filtered and paginated listing of all service appointments.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  string  $status
+     * @return \Illuminate\View\View
      */
-    public function index(\Illuminate\Http\Request $request, string $status = 'all'): View
+    public function index(Request $request, string $status = 'all'): View
     {
+        $status = $request->query('status', $status);
+
         $appointments = ServiceAppointment::with(['service.category', 'user'])
-            ->when($request->service, fn($q) => $q->where('service_id', $request->service))
-            ->when($request->status && $request->status !== 'all', fn($q) => $q->where('status', $request->status))
+            ->when($request->query('service'), fn($q) => $q->where('service_id', $request->query('service')))
+            ->when($status !== 'all', fn($q) => $q->where('status', $status))
             ->latest()
             ->paginate(15)
             ->withQueryString();
 
-        $services = \App\Models\Service::select('id', 'title')->get();
-        $categories = \App\Models\Category::where('is_service', true)->select('id', 'title')->get();
+        $services   = Service::select('id', 'title')->get();
+        $categories = Category::where('is_service', true)->select('id', 'title')->get();
 
         return view('admin.service-appointments.index', compact('appointments', 'services', 'categories', 'status'));
     }
 
     /**
-     * Show the form for creating a new appointment.
+     * Show the interface for initializing a new manual service appointment.
+     *
+     * @return \Illuminate\View\View
      */
     public function create(): View
     {
         $appointment = new ServiceAppointment();
-        $services = \App\Models\Service::select('id', 'title')->get();
-        $users = \App\Models\User::select('id', 'name', 'email')->get();
+        $services    = Service::select('id', 'title')->get();
+        $users       = User::select('id', 'name', 'email')->get();
         
         return view('admin.service-appointments.form', compact('appointment', 'services', 'users'));
     }
 
     /**
-     * Store a newly created appointment.
+     * Store a newly created service appointment and initialize its lifecycle.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(\Illuminate\Http\Request $request): \Illuminate\Http\RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'service_id' => 'required|exists:services,id',
-            'user_id' => 'required|exists:users,id',
-            'name' => 'required|string|max:255',
-            'email' => 'required|email',
-            'phone' => 'nullable|string|max:20',
+            'service_id'   => 'required|exists:services,id',
+            'user_id'      => 'required|exists:users,id',
+            'name'         => 'required|string|max:255',
+            'email'        => 'required|email',
+            'phone'        => 'nullable|string|max:20',
             'scheduled_at' => 'required|date',
-            'status' => 'required|string',
-            'notes' => 'nullable|string',
+            'status'       => 'required|string|max:50',
+            'notes'        => 'nullable|string',
         ]);
 
         ServiceAppointment::create($validated);
@@ -62,51 +83,62 @@ class ServiceAppointmentController extends Controller
     }
 
     /**
-     * Display the specified appointment.
+     * Display the comprehensive details of a specific service appointment and track read status.
+     *
+     * @param  \App\Models\ServiceAppointment  $serviceAppointment
+     * @return \Illuminate\View\View
      */
-    public function show(int $id): View
+    public function show(ServiceAppointment $serviceAppointment): View
     {
-        $appointment = ServiceAppointment::with(['service', 'user'])
-            ->findOrFail($id);
+        $serviceAppointment->load(['service', 'user']);
 
-        if (!$appointment->viewed_at) {
-            $appointment->update(['viewed_at' => now()]);
+        // Administrative Read Receipt Tracking
+        if (!$serviceAppointment->viewed_at) {
+            $serviceAppointment->update(['viewed_at' => now()]);
         }
 
-        return view('admin.service-appointments.show', compact('appointment'));
+        return view('admin.service-appointments.show', ['appointment' => $serviceAppointment]);
     }
 
     /**
-     * Show the form for editing the appointment.
+     * Show the form for editing an existing service appointment.
+     *
+     * @param  \App\Models\ServiceAppointment  $serviceAppointment
+     * @return \Illuminate\View\View
      */
-    public function edit(int $id): View
+    public function edit(ServiceAppointment $serviceAppointment): View
     {
-        $appointment = ServiceAppointment::findOrFail($id);
-        $services = \App\Models\Service::select('id', 'title')->get();
-        $users = \App\Models\User::select('id', 'name', 'email')->get();
+        $services = Service::select('id', 'title')->get();
+        $users    = User::select('id', 'name', 'email')->get();
 
-        return view('admin.service-appointments.form', compact('appointment', 'services', 'users'));
+        return view('admin.service-appointments.form', [
+            'appointment' => $serviceAppointment, 
+            'services'    => $services, 
+            'users'       => $users
+        ]);
     }
 
     /**
-     * Update the specified appointment.
+     * Update an existing service appointment configuration and its scheduled parameters.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\ServiceAppointment  $serviceAppointment
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(\Illuminate\Http\Request $request, int $id): \Illuminate\Http\RedirectResponse
+    public function update(Request $request, ServiceAppointment $serviceAppointment): RedirectResponse
     {
-        $appointment = ServiceAppointment::findOrFail($id);
-
         $validated = $request->validate([
-            'service_id' => 'required|exists:services,id',
-            'user_id' => 'required|exists:users,id',
-            'name' => 'required|string|max:255',
-            'email' => 'required|email',
-            'phone' => 'nullable|string|max:20',
+            'service_id'   => 'required|exists:services,id',
+            'user_id'      => 'required|exists:users,id',
+            'name'         => 'required|string|max:255',
+            'email'        => 'required|email',
+            'phone'        => 'nullable|string|max:20',
             'scheduled_at' => 'required|date',
-            'status' => 'required|string',
-            'notes' => 'nullable|string',
+            'status'       => 'required|string|max:50',
+            'notes'        => 'nullable|string',
         ]);
 
-        $appointment->update($validated);
+        $serviceAppointment->update($validated);
 
         return redirect()
             ->route('admin.service-appointments.index')
@@ -114,12 +146,14 @@ class ServiceAppointmentController extends Controller
     }
 
     /**
-     * Remove the specified appointment.
+     * Remove a service appointment record from the database.
+     *
+     * @param  \App\Models\ServiceAppointment  $serviceAppointment
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(int $id): \Illuminate\Http\RedirectResponse
+    public function destroy(ServiceAppointment $serviceAppointment): RedirectResponse
     {
-        $appointment = ServiceAppointment::findOrFail($id);
-        $appointment->delete();
+        $serviceAppointment->delete();
 
         return redirect()
             ->route('admin.service-appointments.index')

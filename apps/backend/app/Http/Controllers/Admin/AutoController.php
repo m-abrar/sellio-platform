@@ -12,15 +12,30 @@ use App\Http\Requests\Admin\AutoRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-
 use App\Traits\ManagesApproval;
 
+/**
+ * Class AutoController
+ * Manages the automotive vertical of the marketplace, coordinating inventory, 
+ * brand/category taxonomies, and the listing approval lifecycle.
+ */
 class AutoController extends Controller
 {
     use ManagesApproval;
 
+    /**
+     * The model class associated with the approval trait.
+     *
+     * @var string
+     */
     protected $modelClass = Auto::class;
 
+    /**
+     * Display a filtered and paginated list of all automotive listings.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\View\View
+     */
     public function index(Request $request): View
     {
         $categories = Category::where('is_auto', 1)->get();
@@ -40,15 +55,27 @@ class AutoController extends Controller
         return view('admin.autos.index', compact('autos', 'categories', 'brands', 'locations'));
     }
 
+    /**
+     * Show the form for creating a new automotive listing.
+     *
+     * @return \Illuminate\View\View
+     */
     public function create(): View
     {
         $auto = new Auto();
         $categories = Category::where('is_auto', 1)->get();
         $brands = Brand::where('is_auto', 1)->get();
         $locations = Location::where('is_auto', 1)->get();
+        
         return view('admin.autos.form', compact('auto', 'categories', 'brands', 'locations'));
     }
 
+    /**
+     * Store a newly created automotive listing in the database.
+     *
+     * @param  \App\Http\Requests\Admin\AutoRequest  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function store(AutoRequest $request): RedirectResponse
     {
         $validated = $request->validated();
@@ -63,6 +90,12 @@ class AutoController extends Controller
             ->with('success', __('Auto created successfully.'));
     }
 
+    /**
+     * Show the form for editing an existing automotive listing and its inquiries.
+     *
+     * @param  \App\Models\Auto  $auto
+     * @return \Illuminate\View\View
+     */
     public function edit(Auto $auto): View
     {
         $categories = Category::where('is_auto', 1)->get();
@@ -74,6 +107,13 @@ class AutoController extends Controller
         return view('admin.autos.form', compact('auto', 'categories', 'brands', 'locations', 'recentInquiries'));
     }
 
+    /**
+     * Update an existing automotive listing in the database.
+     *
+     * @param  \App\Http\Requests\Admin\AutoRequest  $request
+     * @param  \App\Models\Auto  $auto
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function update(AutoRequest $request, Auto $auto): RedirectResponse
     {
         $validated = $request->validated();
@@ -87,12 +127,24 @@ class AutoController extends Controller
             ->with('success', __('Auto updated successfully.'));
     }
 
+    /**
+     * Remove an automotive listing from the database.
+     *
+     * @param  \App\Models\Auto  $auto
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function destroy(Auto $auto): RedirectResponse
     {
         $auto->delete();
         return redirect()->route('admin.autos.index')->with('success', __('Auto deleted successfully.'));
     }
 
+    /**
+     * Replicate an existing listing as a draft copy for quick inventory entry.
+     *
+     * @param  \App\Models\Auto  $auto
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function duplicate(Auto $auto): RedirectResponse
     {
         $clone = $auto->replicate();

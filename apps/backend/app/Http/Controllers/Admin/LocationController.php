@@ -7,35 +7,44 @@ use App\Models\Location;
 use App\Http\Requests\Admin\LocationRequest;
 use App\Services\Admin\LocationManagementService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 /**
  * Class LocationController
- *
- * Manages administrative location listings and metadata.
+ * Orchestrates the administrative management of geographical locations, 
+ * coordinating listing-location relationships and regional metadata.
  */
 class LocationController extends Controller
 {
     /**
-     * @var LocationManagementService
+     * The location management service.
+     *
+     * @var \App\Services\Admin\LocationManagementService
      */
-    protected $locationService;
+    protected LocationManagementService $locationService;
 
     /**
      * LocationController constructor.
      *
-     * @param LocationManagementService $locationService
+     * @param  \App\Services\Admin\LocationManagementService  $locationService
      */
     public function __construct(LocationManagementService $locationService)
     {
         $this->locationService = $locationService;
     }
 
-    public function index(\Illuminate\Http\Request $request): View
+    /**
+     * Display a filtered listing of all registered marketplace locations.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\View\View
+     */
+    public function index(Request $request): View
     {
         $locations = Location::latest()
-            ->when($request->search, function($q) use ($request) {
-                $q->where('title', 'like', "%{$request->search}%");
+            ->when($request->query('search'), function($q) use ($request) {
+                $q->where('title', 'like', "%{$request->query('search')}%");
             })
             ->get();
 
@@ -43,9 +52,9 @@ class LocationController extends Controller
     }
 
     /**
-     * Show the form for creating a new location.
+     * Show the form for creating a new marketplace location.
      *
-     * @return View
+     * @return \Illuminate\View\View
      */
     public function create(): View
     {
@@ -54,10 +63,10 @@ class LocationController extends Controller
     }
 
     /**
-     * Store a newly created location in storage.
+     * Store a newly created location and its associated metadata.
      *
-     * @param LocationRequest $request
-     * @return RedirectResponse
+     * @param  \App\Http\Requests\Admin\LocationRequest  $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(LocationRequest $request): RedirectResponse
     {
@@ -68,14 +77,14 @@ class LocationController extends Controller
     }
 
     /**
-     * Show the form for editing the specified location.
+     * Show the form for editing an existing marketplace location.
      *
-     * @param Location $location
-     * @return View
+     * @param  \App\Models\Location  $location
+     * @return \Illuminate\View\View
      */
     public function edit(Location $location): View
     {
-        // Handle decoded images if they exist as a JSON string in DB
+        // Normalize geographical assets for the form interface
         $location->images = is_string($location->images) 
             ? json_decode($location->images, true) 
             : ($location->images ?? []);
@@ -84,11 +93,11 @@ class LocationController extends Controller
     }
 
     /**
-     * Update the specified location in storage.
+     * Update an existing marketplace location configuration in the database.
      *
-     * @param LocationRequest $request
-     * @param Location $location
-     * @return RedirectResponse
+     * @param  \App\Http\Requests\Admin\LocationRequest  $request
+     * @param  \App\Models\Location  $location
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(LocationRequest $request, Location $location): RedirectResponse
     {
@@ -99,10 +108,10 @@ class LocationController extends Controller
     }
 
     /**
-     * Remove the specified location from storage.
+     * Remove a location configuration from the database.
      *
-     * @param Location $location
-     * @return RedirectResponse
+     * @param  \App\Models\Location  $location
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Location $location): RedirectResponse
     {

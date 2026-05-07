@@ -7,35 +7,44 @@ use App\Models\Feature;
 use App\Http\Requests\Admin\FeatureRequest;
 use App\Services\Admin\FeatureManagementService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 /**
  * Class FeatureController
- *
- * Orchestrates administrative features for the multi-module directory system.
+ * Orchestrates the administrative management of features, 
+ * coordinating listing-feature relationships and vertical-specific module assignments.
  */
 class FeatureController extends Controller
 {
     /**
-     * @var FeatureManagementService
+     * The feature management service.
+     *
+     * @var \App\Services\Admin\FeatureManagementService
      */
-    protected $featureService;
+    protected FeatureManagementService $featureService;
 
     /**
      * FeatureController constructor.
      *
-     * @param FeatureManagementService $featureService
+     * @param  \App\Services\Admin\FeatureManagementService  $featureService
      */
     public function __construct(FeatureManagementService $featureService)
     {
         $this->featureService = $featureService;
     }
 
-    public function index(\Illuminate\Http\Request $request): View
+    /**
+     * Display a filtered listing of all registered marketplace features.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\View\View
+     */
+    public function index(Request $request): View
     {
         $features = Feature::latest()
-            ->when($request->search, function($q) use ($request) {
-                $q->where('title', 'like', "%{$request->search}%");
+            ->when($request->query('search'), function($q) use ($request) {
+                $q->where('title', 'like', "%{$request->query('search')}%");
             })
             ->get();
 
@@ -43,9 +52,9 @@ class FeatureController extends Controller
     }
 
     /**
-     * Show the form for creating a new feature.
+     * Show the form for creating a new marketplace feature.
      *
-     * @return View
+     * @return \Illuminate\View\View
      */
     public function create(): View
     {
@@ -54,10 +63,10 @@ class FeatureController extends Controller
     }
 
     /**
-     * Store a newly created feature in storage.
+     * Store a newly created feature and its associated configuration.
      *
-     * @param FeatureRequest $request
-     * @return RedirectResponse
+     * @param  \App\Http\Requests\Admin\FeatureRequest  $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(FeatureRequest $request): RedirectResponse
     {
@@ -68,10 +77,10 @@ class FeatureController extends Controller
     }
 
     /**
-     * Show the form for editing the specified feature.
+     * Show the form for editing an existing marketplace feature.
      *
-     * @param Feature $feature
-     * @return View
+     * @param  \App\Models\Feature  $feature
+     * @return \Illuminate\View\View
      */
     public function edit(Feature $feature): View
     {
@@ -79,11 +88,11 @@ class FeatureController extends Controller
     }
 
     /**
-     * Update the specified feature in storage.
+     * Update an existing marketplace feature configuration in the database.
      *
-     * @param FeatureRequest $request
-     * @param Feature $feature
-     * @return RedirectResponse
+     * @param  \App\Http\Requests\Admin\FeatureRequest  $request
+     * @param  \App\Models\Feature  $feature
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(FeatureRequest $request, Feature $feature): RedirectResponse
     {
@@ -94,10 +103,10 @@ class FeatureController extends Controller
     }
 
     /**
-     * Remove the specified feature from storage.
+     * Remove a feature configuration from the database.
      *
-     * @param Feature $feature
-     * @return RedirectResponse
+     * @param  \App\Models\Feature  $feature
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Feature $feature): RedirectResponse
     {

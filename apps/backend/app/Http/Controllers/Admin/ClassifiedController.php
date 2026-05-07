@@ -11,15 +11,30 @@ use App\Http\Requests\Admin\ClassifiedRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-
 use App\Traits\ManagesApproval;
 
+/**
+ * Class ClassifiedController
+ * Manages the general classifieds vertical of the marketplace, 
+ * coordinating listing approval, inventory categorization, and inquiry lifecycle management.
+ */
 class ClassifiedController extends Controller
 {
     use ManagesApproval;
 
+    /**
+     * The model class associated with the approval trait.
+     *
+     * @var string
+     */
     protected $modelClass = Classified::class;
 
+    /**
+     * Display a filtered and paginated list of all classified advertisements.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\View\View
+     */
     public function index(Request $request): View
     {
         $categories = Category::where('is_classified', 1)->get();
@@ -37,14 +52,26 @@ class ClassifiedController extends Controller
         return view('admin.classifieds.index', compact('classifieds', 'categories', 'locations'));
     }
 
+    /**
+     * Show the form for creating a new classified listing.
+     *
+     * @return \Illuminate\View\View
+     */
     public function create(): View
     {
         $classified = new Classified();
         $categories = Category::where('is_classified', 1)->get();
         $locations = Location::where('is_classified', 1)->get();
+        
         return view('admin.classifieds.form', compact('classified', 'categories', 'locations'));
     }
 
+    /**
+     * Store a newly created classified listing in the database.
+     *
+     * @param  \App\Http\Requests\Admin\ClassifiedRequest  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function store(ClassifiedRequest $request): RedirectResponse
     {
         $validated = $request->validated();
@@ -61,6 +88,12 @@ class ClassifiedController extends Controller
             ->with('success', __('Classified ad created successfully.'));
     }
 
+    /**
+     * Show the form for editing an existing classified listing and its associated inquiries.
+     *
+     * @param  \App\Models\Classified  $classified
+     * @return \Illuminate\View\View
+     */
     public function edit(Classified $classified): View
     {
         $categories = Category::where('is_classified', 1)->get();
@@ -71,6 +104,13 @@ class ClassifiedController extends Controller
         return view('admin.classifieds.form', compact('classified', 'categories', 'locations', 'recentInquiries'));
     }
 
+    /**
+     * Update an existing classified listing in the database.
+     *
+     * @param  \App\Http\Requests\Admin\ClassifiedRequest  $request
+     * @param  \App\Models\Classified  $classified
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function update(ClassifiedRequest $request, Classified $classified): RedirectResponse
     {
         $validated = $request->validated();
@@ -86,12 +126,24 @@ class ClassifiedController extends Controller
             ->with('success', __('Classified ad updated successfully.'));
     }
 
+    /**
+     * Remove a classified listing from the database.
+     *
+     * @param  \App\Models\Classified  $classified
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function destroy(Classified $classified): RedirectResponse
     {
         $classified->delete();
         return redirect()->route('admin.classifieds.index')->with('success', __('Classified ad deleted successfully.'));
     }
 
+    /**
+     * Replicate an existing classified listing as a draft copy for quick entry.
+     *
+     * @param  \App\Models\Classified  $classified
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function duplicate(Classified $classified): RedirectResponse
     {
         $clone = $classified->replicate();

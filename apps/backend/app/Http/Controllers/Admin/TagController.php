@@ -7,35 +7,44 @@ use App\Models\Tag;
 use App\Http\Requests\Admin\TagRequest;
 use App\Services\Admin\TagManagementService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 /**
  * Class TagController
- *
- * Manages the taxonomy of tags across multiple application modules.
+ * Orchestrates the administrative taxonomy of tags, coordinating 
+ * cross-module polymorphic relationships and semantic metadata assignments.
  */
 class TagController extends Controller
 {
     /**
-     * @var TagManagementService
+     * The tag management service.
+     *
+     * @var \App\Services\Admin\TagManagementService
      */
-    protected $tagService;
+    protected TagManagementService $tagService;
 
     /**
      * TagController constructor.
      *
-     * @param TagManagementService $tagService
+     * @param  \App\Services\Admin\TagManagementService  $tagService
      */
     public function __construct(TagManagementService $tagService)
     {
         $this->tagService = $tagService;
     }
 
-    public function index(\Illuminate\Http\Request $request): View
+    /**
+     * Display a filtered listing of all registered marketplace tags.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\View\View
+     */
+    public function index(Request $request): View
     {
         $tags = Tag::latest()
-            ->when($request->search, function($q) use ($request) {
-                $q->where('title', 'like', "%{$request->search}%");
+            ->when($request->query('search'), function($q) use ($request) {
+                $q->where('title', 'like', "%{$request->query('search')}%");
             })
             ->get();
 
@@ -43,9 +52,9 @@ class TagController extends Controller
     }
 
     /**
-     * Show the form for creating a new tag.
+     * Show the interface for initializing a new marketplace tag.
      *
-     * @return View
+     * @return \Illuminate\View\View
      */
     public function create(): View
     {
@@ -54,24 +63,24 @@ class TagController extends Controller
     }
 
     /**
-     * Store a newly created tag in storage.
+     * Store a newly created tag and its associated configuration.
      *
-     * @param TagRequest $request
-     * @return RedirectResponse
+     * @param  \App\Http\Requests\Admin\TagRequest  $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(TagRequest $request): RedirectResponse
     {
         $tag = $this->tagService->saveTag($request->validated());
 
         return redirect()->route('admin.tags.edit', $tag->id)
-            ->with('success', __('Tag added successfully.'));
+            ->with('success', __('Tag initialized successfully.'));
     }
 
     /**
-     * Show the form for editing the specified tag.
+     * Show the interface for editing an existing marketplace tag.
      *
-     * @param Tag $tag
-     * @return View
+     * @param  \App\Models\Tag  $tag
+     * @return \Illuminate\View\View
      */
     public function edit(Tag $tag): View
     {
@@ -79,31 +88,31 @@ class TagController extends Controller
     }
 
     /**
-     * Update the specified tag in storage.
+     * Update an existing marketplace tag configuration in the database.
      *
-     * @param TagRequest $request
-     * @param Tag $tag
-     * @return RedirectResponse
+     * @param  \App\Http\Requests\Admin\TagRequest  $request
+     * @param  \App\Models\Tag  $tag
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(TagRequest $request, Tag $tag): RedirectResponse
     {
         $this->tagService->saveTag($request->validated(), $tag);
 
         return redirect()->route('admin.tags.index')
-            ->with('success', __('Tag updated successfully.'));
+            ->with('success', __('Tag configuration updated successfully.'));
     }
 
     /**
-     * Remove the specified tag from storage.
+     * Remove a tag from the active database.
      *
-     * @param Tag $tag
-     * @return RedirectResponse
+     * @param  \App\Models\Tag  $tag
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Tag $tag): RedirectResponse
     {
         $tag->delete();
 
         return redirect()->route('admin.tags.index')
-            ->with('success', __('Tag deleted successfully.'));
+            ->with('success', __('Tag removed successfully.'));
     }
 }

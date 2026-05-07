@@ -7,35 +7,44 @@ use App\Models\Brand;
 use App\Http\Requests\Admin\BrandRequest;
 use App\Services\Admin\BrandManagementService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 /**
  * Class BrandController
- *
- * Manages administrative brand listings and module assignments.
+ * Orchestrates the administrative management of brands, 
+ * coordinating listing-brand relationships and vertical-specific module assignments.
  */
 class BrandController extends Controller
 {
     /**
-     * @var BrandManagementService
+     * The brand management service.
+     *
+     * @var \App\Services\Admin\BrandManagementService
      */
-    protected $brandService;
+    protected BrandManagementService $brandService;
 
     /**
      * BrandController constructor.
      *
-     * @param BrandManagementService $brandService
+     * @param  \App\Services\Admin\BrandManagementService  $brandService
      */
     public function __construct(BrandManagementService $brandService)
     {
         $this->brandService = $brandService;
     }
 
-    public function index(\Illuminate\Http\Request $request): View
+    /**
+     * Display a filtered listing of all registered marketplace brands.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\View\View
+     */
+    public function index(Request $request): View
     {
         $brands = Brand::latest()
-            ->when($request->search, function($q) use ($request) {
-                $q->where('title', 'like', "%{$request->search}%");
+            ->when($request->query('search'), function($q) use ($request) {
+                $q->where('title', 'like', "%{$request->query('search')}%");
             })
             ->get();
 
@@ -43,9 +52,9 @@ class BrandController extends Controller
     }
 
     /**
-     * Show the form for creating a new brand.
+     * Show the form for creating a new marketplace brand.
      *
-     * @return View
+     * @return \Illuminate\View\View
      */
     public function create(): View
     {
@@ -54,10 +63,10 @@ class BrandController extends Controller
     }
 
     /**
-     * Store a newly created brand in storage.
+     * Store a newly created brand and its associated configuration.
      *
-     * @param BrandRequest $request
-     * @return RedirectResponse
+     * @param  \App\Http\Requests\Admin\BrandRequest  $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(BrandRequest $request): RedirectResponse
     {
@@ -68,10 +77,10 @@ class BrandController extends Controller
     }
 
     /**
-     * Show the form for editing the specified brand.
+     * Show the form for editing an existing marketplace brand.
      *
-     * @param Brand $brand
-     * @return View
+     * @param  \App\Models\Brand  $brand
+     * @return \Illuminate\View\View
      */
     public function edit(Brand $brand): View
     {
@@ -79,11 +88,11 @@ class BrandController extends Controller
     }
 
     /**
-     * Update the specified brand in storage.
+     * Update an existing marketplace brand configuration in the database.
      *
-     * @param BrandRequest $request
-     * @param Brand $brand
-     * @return RedirectResponse
+     * @param  \App\Http\Requests\Admin\BrandRequest  $request
+     * @param  \App\Models\Brand  $brand
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(BrandRequest $request, Brand $brand): RedirectResponse
     {
@@ -94,10 +103,10 @@ class BrandController extends Controller
     }
 
     /**
-     * Remove the specified brand from storage.
+     * Remove a brand configuration from the database.
      *
-     * @param Brand $brand
-     * @return RedirectResponse
+     * @param  \App\Models\Brand  $brand
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Brand $brand): RedirectResponse
     {

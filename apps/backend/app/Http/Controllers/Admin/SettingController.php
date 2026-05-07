@@ -3,117 +3,119 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Setting;
 use App\Models\Page;
 use App\Models\Theme;
-use Illuminate\Support\Facades\DB; 
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\View\View;
 
+/**
+ * Class SettingController
+ * Orchestrates the platform's centralized configuration engine, managing 
+ * environmental parameters, feature toggles, and marketing synchronization.
+ */
 class SettingController extends Controller
 {
     /**
-     * Display the Settings Explorer page.
+     * Display the centralized Settings Explorer dashboard.
+     *
+     * @return \Illuminate\View\View
      */
-    public function index()
+    public function index(): View
     {
         $settings = Setting::pluck('value', 'key')->toArray(); 
-        $pages = Page::where('type','page')->get();
-        // Load all themes for potential use in the index/explorer view
-        $themes = Theme::all();
+        $pages    = Page::where('type', 'page')->get();
+        $themes   = Theme::all();
         
         return view('admin.settings.index', compact('settings', 'pages', 'themes'));
     }
 
     /**
-     * Loads the specific settings view (dedicated page) based on the URL parameter.
+     * Load a specific administrative settings segment based on the sectional parameter.
+     *
+     * @param  string  $section
+     * @return \Illuminate\View\View
      */
-    public function getSection(string $section)
+    public function getSection(string $section): View
     {
-        // Fetch all settings data once
         $settings = Setting::pluck('value', 'key')->toArray();
-        
         $viewPath = 'admin.settings.partials.' . $section;
         
-        // --- Conditionally load extra data (like pages and FILTERED applications) ---
-        $pages = [];
-        $applications = []; 
+        $pages  = [];
         $themes = []; 
         
         if ($section === 'pages') {
-            $pages = Page::where('type', 'page')->get();
-            
-            // Load specific theme subsets based on theme_key prefix
-            $themes['all'] = Theme::all(); 
-            $themes['unifieds'] = $this->getFilteredThemes('unified');
+            $pages               = Page::where('type', 'page')->get();
+            $themes['all']       = Theme::all(); 
+            $themes['unifieds']  = $this->getFilteredThemes('unified');
             $themes['properties'] = $this->getFilteredThemes('prop');
-            $themes['autos'] = $this->getFilteredThemes('auto');
-            $themes['events'] = $this->getFilteredThemes('event');
-            $themes['jobs'] = $this->getFilteredThemes('job');
-            $themes['services'] = $this->getFilteredThemes('service');
+            $themes['autos']      = $this->getFilteredThemes('auto');
+            $themes['events']     = $this->getFilteredThemes('event');
+            $themes['jobs']       = $this->getFilteredThemes('job');
+            $themes['services']   = $this->getFilteredThemes('service');
             $themes['classifieds'] = $this->getFilteredThemes('classified');
         }
         
-        // Safety check
         if (!view()->exists($viewPath)) {
-             abort(404, "Settings section '{$section}' not found.");
+             abort(404, __("Settings section ':section' not found.", ['section' => $section]));
         }
 
-        // Returns the dedicated view, which includes the layout and the form.
         return view($viewPath, compact('settings', 'pages', 'themes'));
     }
 
     /**
-     * Dynamically updates the specific settings section data.
+     * Persist localized updates for a specific settings segment.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  string  $section
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function updateSection(Request $request, string $section)
+    public function updateSection(Request $request, string $section): RedirectResponse
     {
-        // 1. Fetch the rules for the section dynamically
         $rules = $this->getValidationRules($section);
 
-        // Define keys that are file-based and should only be validated if a file is present
+        // Optimization: Conditional File Validation
         $fileKeys = ['site_logo', 'site_favicon'];
-        
         foreach ($fileKeys as $key) {
-            // If the section rules have this key but no file is in the request, unset the rule
             if (isset($rules[$key]) && !$request->hasFile($key)) {
                 unset($rules[$key]);
             }
         }
 
-        // 2. Run Validation
         $request->validate($rules);
-        
-        // 3. Save the data to the database
         $this->saveSettingsData($request, $section);
         
-        // 4. Return success
-        return back()->with('success', ucfirst($section) . ' settings updated successfully!');
+        return back()->with('success', __(':section settings updated successfully!', [
+            'section' => ucfirst($section)
+        ]));
     }
 
-    // --- Helper Functions ---
-
     /**
-     * Defines the validation rules for each settings section.
+     * Define the operational validation schema for each settings segment.
+     *
+     * @param  string  $section
+     * @return array
      */
     private function getValidationRules(string $section): array
     {
         $rules = [
             'general' => [
-                'site_name' => 'required|string|max:255',
-                'site_tagline' => 'nullable|string|max:255',
-                'default_language' => 'required|string',
-                'timezone' => 'required|string',
-                'frontend_edit' => 'nullable|boolean',
-                'currency_code' => 'required|string|max:10',
-                'hide_site_name' => 'nullable|boolean',
-                'site_logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
-                'site_favicon' => 'nullable|image|mimes:ico,png,webp|max:100',
-                
-                // External Application URLs
-                'url_frontend' => 'nullable|url',
-                'url_admin' => 'nullable|url',
-                'url_partner' => 'nullable|url',
-                'url_user' => 'nullable|url',
+                'site_name'               => 'required|string|max:255',
+                'site_tagline'            => 'nullable|string|max:255',
+                'default_language'        => 'required|string',
+                'timezone'                => 'required|string',
+                'frontend_edit'           => 'nullable|boolean',
+                'currency_code'           => 'required|string|max:10',
+                'hide_site_name'          => 'nullable|boolean',
+                'site_logo'               => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+                'site_favicon'            => 'nullable|image|mimes:ico,png,webp|max:100',
+                'url_frontend'            => 'nullable|url',
+                'url_admin'               => 'nullable|url',
+                'url_partner'             => 'nullable|url',
+                'url_user'                => 'nullable|url',
                 'built_in_website_status' => 'nullable|string|in:active,redirect',
             ],
             'modules' => [
@@ -122,64 +124,47 @@ class SettingController extends Controller
             'contact' => [
                 'email_contact' => 'required|email|max:255',
                 'phone_contact' => 'nullable|string|max:50',
-                'address' => 'nullable|string|max:255',
+                'address'       => 'nullable|string|max:255',
             ],
             'seo' => [
-                'meta_title' => 'nullable|string|max:255',
-                'meta_description' => 'nullable|string',
+                'meta_title'               => 'nullable|string|max:255',
+                'meta_description'         => 'nullable|string',
                 'google_verification_code' => 'nullable|string|max:255',
-                'google_analytics' => 'nullable|string', 
-                'custom_head_code' => 'nullable|string', 
-                'custom_footer_code' => 'nullable|string', 
+                'google_analytics'         => 'nullable|string', 
+                'custom_head_code'         => 'nullable|string', 
+                'custom_footer_code'       => 'nullable|string', 
             ],
             'social' => [
-                'facebook_url' => 'nullable|url',
-                'twitter_url' => 'nullable|url',
+                'facebook_url'  => 'nullable|url',
+                'twitter_url'   => 'nullable|url',
                 'instagram_url' => 'nullable|url',
-                'linkedin_url' => 'nullable|url',
-                'youtube_url' => 'nullable|url',
+                'linkedin_url'  => 'nullable|url',
+                'youtube_url'   => 'nullable|url',
             ],
             'pages' => [
-                // Site Home now expects a theme_key (string)
-                'site_home' => 'nullable|string', 
-                
-                // Other Page IDs (Integer must point to a valid Page ID)
+                'site_home'         => 'nullable|string', 
                 'site_blog_archive' => 'nullable|integer',
-                'site_contact' => 'nullable|integer', 
-                'site_about' => 'nullable|integer', 
-                'site_faqs' => 'nullable|integer',
-                
-                // Legal Page IDs
-                'site_terms' => 'nullable|integer', 
-                'site_privacy' => 'nullable|integer',
+                'site_contact'      => 'nullable|integer', 
+                'site_about'        => 'nullable|integer', 
+                'site_faqs'         => 'nullable|integer',
+                'site_terms'        => 'nullable|integer', 
+                'site_privacy'      => 'nullable|integer',
             ],
             'apis' => [
                 'google_map_api_key' => 'nullable|string|max:255',
             ],
         ];
 
-        // Dynamic Validation for Listing Archive Theme Keys (Requires Theme::pluck to run)
+        // Dynamic Rule Generation for Vertical Themes
         if ($section === 'pages') {
-            $availableThemeKeys = Theme::pluck('theme_key')->toArray();
-            
-            // Add an empty string for the "-- Default Theme --" option
-            $themeValidationRule = 'nullable|string|in:' . implode(',', array_merge([''], $availableThemeKeys));
-
-            // Theme keys for listing archives
+            $availableThemeKeys   = Theme::pluck('theme_key')->toArray();
+            $themeValidationRule  = 'nullable|string|in:' . implode(',', array_merge([''], $availableThemeKeys));
             $themeKeysToValidate = [
-                'app_unifieds',
-                'app_properties',
-                'app_autos',
-                'app_events',
-                'app_jobs',
-                'app_services',
-                'app_classifieds',
+                'app_unifieds', 'app_properties', 'app_autos', 'app_events', 
+                'app_jobs', 'app_services', 'app_classifieds', 'site_home'
             ];
             
-            // Add validation for 'site_home' and the archive themes
-            $allThemeKeysToValidate = array_merge($themeKeysToValidate, ['site_home']);
-
-            foreach ($allThemeKeysToValidate as $key) {
+            foreach ($themeKeysToValidate as $key) {
                 $rules['pages'][$key] = $themeValidationRule;
             }
         }
@@ -188,122 +173,113 @@ class SettingController extends Controller
     }
     
     /**
-     * Helper function to fetch themes based on a theme_key prefix.
+     * Retrieve a filtered subset of themes based on functional prefixing.
+     *
+     * @param  string  $prefix
+     * @return \Illuminate\Database\Eloquent\Collection
      */
     private function getFilteredThemes(string $prefix)
     {
-        // Use LIKE to match theme_keys starting with the prefix, followed by an underscore
         return Theme::where('theme_key', 'LIKE', $prefix . '_%')->get();
     }
     
     /**
-     * Helper function to activate a theme by its key and update the site_home setting.
-     * This logic is the canonical activation method used by the SettingController.
+     * Synchronize visual platform re-alignment by activating a theme via its unique key.
      *
-     * @param string|null $themeKey The theme_key to activate.
+     * @param  string|null  $themeKey
      * @return void
      */
     private function activateThemeByKey(?string $themeKey): void
     {
-        // 1. Deactivate all themes
         Theme::query()->update(['is_active' => false]);
         
-        // 2. If a key is provided, find and activate the theme
         if (!empty($themeKey)) {
             $theme = Theme::where('theme_key', $themeKey)->first();
-
             if ($theme) {
-                Theme::where('id', $theme->id)->update(['is_active' => true]);
+                $theme->update(['is_active' => true]);
             }
         }
         
-        // 3. Save the theme key to the 'site_home' setting (even if null/empty)
         Setting::updateOrCreate(['key' => 'site_home'], ['value' => $themeKey ?? '']);
     }
 
     /**
-     * Generic function to save settings data, including special handling for arrays and files.
+     * Perform atomic bulk persistence of settings data, including polymorphic file handling.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  string  $section
+     * @return void
      */
-    private function saveSettingsData(Request $request, string $section)
+    private function saveSettingsData(Request $request, string $section): void
     {
-        // 1. Get the keys we should expect to save (based on validation rules)
-        $validKeys = array_keys($this->getValidationRules($section));
-
-        // Define keys that require special handling
-        $fileKeys = ['site_logo', 'site_favicon'];
-        $arrayKeys = ['is_section'];
+        $validKeys   = array_keys($this->getValidationRules($section));
+        $fileKeys    = ['site_logo', 'site_favicon'];
+        $arrayKeys   = ['is_section'];
         $booleanKeys = ['frontend_edit', 'hide_site_name'];
         
         foreach ($validKeys as $key) {
             $value = $request->input($key);
 
-            // --- A. Handle Boolean Fields (Properly evaluate truthy values from checkboxes) ---
+            // Protocol A: Boolean Normalization
             if (in_array($key, $booleanKeys)) {
                 $value = $request->boolean($key) ? '1' : '0';
             }
             
-            // --- B. Handle Theme Activation for site_home ---
+            // Protocol B: Theme Synchronization
             if ($section === 'pages' && $key === 'site_home') {
                 $this->activateThemeByKey($value);
-                // We handled saving the setting inside activateThemeByKey, so we continue
                 continue; 
             }
             
-            // --- B. Handle File Uploads ---
+            // Protocol C: Asset Persistence
             if (in_array($key, $fileKeys) && $request->hasFile($key)) {
                 $path = $request->file($key)->store('settings', 'public');
                 Setting::updateOrCreate(['key' => $key], ['value' => $path]);
 
-                // Sync favicon to public directory for hardcoded package references
                 if ($key === 'site_favicon') {
                     $this->syncFaviconToPublic($path);
                 }
-            // --- C. Handle Array Fields (e.g., modules activation) ---
-            } elseif (in_array($key, $arrayKeys)) {
-                
-                // If the section is 'modules', we need to reset any unchecked boxes 
+            } 
+            // Protocol D: Hierarchical Feature Toggles
+            elseif (in_array($key, $arrayKeys)) {
                 if ($key === 'is_section') {
-                    $existingKeys = Setting::where('key', 'LIKE', 'is_section.%')->pluck('key');
+                    $existingKeys     = Setting::where('key', 'LIKE', 'is_section.%')->pluck('key');
                     $submittedSubKeys = is_array($value) ? array_keys($value) : [];
 
                     foreach ($existingKeys as $fullKey) {
                         $subKey = str_replace('is_section.', '', $fullKey);
                         if (!in_array($subKey, $submittedSubKeys)) {
-                            // Unchecked box: set value to 0
                             Setting::updateOrCreate(['key' => $fullKey], ['value' => '0']);
                         }
                     }
                 }
 
-                // Save submitted values (the checked boxes)
                 if (is_array($value)) {
                     foreach ($value as $subKey => $subValue) {
-                        Setting::updateOrCreate(
-                            ['key' => $key . '.' . $subKey],
-                            ['value' => $subValue]
-                        );
+                        Setting::updateOrCreate(['key' => $key . '.' . $subKey], ['value' => $subValue]);
                     }
                 }
-                
-            // --- D. Handle Simple Fields (Text, Select, Page IDs, Theme Keys) ---
-            } elseif (!in_array($key, $fileKeys)) {
-                // This covers all non-file fields (text, select, other page IDs, listing themes, etc.)
+            } 
+            // Protocol E: Semantic Scalar Persistence
+            elseif (!in_array($key, $fileKeys)) {
                 Setting::updateOrCreate(['key' => $key], ['value' => $value]);
             }
         }
     }
 
     /**
-     * Synchronizes the uploaded favicon to the public/favicons/favicon.ico path
-     * to ensure compatibility with third-party packages that have hardcoded paths.
+     * Synchronize the uploaded favicon to the public/favicons/favicon.ico path.
+     * Ensures compatibility with third-party packages requiring hardcoded public assets.
+     *
+     * @param  string  $storagePath
+     * @return void
      */
     private function syncFaviconToPublic(string $storagePath): void
     {
         try {
-            $sourcePath = storage_path('app/public/' . $storagePath);
+            $sourcePath      = storage_path('app/public/' . $storagePath);
             $destinationPath = public_path('favicons/favicon.ico');
             
-            // Ensure the directory exists
             if (!file_exists(dirname($destinationPath))) {
                 mkdir(dirname($destinationPath), 0755, true);
             }
@@ -312,8 +288,7 @@ class SettingController extends Controller
                 copy($sourcePath, $destinationPath);
             }
         } catch (\Exception $e) {
-            // Silently fail to avoid crashing the settings update if permissions are restricted
-            \Illuminate\Support\Facades\Log::warning("Failed to sync favicon to public directory: " . $e->getMessage());
+            Log::warning("Favicon Synchronization Failure: " . $e->getMessage());
         }
     }
 }

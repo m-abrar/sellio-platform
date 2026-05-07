@@ -5,22 +5,30 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\PageContent;
 use App\Services\ContentService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
+/**
+ * Class ContentController
+ * Orchestrates the administrative CMS interface, managing theme-specific content locations, 
+ * bulk updates, and sophisticated section-based ordering.
+ */
 class ContentController extends Controller
 {
-    // Define the media collection name used for 'file' or 'image' type content
+    /** @var string The media collection identifier for page assets. */
     protected const FILE_COLLECTION = 'page_content'; 
 
-    // --- Custom Ordering Definitions ---
-
-    // Define the section groups for primary sorting (Group 1: Top, Group 3: Bottom)
+    /** @var array Section identifiers prioritized for the top of the interface. */
     protected const TOP_SECTIONS = ['header', 'hero'];
+
+    /** @var array Section identifiers prioritized for the bottom of the interface. */
     protected const BOTTOM_SECTIONS = ['footer'];
 
-    // Define the custom order patterns for specific content keys.
-    // The lower the number, the higher the priority.
-    // NOTE: This logic now correctly assumes the content key column is named 'content_key'
+    /** 
+     * @var array Priority mapping for content key ordering. 
+     * Lower values indicate higher priority.
+     */
     protected const KEY_ORDER_PATTERNS = [
         10 => '%brand%',
         20 => '%logo%',
@@ -32,100 +40,94 @@ class ContentController extends Controller
         55 => '%link%',
     ];
     
-    // --- Controller Methods ---
-
-    public function index()
+    /**
+     * Display a listing of all manageable content locations (Pages x Themes).
+     *
+     * @return \Illuminate\View\View
+     */
+    public function index(): View
     {
-        // Fetch all unique page/theme combinations that have content entries.
-        // This acts as the list of "content management locations".
         $contentPages = PageContent::select('page', 'theme_key')
             ->distinct()
             ->orderBy('page')
             ->orderBy('theme_key')
             ->get();
 
-        // Fetch all unique theme keys (helpful for filtering/display)
         $themeKeys = PageContent::select('theme_key')->distinct()->pluck('theme_key');
 
         return view('admin.content.index', [
             'contentPages' => $contentPages,
-            'themeKeys' => $themeKeys,
+            'themeKeys'    => $themeKeys,
         ]);
     }
     
-    // Fetches all content for the selected page and groups it by section
-    public function editPage(Request $request, string $page, string $theme_key = null)
+    /**
+     * Show the edit interface for a specific page and theme, applying custom section ordering.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  string  $page
+     * @param  string|null  $theme_key
+     * @return \Illuminate\View\View
+     */
+    public function editPage(Request $request, string $page, ?string $theme_key = null): View
     {
-        $activeTheme = $theme_key ?? $request->themeKey;
+        $activeTheme = $theme_key ?? $request->query('themeKey');
         
-        $topSections = self::TOP_SECTIONS;
-        $bottomSections = self::BOTTOM_SECTIONS;
-        $keyPatterns = self::KEY_ORDER_PATTERNS;
-
-        // 1. Build the Primary Section Sorting CASE (Groups 1, 2, 3)
-        // Groups: 1 (Top), 2 (Middle), 3 (Bottom)
+        // Build the Primary Section Sorting CASE (Groups 1: Top, 2: Middle, 3: Bottom)
         $sectionCaseSql = "CASE 
-            WHEN section IN ('" . implode("','", $topSections) . "') THEN 1
-            WHEN section IN ('" . implode("','", $bottomSections) . "') THEN 3
+            WHEN section IN ('" . implode("','", self::TOP_SECTIONS) . "') THEN 1
+            WHEN section IN ('" . implode("','", self::BOTTOM_SECTIONS) . "') THEN 3
             ELSE 2
         END";
 
-        // 2. Build the Content Key Sorting CASE (Uses LIKE)
+        // Build the Content Key Sorting CASE based on semantic patterns (Heading -> Subheading -> Paragraph)
         $keyCaseClauses = [];
-        foreach ($keyPatterns as $orderValue => $pattern) {
-            // *** CORRECTED: Using `content_key` as per the migration ***
+        foreach (self::KEY_ORDER_PATTERNS as $orderValue => $pattern) {
             $keyCaseClauses[] = "WHEN `content_key` LIKE '{$pattern}' THEN {$orderValue}";
         }
-        
-        // Items not matching any pattern will get a high number (999) to appear later.
         $keyCaseSql = "CASE " . implode(' ', $keyCaseClauses) . " ELSE 999 END";
-
 
         $settings = PageContent::where('theme_key', $activeTheme)
             ->where('page', $page)
-            
-            // 1ST LEVEL SORT: Section Grouping (1, 2, 3)
             ->orderByRaw($sectionCaseSql) 
-            
-            // 2ND LEVEL SORT: Specific Section Order ('header' then 'hero', then everything else, then 'footer')
             ->orderByRaw("FIELD(section, 'header', 'hero', 'footer')") 
-            
-            // 3RD LEVEL SORT: Content Key Ordering (10, 20, 30, etc.)
             ->orderByRaw($keyCaseSql)
-            
-            // 4TH LEVEL SORT: Secondary alphabetical sort for any ties or unlisted items (Middle Group 2)
-            // *** CORRECTED: Using `content_key` as per the migration ***
             ->orderBy('section') 
             ->orderBy('content_key')
             ->get();
             
         return view('admin.content.edit-page', [
-            'page' => $page,
+            'page'      => $page,
             'theme_key' => $activeTheme,
-            'settings' => $settings->groupBy('section'), // Group by section for presentation
+            'settings'  => $settings->groupBy('section'),
         ]);
     }
 
-    // Handles the form submission (Bulk Update)
-    public function bulkUpdate(Request $request, ContentService $contentService)
+    /**
+     * Handle bulk updates for text-based content settings.
+     * Note: Media-based settings are managed via specialized AJAX endpoints.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Services\ContentService  $contentService
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function bulkUpdate(Request $request, ContentService $contentService): RedirectResponse
     {
-        // 1. Handle Text/Basic Inputs (submitted via name="values[id]")
         foreach ($request->input('values', []) as $id => $newValue) {
             $setting = PageContent::find($id);
 
             if ($setting && $setting->value !== $newValue) {
-                // Only update the value if it's not a file/image field, 
-                // assuming those are handled by AJAX components.
+                // Exclude media fields from bulk text update
                 if ($setting->input_type !== 'file' && $setting->input_type !== 'image') {
                     $setting->value = $newValue;
                     $setting->save();
-                    $contentService->forgetCache($setting); // Clear cache
+                    
+                    // Clear runtime cache to reflect changes immediately
+                    $contentService->forgetCache($setting);
                 }
             }
         }
         
-        // 2. File uploads are skipped entirely, as they are handled by the AJAX component.
-
-        return redirect()->back()->with('success', 'Content saved successfully!');
+        return redirect()->back()->with('success', __('Content saved successfully!'));
     }
 }

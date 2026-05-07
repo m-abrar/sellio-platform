@@ -2,230 +2,164 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PaymentGateway;
+use App\Services\GatewayManager;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use App\Services\GatewayManager; // Your custom Manager
-use App\Models\PaymentGateway;    // Your Gateway Model
-use Illuminate\Support\Facades\Log; // Added for explicit Log facade use
+use Illuminate\Support\Facades\Log;
+use Illuminate\View\View;
 
+/**
+ * Class CheckoutController
+ * Orchestrates the multi-gateway checkout process, payment initiation, and 3D Secure confirmation.
+ */
 class CheckoutController extends Controller
 {
     /**
-     * Displays the checkout view, loading configurations for all active gateways.
+     * Display the checkout interface with all active payment gateway configurations.
+     *
+     * @param  \App\Services\GatewayManager  $manager
+     * @return \Illuminate\View\View
      */
-    public function showCheckout(GatewayManager $manager)
+    public function showCheckout(GatewayManager $manager): View
     {
-        Log::info('Starting showCheckout process.');
-
         $activeGateways = PaymentGateway::where('is_active', true)
             ->with(['credentials', 'blueprints'])
             ->get();
         
-        Log::debug('Active Gateways retrieved:', ['count' => $activeGateways->count(), 'slugs' => $activeGateways->pluck('slug')->toArray()]);
-
         $frontendConfigs = [];
 
         foreach ($activeGateways as $gateway) {
-            Log::info("Attempting to process gateway: {$gateway->slug}");
-
-            // Log a snippet of the decrypted config
-            Log::debug("Gateway {$gateway->slug} active_config (first few keys):", array_intersect_key((array)$gateway->active_config, array_flip(['publishable_key', 'mode'])));
-
-
             try {
-                // 2. Resolve the concrete service instance using your Manager
                 $service = $manager->resolve($gateway);
-                
-                // 3. Get the frontend-specific configuration (keys)
-                $config = $service->getFrontendConfig();
-                Log::debug("Gateway {$gateway->slug} frontend config resolved.", $config);
-
-                $frontendConfigs[$gateway->slug] = $config;
-
-                // Log a success message for this gateway
-                Log::info("Successfully loaded service and frontend config for {$gateway->slug}");
-
+                $frontendConfigs[$gateway->slug] = $service->getFrontendConfig();
             } catch (\Exception $e) {
-                // Log and skip any misconfigured/broken gateway services
-                Log::error("Failed to load gateway service for {$gateway->slug}. Error: " . $e->getMessage());
-                // It's helpful to know the exact file and line where the service crashed
-                Log::error("Exception trace: {$e->getFile()} on line {$e->getLine()}");
-                
+                Log::error("Failed to load gateway service for {$gateway->slug}: " . $e->getMessage());
                 continue; 
             }
         }
         
-        // --- DEBUG POINT 4: Final output check (non-interrupting) ---
-        // Log the final configuration array being sent to the Blade view
-        Log::debug('Frontend Configs ready to be passed to view:', $frontendConfigs);
-        
-        // Example dynamic order data (Replace with your actual order/invoice data)
+        // Mock order data - In production, this should be retrieved from a Cart or PendingOrder model.
         $orderData = [
-            'amount' => rand(10,50),
-            'currency' => 'USD',
-            'id' => rand(1000, 5000),
-            'description' => 'Testing gateway',
+            'amount'      => rand(10, 50),
+            'currency'    => 'USD',
+            'id'          => rand(1000, 5000),
+            'description' => 'Marketplace Purchase',
         ];
-        
-        Log::debug('Order Data being passed to view:', $orderData);
 
         return view('checkout', [
-            'activeGateways' => $activeGateways,
+            'activeGateways'  => $activeGateways,
             'frontendConfigs' => $frontendConfigs,
-            'orderData' => $orderData,
+            'orderData'       => $orderData,
         ]);
     }
 
-
     /**
-     * Processes the initial charge request from the checkout form.
+     * Process the initial payment charge request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Services\GatewayManager  $manager
+     * @param  string  $gatewaySlug
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function processPayment(Request $request, GatewayManager $manager, string $gatewaySlug)
+    public function processPayment(Request $request, GatewayManager $manager, string $gatewaySlug): RedirectResponse
     {
-        Log::info("Starting payment processing for gateway: {$gatewaySlug}");
-        Log::debug('Incoming payment request data (sanitized):', $request->except(['_token', 'stripeToken', 'paymentToken']));
-
-        // 1. Define the dedicated GET return route for 3D Secure redirect
-        // We use 'checkout.confirm' (the GET route) as the return_url for Stripe.
         $returnUrl = route('checkout.confirm', ['gateway' => $gatewaySlug], true);
-        Log::debug("Generated return URL for 3DS/SCA: {$returnUrl}");
         
         try {
             $gateway = PaymentGateway::where('slug', $gatewaySlug)->firstOrFail();
-            Log::debug("Gateway model found for slug: {$gatewaySlug}");
-
             $service = $manager->resolve($gateway);
-            Log::debug("Gateway service resolved successfully.");
 
-            // Standardize token retrieval
             $token = $request->input('stripeToken') ?? $request->input('paymentToken');
-            $amount = $request->input('amount') ?? 1.00; // Ensure you get the real amount
+            $amount = $request->input('amount') ?? 1.00;
             
-            Log::debug("Payment details: Amount={$amount}, Token present=" . (bool)$token);
-
-            // 2. Call the charge method, passing the returnUrl
             $result = $service->charge($amount, $token, $returnUrl); 
-            Log::info("Payment charge method returned result:", $result);
 
-
-            // 3. Handle the response:
-            
-            // SUCCESS: Charge was approved instantly (e.g., no 3D Secure required)
+            // Handle successful instant charge
             if ($result['status'] === 'successful') {
-                // NOTE: Add your Order finalization logic here (e.g., update Order status, dispatch events)
-                Log::notice("Payment successful. Redirecting to success page. Reference: {$result['reference']}");
+                Log::info("Payment successful via {$gatewaySlug}. Ref: {$result['reference']}");
                 
                 return redirect()->route('order.success')->with([
-                    'success' => $result['message'],
+                    'success'   => $result['message'],
                     'reference' => $result['reference'],
                 ]);
-
             } 
-            // PENDING_AUTH: 3D Secure is required. Redirect the user to the gateway's URL.
-            elseif ($result['status'] === 'pending_auth' && !empty($result['redirect_url'])) {
-                
-                // Gateway needs the user to authenticate outside of your site.
-                Log::notice("Payment requires 3D Secure. Redirecting to: {$result['redirect_url']}");
+            
+            // Handle 3D Secure / SCA redirection
+            if ($result['status'] === 'pending_auth' && !empty($result['redirect_url'])) {
                 return redirect($result['redirect_url']); 
-
             } 
-            // FAILED or ERROR
-            elseif ($result['status'] === 'failed' || $result['status'] === 'error') {
-                Log::error("Payment failed for order: " . $result['message'], ['gateway' => $gatewaySlug, 'order_id' => $request->order_id ?? 'N/A']);
 
+            // Handle failed or erroneous response
+            if ($result['status'] === 'failed' || $result['status'] === 'error') {
+                Log::warning("Payment failed via {$gatewaySlug}: " . $result['message']);
                 return redirect()->route('checkout.index')->with('error', $result['message']);
             }
             
-            // Default return for any unhandled status 
-            $message = $result['message'] ?? 'Payment is still being processed or status is unhandled.';
-            Log::warning("Unhandled payment status: {$result['status']}. Message: {$message}");
-            return redirect()->route('checkout.index')->with('info', $message);
+            return redirect()->route('checkout.index')->with('info', $result['message'] ?? 'Payment status unhandled.');
 
         } catch (\Exception $e) {
-            Log::critical("Critical Payment Processing Error for {$gatewaySlug}: " . $e->getMessage(), [
-                'file' => $e->getFile(), 
-                'line' => $e->getLine()
-            ]);
-            return redirect()->route('checkout.index')->with('error', 'A severe error occurred during payment. Please try again or contact support.');
+            Log::critical("Critical Checkout Error [{$gatewaySlug}]: " . $e->getMessage());
+            return redirect()->route('checkout.index')->with('error', 'A severe error occurred during payment. Please contact support.');
         }
     }
 
     /**
-     * Handles the redirect back from 3D Secure/SCA verification.
-     * Route: GET /checkout/confirm/{gateway}
+     * Handle the asynchronous confirmation return from 3D Secure / SCA providers.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Services\GatewayManager  $manager
+     * @param  string  $gatewaySlug
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function confirmPayment(Request $request, GatewayManager $manager, string $gatewaySlug)
+    public function confirmPayment(Request $request, GatewayManager $manager, string $gatewaySlug): RedirectResponse
     {
-        Log::info("Starting payment confirmation for gateway: {$gatewaySlug}");
-        Log::debug('Incoming confirmation request data:', $request->all());
-
-
-        // Stripe appends 'payment_intent' and 'payment_intent_client_secret'
         $paymentIntentId = $request->get('payment_intent');
 
         if (!$paymentIntentId) {
-            Log::error('Payment confirmation failed: Missing payment_intent ID in URL.');
+            Log::error('Payment confirmation failed: Missing payment_intent ID.');
             return redirect()->route('checkout.index')->with('error', 'Payment confirmation failed: Missing intent ID.');
         }
         
-        Log::debug("Payment Intent ID: {$paymentIntentId}");
-
-
         try {
             $gateway = PaymentGateway::where('slug', $gatewaySlug)->firstOrFail();
             $service = $manager->resolve($gateway);
-            Log::debug("Gateway service resolved for confirmation.");
 
-
-            // Call the service method to check the final Payment Intent status
             $result = $service->retrieveIntentStatus($paymentIntentId);
-            Log::info("Intent status retrieval result for {$paymentIntentId}:", $result);
-
 
             if ($result['status'] === 'successful') {
-                // Success: Finalize the order and redirect
-                // NOTE: Add your Order finalization logic here. (Must be idempotent!)
-                Log::notice("3DS/SCA confirmation successful. Finalizing order for intent: {$paymentIntentId}");
+                Log::notice("3DS Confirmation Success for intent: {$paymentIntentId}");
 
                 return redirect()->route('order.success')->with([
-                    'success' => $result['message'] ?? 'Payment confirmed successfully.',
+                    'success'   => $result['message'] ?? 'Payment confirmed successfully.',
                     'reference' => $paymentIntentId,
                 ]);
             }
             
-            // Handle pending or failed status after 3D secure
-            Log::warning("Payment confirmation was not successful.");
-            Log::warning("Status: " . $result['status'] ?? 'N/A.');
-            Log::warning("Message: " . $result['message'] ?? 'No specific message.');
-
-            return redirect()->route('checkout.index')->with('error', $result['message'] ?? 'Payment confirmation failed. Please try again.');
+            Log::warning("3DS Confirmation Failed for intent: {$paymentIntentId}. Status: " . ($result['status'] ?? 'N/A'));
+            return redirect()->route('checkout.index')->with('error', $result['message'] ?? 'Payment confirmation failed.');
 
         } catch (\Exception $e) {
-            Log::critical("Payment confirmation error for intent {$paymentIntentId}: " . $e->getMessage(), [
-                'file' => $e->getFile(), 
-                'line' => $e->getLine()
-            ]);
+            Log::critical("Payment confirmation error for intent {$paymentIntentId}: " . $e->getMessage());
             return redirect()->route('checkout.index')->with('error', 'A confirmation error occurred. Please try again.');
         }
     }
 
-
     /**
-     * Displays the success page.
+     * Display the order success confirmation view.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\View\View
      */
-    public function showSuccess(Request $request)
+    public function showSuccess(Request $request): View
     {
-        Log::info('Displaying order success page.');
-
-        // Example: Retrieve data passed via the session
         $reference = $request->session()->get('reference', 'N/A');
         $message = $request->session()->get('success', 'Your order was placed successfully.');
         
-        Log::debug('Success page data:', ['reference' => $reference, 'message' => $message]);
-
-
         return view('success', [
             'reference' => $reference,
-            'message' => $message,
+            'message'   => $message,
         ]);
     }
 }

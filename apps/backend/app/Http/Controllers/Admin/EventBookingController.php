@@ -3,15 +3,28 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\EventBooking;
+use App\Models\Category;
 use App\Models\Event;
+use App\Models\EventBooking;
+use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
+/**
+ * Class EventBookingController
+ * Orchestrates the administrative lifecycle for event ticketing, 
+ * managing reservations, financial statuses, and relationship mapping between users and occurrences.
+ */
 class EventBookingController extends Controller
 {
     /**
-     * Display a listing of event bookings with advanced filters.
+     * Display a filtered and paginated list of all event bookings.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  string  $status
+     * @return \Illuminate\View\View
      */
     public function index(Request $request, string $status = 'all'): View
     {
@@ -27,38 +40,43 @@ class EventBookingController extends Controller
             ->withQueryString();
 
         $events = Event::select('id', 'title', 'category_id')->with('category:id,title')->get();
-        $categories = \App\Models\Category::where('is_event', true)->select('id', 'title')->get();
+        $categories = Category::where('is_event', true)->select('id', 'title')->get();
 
         return view('admin.event-bookings.index', compact('bookings', 'events', 'categories', 'status'));
     }
 
     /**
-     * Show the form for creating a new event booking.
+     * Show the form for creating a new manual event booking.
+     *
+     * @return \Illuminate\View\View
      */
     public function create(): View
     {
         $booking = new EventBooking();
         $events = Event::select('id', 'title', 'base_price')->get();
-        $users = \App\Models\User::select('id', 'name', 'email')->get();
+        $users = User::select('id', 'name', 'email')->get();
         
         return view('admin.event-bookings.form', compact('booking', 'events', 'users'));
     }
 
     /**
-     * Store a newly created event booking.
+     * Store a newly created event booking record with a unique reference.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request): \Illuminate\Http\RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'event_id' => 'required|exists:events,id',
-            'user_id' => 'required|exists:users,id',
-            'quantity' => 'required|integer|min:1',
+            'event_id'    => 'required|exists:events,id',
+            'user_id'     => 'required|exists:users,id',
+            'quantity'    => 'required|integer|min:1',
             'total_price' => 'required|numeric|min:0',
-            'status' => 'required|string',
-            'admin_note' => 'nullable|string',
+            'status'      => 'required|string|max:255',
+            'admin_note'  => 'nullable|string',
         ]);
 
-        $validated['booking_reference'] = 'EVT-' . strtoupper(\Illuminate\Support\Str::random(8));
+        $validated['booking_reference'] = 'EVT-' . strtoupper(Str::random(8));
 
         $booking = EventBooking::create($validated);
 
@@ -68,34 +86,42 @@ class EventBookingController extends Controller
     }
 
     /**
-     * Show the form for editing the specified event booking.
+     * Show the form for editing an existing event booking.
+     *
+     * @param  \App\Models\EventBooking  $eventBooking
+     * @return \Illuminate\View\View
      */
-    public function edit(int $id): View
+    public function edit(EventBooking $eventBooking): View
     {
-        $booking = EventBooking::findOrFail($id);
         $events = Event::select('id', 'title', 'base_price')->get();
-        $users = \App\Models\User::select('id', 'name', 'email')->get();
+        $users = User::select('id', 'name', 'email')->get();
 
-        return view('admin.event-bookings.form', compact('booking', 'events', 'users'));
+        return view('admin.event-bookings.form', [
+            'booking' => $eventBooking, 
+            'events'  => $events, 
+            'users'   => $users
+        ]);
     }
 
     /**
-     * Update the specified event booking.
+     * Update an existing event booking record in the database.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\EventBooking  $eventBooking
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, int $id): \Illuminate\Http\RedirectResponse
+    public function update(Request $request, EventBooking $eventBooking): RedirectResponse
     {
-        $booking = EventBooking::findOrFail($id);
-
         $validated = $request->validate([
-            'event_id' => 'required|exists:events,id',
-            'user_id' => 'required|exists:users,id',
-            'quantity' => 'required|integer|min:1',
+            'event_id'    => 'required|exists:events,id',
+            'user_id'     => 'required|exists:users,id',
+            'quantity'    => 'required|integer|min:1',
             'total_price' => 'required|numeric|min:0',
-            'status' => 'required|string',
-            'admin_note' => 'nullable|string',
+            'status'      => 'required|string|max:255',
+            'admin_note'  => 'nullable|string',
         ]);
 
-        $booking->update($validated);
+        $eventBooking->update($validated);
 
         return redirect()
             ->route('admin.event-bookings.index')
@@ -103,12 +129,14 @@ class EventBookingController extends Controller
     }
 
     /**
-     * Remove the specified event booking.
+     * Remove an event booking record from the database.
+     *
+     * @param  \App\Models\EventBooking  $eventBooking
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(int $id): \Illuminate\Http\RedirectResponse
+    public function destroy(EventBooking $eventBooking): RedirectResponse
     {
-        $booking = EventBooking::findOrFail($id);
-        $booking->delete();
+        $eventBooking->delete();
 
         return redirect()
             ->route('admin.event-bookings.index')
