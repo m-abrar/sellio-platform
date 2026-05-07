@@ -6,6 +6,13 @@ use App\Models\ProductAddon;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ * Data Factory for Product Add-ons
+ *
+ * This factory generates optional and required enhancements for products,
+ * such as warranties and installation services, using template-based data
+ * to ensure realistic marketplace listings.
+ */
 class ProductAddonFactory extends Factory
 {
     protected $model = ProductAddon::class;

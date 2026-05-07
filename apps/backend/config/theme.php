@@ -1,5 +1,11 @@
-<?php
-
+/**
+ * Frontend Appearance & Theme Mapping Configuration
+ *
+ * This file serves as the design orchestration layer for the Sellio platform.
+ * It defines the global fallback CSS variables for the storefront and maps
+ * vertical-specific theme identifiers (Properties, Events, Autos, etc.)
+ * to their respective architectural controllers.
+ */
 return [
     /*
     |--------------------------------------------------------------------------

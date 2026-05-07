@@ -1,3 +1,14 @@
+{{--
+    Administrative Finance Partial: Linked Booking Intelligence
+    
+    This component provides a summary of the booking record associated with 
+    a transaction. It displays guest identities, stay chronologies, 
+    and asset information to provide immediate context for financial 
+    reconciliation tasks.
+    
+    @context Transaction Management
+    @variables Transaction $transaction The active transaction context.
+--}}
 <!-- Booking Details Card -->
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">

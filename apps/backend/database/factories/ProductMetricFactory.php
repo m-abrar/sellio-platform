@@ -6,6 +6,13 @@ use App\Models\ProductMetric;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ * Data Factory for Product Metrics
+ *
+ * This factory generates performance and quality metrics for products,
+ * such as Build Quality, Ease of Use, and Durability, providing quantitative
+ * data points for consumer evaluation.
+ */
 class ProductMetricFactory extends Factory
 {
     protected $model = ProductMetric::class;

@@ -1,3 +1,16 @@
+{{--
+    Administrative Services: Global Booking Registry
+    
+    This view provides a central command center for tracking service 
+    appointments. It integrates high-fidelity audit trails for service 
+    fulfillment, client engagement, and technician dispatch. It 
+    facilitates efficient lifecycle tracking and resource allocation 
+    through a responsive data architecture.
+    
+    @extends adminlte::page
+    @context Service Booking Management
+    @variables Paginator $bookings Paginated collection of ServiceAppointment models.
+--}}
 @extends('adminlte::page')
 
 @section('title', __('Service Appointments | Service Intelligence'))

@@ -5,6 +5,13 @@ namespace Database\Factories;
 use App\Models\PropertyNeighborhood;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ * Data Factory for Property Neighborhood Points
+ *
+ * This factory generates geospatial context for properties, mapping nearby
+ * amenities (transit, schools, parks) with realistic distance calculations
+ * and categorical grouping (Commute, Essential, Recreation).
+ */
 class PropertyNeighborhoodFactory extends Factory
 {
     /**

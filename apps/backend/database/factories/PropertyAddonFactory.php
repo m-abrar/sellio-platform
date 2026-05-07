@@ -7,6 +7,13 @@ namespace Database\Factories;
 use App\Models\PropertyAddon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ * Data Factory for Property Add-ons
+ *
+ * This factory generates optional services for property bookings,
+ * such as breakfast, equipment rentals, or insurance, with flexible
+ * pricing models (per_night, per_stay) for the real estate vertical.
+ */
 class PropertyAddonFactory extends Factory
 {
     protected $model = PropertyAddon::class;

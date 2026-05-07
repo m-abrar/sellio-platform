@@ -1,3 +1,16 @@
+{{--
+    Administrative Automotive: Lead Operational Intelligence
+    
+    This view provides a comprehensive 360-degree visualization of a 
+    specific vehicle purchase inquiry. It aggregates vehicle interest 
+    parameters, lead narratives, and verified contact credentials, 
+    facilitating direct engagement through integrated communication 
+    quick-links.
+    
+    @extends adminlte::page
+    @context Automotive Lead Management
+    @variables AutoInquiry $inquiry The inquiry model instance.
+--}}
 @extends('adminlte::page')
 
 @section('title', __('Auto Inquiry') . ' #' . $inquiry->id)
@@ -152,5 +165,4 @@
     .btn-white { background: #fff !important; color: #334155; }
     .btn-white:hover { background: #f8fafc !important; }
 </style>
-@endpush
 @endpush

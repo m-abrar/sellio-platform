@@ -1,3 +1,14 @@
+{{--
+    Administrative Identity Management: Profile Edit
+    
+    This view facilitates the modification of the authenticated administrator's 
+    personal credentials, visual identity (avatar), and security keys.
+    It integrates asynchronous media uploading and high-fidelity form actions.
+    
+    @extends adminlte::page
+    @context Authenticated User Settings
+    @variables User $user The currently authenticated User model instance.
+--}}
 @extends('adminlte::page')
 
 @section('title', 'Account Intelligence | Personal Settings')

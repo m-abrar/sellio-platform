@@ -1,12 +1,16 @@
+{{--
+    Administrative Form Action Sidebar
+    
+    This partial renders the primary control panel for administrative CRUD forms.
+    It handles publishing toggles, state synchronization (Save/Update),
+    record duplication, and deletion protocols.
+    
+    @param Model $model The Eloquent model instance being modified.
+    @param string $title The display label for the record (e.g., 'PROPERTY').
+    @param string $back (Optional) The route name for the cancel action.
+    @param string $duplicate (Optional) The route name for cloning the record.
+--}}
 @php
-    /**
-     * Reusable Form Actions Sidebar Partial
-     * 
-     * @param $model      Model instance
-     * @param $title      Upper-case label (e.g. 'CATEGORY')
-     * @param $duplicate  Route name for duplication (optional)
-     * @param $back       Route name for cancel (optional)
-     */
     $isEdit = $model->exists;
     $label = $title ?? 'RECORD';
 @endphp

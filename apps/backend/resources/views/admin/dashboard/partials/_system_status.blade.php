@@ -1,3 +1,13 @@
+{{--
+    Dashboard Partial: System Infrastructure Health
+    
+    This component provides a real-time diagnostic overview of the platform's 
+    infrastructure. It monitors the operational environment, runtime versions 
+    (PHP/Laravel), database connectivity, and storage driver status to 
+    ensure high-availability.
+    
+    @param array $metrics Pre-aggregated diagnostic data from the system kernel.
+--}}
 <div class="row">
     <div class="col-12 mb-4">
         <div class="card card-glass overflow-hidden">

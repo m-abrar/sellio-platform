@@ -1,3 +1,15 @@
+{{--
+    Administrative Real Estate: Global Property Registry
+    
+    This view serves as the authoritative inventory control hub for 
+    real estate assets. It integrates multi-dimensional filtering, 
+    lifecycle status auditing, and direct access to asset configuration 
+    and cloning protocols, ensuring streamlined marketplace oversight.
+    
+    @extends adminlte::page
+    @context Property Inventory Management
+    @variables Paginator $properties Paginated collection of Property models.
+--}}
 @extends('adminlte::page')
 
 @section('title', 'Properties')

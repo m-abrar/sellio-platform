@@ -1,3 +1,19 @@
+{{--
+    Administrative Automotive: Vehicle Asset Configuration
+    
+    This view serves as the authoritative interface for automotive 
+    listing management. It orchestrates complex data entry for technical 
+    specifications (engine, transmission, mileage), pricing models 
+    (sale/lease), and high-fidelity media galleries. It also integrates 
+    operational intelligence through recent inquiry streams.
+    
+    @extends adminlte::page
+    @context Automotive Inventory Management
+    @variables Auto $auto The vehicle model instance being edited/created.
+    @variables Collection $brands Automotive brands for taxonomy mapping.
+    @variables Collection $categories Vehicle categories for vertical alignment.
+    @variables Collection $locations Regional hubs for geographic clustering.
+--}}
 @extends('adminlte::page')
 
 @section('title', ($auto->exists ? 'Edit' : 'Create') . ' Auto')
@@ -391,65 +407,6 @@
                     popup: 'rounded-xl',
                     confirmButton: 'rounded-pill px-4',
                     cancelButton: 'rounded-pill px-4'
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById('delete-form').submit();
-                }
-            })
-        }
-    </script>
-@endif
-
-@include('admin._partials._toggle-card-css')
-
-@push('js')
-<script>
-    $(document).ready(function () { 
-        $('.select2').select2({ theme: 'bootstrap4', width: '100%' }); 
-
-        const titleInput = $('#title');
-        const slugInput = $('#slug');
-
-        titleInput.on('input', function () {
-            if(!slugInput.data('edited')){
-                let slug = $(this).val().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-                slugInput.val(slug);
-            }
-        });
-
-        slugInput.on('change', function() { $(this).data('edited', true); });
-    });
-</script>
-@endpush
-
-@if($auto->exists)
-    <form id="delete-form" action="{{ route('admin.autos.destroy', $auto->id) }}" method="POST" class="d-none">
-        @csrf @method('DELETE')
-    </form>
-    
-    <script>
-        function triggerDelete() {
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "Permanently delete this auto listing?",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#ef4444',
-                cancelButtonColor: '#64748b',
-                confirmButtonText: 'Yes, delete it!',
-                customClass: {
-                    popup: 'rounded-xl',
-                    confirmButton: 'rounded-pill px-4',
-                    cancelButton: 'rounded-pill px-4'
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById('delete-form').submit();
-                }
-            })
-                    confirmButton: 'btn btn-danger rounded-pill px-4',
-                    cancelButton: 'btn btn-secondary rounded-pill px-4'
                 }
             }).then((result) => {
                 if (result.isConfirmed) {

@@ -1,3 +1,12 @@
+{{--
+    Dashboard Partial: Platform Growth & Traffic Metrics
+    
+    This component tracks the expansion of the platform's user base and network reach.
+    It visualizes total registered accounts, newsletter subscribers, and elite 
+    memberships with associated growth percentages and progress indicators.
+    
+    @param array $metrics Pre-aggregated data including user statistics and growth trends.
+--}}
 <div class="row">
     @php
         $growthItems = [

@@ -7,6 +7,13 @@ namespace Database\Factories;
 use App\Models\PropertyFee;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ * Data Factory for Property Fees
+ *
+ * This factory generates ancillary fee data for property listings,
+ * covering refundable and non-refundable charges (e.g., cleaning, security deposits)
+ * associated with the rental transaction.
+ */
 class PropertyFeeFactory extends Factory
 {
     protected $model = PropertyFee::class;

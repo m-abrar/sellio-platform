@@ -1,3 +1,18 @@
+{{--
+    Administrative Services: Appointment Configuration
+    
+    This view serves as the authoritative interface for managing service 
+    appointments. It orchestrates client identity parameters, scheduled 
+    itineraries, service mapping, and lifecycle status tracking 
+    (pending, confirmed, completed, cancelled) to ensure transparent 
+    and efficient service delivery oversight.
+    
+    @extends adminlte::page
+    @context Service Appointment Management
+    @variables ServiceAppointment $appointment The appointment model instance.
+    @variables Collection $services List of active services for mapping.
+    @variables Collection $users List of platform members for client mapping.
+--}}
 @extends('adminlte::page')
 
 @section('title', ($appointment->exists ? 'Modify' : 'Create') . ' Service Appointment')

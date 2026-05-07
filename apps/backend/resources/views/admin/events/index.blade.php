@@ -1,3 +1,16 @@
+{{--
+    Administrative Events: Global Inventory Registry
+    
+    This view provides the authoritative command center for the event 
+    marketplace. It aggregates schedule itineraries, ticketing 
+    specifications (paid/complimentary), and attendee capacity metrics 
+    for all event assets. It facilitates efficient lifecycle tracking 
+    and inventory oversight through a responsive data architecture.
+    
+    @extends adminlte::page
+    @context Event Inventory Management
+    @variables Paginator $events Paginated collection of Event model instances.
+--}}
 @extends('adminlte::page')
 
 @section('title', 'Events')

@@ -1,4 +1,14 @@
-{{-- Filter Protocol --}}
+{{--
+    Administrative Real Estate: Booking Filter Protocol
+    
+    This component provides a sophisticated filtering interface for the 
+    property booking registry. It enables multi-dimensional auditing 
+    across specific asset inventory, lifecycle states (pending, confirmed, 
+    cancelled), and custom temporal ranges.
+    
+    @context Property Operational Administration
+    @variables Collection $properties List of properties for asset-specific filtering.
+--}}
 <div class="card registry-card-premium registry-filter-card mb-4">
     <div class="card-body">
         <form method="GET" action="{{ url()->current() }}">

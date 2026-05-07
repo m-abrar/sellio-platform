@@ -1,5 +1,10 @@
-<?php
-
+/**
+ * Mail Delivery Configuration
+ *
+ * Orchestrates the transactional email infrastructure for the Sellio platform.
+ * Supports multiple transport protocols (SMTP, SES, Mailgun, Postmark)
+ * for delivering automated notifications, password resets, and marketing communications.
+ */
 return [
 
     /*

@@ -1,3 +1,16 @@
+{{--
+    Administrative Automotive: Global Inventory Registry
+    
+    This view provides the authoritative command center for the automotive 
+    marketplace. It aggregates technical identities, specification summaries, 
+    and financial parameters (sale/lease) for all vehicle assets. It 
+    facilitates high-fidelity lifecycle tracking and inventory oversight 
+    through a responsive, data-rich interface.
+    
+    @extends adminlte::page
+    @context Automotive Inventory Management
+    @variables Paginator $autos Paginated collection of Auto model instances.
+--}}
 @extends('adminlte::page')
 
 @section('title', 'Autos')

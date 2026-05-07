@@ -1,3 +1,17 @@
+{{--
+    Administrative High-Fidelity Image Uploader
+    
+    A sophisticated drag-and-drop interface for asynchronous media management.
+    Supports single and multiple asset uploads, real-time preview synchronization,
+    and state-dependent interaction (locked vs active based on record persistence).
+    
+    @param string $name The input/collection name (e.g., 'gallery').
+    @param string $model The fully qualified class name of the associated model.
+    @param int|null $id The primary key of the record.
+    @param bool $multiple Whether to allow multiple image uploads.
+    @param string|null $label The display title for the uploader card.
+    @param bool $noCard Whether to omit the wrapping .card container.
+--}}
 @if(!($noCard ?? false))
 <div class="card card-premium overflow-hidden mb-0">
     <div class="card-header border-0 bg-white py-3 px-4">

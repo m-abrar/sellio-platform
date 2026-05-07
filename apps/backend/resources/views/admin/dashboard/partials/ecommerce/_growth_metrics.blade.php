@@ -1,3 +1,12 @@
+{{--
+    Ecommerce Dashboard Partial: Customer Reach & Regional Growth
+    
+    This component monitors the expansion of the customer base, focusing on 
+    conversion rates and subscription momentum. It also integrates the 
+    global sales heatmap to identify high-density transactional regions.
+    
+    @param array $metrics Pre-aggregated data including customer growth and coordinate clusters.
+--}}
 <div class="row">
     <!-- Customer Base Expansion -->
     <div class="col-lg-6 mb-4">

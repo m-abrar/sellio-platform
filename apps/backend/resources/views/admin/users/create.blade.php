@@ -1,3 +1,15 @@
+{{--
+    Administrative Identity Management: Create Member
+    
+    This view enables the initialization of new platform accounts. 
+    It handles credential definition, security role mapping, and 
+    visual identity (avatar) attachment through an integrated 
+    asynchronous uploader.
+    
+    @extends adminlte::page
+    @context User Administration
+    @variables Collection $roles List of available Spatie Roles for assignment.
+--}}
 @extends('adminlte::page')
 
 @section('title', 'Create User')

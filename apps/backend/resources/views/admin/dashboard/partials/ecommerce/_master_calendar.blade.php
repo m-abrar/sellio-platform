@@ -1,3 +1,11 @@
+{{--
+    Ecommerce Dashboard Partial: Marketing & Operations Calendar
+    
+    This component renders the FullCalendar instance for e-commerce activities,
+    tracking marketing promotions, flash sales, and operational shipping deadlines.
+    
+    @param array $metrics Pre-aggregated data including ecommerce calendar event objects.
+--}}
 <div class="row">
     <div class="col-lg-12 mb-4">
         <div class="card border-0 shadow-sm" style="border-radius: 12px;">

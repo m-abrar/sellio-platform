@@ -1,3 +1,15 @@
+{{--
+    Administrative Automotive: Purchase Inquiry Registry
+    
+    This view provides a central command center for tracking vehicle 
+    purchase leads. It integrates high-fidelity audit trails for lead 
+    engagement, lifecycle status tracking (pending, viewed, contacted), 
+    and multi-dimensional filtering to optimize sales pipeline conversion.
+    
+    @extends adminlte::page
+    @context Automotive Lead Management
+    @variables Paginator $inquiries Paginated collection of AutoInquiry models.
+--}}
 @extends('adminlte::page')
 
 @section('title', __('Auto Inquiries'))

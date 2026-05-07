@@ -1,3 +1,11 @@
+{{--
+    Automated Deletion Protocol (SweetAlert Integration)
+    
+    This partial scans the DOM for legacy 'onclick' delete confirmations 
+    and transparently upgrades them to the premium SweetAlert2 interface.
+    It ensures that all destructive actions across the backend follow 
+    a unified safety protocol and aesthetic.
+--}}
 @push('js')
 <script>
 $(document).ready(function() {

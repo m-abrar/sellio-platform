@@ -1,3 +1,14 @@
+{{--
+    Administrative Real Estate Partial: Listing Lifecycle Actions
+    
+    This component provides the primary interaction suite for property 
+    persistence. It facilitates listing publication, credential updates, 
+    asset cloning, and secure deletion protocols within a sticky sidebar 
+    architecture for optimized accessibility.
+    
+    @context Property Configuration Interface
+    @variables Property $property The active property model instance.
+--}}
 <div class="card card-premium sticky-top shadow-premium overflow-hidden" style="top: 20px;">
     <div class="card-header border-0 bg-white py-3 px-4">
         <h3 class="card-title font-weight-bold text-dark text-uppercase small letter-spacing-1 mb-0">

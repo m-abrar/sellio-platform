@@ -1,4 +1,14 @@
-{{-- Property Filter Protocol --}}
+{{--
+    Administrative Real Estate: Property Filter Protocol
+    
+    This component provides a high-fidelity filtering interface for the 
+    property registry. It enables multi-dimensional searching across 
+    titles, geographic locations, and categorical taxonomies.
+    
+    @context Property Registry Administration
+    @variables Collection|array $locations List of available locations.
+    @variables Collection|array $categories List of available property categories.
+--}}
 <div class="card registry-card-premium registry-filter-card mb-4">
     <div class="card-body">
         <form action="{{ route('admin.properties.index') }}" method="GET">

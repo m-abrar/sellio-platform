@@ -1,3 +1,13 @@
+{{--
+    Dashboard Partial: Strategic Planning & Geospatial Insights
+    
+    This component identifies high-performance inventory through weighted 
+    engagement metrics and visualizes geographic demand distribution 
+    via a Leaflet-driven heat map. It facilitates long-term resource 
+    allocation and territory architecture decisions.
+    
+    @param array $metrics Pre-aggregated data including top-selling items and coordinate clusters.
+--}}
 <div class="row">
     {{-- 1. PERFORMANCE INVENTORY --}}
     <div class="col-lg-5 mb-4"> 

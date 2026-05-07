@@ -1,5 +1,10 @@
-<?php
-
+/**
+ * Database Infrastructure Configuration
+ *
+ * Defines the persistence layer for the Sellio platform.
+ * Supports a wide range of relational database engines (MySQL, MariaDB, PostgreSQL, SQLite)
+ * and high-performance key-value stores (Redis) for application state and cache management.
+ */
 use Illuminate\Support\Str;
 
 return [

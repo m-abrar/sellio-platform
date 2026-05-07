@@ -1,3 +1,16 @@
+{{--
+    Administrative Jobs: Global Application Registry
+    
+    This view provides a central command center for tracking candidate 
+    submissions. It integrates high-fidelity audit trails for talent 
+    acquisition metrics, pipeline progression, and recruitment engagement. 
+    It facilitates efficient candidate triage through multi-dimensional 
+    filtering and responsive data architecture.
+    
+    @extends adminlte::page
+    @context Job Application Management
+    @variables Paginator $applications Paginated collection of JobApplication models.
+--}}
 @extends('adminlte::page')
 
 @section('title', __('Job Applications | Talent Acquisition'))

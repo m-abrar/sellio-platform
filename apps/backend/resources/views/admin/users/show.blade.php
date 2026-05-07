@@ -1,3 +1,15 @@
+{{--
+    Administrative Identity Management: User Insights
+    
+    This view provides a comprehensive 360-degree visualization of a specific 
+    platform member. It aggregates personal credentials, authentication 
+    metrics, security status, and core performance KPIs (listings, 
+    applications, reviews) into a unified intelligence profile.
+    
+    @extends adminlte::page
+    @context User Administration
+    @variables User $user The User model instance being audited.
+--}}
 @extends('adminlte::page')
 
 @section('title', __('User Profile') . ': ' . $user->name)
@@ -128,7 +140,7 @@
                                         <li class="list-group-item d-flex justify-content-between align-items-center px-0">
                                             <span>Last Login IP</span>
                                             <span class="text-monospace small">192.168.1.1</span>
-                                        </div>
+                                        </li>
                                     </ul>
                                 </div>
                                 <div class="col-md-6">
@@ -155,5 +167,3 @@
     </div>
 </div>
 @stop
-
-@endpush

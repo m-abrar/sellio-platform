@@ -1,3 +1,18 @@
+{{--
+    Administrative Real Estate: Booking Lifecycle Configuration
+    
+    This view serves as the authoritative interface for managing property 
+    reservation records. It orchestrates complex data entry for guest 
+    identities, chronological occupancy parameters (check-in/out), 
+    financial settlements, and visualizes real-time inventory availability 
+    through an integrated calendar engine.
+    
+    @extends adminlte::page
+    @context Property Operational Administration
+    @variables PropertyBooking $booking The booking model instance being modified.
+    @variables Collection $properties List of available real estate assets.
+    @variables Collection $users List of platform members for principal assignment.
+--}}
 @extends('adminlte::page')
 
 @section('title', ($booking->exists ? 'Modify' : 'Create') . ' Property Booking')

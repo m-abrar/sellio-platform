@@ -1,5 +1,10 @@
-<?php
-
+/**
+ * Filesystem & Media Storage Configuration
+ *
+ * Orchestrates the storage architecture for the platform.
+ * Configures various storage abstraction layers (Local, Public, S3)
+ * for handling user uploads, media assets, and private application documents.
+ */
 return [
 
     /*

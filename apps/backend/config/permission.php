@@ -1,5 +1,10 @@
-<?php
-
+/**
+ * RBAC & Permission Configuration
+ *
+ * This file configures the Role-Based Access Control (RBAC) engine (spatie/laravel-permission).
+ * It defines the polymorphic relationships for roles and permissions, table schemas,
+ * and caching strategies to ensure secure and performant authorization across the platform.
+ */
 return [
 
     'models' => [

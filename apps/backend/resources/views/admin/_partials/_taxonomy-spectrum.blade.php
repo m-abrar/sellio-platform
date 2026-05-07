@@ -1,3 +1,12 @@
+{{--
+    Polymorphic Module Association Spectrum
+    
+    This partial renders a series of decorative badges indicating which 
+    marketplace verticals (Property, Auto, Job, etc.) a specific taxonomy 
+    item is associated with.
+    
+    @param Model $model The Eloquent model instance (Category, Location, Tag).
+--}}
 @php
     $modules = [
         'is_property'   => ['title' => 'Property',   'icon' => 'fas fa-home',          'color' => 'badge-indigo-light'],

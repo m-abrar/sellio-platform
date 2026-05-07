@@ -1,5 +1,10 @@
-<?php
-
+/**
+ * Authentication & Authorization Configuration
+ *
+ * Configures the security perimeter of the application, defining guards
+ * (session, sanctum), user providers (Eloquent-backed User model),
+ * and password recovery protocols (throttling, expiry, token mapping).
+ */
 return [
 
     /*

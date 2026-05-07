@@ -1,5 +1,9 @@
-<?php
-
+/**
+ * Authentication Entry Points
+ *
+ * This file manages the stateful authentication guard (web), defining routes
+ * for user registration, session management, password resets, and email verification.
+ */
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\ConfirmablePasswordController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;

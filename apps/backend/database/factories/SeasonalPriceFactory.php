@@ -7,6 +7,13 @@ namespace Database\Factories;
 use App\Models\SeasonalPrice;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ * Data Factory for Seasonal Pricing
+ *
+ * This factory manages dynamic pricing logic for properties, simulating
+ * time-bound rate adjustments (Peak, Off-Season, Holidays) within the
+ * real estate booking engine.
+ */
 class SeasonalPriceFactory extends Factory
 {
     /**

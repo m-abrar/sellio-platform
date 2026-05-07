@@ -6,6 +6,12 @@ namespace Database\Factories;
 use App\Models\Review;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ * Data Factory for Customer Reviews
+ *
+ * This factory generates social proof data across the platform, including
+ * quantitative ratings and qualitative feedback, with moderation status support.
+ */
 class ReviewFactory extends Factory
 {
     protected $model = Review::class;

@@ -1,4 +1,14 @@
-{{-- Event Filter Protocol --}}
+{{--
+    Administrative Events: Inventory Filter Protocol
+    
+    This component provides a streamlined filtering interface for the 
+    event registry. It enables multi-dimensional auditing across event 
+    titles and vertical categories, ensuring efficient oversight of 
+    marketplace ticketing assets.
+    
+    @context Event Inventory Management
+    @variables Collection $categories List of event categories for filtering.
+--}}
 <div class="card registry-card-premium registry-filter-card mb-4">
     <div class="card-body">
         <form action="{{ route('admin.events.index') }}" method="GET">

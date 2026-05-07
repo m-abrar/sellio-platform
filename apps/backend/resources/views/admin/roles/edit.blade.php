@@ -1,3 +1,14 @@
+{{--
+    Administrative Security: Authority Editor (Role Modification)
+    
+    This view enables the adjustment of existing administrative roles. 
+    It facilitates the real-time synchronization of permission mappings and 
+    provides statistics on the security impact across the platform.
+    
+    @extends adminlte::page
+    @context RBAC (Role Based Access Control) Management
+    @variables Role $role The Spatie Role model instance being modified.
+--}}
 @extends('adminlte::page')
 
 @section('title', 'Authority Editor | Modify Role Spectrum')

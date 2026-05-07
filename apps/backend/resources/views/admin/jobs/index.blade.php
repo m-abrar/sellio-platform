@@ -1,3 +1,17 @@
+{{--
+    Administrative Jobs: Global Vacancy Registry
+    
+    This view provides the authoritative command center for the career 
+    marketplace. It aggregates role responsibilities, compensation 
+    parameters, and employment engagement types (full-time/contract) 
+    for all job listings. It facilitates efficient recruitment oversight 
+    through a responsive data architecture and high-fidelity 
+    lifecycle tracking.
+    
+    @extends adminlte::page
+    @context Job Inventory Management
+    @variables Paginator $jobs Paginated collection of JobListing model instances.
+--}}
 @extends('adminlte::page')
 
 @section('title', 'Jobs')

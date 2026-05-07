@@ -7,6 +7,13 @@ namespace Database\Factories;
 use App\Models\PropertyBooking;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ * Data Factory for Property Bookings
+ *
+ * This factory generates transactional data for the real estate vertical,
+ * simulating stays with check-in/out date logic, night count calculations,
+ * and multi-state lifecycle management.
+ */
 class PropertyBookingFactory extends Factory
 {
     protected $model = PropertyBooking::class;

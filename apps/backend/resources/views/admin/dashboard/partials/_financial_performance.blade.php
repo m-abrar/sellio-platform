@@ -1,3 +1,13 @@
+{{--
+    Dashboard Partial: Financial Performance & Analytics
+    
+    This component orchestrates the financial intelligence layer, rendering 
+    real-time transaction streams, revenue trajectory charts, and market 
+    segment distribution. It provides immediate insight into the platform's 
+    economic health.
+    
+    @param array $metrics Pre-aggregated data including recent transactions and chart datasets.
+--}}
 <div class="row">
     {{-- 1. LIVE TRANSACTIONS --}}
     <div class="col-lg-4 mb-4">

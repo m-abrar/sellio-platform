@@ -1,6 +1,11 @@
-<?php
-// config/adminlte-menu.php
-
+/**
+ * Administrative Navigation Schema
+ *
+ * This file constructs the hierarchical menu structure for the AdminLTE sidebar and topbar.
+ * It implements fine-grained access control via 'can' gates and 'module' checks,
+ * grouping administrative features into high-priority operational blocks
+ * (Listings, Bookings, Financials, Content, RBAC).
+ */
 return [
     // TOP NAVIGATION (No change)
     [

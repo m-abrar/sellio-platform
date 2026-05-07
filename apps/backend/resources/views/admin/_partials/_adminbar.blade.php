@@ -1,3 +1,13 @@
+{{--
+    Administrative Quick Access Bar (Admin Bar)
+    
+    This partial renders a floating utility bar at the top of the viewport 
+    for authenticated administrators. It provides rapid access to the 
+    dashboard, theme settings, content management, and menu configuration.
+    
+    @layout resources/views/admin/layout.blade.php
+    @context Authenticated Admin
+--}}
 <div id="admin-bar" role="navigation" aria-label="Admin Quick Bar">
   <div class="container d-flex justify-content-between align-items-center h-100">
     

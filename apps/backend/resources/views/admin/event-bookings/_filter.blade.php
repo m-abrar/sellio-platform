@@ -1,4 +1,15 @@
-{{-- Filter Protocol --}}
+{{--
+    Administrative Events: Booking Filter Protocol
+    
+    This component provides a streamlined filtering interface for event 
+    attendance management. It enables precise auditing across event 
+    identities, taxonomic categories, and lifecycle states (pending, 
+    confirmed, cancelled), facilitating efficient registry oversight.
+    
+    @context Event Booking Management
+    @variables Collection $events List of event assets for selection mapping.
+    @variables Collection $categories Event categories for vertical filtering.
+--}}
 <div class="card registry-card-premium registry-filter-card mb-4">
     <div class="card-body">
         <form method="GET" action="{{ url()->current() }}">

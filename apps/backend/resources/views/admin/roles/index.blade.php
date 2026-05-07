@@ -1,3 +1,14 @@
+{{--
+    Administrative Security: Access Architecture (Role Registry)
+    
+    This view manages the platform's security hierarchy. It provides a 
+    comprehensive registry of defined roles and their associated permission 
+    blueprints, enabling real-time authority management and security auditing.
+    
+    @extends adminlte::page
+    @context RBAC (Role Based Access Control) Management
+    @variables Collection $roles List of all defined Spatie Role models.
+--}}
 @extends('adminlte::page')
 
 @section('title', 'Access Architecture | Authority Registry')

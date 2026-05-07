@@ -1,4 +1,14 @@
-{{-- Filter Protocol --}}
+{{--
+    Administrative Automotive: Inquiry Filter Protocol
+    
+    This component provides a streamlined filtering interface for automotive 
+    lead management. It enables precise auditing across vehicle assets and 
+    lifecycle states (pending, viewed, contacted), facilitating efficient 
+    sales pipeline oversight.
+    
+    @context Automotive Lead Management
+    @variables Collection $autos List of vehicle assets for suggestion mapping.
+--}}
 <div class="card registry-card-premium registry-filter-card mb-4">
     <div class="card-body">
         <form method="GET" action="{{ url()->current() }}">

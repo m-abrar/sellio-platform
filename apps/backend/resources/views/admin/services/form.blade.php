@@ -1,3 +1,18 @@
+{{--
+    Administrative Services: Asset Configuration
+    
+    This view serves as the authoritative interface for managing 
+    professional service listings. It orchestrates complex data entry 
+    for service scope, expertise tiers, operating itineraries, and 
+    financial rates. It also integrates operational intelligence 
+    through recent lead/quote metrics and visual identity management.
+    
+    @extends adminlte::page
+    @context Service Inventory Management
+    @variables Service $service The service model instance being edited/created.
+    @variables Collection $categories Service categories for vertical taxonomy.
+    @variables Collection $locations Regional hubs for geographic clustering.
+--}}
 @extends('adminlte::page')
 
 @section('title', ($service->exists ? 'Edit' : 'Create') . ' Service')

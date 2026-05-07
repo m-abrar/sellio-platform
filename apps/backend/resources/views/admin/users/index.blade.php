@@ -1,3 +1,15 @@
+{{--
+    Administrative Identity Management: User Registry
+    
+    This view provides a central command hub for managing platform members. 
+    It facilitates real-time auditing of user identities, email statuses, 
+    assigned security roles, and provides direct access to profile 
+    refinement and account lifecycle management.
+    
+    @extends adminlte::page
+    @context User Administration
+    @variables Paginator $users Paginated collection of User model instances.
+--}}
 @extends('adminlte::page')
 
 @section('title', 'Users Management')

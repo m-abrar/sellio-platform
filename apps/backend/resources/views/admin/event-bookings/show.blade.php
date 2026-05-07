@@ -1,3 +1,16 @@
+{{--
+    Administrative Events: Attendance Operational Intelligence
+    
+    This view provides a comprehensive 360-degree visualization of a 
+    specific event registration. It aggregates admission specifications, 
+    financial reconciliation data (payments), and participant identity 
+    profiles, ensuring a complete audit trail for attendance and 
+    revenue integrity.
+    
+    @extends adminlte::page
+    @context Event Booking Management
+    @variables EventBooking $booking The booking model instance.
+--}}
 @extends('adminlte::page')
 
 @section('title', __('Event Ticket') . ' #' . $booking->id . ' | Registry Intelligence')

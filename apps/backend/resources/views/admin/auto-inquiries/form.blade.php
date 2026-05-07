@@ -1,3 +1,17 @@
+{{--
+    Administrative Automotive: Purchase Inquiry Configuration
+    
+    This view serves as the authoritative interface for managing vehicle 
+    purchase leads. It orchestrates complex data entry for lead identities, 
+    asset association, contact parameters, and pipeline status lifecycle 
+    (pending, reviewed, contacted, closed).
+    
+    @extends adminlte::page
+    @context Automotive Lead Management
+    @variables AutoInquiry $inquiry The inquiry model instance.
+    @variables Collection $autos List of vehicle assets for lead association.
+    @variables Collection $users List of platform members for principal mapping.
+--}}
 @extends('adminlte::page')
 
 @section('title', ($inquiry->exists ? 'Modify' : 'Create') . ' Auto Inquiry')

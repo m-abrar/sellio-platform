@@ -1,5 +1,10 @@
-<?php
-
+/**
+ * AdminLTE Core UI Configuration
+ *
+ * This file manages the visual and behavioral settings for the AdminLTE dashboard framework.
+ * It configures branding assets, sidebar behaviors, plugin orchestrations (Select2, SweetAlert2),
+ * and layout tokens used across the administrative backend.
+ */
 return [
 
     /*

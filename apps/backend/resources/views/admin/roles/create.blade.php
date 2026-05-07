@@ -1,3 +1,13 @@
+{{--
+    Administrative Security: Authority Architect (Role Creation)
+    
+    This view facilitates the definition of new administrative roles. 
+    It enables the simultaneous mapping of permission sets to the new role 
+    identity, establishing a high-fidelity security blueprint for platform users.
+    
+    @extends adminlte::page
+    @context RBAC (Role Based Access Control) Management
+--}}
 @extends('adminlte::page')
 
 @section('title', 'Authority Architect | Define New Role')

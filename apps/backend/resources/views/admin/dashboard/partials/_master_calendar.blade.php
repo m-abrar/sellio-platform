@@ -1,3 +1,12 @@
+{{--
+    Dashboard Partial: Operational Master Calendar
+    
+    This component renders the FullCalendar instance, providing a unified 
+    chronological view of platform events, service appointments, and asset 
+    availabilities across all marketplace verticals.
+    
+    @param array $metrics Pre-aggregated data including calendar event objects.
+--}}
 <div class="row">
     <div class="col-12 mb-4"> 
         <div class="card border-0 shadow-premium overflow-hidden rounded-xl">

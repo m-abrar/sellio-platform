@@ -1,10 +1,10 @@
-<?php
-
-use Monolog\Handler\NullHandler;
-use Monolog\Handler\StreamHandler;
-use Monolog\Handler\SyslogUdpHandler;
-use Monolog\Processor\PsrLogMessageProcessor;
-
+/**
+ * Application Logging Configuration
+ *
+ * This file configures the Monolog-based logging engine for the Sellio platform.
+ * Defines multiple channels (Single, Daily, Slack, Papertrail) to ensure
+ * comprehensive error tracking, performance monitoring, and administrative auditing.
+ */
 return [
 
     /*

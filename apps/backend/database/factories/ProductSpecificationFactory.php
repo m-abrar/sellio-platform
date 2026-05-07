@@ -6,6 +6,13 @@ use App\Models\ProductSpecification;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ * Data Factory for Product Specifications
+ *
+ * This factory generates detailed technical attributes for products,
+ * categorizing them into logical groups (Physical, Power, Technical)
+ * to provide a structured comparison experience.
+ */
 class ProductSpecificationFactory extends Factory
 {
     protected $model = ProductSpecification::class;

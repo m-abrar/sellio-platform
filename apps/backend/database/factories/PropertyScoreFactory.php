@@ -5,6 +5,13 @@ namespace Database\Factories;
 use App\Models\PropertyScore;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ * Data Factory for Property Quality Scores
+ *
+ * This factory generates performance indices for real estate listings,
+ * including Walk Scores, Transit Ratings, and Safety Indices, supporting
+ * custom value ranges and specific unit taxonomies.
+ */
 class PropertyScoreFactory extends Factory
 {
     /**

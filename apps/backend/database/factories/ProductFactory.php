@@ -10,6 +10,13 @@ use App\Models\Type;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
+/**
+ * Data Factory for Core Products
+ *
+ * This factory generates comprehensive e-commerce product listings,
+ * including dynamic pricing, inventory management, physical dimensions,
+ * and polymorphic categorization/branding.
+ */
 class ProductFactory extends Factory
 {
     protected $model = Product::class;

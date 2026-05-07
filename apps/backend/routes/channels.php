@@ -1,5 +1,9 @@
-<?php
-
+/**
+ * Broadcasting Channels
+ *
+ * Defines the authorization logic for real-time event broadcasting.
+ * Supports private user notifications and secure multi-party chat conversations.
+ */
 use Illuminate\Support\Facades\Broadcast;
 use App\Models\Conversation;
 

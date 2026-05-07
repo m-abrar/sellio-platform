@@ -1,3 +1,15 @@
+{{--
+    Administrative Inventory: Line Item Configuration
+    
+    This view facilitates the definition and modification of transactional 
+    line items (taxes, service fees, discounts). It allows for the mapping 
+    of valuation logic (fixed vs percentage) and application scope 
+    (booking, service, or specific item).
+    
+    @extends adminlte::page
+    @context Marketplace Economics / Inventory Configuration
+    @variables LineItem $LineItem The LineItem model instance.
+--}}
 @extends('adminlte::page')
 
 @section('title', $LineItem->exists ? 'Edit Line Item' : 'Add Line Item')

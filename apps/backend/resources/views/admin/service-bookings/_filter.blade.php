@@ -1,4 +1,14 @@
-{{-- Filter Protocol --}}
+{{--
+    Administrative Services: Booking Filter Protocol
+    
+    This component provides a streamlined search and filtering interface 
+    for service engagement management. It enables precise auditing 
+    across service titles, technician identities, and booking 
+    references, facilitating efficient oversight of the professional 
+    services marketplace.
+    
+    @context Service Booking Management
+--}}
 <div class="card registry-card-premium registry-filter-card mb-4">
     <div class="card-body">
         <form method="GET" action="{{ route('admin.service-bookings.index') }}">

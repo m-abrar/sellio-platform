@@ -1,3 +1,18 @@
+{{--
+    Administrative Events: Inventory Asset Configuration
+    
+    This view serves as the authoritative interface for event listing 
+    management. It orchestrates complex data entry for schedule 
+    itineraries, venue specifications, and ticketing pricing models. 
+    It also integrates operational intelligence through recent 
+    booking manifests and visual identity management.
+    
+    @extends adminlte::page
+    @context Event Inventory Management
+    @variables Event $event The event model instance being edited/created.
+    @variables Collection $categories Event categories for vertical taxonomy.
+    @variables Collection $locations Regional hubs for geographic clustering.
+--}}
 @extends('adminlte::page')
 
 @section('title', ($event->exists ? 'Edit' : 'Create') . ' Event')
@@ -338,80 +353,3 @@
 @endif
 
 @include('admin._partials._toggle-card-css')
-
-@push('js')
-<script>
-    $(document).ready(function () { 
-        $('.select2').select2({ theme: 'bootstrap4', width: '100%' }); 
-
-        const titleInput = $('#title');
-        const slugInput = $('#slug');
-
-        titleInput.on('input', function () {
-            if(!slugInput.data('edited')){
-                let slug = $(this).val().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-                slugInput.val(slug);
-            }
-        });
-
-        slugInput.on('change', function() { $(this).data('edited', true); });
-    });
-</script>
-@endpush
-
-@if($event->exists)
-    <form id="delete-form" action="{{ route('admin.events.destroy', $event->id) }}" method="POST" class="d-none">
-        @csrf @method('DELETE')
-    </form>
-    
-    <script>
-        function triggerDelete() {
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "Permanently delete this event listing?",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#ef4444',
-                cancelButtonColor: '#64748b',
-                confirmButtonText: 'Yes, delete it!',
-                customClass: {
-                    popup: 'rounded-xl',
-                    confirmButton: 'rounded-pill px-4',
-                    cancelButton: 'rounded-pill px-4'
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById('delete-form').submit();
-                }
-            })
-        }
-    </script>
-@endif
-
-@include('admin._partials._toggle-card-css')
-
-@if($event->exists)
-    <form id="delete-form" action="{{ route('admin.events.destroy', $event->id) }}" method="POST" class="d-none">
-        @csrf @method('DELETE')
-    </form>
-    
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        function triggerDelete() {
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "Permanently delete this event listing?",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById('delete-form').submit();
-                }
-            })
-        }
-    </script>
-@endif

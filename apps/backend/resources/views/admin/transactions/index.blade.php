@@ -1,3 +1,15 @@
+{{--
+    Administrative Finance: Global Transaction Ledger
+    
+    This view provides a central audit stream for all financial exchanges. 
+    It integrates reconciliation data from various booking modules, 
+    verifies principal identifiers, and displays proof-of-payment 
+    artifacts to ensure total fiscal transparency across the platform.
+    
+    @extends adminlte::page
+    @context Financial Operations
+    @variables Collection $transactions List of Transaction model instances.
+--}}
 @extends('adminlte::page')
 
 @section('plugins.Datatables', true)

@@ -6,6 +6,13 @@ use App\Models\Ticket;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ * Data Factory for Support Tickets
+ *
+ * This factory generates test data for the customer support system,
+ * including multi-tier status workflows (Open, In-Progress, Closed),
+ * priority escalation, and categorical grouping.
+ */
 class TicketFactory extends Factory
 {
     /**

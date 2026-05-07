@@ -7,7 +7,11 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
+ * Data Factory for Platform Identities
+ *
+ * This factory generates core user profiles, including unique identifiers,
+ * verified contact credentials, and secure credential hashes, supporting
+ * both guest and authenticated user states.
  */
 class UserFactory extends Factory
 {

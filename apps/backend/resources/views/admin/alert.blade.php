@@ -1,5 +1,11 @@
-{{-- Modern Animated Alerts for Sellio Admin --}}
-
+{{--
+    Administrative Feedback Alert System
+    
+    This partial orchestrates the display of session-based notifications 
+    (Success, Error, Warning, Status) and form validation errors.
+    It uses animated transitions and premium glassmorphic styling to 
+    provide a non-intrusive yet highly visible feedback loop.
+--}}
 @php
     $alerts = [
         ['key' => 'success', 'type' => 'success', 'icon' => 'check-circle'],

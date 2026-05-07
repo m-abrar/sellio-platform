@@ -1,3 +1,13 @@
+{{--
+    Administrative Security Partial: Permission Mapping Grid
+    
+    This component renders a sophisticated, grouped grid of system permissions.
+    It supports hierarchical toggling (group-level and global) to streamline 
+    the mapping of atomic permissions to administrative roles.
+    
+    @param Role|null $currentRole The Role model instance being edited, if applicable.
+    @param Collection $permissions Global collection of all defined permissions.
+--}}
 <div class="card border-0 shadow-premium rounded-24 overflow-hidden">
     <div class="card-header bg-white py-4 px-4 border-0 d-flex align-items-center justify-content-between">
         <h3 class="card-title font-weight-bold text-dark mb-0">
@@ -64,6 +74,4 @@
         });
     });
 </script>
-@endpush
-
 @endpush

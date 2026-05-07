@@ -7,6 +7,13 @@ namespace Database\Factories;
 use App\Models\TransactionLine;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ * Data Factory for Transaction Lines
+ *
+ * This factory generates granular financial data, distinguishing between
+ * revenue and expense items to facilitate detailed ledger accounting
+ * and property-level financial reporting.
+ */
 class TransactionLineFactory extends Factory
 {
     protected $model = TransactionLine::class;

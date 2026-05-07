@@ -1,5 +1,11 @@
-<?php
-
+/**
+ * Routes for the Administrative Backend
+ *
+ * This file defines the core routing architecture for the Sellio administrative interface,
+ * including dashboard analytics, resource management (Autos, Events, Jobs, Services,
+ * Classifieds, Properties, Products), financial operations, user access control (RBAC),
+ * and system configuration. All routes are protected by administrative middleware.
+ */
 use Illuminate\Support\Facades\Route;
 
 // --- ADMIN DASHBOARD CONTROLLERS ---

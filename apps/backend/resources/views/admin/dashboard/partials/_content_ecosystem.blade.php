@@ -1,3 +1,12 @@
+{{--
+    Dashboard Partial: Content & Partner Ecosystem
+    
+    This component visualizes the operational health of the platform content.
+    It tracks the listing submission queue, security intelligence notifications,
+    and identifies top-performing partners and marketplace assets.
+    
+    @param array $metrics Pre-aggregated data including recent listings and partner stats.
+--}}
 <div class="row">
     {{-- 1. SUBMISSIONS QUEUE --}}
     <div class="col-lg-4 mb-4">

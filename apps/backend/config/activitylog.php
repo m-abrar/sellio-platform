@@ -1,5 +1,10 @@
-<?php
-
+/**
+ * Activity Log Configuration
+ *
+ * Defines the parameters for the system-wide activity logging engine (spatie/laravel-activitylog).
+ * Manages retention policies, default log names, and polymorphic model mapping
+ * for comprehensive administrative audit trails.
+ */
 return [
 
     /*

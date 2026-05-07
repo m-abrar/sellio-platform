@@ -1,3 +1,12 @@
+{{--
+    Module Association Checkboxes
+    
+    This partial renders a grid of interactive module toggles for taxonomies 
+    (Categories, Locations, Tags). It uses the global module_enabled() helper 
+    to filter available marketplace verticals and handles form state synchronization.
+    
+    @param Model $model The Eloquent model instance (Category, Location, Tag).
+--}}
 @php
     $moduleMap = [
         'is_property'   => 'properties',

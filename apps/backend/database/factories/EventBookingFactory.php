@@ -6,6 +6,13 @@ namespace Database\Factories;
 use App\Models\EventBooking;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ * Data Factory for Event Bookings
+ *
+ * This factory generates test data for the event marketplace vertical.
+ * It simulates ticket purchase transactions with quantity logic and multi-state
+ * payment/booking status tracking.
+ */
 class EventBookingFactory extends Factory
 {
     protected $model = EventBooking::class;

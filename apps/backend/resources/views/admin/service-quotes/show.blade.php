@@ -1,3 +1,16 @@
+{{--
+    Administrative Services: Lead Operational Intelligence
+    
+    This view provides a comprehensive 360-degree visualization of a 
+    specific service quote inquiry. It aggregates service scope 
+    requirements, financial estimates (quoted price), customer identity 
+    profiles, and audit trails to ensure transparent and efficient 
+    lead evaluation and revenue tracking.
+    
+    @extends adminlte::page
+    @context Service Quote Management
+    @variables ServiceQuote $quote The quote model instance.
+--}}
 @extends('adminlte::page')
 
 @section('title', __('Service Quote') . ' #' . $quote->id)

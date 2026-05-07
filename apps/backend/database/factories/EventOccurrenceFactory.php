@@ -7,6 +7,12 @@ namespace Database\Factories;
 use App\Models\EventOccurrence;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ * Data Factory for Event Occurrences
+ *
+ * This factory generates scheduling data for events, including start/end timestamps,
+ * duration logic, and attendance capacity management for the event marketplace.
+ */
 class EventOccurrenceFactory extends Factory
 {
     protected $model = EventOccurrence::class;

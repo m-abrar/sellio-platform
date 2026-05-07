@@ -1,4 +1,14 @@
-{{-- Job Filter Protocol --}}
+{{--
+    Administrative Jobs: Inventory Filter Protocol
+    
+    This component provides a streamlined filtering interface for the 
+    career registry. It enables multi-dimensional auditing across 
+    vacancy titles and vertical categories, ensuring efficient 
+    oversight of marketplace recruitment assets.
+    
+    @context Job Inventory Management
+    @variables Collection $categories List of job categories for filtering.
+--}}
 <div class="card registry-card-premium registry-filter-card mb-4">
     <div class="card-body">
         <form action="{{ route('admin.jobs.index') }}" method="GET">

@@ -1,3 +1,14 @@
+{{--
+    Administrative Security: Refine Permission Protocol
+    
+    This view enables the modification of existing security permissions. 
+    It includes explicit warnings regarding the impact of identifier 
+    changes on established middleware gates and role bindings.
+    
+    @extends adminlte::page
+    @context Security / Permissions Management
+    @variables Permission $permission The Spatie Permission model instance.
+--}}
 @extends('adminlte::page')
 
 @section('title', 'Edit Permission')

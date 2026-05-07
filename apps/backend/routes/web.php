@@ -1,5 +1,11 @@
-<?php
-
+/**
+ * Standard Web Routes
+ *
+ * This file serves as the primary ingress point for the Sellio storefront and
+ * guest-facing experience. It orchestrates the public marketplace discovery,
+ * module-specific booking engines (Real Estate, Automotive, Events, Services, etc.),
+ * cart/checkout flows, and CMS page rendering.
+ */
 use Illuminate\Support\Facades\Route;
 
 // --- CORE & AUTH ---

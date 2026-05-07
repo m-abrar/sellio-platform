@@ -1,3 +1,14 @@
+{{--
+    Administrative Command Center (Main Dashboard)
+    
+    This is the primary intelligence hub for the Sellio platform.
+    It aggregates cross-module KPIs, financial performance, system health,
+    and geospatial distribution data into a unified executive overview.
+    
+    @extends adminlte::page
+    @context Authenticated Administrator
+    @variables array $metrics Pre-aggregated dashboard data including chart values and KPIs.
+--}}
 @extends('adminlte::page')
 
 @section('title', 'Command Center | Admin Operations')

@@ -1,3 +1,18 @@
+{{--
+    Administrative Events: Attendance Configuration
+    
+    This view serves as the authoritative interface for managing event 
+    registrations. It orchestrates guest identity parameters, ticket 
+    inventory allocation, revenue calculations, and lifecycle status 
+    tracking (pending, confirmed, cancelled) to ensure accurate 
+    attendance manifests.
+    
+    @extends adminlte::page
+    @context Event Booking Management
+    @variables EventBooking $booking The booking model instance.
+    @variables Collection $events List of event assets for registration.
+    @variables Collection $users List of platform members for principal mapping.
+--}}
 @extends('adminlte::page')
 
 @section('title', ($booking->exists ? 'Modify' : 'Create') . ' Event Booking')

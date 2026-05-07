@@ -1,5 +1,10 @@
-<?php
-
+/**
+ * Session Persistence Configuration
+ *
+ * Manages the stateful session architecture for the Sellio platform.
+ * Configures storage drivers (Database, Redis, File), expiration lifetimes,
+ * and security headers (SameSite, Secure, HttpOnly) to protect user sessions.
+ */
 use Illuminate\Support\Str;
 
 return [

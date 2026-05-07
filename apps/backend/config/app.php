@@ -1,5 +1,10 @@
-<?php
-
+/**
+ * Global Application Configuration
+ *
+ * This file encapsulates high-level operational settings for the Sellio platform,
+ * including environment identification, encryption protocols, localization tokens,
+ * and system-wide maintenance mode orchestration.
+ */
 return [
 
     /*

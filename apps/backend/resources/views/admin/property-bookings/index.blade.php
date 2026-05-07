@@ -1,3 +1,15 @@
+{{--
+    Administrative Real Estate: Rental & Stay Registry
+    
+    This view provides a high-fidelity audit trail of all property 
+    reservations. It integrates operational metrics (revenue, duration), 
+    lifecycle status tracking, and multi-dimensional filtering, serving 
+    as the command center for short-term rental oversight.
+    
+    @extends adminlte::page
+    @context Property Operational Administration
+    @variables Paginator $bookings Paginated collection of PropertyBooking models.
+--}}
 @extends('adminlte::page')
 
 @section('title', __('Rentals & Stays | Real Estate Intelligence'))

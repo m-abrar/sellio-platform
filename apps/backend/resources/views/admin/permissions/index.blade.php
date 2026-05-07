@@ -1,3 +1,15 @@
+{{--
+    Administrative Security: Permission Registry
+    
+    This view provides a high-fidelity audit trail of all security protocols 
+    within the system. It enables granular management of gated resources, 
+    facilitating atomic access control through identifier modification 
+    and protocol revocation.
+    
+    @extends adminlte::page
+    @context Security / Permissions Management
+    @variables Collection $permissions List of all Spatie Permission models.
+--}}
 @extends('adminlte::page')
 
 @section('title', 'Security Gates | Granular Permissions')

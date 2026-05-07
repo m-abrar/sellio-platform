@@ -6,6 +6,13 @@ use App\Models\User;
 use App\Models\Withdrawal;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ * Data Factory for Payout Withdrawals
+ *
+ * This factory generates test data for the financial disbursement system,
+ * simulating vendor payout requests with various payment methods,
+ * approval workflows, and rejection auditing.
+ */
 class WithdrawalFactory extends Factory
 {
     /**

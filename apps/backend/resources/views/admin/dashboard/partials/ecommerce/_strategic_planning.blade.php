@@ -1,3 +1,12 @@
+{{--
+    Ecommerce Dashboard Partial: Logistics & Order Intelligence
+    
+    This component provides a high-fidelity view of the real-time order feed,
+    facilitating rapid response to new transactions and tracking logistics 
+    lifecycles across the e-commerce fulfillment chain.
+    
+    @param array $metrics Pre-aggregated data including recent order objects and status tags.
+--}}
 <div class="row">
     <div class="col-lg-12 mb-4">
         <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">

@@ -1,4 +1,14 @@
-{{-- Service Filter Protocol --}}
+{{--
+    Administrative Services: Inventory Filter Protocol
+    
+    This component provides a streamlined filtering interface for the 
+    professional services registry. It enables multi-dimensional 
+    auditing across service titles and vertical categories, ensuring 
+    efficient oversight of marketplace service assets.
+    
+    @context Service Inventory Management
+    @variables Collection $categories List of service categories for filtering.
+--}}
 <div class="card registry-card-premium registry-filter-card mb-4">
     <div class="card-body">
         <form action="{{ route('admin.services.index') }}" method="GET">

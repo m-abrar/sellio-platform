@@ -1,3 +1,17 @@
+{{--
+    Administrative Real Estate: Property Asset Configuration
+    
+    This view serves as the authoritative interface for property listing management.
+    It orchestrates complex data entry for specifications, pricing (sale/rental), 
+    geographic localization, and high-fidelity media galleries. It also 
+    integrates operational intelligence through recent booking/inquiry streams.
+    
+    @extends adminlte::page
+    @context Property Inventory Management
+    @variables Property $property The property model instance being edited/created.
+    @variables Collection $categories Property categories for taxonomy mapping.
+    @variables Collection $locations Regional hubs for geographic clustering.
+--}}
 @extends('adminlte::page')
 
 @section('title', ($property->exists ? 'Edit' : 'Create') . ' Property')
@@ -396,53 +410,6 @@
     </form>
 </div>
 @endsection
-
-@push('js')
-<script>
-    $(document).ready(function () {
-        // Shared Slug Logic
-        const titleInput = $('#title');
-        const slugInput = $('#slug');
-
-        titleInput.on('input', function () {
-            let slug = $(this).val().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-            slugInput.val(slug);
-        });
-
-        $('.select2').select2({ theme: 'bootstrap4', width: '100%' });
-    });
-</script>
-@include('admin._partials._toggle-card-css')
-@endpush
-
-@if($property->exists)
-    <form id="delete-form" action="{{ route('admin.properties.destroy', $property->id) }}" method="POST" class="d-none">
-        @csrf @method('DELETE')
-    </form>
-    
-    <script>
-        function triggerDelete() {
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "Permanently delete this property listing?",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#ef4444',
-                cancelButtonColor: '#64748b',
-                confirmButtonText: 'Yes, delete it!',
-                customClass: {
-                    popup: 'rounded-xl',
-                    confirmButton: 'rounded-pill px-4',
-                    cancelButton: 'rounded-pill px-4'
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById('delete-form').submit();
-                }
-            })
-        }
-    </script>
-@endif
 
 @push('js')
 <script>

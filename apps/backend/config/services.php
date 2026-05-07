@@ -1,5 +1,10 @@
-<?php
-
+/**
+ * Third-Party Service Credentials
+ *
+ * Centralizes the integration tokens and API keys for external services.
+ * Orchestrates connections for cloud storage (AWS), transactional messaging
+ * (Postmark, Resend, SES), and OAuth social authentication (Google, Facebook).
+ */
 return [
 
     /*

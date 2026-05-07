@@ -1,3 +1,16 @@
+{{--
+    Administrative Identity Management: Refine Member Credentials
+    
+    This view facilitates the modification of existing platform accounts. 
+    It allows for the dynamic adjustment of security roles, visual identity 
+    updates, and credential resets, with real-time propagation across 
+    the platform's security layer.
+    
+    @extends adminlte::page
+    @context User Administration
+    @variables User $user The User model instance being modified.
+    @variables Collection $roles List of all available Spatie Roles for reassignment.
+--}}
 @extends('adminlte::page')
 
 @section('title', 'User Profile Architect | Admin Registry')

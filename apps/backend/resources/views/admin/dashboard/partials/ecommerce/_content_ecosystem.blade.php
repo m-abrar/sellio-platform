@@ -1,3 +1,12 @@
+{{--
+    Ecommerce Dashboard Partial: Product Performance Ecosystem
+    
+    This component identifies elite product listings based on sales volume 
+    and visualizes categorical distribution. It provides high-level 
+    inventory intelligence specifically for the e-commerce marketplace.
+    
+    @param array $metrics Pre-aggregated data including top-selling product statistics.
+--}}
 <div class="row">
     <!-- Top Sellers -->
     <div class="col-lg-8 mb-4">

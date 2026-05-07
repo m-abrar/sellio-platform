@@ -1,3 +1,12 @@
+{{--
+    Dashboard Partial: Primary KPIs & Urgent Actions
+    
+    This component serves as the executive "Head-Up Display" (HUD).
+    It highlights critical financial net revenue, identifies pending moderation tasks,
+    payout requests, and support tickets requiring immediate administrative attention.
+    
+    @param array $metrics Pre-aggregated data including financial KPIs and urgent action counts.
+--}}
 @php
     $urgent = [
         ['val' => $metrics['urgent_actions']['partner_applications'] ?? 0, 'label' => 'Partners Applications', 'route' => 'admin.users.partners', 'color' => 'danger', 'icon' => 'fa-user-shield'],

@@ -1,3 +1,16 @@
+{{--
+    Administrative Operations: Master Booking & Inquiry Registry
+    
+    This view serves as the cross-module operational command center. 
+    It aggregates transactional requests from various marketplace verticals 
+    (Real Estate, Events, Auto), providing real-time status oversight, 
+    lifecycle filtering, and direct management of the operational queue.
+    
+    @extends adminlte::page
+    @context Marketplace Operations
+    @variables Paginator $bookings Collection of polymorphic booking/inquiry models.
+    @variables string $status The current filtering status context.
+--}}
 @extends('adminlte::page')
 
 @section('title', Str::title($status) . ' ' . __('Bookings & Inquiries'))

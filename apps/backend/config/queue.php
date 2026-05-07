@@ -1,5 +1,10 @@
-<?php
-
+/**
+ * Queue & Background Processing Configuration
+ *
+ * Orchestrates the asynchronous task execution for the Sellio platform.
+ * Supports multiple backends (Redis, Database, SQS, Beanstalkd) to handle
+ * background job processing, batch operations, and failed job management.
+ */
 return [
 
     /*

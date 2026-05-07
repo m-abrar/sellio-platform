@@ -1,5 +1,10 @@
-<?php
-
+/**
+ * Real-time Event Broadcasting Configuration
+ *
+ * Manages the infrastructure for real-time interactivity.
+ * Configures various WebSocket drivers (Reverb, Pusher, Ably) used for
+ * live notifications, real-time chat updates, and marketplace status synchronization.
+ */
 return [
 
     /*

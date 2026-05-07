@@ -1,5 +1,10 @@
-<?php
-
+/**
+ * OpenAPI/Swagger Documentation Configuration
+ *
+ * Configures the automated API documentation engine (dedoc/scramble).
+ * Defines documentation paths, UI themes, and server mapping to provide
+ * a comprehensive and interactive API reference for developers and integrators.
+ */
 use Dedoc\Scramble\Http\Middleware\RestrictedDocsAccess;
 
 return [

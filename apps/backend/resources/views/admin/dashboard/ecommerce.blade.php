@@ -1,3 +1,15 @@
+{{--
+    Ecommerce Intelligence Hub
+    
+    This dashboard specialized overview focuses on the e-commerce vertical,
+    aggregating sales performance, inventory logistics, and customer 
+    geographic distribution. It provides specialized KPIs for order 
+    management and transactional growth.
+    
+    @extends adminlte::page
+    @context Authenticated Administrator
+    @variables array $metrics Pre-aggregated ecommerce data including sales charts and KPIs.
+--}}
 @extends('adminlte::page')
 
 @section('title', 'Ecommerce Intelligence | Sales Ops')

@@ -1,3 +1,12 @@
+{{--
+    Ecommerce Dashboard Partial: Sales KPIs & Logistics Actions
+    
+    This component serves as the operational HUD for e-commerce.
+    It highlights gross sales, pending order fulfillment, low-stock 
+    alerts, and critical customer support tickets.
+    
+    @param array $metrics Pre-aggregated dataset including sales KPIs and order alerts.
+--}}
 @php
     $urgent = [
         ['val' => $metrics['urgent_actions']['pending_orders'] ?? 0, 'label' => 'Pending Orders', 'route' => 'admin.product-orders.index', 'color' => 'danger', 'icon' => 'fa-shopping-cart'],

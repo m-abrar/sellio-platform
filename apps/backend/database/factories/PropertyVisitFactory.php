@@ -5,6 +5,13 @@ namespace Database\Factories;
 use App\Models\PropertyVisit;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ * Data Factory for Property Visits
+ *
+ * This factory generates scheduling data for property viewings, capturing
+ * visitor contact details, appointment timestamps, and multi-state visit
+ * lifecycle tracking for the real estate vertical.
+ */
 class PropertyVisitFactory extends Factory
 {
     /**

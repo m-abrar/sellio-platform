@@ -1,3 +1,16 @@
+{{--
+    Administrative Real Estate: Booking Operational Intelligence
+    
+    This view provides a comprehensive 360-degree visualization of a 
+    specific property reservation. It aggregates stay specifications, 
+    guest logistics, fiscal reconciliation (transaction lines), and 
+    real-time collection metrics (paid vs outstanding balance) into a 
+    unified administrative oversight profile.
+    
+    @extends adminlte::page
+    @context Property Operational Administration
+    @variables PropertyBooking $booking The property booking model instance.
+--}}
 @extends('adminlte::page')
 
 @section('title', __('Booking Details') . ' #' . $booking->id . ' | Real Estate Intelligence')

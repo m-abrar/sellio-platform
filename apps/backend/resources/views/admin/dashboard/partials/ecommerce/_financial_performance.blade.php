@@ -1,3 +1,12 @@
+{{--
+    Ecommerce Dashboard Partial: Revenue & Growth Trajectory
+    
+    This component visualizes the financial momentum of the e-commerce engine,
+    comparing gross sales against fulfillment costs through an interactive 
+    time-series chart.
+    
+    @param array $metrics Pre-aggregated dataset for sales trajectory visualization.
+--}}
 <div class="row">
     <div class="col-lg-12">
         <div class="card border-0 shadow-sm" style="border-radius: 12px;">

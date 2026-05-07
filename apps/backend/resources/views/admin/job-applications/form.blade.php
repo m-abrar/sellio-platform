@@ -1,3 +1,18 @@
+{{--
+    Administrative Jobs: Application Configuration
+    
+    This view serves as the authoritative interface for managing job 
+    applications. It orchestrates candidate identity parameters, 
+    pitch content (cover letter), and pipeline status tracking 
+    (pending, reviewed, shortlisted, rejected, hired) to ensure 
+    transparent and efficient recruitment oversight.
+    
+    @extends adminlte::page
+    @context Job Application Management
+    @variables JobApplication $application The application model instance.
+    @variables Collection $jobs List of active job listings for mapping.
+    @variables Collection $users List of platform members for candidate mapping.
+--}}
 @extends('adminlte::page')
 
 @section('title', ($application->exists ? 'Modify' : 'Create') . ' Job Application')

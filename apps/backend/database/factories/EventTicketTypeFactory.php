@@ -7,6 +7,12 @@ namespace Database\Factories;
 use App\Models\EventTicketType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ * Data Factory for Event Ticket Types
+ *
+ * This factory defines the blueprint for various event admission tiers,
+ * supporting dynamic pricing states (Cheap, VIP) and hierarchical ticket taxonomy.
+ */
 class EventTicketTypeFactory extends Factory
 {
     protected $model = EventTicketType::class;

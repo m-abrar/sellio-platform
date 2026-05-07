@@ -1,3 +1,18 @@
+{{--
+    Administrative Services: Global Leads Registry
+    
+    This view provides a central command center for tracking service 
+    quote requests. It integrates high-fidelity audit trails for 
+    customer inquiries, scope requests, and estimated revenue across 
+    services. It facilitates efficient lead management through 
+    multi-dimensional filtering and responsive data architecture.
+    
+    @extends adminlte::page
+    @context Service Quote Management
+    @variables Paginator $serviceQuotes Paginated collection of ServiceQuote models.
+    @variables Collection $services List of active services for mapping.
+    @variables Collection $categories Service categories for vertical taxonomy.
+--}}
 @extends('adminlte::page')
 
 @section('title', __('Service Quotes | Revenue Intelligence'))

@@ -1,3 +1,15 @@
+{{--
+    Administrative Inventory: Line Item Registry
+    
+    This view provides a comprehensive audit trail of all configured 
+    transactional line items. It enables administrators to manage the 
+    availability and valuation parameters of fees, taxes, and discounts 
+    across the platform.
+    
+    @extends adminlte::page
+    @context Marketplace Economics / Inventory Configuration
+    @variables Collection $lineItems List of defined LineItem model instances.
+--}}
 @extends('adminlte::page')
 
 @section('plugins.Datatables', true)

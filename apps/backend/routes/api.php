@@ -1,5 +1,11 @@
-<?php
-
+/**
+ * API Routing Suite (V1)
+ *
+ * This file orchestrates the public and protected API surface for the Sellio platform.
+ * It provides RESTful endpoints for multi-vertical marketplace exploration (Properties,
+ * Autos, Products, Events, Jobs, Services, Classifieds), cart orchestration,
+ * order processing, and Sanctum-based authentication workflows.
+ */
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\ApiBlogController;
 use App\Http\Controllers\Api\V1\ApiCategoryController;

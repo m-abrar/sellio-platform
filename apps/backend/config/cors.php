@@ -1,5 +1,10 @@
-<?php
-
+/**
+ * Cross-Origin Resource Sharing (CORS) Configuration
+ *
+ * Defines the cross-origin security policies for the Sellio API surface.
+ * Configures allowed origins, methods, and headers to facilitate secure
+ * communication between the backend and external frontend clients or mobile applications.
+ */
 return [
 
     /*

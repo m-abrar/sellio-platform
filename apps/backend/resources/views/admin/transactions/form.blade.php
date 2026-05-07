@@ -1,3 +1,15 @@
+{{--
+    Administrative Finance: Transaction Configuration
+    
+    This view facilitates the manual entry and modification of financial 
+    transaction records. It handles reference number mapping, valuation 
+    parameters, status lifecycle management, and enables the attachment 
+    of visual evidence (screenshots) for payment verification.
+    
+    @extends adminlte::page
+    @context Financial Operations
+    @variables Transaction $transaction The transaction model instance.
+--}}
 @extends('adminlte::page')
 
 @section('title', $transaction->exists ? 'Edit Transaction' : 'Add Transaction')

@@ -6,6 +6,13 @@ use App\Models\Order;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ * Data Factory for Core Orders
+ *
+ * This factory generates complex order data, orchestrating financial calculations
+ * (subtotal, tax, shipping), status states, and detailed logistical snapshots
+ * for the e-commerce fulfillment workflow.
+ */
 class OrderFactory extends Factory
 {
     protected $model = Order::class;

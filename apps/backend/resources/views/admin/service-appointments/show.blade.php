@@ -1,3 +1,16 @@
+{{--
+    Administrative Services: Appointment Operational Intelligence
+    
+    This view provides a comprehensive 360-degree visualization of a 
+    specific service appointment. It aggregates fulfillment 
+    intelligence (scheduled itineraries, estimated revenue), client 
+    manifest directives, and stakeholder profiles, ensuring a complete 
+    audit trail for service delivery and technician dispatch.
+    
+    @extends adminlte::page
+    @context Service Appointment Management
+    @variables ServiceAppointment $appointment The appointment model instance.
+--}}
 @extends('adminlte::page')
 
 @section('title', __('Service Appointment') . ' #' . $appointment->id . ' | Service Intelligence')

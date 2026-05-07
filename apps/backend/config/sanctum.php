@@ -1,5 +1,10 @@
-<?php
-
+/**
+ * Sanctum API Authentication Configuration
+ *
+ * Configures the lightweight authentication system for SPAs and mobile applications.
+ * Manages stateful domains, token expiration policies, and middleware orchestrations
+ * to ensure secure, token-based access to the Sellio API surface.
+ */
 use Laravel\Sanctum\Sanctum;
 
 return [

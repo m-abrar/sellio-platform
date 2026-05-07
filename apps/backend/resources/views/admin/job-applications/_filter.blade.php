@@ -1,4 +1,16 @@
-{{-- Filter Protocol --}}
+{{--
+    Administrative Jobs: Application Filter Protocol
+    
+    This component provides a streamlined filtering interface for the 
+    recruitment pipeline. It enables multi-dimensional auditing across 
+    job positions, vertical sectors, and pipeline statuses (submitted, 
+    reviewed, accepted, rejected), facilitating efficient candidate 
+    triage and registry oversight.
+    
+    @context Job Application Management
+    @variables Collection $jobs List of active job listings for selection mapping.
+    @variables Collection $categories Job sectors for vertical filtering.
+--}}
 <div class="card registry-card-premium registry-filter-card mb-4">
     <div class="card-body">
         <form method="GET" action="{{ url()->current() }}">

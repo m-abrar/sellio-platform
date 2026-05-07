@@ -1,3 +1,16 @@
+{{--
+    Administrative Jobs: Application Operational Intelligence
+    
+    This view provides a comprehensive 360-degree visualization of a 
+    specific candidate submission. It aggregates the professional 
+    dossier (cover letter), target position intelligence, and 
+    candidate identity profiles, ensuring a complete audit trail for 
+    talent evaluation and hiring workflow management.
+    
+    @extends adminlte::page
+    @context Job Application Management
+    @variables JobApplication $application The application model instance.
+--}}
 @extends('adminlte::page')
 
 @section('title', __('Application') . ' #' . $application->id)

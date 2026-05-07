@@ -1,3 +1,16 @@
+{{--
+    Administrative Events: Global Attendance Registry
+    
+    This view provides a central command center for tracking event 
+    registrations. It integrates high-fidelity audit trails for attendee 
+    engagement, revenue settlement, and lifecycle status tracking (pending, 
+    confirmed, cancelled). It facilitates efficient manifest management 
+    through multi-dimensional filtering and responsive data architecture.
+    
+    @extends adminlte::page
+    @context Event Booking Management
+    @variables Paginator $bookings Paginated collection of EventBooking models.
+--}}
 @extends('adminlte::page')
 
 @section('title', __('Event Ticketing | Registry Intelligence'))

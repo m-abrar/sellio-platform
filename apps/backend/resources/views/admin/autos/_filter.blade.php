@@ -1,4 +1,15 @@
-{{-- Auto Filter Protocol --}}
+{{--
+    Administrative Automotive: Inventory Filter Protocol
+    
+    This component provides a sophisticated filtering interface for the 
+    vehicle registry. It enables multi-dimensional auditing across specific 
+    titles, brand taxonomic mappings, and vertical categories, ensuring 
+    efficient marketplace asset oversight.
+    
+    @context Automotive Inventory Management
+    @variables Collection $brands List of automotive brands for filtering.
+    @variables Collection $categories List of vehicle categories for filtering.
+--}}
 <div class="card registry-card-premium registry-filter-card mb-4">
     <div class="card-body">
         <form action="{{ route('admin.autos.index') }}" method="GET">

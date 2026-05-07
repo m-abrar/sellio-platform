@@ -1,3 +1,18 @@
+{{--
+    Administrative Jobs: Vacancy Asset Configuration
+    
+    This view serves as the authoritative interface for job listing 
+    management. It orchestrates complex data entry for role 
+    responsibilities, compensation packages, workspace types (remote/onsite), 
+    and application deadlines. It also integrates operational intelligence 
+    through recruitment pipeline metrics and visual identity management.
+    
+    @extends adminlte::page
+    @context Job Inventory Management
+    @variables JobListing $job The job model instance being edited/created.
+    @variables Collection $categories Job categories for vertical taxonomy.
+    @variables Collection $locations Regional hubs for geographic clustering.
+--}}
 @extends('adminlte::page')
 
 @section('title', ($job->exists ? 'Edit' : 'Create') . ' Job')
@@ -286,57 +301,6 @@
     </form>
 </div>
 @endsection
-
-@push('js')
-<script>
-    $(document).ready(function () { 
-        $('.select2').select2({ theme: 'bootstrap4', width: '100%' }); 
-
-        const titleInput = $('#title');
-        const slugInput = $('#slug');
-
-        titleInput.on('input', function () {
-            if(!slugInput.data('edited')){
-                let slug = $(this).val().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-                slugInput.val(slug);
-            }
-        });
-
-        slugInput.on('change', function() { $(this).data('edited', true); });
-    });
-</script>
-@endpush
-
-@if($job->exists)
-    <form id="delete-form" action="{{ route('admin.jobs.destroy', $job->id) }}" method="POST" class="d-none">
-        @csrf @method('DELETE')
-    </form>
-    
-    <script>
-        function triggerDelete() {
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "Permanently delete this job listing?",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#ef4444',
-                cancelButtonColor: '#64748b',
-                confirmButtonText: 'Yes, delete it!',
-                customClass: {
-                    popup: 'rounded-xl',
-                    confirmButton: 'rounded-pill px-4',
-                    cancelButton: 'rounded-pill px-4'
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById('delete-form').submit();
-                }
-            })
-        }
-    </script>
-@endif
-
-@include('admin._partials._toggle-card-css')
 
 @push('js')
 <script>

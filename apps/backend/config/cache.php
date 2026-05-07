@@ -1,5 +1,10 @@
-<?php
-
+/**
+ * Application Cache Configuration
+ *
+ * Orchestrates the caching strategy for the Sellio platform.
+ * Supports multiple backends (Redis, Database, File) to optimize performance,
+ * handle distributed locks, and ensure horizontal scalability across production clusters.
+ */
 use Illuminate\Support\Str;
 
 return [

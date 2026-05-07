@@ -1,3 +1,13 @@
+{{--
+    Administrative Security: Define New Permission
+    
+    This view facilitates the creation of unique security permissions using the 
+    Spatie Permission architecture. It enforces atomic access control by 
+    defining specific action-based protocols (e.g., 'listings-approve').
+    
+    @extends adminlte::page
+    @context Security / Permissions Management
+--}}
 @extends('adminlte::page')
 
 @section('title', 'Create Permission')
