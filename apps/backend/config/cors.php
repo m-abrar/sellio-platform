@@ -1,3 +1,4 @@
+<?php
 /**
  * Cross-Origin Resource Sharing (CORS) Configuration
  *
@@ -39,3 +40,4 @@ return [
     'supports_credentials' => true,
 
 ];
+

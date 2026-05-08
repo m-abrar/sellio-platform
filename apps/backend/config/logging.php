@@ -1,3 +1,4 @@
+<?php
 /**
  * Application Logging Configuration
  *
@@ -130,3 +131,4 @@ return [
     ],
 
 ];
+

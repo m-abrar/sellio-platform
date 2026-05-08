@@ -1,3 +1,4 @@
+<?php
 /**
  * Mail Delivery Configuration
  *
@@ -121,3 +122,4 @@ return [
     ],
 
 ];
+

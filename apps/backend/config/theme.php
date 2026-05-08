@@ -1,3 +1,4 @@
+<?php
 /**
  * Frontend Appearance & Theme Mapping Configuration
  *

@@ -1,3 +1,4 @@
+<?php
 /**
  * Activity Log Configuration
  *
@@ -55,3 +56,4 @@ return [
      */
     'database_connection' => env('ACTIVITY_LOGGER_DB_CONNECTION'),
 ];
+

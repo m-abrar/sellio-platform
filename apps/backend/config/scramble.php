@@ -1,3 +1,4 @@
+<?php
 /**
  * OpenAPI/Swagger Documentation Configuration
  *
@@ -139,3 +140,4 @@ return [
 
     'extensions' => [],
 ];
+

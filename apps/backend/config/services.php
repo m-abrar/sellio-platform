@@ -1,3 +1,4 @@
+<?php
 /**
  * Third-Party Service Credentials
  *
@@ -54,3 +55,4 @@ return [
     ],
 
 ];
+

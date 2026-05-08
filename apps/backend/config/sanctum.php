@@ -1,3 +1,4 @@
+<?php
 /**
  * Sanctum API Authentication Configuration
  *
@@ -87,3 +88,4 @@ return [
     ],
 
 ];
+

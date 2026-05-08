@@ -1,3 +1,4 @@
+<?php
 /**
  * AdminLTE Core UI Configuration
  *

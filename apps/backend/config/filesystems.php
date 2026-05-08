@@ -1,3 +1,4 @@
+<?php
 /**
  * Filesystem & Media Storage Configuration
  *
@@ -83,3 +84,4 @@ return [
     ],
 
 ];
+

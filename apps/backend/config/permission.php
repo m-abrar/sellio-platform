@@ -1,3 +1,4 @@
+<?php
 /**
  * RBAC & Permission Configuration
  *
@@ -205,3 +206,4 @@ return [
         'store' => 'default',
     ],
 ];
+

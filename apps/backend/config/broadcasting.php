@@ -1,3 +1,4 @@
+<?php
 /**
  * Real-time Event Broadcasting Configuration
  *
@@ -85,3 +86,4 @@ return [
     ],
 
 ];
+

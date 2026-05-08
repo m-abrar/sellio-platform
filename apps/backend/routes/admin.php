@@ -1,3 +1,4 @@
+<?php
 /**
  * Routes for the Administrative Backend
  *

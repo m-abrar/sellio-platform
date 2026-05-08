@@ -1,3 +1,4 @@
+<?php
 /**
  * Queue & Background Processing Configuration
  *
@@ -132,3 +133,4 @@ return [
     ],
 
 ];
+

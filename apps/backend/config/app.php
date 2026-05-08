@@ -1,3 +1,4 @@
+<?php
 /**
  * Global Application Configuration
  *
@@ -129,3 +130,4 @@ return [
     ],
 
 ];
+

@@ -1,3 +1,4 @@
+<?php
 /**
  * Database Infrastructure Configuration
  *
@@ -186,3 +187,4 @@ return [
     ],
 
 ];
+

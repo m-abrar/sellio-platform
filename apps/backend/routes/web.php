@@ -1,3 +1,4 @@
+<?php
 /**
  * Standard Web Routes
  *
@@ -242,6 +243,7 @@ Route::prefix('auth')->group(function () {
     Route::get('{provider}/callback', [SocialLoginController::class, 'callback'])
         ->name('login.social.callback');
 });
+
 
 
 
