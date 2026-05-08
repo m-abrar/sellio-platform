@@ -146,71 +146,38 @@ Manages consumer-to-dealer lead generation (test drives and general inquiries) f
 
 # Controller Audit: app/Http/Controllers/BlogController.php
 
-## Controller Purpose
-Public discovery hub for blog content, providing search, filtering, and detailed article views.
+## Role of File
+Handles public blog discovery, search, and detailed article display.
 
 ## Risk Level
-**LOW**
+🟠 **MEDIUM**
 
-## Problems Found
+## Findings
 
 ### Security
-- **Safe**: Correctly utilizes the `active()` model scope to prevent access to draft content.
-
-### Validation
-- **Elite**: Uses `SearchBlogRequest`.
-
-### Authorization
-- **Safe**: Public content; correctly scoped.
+- **Safe**: Uses `active()` scope and slug-based retrieval.
 
 ### Architecture
-- **Thin Controller**: Excellent service layer delegation.
+- **LOGIC LEAK**: Performs heavy Eager Loading (`with(['user', 'category', 'tags', 'reviews.user', 'media'])`) directly in the controller (L73). This logic belongs in `BlogService` to ensure consistency across Web and API layers.
+- **MIXED PATTERN**: `index` proxies to `search`, but `category` calls service directly. Inconsistent internal flow.
 
 ### Performance
-- **Eager Loading**: Excellent use of `with()` (L73) to prevent N+1 issues when rendering the blog post with tags, categories, and reviews.
-- **Pagination**: Defaulted to a low number (3) for the list; high performance but requires UI verification.
-
-### Scalability
-- **High**: Service-based and utilizes eager loading.
-
-### Maintainability
-- **High**: Clean code, standard patterns.
-
-### API Quality
-- **N/A**: Web/View controller.
+- **N+1 RISKS**: `reviews.user` is eager loaded, but if an article has hundreds of reviews, this will bloat the response. Lacks review pagination/scoping.
 
 ### Code Quality
-- **Elite**: Clean imports and namespaces.
+- Clean naming and proper type-hinting.
 
-### CodeCanyon Compliance
-- **Pass**.
+## Critical Issues
+- Business logic (Query construction) not fully decoupled from controller.
 
-## Dangerous Methods
-- None.
+## Suggestions
+- Move the `show` query logic to `BlogService`.
 
-## Large/Complex Methods
-- None.
+## Production Safety
+🟠 **RISKY** (Suboptimal Architecture)
 
-## Business Logic Extraction Opportunities
-- Already fully extracted.
-
-## Service Layer Opportunities
-- Fully utilized.
-
-## Transaction Safety
-**SAFE** (Read-only).
-
-## Authorization Safety
-**SAFE**
-
-## Validation Safety
-**SAFE**
-
-## Laravel Best Practices
-**PASS**
-
-## Production Ready
-**YES**
+## CodeCanyon Risk
+🟠 **MEDIUM**
 
 ---
 
@@ -431,20 +398,18 @@ Manages the public discovery, faceted search, and detail view for classified mar
 
 # Controller Audit: app/Http/Controllers/Controller.php
 
-## Controller Purpose
-Base abstract controller providing foundation for all application controllers.
+## Role of File
+Base abstract controller providing centralized foundation for API responses and validation.
 
 ## Risk Level
-**LOW**
+✅ **LOW**
 
-## Problems Found
-- **Elite**: Correctly centralizes `ApiResponseTrait`, `AuthorizesRequests`, and `ValidatesRequests`.
-- **Architecture**: Clean, minimal foundation following standard Laravel architecture.
+## Findings
+- Correct use of `ApiResponseTrait`, `AuthorizesRequests`, and `ValidatesRequests`.
+- Follows standard Laravel base controller architecture.
 
-## Dangerous Methods
-- None.
-
----
+## Production Safety
+✅ **SAFE**
 
 # Controller Audit: app/Http/Controllers/ConversationController.php
 
