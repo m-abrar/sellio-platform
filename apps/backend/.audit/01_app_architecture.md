@@ -6,6 +6,7 @@
 
 | Layer | Score | Status | Primary Risk |
 | :--- | :--- | :--- | :--- |
+| **Shared Logic (Traits)** | **25/100** | 🔴 Critical | Server Crasher (Query Storms) / Auth Bypasses |
 | **Business Logic (Services)** | **35/100** | 🔴 Critical | Webhook Spoofing / Double-Spend Race Conditions |
 | **Data Layer (Models)** | **30/100** | 🔴 Critical | Financial Integrity / Moderation Bypasses |
 | **Validation (Requests)** | **30/100** | 🔴 Critical | Systematic Multi-Tenant IDOR Vulnerabilities |
@@ -15,10 +16,12 @@
 ---
 
 ## 🛑 Critical Blockers (P0)
-1. **Financial Fraud**: `PaypalGatewayService` lacks webhook signature verification.
-2. **Identity Breach**: `UserResource` exposes user emails/phones/IDs to public API consumers.
-3. **Data Theft**: Systematic IDOR in `Partner` requests allows unauthorized resource modification.
-4. **Race Conditions**: `WalletService` and `CheckoutService` lack row-level database locks.
+1. **Server Crasher**: `HasMarketplaceMetrics` trait triggers hundreds of queries per partner dashboard load.
+2. **Auth Bypass**: `ManagesApproval` trait allows unauthorized moderation of listings.
+3. **Cache Poisoning**: `MenuService` stores global admin menus without role-based isolation.
+4. **Data Theft**: Systematic IDOR in `Partner` requests allows unauthorized resource modification.
+5. **Race Conditions**: `WalletService` and `CheckoutService` lack row-level database locks.
+6. **Financial Fraud**: `PaypalGatewayService` lacks webhook signature verification.
 
 ---
 
@@ -26,7 +29,7 @@
 
 | File Path | Score | Audit Status |
 | :--- | :--- | :--- |
-| `app\Console\Commands\CheckRenewals.php` | **98** | ✅ High Quality - Re-Audit Pending |
+| `app\Console\Commands\CheckRenewals.php` | **30** | 🔴 Critical - Memory Leak / Failure Window |
 
 ## Controllers
 
@@ -34,7 +37,7 @@
 | :--- | :--- | :--- |
 | `app\Http\Controllers\AutoController.php` | **98** | ✅ Elite - Production Ready |
 | `app\Http\Controllers\AutoInquiryController.php` | **95** | ✅ Elite - Service Based |
-| `app\Http\Controllers\BlogController.php` | **98** | ✅ High Quality - Re-Audit Pending |
+| `app\Http\Controllers\BlogController.php` | **70** | 🟠 Warning - Model/Service Logic Leak |
 | `app\Http\Controllers\BrandController.php` | **80** | ✅ Good - Basic Logic |
 | `app\Http\Controllers\CartController.php` | **90** | ✅ Elite - Service Based |
 | `app\Http\Controllers\CategoryController.php` | **80** | ✅ Good - Basic Logic |
@@ -483,11 +486,11 @@
 | `app\Services\EventBookingService.php` | **95** | ✅ Good - Standard |
 | `app\Services\EventService.php` | **35** | 🔴 Critical - In-Memory Bottleneck |
 | `app\Services\FeatureService.php` | **95** | ✅ Good - Standard |
-| `app\Services\GatewayManager.php` | **100** | ✅ Elite - Strategy Pattern |
+| `app\Services\GatewayManager.php` | **10** | 🔴 Critical - Dynamic Class Injection Risk |
 | `app\Services\HomeDataService.php` | **85** | ✅ Good - Missing Cache |
 | `app\Services\JobManagementService.php` | **95** | ✅ Good - Standard |
 | `app\Services\LocationService.php` | **95** | ✅ Good - Standard |
-| `app\Services\MenuService.php` | **100** | ✅ Elite - Cache Strategy |
+| `app\Services\MenuService.php` | **15** | 🔴 Critical - Global Cache Poisoning |
 | `app\Services\PartnerBonusService.php` | **95** | ✅ Good - Standard |
 | `app\Services\PaypalGatewayService.php` | **10** | 🔴 Critical - Fraud Risk (No Webhook Verification) |
 | `app\Services\ProductService.php` | **95** | ✅ Elite - Efficient Pricing |
@@ -500,7 +503,7 @@
 | `app\Services\TypeService.php` | **95** | ✅ Good - Standard |
 | `app\Services\WalletService.php` | **25** | 🔴 Critical - Double-Spend Risk |
 | `app\Services\Admin\AmenityManagementService.php` | **95** | ✅ Good - Standard |
-| `app\Services\Admin\BookingManagementService.php` | **100** | ✅ Elite - Unified Hydration |
+| `app\Services\Admin\BookingManagementService.php` | **15** | 🔴 Critical - Union Performance Hammer |
 | `app\Services\Admin\BrandManagementService.php` | **95** | ✅ Good - Standard |
 | `app\Services\Admin\CategoryManagementService.php` | **95** | ✅ Good - Standard |
 | `app\Services\Admin\DashboardService.php` | **20** | 🔴 Critical - God Service Bottleneck |
@@ -526,12 +529,14 @@
 
 | File Path | Score | Audit Status |
 | :--- | :--- | :--- |
-| `app\Traits\ApiResponseTrait.php` | **98** | ✅ High Quality - Re-Audit Pending |
-| `app\Traits\HasAnalytics.php` | **98** | ✅ High Quality - Re-Audit Pending |
-| `app\Traits\HasBookingAttributes.php` | **98** | ✅ High Quality - Re-Audit Pending |
-| `app\Traits\HasImageAccess.php` | **98** | ✅ High Quality - Re-Audit Pending |
-| `app\Traits\ManagesApproval.php` | **98** | ✅ High Quality - Re-Audit Pending |
-| `app\Traits\Subscribable.php` | **98** | ✅ High Quality - Re-Audit Pending |
+| `app\Traits\ApiResponseTrait.php` | **75** | 🟠 Warning - Response Lifecycle Debt |
+| `app\Traits\HasAnalytics.php` | **20** | 🔴 Critical - Forced N+1 Storm |
+| `app\Traits\HasBookingAttributes.php` | **60** | 🟠 Warning - Model/View Pollution |
+| `app\Traits\HasImageAccess.php` | **15** | 🔴 Critical - Sync I/O / Timeout Risk |
+| `app\Traits\ManagesApproval.php` | **10** | 🔴 Critical - Authorization Bypass |
+| `app\Traits\Subscribable.php` | **40** | 🟠 Warning - Always Hits DB |
+| `app\Traits\Models\HasMarketplaceMetrics.php` | **5** | 🔴 Critical - Server Crasher |
+| `app\Traits\Models\HasStatusModeration.php` | **85** | ✅ Good - Standard |
 
 ## View Components
 
