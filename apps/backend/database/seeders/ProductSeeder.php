@@ -122,7 +122,7 @@ class ProductSeeder extends Seeder
                 // Hardened Moderation & Status
                 'status'                => 'approved',
                 'admin_note'            => 'Verified retail inventory.',
-                'is_verified_seller'    => true,
+                'is_verified'           => true,
 
                 // Status/Flags
                 'is_published' => true,

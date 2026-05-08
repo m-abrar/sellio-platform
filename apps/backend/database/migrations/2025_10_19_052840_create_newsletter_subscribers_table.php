@@ -27,6 +27,8 @@ return new class extends Migration
             
             // Track the source (e.g., 'footer', 'popup', 'checkout')
             $table->string('source')->nullable(); 
+            $table->string('status', 30)->default('active')->index();
+            $table->text('admin_note')->nullable();
 
             $table->timestamps();
         });
@@ -40,3 +42,8 @@ return new class extends Migration
         Schema::dropIfExists('newsletter_subscribers');
     }
 };
+
+
+
+
+

@@ -119,7 +119,7 @@ class ClassifiedAdSeeder extends Seeder
                 // Hardened Moderation & Status
                 'status'                => 'approved',
                 'admin_note'            => 'Verified community listing.',
-                'is_verified_seller'    => true,
+                'is_verified'           => true,
 
                 // Status/Type Flags
                 'is_published' => true,
@@ -206,9 +206,9 @@ class ClassifiedAdSeeder extends Seeder
                 $inquiriesToInsert[] = [
                     'classified_id' => $classified->id,
                     'user_id'       => $isGuest ? null : $inquirerId,
-                    'guest_name'    => $isGuest ? $faker->name : null,
-                    'guest_email'   => $isGuest ? $faker->email : null,
-                    'guest_phone'   => $isGuest ? $faker->phoneNumber : null,
+                    'name'          => $isGuest ? $faker->name : null,
+                    'email'         => $isGuest ? $faker->email : null,
+                    'phone'         => $isGuest ? $faker->phoneNumber : null,
                     'status'        => $faker->randomElement($inquiryStatuses),
                     'message'       => $faker->paragraphs(1, true),
                     'admin_note'    => $faker->boolean(30) ? 'High interest buyer.' : null,

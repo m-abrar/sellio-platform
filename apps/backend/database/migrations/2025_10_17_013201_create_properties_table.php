@@ -64,10 +64,18 @@ return new class extends Migration
             $table->boolean('is_rental')->default(false)->index()->comment('Is For Rent');
             $table->boolean('is_sale')->default(false)->index()->comment('Is For Sale');
 
+            // --- Production Hardening & Audit Columns ---
+            $table->string('status')->default('active')->index();
+            $table->text('admin_note')->nullable();
+            $table->boolean('is_premium')->default(false)->index();
+            $table->boolean('is_verified')->default(false)->index();
+            $table->string('color', 20)->nullable();
+            
             $table->string('meta_title')->nullable();
             $table->text('meta_description')->nullable();
             $table->timestamp('approved_at')->nullable()->index();
             $table->timestamp('expires_at')->nullable()->index();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -77,3 +85,11 @@ return new class extends Migration
         Schema::dropIfExists('properties');
     }
 };
+
+
+
+
+
+
+
+

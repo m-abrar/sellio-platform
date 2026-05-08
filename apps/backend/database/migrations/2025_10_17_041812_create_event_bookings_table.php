@@ -33,6 +33,10 @@ return new class extends Migration
 
             $table->index(['user_id', 'event_occurrence_id'], 'user_occurrence_index');
             $table->timestamp('viewed_at')->nullable();
+            $table->text('admin_note')->nullable();
+            $table->boolean('is_premium')->default(false)->index();
+            $table->string('color', 20)->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -42,3 +46,9 @@ return new class extends Migration
         Schema::dropIfExists('event_bookings');
     }
 };
+
+
+
+
+
+

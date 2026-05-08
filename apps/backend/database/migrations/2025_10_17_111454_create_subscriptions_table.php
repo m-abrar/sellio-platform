@@ -27,8 +27,8 @@ return new class extends Migration
             $table->timestamp('starts_at');
             $table->timestamp('ends_at')->nullable(); // Null for lifetime plans
             
-            // The user should generally only have one active subscription of a certain 'title'
             $table->unique(['user_id', 'title']); 
+            $table->text('admin_note')->nullable();
 
             $table->timestamps();
         });
@@ -39,3 +39,8 @@ return new class extends Migration
         Schema::dropIfExists('subscriptions');
     }
 };
+
+
+
+
+

@@ -20,11 +20,13 @@ return new class extends Migration
             $table->id();
             
             $table->string('title', 60)->unique(); 
+            $table->string('slug', 60)->unique()->index(); 
             $table->text('description')->nullable();
             
             $table->string('label_text', 50)->nullable(); 
             
             $table->decimal('price', 8, 2);
+            $table->string('color', 20)->nullable();
             $table->enum('billing_period', ['monthly', 'annually']);
             
             // Core Features (Limits)
@@ -42,6 +44,9 @@ return new class extends Migration
             $table->boolean('priority_support')->default(false);
             
             // Status/Timestamps
+            $table->string('status', 30)->default('active')->index();
+            $table->text('admin_note')->nullable();
+            $table->boolean('is_premium')->default(false)->index();
             $table->boolean('is_active')->default(true)->index();
             $table->boolean('is_featured')->default(false); // Merged
             $table->boolean('is_popular')->default(false);  // Merged
@@ -58,3 +63,8 @@ return new class extends Migration
         Schema::dropIfExists('plans');
     }
 };
+
+
+
+
+

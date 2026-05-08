@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 use App\Traits\HasImageAccess;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -324,3 +326,4 @@ class Auto extends Model implements HasMedia
         )->shouldCache();
     }
 }
+

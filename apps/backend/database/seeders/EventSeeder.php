@@ -73,16 +73,6 @@ class EventSeeder extends Seeder
             'Festival', 'Gala', 'Premiere', 'Challenge', 'Adventure'
         ];
 
-        // Loop to create 15 distinct Event records.
-        foreach (range(1, 15) as $index) {
-            // Randomly select a prefix for the event title
-            $randomPrefix = $faker->randomElement($eventPrefixes);
-            $title = $randomPrefix . ' ' . $faker->words(3, true) .' '. $index;
-
-            $startTime = $faker->dateTimeBetween('now', '+6 months');
-            // 80% chance the event is paid.
-            $isPaid = $faker->boolean(80);
-
         // 1. CREATE EVENT (Parent Record)
         $eventTitles = [
             'Global Tech Summit 2024', 'Creative Arts & Design Expo', 'Annual Wellness & Yoga Retreat',
@@ -246,7 +236,7 @@ class EventSeeder extends Seeder
             $bookingsData = EventBooking::factory()
                 ->count($actualBookingsCount)
                 ->make()
-                ->map(function ($booking, $index) use ($selectedCombinations) {
+                ->map(function ($booking, $index) use ($selectedCombinations, $faker) {
                     $combo = $selectedCombinations[$index];
                     $quantity = $booking->quantity;
 

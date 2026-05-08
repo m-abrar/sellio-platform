@@ -24,7 +24,13 @@ return new class extends Migration
             $table->dateTime('end_date');
             $table->string('type')->default('promotion'); // promotion, flash_sale, operation
             $table->string('color')->default('#46a5ac');
-            $table->boolean('is_active')->default(true);
+            
+            // --- Production Hardening & Audit Columns ---
+            $table->string('status')->default('active')->index();
+            $table->text('admin_note')->nullable();
+            $table->boolean('is_premium')->default(false)->index();
+            
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -37,3 +43,9 @@ return new class extends Migration
         Schema::dropIfExists('campaigns');
     }
 };
+
+
+
+
+
+

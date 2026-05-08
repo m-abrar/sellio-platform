@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 use App\Traits\HasImageAccess;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -268,3 +270,4 @@ class Classified extends Model implements HasMedia
         return $first ? $first->getUrl($conversion) : $this->getImageUrl(conversion: $conversion);
     }
 }
+

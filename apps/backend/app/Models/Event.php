@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 use App\Traits\HasImageAccess;
 use App\Traits\Models\HasStatusModeration;
 use Illuminate\Database\Eloquent\Builder;
@@ -292,3 +294,4 @@ class Event extends Model implements HasMedia
         );
     }
 }
+

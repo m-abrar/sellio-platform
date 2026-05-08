@@ -104,7 +104,7 @@ class ServiceSeeder extends Seeder
                 // Hardened Moderation & Status
                 'status'                => 'approved',
                 'admin_note'            => 'Verified professional agency partner.',
-                'is_verified_provider'  => true,
+                'is_verified'           => true,
 
                 // Service Specifics
                 'expertise_level' => $faker->randomElement($expertiseLevels),
@@ -182,9 +182,9 @@ class ServiceSeeder extends Seeder
 
                 $service->quotes()->create([
                     'user_id'       => $isGuest ? null : $customerId,
-                    'guest_name'    => $isGuest ? $faker->name : null,
-                    'guest_email'   => $isGuest ? $faker->email : null,
-                    'guest_phone'   => $isGuest ? $faker->phoneNumber : null,
+                    'name'          => $isGuest ? $faker->name : null,
+                    'email'         => $isGuest ? $faker->email : null,
+                    'phone'         => $isGuest ? $faker->phoneNumber : null,
                     'details'       => $faker->text(200),
                     'requested_date' => $faker->dateTimeBetween('now', '+2 months'),
                     'status'        => $status,

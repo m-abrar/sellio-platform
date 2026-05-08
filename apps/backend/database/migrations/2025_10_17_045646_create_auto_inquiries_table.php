@@ -38,6 +38,10 @@ return new class extends Migration
             // Note: Removed the unique constraint to allow multiple inquiries by the same user, 
             // but kept the unique index on user_id/auto_id implicitly via the primary key/other fields.
             $table->timestamp('viewed_at')->nullable();
+            $table->text('admin_note')->nullable();
+            $table->boolean('is_premium')->default(false)->index();
+            $table->string('color', 20)->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -47,3 +51,9 @@ return new class extends Migration
         Schema::dropIfExists('auto_inquiries');
     }
 };
+
+
+
+
+
+

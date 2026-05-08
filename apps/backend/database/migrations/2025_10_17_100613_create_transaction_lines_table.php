@@ -34,6 +34,13 @@ return new class extends Migration
             
             $table->date('transaction_date');
             
+            // --- Production Hardening & Audit Columns ---
+            $table->string('status')->default('active')->index();
+            $table->text('admin_note')->nullable();
+            $table->boolean('is_premium')->default(false)->index();
+            $table->string('color', 20)->nullable();
+            
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -43,3 +50,8 @@ return new class extends Migration
         Schema::dropIfExists('transaction_lines');
     }
 };
+
+
+
+
+

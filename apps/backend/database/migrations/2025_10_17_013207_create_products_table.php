@@ -60,6 +60,12 @@ return new class extends Migration
             $table->text('meta_description')->nullable();
             
             $table->timestamp('approved_at')->nullable();
+            $table->string('status')->default('active')->index();
+            $table->text('admin_note')->nullable();
+            $table->boolean('is_premium')->default(false)->index();
+            $table->boolean('is_verified')->default(false)->index();
+            $table->string('color', 20)->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -69,3 +75,12 @@ return new class extends Migration
         Schema::dropIfExists('products');
     }
 };
+
+
+
+
+
+
+
+
+

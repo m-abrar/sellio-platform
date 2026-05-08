@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             
             // Statuses - Modernized to string for flexibility
-            $table->string('status')->default('pending');
+            $table->string('status')->default('pending')->index();
             $table->enum('payment_status', ['unpaid', 'paid', 'failed', 'refunded'])->default('unpaid');
             $table->string('payment_method')->nullable(); // e.g., 'stripe', 'paypal'
             
@@ -44,6 +44,10 @@ return new class extends Migration
             $table->timestamp('delivered_at')->nullable();
 
             $table->text('notes')->nullable()->comment('Customer notes');
+            $table->text('admin_note')->nullable();
+            $table->boolean('is_premium')->default(false)->index();
+            $table->string('color', 20)->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -53,3 +57,9 @@ return new class extends Migration
         Schema::dropIfExists('orders');
     }
 };
+
+
+
+
+
+

@@ -37,6 +37,7 @@ return new class extends Migration
             // Link the payment to what was purchased (Polymorphic Relation)
             // This allows a payment to be for a 'Subscription', 'Booking', 'Ticket', etc.
             $table->nullableMorphs('payable'); 
+            $table->text('admin_note')->nullable();
 
             $table->timestamps();
         });
@@ -50,3 +51,8 @@ return new class extends Migration
         Schema::dropIfExists('payments');
     }
 };
+
+
+
+
+

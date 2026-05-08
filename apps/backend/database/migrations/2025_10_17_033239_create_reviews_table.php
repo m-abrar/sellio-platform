@@ -25,11 +25,14 @@ return new class extends Migration
             
             $table->unsignedTinyInteger('rating'); // 1 to 5
             $table->text('comment');
-            $table->string('status')->nullable();
-            
             // Optional: prevent a user from reviewing the same item twice
             $table->unique(['user_id', 'reviewable_id', 'reviewable_type'], 'user_reviewable_unique');
             $table->timestamp('viewed_at')->nullable();
+            $table->string('status')->default('active')->index();
+            $table->text('admin_note')->nullable();
+            $table->boolean('is_premium')->default(false)->index();
+            $table->string('color', 20)->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -39,3 +42,9 @@ return new class extends Migration
         Schema::dropIfExists('reviews');
     }
 };
+
+
+
+
+
+

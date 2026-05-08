@@ -31,9 +31,15 @@ return new class extends Migration
             $table->json('responsive_images');
             $table->unsignedInteger('order_column')->nullable()->index();
             $table->string('status', 30)->default('approved')->index()->comment('pending, approved, rejected');
-            $table->text('admin_notes')->nullable();
+            $table->text('admin_note')->nullable();
 
             $table->nullableTimestamps();
         });
     }
 };
+
+
+
+
+
+

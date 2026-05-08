@@ -95,7 +95,7 @@ class SubscriptionSeeder extends Seeder
                 if (mt_rand(1, 10) <= 3) {
                     // This simulates a subscription that has been canceled and is running until the end of the current period.
                     $endsAt = now()->addDays(mt_rand(7, 14)); 
-                    $status = 'canceled';
+                    $status = 'cancelled';
                 }
                 
                 // If endsAt is null (auto-renew), refine the start date to simulate the exact beginning of the current cycle.

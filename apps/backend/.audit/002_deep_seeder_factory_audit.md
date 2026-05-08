@@ -211,8 +211,9 @@ This report evaluates the application's seeding layer against production SaaS an
 - **Final Score**: **25/100**
 - **Risk Level**: 🔴 CRITICAL (Reliability)
 - **Findings**:
-    - **Logic**: **Corrupted Seeder Logic**. Contains duplicate/conflicting `foreach` loops (L77 vs L95).
-    - **Performance**: O(n^m) iterative complexity in booking combination generation.
+    - **Logic Corruption**: **Inventory Drift**. The seeder uses `EventBooking::insert()` for mass booking generation but fails to update the `sold_count` or decrement the `available_quantity` in the `event_occurrence_tickets` table. This leads to broken demo data where event availability doesn't match the actual bookings.
+    - **Performance**: **O(n*m*p) Bottleneck**. The triple nested loop (Users * Occurrences * Tickets) for booking generation creates an exponential query load as the dataset grows.
+    - **Redundancy**: Contains duplicate loop logic for event creation, potentially leading to race conditions or unexpected record counts if run in a high-concurrency environment.
 - **Production Status**: 🔴 UNSAFE
 
 ### 19. `database\seeders\FavoriteSeeder.php`

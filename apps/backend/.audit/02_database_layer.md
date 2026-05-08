@@ -37,10 +37,10 @@
 | `database\migrations\2025_10_17_013210_create_classified_ads_table.php` | **45** | 🔴 Critical - SoftDelete Gap |
 | `database\migrations\2025_10_17_014201_create_property_bookings_table.php` | **30** | 🔴 Critical - Race Condition Risk |
 | `database\migrations\2025_10_17_014202_create_property_visits_table.php` | **85** | ✅ Safe - Production Ready |
-| `database\migrations\2025_10_17_023418_create_amenities_table.php` | **95** | ✅ Elite - Production Ready |
-| `database\migrations\2025_10_17_023419_create_amenity_property_table.php` | **95** | ✅ Elite - Production Ready |
-| `database\migrations\2025_10_17_023450_create_features_table.php` | **95** | ✅ Elite - Production Ready |
-| `database\migrations\2025_10_17_023452_create_featurables_table.php` | **95** | ✅ Elite - Production Ready |
+| `database\migrations\2025_10_17_023418_create_amenities_table.php` | **75** | 🟠 Warning - Module Flag Debt |
+| `database\migrations\2025_10_17_023419_create_amenity_property_table.php` | **90** | ✅ Safe - Production Ready |
+| `database\migrations\2025_10_17_023450_create_features_table.php` | **75** | 🟠 Warning - Module Flag Debt |
+| `database\migrations\2025_10_17_023452_create_featurables_table.php` | **95** | ✅ Safe - Production Ready |
 | `database\migrations\2025_10_17_033239_create_reviews_table.php` | **30** | 🔴 Critical - Self-Approval Gap |
 | `database\migrations\2025_10_17_041016_create_event_ticket_types_table.php` | **50** | 🟠 Warning - Cascade Delete Risk |
 | `database\migrations\2025_10_17_041525_create_event_occurrences_table.php` | **45** | 🟠 Warning - Date Index Debt |

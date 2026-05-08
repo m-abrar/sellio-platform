@@ -48,6 +48,11 @@ return new class extends Migration
             // Publishing Status
             $table->boolean('is_published')->default(true);
 
+            $table->string('status')->default('active')->index();
+            $table->text('admin_note')->nullable();
+            $table->boolean('is_premium')->default(false)->index();
+            $table->string('color', 20)->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -57,3 +62,10 @@ return new class extends Migration
         Schema::dropIfExists('categories');
     }
 };
+
+
+
+
+
+
+

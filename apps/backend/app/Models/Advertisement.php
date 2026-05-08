@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 use App\Traits\HasImageAccess;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -129,3 +131,4 @@ class Advertisement extends Model implements HasMedia
 
     // Centralized status logic provided by HasStatusModeration trait
 }
+

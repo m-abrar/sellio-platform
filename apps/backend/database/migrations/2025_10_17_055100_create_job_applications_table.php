@@ -30,11 +30,14 @@ return new class extends Migration
             $table->text('cover_letter')->nullable();
             $table->string('resume_path')->nullable()->comment('Path to uploaded PDF/Docx');
             $table->string('portfolio_url')->nullable();
-            $table->text('admin_notes')->nullable()->comment('Internal recruitment notes');
             
             // Unique index: A user can only apply to a job once
             $table->unique(['job_listing_id', 'user_id']); 
             $table->timestamp('viewed_at')->nullable();
+            $table->text('admin_note')->nullable();
+            $table->boolean('is_premium')->default(false)->index();
+            $table->string('color', 20)->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -47,3 +50,9 @@ return new class extends Migration
         Schema::dropIfExists('job_applications');
     }
 };
+
+
+
+
+
+

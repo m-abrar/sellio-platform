@@ -17,7 +17,7 @@ return new class extends Migration
     {
         Schema::create('service_appointments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete(); // The customer
+            $table->foreignId('user_id')->nullable()->constrained()->cascadeOnDelete(); // The customer
             $table->foreignId('service_id')->constrained()->cascadeOnDelete(); // The service listing
             
             // Link to the specific package tier selected
@@ -36,7 +36,7 @@ return new class extends Migration
             $table->string('payment_status', 20)->default('unpaid')->index();
             $table->string('transaction_id')->nullable()->index();
             $table->text('notes')->nullable()->comment('Customer notes');
-            $table->text('admin_notes')->nullable()->comment('Provider notes');
+            $table->text('admin_note')->nullable()->comment('Provider notes');
             $table->decimal('price', 15, 2)->nullable();
             $table->timestamp('viewed_at')->nullable();
             $table->timestamps();
@@ -48,3 +48,8 @@ return new class extends Migration
         Schema::dropIfExists('service_appointments');
     }
 };
+
+
+
+
+

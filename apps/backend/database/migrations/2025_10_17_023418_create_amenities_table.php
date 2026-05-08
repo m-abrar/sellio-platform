@@ -22,6 +22,12 @@ return new class extends Migration
 
             $table->boolean('is_published')->default(false);
             
+            // --- Production Hardening & Audit Columns ---
+            $table->string('status')->default('active')->index();
+            $table->text('admin_note')->nullable();
+            $table->boolean('is_premium')->default(false)->index();
+            $table->string('color', 20)->nullable();
+            
             // ADDED Boolean module columns
             $table->boolean('is_property')->default(false);
             $table->boolean('is_event')->default(false);
@@ -30,6 +36,7 @@ return new class extends Migration
             $table->boolean('is_service')->default(false);
             $table->boolean('is_classified')->default(false);
             
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -39,3 +46,8 @@ return new class extends Migration
         Schema::dropIfExists('amenities');
     }
 };
+
+
+
+
+

@@ -36,10 +36,13 @@ return new class extends Migration
             // Quote Status and Price
             $table->string('status', 30)->default('pending')->index();
             $table->decimal('quoted_price', 15, 2)->nullable(); 
-            $table->text('admin_notes')->nullable();
 
             // Analytics & Notifications
             $table->timestamp('viewed_at')->nullable();
+            $table->text('admin_note')->nullable();
+            $table->boolean('is_premium')->default(false)->index();
+            $table->string('color', 20)->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -49,3 +52,9 @@ return new class extends Migration
         Schema::dropIfExists('service_quotes');
     }
 };
+
+
+
+
+
+

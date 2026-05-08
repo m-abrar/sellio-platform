@@ -62,7 +62,18 @@ return new class extends Migration
             $table->boolean('is_published')->default(true);
 
             // Timestamps
+            // --- Production Hardening & Audit Columns ---
+            $table->string('status')->default('active')->index();
+            $table->text('admin_note')->nullable();
+            $table->boolean('is_premium')->default(false)->index();
+            $table->string('color', 20)->nullable();
+
+            $table->softDeletes();
             $table->timestamps();
+            
+            // Indeces for performance
+            $table->index('parent_id');
+            $table->index('level');
         });
     }
 
@@ -74,3 +85,8 @@ return new class extends Migration
         Schema::dropIfExists('locations');
     }
 };
+
+
+
+
+

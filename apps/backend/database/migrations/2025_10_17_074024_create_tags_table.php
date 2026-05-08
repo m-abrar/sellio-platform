@@ -36,6 +36,9 @@ return new class extends Migration
             $table->boolean('is_published')->default(true)->index();
             $table->string('color', 20)->default('#6c757d')->comment('Hex color for UI badges');
             $table->unsignedSmallInteger('sort_order')->default(0);
+            $table->string('status', 30)->default('active')->index();
+            $table->text('admin_note')->nullable();
+            $table->boolean('is_premium')->default(false)->index();
 
             $table->timestamps();
         });
@@ -49,3 +52,8 @@ return new class extends Migration
         Schema::dropIfExists('tags');
     }
 };
+
+
+
+
+

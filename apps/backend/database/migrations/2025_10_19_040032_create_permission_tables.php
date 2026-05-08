@@ -139,3 +139,9 @@ return new class extends Migration
         Schema::drop($tableNames['permissions']);
     }
 };
+
+
+
+
+
+

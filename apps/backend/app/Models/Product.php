@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 use App\Traits\HasAnalytics;
 use App\Traits\HasImageAccess;
 use Carbon\Carbon;
@@ -261,3 +263,4 @@ class Product extends Model implements HasMedia
 
     
 }
+

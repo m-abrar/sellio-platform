@@ -361,9 +361,59 @@ This report contains the finalized, high-fidelity findings for the core database
 
 
 
+### 44. `database\migrations\2025_10_17_013203_create_events_table.php`
+- **Final Score**: **45/100**
+- **Risk Level**: 🔴 CRITICAL
+- **Findings**:
+    - **Performance**: Missing indexes on core foreign keys (`user_id`, `category_id`, `location_id`). 
+    - **Scalability**: Lacks composite indexes for calendar/search filters (`is_published`, `status`, `start_date_time`).
+    - **Architecture**: `duration_hours` and `venue_size` use `float`, risking precision drift in calculations.
+- **Production Status**: 🔴 UNSAFE
+
+### 45. `database\migrations\2025_10_17_013205_create_services_table.php`
+- **Final Score**: **45/100**
+- **Risk Level**: 🔴 CRITICAL
+- **Findings**:
+    - **Architecture**: `expertise_level` and `availability_schedule` are stored as raw integers without foreign key constraints or DB-level enum validation.
+    - **Data Integrity**: Uses `cascadeOnDelete()` for core user ownership, risking accidental loss of service portfolio data.
+    - **Performance**: Missing indexes on high-traffic filter columns (`city`, `is_published`, `status`).
+- **Production Status**: 🔴 UNSAFE
+
+### 46. `database\migrations\2025_10_17_023418_create_amenities_table.php`
+- **Final Score**: **75/100**
+- **Risk Level**: 🟠 MEDIUM
+- **Findings**:
+    - **Architecture**: **Module Flag Debt**. Uses hardcoded boolean columns (`is_property`, `is_event`, etc.) to filter amenities. This inhibits dynamic vertical expansion and requires a migration for every new module.
+    - **Performance**: Missing indexes on the 6 module-specific boolean flags. Full table scans are required to fetch amenities for a specific module.
+- **Production Status**: 🟠 WARNING
+
+### 47. `database\migrations\2025_10_17_023450_create_features_table.php`
+- **Final Score**: **75/100**
+- **Risk Level**: 🟠 MEDIUM
+- **Findings**:
+    - **Architecture**: **Module Flag Debt**. Identical architectural issue to the amenities table, limiting platform flexibility.
+    - **Performance**: Missing indexes on boolean module flags.
+- **Production Status**: 🟠 WARNING
+
+### 48. `database\migrations\2025_10_17_023419_create_amenity_property_table.php`
+- **Final Score**: **90/100**
+- **Risk Level**: ✅ LOW
+- **Findings**:
+    - **Performance**: Missing index on `property_id`. While the composite PK `[amenity_id, property_id]` covers searches starting with amenity, reverse lookups for "all amenities for property X" will be unindexed.
+- **Production Status**: ✅ SAFE
+
+### 49. `database\migrations\2025_10_17_023452_create_featurables_table.php`
+- **Final Score**: **95/100**
+- **Risk Level**: ✅ LOW
+- **Findings**:
+    - **Architecture**: Correct polymorphic implementation using `morphs()`.
+    - **Performance**: Properly indexed for both direct and polymorphic lookups.
+- **Production Status**: ✅ SAFE
+
 # 🛠️ Global Database Remediation Priority
 1. **[P0]** Add `SoftDeletes` to all marketplace vertical tables (`properties`, `autos`, `services`, etc.).
 2. **[P0]** Implement indexes for all foreign keys currently used in `constrained()` but missing explicit `index()`.
 3. **[P0]** Create composite indexes for the most frequent search query combinations.
 4. **[P1]** Convert `float` area/dimension fields to `decimal` to ensure high-fidelity calculations.
 5. **[P1]** Resolve the `make`/`model` denormalization in the `autos` table to prevent data corruption.
+6. **[P2]** Transition from hardcoded boolean module flags to a polymorphic many-to-many relationship for `Amenities` and `Features`.

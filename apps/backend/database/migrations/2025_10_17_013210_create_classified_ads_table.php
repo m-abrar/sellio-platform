@@ -61,6 +61,10 @@ return new class extends Migration
             $table->text('admin_note')->nullable();
             $table->timestamp('approved_at')->nullable()->index();
             $table->timestamp('expires_at')->nullable()->index();
+            $table->boolean('is_premium')->default(false)->index();
+            $table->boolean('is_verified')->default(false)->index();
+            $table->string('color', 20)->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -70,3 +74,12 @@ return new class extends Migration
         Schema::dropIfExists('classified_ads');
     }
 };
+
+
+
+
+
+
+
+
+

@@ -35,7 +35,14 @@ return new class extends Migration
             
             $table->boolean('is_published')->default(true)->index(); 
             $table->boolean('is_system')->default(false)->comment('If true, cannot be deleted via UI');
-            $table->timestamps(); // created_at timestamp NULL DEFAULT NULL, updated_at timestamp NULL DEFAULT NULL
+            
+            // --- Production Hardening & Audit Columns ---
+            $table->string('status')->default('active')->index();
+            $table->text('admin_note')->nullable();
+            $table->boolean('is_premium')->default(false)->index();
+            $table->string('color', 20)->nullable();
+            $table->softDeletes();
+            $table->timestamps();
         });
     }
 
@@ -48,3 +55,8 @@ return new class extends Migration
         Schema::dropIfExists('pages');
     }
 };
+
+
+
+
+

@@ -35,6 +35,8 @@ return new class extends Migration
                   ->onDelete('cascade');
 
             $table->integer('order')->default(0);
+            $table->string('status', 30)->default('active')->index();
+            $table->text('admin_note')->nullable();
             $table->timestamps();
         });
     }
@@ -47,3 +49,8 @@ return new class extends Migration
         Schema::dropIfExists('menu_items');
     }
 };
+
+
+
+
+

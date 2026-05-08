@@ -24,6 +24,9 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('status')->default('active')->index()->comment('active, banned, suspended');
+            $table->text('admin_note')->nullable();
+            $table->boolean('is_premium')->default(false)->index();
+            $table->string('color', 20)->nullable();
             $table->boolean('is_admin')->default(false)->index();
             $table->rememberToken();
             $table->softDeletes();
@@ -56,3 +59,9 @@ return new class extends Migration
         Schema::dropIfExists('sessions');
     }
 };
+
+
+
+
+
+

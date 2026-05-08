@@ -44,8 +44,12 @@ return new class extends Migration
             $table->unsignedTinyInteger('warranty_months')->nullable();
             $table->unsignedTinyInteger('stock_quantity')->default(1);
             $table->boolean('is_certified')->default(false)->index();
+            // --- Production Hardening & Audit Columns ---
             $table->string('status', 30)->default('active')->index();
             $table->text('admin_note')->nullable();
+            $table->boolean('is_premium')->default(false)->index();
+            $table->boolean('is_verified')->default(false)->index();
+            $table->string('color', 20)->nullable();
 
             // Location/Address
             $table->string('address', 255)->nullable();
@@ -66,6 +70,7 @@ return new class extends Migration
             $table->text('meta_description')->nullable();
             $table->timestamp('approved_at')->nullable()->index();
             $table->timestamp('expires_at')->nullable()->index();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -75,3 +80,11 @@ return new class extends Migration
         Schema::dropIfExists('autos');
     }
 };
+
+
+
+
+
+
+
+

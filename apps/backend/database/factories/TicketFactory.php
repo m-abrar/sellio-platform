@@ -30,7 +30,7 @@ class TicketFactory extends Factory
     public function definition(): array
     {
         // Define the possible statuses based on your migration
-        $statuses = ['open', 'in-progress', 'closed', 'reopened'];
+        $statuses = ['open', 'pending', 'resolved', 'closed', 'reopened'];
         $priorities = ['low', 'medium', 'high', 'urgent'];
         $categories = ['Technical', 'Billing', 'Account', 'Feature Request', 'General Inquiry'];
 

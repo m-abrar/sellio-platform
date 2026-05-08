@@ -30,6 +30,7 @@ return new class extends Migration
             
             $table->timestamp('viewed_at')->nullable();
             $table->timestamp('closed_at')->nullable()->index();
+            $table->text('admin_note')->nullable();
             
             $table->timestamps();
         });
@@ -43,3 +44,8 @@ return new class extends Migration
         Schema::dropIfExists('tickets');
     }
 };
+
+
+
+
+

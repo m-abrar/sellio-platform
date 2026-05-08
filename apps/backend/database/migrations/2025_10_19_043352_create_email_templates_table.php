@@ -47,3 +47,8 @@ return new class extends Migration
         Schema::dropIfExists('email_templates');
     }
 };
+
+
+
+
+

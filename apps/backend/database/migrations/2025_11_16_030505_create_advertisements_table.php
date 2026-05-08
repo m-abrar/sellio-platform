@@ -26,7 +26,12 @@ return new class extends Migration
             $table->string('title')->nullable();
             $table->string('image_path')->nullable();
             $table->string('link')->nullable();
-            $table->boolean('status')->default(1); // 0 or 1
+            // --- Production Hardening & Audit Columns ---
+            $table->string('status')->default('active')->index();
+            $table->text('admin_note')->nullable();
+            $table->boolean('is_premium')->default(false)->index();
+            $table->string('color', 20)->nullable();
+            $table->softDeletes();
 
             // Targeting based on placement/device (JSON column)
             // Stored as an array of strings (e.g., ["header", "footer", "sidebar"])
@@ -56,3 +61,8 @@ return new class extends Migration
         Schema::dropIfExists('advertisements');
     }
 };
+
+
+
+
+

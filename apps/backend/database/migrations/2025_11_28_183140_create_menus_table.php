@@ -22,6 +22,9 @@ return new class extends Migration
             $table->string('theme_key'); // e.g., 'default-theme'
             $table->string('location_key')->index(); // e.g., 'main_header'
             $table->string('title'); // Human-readable title for the admin area
+            $table->string('status', 30)->default('active')->index();
+            $table->text('admin_note')->nullable();
+            $table->boolean('is_system')->default(false)->index();
             $table->timestamps();
             
             // Ensures only one record exists for a given theme and location key
@@ -37,3 +40,8 @@ return new class extends Migration
         Schema::dropIfExists('menus');
     }
 };
+
+
+
+
+

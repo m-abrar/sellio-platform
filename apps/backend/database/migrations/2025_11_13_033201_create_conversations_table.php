@@ -34,6 +34,8 @@ return new class extends Migration
             
             $table->unique(['user_id', 'partner_id', 'inquiriable_id', 'inquiriable_type'], 'conversation_context_unique'); 
             $table->index(['user_id', 'partner_id']);
+            $table->string('status', 30)->default('active')->index();
+            $table->text('admin_note')->nullable();
             
             $table->timestamps(); // created_at, updated_at
         });
@@ -47,3 +49,8 @@ return new class extends Migration
         Schema::dropIfExists('conversations');
     }
 };
+
+
+
+
+

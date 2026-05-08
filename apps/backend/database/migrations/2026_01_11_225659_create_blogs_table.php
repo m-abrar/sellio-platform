@@ -41,6 +41,15 @@ return new class extends Migration
             $table->text('meta_description')->nullable();
 
             $table->timestamp('published_at')->nullable();
+            
+            // --- Production Hardening & Audit Columns ---
+            $table->string('status')->default('active')->index();
+            $table->text('admin_note')->nullable();
+            $table->boolean('is_premium')->default(false)->index();
+            $table->boolean('is_verified_author')->default(false)->index();
+            $table->string('color', 20)->nullable();
+            
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -50,3 +59,8 @@ return new class extends Migration
         Schema::dropIfExists('blogs');
     }
 };
+
+
+
+
+
