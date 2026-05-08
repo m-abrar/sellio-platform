@@ -91,11 +91,43 @@ This report contains the finalized, high-fidelity findings for the 12 critical f
     - **Performance**: Duplicate taxonomy retrieval pattern (scanning 5 tables per search) causes heavy DB load.
 - **Status**: 🟠 Warning
 
+### 14. `app\Http\Requests\Partner\ProfileUpdateRequest.php`
+- **Final Score**: **40/100**
+- **Risk Level**: 🔴 CRITICAL (Security)
+- **Findings**:
+    - **Security**: Missing `authorize()` method or ownership check.
+    - **Privilege Escalation**: Allows updating sensitive user fields if mass-assignable in the controller.
+- **Status**: 🔴 Critical Security Debt
+
+### 15. `app\Notifications\NewPropertySubmitted.php`
+- **Final Score**: **50/100**
+- **Risk Level**: 🟠 MEDIUM
+- **Findings**:
+    - **Architecture**: **SYNCHRONOUS NOTIFICATION**. Fails to implement `ShouldQueue`. Will stall the application if many notifications are triggered.
+- **Status**: 🟠 Performance Debt
+
+### 16. `app\Models\Advertisement.php`
+- **Final Score**: **75/100**
+- **Risk Level**: 🟠 MEDIUM
+- **Findings**:
+    - **Performance**: Non-queued media conversions for high-res banners.
+- **Status**: ✅ Good (With Caveats)
+
+### 17. `app\Events\ReviewReceived.php`
+- **Final Score**: **85/100**
+- **Risk Level**: ✅ LOW
+- **Findings**:
+    - **Architecture**: Correctly serializes models for queue safety.
+- **Status**: ✅ Production Ready
+
 ---
 
 ## 🛠️ Global Remediation Priority
 1. **P0**: Fix `LogoutController` to invalidate sessions and regenerate tokens.
-2. **P0**: Fix `MenuService` cache isolation.
-3. **P0**: Implement `chunk()` in `CheckRenewals`.
-4. **P0**: Move Gateway resolution to a whitelist-based factory.
-5. **P0**: Decouple `BookingManagementService` from UNION queries.
+2. **P0**: Implement sanitization/escaping for `Blog` and `EmailTemplate` content fields.
+3. **P0**: Fix `MenuService` cache isolation.
+4. **P0**: Fix `ProfileUpdateRequest` authorization and field filtering.
+5. **P0**: Implement `chunk()` in `CheckRenewals`.
+6. **P0**: Move Gateway resolution to a whitelist-based factory.
+7. **P0**: Decouple `BookingManagementService` from UNION queries.
+8. **P1**: Implement `ShouldQueue` on all system notifications.

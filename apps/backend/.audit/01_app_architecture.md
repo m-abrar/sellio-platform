@@ -43,27 +43,27 @@
 | `app\Http\Controllers\CategoryController.php` | **80** | ✅ Good - Basic Logic |
 | `app\Http\Controllers\CheckoutController.php` | **30** | 🔴 Critical - Price Manipulation Risk |
 | `app\Http\Controllers\ClassifiedController.php" | **98** | ✅ Elite - Production Ready |
-| `app\Http\Controllers\Controller.php` | **98** | ✅ High Quality - Re-Audit Pending |
+| `app\Http\Controllers\Controller.php` | **98** | ✅ Elite - Production Ready |
 | `app\Http\Controllers\ConversationController.php` | **75** | 🟠 Warning - Logic Debt |
 | `app\Http\Controllers\EventBookingController.php` | **30** | 🔴 Critical - Price Manipulation Risk |
 | `app\Http\Controllers\EventController.php` | **98** | ✅ Elite - Production Ready |
 | `app\Http\Controllers\EventTicketController.php` | **90** | ✅ Elite - Production Ready |
 | `app\Http\Controllers\HomeController.php` | **95** | ✅ Elite - Proxy Pattern |
-| `app\Http\Controllers\JobApplicationController.php` | **98** | ✅ High Quality - Re-Audit Pending |
+| `app\Http\Controllers\JobApplicationController.php` | **98** | ✅ High Quality - Standard |
 | `app\Http\Controllers\JobController.php` | **90** | ✅ Good - Scalability Risk |
 | `app\Http\Controllers\OrderController.php` | **90** | ✅ Good - Service Based |
 | `app\Http\Controllers\PageController.php` | **60** | 🟠 Warning - Stub Logic |
 | `app\Http\Controllers\PartnerController.php` | **85** | ✅ Good - Proxy Pattern |
 | `app\Http\Controllers\ProductController.php` | **95** | ✅ Elite - Service Based |
 | `app\Http\Controllers\PropertyBookingController.php` | **65** | 🟠 Warning - IDOR Ownership Risk |
-| `app\Http\Controllers\PropertyController.php` | **98** | ✅ High Quality - Re-Audit Pending |
+| `app\Http\Controllers\PropertyController.php` | **60** | 🟠 Warning - Visibility logic debt |
 | `app\Http\Controllers\PropertyVisitController.php` | **85** | ✅ Good - Service Extraction Opportunity |
 | `app\Http\Controllers\ReviewController.php` | **95** | ✅ Elite - Service Based |
-| `app\Http\Controllers\ServiceController.php` | **98** | ✅ High Quality - Re-Audit Pending |
-| `app\Http\Controllers\TagController.php` | **98** | ✅ High Quality - Re-Audit Pending |
-| `app\Http\Controllers\TypeController.php` | **98** | ✅ High Quality - Re-Audit Pending |
+| `app\Http\Controllers\ServiceController.php` | **55** | 🟠 Warning - Taxonomy retrieval debt |
+| `app\Http\Controllers\TagController.php` | **98** | ✅ High Quality - Standard |
+| `app\Http\Controllers\TypeController.php` | **98** | ✅ High Quality - Standard |
 | `app\Http\Controllers\UnifiedHomeController.php` | **95** | ✅ Elite - Production Ready |
-| `app\Http\Controllers\WebhookController.php` | **98** | ✅ High Quality - Re-Audit Pending |
+| `app\Http\Controllers\WebhookController.php` | **40** | 🔴 Critical - Signature header debt |
 | `app\Http\Controllers\Auth\SocialLoginController.php` | **75** | 🟠 Warning - Logic Debt |
 | `app\Http\Controllers\Auth\RegisteredUserController.php` | **85** | ✅ Good - Service Extraction Opportunity |
 | `app\Http\Controllers\Dashboard\DashboardRedirectController.php` | **90** | ✅ Elite - Logic Debt |
@@ -72,7 +72,7 @@
 | `app\Http\Controllers\Auth\ConfirmablePasswordController.php` | **90** | ✅ Good - Production Ready |
 | `app\Http\Controllers\Auth\EmailVerificationNotificationController.php` | **98** | ✅ High Quality - Re-Audit Pending |
 | `app\Http\Controllers\Auth\EmailVerificationPromptController.php` | **98** | ✅ High Quality - Re-Audit Pending |
-| `app\Http\Controllers\Auth\LogoutController.php` | **98** | ✅ High Quality - Re-Audit Pending |
+| `app\Http\Controllers\Auth\LogoutController.php` | **10** | 🔴 Critical - Unsafe Session Termination |
 | `app\Http\Controllers\Auth\NewPasswordController.php` | **95** | ✅ Elite - Production Ready |
 | `app\Http\Controllers\Auth\PasswordController.php` | **95** | ✅ Elite - Production Ready |
 | `app\Http\Controllers\Auth\PasswordResetLinkController.php` | **95** | ✅ Elite - Production Ready |
@@ -154,14 +154,14 @@
 | `app\Http\Controllers\Api\V1\Dashboard\Partner\AnalyticsController.php` | **40** | 🔴 Critical - Performance / Fat Controller |
 | `app\Http\Controllers\Api\V1\Dashboard\Partner\DashboardController.php` | **80** | ✅ Good - Trait Debt |
 | `app\Http\Controllers\Api\V1\Dashboard\User\DashboardController.php` | **85** | ✅ Good - Response Inconsistency |
-| `app\Http\Controllers\Api\V1\ApiTagController.php` | **98** | ✅ High Quality - Re-Audit Pending |
+| `app\Http\Controllers\Api\V1\ApiTagController.php` | **85** | ✅ Good - Standard |
 | `app\Http\Controllers\Api\V1\ApiTypeController.php` | **98** | ✅ High Quality - Re-Audit Pending |
 | `app\Http\Controllers\Api\V1\Auth\AuthController.php` | **40** | 🔴 Critical - Privilege Escalation Risk |
 | `app\Http\Controllers\Api\V1\Auth\PasswordResetController.php` | **98** | ✅ High Quality - Re-Audit Pending |
 | `app\Http\Controllers\Api\V1\Auth\ProfileController.php` | **88** | ✅ Elite - Resource Debt |
 | `app\Http\Controllers\Api\V1\Dashboard\Partner\ActivityController.php` | **98** | ✅ High Quality - Re-Audit Pending |
 | `app\Http\Controllers\Api\V1\Dashboard\Partner\AnalyticsController.php` | **45** | 🔴 Critical - Severe Logic Bloat |
-| `app\Http\Controllers\Api\V1\Dashboard\Partner\AutoController.php` | **98** | ✅ High Quality - Re-Audit Pending |
+| `app\Http\Controllers\Api\V1\Dashboard\Partner\AutoController.php` | **65** | 🟠 Warning - Ownership logic debt |
 | `app\Http\Controllers\Api\V1\Dashboard\Partner\AutoInquiryController.php` | **98** | ✅ High Quality - Re-Audit Pending |
 | `app\Http\Controllers\Api\V1\Dashboard\Partner\ClassifiedController.php` | **98** | ✅ High Quality - Re-Audit Pending |
 | `app\Http\Controllers\Api\V1\Dashboard\Partner\ClassifiedInquiryController.php` | **98** | ✅ High Quality - Re-Audit Pending |
@@ -219,7 +219,7 @@
 | `app\Events\PlanSubscribed.php` | **95** | ✅ Elite - Production Ready |
 | `app\Events\PlanUpgraded.php` | **95** | ✅ Elite - Production Ready |
 | `app\Events\PropertyBookingConfirmed.php` | **60** | 🟠 Warning - Model Ambiguity |
-| `app\Events\ReviewReceived.php` | **98** | ✅ High Quality - Re-Audit Pending |
+| `app\Events\ReviewReceived.php` | **85** | ✅ Good - Standard |
 | `app\Events\ReviewRequested.php` | **98** | ✅ High Quality - Re-Audit Pending |
 | `app\Events\UserRegistered.php` | **85** | ✅ Good - Boilerplate Debt |
 
@@ -259,12 +259,12 @@
 
 | File Path | Score | Audit Status |
 | :--- | :--- | :--- |
-| `app\Models\Advertisement.php` | **98** | ✅ High Quality - Re-Audit Pending |
+| `app\Models\Advertisement.php` | **75** | 🟠 Warning - Sync Media Overhead |
 | `app\Models\Amenity.php` | **85** | ✅ Good - Column Sprawl |
 | `app\Models\Application.php` | **98** | ✅ High Quality - Re-Audit Pending |
 | `app\Models\Auto.php` | **45** | 🟠 Warning - Moderation Bypass Risk |
 | `app\Models\AutoInquiry.php` | **85** | ✅ Good - Response Privacy |
-| `app\Models\Blog.php` | **98** | ✅ High Quality - Re-Audit Pending |
+| `app\Models\Blog.php` | **30** | 🔴 Critical - Stored XSS / N+1 Storm |
 | `app\Models\Brand.php` | **70** | 🟠 Warning - N+1 Count Risk |
 | `app\Models\Campaign.php` | **98** | ✅ High Quality - Re-Audit Pending |
 | `app\Models\Cart.php` | **40** | 🔴 Critical - Total Manipulation Risk |
@@ -273,7 +273,7 @@
 | `app\Models\Classified.php` | **45** | 🟠 Warning - Moderation Bypass Risk |
 | `app\Models\ClassifiedInquiry.php` | **85** | ✅ Good - Response Privacy |
 | `app\Models\Conversation.php` | **95** | ✅ Elite - Production Ready |
-| `app\Models\EmailTemplate.php` | **98** | ✅ High Quality - Re-Audit Pending |
+| `app\Models\EmailTemplate.php` | **20** | 🔴 Critical - Stored XSS Risk |
 | `app\Models\Event.php` | **45** | 🟠 Warning - Moderation Bypass Risk |
 | `app\Models\EventBooking.php` | **20** | 🔴 Critical - Financial Fraud Risk |
 | `app\Models\EventOccurrence.php` | **98** | ✅ High Quality - Re-Audit Pending |
@@ -332,7 +332,7 @@
 | File Path | Score | Audit Status |
 | :--- | :--- | :--- |
 | `app\Notifications\ContentFlagged.php` | **98** | ✅ High Quality - Re-Audit Pending |
-| `app\Notifications\NewPropertySubmitted.php` | **98** | ✅ High Quality - Re-Audit Pending |
+| `app\Notifications\NewPropertySubmitted.php` | **50** | 🟠 Warning - Synchronous Bottleneck |
 | `app\Notifications\OrderStatusChanged.php` | **98** | ✅ High Quality - Re-Audit Pending |
 
 ## Observers
@@ -420,7 +420,7 @@
 | `app\Http\Requests\Partner\EventRequest.php` | **15** | 🔴 Critical - Multi-Tenant IDOR |
 | `app\Http\Requests\Partner\JobListingRequest.php` | **15** | 🔴 Critical - Multi-Tenant IDOR |
 | `app\Http\Requests\Partner\ProcessWithdrawalRequest.php` | **20** | 🔴 Critical - Financial IDOR |
-| `app\Http\Requests\Partner\ProfileUpdateRequest.php` | **98** | ✅ High Quality - Re-Audit Pending |
+| `app\Http\Requests\Partner\ProfileUpdateRequest.php` | **40** | 🔴 Critical - Privilege Escalation Risk |
 | `app\Http\Requests\Partner\ServiceRequest.php` | **15** | 🔴 Critical - Multi-Tenant IDOR |
 | `app\Http\Requests\Partner\StorePropertyRequest.php` | **85** | ✅ Good - Validation Debt |
 | `app\Http\Requests\Partner\StoreSubscriptionRequest.php` | **30** | 🔴 Critical - Unsafe Access |
