@@ -1,0 +1,940 @@
+# Executive Summary: Sellio Deep Model Audit
+**Status**: CRITICAL ARCHITECTURAL DEBT / SECURITY VULNERABLE
+**Audit Date**: May 2026
+**Lead Architect**: Antigravity (Senior Laravel Architect)
+
+## Overview
+This audit provides a comprehensive security and performance analysis of all **65 Laravel Eloquent Models** within the Sellio platform. The findings indicate a "Critical Risk" profile, primarily due to catastrophic mass-assignment vulnerabilities across the entire financial and moderation infrastructure.
+
+## Critical Findings
+1.  **Mass Assignment (Financial & Access)**: `Order`, `Payment`, `Withdrawal`, and `Subscription` models allow direct request-based manipulation of `total_amount`, `status`, and `ends_at`. An attacker can generate paid orders for $0.00 or grant themselves lifetime premium access.
+2.  **Moderation Bypass**: All listing models (`Auto`, `Product`, `Property`, etc.) expose `approved_at` to mass assignment, allowing partners to self-approve listings and bypass administrative review.
+3.  **Identity & Impersonation**: `Message`, `TicketMessage`, and `User` models allow spoofing of sender IDs and self-verification of email addresses.
+4.  **Performance Bottlenecks**: High-pressure N+1 query patterns discovered in all taxonomy counts (`Category`, `Location`, `Tag`) and polymorphic rating averages.
+5.  **Architectural Debt**: `User.php` has evolved into a "God Model" anti-pattern, tightly coupling messaging, metrics, and auth logic.
+
+## Remediation Priority
+- **P0 (Immediate)**: Hard-guard all status, pricing, and timestamp fields in every model.
+- **P1**: Move financial calculations and moderation logic to a secure Service Layer.
+- **P2**: Refactor taxonomy counts to utilize database-level aggregations or materialized views.
+- **P3**: Decouple the `User` model using trait-based or component-based architecture.
+
+---
+
+# Model Audit: app/Models/User.php
+
+## Model Purpose
+The central identity and authorization engine of the Sellio platform, managing multi-role personas (Admin, Partner, Buyer) and aggregating cross-vertical marketplace activities.
+
+## Risk Level
+**HIGH / ARCHITECTURAL DEBT**
+
+## Problems Found
+
+### Security
+- **Mass Assignment Risk**: `is_buyer` is included in `$fillable`. While likely used for registration, allowing direct assignment of type flags can be dangerous if the request whitelisting in controllers is bypassed.
+- **Sensitive Attribute Exposure**: `is_admin`, `is_partner`, and `is_verified` are not hidden by default. While guarded from mass assignment, their presence in serialized JSON payloads could leak privilege status to the frontend.
+- **God Model Pattern**: The model is overloaded with 12 traits and dozens of relationships. This tight coupling makes the model a "God Object" that is difficult to test and maintain.
+
+### Database Architecture
+- **Role Redundancy**: Mixes manual boolean flags (`is_admin`, `is_partner`) with Spatie's `HasRoles` trait. This duplication creates data integrity risks where a user might have `is_admin = true` but lack the 'admin' role.
+
+### Relationships
+- **N+1 Query Risks**:
+    - `newMessages` accessor (L161) executes a `count()` query.
+    - `lastMessage` accessor (L168) executes a `first()` query.
+    - `avatarUrl` accessor (L231) triggers media library retrieval.
+    Loading a collection of 50 users will trigger 150+ additional queries if these attributes are accessed.
+
+### Performance
+- **Heavy Default Serialization**: `avatar_url` is in `$appends`, meaning the expensive media-retrieval and fallback logic runs on every serialization.
+- **In-Memory Calculations**: `rating()` (L261) performs complex `pluck` and `whereIn` queries inside the model. This should be moved to a Service or a pre-calculated database column.
+
+### Scalability
+- **Pluck Bottleneck**: `receivedMessages` (L148) plucks all conversation IDs. For power users with thousands of conversations, this will lead to memory exhaustion and slow `whereIn` queries.
+
+### Laravel Best Practices
+- **Mixed Logic**: Business logic for listing limits (`hasReachedMaxListings`) is embedded in the model. This should reside in a `SubscriptionService`.
+
+## Dangerous Attributes
+- `is_buyer` (Mass assignable type flag)
+- `password` (Correctly hidden/hashed, but central to identity)
+
+## Heavy Accessors/Mutators
+- `avatarUrl` (Complex fallback logic)
+- `newMessages` (DB Count)
+- `lastMessage` (DB First)
+
+## N+1 Risks
+- `unreadMessages()->count()`
+- `receivedMessages()->latest()->first()`
+- `getFirstMediaUrl()`
+
+## Fillable/Guarded Safety
+**UNSAFE** (Due to type flags in fillable)
+
+## Relationship Safety
+**SAFE**
+
+## Serialization Safety
+**MEDIUM** (Leaks role flags and triggers N+1)
+
+## Laravel Best Practices
+**FAIL** (God Model / Logic Leakage)
+
+## Production Ready
+**NO**
+
+---
+
+# Model Audit: app/Models/Advertisement.php
+
+## Model Purpose
+Manages promotional inventory, including visual assets, targeting parameters (geo/orientation), and campaign lifecycle status.
+
+## Risk Level
+**LOW**
+
+## Problems Found
+
+### Security
+- **Mass Assignment Risk**: `status` is fillable. An API endpoint using `$model->update($request->all())` would allow any user to bypass administrative approval and activate their own ads.
+
+### Database Architecture
+- **Weak Indexing Strategy**: Targeting data (`cities`, `zipcodes`, `regions`) is stored as JSON/Array casts. This makes it impossible to perform high-performance SQL filtering for geo-targeted ads without using expensive JSON path expressions or full-table scans.
+
+### Relationships
+- **Missing Domain Isolation**: The model lacks a `belongsTo(User::class)` or `belongsTo(Customer::class)` relationship. Ads appear to be global/orphaned from an owner, which complicates attribution and billing.
+
+### Laravel Best Practices
+- **Manual Normalization**: Relies on controllers to normalize targeting arrays. This logic should be moved to Model Mutators or a Service.
+
+## Dangerous Attributes
+- `status` (Mass assignable)
+
+## Fillable/Guarded Safety
+**MEDIUM**
+
+## Relationship Safety
+**UNSAFE** (Missing ownership)
+
+## Serialization Safety
+**SAFE**
+
+## Laravel Best Practices
+**PASS**
+
+## Production Ready
+**YES**
+
+---
+
+# Model Audit: app/Models/Amenity.php
+
+## Model Purpose
+A cross-vertical taxonomy model used to define features and facilities across all marketplace entities (Properties, Autos, Jobs, etc.).
+
+## Risk Level
+**LOW**
+
+## Problems Found
+
+### Architecture
+- **Boolean Flag Sprawl**: Uses 7 distinct boolean flags (`is_property`, `is_auto`, etc.) to handle vertical filtering. This is a "Column Sprawl" pattern that is not extensible. Adding a new vertical requires a database migration to add a new column to the `amenities` table.
+
+### Performance
+- **Missing Multi-Vertical Scopes**: While `scopeForType` exists, there is no centralized way to eager-load amenities filtered by type, leading to potential N+1 if filtering is done in PHP.
+
+## Fillable/Guarded Safety
+**SAFE**
+
+## Relationship Safety
+**SAFE**
+
+## Serialization Safety
+**SAFE**
+
+## Laravel Best Practices
+**PASS**
+
+## Production Ready
+**YES**
+
+---
+
+# Model Audit: app/Models/Application.php
+
+## Model Purpose
+The foundational configuration model for the Sellio platform, defining visual themes, vertical-specific variables, and operational toggles.
+
+## Risk Level
+**MEDIUM**
+
+## Problems Found
+
+### Security
+- **Identifier Risk**: `app_key` is mass assignable. If this key is used for file-system paths or critical config lookups, allowing it to be updated via bulk request is dangerous.
+
+### Database Architecture
+- **Schema Rigidity**: Stores styling and logic parameters in JSON `variables` and `config` columns. While flexible, this makes system-wide reporting on configuration states difficult.
+
+### Performance
+- **Heavy Eager Loading**: `$with = ['media']` (L35) ensures logos are always loaded. This is correct for this specific model as it's typically loaded once per request.
+
+## Fillable/Guarded Safety
+**MEDIUM**
+
+## Relationship Safety
+**SAFE**
+
+## Serialization Safety
+**SAFE**
+
+## Laravel Best Practices
+**PASS**
+
+## Production Ready
+**YES**
+
+---
+
+# Model Audit: app/Models/Auto.php
+
+## Model Purpose
+Represents automotive listings, managing complex vehicle specifications, multi-currency pricing logic, and mileage unit conversions.
+
+## Risk Level
+**HIGH / SECURITY RISK**
+
+## Problems Found
+
+### Security
+- **CRITICAL: Self-Approval Vulnerability**: `approved_at` is included in `$fillable` (L69). Any endpoint that performs a mass update (e.g., `update($request->all())`) will allow a partner to self-approve their listing by injecting an `approved_at` timestamp into the request.
+
+### Performance
+- **Global Dependency Leak**: `mileageFormatted` (L303) and `priceFormatted` (L241) access `Session::get()` and `setting()` helpers directly. This makes the model difficult to test in isolation and can cause crashes in non-web contexts (Queue jobs, CLI commands) where session or certain config providers are not initialized.
+
+### Relationships
+- **Atomic Loading**: Missing inverse `hasMany` relationships for some related models like `AutoInquiry` in the documentation, though `inquiries()` exists.
+
+### Code Quality
+- **Magic Strings**: Status logic (`is_published`, `approved_at`) is repeated across multiple scopes.
+
+## Dangerous Attributes
+- `approved_at` (Mass assignable)
+- `is_featured` (Mass assignable)
+
+## Heavy Accessors/Mutators
+- `priceFormatted` (Calls settings helper)
+- `mileageFormatted` (Calls session helper)
+
+## Fillable/Guarded Safety
+**UNSAFE** (Critical: `approved_at` mass assignable)
+
+## Relationship Safety
+**SAFE**
+
+## Serialization Safety
+**SAFE**
+
+## Laravel Best Practices
+**FAIL** (Global state leakage in accessors)
+
+## Production Ready
+**NO**
+
+---
+
+# Model Audit: app/Models/AutoInquiry.php
+
+## Model Purpose
+Captures lead generation data for automotive listings, facilitating communication between buyers and partners.
+
+## Risk Level
+**LOW**
+
+## Problems Found
+
+### Security
+- **Mass Assignment Risk**: `viewed_at` is fillable. An attacker could potentially mark leads as viewed without administrative or partner interaction.
+
+### Laravel Best Practices
+- **Eager Loading Overhead**: `$with = ['auto']` is always loaded. This may be unnecessary for simple admin list views where only inquiry metadata is required.
+
+## Fillable/Guarded Safety
+**MEDIUM**
+
+## Relationship Safety
+**SAFE**
+
+## Production Ready
+**YES**
+
+---
+
+# Model Audit: app/Models/Blog.php
+
+## Model Purpose
+Manages editorial content, including articles, author attribution, and SEO metadata.
+
+## Risk Level
+**MEDIUM**
+
+## Problems Found
+
+### Security
+- **Mass Assignment Risk**: `view_count` and `is_published` are fillable. This allows anyone to manipulate popularity metrics or bypass editorial approval if the controller isn't strictly whitelisted.
+
+### Performance
+- **Uncached String Processing**: `readingTimeEstimate` (L101) performs `str_word_count(strip_tags(...))` on every access if the database column is null. This is computationally expensive for long articles.
+
+## Heavy Accessors/Mutators
+- `readingTimeEstimate` (Regex/String processing)
+
+## Fillable/Guarded Safety
+**MEDIUM**
+
+## Relationship Safety
+**SAFE**
+
+## Production Ready
+**YES**
+
+---
+
+# Model Audit: app/Models/Brand.php / app/Models/Category.php
+
+## Model Purpose
+Hierarchical taxonomy and manufacturing classification models for cross-vertical entity organization.
+
+## Risk Level
+**MEDIUM / PERFORMANCE RISK**
+
+## Problems Found
+
+### Performance
+- **N+1 / DB Pressure**: `listingsCount` iterates through 6-7 relationships and performs individual `count()` queries. In a list of 50 items, this generates 300+ queries if the 10-20 minute cache is cold.
+- **Recursive Loading Risk**: `Category.php` defines `childrenRecursive` (L147). Eager loading this on a deep tree will cause an exponential number of queries or a memory exhaustion event.
+
+### Architecture
+- **Column Sprawl**: Uses multiple boolean flags (`is_property`, `is_auto`, etc.) to handle vertical filtering. This is not scalable; adding a new vertical requires a schema migration and model logic update.
+
+## Dangerous Relationships
+- `childrenRecursive` (Recursive loading risk)
+
+## Fillable/Guarded Safety
+**SAFE**
+
+## Relationship Safety
+**MEDIUM** (Due to recursion risk)
+
+## Laravel Best Practices
+**PASS**
+
+## Production Ready
+**YES (With performance warnings)**
+
+---
+
+# Model Audit: app/Models/Campaign.php
+
+## Model Purpose
+Represents marketing promotions and scheduled events.
+
+## Risk Level
+**LOW**
+
+## Problems Found
+
+### Database Architecture
+- **Missing Optimization**: Lacks composite indexes on `start_date`, `end_date`, and `is_active`, which are frequently used in the `scopeActive` filter.
+
+## Fillable/Guarded Safety
+**SAFE**
+
+---
+
+# Model Audit: app/Models/Cart.php / app/Models/CartItem.php
+
+## Model Purpose
+The transactional engine for ecommerce activities, managing persistent shopping sessions and item pricing.
+
+## Risk Level
+**CRITICAL / SECURITY RISK**
+
+## Problems Found
+
+### Security
+- **CRITICAL: Price Manipulation**: `CartItem.php` includes `unit_price` in `$fillable` (L20). This allows a malicious user to set their own price (e.g., $0.01) by injecting the attribute into a "Add to Cart" or "Update Item" request. Prices **MUST** be server-computed from the Product source of truth.
+
+### Performance
+- **Heavy Eager Loading**: `Cart.php` always loads `items`, which is correct for individual cart views but inefficient for "Abandoned Cart" reporting dashboards.
+
+## Dangerous Attributes
+- `unit_price` (Mass assignable in CartItem)
+- `temp_total` (Mass assignable in Cart)
+
+## Fillable/Guarded Safety
+**UNSAFE** (Critical: `unit_price` exposure)
+
+## Relationship Safety
+**SAFE**
+
+## Production Ready
+**NO**
+
+---
+
+# Model Audit: app/Models/Classified.php / app/Models/ClassifiedInquiry.php
+
+## Model Purpose
+Manages general marketplace listings and their respective lead communications.
+
+## Risk Level
+**HIGH / SECURITY RISK**
+
+## Problems Found
+
+### Security
+- **CRITICAL: Self-Approval Vulnerability**: `approved_at` and `is_featured` are mass assignable in `Classified.php` (L40). 
+
+### Performance
+- **Cache Stale Risk**: `all_photos` attribute uses a hardcoded 1-hour cache key that doesn't include a versioning timestamp, leading to stale image displays after updates.
+- **Pivot Overhead**: `ClassifiedInquiry.php` (Pivot) eager loads both `user` and `classifiedAd` by default, causing massive overhead when retrieving list of inquiries.
+
+## Fillable/Guarded Safety
+**UNSAFE**
+
+---
+
+# Model Audit: app/Models/Conversation.php
+
+## Model Purpose
+The core entity for the platform's private messaging system.
+
+## Risk Level
+**MEDIUM / ARCHITECTURAL SMELL**
+
+## Problems Found
+
+### Performance
+- **N+1 DB Count**: `unreadMessagesCount` (L113) performs a database query inside an accessor.
+
+### Architecture
+- **Global State Leakage**: The `unreadMessagesCount` accessor relies on the `auth()` helper (L117). This makes the model non-functional in API, CLI, or Queue contexts where an authenticated session might not exist or be different.
+
+## Fillable/Guarded Safety
+**SAFE**
+
+## Relationship Safety
+**SAFE**
+
+---
+
+# Model Audit: app/Models/EmailTemplate.php
+
+## Model Purpose
+Stores system-wide communication blueprints and transactional notification content.
+
+## Risk Level
+**LOW**
+
+## Problems Found
+
+### Security
+- **Identifier Risk**: `key` is included in `$fillable`. Modifying the unique key of a system template (e.g., 'order_confirmation') will break the application's ability to trigger that specific notification.
+
+## Fillable/Guarded Safety
+**MEDIUM**
+
+---
+
+# Model Audit: app/Models/Event.php / app/Models/EventBooking.php
+
+## Model Purpose
+Orchestrates the event ticketing lifecycle, from venue scheduling to financial reservation and inventory tracking.
+
+## Risk Level
+**CRITICAL / SECURITY RISK**
+
+## Problems Found
+
+### Security
+- **CRITICAL: Booking Price Manipulation**: `EventBooking.php` includes `total_price` and `status` in `$fillable` (L56-57). This allows a buyer to bypass payment gateways by injecting a `confirmed` status and a `0.00` price into the booking request.
+- **Mass Assignment (Listing)**: `approved_at` and `is_featured` are fillable in `Event.php`.
+
+### Performance
+- **Unoptimized Inventory Calculation**: `ticketsLeft` (L228) executes a complex `withSum` query inside an accessor. In an event discovery list, this will trigger one DB query per event unless manually eager-loaded with a custom count.
+
+### Architecture
+- **Hardcoded Formatting**: `priceFormatted` (L248) hardcodes the `$` symbol, ignoring the global currency settings used in other verticals (Auto/Classified).
+
+## Dangerous Attributes
+- `total_price` (Mass assignable in Booking)
+- `status` (Mass assignable in Booking)
+- `approved_at` (Mass assignable in Event)
+
+## Heavy Accessors/Mutators
+- `ticketsLeft` (DB Aggregate)
+
+## Fillable/Guarded Safety
+**UNSAFE** (Critical: Booking price exposure)
+
+## Relationship Safety
+**SAFE**
+
+## Production Ready
+**NO**
+
+---
+
+# Model Audit: app/Models/EventOccurrence.php / app/Models/EventOccurrenceTicket.php / app/Models/EventTicketType.php
+
+## Model Purpose
+Granular inventory and scheduling sub-models for managing multiple dates and ticket tiers for a single event.
+
+## Risk Level
+**MEDIUM**
+
+## Problems Found
+
+### Security
+- **Pricing Leakage**: `EventOccurrenceTicket.php` allows mass assignment of `base_price` and `sale_price`, posing a risk if tier-specific pricing is updated via user-driven requests.
+
+## Fillable/Guarded Safety
+**MEDIUM**
+
+---
+
+# Model Audit: app/Models/Favorite.php
+
+## Model Purpose
+A polymorphic engine for managing user-driven bookmarks and "wishlist" items across all marketplace verticals.
+
+## Risk Level
+**MEDIUM / SCALABILITY RISK**
+
+## Problems Found
+
+### Performance
+- **Polymorphic Eager Loading overhead**: `$with = ['favoritable']` (L42) is a massive scalability risk. It forces the application to load every unique listing model (Property, Auto, Event, Job, etc.) whenever a favorite list is retrieved. This will lead to massive memory bloat and "N+1" situations inside the polymorphic mapping.
+
+## Fillable/Guarded Safety
+**MEDIUM** (Due to user_id exposure)
+
+## Relationship Safety
+**FAIL** (Due to forced polymorphic eager loading)
+
+---
+
+# Model Audit: app/Models/Feature.php / app/Models/Gallery.php
+
+## Model Purpose
+Supporting models for taxonomy features and reusable visual media collections.
+
+## Risk Level
+**LOW**
+
+## Problems Found
+- **Standard Implementation**: These models follow established patterns, though `Feature.php` suffers from the same "Column Sprawl" as other taxonomy models.
+
+---
+
+# Model Audit: app/Models/GatewayCredential.php
+
+## Model Purpose
+Securely stores third-party payment integration credentials (keys, secrets) for various financial gateways.
+
+## Risk Level
+**LOW / ELITE**
+
+## Problems Found
+- **Elite Implementation**: Correctly uses `encrypted:array` (L39-40) to ensure sensitive keys are encrypted at rest in the database. This is a high-fidelity implementation that mitigates database breach risks.
+
+## Fillable/Guarded Safety
+**SAFE** (Encrypted at rest)
+
+## Production Ready
+**YES**
+
+---
+
+# Model Audit: app/Models/JobListing.php / app/Models/JobApplication.php
+
+## Model Purpose
+Facilitates the platform's recruitment vertical, managing employment listings and candidate acquisition workflows.
+
+## Risk Level
+**HIGH / SECURITY RISK**
+
+## Problems Found
+
+### Security
+- **CRITICAL: Self-Approval Vulnerability**: `approved_at` and `is_featured` are mass assignable in `JobListing.php` (L87). This allows employers to bypass moderation queues.
+- **Mass Assignment (Application)**: `status` and `viewed_at` are fillable in `JobApplication.php` (L58-61). A candidate could potentially mark their own application as "Accepted".
+
+### Performance
+- **N+1 Risk**: Accessors like `salaryRangeFormatted` (L211) rely on relationship state (`category?->title`) which may not be eager-loaded in listings.
+
+### Architecture
+- **Hardcoded Formatting**: Salary formats hardcode the `$` symbol, ignoring multi-currency localization settings.
+
+## Fillable/Guarded Safety
+**UNSAFE** (Critical: `approved_at` and `status` exposure)
+
+## Relationship Safety
+**SAFE**
+
+## Production Ready
+**NO**
+
+---
+
+# Model Audit: app/Models/Order.php / app/Models/OrderItem.php
+
+## Model Purpose
+The transactional core of the marketplace, managing financial exchanges, shipping logistics, and itemized billing.
+
+## Risk Level
+**CRITICAL / SECURITY RISK**
+
+## Problems Found
+
+### Security
+- **CRITICAL: Price & Status Manipulation**: `Order.php` includes `total_amount`, `status`, and `payment_status` in `$fillable` (L57-67). `OrderItem.php` includes `unit_price` and `total_price` in `$fillable` (L18-19).
+- **Attack Vector**: A malicious user can submit a POST request to the checkout endpoint with a `total_amount` of `0.00` and a `payment_status` of `paid`, effectively stealing products from the platform. These values **MUST** be server-calculated and never accepted from request input.
+
+## Dangerous Attributes
+- `total_amount` (Mass assignable in Order)
+- `payment_status` (Mass assignable in Order)
+- `unit_price` (Mass assignable in OrderItem)
+
+## Fillable/Guarded Safety
+**UNSAFE** (Critical: Financial integrity failure)
+
+## Production Ready
+**NO**
+
+---
+
+# Model Audit: app/Models/Message.php
+
+## Model Purpose
+Atomic data unit for the platform's communication threads.
+
+## Risk Level
+**CRITICAL / SECURITY RISK**
+
+## Problems Found
+
+### Security
+- **CRITICAL: User Impersonation**: `sender_id` is included in `$fillable` (L41). A user can send a message and inject the `sender_id` of another user (e.g., an Admin or a specific Seller) to perform social engineering or fraudulent communication. The `sender_id` **MUST** be forced to `auth()->id()` in the controller or a model observer.
+
+## Fillable/Guarded Safety
+**UNSAFE** (Critical: Identity theft risk)
+
+---
+
+# Model Audit: app/Models/Location.php / app/Models/Menu.php / app/Models/MenuItem.php
+
+## Model Purpose
+Navigational and geographic metadata models for content organization.
+
+## Risk Level
+**MEDIUM**
+
+## Problems Found
+
+### Performance
+- **Aggregated DB Pressure**: `Location.php` suffers from the same expensive `listingsCount` logic as other taxonomy models (6-7 DB counts per location).
+
+### Security
+- **XSS Risk**: `MenuItem.php` allows mass assignment of `url`. If the frontend renders these links without strict sanitization, it could lead to stored XSS via `javascript:` protocols.
+
+---
+
+# Model Audit: app/Models/GatewayFieldBlueprint.php / app/Models/NewsletterSubscriber.php
+
+## Model Purpose
+Blueprint definitions for gateway configuration and marketing acquisition.
+
+## Risk Level
+**LOW**
+
+## Problems Found
+- **Mass Assignment**: `is_confirmed` is fillable in `NewsletterSubscriber.php`, allowing users to self-confirm subscriptions without email verification.
+
+---
+
+# Model Audit: app/Models/Page.php / app/Models/PageContent.php
+
+## Model Purpose
+The dynamic layout engine for the platform, managing custom landing pages, system content, and versioned assets.
+
+## Risk Level
+**HIGH / SECURITY RISK**
+
+## Problems Found
+
+### Security
+- **CRITICAL: Stored XSS Risk**: Both `html` (L54) and `value` (L54 in PageContent) are mass assignable. A compromised administrative account could inject malicious scripts into public pages, leading to cookie theft or credential harvesting for all users.
+
+## Fillable/Guarded Safety
+**UNSAFE** (Stored XSS vector)
+
+## Production Ready
+**YES (With strict admin sanitization)**
+
+---
+
+# Model Audit: app/Models/Payment.php / app/Models/PaymentGateway.php
+
+## Model Purpose
+The platform's financial ledger and third-party integration registry for handling multi-currency transactions.
+
+## Risk Level
+**CRITICAL / SECURITY RISK**
+
+## Problems Found
+
+### Security
+- **CRITICAL: Ledger Manipulation**: `Payment.php` includes `amount`, `status`, `paid_at`, and `transaction_id` in `$fillable` (L53-62).
+- **Attack Vector**: This allows any user (or a compromised partner) to bypass actual payment verification by manually creating or updating a `Payment` record with a `completed` status and a forged `transaction_id`. Financial records **MUST** be immutable and managed via secure service-layer events.
+
+### Performance
+- **N+1 Risk**: `activeConfig` accessor (L82) in `PaymentGateway.php` triggers a relationship check. If listed without `credentials`, it will cause N+1 DB pressure.
+
+## Dangerous Attributes
+- `amount` (Mass assignable in Payment)
+- `status` (Mass assignable in Payment)
+
+## Fillable/Guarded Safety
+**UNSAFE** (Critical: Financial ledger exposure)
+
+## Production Ready
+**NO**
+
+---
+
+# Model Audit: app/Models/Plan.php
+
+## Model Purpose
+Defines subscription tiers and their respective feature quotas and pricing.
+
+## Risk Level
+**LOW**
+
+## Problems Found
+
+### Security
+- **Mass Assignment**: `price` is fillable. While an admin-only model, it's safer to guard sensitive pricing fields.
+
+## Fillable/Guarded Safety
+**MEDIUM**
+
+---
+
+# Model Audit: app/Models/Product.php / app/Models/Property.php / app/Models/Addons...
+
+## Model Purpose
+The high-fidelity core entities for the E-commerce and Real Estate verticals.
+
+## Risk Level
+**HIGH / SECURITY RISK**
+
+## Problems Found
+
+### Security
+- **CRITICAL: Moderation Bypass**: `approved_at` and `is_featured` are mass assignable in both `Product.php` and `Property.php`. Partners can bypass administrative review queues by injecting these timestamps into update requests.
+- **Price Manipulation (Addons)**: `price` and `additional_price` are mass assignable in `ProductAddon`, `ProductAttribute`, and `PropertyAddon`.
+
+### Performance
+- **N+1 Rating Calculation**: `ratingAverage` in both models executes a database query (`avg('rating')`) if not manually eager-loaded with `withAvg`.
+
+## Dangerous Attributes
+- `approved_at` (Mass assignable in Listing models)
+- `price` (Mass assignable in Addon models)
+
+## Fillable/Guarded Safety
+**UNSAFE** (Critical: Bypasses moderation workflows)
+
+## Relationship Safety
+**SAFE**
+
+## Production Ready
+**NO**
+
+---
+
+# Model Audit: app/Models/PropertyBooking.php / app/Models/PropertyVisit.php / app/Models/ServiceAppointment.php / app/Models/ServiceQuote.php
+
+## Model Purpose
+The lead generation and reservation core of the platform's professional services and real estate verticals.
+
+## Risk Level
+**CRITICAL / SECURITY RISK**
+
+## Problems Found
+
+### Security
+- **CRITICAL: Status & Quote Manipulation**: `status` and `viewed_at` are mass assignable across all lead models.
+- **Quote Hijacking**: In `ServiceQuote.php`, `quoted_price` is fillable (L55). A user can submit their own quote price, bypassing the provider's estimation phase.
+- **Financial Risk**: `PropertyBooking.php` allows mass assignment of `total_price` and `status`.
+
+### Performance
+- **N+1 Logic in Model**: `PropertyBooking.php` accessors (L110, L122, L141) execute separate database queries (`transactionLines()->where(...)`) per model instance. This will destroy performance on "My Bookings" registries. These should be calculated via `withSum` or aggregated in the database layer.
+
+## Dangerous Attributes
+- `status` (Mass assignable in all Lead models)
+- `quoted_price` (Mass assignable in ServiceQuote)
+- `total_price` (Mass assignable in PropertyBooking)
+
+## Fillable/Guarded Safety
+**UNSAFE** (Critical: Financial and moderation bypass)
+
+## Production Ready
+**NO**
+
+---
+
+# Model Audit: app/Models/Review.php
+
+## Model Purpose
+Centralized polymorphic engine for user-generated feedback and platform trust metrics.
+
+## Risk Level
+**CRITICAL / SECURITY RISK**
+
+## Problems Found
+
+### Security
+- **CRITICAL: Self-Approval**: `status` is mass assignable (L41). A user can leave a 5-star review and immediately set it to `approved` via the API, bypassing the moderation queue.
+
+## Fillable/Guarded Safety
+**UNSAFE** (Critical: Trust integrity failure)
+
+---
+
+# Model Audit: app/Models/Service.php / app/Models/ServicePackage.php / app/Models/SeasonalPrice.php / app/Models/PropertyFee.php
+
+## Model Purpose
+Pricing and definition models for complex service offerings and rental overrides.
+
+## Risk Level
+**HIGH**
+
+## Problems Found
+
+### Security
+- **Moderation Bypass**: `Service.php` allows mass assignment of `approved_at` and `is_featured` (L47).
+- **Price Exposure**: `base_price`, `sale_price`, and addon prices are mass assignable, requiring strict controller-level validation.
+
+### Performance
+- **N+1 Risk**: `ratingAverage` in `Service.php` (L118) executes a database query per instance.
+
+## Fillable/Guarded Safety
+**UNSAFE** (Moderation and pricing exposure)
+
+---
+
+# Model Audit: app/Models/PropertyNeighborhood.php / app/Models/PropertyScore.php
+
+## Model Purpose
+Metadata and enrichment data for property listings.
+
+## Risk Level
+**LOW**
+
+## Problems Found
+- No critical architectural or security failures; simple attribute-heavy models.
+
+---
+
+# Model Audit: app/Models/User.php
+
+## Model Purpose
+The central identity and authorization engine of the Sellio platform.
+
+## Risk Level
+**CRITICAL / SECURITY RISK**
+
+## Problems Found
+
+### Security
+- **CRITICAL: Account Privilege Escalation**: `email_verified_at` is included in `$fillable` (L71). A user can self-verify their email by injecting a timestamp into a profile update request, bypassing security protocols.
+- **Identity Theft (Messaging)**: The messaging logic (L130-170) is tightly coupled with the model, but lacks strict authorization guardrails at the model layer.
+
+### Performance
+- **God Model Anti-Pattern**: The model is overloaded with messaging, partner metrics, buyer history, and AdminLTE logic (287 lines).
+- **N+1 Message Count**: `newMessages` accessor (L158) triggers a database count per instance, which will cause performance degradation on user lists/dashboards.
+
+### Architecture
+- **In-Memory Calculations**: `rating` helper (L261) performs multiple queries and in-memory averages instead of utilizing database views or `withAvg`.
+
+## Fillable/Guarded Safety
+**UNSAFE** (Critical: `email_verified_at` exposure)
+
+## Production Ready
+**NO**
+
+---
+
+# Model Audit: app/Models/Subscription.php / app/Models/Withdrawal.php / app/Models/TransactionLine.php
+
+## Model Purpose
+The revenue and payout core of the SaaS ecosystem.
+
+## Risk Level
+**CRITICAL / SECURITY RISK**
+
+## Problems Found
+
+### Security
+- **CRITICAL: Payout & Access Theft**: `Subscription.php` and `Withdrawal.php` both have `status` and timestamps (`ends_at`, `approved_at`) in `$fillable`.
+- **Attack Vector**: A user can give themselves a lifetime "Active" subscription or "Approve" their own withdrawal requests by injecting these fields into an API update call.
+- **Ledger Corruption**: `TransactionLine.php` allows mass assignment of `amount`, making financial records untrustworthy.
+
+## Fillable/Guarded Safety
+**UNSAFE** (Critical: Financial and access theft vector)
+
+## Production Ready
+**NO**
+
+---
+
+# Model Audit: app/Models/Ticket.php / app/Models/TicketMessage.php
+
+## Model Purpose
+The dispute and support engine for marketplace trust.
+
+## Risk Level
+**CRITICAL / SECURITY RISK**
+
+## Problems Found
+
+### Security
+- **CRITICAL: Priority Escalation**: `priority` and `status` are fillable in `Ticket.php`.
+- **CRITICAL: Impersonation**: `user_id` is fillable in `TicketMessage.php` (L38). A user can reply to a ticket and set the `user_id` to an Admin's ID to forge an "Official" response.
+
+## Fillable/Guarded Safety
+**UNSAFE** (Critical: Priority escalation and impersonation)
+
+---
+
+# Model Audit: app/Models/Setting.php / app/Models/Tag.php / app/Models/Type.php / app/Models/Theme.php
+
+## Model Purpose
+Configuration and Taxonomy engines.
+
+## Risk Level
+**MEDIUM / SECURITY RISK**
+
+## Problems Found
+
+### Security
+- **XSS Vector**: `Setting.php` and `Theme.php` (variables) are mass assignable and often store raw strings (scripts, CSS).
+
+### Performance
+- ** Taxonomy Sprawl**: `Tag.php` and `Type.php` suffer from the `listingsCount` performance bottleneck (multiple counts per instance).
+
+---
