@@ -120,6 +120,7 @@ class UserController extends Controller
      */
     public function edit(User $user): View
     {
+        $user->load('roles');
         $roles = Role::all();
         return view('admin.users.edit', compact('user', 'roles'));
     }

@@ -132,8 +132,8 @@
                             'name' => \App\Models\User::PRIMARY_MEDIA, 
                             'label' => 'Upload Avatar',
                             'multiple' => false,
-                            'model' => \App\Models\User::class,
-                            'id' => $user->id ?? null,
+                            'model' => 'user',
+                            'record' => $user,
                             'noCard' => true,
                         ])
                     </div>

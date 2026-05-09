@@ -129,7 +129,7 @@
                         'name' => \App\Models\User::PRIMARY_MEDIA,
                         'label' => 'Upload Avatar',
                         'multiple' => false,
-                        'model' => \App\Models\User::class,
+                        'model' => 'user',
                         'id' => null,
                         'noCard' => true,
                     ])

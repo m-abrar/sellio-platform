@@ -24,23 +24,22 @@
 @endif
         @php
             $imageUrls = [];
-            $modelClass = $model;
             $modelMap = \App\Http\Controllers\Dashboard\MediaController::$modelMap;
-            
-            // 1. Resolve Alias to Class (if an alias was passed)
-            if (isset($modelMap[strtolower($model)])) {
-                $modelClass = $modelMap[strtolower($model)];
-            }
-            
-            // 2. Identify the Alias for Frontend (JS) use
             $flippedMap = array_flip($modelMap);
-            $alias = $flippedMap[$modelClass] ?? 'unknown';
 
-            // 3. Establish Record Persistence
-            $isEdit = $id && $modelClass::find($id);
-            $record = $isEdit ? $modelClass::find($id) : null;
+            // 1. Identify the Alias and Class
+            if (isset($record) && $record->exists) {
+                $modelClass = get_class($record);
+                $alias = $flippedMap[$modelClass] ?? 'unknown';
+            } else {
+                $alias = isset($modelMap[strtolower($model)]) ? strtolower($model) : ($flippedMap[$model] ?? 'unknown');
+                $modelClass = $modelMap[$alias] ?? $model;
+            }
+
+            // 2. Establish Record Persistence (Avoid ::find if record is passed)
+            $isEdit = isset($record) && $record->exists;
             
-            if ($record) {
+            if ($isEdit) {
                 if ($multiple) {
                     $imageUrls = $record->getMedia($name)->map(fn($media) => $media->getUrl());
                 } else {
@@ -158,7 +157,7 @@
             formData.append("image", file);
             formData.append("_token", "{{ csrf_token() }}");
             formData.append("model", "{{ $alias }}");
-            formData.append("id", "{{ $id ?? '' }}");
+            formData.append("id", "{{ $record->id ?? ($id ?? '') }}");
             formData.append("name", "{{ $name ?? 'images' }}");
             formData.append("multiple", "{{ $multiple ? '1' : '0' }}");
 
@@ -218,7 +217,7 @@
                         body: JSON.stringify({
                             image: imagePath,
                             model: "{{ $alias }}",
-                            id: "{{ $id ?? '' }}",
+                            id: "{{ $record->id ?? ($id ?? '') }}",
                             name: "{{ $name ?? 'images' }}"
                         })
 

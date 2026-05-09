@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
 use Spatie\MediaLibrary\HasMedia;
@@ -133,6 +134,17 @@ class Page extends Model implements HasMedia
     }
 
     // --- UI Helpers ---
+    
+    /**
+     * Sanitize HTML content before saving to prevent XSS.
+     * We allow common layout tags but block script and other high-risk elements.
+     */
+    protected function html(): Attribute
+    {
+        return Attribute::make(
+            set: fn ($value) => strip_tags($value, '<div><section><main><article><aside><header><footer><nav><p><br><hr><a><b><i><u><strong><em><span><ul><li><ol><h1><h2><h3><h4><h5><h6><img><blockquote><video><audio><source><track><canvas><svg><path><circle><rect><line><polyline><polygon><ellipse>')
+        );
+    }
 
     /**
      * Get a human-readable status label with CSS classes.
