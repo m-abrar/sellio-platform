@@ -23,9 +23,9 @@
         <div class="row mb-4 align-items-end">
             <div class="col-sm-6">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-history mr-2 text-primary"></i> System Heartbeat
+                    <i class="fas fa-history mr-2 text-primary"></i> {{ __('System Heartbeat') }}
                 </h1>
-                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Chronological audit trail of all administrative and system-level interactions.</p>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">{{ __('Chronological audit trail of all administrative and system-level interactions.') }}</p>
             </div>
             <div class="col-sm-6 text-right">
                 <div class="dropdown d-inline-block">
@@ -33,7 +33,7 @@
                         <i class="fas fa-filter mr-1"></i> {{ strtoupper(str_replace('_', ' ', $currentFilter)) }}
                     </button>
                     <div class="dropdown-menu dropdown-menu-right shadow-premium border-0" style="border-radius: 16px; padding: 10px;">
-                        <div class="dropdown-header smallest font-weight-bold text-muted text-uppercase">Filter Streams</div>
+                        <div class="dropdown-header smallest font-weight-bold text-muted text-uppercase">{{ __('Filter Streams') }}</div>
                         @foreach ($filters as $key => $filter)
                             <a class="dropdown-item rounded-lg py-2 px-3 mb-1 {{ $key == $currentFilter ? 'bg-primary-soft text-primary active' : '' }}" 
                                href="{{ route('admin.activity-log.index', ['filter' => $key]) }}">
@@ -42,7 +42,7 @@
                         @endforeach
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item rounded-lg py-2 px-3 text-danger" href="{{ route('admin.activity-log.index', ['filter' => 'all']) }}">
-                            <i class="fas fa-globe mr-2 opacity-50"></i> All Operational Data
+                            <i class="fas fa-globe mr-2 opacity-50"></i> {{ __('All Operational Data') }}
                         </a>
                     </div>
                 </div>
@@ -61,10 +61,10 @@
 
     <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
         <div class="card-header bg-white border-0 py-4 px-4">
-            <h3 class="card-title font-weight-bold text-dark mb-0">Operational Logs</h3>
+            <h3 class="card-title font-weight-bold text-dark mb-0">{{ __('Operational Logs') }}</h3>
             <div class="card-tools">
                 <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest">
-                    LIVE STREAMING
+                    {{ __('LIVE STREAMING') }}
                 </span>
             </div>
         </div>
@@ -73,12 +73,12 @@
                 <table id="activity-log-table" class="table table-hover table-premium mb-0">
                     <thead class="thead-light">
                         <tr>
-                            <th class="pl-4">Timestamp</th>
-                            <th>Identity</th>
-                            <th>Operation</th>
-                            <th>Description</th>
-                            <th>Target Model</th>
-                            <th class="text-right pr-4">Metrics</th>
+                            <th class="pl-4">{{ __('Timestamp') }}</th>
+                            <th>{{ __('Identity') }}</th>
+                            <th>{{ __('Operation') }}</th>
+                            <th>{{ __('Description') }}</th>
+                            <th>{{ __('Target Model') }}</th>
+                            <th class="text-right pr-4">{{ __('Metrics') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -97,7 +97,7 @@
                                             <span class="font-weight-bold text-dark">{{ $activity->causer->name ?? $activity->causer->email }}</span>
                                         </div>
                                     @else
-                                        <span class="badge badge-secondary-soft text-secondary px-3 py-1 rounded-pill smallest font-weight-bold">INTERNAL SYSTEM</span>
+                                        <span class="badge badge-secondary-soft text-secondary px-3 py-1 rounded-pill smallest font-weight-bold">{{ __('INTERNAL SYSTEM') }}</span>
                                     @endif
                                 </td>
                                 <td class="align-middle">
@@ -139,7 +139,7 @@
                                             <i class="fas fa-database mr-1 text-primary"></i> DATA
                                         </button>
                                     @else
-                                        <span class="text-muted smallest font-weight-bold">STATIC</span>
+                                        <span class="text-muted smallest font-weight-bold">{{ __('STATIC') }}</span>
                                     @endif
                                 </td>
                             </tr>
@@ -149,7 +149,7 @@
             </div>
         </div>
         <div class="card-footer bg-white border-0 py-4 px-4 d-flex justify-content-between align-items-center">
-            <div class="text-muted smallest font-weight-bold uppercase">Showing {{ $activityLogs->firstItem() }} to {{ $activityLogs->lastItem() }} of {{ $activityLogs->total() }} events</div>
+            <div class="text-muted smallest font-weight-bold uppercase">{{ __('Showing') }} {{ $activityLogs->firstItem() }} {{ __('to') }} {{ $activityLogs->lastItem() }} {{ __('of') }} {{ $activityLogs->total() }} {{ __('events') }}</div>
             <div>{{ $activityLogs->appends(request()->except('page'))->links() }}</div>
         </div>
     </div>
@@ -162,7 +162,7 @@
         <div class="modal-content border-0 shadow-premium" style="border-radius: 24px;">
             <div class="modal-header border-0 bg-dark py-4 px-4" style="border-top-left-radius: 24px; border-top-right-radius: 24px;">
                 <h5 class="modal-title text-white font-weight-bold" id="detailsModalLabel-{{ $activity->id }}">
-                    <i class="fas fa-fingerprint mr-2 text-primary"></i> Data Signature (ID: {{ $activity->id }})
+                    <i class="fas fa-fingerprint mr-2 text-primary"></i> {{ __('Data Signature (ID: :id)', ['id' => $activity->id]) }}
                 </h5>
                 <button type="button" class="close text-white opacity-50" data-dismiss="alert" data-dismiss="modal">
                     <span aria-hidden="true">&times;</span>
@@ -171,7 +171,7 @@
             <div class="modal-body p-4 bg-light">
                 <div class="row">
                     <div class="col-md-12">
-                        <h6 class="smallest font-weight-bold text-primary text-uppercase letter-spacing-1 mb-3">Contextual Metadata</h6>
+                        <h6 class="smallest font-weight-bold text-primary text-uppercase letter-spacing-1 mb-3">{{ __('Contextual Metadata') }}</h6>
                         <div class="bg-white p-3 rounded-xl border mb-4">
                             <pre class="mb-0 small text-dark font-weight-600" style="white-space: pre-wrap;">{{ json_encode($activity->properties->except(['old', 'attributes'])->toArray(), JSON_PRETTY_PRINT) }}</pre>
                         </div>
@@ -182,14 +182,14 @@
                         @endphp
 
                         @if (!empty($dataToIterate))
-                            <h6 class="smallest font-weight-bold text-primary text-uppercase letter-spacing-1 mb-3">Data Mutation Spectrum</h6>
+                            <h6 class="smallest font-weight-bold text-primary text-uppercase letter-spacing-1 mb-3">{{ __('Data Mutation Spectrum') }}</h6>
                             <div class="table-responsive rounded-xl border overflow-hidden">
                                 <table class="table table-sm table-hover mb-0 bg-white">
                                     <thead class="bg-light">
                                         <tr>
-                                            <th class="px-3 py-2 smallest font-weight-bold">Attribute</th>
-                                            <th class="px-3 py-2 smallest font-weight-bold">Historical State</th>
-                                            <th class="px-3 py-2 smallest font-weight-bold">Modified State</th>
+                                            <th class="px-3 py-2 smallest font-weight-bold">{{ __('Attribute') }}</th>
+                                            <th class="px-3 py-2 smallest font-weight-bold">{{ __('Historical State') }}</th>
+                                            <th class="px-3 py-2 smallest font-weight-bold">{{ __('Modified State') }}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -203,8 +203,20 @@
                                             @endphp
                                             <tr>
                                                 <td class="px-3 py-2 align-middle"><strong class="text-dark small uppercase">{{ $key }}</strong></td>
-                                                <td class="px-3 py-2 align-middle text-muted small">{!! $oldValue ?? '<span class="opacity-50">INITIAL</span>' !!}</td>
-                                                <td class="px-3 py-2 align-middle font-weight-bold text-dark small">{!! $isDeletion ? '<span class="badge badge-danger-light text-danger">PURGED</span>' : $newValue !!}</td>
+                                                <td class="px-3 py-2 align-middle text-muted small">
+                                                    @if(is_null($oldValue))
+                                                        <span class="opacity-50">{{ __('INITIAL') }}</span>
+                                                    @else
+                                                        {{ $oldValue }}
+                                                    @endif
+                                                </td>
+                                                <td class="px-3 py-2 align-middle font-weight-bold text-dark small">
+                                                    @if($isDeletion)
+                                                        <span class="badge badge-danger-light text-danger">{{ __('PURGED') }}</span>
+                                                    @else
+                                                        {{ $newValue }}
+                                                    @endif
+                                                </td>
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -215,7 +227,7 @@
                 </div>
             </div>
             <div class="modal-footer border-0 p-4">
-                <button type="button" class="btn btn-default btn-block rounded-pill font-weight-bold py-2 shadow-sm border" data-dismiss="modal">DISMISS SIGNATURE</button>
+                <button type="button" class="btn btn-default btn-block rounded-pill font-weight-bold py-2 shadow-sm border" data-dismiss="modal">{{ __('DISMISS SIGNATURE') }}</button>
             </div>
         </div>
     </div>

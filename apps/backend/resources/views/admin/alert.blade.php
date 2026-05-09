@@ -22,7 +22,7 @@
                 <i class="fas fa-{{ $alert['icon'] }} fa-lg"></i>
             </div>
             <div class="alert-content">
-                <h6 class="font-weight-bold text-dark mb-1 smallest text-uppercase letter-spacing-1">{{ strtoupper($alert['key']) }} NOTIFICATION</h6>
+                <h6 class="font-weight-bold text-dark mb-1 smallest text-uppercase letter-spacing-1">{{ strtoupper($alert['key']) }} {{ __('NOTIFICATION') }}</h6>
                 <p class="mb-0 text-secondary small font-weight-600">
                     @if($alert['key'] === 'status')
                         @switch(session('status'))
@@ -52,7 +52,7 @@
             <i class="fas fa-exclamation-circle fa-lg"></i>
         </div>
         <div class="alert-content">
-            <h6 class="font-weight-bold text-dark mb-1 smallest text-uppercase letter-spacing-1">VALIDATION ERRORS</h6>
+            <h6 class="font-weight-bold text-dark mb-1 smallest text-uppercase letter-spacing-1">{{ __('VALIDATION ERRORS') }}</h6>
             @if($errors->count() > 1)
                 <ul class="mb-0 text-secondary small font-weight-600 ps-0 list-unstyled">
                     @foreach ($errors->all() as $error)

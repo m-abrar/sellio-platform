@@ -23,15 +23,15 @@
         <div class="row mb-4 align-items-center">
             <div class="col-md-8">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-map-marker-alt mr-2 text-primary"></i> Geographic Areas
+                    <i class="fas fa-map-marker-alt mr-2 text-primary"></i> {{ __('Geographic Areas') }}
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">
-                    Manage regional operational hubs and service availability boundaries.
+                    {{ __('Manage regional operational hubs and service availability boundaries.') }}
                 </p>
             </div>
             <div class="col-md-4 text-right">
                 <a href="{{ route('admin.locations.create') }}" class="btn btn-primary rounded-pill px-4 py-2 font-weight-bold shadow-premium smallest uppercase letter-spacing-1">
-                    <i class="fas fa-plus-circle mr-2"></i> Add Location
+                    <i class="fas fa-plus-circle mr-2"></i> {{ __('Add Location') }}
                 </a>
             </div>
         </div>
@@ -44,10 +44,10 @@
 
     <div class="card border-0 shadow-premium overflow-hidden rounded-24 datatable-premium-layout">
         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
-            <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">Geographic Registry</h3>
+            <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">{{ __('Geographic Registry') }}</h3>
             <div class="card-tools d-flex align-items-center ml-auto">
                 <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase mr-3">
-                    <i class="fas fa-map-marked-alt mr-1"></i> {{ count($locations) }} AREAS FOUND
+                    <i class="fas fa-map-marked-alt mr-1"></i> {{ count($locations) }} {{ __('AREAS FOUND') }}
                 </span>
                 <button type="button" class="btn btn-tool text-muted" data-card-widget="maximize">
                     <i class="fas fa-expand"></i>
@@ -61,12 +61,12 @@
                 <table id="locations-table" class="table table-hover table-premium mb-0">
                     <thead class="thead-light">
                         <tr>
-                            <th class="text-center col-media-70">Preview</th>
-                            <th>Name</th>
-                            <th>Regional Details</th>
-                            <th>Module Applicability</th>
-                            <th class="text-right">Status</th>
-                            <th class="text-right px-4">Actions</th>
+                            <th class="text-center col-media-70">{{ __('Preview') }}</th>
+                            <th>{{ __('Name') }}</th>
+                            <th>{{ __('Regional Details') }}</th>
+                            <th>{{ __('Module Applicability') }}</th>
+                            <th class="text-right">{{ __('Status') }}</th>
+                            <th class="text-right px-4">{{ __('Actions') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -98,36 +98,31 @@
                                 
                                 <td class="text-right align-middle">
                                     <span class="badge {{ $location->is_published ? 'badge-success-light text-success' : 'badge-danger-light text-danger' }} px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 shadow-xs">
-                                        {{ $location->is_published ? 'Active' : 'Draft' }}
+                                        {{ $location->is_published ? __('Active') : __('Draft') }}
                                     </span>
                                 </td>
                                 
                                 <td class="text-right align-middle px-4">
                                     <div class="btn-group btn-group-premium">
-                                        <a href="{{ route('admin.locations.edit', $location->id) }}" class="btn text-info" data-toggle="tooltip" title="Modify Details"><i class="fas fa-edit"></i></a>
+                                        <a href="{{ route('admin.locations.edit', $location->id) }}" class="btn text-info" data-toggle="tooltip" title="{{ __('Modify Details') }}"><i class="fas fa-edit"></i></a>
                                         <form id="delete-location-{{ $location->id }}" action="{{ route('admin.locations.destroy', $location->id) }}" method="POST" class="d-inline">
                                             @csrf @method('DELETE')
-                                            <button type="button" class="btn text-danger" data-toggle="tooltip" title="Remove Location" onclick="confirmDelete('delete-location-{{ $location->id }}')"><i class="fas fa-trash-alt"></i></button>
+                                            <button type="button" class="btn text-danger" data-toggle="tooltip" title="{{ __('Remove Location') }}" onclick="confirmDelete('delete-location-{{ $location->id }}', '{{ __('Purge Geographic Area?') }}', '{{ __('This action will remove the regional operation hub and its associations.') }}')"><i class="fas fa-trash-alt"></i></button>
                                         </form>
                                     </div>
                                 </td>
                             </tr>
                         @empty
-                            <tr class="empty-state">
-                                <td colspan="6" class="text-center py-5">
-                                    <i class="fas fa-map-marked-alt fa-3x text-muted mb-3 d-block"></i>
-                                    <h5 class="text-muted font-weight-bold">No Locations Found</h5>
-                                    @if(request('search'))
-                                        <p class="text-secondary small mb-3">No results matching "<strong>{{ request('search') }}</strong>".</p>
-                                        <a href="{{ route('admin.locations.index') }}" class="btn btn-default btn-sm px-4">Clear Search</a>
-                                    @else
-                                        <p class="text-secondary small mb-3">Define your operation areas to start categorizing entries.</p>
-                                        <a href="{{ route('admin.locations.create') }}" class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-premium smallest uppercase letter-spacing-1">
-                                            <i class="fas fa-plus mr-2"></i> Add Your First Location
-                                        </a>
-                                    @endif
-                                </td>
-                            </tr>
+                        @include('admin._partials._empty-state', [
+                            'colspan' => 6,
+                            'icon' => 'fas fa-map-marked-alt',
+                            'title' => __('No Locations Found'),
+                            'description' => request('search') 
+                                ? __('No results matching ":search"', ['search' => request('search')]) 
+                                : __('Define your operation areas to start categorizing entries.'),
+                            'button_text' => request('search') ? __('Clear Search') : __('Add Your First Location'),
+                            'button_link' => request('search') ? route('admin.locations.index') : route('admin.locations.create')
+                        ])
                         @endforelse
                     </tbody>
                 </table>

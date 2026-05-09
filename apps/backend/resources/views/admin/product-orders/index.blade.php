@@ -27,15 +27,15 @@
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-shopping-bag mr-2 text-primary opacity-50"></i> {{ __('Sales & Orders') }}
                 </h1>
-                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Track marketplace transactions, fulfillment status, and customer shipments.</p>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">{{ __('Track marketplace transactions, fulfillment status, and customer shipments.') }}</p>
             </div>
             <div class="col-sm-5 text-right">
                 <div class="d-flex justify-content-end align-items-center gap-12">
                     <a href="{{ route('admin.product-orders.create') }}" class="btn btn-primary rounded-pill px-4 py-2 font-weight-bold shadow-premium smallest uppercase letter-spacing-1">
-                        <i class="fas fa-plus-circle mr-2"></i> Add Order
+                        <i class="fas fa-plus-circle mr-2"></i> {{ __('Add Order') }}
                     </a>
                     <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">
-                        <i class="fas fa-th-large"></i> Dashboard
+                        <i class="fas fa-th-large"></i> {{ __('Dashboard') }}
                     </a>
                 </div>
             </div>
@@ -53,10 +53,10 @@
         {{-- Main Table --}}
         <div class="card registry-table-card">
             <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
-                <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none letter-spacing-1">Commerce Registry</h3>
+                <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none letter-spacing-1">{{ __('Commerce Registry') }}</h3>
                 <div class="card-tools d-flex align-items-center ml-auto">
                     <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase mr-2">
-                        <i class="fas fa-database mr-1"></i> {{ $orders->total() }} TRANSACTIONS
+                        <i class="fas fa-database mr-1"></i> {{ $orders->total() }} {{ __('TRANSACTIONS') }}
                     </span>
                     <button type="button" class="btn btn-tool text-muted" data-card-widget="maximize">
                         <i class="fas fa-expand"></i>
@@ -77,13 +77,13 @@
                                             <label class="custom-control-label" for="selectAll"></label>
                                         </div>
                                     </th>
-                                    <th class="text-center col-media-80">Media</th>
-                                    <th>Protocol</th>
-                                    <th>Principal</th>
-                                    <th>Aggregate</th>
-                                    <th>Settlement</th>
-                                    <th class="text-center">Lifecycle</th>
-                                    <th class="text-right pr-4">Actions</th>
+                                    <th class="text-center col-media-80">{{ __('Media') }}</th>
+                                    <th>{{ __('Protocol') }}</th>
+                                    <th>{{ __('Principal') }}</th>
+                                    <th>{{ __('Aggregate') }}</th>
+                                    <th>{{ __('Settlement') }}</th>
+                                    <th class="text-center">{{ __('Lifecycle') }}</th>
+                                    <th class="text-right pr-4">{{ __('Actions') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -113,18 +113,18 @@
                                             @endif
                                         </td>
                                         <td class="align-middle">
-                                            <span class="d-block font-weight-bold text-dark mb-0 smallest uppercase letter-spacing-1">{{ $order->user->name ?? 'Guest' }}</span>
+                                            <span class="d-block font-weight-bold text-dark mb-0 smallest uppercase letter-spacing-1">{{ $order->user->name ?? __('Guest') }}</span>
                                             <div class="smallest text-muted text-monospace">{{ Str::limit($order->user->email ?? 'no-email', 20) }}</div>
                                         </td>
                                         <td class="align-middle">
                                             <div class="font-weight-bold text-dark mb-0 text-monospace h6">${{ number_format($order->total_amount, 2) }}</div>
-                                            <div class="smallest text-muted font-weight-bold uppercase letter-spacing-1">{{ $order->items->count() }} {{ Str::plural('UNIT', $order->items->count()) }}</div>
+                                            <div class="smallest text-muted font-weight-bold uppercase letter-spacing-1">{{ $order->items->count() }} {{ Str::plural(__('UNIT'), $order->items->count()) }}</div>
                                         </td>
                                         <td class="align-middle">
                                             @if($order->payment_status === 'paid')
-                                                <span class="badge badge-success-light px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1">Paid</span>
+                                                <span class="badge badge-success-light px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1">{{ __('Paid') }}</span>
                                             @else
-                                                <span class="badge badge-warning-light px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1">Unsettled</span>
+                                                <span class="badge badge-warning-light px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1">{{ __('Unsettled') }}</span>
                                             @endif
                                         </td>
                                         <td class="text-center align-middle">
@@ -135,7 +135,7 @@
                                         </td>
                                         <td class="text-right align-middle pr-4">
                                             <div class="btn-group btn-group-premium">
-                                                <a href="{{ route('admin.product-orders.show', $order->id) }}" class="btn text-info" data-toggle="tooltip" title="Inspect Order"><i class="fas fa-eye"></i></a>
+                                                <a href="{{ route('admin.product-orders.show', $order->id) }}" class="btn text-info" data-toggle="tooltip" title="{{ __('Inspect Order') }}"><i class="fas fa-eye"></i></a>
                                             </div>
                                         </td>
                                     </tr>
@@ -157,7 +157,7 @@
 
             @if(method_exists($orders, 'hasPages') && $orders->hasPages())
                 <div class="card-footer bg-white border-top py-4 px-4 d-flex justify-content-between align-items-center">
-                    <div class="text-muted smallest font-weight-bold uppercase letter-spacing-1">Displaying {{ $orders->firstItem() }} - {{ $orders->lastItem() }} of {{ $orders->total() }} records</div>
+                    <div class="text-muted smallest font-weight-bold uppercase letter-spacing-1">{{ __('Displaying') }} {{ $orders->firstItem() }} - {{ $orders->lastItem() }} {{ __('of') }} {{ $orders->total() }} {{ __('records') }}</div>
                     <div>{{ $orders->withQueryString()->links('pagination::bootstrap-4') }}</div>
                 </div>
             @endif
@@ -170,28 +170,28 @@
             <div class="d-flex align-items-center justify-content-between h-100 px-4">
                 <div class="d-flex align-items-center">
                     <div class="selection-count-badge mr-4">
-                        <span id="selected-count">0</span> SELECTED
+                        <span id="selected-count">0</span> {{ __('SELECTED') }}
                     </div>
                     <div class="divider-v"></div>
                     <div class="d-flex gap-15">
                         <div class="btn-group dropup">
                             <button type="button" class="btn btn-action-pill dropdown-toggle" data-toggle="dropdown">
-                                <i class="fas fa-sync-alt mr-2"></i> UPDATE STATUS
+                                <i class="fas fa-sync-alt mr-2"></i> {{ __('UPDATE STATUS') }}
                             </button>
                             <div class="dropdown-menu dropdown-menu-right shadow-premium-lg border-0 mb-3 rounded-xl">
-                                <h6 class="dropdown-header text-uppercase smallest letter-spacing-1 text-muted mb-2">Transition Lifecycle</h6>
+                                <h6 class="dropdown-header text-uppercase smallest letter-spacing-1 text-muted mb-2">{{ __('Transition Lifecycle') }}</h6>
                                 <a class="dropdown-item py-3 px-4 font-weight-bold smallest uppercase letter-spacing-1" href="javascript:void(0)" onclick="handleBulkStatus('pending')">
-                                    <i class="fas fa-clock mr-2 text-warning"></i> Set to Pending
+                                    <i class="fas fa-clock mr-2 text-warning"></i> {{ __('Set to Pending') }}
                                 </a>
                                 <a class="dropdown-item py-3 px-4 font-weight-bold smallest uppercase letter-spacing-1" href="javascript:void(0)" onclick="handleBulkStatus('processing')">
-                                    <i class="fas fa-sync mr-2 text-info"></i> Start Processing
+                                    <i class="fas fa-sync mr-2 text-info"></i> {{ __('Start Processing') }}
                                 </a>
                                 <a class="dropdown-item py-3 px-4 font-weight-bold smallest uppercase letter-spacing-1" href="javascript:void(0)" onclick="handleBulkStatus('completed')">
-                                    <i class="fas fa-check-circle mr-2 text-success"></i> Mark Completed
+                                    <i class="fas fa-check-circle mr-2 text-success"></i> {{ __('Mark Completed') }}
                                 </a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item py-3 px-4 font-weight-bold smallest uppercase letter-spacing-1 text-danger" href="javascript:void(0)" onclick="handleBulkStatus('cancelled')">
-                                    <i class="fas fa-times-circle mr-2"></i> Cancel Orders
+                                    <i class="fas fa-times-circle mr-2"></i> {{ __('Cancel Orders') }}
                                 </a>
                             </div>
                         </div>
@@ -252,12 +252,12 @@
 
         window.handleBulkStatus = function(status) {
             SellioAlert.fire({
-                title: 'Update ' + $('.order-checkbox:checked').length + ' orders?',
-                text: "Lifecycle status will be transitioned to " + status.toUpperCase(),
+                title: '{{ __('Update') }} ' + $('.order-checkbox:checked').length + ' {{ __('orders?') }}',
+                text: "{{ __('Lifecycle status will be transitioned to') }} " + status.toUpperCase(),
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonText: 'TRANSITION ALL',
-                cancelButtonText: 'ABORT'
+                confirmButtonText: '{{ __('TRANSITION ALL') }}',
+                cancelButtonText: '{{ __('ABORT') }}'
             }).then((result) => {
                 if (result.isConfirmed) {
                     $('#bulk-status-input').val(status);

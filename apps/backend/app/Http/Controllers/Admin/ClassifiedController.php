@@ -12,6 +12,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use App\Traits\ManagesApproval;
+use App\Services\Admin\ClassifiedManagementService;
 
 /**
  * Class ClassifiedController
@@ -28,6 +29,21 @@ class ClassifiedController extends Controller
      * @var string
      */
     protected $modelClass = Classified::class;
+
+    /**
+     * @var ClassifiedManagementService
+     */
+    protected $classifiedService;
+
+    /**
+     * ClassifiedController constructor.
+     *
+     * @param ClassifiedManagementService $classifiedService
+     */
+    public function __construct(ClassifiedManagementService $classifiedService)
+    {
+        $this->classifiedService = $classifiedService;
+    }
 
     /**
      * Display a filtered and paginated list of all classified advertisements.
@@ -74,18 +90,16 @@ class ClassifiedController extends Controller
      */
     public function store(ClassifiedRequest $request): RedirectResponse
     {
-        $validated = $request->validated();
-        $validated['user_id'] = auth()->id();
-        $validated['is_published'] = $request->boolean('is_published');
-        $validated['is_featured'] = $request->boolean('is_featured');
-        $validated['is_for_rent'] = $request->boolean('is_for_rent');
-        $validated['is_for_sale'] = $request->boolean('is_for_sale');
+        try {
+            $classified = $this->classifiedService->saveClassified($request->validated());
 
-        $classified = Classified::create($validated);
-
-        return redirect()
-            ->route('admin.classifieds.edit', $classified->id)
-            ->with('success', __('Classified ad created successfully.'));
+            return redirect()
+                ->route('admin.classifieds.edit', $classified->id)
+                ->with('success', __('Classified ad created successfully.'));
+        } catch (\Exception $e) {
+            Log::error("Classified Creation Failure: {$e->getMessage()}");
+            return back()->withInput()->with('error', __('Synchronization failure.'));
+        }
     }
 
     /**
@@ -113,17 +127,16 @@ class ClassifiedController extends Controller
      */
     public function update(ClassifiedRequest $request, Classified $classified): RedirectResponse
     {
-        $validated = $request->validated();
-        $validated['is_published'] = $request->boolean('is_published');
-        $validated['is_featured'] = $request->boolean('is_featured');
-        $validated['is_for_rent'] = $request->boolean('is_for_rent');
-        $validated['is_for_sale'] = $request->boolean('is_for_sale');
+        try {
+            $this->classifiedService->saveClassified($request->validated(), $classified);
 
-        $classified->update($validated);
-
-        return redirect()
-            ->route('admin.classifieds.edit', $classified->id)
-            ->with('success', __('Classified ad updated successfully.'));
+            return redirect()
+                ->route('admin.classifieds.edit', $classified->id)
+                ->with('success', __('Classified ad updated successfully.'));
+        } catch (\Exception $e) {
+            Log::error("Classified Update Failure: {$e->getMessage()}", ['id' => $classified->id]);
+            return back()->withInput()->with('error', __('Update synchronization failure.'));
+        }
     }
 
     /**
@@ -146,14 +159,15 @@ class ClassifiedController extends Controller
      */
     public function duplicate(Classified $classified): RedirectResponse
     {
-        $clone = $classified->replicate();
-        $clone->is_published = false;
-        $clone->approved_at = null;
-        $clone->title = $classified->title . ' (Copy)';
-        $clone->save();
+        try {
+            $clone = $this->classifiedService->duplicateClassified($classified);
 
-        return redirect()
-            ->route('admin.classifieds.edit', $clone->id)
-            ->with('success', __('Classified replicated as draft successfully.'));
+            return redirect()
+                ->route('admin.classifieds.edit', $clone->id)
+                ->with('success', __('Classified replicated as draft successfully.'));
+        } catch (\Exception $e) {
+            Log::error("Classified Duplication Failure: {$e->getMessage()}", ['id' => $classified->id]);
+            return back()->with('error', __('Duplication failure.'));
+        }
     }
 }

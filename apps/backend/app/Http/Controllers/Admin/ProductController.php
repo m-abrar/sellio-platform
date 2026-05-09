@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
+use App\Services\Admin\ProductManagementService;
 
 /**
  * Class ProductController
@@ -22,6 +23,21 @@ use Illuminate\View\View;
  */
 class ProductController extends Controller
 {
+    /**
+     * @var ProductManagementService
+     */
+    protected $productService;
+
+    /**
+     * ProductController constructor.
+     *
+     * @param ProductManagementService $productService
+     */
+    public function __construct(ProductManagementService $productService)
+    {
+        $this->productService = $productService;
+    }
+
     /**
      * Display a filtered and paginated listing of all marketplace products.
      *
@@ -68,35 +84,8 @@ class ProductController extends Controller
      */
     public function store(ProductRequest $request): RedirectResponse
     {
-        $validated = $request->validated();
-
-        if (empty($validated['slug'])) {
-            $validated['slug'] = Str::slug($validated['title']);
-        }
-
         try {
-            DB::transaction(function () use ($validated) {
-                $productData = collect($validated)->except(['tags', 'attributes', 'addons'])->toArray();
-                $productData['user_id'] = auth()->id();
-
-                $product = Product::create($productData);
-
-                if (!empty($validated['tags'])) {
-                    $product->tags()->sync($validated['tags']);
-                }
-
-                if (!empty($validated['attributes'])) {
-                    foreach ($validated['attributes'] as $attr) {
-                        $product->attributes()->create($attr);
-                    }
-                }
-
-                if (!empty($validated['addons'])) {
-                    foreach ($validated['addons'] as $addon) {
-                        $product->addons()->create($addon);
-                    }
-                }
-            });
+            $this->productService->saveProduct($request->validated());
 
             return redirect()->route('admin.products.index')
                 ->with('success', __('Product created and synchronized successfully.'));
@@ -132,30 +121,8 @@ class ProductController extends Controller
      */
     public function update(ProductRequest $request, Product $product): RedirectResponse
     {
-        $validated = $request->validated();
-
         try {
-            DB::transaction(function () use ($validated, $product) {
-                $productData = collect($validated)->except(['tags', 'attributes', 'addons'])->toArray();
-                $product->update($productData);
-
-                $product->tags()->sync($validated['tags'] ?? []);
-
-                // Atomic Refresh Strategy: Re-synchronize complex sub-entities
-                $product->attributes()->delete();
-                if (!empty($validated['attributes'])) {
-                    foreach ($validated['attributes'] as $attr) {
-                        $product->attributes()->create($attr);
-                    }
-                }
-
-                $product->addons()->delete();
-                if (!empty($validated['addons'])) {
-                    foreach ($validated['addons'] as $addon) {
-                        $product->addons()->create($addon);
-                    }
-                }
-            });
+            $this->productService->saveProduct($request->validated(), $product);
 
             return redirect()->route('admin.products.index')
                 ->with('success', __('Product updated successfully.'));
@@ -174,21 +141,15 @@ class ProductController extends Controller
      */
     public function duplicate(Product $product): RedirectResponse
     {
-        $newProduct = $product->replicate();
-        $newProduct->title .= ' ' . __('(Copy)');
-        $newProduct->sku   .= '-COPY';
-        $newProduct->slug   = Str::slug($newProduct->title) . '-' . uniqid();
-        $newProduct->save();
+        try {
+            $newProduct = $this->productService->duplicateProduct($product);
 
-        $newProduct->tags()->sync($product->tags->pluck('id')->toArray());
-
-        // Recursive Asset Replication
-        foreach ($product->getMedia(Product::GALLERY_MEDIA) as $media) {
-            $media->copy($newProduct, Product::GALLERY_MEDIA);
+            return redirect()->route('admin.products.edit', $newProduct->id)
+                ->with('success', __('Product duplicated as draft successfully.'));
+        } catch (\Exception $e) {
+            Log::error("Product Duplication Failure: {$e->getMessage()}", ['id' => $product->id]);
+            return back()->with('error', __('Duplication failure.'));
         }
-
-        return redirect()->route('admin.products.edit', $newProduct->id)
-            ->with('success', __('Product duplicated as draft successfully.'));
     }
 
     /**

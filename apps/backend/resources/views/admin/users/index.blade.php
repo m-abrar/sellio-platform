@@ -12,7 +12,7 @@
 --}}
 @extends('adminlte::page')
 
-@section('title', 'Users Management')
+@section('title', __('Users Management'))
 
 @section('plugins.Datatables', true)
 
@@ -23,18 +23,18 @@
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-users-cog mr-2 text-primary opacity-50"></i> {{ $viewTitle ?? 'User Management' }}
                 </h1>
-                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Manage registered users, authentication profiles, and access tiers.</p>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">{{ __('Manage registered users, authentication profiles, and access tiers.') }}</p>
             </div>
             <div class="col-sm-5 d-flex align-items-center justify-content-end">
                 <div class="d-flex justify-content-end align-items-center gap-10">
                     <a href="{{ route('admin.roles.index') }}" class="btn btn-back shadow-sm px-3">
-                        <i class="fas fa-user-shield mr-1"></i> ROLES
+                        <i class="fas fa-user-shield mr-1"></i> {{ __('ROLES') }}
                     </a>
                     <a href="{{ route('admin.permissions.index') }}" class="btn btn-back shadow-sm px-3">
-                        <i class="fas fa-key mr-1"></i> PERMISSIONS
+                        <i class="fas fa-key mr-1"></i> {{ __('PERMISSIONS') }}
                     </a>
                     <a href="{{ route('admin.users.create') }}" class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-premium ml-2">
-                        <i class="fas fa-plus-circle mr-1"></i> ADD USER
+                        <i class="fas fa-plus-circle mr-1"></i> {{ __('ADD USER') }}
                     </a>
                 </div>
             </div>
@@ -49,11 +49,11 @@
     <div class="card border-0 shadow-premium overflow-hidden rounded-24">
         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center justify-content-between">
             <h5 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">
-                <i class="fas fa-users mr-2 text-primary opacity-50"></i> {{ $viewTitle ?? 'Registered Users' }} Registry
+                <i class="fas fa-users mr-2 text-primary opacity-50"></i> {{ $viewTitle ?? __('Registered Users') }} {{ __('Registry') }}
             </h5>
             <div class="card-tools ml-auto">
                 <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 shadow-xs">
-                    <i class="fas fa-database mr-1"></i> {{ $users->total() }} TOTAL PARTICIPANTS
+                    <i class="fas fa-database mr-1"></i> {{ $users->total() }} {{ __('TOTAL PARTICIPANTS') }}
                 </span>
             </div>
         </div>
@@ -63,10 +63,10 @@
                 <table id="users-table" class="table table-hover table-premium mb-0">
                     <thead class="thead-light">
                         <tr>
-                            <th>User Identity</th>
-                            <th>Email Address</th>
-                            <th>Assigned Roles</th>
-                            <th class="text-right px-4">Actions</th>
+                            <th>{{ __('User Identity') }}</th>
+                            <th>{{ __('Email Address') }}</th>
+                            <th>{{ __('Assigned Roles') }}</th>
+                            <th class="text-right px-4">{{ __('Actions') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -82,7 +82,7 @@
                                         <div>
                                             <span class="d-block font-weight-bold text-dark mb-0">{{ $user->name }}</span>
                                             <small class="text-muted text-uppercase font-weight-bold smallest-0-6 ls-0-5">
-                                                Joined {{ $user->created_at->format('M Y') }}
+                                                {{ __('Joined') }} {{ $user->created_at->format('M Y') }}
                                             </small>
                                         </div>
                                     </div>
@@ -103,7 +103,7 @@
                                     {{-- 2. Pending Approval Notification Badge --}}
                                     @if($user->is_partner && !$user->hasRole('partner'))
                                         <span class="badge badge-warning-light text-warning px-2 py-1 text-uppercase mr-1 smallest-0-65 ls-0-3">
-                                            <i class="fas fa-hourglass-half mr-1 text-xs"></i> Pending Partner
+                                            <i class="fas fa-hourglass-half mr-1 text-xs"></i> {{ __('Pending Partner') }}
                                         </span>
                                     @endif
                                 </td>
@@ -114,7 +114,7 @@
                                         <form action="{{ route('admin.users.approve', $user->id) }}" method="POST" class="d-inline">
                                             @csrf
                                             <button type="submit" class="btn btn-white btn-sm text-success py-2 px-3 border-right" 
-                                                    data-toggle="tooltip" title="Approve Partner">
+                                                    data-toggle="tooltip" title="{{ __('Approve Partner') }}">
                                                 <i class="fas fa-check-circle"></i>
                                             </button>
                                         </form>
@@ -123,14 +123,14 @@
                                         {{-- New: Show/Preview Button --}}
                                         <a href="{{ route('admin.users.show', $user->id) }}" 
                                         class="btn btn-white btn-sm text-primary py-2 px-3 border-right" 
-                                        data-toggle="tooltip" title="View Details">
+                                        data-toggle="tooltip" title="{{ __('View Details') }}">
                                             <i class="fas fa-eye"></i>
                                         </a>
 
                                         {{-- Edit Button --}}
                                         <a href="{{ route('admin.users.edit', $user->id) }}" 
                                         class="btn btn-white btn-sm text-info py-2 px-3 border-right" 
-                                        data-toggle="tooltip" title="Edit Profile">
+                                        data-toggle="tooltip" title="{{ __('Edit Profile') }}">
                                             <i class="fas fa-user-edit"></i>
                                         </a>
 
@@ -138,8 +138,8 @@
                                         <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="d-inline">
                                             @csrf @method('DELETE')
                                             <button type="submit" class="btn btn-white btn-sm text-danger py-2 px-3" 
-                                                    data-toggle="tooltip" title="Delete User"
-                                                    onclick="return confirm('Permanently delete this user account?')">
+                                                    data-toggle="tooltip" title="{{ __('Delete User') }}"
+                                                    onclick="return confirm('{{ __('Permanently delete this user account?') }}')">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
                                         </form>
@@ -150,9 +150,9 @@
                             @include('admin._partials._empty-state', [
                                 'colspan' => 4,
                                 'icon' => 'fas fa-user-shield',
-                                'title' => 'No Users Detected',
-                                'description' => 'The participant registry is currently empty. Synchronize your authentication provider or initialize new user profiles.',
-                                'button_text' => 'INITIALIZE USER',
+                                'title' => __('No Users Detected'),
+                                'description' => __('The participant registry is currently empty. Synchronize your authentication provider or initialize new user profiles.'),
+                                'button_text' => __('INITIALIZE USER'),
                                 'button_link' => route('admin.users.create')
                             ])
                         @endforelse

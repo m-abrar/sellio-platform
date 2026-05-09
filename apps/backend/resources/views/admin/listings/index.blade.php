@@ -27,22 +27,22 @@
                     <i class="fas fa-layer-group mr-2 text-primary opacity-50"></i>
                     {{ $type !== 'all' ? \Illuminate\Support\Str::title($type) : \Illuminate\Support\Str::title($status ?? 'All') }} Marketplace
                 </h1>
-                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Audit marketplace submissions, moderation statuses, and lifecycle states.</p>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">{{ __('Audit marketplace submissions, moderation statuses, and lifecycle states.') }}</p>
             </div>
             <div class="col-sm-5 d-flex align-items-center justify-content-end">
                 <div class="dropdown">
                     <button class="btn btn-primary btn-registry-add dropdown-toggle" type="button" id="addListingDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-plus-circle mr-1"></i> ADD NEW ASSET
+                        <i class="fas fa-plus-circle mr-1"></i> {{ __('ADD NEW ASSET') }}
                     </button>
                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-premium border-0 animate__animated animate__fadeInUp" aria-labelledby="addListingDropdown">
-                        <h6 class="dropdown-header text-uppercase smallest letter-spacing-1 font-weight-bold text-muted mb-2">Select Listing Vertical</h6>
+                        <h6 class="dropdown-header text-uppercase smallest letter-spacing-1 font-weight-bold text-muted mb-2">{{ __('Select Listing Vertical') }}</h6>
                         
                         @if(module_enabled('properties'))
                         <a class="dropdown-item d-flex align-items-center py-2 px-4 transition-all" href="{{ route('admin.properties.create') }}">
                             <div class="icon-box-soft bg-success-soft text-success mr-3 rounded-circle d-flex align-items-center justify-content-center icon-box-sm">
                                 <i class="fas fa-home smallest"></i>
                             </div>
-                            <span class="font-weight-bold small">Property Listing</span>
+                            <span class="font-weight-bold small">{{ __('Property Listing') }}</span>
                         </a>
                         @endif
 
@@ -51,7 +51,7 @@
                             <div class="icon-box-soft bg-primary-soft text-primary mr-3 rounded-circle d-flex align-items-center justify-content-center icon-box-sm">
                                 <i class="fas fa-car smallest"></i>
                             </div>
-                            <span class="font-weight-bold small">Automotive Asset</span>
+                            <span class="font-weight-bold small">{{ __('Automotive Asset') }}</span>
                         </a>
                         @endif
 
@@ -60,7 +60,7 @@
                             <div class="icon-box-soft bg-info-soft text-info mr-3 rounded-circle d-flex align-items-center justify-content-center icon-box-sm">
                                 <i class="fas fa-calendar-alt smallest"></i>
                             </div>
-                            <span class="font-weight-bold small">Event / Ticket</span>
+                            <span class="font-weight-bold small">{{ __('Event / Ticket') }}</span>
                         </a>
                         @endif
 
@@ -69,7 +69,7 @@
                             <div class="icon-box-soft bg-warning-soft text-warning mr-3 rounded-circle d-flex align-items-center justify-content-center icon-box-sm">
                                 <i class="fas fa-briefcase smallest"></i>
                             </div>
-                            <span class="font-weight-bold small">Job Opportunity</span>
+                            <span class="font-weight-bold small">{{ __('Job Opportunity') }}</span>
                         </a>
                         @endif
 
@@ -78,7 +78,7 @@
                             <div class="icon-box-soft bg-danger-soft text-danger mr-3 rounded-circle d-flex align-items-center justify-content-center icon-box-sm">
                                 <i class="fas fa-tools smallest"></i>
                             </div>
-                            <span class="font-weight-bold small">Professional Service</span>
+                            <span class="font-weight-bold small">{{ __('Professional Service') }}</span>
                         </a>
                         @endif
 
@@ -87,7 +87,7 @@
                             <div class="icon-box-soft bg-secondary-soft text-secondary mr-3 rounded-circle d-flex align-items-center justify-content-center icon-box-sm">
                                 <i class="fas fa-tags smallest"></i>
                             </div>
-                            <span class="font-weight-bold small">General Classified</span>
+                            <span class="font-weight-bold small">{{ __('General Classified') }}</span>
                         </a>
                         @endif
 
@@ -97,7 +97,7 @@
                             <div class="icon-box-soft bg-dark-soft text-dark mr-3 rounded-circle d-flex align-items-center justify-content-center icon-box-sm">
                                 <i class="fas fa-shopping-bag smallest"></i>
                             </div>
-                            <span class="font-weight-bold small">Retail Product</span>
+                            <span class="font-weight-bold small">{{ __('Retail Product') }}</span>
                         </a>
                         @endif
                     </div>
@@ -117,31 +117,31 @@
                 <div class="d-flex align-items-center justify-content-between">
                     <div class="d-flex align-items-center">
                         <span class="form-label-premium mb-0 mr-4">
-                            <i class="fas fa-filter mr-2 text-primary"></i> Lifecycle State:
+                            <i class="fas fa-filter mr-2 text-primary"></i> {{ __('Lifecycle State:') }}
                         </span>
                         <ul class="nav nav-pills nav-pills-premium">
                             <li class="nav-item">
                                 <a class="nav-link {{ $status === 'all' ? 'active' : '' }}" 
                                    href="{{ route(Route::currentRouteName(), ['status' => 'all']) }}">
-                                   <i class="fas fa-th-large mr-2"></i> ALL ASSETS
+                                   <i class="fas fa-th-large mr-2"></i> {{ __('ALL ASSETS') }}
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link {{ $status === 'active' ? 'active' : '' }}" 
                                    href="{{ route(Route::currentRouteName(), ['status' => 'active']) }}">
-                                   <i class="fas fa-check-circle mr-2"></i> ACTIVE
+                                   <i class="fas fa-check-circle mr-2"></i> {{ __('ACTIVE') }}
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link {{ $status === 'pending' ? 'active' : '' }}" 
                                    href="{{ route(Route::currentRouteName(), ['status' => 'pending']) }}">
-                                   <i class="fas fa-hourglass-half mr-2"></i> PENDING
+                                   <i class="fas fa-hourglass-half mr-2"></i> {{ __('PENDING') }}
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link {{ $status === 'expired' ? 'active' : '' }}" 
                                    href="{{ route(Route::currentRouteName(), ['status' => 'expired']) }}">
-                                   <i class="fas fa-calendar-times mr-2"></i> EXPIRED
+                                   <i class="fas fa-calendar-times mr-2"></i> {{ __('EXPIRED') }}
                                 </a>
                             </li>
                         </ul>
@@ -153,11 +153,11 @@
         <div class="card registry-table-card">
             <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
                 <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none letter-spacing-1">
-                    {{ $type !== 'all' ? 'Filtering for ' . \Illuminate\Support\Str::title($type) : 'Marketplace Catalog' }}
+                    {{ $type !== 'all' ? __('Filtering for') . ' ' . \Illuminate\Support\Str::title($type) : __('Marketplace Catalog') }}
                 </h3>
                 <div class="card-tools d-flex align-items-center ml-auto">
                     <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase mr-2">
-                        <i class="fas fa-database mr-1"></i> {{ $listings->total() }} ASSETS FOUND
+                        <i class="fas fa-database mr-1"></i> {{ $listings->total() }} {{ __('ASSETS FOUND') }}
                     </span>
                     <button type="button" class="btn btn-tool text-muted" data-card-widget="maximize">
                         <i class="fas fa-expand"></i>
@@ -170,14 +170,14 @@
                     <table id="listings-table" class="table table-hover table-premium mb-0">
                         <thead class="thead-light">
                             <tr>
-                                <th class="text-center pl-4 col-media-80">Asset</th>
-                                <th>Identity & Location</th>
-                                <th>Proprietor</th>
+                                <th class="text-center pl-4 col-media-80">{{ __('Asset') }}</th>
+                                <th>{{ __('Identity & Location') }}</th>
+                                <th>{{ __('Proprietor') }}</th>
                                 @if($type === 'all')
-                                    <th class="text-center">Vertical</th>
+                                    <th class="text-center">{{ __('Vertical') }}</th>
                                 @endif
-                                <th>State & Sync</th>
-                                <th class="text-right pr-4">Actions</th>
+                                <th>{{ __('State & Sync') }}</th>
+                                <th class="text-right pr-4">{{ __('Actions') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -189,11 +189,11 @@
                                         </div>
                                     </td>
                                     <td class="align-middle">
-                                        <span class="d-block font-weight-bold text-dark mb-0 text-0-95">{{ $listing->title ?? 'Untitled Asset' }}</span>
+                                        <span class="d-block font-weight-bold text-dark mb-0 text-0-95">{{ $listing->title ?? __('Untitled Asset') }}</span>
                                         <div class="d-flex align-items-center mt-1 gap-10">
                                             <span class="smallest font-weight-bold text-muted text-monospace">ID: #{{ str_pad($listing->id, 5, '0', STR_PAD_LEFT) }}</span>
                                             <span class="text-muted smallest font-weight-bold uppercase letter-spacing-1">
-                                                <i class="fas fa-map-marker-alt mr-1 text-danger opacity-50"></i>{{ $listing->location->title ?? 'Global' }}
+                                                <i class="fas fa-map-marker-alt mr-1 text-danger opacity-50"></i>{{ $listing->location->title ?? __('Global') }}
                                             </span>
                                         </div>
                                     </td>
@@ -209,7 +209,7 @@
                                                 </div>
                                             </div>
                                         @else
-                                            <span class="badge badge-secondary-light px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1">Legacy Account</span>
+                                            <span class="badge badge-secondary-light px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1">{{ __('Legacy Account') }}</span>
                                         @endif
                                     </td>
                                     @if($type === 'all')
@@ -238,7 +238,7 @@
                                             </span>
                                         </div>
                                         <div class="smallest text-muted font-weight-bold uppercase letter-spacing-1">
-                                            <i class="far fa-clock mr-1 text-primary opacity-50"></i>{{ $listing->created_at ? $listing->created_at->diffForHumans(null, true) . ' ago' : 'No Date' }}
+                                            <i class="far fa-clock mr-1 text-primary opacity-50"></i>{{ $listing->created_at ? $listing->created_at->diffForHumans(null, true) . ' ' . __('ago') : __('No Date') }}
                                         </div>
                                     </td>
                                     <td class="text-right align-middle pr-4">
@@ -252,26 +252,26 @@
                                             @if (!$listing->approved_at)
                                                 <form action="{{ route('admin.listings.approve', $routeParams) }}" method="POST" class="d-inline">
                                                     @csrf
-                                                    <button type="submit" class="btn text-success" data-toggle="tooltip" title="Approve Entry">
+                                                    <button type="submit" class="btn text-success" data-toggle="tooltip" title="{{ __('Approve Entry') }}">
                                                         <i class="fas fa-check-double"></i>
                                                     </button>
                                                 </form>
                                             @else
                                                 <form action="{{ route('admin.listings.disapprove', $routeParams) }}" method="POST" class="d-inline">
                                                     @csrf
-                                                    <button type="submit" class="btn text-warning" data-toggle="tooltip" title="Rollback Status">
+                                                    <button type="submit" class="btn text-warning" data-toggle="tooltip" title="{{ __('Rollback Status') }}">
                                                         <i class="fas fa-undo-alt"></i>
                                                     </button>
                                                 </form>
                                             @endif
 
-                                            <a href="{{ route('admin.listings.edit', $routeParams) }}" class="btn text-primary" data-toggle="tooltip" title="Modify Asset">
+                                            <a href="{{ route('admin.listings.edit', $routeParams) }}" class="btn text-primary" data-toggle="tooltip" title="{{ __('Modify Asset') }}">
                                                 <i class="fas fa-pencil-alt"></i>
                                             </a>
                                             
                                             <form action="{{ route('admin.listings.destroy', $routeParams) }}" method="POST" class="d-inline">
                                                 @csrf @method('DELETE')
-                                                <button type="submit" class="btn text-danger" data-toggle="tooltip" title="Purge Record" onclick="return confirm('Permanently delete asset?')">
+                                                <button type="submit" class="btn text-danger" data-toggle="tooltip" title="{{ __('Purge Record') }}" onclick="return confirm('{{ __('Permanently delete asset?') }}')">
                                                     <i class="fas fa-trash-alt"></i>
                                                 </button>
                                             </form>
@@ -283,8 +283,8 @@
                                     <td colspan="{{ $type === 'all' ? '7' : '6' }}" class="py-5 text-center">
                                         <div class="py-4">
                                             <i class="fas fa-layer-group fa-4x text-muted opacity-25 mb-3 d-block"></i>
-                                            <h5 class="text-muted font-weight-bold">No active listings found for this catalog.</h5>
-                                            <p class="text-secondary small">Synchronize your marketplace catalog or initialize new entries.</p>
+                                            <h5 class="text-muted font-weight-bold">{{ __('No active listings found for this catalog.') }}</h5>
+                                            <p class="text-secondary small">{{ __('Synchronize your marketplace catalog or initialize new entries.') }}</p>
                                         </div>
                                     </td>
                                 </tr>
@@ -296,7 +296,7 @@
 
             @if(method_exists($listings, 'hasPages') && $listings->hasPages())
                 <div class="card-footer bg-white border-top py-4 px-4 d-flex justify-content-between align-items-center">
-                    <div class="text-muted smallest font-weight-bold uppercase letter-spacing-1">Displaying {{ $listings->firstItem() }} - {{ $listings->lastItem() }} of {{ $listings->total() }} records</div>
+                    <div class="text-muted smallest font-weight-bold uppercase letter-spacing-1">{{ __('Displaying') }} {{ $listings->firstItem() }} - {{ $listings->lastItem() }} {{ __('of') }} {{ $listings->total() }} {{ __('records') }}</div>
                     <div>{{ $listings->appends(request()->except('page'))->links('pagination::bootstrap-4') }}</div>
                 </div>
             @endif

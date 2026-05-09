@@ -13,7 +13,7 @@
 --}}
 @extends('adminlte::page')
 
-@section('title', 'Blog Management')
+@section('title', __('Blog Management'))
 
 @section('plugins.Datatables', true)
 
@@ -22,17 +22,17 @@
         <div class="row mb-4 align-items-center">
             <div class="col-sm-7">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-blog mr-2 text-primary opacity-50"></i> Blog Articles
+                    <i class="fas fa-blog mr-2 text-primary opacity-50"></i> {{ __('Blog Articles') }}
                 </h1>
-                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Compose and curate editorial content for your marketplace community.</p>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">{{ __('Compose and curate editorial content for your marketplace community.') }}</p>
             </div>
             <div class="col-sm-5 d-flex align-items-center justify-content-end">
                 <div class="d-flex justify-content-end align-items-center gap-12">
                     <a href="{{ route('admin.welcome') }}" class="btn btn-back shadow-sm px-4">
-                        <i class="fas fa-arrow-left mr-1"></i> BACK TO DASHBOARD
+                        <i class="fas fa-arrow-left mr-1"></i> {{ __('BACK TO DASHBOARD') }}
                     </a>
                     <a href="{{ route('admin.blogs.create') }}" class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-premium">
-                        <i class="fas fa-plus-circle mr-1"></i> WRITE NEW POST
+                        <i class="fas fa-plus-circle mr-1"></i> {{ __('WRITE NEW POST') }}
                     </a>
                 </div>
             </div>
@@ -48,11 +48,11 @@
     <div class="card border-0 shadow-premium overflow-hidden rounded-24">
         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
             <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">
-                <i class="fas fa-feather mr-1 text-primary opacity-50"></i> Article Registry
+                <i class="fas fa-feather mr-1 text-primary opacity-50"></i> {{ __('Article Registry') }}
             </h3>
             <div class="card-tools ml-auto">
                 <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase">
-                    <i class="fas fa-database mr-1"></i> {{ $blogs->total() }} POSTS
+                    <i class="fas fa-database mr-1"></i> {{ $blogs->total() }} {{ __('POSTS') }}
                 </span>
             </div>
         </div>
@@ -62,11 +62,11 @@
                 <table id="blogs-table" class="table table-hover table-premium mb-0">
                     <thead class="thead-light">
                         <tr>
-                            <th class="px-4 w-35-p">Article Info</th>
-                            <th class="w-20-p">Category & Tags</th>
-                            <th class="text-right">Stats</th>
-                            <th class="text-right">Status</th>
-                            <th class="text-right px-4">Actions</th>
+                            <th class="px-4 w-35-p">{{ __('Article Info') }}</th>
+                            <th class="w-20-p">{{ __('Category & Tags') }}</th>
+                            <th class="text-right">{{ __('Stats') }}</th>
+                            <th class="text-right">{{ __('Status') }}</th>
+                            <th class="text-right px-4">{{ __('Actions') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -115,14 +115,14 @@
                                     <div class="btn-group btn-group-premium shadow-xs rounded-pill border overflow-hidden">
                                         <a href="{{ route('admin.blogs.edit', $blog->id) }}" 
                                            class="btn btn-white btn-sm text-info py-2 px-3 border-right" 
-                                           data-toggle="tooltip" title="Edit Article">
+                                           data-toggle="tooltip" title="{{ __('Edit Article') }}">
                                             <i class="fas fa-pencil-alt"></i>
                                         </a>
                                         <form action="{{ route('admin.blogs.destroy', $blog->id) }}" method="POST" class="d-inline">
                                             @csrf @method('DELETE')
                                             <button type="submit" class="btn btn-white btn-sm text-danger py-2 px-3" 
-                                                    data-toggle="tooltip" title="Delete Post"
-                                                    onclick="return confirm('Permanently remove this article?')">
+                                                    data-toggle="tooltip" title="{{ __('Delete Post') }}"
+                                                    onclick="return confirm('{{ __('Permanently remove this article?') }}')">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
                                         </form>
@@ -133,9 +133,9 @@
                             @include('admin._partials._empty-state', [
                                 'colspan' => 5,
                                 'icon' => 'fas fa-feather',
-                                'title' => 'No Articles Found',
-                                'description' => 'Start sharing news and insights with your audience by composing your first editorial piece.',
-                                'button_text' => 'WRITE FIRST POST',
+                                'title' => __('No Articles Found'),
+                                'description' => __('Start sharing news and insights with your audience by composing your first editorial piece.'),
+                                'button_text' => __('WRITE FIRST POST'),
                                 'button_link' => route('admin.blogs.create')
                             ])
                         @endforelse

@@ -16,8 +16,8 @@
     <td colspan="{{ $colspan ?? 10 }}" class="py-5">
         <x-premium-empty-state 
             :icon="$icon ?? 'fas fa-database'"
-            :title="$title ?? 'No records found.'"
-            :description="$description ?? 'There are currently no items in this registry. Initialize your first entry to get started.'"
+            :title="$title ?? __('No records found.')"
+            :description="$description ?? __('There are currently no items in this registry. Initialize your first entry to get started.')"
             :actionText="$button_text ?? null"
             :actionUrl="$button_link ?? null"
         />

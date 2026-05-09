@@ -12,6 +12,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use App\Traits\ManagesApproval;
+use App\Services\Admin\EventManagementService;
 
 /**
  * Class EventController
@@ -28,6 +29,21 @@ class EventController extends Controller
      * @var string
      */
     protected $modelClass = Event::class;
+
+    /**
+     * @var EventManagementService
+     */
+    protected $eventService;
+
+    /**
+     * EventController constructor.
+     *
+     * @param EventManagementService $eventService
+     */
+    public function __construct(EventManagementService $eventService)
+    {
+        $this->eventService = $eventService;
+    }
 
     /**
      * Display a filtered and paginated list of all event listings.
@@ -74,17 +90,16 @@ class EventController extends Controller
      */
     public function store(EventRequest $request): RedirectResponse
     {
-        $validated = $request->validated();
-        $validated['user_id'] = auth()->id();
-        $validated['is_published'] = $request->boolean('is_published');
-        $validated['is_featured'] = $request->boolean('is_featured');
-        $validated['is_paid'] = $request->boolean('is_paid');
+        try {
+            $event = $this->eventService->saveEvent($request->validated());
 
-        $event = Event::create($validated);
-
-        return redirect()
-            ->route('admin.events.edit', $event->id)
-            ->with('success', __('Event created successfully.'));
+            return redirect()
+                ->route('admin.events.edit', $event->id)
+                ->with('success', __('Event created successfully.'));
+        } catch (\Exception $e) {
+            Log::error("Event Creation Failure: {$e->getMessage()}");
+            return back()->withInput()->with('error', __('Synchronization failure.'));
+        }
     }
 
     /**
@@ -112,16 +127,16 @@ class EventController extends Controller
      */
     public function update(EventRequest $request, Event $event): RedirectResponse
     {
-        $validated = $request->validated();
-        $validated['is_published'] = $request->boolean('is_published');
-        $validated['is_featured'] = $request->boolean('is_featured');
-        $validated['is_paid'] = $request->boolean('is_paid');
+        try {
+            $this->eventService->saveEvent($request->validated(), $event);
 
-        $event->update($validated);
-
-        return redirect()
-            ->route('admin.events.edit', $event->id)
-            ->with('success', __('Event updated successfully.'));
+            return redirect()
+                ->route('admin.events.edit', $event->id)
+                ->with('success', __('Event updated successfully.'));
+        } catch (\Exception $e) {
+            Log::error("Event Update Failure: {$e->getMessage()}", ['id' => $event->id]);
+            return back()->withInput()->with('error', __('Update synchronization failure.'));
+        }
     }
 
     /**
@@ -144,14 +159,15 @@ class EventController extends Controller
      */
     public function duplicate(Event $event): RedirectResponse
     {
-        $clone = $event->replicate();
-        $clone->is_published = false;
-        $clone->approved_at = null;
-        $clone->title = $event->title . ' (Copy)';
-        $clone->save();
+        try {
+            $clone = $this->eventService->duplicateEvent($event);
 
-        return redirect()
-            ->route('admin.events.edit', $clone->id)
-            ->with('success', __('Event duplicated as draft successfully.'));
+            return redirect()
+                ->route('admin.events.edit', $clone->id)
+                ->with('success', __('Event duplicated as draft successfully.'));
+        } catch (\Exception $e) {
+            Log::error("Event Duplication Failure: {$e->getMessage()}", ['id' => $event->id]);
+            return back()->with('error', __('Duplication failure.'));
+        }
     }
 }

@@ -24,10 +24,22 @@
 @endif
         @php
             $imageUrls = [];
+            $modelClass = $model;
+            $modelMap = \App\Http\Controllers\Dashboard\MediaController::$modelMap;
+            
+            // 1. Resolve Alias to Class (if an alias was passed)
+            if (isset($modelMap[strtolower($model)])) {
+                $modelClass = $modelMap[strtolower($model)];
+            }
+            
+            // 2. Identify the Alias for Frontend (JS) use
+            $flippedMap = array_flip($modelMap);
+            $alias = $flippedMap[$modelClass] ?? 'unknown';
 
-            $isEdit = $id && $model::find($id);
-            $record = $isEdit ? $model::find($id) : null;
-
+            // 3. Establish Record Persistence
+            $isEdit = $id && $modelClass::find($id);
+            $record = $isEdit ? $modelClass::find($id) : null;
+            
             if ($record) {
                 if ($multiple) {
                     $imageUrls = $record->getMedia($name)->map(fn($media) => $media->getUrl());
@@ -145,7 +157,7 @@
             let formData = new FormData();
             formData.append("image", file);
             formData.append("_token", "{{ csrf_token() }}");
-            formData.append("model", "{{ addslashes($model ?? '') }}");
+            formData.append("model", "{{ $alias }}");
             formData.append("id", "{{ $id ?? '' }}");
             formData.append("name", "{{ $name ?? 'images' }}");
             formData.append("multiple", "{{ $multiple ? '1' : '0' }}");
@@ -205,7 +217,7 @@
                         },
                         body: JSON.stringify({
                             image: imagePath,
-                            model: "{{ class_basename($model) ?? '' }}", // now "Location" instead of "AppModelsLocation"
+                            model: "{{ $alias }}",
                             id: "{{ $id ?? '' }}",
                             name: "{{ $name ?? 'images' }}"
                         })

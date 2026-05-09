@@ -11,6 +11,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use App\Traits\ManagesApproval;
+use App\Services\Admin\JobManagementService;
 
 /**
  * Class JobController
@@ -27,6 +28,21 @@ class JobController extends Controller
      * @var string
      */
     protected $modelClass = JobListing::class;
+
+    /**
+     * @var JobManagementService
+     */
+    protected $jobService;
+
+    /**
+     * JobController constructor.
+     *
+     * @param JobManagementService $jobService
+     */
+    public function __construct(JobManagementService $jobService)
+    {
+        $this->jobService = $jobService;
+    }
 
     /**
      * Display a filtered and paginated list of all job listings.
@@ -73,18 +89,16 @@ class JobController extends Controller
      */
     public function store(JobListingRequest $request): RedirectResponse
     {
-        $validated = $request->validated();
-        $validated['user_id'] = auth()->id();
-        $validated['is_published'] = $request->boolean('is_published');
-        $validated['is_featured'] = $request->boolean('is_featured');
-        $validated['is_contract'] = $request->boolean('is_contract');
-        $validated['is_full_time'] = $request->boolean('is_full_time');
+        try {
+            $job = $this->jobService->saveJob($request->validated());
 
-        $job = JobListing::create($validated);
-
-        return redirect()
-            ->route('admin.jobs.edit', $job->id)
-            ->with('success', __('Job created successfully.'));
+            return redirect()
+                ->route('admin.jobs.edit', $job->id)
+                ->with('success', __('Job created successfully.'));
+        } catch (\Exception $e) {
+            Log::error("Job Creation Failure: {$e->getMessage()}");
+            return back()->withInput()->with('error', __('Synchronization failure.'));
+        }
     }
 
     /**
@@ -111,17 +125,16 @@ class JobController extends Controller
      */
     public function update(JobListingRequest $request, JobListing $job): RedirectResponse
     {
-        $validated = $request->validated();
-        $validated['is_published'] = $request->boolean('is_published');
-        $validated['is_featured'] = $request->boolean('is_featured');
-        $validated['is_contract'] = $request->boolean('is_contract');
-        $validated['is_full_time'] = $request->boolean('is_full_time');
+        try {
+            $this->jobService->saveJob($request->validated(), $job);
 
-        $job->update($validated);
-
-        return redirect()
-            ->route('admin.jobs.edit', $job->id)
-            ->with('success', __('Job updated successfully.'));
+            return redirect()
+                ->route('admin.jobs.edit', $job->id)
+                ->with('success', __('Job updated successfully.'));
+        } catch (\Exception $e) {
+            Log::error("Job Update Failure: {$e->getMessage()}", ['id' => $job->id]);
+            return back()->withInput()->with('error', __('Update synchronization failure.'));
+        }
     }
 
     /**
@@ -144,14 +157,15 @@ class JobController extends Controller
      */
     public function duplicate(JobListing $job): RedirectResponse
     {
-        $clone = $job->replicate();
-        $clone->is_published = false;
-        $clone->approved_at = null;
-        $clone->title = $job->title . ' (Copy)';
-        $clone->save();
+        try {
+            $clone = $this->jobService->duplicateJob($job);
 
-        return redirect()
-            ->route('admin.jobs.edit', $clone->id)
-            ->with('success', __('Job duplicated as draft successfully.'));
+            return redirect()
+                ->route('admin.jobs.edit', $clone->id)
+                ->with('success', __('Job duplicated as draft successfully.'));
+        } catch (\Exception $e) {
+            Log::error("Job Duplication Failure: {$e->getMessage()}", ['id' => $job->id]);
+            return back()->with('error', __('Duplication failure.'));
+        }
     }
 }

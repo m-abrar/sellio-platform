@@ -38,6 +38,7 @@ class ListingQueryService
                     'title',
                     'created_at',
                     'user_id',
+                    'location_id',
                     'is_published',
                     'approved_at',
                     'expires_at',

@@ -20,20 +20,20 @@
         <div class="row mb-4 align-items-center">
             <div class="col-sm-7">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-user-shield mr-2 text-primary opacity-50"></i> Access Architecture
+                    <i class="fas fa-user-shield mr-2 text-primary opacity-50"></i> {{ __('Access Architecture') }}
                 </h1>
-                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Manage platform authority levels and map granular permissions to security roles.</p>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">{{ __('Manage platform authority levels and map granular permissions to security roles.') }}</p>
             </div>
             <div class="col-sm-5 d-flex align-items-center justify-content-end">
                 <div class="d-flex justify-content-end align-items-center gap-12">
                     <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">
-                        <i class="fas fa-th-large"></i> Dashboard
+                        <i class="fas fa-th-large"></i> {{ __('Dashboard') }}
                     </a>
                     <a href="{{ route('admin.permissions.index') }}" class="btn-back shadow-sm">
-                        <i class="fas fa-key"></i> Permissions
+                        <i class="fas fa-key"></i> {{ __('Permissions') }}
                     </a>
                     <a href="{{ route('admin.roles.create') }}" class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-premium">
-                        <i class="fas fa-plus-circle mr-1"></i> ADD SECURITY ROLE
+                        <i class="fas fa-plus-circle mr-1"></i> {{ __('ADD SECURITY ROLE') }}
                     </a>
                 </div>
             </div>
@@ -48,10 +48,10 @@
     <div class="card border-0 shadow-premium overflow-hidden rounded-24">
         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center justify-content-between">
             <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">
-                <i class="fas fa-layer-group mr-2 text-primary opacity-50"></i> System Authority Registry
+                <i class="fas fa-layer-group mr-2 text-primary opacity-50"></i> {{ __('System Authority Registry') }}
             </h3>
             <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase ml-auto">
-                {{ count($roles) }} ACTIVE ROLES
+                {{ count($roles) }} {{ __('ACTIVE ROLES') }}
             </span>
         </div>
 
@@ -60,9 +60,9 @@
                 <table id="roles-table" class="table table-hover table-premium mb-0">
                     <thead class="thead-light">
                         <tr>
-                            <th class="pl-4 w-25-p">Authority Identity</th>
-                            <th>Permission Blueprint</th>
-                            <th class="text-right pr-4">Metrics</th>
+                            <th class="pl-4 w-25-p">{{ __('Authority Identity') }}</th>
+                            <th>{{ __('Permission Blueprint') }}</th>
+                            <th class="text-right pr-4">{{ __('Metrics') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -76,7 +76,7 @@
                                         <div>
                                             <span class="d-block font-weight-bold text-dark text-capitalize mb-0 font-1-0">{{ $role->name }}</span>
                                             <small class="text-muted text-uppercase font-weight-bold smallest letter-spacing-1">
-                                                Tier Identifier: {{ strtoupper(Str::random(4)) }}
+                                                {{ __('Tier Identifier') }}: {{ strtoupper(Str::random(4)) }}
                                             </small>
                                         </div>
                                     </div>
@@ -89,7 +89,7 @@
                                             </span>
                                         @empty
                                             <span class="text-muted small font-italic opacity-50">
-                                                <i class="fas fa-exclamation-circle mr-1"></i> No specific permissions mapped
+                                                <i class="fas fa-exclamation-circle mr-1"></i> {{ __('No specific permissions mapped') }}
                                             </span>
                                         @endforelse
                                     </div>
@@ -98,15 +98,15 @@
                                     <div class="btn-group btn-group-premium shadow-xs rounded-pill border overflow-hidden">
                                         <a href="{{ route('admin.roles.edit', $role->id) }}" 
                                            class="btn btn-white btn-sm text-info py-2" 
-                                           data-toggle="tooltip" title="Edit Spectrum">
-                                            <i class="fas fa-shield-alt mr-1"></i> EDIT
+                                           data-toggle="tooltip" title="{{ __('Edit Spectrum') }}">
+                                            <i class="fas fa-shield-alt mr-1"></i> {{ __('EDIT') }}
                                         </a>
                                         
                                         <form id="delete-role-{{ $role->id }}" action="{{ route('admin.roles.destroy', $role->id) }}" method="POST" class="d-inline">
                                             @csrf @method('DELETE')
                                             <button type="button" class="btn btn-white btn-sm text-danger py-2 px-3" 
-                                                    data-toggle="tooltip" title="Purge Role"
-                                                    onclick="confirmDelete('delete-role-{{ $role->id }}', 'Purge Security Role?', 'This may affect users assigned to this hierarchy tier.', 'Purge Role')">
+                                                    data-toggle="tooltip" title="{{ __('Purge Role') }}"
+                                                    onclick="confirmDelete('delete-role-{{ $role->id }}', '{{ __('Purge Security Role?') }}', '{{ __('This may affect users assigned to this hierarchy tier.') }}', '{{ __('Purge Role') }}')">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
                                         </form>
@@ -114,15 +114,14 @@
                                 </td>
                             </tr>
                         @empty
-                            <tr class="empty-state">
-                                <td colspan="3" class="text-center py-5">
-                                    <div class="py-4">
-                                        <i class="fas fa-user-lock fa-4x text-muted opacity-25 mb-3"></i>
-                                        <h5 class="text-muted font-weight-bold">Hierarchy Is Empty</h5>
-                                        <p class="small text-secondary">Configure your system's access hierarchy here.</p>
-                                    </div>
-                                </td>
-                            </tr>
+                        @include('admin._partials._empty-state', [
+                            'colspan' => 3,
+                            'icon' => 'fas fa-user-lock',
+                            'title' => __('Hierarchy Is Empty'),
+                            'description' => __('Configure your system\'s access hierarchy here.'),
+                            'button_text' => __('ADD SECURITY ROLE'),
+                            'button_link' => route('admin.roles.create')
+                        ])
                         @endforelse
                     </tbody>
                 </table>
@@ -136,8 +135,8 @@
                 <i class="fas fa-shield-virus text-white"></i>
             </div>
             <div>
-                <h6 class="font-weight-bold text-primary mb-1 smallest uppercase letter-spacing-1">Security Architecture Protocol</h6>
-                <p class="text-muted mb-0 small font-weight-600">Roles define the fundamental access level for users. Changes to permission blueprints are applied in real-time to all active sessions holding this role.</p>
+                <h6 class="font-weight-bold text-primary mb-1 smallest uppercase letter-spacing-1">{{ __('Security Architecture Protocol') }}</h6>
+                <p class="text-muted mb-0 small font-weight-600">{{ __('Roles define the fundamental access level for users. Changes to permission blueprints are applied in real-time to all active sessions holding this role.') }}</p>
             </div>
         </div>
     </div>

@@ -12,6 +12,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use App\Traits\ManagesApproval;
+use App\Services\Admin\ServiceManagementService;
 
 /**
  * Class ServiceController
@@ -28,6 +29,21 @@ class ServiceController extends Controller
      * @var string
      */
     protected $modelClass = Service::class;
+
+    /**
+     * @var ServiceManagementService
+     */
+    protected $serviceManagement;
+
+    /**
+     * ServiceController constructor.
+     *
+     * @param ServiceManagementService $serviceManagement
+     */
+    public function __construct(ServiceManagementService $serviceManagement)
+    {
+        $this->serviceManagement = $serviceManagement;
+    }
 
     /**
      * Display a filtered and paginated listing of all professional services.
@@ -74,18 +90,16 @@ class ServiceController extends Controller
      */
     public function store(ServiceRequest $request): RedirectResponse
     {
-        $validated = $request->validated();
-        $validated['user_id']          = auth()->id();
-        $validated['is_published']     = $request->boolean('is_published');
-        $validated['is_featured']      = $request->boolean('is_featured');
-        $validated['is_subscription']  = $request->boolean('is_subscription');
-        $validated['is_project_based'] = $request->boolean('is_project_based');
+        try {
+            $service = $this->serviceManagement->saveService($request->validated());
 
-        $service = Service::create($validated);
-
-        return redirect()
-            ->route('admin.services.edit', $service->id)
-            ->with('success', __('Service created successfully.'));
+            return redirect()
+                ->route('admin.services.edit', $service->id)
+                ->with('success', __('Service created successfully.'));
+        } catch (\Exception $e) {
+            Log::error("Service Creation Failure: {$e->getMessage()}");
+            return back()->withInput()->with('error', __('Synchronization failure.'));
+        }
     }
 
     /**
@@ -112,17 +126,16 @@ class ServiceController extends Controller
      */
     public function update(ServiceRequest $request, Service $service): RedirectResponse
     {
-        $validated = $request->validated();
-        $validated['is_published']     = $request->boolean('is_published');
-        $validated['is_featured']      = $request->boolean('is_featured');
-        $validated['is_subscription']  = $request->boolean('is_subscription');
-        $validated['is_project_based'] = $request->boolean('is_project_based');
+        try {
+            $this->serviceManagement->saveService($request->validated(), $service);
 
-        $service->update($validated);
-
-        return redirect()
-            ->route('admin.services.edit', $service->id)
-            ->with('success', __('Service updated successfully.'));
+            return redirect()
+                ->route('admin.services.edit', $service->id)
+                ->with('success', __('Service updated successfully.'));
+        } catch (\Exception $e) {
+            Log::error("Service Update Failure: {$e->getMessage()}", ['id' => $service->id]);
+            return back()->withInput()->with('error', __('Update synchronization failure.'));
+        }
     }
 
     /**
@@ -145,14 +158,15 @@ class ServiceController extends Controller
      */
     public function duplicate(Service $service): RedirectResponse
     {
-        $clone = $service->replicate();
-        $clone->is_published = false;
-        $clone->approved_at  = null;
-        $clone->title        = $service->title . ' ' . __('(Copy)');
-        $clone->save();
+        try {
+            $clone = $this->serviceManagement->duplicateService($service);
 
-        return redirect()
-            ->route('admin.services.edit', $clone->id)
-            ->with('success', __('Service duplicated as draft successfully.'));
+            return redirect()
+                ->route('admin.services.edit', $clone->id)
+                ->with('success', __('Service duplicated as draft successfully.'));
+        } catch (\Exception $e) {
+            Log::error("Service Duplication Failure: {$e->getMessage()}", ['id' => $service->id]);
+            return back()->with('error', __('Duplication failure.'));
+        }
     }
 }

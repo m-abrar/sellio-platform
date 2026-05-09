@@ -13,6 +13,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use App\Traits\ManagesApproval;
+use App\Services\Admin\AutoManagementService;
 
 /**
  * Class AutoController
@@ -29,6 +30,21 @@ class AutoController extends Controller
      * @var string
      */
     protected $modelClass = Auto::class;
+
+    /**
+     * @var AutoManagementService
+     */
+    protected $autoService;
+
+    /**
+     * AutoController constructor.
+     *
+     * @param AutoManagementService $autoService
+     */
+    public function __construct(AutoManagementService $autoService)
+    {
+        $this->autoService = $autoService;
+    }
 
     /**
      * Display a filtered and paginated list of all automotive listings.
@@ -78,16 +94,16 @@ class AutoController extends Controller
      */
     public function store(AutoRequest $request): RedirectResponse
     {
-        $validated = $request->validated();
-        $validated['user_id'] = auth()->id();
-        $validated['is_published'] = $request->boolean('is_published');
-        $validated['is_featured'] = $request->boolean('is_featured');
+        try {
+            $auto = $this->autoService->saveAuto($request->validated());
 
-        $auto = Auto::create($validated);
-
-        return redirect()
-            ->route('admin.autos.edit', $auto->id)
-            ->with('success', __('Auto created successfully.'));
+            return redirect()
+                ->route('admin.autos.edit', $auto->id)
+                ->with('success', __('Auto created successfully.'));
+        } catch (\Exception $e) {
+            Log::error("Auto Creation Failure: {$e->getMessage()}");
+            return back()->withInput()->with('error', __('Synchronization failure.'));
+        }
     }
 
     /**
@@ -116,15 +132,16 @@ class AutoController extends Controller
      */
     public function update(AutoRequest $request, Auto $auto): RedirectResponse
     {
-        $validated = $request->validated();
-        $validated['is_published'] = $request->boolean('is_published');
-        $validated['is_featured'] = $request->boolean('is_featured');
+        try {
+            $this->autoService->saveAuto($request->validated(), $auto);
 
-        $auto->update($validated);
-
-        return redirect()
-            ->route('admin.autos.edit', $auto->id)
-            ->with('success', __('Auto updated successfully.'));
+            return redirect()
+                ->route('admin.autos.edit', $auto->id)
+                ->with('success', __('Auto updated successfully.'));
+        } catch (\Exception $e) {
+            Log::error("Auto Update Failure: {$e->getMessage()}", ['id' => $auto->id]);
+            return back()->withInput()->with('error', __('Update synchronization failure.'));
+        }
     }
 
     /**
@@ -147,14 +164,15 @@ class AutoController extends Controller
      */
     public function duplicate(Auto $auto): RedirectResponse
     {
-        $clone = $auto->replicate();
-        $clone->is_published = false;
-        $clone->approved_at = null;
-        $clone->title = $auto->title . ' (Copy)';
-        $clone->save();
+        try {
+            $clone = $this->autoService->duplicateAuto($auto);
 
-        return redirect()
-            ->route('admin.autos.edit', $clone->id)
-            ->with('success', __('Auto duplicated as draft successfully.'));
+            return redirect()
+                ->route('admin.autos.edit', $clone->id)
+                ->with('success', __('Auto duplicated as draft successfully.'));
+        } catch (\Exception $e) {
+            Log::error("Auto Duplication Failure: {$e->getMessage()}", ['id' => $auto->id]);
+            return back()->with('error', __('Duplication failure.'));
+        }
     }
 }

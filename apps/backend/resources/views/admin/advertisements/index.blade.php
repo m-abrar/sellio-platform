@@ -12,26 +12,26 @@
 --}}
 @extends('adminlte::page')
 
-@section('title', 'Advertisements')
+@section('title', __('Advertisements'))
 
 @section('content_header')
     <div class="container-fluid pt-4">
         <div class="row mb-4 align-items-center">
             <div class="col-sm-8">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-ad mr-2 text-primary opacity-50"></i> Ad Campaigns
+                    <i class="fas fa-ad mr-2 text-primary opacity-50"></i> {{ __('Ad Campaigns') }}
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">
-                    Creative management and impression orchestration for marketplace promotions.
+                    {{ __('Creative management and impression orchestration for marketplace promotions.') }}
                 </p>
             </div>
             <div class="col-sm-4 text-right">
                 <div class="d-flex justify-content-end align-items-center gap-12">
                     <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">
-                        <i class="fas fa-th-large"></i> Dashboard
+                        <i class="fas fa-th-large"></i> {{ __('Dashboard') }}
                     </a>
                     <a href="{{ route('admin.advertisements.create') }}" class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-premium smallest uppercase letter-spacing-1">
-                        <i class="fas fa-plus-circle mr-1"></i> ADD ADVERTISEMENT
+                        <i class="fas fa-plus-circle mr-1"></i> {{ __('ADD ADVERTISEMENT') }}
                     </a>
                 </div>
             </div>
@@ -47,11 +47,11 @@
     <div class="card card-premium shadow-premium border-0 overflow-hidden rounded-24">
         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center justify-content-between">
             <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">
-                <i class="fas fa-layer-group mr-2 text-primary opacity-50"></i> Active Creative Registry
+                <i class="fas fa-layer-group mr-2 text-primary opacity-50"></i> {{ __('Active Creative Registry') }}
             </h3>
             <div class="card-tools ml-auto">
                 <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase">
-                    <i class="fas fa-database mr-1"></i> {{ $advertisements->total() }} CAMPAIGNS
+                    <i class="fas fa-database mr-1"></i> {{ $advertisements->total() }} {{ __('CAMPAIGNS') }}
                 </span>
             </div>
         </div>
@@ -61,11 +61,11 @@
                 <table id="advertisements-table" class="table table-hover table-premium mb-0">
                     <thead class="thead-light">
                         <tr>
-                            <th class="px-4 w-35-p">Creative & Title</th>
-                            <th>Target URL</th>
-                            <th>Placements</th>
-                            <th class="text-center">Status</th>
-                            <th class="text-right px-4">Actions</th>
+                            <th class="px-4 w-35-p">{{ __('Creative & Title') }}</th>
+                            <th>{{ __('Target URL') }}</th>
+                            <th>{{ __('Placements') }}</th>
+                            <th class="text-center">{{ __('Status') }}</th>
+                            <th class="text-right px-4">{{ __('Actions') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -128,20 +128,20 @@
                                     <div class="btn-group btn-group-premium shadow-xs rounded-pill border overflow-hidden">
                                         <a href="{{ route('admin.advertisements.show', $advertisement) }}" 
                                            class="btn btn-white text-primary py-2 px-3 border-right" 
-                                           data-toggle="tooltip" title="View Details">
+                                           data-toggle="tooltip" title="{{ __('View Details') }}">
                                             <i class="fas fa-search"></i>
                                         </a>
 
                                         <a href="{{ route('admin.advertisements.edit', $advertisement) }}" 
                                            class="btn btn-white text-info py-2 px-3 border-right" 
-                                           data-toggle="tooltip" title="Modify Creative">
+                                           data-toggle="tooltip" title="{{ __('Modify Creative') }}">
                                             <i class="fas fa-pencil-alt"></i>
                                         </a>
 
                                         <form id="delete-form-{{ $advertisement->id }}" action="{{ route('admin.advertisements.destroy', $advertisement) }}" method="POST" class="d-inline">
                                             @csrf @method('DELETE')
                                             <button type="button" class="btn btn-white text-danger py-2 px-3" 
-                                                    data-toggle="tooltip" title="Archive Campaign"
+                                                    data-toggle="tooltip" title="{{ __('Archive Campaign') }}"
                                                     onclick="confirmDelete({{ $advertisement->id }})">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
@@ -150,18 +150,14 @@
                                 </td>
                             </tr>
                         @empty
-                            <tr class="empty-state">
-                                <td colspan="5" class="text-center py-5">
-                                    <div class="py-4">
-                                        <i class="fas fa-images fa-4x text-muted opacity-25 mb-3 d-block"></i>
-                                        <h5 class="text-muted font-weight-bold">No Campaigns Found</h5>
-                                        <p class="text-secondary small mb-3">Upload your first creative to start generating impressions.</p>
-                                        <a href="{{ route('admin.advertisements.create') }}" class="btn btn-primary btn-sm px-4 rounded-pill font-weight-bold">
-                                            <i class="fas fa-plus mr-1"></i> ADD FIRST AD
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
+                        @include('admin._partials._empty-state', [
+                            'colspan' => 5,
+                            'icon' => 'fas fa-images',
+                            'title' => __('No Campaigns Found'),
+                            'description' => __('Upload your first creative to start generating impressions.'),
+                            'button_text' => __('ADD FIRST AD'),
+                            'button_link' => route('admin.advertisements.create')
+                        ])
                         @endforelse
                     </tbody>
                 </table>
@@ -180,14 +176,14 @@
 
     function confirmDelete(id) {
         Swal.fire({
-            title: 'Archive Campaign?',
-            text: "This creative will be removed from all active placements.",
+            title: '{{ __('Archive Campaign?') }}',
+            text: "{{ __('This creative will be removed from all active placements.') }}",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#ef4444',
             cancelButtonColor: '#64748b',
-            confirmButtonText: 'Yes, archive it',
-            cancelButtonText: 'Cancel'
+            confirmButtonText: '{{ __('Yes, archive it') }}',
+            cancelButtonText: '{{ __('Cancel') }}'
         }).then((result) => {
             if (result.isConfirmed) {
                 document.getElementById('delete-form-' + id).submit();

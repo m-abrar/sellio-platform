@@ -12,18 +12,30 @@ class MediaController extends Controller
     /**
      * Map of allowed model identifiers to their respective classes.
      */
-    protected array $modelMap = [
-        'auto'         => \App\Models\Auto::class,
-        'property'     => \App\Models\Property::class,
-        'event'        => \App\Models\Event::class,
-        'job'          => \App\Models\JobListing::class,
-        'service'      => \App\Models\Service::class,
-        'product'      => \App\Models\Product::class,
-        'classified'   => \App\Models\Classified::class,
-        'blog'         => \App\Models\Blog::class,
-        'user'         => \App\Models\User::class,
+    /**
+     * Map of allowed model identifiers to their respective classes.
+     */
+    public static array $modelMap = [
+        'auto'          => \App\Models\Auto::class,
+        'property'      => \App\Models\Property::class,
+        'event'         => \App\Models\Event::class,
+        'job'           => \App\Models\JobListing::class,
+        'service'       => \App\Models\Service::class,
+        'product'       => \App\Models\Product::class,
+        'classified'    => \App\Models\Classified::class,
+        'blog'          => \App\Models\Blog::class,
+        'user'          => \App\Models\User::class,
         'advertisement' => \App\Models\Advertisement::class,
+        'location'      => \App\Models\Location::class,
     ];
+
+    /**
+     * Get the class name for a given alias.
+     */
+    public static function getClass(string $alias): ?string
+    {
+        return self::$modelMap[strtolower($alias)] ?? null;
+    }
 
     /**
      * Handle AJAX image uploads.
@@ -38,13 +50,12 @@ class MediaController extends Controller
             'multiple' => 'nullable|boolean',
         ]);
 
-        $modelKey = strtolower($request->model);
+        $modelClass = self::getClass($request->model);
         
-        if (!isset($this->modelMap[$modelKey])) {
+        if (!$modelClass) {
             return response()->json(['success' => false, 'message' => "Unauthorized model access."], 403);
         }
 
-        $modelClass = $this->modelMap[$modelKey];
         $model = $modelClass::find($request->id);
 
         if (!$model) {
@@ -52,8 +63,7 @@ class MediaController extends Controller
         }
 
         // Authorization check: User must own the resource or be an admin
-        // (Assuming a simple ownership check or policy exists)
-        if (method_exists($model, 'user') && $model->user_id !== auth()->id() && !auth()->user()->hasRole('admin')) {
+        if (method_exists($model, 'user') && $model->user_id !== auth()->id() && !auth()->user()->hasRole(['admin', 'super-admin'])) {
              return response()->json(['success' => false, 'message' => 'Unauthorized.'], 403);
         }
 
@@ -91,16 +101,15 @@ class MediaController extends Controller
             'name'  => 'required|string',
         ]);
 
-        $modelKey = strtolower($request->model);
+        $modelClass = self::getClass($request->model);
         
-        if (!isset($this->modelMap[$modelKey])) {
+        if (!$modelClass) {
             return response()->json(['success' => false, 'message' => "Unauthorized model access."], 403);
         }
 
-        $modelClass = $this->modelMap[$modelKey];
         $model = $modelClass::find($request->id);
 
-        if (!$model || !$model->hasRole('admin') && method_exists($model, 'user') && $model->user_id !== auth()->id()) {
+        if (!$model || !auth()->user()->hasRole(['admin', 'super-admin']) && method_exists($model, 'user') && $model->user_id !== auth()->id()) {
             return response()->json(['success' => false, 'message' => 'Unauthorized or resource not found.'], 403);
         }
 

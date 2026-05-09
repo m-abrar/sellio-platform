@@ -22,15 +22,15 @@
         <div class="row mb-4 align-items-center">
             <div class="col-md-8">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-folder-open mr-2 text-primary opacity-50"></i> Taxonomy Architecture
+                    <i class="fas fa-folder-open mr-2 text-primary opacity-50"></i> {{ __('Taxonomy Architecture') }}
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">
-                    Organize platform listings into a logical hierarchy and taxonomy.
+                    {{ __('Organize platform listings into a logical hierarchy and taxonomy.') }}
                 </p>
             </div>
             <div class="col-md-4 text-right">
                 <a href="{{ route('admin.categories.create') }}" class="btn btn-primary rounded-pill px-4 py-2 font-weight-bold shadow-premium smallest uppercase letter-spacing-1">
-                    <i class="fas fa-plus-circle mr-2"></i> Add Category
+                    <i class="fas fa-plus-circle mr-2"></i> {{ __('Add Category') }}
                 </a>
             </div>
         </div>
@@ -43,10 +43,10 @@
 
     <div class="card border-0 shadow-premium overflow-hidden rounded-24 datatable-premium-layout">
         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
-            <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">Global Taxonomy Registry</h3>
+            <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">{{ __('Global Taxonomy Registry') }}</h3>
             <div class="card-tools d-flex align-items-center ml-auto">
                 <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase mr-3">
-                    <i class="fas fa-sitemap mr-1"></i> {{ count($categories) }} CATEGORIES FOUND
+                    <i class="fas fa-sitemap mr-1"></i> {{ count($categories) }} {{ __('CATEGORIES FOUND') }}
                 </span>
                 <button type="button" class="btn btn-tool text-muted" data-card-widget="maximize">
                     <i class="fas fa-expand"></i>
@@ -59,11 +59,11 @@
                 <table id="categories-table" class="table table-hover table-premium mb-0">
                     <thead class="thead-light">
                         <tr>
-                            <th class="text-center col-media-80">Icon</th>
-                            <th>Segment Identity</th>
-                            <th>Module Applicability Spectrum</th>
-                            <th class="text-right">Lifecycle</th>
-                            <th class="text-right px-4">Actions</th>
+                            <th class="text-center col-media-80">{{ __('Icon') }}</th>
+                            <th>{{ __('Segment Identity') }}</th>
+                            <th>{{ __('Module Applicability Spectrum') }}</th>
+                            <th class="text-right">{{ __('Lifecycle') }}</th>
+                            <th class="text-right px-4">{{ __('Actions') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -103,32 +103,31 @@
 
                                 <td class="text-right align-middle">
                                     @if($category->is_published)
-                                        <span class="badge badge-success-light px-3 py-2 rounded-pill font-weight-bold smallest uppercase animate-pulse">ACTIVE</span>
+                                        <span class="badge badge-success-light px-3 py-2 rounded-pill font-weight-bold smallest uppercase animate-pulse">{{ __('ACTIVE') }}</span>
                                     @else
-                                        <span class="badge badge-danger-light px-3 py-2 rounded-pill font-weight-bold smallest uppercase">OFFLINE</span>
+                                        <span class="badge badge-danger-light px-3 py-2 rounded-pill font-weight-bold smallest uppercase">{{ __('OFFLINE') }}</span>
                                     @endif
                                 </td>
 
                                 <td class="text-right align-middle px-4">
                                     <div class="btn-group btn-group-premium">
-                                        <a href="{{ route('admin.categories.edit', $category->id) }}" class="btn text-info" data-toggle="tooltip" title="Modify Configuration"><i class="fas fa-edit"></i></a>
+                                        <a href="{{ route('admin.categories.edit', $category->id) }}" class="btn text-info" data-toggle="tooltip" title="{{ __('Modify Configuration') }}"><i class="fas fa-edit"></i></a>
                                         <form id="delete-category-{{ $category->id }}" action="{{ route('admin.categories.destroy', $category->id) }}" method="POST" class="d-inline">
                                             @csrf @method('DELETE')
-                                            <button type="button" class="btn text-danger" data-toggle="tooltip" title="Purge Segment" onclick="confirmDelete('delete-category-{{ $category->id }}', 'Purge Taxonomy?', 'This segment and its associations will be removed.')"><i class="fas fa-trash-alt"></i></button>
+                                            <button type="button" class="btn text-danger" data-toggle="tooltip" title="{{ __('Purge Segment') }}" onclick="confirmDelete('delete-category-{{ $category->id }}', '{{ __('Purge Taxonomy?') }}', '{{ __('This segment and its associations will be removed.') }}')"><i class="fas fa-trash-alt"></i></button>
                                         </form>
                                     </div>
                                 </td>
                             </tr>
                         @empty
-                            <tr class="empty-state">
-                                <td colspan="5" class="text-center py-5">
-                                    <div class="py-4">
-                                        <i class="fas fa-tags fa-4x text-muted opacity-25 mb-3 d-block"></i>
-                                        <h5 class="text-muted font-weight-bold">Taxonomy Is Unmapped</h5>
-                                        <p class="text-secondary small">Organize your marketplace items by creating your first segment.</p>
-                                    </div>
-                                </td>
-                            </tr>
+                        @include('admin._partials._empty-state', [
+                            'colspan' => 5,
+                            'icon' => 'fas fa-tags',
+                            'title' => __('Taxonomy Is Unmapped'),
+                            'description' => __('Organize your marketplace items by creating your first segment.'),
+                            'button_text' => __('Add Category'),
+                            'button_link' => route('admin.categories.create')
+                        ])
                         @endforelse
                     </tbody>
                 </table>
