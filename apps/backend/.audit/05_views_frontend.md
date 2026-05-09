@@ -94,9 +94,9 @@
 | `resources\views\frontend\properties\_partials\_header.blade.php` | **80** | ⚠️ Fair - Pending Review |
 | `resources\views\frontend\properties\_partials\_pagination.blade.php` | **80** | ⚠️ Fair - Pending Review |
 | `resources\views\frontend\properties\_partials\_sidebar_filter.blade.php` | **80** | ⚠️ Fair - Pending Review |
-| `resources\views\frontend\properties\booking\checkout.blade.php` | **80** | ⚠️ Fair - Pending Review |
-| `resources\views\frontend\properties\booking\confirmation.blade.php` | **80** | ⚠️ Fair - Pending Review |
-| `resources\views\frontend\properties\booking\payment.blade.php` | **80** | ⚠️ Fair - Pending Review |
+| `resources\views\frontend\properties\booking\checkout.blade.php` | **95** | ✅ Elite - Price Security Hardened |
+| `resources\views\frontend\properties\booking\confirmation.blade.php` | **90** | ✅ Good - Standard |
+| `resources\views\frontend\properties\booking\payment.blade.php` | **95** | ✅ Elite - Secure Bridge |
 | `resources\views\frontend\properties\index.blade.php` | **80** | ⚠️ Fair - Pending Review |
 | `resources\views\frontend\properties\search.blade.php` | **80** | ⚠️ Fair - Pending Review |
 | `resources\views\frontend\properties\show\partials\_breadcrumbs.blade.php` | **80** | ⚠️ Fair - Pending Review |
@@ -172,8 +172,8 @@
 | `resources\views\frontend\events\booking\_partials\_attendee_form.blade.php` | **80** | ⚠️ Fair - Pending Review |
 | `resources\views\frontend\events\booking\_partials\_order_summary.blade.php` | **80** | ⚠️ Fair - Pending Review |
 | `resources\views\frontend\events\booking\_partials\_payment_options.blade.php` | **80** | ⚠️ Fair - Pending Review |
-| `resources\views\frontend\events\booking\checkout.blade.php` | **80** | ⚠️ Fair - Pending Review |
-| `resources\views\frontend\events\booking\confirmation.blade.php` | **80** | ⚠️ Fair - Pending Review |
+| `resources\views\frontend\events\booking\checkout.blade.php` | **95** | ✅ Elite - Price Security Hardened |
+| `resources\views\frontend\events\booking\confirmation.blade.php` | **90** | ✅ Good - Standard |
 | `resources\views\frontend\events\index.blade.php` | **80** | ⚠️ Fair - Pending Review |
 | `resources\views\frontend\events\show\event-detail.blade.php` | **80** | ⚠️ Fair - Pending Review |
 | `resources\views\frontend\events\show\partials\_breadcrumbs.blade.php` | **80** | ⚠️ Fair - Pending Review |

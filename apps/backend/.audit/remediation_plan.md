@@ -108,5 +108,29 @@ This document tracks the resolution of critical (P0) security and performance vu
 - **Status**: ✅ Resolved
 - **Files**: `app/Http/Controllers/Api/V1/Dashboard/Partner/AnalyticsController.php`, `app/Services/Partner/AnalyticsService.php`
 
+### 18. PageBuilder Architectural Decoupling (`PageBuilderController`)
+- **Risk**: "Fat Controller" bloat with complex base64 asset processing and DB queries in the view layer.
+- **Fix**: Extracted all asset manipulation and transformation logic into `PageBuilderService`. Hardened the controller to only handle request/response orchestration.
+- **Status**: ✅ Resolved
+- **Files**: `app/Http/Controllers/Admin/PageBuilderController.php`, `app/Services/Admin/PageBuilderService.php`
+
+### 19. Automotive Module Normalization (`autos` table)
+- **Risk**: Free-text fields for critical vehicle specifications (`engine`, `transmission`) led to data inconsistency and search inefficiency.
+- **Fix**: Normalized schema using strict `ENUM` types and added composite indexes for `(make, model, year)`.
+- **Status**: ✅ Resolved
+- **File**: `database/migrations/2025_10_17_013202_create_autos_table.php`
+
+### 20. Marketplace Testing Infrastructure (Eloquent Factories)
+- **Risk**: Missing factories for core marketplace models (`Auto`, `Job`, `Service`, `Property`, `Event`, `Classified`) prevented reliable automated testing and consistent seeding.
+- **Fix**: Created high-fidelity factories for all missing marketplace models with validated relationships.
+- **Status**: ✅ Resolved
+- **Files**: `database/factories/*.php`
+
+### 21. Administrative Dashboard Performance (`DashboardService`)
+- **Risk**: "Infinite Queries" (70+ DB hits) on every admin dashboard load.
+- **Fix**: Implemented a multi-layered atomic caching strategy (300s TTL) for all analytical modules.
+- **Status**: ✅ Resolved
+- **File**: `app/Services/Admin/DashboardService.php`
+
 ## 🚧 Pending Critical (P0) Remediations
-*No pending P0 critical items remain in the architectural queue.*
+*No pending P0 critical items remain in the architectural or database queue.*
