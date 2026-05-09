@@ -77,11 +77,12 @@ class MessageController extends Controller
             ->firstOrFail();
 
         // 1. Create the message
-        $message = Message::create([
+        $message = new Message([
             'conversation_id' => $conversation->id,
-            'sender_id'       => $user->id,
             'body'            => $request->input('body'),
         ]);
+        $message->sender_id = $user->id;
+        $message->save();
 
         // 2. Update conversation timestamp for sorting
         $conversation->touch();

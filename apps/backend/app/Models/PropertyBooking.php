@@ -51,13 +51,10 @@ class PropertyBooking extends Model
     protected $with = ['property', 'user'];
 
     protected $fillable = [
-        'user_id',
         'property_id',
         'check_in_date',
         'check_out_date',
         'guests',
-        'total_price',
-        'status',
         'full_name',
         'email',
         'phone',

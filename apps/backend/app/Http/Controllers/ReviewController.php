@@ -69,7 +69,7 @@ class ReviewController extends Controller
         
         $reviews = $reviewable->reviews()
             ->with('user')
-            ->where('status', 'published') // Filters based on migration 'status' field
+            ->approved() // Uses the scope defined in the Review model
             ->latest()
             ->paginate(10);
 

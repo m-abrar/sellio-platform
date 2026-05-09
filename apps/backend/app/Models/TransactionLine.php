@@ -24,8 +24,6 @@ class TransactionLine extends Model
         'property_id',
         'property_booking_id',
         'description',
-        'amount',
-        'type',
         'transaction_date',
     ];
 
@@ -55,4 +53,3 @@ class TransactionLine extends Model
         return $this->belongsTo(PropertyBooking::class, 'property_booking_id');
     }
 }
-

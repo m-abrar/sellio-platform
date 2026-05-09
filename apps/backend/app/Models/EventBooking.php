@@ -49,14 +49,11 @@ class EventBooking extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'user_id',
         'event_id',
         'event_occurrence_id',
         'occurrence_ticket_id',
         'event_ticket_type_id',
         'quantity',
-        'total_price',
-        'status',
         'booking_reference',
         'viewed_at',
     ];

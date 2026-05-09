@@ -151,32 +151,59 @@ class AnalyticsService
     {
         $performance = collect();
         $listingTypes = [
-            'Property'   => ['model' => Property::class,   'relation' => 'properties'],
-            'Event'      => ['model' => Event::class,      'relation' => 'events'],
-            'JobListing' => ['model' => JobListing::class, 'relation' => 'jobs'],
-            'Auto'       => ['model' => Auto::class,       'relation' => 'autos'],
-            'Service'    => ['model' => Service::class,    'relation' => 'services'],
-            'Classified' => ['model' => Classified::class, 'relation' => 'classifieds'],
+            'Property'   => ['model' => Property::class,   'relation' => 'properties',   'lead_col' => 'property_id'],
+            'Event'      => ['model' => Event::class,      'relation' => 'events',       'lead_col' => 'event_id'],
+            'JobListing' => ['model' => JobListing::class, 'relation' => 'jobs',         'lead_col' => 'job_listing_id'],
+            'Auto'       => ['model' => Auto::class,       'relation' => 'autos',        'lead_col' => 'auto_id'],
+            'Service'    => ['model' => Service::class,    'relation' => 'services',     'lead_col' => 'service_id'],
+            'Classified' => ['model' => Classified::class, 'relation' => 'classifieds',  'lead_col' => 'classified_id'],
         ];
 
         foreach ($listingTypes as $type => $config) {
             $listings = $partner->{$config['relation']}()
-                ->withCount(['reviews as views' => function ($q) use ($config, $startDate) {
-                     // Wait, views are in ActivityLog, not reviews. withCount works for relations.
-                }]) 
                 ->get(['id', 'title', 'slug']);
 
-            foreach ($listings as $listing) {
-                // For now, since we need ActivityLog counts, we still have some queries, 
-                // but we can optimize by fetching ALL views for this partner's listings at once.
-                $views = ActivityLog::where('subject_type', $config['model'])
-                    ->where('subject_id', $listing->id)
-                    ->where('description', 'viewed_listing')
-                    ->where('created_at', '>=', $startDate)
-                    ->count();
+            if ($listings->isEmpty()) continue;
 
-                $leads = $this->getLeadsForListing($config['model'], $listing->id, $startDate);
-                $revenue = $this->getRevenueForListing($config['model'], $listing->id, $startDate);
+            $ids = $listings->pluck('id')->toArray();
+
+            // Bulk fetch views
+            $viewsMap = ActivityLog::where('subject_type', $config['model'])
+                ->whereIn('subject_id', $ids)
+                ->where('description', 'viewed_listing')
+                ->where('created_at', '>=', $startDate)
+                ->selectRaw('subject_id, count(*) as count')
+                ->groupBy('subject_id')
+                ->pluck('count', 'subject_id');
+
+            // Bulk fetch leads
+            $leadModel = $this->getLeadModelMap()[$config['lead_col']] ?? null;
+            $leadsMap = collect();
+            if ($leadModel) {
+                $leadsMap = $leadModel::whereIn($config['lead_col'], $ids)
+                    ->where('created_at', '>=', $startDate)
+                    ->selectRaw("{$config['lead_col']} as id, count(*) as count")
+                    ->groupBy($config['lead_col'])
+                    ->pluck('count', 'id');
+            }
+
+            // Special case for Service (Quote + Appointment)
+            if ($type === 'Service') {
+                $quotesMap = ServiceQuote::whereIn('service_id', $ids)
+                    ->where('created_at', '>=', $startDate)
+                    ->selectRaw('service_id, count(*) as count')
+                    ->groupBy('service_id')
+                    ->pluck('count', 'service_id');
+                
+                foreach ($quotesMap as $sid => $count) {
+                    $leadsMap[$sid] = ($leadsMap[$sid] ?? 0) + $count;
+                }
+            }
+
+            foreach ($listings as $listing) {
+                $views = $viewsMap[$listing->id] ?? 0;
+                $leads = $leadsMap[$listing->id] ?? 0;
+                $revenue = $this->getRevenueForListing($config['model'], $listing->id, $startDate); // Revenue is still a bit complex for bulk but usually fewer listings have revenue
 
                 $conversionRate = $views > 0 ? ($leads / $views) * 100 : 0;
 

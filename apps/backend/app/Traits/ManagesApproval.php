@@ -38,7 +38,7 @@ trait ManagesApproval
     public function disapprove($id): RedirectResponse
     {
         // SECURITY: Critical Authorization Check
-        if (!auth()->check() || !auth()->user()->hasRole('super-admin')) {
+        if (!auth()->check() || !auth()->user()->hasRole(['super-admin', 'admin', 'moderator'])) {
             abort(403, __('Unauthorized: You do not have permission to moderate listings.'));
         }
 

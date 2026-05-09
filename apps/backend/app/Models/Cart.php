@@ -31,7 +31,7 @@ class Cart extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = ['user_id', 'session_id', 'temp_total'];
+    protected $fillable = ['user_id', 'session_id'];
 
     /**
      * The attributes that should be cast.

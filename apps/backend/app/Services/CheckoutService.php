@@ -20,15 +20,10 @@ class CheckoutService
         return DB::transaction(function () use ($cart, $shippingData, $paymentMethod) {
             
             // 1. Create the Order (The Parent)
-            $order = Order::create([
+            $order = new Order([
                 'order_number'     => 'ORD-' . strtoupper(Str::random(10)),
-                'user_id'          => $cart->user_id,
-                'status'           => 'pending',
-                'payment_status'   => 'unpaid',
                 'payment_method'   => $paymentMethod,
-                'subtotal'         => $cart->calculateTotal(),
                 'shipping_cost'    => $shippingData['cost'] ?? 0.00,
-                'total_amount'     => $cart->calculateTotal() + ($shippingData['cost'] ?? 0.00),
                 'shipping_name'    => $shippingData['name'],
                 'shipping_address' => $shippingData['address'],
                 'shipping_city'    => $shippingData['city'],
@@ -37,6 +32,13 @@ class CheckoutService
                 'shipping_country' => $shippingData['country'],
             ]);
 
+            $order->user_id = $cart->user_id;
+            $order->status = 'pending';
+            $order->payment_status = 'unpaid';
+            $order->subtotal = $cart->calculateTotal();
+            $order->total_amount = $cart->calculateTotal() + ($shippingData['cost'] ?? 0.00);
+            $order->save();
+
             // 2. Loop through Cart Items to create Order Items (The Snapshots)
             foreach ($cart->items as $cartItem) {
                 
@@ -44,16 +46,18 @@ class CheckoutService
                 $attributes = ProductAttribute::whereIn('id', $cartItem->attribute_ids ?? [])->get();
                 $addons = ProductAddon::whereIn('id', $cartItem->addon_ids ?? [])->get();
 
-                OrderItem::create([
+                $orderItem = new OrderItem([
                     'order_id'            => $order->id,
                     'product_id'          => $cartItem->product_id,
                     'product_name'        => $cartItem->product->title,
                     'quantity'            => $cartItem->quantity,
-                    'unit_price'          => $cartItem->unit_price,
-                    'total_price'         => $cartItem->total_price,
                     'selected_attributes' => $attributes->toArray(),
                     'selected_addons'     => $addons->toArray(),
                 ]);
+
+                $orderItem->unit_price = $cartItem->unit_price;
+                $orderItem->total_price = $cartItem->total_price;
+                $orderItem->save();
 
                 // 3. Secure Stock Reduction (Prevents Race Conditions)
                 if ($cartItem->product->manage_stock) {

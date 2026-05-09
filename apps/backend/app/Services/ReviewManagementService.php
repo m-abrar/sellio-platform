@@ -55,12 +55,16 @@ class ReviewManagementService
      */
     public function createReview(Model $reviewable, array $data)
     {
-        return $reviewable->reviews()->create([
-            'user_id' => Auth::id(),
+        $review = $reviewable->reviews()->make([
             'rating'  => $data['rating'],
-            'comment' => $data['comment'] ?? null, // Aligned with migration 'comment' field
-            'status'  => 'published',              // Optional: default status
+            'comment' => $data['comment'] ?? null,
         ]);
+
+        $review->user_id = Auth::id();
+        $review->status = \App\Models\Review::STATUS_PENDING;
+        $review->save();
+
+        return $review;
     }
 
     /**

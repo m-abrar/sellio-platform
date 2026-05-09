@@ -42,25 +42,28 @@ class SubscriptionService
                 default => null,
             };
 
-            $newSubscription = Subscription::create([
-                'user_id' => $user->id,
-                'plan_id' => $plan->id,
-                'title'    => 'default',
+            $newSubscription = new Subscription([
+                'plan_id'   => $plan->id,
+                'title'     => 'default',
                 'starts_at' => $newStartsAt,
-                'ends_at' => $newEndsAt, 
             ]);
+            $newSubscription->user_id = $user->id;
+            $newSubscription->ends_at = $newEndsAt;
+            $newSubscription->status  = 'active';
+            $newSubscription->save();
 
-            Payment::create([
-                'user_id' => $user->id,
-                'amount' => $plan->price, 
-                'currency' => 'USD',      
+            $payment = new Payment([
+                'currency'       => 'USD',      
                 'transaction_id' => 'TRN-' . \Str::uuid(),
                 'payment_method' => 'credit_card', 
-                'status' => 'completed',
-                'paid_at' => now(),
-                'payable_type' => Subscription::class, 
-                'payable_id' => $newSubscription->id,
+                'paid_at'        => now(),
+                'payable_type'   => Subscription::class, 
+                'payable_id'     => $newSubscription->id,
             ]);
+            $payment->user_id = $user->id;
+            $payment->amount  = $plan->price;
+            $payment->status  = 'completed';
+            $payment->save();
         });
 
         if ($isUpgradeOrChange) {

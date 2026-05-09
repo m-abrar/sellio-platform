@@ -71,14 +71,16 @@ class AuthController extends Controller
     public function register(RegisterRequest $request)
     {
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'phone' => $request->phone,
+        $user = new User([
+            'name'     => $request->name,
+            'email'    => $request->email,
+            'phone'    => $request->phone,
             'username' => $request->username,
-            'password' => $request->password, // Encrypted by cast
-            'is_buyer' => $request->role === 'user',
+            'password' => $request->password,
         ]);
+
+        $user->is_buyer = ($request->role === 'user');
+        $user->save();
 
         $user->assignRole($request->role);
 

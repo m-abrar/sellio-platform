@@ -13,10 +13,11 @@ class TicketManagementService
     public function replyToTicket(Ticket $ticket, array $data): Ticket
     {
         return DB::transaction(function () use ($ticket, $data) {
-            $ticket->messages()->create([
-                'user_id' => auth()->id(), // Admin/Staff user replying
+            $message = $ticket->messages()->make([
                 'body' => $data['body'],
             ]);
+            $message->user_id = auth()->id(); // Admin/Staff user replying
+            $message->save();
 
             // Optionally update ticket status to 'in-progress' on admin reply
             if ($ticket->status === 'open') {

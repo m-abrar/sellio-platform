@@ -37,24 +37,8 @@ class WebhookController extends Controller
         try {
             $service = $manager->resolve($gateway);
             
-            // Standardize signature retrieval across providers
-            $signature = $request->header('stripe-signature') 
-                         ?? $request->header('X-Hub-Signature') 
-                         ?? $request->header('X-Webhook-Signature');
-
-            // Specialized handling for PayPal headers which are multi-part
-            if ($gatewaySlug === 'paypal') {
-                $signature = json_encode([
-                    'transmission_id'   => $request->header('PAYPAL-TRANSMISSION-ID'),
-                    'transmission_time' => $request->header('PAYPAL-TRANSMISSION-TIME'),
-                    'cert_url'          => $request->header('PAYPAL-CERT-URL'),
-                    'auth_algo'         => $request->header('PAYPAL-AUTH-ALGO'),
-                    'transmission_sig'  => $request->header('PAYPAL-TRANSMISSION-SIG'),
-                ]);
-            }
-
-            // Processing raw content for cryptographic verification
-            $result = $service->handleWebhook($request->getContent(), $signature); 
+            // Delegate entire processing and signature verification to the specialized service
+            $result = $service->handleWebhook($request); 
             
             Log::info("Webhook processed for {$gatewaySlug}: " . ($result['message'] ?? 'Success'));
 

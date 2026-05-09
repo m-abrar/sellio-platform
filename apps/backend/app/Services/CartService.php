@@ -46,17 +46,21 @@ class CartService
 
             if ($item) {
                 $item->increment('quantity', $quantity);
-                $item->update(['unit_price' => $unitPrice]); // Update to latest price
+                $item->unit_price = $unitPrice; // Set explicitly after removing from fillable
+                $item->save();
                 return $item;
             }
 
-            return $cart->items()->create([
+            $item = $cart->items()->make([
                 'product_id'    => $productId,
                 'quantity'      => $quantity,
-                'unit_price'    => $unitPrice,
                 'attribute_ids' => $attributes,
                 'addon_ids'     => $addons,
             ]);
+            $item->unit_price = $unitPrice; // Set explicitly
+            $item->save();
+
+            return $item;
         });
     }
 

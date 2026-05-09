@@ -31,11 +31,9 @@ class NewMessageSent implements ShouldBroadcast
      */
     public function broadcastOn(): array
     {
-        // Channel name: 'private-chat.123'
         return [
-            new Channel('chat.' . $this->message->conversation_id), 
+            new PrivateChannel('chat.' . $this->message->conversation_id), 
         ];
-
     }
 
     public function broadcastAs(): string

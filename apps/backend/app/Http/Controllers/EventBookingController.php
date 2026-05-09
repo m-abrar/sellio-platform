@@ -80,19 +80,21 @@ class EventBookingController extends Controller
             $totalAmount = $price * $request->quantity;
 
             try {
-                $booking = EventBooking::create([
+                $booking = new EventBooking([
                     'event_id'             => $event->id,
                     'event_ticket_type_id' => $ticket->id,
                     'event_occurrence_id'  => $occurrence->id,
                     'occurrence_ticket_id' => $occurrenceTicket->id,
-                    'user_id'              => Auth::id(),
                     'quantity'             => $request->quantity,
-                    'total_price'          => $totalAmount,
                     'user_name'            => $request->name ?: Auth::user()->name,
                     'user_email'           => $request->email ?: Auth::user()->email,
                     'user_phone'           => $request->phone,
-                    'status'               => 'pending',
                 ]);
+                
+                $booking->user_id = Auth::id();
+                $booking->total_price = $totalAmount;
+                $booking->status = 'pending';
+                $booking->save();
             } catch (QueryException $e) {
                 return $this->handleDuplicateBooking($e, $event, $occurrence, $ticket);
             }

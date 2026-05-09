@@ -33,12 +33,10 @@ class Review extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'user_id',
         'reviewable_id',
         'reviewable_type',
         'rating',
         'comment',
-        'status',    // e.g., 'pending', 'approved', 'rejected'
         'viewed_at', // Important for admin "New Review" badges
     ];
 

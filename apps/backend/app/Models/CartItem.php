@@ -17,7 +17,6 @@ class CartItem extends Model
         'quantity',
         'attribute_ids',
         'addon_ids',
-        'unit_price', // Added for performance
     ];
 
     protected $casts = [

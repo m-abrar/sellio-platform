@@ -79,15 +79,9 @@ class OrderController extends Controller
 
         try {
             DB::transaction(function () use ($request) {
-                $order = Order::create([
+                $order = new Order([
                     'order_number'     => 'ORD-' . strtoupper(Str::random(10)),
-                    'user_id'          => $request->user_id,
-                    'status'           => $request->status,
-                    'payment_status'   => 'paid', 
                     'payment_method'   => 'manual',
-                    'subtotal'         => $request->subtotal,
-                    'shipping_cost'    => $request->shipping_cost,
-                    'total_amount'     => $request->total_amount,
                     'shipping_name'    => $request->shipping_name,
                     'shipping_address' => $request->shipping_address,
                     'shipping_city'    => $request->shipping_city,
@@ -95,17 +89,27 @@ class OrderController extends Controller
                     'notes'            => $request->notes,
                 ]);
 
+                $order->user_id = $request->user_id;
+                $order->status = $request->status;
+                $order->payment_status = 'paid';
+                $order->subtotal = $request->subtotal;
+                $order->shipping_cost = $request->shipping_cost;
+                $order->total_amount = $request->total_amount;
+                $order->save();
+
                 foreach ($request->items as $item) {
                     $product = Product::findOrFail($item['product_id']);
                     
-                    OrderItem::create([
+                    $orderItem = new OrderItem([
                         'order_id'     => $order->id,
                         'product_id'   => $product->id,
                         'product_name' => $product->name,
                         'quantity'     => $item['quantity'],
-                        'unit_price'   => $item['unit_price'],
-                        'total_price'  => $item['unit_price'] * $item['quantity'],
                     ]);
+
+                    $orderItem->unit_price = $item['unit_price'];
+                    $orderItem->total_price = $item['unit_price'] * $item['quantity'];
+                    $orderItem->save();
 
                     if ($product->manage_stock) {
                         $product->decrement('stock_quantity', $item['quantity']);

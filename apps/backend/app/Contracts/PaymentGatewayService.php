@@ -28,9 +28,8 @@ interface PaymentGatewayService
 
     /**
      * Handles and processes incoming webhook payloads from the gateway.
-     * @param string $payload The raw payload from the request body.
-     * @param string|null $signature The signature header for verification.
+     * @param \Illuminate\Http\Request $request
      * @return array
      */
-    public function handleWebhook(string $payload, ?string $signature = null): array;
+    public function handleWebhook(\Illuminate\Http\Request $request): array;
 }

@@ -198,48 +198,60 @@ class PropertyService
             }
 
             // 3. Create or Update Booking
-            // We use updateOrCreate so users can "edit" their pending booking by re-submitting Step 1
-            $booking = PropertyBooking::updateOrCreate(
-                [
+            $booking = PropertyBooking::where([
+                'property_id'   => $property->id,
+                'check_in_date' => $checkIn->toDateString(),
+                'check_out_date'=> $checkOut->toDateString(),
+                'user_id'       => auth()->id(),
+                'status'        => 'pending',
+            ])->first();
+
+            if (!$booking) {
+                $booking = new PropertyBooking([
                     'property_id'   => $property->id,
                     'check_in_date' => $checkIn->toDateString(),
                     'check_out_date'=> $checkOut->toDateString(),
-                    'user_id'       => auth()->id(),
-                    'status'        => 'pending',
-                ],
-                [
-                    'full_name'   => $data['full_name'],
-                    'email'       => $data['email'],
-                    'phone'       => $data['phone'] ?? null,
-                    'guests'      => $data['guests'],
-                    'message'     => $data['message'] ?? null,
-                    'total_price' => $totalPrice,
-                ]
-            );
+                ]);
+                $booking->user_id = auth()->id();
+                $booking->status = 'pending';
+            }
+
+            $booking->fill([
+                'full_name'   => $data['full_name'],
+                'email'       => $data['email'],
+                'phone'       => $data['phone'] ?? null,
+                'guests'      => $data['guests'],
+                'message'     => $data['message'] ?? null,
+            ]);
+            
+            $booking->total_price = $totalPrice;
+            $booking->save();
 
             // 4. Wipe existing lines to ensure a clean sync of the new price breakdown
             $booking->transactionLines()->delete();
 
             // 5. Save Lodging & Fee Lines
             foreach ($breakdown['lines'] as $line) {
-                $booking->transactionLines()->create([
+                $transactionLine = $booking->transactionLines()->make([
                     'property_id'      => $property->id,
                     'description'      => $line['title'],
-                    'amount'           => $line['amount'],
-                    'type'             => 'revenue',
                     'transaction_date' => now()->toDateString(),
                 ]);
+                $transactionLine->amount = $line['amount'];
+                $transactionLine->type = 'revenue';
+                $transactionLine->save();
             }
 
             // 6. Save Add-on Lines
             foreach ($selectedAddons as $item) {
-                $booking->transactionLines()->create([
+                $transactionLine = $booking->transactionLines()->make([
                     'property_id'      => $property->id,
                     'description'      => "Add-on: {$item['title']} (x{$item['qty']})",
-                    'amount'           => $item['cost'],
-                    'type'             => 'revenue',
                     'transaction_date' => now()->toDateString(),
                 ]);
+                $transactionLine->amount = $item['cost'];
+                $transactionLine->type = 'revenue';
+                $transactionLine->save();
             }
 
             return [

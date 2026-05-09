@@ -230,12 +230,15 @@ class PaypalGatewayService implements PaymentGatewayService
     
     /**
      * Handles incoming webhook payloads from PayPal.
-     * NOTE: PayPal uses its own security system, not Stripe's signature header style.
+     * @param \Illuminate\Http\Request $request
+     * @return array
      */
-    public function handleWebhook(string $payload, ?string $signatureHeader = null): array
+    public function handleWebhook(\Illuminate\Http\Request $request): array
     {
         Log::info('PayPal webhook processing started.');
         
+        $payload = $request->getContent();
+
         // 1. Verify Webhook Signature
         $webhookId = $this->config['webhook_id'] ?? null;
         if (!$webhookId) {
@@ -243,28 +246,20 @@ class PaypalGatewayService implements PaymentGatewayService
             throw new \Exception("PayPal Webhook ID is missing. Cannot verify signature.");
         }
 
-        if (!$signatureHeader) {
-            Log::warning("PayPal Webhook missing signature headers. Rejecting.");
-            throw new WebhookSignatureException("Missing PayPal signature headers.");
-        }
-
         try {
-            $headers = json_decode($signatureHeader, true);
-            
             // --- REAL VERIFICATION CALL ---
-            // In a real PayPal SDK (srmklive/paypal), we verify like this:
             $verify = $this->client->verifyWebHook([
-                'transmission_id'   => $headers['transmission_id'],
-                'transmission_time' => $headers['transmission_time'],
-                'cert_url'          => $headers['cert_url'],
-                'auth_algo'         => $headers['auth_algo'],
-                'transmission_sig'  => $headers['transmission_sig'],
+                'transmission_id'   => $request->header('PAYPAL-TRANSMISSION-ID'),
+                'transmission_time' => $request->header('PAYPAL-TRANSMISSION-TIME'),
+                'cert_url'          => $request->header('PAYPAL-CERT-URL'),
+                'auth_algo'         => $request->header('PAYPAL-AUTH-ALGO'),
+                'transmission_sig'  => $request->header('PAYPAL-TRANSMISSION-SIG'),
                 'webhook_id'        => $webhookId,
                 'webhook_event'     => json_decode($payload, true),
             ]);
 
             if ($verify['status'] !== 'SUCCESS') {
-                Log::error('PayPal Webhook signature verification failed.', ['verify_status' => $verify['status']]);
+                Log::error('PayPal Webhook signature verification failed.', ['verify_status' => $verify['status'] ?? 'N/A']);
                 throw new WebhookSignatureException("PayPal Webhook signature verification failed.");
             }
 

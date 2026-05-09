@@ -47,12 +47,12 @@ class EventBookingService
      */
     public function finalizePayment(EventBooking $booking, string $method, string $transactionId, float $amount): bool
     {
-        return $booking->update([
-            'status'         => 'confirmed',
-            'transaction_id' => $transactionId,
-            'payment_method' => $method,
-            'paid_amount'    => $amount,
-            'paid_at'        => Carbon::now(),
-        ]);
+        $booking->status         = 'confirmed';
+        $booking->transaction_id = $transactionId;
+        $booking->payment_method = $method;
+        $booking->paid_amount    = $amount;
+        $booking->paid_at        = Carbon::now();
+        
+        return $booking->save();
     }
 }

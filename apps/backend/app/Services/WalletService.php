@@ -38,13 +38,15 @@ class WalletService
                 ]);
             }
 
-            $withdrawal = Withdrawal::create([
-                'user_id' => $lockedUser->id,
+            $withdrawal = new Withdrawal([
                 'amount'  => $amountInCents,
                 'method'  => $data['method'] ?? 'Bank Transfer',
                 'details' => json_encode($data['details'] ?? ['account' => '...']),
-                'status'  => 'pending', 
             ]);
+            
+            $withdrawal->user_id = $lockedUser->id;
+            $withdrawal->status  = 'pending';
+            $withdrawal->save();
 
             $lockedUser->withdraw($amountInCents, [
                 'type' => 'withdrawal_request',

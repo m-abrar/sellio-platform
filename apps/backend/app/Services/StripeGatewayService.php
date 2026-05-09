@@ -302,13 +302,15 @@ class StripeGatewayService implements PaymentGatewayService
 
     /**
      * Handles and processes incoming webhook payloads from Stripe.
-     * * @param string $payload The raw payload from the request body (MUST BE RAW STRING).
-     * @param string|null $signature The stripe-signature header.
+     * @param \Illuminate\Http\Request $request
      * @return array
      */
-    public function handleWebhook(string $payload, ?string $signature = null): array
+    public function handleWebhook(\Illuminate\Http\Request $request): array
     {
         Log::info('Stripe webhook processing started.');
+
+        $payload   = $request->getContent();
+        $signature = $request->header('Stripe-Signature');
 
         // 1. Retrieve webhook secret from the service configuration
         $webhookSecret = $this->config['webhook_secret'] ?? null;
@@ -320,7 +322,6 @@ class StripeGatewayService implements PaymentGatewayService
         
         if (!$signature) {
              Log::warning("Webhook request missing Stripe-Signature header. Rejecting.");
-             // Throwing an exception here causes the WebhookController to return 400 or 401
              throw new WebhookSignatureException("Webhook request missing Stripe-Signature header.");
         }
         
@@ -330,11 +331,9 @@ class StripeGatewayService implements PaymentGatewayService
             Log::debug('Stripe webhook signature verified successfully.');
 
         } catch (\UnexpectedValueException $e) {
-            // Invalid payload (e.g., non-JSON)
             Log::error("Webhook error: Invalid payload format.", ['error' => $e->getMessage()]);
             throw new WebhookSignatureException("Invalid payload format: " . $e->getMessage()); 
         } catch (SignatureVerificationException $e) {
-            // Invalid signature
             Log::error("Webhook error: Invalid signature.", ['error' => $e->getMessage()]);
             throw new WebhookSignatureException("Invalid signature: " . $e->getMessage()); 
         }
