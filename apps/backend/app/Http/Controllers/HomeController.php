@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Contracts\View\View;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -15,10 +16,9 @@ class HomeController extends Controller
     /**
      * Invoke the primary landing logic via proxy.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return \Illuminate\Contracts\View\View|\Symfony\Component\HttpFoundation\Response
      */
-    public function __invoke(Request $request): Response
+    public function __invoke(Request $request)
     {
         /** @var UnifiedHomeController $controller */
         $controller = app(UnifiedHomeController::class);
@@ -30,9 +30,9 @@ class HomeController extends Controller
      *
      * @param  string  $group
      * @param  string  $type
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return \Illuminate\Contracts\View\View|\Symfony\Component\HttpFoundation\Response
      */
-    public function landing(string $group, string $type): Response
+    public function landing(string $group, string $type)
     {
         return $this->__invoke(request());
     }
@@ -41,9 +41,9 @@ class HomeController extends Controller
      * General homepage entry point.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return \Illuminate\Contracts\View\View|\Symfony\Component\HttpFoundation\Response
      */
-    public function index(Request $request): Response
+    public function index(Request $request)
     {
         return $this->__invoke($request);
     }

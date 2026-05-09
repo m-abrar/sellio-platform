@@ -26,6 +26,8 @@ use App\Models\Ticket;
 use App\Models\NewsletterSubscriber;
 use App\Models\Subscription;
 use App\Models\Withdrawal;
+use App\Models\Campaign;
+use App\Models\OrderItem;
 use Bavix\Wallet\Models\Transaction as WalletTransaction;
 
 class DashboardService
@@ -115,7 +117,7 @@ class DashboardService
             $revenue += ServiceQuote::where('status', 'accepted')->sum('quoted_price');
         }
         if (module_enabled('classifieds')) {
-            $revenue += ClassifiedInquiry::where('status', 'confirmed')
+            $revenue += ClassifiedInquiry::where('classified_inquiries.status', 'confirmed')
                 ->join('classified_ads', 'classified_inquiries.classified_id', '=', 'classified_ads.id')
                 ->sum('classified_ads.base_price');
         }
@@ -151,7 +153,7 @@ class DashboardService
             $total += ServiceQuote::where('status', 'accepted')->whereYear('created_at', $year)->sum('quoted_price');
         }
         if (module_enabled('classifieds')) {
-            $total += ClassifiedInquiry::where('status', 'confirmed')
+            $total += ClassifiedInquiry::where('classified_inquiries.status', 'confirmed')
                 ->join('classified_ads', 'classified_inquiries.classified_id', '=', 'classified_ads.id')
                 ->whereYear('classified_inquiries.created_at', $year)
                 ->sum('classified_ads.base_price');
@@ -398,7 +400,7 @@ class DashboardService
                 ]));
         }
 
-        $events = $events->merge(Campaign::where('is_active', true)->get()->map(fn($c) => [
+        $events = $events->merge(Campaign::active()->get()->map(fn($c) => [
             'title' => $c->title . ' (Campaign)', 'start' => $c->start_date->toIso8601String(), 'end' => $c->end_date->toIso8601String(), 'color' => $c->color,
             'allDay' => $c->start_date->format('H:i') == '00:00' && $c->end_date->format('H:i') == '00:00'
         ]));

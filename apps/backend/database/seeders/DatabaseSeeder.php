@@ -37,8 +37,8 @@ class DatabaseSeeder extends Seeder
         $this->command->newLine();
 
         $this->call([
-            RolesAndPermissionsSeeder::class,
             UserSeeder::class,
+            RolesAndPermissionsSeeder::class,
             SettingSeeder::class,
             PageSeeder::class,
             ThemeSeeder::class,

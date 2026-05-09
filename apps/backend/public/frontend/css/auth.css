@@ -193,6 +193,7 @@ h1, h2, h3, h4, .brand-text {
 
 .form-icon-group .form-control {
     padding-left: 3.5rem !important;
+    padding-right: 3.5rem !important;
 }
 
 .form-icon-group .input-icon {
@@ -208,6 +209,23 @@ h1, h2, h3, h4, .brand-text {
 }
 
 .form-icon-group .form-control:focus + .input-icon {
+    color: var(--primary);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.form-icon-group .password-toggle {
+    position: absolute;
+    top: 50%;
+    right: 1.5rem;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    z-index: 10;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+}
+
+.form-icon-group .password-toggle:hover {
     color: var(--primary);
     transform: translateY(-50%) scale(1.1);
 }

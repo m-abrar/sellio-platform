@@ -112,6 +112,7 @@
                     <div class="form-icon-group">
                         <input type="password" @class(['form-control', 'rounded-pill', 'is-invalid' => $errors->has('password')]) id="password" name="password" placeholder="••••••••" required autocomplete="new-password">
                         <i class="bi bi-shield-lock input-icon"></i>
+                        <i class="bi bi-eye password-toggle"></i>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -119,6 +120,7 @@
                     <div class="form-icon-group">
                         <input type="password" class="form-control rounded-pill" id="password_confirmation" name="password_confirmation" placeholder="••••••••" required>
                         <i class="bi bi-shield-check input-icon"></i>
+                        <i class="bi bi-eye password-toggle"></i>
                     </div>
                 </div>
                 <div class="col-12 mt-2">

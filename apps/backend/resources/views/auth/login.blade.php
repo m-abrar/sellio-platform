@@ -118,6 +118,7 @@
                 <div class="form-icon-group">
                     <input type="password" @class(['form-control', 'rounded-pill', 'is-invalid' => $errors->has('password')]) id="password" name="password" placeholder="••••••••" required autocomplete="current-password">
                     <i class="bi bi-shield-lock input-icon"></i>
+                    <i class="bi bi-eye password-toggle"></i>
                 </div>
             </div>
             

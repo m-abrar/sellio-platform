@@ -22,7 +22,7 @@ use App\Traits\Models\HasStatusModeration;
  * @property \Illuminate\Support\Carbon|null $end_date
  * @property string|null $type
  * @property string|null $color
- * @property bool $is_active
+ * @property string $status
  */
 class Campaign extends Model
 {
@@ -40,7 +40,7 @@ class Campaign extends Model
         'end_date',
         'type',
         'color',
-        'is_active'
+        'status'
     ];
 
     /**
@@ -51,7 +51,6 @@ class Campaign extends Model
     protected $casts = [
         'start_date' => 'datetime',
         'end_date'   => 'datetime',
-        'is_active'  => 'boolean'
     ];
 
     /**
@@ -72,7 +71,7 @@ class Campaign extends Model
      */
     public function scopeActive(Builder $query): Builder
     {
-        return $query->where('is_active', true)
+        return $query->where('status', 'active')
             ->where(function ($q) {
                 $q->whereNull('start_date')
                   ->orWhere('start_date', '<=', now());

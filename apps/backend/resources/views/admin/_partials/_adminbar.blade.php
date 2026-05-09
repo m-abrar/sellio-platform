@@ -40,11 +40,12 @@
 
       {{-- 3. Theme Context --}}
       <div class="me-3">
-        {{-- Accessing variables via request() to fix Undefined Variable error --}}
-        <a href="{{ route('admin.themes.edit', request()->theme_id) }}" class="text-decoration-none">
-          <i class="fas fa-palette me-1"></i>
-          <span class="badge bg-primary">{{ request()->theme_key }}</span>
-        </a>
+        @if(isset($activeTheme))
+          <a href="{{ route('admin.themes.edit', $activeTheme->id) }}" class="text-decoration-none">
+            <i class="fas fa-palette me-1"></i>
+            <span class="badge bg-primary">{{ $activeTheme->theme_key }}</span>
+          </a>
+        @endif
       </div>
 
       <span class="separator">|</span>
@@ -58,7 +59,7 @@
           {{-- Ensure $themePages is shared via View::share in Middleware or ServiceProvider --}}
           @forelse ($themePages ?? [] as $page)
             <li>
-              <a class="dropdown-item text-capitalize" href="{{ route('admin.content.edit', ['page' => $page->page, 'theme_key' => request()->theme_key]) }}">
+              <a class="dropdown-item text-capitalize" href="{{ route('admin.content.edit', ['page' => $page->page, 'theme_key' => $activeTheme->theme_key ?? '']) }}">
                 <i class="fas fa-file me-2"></i>{{ $page->page }}
               </a>
             </li>
@@ -94,7 +95,7 @@
             <li><hr class="dropdown-divider border-light"></li>
             
             <li>
-                <a class="dropdown-item" href="{{ route('admin.menu.index', ['theme_key' => request()->theme_key]) }}">
+                <a class="dropdown-item" href="{{ route('admin.menu.index', ['theme_key' => $activeTheme->theme_key ?? '']) }}">
                     <i class="fas fa-list-alt me-2"></i>{{ __('Manage All Menus') }}
                 </a>
             </li>
