@@ -221,6 +221,8 @@ class SystemController extends Controller
             __('CURL Extension')     => ['met' => extension_loaded('curl'), 'type' => 'extension'],
             __('exec() Function')    => ['met' => function_exists('exec'), 'type' => 'function'],
             __('passthru() Function')=> ['met' => function_exists('passthru'), 'type' => 'function'],
+            __('shell_exec() Function') => ['met' => function_exists('shell_exec'), 'type' => 'function'],
+            __('symlink() Function')    => ['met' => function_exists('symlink'), 'type' => 'function'],
         ];
 
         $permissions = [
