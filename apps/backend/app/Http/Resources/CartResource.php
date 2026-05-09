@@ -16,7 +16,7 @@ class CartResource extends JsonResource
             'id'         => $this->id,
             'items'      => CartItemResource::collection($this->whenLoaded('items')),
             'total'      => (float) $this->total,
-            'item_count' => (int) ($this->items_count ?? $this->items->sum('quantity')),
+            'item_count' => (int) ($this->items_count ?? ($this->relationLoaded('items') ? $this->items->sum('quantity') : 0)),
             'currency_symbol' => setting('currency_symbol', '$'),
         ];
     }

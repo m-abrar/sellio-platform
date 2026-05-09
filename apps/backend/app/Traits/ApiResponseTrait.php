@@ -22,36 +22,21 @@ trait ApiResponseTrait
         $response = [
             'success' => true,
             'message' => $message ?? 'Success',
-            'errors' => null, // Strict requirement from spec
+            'errors' => null,
         ];
 
         if ($data !== null) {
             if ($data instanceof AnonymousResourceCollection) {
-                // For Pagination/Collections
-                $responseData = $data->response()->getData(true);
+                $responseData = $data->toResponse(request())->getData(true);
                 $response['data'] = $responseData['data'] ?? [];
-                
-                // Merge passed meta with Laravel's pagination meta
-                $response['meta'] = array_merge(
-                    $meta, 
-                    $responseData['meta'] ?? [],
-                    ['links' => $responseData['links'] ?? []]
-                );
+                $response['meta'] = array_merge($meta, $responseData['meta'] ?? [], ['links' => $responseData['links'] ?? []]);
             } elseif ($data instanceof JsonResource) {
-                // Single Resource
-                $responseData = $data->response()->getData(true);
+                $responseData = $data->toResponse(request())->getData(true);
                 $response['data'] = $responseData['data'] ?? $responseData;
-                
-                if (!empty($meta)) {
-                    $response['meta'] = $meta;
-                }
+                if (!empty($meta)) $response['meta'] = $meta;
             } else {
-                // Regular array or object
                 $response['data'] = $data;
-                
-                if (!empty($meta)) {
-                    $response['meta'] = $meta;
-                }
+                if (!empty($meta)) $response['meta'] = $meta;
             }
         } else {
             $response['data'] = null;
@@ -76,7 +61,10 @@ trait ApiResponseTrait
         ];
 
         if ($errors !== null) {
-            $response['errors'] = $errors;
+            // Sanitize errors to prevent internal leakage in production
+            $response['errors'] = app()->environment('production') && $errors instanceof \Throwable 
+                ? 'An internal error occurred.' 
+                : $errors;
         }
 
         return response()->json($response, $code);

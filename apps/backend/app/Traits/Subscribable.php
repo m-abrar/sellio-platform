@@ -69,14 +69,16 @@ trait Subscribable
      */
     public function isSubscribed(): bool
     {
-        // Use the existing 'subscription' relationship (which fetches the 'default' one)
-        return $this->subscription()
-                    ->where(function ($query) {
-                        // The subscription is active if:
-                        $query->whereNull('ends_at') // 1. It is set for auto-renewal (no end date)
-                              ->orWhere('ends_at', '>', now()); // 2. OR its end date is still in the future
-                    })
-                    ->exists(); // Check if a record matching these criteria exists
+        $cacheKey = "user_subscribed_{$this->id}";
+        
+        return cache()->remember($cacheKey, now()->addMinutes(15), function () {
+            return $this->subscription()
+                        ->where(function ($query) {
+                            $query->whereNull('ends_at')
+                                  ->orWhere('ends_at', '>', now());
+                        })
+                        ->exists();
+        });
     }
 
     

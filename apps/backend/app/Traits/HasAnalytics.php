@@ -25,19 +25,17 @@ trait HasAnalytics
      */
     public function getViewsCountAttribute(): int
     {
-        // NOTE: This will result in an N+1 query if not eager loaded using withCount
-        return $this->activityMetrics()->where('description', 'viewed_listing')->count();
+        $cacheKey = "views_count_{$this->getTable()}_{$this->id}";
+        return cache()->remember($cacheKey, now()->addMinutes(10), function () {
+            return $this->activityMetrics()->where('description', 'viewed_listing')->count();
+        });
     }
 
-    /**
-     * ACCESSOR for total leads tracked in the activity log (e.g., successful inquiry/booking).
-     * @return int
-     */
     public function getLeadsCountAttribute(): int
     {
-        // NOTE: This MUST be overridden in the specific listing model
-        // if leads are tracked outside the activity log (e.g., in a bookings table).
-        // For simplicity here, we assume a 'submitted_lead' log exists.
-        return $this->activityMetrics()->where('description', 'submitted_lead')->count();
+        $cacheKey = "leads_count_{$this->getTable()}_{$this->id}";
+        return cache()->remember($cacheKey, now()->addMinutes(10), function () {
+            return $this->activityMetrics()->where('description', 'submitted_lead')->count();
+        });
     }
 }
