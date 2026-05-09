@@ -28,17 +28,17 @@ return new class extends Migration
             $table->decimal('sale_price', 15, 2)->nullable();
             
             // Auto Specifics
-            $table->unsignedSmallInteger('year');
-            $table->string('make');
-            $table->string('model');
-            $table->string('engine_type');
-            $table->string('transmission');
-            $table->string('fuel_economy');
-            $table->string('drivetrain');
-            $table->string('exterior_color');
+            $table->unsignedSmallInteger('year')->index();
+            $table->string('make')->index();
+            $table->string('model')->index();
+            $table->enum('engine_type', ['Gasoline', 'Diesel', 'Electric', 'Hybrid', 'LPG', 'Other'])->default('Gasoline')->index();
+            $table->enum('transmission', ['Automatic', 'Manual', 'CVT', 'Semi-Automatic', 'Other'])->default('Automatic')->index();
+            $table->string('fuel_economy', 100)->nullable();
+            $table->enum('drivetrain', ['FWD', 'RWD', 'AWD', '4WD', 'Other'])->default('FWD')->index();
+            $table->string('exterior_color')->nullable();
 
             $table->unsignedInteger('mileage_value');
-            $table->string('mileage_units');
+            $table->string('mileage_units', 10)->default('km');
             $table->tinyInteger('condition_rating')->nullable(); // 1-10
             $table->string('vin_number', 50)->nullable()->index();
             $table->unsignedTinyInteger('warranty_months')->nullable();

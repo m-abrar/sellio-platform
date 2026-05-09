@@ -34,77 +34,79 @@ class DashboardService
 {
     public function getGlobalMetrics(): array
     {
-        $today = now();
-        $limit = 5;
-        $last24Hours = $today->copy()->subHours(24);
-        $last30Days = $today->copy()->subDays(30);
-        $previous30Days = $last30Days->copy()->subDays(30);
-        $currentYear = $today->year;
-        $last180Days = $today->copy()->subDays(180);
-        $next180Days = $today->copy()->addDays(180);
+        return \Illuminate\Support\Facades\Cache::remember('admin_dashboard_metrics_v2', 300, function() {
+            $today = now();
+            $limit = 5;
+            $last24Hours = $today->copy()->subHours(24);
+            $last30Days = $today->copy()->subDays(30);
+            $previous30Days = $last30Days->copy()->subDays(30);
+            $currentYear = $today->year;
+            $last180Days = $today->copy()->subDays(180);
+            $next180Days = $today->copy()->addDays(180);
 
-        // 1. Revenue & KPIs
-        $totalEarned = $this->calculateTotalRevenue();
-        $yoyChange = $this->calculateYoyGrowth();
+            // 1. Revenue & KPIs
+            $totalEarned = $this->calculateTotalRevenue();
+            $yoyChange = $this->calculateYoyGrowth();
 
-        // 2. User Growth
-        $userMetrics = $this->getUserGrowthMetrics($today, $last30Days, $previous30Days);
+            // 2. User Growth
+            $userMetrics = $this->getUserGrowthMetrics($today, $last30Days, $previous30Days);
 
-        // 3. Charts
-        $revenueChart = $this->getMonthlyRevenueChart($currentYear);
-        $typeChart = $this->getModuleDistributionChart();
+            // 3. Charts
+            $revenueChart = $this->getMonthlyRevenueChart($currentYear);
+            $typeChart = $this->getModuleDistributionChart();
 
-        // 4. Activity & Lists
-        $recentListings = $this->getRecentListings($limit);
-        $recentBookings = $this->getRecentBookings($limit);
-        $notifications = $this->getRecentNotifications($limit);
-        $topPartners = $this->getTopPartnersData($last30Days);
+            // 4. Activity & Lists
+            $recentListings = $this->getRecentListings($limit);
+            $recentBookings = $this->getRecentBookings($limit);
+            $notifications = $this->getRecentNotifications($limit);
+            $topPartners = $this->getTopPartnersData($last30Days);
 
-        // 5. Calendar
-        $calendarEvents = $this->getCalendarEvents($last180Days, $next180Days);
+            // 5. Calendar
+            $calendarEvents = $this->getCalendarEvents($last180Days, $next180Days);
 
-        // 6. Aggregate Metrics
-        $moduleStats = $this->getEnabledModuleStats($last24Hours);
+            // 6. Aggregate Metrics
+            $moduleStats = $this->getEnabledModuleStats($last24Hours);
 
-        return [
-            'system_kpis' => [
-                'earnings' => '$' . number_format($totalEarned, 0),
-                'yoy_change' => $yoyChange,
-            ],
-            'urgent_actions' => [
-                'partner_applications' => User::where('is_partner', true)
-                    ->whereDoesntHave('roles', fn ($query) => $query->where('name', 'partner'))
-                    ->count(),
-                'listing_approvals' => $moduleStats['listing_approvals'],
-                'pending_payouts' => '$' . number_format(Withdrawal::where('status', 'pending')->sum('amount') / 100, 2),
-                'unresolved_tickets' => Ticket::unresolved()->count(),
-            ],
-            'secondary_metrics' => [
-                'active_partners' => User::role('partner')->count(),
-                'live_properties' => $moduleStats['live_listings'],
-                'new_leads_24h' => $moduleStats['new_leads_24h'],
-            ],
-            'recent_bookings' => ['count' => count($recentBookings), 'items' => $recentBookings],
-            'recent_listings' => ['count' => count($recentListings), 'period' => 'Across all categories', 'items' => $recentListings],
-            'notifications' => ['count' => count($notifications), 'items' => $notifications],
-            'top_partners' => $topPartners,
-            'user_metrics' => $userMetrics,
-            'top_sales' => $this->getTopSalesData($last30Days, $limit),
-            'js_data' => [
-                'revenue_chart' => $revenueChart,
-                'type_chart' => $typeChart,
-                'calendar_events' => $calendarEvents,
-                'heatmap_data' => $this->getHeatmapData()
-            ],
-            'system_health' => [
-                'php_version' => PHP_VERSION,
-                'laravel_version' => app()->version(),
-                'server_ip' => request()->server('SERVER_ADDR') ?? '127.0.0.1',
-                'cache_status' => config('cache.default'),
-                'db_status' => 'Healthy',
-                'environment' => app()->environment(),
-            ]
-        ];
+            return [
+                'system_kpis' => [
+                    'earnings' => '$' . number_format($totalEarned, 0),
+                    'yoy_change' => $yoyChange,
+                ],
+                'urgent_actions' => [
+                    'partner_applications' => User::where('is_partner', true)
+                        ->whereDoesntHave('roles', fn ($query) => $query->where('name', 'partner'))
+                        ->count(),
+                    'listing_approvals' => $moduleStats['listing_approvals'],
+                    'pending_payouts' => '$' . number_format(Withdrawal::where('status', 'pending')->sum('amount') / 100, 2),
+                    'unresolved_tickets' => Ticket::unresolved()->count(),
+                ],
+                'secondary_metrics' => [
+                    'active_partners' => User::role('partner')->count(),
+                    'live_properties' => $moduleStats['live_listings'],
+                    'new_leads_24h' => $moduleStats['new_leads_24h'],
+                ],
+                'recent_bookings' => ['count' => count($recentBookings), 'items' => $recentBookings],
+                'recent_listings' => ['count' => count($recentListings), 'period' => 'Across all categories', 'items' => $recentListings],
+                'notifications' => ['count' => count($notifications), 'items' => $notifications],
+                'top_partners' => $topPartners,
+                'user_metrics' => $userMetrics,
+                'top_sales' => $this->getTopSalesData($last30Days, $limit),
+                'js_data' => [
+                    'revenue_chart' => $revenueChart,
+                    'type_chart' => $typeChart,
+                    'calendar_events' => $calendarEvents,
+                    'heatmap_data' => $this->getHeatmapData()
+                ],
+                'system_health' => [
+                    'php_version' => PHP_VERSION,
+                    'laravel_version' => app()->version(),
+                    'server_ip' => request()->server('SERVER_ADDR') ?? '127.0.0.1',
+                    'cache_status' => config('cache.default'),
+                    'db_status' => 'Healthy',
+                    'environment' => app()->environment(),
+                ]
+            ];
+        });
     }
 
     private function calculateTotalRevenue(): float

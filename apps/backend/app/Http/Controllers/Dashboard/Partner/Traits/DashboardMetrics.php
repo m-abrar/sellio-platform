@@ -27,35 +27,40 @@ trait DashboardMetrics
 {
     use Listings; 
 
+    /**
+     * Request-level cache to prevent redundant ID fetching.
+     */
+    private static $listingIdCache = [];
+
     private function getFilteredListings($partner, $listingId = null, $listingType = null): array
     {
+        $cacheKey = $partner->id . '_' . ($listingId ?? 'all') . '_' . ($listingType ?? 'all');
+        
+        if (isset(self::$listingIdCache[$cacheKey])) {
+            return self::$listingIdCache[$cacheKey];
+        }
+
         $listings = [];
         $models = [Property::class, Event::class, Service::class, Auto::class, Classified::class, JobListing::class]; 
 
         foreach ($models as $modelClass) {
             $relationName = Str::lower(class_basename($modelClass)) . 's';
-            
-            if ($modelClass === JobListing::class) {
-                $relationName = 'jobs'; 
-            }
+            if ($modelClass === JobListing::class) $relationName = 'jobs'; 
             
             if (method_exists($partner, $relationName)) {
-                
-                if ($listingType && $listingType !== $modelClass) {
-                    continue;
-                }
+                if ($listingType && $listingType !== $modelClass) continue;
                 
                 $query = $partner->$relationName();
-
-                if ($listingId) {
-                    $query->where('id', $listingId);
-                }
+                if ($listingId) $query->where('id', $listingId);
 
                 $listings[$modelClass] = $query->pluck('id');
             }
         }
 
-        return collect($listings)->map(fn($ids) => collect($ids->map(fn($id) => (object)['id' => $id])) )->all();
+        $result = collect($listings)->map(fn($ids) => collect($ids->map(fn($id) => (object)['id' => $id])) )->all();
+        self::$listingIdCache[$cacheKey] = $result;
+        
+        return $result;
     }
 
     private function calculateEarnings($partner, int $startDayOffset, int $endDayOffset, $listingId = null, $listingType = null): float
@@ -97,11 +102,7 @@ trait DashboardMetrics
                 ->sum('quoted_price')
             : 0.0;
         
-        $serviceRevenue = $serviceAppointmentRevenue + $serviceQuoteRevenue;
-
-        $classifiedRevenue = 0.0; 
-        
-        return (float) ($propertyRevenue + $eventRevenue + $serviceRevenue + $classifiedRevenue);
+        return (float) ($propertyRevenue + $eventRevenue + $serviceAppointmentRevenue + $serviceQuoteRevenue);
     }
 
     private function buildModelMap(array $listingCollections): array
@@ -123,15 +124,10 @@ trait DashboardMetrics
             foreach ($modelMap as $type => $ids) {
                 if ($ids->isNotEmpty()) {
                     $hasCondition = true;
-                    $query->orWhere(function (Builder $q) use ($type, $ids) {
-                        $q->where('subject_type', $type)
-                          ->whereIn('subject_id', $ids);
-                    });
+                    $query->orWhere(fn ($q) => $q->where('subject_type', $type)->whereIn('subject_id', $ids));
                 }
             }
-            if (!$hasCondition) {
-                $query->whereRaw('1 = 0'); 
-            }
+            if (!$hasCondition) $query->whereRaw('1 = 0'); 
         });
 
         return $viewsQuery->count();
@@ -143,26 +139,12 @@ trait DashboardMetrics
         $nonLeadStatuses = ['cancelled', 'rejected', 'refused', 'refunded'];
 
         $leadConfig = [
-            Property::class => [
-                [PropertyBooking::class, 'property_id'], 
-                [PropertyVisit::class, 'property_id']
-            ],
-            Event::class => [
-                [EventBooking::class, 'event_id']
-            ],
-            Service::class => [
-                [ServiceAppointment::class, 'service_id'], 
-                [ServiceQuote::class, 'service_id']
-            ],
-            Auto::class => [
-                [AutoInquiry::class, 'auto_id']
-            ],
-            Classified::class => [
-                [ClassifiedInquiry::class, 'classified_id']
-            ],
-            JobListing::class => [
-                [JobApplication::class, 'job_listing_id']
-            ],
+            Property::class => [[PropertyBooking::class, 'property_id'], [PropertyVisit::class, 'property_id']],
+            Event::class => [[EventBooking::class, 'event_id']],
+            Service::class => [[ServiceAppointment::class, 'service_id'], [ServiceQuote::class, 'service_id']],
+            Auto::class => [[AutoInquiry::class, 'auto_id']],
+            Classified::class => [[ClassifiedInquiry::class, 'classified_id']],
+            JobListing::class => [[JobApplication::class, 'job_listing_id']],
         ];
 
         foreach ($leadConfig as $listingModel => $leadModels) {
@@ -181,7 +163,6 @@ trait DashboardMetrics
         return $totalLeads;
     }
 
-
     private function calculatePerformanceMetrics($partner, int $startDayOffset, int $endDayOffset, $listingId = null, $listingType = null): array
     {
         $endDate = Carbon::now()->subDays($startDayOffset);
@@ -191,20 +172,16 @@ trait DashboardMetrics
         $modelMap = $this->buildModelMap($listingCollections);
 
         $totalViews = $this->countViewsInPeriod($modelMap, $startDate, $endDate);
-
         $totalLeads = $this->countLeadsInPeriod($listingCollections, $startDate, $endDate);
         
         $conversionRate = $totalViews > 0 ? ($totalLeads / $totalViews) * 100 : 0;
-        
-        $avgResponseTime = 'TBD'; 
-        $avgOccupancyRate = 'TBD';
         
         return [
             'total_views' => $totalViews,
             'total_leads' => $totalLeads,
             'conversion_rate' => number_format($conversionRate, 2),
-            'avg_response_time' => $avgResponseTime,
-            'avg_occupancy_rate' => $avgOccupancyRate,
+            'avg_response_time' => 'TBD',
+            'avg_occupancy_rate' => 'TBD',
         ];
     }
 }
