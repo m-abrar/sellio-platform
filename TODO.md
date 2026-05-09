@@ -244,6 +244,13 @@ http://127.0.0.1:8000/admin/job-applications/create
 http://127.0.0.1:8000/admin/classified-inquiries/create
 
 
+-----------------
 
 
+http://127.0.0.1:8000/admin/listings
 
+ErrorException
+app\Http\Controllers\Admin\ListingController.php:61
+Undefined variable $locations
+
+-----------------

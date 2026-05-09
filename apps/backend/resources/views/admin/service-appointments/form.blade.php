@@ -147,10 +147,9 @@
                         </div>
 
                         <div class="form-group mb-0">
-                            <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Service Notes / Requirements</label>
-                            <textarea name="notes" class="form-control" rows="4"
-                                style="border-radius: 16px; border: 1px solid var(--border-light);"
-                                placeholder="Client notes or special requirements...">{{ old('notes', $appointment->notes) }}</textarea>
+                            <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">{{ __('Service Notes / Requirements') }}</label>
+                            <textarea name="notes" class="form-control textarea-premium" rows="4"
+                                placeholder="{{ __('Client notes or special requirements...') }}">{{ old('notes', $appointment->notes) }}</textarea>
                             @error('notes') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
                         </div>
                     </div>

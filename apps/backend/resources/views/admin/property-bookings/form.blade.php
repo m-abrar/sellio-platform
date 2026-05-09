@@ -15,7 +15,7 @@
 --}}
 @extends('adminlte::page')
 
-@section('title', ($booking->exists ? 'Modify' : 'Create') . ' Property Booking')
+@section('title', ($booking->exists ? __('Modify') : __('Create')) . ' ' . __('Property Booking'))
 
 @section('content_header')
     <div class="container-fluid pt-4">
@@ -23,15 +23,15 @@
             <div class="col-sm-8">
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-calendar-alt mr-2 text-primary opacity-50"></i> 
-                    {{ $booking->exists ? 'Modify Stay: ' . $booking->id : 'Create Manual Entry' }}
+                    {{ $booking->exists ? __('Modify Stay: ') . $booking->id : __('Create Manual Entry') }}
                 </h1>
                 <p class="text-muted mt-2 small uppercase letter-spacing-1 mb-0">
-                    {{ $booking->exists ? 'Update occupancy intelligence, guest profiles, and financial ledger records.' : 'Register a new property reservation for an incoming guest principal.' }}
+                    {{ $booking->exists ? __('Update occupancy intelligence, guest profiles, and financial ledger records.') : __('Register a new property reservation for an incoming guest principal.') }}
                 </p>
             </div>
             <div class="col-sm-4 text-right">
                 <a href="{{ route('admin.property-bookings.index') }}" class="btn btn-back shadow-sm">
-                    <i class="fas fa-arrow-left mr-1"></i> Back to Queue
+                    <i class="fas fa-arrow-left mr-1"></i> {{ __('Back to Queue') }}
                 </a>
             </div>
         </div>
@@ -58,9 +58,9 @@
                     </div>
                     <div class="card-body p-4 pt-0">
                         <div class="form-group mb-4">
-                            <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Guest Full Identity <span class="text-danger">*</span></label>
+                            <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">{{ __('Guest Full Identity') }} <span class="text-danger">*</span></label>
                             <input type="text" name="full_name" class="form-control form-control-hero @error('full_name') is-invalid @enderror" 
-                                   value="{{ old('full_name', $booking->full_name) }}" required placeholder="e.g. John Doe">
+                                   value="{{ old('full_name', $booking->full_name) }}" required placeholder="{{ __('e.g. John Doe') }}">
                             @error('full_name') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
                         </div>
 

@@ -15,7 +15,7 @@
 --}}
 @extends('adminlte::page')
 
-@section('title', ($inquiry->exists ? 'Modify' : 'Create') . ' Classified Inquiry')
+@section('title', ($inquiry->exists ? __('Modify') : __('Create')) . ' ' . __('Classified Inquiry'))
 
 @section('content_header')
     <div class="container-fluid pt-4">
@@ -23,7 +23,7 @@
             <div class="col-sm-8">
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-search-dollar mr-2 text-primary opacity-50"></i> 
-                    {{ $inquiry->exists ? 'Update Inquiry: #' . $inquiry->id : 'New Marketplace Inquiry' }}
+                    {{ $inquiry->exists ? __('Update Inquiry: #') . $inquiry->id : __('New Marketplace Inquiry') }}
                 </h1>
                 <p class="text-muted mt-2 small uppercase letter-spacing-1 mb-0">
                     {{ $inquiry->exists ? 'Managing interest for marketplace assets.' : 'Manually logging a new inquiry for a classified listing.' }}
@@ -89,10 +89,9 @@
                         </div>
 
                         <div class="form-group mb-0">
-                            <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Inquiry Message / Interest Context</label>
-                            <textarea name="message" class="form-control" rows="8"
-                                style="border-radius: 16px; border: 1px solid var(--border-light);"
-                                placeholder="Details regarding the inquiry, special requests, or negotiation notes...">{{ old('message', $inquiry->message) }}</textarea>
+                            <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">{{ __('Inquiry Message / Interest Context') }}</label>
+                            <textarea name="message" class="form-control textarea-premium" rows="8"
+                                placeholder="{{ __('Details regarding the inquiry, special requests, or negotiation notes...') }}">{{ old('message', $inquiry->message) }}</textarea>
                             @error('message') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
                         </div>
                     </div>

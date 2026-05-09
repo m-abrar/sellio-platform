@@ -15,7 +15,7 @@
 --}}
 @extends('adminlte::page')
 
-@section('title', ($application->exists ? 'Modify' : 'Create') . ' Job Application')
+@section('title', ($application->exists ? __('Modify') : __('Create')) . ' ' . __('Job Application'))
 
 @section('content_header')
     <div class="container-fluid pt-4">
@@ -23,7 +23,7 @@
             <div class="col-sm-8">
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-briefcase mr-2 text-primary opacity-50"></i> 
-                    {{ $application->exists ? 'Update Application: #' . $application->id : 'New Career Submission' }}
+                    {{ $application->exists ? __('Update Application: #') . $application->id : __('New Career Submission') }}
                 </h1>
                 <p class="text-muted mt-2 small uppercase letter-spacing-1 mb-0">
                     {{ $application->exists ? 'Managing candidate submission for career opportunities.' : 'Manually logging a new candidate application.' }}
@@ -89,10 +89,9 @@
                         </div>
 
                         <div class="form-group mb-0">
-                            <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Cover Letter / Application Pitch</label>
-                            <textarea name="cover_letter" class="form-control" rows="12"
-                                style="border-radius: 16px; border: 1px solid var(--border-light);"
-                                placeholder="Candidate pitch, introductory message, or application context...">{{ old('cover_letter', $application->cover_letter) }}</textarea>
+                            <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">{{ __('Cover Letter / Application Pitch') }}</label>
+                            <textarea name="cover_letter" class="form-control textarea-premium" rows="12"
+                                placeholder="{{ __('Candidate pitch, introductory message, or application context...') }}">{{ old('cover_letter', $application->cover_letter) }}</textarea>
                             @error('cover_letter') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
                         </div>
                     </div>

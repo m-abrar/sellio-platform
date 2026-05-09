@@ -51,7 +51,7 @@ class ListingController extends Controller
         $users     = User::whereIn('id', $userIds)->get()->keyBy('id');
         $locations = \App\Models\Location::whereIn('id', $locIds)->get()->keyBy('id');
 
-        $listings->getCollection()->transform(function ($listing) use ($users) {
+        $listings->getCollection()->transform(function ($listing) use ($users, $locations) {
             $modelClass = ListingQueryService::MODEL_MAP[strtolower($listing->listing_type)] ?? null;
             
             if ($modelClass) {
