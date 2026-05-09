@@ -29,17 +29,9 @@ class Favorite extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'user_id',
         'favoritable_id',
         'favoritable_type',
     ];
-
-    /**
-     * The relationships that should always be eager loaded.
-     *
-     * @var array<int, string>
-     */
-    protected $with = ['favoritable'];
 
     // --- Scopes ---
 

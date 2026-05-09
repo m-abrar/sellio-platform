@@ -70,4 +70,12 @@ class EventOccurrenceTicket extends Model
     {
         return $this->belongsTo(EventTicketType::class, 'event_ticket_type_id');
     }
+
+    /**
+     * Get all bookings associated with this specific ticket inventory record.
+     */
+    public function bookings(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(EventBooking::class, 'occurrence_ticket_id');
+    }
 }

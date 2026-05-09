@@ -55,6 +55,18 @@ class PageContent extends Model implements HasMedia
     ];
 
     /**
+     * Sanitize content before saving to prevent XSS.
+     */
+    protected function value(): \Illuminate\Database\Eloquent\Casts\Attribute
+    {
+        return \Illuminate\Database\Eloquent\Casts\Attribute::make(
+            set: fn ($value) => is_string($value) 
+                ? strip_tags($value, '<div><section><main><article><aside><header><footer><nav><p><br><hr><a><b><i><u><strong><em><span><ul><li><ol><h1><h2><h3><h4><h5><h6><img><blockquote><video><audio><source><track><canvas><svg><path><circle><rect><line><polyline><polygon><ellipse>')
+                : $value
+        );
+    }
+
+    /**
      * Get the options for logging activity.
      */
     public function getActivitylogOptions(): LogOptions

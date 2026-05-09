@@ -192,7 +192,7 @@ class Location extends Model implements HasMedia
     /**
      * The accessors to append to the model's array form.
      */
-    protected $appends = ['listings_count'];
+    protected $appends = [];
 
     /**
      * Aggregates active listings count across all verticals for this location.

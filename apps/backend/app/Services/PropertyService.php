@@ -27,13 +27,18 @@ class PropertyService
      */
     public function getSearchPageData(array $filters, ?User $user): array
     {
-        $rawMaxPrice = Property::active()
-            ->selectRaw('MAX(COALESCE(sale_price, base_price)) as max_price')
-            ->value('max_price');
+        // 1. Calculate Max Price (Cached for 1 hour to prevent heavy aggregate query on every search)
+        $maxAllowedPrice = \Illuminate\Support\Facades\Cache::remember('property_max_price', 3600, function() {
+            $rawMax = Property::active()
+                ->selectRaw('MAX(COALESCE(sale_price, base_price)) as max_price')
+                ->value('max_price');
+            return $this->roundUpPrice($rawMax) ?? 1000000;
+        });
 
         $checkIn = isset($filters['check_in']) ? Carbon::createFromFormat('m-d-Y', $filters['check_in']) : null;
         $checkOut = isset($filters['check_out']) ? Carbon::createFromFormat('m-d-Y', $filters['check_out']) : null;
 
+        // 2. Execute Search
         $properties = $this->applyFilters(Property::query(), $filters, $checkIn, $checkOut, $user)->paginate(12);
 
         $numberOfNights = ($checkIn && $checkOut && $checkIn->lt($checkOut)) 
@@ -49,15 +54,23 @@ class PropertyService
             }
         }
 
+        // 3. Retrieve Taxonomies (Cached for 1 hour)
+        $categories = \Illuminate\Support\Facades\Cache::remember('property_categories', 3600, fn() => Category::where('is_property', true)->get());
+        $locations  = \Illuminate\Support\Facades\Cache::remember('property_locations', 3600, fn() => Location::where('is_property', true)->get());
+        $amenities  = \Illuminate\Support\Facades\Cache::remember('property_amenities', 3600, fn() => \App\Models\Amenity::where('is_property', true)->pluck('title', 'id'));
+        $features   = \Illuminate\Support\Facades\Cache::remember('property_features', 3600, fn() => \App\Models\Feature::where('is_property', true)->pluck('title', 'id'));
+        $tags       = \Illuminate\Support\Facades\Cache::remember('property_tags', 3600, fn() => \App\Models\Tag::where('is_property', true)->pluck('title', 'id'));
+        $agents     = \Illuminate\Support\Facades\Cache::remember('property_top_agents', 600, fn() => User::orderByRating()->take(6)->get());
+
         return [
             'properties'       => $properties,
-            'categories'       => Category::where('is_property', true)->get(),
-            'locations'        => Location::where('is_property', true)->get(),
-            'amenities'        => Amenity::where('is_property', true)->pluck('title', 'id'),
-            'features'         => Feature::where('is_property', true)->pluck('title', 'id'),
-            'tags'             => Tag::where('is_property', true)->pluck('title', 'id'),
-            'agents'           => User::orderByRating()->take(6)->get(),
-            'maxAllowedPrice'  => $this->roundUpPrice($rawMaxPrice) ?? 1000000,
+            'categories'       => $categories,
+            'locations'        => $locations,
+            'amenities'        => $amenities,
+            'features'         => $features,
+            'tags'             => $tags,
+            'agents'           => $agents,
+            'maxAllowedPrice'  => $maxAllowedPrice,
             'numberOfNights'   => $numberOfNights,
         ];
     }

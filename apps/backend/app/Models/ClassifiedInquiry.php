@@ -48,18 +48,11 @@ class ClassifiedInquiry extends Pivot
     public $incrementing = true;
 
     /**
-     * The relationships that should always be eager loaded.
-     */
-    protected $with = ['classifiedAd', 'user'];
-
-    /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
     protected $fillable = [
-        'user_id',
-        'classified_id',
         'status',
         'message',
     ];

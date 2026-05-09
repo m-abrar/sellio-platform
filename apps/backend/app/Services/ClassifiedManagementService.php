@@ -23,20 +23,8 @@ class ClassifiedManagementService
      */
     public function getPaginatedClassifieds(array $filters, ?User $user = null, int $perPage = 12): LengthAwarePaginator
     {
-        $currentPage = (int) ($filters['page'] ?? 1);
-        $isFirstPage = $currentPage === 1;
-
-        // 1. Fetch Featured Items
-        $featured = Classified::where('is_featured', true)
-            ->visibleTo($user)
-            ->latest()
-            ->get();
-
-        $featuredCount = $featured->count();
-
-        // 2. Build Normal Query
-        $normalQuery = Classified::visibleTo($user)
-            ->whereNotIn('id', $featured->pluck('id'))
+        return Classified::visibleTo($user)
+            ->orderByDesc('is_featured')
             ->latest()
             ->when($filters['search'] ?? null, function ($q, $v) {
                 $q->where(fn($sub) => $sub->where('title', 'like', "%$v%")
@@ -50,36 +38,9 @@ class ClassifiedManagementService
             ->when($filters['tags'] ?? null, function ($q, $v) {
                 $q->whereHas('tags', fn($sub) => $sub->whereIn('tags.id', (array) $v));
             })
-            ->with(['category', 'location', 'type', 'tags', 'user']);
-
-        $totalNormalCount = $normalQuery->count();
-        $total = $totalNormalCount + $featuredCount;
-
-        // 3. Handle Manual Pagination Math
-        if ($isFirstPage) {
-            $normalLimit = max($perPage - $featuredCount, 0);
-            $normalOffset = 0;
-        } else {
-            $itemsSkippedBeforeThisPage = ($currentPage - 1) * $perPage;
-            $normalOffset = max($itemsSkippedBeforeThisPage - $featuredCount, 0);
-            $normalLimit = $perPage;
-        }
-
-        $normalItems = $normalQuery->offset($normalOffset)->limit($normalLimit)->get();
-
-        // 4. Merge results
-        $merged = $isFirstPage ? $featured->concat($normalItems) : $normalItems;
-
-        return new LengthAwarePaginator(
-            $merged,
-            $total,
-            $perPage,
-            $currentPage,
-            [
-                'path'  => request()->url(),
-                'query' => request()->query(),
-            ]
-        );
+            ->with(['category', 'location', 'type', 'tags', 'user'])
+            ->paginate($perPage)
+            ->withQueryString();
     }
 
     /**

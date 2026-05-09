@@ -21,15 +21,39 @@ return new class extends Migration
             'products', 'classified_ads', 'blogs', 'property_bookings', 
             'event_bookings', 'auto_inquiries', 'job_applications',
             'service_quotes', 'service_appointments', 'classified_inquiries',
-            'transactions', 'payments', 'withdrawals'
+            'transactions', 'payments', 'withdrawals', 'activity_log', 'subscriptions'
         ];
 
         foreach ($tablesToIndex as $tableName) {
             if (Schema::hasTable($tableName)) {
-                Schema::table($tableName, function (Blueprint $table) {
-                    $table->index('created_at');
+                Schema::table($tableName, function (Blueprint $table) use ($tableName) {
+                    $sm = Schema::getConnection()->getDoctrineSchemaManager();
+                    $indexes = $sm->listTableIndexes($tableName);
+                    
+                    if (!isset($indexes[$tableName . '_created_at_index'])) {
+                        $table->index('created_at');
+                    }
                 });
             }
+        }
+
+        // Specific Performance Indexes
+        if (Schema::hasTable('messages')) {
+            Schema::table('messages', function (Blueprint $table) {
+                $table->index(['conversation_id', 'created_at']);
+            });
+        }
+
+        if (Schema::hasTable('conversations')) {
+            Schema::table('conversations', function (Blueprint $table) {
+                $table->index('updated_at');
+            });
+        }
+
+        if (Schema::hasTable('subscriptions')) {
+            Schema::table('subscriptions', function (Blueprint $table) {
+                $table->index('ends_at');
+            });
         }
 
         // Index price columns for sorting/filtering
@@ -48,22 +72,45 @@ return new class extends Migration
             }
         }
 
-        // 2. FINANCIAL AUDIT INTEGRITY (SNAPSHOTS)
-        $bookingTables = ['property_bookings', 'event_bookings', 'order_items'];
-        foreach ($bookingTables as $tableName) {
+        // 1.1 COMPOSITE INDEXES FOR UNIFIED FEED PERFORMANCE
+        $bookingTablesForUnifiedFeed = [
+            'property_bookings', 'auto_inquiries', 'event_bookings', 
+            'job_applications', 'service_quotes', 'service_appointments', 
+            'classified_inquiries'
+        ];
+        foreach ($bookingTablesForUnifiedFeed as $tableName) {
             if (Schema::hasTable($tableName)) {
                 Schema::table($tableName, function (Blueprint $table) {
-                    if (!Schema::hasColumn($table->getTable(), 'currency')) {
-                        $table->string('currency', 3)->default('USD')->after('total_price');
+                    $table->index(['status', 'created_at']);
+                });
+            }
+        }
+
+        // 2. FINANCIAL AUDIT INTEGRITY (SNAPSHOTS & SOFT DELETES)
+        $financialTables = ['property_bookings', 'event_bookings', 'order_items', 'payments', 'orders', 'transactions'];
+        foreach ($financialTables as $tableName) {
+            if (Schema::hasTable($tableName)) {
+                Schema::table($tableName, function (Blueprint $table) use ($tableName) {
+                    if (!Schema::hasColumn($tableName, 'deleted_at')) {
+                        $table->softDeletes();
                     }
-                    if (!Schema::hasColumn($table->getTable(), 'unit_price')) {
-                        $table->decimal('unit_price', 15, 2)->nullable()->after('total_price');
+                    if (in_array($tableName, ['property_bookings', 'event_bookings', 'order_items'])) {
+                        if (!Schema::hasColumn($tableName, 'currency')) {
+                            $table->string('currency', 3)->default('USD')->after('total_price');
+                        }
+                        if (!Schema::hasColumn($tableName, 'unit_price')) {
+                            $table->decimal('unit_price', 15, 2)->nullable()->after('total_price');
+                        }
                     }
                 });
             }
         }
 
-        // 3. CONSISTENCY: Ensure all verticals have standard audit columns
+        // 3. FIX DANGEROUS CASCADE DELETES (P0 Integrity Risk)
+        // Note: We use raw SQL or careful drops because FK names vary
+        $this->fixCascadeDeletes();
+
+        // 4. CONSISTENCY: Ensure all verticals have standard audit columns
         $verticals = ['autos', 'events', 'joblistings', 'services', 'classified_ads', 'products'];
         foreach ($verticals as $vertical) {
             if (Schema::hasTable($vertical)) {
@@ -78,6 +125,34 @@ return new class extends Migration
                         $table->softDeletes();
                     }
                 });
+            }
+        }
+    }
+
+    /**
+     * Replaces cascadeOnDelete with restrictOnDelete for financial safety.
+     */
+    private function fixCascadeDeletes(): void
+    {
+        $relationships = [
+            ['event_bookings', 'event_id', 'events'],
+            ['order_items', 'order_id', 'orders'],
+            ['payments', 'user_id', 'users'],
+            ['transactions', 'wallet_id', 'wallets'],
+        ];
+
+        foreach ($relationships as [$table, $column, $parentTable]) {
+            if (Schema::hasTable($table)) {
+                try {
+                    Schema::table($table, function (Blueprint $t) use ($table, $column, $parentTable) {
+                        // Standard Laravel naming convention for FKs: table_column_foreign
+                        $fkName = "{$table}_{$column}_foreign";
+                        $t->dropForeign([$column]);
+                        $t->foreign($column)->references('id')->on($parentTable)->restrictOnDelete();
+                    });
+                } catch (\Exception $e) {
+                    // Log or ignore if FK doesn't exist with that name
+                }
             }
         }
     }

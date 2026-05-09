@@ -60,14 +60,17 @@ class EventService
      */
     public function getFormattedTicketData(Event $event): Collection
     {
-        return $event->occurrences->mapWithKeys(function ($occurrence) use ($event) {
-            $inventoryData = $occurrence->inventory->map(function ($inventory) use ($occurrence) {
-                
-                $sold = $occurrence->bookings
-                    ->where('occurrence_ticket_id', $inventory->id)
-                    ->where('status', 'confirmed')
-                    ->sum('quantity');
+        // Optimization: Eager load inventory with bookings sum using a single query aggregate
+        $event->load(['occurrences.inventory' => function ($query) {
+            $query->withSum(['bookings' => function ($q) {
+                $q->where('status', 'confirmed');
+            }], 'quantity')->with('ticketType');
+        }]);
 
+        return $event->occurrences->mapWithKeys(function ($occurrence) use ($event) {
+            $inventoryData = $occurrence->inventory->map(function ($inventory) {
+                
+                $sold = (int) ($inventory->bookings_sum_quantity ?? 0);
                 $remaining = max(0, $inventory->available_quantity - $sold);
 
                 $price = $inventory->sale_price 

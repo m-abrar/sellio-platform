@@ -17,6 +17,9 @@ class ContentService
         $this->activeTheme = $request->get('themeKey') ?? Config::get('app.default_theme', 'default');
     }
 
+    protected array $localCache = [];
+    protected bool $isPrimed = false;
+
     public function get(string $keyString, $default = null): mixed
     {
         $parts = explode('.', $keyString);
@@ -26,27 +29,50 @@ class ContentService
         $isAdmin = Auth::check() && Auth::user()->hasRole(['admin', 'super-admin']);
         $frontendEditEnabled = (bool) setting('frontend_edit', false);
 
-        // 1. Visitor/Guest Path
+        // Visitor/Guest Path (Uses Global Cache)
         if (!$isAdmin || !$frontendEditEnabled) {
             $cacheKey = $this->generateCacheKey($page, $section, $key);
             return Cache::rememberForever($cacheKey, fn() => $this->fetchFromDb($page, $section, $key, $default));
         }
 
-        // 2. Admin Path
-        $setting = PageContent::firstOrCreate([
-            'theme_key'     => $this->activeTheme,
-            'page'        => $page,
-            'section'     => $section,
-            'content_key' => $key,
-        ], [
-            'value'      => $default,
-            'input_type' => 'text',
-        ]);
+        // Admin Path (Optimized with Local Priming to avoid N+1)
+        if (!$this->isPrimed) {
+            $this->primeLocalCache($page);
+        }
+
+        $localKey = "{$section}.{$key}";
+        if (isset($this->localCache[$localKey])) {
+            $setting = $this->localCache[$localKey];
+        } else {
+            // Fallback for missing keys (still creates if missing)
+            $setting = PageContent::firstOrCreate([
+                'theme_key'   => $this->activeTheme,
+                'page'        => $page,
+                'section'     => $section,
+                'content_key' => $key,
+            ], [
+                'value'       => $default,
+                'input_type'  => 'text',
+            ]);
+            $this->localCache[$localKey] = $setting;
+        }
 
         return new ContentResult(
             id: $setting->id, 
             value: $this->formatValue($setting, $default)
         );
+    }
+
+    protected function primeLocalCache(string $page): void
+    {
+        $contents = PageContent::where('theme_key', $this->activeTheme)
+            ->where('page', $page)
+            ->get();
+
+        foreach ($contents as $content) {
+            $this->localCache["{$content->section}.{$content->content_key}"] = $content;
+        }
+        $this->isPrimed = true;
     }
 
     protected function formatValue(PageContent $setting, $default): mixed

@@ -92,7 +92,6 @@ class Category extends Model implements HasMedia
      * @var array<int, string>
      */
     protected $appends = [
-        'listings_count',
     ];
 
     /**
