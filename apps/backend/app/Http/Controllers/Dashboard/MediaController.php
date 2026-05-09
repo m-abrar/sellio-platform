@@ -63,8 +63,19 @@ class MediaController extends Controller
         }
 
         // Authorization check: User must own the resource or be an admin
-        if (method_exists($model, 'user') && $model->user_id !== auth()->id() && !auth()->user()->hasRole(['admin', 'super-admin'])) {
-             return response()->json(['success' => false, 'message' => 'Unauthorized.'], 403);
+        $isAuthorized = false;
+        if (auth()->user()->hasRole(['admin', 'super-admin'])) {
+            $isAuthorized = true;
+        } elseif ($model instanceof \App\Models\User) {
+            $isAuthorized = $model->id === auth()->id();
+        } elseif (isset($model->user_id)) {
+            $isAuthorized = $model->user_id === auth()->id();
+        } elseif (method_exists($model, 'user')) {
+            $isAuthorized = $model->user()->where('id', auth()->id())->exists();
+        }
+
+        if (!$isAuthorized) {
+            return response()->json(['success' => false, 'message' => 'Unauthorized access to this resource.'], 403);
         }
 
         $isMultiple = $request->boolean('multiple');
@@ -109,8 +120,24 @@ class MediaController extends Controller
 
         $model = $modelClass::find($request->id);
 
-        if (!$model || !auth()->user()->hasRole(['admin', 'super-admin']) && method_exists($model, 'user') && $model->user_id !== auth()->id()) {
-            return response()->json(['success' => false, 'message' => 'Unauthorized or resource not found.'], 403);
+        if (!$model) {
+            return response()->json(['success' => false, 'message' => 'Resource not found.'], 404);
+        }
+
+        // Authorization check: User must own the resource or be an admin
+        $isAuthorized = false;
+        if (auth()->user()->hasRole(['admin', 'super-admin'])) {
+            $isAuthorized = true;
+        } elseif ($model instanceof \App\Models\User) {
+            $isAuthorized = $model->id === auth()->id();
+        } elseif (isset($model->user_id)) {
+            $isAuthorized = $model->user_id === auth()->id();
+        } elseif (method_exists($model, 'user')) {
+            $isAuthorized = $model->user()->where('id', auth()->id())->exists();
+        }
+
+        if (!$isAuthorized) {
+            return response()->json(['success' => false, 'message' => 'Unauthorized access.'], 403);
         }
 
         $mediaItems = $model->getMedia($request->name);

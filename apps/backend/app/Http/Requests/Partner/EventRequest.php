@@ -18,7 +18,17 @@ class EventRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return Auth::check();
+        if (!Auth::check()) {
+            return false;
+        }
+
+        // If updating, verify the user owns the event
+        $event = $this->route('event');
+        if ($event instanceof \App\Models\Event) {
+            return $event->user_id === Auth::id();
+        }
+
+        return true;
     }
 
     /**

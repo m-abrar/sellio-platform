@@ -71,3 +71,42 @@ This document tracks the resolution of critical (P0) security and performance vu
 - **Fix**: Implemented composite indexes on `(status, created_at)` across all 7 source tables to optimize query execution plans. Added caching and date-range scan limits to the feed.
 - **Status**: ✅ Resolved (Optimized)
 - **File**: `app/Services/Admin/BookingManagementService.php`
+
+### 12. Dashboard Performance Optimization (`HasMarketplaceMetrics`)
+- **Risk**: "Query Storms" (N+1 aggregate queries) during dashboard loads causing severe database overhead.
+- **Fix**: Implemented a centralized caching layer (300s TTL) for all marketplace counters within the Trait.
+- **Status**: ✅ Resolved
+- **File**: `app/Traits/Models/HasMarketplaceMetrics.php`
+
+### 13. Moderation Authorization Bypass (`ManagesApproval`)
+- **Risk**: Missing authorization checks allowed anyone to approve/disapprove listings via exposed routes.
+- **Fix**: Added strict `hasRole('super-admin')` checks to the `approve` and `disapprove` methods.
+- **Status**: ✅ Resolved
+- **File**: `app/Traits/ManagesApproval.php`
+
+### 14. Multi-Tenant IDOR Prevention (`Partner` Requests)
+- **Risk**: Systematic IDOR vulnerabilities in partner listing modification requests.
+- **Fix**: Implemented proactive ownership verification in the `authorize()` method of all partner-facing FormRequests.
+- **Status**: ✅ Resolved
+- **Files**: `app/Http/Requests/Partner/*.php`
+
+### 15. PayPal Webhook Security (`PaypalGatewayService`)
+- **Risk**: Missing signature verification for PayPal webhooks allowed for potential financial fraud.
+- **Fix**: Implemented full cryptographic signature verification using the PayPal SDK and specialized multi-header processing.
+- **Status**: ✅ Resolved
+- **Files**: `app/Services/PaypalGatewayService.php`, `app/Http/Controllers/WebhookController.php`
+
+### 16. Privilege Escalation Prevention (`AuthController`)
+- **Risk**: Public registration allowed arbitrary role assignment (e.g., registering as an admin).
+- **Fix**: Enforced a strict whitelist of allowed roles (`user`, `partner`) in the `RegisterRequest` validation.
+- **Status**: ✅ Resolved
+- **File**: `app/Http/Requests/Auth/RegisterRequest.php`
+
+### 17. Analytics Performance & Bloat (`AnalyticsController`)
+- **Risk**: Severe N+1 queries and logic bloat in partner analytics.
+- **Fix**: Extracted logic to `AnalyticsService`, implemented 1-hour caching, and optimized aggregate queries.
+- **Status**: ✅ Resolved
+- **Files**: `app/Http/Controllers/Api/V1/Dashboard/Partner/AnalyticsController.php`, `app/Services/Partner/AnalyticsService.php`
+
+## 🚧 Pending Critical (P0) Remediations
+*No pending P0 critical items remain in the architectural queue.*

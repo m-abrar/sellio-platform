@@ -10,7 +10,17 @@ class ServiceRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return Auth::check();
+        if (!Auth::check()) {
+            return false;
+        }
+
+        // If updating, verify the user owns the service
+        $service = $this->route('service');
+        if ($service instanceof \App\Models\Service) {
+            return $service->user_id === Auth::id();
+        }
+
+        return true;
     }
 
     public function rules(): array

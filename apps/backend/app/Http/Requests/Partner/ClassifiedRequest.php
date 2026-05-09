@@ -10,7 +10,17 @@ class ClassifiedRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return Auth::check();
+        if (!Auth::check()) {
+            return false;
+        }
+
+        // If updating, verify the user owns the classified ad
+        $classified = $this->route('classified');
+        if ($classified instanceof \App\Models\Classified) {
+            return $classified->user_id === Auth::id();
+        }
+
+        return true;
     }
 
     public function rules(): array

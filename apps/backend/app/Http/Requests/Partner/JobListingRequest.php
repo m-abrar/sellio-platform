@@ -10,7 +10,17 @@ class JobListingRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return Auth::check();
+        if (!Auth::check()) {
+            return false;
+        }
+
+        // If updating, verify the user owns the job listing
+        $jobListing = $this->route('joblisting');
+        if ($jobListing instanceof \App\Models\JobListing) {
+            return $jobListing->user_id === Auth::id();
+        }
+
+        return true;
     }
 
     public function rules(): array

@@ -13,6 +13,11 @@ trait ManagesApproval
      */
     public function approve($id): RedirectResponse
     {
+        // SECURITY: Critical Authorization Check
+        if (!auth()->check() || !auth()->user()->hasRole('super-admin')) {
+            abort(403, __('Unauthorized: You do not have permission to moderate listings.'));
+        }
+
         $model = $this->resolveModel($id);
 
         if (!$model) {
@@ -32,6 +37,11 @@ trait ManagesApproval
      */
     public function disapprove($id): RedirectResponse
     {
+        // SECURITY: Critical Authorization Check
+        if (!auth()->check() || !auth()->user()->hasRole('super-admin')) {
+            abort(403, __('Unauthorized: You do not have permission to moderate listings.'));
+        }
+
         $model = $this->resolveModel($id);
 
         if (!$model || !$model->approved_at) {

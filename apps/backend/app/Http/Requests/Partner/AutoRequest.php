@@ -18,7 +18,17 @@ class AutoRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return Auth::check();
+        if (!Auth::check()) {
+            return false;
+        }
+
+        // If updating, verify the user owns the vehicle
+        $auto = $this->route('auto');
+        if ($auto instanceof \App\Models\Auto) {
+            return $auto->user_id === Auth::id();
+        }
+
+        return true;
     }
 
     /**

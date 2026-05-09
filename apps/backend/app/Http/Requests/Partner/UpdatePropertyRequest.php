@@ -18,8 +18,17 @@ class UpdatePropertyRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        // Ownership check is handled in the Controller, but we verify auth here
-        return Auth::check();
+        if (!Auth::check()) {
+            return false;
+        }
+
+        // If updating, verify the user owns the property
+        $property = $this->route('property');
+        if ($property instanceof \App\Models\Property) {
+            return $property->user_id === Auth::id();
+        }
+
+        return true;
     }
 
     /**
