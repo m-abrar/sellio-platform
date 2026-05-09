@@ -6,6 +6,10 @@ use App\Models\Classified;
 use Illuminate\Pagination\LengthAwarePaginator;
 use App\Models\User;
 use Illuminate\Support\Collection;
+use App\Models\Category;
+use App\Models\Location;
+use App\Models\Type;
+use App\Models\Tag;
 
 /**
  * Class ClassifiedManagementService
@@ -14,6 +18,21 @@ use Illuminate\Support\Collection;
  */
 class ClassifiedManagementService
 {
+    /**
+     * Get filter taxonomies for the classified search sidebar.
+     *
+     * @return array
+     */
+    public function getFilterTaxonomies(): array
+    {
+        return [
+            'categories' => Category::where('is_classified', true)->get(),
+            'locations'  => Location::where('is_classified', true)->get(),
+            'types'      => Type::where('is_classified', true)->get(),
+            'tags'       => Tag::where('is_classified', true)->get(),
+        ];
+    }
+
     /**
      * Filter and paginate classifieds, ensuring featured items appear first.
      *

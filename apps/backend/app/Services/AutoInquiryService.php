@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Auto;
 use App\Models\AutoInquiry;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class AutoInquiryService
@@ -22,16 +23,18 @@ class AutoInquiryService
      */
     public function createInquiry(Auto $auto, array $data): AutoInquiry
     {
-        return AutoInquiry::create([
-            'user_id'        => Auth::id(),
-            'auto_id'        => $auto->id,
-            'full_name'      => $data['full_name'],
-            'email'          => $data['email'],
-            'phone'          => $data['phone'] ?? null,
-            'preferred_date' => $data['preferred_date'],
-            'preferred_time' => $data['preferred_time'],
-            'message'        => $data['message'] ?? null,
-            'status'         => 'pending',
-        ]);
+        return DB::transaction(function () use ($auto, $data) {
+            return AutoInquiry::create([
+                'user_id'        => Auth::id(),
+                'auto_id'        => $auto->id,
+                'full_name'      => $data['full_name'],
+                'email'          => $data['email'],
+                'phone'          => $data['phone'] ?? null,
+                'preferred_date' => $data['preferred_date'],
+                'preferred_time' => $data['preferred_time'],
+                'message'        => $data['message'] ?? null,
+                'status'         => 'pending',
+            ]);
+        });
     }
 }

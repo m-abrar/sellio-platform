@@ -3,6 +3,10 @@
 namespace App\Services;
 
 use App\Models\JobListing;
+use App\Models\Category;
+use App\Models\Location;
+use App\Models\Type;
+use App\Models\Tag;
 use App\Models\JobApplication;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
@@ -34,6 +38,21 @@ class JobManagementService
         2 => 'Hybrid',
         3 => 'Remote',
     ];
+
+    /**
+     * Retrieve filter taxonomies for the job search sidebar.
+     *
+     * @return array
+     */
+    public function getFilterTaxonomies(): array
+    {
+        return [
+            'categories' => Category::where('is_job', true)->get(),
+            'locations'  => Location::where('is_job', true)->get(),
+            'types'      => Type::where('is_job', true)->get(),
+            'tags'       => Tag::where('is_job', true)->get(),
+        ];
+    }
 
     /**
      * Filter and paginate job listings based on request parameters.

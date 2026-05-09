@@ -200,10 +200,13 @@ class AnalyticsService
                 }
             }
 
+            // Bulk fetch revenue
+            $revenueMap = $this->getBulkRevenueForListings($config['model'], $ids, $startDate);
+
             foreach ($listings as $listing) {
                 $views = $viewsMap[$listing->id] ?? 0;
                 $leads = $leadsMap[$listing->id] ?? 0;
-                $revenue = $this->getRevenueForListing($config['model'], $listing->id, $startDate); // Revenue is still a bit complex for bulk but usually fewer listings have revenue
+                $revenue = $revenueMap[$listing->id] ?? 0.0;
 
                 $conversionRate = $views > 0 ? ($leads / $views) * 100 : 0;
 
@@ -316,13 +319,46 @@ class AnalyticsService
         };
     }
 
-    private function getRevenueForListing(string $model, int $id, Carbon $startDate): float
+    /**
+     * Bulk fetch revenue for a collection of listings to prevent N+1 performance degradation.
+     */
+    private function getBulkRevenueForListings(string $model, array $ids, Carbon $startDate): Collection
     {
+        if (empty($ids)) return collect();
+
         return match($model) {
-            Property::class   => (float) PropertyBooking::where('property_id', $id)->where('status', 'confirmed')->where('created_at', '>=', $startDate)->sum('total_price'),
-            Event::class      => (float) EventBooking::where('event_id', $id)->where('status', 'confirmed')->where('created_at', '>=', $startDate)->sum('total_price'),
-            Service::class    => (float) (ServiceAppointment::where('service_id', $id)->where('status', 'confirmed')->where('created_at', '>=', $startDate)->sum('price') + ServiceQuote::where('service_id', $id)->where('status', 'accepted')->where('created_at', '>=', $startDate)->sum('quoted_price')),
-            default           => 0.0
+            Property::class => PropertyBooking::whereIn('property_id', $ids)
+                ->where('status', 'confirmed')
+                ->where('created_at', '>=', $startDate)
+                ->selectRaw('property_id as id, SUM(total_price) as total')
+                ->groupBy('property_id')
+                ->pluck('total', 'id'),
+
+            Event::class => EventBooking::whereIn('event_id', $ids)
+                ->where('status', 'confirmed')
+                ->where('created_at', '>=', $startDate)
+                ->selectRaw('event_id as id, SUM(total_price) as total')
+                ->groupBy('event_id')
+                ->pluck('total', 'id'),
+
+            Service::class => collect(
+                ServiceAppointment::whereIn('service_id', $ids)
+                    ->where('status', 'confirmed')
+                    ->where('created_at', '>=', $startDate)
+                    ->selectRaw('service_id as id, SUM(price) as total')
+                    ->groupBy('service_id')
+                    ->pluck('total', 'id')
+                    ->all() +
+                ServiceQuote::whereIn('service_id', $ids)
+                    ->where('status', 'accepted')
+                    ->where('created_at', '>=', $startDate)
+                    ->selectRaw('service_id as id, SUM(quoted_price) as total')
+                    ->groupBy('service_id')
+                    ->pluck('total', 'id')
+                    ->all()
+            ),
+
+            default => collect(),
         };
     }
 }

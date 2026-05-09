@@ -30,17 +30,8 @@ class SeasonalPriceSeeder extends Seeder
     {
         $this->command->info('✨ Starting SeasonalPrice Seeder...'); // Header
         
-        $properties = Property::all();
         $initialCount = SeasonalPrice::count();
         $createdCount = 0; // Initialize counter for new/updated records
-
-        // Guard clause to prevent unnecessary execution if no properties exist.
-        if ($properties->isEmpty()) {
-            $this->command->line('⚠️ Skipping SeasonalPriceSeeder: No Property records found.');
-            return;
-        }
-
-        $this->command->info('Seeding seasonal pricing for ' . $properties->count() . ' properties...');
 
         // 2. Define a set of standard, non-overlapping seasons and their corresponding data.
         $seasonalData = [
@@ -53,8 +44,11 @@ class SeasonalPriceSeeder extends Seeder
         // Use the current year to anchor the dates, ensuring the seeded data is relevant.
         $baseYear = Carbon::now()->year; 
 
-        // 3. Loop through each property
-        $properties->each(function ($property) use ($seasonalData, $baseYear, &$createdCount) {
+        // Performance: Use chunkById to prevent memory exhaustion when seeding large property inventories
+        Property::orderBy('id')->chunkById(25, function ($properties) use ($seasonalData, $baseYear, &$createdCount) {
+            $this->command->info('Seeding seasonal pricing for ' . $properties->count() . ' properties chunk...');
+
+            $properties->each(function ($property) use ($seasonalData, $baseYear, &$createdCount) {
             
             // Loop through the predictable seasonal data structure
             foreach ($seasonalData as $season) {
@@ -88,6 +82,7 @@ class SeasonalPriceSeeder extends Seeder
                 
                 $createdCount++;
             }
+            });
         });
 
         $finalCount = SeasonalPrice::count();

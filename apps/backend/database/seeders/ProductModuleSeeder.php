@@ -35,16 +35,18 @@ class ProductModuleSeeder extends Seeder
     public function run(): void
     {
         $this->faker = Faker::create();
-        $this->userIds = DB::table('users')->pluck('id')->toArray();
+        
+        // Performance: Cap user ID fetching to prevent memory bloat
+        $this->userIds = DB::table('users')->limit(200)->pluck('id')->toArray();
         $this->maxUsers = count($this->userIds);
 
         if ($this->maxUsers === 0) return;
 
-        $products = Product::all();
-        if ($products->isEmpty()) return;
-
-        $this->seedProductData($products);
-        $this->seedRelations($products);
+        // Performance: Use chunkById to prevent memory exhaustion
+        Product::orderBy('id')->chunkById(20, function ($products) {
+            $this->seedProductData($products);
+            $this->seedRelations($products);
+        });
     }
 
     private function seedProductData(Collection $products): void

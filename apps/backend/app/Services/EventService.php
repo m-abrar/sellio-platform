@@ -5,6 +5,10 @@ namespace App\Services;
 use App\Models\Event;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use App\Models\Category;
+use App\Models\Location;
+use App\Models\Type;
+use App\Models\Tag;
 use Illuminate\Pagination\LengthAwarePaginator;
 use App\Models\User;
 use Illuminate\Support\Collection;
@@ -16,8 +20,18 @@ use Illuminate\Support\Collection;
  */
 class EventService
 {
+    public function getFilterTaxonomies(): array
+    {
+        return [
+            'categories' => Category::where('is_event', true)->get(),
+            'locations'  => Location::where('is_event', true)->get(),
+            'types'      => Type::where('is_event', true)->get(),
+            'tags'       => Tag::where('is_event', true)->get(),
+        ];
+    }
+
     /**
-     * Filter and paginate events based on request parameters.
+     * Search and filter events based on criteria.
      *
      * @param array $filters
      * @return LengthAwarePaginator

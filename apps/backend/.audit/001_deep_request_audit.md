@@ -17,6 +17,7 @@ Execute a high-fidelity audit of all Laravel `FormRequest` classes in the Sellio
 
 | File Path | Risk | Auth Safety | Validation Safety | Status |
 | :--- | :--- | :--- | :--- | :--- |
+| `app\Http\Requests\AddToCartRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Elite |
 | `app\Http\Requests\CalculateLodgingPriceRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Elite |
 | `app\Http\Requests\CalculatePriceRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Elite |
 | `app\Http\Requests\JobApplicationStoreRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Elite |
@@ -25,6 +26,9 @@ Execute a high-fidelity audit of all Laravel `FormRequest` classes in the Sellio
 | `app\Http\Requests\SaveProductRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Elite |
 | `app\Http\Requests\SearchAutoRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Elite |
 | `app\Http\Requests\SearchBlogRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Elite |
+| `app\Http\Requests\SearchClassifiedRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Elite |
+| `app\Http\Requests\SearchEventRequest.php" | LOW | ✅ Safe | ✅ Safe | ✅ Elite |
+| `app\Http\Requests\SearchJobRequest.php" | LOW | ✅ Safe | ✅ Safe | ✅ Elite |
 | `app\Http\Requests\SearchProductRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Elite |
 | `app\Http\Requests\SearchPropertyRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Elite |
 | `app\Http\Requests\SendContactRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Elite |
@@ -37,6 +41,7 @@ Execute a high-fidelity audit of all Laravel `FormRequest` classes in the Sellio
 | `app\Http\Requests\StoreQuoteRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Elite |
 | `app\Http\Requests\StoreReviewRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Elite |
 | `app\Http\Requests\UpdateBookingDetailsRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Elite |
+| `app\Http\Requests\UpdateCartQuantityRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Elite |
 
 ## Administrative & Management Requests
 
@@ -44,13 +49,13 @@ Execute a high-fidelity audit of all Laravel `FormRequest` classes in the Sellio
 | :--- | :--- | :--- | :--- | :--- |
 | `app\Http\Requests\Admin\AdvertisementRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Audited |
 | `app\Http\Requests\Admin\AmenityRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Audited |
-| `app\Http\Requests\Admin\AutoRequest.php` | MEDIUM | ✅ Safe | 🟠 Moderate | ✅ Audited |
+| `app\Http\Requests\Admin\AutoRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Elite |
 | `app\Http\Requests\Admin\BrandRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Audited |
 | `app\Http\Requests\Admin\CategoryRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Audited |
-| `app\Http\Requests\Admin\ClassifiedRequest.php` | MEDIUM | ✅ Safe | 🟠 Moderate | ✅ Audited |
+| `app\Http\Requests\Admin\ClassifiedRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Elite |
 | `app\Http\Requests\Admin\EventRequest.php` | MEDIUM | ✅ Safe | 🟠 Moderate | ✅ Audited |
 | `app\Http\Requests\Admin\FeatureRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Audited |
-| `app\Http\Requests\Admin\JobListingRequest.php` | MEDIUM | ✅ Safe | 🟠 Moderate | ✅ Audited |
+| `app\Http\Requests\Admin\JobListingRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Elite |
 | `app\Http\Requests\Admin\LocationRequest.php" | LOW | ✅ Safe | ✅ Safe | ✅ Audited |
 | `app\Http\Requests\Admin\ProductRequest.php` | MEDIUM | ✅ Safe | 🟠 Moderate | ✅ Audited |
 | `app\Http\Requests\Admin\PropertyRequest.php` | MEDIUM | ✅ Safe | 🟠 Moderate | ✅ Audited |

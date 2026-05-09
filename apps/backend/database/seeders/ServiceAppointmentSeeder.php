@@ -24,9 +24,9 @@ class ServiceAppointmentSeeder extends Seeder
      */
     public function run(): void
     {
-        // 1. Fetch available data
-        $users = User::all();
-        $services = Service::with('packages')->get();
+        // Performance: Cap data fetching to prevent memory exhaustion on large datasets
+        $users = User::limit(100)->get();
+        $services = Service::with('packages')->limit(100)->get();
 
         if ($users->isEmpty() || $services->isEmpty()) {
             $this->command->line("⚠️ Skipping ServiceAppointmentSeeder: Requires Users and Services with Packages.\n");

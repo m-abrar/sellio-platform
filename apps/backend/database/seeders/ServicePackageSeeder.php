@@ -18,16 +18,11 @@ class ServicePackageSeeder extends Seeder
     public function run(): void
     {
         $faker = Faker::create();
-        $services = Service::all();
-
-        if ($services->isEmpty()) {
-            $this->command->line('⚠️ Skipping ServicePackageSeeder: No services found in the database.');
-            return;
-        }
-
         $this->command->info('Seeding Service Packages (Tiers)...');
 
-        foreach ($services as $service) {
+        // Performance: Use chunkById to prevent memory exhaustion on large datasets
+        Service::orderBy('id')->chunkById(50, function ($services) use ($faker) {
+            foreach ($services as $service) {
             // Define package templates
             $tiers = [
                 [
@@ -75,7 +70,8 @@ class ServicePackageSeeder extends Seeder
                     'updated_at'     => now(),
                 ]);
             }
-        }
+            }
+        });
 
         $this->command->info('✅ Service Packages seeded successfully.');
     }

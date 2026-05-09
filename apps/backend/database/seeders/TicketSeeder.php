@@ -34,8 +34,8 @@ class TicketSeeder extends Seeder
         }
 
         // 1. Get a collection of existing users to assign tickets to.
-        // We assume users have been created by the UserSeeder and use the entire collection.
-        $users = User::all();
+        // Performance: Cap user fetching to prevent memory exhaustion on large datasets
+        $users = User::limit(50)->get();
         $fallbackCreated = false;
 
         // Guard clause: Check if the users collection is empty.

@@ -25,7 +25,7 @@ class OrderFactory extends Factory
         
         return [
             'order_number'    => 'ORD-' . now()->year . '-' . strtoupper($this->faker->unique()->bothify('####??')),
-            'user_id'         => User::inRandomOrder()->first()?->id ?? User::factory(),
+            'user_id'         => User::factory(),
             
             // Statuses
             'status'          => $this->faker->randomElement(['pending', 'processing', 'shipped', 'delivered']),

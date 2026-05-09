@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AddToCartRequest;
+use App\Http\Requests\UpdateCartQuantityRequest;
 use App\Models\Product;
 use App\Services\CartService;
 use Illuminate\Http\Request;
@@ -52,13 +54,9 @@ class CartController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    public function add(Request $request, Product $product): JsonResponse|RedirectResponse
+    public function add(AddToCartRequest $request, Product $product): JsonResponse|RedirectResponse
     {
-        $data = $request->validate([
-            'quantity'      => 'required|integer|min:1|max:100',
-            'attribute_ids' => 'nullable|array',
-            'addon_ids'     => 'nullable|array',
-        ]);
+        $data = $request->validated();
 
         $this->cartService->addItem(
             $product->id, 
@@ -79,11 +77,9 @@ class CartController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, int $id): JsonResponse
+    public function update(UpdateCartQuantityRequest $request, int $id): JsonResponse
     {
-        $request->validate(['quantity' => 'required|integer|min:1']);
-        
-        $this->cartService->updateQuantity($id, $request->quantity);
+        $this->cartService->updateQuantity($id, $request->validated()['quantity']);
 
         return response()->json(['status' => 'success']);
     }

@@ -19,9 +19,13 @@ class ReviewFactory extends Factory
     public function definition(): array
     {
         return [
-            'rating' => $this->faker->numberBetween(1, 5),
-            'comment' => $this->faker->sentence(10),
-            'status' => $this->faker->randomElement(['pending', 'approved']),
+            'user_id'         => \App\Models\User::factory(),
+            'reviewable_id'   => \App\Models\Product::factory(), // Default to product, usually overridden
+            'reviewable_type' => 'App\Models\Product',
+            'rating'          => $this->faker->numberBetween(1, 5),
+            'comment'         => $this->faker->sentence(10),
+            'status'          => 'approved',
+            'approved_at'     => now(),
         ];
     }
 }

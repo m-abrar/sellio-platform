@@ -42,8 +42,15 @@ class SubscriptionQuotaController extends Controller
         }
 
         $quotas = $query->latest()->paginate(15)->withQueryString();
-        $users  = User::select('id', 'name', 'email')->get();
-        $plans  = Plan::select('id', 'title')->get();
+        
+        // Performance: Only fetch users who actually have a subscription quota to prevent memory bloat
+        $users  = User::whereHas('subscriptions.quota')
+            ->select('id', 'name', 'email')
+            ->orderBy('name')
+            ->limit(100) // Safety cap for the dropdown
+            ->get();
+
+        $plans  = Plan::select('id', 'title')->orderBy('title')->get();
 
         return view('admin.subscription-quotas.index', compact('quotas', 'users', 'plans'));
     }

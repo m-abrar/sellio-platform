@@ -34,7 +34,7 @@ class ClassifiedRequest extends FormRequest
             'type_id'          => ['nullable', 'exists:types,id'],
             
             // Classified Specifics
-            'item_condition'   => ['nullable', 'string'],
+            'item_condition'   => ['nullable', 'string', 'in:new,used,refurbished'],
             'item_year_age'    => ['nullable', 'integer', 'min:1900'],
             'item_quantity'    => ['nullable', 'integer', 'min:1'],
             'item_dimensions'  => ['nullable', 'string', 'max:100'],

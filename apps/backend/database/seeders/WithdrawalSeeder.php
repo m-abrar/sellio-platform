@@ -47,33 +47,16 @@ class WithdrawalSeeder extends Seeder
         // This ensures generated withdrawals are valid according to business rules (e.g., $10.00 USD).
         $minBalanceToWithdraw = 1000;
 
-        // --- 1. Fetch Users with a positive balance ---
-        /** @var Collection $users */
-        // We filter for users whose current wallet balance is greater than the required minimum threshold.
-        $users = User::all()->filter(function ($user) use ($minBalanceToWithdraw) {
-            // Note: $user->balance typically comes from a trait (like 'HasWallet')
-            // and returns the balance stored in cents (integer).
-            return $user->balance > $minBalanceToWithdraw;
-        });
-
         $count = 0;
         // Limit the number of withdrawals created to prevent excessive seeding on large databases.
         $maxNumberOfWithdrawalsToCreate = 100;
 
-        // Provide feedback to the developer about the number of eligible users found.
-        if ($this->command) {
-            // Assumes a global helper `humanAmount()` exists for formatting cents to a human-readable currency string.
-            // If humanAmount is not defined, we fallback to simple division for display.
-            $formattedMinBalance = function_exists('humanAmount') 
-                ? humanAmount($minBalanceToWithdraw / 100) 
-                : '$' . number_format($minBalanceToWithdraw / 100, 2);
-
-            $this->command->info("Found {$users->count()} users with sufficient balance (> {$formattedMinBalance}) for withdrawal seeding.");
-        }
-
-        // --- 2. Iterate and create calculated withdrawals ---
-        // We take a limited number of eligible users to create the withdrawal records.
-        foreach ($users->take($maxNumberOfWithdrawalsToCreate) as $user) {
+        // --- 1. Fetch Users with a positive balance using chunkById for performance ---
+        User::whereHas('wallet', function($query) use ($minBalanceToWithdraw) {
+            $query->where('balance', '>', $minBalanceToWithdraw);
+        })->orderBy('id')->chunkById(25, function ($users) use (&$count, $maxNumberOfWithdrawalsToCreate, $faker, $minBalanceToWithdraw) {
+            foreach ($users as $user) {
+                if ($count >= $maxNumberOfWithdrawalsToCreate) break;
             $balanceCents = $user->balance;
 
             // Select a random withdrawal percentage between 70% and 80% of the user's current balance.
@@ -123,9 +106,8 @@ class WithdrawalSeeder extends Seeder
             ]);
 
             $count++;
-            // Stop loop if the maximum number of desired records has been created.
-            if ($count >= $maxNumberOfWithdrawalsToCreate) break;
-        }
+            }
+        });
 
         // Final feedback message to confirm the total number of records successfully seeded.
         if ($this->command) {

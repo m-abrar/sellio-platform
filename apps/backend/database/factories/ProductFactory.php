@@ -28,11 +28,11 @@ class ProductFactory extends Factory
         $onSale = $this->faker->boolean(30);
 
         return [
-            // Foreign Keys (Defaults - usually overwritten in Seeder)
-            'user_id'     => User::where('is_partner', true)->inRandomOrder()->first()?->id ?? User::factory(),
-            'category_id' => Category::where('is_product', true)->inRandomOrder()->first()?->id ?? Category::factory(),
-            'brand_id'    => Brand::inRandomOrder()->first()?->id ?? Brand::factory(),
-            'type_id'     => Type::inRandomOrder()->first()?->id ?? Type::factory(),
+            // Foreign Keys (Lazy loading to prevent O(n) query storm)
+            'user_id'     => User::factory(),
+            'category_id' => Category::factory(),
+            'brand_id'    => Brand::factory(),
+            'type_id'     => Type::factory(),
 
             // Basic Info
             'title'             => ucfirst($title),

@@ -86,8 +86,12 @@ class PaymentController extends Controller
     public function create(): View
     {
         $payment = new Payment();
-        $users = User::select('id', 'name', 'email')->get();
-        $subscriptions = Subscription::all();
+        
+        // Performance: Cap user selection to prevent memory bloat
+        $users = User::select('id', 'name', 'email')->orderBy('name')->limit(100)->get();
+        
+        // Performance: Only show recent or active subscriptions for manual mapping
+        $subscriptions = Subscription::with('plan')->latest()->limit(100)->get();
         
         return view('admin.payments.form', compact('payment', 'users', 'subscriptions'));
     }
@@ -128,8 +132,11 @@ class PaymentController extends Controller
      */
     public function edit(Payment $payment): View
     {
-        $users = User::select('id', 'name', 'email')->get();
-        $subscriptions = Subscription::all();
+        // Performance: Cap user selection to prevent memory bloat
+        $users = User::select('id', 'name', 'email')->orderBy('name')->limit(100)->get();
+        
+        // Performance: Only show recent or active subscriptions for manual mapping
+        $subscriptions = Subscription::with('plan')->latest()->limit(100)->get();
         
         return view('admin.payments.form', compact('payment', 'users', 'subscriptions'));
     }

@@ -23,8 +23,10 @@ class SubscriptionFactory extends Factory
         $endsAt = (clone $startsAt)->modify('+1 year');
 
         return [
+            'user_id'   => \App\Models\User::factory(),
+            'plan_id'   => \App\Models\Plan::factory(),
             'title'     => $this->faker->randomElement(['Pro Monthly', 'Elite Annual', 'Starter Plan']),
-            'status'    => $this->faker->randomElement(['active', 'on_trial', 'expired']),
+            'status'    => 'active',
             'starts_at' => $startsAt,
             'ends_at'   => $endsAt,
         ];

@@ -27,17 +27,11 @@ class SubscriptionSeeder extends Seeder
     public function run(): void
     {
         // Fetch all existing Users and Plans to link the subscriptions correctly.
-        $users = User::all();
         $plans = Plan::all();
-
-        // Guard clause: Ensure prerequisite data exists before attempting to seed subscriptions.
-        if ($users->isEmpty() || $plans->isEmpty()) {
-            $this->command->info('Skipping SubscriptionSeeder: Users or Plans table is empty. Please run UserSeeder and PlanSeeder first.');
-            return;
-        }
-
-        // Iterate through each user to assign historical and current subscriptions.
-        $users->each(function ($user) use ($plans) {
+        
+        // Performance: Use chunkById to prevent memory exhaustion when seeding large user bases
+        User::orderBy('id')->chunkById(100, function ($users) use ($plans) {
+            $users->each(function ($user) use ($plans) {
             
             // ------------------------------------------------
             // 1. ADD 1-2 PREVIOUSLY EXPIRED SUBSCRIPTIONS (HISTORY)

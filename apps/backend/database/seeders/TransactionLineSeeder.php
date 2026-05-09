@@ -32,25 +32,13 @@ class TransactionLineSeeder extends Seeder
             $this->command->line('  🗑️ Cleared existing transaction lines.');
         }
 
-        // Fetch all Property and PropertyBooking records from the database.
-        // This is done once to optimize the loop below.
-        $properties = Property::all();
-        $bookings = PropertyBooking::all(); 
-        
-        // Check if there are properties to seed transactions for
-        if ($properties->isEmpty()) {
-            if ($this->command) $this->command->error('  ❌ No properties found to generate transaction lines.');
-            return;
-        }
-
-        // Iterate through each property to create associated transaction data.
-        $properties->each(function ($property) use ($bookings) {
+        // Performance: Use chunkById to prevent memory exhaustion on large datasets
+        Property::orderBy('id')->chunkById(25, function ($properties) {
+            foreach ($properties as $property) {
+                // Performance: Query only for bookings belonging to this property
+                $propertyBookings = PropertyBooking::where('property_id', $property->id)->get();
             
-            // Filter the bookings collection to only include bookings relevant to the current property.
-            // This optimized collection will be used inside the loop.
-            $propertyBookings = $bookings->where('property_id', $property->id);
-            
-            // Create a random number of transaction line items (between 5 and 15) for each property.
+                // Create a random number of transaction line items (between 5 and 15) for each property.
             for ($i = 0; $i < mt_rand(5, 15); $i++) {
                 
                 $bookingId = null;
@@ -71,6 +59,7 @@ class TransactionLineSeeder extends Seeder
                         // Conditionally link to a booking (will be null if not linked)
                         'property_booking_id' => $bookingId,
                     ]);
+            }
             }
         });
 

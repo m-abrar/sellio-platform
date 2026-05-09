@@ -68,7 +68,7 @@ class BlogSeeder extends Seeder
             // Video Data
             $videoData = $faker->boolean(40) ? $faker->randomElement([
                 '<iframe width="560" height="315" src="https://www.youtube.com/embed/ScMzIvxBSi4" frameborder="0" allowfullscreen></iframe>',
-                'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+                'https://www.youtube.com/watch?v=ScMzIvxBSi4', // Updated to match the embed
             ]) : null;
 
             // --- Create Blog record ---

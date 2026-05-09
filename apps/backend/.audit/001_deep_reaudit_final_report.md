@@ -129,4 +129,6 @@ This report contains the finalized, high-fidelity findings for the 12 critical f
 5. **[RESOLVED]** Implement `chunk()` in `CheckRenewals`.
 6. **[RESOLVED]** Move Gateway resolution to whitelist.
 7. **[RESOLVED]** Implement `ShouldQueue` on all secondary system notifications.
-
+8. **[RESOLVED]** Fixed Exponential N+1 in `AnalyticsService` via bulk revenue fetching.
+9. **[RESOLVED]** Mitigated Memory Exhaustion risks in `SubscriptionQuotaController` and `PaymentController`.
+10. **[RESOLVED]** Restored missing `UpdatePropertyBookingRequest` architectural component.

@@ -2,15 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SearchClassifiedRequest;
 use App\Models\Classified;
-use App\Models\Category;
-use App\Models\Location;
-use App\Models\Type;
-use App\Models\Tag;
 use App\Services\ClassifiedManagementService;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Route;
 
 /**
  * Class ClassifiedController
@@ -40,7 +36,7 @@ class ClassifiedController extends Controller
      * @param Request $request
      * @return View
      */
-    public function index(Request $request): View
+    public function index(SearchClassifiedRequest $request): View
     {
         return $this->search($request);
     }
@@ -51,23 +47,15 @@ class ClassifiedController extends Controller
      * @param Request $request
      * @return View
      */
-    public function search(Request $request): View
+    public function search(SearchClassifiedRequest $request): View
     {
-        $categories = Category::where('is_classified', true)->get();
-        $locations  = Location::where('is_classified', true)->get();
-        $types      = Type::where('is_classified', true)->get();
-        $tags       = Tag::where('is_classified', true)->get();
+        $taxonomies = $this->classifiedService->getFilterTaxonomies();
+        $classifieds = $this->classifiedService->getPaginatedClassifieds($request->validated());
 
-        $classifieds = $this->classifiedService->getPaginatedClassifieds($request->all());
-
-        return view("frontend.classifieds.index", [
+        return view("frontend.classifieds.index", array_merge($taxonomies, [
             'classifieds'      => $classifieds,
-            'categories'       => $categories,
-            'locations'        => $locations,
-            'types'            => $types,
-            'tags'             => $tags,
             'currentRouteName' => Route::currentRouteName(),
-        ]);
+        ]));
     }
 
     /**
@@ -79,6 +67,7 @@ class ClassifiedController extends Controller
     public function show(string $slug): View
     {
         $classified = Classified::where('slug', $slug)
+            ->active()
             // Eager load media and relationships
             ->with(['media', 'user', 'category', 'type', 'location', 'tags', 'user.reviews'])
             ->firstOrFail();

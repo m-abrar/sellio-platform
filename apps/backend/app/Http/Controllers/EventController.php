@@ -2,13 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SearchEventRequest;
 use App\Models\Event;
-use App\Models\Category;
-use App\Models\Type;
-use App\Models\Location;
-use App\Models\Tag;
 use App\Services\EventService;
-use Illuminate\Http\Request;
 use Illuminate\Contracts\View\View;
 
 /**
@@ -39,7 +35,7 @@ class EventController extends Controller
      * @param Request $request
      * @return View
      */
-    public function index(Request $request): View
+    public function index(SearchEventRequest $request): View
     {
         return $this->search($request);
     }
@@ -50,22 +46,14 @@ class EventController extends Controller
      * @param Request $request
      * @return View
      */
-    public function search(Request $request): View
+    public function search(SearchEventRequest $request): View
     {
-        $categories = Category::where('is_event', true)->get();
-        $types      = Type::where('is_event', true)->get();
-        $locations  = Location::where('is_event', true)->get();
-        $tags       = Tag::where('is_event', true)->get();
+        $taxonomies = $this->eventService->getFilterTaxonomies();
+        $events = $this->eventService->searchEvents($request->validated());
 
-        $events = $this->eventService->searchEvents($request->all());
-
-        return view('frontend.events.index', compact(
-            'events', 
-            'categories', 
-            'locations', 
-            'types', 
-            'tags'
-        ));
+        return view('frontend.events.index', array_merge($taxonomies, [
+            'events' => $events,
+        ]));
     }
 
     /**

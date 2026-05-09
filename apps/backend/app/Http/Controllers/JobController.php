@@ -2,13 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SearchJobRequest;
 use App\Models\JobListing;
-use App\Models\Category;
-use App\Models\Location;
-use App\Models\Type;
-use App\Models\Tag;
 use App\Services\JobManagementService;
-use Illuminate\Http\Request;
 use Illuminate\Contracts\View\View;
 
 /**
@@ -39,7 +35,7 @@ class JobController extends Controller
      * @param Request $request
      * @return View
      */
-    public function index(Request $request): View
+    public function index(SearchJobRequest $request): View
     {
         return $this->search($request);
     }
@@ -47,28 +43,19 @@ class JobController extends Controller
     /**
      * Filter jobs based on search criteria.
      *
-     * @param Request $request
+     * @param SearchJobRequest $request
      * @return View
      */
-    public function search(Request $request): View
+    public function search(SearchJobRequest $request): View
     {
-        $categories = Category::where('is_job', true)->get();
-        $locations  = Location::where('is_job', true)->get();
-        $types      = Type::where('is_job', true)->get();
-        $tags       = Tag::where('is_job', true)->get();
-        
+        $taxonomies = $this->jobService->getFilterTaxonomies();
+        $jobs = $this->jobService->searchJobs($request->validated());
 
-        $jobs = $this->jobService->searchJobs($request->all());
-
-        return view('frontend.jobs.index', [
+        return view('frontend.jobs.index', array_merge($taxonomies, [
             'jobs'             => $jobs,
-            'categories'       => $categories,
-            'locations'        => $locations,
-            'tags'             => $tags,
-            'types'            => $types,
             'experienceLevels' => $this->jobService->getExperienceLevels(),
             'workplaceTypes'   => $this->jobService->getWorkplaceTypes(),
-        ]);
+        ]));
     }
 
     /**
@@ -80,6 +67,7 @@ class JobController extends Controller
     public function show(string $slug): View
     {
         $job = JobListing::where('slug', $slug)
+            ->active()
             ->with(['employer', 'category', 'location', 'tags', 'brand'])
             ->firstOrFail();
 

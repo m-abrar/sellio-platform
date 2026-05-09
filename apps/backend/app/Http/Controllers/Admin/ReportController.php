@@ -163,8 +163,8 @@ class ReportController extends Controller
         $propertyList = Property::select('id', 'title', 'slug', 'location_id', 'total_units')
             ->with('location')
             ->orderBy('title', 'asc') 
-            ->get()
-            ->map(function ($property) use ($occupiedPropertyIds) {
+            ->paginate(50)
+            ->through(function ($property) use ($occupiedPropertyIds) {
                  $isOccupied = $occupiedPropertyIds->contains($property->id);
                  return new Fluent([
                      'id'          => $property->id,
