@@ -37,11 +37,7 @@ use App\Traits\Models\HasStatusModeration;
  */
 class Auto extends Model implements HasMedia
 {
-    use InteractsWithMedia;
-    use HasFactory;
-    use LogsActivity;
-    use HasImageAccess;
-    use HasStatusModeration;
+    use SoftDeletes, InteractsWithMedia, HasFactory, LogsActivity, HasImageAccess, HasStatusModeration;
 
     public const PRIMARY_MEDIA = 'main_photo';
     public const GALLERY_MEDIA = 'auto_gallery';

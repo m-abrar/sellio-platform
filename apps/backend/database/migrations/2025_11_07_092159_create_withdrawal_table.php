@@ -26,6 +26,7 @@ return new class extends Migration
             $table->text('admin_note')->nullable();
             $table->timestamp('approved_at')->nullable();
             $table->timestamp('rejected_at')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
 

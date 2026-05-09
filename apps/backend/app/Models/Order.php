@@ -35,7 +35,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class Order extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     // --- Status Constants ---
     public const STATUS_PENDING          = 'pending';

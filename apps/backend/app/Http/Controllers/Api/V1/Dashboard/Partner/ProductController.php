@@ -45,18 +45,18 @@ class ProductController extends Controller
 
     public function store(SaveProductRequest $request) {
         // Use safe()->except to remove media fields from the SQL insert
-        $data = $request->safe()->except(['main_image', 'gallery']);
+        $data = $request->safe()->except(['main_image', 'gallery', 'approved_at', 'user_id']);
 
         $product = Product::create($data + [
             'user_id' => auth()->id(),
-            'approved_at' => now(),
+            // 'approved_at' is NULL by default, requiring admin moderation
         ]);
         
         $this->handleMedia($product, $request);
 
         return $this->successResponse(
             new ProductResource($product),
-            __('Product created successfully'),
+            __('Product created and submitted for moderation'),
             201
         );
     }
@@ -65,8 +65,8 @@ class ProductController extends Controller
 
         $product = Product::where('user_id', auth()->id())->findOrFail($id);
 
-        // Use safe()->except here as well
-        $data = $request->safe()->except(['main_image', 'gallery']);
+        // Prevent partners from changing ownership or approval status
+        $data = $request->safe()->except(['main_image', 'gallery', 'approved_at', 'user_id']);
         
         $product->update($data);
         
@@ -74,7 +74,7 @@ class ProductController extends Controller
 
         return $this->successResponse(
             new ProductResource($product->fresh()),
-            __('Product updated successfully')
+            __('Product updated and resubmitted for moderation')
         );
     }
 

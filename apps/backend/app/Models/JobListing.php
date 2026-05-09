@@ -37,11 +37,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  */
 class JobListing extends Model implements HasMedia
 {
-    use HasFactory;
-    use InteractsWithMedia;
-    use LogsActivity;
-    use HasImageAccess;
-    use HasStatusModeration;
+    use HasFactory, SoftDeletes, InteractsWithMedia, LogsActivity, HasImageAccess, HasStatusModeration;
 
     public const PRIMARY_MEDIA = 'company_logo';
     public const GALLERY_MEDIA = 'office_photos';

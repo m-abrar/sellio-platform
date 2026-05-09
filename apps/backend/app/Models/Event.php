@@ -36,11 +36,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  */
 class Event extends Model implements HasMedia
 {
-    use HasFactory;
-    use InteractsWithMedia;
-    use LogsActivity;
-    use HasImageAccess;
-    use HasStatusModeration;
+    use HasFactory, SoftDeletes, InteractsWithMedia, LogsActivity, HasImageAccess, HasStatusModeration;
 
     public const PRIMARY_MEDIA = 'poster_image';
     public const GALLERY_MEDIA = 'event_gallery';

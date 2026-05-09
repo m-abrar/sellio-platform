@@ -29,7 +29,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  */
 class Service extends Model implements HasMedia
 {
-    use HasFactory, InteractsWithMedia, LogsActivity, HasImageAccess, HasStatusModeration;
+    use SoftDeletes, HasFactory, InteractsWithMedia, LogsActivity, HasImageAccess, HasStatusModeration;
 
     /**
      * Constants for media management.

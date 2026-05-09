@@ -30,7 +30,7 @@ use App\Traits\Models\HasStatusModeration;
  */
 class Product extends Model implements HasMedia
 {
-    use LogsActivity, HasAnalytics, HasFactory, InteractsWithMedia, HasImageAccess, HasStatusModeration;
+    use SoftDeletes, LogsActivity, HasAnalytics, HasFactory, InteractsWithMedia, HasImageAccess, HasStatusModeration;
 
     /**
      * Constants for media collections.

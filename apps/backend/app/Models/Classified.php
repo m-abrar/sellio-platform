@@ -25,7 +25,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class Classified extends Model implements HasMedia
 {
-    use HasFactory, InteractsWithMedia, LogsActivity, HasImageAccess, HasStatusModeration;
+    use SoftDeletes, HasFactory, InteractsWithMedia, LogsActivity, HasImageAccess, HasStatusModeration;
 
     // --- 1. Constants & Properties ---
     public const PRIMARY_MEDIA = 'item_photo';

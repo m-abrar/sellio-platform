@@ -8,103 +8,102 @@ use Illuminate\Support\Facades\Cache;
 trait HasMarketplaceMetrics
 {
     /**
-     * Aggregates active listings across all verticals.
-     * Uses direct counts to prevent N+1 overhead.
+     * Centralized metrics engine.
+     * Consolidates all marketplace counts into a single cached object
+     * to prevent N+1 'Query Storms'.
      */
-    protected function listingsActiveCount(): Attribute
+    public function getMarketplaceMetrics(): array
     {
-        return Attribute::make(
-            get: fn () => Cache::remember("user_metrics_{$this->id}_listings_active", 300, fn () => 
-                \App\Models\Property::where('user_id', $this->id)->where('is_published', true)->count() +
-                \App\Models\Event::where('user_id', $this->id)->where('is_published', true)->count() +
-                \App\Models\JobListing::where('user_id', $this->id)->where('is_published', true)->count() +
-                \App\Models\Service::where('user_id', $this->id)->where('is_published', true)->count() +
-                \App\Models\Classified::where('user_id', $this->id)->where('is_published', true)->count() +
-                \App\Models\Auto::where('user_id', $this->id)->where('is_published', true)->count()
-            ),
-        );
+        return Cache::remember("user_metrics_{$this->id}_v3", 300, function () {
+            return [
+                'listings_active' => $this->calculateListingsActive(),
+                'leads_new'       => $this->calculateNewLeads(),
+                'buyer_pending'   => $this->calculateBuyerPending(),
+                'buyer_total'     => $this->calculateBuyerTotals(),
+            ];
+        });
     }
 
-    // --- SELLER METRICS (Lead Counts) ---
-
-    protected function propertiesBookingsNewCount(): Attribute 
-    { 
-        return Attribute::make(get: fn () => Cache::remember("user_metrics_{$this->id}_prop_bookings_new", 300, fn() => \App\Models\PropertyBooking::whereHas('property', fn($q) => $q->where('user_id', $this->id))->where('status', 'new')->count())); 
-    }
-
-    protected function propertiesVisitsNewCount(): Attribute 
-    { 
-        return Attribute::make(get: fn () => Cache::remember("user_metrics_{$this->id}_prop_visits_new", 300, fn() => \App\Models\PropertyVisit::whereHas('property', fn($q) => $q->where('user_id', $this->id))->where('status', 'new')->count())); 
-    }
-
-    protected function eventsBookingsNewCount(): Attribute 
-    { 
-        return Attribute::make(get: fn () => Cache::remember("user_metrics_{$this->id}_event_bookings_new", 300, fn() => \App\Models\EventBooking::whereHas('event', fn($q) => $q->where('user_id', $this->id))->where('status', 'new')->count())); 
-    }
-
-    protected function jobsApplicationsNewCount(): Attribute 
-    { 
-        return Attribute::make(get: fn () => Cache::remember("user_metrics_{$this->id}_job_apps_new", 300, fn() => \App\Models\JobApplication::whereHas('job', fn($q) => $q->where('user_id', $this->id))->where('status', 'new')->count())); 
-    }
-
-    protected function servicesQuotesNewCount(): Attribute 
-    { 
-        return Attribute::make(get: fn () => Cache::remember("user_metrics_{$this->id}_service_quotes_new", 300, fn() => \App\Models\ServiceQuote::whereHas('service', fn($q) => $q->where('user_id', $this->id))->where('status', 'new')->count())); 
-    }
-
-    protected function servicesAppointmentsNewCount(): Attribute 
-    { 
-        return Attribute::make(get: fn () => Cache::remember("user_metrics_{$this->id}_service_appts_new", 300, fn() => \App\Models\ServiceAppointment::whereHas('service', fn($q) => $q->where('user_id', $this->id))->where('status', 'new')->count())); 
-    }
-
-    protected function autosInquiriesNewCount(): Attribute 
-    { 
-        return Attribute::make(get: fn () => Cache::remember("user_metrics_{$this->id}_auto_inquiries_new", 300, fn() => \App\Models\AutoInquiry::whereHas('auto', fn($q) => $q->where('user_id', $this->id))->where('status', 'new')->count())); 
-    }
-
-    protected function classifiedsInquiriesNewCount(): Attribute 
-    { 
-        return Attribute::make(get: fn () => Cache::remember("user_metrics_{$this->id}_class_inquiries_new", 300, fn() => \App\Models\ClassifiedInquiry::whereHas('classifiedAd', fn($q) => $q->where('user_id', $this->id))->where('status', 'new')->count())); 
-    }
+    /**
+     * Individual Accessors (Refactored to use Centralized Engine)
+     */
+    protected function listingsActiveCount(): Attribute { return Attribute::make(get: fn() => $this->getMarketplaceMetrics()['listings_active']); }
+    
+    protected function propertiesBookingsNewCount(): Attribute { return Attribute::make(get: fn() => $this->getMarketplaceMetrics()['leads_new']['prop_bookings']); }
+    protected function propertiesVisitsNewCount(): Attribute   { return Attribute::make(get: fn() => $this->getMarketplaceMetrics()['leads_new']['prop_visits']); }
+    protected function eventsBookingsNewCount(): Attribute     { return Attribute::make(get: fn() => $this->getMarketplaceMetrics()['leads_new']['event_bookings']); }
+    protected function jobsApplicationsNewCount(): Attribute   { return Attribute::make(get: fn() => $this->getMarketplaceMetrics()['leads_new']['job_apps']); }
+    protected function servicesQuotesNewCount(): Attribute     { return Attribute::make(get: fn() => $this->getMarketplaceMetrics()['leads_new']['service_quotes']); }
+    protected function servicesAppointmentsNewCount(): Attribute { return Attribute::make(get: fn() => $this->getMarketplaceMetrics()['leads_new']['service_appts']); }
+    protected function autosInquiriesNewCount(): Attribute     { return Attribute::make(get: fn() => $this->getMarketplaceMetrics()['leads_new']['auto_inquiries']); }
+    protected function classifiedsInquiriesNewCount(): Attribute { return Attribute::make(get: fn() => $this->getMarketplaceMetrics()['leads_new']['class_inquiries']); }
 
     protected function totalNewActivities(): Attribute
     {
-        return Attribute::make(
-            get: fn () =>
-                $this->properties_bookings_new_count +
-                $this->properties_visits_new_count +
-                $this->events_bookings_new_count +
-                $this->jobs_applications_new_count +
-                $this->services_quotes_new_count +
-                $this->services_appointments_new_count + 
-                $this->autos_inquiries_new_count +
-                $this->classifieds_inquiries_new_count
-        );
+        return Attribute::make(get: fn() => array_sum($this->getMarketplaceMetrics()['leads_new']));
     }
 
-    // --- BUYER METRICS (Pending Counts) ---
-
-    protected function pendingBookingsCount(): Attribute { return Attribute::make(get: fn () => Cache::remember("user_metrics_{$this->id}_pending_bookings", 300, fn() => $this->propertyBookings()->where('status', 'pending')->count() + $this->eventBookings()->where('status', 'pending')->count())); }
-    protected function pendingApplicationsCount(): Attribute { return Attribute::make(get: fn () => Cache::remember("user_metrics_{$this->id}_pending_apps", 300, fn() => $this->jobApplications()->where('status', 'pending')->count())); }
-    protected function pendingQuotesCount(): Attribute { return Attribute::make(get: fn () => Cache::remember("user_metrics_{$this->id}_pending_quotes", 300, fn() => $this->serviceQuotes()->where('status', 'pending')->count())); }
-    protected function pendingAppointmentsCount(): Attribute { return Attribute::make(get: fn () => Cache::remember("user_metrics_{$this->id}_pending_appts", 300, fn() => $this->serviceAppointments()->where('status', 'pending')->count())); }
-    protected function pendingInquiriesCount(): Attribute { return Attribute::make(get: fn () => Cache::remember("user_metrics_{$this->id}_pending_inquiries", 300, fn() => $this->classifiedInquiries()->wherePivot('status', 'pending')->count())); }
-
-    // --- TOTAL BUYER COUNTS ---
-    protected function totalApplicationsCount(): Attribute { return Attribute::make(get: fn () => Cache::remember("user_metrics_{$this->id}_total_apps", 300, fn() => $this->jobApplications()->count())); }
-    protected function totalQuotesCount(): Attribute { return Attribute::make(get: fn () => Cache::remember("user_metrics_{$this->id}_total_quotes", 300, fn() => $this->serviceQuotes()->count())); }
-    protected function totalAppointmentsCount(): Attribute { return Attribute::make(get: fn () => Cache::remember("user_metrics_{$this->id}_total_appts", 300, fn() => $this->serviceAppointments()->count())); }
-    protected function totalInquiriesCount(): Attribute { return Attribute::make(get: fn () => Cache::remember("user_metrics_{$this->id}_total_inquiries", 300, fn() => $this->classifiedInquiries()->count())); }
+    // Buyer Accessors
+    protected function pendingBookingsCount(): Attribute { return Attribute::make(get: fn() => $this->getMarketplaceMetrics()['buyer_pending']['bookings']); }
+    protected function pendingApplicationsCount(): Attribute { return Attribute::make(get: fn() => $this->getMarketplaceMetrics()['buyer_pending']['apps']); }
+    protected function pendingQuotesCount(): Attribute { return Attribute::make(get: fn() => $this->getMarketplaceMetrics()['buyer_pending']['quotes']); }
+    protected function pendingAppointmentsCount(): Attribute { return Attribute::make(get: fn() => $this->getMarketplaceMetrics()['buyer_pending']['appts']); }
+    protected function pendingInquiriesCount(): Attribute { return Attribute::make(get: fn() => $this->getMarketplaceMetrics()['buyer_pending']['inquiries']); }
 
     protected function totalBuyerActivitiesCount(): Attribute
     {
-        return Attribute::make(
-            get: fn () =>
-                $this->pending_bookings_count +
-                $this->pending_applications_count +
-                $this->pending_quotes_count +
-                $this->pending_appointments_count +
-                $this->pending_inquiries_count
-        );
+        return Attribute::make(get: fn() => array_sum($this->getMarketplaceMetrics()['buyer_pending']));
+    }
+
+    // --- Internal Calculation Engine (Optimized Queries) ---
+
+    private function calculateListingsActive(): int
+    {
+        $tables = ['properties', 'events', 'joblistings', 'services', 'classified_ads', 'autos'];
+        $total = 0;
+        foreach ($tables as $table) {
+            $total += \Illuminate\Support\Facades\DB::table($table)
+                ->where('user_id', $this->id)
+                ->where('is_published', true)
+                ->whereNull('deleted_at')
+                ->count();
+        }
+        return $total;
+    }
+
+    private function calculateNewLeads(): array
+    {
+        $id = $this->id;
+        return [
+            'prop_bookings'    => \App\Models\PropertyBooking::join('properties', 'property_bookings.property_id', '=', 'properties.id')->where('properties.user_id', $id)->where('property_bookings.status', 'new')->count(),
+            'prop_visits'      => \App\Models\PropertyVisit::join('properties', 'property_visits.property_id', '=', 'properties.id')->where('properties.user_id', $id)->where('property_visits.status', 'new')->count(),
+            'event_bookings'   => \App\Models\EventBooking::join('events', 'event_bookings.event_id', '=', 'events.id')->where('events.user_id', $id)->where('event_bookings.status', 'new')->count(),
+            'job_apps'         => \App\Models\JobApplication::join('joblistings', 'job_applications.job_listing_id', '=', 'joblistings.id')->where('joblistings.user_id', $id)->where('job_applications.status', 'new')->count(),
+            'service_quotes'   => \App\Models\ServiceQuote::join('services', 'service_quotes.service_id', '=', 'services.id')->where('services.user_id', $id)->where('service_quotes.status', 'new')->count(),
+            'service_appts'    => \App\Models\ServiceAppointment::join('services', 'service_appointments.service_id', '=', 'services.id')->where('services.user_id', $id)->where('service_appointments.status', 'new')->count(),
+            'auto_inquiries'   => \App\Models\AutoInquiry::join('autos', 'auto_inquiries.auto_id', '=', 'autos.id')->where('autos.user_id', $id)->where('auto_inquiries.status', 'new')->count(),
+            'class_inquiries'  => \App\Models\ClassifiedInquiry::join('classified_ads', 'classified_inquiries.classified_id', '=', 'classified_ads.id')->where('classified_ads.user_id', $id)->where('classified_inquiries.status', 'new')->count(),
+        ];
+    }
+
+    private function calculateBuyerPending(): array
+    {
+        return [
+            'bookings'  => $this->propertyBookings()->where('status', 'pending')->count() + $this->eventBookings()->where('status', 'pending')->count(),
+            'apps'      => $this->jobApplications()->where('status', 'pending')->count(),
+            'quotes'    => $this->serviceQuotes()->where('status', 'pending')->count(),
+            'appts'     => $this->serviceAppointments()->where('status', 'pending')->count(),
+            'inquiries' => $this->classifiedInquiries()->wherePivot('status', 'pending')->count(),
+        ];
+    }
+
+    private function calculateBuyerTotals(): array
+    {
+        return [
+            'apps'      => $this->jobApplications()->count(),
+            'quotes'    => $this->serviceQuotes()->count(),
+            'appts'     => $this->serviceAppointments()->count(),
+            'inquiries' => $this->classifiedInquiries()->count(),
+        ];
     }
 }
