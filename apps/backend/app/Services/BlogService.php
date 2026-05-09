@@ -46,6 +46,17 @@ class BlogService
         ];
     }
 
+    /**
+     * Retrieve a fully hydrated active blog post by its slug.
+     */
+    public function findActiveBySlug(string $slug): Blog
+    {
+        return Blog::where('slug', $slug)
+            ->active()
+            ->with(['user', 'category', 'tags', 'reviews.user', 'media'])
+            ->firstOrFail();
+    }
+
     public function getBlogDetailsData(Blog $blog): array
     {
         return [

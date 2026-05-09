@@ -167,9 +167,10 @@ class Blog extends Model implements HasMedia
                 'PUBLISHED' => 'bg-success text-white',
                 'SCHEDULED' => 'bg-info text-white',
                 'DRAFT'     => 'bg-secondary text-white',
-                default     => 'bg-primary text-white'
             }
         );
+    }
+
     /**
      * Sanitize content before saving to prevent XSS.
      */

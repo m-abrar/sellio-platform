@@ -11,6 +11,7 @@ use App\Services\EventBookingService;
 use App\Http\Requests\StoreEventBookingRequest;
 use App\Http\Requests\UpdateBookingDetailsRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Log;
@@ -58,47 +59,49 @@ class EventBookingController extends Controller
         }
 
         $occurrence = EventOccurrence::findOrFail($request->event_occurrence_id);
-        $occurrenceTicket = EventOccurrenceTicket::where('event_occurrence_id', $occurrence->id)
-            ->where('event_ticket_type_id', $ticket->id)
-            ->first();
+        return DB::transaction(function () use ($request, $event, $ticket, $occurrence) {
+            // Lock the ticket record to prevent race conditions (Overbooking)
+            $occurrenceTicket = EventOccurrenceTicket::where('event_occurrence_id', $occurrence->id)
+                ->where('event_ticket_type_id', $ticket->id)
+                ->lockForUpdate()
+                ->first();
 
-        if (!$occurrenceTicket) {
-            return back()->withErrors(['error' => __('The selected ticket type is not available for this date.')]);
-        }
+            if (!$occurrenceTicket) {
+                throw new \Exception(__('The selected ticket type is not available for this date.'));
+            }
 
-        $available = $this->bookingService->getAvailableQuantity($occurrence->id, $ticket->id, $occurrenceTicket);
+            $available = $this->bookingService->getAvailableQuantity($occurrence->id, $ticket->id, $occurrenceTicket);
 
-        if ($request->quantity > $available) {
-            return back()->withInput()->withErrors([
-                'quantity' => __('Only :count tickets remain.', ['count' => $available])
-            ]);
-        }
+            if ($request->quantity > $available) {
+                throw new \Exception(__('Only :count tickets remain.', ['count' => $available]));
+            }
 
-        $price = $occurrenceTicket->sale_price ?? $occurrenceTicket->override_price ?? $ticket->base_price;
-        $totalAmount = $price * $request->quantity;
+            $price = $occurrenceTicket->sale_price ?? $occurrenceTicket->override_price ?? $ticket->base_price;
+            $totalAmount = $price * $request->quantity;
 
-        try {
-            $booking = EventBooking::create([
-                'event_id'             => $event->id,
-                'event_ticket_type_id' => $ticket->id,
-                'event_occurrence_id'  => $occurrence->id,
-                'occurrence_ticket_id' => $occurrenceTicket->id,
-                'user_id'              => Auth::id(),
-                'quantity'             => $request->quantity,
-                'total_price'          => $totalAmount,
-                'user_name'            => $request->name ?: Auth::user()->name,
-                'user_email'           => $request->email ?: Auth::user()->email,
-                'user_phone'           => $request->phone,
-                'status'               => 'pending',
-            ]);
-        } catch (QueryException $e) {
-            return $this->handleDuplicateBooking($e, $event, $occurrence, $ticket);
-        }
+            try {
+                $booking = EventBooking::create([
+                    'event_id'             => $event->id,
+                    'event_ticket_type_id' => $ticket->id,
+                    'event_occurrence_id'  => $occurrence->id,
+                    'occurrence_ticket_id' => $occurrenceTicket->id,
+                    'user_id'              => Auth::id(),
+                    'quantity'             => $request->quantity,
+                    'total_price'          => $totalAmount,
+                    'user_name'            => $request->name ?: Auth::user()->name,
+                    'user_email'           => $request->email ?: Auth::user()->email,
+                    'user_phone'           => $request->phone,
+                    'status'               => 'pending',
+                ]);
+            } catch (QueryException $e) {
+                return $this->handleDuplicateBooking($e, $event, $occurrence, $ticket);
+            }
 
-        $occurrenceTicket->increment('sold_count', $request->quantity);
+            $occurrenceTicket->increment('sold_count', $request->quantity);
 
-        return redirect()->route('events.tickets.booking.checkout', [$event->slug, $booking->id])
-            ->with('success', __('Booking draft created. Total: $:amount', ['amount' => number_format($totalAmount, 2)]));
+            return redirect()->route('events.tickets.booking.checkout', [$event->slug, $booking->id])
+                ->with('success', __('Booking draft created. Total: $:amount', ['amount' => number_format($totalAmount, 2)]));
+        });
     }
 
     /**
@@ -161,17 +164,16 @@ class EventBookingController extends Controller
 
         $request->validate([
             'payment_method' => 'required|string|in:stripe,paypal',
-            'amount'         => 'required|numeric|min:0.01',
         ]);
 
-        $finalTotal = round($booking->total_price * 1.05, 2); 
-        if (round($request->amount, 2) < $finalTotal) {
-            return back()->with('error', __('Payment amount mismatch.'));
-        }
+        // SECURITY: Recalculate amount on the server based on the booking record.
+        // Never trust the 'amount' field from the request in financial transactions.
+        $finalTotal = round($booking->total_price * 1.00, 2); 
+
 
         try {
             $transactionId = strtoupper($request->payment_method) . '_' . Str::random(10);
-            $this->bookingService->finalizePayment($booking, $request->payment_method, $transactionId, $request->amount);
+            $this->bookingService->finalizePayment($booking, $request->payment_method, $transactionId, $finalTotal);
 
             return redirect()->route('events.tickets.booking.confirmation', [$event->slug, $booking->id])
                 ->with('success', __('Payment successful!'));

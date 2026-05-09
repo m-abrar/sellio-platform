@@ -8,6 +8,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use App\Services\CartService;
 use Illuminate\View\View;
 
 /**
@@ -20,9 +22,10 @@ class CheckoutController extends Controller
      * Display the checkout interface with all active payment gateway configurations.
      *
      * @param  \App\Services\GatewayManager  $manager
+     * @param  \App\Services\CartService  $cartService
      * @return \Illuminate\View\View
      */
-    public function showCheckout(GatewayManager $manager): View
+    public function showCheckout(GatewayManager $manager, CartService $cartService): View
     {
         $activeGateways = PaymentGateway::where('is_active', true)
             ->with(['credentials', 'blueprints'])
@@ -40,12 +43,19 @@ class CheckoutController extends Controller
             }
         }
         
-        // Mock order data - In production, this should be retrieved from a Cart or PendingOrder model.
+        // Secure Price Retrieval: Fetch current active cart and calculate total on the server.
+        $cart = $cartService->getOrCreateCart();
+        
+        if ($cart->items->isEmpty()) {
+             // In a real scenario, we might redirect back to cart
+             // return redirect()->route('cart.index')->with('error', 'Your cart is empty.');
+        }
+
         $orderData = [
-            'amount'      => rand(10, 50),
+            'amount'      => $cart->calculateTotal(),
             'currency'    => 'USD',
-            'id'          => rand(1000, 5000),
-            'description' => 'Marketplace Purchase',
+            'id'          => $cart->id,
+            'description' => __('Marketplace Purchase - Order #:id', ['id' => $cart->id]),
         ];
 
         return view('checkout', [
@@ -72,8 +82,15 @@ class CheckoutController extends Controller
             $service = $manager->resolve($gateway);
 
             $token = $request->input('stripeToken') ?? $request->input('paymentToken');
-            $amount = $request->input('amount') ?? 1.00;
             
+            // SECURITY: Never take the amount from the request. Recalculate from the source of truth (Cart).
+            $cart = app(CartService::class)->getOrCreateCart();
+            $amount = $cart->calculateTotal();
+            
+            if ($amount <= 0) {
+                return redirect()->route('cart.index')->with('error', __('Invalid order amount.'));
+            }
+
             $result = $service->charge($amount, $token, $returnUrl); 
 
             // Handle successful instant charge

@@ -68,12 +68,7 @@ class BlogController extends Controller
      */
     public function show(Request $request, string $slug): View
     {
-        $blog = Blog::where('slug', $slug)
-            ->active() // Using the scope from our Model
-            ->with([
-                'user', 'category', 'tags', 'reviews.user', 'media'
-            ])
-            ->firstOrFail();
+        $blog = $this->blogService->findActiveBySlug($slug);
 
         // Get related posts or sidebar data via Service
         $viewData = $this->blogService->getBlogDetailsData($blog);
