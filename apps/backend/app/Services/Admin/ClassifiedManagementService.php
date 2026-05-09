@@ -29,7 +29,9 @@ class ClassifiedManagementService
             $data['is_for_sale']  = isset($data['is_for_sale']) ? (bool)$data['is_for_sale'] : false;
 
             if ($classified) {
-                $classified->update($data);
+                $classified->fill($data);
+                $classified->is_featured = $data['is_featured'];
+                $classified->save();
                 return $classified;
             }
 
@@ -37,7 +39,12 @@ class ClassifiedManagementService
                 $data['user_id'] = auth()->id();
             }
 
-            return Classified::create($data);
+            $classified = new Classified();
+            $classified->fill($data);
+            $classified->is_featured = $data['is_featured'];
+            $classified->save();
+
+            return $classified;
         });
     }
 

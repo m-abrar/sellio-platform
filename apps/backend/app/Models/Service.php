@@ -45,8 +45,8 @@ class Service extends Model implements HasMedia
         'base_price', 'sale_price', 'expertise_level', 'availability_schedule',
         'service_radius', 'licenses_certs', 'min_contract_months', 'max_client_slots',
         'address', 'city', 'state', 'country', 'zip_code', 'latitude', 'longitude',
-        'is_published', 'is_featured', 'is_subscription', 'is_project_based',
-        'meta_title', 'meta_description', 'approved_at', 'expires_at'
+        'is_published', 'is_subscription', 'is_project_based',
+        'meta_title', 'meta_description', 'expires_at'
     ];
 
     protected $casts = [

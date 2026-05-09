@@ -102,8 +102,8 @@ class Property extends Model implements HasMedia
         'minimum_rental_days', 'maximum_rental_days', 'area_sq_ft', 'area_sq_m',
         'number_of_parking_spots', 'hoa', 'rules', 'policies', 'year_built',
         'video', 'virtual_tour', 'address', 'city', 'state', 'country', 'zip_code',
-        'latitude', 'longitude', 'is_published', 'is_featured', 'is_rental', 'is_sale',
-        'meta_title', 'meta_description', 'approved_at', 'expires_at'
+        'latitude', 'longitude', 'is_published', 'is_rental', 'is_sale',
+        'meta_title', 'meta_description', 'expires_at'
     ];
 
     /**

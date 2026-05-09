@@ -29,9 +29,9 @@ class MessageController extends Controller
     public function index($conversationId = null) {
         $user = Auth::user();
         
-        // 1. Fetch all conversations for the user
-        $conversations = Conversation::where('user_id', $user->id)
-            ->with(['partner', 'lastMessage'])
+        // 1. Fetch all conversations for the user using the correct scope
+        $conversations = Conversation::forUser($user->id)
+            ->with(['partner', 'user', 'lastMessage'])
             ->orderByDesc('updated_at')
             ->get();
 
@@ -72,8 +72,8 @@ class MessageController extends Controller
 
         $user = Auth::user();
         
-        $conversation = Conversation::where('id', $conversationId)
-            ->where('user_id', $user->id)
+        $conversation = Conversation::forUser($user->id)
+            ->where('id', $conversationId)
             ->firstOrFail();
 
         // 1. Create the message

@@ -120,6 +120,20 @@ class PropertyService
     }
 
     /**
+     * Retrieve a property by its slug, ensuring it is visible to the current user.
+     */
+    public function findVisibleBySlug(string $slug, ?User $user): Property
+    {
+        return Property::where('slug', $slug)
+            ->visibleTo($user)
+            ->with([
+                'user', 'category', 'location', 'amenities', 'features',
+                'fees', 'addons', 'neighborhoods', 'scores'
+            ])
+            ->firstOrFail();
+    }
+
+    /**
      * Data for the property detail page.
      */
     public function getPropertyDetailsData(Property $property): array
@@ -127,6 +141,12 @@ class PropertyService
         $bookings = collect();
         if ($property->is_rental) {
             $statusColors = ['confirmed' => '#ef4444', 'pending' => '#fde68a'];
+            
+            // Paginate or limit reviews to prevent memory exhaustion
+            $property->load(['reviews' => function($query) {
+                $query->with('user')->latest()->take(10);
+            }]);
+
             $bookings = PropertyBooking::where('property_id', $property->id)
                 ->where('status', '!=', 'cancelled')
                 ->get()

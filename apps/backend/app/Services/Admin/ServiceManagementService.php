@@ -29,7 +29,9 @@ class ServiceManagementService
             $data['is_project_based'] = isset($data['is_project_based']) ? (bool)$data['is_project_based'] : false;
 
             if ($service) {
-                $service->update($data);
+                $service->fill($data);
+                $service->is_featured = $data['is_featured'];
+                $service->save();
                 return $service;
             }
 
@@ -37,7 +39,12 @@ class ServiceManagementService
                 $data['user_id'] = auth()->id();
             }
 
-            return Service::create($data);
+            $service = new Service();
+            $service->fill($data);
+            $service->is_featured = $data['is_featured'];
+            $service->save();
+
+            return $service;
         });
     }
 

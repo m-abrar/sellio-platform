@@ -62,7 +62,6 @@ class Advertisement extends Model implements HasMedia
         'title',
         'image_path',
         'link',
-        'status',
         'orientations',
         'latitude',
         'longitude',
@@ -115,8 +114,7 @@ class Advertisement extends Model implements HasMedia
 
         $this->addMediaConversion('ad_banner_hd')
             ->width(1920)
-            ->height(300)
-            ->nonQueued();
+            ->height(300);
     }
 
     // --- Scopes ---

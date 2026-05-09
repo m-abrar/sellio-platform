@@ -69,12 +69,7 @@ class PropertyController extends Controller
      */
     public function show(Request $request, string $slug): View
     {
-        $property = Property::where('slug', $slug)
-            ->with([
-                'user', 'category', 'location', 'amenities', 'features',
-                'fees', 'addons', 'neighborhoods', 'scores', 'reviews.user'
-            ])
-            ->firstOrFail();
+        $property = $this->propertyService->findVisibleBySlug($slug, auth()->user());
 
         $viewData = $this->propertyService->getPropertyDetailsData($property);
         

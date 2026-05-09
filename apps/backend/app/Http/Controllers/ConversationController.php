@@ -4,15 +4,27 @@ namespace App\Http\Controllers;
 
 use App\Models\Conversation;
 use App\Models\User;
+use App\Services\ConversationService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 
-/**
- * Class ConversationController
- * Manages the initialization and orchestration of messaging threads between buyers and partners.
- */
 class ConversationController extends Controller
 {
+    /**
+     * @var ConversationService
+     */
+    protected ConversationService $conversationService;
+
+    /**
+     * ConversationController constructor.
+     *
+     * @param ConversationService $conversationService
+     */
+    public function __construct(ConversationService $conversationService)
+    {
+        $this->conversationService = $conversationService;
+    }
+
     /**
      * Start or retrieve an existing conversation with a specific user.
      *
@@ -25,30 +37,26 @@ class ConversationController extends Controller
             return redirect()->back()->withErrors(['message' => __('You must be logged in to start a conversation.')]);
         }
 
+        // Apply Rate Limiting: 5 attempts per minute per user
+        $executed = \Illuminate\Support\Facades\RateLimiter::attempt(
+            'start-conversation:' . Auth::id(),
+            5,
+            function() {}
+        );
+
+        if (!$executed) {
+            return redirect()->back()->withErrors(['message' => __('Too many requests. Please try again in a minute.')]);
+        }
+
         $buyerId = Auth::id();
         $partner = User::where('username', $username)->firstOrFail();
-        $partnerId = $partner->id;
-
+        
         // Prevent self-messaging
-        if ($buyerId === $partnerId) {
+        if ($buyerId === $partner->id) {
             return redirect()->back()->withErrors(['message' => __('You cannot start a conversation with yourself.')]);
         }
 
-        // Retrieve existing conversation or create a new one
-        $conversation = Conversation::where(function ($query) use ($buyerId, $partnerId) {
-            $query->where('user_id', $buyerId)
-                  ->where('partner_id', $partnerId);
-        })->orWhere(function ($query) use ($buyerId, $partnerId) {
-            $query->where('user_id', $partnerId)
-                  ->where('partner_id', $buyerId);
-        })->first();
-
-        if (!$conversation) {
-            $conversation = Conversation::create([
-                'user_id'    => $buyerId,
-                'partner_id' => $partnerId,
-            ]);
-        }
+        $conversation = $this->conversationService->findOrCreate($partner, $buyerId);
 
         return redirect()->route('dashboard.user.messages.index', $conversation->id);
     }

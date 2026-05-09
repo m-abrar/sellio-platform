@@ -72,6 +72,10 @@ class User extends Authenticatable implements Wallet, Customer, HasMedia, MustVe
     protected $hidden = [
         'password',
         'remember_token',
+        'is_admin',
+        'is_partner',
+        'is_buyer',
+        'is_verified',
     ];
 
     protected $appends = [
@@ -254,25 +258,6 @@ class User extends Authenticatable implements Wallet, Customer, HasMedia, MustVe
     public function scopeOrderByRating(Builder $query, string $direction = 'desc'): Builder
     {
         return $query->withAvg('reviews', 'rating')->orderBy('reviews_avg_rating', $direction);
-    }
-
-    public function rating(string $type): string
-    {
-        $mapping = [
-            'auto'     => ['class' => Auto::class,     'relation' => 'autos'],
-            'property' => ['class' => Property::class, 'relation' => 'properties'],
-        ];
-        if (!isset($mapping[$type])) return number_format(0, 1);
-        $modelClass = $mapping[$type]['class'];
-        $relationName = $mapping[$type]['relation'];
-        $listingIds = $this->$relationName()->pluck('id');
-        if ($listingIds->isEmpty()) return number_format(0, 1);
-        $averageRating = Review::query()
-            ->whereIn('reviewable_id', $listingIds)
-            ->where('reviewable_type', $modelClass)
-            ->where('status', 'approved')
-            ->avg('rating');
-        return number_format($averageRating ?? 0, 1);
     }
 
     public function getMaxListingsLimit(): int

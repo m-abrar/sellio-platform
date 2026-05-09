@@ -39,7 +39,7 @@ class Classified extends Model implements HasMedia
         'item_condition', 'item_year_age', 'item_quantity', 'item_dimensions',
         'warranty_months', 'min_ad_duration', 'address', 'city', 'state',
         'country', 'zip_code', 'latitude', 'longitude', 'is_published',
-        'is_featured', 'is_for_rent', 'is_for_sale', 'approved_at', 'expires_at',
+        'is_for_rent', 'is_for_sale', 'expires_at',
     ];
 
     protected $casts = [
@@ -74,7 +74,7 @@ class Classified extends Model implements HasMedia
     {
         $this->registerCommonMediaConversions($media);
         $this->addMediaConversion('classified_thumb')
-            ->width(300)->height(300)->sharpen(10)->nonQueued();
+            ->width(300)->height(300)->sharpen(10);
     }
 
     // --- 3. Relationships ---
