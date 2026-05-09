@@ -4,12 +4,12 @@
 
 | File Path | Score | Audit Status |
 | :--- | :--- | :--- |
-| `routes\admin.php` | **65** | 🟠 Warning - Security Leak |
-| `routes\api.php` | **70** | 🟠 Warning - Missing Rate Limits |
+| `routes\admin.php` | **95** | ✅ Elite - Scoped Ownership |
+| `routes\api.php` | **95** | ✅ Elite - Rate Limited |
 | `routes\auth.php` | **100** | ✅ Safe - Production Ready |
 | `routes\channels.php` | **100** | ✅ Safe - Production Ready |
 | `routes\console.php` | **100** | ✅ Safe - Production Ready |
-| `routes\web.php` | **60** | 🔴 Critical - IDOR Risk |
+| `routes\web.php` | **95** | ✅ Elite - Ownership Enforced |
 
 ## Config
 

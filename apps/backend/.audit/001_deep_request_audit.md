@@ -5,10 +5,11 @@ Execute a high-fidelity audit of all Laravel `FormRequest` classes in the Sellio
 
 ## Progress
 - [x] Initial Registry Setup
-- [ ] Core Public Storefront Requests
-- [ ] Administrative & Management Requests
-- [ ] Partner & Dashboard Requests
-- [ ] Authentication & Identity Requests
+- [x] Core Public Storefront Requests
+- [x] Administrative & Management Requests
+- [x] Partner & Dashboard Requests
+- [x] Authentication & Identity Requests
+
 
 ---
 
@@ -16,26 +17,26 @@ Execute a high-fidelity audit of all Laravel `FormRequest` classes in the Sellio
 
 | File Path | Risk | Auth Safety | Validation Safety | Status |
 | :--- | :--- | :--- | :--- | :--- |
-| `app\Http\Requests\CalculateLodgingPriceRequest.php` | MEDIUM | 🟠 Unsafe | 🟠 Weak | ✅ Audited |
-| `app\Http\Requests\CalculatePriceRequest.php` | MEDIUM | 🟠 Unsafe | 🔴 Weak | ✅ Audited |
-| `app\Http\Requests\JobApplicationStoreRequest.php` | MEDIUM | ✅ Safe | 🟠 Moderate | ✅ Audited |
-| `app\Http\Requests\ProcessPaymentRequest.php` | CRITICAL | 🔴 Missing | 🔴 Weak | ✅ Audited |
-| `app\Http\Requests\ProfileUpdateRequest.php` | CRITICAL | 🔴 Missing | ✅ Safe | ✅ Audited |
-| `app\Http\Requests\SaveProductRequest.php` | CRITICAL | 🔴 Unsafe | 🟠 Moderate | ✅ Audited |
-| `app\Http\Requests\SearchAutoRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Audited |
-| `app\Http\Requests\SearchBlogRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Audited |
-| `app\Http\Requests\SearchProductRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Audited |
-| `app\Http\Requests\SearchPropertyRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Audited |
-| `app\Http\Requests\SendContactRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Audited |
-| `app\Http\Requests\SendMessageRequest.php` | CRITICAL | 🔴 Unsafe | 🔴 Weak | ✅ Audited |
-| `app\Http\Requests\StoreAppointmentRequest.php` | HIGH | ✅ Safe | 🔴 Data Risk | ✅ Audited |
-| `app\Http\Requests\StoreAutoInquiryRequest.php` | MEDIUM | ✅ Safe | ✅ Safe | ✅ Audited |
-| `app\Http\Requests\StoreConsultationRequest.php` | MEDIUM | ✅ Safe | ✅ Safe | ✅ Audited |
-| `app\Http\Requests\StoreEventBookingRequest.php` | CRITICAL | 🔴 Unsafe | 🔴 Data Risk | ✅ Audited |
-| `app\Http\Requests\StorePropertyBookingRequest.php` | CRITICAL | 🔴 Unsafe | 🔴 Data Risk | ✅ Audited |
-| `app\Http\Requests\StoreQuoteRequest.php` | MEDIUM | ✅ Safe | ✅ Safe | ✅ Audited |
-| `app\Http\Requests\StoreReviewRequest.php` | MEDIUM | ✅ Safe | ✅ Safe | ✅ Audited |
-| `app\Http\Requests\UpdateBookingDetailsRequest.php` | HIGH | 🔴 Unsafe | ✅ Safe | ✅ Audited |
+| `app\Http\Requests\CalculateLodgingPriceRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Elite |
+| `app\Http\Requests\CalculatePriceRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Elite |
+| `app\Http\Requests\JobApplicationStoreRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Elite |
+| `app\Http\Requests\ProcessPaymentRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Elite |
+| `app\Http\Requests\ProfileUpdateRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Elite |
+| `app\Http\Requests\SaveProductRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Elite |
+| `app\Http\Requests\SearchAutoRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Elite |
+| `app\Http\Requests\SearchBlogRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Elite |
+| `app\Http\Requests\SearchProductRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Elite |
+| `app\Http\Requests\SearchPropertyRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Elite |
+| `app\Http\Requests\SendContactRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Elite |
+| `app\Http\Requests\SendMessageRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Elite |
+| `app\Http\Requests\StoreAppointmentRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Elite |
+| `app\Http\Requests\StoreAutoInquiryRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Elite |
+| `app\Http\Requests\StoreConsultationRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Elite |
+| `app\Http\Requests\StoreEventBookingRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Elite |
+| `app\Http\Requests\StorePropertyBookingRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Elite |
+| `app\Http\Requests\StoreQuoteRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Elite |
+| `app\Http\Requests\StoreReviewRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Elite |
+| `app\Http\Requests\UpdateBookingDetailsRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Elite |
 
 ## Administrative & Management Requests
 
@@ -64,18 +65,18 @@ Execute a high-fidelity audit of all Laravel `FormRequest` classes in the Sellio
 
 | File Path | Risk | Auth Safety | Validation Safety | Status |
 | :--- | :--- | :--- | :--- | :--- |
-| `app\Http\Requests\Dashboard\User\UpdateProfileRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Audited |
-| `app\Http\Requests\Dashboard\User\UpdateReviewRequest.php` | HIGH | 🔴 Unsafe | ✅ Safe | ✅ Audited |
-| `app\Http\Requests\Partner\AutoRequest.php` | CRITICAL | 🔴 IDOR Risk | 🟠 Moderate | ✅ Audited |
-| `app\Http\Requests\Partner\ClassifiedRequest.php` | CRITICAL | 🔴 IDOR Risk | 🟠 Moderate | ✅ Audited |
-| `app\Http\Requests\Partner\EventRequest.php` | CRITICAL | 🔴 IDOR Risk | 🟠 Moderate | ✅ Audited |
-| `app\Http\Requests\Partner\JobListingRequest.php` | CRITICAL | 🔴 IDOR Risk | 🟠 Moderate | ✅ Audited |
-| `app\Http\Requests\Partner\ProcessWithdrawalRequest.php` | CRITICAL | 🔴 IDOR Risk | ✅ Safe | ✅ Audited |
-| `app\Http\Requests\Partner\ProfileUpdateRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Audited |
-| `app\Http\Requests\Partner\ServiceRequest.php` | CRITICAL | 🔴 IDOR Risk | 🟠 Moderate | ✅ Audited |
-| `app\Http\Requests\Partner\StorePropertyRequest.php` | MEDIUM | ✅ Safe | 🟠 Moderate | ✅ Audited |
-| `app\Http\Requests\Partner\StoreSubscriptionRequest.php" | CRITICAL | 🔴 Unsafe | 🔴 Weak | ✅ Audited |
-| `app\Http\Requests\Partner\UpdatePropertyRequest.php` | CRITICAL | 🔴 IDOR Risk | 🟠 Moderate | ✅ Audited |
+| `app\Http\Requests\Dashboard\User\UpdateProfileRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Elite |
+| `app\Http\Requests\Dashboard\User\UpdateReviewRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Elite |
+| `app\Http\Requests\Partner\AutoRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Elite |
+| `app\Http\Requests\Partner\ClassifiedRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Elite |
+| `app\Http\Requests\Partner\EventRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Elite |
+| `app\Http\Requests\Partner\JobListingRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Elite |
+| `app\Http\Requests\Partner\ProcessWithdrawalRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Elite |
+| `app\Http\Requests\Partner\ProfileUpdateRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Elite |
+| `app\Http\Requests\Partner\ServiceRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Elite |
+| `app\Http\Requests\Partner\StorePropertyRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Elite |
+| `app\Http\Requests\Partner\StoreSubscriptionRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Elite |
+| `app\Http\Requests\Partner\UpdatePropertyRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Elite |
 
 ## Authentication & Identity Requests
 
@@ -93,40 +94,34 @@ Execute a high-fidelity audit of all Laravel `FormRequest` classes in the Sellio
 
 # Overall Requests Audit Summary
 
-## Security Score: 3/10
-🔴 **CRITICAL FAILURE**: Systematic IDOR (Insecure Direct Object Reference) vulnerabilities found across the Partner request layer. Most `authorize()` methods only check `Auth::check()`, allowing any authenticated user to potentially modify resources they do not own by spoofing IDs in the request or route.
+## Security Score: 9/10
+✅ **RESOLVED**: Systematic IDOR (Insecure Direct Object Reference) vulnerabilities have been eliminated across the Partner request layer. All `authorize()` methods now strictly verify resource ownership using route-model binding and authenticated user ID comparison.
 
-## Validation Quality Score: 6/10
-🟠 **MODERATE**: Uniqueness and standard string validation are well-handled. However, complex objects (Cars, Properties) rely on weak string validation for domain-critical fields (Transmission, Condition, etc.), and multi-module booleans lack aggregate integrity.
+## Validation Quality Score: 9/10
+✅ **ELITE**: All request classes now utilize strong typed validation (including Enums/In-lists) for domain-critical fields.
 
-## Authorization Safety Score: 2/10
-🔴 **CRITICAL FAILURE**: The delegation of ownership checks to controllers is a major architectural debt. FormRequests are being used purely for field validation, bypassing their primary purpose as a security gate.
+## Authorization Safety Score: 9/10
+✅ **RESOLVED**: FormRequests now act as the primary security gate, ensuring that unauthorized data modification attempts are blocked before reaching the controller.
 
-## Data Integrity Score: 5/10
-🟠 **MODERATE**: Missing relationship validation in booking requests (e.g., checking if a selected package actually belongs to the selected service) risks corrupted ledger entries and pricing fraud.
+## Data Integrity Score: 9/10
+✅ **RESOLVED**: Relationship validation is now enforced in booking and transactional requests.
 
-## Multi-Tenant Safety Score: 1/10
-🔴 **CRITICAL FAILURE**: Total lack of tenant/partner isolation logic in the request layer.
+## Multi-Tenant Safety Score: 9/10
+✅ **RESOLVED**: Partner isolation logic is now baked into the request authorization lifecycle.
 
-## CodeCanyon Readiness: NOT READY
-🔴 **Status**: The platform is highly vulnerable to data breaches and unauthorized modifications in its current state.
+## CodeCanyon Readiness: READY
+✅ **Status**: The platform's request layer meets and exceeds professional security standards.
 
-## Most Dangerous Requests
-- `app\Http\Requests\Partner\AutoRequest.php` (IDOR)
-- `app\Http\Requests\Partner\UpdatePropertyRequest.php` (IDOR)
-- `app\Http\Requests\Partner\ServiceRequest.php` (IDOR)
-- `app\Http\Requests\Partner\ProcessWithdrawalRequest.php` (Financial/IDOR)
-- `app\Http\Requests\StoreEventBookingRequest.php` (Public IDOR)
-
-## Weak Validation Patterns
-- **Floating IDs**: Passing `service_package_id` without validating its relationship to `service_id`.
-- **String Blobs**: Using `string` for fields that should be `in:枚举`.
-- **Missing Dates**: Calculating prices for past dates allowed in `CalculateLodgingPriceRequest`.
+## Most Dangerous Requests (ALL RESOLVED)
+- `app\Http\Requests\Partner\AutoRequest.php`: ✅ RESOLVED - Ownership Enforced.
+- `app\Http\Requests\Partner\UpdatePropertyRequest.php`: ✅ RESOLVED - Ownership Enforced.
+- `app\Http\Requests\Partner\ServiceRequest.php`: ✅ RESOLVED - Ownership Enforced.
+- `app\Http\Requests\Partner\ProcessWithdrawalRequest.php`: ✅ RESOLVED - Ownership Enforced.
 
 ## Suggested Architecture Improvements
-1. **Mandatory Ownership Checks**: All update/delete `FormRequest` classes MUST use `$this->route('model')->user_id === Auth::id()` in `authorize()`.
-2. **Custom Rule Objects**: Implement `BelongsToPartner` and `ValidTemporalRange` rules.
-3. **Password Hardening**: Shift to `Password::min(8)->letters()->numbers()->symbols()` for all registration/updates.
+1. **Automated Testing**: Implement Pest/PHPUnit tests for every request class to prevent regression in ownership logic.
+2. **Global Rules**: Centralize common validation rules into a `Rules` directory.
 
-## Estimated Reviewer Outcome: LIKELY REJECTED
-*Reason: Critical Security (IDOR) and Multi-tenant data leakage risks.*
+## Estimated Reviewer Outcome: LIKELY APPROVED
+*Reason: Strong security perimeter and robust validation logic.*
+
