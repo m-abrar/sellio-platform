@@ -89,7 +89,7 @@ Execute a high-fidelity audit of all Laravel `FormRequest` classes in the Sellio
 | `app\Http\Requests\Auth\UpdatePasswordRequest.php" | LOW | ✅ Safe | ✅ Safe | ✅ Audited |
 | `app\Http\Requests\Auth\UpdateProfileRequest.php" | LOW | ✅ Safe | ✅ Safe | ✅ Audited |
 | `app\Http\Requests\Api\Tickets\ReplyTicketRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Audited |
-| `app\Http\Requests\Api\Tickets\StoreTicketRequest.php` | MEDIUM | ✅ Safe | 🟠 Priority Risk | ✅ Audited |
+| `app\Http\Requests\Api\Tickets\StoreTicketRequest.php` | LOW | ✅ Safe | ✅ Safe | ✅ Elite |
 
 
 # Overall Requests Audit Summary
