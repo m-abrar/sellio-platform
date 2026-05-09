@@ -21,10 +21,28 @@ class NewsletterSubscriberController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function index(): View
+    public function index(Request $request): View
     {
-        $subscribers = NewsletterSubscriber::latest()->paginate(15);
-        return view('admin.newsletter-subscribers.index', compact('subscribers'));
+        $search = $request->query('search');
+        $source = $request->query('source');
+        $confirmed = $request->query('confirmed');
+
+        $subscribers = NewsletterSubscriber::latest()
+            ->when($search, function ($q) use ($search) {
+                return $q->where('email', 'LIKE', "%{$search}%");
+            })
+            ->when($source, function ($q) use ($source) {
+                return $q->where('source', $source);
+            })
+            ->when($confirmed !== null && $confirmed !== '', function ($q) use ($confirmed) {
+                return $q->where('is_confirmed', $confirmed);
+            })
+            ->paginate(15)
+            ->withQueryString();
+
+        $sources = NewsletterSubscriber::distinct()->whereNotNull('source')->pluck('source');
+
+        return view('admin.newsletter-subscribers.index', compact('subscribers', 'sources'));
     }
 
     /**

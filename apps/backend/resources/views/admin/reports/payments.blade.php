@@ -14,7 +14,6 @@
 
 @section('plugins.Chartjs', true) 
 
-@stop
 
 @section('title', 'Payments | Admin')
 

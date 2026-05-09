@@ -45,16 +45,28 @@ class TicketController extends Controller
     public function index(Request $request): View
     {
         $status = $request->query('status', 'open');
+        $search = $request->query('search');
+        $priority = $request->query('priority');
         
         $tickets = Ticket::with('user')
             ->when($status !== 'all', function ($q) use ($status) {
                 return $q->where('status', $status);
             })
+            ->when($priority, function ($q) use ($priority) {
+                return $q->where('priority', $priority);
+            })
+            ->when($search, function ($q) use ($search) {
+                return $q->where(function($sq) use ($search) {
+                    $sq->where('title', 'LIKE', "%{$search}%")
+                       ->orWhere('description', 'LIKE', "%{$search}%")
+                       ->orWhere('id', $search);
+                });
+            })
             ->orderBy('created_at', 'desc')
             ->paginate(15)
             ->withQueryString();
 
-        return view('admin.tickets.index', compact('tickets', 'status'));
+        return view('admin.tickets.index', compact('tickets', 'status', 'priority', 'search'));
     }
 
     /**

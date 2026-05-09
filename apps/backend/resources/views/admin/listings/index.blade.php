@@ -232,33 +232,32 @@
                                     @endif
                                     <td class="align-middle">
                                         <div class="mb-1">
-                                            @php $status = $listing->getStatusMeta(); @endphp
-                                            <span class="badge badge-{{ $status['color'] }}-light px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1">
-                                                <i class="fas fa-{{ $status['icon'] }} mr-1"></i> {{ $status['label'] }}
+                                            @php $listingStatus = $listing->getStatusMeta(); @endphp
+                                            <span class="badge badge-{{ $listingStatus['color'] }}-light px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1">
+                                                <i class="fas fa-{{ $listingStatus['icon'] }} mr-1"></i> {{ $listingStatus['label'] }}
                                             </span>
                                         </div>
                                         <div class="smallest text-muted font-weight-bold uppercase letter-spacing-1">
-                                            <i class="far fa-clock mr-1 text-primary opacity-50"></i>{{ $listing->created_at->diffForHumans(null, true) }} ago
+                                            <i class="far fa-clock mr-1 text-primary opacity-50"></i>{{ $listing->created_at ? $listing->created_at->diffForHumans(null, true) . ' ago' : 'No Date' }}
                                         </div>
                                     </td>
                                     <td class="text-right align-middle pr-4">
                                         <div class="btn-group btn-group-premium">
                                             @php
-                                                $typeKey = strtolower($listing->listing_type);
-                                                $pluralMap = ['joblisting' => 'jobs'];
-                                                $vertical = $pluralMap[$typeKey] ?? \Illuminate\Support\Str::plural($typeKey);
-                                                $routePrefix = "admin." . $vertical;
+                                                $mType = (string)($listing->listing_type ?? class_basename($listing) ?? 'all');
+                                                $mId   = (int)($listing->id ?? (method_exists($listing, 'getKey') ? $listing->getKey() : 0));
+                                                $routeParams = ['listing_type' => trim(strtolower($mType)), 'listing_id' => $mId];
                                             @endphp
 
                                             @if (!$listing->approved_at)
-                                                <form action="{{ route($routePrefix . '.approve', $listing->id) }}" method="POST" class="d-inline">
+                                                <form action="{{ route('admin.listings.approve', $routeParams) }}" method="POST" class="d-inline">
                                                     @csrf
                                                     <button type="submit" class="btn text-success" data-toggle="tooltip" title="Approve Entry">
                                                         <i class="fas fa-check-double"></i>
                                                     </button>
                                                 </form>
                                             @else
-                                                <form action="{{ route($routePrefix . '.disapprove', $listing->id) }}" method="POST" class="d-inline">
+                                                <form action="{{ route('admin.listings.disapprove', $routeParams) }}" method="POST" class="d-inline">
                                                     @csrf
                                                     <button type="submit" class="btn text-warning" data-toggle="tooltip" title="Rollback Status">
                                                         <i class="fas fa-undo-alt"></i>
@@ -266,11 +265,11 @@
                                                 </form>
                                             @endif
 
-                                            <a href="{{ route($routePrefix . '.edit', $listing->id) }}" class="btn text-primary" data-toggle="tooltip" title="Modify Asset">
+                                            <a href="{{ route('admin.listings.edit', $routeParams) }}" class="btn text-primary" data-toggle="tooltip" title="Modify Asset">
                                                 <i class="fas fa-pencil-alt"></i>
                                             </a>
                                             
-                                            <form action="{{ route($routePrefix . '.destroy', $listing->id) }}" method="POST" class="d-inline">
+                                            <form action="{{ route('admin.listings.destroy', $routeParams) }}" method="POST" class="d-inline">
                                                 @csrf @method('DELETE')
                                                 <button type="submit" class="btn text-danger" data-toggle="tooltip" title="Purge Record" onclick="return confirm('Permanently delete asset?')">
                                                     <i class="fas fa-trash-alt"></i>
@@ -315,18 +314,12 @@
             $('#listings-table').DataTable({
                 "paging": false, 
                 "lengthChange": false,
-                "searching": true,
+                "searching": false,
                 "ordering": true,
                 "info": false,
                 "autoWidth": false,
-                "responsive": true,
-                "dom": '<"row pt-3"<"col-sm-12"f>>t',
-                "language": {
-                    "search": "",
-                    "searchPlaceholder": "Search within catalog..."
-                }
+                "responsive": true
             });
-            $('.dataTables_filter input').addClass('form-control form-control-premium shadow-none border-light mb-3');
         }
     });
 </script>

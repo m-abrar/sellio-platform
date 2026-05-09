@@ -111,15 +111,14 @@ Route::prefix('admin')
         /**
      * 2. LISTING & INVENTORY MANAGEMENT
      */
-        Route::controller(ListingController::class)->prefix('listings')->name('listings.')->group(function () {
-            Route::get('/{status?}', 'index')->name('index');
-            Route::get('/{type}/{id}', 'edit')->name('edit');
-            Route::get('/{type}/{id}/edit', 'editByType')->name('edit.type');
-            Route::delete('/{type}/{id}', 'destroy')->name('destroy');
-            Route::post('/{type}/{id}/approve', 'approve')->name('approve');
-            Route::post('/{type}/{id}/disapprove', 'disapprove')->name('disapprove');
-        }
-        );
+        Route::prefix('listings')->name('listings.')->group(function () {
+            Route::get('/{status?}', [ListingController::class, 'index'])->name('index');
+            Route::get('/{listing_type}/{listing_id}', [ListingController::class, 'edit'])->name('edit');
+            Route::get('/{listing_type}/{listing_id}/edit', [ListingController::class, 'edit'])->name('edit.type');
+            Route::delete('/{listing_type}/{listing_id}', [ListingController::class, 'destroy'])->name('destroy');
+            Route::post('/{listing_type}/{listing_id}/approve', [ListingController::class, 'approve'])->name('approve');
+            Route::post('/{listing_type}/{listing_id}/disapprove', [ListingController::class, 'disapprove'])->name('disapprove');
+        });
 
         // Dedicated Vertical List Pages
         Route::controller(\App\Http\Controllers\Admin\AutoController::class)->prefix('autos')->name('autos.')->group(function () {

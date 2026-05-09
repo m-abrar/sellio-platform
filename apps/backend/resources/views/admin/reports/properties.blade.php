@@ -24,6 +24,7 @@
                     <i class="fas fa-building mr-2 text-primary opacity-50"></i> {{ $reportTitle ?? 'Property Utilization Analytics' }}
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Monitor property availability, asset performance, and real-time occupancy metrics.</p>
+            </div>
             @include('admin.reports._header_actions', ['exportText' => 'Export Report'])
         </div>
     </div>

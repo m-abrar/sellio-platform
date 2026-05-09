@@ -43,6 +43,8 @@
 <div class="container-fluid">
     @include('admin.alert')
 
+    @include('admin.newsletter-subscribers._filter')
+
     {{-- Subscriber Management Card --}}
     <div class="card border-0 shadow-premium overflow-hidden rounded-24">
         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center justify-content-between">
@@ -146,7 +148,7 @@
                         Showing {{ $subscribers->firstItem() }}-{{ $subscribers->lastItem() }} of {{ $subscribers->total() }}
                     </span>
                     <div>
-                        {{ $subscribers->links('pagination::bootstrap-4') }}
+                        {{ $subscribers->appends(request()->except('page'))->links('pagination::bootstrap-4') }}
                     </div>
                 </div>
             </div>
@@ -170,12 +172,11 @@
             $('#subscribers-table').DataTable({
                 "paging": false,
                 "info": false,
-                "searching": true,
+                "searching": false,
                 "ordering": true,
                 "autoWidth": false,
                 "responsive": true,
-                "dom": '<"row pt-3"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-6"l>>' +
-                       '<"row"<"col-sm-12"tr>>',
+                "dom": 't',
                 "language": {
                     "search": "",
                     "searchPlaceholder": "Search records...",
@@ -185,8 +186,6 @@
                     }
                 }
             });
-            
-            $('.dataTables_filter input').addClass('form-control form-control-sm form-control-premium shadow-none border-light w-220-p');
         }
     });
 </script>

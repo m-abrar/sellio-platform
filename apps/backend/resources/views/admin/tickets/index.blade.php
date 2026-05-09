@@ -78,6 +78,8 @@
         </div>
     </div>
 
+    @include('admin.tickets._filter')
+
     <div class="card border-0 shadow-premium overflow-hidden rounded-24">
         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center justify-content-between">
             <h5 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">
@@ -273,12 +275,12 @@
                     $('#tickets-table').DataTable({
                         "paging": false, 
                         "lengthChange": false,
-                        "searching": true,
+                        "searching": false,
                         "ordering": true,
                         "info": false,
                         "autoWidth": false,
                         "responsive": true,
-                        "dom": '<"row pt-3"<"col-sm-12"f>>t',
+                        "dom": 't',
                         "language": {
                             "search": "",
                             "searchPlaceholder": "Search within this queue..."
@@ -287,7 +289,6 @@
                             { "orderable": false, "targets": 0 }
                         ]
                     });
-                    $('.dataTables_filter input').addClass('form-control form-control-premium shadow-none border-light mb-3 w-250-p');
                 } catch (e) {
                     console.warn("DataTable initialization failed:", e);
                 }

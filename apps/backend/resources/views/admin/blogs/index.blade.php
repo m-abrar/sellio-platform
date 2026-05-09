@@ -162,18 +162,11 @@
             $('#blogs-table').DataTable({
                 "paging": false,
                 "info": false,
-                "searching": true,
+                "searching": false,
                 "ordering": true,
                 "autoWidth": false,
-                "responsive": true,
-                "dom": '<"row pt-2"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-6"l>>t',
-                "language": {
-                    "search": "",
-                    "searchPlaceholder": "Search...",
-                    "lengthMenu": "_MENU_ per page"
-                }
+                "responsive": true
             });
-            $('.dataTables_filter input').addClass('form-control shadow-xs border w-max-250');
         }
     });
 </script>

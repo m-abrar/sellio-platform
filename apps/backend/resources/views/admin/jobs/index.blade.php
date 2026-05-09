@@ -172,18 +172,12 @@
             $('#jobs-table').DataTable({
                 "paging": false,
                 "lengthChange": false,
-                "searching": true,
+                "searching": false,
                 "ordering": true,
                 "info": false,
                 "autoWidth": false,
-                "responsive": true,
-                "dom": '<"row pt-3"<"col-sm-12"f>>t',
-                "language": {
-                    "search": "",
-                    "searchPlaceholder": "Search vacancy registry..."
-                }
+                "responsive": true
             });
-            $('.dataTables_filter input').addClass('form-control form-control-premium shadow-none border-light mb-3');
         }
     });
 </script>

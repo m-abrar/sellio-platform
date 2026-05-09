@@ -162,7 +162,7 @@
                                         <td class="align-middle">
                                             @if ($booking->user)
                                                 <div class="d-flex align-items-center">
-                                                    <div class="icon-circle bg-light border text-muted mr-3 shadow-xs icon-box-sm">
+                                                    <div class="icon-circle bg-light border text-muted mr-3 shadow-xs icon-box-sm d-flex align-items-center justify-content-center">
                                                         <i class="fas fa-user-circle"></i>
                                                     </div>
                                                     <div>
@@ -257,7 +257,7 @@
             $('#bookings-table').DataTable({
                 "paging": false,
                 "lengthChange": false,
-                "searching": true,
+                "searching": false,
                 "ordering": true,
                 "info": false,
                 "autoWidth": false,

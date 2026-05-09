@@ -43,37 +43,45 @@
     <div class="container-fluid">
         @include('admin.alert')
         {{-- Premium Filter Card --}}
-        <div class="card glass-card shadow-sm mb-4 border-0" style="border-radius: 20px;">
-            <div class="card-body py-3">
-                <form action="{{ route('admin.gallery.index') }}" method="GET" class="row align-items-end justify-content-center">
-                    <div class="col-auto">
-                        <label class="small text-muted font-weight-bold text-uppercase letter-spacing-1 mb-2">Media Source</label>
-                        <select name="source" class="form-control shadow-xs rounded-10" onchange="this.form.submit()">
-                            <option value="">All Storage Collections</option>
-                            @foreach($sources as $source)
-                                <option value="{{ $source }}" {{ request('source') == $source ? 'selected' : '' }}>
-                                    {{ $source }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-auto">
-                        <label class="small text-muted font-weight-bold text-uppercase letter-spacing-1 mb-2">Keyword Search</label>
-                        <div class="input-group shadow-xs">
-                            <input type="text" name="search" class="form-control rounded-l-10" placeholder="Filename search..." value="{{ request('search') }}">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary px-3 rounded-r-10" type="submit">
-                                    <i class="fas fa-search"></i>
-                                </button>
+        <div class="card registry-card-premium registry-filter-card select2-premium mb-4">
+            <div class="card-body">
+                <form action="{{ route('admin.gallery.index') }}" method="GET">
+                    <div class="row align-items-end">
+                        <div class="col-md-5">
+                            <label class="form-label-premium">Media Source</label>
+                            <div class="input-group input-group-premium">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-database text-xs text-primary"></i></span>
+                                </div>
+                                <select name="source" class="form-control select2">
+                                    <option value="">All Storage Collections</option>
+                                    @foreach($sources as $source)
+                                        <option value="{{ $source }}" {{ request('source') == $source ? 'selected' : '' }}>
+                                            {{ $source }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-auto d-flex align-items-end">
-                        @if(request()->anyFilled(['source', 'search']))
-                            <a href="{{ route('admin.gallery.index') }}" class="btn btn-link text-muted small font-weight-bold">
-                                <i class="fas fa-undo-alt mr-1"></i> RESET FILTERS
-                            </a>
-                        @endif
+                        <div class="col-md-5">
+                            <label class="form-label-premium">Keyword Search</label>
+                            <div class="input-group input-group-premium">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-search text-xs text-primary"></i></span>
+                                </div>
+                                <input type="text" name="search" class="form-control" placeholder="Filename search..." value="{{ request('search') }}">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="d-flex align-items-center justify-content-end" style="gap: 12px;">
+                                <button type="submit" class="btn-filter-premium flex-grow-1">
+                                    <i class="fas fa-sync-alt mr-2"></i> UPDATE
+                                </button>
+                                <a href="{{ route('admin.gallery.index') }}" class="btn-reset-premium" data-toggle="tooltip" title="Reset Filters">
+                                    <i class="fas fa-undo"></i>
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -217,9 +225,18 @@
     </div>
 @stop
 
+@section('plugins.Select2', true)
+
 @section('js')
 @include('admin._partials._sweetalert')
 <script>
+    $(function () {
+        if (typeof $.fn.select2 === 'function') {
+            $('.select2').select2({ theme: 'bootstrap4', width: '100%' });
+        }
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+
     function updateFileName(input) {
         const fileName = input.files[0] ? input.files[0].name : '';
         document.getElementById('fileNameDisplay').innerHTML = fileName ? '<i class="fas fa-check-circle mr-1"></i> Ready: ' + fileName : '';

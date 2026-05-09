@@ -249,6 +249,7 @@
 
 @section('css')
 <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <style>
     .fc-modern { border: none !important; }
     .fc .fc-toolbar-title { font-size: 1rem !important; font-weight: 800 !important; color: #1e293b !important; text-transform: uppercase; letter-spacing: 1px; }
@@ -258,13 +259,25 @@
     .fc .fc-daygrid-day-number { font-size: 0.75rem !important; color: #64748b !important; font-weight: 700 !important; padding: 8px !important; }
     .fc .fc-col-header-cell-cushion { font-size: 0.7rem !important; font-weight: 800 !important; text-transform: uppercase; letter-spacing: 1px; color: #94a3b8 !important; padding: 12px 0 !important; }
     .fc-event { border: 0 !important; border-radius: 4px !important; padding: 2px 4px !important; font-size: 0.7rem !important; font-weight: 700 !important; text-transform: uppercase; }
+    
+    /* Flatpickr Premium Overrides */
+    .flatpickr-calendar { border: 0 !important; shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important; border-radius: 12px !important; }
 </style>
 @stop
 
 @push('js')
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
     $(document).ready(function() {
+        // Initialize Flatpickr for Date Inputs
+        flatpickr("input[type=date]", {
+            altInput: true,
+            altFormat: "F j, Y",
+            dateFormat: "Y-m-d",
+            allowInput: true
+        });
+
         if (typeof $('.select2').select2 === 'function') {
             $('.select2').select2({
                 theme: 'bootstrap4',

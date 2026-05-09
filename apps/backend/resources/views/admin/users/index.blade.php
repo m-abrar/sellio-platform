@@ -178,9 +178,9 @@
                 "info": true,
                 "autoWidth": false,
                 "responsive": true,
-                "dom": '<"row pt-3"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-6"l>>' +
+                "dom": '<"row pt-3 px-4"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6 text-right"f>>' +
                        '<"row"<"col-sm-12"tr>>' +
-                       '<"row pb-3"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+                       '<"row pb-3 px-4"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
                 "language": {
                     "search": "",
                     "searchPlaceholder": "Search by name or email...",

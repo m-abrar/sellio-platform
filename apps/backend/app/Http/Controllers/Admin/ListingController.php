@@ -63,4 +63,94 @@ class ListingController extends Controller
 
         return view('admin.listings.index', compact('listings', 'status', 'type'));
     }
+
+    /**
+     * Approve a marketplace listing by vertical type and ID.
+     *
+     * @param  string  $type
+     * @param  int  $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function approve(string $listing_type, int $listing_id)
+    {
+        $listing = $this->listingService->resolveListing($listing_type, $listing_id);
+        
+        if (!$listing) {
+            return back()->with('error', __('Listing not found.'));
+        }
+
+        $listing->update([
+            'approved_at' => now(),
+            'is_published' => true,
+        ]);
+
+        return back()->with('success', __('Asset #:id approved and published.', ['id' => $listing_id]));
+    }
+
+    /**
+     * Disapprove a marketplace listing by vertical type and ID.
+     *
+     * @param  string  $listing_type
+     * @param  int  $listing_id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function disapprove(string $listing_type, int $listing_id)
+    {
+        $listing = $this->listingService->resolveListing($listing_type, $listing_id);
+        
+        if (!$listing) {
+            return back()->with('error', __('Listing not found.'));
+        }
+
+        $listing->update([
+            'approved_at' => null,
+            'is_published' => false,
+        ]);
+
+        return back()->with('success', __('Asset #:id moved to pending.', ['id' => $listing_id]));
+    }
+
+    /**
+     * Redirect to the concrete vertical's edit interface.
+     *
+     * @param  string  $listing_type
+     * @param  int  $listing_id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function edit(string $listing_type, int $listing_id)
+    {
+        $pluralMap = [
+            'joblisting' => 'jobs',
+            'property'   => 'properties',
+            'auto'       => 'autos',
+            'event'      => 'events',
+            'service'    => 'services',
+            'classified' => 'classifieds'
+        ];
+        
+        $modelKey = strtolower($listing_type);
+        $vertical = $pluralMap[$modelKey] ?? \Illuminate\Support\Str::plural($modelKey);
+        
+        return redirect()->route('admin.' . $vertical . '.edit', $listing_id);
+    }
+
+    /**
+     * Purge a marketplace listing by vertical type and ID.
+     *
+     * @param  string  $listing_type
+     * @param  int  $listing_id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function destroy(string $listing_type, int $listing_id)
+    {
+        $listing = $this->listingService->resolveListing($listing_type, $listing_id);
+        
+        if (!$listing) {
+            return back()->with('error', __('Listing not found.'));
+        }
+
+        $listing->delete();
+
+        return back()->with('success', __('Asset #:id purged from registry.', ['id' => $listing_id]));
+    }
 }

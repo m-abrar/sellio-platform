@@ -149,24 +149,18 @@
             $('#pages-table').DataTable({
                 "paging": true,
                 "lengthChange": false,
-                "searching": true,
+                "searching": false,
                 "ordering": true,
                 "info": true,
                 "autoWidth": false,
                 "responsive": true,
-                "dom": '<"row px-0 pt-3"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-6"l>>' +
-                       '<"row"<"col-sm-12"tr>>' +
-                       '<"row px-0 pb-3"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
                 "language": {
-                    "search": "",
-                    "searchPlaceholder": "Filter content...",
                     "paginate": {
                         "previous": "<i class='fas fa-angle-left'></i>",
                         "next": "<i class='fas fa-angle-right'></i>"
                     }
                 }
             });
-            $('.dataTables_filter input').addClass('form-control form-control-premium shadow-none border-light w-250-p');
         }
     });
 </script>

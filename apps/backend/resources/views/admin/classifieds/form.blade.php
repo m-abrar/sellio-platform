@@ -332,6 +332,27 @@
 
         slugInput.on('change', function() { $(this).data('edited', true); });
     });
+
+    function triggerDelete() {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "Permanently delete this classified listing?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#ef4444',
+            cancelButtonColor: '#64748b',
+            confirmButtonText: 'Yes, delete it!',
+            customClass: {
+                popup: 'rounded-xl',
+                confirmButton: 'rounded-pill px-4',
+                cancelButton: 'rounded-pill px-4'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('delete-form').submit();
+            }
+        })
+    }
 </script>
 @endpush
 
@@ -339,59 +360,8 @@
     <form id="delete-form" action="{{ route('admin.classifieds.destroy', $classified->id) }}" method="POST" class="d-none">
         @csrf @method('DELETE')
     </form>
-    
-    <script>
-        function triggerDelete() {
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "Permanently delete this classified listing?",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#ef4444',
-                cancelButtonColor: '#64748b',
-                confirmButtonText: 'Yes, delete it!',
-                customClass: {
-                    popup: 'rounded-xl',
-                    confirmButton: 'rounded-pill px-4',
-                    cancelButton: 'rounded-pill px-4'
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById('delete-form').submit();
-                }
-            })
-        }
-    </script>
 @endif
 
+@push('css')
 @include('admin._partials._toggle-card-css')
 @endpush
-
-@if($classified->exists)
-    <form id="delete-form" action="{{ route('admin.classifieds.destroy', $classified->id) }}" method="POST" class="d-none">
-        @csrf @method('DELETE')
-    </form>
-    
-    <script>
-        function triggerDelete() {
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "Permanently delete this classified listing?",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#ef4444',
-                cancelButtonColor: '#64748b',
-                confirmButtonText: 'Yes, delete it!',
-                customClass: {
-                    popup: 'rounded-xl',
-                    confirmButton: 'rounded-pill px-4',
-                    cancelButton: 'rounded-pill px-4'
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById('delete-form').submit();
-                }
-            })
-        }
-    </script>
-@endif

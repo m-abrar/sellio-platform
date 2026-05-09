@@ -445,6 +445,8 @@ class DashboardService
         $lastMonth = $today->copy()->subMonth();
         $prevMonth = $lastMonth->copy()->subMonth();
         $currentYear = $today->year;
+        $last180Days = $today->copy()->subDays(180);
+        $next180Days = $today->copy()->addDays(180);
 
         $totalEarned = Order::where('payment_status', 'paid')->sum('total_amount');
         $currentYearEarnings = Order::where('payment_status', 'paid')->whereYear('created_at', $currentYear)->sum('total_amount');
@@ -462,17 +464,22 @@ class DashboardService
         $growth = ($usersPrevMonth > 0) ? round((($usersLastMonth - $usersPrevMonth) / $usersPrevMonth) * 100) : 0;
 
         $recentOrders = Order::with('user')->orderByDesc('created_at')->limit(5)->get()->map(function($o) {
-            $map = ['pending' => 'warning', 'failed' => 'danger'];
-            $cls = $map[$o->payment_status] ?? 'success';
+            $map = ['pending' => 'warning', 'failed' => 'danger', 'paid' => 'success'];
+            $cls = $map[$o->payment_status] ?? 'info';
             return [
-                'title' => "Order #{$o->order_number} ({$o->payment_status})",
+                'title' => "Order #{$o->order_number} (" . ucfirst($o->payment_status) . ")",
                 'tag' => 'Order', 'icon_class' => "fa fa-shopping-cart text-{$cls}", 'tag_class' => "bg-{$cls}",
             ];
         });
 
-        $topSellers = OrderItem::select('product_id', 'product_name', DB::raw('SUM(quantity) as total'))
+        $topSellersData = OrderItem::select('product_id', 'product_name', DB::raw('SUM(quantity) as total'))
             ->groupBy('product_id', 'product_name')->orderByDesc('total')->limit(5)->get()
             ->map(fn($i, $idx) => ['rank' => '#' . ($idx + 1), 'title' => $i->product_name, 'bookings' => $i->total . ' Sales']);
+
+        $subscribers = NewsletterSubscriber::where('created_at', '>=', $lastMonth)->count();
+        $activeSubs = Subscription::where('status', 'active')->count();
+        $convRate = ($usersLastMonth > 0) ? round(($subscribers / $usersLastMonth) * 100) : 0;
+        $subPercent = ($totalUsers > 0) ? round(($activeSubs / $totalUsers) * 100) : 0;
 
         return [
             'system_kpis' => ['earnings' => '$' . number_format($totalEarned, 0), 'yoy_change' => ($yoy >= 0 ? '+' : '-') . abs($yoy) . '%'],
@@ -487,16 +494,20 @@ class DashboardService
                 'live_products' => number_format(Product::where('is_published', true)->count()),
                 'conversion_rate' => (User::count() > 0 ? round((Order::where('payment_status', 'paid')->count() / User::count()) * 100, 1) : 0) . '%',
             ],
-            'recent_bookings' => ['items' => $recentOrders],
-            'top_sales' => ['items' => $topSellers],
+            'recent_orders' => ['items' => $recentOrders],
+            'top_sellers' => ['items' => $topSellersData],
             'user_metrics' => [
                 'total_users' => number_format($totalUsers),
                 'users_growth_desc' => ($growth >= 0 ? '+' : '-') . abs($growth) . '% Growth (L30D)',
-                'newsletter_conversion' => ($usersLastMonth > 0) ? round((NewsletterSubscriber::where('created_at', '>=', $lastMonth)->count() / $usersLastMonth) * 100) : 0,
-                'subscriptions_percent' => ($totalUsers > 0) ? round((Subscription::where('status', 'active')->count() / $totalUsers) * 100) : 0,
+                'newsletter_conversion' => $convRate,
+                'newsletter_desc' => $convRate . '% Subscriber Conversion (L30D)',
+                'subscriptions_percent' => $subPercent,
+                'subscriptions_desc' => $subPercent . '% of Total Users are Active Subscribers',
             ],
             'js_data' => [
                 'revenue_chart' => $this->getMonthlyRevenueChart($currentYear),
+                'type_chart' => $this->getModuleDistributionChart(),
+                'calendar_events' => $this->getCalendarEvents($last180Days, $next180Days),
                 'heatmap_data' => $this->getHeatmapData()
             ]
         ];

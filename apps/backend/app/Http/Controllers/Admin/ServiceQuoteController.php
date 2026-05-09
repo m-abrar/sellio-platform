@@ -45,7 +45,7 @@ class ServiceQuoteController extends Controller
         $services   = Service::select('id', 'title', 'category_id')->with('category:id,title')->get();
         $categories = Category::where('is_service', true)->select('id', 'title')->get();
 
-        return view('admin.service-quotes.index', compact('serviceQuotes', 'services', 'categories', $status));
+        return view('admin.service-quotes.index', compact('serviceQuotes', 'services', 'categories', 'status'));
     }
 
     /**

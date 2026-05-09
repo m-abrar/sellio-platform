@@ -123,5 +123,3 @@
     @endif
 </div>
 @endsection
-
-@endsection

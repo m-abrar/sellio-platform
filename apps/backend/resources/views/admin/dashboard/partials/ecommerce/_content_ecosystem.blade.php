@@ -27,6 +27,7 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @if(isset($metrics['top_sellers']['items']))
                             @foreach($metrics['top_sellers']['items'] as $item)
                             <tr>
                                 <td class="pl-4 py-3">
@@ -43,6 +44,13 @@
                                 </td>
                             </tr>
                             @endforeach
+                            @else
+                            <tr>
+                                <td colspan="3" class="text-center py-4">
+                                    <p class="text-muted mb-0">No performance data available for the current period.</p>
+                                </td>
+                            </tr>
+                            @endif
                         </tbody>
                     </table>
                 </div>
