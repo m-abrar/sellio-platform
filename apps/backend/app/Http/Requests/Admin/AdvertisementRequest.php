@@ -41,4 +41,16 @@ class AdvertisementRequest extends FormRequest
             'status'         => ['nullable', 'boolean'],
         ];
     }
+
+    /**
+     * Handle the passed validation attempt.
+     */
+    protected function passedValidation(): void
+    {
+        $this->merge([
+            'status' => $this->boolean('status') 
+                ? \App\Models\Advertisement::STATUS_ACTIVE 
+                : \App\Models\Advertisement::STATUS_INACTIVE,
+        ]);
+    }
 }

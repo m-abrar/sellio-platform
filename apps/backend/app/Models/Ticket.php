@@ -20,9 +20,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  */
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 class Ticket extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     // --- Status Constants ---
     public const STATUS_OPEN     = 'open';

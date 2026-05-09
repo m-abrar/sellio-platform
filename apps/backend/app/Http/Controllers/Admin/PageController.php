@@ -44,22 +44,12 @@ class PageController extends Controller
     /**
      * Store a newly created CMS page and its layout associations.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\Admin\PageRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request): RedirectResponse
+    public function store(\App\Http\Requests\Admin\PageRequest $request): RedirectResponse
     {
-        $request->validate([
-            'title'     => 'required|string|max:255|unique:pages,title',
-            'slug'      => 'nullable|string|max:255|regex:/^[a-z0-9-]+$/',
-            'type'      => 'nullable|string|max:50',
-            'image'     => 'nullable|string|max:255',
-            'header_id' => 'nullable|exists:pages,id',
-            'footer_id' => 'nullable|exists:pages,id',
-            'status'    => 'required|in:active,inactive',
-        ]);
-
-        $page = Page::create($request->all());
+        $page = Page::create($request->validated());
 
         return redirect()->route('admin.pages.edit', $page->id)
             ->with('success', __('Page created successfully.'));
@@ -82,23 +72,13 @@ class PageController extends Controller
     /**
      * Update an existing CMS page configuration and its layout mapping.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\Admin\PageRequest  $request
      * @param  \App\Models\Page  $page
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, Page $page): RedirectResponse
+    public function update(\App\Http\Requests\Admin\PageRequest $request, Page $page): RedirectResponse
     {
-        $request->validate([
-            'title'     => 'required|string|max:255|unique:pages,title,' . $page->id,
-            'slug'      => 'nullable|string|max:255|regex:/^[a-z0-9-]+$/',
-            'type'      => 'nullable|string|max:50',
-            'image'     => 'nullable|string|max:255',
-            'header_id' => 'nullable|exists:pages,id',
-            'footer_id' => 'nullable|exists:pages,id',
-            'status'    => 'required|in:active,inactive',
-        ]);
-
-        $page->update($request->all());
+        $page->update($request->validated());
 
         return redirect()->route('admin.pages.index')
             ->with('success', __('Page updated successfully.'));

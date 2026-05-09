@@ -39,7 +39,7 @@ use App\Traits\Models\HasStatusModeration;
  */
 class Advertisement extends Model implements HasMedia
 {
-    use HasFactory, InteractsWithMedia, HasImageAccess, LogsActivity, HasStatusModeration;
+    use HasFactory, InteractsWithMedia, HasImageAccess, LogsActivity, HasStatusModeration, SoftDeletes;
 
     /**
      * Media collection constants for Spatie Media Library.

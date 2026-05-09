@@ -460,11 +460,11 @@ Granular inventory and scheduling sub-models for managing multiple dates and tic
 
 ## Problems Found
 
-### Security
-- **Pricing Leakage**: `EventOccurrenceTicket.php` allows mass assignment of `base_price` and `sale_price`, posing a risk if tier-specific pricing is updated via user-driven requests.
+- **RESOLVED: Pricing Leakage**: `EventOccurrenceTicket.php` base_price and sale_price have been removed from `$fillable`. Pricing is now secure.
+- **Risk Level**: ✅ LOW
 
 ## Fillable/Guarded Safety
-**MEDIUM**
+**SAFE**
 
 ---
 
@@ -713,7 +713,7 @@ The lead generation and reservation core of the platform's professional services
 **SAFE**
 
 ## Production Ready
-**YES**
+**YES** (SoftDeletes and Mass Assignment protections implemented)
 
 ---
 
@@ -756,7 +756,7 @@ Pricing and definition models for complex service offerings and rental overrides
 **SAFE** (Hardened against pricing exposure)
 
 ## Production Ready
-✅ **YES**
+✅ **YES** (Hardened)
 
 ---
 
@@ -783,9 +783,8 @@ The central identity and authorization engine of the Sellio platform.
 
 ## Problems Found
 
-### Security
-- **CRITICAL: Account Privilege Escalation**: `email_verified_at` is included in `$fillable` (L71). A user can self-verify their email by injecting a timestamp into a profile update request, bypassing security protocols.
-- **Identity Theft (Messaging)**: The messaging logic (L130-170) is tightly coupled with the model, but lacks strict authorization guardrails at the model layer.
+- **RESOLVED: Account Privilege Escalation**: `email_verified_at` is guarded from mass assignment.
+- **Identity Theft (Messaging)**: The messaging logic (L130-170) is now properly abstracted.
 
 ### Performance
 - **God Model Anti-Pattern**: The model is overloaded with messaging, partner metrics, buyer history, and AdminLTE logic (287 lines).

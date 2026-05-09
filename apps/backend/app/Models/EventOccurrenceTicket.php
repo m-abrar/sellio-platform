@@ -38,8 +38,6 @@ class EventOccurrenceTicket extends Model
         'event_occurrence_id',
         'event_ticket_type_id',
         'available_quantity',
-        'base_price',
-        'sale_price',
     ];
 
     /**

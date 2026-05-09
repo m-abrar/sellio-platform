@@ -21,7 +21,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
  */
 class ServiceQuote extends Model
 {
-    use HasBookingAttributes;
+    use HasBookingAttributes, SoftDeletes;
     use HasFactory, LogsActivity;
 
     // --- Status Constants ---
@@ -54,8 +54,6 @@ class ServiceQuote extends Model
         'scope_size',
         'details',        // The project requirements submitted by the user
         'requested_date',  // Desired start date for the service
-        'quoted_price',    // The estimate provided by the service provider
-        'status',          // e.g., 'pending', 'quoted', 'accepted', 'rejected'
         'viewed_at',       // Tracked for provider notification badges
     ];
     

@@ -67,18 +67,7 @@ class AdvertisementController extends Controller
      */
     public function store(AdvertisementRequest $request): RedirectResponse
     {
-        $validated = $request->validated();
-        
-        // Normalize targeting arrays
-        $validated['orientations'] = $request->input('orientations', []);
-        $validated['cities']       = $request->input('cities', []);
-        $validated['zipcodes']     = $request->input('zipcodes', []);
-        $validated['regions']      = $request->input('regions', []);
-
-        $advertisement = new Advertisement();
-        $advertisement->fill($validated);
-        $advertisement->status = $request->has('status') ? Advertisement::STATUS_ACTIVE : Advertisement::STATUS_INACTIVE;
-        $advertisement->save();
+        Advertisement::create($request->validated());
 
         return redirect()->route('admin.advertisements.index')
                          ->with('success', __('Advertisement created successfully.'));
@@ -93,17 +82,7 @@ class AdvertisementController extends Controller
      */
     public function update(AdvertisementRequest $request, Advertisement $advertisement): RedirectResponse
     {
-        $validated = $request->validated();
-        
-        // Normalize targeting arrays
-        $validated['orientations'] = $request->input('orientations', []);
-        $validated['cities']       = $request->input('cities', []);
-        $validated['zipcodes']     = $request->input('zipcodes', []);
-        $validated['regions']      = $request->input('regions', []);
-
-        $advertisement->fill($validated);
-        $advertisement->status = $request->has('status') ? Advertisement::STATUS_ACTIVE : Advertisement::STATUS_INACTIVE;
-        $advertisement->save();
+        $advertisement->update($request->validated());
 
         return redirect()->route('admin.advertisements.index')
                          ->with('success', __('Advertisement updated successfully.'));

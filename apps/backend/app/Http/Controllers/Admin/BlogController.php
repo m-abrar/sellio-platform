@@ -59,28 +59,17 @@ class BlogController extends Controller
     /**
      * Store a newly created blog post and manage its media and tag associations.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\Admin\BlogRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request): RedirectResponse
+    public function store(\App\Http\Requests\Admin\BlogRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'title'           => 'required|string|max:255',
-            'slug'            => 'nullable|string|max:255|unique:blogs,slug',
-            'category_id'     => 'required|exists:categories,id',
-            'content'         => 'required|string',
-            'subtitle'        => 'nullable|string|max:255',
-            'reading_time'    => 'nullable|integer',
-            'video'           => 'nullable|string',
-            'is_published'    => 'boolean',
-            'is_featured'     => 'boolean',
-            'allow_comments'  => 'boolean',
-            'featured_image'  => 'nullable|image|max:2048',
-        ]);
-
+        $validated = $request->validated();
         $validated['user_id'] = Auth::id();
-        $validated['slug'] = $validated['slug'] ?: Str::slug($validated['title']);
-        $validated['published_at'] = $request->boolean('is_published') ? now() : null;
+        
+        if ($request->boolean('is_published')) {
+            $validated['published_at'] = now();
+        }
 
         $blog = Blog::create($validated);
 
@@ -116,20 +105,13 @@ class BlogController extends Controller
     /**
      * Update an existing blog post and synchronize its relationships and media.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\Admin\BlogRequest  $request
      * @param  \App\Models\Blog  $blog
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, Blog $blog): RedirectResponse
+    public function update(\App\Http\Requests\Admin\BlogRequest $request, Blog $blog): RedirectResponse
     {
-        $validated = $request->validate([
-            'title'           => 'required|string|max:255',
-            'slug'            => 'required|string|max:255|unique:blogs,slug,' . $blog->id,
-            'category_id'     => 'required|exists:categories,id',
-            'content'         => 'required|string',
-            'is_published'    => 'boolean',
-            'featured_image'  => 'nullable|image|max:2048',
-        ]);
+        $validated = $request->validated();
         
         if ($request->boolean('is_published') && !$blog->is_published) {
             $validated['published_at'] = now();

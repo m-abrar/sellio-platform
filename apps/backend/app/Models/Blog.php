@@ -27,7 +27,7 @@ use App\Traits\Models\HasStatusModeration;
  */
 class Blog extends Model implements HasMedia
 {
-    use LogsActivity, HasAnalytics, HasFactory, InteractsWithMedia, HasImageAccess, HasStatusModeration;
+    use LogsActivity, HasAnalytics, HasFactory, InteractsWithMedia, HasImageAccess, HasStatusModeration, SoftDeletes;
 
     /**
      * Constants for Spatie media collections.
@@ -40,9 +40,9 @@ class Blog extends Model implements HasMedia
      */
     protected $fillable = [
         'user_id', 'category_id', 'title', 'slug', 'subtitle', 'content',
-        'reading_time', 'view_count', 'video', 
-        'is_published', 'is_featured', 'allow_comments',
-        'meta_title', 'meta_description', 'published_at'
+        'reading_time', 'video', 
+        'allow_comments',
+        'meta_title', 'meta_description'
     ];
 
     /**
@@ -110,7 +110,7 @@ class Blog extends Model implements HasMedia
                 $minutes = ceil($words / 200); // Average 200 words per minute
                 return $minutes . ' min read';
             }
-        );
+        )->shouldCache();
     }
 
     /** Returns a snippet of the content for index pages */
