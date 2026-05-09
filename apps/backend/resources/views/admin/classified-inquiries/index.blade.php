@@ -23,12 +23,12 @@
                     <i class="fas fa-bullhorn mr-2 text-primary opacity-50"></i>
                     {{ __('Classified Inquiries') }}
                 </h1>
-                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Monitor consumer engagement, ad inquiries, and marketplace lead generation performance.</p>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">{{ __('Monitor consumer engagement, ad inquiries, and marketplace lead generation performance.') }}</p>
             </div>
             <div class="col-sm-4 text-right">
                 <div class="d-flex justify-content-end align-items-center gap-12">
                     <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">
-                        <i class="fas fa-th-large"></i> Dashboard
+                        <i class="fas fa-th-large"></i> {{ __('Dashboard') }}
                     </a>
                 </div>
             </div>
@@ -46,10 +46,10 @@
         {{-- Main Table --}}
         <div class="card registry-table-card">
             <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
-                <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none letter-spacing-1">Marketplace Registry</h3>
+                <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none letter-spacing-1">{{ __('Marketplace Registry') }}</h3>
                 <div class="card-tools d-flex align-items-center ml-auto">
                     <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase mr-2">
-                        <i class="fas fa-bullhorn mr-1"></i> {{ $inquiries->total() }} INQUIRIES
+                        <i class="fas fa-bullhorn mr-1"></i> {{ $inquiries->total() }} {{ __('INQUIRIES') }}
                     </span>
                     <button type="button" class="btn btn-tool text-muted" data-card-widget="maximize">
                         <i class="fas fa-expand"></i>
@@ -61,12 +61,12 @@
                     <table id="inquiries-table" class="table table-hover table-premium mb-0">
                         <thead class="thead-light">
                             <tr>
-                                <th class="text-center pl-4 col-media-80">Asset</th>
-                                <th>Ad Intelligence</th>
-                                <th>Inquirer Principal</th>
-                                <th>Engagement Date</th>
-                                <th class="text-center">Lifecycle</th>
-                                <th class="text-right pr-4">Actions</th>
+                                <th class="text-center pl-4 col-media-80">{{ __('Asset') }}</th>
+                                <th>{{ __('Ad Intelligence') }}</th>
+                                <th>{{ __('Inquirer Principal') }}</th>
+                                <th>{{ __('Engagement Date') }}</th>
+                                <th class="text-center">{{ __('Lifecycle') }}</th>
+                                <th class="text-right pr-4">{{ __('Actions') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -89,8 +89,8 @@
                                         </div>
                                     </td>
                                     <td class="align-middle">
-                                        <span class="d-block font-weight-bold text-dark mb-0 smallest uppercase letter-spacing-1">{{ $inquiry->user->name ?? 'Guest Lead' }}</span>
-                                        <div class="smallest text-muted text-monospace">{{ $inquiry->user->email ?? 'no-email' }}</div>
+                                        <span class="d-block font-weight-bold text-dark mb-0 smallest uppercase letter-spacing-1">{{ $inquiry->user->name ?? __('Guest Lead') }}</span>
+                                        <div class="smallest text-muted text-monospace">{{ $inquiry->user->email ?? __('no-email') }}</div>
                                     </td>
                                     <td class="align-middle">
                                         <div class="font-weight-bold text-dark mb-0 smallest uppercase letter-spacing-1">
@@ -106,7 +106,7 @@
                                     @endphp
                                     <td class="text-center align-middle">
                                         <span class="badge {{ $statusClass }} px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 badge-min-90">
-                                            {{ $inquiry->status ?? 'Received' }}
+                                            {{ __($inquiry->status ?? 'Received') }}
                                         </span>
                                     </td>
                                     <td class="text-right align-middle pr-4">
@@ -119,8 +119,8 @@
                                     @include('admin._partials._empty-state', [
                                         'colspan' => 6,
                                         'icon' => 'fas fa-bullhorn',
-                                        'title' => 'No Inquiries Detected',
-                                        'description' => 'Consumer inquiries for marketplace ads will materialize here once synchronized with the community listings.',
+                                        'title' => __('No Inquiries Detected'),
+                                        'description' => __('Consumer inquiries for marketplace ads will materialize here once synchronized with the community listings.'),
                                     ])
                                 @endforelse
                         </tbody>
@@ -130,7 +130,7 @@
 
             @if(method_exists($inquiries, 'hasPages') && $inquiries->hasPages())
                 <div class="card-footer bg-white border-top py-4 px-4 d-flex justify-content-between align-items-center">
-                    <div class="text-muted smallest font-weight-bold uppercase letter-spacing-1">Displaying {{ $inquiries->firstItem() }} - {{ $inquiries->lastItem() }} of {{ $inquiries->total() }} records</div>
+                    <div class="text-muted smallest font-weight-bold uppercase letter-spacing-1">{{ __('Displaying') }} {{ $inquiries->firstItem() }} - {{ $inquiries->lastItem() }} {{ __('of') }} {{ $inquiries->total() }} {{ __('records') }}</div>
                     <div>{{ $inquiries->appends(request()->except('page'))->links('pagination::bootstrap-4') }}</div>
                 </div>
             @endif
@@ -159,7 +159,7 @@
                 "dom": 't',
                 "language": {
                     "search": "",
-                    "searchPlaceholder": "Search marketplace registry..."
+                    "searchPlaceholder": "{{ __('Search marketplace registry...') }}"
                 }
             });
         }

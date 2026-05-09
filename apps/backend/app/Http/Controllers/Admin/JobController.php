@@ -52,8 +52,11 @@ class JobController extends Controller
      */
     public function index(Request $request): View
     {
-        $categories = Category::where('is_job', 1)->get();
-        $locations = Location::where('is_job', 1)->get();
+        $categories = Category::active()->where('is_job', 1)->get();
+        if ($categories->isEmpty()) $categories = Category::active()->get();
+
+        $locations = Location::active()->where('is_job', 1)->get();
+        if ($locations->isEmpty()) $locations = Location::active()->get();
 
         $jobs = JobListing::query()
             ->with(['employer', 'category', 'location'])
@@ -75,8 +78,11 @@ class JobController extends Controller
     public function create(): View
     {
         $job = new JobListing();
-        $categories = Category::where('is_job', 1)->get();
-        $locations = Location::where('is_job', 1)->get();
+        $categories = Category::active()->where('is_job', 1)->get();
+        if ($categories->isEmpty()) $categories = Category::active()->get();
+
+        $locations = Location::active()->where('is_job', 1)->get();
+        if ($locations->isEmpty()) $locations = Location::active()->get();
         
         return view('admin.jobs.form', compact('job', 'categories', 'locations'));
     }
@@ -109,8 +115,11 @@ class JobController extends Controller
      */
     public function edit(JobListing $job): View
     {
-        $categories = Category::where('is_job', 1)->get();
-        $locations = Location::where('is_job', 1)->get();
+        $categories = Category::active()->where('is_job', 1)->get();
+        if ($categories->isEmpty()) $categories = Category::active()->get();
+
+        $locations = Location::active()->where('is_job', 1)->get();
+        if ($locations->isEmpty()) $locations = Location::active()->get();
         $applicationsCount = $job->applications()->count();
 
         return view('admin.jobs.form', compact('job', 'categories', 'locations', 'applicationsCount'));

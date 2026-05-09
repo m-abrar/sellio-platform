@@ -26,7 +26,7 @@
                 <div class="col-md-4">
                     <div class="d-flex align-items-center justify-content-end gap-12">
                         <button type="submit" class="btn-filter-premium flex-grow-1">
-                            <i class="fas fa-sync-alt mr-2"></i> REFRESH REGISTRY
+                            <i class="fas fa-sync-alt mr-2"></i> UPDATE
                         </button>
                         <a href="{{ route('admin.service-bookings.index') }}" class="btn-reset-premium" data-toggle="tooltip" title="Reset Filters">
                             <i class="fas fa-undo"></i>

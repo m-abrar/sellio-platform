@@ -14,7 +14,7 @@
 --}}
 @extends('adminlte::page')
 
-@section('title', 'Initialize New Manual Order')
+@section('title', __('Initialize New Manual Order'))
 
 @section('content_header')
     <div class="container-fluid pt-4">
@@ -22,15 +22,15 @@
             <div class="col-sm-8">
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-cart-plus mr-2 text-primary opacity-50"></i> 
-                    Initialize Order
+                    {{ __('Initialize Order') }}
                 </h1>
                 <p class="text-muted mt-2 small uppercase letter-spacing-1 mb-0">
-                    Manual transaction entry for offline or telephone sales protocols.
+                    {{ __('Manual transaction entry for offline or telephone sales protocols.') }}
                 </p>
             </div>
             <div class="col-sm-4 text-right">
                 <a href="{{ route('admin.product-orders.index') }}" class="btn btn-back shadow-sm">
-                    <i class="fas fa-arrow-left mr-1"></i> Back to Registry
+                    <i class="fas fa-arrow-left mr-1"></i> {{ __('Back to Registry') }}
                 </a>
             </div>
         </div>
@@ -49,13 +49,13 @@
                 {{-- Customer Identification --}}
                 <div class="card border-0 shadow-premium rounded-xl overflow-hidden mb-4">
                     <div class="card-header border-0 bg-white py-4 px-4">
-                        <h3 class="card-title-main">Customer Identification</h3>
+                        <h3 class="card-title-main">{{ __('Customer Identification') }}</h3>
                     </div>
                     <div class="card-body p-4 pt-0">
                         <div class="form-group mb-0">
-                            <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Select Registered User</label>
+                            <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">{{ __('Select Registered User') }}</label>
                             <select name="user_id" id="user_id" class="form-control select2" required>
-                                <option value="">-- SEARCH CUSTOMER DATABASE --</option>
+                                <option value="">-- {{ __('SEARCH CUSTOMER DATABASE') }} --</option>
                                 @foreach($users as $user)
                                     <option value="{{ $user->id }}" data-name="{{ $user->name }}" data-email="{{ $user->email }}">
                                         {{ $user->name }} ({{ $user->email }})
@@ -70,9 +70,9 @@
                 {{-- Item Manifest --}}
                 <div class="card border-0 shadow-premium rounded-xl overflow-hidden mb-4">
                     <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
-                        <h3 class="card-title-main">Item Manifest</h3>
+                        <h3 class="card-title-main">{{ __('Item Manifest') }}</h3>
                         <button type="button" class="btn btn-primary btn-sm rounded-pill px-3 ml-auto font-weight-bold smallest uppercase letter-spacing-1" onclick="addItemRow()">
-                            <i class="fas fa-plus mr-1"></i> Add Line Item
+                            <i class="fas fa-plus mr-1"></i> {{ __('Add Line Item') }}
                         </button>
                     </div>
                     <div class="card-body p-0">
@@ -80,10 +80,10 @@
                             <table class="table table-premium mb-0" id="itemsTable">
                                 <thead class="bg-light">
                                     <tr>
-                                        <th class="pl-4 uppercase smallest letter-spacing-1 font-weight-bold" style="width: 50%">Product Selection</th>
-                                        <th class="text-center uppercase smallest letter-spacing-1 font-weight-bold">Rate</th>
-                                        <th class="text-center uppercase smallest letter-spacing-1 font-weight-bold" style="width: 120px">Qty</th>
-                                        <th class="text-right pr-4 uppercase smallest letter-spacing-1 font-weight-bold">Subtotal</th>
+                                        <th class="pl-4 uppercase smallest letter-spacing-1 font-weight-bold" style="width: 50%">{{ __('Product Selection') }}</th>
+                                        <th class="text-center uppercase smallest letter-spacing-1 font-weight-bold">{{ __('Rate') }}</th>
+                                        <th class="text-center uppercase smallest letter-spacing-1 font-weight-bold" style="width: 120px">{{ __('Qty') }}</th>
+                                        <th class="text-right pr-4 uppercase smallest letter-spacing-1 font-weight-bold">{{ __('Subtotal') }}</th>
                                         <th style="width: 50px"></th>
                                     </tr>
                                 </thead>
@@ -91,7 +91,7 @@
                                     <tr class="item-row">
                                         <td class="pl-4 py-3 align-middle">
                                             <select name="items[0][product_id]" class="form-control select2 product-select" required onchange="updateRowPrice(this)">
-                                                <option value="">-- SELECT PRODUCT --</option>
+                                                <option value="">-- {{ __('SELECT PRODUCT') }} --</option>
                                                 @foreach($products as $product)
                                                     <option value="{{ $product->id }}" data-price="{{ $product->price }}" data-name="{{ $product->name }}">
                                                         {{ $product->name }} ({{ number_format($product->price, 2) }})
@@ -126,44 +126,44 @@
             <div class="col-md-4">
                 {{-- Order Summary --}}
                 <div class="card border-0 shadow-premium rounded-xl overflow-hidden mb-4">
-                    <div class="card-header border-0 bg-dark py-4 px-4">
-                        <h3 class="card-title-side text-white">Order Summary</h3>
+                    <div class="card-header border-0 bg-white py-4 px-4">
+                        <h3 class="card-title-side">{{ __('Order Summary') }}</h3>
                     </div>
                     <div class="card-body p-4">
                         <div class="d-flex justify-content-between mb-3">
-                            <span class="small font-weight-bold text-muted uppercase letter-spacing-1">Subtotal</span>
+                            <span class="small font-weight-bold text-muted uppercase letter-spacing-1">{{ __('Subtotal') }}</span>
                             <span class="small font-weight-bold text-dark" id="summarySubtotal">$0.00</span>
                             <input type="hidden" name="subtotal" id="inputSubtotal" value="0">
                         </div>
                         <div class="d-flex justify-content-between mb-3 align-items-center">
-                            <span class="small font-weight-bold text-muted uppercase letter-spacing-1">Logistics Rate</span>
+                            <span class="small font-weight-bold text-muted uppercase letter-spacing-1">{{ __('Logistics Rate') }}</span>
                             <div style="width: 120px;">
                                 <input type="number" name="shipping_cost" class="form-control form-control-premium text-right font-weight-bold" value="0" step="0.01" onchange="calculateTotals()">
                             </div>
                         </div>
                         <div class="d-flex justify-content-between mb-4 pb-4 border-bottom">
-                            <span class="small font-weight-bold text-muted uppercase letter-spacing-1">Tax Ledger (0%)</span>
+                            <span class="small font-weight-bold text-muted uppercase letter-spacing-1">{{ __('Tax Ledger (0%)') }}</span>
                             <span class="small font-weight-bold text-dark">$0.00</span>
                             <input type="hidden" name="tax_amount" value="0">
                         </div>
                         <div class="d-flex justify-content-between mb-4">
-                            <span class="small font-weight-bold text-dark uppercase letter-spacing-1">Grand Total</span>
+                            <span class="small font-weight-bold text-dark uppercase letter-spacing-1">{{ __('Grand Total') }}</span>
                             <span class="h5 font-weight-bold text-primary mb-0" id="summaryTotal">$0.00</span>
                             <input type="hidden" name="total_amount" id="inputTotal" value="0">
                         </div>
 
                         <div class="form-group mb-4">
-                            <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Transaction Status</label>
+                            <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">{{ __('Transaction Status') }}</label>
                             <select name="status" class="form-control form-control-premium select2" required>
-                                <option value="pending">PENDING</option>
-                                <option value="processing">PROCESSING</option>
-                                <option value="shipped">SHIPPED</option>
-                                <option value="delivered">DELIVERED</option>
+                                <option value="pending">{{ __('PENDING') }}</option>
+                                <option value="processing">{{ __('PROCESSING') }}</option>
+                                <option value="shipped">{{ __('SHIPPED') }}</option>
+                                <option value="delivered">{{ __('DELIVERED') }}</option>
                             </select>
                         </div>
 
                         <button type="submit" class="btn btn-submit-premium btn-block py-3">
-                            <i class="fas fa-check-double mr-2"></i> Authorize Order
+                            <i class="fas fa-check-double mr-2"></i> {{ __('Authorize Order') }}
                         </button>
                     </div>
                 </div>
@@ -171,34 +171,34 @@
                 {{-- Logistics Destination --}}
                 <div class="card border-0 shadow-premium rounded-xl overflow-hidden mb-4">
                     <div class="card-header border-0 bg-white py-4 px-4">
-                        <h3 class="card-title-side">Logistics Destination</h3>
+                        <h3 class="card-title-side">{{ __('Logistics Destination') }}</h3>
                     </div>
                     <div class="card-body p-4 pt-0">
                         <div class="form-group mb-4">
-                            <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Recipient Name</label>
-                            <input type="text" name="shipping_name" id="shipping_name" class="form-control form-control-premium" required placeholder="Full Identity">
+                            <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">{{ __('Recipient Name') }}</label>
+                            <input type="text" name="shipping_name" id="shipping_name" class="form-control form-control-premium" required placeholder="{{ __('Full Identity') }}">
                         </div>
                         <div class="form-group mb-4">
-                            <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Street Address</label>
-                            <textarea name="shipping_address" id="shipping_address" class="form-control" rows="3" required placeholder="Full shipping coordinates..." style="border-radius: 16px; border: 1px solid var(--border-light);"></textarea>
+                            <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">{{ __('Street Address') }}</label>
+                            <textarea name="shipping_address" id="shipping_address" class="form-control" rows="3" required placeholder="{{ __('Full shipping coordinates...') }}" style="border-radius: 16px; border: 1px solid var(--border-light);"></textarea>
                         </div>
                         <div class="row">
                             <div class="col-6">
                                 <div class="form-group mb-4">
-                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">City</label>
+                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">{{ __('City') }}</label>
                                     <input type="text" name="shipping_city" class="form-control form-control-premium" required>
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="form-group mb-4">
-                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Zip Code</label>
+                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">{{ __('Zip Code') }}</label>
                                     <input type="text" name="shipping_zip" class="form-control form-control-premium" required>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group mb-0">
-                            <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Internal Protocol Notes</label>
-                            <textarea name="notes" class="form-control" rows="2" placeholder="Administrative remarks..." style="border-radius: 16px; border: 1px solid var(--border-light);"></textarea>
+                            <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">{{ __('Internal Protocol Notes') }}</label>
+                            <textarea name="notes" class="form-control" rows="2" placeholder="{{ __('Administrative remarks...') }}" style="border-radius: 16px; border: 1px solid var(--border-light);"></textarea>
                         </div>
                     </div>
                 </div>
@@ -249,7 +249,7 @@
             <tr class="item-row">
                 <td class="pl-4 py-3 align-middle">
                     <select name="items[${rowId}][product_id]" class="form-control select2 product-select" required onchange="updateRowPrice(this)">
-                        <option value="">-- SELECT PRODUCT --</option>
+                        <option value="">-- {{ __('SELECT PRODUCT') }} --</option>
                         @foreach($products as $product)
                             <option value="{{ $product->id }}" data-price="{{ $product->price }}" data-name="{{ $product->name }}">
                                 {{ $product->name }} ({{ number_format($product->price, 2) }})

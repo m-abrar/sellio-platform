@@ -25,15 +25,15 @@
         <div class="row mb-4 align-items-center">
             <div class="col-sm-8">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-boxes mr-2 text-primary"></i> {{ $product->exists ? 'Modify Product' : 'New Product Listing' }}
+                    <i class="fas fa-boxes mr-2 text-primary opacity-50"></i> {{ $product->exists ? __('Modify Product') : __('Initialize Product') }}
                 </h1>
                 <p class="text-muted mt-2 small uppercase letter-spacing-1 mb-0">
-                    {{ $product->exists ? 'Update inventory details and retail pricing for this item.' : 'Define technical specifications and commercial attributes for a new listing.' }}
+                    {{ $product->exists ? __('Update inventory specifications, retail pricing, and logistical parameters.') : __('Define technical specifications, commercial attributes, and inventory intelligence.') }}
                 </p>
             </div>
             <div class="col-sm-4 text-right">
                 <a href="{{ route('admin.products.index') }}" class="btn btn-back shadow-sm">
-                    <i class="fas fa-arrow-left mr-1"></i> Back to Catalog
+                    <i class="fas fa-arrow-left mr-1"></i> {{ __('Back to Catalog') }}
                 </a>
             </div>
         </div>
@@ -53,7 +53,7 @@
 
         <div class="row">
             {{-- Main Content Column --}}
-            <div class="col-md-8">
+            <div class="col-md-9">
                 {{-- Section 1: General Information --}}
                 <div class="card border-0 shadow-premium rounded-xl overflow-hidden mb-4">
                     <div class="card-header border-0 bg-white py-4 px-4">
@@ -172,9 +172,9 @@
                 {{-- Section 3: Add-ons --}}
                 <div class="card border-0 shadow-premium rounded-xl overflow-hidden mb-4">
                     <div class="card-header border-0 bg-white py-4 px-4 d-flex justify-content-between align-items-center">
-                        <h3 class="card-title-main">Optional Extra Services</h3>
+                        <h3 class="card-title-main">{{ __('Optional Extra Services') }}</h3>
                         <button type="button" class="btn btn-primary rounded-pill px-3 font-weight-bold shadow-premium smallest uppercase letter-spacing-1" onclick="addAddonRow()">
-                            <i class="fas fa-plus-circle mr-1"></i> ADD NEW ADD-ON
+                            <i class="fas fa-plus-circle mr-1"></i> {{ __('ADD EXTRA SERVICE') }}
                         </button>
                     </div>
                     <div class="card-body p-4 pt-0">
@@ -268,7 +268,7 @@
             </div>
 
             {{-- Sidebar Column --}}
-            <div class="col-md-4">
+            <div class="col-md-3">
                 @include('admin._partials._form-actions', [
                     'model' => $product,
                     'title' => 'PRODUCT',

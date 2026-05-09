@@ -46,7 +46,8 @@ class ProductController extends Controller
      */
     public function index(Request $request): View
     {
-        $categories = Category::where('is_product', 1)->get();
+        $categories = Category::active()->where('is_product', 1)->get();
+        if ($categories->isEmpty()) $categories = Category::active()->get();
 
         $products = Product::query()
             ->when($request->query('title'), fn($q) => $q->where('title', 'like', '%' . $request->query('title') . '%'))
@@ -68,8 +69,11 @@ class ProductController extends Controller
      */
     public function create(): View
     {
-        $categories = Category::where('is_product', 1)->get();
-        $brands     = Brand::where('is_product', 1)->get();
+        $categories = Category::active()->where('is_product', 1)->get();
+        if ($categories->isEmpty()) $categories = Category::active()->get();
+
+        $brands = Brand::active()->where('is_product', 1)->get();
+        if ($brands->isEmpty()) $brands = Brand::active()->get();
         $tags       = Tag::all();
         $product    = new Product();
 
@@ -105,8 +109,11 @@ class ProductController extends Controller
     public function edit(Product $product): View
     {
         $product->load(['attributes', 'addons', 'tags']);
-        $categories = Category::where('is_product', 1)->get();
-        $brands     = Brand::where('is_product', 1)->get();
+        $categories = Category::active()->where('is_product', 1)->get();
+        if ($categories->isEmpty()) $categories = Category::active()->get();
+
+        $brands = Brand::active()->where('is_product', 1)->get();
+        if ($brands->isEmpty()) $brands = Brand::active()->get();
         $tags       = Tag::all();
 
         return view('admin.products.form', compact('product', 'categories', 'brands', 'tags'));

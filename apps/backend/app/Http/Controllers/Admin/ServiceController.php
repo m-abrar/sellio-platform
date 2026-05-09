@@ -53,8 +53,11 @@ class ServiceController extends Controller
      */
     public function index(Request $request): View
     {
-        $categories = Category::where('is_service', 1)->get();
-        $locations  = Location::where('is_service', 1)->get();
+        $categories = Category::active()->where('is_service', 1)->get();
+        if ($categories->isEmpty()) $categories = Category::active()->get();
+
+        $locations = Location::active()->where('is_service', 1)->get();
+        if ($locations->isEmpty()) $locations = Location::active()->get();
 
         $services = Service::query()
             ->with(['user', 'category', 'location'])
@@ -76,8 +79,11 @@ class ServiceController extends Controller
     public function create(): View
     {
         $service    = new Service();
-        $categories = Category::where('is_service', 1)->get();
-        $locations  = Location::where('is_service', 1)->get();
+        $categories = Category::active()->where('is_service', 1)->get();
+        if ($categories->isEmpty()) $categories = Category::active()->get();
+
+        $locations = Location::active()->where('is_service', 1)->get();
+        if ($locations->isEmpty()) $locations = Location::active()->get();
         
         return view('admin.services.form', compact('service', 'categories', 'locations'));
     }
@@ -110,8 +116,11 @@ class ServiceController extends Controller
      */
     public function edit(Service $service): View
     {
-        $categories   = Category::where('is_service', 1)->get();
-        $locations    = Location::where('is_service', 1)->get();
+        $categories   = Category::active()->where('is_service', 1)->get();
+        if ($categories->isEmpty()) $categories = Category::active()->get();
+
+        $locations    = Location::active()->where('is_service', 1)->get();
+        if ($locations->isEmpty()) $locations = Location::active()->get();
         $recentQuotes = ServiceQuote::where('service_id', $service->id)->latest()->take(5)->get();
 
         return view('admin.services.form', compact('service', 'categories', 'locations', 'recentQuotes'));

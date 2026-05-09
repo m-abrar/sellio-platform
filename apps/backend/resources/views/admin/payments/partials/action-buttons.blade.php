@@ -14,7 +14,7 @@
 <div class="card card-sidebar-premium mb-4">
     <div class="card-header border-0 d-flex align-items-center">
         <h5 class="card-title-side">
-            <i class="fas fa-cog mr-2 text-primary"></i> Lifecycle Management
+            <i class="fas fa-cog mr-2 text-primary"></i> {{ __('Lifecycle Management') }}
         </h5>
     </div>
 
@@ -22,7 +22,7 @@
         {{-- Primary Action --}}
         <div class="mb-4">
             <button form="payment-form" type="submit" class="btn btn-submit-premium btn-block font-weight-bold small uppercase letter-spacing-1 py-3 shadow-glow">
-                <i class="fas fa-save mr-2"></i> {{ $payment->exists ? 'Update Record' : 'Commit Transaction' }}
+                <i class="fas fa-save mr-2"></i> {{ $payment->exists ? __('Update Record') : __('Commit Transaction') }}
             </button>
         </div>
 
@@ -31,15 +31,15 @@
         <div class="row mb-4 px-2">
             <div class="col-6 px-1">
                 <a href="{{ route('admin.payments.index') }}" class="btn btn-light btn-block border shadow-sm py-2 small font-weight-bold uppercase letter-spacing-1 rounded-pill text-muted">
-                    <i class="fas fa-undo mr-1 text-warning"></i> Revert
+                    <i class="fas fa-undo mr-1 text-warning"></i> {{ __('Revert') }}
                 </a>
             </div>
             <div class="col-6 px-1">
                 <form id="delete-form-{{ $payment->id }}" action="{{ route('admin.payments.destroy', $payment->id) }}" method="POST">
                     @csrf @method('DELETE')
                     <button type="button" class="btn btn-light btn-block border shadow-sm py-2 small font-weight-bold uppercase letter-spacing-1 rounded-pill text-danger"
-                            onclick="confirmDelete('delete-form-{{ $payment->id }}', 'Void Transaction?', 'This will permanently remove this financial record from the ledger.', 'Confirm')">
-                        <i class="fas fa-trash-alt mr-1"></i> Void
+                            onclick="confirmDelete('delete-form-{{ $payment->id }}', '{{ __('Void Transaction?') }}', '{{ __('This will permanently remove this financial record from the ledger.') }}', '{{ __('Confirm') }}')">
+                        <i class="fas fa-trash-alt mr-1"></i> {{ __('Void') }}
                     </button>
                 </form>
             </div>
@@ -54,8 +54,8 @@
                     <i class="fas fa-layer-group text-primary small"></i>
                 </div>
                 <div>
-                    <div class="small text-muted font-weight-bold uppercase letter-spacing-1">Activity Volume</div>
-                    <div class="font-weight-bold text-dark h5 mb-0">{{ $payment->payable->payments->count() }} <span class="small text-muted">Records</span></div>
+                    <div class="small text-muted font-weight-bold uppercase letter-spacing-1">{{ __('Activity Volume') }}</div>
+                    <div class="font-weight-bold text-dark h5 mb-0">{{ $payment->payable->payments->count() }} <span class="small text-muted">{{ __('Records') }}</span></div>
                 </div>
             </div>
 
@@ -64,7 +64,7 @@
                     <i class="fas fa-money-bill-wave small"></i>
                 </div>
                 <div>
-                    <div class="small text-muted font-weight-bold uppercase letter-spacing-1">Aggregate Revenue</div>
+                    <div class="small text-muted font-weight-bold uppercase letter-spacing-1">{{ __('Aggregate Revenue') }}</div>
                     <div class="font-weight-bold text-dark h5 mb-0">{{ $payment->currency }} {{ number_format($payment->payable->payments->where('status', 'completed')->sum('amount'), 2) }}</div>
                 </div>
             </div>
@@ -75,11 +75,11 @@
         @if($payment->exists)
         <div class="mt-4 pt-4 border-top">
             <div class="d-flex justify-content-between mb-2">
-                <span class="small text-muted font-weight-bold uppercase letter-spacing-1">Origination</span>
+                <span class="small text-muted font-weight-bold uppercase letter-spacing-1">{{ __('Origination') }}</span>
                 <span class="small text-dark font-weight-bold uppercase letter-spacing-1">{{ $payment->created_at->format('d M Y') }}</span>
             </div>
             <div class="d-flex justify-content-between">
-                <span class="small text-muted font-weight-bold uppercase letter-spacing-1">Last Update</span>
+                <span class="small text-muted font-weight-bold uppercase letter-spacing-1">{{ __('Last Update') }}</span>
                 <span class="small text-dark font-weight-bold uppercase letter-spacing-1">{{ $payment->updated_at->diffForHumans() }}</span>
             </div>
         </div>

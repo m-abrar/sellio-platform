@@ -54,7 +54,7 @@
                 {{-- Booking Parameters --}}
                 <div class="card border-0 shadow-premium rounded-xl overflow-hidden mb-4">
                     <div class="card-header border-0 bg-white py-4 px-4">
-                        <h3 class="card-title-main">Booking Parameters</h3>
+                        <h3 class="card-title-main">{{ __('Booking Parameters') }}</h3>
                     </div>
                     <div class="card-body p-4 pt-0">
                         <div class="form-group mb-4">
@@ -67,9 +67,9 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group mb-4">
-                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Target Inventory Asset</label>
+                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">{{ __('Target Inventory Asset') }}</label>
                                     <select name="property_id" id="property_id" class="form-control select2" required>
-                                        <option value="">Select Asset</option>
+                                        <option value="">{{ __('Select Asset') }}</option>
                                         @foreach($properties as $property)
                                             <option value="{{ $property->id }}" {{ old('property_id', $booking->property_id) == $property->id ? 'selected' : '' }}>
                                                 {{ $property->title }}
@@ -81,9 +81,9 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group mb-4">
-                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Associated Principal</label>
+                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">{{ __('Associated Principal') }}</label>
                                     <select name="user_id" class="form-control select2">
-                                        <option value="">Guest / No Account</option>
+                                        <option value="">{{ __('Guest / No Account') }}</option>
                                         @foreach($users as $user)
                                             <option value="{{ $user->id }}" {{ old('user_id', $booking->user_id) == $user->id ? 'selected' : '' }}>
                                                 {{ $user->name }} ({{ $user->email }})
@@ -98,15 +98,15 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group mb-4">
-                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Electronic Contact</label>
+                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">{{ __('Electronic Contact') }}</label>
                                     <input type="email" name="email" class="form-control form-control-premium text-monospace" 
-                                           value="{{ old('email', $booking->email) }}" required placeholder="guest@example.com">
+                                           value="{{ old('email', $booking->email) }}" required placeholder="{{ __('guest@example.com') }}">
                                     @error('email') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group mb-4">
-                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Telephonic Contact</label>
+                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">{{ __('Telephonic Contact') }}</label>
                                     <input type="text" name="phone" class="form-control form-control-premium" 
                                            value="{{ old('phone', $booking->phone) }}" placeholder="+1 (555) 000-0000">
                                     @error('phone') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
@@ -117,7 +117,7 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group mb-4">
-                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Check-In Chronology</label>
+                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">{{ __('Check-In Chronology') }}</label>
                                     <input type="date" name="check_in_date" class="form-control form-control-premium font-weight-bold" 
                                            value="{{ old('check_in_date', $booking->exists ? $booking->check_in_date->format('Y-m-d') : '') }}" required>
                                     @error('check_in_date') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
@@ -125,7 +125,7 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group mb-4">
-                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Check-Out Chronology</label>
+                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">{{ __('Check-Out Chronology') }}</label>
                                     <input type="date" name="check_out_date" class="form-control form-control-premium font-weight-bold" 
                                            value="{{ old('check_out_date', $booking->exists ? $booking->check_out_date->format('Y-m-d') : '') }}" required>
                                     @error('check_out_date') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
@@ -133,7 +133,7 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group mb-4">
-                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Aggregate Guests</label>
+                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">{{ __('Aggregate Guests') }}</label>
                                     <input type="number" name="guests" min="1" class="form-control form-control-premium font-weight-bold text-center" 
                                            value="{{ old('guests', $booking->guests ?? 1) }}" required>
                                     @error('guests') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
@@ -144,11 +144,11 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group mb-4">
-                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Settlement Status</label>
+                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">{{ __('Settlement Status') }}</label>
                                     <select name="status" class="form-control form-control-premium" required>
                                         @foreach(['pending', 'confirmed', 'cancelled'] as $st)
                                             <option value="{{ $st }}" {{ old('status', $booking->status ?? 'pending') == $st ? 'selected' : '' }}>
-                                                {{ strtoupper($st) }}
+                                                {{ strtoupper(__($st)) }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -157,7 +157,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group mb-4">
-                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Aggregate Revenue</label>
+                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">{{ __('Aggregate Revenue') }}</label>
                                     <div class="input-group-premium">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">$</span>
@@ -171,9 +171,9 @@
                         </div>
 
                         <div class="form-group mb-0">
-                            <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Administrative Intel / Guest Requests</label>
+                            <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">{{ __('Administrative Intel / Guest Requests') }}</label>
                             <textarea name="message" class="form-control textarea-premium" rows="3"
-                                placeholder="Internal context or manual override rationale...">{{ old('message', $booking->message) }}</textarea>
+                                placeholder="{{ __('Internal context or manual override rationale...') }}">{{ old('message', $booking->message) }}</textarea>
                             @error('message') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
                         </div>
                     </div>
@@ -182,21 +182,21 @@
                 {{-- Availability Calendar --}}
                 <div class="card border-0 shadow-premium rounded-xl overflow-hidden">
                     <div class="card-header border-0 bg-white py-4 px-4">
-                        <h3 class="card-title-main">Availability Visualizer</h3>
+                        <h3 class="card-title-main">{{ __('Availability Visualizer') }}</h3>
                     </div>
                     <div class="card-body p-4 pt-0">
                         @if(isset($calendarEvents))
                             <div id="calendar" class="fc-modern"></div>
                             <div class="mt-4 d-flex flex-wrap" style="gap: 15px;">
-                                <div class="d-flex align-items-center"><span class="legend-dot" style="background-color: #fde68a; width: 12px; height: 12px; border-radius: 3px;"></span> <span class="small font-weight-bold text-muted uppercase ml-2 letter-spacing-1">Pending</span></div>
-                                <div class="d-flex align-items-center"><span class="legend-dot" style="background-color: #bbf7d0; width: 12px; height: 12px; border-radius: 3px;"></span> <span class="small font-weight-bold text-muted uppercase ml-2 letter-spacing-1">Confirmed</span></div>
-                                <div class="d-flex align-items-center"><span class="legend-dot" style="background-color: #fecaca; width: 12px; height: 12px; border-radius: 3px;"></span> <span class="small font-weight-bold text-muted uppercase ml-2 letter-spacing-1">Cancelled</span></div>
-                                <div class="d-flex align-items-center"><span class="legend-dot" style="background-color: #93c5fd; width: 12px; height: 12px; border-radius: 3px;"></span> <span class="small font-weight-bold text-muted uppercase ml-2 letter-spacing-1">Current Focus</span></div>
+                                <div class="d-flex align-items-center"><span class="legend-dot" style="background-color: #fde68a; width: 12px; height: 12px; border-radius: 3px;"></span> <span class="small font-weight-bold text-muted uppercase ml-2 letter-spacing-1">{{ __('Pending') }}</span></div>
+                                <div class="d-flex align-items-center"><span class="legend-dot" style="background-color: #bbf7d0; width: 12px; height: 12px; border-radius: 3px;"></span> <span class="small font-weight-bold text-muted uppercase ml-2 letter-spacing-1">{{ __('Confirmed') }}</span></div>
+                                <div class="d-flex align-items-center"><span class="legend-dot" style="background-color: #fecaca; width: 12px; height: 12px; border-radius: 3px;"></span> <span class="small font-weight-bold text-muted uppercase ml-2 letter-spacing-1">{{ __('Cancelled') }}</span></div>
+                                <div class="d-flex align-items-center"><span class="legend-dot" style="background-color: #93c5fd; width: 12px; height: 12px; border-radius: 3px;"></span> <span class="small font-weight-bold text-muted uppercase ml-2 letter-spacing-1">{{ __('Current Focus') }}</span></div>
                             </div>
                         @else
                             <div class="text-center py-5 bg-light rounded-xl border border-dashed border-light-soft">
                                 <i class="fas fa-calendar-day fa-3x text-muted mb-3 opacity-25"></i>
-                                <p class="text-muted small font-weight-bold uppercase letter-spacing-1 mb-0">Switch to inspection mode to visualize live occupancy</p>
+                                <p class="text-muted small font-weight-bold uppercase letter-spacing-1 mb-0">{{ __('Switch to inspection mode to visualize live occupancy') }}</p>
                             </div>
                         @endif
                     </div>
@@ -207,19 +207,19 @@
             <div class="col-md-4">
                 @include('admin._partials._form-actions', [
                     'model' => $booking,
-                    'title' => 'RESERVATION',
+                    'title' => __('RESERVATION'),
                     'back' => 'admin.property-bookings.index'
                 ])
 
                 {{-- Financial Integrity --}}
                 <div class="card border-0 shadow-premium mt-4 rounded-xl overflow-hidden">
                     <div class="card-header border-0 bg-white py-4 px-4">
-                        <h3 class="card-title-side">Financial Integrity</h3>
+                        <h3 class="card-title-side">{{ __('Financial Integrity') }}</h3>
                     </div>
                     <div class="card-body p-4 pt-0">
                         <div class="p-3 bg-light rounded-xl border border-light leading-relaxed">
                             <p class="small text-muted mb-0 font-italic">
-                                <i class="fas fa-info-circle mr-1 text-primary"></i> Manually creating a stay record will skip the payment gateway logic. Ensure you verify physical fund transfers before marking the status as <strong>CONFIRMED</strong>.
+                                <i class="fas fa-info-circle mr-1 text-primary"></i> {{ __('Manually creating a stay record will skip the payment gateway logic. Ensure you verify physical fund transfers before marking the status as') }} <strong>{{ __('CONFIRMED') }}</strong>.
                             </p>
                         </div>
                     </div>
@@ -228,16 +228,16 @@
                 {{-- Meta Information --}}
                 <div class="card border-0 shadow-premium mb-4 rounded-xl overflow-hidden mt-4">
                     <div class="card-header border-0 bg-white py-4 px-4">
-                        <h3 class="card-title-side">Audit Trail</h3>
+                        <h3 class="card-title-side">{{ __('Audit Trail') }}</h3>
                     </div>
                     <div class="card-body p-4 pt-0">
                         <div class="d-flex justify-content-between mb-2">
-                            <span class="small text-muted uppercase letter-spacing-1">Created At</span>
-                            <span class="small font-weight-bold">{{ $booking->created_at ? $booking->created_at->format('M d, Y') : 'Draft' }}</span>
+                            <span class="small text-muted uppercase letter-spacing-1">{{ __('Created At') }}</span>
+                            <span class="small font-weight-bold">{{ $booking->created_at ? $booking->created_at->format('M d, Y') : __('Draft') }}</span>
                         </div>
                         <div class="d-flex justify-content-between">
-                            <span class="small text-muted uppercase letter-spacing-1">Source</span>
-                            <span class="small font-weight-bold text-primary">Property Registry</span>
+                            <span class="small text-muted uppercase letter-spacing-1">{{ __('Source') }}</span>
+                            <span class="small font-weight-bold text-primary">{{ __('Property Registry') }}</span>
                         </div>
                     </div>
                 </div>

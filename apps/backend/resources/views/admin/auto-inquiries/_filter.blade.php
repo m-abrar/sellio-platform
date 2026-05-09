@@ -42,7 +42,7 @@
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="d-flex align-items-center justify-content-end" style="gap: 12px;">
+                    <div class="d-flex align-items-center justify-content-end gap-12">
                         <button type="submit" class="btn-filter-premium flex-grow-1">
                             <i class="fas fa-sync-alt mr-2"></i> UPDATE
                         </button>

@@ -44,7 +44,7 @@ class ListingController extends Controller
     {
         $listings = $this->listingService->getUnifiedListings($status, $type, 20);
 
-        // Optimization: Manually hydrate User relationships to circumvent N+1 limitations in Union queries.
+        // Optimization: Manually hydrate User and Location relationships to circumvent N+1 limitations in Union queries.
         $userIds = $listings->pluck('user_id')->unique()->filter();
         $locIds  = $listings->pluck('location_id')->unique()->filter();
 
@@ -56,7 +56,8 @@ class ListingController extends Controller
             
             if ($modelClass) {
                 // Rehydrate the generic database object into its concrete Eloquent model instance.
-                $instance = (new $modelClass)->newFromBuilder($listing);
+                $instance = (new $modelClass)->newFromBuilder((array)$listing);
+                $instance->exists = true;
                 $instance->setRelation('user', $users->get($listing->user_id));
                 $instance->setRelation('location', $locations->get($listing->location_id));
                 return $instance;
@@ -65,7 +66,7 @@ class ListingController extends Controller
             return $listing;
         });
 
-        return view('admin.listings.index', compact('listings', 'status', 'type'));
+        return view('admin.listings.index', compact('listings', 'status', 'type', 'locations'));
     }
 
     /**

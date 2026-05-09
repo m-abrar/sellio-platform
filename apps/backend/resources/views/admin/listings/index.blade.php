@@ -29,7 +29,10 @@
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">{{ __('Audit marketplace submissions, moderation statuses, and lifecycle states.') }}</p>
             </div>
-            <div class="col-sm-5 d-flex align-items-center justify-content-end">
+            <div class="col-sm-5 d-flex align-items-center justify-content-end gap-12">
+                <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">
+                    <i class="fas fa-th-large mr-2"></i> {{ __('Dashboard') }}
+                </a>
                 <div class="dropdown">
                     <button class="btn btn-primary btn-registry-add dropdown-toggle" type="button" id="addListingDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-plus-circle mr-1"></i> {{ __('ADD NEW ASSET') }}

@@ -63,7 +63,10 @@ class PropertyController extends Controller
     public function index(Request $request): View
     {
         $categories = Category::active()->forType('property')->get();
-        $locations  = Location::active()->forType('property')->get();
+        if ($categories->isEmpty()) $categories = Category::active()->get();
+
+        $locations = Location::active()->forType('property')->get();
+        if ($locations->isEmpty()) $locations = Location::active()->get();
 
         $properties = Property::query()
             ->when($request->query('name'), fn($q) => $q->where('title', 'like', '%' . $request->query('name') . '%'))
@@ -90,7 +93,10 @@ class PropertyController extends Controller
         $types      = Type::active()->forType('property')->get();
         $tags       = Tag::active()->forType('property')->get();
         $categories = Category::active()->forType('property')->get();
-        $locations  = Location::active()->forType('property')->get();
+        if ($categories->isEmpty()) $categories = Category::active()->get();
+
+        $locations = Location::active()->forType('property')->get();
+        if ($locations->isEmpty()) $locations = Location::active()->get();
         $property   = new Property();
 
         return view('admin.properties.form', compact('property', 'amenities', 'features', 'types', 'tags', 'categories', 'locations'));
@@ -132,7 +138,10 @@ class PropertyController extends Controller
         $tags       = Tag::active()->forType('property')->get();
         $types      = Type::active()->forType('property')->get();
         $categories = Category::active()->forType('property')->get();
-        $locations  = Location::active()->forType('property')->get();
+        if ($categories->isEmpty()) $categories = Category::active()->get();
+
+        $locations = Location::active()->forType('property')->get();
+        if ($locations->isEmpty()) $locations = Location::active()->get();
 
         $statusColors = ['confirmed' => '#ef4444', 'pending' => '#fde68a'];
         

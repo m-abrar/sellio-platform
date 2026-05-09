@@ -27,12 +27,12 @@
                     <i class="fas fa-file-signature mr-2 text-primary opacity-50"></i>
                     {{ __('Talent Acquisition') }}
                 </h1>
-                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Review candidate submissions, resume profiles, and hiring pipeline progress.</p>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">{{ __('Review candidate submissions, resume profiles, and hiring pipeline progress.') }}</p>
             </div>
             <div class="col-sm-4 text-right">
                 <div class="d-flex justify-content-end align-items-center gap-12">
                     <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">
-                        <i class="fas fa-th-large"></i> Dashboard
+                        <i class="fas fa-th-large"></i> {{ __('Dashboard') }}
                     </a>
                 </div>
             </div>
@@ -50,10 +50,10 @@
         {{-- Main Table --}}
         <div class="card registry-table-card">
             <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
-                <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none letter-spacing-1">Talent Registry</h3>
+                <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none letter-spacing-1">{{ __('Talent Registry') }}</h3>
                 <div class="card-tools d-flex align-items-center ml-auto">
                     <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase mr-2">
-                        <i class="fas fa-users mr-1"></i> {{ $applications->total() }} APPLICANTS
+                        <i class="fas fa-users mr-1"></i> {{ $applications->total() }} {{ __('APPLICANTS') }}
                     </span>
                     <button type="button" class="btn btn-tool text-muted" data-card-widget="maximize">
                         <i class="fas fa-expand"></i>
@@ -65,12 +65,12 @@
                     <table id="applications-table" class="table table-hover table-premium mb-0">
                         <thead class="thead-light">
                             <tr>
-                                <th class="text-center pl-4 col-media-80">Asset</th>
-                                <th>Listing Intelligence</th>
-                                <th>Candidate Principal</th>
-                                <th>Applied At</th>
-                                <th class="text-center">Pipeline</th>
-                                <th class="text-right pr-4">Actions</th>
+                                <th class="text-center pl-4 col-media-80">{{ __('Asset') }}</th>
+                                <th>{{ __('Listing Intelligence') }}</th>
+                                <th>{{ __('Candidate Principal') }}</th>
+                                <th>{{ __('Applied At') }}</th>
+                                <th class="text-center">{{ __('Pipeline') }}</th>
+                                <th class="text-right pr-4">{{ __('Actions') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -93,8 +93,8 @@
                                         </div>
                                     </td>
                                     <td class="align-middle">
-                                        <span class="d-block font-weight-bold text-dark mb-0 smallest uppercase letter-spacing-1">{{ $app->user->name ?? 'External Applicant' }}</span>
-                                        <div class="smallest text-muted text-monospace">{{ $app->user->email ?? 'no-email' }}</div>
+                                        <span class="d-block font-weight-bold text-dark mb-0 smallest uppercase letter-spacing-1">{{ $app->user->name ?? __('External Applicant') }}</span>
+                                        <div class="smallest text-muted text-monospace">{{ $app->user->email ?? __('no-email') }}</div>
                                     </td>
                                     <td class="align-middle">
                                         <div class="font-weight-bold text-dark mb-0 smallest uppercase letter-spacing-1">{{ $app->created_at->format('d M, Y') }}</div>
@@ -106,7 +106,7 @@
                                     @endphp
                                     <td class="text-center align-middle">
                                         <span class="badge {{ $statusClass }} px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 badge-min-90">
-                                            {{ $app->status ?? 'Submitted' }}
+                                            {{ __($app->status ?? 'Submitted') }}
                                         </span>
                                     </td>
                                     <td class="text-right align-middle pr-4">
@@ -124,8 +124,8 @@
                                     <td colspan="6" class="text-center py-5">
                                         <div class="py-4">
                                             <i class="fas fa-file-signature fa-4x text-muted opacity-25 mb-3 d-block"></i>
-                                            <h5 class="text-muted font-weight-bold">No Applications Detected</h5>
-                                            <p class="text-secondary small mb-0">Candidate submissions for your job listings will materialize here.</p>
+                                            <h5 class="text-muted font-weight-bold">{{ __('No Applications Detected') }}</h5>
+                                            <p class="text-secondary small mb-0">{{ __('Candidate submissions for your job listings will materialize here.') }}</p>
                                         </div>
                                     </td>
                                 </tr>
@@ -137,7 +137,7 @@
 
             @if(method_exists($applications, 'hasPages') && $applications->hasPages())
                 <div class="card-footer bg-white border-top py-4 px-4 d-flex justify-content-between align-items-center">
-                    <div class="text-muted smallest font-weight-bold uppercase letter-spacing-1">Displaying {{ $applications->firstItem() }} - {{ $applications->lastItem() }} of {{ $applications->total() }} records</div>
+                    <div class="text-muted smallest font-weight-bold uppercase letter-spacing-1">{{ __('Displaying') }} {{ $applications->firstItem() }} - {{ $applications->lastItem() }} {{ __('of') }} {{ $applications->total() }} {{ __('records') }}</div>
                     <div>{{ $applications->appends(request()->except('page'))->links('pagination::bootstrap-4') }}</div>
                 </div>
             @endif
@@ -167,7 +167,7 @@
                 "dom": 't',
                 "language": {
                     "search": "",
-                    "searchPlaceholder": "Search talent registry..."
+                    "searchPlaceholder": "{{ __('Search talent registry...') }}"
                 }
             });
         }

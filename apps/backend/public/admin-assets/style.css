@@ -149,6 +149,12 @@ h1, h2, h3, h4, h5, h6, .brand-text {
 @media (min-width: 992px) {
     .sidebar-mini:not(.sidebar-collapse) .main-header {
         left: 250px !important;
+        width: calc(100% - 250px) !important;
+    }
+
+    .sidebar-collapse .main-header {
+        left: 73px !important;
+        width: calc(100% - 73px) !important;
     }
     
     .sidebar-mini.sidebar-collapse .main-header {
@@ -400,6 +406,23 @@ h1, h2, h3, h4, h5, h6, .brand-text {
 
 .card-footer {
     border-radius: 0 0 var(--radius-xl) var(--radius-xl) !important;
+}
+
+.card-title-main {
+    font-size: 1.15rem !important;
+    font-weight: var(--weight-bold) !important;
+    color: var(--dark) !important;
+    margin-bottom: 0 !important;
+    letter-spacing: -0.3px !important;
+}
+
+.card-title-side {
+    font-size: 0.85rem !important;
+    font-weight: var(--weight-bold) !important;
+    text-transform: uppercase !important;
+    letter-spacing: var(--ls-1) !important;
+    color: var(--dark-muted) !important;
+    margin-bottom: 0 !important;
 }
 
 /* --- 6. FORM ELEMENTS --- */
@@ -1420,6 +1443,89 @@ body.dark-mode .form-control {
     box-shadow: var(--shadow-sm) !important;
 }
 
+/* --- 18. REGISTRY & DATA MANAGEMENT TOKENS --- */
+.registry-card-premium {
+    border-radius: var(--radius-xl) !important;
+    border: none !important;
+    box-shadow: var(--shadow-premium) !important;
+    background: #ffffff !important;
+}
+
+.registry-filter-card {
+    background: rgba(255, 255, 255, 0.7) !important;
+    backdrop-filter: blur(10px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    margin-bottom: 1.5rem !important;
+}
+
+.registry-table-card {
+    border-radius: var(--radius-xl) !important;
+    border: none !important;
+    box-shadow: var(--shadow-premium) !important;
+    overflow: hidden !important;
+}
+
+.btn-registry-add {
+    border-radius: var(--radius-pill) !important;
+    padding: 0.6rem 1.8rem !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1.2px !important;
+    font-size: var(--text-smallest) !important;
+    box-shadow: var(--shadow-glow) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+}
+
+.btn-filter-premium {
+    background: var(--primary) !important;
+    color: #ffffff !important;
+    border: none !important;
+    border-radius: var(--radius-md) !important;
+    padding: 0.75rem 1.5rem !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+    font-size: 0.7rem !important;
+    transition: all 0.3s ease !important;
+    box-shadow: var(--shadow-sm) !important;
+}
+
+.btn-filter-premium:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: var(--shadow-glow) !important;
+    filter: brightness(1.1) !important;
+}
+
+.btn-reset-premium {
+    background: #ffffff !important;
+    color: var(--dark-muted) !important;
+    border: 1px solid var(--border-color) !important;
+    width: 46px !important;
+    height: 46px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: var(--radius-md) !important;
+    transition: all 0.3s ease !important;
+}
+
+.btn-reset-premium:hover {
+    background: #f1f5f9 !important;
+    color: var(--primary) !important;
+    border-color: var(--primary) !important;
+}
+
+.form-label-premium {
+    font-size: var(--text-smallest) !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1.2px !important;
+    color: var(--dark-muted) !important;
+    margin-bottom: 0.75rem !important;
+    display: block !important;
+}
+
 .btn-submit-premium {
     background: var(--grad-primary) !important;
     color: #fff !important;
@@ -1434,6 +1540,22 @@ body.dark-mode .form-control {
     box-shadow: 0 12px 24px rgba(var(--primary-rgb), 0.3) !important;
     filter: brightness(1.1);
 }
+
+/* Soft Action Buttons */
+.btn-primary-soft { background-color: rgba(99, 102, 241, 0.1) !important; color: #6366f1 !important; border: 1px solid rgba(99, 102, 241, 0.1) !important; }
+.btn-primary-soft:hover { background-color: #6366f1 !important; color: #ffffff !important; }
+
+.btn-success-soft { background-color: rgba(16, 185, 129, 0.1) !important; color: #10b981 !important; border: 1px solid rgba(16, 185, 129, 0.1) !important; }
+.btn-success-soft:hover { background-color: #10b981 !important; color: #ffffff !important; }
+
+.btn-danger-soft { background-color: rgba(239, 68, 68, 0.1) !important; color: #ef4444 !important; border: 1px solid rgba(239, 68, 68, 0.1) !important; }
+.btn-danger-soft:hover { background-color: #ef4444 !important; color: #ffffff !important; }
+
+.btn-warning-soft { background-color: rgba(245, 158, 11, 0.1) !important; color: #f59e0b !important; border: 1px solid rgba(245, 158, 11, 0.1) !important; }
+.btn-warning-soft:hover { background-color: #f59e0b !important; color: #ffffff !important; }
+
+.btn-info-soft { background-color: rgba(6, 182, 212, 0.1) !important; color: #06b6d4 !important; border: 1px solid rgba(6, 182, 212, 0.1) !important; }
+.btn-info-soft:hover { background-color: #06b6d4 !important; color: #ffffff !important; }
 
 .table-img-preview {
     width: 54px;

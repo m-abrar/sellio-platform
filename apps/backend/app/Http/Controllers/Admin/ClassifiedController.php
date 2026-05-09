@@ -53,8 +53,11 @@ class ClassifiedController extends Controller
      */
     public function index(Request $request): View
     {
-        $categories = Category::where('is_classified', 1)->get();
-        $locations = Location::where('is_classified', 1)->get();
+        $categories = Category::active()->where('is_classified', 1)->get();
+        if ($categories->isEmpty()) $categories = Category::active()->get();
+
+        $locations = Location::active()->where('is_classified', 1)->get();
+        if ($locations->isEmpty()) $locations = Location::active()->get();
 
         $classifieds = Classified::query()
             ->with(['user', 'category', 'location'])
@@ -76,8 +79,11 @@ class ClassifiedController extends Controller
     public function create(): View
     {
         $classified = new Classified();
-        $categories = Category::where('is_classified', 1)->get();
-        $locations = Location::where('is_classified', 1)->get();
+        $categories = Category::active()->where('is_classified', 1)->get();
+        if ($categories->isEmpty()) $categories = Category::active()->get();
+
+        $locations = Location::active()->where('is_classified', 1)->get();
+        if ($locations->isEmpty()) $locations = Location::active()->get();
         
         return view('admin.classifieds.form', compact('classified', 'categories', 'locations'));
     }
@@ -110,8 +116,11 @@ class ClassifiedController extends Controller
      */
     public function edit(Classified $classified): View
     {
-        $categories = Category::where('is_classified', 1)->get();
-        $locations = Location::where('is_classified', 1)->get();
+        $categories = Category::active()->where('is_classified', 1)->get();
+        if ($categories->isEmpty()) $categories = Category::active()->get();
+
+        $locations = Location::active()->where('is_classified', 1)->get();
+        if ($locations->isEmpty()) $locations = Location::active()->get();
         
         $recentInquiries = ClassifiedInquiry::where('classified_id', $classified->id)->latest()->take(5)->get();
 

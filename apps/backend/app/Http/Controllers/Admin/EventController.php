@@ -53,8 +53,11 @@ class EventController extends Controller
      */
     public function index(Request $request): View
     {
-        $categories = Category::where('is_event', 1)->get();
-        $locations = Location::where('is_event', 1)->get();
+        $categories = Category::active()->where('is_event', 1)->get();
+        if ($categories->isEmpty()) $categories = Category::active()->get();
+
+        $locations = Location::active()->where('is_event', 1)->get();
+        if ($locations->isEmpty()) $locations = Location::active()->get();
 
         $events = Event::query()
             ->with(['user', 'category', 'location'])
@@ -76,8 +79,11 @@ class EventController extends Controller
     public function create(): View
     {
         $event = new Event();
-        $categories = Category::where('is_event', 1)->get();
-        $locations = Location::where('is_event', 1)->get();
+        $categories = Category::active()->where('is_event', 1)->get();
+        if ($categories->isEmpty()) $categories = Category::active()->get();
+
+        $locations = Location::active()->where('is_event', 1)->get();
+        if ($locations->isEmpty()) $locations = Location::active()->get();
         
         return view('admin.events.form', compact('event', 'categories', 'locations'));
     }
@@ -110,8 +116,11 @@ class EventController extends Controller
      */
     public function edit(Event $event): View
     {
-        $categories = Category::where('is_event', 1)->get();
-        $locations = Location::where('is_event', 1)->get();
+        $categories = Category::active()->where('is_event', 1)->get();
+        if ($categories->isEmpty()) $categories = Category::active()->get();
+
+        $locations = Location::active()->where('is_event', 1)->get();
+        if ($locations->isEmpty()) $locations = Location::active()->get();
         
         $recentBookings = EventBooking::where('event_id', $event->id)->with('user')->latest()->take(5)->get();
 

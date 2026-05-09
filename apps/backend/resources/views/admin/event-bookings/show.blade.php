@@ -28,7 +28,7 @@
             <div class="col-sm-6 text-right">
                 <div class="d-flex justify-content-end align-items-center" style="gap: 12px;">
                     <a href="{{ route('admin.event-bookings.index') }}" class="btn-back shadow-sm">
-                        <i class="fas fa-receipt mr-2"></i> Back to Ledger
+                        <i class="fas fa-receipt mr-2"></i> {{ __('RETURN TO REGISTRY') }}
                     </a>
                 </div>
             </div>
@@ -42,7 +42,7 @@
 
         <div class="row">
             {{-- Admission Specifications --}}
-            <div class="col-md-8">
+            <div class="col-md-9">
                 <div class="card card-premium shadow-premium border-0 overflow-hidden mb-4" style="border-radius: 24px;">
                     <div class="card-header border-0 bg-white py-4 px-4 d-flex justify-content-between align-items-center">
                         <h5 class="card-title font-weight-bold text-dark mb-0 text-uppercase letter-spacing-1">
@@ -156,7 +156,7 @@
             </div>
 
             {{-- Participant Profile --}}
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="card card-premium shadow-premium border-0 overflow-hidden mb-4 text-center" style="border-radius: 24px;">
                     <div class="card-header border-0 bg-white py-3 px-4 border-bottom">
                         <h5 class="card-title font-weight-bold text-dark smallest text-uppercase letter-spacing-1 mb-0">

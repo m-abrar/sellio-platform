@@ -15,7 +15,7 @@
 --}}
 @extends('adminlte::page')
 
-@section('title', ($booking->exists ? 'Modify' : 'Create') . ' Event Booking')
+@section('title', ($booking->exists ? __('Modify') : __('Create')) . ' ' . __('Event Booking'))
 
 @section('content_header')
     <div class="container-fluid pt-4">
@@ -23,15 +23,15 @@
             <div class="col-sm-8">
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-ticket-alt mr-2 text-primary opacity-50"></i> 
-                    {{ $booking->exists ? 'Update Booking: #' . $booking->id : 'New Event Registration' }}
+                    {{ $booking->exists ? __('Update Booking: #') . $booking->id : __('New Event Registration') }}
                 </h1>
                 <p class="text-muted mt-2 small uppercase letter-spacing-1 mb-0">
-                    {{ $booking->exists ? 'Managing guest attendance and ticket lifecycle.' : 'Manually logging a new event registration for a guest principal.' }}
+                    {{ $booking->exists ? __('Managing guest attendance and ticket lifecycle.') : __('Manually logging a new event registration for a guest principal.') }}
                 </p>
             </div>
             <div class="col-sm-4 text-right">
                 <a href="{{ route('admin.event-bookings.index') }}" class="btn btn-back shadow-sm">
-                    <i class="fas fa-arrow-left mr-1"></i> Back to Queue
+                    <i class="fas fa-arrow-left mr-1"></i> {{ __('Back to Queue') }}
                 </a>
             </div>
         </div>
@@ -54,44 +54,54 @@
                 {{-- Booking Information --}}
                 <div class="card border-0 shadow-premium rounded-xl overflow-hidden mb-4">
                     <div class="card-header border-0 bg-white py-4 px-4">
-                        <h3 class="card-title-main">Booking Parameters</h3>
+                        <h3 class="card-title-main">{{ __('Booking Parameters') }}</h3>
                     </div>
                     <div class="card-body p-4 pt-0">
                         <div class="form-group mb-4">
-                            <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Guest Full Identity <span class="text-danger">*</span></label>
+                            <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">{{ __('Guest Full Identity') }} <span class="text-danger">*</span></label>
                             <input type="text" name="full_name" class="form-control form-control-hero @error('full_name') is-invalid @enderror" 
-                                   value="{{ old('full_name', $booking->full_name) }}" required placeholder="e.g. John Doe">
+                                   value="{{ old('full_name', $booking->full_name) }}" required placeholder="{{ __('e.g. John Doe') }}">
                             @error('full_name') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
                         </div>
 
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group mb-4">
-                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Select Target Event</label>
-                                    <select name="event_id" id="event_id" class="form-control select2" required>
-                                        <option value="">-- Choose Event --</option>
-                                        @foreach($events as $event)
-                                            <option value="{{ $event->id }}" 
-                                                    data-price="{{ $event->price }}"
-                                                    {{ old('event_id', $booking->event_id) == $event->id ? 'selected' : '' }}>
-                                                {{ $event->title }} (${{ number_format($event->price, 2) }})
-                                            </option>
-                                        @endforeach
-                                    </select>
+                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">{{ __('Select Target Event') }}</label>
+                                    <div class="input-group-premium">
+                                        <div class="input-group-prepend border-0">
+                                            <span class="input-group-text"><i class="fas fa-ticket-alt"></i></span>
+                                        </div>
+                                        <select name="event_id" id="event_id" class="form-control select2" required>
+                                            <option value="">-- {{ __('Choose Event') }} --</option>
+                                            @foreach($events as $event)
+                                                <option value="{{ $event->id }}" 
+                                                        data-price="{{ $event->price }}"
+                                                        {{ old('event_id', $booking->event_id) == $event->id ? 'selected' : '' }}>
+                                                    {{ $event->title }} (${{ number_format($event->price, 2) }})
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                     @error('event_id') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group mb-4">
-                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Associated Principal</label>
-                                    <select name="user_id" class="form-control select2" required>
-                                        <option value="">Associate User</option>
-                                        @foreach($users as $user)
-                                            <option value="{{ $user->id }}" {{ old('user_id', $booking->user_id) == $user->id ? 'selected' : '' }}>
-                                                {{ $user->name }} ({{ $user->email }})
-                                            </option>
-                                        @endforeach
-                                    </select>
+                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">{{ __('Associated Principal') }}</label>
+                                    <div class="input-group-premium">
+                                        <div class="input-group-prepend border-0">
+                                            <span class="input-group-text"><i class="fas fa-user-tie"></i></span>
+                                        </div>
+                                        <select name="user_id" class="form-control select2" required>
+                                            <option value="">{{ __('Associate User') }}</option>
+                                            @foreach($users as $user)
+                                                <option value="{{ $user->id }}" {{ old('user_id', $booking->user_id) == $user->id ? 'selected' : '' }}>
+                                                    {{ $user->name }} ({{ $user->email }})
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                     @error('user_id') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
                                 </div>
                             </div>
@@ -100,17 +110,17 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group mb-4">
-                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Electronic Mail</label>
+                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">{{ __('Electronic Mail') }}</label>
                                     <input type="email" name="email" class="form-control form-control-premium text-monospace" 
-                                           value="{{ old('email', $booking->email) }}" required placeholder="guest@example.com">
+                                           value="{{ old('email', $booking->email) }}" required placeholder="{{ __('guest@example.com') }}">
                                     @error('email') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group mb-4">
-                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Telephonic Contact</label>
+                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">{{ __('Telephonic Contact') }}</label>
                                     <input type="text" name="phone" class="form-control form-control-premium" 
-                                           value="{{ old('phone', $booking->phone) }}" placeholder="+1 234 567 890">
+                                           value="{{ old('phone', $booking->phone) }}" placeholder="{{ __('+1 234 567 890') }}">
                                     @error('phone') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
                                 </div>
                             </div>
@@ -119,7 +129,7 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group mb-4">
-                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Ticket Quantity</label>
+                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">{{ __('Ticket Quantity') }}</label>
                                     <input type="number" name="quantity" id="quantity" min="1" class="form-control form-control-premium font-weight-bold" 
                                            value="{{ old('quantity', $booking->quantity ?? 1) }}" required>
                                     @error('quantity') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
@@ -127,13 +137,12 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group mb-4">
-                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Aggregate Revenue</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text bg-white border-right-0" style="border-radius: 12px 0 0 12px; border: 1px solid var(--border-light);">$</span>
+                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">{{ __('Aggregate Revenue') }}</label>
+                                    <div class="input-group-premium">
+                                        <div class="input-group-prepend border-0">
+                                            <span class="input-group-text font-weight-bold">{{ setting('currency_symbol', '$') }}</span>
                                         </div>
-                                        <input type="number" step="0.01" name="total_price" id="total_price" class="form-control form-control-premium border-left-0 font-weight-bold text-success" 
-                                               style="border-radius: 0 12px 12px 0;"
+                                        <input type="number" step="0.01" name="total_price" id="total_price" class="form-control font-weight-bold text-success" 
                                                value="{{ old('total_price', $booking->total_price ?? '0.00') }}" required readonly>
                                     </div>
                                     @error('total_price') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
@@ -141,11 +150,11 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group mb-4">
-                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Lifecycle Status</label>
+                                    <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">{{ __('Lifecycle Status') }}</label>
                                     <select name="status" class="form-control form-control-premium" required>
                                         @foreach(['pending', 'confirmed', 'cancelled'] as $st)
                                             <option value="{{ $st }}" {{ old('status', $booking->status ?? 'pending') == $st ? 'selected' : '' }}>
-                                                {{ strtoupper($st) }}
+                                                {{ __(strtoupper($st)) }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -155,10 +164,10 @@
                         </div>
 
                         <div class="form-group mb-0">
-                            <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Special Requirements / Notes</label>
+                            <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">{{ __('Special Requirements / Notes') }}</label>
                             <textarea name="notes" class="form-control" rows="4"
                                 style="border-radius: 16px; border: 1px solid var(--border-light);"
-                                placeholder="Guest requirements or administrative notes...">{{ old('notes', $booking->notes) }}</textarea>
+                                placeholder="{{ __('Guest requirements or administrative notes...') }}">{{ old('notes', $booking->notes) }}</textarea>
                             @error('notes') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
                         </div>
                     </div>
@@ -176,12 +185,12 @@
                 {{-- Revenue Integrity --}}
                 <div class="card border-0 shadow-premium mt-4 rounded-xl overflow-hidden">
                     <div class="card-header border-0 bg-white py-4 px-4">
-                        <h3 class="card-title-side">Revenue Integrity</h3>
+                        <h3 class="card-title-side">{{ __('Revenue Integrity') }}</h3>
                     </div>
                     <div class="card-body p-4 pt-0">
                         <div class="p-3 bg-light rounded-xl border border-light">
                             <p class="small text-muted mb-0 font-italic" style="line-height: 1.6;">
-                                <i class="fas fa-info-circle mr-1 text-primary"></i> Total price is calculated automatically based on the selected event's base rate and the aggregate ticket quantity. Manual overrides are not permitted in this registry module.
+                                <i class="fas fa-info-circle mr-1 text-primary"></i> {{ __('Total price is calculated automatically based on the selected event\'s base rate and the aggregate ticket quantity. Manual overrides are not permitted in this registry module.') }}
                             </p>
                         </div>
                     </div>
@@ -190,16 +199,16 @@
                 {{-- Meta Information --}}
                 <div class="card border-0 shadow-premium mb-4 rounded-xl overflow-hidden mt-4">
                     <div class="card-header border-0 bg-white py-4 px-4">
-                        <h3 class="card-title-side">Audit Trail</h3>
+                        <h3 class="card-title-side">{{ __('Audit Trail') }}</h3>
                     </div>
                     <div class="card-body p-4 pt-0">
                         <div class="d-flex justify-content-between mb-2">
-                            <span class="small text-muted uppercase letter-spacing-1">Created At</span>
-                            <span class="small font-weight-bold">{{ $booking->created_at ? $booking->created_at->format('M d, Y') : 'Draft' }}</span>
+                            <span class="small text-muted uppercase letter-spacing-1">{{ __('Created At') }}</span>
+                            <span class="small font-weight-bold">{{ $booking->created_at ? $booking->created_at->format('M d, Y') : __('Draft') }}</span>
                         </div>
                         <div class="d-flex justify-content-between">
-                            <span class="small text-muted uppercase letter-spacing-1">Type</span>
-                            <span class="small font-weight-bold text-primary">Event Ticketing</span>
+                            <span class="small text-muted uppercase letter-spacing-1">{{ __('Type') }}</span>
+                            <span class="small font-weight-bold text-primary">{{ __('Event Ticketing') }}</span>
                         </div>
                     </div>
                 </div>

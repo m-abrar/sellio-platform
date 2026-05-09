@@ -26,12 +26,12 @@
                     {{ $application->exists ? __('Update Application: #') . $application->id : __('New Career Submission') }}
                 </h1>
                 <p class="text-muted mt-2 small uppercase letter-spacing-1 mb-0">
-                    {{ $application->exists ? 'Managing candidate submission for career opportunities.' : 'Manually logging a new candidate application.' }}
+                    {{ $application->exists ? __('Managing candidate submission for career opportunities.') : __('Manually logging a new candidate application.') }}
                 </p>
             </div>
             <div class="col-sm-4 text-right">
                 <a href="{{ route('admin.job-applications.index') }}" class="btn btn-back shadow-sm">
-                    <i class="fas fa-arrow-left mr-1"></i> Back to Queue
+                    <i class="fas fa-arrow-left mr-1"></i> {{ __('Back to Queue') }}
                 </a>
             </div>
         </div>
@@ -54,7 +54,7 @@
                 {{-- Lead Information --}}
                 <div class="card border-0 shadow-premium rounded-xl overflow-hidden mb-4">
                     <div class="card-header border-0 bg-white py-4 px-4">
-                        <h3 class="card-title-main">Application Parameters</h3>
+                        <h3 class="card-title-main">{{ __('Application Parameters') }}</h3>
                     </div>
                     <div class="card-body p-4 pt-0">
                         <div class="row">
@@ -102,21 +102,21 @@
             <div class="col-md-4">
                 @include('admin._partials._form-actions', [
                     'model' => $application,
-                    'title' => 'APPLICATION',
+                    'title' => __('APPLICATION'),
                     'back' => 'admin.job-applications.index'
                 ])
 
                 {{-- Status Control --}}
                 <div class="card border-0 shadow-premium mb-4 rounded-xl overflow-hidden mt-4">
                     <div class="card-header border-0 bg-white py-4 px-4">
-                        <h3 class="card-title-side">Review Status</h3>
+                        <h3 class="card-title-side">{{ __('Review Status') }}</h3>
                     </div>
                     <div class="card-body p-4 pt-0">
                         <div class="form-group mb-3">
                             <select name="status" class="form-control form-control-premium @error('status') is-invalid @enderror" required>
                                 @foreach(['pending', 'reviewed', 'shortlisted', 'rejected', 'hired'] as $st)
                                     <option value="{{ $st }}" {{ old('status', $application->status ?? 'pending') == $st ? 'selected' : '' }}>
-                                        {{ strtoupper($st) }}
+                                        {{ strtoupper(__($st)) }}
                                     </option>
                                 @endforeach
                             </select>
@@ -124,7 +124,7 @@
                         </div>
                         <div class="p-3 bg-light rounded-xl border border-light">
                             <p class="smallest text-muted mb-0 font-italic">
-                                <i class="fas fa-info-circle mr-1"></i> Status updates are synchronized with the candidate's career portal.
+                                <i class="fas fa-info-circle mr-1"></i> {{ __('Status updates are synchronized with the candidate\'s career portal.') }}
                             </p>
                         </div>
                     </div>
@@ -133,16 +133,16 @@
                 {{-- Meta Information --}}
                 <div class="card border-0 shadow-premium mb-4 rounded-xl overflow-hidden">
                     <div class="card-header border-0 bg-white py-4 px-4">
-                        <h3 class="card-title-side">Audit Trail</h3>
+                        <h3 class="card-title-side">{{ __('Audit Trail') }}</h3>
                     </div>
                     <div class="card-body p-4 pt-0">
                         <div class="d-flex justify-content-between mb-2">
-                            <span class="small text-muted uppercase letter-spacing-1">Submitted At</span>
-                            <span class="small font-weight-bold">{{ $application->created_at ? $application->created_at->format('M d, Y') : 'Draft' }}</span>
+                            <span class="small text-muted uppercase letter-spacing-1">{{ __('Submitted At') }}</span>
+                            <span class="small font-weight-bold">{{ $application->created_at ? $application->created_at->format('M d, Y') : __('Draft') }}</span>
                         </div>
                         <div class="d-flex justify-content-between">
-                            <span class="small text-muted uppercase letter-spacing-1">Candidate</span>
-                            <span class="small font-weight-bold text-primary">Registered User</span>
+                            <span class="small text-muted uppercase letter-spacing-1">{{ __('Candidate') }}</span>
+                            <span class="small font-weight-bold text-primary">{{ __('Registered User') }}</span>
                         </div>
                     </div>
                 </div>
