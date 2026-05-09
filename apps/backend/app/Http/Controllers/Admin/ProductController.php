@@ -54,7 +54,7 @@ class ProductController extends Controller
             ->when($request->query('category_id'), fn($q) => $q->where('category_id', $request->query('category_id')))
             ->when($request->query('sku'), fn($q) => $q->where('sku', 'like', '%' . $request->query('sku') . '%'))
             ->when($request->query('status') !== null, fn($q) => $q->where('is_published', $request->query('status')))
-            ->with(['category', 'user', 'brand'])
+            ->with(['category', 'user', 'brand', 'media'])
             ->latest()
             ->paginate(15)
             ->withQueryString();
@@ -75,9 +75,10 @@ class ProductController extends Controller
         $brands = Brand::active()->where('is_product', 1)->get();
         if ($brands->isEmpty()) $brands = Brand::active()->get();
         $tags       = Tag::all();
+        $titleSuggestions = Product::select('title')->distinct()->limit(20)->pluck('title');
         $product    = new Product();
 
-        return view('admin.products.form', compact('product', 'categories', 'brands', 'tags'));
+        return view('admin.products.form', compact('product', 'categories', 'brands', 'tags', 'titleSuggestions'));
     }
 
     /**
@@ -115,8 +116,9 @@ class ProductController extends Controller
         $brands = Brand::active()->where('is_product', 1)->get();
         if ($brands->isEmpty()) $brands = Brand::active()->get();
         $tags       = Tag::all();
+        $titleSuggestions = Product::select('title')->distinct()->limit(20)->pluck('title');
 
-        return view('admin.products.form', compact('product', 'categories', 'brands', 'tags'));
+        return view('admin.products.form', compact('product', 'categories', 'brands', 'tags', 'titleSuggestions'));
     }
 
     /**

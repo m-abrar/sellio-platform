@@ -66,7 +66,7 @@
                                    placeholder="Enter property name/heading"
                                    value="{{ old('title', $property->title ?? '') }}" required list="property-title-suggestions">
                             <datalist id="property-title-suggestions">
-                                @foreach(\App\Models\Property::select('title')->distinct()->limit(20)->pluck('title') as $title)
+                                @foreach($titleSuggestions ?? [] as $title)
                                     <option value="{{ $title }}">
                                 @endforeach
                             </datalist>

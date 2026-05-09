@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->string('order_number')->unique(); // e.g., ORD-2026-0001
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('restrict');
             
             // Statuses - Modernized to string for flexibility
             $table->string('status')->default('pending')->index();

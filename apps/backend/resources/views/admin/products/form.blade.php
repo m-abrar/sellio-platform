@@ -64,7 +64,7 @@
                             <label for="title" class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Product Title <span class="text-danger">*</span></label>
                             <input type="text" name="title" id="title" class="form-control form-control-hero" placeholder="Enter product name" value="{{ old('title', $product->title ?? '') }}" required list="product-title-suggestions">
                             <datalist id="product-title-suggestions">
-                                @foreach(\App\Models\Product::select('title')->distinct()->limit(20)->pluck('title') as $title)
+                                @foreach($titleSuggestions ?? [] as $title)
                                     <option value="{{ $title }}">
                                 @endforeach
                             </datalist>

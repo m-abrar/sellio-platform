@@ -79,15 +79,14 @@ class OrderController extends Controller
 
         try {
             DB::transaction(function () use ($request) {
-                $order = new Order([
-                    'order_number'     => 'ORD-' . strtoupper(Str::random(10)),
-                    'payment_method'   => 'manual',
-                    'shipping_name'    => $request->shipping_name,
-                    'shipping_address' => $request->shipping_address,
-                    'shipping_city'    => $request->shipping_city,
-                    'shipping_zip'     => $request->shipping_zip,
-                    'notes'            => $request->notes,
-                ]);
+                $order = new Order();
+                $order->order_number     = 'ORD-' . strtoupper(Str::random(10));
+                $order->payment_method   = 'manual';
+                $order->shipping_name    = $request->shipping_name;
+                $order->shipping_address = $request->shipping_address;
+                $order->shipping_city    = $request->shipping_city;
+                $order->shipping_zip     = $request->shipping_zip;
+                $order->notes            = $request->notes;
 
                 $order->user_id = $request->user_id;
                 $order->status = $request->status;

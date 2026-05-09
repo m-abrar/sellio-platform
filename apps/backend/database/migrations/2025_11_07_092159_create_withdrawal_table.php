@@ -18,7 +18,7 @@ return new class extends Migration
     {
         Schema::create('withdrawals', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained()->onDelete('restrict');
             $table->decimal('amount', 15, 2);
             $table->string('method')->nullable(); // e.g., PayPal, Bank
             $table->string('details')->nullable(); // JSON or text for account info

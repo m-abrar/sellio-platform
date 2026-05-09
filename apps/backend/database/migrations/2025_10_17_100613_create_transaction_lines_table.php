@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             
             // 🔑 Mandatory link: Every line item belongs to a property
-            $table->foreignId('property_id')->constrained()->onDelete('cascade');
+            $table->foreignId('property_id')->constrained()->onDelete('restrict');
             
             // 🔑 Optional link: The line item may belong to a specific booking (Revenue/Booking Expense)
             // It is nullable for general property expenses (e.g., annual insurance)

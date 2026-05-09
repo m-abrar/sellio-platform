@@ -63,7 +63,7 @@
                                    placeholder="e.g. Featured, Hot Deal, New"
                                    value="{{ old('title', $tag->title ?? '') }}" required list="tag-title-suggestions">
                             <datalist id="tag-title-suggestions">
-                                @foreach(\App\Models\Tag::select('title')->distinct()->limit(20)->pluck('title') as $title)
+                                @foreach($titleSuggestions ?? [] as $title)
                                     <option value="{{ $title }}">
                                 @endforeach
                             </datalist>

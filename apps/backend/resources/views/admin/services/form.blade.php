@@ -63,7 +63,7 @@
                             <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Service Name <span class="text-danger">*</span></label>
                             <input type="text" name="title" id="title" class="form-control form-control-hero" value="{{ old('title', $service->title ?? '') }}" required list="service-title-suggestions" placeholder="e.g. Professional Interior Design">
                             <datalist id="service-title-suggestions">
-                                @foreach(\App\Models\Service::select('title')->distinct()->limit(20)->pluck('title') as $title)
+                                @foreach($titleSuggestions ?? [] as $title)
                                     <option value="{{ $title }}">
                                 @endforeach
                             </datalist>

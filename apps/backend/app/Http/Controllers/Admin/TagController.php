@@ -59,7 +59,9 @@ class TagController extends Controller
     public function create(): View
     {
         $tag = new Tag();
-        return view('admin.tags.form', compact('tag'));
+        $titleSuggestions = Tag::select('title')->distinct()->limit(20)->pluck('title');
+
+        return view('admin.tags.form', compact('tag', 'titleSuggestions'));
     }
 
     /**
@@ -84,7 +86,9 @@ class TagController extends Controller
      */
     public function edit(Tag $tag): View
     {
-        return view('admin.tags.form', compact('tag'));
+        $titleSuggestions = Tag::select('title')->distinct()->limit(20)->pluck('title');
+
+        return view('admin.tags.form', compact('tag', 'titleSuggestions'));
     }
 
     /**

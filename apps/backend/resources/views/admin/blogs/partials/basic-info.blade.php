@@ -25,7 +25,7 @@
             <input type="text" name="title" id="title" class="form-control form-control-hero @error('title') is-invalid @enderror" 
                    value="{{ old('title', $blog->title ?? '') }}" required placeholder="e.g., 10 Tips for Modern Living" list="blog-title-suggestions">
             <datalist id="blog-title-suggestions">
-                @foreach(\App\Models\Blog::select('title')->distinct()->limit(20)->pluck('title') as $title)
+                @foreach($titleSuggestions ?? [] as $title)
                     <option value="{{ $title }}">
                 @endforeach
             </datalist>

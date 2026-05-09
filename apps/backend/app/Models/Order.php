@@ -57,8 +57,6 @@ class Order extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'order_number',
-        'payment_method',
         'shipping_cost',
         'tax_amount',
         'discount_amount',

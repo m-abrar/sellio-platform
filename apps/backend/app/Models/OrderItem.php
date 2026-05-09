@@ -9,6 +9,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class OrderItem extends Model
 {
     use HasFactory;
+    
+    /**
+     * The relationships that should always be eager loaded.
+     */
+    protected $with = ['product'];
 
     protected $fillable = [
         'order_id',

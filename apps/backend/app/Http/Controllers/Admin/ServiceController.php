@@ -60,7 +60,7 @@ class ServiceController extends Controller
         if ($locations->isEmpty()) $locations = Location::active()->get();
 
         $services = Service::query()
-            ->with(['user', 'category', 'location'])
+            ->with(['user', 'category', 'location', 'media'])
             ->when($request->query('title'), fn($q) => $q->where('title', 'like', '%' . $request->query('title') . '%'))
             ->when($request->query('category_id'), fn($q) => $q->where('category_id', $request->query('category_id')))
             ->when($request->query('location_id'), fn($q) => $q->where('location_id', $request->query('location_id')))
@@ -85,7 +85,9 @@ class ServiceController extends Controller
         $locations = Location::active()->where('is_service', 1)->get();
         if ($locations->isEmpty()) $locations = Location::active()->get();
         
-        return view('admin.services.form', compact('service', 'categories', 'locations'));
+        $titleSuggestions = Service::select('title')->distinct()->limit(20)->pluck('title');
+        
+        return view('admin.services.form', compact('service', 'categories', 'locations', 'titleSuggestions'));
     }
 
     /**
@@ -122,8 +124,9 @@ class ServiceController extends Controller
         $locations    = Location::active()->where('is_service', 1)->get();
         if ($locations->isEmpty()) $locations = Location::active()->get();
         $recentQuotes = ServiceQuote::where('service_id', $service->id)->latest()->take(5)->get();
+        $titleSuggestions = Service::select('title')->distinct()->limit(20)->pluck('title');
 
-        return view('admin.services.form', compact('service', 'categories', 'locations', 'recentQuotes'));
+        return view('admin.services.form', compact('service', 'categories', 'locations', 'recentQuotes', 'titleSuggestions'));
     }
 
     /**

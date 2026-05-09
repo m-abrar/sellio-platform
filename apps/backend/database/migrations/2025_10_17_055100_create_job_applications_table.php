@@ -22,8 +22,8 @@ return new class extends Migration
             $table->id();
             
             // Foreign keys
-            $table->foreignId('job_listing_id')->constrained('joblistings')->onDelete('cascade');
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); // The applicant
+            $table->foreignId('job_listing_id')->constrained('joblistings')->onDelete('restrict');
+            $table->foreignId('user_id')->constrained('users')->onDelete('restrict'); // The applicant
 
             // Application details
             $table->string('status', 30)->default('pending')->index();

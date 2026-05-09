@@ -59,7 +59,9 @@ class TypeController extends Controller
     public function create(): View
     {
         $type = new Type();
-        return view('admin.types.form', compact('type'));
+        $titleSuggestions = Type::select('title')->distinct()->limit(20)->pluck('title');
+
+        return view('admin.types.form', compact('type', 'titleSuggestions'));
     }
 
     /**
@@ -84,7 +86,9 @@ class TypeController extends Controller
      */
     public function edit(Type $type): View
     {
-        return view('admin.types.form', compact('type'));
+        $titleSuggestions = Type::select('title')->distinct()->limit(20)->pluck('title');
+
+        return view('admin.types.form', compact('type', 'titleSuggestions'));
     }
 
     /**

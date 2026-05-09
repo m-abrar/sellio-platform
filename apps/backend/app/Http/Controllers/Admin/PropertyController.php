@@ -73,7 +73,7 @@ class PropertyController extends Controller
             ->when($request->query('location_id'), fn($q) => $q->where('location_id', $request->query('location_id')))
             ->when($request->query('category_id'), fn($q) => $q->where('category_id', $request->query('category_id')))
             ->when($request->query('only_active'), fn($q) => $q->where('is_published', 1))
-            ->with(['location', 'category', 'user'])
+            ->with(['location', 'category', 'user', 'media', 'type'])
             ->latest()
             ->paginate(15)
             ->withQueryString();
@@ -97,9 +97,11 @@ class PropertyController extends Controller
 
         $locations = Location::active()->forType('property')->get();
         if ($locations->isEmpty()) $locations = Location::active()->get();
+        
+        $titleSuggestions = Property::select('title')->distinct()->limit(20)->pluck('title');
         $property   = new Property();
 
-        return view('admin.properties.form', compact('property', 'amenities', 'features', 'types', 'tags', 'categories', 'locations'));
+        return view('admin.properties.form', compact('property', 'amenities', 'features', 'types', 'tags', 'categories', 'locations', 'titleSuggestions'));
     }
 
     /**
@@ -155,8 +157,9 @@ class PropertyController extends Controller
 
         $recentBookings = PropertyBooking::where('property_id', $property->id)->with('user')->latest()->take(5)->get();
         $recentVisits   = PropertyVisit::where('property_id', $property->id)->latest()->take(5)->get();
+        $titleSuggestions = Property::select('title')->distinct()->limit(20)->pluck('title');
 
-        return view('admin.properties.form', compact('property', 'bookings', 'amenities', 'features', 'tags', 'types', 'categories', 'locations', 'recentBookings', 'recentVisits'));
+        return view('admin.properties.form', compact('property', 'bookings', 'amenities', 'features', 'tags', 'types', 'categories', 'locations', 'recentBookings', 'recentVisits', 'titleSuggestions'));
     }
 
     /**

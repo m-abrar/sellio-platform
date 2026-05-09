@@ -51,8 +51,9 @@ class BlogController extends Controller
         $blog = new Blog();
         $categories = Category::where('is_blog', true)->get();
         $tags = Tag::where('is_blog', true)->get();
+        $titleSuggestions = Blog::select('title')->distinct()->limit(20)->pluck('title');
         
-        return view('admin.blogs.form', compact('blog', 'categories', 'tags'));
+        return view('admin.blogs.form', compact('blog', 'categories', 'tags', 'titleSuggestions'));
     }
 
     /**
@@ -107,8 +108,9 @@ class BlogController extends Controller
         $categories = Category::where('is_blog', true)->get();
         $tags = Tag::where('is_blog', true)->get();
         $selectedTags = $blog->tags->pluck('id')->toArray();
+        $titleSuggestions = Blog::select('title')->distinct()->limit(20)->pluck('title');
 
-        return view('admin.blogs.form', compact('blog', 'categories', 'tags', 'selectedTags'));
+        return view('admin.blogs.form', compact('blog', 'categories', 'tags', 'selectedTags', 'titleSuggestions'));
     }
 
     /**

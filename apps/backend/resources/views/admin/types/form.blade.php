@@ -62,7 +62,7 @@
                                    placeholder="e.g. Residential, Workshop, Full-Time"
                                    value="{{ old('title', $type?->title ?? '') }}" required list="type-title-suggestions">
                             <datalist id="type-title-suggestions">
-                                @foreach(\App\Models\Type::select('title')->distinct()->limit(20)->pluck('title') as $title)
+                                @foreach($titleSuggestions ?? [] as $title)
                                     <option value="{{ $title }}">
                                 @endforeach
                             </datalist>
