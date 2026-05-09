@@ -27,45 +27,49 @@ class BookingManagementService
      */
     public function getUnifiedBookings(string $status = 'all', string $type = 'all', int $perPage = 20): LengthAwarePaginator
     {
-        $query = null;
+        $cacheKey = "unified_bookings_{$status}_{$type}_{$perPage}_page_" . request('page', 1);
 
-        foreach (self::MODEL_MAP as $modelClass => $config) {
-            // Filter by item category/type if requested
-            if ($type !== 'all' && $config['relation'] !== $type) {
-                continue;
+        return cache()->remember($cacheKey, 60, function () use ($status, $type, $perPage) {
+            $query = null;
+            $cutoffDate = now()->subDays(90); // Only scan last 90 days for the unified feed by default
+
+            foreach (self::MODEL_MAP as $modelClass => $config) {
+                if ($type !== 'all' && $config['relation'] !== $type) {
+                    continue;
+                }
+
+                $subQuery = DB::table($config['table'])
+                    ->select(
+                        'id',
+                        'user_id',
+                        'status',
+                        'created_at',
+                        $config['foreign_key'] . " as item_id",
+                        DB::raw("'" . class_basename($modelClass) . "' as booking_type"),
+                        DB::raw("'" . $config['relation'] . "' as relation_name"),
+                        DB::raw("'" . $config['foreign_key'] . "' as actual_foreign_key")
+                    )
+                    ->where('created_at', '>=', $cutoffDate); // Performance: Limit scan range
+
+                if ($status !== 'all') {
+                    $subQuery->where('status', $status);
+                }
+
+                if (request('item_id')) {
+                    $subQuery->where($config['foreign_key'], request('item_id'));
+                }
+
+                $query = ($query === null) ? $subQuery : $query->unionAll($subQuery);
             }
 
-            $subQuery = DB::table($config['table'])
-                ->select(
-                    'id',
-                    'user_id',
-                    'status',
-                    'created_at',
-                    $config['foreign_key'] . " as item_id", // Uses 'job_listing_id' correctly now
-                    DB::raw("'" . class_basename($modelClass) . "' as booking_type"),
-                    DB::raw("'" . $config['relation'] . "' as relation_name"),
-                    DB::raw("'" . $config['foreign_key'] . "' as actual_foreign_key") // Pass this to hydration
-                );
-
-            if ($status !== 'all') {
-                $subQuery->where('status', $status);
+            if ($query === null) {
+                return new LengthAwarePaginator([], 0, $perPage);
             }
 
-            if (request('item_id')) {
-                $subQuery->where($config['foreign_key'], request('item_id'));
-            }
+            $results = $query->orderByDesc('created_at')->paginate($perPage);
 
-            $query = ($query === null) ? $subQuery : $query->unionAll($subQuery);
-        }
-
-        // Handle case where query is completely empty because no model matched the type filter
-        if ($query === null) {
-            return new LengthAwarePaginator([], 0, $perPage);
-        }
-
-        $results = $query->orderByDesc('created_at')->paginate($perPage);
-
-        return $this->hydrateBookings($results);
+            return $this->hydrateBookings($results);
+        });
     }
 
 

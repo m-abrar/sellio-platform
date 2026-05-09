@@ -69,12 +69,29 @@ class Setting extends Model
     }
 
     /**
-     * Helper to retrieve multiple settings at once.
+     * Sanitize values to prevent XSS, allowing raw scripts only for specific keys.
      */
-    public static function getAllGrouped(): array
+    protected function value(): \Illuminate\Database\Eloquent\Casts\Attribute
     {
-        return Cache::rememberForever('settings_all', function () {
-            return self::pluck('value', 'key')->all();
-        });
+        return \Illuminate\Database\Eloquent\Casts\Attribute::make(
+            set: function ($value, $attributes) {
+                $key = $attributes['key'] ?? '';
+                
+                // Whitelist of keys allowed to contain raw scripts/HTML
+                $allowedRawKeys = [
+                    'google_analytics',
+                    'custom_head_code',
+                    'custom_footer_code',
+                    'google_map_api_key'
+                ];
+
+                if (in_array($key, $allowedRawKeys)) {
+                    return $value;
+                }
+
+                // Strictly strip all tags for everything else
+                return strip_tags($value);
+            }
+        );
     }
 }

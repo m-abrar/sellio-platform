@@ -4,9 +4,10 @@ namespace App\Notifications;
 
 use App\Models\Property;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
 
-class NewPropertySubmitted extends Notification
+class NewPropertySubmitted extends Notification implements ShouldQueue
 {
     use Queueable;
 

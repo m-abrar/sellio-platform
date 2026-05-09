@@ -20,24 +20,33 @@ class WalletService
     {
         $amountInCents = intval(round($data['amount'] * 100));
 
-        if (!$partner->canWithdraw($amountInCents)) {
+        if ($amountInCents <= 0) {
             throw ValidationException::withMessages([
-                'amount' => 'Insufficient funds. Your current available balance is less than the amount requested.',
+                'amount' => 'Withdrawal amount must be greater than zero.',
             ]);
         }
 
         try {
             DB::beginTransaction();
 
+            // Lock the user record for update to prevent concurrent balance checks/deductions
+            $lockedUser = User::where('id', $partner->id)->lockForUpdate()->first();
+
+            if (!$lockedUser->canWithdraw($amountInCents)) {
+                throw ValidationException::withMessages([
+                    'amount' => 'Insufficient funds. Your current available balance is less than the amount requested.',
+                ]);
+            }
+
             $withdrawal = Withdrawal::create([
-                'user_id' => $partner->id,
-                'amount' => $amountInCents,
-                'method' => $data['method'] ?? 'Bank Transfer',
+                'user_id' => $lockedUser->id,
+                'amount'  => $amountInCents,
+                'method'  => $data['method'] ?? 'Bank Transfer',
                 'details' => json_encode($data['details'] ?? ['account' => '...']),
-                'status' => 'pending', 
+                'status'  => 'pending', 
             ]);
 
-            $partner->withdraw($amountInCents, [
+            $lockedUser->withdraw($amountInCents, [
                 'type' => 'withdrawal_request',
                 'description' => 'Pending withdrawal request #' . $withdrawal->id,
                 'withdrawal_id' => $withdrawal->id,
@@ -45,6 +54,9 @@ class WalletService
 
             DB::commit();
 
+        } catch (ValidationException $e) {
+            DB::rollBack();
+            throw $e;
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Wallet Withdrawal Error: ' . $e->getMessage(), ['user_id' => $partner->id]);

@@ -218,6 +218,10 @@ Route::middleware(['built_in_website'])->group(function () {
     Route::post('/reviews/{type}/{id}', [ReviewController::class, 'store'])->name('reviews.store')->whereNumber('id');
     Route::get('/conversation/{user:username}', [ConversationController::class, 'start'])->name('conversation.start');
 
+    // Newsletter
+    Route::post('/newsletter/subscribe', [\App\Http\Controllers\NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
+    Route::get('/newsletter/confirm/{token}', [\App\Http\Controllers\NewsletterController::class, 'confirm'])->name('newsletter.confirm');
+
     // Demo & Support
     Route::get('/landing-page/{group}/{type}', [HomeController::class, 'landing'])->name('landing.page');
     Route::get('/#', [HomeController::class, 'index'])->name('#');

@@ -38,6 +38,7 @@ class NewsletterSubscriber extends Model
     protected $fillable = [
         'email',
         'is_confirmed',
+        'confirmation_token',
         'source',
     ];
 

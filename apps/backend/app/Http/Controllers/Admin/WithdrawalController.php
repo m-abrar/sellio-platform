@@ -85,32 +85,39 @@ class WithdrawalController extends Controller
      */
     public function approve(Withdrawal $withdrawal): RedirectResponse
     {
-        if ($withdrawal->status !== 'pending') {
-            return back()->with('error', __('The withdrawal request is already :status.', ['status' => $withdrawal->status]));
-        }
-
-        // Verify that the initial wallet reservation exists
-        $initialTransaction = $withdrawal->user->transactions()
-            ->where('type', 'withdraw')
-            ->whereJsonContains('meta', ['withdrawal_id' => $withdrawal->id])
-            ->first();
-
-        if (!$initialTransaction) {
-            Log::warning("Potential Reconciliation Risk: Missing wallet reservation for withdrawal ID: {$withdrawal->id} during approval.");
-        }
-
         try {
-            DB::transaction(function () use ($withdrawal) {
-                $withdrawal->update([
-                    'status'      => 'approved',
-                    'approved_at' => now(),
-                    'admin_note'  => 'Approved and scheduled for bank transfer.', 
-                ]);
-            });
+            DB::beginTransaction();
+
+            // Lock the withdrawal record for update
+            $lockedWithdrawal = Withdrawal::where('id', $withdrawal->id)->lockForUpdate()->first();
+
+            if ($lockedWithdrawal->status !== 'pending') {
+                DB::rollBack();
+                return back()->with('error', __('The withdrawal request is already :status.', ['status' => $lockedWithdrawal->status]));
+            }
+
+            // Verify that the initial wallet reservation exists
+            $initialTransaction = $lockedWithdrawal->user->transactions()
+                ->where('type', 'withdraw')
+                ->whereJsonContains('meta', ['withdrawal_id' => $lockedWithdrawal->id])
+                ->first();
+
+            if (!$initialTransaction) {
+                Log::warning("Potential Reconciliation Risk: Missing wallet reservation for withdrawal ID: {$lockedWithdrawal->id} during approval.");
+            }
+
+            $lockedWithdrawal->update([
+                'status'      => 'approved',
+                'approved_at' => now(),
+                'admin_note'  => 'Approved and scheduled for bank transfer.', 
+            ]);
+
+            DB::commit();
             
             return back()->with('success', __('Withdrawal approved successfully. Reservation finalized for payout.'));
 
         } catch (\Exception $e) {
+            DB::rollBack();
             Log::error("Withdrawal Approval Failure: {$e->getMessage()}", ['id' => $withdrawal->id]);
             return back()->with('error', __('Approval failed due to a database error.'));
         }
@@ -129,37 +136,43 @@ class WithdrawalController extends Controller
             'admin_note' => 'required|string|max:255',
         ]);
         
-        if ($withdrawal->status !== 'pending') {
-            return back()->with('error', __('The withdrawal request is already :status.', ['status' => $withdrawal->status]));
-        }
-
-        $initialTransaction = $withdrawal->user->transactions()
-            ->where('type', 'withdraw')
-            ->whereJsonContains('meta', ['withdrawal_id' => $withdrawal->id])
-            ->first();
-
         try {
-            DB::transaction(function () use ($withdrawal, $request, $initialTransaction) {
+            DB::beginTransaction();
 
-                // Orchestrate Wallet Refund
-                if ($initialTransaction) {
-                    $withdrawal->user->deposit($withdrawal->amount, [
-                        'type'           => 'withdrawal_refund',
-                        'description'    => "Withdrawal Request #{$withdrawal->id} Rejected/Refunded",
-                        'reversal_of_id' => $initialTransaction->id,
-                    ]);
-                }
+            // Lock the withdrawal record for update
+            $lockedWithdrawal = Withdrawal::where('id', $withdrawal->id)->lockForUpdate()->first();
 
-                $withdrawal->update([
-                    'status'      => 'rejected',
-                    'admin_note'  => $request->input('admin_note'),
-                    'rejected_at' => now(),
+            if ($lockedWithdrawal->status !== 'pending') {
+                DB::rollBack();
+                return back()->with('error', __('The withdrawal request is already :status.', ['status' => $lockedWithdrawal->status]));
+            }
+
+            $initialTransaction = $lockedWithdrawal->user->transactions()
+                ->where('type', 'withdraw')
+                ->whereJsonContains('meta', ['withdrawal_id' => $lockedWithdrawal->id])
+                ->first();
+
+            // Orchestrate Wallet Refund
+            if ($initialTransaction) {
+                $lockedWithdrawal->user->deposit($lockedWithdrawal->amount, [
+                    'type'           => 'withdrawal_refund',
+                    'description'    => "Withdrawal Request #{$lockedWithdrawal->id} Rejected/Refunded",
+                    'reversal_of_id' => $initialTransaction->id,
                 ]);
-            });
+            }
+
+            $lockedWithdrawal->update([
+                'status'      => 'rejected',
+                'admin_note'  => $request->input('admin_note'),
+                'rejected_at' => now(),
+            ]);
+
+            DB::commit();
 
             return back()->with('success', __('Withdrawal rejected and funds refunded to the user wallet.'));
 
         } catch (\Exception $e) {
+            DB::rollBack();
             Log::error("Withdrawal Rejection Failure: {$e->getMessage()}", ['id' => $withdrawal->id]);
             return back()->with('error', __('Rejection failed due to a database error.'));
         }

@@ -132,6 +132,8 @@ class PropertyBookingController extends Controller
      */
     public function processPayment(ProcessPaymentRequest $request, PropertyBooking $booking): RedirectResponse
     {
+        $this->authorizeBooking($booking->property, $booking);
+
         if ($booking->status === 'confirmed') {
             return redirect()->route('property.booking.confirmation', [
                 'property' => $booking->property->slug,
@@ -187,8 +189,20 @@ class PropertyBookingController extends Controller
      */
     private function authorizeBooking(Property $property, PropertyBooking $booking): void
     {
+        // 1. Structural Check: Does this booking actually belong to this property?
         if ($booking->property_id !== $property->id) {
             abort(404);
+        }
+
+        // 2. Ownership Check (IDOR Protection): Does this booking belong to the logged-in user?
+        // Admins and the Property Owner (Partner) can also view, but visitors cannot spoof other users.
+        $user = auth()->user();
+        $isOwner = $user && $user->id === $booking->user_id;
+        $isPartner = $user && $user->id === $property->user_id;
+        $isAdmin = $user && $user->hasRole(['admin', 'super-admin']);
+
+        if (!$isOwner && !$isPartner && !$isAdmin) {
+            abort(403, 'Unauthorized access to this booking.');
         }
     }
 }

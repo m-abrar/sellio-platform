@@ -24,6 +24,7 @@ class CreateActivityLogTable extends Migration
             $table->uuid('batch_uuid')->nullable(); // Merged
             $table->timestamps();
             $table->index('log_name');
+            $table->index('created_at');
         });
     }
 

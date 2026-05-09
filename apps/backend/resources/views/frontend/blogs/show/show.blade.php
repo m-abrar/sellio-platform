@@ -112,9 +112,11 @@
                 <div class="card bg-primary text-white p-4 rounded-4 border-0 shadow-sm">
                     <h5 class="fw-bold mb-2">{{ __('Join our Newsletter') }}</h5>
                     <p class="small opacity-75 mb-3">{{ __('Get the latest stories sent to your inbox.') }}</p>
-                    <form action="#" class="mt-2">
-                        <input type="email" class="form-control form-control-sm border-0 mb-2" placeholder="Email Address">
-                        <button class="btn btn-dark btn-sm w-100 rounded-pill">{{ __('Subscribe') }}</button>
+                    <form action="{{ route('newsletter.subscribe') }}" method="POST" class="mt-2">
+                        @csrf
+                        <input type="hidden" name="source" value="blog_sidebar">
+                        <input type="email" name="email" class="form-control form-control-sm border-0 mb-2" placeholder="Email Address" required>
+                        <button type="submit" class="btn btn-dark btn-sm w-100 rounded-pill">{{ __('Subscribe') }}</button>
                     </form>
                 </div>
 

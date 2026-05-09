@@ -27,6 +27,7 @@ return new class extends Migration
             
             // Track the source (e.g., 'footer', 'popup', 'checkout')
             $table->string('source')->nullable(); 
+            $table->string('confirmation_token', 64)->nullable()->index();
             $table->string('status', 30)->default('active')->index();
             $table->text('admin_note')->nullable();
 
