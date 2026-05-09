@@ -73,4 +73,29 @@ class SubscriptionService
 
         return ['success' => true, 'message' => $message];
     }
+    /**
+     * Dispatch reminders for subscriptions expiring within a specific window.
+     * Optimized with chunking for large-scale operations.
+     */
+    public function dispatchRenewalReminders(int $daysAhead = 7): int
+    {
+        $targetDate = \Carbon\Carbon::now()->addDays($daysAhead)->setTime(0, 0, 0);
+        $targetEndDate = $targetDate->copy()->endOfDay();
+        $processedCount = 0;
+
+        Subscription::with('user', 'plan')
+            ->where('name', 'default')
+            ->whereNotNull('ends_at')
+            ->whereBetween('ends_at', [$targetDate, $targetEndDate])
+            ->chunkById(100, function ($subscriptions) use (&$processedCount) {
+                foreach ($subscriptions as $subscription) {
+                    if ($subscription->user && $subscription->plan) {
+                        \App\Events\PlanAboutToExpire::dispatch($subscription->user, $subscription);
+                        $processedCount++;
+                    }
+                }
+            });
+
+        return $processedCount;
+    }
 }

@@ -80,5 +80,13 @@ class EmailTemplate extends Model
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('is_active', true);
+    /**
+     * Sanitize body before saving to prevent XSS.
+     */
+    protected function body(): \Illuminate\Database\Eloquent\Casts\Attribute
+    {
+        return \Illuminate\Database\Eloquent\Casts\Attribute::make(
+            set: fn ($value) => strip_tags($value, '<a><b><i><u><strong><em><p><br><ul><li><ol><h1><h2><h3><h4><h5><h6><img><blockquote><style>')
+        );
     }
 }

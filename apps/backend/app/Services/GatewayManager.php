@@ -11,19 +11,27 @@ use Illuminate\Container\Container;
 class GatewayManager
 {
     /**
-     * Dynamically resolves and initializes the correct payment service.
+     * Map of allowed gateway identifiers to their respective service classes.
+     */
+    protected array $gatewayMap = [
+        'stripe' => \App\Services\StripeGatewayService::class,
+        'paypal' => \App\Services\PaypalGatewayService::class,
+    ];
+
+    /**
+     * Resolves and initializes the correct payment service using a secure whitelist.
      */
     public function resolve(PaymentGateway $gateway): PaymentGatewayService
     {
-        $className = $gateway->class_name; 
-        $config = $gateway->active_config; // Accesses the JSON config via model accessor
-
-        // Basic validation and instantiation using the container's makeWith
-        if (!class_exists($className)) {
-            throw new \Exception("Gateway class not found: {$className}");
+        $key = $gateway->slug; // Using 'slug' as the unique identifier
+        
+        if (!isset($this->gatewayMap[$key])) {
+            throw new \Exception("Unsupported or unauthorized gateway: {$key}");
         }
 
-        // The container handles dependency injection, passing the config to the constructor
+        $className = $this->gatewayMap[$key];
+        $config = $gateway->active_config;
+
         return Container::getInstance()->makeWith($className, ['config' => $config]);
     }
 }

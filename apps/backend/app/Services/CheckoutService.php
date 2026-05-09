@@ -55,9 +55,14 @@ class CheckoutService
                     'selected_addons'     => $addons->toArray(),
                 ]);
 
-                // 3. (Optional) Reduce Stock logic here
+                // 3. Secure Stock Reduction (Prevents Race Conditions)
                 if ($cartItem->product->manage_stock) {
-                    $cartItem->product->decrement('stock_quantity', $cartItem->quantity);
+                    $product = \App\Models\Product::where('id', $cartItem->product_id)->lockForUpdate()->first();
+                    if ($product && $product->stock_quantity >= $cartItem->quantity) {
+                        $product->decrement('stock_quantity', $cartItem->quantity);
+                    } else {
+                        throw new \Exception("Insufficient stock for product: " . ($product->title ?? 'Unknown'));
+                    }
                 }
             }
 

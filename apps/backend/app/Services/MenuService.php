@@ -187,16 +187,20 @@ class MenuService
 
     protected function generateCacheKey(string $locationKey): string
     {
-        return "menu.{$this->activeTheme}.{$locationKey}"; // Cache key for menu items
+        $roleHash = auth()->check() ? md5(implode(',', auth()->user()->roles->pluck('name')->toArray())) : 'guest';
+        return "menu.{$this->activeTheme}.{$locationKey}.{$roleHash}"; 
     }
     
     protected function generateMenuNameCacheKey(string $locationKey): string
     {
-        return "menu.name.{$this->activeTheme}.{$locationKey}"; // Cache key for menu name
+        // Menu names are generally static per theme/location, so isolation is less critical but still good practice
+        $roleHash = auth()->check() ? md5(implode(',', auth()->user()->roles->pluck('name')->toArray())) : 'guest';
+        return "menu.name.{$this->activeTheme}.{$locationKey}.{$roleHash}";
     }
 
     protected function generateMenusListCacheKey(): string
     {
-        return "menu.list.{$this->activeTheme}"; // Cache key for the list of all menus in this theme
+        $roleHash = auth()->check() ? md5(implode(',', auth()->user()->roles->pluck('name')->toArray())) : 'guest';
+        return "menu.list.{$this->activeTheme}.{$roleHash}"; 
     }
 }
