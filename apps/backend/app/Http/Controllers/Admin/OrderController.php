@@ -169,4 +169,3 @@ class OrderController extends Controller
         return redirect()->back()->with('success', __(':count orders updated successfully.', ['count' => $count]));
     }
 }
-}

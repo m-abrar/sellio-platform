@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use App\Services\Partner\AnalyticsService;
 
 // Listing Models
 use App\Models\Property; 

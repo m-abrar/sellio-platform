@@ -19,6 +19,21 @@ use Illuminate\View\View;
 class PropertyVisitController extends Controller
 {
     /**
+     * @var \App\Services\PropertyVisitService
+     */
+    protected $visitService;
+
+    /**
+     * PropertyVisitController constructor.
+     *
+     * @param  \App\Services\PropertyVisitService  $visitService
+     */
+    public function __construct(\App\Services\PropertyVisitService $visitService)
+    {
+        $this->visitService = $visitService;
+    }
+
+    /**
      * Display the viewing appointment creation form for a specific property.
      *
      * @param  \App\Models\Property  $property
@@ -52,29 +67,14 @@ class PropertyVisitController extends Controller
             'phone'        => ['nullable', 'string', 'max:20'],
         ]);
 
-        $property = Property::findOrFail($validated['property_id']);
-
-        if (!$property->is_sale) {
-            return back()->with('error', __('Cannot schedule a visit for a rental property.'));
-        }
-
-        // Log the 'lead' activity for performance analytics
-        activity('listings')
-           ->performedOn($property)
-           ->by(Auth::user())
-           ->log('submitted_lead');
-
         try {
-            $visit = PropertyVisit::create([
-                'user_id'      => Auth::id(),
-                'property_id'  => $property->id,
-                'scheduled_at' => $validated['scheduled_at'],
-                'status'       => 'scheduled',
-                'notes'        => $validated['notes'],
-                'full_name'    => $validated['full_name'], 
-                'email'        => $validated['email'],
-                'phone'        => $validated['phone'] ?? null,
-            ]);
+            $property = Property::findOrFail($validated['property_id']);
+
+            if (!$property->is_sale) {
+                return back()->with('error', __('Cannot schedule a visit for a rental property.'));
+            }
+
+            $visit = $this->visitService->scheduleVisit($property, $validated);
 
             $message = __('✅ Your viewing appointment has been successfully scheduled for :date.', [
                 'date' => $visit->scheduled_at->format('F jS, Y \a\t h:i A')
@@ -130,10 +130,7 @@ class PropertyVisitController extends Controller
             abort(403, __('You do not have permission to cancel this visit.'));
         }
 
-        if ($visit->status === 'scheduled' || $visit->status === 'rescheduled') {
-            $visit->status = 'cancelled';
-            $visit->save();
-
+        if ($this->visitService->cancelVisit($visit)) {
             return redirect()
                 ->route('properties.show', $property->slug)
                 ->with('success', __('Appointment successfully cancelled.'));
