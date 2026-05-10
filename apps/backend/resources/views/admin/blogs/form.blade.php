@@ -93,7 +93,7 @@
                             'name' => 'featured_image',
                             'label' => 'Select Featured Image',
                             'multiple' => false,
-                            'model' => \App\Models\Blog::class,
+                            'model' => 'blog',
                             'id' => $blog->id ?? null,
                             'noCard' => true,
                         ])

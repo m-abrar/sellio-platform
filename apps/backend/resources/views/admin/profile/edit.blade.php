@@ -154,7 +154,7 @@
                             'name' => \App\Models\User::PRIMARY_MEDIA,
                             'label' => 'Upload New Identity Image',
                             'multiple' => false,
-                            'model' => \App\Models\User::class,
+                            'model' => 'user',
                             'id' => $user->id ?? null,
                             'noCard' => true
                         ])

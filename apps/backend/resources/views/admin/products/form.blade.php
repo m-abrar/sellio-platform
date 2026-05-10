@@ -259,7 +259,7 @@
                             'name' => \App\Models\Product::GALLERY_MEDIA,
                             'label' => 'Product Gallery',
                             'multiple' => true,
-                            'model' => \App\Models\Product::class,
+                            'model' => 'product',
                             'id' => $product->id ?? null,
                             'noCard' => true,
                         ])
@@ -288,7 +288,7 @@
                             'name' => \App\Models\Product::PRIMARY_MEDIA,
                             'label' => 'Main Listing Image',
                             'multiple' => false,
-                            'model' => \App\Models\Product::class,
+                            'model' => 'product',
                             'id' => $product->id ?? null,
                             'noCard' => true,
                         ])
@@ -360,8 +360,8 @@
 @endsection
 
     @php
-        $vIndex = ($product->exists && $product->attributes->count() > 0) ? $product->attributes->max('id') + 1 : 0;
-        $aIndex = ($product->exists && $product->addons->count() > 0) ? $product->addons->max('id') + 1 : 0;
+        $vIndex = ($product->exists && $product->attributes->isNotEmpty()) ? $product->attributes->count() : 0;
+        $aIndex = ($product->exists && $product->addons->isNotEmpty()) ? $product->addons->count() : 0;
     @endphp
 
     @push('js')
