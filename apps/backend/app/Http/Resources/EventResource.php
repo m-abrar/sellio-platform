@@ -42,24 +42,24 @@ class EventResource extends JsonResource
 
             // Taxonomy & Specs
             'specs' => [
-                'category'    => $this->category?->title,
-                'type'        => $this->type?->title,
-                'brand'       => $this->brand?->title,
+                'category'    => $this->whenLoaded('category', fn() => $this->category->title),
+                'type'        => $this->whenLoaded('type', fn() => $this->type->title),
+                'brand'       => $this->whenLoaded('brand', fn() => $this->brand->title),
                 'event_genre' => $this->event_genre,
                 'venue_size'  => $this->venue_size,
-                'tags'        => $this->tags->pluck('title'),
+                'tags'        => $this->whenLoaded('tags', fn() => $this->tags->pluck('title')),
             ],
 
             // Spatie Media Implementation
             'media' => [
                 'poster'  => $this->primary_image_url, 
-                'preview' => $this->getMedia(Event::PRIMARY_MEDIA)->first()?->getUrl('event_poster_preview'),
-                'gallery' => $this->getMedia(Event::GALLERY_MEDIA)->map(fn($media) => [
+                'preview' => $this->whenLoaded('media', fn() => $this->getMedia(Event::PRIMARY_MEDIA)->first()?->getUrl('event_poster_preview')),
+                'gallery' => $this->whenLoaded('media', fn() => $this->getMedia(Event::GALLERY_MEDIA)->map(fn($media) => [
                     'id'        => $media->id,
                     'url'       => $media->getUrl(),
                     'thumbnail' => $media->getUrl('thumb'), // Assuming standard thumb conversion
                     'order'     => $media->order_column
-                ]),
+                ])),
             ],
 
             // Location Meta
@@ -70,22 +70,22 @@ class EventResource extends JsonResource
                 'country'   => $this->country,
                 'latitude'  => (float) $this->latitude,
                 'longitude' => (float) $this->longitude,
-                'map_title' => $this->location?->title,
+                'map_title' => $this->whenLoaded('location', fn() => $this->location->title),
             ],
 
             // Organizer Details
-            'organizer' => [
+            'organizer' => $this->whenLoaded('organizer', fn() => [
                 'id'     => $this->user_id,
-                'name'   => $this->organizer?->name,
-                'avatar' => $this->organizer?->avatar_url ?? null,
-            ],
+                'name'   => $this->organizer->name,
+                'avatar' => $this->organizer->avatar_url ?? null,
+            ]),
 
             // Meta & Status
             'status' => [
                 'is_published' => (bool) $this->is_published,
                 'is_featured'  => (bool) $this->is_featured,
                 'approved_at'  => $this->approved_at?->toIso8601String(),
-                'rating'       => $this->reviews()->avg('rating') ?? 0,
+                'rating'       => (float) ($this->reviews_avg_rating ?? 0),
             ],
 
             'seo' => [

@@ -34,9 +34,16 @@ class ProductResource extends JsonResource
             // Inventory Management
             'inventory' => [
                 'in_stock'             => (bool) $this->in_stock,
-                'stock_quantity'       => (int) $this->stock_quantity,
+                'stock_quantity'       => $this->when(
+                    auth()->id() === $this->user_id || (auth()->check() && auth()->user()->hasRole('admin')),
+                    (int) $this->stock_quantity,
+                    $this->stock_quantity > 0 ? 'In Stock' : 'Out of Stock'
+                ),
                 'manage_stock'         => (bool) $this->manage_stock,
-                'low_stock_threshold'  => (int) $this->low_stock_threshold,
+                'low_stock_threshold'  => $this->when(
+                    auth()->id() === $this->user_id || (auth()->check() && auth()->user()->hasRole('admin')),
+                    (int) $this->low_stock_threshold
+                ),
                 'is_digital'           => (bool) $this->is_digital,
             ],
 
@@ -44,56 +51,56 @@ class ProductResource extends JsonResource
             'specs' => [
                 'weight'               => $this->weight ? $this->weight . ' kg' : null,
                 'dimensions'           => $this->dimensions_formatted, // From custom accessor
-                'type'                 => $this->type?->title,
-                'features'             => $this->features->map(fn($f) => [
+                'type'                 => $this->whenLoaded('type', fn() => $this->type->title),
+                'features'             => $this->whenLoaded('features', fn() => $this->features->map(fn($f) => [
                     'id'    => $f->id,
                     'title' => $f->title,
                     'icon'  => $f->icon,
-                ]),
+                ])),
             ],
 
             // Spatie Media Implementation
             'media' => [
                 'featured_image' => $this->primary_image_url, 
-                'gallery'        => $this->getMedia(Product::GALLERY_MEDIA)->map(fn($media) => [
+                'gallery'        => $this->whenLoaded('media', fn() => $this->getMedia(Product::GALLERY_MEDIA)->map(fn($media) => [
                     'id'        => $media->id,
                     'url'       => $media->getUrl(),
                     'thumbnail' => $media->getUrl('product_thumbnail'),
                     'name'      => $media->name,
                     'order'     => $media->order_column
-                ]),
+                ])),
                 'video_url' => $this->video,
             ],
 
             // Relationships & Taxonomy
             'taxonomy' => [
-                'category' => [
-                    'id'    => $this->category?->id,
-                    'title' => $this->category?->title,
-                    'slug'  => $this->category?->slug,
-                ],
-                'brand' => [
-                    'id'    => $this->brand?->id,
-                    'title' => $this->brand?->title,
-                    'logo'  => $this->brand?->logo_url ?? null,
-                ],
-                'tags' => $this->tags->pluck('title'),
+                'category' => $this->whenLoaded('category', fn() => [
+                    'id'    => $this->category->id,
+                    'title' => $this->category->title,
+                    'slug'  => $this->category->slug,
+                ]),
+                'brand' => $this->whenLoaded('brand', fn() => [
+                    'id'    => $this->brand->id,
+                    'title' => $this->brand->title,
+                    'logo'  => $this->brand->logo_url ?? null,
+                ]),
+                'tags' => $this->whenLoaded('tags', fn() => $this->tags->pluck('title')),
             ],
 
             // Vendor Info
-            'vendor' => [
+            'vendor' => $this->whenLoaded('user', fn() => [
                 'id'     => $this->user_id,
-                'name'   => $this->user?->name ?? __('Official Store'),
-                'avatar' => $this->user?->avatar_url ?? null,
-            ],
+                'name'   => $this->user->name ?? __('Official Store'),
+                'avatar' => $this->user->avatar_url ?? null,
+            ]),
 
             // SEO & Status
             'status' => [
                 'is_published' => (bool) $this->is_published,
                 'is_featured'  => (bool) $this->is_featured,
                 'is_new'       => (bool) $this->is_new,
-                'rating'       => (float) $this->rating_average,
-                'review_count' => (int) ($this->reviews_count ?? $this->reviews()->count()),
+                'rating'       => (float) ($this->reviews_avg_rating ?? 0),
+                'review_count' => (int) $this->whenCounted('reviews'),
                 'approved_at'  => $this->approved_at?->toIso8601String(),
             ],
 

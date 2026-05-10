@@ -12,6 +12,14 @@ use Illuminate\Foundation\Http\FormRequest;
 class ProcessPaymentRequest extends FormRequest
 {
     /**
+     * Determine if the user is authorized to make this request.
+     */
+    public function authorize(): bool
+    {
+        return auth()->check();
+    }
+
+    /**
      * Sanitize input data before validation, purging card number formatting noise.
      *
      * @return void

@@ -29,9 +29,11 @@ class CalculatePriceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'attribute_ids' => ['nullable', 'array'],
-            'addon_ids'     => ['nullable', 'array'],
-            'quantity'      => ['nullable', 'integer', 'min:1'],
+            'attribute_ids'   => ['nullable', 'array'],
+            'attribute_ids.*' => ['exists:product_attributes,id'],
+            'addon_ids'       => ['nullable', 'array'],
+            'addon_ids.*'     => ['exists:product_addons,id'],
+            'quantity'        => ['nullable', 'integer', 'min:1'],
         ];
     }
 }

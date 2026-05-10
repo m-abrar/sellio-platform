@@ -40,10 +40,10 @@ class ProfileService
         // 3. Update Partner/Business Meta
         // Assuming a relation or JSON field for business details
         $user->update([
-            'company_name'   => $data['company_name'] ?? $user->company_name,
+            'company'        => $data['company_name'] ?? $user->company,
             'website_url'    => $data['website_url'] ?? null,
             'bio'            => $data['bio'] ?? null,
-            'phone_number'   => $data['phone_number'] ?? null,
+            'phone'          => $data['phone_number'] ?? null,
             'social_links'   => $data['social_links'] ?? [], // Array cast in Model
         ]);
 

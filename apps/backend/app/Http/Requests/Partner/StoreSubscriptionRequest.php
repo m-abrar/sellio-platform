@@ -18,7 +18,7 @@ class StoreSubscriptionRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return auth()->check() && (auth()->user()->hasRole('partner') || auth()->user()->hasRole('user'));
     }
 
     /**

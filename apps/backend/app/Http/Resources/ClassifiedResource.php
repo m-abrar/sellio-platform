@@ -48,22 +48,22 @@ class ClassifiedResource extends JsonResource
             // Media (Spatie Media Library)
             'media' => [
                 'main_photo' => $this->primary_image_url,
-                'thumbnail'  => $this->getMedia(Classified::PRIMARY_MEDIA)->first()?->getUrl('classified_thumb'),
-                'gallery'    => $this->getMedia(Classified::GALLERY_MEDIA)->map(fn($media) => [
+                'thumbnail'  => $this->whenLoaded('media', fn() => $this->getMedia(Classified::PRIMARY_MEDIA)->first()?->getUrl('classified_thumb')),
+                'gallery'    => $this->whenLoaded('media', fn() => $this->getMedia(Classified::GALLERY_MEDIA)->map(fn($media) => [
                     'id'    => $media->id,
                     'url'   => $media->getUrl(),
                     'thumb' => $media->getUrl('thumb'),
-                ]),
+                ])),
                 // Efficiently merged collection from your custom attribute
-                'all_photos_count' => $this->all_photos->count(),
+                'all_photos_count' => $this->whenLoaded('media', fn() => $this->all_photos->count()),
             ],
 
             // Taxonomy & Location
             'taxonomy' => [
-                'category' => $this->category?->title,
-                'type'     => $this->type?->title,
-                'brand'    => $this->brand?->title,
-                'tags'     => $this->tags->pluck('title'),
+                'category' => $this->whenLoaded('category', fn() => $this->category->title),
+                'type'     => $this->whenLoaded('type', fn() => $this->type->title),
+                'brand'    => $this->whenLoaded('brand', fn() => $this->brand->title),
+                'tags'     => $this->whenLoaded('tags', fn() => $this->tags->pluck('title')),
             ],
 
             'location' => [
@@ -78,19 +78,19 @@ class ClassifiedResource extends JsonResource
 
             // Status & Engagement
             'status' => [
-                'is_published'  => (bool) $this->is_published,
-                'is_featured'   => (bool) $this->is_featured,
+                'is_published'   => (bool) $this->is_published,
+                'is_featured'    => (bool) $this->is_featured,
                 'is_new_listing' => (bool) $this->is_new,
-                'is_shipping'   => (bool) $this->is_shipping,
-                'approved_at'   => $this->approved_at?->toIso8601String(),
-                'inquiry_count' => (int) ($this->inquiries_count ?? $this->inquiries()->count()),
+                'is_shipping'    => (bool) $this->is_shipping,
+                'approved_at'    => $this->approved_at?->toIso8601String(),
+                'inquiry_count'  => (int) $this->whenCounted('inquiries'),
             ],
 
-            'seller' => [
+            'seller' => $this->whenLoaded('user', fn() => [
                 'id'     => $this->user_id,
-                'name'   => $this->user?->name,
-                'avatar' => $this->user?->avatar_url,
-            ],
+                'name'   => $this->user->name,
+                'avatar' => $this->user->avatar_url,
+            ]),
 
             'created_at' => $this->created_at?->toIso8601String(),
             'updated_at' => $this->updated_at?->toIso8601String(),

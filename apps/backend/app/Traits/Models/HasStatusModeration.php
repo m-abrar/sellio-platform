@@ -32,12 +32,12 @@ trait HasStatusModeration
 
         // Standard string-based status logic
         return match ($this->status) {
-            'active', 'approved', 'published' => ['label' => ucfirst($this->status), 'color' => 'success', 'icon' => 'check-circle'],
-            'pending', 'review', 'scheduled' => ['label' => ucfirst($this->status), 'color' => 'warning', 'icon' => 'clock'],
-            'inactive', 'draft', 'closed'    => ['label' => ucfirst($this->status), 'color' => 'secondary', 'icon' => 'pencil-alt'],
-            'rejected', 'expired', 'canceled' => ['label' => ucfirst($this->status), 'color' => 'danger', 'icon' => 'times-circle'],
-            'premium', 'elite'               => ['label' => ucfirst($this->status), 'color' => 'primary', 'icon' => 'star'],
-            default                          => ['label' => ucfirst($this->status), 'color' => 'dark', 'icon' => 'info-circle'],
+            'active', 'approved', 'published' => ['label' => __($this->status), 'color' => 'success', 'icon' => 'check-circle'],
+            'pending', 'review', 'scheduled' => ['label' => __($this->status), 'color' => 'warning', 'icon' => 'clock'],
+            'inactive', 'draft', 'closed'    => ['label' => __($this->status), 'color' => 'secondary', 'icon' => 'pencil-alt'],
+            'rejected', 'expired', 'canceled' => ['label' => __($this->status), 'color' => 'danger', 'icon' => 'times-circle'],
+            'premium', 'elite'               => ['label' => __($this->status), 'color' => 'primary', 'icon' => 'star'],
+            default                          => ['label' => __($this->status), 'color' => 'dark', 'icon' => 'info-circle'],
         };
     }
 

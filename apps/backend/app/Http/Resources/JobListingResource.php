@@ -41,20 +41,20 @@ class JobListingResource extends JsonResource
 
             // Company & Branding (Spatie Media)
             'company' => [
-                'name'      => $this->brand?->title ?? $this->employer?->company_name,
+                'name'      => $this->whenLoaded('brand', fn() => $this->brand->title, $this->employer->company_name ?? null),
                 'logo'      => $this->primary_image_url,
-                'logo_card' => $this->getMedia(JobListing::PRIMARY_MEDIA)->first()?->getUrl('listing_card_logo'),
-                'photos'    => $this->getMedia(JobListing::GALLERY_MEDIA)->map(fn($media) => [
+                'logo_card' => $this->whenLoaded('media', fn() => $this->getMedia(JobListing::PRIMARY_MEDIA)->first()?->getUrl('listing_card_logo')),
+                'photos'    => $this->whenLoaded('media', fn() => $this->getMedia(JobListing::GALLERY_MEDIA)->map(fn($media) => [
                     'url'   => $media->getUrl(),
                     'thumb' => $media->getUrl('thumb'),
-                ]),
+                ])),
             ],
 
             // Taxonomy & UI
             'taxonomy' => [
-                'category'    => $this->category?->title,
+                'category'    => $this->whenLoaded('category', fn() => $this->category->title),
                 'badge_class' => $this->badge_class, // From model accessor
-                'tags'        => $this->tags->pluck('title'),
+                'tags'        => $this->whenLoaded('tags', fn() => $this->tags->pluck('title')),
             ],
 
             // Location
@@ -70,19 +70,18 @@ class JobListingResource extends JsonResource
 
             // Applications & Status
             'status' => [
-                'is_published'     => (bool) $this->is_published,
-                'is_featured'      => (bool) $this->is_featured,
-                'deadline'         => $this->application_deadline?->toIso8601String(),
-                'is_expired'       => $this->application_deadline?->isPast() ?? false,
-                'approved_at'      => $this->approved_at?->toIso8601String(),
-                'application_count' => (int) ($this->applications_count ?? $this->applications()->count()),
-                'new_applications'  => (int) ($this->applications_new_count ?? $this->applicationsNew()->count()),
+                'is_published'      => (bool) $this->is_published,
+                'is_featured'       => (bool) $this->is_featured,
+                'deadline'          => $this->application_deadline?->toIso8601String(),
+                'is_expired'        => $this->application_deadline?->isPast() ?? false,
+                'approved_at'       => $this->approved_at?->toIso8601String(),
+                'application_count' => (int) $this->whenCounted('applications'),
             ],
 
-            'employer' => [
+            'employer' => $this->whenLoaded('employer', fn() => [
                 'id'   => $this->user_id,
-                'name' => $this->employer?->name,
-            ],
+                'name' => $this->employer->name,
+            ]),
 
             'created_at' => $this->created_at?->toIso8601String(),
             'updated_at' => $this->updated_at?->toIso8601String(),

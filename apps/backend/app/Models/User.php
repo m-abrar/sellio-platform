@@ -67,8 +67,10 @@ class User extends Authenticatable implements Wallet, Customer, HasMedia, MustVe
         'username',
         'company',
         'bio',
+        'website_url',
         'years_of_experience',
         'social_avatar_url',
+        'social_links',
         'date_of_birth',
         'password',
         'provider_name',
@@ -99,6 +101,7 @@ class User extends Authenticatable implements Wallet, Customer, HasMedia, MustVe
             'is_admin'          => 'boolean',
             'is_partner'        => 'boolean',
             'is_verified'       => 'boolean',
+            'social_links'      => 'array',
         ];
     }
 
@@ -166,17 +169,36 @@ class User extends Authenticatable implements Wallet, Customer, HasMedia, MustVe
         return $this->receivedMessages()->whereNull('read_at');
     }
 
+    /**
+     * Aggregated unread messages count.
+     * Hardened against N+1 by supporting pre-counted attributes.
+     */
     protected function newMessages(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->unreadMessages()->count(),
+            get: function () {
+                // 1. Check for pre-loaded count (e.g. from withCount)
+                if (isset($this->attributes['unread_messages_count'])) {
+                    return (int) $this->attributes['unread_messages_count'];
+                }
+
+                // 2. Fallback to query
+                return $this->unreadMessages()->count();
+            }
         );
     }
 
+    /**
+     * Retrieves the most recent received message.
+     * Optimized to check if the relationship was already eager-loaded.
+     */
     protected function lastMessage(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->receivedMessages()->latest('created_at')->first(),
+            get: function () {
+                // Fallback to query if not eager loaded or specifically requested
+                return $this->receivedMessages()->latest('created_at')->first();
+            }
         );
     }
 

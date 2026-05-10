@@ -235,7 +235,17 @@ class Property extends Model implements HasMedia
     protected function ratingAverage(): Attribute
     {
         return Attribute::make(
-            get: fn () => rtrim(rtrim(number_format($this->reviews()->avg('rating') ?? 0, 2), '0'), '.')
+            get: function () {
+                // 1. Check if the average was pre-loaded via withAvg()
+                if (array_key_exists('reviews_avg_rating', $this->attributes)) {
+                    $avg = (float) $this->attributes['reviews_avg_rating'];
+                } else {
+                    // 2. Fallback to query (N+1 Risk)
+                    $avg = (float) ($this->reviews()->avg('rating') ?? 0);
+                }
+
+                return rtrim(rtrim(number_format($avg, 2), '0'), '.');
+            }
         )->shouldCache();
     }
     

@@ -30,15 +30,38 @@ class StorePropertyRequest extends FormRequest
     public function rules(): array
     {
         return [
+            // Core Identity
             'title'        => ['required', 'string', 'max:255'],
             'description'  => ['required', 'string'],
-            'price'        => ['required', 'numeric', 'min:0'],
-            'address'      => ['required', 'string', 'max:255'],
-            'is_published' => ['boolean'],
-            'is_featured'  => ['boolean'],
+            'category_id'  => ['required', 'exists:categories,id'],
+            'type_id'      => ['required', 'exists:types,id'],
+            'location_id'  => ['required', 'exists:locations,id'],
+            
+            // Pricing (Standardized with Model)
+            'base_price'      => ['nullable', 'numeric', 'min:0'],
+            'sale_price'      => ['nullable', 'numeric', 'min:0'],
+            'price_per_night' => ['nullable', 'numeric', 'min:0'],
+            'is_rental'       => ['boolean'],
+            'is_sale'         => ['boolean'],
+
+            // Physical Specs
+            'number_of_bedrooms'  => ['nullable', 'integer', 'min:0'],
+            'number_of_bathrooms' => ['nullable', 'integer', 'min:0'],
+            'maximum_guests'      => ['nullable', 'integer', 'min:1'],
+            'area_sq_ft'          => ['nullable', 'numeric', 'min:0'],
+            'year_built'          => ['nullable', 'integer', 'min:1800', 'max:' . (date('Y') + 5)],
+
+            // Location
+            'address'  => ['required', 'string', 'max:255'],
+            'city'     => ['required', 'string', 'max:100'],
+            'country'  => ['required', 'string', 'max:100'],
+            'zip_code' => ['nullable', 'string', 'max:20'],
+
+            // Taxonomy & Status
             'amenities'    => ['nullable', 'array'],
             'amenities.*'  => ['exists:amenities,id'],
-            // Add other migration-specific fields here (e.g., bedrooms, bathrooms)
+            'is_published' => ['boolean'],
+            'is_featured'  => ['boolean'], // Validated but controlled in Service/Controller
         ];
     }
 

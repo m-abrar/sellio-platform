@@ -196,29 +196,40 @@ class Location extends Model implements HasMedia
 
     /**
      * Aggregates active listings count across all verticals for this location.
-     * Cached to handle high-traffic location-based filtering.
+     * Hardened to handle N+1 risks by checking for pre-loaded withCount attributes.
      */
     public function listingsCount(): Attribute
     {
         return Attribute::make(
             get: function () {
+                $verticals = ['properties', 'events', 'jobs', 'services', 'classifieds', 'autos', 'products'];
+                
+                // 1. Check if counts were pre-loaded via withCount()
+                $preLoadedSum = 0;
+                $hasPreLoaded = false;
+                foreach ($verticals as $v) {
+                    $attr = $v . '_count';
+                    if (array_key_exists($attr, $this->attributes)) {
+                        $preLoadedSum += (int) $this->attributes[$attr];
+                        $hasPreLoaded = true;
+                    }
+                }
+                
+                if ($hasPreLoaded) {
+                    return $preLoadedSum;
+                }
+
+                // 2. Fallback to cached individual counts (still triggers queries if cache cold)
                 $cacheKey = "location_listings_count_{$this->id}_" . ($this->updated_at?->timestamp ?? 'new');
 
-                return cache()->remember($cacheKey, now()->addMinutes(30), function () {
-                    $verticals = [
-                        'properties', 
-                        'events', 
-                        'jobs', 
-                        'services', 
-                        'classifieds', 
-                        'autos'
-                    ];
-
-                    return collect($verticals)->sum(function ($relation) {
-                        return method_exists($this, $relation) 
-                            ? $this->$relation()->active()->count() 
-                            : 0;
-                    });
+                return cache()->remember($cacheKey, 1800, function () use ($verticals) {
+                    $total = 0;
+                    foreach ($verticals as $relation) {
+                        if (method_exists($this, $relation)) {
+                            $total += $this->$relation()->active()->count();
+                        }
+                    }
+                    return $total;
                 });
             }
         );

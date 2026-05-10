@@ -50,19 +50,19 @@ class ServiceResource extends JsonResource
                 'expertise_id'   => $this->expertise_level,
                 'schedule_id'    => $this->availability_schedule,
                 'certifications' => $this->licenses_certs,
-                'category'       => $this->category?->title,
-                'type'           => $this->type?->title,
+                'category'       => $this->whenLoaded('category', fn() => $this->category->title),
+                'type'           => $this->whenLoaded('type', fn() => $this->type->title),
             ],
 
             // Spatie Media Library
             'media' => [
                 'main_photo' => $this->primary_image_url,
-                'gallery'    => $this->getMedia(Service::GALLERY_MEDIA)->map(fn($media) => [
+                'gallery'    => $this->whenLoaded('media', fn() => $this->getMedia(Service::GALLERY_MEDIA)->map(fn($media) => [
                     'id'        => $media->id,
                     'url'       => $media->getUrl(),
                     'thumbnail' => $media->getUrl('thumb'),
                     'name'      => $media->name,
-                ]),
+                ])),
             ],
 
             // Location details
@@ -73,25 +73,25 @@ class ServiceResource extends JsonResource
                 'country'   => $this->country,
                 'latitude'  => (float) $this->latitude,
                 'longitude' => (float) $this->longitude,
-                'meta'      => $this->location?->title,
+                'meta'      => $this->whenLoaded('location', fn() => $this->location->title),
             ],
 
             // Provider (User) Info
-            'provider' => [
+            'provider' => $this->whenLoaded('provider', fn() => [
                 'id'     => $this->user_id,
-                'name'   => $this->provider?->name ?? __('Verified Professional'),
-                'avatar' => $this->provider?->avatar_url,
-                'rating' => (float) $this->rating_average,
-            ],
+                'name'   => $this->provider->name ?? __('Verified Professional'),
+                'avatar' => $this->provider->avatar_url,
+                'rating' => (float) ($this->reviews_avg_rating ?? 0),
+            ]),
 
             // Features & Tags
-            'features' => $this->features->map(fn($f) => [
+            'features' => $this->whenLoaded('features', fn() => $this->features->map(fn($f) => [
                 'id'    => $f->id,
                 'title' => $f->title,
                 'value' => $f->pivot?->value,
                 'icon'  => $f->icon,
-            ]),
-            'tags' => $this->tags->pluck('title'),
+            ])),
+            'tags' => $this->whenLoaded('tags', fn() => $this->tags->pluck('title')),
 
             // Meta & Status
             'status' => [
@@ -99,8 +99,8 @@ class ServiceResource extends JsonResource
                 'is_featured'  => (bool) $this->is_featured,
                 'approved_at'  => $this->approved_at?->toIso8601String(),
                 'lead_counts'  => [
-                    'quotes'       => (int) ($this->quotes_count ?? $this->quotes()->count()),
-                    'appointments' => (int) ($this->appointments_count ?? $this->appointments()->count()),
+                    'quotes'       => (int) $this->whenCounted('quotes'),
+                    'appointments' => (int) $this->whenCounted('appointments'),
                 ],
             ],
 

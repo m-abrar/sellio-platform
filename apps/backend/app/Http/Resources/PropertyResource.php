@@ -53,16 +53,16 @@ class PropertyResource extends JsonResource
                 'category'        => $this->whenLoaded('category', fn() => $this->category->title),
             ],
 
-            // Spatie Media (Using Model Constants)
-            'thumbnail_image' => $this->thumbnail_url, 
-            'featured_image' => $this->primary_image_url, 
-            'gallery'        => $this->getMedia(Property::GALLERY_MEDIA)->map(fn($media) => [
+            // Spatie Media (N+1 Hardened)
+            'thumbnail_image' => $this->relationLoaded('media') ? $this->thumbnail_url : $this->getFallbackImage('thumb'), 
+            'featured_image'  => $this->relationLoaded('media') ? $this->primary_image_url : $this->getFallbackImage('card'), 
+            'gallery'         => $this->whenLoaded('media', fn() => $this->getMedia(Property::GALLERY_MEDIA)->map(fn($media) => [
                 'id'        => $media->id,
                 'url'       => $media->getUrl(),
                 'hero'      => $media->getUrl('listing_hero'),
-                'thumbnail' => $media->getUrl('thumb'), // Provided by your HasImageAccess trait
+                'thumbnail' => $media->getUrl('thumb'),
                 'order'     => $media->order_column
-            ]),
+            ])),
             
             // Rich Media
             'video'        => $this->video,
@@ -82,7 +82,7 @@ class PropertyResource extends JsonResource
 
             // Relationships
             'amenities' => AmenityResource::collection($this->whenLoaded('amenities')),
-            'owner' => new UserResource($this->whenLoaded('user')),
+            'owner'     => new UserResource($this->whenLoaded('user')),
 
             // Status & Meta
             'status' => [

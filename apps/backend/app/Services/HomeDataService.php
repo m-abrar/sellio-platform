@@ -28,35 +28,37 @@ class HomeDataService
      */
     public function getHomeData(): array
     {
-        $lastMonth = Carbon::now()->subDays(30);
+        return cache()->remember('home_page_data_v2', 600, function () {
+            $lastMonth = Carbon::now()->subDays(30);
 
-        return [
-            // Featured Sections
-            'propertiesFeatured'  => $this->getFeatured(new Property()),
-            'autosFeatured'       => $this->getFeatured(new Auto()),
-            'eventsFeatured'      => $this->getFeatured(new Event()),
-            'jobsFeatured'        => $this->getFeatured(new JobListing()),
-            'servicesFeatured'    => $this->getFeatured(new Service()),
-            'classifiedsFeatured' => $this->getFeatured(new Classified()),
+            return [
+                // Featured Sections
+                'propertiesFeatured'  => $this->getFeatured(new Property()),
+                'autosFeatured'       => $this->getFeatured(new Auto()),
+                'eventsFeatured'      => $this->getFeatured(new Event()),
+                'jobsFeatured'        => $this->getFeatured(new JobListing()),
+                'servicesFeatured'    => $this->getFeatured(new Service()),
+                'classifiedsFeatured' => $this->getFeatured(new Classified()),
 
-            // Trending Sections (Based on 30-day activity)
-            'propertiesTrending'  => $this->getTrending(new Property(), 'bookings', $lastMonth),
-            'autosTrending'       => $this->getTrending(new Auto(), 'inquiries', $lastMonth),
-            'eventsTrending'      => $this->getTrending(new Event(), 'bookings', $lastMonth),
-            'jobsTrending'        => $this->getTrending(new JobListing(), 'applications', $lastMonth),
-            'servicesTrending'    => $this->getTrendingServices($lastMonth),
-            'classifiedsTrending' => $this->getTrending(new Classified(), 'inquiries', $lastMonth),
+                // Trending Sections (Based on 30-day activity)
+                'propertiesTrending'  => $this->getTrending(new Property(), 'bookings', $lastMonth),
+                'autosTrending'       => $this->getTrending(new Auto(), 'inquiries', $lastMonth),
+                'eventsTrending'      => $this->getTrending(new Event(), 'bookings', $lastMonth),
+                'jobsTrending'        => $this->getTrending(new JobListing(), 'applications', $lastMonth),
+                'servicesTrending'    => $this->getTrendingServices($lastMonth),
+                'classifiedsTrending' => $this->getTrending(new Classified(), 'inquiries', $lastMonth),
 
-            // Specific Sub-sections
-            'propertiesRental'    => Property::active()->where('is_rental', true)->latest()->take(6)->get(),
-            'propertiesSale'      => Property::active()->where('is_sale', true)->latest()->take(6)->get(),
-            'autosLatest'         => Auto::active()->latest()->take(6)->get(),
+                // Specific Sub-sections
+                'propertiesRental'    => Property::active()->where('is_rental', true)->latest()->take(6)->get(),
+                'propertiesSale'      => Property::active()->where('is_sale', true)->latest()->take(6)->get(),
+                'autosLatest'         => Auto::active()->latest()->take(6)->get(),
 
-            // Taxonomy
-            'categories'          => Category::active()->get(),
-            'locations'           => Location::active()->get(),
-            'locationsFeatured'   => Location::active()->orderByDesc('is_featured')->take(6)->get(),
-        ];
+                // Taxonomy
+                'categories'          => Category::active()->get(),
+                'locations'           => Location::active()->get(),
+                'locationsFeatured'   => Location::active()->orderByDesc('is_featured')->take(6)->get(),
+            ];
+        });
     }
 
     /**

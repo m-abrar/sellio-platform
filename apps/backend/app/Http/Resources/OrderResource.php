@@ -28,24 +28,35 @@ class OrderResource extends JsonResource
                 'currency_symbol' => setting('currency_symbol', '$'),
             ],
 
-            'shipping' => [
-                'name'    => $this->shipping_name,
-                'address' => $this->shipping_address,
-                'city'    => $this->shipping_city,
-                'state'   => $this->shipping_state,
-                'zip'     => $this->shipping_zip,
-                'country' => $this->shipping_country,
-            ],
+            'shipping' => $this->when(
+                auth()->id() === $this->user_id || (auth()->check() && auth()->user()->hasRole('admin')),
+                fn() => [
+                    'name'    => $this->shipping_name,
+                    'address' => $this->shipping_address,
+                    'city'    => $this->shipping_city,
+                    'state'   => $this->shipping_state,
+                    'zip'     => $this->shipping_zip,
+                    'country' => $this->shipping_country,
+                ],
+                fn() => [
+                    'city'    => $this->shipping_city,
+                    'country' => $this->shipping_country,
+                    'note'    => 'Full address restricted.'
+                ]
+            ),
 
-            'tracking_number' => $this->tracking_number,
+            'tracking_number' => $this->when(
+                auth()->id() === $this->user_id || (auth()->check() && auth()->user()->hasRole('admin')),
+                $this->tracking_number
+            ),
             'notes'           => $this->notes,
 
             'items' => OrderItemResource::collection($this->whenLoaded('items')),
 
-            'user' => [
-                'id'   => $this->user?->id,
-                'name' => $this->user?->name,
-            ],
+            'user' => $this->whenLoaded('user', fn() => [
+                'id'   => $this->user->id,
+                'name' => $this->user->name,
+            ]),
 
             'created_at' => $this->created_at?->toIso8601String(),
             'updated_at' => $this->updated_at?->toIso8601String(),

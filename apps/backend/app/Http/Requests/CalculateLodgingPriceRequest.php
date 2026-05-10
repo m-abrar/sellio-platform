@@ -20,8 +20,8 @@ class CalculateLodgingPriceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'check_in'  => ['required', 'date', 'after_or_equal:today'],
-            'check_out' => ['required', 'date', 'after:check_in'],
+            'check_in'  => ['required', 'date_format:Y-m-d', 'after_or_equal:today'],
+            'check_out' => ['required', 'date_format:Y-m-d', 'after:check_in'],
         ];
     }
 }

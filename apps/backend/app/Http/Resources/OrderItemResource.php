@@ -19,12 +19,12 @@ class OrderItemResource extends JsonResource
             'unit_price'   => (float) $this->unit_price,
             'total_price'  => (float) $this->total_price,
 
-            'product' => [
-                'id'    => $this->product?->id,
-                'title' => $this->product?->title,
-                'slug'  => $this->product?->slug,
-                'image' => $this->product?->primary_image_url ?? null,
-            ],
+            'product' => $this->whenLoaded('product', fn() => [
+                'id'    => $this->product->id,
+                'title' => $this->product->title,
+                'slug'  => $this->product->slug,
+                'image' => $this->product->primary_image_url ?? null,
+            ]),
 
             'selected_attributes' => $this->selected_attributes,
             'selected_addons'     => $this->selected_addons,

@@ -7,10 +7,15 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
 
+use Illuminate\Queue\SerializesModels;
+
 class NewPropertySubmitted extends Notification implements ShouldQueue
 {
-    use Queueable;
+    use Queueable, SerializesModels;
 
+    /**
+     * Create a new notification instance.
+     */
     public function __construct(public Property $property) {}
 
     public function via($notifiable)
