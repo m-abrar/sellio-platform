@@ -40,7 +40,7 @@ class SeasonalPriceFactory extends Factory
         $seasonNames = ['Summer Peak', 'Winter Special', 'Shoulder Season', 'Holiday Rush', 'Off-Season', 'Spring Break'];
         
         return [
-            // property_id will be overwritten by the seeder
+            'property_id' => \App\Models\Property::factory(),
             'start_date' => $startDate->format('Y-m-d'),
             'end_date' => $endDate->format('Y-m-d'),
             'title' => $this->faker->randomElement($seasonNames), // 🆕 GENERATED: Random season name

@@ -28,15 +28,11 @@ class ConversationController extends Controller
     /**
      * Start or retrieve an existing conversation with a specific user.
      *
-     * @param  string  $username
+     * @param  \App\Http\Requests\StartConversationRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function start(string $username): RedirectResponse
+    public function start(\App\Http\Requests\StartConversationRequest $request): RedirectResponse
     {
-        if (!Auth::check()) {
-            return redirect()->back()->withErrors(['message' => __('You must be logged in to start a conversation.')]);
-        }
-
         // Apply Rate Limiting: 5 attempts per minute per user
         $executed = \Illuminate\Support\Facades\RateLimiter::attempt(
             'start-conversation:' . Auth::id(),
@@ -49,7 +45,7 @@ class ConversationController extends Controller
         }
 
         $buyerId = Auth::id();
-        $partner = User::where('username', $username)->firstOrFail();
+        $partner = User::where('username', $request->validated()['username'])->firstOrFail();
         
         // Prevent self-messaging
         if ($buyerId === $partner->id) {

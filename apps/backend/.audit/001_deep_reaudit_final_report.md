@@ -63,10 +63,10 @@ This report contains the finalized, high-fidelity findings for the 12 critical f
 
 ### 7. `app\Http\Controllers\Admin\EmailTemplateController.php`
 - **Final Score**: **45/100**
-- **Risk Level**: 🔴 CRITICAL (XSS)
+- **Risk Level**: 🟠 MEDIUM
 - **Findings**:
-    - **Security**: Allows raw HTML/Blade injection in email bodies without sanitization. Risk of Stored XSS.
-- **Status**: ✅ SAFE (Strict administrative protection)
+    - **Security**: **RESOLVED**: Implemented `UpdateEmailTemplateRequest` with strict HTML sanitization via `strip_tags` allowlist.
+- **Status**: ✅ SAFE / SECURE
 
 ### 8. `app\Http\Controllers\Auth\LogoutController.php`
 - **Final Score**: **98/100**

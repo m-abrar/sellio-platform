@@ -40,23 +40,13 @@ class EmailTemplateController extends Controller
     /**
      * Update the content and configuration of a system email template.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\Admin\UpdateEmailTemplateRequest  $request
      * @param  \App\Models\EmailTemplate  $emailTemplate
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, EmailTemplate $emailTemplate): RedirectResponse
+    public function update(\App\Http\Requests\Admin\UpdateEmailTemplateRequest $request, EmailTemplate $emailTemplate): RedirectResponse
     {
-        $request->validate([
-            'subject'   => 'required|string|max:255',
-            'body'      => 'required|string',
-            'is_active' => 'sometimes|boolean',
-        ]);
-
-        $emailTemplate->update([
-            'subject'   => $request->input('subject'),
-            'body'      => $request->input('body'),
-            'is_active' => $request->boolean('is_active'),
-        ]);
+        $emailTemplate->update($request->validated());
 
         return redirect()->route('admin.email-templates.index')
                          ->with('success', __('Email template updated successfully.'));

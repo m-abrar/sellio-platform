@@ -28,11 +28,12 @@ class EventBookingFactory extends Factory
 
 
         return [
-            // user_id, event_occurrence_id, and event_ticket_type_id will be set by the EventSeeder
-            'quantity' => $quantity,
-            'total_price' => $quantity * $tempTicketPrice, 
-            'status' => $this->faker->randomElement(['confirmed', 'pending', 'cancelled', 'refunded']),
-
+            'user_id'                 => \App\Models\User::factory(),
+            'event_occurrence_id'    => \App\Models\EventOccurrence::factory(),
+            'event_ticket_type_id'   => \App\Models\EventTicketType::factory(),
+            'quantity'               => $quantity,
+            'total_price'            => $quantity * $tempTicketPrice, 
+            'status'                 => $this->faker->randomElement(['confirmed', 'pending', 'cancelled', 'refunded']),
         ];
     }
 }

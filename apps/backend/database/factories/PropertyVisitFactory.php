@@ -43,7 +43,8 @@ class PropertyVisitFactory extends Factory
             'status' => $this->faker->randomElement(['pending', 'confirmed', 'confirmed', 'cancelled', 'completed']), 
             'notes' => $this->faker->boolean(20) ? $this->faker->sentence(5) : null,
             
-            // user_id and property_id will be set by the PropertyModuleSeeder
+            'user_id'      => \App\Models\User::factory(),
+            'property_id'  => \App\Models\Property::factory(),
         ];
     }
 }

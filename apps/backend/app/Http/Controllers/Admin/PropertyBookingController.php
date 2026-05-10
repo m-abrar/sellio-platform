@@ -39,7 +39,8 @@ class PropertyBookingController extends Controller
             ->paginate(15)
             ->withQueryString();
 
-        $properties = Property::select('id', 'title')->get();
+        // Performance: Cap selection to prevent memory exhaustion in high-volume environments.
+        $properties = Property::select('id', 'title')->limit(100)->get();
 
         return view('admin.property-bookings.index', compact('bookings', 'properties', 'status'));
     }
@@ -70,8 +71,9 @@ class PropertyBookingController extends Controller
     public function create(): View
     {
         $booking = new PropertyBooking();
-        $properties = Property::select('id', 'title')->get();
-        $users = User::select('id', 'name', 'email')->get();
+        // Performance: Cap selection to prevent memory exhaustion.
+        $properties = Property::select('id', 'title')->limit(100)->get();
+        $users = User::select('id', 'name', 'email')->limit(100)->get();
         
         return view('admin.property-bookings.form', compact('booking', 'properties', 'users'));
     }
@@ -99,8 +101,9 @@ class PropertyBookingController extends Controller
      */
     public function edit(PropertyBooking $propertyBooking): View
     {
-        $properties = Property::select('id', 'title')->get();
-        $users = User::select('id', 'name', 'email')->get();
+        // Performance: Cap selection to prevent memory exhaustion.
+        $properties = Property::select('id', 'title')->limit(100)->get();
+        $users = User::select('id', 'name', 'email')->limit(100)->get();
 
         $statusColors = [
             'confirmed' => '#bbf7d0',

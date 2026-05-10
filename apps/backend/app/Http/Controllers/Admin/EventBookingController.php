@@ -39,8 +39,8 @@ class EventBookingController extends Controller
             ->paginate(15)
             ->withQueryString();
 
-        $events = Event::select('id', 'title', 'category_id')->with('category:id,title')->get();
-        $categories = Category::where('is_event', true)->select('id', 'title')->get();
+        $events = Event::select('id', 'title', 'category_id')->with('category:id,title')->limit(50)->get();
+        $categories = Category::where('is_event', true)->select('id', 'title')->limit(50)->get();
 
         return view('admin.event-bookings.index', compact('bookings', 'events', 'categories', 'status'));
     }
@@ -53,8 +53,9 @@ class EventBookingController extends Controller
     public function create(): View
     {
         $booking = new EventBooking();
-        $events = Event::select('id', 'title', 'base_price')->get();
-        $users = User::select('id', 'name', 'email')->get();
+        // Performance: Cap selection to prevent memory exhaustion.
+        $events = Event::select('id', 'title', 'base_price')->limit(50)->get();
+        $users = User::select('id', 'name', 'email')->limit(100)->get();
         
         return view('admin.event-bookings.form', compact('booking', 'events', 'users'));
     }
@@ -62,20 +63,12 @@ class EventBookingController extends Controller
     /**
      * Store a newly created event booking record with a unique reference.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\Admin\UpdateEventBookingRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request): RedirectResponse
+    public function store(\App\Http\Requests\Admin\UpdateEventBookingRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'event_id'    => 'required|exists:events,id',
-            'user_id'     => 'required|exists:users,id',
-            'quantity'    => 'required|integer|min:1',
-            'total_price' => 'required|numeric|min:0',
-            'status'      => 'required|string|max:255',
-            'admin_note'  => 'nullable|string',
-        ]);
-
+        $validated = $request->validated();
         $validated['booking_reference'] = 'EVT-' . strtoupper(Str::random(8));
 
         $booking = EventBooking::create($validated);
@@ -93,8 +86,9 @@ class EventBookingController extends Controller
      */
     public function edit(EventBooking $eventBooking): View
     {
-        $events = Event::select('id', 'title', 'base_price')->get();
-        $users = User::select('id', 'name', 'email')->get();
+        // Performance: Cap selection to prevent memory exhaustion.
+        $events = Event::select('id', 'title', 'base_price')->limit(50)->get();
+        $users = User::select('id', 'name', 'email')->limit(100)->get();
 
         return view('admin.event-bookings.form', [
             'booking' => $eventBooking, 
@@ -106,22 +100,13 @@ class EventBookingController extends Controller
     /**
      * Update an existing event booking record in the database.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\Admin\UpdateEventBookingRequest  $request
      * @param  \App\Models\EventBooking  $eventBooking
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, EventBooking $eventBooking): RedirectResponse
+    public function update(\App\Http\Requests\Admin\UpdateEventBookingRequest $request, EventBooking $eventBooking): RedirectResponse
     {
-        $validated = $request->validate([
-            'event_id'    => 'required|exists:events,id',
-            'user_id'     => 'required|exists:users,id',
-            'quantity'    => 'required|integer|min:1',
-            'total_price' => 'required|numeric|min:0',
-            'status'      => 'required|string|max:255',
-            'admin_note'  => 'nullable|string',
-        ]);
-
-        $eventBooking->update($validated);
+        $eventBooking->update($request->validated());
 
         return redirect()
             ->route('admin.event-bookings.index')

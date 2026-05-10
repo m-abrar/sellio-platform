@@ -37,10 +37,10 @@ class OrderController extends Controller
     /**
      * Process the conversion of a validated cart into a formal Order.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\StoreOrderRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request): RedirectResponse
+    public function store(\App\Http\Requests\StoreOrderRequest $request): RedirectResponse
     {
         $cart = Cart::where('user_id', Auth::id())
                     ->with(['items.product', 'items.cart'])
@@ -50,17 +50,8 @@ class OrderController extends Controller
             return redirect()->back()->with('error', __('Your cart is empty.'));
         }
 
-        $validated = $request->validate([
-            'shipping_name'    => 'required|string|max:255',
-            'shipping_address' => 'required|string',
-            'shipping_city'    => 'required|string',
-            'shipping_zip'     => 'required|string|max:20',
-            'shipping_country' => 'required|string',
-            'payment_method'   => 'required|string',
-        ]);
-
         try {
-            $order = $this->checkoutService->process($cart, $validated, $request->payment_method);
+            $order = $this->checkoutService->process($cart, $request->validated(), $request->payment_method);
 
             return redirect()->route('orders.show', $order->order_number)
                              ->with('success', __('Thank you! Your order has been placed.'));

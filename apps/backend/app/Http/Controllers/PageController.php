@@ -17,6 +17,21 @@ use Illuminate\Http\RedirectResponse;
 class PageController extends Controller
 {
     /**
+     * @var \App\Services\ContactService
+     */
+    protected $contactService;
+
+    /**
+     * PageController constructor.
+     *
+     * @param \App\Services\ContactService $contactService
+     */
+    public function __construct(\App\Services\ContactService $contactService)
+    {
+        $this->contactService = $contactService;
+    }
+
+    /**
      * Display the About Us page.
      *
      * @return View
@@ -44,7 +59,7 @@ class PageController extends Controller
      */
     public function sendContact(SendContactRequest $request): RedirectResponse
     {
-        // Business logic (e.g., sending mail) should ideally be in an Action or Service class.
+        $this->contactService->handleInquiry($request->validated());
         
         return back()->with('success', __('Thank you for your message! We will be in touch soon.'));
     }

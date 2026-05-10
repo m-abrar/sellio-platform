@@ -60,9 +60,7 @@ class NewsletterSubscriberController extends Controller
             "Expires"             => "0"
         ];
 
-        $subscribers = NewsletterSubscriber::all();
-
-        $callback = function() use ($subscribers) {
+        $callback = function() {
             $file = fopen('php://output', 'w');
             
             // Localized CSV Headers
@@ -74,15 +72,17 @@ class NewsletterSubscriberController extends Controller
                 __('Created At')
             ]);
 
-            foreach ($subscribers as $subscriber) {
-                fputcsv($file, [
-                    $subscriber->id,
-                    $subscriber->email,
-                    $subscriber->source ?? __('Main Website'),
-                    $subscriber->is_confirmed ? __('Yes') : __('No'),
-                    $subscriber->created_at ? $subscriber->created_at->format('Y-m-d H:i:s') : ''
-                ]);
-            }
+            NewsletterSubscriber::query()->chunk(500, function ($subscribers) use ($file) {
+                foreach ($subscribers as $subscriber) {
+                    fputcsv($file, [
+                        $subscriber->id,
+                        $subscriber->email,
+                        $subscriber->source ?? __('Main Website'),
+                        $subscriber->is_confirmed ? __('Yes') : __('No'),
+                        $subscriber->created_at ? $subscriber->created_at->format('Y-m-d H:i:s') : ''
+                    ]);
+                }
+            });
 
             fclose($file);
         };

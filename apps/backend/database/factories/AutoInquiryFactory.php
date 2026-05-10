@@ -21,8 +21,8 @@ class AutoInquiryFactory extends Factory
     public function definition(): array
     {
         return [
-            // user_id and auto_id will be set by the seeder
-
+            'user_id' => \App\Models\User::factory(),
+            'auto_id' => \App\Models\Auto::factory(),
             // Contact Details
             'full_name' => $this->faker->title() .' '. $this->faker->name(),
             'email' => $this->faker->unique()->safeEmail(),

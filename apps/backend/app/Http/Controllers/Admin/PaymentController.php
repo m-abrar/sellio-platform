@@ -88,10 +88,11 @@ class PaymentController extends Controller
         $payment = new Payment();
         
         // Performance: Cap user selection to prevent memory bloat
+        // In a production environment with >10k users, this should be replaced by an Ajax-based search.
         $users = User::select('id', 'name', 'email')->orderBy('name')->limit(100)->get();
         
-        // Performance: Only show recent or active subscriptions for manual mapping
-        $subscriptions = Subscription::with('plan')->latest()->limit(100)->get();
+        // Performance: Only show recent subscriptions for manual mapping
+        $subscriptions = Subscription::with('plan')->latest()->limit(50)->get();
         
         return view('admin.payments.form', compact('payment', 'users', 'subscriptions'));
     }
@@ -99,26 +100,12 @@ class PaymentController extends Controller
     /**
      * Store a manually initialized payment record and its polymorphic mapping.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\Admin\StorePaymentRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request): RedirectResponse
+    public function store(\App\Http\Requests\Admin\StorePaymentRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'user_id'        => 'required|exists:users,id',
-            'payable_id'     => 'required|exists:subscriptions,id', 
-            'amount'         => 'required|numeric|min:0',
-            'currency'       => 'required|string|size:3',
-            'payment_method' => 'required|string|max:255', 
-            'status'         => 'required|in:pending,completed,failed,refunded', 
-            'transaction_id' => 'nullable|string|max:255',
-            'paid_at'        => 'nullable|date',
-        ]);
-
-        // Explicitly hydrate the polymorphic relationship mapping
-        $validated['payable_type'] = Subscription::class;
-
-        Payment::create($validated);
+        Payment::create($request->validated());
 
         return redirect()->route('admin.payments.index')
             ->with('success', __('Payment recorded successfully.'));
@@ -135,8 +122,8 @@ class PaymentController extends Controller
         // Performance: Cap user selection to prevent memory bloat
         $users = User::select('id', 'name', 'email')->orderBy('name')->limit(100)->get();
         
-        // Performance: Only show recent or active subscriptions for manual mapping
-        $subscriptions = Subscription::with('plan')->latest()->limit(100)->get();
+        // Performance: Only show recent subscriptions for manual mapping
+        $subscriptions = Subscription::with('plan')->latest()->limit(50)->get();
         
         return view('admin.payments.form', compact('payment', 'users', 'subscriptions'));
     }
@@ -144,26 +131,13 @@ class PaymentController extends Controller
     /**
      * Update an existing financial record and maintain polymorphic integrity.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\Admin\StorePaymentRequest  $request
      * @param  \App\Models\Payment  $payment
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, Payment $payment): RedirectResponse
+    public function update(\App\Http\Requests\Admin\StorePaymentRequest $request, Payment $payment): RedirectResponse
     {
-        $validated = $request->validate([
-            'user_id'        => 'required|exists:users,id',
-            'payable_id'     => 'required|exists:subscriptions,id',
-            'amount'         => 'required|numeric|min:0',
-            'currency'       => 'required|string|size:3',
-            'payment_method' => 'required|string|max:255',
-            'status'         => 'required|in:pending,completed,failed,refunded',
-            'transaction_id' => 'nullable|string|max:255',
-            'paid_at'        => 'nullable|date',
-        ]);
-
-        $validated['payable_type'] = Subscription::class;
-
-        $payment->update($validated);
+        $payment->update($request->validated());
 
         return redirect()->route('admin.payments.index')
             ->with('success', __('Payment details updated successfully.'));

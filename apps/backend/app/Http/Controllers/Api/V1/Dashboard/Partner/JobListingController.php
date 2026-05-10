@@ -144,8 +144,8 @@ class JobListingController extends Controller
     protected function getFormData(): array
     {
         return [
-            'categories' => Category::where('is_job', true),
-            'locations'  => Location::where('is_job', true),
+            'categories' => Category::where('is_job', true)->get(),
+            'locations'  => Location::where('is_job', true)->get(),
         ];
     }
 
