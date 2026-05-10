@@ -97,6 +97,11 @@ class ContentService
         return $setting ? $this->formatValue($setting, $default) : $default;
     }
 
+    public function forgetCache(PageContent $setting): void
+    {
+        Cache::forget($this->generateCacheKey($setting->page, $setting->section, $setting->content_key));
+    }
+
     protected function generateCacheKey($page, $section, $key): string
     {
         return "page_content.{$this->activeTheme}.{$page}.{$section}.{$key}";

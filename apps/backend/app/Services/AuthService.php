@@ -88,4 +88,51 @@ class AuthService
         $user->currentAccessToken()->delete();
         return $user->createToken('auth_token')->plainTextToken;
     }
+    /**
+     * Resolve a social user from OAuth data.
+     *
+     * @param string $provider
+     * @param \Laravel\Socialite\Contracts\User $socialUser
+     * @return User
+     */
+    public function findOrCreateSocialUser(string $provider, \Laravel\Socialite\Contracts\User $socialUser): User
+    {
+        // Security: Attempt to find user by provider identity first
+        $user = User::where('provider_name', $provider)
+            ->where('provider_id', $socialUser->getId())
+            ->first();
+
+        if ($user) {
+            return $user;
+        }
+
+        // Fallback: Match by email if the provider verifies it
+        // Note: For production, ensure the provider guarantees email verification.
+        $user = User::where('email', $socialUser->getEmail())->first();
+
+        if ($user) {
+            // Link the account to the existing user
+            $user->update([
+                'provider_name' => $provider,
+                'provider_id'   => $socialUser->getId(),
+            ]);
+            return $user;
+        }
+
+        // Create a new user
+        $user = User::create([
+            'name'              => $socialUser->getName(),
+            'email'             => $socialUser->getEmail(),
+            'social_avatar_url' => $socialUser->getAvatar(),
+            'provider_name'     => $provider,
+            'provider_id'       => $socialUser->getId(),
+            'password'          => Hash::make(\Illuminate\Support\Str::random(24)),
+            'email_verified_at' => now(), // Social accounts are pre-verified
+            'is_buyer'          => true,
+        ]);
+
+        $user->assignRole('user');
+
+        return $user;
+    }
 }

@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\SaveAddonRequest;
 use App\Models\Addon;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 /**
@@ -39,19 +39,12 @@ class AddonController extends Controller
     /**
      * Store a newly created addon in the database.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  SaveAddonRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request): RedirectResponse
+    public function store(SaveAddonRequest $request): RedirectResponse
     {
-        $data = $request->validate([
-            'name'        => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'price'       => 'required|numeric|min:0',
-            'status'      => 'nullable|in:active,inactive',
-        ]);
-
-        Addon::create($data);
+        Addon::create($request->validated());
 
         return redirect()->route('admin.addons.index')
                          ->with('success', __('Addon created successfully.'));
@@ -71,20 +64,13 @@ class AddonController extends Controller
     /**
      * Update an existing marketplace addon in the database.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  SaveAddonRequest  $request
      * @param  \App\Models\Addon  $addon
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, Addon $addon): RedirectResponse
+    public function update(SaveAddonRequest $request, Addon $addon): RedirectResponse
     {
-        $data = $request->validate([
-            'name'        => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'price'       => 'required|numeric|min:0',
-            'status'      => 'nullable|in:active,inactive',
-        ]);
-
-        $addon->update($data);
+        $addon->update($request->validated());
 
         return redirect()->route('admin.addons.index')
                          ->with('success', __('Addon updated successfully.'));

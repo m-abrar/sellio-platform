@@ -111,4 +111,38 @@ class PageContent extends Model implements HasMedia
     {
         return $query->where('section', $section);
     }
+
+    /**
+     * Scope a query to order results semantically (Top -> Middle -> Bottom) 
+     * and by content key importance (Heading -> Subheading -> Paragraph).
+     */
+    public function scopeOrdered($query)
+    {
+        $topSections = ['header', 'hero'];
+        $bottomSections = ['footer'];
+        
+        $sectionCase = "CASE 
+            WHEN section IN ('" . implode("','", $topSections) . "') THEN 1
+            WHEN section IN ('" . implode("','", $bottomSections) . "') THEN 3
+            ELSE 2
+        END";
+
+        $keyPatterns = [
+            10 => '%brand%', 20 => '%logo%', 30 => '%heading%', 
+            31 => '%subheading%', 32 => '%sub_heading%', 
+            40 => '%paragraph%', 50 => '%button%', 55 => '%link%',
+        ];
+
+        $keyCaseClauses = [];
+        foreach ($keyPatterns as $orderValue => $pattern) {
+            $keyCaseClauses[] = "WHEN `content_key` LIKE '{$pattern}' THEN {$orderValue}";
+        }
+        $keyCaseSql = "CASE " . implode(' ', $keyCaseClauses) . " ELSE 999 END";
+
+        return $query->orderByRaw($sectionCase)
+            ->orderByRaw("FIELD(section, 'header', 'hero', 'footer')")
+            ->orderByRaw($keyCaseSql)
+            ->orderBy('section')
+            ->orderBy('content_key');
+    }
 }

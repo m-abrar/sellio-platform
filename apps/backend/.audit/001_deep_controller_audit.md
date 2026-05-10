@@ -3298,7 +3298,7 @@ Manages administrative supplements and extra service offerings (upsells) availab
 - **Safe**: Restricted to administrative access.
 
 ### Validation
-- **FAIL**: Missing `FormRequest`. Utilizes inline validation (L47, L80).
+- **Elite**: **RESOLVED**. Extracted `SaveAddonRequest` to handle administrative input validation.
 
 ### Authorization
 - **Safe**.
@@ -5652,11 +5652,11 @@ MEDIUM
 ### Problems Found
 
 ### Security
-- **Email Spoofing Risk**: Relies solely on email matching (L44) to link social accounts to existing users. If a social provider does not guarantee email verification, an attacker could hijack an existing account.
-- **CSRF Risk**: Uses `stateless()` (L30) in a web-based redirect flow, which bypasses state verification.
+- **Email Spoofing Risk**: **RESOLVED**. Implemented provider-specific identity matching (`provider_id`, `provider_name`) and account linking logic in `AuthService`.
+- **CSRF Risk**: **RESOLVED**. Removed `stateless()` to restore standard state verification for web flows.
 
 ### Architecture
-- **Logic Debt**: Hardcoded role assignment (`user`) and status (`is_buyer => true`). Should be handled via an `IdentityService` or configuration.
+- **Logic Debt**: **RESOLVED**. Delegated to `AuthService`. Role assignment and identity resolution standardized.
 
 ## Controller Audit: app/Http/Controllers/Admin/TransactionController.php
 

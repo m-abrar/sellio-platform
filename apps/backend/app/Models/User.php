@@ -65,8 +65,14 @@ class User extends Authenticatable implements Wallet, Customer, HasMedia, MustVe
         'email',
         'phone',
         'username',
+        'company',
+        'bio',
+        'years_of_experience',
         'social_avatar_url',
+        'date_of_birth',
         'password',
+        'provider_name',
+        'provider_id',
     ];
 
     protected $hidden = [

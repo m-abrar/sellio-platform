@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\BulkUpdateContentRequest;
 use App\Models\PageContent;
 use App\Services\ContentService;
 use Illuminate\Http\RedirectResponse;
@@ -73,27 +74,9 @@ class ContentController extends Controller
     {
         $activeTheme = $theme_key ?? $request->query('themeKey');
         
-        // Build the Primary Section Sorting CASE (Groups 1: Top, 2: Middle, 3: Bottom)
-        $sectionCaseSql = "CASE 
-            WHEN section IN ('" . implode("','", self::TOP_SECTIONS) . "') THEN 1
-            WHEN section IN ('" . implode("','", self::BOTTOM_SECTIONS) . "') THEN 3
-            ELSE 2
-        END";
-
-        // Build the Content Key Sorting CASE based on semantic patterns (Heading -> Subheading -> Paragraph)
-        $keyCaseClauses = [];
-        foreach (self::KEY_ORDER_PATTERNS as $orderValue => $pattern) {
-            $keyCaseClauses[] = "WHEN `content_key` LIKE '{$pattern}' THEN {$orderValue}";
-        }
-        $keyCaseSql = "CASE " . implode(' ', $keyCaseClauses) . " ELSE 999 END";
-
         $settings = PageContent::where('theme_key', $activeTheme)
             ->where('page', $page)
-            ->orderByRaw($sectionCaseSql) 
-            ->orderByRaw("FIELD(section, 'header', 'hero', 'footer')") 
-            ->orderByRaw($keyCaseSql)
-            ->orderBy('section') 
-            ->orderBy('content_key')
+            ->ordered()
             ->get();
             
         return view('admin.content.edit-page', [
@@ -111,18 +94,21 @@ class ContentController extends Controller
      * @param  \App\Services\ContentService  $contentService
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function bulkUpdate(Request $request, ContentService $contentService): RedirectResponse
+    public function bulkUpdate(BulkUpdateContentRequest $request, ContentService $contentService): RedirectResponse
     {
-        foreach ($request->input('values', []) as $id => $newValue) {
-            $setting = PageContent::find($id);
+        $values = $request->validated()['values'];
+        
+        // Eager load settings to prevent N+1 during the loop
+        $settings = PageContent::whereIn('id', array_keys($values))->get();
 
-            if ($setting && $setting->value !== $newValue) {
-                // Exclude media fields from bulk text update
-                if ($setting->input_type !== 'file' && $setting->input_type !== 'image') {
+        foreach ($settings as $setting) {
+            $newValue = $values[$setting->id] ?? null;
+
+            if ($setting->value !== $newValue) {
+                if (!in_array($setting->input_type, ['file', 'image', 'logo'])) {
                     $setting->value = $newValue;
                     $setting->save();
                     
-                    // Clear runtime cache to reflect changes immediately
                     $contentService->forgetCache($setting);
                 }
             }
