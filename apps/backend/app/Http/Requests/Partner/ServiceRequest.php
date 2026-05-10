@@ -16,8 +16,11 @@ class ServiceRequest extends FormRequest
 
         // If updating, verify the user owns the service
         $service = $this->route('service');
-        if ($service instanceof \App\Models\Service) {
-            return $service->user_id === Auth::id();
+        if ($service) {
+            $serviceId = $service instanceof \App\Models\Service ? $service->id : $service;
+            return \App\Models\Service::where('id', $serviceId)
+                ->where('user_id', Auth::id())
+                ->exists();
         }
 
         return true;

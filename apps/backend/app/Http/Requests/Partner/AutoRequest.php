@@ -24,8 +24,11 @@ class AutoRequest extends FormRequest
 
         // If updating, verify the user owns the vehicle
         $auto = $this->route('auto');
-        if ($auto instanceof \App\Models\Auto) {
-            return $auto->user_id === Auth::id();
+        if ($auto) {
+            $autoId = $auto instanceof \App\Models\Auto ? $auto->id : $auto;
+            return \App\Models\Auto::where('id', $autoId)
+                ->where('user_id', Auth::id())
+                ->exists();
         }
 
         return true;

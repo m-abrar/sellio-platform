@@ -20,11 +20,24 @@ class MenuService
     public function __construct(Request $request)
     {
         // 1. Resolve active theme with a reliable fallback
-        // We check request, then falling back to the DB's active theme, then finally config.
-        $this->activeTheme = $request->get('theme_key') 
-            ?? $request->themeKey 
-            ?? \App\Models\Theme::where('is_active', 1)->value('theme_key')
-            ?? Config::get('app.default_theme', 'default');
+        // We check request, then fall back to the DB's active theme, then finally config.
+        $requestedTheme = $request->get('theme_key') ?? $request->themeKey;
+        
+        if ($requestedTheme) {
+            // Verify the theme exists to prevent database hammering via firstOrCreate in get()
+            $themeExists = Cache::remember("theme_exists.{$requestedTheme}", 3600, function () use ($requestedTheme) {
+                return \App\Models\Theme::where('theme_key', $requestedTheme)->exists();
+            });
+
+            if ($themeExists) {
+                $this->activeTheme = $requestedTheme;
+            }
+        }
+
+        if (!isset($this->activeTheme)) {
+            $this->activeTheme = \App\Models\Theme::where('is_active', 1)->value('theme_key')
+                ?? Config::get('app.default_theme', 'default');
+        }
 
         // 2. Normalize current path for comparison
         $this->currentPath = trim($request->path(), '/'); 

@@ -35,7 +35,11 @@ class AutoResource extends JsonResource
                 'year'           => (int) $this->year,
                 'make'           => $this->make,
                 'model'          => $this->model,
-                'vin'            => $this->vin_number,
+                'vin'            => $this->when(
+                    auth()->id() === $this->user_id || (auth()->check() && auth()->user()->hasRole('admin')),
+                    $this->vin_number,
+                    $this->vin_number ? substr($this->vin_number, 0, 4) . '***********' : null
+                ),
                 'condition'      => $this->condition_rating . '/10',
                 'mileage'        => $this->mileage_formatted, // Uses session-aware conversion
                 'raw_mileage'    => (int) $this->mileage_value,
@@ -51,30 +55,30 @@ class AutoResource extends JsonResource
             // Media (Spatie Media Library)
             'media' => [
                 'main_photo' => $this->primary_image_url,
-                'preview'    => $this->getMedia(Auto::PRIMARY_MEDIA)->first()?->getUrl('auto_listing_preview'),
-                'gallery'    => $this->getMedia(Auto::GALLERY_MEDIA)->map(fn($media) => [
+                'preview'    => $this->whenLoaded('media', fn() => $this->getMedia(Auto::PRIMARY_MEDIA)->first()?->getUrl('auto_listing_preview')),
+                'gallery'    => $this->whenLoaded('media', fn() => $this->getMedia(Auto::GALLERY_MEDIA)->map(fn($media) => [
                     'id'        => $media->id,
                     'url'       => $media->getUrl(),
                     'thumbnail' => $media->getUrl('thumb'),
                     'name'      => $media->name,
-                ]),
+                ])),
             ],
 
             // Relationships & Taxonomy
             'taxonomy' => [
-                'category' => [
-                    'id'    => $this->category?->id,
-                    'title' => $this->category?->title,
-                ],
-                'brand' => [
-                    'id'    => $this->brand?->id,
-                    'title' => $this->brand?->title,
-                ],
-                'features' => $this->features->map(fn($f) => [
+                'category' => $this->whenLoaded('category', fn() => [
+                    'id'    => $this->category->id,
+                    'title' => $this->category->title,
+                ]),
+                'brand' => $this->whenLoaded('brand', fn() => [
+                    'id'    => $this->brand->id,
+                    'title' => $this->brand->title,
+                ]),
+                'features' => $this->whenLoaded('features', fn() => $this->features->map(fn($f) => [
                     'title' => $f->title,
                     'icon'  => $f->icon,
-                ]),
-                'tags' => $this->tags->pluck('title'),
+                ])),
+                'tags' => $this->whenLoaded('tags', fn() => $this->tags->pluck('title')),
             ],
 
             // Location
@@ -90,11 +94,11 @@ class AutoResource extends JsonResource
 
             // Meta & Status
             'status' => [
-                'is_published'  => (bool) $this->is_published,
-                'is_featured'   => (bool) $this->is_featured,
+                'is_published'   => (bool) $this->is_published,
+                'is_featured'    => (bool) $this->is_featured,
                 'is_new_arrival' => (bool) $this->is_new,
-                'approved_at'   => $this->approved_at?->toIso8601String(),
-                'inquiry_count' => (int) ($this->inquiries_count ?? $this->inquiries()->count()),
+                'approved_at'    => $this->approved_at?->toIso8601String(),
+                'inquiry_count'  => (int) $this->whenCounted('inquiries'),
             ],
 
             'seo' => [
@@ -102,11 +106,11 @@ class AutoResource extends JsonResource
                 'meta_description' => $this->meta_description,
             ],
 
-            'owner' => [
+            'owner' => $this->whenLoaded('user', fn() => [
                 'id'     => $this->user_id,
-                'name'   => $this->user?->name,
-                'avatar' => $this->user?->avatar_url,
-            ],
+                'name'   => $this->user->name,
+                'avatar' => $this->user->avatar_url,
+            ]),
 
             'created_at' => $this->created_at?->toIso8601String(),
         ];

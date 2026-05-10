@@ -9,7 +9,13 @@ class SaveProductRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true; // Auth handled by Sanctum middleware
+        $productId = $this->route('id');
+        if ($productId) {
+            return \App\Models\Product::where('id', $productId)
+                ->where('user_id', auth()->id())
+                ->exists();
+        }
+        return auth()->check();
     }
 
     public function rules(): array

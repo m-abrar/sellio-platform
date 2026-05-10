@@ -18,7 +18,23 @@ class UpdateBookingDetailsRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        $booking = $this->route('booking');
+        if ($booking) {
+            // Check both PropertyBooking and EventBooking as they might use the same request
+            // This is a common pattern in the unified dashboard
+            $userId = auth()->id();
+            
+            $isPropertyOwner = \App\Models\PropertyBooking::where('id', $booking instanceof \App\Models\PropertyBooking ? $booking->id : $booking)
+                ->where('user_id', $userId)
+                ->exists();
+                
+            $isEventOwner = \App\Models\EventBooking::where('id', $booking instanceof \App\Models\EventBooking ? $booking->id : $booking)
+                ->where('user_id', $userId)
+                ->exists();
+                
+            return $isPropertyOwner || $isEventOwner;
+        }
+        return auth()->check();
     }
 
     /**

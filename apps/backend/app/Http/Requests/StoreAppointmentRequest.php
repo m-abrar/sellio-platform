@@ -32,8 +32,13 @@ class StoreAppointmentRequest extends FormRequest
             'booking_date'       => 'required|date|after:today',
             'time_slot'          => 'required|string|regex:/^[0-9]{2}:[0-9]{2}$/',
             'notes'              => 'nullable|string|max:500',
-            'service_package_id' => 'required|exists:service_packages,id',
-            'service_id'         => 'required|exists:services,id',
+            'service_package_id' => [
+                'required', 
+                \Illuminate\Validation\Rule::exists('service_packages', 'id')->where(function ($query) {
+                    $query->where('service_id', $this->service_id);
+                }),
+            ],
+            'service_id'         => ['required', 'exists:services,id'],
         ];
     }
 

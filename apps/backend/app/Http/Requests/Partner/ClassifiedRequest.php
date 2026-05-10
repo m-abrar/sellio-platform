@@ -16,8 +16,11 @@ class ClassifiedRequest extends FormRequest
 
         // If updating, verify the user owns the classified ad
         $classified = $this->route('classified');
-        if ($classified instanceof \App\Models\Classified) {
-            return $classified->user_id === Auth::id();
+        if ($classified) {
+            $classifiedId = $classified instanceof \App\Models\Classified ? $classified->id : $classified;
+            return \App\Models\Classified::where('id', $classifiedId)
+                ->where('user_id', Auth::id())
+                ->exists();
         }
 
         return true;

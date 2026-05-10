@@ -18,8 +18,7 @@ class StoreEventBookingRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        // Permission is handled via middleware or Auth check in controller
-        return true;
+        return auth()->check();
     }
 
     /**

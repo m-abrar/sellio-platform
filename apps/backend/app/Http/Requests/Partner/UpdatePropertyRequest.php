@@ -24,8 +24,11 @@ class UpdatePropertyRequest extends FormRequest
 
         // If updating, verify the user owns the property
         $property = $this->route('property');
-        if ($property instanceof \App\Models\Property) {
-            return $property->user_id === Auth::id();
+        if ($property) {
+            $propertyId = $property instanceof \App\Models\Property ? $property->id : $property;
+            return \App\Models\Property::where('id', $propertyId)
+                ->where('user_id', Auth::id())
+                ->exists();
         }
 
         return true;

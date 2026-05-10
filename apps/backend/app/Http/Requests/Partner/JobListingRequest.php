@@ -16,8 +16,11 @@ class JobListingRequest extends FormRequest
 
         // If updating, verify the user owns the job listing
         $jobListing = $this->route('joblisting');
-        if ($jobListing instanceof \App\Models\JobListing) {
-            return $jobListing->user_id === Auth::id();
+        if ($jobListing) {
+            $jobListingId = $jobListing instanceof \App\Models\JobListing ? $jobListing->id : $jobListing;
+            return \App\Models\JobListing::where('id', $jobListingId)
+                ->where('user_id', Auth::id())
+                ->exists();
         }
 
         return true;

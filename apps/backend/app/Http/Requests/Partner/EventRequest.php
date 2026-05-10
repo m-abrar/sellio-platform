@@ -24,8 +24,11 @@ class EventRequest extends FormRequest
 
         // If updating, verify the user owns the event
         $event = $this->route('event');
-        if ($event instanceof \App\Models\Event) {
-            return $event->user_id === Auth::id();
+        if ($event) {
+            $eventId = $event instanceof \App\Models\Event ? $event->id : $event;
+            return \App\Models\Event::where('id', $eventId)
+                ->where('user_id', Auth::id())
+                ->exists();
         }
 
         return true;

@@ -21,18 +21,20 @@ class BlogResource extends JsonResource
             
             // Spatie Media & Custom Attributes
             'featured_image' => $this->primary_image_url, 
-            'gallery'        => $this->getMedia('gallery')->map(fn($media) => [
-                'url'  => $media->getUrl(),
-                'title' => $media->title
-            ]),
+            'gallery'        => $this->whenLoaded('media', fn() => $this->getMedia('gallery')->map(fn($media) => [
+                'url'   => $media->getUrl(),
+                'title' => $media->name // Fix: Spatie Media uses 'name' not 'title' by default
+            ])),
 
             // Relationships with null-safety
-            'category'       => $this->category?->title, 
-            'tags'           => $this->tags->pluck('title'),
-            'authorrr'         => [
-                'name'   => $this->user?->name ?? 'Admin',
-                'avatar' => $this->user?->avatar_url ?: null
-            ],
+            'category'       => $this->whenLoaded('category', fn() => $this->category->title), 
+            'tags'           => $this->whenLoaded('tags', fn() => $this->tags->pluck('title')),
+            'author'         => $this->whenLoaded('user', fn() => [
+                'name'   => $this->user->name ?? 'Admin',
+                'avatar' => $this->user->avatar_url ?: null
+            ], [
+                'name' => 'Admin' // Fallback for when user is not loaded
+            ]),
             
             'view_count'     => $this->view_count,
             'published_at'   => $this->published_at,

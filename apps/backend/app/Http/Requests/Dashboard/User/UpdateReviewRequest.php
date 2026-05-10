@@ -8,7 +8,14 @@ class UpdateReviewRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true;
+        $review = $this->route('review');
+        if ($review) {
+            $reviewId = $review instanceof \App\Models\Review ? $review->id : $review;
+            return \App\Models\Review::where('id', $reviewId)
+                ->where('user_id', auth()->id())
+                ->exists();
+        }
+        return auth()->check();
     }
 
     public function rules(): array
