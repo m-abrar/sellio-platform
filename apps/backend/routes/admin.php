@@ -387,10 +387,10 @@ Route::prefix('admin')
             'line-items' => LineItemController::class ,
             'addons' => AddonController::class ,
         ]);
-    });
 
-/**
- * SECTION: GLOBAL ASSETS
- */
-Route::post('/upload-image', [MediaController::class , 'upload'])->name('upload.image');
-Route::post('/admin/delete-image', [MediaController::class , 'delete'])->name('delete.image');
+        /**
+         * SECTION: GLOBAL ASSETS (Administrative)
+         */
+        Route::post('/upload-image', [MediaController::class , 'upload'])->name('upload.image');
+        Route::post('/admin/delete-image', [MediaController::class , 'delete'])->name('delete.image');
+    });

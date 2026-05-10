@@ -215,8 +215,8 @@ Route::middleware(['built_in_website'])->group(function () {
     Route::get('/partner/{user:username}', [PartnerController::class, 'show'])->name('partner.profile');
     Route::get('/alias/users/{user:username}', fn($user) => redirect()->route('partner.profile', $user))->name('users.show');
 
-    Route::post('/reviews/{type}/{id}', [ReviewController::class, 'store'])->name('reviews.store')->whereNumber('id');
-    Route::get('/conversation/{user:username}', [ConversationController::class, 'start'])->name('conversation.start');
+    Route::post('/reviews/{type}/{id}', [ReviewController::class, 'store'])->middleware('auth')->name('reviews.store')->whereNumber('id');
+    Route::get('/conversation/{user:username}', [ConversationController::class, 'start'])->middleware('auth')->name('conversation.start');
 
     // Newsletter
     Route::post('/newsletter/subscribe', [\App\Http\Controllers\NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');

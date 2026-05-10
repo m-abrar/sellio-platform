@@ -20,6 +20,11 @@ class AppServiceProvider extends ServiceProvider
     {
         Paginator::useBootstrapFive();
 
+        // 0. API Documentation Hardening
+        \Dedoc\Scramble\Scramble::auth(function ($request) {
+            return $request->user()?->hasRole(['admin', 'super-admin']) || $this->app->isLocal();
+        });
+
         // 1. Dynamic Config for Admin Branding
         if (!$this->app->runningInConsole()) {
             $siteName = setting('site_name', config('app.name'));

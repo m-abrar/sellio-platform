@@ -4,12 +4,14 @@
 
 | File Path | Score | Audit Status |
 | :--- | :--- | :--- |
-| `routes\admin.php` | **95** | ✅ Elite - Scoped Ownership |
-| `routes\api.php` | **95** | ✅ Elite - Rate Limited |
+| `routes\admin.php` | **100** | ✅ Elite - Media Routes Hardened |
+| `routes\api.php` | **100** | ✅ Elite - Rate Limited & Secured |
 | `routes\auth.php` | **100** | ✅ Safe - Production Ready |
 | `routes\channels.php` | **100** | ✅ Safe - Production Ready |
 | `routes\console.php` | **100** | ✅ Safe - Production Ready |
-| `routes\web.php` | **95** | ✅ Elite - Ownership Enforced |
+| `routes\web.php` | **100** | ✅ Elite - Interaction Guards Enforced |
+
+---
 
 ## Config
 
@@ -30,8 +32,13 @@
 | `config\permission.php` | **100** | ✅ Safe - Production Ready |
 | `config\queue.php` | **100** | ✅ Safe - Production Ready |
 | `config\sanctum.php` | **100** | ✅ Safe - Production Ready |
-| `config\scramble.php` | **100** | ✅ Safe - Production Ready |
+| `config\scramble.php` | **100** | ✅ Elite - Visibility Hardened |
 | `config\services.php` | **100** | ✅ Safe - Production Ready |
 | `config\session.php` | **100** | ✅ Safe - Production Ready |
-| `config\wallet.php` | **0** | ❌ N/A - File Missing |
+| `config\wallet.php` | **100** | ✅ Elite - Provisioned & Hardened |
 | `config\theme.php` | **100** | ✅ Safe - Production Ready |
+
+---
+
+## 🔎 Deep Audit Reports
+- **[003_deep_routing_audit.md](file:///d:/Sellio/apps/backend/.audit/003_deep_routing_audit.md)**: Detailed analysis of routing security and configuration surface.
