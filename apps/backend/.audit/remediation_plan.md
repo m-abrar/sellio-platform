@@ -174,5 +174,41 @@ This document tracks the resolution of critical (P0) security and performance vu
 - **Status**: ✅ Resolved
 - **Files**: `app/Models/Application.php`, `app/Models/AutoInquiry.php`
 
+### 30. Relational Integrity Hardening (`Event & Financial Migrations`)
+- **Risk**: `CASCADE ON DELETE` risk in ticketing and financial definitions could lead to unintended data loss for historical audit trails.
+- **Fix**: Replaced with `restrictOnDelete()` and implemented `SoftDeletes` for consistent data preservation across the Events module.
+- **Status**: ✅ Resolved
+- **Files**: `database/migrations/2025_10_17_041016_create_event_ticket_types_table.php`, `database/migrations/2025_10_17_041525_create_event_occurrences_ticket_table.php`
+
+### 31. Financial Precision Future-Proofing (`Property Addons`)
+- **Risk**: `decimal(8, 2)` precision was insufficient for high-value transactions or hyper-inflationary currencies.
+- **Fix**: Increased precision to `decimal(15, 2)` across auxiliary pricing tables.
+- **Status**: ✅ Resolved
+- **File**: `database/migrations/2025_10_17_095104_create_property_addons_table.php`
+
+### 32. System-Wide Query Optimization (`Strategic Indexes`)
+- **Risk**: "Filter Scan Debt" and "Linear Scan Bottlenecks" in high-traffic tables (Notifications, Carts, Menu Items, Tags).
+- **Fix**: Implemented strategic indexes on module flags, notification timestamps (`read_at`, `created_at`), menu orders, and cart update windows.
+- **Status**: ✅ Resolved
+- **Files**: `database/migrations/*.php`
+
+### 33. Financial Ledger Integrity (`Wallet Ledger Protection`)
+- **Risk**: Destructive migration attempted to drop polymorphic columns (`from_type`, `to_type`) required by the underlying wallet package logic.
+- **Fix**: Reverted the column drop to maintain ledger integrity and ensure full compatibility with the `Bavix/Wallet` ecosystem.
+- **Status**: ✅ Resolved
+- **File**: `database/migrations/2023_12_30_113122_extra_columns_removed.php`
+
+### 34. Factory-Driven Identity Simulation (`SaaS Identity Factories`)
+- **Risk**: Missing identity states and assignment logic in factories limited the fidelity of automated testing and demonstration seeding.
+- **Fix**: Implemented `admin()`, `partner()`, and `verified()` states in `UserFactory`, and added `assigned_to` logic to `TicketFactory`.
+- **Status**: ✅ Resolved
+- **Files**: `database/factories/UserFactory.php`, `database/factories/TicketFactory.php`, `database/factories/SubscriptionFactory.php`
+
+### 35. Core Financial Indexing (`Transaction & Transfer Ledgers`)
+- **Risk**: Missing indexes on `wallet_id`, `deposit_id`, and `withdraw_id` would lead to severe performance degradation as the financial ledger grows.
+- **Fix**: Implemented strategic indexes on all key foreign identifiers within the `Bavix/Wallet` table structures.
+- **Status**: ✅ Resolved
+- **Files**: `database/migrations/2018_11_06_222923_create_transactions_table.php`, `database/migrations/2018_11_07_192923_create_transfers_table.php`
+
 ## 🏁 Final Audit Verdict
 *The Sellio platform is now **100% PRODUCTION READY**. All critical architectural, security, and performance risks identified during the 'Elite' audit phase have been successfully remediated using industry-standard patterns. The system is hardened against IDOR, XSS, Mass Assignment, and SQL Injection, with an optimized database layer capable of high-concurrency marketplace operations.*

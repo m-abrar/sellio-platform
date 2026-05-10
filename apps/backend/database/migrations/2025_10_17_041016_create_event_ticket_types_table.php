@@ -16,11 +16,12 @@ return new class extends Migration
     {
         Schema::create('event_ticket_types', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('event_id')->constrained('events')->cascadeOnDelete();
+            $table->foreignId('event_id')->constrained('events')->restrictOnDelete();
             $table->string('title');
             $table->decimal('base_price', 15, 2);
             $table->text('description')->nullable();
             $table->unsignedInteger('max_quantity')->nullable()->comment('NULL for unlimited');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

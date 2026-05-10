@@ -15,11 +15,13 @@ return new class extends Migration
     {
         Schema::create('product_attributes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id')->constrained()->onDelete('cascade');
+            $table->foreignId('product_id')->constrained()->restrictOnDelete();
             
             // Attribute Info (e.g., "Size", "Color", "Material")
             $table->string('name', 100); 
             $table->string('value', 255); // (e.g., "XL", "Red", "Stainless Steel")
+
+            $table->index(['product_id', 'name', 'value'], 'product_attribute_lookup');
             
             // Logic for Pricing & Stock
             $table->decimal('additional_price', 15, 2)->default(0.00)->comment('Added to base price');

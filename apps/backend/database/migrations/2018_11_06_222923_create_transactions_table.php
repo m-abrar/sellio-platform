@@ -19,7 +19,7 @@ return new class() extends Migration
         Schema::create($this->table(), static function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->morphs('payable');
-            $table->unsignedBigInteger('wallet_id');
+            $table->unsignedBigInteger('wallet_id')->index();
             $table->enum('type', ['deposit', 'withdraw'])->index();
             $table->decimal('amount', 64, 0);
             $table->boolean('confirmed');

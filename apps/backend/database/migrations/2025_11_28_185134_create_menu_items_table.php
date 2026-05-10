@@ -34,7 +34,7 @@ return new class extends Migration
                   ->constrained('menu_items')
                   ->onDelete('cascade');
 
-            $table->integer('order')->default(0);
+            $table->integer('order')->default(0)->index();
             $table->string('status', 30)->default('active')->index();
             $table->text('admin_note')->nullable();
             $table->timestamps();

@@ -41,7 +41,43 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
+
+            // Identity Flags
+            'is_admin' => false,
+            'is_partner' => false,
+            'is_buyer' => true,
+            'is_verified' => false,
         ];
+    }
+
+    /**
+     * Indicate that the user is an administrator.
+     */
+    public function admin(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'is_admin' => true,
+        ]);
+    }
+
+    /**
+     * Indicate that the user is a partner/seller.
+     */
+    public function partner(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'is_partner' => true,
+        ]);
+    }
+
+    /**
+     * Indicate that the user is verified.
+     */
+    public function verified(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'is_verified' => true,
+        ]);
     }
 
     /**

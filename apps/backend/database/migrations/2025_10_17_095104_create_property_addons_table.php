@@ -15,13 +15,13 @@ return new class extends Migration
     {
         Schema::create('property_addons', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('property_id')->constrained()->onDelete('cascade');
+            $table->foreignId('property_id')->constrained()->restrictOnDelete();
             
             $table->string('title', 100);
             $table->text('description')->nullable();
             $table->string('icon')->default('bi bi-stars'); // Store Bootstrap icon class
             
-            $table->decimal('price', 8, 2);
+            $table->decimal('price', 15, 2);
             
             // Intellectual Logic Fields
             $table->enum('type', ['per_night', 'per_stay'])->default('per_stay');

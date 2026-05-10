@@ -36,6 +36,7 @@ class TicketFactory extends Factory
 
         return [
             'user_id' => User::factory(), // Automatically creates a User if one doesn't exist
+            'assigned_to' => null, // Default to unassigned
             
             // Generate a random, unique title
             'title' => $this->faker->unique()->sentence(rand(3, 6)),
@@ -52,6 +53,17 @@ class TicketFactory extends Factory
             'created_at' => $this->faker->dateTimeBetween('-1 year', 'now'),
             'updated_at' => $this->faker->dateTimeBetween('-6 months', 'now'),
         ];
+    }
+
+    /**
+     * Indicate that the ticket is assigned to an agent.
+     */
+    public function assigned(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'assigned_to' => User::factory(),
+            'status' => 'pending',
+        ]);
     }
 
     /**

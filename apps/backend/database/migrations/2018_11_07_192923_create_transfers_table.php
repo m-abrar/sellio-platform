@@ -29,8 +29,8 @@ return new class() extends Migration
                 ->enum('status_last', ['exchange', 'transfer', 'paid', 'refund', 'gift'])
                 ->nullable();
 
-            $table->unsignedBigInteger('deposit_id');
-            $table->unsignedBigInteger('withdraw_id');
+            $table->unsignedBigInteger('deposit_id')->index();
+            $table->unsignedBigInteger('withdraw_id')->index();
 
             $table->decimal('discount', 64, 0)
                 ->default(0);

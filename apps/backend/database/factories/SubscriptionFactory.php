@@ -31,4 +31,35 @@ class SubscriptionFactory extends Factory
             'ends_at'   => $endsAt,
         ];
     }
+
+    /**
+     * Indicate that the subscription is monthly.
+     */
+    public function monthly(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'ends_at' => (clone $attributes['starts_at'])->modify('+1 month'),
+        ]);
+    }
+
+    /**
+     * Indicate that the subscription is annual.
+     */
+    public function annual(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'ends_at' => (clone $attributes['starts_at'])->modify('+1 year'),
+        ]);
+    }
+
+    /**
+     * Indicate that the subscription is expired.
+     */
+    public function expired(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'status' => 'expired',
+            'ends_at' => now()->subDay(),
+        ]);
+    }
 }

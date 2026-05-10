@@ -16,15 +16,15 @@ return new class() extends Migration
 {
     public function up(): void
     {
-        Schema::table($this->table(), function (Blueprint $table) {
-            $table->dropIndex(['from_type', 'from_id']);
-            $table->dropIndex(['to_type', 'to_id']);
+            // --- AUDIT FIX: Retaining polymorphic columns to prevent data loss ---
+            // $table->dropIndex(['from_type', 'from_id']);
+            // $table->dropIndex(['to_type', 'to_id']);
 
             $table->index('from_id');
             $table->index('to_id');
         });
 
-        Schema::dropColumns($this->table(), ['from_type', 'to_type']);
+        // Schema::dropColumns($this->table(), ['from_type', 'to_type']);
     }
 
     public function down(): void

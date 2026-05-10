@@ -17,13 +17,13 @@ return new class extends Migration
         Schema::create('event_occurrence_tickets', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('event_occurrence_id')->constrained('event_occurrences')->cascadeOnDelete();
-            $table->foreignId('event_ticket_type_id')->constrained('event_ticket_types')->cascadeOnDelete();
+            $table->foreignId('event_occurrence_id')->constrained('event_occurrences')->restrictOnDelete();
+            $table->foreignId('event_ticket_type_id')->constrained('event_ticket_types')->restrictOnDelete();
 
-            $table->integer('available_quantity');
-            $table->integer('sold_count');
-            $table->decimal('override_price', 10, 2)->nullable();
-            $table->decimal('sale_price', 10, 2)->nullable();
+            $table->unsignedInteger('available_quantity')->default(0);
+            $table->unsignedInteger('sold_count')->default(0);
+            $table->decimal('override_price', 15, 2)->nullable();
+            $table->decimal('sale_price', 15, 2)->nullable();
 
             $table->unique(['event_occurrence_id', 'event_ticket_type_id'], 'occurrence_ticket_unique');
 

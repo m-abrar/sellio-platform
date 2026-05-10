@@ -29,12 +29,12 @@ return new class extends Migration
             $table->string('color', 20)->nullable();
             
             // ADDED Boolean module columns
-            $table->boolean('is_property')->default(false);
-            $table->boolean('is_event')->default(false);
-            $table->boolean('is_job')->default(false);
-            $table->boolean('is_auto')->default(false);
-            $table->boolean('is_service')->default(false);
-            $table->boolean('is_classified')->default(false);
+            $table->boolean('is_property')->default(false)->index();
+            $table->boolean('is_event')->default(false)->index();
+            $table->boolean('is_job')->default(false)->index();
+            $table->boolean('is_auto')->default(false)->index();
+            $table->boolean('is_service')->default(false)->index();
+            $table->boolean('is_classified')->default(false)->index();
             
             $table->softDeletes();
             $table->timestamps();
