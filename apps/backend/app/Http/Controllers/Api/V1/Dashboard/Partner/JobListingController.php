@@ -40,12 +40,18 @@ class JobListingController extends Controller
      *
      * @return View
      */
+    /**
+     * Display a listing of the partner's jobs.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function index(Request $request)
     {
         $jobs = JobListing::where('user_id', Auth::id())
-            ->with(['category', 'location'])
+            ->withCount(['applications', 'applicationsNew'])
+            ->with(['category', 'location', 'brand', 'tags', 'employer'])
             ->latest()
-            ->paginate(10);
+            ->paginate(15);
 
         return $this->successResponse(JobListingResource::collection($jobs));
     }
