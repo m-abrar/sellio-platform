@@ -28,15 +28,15 @@ return new class extends Migration
             $table->foreignId('parent_id')
                   ->nullable()
                   ->constrained('locations')
-                  ->onDelete('cascade');
+                  ->restrictOnDelete();
             
             $table->unsignedTinyInteger('level')->default(1)->comment('1: Country, 2: State, 3: City, 4: Area');
             
             // Geographical Data
             // Precision for Latitude (max 90.00000000)
-            $table->decimal('latitude', 10, 8)->nullable();
+            $table->decimal('latitude', 10, 8)->nullable()->index();
             // Precision for Longitude (max 180.00000000)
-            $table->decimal('longitude', 11, 8)->nullable();
+            $table->decimal('longitude', 11, 8)->nullable()->index();
 
             // Address Components
             $table->string('state', 100)->nullable();
@@ -48,18 +48,18 @@ return new class extends Migration
             $table->text('meta_description')->nullable();
 
             // Module Flags (Indicate which modules this location is relevant to)
-            $table->boolean('is_property')->default(false);
-            $table->boolean('is_event')->default(false);
-            $table->boolean('is_job')->default(false);
-            $table->boolean('is_auto')->default(false);
-            $table->boolean('is_service')->default(false);
-            $table->boolean('is_classified')->default(false);
-            $table->boolean('is_product')->default(false);
-            $table->boolean('is_blog')->default(false);
+            $table->boolean('is_property')->default(false)->index();
+            $table->boolean('is_event')->default(false)->index();
+            $table->boolean('is_job')->default(false)->index();
+            $table->boolean('is_auto')->default(false)->index();
+            $table->boolean('is_service')->default(false)->index();
+            $table->boolean('is_classified')->default(false)->index();
+            $table->boolean('is_product')->default(false)->index();
+            $table->boolean('is_blog')->default(false)->index();
 
             // Publishing Status
-            $table->boolean('is_featured')->default(true);
-            $table->boolean('is_published')->default(true);
+            $table->boolean('is_featured')->default(true)->index();
+            $table->boolean('is_published')->default(true)->index();
 
             // Timestamps
             // --- Production Hardening & Audit Columns ---

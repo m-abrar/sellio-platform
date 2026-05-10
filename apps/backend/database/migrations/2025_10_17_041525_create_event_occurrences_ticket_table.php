@@ -24,6 +24,9 @@ return new class extends Migration
             $table->unsignedInteger('sold_count')->default(0);
             $table->decimal('override_price', 15, 2)->nullable();
             $table->decimal('sale_price', 15, 2)->nullable();
+            
+            $table->boolean('is_active')->default(true)->index();
+            $table->unsignedInteger('lock_version')->default(0)->comment('Optimistic locking for inventory protection');
 
             $table->unique(['event_occurrence_id', 'event_ticket_type_id'], 'occurrence_ticket_unique');
 

@@ -97,35 +97,29 @@ class JobSeeder extends Seeder
             'Human Resources Business Partner', 'Operations Manager', 'Project Management Officer'
         ];
 
+        $batchJobs = [];
         foreach (range(1, $numberOfListings) as $index) {
             $title = $jobTitles[$index - 1] ?? $faker->jobTitle;
             $salaryMin = $faker->numberBetween(60000, 110000);
             $salaryMax = $faker->numberBetween($salaryMin + 20000, $salaryMin + 80000);
             $createdAt = now()->subDays($faker->numberBetween(1, 30));
 
-            $job = JobListing::create([ 
-                // Foreign Keys
+            $batchJobs[] = [
                 'user_id' => $faker->randomElement($userIds),
                 'category_id' => $faker->randomElement($categoryIds),
                 'type_id' => $faker->randomElement($typeIds),
                 'brand_id' => !empty($brandIds) ? $faker->randomElement($brandIds) : null,
                 'location_id' => $faker->randomElement($locationIds),
-                
-                // Core Data
                 'title' => $title,
                 'slug' => Str::slug($title . '-' . $index) . '-' . Str::random(5),
-                'description' => $faker->realText(1000), // Professional corporate description
+                'description' => $faker->realText(1000),
                 'salary_min' => $salaryMin,
                 'salary_max' => $salaryMax,
                 'salary_frequency' => 'yearly',
-                
-                // Job Specifics
                 'experience_level' => $faker->randomElement($experienceLevels),
                 'workplace_type' => $faker->randomElement($workplaceTypes),
                 'required_education' => $faker->randomElement(['Bachelors Degree', 'Masters Degree', 'PhD preferred']),
                 'application_deadline' => $faker->dateTimeBetween('now +1 week', 'now +2 months'),
-
-                // Detailed Location/Address fields
                 'address' => $faker->streetAddress,
                 'city' => $faker->city,
                 'state' => $faker->stateAbbr,
@@ -133,13 +127,9 @@ class JobSeeder extends Seeder
                 'zip_code' => $faker->postcode,
                 'latitude' => $faker->latitude(34, 42),
                 'longitude' => $faker->longitude(-118, -74),
-
-                // Hardened Moderation & Status
                 'status'        => 'approved',
                 'admin_note'    => 'Verified corporate recruitment partner.',
                 'is_verified'   => true,
-
-                // Status/Visibility Flags
                 'is_published' => true,
                 'is_featured' => $faker->boolean(20),
                 'is_contract' => $faker->boolean(20),
@@ -147,11 +137,16 @@ class JobSeeder extends Seeder
                 'approved_at'       => now(),
                 'created_at' => $createdAt,
                 'updated_at' => $createdAt,
-            ]);
-            
-            $jobs[] = $job;
-            $jobsCreatedCount++;
+            ];
         }
+
+        foreach (array_chunk($batchJobs, 10) as $chunk) {
+            foreach ($chunk as $data) {
+                $jobs[] = JobListing::create($data); // Using create to get IDs for child applications
+                $jobsCreatedCount++;
+            }
+        }
+        
         $this->command->line(" ✓ Created {$jobsCreatedCount} job listings.");
 
 

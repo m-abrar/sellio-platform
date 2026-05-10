@@ -65,6 +65,7 @@ class AutoSeeder extends Seeder
         $totalFeaturesAttached = 0;
         $totalInquiriesCreated = 0;
         $totalReviewsCreated = 0;
+        $jobsCreatedCount = 0;
 
         // Loop to create 30 distinct Auto listings.
         $numberOfListings = 30;
@@ -81,47 +82,38 @@ class AutoSeeder extends Seeder
             'Toyota' => ['Land Cruiser 300', 'GR Supra', 'Sequoia Capstone'],
         ];
 
+        $batchAutos = [];
         foreach (range(1, $numberOfListings) as $index) {
             $make = $faker->randomElement(array_keys($autoModels));
             $model = $faker->randomElement($autoModels[$make]);
             $year = $faker->numberBetween(2021, 2024);
             $title = "$year $make $model";
 
-            // --- 4. CREATE AUTO LISTING (Parent Record) ---
-            $auto = Auto::create([
-                // Foreign Keys
+            $batchAutos[] = [
                 'user_id' => $faker->randomElement($userIds),
                 'category_id' => $faker->randomElement($categoryIds),
                 'brand_id' => $faker->randomElement($brandIds),
                 'location_id' => $faker->randomElement($locationIds),
                 'type_id' => $faker->randomElement($typeIds),
-                
-                // Core Data
                 'title' => $title,
                 'slug' => Str::slug($title . '-' . $index) . '-' . Str::random(5),
-                'description' => $faker->realText(600), // Professional automotive description
+                'description' => $faker->realText(600),
                 'base_price' => $faker->randomFloat(2, 45000, 185000),
                 'sale_price' => $faker->boolean(25) ? $faker->randomFloat(2, 40000, 170000) : null,
-                
-                // Specifics (Auto-related attributes)
                 'year' => $year,
                 'make' => $make,
                 'model' => $model,
-                'mileage_value' => $faker->numberBetween(5, 15000), // Low mileage for premium look
+                'mileage_value' => $faker->numberBetween(5, 15000),
                 'mileage_units' => 'mi',
                 'engine_type' => $faker->randomElement(['V8 Biturbo', 'Electric Drive', 'Inline-6 Hybrid', 'V6 Twin-Turbo']),
                 'transmission' => $faker->randomElement(['9-Speed Automatic', '8-Speed Dual-Clutch', 'Single-Speed Direct']),
-                'fuel_economy' => $faker->randomFloat(1, 12, 110), // Mix of high-perf and EV
+                'fuel_economy' => $faker->randomFloat(1, 12, 110),
                 'drivetrain' => $faker->randomElement(['AWD', 'RWD', '4WD']),
                 'exterior_color' => $faker->randomElement(['Obsidian Black', 'Mineral White', 'Selenite Grey', 'Tanzanite Blue', 'San Marino Blue', 'Chalk']),
-                
-                // Inventory and Condition
                 'condition_rating' => $faker->numberBetween(8, 10),
                 'vin_number' => Str::upper(Str::random(17)),
                 'warranty_months' => $faker->randomElement([36, 48, 60, 72]),
                 'stock_quantity' => $faker->numberBetween(1, 2),
-
-                // Location/Address data
                 'address' => $faker->streetAddress,
                 'city' => $faker->city,
                 'state' => $faker->stateAbbr,
@@ -129,75 +121,61 @@ class AutoSeeder extends Seeder
                 'zip_code' => $faker->postcode,
                 'latitude' => $faker->latitude(34, 42),
                 'longitude' => $faker->longitude(-118, -74),
-
-                // Hardened Moderation & Certification
-                'status'        => 'approved',
-                'admin_note'    => 'Automatically approved vehicle listing.',
-                'is_certified'  => $faker->boolean(40),
-
-                // Status/Type Flags
+                'status' => 'approved',
+                'admin_note' => 'Verified premium inventory.',
+                'is_certified' => $faker->boolean(40),
                 'is_published' => true,
                 'is_featured' => $faker->boolean(10),
                 'is_lease' => $faker->boolean(15),
                 'is_selling' => true,
-                'approved_at'       => now(),
+                'approved_at' => now(),
                 'created_at' => now(),
                 'updated_at' => now(),
-            ]);
+            ];
+        }
+        
+        // Insert in chunks to be safe with database limits
+        foreach (array_chunk($batchAutos, 10) as $chunk) {
+            foreach ($chunk as $data) {
+                $auto = Auto::create($data); // We still use create() here because we need the IDs for pivot/hasMany seeding in the NEXT loop
+                
+                // --- 5. INTEGRATE FEATURES (Pivot Table: auto_feature) ---
+                $numFeaturesToAttach = $faker->numberBetween(1, min(7, $maxFeatures));
+                $featureElements = $faker->randomElements($featureIds, $numFeaturesToAttach);
+                $auto->features()->attach($featureElements);
+                $totalFeaturesAttached += count($featureElements);
 
-
-            // --- 5. INTEGRATE FEATURES (Pivot Table: auto_feature) ---
-            $numFeaturesToAttach = $faker->numberBetween(1, min(7, $maxFeatures));
-            $featureElements = $faker->randomElements($featureIds, $numFeaturesToAttach);
-            
-            $auto->features()->attach($featureElements);
-            $totalFeaturesAttached += count($featureElements);
-
-
-            // --- 6. CREATE AUTO INQUIRIES (HasMany Relationship) ---
-            // Ensure the minimum number of inquiries doesn't exceed the available user count.
-            $minInquiries = min(2, $maxUsers);
-            if ($minInquiries > 0) {
-                $numberOfInquiries = $faker->numberBetween($minInquiries, min(8, $maxUsers)); 
-                $inquiryUserIds = $faker->randomElements($userIds, $numberOfInquiries);
-
-                $auto->inquiries()->createMany(
-                    AutoInquiry::factory()
-                        ->count(count($inquiryUserIds)) 
-                        ->make()
-                        // Map over the generated models to inject the required user_id
-                        ->map(function ($inquiry, $index) use ($inquiryUserIds) {
+                // --- 6. CREATE AUTO INQUIRIES (HasMany Relationship) ---
+                $minInquiries = min(2, $maxUsers);
+                if ($minInquiries > 0) {
+                    $numberOfInquiries = $faker->numberBetween($minInquiries, min(8, $maxUsers)); 
+                    $inquiryUserIds = $faker->randomElements($userIds, $numberOfInquiries);
+                    $auto->inquiries()->createMany(
+                        AutoInquiry::factory()->count($numberOfInquiries)->make()->map(function ($inquiry, $index) use ($inquiryUserIds) {
                             $inquiry->user_id = $inquiryUserIds[$index];
                             return $inquiry->toArray();
-                        })
-                        ->toArray()
-                );
-                $totalInquiriesCreated += $numberOfInquiries;
-            }
+                        })->toArray()
+                    );
+                    $totalInquiriesCreated += $numberOfInquiries;
+                }
 
-            // --- 7. CREATE REVIEWS (HasMany Relationship) ---
-            // Ensure the minimum number of reviews doesn't exceed the available user count.
-            $minReviews = min(3, $maxUsers);
-            if ($minReviews > 0) {
-                $numberOfReviews = $faker->numberBetween($minReviews, min(8, $maxUsers));
-                $reviewerIds = $faker->randomElements($userIds, $numberOfReviews);
-
-                $auto->reviews()->createMany(
-                    Review::factory()
-                        ->count(count($reviewerIds)) 
-                        ->make()
-                        // Map over the generated models to inject the required user_id and polymorphic data
-                        ->map(function ($review, $index) use ($reviewerIds, $auto) { // <--- FIXED: Added $auto to the use statement
+                // --- 7. CREATE REVIEWS (HasMany Relationship) ---
+                $minReviews = min(3, $maxUsers);
+                if ($minReviews > 0) {
+                    $numberOfReviews = $faker->numberBetween($minReviews, min(8, $maxUsers));
+                    $reviewerIds = $faker->randomElements($userIds, $numberOfReviews);
+                    $auto->reviews()->createMany(
+                        Review::factory()->count($numberOfReviews)->make()->map(function ($review, $index) use ($reviewerIds, $auto) {
                             $review->user_id = $reviewerIds[$index]; 
-                            // Add polymorphic relation fields (since we are using createMany on the relation)
                             $review->reviewable_type = Auto::class;
                             $review->reviewable_id = $auto->id;
                             return $review->toArray();
-                        })
-                        ->toArray()
-                );
-                $totalReviewsCreated += $numberOfReviews;
+                        })->toArray()
+                    );
+                    $totalReviewsCreated += $numberOfReviews;
+                }
             }
+            $jobsCreatedCount += count($chunk); // Using index count for summary
         }
 
         // --- Summary and Footer ---

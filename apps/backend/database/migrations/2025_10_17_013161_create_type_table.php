@@ -24,14 +24,14 @@ return new class extends Migration
             $table->string('icon')->nullable(); //
 
             // Module Flags
-            $table->boolean('is_property')->default(false);
-            $table->boolean('is_event')->default(false);
-            $table->boolean('is_job')->default(false);
-            $table->boolean('is_auto')->default(false);
-            $table->boolean('is_service')->default(false);
-            $table->boolean('is_classified')->default(false);
-            $table->boolean('is_product')->default(false);
-            $table->boolean('is_blog')->default(false);
+            $table->boolean('is_property')->default(false)->index();
+            $table->boolean('is_event')->default(false)->index();
+            $table->boolean('is_job')->default(false)->index();
+            $table->boolean('is_auto')->default(false)->index();
+            $table->boolean('is_service')->default(false)->index();
+            $table->boolean('is_classified')->default(false)->index();
+            $table->boolean('is_product')->default(false)->index();
+            $table->boolean('is_blog')->default(false)->index();
 
             // Publishing Status
             $table->boolean('is_published')->default(true);

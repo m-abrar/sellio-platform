@@ -69,6 +69,7 @@ class ClassifiedAdSeeder extends Seeder
             'Premium Portable Charcoal Grill', 'Nordic Style Ceramic Dinnerware'
         ];
 
+        $batchClassifieds = [];
         foreach (range(1, 50) as $index) {
             $baseTitle = $faker->randomElement($itemTitles);
             $title = $faker->randomElement(['Excellent', 'Pristine', 'Authentic', 'Rare']) . ' ' . $baseTitle;
@@ -80,34 +81,25 @@ class ClassifiedAdSeeder extends Seeder
             $hasSalePrice = $faker->boolean(30);
             $salePrice = $hasSalePrice ? $basePrice * 0.85 : null;
 
-            $classified = Classified::create([
-                // Foreign Keys
+            $batchClassifieds[] = [
                 'user_id' => $sellerId,
                 'category_id' => $faker->randomElement($categoryIds),
                 'type_id' => $faker->randomElement($typeIds),
                 'brand_id' => $faker->randomElement($brandIds),
                 'location_id' => $faker->randomElement($locationIds),
-                
-                // Core Data & Pricing
                 'title' => Str::title($title),
                 'slug' => Str::slug($title . '-ad-' . $index) . '-' . Str::random(5),
                 'description' => $faker->realText(500),
                 'base_price' => $basePrice,
                 'sale_price' => $salePrice,
-                
-                // Sale Timestamps
                 'sale_starts_at' => $hasSalePrice ? now() : null,
                 'sale_ends_at' => $hasSalePrice ? now()->addDays(14) : null,
-                
-                // Specifics
                 'item_condition' => $faker->numberBetween(7, 10),
                 'item_year_age' => $faker->numberBetween(1, 5),
                 'item_quantity' => 1,
                 'item_dimensions' => $faker->randomFloat(2, 10, 100), 
                 'warranty_months' => $faker->boolean(20) ? 6 : null,
                 'min_ad_duration' => 14,
-
-                // Location/Address
                 'address' => $faker->streetAddress,
                 'city' => $faker->city,
                 'state' => $faker->stateAbbr,
@@ -115,26 +107,24 @@ class ClassifiedAdSeeder extends Seeder
                 'zip_code' => $faker->postcode,
                 'latitude' => $faker->latitude(34, 42),
                 'longitude' => $faker->longitude(-118, -74),
-
-                // Hardened Moderation & Status
                 'status'                => 'approved',
                 'admin_note'            => 'Verified community listing.',
                 'is_verified'           => true,
-
-                // Status/Type Flags
                 'is_published' => true,
                 'is_featured' => $faker->boolean(10),
                 'is_for_rent' => false,
                 'is_shipping' => $faker->boolean(70),
                 'is_for_sale' => true,
-
-                // Dates
                 'approved_at'       => now(),
                 'created_at' => $createdAt,
                 'updated_at' => $createdAt,
-            ]);
-            
-            $classifieds[] = $classified;
+            ];
+        }
+
+        foreach (array_chunk($batchClassifieds, 10) as $chunk) {
+            foreach ($chunk as $data) {
+                $classifieds[] = Classified::create($data); // Using create to get IDs for polymorphic relations
+            }
         }
 
         

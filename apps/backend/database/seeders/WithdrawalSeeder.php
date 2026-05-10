@@ -55,57 +55,44 @@ class WithdrawalSeeder extends Seeder
         User::whereHas('wallet', function($query) use ($minBalanceToWithdraw) {
             $query->where('balance', '>', $minBalanceToWithdraw);
         })->orderBy('id')->chunkById(25, function ($users) use (&$count, $maxNumberOfWithdrawalsToCreate, $faker, $minBalanceToWithdraw) {
+            $batchWithdrawals = [];
             foreach ($users as $user) {
                 if ($count >= $maxNumberOfWithdrawalsToCreate) break;
-            $balanceCents = $user->balance;
+                
+                $balanceCents = $user->balance;
+                $percentage = mt_rand(70, 80) / 100;
+                $withdrawalCents = floor($balanceCents * $percentage);
 
-            // Select a random withdrawal percentage between 70% and 80% of the user's current balance.
-            $percentage = mt_rand(70, 80) / 100;
+                if ($withdrawalCents < $minBalanceToWithdraw) {
+                    continue;
+                }
 
-            // Calculate the withdrawal amount in cents.
-            // floor() is used to ensure the amount is a valid integer (cents) and does not exceed cent precision.
-            $withdrawalCents = floor($balanceCents * $percentage);
+                $status = $faker->randomElement(['pending', 'approved', 'rejected']);
+                $createdAt = $faker->dateTimeBetween('-8 months', 'now');
+                $approvedAt = ($status === 'approved') ? $faker->dateTimeBetween($createdAt, 'now') : null;
+                $rejectedAt = ($status === 'rejected') ? $faker->dateTimeBetween($createdAt, 'now') : null;
 
-            // Final check: if the calculated amount falls below the minimum required, skip this user.
-            if ($withdrawalCents < $minBalanceToWithdraw) {
-                continue;
+                $batchWithdrawals[] = [
+                    'user_id' => $user->id,
+                    'amount' => $withdrawalCents,
+                    'method' => $faker->randomElement(['Bank Transfer', 'PayPal', 'Wire Transfer']),
+                    'details' => json_encode([
+                        'account' => $faker->bankAccountNumber(), 
+                        'name' => $faker->name()
+                    ]),
+                    'status' => $status,
+                    'admin_note' => $faker->sentence(),
+                    'approved_at' => $approvedAt,
+                    'rejected_at' => $rejectedAt,
+                    'created_at' => $createdAt,
+                    'updated_at' => now(),
+                ];
+
+                $count++;
             }
-
-            // Determine a random status for the withdrawal to represent different states in history.
-            $status = $faker->randomElement(['pending', 'approved', 'rejected']);
-            // Set a historical creation date within the last 8 months.
-            $createdAt = $faker->dateTimeBetween('-8 months', 'now');
-
-            // Initialize conditional date fields.
-            $approvedAt = null;
-            $rejectedAt = null;
-
-            // Set the appropriate historical date based on the determined status.
-            if ($status === 'approved') {
-                // Approved date must logically be after the creation date.
-                $approvedAt = $faker->dateTimeBetween($createdAt, 'now');
-            } elseif ($status === 'rejected') {
-                // Rejected date must logically be after the creation date.
-                $rejectedAt = $faker->dateTimeBetween($createdAt, 'now');
-            }
-
-            // --- Create the Withdrawal Record ---
-            Withdrawal::create([
-                'user_id' => $user->id,
-                'amount' => $withdrawalCents,
-                'method' => $faker->randomElement(['Bank Transfer', 'PayPal', 'Wire Transfer']),
-                // Store payment account details as a JSON string, mimicking real-world data storage.
-                'details' => json_encode(['account' => $faker->bankAccountNumber(), 
-                'name' => $faker->name()]),
-                'status' => $status,
-                'admin_note' => $faker->sentence(),
-                // Set the conditional and historical timestamps.
-                'approved_at' => $approvedAt,
-                'rejected_at' => $rejectedAt,
-                'created_at' => $createdAt,
-            ]);
-
-            $count++;
+            
+            if (!empty($batchWithdrawals)) {
+                Withdrawal::insert($batchWithdrawals);
             }
         });
 

@@ -22,6 +22,7 @@ return new class extends Migration
             $table->id();
             $table->string('title', 100)->unique();
             $table->string('slug', 100)->unique();
+            $table->string('group', 50)->nullable()->index()->comment('e.g., Brand, Style, Technical');
             $table->text('description')->nullable();
 
             $table->boolean('is_property')->default(false)->index();

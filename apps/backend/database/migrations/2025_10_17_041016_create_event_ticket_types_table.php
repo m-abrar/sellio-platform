@@ -21,6 +21,7 @@ return new class extends Migration
             $table->decimal('base_price', 15, 2);
             $table->text('description')->nullable();
             $table->unsignedInteger('max_quantity')->nullable()->comment('NULL for unlimited');
+            $table->unsignedSmallInteger('sort_order')->default(0)->index();
             $table->softDeletes();
             $table->timestamps();
         });

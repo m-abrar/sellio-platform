@@ -67,6 +67,7 @@ class ProductSeeder extends Seeder
             'Graphite Drawing Set', 'Digital Canvas Display', 'Pure Silk Sleep Mask'
         ];
 
+            $batchProducts = [];
         foreach (range(1, $totalProductsToCreate) as $index) {
             $baseName = $productNames[$index - 1] ?? $faker->words(3, true);
             $name = $baseName . ' ' . $faker->randomElement(['Edition', 'Pro', 'Series 2', 'Plus', 'Elite']);
@@ -75,103 +76,85 @@ class ProductSeeder extends Seeder
             $basePrice = $faker->randomFloat(2, 45, 1200);
             $onSale    = $faker->boolean(25); 
             $salePrice = $onSale ? $basePrice * 0.85 : null;
-            $costPrice = $basePrice * 0.5; // Simulating 50% margin
+            $costPrice = $basePrice * 0.5;
             
-            // --- Random dates ---
             $createdAt = $faker->dateTimeThisYear();
 
-            // Video Data (Professional Placeholder)
-            $videoUrl = $faker->boolean(30) ? 'https://www.youtube.com/watch?v=vV_P_7_8_i8' : null;
+            // Video Data (Professional Product Presentation)
+            $videoUrl = $faker->boolean(30) ? 'https://www.youtube.com/watch?v=ScMzIvxBSi4' : null;
 
-            // --- Create Product record mapped to Migration columns ---
-            $product = Product::create([
-                // Relationships
+            $batchProducts[] = [
                 'user_id'     => $faker->randomElement($userIds),
                 'category_id' => $faker->randomElement($categoryIds),
                 'type_id'     => $maxTypes > 0 ? $faker->randomElement($typeIds) : null,
                 'brand_id'    => $faker->randomElement($brandIds),
-
-                // Basic Info
                 'title'       => $name,
                 'slug'        => Str::slug($name) . '-' . $faker->unique()->numberBetween(100, 999) . '-' . Str::random(5),
                 'sku'         => strtoupper($faker->bothify('PRD-####-??')),
-                'description' => $faker->realText(800), // Professional product description
+                'description' => $faker->realText(800),
                 'short_description' => $faker->realText(150),
-
-                // Pricing
                 'base_price'  => $basePrice,
                 'sale_price'  => $salePrice,
                 'cost_price'  => $costPrice,
-                
-                // Inventory Specifics
                 'stock_quantity'      => $faker->numberBetween(5, 100),
                 'low_stock_threshold' => 5,
                 'manage_stock'        => true,
                 'in_stock'            => true,
-
-                // Physical Attributes
                 'weight'      => $faker->randomFloat(2, 0.5, 5),
                 'length'      => $faker->randomFloat(2, 5, 30),
                 'width'       => $faker->randomFloat(2, 5, 20),
                 'height'      => $faker->randomFloat(2, 5, 15),
-
-                // Media
                 'video'       => $videoUrl,
                 'main_image'  => null,
-
-                // Hardened Moderation & Status
                 'status'                => 'approved',
                 'admin_note'            => 'Verified retail inventory.',
                 'is_verified'           => true,
-
-                // Status/Flags
                 'is_published' => true,
                 'is_featured'  => $faker->boolean(15),
                 'on_sale'      => $onSale,
                 'is_digital'   => false,
-
-                // SEO
                 'meta_title'       => "$name | Premium Marketplace",
                 'meta_description' => "Shop $name online at our premium marketplace. Quality guaranteed with fast shipping.",
-
-                // Timestamps
                 'approved_at' => now(),
                 'created_at'  => $createdAt,
                 'updated_at'  => $createdAt, 
-            ]);
+            ];
+        }
 
-            $totalProductsCreated++;
-
-            // 3. Attach Attributes (Variations)
-            if (!empty($attributeIds)) {
-                $attrCount = $faker->numberBetween(1, min(4, count($attributeIds)));
-                $randomAttrIds = $faker->randomElements($attributeIds, $attrCount);
+        // Insert in chunks and handle pivot tables
+        foreach (array_chunk($batchProducts, 10) as $chunk) {
+            foreach ($chunk as $data) {
+                $product = Product::create($data); // Using create to get IDs for pivots
                 
-                $attrPivotData = [];
-                foreach($randomAttrIds as $id) {
-                    $attrPivotData[$id] = [
-                        'additional_price' => $faker->randomElement([0, 5, 10, 15]),
-                        'is_visible' => true
-                    ];
-                }
-                $product->attributes()->attach($attrPivotData);
-                $totalAttributesAttached += count($randomAttrIds);
-            }
-
-            // 4. Attach Specifications (Features)
-            if (!empty($specIds)) {
-                $specsToAttach = [];
-                $numSpecs = $faker->numberBetween(2, min(6, count($specIds)));
-                $randomSpecIds = $faker->randomElements($specIds, $numSpecs);
-
-                foreach ($randomSpecIds as $specId) {
-                    $specsToAttach[$specId] = [
-                        'value' => $faker->randomElement(['Premium Grade', '100% Organic', 'Water Resistant', 'Eco-friendly', 'Imported']),
-                    ];
+                // 3. Attach Attributes (Variations)
+                if (!empty($attributeIds)) {
+                    $attrCount = $faker->numberBetween(1, min(4, count($attributeIds)));
+                    $randomAttrIds = $faker->randomElements($attributeIds, $attrCount);
+                    $attrPivotData = [];
+                    foreach($randomAttrIds as $id) {
+                        $attrPivotData[$id] = [
+                            'additional_price' => $faker->randomElement([0, 5, 10, 15]),
+                            'is_visible' => true
+                        ];
+                    }
+                    $product->attributes()->attach($attrPivotData);
+                    $totalAttributesAttached += count($randomAttrIds);
                 }
 
-                $product->features()->attach($specsToAttach);
-                $totalSpecsAttached += count($specsToAttach);
+                // 4. Attach Specifications (Features)
+                if (!empty($specIds)) {
+                    $specsToAttach = [];
+                    $numSpecs = $faker->numberBetween(2, min(6, count($specIds)));
+                    $randomSpecIds = $faker->randomElements($specIds, $numSpecs);
+                    foreach ($randomSpecIds as $specId) {
+                        $specsToAttach[$specId] = [
+                            'value' => $faker->randomElement(['Premium Grade', '100% Organic', 'Water Resistant', 'Eco-friendly', 'Imported']),
+                        ];
+                    }
+                    $product->features()->attach($specsToAttach);
+                    $totalSpecsAttached += count($specsToAttach);
+                }
+                $totalProductsCreated++;
             }
         }
         

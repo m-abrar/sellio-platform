@@ -16,9 +16,9 @@ return new class extends Migration
         Schema::create('order_items', function (Blueprint $table) {
             $table->id();
             $table->foreignId('order_id')->constrained()->onDelete('cascade');
-            $table->foreignId('product_id')->constrained(); // No cascade delete (keep historical record)
+            $table->foreignId('product_id')->constrained()->restrictOnDelete();
             
-            $table->string('product_name'); // Snapshot in case product name changes
+            $table->string('product_name')->index(); // Snapshot in case product name changes
             $table->integer('quantity')->default(1);
             $table->decimal('unit_price', 15, 2); // Price at time of purchase
             $table->decimal('total_price', 15, 2); // unit_price * quantity
