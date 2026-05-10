@@ -13,12 +13,17 @@ trait ManagesApproval
      */
     public function approve($id): RedirectResponse
     {
-        // SECURITY: Critical Authorization Check
-        if (!auth()->check() || !auth()->user()->hasRole('super-admin')) {
-            abort(403, __('Unauthorized: You do not have permission to moderate listings.'));
+        // SECURITY: Decoupled Policy-Based Authorization
+        // Each moderateable model must have a policy defining 'moderate' permission.
+        $model = $this->resolveModel($id);
+        
+        if (!$model) {
+            return back()->with('error', __('Listing not found.'));
         }
 
-        $model = $this->resolveModel($id);
+        if (method_exists(auth()->user(), 'can') && !auth()->user()->can('moderate', $model)) {
+            abort(403, __('Unauthorized: You do not have permission to moderate this listing.'));
+        }
 
         if (!$model) {
             return back()->with('error', __('Listing not found.'));
@@ -37,14 +42,18 @@ trait ManagesApproval
      */
     public function disapprove($id): RedirectResponse
     {
-        // SECURITY: Critical Authorization Check
-        if (!auth()->check() || !auth()->user()->hasRole(['super-admin', 'admin', 'moderator'])) {
-            abort(403, __('Unauthorized: You do not have permission to moderate listings.'));
+        // SECURITY: Decoupled Policy-Based Authorization
+        $model = $this->resolveModel($id);
+        
+        if (!$model) {
+            return back()->with('error', __('Listing not found.'));
         }
 
-        $model = $this->resolveModel($id);
+        if (method_exists(auth()->user(), 'can') && !auth()->user()->can('moderate', $model)) {
+            abort(403, __('Unauthorized: You do not have permission to moderate this listing.'));
+        }
 
-        if (!$model || !$model->approved_at) {
+        if (!$model->approved_at) {
             return back()->with('error', __('Listing not found or already in pending status.'));
         }
 

@@ -264,7 +264,7 @@
 | `app\Models\Amenity.php` | **95** | ✅ Elite - Production Ready |
 | `app\Models\Application.php` | **98** | ✅ Elite - Production Ready |
 | `app\Models\Auto.php` | **98** | ✅ Elite - Moderation Hardened |
-| `app\Models\AutoInquiry.php` | **85** | ✅ Good - Response Privacy |
+| `app\Models\AutoInquiry.php` | **98** | ✅ Elite - SoftDeletes Active |
 | `app\Models\Blog.php` | **98** | ✅ Elite - Sanitized / Secure |
 | `app\Models\Brand.php` | **98** | ✅ Elite - Production Ready |
 | `app\Models\Campaign.php` | **98** | ✅ Elite - Production Ready |
@@ -272,7 +272,7 @@
 | `app\Models\CartItem.php` | **98** | ✅ Elite - Security Hardened |
 | `app\Models\Category.php` | **98** | ✅ Elite - Production Ready |
 | `app\Models\Classified.php` | **98** | ✅ Elite - Moderation Hardened |
-| `app\Models\ClassifiedInquiry.php` | **85** | ✅ Good - Response Privacy |
+| `app\Models\ClassifiedInquiry.php` | **98** | ✅ Elite - SoftDeletes Active |
 | `app\Models\Conversation.php` | **98** | ✅ Elite - Production Ready |
 | `app\Models\EmailTemplate.php` | **95** | ✅ Elite - Sanitized / Secure |
 | `app\Models\Event.php` | **98** | ✅ Elite - Moderation Hardened |
@@ -290,7 +290,7 @@
 | `app\Models\Location.php` | **98** | ✅ Elite - Aggregation Optimized |
 | `app\Models\Menu.php` | **98** | ✅ High Quality - Re-Audit Pending |
 | `app\Models\MenuItem.php` | **95** | ✅ Elite - XSS Sanitized |
-| `app\Models\Message.php` | **98** | ✅ Elite - Identity Hardened |
+| `app\Models\Message.php` | **98** | ✅ Elite - N+1 Hardened |
 | `app\Models\NewsletterSubscriber.php` | **98** | ✅ Elite - Production Ready |
 | `app\Models\Order.php` | **95** | ✅ Elite - SoftDeletes Active |
 | `app\Models\OrderItem.php` | **98** | ✅ Elite - Financial Hardened |

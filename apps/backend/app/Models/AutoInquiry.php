@@ -27,6 +27,8 @@ class AutoInquiry extends Model
     use HasFactory;
     use LogsActivity;
     use HasBookingAttributes;
+    use SoftDeletes;
+
 
     // --- Status Constants ---
     public const STATUS_PENDING   = 'pending';

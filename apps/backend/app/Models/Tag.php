@@ -49,9 +49,6 @@ class Tag extends Model implements HasMedia
         'icon', // Support for FontAwesome/Bootstrap icon strings
     ];
 
-    /**
-     * The attributes that should be cast.
-     */
     protected $casts = [
         'is_property'   => 'boolean', 
         'is_auto'       => 'boolean', 
@@ -134,7 +131,15 @@ class Tag extends Model implements HasMedia
     {
         return Attribute::make(
             get: function () {
-                // Cache by Tag ID and last update to ensure freshness
+                // If the count has been pre-loaded via withCount(), return it immediately
+                if (isset($this->attributes['properties_count'])) {
+                    return array_sum(array_intersect_key($this->attributes, array_flip([
+                        'properties_count', 'autos_count', 'events_count', 'jobs_count', 
+                        'services_count', 'classifieds_count', 'products_count'
+                    ])));
+                }
+
+                // Fallback to cached individual counts if not pre-loaded
                 return cache()->remember("tag_count_{$this->id}_{$this->updated_at?->timestamp}", now()->addMinutes(10), function () {
                     $relations = ['properties', 'autos', 'events', 'jobs', 'services', 'classifieds', 'products'];
                     $total = 0;

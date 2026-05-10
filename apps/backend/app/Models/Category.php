@@ -215,32 +215,28 @@ class Category extends Model implements HasMedia
     {
         return Attribute::make(
             get: function () {
+                // If the count has been pre-loaded via withCount(), return it immediately
+                if (isset($this->attributes['properties_count'])) {
+                    return array_sum(array_intersect_key($this->attributes, array_flip([
+                        'properties_count', 'autos_count', 'events_count', 'jobs_count', 
+                        'services_count', 'classifieds_count', 'products_count'
+                    ])));
+                }
+
                 // Unique key based on ID and last update to ensure validity
                 $cacheKey = "category_listings_count_{$this->id}_" . ($this->updated_at?->timestamp ?? 'new');
 
                 return cache()->remember($cacheKey, now()->addMinutes(20), function () {
-                    $verticals = [
-                        'properties', 
-                        'events', 
-                        'jobs', 
-                        'services', 
-                        'classifieds', 
-                        'autos',
-                        'products'
-                    ];
-
+                    $verticals = ['properties', 'events', 'jobs', 'services', 'classifieds', 'autos', 'products'];
                     $count = 0;
                     foreach ($verticals as $relation) {
                         if (method_exists($this, $relation)) {
-                            // Assumes scopeActive exists in related models for consistency
                             $count += $this->$relation()->active()->count();
                         }
                     }
-
                     return $count;
                 });
             }
         );
     }
 }
-

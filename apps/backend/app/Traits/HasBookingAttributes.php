@@ -7,33 +7,34 @@ use Illuminate\Support\Str;
 trait HasBookingAttributes
 {
     /**
-     * Get the CSS class for the module type badge.
+     * Get the semantic state for the module type.
+     * Maps to view-layer CSS classes (primary, success, etc.)
      */
-    public function getTypeBadgeClass(): string
+    public function getTypeState(): string
     {
         $type = class_basename($this);
 
         return match (true) {
-            str_contains($type, 'Property')  => 'badge-primary',
-            str_contains($type, 'Event')     => 'badge-success',
-            str_contains($type, 'Service')   => 'badge-warning',
-            str_contains($type, 'Job')       => 'badge-info',
-            str_contains($type, 'Auto')      => 'badge-dark',
-            str_contains($type, 'Classified') => 'badge-secondary',
-            default                          => 'badge-light',
+            str_contains($type, 'Property')  => 'primary',
+            str_contains($type, 'Event')     => 'success',
+            str_contains($type, 'Service')   => 'warning',
+            str_contains($type, 'Job')       => 'info',
+            str_contains($type, 'Auto')      => 'dark',
+            str_contains($type, 'Classified') => 'secondary',
+            default                          => 'light',
         };
     }
 
     /**
-     * Get the CSS class for the status badge.
+     * Get the semantic status state for the booking.
      */
-    public function getStatusBadgeClass(): string
+    public function getStatusState(): string
     {
         return match ($this->status) {
-            'confirmed', 'accepted', 'paid', 'completed' => 'badge-success',
-            'pending', 'requested', 'processing'         => 'badge-warning',
-            'cancelled', 'rejected', 'failed', 'denied'  => 'badge-danger',
-            default                                      => 'badge-info',
+            'confirmed', 'accepted', 'paid', 'completed' => 'success',
+            'pending', 'requested', 'processing'         => 'warning',
+            'cancelled', 'rejected', 'failed', 'denied'  => 'danger',
+            default                                      => 'info',
         };
     }
 

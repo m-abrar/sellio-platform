@@ -128,25 +128,26 @@ class Type extends Model implements HasMedia
     {
         return Attribute::make(
             get: function () {
+                // If the count has been pre-loaded via withCount(), return it immediately
+                if (isset($this->attributes['properties_count'])) {
+                    return array_sum(array_intersect_key($this->attributes, array_flip([
+                        'properties_count', 'autos_count', 'events_count', 'jobs_count', 
+                        'services_count', 'classifieds_count', 'products_count'
+                    ])));
+                }
+
                 // Key is unique to this Type ID and invalidates if the record is updated
                 $cacheKey = "type_count_{$this->id}_" . ($this->updated_at?->timestamp ?? 'new');
 
                 return cache()->remember($cacheKey, now()->addMinutes(15), function () {
-                    $relations = [
-                        'properties', 
-                        'events', 
-                        'jobs', 
-                        'services', 
-                        'classifieds', 
-                        'autos'
-                    ];
-
-                    return collect($relations)->sum(function ($relation) {
-                        // Ensure the relationship exists and use a standardized active scope
-                        return method_exists($this, $relation) 
-                            ? $this->$relation()->active()->count() 
-                            : 0;
-                    });
+                    $relations = ['properties', 'events', 'jobs', 'services', 'classifieds', 'autos', 'products'];
+                    $count = 0;
+                    foreach ($relations as $relation) {
+                        if (method_exists($this, $relation)) {
+                            $count += $this->$relation()->active()->count();
+                        }
+                    }
+                    return $count;
                 });
             }
         );

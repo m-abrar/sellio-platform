@@ -256,7 +256,7 @@ Transforms user reviews for display on listings.
 ## Problems Found
 
 ### Laravel Best Practices
-- **SAFE**: Correctly implements `whenLoaded()` for `user` and `reviewable` relationships (L28-29). This is the only resource in the batch that avoids forced N+1 queries.
+- **SAFE**: Correctly implements `whenLoaded()` for `user` and `reviewable` relationships (L28-29). This aligns with the platform-wide hardening of API Resources.
 
 ## Production Ready
 **YES**

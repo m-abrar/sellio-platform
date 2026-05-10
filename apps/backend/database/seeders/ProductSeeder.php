@@ -81,7 +81,7 @@ class ProductSeeder extends Seeder
             $createdAt = $faker->dateTimeThisYear();
 
             // Video Data
-            $videoUrl = $faker->boolean(30) ? 'https://www.youtube.com/watch?v=dQw4w9WgXcQ' : null;
+            $videoUrl = $faker->boolean(30) ? 'https://www.youtube.com/watch?v=ScMzIvxBSi4' : null;
 
             // --- Create Product record mapped to Migration columns ---
             $product = Product::create([

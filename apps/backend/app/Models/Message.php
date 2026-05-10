@@ -32,6 +32,12 @@ class Message extends Model
     protected $touches = ['conversation'];
 
     /**
+     * The relationships that should always be eager loaded.
+     */
+    protected $with = ['sender'];
+
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>

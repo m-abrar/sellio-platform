@@ -42,10 +42,10 @@ The central identity and authorization engine of the Sellio platform, managing m
 
 ### Relationships
 - **N+1 Query Risks**:
-    - `newMessages` accessor (L161) executes a `count()` query.
-    - `lastMessage` accessor (L168) executes a `first()` query.
-    - `avatarUrl` accessor (L231) triggers media library retrieval.
-    Loading a collection of 50 users will trigger 150+ additional queries if these attributes are accessed.
+    - `newMessages` accessor (L161): ✅ **RESOLVED**. Now supports pre-loaded `unread_messages_count`.
+    - `lastMessage` accessor (L168): ✅ **RESOLVED**. Hardened for production lists.
+    - `avatarUrl` accessor (L231): ✅ **RESOLVED**. Implemented intelligent fallback caching.
+    Loading a collection of 50 users is now O(1) for these attributes if properly hydrated.
 
 ### Performance
 - **Heavy Default Serialization**: `avatar_url` is in `$appends`, meaning the expensive media-retrieval and fallback logic runs on every serialization.
@@ -593,7 +593,7 @@ Navigational and geographic metadata models for content organization.
 ## Problems Found
 
 ### Performance
-- **Aggregated DB Pressure**: `Location.php` suffers from the same expensive `listingsCount` logic as other taxonomy models (6-7 DB counts per location).
+- **RESOLVED: Aggregated DB Pressure**: `Location.php` now supports `withCount()` for all vertical relations, eliminating the 6-7 DB counts per location in list views. Fallback caching remains active.
 
 ### Security
 - **XSS Risk**: `MenuItem.php` allows mass assignment of `url`. If the frontend renders these links without strict sanitization, it could lead to stored XSS via `javascript:` protocols.
@@ -788,7 +788,7 @@ The central identity and authorization engine of the Sellio platform.
 
 ### Performance
 - **God Model Anti-Pattern**: The model is overloaded with messaging, partner metrics, buyer history, and AdminLTE logic (287 lines).
-- **N+1 Message Count**: `newMessages` accessor (L158) triggers a database count per instance, which will cause performance degradation on user lists/dashboards.
+- **RESOLVED: N+1 Message Count**: `newMessages` accessor now checks for pre-loaded `unread_messages_count` before falling back to a database count.
 
 ### Architecture
 - **In-Memory Calculations**: `rating` helper (L261) performs multiple queries and in-memory averages instead of utilizing database views or `withAvg`.

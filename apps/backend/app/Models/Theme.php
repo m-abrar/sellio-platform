@@ -38,8 +38,34 @@ class Theme extends Model implements HasMedia
         'config'    => 'array',
         'is_active' => 'boolean',
         'last_activated_at' => 'datetime',
-        'last_activated_at' => 'datetime',
     ];
+
+    /**
+     * Recursive XSS Sanitizer for theme variables and configuration.
+     * Prevents script injection in style variables.
+     */
+    protected function variables(): \Illuminate\Database\Eloquent\Casts\Attribute
+    {
+        return \Illuminate\Database\Eloquent\Casts\Attribute::make(
+            set: fn ($value) => $this->sanitizeRecursive($value)
+        );
+    }
+
+    protected function config(): \Illuminate\Database\Eloquent\Casts\Attribute
+    {
+        return \Illuminate\Database\Eloquent\Casts\Attribute::make(
+            set: fn ($value) => $this->sanitizeRecursive($value)
+        );
+    }
+
+    private function sanitizeRecursive($data)
+    {
+        if (is_array($data)) {
+            return array_map([$this, 'sanitizeRecursive'], $data);
+        }
+        
+        return is_string($data) ? strip_tags($data) : $data;
+    }
 
     // --- Scopes ---
 
