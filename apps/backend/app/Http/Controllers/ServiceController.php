@@ -53,28 +53,14 @@ class ServiceController extends Controller
     /**
      * Perform service search with advanced filters.
      *
-     * @param Request $request
+     * @param \App\Http\Requests\SearchServiceRequest $request
      * @return View
      */
-    public function search(Request $request): View
+    public function search(\App\Http\Requests\SearchServiceRequest $request): View
     {
-        $categories = Category::where('is_service', true)->get();
-        $locations  = Location::where('is_service', true)->get();
-        $types      = Type::where('is_service', true)->get();
-        $features   = Feature::where('is_service', true)->get(); 
-        $tags       = Tag::where('is_service', true)->get();
+        $data = $this->serviceManagement->getSearchPageData($request->validated(), auth()->user());
 
-        $services = $this->serviceManagement->searchServices($request->all());
-
-        return view('frontend.services.index', [
-            'services'        => $services,
-            'categories'      => $categories,
-            'locations'       => $locations,
-            'features'        => $features,
-            'tags'            => $tags,
-            'types'           => $types,
-            'expertiseLevels' => $this->serviceManagement->getExpertiseLevels(),
-        ]);
+        return view('frontend.services.index', $data);
     }
 
     /**
@@ -86,6 +72,7 @@ class ServiceController extends Controller
     public function show(string $slug): View
     {
         $service = Service::where('slug', $slug)
+            ->active()
             ->with(['category', 'user.reviews', 'location', 'brand', 'features'])
             ->firstOrFail();
 
@@ -108,13 +95,13 @@ class ServiceController extends Controller
     /**
      * Store a newly created appointment.
      *
-     * @param StoreAppointmentRequest $request
+     * @param StoreConsultationRequest $request
      * @param string $slug
      * @return RedirectResponse
      */
     public function consultationStore(StoreConsultationRequest $request, string $slug): RedirectResponse
     {
-        $service = Service::where('slug', $slug)->firstOrFail();
+        $service = Service::where('slug', $slug)->active()->firstOrFail();
 
         try {
             $this->serviceManagement->createConsultation($request->validated(), $service);
@@ -135,7 +122,7 @@ class ServiceController extends Controller
      */
     public function appointmentStore(StoreAppointmentRequest $request, string $slug): RedirectResponse
     {
-        $service = Service::where('slug', $slug)->firstOrFail();
+        $service = Service::where('slug', $slug)->active()->firstOrFail();
 
         try {
             $this->serviceManagement->createAppointment($request->validated(), $service);
@@ -150,23 +137,16 @@ class ServiceController extends Controller
     /**
      * Store a newly created service quote request.
      *
-     * @param Request $request
+     * @param StoreQuoteRequest $request
      * @param string $slug
      * @return RedirectResponse
      */
     public function quoteStore(StoreQuoteRequest $request, string $slug): RedirectResponse
     {
-        $service = Service::where('slug', $slug)->firstOrFail();
-
-        // Use the validated data from the FormRequest
-        // This ensures all keys defined in the rules exist in the array
-        $validated = $request->validated();
-
-        // Ensure 'notes' exists even if empty to prevent array key errors
-        $validated['notes'] = $validated['notes'] ?? null;
+        $service = Service::where('slug', $slug)->active()->firstOrFail();
 
         try {
-            $this->serviceManagement->createQuote($validated, $service);
+            $this->serviceManagement->createQuote($request->validated(), $service);
 
             return back()->with('success', __('Your quote request has been submitted. The provider will review your details shortly.'));
         } catch (\Exception $e) {
@@ -178,10 +158,19 @@ class ServiceController extends Controller
     /**
      * Calculate service price based on dynamic parameters.
      *
-     * @return void
+     * @param Request $request
+     * @param Service $service
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function calculatePrice()
+    public function calculatePrice(Request $request, Service $service)
     {
-        // To be implemented based on your pricing logic
+        $data = $request->validate([
+            'service_package_id' => ['nullable', 'integer', 'exists:service_packages,id'],
+            'scope_size'         => ['nullable', 'string', 'in:small,medium,large,enterprise'],
+        ]);
+
+        $calculation = $this->serviceManagement->calculateServicePrice($service, $data);
+
+        return response()->json($calculation);
     }
 }

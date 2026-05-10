@@ -18,6 +18,55 @@ use Illuminate\Support\Str;
 class PropertyManagementService
 {
     /**
+     * Get all data required for the property listing index.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return array
+     */
+    public function getListingData(\Illuminate\Http\Request $request): array
+    {
+        $categories = \App\Models\Category::active()->forType('property')->get();
+        if ($categories->isEmpty()) $categories = \App\Models\Category::active()->get();
+
+        $locations = \App\Models\Location::active()->forType('property')->get();
+        if ($locations->isEmpty()) $locations = \App\Models\Location::active()->get();
+
+        $properties = Property::query()
+            ->when($request->query('name'), fn($q) => $q->where('title', 'like', '%' . $request->query('name') . '%'))
+            ->when($request->query('location_id'), fn($q) => $q->where('location_id', $request->query('location_id')))
+            ->when($request->query('category_id'), fn($q) => $q->where('category_id', $request->query('category_id')))
+            ->when($request->query('only_active'), fn($q) => $q->where('is_published', 1))
+            ->with(['location', 'category', 'user', 'media', 'type'])
+            ->latest()
+            ->paginate(15)
+            ->withQueryString();
+
+        return compact('properties', 'locations', 'categories');
+    }
+
+    /**
+     * Get all taxonomies and metadata for the property form (create/edit).
+     *
+     * @return array
+     */
+    public function getFormData(): array
+    {
+        $amenities  = \App\Models\Amenity::active()->forType('property')->get();
+        $features   = \App\Models\Feature::active()->forType('property')->get();
+        $types      = \App\Models\Type::active()->forType('property')->get();
+        $tags       = \App\Models\Tag::active()->forType('property')->get();
+        $categories = \App\Models\Category::active()->forType('property')->get();
+        if ($categories->isEmpty()) $categories = \App\Models\Category::active()->get();
+
+        $locations = \App\Models\Location::active()->forType('property')->get();
+        if ($locations->isEmpty()) $locations = \App\Models\Location::active()->get();
+        
+        $titleSuggestions = Property::select('title')->distinct()->limit(20)->pluck('title');
+
+        return compact('amenities', 'features', 'types', 'tags', 'categories', 'locations', 'titleSuggestions');
+    }
+
+    /**
      * Create or update a property listing with its complex relational data.
      *
      * @param array $data

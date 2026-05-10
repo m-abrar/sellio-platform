@@ -56,7 +56,37 @@ class ServiceManagementService
                 $q->whereHas('tags', fn($sub) => $sub->whereIn('tags.id', (array) $v));
             })
             ->with(['category', 'user'])
-            ->paginate(12);
+            ->paginate($filters['per_page'] ?? 12);
+    }
+
+    /**
+     * Compile all data required for the service search/index page.
+     *
+     * @param array $filters
+     * @param User|null $user
+     * @return array
+     */
+    public function getSearchPageData(array $filters, ?User $user = null): array
+    {
+        // Centralized taxonomy retrieval with active scope
+        $categories = \App\Models\Category::active()->where('is_service', true)->get();
+        $locations  = \App\Models\Location::active()->where('is_service', true)->get();
+        $types      = \App\Models\Type::active()->where('is_service', true)->get();
+        $features   = \App\Models\Feature::active()->where('is_service', true)->get();
+        $tags       = \App\Models\Tag::active()->where('is_service', true)->get();
+
+        $services = $this->searchServices($filters, $user);
+
+        return [
+            'services'        => $services,
+            'categories'      => $categories,
+            'locations'       => $locations,
+            'features'        => $features,
+            'tags'            => $tags,
+            'types'           => $types,
+            'expertiseLevels' => $this->getExpertiseLevels(),
+            'filters'         => $filters
+        ];
     }
 
     /**
@@ -138,6 +168,13 @@ class ServiceManagementService
         ]);
     }
 
+    /**
+     * Create a new service quote record.
+     *
+     * @param array $data
+     * @param Service $service
+     * @return ServiceQuote
+     */
     public function createQuote(array $data, Service $service): ServiceQuote
     {
         // 1. Resolve the package
@@ -160,5 +197,41 @@ class ServiceManagementService
             'details'            => $detailsText, // Storing the formatted string we built above
             'status'             => 'pending',
         ]);
+    }
+
+    /**
+     * Calculate estimated service price based on selected package and scale.
+     *
+     * @param Service $service
+     * @param array $data
+     * @return array
+     */
+    public function calculateServicePrice(Service $service, array $data): array
+    {
+        $packageId = $data['service_package_id'] ?? null;
+        $package = $packageId ? ServicePackage::where('service_id', $service->id)->find($packageId) : null;
+        
+        $basePrice = $package ? (float) $package->price : (float) ($service->sale_price ?? $service->base_price);
+        $multiplier = 1.0;
+
+        // Optional: Add scale-based multipliers if scope_size is provided
+        if (isset($data['scope_size'])) {
+            $multiplier = match ($data['scope_size']) {
+                'small'  => 1.0,
+                'medium' => 1.5,
+                'large'  => 2.5,
+                'enterprise' => 5.0,
+                default  => 1.0,
+            };
+        }
+
+        $total = $basePrice * $multiplier;
+
+        return [
+            'base_price' => $basePrice,
+            'multiplier' => $multiplier,
+            'total'      => $total,
+            'formatted_total' => number_format($total, 2),
+        ];
     }
 }

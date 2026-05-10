@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Payment;
 use App\Models\Subscription;
 use App\Models\User;
+use App\Http\Requests\Admin\StorePaymentRequest;
+use App\Services\Admin\PaymentManagementService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -18,6 +20,21 @@ use Illuminate\View\View;
 class PaymentController extends Controller
 {
     /**
+     * @var PaymentManagementService
+     */
+    protected PaymentManagementService $paymentService;
+
+    /**
+     * PaymentController constructor.
+     *
+     * @param PaymentManagementService $paymentService
+     */
+    public function __construct(PaymentManagementService $paymentService)
+    {
+        $this->paymentService = $paymentService;
+    }
+
+    /**
      * Display a filtered and paginated listing of all platform transactions.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -25,29 +42,8 @@ class PaymentController extends Controller
      */
     public function index(Request $request): View
     {
-        $perPage = 15;
-        $paymentsQuery = Payment::with(['user', 'payable']);
-
-        // Semantic Search by ID or Transaction Reference
-        if ($search = $request->query('search')) {
-            $paymentsQuery->where(function ($query) use ($search) {
-                $query->where('id', $search)
-                    ->orWhere('transaction_id', 'like', '%' . $search . '%');
-            });
-        }
-
-        // Status-based Filtering (pending, completed, failed, refunded)
-        if ($status = $request->query('status')) {
-            $paymentsQuery->where('status', $status);
-        }
-        
-        // Payment Method Filtering
-        if ($method = $request->query('method')) {
-            $paymentsQuery->where('payment_method', 'like', '%' . $method . '%');
-        }
-
-        $payments = $paymentsQuery->orderBy('created_at', 'desc')->paginate($perPage); 
-        $payments->appends($request->query());
+        $filters = $request->only(['search', 'status', 'method']);
+        $payments = $this->paymentService->getPayments($filters);
         
         return view('admin.payments.index', compact('payments'));
     }
@@ -60,18 +56,8 @@ class PaymentController extends Controller
      */
     public function failed(Request $request): View
     {
-        $perPage = 15;
-        $paymentsQuery = Payment::with(['user', 'payable'])->where('status', 'failed');
-
-        if ($search = $request->query('search')) {
-            $paymentsQuery->where(function ($query) use ($search) {
-                $query->where('id', $search)
-                    ->orWhere('transaction_id', 'like', '%' . $search . '%');
-            });
-        }
-
-        $payments = $paymentsQuery->orderBy('created_at', 'desc')->paginate($perPage); 
-        $payments->appends($request->query());
+        $filters = array_merge($request->only(['search', 'method']), ['status' => 'failed']);
+        $payments = $this->paymentService->getPayments($filters);
         
         $pageTitle = __('Failed Payments'); 
 
@@ -103,9 +89,9 @@ class PaymentController extends Controller
      * @param  \App\Http\Requests\Admin\StorePaymentRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(\App\Http\Requests\Admin\StorePaymentRequest $request): RedirectResponse
+    public function store(StorePaymentRequest $request): RedirectResponse
     {
-        Payment::create($request->validated());
+        $this->paymentService->createPayment($request->validated());
 
         return redirect()->route('admin.payments.index')
             ->with('success', __('Payment recorded successfully.'));
@@ -135,9 +121,9 @@ class PaymentController extends Controller
      * @param  \App\Models\Payment  $payment
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(\App\Http\Requests\Admin\StorePaymentRequest $request, Payment $payment): RedirectResponse
+    public function update(StorePaymentRequest $request, Payment $payment): RedirectResponse
     {
-        $payment->update($request->validated());
+        $this->paymentService->updatePayment($payment, $request->validated());
 
         return redirect()->route('admin.payments.index')
             ->with('success', __('Payment details updated successfully.'));
@@ -151,7 +137,7 @@ class PaymentController extends Controller
      */
     public function destroy(Payment $payment): RedirectResponse
     {
-        $payment->delete();
+        $this->paymentService->deletePayment($payment);
         
         return redirect()->route('admin.payments.index')
             ->with('success', __('Payment record removed successfully.'));

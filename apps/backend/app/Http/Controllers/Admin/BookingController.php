@@ -72,12 +72,12 @@ class BookingController extends Controller
      */
     public function show(string $type, int $id): RedirectResponse
     {
-        $modelClass = "App\\Models\\" . $type;
-        
-        if (!class_exists($modelClass)) {
-            return back()->with('error', __('Invalid booking type.'));
+        if (!in_array($type, $this->bookingService->getAllowedModels())) {
+            return back()->with('error', __('Invalid booking type requested.'));
         }
 
+        $modelClass = "App\\Models\\" . $type;
+        
         // Resolve route prefix from model name (e.g., PropertyBooking -> property-bookings)
         $pluralName = Str::plural($type); 
         $routePrefix = Str::kebab($pluralName);
@@ -96,13 +96,13 @@ class BookingController extends Controller
      */
     public function destroy(string $type, int $id): RedirectResponse
     {
-        $modelClass = "App\\Models\\" . $type;
-        
-        if (class_exists($modelClass)) {
-            $modelClass::destroy($id);
-            return back()->with('success', __('Booking deleted successfully.'));
+        if (!in_array($type, $this->bookingService->getAllowedModels())) {
+            return back()->with('error', __('Invalid booking type requested.'));
         }
 
-        return back()->with('error', __('Invalid booking type.'));
+        $modelClass = "App\\Models\\" . $type;
+        $modelClass::destroy($id);
+
+        return back()->with('success', __('Booking deleted successfully.'));
     }
 }

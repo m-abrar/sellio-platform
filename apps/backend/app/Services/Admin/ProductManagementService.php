@@ -15,6 +15,49 @@ use Illuminate\Support\Str;
 class ProductManagementService
 {
     /**
+     * Get all data required for the product listing index.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return array
+     */
+    public function getListingData(\Illuminate\Http\Request $request): array
+    {
+        $categories = \App\Models\Category::active()->where('is_product', 1)->get();
+        if ($categories->isEmpty()) $categories = \App\Models\Category::active()->get();
+
+        $products = Product::query()
+            ->when($request->query('title'), fn($q) => $q->where('title', 'like', '%' . $request->query('title') . '%'))
+            ->when($request->query('category_id'), fn($q) => $q->where('category_id', $request->query('category_id')))
+            ->when($request->query('sku'), fn($q) => $q->where('sku', 'like', '%' . $request->query('sku') . '%'))
+            ->when($request->query('status') !== null, fn($q) => $q->where('is_published', $request->query('status')))
+            ->with(['category', 'user', 'brand', 'media'])
+            ->latest()
+            ->paginate(15)
+            ->withQueryString();
+
+        return compact('products', 'categories');
+    }
+
+    /**
+     * Get all taxonomies and metadata for the product form.
+     *
+     * @return array
+     */
+    public function getFormData(): array
+    {
+        $categories = \App\Models\Category::active()->where('is_product', 1)->get();
+        if ($categories->isEmpty()) $categories = \App\Models\Category::active()->get();
+
+        $brands = \App\Models\Brand::active()->where('is_product', 1)->get();
+        if ($brands->isEmpty()) $brands = \App\Models\Brand::active()->get();
+
+        $tags = \App\Models\Tag::all();
+        $titleSuggestions = Product::select('title')->distinct()->limit(20)->pluck('title');
+
+        return compact('categories', 'brands', 'tags', 'titleSuggestions');
+    }
+
+    /**
      * Create or update a product listing.
      *
      * @param array $data

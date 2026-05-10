@@ -75,4 +75,48 @@ class ListingQueryService
         $modelClass = self::MODEL_MAP[strtolower($type)] ?? null;
         return $modelClass ? $modelClass::find($id) : null;
     }
+
+    /**
+     * Rehydrate generic objects from union query into concrete Eloquent models.
+     *
+     * @param \Illuminate\Pagination\LengthAwarePaginator $listings
+     * @return \Illuminate\Pagination\LengthAwarePaginator
+     */
+    public function hydrateListings(LengthAwarePaginator $listings): LengthAwarePaginator
+    {
+        $userIds = $listings->pluck('user_id')->unique()->filter();
+        $locIds  = $listings->pluck('location_id')->unique()->filter();
+
+        $users     = \App\Models\User::whereIn('id', $userIds)->get()->keyBy('id');
+        $locations = \App\Models\Location::whereIn('id', $locIds)->get()->keyBy('id');
+
+        $listings->getCollection()->transform(function ($listing) use ($users, $locations) {
+            $typeKey = strtolower($listing->listing_type);
+            
+            // Normalize type keys if necessary (e.g. 'JobListing' vs 'joblisting')
+            $modelClass = self::MODEL_MAP[$typeKey] ?? null;
+            
+            if (!$modelClass) {
+                // Try case-insensitive match
+                foreach (self::MODEL_MAP as $key => $class) {
+                    if (strtolower($key) === $typeKey) {
+                        $modelClass = $class;
+                        break;
+                    }
+                }
+            }
+            
+            if ($modelClass) {
+                $instance = (new $modelClass)->newFromBuilder((array)$listing);
+                $instance->exists = true;
+                $instance->setRelation('user', $users->get($listing->user_id));
+                $instance->setRelation('location', $locations->get($listing->location_id));
+                return $instance;
+            }
+            
+            return $listing;
+        });
+
+        return $listings;
+    }
 }

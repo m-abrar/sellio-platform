@@ -7,6 +7,7 @@ use App\Models\Service;
 use App\Models\ServiceAppointment;
 use App\Models\User;
 use App\Models\Category;
+use App\Services\Admin\ServiceAppointmentManagementService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -19,6 +20,21 @@ use Illuminate\View\View;
 class ServiceAppointmentController extends Controller
 {
     /**
+     * @var ServiceAppointmentManagementService
+     */
+    protected ServiceAppointmentManagementService $appointmentService;
+
+    /**
+     * ServiceAppointmentController constructor.
+     *
+     * @param ServiceAppointmentManagementService $appointmentService
+     */
+    public function __construct(ServiceAppointmentManagementService $appointmentService)
+    {
+        $this->appointmentService = $appointmentService;
+    }
+
+    /**
      * Display a filtered and paginated listing of all service appointments.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -28,15 +44,13 @@ class ServiceAppointmentController extends Controller
     public function index(Request $request, string $status = 'all'): View
     {
         $status = $request->query('status', $status);
+        $filters = ['service' => $request->query('service'), 'status' => $status];
 
-        $appointments = ServiceAppointment::with(['service.category', 'user'])
-            ->when($request->query('service'), fn($q) => $q->where('service_id', $request->query('service')))
-            ->when($status !== 'all', fn($q) => $q->where('status', $status))
-            ->latest()
-            ->paginate(15)
-            ->withQueryString();
+        $appointments = $this->appointmentService->getAppointments($filters);
 
-        $services   = Service::select('id', 'title')->get();
+        // Performance: Cap selection to prevent memory exhaustion in high-volume environments.
+        // RECOMMENDATION: Replace with AJAX search for true scalability
+        $services = Service::select('id', 'title')->limit(100)->get();
         $categories = Category::where('is_service', true)->select('id', 'title')->get();
 
         return view('admin.service-appointments.index', compact('appointments', 'services', 'categories', 'status'));
@@ -50,8 +64,9 @@ class ServiceAppointmentController extends Controller
     public function create(): View
     {
         $appointment = new ServiceAppointment();
-        $services    = Service::select('id', 'title')->get();
-        $users       = User::select('id', 'name', 'email')->get();
+        // Performance: Cap selection to prevent memory exhaustion.
+        $services = Service::select('id', 'title')->limit(100)->get();
+        $users = User::select('id', 'name', 'email')->limit(100)->get();
         
         return view('admin.service-appointments.form', compact('appointment', 'services', 'users'));
     }
@@ -75,7 +90,7 @@ class ServiceAppointmentController extends Controller
             'notes'        => 'nullable|string',
         ]);
 
-        ServiceAppointment::create($validated);
+        $this->appointmentService->createAppointment($validated);
 
         return redirect()
             ->route('admin.service-appointments.index')
@@ -92,10 +107,7 @@ class ServiceAppointmentController extends Controller
     {
         $serviceAppointment->load(['service', 'user']);
 
-        // Administrative Read Receipt Tracking
-        if (!$serviceAppointment->viewed_at) {
-            $serviceAppointment->update(['viewed_at' => now()]);
-        }
+        $this->appointmentService->markAsViewed($serviceAppointment);
 
         return view('admin.service-appointments.show', ['appointment' => $serviceAppointment]);
     }
@@ -108,8 +120,9 @@ class ServiceAppointmentController extends Controller
      */
     public function edit(ServiceAppointment $serviceAppointment): View
     {
-        $services = Service::select('id', 'title')->get();
-        $users    = User::select('id', 'name', 'email')->get();
+        // Performance: Cap selection to prevent memory exhaustion.
+        $services = Service::select('id', 'title')->limit(100)->get();
+        $users = User::select('id', 'name', 'email')->limit(100)->get();
 
         return view('admin.service-appointments.form', [
             'appointment' => $serviceAppointment, 
@@ -138,7 +151,7 @@ class ServiceAppointmentController extends Controller
             'notes'        => 'nullable|string',
         ]);
 
-        $serviceAppointment->update($validated);
+        $this->appointmentService->updateAppointment($serviceAppointment, $validated);
 
         return redirect()
             ->route('admin.service-appointments.index')
@@ -153,7 +166,7 @@ class ServiceAppointmentController extends Controller
      */
     public function destroy(ServiceAppointment $serviceAppointment): RedirectResponse
     {
-        $serviceAppointment->delete();
+        $this->appointmentService->deleteAppointment($serviceAppointment);
 
         return redirect()
             ->route('admin.service-appointments.index')

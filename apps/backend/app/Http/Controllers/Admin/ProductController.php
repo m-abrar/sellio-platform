@@ -46,20 +46,9 @@ class ProductController extends Controller
      */
     public function index(Request $request): View
     {
-        $categories = Category::active()->where('is_product', 1)->get();
-        if ($categories->isEmpty()) $categories = Category::active()->get();
+        $data = $this->productService->getListingData($request);
 
-        $products = Product::query()
-            ->when($request->query('title'), fn($q) => $q->where('title', 'like', '%' . $request->query('title') . '%'))
-            ->when($request->query('category_id'), fn($q) => $q->where('category_id', $request->query('category_id')))
-            ->when($request->query('sku'), fn($q) => $q->where('sku', 'like', '%' . $request->query('sku') . '%'))
-            ->when($request->query('status') !== null, fn($q) => $q->where('is_published', $request->query('status')))
-            ->with(['category', 'user', 'brand', 'media'])
-            ->latest()
-            ->paginate(15)
-            ->withQueryString();
-
-        return view('admin.products.index', compact('products', 'categories'));
+        return view('admin.products.index', $data);
     }
 
     /**
@@ -69,16 +58,10 @@ class ProductController extends Controller
      */
     public function create(): View
     {
-        $categories = Category::active()->where('is_product', 1)->get();
-        if ($categories->isEmpty()) $categories = Category::active()->get();
+        $formData = $this->productService->getFormData();
+        $product = new Product();
 
-        $brands = Brand::active()->where('is_product', 1)->get();
-        if ($brands->isEmpty()) $brands = Brand::active()->get();
-        $tags       = Tag::all();
-        $titleSuggestions = Product::select('title')->distinct()->limit(20)->pluck('title');
-        $product    = new Product();
-
-        return view('admin.products.form', compact('product', 'categories', 'brands', 'tags', 'titleSuggestions'));
+        return view('admin.products.form', array_merge($formData, compact('product')));
     }
 
     /**
@@ -110,15 +93,9 @@ class ProductController extends Controller
     public function edit(Product $product): View
     {
         $product->load(['attributes', 'addons', 'tags']);
-        $categories = Category::active()->where('is_product', 1)->get();
-        if ($categories->isEmpty()) $categories = Category::active()->get();
+        $formData = $this->productService->getFormData();
 
-        $brands = Brand::active()->where('is_product', 1)->get();
-        if ($brands->isEmpty()) $brands = Brand::active()->get();
-        $tags       = Tag::all();
-        $titleSuggestions = Product::select('title')->distinct()->limit(20)->pluck('title');
-
-        return view('admin.products.form', compact('product', 'categories', 'brands', 'tags', 'titleSuggestions'));
+        return view('admin.products.form', array_merge($formData, compact('product')));
     }
 
     /**

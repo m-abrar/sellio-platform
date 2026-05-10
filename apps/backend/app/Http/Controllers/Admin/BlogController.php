@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\BlogRequest;
 use App\Models\Blog;
 use App\Models\Category;
 use App\Models\Tag;
+use App\Services\Admin\BlogManagementService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 /**
@@ -20,13 +20,28 @@ use Illuminate\View\View;
 class BlogController extends Controller
 {
     /**
+     * @var BlogManagementService
+     */
+    protected BlogManagementService $blogService;
+
+    /**
+     * BlogController constructor.
+     *
+     * @param BlogManagementService $blogService
+     */
+    public function __construct(BlogManagementService $blogService)
+    {
+        $this->blogService = $blogService;
+    }
+
+    /**
      * Display a paginated list of all blog posts with associated relationships.
      *
      * @return \Illuminate\View\View
      */
     public function index(): View
     {
-        $blogs = Blog::with(['category', 'user'])->latest()->paginate(10);
+        $blogs = $this->blogService->getBlogs();
         return view('admin.blogs.index', compact('blogs'));
     }
 
@@ -37,7 +52,7 @@ class BlogController extends Controller
      */
     public function pending(): View
     {
-        $blogs = Blog::with(['category', 'user'])->where('is_published', false)->latest()->paginate(10);
+        $blogs = $this->blogService->getBlogs(false);
         return view('admin.blogs.index', compact('blogs'));
     }
 
@@ -62,25 +77,16 @@ class BlogController extends Controller
      * @param  \App\Http\Requests\Admin\BlogRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(\App\Http\Requests\Admin\BlogRequest $request): RedirectResponse
+    public function store(BlogRequest $request): RedirectResponse
     {
-        $validated = $request->validated();
-        $validated['user_id'] = Auth::id();
+        $data = $request->validated();
+        $data['user_id'] = Auth::id();
         
-        if ($request->boolean('is_published')) {
-            $validated['published_at'] = now();
-        }
-
-        $blog = Blog::create($validated);
-
-        if ($request->has('tags')) {
-            $blog->tags()->sync($request->tags);
-        }
-
         if ($request->hasFile('featured_image')) {
-            $blog->addMediaFromRequest('featured_image')
-                 ->toMediaCollection('featured_image');
+            $data['featured_image'] = $request->file('featured_image');
         }
+
+        $this->blogService->createBlog($data);
 
         return redirect()->route('admin.blogs.index')
             ->with('success', __('Blog post created successfully.'));
@@ -109,21 +115,15 @@ class BlogController extends Controller
      * @param  \App\Models\Blog  $blog
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(\App\Http\Requests\Admin\BlogRequest $request, Blog $blog): RedirectResponse
+    public function update(BlogRequest $request, Blog $blog): RedirectResponse
     {
-        $validated = $request->validated();
-        
-        if ($request->boolean('is_published') && !$blog->is_published) {
-            $validated['published_at'] = now();
-        }
-
-        $blog->update($validated);
-        $blog->tags()->sync($request->tags ?? []);
+        $data = $request->validated();
 
         if ($request->hasFile('featured_image')) {
-            $blog->addMediaFromRequest('featured_image')
-                 ->toMediaCollection('featured_image');
+            $data['featured_image'] = $request->file('featured_image');
         }
+
+        $this->blogService->updateBlog($blog, $data);
 
         return redirect()->route('admin.blogs.index')
             ->with('success', __('Blog post updated successfully.'));
@@ -137,7 +137,7 @@ class BlogController extends Controller
      */
     public function destroy(Blog $blog): RedirectResponse
     {
-        $blog->delete();
+        $this->blogService->deleteBlog($blog);
 
         return redirect()->route('admin.blogs.index')
             ->with('success', __('Blog post deleted successfully.'));

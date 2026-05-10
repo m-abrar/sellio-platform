@@ -7,6 +7,8 @@ use App\Models\Category;
 use App\Models\Classified;
 use App\Models\ClassifiedInquiry;
 use App\Models\User;
+use App\Http\Requests\Admin\UpdateClassifiedInquiryRequest;
+use App\Services\Admin\ClassifiedInquiryManagementService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -19,6 +21,21 @@ use Illuminate\View\View;
 class ClassifiedInquiryController extends Controller
 {
     /**
+     * @var ClassifiedInquiryManagementService
+     */
+    protected ClassifiedInquiryManagementService $inquiryService;
+
+    /**
+     * ClassifiedInquiryController constructor.
+     *
+     * @param ClassifiedInquiryManagementService $inquiryService
+     */
+    public function __construct(ClassifiedInquiryManagementService $inquiryService)
+    {
+        $this->inquiryService = $inquiryService;
+    }
+
+    /**
      * Display a filtered and paginated list of all classified inquiries.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -27,19 +44,13 @@ class ClassifiedInquiryController extends Controller
      */
     public function index(Request $request, string $status = 'all'): View
     {
-        $status = $request->route('status') ?: ($request->status ?: 'all');
+        $status = $request->route('status') ?: ($request->query('status') ?: 'all');
+        $filters = array_merge($request->only(['classifiedad', 'ad_name', 'category']), ['status' => $status]);
 
-        $inquiries = ClassifiedInquiry::with(['classifiedAd.category', 'classifiedAd.location', 'user'])
-            ->when($request->classifiedad, fn($q) => $q->where('classified_id', $request->classifiedad))
-            ->when($request->ad_name, fn($q) => $q->whereHas('classifiedAd', fn($c) => $c->where('title', 'LIKE', "%{$request->ad_name}%")))
-            ->when($request->category, function($q) use ($request) {
-                $q->whereHas('classifiedAd', fn($c) => $c->where('category_id', $request->category));
-            })
-            ->when($status !== 'all', fn($q) => $q->where('status', $status))
-            ->latest()
-            ->paginate(15)
-            ->withQueryString();
+        $inquiries = $this->inquiryService->getInquiries($filters);
 
+        // Performance: Cap selection to prevent memory exhaustion in high-volume environments.
+        // RECOMMENDATION: Replace with AJAX search for true scalability
         $classifieds = Classified::select('id', 'title', 'category_id')->with('category:id,title')->limit(100)->get();
         $categories = Category::where('is_classified', true)->select('id', 'title')->get();
 
@@ -54,6 +65,7 @@ class ClassifiedInquiryController extends Controller
     public function create(): View
     {
         $inquiry = new ClassifiedInquiry();
+        // Performance: Cap selection to prevent memory exhaustion.
         $classifieds = Classified::select('id', 'title')->limit(100)->get();
         $users = User::select('id', 'name', 'email')->limit(100)->get();
         
@@ -66,9 +78,9 @@ class ClassifiedInquiryController extends Controller
      * @param  \App\Http\Requests\Admin\UpdateClassifiedInquiryRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(\App\Http\Requests\Admin\UpdateClassifiedInquiryRequest $request): RedirectResponse
+    public function store(UpdateClassifiedInquiryRequest $request): RedirectResponse
     {
-        ClassifiedInquiry::create($request->validated());
+        $this->inquiryService->createInquiry($request->validated());
 
         return redirect()
             ->route('admin.classified-inquiries.index')
@@ -85,9 +97,7 @@ class ClassifiedInquiryController extends Controller
     {
         $classifiedInquiry->load(['classifiedAd', 'user']);
 
-        if (!$classifiedInquiry->viewed_at) {
-            $classifiedInquiry->update(['viewed_at' => now()]);
-        }
+        $this->inquiryService->markAsViewed($classifiedInquiry);
 
         return view('admin.classified-inquiries.show', ['inquiry' => $classifiedInquiry]);
     }
@@ -100,6 +110,7 @@ class ClassifiedInquiryController extends Controller
      */
     public function edit(ClassifiedInquiry $classifiedInquiry): View
     {
+        // Performance: Cap selection to prevent memory exhaustion.
         $classifieds = Classified::select('id', 'title')->limit(100)->get();
         $users = User::select('id', 'name', 'email')->limit(100)->get();
 
@@ -117,9 +128,9 @@ class ClassifiedInquiryController extends Controller
      * @param  \App\Models\ClassifiedInquiry  $classifiedInquiry
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(\App\Http\Requests\Admin\UpdateClassifiedInquiryRequest $request, ClassifiedInquiry $classifiedInquiry): RedirectResponse
+    public function update(UpdateClassifiedInquiryRequest $request, ClassifiedInquiry $classifiedInquiry): RedirectResponse
     {
-        $classifiedInquiry->update($request->validated());
+        $this->inquiryService->updateInquiry($classifiedInquiry, $request->validated());
 
         return redirect()
             ->route('admin.classified-inquiries.index')
@@ -134,7 +145,7 @@ class ClassifiedInquiryController extends Controller
      */
     public function destroy(ClassifiedInquiry $classifiedInquiry): RedirectResponse
     {
-        $classifiedInquiry->delete();
+        $this->inquiryService->deleteInquiry($classifiedInquiry);
 
         return redirect()
             ->route('admin.classified-inquiries.index')

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Service;
 use App\Models\ServiceQuote;
 use App\Models\Category;
+use App\Services\Admin\ServiceQuoteManagementService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -18,6 +19,21 @@ use Illuminate\View\View;
 class ServiceQuoteController extends Controller
 {
     /**
+     * @var ServiceQuoteManagementService
+     */
+    protected ServiceQuoteManagementService $quoteService;
+
+    /**
+     * ServiceQuoteController constructor.
+     *
+     * @param ServiceQuoteManagementService $quoteService
+     */
+    public function __construct(ServiceQuoteManagementService $quoteService)
+    {
+        $this->quoteService = $quoteService;
+    }
+
+    /**
      * Display a filtered and paginated listing of all professional service quote requests.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -26,23 +42,13 @@ class ServiceQuoteController extends Controller
     public function index(Request $request): View
     {
         $status = $request->query('status', 'all');
+        $filters = array_merge($request->only(['service', 'service_name', 'category']), ['status' => $status]);
 
-        $serviceQuotes = ServiceQuote::with([
-            'service.category',
-            'service.location',
-            'user' => fn ($q) => $q->select('id', 'name', 'email'),
-        ])
-            ->when($request->query('service'), fn($q) => $q->where('service_id', $request->query('service')))
-            ->when($request->query('service_name'), fn($q) => $q->whereHas('service', fn($s) => $s->where('title', 'LIKE', "%{$request->query('service_name')}%")))
-            ->when($request->query('category'), function($q) use ($request) {
-                $q->whereHas('service', fn($s) => $s->where('category_id', $request->query('category')));
-            })
-            ->when($status !== 'all', fn($q) => $q->where('status', $status))
-            ->latest()
-            ->paginate(15)
-            ->withQueryString();
+        $serviceQuotes = $this->quoteService->getQuotes($filters);
 
-        $services   = Service::select('id', 'title', 'category_id')->with('category:id,title')->get();
+        // Performance: Cap selection to prevent memory exhaustion in high-volume environments.
+        // RECOMMENDATION: Replace with AJAX search for true scalability
+        $services = Service::select('id', 'title', 'category_id')->with('category:id,title')->limit(100)->get();
         $categories = Category::where('is_service', true)->select('id', 'title')->get();
 
         return view('admin.service-quotes.index', compact('serviceQuotes', 'services', 'categories', 'status'));
@@ -56,10 +62,7 @@ class ServiceQuoteController extends Controller
      */
     public function show(ServiceQuote $serviceQuote): View
     {
-        // Administrative Engagement Tracking
-        if (!$serviceQuote->viewed_at) {
-            $serviceQuote->update(['viewed_at' => now()]);
-        }
+        $this->quoteService->markAsViewed($serviceQuote);
 
         return view('admin.service-quotes.show', [
             'quote' => $serviceQuote->load(['service', 'user']),
@@ -74,7 +77,7 @@ class ServiceQuoteController extends Controller
      */
     public function destroy(ServiceQuote $serviceQuote): RedirectResponse
     {
-        $serviceQuote->delete();
+        $this->quoteService->deleteQuote($serviceQuote);
 
         return redirect()
             ->route('admin.service-quotes.index')

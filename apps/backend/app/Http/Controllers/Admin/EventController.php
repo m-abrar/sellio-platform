@@ -8,11 +8,12 @@ use App\Models\EventBooking;
 use App\Models\Category;
 use App\Models\Location;
 use App\Http\Requests\Admin\EventRequest;
+use App\Services\Admin\EventManagementService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use App\Traits\ManagesApproval;
-use App\Services\Admin\EventManagementService;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Class EventController
@@ -33,7 +34,7 @@ class EventController extends Controller
     /**
      * @var EventManagementService
      */
-    protected $eventService;
+    protected EventManagementService $eventService;
 
     /**
      * EventController constructor.
@@ -59,14 +60,7 @@ class EventController extends Controller
         $locations = Location::active()->where('is_event', 1)->get();
         if ($locations->isEmpty()) $locations = Location::active()->get();
 
-        $events = Event::query()
-            ->with(['user', 'category', 'location'])
-            ->when($request->title, fn($q) => $q->where('title', 'like', '%' . $request->title . '%'))
-            ->when($request->category_id, fn($q) => $q->where('category_id', $request->category_id))
-            ->when($request->location_id, fn($q) => $q->where('location_id', $request->location_id))
-            ->latest()
-            ->paginate(15)
-            ->withQueryString();
+        $events = $this->eventService->getEvents($request->only(['title', 'category_id', 'location_id']));
 
         return view('admin.events.index', compact('events', 'categories', 'locations'));
     }

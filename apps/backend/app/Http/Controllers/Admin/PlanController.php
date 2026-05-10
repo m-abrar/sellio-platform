@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\PlanRequest;
 use App\Models\Plan;
+use App\Services\Admin\PlanManagementService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -11,10 +13,25 @@ use Illuminate\View\View;
 /**
  * Class PlanController
  * Orchestrates the administrative lifecycle of subscription plans, coordinating 
- * pricing tiers, resource quotas, and specialized feature access for marketplace partners.
+ * pricing tiers, resource quotas, and specialized feature access.
  */
 class PlanController extends Controller
 {
+    /**
+     * @var PlanManagementService
+     */
+    protected PlanManagementService $planService;
+
+    /**
+     * PlanController constructor.
+     *
+     * @param PlanManagementService $planService
+     */
+    public function __construct(PlanManagementService $planService)
+    {
+        $this->planService = $planService;
+    }
+
     /**
      * Display a filtered and paginated listing of all subscription tiers.
      *
@@ -23,29 +40,7 @@ class PlanController extends Controller
      */
     public function index(Request $request): View
     {
-        $query = Plan::query();
-
-        // Semantic Search by Title or Description
-        if ($request->filled('search')) {
-            $search = $request->query('search');
-            $query->where(function ($q) use ($search) {
-                $q->where('title', 'like', '%' . $search . '%')
-                  ->orWhere('description', 'like', '%' . $search . '%');
-            });
-        }
-
-        // Billing Period Filtering
-        if ($request->filled('billing_period')) {
-            $period = $request->query('billing_period');
-            if (in_array($period, ['monthly', 'annually'])) {
-                $query->where('billing_period', $period);
-            }
-        }
-
-        $plans = $query
-            ->orderBy('price', 'asc')
-            ->paginate(15) 
-            ->withQueryString(); 
+        $plans = $this->planService->getPlans($request->only(['search', 'billing_period']));
 
         return view('admin.plans.index', compact('plans'));
     }
@@ -64,15 +59,12 @@ class PlanController extends Controller
     /**
      * Store a newly created subscription plan and normalize its quota parameters.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\Admin\PlanRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request): RedirectResponse
+    public function store(PlanRequest $request): RedirectResponse
     {
-        $validated = $this->validatePlan($request);
-        $data = $this->normalizePlanData($request, $validated);
-
-        Plan::create($data);
+        $this->planService->createPlan($request->validated());
         
         return redirect()->route('admin.plans.index')
             ->with('success', __('Subscription plan created successfully.'));
@@ -92,16 +84,13 @@ class PlanController extends Controller
     /**
      * Update an existing subscription plan and synchronize its resource quotas.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\Admin\PlanRequest  $request
      * @param  \App\Models\Plan  $plan
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, Plan $plan): RedirectResponse
+    public function update(PlanRequest $request, Plan $plan): RedirectResponse
     {
-        $validated = $this->validatePlan($request);
-        $data = $this->normalizePlanData($request, $validated);
-        
-        $plan->update($data);
+        $this->planService->updatePlan($plan, $request->validated());
 
         return redirect()->route('admin.plans.index')
             ->with('success', __('Subscription plan updated successfully.'));
@@ -115,61 +104,9 @@ class PlanController extends Controller
      */
     public function destroy(Plan $plan): RedirectResponse
     {
-        $plan->delete();
+        $this->planService->deletePlan($plan);
         
         return redirect()->route('admin.plans.index')
             ->with('success', __('Subscription plan deleted successfully.'));
-    }
-
-    /**
-     * Validate the plan's configuration parameters.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
-     */
-    protected function validatePlan(Request $request): array
-    {
-        return $request->validate([
-            'title'                  => 'required|string|max:60',
-            'description'            => 'nullable|string|max:500',
-            'label_text'             => 'nullable|string|max:50',
-            'price'                  => 'required|numeric|min:0',
-            'billing_period'         => 'required|in:monthly,annually', 
-            'max_listings'           => 'nullable|integer|min:0', 
-            'max_featured_listings'  => 'nullable|integer|min:0',
-            'max_addons'             => 'nullable|integer|min:0',
-            'listing_duration'       => 'required|integer|min:1',
-            'analytics_access'       => 'required|in:none,basic,advanced', 
-            'is_active'              => 'sometimes|boolean', 
-            'is_featured'            => 'sometimes|boolean',
-            'is_popular'             => 'sometimes|boolean',
-            'priority_support'       => 'sometimes|boolean',
-            'custom_branding'        => 'sometimes|boolean',
-        ]);
-    }
-
-    /**
-     * Normalize plan data, ensuring proper boolean casting and nullification of unlimited quotas.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  array  $data
-     * @return array
-     */
-    protected function normalizePlanData(Request $request, array $data): array
-    {
-        $data['is_active']        = $request->boolean('is_active');
-        $data['is_featured']      = $request->boolean('is_featured');
-        $data['is_popular']       = $request->boolean('is_popular');
-        $data['priority_support'] = $request->boolean('priority_support');
-        $data['custom_branding']  = $request->boolean('custom_branding');
-        
-        // Normalize empty quotas to NULL for "Unlimited" handling
-        foreach (['max_listings', 'max_featured_listings', 'max_addons'] as $field) {
-            if (empty($data[$field])) {
-                $data[$field] = null;
-            }
-        }
-
-        return $data;
     }
 }

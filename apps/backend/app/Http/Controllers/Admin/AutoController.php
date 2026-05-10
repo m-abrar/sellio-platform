@@ -52,28 +52,17 @@ class AutoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\View\View
      */
+    /**
+     * Display a filtered and paginated list of all automotive listings.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\View\View
+     */
     public function index(Request $request): View
     {
-        $categories = Category::active()->where('is_auto', 1)->get();
-        if ($categories->isEmpty()) $categories = Category::active()->get();
+        $data = $this->autoService->getListingData($request);
 
-        $brands = Brand::active()->where('is_auto', 1)->get();
-        if ($brands->isEmpty()) $brands = Brand::active()->get();
-
-        $locations = Location::active()->where('is_auto', 1)->get();
-        if ($locations->isEmpty()) $locations = Location::active()->get();
-
-        $autos = Auto::query()
-            ->with(['user', 'category', 'brand', 'location'])
-            ->when($request->title, fn($q) => $q->where('title', 'like', '%' . $request->title . '%'))
-            ->when($request->brand_id, fn($q) => $q->where('brand_id', $request->brand_id))
-            ->when($request->category_id, fn($q) => $q->where('category_id', $request->category_id))
-            ->when($request->location_id, fn($q) => $q->where('location_id', $request->location_id))
-            ->latest()
-            ->paginate(15)
-            ->withQueryString();
-
-        return view('admin.autos.index', compact('autos', 'categories', 'brands', 'locations'));
+        return view('admin.autos.index', $data);
     }
 
     /**
@@ -83,17 +72,10 @@ class AutoController extends Controller
      */
     public function create(): View
     {
+        $data = $this->autoService->getFormData();
         $auto = new Auto();
-        $categories = Category::active()->where('is_auto', 1)->get();
-        if ($categories->isEmpty()) $categories = Category::active()->get();
-
-        $brands = Brand::active()->where('is_auto', 1)->get();
-        if ($brands->isEmpty()) $brands = Brand::active()->get();
-
-        $locations = Location::active()->where('is_auto', 1)->get();
-        if ($locations->isEmpty()) $locations = Location::active()->get();
         
-        return view('admin.autos.form', compact('auto', 'categories', 'brands', 'locations'));
+        return view('admin.autos.form', array_merge($data, compact('auto')));
     }
 
     /**
@@ -124,18 +106,10 @@ class AutoController extends Controller
      */
     public function edit(Auto $auto): View
     {
-        $categories = Category::active()->where('is_auto', 1)->get();
-        if ($categories->isEmpty()) $categories = Category::active()->get();
-
-        $brands = Brand::active()->where('is_auto', 1)->get();
-        if ($brands->isEmpty()) $brands = Brand::active()->get();
-
-        $locations = Location::active()->where('is_auto', 1)->get();
-        if ($locations->isEmpty()) $locations = Location::active()->get();
-        
+        $data = $this->autoService->getFormData();
         $recentInquiries = AutoInquiry::where('auto_id', $auto->id)->latest()->take(5)->get();
 
-        return view('admin.autos.form', compact('auto', 'categories', 'brands', 'locations', 'recentInquiries'));
+        return view('admin.autos.form', array_merge($data, compact('auto', 'recentInquiries')));
     }
 
     /**

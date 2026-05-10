@@ -13,6 +13,34 @@ use Illuminate\Support\Str;
 class TypeManagementService
 {
     /**
+     * Get a paginated list of types with optional search.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
+    public function getListingData(\Illuminate\Http\Request $request)
+    {
+        return Type::latest()
+            ->when($request->query('search'), function($q) use ($request) {
+                $q->where('title', 'like', "%{$request->query('search')}%");
+            })
+            ->paginate(20)
+            ->withQueryString();
+    }
+
+    /**
+     * Get data for the type creation/edit form.
+     *
+     * @return array
+     */
+    public function getFormData(): array
+    {
+        return [
+            'titleSuggestions' => Type::select('title')->distinct()->limit(20)->pluck('title')
+        ];
+    }
+
+    /**
      * Create or update a type with handled boolean flags.
      *
      * @param array $data

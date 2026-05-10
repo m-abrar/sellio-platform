@@ -7,9 +7,10 @@ use App\Models\Category;
 use App\Models\Event;
 use App\Models\EventBooking;
 use App\Models\User;
+use App\Http\Requests\Admin\UpdateEventBookingRequest;
+use App\Services\Admin\EventBookingManagementService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 /**
@@ -20,6 +21,21 @@ use Illuminate\View\View;
 class EventBookingController extends Controller
 {
     /**
+     * @var EventBookingManagementService
+     */
+    protected EventBookingManagementService $bookingService;
+
+    /**
+     * EventBookingController constructor.
+     *
+     * @param EventBookingManagementService $bookingService
+     */
+    public function __construct(EventBookingManagementService $bookingService)
+    {
+        $this->bookingService = $bookingService;
+    }
+
+    /**
      * Display a filtered and paginated list of all event bookings.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -28,17 +44,13 @@ class EventBookingController extends Controller
      */
     public function index(Request $request, string $status = 'all'): View
     {
-        $bookings = EventBooking::with(['event.category', 'event.location', 'user', 'payments'])
-            ->when($request->event, fn($q) => $q->where('event_id', $request->event))
-            ->when($request->event_name, fn($q) => $q->whereHas('event', fn($ev) => $ev->where('title', 'LIKE', "%{$request->event_name}%")))
-            ->when($request->category, function($q) use ($request) {
-                $q->whereHas('event', fn($ev) => $ev->where('category_id', $request->category));
-            })
-            ->when($status !== 'all', fn($q) => $q->where('status', $status))
-            ->latest()
-            ->paginate(15)
-            ->withQueryString();
+        $status = $request->route('status') ?: ($request->query('status') ?: 'all');
+        $filters = array_merge($request->only(['event', 'event_name', 'category']), ['status' => $status]);
 
+        $bookings = $this->bookingService->getBookings($filters);
+
+        // Performance: Cap selection to prevent memory exhaustion in high-volume environments.
+        // RECOMMENDATION: Replace with AJAX search for true scalability
         $events = Event::select('id', 'title', 'category_id')->with('category:id,title')->limit(50)->get();
         $categories = Category::where('is_event', true)->select('id', 'title')->limit(50)->get();
 
@@ -66,12 +78,9 @@ class EventBookingController extends Controller
      * @param  \App\Http\Requests\Admin\UpdateEventBookingRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(\App\Http\Requests\Admin\UpdateEventBookingRequest $request): RedirectResponse
+    public function store(UpdateEventBookingRequest $request): RedirectResponse
     {
-        $validated = $request->validated();
-        $validated['booking_reference'] = 'EVT-' . strtoupper(Str::random(8));
-
-        $booking = EventBooking::create($validated);
+        $booking = $this->bookingService->createBooking($request->validated());
 
         return redirect()
             ->route('admin.event-bookings.index')
@@ -104,9 +113,9 @@ class EventBookingController extends Controller
      * @param  \App\Models\EventBooking  $eventBooking
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(\App\Http\Requests\Admin\UpdateEventBookingRequest $request, EventBooking $eventBooking): RedirectResponse
+    public function update(UpdateEventBookingRequest $request, EventBooking $eventBooking): RedirectResponse
     {
-        $eventBooking->update($request->validated());
+        $this->bookingService->updateBooking($eventBooking, $request->validated());
 
         return redirect()
             ->route('admin.event-bookings.index')
@@ -121,7 +130,7 @@ class EventBookingController extends Controller
      */
     public function destroy(EventBooking $eventBooking): RedirectResponse
     {
-        $eventBooking->delete();
+        $this->bookingService->deleteBooking($eventBooking);
 
         return redirect()
             ->route('admin.event-bookings.index')

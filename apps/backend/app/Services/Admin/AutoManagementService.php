@@ -15,6 +15,55 @@ use Illuminate\Support\Facades\Log;
 class AutoManagementService
 {
     /**
+     * Get all data required for the automotive listing index.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return array
+     */
+    public function getListingData(\Illuminate\Http\Request $request): array
+    {
+        $categories = \App\Models\Category::active()->where('is_auto', 1)->get();
+        if ($categories->isEmpty()) $categories = \App\Models\Category::active()->get();
+
+        $brands = \App\Models\Brand::active()->where('is_auto', 1)->get();
+        if ($brands->isEmpty()) $brands = \App\Models\Brand::active()->get();
+
+        $locations = \App\Models\Location::active()->where('is_auto', 1)->get();
+        if ($locations->isEmpty()) $locations = \App\Models\Location::active()->get();
+
+        $autos = Auto::query()
+            ->with(['user', 'category', 'brand', 'location'])
+            ->when($request->title, fn($q) => $q->where('title', 'like', '%' . $request->title . '%'))
+            ->when($request->brand_id, fn($q) => $q->where('brand_id', $request->brand_id))
+            ->when($request->category_id, fn($q) => $q->where('category_id', $request->category_id))
+            ->when($request->location_id, fn($q) => $q->where('location_id', $request->location_id))
+            ->latest()
+            ->paginate(15)
+            ->withQueryString();
+
+        return compact('autos', 'categories', 'brands', 'locations');
+    }
+
+    /**
+     * Get all taxonomies for the automotive form.
+     *
+     * @return array
+     */
+    public function getFormData(): array
+    {
+        $categories = \App\Models\Category::active()->where('is_auto', 1)->get();
+        if ($categories->isEmpty()) $categories = \App\Models\Category::active()->get();
+
+        $brands = \App\Models\Brand::active()->where('is_auto', 1)->get();
+        if ($brands->isEmpty()) $brands = \App\Models\Brand::active()->get();
+
+        $locations = \App\Models\Location::active()->where('is_auto', 1)->get();
+        if ($locations->isEmpty()) $locations = \App\Models\Location::active()->get();
+
+        return compact('categories', 'brands', 'locations');
+    }
+
+    /**
      * Create or update an automotive listing.
      *
      * @param array $data

@@ -7,6 +7,7 @@ use App\Models\PropertyBooking;
 use App\Models\Property;
 use App\Models\User;
 use App\Http\Requests\Dashboard\Admin\UpdatePropertyBookingRequest;
+use App\Services\Admin\PropertyBookingManagementService;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
@@ -20,6 +21,21 @@ use Illuminate\Support\Carbon;
 class PropertyBookingController extends Controller
 {
     /**
+     * @var PropertyBookingManagementService
+     */
+    protected PropertyBookingManagementService $bookingService;
+
+    /**
+     * PropertyBookingController constructor.
+     *
+     * @param PropertyBookingManagementService $bookingService
+     */
+    public function __construct(PropertyBookingManagementService $bookingService)
+    {
+        $this->bookingService = $bookingService;
+    }
+
+    /**
      * Display a filtered and paginated listing of all property bookings.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -29,17 +45,12 @@ class PropertyBookingController extends Controller
     public function index(Request $request, string $status = 'all'): View
     {
         $status = $request->route('status') ?: ($request->query('status') ?: 'all');
+        $filters = array_merge($request->only(['property', 'start_date', 'end_date']), ['status' => $status]);
 
-        $bookings = PropertyBooking::with(['property', 'user'])
-            ->when($request->query('property'), fn($q) => $q->where('property_id', $request->query('property')))
-            ->when($status !== 'all', fn($q) => $q->where('status', $status))
-            ->when($request->query('start_date'), fn($q) => $q->where('check_in_date', '>=', $request->query('start_date')))
-            ->when($request->query('end_date'), fn($q) => $q->where('check_out_date', '<=', $request->query('end_date')))
-            ->latest()
-            ->paginate(15)
-            ->withQueryString();
+        $bookings = $this->bookingService->getBookings($filters);
 
         // Performance: Cap selection to prevent memory exhaustion in high-volume environments.
+        // RECOMMENDATION: Replace with AJAX search for true scalability
         $properties = Property::select('id', 'title')->limit(100)->get();
 
         return view('admin.property-bookings.index', compact('bookings', 'properties', 'status'));
@@ -86,7 +97,7 @@ class PropertyBookingController extends Controller
      */
     public function store(UpdatePropertyBookingRequest $request): RedirectResponse
     {
-        $booking = PropertyBooking::create($request->validated());
+        $booking = $this->bookingService->createBooking($request->validated());
 
         return redirect()
             ->route('admin.property-bookings.edit', $booking->id)
@@ -105,24 +116,8 @@ class PropertyBookingController extends Controller
         $properties = Property::select('id', 'title')->limit(100)->get();
         $users = User::select('id', 'name', 'email')->limit(100)->get();
 
-        $statusColors = [
-            'confirmed' => '#bbf7d0',
-            'pending'   => '#fde68a',
-            'cancelled' => '#fecaca',
-        ];
-
         // Hydrate Sibling Bookings: Build the availability map for the host property
-        $calendarEvents = PropertyBooking::where('property_id', $propertyBooking->property_id)
-            ->where('id', '!=', $propertyBooking->id)
-            ->get()
-            ->map(function ($b) use ($statusColors) {
-                return [
-                    'start' => Carbon::parse($b->check_in_date)->toDateString(),
-                    'end'   => Carbon::parse($b->check_out_date)->toDateString(),
-                    'color' => $statusColors[$b->status] ?? '#e5e7eb',
-                    'title' => $b->full_name ?? __('Booked'),
-                ];
-            });
+        $calendarEvents = $this->bookingService->getCalendarEvents($propertyBooking->property_id, $propertyBooking->id);
 
         // Interactive Highlight: Emphasize the current booking context
         $calendarEvents->push([
@@ -149,7 +144,7 @@ class PropertyBookingController extends Controller
      */
     public function update(UpdatePropertyBookingRequest $request, PropertyBooking $propertyBooking): RedirectResponse
     {
-        $propertyBooking->update($request->validated());
+        $this->bookingService->updateBooking($propertyBooking, $request->validated());
 
         return redirect()
             ->route('admin.property-bookings.index')
@@ -164,7 +159,7 @@ class PropertyBookingController extends Controller
      */
     public function destroy(PropertyBooking $propertyBooking): RedirectResponse
     {
-        $propertyBooking->delete();
+        $this->bookingService->deleteBooking($propertyBooking);
 
         return redirect()
             ->route('admin.property-bookings.index')

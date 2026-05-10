@@ -22,6 +22,21 @@ use Illuminate\View\View;
 class OrderController extends Controller
 {
     /**
+     * @var \App\Services\Admin\OrderManagementService
+     */
+    protected $orderService;
+
+    /**
+     * OrderController constructor.
+     *
+     * @param \App\Services\Admin\OrderManagementService $orderService
+     */
+    public function __construct(\App\Services\Admin\OrderManagementService $orderService)
+    {
+        $this->orderService = $orderService;
+    }
+
+    /**
      * Display a filtered and paginated list of all product orders.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -33,7 +48,7 @@ class OrderController extends Controller
 
         $orders = Order::with(['user', 'items.product'])
             ->when($request->order_number, fn($q) => $q->where('order_number', 'LIKE', "%{$request->order_number}%"))
-            ->when($request->product_name, fn($q) => $q->whereHas('items.product', fn($pq) => $pq->where('name', 'LIKE', "%{$request->product_name}%")))
+            ->when($request->product_name, fn($q) => $q->whereHas('items.product', fn($pq) => $pq->where('title', 'LIKE', "%{$request->product_name}%")))
             ->when($status !== 'all', fn($q) => $q->where('status', $status))
             ->when($request->payment_status, fn($q) => $q->where('payment_status', $request->payment_status))
             ->latest()
@@ -51,7 +66,7 @@ class OrderController extends Controller
     public function create(): View
     {
         $users = User::select('id', 'name', 'email')->get();
-        $products = Product::where('is_published', true)->select('id', 'name', 'price', 'manage_stock', 'stock_quantity')->get();
+        $products = Product::active()->select('id', 'title', 'price', 'manage_stock', 'stock_quantity')->get();
         
         return view('admin.product-orders.create', compact('users', 'products'));
     }
@@ -64,7 +79,7 @@ class OrderController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $request->validate([
+        $validated = $request->validate([
             'user_id'          => 'required|exists:users,id',
             'items'            => 'required|array|min:1',
             'items.*.product_id' => 'required|exists:products,id',
@@ -75,52 +90,21 @@ class OrderController extends Controller
             'shipping_address' => 'required|string',
             'shipping_city'    => 'required|string|max:255',
             'shipping_zip'     => 'required|string|max:20',
+            'subtotal'         => 'required|numeric',
+            'shipping_cost'    => 'required|numeric',
+            'total_amount'     => 'required|numeric',
+            'notes'            => 'nullable|string'
         ]);
 
         try {
-            DB::transaction(function () use ($request) {
-                $order = new Order();
-                $order->order_number     = 'ORD-' . strtoupper(Str::random(10));
-                $order->payment_method   = 'manual';
-                $order->shipping_name    = $request->shipping_name;
-                $order->shipping_address = $request->shipping_address;
-                $order->shipping_city    = $request->shipping_city;
-                $order->shipping_zip     = $request->shipping_zip;
-                $order->notes            = $request->notes;
-
-                $order->user_id = $request->user_id;
-                $order->status = $request->status;
-                $order->payment_status = 'paid';
-                $order->subtotal = $request->subtotal;
-                $order->shipping_cost = $request->shipping_cost;
-                $order->total_amount = $request->total_amount;
-                $order->save();
-
-                foreach ($request->items as $item) {
-                    $product = Product::findOrFail($item['product_id']);
-                    
-                    $orderItem = new OrderItem([
-                        'order_id'     => $order->id,
-                        'product_id'   => $product->id,
-                        'product_name' => $product->name,
-                        'quantity'     => $item['quantity'],
-                    ]);
-
-                    $orderItem->unit_price = $item['unit_price'];
-                    $orderItem->total_price = $item['unit_price'] * $item['quantity'];
-                    $orderItem->save();
-
-                    if ($product->manage_stock) {
-                        $product->decrement('stock_quantity', $item['quantity']);
-                    }
-                }
-            });
+            $this->orderService->createManualOrder($validated);
 
             return redirect()->route('admin.product-orders.index')
                              ->with('success', __('Manual order initialized and synchronized successfully.'));
 
         } catch (\Exception $e) {
-            return back()->with('error', __('Critical synchronization error: :msg', ['msg' => $e->getMessage()]));
+            Log::error("Order Creation Failed: " . $e->getMessage());
+            return back()->withInput()->with('error', __('Critical synchronization error: :msg', ['msg' => $e->getMessage()]));
         }
     }
 
@@ -161,28 +145,7 @@ class OrderController extends Controller
             'tracking_number' => 'nullable|string|max:100',
         ]);
 
-        $oldStatus = $order->status;
-        $order->status = $validated['status'];
-        
-        if (isset($validated['tracking_number'])) {
-            $order->tracking_number = $validated['tracking_number'];
-        }
-
-        // Fulfillment timestamp audit
-        if ($order->status === Order::STATUS_SHIPPED && !$order->shipped_at) {
-            $order->shipped_at = now();
-        }
-
-        if ($order->status === Order::STATUS_DELIVERED && !$order->delivered_at) {
-            $order->delivered_at = now();
-        }
-
-        $order->save();
-
-        // Automated Notification Dispatch
-        if ($oldStatus !== $order->status && $order->user) {
-            $order->user->notify(new OrderStatusChanged($order));
-        }
+        $this->orderService->updateOrderStatus($order, $validated);
 
         return redirect()->back()->with('success', __('Order status updated successfully.'));
     }
@@ -201,29 +164,9 @@ class OrderController extends Controller
             'bulk_status' => 'required|string|max:255',
         ]);
 
-        $orders = Order::whereIn('id', $validated['ids'])->get();
-        $count = 0;
-
-        foreach ($orders as $order) {
-            $oldStatus = $order->status;
-            $order->status = $validated['bulk_status'];
-            
-            if ($order->status === Order::STATUS_SHIPPED && !$order->shipped_at) {
-                $order->shipped_at = now();
-            }
-
-            if ($order->status === Order::STATUS_DELIVERED && !$order->delivered_at) {
-                $order->delivered_at = now();
-            }
-
-            $order->save();
-            $count++;
-
-            if ($oldStatus !== $order->status && $order->user) {
-                $order->user->notify(new OrderStatusChanged($order));
-            }
-        }
+        $count = $this->orderService->bulkUpdateStatus($validated['ids'], $validated['bulk_status']);
 
         return redirect()->back()->with('success', __(':count orders updated successfully.', ['count' => $count]));
     }
+}
 }

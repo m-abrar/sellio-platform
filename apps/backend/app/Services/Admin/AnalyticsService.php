@@ -9,13 +9,22 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Fluent;
+use Illuminate\Pagination\LengthAwarePaginator;
 
+/**
+ * Class AnalyticsService
+ * Orchestrates the complex data aggregation and analytical logic for the platform's reporting hub.
+ */
 class AnalyticsService
 {
     private const MONTHS_FOR_TREND = 12;
 
     /**
      * Get Payment Analytics including KPIs and Trends.
+     *
+     * @param Carbon $start
+     * @param Carbon $end
+     * @return array
      */
     public function getPaymentAnalytics(Carbon $start, Carbon $end): array
     {
@@ -36,7 +45,7 @@ class AnalyticsService
             ->map(fn ($tx) => new Fluent([
                 'id'      => $tx->id,
                 'amount'  => $tx->amount,
-                'method'  => $tx->payable ? class_basename($tx->payable) : $tx->method,
+                'method'  => $tx->payable ? class_basename($tx->payable) : $tx->payment_method,
                 'status'  => $tx->status,
                 'paid_at' => $tx->paid_at,
                 'payable' => $tx->payable,
@@ -54,6 +63,10 @@ class AnalyticsService
 
     /**
      * Get Property Booking Analytics.
+     *
+     * @param Carbon $start
+     * @param Carbon $end
+     * @return array
      */
     public function getBookingAnalytics(Carbon $start, Carbon $end): array
     {
@@ -114,6 +127,10 @@ class AnalyticsService
 
     /**
      * Get Property Occupancy Analytics.
+     *
+     * @param Carbon $start
+     * @param Carbon $end
+     * @return array
      */
     public function getOccupancyAnalytics(Carbon $start, Carbon $end): array
     {
@@ -138,6 +155,40 @@ class AnalyticsService
         ];
     }
 
+    /**
+     * Get paginated occupancy list for properties with formatted status.
+     *
+     * @param Carbon $start
+     * @param Carbon $end
+     * @param int $perPage
+     * @return LengthAwarePaginator
+     */
+    public function getPropertyOccupancyList(Carbon $start, Carbon $end, int $perPage = 50): LengthAwarePaginator
+    {
+        $analytics = $this->getOccupancyAnalytics($start, $end);
+        
+        return Property::select('id', 'title', 'slug', 'location_id', 'total_units')
+            ->with('location')
+            ->orderBy('title', 'asc') 
+            ->paginate($perPage)
+            ->through(function ($property) use ($analytics) {
+                 $isOccupied = $analytics['occupiedIds']->contains($property->id);
+                 return new Fluent([
+                     'id'          => $property->id,
+                     'title'       => $property->title, 
+                     'location'    => optional($property->location)->title ?? __('N/A'), 
+                     'status'      => $isOccupied ? __('Occupied (in range)') : __('Available (in range)'),
+                     'total_units' => $property->total_units ?? 1,
+                     'link'        => route('properties.show', $property->slug), 
+                 ]);
+            });
+    }
+
+    /**
+     * Internal helper to calculate monthly revenue trends.
+     *
+     * @return array
+     */
     protected function getMonthlyRevenueTrend(): array
     {
         $trendStart = Carbon::now()->subMonths(self::MONTHS_FOR_TREND)->startOfMonth();
@@ -166,6 +217,11 @@ class AnalyticsService
         return ['labels' => $labels, 'data' => $data];
     }
 
+    /**
+     * Internal helper to calculate monthly booking trends.
+     *
+     * @return array
+     */
     protected function getMonthlyBookingTrend(): array
     {
         $trendStart = Carbon::now()->subMonths(self::MONTHS_FOR_TREND)->startOfMonth();

@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\TransactionRequest;
 use App\Models\Transaction;
 use App\Models\Booking;
+use App\Services\Admin\TransactionManagementService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -17,15 +19,28 @@ use Illuminate\View\View;
 class TransactionController extends Controller
 {
     /**
+     * @var TransactionManagementService
+     */
+    protected TransactionManagementService $transactionService;
+
+    /**
+     * TransactionController constructor.
+     *
+     * @param TransactionManagementService $transactionService
+     */
+    public function __construct(TransactionManagementService $transactionService)
+    {
+        $this->transactionService = $transactionService;
+    }
+
+    /**
      * Display a paginated listing of all platform transactions for financial auditing.
      *
      * @return \Illuminate\View\View
      */
     public function index(): View
     {
-        $transactions = Transaction::with(['user', 'payable'])
-            ->latest()
-            ->paginate(15);
+        $transactions = $this->transactionService->getTransactions();
 
         return view('admin.transactions.index', compact('transactions'));
     }
@@ -37,7 +52,8 @@ class TransactionController extends Controller
      */
     public function create(): View
     {
-        $bookings    = Booking::all();
+        // RECOMMENDATION: For large datasets, replace with AJAX search endpoint
+        $bookings    = Booking::latest()->limit(100)->get();
         $transaction = new Transaction();
         
         return view('admin.transactions.form', compact('transaction', 'bookings'));
@@ -46,30 +62,12 @@ class TransactionController extends Controller
     /**
      * Store a newly created financial transaction and archive its associated media.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\Admin\TransactionRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request): RedirectResponse
+    public function store(TransactionRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'amount'           => 'required|numeric',
-            'payment_method'   => 'nullable|string|max:100',
-            'reference_number' => 'nullable|string|max:255',
-            'status'           => 'required|in:pending,completed,failed,cancelled',
-            'notes'            => 'nullable|string',
-            'transaction_date' => 'nullable|date',
-            'media'            => 'nullable|array',
-            'media.*'          => 'file|image|max:5120',
-        ]);
-
-        $transaction = Transaction::create($validated);
-
-        // Archive Proof of Payment
-        if ($request->hasFile('media')) {
-            foreach ($request->file('media') as $file) {
-                $transaction->addMedia($file)->toMediaCollection('transaction_screenshots');
-            }
-        }
+        $transaction = $this->transactionService->createTransaction($request->validated());
 
         return redirect()->route('admin.transactions.edit', $transaction->id)
             ->with('success', __('Transaction entry initialized and archived successfully.'));
@@ -83,7 +81,8 @@ class TransactionController extends Controller
      */
     public function edit(Transaction $transaction): View
     {
-        $bookings = Booking::all();
+        // RECOMMENDATION: For large datasets, replace with AJAX search endpoint
+        $bookings = Booking::latest()->limit(100)->get();
         $transaction->load(['user', 'payable']);
         
         return view('admin.transactions.form', compact('transaction', 'bookings'));
@@ -92,32 +91,13 @@ class TransactionController extends Controller
     /**
      * Update an existing financial record and synchronize its audit media.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\Admin\TransactionRequest  $request
      * @param  \App\Models\Transaction  $transaction
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, Transaction $transaction): RedirectResponse
+    public function update(TransactionRequest $request, Transaction $transaction): RedirectResponse
     {
-        $validated = $request->validate([
-            'amount'           => 'required|numeric',
-            'payment_method'   => 'nullable|string|max:100',
-            'reference_number' => 'nullable|string|max:255',
-            'status'           => 'required|in:pending,completed,failed,cancelled',
-            'notes'            => 'nullable|string',
-            'transaction_date' => 'nullable|date',
-            'media'            => 'nullable|array',
-            'media.*'          => 'file|image|max:5120',
-        ]);
-
-        $transaction->update($validated);
-
-        // Synchronize Audit Media: Reset and Re-archive if new files are provided
-        if ($request->hasFile('media')) {
-            $transaction->clearMediaCollection('transaction_screenshots');
-            foreach ($request->file('media') as $file) {
-                $transaction->addMedia($file)->toMediaCollection('transaction_screenshots');
-            }
-        }
+        $this->transactionService->updateTransaction($transaction, $request->validated());
 
         return redirect()->route('admin.transactions.index')
             ->with('success', __('Transaction audit details updated successfully.'));
@@ -131,7 +111,7 @@ class TransactionController extends Controller
      */
     public function destroy(Transaction $transaction): RedirectResponse
     {
-        $transaction->delete();
+        $this->transactionService->deleteTransaction($transaction);
         
         return redirect()->route('admin.transactions.index')
             ->with('success', __('Transaction entry removed from ledger successfully.'));

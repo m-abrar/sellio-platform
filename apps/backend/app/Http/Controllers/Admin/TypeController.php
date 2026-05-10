@@ -42,11 +42,7 @@ class TypeController extends Controller
      */
     public function index(Request $request): View
     {
-        $types = Type::latest()
-            ->when($request->query('search'), function($q) use ($request) {
-                $q->where('title', 'like', "%{$request->query('search')}%");
-            })
-            ->get();
+        $types = $this->typeService->getListingData($request);
 
         return view('admin.types.index', compact('types'));
     }
@@ -59,9 +55,9 @@ class TypeController extends Controller
     public function create(): View
     {
         $type = new Type();
-        $titleSuggestions = Type::select('title')->distinct()->limit(20)->pluck('title');
+        $formData = $this->typeService->getFormData();
 
-        return view('admin.types.form', compact('type', 'titleSuggestions'));
+        return view('admin.types.form', array_merge($formData, compact('type')));
     }
 
     /**
@@ -86,9 +82,9 @@ class TypeController extends Controller
      */
     public function edit(Type $type): View
     {
-        $titleSuggestions = Type::select('title')->distinct()->limit(20)->pluck('title');
+        $formData = $this->typeService->getFormData();
 
-        return view('admin.types.form', compact('type', 'titleSuggestions'));
+        return view('admin.types.form', array_merge($formData, compact('type')));
     }
 
     /**

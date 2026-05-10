@@ -73,9 +73,23 @@ class BookingManagementService
     }
 
 
+    /**
+     * Get the list of allowed model class names (basenames) for dynamic resolution.
+     */
+    public function getAllowedModels(): array
+    {
+        return collect(self::MODEL_MAP)->keys()->map(fn($m) => class_basename($m))->toArray();
+    }
+
     protected function hydrateBookings(LengthAwarePaginator $paginator): LengthAwarePaginator
     {
-        $models = $paginator->getCollection()->map(function ($raw) {
+        $allowedBasenames = $this->getAllowedModels();
+
+        $models = $paginator->getCollection()->map(function ($raw) use ($allowedBasenames) {
+            if (!in_array($raw->booking_type, $allowedBasenames)) {
+                return null;
+            }
+
             $fullClassName = "App\\Models\\" . $raw->booking_type;
             $model = new $fullClassName();
             
@@ -93,7 +107,7 @@ class BookingManagementService
             }
 
             return $model;
-        });
+        })->filter();
 
         $items = new \Illuminate\Database\Eloquent\Collection($models);
         

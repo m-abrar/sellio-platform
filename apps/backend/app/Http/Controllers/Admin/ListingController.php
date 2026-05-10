@@ -43,30 +43,9 @@ class ListingController extends Controller
     public function index(string $status = 'active', string $type = 'all'): View
     {
         $listings = $this->listingService->getUnifiedListings($status, $type, 20);
+        $listings = $this->listingService->hydrateListings($listings);
 
-        // Optimization: Manually hydrate User and Location relationships to circumvent N+1 limitations in Union queries.
-        $userIds = $listings->pluck('user_id')->unique()->filter();
-        $locIds  = $listings->pluck('location_id')->unique()->filter();
-
-        $users     = User::whereIn('id', $userIds)->get()->keyBy('id');
-        $locations = \App\Models\Location::whereIn('id', $locIds)->get()->keyBy('id');
-
-        $listings->getCollection()->transform(function ($listing) use ($users, $locations) {
-            $modelClass = ListingQueryService::MODEL_MAP[strtolower($listing->listing_type)] ?? null;
-            
-            if ($modelClass) {
-                // Rehydrate the generic database object into its concrete Eloquent model instance.
-                $instance = (new $modelClass)->newFromBuilder((array)$listing);
-                $instance->exists = true;
-                $instance->setRelation('user', $users->get($listing->user_id));
-                $instance->setRelation('location', $locations->get($listing->location_id));
-                return $instance;
-            }
-            
-            return $listing;
-        });
-
-        return view('admin.listings.index', compact('listings', 'status', 'type', 'locations'));
+        return view('admin.listings.index', compact('listings', 'status', 'type'));
     }
 
     /**

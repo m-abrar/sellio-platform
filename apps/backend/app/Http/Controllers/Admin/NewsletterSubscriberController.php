@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\NewsletterSubscriber;
+use App\Services\Admin\NewsletterManagementService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -17,30 +18,30 @@ use Illuminate\View\View;
 class NewsletterSubscriberController extends Controller
 {
     /**
+     * @var NewsletterManagementService
+     */
+    protected NewsletterManagementService $newsletterService;
+
+    /**
+     * NewsletterSubscriberController constructor.
+     *
+     * @param NewsletterManagementService $newsletterService
+     */
+    public function __construct(NewsletterManagementService $newsletterService)
+    {
+        $this->newsletterService = $newsletterService;
+    }
+
+    /**
      * Display a paginated listing of all registered newsletter subscribers.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\View\View
      */
     public function index(Request $request): View
     {
-        $search = $request->query('search');
-        $source = $request->query('source');
-        $confirmed = $request->query('confirmed');
-
-        $subscribers = NewsletterSubscriber::latest()
-            ->when($search, function ($q) use ($search) {
-                return $q->where('email', 'LIKE', "%{$search}%");
-            })
-            ->when($source, function ($q) use ($source) {
-                return $q->where('source', $source);
-            })
-            ->when($confirmed !== null && $confirmed !== '', function ($q) use ($confirmed) {
-                return $q->where('is_confirmed', $confirmed);
-            })
-            ->paginate(15)
-            ->withQueryString();
-
-        $sources = NewsletterSubscriber::distinct()->whereNotNull('source')->pluck('source');
+        $subscribers = $this->newsletterService->getSubscribers($request->only(['search', 'source', 'confirmed']));
+        $sources = $this->newsletterService->getSources();
 
         return view('admin.newsletter-subscribers.index', compact('subscribers', 'sources'));
     }
@@ -52,42 +53,7 @@ class NewsletterSubscriberController extends Controller
      */
     public function export(): StreamedResponse
     {
-        $headers = [
-            "Content-type"        => "text/csv",
-            "Content-Disposition" => "attachment; filename=subscribers_" . date('Y-m-d') . ".csv",
-            "Pragma"              => "no-cache",
-            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
-            "Expires"             => "0"
-        ];
-
-        $callback = function() {
-            $file = fopen('php://output', 'w');
-            
-            // Localized CSV Headers
-            fputcsv($file, [
-                __('ID'), 
-                __('Email'), 
-                __('Source'), 
-                __('Confirmed'), 
-                __('Created At')
-            ]);
-
-            NewsletterSubscriber::query()->chunk(500, function ($subscribers) use ($file) {
-                foreach ($subscribers as $subscriber) {
-                    fputcsv($file, [
-                        $subscriber->id,
-                        $subscriber->email,
-                        $subscriber->source ?? __('Main Website'),
-                        $subscriber->is_confirmed ? __('Yes') : __('No'),
-                        $subscriber->created_at ? $subscriber->created_at->format('Y-m-d H:i:s') : ''
-                    ]);
-                }
-            });
-
-            fclose($file);
-        };
-
-        return response()->stream($callback, 200, $headers);
+        return $this->newsletterService->exportToCsv();
     }
 
     /**
@@ -146,7 +112,7 @@ class NewsletterSubscriberController extends Controller
             'source'       => 'nullable|string|max:255',
         ]);
 
-        $newsletterSubscriber->update($validatedData);
+        $this->newsletterService->updateSubscriber($newsletterSubscriber, $validatedData);
 
         return redirect()->route('admin.newsletter-subscribers.index')
                          ->with('success', __('Subscriber updated successfully.'));
@@ -160,7 +126,7 @@ class NewsletterSubscriberController extends Controller
      */
     public function destroy(NewsletterSubscriber $newsletterSubscriber): RedirectResponse
     {
-        $newsletterSubscriber->delete();
+        $this->newsletterService->deleteSubscriber($newsletterSubscriber);
 
         return redirect()->route('admin.newsletter-subscribers.index')
                          ->with('success', __('Subscriber deleted successfully.'));

@@ -394,18 +394,20 @@ class DashboardService
         }
 
         if (module_enabled('services')) {
-            $events = $events->merge(ServiceAppointment::with('service')->where('status', 'confirmed')
+            $events = $events->merge(ServiceAppointment::with('service:id,title')->where('status', 'confirmed')
                 ->whereBetween('scheduled_at', [$last180Days, $next180Days])
-                ->get()->map(fn($a) => [
+                ->get(['id', 'service_id', 'scheduled_at'])->map(fn($a) => [
                     'title' => Str::limit($a->service->title ?? 'Service', 25) . ' (Appt.)',
                     'start' => $a->scheduled_at, 'end' => $a->scheduled_at?->copy()->addHour(), 'color' => '#ffc107'
                 ]));
         }
 
-        $events = $events->merge(Campaign::active()->get()->map(fn($c) => [
-            'title' => $c->title . ' (Campaign)', 'start' => $c->start_date->toIso8601String(), 'end' => $c->end_date->toIso8601String(), 'color' => $c->color,
-            'allDay' => $c->start_date->format('H:i') == '00:00' && $c->end_date->format('H:i') == '00:00'
-        ]));
+        $events = $events->merge(Campaign::active()
+            ->where(fn($q) => $q->whereBetween('start_date', [$last180Days, $next180Days])->orWhereBetween('end_date', [$last180Days, $next180Days]))
+            ->get(['id', 'title', 'start_date', 'end_date', 'color'])->map(fn($c) => [
+                'title' => $c->title . ' (Campaign)', 'start' => $c->start_date->toIso8601String(), 'end' => $c->end_date->toIso8601String(), 'color' => $c->color,
+                'allDay' => $c->start_date->format('H:i') == '00:00' && $c->end_date->format('H:i') == '00:00'
+            ]));
 
         return $events->sortBy('start')->values()->toArray();
     }

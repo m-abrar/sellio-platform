@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Auto;
 use App\Models\AutoInquiry;
 use App\Models\User;
+use App\Services\Admin\AutoInquiryManagementService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -18,6 +19,21 @@ use Illuminate\View\View;
 class AutoInquiryController extends Controller
 {
     /**
+     * @var AutoInquiryManagementService
+     */
+    protected AutoInquiryManagementService $inquiryService;
+
+    /**
+     * AutoInquiryController constructor.
+     *
+     * @param AutoInquiryManagementService $inquiryService
+     */
+    public function __construct(AutoInquiryManagementService $inquiryService)
+    {
+        $this->inquiryService = $inquiryService;
+    }
+
+    /**
      * Display a filtered and paginated list of automotive inquiries.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -26,21 +42,14 @@ class AutoInquiryController extends Controller
      */
     public function index(Request $request, string $status = 'all'): View
     {
-        $status = $request->route('status') ?: ($request->status ?: 'all');
+        $status = $request->route('status') ?: ($request->query('status') ?: 'all');
+        $filters = array_merge($request->only(['auto', 'search']), ['status' => $status]);
 
-        $inquiries = AutoInquiry::with(['auto', 'user'])
-            ->when($request->auto, fn($q) => $q->where('auto_id', $request->auto))
-            ->when($request->search, fn($q) => $q->where(function($query) use ($request) {
-                $query->where('full_name', 'LIKE', "%{$request->search}%")
-                    ->orWhereHas('user', fn($uq) => $uq->where('name', 'LIKE', "%{$request->search}%"))
-                    ->orWhereHas('auto', fn($aq) => $aq->where('title', 'LIKE', "%{$request->search}%"));
-            }))
-            ->when($status !== 'all', fn($q) => $q->where('status', $status))
-            ->latest()
-            ->paginate(15)
-            ->withQueryString();
+        $inquiries = $this->inquiryService->getInquiries($filters);
 
-        $autos = Auto::select('id', 'title')->get();
+        // Performance: Cap selection to prevent memory exhaustion in high-volume environments.
+        // RECOMMENDATION: Replace with AJAX search for true scalability
+        $autos = Auto::select('id', 'title')->limit(100)->get();
 
         return view('admin.auto-inquiries.index', compact('inquiries', 'autos', 'status'));
     }
@@ -65,8 +74,9 @@ class AutoInquiryController extends Controller
     public function create(): View
     {
         $inquiry = new AutoInquiry();
-        $autos = Auto::select('id', 'title')->get();
-        $users = User::select('id', 'name', 'email')->get();
+        // Performance: Cap selection to prevent memory exhaustion.
+        $autos = Auto::select('id', 'title')->limit(100)->get();
+        $users = User::select('id', 'name', 'email')->limit(100)->get();
         
         return view('admin.auto-inquiries.form', compact('inquiry', 'autos', 'users'));
     }
@@ -91,7 +101,7 @@ class AutoInquiryController extends Controller
             'status'         => 'required|string|max:255',
         ]);
 
-        AutoInquiry::create($validated);
+        $this->inquiryService->createInquiry($validated);
 
         return redirect()
             ->route('admin.auto-inquiries.index')
@@ -106,8 +116,9 @@ class AutoInquiryController extends Controller
      */
     public function edit(AutoInquiry $autoInquiry): View
     {
-        $autos = Auto::select('id', 'title')->get();
-        $users = User::select('id', 'name', 'email')->get();
+        // Performance: Cap selection to prevent memory exhaustion.
+        $autos = Auto::select('id', 'title')->limit(100)->get();
+        $users = User::select('id', 'name', 'email')->limit(100)->get();
 
         return view('admin.auto-inquiries.form', ['inquiry' => $autoInquiry, 'autos' => $autos, 'users' => $users]);
     }
@@ -133,7 +144,7 @@ class AutoInquiryController extends Controller
             'status'         => 'required|string|max:255',
         ]);
 
-        $autoInquiry->update($validated);
+        $this->inquiryService->updateInquiry($autoInquiry, $validated);
 
         return redirect()
             ->route('admin.auto-inquiries.index')
@@ -148,7 +159,7 @@ class AutoInquiryController extends Controller
      */
     public function destroy(AutoInquiry $autoInquiry): RedirectResponse
     {
-        $autoInquiry->delete();
+        $this->inquiryService->deleteInquiry($autoInquiry);
 
         return redirect()
             ->route('admin.auto-inquiries.index')

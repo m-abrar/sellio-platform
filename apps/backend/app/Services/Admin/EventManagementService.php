@@ -4,6 +4,7 @@ namespace App\Services\Admin;
 
 use App\Models\Event;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 /**
  * Class EventManagementService
@@ -14,7 +15,26 @@ use Illuminate\Support\Facades\DB;
 class EventManagementService
 {
     /**
-     * Create or update an event listing.
+     * Get paginated event listings with associated metadata and filters.
+     *
+     * @param array $filters
+     * @param int $perPage
+     * @return LengthAwarePaginator
+     */
+    public function getEvents(array $filters = [], int $perPage = 15): LengthAwarePaginator
+    {
+        return Event::query()
+            ->with(['user', 'category', 'location'])
+            ->when($filters['title'] ?? null, fn($q, $title) => $q->where('title', 'like', '%' . $title . '%'))
+            ->when($filters['category_id'] ?? null, fn($q, $cat) => $q->where('category_id', $cat))
+            ->when($filters['location_id'] ?? null, fn($q, $loc) => $q->where('location_id', $loc))
+            ->latest()
+            ->paginate($perPage)
+            ->withQueryString();
+    }
+
+    /**
+     * Create or update an event listing within an atomic transaction.
      *
      * @param array $data
      * @param Event|null $event
@@ -41,7 +61,7 @@ class EventManagementService
     }
 
     /**
-     * Replicate an existing event listing as a draft copy.
+     * Replicate an existing event listing as a draft copy for rapid entry.
      *
      * @param Event $event
      * @return Event

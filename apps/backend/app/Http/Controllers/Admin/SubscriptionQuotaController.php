@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Plan;
 use App\Models\SubscriptionQuota;
 use App\Models\User;
+use App\Services\Admin\QuotaManagementService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -18,6 +19,21 @@ use Illuminate\View\View;
 class SubscriptionQuotaController extends Controller
 {
     /**
+     * @var QuotaManagementService
+     */
+    protected QuotaManagementService $quotaService;
+
+    /**
+     * SubscriptionQuotaController constructor.
+     *
+     * @param QuotaManagementService $quotaService
+     */
+    public function __construct(QuotaManagementService $quotaService)
+    {
+        $this->quotaService = $quotaService;
+    }
+
+    /**
      * Display a filtered and paginated listing of all subscription usage quotas.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -25,29 +41,14 @@ class SubscriptionQuotaController extends Controller
      */
     public function index(Request $request): View
     {
-        $query = SubscriptionQuota::with(['subscription.plan', 'subscription.user']);
-
-        // User-specific Filtering
-        if ($request->filled('user_id')) {
-            $query->whereHas('subscription.user', function($q) use ($request) {
-                $q->where('id', $request->query('user_id'));
-            });
-        }
-
-        // Plan-specific Filtering
-        if ($request->filled('plan_id')) {
-            $query->whereHas('subscription.plan', function($q) use ($request) {
-                $q->where('id', $request->query('plan_id'));
-            });
-        }
-
-        $quotas = $query->latest()->paginate(15)->withQueryString();
+        $quotas = $this->quotaService->getQuotas($request->only(['user_id', 'plan_id']));
         
         // Performance: Only fetch users who actually have a subscription quota to prevent memory bloat
+        // RECOMMENDATION: Replace with AJAX search for true scalability
         $users  = User::whereHas('subscriptions.quota')
             ->select('id', 'name', 'email')
             ->orderBy('name')
-            ->limit(100) // Safety cap for the dropdown
+            ->limit(100) 
             ->get();
 
         $plans  = Plan::select('id', 'title')->orderBy('title')->get();
@@ -82,7 +83,7 @@ class SubscriptionQuotaController extends Controller
             'featured_used' => 'required|integer|min:0',
         ]);
 
-        $subscriptionQuota->update($validated);
+        $this->quotaService->updateUsage($subscriptionQuota, $validated);
 
         return redirect()->route('admin.subscription-quotas.index')
             ->with('success', __('Subscription resource consumption updated successfully.'));
@@ -96,10 +97,7 @@ class SubscriptionQuotaController extends Controller
      */
     public function reset(SubscriptionQuota $subscriptionQuota): RedirectResponse
     {
-        $subscriptionQuota->update([
-            'listings_used' => 0,
-            'featured_used' => 0,
-        ]);
+        $this->quotaService->resetUsage($subscriptionQuota);
 
         return back()->with('success', __('Subscription resource consumption has been reset to zero.'));
     }

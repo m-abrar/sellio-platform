@@ -3,23 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Auto;
-use App\Models\AutoInquiry;
-use App\Models\Classified;
-use App\Models\ClassifiedInquiry;
-use App\Models\Event;
-use App\Models\EventBooking;
-use App\Models\JobApplication;
-use App\Models\JobListing;
-use App\Models\Property;
-use App\Models\PropertyBooking;
-use App\Models\Service;
-use App\Models\ServiceAppointment;
-use App\Models\ServiceQuote;
+use App\Services\Admin\AuditManagementService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Spatie\Activitylog\Models\Activity;
 
 /**
  * Class ActivityLogController
@@ -29,58 +16,18 @@ use Spatie\Activitylog\Models\Activity;
 class ActivityLogController extends Controller
 {
     /**
-     * Define the semantic filter groups for administrative auditing.
-     *
-     * @var array
+     * @var AuditManagementService
      */
-    protected array $subjectFilters = [];
+    protected AuditManagementService $auditService;
 
     /**
      * ActivityLogController constructor.
-     * Initializes the localized filter registry.
+     *
+     * @param AuditManagementService $auditService
      */
-    public function __construct()
+    public function __construct(AuditManagementService $auditService)
     {
-        $this->subjectFilters = [
-            'all' => __('All Activities'),
-            'auth' => __('User Security Events'),
-            'listings' => [
-                'label' => __('Main Listings'),
-                'models' => [
-                    Property::class,
-                    Auto::class,
-                    Event::class,
-                    JobListing::class,
-                    Service::class,
-                    Classified::class,
-                ],
-            ],
-            'transactions' => [
-                'label' => __('Transactions & Leads'),
-                'models' => [
-                    PropertyBooking::class,
-                    AutoInquiry::class,
-                    EventBooking::class,
-                    JobApplication::class,
-                    ServiceQuote::class,
-                    ServiceAppointment::class,
-                    ClassifiedInquiry::class,
-                ],
-            ],
-            'property'            => Property::class,
-            'property_booking'    => PropertyBooking::class,
-            'auto'                => Auto::class,
-            'auto_inquiry'        => AutoInquiry::class, 
-            'event'               => Event::class,
-            'event_booking'       => EventBooking::class,
-            'job_listing'         => JobListing::class,
-            'job_application'     => JobApplication::class,
-            'service'             => Service::class,
-            'service_quote'       => ServiceQuote::class,
-            'service_appointment' => ServiceAppointment::class,
-            'classified'          => Classified::class,
-            'classified_inquiry'  => ClassifiedInquiry::class,
-        ];
+        $this->auditService = $auditService;
     }
 
     /**
@@ -92,23 +39,11 @@ class ActivityLogController extends Controller
     public function index(Request $request): View
     {
         $filterKey = $request->get('filter', 'all');
-        $filterData = $this->subjectFilters[$filterKey] ?? $this->subjectFilters['all'];
-
-        $query = Activity::query()->latest();
-
-        if ($filterKey === 'auth') {
-            $query->inLog('auth');
-        } elseif (isset($filterData['models'])) {
-            $query->whereIn('subject_type', $filterData['models']);
-        } elseif (is_string($filterData) && class_exists($filterData)) {
-            $query->where('subject_type', $filterData);
-        }
-        
-        $activityLogs = $query->with(['causer', 'subject'])->paginate(100);
+        $activityLogs = $this->auditService->getLogs($filterKey);
         
         return view('admin.activity_log.index', [
             'activityLogs'  => $activityLogs,
-            'filters'       => $this->subjectFilters,
+            'filters'       => $this->auditService->getFilters(),
             'currentFilter' => $filterKey,
         ]);
     }
@@ -125,7 +60,8 @@ class ActivityLogController extends Controller
             return back()->with('error', __('Unauthorized: Only Super Admins can purge audit trails.'));
         }
 
-        // Logic for partial cleanup could be implemented here (e.g. Activity::truncate())
-        return back()->with('info', __('Activity log cleanup is managed by system maintenance schedules.'));
+        $count = $this->auditService->purgeLogs();
+        
+        return back()->with('success', __(':count activity logs have been successfully purged.', ['count' => $count]));
     }
 }
