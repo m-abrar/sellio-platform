@@ -35,8 +35,8 @@ class TicketFactory extends Factory
         $categories = ['Technical', 'Billing', 'Account', 'Feature Request', 'General Inquiry'];
 
         return [
-            'user_id' => User::factory(), // Automatically creates a User if one doesn't exist
-            'assigned_to' => null, // Default to unassigned
+            'user_id' => User::factory(), 
+            'assigned_to' => $this->faker->boolean(40) ? User::factory() : null, 
             
             // Generate a random, unique title
             'title' => $this->faker->unique()->sentence(rand(3, 6)),

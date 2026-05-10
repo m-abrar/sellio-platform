@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('properties', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade');
+            $table->foreignId('user_id')->nullable()->constrained('users')->restrictOnDelete();
             $table->foreignId('category_id')->nullable()->constrained('categories')->onDelete('set null');
             $table->foreignId('type_id')->nullable()->constrained('types')->onDelete('set null');
             $table->foreignId('brand_id')->nullable()->constrained('brands')->onDelete('set null');
@@ -55,8 +55,8 @@ return new class extends Migration
             $table->string('state', 100)->nullable();
             $table->string('country', 100);
             $table->string('zip_code', 20)->nullable();
-            $table->decimal('latitude', 10, 8)->nullable();
-            $table->decimal('longitude', 11, 8)->nullable();
+            $table->decimal('latitude', 10, 8)->nullable()->index();
+            $table->decimal('longitude', 11, 8)->nullable()->index();
 
             // Status/Type
             $table->boolean('is_published')->default(false)->index();

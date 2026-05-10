@@ -21,7 +21,7 @@ return new class extends Migration
             $table->id();
             
             // Foreign Keys
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->restrictOnDelete();
             $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
             $table->foreignId('type_id')->nullable()->constrained('types')->onDelete('set null')->comment('e.g., Full-Time, Part-Time, Internship'); 
             $table->foreignId('brand_id')->nullable()->constrained('brands')->onDelete('set null');
@@ -49,8 +49,8 @@ return new class extends Migration
             $table->string('state', 100)->nullable();
             $table->string('country', 100);
             $table->string('zip_code', 20)->nullable();
-            $table->decimal('latitude', 10, 8)->nullable();
-            $table->decimal('longitude', 11, 8)->nullable();
+            $table->decimal('latitude', 10, 8)->nullable()->index();
+            $table->decimal('longitude', 11, 8)->nullable()->index();
 
             // Status/Type Flags
             $table->boolean('is_published')->default(false)->index();

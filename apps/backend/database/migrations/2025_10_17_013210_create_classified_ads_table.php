@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('classified_ads', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->restrictOnDelete();
             $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
             $table->foreignId('type_id')->constrained('types')->onDelete('cascade');
             $table->foreignId('brand_id')->nullable()->constrained('brands')->onDelete('set null');
@@ -44,8 +44,8 @@ return new class extends Migration
             $table->string('state', 100)->nullable();
             $table->string('country', 100);
             $table->string('zip_code', 20)->nullable();
-            $table->decimal('latitude', 10, 8)->nullable();
-            $table->decimal('longitude', 11, 8)->nullable();
+            $table->decimal('latitude', 10, 8)->nullable()->index();
+            $table->decimal('longitude', 11, 8)->nullable()->index();
 
             // Status/Type
             $table->string('status', 30)->default('active')->index();
