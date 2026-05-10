@@ -15,66 +15,28 @@ use Illuminate\View\View;
  */
 class DashboardController extends Controller
 {
-    use Listings;
-    use DashboardDataPreparation;
+    /**
+     * @var \App\Services\Partner\DashboardService
+     */
+    protected $dashboardService;
 
     /**
-     * Display the partner dashboard overview.
-     * * @return View
+     * DashboardController constructor.
+     *
+     * @param \App\Services\Partner\DashboardService $dashboardService
      */
-    public function index() {
-        $partner = Auth::user();
-
-        // 1. Data Aggregation via Traits
-        $dashboardData     = $this->prepareDashboardData($partner);
-        $earningData       = $this->fetchEarningData($partner);
-        $performanceData   = $this->fetchPerformanceMetrics($partner);
-        $chartData         = $this->fetchChartData($partner);
-        $healthScoreData   = $this->calculateListingHealthScore($partner);
-
-        // 2. Optimized Listing Retrieval
-        // We select only the necessary columns to keep the memory footprint low.
-        $baseSelect = ['id', 'title', 'created_at', 'is_published', 'slug'];
-
-        $recentListings = $this->getUnifiedRecentListings($partner, $baseSelect);
-
-        // 3. View Composition
-        return $this->successResponse(array_merge(
-            [
-                'partner'           => $partner,
-                'earningChangeData' => $earningData,
-                'performanceData'   => $performanceData,
-                'chartData'         => $chartData,
-                'healthScoreData'   => $healthScoreData,
-                'recentListings'    => $recentListings,
-            ],
-            $dashboardData
-        ));
+    public function __construct(\App\Services\Partner\DashboardService $dashboardService)
+    {
+        $this->dashboardService = $dashboardService;
     }
 
     /**
-     * Fetch, merge, and enrich listings from all categories.
-     * * @param \App\Models\User $partner
-     * @param array $columns
-     * @return Collection
+     * Display the partner dashboard overview.
+     * @return \Illuminate\Http\JsonResponse
      */
-    protected function getUnifiedRecentListings($partner, array $columns): Collection
-    {
-        $limit = 3;
+    public function index() {
+        $data = $this->dashboardService->getDashboardData(Auth::user());
 
-        $collections = [
-            $partner->properties()->latest()->take($limit)->get($columns),
-            $partner->events()->latest()->take($limit)->get($columns),
-            $partner->autos()->latest()->take($limit)->get($columns),
-            $partner->services()->latest()->take($limit)->get($columns),
-            $partner->classifieds()->latest()->take($limit)->get($columns),
-            $partner->jobs()->latest()->take($limit)->get($columns),
-        ];
-
-        return collect($collections)
-            ->collapse()
-            ->sortByDesc('created_at')
-            ->take(15)
-            ->map(fn($listing) => $this->enrichListingData($listing));
+        return $this->successResponse($data);
     }
 }

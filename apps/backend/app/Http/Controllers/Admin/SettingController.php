@@ -20,6 +20,21 @@ use Illuminate\View\View;
 class SettingController extends Controller
 {
     /**
+     * @var \App\Services\Admin\SettingService
+     */
+    protected $settingService;
+
+    /**
+     * SettingController constructor.
+     *
+     * @param  \App\Services\Admin\SettingService  $settingService
+     */
+    public function __construct(\App\Services\Admin\SettingService $settingService)
+    {
+        $this->settingService = $settingService;
+    }
+
+    /**
      * Display the centralized Settings Explorer dashboard.
      *
      * @return \Illuminate\View\View
@@ -86,7 +101,7 @@ class SettingController extends Controller
         }
 
         $request->validate($rules);
-        $this->saveSettingsData($request, $section);
+        $this->settingService->updateSettings($request, $section, $rules);
         
         return back()->with('success', __(':section settings updated successfully!', [
             'section' => ucfirst($section)
@@ -182,113 +197,5 @@ class SettingController extends Controller
     {
         return Theme::where('theme_key', 'LIKE', $prefix . '_%')->get();
     }
-    
-    /**
-     * Synchronize visual platform re-alignment by activating a theme via its unique key.
-     *
-     * @param  string|null  $themeKey
-     * @return void
-     */
-    private function activateThemeByKey(?string $themeKey): void
-    {
-        Theme::query()->update(['is_active' => false]);
-        
-        if (!empty($themeKey)) {
-            $theme = Theme::where('theme_key', $themeKey)->first();
-            if ($theme) {
-                $theme->update(['is_active' => true]);
-            }
-        }
-        
-        Setting::updateOrCreate(['key' => 'site_home'], ['value' => $themeKey ?? '']);
-    }
-
-    /**
-     * Perform atomic bulk persistence of settings data, including polymorphic file handling.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  string  $section
-     * @return void
-     */
-    private function saveSettingsData(Request $request, string $section): void
-    {
-        $validKeys   = array_keys($this->getValidationRules($section));
-        $fileKeys    = ['site_logo', 'site_favicon'];
-        $arrayKeys   = ['is_section'];
-        $booleanKeys = ['frontend_edit', 'hide_site_name'];
-        
-        foreach ($validKeys as $key) {
-            $value = $request->input($key);
-
-            // Protocol A: Boolean Normalization
-            if (in_array($key, $booleanKeys)) {
-                $value = $request->boolean($key) ? '1' : '0';
-            }
-            
-            // Protocol B: Theme Synchronization
-            if ($section === 'pages' && $key === 'site_home') {
-                $this->activateThemeByKey($value);
-                continue; 
-            }
-            
-            // Protocol C: Asset Persistence
-            if (in_array($key, $fileKeys) && $request->hasFile($key)) {
-                $path = $request->file($key)->store('settings', 'public');
-                Setting::updateOrCreate(['key' => $key], ['value' => $path]);
-
-                if ($key === 'site_favicon') {
-                    $this->syncFaviconToPublic($path);
-                }
-            } 
-            // Protocol D: Hierarchical Feature Toggles
-            elseif (in_array($key, $arrayKeys)) {
-                if ($key === 'is_section') {
-                    $existingKeys     = Setting::where('key', 'LIKE', 'is_section.%')->pluck('key');
-                    $submittedSubKeys = is_array($value) ? array_keys($value) : [];
-
-                    foreach ($existingKeys as $fullKey) {
-                        $subKey = str_replace('is_section.', '', $fullKey);
-                        if (!in_array($subKey, $submittedSubKeys)) {
-                            Setting::updateOrCreate(['key' => $fullKey], ['value' => '0']);
-                        }
-                    }
-                }
-
-                if (is_array($value)) {
-                    foreach ($value as $subKey => $subValue) {
-                        Setting::updateOrCreate(['key' => $key . '.' . $subKey], ['value' => $subValue]);
-                    }
-                }
-            } 
-            // Protocol E: Semantic Scalar Persistence
-            elseif (!in_array($key, $fileKeys)) {
-                Setting::updateOrCreate(['key' => $key], ['value' => $value]);
-            }
-        }
-    }
-
-    /**
-     * Synchronize the uploaded favicon to the public/favicons/favicon.ico path.
-     * Ensures compatibility with third-party packages requiring hardcoded public assets.
-     *
-     * @param  string  $storagePath
-     * @return void
-     */
-    private function syncFaviconToPublic(string $storagePath): void
-    {
-        try {
-            $sourcePath      = storage_path('app/public/' . $storagePath);
-            $destinationPath = public_path('favicons/favicon.ico');
-            
-            if (!file_exists(dirname($destinationPath))) {
-                mkdir(dirname($destinationPath), 0755, true);
-            }
-            
-            if (file_exists($sourcePath)) {
-                copy($sourcePath, $destinationPath);
-            }
-        } catch (\Exception $e) {
-            Log::warning("Favicon Synchronization Failure: " . $e->getMessage());
-        }
-    }
+}
 }

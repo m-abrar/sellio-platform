@@ -277,3 +277,15 @@ change icon background white to something else
 http://127.0.0.1:8000/admin/welcome
  Intelligence Pulse
 this card needs to be filled 
+
+
+
+
+
+
+
+
+
+Rate Limits
+API Resource Hardening
+Tests

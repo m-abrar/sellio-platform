@@ -40,7 +40,7 @@ class ClassifiedInquiryController extends Controller
             ->paginate(15)
             ->withQueryString();
 
-        $classifieds = Classified::select('id', 'title', 'category_id')->with('category:id,title')->get();
+        $classifieds = Classified::select('id', 'title', 'category_id')->with('category:id,title')->limit(100)->get();
         $categories = Category::where('is_classified', true)->select('id', 'title')->get();
 
         return view('admin.classified-inquiries.index', compact('inquiries', 'classifieds', 'categories', 'status'));
@@ -54,8 +54,8 @@ class ClassifiedInquiryController extends Controller
     public function create(): View
     {
         $inquiry = new ClassifiedInquiry();
-        $classifieds = Classified::select('id', 'title')->get();
-        $users = User::select('id', 'name', 'email')->get();
+        $classifieds = Classified::select('id', 'title')->limit(100)->get();
+        $users = User::select('id', 'name', 'email')->limit(100)->get();
         
         return view('admin.classified-inquiries.form', compact('inquiry', 'classifieds', 'users'));
     }
@@ -63,19 +63,12 @@ class ClassifiedInquiryController extends Controller
     /**
      * Store a newly created classified inquiry record in the database.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\Admin\UpdateClassifiedInquiryRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request): RedirectResponse
+    public function store(\App\Http\Requests\Admin\UpdateClassifiedInquiryRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'classified_id' => 'required|exists:classifieds,id',
-            'user_id'       => 'required|exists:users,id',
-            'status'        => 'required|string|max:255',
-            'message'       => 'nullable|string',
-        ]);
-
-        ClassifiedInquiry::create($validated);
+        ClassifiedInquiry::create($request->validated());
 
         return redirect()
             ->route('admin.classified-inquiries.index')
@@ -107,8 +100,8 @@ class ClassifiedInquiryController extends Controller
      */
     public function edit(ClassifiedInquiry $classifiedInquiry): View
     {
-        $classifieds = Classified::select('id', 'title')->get();
-        $users = User::select('id', 'name', 'email')->get();
+        $classifieds = Classified::select('id', 'title')->limit(100)->get();
+        $users = User::select('id', 'name', 'email')->limit(100)->get();
 
         return view('admin.classified-inquiries.form', [
             'inquiry'     => $classifiedInquiry, 
@@ -120,20 +113,13 @@ class ClassifiedInquiryController extends Controller
     /**
      * Update the specified classified inquiry in the database.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\Admin\UpdateClassifiedInquiryRequest  $request
      * @param  \App\Models\ClassifiedInquiry  $classifiedInquiry
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, ClassifiedInquiry $classifiedInquiry): RedirectResponse
+    public function update(\App\Http\Requests\Admin\UpdateClassifiedInquiryRequest $request, ClassifiedInquiry $classifiedInquiry): RedirectResponse
     {
-        $validated = $request->validate([
-            'classified_id' => 'required|exists:classifieds,id',
-            'user_id'       => 'required|exists:users,id',
-            'status'        => 'required|string|max:255',
-            'message'       => 'nullable|string',
-        ]);
-
-        $classifiedInquiry->update($validated);
+        $classifiedInquiry->update($request->validated());
 
         return redirect()
             ->route('admin.classified-inquiries.index')

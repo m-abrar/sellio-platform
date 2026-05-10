@@ -12,28 +12,34 @@ use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
+    /**
+     * @var \App\Services\AuthService
+     */
+    protected $authService;
+
+    /**
+     * AuthController constructor.
+     *
+     * @param  \App\Services\AuthService  $authService
+     */
+    public function __construct(\App\Services\AuthService $authService)
+    {
+        $this->authService = $authService;
+    }
+
     public function login(LoginRequest $request)
     {
-
-        $user = User::where('email', $request->email)->first();
-
-        if (! $user || ! Hash::check($request->password, $user->password)) {
-            throw ValidationException::withMessages([
-                'email' => ['The provided credentials are incorrect.'],
-            ]);
-        }
-
-        // Generate dynamic token
-        $token = $user->createToken('auth_token')->plainTextToken;
+        $result = $this->authService->login($request->email, $request->password);
+        $user = $result['user'];
 
         return $this->successResponse([
-            'access_token' => $token,
-            'token_type' => 'Bearer',
+            'access_token' => $result['token'],
+            'token_type'   => 'Bearer',
             'user' => [
-                'id' => $user->id,
-                'name' => $user->name,
+                'id'    => $user->id,
+                'name'  => $user->name,
                 'email' => $user->email,
-                'roles' => $user->getRoleNames(), // Spatie method
+                'roles' => $user->getRoleNames(),
             ]
         ]);
     }
@@ -43,59 +49,41 @@ class AuthController extends Controller
         $user = $request->user();
 
         if ($user) {
-            // This deletes the specific token used for this request
-            $user->currentAccessToken()->delete();
-            
-            return $this->successResponse(null, 'Logged out successfully');
+            $this->authService->logout($user);
+            return $this->successResponse(null, __('Logged out successfully'));
         }
 
-        return $this->errorResponse('Already logged out or session expired', 401);
+        return $this->errorResponse(__('Already logged out or session expired'), 401);
     }
 
     /**
      * Refresh the current Sanctum token.
-     * Deletes the existing token and issues a fresh one.
      */
     public function refresh(Request $request): \Illuminate\Http\JsonResponse
     {
-        $user = $request->user();
-
-        $user->currentAccessToken()->delete();
+        $token = $this->authService->refreshToken($request->user());
 
         return $this->successResponse([
-            'access_token' => $user->createToken('auth_token')->plainTextToken,
+            'access_token' => $token,
             'token_type'   => 'Bearer',
         ]);
     }
 
     public function register(RegisterRequest $request)
     {
-
-        $user = new User([
-            'name'     => $request->name,
-            'email'    => $request->email,
-            'phone'    => $request->phone,
-            'username' => $request->username,
-            'password' => $request->password,
-        ]);
-
-        $user->is_buyer = ($request->role === 'user');
-        $user->save();
-
-        $user->assignRole($request->role);
-
-        $token = $user->createToken('auth_token')->plainTextToken;
+        $result = $this->authService->register($request->validated(), $request->role);
+        $user = $result['user'];
 
         return $this->successResponse([
-            'access_token' => $token,
-            'token_type' => 'Bearer',
+            'access_token' => $result['token'],
+            'token_type'   => 'Bearer',
             'user' => [
-                'id' => $user->id,
-                'name' => $user->name,
+                'id'    => $user->id,
+                'name'  => $user->name,
                 'email' => $user->email,
                 'roles' => $user->getRoleNames(),
             ]
-        ], 'Registration successful', 201);
+        ], __('Registration successful'), 201);
     }
 
 }
