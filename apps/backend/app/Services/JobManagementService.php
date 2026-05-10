@@ -46,11 +46,14 @@ class JobManagementService
      */
     public function getFilterTaxonomies(): array
     {
+        // Define common vertical relations to count for the dashboard/sidebar
+        $verticals = ['properties', 'autos', 'events', 'jobs', 'services', 'classifieds', 'products'];
+
         return [
-            'categories' => Category::where('is_job', true)->get(),
-            'locations'  => Location::where('is_job', true)->get(),
-            'types'      => Type::where('is_job', true)->get(),
-            'tags'       => Tag::where('is_job', true)->get(),
+            'categories' => Category::where('is_job', true)->withCount($verticals)->get(),
+            'locations'  => Location::where('is_job', true)->withCount($verticals)->get(),
+            'types'      => Type::where('is_job', true)->withCount($verticals)->get(),
+            'tags'       => Tag::where('is_job', true)->withCount($verticals)->get(),
         ];
     }
 

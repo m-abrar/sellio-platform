@@ -285,11 +285,11 @@
 | `app\Models\Gallery.php` | **98** | ✅ High Quality - Re-Audit Pending |
 | `app\Models\GatewayCredential.php` | **100** | ✅ Elite - Security Hardened |
 | `app\Models\GatewayFieldBlueprint.php` | **98** | ✅ High Quality - Re-Audit Pending |
-| `app\Models\JobApplication.php` | **85** | ✅ Good - Status Exposure |
+| `app\Models\JobApplication.php` | **98** | ✅ Elite - Moderation Hardened |
 | `app\Models\JobListing.php` | **98** | ✅ Elite - Moderation Hardened |
 | `app\Models\Location.php` | **98** | ✅ Elite - Aggregation Optimized |
 | `app\Models\Menu.php` | **98** | ✅ High Quality - Re-Audit Pending |
-| `app\Models\MenuItem.php` | **95** | ✅ Elite - XSS Sanitized |
+| `app\Models\MenuItem.php` | **98** | ✅ Elite - XSS Sanitized |
 | `app\Models\Message.php` | **98** | ✅ Elite - N+1 Hardened |
 | `app\Models\NewsletterSubscriber.php` | **98** | ✅ Elite - Production Ready |
 | `app\Models\Order.php` | **95** | ✅ Elite - SoftDeletes Active |

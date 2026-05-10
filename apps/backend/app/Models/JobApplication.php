@@ -30,6 +30,7 @@ class JobApplication extends Model
     use HasFactory;
     use LogsActivity;
     use HasBookingAttributes;
+    use SoftDeletes;
 
     // --- Status Constants ---
     public const STATUS_PENDING   = 'pending';
@@ -56,8 +57,6 @@ class JobApplication extends Model
      */
     protected $fillable = [
         'job_listing_id',
-        'user_id',
-        'status',
         'cover_letter',
         'viewed_at',
     ];

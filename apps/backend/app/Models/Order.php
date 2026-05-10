@@ -57,9 +57,14 @@ class Order extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'order_number',
+        'user_id',
+        'payment_method',
+        'subtotal',
         'shipping_cost',
         'tax_amount',
         'discount_amount',
+        'total_amount',
         'shipping_name',
         'shipping_address',
         'shipping_city',

@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Services\CartService;
+use App\Services\CheckoutService;
+use App\Http\Requests\StoreOrderRequest;
 use Illuminate\View\View;
 
 /**
@@ -62,55 +64,64 @@ class CheckoutController extends Controller
             'activeGateways'  => $activeGateways,
             'frontendConfigs' => $frontendConfigs,
             'orderData'       => $orderData,
+            'cart'            => $cart, // Pass cart to view for summary
         ]);
     }
 
     /**
      * Process the initial payment charge request.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\StoreOrderRequest  $request
      * @param  \App\Services\GatewayManager  $manager
+     * @param  \App\Services\CheckoutService  $checkoutService
      * @param  string  $gatewaySlug
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function processPayment(Request $request, GatewayManager $manager, string $gatewaySlug): RedirectResponse
+    public function processPayment(StoreOrderRequest $request, GatewayManager $manager, CheckoutService $checkoutService, string $gatewaySlug): RedirectResponse
     {
-        $returnUrl = route('checkout.confirm', ['gateway' => $gatewaySlug], true);
-        
         try {
             $gateway = PaymentGateway::where('slug', $gatewaySlug)->firstOrFail();
             $service = $manager->resolve($gateway);
 
-            $token = $request->input('stripeToken') ?? $request->input('paymentToken');
-            
-            // SECURITY: Never take the amount from the request. Recalculate from the source of truth (Cart).
+            // SECURITY: Recalculate amount from the source of truth (Cart)
             $cart = app(CartService::class)->getOrCreateCart();
-            $amount = $cart->calculateTotal();
             
-            if ($amount <= 0) {
-                return redirect()->route('cart.index')->with('error', __('Invalid order amount.'));
+            if ($cart->items->isEmpty()) {
+                return redirect()->route('cart.index')->with('error', __('Your cart is empty.'));
             }
 
-            $result = $service->charge($amount, $token, $returnUrl); 
+            // 1. Persist the Order before charging (Pendings state)
+            $order = $checkoutService->process($cart, $request->validated(), $gatewaySlug);
+            
+            $returnUrl = route('checkout.confirm', ['gateway' => $gatewaySlug, 'order' => $order->id], true);
+            
+            $token = $request->input('stripeToken') ?? $request->input('paymentToken');
+            
+            // 2. Execute Charge
+            $result = $service->charge($order->total_amount, $token, $returnUrl, [
+                'order_id'     => $order->id,
+                'order_number' => $order->order_number,
+                'description'  => __('Payment for Order #:num', ['num' => $order->order_number]),
+            ]); 
 
-            // Handle successful instant charge
+            // 3. Handle Result
             if ($result['status'] === 'successful') {
-                Log::info("Payment successful via {$gatewaySlug}. Ref: {$result['reference']}");
+                $order->update(['payment_status' => 'paid', 'status' => 'processing']);
+                Log::info("Payment successful via {$gatewaySlug}. Order: {$order->order_number}");
                 
-                return redirect()->route('order.success')->with([
+                return redirect()->route('checkout.order.success')->with([
                     'success'   => $result['message'],
                     'reference' => $result['reference'],
                 ]);
             } 
             
-            // Handle 3D Secure / SCA redirection
             if ($result['status'] === 'pending_auth' && !empty($result['redirect_url'])) {
                 return redirect($result['redirect_url']); 
             } 
 
-            // Handle failed or erroneous response
             if ($result['status'] === 'failed' || $result['status'] === 'error') {
-                Log::warning("Payment failed via {$gatewaySlug}: " . $result['message']);
+                $order->update(['status' => 'cancelled', 'notes' => $result['message']]);
+                Log::warning("Payment failed for order {$order->order_number}: " . $result['message']);
                 return redirect()->route('checkout.index')->with('error', $result['message']);
             }
             
@@ -122,21 +133,23 @@ class CheckoutController extends Controller
         }
     }
 
+
     /**
      * Handle the asynchronous confirmation return from 3D Secure / SCA providers.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Services\GatewayManager  $manager
+     * @param  \App\Models\Order  $order
      * @param  string  $gatewaySlug
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function confirmPayment(Request $request, GatewayManager $manager, string $gatewaySlug): RedirectResponse
+    public function confirmPayment(Request $request, GatewayManager $manager, \App\Models\Order $order, string $gatewaySlug): RedirectResponse
     {
-        $paymentIntentId = $request->get('payment_intent');
+        $paymentIntentId = $request->get('payment_intent') ?? $request->get('token');
 
         if (!$paymentIntentId) {
-            Log::error('Payment confirmation failed: Missing payment_intent ID.');
-            return redirect()->route('checkout.index')->with('error', 'Payment confirmation failed: Missing intent ID.');
+            Log::error("Payment confirmation failed for order {$order->order_number}: Missing intent/token ID.");
+            return redirect()->route('checkout.showCheckout')->with('error', 'Payment confirmation failed: Missing transaction ID.');
         }
         
         try {
@@ -146,20 +159,22 @@ class CheckoutController extends Controller
             $result = $service->retrieveIntentStatus($paymentIntentId);
 
             if ($result['status'] === 'successful') {
-                Log::notice("3DS Confirmation Success for intent: {$paymentIntentId}");
+                $order->update(['payment_status' => 'paid', 'status' => 'processing']);
+                Log::notice("3DS Confirmation Success for order {$order->order_number}, intent: {$paymentIntentId}");
 
-                return redirect()->route('order.success')->with([
+                return redirect()->route('checkout.order.success')->with([
                     'success'   => $result['message'] ?? 'Payment confirmed successfully.',
                     'reference' => $paymentIntentId,
                 ]);
             }
             
-            Log::warning("3DS Confirmation Failed for intent: {$paymentIntentId}. Status: " . ($result['status'] ?? 'N/A'));
-            return redirect()->route('checkout.index')->with('error', $result['message'] ?? 'Payment confirmation failed.');
+            $order->update(['status' => 'failed', 'notes' => $result['message'] ?? 'Payment failed during 3DS confirmation.']);
+            Log::warning("3DS Confirmation Failed for order {$order->order_number}, intent: {$paymentIntentId}.");
+            return redirect()->route('checkout.showCheckout')->with('error', $result['message'] ?? 'Payment confirmation failed.');
 
         } catch (\Exception $e) {
-            Log::critical("Payment confirmation error for intent {$paymentIntentId}: " . $e->getMessage());
-            return redirect()->route('checkout.index')->with('error', 'A confirmation error occurred. Please try again.');
+            Log::critical("Payment confirmation error for order {$order->order_number}: " . $e->getMessage());
+            return redirect()->route('checkout.showCheckout')->with('error', 'A confirmation error occurred. Please try again.');
         }
     }
 

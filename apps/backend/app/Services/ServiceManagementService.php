@@ -68,12 +68,15 @@ class ServiceManagementService
      */
     public function getSearchPageData(array $filters, ?User $user = null): array
     {
-        // Centralized taxonomy retrieval with active scope
-        $categories = \App\Models\Category::active()->where('is_service', true)->get();
-        $locations  = \App\Models\Location::active()->where('is_service', true)->get();
-        $types      = \App\Models\Type::active()->where('is_service', true)->get();
+        // Define common vertical relations to count for the dashboard/sidebar
+        $verticals = ['properties', 'autos', 'events', 'jobs', 'services', 'classifieds', 'products'];
+
+        // Centralized taxonomy retrieval with active scope and eager-loaded counts
+        $categories = \App\Models\Category::active()->where('is_service', true)->withCount($verticals)->get();
+        $locations  = \App\Models\Location::active()->where('is_service', true)->withCount($verticals)->get();
+        $types      = \App\Models\Type::active()->where('is_service', true)->withCount($verticals)->get();
         $features   = \App\Models\Feature::active()->where('is_service', true)->get();
-        $tags       = \App\Models\Tag::active()->where('is_service', true)->get();
+        $tags       = \App\Models\Tag::active()->where('is_service', true)->withCount($verticals)->get();
 
         $services = $this->searchServices($filters, $user);
 

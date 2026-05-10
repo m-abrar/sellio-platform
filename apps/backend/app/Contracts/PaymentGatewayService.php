@@ -12,8 +12,12 @@ interface PaymentGatewayService
 
     /**
      * Executes a payment charge.
+     * @param float $amount The amount to charge.
+     * @param string $token The payment token or method ID.
+     * @param string $returnUrl The URL to redirect back to after 3DS/SCA.
+     * @param array $metadata Optional metadata to attach to the transaction (e.g. order_id, booking_id).
      */
-    public function charge(float $amount, string $token, string $returnUrl): array;
+    public function charge(float $amount, string $token, string $returnUrl, array $metadata = []): array;
     public function retrieveIntentStatus(string $paymentIntentId): array;
     /**
      * Executes a refund for a previous transaction.

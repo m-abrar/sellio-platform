@@ -22,11 +22,14 @@ class EventService
 {
     public function getFilterTaxonomies(): array
     {
+        // Define common vertical relations to count for the dashboard/sidebar
+        $verticals = ['properties', 'autos', 'events', 'jobs', 'services', 'classifieds', 'products'];
+
         return [
-            'categories' => Category::where('is_event', true)->get(),
-            'locations'  => Location::where('is_event', true)->get(),
-            'types'      => Type::where('is_event', true)->get(),
-            'tags'       => Tag::where('is_event', true)->get(),
+            'categories' => Category::where('is_event', true)->withCount($verticals)->get(),
+            'locations'  => Location::where('is_event', true)->withCount($verticals)->get(),
+            'types'      => Type::where('is_event', true)->withCount($verticals)->get(),
+            'tags'       => Tag::where('is_event', true)->withCount($verticals)->get(),
         ];
     }
 

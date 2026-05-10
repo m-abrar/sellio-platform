@@ -141,7 +141,7 @@ Route::middleware(['built_in_website'])->group(function () {
     Route::prefix('checkout')->name('checkout.')->middleware('module:products')->group(function () {
         Route::get('/', [CheckoutController::class, 'showCheckout'])->name('index');
         Route::post('/process/{gateway}', [CheckoutController::class, 'processPayment'])->name('process');
-        Route::get('/confirm/{gateway}', [CheckoutController::class, 'confirmPayment'])->name('confirm');
+        Route::get('/confirm/{gateway}/{order}', [CheckoutController::class, 'confirmPayment'])->name('confirm');
         Route::get('/success', [CheckoutController::class, 'showSuccess'])->name('order.success');
     });
 

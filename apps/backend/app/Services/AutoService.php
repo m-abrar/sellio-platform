@@ -25,12 +25,15 @@ class AutoService
      */
     public function getSearchPageData(array $filters, ?User $user = null): array
     {
+        // Define common vertical relations to count for the dashboard/sidebar
+        $verticals = ['properties', 'autos', 'events', 'jobs', 'services', 'classifieds', 'products'];
+
         return [
             'autos' => $this->getFilteredAutos($filters, $user),
-            'categories' => Category::where('is_auto', true)->get(),
-            'locations' => Location::where('is_auto', true)->get(),
-            'types' => Type::where('is_auto', true)->get(),
-            'tags' => Tag::where('is_auto', true)->get(),
+            'categories' => Category::where('is_auto', true)->withCount($verticals)->get(),
+            'locations' => Location::where('is_auto', true)->withCount($verticals)->get(),
+            'types' => Type::where('is_auto', true)->withCount($verticals)->get(),
+            'tags' => Tag::where('is_auto', true)->withCount($verticals)->get(),
             'brands' => Brand::where('is_auto', true)->get(),
             'transactionType' => $this->getTransactionTypes(),
             'transmissionOptions' => ['Automatic', 'Manual'],

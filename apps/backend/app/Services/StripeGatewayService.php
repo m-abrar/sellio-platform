@@ -37,7 +37,7 @@ class StripeGatewayService implements PaymentGatewayService
     }
 
 
-    public function charge(float $amount, string $token, string $returnUrl): array
+    public function charge(float $amount, string $token, string $returnUrl, array $metadata = []): array
     {
         $currency = $this->config['currency'] ?? 'usd';
         $amountInCents = round($amount * 100);
@@ -45,7 +45,8 @@ class StripeGatewayService implements PaymentGatewayService
             'amount_float' => $amount, 
             'currency' => $currency, 
             'return_url' => $returnUrl,
-            'token_type' => substr($token, 0, 4)
+            'token_type' => substr($token, 0, 4),
+            'metadata' => $metadata
         ]);
 
         // Determine if the frontend sent an old 'tok_' token or a modern 'pm_' Payment Method ID
@@ -67,7 +68,8 @@ class StripeGatewayService implements PaymentGatewayService
                 'currency' => $currency,
                 'confirmation_method' => 'manual',
                 'confirm' => true,
-                'description' => 'Order payment from your application.',
+                'description' => $metadata['description'] ?? 'Order payment from your application.',
+                'metadata' => $metadata,
                 
                 // CRITICAL: The URL to redirect the user to after external authentication
                 'return_url' => $returnUrl, 
@@ -344,10 +346,26 @@ class StripeGatewayService implements PaymentGatewayService
         
         Log::notice("Processing Stripe event type: {$eventType}", ['event_id' => $event->id, 'object_id' => $eventData['id'] ?? 'N/A']);
 
+        if ($eventType === 'payment_intent.succeeded') {
+            Log::info("Handled 'payment_intent.succeeded'. Intent ID: {$eventData['id']}");
+            return [
+                'status'         => 'processed',
+                'order_id'       => $eventData['metadata']['order_id'] ?? null,
+                'payment_status' => 'paid',
+                'reference'      => $eventData['id'],
+                'message'        => 'Payment intent succeeded event handled.',
+            ];
+        }
+
         if ($eventType === 'checkout.session.completed') {
-            // Logic: Mark the order as paid, process the subscription, etc.
-            Log::info("Handled 'checkout.session.completed'. Payment Status: " . ($eventData['payment_status'] ?? 'N/A'));
-            return ['status' => 'processed', 'message' => 'Checkout session completed event handled.'];
+            Log::info("Handled 'checkout.session.completed'. Session ID: {$eventData['id']}");
+            return [
+                'status'         => 'processed',
+                'order_id'       => $eventData['metadata']['order_id'] ?? null,
+                'payment_status' => 'paid',
+                'reference'      => $eventData['id'],
+                'message'        => 'Checkout session completed event handled.',
+            ];
         }
         
         if ($eventType === 'invoice.paid') {

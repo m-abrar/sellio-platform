@@ -46,6 +46,23 @@ class MenuItem extends Model
     ];
 
     /**
+     * Sanitize URL to prevent stored XSS via javascript: or data: protocols.
+     */
+    protected function url(): \Illuminate\Database\Eloquent\Casts\Attribute
+    {
+        return \Illuminate\Database\Eloquent\Casts\Attribute::make(
+            set: function ($value) {
+                $sanitized = filter_var($value, FILTER_SANITIZE_URL);
+                // Block dangerous protocols
+                if (preg_match('/^(javascript|data|vbscript|file):/i', $sanitized)) {
+                    return '#';
+                }
+                return $sanitized;
+            }
+        );
+    }
+
+    /**
      * The attributes that should be cast.
      *
      * @var array<string, string>

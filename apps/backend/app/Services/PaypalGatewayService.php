@@ -59,21 +59,19 @@ class PaypalGatewayService implements PaymentGatewayService
      * Executes a payment charge using the PayPal API (usually creating an Order).
      * @param string $token is typically the return URL from the client-side Order creation.
      */
-    public function charge(float $amount, string $token, string $returnUrl): array
+    public function charge(float $amount, string $token, string $returnUrl, array $metadata = []): array
     {
         $currency = $this->config['currency'] ?? 'USD';
         Log::info('Attempting PayPal charge (Create Order).', [
             'amount' => $amount, 
             'currency' => $currency, 
-            'returnUrl' => $returnUrl
+            'returnUrl' => $returnUrl,
+            'metadata' => $metadata
         ]);
 
         try {
             // 1. Create the PayPal Order
-            // $token is not used in the initial backend call for PayPal, 
-            // the client-side script handles the Order approval.
-            
-            $order = $this->client->createOrder([
+            $orderData = [
                 'intent' => 'CAPTURE',
                 'purchase_units' => [
                     [
@@ -81,13 +79,16 @@ class PaypalGatewayService implements PaymentGatewayService
                             'currency_code' => $currency,
                             'value' => number_format($amount, 2, '.', ''),
                         ],
+                        'custom_id' => $metadata['order_id'] ?? ($metadata['booking_id'] ?? null),
                     ],
                 ],
                 'application_context' => [
-                    'return_url' => $returnUrl, // Required for success redirect
-                    'cancel_url' => route('checkout.show', ['error' => 'paypal_cancelled']), // Example cancel redirect
+                    'return_url' => $returnUrl, 
+                    'cancel_url' => route('checkout.showCheckout', ['error' => 'paypal_cancelled']), 
                 ],
-            ]);
+            ];
+            
+            $order = $this->client->createOrder($orderData);
             
             Log::info('PayPal Order created successfully.', ['order_id' => $order['id'], 'status' => $order['status']]);
 
