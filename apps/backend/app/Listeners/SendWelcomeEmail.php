@@ -37,7 +37,7 @@ class SendWelcomeEmail implements ShouldQueue
         // --- Logic to send a welcome email using a dynamic template ---
                 
         // 1. Fetch the 'welcome_to_platform' template from the database
-        $template = EmailTemplate::where('key', 'welcome_to_platform')->first();
+        $template = EmailTemplate::fetchByKey('welcome_to_platform');
 
         if ($template) {
             // 2. Define the data to be substituted in the template

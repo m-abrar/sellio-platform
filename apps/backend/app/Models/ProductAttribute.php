@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -22,7 +23,6 @@ class ProductAttribute extends Model
         'product_id',
         'name',
         'value',
-        'additional_price',
         'sku_extension',
         'stock_quantity',
         'visual_color_code',

@@ -83,6 +83,24 @@ class EmailTemplate extends Model
     }
 
     /**
+     * Fetch a template by key with persistent caching to eliminate N+1 overhead.
+     */
+    public static function fetchByKey(string $key): ?self
+    {
+        return \Illuminate\Support\Facades\Cache::rememberForever("email_template.{$key}", function () use ($key) {
+            return self::where('key', $key)->first();
+        });
+    }
+
+    /**
+     * Invalidate the cache for a specific template.
+     */
+    public function forgetCache(): void
+    {
+        \Illuminate\Support\Facades\Cache::forget("email_template.{$this->key}");
+    }
+
+    /**
      * Sanitize body before saving to prevent XSS.
      */
     protected function body(): \Illuminate\Database\Eloquent\Casts\Attribute

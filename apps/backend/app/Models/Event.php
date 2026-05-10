@@ -59,14 +59,12 @@ class Event extends Model implements HasMedia
         'end_date_time',
         'is_paid',
         'is_published',
-        'is_featured',
         'max_attendees',
         'base_price',
         'sale_price',
         'address',
         'latitude',
         'longitude',
-        'approved_at',
         'expires_at',
     ];
 

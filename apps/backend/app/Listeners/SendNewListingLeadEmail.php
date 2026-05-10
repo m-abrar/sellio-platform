@@ -41,7 +41,7 @@ class SendNewListingLeadEmail implements ShouldQueue
         }
 
         // 1. Fetch the 'new_listing_lead' template from the database
-        $template = EmailTemplate::where('key', 'new_listing_lead')->first();
+        $template = EmailTemplate::fetchByKey('new_listing_lead');
 
         if ($template) {
             // 2. Define the dynamic data for the template

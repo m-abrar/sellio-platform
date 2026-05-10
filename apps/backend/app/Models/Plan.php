@@ -52,7 +52,6 @@ class Plan extends Model implements HasMedia
         'title',
         'description',
         'label_text',
-        'price',
         'billing_period',
         'max_listings',
         'max_addons',

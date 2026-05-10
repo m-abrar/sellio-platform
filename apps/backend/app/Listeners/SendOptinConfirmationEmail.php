@@ -30,7 +30,7 @@ class SendOptinConfirmationEmail implements ShouldQueue
         $subscription = $event->subscription;
 
         // 1. Fetch the necessary template from the database
-        $template = EmailTemplate::where('key', 'newsletter_optin_confirmation')->first();
+        $template = EmailTemplate::fetchByKey('newsletter_optin_confirmation');
 
         if (!$template || !$subscription->email || !$subscription->confirmation_token) {
             Log::warning("Email template 'newsletter_optin_confirmation' not found or missing subscription metadata.");

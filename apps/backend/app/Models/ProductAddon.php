@@ -51,7 +51,6 @@ class ProductAddon extends Model implements HasMedia
         'title',
         'description',
         'icon',
-        'price',
         'pricing_type',
         'max_qty',
         'is_required',

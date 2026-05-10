@@ -45,8 +45,8 @@ class Product extends Model implements HasMedia
         'stock_quantity', 'low_stock_threshold', 'manage_stock', 'in_stock',
         'weight', 'length', 'width', 'height', 
         'video', 'main_image',
-        'is_published', 'is_featured', 'on_sale', 'is_digital',
-        'meta_title', 'meta_description', 'approved_at'
+        'is_published', 'on_sale', 'is_digital',
+        'meta_title', 'meta_description'
     ];
 
     /**

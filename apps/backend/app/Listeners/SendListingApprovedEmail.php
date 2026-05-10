@@ -42,7 +42,7 @@ class SendListingApprovedEmail implements ShouldQueue
         }
 
         // 1. Fetch the 'listing_approved' template from the database
-        $template = EmailTemplate::where('key', 'listing_approved')->first();
+        $template = EmailTemplate::fetchByKey('listing_approved');
 
         if ($template) {
             // 2. Define the dynamic data for the template

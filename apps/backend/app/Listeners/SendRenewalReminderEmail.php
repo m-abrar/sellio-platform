@@ -42,7 +42,7 @@ class SendRenewalReminderEmail implements ShouldQueue
         }
 
         // 1. Fetch the 'plan_about_to_expire' template from the database
-        $template = EmailTemplate::where('key', 'plan_about_to_expire')->first();
+        $template = EmailTemplate::fetchByKey('plan_about_to_expire');
 
         if ($template) {
             // 2. Define the dynamic data for the template

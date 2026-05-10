@@ -43,7 +43,7 @@ class SendPlanDowngradedEmail implements ShouldQueue
         }
 
         // 1. Fetch the 'plan_downgraded' template from the database
-        $template = EmailTemplate::where('key', 'plan_downgraded')->first();
+        $template = EmailTemplate::fetchByKey('plan_downgraded');
 
         if ($template) {
             // 2. Define the dynamic data for the template

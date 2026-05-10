@@ -37,7 +37,7 @@ class SendPlanUpgradedEmail implements ShouldQueue
         $newPlan = $event->newPlan; // Access the new plan
 
         // 1. Fetch the 'plan_upgraded' template from the database
-        $template = EmailTemplate::where('key', 'plan_upgraded')->first();
+        $template = EmailTemplate::fetchByKey('plan_upgraded');
 
         if ($template) {
             // 2. Define the dynamic data for the template, including both plan names

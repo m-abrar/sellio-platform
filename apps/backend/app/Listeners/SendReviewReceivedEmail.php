@@ -27,7 +27,7 @@ class SendReviewReceivedEmail implements ShouldQueue
      */
     public function handle(ReviewReceived $event): void
     {
-        $template = EmailTemplate::where('key', 'review_received')->first();
+        $template = EmailTemplate::fetchByKey('review_received');
 
         if (!$template || !$event->owner->email) {
             Log::warning("Email template 'review_received' not found or missing owner email.");

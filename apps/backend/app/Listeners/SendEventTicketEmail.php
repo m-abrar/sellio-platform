@@ -44,7 +44,7 @@ class SendEventTicketEmail implements ShouldQueue
         }
 
         // 1. Fetch the 'event_ticket_purchased' template from the database
-        $template = EmailTemplate::where('key', 'event_ticket_purchased')->first();
+        $template = EmailTemplate::fetchByKey('event_ticket_purchased');
 
         if ($template) {
             // 2. Define the dynamic data for the template

@@ -42,7 +42,7 @@ class SendPaymentFailedEmail implements ShouldQueue
         }
 
         // 1. Fetch the 'payment_failed' template from the database
-        $template = EmailTemplate::where('key', 'payment_failed')->first();
+        $template = EmailTemplate::fetchByKey('payment_failed');
 
         if ($template) {
             // 2. Define the dynamic data for the template

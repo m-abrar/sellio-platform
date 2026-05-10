@@ -43,7 +43,7 @@ class SendBookingConfirmedEmail implements ShouldQueue
         }
 
         // 1. Fetch the 'property_booking_confirmed' template from the database
-        $template = EmailTemplate::where('key', 'property_booking_confirmed')->first();
+        $template = EmailTemplate::fetchByKey('property_booking_confirmed');
 
         if ($template) {
             // 2. Define the dynamic data for the template

@@ -47,7 +47,7 @@ class SendPlanExpiredEmail implements ShouldQueue
         }
 
         // 1. Fetch the 'plan_expired' template from the database
-        $template = EmailTemplate::where('key', 'plan_expired')->first();
+        $template = EmailTemplate::fetchByKey('plan_expired');
 
         Log::info($template);
 

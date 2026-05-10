@@ -62,9 +62,7 @@ class Auto extends Model implements HasMedia
         'mileage_units',
         'is_lease',
         'is_selling',
-        'is_featured',
         'is_published',
-        'approved_at',
         'expires_at',
     ];
 

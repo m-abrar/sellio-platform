@@ -107,16 +107,4 @@ class Conversation extends Model
 
     // --- Attributes ---
 
-    /**
-     * Get the count of unread messages for the authenticated user.
-     */
-    protected function unreadMessagesCount(): Attribute
-    {
-        return Attribute::make(
-            get: fn () => $this->messages()
-                ->where('sender_id', '!=', auth()->id())
-                ->unread()
-                ->count()
-        )->shouldCache();
-    }
 }

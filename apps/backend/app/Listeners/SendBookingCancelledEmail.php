@@ -45,7 +45,7 @@ class SendBookingCancelledEmail implements ShouldQueue
         }
 
         // 1. Fetch the 'booking_cancelled' template from the database
-        $template = EmailTemplate::where('key', 'booking_cancelled')->first();
+        $template = EmailTemplate::fetchByKey('booking_cancelled');
 
         if ($template) {
             // 2. Format the refund amount for display (e.g., 150.00 USD)

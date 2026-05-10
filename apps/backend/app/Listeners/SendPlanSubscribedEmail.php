@@ -37,7 +37,7 @@ class SendPlanSubscribedEmail implements ShouldQueue
         $plan = $event->plan;
 
         // 1. Fetch the 'plan_subscribed' template from the database
-        $template = EmailTemplate::where('key', 'plan_subscribed')->first();
+        $template = EmailTemplate::fetchByKey('plan_subscribed');
 
         if ($template) {
             // 2. Define the dynamic data for the template

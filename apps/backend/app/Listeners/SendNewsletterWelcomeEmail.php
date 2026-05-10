@@ -30,7 +30,7 @@ class SendNewsletterWelcomeEmail implements ShouldQueue
         $subscription = $event->subscription;
 
         // 1. Fetch the necessary template from the database
-        $template = EmailTemplate::where('key', 'newsletter_welcome')->first();
+        $template = EmailTemplate::fetchByKey('newsletter_welcome');
 
         if (!$template || !$subscription->email) {
             Log::warning("Email template 'newsletter_welcome' not found or missing recipient email.");

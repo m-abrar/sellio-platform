@@ -42,7 +42,7 @@ class SendListingRejectedEmail implements ShouldQueue
         }
 
         // 1. Fetch the 'listing_rejected' template from the database
-        $template = EmailTemplate::where('key', 'listing_rejected')->first();
+        $template = EmailTemplate::fetchByKey('listing_rejected');
 
         if ($template) {
             // 2. Define the dynamic data for the template

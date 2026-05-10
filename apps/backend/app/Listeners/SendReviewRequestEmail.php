@@ -28,7 +28,7 @@ class SendReviewRequestEmail implements ShouldQueue
     public function handle(ReviewRequested $event): void
     {
         // 1. Fetch the necessary template from the database
-        $template = EmailTemplate::where('key', 'request_a_review')->first();
+        $template = EmailTemplate::fetchByKey('request_a_review');
 
         if (!$template || !$event->recipient->email) {
             Log::warning("Email template 'request_a_review' not found or missing recipient email.");

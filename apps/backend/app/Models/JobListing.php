@@ -79,10 +79,8 @@ class JobListing extends Model implements HasMedia
         'latitude',
         'longitude',
         'is_published',
-        'is_featured',
         'is_contract',
         'is_full_time',
-        'approved_at',
         'expires_at',
     ];
 

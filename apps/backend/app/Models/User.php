@@ -153,9 +153,12 @@ class User extends Authenticatable implements Wallet, Customer, HasMedia, MustVe
 
     public function receivedMessages()
     {
-        $conversationIds = $this->allConversations()->pluck('id');
-        return Message::whereIn('conversation_id', $conversationIds)
-                      ->where('sender_id', '!=', $this->id);
+        return Message::whereIn('conversation_id', function ($query) {
+            $query->select('id')
+                ->from('conversations')
+                ->where('user_id', $this->id)
+                ->orWhere('partner_id', $this->id);
+        })->where('sender_id', '!=', $this->id);
     }
 
     public function unreadMessages()

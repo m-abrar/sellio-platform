@@ -43,7 +43,7 @@ class SendJobApplicationReceivedEmail implements ShouldQueue
         }
 
         // 1. Fetch the 'job_application_received' template from the database
-        $template = EmailTemplate::where('key', 'job_application_received')->first();
+        $template = EmailTemplate::fetchByKey('job_application_received');
 
         if ($template) {
             // 2. Define the dynamic data for the template
