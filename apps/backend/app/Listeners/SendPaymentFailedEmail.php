@@ -49,6 +49,7 @@ class SendPaymentFailedEmail implements ShouldQueue
             $data = [
                 'user_name' => $user->name,
                 'plan_name' => $plan->title, 
+                'error_message' => $event->errorMessage ?? __('An unknown error occurred during payment processing.'),
                 // Link directly to where the user can update their card details
                 'billing_url' => route('dashboard.partner.subscriptions.index'), 
             ];

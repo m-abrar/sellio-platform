@@ -32,12 +32,13 @@ class SendJobApplicationReceivedEmail implements ShouldQueue
      */
     public function handle(JobApplicationReceived $event): void
     {
-        $employer = $event->employer;
-        $jobListing = $event->jobListing;
+        $application = $event->application;
+        $jobListing = $application->listing; // Specialized JobListing model
+        $employer = $jobListing->user;
 
         // Critical Check: Ensure required models are present
         if (!$employer || !$jobListing) {
-             Log::error("JobApplicationReceived event received with missing Employer or Job Listing model.");
+             Log::error("JobApplicationReceived event received with missing Employer or Job Listing model on application ID: " . ($application->id ?? 'unknown'));
              return;
         }
 
@@ -48,8 +49,8 @@ class SendJobApplicationReceivedEmail implements ShouldQueue
             // 2. Define the dynamic data for the template
             $data = [
                 'employer_name' => $employer->name,
-                'job_title' => $jobListing->title, // Assuming 'title' holds the job name
-                'application_link' => $event->applicationLink,
+                'job_title' => $jobListing->title, 
+                'application_link' => route('admin.job-applications.show', $application->id),
             ];
 
             // 3. Send the email using the DynamicEmail Mailable via the queue

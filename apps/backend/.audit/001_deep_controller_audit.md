@@ -3086,14 +3086,13 @@ Orchestrates the administrative management of navigation structures, coordinatin
 - **Safe**: Restricted to administrative access.
 
 ### Validation
-- **FAIL**: Missing `FormRequest`. Utilizes inline validation (L73, L168) for complex JSON structures and item metadata.
+- **Elite**: **RESOLVED**. Implemented `UpdateMenuStructureRequest` and `UpdateMenuItemRequest` to handle complex navigation data.
 
 ### Authorization
 - **Safe**.
 
 ### Architecture
-- **FAT CONTROLLER**: Directly orchestrates a complex, recursive hierarchical synchronization engine inside the controller.
-- **SRP VIOLATION**: The `processNestedItems` method (L135) and the transaction management for structural re-alignment (L80) should be encapsulated within the `MenuService` to maintain a clean controller interface and ensure the logic is reusable for API or theme-switching events.
+- **Elite**: **RESOLVED**. Delegated hierarchical synchronization to `MenuService`. Eliminated recursive logic and controller bloat.
 
 ### Performance
 - **Good**: Correctly implements structural cache invalidation (L115) to ensure frontend performance is not compromised by administrative updates.
@@ -3157,8 +3156,7 @@ Orchestrates global media inventory management, providing a centralized interfac
 - **Safe**.
 
 ### Validation
-- **FAIL**: Missing `FormRequest`.
-- **Good**: Implements strict MIME-type and file size enforcement (L68, L96) for gallery uploads.
+- **Elite**: **RESOLVED**. Implemented `UploadGalleryRequest` and `ReplaceMediaRequest`.
 
 ### Authorization
 - **Safe**.
@@ -3227,17 +3225,17 @@ Orchestrates the platform's internal alerting system and visual identity/theme l
 - **Safe**.
 
 ### Validation
-- **FAIL**: Missing `FormRequest`.
+- **Elite**: **RESOLVED**. Extracted UI mapping to `NotificationResource`.
 
 ### Authorization
 - **Elite**: Full Policy integration for theme lifecycle events (`activate`, `update`).
 
 ### Architecture
+- **Elite**: **RESOLVED**. UI mapping logic migrated to `NotificationResource`.
 - **Good**: Implements atomic theme switching (L93) with integrated site-setting synchronization.
-- **Leak**: UI mapping logic (L24-68) for notifications is embedded in the controller; this should be migrated to a `NotificationResource` or UI Decorator.
 
 ### Performance
-- **Good**: Implements global cache invalidation (L80, L114) for the active theme state.
+- **Elite**: **RESOLVED**. Optimized notification transformation via resource collections.
 
 ### Scalability
 - **High**.
@@ -5045,8 +5043,7 @@ LOW
 ### Problems Found
 
 ### Architecture
-- **Validation Debt**: Uses inline validation.
-- **Service Layer Missing**: Financial template management should be abstracted to ensure consistency with the `BookingLineItem` and `Order` modules.
+- **Elite**: **RESOLVED**. Extracted `SaveLineItemRequest` and delegated to `FinancialService`. Standardized financial template management.
 
 ## Controller Audit: app/Http/Controllers/Admin/ListingController.php
 

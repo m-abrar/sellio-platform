@@ -185,22 +185,82 @@ class MenuService
         Cache::forget($this->generateMenusListCacheKey());
     }
 
+    /**
+     * Synchronize a menu structure with hierarchical data.
+     */
+    public function updateStructure(Menu $menu, array $data): void
+    {
+        \Illuminate\Support\Facades\DB::transaction(function () use ($menu, $data) {
+            // 1. Process New Items
+            if (!empty($data['new_items'])) {
+                foreach ($data['new_items'] as $newItem) {
+                    if (!empty($newItem['title']) && !empty($newItem['url'])) {
+                        MenuItem::create([
+                            'menu_id' => $menu->id,
+                            'title'   => $newItem['title'],
+                            'url'     => $newItem['url'],
+                            'order'   => 9999,
+                        ]);
+                    }
+                }
+            }
+
+            // 2. Process Hierarchical Structure
+            $menuStructure = [];
+            if (!empty($data['menu_structure'])) {
+                $decoded = json_decode($data['menu_structure'], true);
+                if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+                    $menuStructure = $decoded;
+                }
+            }
+
+            if (!empty($menuStructure)) {
+                $this->processNestedItems($menuStructure, $menu->id);
+            }
+
+            // 3. Invalidate Cache
+            $this->forgetCache($menu);
+        });
+    }
+
+    /**
+     * Recursively update item hierarchy.
+     */
+    protected function processNestedItems(array $items, int $menuId, ?int $parentId = null): void
+    {
+        // Optimization: Collect all IDs to avoid N+1 if needed, 
+        // but for nested trees, standard updates are often clearer.
+        foreach ($items as $index => $itemData) {
+            if (isset($itemData['id']) && !Str::startsWith($itemData['id'], 'new-')) {
+                MenuItem::where('id', $itemData['id'])
+                    ->where('menu_id', $menuId)
+                    ->update([
+                        'order'     => $index + 1,
+                        'parent_id' => $parentId,
+                    ]);
+
+                if (!empty($itemData['children'])) {
+                    $this->processNestedItems($itemData['children'], $menuId, (int)$itemData['id']);
+                }
+            }
+        }
+    }
+
     protected function generateCacheKey(string $locationKey): string
     {
-        $roleHash = auth()->check() ? md5(implode(',', auth()->user()->roles->pluck('name')->toArray())) : 'guest';
+        $roleHash = auth()->check() ? md5(implode(',', auth()->user()->getRoleNames()->toArray())) : 'guest';
         return "menu.{$this->activeTheme}.{$locationKey}.{$roleHash}"; 
     }
     
     protected function generateMenuNameCacheKey(string $locationKey): string
     {
-        // Menu names are generally static per theme/location, so isolation is less critical but still good practice
-        $roleHash = auth()->check() ? md5(implode(',', auth()->user()->roles->pluck('name')->toArray())) : 'guest';
+        $roleHash = auth()->check() ? md5(implode(',', auth()->user()->getRoleNames()->toArray())) : 'guest';
         return "menu.name.{$this->activeTheme}.{$locationKey}.{$roleHash}";
     }
 
     protected function generateMenusListCacheKey(): string
     {
-        $roleHash = auth()->check() ? md5(implode(',', auth()->user()->roles->pluck('name')->toArray())) : 'guest';
+        $roleHash = auth()->check() ? md5(implode(',', auth()->user()->getRoleNames()->toArray())) : 'guest';
         return "menu.list.{$this->activeTheme}.{$roleHash}"; 
     }
 }

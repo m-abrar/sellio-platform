@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\ReplaceMediaRequest;
+use App\Http\Requests\Admin\UploadGalleryRequest;
 use App\Models\Gallery;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -62,13 +64,8 @@ class GalleryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request): RedirectResponse
+    public function store(UploadGalleryRequest $request): RedirectResponse
     {
-        $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
-            'title' => 'nullable|string|max:255',
-        ]);
-
         // Standalone assets require a parent model; we create a Gallery record as the host
         $gallery = Gallery::create([
             'title' => $request->input('title') ?: 'Upload ' . now()->format('Y-m-d H:i'),
@@ -88,13 +85,9 @@ class GalleryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, int $id): RedirectResponse
+    public function update(ReplaceMediaRequest $request, int $id): RedirectResponse
     {
         $media = Media::findOrFail($id);
-
-        $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
-        ]);
 
         $model = $media->model;
         $collection = $media->collection_name;

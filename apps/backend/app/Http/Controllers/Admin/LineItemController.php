@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\SaveLineItemRequest;
 use App\Models\LineItem;
+use App\Services\FinancialService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -15,6 +17,12 @@ use Illuminate\View\View;
  */
 class LineItemController extends Controller
 {
+    protected $financialService;
+
+    public function __construct(FinancialService $financialService)
+    {
+        $this->financialService = $financialService;
+    }
     /**
      * Display a listing of all configured line item templates.
      *
@@ -42,20 +50,9 @@ class LineItemController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request): RedirectResponse
+    public function store(SaveLineItemRequest $request): RedirectResponse
     {
-        $data = $request->validate([
-            'name'        => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'amount'      => 'required|numeric',
-            'is_required' => 'boolean',
-            'applies_on'  => 'required|string',
-            'type'        => 'nullable|string|max:100',
-            'order'       => 'nullable|integer',
-            'status'      => 'nullable|in:active,inactive',
-        ]);
-
-        LineItem::create($data);
+        $this->financialService->createTemplate($request->validated());
 
         return redirect()->route('admin.line-items.index')
                          ->with('success', __('Template created successfully.'));
@@ -79,20 +76,9 @@ class LineItemController extends Controller
      * @param  \App\Models\LineItem  $lineItem
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, LineItem $lineItem): RedirectResponse
+    public function update(SaveLineItemRequest $request, LineItem $lineItem): RedirectResponse
     {
-        $data = $request->validate([
-            'name'        => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'amount'      => 'required|numeric',
-            'is_required' => 'boolean',
-            'applies_on'  => 'required|string',
-            'type'        => 'nullable|string|max:100',
-            'order'       => 'nullable|integer',
-            'status'      => 'nullable|in:active,inactive',
-        ]);
-
-        $lineItem->update($data);
+        $this->financialService->updateTemplate($lineItem, $request->validated());
 
         return redirect()->route('admin.line-items.index')
                          ->with('success', __('Template updated successfully.'));
@@ -106,7 +92,7 @@ class LineItemController extends Controller
      */
     public function destroy(LineItem $lineItem): RedirectResponse
     {
-        $lineItem->delete();
+        $this->financialService->deleteTemplate($lineItem);
 
         return redirect()->route('admin.line-items.index')
                          ->with('success', __('Template deleted successfully.'));

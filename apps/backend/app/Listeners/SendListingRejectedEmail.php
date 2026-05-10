@@ -32,12 +32,12 @@ class SendListingRejectedEmail implements ShouldQueue
      */
     public function handle(ListingRejected $event): void
     {
-        $owner = $event->owner;
         $listing = $event->listing;
+        $owner = $listing->user;
 
         // Critical Check: Ensure required models are present
         if (!$owner || !$listing) {
-             Log::error("ListingRejected event received with missing Owner or Listing model.");
+             Log::error("ListingRejected event received with missing Owner or Listing model on listing ID: " . ($listing->id ?? 'unknown'));
              return;
         }
 
@@ -48,7 +48,7 @@ class SendListingRejectedEmail implements ShouldQueue
             // 2. Define the dynamic data for the template
             $data = [
                 'user_name' => $owner->name,
-                'listing_title' => $listing->title, // Assuming 'title' holds the listing name/title
+                'listing_title' => $listing->title, 
                 'rejection_reason' => $event->rejectionReason,
             ];
 

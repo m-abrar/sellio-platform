@@ -32,12 +32,15 @@ class SendBookingCancelledEmail implements ShouldQueue
      */
     public function handle(BookingCancelled $event): void
     {
-        $user = $event->user;
-        $itemTitle = $event->itemTitle;
-        $refundAmount = $event->refundAmount; 
+        $booking = $event->booking;
+        $user = $booking->user;
+        
+        // Resolve item title and refund amount based on booking type
+        $itemTitle = $booking->property->title ?? $booking->event->title ?? __('Marketplace Item');
+        $refundAmount = $booking->total_price ?? 0;
 
         if (!$user) {
-             Log::error("BookingCancelled event received with missing User model.");
+             Log::error("BookingCancelled event received with missing User model on booking ID: " . ($booking->id ?? 'unknown'));
              return;
         }
 

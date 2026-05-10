@@ -32,12 +32,12 @@ class SendListingApprovedEmail implements ShouldQueue
      */
     public function handle(ListingApproved $event): void
     {
-        $owner = $event->owner;
         $listing = $event->listing;
+        $owner = $listing->user;
 
         // Critical Check: Ensure required models are present
         if (!$owner || !$listing) {
-             Log::error("ListingApproved event received with missing Owner or Listing model.");
+             Log::error("ListingApproved event received with missing Owner or Listing model on listing ID: " . ($listing->id ?? 'unknown'));
              return;
         }
 
@@ -48,8 +48,8 @@ class SendListingApprovedEmail implements ShouldQueue
             // 2. Define the dynamic data for the template
             $data = [
                 'owner_name' => $owner->name,
-                'listing_title' => $listing->title, // Assuming 'title' holds the listing name/title
-                'live_url' => $event->liveUrl,
+                'listing_title' => $listing->title, 
+                'live_url' => route('listings.show', $listing->id),
             ];
 
             // 3. Send the email using the DynamicEmail Mailable via the queue

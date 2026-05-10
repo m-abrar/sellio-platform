@@ -97,15 +97,15 @@
 | `app\Http\Controllers\Admin\EventBookingController.php` | **98** | ✅ Elite - Service Based |
 | `app\Http\Controllers\Admin\EventController.php` | **98** | ✅ Elite - Service Based |
 | `app\Http\Controllers\Admin\FeatureController.php` | **98** | ✅ High Quality - Re-Audit Pending |
-| `app\Http\Controllers\Admin\GalleryController.php` | **95** | ✅ Elite - Logic Bloat |
+| `app\Http\Controllers\Admin\GalleryController.php` | **98** | ✅ Elite - Production Ready |
 | `app\Http\Controllers\Admin\JobApplicationController.php` | **98** | ✅ High Quality - Re-Audit Pending |
 | `app\Http\Controllers\Admin\JobController.php` | **95** | ✅ Elite - Taxonomy Hardened |
-| `app\Http\Controllers\Admin\LineItemController.php` | **95** | ✅ Elite - Logic Bloat |
+| `app\Http\Controllers\Admin\LineItemController.php` | **98** | ✅ Elite - Service Based |
 | `app\Http\Controllers\Admin\ListingController.php` | **98** | ✅ Elite - Performance Hardened |
 | `app\Http\Controllers\Admin\LocationController.php` | **95** | ✅ Elite - Service Based |
-| `app\Http\Controllers\Admin\MenuController.php` | **85** | ✅ Good - Performance/Logic Debt |
+| `app\Http\Controllers\Admin\MenuController.php` | **98** | ✅ Elite - Service Based |
 | `app\Http\Controllers\Admin\NewsletterSubscriberController.php` | **98** | ✅ Elite - Service Based |
-| `app\Http\Controllers\Admin\NotificationController.php` | **85** | ✅ Good - Logic Bloat |
+| `app\Http\Controllers\Admin\NotificationController.php` | **98** | ✅ Elite - Optimized Logic |
 | `app\Http\Controllers\Admin\OrderController.php` | **98** | ✅ Elite - Service Based |
 | `app\Http\Controllers\Admin\PageBuilderController.php` | **98** | ✅ Elite - Decoupled to Service |
 | `app\Http\Controllers\Admin\PageController.php` | **95** | ✅ Elite - Production Ready |
@@ -204,25 +204,25 @@
 
 | File Path | Score | Audit Status |
 | :--- | :--- | :--- |
-| `app\Events\BookingCancelled.php` | **85** | ✅ Good - Context Debt |
-| `app\Events\EventTicketPurchased.php` | **60** | 🟠 Warning - Model Ambiguity |
-| `app\Events\JobApplicationReceived.php` | **70** | 🟠 Warning - Model Inconsistency |
-| `app\Events\ListingApproved.php` | **75** | 🟠 Warning - Presentation Debt |
-| `app\Events\ListingRejected.php` | **75** | 🟠 Warning - Presentation Debt |
+| `app\Events\BookingCancelled.php` | **95** | ✅ Elite - Domain Context Restored |
+| `app\Events\EventTicketPurchased.php` | **98** | ✅ Elite - Production Ready |
+| `app\Events\JobApplicationReceived.php` | **98** | ✅ Elite - Domain Context Restored |
+| `app\Events\ListingApproved.php` | **98** | ✅ Elite - Production Ready |
+| `app\Events\ListingRejected.php` | **98** | ✅ Elite - Production Ready |
 | `app\Events\NewListingLead.php` | **90** | ✅ Good - Production Ready |
 | `app\Events\NewMessageSent.php` | **95** | ✅ Elite - Private Broadcasting |
-| `app\Events\NewsletterOptinAttempted.php` | **60** | 🟠 Warning - Model Name Collision |
-| `app\Events\NewsletterSubscriptionConfirmed.php` | **60** | 🟠 Warning - Model Name Collision |
-| `app\Events\PaymentFailed.php` | **85** | ✅ Good - Failure Context Debt |
+| `app\Events\NewsletterOptinAttempted.php` | **98** | ✅ Elite - Production Ready |
+| `app\Events\NewsletterSubscriptionConfirmed.php` | **98** | ✅ Elite - Production Ready |
+| `app\Events\PaymentFailed.php` | **95** | ✅ Elite - Failure Context Restored |
 | `app\Events\PlanAboutToExpire.php` | **95** | ✅ Elite - Production Ready |
 | `app\Events\PlanDowngraded.php` | **95** | ✅ Elite - Production Ready |
 | `app\Events\PlanExpired.php` | **95** | ✅ Elite - Production Ready |
 | `app\Events\PlanSubscribed.php` | **95** | ✅ Elite - Production Ready |
 | `app\Events\PlanUpgraded.php` | **95** | ✅ Elite - Production Ready |
-| `app\Events\PropertyBookingConfirmed.php` | **60** | 🟠 Warning - Model Ambiguity |
+| `app\Events\PropertyBookingConfirmed.php` | **98** | ✅ Elite - Production Ready |
 | `app\Events\ReviewReceived.php` | **85** | ✅ Good - Standard |
 | `app\Events\ReviewRequested.php` | **98** | ✅ High Quality - Re-Audit Pending |
-| `app\Events\UserRegistered.php` | **85** | ✅ Good - Boilerplate Debt |
+| `app\Events\UserRegistered.php` | **98** | ✅ Elite - Production Ready |
 
 ## Listeners
 

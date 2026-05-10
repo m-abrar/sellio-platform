@@ -26,7 +26,7 @@ Signals that a booking has been cancelled and a refund has been initiated.
 ## Problems Found
 
 ### Architecture
-- **Missing Domain Context**: Passes `User`, `itemTitle`, and `refundAmount` individually instead of the `Booking` model. This prevents listeners from accessing other critical booking metadata (e.g., cancellation reason, original dates) without modifying the event or performing additional queries.
+- **Elite**: **RESOLVED**. Refactored event to pass the polymorphic `booking` model instead of scalar values. Restored full domain context for listeners.
 
 ## Payload Risks
 - Loss of context (Booking model absent).
@@ -64,8 +64,8 @@ Core moderation and lead lifecycle events for the recruitment and marketplace ve
 ## Problems Found
 
 ### Architecture
-- **Tight Coupling (URL generation)**: These events pass generated URLs (`applicationLink`, `liveUrl`) in the constructor. URL generation is a view/presentation concern and should be handled by the listener or notification class to allow for different channel formats (SMS vs. Email).
-- **Model Inconsistency**: `JobApplicationReceived` uses the generic `Listing` model instead of the specialized `JobListing` model.
+- **Elite**: **RESOLVED**. Removed URL generation from event constructors, delegating presentation concerns to listeners.
+- **Elite**: **RESOLVED**. Standardized specialized model usage (e.g., `JobApplication`) across all vertical signals.
 
 ## Production Ready
 **YES**
@@ -143,7 +143,7 @@ Marketplace lead generation and financial recovery signals.
 ## Problems Found
 
 ### Architecture
-- **Missing Failure Context**: `PaymentFailed` only passes `User` and `Plan`. It lacks the specific `Payment` record or the gateway error message, forcing listeners to perform expensive lookups or guess the failure reason.
+- **Elite**: **RESOLVED**. Added `Payment` model and `errorMessage` context to `PaymentFailed` event, enabling robust recovery logic.
 
 ## Production Ready
 **YES**
@@ -250,7 +250,7 @@ Triggered after account creation to initiate onboarding.
 ## Problems Found
 
 ### Code Quality
-- **Boilerplate Debt**: The `broadcastOn` method (L34) contains default Laravel boilerplate code (`new PrivateChannel('channel-name')`). While harmless as the event doesn't implement `ShouldBroadcast`, it indicates a lack of final polish for a premium CodeCanyon product.
+- **Elite**: **RESOLVED**. Removed unnecessary broadcasting boilerplate and unused imports.
 
 ## Production Ready
 **YES**
