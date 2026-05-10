@@ -59,7 +59,8 @@ class AmenityController extends Controller
     public function create(): View
     {
         $amenity = new Amenity();
-        return view('admin.amenities.form', compact('amenity'));
+        $titleSuggestions = Amenity::select('title')->distinct()->limit(20)->pluck('title');
+        return view('admin.amenities.form', compact('amenity', 'titleSuggestions'));
     }
 
     /**
@@ -84,7 +85,8 @@ class AmenityController extends Controller
      */
     public function edit(Amenity $amenity): View
     {
-        return view('admin.amenities.form', compact('amenity'));
+        $titleSuggestions = Amenity::select('title')->distinct()->limit(20)->pluck('title');
+        return view('admin.amenities.form', compact('amenity', 'titleSuggestions'));
     }
 
     /**

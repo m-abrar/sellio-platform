@@ -88,7 +88,7 @@
                 'name' => \App\Models\Transaction::PRIMARY_MEDIA,
                 'label' => 'Transaction Screenshot',
                 'multiple' => false,
-                'model' => \App\Models\Transaction::class,
+                'model' => 'transaction',
                 'id' => $transaction->id ?? null,
             ])
 

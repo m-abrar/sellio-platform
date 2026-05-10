@@ -66,7 +66,7 @@
                                    placeholder="e.g. Residential Apartments"
                                    value="{{ old('title', $category?->title ?? '') }}" required list="category-title-suggestions">
                             <datalist id="category-title-suggestions">
-                                @foreach(\App\Models\Category::select('title')->distinct()->limit(20)->pluck('title') as $title)
+                                @foreach($titleSuggestions ?? [] as $title)
                                     <option value="{{ $title }}">
                                 @endforeach
                             </datalist>
@@ -133,7 +133,7 @@
                             'name' => 'gallery',
                             'label' => 'Select Gallery Images',
                             'multiple' => true,
-                            'model' => \App\Models\Category::class,
+                            'model' => 'category',
                             'id' => $category->id ?? null,
                             'noCard' => true,
                         ])
@@ -161,7 +161,7 @@
                             'name' => 'thumbnail',
                             'label' => 'Main Icon / Badge',
                             'multiple' => false,
-                            'model' => \App\Models\Category::class,
+                            'model' => 'category',
                             'id' => $category->id ?? null,
                             'noCard' => true,
                         ])

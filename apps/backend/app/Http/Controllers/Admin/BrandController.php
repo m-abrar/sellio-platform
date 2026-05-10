@@ -59,7 +59,8 @@ class BrandController extends Controller
     public function create(): View
     {
         $brand = new Brand();
-        return view('admin.brands.form', compact('brand'));
+        $titleSuggestions = Brand::select('title')->distinct()->limit(20)->pluck('title');
+        return view('admin.brands.form', compact('brand', 'titleSuggestions'));
     }
 
     /**
@@ -84,7 +85,8 @@ class BrandController extends Controller
      */
     public function edit(Brand $brand): View
     {
-        return view('admin.brands.form', compact('brand'));
+        $titleSuggestions = Brand::select('title')->distinct()->limit(20)->pluck('title');
+        return view('admin.brands.form', compact('brand', 'titleSuggestions'));
     }
 
     /**

@@ -176,7 +176,7 @@
                             'name' => \App\Models\JobListing::GALLERY_MEDIA,
                             'label' => 'Select Gallery Images',
                             'multiple' => true,
-                            'model' => \App\Models\JobListing::class,
+                            'model' => 'job',
                             'id' => $job->id ?? null,
                             'noCard' => true,
                         ])
@@ -263,7 +263,7 @@
                             'name' => \App\Models\JobListing::PRIMARY_MEDIA,
                             'label' => 'Company Logo',
                             'multiple' => false,
-                            'model' => \App\Models\JobListing::class,
+                            'model' => 'job',
                             'id' => $job->id ?? null,
                             'noCard' => true,
                         ])

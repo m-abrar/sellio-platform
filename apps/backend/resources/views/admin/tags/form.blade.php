@@ -111,7 +111,7 @@
                             'name' => \App\Models\Tag::GALLERY_MEDIA,
                             'label' => 'Select Gallery Images',
                             'multiple' => true,
-                            'model' => \App\Models\Tag::class,
+                            'model' => 'tag',
                             'id' => $tag->id ?? null,
                             'noCard' => true,
                         ])
@@ -139,7 +139,7 @@
                             'name' => \App\Models\Tag::PRIMARY_MEDIA,
                             'label' => 'Main Icon / Badge',
                             'multiple' => false,
-                            'model' => \App\Models\Tag::class,
+                            'model' => 'tag',
                             'id' => $tag->id ?? null,
                             'noCard' => true,
                         ])

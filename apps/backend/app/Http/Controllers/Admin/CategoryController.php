@@ -61,8 +61,9 @@ class CategoryController extends Controller
     {
         $category = new Category();
         $categories = Category::orderBy('title')->get();
+        $titleSuggestions = Category::select('title')->distinct()->limit(20)->pluck('title');
         
-        return view('admin.categories.form', compact('category', 'categories'));
+        return view('admin.categories.form', compact('category', 'categories', 'titleSuggestions'));
     }
 
     /**
@@ -88,8 +89,9 @@ class CategoryController extends Controller
     public function edit(Category $category): View
     {
         $categories = Category::where('id', '!=', $category->id)->orderBy('title')->get();
+        $titleSuggestions = Category::select('title')->distinct()->limit(20)->pluck('title');
         
-        return view('admin.categories.form', compact('category', 'categories'));
+        return view('admin.categories.form', compact('category', 'categories', 'titleSuggestions'));
     }
 
     /**

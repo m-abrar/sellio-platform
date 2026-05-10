@@ -63,7 +63,7 @@
                                    placeholder="e.g. Downtown District"
                                    value="{{ old('title', $location?->title ?? '') }}" required list="location-title-suggestions">
                             <datalist id="location-title-suggestions">
-                                @foreach(\App\Models\Location::select('title')->distinct()->limit(20)->pluck('title') as $title)
+                                @foreach($titleSuggestions ?? [] as $title)
                                     <option value="{{ $title }}">
                                 @endforeach
                             </datalist>
@@ -150,7 +150,7 @@
                             'name' => \App\Models\Location::GALLERY_MEDIA,
                             'label' => 'Select Gallery Images',
                             'multiple' => true,
-                            'model' => \App\Models\Location::class,
+                            'model' => 'location',
                             'id' => $location->id ?? null,
                             'noCard' => true,
                         ])
@@ -180,7 +180,7 @@
                             'name' => \App\Models\Location::PRIMARY_MEDIA,
                             'label' => 'Main Cover Image',
                             'multiple' => false,
-                            'model' => \App\Models\Location::class,
+                            'model' => 'location',
                             'id' => $location->id ?? null,
                             'noCard' => true,
                         ])

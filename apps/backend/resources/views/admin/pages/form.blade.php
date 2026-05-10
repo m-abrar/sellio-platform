@@ -88,7 +88,7 @@
                                 'name' => \App\Models\Page::PRIMARY_MEDIA,
                                 'label' => 'Select Featured Image',
                                 'multiple' => false,
-                                'model' => \App\Models\Page::class,
+                                'model' => 'page',
                                 'id' => $page->id ?? null,
                             ])
                         </div>

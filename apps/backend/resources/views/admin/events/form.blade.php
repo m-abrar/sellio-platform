@@ -155,7 +155,7 @@
                             'name' => \App\Models\Event::GALLERY_MEDIA,
                             'label' => 'Select Gallery Images',
                             'multiple' => true,
-                            'model' => \App\Models\Event::class,
+                            'model' => 'event',
                             'id' => $event->id ?? null,
                             'noCard' => true,
                         ])
@@ -264,7 +264,7 @@
                             'name' => \App\Models\Event::PRIMARY_MEDIA,
                             'label' => 'Main Listing Image',
                             'multiple' => false,
-                            'model' => \App\Models\Event::class,
+                            'model' => 'event',
                             'id' => $event->id ?? null,
                             'noCard' => true,
                         ])

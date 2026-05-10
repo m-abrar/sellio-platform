@@ -59,7 +59,8 @@ class FeatureController extends Controller
     public function create(): View
     {
         $feature = new Feature();
-        return view('admin.features.form', compact('feature'));
+        $titleSuggestions = Feature::select('title')->distinct()->limit(20)->pluck('title');
+        return view('admin.features.form', compact('feature', 'titleSuggestions'));
     }
 
     /**
@@ -84,7 +85,8 @@ class FeatureController extends Controller
      */
     public function edit(Feature $feature): View
     {
-        return view('admin.features.form', compact('feature'));
+        $titleSuggestions = Feature::select('title')->distinct()->limit(20)->pluck('title');
+        return view('admin.features.form', compact('feature', 'titleSuggestions'));
     }
 
     /**

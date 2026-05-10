@@ -27,6 +27,20 @@ class MediaController extends Controller
         'user'          => \App\Models\User::class,
         'advertisement' => \App\Models\Advertisement::class,
         'location'      => \App\Models\Location::class,
+        'addon'         => \App\Models\ProductAddon::class,
+        'category'      => \App\Models\Category::class,
+        'brand'         => \App\Models\Brand::class,
+        'tag'           => \App\Models\Tag::class,
+        'type'          => \App\Models\Type::class,
+        'amenity'       => \App\Models\Amenity::class,
+        'feature'       => \App\Models\Feature::class,
+        'plan'          => \App\Models\Plan::class,
+        'page'          => \App\Models\Page::class,
+        'transaction'   => \App\Models\Transaction::class,
+        'line-item'     => \App\Models\LineItem::class,
+        'classified'    => \App\Models\Classified::class,
+        'auto'          => \App\Models\Auto::class,
+        'page-content'  => \App\Models\PageContent::class,
     ];
 
     /**

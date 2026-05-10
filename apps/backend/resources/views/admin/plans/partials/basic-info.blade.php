@@ -27,7 +27,7 @@
                        value="{{ old('title', $plan->title ?? '') }}" required placeholder="e.g., Premium Monthly" list="plan-title-suggestions">
             </div>
             <datalist id="plan-title-suggestions">
-                @foreach(\App\Models\Plan::select('title')->distinct()->limit(20)->pluck('title') as $title)
+                @foreach($titleSuggestions ?? [] as $title)
                     <option value="{{ $title }}">
                 @endforeach
             </datalist>

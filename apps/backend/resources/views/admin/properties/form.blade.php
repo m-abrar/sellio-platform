@@ -211,7 +211,7 @@
                             'name' => \App\Models\Property::GALLERY_MEDIA,
                             'label' => 'Select Gallery Images',
                             'multiple' => true,
-                            'model' => \App\Models\Property::class,
+                            'model' => 'property',
                             'id' => $property->id ?? null,
                             'noCard' => true,
                         ])
@@ -372,7 +372,7 @@
                             'name' => \App\Models\Property::PRIMARY_MEDIA,
                             'label' => 'Main Listing Image',
                             'multiple' => false,
-                            'model' => \App\Models\Property::class,
+                            'model' => 'property',
                             'id' => $property->id ?? null,
                             'noCard' => true,
                         ])

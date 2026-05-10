@@ -107,7 +107,7 @@
                             'name' => \App\Models\PropertyAddon::PRIMARY_MEDIA,
                             'label' => 'Service Icon / Badge',
                             'multiple' => false,
-                            'model' => \App\Models\PropertyAddon::class,
+                            'model' => 'addon',
                             'id' => $addon->id ?? null,
                             'noCard' => true,
                         ])

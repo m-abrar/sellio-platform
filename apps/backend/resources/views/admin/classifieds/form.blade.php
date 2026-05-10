@@ -63,7 +63,7 @@
                             <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Item Title <span class="text-danger">*</span></label>
                             <input type="text" name="title" id="title" class="form-control form-control-hero @error('title') is-invalid @enderror" value="{{ old('title', $classified->title ?? '') }}" required list="classified-title-suggestions" placeholder="e.g. Vintage Leather Sofa">
                             <datalist id="classified-title-suggestions">
-                                @foreach(\App\Models\Classified::select('title')->distinct()->limit(20)->pluck('title') as $title)
+                                @foreach($titleSuggestions ?? [] as $title)
                                     <option value="{{ $title }}">
                                 @endforeach
                             </datalist>
@@ -166,7 +166,7 @@
                             'name' => \App\Models\Classified::GALLERY_MEDIA,
                             'label' => 'Select Gallery Images',
                             'multiple' => true,
-                            'model' => \App\Models\Classified::class,
+                            'model' => 'classified',
                             'id' => $classified->id ?? null,
                             'noCard' => true,
                         ])
@@ -276,7 +276,7 @@
                             'name' => \App\Models\Classified::PRIMARY_MEDIA,
                             'label' => 'Main Listing Image',
                             'multiple' => false,
-                            'model' => \App\Models\Classified::class,
+                            'model' => 'classified',
                             'id' => $classified->id ?? null,
                             'noCard' => true,
                         ])

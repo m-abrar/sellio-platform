@@ -29,7 +29,7 @@
                 'name' => \App\Models\PageContent::PRIMARY_MEDIA,
                 'label' => 'Upload Asset',
                 'multiple' => false,
-                'model' => \App\Models\PageContent::class,
+                'model' => 'page-content',
                 'id' => $item->id ?? null,
                 'noCard' => true
             ])

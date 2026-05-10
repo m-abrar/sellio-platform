@@ -59,7 +59,8 @@ class LocationController extends Controller
     public function create(): View
     {
         $location = new Location();
-        return view('admin.locations.form', compact('location'));
+        $titleSuggestions = Location::select('title')->distinct()->limit(20)->pluck('title');
+        return view('admin.locations.form', compact('location', 'titleSuggestions'));
     }
 
     /**
@@ -89,7 +90,9 @@ class LocationController extends Controller
             ? json_decode($location->images, true) 
             : ($location->images ?? []);
 
-        return view('admin.locations.form', compact('location'));
+        $titleSuggestions = Location::select('title')->distinct()->limit(20)->pluck('title');
+
+        return view('admin.locations.form', compact('location', 'titleSuggestions'));
     }
 
     /**

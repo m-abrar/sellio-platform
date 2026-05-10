@@ -98,7 +98,7 @@
                 'name' => \App\Models\LineItem::PRIMARY_MEDIA,
                 'label' => 'Icon (Optional)',
                 'multiple' => false,
-                'model' => \App\Models\LineItem::class,
+                'model' => 'line-item',
                 'id' => $LineItem->id ?? null,
             ])
         </div>

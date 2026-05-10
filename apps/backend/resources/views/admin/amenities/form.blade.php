@@ -63,7 +63,7 @@
                                    placeholder="e.g. Swimming Pool, Air Conditioning"
                                    value="{{ old('title', $amenity->title ?? '') }}" required list="amenity-title-suggestions">
                             <datalist id="amenity-title-suggestions">
-                                @foreach(\App\Models\Amenity::select('title')->distinct()->limit(20)->pluck('title') as $title)
+                                @foreach($titleSuggestions ?? [] as $title)
                                     <option value="{{ $title }}">
                                 @endforeach
                             </datalist>
@@ -111,7 +111,7 @@
                             'name' => \App\Models\Amenity::GALLERY_MEDIA,
                             'label' => 'Select Gallery Images',
                             'multiple' => true,
-                            'model' => \App\Models\Amenity::class,
+                            'model' => 'amenity',
                             'id' => $amenity->id ?? null,
                             'noCard' => true,
                         ])
@@ -139,7 +139,7 @@
                             'name' => \App\Models\Amenity::PRIMARY_MEDIA,
                             'label' => 'Main Icon / Badge',
                             'multiple' => false,
-                            'model' => \App\Models\Amenity::class,
+                            'model' => 'amenity',
                             'id' => $amenity->id ?? null,
                             'noCard' => true,
                         ])

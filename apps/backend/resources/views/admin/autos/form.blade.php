@@ -210,7 +210,7 @@
                             'name' => \App\Models\Auto::GALLERY_MEDIA,
                             'label' => 'Select Gallery Images',
                             'multiple' => true,
-                            'model' => \App\Models\Auto::class,
+                            'model' => 'auto',
                             'id' => $auto->id ?? null,
                             'noCard' => true,
                         ])
@@ -320,7 +320,7 @@
                             'name' => \App\Models\Auto::PRIMARY_MEDIA,
                             'label' => 'Main Listing Image',
                             'multiple' => false,
-                            'model' => \App\Models\Auto::class,
+                            'model' => 'auto',
                             'id' => $auto->id ?? null,
                             'noCard' => true,
                         ])

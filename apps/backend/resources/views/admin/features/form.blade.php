@@ -63,7 +63,7 @@
                                    placeholder="e.g. Engine Capacity or Experience Level"
                                    value="{{ old('title', $feature->title ?? '') }}" required list="feature-title-suggestions">
                             <datalist id="feature-title-suggestions">
-                                @foreach(\App\Models\Feature::select('title')->distinct()->limit(20)->pluck('title') as $title)
+                                @foreach($titleSuggestions ?? [] as $title)
                                     <option value="{{ $title }}">
                                 @endforeach
                             </datalist>
@@ -111,7 +111,7 @@
                             'name' => \App\Models\Feature::GALLERY_MEDIA,
                             'label' => 'Select Gallery Images',
                             'multiple' => true,
-                            'model' => \App\Models\Feature::class,
+                            'model' => 'feature',
                             'id' => $feature->id ?? null,
                             'noCard' => true,
                         ])
@@ -139,7 +139,7 @@
                             'name' => \App\Models\Feature::PRIMARY_MEDIA,
                             'label' => 'Main Icon / Badge',
                             'multiple' => false,
-                            'model' => \App\Models\Feature::class,
+                            'model' => 'feature',
                             'id' => $feature->id ?? null,
                             'noCard' => true,
                         ])

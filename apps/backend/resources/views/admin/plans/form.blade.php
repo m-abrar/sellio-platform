@@ -103,7 +103,7 @@
                                 'name' => \App\Models\Plan::PRIMARY_MEDIA, 
                                 'label' => 'Select Cover Image',
                                 'multiple' => false,
-                                'model' => \App\Models\Plan::class,
+                                'model' => 'plan',
                                 'id' => $plan->id ?? null,
                                 'noCard' => true,
                             ])

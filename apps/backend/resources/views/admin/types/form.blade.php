@@ -130,7 +130,7 @@
                             'name' => \App\Models\Type::GALLERY_MEDIA,
                             'label' => 'Select Gallery Images',
                             'multiple' => true,
-                            'model' => \App\Models\Type::class,
+                            'model' => 'type',
                             'id' => $type->id ?? null,
                             'noCard' => true,
                         ])
@@ -158,7 +158,7 @@
                             'name' => \App\Models\Type::PRIMARY_MEDIA,
                             'label' => 'Main Icon / Badge',
                             'multiple' => false,
-                            'model' => \App\Models\Type::class,
+                            'model' => 'type',
                             'id' => $type->id ?? null,
                             'noCard' => true,
                         ])

@@ -63,7 +63,7 @@
                                    placeholder="e.g. Apple, Nike, Samsung"
                                    value="{{ old('title', $brand->title ?? '') }}" required list="brand-title-suggestions">
                             <datalist id="brand-title-suggestions">
-                                @foreach(\App\Models\Brand::select('title')->distinct()->limit(20)->pluck('title') as $title)
+                                @foreach($titleSuggestions ?? [] as $title)
                                     <option value="{{ $title }}">
                                 @endforeach
                             </datalist>
@@ -111,7 +111,7 @@
                             'name' => \App\Models\Brand::GALLERY_MEDIA,
                             'label' => 'Select Gallery Images',
                             'multiple' => true,
-                            'model' => \App\Models\Brand::class,
+                            'model' => 'brand',
                             'id' => $brand->id ?? null,
                             'noCard' => true,
                         ])
@@ -139,7 +139,7 @@
                             'name' => \App\Models\Brand::PRIMARY_MEDIA,
                             'label' => 'Main Icon / Badge',
                             'multiple' => false,
-                            'model' => \App\Models\Brand::class,
+                            'model' => 'brand',
                             'id' => $brand->id ?? null,
                             'noCard' => true,
                         ])

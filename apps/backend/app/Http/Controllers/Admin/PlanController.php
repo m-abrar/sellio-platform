@@ -53,7 +53,8 @@ class PlanController extends Controller
     public function create(): View
     {
         $plan = new Plan();
-        return view('admin.plans.form', compact('plan'));
+        $titleSuggestions = Plan::select('title')->distinct()->limit(20)->pluck('title');
+        return view('admin.plans.form', compact('plan', 'titleSuggestions'));
     }
 
     /**
@@ -78,7 +79,8 @@ class PlanController extends Controller
      */
     public function edit(Plan $plan): View
     {
-        return view('admin.plans.form', compact('plan'));
+        $titleSuggestions = Plan::select('title')->distinct()->limit(20)->pluck('title');
+        return view('admin.plans.form', compact('plan', 'titleSuggestions'));
     }
 
     /**

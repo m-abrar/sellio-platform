@@ -112,7 +112,7 @@
       
       <span class="separator">|</span>
       
-      <a href="{{ route('logout') }}" class="text-danger fw-semibold" onclick="event.preventDefault(); document.getElementById('admin-logout-form').submit();">
+      <a href="{{ route('logout') }}" class="text-danger fw-semibold" id="admin-logout-link">
         <i class="fas fa-sign-out-alt me-1"></i>{{ __('Logout') }}
       </a>
       <form id="admin-logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
@@ -123,3 +123,16 @@
     
   </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const logoutLink = document.getElementById('admin-logout-link');
+        const logoutForm = document.getElementById('admin-logout-form');
+        if (logoutLink && logoutForm) {
+            logoutLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                logoutForm.submit();
+            });
+        }
+    });
+</script>

@@ -72,7 +72,7 @@
                             'name' => \App\Models\Advertisement::PRIMARY_MEDIA,
                             'label' => 'Select Ad Image',
                             'multiple' => false,
-                            'model' => \App\Models\Advertisement::class,
+                            'model' => 'advertisement',
                             'id' => $advertisement->id ?? null,
                             'noCard' => true,
                         ])

@@ -167,7 +167,7 @@
                             'name' => \App\Models\Service::GALLERY_MEDIA,
                             'label' => 'Select Gallery Images',
                             'multiple' => true,
-                            'model' => \App\Models\Service::class,
+                            'model' => 'service',
                             'id' => $service->id ?? null,
                             'noCard' => true,
                         ])
@@ -276,7 +276,7 @@
                             'name' => \App\Models\Service::PRIMARY_MEDIA,
                             'label' => 'Main Listing Image',
                             'multiple' => false,
-                            'model' => \App\Models\Service::class,
+                            'model' => 'service',
                             'id' => $service->id ?? null,
                             'noCard' => true,
                         ])

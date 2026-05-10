@@ -85,7 +85,9 @@ class ClassifiedController extends Controller
         $locations = Location::active()->where('is_classified', 1)->get();
         if ($locations->isEmpty()) $locations = Location::active()->get();
         
-        return view('admin.classifieds.form', compact('classified', 'categories', 'locations'));
+        $titleSuggestions = Classified::select('title')->distinct()->limit(20)->pluck('title');
+        
+        return view('admin.classifieds.form', compact('classified', 'categories', 'locations', 'titleSuggestions'));
     }
 
     /**
@@ -123,8 +125,9 @@ class ClassifiedController extends Controller
         if ($locations->isEmpty()) $locations = Location::active()->get();
         
         $recentInquiries = ClassifiedInquiry::where('classified_id', $classified->id)->latest()->take(5)->get();
+        $titleSuggestions = Classified::select('title')->distinct()->limit(20)->pluck('title');
 
-        return view('admin.classifieds.form', compact('classified', 'categories', 'locations', 'recentInquiries'));
+        return view('admin.classifieds.form', compact('classified', 'categories', 'locations', 'recentInquiries', 'titleSuggestions'));
     }
 
     /**
