@@ -105,12 +105,12 @@ class ActivityService
                 $chartStats[$weekKey] = ['high' => 0, 'low' => 0];
             }
 
-            // Aggregate High Priority Activities
+            // Aggregate High Priority Activities (Optimized for MySQL compatibility)
             foreach ($highPriorityModels as $type => $model) {
                 $relation = strtolower($type);
                 $counts = $model::where('created_at', '>=', $startDate)
                     ->whereHas($relation, fn(Builder $q) => $q->where('user_id', $partnerId))
-                    ->select(\Illuminate\Support\Facades\DB::raw("FORMAT(created_at, 'yyyy-ww') as week"), \Illuminate\Support\Facades\DB::raw('COUNT(*) as total'))
+                    ->select(\Illuminate\Support\Facades\DB::raw("DATE_FORMAT(created_at, '%Y-%v') as week"), \Illuminate\Support\Facades\DB::raw('COUNT(*) as total'))
                     ->groupBy('week')
                     ->pluck('total', 'week');
 
@@ -129,7 +129,7 @@ class ActivityService
                     $query->whereHas($relation, fn(Builder $q) => $q->where('user_id', $partnerId));
                 }
 
-                $counts = $query->select(\Illuminate\Support\Facades\DB::raw("FORMAT(created_at, 'yyyy-ww') as week"), \Illuminate\Support\Facades\DB::raw('COUNT(*) as total'))
+                $counts = $query->select(\Illuminate\Support\Facades\DB::raw("DATE_FORMAT(created_at, '%Y-%v') as week"), \Illuminate\Support\Facades\DB::raw('COUNT(*) as total'))
                     ->groupBy('week')
                     ->pluck('total', 'week');
 

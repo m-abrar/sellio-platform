@@ -76,13 +76,7 @@ class BookingController extends Controller
             return back()->with('error', __('Invalid booking type requested.'));
         }
 
-        $modelClass = "App\\Models\\" . $type;
-        
-        // Resolve route prefix from model name (e.g., PropertyBooking -> property-bookings)
-        $pluralName = Str::plural($type); 
-        $routePrefix = Str::kebab($pluralName);
-        
-        $url = url('/admin/' . $routePrefix . '/' . $id);
+        $url = $this->bookingService->resolveRedirectUrl($type, $id);
         
         return redirect($url);
     }
@@ -100,8 +94,7 @@ class BookingController extends Controller
             return back()->with('error', __('Invalid booking type requested.'));
         }
 
-        $modelClass = "App\\Models\\" . $type;
-        $modelClass::destroy($id);
+        $this->bookingService->deleteBooking($type, $id);
 
         return back()->with('success', __('Booking deleted successfully.'));
     }

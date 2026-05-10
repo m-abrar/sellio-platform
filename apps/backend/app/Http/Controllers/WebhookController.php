@@ -40,6 +40,19 @@ class WebhookController extends Controller
             // Delegate entire processing and signature verification to the specialized service
             $result = $service->handleWebhook($request); 
             
+            // AUTOMATED FULFILLMENT: Update the corresponding Order if identified
+            if (!empty($result['order_id']) && isset($result['payment_status']) && $result['payment_status'] === 'paid') {
+                $order = \App\Models\Order::find($result['order_id']);
+                if ($order && $order->payment_status !== 'paid') {
+                    $order->update([
+                        'payment_status' => 'paid',
+                        'status'         => 'processing',
+                        'notes'          => $order->notes . "\n[Webhook] " . ($result['message'] ?? 'Payment confirmed via webhook.')
+                    ]);
+                    Log::info("Webhook fulfilled Order: {$order->order_number} via {$gatewaySlug}");
+                }
+            }
+
             Log::info("Webhook processed for {$gatewaySlug}: " . ($result['message'] ?? 'Success'));
 
             return response()->json([

@@ -120,4 +120,24 @@ class BookingManagementService
 
         return $paginator->setCollection($items);
     }
+    /**
+     * Resolve the specific administrative URL for a booking type and ID.
+     */
+    public function resolveRedirectUrl(string $type, int $id): string
+    {
+        // Pluralize and kebab-case for standard Laravel route patterns
+        $pluralName = \Illuminate\Support\Str::plural($type); 
+        $routePrefix = \Illuminate\Support\Str::kebab($pluralName);
+        
+        return url('/admin/' . $routePrefix . '/' . $id);
+    }
+
+    /**
+     * Delete a booking or inquiry record atomically.
+     */
+    public function deleteBooking(string $type, int $id): bool
+    {
+        $modelClass = "App\\Models\\" . $type;
+        return (bool) $modelClass::destroy($id);
+    }
 }

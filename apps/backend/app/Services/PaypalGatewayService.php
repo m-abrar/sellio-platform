@@ -274,9 +274,14 @@ class PaypalGatewayService implements PaymentGatewayService
             Log::notice("Processing PayPal event type: {$eventType}", ['resource_id' => $resourceId]);
 
             if ($eventType === 'PAYMENT.CAPTURE.COMPLETED') {
-                // Logic: Mark the order as paid, process the subscription, etc.
                 Log::info("Handled 'PAYMENT.CAPTURE.COMPLETED'. Capture ID: {$resourceId}");
-                return ['status' => 'processed', 'message' => 'Payment capture completed event handled.'];
+                return [
+                    'status'         => 'processed',
+                    'order_id'       => $data['resource']['custom_id'] ?? null,
+                    'payment_status' => 'paid',
+                    'reference'      => $resourceId,
+                    'message'        => 'Payment capture completed event handled.',
+                ];
             }
             
             if ($eventType === 'CHECKOUT.ORDER.APPROVED') {
