@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Api\V1\Dashboard\Partner;
 
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\Dashboard\Partner\Traits\DashboardDataPreparation;
-use App\Http\Controllers\Dashboard\Partner\Traits\Listings;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;

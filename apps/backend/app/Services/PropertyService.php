@@ -60,7 +60,7 @@ class PropertyService
         $amenities  = \Illuminate\Support\Facades\Cache::remember('property_amenities', 3600, fn() => \App\Models\Amenity::where('is_property', true)->pluck('title', 'id'));
         $features   = \Illuminate\Support\Facades\Cache::remember('property_features', 3600, fn() => \App\Models\Feature::where('is_property', true)->pluck('title', 'id'));
         $tags       = \Illuminate\Support\Facades\Cache::remember('property_tags', 3600, fn() => \App\Models\Tag::where('is_property', true)->pluck('title', 'id'));
-        $agents     = \Illuminate\Support\Facades\Cache::remember('property_top_agents', 600, fn() => User::orderByRating()->take(6)->get());
+        $agents     = \Illuminate\Support\Facades\Cache::remember('property_top_agents', 600, fn() => User::orderByRating()->take(6)->with('media')->get());
 
         return [
             'properties'       => $properties,
@@ -125,6 +125,8 @@ class PropertyService
      */
     public function logListingView(Property $property): void
     {
+        $property->increment('view_count');
+
         activity('listings')
             ->performedOn($property)
             ->causedBy(auth()->user())
@@ -366,15 +368,18 @@ class PropertyService
     protected function getRelatedProperties(Property $property): Collection
     {
         $related = Property::where('id', '!=', $property->id)
+            ->visibleTo(auth()->user())
             ->where('category_id', $property->category_id)
             ->where('location_id', $property->location_id)
-            ->with(['category', 'location', 'prices', 'reviews'])
+            ->with(['category', 'location', 'prices', 'reviews.user', 'media'])
             ->limit(4)->get();
 
         if ($related->count() < 4) {
             $extra = Property::where('id', '!=', $property->id)
+                ->visibleTo(auth()->user())
                 ->where('category_id', $property->category_id)
                 ->whereNotIn('id', $related->pluck('id'))
+                ->with(['category', 'location', 'prices', 'reviews.user', 'media'])
                 ->inRandomOrder()->limit(4 - $related->count())->get();
             $related = $related->merge($extra);
         }

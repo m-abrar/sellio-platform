@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CalculateLodgingPriceRequest;
 use App\Http\Requests\SearchPropertyRequest;
 use App\Models\Property;
 use App\Services\PropertyService;
@@ -91,21 +92,18 @@ class PropertyController extends Controller
     /**
      * Calculate lodging price via AJAX.
      *
-     * @param Request $request
+     * @param CalculateLodgingPriceRequest $request
      * @param Property $property
      * @return JsonResponse
      */
-    public function calculateLodgingPrice(Request $request, Property $property): JsonResponse
+    public function calculateLodgingPrice(CalculateLodgingPriceRequest $request, Property $property): JsonResponse
     {
-        $request->validate([
-            'check_in'  => ['required', 'date'],
-            'check_out' => ['required', 'date', 'after:check_in'],
-        ]);
+        $validated = $request->validated();
 
         $calculation = $this->propertyService->calculateEstimatedLodging(
             $property,
-            (string) $request->get('check_in'),
-            (string) $request->get('check_out')
+            (string) $validated['check_in'],
+            (string) $validated['check_out']
         );
 
         return response()->json($calculation);

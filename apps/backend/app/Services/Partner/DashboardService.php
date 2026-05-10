@@ -36,9 +36,12 @@ class DashboardService
      */
     public function getDashboardData(User $partner): array
     {
-        $earningData     = $this->fetchEarningData($partner);
-        $performanceData = $this->fetchPerformanceMetrics($partner);
-        $chartData       = $this->fetchChartData($partner);
+        // 1. Pre-fetch all listing IDs once to prevent redundant 'pluck' queries in sub-methods
+        $listingIds = $this->getPartnerListingIds($partner);
+
+        $earningData     = $this->fetchEarningData($partner, $listingIds);
+        $performanceData = $this->fetchPerformanceMetrics($partner, $listingIds);
+        $chartData       = $this->fetchChartData($partner, $listingIds);
         $healthScoreData = $this->calculateListingHealthScore($partner);
         $uiData          = $this->prepareUiData($partner);
 
@@ -100,10 +103,10 @@ class DashboardService
         return $listing;
     }
 
-    protected function fetchEarningData(User $partner): array
+    protected function fetchEarningData(User $partner, array $listingIds): array
     {
-        $currentEarnings = $this->calculateEarnings($partner, 0, 30);
-        $previousEarnings = $this->calculateEarnings($partner, 30, 60);
+        $currentEarnings = $this->calculateEarnings($partner, $listingIds, 0, 30);
+        $previousEarnings = $this->calculateEarnings($partner, $listingIds, 30, 60);
 
         $change = 0;
         $changeType = 'neutral'; 
@@ -126,27 +129,27 @@ class DashboardService
         ];
     }
 
-    protected function calculateEarnings(User $partner, int $startOffset, int $endOffset): float
+    protected function calculateEarnings(User $partner, array $ids, int $startOffset, int $endOffset): float
     {
         $endDate = Carbon::now()->subDays($startOffset);
         $startDate = Carbon::now()->subDays($endOffset);
 
-        $propertyRevenue = PropertyBooking::whereIn('property_id', $partner->properties()->pluck('id'))
+        $propertyRevenue = PropertyBooking::whereIn('property_id', $ids[Property::class])
             ->where('status', 'confirmed')
             ->whereBetween('created_at', [$startDate, $endDate])
             ->sum('total_price');
 
-        $eventRevenue = EventBooking::whereIn('event_id', $partner->events()->pluck('id'))
+        $eventRevenue = EventBooking::whereIn('event_id', $ids[Event::class])
             ->where('status', 'confirmed')
             ->whereBetween('created_at', [$startDate, $endDate])
             ->sum('total_price');
 
-        $serviceRevenue = ServiceAppointment::whereIn('service_id', $partner->services()->pluck('id'))
+        $serviceRevenue = ServiceAppointment::whereIn('service_id', $ids[Service::class])
             ->where('status', 'confirmed')
             ->whereBetween('created_at', [$startDate, $endDate])
             ->sum('price');
 
-        $quoteRevenue = ServiceQuote::whereIn('service_id', $partner->services()->pluck('id'))
+        $quoteRevenue = ServiceQuote::whereIn('service_id', $ids[Service::class])
             ->where('status', 'accepted')
             ->whereBetween('created_at', [$startDate, $endDate])
             ->sum('quoted_price');
@@ -154,9 +157,9 @@ class DashboardService
         return (float) ($propertyRevenue + $eventRevenue + $serviceRevenue + $quoteRevenue);
     }
 
-    protected function fetchPerformanceMetrics(User $partner): array
+    protected function fetchPerformanceMetrics(User $partner, array $listingIds): array
     {
-        $current = $this->calculateDetailedMetrics($partner, 0, 30);
+        $current = $this->calculateDetailedMetrics($partner, $listingIds, 0, 30);
         
         return [
             'total_views' => $current['total_views'],
@@ -167,31 +170,22 @@ class DashboardService
         ];
     }
 
-    protected function calculateDetailedMetrics(User $partner, int $startOffset, int $endOffset): array
+    protected function calculateDetailedMetrics(User $partner, array $ids, int $startOffset, int $endOffset): array
     {
         $endDate = Carbon::now()->subDays($startOffset);
         $startDate = Carbon::now()->subDays($endOffset);
 
-        $modelMap = [
-            Property::class => $partner->properties()->pluck('id'),
-            Event::class => $partner->events()->pluck('id'),
-            Auto::class => $partner->autos()->pluck('id'),
-            Service::class => $partner->services()->pluck('id'),
-            Classified::class => $partner->classifieds()->pluck('id'),
-            JobListing::class => $partner->jobs()->pluck('id'),
-        ];
-
         $totalViews = ActivityLog::where('description', 'viewed_listing')
             ->whereBetween('created_at', [$startDate, $endDate])
-            ->where(function ($query) use ($modelMap) {
-                foreach ($modelMap as $type => $ids) {
-                    if ($ids->isNotEmpty()) {
-                        $query->orWhere(fn ($q) => $q->where('subject_type', $type)->whereIn('subject_id', $ids));
+            ->where(function ($query) use ($ids) {
+                foreach ($ids as $type => $pluckedIds) {
+                    if ($pluckedIds->isNotEmpty()) {
+                        $query->orWhere(fn ($q) => $q->where('subject_type', $type)->whereIn('subject_id', $pluckedIds));
                     }
                 }
             })->count();
 
-        $totalLeads = $this->countLeads($partner, $startDate, $endDate);
+        $totalLeads = $this->countLeads($partner, $ids, $startDate, $endDate);
         $conversionRate = $totalViews > 0 ? ($totalLeads / $totalViews) * 100 : 0;
 
         return [
@@ -201,33 +195,33 @@ class DashboardService
         ];
     }
 
-    protected function countLeads(User $partner, Carbon $startDate, Carbon $endDate): int
+    protected function countLeads(User $partner, array $ids, Carbon $startDate, Carbon $endDate): int
     {
         $total = 0;
         $statuses = ['cancelled', 'rejected', 'refused', 'refunded'];
 
-        $total += PropertyBooking::whereIn('property_id', $partner->properties()->pluck('id'))
+        $total += PropertyBooking::whereIn('property_id', $ids[Property::class])
             ->whereBetween('created_at', [$startDate, $endDate])->whereNotIn('status', $statuses)->count();
         
-        $total += PropertyVisit::whereIn('property_id', $partner->properties()->pluck('id'))
+        $total += PropertyVisit::whereIn('property_id', $ids[Property::class])
             ->whereBetween('created_at', [$startDate, $endDate])->whereNotIn('status', $statuses)->count();
 
-        $total += EventBooking::whereIn('event_id', $partner->events()->pluck('id'))
+        $total += EventBooking::whereIn('event_id', $ids[Event::class])
             ->whereBetween('created_at', [$startDate, $endDate])->whereNotIn('status', $statuses)->count();
 
-        $total += ServiceAppointment::whereIn('service_id', $partner->services()->pluck('id'))
+        $total += ServiceAppointment::whereIn('service_id', $ids[Service::class])
             ->whereBetween('created_at', [$startDate, $endDate])->whereNotIn('status', $statuses)->count();
 
-        $total += AutoInquiry::whereIn('auto_id', $partner->autos()->pluck('id'))
+        $total += AutoInquiry::whereIn('auto_id', $ids[Auto::class])
             ->whereBetween('created_at', [$startDate, $endDate])->whereNotIn('status', $statuses)->count();
 
-        $total += JobApplication::whereIn('job_listing_id', $partner->jobs()->pluck('id'))
+        $total += JobApplication::whereIn('job_listing_id', $ids[JobListing::class])
             ->whereBetween('created_at', [$startDate, $endDate])->whereNotIn('status', $statuses)->count();
 
         return $total;
     }
 
-    protected function fetchChartData(User $partner): array
+    protected function fetchChartData(User $partner, array $listingIds): array
     {
         $labels = [];
         $dataViews = [];
@@ -241,7 +235,7 @@ class DashboardService
 
             $labels[] = $date->shortMonthName;
             
-            $metrics = $this->calculateDetailedMetricsForDates($partner, $startDate, $endDate);
+            $metrics = $this->calculateDetailedMetricsForDates($partner, $listingIds, $startDate, $endDate);
             $dataViews[] = $metrics['total_views'];
             $dataLeads[] = $metrics['total_leads'];
         }
@@ -255,30 +249,33 @@ class DashboardService
         ];
     }
 
-    protected function calculateDetailedMetricsForDates(User $partner, Carbon $start, Carbon $end): array
+    protected function calculateDetailedMetricsForDates(User $partner, array $ids, Carbon $start, Carbon $end): array
     {
-        $modelMap = [
-            Property::class => $partner->properties()->pluck('id'),
-            Event::class => $partner->events()->pluck('id'),
-            Auto::class => $partner->autos()->pluck('id'),
-            Service::class => $partner->services()->pluck('id'),
-            Classified::class => $partner->classifieds()->pluck('id'),
-            JobListing::class => $partner->jobs()->pluck('id'),
-        ];
-
         $totalViews = ActivityLog::where('description', 'viewed_listing')
             ->whereBetween('created_at', [$start, $end])
-            ->where(function ($query) use ($modelMap) {
-                foreach ($modelMap as $type => $ids) {
-                    if ($ids->isNotEmpty()) {
-                        $query->orWhere(fn ($q) => $q->where('subject_type', $type)->whereIn('subject_id', $ids));
+            ->where(function ($query) use ($ids) {
+                foreach ($ids as $type => $pluckedIds) {
+                    if ($pluckedIds->isNotEmpty()) {
+                        $query->orWhere(fn ($q) => $q->where('subject_type', $type)->whereIn('subject_id', $pluckedIds));
                     }
                 }
             })->count();
 
-        $totalLeads = $this->countLeads($partner, $start, $end);
+        $totalLeads = $this->countLeads($partner, $ids, $start, $end);
 
         return ['total_views' => $totalViews, 'total_leads' => $totalLeads];
+    }
+
+    protected function getPartnerListingIds(User $partner): array
+    {
+        return [
+            Property::class   => $partner->properties()->pluck('id'),
+            Event::class      => $partner->events()->pluck('id'),
+            Auto::class       => $partner->autos()->pluck('id'),
+            Service::class    => $partner->services()->pluck('id'),
+            Classified::class => $partner->classifieds()->pluck('id'),
+            JobListing::class => $partner->jobs()->pluck('id'),
+        ];
     }
 
     protected function calculateListingHealthScore(User $partner): array
@@ -297,7 +294,7 @@ class DashboardService
         $poorTitles = $listings->filter(fn($l) => strlen($l->title) < self::MIN_TITLE_LENGTH)->count();
         $poorPhotos = $listings->filter(fn($l) => $l->media_count < self::MIN_REQUIRED_PHOTOS)->count();
 
-        $score = 100 - (($poorTitles + poorPhotos) * (100 / ($total * 2)));
+        $score = 100 - (($poorTitles + $poorPhotos) * (100 / ($total * 2)));
         $score = max(0, round($score));
 
         return [

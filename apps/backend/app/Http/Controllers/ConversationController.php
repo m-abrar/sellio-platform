@@ -33,26 +33,19 @@ class ConversationController extends Controller
      */
     public function start(\App\Http\Requests\StartConversationRequest $request): RedirectResponse
     {
-        // Apply Rate Limiting: 5 attempts per minute per user
-        $executed = \Illuminate\Support\Facades\RateLimiter::attempt(
-            'start-conversation:' . Auth::id(),
-            5,
-            function() {}
-        );
-
-        if (!$executed) {
-            return redirect()->back()->withErrors(['message' => __('Too many requests. Please try again in a minute.')]);
+        // Rate Limiting
+        if (\Illuminate\Support\Facades\RateLimiter::tooManyAttempts('start-conv:' . Auth::id(), 5)) {
+            return back()->withErrors(['message' => __('Too many requests.')]);
         }
+        \Illuminate\Support\Facades\RateLimiter::hit('start-conv:' . Auth::id(), 60);
 
-        $buyerId = Auth::id();
         $partner = User::where('username', $request->validated()['username'])->firstOrFail();
         
-        // Prevent self-messaging
-        if ($buyerId === $partner->id) {
-            return redirect()->back()->withErrors(['message' => __('You cannot start a conversation with yourself.')]);
+        if (Auth::id() === $partner->id) {
+            return back()->withErrors(['message' => __('You cannot start a conversation with yourself.')]);
         }
 
-        $conversation = $this->conversationService->findOrCreate($partner, $buyerId);
+        $conversation = $this->conversationService->findOrCreate($partner, Auth::id());
 
         return redirect()->route('dashboard.user.messages.index', $conversation->id);
     }

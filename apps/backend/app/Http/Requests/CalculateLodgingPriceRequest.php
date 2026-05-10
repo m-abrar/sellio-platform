@@ -4,17 +4,10 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-/**
- * Class CalculateLodgingPriceRequest
- * Validates temporal parameters for lodging price estimation, ensuring 
- * chronological integrity and valid date sequences for stay duration.
- */
 class CalculateLodgingPriceRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to perform lodging price calculations.
-     *
-     * @return bool
+     * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
@@ -22,14 +15,12 @@ class CalculateLodgingPriceRequest extends FormRequest
     }
 
     /**
-     * Define the temporal validation constraints for lodging duration.
-     *
-     * @return array<string, mixed>
+     * Get the validation rules that apply to the request.
      */
     public function rules(): array
     {
         return [
-            'check_in'  => ['required', 'date'],
+            'check_in'  => ['required', 'date', 'after_or_equal:today'],
             'check_out' => ['required', 'date', 'after:check_in'],
         ];
     }

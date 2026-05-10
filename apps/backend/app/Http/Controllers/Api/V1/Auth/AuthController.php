@@ -9,6 +9,7 @@ use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use App\Http\Resources\UserResource;
 
 class AuthController extends Controller
 {
@@ -35,12 +36,7 @@ class AuthController extends Controller
         return $this->successResponse([
             'access_token' => $result['token'],
             'token_type'   => 'Bearer',
-            'user' => [
-                'id'    => $user->id,
-                'name'  => $user->name,
-                'email' => $user->email,
-                'roles' => $user->getRoleNames(),
-            ]
+            'user'         => new UserResource($user),
         ]);
     }
 
@@ -77,12 +73,7 @@ class AuthController extends Controller
         return $this->successResponse([
             'access_token' => $result['token'],
             'token_type'   => 'Bearer',
-            'user' => [
-                'id'    => $user->id,
-                'name'  => $user->name,
-                'email' => $user->email,
-                'roles' => $user->getRoleNames(),
-            ]
+            'user'         => new UserResource($user),
         ], __('Registration successful'), 201);
     }
 

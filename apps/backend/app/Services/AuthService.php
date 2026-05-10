@@ -49,12 +49,16 @@ class AuthService
             'password' => $data['password'],
         ]);
 
+        // Security: Explicit Role Whitelisting
+        $allowedRoles = ['user', 'partner'];
+        $assignedRole = in_array($role, $allowedRoles) ? $role : 'user';
+
         // Business Logic: Buyer/Partner Flagging
-        $user->is_buyer = ($role === 'user');
+        $user->is_buyer = ($assignedRole === 'user');
         $user->save();
 
         // Security: Explicit Role Assignment
-        $user->assignRole($role);
+        $user->assignRole($assignedRole);
 
         return [
             'user'  => $user,

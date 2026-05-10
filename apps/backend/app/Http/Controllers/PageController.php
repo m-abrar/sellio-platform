@@ -32,23 +32,42 @@ class PageController extends Controller
     }
 
     /**
-     * Display the About Us page.
+     * Display a specific CMS page by slug, with fallback to static views.
      *
+     * @param string $slug
      * @return View
+     */
+    public function show(string $slug): View
+    {
+        $page = \App\Models\Page::active()->where('slug', $slug)->first();
+
+        if ($page) {
+            return view('frontend.pages.dynamic', compact('page'));
+        }
+
+        // Fallback to legacy static views if DB record missing
+        $viewPath = "frontend.pages.{$slug}";
+        if (view()->exists($viewPath)) {
+            return view($viewPath);
+        }
+
+        abort(404);
+    }
+
+    /**
+     * Display the About Us page.
      */
     public function about(): View
     {
-        return view('frontend.pages.about');
+        return $this->show('about');
     }
 
     /**
      * Display the Contact Us page.
-     *
-     * @return View
      */
     public function contact(): View
     {
-        return view('frontend.pages.contact');
+        return $this->show('contact');
     }
 
     /**
@@ -66,31 +85,25 @@ class PageController extends Controller
 
     /**
      * Display the FAQ page.
-     *
-     * @return View
      */
     public function faq(): View
     {
-        return view('frontend.pages.faq');
+        return $this->show('faq');
     }
 
     /**
      * Display the Privacy Policy page.
-     *
-     * @return View
      */
     public function privacyPolicy(): View
     {
-        return view('frontend.pages.privacy-policy');
+        return $this->show('privacy-policy');
     }
 
     /**
      * Display the Terms and Conditions page.
-     *
-     * @return View
      */
     public function terms(): View
     {
-        return view('frontend.pages.terms');
+        return $this->show('terms');
     }
 }

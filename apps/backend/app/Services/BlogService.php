@@ -42,7 +42,7 @@ class BlogService
             // Ensure paginate() is called using the variable
             'blogs'        => $query->paginate($perPage)->withQueryString(),
             'categories'   => Cache::remember('blog_categories', 3600, fn() => Category::where('is_blog', true)->active()->get()),
-            'recent_posts' => Blog::active()->latest()->take(5)->get(),
+            'recent_posts' => Blog::active()->with(['user', 'category', 'media'])->latest()->take(5)->get(),
         ];
     }
 
@@ -64,6 +64,7 @@ class BlogService
             'related_posts' => Blog::active()
                 ->where('category_id', $blog->category_id)
                 ->where('id', '!=', $blog->id)
+                ->with(['user', 'category', 'media'])
                 ->limit(3)
                 ->get(),
             'author_meta'   => $blog->user?->profile ?? null,

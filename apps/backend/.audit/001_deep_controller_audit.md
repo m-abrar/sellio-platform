@@ -158,8 +158,8 @@ Handles public blog discovery, search, and detailed article display.
 - **Safe**: Uses `active()` scope and slug-based retrieval.
 
 ### Architecture
-- **LOGIC LEAK**: Performs heavy Eager Loading (`with(['user', 'category', 'tags', 'reviews.user', 'media'])`) directly in the controller (L73). This logic belongs in `BlogService` to ensure consistency across Web and API layers.
-- **MIXED PATTERN**: `index` proxies to `search`, but `category` calls service directly. Inconsistent internal flow.
+- **LOGIC LEAK**: **RESOLVED**. Eager loading and pagination logic migrated to `BlogService`.
+- **FLOW**: **RESOLVED**. Standardized internal flow using the service layer.
 
 ### Performance
 - **N+1 RISKS**: `reviews.user` is eager loaded, but if an article has hundreds of reviews, this will bloat the response. Lacks review pagination/scoping.
@@ -417,16 +417,16 @@ Handles the initialization of messaging threads between buyers and partners.
 
 ### Security
 - **Safe**: Correctly implements a self-messaging prevention check (L33).
-- **Risk**: Missing Rate Limiting. Malicious users can automate the creation of thousands of empty conversation threads to spam partner dashboards.
+- **Rate Limiting**: **RESOLVED**. Implemented via `RateLimiter` to prevent spam.
 
 ### Validation
-- **FAIL**: Missing `FormRequest`. The `username` is retrieved from the route but not validated for format/integrity beyond existence checks.
+- **Elite**: **RESOLVED**. Utilizes `StartConversationRequest` for secure username validation.
 
 ### Authorization
 - **Safe**: Requires authentication (L24).
 
 ### Architecture
-- **Missing Service Layer**: The logic for "Finding or Creating" a conversation (L38-51) is embedded in the controller. This business logic should be in a `ConversationService`.
+- **Service Layer**: **RESOLVED**. Fully delegated to `ConversationService`.
 
 ### Performance
 - **Good**: Utilizes efficient queries for retrieval.
@@ -777,7 +777,8 @@ Manages static marketing and legal pages, along with the global contact form int
 - **Safe**: Public pages.
 
 ### Architecture
-- **INCOMPLETE FEATURE**: `sendContact` (L45) is currently a logic-less stub. It validates the input but does not trigger any mailing or storage actions.
+- **Elite**: **RESOLVED**. CMS integration implemented. Dynamic pages are now fetched from the database with graceful static fallbacks.
+- **Service Integration**: **RESOLVED**. `sendContact` now utilizes `ContactService`.
 
 ### Performance
 - **Good**.
@@ -5556,11 +5557,11 @@ LOW-MEDIUM
 ### Problems Found
 
 ### Security
-- **Authorization Debt**: Uses manual ID comparison (L51, L65) instead of Laravel Policies (`$this->authorize('update', $ticket)`).
+- **Authorization Debt**: **RESOLVED**. Implemented `authorizeOwner` helper and standardized ownership checks.
 
 ### Architecture
-- **Protocol Debt**: Uses a non-standard HTTP status code `210` (L42). 
-- **Logic Bloat**: Creation and reply logic is trapped in the controller. This should be offloaded to a `TicketService` to match the administrative implementation.
+- **Protocol Debt**: **RESOLVED**. Standardized status codes (201 for creation).
+- **Logic Bloat**: **RESOLVED**. Fully delegated logic to `TicketService`.
 
 ## Controller Audit: app/Http/Controllers/Api/V1/Auth/AuthController.php
 
@@ -5573,10 +5574,10 @@ CRITICAL
 ### Problems Found
 
 ### Security
-- **Privilege Escalation**: `register` method (L83) accepts the `role` parameter directly from the request and passes it to Spatie's `assignRole()`. This allows any guest to register as a 'super-admin' or other privileged role.
+- **Privilege Escalation**: **RESOLVED**. Implemented role whitelisting in `AuthService`. Only 'user' and 'partner' roles are allowed via public registration.
 
 ### Architecture
-- **Logic Bloat**: Manual array mapping for user data (L32-37, L90-95) instead of using a `UserResource`.
+- **Logic Bloat**: **RESOLVED**. Integrated `UserResource` for consistent and secure API responses.
 
 ## Controller Audit: app/Http/Controllers/Api/V1/Auth/PasswordResetController.php
 
@@ -5624,8 +5625,8 @@ LOW-MEDIUM
 ### Problems Found
 
 ### Architecture
-- **Trait Debt**: Relies on heavy traits (`Listings`, `DashboardDataPreparation`) to hide massive data aggregation logic. This is a "fat controller" anti-pattern in disguise and should be migrated to a dedicated `DashboardService`.
-- **Manual Collapsing**: Manually executes and collapses 6 separate listing queries (L65-72) instead of using a unified listing union or optimized eager loading.
+- **Trait Debt**: **RESOLVED**. Removed unused traits and migrated core logic to `DashboardService`.
+- **Manual Collapsing**: **RESOLVED**. Consolidated query logic within `DashboardService` with optimized ID pre-fetching.
 
 ---
 
@@ -5743,11 +5744,11 @@ CRITICAL / PERFORMANCE RISK
 ### Problems Found
 
 ### Performance
-- **Exponential N+1 Database Queries**: `getDetailedListingPerformance` (L355) executes multiple database queries (Activity logs, leads, revenue) for every single listing owned by the partner within a loop. A partner with a moderate number of listings (e.g., 50) will trigger 150+ queries per request, leading to massive latency and potential DB denial-of-service.
-- **Unoptimized Metric Aggregation**: Relies on raw counting and summing within loops rather than utilizing efficient DB-level grouping or caching.
+- **Exponential N+1 Database Queries**: **RESOLVED**. Implemented bulk-fetching and mapping in `AnalyticsService`.
+- **Unoptimized Metric Aggregation**: **RESOLVED**. Consolidated queries into efficient groupings.
 
 ### Architecture
-- **Fat Controller**: At 434 lines, this controller violates the "Thin Controller" mandate. It handles complex business logic that should reside in an `AnalyticsService`.
+- **Thin Controller**: **RESOLVED**. Logic moved to `AnalyticsService`.
 
 ## Controller Audit: app/Http/Controllers/Api/V1/Dashboard/Partner/DashboardController.php
 
@@ -5773,7 +5774,7 @@ MEDIUM
 ### Problems Found
 
 ### Architecture
-- **Response Inconsistency**: `updateProfile` (L65) uses `back()`, which is a web-oriented redirect. In an API context (`Api\V1`), this should return a JSON response to maintain protocol consistency.
+- **Response Inconsistency**: **RESOLVED**. Standardized to JSON success responses.
 
 ## Controller Audit: app/Http/Controllers/Api/V1/Dashboard/Partner/PropertyController.php
 

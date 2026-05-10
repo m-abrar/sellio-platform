@@ -12,14 +12,24 @@ use Illuminate\Http\Request;
 class TicketController extends Controller
 {
     /**
+     * @var \App\Services\TicketService
+     */
+    protected $ticketService;
+
+    /**
+     * TicketController constructor.
+     */
+    public function __construct(\App\Services\TicketService $ticketService)
+    {
+        $this->ticketService = $ticketService;
+    }
+
+    /**
      * Display a listing of the authenticated user's tickets.
      */
     public function index()
     {
-        $tickets = auth()->user()->tickets()
-            ->with(['messages', 'user']) // eager load
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
+        $tickets = $this->ticketService->getUserTickets(auth()->user());
 
         return TicketResource::collection($tickets);
     }
@@ -29,17 +39,14 @@ class TicketController extends Controller
      */
     public function store(StoreTicketRequest $request)
     {
-        $ticket = auth()->user()->tickets()->create([
-            'title' => $request->title,
-            'description' => $request->description,
-            'priority' => $request->get('priority', 'low'),
-            'status' => 'open',
-        ]);
+        $ticket = $this->ticketService->createTicket(auth()->user(), $request->validated());
 
-        return response()->json([
-            'message' => 'Ticket created successfully.',
-            'data' => new TicketResource($ticket)
-        ], 210);
+        return $this->successResponse(
+            new TicketResource($ticket),
+            __('Ticket created successfully.'),
+            [],
+            201
+        );
     }
 
     /**
@@ -47,14 +54,9 @@ class TicketController extends Controller
      */
     public function show(Ticket $ticket)
     {
-        // Verify owner if not Admin (Admin handles are separate, but verify generic ownership)
-        if ($ticket->user_id !== auth()->id()) {
-            return response()->json(['message' => 'Unauthorized Access.'], 403);
-        }
+        $this->authorizeOwner($ticket);
 
-        $ticket->load(['messages.user']);
-
-        return new TicketResource($ticket);
+        return new TicketResource($ticket->load(['messages.user']));
     }
 
     /**
@@ -62,22 +64,27 @@ class TicketController extends Controller
      */
     public function reply(ReplyTicketRequest $request, Ticket $ticket)
     {
-        if ($ticket->user_id !== auth()->id()) {
-            return response()->json(['message' => 'Unauthorized Access.'], 403);
-        }
+        $this->authorizeOwner($ticket);
 
         if ($ticket->status === 'closed') {
-            return response()->json(['message' => 'Cannot reply to a closed ticket.'], 400);
+            return $this->errorResponse(__('Cannot reply to a closed ticket.'), 400);
         }
 
-        $message = $ticket->messages()->create([
-            'user_id' => auth()->id(),
-            'body' => $request->body,
-        ]);
+        $this->ticketService->replyToTicket(auth()->user(), $ticket, $request->validated());
 
-        return response()->json([
-            'message' => 'Reply submitted.',
-            'data' => $message 
-        ], 200);
+        return $this->successResponse(
+            new TicketResource($ticket->fresh(['messages.user'])),
+            __('Reply submitted.')
+        );
+    }
+
+    /**
+     * Internal: Verify ticket ownership.
+     */
+    protected function authorizeOwner(Ticket $ticket): void
+    {
+        if ($ticket->user_id !== auth()->id()) {
+            abort(403, __('Unauthorized Access.'));
+        }
     }
 }

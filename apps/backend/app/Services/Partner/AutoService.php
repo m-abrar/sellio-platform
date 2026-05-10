@@ -13,6 +13,30 @@ use Illuminate\Support\Str;
 class AutoService
 {
     /**
+     * Get paginated listings for a specific partner.
+     */
+    public function getPartnerAutos(User $partner, int $perPage = 10)
+    {
+        return $partner->autos()
+            ->with(['category', 'brand', 'location'])
+            ->latest()
+            ->paginate($perPage);
+    }
+
+    /**
+     * Get discovery data for automotive forms.
+     */
+    public function getFormData(): array
+    {
+        return [
+            'categories' => \App\Models\Category::where('is_auto', true)->get(),
+            'brands'     => \App\Models\Brand::where('is_auto', true)->get(),
+            'types'      => \App\Models\Type::where('is_auto', true)->get(),
+            'locations'  => \App\Models\Location::all(),
+        ];
+    }
+
+    /**
      * Save the vehicle listing with migration-aligned data.
      *
      * @param User $user
@@ -36,6 +60,14 @@ class AutoService
         }
 
         return $user->autos()->create($data);
+    }
+
+    /**
+     * Remove a vehicle listing.
+     */
+    public function deleteAuto(Auto $auto): void
+    {
+        $auto->delete();
     }
 
     /**

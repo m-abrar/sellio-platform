@@ -62,7 +62,10 @@ class DashboardController extends Controller
 
         $user->update($validated);
 
-        return back()->with('success', 'Profile updated successfully.');
+        return $this->successResponse(
+            new UserResource($user),
+            __('Profile updated successfully.')
+        );
     }
 
     /**
