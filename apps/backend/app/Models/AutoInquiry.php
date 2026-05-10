@@ -54,7 +54,6 @@ class AutoInquiry extends Model
         'preferred_date',
         'preferred_time',
         'message',
-        'viewed_at',
     ];
 
     /**

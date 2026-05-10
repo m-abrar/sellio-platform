@@ -40,7 +40,6 @@ class Application extends Model implements HasMedia
      * @var array<int, string>
      */
     protected $fillable = [
-        'app_key',   // e.g., 'modern_dark', 'classic_realestate'
         'vertical',  // e.g., 'real_estate', 'automotive'
         'title',     // e.g., "Modern Midnight"
         'is_active', 

@@ -7,28 +7,28 @@ use Illuminate\Support\Str;
 trait HasBookingAttributes
 {
     /**
-     * Get the semantic state for the module type.
-     * Maps to view-layer CSS classes (primary, success, etc.)
+     * Get the semantic context level for the module type.
+     * Maps to internal vertical types for UI categorization.
      */
-    public function getTypeState(): string
+    public function getTypeContext(): string
     {
         $type = class_basename($this);
 
         return match (true) {
-            str_contains($type, 'Property')  => 'primary',
-            str_contains($type, 'Event')     => 'success',
-            str_contains($type, 'Service')   => 'warning',
-            str_contains($type, 'Job')       => 'info',
-            str_contains($type, 'Auto')      => 'dark',
-            str_contains($type, 'Classified') => 'secondary',
-            default                          => 'light',
+            str_contains($type, 'Property')  => 'real-estate',
+            str_contains($type, 'Event')     => 'event',
+            str_contains($type, 'Service')   => 'service',
+            str_contains($type, 'Job')       => 'recruitment',
+            str_contains($type, 'Auto')      => 'automotive',
+            str_contains($type, 'Classified') => 'classified',
+            default                          => 'general',
         };
     }
 
     /**
-     * Get the semantic status state for the booking.
+     * Get the semantic severity level for the booking status.
      */
-    public function getStatusState(): string
+    public function getStatusLevel(): string
     {
         return match ($this->status) {
             'confirmed', 'accepted', 'paid', 'completed' => 'success',

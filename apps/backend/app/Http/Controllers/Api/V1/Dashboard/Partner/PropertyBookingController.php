@@ -69,11 +69,17 @@ class PropertyBookingController extends Controller
      *
      * @param string $status
      * @param PropertyBooking $propertyBooking
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function updateStatus(string $status, PropertyBooking $propertyBooking)
+    public function updateStatus(string $status, PropertyBooking $propertyBooking): \Illuminate\Http\JsonResponse
     {
         $this->authorizeOwner($propertyBooking);
+
+        $validStatuses = ['pending', 'confirmed', 'cancelled', 'completed', 'failed'];
+
+        if (!in_array($status, $validStatuses)) {
+            return $this->errorResponse(__('Invalid booking status requested.'), 422);
+        }
 
         $propertyBooking->update(['status' => $status]);
 

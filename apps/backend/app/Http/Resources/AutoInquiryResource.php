@@ -14,16 +14,22 @@ class AutoInquiryResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $user = $request->user();
+        $isOwner = $user && $user->id === $this->user_id;
+        $isPartner = $user && $this->relationLoaded('auto') && $user->id === $this->auto->user_id;
+        $isAdmin = $user && $user->hasRole(['admin', 'super-admin']);
+        $canViewPii = $isOwner || $isPartner || $isAdmin;
+
         return [
             'id' => $this->id,
             'user_id' => $this->user_id,
             'auto_id' => $this->auto_id,
-            'full_name' => $this->full_name,
-            'email' => $this->email,
-            'phone' => $this->phone,
+            'full_name' => $this->when($canViewPii, $this->full_name),
+            'email' => $this->when($canViewPii, $this->email),
+            'phone' => $this->when($canViewPii, $this->phone),
             'preferred_date' => $this->preferred_date,
             'preferred_time' => $this->preferred_time,
-            'message' => $this->message,
+            'message' => $this->when($canViewPii, $this->message),
             'status' => $this->status,
             'viewed_at' => $this->viewed_at,
             'created_at' => $this->created_at,

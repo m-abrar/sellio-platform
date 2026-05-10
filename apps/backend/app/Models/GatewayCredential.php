@@ -25,6 +25,7 @@ class GatewayCredential extends Model
      */
     protected $fillable = [
         'payment_gateway_id',
+        'user_id',
         'live_config',
         'sandbox_config',
     ];
@@ -48,5 +49,13 @@ class GatewayCredential extends Model
     public function gateway(): BelongsTo
     {
         return $this->belongsTo(PaymentGateway::class, 'payment_gateway_id');
+    }
+
+    /**
+     * Get the user/partner who owns these credentials.
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 }

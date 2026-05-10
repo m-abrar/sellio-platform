@@ -45,7 +45,7 @@ class JobListingController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index(Request $request)
+    public function index(Request $request): \Illuminate\Http\JsonResponse
     {
         $jobs = JobListing::where('user_id', Auth::id())
             ->withCount(['applications', 'applicationsNew'])
@@ -92,12 +92,15 @@ class JobListingController extends Controller
      * @param JobListing $joblisting
      * @return View
      */
-    public function edit(JobListing $joblisting) {
+    public function edit(JobListing $joblisting): \Illuminate\Http\JsonResponse
+    {
         $this->authorizeOwner($joblisting);
 
-        $data = array_merge($this->getFormData(), ['job' => $joblisting]);
+        $data = array_merge($this->getFormData(), [
+            'job' => new JobListingResource($joblisting->load(['category', 'location', 'tags']))
+        ]);
 
-        return $this->successResponse(null, 'Success');
+        return $this->successResponse($data, __('Job details retrieved successfully.'));
     }
 
     /**

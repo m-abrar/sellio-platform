@@ -68,14 +68,21 @@ class ServiceQuoteController extends Controller
     }
 
     /**
-     * Update the quote with an estimated price or status.
+     * Update the quote status.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param string $status
      * @param ServiceQuote $serviceQuote
-     * @return RedirectResponse
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function update(string $status, ServiceQuote $serviceQuote) {
+    public function update(string $status, ServiceQuote $serviceQuote): \Illuminate\Http\JsonResponse
+    {
         $this->authorizeOwner($serviceQuote);
+
+        $validStatuses = ['pending', 'processing', 'sent', 'accepted', 'rejected', 'expired'];
+
+        if (!in_array($status, $validStatuses)) {
+            return $this->errorResponse(__('Invalid quote status requested.'), 422);
+        }
 
         $serviceQuote->update(['status' => $status]);
 

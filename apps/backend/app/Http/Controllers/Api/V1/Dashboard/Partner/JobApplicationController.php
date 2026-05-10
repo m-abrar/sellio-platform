@@ -72,12 +72,18 @@ class JobApplicationController extends Controller
      *
      * @param JobApplication $jobApplication
      * @param string $status
-     * @return RedirectResponse
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function updateStatus(JobApplication $jobApplication, string $status) {
+    public function updateStatus(JobApplication $jobApplication, string $status): \Illuminate\Http\JsonResponse
+    {
         $this->authorizeOwner($jobApplication);
 
-        // Validation of status should happen here or in a Request class
+        $validStatuses = ['pending', 'interviewing', 'shortlisted', 'rejected', 'hired'];
+
+        if (!in_array($status, $validStatuses)) {
+            return $this->errorResponse(__('Invalid application status requested.'), 422);
+        }
+
         $jobApplication->update(['status' => $status]);
 
         return $this->successResponse(null, __('Application status updated to :status.', ['status' => ucfirst($status)]));
