@@ -159,24 +159,26 @@ class UserSeeder extends Seeder
         $this->command->info('  - Created Buyer User: buyer@sellio-platform.test (buyer123)');
         $this->command->newLine();
 
-        // 4. Create 10 Regular Users with randomized attributes
+        // 4. Create 20 Regular Users with randomized attributes
         $this->command->line('Creating 20 Regular Users...');
         $regularUserCount = 0;
+        $batchUsers = [];
+        $hashedPassword = Hash::make('password'); // Pre-hash for performance
+
         foreach (range(1, 20) as $index) {
             $userName = $faker->name;
-            // 30% chance of being a partner for mixed data
             $isPartner = $faker->boolean(30);
+            $slug = Str::slug($userName, '_');
 
-            $regularUser = User::create([
+            $batchUsers[] = [
+                'uuid' => Str::uuid(),
                 'name' => $userName,
                 'email' => 'user' . $index . '@sellio-platform.test',
                 'email_verified_at' => now(),
-                'password' => Hash::make('password'),
+                'password' => $hashedPassword,
                 'phone' => $faker->phoneNumber,
                 'is_admin' => false,
-
-                'username' => $generateUniqueUsername($userName),
-                // Only partners receive a company attribute
+                'username' => $slug . '_' . $faker->unique()->numberBetween(1000, 9999),
                 'company' => $isPartner ? $faker->unique()->company() : null,
                 'bio' => $faker->paragraph(2),
                 'status' => 'active',
@@ -186,57 +188,54 @@ class UserSeeder extends Seeder
                 'is_buyer' => $faker->boolean(70),
                 'is_verified' => $faker->boolean(80),
                 'date_of_birth' => $faker->dateTimeBetween('-40 years', '-18 years')->format('Y-m-d'),
-                // Experience is only relevant and populated for partner users
                 'years_of_experience' => $isPartner ? $faker->numberBetween(1, 15) : 0,
-
                 'remember_token' => Str::random(10),
                 'created_at' => now(),
                 'updated_at' => now(),
-            ]);
-            $users[] = $regularUser;
+            ];
             $regularUserCount++;
         }
+        User::insert($batchUsers);
         $this->command->info("  - **{$regularUserCount}** randomized users created.");
         $this->command->newLine();
 
         // 5. Attach Polymorphic Reviews to all created users
         $this->command->line('Generating polymorphic Reviews...');
         $reviewStatuses = ['approved', 'pending'];
-        // Get an array of all user IDs to select reviewers from
-        $userIds = collect($users)->pluck('id')->toArray();
+        
+        // Refresh users collection to include the batch-inserted ones
+        $allUsers = User::all();
+        $userIds = $allUsers->pluck('id')->toArray();
         $totalReviewsCreated = 0;
+        $batchReviews = [];
 
-        /** @var User $reviewedUser */
-        foreach ($users as $reviewedUser) {
-            // Ensure the reviewer cannot be the user being reviewed
+        foreach ($allUsers as $reviewedUser) {
             $availableReviewers = array_diff($userIds, [$reviewedUser->id]);
-
             $maxPossibleReviews = count($availableReviewers);
-            // Skip review creation if no other users exist to review this user
+            
             if ($maxPossibleReviews < 1) continue;
 
-            // Generate a random number of reviews (1 to 5) from the available pool.
             $numReviews = $faker->numberBetween(1, min(5, $maxPossibleReviews));
-
-            // Randomly select keys (indices) from the available reviewers array.
             $randomKeys = (array) array_rand($availableReviewers, $numReviews);
-            // Map the selected keys back to the actual User IDs.
             $reviewerIds = array_map(fn($key) => $availableReviewers[$key], $randomKeys);
 
-            /** @var int $reviewerId */
             foreach ($reviewerIds as $reviewerId) {
-
-                // Create a polymorphic Review record linked to the User model.
-                $reviewedUser->reviews()->create([
-                    'user_id' => $reviewerId, // The ID of the user submitting the review
+                $batchReviews[] = [
+                    'user_id' => $reviewerId,
                     'rating' => $faker->numberBetween(1, 5),
                     'comment' => $faker->paragraphs(1, true),
-                    'status' => $faker->randomElement($reviewStatuses), // Mix of approved and pending reviews
-                    // Ensure the review creation date is after the user's creation date
+                    'status' => $faker->randomElement($reviewStatuses),
+                    'reviewable_id' => $reviewedUser->id,
+                    'reviewable_type' => User::class,
                     'created_at' => $faker->dateTimeBetween($reviewedUser->created_at, 'now'),
-                ]);
+                    'updated_at' => now(),
+                ];
                 $totalReviewsCreated++;
             }
+        }
+        
+        if (!empty($batchReviews)) {
+            Review::insert($batchReviews);
         }
         $this->command->info("  - **{$totalReviewsCreated}** polymorphic reviews created.");
         // --- Seeding Logic End ---

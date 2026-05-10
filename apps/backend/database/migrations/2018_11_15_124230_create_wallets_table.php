@@ -20,7 +20,7 @@ return new class() extends Migration
         Schema::create($this->table(), static function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->morphs('holder');
-            $table->string('name');
+            $table->string('name')->index();
             $table->string('slug')
                 ->index();
             $table->uuid('uuid')

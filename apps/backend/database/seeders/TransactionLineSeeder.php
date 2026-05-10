@@ -34,32 +34,32 @@ class TransactionLineSeeder extends Seeder
 
         // Performance: Use chunkById to prevent memory exhaustion on large datasets
         Property::orderBy('id')->chunkById(25, function ($properties) {
+            $batchLines = [];
             foreach ($properties as $property) {
                 // Performance: Query only for bookings belonging to this property
                 $propertyBookings = PropertyBooking::where('property_id', $property->id)->get();
             
                 // Create a random number of transaction line items (between 5 and 15) for each property.
-            for ($i = 0; $i < mt_rand(5, 15); $i++) {
-                
-                $bookingId = null;
-                
-                // Logic to simulate linking:
-                // If the property has bookings and a random number (70% chance) hits,
-                // link the transaction line item to a random existing booking ID.
-                if ($propertyBookings->isNotEmpty() && mt_rand(1, 10) <= 7) {
-                    // Get a random booking ID from the property's bookings
-                    $bookingId = $propertyBookings->random()->id;
-                }
-                
-                // Use the factory to create the TransactionLine model instance.
-                TransactionLine::factory()
-                    ->create([
-                        // Always link to the current property
+                for ($i = 0; $i < mt_rand(5, 15); $i++) {
+                    $bookingId = null;
+                    
+                    // Logic to simulate linking:
+                    if ($propertyBookings->isNotEmpty() && mt_rand(1, 10) <= 7) {
+                        $bookingId = $propertyBookings->random()->id;
+                    }
+                    
+                    // Use the factory to generate data for batch insertion
+                    $batchLines[] = TransactionLine::factory()->make([
                         'property_id' => $property->id,
-                        // Conditionally link to a booking (will be null if not linked)
                         'property_booking_id' => $bookingId,
-                    ]);
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ])->toArray();
+                }
             }
+            // Batch insert for this chunk
+            if (!empty($batchLines)) {
+                TransactionLine::insert($batchLines);
             }
         });
 

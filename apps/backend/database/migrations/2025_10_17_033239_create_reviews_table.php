@@ -18,7 +18,7 @@ return new class extends Migration
             $table->id();
             
             // The user who wrote the review
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained()->restrictOnDelete();
             
             // Polymorphic columns for the item being reviewed (property, auto, job, etc.)
             $table->morphs('reviewable'); 

@@ -193,10 +193,11 @@ class JobSeeder extends Seeder
             // Re-map keys to their corresponding user IDs
             $applicantIds = array_map(fn($key) => $availableApplicants[$key], $randomKeys);
             
-            // Create the application records
+            // Batch creation of application records for performance (O(1) query)
+            $batchApplications = [];
             foreach ($applicantIds as $applicantId) {
-                
-                $job->applications()->create([
+                $batchApplications[] = [
+                    'job_listing_id' => $job->id,
                     'user_id' => $applicantId,
                     'status' => $faker->randomElement($applicationStatuses),
                     'cover_letter' => $faker->paragraphs(1, true),
@@ -204,9 +205,11 @@ class JobSeeder extends Seeder
                     'portfolio_url' => $faker->url(),
                     'admin_note'    => $faker->boolean(30) ? 'Strong candidate based on initial review.' : null,
                     'created_at' => $faker->dateTimeBetween($job->created_at, 'now'),
-                ]);
+                    'updated_at' => now(),
+                ];
                 $applicationsCreatedCount++;
             }
+            JobApplication::insert($batchApplications);
         }
         $this->command->line(" ✓ Created {$applicationsCreatedCount} job applications.");
 

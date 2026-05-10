@@ -20,7 +20,10 @@ return new class extends Migration
             $table->id();
             
             // A unique key to identify the template (e.g., 'plan_subscribed')
-            $table->string('key')->unique(); 
+            $table->string('key'); 
+            $table->string('locale', 10)->default('en')->index();
+
+            $table->unique(['key', 'locale']);
             
             // A friendly title for the admin panel
             $table->string('title');

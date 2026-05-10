@@ -35,7 +35,7 @@ This report contains the finalized, high-fidelity findings for the core database
 - **Findings**:
     - **Security**: Standard Laravel 11 structure.
     - **Performance**: `phone` is indexed correctly.
-    - **Architecture**: Lacks a sequential UUID/ULID for public-facing identifiers (avoiding ID enumeration).
+    - **RESOLVED: Architecture**: Added a unique UUID column for public-facing identifiers (avoiding ID enumeration).
 - **Production Status**: ✅ SAFE
 
 ### 5. `database\migrations\2025_10_17_041812_create_event_bookings_table.php`
@@ -86,9 +86,9 @@ This report contains the finalized, high-fidelity findings for the core database
 - **Final Score**: **50/100**
 - **Risk Level**: 🟠 MEDIUM (Security)
 - **Findings**:
-    - **Architecture**: No multi-lingual support (missing locale/language columns).
+    - **RESOLVED: Architecture**: Added `locale` column for multi-lingual support.
     - **Security**: Raw HTML storage in `body` requires strict application-layer sanitization.
-- **Production Status**: 🟠 WARNING
+- **Production Status**: ✅ SAFE
 
 ### 11. `database\migrations\2025_11_09_060216_create_activity_log_table.php`
 - **Final Score**: **20/100**

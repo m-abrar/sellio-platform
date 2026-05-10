@@ -22,8 +22,8 @@ return new class extends Migration
             $table->id();
             
             // Foreign Keys
-            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade'); 
-            $table->foreignId('classified_id')->constrained('classified_ads')->onDelete('cascade');
+            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('restrict'); 
+            $table->foreignId('classified_id')->constrained('classified_ads')->onDelete('restrict');
             
             // Guest Contact Details
             $table->string('name')->nullable();

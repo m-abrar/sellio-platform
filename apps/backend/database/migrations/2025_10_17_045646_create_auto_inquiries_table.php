@@ -18,8 +18,8 @@ return new class extends Migration
         Schema::create('auto_inquiries', function (Blueprint $table) {
             $table->id();
             // user_id is nullable if guests can inquire
-            $table->foreignId('user_id')->nullable()->constrained()->cascadeOnDelete(); 
-            $table->foreignId('auto_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->nullable()->constrained()->restrictOnDelete(); 
+            $table->foreignId('auto_id')->constrained()->restrictOnDelete();
             
             // New Contact Details (mandatory if user_id is null, but we'll enforce in the form)
             $table->string('full_name')->nullable();
@@ -33,7 +33,7 @@ return new class extends Migration
             // Message is now optional as the structure holds the details
             $table->text('message')->nullable();
             
-            $table->string('status', 50)->default('pending'); // e.g., 'pending', 'contacted', 'resolved'
+            $table->string('status', 50)->default('pending')->index(); // e.g., 'pending', 'contacted', 'resolved'
             
             // Note: Removed the unique constraint to allow multiple inquiries by the same user, 
             // but kept the unique index on user_id/auto_id implicitly via the primary key/other fields.

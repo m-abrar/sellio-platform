@@ -25,7 +25,7 @@ return new class extends Migration
             
             $table->string('label_text', 50)->nullable(); 
             
-            $table->decimal('price', 8, 2);
+            $table->decimal('price', 15, 2);
             $table->string('color', 20)->nullable();
             $table->enum('billing_period', ['monthly', 'annually']);
             
