@@ -190,8 +190,8 @@ class UserSeeder extends Seeder
                 'date_of_birth' => $faker->dateTimeBetween('-40 years', '-18 years')->format('Y-m-d'),
                 'years_of_experience' => $isPartner ? $faker->numberBetween(1, 15) : 0,
                 'remember_token' => Str::random(10),
-                'created_at' => now(),
-                'updated_at' => now(),
+                'created_at' => now()->toDateTimeString(),
+                'updated_at' => now()->toDateTimeString(),
             ];
             $regularUserCount++;
         }
@@ -227,8 +227,8 @@ class UserSeeder extends Seeder
                     'status' => $faker->randomElement($reviewStatuses),
                     'reviewable_id' => $reviewedUser->id,
                     'reviewable_type' => User::class,
-                    'created_at' => $faker->dateTimeBetween($reviewedUser->created_at, 'now'),
-                    'updated_at' => now(),
+                    'created_at' => $faker->dateTimeBetween($reviewedUser->created_at, 'now')->format('Y-m-d H:i:s'),
+                    'updated_at' => now()->toDateTimeString(),
                 ];
                 $totalReviewsCreated++;
             }

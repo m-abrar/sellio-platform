@@ -48,13 +48,17 @@ class TransactionLineSeeder extends Seeder
                         $bookingId = $propertyBookings->random()->id;
                     }
                     
-                    // Use the factory to generate data for batch insertion
-                    $batchLines[] = TransactionLine::factory()->make([
+                    $lineData = TransactionLine::factory()->make([
                         'property_id' => $property->id,
                         'property_booking_id' => $bookingId,
-                        'created_at' => now(),
-                        'updated_at' => now(),
                     ])->toArray();
+                    
+                    // Force SQL-compatible date formats (override ISO 8601 from toArray)
+                    $lineData['transaction_date'] = \Carbon\Carbon::parse($lineData['transaction_date'])->format('Y-m-d');
+                    $lineData['created_at'] = now()->toDateTimeString();
+                    $lineData['updated_at'] = now()->toDateTimeString();
+                    
+                    $batchLines[] = $lineData;
                 }
             }
             // Batch insert for this chunk
@@ -65,7 +69,7 @@ class TransactionLineSeeder extends Seeder
 
         if ($this->command) {
             $count = TransactionLine::count();
-            $this->command->info("  Created {$count} transaction line items across {$properties->count()} properties.");
+            $this->command->info("  Created {$count} transaction line items across " . Property::count() . " properties.");
             $this->command->info('--- 🏁 Transaction Line Seeding Complete ---');
         }
     }

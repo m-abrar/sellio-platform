@@ -113,6 +113,7 @@ class SubscriptionSeeder extends Seeder
                 ]);
             }
         });
+    });
         
         $this->command->info('✅ Subscription seeding complete! ' . Subscription::count() . ' subscriptions processed.');
     }

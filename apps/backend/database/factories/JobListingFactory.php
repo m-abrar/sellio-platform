@@ -28,7 +28,7 @@ class JobListingFactory extends Factory
             'brand_id'    => Brand::where('is_job', true)->inRandomOrder()->first()?->id ?? null,
 
             'title'       => $title,
-            'slug'        => Str::slug($title) . '-' . $this->faker->unique()->numberBetween(100, 999),
+            'slug'        => Str::slug($title) . '-' . $this->faker->unique()->numberBetween(1000, 999999),
             'description' => $this->faker->paragraphs(3, true),
             
             'salary_min'       => $salaryMin,

@@ -60,6 +60,18 @@ class User extends Authenticatable implements Wallet, Customer, HasMedia, MustVe
     public const PRIMARY_MEDIA = 'avatar';
     public const GALLERY_MEDIA = 'cover_photos';
 
+    /**
+     * Boot the model.
+     */
+    protected static function booted(): void
+    {
+        static::creating(function (User $user) {
+            if (empty($user->uuid)) {
+                $user->uuid = (string) \Illuminate\Support\Str::uuid();
+            }
+        });
+    }
+
     protected $fillable = [
         'name',
         'email',

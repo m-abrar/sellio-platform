@@ -27,7 +27,7 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
-        $username = fake()->unique()->word() . fake()->randomNumber(3);
+        $username = fake()->userName() . Str::random(4);
         
         return [
             'name' => fake()->name(),

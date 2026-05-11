@@ -5,7 +5,7 @@ namespace App\Providers;
 use App\Services\CartService;
 use App\DTOs\ContentResult; // Import the DTO
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\{View, Auth, Event, Session, Storage, Cache, Blade};
+use Illuminate\Support\Facades\{View, Auth, Gate, Event, Session, Storage, Cache, Blade};
 use Illuminate\Auth\Events\Authenticated;
 use Illuminate\Pagination\Paginator;
 
@@ -21,8 +21,8 @@ class AppServiceProvider extends ServiceProvider
         Paginator::useBootstrapFive();
 
         // 0. API Documentation Hardening
-        \Dedoc\Scramble\Scramble::auth(function ($request) {
-            return $request->user()?->hasRole(['admin', 'super-admin']) || $this->app->isLocal();
+        Gate::define('viewApiDocs', function ($user = null) {
+            return $user?->hasRole(['admin', 'super-admin']) || app()->isLocal();
         });
 
         // 1. Dynamic Config for Admin Branding

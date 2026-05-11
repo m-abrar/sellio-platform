@@ -182,8 +182,8 @@ class EventSeeder extends Seeder
                         'sold_count' => $faker->numberBetween(1, 10),
                         // 10% chance of a special sale price lower than the override/base price.
                         'sale_price' => $faker->boolean(10) && $priceOverride > 10 ? $faker->randomFloat(2, 5, $priceOverride - 5) : null,
-                        'created_at' => now(),
-                        'updated_at' => now(),
+                        'created_at' => now()->toDateTimeString(),
+                        'updated_at' => now()->toDateTimeString(),
                     ];
                 }
             }

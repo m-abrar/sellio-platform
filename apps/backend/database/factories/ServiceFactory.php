@@ -26,7 +26,7 @@ class ServiceFactory extends Factory
             'location_id' => Location::inRandomOrder()->first()?->id ?? Location::factory(),
 
             'title'       => ucfirst($title),
-            'slug'        => Str::slug($title) . '-' . $this->faker->unique()->numberBetween(100, 999),
+            'slug'        => Str::slug($title) . '-' . $this->faker->unique()->numberBetween(1000, 999999),
             'description' => $this->faker->paragraphs(3, true),
             
             'base_price'      => $basePrice,

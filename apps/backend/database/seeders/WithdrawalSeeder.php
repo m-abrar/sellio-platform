@@ -82,10 +82,10 @@ class WithdrawalSeeder extends Seeder
                     ]),
                     'status' => $status,
                     'admin_note' => $faker->sentence(),
-                    'approved_at' => $approvedAt,
-                    'rejected_at' => $rejectedAt,
-                    'created_at' => $createdAt,
-                    'updated_at' => now(),
+                    'approved_at' => $approvedAt ? $approvedAt->format('Y-m-d H:i:s') : null,
+                    'rejected_at' => $rejectedAt ? $rejectedAt->format('Y-m-d H:i:s') : null,
+                    'created_at' => $createdAt->format('Y-m-d H:i:s'),
+                    'updated_at' => now()->toDateTimeString(),
                 ];
 
                 $count++;

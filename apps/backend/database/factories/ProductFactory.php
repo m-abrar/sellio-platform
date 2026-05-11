@@ -36,7 +36,7 @@ class ProductFactory extends Factory
 
             // Basic Info
             'title'             => ucfirst($title),
-            'slug'              => Str::slug($title) . '-' . $this->faker->unique()->numberBetween(100, 999),
+            'slug'              => Str::slug($title) . '-' . $this->faker->unique()->numberBetween(1000, 999999),
             'sku'               => strtoupper($this->faker->bothify('??-####-???')),
             'description'       => $this->faker->paragraphs(3, true),
             'short_description' => $this->faker->sentence(15),

@@ -27,10 +27,7 @@ return new class extends Migration
         foreach ($tablesToIndex as $tableName) {
             if (Schema::hasTable($tableName)) {
                 Schema::table($tableName, function (Blueprint $table) use ($tableName) {
-                    $sm = Schema::getConnection()->getDoctrineSchemaManager();
-                    $indexes = $sm->listTableIndexes($tableName);
-                    
-                    if (!isset($indexes[$tableName . '_created_at_index'])) {
+                    if (!Schema::hasIndex($tableName, ['created_at'])) {
                         $table->index('created_at');
                     }
                 });
@@ -40,19 +37,25 @@ return new class extends Migration
         // Specific Performance Indexes
         if (Schema::hasTable('messages')) {
             Schema::table('messages', function (Blueprint $table) {
-                $table->index(['conversation_id', 'created_at']);
+                if (!Schema::hasIndex('messages', ['conversation_id', 'created_at'])) {
+                    $table->index(['conversation_id', 'created_at']);
+                }
             });
         }
 
         if (Schema::hasTable('conversations')) {
             Schema::table('conversations', function (Blueprint $table) {
-                $table->index('updated_at');
+                if (!Schema::hasIndex('conversations', ['updated_at'])) {
+                    $table->index('updated_at');
+                }
             });
         }
 
         if (Schema::hasTable('subscriptions')) {
             Schema::table('subscriptions', function (Blueprint $table) {
-                $table->index('ends_at');
+                if (!Schema::hasIndex('subscriptions', ['ends_at'])) {
+                    $table->index('ends_at');
+                }
             });
         }
 
@@ -66,25 +69,16 @@ return new class extends Migration
 
         foreach ($priceTables as $tableName => $column) {
             if (Schema::hasTable($tableName)) {
-                Schema::table($tableName, function (Blueprint $table) use ($column) {
-                    $table->index($column);
+                Schema::table($tableName, function (Blueprint $table) use ($tableName, $column) {
+                    if (!Schema::hasIndex($tableName, [$column])) {
+                        $table->index($column);
+                    }
                 });
             }
         }
 
         // 1.1 COMPOSITE INDEXES FOR UNIFIED FEED PERFORMANCE
-        $bookingTablesForUnifiedFeed = [
-            'property_bookings', 'auto_inquiries', 'event_bookings', 
-            'job_applications', 'service_quotes', 'service_appointments', 
-            'classified_inquiries'
-        ];
-        foreach ($bookingTablesForUnifiedFeed as $tableName) {
-            if (Schema::hasTable($tableName)) {
-                Schema::table($tableName, function (Blueprint $table) {
-                    $table->index(['status', 'created_at']);
-                });
-            }
-        }
+        // (Handled by 2026_05_09_135932_add_performance_indexes_to_booking_tables.php)
 
         // 2. FINANCIAL AUDIT INTEGRITY (SNAPSHOTS & SOFT DELETES)
         $financialTables = ['property_bookings', 'event_bookings', 'order_items', 'payments', 'orders', 'transactions'];
@@ -138,7 +132,6 @@ return new class extends Migration
             ['event_bookings', 'event_id', 'events'],
             ['order_items', 'order_id', 'orders'],
             ['payments', 'user_id', 'users'],
-            ['transactions', 'wallet_id', 'wallets'],
         ];
 
         foreach ($relationships as [$table, $column, $parentTable]) {

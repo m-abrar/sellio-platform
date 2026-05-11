@@ -199,8 +199,8 @@ class JobSeeder extends Seeder
                     'resume_path' => 'resumes/demo-resume-' . $index . '.pdf',
                     'portfolio_url' => $faker->url(),
                     'admin_note'    => $faker->boolean(30) ? 'Strong candidate based on initial review.' : null,
-                    'created_at' => $faker->dateTimeBetween($job->created_at, 'now'),
-                    'updated_at' => now(),
+                    'created_at' => $faker->dateTimeBetween($job->created_at, 'now')->format('Y-m-d H:i:s'),
+                    'updated_at' => now()->toDateTimeString(),
                 ];
                 $applicationsCreatedCount++;
             }

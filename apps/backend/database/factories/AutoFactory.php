@@ -30,7 +30,7 @@ class AutoFactory extends Factory
             'location_id' => Location::inRandomOrder()->first()?->id ?? Location::factory(),
 
             'title'       => $title,
-            'slug'        => Str::slug($title) . '-' . $this->faker->unique()->numberBetween(100, 999),
+            'slug'        => Str::slug($title) . '-' . $this->faker->unique()->numberBetween(1000, 999999),
             'description' => $this->faker->paragraphs(2, true),
             'base_price'  => $basePrice,
             'sale_price'  => $this->faker->boolean(20) ? $basePrice * 0.9 : null,

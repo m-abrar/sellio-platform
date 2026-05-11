@@ -14,7 +14,7 @@ return new class extends Migration
         // 1. Transactions Table - Missing index on wallet_id
         if (Schema::hasTable('transactions')) {
             Schema::table('transactions', function (Blueprint $table) {
-                if (Schema::hasColumn('transactions', 'wallet_id')) {
+                if (Schema::hasColumn('transactions', 'wallet_id') && !Schema::hasIndex('transactions', ['wallet_id'])) {
                     $table->index('wallet_id');
                 }
             });
@@ -23,28 +23,34 @@ return new class extends Migration
         // 2. Event Occurrences - Missing temporal indexes
         if (Schema::hasTable('event_occurrences')) {
             Schema::table('event_occurrences', function (Blueprint $table) {
-                $table->index(['start_date_time', 'end_date_time'], 'event_occurrences_time_range_index');
+                if (!Schema::hasIndex('event_occurrences', 'event_occurrences_time_range_index')) {
+                    $table->index(['start_date_time', 'end_date_time'], 'event_occurrences_time_range_index');
+                }
             });
         }
 
         // 3. Blogs - Missing visibility indexes
         if (Schema::hasTable('blogs')) {
             Schema::table('blogs', function (Blueprint $table) {
-                $table->index(['is_published', 'published_at'], 'blogs_visibility_index');
+                if (!Schema::hasIndex('blogs', 'blogs_visibility_index')) {
+                    $table->index(['is_published', 'published_at'], 'blogs_visibility_index');
+                }
             });
         }
 
         // 4. Seasonal Prices - Missing temporal indexes
         if (Schema::hasTable('seasonal_prices')) {
             Schema::table('seasonal_prices', function (Blueprint $table) {
-                $table->index(['start_date', 'end_date'], 'seasonal_prices_range_index');
+                if (!Schema::hasIndex('seasonal_prices', 'seasonal_prices_range_index')) {
+                    $table->index(['start_date', 'end_date'], 'seasonal_prices_range_index');
+                }
             });
         }
 
         // 5. Menu Items - Missing sort index
         if (Schema::hasTable('menu_items')) {
             Schema::table('menu_items', function (Blueprint $table) {
-                if (Schema::hasColumn('menu_items', 'order')) {
+                if (Schema::hasColumn('menu_items', 'order') && !Schema::hasIndex('menu_items', ['order'])) {
                     $table->index('order');
                 }
             });
@@ -53,7 +59,9 @@ return new class extends Migration
         // 6. Amenity Property - Missing reverse lookup index
         if (Schema::hasTable('amenity_property')) {
             Schema::table('amenity_property', function (Blueprint $table) {
-                $table->index('property_id');
+                if (!Schema::hasIndex('amenity_property', ['property_id'])) {
+                    $table->index('property_id');
+                }
             });
         }
 
@@ -89,7 +97,9 @@ return new class extends Migration
         // 10. Service Quotes - Ensure indexes for foreign keys if missing
         if (Schema::hasTable('service_quotes')) {
             Schema::table('service_quotes', function (Blueprint $table) {
-                $table->index(['service_id', 'status'], 'service_quotes_status_lookup_index');
+                if (!Schema::hasIndex('service_quotes', 'service_quotes_status_lookup_index')) {
+                    $table->index(['service_id', 'status'], 'service_quotes_status_lookup_index');
+                }
             });
         }
     }

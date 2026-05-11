@@ -47,14 +47,14 @@ class Theme extends Model implements HasMedia
     protected function variables(): \Illuminate\Database\Eloquent\Casts\Attribute
     {
         return \Illuminate\Database\Eloquent\Casts\Attribute::make(
-            set: fn ($value) => $this->sanitizeRecursive($value)
+            set: fn ($value) => ['variables' => json_encode($this->sanitizeRecursive($value))]
         );
     }
 
     protected function config(): \Illuminate\Database\Eloquent\Casts\Attribute
     {
         return \Illuminate\Database\Eloquent\Casts\Attribute::make(
-            set: fn ($value) => $this->sanitizeRecursive($value)
+            set: fn ($value) => ['config' => json_encode($this->sanitizeRecursive($value))]
         );
     }
 
