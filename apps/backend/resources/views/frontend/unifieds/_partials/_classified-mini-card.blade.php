@@ -6,7 +6,7 @@
 @endphp
 
 <div data-aos="zoom-in" data-aos-delay="{{ $delay }}">
-    <a href="{{ route('classifieds.show', $item) }}" class="text-decoration-none group d-block">
+    <a href="{{ route('classifieds.show', $item->slug) }}" class="text-decoration-none group d-block">
         <div class="rounded-4 overflow-hidden mb-2 shadow-sm position-relative hover-lift border border-white border-opacity-50 glass-surface">
             
             {{-- Image Container --}}

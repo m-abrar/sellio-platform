@@ -44,7 +44,7 @@
             </p>
 
             <div class="d-grid mt-auto">
-                <a href="{{ route('events.show', $event) }}" class="btn btn-primary btn-sm rounded-pill fw-800 py-2 shadow-sm">
+                <a href="{{ route('events.show', $event->slug) }}" class="btn btn-primary btn-sm rounded-pill fw-800 py-2 shadow-sm">
                     {{ __('Interested') }}
                 </a>
             </div>

@@ -6,7 +6,7 @@
 @endphp
 
 <div data-aos="fade-right" data-aos-delay="{{ $delay }}">
-    <a href="{{ route('jobs.show', $job) }}" 
+    <a href="{{ route('jobs.show', $job->slug) }}" 
        class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-3 bg-transparent border-bottom px-0 transition-all border-0">
         
         <div class="pe-3 overflow-hidden">

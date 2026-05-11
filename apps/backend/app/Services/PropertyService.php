@@ -127,8 +127,6 @@ class PropertyService
      */
     public function logListingView(Property $property): void
     {
-        $property->increment('view_count');
-
         activity('listings')
             ->performedOn($property)
             ->causedBy(auth()->user())
