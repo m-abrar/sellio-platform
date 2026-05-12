@@ -49,7 +49,7 @@
                                      class="rounded-circle me-2" width="30" height="30" alt="{{ $blog->user->name }}">
                                 <span>{{ __('By') }} <strong>{{ $blog->user->name }}</strong></span>
                             </div>
-                            <span><i class="bi bi-calendar3 me-1"></i>{{ $blog->created_at->format('M d, Y') }}</span>
+                            <span><i class="bi bi-calendar3 me-1"></i>{{ $blog->created_at->translatedFormat('M d, Y') }}</span>
                             <span><i class="bi bi-eye me-1"></i>{{ $blog->views_count ?? 0 }} {{ __('Views') }}</span>
                         </div>
                     </header>

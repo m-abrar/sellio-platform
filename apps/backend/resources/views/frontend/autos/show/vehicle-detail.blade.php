@@ -1,6 +1,6 @@
 @extends('frontend._layouts._app')
 
-@section('title', $auto->meta_title ?: ($auto->year . ' ' . $auto->make . ' ' . $auto->model . ' for Sale in ' . $auto->city)) 
+@section('title', $auto->meta_title ?: ($auto->year . ' ' . $auto->make . ' ' . $auto->model . ' ' . __('for Sale in') . ' ' . $auto->city)) 
 
 @section('body_class', 'has-body-glow bg-light')
 

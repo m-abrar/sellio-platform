@@ -104,7 +104,7 @@ class EventService
             })->values();
 
             return [$occurrence->id => [
-                'start_date_formatted' => $occurrence->start_date_time->format('F jS, Y \a\t h:i A'),
+                'start_date_formatted' => $occurrence->start_date_time->translatedFormat('F jS, Y') . ' ' . __('at') . ' ' . $occurrence->start_date_time->translatedFormat('h:i A'),
                 'start_date_iso'       => $occurrence->start_date_time->toIso8601String(),
                 'slug'                 => $event->slug,
                 'inventory'            => $inventoryData->filter(fn($item) => $item['available'] > 0),

@@ -18,7 +18,7 @@
     $emptyStars = 5 - $fullStars - ($hasHalfStar ? 1 : 0);
 @endphp
 
-<span class="d-inline-block text-warning" aria-label="Rating: {{ number_format($rating, 1) }} out of 5 stars">
+<span class="d-inline-block text-warning" aria-label="{{ __('Rating: :rating out of 5 stars', ['rating' => number_format($rating, 1)]) }}">
     {{-- Render Full Stars --}}
     @for ($i = 0; $i < $fullStars; $i++)
         <i class="bi bi-star-fill"></i>

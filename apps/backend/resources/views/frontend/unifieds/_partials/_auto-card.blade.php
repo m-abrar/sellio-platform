@@ -31,7 +31,7 @@
 
                 @if(isset($auto->engine_type) && strtolower($auto->engine_type) === 'electric')
                     <span class="badge bg-info text-white rounded-pill px-2 px-md-3 py-1 py-md-2 shadow-sm fw-800">
-                        <i class="bi bi-lightning-fill me-1"></i>EV
+                        <i class="bi bi-lightning-fill me-1"></i>{{ __('EV') }}
                     </span>
                 @endif
             </div>
@@ -41,10 +41,10 @@
                 <div class="price-overlay bg-dark bg-opacity-75 backdrop-blur text-white rounded-pill border border-white border-opacity-25 px-2 px-md-3 py-1 py-md-2 shadow-sm">
                     <span class="fw-800 price-font">
                         @if($auto->sale_price > 0 && $auto->sale_price < $auto->base_price)
-                            <span class="text-warning">${{ number_format($auto->sale_price) }}</span>
-                            <small class="text-white text-decoration-line-through opacity-50 ms-1" style="font-size: 0.7rem;">${{ number_format($auto->base_price) }}</small>
+                            <span class="text-warning">{{ setting('currency_symbol', '$') }}{{ number_format($auto->sale_price) }}</span>
+                            <small class="text-white text-decoration-line-through opacity-50 ms-1" style="font-size: 0.7rem;">{{ setting('currency_symbol', '$') }}{{ number_format($auto->base_price) }}</small>
                         @else
-                            ${{ number_format($auto->base_price) }}
+                            {{ setting('currency_symbol', '$') }}{{ number_format($auto->base_price) }}
                         @endif
                     </span>
                 </div>
@@ -67,15 +67,15 @@
             <div class="row g-0 pt-3 border-top mt-auto align-items-center">
                 <div class="col-4 text-center border-end">
                     <span class="metric-label d-block opacity-75 small text-uppercase" style="font-size: 0.6rem;">{{ __('Mileage') }}</span>
-                    <span class="metric-value fw-800 text-primary small">{{ $auto->mileage_formatted ?? 'N/A' }}</span>
+                    <span class="metric-value fw-800 text-primary small">{{ $auto->mileage_formatted ?? __('N/A') }}</span>
                 </div>
                 <div class="col-4 text-center border-end px-1">
                     <span class="metric-label d-block opacity-75 small text-uppercase" style="font-size: 0.6rem;">{{ __('Gear') }}</span>
-                    <span class="metric-value fw-800 text-primary text-truncate d-block small">{{ $auto->transmission ?? 'N/A' }}</span>
+                    <span class="metric-value fw-800 text-primary text-truncate d-block small">{{ $auto->transmission ?? __('N/A') }}</span>
                 </div>
                 <div class="col-4 text-center">
                     <span class="metric-label d-block opacity-75 small text-uppercase" style="font-size: 0.6rem;">{{ __('Fuel') }}</span>
-                    <span class="metric-value fw-800 text-primary small">{{ ucfirst($auto->engine_type ?? 'Gas') }}</span>
+                    <span class="metric-value fw-800 text-primary small">{{ ucfirst($auto->engine_type ?? __('Gas')) }}</span>
                 </div>
             </div>
         </div>

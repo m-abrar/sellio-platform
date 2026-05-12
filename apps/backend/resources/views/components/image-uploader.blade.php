@@ -3,7 +3,7 @@
     'id' => null, // The ID of the model instance (for editing/existing record)
     'name' => 'avatar', // The media collection name
     'multiple' => true, // Whether to allow multiple images
-    'label' => 'Upload Images', // Card title label
+    'label' => __('Upload Images'), // Card title label
     'card' => false, // Whether to wrap the content in a Bootstrap Card
     'triggerId' => null, // ID of an external button to trigger the click
 ])
@@ -58,9 +58,9 @@
         <i class="fas fa-cloud-upload-alt fa-2x text-primary"></i>
         <p class="mt-2">
             @if($isEdit)
-                Drag & drop {{ $multiple ? 'images' : 'image' }} here or click to upload.
+                {{ __('Drag & drop :type here or click to upload.', ['type' => $multiple ? __('images') : __('image')]) }}
             @else
-                Please save the **{{ strtolower($jsModelName) }}** first to upload images.
+                {!! __('Please save the **:model** first to upload images.', ['model' => strtolower($jsModelName)]) !!}
             @endif
         </p>
     </div>
@@ -99,7 +99,7 @@
             }
 
             if (!isEditable) {
-                alert("Please save the record first to upload images.");
+                alert("{{ __('Please save the record first to upload images.') }}");
                 return;
             }
             let fileInput = document.createElement("input");
@@ -115,7 +115,7 @@
         // --- File Upload Handler (API communication) ---
         function handleFileUpload(file) {
              if (!file || !file.type.startsWith("image/")) {
-                alert("Please upload a valid image file.");
+                alert("{{ __('Please upload a valid image file.') }}");
                 return;
             }
             
@@ -152,12 +152,12 @@
                     previewContainer.innerHTML += imageHtml;
                     attachRemoveEvents();
                 } else {
-                    alert(data.message || "Upload failed.");
+                    alert(data.message || "{{ __('Upload failed.') }}");
                 }
             })
             .catch(error => {
                 console.error("Upload error:", error);
-                alert("Something went wrong!");
+                alert("{{ __('Something went wrong!') }}");
             });
         }
 

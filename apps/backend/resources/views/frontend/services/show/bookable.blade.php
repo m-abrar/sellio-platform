@@ -1,6 +1,6 @@
 @extends('frontend._layouts._app')
 
-@section('title', $service->title . ' - Book Now') 
+@section('title', $service->title . ' - ' . __('Book Now')) 
 @section('body_class', 'has-body-glow bg-light')
 
 @section('content')

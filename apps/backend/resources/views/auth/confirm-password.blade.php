@@ -101,7 +101,7 @@
             <div class="mb-5">
                 <label for="password" class="form-label fw-bold small text-dark opacity-75 ms-1">{{ __('PASSWORD') }}</label>
                 <div class="form-icon-group">
-                    <input type="password" @class(['form-control', 'rounded-pill', 'is-invalid' => $errors->has('password')]) id="password" name="password" placeholder="••••••••" required autofocus>
+                    <input type="password" @class(['form-control', 'rounded-pill', 'is-invalid' => $errors->has('password')]) id="password" name="password" placeholder="{{ __('••••••••') }}" required autofocus>
                     <i class="bi bi-shield-lock input-icon"></i>
                     <i class="bi bi-eye password-toggle"></i>
                 </div>

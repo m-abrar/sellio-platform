@@ -112,7 +112,7 @@
                         <i class="bi bi-calendar-check me-3 text-primary fs-5"></i>
                         <div>
                             <small class="text-muted d-block">{{ __('Indexed Since') }}</small>
-                            <span class="fw-600 small">{{ $category->created_at->format('M d, Y') }}</span>
+                            <span class="fw-600 small">{{ $category->created_at->translatedFormat('M d, Y') }}</span>
                         </div>
                     </div>
                     <div class="d-flex align-items-center">

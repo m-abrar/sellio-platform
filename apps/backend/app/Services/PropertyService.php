@@ -103,7 +103,7 @@ class PropertyService
             $query->when($f['max_price'] ?? null, fn($q, $v) => $q->where(fn($sq) => $sq->where('sale_price', '<=', $v)->orWhere(fn($ssq) => $ssq->whereNull('sale_price')->where('base_price', '<=', $v))));
         }
 
-        return $query->with(['prices', 'location', 'category', 'user']);
+        return $query->with(['prices', 'location', 'category', 'user', 'media']);
     }
 
     /**
@@ -327,7 +327,7 @@ class PropertyService
         // 1. Calculate Base Lodging
         $lodgingAmount = $this->calculateLodgingAmount($property, $start, $end);
         $lines->push([
-            'title'  => "Base Rental ($nights nights)",
+            'title'  => __("Base Rental (:nights nights)", ['nights' => $nights]),
             'amount' => round($lodgingAmount, 2),
             'type'   => 'lodging'
         ]);

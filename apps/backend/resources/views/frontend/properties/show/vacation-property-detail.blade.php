@@ -1,6 +1,6 @@
 @extends('frontend._layouts._app')
 
-@section('title', $property->meta_title ?: ($property->title . ' in ' . $property->city))
+@section('title', $property->meta_title ?: ($property->title . ' ' . __('in') . ' ' . $property->city))
 
 @section('head_extra')
 <meta name="description" content="{{ $property->meta_description ?: $property->description }}">

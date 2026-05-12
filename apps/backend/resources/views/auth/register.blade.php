@@ -93,7 +93,7 @@
             <div class="mb-4">
                 <label for="name" class="form-label fw-bold small text-dark opacity-75 ms-1">{{ __('FULL NAME') }}</label>
                 <div class="form-icon-group">
-                    <input type="text" @class(['form-control', 'rounded-pill', 'is-invalid' => $errors->has('name')]) id="name" name="name" value="{{ old('name') }}" placeholder="John Doe" required autofocus autocomplete="name">
+                    <input type="text" @class(['form-control', 'rounded-pill', 'is-invalid' => $errors->has('name')]) id="name" name="name" value="{{ old('name') }}" placeholder="{{ __('John Doe') }}" required autofocus autocomplete="name">
                     <i class="bi bi-person input-icon"></i>
                 </div>
             </div>
@@ -101,7 +101,7 @@
             <div class="mb-4">
                 <label for="email" class="form-label fw-bold small text-dark opacity-75 ms-1">{{ __('EMAIL ADDRESS') }}</label>
                 <div class="form-icon-group">
-                    <input type="email" @class(['form-control', 'rounded-pill', 'is-invalid' => $errors->has('email')]) id="email" name="email" value="{{ old('email') }}" placeholder="name@company.com" required autocomplete="email">
+                    <input type="email" @class(['form-control', 'rounded-pill', 'is-invalid' => $errors->has('email')]) id="email" name="email" value="{{ old('email') }}" placeholder="{{ __('name@company.com') }}" required autocomplete="email">
                     <i class="bi bi-envelope input-icon"></i>
                 </div>
             </div>
@@ -110,7 +110,7 @@
                 <div class="col-md-6">
                     <label for="password" class="form-label fw-bold small text-dark opacity-75 ms-1">{{ __('PASSWORD') }}</label>
                     <div class="form-icon-group">
-                        <input type="password" @class(['form-control', 'rounded-pill', 'is-invalid' => $errors->has('password')]) id="password" name="password" placeholder="••••••••" required autocomplete="new-password">
+                        <input type="password" @class(['form-control', 'rounded-pill', 'is-invalid' => $errors->has('password')]) id="password" name="password" placeholder="{{ __('••••••••') }}" required autocomplete="new-password">
                         <i class="bi bi-shield-lock input-icon"></i>
                         <i class="bi bi-eye password-toggle"></i>
                     </div>
@@ -118,7 +118,7 @@
                 <div class="col-md-6">
                     <label for="password_confirmation" class="form-label fw-bold small text-dark opacity-75 ms-1">{{ __('CONFIRM') }}</label>
                     <div class="form-icon-group">
-                        <input type="password" class="form-control rounded-pill" id="password_confirmation" name="password_confirmation" placeholder="••••••••" required>
+                        <input type="password" class="form-control rounded-pill" id="password_confirmation" name="password_confirmation" placeholder="{{ __('••••••••') }}" required>
                         <i class="bi bi-shield-check input-icon"></i>
                         <i class="bi bi-eye password-toggle"></i>
                     </div>

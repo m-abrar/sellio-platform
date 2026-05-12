@@ -103,7 +103,7 @@
             <div class="mb-4">
                 <label for="email" class="form-label fw-bold small text-dark opacity-75 ms-1">{{ __('EMAIL ADDRESS') }}</label>
                 <div class="form-icon-group">
-                    <input type="email" @class(['form-control', 'rounded-pill', 'is-invalid' => $errors->has('email')]) id="email" name="email" value="{{ old('email') }}" placeholder="name@company.com" required autofocus>
+                    <input type="email" @class(['form-control', 'rounded-pill', 'is-invalid' => $errors->has('email')]) id="email" name="email" value="{{ old('email') }}" placeholder="{{ __('name@company.com') }}" required autofocus>
                     <i class="bi bi-envelope input-icon"></i>
                 </div>
             </div>
@@ -116,7 +116,7 @@
                     @endif
                 </div>
                 <div class="form-icon-group">
-                    <input type="password" @class(['form-control', 'rounded-pill', 'is-invalid' => $errors->has('password')]) id="password" name="password" placeholder="••••••••" required autocomplete="current-password">
+                    <input type="password" @class(['form-control', 'rounded-pill', 'is-invalid' => $errors->has('password')]) id="password" name="password" placeholder="{{ __('••••••••') }}" required autocomplete="current-password">
                     <i class="bi bi-shield-lock input-icon"></i>
                     <i class="bi bi-eye password-toggle"></i>
                 </div>

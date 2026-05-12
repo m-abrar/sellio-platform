@@ -19,7 +19,7 @@
         <div class="img-container position-relative overflow-hidden" style="aspect-ratio: 4/3;">
             <div class="listing-card-img h-100">
                 <img src="{{ $property->primary_image_url }}" 
-                     alt="{{ $property->title }} in {{ $property->location?->title ?? '' }}"
+                     alt="{{ $property->title }} {{ __('in') }} {{ $property->location?->title ?? '' }}"
                      class="transition-img w-100 h-100 object-fit-cover"
                      loading="lazy">
             </div>
@@ -70,7 +70,7 @@
                         <span class="metric-value fw-800 text-primary">{{ number_format($property->area_sq_m) }}</span>
                     @else
                         <span class="metric-label d-block text-muted small">{{ __('AREA') }}</span>
-                        <span class="metric-value fw-800 text-primary">N/A</span>
+                        <span class="metric-value fw-800 text-primary">{{ __('N/A') }}</span>
                     @endif
                 </div>
             </div>

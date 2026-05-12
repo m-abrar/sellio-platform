@@ -29,7 +29,7 @@
         </div>
         
         <h1 class="display-4 fw-800 mb-4 lh-sm">
-            Join the <span class="text-gradient">Master</span> Partner Network
+            {!! __('Join the <span class="text-gradient">Master</span> Partner Network') !!}
         </h1>
         
         <div class="onboarding-steps vstack gap-4 mt-2">
@@ -98,7 +98,7 @@
             <div class="mb-4">
                 <label for="name" class="form-label fw-bold small text-dark opacity-75 ms-1">{{ __('FULL LEGAL NAME') }}</label>
                 <div class="form-icon-group">
-                    <input type="text" @class(['form-control', 'rounded-pill', 'is-invalid' => $errors->has('name')]) id="name" name="name" value="{{ old('name') }}" placeholder="Alexander Pierce" required autofocus>
+                    <input type="text" @class(['form-control', 'rounded-pill', 'is-invalid' => $errors->has('name')]) id="name" name="name" value="{{ old('name') }}" placeholder="{{ __('Alexander Pierce') }}" required autofocus>
                     <i class="bi bi-person input-icon"></i>
                 </div>
             </div>
@@ -106,7 +106,7 @@
             <div class="mb-4">
                 <label for="email" class="form-label fw-bold small text-dark opacity-75 ms-1">{{ __('WORK EMAIL ADDRESS') }}</label>
                 <div class="form-icon-group">
-                    <input type="email" @class(['form-control', 'rounded-pill', 'is-invalid' => $errors->has('email')]) id="email" name="email" value="{{ old('email') }}" placeholder="alex@company.com" required>
+                    <input type="email" @class(['form-control', 'rounded-pill', 'is-invalid' => $errors->has('email')]) id="email" name="email" value="{{ old('email') }}" placeholder="{{ __('alex@company.com') }}" required>
                     <i class="bi bi-envelope input-icon"></i>
                 </div>
             </div>
@@ -115,7 +115,7 @@
                 <div class="col-md-6">
                     <label for="password" class="form-label fw-bold small text-dark opacity-75 ms-1">{{ __('SECURITY KEY') }}</label>
                     <div class="form-icon-group">
-                        <input type="password" @class(['form-control', 'rounded-pill', 'is-invalid' => $errors->has('password')]) id="password" name="password" placeholder="••••••••" required>
+                        <input type="password" @class(['form-control', 'rounded-pill', 'is-invalid' => $errors->has('password')]) id="password" name="password" placeholder="{{ __('••••••••') }}" required>
                         <i class="bi bi-shield-lock input-icon"></i>
                         <i class="bi bi-eye password-toggle"></i>
                     </div>
@@ -123,7 +123,7 @@
                 <div class="col-md-6">
                     <label for="password_confirmation" class="form-label fw-bold small text-dark opacity-75 ms-1">{{ __('CONFIRM KEY') }}</label>
                     <div class="form-icon-group">
-                        <input type="password" class="form-control rounded-pill" id="password_confirmation" name="password_confirmation" placeholder="••••••••" required>
+                        <input type="password" class="form-control rounded-pill" id="password_confirmation" name="password_confirmation" placeholder="{{ __('••••••••') }}" required>
                         <i class="bi bi-shield-check input-icon"></i>
                         <i class="bi bi-eye password-toggle"></i>
                     </div>
@@ -134,7 +134,7 @@
                 <div class="form-check custom-check d-flex align-items-start gap-3 py-1">
                     <input class="form-check-input flex-shrink-0 custom-check-input" type="checkbox" name="terms" id="terms" required>
                     <label class="form-check-label small text-muted fw-bold mb-0 custom-check-label" for="terms">
-                        I agree to the <a href="#" class="text-gradient fw-bold text-decoration-none">Master Service Agreement</a> and Privacy Policy.
+                        {{ __('I agree to the') }} <a href="#" class="text-gradient fw-bold text-decoration-none">{{ __('Master Service Agreement') }}</a> {{ __('and Privacy Policy.') }}
                     </label>
                 </div>
             </div>

@@ -36,7 +36,7 @@ class AutoService
             'tags' => Tag::where('is_auto', true)->withCount($verticals)->get(),
             'brands' => Brand::where('is_auto', true)->get(),
             'transactionType' => $this->getTransactionTypes(),
-            'transmissionOptions' => ['Automatic', 'Manual'],
+            'transmissionOptions' => [__('Automatic'), __('Manual')],
         ];
     }
 
@@ -77,7 +77,7 @@ class AutoService
             }
         });
 
-        return $query->with(['category', 'location', 'user'])->paginate(12);
+        return $query->with(['category', 'location', 'user', 'media'])->paginate(12);
     }
 
     /**
@@ -126,8 +126,8 @@ class AutoService
     private function getTransactionTypes(): Collection
     {
         return collect([
-            (object)['id' => 'selling', 'title' => 'For Sale'],
-            (object)['id' => 'lease', 'title' => 'For Lease'],
+            (object)['id' => 'selling', 'title' => __('For Sale')],
+            (object)['id' => 'lease', 'title' => __('For Lease')],
         ]);
     }
 }

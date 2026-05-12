@@ -190,9 +190,9 @@ class ServiceManagementService
         // We use ?? to handle the case where 'notes' might be missing from the array
         $clientNotes = $data['notes'] ?? __('No additional notes provided.');
         
-        $detailsText = __('Package') . ": " . ($package->title ?? __('N/A')) . "\n";
-        $detailsText .= __('Project Scale/Size') . ": " . ($data['scope_size'] ?? __('N/A')) . "\n";
-        $detailsText .= __('Client Notes') . ": " . $clientNotes;
+        $detailsText = __("Package: :title", ['title' => $package->title ?? __('N/A')]) . "\n";
+        $detailsText .= __("Project Scale/Size: :size", ['size' => $data['scope_size'] ?? __('N/A')]) . "\n";
+        $detailsText .= __("Client Notes: :notes", ['notes' => $clientNotes]);
 
         // 3. Create the Quote record
         return $service->quotes()->create([

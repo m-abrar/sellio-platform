@@ -130,7 +130,7 @@ class JobManagementService
             activity()
                 ->performedOn($application)
                 ->causedBy(Auth::user())
-                ->log('Submitted application for job listing: ' . $job->title);
+                ->log(__('Submitted application for job listing: :title', ['title' => $job->title]));
         }
 
         return $application;

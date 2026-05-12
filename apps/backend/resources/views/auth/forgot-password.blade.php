@@ -100,7 +100,7 @@
             <div class="mb-5">
                 <label for="email" class="form-label fw-bold small text-dark opacity-75 ms-1">{{ __('EMAIL ADDRESS') }}</label>
                 <div class="form-icon-group">
-                    <input id="email" @class(['form-control', 'rounded-pill', 'is-invalid' => $errors->has('email')]) type="email" name="email" value="{{ old('email') }}" placeholder="name@company.com" required autofocus />
+                    <input id="email" @class(['form-control', 'rounded-pill', 'is-invalid' => $errors->has('email')]) type="email" name="email" value="{{ old('email') }}" placeholder="{{ __('name@company.com') }}" required autofocus />
                     <i class="bi bi-envelope input-icon"></i>
                 </div>
             </div>

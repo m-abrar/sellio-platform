@@ -1,7 +1,7 @@
 @props([
     'icon' => 'fas fa-inbox',
-    'title' => 'No Data Found',
-    'description' => 'It looks like there are no records here yet.',
+    'title' => __('No Data Found'),
+    'description' => __('It looks like there are no records here yet.'),
     'actionText' => null,
     'actionUrl' => null,
 ])

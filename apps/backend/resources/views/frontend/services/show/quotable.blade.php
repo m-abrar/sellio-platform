@@ -1,6 +1,6 @@
 @extends('frontend._layouts._app')
 
-@section('title', $service->title . ' - Get a Quote') 
+@section('title', $service->title . ' - ' . __('Get a Quote')) 
 @section('body_class', 'has-body-glow bg-light')
 
 @section('content')
