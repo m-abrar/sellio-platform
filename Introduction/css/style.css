@@ -14,7 +14,7 @@
     --ease-snap: cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; scroll-padding-top: 100px; }
 
 body { 
     font-family: var(--font-body); 

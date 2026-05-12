@@ -26,7 +26,7 @@
         </div>
     </section>
 
-    <section id="automation" class="py-100 bg-automation border-top border-bottom">
+    <section id="automation" class="py-100 bg-automation border-top border-bottom reveal" data-animation="animate__fadeInLeft">
         <div class="container">
             <div class="row align-items-center g-5">
                 <div class="col-lg-5">
@@ -52,7 +52,49 @@
         </div>
     </section>
 
-    <section id="modules" class="py-100 bg-modules">
+    <section id="ecosystem" class="py-100 bg-light reveal" data-animation="animate__fadeIn">
+        <div class="container text-center">
+            <h6 class="text-sellio fw-bold text-uppercase mb-3">Holistic Architecture</h6>
+            <h2 class="display-5 fw-800 mb-5">The <span class="text-sellio">360°</span> Ecosystem</h2>
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <div class="p-5 rounded-5 border bg-white h-100 transition-all hover-translate-y shadow-premium-sm">
+                        <div class="icon-box-lg bg-primary-soft text-primary mb-4 mx-auto d-flex align-items-center justify-content-center" style="width:80px; height:80px; border-radius:24px;">
+                            <i class="fas fa-shield-alt fa-2x"></i>
+                        </div>
+                        <h4 class="fw-bold">Admin Hub</h4>
+                        <p class="text-muted small">The nerve center. Manage taxes, commissions, users, and full-scale moderation with executive precision.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="p-5 rounded-5 border bg-white h-100 transition-all hover-translate-y shadow-premium-sm">
+                        <div class="icon-box-lg bg-success-soft text-success mb-4 mx-auto d-flex align-items-center justify-content-center" style="width:80px; height:80px; border-radius:24px;">
+                            <i class="fas fa-store fa-2x"></i>
+                        </div>
+                        <h4 class="fw-bold">Seller Desk</h4>
+                        <p class="text-muted small">Empower merchants. Advanced inventory management, dynamic pricing, and dedicated shop-fronts.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="p-5 rounded-5 border bg-white h-100 transition-all hover-translate-y shadow-premium-sm">
+                        <div class="icon-box-lg bg-info-soft text-info mb-4 mx-auto d-flex align-items-center justify-content-center" style="width:80px; height:80px; border-radius:24px;">
+                            <i class="fas fa-shopping-bag fa-2x"></i>
+                        </div>
+                        <h4 class="fw-bold">Buyer Experience</h4>
+                        <p class="text-muted small">Convert visitors. AI-driven searches, seamless checkouts, and premium tracking interfaces.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <style>
+        .bg-primary-soft { background-color: rgba(13, 110, 253, 0.05); }
+        .bg-success-soft { background-color: rgba(25, 135, 84, 0.05); }
+        .bg-info-soft { background-color: rgba(13, 202, 240, 0.05); }
+    </style>
+
+    <section id="modules" class="py-100 bg-modules reveal" data-animation="animate__fadeInUp">
         <div class="container text-center">
             <h2 class="display-5 fw-800 mb-5">One core system. <span class="text-sellio">Bespoke</span> modules.</h2>
             <div class="row g-4">
@@ -69,7 +111,39 @@
         </div>
     </section>
 
-    <section class="py-100 bg-comparison border-top border-bottom">
+    <section class="py-100 bg-comparison border-top border-bottom reveal" data-animation="animate__fadeIn">
+        <div class="container text-center mb-5">
+            <h2 class="display-5 fw-800 mb-5">Intelligence & <span class="text-sellio">Scale</span></h2>
+            <div class="row g-4">
+                <div class="col-md-3 col-6">
+                    <div class="p-4 border rounded-4 bg-white shadow-sm">
+                        <div class="h2 fw-bold text-sellio mb-1">50+</div>
+                        <div class="small text-muted text-uppercase fw-bold letter-spacing-1">Market Demos</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="p-4 border rounded-4 bg-white shadow-sm">
+                        <div class="h2 fw-bold text-sellio mb-1">12k+</div>
+                        <div class="small text-muted text-uppercase fw-bold letter-spacing-1">Daily Listings</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="p-4 border rounded-4 bg-white shadow-sm">
+                        <div class="h2 fw-bold text-sellio mb-1">99.9%</div>
+                        <div class="small text-muted text-uppercase fw-bold letter-spacing-1">Uptime SLA</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="p-4 border rounded-4 bg-white shadow-sm">
+                        <div class="h2 fw-bold text-sellio mb-1">$0</div>
+                        <div class="small text-muted text-uppercase fw-bold letter-spacing-1">Monthly Fees</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-100 bg-comparison border-top border-bottom reveal" data-animation="animate__slideInUp">
         <div class="container">
             <div class="text-center mb-5">
                 <h2 class="display-5 fw-800">Stop Paying <span class="text-sellio">Monthly Fees</span></h2>
@@ -128,7 +202,58 @@
         </div>
     </section>
 
-    <section id="reviews" class="py-100 bg-reviews">
+    <section id="intelligence" class="py-100 reveal" data-animation="animate__fadeIn">
+        <div class="container">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-6">
+                    <h6 class="text-sellio fw-bold text-uppercase mb-3">Data-Driven Insights</h6>
+                    <h2 class="display-5 fw-800 mb-4">Marketplace <br><span class="text-sellio">Intelligence</span></h2>
+                    <p class="lead text-muted mb-5">Gain absolute visibility into your commercial ecosystem. Monitor every transaction, lead, and user interaction in real-time.</p>
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="icon-box-sm bg-sellio-solid rounded-circle d-flex align-items-center justify-content-center" style="width:40px; height:40px;">
+                                    <i class="fas fa-chart-line text-white small"></i>
+                                </div>
+                                <div class="fw-bold small uppercase letter-spacing-1">Predictive Analytics</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="icon-box-sm bg-sellio-solid rounded-circle d-flex align-items-center justify-content-center" style="width:40px; height:40px;">
+                                    <i class="fas fa-piggy-bank text-white small"></i>
+                                </div>
+                                <div class="fw-bold small uppercase letter-spacing-1">Revenue Tracking</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="p-4 bg-white rounded-5 shadow-premium border reveal" data-animation="animate__zoomIn">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h5 class="fw-bold mb-0">Ecosystem Performance</h5>
+                            <span class="badge bg-success-soft text-success rounded-pill px-3">Live Feed</span>
+                        </div>
+                        <div class="chart-mockup d-flex align-items-end gap-2 justify-content-between mb-4" style="height: 200px;">
+                            <div class="bg-light w-100 rounded-3" style="height: 40%;"></div>
+                            <div class="bg-sellio-solid w-100 rounded-3" style="height: 70%;"></div>
+                            <div class="bg-light w-100 rounded-3" style="height: 30%;"></div>
+                            <div class="bg-sellio-solid w-100 rounded-3" style="height: 90%;"></div>
+                            <div class="bg-light w-100 rounded-3" style="height: 50%;"></div>
+                            <div class="bg-sellio-solid w-100 rounded-3" style="height: 100%;"></div>
+                        </div>
+                        <div class="d-flex justify-content-around text-center mt-3">
+                            <div><div class="h6 fw-bold mb-0">94k</div><small class="text-muted smallest uppercase">Sales</small></div>
+                            <div><div class="h6 fw-bold mb-0">1.2m</div><small class="text-muted smallest uppercase">Traffic</small></div>
+                            <div><div class="h6 fw-bold mb-0">8.4k</div><small class="text-muted smallest uppercase">Leads</small></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="reviews" class="py-100 bg-reviews reveal" data-animation="animate__fadeInUp">
         <div class="container">
             <div class="row align-items-end mb-5">
                 <div class="col-lg-6 text-start">
@@ -185,7 +310,7 @@
         <?php include('faqs.php'); ?>
     </section>
 
-    <section id="mobile-ready" class="py-100 bg-mobile">
+    <section id="mobile-ready" class="py-100 bg-mobile reveal" data-animation="animate__fadeInRight">
         <?php include('mobile-ready.php'); ?>
     </section>
     

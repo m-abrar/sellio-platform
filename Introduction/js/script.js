@@ -84,45 +84,35 @@ function initDemoFilter() {
 
 
 
-window.addEventListener('scroll', function() {
-    const buyBar = document.querySelector('.floating-buy-bar');
-    if (window.scrollY > 600) {
-        buyBar.style.display = 'block';
-    } else {
-        buyBar.style.display = 'none';
-    }
-});
+// 4. SCROLL REVEAL OBSERVER
+function initScrollReveal() {
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
 
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate__animated', entry.target.dataset.animation || 'animate__fadeInUp');
+                entry.target.style.opacity = '1';
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
 
-
-let popupShown = false;
-
-document.addEventListener("mouseleave", function(e) {
-    // Trigger if mouse moves above the top of the viewport
-    if (e.clientY < 0 && !popupShown) {
-        const popup = document.getElementById('exitIntentPopup');
-        const content = popup.querySelector('.exit-popup-content');
-        
-        popup.style.display = 'flex';
-        content.classList.add('animate__zoomIn'); // Uses Animate.css if you have it
-        
-        popupShown = true;
-        // Optional: Save to localStorage so it doesn't show again for 24 hours
-        localStorage.setItem('exitPopupShown', 'true');
-    }
-});
-
-function closeExitPopup() {
-    document.getElementById('exitIntentPopup').style.display = 'none';
+    document.querySelectorAll('.reveal').forEach(el => {
+        el.style.opacity = '0';
+        observer.observe(el);
+    });
 }
 
-// Check if already shown in this session
-if (localStorage.getItem('exitPopupShown')) {
-    popupShown = true;
-}
-
-
-
+document.addEventListener('DOMContentLoaded', () => {
+    initTypewriter();
+    initHighSpeedWheel();
+    initDemoFilter();
+    initScrollReveal();
+});
 
 window.addEventListener('scroll', function() {
     const bar = document.querySelector('.floating-buy-bar');
@@ -132,3 +122,27 @@ window.addEventListener('scroll', function() {
         bar.style.display = 'none';
     }
 });
+
+let popupShown = false;
+
+document.addEventListener("mouseleave", function(e) {
+    if (e.clientY < 0 && !popupShown) {
+        const popup = document.getElementById('exitIntentPopup');
+        const content = popup.querySelector('.exit-popup-content');
+        if (popup && content) {
+            popup.style.display = 'flex';
+            content.classList.add('animate__zoomIn');
+            popupShown = true;
+            localStorage.setItem('exitPopupShown', 'true');
+        }
+    }
+});
+
+function closeExitPopup() {
+    const popup = document.getElementById('exitIntentPopup');
+    if (popup) popup.style.display = 'none';
+}
+
+if (localStorage.getItem('exitPopupShown')) {
+    popupShown = true;
+}
