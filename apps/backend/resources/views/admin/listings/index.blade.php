@@ -282,15 +282,14 @@
                                     </td>
                                 </tr>
                             @empty
-                                <tr class="empty-state">
-                                    <td colspan="{{ $type === 'all' ? '7' : '6' }}" class="py-5 text-center">
-                                        <div class="py-4">
-                                            <i class="fas fa-layer-group fa-4x text-muted opacity-25 mb-3 d-block"></i>
-                                            <h5 class="text-muted font-weight-bold">{{ __('No active listings found for this catalog.') }}</h5>
-                                            <p class="text-secondary small">{{ __('Synchronize your marketplace catalog or initialize new entries.') }}</p>
-                                        </div>
-                                    </td>
-                                </tr>
+                                @include('admin._partials._empty-state', [
+                                    'colspan' => $type === 'all' ? 7 : 6,
+                                    'icon' => 'fas fa-layer-group',
+                                    'title' => __('No Active Assets Found'),
+                                    'description' => __('The catalog is currently awaiting synchronized marketplace entries. Initialize your first entry to get started.'),
+                                    'button_text' => __('ADD FIRST ASSET'),
+                                    'button_link' => route('admin.listings.create')
+                                ])
                             @endforelse
                         </tbody>
                     </table>

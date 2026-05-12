@@ -120,15 +120,12 @@
                                     </td>
                                 </tr>
                             @empty
-                                <tr class="empty-state">
-                                    <td colspan="6" class="text-center py-5">
-                                        <div class="py-4">
-                                            <i class="fas fa-file-signature fa-4x text-muted opacity-25 mb-3 d-block"></i>
-                                            <h5 class="text-muted font-weight-bold">{{ __('No Applications Detected') }}</h5>
-                                            <p class="text-secondary small mb-0">{{ __('Candidate submissions for your job listings will materialize here.') }}</p>
-                                        </div>
-                                    </td>
-                                </tr>
+                                @include('admin._partials._empty-state', [
+                                    'colspan' => 6,
+                                    'icon' => 'fas fa-file-signature',
+                                    'title' => __('No Applications Detected'),
+                                    'description' => __('The talent registry is currently awaiting synchronized candidate submissions. These will appear as soon as your listings receive interest.')
+                                ])
                             @endforelse
                         </tbody>
                     </table>

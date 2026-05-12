@@ -37,6 +37,7 @@
                     <ul class="nav-list">
                         <li class="nav-item"><a href="#installation">Installation Guide</a></li>
                         <li class="nav-item"><a href="#configuration">Core Configuration</a></li>
+                        <li class="nav-item"><a href="#rbac">Identity & RBAC</a></li>
                     </ul>
                 </div>
 
@@ -45,7 +46,7 @@
                     <ul class="nav-list">
                         <li class="nav-item"><a href="#real-estate">Real Estate Module</a></li>
                         <li class="nav-item"><a href="#auto">Auto Module</a></li>
-                        <li class="nav-item"><a href="#ecommerce">Shop / E-commerce</a></li>
+                        <li class="nav-item"><a href="#financials">Financial Ecosystem</a></li>
                     </ul>
                 </div>
 
@@ -60,9 +61,9 @@
                 <div class="nav-section">
                     <div class="nav-title">Developer Hub</div>
                     <ul class="nav-list">
+                        <li class="nav-item"><a href="#architecture">Technical Architecture</a></li>
                         <li class="nav-item"><a href="#api">API Integration</a></li>
                         <li class="nav-item"><a href="#troubleshooting">Troubleshooting</a></li>
-                        <li class="nav-item"><a href="#updating">Updating Guide</a></li>
                     </ul>
                 </div>
             </nav>
@@ -72,27 +73,14 @@
         <main class="main-content">
             <section id="welcome">
                 <header>
-                    <span class="version-badge">v2.0.0 Stable</span>
+                    <span class="version-badge">v2.1.0 Stable (Elite)</span>
                     <h1>The Most Complete <br> <span id="typewriter" class="text-primary"></span><span class="cursor-blink"></span> <br> Platform</h1>
-                    <p class="lead" style="max-width: 700px;">Sellio is a high-fidelity, modular marketplace ecosystem designed for professional distribution. Host Real Estate, Automotive, and E-commerce verticals from a single unified core.</p>
+                    <p class="lead" style="max-width: 700px;">Sellio is a high-fidelity, modular marketplace ecosystem designed for professional distribution. Host Real Estate, Automotive, Jobs, and E-commerce verticals from a single unified core.</p>
                 </header>
 
-                <!-- Hero Stack -->
                 <div class="image-stack reveal-up">
-                    <div class="card-mock card-bottom">
-                        <div style="height: 30px; background: #f1f1f1; padding: 0 12px; display: flex; align-items: center; gap: 6px;">
-                            <div style="width: 8px; height: 8px; border-radius: 50%; background: #ddd;"></div>
-                            <div style="width: 8px; height: 8px; border-radius: 50%; background: #ddd;"></div>
-                        </div>
-                        <div style="padding: 2rem; background: #fafafa; height: 100%;"></div>
-                    </div>
-                    <div class="card-mock card-mid">
-                        <div style="height: 30px; background: #f1f1f1; padding: 0 12px; display: flex; align-items: center; gap: 6px;">
-                            <div style="width: 8px; height: 8px; border-radius: 50%; background: #ddd;"></div>
-                            <div style="width: 8px; height: 8px; border-radius: 50%; background: #ddd;"></div>
-                        </div>
-                        <div style="padding: 2rem; background: #fdfdfd; height: 100%;"></div>
-                    </div>
+                    <div class="card-mock card-bottom"></div>
+                    <div class="card-mock card-mid"></div>
                     <div class="card-mock card-main">
                         <div style="height: 30px; background: #fff; border-bottom: 1px solid #eee; padding: 0 12px; display: flex; align-items: center; gap: 6px;">
                             <div style="width: 8px; height: 8px; border-radius: 50%; background: #ff5f56;"></div>
@@ -100,9 +88,9 @@
                             <div style="width: 8px; height: 8px; border-radius: 50%; background: #27c93f;"></div>
                         </div>
                         <div style="padding: 3rem; background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: #fff; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
-                            <i class="fas fa-rocket fa-4x mb-4"></i>
-                            <h3 style="color: #fff; margin-bottom: 0.5rem;">Ready for Production</h3>
-                            <p style="color: rgba(255,255,255,0.8); font-size: 0.9rem;">Validated for CodeCanyon standards.</p>
+                            <i class="fas fa-shield-halved fa-4x mb-4"></i>
+                            <h3 style="color: #fff; margin-bottom: 0.5rem;">Executive Hardened</h3>
+                            <p style="color: rgba(255,255,255,0.8); font-size: 0.9rem;">Validated for CodeCanyon Elite standards.</p>
                         </div>
                     </div>
                 </div>
@@ -110,48 +98,43 @@
                 <div class="feature-grid">
                     <div class="feature-card">
                         <div class="feature-icon"><i class="fas fa-layer-group"></i></div>
-                        <h3>Multi-Vertical Core</h3>
-                        <p>One installation, infinite possibilities. Activate verticals as per your business model.</p>
+                        <h3>8+ Marketplace Verticals</h3>
+                        <p>Toggle between Real Estate, Autos, Jobs, Services, Events, and more with zero code changes.</p>
                     </div>
                     <div class="feature-card">
-                        <div class="feature-icon"><i class="fas fa-microchip"></i></div>
-                        <h3>Intelligent Seeding</h3>
-                        <p>Automatically populates your marketplace with high-quality sample data during install.</p>
+                        <div class="feature-icon"><i class="fas fa-wallet"></i></div>
+                        <h3>Integrated Wallet</h3>
+                        <p>Full financial lifecycle management including withdrawals, deposits, and commission tracking.</p>
                     </div>
                     <div class="feature-card">
                         <div class="feature-icon"><i class="fas fa-fingerprint"></i></div>
-                        <h3>Executive Security</h3>
-                        <p>Advanced ACL (Access Control List) and Sanctuam-powered API authentication.</p>
+                        <h3>Advanced RBAC</h3>
+                        <p>Granular Access Control List powered by Spatie, ensuring total data isolation between roles.</p>
                     </div>
                 </div>
             </section>
 
             <section id="requirements">
                 <h2>System Requirements</h2>
-                <p>Sellio leverages the power of Laravel 12. Ensure your server environment matches these high-fidelity specifications.</p>
+                <p>Sellio leverages the power of Laravel 11/12. Ensure your server environment matches these high-fidelity specifications.</p>
                 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 2rem 0;">
+                <div class="feature-grid">
                     <div class="feature-card">
                         <h4 style="margin-bottom: 1rem;"><i class="fas fa-server me-2 text-primary"></i> Environment</h4>
-                        <ul style="list-style: none; padding-left: 0;">
-                            <li style="margin-bottom: 0.75rem;"><i class="fas fa-check-circle text-success me-2"></i> **PHP 8.2 or 8.3** (CLI & FPM)</li>
-                            <li style="margin-bottom: 0.75rem;"><i class="fas fa-check-circle text-success me-2"></i> **MySQL 8.0+** or **MariaDB 10.6+**</li>
-                            <li style="margin-bottom: 0.75rem;"><i class="fas fa-check-circle text-success me-2"></i> **Composer 2.x** for dependency management</li>
+                        <ul class="nav-list smallest">
+                            <li><i class="fas fa-check-circle text-success mr-2"></i> PHP 8.2 or 8.3</li>
+                            <li><i class="fas fa-check-circle text-success mr-2"></i> MySQL 8.0+</li>
+                            <li><i class="fas fa-check-circle text-success mr-2"></i> Redis (Optional but Recommended)</li>
                         </ul>
                     </div>
                     <div class="feature-card">
-                        <h4 style="margin-bottom: 1rem;"><i class="fas fa-puzzle-piece me-2 text-primary"></i> Critical Extensions</h4>
-                        <ul style="list-style: none; padding-left: 0;">
-                            <li style="margin-bottom: 0.75rem;"><i class="fas fa-check-circle text-success me-2"></i> **BCMath, Ctype, Fileinfo**</li>
-                            <li style="margin-bottom: 0.75rem;"><i class="fas fa-check-circle text-success me-2"></i> **GD/Imagick** (Image Processing)</li>
-                            <li style="margin-bottom: 0.75rem;"><i class="fas fa-check-circle text-success me-2"></i> **Intl, Zip, Exif** (High-res data)</li>
+                        <h4 style="margin-bottom: 1rem;"><i class="fas fa-puzzle-piece me-2 text-primary"></i> PHP Extensions</h4>
+                        <ul class="nav-list smallest">
+                            <li><i class="fas fa-check-circle text-success mr-2"></i> GD / Imagick (for Media Library)</li>
+                            <li><i class="fas fa-check-circle text-success mr-2"></i> BCMath & GMP (for Wallet)</li>
+                            <li><i class="fas fa-check-circle text-success mr-2"></i> Exif & Fileinfo</li>
                         </ul>
                     </div>
-                </div>
-
-                <div class="callout callout-warning">
-                    <div class="callout-title">Function Check</div>
-                    <p>The <code>exec()</code> and <code>passthru()</code> functions must be enabled for the **Web Installer** to run migrations and seeders automatically.</p>
                 </div>
             </section>
 
@@ -160,188 +143,144 @@
                 <p>Deploying Sellio is a streamlined process. Follow these high-fidelity steps for a perfect launch.</p>
 
                 <div class="nav-tabs">
-                    <button class="tab-btn active" onclick="showTab('web')">Web Wizard</button>
-                    <button class="tab-btn" onclick="showTab('cli')">CLI / Expert</button>
+                    <button class="tab-btn active" onclick="showTab('cli')">CLI / Professional</button>
+                    <button class="tab-btn" onclick="showTab('web')">Web Wizard (Internal Alpha)</button>
                 </div>
 
-                <div id="web" class="tab-content active">
+                <div id="cli" class="tab-content active">
                     <div class="step-item">
                         <div class="step-number">1</div>
                         <div class="step-content">
-                            <h4>Upload & Permissions</h4>
-                            <p>Upload the contents of the <code>apps/backend</code> folder to your public directory. Ensure <code>storage</code> and <code>bootstrap/cache</code> are writable.</p>
+                            <h4>Dependency Resolution</h4>
+                            <pre><code>composer install --no-dev --optimize-autoloader</code></pre>
                         </div>
                     </div>
                     <div class="step-item">
                         <div class="step-number">2</div>
                         <div class="step-content">
-                            <h4>System Audit</h4>
-                            <p>Navigate to <code>/install</code>. The wizard will perform a real-time health check on your server extensions and folder permissions.</p>
-                        </div>
-                    </div>
-                    <div class="step-item">
-                        <div class="step-number">3</div>
-                        <div class="step-content">
-                            <h4>Environment Provisioning</h4>
-                            <p>Configure your **Database Credentials** and **Mail Server (SMTP)**. The installer will automatically generate your <code>.env</code> file.</p>
-                        </div>
-                    </div>
-                    <div class="step-item">
-                        <div class="step-number">4</div>
-                        <div class="step-content">
-                            <h4>Structural Deployment</h4>
-                            <p>The installer will run <strong>migrations</strong> and <strong>seeders</strong> to populate the system. Do not close the tab during this process.</p>
+                            <h4>Database Provisioning</h4>
+                            <p>Configure your <code>.env</code> file, then run the atomic migration pipeline:</p>
+                            <pre><code>php artisan migrate --seed --force</code></pre>
+                            <div class="callout callout-info">
+                                <p>This command will execute the **Golden Dataset Seeder**, populating all 8 verticals with demo data.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div id="cli" class="tab-content">
-                    <pre><code># Professional CLI Pipeline
-composer install --no-dev --optimize-autoloader
-cp .env.example .env
-php artisan key:generate
-# Configure DB in .env
-php artisan migrate --seed --force
-php artisan storage:link</code></pre>
+                <div id="web" class="tab-content">
+                    <p class="text-muted italic">The graphical web installer is currently in Alpha and recommended only for development environments.</p>
+                    <div class="step-item">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <p>Navigate to <code>/install</code> and follow the server health audit.</p>
+                        </div>
+                    </div>
                 </div>
             </section>
 
-            <section id="real-estate">
-                <h2>Real Estate Module</h2>
-                <p>A comprehensive ecosystem for property listings, agent management, and booking workflows.</p>
+            <section id="#rbac">
+                <h2>Identity & RBAC</h2>
+                <p>Sellio uses a sophisticated role-based access system to manage different platform participants.</p>
+                
+                <table class="table-premium">
+                    <thead>
+                        <tr>
+                            <th>Role</th>
+                            <th>Description</th>
+                            <th>Dashboards</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Super Admin</strong></td>
+                            <td>Root access with global permission bypass.</td>
+                            <td>Admin Central</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Admin</strong></td>
+                            <td>Standard operational access.</td>
+                            <td>Admin Central</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Partner</strong></td>
+                            <td>Vendors/Agents managing their own inventory.</td>
+                            <td>Partner Hub</td>
+                        </tr>
+                        <tr>
+                            <td><strong>User</strong></td>
+                            <td>Standard buyers and customers.</td>
+                            <td>Customer Profile</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="financials">
+                <h2>Financial Ecosystem</h2>
+                <p>The platform features a double-entry accounting system for secure financial transactions.</p>
                 
                 <div class="feature-grid">
                     <div class="feature-card">
-                        <span class="marker marker-required">Core</span>
-                        <h4>Property Registry</h4>
-                        <p class="small">Support for residential, commercial, and industrial property types with high-res galleries.</p>
+                        <h4>Atomic Wallet</h4>
+                        <p class="small">Powered by <code>bavix/laravel-wallet</code>, ensuring every credit/debit is mathematically validated.</p>
                     </div>
                     <div class="feature-card">
-                        <span class="marker marker-pro">Advanced</span>
-                        <h4>Booking Engine</h4>
-                        <p class="small">Integrated availability calendar for short-term rentals and viewing appointments.</p>
-                    </div>
-                    <div class="feature-card">
-                        <span class="marker marker-optional">Add-on</span>
-                        <h4>Amenities Matrix</h4>
-                        <p class="small">Fully customizable amenity registry (e.g., "Pool", "Gym") manageable via Admin.</p>
+                        <h4>Withdrawal Pipeline</h4>
+                        <p class="small">Partners can request payouts. Admins review and approve via <strong>Admin -> Financials -> Withdrawals</strong>.</p>
                     </div>
                 </div>
 
                 <div class="callout callout-info">
-                    <div class="callout-title">Module Settings: Real Estate</div>
-                    <p>Navigate to <code>Admin -> Properties -> Settings</code> to toggle Google Maps integration, currency display, and agent commission rates.</p>
-                </div>
-            </section>
-
-            <section id="auto">
-                <h2>Auto Module</h2>
-                <p>Engineered for high-volume automotive marketplaces with specialized vehicle specifications.</p>
-                
-                <div class="feature-grid">
-                    <div class="feature-card">
-                        <h4>Vehicle Specs Hub</h4>
-                        <p class="small">Managed registry for Makes, Models, Engine types, and Fuel configurations.</p>
-                    </div>
-                    <div class="feature-card">
-                        <h4>Inquiry Pipeline</h4>
-                        <p class="small">Direct-to-Seller messaging system with automatic inquiry tracking.</p>
-                    </div>
-                </div>
-
-                <h3>Configuring Vehicle Types</h3>
-                <p>To add a new vehicle category (e.g., "Electric Motorcycles"):</p>
-                <div class="step-item">
-                    <div class="step-number">1</div>
-                    <div class="step-content">
-                        <p>Go to <strong>Admin -> Autos -> Categories</strong>.</p>
-                    </div>
-                </div>
-                <div class="step-item">
-                    <div class="step-number">2</div>
-                    <div class="step-content">
-                        <p>Create the category and assign relevant **Features** (e.g., "Battery Capacity").</p>
-                    </div>
-                </div>
-            </section>
-
-            <section id="settings">
-                <h2>System Settings Mastery</h2>
-                <p>The Admin Dashboard provides granular control over every aspect of the platform.</p>
-
-                <div class="feature-card mb-4">
-                    <h4 class="h6 fw-bold"><i class="fas fa-globe me-2 text-primary"></i> Localization & Multi-Currency</h4>
-                    <p class="small">Manage system languages and exchange rates. Support for automatic currency conversion is built into the pricing engine.</p>
-                </div>
-
-                <div class="feature-card mb-4">
-                    <h4 class="h6 fw-bold"><i class="fas fa-search-dollar me-2 text-primary"></i> SEO & Metadata Engine</h4>
-                    <p class="small">Configure global meta tags, OpenGraph data, and Sitemap generation. Each listing automatically generates its own SEO-friendly metadata.</p>
-                </div>
-
-                <div class="feature-card mb-4">
-                    <h4 class="h6 fw-bold"><i class="fas fa-credit-card me-2 text-primary"></i> Payment Gateways</h4>
-                    <p class="small">Native support for **Stripe, PayPal, and Paystack**. Configure API keys and Webhook secrets via <code>Admin -> Payments</code>.</p>
+                    <div class="callout-title">Payment Gateways</div>
+                    <p>Current stable integrations: <strong>Stripe, PayPal</strong>. Regional gateways (Razorpay, Flutterwave) are planned for v2.2.0.</p>
                 </div>
             </section>
 
             <section id="maintenance">
                 <h2>Maintenance Hub</h2>
-                <p>Keep your platform running at peak performance with the Executive Maintenance suite.</p>
+                <p>Exclusive diagnostic tools developed for platform stability.</p>
                 
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        <div class="feature-card h-100">
-                            <h4 class="h6 fw-bold">Optimization Pipeline</h4>
-                            <p class="smallest text-muted mb-2">Clear application, route, and configuration caches with one click.</p>
-                            <code class="d-block bg-light p-2 rounded">Artisan::call('optimize')</code>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="feature-card h-100">
-                            <h4 class="h6 fw-bold">System Health Audit</h4>
-                            <p class="smallest text-muted mb-2">Real-time monitoring of server extensions and folder permissions.</p>
-                            <span class="marker marker-pro">Active Monitoring</span>
-                        </div>
-                    </div>
+                <div class="feature-card mb-4">
+                    <h4 class="h6 fw-bold"><i class="fas fa-heartbeat me-2 text-danger"></i> System Health Audit</h4>
+                    <p class="small">Real-time verification of folder permissions and PHP extension status. Accessible via <code>Admin -> System -> Status</code>.</p>
                 </div>
+
+                <div class="feature-card mb-4">
+                    <h4 class="h6 fw-bold"><i class="fas fa-broom me-2 text-warning"></i> Atomic Purge</h4>
+                    <p class="small">Unified cache clearing for routes, views, and config without SSH access. Accessible via <code>Admin -> System -> Maintenance</code>.</p>
+                </div>
+            </section>
+
+            <section id="architecture">
+                <h2>Technical Architecture</h2>
+                <p>Sellio is built for developers who value clean, maintainable code.</p>
+
+                <h3>Service Layer Pattern</h3>
+                <p>Controllers do not contain business logic. Instead, they proxy requests to specialized Services:</p>
+                <pre><code>// Example: Listing Creation
+public function store(ListingRequest $request) {
+    return $this->listingService->create($request->validated());
+}</code></pre>
+
+                <h3>Core Traits</h3>
+                <ul>
+                    <li><strong>HasImageAccess</strong>: Unified Spatie Media Library management.</li>
+                    <li><strong>HasAnalytics</strong>: High-performance view tracking.</li>
+                    <li><strong>ManagesApproval</strong>: Standardized moderation workflows.</li>
+                </ul>
             </section>
 
             <section id="api">
                 <h2>API Integration</h2>
-                <p>Sellio provides a robust RESTful API to power your Next.js storefront and mobile applications.</p>
-                
-                <h3>Authentication Flow</h3>
-                <p>Requests must include a valid Bearer token in the <code>Authorization</code> header.</p>
-                <pre><code>curl -X POST https://api.yourdomain.com/v1/auth/login \
-     -H "Content-Type: application/json" \
-     -d '{"email":"admin@sellio.com", "password":"password"}'</code></pre>
-
-                <h3>High-Fidelity Response Structure</h3>
-                <p>All endpoints return a standardized envelope for reliable parsing:</p>
-                <pre><code>{
-    "success": true,
-    "message": "Resource retrieved",
-    "data": { ... },
-    "meta": { "current_page": 1, "total": 150 },
-    "errors": null
-}</code></pre>
-            </section>
-
-            <section id="troubleshooting">
-                <h2>Troubleshooting</h2>
-                <div class="feature-card mb-3">
-                    <h4 class="h6 fw-bold mb-2">Issue: Database Connection Refused</h4>
-                    <p class="small">Verify your <code>DB_HOST</code> and <code>DB_PORT</code> in the <code>.env</code> file. On shared hosting, ensure the database user is assigned to the database with **ALL PRIVILEGES**.</p>
-                </div>
-                <div class="feature-card mb-3">
-                    <h4 class="h6 fw-bold mb-2">Issue: Image Upload Failures</h4>
-                    <p class="small">Check your <code>upload_max_filesize</code> and <code>post_max_size</code> in <code>php.ini</code>. Also, ensure the <code>storage/app/public</code> directory is writable.</p>
+                <p>Automated OpenAPI documentation powered by **Scramble**.</p>
+                <div class="callout callout-info">
+                    <p>View your live API registry at <code>/docs/api</code>. No manual YAML updates required.</p>
                 </div>
             </section>
 
             <footer style="margin-top: 6rem; padding-top: 2rem; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 0.85rem; text-align: center;">
-                &copy; 2024 Sellio Marketplace Suite. All Rights Reserved. Engineered for High-Fidelity Distribution.
+                &copy; 2024-2026 Sellio Marketplace Suite. All Rights Reserved. Engineered for Elite Distribution.
             </footer>
         </main>
     </div>
@@ -386,7 +325,7 @@ php artisan storage:link</code></pre>
             let current = '';
             sections.forEach(section => {
                 const sectionTop = section.offsetTop;
-                if (pageYOffset >= sectionTop - 100) {
+                if (window.pageYOffset >= sectionTop - 150) {
                     current = section.getAttribute('id');
                 }
             });
