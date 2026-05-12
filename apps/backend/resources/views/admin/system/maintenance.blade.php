@@ -160,22 +160,22 @@
                     <h5 class="font-weight-bold text-white mb-3 small text-uppercase ls-1-p">
                         <i class="fas fa-info-circle mr-2 text-warning"></i> {{ __('Operational Guide') }}
                     </h5>
-                    <p class="smallest text-white-50 mb-3 font-weight-bold uppercase leading-1-6">
+                    <p class="smallest text-light mb-3 font-weight-bold uppercase leading-1-6 opacity-75">
                         {{ __('These tools manage the platform\'s foundational buffers. Use them to resolve:') }}
                     </p>
-                    <ul class="smallest text-white-50 pl-3 mb-4 font-weight-bold uppercase leading-1-6 list-none">
+                    <ul class="smallest text-light pl-3 mb-4 font-weight-bold uppercase leading-1-6 list-none opacity-75">
                         <li class="mb-2"><i class="fas fa-check-circle mr-2 text-success"></i> {{ __('Environment (.env) sync issues') }}</li>
                         <li class="mb-2"><i class="fas fa-check-circle mr-2 text-success"></i> {{ __('Broken media or symlinks') }}</li>
                         <li class="mb-2"><i class="fas fa-check-circle mr-2 text-success"></i> {{ __('Routing conflicts or missing keys') }}</li>
                         <li class="mb-2"><i class="fas fa-check-circle mr-2 text-success"></i> {{ __('Compiled template legacy issues') }}</li>
                     </ul>
-                    <div class="p-3 bg-white bg-opacity-10 rounded-xl border border-white border-opacity-10 smallest">
+                    <div class="p-3 rounded-xl smallest" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1);">
                         <div class="d-flex justify-content-between mb-2">
-                            <span class="text-white-50 uppercase font-weight-bold">{{ __('Environment') }}</span>
+                            <span class="text-light opacity-75 uppercase font-weight-bold">{{ __('Environment') }}</span>
                             <span class="font-weight-bold text-warning text-uppercase letter-spacing-1 ls-1-p">{{ config('app.env') }}</span>
                         </div>
                         <div class="d-flex justify-content-between">
-                            <span class="text-white-50 uppercase font-weight-bold">{{ __('Timezone') }}</span>
+                            <span class="text-light opacity-75 uppercase font-weight-bold">{{ __('Timezone') }}</span>
                             <span class="font-weight-bold text-white uppercase">{{ config('app.timezone') }}</span>
                         </div>
                     </div>

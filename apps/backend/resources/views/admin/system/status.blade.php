@@ -137,11 +137,11 @@
                     <h5 class="font-weight-bold text-white mb-3 small text-uppercase ls-1-p">
                         <i class="fas fa-stethoscope mr-2 text-warning"></i> Platform Intelligence
                     </h5>
-                    <p class="smallest text-white-50 mb-4 font-weight-bold uppercase leading-1-6">
+                    <p class="smallest text-light mb-4 font-weight-bold uppercase leading-1-6 opacity-75">
                         System health reflects the stability of the underlying architecture. Any "Fail" markers should be addressed immediately with your server administrator.
                     </p>
                     
-                    <div class="p-4 bg-white bg-opacity-10 rounded-20 border border-white border-opacity-10 mb-4">
+                    <div class="p-4 rounded-20 mb-4" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1);">
                         <div class="text-center">
                             @php
                                 $totalReqs = count($requirements) + count($permissions);
@@ -150,7 +150,7 @@
                                 $healthColor = $healthScore >= 90 ? 'text-success' : ($healthScore >= 70 ? 'text-warning' : 'text-danger');
                             @endphp
                             <h2 class="font-weight-bold {{ $healthColor }} mb-0">{{ $healthScore }}%</h2>
-                            <span class="smallest text-white-50 uppercase font-weight-bold ls-1-p">Aggregate Health Score</span>
+                            <span class="smallest text-light uppercase font-weight-bold ls-1-p">Aggregate Health Score</span>
                         </div>
                     </div>
 

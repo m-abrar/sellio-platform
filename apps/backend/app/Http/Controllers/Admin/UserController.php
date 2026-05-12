@@ -9,6 +9,8 @@ use App\Http\Requests\Admin\UserStoreRequest;
 use App\Services\Admin\UserManagementService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 /**
  * Class UserController
