@@ -18,16 +18,23 @@ use Illuminate\Support\Facades\DB;
 
 /**
  * Class PropertyService
- * * Centralized business logic for Property search, pricing, and booking transactions.
+ *
+ * Provides centralized business logic for property discovery, seasonal pricing calculations, 
+ * secure booking transactions, and multi-vertical taxonomy retrieval.
  */
 class PropertyService
 {
     /**
-     * Get all data required for the search view.
+     * Retrieve all data required for the property search page.
+     * Uses caching to optimize heavy aggregate queries and taxonomy retrieval.
+     *
+     * @param array $filters The validated search parameters.
+     * @param User|null $user The currently authenticated user (optional).
+     * @return array
      */
     public function getSearchPageData(array $filters, ?User $user): array
     {
-        // 1. Calculate Max Price (Cached for 1 hour to prevent heavy aggregate query on every search)
+        // Calculate Max Price (Cached to prevent heavy aggregate query on every search)
         $maxAllowedPrice = \Illuminate\Support\Facades\Cache::remember('property_max_price', 3600, function() {
             $rawMax = Property::active()
                 ->selectRaw('MAX(COALESCE(sale_price, base_price)) as max_price')
@@ -38,7 +45,7 @@ class PropertyService
         $checkIn = isset($filters['check_in']) ? Carbon::createFromFormat('m-d-Y', $filters['check_in']) : null;
         $checkOut = isset($filters['check_out']) ? Carbon::createFromFormat('m-d-Y', $filters['check_out']) : null;
 
-        // 2. Execute Search
+        // Execute filtered search
         $properties = $this->applyFilters(Property::query(), $filters, $checkIn, $checkOut, $user)->paginate(12);
 
         $numberOfNights = ($checkIn && $checkOut && $checkIn->lt($checkOut)) 
@@ -54,7 +61,7 @@ class PropertyService
             }
         }
 
-        // 3. Retrieve Taxonomies (Cached for 1 hour)
+        // Retrieve Taxonomies (Cached)
         $verticals = ['properties', 'autos', 'events', 'jobs', 'services', 'classifieds', 'products'];
 
         $categories = \Illuminate\Support\Facades\Cache::remember('property_categories', 3600, fn() => Category::where('is_property', true)->withCount($verticals)->get());
@@ -78,7 +85,14 @@ class PropertyService
     }
 
     /**
-     * Core filtering logic for properties.
+     * Internal helper to apply filters to the Property query.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param array $f
+     * @param Carbon|null $checkIn
+     * @param Carbon|null $checkOut
+     * @param User|null $user
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     private function applyFilters($query, array $f, ?Carbon $checkIn, ?Carbon $checkOut, ?User $user)
     {
@@ -107,7 +121,12 @@ class PropertyService
     }
 
     /**
-     * Calculate seasonal pricing sum.
+     * Calculate the total lodging amount for a given date range, accounting for seasonal price overrides.
+     *
+     * @param Property $property
+     * @param Carbon $checkIn
+     * @param Carbon $checkOut
+     * @return float
      */
     public function calculateLodgingAmount(Property $property, Carbon $checkIn, Carbon $checkOut): float
     {
@@ -123,7 +142,10 @@ class PropertyService
     }
 
     /**
-     * Log listing view activity (Spatie ActivityLog).
+     * Log listing view activity using the Spatie ActivityLog framework.
+     *
+     * @param Property $property
+     * @return void
      */
     public function logListingView(Property $property): void
     {
@@ -135,7 +157,11 @@ class PropertyService
     }
 
     /**
-     * Retrieve a property by its slug, ensuring it is visible to the current user.
+     * Retrieve a property by its slug, ensuring it is visible to the current user and fully hydrated with metadata.
+     *
+     * @param string $slug
+     * @param User|null $user
+     * @return Property
      */
     public function findVisibleBySlug(string $slug, ?User $user): Property
     {
@@ -150,7 +176,10 @@ class PropertyService
     }
 
     /**
-     * Data for the property detail page.
+     * Compile all data required for the property detail view, including related items and current bookings.
+     *
+     * @param Property $property
+     * @return array
      */
     public function getPropertyDetailsData(Property $property): array
     {
@@ -158,7 +187,7 @@ class PropertyService
         if ($property->is_rental) {
             $statusColors = ['confirmed' => '#ef4444', 'pending' => '#fde68a'];
             
-            // Paginate or limit reviews to prevent memory exhaustion
+            // Limit reviews to prevent memory exhaustion on high-traffic listings
             $property->load(['reviews' => function($query) {
                 $query->with('user')->latest()->take(10);
             }]);
@@ -181,7 +210,12 @@ class PropertyService
     }
 
     /**
-     * Simple estimation for AJAX price calculators.
+     * Generate a quick estimation for AJAX price calculators.
+     *
+     * @param Property $property
+     * @param string $in Check-in date string.
+     * @param string $out Check-out date string.
+     * @return array
      */
     public function calculateEstimatedLodging(Property $property, string $in, string $out): array
     {
@@ -194,8 +228,11 @@ class PropertyService
     }
 
     /**
-     * Handles DB transaction for booking registration and ledger entry.
-     * Incorporates PropertyFees and selected Addons dynamically.
+     * Atomically process a property booking, including financial ledger entries for fees and addons.
+     *
+     * @param array $data The validated booking request data.
+     * @return array
+     * @throws \Exception
      */
     public function createOrRetrieveBooking(array $data): array
     {
@@ -206,11 +243,11 @@ class PropertyService
 
         return DB::transaction(function () use ($property, $data, $checkIn, $checkOut, $nights) {
             
-            // 1. Calculate the dynamic breakdown (Lodging + Fees)
+            // Calculate the dynamic breakdown (Lodging + Fees)
             $breakdown = $this->calculateBookingBreakdown($property, $data['check_in'], $data['check_out'], (int)$data['guests']);
             $totalPrice = $breakdown['initial_total'];
 
-            // 2. Process Add-ons
+            // Process Add-ons
             $selectedAddons = [];
             if (!empty($data['add_ons'])) {
                 foreach ($data['add_ons'] as $addonId => $input) {
@@ -233,7 +270,7 @@ class PropertyService
                 }
             }
 
-            // 3. Create or Update Booking
+            // Create or Update Booking record
             $booking = PropertyBooking::where([
                 'property_id'   => $property->id,
                 'check_in_date' => $checkIn->toDateString(),
@@ -263,10 +300,10 @@ class PropertyService
             $booking->total_price = $totalPrice;
             $booking->save();
 
-            // 4. Wipe existing lines to ensure a clean sync of the new price breakdown
+            // Clear old transaction lines for idempotent updates
             $booking->transactionLines()->delete();
 
-            // 5. Save Lodging & Fee Lines
+            // Persist revenue lines for ledger tracking
             foreach ($breakdown['lines'] as $line) {
                 $transactionLine = $booking->transactionLines()->make([
                     'property_id'      => $property->id,
@@ -278,7 +315,7 @@ class PropertyService
                 $transactionLine->save();
             }
 
-            // 6. Save Add-on Lines
+            // Save Add-on Lines
             foreach ($selectedAddons as $item) {
                 $transactionLine = $booking->transactionLines()->make([
                     'property_id'      => $property->id,
@@ -299,7 +336,10 @@ class PropertyService
     }
 
     /**
-     * Confirm a booking payment.
+     * Mark a booking as confirmed and finalize the transaction.
+     *
+     * @param PropertyBooking $booking
+     * @return void
      */
     public function confirmBookingPayment(PropertyBooking $booking): void
     {
@@ -314,7 +354,13 @@ class PropertyService
     }
 
     /**
-     * Calculate a full booking breakdown including fees and taxes.
+     * Calculate a full booking breakdown including seasonal rates, flat fees, and percentage taxes.
+     *
+     * @param Property $property
+     * @param string $startDate
+     * @param string $endDate
+     * @param int $guestCount
+     * @return array
      */
     public function calculateBookingBreakdown(Property $property, string $startDate, string $endDate, int $guestCount): array
     {
@@ -324,7 +370,7 @@ class PropertyService
 
         $lines = collect();
 
-        // 1. Calculate Base Lodging
+        // Calculate Base Lodging
         $lodgingAmount = $this->calculateLodgingAmount($property, $start, $end);
         $lines->push([
             'title'  => __("Base Rental (:nights nights)", ['nights' => $nights]),
@@ -332,18 +378,16 @@ class PropertyService
             'type'   => 'lodging'
         ]);
 
-        // 2. Add Flat Fees (e.g., Cleaning Fee, Security Deposit)
-        // We separate these so percentages can be calculated on top of them if needed
+        // Add Flat Fees (e.g., Cleaning Fee)
         foreach ($property->fees->where('charge_type', 'flat') as $fee) {
             $lines->push([
                 'title'  => $fee->title,
                 'amount' => (float) $fee->amount,
-                'type'   => $fee->type // refundable / non_refundable
+                'type'   => $fee->type
             ]);
         }
 
-        // 3. Calculate Percentage Fees (e.g., Taxes, Service Fees)
-        // We calculate these based on the sum of lodging + flat fees
+        // Calculate Percentage Fees (e.g., Taxes) on top of lodging + flat fees
         $subtotal = $lines->sum('amount');
         
         foreach ($property->fees->where('charge_type', 'percentage') as $fee) {
@@ -366,6 +410,12 @@ class PropertyService
         ];
     }
 
+    /**
+     * Retrieve related property listings based on shared category and location.
+     *
+     * @param Property $property
+     * @return Collection
+     */
     protected function getRelatedProperties(Property $property): Collection
     {
         $related = Property::where('id', '!=', $property->id)
@@ -388,6 +438,12 @@ class PropertyService
         return $related;
     }
 
+    /**
+     * Helper to round up prices to the nearest significant interval for search filter generation.
+     *
+     * @param float|null $price
+     * @return int|null
+     */
     protected function roundUpPrice(?float $price): ?int
     {
         if (!$price || $price <= 0) return null;

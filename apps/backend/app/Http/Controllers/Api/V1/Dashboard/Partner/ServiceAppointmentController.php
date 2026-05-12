@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1\Dashboard\Partner;
 
 use App\Http\Controllers\Controller;
 use App\Models\ServiceAppointment;
+use App\Http\Resources\ServiceAppointmentResource;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;

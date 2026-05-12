@@ -4,6 +4,12 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class SearchPropertyRequest
+ *
+ * Handles validation for property discovery and search filtering.
+ * Supports date range validation for rental availability and dynamic taxonomy filtering.
+ */
 class SearchPropertyRequest extends FormRequest
 {
     public function authorize(): bool { return true; }

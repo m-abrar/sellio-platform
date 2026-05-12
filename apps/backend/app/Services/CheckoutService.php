@@ -10,10 +10,29 @@ use App\Models\ProductAddon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
+/**
+ * Class CheckoutService
+ *
+ * Handles the conversion of a temporary shopping cart into a permanent, legal Order record.
+ * Manages inventory locking, JSON snapshotting of product variants, and database transactions.
+ */
 class CheckoutService
 {
     /**
-     * Convert a Cart into a permanent Order.
+     * Convert a Cart into a permanent Order record.
+     *
+     * This process is wrapped in a database transaction to ensure atomicity.
+     * It handles:
+     * 1. Parent order creation with calculated totals.
+     * 2. Snapshotting of product attributes and addons to prevent future price/name changes from affecting history.
+     * 3. Secure stock reduction with pessimistic locking.
+     * 4. Cart cleanup.
+     *
+     * @param Cart $cart The source cart to be processed.
+     * @param array $shippingData Validated shipping and cost data from the checkout form.
+     * @param string $paymentMethod The slug of the selected payment gateway.
+     * @return Order The newly created order record.
+     * @throws \Exception If stock is insufficient or a database error occurs.
      */
     public function process(Cart $cart, array $shippingData, string $paymentMethod): Order
     {
@@ -65,7 +84,7 @@ class CheckoutService
                     if ($product && $product->stock_quantity >= $cartItem->quantity) {
                         $product->decrement('stock_quantity', $cartItem->quantity);
                     } else {
-                        throw new \Exception("Insufficient stock for product: " . ($product->title ?? 'Unknown'));
+                        throw new \Exception(__('Insufficient stock for product: :title', ['title' => $product->title ?? 'Unknown']));
                     }
                 }
             }

@@ -20,6 +20,12 @@ use Illuminate\Support\Collection;
  */
 class EventService
 {
+    /**
+     * Retrieve all taxonomies (categories, locations, etc.) for the event filter sidebar.
+     * Includes counts across all marketplace verticals for enhanced discovery.
+     *
+     * @return array
+     */
     public function getFilterTaxonomies(): array
     {
         // Define common vertical relations to count for the dashboard/sidebar

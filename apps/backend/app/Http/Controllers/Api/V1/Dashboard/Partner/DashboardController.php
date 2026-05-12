@@ -9,7 +9,9 @@ use Illuminate\View\View;
 
 /**
  * Class DashboardController
- * * Aggregates multi-source data to provide a unified overview for partners.
+ *
+ * Aggregates high-fidelity analytical data, financial summaries, and interaction 
+ * metrics to provide a unified command overview for marketplace partners.
  */
 class DashboardController extends Controller
 {

@@ -9,6 +9,13 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Facades\Log;
+/**
+ * Class SocialLoginController
+ *
+ * Orchestrates the OAuth authentication lifecycle for third-party providers 
+ * (Google, Facebook, etc.) via Laravel Socialite. Handles user discovery, 
+ * atomic account creation, and secure login redirection.
+ */
 class SocialLoginController extends Controller
 {
     protected $authService;

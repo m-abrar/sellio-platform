@@ -165,7 +165,10 @@ class ProductService
     }
 
     /**
-     * Get related products with optimized fallback.
+     * Retrieve related products with optimized fallback.
+     *
+     * @param Product $product
+     * @return Collection
      */
     protected function getRelatedProducts(Product $product): Collection
     {
@@ -192,6 +195,9 @@ class ProductService
 
     /**
      * Logic for search price rounding.
+     *
+     * @param float|null $price
+     * @return int|null
      */
     protected function roundUpPrice(?float $price): ?int
     {
@@ -203,6 +209,9 @@ class ProductService
 
     /**
      * Log the view for analytics using Spatie ActivityLog.
+     *
+     * @param Product $product
+     * @return void
      */
     public function logListingView(Product $product): void
     {

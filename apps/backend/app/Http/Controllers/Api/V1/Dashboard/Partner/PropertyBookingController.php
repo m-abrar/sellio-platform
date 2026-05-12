@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1\Dashboard\Partner;
 
 use App\Http\Controllers\Controller;
 use App\Models\PropertyBooking;
+use App\Http\Resources\PropertyBookingResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 

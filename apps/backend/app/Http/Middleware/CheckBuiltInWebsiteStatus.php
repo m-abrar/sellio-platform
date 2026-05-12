@@ -8,6 +8,15 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Models\Setting;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * Class CheckBuiltInWebsiteStatus
+ *
+ * This middleware manages the global visibility of the built-in Laravel website.
+ * When 'built_in_website_status' is set to 'redirect', public access to the Laravel frontend
+ * is restricted, and users (Guests, Partners, Users) are redirected to the dashboard gateway.
+ * 
+ * Administrative roles (Admin, Super-Admin, Moderator) are exempt to allow for content management.
+ */
 class CheckBuiltInWebsiteStatus
 {
     /**

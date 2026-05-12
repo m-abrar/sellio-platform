@@ -13,6 +13,13 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * Class PropertyController
+ *
+ * Orchestrates the administrative lifecycle for partner-owned real estate listings.
+ * Manages complex validation, tiered subscription limits, and media synchronization
+ * via the Spatie MediaLibrary integration.
+ */
 class PropertyController extends Controller
 {
     protected PropertyService $propertyService;

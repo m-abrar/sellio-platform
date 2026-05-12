@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1\Dashboard\Partner;
 
 use App\Http\Controllers\Controller;
 use App\Models\ServiceQuote;
+use App\Http\Resources\ServiceQuoteResource;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
