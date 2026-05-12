@@ -94,9 +94,9 @@
                                 </td>
                                 <td class="align-middle">
                                     {{-- 1. Render Assigned Roles --}}
-                                    @foreach($user->roles as $role)
-                                        <span class="badge {{ $role->name == 'admin' ? 'badge-info-light' : 'badge-info-light' }} text-info px-2 py-1 text-uppercase mr-1 smallest-0-65 ls-0-3">
-                                            <i class="fas fa-shield-alt mr-1 text-xs"></i> {{ $role->name }}
+                                    @foreach($user->getRoleNames() as $roleName)
+                                        <span class="badge badge-info px-2 py-1 text-uppercase mr-1 smallest-0-65 ls-0-3">
+                                            <i class="fas fa-shield-alt mr-1 text-xs"></i> {{ $roleName }}
                                         </span>
                                     @endforeach
 

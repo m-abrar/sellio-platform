@@ -141,6 +141,7 @@ class DatabaseSeeder extends Seeder
             MenuItemSeeder::class,
             ActivityLogSeeder::class,
             MediaFullSeeder::class,
+            UserRoleAssignmentSeeder::class,
         ]);
         
         // Final Footer

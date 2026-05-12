@@ -107,46 +107,7 @@ class RolesAndPermissionsSeeder extends Seeder
         $this->command->info('👑 **Roles** created/checked and permissions assigned.');
         $this->command->newLine();
 
-        // 3. Assign Roles to Users
-        $this->command->line('Assigning Roles to specific Users...');
-
-        // Assign 'super-admin' role to the first user created (typically the main system account).
-        $superAdminUser = User::find(1);
-        
-        if ($superAdminUser) {
-            // Assign both super-admin and admin roles for full administrative access.
-            $superAdminUser->assignRole(['super-admin', 'admin']);
-            $this->command->info('🔑 Super-Admin/Admin role assigned to **User ID 1**.');
-        } else {
-            $this->command->line('⚠️ User with ID 1 not found. Super-Admin role was not assigned.');
-        }
-
-        // Assign 'partner' role to the second user (e.g., a dedicated vendor account).
-        $partnerUser = User::find(2);
-        
-        if ($partnerUser) {
-            $partnerUser->assignRole('partner');
-            $this->command->info('🤝 Partner role assigned to **User ID 2**.');
-        } else {
-            $this->command->line('⚠️ User with ID 2 not found. Partner role was not assigned.');
-        }
-
-        // Assign 'user' role to all other users (all remaining IDs > 2) for standard consumer access.
-        $remainingUsersCount = User::where('id', '>', 2)->count();
-
-        User::where('id', '>', 2)->get()->each(function ($user) {
-            if ($user->is_partner) {
-                $user->assignRole('partner');
-            } else {
-                // Both buyers and general users are assigned the 'user' role
-                $user->assignRole('user');
-            }
-        });
-
-        $this->command->info("👤 User role assigned to **{$remainingUsersCount}** other users.");
-        $this->command->newLine();
-
-        // 4. Display the Count of Created Records
+        // 3. Display the Count of Created Records
         $finalPermissionCount = Permission::count();
         $finalRoleCount = Role::count();
         

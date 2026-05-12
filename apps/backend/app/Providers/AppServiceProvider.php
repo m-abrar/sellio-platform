@@ -25,6 +25,11 @@ class AppServiceProvider extends ServiceProvider
             return $user?->hasRole(['admin', 'super-admin']) || app()->isLocal();
         });
 
+        // 1. Super Admin Privilege Escalation (Global Interceptor)
+        Gate::before(function ($user, $ability) {
+            return $user->hasRole('super-admin') ? true : null;
+        });
+
         // 1. Dynamic Config for Admin Branding
         if (!$this->app->runningInConsole()) {
             $siteName = setting('site_name', config('app.name'));
