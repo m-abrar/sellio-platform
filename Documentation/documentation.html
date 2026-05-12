@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laravel App Documentation - [Your Item Name]</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" >
+
+    <style>
+        /* --- Color Variables --- */
+        :root {
+            --primary-accent: #e4bd0f; 
+            --primary-accent-hover: #b49611; 
+            --bg-light: #ffffff;
+            --bg-dark-sidebar: #1e2125; /* Deep Gray/Blue Sidebar */
+            --text-dark: #212529;
+            --text-light: #f8f9fa;
+            --border-color: #3e444a; /* Dark Border */
+            --code-bg: #2d2d2d; /* Code Editor Background */
+        }
+
+        /* --- General Body and Font Styles --- */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5; 
+            color: var(--text-dark);
+            padding-top: 66px; 
+        }
+
+        /* --- Navbar (Top Navigation) --- */
+        .navbar {
+            background-color: var(--bg-light) !important;
+            border-bottom: 1px solid #dee2e6;
+            height: 66px; 
+            z-index: 1031; 
+        }
+        .navbar-brand {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+        }
+
+        /* --- Headings --- */
+        h1, h2, h3, h4 {
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-dark);
+        }
+
+        h2 {
+            border-bottom: 3px solid var(--primary-accent);
+            padding-bottom: 0.5rem;
+            margin-top: 2.5rem; /* Increased separation */
+            margin-bottom: 2rem;
+            color: var(--text-dark);
+        }
+        
+        /* Premium Look Button */
+        .btn-accent {
+            background-color: var(--primary-accent);
+            color: var(--bg-dark-sidebar);
+            border: none;
+            font-weight: 600;
+            transition: background-color 0.2s;
+        }
+        .btn-accent:hover {
+            background-color: var(--primary-accent-hover);
+            color: var(--bg-dark-sidebar);
+        }
+
+        /* --- Sidebar Styling --- */
+        #sidebar-wrapper {
+            min-height: 100vh;
+            margin-left: -15rem;
+            transition: margin 0.3s ease-in-out;
+            background-color: var(--bg-dark-sidebar);
+            border-right: 1px solid var(--border-color);
+            position: fixed;
+            top: 66px; 
+            left: 0;
+            z-index: 1030;
+            padding-top: 1rem;
+        }
+
+        #sidebar-wrapper .list-group {
+            width: 15rem;
+        }
+
+        #sidebar-wrapper .list-group-item {
+            border: none;
+            padding: 0.75rem 1.25rem;
+            font-weight: 600;
+            color: var(--text-light);
+            background-color: transparent;
+            transition: background-color 0.2s;
+            /* FIX: Ensure active link style does not overflow/wrap its container */
+            border-radius: 0; 
+            margin: 0;
+        }
+
+        #sidebar-wrapper .list-group-item:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+            color: var(--primary-accent);
+        }
+
+        #sidebar-wrapper .list-group-item.active {
+            background-color: var(--primary-accent);
+            color: var(--bg-dark-sidebar);
+            /* Add a subtle visual indicator */
+            border-left: 5px solid var(--primary-accent); 
+            padding-left: calc(1.25rem - 5px);
+        }
+        
+        /* --- Content Wrapper and Desktop Sidebar Visibility --- */
+        #page-content-wrapper {
+            padding-left: 0;
+            transition: padding 0.3s ease-in-out;
+            width: 100%;
+        }
+
+        @media (min-width: 992px) {
+            #sidebar-wrapper {
+                margin-left: 0;
+            }
+
+            #page-content-wrapper {
+                padding-left: 15rem; 
+            }
+
+            .navbar-toggler {
+                display: none;
+            }
+        }
+
+        /* Mobile Sidebar Toggle */
+        .sidebar-toggled #sidebar-wrapper {
+            margin-left: 0;
+        }
+
+        /* --- Main Content Styling --- */
+        .documentation-content {
+            max-width: 1000px; 
+            margin: 0 auto;
+            padding: 2rem 1.5rem 5rem 1.5rem;
+            background-color: var(--bg-light);
+            min-height: calc(100vh - 66px); 
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.08); /* Stronger shadow for depth */
+        }
+
+        /* Fix for scroll-spy active state behind fixed navbar */
+        section {
+            padding-top: 86px;
+            margin-top: -86px;
+        }
+
+        hr{
+            margin-top: 4rem;
+            margin-bottom: 8rem;
+        }
+        
+        /* --- Tabs/Accordion Styling --- */
+        .nav-tabs .nav-link.active {
+            border-bottom: 3px solid var(--primary-accent);
+            color: var(--primary-accent);
+            font-weight: 600;
+        }
+        .accordion-button:not(.collapsed) {
+            color: var(--text-dark);
+            background-color: #f5f5f5;
+            border-bottom: 1px solid var(--primary-accent);
+        }
+        
+        /* --- Code Block Styling (Premium Dark Look) --- */
+        pre {
+            background-color: var(--code-bg);
+            color: #dcdcdc;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+        }
+
+        code {
+            color: var(--primary-accent);
+            background-color: #3b3b3b;
+        }
+        pre .keyword { color: #f92672; }
+        pre .string { color: #e6db74; }
+        pre .number { color: #ae81ff; }
+        pre .comment { color: #75715e; }
+        pre .variable { color: #66d9ef; }
+
+        /* --- Footer --- */
+        .footer {
+            padding: 1.5rem 0;
+            background-color: #e9ecef; /* Light gray footer background */
+            border-top: 1px solid #dee2e6;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body data-bs-spy="scroll" data-bs-target="#sidebar-wrapper" data-bs-offset="90">
+
+    <nav class="navbar navbar-expand-lg bg-white border-bottom fixed-top">
+        <div class="container-fluid">
+            <button class="btn btn-outline-secondary d-lg-none" id="sidebarToggle">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+                </svg>
+            </button>
+            <a class="navbar-brand ms-3" href="#">
+                <span class="text-secondary">[App Name]</span> <strong style="color: var(--primary-accent);">Documentation</strong>
+            </a>
+            <div class="ms-auto me-3">
+                <a href="[Your Envato Profile Link]" class="btn btn-sm btn-accent" target="_blank">Get Support</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="d-flex" id="wrapper">
+
+        <div id="sidebar-wrapper">
+            <div class="list-group list-group-flush">
+                <a href="#introduction" class="list-group-item list-group-item-action">Introduction</a>
+                <a href="#requirements" class="list-group-item list-group-item-action">Requirements</a>
+                <a href="#installation" class="list-group-item list-group-item-action">Installation</a>
+                <a href="#features" class="list-group-item list-group-item-action">Features</a>
+                <a href="#configuration" class="list-group-item list-group-item-action">Configuration</a>
+                <a href="#usage" class="list-group-item list-group-item-action">Usage</a>
+                <a href="#updating" class="list-group-item list-group-item-action">Updating</a>
+                <a href="#troubleshooting" class="list-group-item list-group-item-action">Troubleshooting</a>
+                <a href="#support" class="list-group-item list-group-item-action">Support</a>
+                <a href="#changelog" class="list-group-item list-group-item-action">Changelog</a>
+            </div>
+        </div>
+
+        <div id="page-content-wrapper">
+
+            <div class="documentation-content">
+
+                <section id="introduction">
+                    <h2>1. Introduction</h2>
+                    <p class="lead">Welcome to the documentation for <strong style="color: var(--primary-accent);">[Your Item Name]</strong>! This guide will provide all the information you need to install, configure, and operate your Laravel application.</p>
+                    <p>It is built using **Laravel [X.Y]**, integrated with **Bootstrap 5**, and follows modern development practices to ensure scalability and maintainability.</p>
+                </section>
+
+                <hr>
+
+                <section id="requirements">
+                    <h2>2. Requirements</h2>
+                    <p>Ensure your server or local environment meets the following minimum specifications:</p>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4 class="mt-4">Server Environment</h4>
+                            <ul class="list-unstyled">
+                                <li>✅ PHP $\ge$ 8.1</li>
+                                <li>✅ MySQL $\ge$ 5.7 or equivalent</li>
+                                <li>✅ Composer $\ge$ 2.0</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h4 class="mt-4">Required PHP Extensions</h4>
+                            <ul class="list-unstyled">
+                                <li>✅ `openssl`, `pdo`, `mbstring`</li>
+                                <li>✅ `tokenizer`, `xml`, `json`</li>
+                                <li>✅ `bcmath`, `fileinfo`</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <hr>
+
+                <section id="installation">
+                    <h2>3. Installation</h2>
+                    <p>Choose your preferred installation method below:</p>
+
+                    <ul class="nav nav-tabs" id="installationTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="ftp-tab" data-bs-toggle="tab" data-bs-target="#ftp" type="button" role="tab" aria-controls="ftp" aria-selected="true">FTP / cPanel</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="cli-tab" data-bs-toggle="tab" data-bs-target="#cli" type="button" role="tab" aria-controls="cli" aria-selected="false">Command Line (CLI)</button>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content border border-top-0 p-4 bg-white shadow-sm">
+                        <div class="tab-pane fade show active" id="ftp" role="tabpanel" aria-labelledby="ftp-tab">
+                            <h4 class="mb-3">Web/cPanel Installation Steps</h4>
+                            <p>For shared hosting, use this method. The installer handles Composer dependencies.</p>
+                            <ol>
+                                <li>Upload the contents of the <code class="language-bash">/application</code> folder to your web root.</li>
+                                <li>Create a new MySQL database.</li>
+                                <li>Access your domain in the browser to run the **Web Installer** and input your database details.</li>
+                            </ol>
+                        </div>
+
+                        <div class="tab-pane fade" id="cli" role="tabpanel" aria-labelledby="cli-tab">
+                            <h4 class="mb-3">CLI Installation Steps (Recommended for VPS/Dedicated)</h4>
+                            <pre><code class="language-bash"># 1. Install Composer dependencies
+<span class="keyword">composer</span> install --no-dev
+
+# 2. Setup environment file
+cp .env.example .env
+php artisan key:generate
+
+# 3. Configure .env file (DB and Mail settings)
+
+# 4. Run migrations and seed initial data
+php artisan migrate --seed
+
+# 5. Link storage
+php artisan storage:link</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <hr>
+
+                <section id="features">
+                    <h2>4. Features</h2>
+                    <p>Detailed breakdown of core modules and their usage. Below shows how to interact with the main **Project Management** module.</p>
+
+                    <div class="accordion" id="featuresAccordion">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true">
+                                    Project Creation
+                                </button>
+                            </h2>
+                            <div id="collapseOne" class="accordion-collapse collapse show">
+                                <div class="accordion-body">
+                                    To create a new project, navigate to **Dashboard > Projects > Create New**. Required fields include the Project Title and the Client.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false">
+                                    Task Assignment
+                                </button>
+                            </h2>
+                            <div id="collapseTwo" class="accordion-collapse collapse">
+                                <div class="accordion-body">
+                                    Tasks can be assigned to team members directly from the project detail view. Use the **@mention** feature in the task description for notifications.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <hr>
+                
+                <section id="configuration">
+                    <h2>5. Configuration</h2>
+                    <p>The primary configuration file is the <code class="language-bash">.env</code> file located in the root directory. Modify this file to customize application settings, mail drivers, and more.</p>
+
+                    <h4 class="mt-4">Mail Service Setup</h4>
+                    <p>We recommend using a transactional email service (like Mailgun or SendGrid) for reliable delivery. Update the following $\texttt{.env}$ variables:</p>
+                    <pre><code class="language-bash">MAIL_MAILER=smtp
+MAIL_HOST=<span class="string">smtp.mailgun.org</span>
+MAIL_PORT=<span class="number">587</span>
+MAIL_USERNAME=<span class="string">postmaster@yourdomain.com</span>
+MAIL_PASSWORD=<span class="string">your-smtp-password</span>
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=<span class="string">no-reply@yourdomain.com</span></code></pre>
+                    <p class="alert alert-info mt-3">After changing configuration, always run: <code class="language-bash">php artisan config:clear</code></p>
+                </section>
+
+                <hr>
+                
+                <section id="usage">
+                    <h2>6. Usage</h2>
+                    <p>A brief guide on navigating the application's core functionality.</p>
+                    <h4 class="mt-4">User Roles & Permissions</h4>
+                    <p>The application supports three default roles:</p>
+                    <ol>
+                        <li>**Admin:** Full access to all settings and data. (Login: <code class="language-bash">admin@example.com</code> / <code class="language-bash">password</code>)</li>
+                        <li>**Manager:** Access to all project data, but restricted settings.</li>
+                        <li>**User:** Can only view and update tasks assigned to them.</li>
+                    </ol>
+                    <p class="mt-3">Roles can be managed under **Admin Panel > Users**.</p>
+                </section>
+
+                <hr>
+
+                <section id="updating">
+                    <h2>7. Updating</h2>
+                    <p>Follow these steps carefully to update your application without data loss.</p>
+                    <ul class="list-group">
+                        <li class="list-group-item"><strong>Step 1: Backup.</strong> Create a full backup of your **database** and **application files**.</li>
+                        <li class="list-group-item"><strong>Step 2: Replace Files.</strong> Replace all files with the new version, **except** for the <code class="language-bash">.env</code> file.</li>
+                        <li class="list-group-item"><strong>Step 3: Run Composer.</strong> Execute <code class="language-bash">composer install --no-dev</code>.</li>
+                        <li class="list-group-item"><strong>Step 4: Migrate Database.</strong> Run schema updates: <code class="language-bash">php artisan migrate</code>.</li>
+                        <li class="list-group-item"><strong>Step 5: Clear Cache.</strong> Ensure all old config is cleared: <code class="language-bash">php artisan optimize:clear</code>.</li>
+                    </ul>
+                </section>
+
+                <hr>
+
+                <section id="troubleshooting">
+                    <h2>8. Troubleshooting</h2>
+                    <p>Encountering issues? Check these common problems first.</p>
+                    
+                    <h4 class="mt-4">$\text{404}$ Errors on Internal Pages</h4>
+                    <p>This is usually an $\texttt{.htaccess}$ issue. Ensure your web server has the <code class="language-bash">mod_rewrite</code> module enabled and the $\texttt{.htaccess}$ file is present and correct in the public directory.</p>
+                    
+                    <h4 class="mt-4">Blank Screen / $\text{500}$ Error</h4>
+                    <p>Set $\texttt{APP\_DEBUG=true}$ in your $\texttt{.env}$ file to see the specific Laravel error message. Also, confirm that the <code class="language-bash">/storage</code> and <code class="language-bash">/bootstrap/cache</code> directories have correct **write permissions ($\text{775}$ or $\text{777}$)**.</p>
+                </section>
+
+                <hr>
+                
+                <section id="support">
+                    <h2>9. Support</h2>
+                    <p>If you encounter a bug or have questions regarding the item's core functionality, please reach out.</p>
+
+                    <h4 class="mt-4">Scope of Support</h4>
+                    <p>We provide assistance for bugs, documented features, and general usage questions. We cannot provide free support for server configuration, software customization, or third-party conflicts.</p>
+
+                    <a href="[Your Envato Support Link]" class="btn btn-lg btn-accent mt-3" target="_blank">Submit a Support Ticket Now</a>
+                </section>
+
+                <hr>
+
+                <section id="changelog">
+                    <h2>10. Changelog</h2>
+                    <dl class="row">
+                        <dt class="col-sm-3 text-primary">v1.1.0 - 2024-09-01</dt>
+                        <dd class="col-sm-9">
+                            <ul>
+                                <li><span class="text-success fw-bold">Added:</span> Two-Factor Authentication support.</li>
+                                <li><span class="text-warning fw-bold">Updated:</span> Tailwind CSS to v3.4.</li>
+                            </ul>
+                        </dd>
+                        <dt class="col-sm-3 text-primary">v1.0.0 - 2024-06-15</dt>
+                        <dd class="col-sm-9">
+                            Initial Release of [Your Item Name].
+                        </dd>
+                    </dl>
+                </section>
+
+            </div>
+            <footer class="footer">
+                <div class="container-fluid">
+                    &copy; 2024 [Your Company/Name]. All Rights Reserved.
+                    <span class="mx-2">|</span>
+                    <a href="[Your Envato Profile Link]" style="color: var(--primary-accent);" class="text-decoration-none">Support & Updates</a>
+                </div>
+            </footer>
+        </div>
+        </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+    <script>
+        document.getElementById("sidebarToggle").addEventListener("click", function() {
+            document.getElementById("wrapper").classList.toggle("sidebar-toggled");
+        });
+
+        // Close sidebar on mobile when a link is clicked
+        const sidebarLinks = document.querySelectorAll('#sidebar-wrapper .list-group-item');
+        sidebarLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth < 992) {
+                    document.getElementById("wrapper").classList.remove("sidebar-toggled");
+                }
+            });
+        });
+    </script>
+</body>
+</html>
