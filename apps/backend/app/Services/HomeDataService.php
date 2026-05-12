@@ -53,14 +53,16 @@ class HomeDataService
             'classifiedsTrending' => $this->cached('h_trend_class', fn() => $this->getTrending(new Classified(), 'inquiries', $lastMonth)),
 
             // Specific Sub-sections
-            'propertiesRental'    => $this->cached('h_rent_prop', fn() => $this->transformCollection(Property::active()->without(['media'])->where('is_rental', true)->latest()->take(6)->get())),
-            'propertiesSale'      => $this->cached('h_sale_prop', fn() => $this->transformCollection(Property::active()->without(['media'])->where('is_sale', true)->latest()->take(6)->get())),
-            'autosLatest'         => $this->cached('h_late_auto', fn() => $this->transformCollection(Auto::active()->without(['media'])->latest()->take(6)->get())),
+            'propertiesRental'    => $this->cached('h_rent_prop', fn() => $this->transformCollection(Property::active()->with(['location', 'category', 'user'])->without(['media'])->where('is_rental', true)->latest()->take(6)->get())),
+            'propertiesSale'      => $this->cached('h_sale_prop', fn() => $this->transformCollection(Property::active()->with(['location', 'category', 'user'])->without(['media'])->where('is_sale', true)->latest()->take(6)->get())),
+            'autosLatest'         => $this->cached('h_late_auto', fn() => $this->transformCollection(Auto::active()->with(['location', 'category', 'user'])->without(['media'])->latest()->take(6)->get())),
 
             // Taxonomy
             'categories'          => $this->cached('h_tax_cat', fn() => Category::active()->without(['media'])->get()->map(fn($c) => $this->transformTaxonomy($c))),
             'locations'           => $this->cached('h_tax_loc', fn() => Location::active()->without(['media'])->get()->map(fn($l) => $this->transformTaxonomy($l))),
             'locationsFeatured'   => $this->cached('h_feat_loc', fn() => Location::active()->without(['media'])->orderByDesc('is_featured')->take(6)->get()->map(fn($l) => $this->transformTaxonomy($l))),
+            'serviceCategories'   => $this->cached('h_serv_cat', fn() => Category::active()->where('is_service', true)->without(['media'])->take(4)->get()->map(fn($c) => $this->transformTaxonomy($c))),
+            'autoCategories'      => $this->cached('h_auto_cat', fn() => Category::active()->where('is_auto', true)->without(['media'])->get()->map(fn($c) => $this->transformTaxonomy($c))),
         ];
     }
 
@@ -78,7 +80,8 @@ class HomeDataService
     protected function getFeatured($model): Collection
     {
         $collection = $model->active()
-            ->without(['media', 'type', 'location']) 
+            ->with(['location', 'category', 'user'])
+            ->without(['media', 'type']) 
             ->orderByDesc('is_featured')
             ->orderByDesc('created_at')
             ->take(6)
@@ -93,7 +96,8 @@ class HomeDataService
     protected function getTrending($model, string $relation, Carbon $date): Collection
     {
         $collection = $model->active()
-            ->without(['media', 'type', 'location'])
+            ->with(['location', 'category', 'user'])
+            ->without(['media', 'type'])
             ->withCount([$relation => function ($query) use ($date) {
                 $query->where('created_at', '>=', $date);
             }])
@@ -112,7 +116,8 @@ class HomeDataService
     protected function getTrendingServices(Carbon $date): Collection
     {
         $collection = Service::active()
-            ->without(['media', 'type', 'location'])
+            ->with(['location', 'category', 'user'])
+            ->without(['media', 'type'])
             ->withCount(['quotes' => fn($q) => $q->where('created_at', '>=', $date)])
             ->withCount(['appointments' => fn($q) => $q->where('created_at', '>=', $date)])
             ->orderByDesc('is_featured')

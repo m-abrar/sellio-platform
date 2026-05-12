@@ -84,7 +84,7 @@
                 @click="isFilterOpen = true">
             <i class="bi bi-sliders2 me-2"></i> 
             {{ __('Filters') }}
-            @if(request()->anyFilled(['category', 'price_min', 'price_max', 'location']))
+            @if(request()->anyFilled(['category', 'max_price', 'location', 'bedrooms', 'bathrooms', 'amenities', 'features']))
                 <span class="ms-2 badge rounded-pill bg-primary" style="font-size: 0.7rem;">!</span>
             @endif
         </button>

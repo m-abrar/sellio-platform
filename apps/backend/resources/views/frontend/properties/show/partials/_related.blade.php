@@ -15,8 +15,8 @@
                     <h5 class="fw-800 text-primary mb-1">{{ $related->price }}</h5>
                     <p class="text-dark fw-600 small mb-2 text-truncate">{{ $related->title }}</p>
                     <div class="d-flex gap-3 text-muted small">
-                        <span><i class="fa fa-bed me-1"></i>{{ $related->number_of_bedrooms }}</span>
-                        <span><i class="fa fa-bath me-1"></i>{{ $related->number_of_bathrooms }}</span>
+                        <span><i class="bi bi-house me-1"></i>{{ $related->number_of_bedrooms }}</span>
+                        <span><i class="bi bi-droplet me-1"></i>{{ $related->number_of_bathrooms }}</span>
                     </div>
                 </div>
                 <a href="{{ route('properties.show', $related->slug) }}" class="stretched-link"></a>

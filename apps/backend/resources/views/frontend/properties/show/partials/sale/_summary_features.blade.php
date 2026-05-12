@@ -4,7 +4,7 @@
         <div class="col-6 col-md-4">
             <div class="feature-card p-3 rounded-4 bg-light border d-flex align-items-center gap-3">
                 <div class="icon-box bg-white text-primary shadow-sm rounded-3 p-2">
-                    <i class="fa-solid fa-bed fs-4"></i>
+                    <i class="bi bi-house-door fs-4"></i>
                 </div>
                 <div>
                     <span class="d-block fw-800 text-dark fs-5">{{ $property->number_of_bedrooms ?? '0' }}</span>
@@ -17,7 +17,7 @@
         <div class="col-6 col-md-4">
             <div class="feature-card p-3 rounded-4 bg-light border d-flex align-items-center gap-3">
                 <div class="icon-box bg-white text-primary shadow-sm rounded-3 p-2">
-                    <i class="fa-solid fa-bath fs-4"></i>
+                    <i class="bi bi-droplet fs-4"></i>
                 </div>
                 <div>
                     <span class="d-block fw-800 text-dark fs-5">{{ $property->number_of_bathrooms ?? '0' }}</span>

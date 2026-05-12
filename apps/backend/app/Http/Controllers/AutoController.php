@@ -62,6 +62,8 @@ class AutoController extends Controller
             abort(404);
         }
 
+        $auto->load(['category', 'location', 'user', 'tags', 'media']);
+
         $relatedAutos = $this->autoService->getRelatedAutos($auto);
 
         return view('frontend.autos.show.vehicle-detail', [

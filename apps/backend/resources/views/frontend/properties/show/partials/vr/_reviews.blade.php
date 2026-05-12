@@ -12,11 +12,11 @@
             <div class="mt-2">
                 @include('components.rating-stars', ['rating' => $averageRating])
             </div>
-            <p class="text-muted small mt-2 mb-0">{{ $totalReviews }} Verified Reviews</p>
+            <p class="text-muted small mt-2 mb-0">{{ $totalReviews }} {{ __('Verified Reviews') }}</p>
         </div>
         <div class="col-md ms-md-4 mt-4 mt-md-0">
-            <h4 class="fw-800 mb-1">Guest Favorites</h4>
-            <p class="text-muted mb-0">This home is in the top 5% of properties based on ratings, hospitality, and reliability.</p>
+            <h4 class="fw-800 mb-1">{{ __('Guest Favorites') }}</h4>
+            <p class="text-muted mb-0">{{ __('This home is in the top 5% of properties based on ratings, hospitality, and reliability.') }}</p>
         </div>
     </div>
 
@@ -29,7 +29,7 @@
                             {{ substr($review->user->name ?? 'G', 0, 1) }}
                         </div>
                         <div>
-                            <h6 class="mb-0 fw-bold">{{ $review->user->name ?? 'Verified Guest' }}</h6>
+                            <h6 class="mb-0 fw-bold">{{ $review->user->name ?? __('Verified Guest') }}</h6>
                             <span class="tiny text-muted">{{ $review->created_at->format('M Y') }}</span>
                         </div>
                     </div>

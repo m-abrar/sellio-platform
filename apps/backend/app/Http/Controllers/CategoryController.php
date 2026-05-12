@@ -16,6 +16,15 @@ class CategoryController extends Controller
      */
     public function show(Request $request, Category $category): View
     {
+        $category->load([
+            'properties' => fn($q) => $q->active()->with(['location', 'category']),
+            'events'     => fn($q) => $q->active()->with(['location', 'category']),
+            'jobs'       => fn($q) => $q->active()->with(['location', 'category']),
+            'services'   => fn($q) => $q->active()->with(['location', 'category']),
+            'autos'      => fn($q) => $q->active()->with(['location', 'category']),
+            'classifieds'=> fn($q) => $q->active()->with(['location', 'category']),
+        ]);
+
         return view("frontend.categories.show", [
             'category' => $category,
         ]);

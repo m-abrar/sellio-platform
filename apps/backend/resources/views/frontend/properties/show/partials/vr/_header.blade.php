@@ -48,7 +48,7 @@
                 </span>
                 <div class="d-flex align-items-baseline justify-content-lg-end gap-1">
                     <h2 class="fw-800 text-primary mb-0 display-6">
-                        ${{ number_format($property->price_per_night) }}
+                        {{ setting('currency_symbol', '$') }}{{ number_format($property->price_per_night) }}
                     </h2>
                     <span class="text-muted fs-5">/{{ __('night') }}</span>
                 </div>

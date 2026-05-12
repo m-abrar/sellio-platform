@@ -77,7 +77,7 @@ class AutoService
             }
         });
 
-        return $query->paginate(12);
+        return $query->with(['category', 'location', 'user'])->paginate(12);
     }
 
     /**
@@ -95,7 +95,7 @@ class AutoService
             ->where('category_id', $auto->category_id)
             ->where('make', $auto->make)
             ->whereNotIn('id', $excludedIds)
-            ->with(['category'])
+            ->with(['category', 'location', 'media'])
             ->latest()
             ->take($limit)
             ->get();
@@ -108,7 +108,7 @@ class AutoService
             $extra = Auto::active()
                 ->where('category_id', $auto->category_id)
                 ->whereNotIn('id', $excludedIds)
-                ->with(['category'])
+                ->with(['category', 'location', 'media'])
                 ->inRandomOrder()
                 ->take($needed)
                 ->get();

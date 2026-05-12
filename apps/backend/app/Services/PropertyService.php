@@ -103,7 +103,7 @@ class PropertyService
             $query->when($f['max_price'] ?? null, fn($q, $v) => $q->where(fn($sq) => $sq->where('sale_price', '<=', $v)->orWhere(fn($ssq) => $ssq->whereNull('sale_price')->where('base_price', '<=', $v))));
         }
 
-        return $query->with('prices');
+        return $query->with(['prices', 'location', 'category', 'user']);
     }
 
     /**
@@ -142,8 +142,9 @@ class PropertyService
         return Property::where('slug', $slug)
             ->visibleTo($user)
             ->with([
-                'user', 'category', 'location', 'amenities', 'features',
-                'fees', 'addons', 'neighborhoods', 'scores'
+                'user' => fn($q) => $q->withCount(['properties' => fn($pq) => $pq->active()->where('is_sale', true)]),
+                'category', 'location', 'amenities', 'features',
+                'fees', 'addons', 'neighborhoods', 'scores', 'reviews.user', 'media'
             ])
             ->firstOrFail();
     }

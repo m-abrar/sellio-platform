@@ -24,7 +24,14 @@ class PartnerController extends Controller
     {
         // Fetch user by username or fail with 404
         $user = User::where('username', $username)
-            ->withCount(['reviews']) // Optional: Eager load stats for the profile
+            ->withCount(['reviews'])
+            ->with([
+                'properties' => fn($q) => $q->active()->with(['location', 'category']),
+                'autos'      => fn($q) => $q->active()->with(['location', 'category']),
+                'jobs'       => fn($q) => $q->active()->with(['location', 'category']),
+                'services'   => fn($q) => $q->active()->with(['location', 'category']),
+                'events'     => fn($q) => $q->active()->with(['location', 'category']),
+            ])
             ->firstOrFail();
 
         return view("frontend.partners.show", [

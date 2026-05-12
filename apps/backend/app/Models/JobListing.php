@@ -136,10 +136,10 @@ class JobListing extends Model implements HasMedia
 
     // --- Relationships ---
 
-    // public function user(): BelongsTo
-    // {
-    //     return $this->belongsTo(User::class);
-    // }
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
     public function employer(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');

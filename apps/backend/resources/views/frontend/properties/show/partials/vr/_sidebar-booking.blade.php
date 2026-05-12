@@ -46,10 +46,10 @@
     
     {{-- Nightly Rate Display --}}
     <p class="h4 fw-bold mb-3">
-        ${{ number_format($nightlyRate, 0) }}
-        <span class="small fw-normal text-muted"> / average night</span>
+        {{ setting('currency_symbol', '$') }}{{ number_format($nightlyRate, 0) }}
+        <span class="small fw-normal text-muted"> / {{ __('average night') }}</span>
     </p>
-    <div class="fw-bold text-center border w-100 p-2 rounded-3">Select Checkin & Checkout Dates</div>
+    <div class="fw-bold text-center border w-100 p-2 rounded-3">{{ __('Select Check-in & Check-out Dates') }}</div>
 
     <form action="{{ route('property.booking.start', $property->slug) }}" method="POST">
         @csrf
@@ -90,25 +90,24 @@
             
             {{-- Total Nights line --}}
             <li class="list-group-item d-flex justify-content-between bg-transparent px-0 pt-0 pb-2 border-0">
-                <span class="fw-semibold">Your Stay Duration:</span>
+                <span class="fw-semibold">{{ __('Your Stay Duration:') }}</span>
                 <span class="fw-bold text-end">
                     <span id="total_nights_span">{{ $totalNights }}</span>
-                    <span id="nights_word_span"> Night{{ $totalNights !== 1 ? 's' : '' }}</span>
+                    <span id="nights_word_span"> {{ __('Night') }}{{ $totalNights !== 1 ? 's' : '' }}</span>
                 </span>
             </li>
             
             {{-- Lodging Total (Bottom line) --}}
             <li class="list-group-item d-flex justify-content-between bg-transparent px-0 pt-3 border-top">
-                <span class="fw-bold h5 mb-0 text-primary-color">Lodging Total: <small class="text-muted"> estimated </small></span>
-                <span class="fw-bold h5 text-primary-color mb-0" id="estimated_lodging_total">${{ number_format($estimatedLodgingTotal, 2) }}</span>
-                
+                <span class="fw-bold h5 mb-0 text-primary-color">{{ __('Lodging Total:') }} <small class="text-muted"> {{ __('estimated') }} </small></span>
+                <span class="fw-bold h5 text-primary-color mb-0" id="estimated_lodging_total">{{ setting('currency_symbol', '$') }}{{ number_format($estimatedLodgingTotal, 2) }}</span>
             </li>
         </ul>
 
         {{-- Book Button --}}
         <div class="d-grid">
             <button type="submit" class="btn btn-lg fw-bold text-white btn-primary-theme">
-                Continue Booking <i class="bi bi-arrow-right-short ms-2"></i>
+                {{ __('Continue Booking') }} <i class="bi bi-arrow-right-short ms-2"></i>
             </button>
         </div>
         <p class="text-center small text-muted mt-2">Taxes and final fees are calculated on the next page.</p>

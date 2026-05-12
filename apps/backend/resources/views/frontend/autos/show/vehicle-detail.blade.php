@@ -40,11 +40,11 @@
                         </div>
                         <div class="col-md-4 text-md-end mt-3 mt-md-0">
                             @if ($auto->sale_price < $auto->base_price && $auto->sale_price > 0)
-                                <h2 class="text-danger fw-800 mb-0">${{ number_format($auto->sale_price) }}</h2>
-                                <del class="text-muted small">${{ number_format($auto->base_price) }}</del>
+                                <h2 class="text-danger fw-800 mb-0">{{ setting('currency_symbol', '$') }}{{ number_format($auto->sale_price) }}</h2>
+                                <del class="text-muted small">{{ setting('currency_symbol', '$') }}{{ number_format($auto->base_price) }}</del>
                             @else
                                 <div class="price-tag-lg shadow-sm">
-                                    ${{ number_format($auto->base_price) }}
+                                    {{ setting('currency_symbol', '$') }}{{ number_format($auto->base_price) }}
                                 </div>
                             @endif
                             <p class="text-muted small mt-2 mb-0 fw-bold">{{ __('Excl. Taxes & Licensing') }}</p>

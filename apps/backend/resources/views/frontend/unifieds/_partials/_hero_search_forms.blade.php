@@ -29,8 +29,8 @@
         <div class="col-lg-3">
             <select class="form-select custom-pill-input" name="category">
                 <option selected value="">{{ __('All Body Types') }}</option>
-                @isset($categories)
-                    @foreach($categories->where('is_auto', true) as $category)
+                @isset($autoCategories)
+                    @foreach($autoCategories as $category)
                         <option value="{{ $category->id }}" @selected(request('category') == $category->id)>
                             {{ $category->title }}
                         </option>

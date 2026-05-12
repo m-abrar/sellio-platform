@@ -65,24 +65,24 @@
 
 | File Path | Score | Audit Status |
 | :--- | :--- | :--- |
-| `resources\views\frontend\unifieds\_partials\_auto-card.blade.php` | **80** | ⚠️ Fair - Pending Review |
+| `resources\views\frontend\unifieds\_partials\_auto-card.blade.php` | **90** | ✅ Good - Performance Hardened |
 | `resources\views\frontend\unifieds\_partials\_classified-mini-card.blade.php` | **80** | ⚠️ Fair - Pending Review |
-| `resources\views\frontend\unifieds\_partials\_event-card.blade.php` | **80** | ⚠️ Fair - Pending Review |
+| `resources\views\frontend\unifieds\_partials\_event-card.blade.php` | **90** | ✅ Good - Performance Hardened |
 | `resources\views\frontend\unifieds\_partials\_footer.blade.php` | **80** | ⚠️ Fair - Pending Review |
 | `resources\views\frontend\unifieds\_partials\_header.blade.php` | **80** | ⚠️ Fair - Pending Review |
 | `resources\views\frontend\unifieds\_partials\_hero_search_forms.blade.php` | **80** | ⚠️ Fair - Pending Review |
-| `resources\views\frontend\unifieds\_partials\_index-body.blade.php` | **80** | ⚠️ Fair - Pending Review |
+| `resources\views\frontend\unifieds\_partials\_index-body.blade.php` | **85** | ✅ Good - Logic Audit |
 | `resources\views\frontend\unifieds\_partials\_index-cta.blade.php` | **80** | ⚠️ Fair - Pending Review |
 | `resources\views\frontend\unifieds\_partials\_index-section-hero.blade.php` | **80** | ⚠️ Fair - Pending Review |
-| `resources\views\frontend\unifieds\_partials\_job-list-item.blade.php` | **80** | ⚠️ Fair - Pending Review |
+| `resources\views\frontend\unifieds\_partials\_job-list-item.blade.php` | **90** | ✅ Good - Performance Hardened |
 | `resources\views\frontend\unifieds\_partials\_pagination_links.blade.php` | **80** | ⚠️ Fair - Pending Review |
-| `resources\views\frontend\unifieds\_partials\_property-card.blade.php` | **80** | ⚠️ Fair - Pending Review |
+| `resources\views\frontend\unifieds\_partials\_property-card.blade.php` | **95** | ✅ Elite - Production Ready |
 | `resources\views\frontend\unifieds\brands\show.blade.php` | **80** | ⚠️ Fair - Pending Review |
 | `resources\views\frontend\unifieds\categories\show.blade.php` | **80** | ⚠️ Fair - Pending Review |
-| `resources\views\frontend\unifieds\index.blade.php` | **80** | ⚠️ Fair - Pending Review |
+| `resources\views\frontend\unifieds\index.blade.php` | **95** | ✅ Elite - Production Ready |
 | `resources\views\frontend\unifieds\partners\show.blade.php` | **80** | ⚠️ Fair - Pending Review |
 | `resources\views\frontend\unifieds\tags\show.blade.php` | **80** | ⚠️ Fair - Pending Review |
-| `resources\views\frontend\unifieds\types\show.blade.php" | **80** | ⚠️ Fair - Pending Review |
+| `resources\views\frontend\unifieds\types\show.blade.php` | **80** | ⚠️ Fair - Pending Review |
 
 ### Frontend — Property Module (41 files)
 
@@ -326,3 +326,10 @@
 | `resources\views\vendor\pagination\simple-default.blade.php` | **80** | ⚠️ Fair - Pending Review |
 | `resources\views\vendor\pagination\simple-tailwind.blade.php` | **80** | ⚠️ Fair - Pending Review |
 | `resources\views\vendor\pagination\tailwind.blade.php` | **80** | ⚠️ Fair - Pending Review |
+
+---
+
+# Detailed Audit Reports
+
+Detailed security, performance, and UI/UX audit reports for each file are being consolidated in:
+**[005_frontend_blade_audit_report.md](./005_frontend_blade_audit_report.md)**

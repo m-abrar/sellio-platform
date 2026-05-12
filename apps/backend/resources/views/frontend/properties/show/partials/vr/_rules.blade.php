@@ -2,14 +2,14 @@
 <div class="row g-3">
     <div class="col-6">
         <div class="rule-card">
-            <span class="tiny text-uppercase fw-bold text-muted d-block">Check-in</span>
-            <span class="fw-bold text-dark">After 4:00 PM</span>
+            <span class="tiny text-uppercase fw-bold text-muted d-block">{{ __('Check-in') }}</span>
+            <span class="fw-bold text-dark">{{ __('After 4:00 PM') }}</span>
         </div>
     </div>
     <div class="col-6">
         <div class="rule-card" style="border-color: #ffc107;">
-            <span class="tiny text-uppercase fw-bold text-muted d-block">Check-out</span>
-            <span class="fw-bold text-dark">10:00 AM Sharp</span>
+            <span class="tiny text-uppercase fw-bold text-muted d-block">{{ __('Check-out') }}</span>
+            <span class="fw-bold text-dark">{{ __('10:00 AM Sharp') }}</span>
         </div>
     </div>
 </div>

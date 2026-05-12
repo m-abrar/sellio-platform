@@ -103,8 +103,8 @@
         </div>
 
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
-            @isset($categories)
-                @foreach($categories->where('is_service', true)->take(4) as $category)
+            @isset($serviceCategories)
+                @foreach($serviceCategories as $category)
                     <div class="col" data-aos="zoom-in" data-aos-delay="{{ $loop->index * 100 }}">
                         <a href="{{ route('services.index', ['category' => $category->slug]) }}" class="text-decoration-none">
                             <div class="card glass-surface text-center h-100 border-0 rounded-5 p-3 hover-lift transition-all">
