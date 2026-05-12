@@ -39,6 +39,7 @@
                         <li class="nav-item"><a href="#installation">Installation Guide</a></li>
                         <li class="nav-item"><a href="#configuration">Core Configuration</a></li>
                         <li class="nav-item"><a href="#cron">Crons & Workers</a></li>
+                        <li class="nav-item"><a href="#updating">Maintenance & Updates</a></li>
                     </ul>
                 </div>
 
@@ -68,6 +69,7 @@
                         <li class="nav-item"><a href="#architecture">Backend Architecture</a></li>
                         <li class="nav-item"><a href="#api">API Integration</a></li>
                         <li class="nav-item"><a href="#troubleshooting">Troubleshooting</a></li>
+                        <li class="nav-item"><a href="#support">Support & Changelog</a></li>
                     </ul>
                 </div>
             </nav>
@@ -139,7 +141,7 @@
                 <h2>Installation Pipeline</h2>
                 <div class="nav-tabs">
                     <button class="tab-btn active" onclick="showTab('cli')">Expert CLI</button>
-                    <button class="tab-btn" onclick="showTab('web')">Web Wizard</button>
+                    <button class="tab-btn" onclick="showTab('web')">FTP / cPanel</button>
                 </div>
 
                 <div id="cli" class="tab-content active">
@@ -147,16 +149,24 @@
                         <div class="step-number">1</div>
                         <div class="step-content">
                             <h4>Asset Extraction & Dependency Sync</h4>
-                            <p>Upload the <code>apps/backend</code> folder. Run the composer orchestration:</p>
+                            <p>Upload the <code>apps/backend</code> folder to your server. Run the composer orchestration:</p>
                             <pre><code>composer install --no-dev --optimize-autoloader</code></pre>
                         </div>
                     </div>
                     <div class="step-item">
                         <div class="step-number">2</div>
                         <div class="step-content">
+                            <h4>Environment Setup</h4>
+                            <p>Initialize your environment variables and generate the secure application key:</p>
+                            <pre><code>cp .env.example .env && php artisan key:generate</code></pre>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
                             <h4>Atomic Schema Deployment</h4>
                             <p>Ensure your <code>.env</code> database credentials are set, then execute:</p>
-                            <pre><code>php artisan migrate --seed --force</code></pre>
+                            <pre><code>php artisan migrate --seed --force && php artisan storage:link</code></pre>
                             <div class="callout callout-info">
                                 <p>This will run the **Golden Dataset Seeder**, populating all 8 verticals with high-fidelity sample data.</p>
                             </div>
@@ -168,17 +178,41 @@
                     <div class="step-item">
                         <div class="step-number">1</div>
                         <div class="step-content">
-                            <h4>Health Audit</h4>
-                            <p>Navigate to <code>/install</code>. The wizard will automatically check your PHP extensions and folder permissions.</p>
+                            <h4>Payload Upload</h4>
+                            <p>Upload the contents of the <code>/application</code> (backend) folder to your web root (usually <code>public_html</code>).</p>
                         </div>
                     </div>
                     <div class="step-item">
                         <div class="step-number">2</div>
                         <div class="step-content">
                             <h4>Database Provisioning</h4>
-                            <p>Enter your database host, name, and password. The wizard will handle the <code>.env</code> generation.</p>
+                            <p>Create a new MySQL database via cPanel and a user with full privileges. Note down the name, user, and password.</p>
                         </div>
                     </div>
+                    <div class="step-item">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h4>Web Installer</h4>
+                            <p>Access your domain in the browser (e.g., <code>yoursite.com/install</code>). The high-fidelity wizard will guide you through the <code>.env</code> generation and migration process.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="configuration">
+                <h2>Core Configuration</h2>
+                <p>The primary configuration hub is the <code>.env</code> file. After any modification, run <code>php artisan config:clear</code>.</p>
+                
+                <div class="feature-card mb-4">
+                    <h4 class="small fw-bold"><i class="fas fa-envelope mr-2 text-primary"></i> Mail Service Setup</h4>
+                    <p class="small">We recommend using a transactional service like Mailgun or SendGrid for platform notifications.</p>
+                    <pre><code>MAIL_MAILER=smtp
+MAIL_HOST=smtp.mailgun.org
+MAIL_PORT=587
+MAIL_USERNAME=postmaster@yourdomain.com
+MAIL_PASSWORD=your-secure-password
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=no-reply@yourdomain.com</code></pre>
                 </div>
             </section>
 
@@ -189,6 +223,25 @@
                     <h4 class="small fw-bold">Scheduler (Cron Job)</h4>
                     <pre><code>* * * * * cd /path-to-your-project && php artisan schedule:run >> /dev/null 2>&1</code></pre>
                     <p class="smallest text-muted">This runs the cleanup tasks, recurring payments, and email queues every minute.</p>
+                </div>
+            </section>
+
+            <section id="updating">
+                <h2>Maintenance & Updates</h2>
+                <p>Follow this high-fidelity workflow to update your platform without data loss.</p>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4 class="small fw-bold">1. Payload Swap</h4>
+                        <p class="smallest">Replace all files in your installation directory EXCEPT for the <code>.env</code> file and the <code>storage/app/public</code> folder.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4 class="small fw-bold">2. Schema Sync</h4>
+                        <p class="smallest">Run <code>php artisan migrate</code> to sync new database columns and tables with your existing data.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4 class="small fw-bold">3. Cache Purge</h4>
+                        <p class="smallest">Run <code>php artisan optimize:clear</code> to ensure all new configuration and routing changes are registered.</p>
+                    </div>
                 </div>
             </section>
 
@@ -205,10 +258,6 @@
                         <p class="smallest">Integrated booking system with night-based pricing and availability calendars.</p>
                     </div>
                 </div>
-                <div class="callout callout-info">
-                    <div class="callout-title">Management Path</div>
-                    <p>Go to <strong>Admin -> Properties</strong> to manage listings, or <strong>Admin -> Property Bookings</strong> to audit guest stays.</p>
-                </div>
             </section>
 
             <section id="auto">
@@ -222,6 +271,21 @@
                     <div class="feature-card">
                         <h4 class="small fw-bold">Vehicle Matrix</h4>
                         <p class="smallest">Support for advanced specs like Engine Size, Fuel Type, Transmission, and Drive Train.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="ecommerce">
+                <h2>E-Commerce Engine</h2>
+                <p>A complete retail solution with cart, checkout, and inventory tracking.</p>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4 class="small fw-bold">Variation Matrix</h4>
+                        <p class="smallest">Support for multiple sizes, colors, and SKUs per product with independent pricing.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4 class="small fw-bold">Order Lifecycle</h4>
+                        <p class="smallest">Full tracking from "Pending" to "Processing" to "Completed" with automated buyer notifications.</p>
                     </div>
                 </div>
             </section>
@@ -290,43 +354,6 @@
                         </tr>
                     </tbody>
                 </table>
-                <div class="callout callout-warning">
-                    <p>Admins can use the <strong>"Login As" (Impersonation)</strong> feature to troubleshoot user accounts securely without needing passwords.</p>
-                </div>
-            </section>
-
-            <section id="architecture">
-                <h2>Advanced Backend Engineering</h2>
-                <p>Sellio's codebase is designed to be modified and extended by developers.</p>
-
-                <div class="feature-card mb-4">
-                    <h4 class="small fw-bold">Service Layer Pattern</h4>
-                    <p class="small">We decouple business logic from the HTTP layer. Every major module (e.g., <code>PropertyService</code>, <code>FinancialService</code>) can be called from Web, API, or CLI without rewriting logic.</p>
-                    <pre><code>// Clean implementation example
-$result = $this->financialService->payout($withdrawal);</code></pre>
-                </div>
-
-                <div class="feature-card mb-4">
-                    <h4 class="small fw-bold">Modular Traits</h4>
-                    <ul class="nav-list smallest">
-                        <li><strong>HasImageAccess</strong>: Unified Spatie Media Library management with fallback support.</li>
-                        <li><strong>HasAnalytics</strong>: Non-blocking engagement tracking for listings.</li>
-                        <li><strong>ManagesApproval</strong>: Standardized moderation/approval workflows.</li>
-                    </ul>
-                </div>
-            </section>
-
-            <section id="api">
-                <h2>API Integration & Mobility</h2>
-                <p>Automated OpenAPI documentation powered by **Scramble**.</p>
-                <div class="callout callout-info">
-                    <p>Access the live API registry at <code>/docs/api</code>. Use <strong>Laravel Sanctum</strong> for mobile app authentication.</p>
-                </div>
-                <div class="feature-card">
-                    <h4 class="small fw-bold">Standardized Envelope</h4>
-                    <p class="smallest">All API responses follow this structure for predictable mobile parsing:</p>
-                    <pre><code>{ "success": true, "data": [...], "meta": {...} }</code></pre>
-                </div>
             </section>
 
             <section id="monetization">
@@ -345,6 +372,60 @@ $result = $this->financialService->payout($withdrawal);</code></pre>
                         <h4 class="small fw-bold">3. Ad Placements</h4>
                         <p class="smallest">Sell premium advertisement slots across the homepage and search results using the Ad Module.</p>
                     </div>
+                </div>
+            </section>
+
+            <section id="architecture">
+                <h2>Advanced Backend Engineering</h2>
+                <p>Sellio's codebase is designed to be modified and extended by developers.</p>
+
+                <div class="feature-card mb-4">
+                    <h4 class="small fw-bold">Service Layer Pattern</h4>
+                    <p class="small">We decouple business logic from the HTTP layer. Every major module (e.g., <code>PropertyService</code>, <code>FinancialService</code>) can be called from Web, API, or CLI without rewriting logic.</p>
+                </div>
+
+                <div class="feature-card mb-4">
+                    <h4 class="small fw-bold">Modular Traits</h4>
+                    <ul class="nav-list smallest">
+                        <li><strong>HasImageAccess</strong>: Unified Spatie Media Library management.</li>
+                        <li><strong>HasAnalytics</strong>: Non-blocking engagement tracking for listings.</li>
+                        <li><strong>ManagesApproval</strong>: Standardized moderation/approval workflows.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="troubleshooting">
+                <h2>Troubleshooting</h2>
+                <p>Common issues and their executive-level resolutions.</p>
+                <div class="feature-card mb-4">
+                    <h4 class="small fw-bold">404 Errors on Internal Pages</h4>
+                    <p class="small">Usually caused by missing <code>.htaccess</code> (Apache) or incorrect <code>try_files</code> (Nginx). Ensure <code>mod_rewrite</code> is enabled.</p>
+                </div>
+                <div class="feature-card mb-4">
+                    <h4 class="small fw-bold">Blank Screen / 500 Error</h4>
+                    <p class="small">Check your <code>storage/logs/laravel.log</code>. This is almost always caused by incorrect folder permissions (ensure <code>storage</code> and <code>bootstrap/cache</code> are writable, usually chmod 775/777).</p>
+                </div>
+            </section>
+
+            <section id="support">
+                <h2>Support & Changelog</h2>
+                <div class="feature-card mb-4">
+                    <h4 class="small fw-bold">Scope of Support</h4>
+                    <p class="small">Assistance is provided for platform bugs and documented features. We do not provide free support for third-party customizations or server-side configuration issues.</p>
+                    <a href="#" class="btn-text">Contact Support via Envato <i class="fas fa-external-link-alt ml-1"></i></a>
+                </div>
+
+                <h3 class="mt-5 mb-4">Release Registry</h3>
+                <div class="feature-card">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-primary fw-bold">v2.1.0 Stable</span>
+                        <span class="text-muted smallest">Oct 2024</span>
+                    </div>
+                    <ul class="nav-list smallest">
+                        <li><span class="badge-success-light text-success px-2 mr-2">New</span> Integrated Scramble API documentation.</li>
+                        <li><span class="badge-success-light text-success px-2 mr-2">New</span> Atomic Financial Wallet hardering.</li>
+                        <li><span class="badge-info-light text-info px-2 mr-2">Update</span> Laravel 12.x Core Synchronization.</li>
+                    </ul>
                 </div>
             </section>
 
