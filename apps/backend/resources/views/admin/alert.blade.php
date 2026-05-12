@@ -45,6 +45,26 @@
     @endif
 @endforeach
 
+{{-- Impersonation Notification --}}
+@if(Session::has('impersonate_original_user_id'))
+    <div class="alert alert-primary-light border-0 shadow-premium d-flex align-items-center p-3 mb-4" role="alert" style="border-radius: 16px; border-left: 5px solid var(--primary) !important; background: #fff; position: relative; z-index: 9999;">
+        <div class="icon-box bg-primary text-white mr-3 shadow-lg" style="width: 48px; height: 48px; min-width: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+            <i class="fas fa-user-secret fa-lg"></i>
+        </div>
+        <div class="alert-content">
+            <h6 class="font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1">{{ __('IMPERSONATION MODE ACTIVE') }}</h6>
+            <p class="mb-0 text-secondary small font-weight-600">
+                {{ __('You are currently logged in as') }} <strong>{{ Auth::user()->name }}</strong>.
+            </p>
+        </div>
+        <div class="ml-auto">
+            <a href="{{ route('admin.users.stop-impersonating') }}" class="btn btn-primary btn-sm rounded-pill px-4 font-weight-bold shadow-sm">
+                <i class="fas fa-sign-out-alt mr-1"></i> {{ __('STOP IMPERSONATION') }}
+            </a>
+        </div>
+    </div>
+@endif
+
 {{-- Validation Errors --}}
 @if($errors->any())
     <div class="alert alert-danger-light animate__animated animate__shakeX border-0 shadow-sm d-flex align-items-start p-3 mb-4" role="alert" style="border-radius: 16px; border-left: 5px solid var(--danger) !important; background: rgba(255,255,255,0.9); backdrop-filter: blur(10px);">

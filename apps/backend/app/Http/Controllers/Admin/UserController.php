@@ -175,4 +175,45 @@ class UserController extends Controller
         
         return redirect()->back()->with('success', __('User approved as Partner successfully.'));
     }
+
+    /**
+     * Impersonate a specific user.
+     */
+    public function impersonate(User $user)
+    {
+        // 1. Security Check: Only admins can impersonate, and cannot impersonate themselves
+        if (Auth::id() === $user->id) {
+            return back()->with('error', __('You cannot impersonate yourself.'));
+        }
+
+        // 2. Store the original user ID in the session
+        Session::put('impersonate_original_user_id', Auth::id());
+
+        // 3. Log out current user and log in as target user
+        Auth::login($user);
+
+        return redirect()->route('admin.welcome')->with('success', __('You are now impersonating') . " {$user->name}");
+    }
+
+    /**
+     * Stop impersonating and return to the original admin user.
+     */
+    public function stopImpersonating()
+    {
+        $originalUserId = Session::get('impersonate_original_user_id');
+
+        if (!$originalUserId) {
+            return redirect()->route('admin.welcome');
+        }
+
+        $originalUser = User::find($originalUserId);
+
+        if ($originalUser) {
+            Auth::login($originalUser);
+            Session::forget('impersonate_original_user_id');
+            return redirect()->route('admin.users.index')->with('success', __('Returned to your original session.'));
+        }
+
+        return redirect()->route('login');
+    }
 }

@@ -236,6 +236,8 @@ Route::prefix('admin')
         );
 
         Route::resource('users', UserController::class)->middleware('can:manage-users');
+        Route::get('users/{user}/impersonate', [UserController::class, 'impersonate'])->name('users.impersonate')->middleware('can:manage-users');
+        Route::get('stop-impersonating', [UserController::class, 'stopImpersonating'])->name('users.stop-impersonating');
 
         Route::middleware('can:app-settings')->group(function () {
             Route::resource('roles', RoleController::class);

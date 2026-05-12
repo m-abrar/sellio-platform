@@ -127,6 +127,13 @@
                                             <i class="fas fa-eye"></i>
                                         </a>
 
+                                        {{-- Impersonate Button --}}
+                                        <a href="{{ route('admin.users.impersonate', $user->id) }}" 
+                                        class="btn btn-white btn-sm text-primary py-2 px-3 border-right" 
+                                        data-toggle="tooltip" title="{{ __('Impersonate User') }}">
+                                            <i class="fas fa-user-secret"></i>
+                                        </a>
+
                                         {{-- Edit Button --}}
                                         <a href="{{ route('admin.users.edit', $user->id) }}" 
                                         class="btn btn-white btn-sm text-info py-2 px-3 border-right" 
