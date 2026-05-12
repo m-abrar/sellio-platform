@@ -45,4 +45,48 @@ trait HasBookingAttributes
     {
         return Str::headline(str_replace(['Booking', 'Inquiry', 'Application', 'Quote', 'Appointment'], '', class_basename($this)));
     }
+
+    /**
+     * Get the CSS badge class based on the module context.
+     */
+    public function getTypeBadgeClass(): string
+    {
+        return match ($this->getTypeContext()) {
+            'real-estate' => 'badge-info-light text-info',
+            'event'       => 'badge-success-light text-success',
+            'service'     => 'badge-teal-light text-teal',
+            'recruitment' => 'badge-purple-light text-purple',
+            'automotive'  => 'badge-primary-light text-primary',
+            'classified'  => 'badge-secondary-light text-secondary',
+            default       => 'badge-dark-light text-dark',
+        };
+    }
+
+    /**
+     * Virtual attribute to get the title of the related item.
+     */
+    public function getItemTitleAttribute(): string
+    {
+        $relation = $this->relation_name ?? null;
+        if (!$relation) return 'N/A';
+        
+        return $this->{$relation}->title ?? $this->{$relation}->name ?? 'Untitled Item';
+    }
+
+    /**
+     * Virtual attribute to get the thumbnail of the related item.
+     */
+    public function getItemThumbnailAttribute(): string
+    {
+        $relation = $this->relation_name ?? null;
+        if (!$relation || !$this->{$relation}) {
+            return asset('images/fallbacks/default.jpg');
+        }
+
+        return method_exists($this->{$relation}, 'getFirstMediaUrl') 
+            ? $this->{$relation}->getFirstMediaUrl('featured_image', 'thumb') 
+            : asset('images/fallbacks/default.jpg');
+    }
 }
+
+

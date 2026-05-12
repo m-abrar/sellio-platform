@@ -66,7 +66,8 @@ class OrderController extends Controller
     public function create(): View
     {
         $users = User::select('id', 'name', 'email')->get();
-        $products = Product::active()->select('id', 'title', 'price', 'manage_stock', 'stock_quantity')->get();
+        $products = Product::active()->select('id', 'title', 'base_price', 'sale_price', 'on_sale', 'manage_stock', 'stock_quantity')->get();
+
         
         return view('admin.product-orders.create', compact('users', 'products'));
     }

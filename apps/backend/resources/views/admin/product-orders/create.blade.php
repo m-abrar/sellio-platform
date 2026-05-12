@@ -93,9 +93,10 @@
                                             <select name="items[0][product_id]" class="form-control select2 product-select" required onchange="updateRowPrice(this)">
                                                 <option value="">-- {{ __('SELECT PRODUCT') }} --</option>
                                                 @foreach($products as $product)
-                                                    <option value="{{ $product->id }}" data-price="{{ $product->price }}" data-name="{{ $product->name }}">
-                                                        {{ $product->name }} ({{ number_format($product->price, 2) }})
+                                                    <option value="{{ $product->id }}" data-price="{{ $product->price }}" data-title="{{ $product->title }}">
+                                                        {{ $product->title }} ({{ number_format($product->price, 2) }})
                                                     </option>
+
                                                 @endforeach
                                             </select>
                                         </td>
@@ -251,9 +252,10 @@
                     <select name="items[${rowId}][product_id]" class="form-control select2 product-select" required onchange="updateRowPrice(this)">
                         <option value="">-- {{ __('SELECT PRODUCT') }} --</option>
                         @foreach($products as $product)
-                            <option value="{{ $product->id }}" data-price="{{ $product->price }}" data-name="{{ $product->name }}">
-                                {{ $product->name }} ({{ number_format($product->price, 2) }})
+                            <option value="{{ $product->id }}" data-price="{{ $product->price }}" data-title="{{ $product->title }}">
+                                {{ $product->title }} ({{ number_format($product->price, 2) }})
                             </option>
+
                         @endforeach
                     </select>
                 </td>

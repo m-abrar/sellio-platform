@@ -31,7 +31,7 @@ use App\Http\Controllers\Dashboard\MediaController;
 |
 */
 
-Route::name('dashboard.user.')->group(function () {
+Route::group([], function () {
 
     /**
      * 1. CORE DASHBOARD

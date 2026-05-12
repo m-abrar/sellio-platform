@@ -391,6 +391,13 @@ Route::prefix('admin')
         /**
          * SECTION: GLOBAL ASSETS (Administrative)
          */
-        Route::post('/upload-image', [MediaController::class , 'upload'])->name('upload.image');
-        Route::post('/admin/delete-image', [MediaController::class , 'delete'])->name('delete.image');
     });
+
+// --- GLOBAL MEDIA UTILITIES ---
+// These routes are defined outside the 'admin.' name prefix to allow shared components
+// to use 'upload.image' and 'delete.image' consistently across all dashboard contexts.
+Route::middleware(['auth'])->prefix('admin')->group(function () {
+    Route::post('/upload-image', [MediaController::class, 'upload'])->name('upload.image');
+    Route::post('/delete-image', [MediaController::class, 'delete'])->name('delete.image');
+});
+
