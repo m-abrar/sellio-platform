@@ -65,7 +65,7 @@ class EventController extends Controller
     public function show(Event $event): View
     {
         $event->load([
-            'category', 'location', 'tags', 'ticketTypes', 'media',
+            'category', 'location', 'user', 'brand', 'tags', 'ticketTypes', 'media',
             'occurrences' => function ($query) {
                 $query->where('start_date_time', '>', now())
                     ->orderBy('start_date_time')

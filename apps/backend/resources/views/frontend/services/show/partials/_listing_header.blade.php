@@ -5,9 +5,9 @@
         <div class="price-badge-premium d-flex align-items-center shadow-sm me-2">
             <span class="price-amount px-3 py-2 fw-800">
                 @if($service->sale_price)
-                    ${{ number_format($service->sale_price) }}
+                    {{ setting('currency_symbol', '$') }}{{ number_format($service->sale_price) }}
                 @elseif($service->base_price)
-                    ${{ number_format($service->base_price) }}
+                    {{ setting('currency_symbol', '$') }}{{ number_format($service->base_price) }}
                 @else
                     {{ __('By Quote') }}
                 @endif
@@ -24,7 +24,7 @@
         @endif
         
         <span class="badge bg-primary-light text-primary-color px-3 py-2 rounded-pill fw-bold small">
-            <i class="bi bi-award-fill me-1"></i> {{ __('Level') }}: {{ $service->expertise_level }}
+            <i class="bi bi-award-fill me-1"></i> {{ __('Level') }}: {{ $expertiseMap[$service->expertise_level] ?? $service->expertise_level }}
         </span>
 
         @if($service->is_project_based)

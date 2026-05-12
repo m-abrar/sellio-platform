@@ -1,7 +1,7 @@
 <div class="sticky-top">
     <div class="card glass-surface border-0 shadow-lg p-4 mb-4">
-        <h4 class="fw-800 text-dark mb-1">Book Consultation</h4>
-        <p class="text-muted small mb-4">Response time: Usually within 24h</p>
+        <h4 class="fw-800 text-dark mb-1">{{ __('Book Consultation') }}</h4>
+        <p class="text-muted small mb-4">{{ __('Response time: Usually within 24h') }}</p>
 
         <form action="{{ route('services.consultation.store', $service->slug) }}" method="POST">
             @csrf
@@ -12,10 +12,10 @@
                        name="name" 
                        class="form-control glass-input @error('name') is-invalid @enderror" 
                        id="floatingName" 
-                       placeholder="Name" 
+                       placeholder="{{ __('Name') }}" 
                        value="{{ old('name', auth()->user()->name ?? '') }}" 
                        required>
-                <label for="floatingName">Full Name</label>
+                <label for="floatingName">{{ __('Full Name') }}</label>
                 @error('name') <div class="invalid-feedback">{{ $message }}</div> @enderror
             </div>
 
@@ -25,10 +25,10 @@
                        name="email" 
                        class="form-control glass-input @error('email') is-invalid @enderror" 
                        id="floatingEmail" 
-                       placeholder="Email" 
+                       placeholder="{{ __('Email') }}" 
                        value="{{ old('email', auth()->user()->email ?? '') }}" 
                        required>
-                <label for="floatingEmail">Email Address</label>
+                <label for="floatingEmail">{{ __('Email Address') }}</label>
                 @error('email') <div class="invalid-feedback">{{ $message }}</div> @enderror
             </div>
 
@@ -38,18 +38,18 @@
                        name="phone" 
                        class="form-control glass-input @error('phone') is-invalid @enderror" 
                        id="floatingPhone" 
-                       placeholder="Phone Number" 
+                       placeholder="{{ __('Phone Number') }}" 
                        value="{{ old('phone', auth()->user()->phone ?? '') }}" 
                        required>
-                <label for="floatingPhone">Phone Number</label>
+                <label for="floatingPhone">{{ __('Phone Number') }}</label>
                 @error('phone') <div class="invalid-feedback">{{ $message }}</div> @enderror
             </div>
 
             {{-- Topic / Interest --}}
             <div class="mb-4">
-                <label class="small fw-bold text-muted mb-2">Primary Interest</label>
+                <label class="small fw-bold text-muted mb-2">{{ __('Primary Interest') }}</label>
                 <select name="topic" class="form-select glass-input py-3 @error('topic') is-invalid @enderror" required>
-                    <option value="" disabled {{ old('topic') ? '' : 'selected' }}>Select a service...</option>
+                    <option value="" disabled {{ old('topic') ? '' : 'selected' }}>{{ __('Select a service...') }}</option>
                     @foreach ($service->features as $feature)
                         <option value="{{ $feature->title }}" {{ old('topic') == $feature->title ? 'selected' : '' }}>
                             {{ $feature->title }}
@@ -61,7 +61,7 @@
 
             <div class="d-grid mb-3">
                 <button type="submit" class="btn btn-lg fw-bold text-white btn-primary">
-                    Schedule My Call <i class="bi bi-arrow-right ms-2"></i>
+                    {{ __('Schedule My Call') }} <i class="bi bi-arrow-right ms-2"></i>
                 </button>
             </div>
             
@@ -74,8 +74,8 @@
                 <i class="bi bi-shield-check fs-5"></i>
             </div>
             <div>
-                <h6 class="mb-0 fw-bold text-success small">Secure Consultation</h6>
-                <p class="extra-small text-success mb-0 opacity-75">Encrypted and confidential sessions.</p>
+                <h6 class="mb-0 fw-bold text-success small">{{ __('Secure Consultation') }}</h6>
+                <p class="extra-small text-success mb-0 opacity-75">{{ __('Encrypted and confidential sessions.') }}</p>
             </div>
         </div>
     </div>

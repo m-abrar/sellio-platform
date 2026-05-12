@@ -21,12 +21,15 @@ class ServiceManagementService
     /**
      * @var array
      */
-    protected $expertiseLevels = [
-        1 => 'Beginner/Junior',
-        2 => 'Intermediate/Mid-level',
-        3 => 'Advanced/Senior',
-        4 => 'Expert/Master',
-    ];
+    protected function getExpertiseLevelsRaw(): array
+    {
+        return [
+            1 => __('Beginner/Junior'),
+            2 => __('Intermediate/Mid-level'),
+            3 => __('Advanced/Senior'),
+            4 => __('Expert/Master'),
+        ];
+    }
 
     /**
      * Filter and paginate services based on request parameters.
@@ -55,7 +58,7 @@ class ServiceManagementService
             ->when($filters['tags'] ?? null, function ($q, $v) {
                 $q->whereHas('tags', fn($sub) => $sub->whereIn('tags.id', (array) $v));
             })
-            ->with(['category', 'user'])
+            ->with(['category', 'user.reviews', 'media'])
             ->paginate($filters['per_page'] ?? 12);
     }
 
@@ -99,7 +102,7 @@ class ServiceManagementService
      */
     public function getExpertiseLevels(): array
     {
-        return $this->expertiseLevels;
+        return $this->getExpertiseLevelsRaw();
     }
 
     /**
@@ -134,7 +137,7 @@ class ServiceManagementService
             'name'    => $data['name']  ?? auth()->user()->name,
             'email'   => $data['email'] ?? auth()->user()->email,
             'phone'   => $data['phone'] ?? auth()->user()->phone,
-            'topic'   => $data['topic'] ?? 'General Consultation',
+            'topic'   => $data['topic'] ?? __('General Consultation'),
             'notes'   => $data['notes'] ?? null,
             'status'  => 'pending',
             'price'   => $service->sale_price ?? $service->base_price,
@@ -185,11 +188,11 @@ class ServiceManagementService
         
         // 2. Format the 'details' text field safely
         // We use ?? to handle the case where 'notes' might be missing from the array
-        $clientNotes = $data['notes'] ?? 'No additional notes provided.';
+        $clientNotes = $data['notes'] ?? __('No additional notes provided.');
         
-        $detailsText = "Package: " . ($package->title ?? 'N/A') . "\n";
-        $detailsText .= "Project Scale/Size: " . ($data['scope_size'] ?? 'N/A') . "\n";
-        $detailsText .= "Client Notes: " . $clientNotes;
+        $detailsText = __('Package') . ": " . ($package->title ?? __('N/A')) . "\n";
+        $detailsText .= __('Project Scale/Size') . ": " . ($data['scope_size'] ?? __('N/A')) . "\n";
+        $detailsText .= __('Client Notes') . ": " . $clientNotes;
 
         // 3. Create the Quote record
         return $service->quotes()->create([

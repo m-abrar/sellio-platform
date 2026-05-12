@@ -4,34 +4,34 @@
 
 | File Path | Score | Audit Status |
 | :--- | :--- | :--- |
-| `resources\views\auth\confirm-password.blade.php` | **100** | ✅ Elite - Production Ready |
-| `resources\views\auth\forgot-password.blade.php` | **100** | ✅ Elite - Production Ready |
-| `resources\views\auth\login.blade.php` | **100** | ✅ Elite - Production Ready |
-| `resources\views\auth\login-partner.blade.php` | **100** | ✅ Elite - Production Ready |
-| `resources\views\auth\register.blade.php` | **100** | ✅ Elite - Production Ready |
-| `resources\views\auth\register-partner.blade.php` | **100** | ✅ Elite - Production Ready |
-| `resources\views\auth\reset-password.blade.php` | **100** | ✅ Elite - Production Ready |
-| `resources\views\auth\verify-email.blade.php" | **100** | ✅ Elite - Production Ready |
+| `resources\views\auth\confirm-password.blade.php` | **80** | ⚠️ Fair - Pending Review |
+| `resources\views\auth\forgot-password.blade.php` | **80** | ⚠️ Fair - Pending Review |
+| `resources\views\auth\login.blade.php` | **80** | ⚠️ Fair - Pending Review |
+| `resources\views\auth\login-partner.blade.php` | **80** | ⚠️ Fair - Pending Review |
+| `resources\views\auth\register.blade.php" | **80** | ⚠️ Fair - Pending Review |
+| `resources\views\auth\register-partner.blade.php` | **80** | ⚠️ Fair - Pending Review |
+| `resources\views\auth\reset-password.blade.php` | **80** | ⚠️ Fair - Pending Review |
+| `resources\views\auth\verify-email.blade.php" | **80** | ⚠️ Fair - Pending Review |
 
 ### Blade Components (16 files)
 
 | File Path | Score | Audit Status |
-| `resources\views\components\application-logo.blade.php` | **95** | ✅ Safe - Production Ready |
-| `resources\views\components\auth-session-status.blade.php` | **95** | ✅ Safe - Production Ready |
-| `resources\views\components\danger-button.blade.php` | **95** | ✅ Safe - Production Ready |
-| `resources\views\components\dropdown.blade.php` | **95** | ✅ Safe - Production Ready |
-| `resources\views\components\dropdown-link.blade.php` | **95** | ✅ Safe - Production Ready |
-| `resources\views\components\image-uploader.blade.php` | **95** | ✅ Safe - Auth Hardened |
-| `resources\views\components\input-error.blade.php` | **95** | ✅ Safe - Production Ready |
-| `resources\views\components\input-label.blade.php` | **95** | ✅ Safe - Production Ready |
-| `resources\views\components\modal.blade.php` | **95** | ✅ Safe - Production Ready |
-| `resources\views\components\nav-link.blade.php` | **95** | ✅ Safe - Production Ready |
-| `resources\views\components\premium-empty-state.blade.php` | **98** | ✅ Elite - Production Ready |
-| `resources\views\components\primary-button.blade.php` | **95** | ✅ Safe - Production Ready |
-| `resources\views\components\rating-stars.blade.php` | **95** | ✅ Safe - Production Ready |
-| `resources\views\components\responsive-nav-link.blade.php` | **95** | ✅ Safe - Production Ready |
-| `resources\views\components\secondary-button.blade.php` | **95** | ✅ Safe - Production Ready |
-| `resources\views\components\text-input.blade.php` | **95** | ✅ Safe - Production Ready |ources\views\components\text-input.blade.php` | **80** | ⚠️ Fair - Pending Review |
+| `resources\views\components\application-logo.blade.php` | **80** | ⚠️ Fair - Pending Review |
+| `resources\views\components\auth-session-status.blade.php` | **80** | ⚠️ Fair - Pending Review |
+| `resources\views\components\danger-button.blade.php` | **80** | ⚠️ Fair - Pending Review |
+| `resources\views\components\dropdown.blade.php` | **80** | ⚠️ Fair - Pending Review |
+| `resources\views\components\dropdown-link.blade.php` | **80** | ⚠️ Fair - Pending Review |
+| `resources\views\components\image-uploader.blade.php` | **80** | ⚠️ Fair - Pending Review |
+| `resources\views\components\input-error.blade.php` | **80** | ⚠️ Fair - Pending Review |
+| `resources\views\components\input-label.blade.php` | **80** | ⚠️ Fair - Pending Review |
+| `resources\views\components\modal.blade.php` | **80** | ⚠️ Fair - Pending Review |
+| `resources\views\components\nav-link.blade.php` | **80** | ⚠️ Fair - Pending Review |
+| `resources\views\components\premium-empty-state.blade.php` | **80** | ⚠️ Fair - Pending Review |
+| `resources\views\components\primary-button.blade.php` | **80** | ⚠️ Fair - Pending Review |
+| `resources\views\components\rating-stars.blade.php` | **80** | ⚠️ Fair - Pending Review |
+| `resources\views\components\responsive-nav-link.blade.php` | **80** | ⚠️ Fair - Pending Review |
+| `resources\views\components\secondary-button.blade.php` | **80** | ⚠️ Fair - Pending Review |
+| `resources\views\components\text-input.blade.php` | **80** | ⚠️ Fair - Pending Review |
 
 ### Email Templates (1 files)
 
@@ -51,35 +51,35 @@
 
 | File Path | Score | Audit Status |
 | :--- | :--- | :--- |
-| `resources\views\frontend\_layouts\_app.blade.php` | **95** | ✅ Safe - Production Ready |
-| `resources\views\frontend\_layouts\_guest.blade.php` | **95** | ✅ Safe - Production Ready |
-| `resources\views\frontend\_layouts\_guest_partner.blade.php` | **95** | ✅ Safe - Production Ready |
-| `resources\views\frontend\_partials\_alerts.blade.php` | **95** | ✅ Safe - Production Ready |
-| `resources\views\frontend\_partials\_footer.blade.php` | **95** | ✅ Safe - Production Ready |
-| `resources\views\frontend\_partials\_header.blade.php` | **95** | ✅ Safe - Production Ready |
-| `resources\views\frontend\_partials\_pagination.blade.php` | **95** | ✅ Safe - Production Ready |
-| `resources\views\frontend\_partials\_pagination_links.blade.php` | **95** | ✅ Safe - Production Ready |
-| `resources\views\frontend\_partials\_reviews.blade.php` | **95** | ✅ Safe - Auth Hardened |
+| `resources\views\frontend\_layouts\_app.blade.php` | **80** | ⚠️ Fair - Pending Review |
+| `resources\views\frontend\_layouts\_guest.blade.php` | **80** | ⚠️ Fair - Pending Review |
+| `resources\views\frontend\_layouts\_guest_partner.blade.php` | **80** | ⚠️ Fair - Pending Review |
+| `resources\views\frontend\_partials\_alerts.blade.php` | **80** | ⚠️ Fair - Pending Review |
+| `resources\views\frontend\_partials\_footer.blade.php` | **80** | ⚠️ Fair - Pending Review |
+| `resources\views\frontend\_partials\_header.blade.php` | **80** | ⚠️ Fair - Pending Review |
+| `resources\views\frontend\_partials\_pagination.blade.php` | **80** | ⚠️ Fair - Pending Review |
+| `resources\views\frontend\_partials\_pagination_links.blade.php` | **80** | ⚠️ Fair - Pending Review |
+| `resources\views\frontend\_partials\_reviews.blade.php` | **80** | ⚠️ Fair - Pending Review |
 
 ### Frontend — Unified (Multi-Vertical) (18 files)
 
 | File Path | Score | Audit Status |
 | :--- | :--- | :--- |
-| `resources\views\frontend\unifieds\_partials\_auto-card.blade.php` | **90** | ✅ Good - Performance Hardened |
+| `resources\views\frontend\unifieds\_partials\_auto-card.blade.php` | **80** | ⚠️ Fair - Pending Review |
 | `resources\views\frontend\unifieds\_partials\_classified-mini-card.blade.php` | **80** | ⚠️ Fair - Pending Review |
-| `resources\views\frontend\unifieds\_partials\_event-card.blade.php` | **90** | ✅ Good - Performance Hardened |
+| `resources\views\frontend\unifieds\_partials\_event-card.blade.php` | **80** | ⚠️ Fair - Pending Review |
 | `resources\views\frontend\unifieds\_partials\_footer.blade.php` | **80** | ⚠️ Fair - Pending Review |
 | `resources\views\frontend\unifieds\_partials\_header.blade.php` | **80** | ⚠️ Fair - Pending Review |
 | `resources\views\frontend\unifieds\_partials\_hero_search_forms.blade.php` | **80** | ⚠️ Fair - Pending Review |
-| `resources\views\frontend\unifieds\_partials\_index-body.blade.php` | **85** | ✅ Good - Logic Audit |
+| `resources\views\frontend\unifieds\_partials\_index-body.blade.php` | **80** | ⚠️ Fair - Pending Review |
 | `resources\views\frontend\unifieds\_partials\_index-cta.blade.php` | **80** | ⚠️ Fair - Pending Review |
 | `resources\views\frontend\unifieds\_partials\_index-section-hero.blade.php` | **80** | ⚠️ Fair - Pending Review |
-| `resources\views\frontend\unifieds\_partials\_job-list-item.blade.php` | **90** | ✅ Good - Performance Hardened |
+| `resources\views\frontend\unifieds\_partials\_job-list-item.blade.php` | **80** | ⚠️ Fair - Pending Review |
 | `resources\views\frontend\unifieds\_partials\_pagination_links.blade.php` | **80** | ⚠️ Fair - Pending Review |
-| `resources\views\frontend\unifieds\_partials\_property-card.blade.php` | **95** | ✅ Elite - Production Ready |
+| `resources\views\frontend\unifieds\_partials\_property-card.blade.php` | **80** | ⚠️ Fair - Pending Review |
 | `resources\views\frontend\unifieds\brands\show.blade.php` | **80** | ⚠️ Fair - Pending Review |
 | `resources\views\frontend\unifieds\categories\show.blade.php` | **80** | ⚠️ Fair - Pending Review |
-| `resources\views\frontend\unifieds\index.blade.php` | **95** | ✅ Elite - Production Ready |
+| `resources\views\frontend\unifieds\index.blade.php` | **80** | ⚠️ Fair - Pending Review |
 | `resources\views\frontend\unifieds\partners\show.blade.php` | **80** | ⚠️ Fair - Pending Review |
 | `resources\views\frontend\unifieds\tags\show.blade.php` | **80** | ⚠️ Fair - Pending Review |
 | `resources\views\frontend\unifieds\types\show.blade.php` | **80** | ⚠️ Fair - Pending Review |
@@ -93,9 +93,9 @@
 | `resources\views\frontend\properties\_partials\_header.blade.php` | **80** | ⚠️ Fair - Pending Review |
 | `resources\views\frontend\properties\_partials\_pagination.blade.php` | **80** | ⚠️ Fair - Pending Review |
 | `resources\views\frontend\properties\_partials\_sidebar_filter.blade.php` | **80** | ⚠️ Fair - Pending Review |
-| `resources\views\frontend\properties\booking\checkout.blade.php` | **95** | ✅ Elite - Price Security Hardened |
-| `resources\views\frontend\properties\booking\confirmation.blade.php` | **90** | ✅ Good - Standard |
-| `resources\views\frontend\properties\booking\payment.blade.php` | **95** | ✅ Elite - Secure Bridge |
+| `resources\views\frontend\properties\booking\checkout.blade.php` | **80** | ⚠️ Fair - Pending Review |
+| `resources\views\frontend\properties\booking\confirmation.blade.php` | **80** | ⚠️ Fair - Pending Review |
+| `resources\views\frontend\properties\booking\payment.blade.php` | **80** | ⚠️ Fair - Pending Review |
 | `resources\views\frontend\properties\index.blade.php` | **80** | ⚠️ Fair - Pending Review |
 | `resources\views\frontend\properties\search.blade.php` | **80** | ⚠️ Fair - Pending Review |
 | `resources\views\frontend\properties\show\partials\_breadcrumbs.blade.php` | **80** | ⚠️ Fair - Pending Review |
@@ -171,8 +171,8 @@
 | `resources\views\frontend\events\booking\_partials\_attendee_form.blade.php` | **80** | ⚠️ Fair - Pending Review |
 | `resources\views\frontend\events\booking\_partials\_order_summary.blade.php` | **80** | ⚠️ Fair - Pending Review |
 | `resources\views\frontend\events\booking\_partials\_payment_options.blade.php` | **80** | ⚠️ Fair - Pending Review |
-| `resources\views\frontend\events\booking\checkout.blade.php` | **95** | ✅ Elite - Price Security Hardened |
-| `resources\views\frontend\events\booking\confirmation.blade.php` | **90** | ✅ Good - Standard |
+| `resources\views\frontend\events\booking\checkout.blade.php` | **80** | ⚠️ Fair - Pending Review |
+| `resources\views\frontend\events\booking\confirmation.blade.php` | **80** | ⚠️ Fair - Pending Review |
 | `resources\views\frontend\events\index.blade.php` | **80** | ⚠️ Fair - Pending Review |
 | `resources\views\frontend\events\show\event-detail.blade.php` | **80** | ⚠️ Fair - Pending Review |
 | `resources\views\frontend\events\show\partials\_breadcrumbs.blade.php` | **80** | ⚠️ Fair - Pending Review |

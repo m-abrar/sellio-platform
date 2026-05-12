@@ -11,7 +11,7 @@
 
     {{-- 1. Occurrence Picker --}}
     <div class="card glass-surface p-4 border border-primary-light shadow-lg mb-4">
-        <h4 class="fw-bold mb-3"><i class="bi bi-calendar-event me-2 text-primary-color"></i>Select Date</h4>
+        <h4 class="fw-bold mb-3"><i class="bi bi-calendar-event me-2 text-primary-color"></i>{{ __('Select Date') }}</h4>
         
         @if ($allTicketData->isNotEmpty())
             <form id="occurrence-selection-form">
@@ -38,26 +38,26 @@
 
                 {{-- Optional: Show a message if scrolling is needed --}}
                 @if (count($allTicketData) > 5) {{-- Assuming 5 items fit before scroll is needed --}}
-                    <small class="text-muted d-block mt-2">Scroll for more dates...</small>
+                    <small class="text-muted d-block mt-2">{{ __('Scroll for more dates...') }}</small>
                 @endif
             </form>
         @else
-            <div class="alert alert-info">There are no upcoming dates available for booking.</div>
+            <div class="alert alert-info">{{ __('There are no upcoming dates available for booking.') }}</div>
         @endif
     </div>
 
     {{-- 2. Dynamic Ticket Purchase Card --}}
     <div class="card glass-surface p-4 border border-primary-light shadow-lg mb-4">
-        <h4 class="fw-bold mb-3"><i class="bi bi-ticket-fill me-2 text-primary-color"></i>Get Your Tickets</h4>
+        <h4 class="fw-bold mb-3"><i class="bi bi-ticket-fill me-2 text-primary-color"></i>{{ __('Get Your Tickets') }}</h4>
         
         {{-- Countdown Timer Placeholder (will be updated by JS) --}}
         <div id="countdown-wrapper" class="d-none">
             <div class="bg-danger-theme text-white text-center p-2 rounded mb-3 small fw-bold">
-                Registration Closes In: 
+                {{ __('Registration Closes In:') }} 
                 <span class="d-block fs-5 fw-bolder" 
                       id="countdown-timer" 
                       data-countdown-to="">
-                      00 Days 00:00:00
+                      00 {{ __('Days') }} 00:00:00
                 </span>
             </div>
         </div>
@@ -69,7 +69,7 @@
             {{-- Hidden field to store the selected occurrence ID --}}
             <input type="hidden" name="event_occurrence_id" id="form-occurrence-id">
             
-            <h6 class="fw-semibold mb-3">Select Ticket Type and Quantity:</h6>
+            <h6 class="fw-semibold mb-3">{{ __('Select Ticket Type and Quantity:') }}</h6>
 
             {{-- Dynamic Ticket Rows will be injected here --}}
             <div id="ticket-rows-container"></div>
@@ -78,20 +78,20 @@
 
             {{-- Dynamic Summary --}}
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <span class="fw-bold fs-5">Total:</span>
-                <span class="fw-bolder fs-3 text-primary-color" id="total-price">$0</span> 
+                <span class="fw-bold fs-5">{{ __('Total:') }}</span>
+                <span class="fw-bolder fs-3 text-primary-color" id="total-price">{{ setting('currency_symbol', '$') }}0</span> 
             </div>
 
             <div class="d-grid mb-3">
                 <button type="submit" id="checkout-button" class="btn btn-lg fw-bold text-white btn-primary-theme" disabled>
-                    <i class="bi bi-cart-fill me-2"></i>Proceed to Checkout
+                    <i class="bi bi-cart-fill me-2"></i>{{ __('Proceed to Checkout') }}
                 </button>
             </div>
         </form>
         
         {{-- Placeholder for when no date is selected --}}
         <div id="no-selection-message" class="text-center py-4 border rounded">
-            Select an event date above to view ticket options.
+            {{ __('Select an event date above to view ticket options.') }}
         </div>
     </div>
     

@@ -68,14 +68,23 @@ class JobController extends Controller
     {
         $job = JobListing::where('slug', $slug)
             ->active()
-            ->with(['employer', 'category', 'location', 'tags', 'brand'])
+            ->with(['employer', 'user', 'category', 'location', 'tags', 'brand', 'media'])
             ->firstOrFail();
 
         $relatedJobs = $this->jobService->getRelatedJobs($job);
 
         return view('frontend.jobs.show.job-detail', [
-            'job'         => $job,
-            'related_jobs' => $relatedJobs
+            'job'              => $job,
+            'related_jobs'     => $relatedJobs,
+            'employmentMap'    => [
+                'full-time' => __('Full-Time'),
+                'part-time' => __('Part-Time'),
+                'contract'  => __('Contract'),
+                'intern'    => __('Internship'),
+                'freelance' => __('Freelance'),
+            ],
+            'experienceMap'    => $this->jobService->getExperienceLevels(),
+            'workplaceMap'     => $this->jobService->getWorkplaceTypes(),
         ]);
     }
 }

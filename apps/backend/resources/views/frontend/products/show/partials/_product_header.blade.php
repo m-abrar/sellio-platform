@@ -19,15 +19,15 @@
         @if($product->on_sale && $product->sale_price > 0)
             <div class="d-flex flex-column align-items-end">
                 <span class="badge bg-danger text-white fw-800 p-2 fs-4 shadow-sm">
-                    ${{ number_format($product->sale_price, 2) }}
+                    {{ setting('currency_symbol', '$') }}{{ number_format($product->sale_price, 2) }}
                 </span>
                 <span class="text-muted text-decoration-line-through small mt-1">
-                    ${{ number_format($product->base_price, 2) }}
+                    {{ setting('currency_symbol', '$') }}{{ number_format($product->base_price, 2) }}
                 </span>
             </div>
         @else
             <span class="badge bg-primary text-white fw-800 p-2 fs-4 shadow-sm">
-                ${{ number_format($product->base_price, 2) }}
+                {{ setting('currency_symbol', '$') }}{{ number_format($product->base_price, 2) }}
             </span>
         @endif
     </div>
@@ -37,7 +37,7 @@
 <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
     <div class="d-flex align-items-center gap-3">
         <p class="mb-0 small text-muted">
-            <span class="fw-bold text-dark">{{ __('SKU:') }}</span> {{ $product->sku ?? 'N/A' }}
+            <span class="fw-bold text-dark">{{ __('SKU:') }}</span> {{ $product->sku ?? __('N/A') }}
         </p>
         <div class="vr opacity-25" style="height: 15px;"></div>
         <p class="mb-0 small text-muted">

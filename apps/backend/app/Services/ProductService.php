@@ -98,7 +98,7 @@ class ProductService
     public function calculateSelectionPrice(Product $product, array $attrIds, array $addonIds, int $qty = 1): array
     {
         $breakdown = $this->calculateProductBreakdown($product, $attrIds, $addonIds, $qty);
-        $currency = config('app.currency_symbol', '$');
+        $currency = setting('currency_symbol', '$');
 
         return [
             'unit_price'            => $breakdown['unit_price'],
@@ -175,14 +175,14 @@ class ProductService
                 $q->where('category_id', $product->category_id)
                   ->orWhere('brand_id', $product->brand_id);
             })
-            ->with(['media'])
+            ->with(['media', 'brand', 'category', 'user'])
             ->limit(4)->get();
 
         if ($related->count() < 4) {
             $extra = Product::active()
                 ->where('id', '!=', $product->id)
                 ->whereNotIn('id', $related->pluck('id'))
-                ->with(['media'])
+                ->with(['media', 'brand', 'category', 'user'])
                 ->inRandomOrder()->limit(4 - $related->count())->get();
             $related = $related->merge($extra);
         }

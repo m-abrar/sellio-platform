@@ -33,7 +33,7 @@
                 <img 
                     src="{{ $event->getImageUrl(conversion: CAROUSEL_CONVERSION) }}" 
                     class="d-block w-100 listing-header-img" 
-                    alt="No photo available"
+                    alt="{{ __('No photo available') }}"
                 >
             </div>
         @endforelse
@@ -42,15 +42,15 @@
     @if ($totalPhotos > 1)
         <button class="carousel-control-prev" type="button" data-bs-target="#eventGallery" data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
+            <span class="visually-hidden">{{ __('Previous') }}</span>
         </button>
         <button class="carousel-control-next" type="button" data-bs-target="#eventGallery" data-bs-slide="next">
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
+            <span class="visually-hidden">{{ __('Next') }}</span>
         </button>
     @endif
     
     <span class="badge position-absolute top-0 end-0 m-3 text-white fw-bold bg-dark-glass z-10">
-        <i class="bi bi-images me-1"></i> {{ $totalPhotos }} Photos
+        <i class="bi bi-images me-1"></i> {{ $totalPhotos }} {{ __('Photos') }}
     </span>
 </div>

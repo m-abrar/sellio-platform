@@ -63,7 +63,7 @@ class EventService
                 $q->whereHas('occurrences', fn($sub) => $sub->whereDate('start_date_time', '<=', Carbon::parse($v)));
             })
             ->with([
-                'category', 'location', 'type', 'tags', 'media',
+                'category', 'location', 'type', 'user', 'tags', 'media',
                 'occurrences' => fn($q) => $q->where('start_date_time', '>=', now())->orderBy('start_date_time')
             ])
             ->paginate(12);

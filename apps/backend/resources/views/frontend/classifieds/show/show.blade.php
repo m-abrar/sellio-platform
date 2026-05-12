@@ -1,7 +1,7 @@
 @extends('frontend._layouts._app')
 
 {{-- Use classified data for title and category name --}}
-@section('title', $classified->title . ' - ' . ($classified->category->title ?? 'Classified Ad')) 
+@section('title', $classified->title . ' - ' . ($classified->category->title ?? __('Classified Ad'))) 
 @section('body_class', 'has-body-glow bg-light')
 
 @section('content')
@@ -10,7 +10,7 @@
     {{-- 1. NAVIGATION HEADER (Breadcrumbs Only) --}}
     @include('frontend.classifieds.show.partials._breadcrumbs', [
         'pageTitle' => $classified->title,
-        'categoryName' => $classified->category->title ?? 'Classifieds',
+        'categoryName' => $classified->category->title ?? __('Classifieds'),
         'categorySlug' => $classified->category->slug ?? null,
     ])
 
@@ -24,7 +24,7 @@
                     {{-- Status Ribbon --}}
                     <div class="position-absolute top-0 start-0 m-3 z-2">
                         <span class="badge bg-white text-dark shadow-sm border px-3 py-2 rounded-pill fw-bold small">
-                           <i class="bi bi-megaphone-fill text-primary me-1"></i> {{ strtoupper($classified->type?->title ?? 'Listing') }}
+                           <i class="bi bi-megaphone-fill text-primary me-1"></i> {{ strtoupper($classified->type?->title ?? __('Listing')) }}
                         </span>
                     </div>
                     @include('frontend.classifieds.show.partials._listing_gallery') 

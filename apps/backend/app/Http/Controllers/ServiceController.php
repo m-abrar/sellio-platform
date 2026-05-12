@@ -73,7 +73,7 @@ class ServiceController extends Controller
     {
         $service = Service::where('slug', $slug)
             ->active()
-            ->with(['category', 'user.reviews', 'location', 'brand', 'features'])
+            ->with(['category', 'user.reviews', 'location', 'brand', 'features', 'media'])
             ->firstOrFail();
 
         $badges = [
@@ -85,11 +85,12 @@ class ServiceController extends Controller
         $viewName = $this->serviceManagement->determineViewName($service);
         $appointments = collect([]); 
 
-        return view("frontend.services.show.{$viewName}", compact(
-            'service', 
-            'badges', 
-            'appointments'
-        ));
+        return view("frontend.services.show.{$viewName}", [
+            'service'         => $service, 
+            'badges'          => $badges, 
+            'appointments'    => $appointments,
+            'expertiseMap'    => $this->serviceManagement->getExpertiseLevels(),
+        ]);
     }
 
     /**

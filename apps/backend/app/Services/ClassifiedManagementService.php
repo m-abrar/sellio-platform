@@ -60,7 +60,7 @@ class ClassifiedManagementService
             ->when($filters['tags'] ?? null, function ($q, $v) {
                 $q->whereHas('tags', fn($sub) => $sub->whereIn('tags.id', (array) $v));
             })
-            ->with(['category', 'location', 'type', 'tags', 'user'])
+            ->with(['category', 'location', 'type', 'tags', 'user', 'media'])
             ->paginate($perPage)
             ->withQueryString();
     }
@@ -78,6 +78,7 @@ class ClassifiedManagementService
             ->where('id', '!=', $classified->id)
             ->active()
             ->latest()
+            ->with(['media', 'category', 'location'])
             ->limit($limit)
             ->get();
     }

@@ -21,7 +21,7 @@
             <li class="breadcrumb-item">
                 <a href="{{ route('events.index', ['category' => $event->category->slug]) }}" 
                    class="text-muted text-decoration-none small fw-500 hover-primary">
-                    {{ $event->category->title ?? 'Event Search' }}
+                    {{ $event->category->title ?? __('Event Search') }}
                 </a>
             </li>
         @endif

@@ -115,7 +115,7 @@
                     <form action="{{ route('newsletter.subscribe') }}" method="POST" class="mt-2">
                         @csrf
                         <input type="hidden" name="source" value="blog_sidebar">
-                        <input type="email" name="email" class="form-control form-control-sm border-0 mb-2" placeholder="Email Address" required>
+                        <input type="email" name="email" class="form-control form-control-sm border-0 mb-2" placeholder="{{ __('Email Address') }}" required>
                         <button type="submit" class="btn btn-dark btn-sm w-100 rounded-pill">{{ __('Subscribe') }}</button>
                     </form>
                 </div>

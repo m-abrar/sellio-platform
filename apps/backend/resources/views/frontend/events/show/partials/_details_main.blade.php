@@ -32,7 +32,7 @@
                         @endif
                     </span>
                     <span class="smaller text-muted">
-                        {{ $event->occurrences->count() > 1 ? 'Multi-Day Event' : 'Date & Time' }}
+                        {{ $event->occurrences->count() > 1 ? __('Multi-Day Event') : __('Date & Time') }}
                     </span>
                 </div>
             </div>
@@ -43,21 +43,21 @@
                     <i class="bi bi-geo-alt text-primary-color fs-4 d-block mb-2"></i>
                     <span class="fw-bold d-block text-dark">
                         @if($event->is_virtual)
-                            Virtual Event
+                            {{ __('Virtual Event') }}
                         @else
                             {{ $event->location->title ?? $event->city }}
                         @endif
                     </span>
-                    <span class="smaller text-muted">Venue</span>
+                    <span class="smaller text-muted">{{ __('Venue') }}</span>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="p-3 bg-light rounded-4 h-100 border border-white shadow-sm">
                     <i class="bi bi-ticket-perforated text-primary-color fs-4 d-block mb-2"></i>
                     <span class="fw-bold d-block {{ $tickets_left < 10 ? 'text-danger' : 'text-dark' }}">
-                        {{ $tickets_left > 0 ? $tickets_left . ' Seats Left' : 'Sold Out!' }}
+                        {{ $tickets_left > 0 ? $tickets_left . ' ' . __('Seats Left') : __('Sold Out!') }}
                     </span>
-                    <span class="smaller text-muted">Availability</span>
+                    <span class="smaller text-muted">{{ __('Availability') }}</span>
                 </div>
             </div>
         </div>
@@ -65,14 +65,14 @@
         <hr class="opacity-10">
         
         {{-- About Section --}}
-        <h4 class="fw-bold mt-5 mb-4 text-dark">Event Overview</h4>
+        <h4 class="fw-bold mt-5 mb-4 text-dark">{{ __('Event Overview') }}</h4>
         <div class="event-description text-muted fs-6 line-height-lg">
             {!! nl2br(e($event->description)) !!}
         </div>
         
         {{-- Dynamic Schedule Section --}}
         @if($event->schedule_items && $event->schedule_items->count() > 0)
-            <h4 class="fw-bold mt-5 mb-4 text-dark"><i class="bi bi-clock-history me-2 text-primary-color"></i>Program Schedule</h4>
+            <h4 class="fw-bold mt-5 mb-4 text-dark"><i class="bi bi-clock-history me-2 text-primary-color"></i>{{ __('Program Schedule') }}</h4>
             <div class="schedule-timeline ms-2">
                 @foreach($event->schedule_items as $item)
                     <div class="schedule-item">
@@ -86,7 +86,7 @@
 
         {{-- Speakers Grid --}}
         @if($event->speakers && $event->speakers->count() > 0)
-            <h4 class="fw-bold mt-5 mb-4 text-dark"><i class="bi bi-mic-fill me-2 text-primary-color"></i>Featured Speakers</h4>
+            <h4 class="fw-bold mt-5 mb-4 text-dark"><i class="bi bi-mic-fill me-2 text-primary-color"></i>{{ __('Featured Speakers') }}</h4>
             <div class="row row-cols-2 row-cols-md-4 g-4">
                 @foreach($event->speakers as $speaker)
                     <div class="col text-center">
@@ -104,7 +104,7 @@
 
         {{-- Map & Venue --}}
         @unless($event->is_virtual)
-            <h4 class="fw-bold mt-5 mb-4 text-dark"><i class="bi bi-pin-map-fill me-2 text-primary-color"></i>Venue Information</h4>
+            <h4 class="fw-bold mt-5 mb-4 text-dark"><i class="bi bi-pin-map-fill me-2 text-primary-color"></i>{{ __('Venue Information') }}</h4>
             <div class="p-4 bg-light rounded-4 border border-white mb-4">
                 <div class="row align-items-center">
                     <div class="col-md-7">
@@ -116,7 +116,7 @@
                     </div>
                     <div class="col-md-5 text-md-end mt-3 mt-md-0">
                         <a href="https://www.google.com/maps/dir/?api=1&destination={{ $event->latitude }},{{ $event->longitude }}" target="_blank" class="btn btn-outline-primary-theme btn-sm rounded-pill px-4">
-                            <i class="bi bi-signpost-split me-1"></i> Get Directions
+                            <i class="bi bi-signpost-split me-1"></i> {{ __('Get Directions') }}
                         </a>
                     </div>
                 </div>

@@ -23,21 +23,27 @@ class JobManagementService
     /**
      * @var array
      */
-    protected $experienceLevels = [
-        1 => 'Entry-Level',
-        2 => 'Mid-Level',
-        3 => 'Senior/Lead',
-        4 => 'Executive',
-    ];
+    protected function getExperienceLevelsRaw(): array
+    {
+        return [
+            1 => __('Entry-Level'),
+            2 => __('Mid-Level'),
+            3 => __('Senior/Lead'),
+            4 => __('Executive'),
+        ];
+    }
 
     /**
      * @var array
      */
-    protected $workplaceTypes = [
-        1 => 'On-Site',
-        2 => 'Hybrid',
-        3 => 'Remote',
-    ];
+    protected function getWorkplaceTypesRaw(): array
+    {
+        return [
+            1 => __('On-Site'),
+            2 => __('Hybrid'),
+            3 => __('Remote'),
+        ];
+    }
 
     /**
      * Retrieve filter taxonomies for the job search sidebar.
@@ -82,7 +88,7 @@ class JobManagementService
             ->when($filters['tags'] ?? null, function ($q, $v) {
                 $q->whereHas('tags', fn($sub) => $sub->whereIn('tags.id', (array) $v));
             })
-            ->with(['employer', 'category', 'location'])
+            ->with(['employer', 'user', 'category', 'location', 'media'])
             ->paginate(12);
     }
 
@@ -99,6 +105,7 @@ class JobManagementService
             ->where('id', '!=', $job->id)
             ->active()
             ->latest()
+            ->with(['employer', 'user', 'category', 'location', 'media'])
             ->limit($limit)
             ->get();
     }
@@ -151,7 +158,7 @@ class JobManagementService
      */
     public function getExperienceLevels(): array
     {
-        return $this->experienceLevels;
+        return $this->getExperienceLevelsRaw();
     }
 
     /**
@@ -159,6 +166,6 @@ class JobManagementService
      */
     public function getWorkplaceTypes(): array
     {
-        return $this->workplaceTypes;
+        return $this->getWorkplaceTypesRaw();
     }
 }

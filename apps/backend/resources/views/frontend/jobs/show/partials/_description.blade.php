@@ -9,13 +9,13 @@
             @php
                 $logoUrl = $job->employer->getFirstMediaUrl('avatar', 'thumb') 
                             ?: 'https://ui-avatars.com/api/?name=' . urlencode($job->employer->name) . '&background=059669&color=fff&size=120&font-size=0.45';
-                $companyName = $job->employer->name ?? 'N/A';
+                $companyName = $job->employer->name ?? __('N/A');
             @endphp
             
             <div class="position-relative">
                 <img src="{{ $logoUrl }}" class="company-logo-header shadow-sm bg-white p-2 rounded-4 border border-white" 
-                     alt="{{ $companyName }} Logo" style="width: 100px; height: 100px; object-fit: contain;">
-                <span class="position-absolute bottom-0 end-0 badge rounded-circle bg-success p-2 border border-3 border-white" title="Verified Employer">
+                     alt="{{ $companyName }} {{ __('Logo') }}" style="width: 100px; height: 100px; object-fit: contain;">
+                <span class="position-absolute bottom-0 end-0 badge rounded-circle bg-success p-2 border border-3 border-white" title="{{ __('Verified Employer') }}">
                     <i class="bi bi-check-lg text-white"></i>
                 </span>
             </div>
@@ -30,16 +30,16 @@
                 <div class="d-flex flex-wrap gap-3 mt-2">
                     <div class="stats-pill">
                         <i class="bi bi-geo-alt-fill text-danger me-1"></i>
-                        {{ $job->workplace_type == 1 ? 'Fully Remote' : ($job->city . ', ' . $job->state) }}
+                        {{ $job->workplace_type == 3 ? __('Fully Remote') : ($job->city . ', ' . $job->state) }}
                     </div>
                     <div class="stats-pill">
                         <i class="bi bi-briefcase-fill text-primary-color me-1"></i>
-                        {{ $employmentMap[$job->employment_type] ?? 'Full-Time' }}
+                        {{ $employmentMap[$job->employment_type] ?? __('Full-Time') }}
                     </div>
                     <div class="stats-pill bg-success-light text-success fw-bold">
                         <i class="bi bi-cash-stack me-1"></i>
-                        ${{ number_format($job->salary_min) }} - ${{ number_format($job->salary_max) }} 
-                        <span class="smaller fw-normal">/ {{ Str::title($job->salary_frequency) }}</span>
+                        {{ setting('currency_symbol', '$') }}{{ number_format($job->salary_min) }} - {{ setting('currency_symbol', '$') }}{{ number_format($job->salary_max) }} 
+                        <span class="smaller fw-normal">/ {{ __(Str::title($job->salary_frequency)) }}</span>
                     </div>
                 </div>
             </div>
@@ -62,43 +62,43 @@
     {{-- 3. Detailed Body Content --}}
     <div class="p-4 p-lg-5">
         <div class="job-content-area line-height-lg text-muted">
-            <h4 class="fw-bold text-dark mb-3"><i class="bi bi-body-text me-2 text-primary-color"></i>Job Description</h4>
+            <h4 class="fw-bold text-dark mb-3"><i class="bi bi-body-text me-2 text-primary-color"></i>{{ __('Job Description') }}</h4>
             <div class="mb-5 fs-6">
                 {!! nl2br(e($job->description)) !!}
             </div>
 
-            <h4 class="fw-bold text-dark mb-3"><i class="bi bi-mortarboard me-2 text-primary-color"></i>Requirements</h4>
+            <h4 class="fw-bold text-dark mb-3"><i class="bi bi-mortarboard me-2 text-primary-color"></i>{{ __('Requirements') }}</h4>
             <div class="bg-light bg-opacity-50 rounded-4 p-4 mb-5 border border-white">
                 <div class="row g-3">
                     <div class="col-sm-6">
-                        <div class="smaller text-uppercase tracking-wider fw-bold text-muted mb-1">Education</div>
+                        <div class="smaller text-uppercase tracking-wider fw-bold text-muted mb-1">{{ __('Education') }}</div>
                         <div class="text-dark fw-bold">{{ $job->required_education }}</div>
                     </div>
                     <div class="col-sm-6">
-                        <div class="smaller text-uppercase tracking-wider fw-bold text-muted mb-1">Experience Level</div>
-                        <div class="text-dark fw-bold">{{ Str::title($job->experience_level) }} Level</div>
+                        <div class="smaller text-uppercase tracking-wider fw-bold text-muted mb-1">{{ __('Experience Level') }}</div>
+                        <div class="text-dark fw-bold">{{ $experienceMap[$job->experience_level] ?? Str::title($job->experience_level) }}</div>
                     </div>
                 </div>
             </div>
 
-            <h4 class="fw-bold text-dark mb-4"><i class="bi bi-gift me-2 text-primary-color"></i>Benefits & Perks</h4>
+            <h4 class="fw-bold text-dark mb-4"><i class="bi bi-gift me-2 text-primary-color"></i>{{ __('Benefits & Perks') }}</h4>
             <div class="row row-cols-1 row-cols-md-2 g-3 mb-5">
-                <div class="col d-flex align-items-center"><i class="bi bi-check2-circle text-success me-2 fs-5"></i> Paid Time Off (PTO)</div>
-                <div class="col d-flex align-items-center"><i class="bi bi-check2-circle text-success me-2 fs-5"></i> Comprehensive Health Coverage</div>
-                <div class="col d-flex align-items-center"><i class="bi bi-check2-circle text-success me-2 fs-5"></i> Remote / Hybrid Flexibility</div>
-                <div class="col d-flex align-items-center"><i class="bi bi-check2-circle text-success me-2 fs-5"></i> 401(k) Retirement Planning</div>
+                <div class="col d-flex align-items-center"><i class="bi bi-check2-circle text-success me-2 fs-5"></i> {{ __('Paid Time Off (PTO)') }}</div>
+                <div class="col d-flex align-items-center"><i class="bi bi-check2-circle text-success me-2 fs-5"></i> {{ __('Comprehensive Health Coverage') }}</div>
+                <div class="col d-flex align-items-center"><i class="bi bi-check2-circle text-success me-2 fs-5"></i> {{ __('Remote / Hybrid Flexibility') }}</div>
+                <div class="col d-flex align-items-center"><i class="bi bi-check2-circle text-success me-2 fs-5"></i> {{ __('401(k) Retirement Planning') }}</div>
             </div>
         </div>
 
         {{-- 4. About Company Section --}}
         <div class="mt-5 pt-5 border-top">
             <div class="card bg-primary-light border-0 rounded-4 p-4 p-lg-5 shadow-sm">
-                <h4 class="fw-bold text-dark mb-3">About {{ $companyName }}</h4>
+                <h4 class="fw-bold text-dark mb-3">{{ __('About') }} {{ $companyName }}</h4>
                 <p class="text-muted mb-4 fs-6">
-                    {{ Str::limit($job->employer->profile_summary ?? 'This company is a leading player in the ' . $job->category->title . ' industry.', 300) }}
+                    {{ Str::limit($job->employer->profile_summary ?? __('This company is a leading player in the :category industry.', ['category' => $job->category->title]), 300) }}
                 </p>
                 <a href="{{ route('partner.profile', $job->employer) }}" class="btn btn-white text-primary-color fw-bold rounded-pill px-4 shadow-sm border-0">
-                    Explore Company Profile <i class="bi bi-arrow-up-right ms-2"></i>
+                    {{ __('Explore Company Profile') }} <i class="bi bi-arrow-up-right ms-2"></i>
                 </a>
             </div>
         </div>
