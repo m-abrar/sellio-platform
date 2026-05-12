@@ -1,0 +1,366 @@
+/* ==========================================================================
+    1. DESIGN TOKENS & RESET
+   ========================================================================== */
+:root {
+    --primary-sellio: #76c043;
+    --primary-dark: #5ba32d;
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+    --white: #ffffff;
+    --bg-light: #f8fafc;
+    --bg-alt: #f1f5f9;
+    --font-heading: 'Manrope', sans-serif;
+    --font-body: 'Urbanist', sans-serif;
+    --ease-snap: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+html { scroll-behavior: smooth; }
+
+body { 
+    font-family: var(--font-body); 
+    background: var(--white);
+    color: var(--text-main);
+    padding-top: 100px; 
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+.py-100 { padding: 100px 0; }
+.fw-800 { font-weight: 800; }
+
+/* ==========================================================================
+    2. TYPOGRAPHY & GRADIENTS
+   ========================================================================== */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1.1;
+}
+
+h1 {
+    background: linear-gradient(to bottom, var(--text-main) 70%, #475569);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.text-sellio {
+    background: linear-gradient(135deg, var(--primary-sellio), var(--primary-dark));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.lead { color: var(--text-muted); font-size: 1.25rem; }
+
+/* ==========================================================================
+    3. NAVIGATION & BUTTONS
+   ========================================================================== */
+.navbar { 
+    background: rgba(255, 255, 255, 0.9); 
+    backdrop-filter: blur(20px); 
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05); 
+    padding: 20px 0;
+    transition: all 0.3s ease;
+}
+
+.navbar.scrolled {
+    padding: 12px 0;
+    background: rgba(255, 255, 255, 0.98);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.navbar-brand {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: 1.4rem;
+    color: var(--text-main) !important;
+}
+
+.navbar-brand span {
+    background: linear-gradient(135deg, var(--primary-sellio), var(--primary-dark));
+    color: var(--white);
+    padding: 4px 12px;
+    border-radius: 10px;
+    margin-right: 10px;
+    display: inline-block;
+}
+
+.btn-main, .btn-sellio-solid { 
+    background: var(--text-main); 
+    color: var(--white) !important; 
+    padding: 14px 32px; 
+    border-radius: 12px; 
+    text-decoration: none; 
+    font-weight: 700; 
+    transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+    display: inline-block;
+    border: none;
+}
+
+.btn-sellio-solid { background: var(--primary-sellio); }
+.btn-sellio-solid:hover { 
+    background: var(--primary-dark); 
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(118, 192, 67, 0.2);
+}
+.btn-main:hover { transform: translateY(-2px); background: #000; }
+
+/* ==========================================================================
+    4. SECTION BACKGROUNDS
+   ========================================================================== */
+.bg-hero { background: radial-gradient(circle at 90% 10%, rgba(118, 192, 67, 0.08) 0%, var(--white) 50%); }
+.bg-automation { background-color: var(--bg-light); }
+.bg-modules { background-color: var(--white); }
+.bg-comparison { background-color: var(--bg-alt); }
+.bg-features { background-color: var(--white); }
+.bg-reviews { background-color: var(--bg-light); }
+
+.bg-demos { 
+    background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%); 
+    padding: 120px 0;
+}
+
+.bg-tech-stack {
+    background-color: var(--bg-alt);
+    background-image: radial-gradient(#cbd5e1 0.5px, transparent 0.5px);
+    background-size: 20px 20px;
+}
+
+.bg-cta { 
+    background: linear-gradient(135deg, var(--primary-sellio) 0%, var(--primary-dark) 100%); 
+    color: var(--white);
+}
+
+/* ==========================================================================
+    5. HERO WHEEL SYSTEM
+   ========================================================================== */
+.wheel-container { height: 550px; perspective: 2000px; margin-top: 40px; }
+.card-stack { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; }
+.card-3d { 
+    position: absolute; width: 100%; max-width: 480px; left: 50%;
+    background: var(--white); border-radius: 16px; overflow: hidden; 
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12); border: 1px solid rgba(0, 0, 0, 0.08);
+    transition: transform 0.6s var(--ease-snap), opacity 0.5s ease;
+}
+
+.pos-1 { transform: translate3d(-50%, 0, 150px); z-index: 100; opacity: 1; }
+.pos-2 { transform: translate3d(-50%, -50px, 0px) scale(0.94); z-index: 50; opacity: 0.8; }
+.pos-3 { transform: translate3d(-50%, -100px, -150px) scale(0.88); z-index: 20; opacity: 0.5; }
+
+.sinking { transform: translate3d(-50%, 300px, 100px) rotateX(-15deg); opacity: 0; }
+.preparing { transition: none !important; transform: translate3d(-50%, -100px, -150px) scale(0.88); opacity: 0; }
+
+.browser-chrome { height: 38px; background: #f8fafc; display: flex; align-items: center; padding: 0 15px; border-bottom: 1px solid #e2e8f0; }
+.window-dots span { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 4px; }
+.dot-red { background: #ff5f56; } .dot-yellow { background: #ffbd2e; } .dot-green { background: #27c93f; }
+.browser-address { flex-grow: 1; background: var(--white); height: 24px; border-radius: 6px; margin-left: 10px; font-size: 11px; color: #94a3b8; display: flex; align-items: center; padding-left: 12px; }
+.window-content { height: 350px; width: 100%; overflow: hidden; position: relative; }
+.window-content img { width: 100%; height: auto; display: block; will-change: transform; }
+
+.pos-1 .window-content img { animation: holdAndScrollToBottom 1.4s cubic-bezier(0.45, 0.05, 0.55, 0.95) forwards; }
+@keyframes holdAndScrollToBottom { 0%, 50% { transform: translateY(0); } 100% { transform: translateY(calc(-100% + 350px)); } }
+
+/* ==========================================================================
+    6. DEMO GRID & FILTERING
+   ========================================================================== */
+.filter-btn {
+    border: 1px solid #e2e8f0; background: var(--white); padding: 10px 24px;
+    border-radius: 100px; font-weight: 600; transition: all 0.3s ease;
+}
+.bg-demos .filter-btn { background: rgba(255, 255, 255, 0.05); color: var(--white); border: 1px solid rgba(255, 255, 255, 0.1); }
+.filter-btn.active, .bg-demos .filter-btn.active { background: var(--primary-sellio); color: var(--white); border-color: var(--primary-sellio); }
+
+.badge-count { font-size: 0.7rem; background: rgba(0,0,0,0.05); padding: 2px 6px; border-radius: 6px; margin-left: 5px; }
+.filter-btn.active .badge-count { background: rgba(255,255,255,0.2); color: white; }
+
+.demo-card-v2 { background: var(--white); border-radius: 20px; border: 1px solid rgba(0, 0, 0, 0.08); overflow: hidden; transition: all 0.4s var(--ease-snap); position: relative; }
+.demo-card-v2:not(.coming-soon):hover { transform: translateY(-10px); box-shadow: 0 30px 60px rgba(0, 0, 0, 0.1); }
+.demo-img-wrapper { position: relative; height: 300px; overflow: hidden; background: #f1f5f9; }
+
+.scroll-img { width: 100%; height: auto; transition: transform 2s ease-in-out !important; }
+.demo-card-v2:not(.coming-soon):hover .scroll-img { transform: translateY(calc(-100% + 300px)); }
+
+.soon-badge { position: absolute; top: 15px; right: 15px; background: #000; color: #fff; padding: 4px 12px; border-radius: 50px; font-size: 10px; font-weight: 800; z-index: 10; }
+.coming-soon { opacity: 0.7; }
+
+/* ==========================================================================
+    7. UI BLOCKS (FAQ, STEPS, REVIEWS, TECH)
+   ========================================================================== */
+.feature-card { transition: all 0.3s var(--ease-snap); }
+.feature-card:hover { transform: translateY(-8px); border-color: var(--primary-sellio) !important; box-shadow: 0 20px 40px rgba(0,0,0,0.08) !important; }
+
+.step-card { background: var(--white); padding: 40px 30px; border-radius: 24px; border: 1px solid rgba(0,0,0,0.05); position: relative; transition: all 0.3s ease; height: 100%; }
+.step-card.active { border-color: var(--primary-sellio); box-shadow: 0 20px 40px rgba(118, 192, 67, 0.1); }
+.step-number { position: absolute; top: 20px; right: 30px; font-size: 3rem; font-weight: 900; color: rgba(0,0,0,0.03); line-height: 1; }
+
+.review-card { background: var(--bg-light); padding: 35px; border-radius: 24px; border: 1px solid rgba(0,0,0,0.05); height: 100%; transition: transform 0.3s ease; }
+.review-card.highlighted { background: var(--white); border-color: var(--primary-sellio); box-shadow: 0 15px 40px rgba(0,0,0,0.05); }
+
+.table-hover tbody tr:hover { background-color: rgba(118, 192, 67, 0.02); }
+.bg-comparison thead th { background: #f8fafc; padding: 20px !important; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px; }
+
+/* ==========================================================================
+    8. FLOATING UI & POPUPS
+   ========================================================================== */
+.floating-buy-bar {
+    position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+    width: 90%; max-width: 850px; background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(0, 0, 0, 0.08); border-radius: 100px;
+    z-index: 9999; padding: 10px 20px; display: flex; align-items: center;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1); transition: all 0.3s ease;
+}
+
+.floating-buy-bar:hover { transform: translateX(-50%) translateY(-5px); }
+
+.exit-popup-overlay { 
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+    background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(5px); 
+    z-index: 10000; display: none; align-items: center; justify-content: center; 
+}
+
+.exit-popup-content { 
+    background: var(--white); width: 90%; max-width: 700px; 
+    border-radius: 30px; position: relative; overflow: hidden; 
+    transform: scale(0.9); transition: transform 0.4s var(--ease-snap);
+}
+
+.close-exit { position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 2rem; color: #cbd5e1; cursor: pointer; }
+
+/* Typewriter */
+#typewriter { border-right: 3px solid var(--primary-sellio); animation: blink 0.8s step-end infinite; }
+@keyframes blink { 50% { border-color: transparent; } }
+
+/* ==========================================================================
+    9. RESPONSIVE ADJUSTMENTS
+   ========================================================================== */
+@media (max-width: 768px) {
+    .floating-buy-bar { bottom: 10px; width: 95%; border-radius: 20px; flex-direction: column; gap: 10px; padding: 15px; }
+    .floating-buy-bar .d-md-flex { display: none !important; }
+    body { padding-bottom: 140px; }
+    .display-3 { font-size: 2.8rem; }
+    .wheel-container { height: 400px; }
+}
+
+
+@media (max-width: 768px) {
+    body { padding-bottom: 120px; } /* Space for the floating bar */
+}
+
+
+
+/* Update Section 8 & 9 with these specific fixes */
+
+.floating-buy-bar {
+    position: fixed; 
+    bottom: 20px; 
+    left: 50%; 
+    /* This ensures it stays centered even when the animation triggers */
+    transform: translateX(-50%) translateY(0);
+    width: 90%; 
+    max-width: 850px; 
+    background: rgba(255, 255, 255, 0.95); /* Increased slightly for readability */
+    backdrop-filter: blur(15px); 
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(0, 0, 0, 0.08); 
+    border-radius: 100px;
+    z-index: 9999; 
+    padding: 12px 24px; 
+    display: flex; 
+    align-items: center;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1); 
+    transition: transform 0.3s var(--ease-snap), box-shadow 0.3s ease;
+}
+
+/* Corrected Hover Logic */
+.floating-buy-bar:hover { 
+    transform: translateX(-50%) translateY(-8px); 
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* Optimized Mobile Media Query */
+@media (max-width: 768px) {
+    .floating-buy-bar { 
+        bottom: 15px; 
+        width: 94%; 
+        border-radius: 24px; 
+        flex-direction: column; 
+        gap: 8px; 
+        padding: 15px; 
+    }
+    
+    /* Hide the text info on mobile to keep the bar slim */
+    .floating-buy-bar .d-md-flex { 
+        display: none !important; 
+    }
+    
+    /* Add padding to body so the bar doesn't cover footer content */
+    body { 
+        padding-bottom: 160px !important; 
+    }
+    
+    .display-3 { font-size: 2.8rem; }
+    .wheel-container { height: 400px; }
+}
+
+
+.floating-buy-bar {
+    position: fixed;
+    bottom: 25px; /* Lifted slightly higher off the edge */
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto; /* Let content dictate width */
+    min-width: 320px;
+    max-width: 600px; /* Reduced from 850px */
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 50px; /* Fully rounded pill */
+    z-index: 9999;
+    padding: 8px 12px; /* Much tighter padding */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.floating-buy-bar:hover {
+    transform: translateX(-50%) translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+}
+
+/* Mobile Tweak */
+@media (max-width: 576px) {
+    .floating-buy-bar {
+        width: 90%;
+        bottom: 15px;
+        padding: 10px;
+    }
+}
+
+/* Custom Utility for the Brand Green */
+.bg-sellio-solid { 
+    background-color: var(--primary-sellio) !important; 
+    color: var(--white) !important;
+}
+
+
+/* Fix the missing green background class */
+.bg-sellio-solid { 
+    background-color: var(--primary-sellio) !important; 
+    color: var(--white) !important; 
+}
+
+/* Ensure buttons always center their content internally */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1; /* Prevents text from sitting too high or low */
+}
+
+/* Slimmer & centered bar */
+.floating-buy-bar {
+    /* ... your existing code ... */
+    max-width: 650px; /* Makes it smaller as requested */
+    padding: 10px 20px;
+}
