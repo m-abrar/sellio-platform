@@ -68,10 +68,11 @@ AdvertisementController,
 NewsletterSubscriberController,
 NotificationController,
 ReportController,
-TicketController,
-SettingController,
-SystemController,
-GalleryController
+    TicketController,
+    SettingController,
+    SystemController,
+    GalleryController,
+    LanguageController
 };
 
 // Global Dashboard Controllers
@@ -372,6 +373,20 @@ Route::prefix('admin')
             Route::post('{ticket}/reply', 'reply')->name('reply');
             Route::post('{ticket}/status', 'updateStatus')->name('status');
             Route::delete('{ticket}', 'destroy')->name('destroy');
+        });
+
+        /**
+         * 8. LOCALIZATION MANAGEMENT
+         */
+        Route::controller(LanguageController::class)->prefix('languages')->name('languages.')->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/create', 'create')->name('create');
+            Route::post('/', 'store')->name('store');
+            Route::get('/{language}/edit', 'edit')->name('edit');
+            Route::post('/{language}/update', 'update')->name('update');
+            Route::delete('/{language}', 'destroy')->name('destroy');
+            Route::get('/{language}/translations', 'translations')->name('translations');
+            Route::post('/{language}/translations', 'updateTranslations')->name('translations.update');
         });
 
         /**

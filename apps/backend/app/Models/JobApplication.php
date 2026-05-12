@@ -34,8 +34,9 @@ class JobApplication extends Model
 
     // --- Status Constants ---
     public const STATUS_PENDING   = 'pending';
-    public const STATUS_REVIEWING = 'reviewing';
-    public const STATUS_ACCEPTED  = 'accepted';
+    public const STATUS_REVIEWED  = 'reviewed';
+    public const STATUS_INTERVIEW = 'interview';
+    public const STATUS_HIRED     = 'hired';
     public const STATUS_REJECTED  = 'rejected';
 
     /**
@@ -57,6 +58,8 @@ class JobApplication extends Model
      */
     protected $fillable = [
         'job_listing_id',
+        'user_id',
+        'status',
         'cover_letter',
         'viewed_at',
     ];
@@ -109,11 +112,12 @@ class JobApplication extends Model
     public function getStatusMeta(): array
     {
         return match ($this->status) {
-            self::STATUS_PENDING   => ['label' => 'Pending', 'color' => 'warning'],
-            self::STATUS_REVIEWING => ['label' => 'Reviewing', 'color' => 'info'],
-            self::STATUS_ACCEPTED  => ['label' => 'Accepted', 'color' => 'success'],
-            self::STATUS_REJECTED  => ['label' => 'Rejected', 'color' => 'danger'],
-            default               => ['label' => 'Unknown', 'color' => 'dark'],
+            self::STATUS_PENDING   => ['label' => 'Pending', 'color' => 'warning', 'icon' => 'hourglass-half'],
+            self::STATUS_REVIEWED  => ['label' => 'Reviewed', 'color' => 'info', 'icon' => 'user-check'],
+            self::STATUS_INTERVIEW => ['label' => 'Interview', 'color' => 'primary', 'icon' => 'comments'],
+            self::STATUS_HIRED     => ['label' => 'Hired', 'color' => 'success', 'icon' => 'user-plus'],
+            self::STATUS_REJECTED  => ['label' => 'Rejected', 'color' => 'danger', 'icon' => 'user-times'],
+            default               => ['label' => ucfirst($this->status), 'color' => 'secondary', 'icon' => 'file-signature'],
         };
     }
 }

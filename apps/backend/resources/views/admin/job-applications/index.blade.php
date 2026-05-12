@@ -100,13 +100,10 @@
                                         <div class="font-weight-bold text-dark mb-0 smallest uppercase letter-spacing-1">{{ $app->created_at->format('d M, Y') }}</div>
                                         <small class="text-muted smallest uppercase font-weight-bold"><i class="far fa-clock mr-1 text-primary opacity-50"></i>{{ $app->created_at->format('H:i') }}</small>
                                     </td>
-                                    @php
-                                        $statusMap = ['submitted' => 'badge-warning-light', 'reviewed' => 'badge-info-light', 'accepted' => 'badge-success-light', 'hired' => 'badge-success-light', 'rejected' => 'badge-danger-light'];
-                                        $statusClass = $statusMap[$app->status] ?? 'badge-secondary-light';
-                                    @endphp
+                                    @php $statusMeta = $app->getStatusMeta(); @endphp
                                     <td class="text-center align-middle">
-                                        <span class="badge {{ $statusClass }} px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 badge-min-90">
-                                            {{ __($app->status ?? 'Submitted') }}
+                                        <span class="badge badge-{{ $statusMeta['color'] }}-light text-{{ $statusMeta['color'] }} px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 badge-min-90">
+                                            <i class="fas fa-{{ $statusMeta['icon'] }} mr-1"></i> {{ $statusMeta['label'] }}
                                         </span>
                                     </td>
                                     <td class="text-right align-middle pr-4">

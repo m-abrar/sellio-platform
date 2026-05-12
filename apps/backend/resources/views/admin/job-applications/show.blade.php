@@ -49,18 +49,9 @@
                             <i class="fas fa-file-alt mr-2 text-primary opacity-50"></i> {{ __('Submission Dossier') }}
                         </h5>
                         <div class="card-tools">
-                            @php
-                                $statusMap = [
-                                    'submitted' => 'badge-warning',
-                                    'reviewed'  => 'badge-info',
-                                    'accepted'  => 'badge-success',
-                                    'hired'     => 'badge-success',
-                                    'rejected'  => 'badge-danger',
-                                ];
-                                $statusClass = $statusMap[$application->status] ?? 'badge-secondary';
-                            @endphp
-                            <span class="badge {{ $statusClass }}-light text-{{ str_replace('badge-', '', $statusClass) }} px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 shadow-xs">
-                                {{ strtoupper($application->status) }}
+                            @php $statusMeta = $application->getStatusMeta(); @endphp
+                            <span class="badge badge-{{ $statusMeta['color'] }}-light text-{{ $statusMeta['color'] }} px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 shadow-xs">
+                                <i class="fas fa-{{ $statusMeta['icon'] }} mr-1"></i> {{ $statusMeta['label'] }}
                             </span>
                         </div>
                     </div>
