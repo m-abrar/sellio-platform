@@ -60,7 +60,8 @@
         </div>
         <div class="card-body p-0">
             <div class="table-responsive">
-                <table id="autos-table" class="table table-hover table-premium mb-0">
+                <table id="autos-table" class="table table-hover table-premium mb-0 datatable-init"
+                       data-datatable-config='{"paging": false, "searching": false, "ordering": true, "info": false}'>
                     <thead class="thead-light">
                         <tr>
                             <th class="text-center pl-4 col-media-70">Media</th>
@@ -126,7 +127,11 @@
                                         </a>
                                         <form action="{{ route('admin.autos.destroy', $auto->id) }}" method="POST" class="d-inline">
                                             @csrf @method('DELETE')
-                                            <button type="submit" class="btn text-danger" data-toggle="tooltip" title="Purge Asset" onclick="return confirm('Permanently delete this auto listing?')">
+                                            <button type="button" class="btn text-danger" 
+                                                    data-toggle="tooltip" title="Purge Asset"
+                                                    data-action="delete-trigger"
+                                                    data-confirm-title="Purge Asset?"
+                                                    data-confirm-text="Permanently delete this auto listing?">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
                                         </form>
@@ -159,25 +164,5 @@
 @endsection
 
 @section('js')
-@include('admin._partials._sweetalert-delete')
-<script>
-    $(function () {
-        if (typeof $.fn.select2 === 'function') {
-            $('.select2').select2({ theme: 'bootstrap4', width: '100%' });
-        }
-        $('[data-toggle="tooltip"]').tooltip();
-
-        if ($('#autos-table tbody tr:not(.empty-state)').length > 0) {
-            $('#autos-table').DataTable({
-                "paging": false,
-                "lengthChange": false,
-                "searching": false,
-                "ordering": true,
-                "info": false,
-                "autoWidth": false,
-                "responsive": true
-            });
-        }
-    });
-</script>
+<script src="{{ asset('admin-assets/pages/registry-index.js') }}"></script>
 @endsection

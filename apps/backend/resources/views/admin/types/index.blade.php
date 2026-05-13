@@ -56,7 +56,8 @@
         <div class="card-body p-0">
             <div class="table-responsive">
                 {{-- Refined: Applied table-premium for the brand-border hover effect --}}
-                <table id="types-table" class="table table-hover table-premium mb-0">
+                <table id="types-table" class="table table-hover table-premium mb-0 datatable-init"
+                       data-datatable-config='{"paging": true, "lengthChange": true, "searching": true, "ordering": true, "info": true, "columnDefs": [{"orderable": false, "targets": [0, 2, 4]}]}'>
                     <thead class="thead-light">
                         <tr>
                             <th class="text-center col-media-80">Icon</th>
@@ -95,7 +96,13 @@
                                         <a href="{{ route('admin.types.edit', $type->id) }}" class="btn text-info" data-toggle="tooltip" title="Modify Details"><i class="fas fa-edit"></i></a>
                                         <form id="delete-type-{{ $type->id }}" action="{{ route('admin.types.destroy', $type->id) }}" method="POST" class="d-inline">
                                             @csrf @method('DELETE')
-                                            <button type="button" class="btn text-danger" data-toggle="tooltip" title="Remove Type" onclick="confirmDelete('delete-type-{{ $type->id }}')"><i class="fas fa-trash-alt"></i></button>
+                                             <button type="button" class="btn text-danger" 
+                                                     data-toggle="tooltip" title="Remove Type"
+                                                     data-action="delete-trigger"
+                                                     data-confirm-title="Remove Type?"
+                                                     data-confirm-text="Are you sure you want to delete this listing type?">
+                                                 <i class="fas fa-trash-alt"></i>
+                                             </button>
                                         </form>
                                     </div>
                                 </td>
@@ -136,6 +143,5 @@
 
 
 @section('js')
-    @include('admin._partials._sweetalert')
-    <script src="{{ asset('admin-assets/pages/types-index.js') }}"></script>
+    <script src="{{ asset('admin-assets/pages/registry-index.js') }}"></script>
 @endsection

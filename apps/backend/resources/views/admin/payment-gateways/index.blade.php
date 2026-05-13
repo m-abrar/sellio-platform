@@ -67,7 +67,8 @@
 
         <div class="card-body p-0">
             <div class="table-responsive">
-                <table id="gateways-table" class="table table-hover table-premium mb-0">
+                <table id="gateways-table" class="table table-hover table-premium mb-0 datatable-init"
+                       data-datatable-config='{"paging": true, "lengthChange": false, "searching": true, "ordering": true, "info": false, "autoWidth": false, "responsive": true}'>
                     <thead>
                         <tr>
                             <th class="pl-4">Gateway & Integration</th>
@@ -151,34 +152,5 @@
 @endsection
 
 @section('js')
-<script>
-    $(function () {
-        $('[data-toggle="tooltip"]').tooltip();
-
-        if ($('#gateways-table tbody tr:not(.empty-state)').length > 0) {
-            $('#gateways-table').DataTable({
-                "paging": true,
-                "lengthChange": false,
-                "searching": true,
-                "ordering": true,
-                "info": false,
-                "autoWidth": false,
-                "responsive": true,
-                "dom": '<"row px-0 pt-2"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-3"l>>t<"row px-0 pb-3"<"col-sm-12"p>>',
-                "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-                "language": {
-                    "search": "",
-                    "searchPlaceholder": "Filter...",
-                    "lengthMenu": "_MENU_ per page",
-                    "paginate": {
-                        "previous": "<i class='fas fa-angle-left'></i>",
-                        "next": "<i class='fas fa-angle-right'></i>"
-                    }
-                }
-            });
-            $('.dataTables_filter input').addClass('form-control shadow-xs border w-max-200');
-            $('.dataTables_length select').addClass('form-control form-control-sm shadow-xs');
-        }
-    });
-</script>
+<script src="{{ asset('admin-assets/pages/registry-index.js') }}"></script>
 @endsection

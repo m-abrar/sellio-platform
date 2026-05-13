@@ -57,7 +57,8 @@
         
         <div class="card-body p-0">
             <div class="table-responsive">
-                <table id="tags-table" class="table table-hover table-premium mb-0">
+                <table id="tags-table" class="table table-hover table-premium mb-0 datatable-init"
+                       data-datatable-config='{"paging": true, "lengthChange": true, "searching": true, "ordering": true, "info": true, "columnDefs": [{"orderable": false, "targets": [0, 4]}]}'>
                     <thead class="thead-light">
                         <tr>
                             <th class="text-center col-media-70">Preview</th>
@@ -98,7 +99,13 @@
                                         <a href="{{ route('admin.tags.edit', $tag->id) }}" class="btn text-info" data-toggle="tooltip" title="Modify Settings"><i class="fas fa-edit"></i></a>
                                         <form id="delete-tag-{{ $tag->id }}" action="{{ route('admin.tags.destroy', $tag->id) }}" method="POST" class="d-inline">
                                             @csrf @method('DELETE')
-                                            <button type="button" class="btn text-danger" data-toggle="tooltip" title="Delete Tag" onclick="confirmDelete('delete-tag-{{ $tag->id }}')"><i class="fas fa-trash-alt"></i></button>
+                                             <button type="button" class="btn text-danger" 
+                                                     data-toggle="tooltip" title="Delete Tag"
+                                                     data-action="delete-trigger"
+                                                     data-confirm-title="Delete Tag?"
+                                                     data-confirm-text="Are you sure you want to delete this tag?">
+                                                 <i class="fas fa-trash-alt"></i>
+                                             </button>
                                         </form>
                                     </div>
                                 </td>
@@ -137,40 +144,5 @@
 
 
 @section('js')
-    <script>
-        $(function () {
-            if ($('#tags-table tbody tr:not(.empty-state)').length > 0) {
-                $('#tags-table').DataTable({
-                    "paging": true,
-                    "lengthChange": true,
-                    "searching": true,
-                    "ordering": true,
-                    "info": true,
-                    "autoWidth": false,
-                    "responsive": true,
-                    "dom": '<"row"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-6"l>>' +
-                           '<"row"<"col-sm-12"tr>>' +
-                           '<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
-                    "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-                    "order": [[1, "asc"]],
-                    "columnDefs": [
-                        { "orderable": false, "targets": [0, 4] }
-                    ],
-                    "language": {
-                        "search": "",
-                        "searchPlaceholder": "Search tags...",
-                        "paginate": {
-                            "previous": "<i class='fas fa-angle-left'></i>",
-                            "next": "<i class='fas fa-angle-right'></i>"
-                        },
-                        "lengthMenu": "_MENU_ per page"
-                    }
-                });
-                $('.dataTables_filter input').addClass('form-control form-control-premium shadow-none border-light');
-                $('.dataTables_length select').addClass('form-control form-control-premium shadow-none border-light');
-            }
-            
-            $('[data-toggle="tooltip"]').tooltip();
-        });
-    </script>
+    <script src="{{ asset('admin-assets/pages/registry-index.js') }}"></script>
 @endsection

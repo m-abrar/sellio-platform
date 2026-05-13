@@ -145,16 +145,5 @@
 @stop
 
 @section('js')
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const toggleInput = document.querySelector('.toggle-input');
-        const statusText = document.querySelector('.toggle-status');
-        
-        if (toggleInput) {
-            toggleInput.addEventListener('change', function() {
-                statusText.textContent = this.checked ? 'Verified Lead' : 'Pending Opt-in';
-            });
-        }
-    });
-</script>
+<script src="{{ asset('admin-assets/pages/registry-index.js') }}"></script>
 @stop

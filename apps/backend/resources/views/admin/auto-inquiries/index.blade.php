@@ -62,7 +62,8 @@
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
-                    <table id="inquiries-table" class="table table-hover table-premium mb-0">
+                    <table id="inquiries-table" class="table table-hover table-premium mb-0 datatable-init"
+                           data-datatable-config='{"paging": false, "lengthChange": false, "searching": false, "ordering": true, "info": false, "dom": "t"}'>
                         <thead class="thead-light">
                             <tr>
                                 <th class="text-center pl-4 col-media-80">Media</th>
@@ -129,29 +130,5 @@
 
 
 @section('js')
-<script>
-    $(document).ready(function() {
-        if (typeof $.fn.select2 === 'function') {
-            $('.select2').select2({ theme: 'bootstrap4', width: '100%' });
-        }
-        $('[data-toggle="tooltip"]').tooltip();
-
-        if ($('#inquiries-table tbody tr:not(.empty-state)').length > 0) {
-            $('#inquiries-table').DataTable({
-                "paging": false,
-                "lengthChange": false,
-                "searching": false,
-                "ordering": true,
-                "info": false,
-                "autoWidth": false,
-                "responsive": true,
-                "dom": 't',
-                "language": {
-                    "search": "",
-                    "searchPlaceholder": "Search leads registry..."
-                }
-            });
-        }
-    });
-</script>
+<script src="{{ asset('admin-assets/pages/registry-index.js') }}"></script>
 @endsection

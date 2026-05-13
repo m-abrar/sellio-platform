@@ -58,7 +58,8 @@
         <div class="card-body p-0">
             <div class="table-responsive">
                 {{-- DRY: Applied table-premium for the consistent brand hover effect --}}
-                <table id="locations-table" class="table table-hover table-premium mb-0">
+                <table id="locations-table" class="table table-hover table-premium mb-0 datatable-init"
+                       data-datatable-config='{"order": [[1, "asc"]], "columnDefs": [{"orderable": false, "targets": [0, 3, 5]}]}'>
                     <thead class="thead-light">
                         <tr>
                             <th class="text-center col-media-70">{{ __('Preview') }}</th>
@@ -145,16 +146,5 @@
 @endsection
 
 @section('js')
-    <script>
-        $(function () {
-            if ($('#locations-table tbody tr:not(.empty-state)').length > 0) {
-                $('#locations-table').DataTable({
-                    "order": [[1, "asc"]],
-                    "columnDefs": [
-                        { "orderable": false, "targets": [0, 3, 5] }
-                    ]
-                });
-            }
-        });
-    </script>
+<script src="{{ asset('admin-assets/pages/registry-index.js') }}"></script>
 @endsection

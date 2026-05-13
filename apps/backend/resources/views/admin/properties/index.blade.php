@@ -53,7 +53,8 @@
         </div>
         <div class="card-body p-0">
             <div class="table-responsive">
-                <table id="properties-table" class="table table-hover table-premium mb-0">
+                <table id="properties-table" class="table table-hover table-premium mb-0 datatable-init"
+                       data-datatable-config='{"paging": false, "searching": true, "ordering": true, "info": false, "dom": "<\"row pt-3\"<\"col-sm-12\"f>>t", "language": {"search": "", "searchPlaceholder": "Search property catalog..."}}'>
                     <thead class="thead-light">
                         <tr>
                             <th class="text-center pl-4 col-media-70">Media</th>
@@ -126,9 +127,11 @@
                                         </a>
                                         <form action="{{ route('admin.properties.destroy', $property->id) }}" method="POST" class="d-inline">
                                             @csrf @method('DELETE')
-                                            <button type="submit" class="btn text-danger" 
+                                            <button type="button" class="btn text-danger" 
                                                     data-toggle="tooltip" title="Purge Asset"
-                                                    onclick="return confirm('Permanently delete this property listing?')">
+                                                    data-action="delete-trigger"
+                                                    data-confirm-title="Purge Asset?"
+                                                    data-confirm-text="Permanently delete this property listing?">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
                                         </form>
@@ -162,30 +165,5 @@
 @endsection
 
 @section('js')
-<script>
-    $(function () {
-        if (typeof $.fn.select2 === 'function') {
-            $('.select2').select2({ theme: 'bootstrap4', width: '100%' });
-        }
-        $('[data-toggle="tooltip"]').tooltip();
-
-        if ($('#properties-table tbody tr:not(.empty-state)').length > 0) {
-            $('#properties-table').DataTable({
-                "paging": false,
-                "lengthChange": false,
-                "searching": true,
-                "ordering": true,
-                "info": false,
-                "autoWidth": false,
-                "responsive": true,
-                "dom": '<"row pt-3"<"col-sm-12"f>>t',
-                "language": {
-                    "search": "",
-                    "searchPlaceholder": "Search property catalog..."
-                }
-            });
-            $('.dataTables_filter input').addClass('form-control form-control-premium shadow-none border-light mb-3');
-        }
-    });
-</script>
+<script src="{{ asset('admin-assets/pages/registry-index.js') }}"></script>
 @endsection

@@ -59,7 +59,7 @@
 <div class="container-fluid pb-5">
     @include('admin.alert') 
 
-    <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
+    <div class="card border-0 shadow-premium overflow-hidden rounded-24">
         <div class="card-header bg-white border-0 py-4 px-4">
             <h3 class="card-title font-weight-bold text-dark mb-0">{{ __('Operational Logs') }}</h3>
             <div class="card-tools">
@@ -70,7 +70,8 @@
         </div>
         <div class="card-body p-0">
             <div class="table-responsive">
-                <table id="activity-log-table" class="table table-hover table-premium mb-0">
+                <table id="activity-log-table" class="table table-hover table-premium mb-0 datatable-init"
+                       data-datatable-config='{"paging": false, "info": false, "searching": false, "ordering": true, "columnDefs": [{"orderable": false, "targets": [5]}]}'>
                     <thead class="thead-light">
                         <tr>
                             <th class="pl-4">{{ __('Timestamp') }}</th>
@@ -234,6 +235,6 @@
 </div>
 @endforeach
 
-@stop
-
+@section('js')
+<script src="{{ asset('admin-assets/pages/registry-index.js') }}"></script>
 @stop

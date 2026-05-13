@@ -54,7 +54,8 @@
         
         <div class="card-body p-0">
             <div class="table-responsive">
-                <table id="addons-table" class="table table-hover table-premium mb-0">
+                <table id="addons-table" class="table table-hover table-premium mb-0 datatable-init"
+                       data-datatable-config='{"columnDefs": [{"orderable": false, "targets": [1, 4]}], "responsive": true}'>
                     <thead class="thead-light">
                         <tr>
                             <th class="px-4">Addon Identity</th>
@@ -121,6 +122,5 @@
 @endsection
 
 @section('js')
-    @include('admin._partials._sweetalert')
-    <script src="{{ asset('admin-assets/pages/addons-index.js') }}"></script>
+    <script src="{{ asset('admin-assets/pages/registry-index.js') }}"></script>
 @endsection

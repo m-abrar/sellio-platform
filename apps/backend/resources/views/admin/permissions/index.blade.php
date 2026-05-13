@@ -58,7 +58,8 @@
 
         <div class="card-body p-0">
             <div class="table-responsive">
-                <table id="permissions-table" class="table table-hover table-premium mb-0">
+                <table id="permissions-table" class="table table-hover table-premium mb-0 datatable-init"
+                       data-datatable-config='{"paging": true, "lengthChange": false, "searching": true, "ordering": true, "info": true}'>
                     <thead class="thead-light">
                         <tr>
                             <th class="pl-4">Resource Identifier</th>
@@ -97,11 +98,13 @@
                                         
                                         <form id="delete-permission-{{ $permission->id }}" action="{{ route('admin.permissions.destroy', $permission->id) }}" method="POST" class="d-inline">
                                             @csrf @method('DELETE')
-                                            <button type="button" class="btn btn-white btn-sm text-danger py-2 px-3" 
-                                                    data-toggle="tooltip" title="Revoke Protocol"
-                                                    onclick="confirmDelete('delete-permission-{{ $permission->id }}', 'Revoke Permission?', 'This will remove the protocol from all associated roles.', 'Revoke Protocol')">
-                                                <i class="fas fa-trash-alt"></i>
-                                            </button>
+                                             <button type="button" class="btn btn-white btn-sm text-danger py-2 px-3" 
+                                                     data-toggle="tooltip" title="Revoke Protocol"
+                                                     data-action="delete-trigger"
+                                                     data-confirm-title="Revoke Permission?"
+                                                     data-confirm-text="This will remove the protocol from all associated roles.">
+                                                 <i class="fas fa-trash-alt"></i>
+                                             </button>
                                         </form>
                                     </div>
                                 </td>
@@ -130,34 +133,5 @@
 @endpush
 
 @push('js')
-@include('admin._partials._sweetalert')
-<script>
-    $(function () {
-        $('[data-toggle="tooltip"]').tooltip();
-        
-        if ($('#permissions-table tbody tr:not(.empty-state)').length > 0) {
-            $('#permissions-table').DataTable({
-                "paging": true,
-                "lengthChange": false,
-                "searching": true,
-                "ordering": true,
-                "info": true,
-                "autoWidth": false,
-                "responsive": true,
-                "dom": '<"row pt-3"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-6"l>>' +
-                       '<"row"<"col-sm-12"tr>>' +
-                       '<"row pb-3"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
-                "language": {
-                    "search": "",
-                    "searchPlaceholder": "Search records...",
-                    "paginate": {
-                        "previous": "<i class='fas fa-angle-left'></i>",
-                        "next": "<i class='fas fa-angle-right'></i>"
-                    }
-                }
-            });
-            $('.dataTables_filter input').addClass('form-control form-control-sm form-control-premium shadow-none border-light w-220-p');
-        }
-    });
-</script>
+<script src="{{ asset('admin-assets/pages/registry-index.js') }}"></script>
 @endpush

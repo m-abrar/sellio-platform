@@ -58,7 +58,8 @@
 
         <div class="card-body p-0">
             <div class="table-responsive">
-                <table id="plans-table" class="table table-hover table-premium mb-0">
+                <table id="plans-table" class="table table-hover table-premium mb-0 datatable-init"
+                       data-datatable-config='{"paging": false, "info": false, "searching": false, "ordering": true}'>
                     <thead class="thead-light">
                         <tr>
                             <th class="pl-4">Tier Identity</th>
@@ -134,7 +135,9 @@
                                             @csrf @method('DELETE')
                                             <button type="button" class="btn btn-white text-danger py-2 px-3 border-left d-inline-flex align-items-center" 
                                                     data-toggle="tooltip" title="Decommission"
-                                                    onclick="confirmDelete('delete-form-{{ $plan->id }}', 'Decommission Tier?', 'All subscriptions tied to this tier will be affected.', 'Confirm')">
+                                                    data-action="delete-trigger"
+                                                    data-confirm-title="Decommission Tier?"
+                                                    data-confirm-text="All subscriptions tied to this tier will be affected.">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
                                         </form>
@@ -175,13 +178,5 @@
 @endsection
 
 @section('js')
-@include('admin._partials._sweetalert')
-<script>
-    $(function () {
-        $('[data-toggle="tooltip"]').tooltip();
-        if($('.select2').length) {
-            $('.select2').select2({ theme: 'bootstrap4', width: '100%' });
-        }
-    });
-</script>
+<script src="{{ asset('admin-assets/pages/registry-index.js') }}"></script>
 @endsection

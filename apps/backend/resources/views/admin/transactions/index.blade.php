@@ -40,7 +40,8 @@
         </a>
     </div>
     <div class="card-body">
-        <table id="transactions-table" class="table table-hover table-premium mb-0">
+        <table id="transactions-table" class="table table-hover table-premium mb-0 datatable-init"
+               data-datatable-config='{"paging": true, "searching": true, "ordering": true, "order": [[7, "desc"]], "responsive": true}'>
             <thead class="thead-light">
                 <tr>
                     <th>Reference</th>
@@ -109,6 +110,6 @@
 
 
 @section('js')
-    @include('admin._partials._sweetalert')
+    <script src="{{ asset('admin-assets/pages/registry-index.js') }}"></script>
     <script src="{{ asset('admin-assets/pages/transactions-index.js') }}"></script>
 @endsection

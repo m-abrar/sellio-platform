@@ -56,7 +56,8 @@
 
         <div class="card-body p-0">
             <div class="table-responsive">
-                <table id="products-table" class="table table-hover table-premium mb-0">
+                <table id="products-table" class="table table-hover table-premium mb-0 datatable-init" 
+                       data-datatable-config='{"paging": false, "info": false, "searching": false, "columnDefs": [{"orderable": false, "targets": [0, 5]}]}'>
                     <thead class="thead-light">
                         <tr>
                             <th class="text-center pl-4 col-media-70">Media</th>
@@ -184,18 +185,5 @@
 @endsection
 
 @push('js')
-    <script>
-        $(function () {
-            if ($('#products-table tbody tr:not(.empty-state)').length > 0) {
-                $('#products-table').DataTable({
-                    "paging": false,
-                    "info": false,
-                    "searching": false,
-                    "columnDefs": [
-                        { "orderable": false, "targets": [0, 5] }
-                    ]
-                });
-            }
-        });
-    </script>
+    <script src="{{ asset('admin-assets/pages/registry-index.js') }}"></script>
 @endpush

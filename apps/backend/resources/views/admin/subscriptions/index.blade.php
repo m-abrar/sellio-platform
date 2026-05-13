@@ -60,7 +60,8 @@
 
         <div class="card-body p-0">
             <div class="table-responsive">
-                <table id="subscriptions-table" class="table table-hover table-premium mb-0">
+                <table id="subscriptions-table" class="table table-hover table-premium mb-0 datatable-init"
+                       data-datatable-config='{"paging": false, "info": false, "searching": false, "ordering": true}'>
                     <thead class="thead-light">
                         <tr>
                             <th class="pl-4">Subscriber Identity</th>
@@ -176,6 +177,5 @@
 @endsection
 
 @section('js')
-@include('admin._partials._sweetalert')
 <script src="{{ asset('admin-assets/pages/registry-index.js') }}"></script>
 @endsection

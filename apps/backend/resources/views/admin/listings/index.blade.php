@@ -170,7 +170,8 @@
 
             <div class="card-body p-0">
                 <div class="table-responsive">
-                    <table id="listings-table" class="table table-hover table-premium mb-0">
+                    <table id="listings-table" class="table table-hover table-premium mb-0 datatable-init"
+                           data-datatable-config='{"paging": false, "lengthChange": false, "searching": false, "ordering": true, "info": false}'>
                         <thead class="thead-light">
                             <tr>
                                 <th class="text-center pl-4 col-media-80">{{ __('Asset') }}</th>
@@ -274,7 +275,11 @@
                                             
                                             <form action="{{ route('admin.listings.destroy', $routeParams) }}" method="POST" class="d-inline">
                                                 @csrf @method('DELETE')
-                                                <button type="submit" class="btn text-danger" data-toggle="tooltip" title="{{ __('Purge Record') }}" onclick="return confirm('{{ __('Permanently delete asset?') }}')">
+                                                <button type="button" class="btn text-danger" 
+                                                        data-toggle="tooltip" title="{{ __('Purge Record') }}"
+                                                        data-action="delete-trigger"
+                                                        data-confirm-title="{{ __('Purge Record?') }}"
+                                                        data-confirm-text="{{ __('Are you sure you want to permanently delete this asset?') }}">
                                                     <i class="fas fa-trash-alt"></i>
                                                 </button>
                                             </form>
@@ -307,22 +312,5 @@
 @stop
 
 @push('js')
-<script>
-    $(function () {
-        $('[data-toggle="tooltip"]').tooltip();
-
-        // DataTables Premium Initialization
-        if ($('#listings-table tbody tr:not(.empty-state)').length > 0) {
-            $('#listings-table').DataTable({
-                "paging": false, 
-                "lengthChange": false,
-                "searching": false,
-                "ordering": true,
-                "info": false,
-                "autoWidth": false,
-                "responsive": true
-            });
-        }
-    });
-</script>
+<script src="{{ asset('admin-assets/pages/registry-index.js') }}"></script>
 @endpush

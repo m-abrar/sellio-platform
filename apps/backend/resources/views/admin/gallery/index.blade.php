@@ -101,14 +101,17 @@
                                     <button type="button" class="btn btn-white btn-sm mx-1 rounded-circle shadow-sm icon-box-38" data-toggle="modal" data-target="#replaceModal{{ $media->id }}" title="Replace Asset">
                                         <i class="fas fa-sync-alt text-primary"></i>
                                     </button>
-                                    <form id="delete-form-{{ $media->id }}" action="{{ route('admin.gallery.destroy', $media->id) }}" method="POST" class="d-inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="button" class="btn btn-white btn-sm mx-1 rounded-circle shadow-sm icon-box-38" title="Delete" 
-                                                onclick="confirmDelete('delete-form-{{ $media->id }}', 'Delete Asset?', 'This operation is permanent and may break linked listings!', 'Delete It')">
-                                            <i class="fas fa-trash text-danger"></i>
-                                        </button>
-                                    </form>
+                                     <form id="delete-form-{{ $media->id }}" action="{{ route('admin.gallery.destroy', $media->id) }}" method="POST" class="d-inline">
+                                         @csrf
+                                         @method('DELETE')
+                                         <button type="button" class="btn btn-white btn-sm mx-1 rounded-circle shadow-sm icon-box-38" 
+                                                 title="Delete"
+                                                 data-action="delete-trigger"
+                                                 data-confirm-title="Delete Asset?"
+                                                 data-confirm-text="This operation is permanent and may break linked listings!">
+                                             <i class="fas fa-trash text-danger"></i>
+                                         </button>
+                                     </form>
                                     <a href="{{ $media->getUrl() }}" target="_blank" class="btn btn-white btn-sm mx-1 rounded-circle shadow-sm icon-box-38" title="Fullscreen">
                                         <i class="fas fa-expand text-primary"></i>
                                     </a>
@@ -200,14 +203,14 @@
                     @csrf
                     <div class="modal-body p-4">
                         <div class="form-group mb-4 text-center">
-                            <div class="upload-area p-5 border-dashed-2 rounded-xl bg-light transition-0-3" onclick="document.getElementById('newAssetFile').click();">
+                            <div class="upload-area p-5 border-dashed-2 rounded-xl bg-light transition-0-3">
                                 <div class="icon-circle bg-white shadow-sm mx-auto mb-3 icon-box-60 rounded-circle d-flex align-items-center justify-content-center">
                                     <i class="fas fa-cloud-upload-alt fa-lg text-primary"></i>
                                 </div>
                                 <p class="mb-1 font-weight-bold text-dark">Click to select asset</p>
                                 <small class="text-muted">Will be indexed in "Gallery" collection</small>
                             </div>
-                            <input type="file" name="image" class="d-none" id="newAssetFile" required onchange="updateFileName(this)">
+                            <input type="file" name="image" class="d-none" id="newAssetFile" required>
                             <div id="fileNameDisplay" class="mt-3 text-primary font-weight-bold small"></div>
                         </div>
                         <div class="form-group mb-0">
@@ -228,23 +231,5 @@
 @section('plugins.Select2', true)
 
 @section('js')
-@include('admin._partials._sweetalert')
-<script>
-    $(function () {
-        if (typeof $.fn.select2 === 'function') {
-            $('.select2').select2({ theme: 'bootstrap4', width: '100%' });
-        }
-        $('[data-toggle="tooltip"]').tooltip();
-    });
-
-    function updateFileName(input) {
-        const fileName = input.files[0] ? input.files[0].name : '';
-        document.getElementById('fileNameDisplay').innerHTML = fileName ? '<i class="fas fa-check-circle mr-1"></i> Ready: ' + fileName : '';
-    }
-    
-    $(".custom-file-input").on("change", function() {
-        var fileName = $(this).val().split("\\").pop();
-        $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
-    });
-</script>
+<script src="{{ asset('admin-assets/pages/gallery-index.js') }}"></script>
 @stop

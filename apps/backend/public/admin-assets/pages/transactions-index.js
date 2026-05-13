@@ -1,21 +1,10 @@
 /**
  * Finance Module: Global Transaction Ledger Logic
+ * This file is now primarily for custom extensions as core initialization 
+ * is handled by registry-index.js via .datatable-init
  */
 
 (function($) {
     'use strict';
-
-    $(document).ready(function() {
-        // Initialize DataTable
-        const transactionsTable = $('#transactions-table');
-        if (transactionsTable.length > 0) {
-            transactionsTable.DataTable({
-                paging: true,
-                searching: true,
-                ordering: true,
-                order: [[7, 'desc']], // Default: Chronological order (descending)
-                responsive: true
-            });
-        }
-    });
+    // Add custom transaction logic here if needed
 })(jQuery);

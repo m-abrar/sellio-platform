@@ -53,7 +53,8 @@
 
             <div class="card-body p-0">
                 <div class="table-responsive">
-                    <table id="bookings-table" class="table table-hover table-premium mb-0">
+                    <table id="bookings-table" class="table table-hover table-premium mb-0 datatable-init"
+                           data-datatable-config='{"paging": false, "searching": false, "ordering": true, "info": false, "dom": "t"}'>
                         <thead class="thead-light">
                             <tr>
                                 <th class="pl-4 col-media-70">Media</th>
@@ -161,9 +162,5 @@
 
 
 @section('js')
-<script>
-    $(document).ready(function() {
-        $('[data-toggle="tooltip"]').tooltip();
-    });
-</script>
+<script src="{{ asset('admin-assets/pages/registry-index.js') }}"></script>
 @endsection

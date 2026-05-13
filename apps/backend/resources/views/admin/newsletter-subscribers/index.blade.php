@@ -58,7 +58,8 @@
 
         <div class="card-body p-0">
             <div class="table-responsive">
-                <table id="subscribers-table" class="table table-hover table-premium mb-0">
+                <table id="subscribers-table" class="table table-hover table-premium mb-0 datatable-init"
+                       data-datatable-config='{"paging": false, "info": false, "searching": false, "ordering": true, "dom": "t"}'>
                     <thead class="thead-light">
                         <tr>
                             <th>Subscriber Identity</th>
@@ -118,7 +119,9 @@
                                             @csrf @method('DELETE')
                                             <button type="button" class="btn btn-white btn-sm text-danger py-2 px-3 border-left" 
                                                     data-toggle="tooltip" title="Unsubscribe"
-                                                    onclick="confirmDelete('delete-form-{{ $subscriber->id }}', 'Unsubscribe User?', 'This user will be removed from the registry.', 'Unsubscribe')">
+                                                    data-action="delete-trigger"
+                                                    data-confirm-title="Unsubscribe User?"
+                                                    data-confirm-text="This user will be removed from the registry.">
                                                 <i class="fas fa-user-minus"></i>
                                             </button>
                                         </form>
@@ -162,31 +165,5 @@
 @stop
 
 @section('js')
-@include('admin._partials._sweetalert')
-<script>
-    $(function () {
-        $('[data-toggle="tooltip"]').tooltip();
-        
-        // Refined Search UI for DataTables
-        if ($('#subscribers-table tbody tr:not(.empty-state)').length > 0) {
-            $('#subscribers-table').DataTable({
-                "paging": false,
-                "info": false,
-                "searching": false,
-                "ordering": true,
-                "autoWidth": false,
-                "responsive": true,
-                "dom": 't',
-                "language": {
-                    "search": "",
-                    "searchPlaceholder": "Search records...",
-                    "paginate": {
-                        "previous": "<i class='fas fa-angle-left'></i>",
-                        "next": "<i class='fas fa-angle-right'></i>"
-                    }
-                }
-            });
-        }
-    });
-</script>
+<script src="{{ asset('admin-assets/pages/registry-index.js') }}"></script>
 @stop

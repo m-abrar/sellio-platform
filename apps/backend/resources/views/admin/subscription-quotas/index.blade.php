@@ -71,7 +71,8 @@
         <h3 class="card-title">Quota List</h3>
     </div>
     <div class="card-body table-responsive">
-        <table class="table table-hover table-premium mb-0">
+        <table class="table table-hover table-premium mb-0 datatable-init"
+               data-datatable-config='{"paging": false, "info": false, "searching": false}'>
             <thead class="thead-light">
                 <tr>
                     <th>User</th>
@@ -105,9 +106,12 @@
                                 <i class="fas fa-edit"></i>
                             </a> &nbsp;&nbsp;&nbsp;
 
-                            <form action="{{ route('admin.subscription-quotas.reset', $quota->id) }}" method="POST" onsubmit="return confirm('Reset quota for this user?');">
+                            <form action="{{ route('admin.subscription-quotas.reset', $quota->id) }}" method="POST">
                                 @csrf
-                                <button type="submit" class="btn btn-warning btn-sm">
+                                <button type="button" class="btn btn-warning btn-sm"
+                                        data-action="delete-trigger"
+                                        data-confirm-title="Reset Quota?"
+                                        data-confirm-text="Reset resource utilization for this user?">
                                     <i class="fas fa-sync-alt"></i>
                                 </button>
                             </form>
@@ -122,4 +126,7 @@
         </div>
     </div>
 </div>
+@section('js')
+<script src="{{ asset('admin-assets/pages/registry-index.js') }}"></script>
+@endsection
 @stop

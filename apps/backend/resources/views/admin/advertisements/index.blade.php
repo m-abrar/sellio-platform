@@ -58,7 +58,8 @@
 
         <div class="card-body p-0">
             <div class="table-responsive">
-                <table id="advertisements-table" class="table table-hover table-premium mb-0">
+                <table id="addons-table" class="table table-hover table-premium mb-0 datatable-init"
+                       data-datatable-config='{"columnDefs": [{"orderable": false, "targets": [1, 4]}], "responsive": true}'>
                     <thead class="thead-light">
                         <tr>
                             <th class="px-4 w-35-p">{{ __('Creative & Title') }}</th>
@@ -142,7 +143,10 @@
                                             @csrf @method('DELETE')
                                             <button type="button" class="btn btn-white text-danger py-2 px-3" 
                                                     data-toggle="tooltip" title="{{ __('Archive Campaign') }}"
-                                                    onclick="confirmDelete({{ $advertisement->id }})">
+                                                    data-action="confirm-trigger"
+                                                    data-confirm-title="{{ __('Archive Campaign?') }}"
+                                                    data-confirm-text="{{ __('This creative will be removed from all active placements.') }}"
+                                                    data-confirm-button="{{ __('Yes, archive it') }}">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
                                         </form>
@@ -168,27 +172,5 @@
 @endsection
 
 @section('js')
-@include('admin._partials._sweetalert')
-<script>
-    $(function () {
-        $('[data-toggle="tooltip"]').tooltip();
-    });
-
-    function confirmDelete(id) {
-        Swal.fire({
-            title: '{{ __('Archive Campaign?') }}',
-            text: "{{ __('This creative will be removed from all active placements.') }}",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#ef4444',
-            cancelButtonColor: '#64748b',
-            confirmButtonText: '{{ __('Yes, archive it') }}',
-            cancelButtonText: '{{ __('Cancel') }}'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                document.getElementById('delete-form-' + id).submit();
-            }
-        })
-    }
-</script>
+    <script src="{{ asset('admin-assets/pages/registry-index.js') }}"></script>
 @endsection

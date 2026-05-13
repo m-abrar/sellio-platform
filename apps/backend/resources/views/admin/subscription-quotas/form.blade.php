@@ -73,53 +73,9 @@
 @endsection
 
 @push('js')
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    // Handle Status Toggle in Settings
-    let statusSwitch = document.getElementById('statusSwitch');
-    if(statusSwitch){
-        statusSwitch.addEventListener('change', function(){
-            this.value = this.checked ? 'active' : 'inactive';
-        });
-    }
-});
-</script>
+<script src="{{ asset('admin-assets/pages/registry-index.js') }}"></script>
 @endpush
 
 @push('css')
-<style>
-.position-sticky {
-    position: sticky;
-    z-index: 100;
-    top: 10px !important;
-}
-
-#subscriptionTabs.nav-pills {
-    flex-wrap: wrap;
-    gap: 0.5rem;
-}
-
-#subscriptionTabs.nav-pills .nav-link {
-    border-radius: 0.5rem;
-    color: #6c757d;
-    font-weight: 500;
-    transition: all 0.2s ease-in-out;
-    background-color: #fff;
-}
-
-#subscriptionTabs.nav-pills .nav-link:hover {
-    background-color: #fff;
-    color: #222 !important;
-    border-radius: 0.3rem;
-}
-
-#subscriptionTabs.nav-pills .nav-link.active {
-    border-bottom: 3px solid #9ACD32;
-    color: #9ACD32 !important;
-    font-weight: 600;
-    background-color: #fff;
-    border-radius: 0.3rem;
-    box-shadow: 0 2px 4px rgba(13,110,253,0.2);
-}
-</style>
+@include('admin._partials._toggle-card-css')
 @endpush

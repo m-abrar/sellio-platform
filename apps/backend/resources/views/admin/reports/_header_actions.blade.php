@@ -10,7 +10,7 @@
 --}}
 <div class="col-sm-5 d-flex align-items-center justify-content-end" style="gap: 12px;">
     <div class="btn-group btn-group-premium">
-        <button class="btn btn-white" onclick="window.print()">
+        <button class="btn btn-white" data-action="print-page">
             <i class="fas fa-print mr-2 text-primary opacity-75"></i> {{ $exportText ?? 'Export Report' }}
         </button>
     </div>

@@ -57,7 +57,8 @@
         </div>
         <div class="card-body p-0">
             <div class="table-responsive">
-                <table id="jobs-table" class="table table-hover table-premium mb-0">
+                <table id="jobs-table" class="table table-hover table-premium mb-0 datatable-init"
+                       data-datatable-config='{"paging": false, "searching": false, "ordering": true, "info": false}'>
                     <thead class="thead-light">
                         <tr>
                             <th class="text-center pl-4 col-media-70">Media</th>
@@ -125,7 +126,13 @@
                                         <a href="{{ route('admin.jobs.duplicate', $job->id) }}" class="btn text-success" data-toggle="tooltip" title="Clone Entry"><i class="fas fa-copy"></i></a>
                                         <form action="{{ route('admin.jobs.destroy', $job->id) }}" method="POST" class="d-inline">
                                             @csrf @method('DELETE')
-                                            <button type="submit" class="btn text-danger" data-toggle="tooltip" title="Purge Vacancy" onclick="return confirm('Permanently delete this job listing?')"><i class="fas fa-trash-alt"></i></button>
+                                            <button type="button" class="btn text-danger" 
+                                                    data-toggle="tooltip" title="Purge Vacancy"
+                                                    data-action="delete-trigger"
+                                                    data-confirm-title="Purge Vacancy?"
+                                                    data-confirm-text="Permanently delete this job listing?">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
                                         </form>
                                     </div>
                                 </td>
@@ -161,24 +168,5 @@
 @endsection
 
 @section('js')
-<script>
-    $(function () {
-        if (typeof $.fn.select2 === 'function') {
-            $('.select2').select2({ theme: 'bootstrap4', width: '100%' });
-        }
-        $('[data-toggle="tooltip"]').tooltip();
-
-        if ($('#jobs-table tbody tr:not(.empty-state)').length > 0) {
-            $('#jobs-table').DataTable({
-                "paging": false,
-                "lengthChange": false,
-                "searching": false,
-                "ordering": true,
-                "info": false,
-                "autoWidth": false,
-                "responsive": true
-            });
-        }
-    });
-</script>
+<script src="{{ asset('admin-assets/pages/registry-index.js') }}"></script>
 @endsection

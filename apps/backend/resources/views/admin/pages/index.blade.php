@@ -57,7 +57,8 @@
 
         <div class="card-body p-0">
             <div class="table-responsive">
-                <table id="pages-table" class="table table-hover table-premium mb-0">
+                <table id="pages-table" class="table table-hover table-premium mb-0 datatable-init"
+                       data-datatable-config='{"paging": true, "lengthChange": false, "searching": false, "ordering": true, "info": true}'>
                     <thead class="thead-light">
                         <tr>
                             <th class="pl-4 w-40-p">Title & Identity</th>
@@ -114,7 +115,9 @@
                                             @csrf @method('DELETE')
                                             <button type="button" class="btn btn-white text-danger py-2 px-3 border-left d-inline-flex align-items-center" 
                                                     data-toggle="tooltip" title="Purge Asset"
-                                                    onclick="confirmDelete('delete-form-{{ $page->id }}', 'Purge Page?', 'This content will be permanently removed from the platform.', 'Purge Now')">
+                                                    data-action="delete-trigger"
+                                                    data-confirm-title="Purge Page?"
+                                                    data-confirm-text="This content will be permanently removed from the platform.">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
                                         </form>
@@ -140,28 +143,5 @@
 @endsection
 
 @section('js')
-@include('admin._partials._sweetalert')
-<script>
-    $(function () {
-        $('[data-toggle="tooltip"]').tooltip();
-        
-        if ($('#pages-table tbody tr:not(.empty-state)').length > 0) {
-            $('#pages-table').DataTable({
-                "paging": true,
-                "lengthChange": false,
-                "searching": false,
-                "ordering": true,
-                "info": true,
-                "autoWidth": false,
-                "responsive": true,
-                "language": {
-                    "paginate": {
-                        "previous": "<i class='fas fa-angle-left'></i>",
-                        "next": "<i class='fas fa-angle-right'></i>"
-                    }
-                }
-            });
-        }
-    });
-</script>
+<script src="{{ asset('admin-assets/pages/registry-index.js') }}"></script>
 @endsection

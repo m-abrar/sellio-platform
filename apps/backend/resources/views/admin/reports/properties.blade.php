@@ -130,7 +130,8 @@
         </div>
         <div class="card-body p-0">
             <div class="table-responsive">
-                <table class="table table-hover table-premium m-0" id="propertyTable">
+                <table class="table table-hover table-premium m-0 datatable-init" id="propertyTable"
+                       data-datatable-config='{"paging": true, "lengthChange": true, "searching": true, "ordering": true, "info": true, "autoWidth": false, "responsive": true}'>
                     <thead>
                         <tr>
                             <th class="pl-4">Property Identity</th>
@@ -194,26 +195,5 @@
 @stop
 
 @section('js')
-    <script>
-        // DataTables initialization script
-        $(function () {
-            $('#propertyTable').DataTable({
-                "paging": true,
-                "lengthChange": true,
-                "searching": true,
-                "ordering": true,
-                "info": true,
-                "autoWidth": false,
-                "responsive": true,
-                "language": {
-                    "search": "_INPUT_",
-                    "searchPlaceholder": "Search properties...",
-                    "paginate": {
-                        "previous": '<i class="fas fa-chevron-left"></i>',
-                        "next": '<i class="fas fa-chevron-right"></i>'
-                    }
-                }
-            });
-        });
-    </script>
+<script src="{{ asset('admin-assets/pages/registry-index.js') }}"></script>
 @endsection

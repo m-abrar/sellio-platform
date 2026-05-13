@@ -109,7 +109,8 @@
 
         <div class="card-body p-0">
             <div class="table-responsive">
-                <table id="withdrawals-table" class="table table-hover table-premium mb-0">
+                <table id="withdrawals-table" class="table table-hover table-premium mb-0 datatable-init"
+                       data-datatable-config='{"paging": true, "searching": true, "ordering": true, "info": true, "order": [[5, "desc"]], "dom": "tr"}'>
                     <thead class="thead-light">
                         <tr>
                             <th class="pl-4">Partner Intelligence</th>
@@ -185,7 +186,10 @@
                                                  @csrf
                                                  <button type="button" class="btn text-success" 
                                                          title="{{ __('Approve Payout') }}" 
-                                                         onclick="confirmDelete('approve-form-{{ $withdrawal->id }}', 'Approve Payout?', 'Confirming this will process the settlement of ${{ number_format($withdrawal->amount_dollars, 2) }} to the partner.', 'Approve Now')">
+                                                         data-action="confirm-trigger"
+                                                         data-confirm-title="Approve Payout?"
+                                                         data-confirm-text="Confirming this will process the settlement of ${{ number_format($withdrawal->amount_dollars, 2) }} to the partner."
+                                                         data-confirm-button="Approve Now">
                                                      <i class="fas fa-check"></i>
                                                  </button>
                                              </form>
@@ -264,6 +268,6 @@
 @endsection
 
 @section('js')
-    @include('admin._partials._sweetalert')
+    <script src="{{ asset('admin-assets/pages/registry-index.js') }}"></script>
     <script src="{{ asset('admin-assets/pages/withdrawals-index.js') }}"></script>
 @endsection

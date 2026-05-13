@@ -133,7 +133,8 @@
                 
                 <div class="card-body p-0">
                     <div class="table-responsive">
-                        <table id="bookings-table" class="table table-hover table-premium mb-0">
+                        <table id="bookings-table" class="table table-hover table-premium mb-0 datatable-init"
+                               data-datatable-config='{"paging": false, "lengthChange": false, "searching": false, "ordering": true, "info": false}'>
                             <thead class="bg-light text-uppercase smallest font-weight-bold">
                                 <tr>
                                     <th class="py-3 border-0 text-center col-media-80">{{ __('Media') }}</th>
@@ -209,9 +210,13 @@
                                                 </a>
                                                 <form action="{{ ($booking->booking_type && $booking->id) ? route('admin.bookings.destroy', [$booking->booking_type, $booking->id]) : '#' }}" method="POST" class="d-inline">
                                                     @csrf @method('DELETE')
-                                                    <button type="submit" class="btn text-danger" data-toggle="tooltip" title="Purge Record" onclick="return confirm('Permanently delete booking?')">
-                                                        <i class="fas fa-trash-alt"></i>
-                                                    </button>
+                                                     <button type="button" class="btn text-danger" 
+                                                             data-toggle="tooltip" title="Purge Record" 
+                                                             data-action="delete-trigger"
+                                                             data-confirm-title="Purge Record?"
+                                                             data-confirm-text="Are you sure you want to permanently delete this booking?">
+                                                         <i class="fas fa-trash-alt"></i>
+                                                     </button>
                                                 </form>
                                             </div>
                                         </td>
@@ -248,30 +253,7 @@
 @endpush
 
 @section('js')
-<script>
-    $(function () {
-        $('[data-toggle="tooltip"]').tooltip();
-
-        // DataTables Premium Initialization
-        if ($('#bookings-table tbody tr:not(.empty-state)').length > 0) {
-            $('#bookings-table').DataTable({
-                "paging": false,
-                "lengthChange": false,
-                "searching": false,
-                "ordering": true,
-                "info": false,
-                "autoWidth": false,
-                "responsive": true,
-                "dom": '<"row pt-3"<"col-sm-12"f>>t',
-                "language": {
-                    "search": "",
-                    "searchPlaceholder": "{{ __('Search bookings registry...') }}"
-                }
-            });
-            $('.dataTables_filter input').addClass('form-control form-control-premium shadow-none border-light');
-        }
-    });
-</script>
+<script src="{{ asset('admin-assets/pages/registry-index.js') }}"></script>
 @stop
 
 @include('admin._partials._sweetalert-delete')

@@ -62,7 +62,8 @@
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
-                    <table id="applications-table" class="table table-hover table-premium mb-0">
+                    <table id="applications-table" class="table table-hover table-premium mb-0 datatable-init"
+                           data-datatable-config='{"paging": false, "searching": false, "ordering": true, "info": false, "dom": "t"}'>
                         <thead class="thead-light">
                             <tr>
                                 <th class="text-center pl-4 col-media-80">{{ __('Asset') }}</th>
@@ -111,7 +112,13 @@
                                             <a href="{{ route('admin.job-applications.show', $app->id) }}" class="btn text-info" data-toggle="tooltip" title="Inspect Record"><i class="fas fa-eye"></i></a>
                                             <form action="{{ route('admin.job-applications.destroy', $app->id) }}" method="POST" class="d-inline">
                                                 @csrf @method('DELETE')
-                                                <button type="submit" class="btn text-danger" data-toggle="tooltip" title="Purge Record" onclick="return confirm('Permanently delete application?')"><i class="fas fa-trash-alt"></i></button>
+                                                <button type="button" class="btn text-danger" 
+                                                        data-toggle="tooltip" title="Purge Record" 
+                                                        data-action="delete-trigger"
+                                                        data-confirm-title="Purge Record?"
+                                                        data-confirm-text="Permanently delete application?">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
                                             </form>
                                         </div>
                                     </td>
@@ -141,30 +148,5 @@
 
 
 @section('js')
-@include('admin._partials._sweetalert')
-<script>
-    $(document).ready(function() {
-        if (typeof $.fn.select2 === 'function') {
-            $('.select2').select2({ theme: 'bootstrap4', width: '100%' });
-        }
-        $('[data-toggle="tooltip"]').tooltip();
-
-        if ($('#applications-table tbody tr:not(.empty-state)').length > 0) {
-            $('#applications-table').DataTable({
-                "paging": false,
-                "lengthChange": false,
-                "searching": false,
-                "ordering": true,
-                "info": false,
-                "autoWidth": false,
-                "responsive": true,
-                "dom": 't',
-                "language": {
-                    "search": "",
-                    "searchPlaceholder": "{{ __('Search talent registry...') }}"
-                }
-            });
-        }
-    });
-</script>
+<script src="{{ asset('admin-assets/pages/registry-index.js') }}"></script>
 @endsection

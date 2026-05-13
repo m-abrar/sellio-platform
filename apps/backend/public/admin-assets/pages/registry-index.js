@@ -12,6 +12,40 @@
             $('[data-toggle="tooltip"]').tooltip();
         }
 
+        // Confirmation Orchestration (Generic)
+        $(document).on('click', '[data-action="confirm-trigger"]', function(e) {
+            e.preventDefault();
+            const btn = $(this);
+            const form = btn.closest('form');
+            const title = btn.data('confirm-title') || 'Are you sure?';
+            const text = btn.data('confirm-text') || 'Please confirm this operation.';
+            const confirmBtn = btn.data('confirm-button') || 'Confirm';
+
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    title: title,
+                    text: text,
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#46a5ac',
+                    cancelButtonColor: '#94a3b8',
+                    confirmButtonText: confirmBtn,
+                    cancelButtonText: 'Cancel',
+                    reverseButtons: true,
+                    customClass: {
+                        container: 'swal-premium-container',
+                        popup: 'rounded-24 border-0 shadow-premium',
+                        confirmButton: 'btn btn-primary rounded-pill px-4',
+                        cancelButton: 'btn btn-light rounded-pill px-4 mr-2'
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            }
+        });
+
         // 2. Initialize Select2
         if ($.fn.select2) {
             $('.select2').each(function() {
@@ -28,7 +62,8 @@
             // Auto-init tables with class .datatable-init
             $('.datatable-init').each(function() {
                 if (!$.fn.DataTable.isDataTable(this)) {
-                    $(this).DataTable({
+                    const customConfig = $(this).data('datatable-config') || {};
+                    const defaultConfig = {
                         "columnDefs": [
                             { "orderable": false, "targets": "no-sort" }
                         ],
@@ -36,7 +71,9 @@
                             "search": "_INPUT_",
                             "searchPlaceholder": "Search records..."
                         }
-                    });
+                    };
+                    
+                    $(this).DataTable($.extend(true, defaultConfig, customConfig));
                 }
             });
         }

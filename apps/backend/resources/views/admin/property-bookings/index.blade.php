@@ -60,7 +60,8 @@
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
-                    <table id="bookings-table" class="table table-hover table-premium mb-0">
+                    <table id="bookings-table" class="table table-hover table-premium mb-0 datatable-init"
+                           data-datatable-config='{"paging": false, "lengthChange": false, "searching": false, "ordering": true, "info": false, "dom": "t"}'>
                         <thead class="thead-light">
                             <tr>
                                 <th class="pl-4 col-media-70">Media</th>
@@ -132,7 +133,13 @@
                                             <a href="{{ route('admin.property-bookings.edit', $booking->id) }}" class="btn text-primary" data-toggle="tooltip" title="Modify Record"><i class="fas fa-edit"></i></a>
                                             <form action="{{ route('admin.property-bookings.destroy', $booking->id) }}" method="POST" class="d-inline">
                                                 @csrf @method('DELETE')
-                                                <button type="submit" class="btn text-danger" data-toggle="tooltip" title="Purge Record" onclick="return confirm('Permanently delete booking?')"><i class="fas fa-trash-alt"></i></button>
+                                                 <button type="button" class="btn text-danger" 
+                                                         data-toggle="tooltip" title="Purge Record" 
+                                                         data-action="delete-trigger"
+                                                         data-confirm-title="Purge Record?"
+                                                         data-confirm-text="Are you sure you want to permanently delete this reservation?">
+                                                     <i class="fas fa-trash-alt"></i>
+                                                 </button>
                                             </form>
                                         </div>
                                     </td>
@@ -162,32 +169,6 @@
 
 
 @section('js')
-@include('admin._partials._sweetalert')
-<script>
-    $(document).ready(function() {
-        if (typeof $.fn.select2 === 'function') {
-            $('.select2').select2({ theme: 'bootstrap4', width: '100%' });
-        }
-        $('[data-toggle="tooltip"]').tooltip();
-
-        if ($('#bookings-table tbody tr:not(.empty-state)').length > 0) {
-            $('#bookings-table').DataTable({
-                "paging": false,
-                "lengthChange": false,
-                "searching": false,
-                "ordering": true,
-                "info": false,
-                "autoWidth": false,
-                "responsive": true,
-                "dom": 't',
-                "language": {
-                    "search": "",
-                    "searchPlaceholder": "Search reservations..."
-                }
-            });
-            $('.dataTables_filter input').addClass('form-control form-control-premium shadow-none border-light mb-3');
-        }
-    });
-</script>
+<script src="{{ asset('admin-assets/pages/registry-index.js') }}"></script>
 @endsection
 

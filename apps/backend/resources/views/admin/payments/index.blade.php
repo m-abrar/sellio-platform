@@ -92,14 +92,5 @@
 
 @section('js')
 @include('admin._partials._sweetalert')
-<script>
-    $(document).ready(function() {
-        $('[data-toggle="tooltip"]').tooltip();
-        $('.select2').select2({
-            theme: 'bootstrap4',
-            width: '100%',
-            placeholder: "Filter Intelligence"
-        });
-    });
-</script>
+<script src="{{ asset('admin-assets/pages/registry-index.js') }}"></script>
 @endsection

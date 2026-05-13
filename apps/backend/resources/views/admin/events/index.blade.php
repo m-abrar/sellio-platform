@@ -56,7 +56,8 @@
         </div>
         <div class="card-body p-0">
             <div class="table-responsive">
-                <table id="events-table" class="table table-hover table-premium mb-0">
+                <table id="events-table" class="table table-hover table-premium mb-0 datatable-init"
+                       data-datatable-config='{"paging": false, "searching": false, "ordering": true, "info": false}'>
                     <thead class="thead-light">
                         <tr>
                             <th class="text-center pl-4 col-media-70">Media</th>
@@ -118,7 +119,13 @@
                                         <a href="{{ route('admin.events.duplicate', $event->id) }}" class="btn text-success" data-toggle="tooltip" title="Clone Event"><i class="fas fa-copy"></i></a>
                                         <form action="{{ route('admin.events.destroy', $event->id) }}" method="POST" class="d-inline">
                                             @csrf @method('DELETE')
-                                            <button type="submit" class="btn text-danger" data-toggle="tooltip" title="Purge Event" onclick="return confirm('Permanently delete this event listing?')"><i class="fas fa-trash-alt"></i></button>
+                                            <button type="button" class="btn text-danger" 
+                                                    data-toggle="tooltip" title="Purge Event"
+                                                    data-action="delete-trigger"
+                                                    data-confirm-title="Purge Event?"
+                                                    data-confirm-text="Permanently delete this event listing?">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
                                         </form>
                                     </div>
                                 </td>
@@ -150,26 +157,7 @@
 @endsection
 
 @section('js')
-<script>
-    $(function () {
-        if (typeof $.fn.select2 === 'function') {
-            $('.select2').select2({ theme: 'bootstrap4', width: '100%' });
-        }
-        $('[data-toggle="tooltip"]').tooltip();
-
-        if ($('#events-table tbody tr:not(.empty-state)').length > 0) {
-            $('#events-table').DataTable({
-                "paging": false,
-                "lengthChange": false,
-                "searching": false,
-                "ordering": true,
-                "info": false,
-                "autoWidth": false,
-                "responsive": true
-            });
-        }
-    });
-</script>
+<script src="{{ asset('admin-assets/pages/registry-index.js') }}"></script>
 @endsection
 
 @section('css')

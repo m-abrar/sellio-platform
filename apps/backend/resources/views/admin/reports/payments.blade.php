@@ -103,7 +103,8 @@
         </div>
         <div class="card-body p-4">
             <div class="chart-responsive h-380-p">
-                <canvas id="revenueChart"></canvas>
+                <canvas id="revenueChart" 
+                        data-chart-config='{"labels": @json($chartLabels ?? []), "data": @json($chartData ?? [])}'></canvas>
             </div>
         </div>
     </div>
@@ -197,87 +198,6 @@
 
 
 @section('js')
-<script>
-    window.addEventListener('load', function() {
-        try {
-            var ctx = document.getElementById("revenueChart").getContext('2d');
-            
-            // Create Gradient
-            var gradient = ctx.createLinearGradient(0, 0, 0, 400);
-            gradient.addColorStop(0, 'rgba(70, 165, 172, 0.4)'); // Primary Teal
-            gradient.addColorStop(1, 'rgba(70, 165, 172, 0.0)');
-
-            var chartLabels = @json($chartLabels ?? []);
-            var chartData = @json($chartData ?? []);
-
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: chartLabels,
-                    datasets: [{
-                        label: "Revenue ($)",
-                        lineTension: 0.4, // Smoother curves
-                        backgroundColor: gradient, 
-                        borderColor: '#46a5ac',
-                        borderWidth: 3,
-                        pointRadius: 4,
-                        pointBackgroundColor: "#fff",
-                        pointBorderColor: "#46a5ac",
-                        pointBorderWidth: 2,
-                        pointHoverRadius: 6,
-                        pointHoverBackgroundColor: "#46a5ac",
-                        pointHoverBorderColor: "#fff",
-                        pointHoverBorderWidth: 2,
-                        data: chartData,
-                        fill: true
-                    }],
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    legend: { display: false },
-                    scales: {
-                        xAxes: [{
-                            gridLines: { display: false, drawBorder: false },
-                            ticks: { fontColor: '#94a3b8', fontStyle: '600' }
-                        }],
-                        yAxes: [{
-                            ticks: {
-                                beginAtZero: true,
-                                fontColor: '#94a3b8',
-                                fontStyle: '600',
-                                padding: 10,
-                                callback: function(value) {
-                                    if (value >= 1000) return '$' + (value/1000) + 'k';
-                                    return '$' + value;
-                                }
-                            },
-                            gridLines: {
-                                color: "rgba(0, 0, 0, 0.03)",
-                                zeroLineColor: "rgba(0, 0, 0, 0.03)",
-                                drawBorder: false
-                            }
-                        }],
-                    },
-                    tooltips: {
-                        backgroundColor: "#1e293b",
-                        titleFontColor: "#fff",
-                        bodyFontColor: "#fff",
-                        cornerRadius: 8,
-                        xPadding: 12,
-                        yPadding: 12,
-                        displayColors: false,
-                        callbacks: {
-                            label: function(tooltipItem, chart) {
-                                return 'Revenue: $' + tooltipItem.yLabel.toLocaleString();
-                            }
-                        }
-                    }
-                }
-            });
-        } catch (e) {
-            console.error("Error loading revenue chart:", e);
-        }
-    });
-</script>
+<script src="{{ asset('admin-assets/pages/registry-index.js') }}"></script>
+<script src="{{ asset('admin-assets/pages/reports-payments.js') }}"></script>
 @endsection

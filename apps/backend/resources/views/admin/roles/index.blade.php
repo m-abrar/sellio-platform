@@ -57,7 +57,8 @@
 
         <div class="card-body p-0">
             <div class="table-responsive">
-                <table id="roles-table" class="table table-hover table-premium mb-0">
+                <table id="roles-table" class="table table-hover table-premium mb-0 datatable-init"
+                       data-datatable-config='{"paging": true, "lengthChange": false, "searching": true, "ordering": true, "info": true}'>
                     <thead class="thead-light">
                         <tr>
                             <th class="pl-4 w-25-p">{{ __('Authority Identity') }}</th>
@@ -104,11 +105,13 @@
                                         
                                         <form id="delete-role-{{ $role->id }}" action="{{ route('admin.roles.destroy', $role->id) }}" method="POST" class="d-inline">
                                             @csrf @method('DELETE')
-                                            <button type="button" class="btn btn-white btn-sm text-danger py-2 px-3" 
-                                                    data-toggle="tooltip" title="{{ __('Purge Role') }}"
-                                                    onclick="confirmDelete('delete-role-{{ $role->id }}', '{{ __('Purge Security Role?') }}', '{{ __('This may affect users assigned to this hierarchy tier.') }}', '{{ __('Purge Role') }}')">
-                                                <i class="fas fa-trash-alt"></i>
-                                            </button>
+                                             <button type="button" class="btn btn-white btn-sm text-danger py-2 px-3" 
+                                                     data-toggle="tooltip" title="{{ __('Purge Role') }}"
+                                                     data-action="delete-trigger"
+                                                     data-confirm-title="{{ __('Purge Security Role?') }}"
+                                                     data-confirm-text="{{ __('This may affect users assigned to this hierarchy tier.') }}">
+                                                 <i class="fas fa-trash-alt"></i>
+                                             </button>
                                         </form>
                                     </div>
                                 </td>
@@ -148,34 +151,5 @@
 @endpush
 
 @push('js')
-@include('admin._partials._sweetalert')
-<script>
-    $(function () {
-        $('[data-toggle="tooltip"]').tooltip();
-        
-        if ($('#roles-table tbody tr:not(.empty-state)').length > 0) {
-            $('#roles-table').DataTable({
-                "paging": true,
-                "lengthChange": false,
-                "searching": true,
-                "ordering": true,
-                "info": true,
-                "autoWidth": false,
-                "responsive": true,
-                "dom": '<"row pt-3"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-6"l>>' +
-                       '<"row"<"col-sm-12"tr>>' +
-                       '<"row pb-3"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
-                "language": {
-                    "search": "",
-                    "searchPlaceholder": "Search records...",
-                    "paginate": {
-                        "previous": "<i class='fas fa-angle-left'></i>",
-                        "next": "<i class='fas fa-angle-right'></i>"
-                    }
-                }
-            });
-            $('.dataTables_filter input').addClass('form-control form-control-sm form-control-premium shadow-none border-light w-220-p');
-        }
-    });
-</script>
+<script src="{{ asset('admin-assets/pages/registry-index.js') }}"></script>
 @endpush

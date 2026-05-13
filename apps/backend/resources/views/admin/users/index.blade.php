@@ -60,7 +60,8 @@
 
         <div class="card-body p-0">
             <div class="table-responsive">
-                <table id="users-table" class="table table-hover table-premium mb-0">
+                <table id="users-table" class="table table-hover table-premium mb-0 datatable-init"
+                       data-datatable-config='{"paging": true, "lengthChange": true, "searching": true, "ordering": true, "info": true, "autoWidth": false, "responsive": true}'>
                     <thead class="thead-light">
                         <tr>
                             <th>{{ __('User Identity') }}</th>
@@ -172,5 +173,5 @@
 @endsection
 
 @section('js')
-<script src="{{ asset('admin-assets/pages/users.js') }}"></script>
+<script src="{{ asset('admin-assets/pages/registry-index.js') }}"></script>
 @endsection

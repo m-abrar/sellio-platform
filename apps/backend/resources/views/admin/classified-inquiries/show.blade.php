@@ -147,7 +147,9 @@
                             @csrf
                             @method('DELETE')
                             <button type="button" class="btn btn-white btn-block rounded-pill border font-weight-bold smallest uppercase text-danger py-2" 
-                                    onclick="confirmDelete('delete-cl-form', 'Purge Marketplace Inquiry?', 'This will permanently remove the interaction from the registry.', 'Purge')">
+                                    data-action="delete-trigger"
+                                    data-confirm-title="Purge Marketplace Inquiry?"
+                                    data-confirm-text="This will permanently remove the interaction from the registry.">
                                 <i class="fas fa-trash-alt mr-1"></i> {{ __('Purge Registry Record') }}
                             </button>
                         </form>
@@ -159,14 +161,9 @@
 @stop
 
 @push('css')
-<style>
-    .rounded-xl { border-radius: 16px !important; }
-    .bg-primary-soft { background: rgba(70, 165, 172, 0.05); }
-    .border-primary-soft { border-color: rgba(70, 165, 172, 0.1) !important; }
-    .text-monospace { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace !important; }
-</style>
+@include('admin._partials._toggle-card-css')
 @endpush
 
 @section('js')
-@include('admin._partials._sweetalert')
+<script src="{{ asset('admin-assets/pages/registry-index.js') }}"></script>
 @stop

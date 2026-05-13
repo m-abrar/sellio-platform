@@ -59,7 +59,8 @@
 
         <div class="card-body p-0">
             <div class="table-responsive">
-                <table id="blogs-table" class="table table-hover table-premium mb-0">
+                <table id="blogs-table" class="table table-hover table-premium mb-0 datatable-init"
+                       data-datatable-config='{"paging": false, "info": false, "searching": false, "responsive": true}'>
                     <thead class="thead-light">
                         <tr>
                             <th class="px-4 w-35-p">{{ __('Article Info') }}</th>
@@ -156,6 +157,5 @@
 @endsection
 
 @section('js')
-    @include('admin._partials._sweetalert')
-    <script src="{{ asset('admin-assets/pages/blogs-index.js') }}"></script>
+    <script src="{{ asset('admin-assets/pages/registry-index.js') }}"></script>
 @endsection
