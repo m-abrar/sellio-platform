@@ -58,7 +58,7 @@
         <div class="card-body p-0">
             <div class="table-responsive">
                 {{-- Premium Hover Interaction --}}
-                <table id="features-table" class="table table-hover table-premium mb-0">
+                <table id="features-table" class="table table-hover table-premium mb-0 datatable-init">
                     <thead class="thead-light">
                         <tr>
                             <th class="text-center col-media-100">Preview</th>
@@ -149,16 +149,5 @@
 
 
 @section('js')
-    <script>
-        $(function () {
-            if ($('#features-table tbody tr:not(.empty-state)').length > 0) {
-                $('#features-table').DataTable({
-                    "order": [[1, "asc"]],
-                    "columnDefs": [
-                        { "orderable": false, "targets": [0, 4] }
-                    ]
-                });
-            }
-        });
-    </script>
+    <script src="{{ asset('admin-assets/pages/registry-index.js') }}"></script>
 @endsection

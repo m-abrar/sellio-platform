@@ -6,8 +6,8 @@
     'use strict';
 
     $(document).ready(function() {
-        if (!window.dashboardData) return;
-        const data = window.dashboardData;
+        const data = window.dashboardData || JSON.parse($('.dashboard-blueprint').attr('data-dashboard-data') || '{}');
+        if (!data || Object.keys(data).length === 0) return;
 
         // Dashboard Clock
         function updateClock() {

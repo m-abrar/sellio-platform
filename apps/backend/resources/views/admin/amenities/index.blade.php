@@ -58,7 +58,7 @@
         <div class="card-body p-0">
             <div class="table-responsive">
                 {{-- Refined: Applied table-premium for the brand-border hover effect --}}
-                <table id="amenities-table" class="table table-hover table-premium mb-0">
+                <table id="amenities-table" class="table table-hover table-premium mb-0 datatable-init">
                     <thead class="thead-light">
                         <tr>
                             <th class="text-center col-media-80">{{ __('Icon') }}</th>
@@ -139,15 +139,5 @@
 
 
 @section('js')
-    <script>
-        $(function () {
-            if ($('#amenities-table tbody tr:not(.empty-state)').length > 0) {
-                $('#amenities-table').DataTable({
-                    "columnDefs": [
-                        { "orderable": false, "targets": [0, 2, 4] }
-                    ]
-                });
-            }
-        });
-    </script>
+    <script src="{{ asset('admin-assets/pages/registry-index.js') }}"></script>
 @endsection

@@ -137,7 +137,9 @@
                                             @csrf @method('DELETE')
                                             <button type="button" class="btn btn-white text-danger py-2 px-3 border-left d-inline-flex align-items-center" 
                                                     data-toggle="tooltip" title="Terminate"
-                                                    onclick="confirmDelete('delete-form-{{ $subscription->id }}', 'Terminate Enrollment?', 'This user will lose access to all subscription benefits immediately.', 'Confirm')">
+                                                    data-action="delete-trigger"
+                                                    data-confirm-title="Terminate Enrollment?"
+                                                    data-confirm-text="This user will lose access to all subscription benefits immediately.">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
                                         </form>
@@ -175,12 +177,5 @@
 
 @section('js')
 @include('admin._partials._sweetalert')
-<script>
-    $(function () {
-        $('[data-toggle="tooltip"]').tooltip();
-        if($('.select2').length) {
-            $('.select2').select2({ theme: 'bootstrap4', width: '100%' });
-        }
-    });
-</script>
+<script src="{{ asset('admin-assets/pages/registry-index.js') }}"></script>
 @endsection

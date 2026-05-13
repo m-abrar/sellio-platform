@@ -90,7 +90,10 @@
                             <form action="{{ route('admin.transactions.destroy', $transaction->id) }}" method="POST" class="d-inline">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">
+                                <button type="button" class="btn btn-danger btn-sm" 
+                                        data-action="delete-trigger" 
+                                        data-confirm-title="Purge Transaction?" 
+                                        data-confirm-text="Are you sure you want to permanently remove this transaction record?">
                                     <i class="fas fa-trash-alt"></i>
                                 </button>
                             </form>

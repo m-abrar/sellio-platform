@@ -103,7 +103,7 @@
         </div>
     </div>
 
-    <div class="dashboard-blueprint">
+    <div class="dashboard-blueprint" data-dashboard-data="{{ json_encode($metrics['js_data']) }}">
         @php
             $sections = [
                 ['id' => 'kpi', 'title' => 'Overview & Vital Stats', 'dot' => 'danger', 'pulse' => true, 'partial' => '_KPIs'],
@@ -140,8 +140,5 @@
     <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
     
-    <script>
-        window.dashboardData = @json($metrics['js_data']);
-    </script>
     <script src="{{ asset('admin-assets/pages/dashboard.js') }}"></script>
 @endpush

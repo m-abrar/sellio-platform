@@ -37,7 +37,7 @@
                     </a>
                 </div>
             </div>
-            <i class="fas fa-chart-pie glassmorphic-glow-icon" style="opacity: 0.05;"></i>
+            <i class="fas fa-chart-pie glassmorphic-glow-icon opacity-05"></i>
         </div>
     </div>
     

@@ -15,12 +15,12 @@
                 <div class="row align-items-center">
                     <div class="col-md-3 border-right border-light-soft">
                         <div class="d-flex align-items-center">
-                            <div class="icon-box-soft bg-primary-soft text-primary mr-3 shadow-xs rounded-lg" style="width: 60px; height: 60px; font-size: 1.8rem;">
+                            <div class="icon-box-soft bg-primary-soft text-primary mr-3 shadow-xs rounded-lg icon-box-60 fs-1-05">
                                 <i class="fas fa-server"></i>
                             </div>
                             <div>
                                 <h6 class="mb-1 font-weight-bold text-dark smallest text-uppercase letter-spacing-1">Core Engine</h6>
-                                <span class="badge badge-success-light px-3 py-2 rounded-pill border-0 smallest font-weight-bold animate-pulse-soft" style="letter-spacing: 0.5px;">
+                                <span class="badge badge-success-light px-3 py-2 rounded-pill border-0 smallest font-weight-bold animate-pulse-soft ls-05">
                                     <i class="fas fa-heartbeat mr-1"></i> LIVE PULSE
                                 </span>
                             </div>
@@ -30,17 +30,17 @@
                         <div class="row text-center text-md-left gy-4">
                             <div class="col-6 col-md-2">
                                 <span class="smallest text-muted d-block mb-2 font-weight-bold text-uppercase letter-spacing-1">Environment</span>
-                                <span class="badge badge-primary-soft px-3 py-1 font-weight-bold text-uppercase border-0 shadow-none rounded-pill" style="font-size: 0.65rem;">
+                                <span class="badge badge-primary-soft px-3 py-1 font-weight-bold text-uppercase border-0 shadow-none rounded-pill fs-065">
                                     {{ $metrics['system_health']['environment'] }}
                                 </span>
                             </div>
                             <div class="col-6 col-md-2 border-left border-light-soft">
                                 <span class="smallest text-muted d-block mb-2 font-weight-bold text-uppercase letter-spacing-1">Runtime</span>
-                                <span class="font-weight-bold text-dark" style="font-size: 0.95rem; font-family: 'Outfit', sans-serif;">PHP {{ $metrics['system_health']['php_version'] }}</span>
+                                <span class="font-weight-bold text-dark fs-095 font-outfit">PHP {{ $metrics['system_health']['php_version'] }}</span>
                             </div>
                             <div class="col-6 col-md-2 border-left border-light-soft">
                                 <span class="smallest text-muted d-block mb-2 font-weight-bold text-uppercase letter-spacing-1">Registry</span>
-                                <span class="font-weight-bold text-dark" style="font-size: 0.95rem; font-family: 'Outfit', sans-serif;">v{{ $metrics['system_health']['laravel_version'] }}</span>
+                                <span class="font-weight-bold text-dark fs-095 font-outfit">v{{ $metrics['system_health']['laravel_version'] }}</span>
                             </div>
                             <div class="col-6 col-md-2 border-left border-light-soft">
                                 <span class="smallest text-muted d-block mb-2 font-weight-bold text-uppercase letter-spacing-1">Database</span>
