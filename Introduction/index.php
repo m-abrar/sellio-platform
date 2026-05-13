@@ -31,14 +31,9 @@
                 </div>
             </div>
         </div>
-        <div class="custom-shape-divider-bottom-1715541814">
-            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
-                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" fill="#F8FAFC"></path>
-            </svg>
-        </div>
     </section>
 
-    <section id="automation" class="py-100 bg-automation section-overlap border-bottom reveal" data-animation="animate__fadeIn">
+    <section id="automation" class="py-100 bg-automation border-bottom reveal position-relative" data-animation="animate__fadeIn">
         <div class="container">
             <div class="row align-items-center g-5">
                 <div class="col-lg-5">
@@ -76,31 +71,48 @@
                     </div>
                 </div>
                 <div class="col-lg-7">
-                    <div class="p-5 bg-white rounded-5 shadow-executive border text-center position-relative overflow-hidden">
-                        <div class="position-absolute top-0 start-0 w-100 h-1 bg-sellio-solid"></div>
-                        <h4 class="fw-800 mb-5">Multi-Role Performance</h4>
-                        <div class="row g-4">
+                    <div class="p-5 bg-white rounded-5 shadow-executive border text-center position-relative overflow-hidden nexus-container">
+                        <div class="position-absolute top-0 start-0 w-100 h-2 bg-sellio-solid"></div>
+                        
+                        <h4 class="fw-800 mb-2">Multi-Role Performance</h4>
+                        <p class="text-muted small mb-5">One unified core engine powering three distinct commercial experiences.</p>
+
+                        <div class="row g-4 position-relative">
+                            <!-- Connectivity Line (CSS) -->
+                            <div class="nexus-line"></div>
+
                             <div class="col-4">
-                                <div class="p-4 border rounded-4 bg-light transition-all hover-translate-y">
-                                    <i class="fas fa-user-shield fa-2x mb-3 text-sellio opacity-50"></i>
-                                    <div class="small fw-bold text-uppercase">Admin</div>
+                                <div class="persona-node p-4 border rounded-4 transition-all" data-role="admin">
+                                    <div class="icon-circle bg-primary-soft text-primary mb-3 mx-auto">
+                                        <i class="fas fa-shield-halved"></i>
+                                    </div>
+                                    <div class="fw-800 smallest text-uppercase mb-2">Admin</div>
+                                    <div class="persona-power small text-muted">Full Control</div>
                                 </div>
                             </div>
                             <div class="col-4">
-                                <div class="p-4 border rounded-4 bg-light transition-all hover-translate-y">
-                                    <i class="fas fa-user-tag fa-2x mb-3 text-sellio opacity-50"></i>
-                                    <div class="small fw-bold text-uppercase">Seller</div>
+                                <div class="persona-node p-4 border rounded-4 transition-all" data-role="seller">
+                                    <div class="icon-circle bg-success-soft text-success mb-3 mx-auto">
+                                        <i class="fas fa-store"></i>
+                                    </div>
+                                    <div class="fw-800 smallest text-uppercase mb-2">Seller</div>
+                                    <div class="persona-power small text-muted">Global Sales</div>
                                 </div>
                             </div>
                             <div class="col-4">
-                                <div class="p-4 border rounded-4 bg-light transition-all hover-translate-y">
-                                    <i class="fas fa-user fa-2x mb-3 text-sellio opacity-50"></i>
-                                    <div class="small fw-bold text-uppercase">Buyer</div>
+                                <div class="persona-node p-4 border rounded-4 transition-all" data-role="buyer">
+                                    <div class="icon-circle bg-info-soft text-info mb-3 mx-auto">
+                                        <i class="fas fa-shopping-cart"></i>
+                                    </div>
+                                    <div class="fw-800 smallest text-uppercase mb-2">Buyer</div>
+                                    <div class="persona-power small text-muted">Instant Buy</div>
                                 </div>
                             </div>
                         </div>
-                        <div class="mt-5 p-3 rounded-4 bg-light border-dashed border-2">
-                            <p class="small text-muted mb-0 font-italic">"One core system, infinite operational possibilities."</p>
+
+                        <!-- Dynamic Role Description -->
+                        <div class="mt-5 p-4 rounded-4 bg-light border-dashed role-detail-box">
+                            <div id="role-text" class="small fw-bold text-sellio">Hover over a role to explore its core capabilities.</div>
                         </div>
                     </div>
                 </div>
@@ -114,7 +126,7 @@
             <h2 class="display-5 fw-800 mb-5">The <span class="text-sellio">360°</span> Ecosystem</h2>
             <div class="row g-4">
                 <div class="col-lg-4">
-                    <div class="p-5 rounded-5 border bg-white h-100 transition-all hover-translate-y shadow-premium-sm">
+                    <div class="p-5 rounded-5 border bg-white h-100 transition-all hover-translate-y hover-border-sellio shadow-premium-sm">
                         <div class="icon-box-lg bg-primary-soft text-primary mb-4 mx-auto d-flex align-items-center justify-content-center" style="width:80px; height:80px; border-radius:24px;">
                             <i class="fas fa-shield-alt fa-2x"></i>
                         </div>
@@ -123,7 +135,7 @@
                     </div>
                 </div>
                 <div class="col-lg-4">
-                    <div class="p-5 rounded-5 border bg-white h-100 transition-all hover-translate-y shadow-premium-sm">
+                    <div class="p-5 rounded-5 border bg-white h-100 transition-all hover-translate-y hover-border-sellio shadow-premium-sm">
                         <div class="icon-box-lg bg-success-soft text-success mb-4 mx-auto d-flex align-items-center justify-content-center" style="width:80px; height:80px; border-radius:24px;">
                             <i class="fas fa-store fa-2x"></i>
                         </div>
@@ -132,7 +144,7 @@
                     </div>
                 </div>
                 <div class="col-lg-4">
-                    <div class="p-5 rounded-5 border bg-white h-100 transition-all hover-translate-y shadow-premium-sm">
+                    <div class="p-5 rounded-5 border bg-white h-100 transition-all hover-translate-y hover-border-sellio shadow-premium-sm">
                         <div class="icon-box-lg bg-info-soft text-info mb-4 mx-auto d-flex align-items-center justify-content-center" style="width:80px; height:80px; border-radius:24px;">
                             <i class="fas fa-shopping-bag fa-2x"></i>
                         </div>
@@ -158,16 +170,32 @@
                 <?php foreach($industries as $ind): ?>
                     <div class="<?php echo $ind['size']; ?>">
                         <div class="p-5 rounded-5 card-luxury h-100 feature-card text-start position-relative overflow-hidden">
+                            <!-- Decorative Glow -->
+                            <div class="ambient-glow" style="background: <?php echo $ind['color']; ?>;"></div>
+                            
                             <div class="icon-box-lg mb-4 d-flex align-items-center justify-content-center" style="width:70px; height:70px; border-radius:20px; background: <?php echo $ind['color']; ?>15; color: <?php echo $ind['color']; ?>;">
                                 <i class="<?php echo $ind['icon']; ?> fs-2"></i>
                             </div>
+                            
                             <h3 class="fw-800 mb-3"><?php echo $ind['title']; ?></h3>
-                            <p class="text-muted mb-0 lead-sm"><?php echo $ind['desc']; ?></p>
-                            <div class="mt-4 d-flex align-items-center gap-2">
-                                <span class="badge bg-light text-dark border rounded-pill px-3 py-2 small fw-bold">Ready for Production</span>
+                            <p class="text-muted mb-4 lead-sm"><?php echo $ind['desc']; ?></p>
+                            
+                            <!-- Capability Pills -->
+                            <div class="d-flex flex-wrap gap-2 mb-4">
+                                <?php foreach($ind['features'] as $feature): ?>
+                                    <span class="feature-pill"><?php echo $feature; ?></span>
+                                <?php endforeach; ?>
+                            </div>
+
+                            <div class="mt-auto d-flex align-items-center gap-2">
                                 <?php if(isset($ind['tag'])): ?>
                                     <span class="badge rounded-pill px-3 py-2 small fw-bold" style="background: <?php echo $ind['color']; ?>10; color: <?php echo $ind['color']; ?>;"><?php echo $ind['tag']; ?></span>
                                 <?php endif; ?>
+                            </div>
+
+                            <!-- Hover Interaction -->
+                            <div class="hover-arrow">
+                                <i class="fas fa-arrow-right"></i>
                             </div>
                         </div>
                     </div>
@@ -181,25 +209,25 @@
             <h2 class="display-5 fw-800 mb-5">Intelligence & <span class="text-sellio">Scale</span></h2>
             <div class="row g-4">
                 <div class="col-md-3 col-6">
-                    <div class="p-4 border rounded-4 bg-white shadow-sm">
+                    <div class="p-4 border rounded-4 bg-white shadow-sm transition-all hover-translate-y hover-border-sellio">
                         <div class="h2 fw-bold text-sellio mb-1">50+</div>
                         <div class="small text-muted text-uppercase fw-bold letter-spacing-1">Market Demos</div>
                     </div>
                 </div>
                 <div class="col-md-3 col-6">
-                    <div class="p-4 border rounded-4 bg-white shadow-sm">
+                    <div class="p-4 border rounded-4 bg-white shadow-sm transition-all hover-translate-y hover-border-sellio">
                         <div class="h2 fw-bold text-sellio mb-1">12k+</div>
                         <div class="small text-muted text-uppercase fw-bold letter-spacing-1">Daily Listings</div>
                     </div>
                 </div>
                 <div class="col-md-3 col-6">
-                    <div class="p-4 border rounded-4 bg-white shadow-sm">
+                    <div class="p-4 border rounded-4 bg-white shadow-sm transition-all hover-translate-y hover-border-sellio">
                         <div class="h2 fw-bold text-sellio mb-1">99.9%</div>
                         <div class="small text-muted text-uppercase fw-bold letter-spacing-1">Uptime SLA</div>
                     </div>
                 </div>
                 <div class="col-md-3 col-6">
-                    <div class="p-4 border rounded-4 bg-white shadow-sm">
+                    <div class="p-4 border rounded-4 bg-white shadow-sm transition-all hover-translate-y hover-border-sellio">
                         <div class="h2 fw-bold text-sellio mb-1">$0</div>
                         <div class="small text-muted text-uppercase fw-bold letter-spacing-1">Monthly Fees</div>
                     </div>
@@ -208,7 +236,7 @@
         </div>
     </section>
 
-    <section class="py-100 bg-comparison border-top border-bottom reveal" data-animation="animate__slideInUp">
+    <section id="comparison" class="py-100 bg-comparison border-top border-bottom reveal" data-animation="animate__slideInUp">
         <div class="container">
             <div class="text-center mb-5">
                 <h2 class="display-5 fw-800">Stop Paying <span class="text-sellio">Monthly Fees</span></h2>
@@ -267,57 +295,121 @@
         </div>
     </section>
 
-    <section id="intelligence" class="py-100 reveal" data-animation="animate__fadeIn">
-        <div class="container">
+    <section id="intelligence" class="py-100 position-relative overflow-hidden reveal" data-animation="animate__fadeIn">
+        <!-- Background Data Grid -->
+        <div class="position-absolute top-0 start-0 w-100 h-100 opacity-05" style="background-image: radial-gradient(#76c043 1px, transparent 1px); background-size: 30px 30px; pointer-events: none;"></div>
+
+        <div class="container position-relative">
             <div class="row align-items-center g-5">
                 <div class="col-lg-6">
-                    <h6 class="text-sellio fw-bold text-uppercase mb-3">Data-Driven Insights</h6>
-                    <h2 class="display-5 fw-800 mb-4">Marketplace <br><span class="text-sellio">Intelligence</span></h2>
-                    <p class="lead text-muted mb-5">Gain absolute visibility into your commercial ecosystem. Monitor every transaction, lead, and user interaction in real-time.</p>
+                    <div class="badge bg-sellio-solid rounded-pill px-3 py-2 mb-3">PERFORMANCE ARCHITECTURE</div>
+                    <h2 class="display-5 fw-800 mb-4">Intelligence & <span class="text-sellio">Scale</span></h2>
+                    <p class="text-muted lead mb-5">Sellio is engineered for high-volume marketplaces. Built on a performance-first architecture that handles millions of listings without breaking a sweat.</p>
+                    
                     <div class="row g-4">
-                        <div class="col-md-6">
-                            <div class="d-flex align-items-center gap-3">
-                                <div class="icon-box-sm bg-sellio-solid rounded-circle d-flex align-items-center justify-content-center" style="width:40px; height:40px;">
-                                    <i class="fas fa-chart-line text-white small"></i>
+                        <div class="col-6">
+                            <div class="p-4 border rounded-4 bg-white shadow-sm transition-all hover-translate-y hover-border-sellio">
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <div class="h2 fw-800 text-sellio mb-0 data-font">50+</div>
+                                    <i class="fas fa-chart-line text-muted opacity-25"></i>
                                 </div>
-                                <div class="fw-bold small uppercase letter-spacing-1">Predictive Analytics</div>
+                                <div class="small text-muted text-uppercase fw-bold letter-spacing-1">Market Demos</div>
+                                <div class="mt-2 progress" style="height: 4px;">
+                                    <div class="progress-bar bg-sellio-solid" style="width: 85%"></div>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="d-flex align-items-center gap-3">
-                                <div class="icon-box-sm bg-sellio-solid rounded-circle d-flex align-items-center justify-content-center" style="width:40px; height:40px;">
-                                    <i class="fas fa-piggy-bank text-white small"></i>
+                        <div class="col-6">
+                            <div class="p-4 border rounded-4 bg-white shadow-sm transition-all hover-translate-y hover-border-sellio">
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <div class="h2 fw-800 text-sellio mb-0 data-font">12k+</div>
+                                    <i class="fas fa-bolt text-muted opacity-25"></i>
                                 </div>
-                                <div class="fw-bold small uppercase letter-spacing-1">Revenue Tracking</div>
+                                <div class="small text-muted text-uppercase fw-bold letter-spacing-1">Daily Listings</div>
+                                <div class="mt-2 progress" style="height: 4px;">
+                                    <div class="progress-bar bg-sellio-solid" style="width: 60%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="p-4 border rounded-4 bg-white shadow-sm transition-all hover-translate-y hover-border-sellio">
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <div class="h2 fw-800 text-sellio mb-0 data-font">99.9<small>%</small></div>
+                                    <i class="fas fa-server text-muted opacity-25"></i>
+                                </div>
+                                <div class="small text-muted text-uppercase fw-bold letter-spacing-1">Uptime SLA</div>
+                                <div class="mt-2 progress" style="height: 4px;">
+                                    <div class="progress-bar bg-sellio-solid" style="width: 99%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="p-4 border rounded-4 bg-white shadow-sm transition-all hover-translate-y hover-border-sellio">
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <div class="h2 fw-800 text-sellio mb-0 data-font">$0</div>
+                                    <i class="fas fa-coins text-muted opacity-25"></i>
+                                </div>
+                                <div class="small text-muted text-uppercase fw-bold letter-spacing-1">Monthly Fees</div>
+                                <div class="mt-2 progress" style="height: 4px;">
+                                    <div class="progress-bar bg-sellio-solid" style="width: 100%"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-6">
-                    <div class="p-4 bg-white rounded-5 shadow-premium border reveal" data-animation="animate__zoomIn">
-                        <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h5 class="fw-bold mb-0">Ecosystem Performance</h5>
-                            <span class="badge bg-success-soft text-success rounded-pill px-3">Live Feed</span>
+                    <div class="dashboard-mockup p-4 p-md-5 rounded-5 border shadow-executive bg-white position-relative">
+                        <!-- Glass Top Bar -->
+                        <div class="d-flex justify-content-between align-items-center mb-5">
+                            <div>
+                                <h5 class="fw-800 mb-0">Global Listings Feed</h5>
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="pulsate-dot"></span>
+                                    <small class="text-muted fw-bold">LIVE ACTIVITY</small>
+                                </div>
+                            </div>
+                            <div class="dropdown">
+                                <button class="btn btn-light btn-sm rounded-pill px-3">Last 24h</button>
+                            </div>
                         </div>
-                        <div class="chart-mockup d-flex align-items-end gap-2 justify-content-between mb-4" style="height: 200px;">
-                            <div class="bg-light w-100 rounded-3" style="height: 40%;"></div>
-                            <div class="bg-sellio-solid w-100 rounded-3" style="height: 70%;"></div>
-                            <div class="bg-light w-100 rounded-3" style="height: 30%;"></div>
-                            <div class="bg-sellio-solid w-100 rounded-3" style="height: 90%;"></div>
-                            <div class="bg-light w-100 rounded-3" style="height: 50%;"></div>
-                            <div class="bg-sellio-solid w-100 rounded-3" style="height: 100%;"></div>
+
+                        <!-- Enhanced Chart -->
+                        <div class="chart-mockup d-flex align-items-end gap-3 justify-content-between mb-5" style="height: 250px;">
+                            <div class="chart-bar bg-light w-100 rounded-3" style="height: 40%;"></div>
+                            <div class="chart-bar bg-sellio-solid w-100 rounded-3" style="height: 70%;"></div>
+                            <div class="chart-bar bg-light w-100 rounded-3" style="height: 30%;"></div>
+                            <div class="chart-bar bg-sellio-solid pulsate-bar w-100 rounded-3" style="height: 95%;"></div>
+                            <div class="chart-bar bg-light w-100 rounded-3" style="height: 50%;"></div>
+                            <div class="chart-bar bg-sellio-solid w-100 rounded-3" style="height: 80%;"></div>
+                            <div class="chart-bar bg-light w-100 rounded-3" style="height: 40%;"></div>
                         </div>
-                        <div class="d-flex justify-content-around text-center mt-3">
-                            <div><div class="h6 fw-bold mb-0">94k</div><small class="text-muted smallest uppercase">Sales</small></div>
-                            <div><div class="h6 fw-bold mb-0">1.2m</div><small class="text-muted smallest uppercase">Traffic</small></div>
-                            <div><div class="h6 fw-bold mb-0">8.4k</div><small class="text-muted smallest uppercase">Leads</small></div>
+
+                        <!-- Stats Footer -->
+                        <div class="row g-3 text-center pt-4 border-top">
+                            <div class="col-4 border-end">
+                                <div class="h5 fw-800 mb-0 data-font">942.8k</div>
+                                <small class="text-muted smallest uppercase fw-bold">Total Sales</small>
+                            </div>
+                            <div class="col-4 border-end">
+                                <div class="h5 fw-800 mb-0 data-font">1.24m</div>
+                                <small class="text-muted smallest uppercase fw-bold">Visitors</small>
+                            </div>
+                            <div class="col-4">
+                                <div class="h5 fw-800 mb-0 data-font">8.4k</div>
+                                <small class="text-muted smallest uppercase fw-bold">New Leads</small>
+                            </div>
+                        </div>
+
+                        <!-- Floating Badge -->
+                        <div class="position-absolute top-0 start-0 translate-middle-y bg-white border shadow-sm rounded-pill px-3 py-2 d-flex align-items-center gap-2" style="margin-left: 50px;">
+                            <i class="fas fa-check-circle text-success"></i>
+                            <span class="smallest fw-800 text-uppercase">Enterprise Ready</span>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-
     <section id="reviews" class="py-100 bg-reviews reveal" data-animation="animate__fadeInUp">
         <div class="container">
             <div class="row align-items-end mb-5">
@@ -327,7 +419,7 @@
                 </div>
                 <div class="col-lg-6 text-md-end pb-2">
                     <div class="d-inline-flex align-items-center gap-2 bg-light p-3 rounded-4 border">
-                        <span class="fs-4 fw-bold text-dark">4.95 / 5.0</span>
+                        <span class="fs-4 fw-bold">4.95 / 5.0</span>
                         <div class="text-warning fs-5">★★★★★</div>
                         <span class="small text-muted border-start ps-2">Average Rating</span>
                     </div>
@@ -371,7 +463,7 @@
         </div>
     </section>
 
-    <section id="faq" class="py-100 bg-faq">
+    <section id="faq" class="py-100 bg-white">
         <?php include('faqs.php'); ?>
     </section>
 

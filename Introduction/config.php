@@ -5,31 +5,106 @@
       ['img' => 'images/properties_default.webp', 'url' => 'website.com/properties'],
       ['img' => 'images/autos_default.webp', 'url' => 'website.com/autos'],
       ['img' => 'images/events_default.webp', 'url' => 'website.com/events'],
-    //   ['img' => 'images/jobs_default.webp', 'url' => 'website.com/jobs'],
-    //   ['img' => 'images/services_default.webp', 'url' => 'website.com/services'],
-    //   ['img' => 'images/classifieds_default.webp', 'url' => 'website.com/classifieds']
   ];
 
-  // 1. Industry Modules Data
-  // 1. Industry Modules Data
+  // 1. Industry Modules Data (Prioritized & Enhanced)
   $industries = [
-      ['title' => 'Real Estate', 'desc' => 'Premium property portal with floor plans, map views, and agent management.', 'icon' => 'fas fa-house-chimney', 'size' => 'col-lg-8', 'tag' => 'Top Interest', 'color' => '#0d6efd'],
-      ['title' => 'eCommerce & Shop', 'desc' => 'Full-scale storefronts with digital/physical product support and cart systems.', 'icon' => 'fas fa-shopping-bag', 'size' => 'col-lg-4', 'tag' => 'Commercial', 'color' => '#6610f2'],
-      ['title' => 'Unified Marketplace', 'desc' => 'The ultimate all-in-one powerhouse. Combine every niche into a single mega portal.', 'icon' => 'fas fa-layer-group', 'size' => 'col-lg-12', 'tag' => 'Elite Solution', 'color' => '#76c043'],
-      ['title' => 'Classified Ads', 'desc' => 'Multi-niche ads marketplace with custom fields, location search, and user messaging.', 'icon' => 'fas fa-bullhorn', 'size' => 'col-lg-8', 'tag' => 'High Demand', 'color' => '#fd7e14'],
-      ['title' => 'Directory Hub', 'desc' => 'Business listing directory with premium tiers and claimed listings.', 'icon' => 'fas fa-location-dot', 'size' => 'col-lg-4', 'tag' => 'Community', 'color' => '#20c997'],
-      ['title' => 'Automotive', 'desc' => 'Advanced vehicle marketplace for dealerships and private sellers with VIN lookup.', 'icon' => 'fas fa-car-side', 'size' => 'col-lg-4', 'tag' => 'Classic', 'color' => '#dc3545'],
-      ['title' => 'Job Board', 'desc' => 'Complete recruitment ecosystem with resume builders and employer dashboards.', 'icon' => 'fas fa-briefcase', 'size' => 'col-lg-4', 'tag' => 'Enterprise', 'color' => '#0dcaf0'],
-      ['title' => 'Service Finder', 'desc' => 'Local service directory with appointment booking and quote request systems.', 'icon' => 'fas fa-gears', 'size' => 'col-lg-4', 'tag' => 'Niche Growth', 'color' => '#ffc107'],
-      ['title' => 'Events & Tickets', 'desc' => 'Event management with calendar views and QR-based ticket verification.', 'icon' => 'fas fa-ticket', 'size' => 'col-lg-12', 'tag' => 'Interactive', 'color' => '#d63384']
+      [
+          'title' => 'eCommerce & Shop', 
+          'desc' => 'Full-scale storefronts with digital/physical product support and cart systems.', 
+          'icon' => 'fas fa-shopping-bag', 
+          'size' => 'col-lg-8', 
+          'tag' => 'Commercial', 
+          'color' => '#6610f2',
+          'features' => ['Cart System', 'Stripe Connect', 'Digital Downloads']
+      ],
+      [
+          'title' => 'Travel & Booking', 
+          'desc' => 'Full-scale travel portal for hotels, vacation rentals, and guided tours.', 
+          'icon' => 'fas fa-plane-departure', 
+          'size' => 'col-lg-4', 
+          'tag' => 'New Release', 
+          'color' => '#20c997',
+          'features' => ['Calendar Sync', 'Booking Engine', 'iCal Export']
+      ],
+      [
+          'title' => 'Directory Hub', 
+          'desc' => 'Business listing directory with premium tiers, claimed listings, and maps.', 
+          'icon' => 'fas fa-location-dot', 
+          'size' => 'col-lg-4', 
+          'tag' => 'Community', 
+          'color' => '#0dcaf0',
+          'features' => ['Claim Listing', 'Map View', 'Premium Tiers']
+      ],
+      [
+          'title' => 'Real Estate', 
+          'desc' => 'Premium property portal with floor plans, map views, and agent management.', 
+          'icon' => 'fas fa-house-chimney', 
+          'size' => 'col-lg-8', 
+          'tag' => 'Top Interest', 
+          'color' => '#0d6efd',
+          'features' => ['Floor Plans', 'Agent Portals', '360° Tours']
+      ],
+      [
+          'title' => 'Events & Tickets', 
+          'desc' => 'Event management with calendar views and QR-based ticket verification.', 
+          'icon' => 'fas fa-ticket', 
+          'size' => 'col-lg-8', 
+          'tag' => 'Interactive', 
+          'color' => '#d63384',
+          'features' => ['QR Check-in', 'Seat Maps', 'Calendar View']
+      ],
+      [
+          'title' => 'Classified Ads', 
+          'desc' => 'Multi-niche ads marketplace with custom fields, location search, and messaging.', 
+          'icon' => 'fas fa-bullhorn', 
+          'size' => 'col-lg-4', 
+          'tag' => 'High Demand', 
+          'color' => '#fd7e14',
+          'features' => ['Custom Fields', 'Chat System', 'Bump-up Ads']
+      ],
+      [
+          'title' => 'Automotive', 
+          'desc' => 'Advanced vehicle marketplace for dealerships with VIN lookup support.', 
+          'icon' => 'fas fa-car-side', 
+          'size' => 'col-lg-4', 
+          'tag' => 'Classic', 
+          'color' => '#dc3545',
+          'features' => ['VIN Decoder', 'Dealer Panels', 'Compare Tool']
+      ],
+      [
+          'title' => 'Job Board', 
+          'desc' => 'Complete recruitment ecosystem with resume builders and employer dashboards.', 
+          'icon' => 'fas fa-briefcase', 
+          'size' => 'col-lg-4', 
+          'tag' => 'Enterprise', 
+          'color' => '#0dcaf0',
+          'features' => ['Resume Builder', 'Apply Tracker', 'Job Alerts']
+      ],
+      [
+          'title' => 'Service Finder', 
+          'desc' => 'Local service directory with appointment booking and quote request systems.', 
+          'icon' => 'fas fa-gears', 
+          'size' => 'col-lg-4', 
+          'tag' => 'Niche Growth', 
+          'color' => '#ffc107',
+          'features' => ['Quote Request', 'Slot Booking', 'Provider Apps']
+      ],
+      [
+          'title' => 'Unified Marketplace', 
+          'desc' => 'The ultimate all-in-one powerhouse. Combine every niche into a single mega portal.', 
+          'icon' => 'fas fa-layer-group', 
+          'size' => 'col-lg-12', 
+          'tag' => 'Elite Solution', 
+          'color' => '#76c043',
+          'features' => ['Niche Switching', 'Global Search', 'Mega Dashboard']
+      ]
   ];
 
   // 2. Demo Categories (Filters)
   $demo_categories = ['Unified', 'Properties', 'Events', 'Autos', 'Services', 'Jobs', 'Classifieds'];
 
   // 3. Demos Mapped to Theme Map Slugs
-
-
     $demos = [
         // Unified / All-in-One
         ['cat' => 'Unified', 'name' => 'Unifieds Default', 'slug' => 'unifieds_default', 'img' => 'images/unifieds_default.png', 'status' => 'active'],
@@ -100,3 +175,11 @@
 
 $category_counts = array_count_values(array_column($demos, 'cat'));
 $total_demos = count($demos);
+
+$faqs = [
+    ['q' => 'Is this a one-time payment or a subscription?', 'a' => 'Sellio is a <strong>one-time payment</strong> solution. Once you purchase the license, you own the source code forever with no recurring monthly fees or hidden costs.'],
+    ['q' => 'Can I customize the source code?', 'a' => 'Yes, 100%. You get full access to the Laravel backend and the frontend source code. You can modify the architecture, design, and features to meet your specific business requirements.'],
+    ['q' => 'Does it support multi-vendor payments?', 'a' => 'Absolutely. The platform includes a robust commission system where you can set global or category-specific rates. It supports multiple gateways including Stripe Connect for automated vendor payouts.'],
+    ['q' => 'Is the platform SEO-friendly?', 'a' => 'Yes, Sellio is built with SEO best practices. It includes dynamic meta tags, clean URL structures, schema.org markup, and high-performance server-side rendering to ensure your marketplace ranks well.'],
+    ['q' => 'What are the server requirements?', 'a' => 'You need a standard VPS or shared hosting with PHP 8.2+, MySQL 8, and support for Laravel (Redis is recommended for high-traffic scale).'],
+];

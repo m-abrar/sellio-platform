@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initTypewriter();
     initHighSpeedWheel();
     initDemoFilter();
+    initPersonaNexus();
 });
 
 // 1. TYPEWRITER EFFECT
@@ -146,3 +147,86 @@ function closeExitPopup() {
 if (localStorage.getItem('exitPopupShown')) {
     popupShown = true;
 }
+
+// 5. THEME TOGGLE (DARK MODE)
+const themeToggle = document.getElementById('theme-toggle');
+const htmlEl = document.documentElement;
+const darkIcon = document.querySelector('.theme-icon-dark');
+const lightIcon = document.querySelector('.theme-icon-light');
+
+if (localStorage.getItem('theme') === 'dark') {
+    htmlEl.setAttribute('data-theme', 'dark');
+    darkIcon.classList.add('d-none');
+    lightIcon.classList.remove('d-none');
+}
+
+themeToggle.addEventListener('click', () => {
+    const isDark = htmlEl.getAttribute('data-theme') === 'dark';
+    if (isDark) {
+        htmlEl.removeAttribute('data-theme');
+        localStorage.setItem('theme', 'light');
+        darkIcon.classList.remove('d-none');
+        lightIcon.classList.add('d-none');
+    } else {
+        htmlEl.setAttribute('data-theme', 'dark');
+        localStorage.setItem('theme', 'dark');
+        darkIcon.classList.add('d-none');
+        lightIcon.classList.remove('d-none');
+    }
+});
+
+// 6. PERSONA NEXUS INTERACTION
+function initPersonaNexus() {
+    const roleNodes = document.querySelectorAll('.persona-node');
+    const roleText = document.getElementById('role-text');
+    if (!roleNodes.length || !roleText) return;
+
+    const roleDetails = {
+        'admin': 'The Nerve Center: Manage commissions, moderate listings, and oversee global taxes with a 360° dashboard.',
+        'seller': 'Merchant Power: Dynamic pricing, inventory tracking, and dedicated storefronts with detailed sales analytics.',
+        'buyer': 'Frictionless Checkout: AI-driven search, multi-gateway payments, and real-time order tracking experiences.'
+    };
+
+    let currentIndex = 0;
+    let rotationInterval;
+
+    const updateRole = (index) => {
+        // Remove active class from all
+        roleNodes.forEach(n => n.classList.remove('active-nexus'));
+        
+        const activeNode = roleNodes[index];
+        const role = activeNode.getAttribute('data-role');
+        
+        activeNode.classList.add('active-nexus');
+        
+        roleText.style.opacity = '0';
+        setTimeout(() => {
+            roleText.innerHTML = roleDetails[role];
+            roleText.style.opacity = '1';
+        }, 150);
+    };
+
+    const startRotation = () => {
+        rotationInterval = setInterval(() => {
+            currentIndex = (currentIndex + 1) % roleNodes.length;
+            updateRole(currentIndex);
+        }, 3500);
+    };
+
+    roleNodes.forEach((node, idx) => {
+        node.addEventListener('mouseenter', function() {
+            clearInterval(rotationInterval);
+            currentIndex = idx;
+            updateRole(currentIndex);
+        });
+
+        node.addEventListener('mouseleave', function() {
+            startRotation();
+        });
+    });
+
+    // Start initial
+    updateRole(0);
+    startRotation();
+}
+

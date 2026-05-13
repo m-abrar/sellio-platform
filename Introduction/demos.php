@@ -1,6 +1,6 @@
 <div class="container text-center">
     <h2 class="display-5 fw-800 mb-2 text-white">Explore 50+ Demos</h2>
-    <p class="text-light opacity-75 mb-5">One license gives you access to every niche imaginable.</p>
+    <p class="text-white opacity-75 lead mb-5">One license gives you access to every niche imaginable.</p>
 
     <div class="d-flex flex-wrap justify-content-center gap-2 mb-5">
         <button class="filter-btn active" data-filter="all">
@@ -31,9 +31,9 @@
                         <div class="demo-overlay-v2"></div>
                     </div>
 
-                    <div class="p-3 d-flex justify-content-between align-items-center bg-white border-top">
+                    <div class="p-3 d-flex justify-content-between align-items-center bg-card-footer border-top">
                         <div class="text-start">
-                            <h5 class="fw-bold mb-0 text-dark"><?php echo $demo['name']; ?></h5>
+                            <h5 class="fw-bold mb-0"><?php echo $demo['name']; ?></h5>
                             <small class="text-muted text-uppercase" style="font-size: 10px; letter-spacing: 1px;">
                                 <?php echo str_replace('_', ' ', $demo['slug']); ?>
                             </small>

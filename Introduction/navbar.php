@@ -14,9 +14,13 @@
                 <li class="nav-item"><a class="nav-link fw-bold" href="#modules">Modules</a></li>
                 <li class="nav-item"><a class="nav-link fw-bold" href="#automation">Smart Automation</a></li>
                 <li class="nav-item"><a class="nav-link fw-bold" href="#demos">Demos</a></li>
-                <li class="nav-item"><a class="nav-link text-sellio fw-bold" href="../Documentation/index.html" target="_blank">Documentation</a></li>
+                <li class="nav-item"><a class="nav-link text-sellio fw-bold" href="../documentation/index.html" target="_blank">Documentation</a></li>
             </ul>
             <div class="ms-auto d-flex align-items-center gap-3">
+                <button id="theme-toggle" class="btn btn-link text-dark p-0 me-2" style="font-size: 1.2rem; text-decoration: none;">
+                    <i class="fas fa-moon theme-icon-dark"></i>
+                    <i class="fas fa-sun theme-icon-light d-none"></i>
+                </button>
                 <a href="#demos" class="text-dark fw-bold d-none d-lg-inline-block text-decoration-none small">Live Preview</a>
                 <a href="#" class="btn-sellio-solid shadow-sm">Get License</a>
             </div>

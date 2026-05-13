@@ -24,7 +24,7 @@
             <div class="col-6 col-lg-2">
                 <h6 class="fw-800 mb-4 text-uppercase smallest" style="letter-spacing: 2px;">Developers</h6>
                 <ul class="list-unstyled text-muted">
-                    <li class="mb-3"><a href="../Documentation/index.html" target="_blank" class="text-muted text-decoration-none hover-sellio">Documentation</a></li>
+                    <li class="mb-3"><a href="../documentation/index.html" target="_blank" class="text-muted text-decoration-none hover-sellio">Documentation</a></li>
                     <li class="mb-3"><a href="#" class="text-muted text-decoration-none hover-sellio">API Reference</a></li>
                     <li class="mb-3"><a href="#" class="text-muted text-decoration-none hover-sellio">Change Log</a></li>
                     <li class="mb-3"><a href="#" class="text-muted text-decoration-none hover-sellio">License Details</a></li>
