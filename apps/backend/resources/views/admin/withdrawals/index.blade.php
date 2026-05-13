@@ -155,7 +155,7 @@
                                     </div>
                                     @if ($withdrawal->admin_note)
                                         <div class="mt-2">
-                                            <div class="badge badge-danger-light text-danger smallest p-2 border-left-premium-danger" style="white-space: normal; text-align: left; border-radius: 4px 8px 8px 4px; letter-spacing: 0.5px;">
+                                            <div class="badge badge-danger-light text-danger smallest p-2 border-left-premium-danger note-badge-premium">
                                                 <i class="fas fa-info-circle mr-1"></i> <strong>NOTE:</strong> {{ $withdrawal->admin_note }}
                                             </div>
                                         </div>
@@ -265,38 +265,5 @@
 
 @section('js')
     @include('admin._partials._sweetalert')
-    <script>
-        $(document).ready(function () {
-             if ($('#withdrawals-table tbody tr:not(.empty-state)').length > 0) {
-                 var table = $('#withdrawals-table').DataTable({
-                     "paging": true,
-                     "searching": true,
-                     "ordering": true,
-                     "info": true,
-                     "autoWidth": false,
-                     "responsive": true,
-                     "order": [[5, "desc"]],
-                     "dom": "tr", // Remove default search/length controls for a cleaner look
-                     "language": {
-                         "emptyTable": "Zero requests detected in this queue."
-                     },
-                     "columnDefs": [
-                         { "orderable": false, "targets": [6] }
-                     ]
-                 });
-
-                 // Bind custom search field
-                 $('#custom-search').on('keyup', function() {
-                     table.search(this.value).draw();
-                 });
-             }
-
-            $('#rejectModal').on('show.bs.modal', function (event) {
-                var button = $(event.relatedTarget);
-                var route = button.data('withdrawal-route');
-                $(this).find('#rejectForm').attr('action', route);
-                $(this).find('#admin_note').val('');
-            });
-        });
-    </script>
+    <script src="{{ asset('admin-assets/pages/withdrawals-index.js') }}"></script>
 @endsection

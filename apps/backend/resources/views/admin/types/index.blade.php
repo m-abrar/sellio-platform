@@ -130,44 +130,12 @@
 </div>
 @endsection
 
-@section('css')
-@include('admin._partials._toggle-card-css')
-@endsection
+@push('css')
+    @include('admin._partials._toggle-card-css')
+@endpush
 
 
 @section('js')
-    <script>
-        $(function () {
-            if ($('#types-table tbody tr:not(.empty-state)').length > 0) {
-                $('#types-table').DataTable({
-                    "paging": true,
-                    "lengthChange": true,
-                    "searching": true,
-                    "ordering": true,
-                    "info": true,
-                    "autoWidth": false,
-                    "responsive": true,
-                    "dom": '<"row"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-6"l>>' +
-                           '<"row"<"col-sm-12"tr>>' +
-                           '<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
-                    "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-                    "columnDefs": [
-                        { "orderable": false, "targets": [0, 2, 4] }
-                    ],
-                    "language": {
-                        "search": "",
-                        "searchPlaceholder": "Search types...",
-                        "paginate": {
-                            "previous": "<i class='fas fa-angle-left'></i>",
-                            "next": "<i class='fas fa-angle-right'></i>"
-                        },
-                        "lengthMenu": "_MENU_ per page"
-                    }
-                });
-                $('.dataTables_filter input').addClass('form-control form-control-premium shadow-none border-light');
-                $('.dataTables_length select').addClass('form-control form-control-premium shadow-none border-light');
-            }
-            $('[data-toggle="tooltip"]').tooltip();
-        });
-    </script>
+    @include('admin._partials._sweetalert')
+    <script src="{{ asset('admin-assets/pages/types-index.js') }}"></script>
 @endsection

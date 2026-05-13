@@ -79,8 +79,7 @@
                         <div class="form-group mb-0">
                             <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">Service Description <span class="text-danger">*</span></label>
                             <textarea name="description" id="description" rows="5" 
-                                      class="form-control @error('description') is-invalid @enderror" 
-                                      style="border-radius: 16px; border: 1px solid var(--border-light);"
+                                      class="form-control rounded-16 border-light @error('description') is-invalid @enderror" 
                                       placeholder="Describe the benefits and details of this addon..."
                                       required>{{ old('description', $addon->description ?? '') }}</textarea>
                             @error('description') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror

@@ -156,15 +156,6 @@
 @endsection
 
 @section('js')
-<script>
-    $(function () {
-        if ($('#blogs-table tbody tr:not(.empty-state)').length > 0) {
-            $('#blogs-table').DataTable({
-                "paging": false,
-                "info": false,
-                "searching": false
-            });
-        }
-    });
-</script>
+    @include('admin._partials._sweetalert')
+    <script src="{{ asset('admin-assets/pages/blogs-index.js') }}"></script>
 @endsection

@@ -31,7 +31,7 @@
                     <a href="{{ route('admin.product-orders.index') }}" class="btn-back shadow-sm print-hide">
                         <i class="fas fa-receipt mr-2"></i> Back to Ledger
                     </a>
-                    <button type="button" class="btn btn-primary shadow-premium rounded-pill px-4 py-2 font-weight-bold smallest uppercase letter-spacing-1 print-hide" onclick="window.print()">
+                    <button type="button" class="btn btn-primary shadow-premium rounded-pill px-4 py-2 font-weight-bold smallest uppercase letter-spacing-1 print-hide" data-action="print-invoice">
                         <i class="fas fa-print mr-2"></i> Generate Invoice
                     </button>
                 </div>
@@ -275,46 +275,8 @@
     </div>
 @endsection
 
-@section('css')
-<style>
-    @media print {
-        .main-sidebar, .main-header, .btn, .btn-back, .print-hide, .sync-lifecycle-card {
-            display: none !important;
-        }
-        .content-wrapper {
-            margin-left: 0 !important;
-            padding-top: 0 !important;
-        }
-        .card {
-            border: 1px solid #eee !important;
-            box-shadow: none !important;
-        }
-    }
-</style>
-@endsection
+
 
 @section('js')
-<script>
-    $(document).ready(function() {
-        if (typeof $.fn.select2 !== 'undefined') {
-            $('.select2').select2({
-                theme: 'bootstrap4',
-                width: '100%'
-            });
-        }
-
-        $('#statusSelect').on('change', function() {
-            const status = $(this).val();
-            const trackingStatuses = ['shipped', 'out_for_delivery', 'delivered'];
-            
-            if (trackingStatuses.includes(status)) {
-                $('#trackingGroup').removeClass('d-none').hide().fadeIn();
-            } else {
-                $('#trackingGroup').fadeOut(function() {
-                    $(this).addClass('d-none');
-                });
-            }
-        });
-    });
-</script>
+    <script src="{{ asset('admin-assets/pages/product-orders-show.js') }}"></script>
 @endsection

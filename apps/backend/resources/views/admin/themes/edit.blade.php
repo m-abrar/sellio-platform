@@ -46,7 +46,7 @@
     <div class="col-md-8">
       <div class="card card-premium overflow-hidden">
         <div class="card-header border-0 bg-white py-3 px-4">
-            <h3 class="card-title font-weight-bold text-dark text-uppercase small" style="letter-spacing: 1px;"><i class="fas fa-palette mr-2 text-primary opacity-50"></i> Theme Variables</h3>
+            <h3 class="card-title font-weight-bold text-dark text-uppercase small ls-1"><i class="fas fa-palette mr-2 text-primary opacity-50"></i> Theme Variables</h3>
         </div>
 
         <div class="card-body p-4">
@@ -100,9 +100,9 @@
               <small class="form-text text-muted">Example: "Poppins, sans-serif"</small>
             </div>
             <div class="col-md-2 d-flex align-items-end mb-3">
-               <div class="p-3 border rounded w-100 text-center bg-light shadow-sm" style="min-height: 80px;">
-                  <h6 id="preview-heading" class="mb-1" style="font-size: 1rem;">Heading Preview</h6>
-                  <p id="preview-base" class="mb-0" style="font-size: 0.8rem;">Body text preview.</p>
+               <div class="p-3 border rounded w-100 text-center bg-light shadow-sm theme-preview-box">
+                  <h6 id="preview-heading" class="mb-1 fs-1-rem">Heading Preview</h6>
+                  <p id="preview-base" class="mb-0 fs-0-8-rem">Body text preview.</p>
                </div>
             </div>
           </div>
@@ -164,52 +164,5 @@
 @endsection
 
 @push('js')
-<script>
-    $(document).ready(function() {
-        const baseInput = $('#font-family-base');
-        const headingInput = $('#font-family-heading');
-        const basePreview = $('#preview-base');
-        const headingPreview = $('#preview-heading');
-
-        function extractFontName(fontString) {
-            let name = fontString.split(',')[0].trim();
-            return name.replace(/['"]/g, '');
-        }
-
-        function loadGoogleFont(fontName) {
-            if (!fontName || ['serif', 'sans-serif', 'monospace', 'cursive', 'system-ui'].includes(fontName.toLowerCase())) return;
-            
-            const fontId = 'google-font-' + fontName.replace(/\s+/g, '-').toLowerCase();
-            if ($('#' + fontId).length === 0) {
-                const link = `<link id="${fontId}" href="https://fonts.googleapis.com/css2?family=${fontName.replace(/\s+/g, '+')}:wght@400;700&display=swap" rel="stylesheet">`;
-                $('head').append(link);
-            }
-        }
-
-        function updatePreview() {
-            const baseFont = baseInput.val();
-            const headingFont = headingInput.val();
-            const baseName = extractFontName(baseFont);
-            const headingName = extractFontName(headingFont);
-
-            loadGoogleFont(baseName);
-            loadGoogleFont(headingName);
-
-            basePreview.css('font-family', baseFont);
-            headingPreview.css('font-family', headingFont);
-        }
-
-        let timeout = null;
-        baseInput.on('input', function() {
-            clearTimeout(timeout);
-            timeout = setTimeout(updatePreview, 500);
-        });
-        headingInput.on('input', function() {
-            clearTimeout(timeout);
-            timeout = setTimeout(updatePreview, 500);
-        });
-
-        updatePreview();
-    });
-</script>
+<script src="{{ asset('admin-assets/pages/theme-editor.js') }}"></script>
 @endpush

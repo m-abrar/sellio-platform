@@ -24,12 +24,3 @@
     </td>
 </tr>
 
-<style>
-    .empty-state-container {
-        border: none !important;
-    }
-    .empty-state-container td {
-        border: none !important;
-        background: transparent !important;
-    }
-</style>

@@ -171,63 +171,13 @@
 @endsection
 
 @push('js')
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const titleInput = document.getElementById('title');
-        const slugInput = document.getElementById('slug');
-        const iconInput = document.getElementById('icon');
-        const iconPreview = document.querySelector('#icon-preview-addon i');
-
-        // Auto-generate Slug
-        titleInput.addEventListener('input', function () {
-            if(!slugInput.dataset.edited) {
-                let slug = this.value.toLowerCase()
-                    .replace(/[^a-z0-9]+/g, '-')
-                    .replace(/^-|-$/g, '');
-                slugInput.value = slug;
-            }
-        });
-
-        slugInput.addEventListener('change', () => slugInput.dataset.edited = "true");
-
-        // Live Icon Preview
-        iconInput.addEventListener('input', function() {
-            const val = this.value || 'fas fa-icons';
-            iconPreview.className = val + ' text-primary';
-        });
-    });
-</script>
+<script src="{{ asset('admin-assets/pages/type-form.js') }}"></script>
 @endpush
 
-@if($type->exists)
-    <form id="delete-form" action="{{ route('admin.types.destroy', $type->id) }}" method="POST" class="d-none">
-        @csrf @method('DELETE')
-    </form>
-    
-    <script>
-        function triggerDelete() {
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "Permanently delete this type?",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#ef4444',
-                cancelButtonColor: '#64748b',
-                confirmButtonText: 'Yes, delete it!',
-                customClass: {
-                    popup: 'rounded-xl',
-                    confirmButton: 'rounded-pill px-4',
-                    cancelButton: 'rounded-pill px-4'
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById('delete-form').submit();
-                }
-            })
-        }
-    </script>
-@endif
 
+
+@push('css')
 @include('admin._partials._toggle-card-css')
+@endpush
 
 

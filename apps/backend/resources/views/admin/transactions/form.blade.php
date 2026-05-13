@@ -99,15 +99,7 @@
 @endsection
 
 @push('js')
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Handle Amount Format
-        document.getElementById('amount').addEventListener('input', function () {
-            let amount = parseFloat(this.value).toFixed(2);
-            this.value = amount;
-        });
-    });
-</script>
+<script src="{{ asset('admin-assets/pages/transactions-form.js') }}"></script>
 @endpush
 
 @push('css')

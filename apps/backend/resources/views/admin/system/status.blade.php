@@ -141,7 +141,7 @@
                         System health reflects the stability of the underlying architecture. Any "Fail" markers should be addressed immediately with your server administrator.
                     </p>
                     
-                    <div class="p-4 rounded-20 mb-4" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1);">
+                    <div class="p-4 rounded-20 mb-4 glass-panel-dark">
                         <div class="text-center">
                             @php
                                 $totalReqs = count($requirements) + count($permissions);
@@ -184,9 +184,4 @@
 </div>
 @endsection
 
-@section('css')
-<style>
-    .bg-primary-soft { background-color: rgba(70, 165, 172, 0.08); }
-    .border-dashed-primary { border: 1.5px dashed rgba(70, 165, 172, 0.4) !important; }
-</style>
-@endsection
+

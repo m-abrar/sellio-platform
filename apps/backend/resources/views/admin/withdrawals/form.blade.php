@@ -45,7 +45,7 @@
                 <div class="col-md-6">
                     <div class="card border-0 shadow-premium rounded-xl bg-primary text-white overflow-hidden h-100">
                         <div class="card-body p-4 position-relative">
-                            <div class="opacity-10 position-absolute" style="right: -10px; bottom: -20px; font-size: 8rem;">
+                            <div class="opacity-10 position-absolute r-minus-10 b-minus-20 fs-8-rem">
                                 <i class="fas fa-money-check-alt"></i>
                             </div>
                             <h6 class="smallest font-weight-bold uppercase letter-spacing-2 mb-3 opacity-75">Settlement Amount</h6>
@@ -102,7 +102,7 @@
                     <div class="form-group mb-0">
                         <label class="small font-weight-bold text-muted uppercase mb-2 d-block">Destination Credentials</label>
                         <div class="p-4 bg-dark text-white rounded-xl shadow-premium-sm font-weight-600 font-0-9">
-                            <pre class="mb-0 text-white" style="white-space: pre-wrap;">{{ $withdrawal->details ?: 'No detailed credentials provided.' }}</pre>
+                            <pre class="mb-0 text-white pre-wrap">{{ $withdrawal->details ?: 'No detailed credentials provided.' }}</pre>
                         </div>
                     </div>
                 </div>
@@ -222,27 +222,6 @@
 @endsection
 
 @section('js')
-@include('admin._partials._sweetalert')
-<script>
-    function triggerApproval() {
-        Swal.fire({
-            title: 'Finalize Payout?',
-            text: "Confirm that funds have been transferred to the partner.",
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#10b981',
-            cancelButtonColor: '#64748b',
-            confirmButtonText: 'Yes, Finalize!',
-            customClass: {
-                popup: 'rounded-xl',
-                confirmButton: 'rounded-pill px-4',
-                cancelButton: 'rounded-pill px-4'
-            }
-        }).then((result) => {
-            if (result.isConfirmed) {
-                document.getElementById('payoutApproveForm').submit();
-            }
-        })
-    }
-</script>
+    @include('admin._partials._sweetalert')
+    <script src="{{ asset('admin-assets/pages/withdrawals-form.js') }}"></script>
 @endsection

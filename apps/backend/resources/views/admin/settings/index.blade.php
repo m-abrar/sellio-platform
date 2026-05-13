@@ -69,7 +69,7 @@
                 <div class="card h-100 border-0 shadow-premium stat-card rounded-20">
                     <div class="card-body p-4">
                         <div class="d-flex align-items-start mb-4">
-                            <div class="icon-square-premium bg-{{ $group['color'] }}-soft mr-3" style="color: {{ $group['color'] == 'indigo' ? '#6366f1' : 'var(--' . $group['color'] . ')' }};">
+                            <div class="icon-square-premium bg-{{ $group['color'] }}-soft mr-3">
                                 <i class="fas {{ $group['icon'] }}"></i>
                             </div>
                             <div class="flex-grow-1">
@@ -100,19 +100,5 @@
 @endsection
 
 @section('js')
-<script>
-    $(function () {
-        // Animation sequence for cards
-        $('.stat-card').each(function(index) {
-            $(this).css({
-                'opacity': '0',
-                'transform': 'translateY(15px)',
-                'transition': 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)'
-            });
-            setTimeout(() => {
-                $(this).css({'opacity': '1', 'transform': 'translateY(0)'});
-            }, index * 80);
-        });
-    });
-</script>
+    <script src="{{ asset('admin-assets/pages/settings-explorer.js') }}"></script>
 @endsection

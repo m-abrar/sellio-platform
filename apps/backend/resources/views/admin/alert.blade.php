@@ -47,7 +47,7 @@
 
 {{-- Impersonation Notification --}}
 @if(Session::has('impersonate_original_user_id'))
-    <div class="alert alert-primary-light alert-premium border-0 shadow-premium d-flex align-items-center p-3 mb-4 alert-border-primary" role="alert" style="position: relative; z-index: 9999;">
+    <div class="alert alert-primary-light alert-premium border-0 shadow-premium d-flex align-items-center p-3 mb-4 alert-border-primary position-relative z-9999" role="alert">
         <div class="icon-box bg-primary text-white mr-3 shadow-lg alert-icon-box">
             <i class="fas fa-user-secret fa-lg"></i>
         </div>

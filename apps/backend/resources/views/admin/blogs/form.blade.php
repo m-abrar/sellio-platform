@@ -127,10 +127,10 @@
 </div>
 @endsection
 
-@section('css')
+@push('css')
 @include('admin._partials._toggle-card-css')
-@endsection
+@endpush
 
 @push('js')
-<script src="{{ asset('admin-assets/pages/taxonomy-form.js') }}"></script>
+<script src="{{ asset('admin-assets/pages/blog-form.js') }}"></script>
 @endpush

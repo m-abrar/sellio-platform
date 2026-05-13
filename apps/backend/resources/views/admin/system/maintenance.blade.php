@@ -169,7 +169,7 @@
                         <li class="mb-2"><i class="fas fa-check-circle mr-2 text-success"></i> {{ __('Routing conflicts or missing keys') }}</li>
                         <li class="mb-2"><i class="fas fa-check-circle mr-2 text-success"></i> {{ __('Compiled template legacy issues') }}</li>
                     </ul>
-                    <div class="p-3 rounded-xl smallest" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1);">
+                    <div class="p-3 rounded-xl smallest glass-panel-dark">
                         <div class="d-flex justify-content-between mb-2">
                             <span class="text-light opacity-75 uppercase font-weight-bold">{{ __('Environment') }}</span>
                             <span class="font-weight-bold text-warning text-uppercase letter-spacing-1 ls-1-p">{{ config('app.env') }}</span>
@@ -199,112 +199,6 @@
 @endsection
 
 @section('js')
-    <script>
-        $(function() {
-            // Premium Swal Configuration
-            const premiumSwal = {
-                backdrop: `rgba(15, 23, 42, 0.2)`,
-                borderRadius: '32px',
-                buttonsStyling: false,
-                customClass: {
-                    popup: 'border-0',
-                    title: 'swal2-title',
-                    htmlContainer: 'text-muted small uppercase letter-spacing-1 font-weight-bold opacity-75 mt-3',
-                    confirmButton: 'btn btn-primary rounded-pill px-5 py-3 mx-2 swal2-confirm',
-                    cancelButton: 'btn btn-light rounded-pill px-5 py-3 mx-2 swal2-cancel'
-                },
-                showClass: {
-                    popup: 'animate__animated animate__fadeInUp animate__faster'
-                },
-                hideClass: {
-                    popup: 'animate__animated animate__fadeOutDown animate__faster'
-                }
-            };
-
-            // Success Alerts
-            @if(session('success'))
-                Swal.fire({
-                    ...premiumSwal,
-                    icon: 'success',
-                    title: 'SYSTEM INTELLIGENCE',
-                    text: "{{ session('success') }}",
-                    iconColor: '#46a5ac',
-                });
-            @endif
-
-            // Error Alerts
-            @if(session('error'))
-                Swal.fire({
-                    ...premiumSwal,
-                    icon: 'error',
-                    title: 'MISSION INTERRUPTED',
-                    text: "{{ session('error') }}",
-                    iconColor: '#ef4444',
-                });
-            @endif
-
-            // AJAX Execution for Maintenance Tasks
-            $('.btn-purge, button[type="submit"]').on('click', function(e) {
-                const $button = $(this);
-                const $form = $button.closest('form');
-                const actionName = $button.text().trim();
-                const url = $form.attr('action');
-                const method = $form.attr('method') || 'POST';
-                
-                if ($button.hasClass('btn-back')) return;
-
-                e.preventDefault();
-
-                Swal.fire({
-                    ...premiumSwal,
-                    title: "{{ __('AUTHORIZE OPERATION?') }}",
-                    text: `{{ __('SYSTEM WILL EXECUTE:') }} ${actionName}. {{ __('PROCEED WITH CAUTION.') }}`,
-                    icon: 'warning',
-                    iconColor: '#f59e0b',
-                    showCancelButton: true,
-                    confirmButtonText: "{{ __('Execute Action') }}",
-                    cancelButtonText: "{{ __('Abort Mission') }}",
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // Show Loading State
-                        Swal.fire({
-                            ...premiumSwal,
-                            title: "{{ __('EXECUTING...') }}",
-                            text: "{{ __('Please wait while the system optimizes foundational buffers.') }}",
-                            allowOutsideClick: false,
-                            allowEscapeKey: false,
-                            didOpen: () => {
-                                Swal.showLoading();
-                            }
-                        });
-
-                        $.ajax({
-                            url: url,
-                            type: method,
-                            data: $form.serialize(),
-                            success: function(response) {
-                                Swal.fire({
-                                    ...premiumSwal,
-                                    icon: 'success',
-                                    title: "{{ __('SYSTEM INTELLIGENCE') }}",
-                                    text: "{{ __('OPERATION COMPLETED SUCCESSFULLY.') }}",
-                                    iconColor: '#46a5ac',
-                                });
-                            },
-                            error: function(xhr) {
-                                const errorMsg = xhr.responseJSON?.message || 'AN UNKNOWN ERROR OCCURRED DURING EXECUTION.';
-                                Swal.fire({
-                                    ...premiumSwal,
-                                    icon: 'error',
-                                    title: "{{ __('MISSION INTERRUPTED') }}",
-                                    text: errorMsg.toUpperCase(),
-                                    iconColor: '#ef4444',
-                                });
-                            }
-                        });
-                    }
-                });
-            });
-        });
-    </script>
-@stop
+    @include('admin._partials._sweetalert')
+    <script src="{{ asset('admin-assets/pages/maintenance.js') }}"></script>
+@endsection

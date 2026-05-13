@@ -39,7 +39,7 @@
 <div class="container-fluid">
     @include('admin.alert')
 
-    <div class="card border-0 shadow-premium overflow-hidden" style="border-radius: 24px;">
+    <div class="card border-0 shadow-premium overflow-hidden rounded-24">
         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
             <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">Module Registry</h3>
             <div class="card-tools d-flex align-items-center ml-auto">
@@ -69,7 +69,7 @@
                             <tr>
                                 <td class="align-middle px-4">
                                     <div class="d-flex align-items-center">
-                                        <div class="icon-box-soft bg-primary-soft mr-3 d-flex align-items-center justify-content-center shadow-xs" style="width:40px; height:40px; border-radius: 10px;">
+                                        <div class="icon-box-soft bg-primary-soft mr-3 d-flex align-items-center justify-content-center shadow-xs icon-box-40 rounded-10">
                                             <i class="fas fa-puzzle-piece text-primary"></i>
                                         </div>
                                         <span class="font-weight-bold text-dark">{{ $addon->title }}</span>
@@ -120,16 +120,7 @@
 </div>
 @endsection
 
-@push('js')
-    <script>
-        $(function () {
-            if ($('#addons-table tbody tr:not(.empty-state)').length > 0) {
-                $('#addons-table').DataTable({
-                    "columnDefs": [
-                        { "orderable": false, "targets": [1, 4] }
-                    ]
-                });
-            }
-        });
-    </script>
-@endpush
+@section('js')
+    @include('admin._partials._sweetalert')
+    <script src="{{ asset('admin-assets/pages/addons-index.js') }}"></script>
+@endsection

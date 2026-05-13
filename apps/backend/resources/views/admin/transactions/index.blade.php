@@ -78,7 +78,7 @@
                         <td class="small">{{ $transaction->transaction_date ? $transaction->transaction_date->format('Y-m-d H:i') : '—' }}</td>
                         <td>
                             @if ($transaction->getFirstMediaUrl('transaction_screenshots'))
-                                <img src="{{ $transaction->getFirstMediaUrl('transaction_screenshots') }}" alt="Screenshot" class="img-thumbnail" style="width: 60px; height: 60px; object-fit: cover;">
+                                <img src="{{ $transaction->getFirstMediaUrl('transaction_screenshots') }}" alt="Screenshot" class="img-thumbnail icon-box-60 object-fit-cover">
                             @else
                                 <span class="text-muted">No Image</span>
                             @endif
@@ -87,7 +87,7 @@
                             <a href="{{ route('admin.transactions.edit', $transaction->id) }}" class="btn btn-primary btn-sm">
                                 <i class="fas fa-edit"></i>
                             </a>
-                            <form action="{{ route('admin.transactions.destroy', $transaction->id) }}" method="POST" style="display:inline;">
+                            <form action="{{ route('admin.transactions.destroy', $transaction->id) }}" method="POST" class="d-inline">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">
@@ -106,17 +106,6 @@
 
 
 @section('js')
-    
-    
-    <script>
-        $(document).ready(function () {
-            $('#transactions-table').DataTable({
-                paging: true,
-                searching: true,
-                ordering: true,
-                order: [[7, 'desc']], // Sort by date column by default
-                responsive: true
-            });
-        });
-    </script>
+    @include('admin._partials._sweetalert')
+    <script src="{{ asset('admin-assets/pages/transactions-index.js') }}"></script>
 @endsection
