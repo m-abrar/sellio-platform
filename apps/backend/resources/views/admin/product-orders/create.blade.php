@@ -71,7 +71,7 @@
                 <div class="card border-0 shadow-premium rounded-xl overflow-hidden mb-4">
                     <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
                         <h3 class="card-title-main">{{ __('Item Manifest') }}</h3>
-                        <button type="button" class="btn btn-primary btn-sm rounded-pill px-3 ml-auto font-weight-bold smallest uppercase letter-spacing-1" onclick="addItemRow()">
+                        <button type="button" class="btn btn-primary btn-sm rounded-pill px-3 ml-auto font-weight-bold smallest uppercase letter-spacing-1" data-action="add-item-row">
                             <i class="fas fa-plus mr-1"></i> {{ __('Add Line Item') }}
                         </button>
                     </div>
@@ -90,13 +90,12 @@
                                 <tbody id="itemsBody">
                                     <tr class="item-row">
                                         <td class="pl-4 py-3 align-middle">
-                                            <select name="items[0][product_id]" class="form-control select2 product-select" required onchange="updateRowPrice(this)">
+                                            <select name="items[0][product_id]" class="form-control select2 product-select" required>
                                                 <option value="">-- {{ __('SELECT PRODUCT') }} --</option>
                                                 @foreach($products as $product)
                                                     <option value="{{ $product->id }}" data-price="{{ $product->price }}" data-title="{{ $product->title }}">
                                                         {{ $product->title }} ({{ number_format($product->price, 2) }})
                                                     </option>
-
                                                 @endforeach
                                             </select>
                                         </td>
@@ -105,13 +104,13 @@
                                             <input type="hidden" name="items[0][unit_price]" class="unit-price-input" value="0">
                                         </td>
                                         <td class="text-center align-middle">
-                                            <input type="number" name="items[0][quantity]" class="form-control form-control-premium text-center quantity-input" value="1" min="1" onchange="calculateTotals()">
+                                            <input type="number" name="items[0][quantity]" class="form-control form-control-premium text-center quantity-input" value="1" min="1">
                                         </td>
                                         <td class="text-right align-middle pr-4 font-weight-bold text-primary row-total-display">
                                             $0.00
                                         </td>
                                         <td class="align-middle text-center pr-4">
-                                            <button type="button" class="btn btn-link text-danger p-0" onclick="removeItemRow(this)">
+                                            <button type="button" class="btn btn-link text-danger p-0" data-action="remove-item-row">
                                                 <i class="fas fa-times-circle"></i>
                                             </button>
                                         </td>
@@ -139,7 +138,7 @@
                         <div class="d-flex justify-content-between mb-3 align-items-center">
                             <span class="small font-weight-bold text-muted uppercase letter-spacing-1">{{ __('Logistics Rate') }}</span>
                             <div style="width: 120px;">
-                                <input type="number" name="shipping_cost" class="form-control form-control-premium text-right font-weight-bold" value="0" step="0.01" onchange="calculateTotals()">
+                                <input type="number" name="shipping_cost" class="form-control form-control-premium text-right font-weight-bold" value="0" step="0.01">
                             </div>
                         </div>
                         <div class="d-flex justify-content-between mb-4 pb-4 border-bottom">
@@ -209,117 +208,7 @@
 </div>
 @endsection
 
-@push('css')
-<style>
-    .unit-price-display { font-size: 0.9rem; }
-    .row-total-display { font-size: 1rem; }
-    .border-light-soft { border: 1px solid #f1f5f9 !important; }
-</style>
-@endpush
 
 @push('js')
-<script>
-    let itemCount = 1;
-
-    $(document).ready(function() {
-        initSelect2();
-        
-        // Auto-fill shipping name when user is selected
-        $('#user_id').on('change', function() {
-            const selected = $(this).find(':selected');
-            if (selected.val()) {
-                $('#shipping_name').val(selected.data('name'));
-            }
-        });
-    });
-
-    function initSelect2() {
-        $('.select2').each(function() {
-            if (!$(this).hasClass("select2-hidden-accessible")) {
-                $(this).select2({
-                    theme: 'bootstrap4',
-                    width: '100%'
-                });
-            }
-        });
-    }
-
-    function addItemRow() {
-        const rowId = itemCount++;
-        const template = `
-            <tr class="item-row">
-                <td class="pl-4 py-3 align-middle">
-                    <select name="items[${rowId}][product_id]" class="form-control select2 product-select" required onchange="updateRowPrice(this)">
-                        <option value="">-- {{ __('SELECT PRODUCT') }} --</option>
-                        @foreach($products as $product)
-                            <option value="{{ $product->id }}" data-price="{{ $product->price }}" data-title="{{ $product->title }}">
-                                {{ $product->title }} ({{ number_format($product->price, 2) }})
-                            </option>
-
-                        @endforeach
-                    </select>
-                </td>
-                <td class="text-center align-middle">
-                    <div class="font-weight-bold text-dark unit-price-display">$0.00</div>
-                    <input type="hidden" name="items[${rowId}][unit_price]" class="unit-price-input" value="0">
-                </td>
-                <td class="text-center align-middle">
-                    <input type="number" name="items[${rowId}][quantity]" class="form-control form-control-premium text-center quantity-input" value="1" min="1" onchange="calculateTotals()">
-                </td>
-                <td class="text-right align-middle pr-4 font-weight-bold text-primary row-total-display">
-                    $0.00
-                </td>
-                <td class="align-middle text-center pr-4">
-                    <button type="button" class="btn btn-link text-danger p-0" onclick="removeItemRow(this)">
-                        <i class="fas fa-times-circle"></i>
-                    </button>
-                </td>
-            </tr>
-        `;
-        $('#itemsBody').append(template);
-        initSelect2();
-    }
-
-    function removeItemRow(btn) {
-        if ($('.item-row').length > 1) {
-            $(btn).closest('tr').remove();
-            calculateTotals();
-        } else {
-            Swal.fire('Manifest Error', 'Order must contain at least one line item.', 'error');
-        }
-    }
-
-    function updateRowPrice(select) {
-        const selected = $(select).find(':selected');
-        const price = parseFloat(selected.data('price')) || 0;
-        const row = $(select).closest('tr');
-        
-        row.find('.unit-price-display').text('$' + price.toFixed(2));
-        row.find('.unit-price-input').val(price);
-        
-        calculateTotals();
-    }
-
-    function calculateTotals() {
-        let subtotal = 0;
-        
-        $('.item-row').each(function() {
-            const price = parseFloat($(this).find('.unit-price-input').val()) || 0;
-            const qty = parseInt($(this).find('.quantity-input').val()) || 0;
-            const total = price * qty;
-            
-            $(this).find('.row-total-display').text('$' + total.toFixed(2));
-            subtotal += total;
-        });
-        
-        const shipping = parseFloat($('input[name="shipping_cost"]').val()) || 0;
-        const total = subtotal + shipping;
-        
-        $('#summarySubtotal').text('$' + subtotal.toFixed(2));
-        $('#inputSubtotal').val(subtotal.toFixed(2));
-        
-        $('#summaryTotal').text('$' + total.toFixed(2));
-        $('#inputTotal').val(total.toFixed(2));
-    }
-</script>
+<script src="{{ asset('admin-assets/pages/product-orders.js') }}"></script>
 @endpush

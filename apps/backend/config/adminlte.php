@@ -349,12 +349,12 @@ return [
                 [
                     'type' => 'css',
                     'asset' => true,
-                    'location' => 'admin-assets/style.css',
+                    'location' => 'admin-assets/global.css',
                 ],
                 [
                     'type' => 'css',
                     'asset' => true,
-                    'location' => 'admin/css/sellio-premium.css',
+                    'location' => 'admin-assets/admin-custom.css',
                 ],
                 [
                     'type' => 'js',

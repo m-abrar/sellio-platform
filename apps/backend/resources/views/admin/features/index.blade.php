@@ -74,9 +74,9 @@
                                 <td class="text-center align-middle">
                                     <div class="table-img-preview shadow-sm">
                                         @if($feature->thumbnail_url)
-                                            <img src="{{ $feature->thumbnail_url }}" 
-                                                 alt="{{ $feature->title }}" 
-                                                 onerror="this.src='{{ asset('images/fallbacks/default.jpg') }}'">
+                                             <img src="{{ $feature->thumbnail_url }}" 
+                                                  alt="{{ $feature->title }}" 
+                                                  data-fallback="{{ asset('images/fallbacks/default.jpg') }}">
                                         @else
                                             <i class="fas fa-star text-muted opacity-50"></i>
                                         @endif
@@ -103,7 +103,13 @@
                                         <a href="{{ route('admin.features.edit', $feature->id) }}" class="btn text-info" data-toggle="tooltip" title="Edit Configuration"><i class="fas fa-edit"></i></a>
                                         <form id="delete-feature-{{ $feature->id }}" action="{{ route('admin.features.destroy', $feature->id) }}" method="POST" class="d-inline">
                                             @csrf @method('DELETE')
-                                            <button type="button" class="btn text-danger" data-toggle="tooltip" title="Remove Feature" onclick="confirmDelete('delete-feature-{{ $feature->id }}')"><i class="fas fa-trash-alt"></i></button>
+                                             <button type="button" class="btn text-danger" 
+                                                    data-toggle="tooltip" title="Remove Feature" 
+                                                    data-action="delete-trigger"
+                                                    data-confirm-title="Purge Feature?"
+                                                    data-confirm-text="This feature and its associations will be removed.">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
                                         </form>
                                     </div>
                                 </td>
@@ -133,7 +139,6 @@
         </div>
 
         
-        @include('admin._partials._sweetalert')
     </div>
 </div>
 @endsection
@@ -148,35 +153,12 @@
         $(function () {
             if ($('#features-table tbody tr:not(.empty-state)').length > 0) {
                 $('#features-table').DataTable({
-                    "paging": true,
-                    "lengthChange": true,
-                    "searching": true,
-                    "ordering": true,
-                    "info": true,
-                    "autoWidth": false,
-                    "responsive": true,
-                    "dom": '<"row"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-6"l>>' +
-                           '<"row"<"col-sm-12"tr>>' +
-                           '<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
-                    "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
                     "order": [[1, "asc"]],
                     "columnDefs": [
                         { "orderable": false, "targets": [0, 4] }
-                    ],
-                    "language": {
-                        "search": "",
-                        "searchPlaceholder": "Search features...",
-                        "paginate": {
-                            "previous": "<i class='fas fa-angle-left'></i>",
-                            "next": "<i class='fas fa-angle-right'></i>"
-                        },
-                        "lengthMenu": "_MENU_ per page"
-                    }
+                    ]
                 });
-                $('.dataTables_filter input').addClass('form-control form-control-premium shadow-none border-light');
-                $('.dataTables_length select').addClass('form-control form-control-premium shadow-none border-light');
             }
-            $('[data-toggle="tooltip"]').tooltip();
         });
     </script>
 @endsection

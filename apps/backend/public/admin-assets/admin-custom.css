@@ -1,0 +1,37 @@
+/*
+    Sellio Admin Dashboard: Custom Aesthetic Overrides
+    
+    This file orchestrates the high-fidelity visual refinements for the 
+    administrative interface. It provides standardized tokens for 
+    shadows, borders, and component-specific layout adjustments.
+*/
+
+:root {
+    --shadow-premium: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+    --border-light-soft: 1px solid #f1f5f9;
+}
+
+/* Unit Displays */
+.unit-price-display { font-size: 0.9rem; }
+.row-total-display { font-size: 1rem; }
+.border-light-soft { border: var(--border-light-soft) !important; }
+
+/* Rounded Utility Overrides */
+.rounded-20 { border-radius: 20px !important; }
+.rounded-24 { border-radius: 24px !important; }
+
+/* Bulk Action Bar Animation */
+.animate__fadeInUpCustom {
+    animation: fadeInUpCustom 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes fadeInUpCustom {
+    from { opacity: 0; transform: translate(-50%, 20px); }
+    to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+/* Custom Checkbox refinements */
+.custom-control-premium .custom-control-label::before {
+    border-radius: 6px;
+    border-color: #cbd5e1;
+}

@@ -57,7 +57,10 @@
                     <div class="col-3" style="flex: 0 0 20.833%; max-width: 20.833%;">
                         <button type="button" 
                                 class="btn btn-default btn-block btn-flat h-100 d-flex align-items-center justify-content-center text-danger"
-                                onclick="triggerDelete()"
+                                data-action="delete-trigger"
+                                data-form-id="delete-form"
+                                data-confirm-title="Purge Feature?"
+                                data-confirm-text="This will permanently remove the classification segment."
                                 data-toggle="tooltip" title="Delete">
                             <i class="fas fa-trash-alt"></i>
                         </button>

@@ -123,13 +123,13 @@
                 <div class="card border-0 shadow-premium rounded-xl overflow-hidden mb-4">
                     <div class="card-header border-0 bg-white py-4 px-4 d-flex justify-content-between align-items-center">
                         <h3 class="card-title-main">Attributes & Variations</h3>
-                        <button type="button" class="btn btn-primary rounded-pill px-3 font-weight-bold shadow-premium smallest uppercase letter-spacing-1" onclick="addVariationRow()">
+                        <button type="button" class="btn btn-primary rounded-pill px-3 font-weight-bold shadow-premium smallest uppercase letter-spacing-1" data-action="add-variation">
                             <i class="fas fa-plus-circle mr-1"></i> ADD ATTRIBUTE
                         </button>
                     </div>
                     <div class="card-body p-4 pt-0">
                         <div class="table-responsive rounded-xl border border-light-soft">
-                            <table class="table table-premium mb-0" id="variationsTable">
+                            <table class="table table-premium mb-0" id="variationsTable" data-next-index="{{ $vIndex }}">
                                 <thead class="bg-light">
                                     <tr>
                                         <th class="px-4 py-3 small uppercase letter-spacing-1">Name</th>
@@ -173,13 +173,13 @@
                 <div class="card border-0 shadow-premium rounded-xl overflow-hidden mb-4">
                     <div class="card-header border-0 bg-white py-4 px-4 d-flex justify-content-between align-items-center">
                         <h3 class="card-title-main">{{ __('Optional Extra Services') }}</h3>
-                        <button type="button" class="btn btn-primary rounded-pill px-3 font-weight-bold shadow-premium smallest uppercase letter-spacing-1" onclick="addAddonRow()">
+                        <button type="button" class="btn btn-primary rounded-pill px-3 font-weight-bold shadow-premium smallest uppercase letter-spacing-1" data-action="add-addon">
                             <i class="fas fa-plus-circle mr-1"></i> {{ __('ADD EXTRA SERVICE') }}
                         </button>
                     </div>
                     <div class="card-body p-4 pt-0">
                         <div class="table-responsive rounded-xl border border-light-soft">
-                            <table class="table table-premium mb-0" id="addonsTable">
+                            <table class="table table-premium mb-0" id="addonsTable" data-next-index="{{ $aIndex }}">
                                 <thead class="bg-light">
                                     <tr>
                                         <th class="px-4 py-3 small uppercase letter-spacing-1">Title</th>
@@ -365,96 +365,7 @@
     @endphp
 
     @push('js')
-    <script>
-        let variationIndex = {{ $vIndex }};
-        let addonIndex = {{ $aIndex }};
-
-        function addVariationRow() {
-            let row = `
-                <tr data-index="${variationIndex}">
-                    <td class="px-4 py-3"><input type="text" name="attributes[${variationIndex}][name]" class="form-control form-control-premium py-1 px-3 h-auto" placeholder="Color" required></td>
-                    <td class="px-4 py-3"><input type="text" name="attributes[${variationIndex}][value]" class="form-control form-control-premium py-1 px-3 h-auto" placeholder="Red" required></td>
-                    <td class="px-4 py-3"><input type="number" step="0.01" name="attributes[${variationIndex}][additional_price]" class="form-control form-control-premium py-1 px-3 h-auto" value="0.00"></td>
-                    <td class="px-4 py-3"><input type="text" name="attributes[${variationIndex}][sku_extension]" class="form-control form-control-premium py-1 px-3 h-auto" placeholder="-RED"></td>
-                    <td class="px-4 py-3"><input type="number" name="attributes[${variationIndex}][stock_quantity]" class="form-control form-control-premium py-1 px-3 h-auto" value="0"></td>
-                    <td class="px-4 py-3 text-center">
-                        <div class="custom-control custom-switch custom-switch-premium d-inline-block">
-                            <input type="hidden" name="attributes[${variationIndex}][is_variation]" value="0">
-                            <input type="checkbox" name="attributes[${variationIndex}][is_variation]" value="1" class="custom-control-input" id="attr_v_${variationIndex}" checked>
-                            <label class="custom-control-label" for="attr_v_${variationIndex}"></label>
-                        </div>
-                    </td>
-                    <td class="px-4 py-3 text-center"><button type="button" class="btn btn-danger btn-xs rounded-circle" onclick="removeRow(this)"><i class="fas fa-trash"></i></button></td>
-                </tr>
-            `;
-            $('#variationsTable tbody').append(row);
-            variationIndex++;
-        }
-
-        function addAddonRow() {
-            let row = `
-                <tr data-index="${addonIndex}">
-                    <td class="px-4 py-3"><input type="text" name="addons[${addonIndex}][title]" class="form-control form-control-premium py-1 px-3 h-auto" placeholder="Gift Wrap" required></td>
-                    <td class="px-4 py-3"><input type="number" step="0.01" name="addons[${addonIndex}][price]" class="form-control form-control-premium py-1 px-3 h-auto" value="0.00" required></td>
-                    <td class="px-4 py-3">
-                        <select name="addons[${addonIndex}][pricing_type]" class="form-control form-control-premium py-1 px-3 h-auto">
-                            <option value="one_time">One-Time</option>
-                            <option value="per_unit">Per Unit</option>
-                        </select>
-                    </td>
-                    <td class="px-4 py-3"><input type="text" name="addons[${addonIndex}][description]" class="form-control form-control-premium py-1 px-3 h-auto" placeholder="Add beautiful gift box"></td>
-                    <td class="px-4 py-3 text-center">
-                        <div class="custom-control custom-switch custom-switch-premium d-inline-block">
-                            <input type="hidden" name="addons[${addonIndex}][is_required]" value="0">
-                            <input type="checkbox" name="addons[${addonIndex}][is_required]" value="1" class="custom-control-input" id="addon_r_${addonIndex}">
-                            <label class="custom-control-label" for="addon_r_${addonIndex}"></label>
-                        </div>
-                    </td>
-                    <td class="px-4 py-3 text-center"><button type="button" class="btn btn-danger btn-xs rounded-circle" onclick="removeRow(this)"><i class="fas fa-trash"></i></button></td>
-                </tr>
-            `;
-            $('#addonsTable tbody').append(row);
-            addonIndex++;
-        }
-
-        function removeRow(btn) {
-            $(btn).closest('tr').remove();
-        }
-
-        $(document).ready(function () {
-            const titleInput = $('#title');
-            const slugInput = $('#slug');
-            titleInput.on('input', function () {
-                if(!slugInput.data('edited')){
-                    let slug = $(this).val().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-                    slugInput.val(slug);
-                }
-            });
-            slugInput.on('change', function() { $(this).data('edited', true); });
-            $('.select2').select2({ theme: 'bootstrap4', width: '100%' });
-        });
-
-        function triggerDelete() {
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "Permanently delete this product listing?",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#ef4444',
-                cancelButtonColor: '#64748b',
-                confirmButtonText: 'Yes, delete it!',
-                customClass: {
-                    popup: 'rounded-xl',
-                    confirmButton: 'rounded-pill px-4',
-                    cancelButton: 'rounded-pill px-4'
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById('delete-form').submit();
-                }
-            })
-        }
-    </script>
+    <script src="{{ asset('admin-assets/pages/product-form.js') }}"></script>
     @endpush
 
     @if($product->exists)

@@ -152,58 +152,13 @@
 @endsection
 
 @push('js')
-<script>
-    $(document).ready(function () {
-        // Auto-Slug Logic
-        const titleInput = $('#title');
-        const slugInput = $('#slug');
-
-        titleInput.on('input', function () {
-            if(!slugInput.data('edited')){
-                let slug = $(this).val()
-                    .toLowerCase()
-                    .replace(/[^a-z0-9]+/g, '-')
-                    .replace(/^-|-$/g, '');
-                slugInput.val(slug);
-            }
-        });
-
-        slugInput.on('change', function() {
-            $(this).data('edited', true);
-        });
-
-        $('[data-toggle="tooltip"]').tooltip();
-    });
-</script>
+<script src="{{ asset('admin-assets/pages/taxonomy-form.js') }}"></script>
 @endpush
 
 @if($feature->exists)
     <form id="delete-form" action="{{ route('admin.features.destroy', $feature->id) }}" method="POST" class="d-none">
         @csrf @method('DELETE')
     </form>
-    
-    <script>
-        function triggerDelete() {
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "Permanently delete this feature?",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#ef4444',
-                cancelButtonColor: '#64748b',
-                confirmButtonText: 'Yes, delete it!',
-                customClass: {
-                    popup: 'rounded-xl',
-                    confirmButton: 'rounded-pill px-4',
-                    cancelButton: 'rounded-pill px-4'
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById('delete-form').submit();
-                }
-            })
-        }
-    </script>
 @endif
 
 @include('admin._partials._toggle-card-css')

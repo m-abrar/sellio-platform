@@ -175,7 +175,12 @@
                                         </a>
                                         <form id="delete-ticket-{{ $ticket->id }}" action="{{ route('admin.tickets.destroy', $ticket->id) }}" method="POST" class="d-inline">
                                             @csrf @method('DELETE')
-                                            <button type="button" class="btn btn-white btn-sm text-danger py-2 px-3" data-toggle="tooltip" title="Purge Ticket" onclick="confirmDelete('delete-ticket-{{ $ticket->id }}', 'Purge Support Ticket?', 'This will permanently remove the ticket from the system database.', 'Purge Ticket')">
+                                            <button type="button" class="btn btn-white btn-sm text-danger py-2 px-3" 
+                                                    data-toggle="tooltip" title="Purge Ticket" 
+                                                    data-action="delete-trigger"
+                                                    data-confirm-title="Purge Support Ticket?"
+                                                    data-confirm-text="This will permanently remove the ticket from the system database."
+                                                    data-confirm-btn="Purge Ticket">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
                                         </form>
@@ -220,13 +225,13 @@
                             <i class="fas fa-toggle-on mr-2"></i> STATUS
                         </button>
                         <div class="dropdown-menu dropdown-menu-right shadow-premium-lg border-0 mb-3 rounded-15">
-                            <a class="dropdown-item py-3 px-4 font-weight-bold smallest uppercase letter-spacing-1" href="javascript:void(0)" onclick="handleBulkUpdate('status', 'open')">
+                            <a class="dropdown-item py-3 px-4 font-weight-bold smallest uppercase letter-spacing-1" href="javascript:void(0)" data-action="bulk-update" data-type="status" data-value="open">
                                 <i class="fas fa-envelope-open mr-2 text-success"></i> Re-Open Tickets
                             </a>
-                            <a class="dropdown-item py-3 px-4 font-weight-bold smallest uppercase letter-spacing-1" href="javascript:void(0)" onclick="handleBulkUpdate('status', 'in-progress')">
+                            <a class="dropdown-item py-3 px-4 font-weight-bold smallest uppercase letter-spacing-1" href="javascript:void(0)" data-action="bulk-update" data-type="status" data-value="in-progress">
                                 <i class="fas fa-spinner mr-2 text-info"></i> Shift to In-Progress
                             </a>
-                            <a class="dropdown-item py-3 px-4 font-weight-bold smallest uppercase letter-spacing-1" href="javascript:void(0)" onclick="handleBulkUpdate('status', 'closed')">
+                            <a class="dropdown-item py-3 px-4 font-weight-bold smallest uppercase letter-spacing-1" href="javascript:void(0)" data-action="bulk-update" data-type="status" data-value="closed">
                                 <i class="fas fa-archive mr-2 text-dark"></i> Close & Archive
                             </a>
                         </div>
@@ -237,10 +242,10 @@
                             <i class="fas fa-bolt mr-2"></i> PRIORITY
                         </button>
                         <div class="dropdown-menu dropdown-menu-right shadow-premium-lg border-0 mb-3 rounded-15">
-                            <a class="dropdown-item py-3 px-4 font-weight-bold smallest uppercase letter-spacing-1 text-danger" href="javascript:void(0)" onclick="handleBulkUpdate('priority', 'urgent')">
+                            <a class="dropdown-item py-3 px-4 font-weight-bold smallest uppercase letter-spacing-1 text-danger" href="javascript:void(0)" data-action="bulk-update" data-type="priority" data-value="urgent">
                                 <i class="fas fa-fire mr-2"></i> Escalate to Urgent
                             </a>
-                            <a class="dropdown-item py-3 px-4 font-weight-bold smallest uppercase letter-spacing-1 text-warning" href="javascript:void(0)" onclick="handleBulkUpdate('priority', 'high')">
+                            <a class="dropdown-item py-3 px-4 font-weight-bold smallest uppercase letter-spacing-1 text-warning" href="javascript:void(0)" data-action="bulk-update" data-type="priority" data-value="high">
                                 <i class="fas fa-arrow-up mr-2"></i> Elevate to High
                             </a>
                         </div>
@@ -249,7 +254,7 @@
             </div>
             
             <div class="d-flex align-items-center">
-                <button type="button" class="btn btn-danger-pill mr-3" onclick="handleBulkUpdate('action', 'delete')">
+                <button type="button" class="btn btn-danger-pill mr-3" data-action="bulk-update" data-type="action" data-value="delete">
                     <i class="fas fa-trash-alt mr-2"></i> PURGE SELECTION
                 </button>
                 <button type="button" class="btn btn-close-bar" id="deselectAll">
@@ -261,103 +266,6 @@
 </div>
 @stop
 
-@section('js')
-@include('admin._partials._sweetalert')
-
-<script>
-    $(function () {
-        $('[data-toggle="tooltip"]').tooltip();
-        
-        // DataTables Initialization (Resilient)
-        if (typeof $.fn.DataTable === 'function') {
-            if ($('#tickets-table tbody tr:not(.empty-state)').length > 0 && $('#tickets-table').find('i.fa-inbox').length === 0) {
-                try {
-                    $('#tickets-table').DataTable({
-                        "paging": false, 
-                        "lengthChange": false,
-                        "searching": false,
-                        "ordering": true,
-                        "info": false,
-                        "autoWidth": false,
-                        "responsive": true,
-                        "dom": 't',
-                        "language": {
-                            "search": "",
-                            "searchPlaceholder": "Search within this queue..."
-                        },
-                        "columnDefs": [
-                            { "orderable": false, "targets": 0 }
-                        ]
-                    });
-                } catch (e) {
-                    console.warn("DataTable initialization failed:", e);
-                }
-            }
-        } else {
-            console.warn("DataTable plugin not loaded.");
-        }
-
-    // Bulk Selection Logic
-    const $selectAll = $('#check-all');
-    const $bulkBar = $('#bulk-floating-bar');
-    const $selectedCount = $('#selected-count');
-
-    function updateBulkUI() {
-        const checkedCount = $('.ticket-checkbox:checked').length;
-        if (checkedCount > 0) {
-            $selectedCount.text(checkedCount);
-            if ($bulkBar.hasClass('d-none')) {
-                $bulkBar.removeClass('d-none').addClass('animate__fadeInUpCustom');
-            }
-        } else {
-            $bulkBar.addClass('d-none').removeClass('animate__fadeInUpCustom');
-        }
-    }
-
-    // Delegated Select All
-    $(document).on('change', '#check-all', function() {
-        $('.ticket-checkbox').prop('checked', this.checked);
-        updateBulkUI();
-    });
-
-    // Deselect All Button in Bar
-    $(document).on('click', '#deselectAll', function() {
-        $('.ticket-checkbox').prop('checked', false);
-        $('#check-all').prop('checked', false);
-        updateBulkUI();
-    });
-
-    // Delegated Individual Checkbox
-    $(document).on('change', '.ticket-checkbox', function() {
-        const total = $('.ticket-checkbox').length;
-        const checked = $('.ticket-checkbox:checked').length;
-        
-        $('#check-all').prop('checked', total === checked && total > 0);
-        updateBulkUI();
-    });
-
-    // Handle Bulk Update
-    window.handleBulkUpdate = function(type, value) {
-        const count = $('.ticket-checkbox:checked').length;
-        if (count === 0) return;
-
-        SellioAlert.fire({
-            title: 'Bulk Action Confirmation',
-            text: `Apply "${value.toUpperCase()}" ${type} to ${count} selected tickets?`,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: 'var(--primary)',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Execute Action',
-            backdrop: `rgba(15, 23, 42, 0.4)`
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $('#bulk-type-input').val(type);
-                $('#bulk-value-input').val(value);
-                $('#tickets-mass-action-form').submit();
-            }
-        });
-    };
-});
-</script>
-@stop
+@push('js')
+<script src="{{ asset('admin-assets/pages/tickets-index.js') }}"></script>
+@endpush

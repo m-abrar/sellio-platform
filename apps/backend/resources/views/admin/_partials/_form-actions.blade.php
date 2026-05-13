@@ -65,7 +65,11 @@
                             <i class="fas fa-copy mr-1"></i> Clone
                         </a>
                     @endif
-                    <button type="button" class="btn btn-light flex-grow-1 rounded-pill font-weight-bold small py-2 text-danger border uppercase letter-spacing-1" onclick="triggerDelete()">
+                    <button type="button" class="btn btn-light flex-grow-1 rounded-pill font-weight-bold small py-2 text-danger border uppercase letter-spacing-1" 
+                        data-action="delete-trigger" 
+                        data-form-id="delete-form"
+                        data-confirm-title="Purge {{ $label }}?"
+                        data-confirm-text="This will permanently remove the record from the platform registry.">
                         <i class="fas fa-trash-alt mr-1"></i> Purge
                     </button>
                 @endif

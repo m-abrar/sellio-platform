@@ -167,15 +167,57 @@ $(function() {
     });
 
     /**
-     * 6. Smooth Scrolling for Anchor Links
+     * 7. Centralized Action Handlers (Audit Remediation)
+     * Replaces inline 'onclick' and 'onsubmit' handlers across the dashboard.
      */
-    $('a[href^="#"]:not([href="#"])').on('click', function(event) {
-        var target = $(this.getAttribute('href'));
-        if (target.length) {
-            event.preventDefault();
-            $('html, body').stop().animate({
-                scrollTop: target.offset().top - 100
-            }, 800);
+    
+    // Delegated listener for generic delete triggers
+    $(document).on('click', '[data-action="delete-trigger"]', function(e) {
+        e.preventDefault();
+        const btn = $(this);
+        const formId = btn.data('form-id');
+        const title = btn.data('confirm-title') || 'Are you sure?';
+        const text = btn.data('confirm-text') || 'This action cannot be undone.';
+        const confirmBtn = btn.data('confirm-btn') || 'Yes, Delete It';
+
+        if (window.PremiumConfirm) {
+            PremiumConfirm.fire({
+                title: title,
+                text: text,
+                icon: 'warning',
+                iconColor: '#f59e0b',
+                showCancelButton: true,
+                confirmButtonText: `<i class="fas fa-trash-alt mr-2"></i> ${confirmBtn}`,
+                cancelButtonText: 'Cancel',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const form = formId ? document.getElementById(formId) : btn.closest('form');
+                    if (form) form.submit();
+                }
+            });
         }
     });
+
+    // Centralized confirmation helper (legacy support)
+    window.confirmAction = function(options) {
+        if (!window.PremiumConfirm) return confirm(options.text || 'Are you sure?');
+        
+        return PremiumConfirm.fire({
+            title: options.title || 'Are you sure?',
+            text: options.text || '',
+            icon: options.icon || 'warning',
+            showCancelButton: true,
+            confirmButtonText: options.confirmButtonText || 'Confirm',
+            cancelButtonText: options.cancelButtonText || 'Cancel',
+            reverseButtons: true
+    // Global Image Fallback Protocol
+    window.addEventListener('error', function(e) {
+        if (e.target.tagName === 'IMG') {
+            const fallback = e.target.dataset.fallback || '/images/fallbacks/default.jpg';
+            if (e.target.src !== fallback) {
+                e.target.src = fallback;
+            }
+        }
+    }, true);
 });

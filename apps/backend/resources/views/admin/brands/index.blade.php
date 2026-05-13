@@ -74,9 +74,9 @@
 
                                 <td class="text-center align-middle">
                                     <div class="table-img-preview shadow-sm">
-                                        <img src="{{ $brand->thumbnail_url }}" 
-                                             alt="{{ $brand->title }}" 
-                                             onerror="this.src='{{ asset('images/fallbacks/default.jpg') }}'">
+                                         <img src="{{ $brand->thumbnail_url }}" 
+                                              alt="{{ $brand->title }}" 
+                                              data-fallback="{{ asset('images/fallbacks/default.jpg') }}">
                                     </div>
                                 </td>
 
@@ -100,7 +100,13 @@
                                         <a href="{{ route('admin.brands.edit', $brand->id) }}" class="btn text-info" data-toggle="tooltip" title="{{ __('Modify Identity') }}"><i class="fas fa-edit"></i></a>
                                         <form id="delete-brand-{{ $brand->id }}" action="{{ route('admin.brands.destroy', $brand->id) }}" method="POST" class="d-inline">
                                             @csrf @method('DELETE')
-                                            <button type="button" class="btn text-danger" data-toggle="tooltip" title="{{ __('Remove Brand') }}" onclick="confirmDelete('delete-brand-{{ $brand->id }}', '{{ __('Purge Brand?') }}', '{{ __('This action will remove the manufacturer identity and its associations.') }}')"><i class="fas fa-trash-alt"></i></button>
+                                             <button type="button" class="btn text-danger" 
+                                                    data-toggle="tooltip" title="{{ __('Remove Brand') }}" 
+                                                    data-action="delete-trigger"
+                                                    data-confirm-title="{{ __('Purge Brand?') }}"
+                                                    data-confirm-text="{{ __('This action will remove the manufacturer identity and its associations.') }}">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
                                         </form>
                                     </div>
                                 </td>
@@ -123,7 +129,6 @@
         </div>
 
         
-        @include('admin._partials._sweetalert')
     </div>
 </div>
 @endsection
@@ -138,36 +143,12 @@
         $(function () {
             if ($('#brands-table tbody tr:not(.empty-state)').length > 0) {
                 $('#brands-table').DataTable({
-                    "paging": true,
-                    "lengthChange": true,
-                    "searching": true,
-                    "ordering": true,
-                    "info": true,
-                    "autoWidth": false,
-                    "responsive": true,
-                    "dom": '<"row"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-6"l>>' +
-                           '<"row"<"col-sm-12"tr>>' +
-                           '<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
-                    "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
                     "order": [[1, "asc"]],
                     "columnDefs": [
                         { "orderable": false, "targets": [0, 4] }
-                    ],
-                    "language": {
-                        "search": "",
-                        "searchPlaceholder": "Search brands...",
-                        "paginate": {
-                            "previous": "<i class='fas fa-angle-left'></i>",
-                            "next": "<i class='fas fa-angle-right'></i>"
-                        },
-                        "lengthMenu": "_MENU_ per page"
-                    }
+                    ]
                 });
-                $('.dataTables_filter input').addClass('form-control form-control-premium shadow-none border-light');
-                $('.dataTables_length select').addClass('form-control form-control-premium shadow-none border-light');
             }
-            
-            $('[data-toggle="tooltip"]').tooltip();
         });
     </script>
 @endsection
