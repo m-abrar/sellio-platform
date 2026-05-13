@@ -254,30 +254,56 @@ h1 {
 /* ==========================================================================
     8. FLOATING UI & POPUPS
    ========================================================================== */
+/* ==========================================================================
+    8. FLOATING UI & POPUPS
+   ========================================================================== */
 .floating-buy-bar {
-    position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-    width: 90%; max-width: 850px; background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-    border: 1px solid rgba(0, 0, 0, 0.08); border-radius: 100px;
-    z-index: 9999; padding: 10px 20px; display: flex; align-items: center;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1); transition: all 0.3s ease;
+    position: fixed;
+    bottom: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
+    min-width: 320px;
+    max-width: 650px;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 100px;
+    z-index: 9999;
+    padding: 10px 24px;
+    display: none; /* Controlled via JS */
+    align-items: center;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+    transition: all 0.4s var(--ease-snap);
 }
 
-.floating-buy-bar:hover { transform: translateX(-50%) translateY(-5px); }
+.floating-buy-bar:hover {
+    transform: translateX(-50%) translateY(-8px);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15), inset 0 0 0 1px rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.98);
+}
 
 .exit-popup-overlay { 
     position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-    background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(5px); 
+    background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(10px); 
     z-index: 10000; display: none; align-items: center; justify-content: center; 
 }
 
 .exit-popup-content { 
-    background: var(--white); width: 90%; max-width: 700px; 
-    border-radius: 30px; position: relative; overflow: hidden; 
-    transform: scale(0.9); transition: transform 0.4s var(--ease-snap);
+    background: var(--white); width: 95%; max-width: 700px; 
+    border-radius: 40px; position: relative; overflow: hidden; 
+    box-shadow: 0 50px 100px rgba(0,0,0,0.3);
 }
 
-.close-exit { position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 2rem; color: #cbd5e1; cursor: pointer; }
+.close-exit { 
+    position: absolute; top: 20px; right: 25px; 
+    background: rgba(0,0,0,0.05); border: none; width: 40px; height: 40px; 
+    border-radius: 50%; font-size: 1.2rem; color: var(--text-muted); 
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s ease;
+}
+.close-exit:hover { background: rgba(0,0,0,0.1); color: var(--secondary-sellio); transform: rotate(90deg); }
 
 /* Typewriter */
 #typewriter { border-right: 3px solid var(--primary-sellio); animation: blink 0.8s step-end infinite; }
@@ -286,52 +312,16 @@ h1 {
 /* ==========================================================================
     9. RESPONSIVE ADJUSTMENTS
    ========================================================================== */
+@media (max-width: 991px) {
+    h1 { font-size: 3.5rem; }
+    .display-3 { font-size: 3.5rem; }
+    .py-100 { padding: 70px 0; }
+}
+
 @media (max-width: 768px) {
-    .floating-buy-bar { bottom: 10px; width: 95%; border-radius: 20px; flex-direction: column; gap: 10px; padding: 15px; }
-    .floating-buy-bar .d-md-flex { display: none !important; }
-    body { padding-bottom: 140px; }
+    h1 { font-size: 2.8rem; }
     .display-3 { font-size: 2.8rem; }
-    .wheel-container { height: 400px; }
-}
-
-
-@media (max-width: 768px) {
-    body { padding-bottom: 120px; } /* Space for the floating bar */
-}
-
-
-
-/* Update Section 8 & 9 with these specific fixes */
-
-.floating-buy-bar {
-    position: fixed; 
-    bottom: 20px; 
-    left: 50%; 
-    /* This ensures it stays centered even when the animation triggers */
-    transform: translateX(-50%) translateY(0);
-    width: 90%; 
-    max-width: 850px; 
-    background: rgba(255, 255, 255, 0.95); /* Increased slightly for readability */
-    backdrop-filter: blur(15px); 
-    -webkit-backdrop-filter: blur(15px);
-    border: 1px solid rgba(0, 0, 0, 0.08); 
-    border-radius: 100px;
-    z-index: 9999; 
-    padding: 12px 24px; 
-    display: flex; 
-    align-items: center;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1); 
-    transition: transform 0.3s var(--ease-snap), box-shadow 0.3s ease;
-}
-
-/* Corrected Hover Logic */
-.floating-buy-bar:hover { 
-    transform: translateX(-50%) translateY(-8px); 
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-}
-
-/* Optimized Mobile Media Query */
-@media (max-width: 768px) {
+    .display-5 { font-size: 2.2rem; }
     .floating-buy-bar { 
         bottom: 15px; 
         width: 94%; 
@@ -340,78 +330,27 @@ h1 {
         gap: 8px; 
         padding: 15px; 
     }
-    
-    /* Hide the text info on mobile to keep the bar slim */
-    .floating-buy-bar .d-md-flex { 
-        display: none !important; 
-    }
-    
-    /* Add padding to body so the bar doesn't cover footer content */
-    body { 
-        padding-bottom: 160px !important; 
-    }
-    
-    .display-3 { font-size: 2.8rem; }
-    .wheel-container { height: 400px; }
+    .floating-buy-bar .d-md-flex { display: none !important; }
+    body { padding-bottom: 160px !important; }
+    .wheel-container { height: 400px; margin-top: 20px; }
+    .card-3d { max-width: 100%; }
 }
 
-
-.floating-buy-bar {
-    position: fixed;
-    bottom: 25px; /* Lifted slightly higher off the edge */
-    left: 50%;
-    transform: translateX(-50%);
-    width: auto; /* Let content dictate width */
-    min-width: 320px;
-    max-width: 600px; /* Reduced from 850px */
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(0, 0, 0, 0.05);
-    border-radius: 50px; /* Fully rounded pill */
-    z-index: 9999;
-    padding: 8px 12px; /* Much tighter padding */
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.floating-buy-bar:hover {
-    transform: translateX(-50%) translateY(-5px);
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
-}
-
-/* Mobile Tweak */
-@media (max-width: 576px) {
-    .floating-buy-bar {
-        width: 90%;
-        bottom: 15px;
-        padding: 10px;
-    }
-}
-
-/* Custom Utility for the Brand Green */
+/* ==========================================================================
+    10. ADVANCED UTILITIES & POLISH
+   ========================================================================== */
 .bg-sellio-solid { 
     background-color: var(--primary-sellio) !important; 
     color: var(--white) !important;
 }
 
-
-/* Fix the missing green background class */
-.bg-sellio-solid { 
-    background-color: var(--primary-sellio) !important; 
-    color: var(--white) !important; 
-}
-
-/* Ensure buttons always center their content internally */
 .btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    line-height: 1; /* Prevents text from sitting too high or low */
+    line-height: 1;
 }
 
-/* ==========================================================================
-    10. ADVANCED LAYOUT (SHAPES & OVERLAPS)
-   ========================================================================== */
 .custom-shape-divider-bottom-1715541814 {
     position: absolute;
     bottom: 0;
@@ -431,14 +370,24 @@ h1 {
 
 .section-overlap { margin-top: -80px; position: relative; z-index: 10; }
 
-.bg-hero { background: #fff; padding-bottom: 150px; }
-.bg-automation { background: #f8fafc; }
-.bg-light-pattern { background-color: #f8fafc; background-image: radial-gradient(var(--primary-sellio) 0.5px, transparent 0.5px); background-size: 20px 20px; opacity: 0.1; }
+.bg-light-pattern { 
+    background-color: #f8fafc; 
+    background-image: radial-gradient(var(--primary-sellio) 0.5px, transparent 0.5px); 
+    background-size: 20px 20px; 
+    opacity: 0.1; 
+}
 
 .card-luxury {
     background: var(--white);
     border: 1px solid var(--border-light);
     box-shadow: var(--shadow-premium);
-    transition: all 0.3s var(--ease-snap);
+    transition: all 0.4s var(--ease-snap);
 }
-.card-luxury:hover { transform: translateY(-10px); box-shadow: var(--shadow-executive); }
+.card-luxury:hover { 
+    transform: translateY(-12px) scale(1.02); 
+    box-shadow: var(--shadow-executive); 
+}
+
+.shadow-premium-sm { box-shadow: 0 10px 25px -5px rgba(0,0,0,0.03); }
+.hover-translate-y:hover { transform: translateY(-8px); }
+.transition-all { transition: all 0.3s ease; }
