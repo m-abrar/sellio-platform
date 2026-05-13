@@ -131,25 +131,11 @@
 @include('admin._partials._toggle-card-css')
 @endsection
 
-@section('js')
+@push('js')
+<script src="{{ asset('admin-assets/pages/taxonomy-form.js') }}"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    $(document).ready(function () {
         $('.select2').select2({ theme: 'bootstrap4', width: '100%' });
-
-        // Auto-generate Slug from Title
-        const titleInput = document.getElementById('title');
-        const slugInput = document.getElementById('slug');
-        
-        if (titleInput && slugInput) {
-            titleInput.addEventListener('input', function () {
-                @if(!$blog->exists)
-                    let slug = this.value.toLowerCase()
-                        .replace(/[^a-z0-9]+/g, '-')
-                        .replace(/^-|-$/g, '');
-                    slugInput.value = slug;
-                @endif
-            });
-        }
     });
 </script>
-@endsection
+@endpush

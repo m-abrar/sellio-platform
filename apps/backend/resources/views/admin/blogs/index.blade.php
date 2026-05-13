@@ -118,11 +118,13 @@
                                            data-toggle="tooltip" title="{{ __('Edit Article') }}">
                                             <i class="fas fa-pencil-alt"></i>
                                         </a>
-                                        <form action="{{ route('admin.blogs.destroy', $blog->id) }}" method="POST" class="d-inline">
+                                        <form id="delete-blog-{{ $blog->id }}" action="{{ route('admin.blogs.destroy', $blog->id) }}" method="POST" class="d-inline">
                                             @csrf @method('DELETE')
-                                            <button type="submit" class="btn btn-white btn-sm text-danger py-2 px-3" 
+                                            <button type="button" class="btn btn-white btn-sm text-danger py-2 px-3" 
                                                     data-toggle="tooltip" title="{{ __('Delete Post') }}"
-                                                    onclick="return confirm('{{ __('Permanently remove this article?') }}')">
+                                                    data-action="delete-trigger"
+                                                    data-confirm-title="{{ __('Purge Article?') }}"
+                                                    data-confirm-text="{{ __('This action will permanently remove the article identity and its associated media.') }}">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
                                         </form>
@@ -156,16 +158,11 @@
 @section('js')
 <script>
     $(function () {
-        $('[data-toggle="tooltip"]').tooltip();
-        
-        if ($('#blogs-table tbody tr').length > 0 && !$('.empty-state').length) {
+        if ($('#blogs-table tbody tr:not(.empty-state)').length > 0) {
             $('#blogs-table').DataTable({
                 "paging": false,
                 "info": false,
-                "searching": false,
-                "ordering": true,
-                "autoWidth": false,
-                "responsive": true
+                "searching": false
             });
         }
     });

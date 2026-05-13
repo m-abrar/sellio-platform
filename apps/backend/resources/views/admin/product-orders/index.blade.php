@@ -101,7 +101,7 @@
                                                 $thumbnail = $firstItem && $firstItem->product ? $firstItem->product->thumbnail_url : asset('images/fallbacks/default.jpg');
                                             @endphp
                                             <div class="table-img-preview shadow-sm mx-auto">
-                                                <img src="{{ $thumbnail }}" onerror="this.src='{{ asset('images/fallbacks/default.jpg') }}'">
+                                                <img src="{{ $thumbnail }}" data-fallback="{{ asset('images/fallbacks/default.jpg') }}">
                                             </div>
                                         </td>
                                         <td class="align-middle">
@@ -180,17 +180,17 @@
                             </button>
                             <div class="dropdown-menu dropdown-menu-right shadow-premium-lg border-0 mb-3 rounded-xl">
                                 <h6 class="dropdown-header text-uppercase smallest letter-spacing-1 text-muted mb-2">{{ __('Transition Lifecycle') }}</h6>
-                                <a class="dropdown-item py-3 px-4 font-weight-bold smallest uppercase letter-spacing-1" href="javascript:void(0)" onclick="handleBulkStatus('pending')">
+                                 <a class="dropdown-item py-3 px-4 font-weight-bold smallest uppercase letter-spacing-1" href="javascript:void(0)" data-action="bulk-status-trigger" data-status="pending">
                                     <i class="fas fa-clock mr-2 text-warning"></i> {{ __('Set to Pending') }}
                                 </a>
-                                <a class="dropdown-item py-3 px-4 font-weight-bold smallest uppercase letter-spacing-1" href="javascript:void(0)" onclick="handleBulkStatus('processing')">
+                                <a class="dropdown-item py-3 px-4 font-weight-bold smallest uppercase letter-spacing-1" href="javascript:void(0)" data-action="bulk-status-trigger" data-status="processing">
                                     <i class="fas fa-sync mr-2 text-info"></i> {{ __('Start Processing') }}
                                 </a>
-                                <a class="dropdown-item py-3 px-4 font-weight-bold smallest uppercase letter-spacing-1" href="javascript:void(0)" onclick="handleBulkStatus('completed')">
+                                <a class="dropdown-item py-3 px-4 font-weight-bold smallest uppercase letter-spacing-1" href="javascript:void(0)" data-action="bulk-status-trigger" data-status="completed">
                                     <i class="fas fa-check-circle mr-2 text-success"></i> {{ __('Mark Completed') }}
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item py-3 px-4 font-weight-bold smallest uppercase letter-spacing-1 text-danger" href="javascript:void(0)" onclick="handleBulkStatus('cancelled')">
+                                <a class="dropdown-item py-3 px-4 font-weight-bold smallest uppercase letter-spacing-1 text-danger" href="javascript:void(0)" data-action="bulk-status-trigger" data-status="cancelled">
                                     <i class="fas fa-times-circle mr-2"></i> {{ __('Cancel Orders') }}
                                 </a>
                             </div>
@@ -208,81 +208,6 @@
     </div>
 @endsection
 
-@section('js')
-@include('admin._partials._sweetalert')
-<script>
-    $(function () {
-        if (typeof $.fn.select2 === 'function') {
-            $('.select2').select2({ theme: 'bootstrap4', width: '100%' });
-        }
-        $('[data-toggle="tooltip"]').tooltip();
-
-        const $bulkBar = $('#bulk-floating-bar');
-        const $selectedCount = $('#selected-count');
-
-        function updateBulkUI() {
-            const checkedCount = $('.order-checkbox:checked').length;
-            if (checkedCount > 0) {
-                $selectedCount.text(checkedCount);
-                if ($bulkBar.hasClass('d-none')) {
-                    $bulkBar.removeClass('d-none').addClass('animate__fadeInUpCustom');
-                }
-            } else {
-                $bulkBar.addClass('d-none').removeClass('animate__fadeInUpCustom');
-            }
-        }
-
-        $(document).on('change', '#selectAll', function() {
-            $('.order-checkbox').prop('checked', this.checked);
-            updateBulkUI();
-        });
-
-        $(document).on('click', '#deselectAll', function() {
-            $('.order-checkbox').prop('checked', false);
-            $('#selectAll').prop('checked', false);
-            updateBulkUI();
-        });
-
-        $(document).on('change', '.order-checkbox', function() {
-            const $orderCheckboxes = $('.order-checkbox');
-            if (!this.checked) $('#selectAll').prop('checked', false);
-            if ($('.order-checkbox:checked').length === $orderCheckboxes.length) $('#selectAll').prop('checked', true);
-            updateBulkUI();
-        });
-
-        window.handleBulkStatus = function(status) {
-            SellioAlert.fire({
-                title: '{{ __('Update') }} ' + $('.order-checkbox:checked').length + ' {{ __('orders?') }}',
-                text: "{{ __('Lifecycle status will be transitioned to') }} " + status.toUpperCase(),
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: '{{ __('TRANSITION ALL') }}',
-                cancelButtonText: '{{ __('ABORT') }}'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $('#bulk-status-input').val(status);
-                    $('#bulk-action-form').submit();
-                }
-            });
-        };
-
-        if ($('#orders-table tbody tr:not(.empty-state)').length > 0) {
-            $('#orders-table').DataTable({
-                "paging": false,
-                "lengthChange": false,
-                "searching": true,
-                "ordering": true,
-                "info": false,
-                "autoWidth": false,
-                "responsive": true,
-                "dom": '<"row pt-3"<"col-sm-12"f>>t',
-                "language": {
-                    "search": "",
-                    "searchPlaceholder": "Search commerce registry..."
-                }
-            });
-            $('.dataTables_filter input').addClass('form-control form-control-premium shadow-none border-light mb-3');
-        }
-    });
-</script>
-@endsection
+@push('js')
+<script src="{{ asset('admin-assets/pages/product-orders-index.js') }}"></script>
+@endpush

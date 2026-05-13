@@ -236,13 +236,4 @@
 
 @stop
 
-@section('css')
-<style>
-    .bg-dark-soft { background: rgba(30, 41, 59, 0.05); }
-    .badge-success-light { background: rgba(16, 185, 129, 0.1); color: #059669; }
-    .badge-danger-light { background: rgba(239, 68, 68, 0.1); color: #dc2626; }
-    .badge-warning-light { background: rgba(245, 158, 11, 0.1); color: #d97706; }
-    .badge-primary-light { background: rgba(70, 165, 172, 0.1); color: #3d8f95; }
-    .badge-secondary-soft { background: #f1f5f9; color: #64748b; }
-</style>
 @stop

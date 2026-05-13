@@ -412,48 +412,11 @@
 @endsection
 
 @push('js')
-<script>
-    $(document).ready(function () {
-        // Shared Slug Logic
-        const titleInput = $('#title');
-        const slugInput = $('#slug');
-
-        titleInput.on('input', function () {
-            let slug = $(this).val().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-            slugInput.val(slug);
-        });
-
-        $('.select2').select2({ theme: 'bootstrap4', width: '100%' });
-    });
-</script>
-@include('admin._partials._toggle-card-css')
+<script src="{{ asset('admin-assets/pages/taxonomy-form.js') }}"></script>
 @endpush
 
 @if($property->exists)
-    <form id="delete-form" action="{{ route('admin.properties.destroy', $property->id) }}" method="POST" class="d-none">
+    <form id="delete-trigger-form" action="{{ route('admin.properties.destroy', $property->id) }}" method="POST" class="d-none">
         @csrf @method('DELETE')
     </form>
-    
-    <script>
-        function triggerDelete() {
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "Permanently delete this property listing?",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#ef4444',
-                cancelButtonColor: '#64748b',
-                confirmButtonText: 'Yes, delete it!',
-                customClass: {
-                    popup: 'rounded-xl',
-                    confirmButton: 'rounded-pill px-4',
-                    cancelButton: 'rounded-pill px-4'
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById('delete-form').submit();
-                }
-            })
-        }
-    </script>
 @endif

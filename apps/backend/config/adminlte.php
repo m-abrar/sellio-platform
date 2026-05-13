@@ -361,6 +361,11 @@ return [
                     'asset' => true,
                     'location' => 'admin-assets/global.js',
                 ],
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'admin-assets/global-uploader.js',
+                ],
             ],
         ],
         // -------------------------------------

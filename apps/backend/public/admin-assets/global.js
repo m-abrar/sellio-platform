@@ -211,6 +211,9 @@ $(function() {
             confirmButtonText: options.confirmButtonText || 'Confirm',
             cancelButtonText: options.cancelButtonText || 'Cancel',
             reverseButtons: true
+        });
+    };
+
     // Global Image Fallback Protocol
     window.addEventListener('error', function(e) {
         if (e.target.tagName === 'IMG') {

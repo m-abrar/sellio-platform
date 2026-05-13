@@ -76,7 +76,7 @@
                                     <div class="table-img-preview shadow-sm">
                                         <img src="{{ $location->thumbnail_url }}" 
                                              alt="{{ $location->title ?? 'Location' }}" 
-                                             onerror="this.src='{{ asset('images/fallbacks/default.jpg') }}'">
+                                             data-fallback="{{ asset('images/fallbacks/default.jpg') }}">
                                     </div>
                                 </td>
                                 
@@ -107,7 +107,13 @@
                                         <a href="{{ route('admin.locations.edit', $location->id) }}" class="btn text-info" data-toggle="tooltip" title="{{ __('Modify Details') }}"><i class="fas fa-edit"></i></a>
                                         <form id="delete-location-{{ $location->id }}" action="{{ route('admin.locations.destroy', $location->id) }}" method="POST" class="d-inline">
                                             @csrf @method('DELETE')
-                                            <button type="button" class="btn text-danger" data-toggle="tooltip" title="{{ __('Remove Location') }}" onclick="confirmDelete('delete-location-{{ $location->id }}', '{{ __('Purge Geographic Area?') }}', '{{ __('This action will remove the regional operation hub and its associations.') }}')"><i class="fas fa-trash-alt"></i></button>
+                                            <button type="button" class="btn text-danger" 
+                                                    data-toggle="tooltip" title="{{ __('Remove Location') }}" 
+                                                    data-action="delete-trigger"
+                                                    data-confirm-title="{{ __('Purge Geographic Area?') }}"
+                                                    data-confirm-text="{{ __('This action will remove the regional operation hub and its associations.') }}">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
                                         </form>
                                     </div>
                                 </td>
@@ -130,7 +136,6 @@
         </div>
 
         
-        @include('admin._partials._sweetalert')
     </div>
 </div>
 @endsection
@@ -144,35 +149,12 @@
         $(function () {
             if ($('#locations-table tbody tr:not(.empty-state)').length > 0) {
                 $('#locations-table').DataTable({
-                    "paging": true,
-                    "lengthChange": true,
-                    "searching": true,
-                    "ordering": true,
-                    "info": true,
-                    "autoWidth": false,
-                    "responsive": true,
-                    "dom": '<"row"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-6"l>>' +
-                           '<"row"<"col-sm-12"tr>>' +
-                           '<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
-                    "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
                     "order": [[1, "asc"]],
                     "columnDefs": [
                         { "orderable": false, "targets": [0, 3, 5] }
-                    ],
-                    "language": {
-                        "search": "",
-                        "searchPlaceholder": "Search locations...",
-                        "paginate": {
-                            "previous": "<i class='fas fa-angle-left'></i>",
-                            "next": "<i class='fas fa-angle-right'></i>"
-                        },
-                        "lengthMenu": "_MENU_ per page"
-                    }
+                    ]
                 });
-                $('.dataTables_filter input').addClass('form-control form-control-premium shadow-none border-light');
-                $('.dataTables_length select').addClass('form-control form-control-premium shadow-none border-light');
             }
-            $('[data-toggle="tooltip"]').tooltip();
         });
     </script>
 @endsection
