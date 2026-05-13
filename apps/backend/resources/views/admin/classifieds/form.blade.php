@@ -316,44 +316,7 @@
 @endsection
 
 @push('js')
-<script>
-    $(document).ready(function () { 
-        $('.select2').select2({ theme: 'bootstrap4', width: '100%' }); 
-
-        const titleInput = $('#title');
-        const slugInput = $('#slug');
-
-        titleInput.on('input', function () {
-            if(!slugInput.data('edited')){
-                let slug = $(this).val().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-                slugInput.val(slug);
-            }
-        });
-
-        slugInput.on('change', function() { $(this).data('edited', true); });
-    });
-
-    function triggerDelete() {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "Permanently delete this classified listing?",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#ef4444',
-            cancelButtonColor: '#64748b',
-            confirmButtonText: 'Yes, delete it!',
-            customClass: {
-                popup: 'rounded-xl',
-                confirmButton: 'rounded-pill px-4',
-                cancelButton: 'rounded-pill px-4'
-            }
-        }).then((result) => {
-            if (result.isConfirmed) {
-                document.getElementById('delete-form').submit();
-            }
-        })
-    }
-</script>
+<script src="{{ asset('admin-assets/pages/classified-form.js') }}"></script>
 @endpush
 
 @if($classified->exists)

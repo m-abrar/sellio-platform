@@ -214,6 +214,17 @@ $(function() {
         });
     };
 
+    // Global Logout Orchestration
+    $(document).on('click', '#admin-logout-link', function(e) {
+        e.preventDefault();
+        const $form = $('#admin-logout-form');
+        if ($form.length) {
+            $form.submit();
+        } else {
+            window.location.href = $(this).attr('href');
+        }
+    });
+
     // Global Image Fallback Protocol
     window.addEventListener('error', function(e) {
         if (e.target.tagName === 'IMG') {

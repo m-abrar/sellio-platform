@@ -144,9 +144,9 @@
                                         {{-- Delete Button --}}
                                         <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="d-inline">
                                             @csrf @method('DELETE')
-                                            <button type="submit" class="btn btn-white btn-sm text-danger py-2 px-3" 
+                                            <button type="button" class="btn btn-white btn-sm text-danger py-2 px-3" 
                                                     data-toggle="tooltip" title="{{ __('Delete User') }}"
-                                                    onclick="return confirm('{{ __('Permanently delete this user account?') }}')">
+                                                    data-action="delete-trigger">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
                                         </form>
@@ -172,33 +172,5 @@
 @endsection
 
 @section('js')
-<script>
-    $(function () {
-        $('[data-toggle="tooltip"]').tooltip();
-
-        if ($('#users-table tbody tr:not(.empty-state)').length > 0) {
-            $('#users-table').DataTable({
-                "paging": true,
-                "lengthChange": true,
-                "searching": true,
-                "ordering": true,
-                "info": true,
-                "autoWidth": false,
-                "responsive": true,
-                "dom": '<"row pt-3 px-4"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6 text-right"f>>' +
-                       '<"row"<"col-sm-12"tr>>' +
-                       '<"row pb-3 px-4"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
-                "language": {
-                    "search": "",
-                    "searchPlaceholder": "Search by name or email...",
-                    "paginate": {
-                        "previous": "<i class='fas fa-angle-left'></i>",
-                        "next": "<i class='fas fa-angle-right'></i>"
-                    }
-                }
-            });
-            $('.dataTables_filter input').addClass('form-control shadow-none border-light w-250-p');
-        }
-    });
-</script>
+<script src="{{ asset('admin-assets/pages/users.js') }}"></script>
 @endsection

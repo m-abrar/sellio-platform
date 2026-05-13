@@ -158,7 +158,7 @@
                                                         <label class="custom-control-label" for="attr_v_{{ $vIndex }}"></label>
                                                     </div>
                                                 </td>
-                                                <td class="px-4 py-3 text-center"><button type="button" class="btn btn-danger btn-xs rounded-circle" onclick="removeRow(this)"><i class="fas fa-trash"></i></button></td>
+                                                <td class="px-4 py-3 text-center"><button type="button" class="btn btn-danger btn-xs rounded-circle" data-action="remove-row"><i class="fas fa-trash"></i></button></td>
                                             </tr>
                                             @php $vIndex++; @endphp
                                         @endforeach
@@ -211,7 +211,7 @@
                                                         <label class="custom-control-label" for="addon_r_{{ $aIndex }}"></label>
                                                     </div>
                                                 </td>
-                                                <td class="px-4 py-3 text-center"><button type="button" class="btn btn-danger btn-xs rounded-circle" onclick="removeRow(this)"><i class="fas fa-trash"></i></button></td>
+                                                <td class="px-4 py-3 text-center"><button type="button" class="btn btn-danger btn-xs rounded-circle" data-action="remove-row"><i class="fas fa-trash"></i></button></td>
                                             </tr>
                                             @php $aIndex++; @endphp
                                         @endforeach

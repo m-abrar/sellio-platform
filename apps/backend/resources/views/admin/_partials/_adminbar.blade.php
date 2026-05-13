@@ -124,15 +124,4 @@
   </div>
 </div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const logoutLink = document.getElementById('admin-logout-link');
-        const logoutForm = document.getElementById('admin-logout-form');
-        if (logoutLink && logoutForm) {
-            logoutLink.addEventListener('click', function(e) {
-                e.preventDefault();
-                logoutForm.submit();
-            });
-        }
-    });
-</script>
+@stop
