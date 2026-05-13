@@ -72,7 +72,7 @@
                             <tr>
                                 <td class="text-center align-middle pl-4">
                                     <div class="table-img-preview shadow-sm mx-auto">
-                                        <img src="{{ $ad->thumbnail_url ?? asset('images/placeholder.png') }}" onerror="this.src='{{ asset('images/fallbacks/default.jpg') }}'">
+                                        <img src="{{ $ad->thumbnail_url ?? asset('images/placeholder.png') }}" data-fallback="{{ asset('images/fallbacks/default.jpg') }}">
                                     </div>
                                 </td>
                                 <td class="align-middle">
@@ -114,7 +114,9 @@
                                         <a href="{{ route('admin.classifieds.duplicate', $ad->id) }}" class="btn text-success" data-toggle="tooltip" title="Clone Entry"><i class="fas fa-copy"></i></a>
                                         <form action="{{ route('admin.classifieds.destroy', $ad->id) }}" method="POST" class="d-inline">
                                             @csrf @method('DELETE')
-                                            <button type="submit" class="btn text-danger" data-toggle="tooltip" title="Purge Ad" onclick="return confirm('Permanently delete this classified ad?')"><i class="fas fa-trash-alt"></i></button>
+                                            <button type="button" class="btn text-danger" data-toggle="tooltip" title="Purge Ad" data-action="delete-trigger">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
                                         </form>
                                     </div>
                                 </td>
@@ -142,37 +144,23 @@
         @endif
     </div>
 </div>
-@include('admin._partials._sweetalert-delete')
 @endsection
 
-@section('js')
+@push('js')
 <script>
     $(function () {
-        if (typeof $.fn.select2 === 'function') {
-            $('.select2').select2({ theme: 'bootstrap4', width: '100%' });
-        }
-        $('[data-toggle="tooltip"]').tooltip();
-
         if ($('#classifieds-table tbody tr:not(.empty-state)').length > 0) {
             $('#classifieds-table').DataTable({
                 "paging": false,
-                "lengthChange": false,
                 "searching": true,
-                "ordering": true,
-                "info": false,
-                "autoWidth": false,
-                "responsive": true,
-                "dom": '<"row pt-3"<"col-sm-12"f>>t',
-                "language": {
-                    "search": "",
-                    "searchPlaceholder": "Search marketplace registry..."
-                }
+                "columnDefs": [
+                    { "orderable": false, "targets": [0, 5] }
+                ]
             });
-            $('.dataTables_filter input').addClass('form-control form-control-premium shadow-none border-light mb-3');
         }
     });
 </script>
-@endsection
+@endpush
 
 @section('css')
 @include('admin._partials._toggle-card-css')

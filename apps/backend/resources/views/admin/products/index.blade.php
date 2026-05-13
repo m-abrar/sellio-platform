@@ -73,7 +73,7 @@
                                 <td class="text-center align-middle pl-4">
                                     <div class="table-img-preview shadow-sm mx-auto">
                                         <img src="{{ $product->getFirstMediaUrl('main_image', 'product_thumbnail') ?: asset('assets/defaults/placeholder.png') }}" 
-                                             alt="{{ $product->title }}" onerror="this.src='{{ asset('images/fallbacks/default.jpg') }}'">
+                                             alt="{{ $product->title }}" data-fallback="{{ asset('images/fallbacks/default.jpg') }}">
                                     </div>
                                 </td>
 
@@ -147,12 +147,11 @@
                                         </a>
                                         <form action="{{ route('admin.products.destroy', $product->id) }}" 
                                               method="POST" 
-                                              class="d-inline"
-                                              onsubmit="return confirm('Archive this product and remove from catalog?')">
+                                              class="d-inline">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn text-danger" 
-                                                    data-toggle="tooltip" title="Purge Product">
+                                            <button type="button" class="btn text-danger" 
+                                                    data-toggle="tooltip" title="Purge Product" data-action="delete-trigger">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
                                         </form>
@@ -184,25 +183,19 @@
 </div>
 @endsection
 
-@section('js')
+@push('js')
     <script>
         $(function () {
-            if (typeof $.fn.select2 === 'function') {
-                $('.select2').select2({ theme: 'bootstrap4', width: '100%' });
-            }
-            $('[data-toggle="tooltip"]').tooltip();
-
             if ($('#products-table tbody tr:not(.empty-state)').length > 0) {
                 $('#products-table').DataTable({
                     "paging": false,
-                    "lengthChange": false,
-                    "searching": false,
-                    "ordering": true,
                     "info": false,
-                    "autoWidth": false,
-                    "responsive": true
+                    "searching": false,
+                    "columnDefs": [
+                        { "orderable": false, "targets": [0, 5] }
+                    ]
                 });
             }
         });
     </script>
-@endsection
+@endpush

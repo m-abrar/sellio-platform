@@ -19,11 +19,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
-    <style>
-        #master-calendar { background: transparent; padding: 1.5rem; border-radius: var(--radius-md); }
-        .fc { font-family: var(--font-heading) !important; }
-        .fc .fc-toolbar-title { font-weight: 700; color: var(--dark); font-size: 1.25rem !important; }
-    </style>
 @stop
 
 @section('content_header')
@@ -85,68 +80,14 @@
 </div>
 @stop
 
-@section('js')
+@push('js')
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const data = @json($metrics['js_data']);
-            
-            // Dashboard Clock
-            function updateClock() {
-                const now = new Date();
-                document.getElementById('dashboard-clock').textContent = now.toLocaleTimeString();
-            }
-            setInterval(updateClock, 1000);
-            updateClock();
-
-            // DRY Chart Configuration
-            const baseOptions = {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { display: true, position: 'bottom', labels: { usePointStyle: true, padding: 20, font: { family: "'Outfit', sans-serif", size: 11 } } } }
-            };
-
-            // 1. Revenue Analytics
-            new Chart(document.getElementById('revenueChart'), {
-                type: 'line',
-                data: {
-                    labels: data.revenue_chart.labels,
-                    datasets: [
-                        { label: 'Gross Sales', data: data.revenue_chart.gross_earnings, borderColor: '#46a5ac', backgroundColor: 'rgba(70, 165, 172, 0.1)', fill: true, tension: 0.4, borderWidth: 3, pointRadius: 4, pointBackgroundColor: '#fff' },
-                        { label: 'Operating Costs', data: data.revenue_chart.total_payouts, borderColor: '#1e293b', borderDash: [5, 5], fill: false, tension: 0.4 }
-                    ]
-                },
-                options: baseOptions
-            });
-
-            // 2. Distribution Pie
-            new Chart(document.getElementById('propertyTypeChart'), {
-                type: 'doughnut',
-                data: {
-                    labels: data.type_chart.labels,
-                    datasets: [{ data: data.type_chart.data, backgroundColor: ['#46a5ac', '#1e293b', '#64748b', '#94a3b8', '#cbd5e1'], borderWidth: 0 }]
-                },
-                options: { ...baseOptions, cutout: '70%', scales: { x: { display: false }, y: { display: false } } }
-            });
-
-            // 3. Operational Calendar
-            new FullCalendar.Calendar(document.getElementById('master-calendar'), {
-                initialView: 'dayGridMonth',
-                themeSystem: 'bootstrap',
-                headerToolbar: { left: 'prev,next today', center: 'title', right: 'dayGridMonth,timeGridWeek' },
-                events: data.calendar_events,
-                height: 'auto',
-                eventColor: '#46a5ac'
-            }).render();
-
-            // 4. Geospatial Heatmap
-            const map = L.map('heatmap', { scrollWheelZoom: false }).setView([30.3753, 69.3451], 5);
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png').addTo(map);
-            L.heatLayer(data.heatmap_data, { radius: 25, blur: 15, gradient: {0.4: '#46a5ac', 0.65: '#1e293b', 1: '#000'} }).addTo(map);
-        });
+        window.dashboardData = @json($metrics['js_data']);
     </script>
-@stop
+    <script src="{{ asset('admin-assets/pages/dashboard.js') }}"></script>
+@endpush

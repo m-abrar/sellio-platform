@@ -133,9 +133,4 @@
 
 @push('js')
 <script src="{{ asset('admin-assets/pages/taxonomy-form.js') }}"></script>
-<script>
-    $(document).ready(function () {
-        $('.select2').select2({ theme: 'bootstrap4', width: '100%' });
-    });
-</script>
 @endpush

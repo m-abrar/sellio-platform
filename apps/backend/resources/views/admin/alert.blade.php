@@ -17,8 +17,8 @@
 
 @foreach($alerts as $alert)
     @if(session($alert['key']))
-        <div class="alert alert-{{ $alert['type'] }}-light animate__animated animate__fadeInDown border-0 shadow-sm d-flex align-items-center p-3 mb-4" role="alert" style="border-radius: 16px; border-left: 5px solid var(--{{ $alert['type'] }}) !important; background: rgba(255,255,255,0.9); backdrop-filter: blur(10px);">
-            <div class="icon-box-soft bg-{{ $alert['type'] }}-soft text-{{ $alert['type'] }} mr-3 shadow-xs" style="width: 48px; height: 48px; min-width: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+        <div class="alert alert-{{ $alert['type'] }}-light alert-premium animate__animated animate__fadeInDown border-0 shadow-sm d-flex align-items-center p-3 mb-4 alert-border-{{ $alert['type'] }}" role="alert">
+            <div class="icon-box-soft bg-{{ $alert['type'] }}-soft text-{{ $alert['type'] }} mr-3 shadow-xs alert-icon-box">
                 <i class="fas fa-{{ $alert['icon'] }} fa-lg"></i>
             </div>
             <div class="alert-content">
@@ -47,8 +47,8 @@
 
 {{-- Impersonation Notification --}}
 @if(Session::has('impersonate_original_user_id'))
-    <div class="alert alert-primary-light border-0 shadow-premium d-flex align-items-center p-3 mb-4" role="alert" style="border-radius: 16px; border-left: 5px solid var(--primary) !important; background: #fff; position: relative; z-index: 9999;">
-        <div class="icon-box bg-primary text-white mr-3 shadow-lg" style="width: 48px; height: 48px; min-width: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+    <div class="alert alert-primary-light alert-premium border-0 shadow-premium d-flex align-items-center p-3 mb-4 alert-border-primary" role="alert" style="position: relative; z-index: 9999;">
+        <div class="icon-box bg-primary text-white mr-3 shadow-lg alert-icon-box">
             <i class="fas fa-user-secret fa-lg"></i>
         </div>
         <div class="alert-content">
@@ -67,8 +67,8 @@
 
 {{-- Validation Errors --}}
 @if($errors->any())
-    <div class="alert alert-danger-light animate__animated animate__shakeX border-0 shadow-sm d-flex align-items-start p-3 mb-4" role="alert" style="border-radius: 16px; border-left: 5px solid var(--danger) !important; background: rgba(255,255,255,0.9); backdrop-filter: blur(10px);">
-        <div class="icon-box-soft bg-danger-soft text-danger mr-3 shadow-xs" style="width: 48px; height: 48px; min-width: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+    <div class="alert alert-danger-light alert-premium animate__animated animate__shakeX border-0 shadow-sm d-flex align-items-start p-3 mb-4 alert-border-danger" role="alert">
+        <div class="icon-box-soft bg-danger-soft text-danger mr-3 shadow-xs alert-icon-box">
             <i class="fas fa-exclamation-circle fa-lg"></i>
         </div>
         <div class="alert-content">
@@ -89,9 +89,3 @@
     </div>
 @endif
 
-<style>
-    .alert-success-light { background: rgba(16, 185, 129, 0.05) !important; }
-    .alert-danger-light { background: rgba(239, 68, 68, 0.05) !important; }
-    .alert-warning-light { background: rgba(245, 158, 11, 0.05) !important; }
-    .alert-info-light { background: rgba(14, 165, 233, 0.05) !important; }
-</style>

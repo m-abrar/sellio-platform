@@ -93,10 +93,10 @@
                                         <a href="{{ route('admin.addons.edit', $addon->id) }}" class="btn btn-white btn-sm text-info py-2 px-3 border-right" data-toggle="tooltip" title="Modify Settings">
                                             <i class="fas fa-pencil-alt"></i>
                                         </a>
-                                        <form action="{{ route('admin.addons.destroy', $addon->id) }}" method="POST" class="d-inline">
+                                         <form action="{{ route('admin.addons.destroy', $addon->id) }}" method="POST" class="d-inline">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-white btn-sm text-danger py-2 px-3" data-toggle="tooltip" title="Remove Module" onclick="return confirm('Are you sure you want to delete this addon?')">
+                                            <button type="button" class="btn btn-white btn-sm text-danger py-2 px-3" data-toggle="tooltip" title="Remove Module" data-action="delete-trigger">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
                                         </form>
@@ -120,42 +120,16 @@
 </div>
 @endsection
 
-@section('css')
-<style>
-    .badge-success-light { background-color: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
-    .badge-danger-light { background-color: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
-    .badge-primary-light { background-color: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
-</style>
-@endsection
-
-@section('js')
-@include('admin._partials._sweetalert-delete')
+@push('js')
     <script>
         $(function () {
             if ($('#addons-table tbody tr:not(.empty-state)').length > 0) {
                 $('#addons-table').DataTable({
-                    "paging": true,
-                    "lengthChange": true,
-                    "searching": true,
-                    "ordering": true,
-                    "info": true,
-                    "autoWidth": false,
-                    "responsive": true,
-                    "dom": '<"row pt-3"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-6"l>>' +
-                           '<"row"<"col-sm-12"tr>>' +
-                           '<"row pb-3"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
-                    "language": {
-                        "search": "",
-                        "searchPlaceholder": "Search addons...",
-                        "paginate": {
-                            "previous": "<i class='fas fa-angle-left'></i>",
-                            "next": "<i class='fas fa-angle-right'></i>"
-                        }
-                    }
+                    "columnDefs": [
+                        { "orderable": false, "targets": [1, 4] }
+                    ]
                 });
-                $('.dataTables_filter input').addClass('form-control shadow-none border-light').css('width', '250px');
             }
-            $('[data-toggle="tooltip"]').tooltip();
         });
     </script>
-@endsection
+@endpush
