@@ -8,15 +8,22 @@
 <body>
     <?php include('navbar.php'); ?>
 
-    <section class="hero-section bg-hero">
-        <div class="container">
+    <section class="hero-section bg-hero position-relative overflow-hidden pb-0">
+        <div class="hero-bg-accent position-absolute top-0 end-0 opacity-10">
+            <svg width="800" height="800" viewBox="0 0 600 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="300" cy="300" r="300" fill="url(#hero-grad)"/>
+                <defs><radialGradient id="hero-grad" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(300 300) rotate(90) scale(300)"><stop stop-color="#76c043"/><stop offset="1" stop-color="#76c043" stop-opacity="0"/></radialGradient></defs>
+            </svg>
+        </div>
+        <div class="container position-relative z-1">
             <div class="row align-items-center">
                 <div class="col-lg-6 py-5">
-                    <h1 class="display-3">Deploy <span id="typewriter" class="text-sellio"></span> <br>Experiences</h1>
-                    <p class="lead mb-5">Launch, manage, and grow high-performance marketplaces. A self-hosted solution for business owners and agencies that eliminates recurring fees while ensuring full data ownership.</p>
-                    <div class="d-flex gap-3">
-                        <a href="#demos" class="btn-main">Explore 50+ Demos</a>
-                        <a href="#modules" class="btn btn-outline-secondary px-4 py-3 rounded-4 fw-bold">View Industry Modules</a>
+                    <div class="badge bg-sellio-solid rounded-pill px-3 py-2 mb-4 animate__animated animate__fadeInDown shadow-sm">PRODUCTION READY v2.4</div>
+                    <h1 class="display-3 fw-800">Deploy <span id="typewriter" class="text-sellio"></span> <br>Experiences</h1>
+                    <p class="lead mb-5 opacity-75">Launch, manage, and grow high-performance marketplaces. A self-hosted solution that eliminates recurring fees while ensuring full data ownership.</p>
+                    <div class="d-flex gap-3 animate__animated animate__fadeInUp">
+                        <a href="#demos" class="btn-main shadow-executive">Explore 50+ Demos</a>
+                        <a href="#modules" class="btn-premium-outline">Industry Modules</a>
                     </div>
                 </div>
                 <div class="col-lg-6">
@@ -24,27 +31,76 @@
                 </div>
             </div>
         </div>
+        <div class="custom-shape-divider-bottom-1715541814">
+            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" fill="#F8FAFC"></path>
+            </svg>
+        </div>
     </section>
 
-    <section id="automation" class="py-100 bg-automation border-top border-bottom reveal" data-animation="animate__fadeInLeft">
+    <section id="automation" class="py-100 bg-automation section-overlap border-bottom reveal" data-animation="animate__fadeIn">
         <div class="container">
             <div class="row align-items-center g-5">
                 <div class="col-lg-5">
+                    <h6 class="text-sellio fw-bold text-uppercase mb-3">Workflow Orchestration</h6>
                     <h2 class="display-5 fw-800 mb-4">Hands-free <span class="text-sellio">Workflows</span>.</h2>
-                    <p class="text-muted mb-4">Eliminate manual admin work. Our platform utilizes automatic background processes to keep your marketplace moving 24/7.</p>
-                    <ul class="list-unstyled">
-                        <li class="mb-3 d-flex gap-2"><span>⚡</span> <strong>Automatic Approvals:</strong> Auto-review or approve new listings.</li>
-                        <li class="mb-3 d-flex gap-2"><span>🔔</span> <strong>Smart Reminders:</strong> Automated alerts and status updates.</li>
-                        <li class="mb-3 d-flex gap-2"><span>📅</span> <strong>Expirations:</strong> Hands-free handling of renewals.</li>
-                    </ul>
+                    <p class="text-muted mb-5">Eliminate manual admin work. Our platform utilizes automatic background processes to keep your marketplace moving 24/7.</p>
+                    <div class="automation-steps">
+                        <div class="d-flex gap-3 mb-4">
+                            <div class="step-icon-sm bg-white shadow-sm rounded-3 d-flex align-items-center justify-content-center" style="width:48px; height:48px; min-width:48px;">
+                                <i class="fas fa-bolt text-warning"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-1">Automatic Approvals</h6>
+                                <p class="small text-muted mb-0">Auto-review or approve new listings based on your custom rule-set.</p>
+                            </div>
+                        </div>
+                        <div class="d-flex gap-3 mb-4">
+                            <div class="step-icon-sm bg-white shadow-sm rounded-3 d-flex align-items-center justify-content-center" style="width:48px; height:48px; min-width:48px;">
+                                <i class="fas fa-bell text-primary"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-1">Smart Reminders</h6>
+                                <p class="small text-muted mb-0">Automated alerts and status updates sent via email and in-app notifications.</p>
+                            </div>
+                        </div>
+                        <div class="d-flex gap-3">
+                            <div class="step-icon-sm bg-white shadow-sm rounded-3 d-flex align-items-center justify-content-center" style="width:48px; height:48px; min-width:48px;">
+                                <i class="fas fa-calendar-check text-success"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-1">Expiration Handling</h6>
+                                <p class="small text-muted mb-0">Hands-free handling of renewals and listing expirations.</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-lg-7">
-                    <div class="p-5 bg-white rounded-5 shadow-sm border text-center">
-                        <h4 class="fw-800 mb-4">Multi-Role Performance</h4>
-                        <div class="row g-3">
-                            <div class="col-4"><div class="p-3 border rounded-4 small fw-bold">Admin Panel</div></div>
-                            <div class="col-4"><div class="p-3 border rounded-4 small fw-bold">Seller Desk</div></div>
-                            <div class="col-4"><div class="p-3 border rounded-4 small fw-bold">Buyer Desk</div></div>
+                    <div class="p-5 bg-white rounded-5 shadow-executive border text-center position-relative overflow-hidden">
+                        <div class="position-absolute top-0 start-0 w-100 h-1 bg-sellio-solid"></div>
+                        <h4 class="fw-800 mb-5">Multi-Role Performance</h4>
+                        <div class="row g-4">
+                            <div class="col-4">
+                                <div class="p-4 border rounded-4 bg-light transition-all hover-translate-y">
+                                    <i class="fas fa-user-shield fa-2x mb-3 text-sellio opacity-50"></i>
+                                    <div class="small fw-bold text-uppercase">Admin</div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="p-4 border rounded-4 bg-light transition-all hover-translate-y">
+                                    <i class="fas fa-user-tag fa-2x mb-3 text-sellio opacity-50"></i>
+                                    <div class="small fw-bold text-uppercase">Seller</div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="p-4 border rounded-4 bg-light transition-all hover-translate-y">
+                                    <i class="fas fa-user fa-2x mb-3 text-sellio opacity-50"></i>
+                                    <div class="small fw-bold text-uppercase">Buyer</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-5 p-3 rounded-4 bg-light border-dashed border-2">
+                            <p class="small text-muted mb-0 font-italic">"One core system, infinite operational possibilities."</p>
                         </div>
                     </div>
                 </div>
@@ -94,16 +150,25 @@
         .bg-info-soft { background-color: rgba(13, 202, 240, 0.05); }
     </style>
 
-    <section id="modules" class="py-100 bg-modules reveal" data-animation="animate__fadeInUp">
+    <section id="modules" class="py-100 position-relative reveal" data-animation="animate__fadeInUp">
+        <div class="bg-light-pattern position-absolute top-0 start-0 w-100 h-100" style="z-index: -1;"></div>
         <div class="container text-center">
             <h2 class="display-5 fw-800 mb-5">One core system. <span class="text-sellio">Bespoke</span> modules.</h2>
             <div class="row g-4">
                 <?php foreach($industries as $ind): ?>
-                    <div class="col-md-4">
-                        <div class="p-4 rounded-4 border bg-white h-100 feature-card text-start shadow-sm">
-                            <div class="fs-2 mb-2"><?php echo $ind['icon']; ?></div>
-                            <h4 class="fw-bold"><?php echo $ind['title']; ?></h4>
-                            <p class="text-muted mb-0 small"><?php echo $ind['desc']; ?></p>
+                    <div class="<?php echo $ind['size']; ?>">
+                        <div class="p-5 rounded-5 card-luxury h-100 feature-card text-start position-relative overflow-hidden">
+                            <div class="icon-box-lg mb-4 d-flex align-items-center justify-content-center" style="width:70px; height:70px; border-radius:20px; background: <?php echo $ind['color']; ?>15; color: <?php echo $ind['color']; ?>;">
+                                <i class="<?php echo $ind['icon']; ?> fs-2"></i>
+                            </div>
+                            <h3 class="fw-800 mb-3"><?php echo $ind['title']; ?></h3>
+                            <p class="text-muted mb-0 lead-sm"><?php echo $ind['desc']; ?></p>
+                            <div class="mt-4 d-flex align-items-center gap-2">
+                                <span class="badge bg-light text-dark border rounded-pill px-3 py-2 small fw-bold">Ready for Production</span>
+                                <?php if(isset($ind['tag'])): ?>
+                                    <span class="badge rounded-pill px-3 py-2 small fw-bold" style="background: <?php echo $ind['color']; ?>10; color: <?php echo $ind['color']; ?>;"><?php echo $ind['tag']; ?></span>
+                                <?php endif; ?>
+                            </div>
                         </div>
                     </div>
                 <?php endforeach; ?>
@@ -149,16 +214,16 @@
                 <h2 class="display-5 fw-800">Stop Paying <span class="text-sellio">Monthly Fees</span></h2>
                 <p class="text-muted">Own your platform forever with a single payment.</p>
             </div>
-            <div class="table-responsive rounded-5 border shadow-sm bg-white">
+            <div class="table-responsive rounded-5 border-0 shadow-executive bg-white p-2">
                 <table class="table table-hover mb-0 align-middle">
                     <thead class="bg-light">
-                        <tr>
-                            <th class="p-4">Feature</th>
+                        <tr class="border-0">
+                            <th class="p-4 rounded-start-4">Feature</th>
                             <th class="p-4">Standard SaaS</th>
-                            <th class="p-4 text-sellio">Your Platform</th>
+                            <th class="p-4 text-sellio rounded-end-4">Your Platform</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="border-top-0">
                         <tr><td class="p-4 fw-bold">Upfront Cost</td><td class="p-4">$0</td><td class="p-4">One-time License</td></tr>
                         <tr><td class="p-4 fw-bold">Monthly Subscription</td><td class="p-4 text-danger">$99 - $500+</td><td class="p-4 text-success">$0 (Forever)</td></tr>
                         <tr><td class="p-4 fw-bold">Source Code Access</td><td class="p-4">Locked</td><td class="p-4 text-success">100% Full Access</td></tr>
@@ -177,7 +242,7 @@
                 <div class="col-md-4">
                     <div class="step-card">
                         <div class="step-number">01</div>
-                        <div class="step-icon">📥</div>
+                        <div class="step-icon text-sellio"><i class="fas fa-cloud-download-alt"></i></div>
                         <h4 class="fw-bold">Get Your Files</h4>
                         <p class="text-muted">Download the full source code immediately after purchase.</p>
                     </div>
@@ -185,7 +250,7 @@
                 <div class="col-md-4">
                     <div class="step-card">
                         <div class="step-number">02</div>
-                        <div class="step-icon">⚙️</div>
+                        <div class="step-icon text-sellio"><i class="fas fa-screwdriver-wrench"></i></div>
                         <h4 class="fw-bold">Quick Install</h4>
                         <p class="text-muted">Run our automated 1-click installation wizard in seconds.</p>
                     </div>
@@ -193,7 +258,7 @@
                 <div class="col-md-4">
                     <div class="step-card active">
                         <div class="step-number">03</div>
-                        <div class="step-icon">🚀</div>
+                        <div class="step-icon text-sellio"><i class="fas fa-rocket"></i></div>
                         <h4 class="fw-bold">Import & Go</h4>
                         <p class="text-muted">Import your favorite demo and start onboarding sellers.</p>
                     </div>
@@ -275,7 +340,7 @@
                         <p class="review-text">"The automation features saved me at least 20 hours a week in admin work."</p>
                         <hr>
                         <div class="d-flex align-items-center gap-3">
-                            <div class="avatar-circle">JD</div>
+                            <div class="avatar-circle bg-sellio-solid text-white fw-bold d-flex align-items-center justify-content-center mb-3" style="width:50px; height:50px; border-radius:50%; font-size: 1.2rem;">JD</div>
                             <div><h6 class="mb-0 fw-bold">John D.</h6><small class="text-muted">Agency Owner</small></div>
                         </div>
                     </div>
@@ -286,7 +351,7 @@
                         <p class="review-text">"I've tried many scripts, but this is by far the cleanest code encountered."</p>
                         <hr>
                         <div class="d-flex align-items-center gap-3">
-                            <div class="avatar-circle">MS</div>
+                            <div class="avatar-circle bg-primary text-white fw-bold d-flex align-items-center justify-content-center mb-3" style="width:50px; height:50px; border-radius:50%; font-size: 1.2rem;">MS</div>
                             <div><h6 class="mb-0 fw-bold">Marco S.</h6><small class="text-muted">Developer</small></div>
                         </div>
                     </div>
@@ -297,7 +362,7 @@
                         <p class="review-text">"The support team is incredible. Helped me with a custom integration fast!"</p>
                         <hr>
                         <div class="d-flex align-items-center gap-3">
-                            <div class="avatar-circle">AL</div>
+                            <div class="avatar-circle bg-info text-white fw-bold d-flex align-items-center justify-content-center mb-3" style="width:50px; height:50px; border-radius:50%; font-size: 1.2rem;">AL</div>
                             <div><h6 class="mb-0 fw-bold">Anna L.</h6><small class="text-muted">Startup Founder</small></div>
                         </div>
                     </div>

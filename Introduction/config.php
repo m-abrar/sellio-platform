@@ -11,14 +11,17 @@
   ];
 
   // 1. Industry Modules Data
+  // 1. Industry Modules Data
   $industries = [
-      ['title' => 'Real Estate', 'desc' => 'Property sale, rental & online booking.', 'icon' => '🏠'],
-      ['title' => 'Automotive', 'desc' => 'Auto listings & professional dealerships.', 'icon' => '🚗'],
-      ['title' => 'Events', 'desc' => 'Event listings & online ticket sales.', 'icon' => '🎟️'],
-      ['cat'   => 'Jobs', 'title' => 'Jobs', 'desc' => 'Job listings & professional career portals.', 'icon' => '💼'],
-      ['title' => 'Services', 'desc' => 'Service bookings with quote requests.', 'icon' => '🛠️'],
-      ['title' => 'Classifieds', 'desc' => 'Multi-niche classified ads marketplace.', 'icon' => '📣'],
-    //   ['title' => 'eCommerce', 'desc' => 'Online shopping cart & order handling.', 'icon' => '🛍️']
+      ['title' => 'Real Estate', 'desc' => 'Premium property portal with floor plans, map views, and agent management.', 'icon' => 'fas fa-house-chimney', 'size' => 'col-lg-8', 'tag' => 'Top Interest', 'color' => '#0d6efd'],
+      ['title' => 'eCommerce & Shop', 'desc' => 'Full-scale storefronts with digital/physical product support and cart systems.', 'icon' => 'fas fa-shopping-bag', 'size' => 'col-lg-4', 'tag' => 'Commercial', 'color' => '#6610f2'],
+      ['title' => 'Unified Marketplace', 'desc' => 'The ultimate all-in-one powerhouse. Combine every niche into a single mega portal.', 'icon' => 'fas fa-layer-group', 'size' => 'col-lg-12', 'tag' => 'Elite Solution', 'color' => '#76c043'],
+      ['title' => 'Classified Ads', 'desc' => 'Multi-niche ads marketplace with custom fields, location search, and user messaging.', 'icon' => 'fas fa-bullhorn', 'size' => 'col-lg-8', 'tag' => 'High Demand', 'color' => '#fd7e14'],
+      ['title' => 'Directory Hub', 'desc' => 'Business listing directory with premium tiers and claimed listings.', 'icon' => 'fas fa-location-dot', 'size' => 'col-lg-4', 'tag' => 'Community', 'color' => '#20c997'],
+      ['title' => 'Automotive', 'desc' => 'Advanced vehicle marketplace for dealerships and private sellers with VIN lookup.', 'icon' => 'fas fa-car-side', 'size' => 'col-lg-4', 'tag' => 'Classic', 'color' => '#dc3545'],
+      ['title' => 'Job Board', 'desc' => 'Complete recruitment ecosystem with resume builders and employer dashboards.', 'icon' => 'fas fa-briefcase', 'size' => 'col-lg-4', 'tag' => 'Enterprise', 'color' => '#0dcaf0'],
+      ['title' => 'Service Finder', 'desc' => 'Local service directory with appointment booking and quote request systems.', 'icon' => 'fas fa-gears', 'size' => 'col-lg-4', 'tag' => 'Niche Growth', 'color' => '#ffc107'],
+      ['title' => 'Events & Tickets', 'desc' => 'Event management with calendar views and QR-based ticket verification.', 'icon' => 'fas fa-ticket', 'size' => 'col-lg-12', 'tag' => 'Interactive', 'color' => '#d63384']
   ];
 
   // 2. Demo Categories (Filters)

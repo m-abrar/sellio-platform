@@ -4,14 +4,19 @@
 :root {
     --primary-sellio: #76c043;
     --primary-dark: #5ba32d;
-    --text-main: #0f172a;
+    --secondary-sellio: #0f172a;
+    --text-main: #1e293b;
     --text-muted: #64748b;
     --white: #ffffff;
     --bg-light: #f8fafc;
     --bg-alt: #f1f5f9;
+    --bg-dark: #0f172a;
+    --border-light: rgba(0,0,0,0.06);
     --font-heading: 'Manrope', sans-serif;
     --font-body: 'Urbanist', sans-serif;
     --ease-snap: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    --shadow-premium: 0 10px 30px -5px rgba(0,0,0,0.05);
+    --shadow-executive: 0 30px 60px -12px rgba(0,0,0,0.12);
 }
 
 html { scroll-behavior: smooth; scroll-padding-top: 100px; }
@@ -23,6 +28,8 @@ body {
     padding-top: 100px; 
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
+    background-image: radial-gradient(#76c04308 1px, transparent 1px);
+    background-size: 30px 30px;
 }
 
 .py-100 { padding: 100px 0; }
@@ -34,23 +41,23 @@ body {
 h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-heading);
     font-weight: 800;
-    letter-spacing: -0.04em;
-    line-height: 1.1;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    color: var(--secondary-sellio);
 }
 
 h1 {
-    background: linear-gradient(to bottom, var(--text-main) 70%, #475569);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    font-size: 4.5rem;
+    line-height: 1.1;
+    margin-bottom: 2rem;
 }
 
-.text-sellio {
-    background: linear-gradient(135deg, var(--primary-sellio), var(--primary-dark));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
+.text-sellio { color: var(--primary-sellio) !important; font-weight: 800; }
+.bg-sellio-solid { background: var(--primary-sellio) !important; color: white !important; }
 
-.lead { color: var(--text-muted); font-size: 1.25rem; }
+.display-3 { font-size: 4.5rem; font-weight: 800; letter-spacing: -0.04em; line-height: 1.1; }
+.display-5 { font-size: 3rem; font-weight: 800; letter-spacing: -0.02em; line-height: 1.2; }
+.lead { font-size: 1.25rem; font-weight: 400; line-height: 1.6; color: var(--text-main); opacity: 0.8; }
 
 /* ==========================================================================
     3. NAVIGATION & BUTTONS
@@ -104,7 +111,23 @@ h1 {
     transform: translateY(-2px);
     box-shadow: 0 10px 20px rgba(118, 192, 67, 0.2);
 }
-.btn-main:hover { transform: translateY(-2px); background: #000; }
+.btn-main:hover { transform: translateY(-2px); background: #000; box-shadow: var(--shadow-premium); }
+
+.btn-premium-outline {
+    border: 2px solid var(--text-main);
+    color: var(--text-main);
+    padding: 12px 28px;
+    border-radius: 12px;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.btn-premium-outline:hover {
+    background: var(--text-main);
+    color: var(--white);
+    transform: translateY(-2px);
+}
 
 /* ==========================================================================
     4. SECTION BACKGROUNDS
@@ -178,8 +201,21 @@ h1 {
 .demo-card-v2:not(.coming-soon):hover { transform: translateY(-10px); box-shadow: 0 30px 60px rgba(0, 0, 0, 0.1); }
 .demo-img-wrapper { position: relative; height: 300px; overflow: hidden; background: #f1f5f9; }
 
-.scroll-img { width: 100%; height: auto; transition: transform 2s ease-in-out !important; }
+.scroll-img { width: 100%; height: auto; transition: transform 2s cubic-bezier(0.4, 0, 0.2, 1) !important; }
 .demo-card-v2:not(.coming-soon):hover .scroll-img { transform: translateY(calc(-100% + 300px)); }
+
+.demo-card-v2::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    box-shadow: inset 0 0 0 0 rgba(118, 192, 67, 0.2);
+    transition: all 0.3s ease;
+    pointer-events: none;
+}
+
+.demo-card-v2:hover::after {
+    box-shadow: inset 0 0 0 3px var(--primary-sellio);
+}
 
 .soon-badge { position: absolute; top: 15px; right: 15px; background: #000; color: #fff; padding: 4px 12px; border-radius: 50px; font-size: 10px; font-weight: 800; z-index: 10; }
 .coming-soon { opacity: 0.7; }
@@ -187,12 +223,27 @@ h1 {
 /* ==========================================================================
     7. UI BLOCKS (FAQ, STEPS, REVIEWS, TECH)
    ========================================================================== */
-.feature-card { transition: all 0.3s var(--ease-snap); }
-.feature-card:hover { transform: translateY(-8px); border-color: var(--primary-sellio) !important; box-shadow: 0 20px 40px rgba(0,0,0,0.08) !important; }
+.lead-sm { font-size: 1.1rem; line-height: 1.6; }
+
+.feature-card { 
+    transition: all 0.4s var(--ease-snap); 
+    border: 1px solid rgba(0,0,0,0.05);
+}
+
+.feature-card:hover { 
+    transform: translateY(-12px); 
+    border-color: var(--primary-sellio) !important; 
+    box-shadow: var(--shadow-executive) !important; 
+}
+
+.feature-card h3 { transition: color 0.3s ease; }
+.feature-card:hover h3 { color: var(--primary-sellio); }
 
 .step-card { background: var(--white); padding: 40px 30px; border-radius: 24px; border: 1px solid rgba(0,0,0,0.05); position: relative; transition: all 0.3s ease; height: 100%; }
 .step-card.active { border-color: var(--primary-sellio); box-shadow: 0 20px 40px rgba(118, 192, 67, 0.1); }
-.step-number { position: absolute; top: 20px; right: 30px; font-size: 3rem; font-weight: 900; color: rgba(0,0,0,0.03); line-height: 1; }
+.step-number { position: absolute; top: 10px; right: 20px; font-size: 4rem; font-weight: 900; color: rgba(118, 192, 67, 0.05); line-height: 1; pointer-events: none; }
+.step-icon { font-size: 2.5rem; margin-bottom: 20px; display: inline-block; transition: transform 0.3s ease; }
+.step-card:hover .step-icon { transform: scale(1.2) rotate(5deg); }
 
 .review-card { background: var(--bg-light); padding: 35px; border-radius: 24px; border: 1px solid rgba(0,0,0,0.05); height: 100%; transition: transform 0.3s ease; }
 .review-card.highlighted { background: var(--white); border-color: var(--primary-sellio); box-shadow: 0 15px 40px rgba(0,0,0,0.05); }
@@ -358,9 +409,36 @@ h1 {
     line-height: 1; /* Prevents text from sitting too high or low */
 }
 
-/* Slimmer & centered bar */
-.floating-buy-bar {
-    /* ... your existing code ... */
-    max-width: 650px; /* Makes it smaller as requested */
-    padding: 10px 20px;
+/* ==========================================================================
+    10. ADVANCED LAYOUT (SHAPES & OVERLAPS)
+   ========================================================================== */
+.custom-shape-divider-bottom-1715541814 {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+    transform: rotate(180deg);
 }
+
+.custom-shape-divider-bottom-1715541814 svg {
+    position: relative;
+    display: block;
+    width: calc(100% + 1.3px);
+    height: 80px;
+}
+
+.section-overlap { margin-top: -80px; position: relative; z-index: 10; }
+
+.bg-hero { background: #fff; padding-bottom: 150px; }
+.bg-automation { background: #f8fafc; }
+.bg-light-pattern { background-color: #f8fafc; background-image: radial-gradient(var(--primary-sellio) 0.5px, transparent 0.5px); background-size: 20px 20px; opacity: 0.1; }
+
+.card-luxury {
+    background: var(--white);
+    border: 1px solid var(--border-light);
+    box-shadow: var(--shadow-premium);
+    transition: all 0.3s var(--ease-snap);
+}
+.card-luxury:hover { transform: translateY(-10px); box-shadow: var(--shadow-executive); }
