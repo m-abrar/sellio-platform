@@ -14,18 +14,18 @@
 
 @section('plugins.Datatables', true)
 
-@section('title', $reportTitle)
+@section('title', __($reportTitle))
 
 @section('content_header')
     <div class="container-fluid pt-4">
         <div class="row mb-4 align-items-center">
             <div class="col-sm-7">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-building mr-2 text-primary opacity-50"></i> {{ $reportTitle ?? 'Property Utilization Analytics' }}
+                    <i class="fas fa-building mr-2 text-primary opacity-50"></i> {{ $reportTitle ?? __('Property Utilization Analytics') }}
                 </h1>
-                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Monitor property availability, asset performance, and real-time occupancy metrics.</p>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">{{ __('Monitor property availability, asset performance, and real-time occupancy metrics.') }}</p>
             </div>
-            @include('admin.reports._header_actions', ['exportText' => 'Export Report'])
+            @include('admin.reports._header_actions', ['exportText' => __('Export Report')])
         </div>
     </div>
 @stop
@@ -47,7 +47,7 @@
                         <div class="icon-box-soft bg-warning-soft text-warning mr-3 shadow-xs" style="width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center;">
                             <i class="fas fa-chart-pie text-lg"></i>
                         </div>
-                        <span class="text-uppercase smallest font-weight-bold text-muted letter-spacing-1">Occupancy Rate</span>
+                        <span class="text-uppercase smallest font-weight-bold text-muted letter-spacing-1">{{ __('Occupancy Rate') }}</span>
                     </div>
                     <div class="d-flex align-items-baseline">
                         <h2 class="font-weight-bold text-dark mb-0 mr-1">{{ $occupancyRate ?? '0%' }}</h2>
@@ -66,11 +66,11 @@
                         <div class="icon-box-soft bg-danger-soft text-danger mr-3 shadow-xs" style="width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center;">
                             <i class="fas fa-house-user text-lg"></i>
                         </div>
-                        <span class="text-uppercase smallest font-weight-bold text-muted letter-spacing-1">Occupied Units</span>
+                        <span class="text-uppercase smallest font-weight-bold text-muted letter-spacing-1">{{ __('Occupied Units') }}</span>
                     </div>
                     <div class="d-flex align-items-baseline">
                         <h2 class="font-weight-bold text-dark mb-0 mr-1">{{ $occupiedUnits ?? 0 }}</h2>
-                        <span class="text-muted smallest font-weight-bold uppercase ml-1">UNITS</span>
+                        <span class="text-muted smallest font-weight-bold uppercase ml-1">{{ __('UNITS') }}</span>
                     </div>
                     <div class="progress mt-3" style="height: 4px; border-radius: 2px; background: rgba(0,0,0,0.05);">
                         <div class="progress-bar bg-danger" role="progressbar" style="width: 100%"></div>
@@ -86,11 +86,11 @@
                         <div class="icon-box-soft bg-success-soft text-success mr-3 shadow-xs" style="width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center;">
                             <i class="fas fa-door-open text-lg"></i>
                         </div>
-                        <span class="text-uppercase smallest font-weight-bold text-muted letter-spacing-1">Available Units</span>
+                        <span class="text-uppercase smallest font-weight-bold text-muted letter-spacing-1">{{ __('Available Units') }}</span>
                     </div>
                     <div class="d-flex align-items-baseline">
                         <h2 class="font-weight-bold text-dark mb-0 mr-1">{{ $availableUnits ?? 0 }}</h2>
-                        <span class="text-muted smallest font-weight-bold uppercase ml-1">FREE</span>
+                        <span class="text-muted smallest font-weight-bold uppercase ml-1">{{ __('FREE') }}</span>
                     </div>
                     <div class="progress mt-3" style="height: 4px; border-radius: 2px; background: rgba(0,0,0,0.05);">
                         <div class="progress-bar bg-success" role="progressbar" style="width: 100%"></div>
@@ -106,11 +106,11 @@
                         <div class="icon-box-soft bg-info-soft text-info mr-3 shadow-xs" style="width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center;">
                             <i class="fas fa-list-ol text-lg"></i>
                         </div>
-                        <span class="text-uppercase smallest font-weight-bold text-muted letter-spacing-1">Total Assets</span>
+                        <span class="text-uppercase smallest font-weight-bold text-muted letter-spacing-1">{{ __('Total Assets') }}</span>
                     </div>
                     <div class="d-flex align-items-baseline">
                         <h2 class="font-weight-bold text-dark mb-0 mr-1">{{ $totalUnits ?? 0 }}</h2>
-                        <span class="text-muted smallest font-weight-bold uppercase ml-1">CATALOGED</span>
+                        <span class="text-muted smallest font-weight-bold uppercase ml-1">{{ __('CATALOGED') }}</span>
                     </div>
                     <div class="progress mt-3" style="height: 4px; border-radius: 2px; background: rgba(0,0,0,0.05);">
                         <div class="progress-bar bg-info" role="progressbar" style="width: 100%"></div>
@@ -126,7 +126,7 @@
             <div class="icon-box-soft bg-primary-soft text-primary mr-3 shadow-xs" style="width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
                 <i class="fas fa-building"></i>
             </div>
-            <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">Property Ledger</h3>
+            <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">{{ __('Property Ledger') }}</h3>
         </div>
         <div class="card-body p-0">
             <div class="table-responsive">
@@ -134,11 +134,11 @@
                        data-datatable-config='{"paging": true, "lengthChange": true, "searching": true, "ordering": true, "info": true, "autoWidth": false, "responsive": true}'>
                     <thead>
                         <tr>
-                            <th class="pl-4">Property Identity</th>
-                            <th>Geographic Context</th>
-                            <th>Resource Capacity</th>
-                            <th>Utilization Status</th>
-                            <th class="text-right pr-4">Intelligence</th>
+                            <th class="pl-4">{{ __('Property Identity') }}</th>
+                            <th>{{ __('Geographic Context') }}</th>
+                            <th>{{ __('Resource Capacity') }}</th>
+                            <th>{{ __('Utilization Status') }}</th>
+                            <th class="text-right pr-4">{{ __('Intelligence') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -149,7 +149,7 @@
                                 <i class="fas fa-map-marker-alt mr-2 text-danger opacity-50"></i> {{ $property->location }}
                             </td>
                             <td class="align-middle">
-                                <span class="badge badge-secondary-soft text-secondary border px-3 py-1 rounded-pill font-weight-bold smallest uppercase">{{ $property->total_units }} UNITS</span>
+                                <span class="badge badge-secondary-soft text-secondary border px-3 py-1 rounded-pill font-weight-bold smallest uppercase">{{ $property->total_units }} {{ __('UNITS') }}</span>
                             </td>
                             <td class="align-middle">
                                 @php
@@ -161,12 +161,12 @@
                                     ][strtolower($status)] ?? ['bg' => 'secondary-light', 'text' => 'secondary', 'icon' => 'fa-info-circle'];
                                 @endphp
                                 <span class="badge badge-{{ $statusStyle['bg'] }} text-{{ $statusStyle['text'] }} px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1" style="min-width: 110px;">
-                                    <i class="fas {{ $statusStyle['icon'] }} mr-2"></i> {{ $property->status }}
+                                    <i class="fas {{ $statusStyle['icon'] }} mr-2"></i> {{ strtoupper(__($property->status)) }}
                                 </span>
                             </td>
                             <td class="text-right pr-4 align-middle">
                                 <a href="{{ $property->link ?? '#' }}" target="_blank" class="btn btn-premium-soft btn-premium-soft-primary">
-                                    INSPECT <i class="fas fa-external-link-alt ml-2 small"></i>
+                                    {{ __('INSPECT') }} <i class="fas fa-external-link-alt ml-2 small"></i>
                                 </a>
                             </td>
                         </tr>
@@ -174,8 +174,8 @@
                         <tr>
                             <td colspan="5" class="text-center py-5">
                                 <i class="fas fa-city fa-4x text-muted opacity-25 mb-3 d-block"></i>
-                                <h5 class="text-muted font-weight-bold smallest uppercase letter-spacing-1">No Assets Cataloged</h5>
-                                <p class="small text-secondary mb-0">No property utilization data available for this range.</p>
+                                <h5 class="text-muted font-weight-bold smallest uppercase letter-spacing-1">{{ __('No Assets Cataloged') }}</h5>
+                                <p class="small text-secondary mb-0">{{ __('No property utilization data available for this range.') }}</p>
                             </td>
                         </tr>
                         @endforelse

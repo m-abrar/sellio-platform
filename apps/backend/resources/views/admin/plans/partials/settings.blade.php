@@ -13,15 +13,15 @@
 <div class="card card-premium mb-4">
     <div class="card-header bg-white border-0 py-4 px-4">
         <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
-            <i class="fas fa-eye mr-2 text-primary opacity-50"></i> Display Parameters
+            <i class="fas fa-eye mr-2 text-primary opacity-50"></i> {{ __('Display Parameters') }}
         </h3>
     </div>
     <div class="card-body p-4">
         <div class="row g-4">
             @php
                 $displaySwitches = [
-                    ['name' => 'is_featured', 'id' => 'featuredSwitch', 'label' => 'FEATURED STATUS', 'desc' => 'Highlight on main pricing grid', 'value' => 1, 'checked' => $plan->exists && $plan->is_featured],
-                    ['name' => 'is_popular', 'id' => 'popularSwitch', 'label' => 'POPULAR MARKER', 'desc' => 'Badge as most selected choice', 'value' => 1, 'checked' => $plan->exists && $plan->is_popular],
+                    ['name' => 'is_featured', 'id' => 'featuredSwitch', 'label' => __('FEATURED STATUS'), 'desc' => __('Highlight on main pricing grid'), 'value' => 1, 'checked' => $plan->exists && $plan->is_featured],
+                    ['name' => 'is_popular', 'id' => 'popularSwitch', 'label' => __('POPULAR MARKER'), 'desc' => __('Badge as most selected choice'), 'value' => 1, 'checked' => $plan->exists && $plan->is_popular],
                 ];
             @endphp
 

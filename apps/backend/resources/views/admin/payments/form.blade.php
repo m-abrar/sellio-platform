@@ -262,7 +262,7 @@
         $('.select2').select2({
             theme: 'bootstrap4',
             width: '100%',
-            placeholder: "Target Principal"
+            placeholder: "{{ __('Target Principal') }}"
         });
     });
 </script>

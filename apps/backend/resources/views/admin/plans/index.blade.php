@@ -13,24 +13,24 @@
 --}}
 @extends('adminlte::page')
 
-@section('title', 'Subscription Plans | Tier Registry')
+@section('title', __('Subscription Plans | Tier Registry'))
 
 @section('content_header')
     <div class="container-fluid pt-4">
         <div class="row mb-4 align-items-center">
             <div class="col-sm-8">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-boxes mr-2 text-primary opacity-50"></i> Tier Architect & Plans
+                    <i class="fas fa-boxes mr-2 text-primary opacity-50"></i> {{ __('Tier Architect & Plans') }}
                 </h1>
-                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Manage marketplace subscription tiers, billing structures, and service quotas.</p>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">{{ __('Manage marketplace subscription tiers, billing structures, and service quotas.') }}</p>
             </div>
             <div class="col-sm-4 text-right">
                 <div class="d-flex justify-content-end align-items-center gap-12">
                     <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">
-                        <i class="fas fa-th-large"></i> Dashboard
+                        <i class="fas fa-th-large"></i> {{ __('Dashboard') }}
                     </a>
                     <a href="{{ route('admin.plans.create') }}" class="btn btn-primary btn-registry-add">
-                        <i class="fas fa-plus-circle mr-2"></i> ADD TIER
+                        <i class="fas fa-plus-circle mr-2"></i> {{ __('ADD TIER') }}
                     </a>
                 </div>
             </div>
@@ -49,10 +49,10 @@
     <div class="card card-premium overflow-hidden">
         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center justify-content-between">
             <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">
-                <i class="fas fa-layer-group mr-2 text-primary opacity-50"></i> Product Catalog
+                <i class="fas fa-layer-group mr-2 text-primary opacity-50"></i> {{ __('Product Catalog') }}
             </h3>
             <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase ml-auto">
-                {{ count($plans) }} ACTIVE TIERS
+                {{ count($plans) }} {{ __('ACTIVE TIERS') }}
             </span>
         </div>
 
@@ -62,11 +62,11 @@
                        data-datatable-config='{"paging": false, "info": false, "searching": false, "ordering": true}'>
                     <thead class="thead-light">
                         <tr>
-                            <th class="pl-4">Tier Identity</th>
-                            <th>Cost Analysis</th>
-                            <th class="text-center">Visibility</th>
-                            <th>Resource Quotas</th>
-                            <th class="text-right pr-4">Actions</th>
+                            <th class="pl-4">{{ __('Tier Identity') }}</th>
+                            <th>{{ __('Cost Analysis') }}</th>
+                            <th class="text-center">{{ __('Visibility') }}</th>
+                            <th>{{ __('Resource Quotas') }}</th>
+                            <th class="text-right pr-4">{{ __('Actions') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -95,18 +95,18 @@
                                         {{ setting('currency_symbol', '$') }}{{ number_format($plan->price, 2) }}
                                     </div>
                                     <div class="smallest text-muted text-uppercase font-weight-bold letter-spacing-1 mt-1">
-                                        PER {{ $plan->billing_period }}
+                                        {{ __('PER') }} {{ strtoupper(__($plan->billing_period)) }}
                                     </div>
                                 </td>
 
                                 <td class="text-center align-middle">
                                     @if($plan->is_active)
                                         <span class="badge badge-success-light px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1">
-                                            <i class="fas fa-check-circle mr-1"></i> ACTIVE
+                                            <i class="fas fa-check-circle mr-1"></i> {{ __('ACTIVE') }}
                                         </span>
                                     @else
                                         <span class="badge badge-secondary-soft text-secondary px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1">
-                                            <i class="fas fa-eye-slash mr-1"></i> DISABLED
+                                            <i class="fas fa-eye-slash mr-1"></i> {{ __('DISABLED') }}
                                         </span>
                                     @endif
                                 </td>
@@ -115,11 +115,11 @@
                                     <div class="d-flex flex-column gap-4-p">
                                         <div class="smallest text-dark font-weight-bold uppercase letter-spacing-1">
                                             <i class="fas fa-th-list mr-2 text-primary opacity-50 icon-box-15"></i>
-                                            Assets: {!! $plan->max_listings === null ? '<span class="text-primary">∞</span>' : $plan->max_listings !!}
+                                            {{ __('Assets') }}: {!! $plan->max_listings === null ? '<span class="text-primary">∞</span>' : $plan->max_listings !!}
                                         </div>
                                         <div class="smallest text-dark font-weight-bold uppercase letter-spacing-1">
                                             <i class="fas fa-star mr-2 text-warning icon-box-15"></i>
-                                            Priority: {!! $plan->max_featured_listings === null ? '<span class="text-primary">∞</span>' : $plan->max_featured_listings !!}
+                                            {{ __('Priority') }}: {!! $plan->max_featured_listings === null ? '<span class="text-primary">∞</span>' : $plan->max_featured_listings !!}
                                         </div>
                                     </div>
                                 </td>
@@ -128,16 +128,16 @@
                                     <div class="btn-group btn-group-premium shadow-xs rounded-pill border overflow-hidden">
                                         <a href="{{ route('admin.plans.edit', $plan->id) }}" 
                                            class="btn btn-white text-info py-2 px-3 d-inline-flex align-items-center" 
-                                           data-toggle="tooltip" title="Modify Tier">
+                                           data-toggle="tooltip" title="{{ __('Modify Tier') }}">
                                             <i class="fas fa-pencil-alt"></i>
                                         </a>
                                         <form id="delete-form-{{ $plan->id }}" action="{{ route('admin.plans.destroy', $plan->id) }}" method="POST" class="d-inline">
                                             @csrf @method('DELETE')
                                             <button type="button" class="btn btn-white text-danger py-2 px-3 border-left d-inline-flex align-items-center" 
-                                                    data-toggle="tooltip" title="Decommission"
+                                                    data-toggle="tooltip" title="{{ __('Decommission') }}"
                                                     data-action="delete-trigger"
-                                                    data-confirm-title="Decommission Tier?"
-                                                    data-confirm-text="All subscriptions tied to this tier will be affected.">
+                                                    data-confirm-title="{{ __('Decommission Tier?') }}"
+                                                    data-confirm-text="{{ __('All subscriptions tied to this tier will be affected.') }}">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
                                         </form>
@@ -149,10 +149,10 @@
                                 <td colspan="5" class="text-center py-5">
                                     <div class="py-4">
                                         <i class="fas fa-boxes fa-4x text-muted opacity-25 mb-3 d-block"></i>
-                                        <h5 class="text-muted font-weight-bold">No Tiers Architected</h5>
-                                        <p class="text-secondary small mb-3">Initialize your monetization engine by creating your first plan.</p>
+                                        <h5 class="text-muted font-weight-bold">{{ __('No Tiers Architected') }}</h5>
+                                        <p class="text-secondary small mb-3">{{ __('Initialize your monetization engine by creating your first plan.') }}</p>
                                         <a href="{{ route('admin.plans.create') }}" class="btn btn-primary btn-registry-add">
-                                            <i class="fas fa-plus mr-2"></i> CREATE FIRST TIER
+                                            <i class="fas fa-plus mr-2"></i> {{ __('CREATE FIRST TIER') }}
                                         </a>
                                     </div>
                                 </td>
@@ -166,7 +166,7 @@
         @if(method_exists($plans, 'links') && $plans->hasPages())
             <div class="card-footer bg-white border-top py-3 px-4">
                 <div class="d-flex justify-content-between align-items-center">
-                    <span class="smallest text-muted font-weight-bold text-uppercase letter-spacing-1">Catalog Pagination</span>
+                    <span class="smallest text-muted font-weight-bold text-uppercase letter-spacing-1">{{ __('Catalog Pagination') }}</span>
                     <div>
                         {{ $plans->appends(request()->query())->links('pagination::bootstrap-4') }}
                     </div>

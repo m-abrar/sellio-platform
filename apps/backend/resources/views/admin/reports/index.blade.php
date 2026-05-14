@@ -11,7 +11,7 @@
 --}}
 @extends('adminlte::page')
 
-@section('title', 'Reports & Intelligence')
+@section('title', __('Reports & Intelligence'))
 
 @section('content_header')
     <div class="container-fluid pt-4">
@@ -43,22 +43,22 @@
                 [
                     'route' => 'admin.reports.bookings',
                     'icon' => 'fa-calendar-check',
-                    'title' => 'Booking Velocity Analytics',
-                    'desc' => 'Track reservation trends, cancellation rates, and volume growth across all marketplace modules.',
+                    'title' => __('Booking Velocity Analytics'),
+                    'desc' => __('Track reservation trends, cancellation rates, and volume growth across all marketplace modules.'),
                     'color' => 'primary'
                 ],
                 [
                     'route' => 'admin.reports.properties',
                     'icon' => 'fa-home',
-                    'title' => 'Property Utilization Analytics',
-                    'desc' => 'Analyze property performance, availability trends, and regional occupancy hotspots.',
+                    'title' => __('Property Utilization Analytics'),
+                    'desc' => __('Analyze property performance, availability trends, and regional occupancy hotspots.'),
                     'color' => 'success'
                 ],
                 [
                     'route' => 'admin.reports.payments',
                     'icon' => 'fa-wallet',
-                    'title' => 'Payments & Revenue Analytics',
-                    'desc' => 'Audit revenue streams, payment gateway performance, and marketplace fee collection ledger.',
+                    'title' => __('Payments & Revenue Analytics'),
+                    'desc' => __('Audit revenue streams, payment gateway performance, and marketplace fee collection ledger.'),
                     'color' => 'info'
                 ]
             ];
@@ -76,7 +76,7 @@
                         {{ $report['desc'] }}
                     </p>
                     <a href="{{ route($report['route']) }}" class="btn btn-primary-soft text-primary rounded-pill px-4 py-2 font-weight-bold smallest uppercase letter-spacing-1 stretched-link">
-                        Generate Report <i class="fas fa-chevron-right ml-2 small"></i>
+                        {{ __('Generate Report') }} <i class="fas fa-chevron-right ml-2 small"></i>
                     </a>
                 </div>
             </div>

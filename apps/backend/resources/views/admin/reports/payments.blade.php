@@ -15,18 +15,18 @@
 @section('plugins.Chartjs', true) 
 
 
-@section('title', 'Payments | Admin')
+@section('title', __('Payments | Admin'))
 
 @section('content_header')
     <div class="container-fluid pt-4">
         <div class="row mb-4 align-items-center">
             <div class="col-sm-7">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-chart-line mr-2 text-primary opacity-50"></i> {{ $reportTitle ?? 'Payments & Revenue Analytics' }}
+                    <i class="fas fa-chart-line mr-2 text-primary opacity-50"></i> {{ $reportTitle ?? __('Payments & Revenue Analytics') }}
                 </h1>
-                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">High-fidelity analysis of marketplace inflow, revenue trends, and settled transactions.</p>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">{{ __('High-fidelity analysis of marketplace inflow, revenue trends, and settled transactions.') }}</p>
             </div>
-            @include('admin.reports._header_actions', ['exportText' => 'Export Report'])
+            @include('admin.reports._header_actions', ['exportText' => __('Export Report')])
         </div>
     </div>
 @stop
@@ -48,11 +48,11 @@
                         <div class="icon-box-soft bg-success-soft text-success mr-3 shadow-xs icon-box-48 rounded-14 d-flex align-items-center justify-content-center">
                             <i class="fas fa-money-bill-wave text-lg"></i>
                         </div>
-                        <span class="text-uppercase smallest font-weight-bold text-muted letter-spacing-1">Total Revenue</span>
+                        <span class="text-uppercase smallest font-weight-bold text-muted letter-spacing-1">{{ __('Total Revenue') }}</span>
                     </div>
                     <div class="d-flex align-items-baseline">
-                        <h2 class="font-weight-bold text-dark mb-0 mr-1">${{ $totalRevenue ?? '0.00' }}</h2>
-                        <span class="text-muted smallest font-weight-bold">GROSS</span>
+                        <h2 class="font-weight-bold text-dark mb-0 mr-1">{{ setting('currency_symbol', '$') }}{{ $totalRevenue ?? '0.00' }}</h2>
+                        <span class="text-muted smallest font-weight-bold">{{ __('GROSS') }}</span>
                     </div>
                 </div>
             </div>
@@ -65,11 +65,11 @@
                         <div class="icon-box-soft bg-info-soft text-info mr-3 shadow-xs icon-box-48 rounded-14 d-flex align-items-center justify-content-center">
                             <i class="fas fa-chart-pie text-lg"></i>
                         </div>
-                        <span class="text-uppercase smallest font-weight-bold text-muted letter-spacing-1">Avg Transaction</span>
+                        <span class="text-uppercase smallest font-weight-bold text-muted letter-spacing-1">{{ __('Avg Transaction') }}</span>
                     </div>
                     <div class="d-flex align-items-baseline">
-                        <h2 class="font-weight-bold text-dark mb-0 mr-1">${{ number_format($avgTransactionValue ?? 0, 2) }}</h2>
-                        <span class="text-muted smallest font-weight-bold">MEAN</span>
+                        <h2 class="font-weight-bold text-dark mb-0 mr-1">{{ setting('currency_symbol', '$') }}{{ number_format($avgTransactionValue ?? 0, 2) }}</h2>
+                        <span class="text-muted smallest font-weight-bold">{{ __('MEAN') }}</span>
                     </div>
                 </div>
             </div>
@@ -82,11 +82,11 @@
                         <div class="icon-box-soft bg-primary-soft text-primary mr-3 shadow-xs icon-box-48 rounded-14 d-flex align-items-center justify-content-center">
                             <i class="fas fa-check-double text-lg"></i>
                         </div>
-                        <span class="text-uppercase smallest font-weight-bold text-muted letter-spacing-1">Transactions</span>
+                        <span class="text-uppercase smallest font-weight-bold text-muted letter-spacing-1">{{ __('Transactions') }}</span>
                     </div>
                     <div class="d-flex align-items-baseline">
                         <h2 class="font-weight-bold text-dark mb-0 mr-1">{{ number_format($successfulTransactions ?? 0) }}</h2>
-                        <span class="text-success smallest font-weight-bold uppercase ml-1">SETTLED</span>
+                        <span class="text-success smallest font-weight-bold uppercase ml-1">{{ __('SETTLED') }}</span>
                     </div>
                 </div>
             </div>
@@ -99,7 +99,7 @@
             <div class="icon-box-soft bg-success-soft text-success mr-3 d-flex align-items-center justify-content-center shadow-xs icon-box-40 rounded-10">
                 <i class="fas fa-chart-line"></i>
             </div>
-            <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">Monthly Inflow Trend</h3>
+            <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">{{ __('Monthly Inflow Trend') }}</h3>
         </div>
         <div class="card-body p-4">
             <div class="chart-responsive h-380-p">
@@ -116,10 +116,10 @@
                 <div class="icon-box-soft bg-info-soft text-info mr-3 d-flex align-items-center justify-content-center shadow-xs icon-box-40 rounded-10">
                     <i class="fas fa-file-invoice-dollar"></i>
                 </div>
-                <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">Recent Transactions</h3>
+                <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">{{ __('Recent Transactions') }}</h3>
             </div>
             <a href="{{ route('admin.payments.index') }}" class="btn btn-premium-soft btn-premium-soft-primary">
-                View Ledger <i class="fas fa-arrow-right ml-2"></i>
+                {{ __('View Ledger') }} <i class="fas fa-arrow-right ml-2"></i>
             </a>
         </div>
         <div class="card-body p-0">
@@ -127,12 +127,12 @@
                 <table class="table table-hover table-premium m-0">
                     <thead class="thead-light">
                         <tr>
-                            <th class="px-4">Reference</th>
-                            <th>Value</th>
-                            <th>Protocol</th>
-                            <th class="text-center">Lifecycle</th>
-                            <th>Intelligence</th>
-                            <th class="text-right px-4">Temporal Data</th>
+                            <th class="px-4">{{ __('Reference') }}</th>
+                            <th>{{ __('Value') }}</th>
+                            <th>{{ __('Protocol') }}</th>
+                            <th class="text-center">{{ __('Lifecycle') }}</th>
+                            <th>{{ __('Intelligence') }}</th>
+                            <th class="text-right px-4">{{ __('Temporal Data') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -142,11 +142,11 @@
                                 <span class="text-monospace smallest text-muted font-weight-bold">#{{ $transaction->id }}</span>
                             </td>
                             <td class="align-middle">
-                                <div class="font-weight-bold text-dark">${{ number_format($transaction->amount, 2) }}</div>
+                                <div class="font-weight-bold text-dark">{{ setting('currency_symbol', '$') }}{{ number_format($transaction->amount, 2) }}</div>
                             </td>
                             <td class="align-middle">
                                 <span class="smallest font-weight-bold uppercase letter-spacing-1 text-muted">
-                                    <i class="fas fa-wallet mr-1"></i> {{ $transaction->method }}
+                                    <i class="fas fa-wallet mr-1"></i> {{ strtoupper(__($transaction->method)) }}
                                 </span>
                             </td> 
                             <td class="align-middle text-center">
@@ -158,7 +158,7 @@
                                     ][strtolower($transaction->status)] ?? ['bg' => 'secondary-light', 'text' => 'secondary'];
                                 @endphp
                                 <span class="badge badge-premium badge-{{ $statusStyle['bg'] }} text-{{ $statusStyle['text'] }} px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 shadow-xs min-w-90">
-                                    {{ $transaction->status }}
+                                    {{ strtoupper(__($transaction->status)) }}
                                 </span>
                             </td>
                             <td class="align-middle">
@@ -179,8 +179,8 @@
                         <tr>
                             <td colspan="6" class="text-center py-5">
                                 <i class="fas fa-receipt fa-4x text-muted opacity-25 mb-3 d-block"></i>
-                                <h5 class="text-muted font-weight-bold uppercase letter-spacing-1">No Transactions Detected</h5>
-                                <p class="small text-secondary mb-0">Financial activity in this range is currently dormant.</p>
+                                <h5 class="text-muted font-weight-bold uppercase letter-spacing-1">{{ __('No Transactions Detected') }}</h5>
+                                <p class="small text-secondary mb-0">{{ __('Financial activity in this range is currently dormant.') }}</p>
                             </td>
                         </tr>
                         @endforelse

@@ -13,24 +13,24 @@
 --}}
 @extends('adminlte::page')
 
-@section('title', 'Subscriptions Management | Enrollment Ledger')
+@section('title', __('Subscriptions Management | Enrollment Ledger'))
 
 @section('content_header')
     <div class="container-fluid pt-4">
         <div class="row mb-4 align-items-center">
             <div class="col-sm-8">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-sync-alt mr-2 text-primary opacity-50"></i> Enrollment Registry
+                    <i class="fas fa-sync-alt mr-2 text-primary opacity-50"></i> {{ __('Enrollment Registry') }}
                 </h1>
-                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Track platform memberships, trial states, and recurring revenue pipelines.</p>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">{{ __('Track platform memberships, trial states, and recurring revenue pipelines.') }}</p>
             </div>
             <div class="col-sm-4 text-right">
                 <div class="d-flex justify-content-end align-items-center gap-12">
                     <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">
-                        <i class="fas fa-th-large"></i> Dashboard
+                        <i class="fas fa-th-large"></i> {{ __('Dashboard') }}
                     </a>
                     <a href="{{ route('admin.subscriptions.create') }}" class="btn btn-primary btn-registry-add">
-                        <i class="fas fa-plus-circle mr-2"></i> ENROLL USER
+                        <i class="fas fa-plus-circle mr-2"></i> {{ __('ENROLL USER') }}
                     </a>
                 </div>
             </div>
@@ -49,11 +49,11 @@
     <div class="card card-premium overflow-hidden">
         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
             <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">
-                <i class="fas fa-id-badge mr-2 text-primary opacity-50"></i> Global Enrollment Ledger
+                <i class="fas fa-id-badge mr-2 text-primary opacity-50"></i> {{ __('Global Enrollment Ledger') }}
             </h3>
             <div class="card-tools ml-auto">
                 <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase">
-                    <i class="fas fa-users mr-1"></i> {{ $subscriptions->total() }} ACTIVE SEATS
+                    <i class="fas fa-users mr-1"></i> {{ $subscriptions->total() }} {{ __('ACTIVE SEATS') }}
                 </span>
             </div>
         </div>
@@ -64,11 +64,11 @@
                        data-datatable-config='{"paging": false, "info": false, "searching": false, "ordering": true}'>
                     <thead class="thead-light">
                         <tr>
-                            <th class="pl-4">Subscriber Identity</th>
-                            <th>Service Tier</th>
-                            <th>Access Timeline</th>
-                            <th class="text-center">Lifecycle</th>
-                            <th class="text-right pr-4">Actions</th>
+                            <th class="pl-4">{{ __('Subscriber Identity') }}</th>
+                            <th>{{ __('Service Tier') }}</th>
+                            <th>{{ __('Access Timeline') }}</th>
+                            <th class="text-center">{{ __('Lifecycle') }}</th>
+                            <th class="text-right pr-4">{{ __('Actions') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -90,16 +90,16 @@
                                             <span class="smallest font-weight-bold text-primary">{{ strtoupper(substr($subscription->user->name ?? 'N', 0, 1)) }}</span>
                                         </div>
                                         <div>
-                                            <span class="d-block font-weight-bold text-dark mb-0 font-0-95">{{ $subscription->user->name ?? 'Unknown User' }}</span>
-                                            <small class="text-muted text-monospace smallest">{{ $subscription->user->email ?? 'N/A' }}</small>
+                                            <span class="d-block font-weight-bold text-dark mb-0 font-0-95">{{ $subscription->user->name ?? __('Unknown User') }}</span>
+                                            <small class="text-muted text-monospace smallest">{{ $subscription->user->email ?? __('N/A') }}</small>
                                         </div>
                                     </div>
                                 </td>
 
                                 <td class="align-middle">
-                                    <div class="text-dark font-weight-bold">{{ $subscription->plan->title ?? 'Custom Plan' }}</div>
+                                    <div class="text-dark font-weight-bold">{{ $subscription->plan->title ?? __('Custom Plan') }}</div>
                                     <span class="badge badge-light border text-muted smallest uppercase font-weight-bold mt-1">
-                                        <i class="fas fa-tag mr-1 text-xs opacity-50"></i> Recurring Billing
+                                        <i class="fas fa-tag mr-1 text-xs opacity-50"></i> {{ __('Recurring Billing') }}
                                     </span>
                                 </td>
 
@@ -107,15 +107,15 @@
                                     <div class="d-flex flex-column gap-4-p">
                                         <div class="smallest text-dark font-weight-bold uppercase letter-spacing-1">
                                             <i class="far fa-calendar-check mr-2 text-success icon-box-15"></i>
-                                            Started: {{ $subscription->starts_at->format('M d, Y') }}
+                                            {{ __('Started') }}: {{ $subscription->starts_at->format('M d, Y') }}
                                         </div>
                                         <div class="smallest text-dark font-weight-bold uppercase letter-spacing-1">
                                             @if(!$subscription->ends_at)
                                                 <i class="fas fa-infinity mr-2 text-primary icon-box-15"></i>
-                                                Access: <span class="text-primary">PERPETUAL</span>
+                                                {{ __('Access') }}: <span class="text-primary">{{ __('PERPETUAL') }}</span>
                                             @else
                                                 <i class="far fa-calendar-times mr-2 text-danger icon-box-15"></i>
-                                                Until: {{ $subscription->ends_at->format('M d, Y') }}
+                                                {{ __('Until') }}: {{ $subscription->ends_at->format('M d, Y') }}
                                             @endif
                                         </div>
                                     </div>
@@ -123,7 +123,7 @@
 
                                 <td class="text-center align-middle">
                                     <span class="badge {{ $badgeClass }} px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 min-w-90">
-                                        {{ str_replace('_', ' ', $subscription->status) }}
+                                        {{ strtoupper(str_replace('_', ' ', __($subscription->status))) }}
                                     </span>
                                 </td>
 
@@ -131,16 +131,16 @@
                                     <div class="btn-group btn-group-premium shadow-xs rounded-pill border overflow-hidden">
                                         <a href="{{ route('admin.subscriptions.edit', $subscription->id) }}" 
                                            class="btn btn-white text-info py-2 px-3 d-inline-flex align-items-center" 
-                                           data-toggle="tooltip" title="Modify Enrollment">
+                                           data-toggle="tooltip" title="{{ __('Modify Enrollment') }}">
                                             <i class="fas fa-pencil-alt"></i>
                                         </a>
                                         <form id="delete-form-{{ $subscription->id }}" action="{{ route('admin.subscriptions.destroy', $subscription->id) }}" method="POST" class="d-inline">
                                             @csrf @method('DELETE')
                                             <button type="button" class="btn btn-white text-danger py-2 px-3 border-left d-inline-flex align-items-center" 
-                                                    data-toggle="tooltip" title="Terminate"
+                                                    data-toggle="tooltip" title="{{ __('Terminate') }}"
                                                     data-action="delete-trigger"
-                                                    data-confirm-title="Terminate Enrollment?"
-                                                    data-confirm-text="This user will lose access to all subscription benefits immediately.">
+                                                    data-confirm-title="{{ __('Terminate Enrollment?') }}"
+                                                    data-confirm-text="{{ __('This user will lose access to all subscription benefits immediately.') }}">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
                                         </form>
@@ -152,10 +152,10 @@
                                 <td colspan="5" class="text-center py-5">
                                     <div class="py-4">
                                         <i class="fas fa-sync-alt fa-4x text-muted opacity-25 mb-3 d-block"></i>
-                                        <h5 class="text-muted font-weight-bold">No Enrollments Detected</h5>
-                                        <p class="text-secondary small mb-3">New user subscriptions will be architected here.</p>
+                                        <h5 class="text-muted font-weight-bold">{{ __('No Enrollments Detected') }}</h5>
+                                        <p class="text-secondary small mb-3">{{ __('New user subscriptions will be architected here.') }}</p>
                                         <a href="{{ route('admin.subscriptions.create') }}" class="btn btn-primary btn-registry-add">
-                                            <i class="fas fa-plus mr-2"></i> INITIALIZE ENROLLMENT
+                                            <i class="fas fa-plus mr-2"></i> {{ __('INITIALIZE ENROLLMENT') }}
                                         </a>
                                     </div>
                                 </td>
@@ -168,7 +168,7 @@
 
         @if(method_exists($subscriptions, 'hasPages') && $subscriptions->hasPages())
             <div class="card-footer bg-white border-top py-4 px-4 d-flex justify-content-between align-items-center">
-                <div class="text-muted smallest font-weight-bold uppercase letter-spacing-1">Displaying {{ $subscriptions->firstItem() }} - {{ $subscriptions->lastItem() }} of {{ $subscriptions->total() }} records</div>
+                <div class="text-muted smallest font-weight-bold uppercase letter-spacing-1">{{ __('Displaying :first - :last of :total records', ['first' => $subscriptions->firstItem(), 'last' => $subscriptions->lastItem(), 'total' => $subscriptions->total()]) }}</div>
                 <div>{{ $subscriptions->appends(request()->except('page'))->links('pagination::bootstrap-4') }}</div>
             </div>
         @endif

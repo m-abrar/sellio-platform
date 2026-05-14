@@ -82,7 +82,7 @@
 
             @if(method_exists($payments, 'hasPages') && $payments->hasPages())
                 <div class="card-footer bg-white border-top py-4 px-4 d-flex justify-content-between align-items-center">
-                    <div class="text-muted smallest font-weight-bold uppercase letter-spacing-1">{{ __('Displaying') }} {{ $payments->firstItem() }} - {{ $payments->lastItem() }} {{ __('of') }} {{ $payments->total() }} {{ __('records') }}</div>
+                    <div class="text-muted smallest font-weight-bold uppercase letter-spacing-1">{{ __('Displaying :first - :last of :total records', ['first' => $payments->firstItem(), 'last' => $payments->lastItem(), 'total' => $payments->total()]) }}</div>
                     <div>{{ $payments->appends(request()->except('page'))->links('pagination::bootstrap-4') }}</div>
                 </div>
             @endif

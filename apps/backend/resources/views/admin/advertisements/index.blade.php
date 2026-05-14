@@ -85,7 +85,7 @@
                                                 {{ $advertisement->title }}
                                             </a>
                                             <small class="text-muted text-uppercase font-weight-bold text-monospace smallest ls-0-5">
-                                                ID: #AD-{{ $advertisement->id }}
+                                                {{ __('ID:') }} #AD-{{ $advertisement->id }}
                                             </small>
                                         </div>
                                     </div>
