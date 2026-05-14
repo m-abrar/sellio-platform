@@ -23,15 +23,15 @@
                     <i class="fas fa-key mr-2 text-primary opacity-50"></i>
                     {{ __('Reservation Protocol') }} <small class="text-muted font-weight-bold opacity-75 text-monospace">#{{ $booking->id }}</small>
                 </h1>
-                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Managed hospitality registry for property lodgings and guest stays.</p>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">{{ __('Managed hospitality registry for property lodgings and guest stays.') }}</p>
             </div>
             <div class="col-sm-6 text-right">
                 <div class="d-flex justify-content-end align-items-center gap-12">
                     <a href="{{ route('admin.property-bookings.edit', $booking->id) }}" class="btn btn-primary rounded-pill px-4 py-2 font-weight-bold shadow-premium smallest uppercase letter-spacing-1">
-                        <i class="fas fa-edit mr-2"></i> Modify Record
+                        <i class="fas fa-edit mr-2"></i> {{ __('Modify Record') }}
                     </a>
                     <a href="{{ route('admin.property-bookings.index') }}" class="btn-back shadow-sm">
-                        <i class="fas fa-receipt mr-2"></i> Back to Ledger
+                        <i class="fas fa-receipt mr-2"></i> {{ __('Back to Ledger') }}
                     </a>
                 </div>
             </div>
@@ -92,7 +92,7 @@
                                 <div class="p-3 rounded-xl bg-light border shadow-xs">
                                     <table class="table table-sm table-borderless mb-0">
                                         <tr>
-                                            <th class="smallest text-muted py-2 letter-spacing-1 uppercase" style="width: 40%">{{ __('Arrival') }}</th>
+                                            <th class="smallest text-muted py-2 letter-spacing-1 uppercase w-40-p">{{ __('Arrival') }}</th>
                                             <td class="smallest font-weight-bold text-dark py-2 letter-spacing-1 uppercase">{{ $booking->check_in_date->format('l, M d, Y') }}</td>
                                         </tr>
                                         <tr>
@@ -190,7 +190,7 @@
                 <div class="card card-premium shadow-sm mb-4 border-0 overflow-hidden text-center">
                     <div class="card-header border-0 bg-white py-3 px-4 border-bottom">
                         <h3 class="card-title font-weight-bold text-dark smallest text-uppercase letter-spacing-1 mb-0">
-                            <i class="fas fa-user-shield mr-2 text-primary opacity-50"></i> Principal Integrity
+                            <i class="fas fa-user-shield mr-2 text-primary opacity-50"></i> {{ __('Principal Integrity') }}
                         </h3>
                     </div>
                     <div class="card-body p-4">
@@ -201,7 +201,7 @@
                             <h6 class="font-weight-bold text-dark mb-1 smallest uppercase letter-spacing-1">{{ $booking->user->name }}</h6>
                             <p class="text-muted smallest font-weight-bold letter-spacing-1 text-monospace mb-4">{{ $booking->user->email }}</p>
                             <a href="{{ route('admin.users.show', $booking->user_id) }}" class="btn btn-primary-soft rounded-pill btn-block font-weight-bold smallest py-2 letter-spacing-1 uppercase shadow-xs">
-                                <i class="fas fa-external-link-alt mr-2"></i> Inspect Profile
+                                <i class="fas fa-external-link-alt mr-2"></i> {{ __('Inspect Profile') }}
                             </a>
                         @else
                             <div class="text-muted py-4 text-center">
@@ -209,7 +209,7 @@
                                     <i class="fas fa-user-slash text-muted h4 mb-0"></i>
                                 </div>
                                 <p class="font-weight-bold text-muted smallest text-uppercase letter-spacing-2 mb-0">{{ __('External Guest submission') }}</p>
-                                <p class="smallest text-muted mt-2 opacity-75">No synchronized platform account found.</p>
+                                <p class="smallest text-muted mt-2 opacity-75">{{ __('No synchronized platform account found.') }}</p>
                             </div>
                         @endif
                     </div>
@@ -225,7 +225,7 @@
                 <div class="card card-premium shadow-sm border-0 overflow-hidden">
                     <div class="card-header border-0 bg-white py-3 px-4 border-bottom">
                         <h3 class="card-title font-weight-bold text-dark smallest text-uppercase letter-spacing-1 mb-0">
-                            <i class="fas fa-wallet mr-2 text-primary opacity-50"></i> Collection Status
+                            <i class="fas fa-wallet mr-2 text-primary opacity-50"></i> {{ __('Collection Status') }}
                         </h3>
                     </div>
                     <div class="card-body p-4">
@@ -234,7 +234,7 @@
                             <span class="font-weight-bold text-dark smallest uppercase letter-spacing-1">{{ round($paymentPercent) }}%</span>
                         </div>
                         <div class="progress progress-sm mb-4 shadow-xs progress-premium">
-                            <div class="progress-bar bg-success rounded-pill" role="progressbar" style="width: {{ $paymentPercent }}%;"></div>
+                            <div class="progress-bar bg-success rounded-pill" role="progressbar" data-payment-percent="{{ $paymentPercent }}"></div>
                         </div>
                         
                         <div class="p-3 rounded-xl bg-light border shadow-xs">
@@ -251,13 +251,13 @@
                         @if($balance > 0)
                             <div class="mt-4 p-3 bg-danger-soft rounded-xl text-center border-danger-soft">
                                 <p class="mb-0 smallest font-weight-bold text-danger text-uppercase letter-spacing-2">
-                                    <i class="fas fa-exclamation-circle mr-2"></i> Collection Pending
+                                    <i class="fas fa-exclamation-circle mr-2"></i> {{ __('Collection Pending') }}
                                 </p>
                             </div>
                         @else
                             <div class="mt-4 p-3 bg-success-soft rounded-xl text-center border-success-soft">
                                 <p class="mb-0 smallest font-weight-bold text-success text-uppercase letter-spacing-2">
-                                    <i class="fas fa-check-double mr-2"></i> Revenue Secured
+                                    <i class="fas fa-check-double mr-2"></i> {{ __('Revenue Secured') }}
                                 </p>
                             </div>
                         @endif

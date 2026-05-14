@@ -16,7 +16,7 @@
 @section('setting-form-content')
 <form action="{{ route('admin.settings.update.group', ['section' => 'seo']) }}" method="POST">
     @csrf
-    <div class="card border-0 shadow-premium" style="border-radius: 24px;">
+    <div class="card border-0 shadow-premium rounded-24">
         <div class="card-header bg-white py-4 px-4 border-0">
             <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1 float-none d-block">
                 <i class="fas fa-search mr-2 text-primary opacity-50"></i> {{ __('Search Engine Optimization') }}
@@ -27,7 +27,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group mb-4">
-                        <label class="small font-weight-bold text-uppercase text-secondary mb-2" style="letter-spacing: 0.5px;">{{ __('Global Meta Title') }}</label>
+                        <label class="small font-weight-bold text-uppercase text-secondary mb-2 ls-05">{{ __('Global Meta Title') }}</label>
                         <input type="text" name="meta_title" class="form-control" value="{{ old('meta_title', $settings['meta_title'] ?? '') }}" placeholder="Primary Title for Search Engines">
                         <div class="d-flex justify-content-between mt-2">
                             <small class="text-muted smallest font-weight-bold text-uppercase letter-spacing-1">{{ __('Target Length') }}: 50-60 {{ __('characters') }}</small>
@@ -36,8 +36,8 @@
                     </div>
                     
                     <div class="form-group mb-0">
-                        <label class="small font-weight-bold text-uppercase text-secondary mb-2" style="letter-spacing: 0.5px;">{{ __('Global Meta Description') }}</label>
-                        <textarea name="meta_description" class="form-control" rows="4" style="height: auto !important;" placeholder="Brief summary of your platform...">{{ old('meta_description', $settings['meta_description'] ?? '') }}</textarea>
+                        <label class="small font-weight-bold text-uppercase text-secondary mb-2 ls-05">{{ __('Global Meta Description') }}</label>
+                        <textarea name="meta_description" class="form-control" rows="4" placeholder="{{ __('Brief summary of your platform...') }}">{{ old('meta_description', $settings['meta_description'] ?? '') }}</textarea>
                         <div class="d-flex justify-content-between mt-2">
                             <small class="text-muted smallest font-weight-bold text-uppercase letter-spacing-1">{{ __('Target Length') }}: 150-160 {{ __('characters') }}</small>
                             <small class="text-primary smallest font-weight-bold">{{ strlen($settings['meta_description'] ?? '') }} {{ __('chars') }}</small>

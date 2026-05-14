@@ -14,22 +14,22 @@
         <form action="{{ route('admin.services.index') }}" method="GET">
             <div class="row align-items-end">
                 <div class="col-md-4">
-                    <label class="form-label-premium">Service Focus</label>
+                    <label class="form-label-premium">{{ __('Service Focus') }}</label>
                     <div class="input-group input-group-premium">
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-search text-xs"></i></span>
                         </div>
-                        <input type="text" name="title" class="form-control" placeholder="Search by Title..." value="{{ request('title') }}">
+                        <input type="text" name="title" class="form-control" placeholder="{{ __('Search by Title...') }}" value="{{ request('title') }}">
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <label class="form-label-premium">Vertical Category</label>
+                    <label class="form-label-premium">{{ __('Vertical Category') }}</label>
                     <div class="input-group input-group-premium">
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-folder-open text-xs"></i></span>
                         </div>
                         <select name="category_id" class="form-control select2">
-                            <option value="">All Categories</option>
+                            <option value="">{{ __('All Categories') }}</option>
                             @foreach($categories ?? [] as $cat)
                                 <option value="{{ $cat->id }}" {{ request('category_id') == $cat->id ? 'selected' : '' }}>{{ $cat->title }}</option>
                             @endforeach
@@ -37,11 +37,11 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="d-flex align-items-center justify-content-end" style="gap: 12px;">
+                    <div class="d-flex align-items-center justify-content-end gap-12">
                         <button type="submit" class="btn-filter-premium flex-grow-1">
-                            <i class="fas fa-sync-alt mr-2"></i> UPDATE
+                            <i class="fas fa-sync-alt mr-2"></i> {{ __('UPDATE') }}
                         </button>
-                        <a href="{{ route('admin.services.index') }}" class="btn-reset-premium" data-toggle="tooltip" title="Reset Filters">
+                        <a href="{{ route('admin.services.index') }}" class="btn-reset-premium" data-toggle="tooltip" title="{{ __('Reset Filters') }}">
                             <i class="fas fa-undo"></i>
                         </a>
                     </div>

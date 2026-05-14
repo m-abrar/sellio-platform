@@ -186,12 +186,13 @@
                     </div>
                     <div class="card-body p-4 pt-0">
                         @if(isset($calendarEvents))
+                            <div id="calendar-config" data-events='@json($calendarEvents)'></div>
                             <div id="calendar" class="fc-modern"></div>
-                            <div class="mt-4 d-flex flex-wrap" style="gap: 15px;">
-                                <div class="d-flex align-items-center"><span class="legend-dot" style="background-color: #fde68a; width: 12px; height: 12px; border-radius: 3px;"></span> <span class="small font-weight-bold text-muted uppercase ml-2 letter-spacing-1">{{ __('Pending') }}</span></div>
-                                <div class="d-flex align-items-center"><span class="legend-dot" style="background-color: #bbf7d0; width: 12px; height: 12px; border-radius: 3px;"></span> <span class="small font-weight-bold text-muted uppercase ml-2 letter-spacing-1">{{ __('Confirmed') }}</span></div>
-                                <div class="d-flex align-items-center"><span class="legend-dot" style="background-color: #fecaca; width: 12px; height: 12px; border-radius: 3px;"></span> <span class="small font-weight-bold text-muted uppercase ml-2 letter-spacing-1">{{ __('Cancelled') }}</span></div>
-                                <div class="d-flex align-items-center"><span class="legend-dot" style="background-color: #93c5fd; width: 12px; height: 12px; border-radius: 3px;"></span> <span class="small font-weight-bold text-muted uppercase ml-2 letter-spacing-1">{{ __('Current Focus') }}</span></div>
+                            <div class="mt-4 d-flex flex-wrap gap-15">
+                                <div class="d-flex align-items-center"><span class="legend-dot bg-fde68a"></span> <span class="small font-weight-bold text-muted uppercase ml-2 letter-spacing-1">{{ __('Pending') }}</span></div>
+                                <div class="d-flex align-items-center"><span class="legend-dot bg-bbf7d0"></span> <span class="small font-weight-bold text-muted uppercase ml-2 letter-spacing-1">{{ __('Confirmed') }}</span></div>
+                                <div class="d-flex align-items-center"><span class="legend-dot bg-fecaca"></span> <span class="small font-weight-bold text-muted uppercase ml-2 letter-spacing-1">{{ __('Cancelled') }}</span></div>
+                                <div class="d-flex align-items-center"><span class="legend-dot bg-93c5fd"></span> <span class="small font-weight-bold text-muted uppercase ml-2 letter-spacing-1">{{ __('Current Focus') }}</span></div>
                             </div>
                         @else
                             <div class="text-center py-5 bg-light rounded-xl border border-dashed border-light-soft">
@@ -247,62 +248,10 @@
 </div>
 @stop
 
-@section('css')
-<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-<style>
-    .fc-modern { border: none !important; }
-    .fc .fc-toolbar-title { font-size: 1rem !important; font-weight: 800 !important; color: #1e293b !important; text-transform: uppercase; letter-spacing: 1px; }
-    .fc .fc-button-primary { background-color: #fff !important; border: 1px solid #e2e8f0 !important; color: #64748b !important; font-weight: 700 !important; text-transform: uppercase; font-size: 0.65rem !important; border-radius: 30px !important; padding: 8px 16px !important; letter-spacing: 0.5px; }
-    .fc .fc-button-primary:hover { background-color: #f8fafc !important; color: #007bff !important; border-color: #007bff !important; }
-    .fc .fc-button-active { background-color: #007bff !important; color: #fff !important; border-color: #007bff !important; }
-    .fc .fc-daygrid-day-number { font-size: 0.75rem !important; color: #64748b !important; font-weight: 700 !important; padding: 8px !important; }
-    .fc .fc-col-header-cell-cushion { font-size: 0.7rem !important; font-weight: 800 !important; text-transform: uppercase; letter-spacing: 1px; color: #94a3b8 !important; padding: 12px 0 !important; }
-    .fc-event { border: 0 !important; border-radius: 4px !important; padding: 2px 4px !important; font-size: 0.7rem !important; font-weight: 700 !important; text-transform: uppercase; }
-    
-    /* Flatpickr Premium Overrides */
-    .flatpickr-calendar { border: 0 !important; shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important; border-radius: 12px !important; }
-</style>
 @stop
 
 @push('js')
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-<script>
-    $(document).ready(function() {
-        // Initialize Flatpickr for Date Inputs
-        flatpickr("input[type=date]", {
-            altInput: true,
-            altFormat: "F j, Y",
-            dateFormat: "Y-m-d",
-            allowInput: true
-        });
-
-        if (typeof $('.select2').select2 === 'function') {
-            $('.select2').select2({
-                theme: 'bootstrap4',
-                width: '100%',
-                placeholder: "Select Principal"
-            });
-        }
-
-        @if(isset($calendarEvents))
-            const calendarEl = document.getElementById('calendar');
-            const calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView: 'dayGridMonth',
-                headerToolbar: {
-                    left: 'prev,next today',
-                    center: 'title',
-                    right: 'dayGridMonth,dayGridWeek'
-                },
-                events: @json($calendarEvents),
-                height: 'auto',
-                eventDisplay: 'block',
-                eventTextColor: '#1e293b',
-                eventClassNames: 'shadow-xs border-0'
-            });
-            calendar.render();
-        @endif
-    });
-</script>
+<script src="{{ asset('admin-assets/pages/property-bookings-form.js') }}"></script>
 @endpush

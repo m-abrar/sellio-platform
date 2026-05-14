@@ -240,7 +240,7 @@
             <form id="rejectForm" method="POST">
                 @csrf
                 <div class="modal-body p-4">
-                    <div class="d-flex align-items-center p-3 mb-4 rounded-xl shadow-xs bg-fff5f5 border-fed7d7">
+                    <div class="d-flex align-items-center p-3 mb-4 rounded-xl shadow-xs bg-danger-soft-alt border-danger-soft-alt">
                         <div class="icon-box-soft bg-white text-danger mr-3 shadow-xs icon-box-40 rounded-10 d-flex align-items-center justify-content-center">
                             <i class="fas fa-exclamation-triangle"></i>
                         </div>

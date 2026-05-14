@@ -30,7 +30,7 @@
                 </p>
             </div>
             <div class="col-sm-4 text-right">
-                <div class="d-flex justify-content-end align-items-center" style="gap: 12px;">
+                <div class="d-flex justify-content-end align-items-center gap-12">
                     <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">
                         <i class="fas fa-th-large"></i> {{ __('Dashboard') }}
                     </a>
@@ -57,7 +57,7 @@
             {{-- Left Column --}}
             <div class="col-md-8">
                 <div class="nav-pills-wrapper mb-4">
-                    <ul class="nav nav-pills p-1 bg-white shadow-sm rounded-pill border nav-pills-premium" id="subscriptionTabs" role="tablist" style="width: fit-content;">
+                    <ul class="nav nav-pills p-1 bg-white shadow-sm rounded-pill border nav-pills-premium w-fit-content" id="subscriptionTabs" role="tablist">
                         <li class="nav-item">
                             <a class="nav-link active px-4 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1" id="details-tab" data-toggle="tab" href="#details" role="tab">
                                 <i class="fas fa-info-circle mr-2"></i> {{ __('Enrollment Info') }}
@@ -90,7 +90,7 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group mb-4">
-                                            <label class="small font-weight-bold text-secondary mb-2 text-uppercase" style="letter-spacing: 0.5px;" id="user-select-label" data-placeholder="{{ __('Select an account...') }}">{{ __('Customer Account') }} <span class="text-danger">*</span></label>
+                                            <label class="small font-weight-bold text-secondary mb-2 text-uppercase ls-05" id="user-select-label" data-placeholder="{{ __('Select an account...') }}">{{ __('Customer Account') }} <span class="text-danger">*</span></label>
                                             <div class="input-group border rounded p-1 shadow-xs bg-white">
                                                 <div class="input-group-prepend border-0">
                                                     <span class="input-group-text bg-white border-0"><i class="fas fa-user text-primary"></i></span>
@@ -107,7 +107,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group mb-4">
-                                            <label class="small font-weight-bold text-secondary mb-2 text-uppercase" style="letter-spacing: 0.5px;">{{ __('Service Tier') }} <span class="text-danger">*</span></label>
+                                            <label class="small font-weight-bold text-secondary mb-2 text-uppercase ls-05">{{ __('Service Tier') }} <span class="text-danger">*</span></label>
                                             <div class="input-group border rounded p-1 shadow-xs bg-white">
                                                 <div class="input-group-prepend border-0">
                                                     <span class="input-group-text bg-white border-0"><i class="fas fa-layer-group text-primary"></i></span>
@@ -125,7 +125,7 @@
                                 </div>
 
                                 <div class="form-group mb-4">
-                                    <label class="small font-weight-bold text-secondary mb-2 text-uppercase" style="letter-spacing: 0.5px;">{{ __('Reference Label') }} <span class="text-danger">*</span></label>
+                                    <label class="small font-weight-bold text-secondary mb-2 text-uppercase ls-05">{{ __('Reference Label') }} <span class="text-danger">*</span></label>
                                     <div class="input-group border rounded p-1 shadow-xs bg-white">
                                         <div class="input-group-prepend border-0">
                                             <span class="input-group-text bg-white border-0"><i class="fas fa-tag text-primary"></i></span>
@@ -137,7 +137,7 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group mb-0">
-                                            <label class="small font-weight-bold text-secondary mb-2 text-uppercase" style="letter-spacing: 0.5px;">{{ __('Activation Date') }} <span class="text-danger">*</span></label>
+                                            <label class="small font-weight-bold text-secondary mb-2 text-uppercase ls-05">{{ __('Activation Date') }} <span class="text-danger">*</span></label>
                                             <div class="input-group border rounded p-1 shadow-xs bg-white">
                                                 <div class="input-group-prepend border-0">
                                                     <span class="input-group-text bg-white border-0"><i class="fas fa-calendar-check text-success"></i></span>
@@ -148,7 +148,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group mb-0">
-                                            <label class="small font-weight-bold text-secondary mb-2 text-uppercase" style="letter-spacing: 0.5px;">{{ __('Expiration Date (Optional)') }}</label>
+                                            <label class="small font-weight-bold text-secondary mb-2 text-uppercase ls-05">{{ __('Expiration Date (Optional)') }}</label>
                                             <div class="input-group border rounded p-1 shadow-xs bg-white">
                                                 <div class="input-group-prepend border-0">
                                                     <span class="input-group-text bg-white border-0"><i class="fas fa-calendar-times text-danger"></i></span>
@@ -176,7 +176,7 @@
 
             {{-- Right Column --}}
             <div class="col-md-4">
-                <div class="sticky-top-20" style="z-index: 10;">
+                <div class="sticky-top-20 z-10">
                     @include('admin.subscriptions.partials.action-buttons')
                 </div>
             </div>

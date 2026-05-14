@@ -29,7 +29,7 @@
                         <div class="card h-100 border-0 shadow-xs hover-shadow-sm transition-all module-card">
                             <div class="card-body p-3">
                                 <div class="d-flex align-items-center justify-content-between mb-3">
-                                    <div class="icon-box rounded-circle bg-white shadow-sm d-flex align-items-center justify-content-center" style="width: 42px; height: 42px; border: 1px solid #f1f3f5;">
+                                    <div class="icon-box icon-box-42 bg-white shadow-sm d-flex align-items-center justify-content-center border-light-soft">
                                         <i class="{{ $data['icon'] }} {{ $data['color'] }}"></i>
                                     </div>
                                     
@@ -63,46 +63,3 @@
     </div>
 </form>
 @endsection
-
-@push('css')
-<style>
-    /* Premium Switch - Gray Family for OFF / Emerald for ON */
-    .custom-switch-premium .custom-control-input ~ .custom-control-label::before {
-        background-color: #e2e8f0; /* Gray 200 */
-        border: none;
-        transition: all 0.25s ease;
-    }
-
-    /* OFF State (Gray Family) */
-    .custom-switch-premium .custom-control-input:not(:checked) ~ .custom-control-label::before {
-        background-color: #cbd5e1 !important; /* Slate 300 */
-        opacity: 0.8;
-    }
-
-    .custom-switch-premium .custom-control-input:not(:checked) ~ .custom-control-label::after {
-        background-color: #94a3b8 !important; /* Slate 400 knob */
-    }
-
-    /* ON State (Emerald Family) */
-    .custom-switch-premium .custom-control-input:checked ~ .custom-control-label::before {
-        background-color: #10b981 !important; /* Emerald 500 */
-        box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
-    }
-
-    .custom-switch-premium .custom-control-input:checked ~ .custom-control-label::after {
-        background-color: #ffffff !important; /* Pure white knob */
-    }
-
-    /* Icon Colors */
-    .text-indigo { color: #6610f2; }
-    .text-teal { color: #20c997; }
-    .text-orange { color: #fd7e14; }
-
-    /* Card Styling */
-    .bg-light-gray { background-color: #f8fafc; }
-    .module-card { border-radius: 12px; border: 1px solid #f1f5f9; }
-    .shadow-xs { box-shadow: 0 2px 4px rgba(0,0,0,.03); }
-    .transition-all { transition: all 0.25s ease-in-out; }
-    .hover-shadow-sm:hover { transform: translateY(-3px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.07); }
-</style>
-@endpush

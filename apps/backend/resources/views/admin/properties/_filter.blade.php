@@ -14,22 +14,22 @@
         <form action="{{ route('admin.properties.index') }}" method="GET">
             <div class="row align-items-end">
                 <div class="col-md-3">
-                    <label class="form-label-premium">Property Focus</label>
+                    <label class="form-label-premium">{{ __('Property Focus') }}</label>
                     <div class="input-group input-group-premium">
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-search text-xs"></i></span>
                         </div>
-                        <input type="text" name="name" class="form-control" placeholder="Search by Title..." value="{{ request('name') }}">
+                        <input type="text" name="name" class="form-control" placeholder="{{ __('Search by Title...') }}" value="{{ request('name') }}">
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label-premium">Location Intelligence</label>
+                    <label class="form-label-premium">{{ __('Location Intelligence') }}</label>
                     <div class="input-group input-group-premium">
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-map-marker-alt text-xs"></i></span>
                         </div>
                         <select name="location_id" class="form-control select2">
-                            <option value="">All Locations</option>
+                            <option value="">{{ __('All Locations') }}</option>
                             @foreach($locations ?? [] as $loc)
                                 <option value="{{ $loc->id }}" {{ request('location_id') == $loc->id ? 'selected' : '' }}>{{ $loc->title }}</option>
                             @endforeach
@@ -37,13 +37,13 @@
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label-premium">Category Protocol</label>
+                    <label class="form-label-premium">{{ __('Category Protocol') }}</label>
                     <div class="input-group input-group-premium">
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-folder-open text-xs"></i></span>
                         </div>
                         <select name="category_id" class="form-control select2">
-                            <option value="">All Categories</option>
+                            <option value="">{{ __('All Categories') }}</option>
                             @foreach($categories ?? [] as $cat)
                                 <option value="{{ $cat->id }}" {{ request('category_id') == $cat->id ? 'selected' : '' }}>{{ $cat->title }}</option>
                             @endforeach
@@ -51,11 +51,11 @@
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="d-flex align-items-center justify-content-end" style="gap: 12px;">
+                    <div class="d-flex align-items-center justify-content-end gap-12">
                         <button type="submit" class="btn-filter-premium flex-grow-1">
-                            <i class="fas fa-sync-alt mr-2"></i> UPDATE
+                            <i class="fas fa-sync-alt mr-2"></i> {{ __('UPDATE') }}
                         </button>
-                        <a href="{{ route('admin.properties.index') }}" class="btn-reset-premium" data-toggle="tooltip" title="Reset Filters">
+                        <a href="{{ route('admin.properties.index') }}" class="btn-reset-premium" data-toggle="tooltip" title="{{ __('Reset Filters') }}">
                             <i class="fas fa-undo"></i>
                         </a>
                     </div>

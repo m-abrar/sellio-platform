@@ -16,9 +16,33 @@
 .row-total-display { font-size: 1rem; }
 .border-light-soft { border: var(--border-light-soft) !important; }
 
+/* Sizing & Layout Constraints */
+.min-width-90 { min-width: 90px !important; }
+.min-width-110 { min-width: 110px !important; }
+.min-w-90 { min-width: 90px !important; }
+.min-w-110 { min-width: 110px !important; }
+.width-80 { width: 80px !important; }
+.w-40-p { width: 40% !important; }
+.w-60-p { width: 60px !important; }
+.w-140-p { width: 140px !important; }
+.w-max-150 { max-width: 150px !important; }
+.w-max-250 { max-width: 250px !important; }
+.w-max-350 { max-width: 350px !important; }
+.w-180 { width: 180px !important; }
+.h-140 { height: 140px !important; }
+.h-4 { height: 4px !important; }
+.min-h-140 { min-height: 140px !important; }
+.max-h-80 { max-height: 80px !important; }
+
 /* Rounded Utility Overrides */
-.rounded-20 { border-radius: 20px !important; }
 .rounded-24 { border-radius: 24px !important; }
+.rounded-20 { border-radius: 20px !important; }
+.rounded-16 { border-radius: 16px !important; }
+.rounded-14 { border-radius: 14px !important; }
+.rounded-12 { border-radius: 12px !important; }
+.rounded-10 { border-radius: 10px !important; }
+.rounded-circle { border-radius: 50% !important; }
+.rounded-xl { border-radius: 1rem !important; }
 
 /* Bulk Action Bar Animation */
 .animate__fadeInUpCustom {
@@ -107,8 +131,57 @@
 .badge-info-light { background: rgba(6, 182, 212, 0.1); color: #0891b2; }
 .badge-secondary-soft { background: #f1f5f9; color: #64748b; }
 
+/* Premium Switch - Gray Family for OFF / Emerald for ON */
+.custom-switch-premium .custom-control-input ~ .custom-control-label::before {
+    background-color: #e2e8f0; /* Gray 200 */
+    border: none !important;
+    transition: all 0.25s ease !important;
+}
+
+/* OFF State (Gray Family) */
+.custom-switch-premium .custom-control-input:not(:checked) ~ .custom-control-label::before {
+    background-color: #cbd5e1 !important; /* Slate 300 */
+    opacity: 0.8 !important;
+}
+
+.custom-switch-premium .custom-control-input:not(:checked) ~ .custom-control-label::after {
+    background-color: #94a3b8 !important; /* Slate 400 knob */
+}
+
+/* ON State (Emerald Family) */
+.custom-switch-premium .custom-control-input:checked ~ .custom-control-label::before {
+    background-color: #10b981 !important; /* Emerald 500 */
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3) !important;
+}
+
+.custom-switch-premium .custom-control-input:checked ~ .custom-control-label::after {
+    background-color: #ffffff !important; /* Pure white knob */
+}
+
+/* Icon & Semantic Colors */
+.text-indigo { color: #6610f2 !important; }
+.text-teal { color: #20c997 !important; }
+.text-orange { color: #fd7e14 !important; }
+.bg-light-gray { background-color: #f8fafc !important; }
+.module-card { border-radius: 12px !important; border: 1px solid #f1f5f9 !important; }
+.shadow-xs { box-shadow: 0 2px 4px rgba(0,0,0,.03) !important; }
+.transition-all { transition: all 0.25s ease-in-out !important; }
+.hover-shadow-sm:hover { transform: translateY(-3px) !important; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.07) !important; }
+
+/* Social Identity Colors */
+.text-facebook { color: #1877F2 !important; }
+.text-twitter { color: #1DA1F2 !important; }
+.text-instagram { color: #E4405F !important; }
+.text-linkedin { color: #0A66C2 !important; }
+.text-youtube { color: #FF0000 !important; }
+
 /* Activity & Identity Components */
 .bg-dark-soft { background: rgba(30, 41, 59, 0.05); }
+.bg-black-05 { background: rgba(0,0,0,0.05) !important; }
+.bg-fde68a { background-color: #fde68a !important; }
+.bg-bbf7d0 { background-color: #bbf7d0 !important; }
+.bg-fecaca { background-color: #fecaca !important; }
+.bg-93c5fd { background-color: #93c5fd !important; }
 .icon-box-soft { transition: all 0.2s ease; }
 .icon-box-soft:hover { transform: scale(1.05); background: rgba(30, 41, 59, 0.1); }
 
@@ -211,11 +284,21 @@
 /* Positioning & Typography Utilities */
 .r-minus-10 { right: -10px !important; }
 .b-minus-20 { bottom: -20px !important; }
+.z-10 { z-index: 10 !important; }
+.move-pointer { cursor: pointer !important; }
 .fs-8-rem { font-size: 8rem !important; }
+.fs-3-5 { font-size: 3.5rem !important; }
+.fs-1-rem { font-size: 1rem !important; }
+.fs-1-05 { font-size: 1.05rem !important; }
+.fs-0-8-rem { font-size: 0.8rem !important; }
+.fs-095 { font-size: 0.95rem !important; }
+.fs-08 { font-size: 0.8rem !important; }
+.smallest-0-65 { font-size: 0.65rem !important; }
+.ls-0-5 { letter-spacing: 0.5px !important; }
 .pre-wrap { white-space: pre-wrap !important; }
 .leading-1-5 { line-height: 1.5 !important; }
-.min-w-90 { min-width: 90px !important; }
-.icon-box-60 { width: 60px !important; height: 60px !important; }
+.leading-1-6 { line-height: 1.6 !important; }
+.leading-1-8 { line-height: 1.8 !important; }
 
 /* Theme Editor Utilities */
 .ls-1 { letter-spacing: 1px !important; }
@@ -230,8 +313,12 @@
 }
 
 .bg-primary-soft { background-color: rgba(70, 165, 172, 0.08) !important; }
+.bg-info-soft { background-color: rgba(6, 182, 212, 0.08) !important; }
 .border-dashed-primary { border: 1.5px dashed rgba(70, 165, 172, 0.4) !important; }
+.border-dashed-light { border: 2px dashed #e2e8f0 !important; }
 .ls-1-p { letter-spacing: 1px !important; }
+.ls-1 { letter-spacing: 1px !important; }
+.ls-05 { letter-spacing: 0.5px !important; }
 
 /* Settings Explorer & Card Animations */
 .stat-card {
@@ -268,17 +355,9 @@
 .w-20-p { width: 20% !important; }
 .w-25-p { width: 25% !important; }
 
-/* Radius Utilities */
-.rounded-24 { border-radius: 24px !important; }
-.rounded-20 { border-radius: 20px !important; }
-.rounded-16 { border-radius: 16px !important; }
-.rounded-14 { border-radius: 14px !important; }
-.rounded-10 { border-radius: 10px !important; }
-.rounded-xl { border-radius: 1rem !important; }
-.opacity-05 { opacity: 0.05 !important; }
-
-.border-light { border: 1px solid var(--border-light) !important; }
 .z-9999 { z-index: 9999 !important; }
+.border-4-fff { border: 4px solid #fff !important; }
+.object-fit-cover { object-fit: cover !important; }
 
 /* Alert Utilities */
 .alert-icon-box {
@@ -307,8 +386,6 @@
 
 /* Typography & Spacing Utilities */
 .font-outfit { font-family: 'Outfit', sans-serif !important; }
-.ls-05 { letter-spacing: 0.5px !important; }
-.ls-1 { letter-spacing: 1px !important; }
 .fs-065 { font-size: 0.65rem !important; }
 .fs-095 { font-size: 0.95rem !important; }
 .fs-1-05 { font-size: 1.05rem !important; }
@@ -340,8 +417,10 @@
 /* UI Soft Surface Orchestration */
 .bg-primary-soft { background: rgba(70, 165, 172, 0.05); }
 .bg-success-soft { background: rgba(40, 167, 69, 0.05); }
+.bg-danger-soft-alt { background-color: #fff5f5 !important; }
 .border-primary-soft { border-color: rgba(70, 165, 172, 0.1) !important; }
 .border-success-soft { border-color: rgba(40, 167, 69, 0.1) !important; }
+.border-danger-soft-alt { border: 1px solid #fed7d7 !important; }
 
 /* Interactive Hover States */
 .btn-hover-premium {
@@ -354,11 +433,13 @@
 
 /* Sticky Positioning Utilities */
 .sticky-top-20 { top: 20px !important; }
+.sticky-top-20 { top: 20px !important; }
 .sticky-top-100 { top: 100px !important; }
 
 /* Border & Accent Orchestration */
 .border-bottom-accent { border-bottom: 3px solid var(--brand-primary) !important; }
 .border-light-gray { border: 1px solid #dee2e6 !important; }
+.border-left-primary { border-left: 4px solid var(--brand-primary) !important; }
 
 /* Specialized Grid Fractions */
 .col-fraction-20 { flex: 0 0 20.833% !important; max-width: 20.833% !important; }
@@ -374,9 +455,13 @@
 /* Sizing & Layout Constraints */
 .min-width-90 { min-width: 90px !important; }
 .width-80 { width: 80px !important; }
-.icon-box-24 { width: 24px !important; height: 24px !important; border-radius: 6px !important; }
+.icon-box-38 { width: 38px !important; height: 38px !important; }
 .icon-box-40 { width: 40px !important; height: 40px !important; border-radius: 50% !important; }
+.icon-box-42 { width: 42px !important; height: 42px !important; border-radius: 50% !important; }
+.icon-box-48 { width: 48px !important; height: 48px !important; }
 .icon-box-50 { width: 50px !important; height: 50px !important; border-radius: 12px !important; }
+.icon-box-60 { width: 60px !important; height: 60px !important; }
+.icon-box-100 { width: 100px !important; height: 100px !important; }
 
 /* Typography Utilities */
 .letter-spacing-1 { letter-spacing: 1px !important; }
@@ -425,3 +510,23 @@
 .gap-8 { gap: 8px !important; }
 .gap-12 { gap: 12px !important; }
 .gap-15 { gap: 15px !important; }
+.icon-box-90 { width: 90px !important; height: 90px !important; }
+.ls-neg-2 { letter-spacing: -2px !important; }
+.ls-1 { letter-spacing: 1px !important; }
+.rounded-circle { border-radius: 50% !important; }
+.status-dot { width: 16px !important; height: 16px !important; border-radius: 50% !important; border-width: 3px !important; border-style: solid !important; border-color: #fff !important; }
+.icon-box-84 { width: 84px !important; height: 84px !important; }
+.rounded-2 { border-radius: 2px !important; }
+.rounded-50 { border-radius: 50px !important; }
+.legend-dot { width: 12px !important; height: 12px !important; border-radius: 3px !important; display: inline-block !important; }
+
+/* FullCalendar & Flatpickr Premium Orchestration */
+.fc-modern { border: none !important; }
+.fc .fc-toolbar-title { font-size: 1rem !important; font-weight: 800 !important; color: #1e293b !important; text-transform: uppercase; letter-spacing: 1px; }
+.fc .fc-button-primary { background-color: #fff !important; border: 1px solid #e2e8f0 !important; color: #64748b !important; font-weight: 700 !important; text-transform: uppercase; font-size: 0.65rem !important; border-radius: 30px !important; padding: 8px 16px !important; letter-spacing: 0.5px; }
+.fc .fc-button-primary:hover { background-color: #f8fafc !important; color: #007bff !important; border-color: #007bff !important; }
+.fc .fc-button-active { background-color: #007bff !important; color: #fff !important; border-color: #007bff !important; }
+.fc .fc-daygrid-day-number { font-size: 0.75rem !important; color: #64748b !important; font-weight: 700 !important; padding: 8px !important; }
+.fc .fc-col-header-cell-cushion { font-size: 0.7rem !important; font-weight: 800 !important; text-transform: uppercase; letter-spacing: 1px; color: #94a3b8 !important; padding: 12px 0 !important; }
+.fc-event { border: 0 !important; border-radius: 4px !important; padding: 2px 4px !important; font-size: 0.7rem !important; font-weight: 700 !important; text-transform: uppercase; }
+.flatpickr-calendar { border: 0 !important; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important; border-radius: 12px !important; }

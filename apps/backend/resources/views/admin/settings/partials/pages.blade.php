@@ -5,7 +5,7 @@
     @csrf
 
     {{-- 1. CORE NAVIGATION PAGES --}}
-    <div class="card border-0 shadow-premium mb-4" style="border-radius: 24px;">
+    <div class="card border-0 shadow-premium mb-4 rounded-24">
         <div class="card-header bg-white py-4 px-4 border-0">
             <h5 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1 float-none d-block">
                 <i class="fas fa-compass mr-2 text-primary opacity-50"></i> {{ __('Core Navigation Pages') }}
@@ -16,7 +16,7 @@
             <div class="row">
                 <div class="col-md-4 mb-4">
                     <div class="form-group">
-                        <label class="small font-weight-bold text-secondary mb-2 text-uppercase" style="letter-spacing: 0.5px;">{{ __('Home/Front Theme') }}</label>
+                        <label class="small font-weight-bold text-secondary mb-2 text-uppercase ls-05">{{ __('Home/Front Theme') }}</label>
                         <select name="site_home" class="form-control select2">
                             <option value="">-- {{ __('Default Theme') }} --</option>
                             @foreach($themes['all'] as $theme)
@@ -29,7 +29,7 @@
                 </div>
                 <div class="col-md-4 mb-4">
                     <div class="form-group">
-                        <label class="small font-weight-bold text-secondary mb-2 text-uppercase" style="letter-spacing: 0.5px;">{{ __('Blog Archive') }}</label>
+                        <label class="small font-weight-bold text-secondary mb-2 text-uppercase ls-05">{{ __('Blog Archive') }}</label>
                         <select name="site_blog_archive" class="form-control select2">
                             <option value="">-- {{ __('Default Page') }} --</option>
                             @foreach($pages as $page)
@@ -42,7 +42,7 @@
                 </div>
                 <div class="col-md-4 mb-4">
                     <div class="form-group">
-                        <label class="small font-weight-bold text-secondary mb-2 text-uppercase" style="letter-spacing: 0.5px;">{{ __('Contact Page') }}</label>
+                        <label class="small font-weight-bold text-secondary mb-2 text-uppercase ls-05">{{ __('Contact Page') }}</label>
                         <select name="site_contact" class="form-control select2">
                             <option value="">-- {{ __('Select Page') }} --</option>
                             @foreach($pages as $page)
@@ -55,7 +55,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label class="small font-weight-bold text-secondary mb-2 text-uppercase" style="letter-spacing: 0.5px;">{{ __('About Platform') }}</label>
+                        <label class="small font-weight-bold text-secondary mb-2 text-uppercase ls-05">{{ __('About Platform') }}</label>
                         <select name="site_about" class="form-control select2">
                             <option value="">-- {{ __('Select Page') }} --</option>
                             @foreach($pages as $page)
@@ -68,7 +68,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label class="small font-weight-bold text-secondary mb-2 text-uppercase" style="letter-spacing: 0.5px;">{{ __('FAQs Center') }}</label>
+                        <label class="small font-weight-bold text-secondary mb-2 text-uppercase ls-05">{{ __('FAQs Center') }}</label>
                         <select name="site_faqs" class="form-control select2">
                             <option value="">-- {{ __('Select Page') }} --</option>
                             @foreach($pages as $page)
@@ -84,7 +84,7 @@
     </div>
 
     {{-- 2. SEGMENT ENGINE THEMES --}}
-    <div class="card border-0 shadow-premium mb-4" style="border-radius: 24px;">
+    <div class="card border-0 shadow-premium mb-4 rounded-24">
         <div class="card-header bg-white py-4 px-4 border-0">
             <h5 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1 float-none d-block">
                 <i class="fas fa-palette mr-2 text-primary opacity-50"></i> {{ __('Segment Engine Themes') }}
@@ -128,7 +128,7 @@
     </div>
 
     {{-- 3. LEGAL COMPLIANCE MAPPING --}}
-    <div class="card border-0 shadow-premium mb-4" style="border-radius: 24px;">
+    <div class="card border-0 shadow-premium mb-4 rounded-24">
         <div class="card-header bg-white py-4 px-4 border-0">
             <h5 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1 float-none d-block">
                 <i class="fas fa-balance-scale mr-2 text-primary opacity-50"></i> {{ __('Legal Compliance Mapping') }}
@@ -139,7 +139,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group mb-0">
-                        <label class="small font-weight-bold text-secondary mb-2 text-uppercase" style="letter-spacing: 0.5px;">{{ __('Terms & Conditions Page') }}</label>
+                        <label class="small font-weight-bold text-secondary mb-2 text-uppercase ls-05">{{ __('Terms & Conditions Page') }}</label>
                         <select name="site_terms" class="form-control select2">
                             <option value="">-- {{ __('Select Page') }} --</option>
                             @foreach($pages as $page)
@@ -152,7 +152,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group mb-0">
-                        <label class="small font-weight-bold text-secondary mb-2 text-uppercase" style="letter-spacing: 0.5px;">{{ __('Privacy Policy Page') }}</label>
+                        <label class="small font-weight-bold text-secondary mb-2 text-uppercase ls-05">{{ __('Privacy Policy Page') }}</label>
                         <select name="site_privacy" class="form-control select2">
                             <option value="">-- {{ __('Select Page') }} --</option>
                             @foreach($pages as $page)

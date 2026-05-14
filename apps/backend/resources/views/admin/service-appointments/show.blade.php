@@ -23,11 +23,11 @@
                     <i class="fas fa-concierge-bell mr-2 text-primary opacity-50"></i> {{ __('Appointment Protocol') }}
                     <small class="text-muted font-weight-bold opacity-75 text-monospace">#{{ $appointment->id }}</small>
                 </h1>
-                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Operational manifest for scheduled service fulfillment and technician dispatch.</p>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">{{ __('Operational manifest for scheduled service fulfillment and technician dispatch.') }}</p>
             </div>
             <div class="col-sm-4 text-right">
                 <a href="{{ route('admin.service-bookings.index') }}" class="btn-back shadow-sm">
-                    <i class="fas fa-calendar-check mr-2"></i> Back to Ledger
+                    <i class="fas fa-calendar-check mr-2"></i> {{ __('Back to Ledger') }}
                 </a>
             </div>
         </div>
@@ -56,7 +56,7 @@
                             $statusClass = $statusMap[$appointment->status] ?? 'badge-info-light text-info';
                         @endphp
                         <span class="badge {{ $statusClass }} px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 shadow-xs">
-                            {{ $appointment->status }}
+                            {{ __($appointment->status) }}
                         </span>
                     </div>
                     <div class="card-body px-4 pb-4">
@@ -64,7 +64,7 @@
                             <div class="col-sm-6">
                                 <label class="smallest font-weight-bold text-secondary text-uppercase letter-spacing-1 mb-2 d-block">{{ __('Provisioned Service') }}</label>
                                 <div class="d-flex align-items-center">
-                                    <div class="icon-box-soft bg-primary-soft mr-3 shadow-xs d-flex align-items-center justify-content-center" style="width: 50px; height: 50px; border-radius: 12px;">
+                                    <div class="icon-box-soft bg-primary-soft mr-3 shadow-xs d-flex align-items-center justify-content-center icon-box-50">
                                         <i class="fas fa-toolbox text-primary"></i>
                                     </div>
                                     <div>
@@ -86,11 +86,11 @@
                             </div>
                         </div>
 
-                        <div class="bg-light p-4 rounded-xl border shadow-xs mb-4" style="border-left: 4px solid var(--primary) !important;">
+                        <div class="bg-light p-4 rounded-xl border shadow-xs mb-4 border-left-primary">
                             <h6 class="font-weight-bold text-dark mb-3 smallest text-uppercase letter-spacing-1">
                                 <i class="fas fa-signature mr-2 text-primary opacity-50"></i>{{ __('Client Manifest Directives') }}
                             </h6>
-                            <div class="text-dark small" style="line-height: 1.6; font-style: italic;">
+                            <div class="text-dark small leading-1-6 italic">
                                 "{{ $appointment->notes ?? __('No specific operational instructions were synchronized for this dispatch request.') }}"
                             </div>
                         </div>
@@ -98,7 +98,7 @@
                         <div class="row align-items-center pt-3">
                             <div class="col-sm-6">
                                 <div class="d-flex align-items-center">
-                                    <div class="icon-box-soft bg-success-soft text-success mr-3 shadow-xs d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; border-radius: 12px;">
+                                    <div class="icon-box-soft bg-success-soft text-success mr-3 shadow-xs d-flex align-items-center justify-content-center icon-box-48 rounded-12">
                                         <i class="fas fa-file-invoice-dollar h5 mb-0"></i>
                                     </div>
                                     <div>
@@ -129,11 +129,10 @@
                     </div>
                     <div class="card-body p-4">
                         <div class="position-relative d-inline-block mb-4 p-1 rounded-circle border shadow-sm bg-white">
-                            <img class="rounded-circle"
+                            <img class="rounded-circle icon-box-84 object-fit-cover"
                                  src="https://ui-avatars.com/api/?name={{ urlencode($appointment->user->name) }}&background=46a5ac&color=fff&bold=true"
-                                 style="width: 84px; height: 84px; object-fit: cover;"
                                  alt="Principal">
-                            <div class="bg-success position-absolute border border-white" style="width: 16px; height: 16px; border-radius: 50%; bottom: 4px; right: 4px; border-width: 3px !important;"></div>
+                            <div class="bg-success position-absolute border border-white status-dot b-4 r-4"></div>
                         </div>
                         
                         <h6 class="font-weight-bold text-dark mb-1 smallest uppercase letter-spacing-1">{{ $appointment->user->name }}</h6>
@@ -157,13 +156,13 @@
                 </div>
 
                 <div class="card card-premium shadow-sm border-0">
-                    <div class="card-body p-4 d-flex align-items-center bg-white" style="border-radius: 12px;">
-                        <div class="mr-3 icon-box-soft bg-primary-soft text-primary shadow-xs d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; border-radius: 12px;">
+                    <div class="card-body p-4 d-flex align-items-center bg-white rounded-12">
+                        <div class="mr-3 icon-box-soft bg-primary-soft text-primary shadow-xs d-flex align-items-center justify-content-center icon-box-48 rounded-12">
                             <i class="fas fa-fingerprint h5 mb-0"></i>
                         </div>
                         <div>
-                            <h6 class="font-weight-bold text-dark smallest uppercase letter-spacing-1 mb-1">Audit Integrity</h6>
-                            <p class="smallest text-muted mb-0 uppercase letter-spacing-1 opacity-75">Immutable system record.</p>
+                            <h6 class="font-weight-bold text-dark smallest uppercase letter-spacing-1 mb-1">{{ __('Audit Integrity') }}</h6>
+                            <p class="smallest text-muted mb-0 uppercase letter-spacing-1 opacity-75">{{ __('Immutable system record.') }}</p>
                         </div>
                     </div>
                 </div>
@@ -172,12 +171,4 @@
     </div>
 @endsection
 
-@section('css')
-<style>
-    .text-monospace { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace !important; }
-    .bg-primary-soft { background: rgba(70, 165, 172, 0.1) !important; }
-    .bg-success-soft { background: rgba(34, 197, 94, 0.1) !important; }
-    .bg-info-light { background: rgba(23, 162, 184, 0.1) !important; }
-    .rounded-xl { border-radius: 12px !important; }
-</style>
 @endsection

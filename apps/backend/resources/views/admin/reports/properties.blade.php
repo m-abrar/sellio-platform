@@ -44,7 +44,7 @@
             <div class="card card-premium stat-card-interactive h-100 border-0 shadow-premium overflow-hidden">
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center mb-3">
-                        <div class="icon-box-soft bg-warning-soft text-warning mr-3 shadow-xs" style="width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center;">
+                        <div class="icon-box-soft bg-warning-soft text-warning mr-3 shadow-xs d-flex align-items-center justify-content-center icon-box-48 rounded-14">
                             <i class="fas fa-chart-pie text-lg"></i>
                         </div>
                         <span class="text-uppercase smallest font-weight-bold text-muted letter-spacing-1">{{ __('Occupancy Rate') }}</span>
@@ -52,7 +52,7 @@
                     <div class="d-flex align-items-baseline">
                         <h2 class="font-weight-bold text-dark mb-0 mr-1">{{ $occupancyRate ?? '0%' }}</h2>
                     </div>
-                    <div class="progress mt-3" style="height: 4px; border-radius: 2px; background: rgba(0,0,0,0.05);">
+                    <div class="progress mt-3 h-4 rounded-2 bg-black-05">
                         <div class="progress-bar bg-warning" role="progressbar" style="width: {{ $occupancyRate ?? 0 }}%"></div>
                     </div>
                 </div>
@@ -63,7 +63,7 @@
             <div class="card card-premium stat-card-interactive h-100 border-0 shadow-premium overflow-hidden">
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center mb-3">
-                        <div class="icon-box-soft bg-danger-soft text-danger mr-3 shadow-xs" style="width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center;">
+                        <div class="icon-box-soft bg-danger-soft text-danger mr-3 shadow-xs d-flex align-items-center justify-content-center icon-box-48 rounded-14">
                             <i class="fas fa-house-user text-lg"></i>
                         </div>
                         <span class="text-uppercase smallest font-weight-bold text-muted letter-spacing-1">{{ __('Occupied Units') }}</span>
@@ -72,7 +72,7 @@
                         <h2 class="font-weight-bold text-dark mb-0 mr-1">{{ $occupiedUnits ?? 0 }}</h2>
                         <span class="text-muted smallest font-weight-bold uppercase ml-1">{{ __('UNITS') }}</span>
                     </div>
-                    <div class="progress mt-3" style="height: 4px; border-radius: 2px; background: rgba(0,0,0,0.05);">
+                    <div class="progress mt-3 h-4 rounded-2 bg-black-05">
                         <div class="progress-bar bg-danger" role="progressbar" style="width: 100%"></div>
                     </div>
                 </div>
@@ -83,7 +83,7 @@
             <div class="card card-premium stat-card-interactive h-100 border-0 shadow-premium overflow-hidden">
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center mb-3">
-                        <div class="icon-box-soft bg-success-soft text-success mr-3 shadow-xs" style="width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center;">
+                        <div class="icon-box-soft bg-success-soft text-success mr-3 shadow-xs d-flex align-items-center justify-content-center icon-box-48 rounded-14">
                             <i class="fas fa-door-open text-lg"></i>
                         </div>
                         <span class="text-uppercase smallest font-weight-bold text-muted letter-spacing-1">{{ __('Available Units') }}</span>
@@ -92,7 +92,7 @@
                         <h2 class="font-weight-bold text-dark mb-0 mr-1">{{ $availableUnits ?? 0 }}</h2>
                         <span class="text-muted smallest font-weight-bold uppercase ml-1">{{ __('FREE') }}</span>
                     </div>
-                    <div class="progress mt-3" style="height: 4px; border-radius: 2px; background: rgba(0,0,0,0.05);">
+                    <div class="progress mt-3 h-4 rounded-2 bg-black-05">
                         <div class="progress-bar bg-success" role="progressbar" style="width: 100%"></div>
                     </div>
                 </div>
@@ -103,7 +103,7 @@
             <div class="card card-premium stat-card-interactive h-100 border-0 shadow-premium overflow-hidden">
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center mb-3">
-                        <div class="icon-box-soft bg-info-soft text-info mr-3 shadow-xs" style="width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center;">
+                        <div class="icon-box-soft bg-info-soft text-info mr-3 shadow-xs d-flex align-items-center justify-content-center icon-box-48 rounded-14">
                             <i class="fas fa-list-ol text-lg"></i>
                         </div>
                         <span class="text-uppercase smallest font-weight-bold text-muted letter-spacing-1">{{ __('Total Assets') }}</span>
@@ -123,7 +123,7 @@
     {{-- Property Table --}}
     <div class="card card-premium shadow-premium border-0 mb-4 overflow-hidden">
         <div class="card-header border-0 bg-white pt-4 px-4 d-flex align-items-center">
-            <div class="icon-box-soft bg-primary-soft text-primary mr-3 shadow-xs" style="width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+            <div class="icon-box-soft bg-primary-soft text-primary mr-3 shadow-xs d-flex align-items-center justify-content-center icon-box-40 rounded-10">
                 <i class="fas fa-building"></i>
             </div>
             <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">{{ __('Property Ledger') }}</h3>
@@ -160,7 +160,7 @@
                                         'occupied' => ['bg' => 'danger-light', 'text' => 'danger', 'icon' => 'fa-door-closed'],
                                     ][strtolower($status)] ?? ['bg' => 'secondary-light', 'text' => 'secondary', 'icon' => 'fa-info-circle'];
                                 @endphp
-                                <span class="badge badge-{{ $statusStyle['bg'] }} text-{{ $statusStyle['text'] }} px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1" style="min-width: 110px;">
+                                <span class="badge badge-{{ $statusStyle['bg'] }} text-{{ $statusStyle['text'] }} px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 min-w-110">
                                     <i class="fas {{ $statusStyle['icon'] }} mr-2"></i> {{ strtoupper(__($property->status)) }}
                                 </span>
                             </td>

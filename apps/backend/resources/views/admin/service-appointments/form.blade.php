@@ -171,7 +171,7 @@
                     </div>
                     <div class="card-body p-4 pt-0">
                         <div class="p-3 bg-light rounded-xl border border-light">
-                            <p class="small text-muted mb-0 font-italic" style="line-height: 1.6;">
+                            <p class="small text-muted mb-0 font-italic leading-1-6">
                                 <i class="fas fa-info-circle mr-1 text-primary"></i> {{ __('Confirming this appointment will trigger an automated confirmation email to the client principal. Ensure the Scheduled Timeline is verified with the service provider.') }}
                             </p>
                         </div>
@@ -201,14 +201,5 @@
 @endsection
 
 @push('js')
-<script>
-    $(document).ready(function() {
-        if (typeof $('.select2').select2 === 'function') {
-            $('.select2').select2({
-                theme: 'bootstrap4',
-                width: '100%'
-            });
-        }
-    });
-</script>
+<script src="{{ asset('admin-assets/pages/appointment-form.js') }}"></script>
 @endpush

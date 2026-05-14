@@ -146,7 +146,7 @@
                         <h3 class="card-title-main">{{ __('Administrative Audit Log') }}</h3>
                     </div>
                     <div class="card-body p-4 pt-0">
-                        <div class="p-3 bg-{{ $status['color'] }}-soft text-{{ $status['color'] }} rounded-xl border border-{{ $status['color'] }}-light">
+                        <div class="p-3 rounded-xl border" :class="'bg-{{ $status['color'] }}-soft text-{{ $status['color'] }} border-{{ $status['color'] }}-light'">
                             <i class="fas fa-info-circle mr-2"></i> <strong>{{ __('Audit Note') }}:</strong> {{ $withdrawal->admin_note }}
                         </div>
                     </div>

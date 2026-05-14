@@ -23,12 +23,12 @@
                     <i class="fas fa-concierge-bell mr-2 text-primary opacity-50"></i>
                     {{ __('Service Appointments') }}
                 </h1>
-                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Manage service requests, schedule appointments, and track technician fulfillment.</p>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">{{ __('Manage service requests, schedule appointments, and track technician fulfillment.') }}</p>
             </div>
             <div class="col-sm-5 text-right">
                 <div class="d-flex justify-content-end align-items-center gap-12">
                     <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">
-                        <i class="fas fa-th-large mr-2"></i> Dashboard
+                        <i class="fas fa-th-large mr-2"></i> {{ __('Dashboard') }}
                     </a>
                 </div>
             </div>
@@ -47,7 +47,7 @@
         <div class="card card-premium overflow-hidden">
             <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
                 <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1">
-                    <i class="fas fa-list-ul mr-2 text-primary opacity-50"></i> Appointment Ledger
+                    <i class="fas fa-list-ul mr-2 text-primary opacity-50"></i> {{ __('Appointment Ledger') }}
                 </h3>
             </div>
 
@@ -57,12 +57,12 @@
                            data-datatable-config='{"paging": false, "searching": false, "ordering": true, "info": false, "dom": "t"}'>
                         <thead class="thead-light">
                             <tr>
-                                <th class="pl-4 col-media-70">Media</th>
-                                <th>Service Fulfillment</th>
-                                <th>Client Principal</th>
-                                <th>Schedule Date</th>
-                                <th class="text-center">Lifecycle</th>
-                                <th class="text-right pr-4">Actions</th>
+                                <th class="pl-4 col-media-70">{{ __('Media') }}</th>
+                                <th>{{ __('Service Fulfillment') }}</th>
+                                <th>{{ __('Client Principal') }}</th>
+                                <th>{{ __('Schedule Date') }}</th>
+                                <th class="text-center">{{ __('Lifecycle') }}</th>
+                                <th class="text-right pr-4">{{ __('Actions') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -120,7 +120,7 @@
 
                                     <td class="text-center align-middle">
                                         <span class="badge badge-info-light text-info px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 shadow-xs badge-min-110">
-                                            {{ $booking->status ?? 'Received' }}
+                                            {{ __($booking->status ?? 'Received') }}
                                         </span>
                                     </td>
 
@@ -128,8 +128,8 @@
                                         <div class="btn-group btn-group-premium shadow-xs rounded-pill border overflow-hidden">
                                             <a href="{{ route('admin.service-bookings.show', $booking->id) }}"
                                                class="btn btn-white text-info py-2 px-3 d-inline-flex align-items-center"
-                                               data-toggle="tooltip" title="Inspect Appointment">
-                                                <i class="fas fa-eye mr-2"></i> Inspect
+                                               data-toggle="tooltip" title="{{ __('Inspect Appointment') }}">
+                                                <i class="fas fa-eye mr-2"></i> {{ __('Inspect') }}
                                             </a>
                                         </div>
                                     </td>
@@ -139,8 +139,8 @@
                                     <td colspan="6" class="text-center py-5">
                                         <div class="py-4">
                                             <i class="fas fa-concierge-bell fa-4x text-muted opacity-25 mb-3 d-block"></i>
-                                            <h5 class="text-muted font-weight-bold">No Service Requests Detected</h5>
-                                            <p class="small text-secondary mb-0">The appointment ledger is currently awaiting synchronized entries.</p>
+                                            <h5 class="text-muted font-weight-bold">{{ __('No Service Requests Detected') }}</h5>
+                                            <p class="small text-secondary mb-0">{{ __('The appointment ledger is currently awaiting synchronized entries.') }}</p>
                                         </div>
                                     </td>
                                 </tr>
@@ -152,7 +152,7 @@
 
             @if($bookings->hasPages())
                 <div class="card-footer bg-white border-top py-4 px-4 d-flex justify-content-between align-items-center">
-                    <div class="text-muted smallest font-weight-bold uppercase letter-spacing-1">Displaying {{ $bookings->firstItem() }} - {{ $bookings->lastItem() }} of {{ $bookings->total() }} records</div>
+                    <div class="text-muted smallest font-weight-bold uppercase letter-spacing-1">{{ __('Displaying') }} {{ $bookings->firstItem() }} - {{ $bookings->lastItem() }} {{ __('of') }} {{ $bookings->total() }} {{ __('records') }}</div>
                     <div>{{ $bookings->withQueryString()->links('pagination::bootstrap-4') }}</div>
                 </div>
             @endif

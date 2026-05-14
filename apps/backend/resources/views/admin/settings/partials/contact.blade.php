@@ -3,7 +3,7 @@
 @section('setting-form-content')
 <form action="{{ route('admin.settings.update.group', ['section' => 'contact']) }}" method="POST">
     @csrf
-    <div class="card border-0 shadow-premium" style="border-radius: 24px;">
+    <div class="card border-0 shadow-premium rounded-24">
         <div class="card-header bg-white py-4 px-4 border-0">
             <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1 float-none d-block">
                 <i class="fas fa-headset mr-2 text-primary opacity-50"></i> {{ __('Contact Channels & Intelligence') }}
@@ -14,7 +14,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label class="small font-weight-bold text-uppercase text-secondary mb-2" style="letter-spacing: 0.5px;">{{ __('Public Support Email') }}</label>
+                        <label class="small font-weight-bold text-uppercase text-secondary mb-2 ls-05">{{ __('Public Support Email') }}</label>
                         <div class="input-group shadow-xs">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-envelope text-primary"></i></span>
@@ -25,7 +25,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label class="small font-weight-bold text-uppercase text-secondary mb-2" style="letter-spacing: 0.5px;">{{ __('Official Business Phone') }}</label>
+                        <label class="small font-weight-bold text-uppercase text-secondary mb-2 ls-05">{{ __('Official Business Phone') }}</label>
                         <div class="input-group shadow-xs">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-phone text-success"></i></span>

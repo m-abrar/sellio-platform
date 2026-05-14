@@ -14,8 +14,9 @@
 @extends('admin.settings.settings-layout')
 
 @section('setting-form-content')
-    {{-- Ensure Alpine.js is available for the enhancements --}}
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
+@push('js')
+    <script src="{{ asset('admin-assets/pages/settings-general.js') }}"></script>
+@endpush
 
     <form action="{{ route('admin.settings.update.group', ['section' => 'general']) }}" method="POST"
         enctype="multipart/form-data">
@@ -32,7 +33,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label class="small font-weight-bold text-uppercase text-secondary mb-2" style="letter-spacing: 0.5px;">{{ __('Site Name') }}</label>
+                            <label class="small font-weight-bold text-uppercase text-secondary mb-2 ls-05">{{ __('Site Name') }}</label>
                             <div class="input-group shadow-xs">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fas fa-globe text-primary"></i></span>
@@ -51,8 +52,8 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label class="small font-weight-bold text-uppercase text-secondary mb-2" style="letter-spacing: 0.5px;">{{ __('Site Tagline') }}</label>
-                            <input type="text" name="site_tagline" class="form-control" style="border-radius: 10px;"
+                            <label class="small font-weight-bold text-uppercase text-secondary mb-2 ls-05">{{ __('Site Tagline') }}</label>
+                            <input type="text" name="site_tagline" class="form-control rounded-10"
                                 value="{{ old('site_tagline', $settings['site_tagline'] ?? '') }}">
                         </div>
                     </div>
@@ -60,48 +61,23 @@
 
                 <div class="row mt-4 pt-4 border-top">
                     <div class="col-md-6 text-center border-right border-light">
-                        <label class="d-block small font-weight-bold text-uppercase text-secondary mb-3" style="letter-spacing: 0.5px;">{{ __('Main Brand Logo') }}</label>
+                        <label class="d-block small font-weight-bold text-uppercase text-secondary mb-3 ls-05">{{ __('Main Brand Logo') }}</label>
                         
-                        <div x-data="{ 
-                            imageUrl: '{{ isset($settings['site_logo']) ? asset('storage/' . $settings['site_logo']) : '' }}',
-                            dragover: false,
-                            handleFile(event) {
-                                const file = event.target.files[0];
-                                if (file) {
-                                    this.imageUrl = URL.createObjectURL(file);
-                                }
-                            },
-                            handleDrop(event) {
-                                const file = event.dataTransfer.files[0];
-                                if (file) {
-                                    this.$refs.logoInput.files = event.dataTransfer.files;
-                                    this.imageUrl = URL.createObjectURL(file);
-                                }
-                                this.dragover = false;
-                            }
-                        }" 
-                        @dragover.prevent="dragover = true" 
-                        @dragleave.prevent="dragover = false" 
-                        @drop.prevent="handleDrop($event)"
-                        class="dropzone-wrapper move-pointer mb-3 p-4 rounded-xl"
-                        style="border-radius: 20px; border: 2px dashed #e2e8f0; transition: all 0.3s ease;"
-                        :class="dragover ? 'bg-primary-soft border-primary' : 'bg-light'">
+                        <div id="logo-dropzone"
+                             class="dropzone-wrapper move-pointer mb-3 p-4 rounded-20 border-dashed-light transition-base bg-light">
                             
-                            <div class="preview-container d-flex flex-column align-items-center justify-content-center" 
-                                 style="min-height: 140px;" 
-                                 @click="$refs.logoInput.click()">
-                                <template x-if="imageUrl">
-                                    <img :src="imageUrl" class="img-fluid drop-shadow-sm mb-3" style="max-height: 80px;" alt="Logo Preview">
-                                </template>
-                                <template x-if="!imageUrl">
+                            <div id="logo-preview-container" class="preview-container d-flex flex-column align-items-center justify-content-center min-h-140">
+                                @if(isset($settings['site_logo']))
+                                    <img src="{{ asset('storage/' . $settings['site_logo']) }}" class="img-fluid drop-shadow-sm mb-3 max-h-80" alt="Logo Preview">
+                                @else
                                     <div class="text-center py-2">
-                                        <div class="icon-circle bg-white shadow-xs mx-auto mb-3" style="width: 60px; height: 60px; border-radius: 50%;">
+                                        <div class="icon-circle bg-white shadow-xs mx-auto mb-3 icon-box-60 rounded-circle">
                                             <i class="fas fa-cloud-upload-alt text-primary fa-lg"></i>
                                         </div>
                                         <p class="text-dark font-weight-bold mb-1">{{ __('Upload Platform Logo') }}</p>
                                         <p class="text-muted small mb-0">{{ __('SVG, PNG or JPG (Max 2MB)') }}</p>
                                     </div>
-                                </template>
+                                @endif
 
                                 <div class="mt-3">
                                     <span class="btn btn-sm btn-white rounded-pill px-4 font-weight-bold shadow-xs border">
@@ -110,51 +86,27 @@
                                 </div>
                             </div>
                             
-                            <input type="file" name="site_logo" x-ref="logoInput" class="d-none" @change="handleFile($event)" accept="image/*">
+                            <input type="file" name="site_logo" id="site-logo-input" class="d-none" accept="image/*">
                         </div>
                     </div>
 
-                    <div class="col-md-6 text-center"
-                         x-data="{ 
-                            imageUrl: '{{ isset($settings['site_favicon']) ? asset('storage/' . $settings['site_favicon']) : '' }}',
-                            dragover: false,
-                            handleFile(event) {
-                                const file = event.target.files[0];
-                                if (file) {
-                                    this.imageUrl = URL.createObjectURL(file);
-                                }
-                            },
-                            handleDrop(event) {
-                                const file = event.dataTransfer.files[0];
-                                if (file) {
-                                    this.$refs.faviconInput.files = event.dataTransfer.files;
-                                    this.imageUrl = URL.createObjectURL(file);
-                                }
-                                this.dragover = false;
-                            }
-                        }">
-                        <label class="d-block small font-weight-bold text-uppercase text-secondary mb-3" style="letter-spacing: 0.5px;">{{ __('Browser Favicon') }}</label>
+                    <div class="col-md-6 text-center">
+                        <label class="d-block small font-weight-bold text-uppercase text-secondary mb-3 ls-05">{{ __('Browser Favicon') }}</label>
                         
-                        <div @dragover.prevent="dragover = true" 
-                             @dragleave.prevent="dragover = false" 
-                             @drop.prevent="handleDrop($event)"
-                             @click="$refs.faviconInput.click()"
-                             class="dropzone-wrapper move-pointer mb-3 p-4 rounded-xl mx-auto"
-                             style="width: 180px; border-radius: 20px; border: 2px dashed #e2e8f0; transition: all 0.3s ease;"
-                             :class="dragover ? 'bg-info-soft border-info' : 'bg-light'">
+                        <div id="favicon-dropzone"
+                             class="dropzone-wrapper move-pointer mb-3 p-4 rounded-20 border-dashed-light transition-base w-180 mx-auto bg-light">
                             
-                            <div class="preview-container d-flex flex-column align-items-center justify-content-center" style="height: 140px;">
-                                <template x-if="imageUrl">
-                                    <img :src="imageUrl" width="56" height="56" class="drop-shadow-sm rounded shadow-xs" alt="Favicon Preview">
-                                </template>
-                                <template x-if="!imageUrl">
+                            <div id="favicon-preview-container" class="preview-container d-flex flex-column align-items-center justify-content-center h-140">
+                                @if(isset($settings['site_favicon']))
+                                    <img src="{{ asset('storage/' . $settings['site_favicon']) }}" width="56" height="56" class="drop-shadow-sm rounded shadow-xs" alt="Favicon Preview">
+                                @else
                                     <div class="text-center">
-                                        <div class="icon-circle bg-white shadow-xs mx-auto mb-3" style="width: 50px; height: 50px; border-radius: 50%;">
+                                        <div class="icon-circle bg-white shadow-xs mx-auto mb-3 icon-box-50 rounded-circle">
                                             <i class="fas fa-icons text-info"></i>
                                         </div>
-                                        <p class="text-dark font-weight-bold mb-1" style="font-size: 0.8rem;">{{ __('Favicon') }}</p>
+                                        <p class="text-dark font-weight-bold mb-1 fs-08">{{ __('Favicon') }}</p>
                                     </div>
-                                </template>
+                                @endif
 
                                 <div class="mt-3">
                                     <span class="btn btn-xs btn-white rounded-pill px-3 font-weight-bold shadow-xs border">
@@ -163,7 +115,7 @@
                                 </div>
                             </div>
                             
-                            <input type="file" name="site_favicon" x-ref="faviconInput" class="d-none" @change="handleFile($event)" accept="image/*">
+                            <input type="file" name="site_favicon" id="site-favicon-input" class="d-none" accept="image/*">
                         </div>
                     </div>
                 </div>
@@ -204,7 +156,7 @@
 
                 <div class="row mt-4 pt-4 border-top">
                     <div class="col-md-12 mb-3">
-                        <h5 class="font-weight-bold text-dark text-uppercase small" style="letter-spacing: 1px;"><i class="fas fa-link mr-2 text-primary"></i>
+                        <h5 class="font-weight-bold text-dark text-uppercase small ls-1"><i class="fas fa-link mr-2 text-primary"></i>
                             {{ __('Platform Ecosystem URLs') }}</h5>
                         <p class="text-muted small">
                             {{ __('Configure the absolute domains for your distributed application components.') }}
@@ -245,8 +197,7 @@
                 <div class="row mt-4 pt-4 border-top">
                     <div class="col-md-12 mb-3">
                         <div class="form-group">
-                            <label class="small font-weight-bold d-block mb-1 text-uppercase text-secondary"
-                                style="letter-spacing: 0.5px;">{{ __('Built-in Website Accessibility') }}</label>
+                            <label class="small font-weight-bold d-block mb-1 text-uppercase text-secondary ls-05">{{ __('Built-in Website Accessibility') }}</label>
                             <p class="text-muted small mb-3">
                                 {{ __('Determine if visitors can access the standard Laravel storefront pages.') }}
                             </p>

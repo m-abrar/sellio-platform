@@ -13,10 +13,10 @@
 --}}
 @extends('adminlte::page')
 
-@section('title', $subscriptionQuota->exists ? 'Edit Subscription Quotas' : 'Add Subscription Quotas')
+@section('title', ($subscriptionQuota->exists ? __('Edit Subscription Quotas') : __('Add Subscription Quotas')) . ' | ' . __('Resource Architect'))
 
 @section('content_header')
-    <h1>{{ $subscriptionQuota->exists ? 'Edit Subscription Quotas' : 'Add Subscription' }}</h1>
+    <h1>{{ $subscriptionQuota->exists ? __('Edit Subscription Quotas') : __('Add Subscription') }}</h1>
 @stop
 
 @section('content')
@@ -36,10 +36,10 @@
                 @if($subscriptionQuota->exists) @method('PATCH') @endif
 
                 <!-- Tabs Navigation -->
-                <ul class="nav nav-pills mb-3 p-1 bg-white shadow-sm rounded-pill" id="subscriptionTabs" role="tablist" style="width: fit-content;">
+                <ul class="nav nav-pills mb-3 p-1 bg-white shadow-sm rounded-pill w-fit-content" id="subscriptionTabs" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active px-4 py-2 rounded-pill" id="details-tab" data-toggle="tab" href="#details" role="tab">
-                            <i class="fas fa-info-circle mr-1"></i> Usage Details
+                        <a class="nav-link active px-4 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1" id="details-tab" data-toggle="tab" href="#details" role="tab">
+                            <i class="fas fa-info-circle mr-1"></i> {{ __('Usage Details') }}
                         </a>
                     </li>
                 </ul>

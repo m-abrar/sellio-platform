@@ -45,9 +45,9 @@
             <div class="col-md-8">
 
                 {{-- Quote Details Card --}}
-                <div class="card card-premium shadow-premium border-0 overflow-hidden mb-4" style="border-radius: 24px;">
+                <div class="card card-premium shadow-premium border-0 overflow-hidden mb-4 rounded-24">
                     <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center justify-content-between">
-                        <h5 class="card-title font-weight-bold text-dark text-uppercase mb-0" style="letter-spacing: 1px;">
+                        <h5 class="card-title font-weight-bold text-dark text-uppercase mb-0 ls-1">
                             <i class="fas fa-tools mr-2 text-primary opacity-50"></i> {{ __('Service & Scope') }}
                         </h5>
                         <div class="card-tools">
@@ -102,7 +102,7 @@
                             <h6 class="font-weight-bold text-primary text-uppercase smallest letter-spacing-1 mb-3">
                                 <i class="fas fa-comment-alt mr-2"></i> {{ __('Requirements & Details') }}
                             </h6>
-                            <div class="text-dark font-weight-500" style="line-height: 1.8; font-size: 1.05rem; white-space: pre-wrap;">
+                            <div class="text-dark font-weight-500 leading-1-8 fs-1-05 pre-wrap">
                                 @if($quote->details)
                                     {!! nl2br(e($quote->details)) !!}
                                 @else
@@ -114,9 +114,9 @@
                 </div>
 
                 {{-- Quoted Price Card --}}
-                <div class="card card-premium shadow-premium border-0 overflow-hidden mb-4" style="border-radius: 24px;">
+                <div class="card card-premium shadow-premium border-0 overflow-hidden mb-4 rounded-24">
                     <div class="card-header border-0 bg-white py-4 px-4">
-                        <h5 class="card-title font-weight-bold text-dark text-uppercase mb-0" style="letter-spacing: 1px;">
+                        <h5 class="card-title font-weight-bold text-dark text-uppercase mb-0 ls-1">
                             <i class="fas fa-dollar-sign mr-2 text-primary opacity-50"></i> {{ __('Financial Estimate') }}
                         </h5>
                     </div>
@@ -124,7 +124,7 @@
                         @if($quote->quoted_price)
                             <div class="text-center py-4 bg-success-soft rounded-xl border border-success-soft shadow-xs">
                                 <p class="smallest font-weight-bold text-success text-uppercase letter-spacing-1 mb-2">{{ __('Current Quoted Price') }}</p>
-                                <h2 class="text-success font-weight-bold mb-0" style="font-size: 3.5rem; letter-spacing: -2px;">
+                                <h2 class="text-success font-weight-bold mb-0 fs-3-5 ls-neg-2">
                                     ${{ number_format($quote->quoted_price, 2) }}
                                 </h2>
                                 <p class="text-muted smallest font-weight-bold uppercase mt-3 mb-0">
@@ -133,7 +133,7 @@
                             </div>
                         @else
                             <div class="text-center py-5 bg-light rounded-xl border border-dashed shadow-xs">
-                                <div class="icon-circle bg-white text-muted mx-auto mb-3 shadow-xs" style="width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                <div class="icon-circle bg-white text-muted mx-auto mb-3 shadow-xs icon-box-60 d-flex align-items-center justify-content-center rounded-circle">
                                     <i class="fas fa-hourglass-half fa-lg"></i>
                                 </div>
                                 <h6 class="font-weight-bold text-dark mb-1">{{ __('Awaiting Financial Proposal') }}</h6>
@@ -147,9 +147,9 @@
 
             {{-- Right Sidebar: Customer Information --}}
             <div class="col-md-4">
-                <div class="card card-premium shadow-premium border-0 overflow-hidden mb-4" style="border-radius: 24px;">
+                <div class="card card-premium shadow-premium border-0 overflow-hidden mb-4 rounded-24">
                     <div class="card-header border-0 bg-white py-4 px-4">
-                        <h5 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0" style="letter-spacing: 1px;">
+                        <h5 class="card-title font-weight-bold text-dark text-uppercase mb-0 ls-1">
                             <i class="fas fa-user-tag mr-2 text-primary opacity-50"></i> {{ __('Client Identity') }}
                         </h5>
                     </div>
@@ -157,8 +157,7 @@
                         @if($quote->user)
                             <div class="position-relative d-inline-block mb-3">
                                 <img src="https://ui-avatars.com/api/?name={{ urlencode($quote->user->name) }}&background=46a5ac&color=fff&size=200" 
-                                     class="img-circle shadow-premium border border-white" 
-                                     style="width: 90px; height: 90px; border-width: 4px !important;">
+                                     class="img-circle shadow-premium border-4-fff icon-box-90">
                             </div>
                             <h5 class="font-weight-bold text-dark mb-1">{{ $quote->user->name }}</h5>
                             <p class="text-muted smallest font-weight-bold uppercase letter-spacing-1 mb-4">{{ $quote->user->email }}</p>
@@ -187,9 +186,9 @@
                 </div>
 
                 {{-- Meta Info Card --}}
-                <div class="card card-premium shadow-premium border-0 overflow-hidden mb-4" style="border-radius: 24px;">
+                <div class="card card-premium shadow-premium border-0 overflow-hidden mb-4 rounded-24">
                     <div class="card-header border-0 bg-white py-4 px-4">
-                        <h5 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0" style="letter-spacing: 1px;">
+                        <h5 class="card-title font-weight-bold text-dark text-uppercase mb-0 ls-1">
                             <i class="fas fa-info-circle mr-2 text-primary opacity-50"></i> {{ __('Audit & Meta') }}
                         </h5>
                     </div>
