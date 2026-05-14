@@ -67,12 +67,12 @@
             $('#orders-table').DataTable({
                 "paging": false,
                 "lengthChange": false,
-                "searching": true,
+                "searching": false,
                 "ordering": true,
                 "info": false,
-                "dom": '<"row pt-3"<"col-sm-12"f>>t',
+                "dom": 't',
                 "columnDefs": [
-                    { "orderable": false, "targets": 0 }
+                    { "orderable": false, "targets": [0, 1, 7] }
                 ]
             });
         }
