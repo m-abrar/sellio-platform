@@ -19,9 +19,10 @@
 Sellio is built as a unified monorepo for maximum developer efficiency:
 
 -   **`apps/backend`**: Laravel 12.x Core - The brain of the platform. Handles API, SSR Storefront, and Admin Ops.
--   **`apps/dashboard`**: React + Vite Admin Panel - Modern frontend for partner management.
--   **`packages/ui`**: Shared Design System - Vanilla CSS tokens and React components.
+-   **`apps/storefront`**: React/Next.js Storefront (Coming Soon)
+-   **`apps/seller`**: Dedicated Seller Dashboard
 -   **`packages/api-client`**: Unified Axios wrapper for cross-app synchronization.
+-   **`packages/types`**: Shared TypeScript definitions.
 
 ---
 
@@ -32,7 +33,7 @@ Sellio is built as a unified monorepo for maximum developer efficiency:
 | **PHP** | 8.2+ |
 | **Database** | MySQL 8.0+ / PostgreSQL / SQLite |
 | **Node.js** | 20.x+ (LTS) |
-| **Package Manager** | `pnpm` (Workspace support) |
+| **Package Manager** | `npm` (Workspace support) |
 | **Frameworks** | Laravel 12, React 18, Vite |
 
 ---
@@ -41,7 +42,7 @@ Sellio is built as a unified monorepo for maximum developer efficiency:
 
 ### 1. Initialize Workspace
 ```bash
-pnpm install
+npm install
 ```
 
 ### 2. Configure Backend
@@ -54,7 +55,7 @@ php artisan migrate --seed
 
 ### 3. Launch Development
 ```bash
-pnpm dev
+npm run dev --workspace=apps/backend
 ```
 
 ---
