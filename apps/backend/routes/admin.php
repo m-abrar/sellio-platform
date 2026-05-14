@@ -103,7 +103,7 @@ Route::prefix('admin')
         }
         );
 
-        Route::controller(ActivityLogController::class)->prefix('activity-log')->name('activity-log.')->group(function () {
+        Route::controller(ActivityLogController::class)->prefix('activity-log')->name('activity-log.')->middleware('can:app-settings')->group(function () {
             Route::get('/', 'index')->name('index');
             Route::delete('/clear', 'clearLog')->name('clear');
         }
@@ -320,9 +320,9 @@ Route::prefix('admin')
         );
 
         Route::resource('email-templates', EmailTemplateController::class)->except(['create', 'store', 'destroy'])->middleware('can:app-settings');
-        Route::resource('advertisements', AdvertisementController::class);
-        Route::get('newsletter-subscribers/export', [NewsletterSubscriberController::class, 'export'])->name('newsletter-subscribers.export');
-        Route::resource('newsletter-subscribers', NewsletterSubscriberController::class);
+        Route::resource('advertisements', AdvertisementController::class)->middleware('can:manage-pages');
+        Route::get('newsletter-subscribers/export', [NewsletterSubscriberController::class, 'export'])->name('newsletter-subscribers.export')->middleware('can:manage-users');
+        Route::resource('newsletter-subscribers', NewsletterSubscriberController::class)->middleware('can:manage-users');
 
         /**
      * 6. SUBSCRIPTIONS & GATEWAYS
@@ -359,7 +359,7 @@ Route::prefix('admin')
         /**
      * 7. ANALYTICS & APPEARANCE
      */
-        Route::controller(ReportController::class)->prefix('reports')->name('reports.')->group(function () {
+        Route::controller(ReportController::class)->prefix('reports')->name('reports.')->middleware('can:view')->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/bookings', 'bookings')->name('bookings');
             Route::get('/payments', 'payments')->name('payments');
@@ -392,7 +392,7 @@ Route::prefix('admin')
         /**
          * 8. LOCALIZATION MANAGEMENT
          */
-        Route::controller(LanguageController::class)->prefix('languages')->name('languages.')->group(function () {
+        Route::controller(LanguageController::class)->prefix('languages')->name('languages.')->middleware('can:app-settings')->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/create', 'create')->name('create');
             Route::post('/', 'store')->name('store');

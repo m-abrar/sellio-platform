@@ -92,13 +92,18 @@ class RolesAndPermissionsSeeder extends Seeder
             'manage-withdrawals', 'manage-users',
             'manage-property', 'manage-auto', 'manage-event', 'manage-job', 
             'manage-service', 'manage-product', 'manage-classified', 
-            'manage-blog', 'manage-pages', 'manage-menus'
+            'manage-blog', 'manage-pages', 'manage-menus', 'manage-themes'
         ]);
 
         // C. Moderator Role
         // The Moderator role focuses on content maintenance and approval workflows.
         $moderatorRole = Role::firstOrCreate(['name' => 'moderator']);
-        $moderatorRole->givePermissionTo(['edit', 'delete', 'view']);
+        $moderatorRole->givePermissionTo([
+            'edit', 'delete', 'view',
+            'manage-property', 'manage-auto', 'manage-event', 'manage-job', 
+            'manage-service', 'manage-product', 'manage-classified', 
+            'manage-blog'
+        ]);
 
         // D. Standard Partner Role (Users who offer services/products)
         $partnerRole = Role::firstOrCreate(['name' => 'partner']);
