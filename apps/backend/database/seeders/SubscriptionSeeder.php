@@ -26,6 +26,12 @@ class SubscriptionSeeder extends Seeder
      */
     public function run(): void
     {
+        if ($this->command) {
+            $this->command->info('📩 Starting Subscription Seeder...');
+            \Illuminate\Support\Facades\DB::table('subscriptions')->delete();
+            $this->command->line('  🗑️ Cleared existing subscriptions.');
+        }
+
         // Fetch all existing Users and Plans to link the subscriptions correctly.
         $plans = Plan::all();
         
@@ -83,13 +89,21 @@ class SubscriptionSeeder extends Seeder
                     default => null, 
                 };
 
-                // For testing cancellation and renewal warning logic,
-                // randomly set 30% of active subs to end within 1-2 weeks (future date).
-                $status = 'active';
-                if (mt_rand(1, 10) <= 3) {
-                    // This simulates a subscription that has been canceled and is running until the end of the current period.
+                // For testing cancellation, renewal warning, and pending state logic,
+                // randomly set status to diverse states.
+                $status = Subscription::STATUS_ACTIVE;
+                $dice = mt_rand(1, 10);
+                
+                if ($dice <= 2) {
+                    // 20% Canceled: Running until period end
                     $endsAt = now()->addDays(mt_rand(7, 14)); 
-                    $status = 'cancelled';
+                    $status = Subscription::STATUS_CANCELLED;
+                } elseif ($dice === 3) {
+                    // 10% Pending: Awaiting payment/initialization
+                    $status = Subscription::STATUS_PENDING;
+                } elseif ($dice === 4) {
+                    // 10% Past Due: Payment collection failure
+                    $status = Subscription::STATUS_PAST_DUE;
                 }
                 
                 // If endsAt is null (auto-renew), refine the start date to simulate the exact beginning of the current cycle.

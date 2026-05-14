@@ -23,9 +23,10 @@ class Subscription extends Model
     /**
      * Subscription Status Constants
      */
-    public const STATUS_ACTIVE   = 'active';
-    public const STATUS_ON_TRIAL = 'on_trial';
-    public const STATUS_PAST_DUE = 'past_due';
+    public const STATUS_ACTIVE    = 'active';
+    public const STATUS_ON_TRIAL  = 'on_trial';
+    public const STATUS_PAST_DUE  = 'past_due';
+    public const STATUS_PENDING   = 'pending';
     public const STATUS_CANCELLED = 'cancelled';
     public const STATUS_EXPIRED   = 'expired';
 
