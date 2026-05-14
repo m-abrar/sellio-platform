@@ -122,61 +122,75 @@ Route::prefix('admin')
         });
 
         // Dedicated Vertical List Pages
-        Route::controller(\App\Http\Controllers\Admin\AutoController::class)->prefix('autos')->name('autos.')->group(function () {
-            Route::post('/{auto}/approve', 'approve')->name('approve');
-            Route::post('/{auto}/disapprove', 'disapprove')->name('disapprove');
-            Route::get('/{auto}/duplicate', 'duplicate')->name('duplicate');
+        Route::middleware('can:manage-auto')->group(function () {
+            Route::controller(\App\Http\Controllers\Admin\AutoController::class)->prefix('autos')->name('autos.')->group(function () {
+                Route::post('/{auto}/approve', 'approve')->name('approve');
+                Route::post('/{auto}/disapprove', 'disapprove')->name('disapprove');
+                Route::get('/{auto}/duplicate', 'duplicate')->name('duplicate');
+            });
+            Route::resource('autos', \App\Http\Controllers\Admin\AutoController::class)->middleware('module:autos');
         });
-        Route::resource('autos', \App\Http\Controllers\Admin\AutoController::class)->middleware('module:autos');
 
-        Route::controller(\App\Http\Controllers\Admin\EventController::class)->prefix('events')->name('events.')->group(function () {
-            Route::post('/{event}/approve', 'approve')->name('approve');
-            Route::post('/{event}/disapprove', 'disapprove')->name('disapprove');
-            Route::get('/{event}/duplicate', 'duplicate')->name('duplicate');
+        Route::middleware('can:manage-event')->group(function () {
+            Route::controller(\App\Http\Controllers\Admin\EventController::class)->prefix('events')->name('events.')->group(function () {
+                Route::post('/{event}/approve', 'approve')->name('approve');
+                Route::post('/{event}/disapprove', 'disapprove')->name('disapprove');
+                Route::get('/{event}/duplicate', 'duplicate')->name('duplicate');
+            });
+            Route::resource('events', \App\Http\Controllers\Admin\EventController::class)->middleware('module:events');
         });
-        Route::resource('events', \App\Http\Controllers\Admin\EventController::class)->middleware('module:events');
 
-        Route::controller(\App\Http\Controllers\Admin\JobController::class)->prefix('jobs')->name('jobs.')->group(function () {
-            Route::post('/{job}/approve', 'approve')->name('approve');
-            Route::post('/{job}/disapprove', 'disapprove')->name('disapprove');
-            Route::get('/{job}/duplicate', 'duplicate')->name('duplicate');
+        Route::middleware('can:manage-job')->group(function () {
+            Route::controller(\App\Http\Controllers\Admin\JobController::class)->prefix('jobs')->name('jobs.')->group(function () {
+                Route::post('/{job}/approve', 'approve')->name('approve');
+                Route::post('/{job}/disapprove', 'disapprove')->name('disapprove');
+                Route::get('/{job}/duplicate', 'duplicate')->name('duplicate');
+            });
+            Route::resource('jobs', \App\Http\Controllers\Admin\JobController::class)->middleware('module:jobs');
         });
-        Route::resource('jobs', \App\Http\Controllers\Admin\JobController::class)->middleware('module:jobs');
 
-        Route::controller(\App\Http\Controllers\Admin\ServiceController::class)->prefix('services')->name('services.')->group(function () {
-            Route::post('/{service}/approve', 'approve')->name('approve');
-            Route::post('/{service}/disapprove', 'disapprove')->name('disapprove');
-            Route::get('/{service}/duplicate', 'duplicate')->name('duplicate');
+        Route::middleware('can:manage-service')->group(function () {
+            Route::controller(\App\Http\Controllers\Admin\ServiceController::class)->prefix('services')->name('services.')->group(function () {
+                Route::post('/{service}/approve', 'approve')->name('approve');
+                Route::post('/{service}/disapprove', 'disapprove')->name('disapprove');
+                Route::get('/{service}/duplicate', 'duplicate')->name('duplicate');
+            });
+            Route::resource('services', \App\Http\Controllers\Admin\ServiceController::class)->middleware('module:services');
         });
-        Route::resource('services', \App\Http\Controllers\Admin\ServiceController::class)->middleware('module:services');
 
-        Route::controller(\App\Http\Controllers\Admin\ClassifiedController::class)->prefix('classifieds')->name('classifieds.')->group(function () {
-            Route::post('/{classified}/approve', 'approve')->name('approve');
-            Route::post('/{classified}/disapprove', 'disapprove')->name('disapprove');
-            Route::get('/{classified}/duplicate', 'duplicate')->name('duplicate');
+        Route::middleware('can:manage-classified')->group(function () {
+            Route::controller(\App\Http\Controllers\Admin\ClassifiedController::class)->prefix('classifieds')->name('classifieds.')->group(function () {
+                Route::post('/{classified}/approve', 'approve')->name('approve');
+                Route::post('/{classified}/disapprove', 'disapprove')->name('disapprove');
+                Route::get('/{classified}/duplicate', 'duplicate')->name('duplicate');
+            });
+            Route::resource('classifieds', \App\Http\Controllers\Admin\ClassifiedController::class)->middleware('module:classifieds');
         });
-        Route::resource('classifieds', \App\Http\Controllers\Admin\ClassifiedController::class)->middleware('module:classifieds');
 
-        Route::controller(\App\Http\Controllers\Admin\PropertyController::class)->prefix('properties')->name('properties.')->group(function () {
-            Route::post('/{property}/approve', 'approve')->name('approve');
-            Route::post('/{property}/disapprove', 'disapprove')->name('disapprove');
-            Route::get('/{property}/duplicate', 'duplicate')->name('duplicate');
+        Route::middleware('can:manage-property')->group(function () {
+            Route::controller(\App\Http\Controllers\Admin\PropertyController::class)->prefix('properties')->name('properties.')->group(function () {
+                Route::post('/{property}/approve', 'approve')->name('approve');
+                Route::post('/{property}/disapprove', 'disapprove')->name('disapprove');
+                Route::get('/{property}/duplicate', 'duplicate')->name('duplicate');
+            });
+            Route::resource('properties', PropertyController::class)->middleware('module:properties');
         });
-        Route::resource('properties', PropertyController::class)->middleware('module:properties');
 
-        Route::resource('products', ProductController::class)->middleware('module:products');
-        Route::get('products/{product}/duplicate', [ProductController::class, 'duplicate'])->name('products.duplicate')->middleware('module:products');
-        
-        // Product Orders Management
-        Route::controller(OrderController::class)->prefix('product-orders')->name('product-orders.')->middleware('module:products')->group(function () {
-            Route::get('/', 'index')->name('index');
-            Route::get('/create', 'create')->name('create');
-            Route::post('/', 'store')->name('store');
-            Route::get('/{order}', 'show')->name('show');
-            Route::get('/{order}/edit', 'edit')->name('edit');
-            Route::put('/{order}', 'update')->name('update');
-            Route::post('/bulk-update', 'bulkUpdate')->name('bulk-update');
-            Route::post('/{order}/status', 'updateStatus')->name('update-status');
+        Route::middleware('can:manage-product')->group(function () {
+            Route::resource('products', ProductController::class)->middleware('module:products');
+            Route::get('products/{product}/duplicate', [ProductController::class, 'duplicate'])->name('products.duplicate')->middleware('module:products');
+            
+            // Product Orders Management
+            Route::controller(OrderController::class)->prefix('product-orders')->name('product-orders.')->middleware('module:products')->group(function () {
+                Route::get('/', 'index')->name('index');
+                Route::get('/create', 'create')->name('create');
+                Route::post('/', 'store')->name('store');
+                Route::get('/{order}', 'show')->name('show');
+                Route::get('/{order}/edit', 'edit')->name('edit');
+                Route::put('/{order}', 'update')->name('update');
+                Route::post('/bulk-update', 'bulkUpdate')->name('bulk-update');
+                Route::post('/{order}/status', 'updateStatus')->name('update-status');
+            });
         });
 
         /**
@@ -184,12 +198,12 @@ Route::prefix('admin')
      */
         Route::controller(BookingController::class)->prefix('bookings')->name('bookings.')->group(function () {
             // Dedicated Category Views (Pills Grouping equivalent)
-            Route::get('/properties/{status?}', [PropertyBookingController::class, 'index'])->name('properties')->middleware('module:properties');
-            Route::get('/autos/{status?}', [AutoInquiryController::class, 'index'])->name('autos')->middleware('module:autos');
-            Route::get('/events/{status?}', [EventBookingController::class, 'index'])->name('events')->middleware('module:events');
-            Route::get('/jobs/{status?}', [JobApplicationController::class, 'index'])->name('jobs')->middleware('module:jobs');
-            Route::get('/services/{status?}', [ServiceQuoteController::class, 'index'])->name('services')->middleware('module:services');
-            Route::get('/classifieds/{status?}', [ClassifiedInquiryController::class, 'index'])->name('classifieds')->middleware('module:classifieds');
+            Route::get('/properties/{status?}', [PropertyBookingController::class, 'index'])->name('properties')->middleware(['module:properties', 'can:manage-property']);
+            Route::get('/autos/{status?}', [AutoInquiryController::class, 'index'])->name('autos')->middleware(['module:autos', 'can:manage-auto']);
+            Route::get('/events/{status?}', [EventBookingController::class, 'index'])->name('events')->middleware(['module:events', 'can:manage-event']);
+            Route::get('/jobs/{status?}', [JobApplicationController::class, 'index'])->name('jobs')->middleware(['module:jobs', 'can:manage-job']);
+            Route::get('/services/{status?}', [ServiceQuoteController::class, 'index'])->name('services')->middleware(['module:services', 'can:manage-service']);
+            Route::get('/classifieds/{status?}', [ClassifiedInquiryController::class, 'index'])->name('classifieds')->middleware(['module:classifieds', 'can:manage-classified']);
 
             Route::get('/show/{type}/{id}', 'show')->name('show');
             Route::delete('/destroy/{type}/{id}', 'destroy')->name('destroy');
@@ -198,13 +212,13 @@ Route::prefix('admin')
         }
         );
 
-        Route::resource('property-bookings', PropertyBookingController::class)->middleware('module:properties');
-        Route::resource('auto-inquiries', AutoInquiryController::class)->middleware('module:autos');
-        Route::resource('event-bookings', EventBookingController::class)->middleware('module:events');
-        Route::resource('job-applications', JobApplicationController::class)->middleware('module:jobs');
-        Route::resource('service-quotes', ServiceQuoteController::class)->middleware('module:services');
-        Route::resource('service-appointments', ServiceAppointmentController::class)->middleware('module:services');
-        Route::resource('classified-inquiries', ClassifiedInquiryController::class)->middleware('module:classifieds');
+        Route::resource('property-bookings', PropertyBookingController::class)->middleware(['module:properties', 'can:manage-property']);
+        Route::resource('auto-inquiries', AutoInquiryController::class)->middleware(['module:autos', 'can:manage-auto']);
+        Route::resource('event-bookings', EventBookingController::class)->middleware(['module:events', 'can:manage-event']);
+        Route::resource('job-applications', JobApplicationController::class)->middleware(['module:jobs', 'can:manage-job']);
+        Route::resource('service-quotes', ServiceQuoteController::class)->middleware(['module:services', 'can:manage-service']);
+        Route::resource('service-appointments', ServiceAppointmentController::class)->middleware(['module:services', 'can:manage-service']);
+        Route::resource('classified-inquiries', ClassifiedInquiryController::class)->middleware(['module:classifieds', 'can:manage-classified']);
 
         Route::resource('transactions', TransactionController::class);
 
@@ -275,14 +289,14 @@ Route::prefix('admin')
          * 5. CMS, BLOGS, THEMES & MARKETING
          */
             // Blog Management Routes
-            Route::get('blogs/pending', [BlogController::class , 'pending'])->name('blogs.pending');
-            Route::resource('blogs', BlogController::class);
+            Route::get('blogs/pending', [BlogController::class , 'pending'])->name('blogs.pending')->middleware('can:manage-blog');
+            Route::resource('blogs', BlogController::class)->middleware('can:manage-blog');
 
             // Page Management Routes
-            Route::resource('pages', PageController::class);
-            Route::get('pages/type/{type}', [PageController::class , 'index'])->name('pages.index.type');
+            Route::resource('pages', PageController::class)->middleware('can:manage-pages');
+            Route::get('pages/type/{type}', [PageController::class , 'index'])->name('pages.index.type')->middleware('can:manage-pages');
 
-            Route::controller(PageBuilderController::class)->prefix('page-builder')->name('page-builder.')->group(function () {
+            Route::controller(PageBuilderController::class)->prefix('page-builder')->name('page-builder.')->middleware('can:manage-pages')->group(function () {
             Route::get('/{id}', 'edit')->name('edit');
             Route::post('/{id}', 'update')->name('update');
         }
@@ -296,7 +310,7 @@ Route::prefix('admin')
         }
         );
 
-        Route::controller(MenuController::class)->prefix('menu')->name('menu.')->group(function () {
+        Route::controller(MenuController::class)->prefix('menu')->name('menu.')->middleware('can:manage-menus')->group(function () {
             Route::get('/{theme?}', 'index')->name('index');
             Route::get('/{menu}/edit', 'edit')->name('edit');
             Route::post('/{menu}/update', 'updateStructure')->name('update_structure');
@@ -354,7 +368,7 @@ Route::prefix('admin')
         );
         Route::get('payments-report', [ReportController::class , 'payments'])->name('payments_report');
 
-        Route::controller(ThemeController::class)->middleware('can:app-settings')->prefix('themes')->name('themes.')->group(function () {
+        Route::controller(ThemeController::class)->middleware('can:manage-themes')->prefix('themes')->name('themes.')->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/{theme}/edit', 'edit')->name('edit');
             Route::post('/{theme}/update', 'update')->name('update');

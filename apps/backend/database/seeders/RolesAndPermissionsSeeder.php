@@ -87,7 +87,13 @@ class RolesAndPermissionsSeeder extends Seeder
         // B. Admin Role
         // The Admin role typically manages core site operations and high-level content.
         $adminRole = Role::firstOrCreate(['name' => 'admin']);
-        $adminRole->givePermissionTo(['create', 'edit', 'delete', 'view', 'manage-withdrawals', 'manage-users']);
+        $adminRole->givePermissionTo([
+            'create', 'edit', 'delete', 'view', 
+            'manage-withdrawals', 'manage-users',
+            'manage-property', 'manage-auto', 'manage-event', 'manage-job', 
+            'manage-service', 'manage-product', 'manage-classified', 
+            'manage-blog', 'manage-pages', 'manage-menus'
+        ]);
 
         // C. Moderator Role
         // The Moderator role focuses on content maintenance and approval workflows.
