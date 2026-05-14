@@ -26,11 +26,15 @@ $(document).ready(function() {
             "paging": false,
             "lengthChange": false,
             "searching": false,
+            "bSearching": false,
             "ordering": true,
             "info": false,
             "autoWidth": false,
             "responsive": true,
-            "dom": 't'
+            "dom": 't',
+            "columnDefs": [
+                { "orderable": false, "targets": [0, 6] }
+            ]
         });
     }
 });
