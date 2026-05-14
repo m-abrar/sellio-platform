@@ -52,7 +52,7 @@
     {{-- Stats Row --}}
     <div class="row mb-5">
         <div class="col-lg-3 col-md-6 mb-4">
-            <div class="card card-premium h-100 border-0 shadow-premium overflow-hidden">
+            <div class="card card-premium stat-card-interactive h-100 border-0 shadow-premium overflow-hidden">
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center mb-3">
                         <div class="icon-box-soft bg-info-soft text-info mr-3 shadow-xs icon-box-48 rounded-14 d-flex align-items-center justify-content-center">
@@ -72,7 +72,7 @@
         </div>
 
         <div class="col-lg-3 col-md-6 mb-4">
-            <div class="card card-premium h-100 border-0 shadow-premium overflow-hidden">
+            <div class="card card-premium stat-card-interactive h-100 border-0 shadow-premium overflow-hidden">
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center mb-3">
                         <div class="icon-box-soft bg-success-soft text-success mr-3 shadow-xs icon-box-48 rounded-14 d-flex align-items-center justify-content-center">
@@ -92,7 +92,7 @@
         </div>
 
         <div class="col-lg-3 col-md-6 mb-4">
-            <div class="card card-premium h-100 border-0 shadow-premium overflow-hidden">
+            <div class="card card-premium stat-card-interactive h-100 border-0 shadow-premium overflow-hidden">
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center mb-3">
                         <div class="icon-box-soft bg-danger-soft text-danger mr-3 shadow-xs icon-box-48 rounded-14 d-flex align-items-center justify-content-center">

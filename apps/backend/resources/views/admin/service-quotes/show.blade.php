@@ -22,11 +22,11 @@
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-file-invoice mr-2 text-primary"></i> {{ __('Quote Manifest') }} <small class="text-muted ml-2">#{{ $quote->id }}</small>
                 </h1>
-                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Review service scope, pricing estimates, and customer requirements for operational fulfillment.</p>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">{{ __('Review service scope, pricing estimates, and customer requirements for operational fulfillment.') }}</p>
             </div>
             <div class="col-sm-4 text-right">
                 <a href="{{ route('admin.bookings.services') }}" class="btn btn-back shadow-sm rounded-pill px-4 py-2 font-weight-bold smallest uppercase letter-spacing-1">
-                    <i class="fas fa-arrow-left mr-1"></i> Return to Registry
+                    <i class="fas fa-arrow-left mr-1"></i> {{ __('Return to Registry') }}
                 </a>
             </div>
         </div>
@@ -165,11 +165,11 @@
                             
                             <div class="text-left mb-4">
                                 <div class="px-3 py-2 bg-light rounded-xl border mb-2 d-flex justify-content-between align-items-center">
-                                    <span class="smallest font-weight-bold text-muted uppercase">Client ID</span>
+                                    <span class="smallest font-weight-bold text-muted uppercase">{{ __('Client ID') }}</span>
                                     <span class="smallest font-weight-bold text-dark text-monospace">#USER-{{ str_pad($quote->user_id, 4, '0', STR_PAD_LEFT) }}</span>
                                 </div>
                                 <div class="px-3 py-2 bg-light rounded-xl border d-flex justify-content-between align-items-center">
-                                    <span class="smallest font-weight-bold text-muted uppercase">Onboarded</span>
+                                    <span class="smallest font-weight-bold text-muted uppercase">{{ __('Onboarded') }}</span>
                                     <span class="smallest font-weight-bold text-dark">{{ $quote->user->created_at->format('M Y') }}</span>
                                 </div>
                             </div>
@@ -195,11 +195,11 @@
                     </div>
                     <div class="card-body p-0">
                         <div class="px-4 py-3 border-bottom d-flex justify-content-between align-items-center">
-                            <span class="smallest font-weight-bold text-muted uppercase">Service Tier</span>
+                            <span class="smallest font-weight-bold text-muted uppercase">{{ __('Service Tier') }}</span>
                             <span class="smallest font-weight-bold text-dark">{{ $quote->service_package_id ? '#' . $quote->service_package_id : __('Standard') }}</span>
                         </div>
                         <div class="px-4 py-3 border-bottom d-flex justify-content-between align-items-center">
-                            <span class="smallest font-weight-bold text-muted uppercase">Review State</span>
+                            <span class="smallest font-weight-bold text-muted uppercase">{{ __('Review State') }}</span>
                             <span>
                                 @if($quote->viewed_at)
                                     <span class="badge badge-success-light text-success px-2 py-1 rounded-pill smallest font-weight-bold">
@@ -213,7 +213,7 @@
                             </span>
                         </div>
                         <div class="px-4 py-3 border-bottom d-flex justify-content-between align-items-center">
-                            <span class="smallest font-weight-bold text-muted uppercase">Last Pulse</span>
+                            <span class="smallest font-weight-bold text-muted uppercase">{{ __('Last Pulse') }}</span>
                             <span class="smallest font-weight-bold text-dark">{{ $quote->updated_at->format('M d, Y') }}</span>
                         </div>
                     </div>
@@ -236,14 +236,7 @@
 @stop
 
 @push('css')
-<style>
-    .rounded-xl { border-radius: 16px !important; }
-    .bg-primary-soft { background: rgba(70, 165, 172, 0.05); }
-    .bg-success-soft { background: rgba(40, 167, 69, 0.05); }
-    .border-primary-soft { border-color: rgba(70, 165, 172, 0.1) !important; }
-    .border-success-soft { border-color: rgba(40, 167, 69, 0.1) !important; }
-    .text-monospace { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace !important; }
-</style>
+@include('admin._partials._toggle-card-css')
 @endpush
 
 @section('js')

@@ -41,7 +41,7 @@
     {{-- Stats Row --}}
     <div class="row mb-5">
         <div class="col-lg-3 col-md-6 mb-4">
-            <div class="card card-premium h-100 border-0 shadow-premium overflow-hidden">
+            <div class="card card-premium stat-card-interactive h-100 border-0 shadow-premium overflow-hidden">
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center mb-3">
                         <div class="icon-box-soft bg-warning-soft text-warning mr-3 shadow-xs" style="width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center;">
@@ -60,7 +60,7 @@
         </div>
 
         <div class="col-lg-3 col-md-6 mb-4">
-            <div class="card card-premium h-100 border-0 shadow-premium overflow-hidden">
+            <div class="card card-premium stat-card-interactive h-100 border-0 shadow-premium overflow-hidden">
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center mb-3">
                         <div class="icon-box-soft bg-danger-soft text-danger mr-3 shadow-xs" style="width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center;">
@@ -80,7 +80,7 @@
         </div>
 
         <div class="col-lg-3 col-md-6 mb-4">
-            <div class="card card-premium h-100 border-0 shadow-premium overflow-hidden">
+            <div class="card card-premium stat-card-interactive h-100 border-0 shadow-premium overflow-hidden">
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center mb-3">
                         <div class="icon-box-soft bg-success-soft text-success mr-3 shadow-xs" style="width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center;">
@@ -100,7 +100,7 @@
         </div>
 
         <div class="col-lg-3 col-md-6 mb-4">
-            <div class="card card-premium h-100 border-0 shadow-premium overflow-hidden">
+            <div class="card card-premium stat-card-interactive h-100 border-0 shadow-premium overflow-hidden">
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center mb-3">
                         <div class="icon-box-soft bg-info-soft text-info mr-3 shadow-xs" style="width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center;">
@@ -185,13 +185,6 @@
         </div>
     </div>
 </div>
-@stop
-
-@section('css')
-<style>
-    .stat-card { transition: all 0.3s ease; }
-    .stat-card:hover { transform: translateY(-5px); box-shadow: 0 15px 45px rgba(0,0,0,0.1) !important; }
-</style>
 @stop
 
 @section('js')

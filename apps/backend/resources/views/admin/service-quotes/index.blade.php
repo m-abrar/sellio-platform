@@ -15,7 +15,7 @@
 --}}
 @extends('adminlte::page')
 
-@section('title', __('Service Quotes | Revenue Intelligence'))
+@section('title', __('Service Quotes') . ' | ' . __('Revenue Intelligence'))
 
 @section('plugins.Select2', true)
 @section('plugins.Sweetalert2', true)
@@ -29,12 +29,12 @@
                     <i class="fas fa-file-invoice mr-2 text-primary opacity-50"></i>
                     {{ __('Service Quotes') }}
                 </h1>
-                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Track customer inquiries, scope requests, and estimated revenue across services.</p>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">{{ __('Track customer inquiries, scope requests, and estimated revenue across services.') }}</p>
             </div>
             <div class="col-sm-4 text-right">
                 <div class="d-flex justify-content-end align-items-center" style="gap: 12px;">
                     <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">
-                        <i class="fas fa-th-large"></i> Dashboard
+                        <i class="fas fa-th-large"></i> {{ __('Dashboard') }}
                     </a>
                 </div>
             </div>
@@ -52,13 +52,13 @@
                 <form method="GET" action="{{ url()->current() }}">
                     <div class="row align-items-end">
                         <div class="col-md-3">
-                            <label class="form-label-premium">Target Service</label>
-                            <div class="input-group input-group-premium">
+                            <label class="form-label-premium">{{ __('Target Service') }}</label>
+                            <div class="input-group input-group-premium select2-input-group-fix">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fas fa-concierge-bell text-xs"></i></span>
                                 </div>
                                 <select name="service" class="form-control select2">
-                                    <option value="">All Services</option>
+                                    <option value="">{{ __('All Services') }}</option>
                                     @foreach($services as $s)
                                         <option value="{{ $s->id }}" {{ request('service') == $s->id ? 'selected' : '' }}>{{ $s->title }}</option>
                                     @endforeach
@@ -66,13 +66,13 @@
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <label class="form-label-premium">Service Sector</label>
-                            <div class="input-group input-group-premium">
+                            <label class="form-label-premium">{{ __('Service Sector') }}</label>
+                            <div class="input-group input-group-premium select2-input-group-fix">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fas fa-tags text-xs"></i></span>
                                 </div>
                                 <select name="category" class="form-control select2">
-                                    <option value="">All Sectors</option>
+                                    <option value="">{{ __('All Sectors') }}</option>
                                     @foreach ($categories as $c)
                                         <option value="{{ $c->id }}" {{ request('category') == $c->id ? 'selected' : '' }}>{{ $c->title }}</option>
                                     @endforeach
@@ -80,14 +80,14 @@
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <label class="form-label-premium">Quote Status</label>
-                            <div class="input-group input-group-premium">
+                            <label class="form-label-premium">{{ __('Quote Status') }}</label>
+                            <div class="input-group input-group-premium select2-input-group-fix">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fas fa-traffic-light text-xs"></i></span>
                                 </div>
                                 <select name="status" class="form-control select2">
-                                    <option value="all">All Lifecycle States</option>
-                                    @foreach (['pending' => 'Awaiting Review', 'quoted' => 'Quote Issued', 'accepted' => 'Accepted Engagement', 'rejected' => 'Rejected'] as $val => $label)
+                                    <option value="all">{{ __('All Lifecycle States') }}</option>
+                                    @foreach (['pending' => __('Awaiting Review'), 'quoted' => __('Quote Issued'), 'accepted' => __('Accepted Engagement'), 'rejected' => __('Rejected')] as $val => $label)
                                         <option value="{{ $val }}" {{ $status == $val ? 'selected' : '' }}>{{ $label }}</option>
                                     @endforeach
                                 </select>
@@ -96,9 +96,9 @@
                         <div class="col-md-3">
                             <div class="d-flex align-items-center justify-content-end" style="gap: 12px;">
                                 <button type="submit" class="btn-filter-premium flex-grow-1">
-                                    <i class="fas fa-sync-alt mr-2"></i> UPDATE
+                                    <i class="fas fa-sync-alt mr-2"></i> {{ __('UPDATE') }}
                                 </button>
-                                <a href="{{ url()->current() }}" class="btn-reset-premium" data-toggle="tooltip" title="Reset Filters">
+                                <a href="{{ url()->current() }}" class="btn-reset-premium" data-toggle="tooltip" title="{{ __('Reset Filters') }}">
                                     <i class="fas fa-undo"></i>
                                 </a>
                             </div>
@@ -111,10 +111,10 @@
         {{-- Main Table --}}
         <div class="card registry-table-card">
             <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
-                <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none" style="letter-spacing: 1px;">Leads Registry</h3>
+                <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none" style="letter-spacing: 1px;">{{ __('Leads Registry') }}</h3>
                 <div class="card-tools d-flex align-items-center ml-auto">
                     <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase mr-2">
-                        <i class="fas fa-file-invoice-dollar mr-1"></i> {{ $serviceQuotes->total() }} LEADS
+                        <i class="fas fa-file-invoice-dollar mr-1"></i> {{ $serviceQuotes->total() }} {{ __('LEADS') }}
                     </span>
                     <button type="button" class="btn btn-tool text-muted" data-card-widget="maximize">
                         <i class="fas fa-expand"></i>
@@ -126,13 +126,13 @@
                     <table id="quotes-table" class="table table-hover table-premium mb-0">
                         <thead class="thead-light">
                             <tr>
-                                <th class="text-center pl-4" style="width: 80px">Asset</th>
-                                <th>Service Intelligence</th>
-                                <th>Customer Principal</th>
-                                <th>Scope</th>
-                                <th>Engagement</th>
-                                <th class="text-center">Lifecycle</th>
-                                <th class="text-right pr-4">Actions</th>
+                                <th class="text-center pl-4" style="width: 80px">{{ __('Asset') }}</th>
+                                <th>{{ __('Service Intelligence') }}</th>
+                                <th>{{ __('Customer Principal') }}</th>
+                                <th>{{ __('Scope') }}</th>
+                                <th>{{ __('Engagement') }}</th>
+                                <th class="text-center">{{ __('Lifecycle') }}</th>
+                                <th class="text-right pr-4">{{ __('Actions') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -155,17 +155,17 @@
                                         </div>
                                     </td>
                                     <td class="align-middle">
-                                        <span class="d-block font-weight-bold text-dark mb-0 smallest uppercase letter-spacing-1">{{ $quote->user->name ?? 'Guest Prospect' }}</span>
-                                        <div class="smallest text-muted text-monospace">{{ $quote->user->email ?? 'no-email' }}</div>
+                                        <span class="d-block font-weight-bold text-dark mb-0 smallest uppercase letter-spacing-1">{{ $quote->user->name ?? __('Guest Prospect') }}</span>
+                                        <div class="smallest text-muted text-monospace">{{ $quote->user->email ?? __('no-email') }}</div>
                                     </td>
                                     <td class="align-middle">
                                         <span class="badge badge-light border text-dark uppercase font-weight-bold px-3 py-1 rounded-pill smallest letter-spacing-1">
-                                            {{ $quote->scope_size ?: 'Standard' }}
+                                            {{ __($quote->scope_size ?: 'Standard') }}
                                         </span>
                                     </td>
                                     <td class="align-middle">
                                         <div class="font-weight-bold text-dark mb-0 smallest uppercase letter-spacing-1">
-                                            {{ $quote->requested_date ? $quote->requested_date->format('M d, Y') : 'Flexible' }}
+                                            {{ $quote->requested_date ? $quote->requested_date->format('M d, Y') : __('Flexible') }}
                                         </div>
                                         <small class="text-muted smallest uppercase font-weight-bold">{{ $quote->created_at->diffForHumans() }}</small>
                                     </td>
@@ -175,15 +175,15 @@
                                     @endphp
                                     <td class="text-center align-middle">
                                         <span class="badge {{ $statusClass }} px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1" style="min-width: 90px;">
-                                            {{ $quote->status }}
+                                            {{ strtoupper(__($quote->status)) }}
                                         </span>
                                     </td>
                                     <td class="text-right align-middle pr-4">
                                         <div class="btn-group btn-group-premium">
-                                            <a href="{{ route('admin.service-quotes.show', $quote->id) }}" class="btn text-info" data-toggle="tooltip" title="Inspect Record"><i class="fas fa-eye"></i></a>
+                                            <a href="{{ route('admin.service-quotes.show', $quote->id) }}" class="btn text-info" data-toggle="tooltip" title="{{ __('Inspect Record') }}"><i class="fas fa-eye"></i></a>
                                             <form action="{{ route('admin.service-quotes.destroy', $quote->id) }}" method="POST" class="d-inline">
                                                 @csrf @method('DELETE')
-                                                <button type="submit" class="btn text-danger" data-toggle="tooltip" title="Purge Record" onclick="return confirm('Permanently delete quote request?')"><i class="fas fa-trash-alt"></i></button>
+                                                <button type="submit" class="btn text-danger" data-toggle="tooltip" title="{{ __('Purge Record') }}" onclick="return confirm('{{ __('Permanently delete quote request?') }}')"><i class="fas fa-trash-alt"></i></button>
                                             </form>
                                         </div>
                                     </td>
@@ -203,7 +203,7 @@
 
             @if($serviceQuotes->hasPages())
                 <div class="card-footer bg-white border-top py-4 px-4 d-flex justify-content-between align-items-center">
-                    <div class="text-muted smallest font-weight-bold uppercase letter-spacing-1">Displaying {{ $serviceQuotes->firstItem() }} - {{ $serviceQuotes->lastItem() }} of {{ $serviceQuotes->total() }} records</div>
+                    <div class="text-muted smallest font-weight-bold uppercase letter-spacing-1">{{ __('Displaying :first - :last of :total records', ['first' => $serviceQuotes->firstItem(), 'last' => $serviceQuotes->lastItem(), 'total' => $serviceQuotes->total()]) }}</div>
                     <div>{{ $serviceQuotes->appends(request()->except('page'))->links('pagination::bootstrap-4') }}</div>
                 </div>
             @endif
@@ -212,37 +212,9 @@
 @endsection
 
 @section('css')
-<style>
-    .input-group-premium .select2-container { flex: 1 1 auto !important; width: 1% !important; }
-    .input-group-premium .select2-container .select2-selection--single { height: 46px !important; border: 0 !important; padding-top: 10px !important; border-radius: 0 12px 12px 0 !important; }
-</style>
+@include('admin._partials._toggle-card-css')
 @endsection
 
 @section('js')
-@include('admin._partials._sweetalert')
-<script>
-    $(document).ready(function() {
-        if (typeof $.fn.select2 === 'function') {
-            $('.select2').select2({ theme: 'bootstrap4', width: '100%' });
-        }
-        $('[data-toggle="tooltip"]').tooltip();
-
-        if ($('#quotes-table tbody tr:not(.empty-state)').length > 0) {
-            $('#quotes-table').DataTable({
-                "paging": false,
-                "lengthChange": false,
-                "searching": false,
-                "ordering": true,
-                "info": false,
-                "autoWidth": false,
-                "responsive": true,
-                "dom": 't',
-                "language": {
-                    "search": "",
-                    "searchPlaceholder": "Search leads registry..."
-                }
-            });
-        }
-    });
-</script>
+<script src="{{ asset('admin-assets/pages/service-quotes-index.js') }}"></script>
 @endsection

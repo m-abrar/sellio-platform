@@ -112,9 +112,5 @@
 @endsection
 
 @section('js')
-<script>
-    $(function () {
-        $('[data-toggle="tooltip"]').tooltip();
-    });
-</script>
+<script src="{{ asset('admin-assets/pages/advertisements-form.js') }}"></script>
 @stop

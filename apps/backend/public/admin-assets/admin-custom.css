@@ -75,6 +75,11 @@
     box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3) !important;
     border: none;
 }
+.sticky-top-20 { top: 20px !important; }
+.nav-pills-premium .nav-link { color: #6c757d; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border: 1px solid transparent; }
+.nav-pills-premium .nav-link.active { background-color: var(--primary) !important; color: #fff !important; box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.25) !important; }
+.nav-pills-premium .nav-link:not(.active):hover { background-color: #f8f9fa; color: var(--primary); }
+
 .image-container:hover .remove-image { 
     opacity: 1; 
     transform: scale(1); 
@@ -240,6 +245,15 @@
     transform: translateY(0);
 }
 
+.stat-card-interactive {
+    transition: all 0.3s ease;
+}
+
+.stat-card-interactive:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 45px rgba(0,0,0,0.1) !important;
+}
+
 .bg-indigo-soft { background-color: rgba(99, 102, 241, 0.08) !important; color: #6366f1 !important; }
 .icon-square-premium.bg-primary-soft { color: var(--primary) !important; }
 .icon-square-premium.bg-success-soft { color: var(--success) !important; }
@@ -288,6 +302,9 @@
 .icon-box-60 { width: 60px !important; height: 60px !important; }
 .icon-box-100 { width: 100px !important; height: 100px !important; }
 
+.select2-input-group-fix .select2-container { flex: 1 1 auto !important; width: 1% !important; }
+.select2-input-group-fix .select2-container .select2-selection--single { height: 46px !important; border: 0 !important; padding-top: 10px !important; border-radius: 0 12px 12px 0 !important; }
+
 /* Typography & Spacing Utilities */
 .font-outfit { font-family: 'Outfit', sans-serif !important; }
 .ls-05 { letter-spacing: 0.5px !important; }
@@ -319,3 +336,9 @@
         border-radius: 0 !important;
     }
 }
+
+/* UI Soft Surface Orchestration */
+.bg-primary-soft { background: rgba(70, 165, 172, 0.05); }
+.bg-success-soft { background: rgba(40, 167, 69, 0.05); }
+.border-primary-soft { border-color: rgba(70, 165, 172, 0.1) !important; }
+.border-success-soft { border-color: rgba(40, 167, 69, 0.1) !important; }

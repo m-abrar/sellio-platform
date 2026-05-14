@@ -287,15 +287,3 @@
         </div>
     </form>
 @endsection
-
-@push('css')
-<style>
-    .rounded-xl { border-radius: 16px !important; }
-    .dropzone-wrapper:hover { 
-        border-color: var(--primary) !important; 
-        background-color: var(--primary-soft) !important;
-        transform: translateY(-3px);
-        box-shadow: var(--premium-shadow);
-    }
-</style>
-@endpush

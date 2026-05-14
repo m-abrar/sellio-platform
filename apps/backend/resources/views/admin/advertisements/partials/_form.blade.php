@@ -50,7 +50,7 @@
 
         <div class="form-group bg-light p-4 mb-4 rounded-16 border-light">
             <label class="small font-weight-bold text-dark mb-3 uppercase letter-spacing-1 d-block">
-                {{ __('Target Radius:') }} <span id="radius-display" class="text-primary font-weight-bold ml-1">{{ old('radius', $advertisement->radius ?? 5) }} {{ __('KM') }}</span>
+                {{ __('Target Radius:') }} <span id="radius-display" class="text-primary font-weight-bold ml-1" data-unit="{{ __('KM') }}">{{ old('radius', $advertisement->radius ?? 5) }} {{ __('KM') }}</span>
             </label>
             <input type="range" name="radius" id="radius" class="custom-range custom-range-primary" min="1" max="100" value="{{ old('radius', $advertisement->radius ?? 5) }}">
         </div>
@@ -116,19 +116,3 @@
         @error('orientations') <div class="text-danger small mt-2 font-weight-bold">{{ $message }}</div> @enderror
     </div>
 </div>
-
-@push('js')
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const radiusInput = document.getElementById('radius');
-        const radiusDisplay = document.getElementById('radius-display');
-        const unitLabel = "{{ __('KM') }}";
-        
-        if (radiusInput && radiusDisplay) {
-            radiusInput.addEventListener('input', function() {
-                radiusDisplay.textContent = this.value + ' ' + unitLabel;
-            });
-        }
-    });
-</script>
-@endpush
