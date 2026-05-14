@@ -246,14 +246,5 @@
 @endsection
 
 @section('js')
-<script>
-    $(function () {
-        $('[data-toggle="tooltip"]').tooltip();
-        
-        var hash = window.location.hash;
-        if (hash) {
-            $('.nav-pills a[href="' + hash + '"]').tab('show');
-        }
-    });
-</script>
+    <script src="{{ asset('admin-assets/pages/themes-index.js') }}"></script>
 @endsection

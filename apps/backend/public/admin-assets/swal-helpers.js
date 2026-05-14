@@ -121,11 +121,63 @@
         });
     };
 
+    /**
+     * Declarative Action Orchestration
+     * Scans for data-action attributes to bind premium behaviors.
+     */
+    window.initializeDeclarativeActions = function() {
+        // Delete Trigger: data-action="delete-trigger"
+        document.querySelectorAll('[data-action="delete-trigger"]').forEach(function(el) {
+            el.addEventListener('click', function(e) {
+                e.preventDefault();
+                const formId = this.dataset.formId || 'delete-form';
+                const title = this.dataset.confirmTitle || 'Are you sure?';
+                const text = this.dataset.confirmText || 'This action will permanently remove the record.';
+                const confirmBtn = this.dataset.confirmBtn || 'Yes, Delete';
+
+                window.confirmDelete(formId, title, text, confirmBtn);
+            });
+        });
+
+        // Generic Confirm Trigger: data-action="confirm-action"
+        document.querySelectorAll('[data-action="confirm-action"]').forEach(function(el) {
+            el.addEventListener('click', function(e) {
+                e.preventDefault();
+                const formId = this.dataset.formId;
+                const title = this.dataset.confirmTitle || 'Confirm Action?';
+                const text = this.dataset.confirmText || 'Please confirm to proceed.';
+                const confirmBtn = this.dataset.confirmBtn || 'Confirm';
+                const icon = this.dataset.confirmIcon || 'question';
+                const iconColor = this.dataset.confirmIconColor || '#46a5ac';
+
+                SellioAlert.fire({
+                    title: title,
+                    text: text,
+                    icon: icon,
+                    iconColor: iconColor,
+                    showCancelButton: true,
+                    confirmButtonText: confirmBtn,
+                    cancelButtonText: 'Cancel',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        const form = document.getElementById(formId);
+                        if (form) form.submit();
+                    }
+                });
+            });
+        });
+    };
+
     // Auto-run on DOM ready
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', window.upgradeDeleteButtons);
+        document.addEventListener('DOMContentLoaded', function() {
+            window.upgradeDeleteButtons();
+            window.initializeDeclarativeActions();
+        });
     } else {
         window.upgradeDeleteButtons();
+        window.initializeDeclarativeActions();
     }
 
     // Expose the configured instance

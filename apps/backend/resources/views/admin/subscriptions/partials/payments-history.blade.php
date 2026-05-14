@@ -13,10 +13,10 @@
 <div class="card card-premium shadow-sm border-0">
     <div class="card-header bg-white border-0 py-4 px-4 d-flex justify-content-between align-items-center">
         <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">
-            <i class="fas fa-receipt mr-2 text-primary opacity-50"></i> Transaction Ledger
+            <i class="fas fa-receipt mr-2 text-primary opacity-50"></i> {{ __('Transaction Ledger') }}
         </h3>
         <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1">
-            <i class="fas fa-money-bill-wave mr-1 opacity-50"></i> Total Yield: {{ setting('currency_symbol', '$') }}{{ number_format($subscription->payments->sum('amount') ?? 0, 2) }}
+            <i class="fas fa-money-bill-wave mr-1 opacity-50"></i> {{ __('Total Yield') }}: {{ setting('currency_symbol', '$') }}{{ number_format($subscription->payments->sum('amount') ?? 0, 2) }}
         </span>
     </div>
     <div class="card-body p-0">
@@ -25,11 +25,11 @@
                 <table class="table table-hover table-premium mb-0">
                     <thead class="thead-light">
                         <tr>
-                            <th class="pl-4">Reference</th>
-                            <th>Amount</th>
-                            <th class="text-center">Lifecycle</th>
-                            <th>Method</th>
-                            <th class="pr-4 text-right">Timestamp</th>
+                            <th class="pl-4">{{ __('Reference') }}</th>
+                            <th>{{ __('Amount') }}</th>
+                            <th class="text-center">{{ __('Lifecycle') }}</th>
+                            <th>{{ __('Method') }}</th>
+                            <th class="pr-4 text-right">{{ __('Timestamp') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -51,16 +51,16 @@
                                         ];
                                         $statusClass = $statusMap[$payment->status] ?? 'badge-secondary-light text-secondary';
                                     @endphp
-                                    <span class="badge {{ $statusClass }} px-3 py-2 rounded-pill smallest font-weight-bold uppercase letter-spacing-1" style="min-width: 90px;">
-                                        {{ $payment->status }}
+                                    <span class="badge {{ $statusClass }} px-3 py-2 rounded-pill smallest font-weight-bold uppercase letter-spacing-1 min-width-90">
+                                        {{ __($payment->status) }}
                                     </span>
                                 </td>
                                 <td class="align-middle">
                                     <div class="d-flex align-items-center">
-                                        <div class="icon-box-soft bg-light mr-2 d-flex align-items-center justify-content-center" style="width:24px; height:24px; border-radius: 6px;">
+                                        <div class="icon-box-soft bg-light mr-2 d-flex align-items-center justify-content-center icon-box-24">
                                             <i class="fas fa-credit-card smallest text-primary"></i>
                                         </div>
-                                        <span class="smallest font-weight-bold text-dark uppercase letter-spacing-1">{{ $payment->method ?? 'Manual' }}</span>
+                                        <span class="smallest font-weight-bold text-dark uppercase letter-spacing-1">{{ __($payment->method ?? 'Manual') }}</span>
                                     </div>
                                 </td>
                                 <td class="pr-4 text-right align-middle">
@@ -74,14 +74,14 @@
         @else
             <div class="text-center py-5">
                 <i class="fas fa-sync-alt fa-4x text-muted opacity-25 mb-3 d-block"></i>
-                <h5 class="text-muted font-weight-bold">No Transactions Detected</h5>
-                <p class="text-secondary small">Financial records for this enrollment will be architected here.</p>
+                <h5 class="text-muted font-weight-bold">{{ __('No Transactions Detected') }}</h5>
+                <p class="text-secondary small">{{ __('Financial records for this enrollment will be architected here.') }}</p>
             </div>
         @endif
     </div>
     @if($subscription->payments && $subscription->payments->count() > 0)
         <div class="card-footer bg-white border-top py-3 px-4">
-            <div class="text-muted smallest font-weight-bold uppercase letter-spacing-1">Ledger Depth: {{ $subscription->payments->count() }} transaction(s) recorded</div>
+            <div class="text-muted smallest font-weight-bold uppercase letter-spacing-1">{{ __('Ledger Depth') }}: {{ $subscription->payments->count() }} {{ __('transaction(s) recorded') }}</div>
         </div>
     @endif
 </div>

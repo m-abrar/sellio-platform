@@ -123,7 +123,14 @@
                             </div>
                             
                             <div class="d-flex gap-12">
-                                <button type="button" class="btn btn-success rounded-pill px-4 py-3 flex-grow-1 font-weight-bold smallest uppercase letter-spacing-1 shadow-sm" onclick="triggerApproval()">
+                                <button type="button" class="btn btn-success rounded-pill px-4 py-3 flex-grow-1 font-weight-bold smallest uppercase letter-spacing-1 shadow-sm" 
+                                    data-action="confirm-action"
+                                    data-form-id="payoutApproveForm"
+                                    data-confirm-title="{{ __('Finalize Payout?') }}"
+                                    data-confirm-text="{{ __('Confirm that funds have been transferred to the partner.') }}"
+                                    data-confirm-btn="<i class='fas fa-check-circle mr-2'></i> {{ __('Yes, Finalize!') }}"
+                                    data-confirm-icon="question"
+                                    data-confirm-icon-color="#10b981">
                                     <i class="fas fa-check-circle mr-2"></i> {{ __('Approve & Process') }}
                                 </button>
                                 <button type="button" class="btn btn-danger-soft rounded-pill px-4 py-3 flex-grow-1 font-weight-bold smallest uppercase letter-spacing-1 border" data-toggle="modal" data-target="#rejectModal">
@@ -223,5 +230,4 @@
 
 @section('js')
     @include('admin._partials._sweetalert')
-    <script src="{{ asset('admin-assets/pages/withdrawals-form.js') }}"></script>
 @endsection

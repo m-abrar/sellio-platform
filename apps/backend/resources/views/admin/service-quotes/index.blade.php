@@ -32,7 +32,7 @@
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">{{ __('Track customer inquiries, scope requests, and estimated revenue across services.') }}</p>
             </div>
             <div class="col-sm-4 text-right">
-                <div class="d-flex justify-content-end align-items-center" style="gap: 12px;">
+                <div class="d-flex justify-content-end align-items-center gap-12">
                     <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">
                         <i class="fas fa-th-large"></i> {{ __('Dashboard') }}
                     </a>
@@ -94,7 +94,7 @@
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <div class="d-flex align-items-center justify-content-end" style="gap: 12px;">
+                            <div class="d-flex align-items-center justify-content-end gap-12">
                                 <button type="submit" class="btn-filter-premium flex-grow-1">
                                     <i class="fas fa-sync-alt mr-2"></i> {{ __('UPDATE') }}
                                 </button>
@@ -111,7 +111,7 @@
         {{-- Main Table --}}
         <div class="card registry-table-card">
             <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
-                <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none" style="letter-spacing: 1px;">{{ __('Leads Registry') }}</h3>
+                <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none letter-spacing-1">{{ __('Leads Registry') }}</h3>
                 <div class="card-tools d-flex align-items-center ml-auto">
                     <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase mr-2">
                         <i class="fas fa-file-invoice-dollar mr-1"></i> {{ $serviceQuotes->total() }} {{ __('LEADS') }}
@@ -126,7 +126,7 @@
                     <table id="quotes-table" class="table table-hover table-premium mb-0">
                         <thead class="thead-light">
                             <tr>
-                                <th class="text-center pl-4" style="width: 80px">{{ __('Asset') }}</th>
+                                <th class="text-center pl-4 width-80">{{ __('Asset') }}</th>
                                 <th>{{ __('Service Intelligence') }}</th>
                                 <th>{{ __('Customer Principal') }}</th>
                                 <th>{{ __('Scope') }}</th>
@@ -145,7 +145,7 @@
                                     </td>
                                     <td class="align-middle">
                                         <span class="d-block font-weight-bold text-dark mb-0">{{ $quote->service->title ?? 'N/A' }}</span>
-                                        <div class="d-flex align-items-center mt-1" style="gap: 6px;">
+                                        <div class="d-flex align-items-center mt-1 gap-6">
                                             @if($quote->service && $quote->service->category)
                                                 <span class="badge badge-primary-light text-primary px-2 py-1 rounded-pill smallest font-weight-bold uppercase">
                                                     {{ $quote->service->category->title }}
@@ -174,16 +174,24 @@
                                         $statusClass = $statusMap[$quote->status] ?? 'badge-secondary-light';
                                     @endphp
                                     <td class="text-center align-middle">
-                                        <span class="badge {{ $statusClass }} px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1" style="min-width: 90px;">
+                                        <span class="badge {{ $statusClass }} px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 min-width-90">
                                             {{ strtoupper(__($quote->status)) }}
                                         </span>
                                     </td>
                                     <td class="text-right align-middle pr-4">
                                         <div class="btn-group btn-group-premium">
                                             <a href="{{ route('admin.service-quotes.show', $quote->id) }}" class="btn text-info" data-toggle="tooltip" title="{{ __('Inspect Record') }}"><i class="fas fa-eye"></i></a>
-                                            <form action="{{ route('admin.service-quotes.destroy', $quote->id) }}" method="POST" class="d-inline">
+                                            <button type="button" class="btn text-danger" 
+                                                    data-toggle="tooltip" title="{{ __('Purge Record') }}"
+                                                    data-action="delete-trigger"
+                                                    data-form-id="delete-form-{{ $quote->id }}"
+                                                    data-confirm-title="{{ __('Purge Record?') }}"
+                                                    data-confirm-text="{{ __('Permanently delete quote request?') }}"
+                                                    data-confirm-btn="{{ __('Confirm') }}">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                            <form id="delete-form-{{ $quote->id }}" action="{{ route('admin.service-quotes.destroy', $quote->id) }}" method="POST" class="d-none">
                                                 @csrf @method('DELETE')
-                                                <button type="submit" class="btn text-danger" data-toggle="tooltip" title="{{ __('Purge Record') }}" onclick="return confirm('{{ __('Permanently delete quote request?') }}')"><i class="fas fa-trash-alt"></i></button>
                                             </form>
                                         </div>
                                     </td>
@@ -192,8 +200,8 @@
                                     @include('admin._partials._empty-state', [
                                         'colspan' => 7,
                                         'icon' => 'fas fa-file-invoice',
-                                        'title' => 'No Leads Detected',
-                                        'description' => 'Customer scope requests and revenue inquiries will materialize here once synchronized with the professional services catalog.',
+                                        'title' => __('No Leads Detected'),
+                                        'description' => __('Customer scope requests and revenue inquiries will materialize here once synchronized with the professional services catalog.'),
                                     ])
                             @endforelse
                         </tbody>

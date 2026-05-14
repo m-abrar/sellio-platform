@@ -342,3 +342,86 @@
 .bg-success-soft { background: rgba(40, 167, 69, 0.05); }
 .border-primary-soft { border-color: rgba(70, 165, 172, 0.1) !important; }
 .border-success-soft { border-color: rgba(40, 167, 69, 0.1) !important; }
+
+/* Interactive Hover States */
+.btn-hover-premium {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+.btn-hover-premium:hover {
+    transform: translateY(-4px) !important;
+    box-shadow: var(--premium-shadow) !important;
+}
+
+/* Sticky Positioning Utilities */
+.sticky-top-20 { top: 20px !important; }
+.sticky-top-100 { top: 100px !important; }
+
+/* Border & Accent Orchestration */
+.border-bottom-accent { border-bottom: 3px solid var(--brand-primary) !important; }
+.border-light-gray { border: 1px solid #dee2e6 !important; }
+
+/* Specialized Grid Fractions */
+.col-fraction-20 { flex: 0 0 20.833% !important; max-width: 20.833% !important; }
+
+/* Interactive Toggle Cards */
+.toggle-card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background-color: #f8f9fa;
+    position: relative;
+    border: 1px solid #dee2e6;
+}
+
+/* Sizing & Layout Constraints */
+.min-width-90 { min-width: 90px !important; }
+.width-80 { width: 80px !important; }
+.icon-box-24 { width: 24px !important; height: 24px !important; border-radius: 6px !important; }
+.icon-box-40 { width: 40px !important; height: 40px !important; border-radius: 50% !important; }
+.icon-box-50 { width: 50px !important; height: 50px !important; border-radius: 12px !important; }
+
+/* Typography Utilities */
+.letter-spacing-1 { letter-spacing: 1px !important; }
+
+.toggle-input:checked + .toggle-card {
+    background-color: rgba(40, 167, 69, 0.05);
+    border-color: #28a745 !important;
+}
+
+.toggle-card .toggle-indicator {
+    width: 36px;
+    height: 20px;
+    border-radius: 10px;
+    background-color: #ccc;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.toggle-card .toggle-indicator::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: white;
+    transition: all 0.3s ease;
+}
+
+.toggle-input:checked + .toggle-card .toggle-indicator {
+    background-color: #28a745;
+}
+
+.toggle-input:checked + .toggle-card .toggle-indicator::after {
+    transform: translateX(16px);
+}
+
+.toggle-input:checked + .toggle-card .toggle-status {
+    color: #28a745;
+    font-weight: 600;
+}
+
+/* Flex Gap Utilities */
+.gap-6 { gap: 6px !important; }
+.gap-8 { gap: 8px !important; }
+.gap-12 { gap: 12px !important; }
+.gap-15 { gap: 15px !important; }
