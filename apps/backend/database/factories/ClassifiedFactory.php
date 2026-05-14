@@ -27,8 +27,8 @@ class ClassifiedFactory extends Factory
             'slug'        => Str::slug($title) . '-' . $this->faker->unique()->numberBetween(1000, 999999),
             'description' => $this->faker->paragraphs(2, true),
             
-            'price'       => $price,
-            'condition'   => $this->faker->randomElement(['new', 'used_like_new', 'used_good', 'used_fair']),
+            'base_price'       => $price,
+            'item_condition'   => $this->faker->numberBetween(1, 10),
             'is_negotiable' => $this->faker->boolean(50),
 
             'address'   => $this->faker->streetAddress,

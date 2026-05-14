@@ -71,19 +71,19 @@
                         <table id="orders-table" class="table table-hover table-premium mb-0">
                             <thead class="thead-light">
                                 <tr>
-                                    <th class="text-center pl-4 col-checkbox">
+                                    <th class="text-center pl-4 col-checkbox" data-orderable="false">
                                         <div class="custom-control custom-checkbox custom-checkbox-premium">
                                             <input type="checkbox" class="custom-control-input" id="selectAll">
                                             <label class="custom-control-label" for="selectAll"></label>
                                         </div>
                                     </th>
-                                    <th class="text-center col-media-80">{{ __('Media') }}</th>
+                                    <th class="text-center col-media-80" data-orderable="false">{{ __('Media') }}</th>
                                     <th>{{ __('Protocol') }}</th>
                                     <th>{{ __('Principal') }}</th>
                                     <th>{{ __('Aggregate') }}</th>
                                     <th>{{ __('Settlement') }}</th>
                                     <th class="text-center">{{ __('Lifecycle') }}</th>
-                                    <th class="text-right pr-4">{{ __('Actions') }}</th>
+                                    <th class="text-right pr-4" data-orderable="false">{{ __('Actions') }}</th>
                                 </tr>
                             </thead>
                             <tbody>

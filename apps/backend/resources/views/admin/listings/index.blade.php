@@ -290,10 +290,10 @@
                                 @include('admin._partials._empty-state', [
                                     'colspan' => $type === 'all' ? 7 : 6,
                                     'icon' => 'fas fa-layer-group',
-                                    'title' => __('No Active Assets Found'),
+                                    'title' => ($status === 'all' || !$status) ? __('No Assets Found') : __('No :status Assets Found', ['status' => __(Str::title($status))]),
                                     'description' => __('The catalog is currently awaiting synchronized marketplace entries. Initialize your first entry to get started.'),
                                     'button_text' => __('ADD FIRST ASSET'),
-                                    'button_link' => route('admin.listings.create')
+                                    'button_link' => route('admin.listings.index')
                                 ])
                             @endforelse
                         </tbody>

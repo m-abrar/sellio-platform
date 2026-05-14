@@ -47,13 +47,13 @@
                 </div>
                 <div class="col-md-3">
                     <label class="form-label-premium">Temporal Range</label>
-                    <div class="d-flex align-items-center gap-10">
-                        <div class="input-group input-group-premium flex-grow-1">
-                            <input type="date" name="start_date" class="form-control" value="{{ request('start_date') }}">
+                    <div class="input-group input-group-premium">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-calendar-alt text-xs"></i></span>
                         </div>
-                        <div class="input-group input-group-premium flex-grow-1">
-                            <input type="date" name="end_date" class="form-control" value="{{ request('end_date') }}">
-                        </div>
+                        <input type="text" id="date_range_picker" class="form-control" placeholder="Select dates..." readonly value="{{ request('start_date') && request('end_date') ? request('start_date') . ' to ' . request('end_date') : '' }}">
+                        <input type="hidden" name="start_date" id="start_date" value="{{ request('start_date') }}">
+                        <input type="hidden" name="end_date" id="end_date" value="{{ request('end_date') }}">
                     </div>
                 </div>
                 <div class="col-md-3">

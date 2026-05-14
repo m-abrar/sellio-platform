@@ -31,7 +31,7 @@ class EventFactory extends Factory
             'is_paid'     => $basePrice > 0,
             
             'start_date_time' => $this->faker->dateTimeBetween('+1 week', '+3 months'),
-            'end_date_time'   => $this->faker->dateTimeBetween('+3 months', '+4 months'),
+            'duration_hours'  => $this->faker->numberBetween(1, 48),
             'is_virtual'      => $this->faker->boolean(20),
             'virtual_link'    => $this->faker->boolean(20) ? $this->faker->url : null,
 

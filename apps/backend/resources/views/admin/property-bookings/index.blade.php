@@ -14,6 +14,20 @@
 
 @section('title', __('Rentals & Stays | Real Estate Intelligence'))
 
+@section('css')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<style>
+    .flatpickr-calendar { border-radius: 16px; border: 0; box-shadow: 0 15px 35px rgba(0,0,0,0.1), 0 5px 15px rgba(0,0,0,0.05); padding: 5px; }
+    .flatpickr-day.selected, .flatpickr-day.startRange, .flatpickr-day.endRange, .flatpickr-day.selected.inRange, .flatpickr-day.startRange.inRange, .flatpickr-day.endRange.inRange, .flatpickr-day.selected:focus, .flatpickr-day.startRange:focus, .flatpickr-day.endRange:focus, .flatpickr-day.selected:hover, .flatpickr-day.startRange:hover, .flatpickr-day.endRange:hover, .flatpickr-day.prevMonthDay.selected, .flatpickr-day.nextMonthDay.selected, .flatpickr-day.prevMonthDay.startRange, .flatpickr-day.nextMonthDay.startRange, .flatpickr-day.prevMonthDay.endRange, .flatpickr-day.nextMonthDay.endRange { background: var(--primary) !important; border-color: var(--primary) !important; color: #ffffff !important; }
+    .flatpickr-day.inRange, .flatpickr-day.prevMonthDay.inRange, .flatpickr-day.nextMonthDay.inRange, .flatpickr-day.today.inRange, .flatpickr-day.prevMonthDay.today.inRange, .flatpickr-day.nextMonthDay.today.inRange { background: var(--primary-soft) !important; border-color: transparent !important; color: var(--primary) !important; }
+    .flatpickr-day:hover, .flatpickr-day.prevMonthDay:hover, .flatpickr-day.nextMonthDay:hover, .flatpickr-day:focus, .flatpickr-day.prevMonthDay:focus, .flatpickr-day.nextMonthDay:focus { background: var(--primary-soft) !important; border-color: transparent !important; color: var(--primary) !important; }
+    .flatpickr-months .flatpickr-month { height: 40px; }
+    .flatpickr-current-month { padding-top: 10px; font-weight: 700; }
+    .flatpickr-day.today { border-color: var(--primary) !important; color: var(--primary) !important; }
+    .flatpickr-day.today:hover, .flatpickr-day.today.selected { background: var(--primary) !important; color: #ffffff !important; }
+</style>
+@endsection
+
 @section('content_header')
     <div class="container-fluid pt-4">
         <div class="row mb-4 align-items-center">
@@ -169,6 +183,8 @@
 
 
 @section('js')
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="{{ asset('admin-assets/pages/registry-index.js') }}"></script>
+<script src="{{ asset('admin-assets/pages/property-bookings-index.js') }}"></script>
 @endsection
 

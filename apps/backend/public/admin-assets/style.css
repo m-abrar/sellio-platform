@@ -1546,7 +1546,7 @@ body.dark-mode .form-control {
 .btn-filter-premium:hover {
     transform: translateY(-2px) !important;
     box-shadow: var(--shadow-glow) !important;
-    filter: brightness(1.1) !important;
+    background: var(--primary-hover) !important;
 }
 
 .btn-reset-premium {

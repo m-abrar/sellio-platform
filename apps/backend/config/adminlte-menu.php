@@ -116,7 +116,7 @@ return [
             [
                 'text' => 'Services',
                 'url' => 'admin/services',
-                'icon' => 'fas fa-handholding-heart',
+                'icon' => 'fas fa-hand-holding-heart',
                 'module' => 'services',
                 'can' => 'manage-services',
             ],

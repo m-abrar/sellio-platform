@@ -139,8 +139,17 @@
     align-items: center !important;
     justify-content: center !important;
     line-height: 1 !important;
-    padding-top: 0.35rem !important;
-    padding-bottom: 0.35rem !important;
+    padding-top: 0.32rem !important;
+    padding-bottom: 0.38rem !important; /* Favoring bottom slightly for visual centering */
+    vertical-align: middle !important;
+}
+
+/* Vertical Centering for Input Fields */
+.input-group-premium .form-control {
+    display: flex !important;
+    align-items: center !important;
+    line-height: normal !important;
+    padding-top: 2px !important; /* Micro-adjustment for baseline */
 }
 
 /* Select2 Vertical Centering Fix in Premium Input Groups */

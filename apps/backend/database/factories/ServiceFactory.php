@@ -30,10 +30,13 @@ class ServiceFactory extends Factory
             'description' => $this->faker->paragraphs(3, true),
             
             'base_price'      => $basePrice,
-            'price_type'      => $this->faker->randomElement(['fixed', 'starting_at', 'hourly']),
+            'sale_price'      => $this->faker->boolean(30) ? $basePrice * 0.9 : null,
             
-            'duration_minutes' => $this->faker->randomElement([30, 60, 90, 120]),
-            'is_virtual'       => $this->faker->boolean(20),
+            'is_subscription'  => $this->faker->boolean(20),
+            'is_project_based' => $this->faker->boolean(50),
+            'expertise_level'  => $this->faker->numberBetween(1, 4),
+            'availability_schedule' => $this->faker->numberBetween(1, 3),
+            'operating_hours' => '9AM-5PM',
 
             'address'   => $this->faker->streetAddress,
             'city'      => $this->faker->city,
