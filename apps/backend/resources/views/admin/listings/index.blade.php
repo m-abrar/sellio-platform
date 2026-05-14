@@ -22,14 +22,14 @@
 @section('content_header')
     <div class="container-fluid pt-4">
         <div class="row align-items-center mb-4">
-            <div class="col-sm-7">
+            <div class="col-sm-7 text-center text-sm-left mb-3 mb-sm-0">
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-layer-group mr-2 text-primary"></i>
                     {{ $type !== 'all' ? __(Str::title($type)) : __(Str::title($status ?? 'All')) }} {{ __('Marketplace') }}
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">{{ __('Audit marketplace submissions, moderation statuses, and lifecycle states.') }}</p>
             </div>
-            <div class="col-sm-5 d-flex align-items-center justify-content-end gap-12">
+            <div class="col-sm-5 d-flex align-items-center justify-content-center justify-content-sm-end gap-12">
                 <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">
                     <i class="fas fa-th-large mr-2"></i> {{ __('Dashboard') }}
                 </a>
@@ -117,34 +117,34 @@
         {{-- Filter Protocol --}}
         <div class="card registry-card-premium registry-filter-card mb-4">
             <div class="card-body">
-                <div class="d-flex align-items-center justify-content-between">
-                    <div class="d-flex align-items-center">
-                        <span class="form-label-premium mb-0 mr-4">
+                <div class="d-flex flex-column flex-md-row align-items-center justify-content-between">
+                    <div class="d-flex flex-column flex-md-row align-items-center">
+                        <span class="form-label-premium mb-3 mb-md-0 mr-md-4">
                             <i class="fas fa-filter mr-2 text-primary"></i> {{ __('Lifecycle State:') }}
                         </span>
-                        <ul class="nav nav-pills nav-pills-premium">
+                        <ul class="nav nav-pills nav-pills-premium flex-wrap justify-content-center">
                             <li class="nav-item">
                                 <a class="nav-link {{ $status === 'all' ? 'active' : '' }}" 
                                    href="{{ route(Route::currentRouteName(), ['status' => 'all']) }}">
-                                   <i class="fas fa-th-large mr-2"></i> {{ __('ALL ASSETS') }}
+                                   <i class="fas fa-th-large mr-1 mr-md-2"></i> {{ __('ALL ASSETS') }}
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link {{ $status === 'active' ? 'active' : '' }}" 
                                    href="{{ route(Route::currentRouteName(), ['status' => 'active']) }}">
-                                   <i class="fas fa-check-circle mr-2"></i> {{ __('ACTIVE') }}
+                                   <i class="fas fa-check-circle mr-1 mr-md-2"></i> {{ __('ACTIVE') }}
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link {{ $status === 'pending' ? 'active' : '' }}" 
                                    href="{{ route(Route::currentRouteName(), ['status' => 'pending']) }}">
-                                   <i class="fas fa-hourglass-half mr-2"></i> {{ __('PENDING') }}
+                                   <i class="fas fa-hourglass-half mr-1 mr-md-2"></i> {{ __('PENDING') }}
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link {{ $status === 'expired' ? 'active' : '' }}" 
                                    href="{{ route(Route::currentRouteName(), ['status' => 'expired']) }}">
-                                   <i class="fas fa-calendar-times mr-2"></i> {{ __('EXPIRED') }}
+                                   <i class="fas fa-calendar-times mr-1 mr-md-2"></i> {{ __('EXPIRED') }}
                                 </a>
                             </li>
                         </ul>

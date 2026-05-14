@@ -21,15 +21,15 @@
 @section('content_header')
     <div class="container-fluid pt-4">
         <div class="row mb-4 align-items-end">
-            <div class="col-sm-6">
+            <div class="col-sm-6 text-center text-sm-left mb-3 mb-sm-0">
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-history mr-2 text-primary"></i> {{ __('System Heartbeat') }}
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">{{ __('Chronological audit trail of all administrative and system-level interactions.') }}</p>
             </div>
-            <div class="col-sm-6 text-right">
-                <div class="dropdown d-inline-block">
-                    <button type="button" class="btn btn-primary btn-sm rounded-pill px-4 font-weight-bold dropdown-toggle" data-toggle="dropdown">
+            <div class="col-sm-6 d-flex flex-column align-items-center align-items-sm-end">
+                <div class="dropdown d-inline-block mb-3">
+                    <button type="button" class="btn btn-primary btn-sm rounded-pill px-4 font-weight-bold dropdown-toggle shadow-premium" data-toggle="dropdown">
                         <i class="fas fa-filter mr-1"></i> {{ strtoupper(str_replace('_', ' ', $currentFilter)) }}
                     </button>
                     <div class="dropdown-menu dropdown-menu-right shadow-premium border-0" style="border-radius: 16px; padding: 10px;">
@@ -46,7 +46,7 @@
                         </a>
                     </div>
                 </div>
-                <ol class="breadcrumb float-sm-right bg-transparent p-0 mt-3 small">
+                <ol class="breadcrumb bg-transparent p-0 m-0 small d-none d-sm-flex">
                     <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}">Dashboard</a></li>
                     <li class="breadcrumb-item active">Activity Timeline</li>
                 </ol>

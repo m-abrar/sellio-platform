@@ -16,17 +16,17 @@
 @section('content_header')
     <div class="container-fluid pt-4">
         <div class="row mb-4 align-items-center">
-            <div class="col-sm-8">
+            <div class="col-sm-8 text-center text-sm-left mb-3 mb-sm-0">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-chart-line mr-2 text-primary"></i> Analytical Intelligence
+                    <i class="fas fa-chart-line mr-2 text-primary"></i> {{ __('Analytical Intelligence') }}
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">
-                    Reviewing marketplace performance, revenue streams, and operation metrics.
+                    {{ __('Reviewing marketplace performance, revenue streams, and operation metrics.') }}
                 </p>
             </div>
-            <div class="col-sm-4 text-right">
+            <div class="col-sm-4 d-flex align-items-center justify-content-center justify-content-sm-end">
                 <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">
-                    <i class="fas fa-th-large"></i> Dashboard
+                    <i class="fas fa-th-large"></i> {{ __('Dashboard') }}
                 </a>
             </div>
         </div>
@@ -65,7 +65,7 @@
         @endphp
 
         @foreach($reports as $report)
-        <div class="col-md-4 mb-4">
+        <div class="col-lg-4 col-md-6 mb-4">
             <div class="card h-100 border-0 shadow-premium stat-card rounded-24 transition-0-3">
                 <div class="card-body text-center p-5">
                     <div class="icon-circle bg-{{ $report['color'] }}-soft text-{{ $report['color'] }} mx-auto mb-4 shadow-xs icon-box-80 rounded-24 d-flex align-items-center justify-content-center font-2-0">

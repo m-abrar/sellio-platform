@@ -19,19 +19,19 @@
 @section('content_header')
     <div class="container-fluid pt-4">
         <div class="row mb-4 align-items-center">
-            <div class="col-sm-8">
+            <div class="col-sm-8 text-center text-sm-left mb-3 mb-sm-0">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-envelope-open-text mr-2 text-primary opacity-50"></i> Newsletter Audience
+                    <i class="fas fa-envelope-open-text mr-2 text-primary opacity-50"></i> {{ __('Newsletter Audience') }}
                 </h1>
-                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Audience registry for multi-channel marketing and prospect engagement.</p>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">{{ __('Audience registry for multi-channel marketing and prospect engagement.') }}</p>
             </div>
-            <div class="col-sm-4 text-right">
-                <div class="d-flex justify-content-end align-items-center gap-12">
-                    <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">
-                        <i class="fas fa-th-large"></i> Dashboard
+            <div class="col-sm-4 d-flex align-items-center justify-content-center justify-content-sm-end">
+                <div class="d-flex justify-content-center justify-content-sm-end align-items-center gap-12 flex-wrap">
+                    <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm mb-2 mb-sm-0">
+                        <i class="fas fa-th-large"></i> {{ __('Dashboard') }}
                     </a>
-                    <a href="{{ route('admin.newsletter-subscribers.export') }}" class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-premium">
-                        <i class="fas fa-file-export mr-1"></i> EXPORT AUDIENCE
+                    <a href="{{ route('admin.newsletter-subscribers.export') }}" class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-premium mb-2 mb-sm-0">
+                        <i class="fas fa-file-export mr-1"></i> {{ __('EXPORT AUDIENCE') }}
                     </a>
                 </div>
             </div>

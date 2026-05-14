@@ -19,21 +19,21 @@
 @section('content_header')
     <div class="container-fluid pt-4">
         <div class="row mb-4 align-items-center">
-            <div class="col-sm-7">
+            <div class="col-sm-7 text-center text-sm-left mb-3 mb-sm-0">
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-users-cog mr-2 text-primary"></i> {{ $viewTitle ?? __('User Management') }}
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">{{ __('Manage registered users, authentication profiles, and access tiers.') }}</p>
             </div>
-            <div class="col-sm-5 d-flex align-items-center justify-content-end">
-                <div class="d-flex justify-content-end align-items-center gap-10">
-                    <a href="{{ route('admin.roles.index') }}" class="btn btn-back shadow-sm px-3">
+            <div class="col-sm-5">
+                <div class="d-flex flex-wrap justify-content-center justify-content-sm-end align-items-center gap-10">
+                    <a href="{{ route('admin.roles.index') }}" class="btn btn-back shadow-sm px-3 mb-2 mb-sm-0">
                         <i class="fas fa-user-shield mr-1"></i> {{ __('ROLES') }}
                     </a>
-                    <a href="{{ route('admin.permissions.index') }}" class="btn btn-back shadow-sm px-3">
+                    <a href="{{ route('admin.permissions.index') }}" class="btn btn-back shadow-sm px-3 mb-2 mb-sm-0">
                         <i class="fas fa-key mr-1"></i> {{ __('PERMISSIONS') }}
                     </a>
-                    <a href="{{ route('admin.users.create') }}" class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-premium ml-2">
+                    <a href="{{ route('admin.users.create') }}" class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-premium ml-sm-2 mb-2 mb-sm-0">
                         <i class="fas fa-plus-circle mr-1"></i> {{ __('ADD USER') }}
                     </a>
                 </div>

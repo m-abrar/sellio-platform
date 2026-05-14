@@ -20,14 +20,14 @@
 @section('content_header')
     <div class="container-fluid pt-4">
         <div class="row mb-4 align-items-center">
-            <div class="col-sm-8">
+            <div class="col-sm-8 text-center text-sm-left mb-3 mb-sm-0">
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-file-alt mr-2 text-primary"></i> {{ __('Content & Static Pages') }}
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">{{ __('Manage system blueprints, informational assets, and footer navigation layers.') }}</p>
             </div>
-            <div class="col-sm-4 text-right">
-                <a href="{{ route('admin.pages.create') }}" class="btn btn-primary btn-registry-add">
+            <div class="col-sm-4 d-flex align-items-center justify-content-center justify-content-sm-end">
+                <a href="{{ route('admin.pages.create') }}" class="btn btn-primary btn-registry-add shadow-premium">
                     <i class="fas fa-plus-circle mr-1"></i> {{ __('ADD PAGE') }}
                 </a>
             </div>

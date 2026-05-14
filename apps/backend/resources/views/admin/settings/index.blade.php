@@ -20,13 +20,13 @@
 @section('content_header')
     <div class="container-fluid pt-4">
         <div class="row mb-4 align-items-center">
-            <div class="col-sm-7">
+            <div class="col-sm-7 text-center text-sm-left mb-3 mb-sm-0">
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-sliders-h mr-2 text-primary opacity-50"></i> {{ __('System Architecture') }}
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">{{ __('Manage global system variables, environment parameters, and platform logic.') }}</p>
             </div>
-            <div class="col-sm-5 d-flex align-items-center justify-content-end">
+            <div class="col-sm-5 d-flex align-items-center justify-content-center justify-content-sm-end">
                 @include('admin._partials._back-button', ['label' => 'DASHBOARD'])
             </div>
         </div>

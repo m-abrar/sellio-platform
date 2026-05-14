@@ -21,7 +21,7 @@
 @section('content_header')
     <div class="container-fluid pt-4">
         <div class="row mb-4 align-items-center">
-            <div class="col-md-8">
+            <div class="col-sm-8 text-center text-sm-left mb-3 mb-sm-0">
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-tags mr-2 text-primary"></i> {{ __('Listing Tags') }}
                 </h1>
@@ -29,7 +29,7 @@
                     {{ __('Manage high-level classification labels for quick filtering and discovery.') }}
                 </p>
             </div>
-            <div class="col-md-4 text-right">
+            <div class="col-sm-4 d-flex align-items-center justify-content-center justify-content-sm-end">
                 <a href="{{ route('admin.tags.create') }}" class="btn btn-primary rounded-pill px-4 py-2 font-weight-bold shadow-premium smallest uppercase letter-spacing-1">
                     <i class="fas fa-plus-circle mr-2"></i> {{ __('Add Tag') }}
                 </a>

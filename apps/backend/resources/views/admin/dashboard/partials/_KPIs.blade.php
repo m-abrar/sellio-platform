@@ -49,7 +49,7 @@
                     $valNumeric = is_numeric($u['val']) ? $u['val'] : (float) filter_var($u['val'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
                     $hasAlert = $valNumeric > 0;
                 @endphp
-                <div class="col-md-3 mb-4 mb-md-0">
+                <div class="col-6 col-md-3 mb-4 mb-md-0">
                     <div class="card gradient-action-card h-100 bg-gradient-{{ $u['color'] }}">
                         <div class="card-body p-4 flex-grow-1 d-flex flex-column">
                             <div class="d-flex justify-content-between align-items-center mb-3">
@@ -88,7 +88,7 @@
                         ];
                     @endphp
                     @foreach($secondary as $s)
-                    <div class="col-md-4 mb-3 mb-md-0">
+                    <div class="col-6 col-md-4 mb-3 mb-md-0">
                         <div class="card card-premium border-0">
                             <div class="card-body py-3 px-4 d-flex align-items-center justify-content-between">
                                 <div>

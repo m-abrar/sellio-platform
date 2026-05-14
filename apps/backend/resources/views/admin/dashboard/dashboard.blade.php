@@ -15,15 +15,15 @@
 
 @section('content_header')
     <div class="container-fluid pt-4">
-        <div class="d-flex align-items-center justify-content-between mb-2">
-            <div>
+        <div class="d-flex flex-column flex-md-row align-items-center justify-content-between mb-2">
+            <div class="text-center text-md-left mb-3 mb-md-0">
                 <h1 class="font-weight-bold text-dark mb-0">
                     <i class="fas fa-chart-line mr-2 text-primary"></i> 
                     {{ __('Command Center') }}
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">{{ __('Welcome back') }}, {{ auth()->user()->name }}. {{ __('Performance metrics are live for') }} <span class="text-primary font-weight-bold">{{ now()->format('F d, Y') }}</span>.</p>
             </div>
-            <div class="d-none d-md-block text-right">
+            <div class="d-md-block text-right">
                 <div class="dashboard-clock-wrapper px-3 py-2 shadow-premium d-inline-block text-center">
                     <div id="dashboard-clock" class="h4 font-weight-bold text-primary mb-0 dashboard-clock-text">00:00:00</div>
                     <div class="text-white smallest font-weight-bold uppercase letter-spacing-1 opacity-50">{{ now()->format('l, d M Y') }}</div>

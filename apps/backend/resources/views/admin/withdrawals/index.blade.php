@@ -47,45 +47,45 @@
     {{-- Premium Status Filter --}}
     <div class="card registry-card-premium registry-filter-card mb-4">
         <div class="card-body">
-            <div class="d-flex align-items-center justify-content-between">
-                <div class="d-flex align-items-center">
-                    <span class="form-label-premium mb-0 mr-3">
+            <div class="d-flex flex-column flex-md-row align-items-center justify-content-between">
+                <div class="d-flex flex-column flex-md-row align-items-center mb-3 mb-md-0">
+                    <span class="form-label-premium mb-3 mb-md-0 mr-md-3 text-center text-md-left">
                         <i class="fas fa-filter mr-1 text-primary opacity-75"></i> Lifecycle:
                     </span>
-                    <ul class="nav nav-pills nav-pills-premium">
+                    <ul class="nav nav-pills nav-pills-premium flex-wrap justify-content-center">
                         <li class="nav-item">
                             <a class="nav-link {{ $filter_status === 'all' ? 'active' : '' }}" 
                                href="{{ route('admin.withdrawals.index') }}">
-                               ALL
+                               {{ __('ALL') }}
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link {{ $filter_status === 'pending' ? 'active' : '' }}" 
                                href="{{ route('admin.withdrawals.index', ['status' => 'pending']) }}">
-                               PENDING
+                               {{ __('PENDING') }}
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link {{ $filter_status === 'approved' ? 'active' : '' }}" 
                                href="{{ route('admin.withdrawals.index', ['status' => 'approved']) }}">
-                               APPROVED
+                               {{ __('APPROVED') }}
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link {{ $filter_status === 'rejected' ? 'active' : '' }}" 
                                href="{{ route('admin.withdrawals.index', ['status' => 'rejected']) }}">
-                               REJECTED
+                               {{ __('REJECTED') }}
                             </a>
                         </li>
                     </ul>
                 </div>
                 
-                <div class="ml-auto d-flex align-items-center pr-2">
-                    <div class="input-group input-group-premium col-media-280">
+                <div class="w-100 w-md-auto d-flex align-items-center">
+                    <div class="input-group input-group-premium w-100 col-media-280-md">
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-search text-xs"></i></span>
                         </div>
-                        <input type="text" id="custom-search" class="form-control" placeholder="Search Intelligence...">
+                        <input type="text" id="custom-search" class="form-control" placeholder="{{ __('Search Intelligence...') }}">
                     </div>
                 </div>
             </div>

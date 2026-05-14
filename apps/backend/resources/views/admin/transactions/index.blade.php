@@ -19,14 +19,14 @@
 @section('content_header')
     <div class="container-fluid pt-4">
         <div class="row mb-4 align-items-center">
-            <div class="col-sm-8">
+            <div class="col-sm-8 text-center text-sm-left mb-3 mb-sm-0">
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-file-invoice-dollar mr-2 text-primary"></i> {{ __('Financial Ledger & Transactions') }}
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">{{ __('Audit financial exchanges, verify payment artifacts, and reconcile bookings.') }}</p>
             </div>
-            <div class="col-sm-4 text-right">
-                <a href="{{ route('admin.transactions.create') }}" class="btn btn-primary btn-registry-add">
+            <div class="col-sm-4 d-flex align-items-center justify-content-center justify-content-sm-end">
+                <a href="{{ route('admin.transactions.create') }}" class="btn btn-primary btn-registry-add shadow-premium">
                     <i class="fas fa-plus-circle mr-2"></i> {{ __('Add Transaction') }}
                 </a>
             </div>
@@ -50,77 +50,79 @@
             </button>
         </div>
     </div>
-    <div class="card-body">
-        <table id="transactions-table" class="table table-hover table-premium mb-0 datatable-init"
-               data-datatable-config='{"paging": true, "searching": true, "ordering": true, "order": [[7, "desc"]], "responsive": true}'>
-            <thead class="thead-light">
-                <tr>
-                    <th>{{ __('Reference') }}</th>
-                    <th>{{ __('Amount') }}</th>
-                    <th>{{ __('Property') }}</th>
-                    <th>{{ __('Customer') }}</th>
-                    <th>{{ __('Booking Dates') }}</th>
-                    <th>{{ __('Total') }}</th>
-                    <th class="text-center">{{ __('Status') }}</th>
-                    <th>{{ __('Timestamp') }}</th>
-                    <th class="text-center">{{ __('Proof') }}</th>
-                    <th class="text-right pr-4">{{ __('Actions') }}</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($transactions as $transaction)
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table id="transactions-table" class="table table-hover table-premium mb-0 datatable-init"
+                   data-datatable-config='{"paging": true, "searching": true, "ordering": true, "order": [[7, "desc"]], "responsive": true}'>
+                <thead class="thead-light">
                     <tr>
-                        <td>{{ $transaction->reference_number ?? '—' }}</td>
-                        <td>{{ setting('currency_symbol') }}{{ number_format($transaction->amount, 2) }}</td>
-                        <td>{{ $transaction->booking->property->title }}</td>
-                        <td>{{ $transaction->booking->first_name }} {{ $transaction->booking->last_name }}</td>
-                        <td>{{ \Carbon\Carbon::parse($transaction->booking->start_date)->format('d M, Y') }} - {{ \Carbon\Carbon::parse($transaction->booking->end_date)->format('d M, Y') }}</td>
-                        <td>{{ setting('currency_symbol') }}{{ number_format($transaction->booking->total_price, 2) }}</td>
-                        <td class="text-center align-middle">
-                            @if($transaction->status == 'completed')
-                                <span class="badge badge-success-light px-3 py-1 rounded-pill font-weight-bold smallest uppercase">{{ __('Completed') }}</span>
-                            @elseif($transaction->status == 'pending')
-                                <span class="badge badge-warning-light px-3 py-1 rounded-pill font-weight-bold smallest uppercase">{{ __('Pending') }}</span>
-                            @elseif($transaction->status == 'failed')
-                                <span class="badge badge-danger-light px-3 py-1 rounded-pill font-weight-bold smallest uppercase">{{ __('Failed') }}</span>
-                            @else
-                                <span class="badge badge-secondary-light px-3 py-1 rounded-pill font-weight-bold smallest uppercase">{{ ucfirst($transaction->status) }}</span>
-                            @endif
-                        </td>
-                        <td class="small">{{ $transaction->transaction_date ? $transaction->transaction_date->format('Y-m-d H:i') : '—' }}</td>
-                        <td class="text-center align-middle">
-                            @if ($transaction->getFirstMediaUrl('transaction_screenshots'))
-                                <div class="table-img-preview shadow-sm mx-auto icon-box-60">
-                                    <img src="{{ $transaction->getFirstMediaUrl('transaction_screenshots') }}" alt="{{ __('Screenshot') }}" class="object-fit-cover">
-                                </div>
-                            @else
-                                <span class="text-muted smallest uppercase font-weight-bold">{{ __('No Image') }}</span>
-                            @endif
-                        </td>
-                        <td class="text-right align-middle pr-4">
-                            <div class="btn-group btn-group-premium">
-                                <a href="{{ route('admin.transactions.edit', $transaction->id) }}" 
-                                   class="btn text-primary" 
-                                   data-toggle="tooltip" title="{{ __('Modify Record') }}">
-                                    <i class="fas fa-pencil-alt"></i>
-                                </a>
-                                <form action="{{ route('admin.transactions.destroy', $transaction->id) }}" method="POST" class="d-inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="button" class="btn text-danger" 
-                                            data-toggle="tooltip" title="{{ __('Purge Record') }}"
-                                            data-action="delete-trigger" 
-                                            data-confirm-title="{{ __('Purge Transaction?') }}" 
-                                            data-confirm-text="{{ __('Are you sure you want to permanently remove this transaction record?') }}">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                </form>
-                            </div>
-                        </td>
+                        <th>{{ __('Reference') }}</th>
+                        <th>{{ __('Amount') }}</th>
+                        <th>{{ __('Property') }}</th>
+                        <th>{{ __('Customer') }}</th>
+                        <th>{{ __('Booking Dates') }}</th>
+                        <th>{{ __('Total') }}</th>
+                        <th class="text-center">{{ __('Status') }}</th>
+                        <th>{{ __('Timestamp') }}</th>
+                        <th class="text-center">{{ __('Proof') }}</th>
+                        <th class="text-right pr-4">{{ __('Actions') }}</th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach ($transactions as $transaction)
+                        <tr>
+                            <td>{{ $transaction->reference_number ?? '—' }}</td>
+                            <td>{{ setting('currency_symbol') }}{{ number_format($transaction->amount, 2) }}</td>
+                            <td>{{ $transaction->booking->property->title }}</td>
+                            <td>{{ $transaction->booking->first_name }} {{ $transaction->booking->last_name }}</td>
+                            <td>{{ \Carbon\Carbon::parse($transaction->booking->start_date)->format('d M, Y') }} - {{ \Carbon\Carbon::parse($transaction->booking->end_date)->format('d M, Y') }}</td>
+                            <td>{{ setting('currency_symbol') }}{{ number_format($transaction->booking->total_price, 2) }}</td>
+                            <td class="text-center align-middle">
+                                @if($transaction->status == 'completed')
+                                    <span class="badge badge-success-light px-3 py-1 rounded-pill font-weight-bold smallest uppercase">{{ __('Completed') }}</span>
+                                @elseif($transaction->status == 'pending')
+                                    <span class="badge badge-warning-light px-3 py-1 rounded-pill font-weight-bold smallest uppercase">{{ __('Pending') }}</span>
+                                @elseif($transaction->status == 'failed')
+                                    <span class="badge badge-danger-light px-3 py-1 rounded-pill font-weight-bold smallest uppercase">{{ __('Failed') }}</span>
+                                @else
+                                    <span class="badge badge-secondary-light px-3 py-1 rounded-pill font-weight-bold smallest uppercase">{{ ucfirst($transaction->status) }}</span>
+                                @endif
+                            </td>
+                            <td class="small">{{ $transaction->transaction_date ? $transaction->transaction_date->format('Y-m-d H:i') : '—' }}</td>
+                            <td class="text-center align-middle">
+                                @if ($transaction->getFirstMediaUrl('transaction_screenshots'))
+                                    <div class="table-img-preview shadow-sm mx-auto icon-box-60">
+                                        <img src="{{ $transaction->getFirstMediaUrl('transaction_screenshots') }}" alt="{{ __('Screenshot') }}" class="object-fit-cover">
+                                    </div>
+                                @else
+                                    <span class="text-muted smallest uppercase font-weight-bold">{{ __('No Image') }}</span>
+                                @endif
+                            </td>
+                            <td class="text-right align-middle pr-4">
+                                <div class="btn-group btn-group-premium">
+                                    <a href="{{ route('admin.transactions.edit', $transaction->id) }}" 
+                                       class="btn text-primary" 
+                                       data-toggle="tooltip" title="{{ __('Modify Record') }}">
+                                        <i class="fas fa-pencil-alt"></i>
+                                    </a>
+                                    <form action="{{ route('admin.transactions.destroy', $transaction->id) }}" method="POST" class="d-inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="button" class="btn text-danger" 
+                                                data-toggle="tooltip" title="{{ __('Purge Record') }}"
+                                                data-action="delete-trigger" 
+                                                data-confirm-title="{{ __('Purge Transaction?') }}" 
+                                                data-confirm-text="{{ __('Are you sure you want to permanently remove this transaction record?') }}">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 

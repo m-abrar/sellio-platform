@@ -18,7 +18,7 @@
 @section('content_header')
     <div class="container-fluid pt-4">
         <div class="row mb-4 align-items-center">
-            <div class="col-sm-8">
+            <div class="col-sm-8 text-center text-sm-left mb-3 mb-sm-0">
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-heartbeat mr-2 text-primary opacity-50"></i> 
                     {{ __('System Health & Requirements') }}
@@ -27,7 +27,7 @@
                     {{ __('Diagnostics for platform stability, server requirements, and environment integrity.') }}
                 </p>
             </div>
-            <div class="col-sm-4 text-right">
+            <div class="col-sm-4 d-flex align-items-center justify-content-center justify-content-sm-end">
                 @include('admin._partials._back-button')
             </div>
         </div>
