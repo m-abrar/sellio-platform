@@ -6,8 +6,8 @@ const nextConfig: NextConfig = {
     externalDir: true,
     turbo: {
       resolveAlias: {
-        "@sellio/types": "../../packages/types/src/index.ts",
-        "@sellio/api-client": "../../packages/api-client/src/index.ts",
+        "@sellio/types": "D:/Sellio/packages/types/src/index.ts",
+        "@sellio/api-client": "D:/Sellio/packages/api-client/src/index.ts",
       },
     },
   },
