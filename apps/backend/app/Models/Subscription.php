@@ -126,4 +126,15 @@ class Subscription extends Model
             default               => ['label' => 'Unknown', 'color' => 'dark', 'icon' => 'question-circle'],
         };
     }
+
+    /**
+     * Get the options for logging activity.
+     */
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
 }

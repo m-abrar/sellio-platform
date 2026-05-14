@@ -48,31 +48,31 @@
     <div class="card registry-card-premium registry-filter-card mb-4">
         <div class="card-body">
             <div class="d-flex flex-column flex-md-row align-items-center justify-content-between">
-                <div class="d-flex flex-column flex-md-row align-items-center mb-3 mb-md-0">
-                    <span class="form-label-premium mb-3 mb-md-0 mr-md-3 text-center text-md-left">
+                <div class="d-flex flex-row align-items-center mb-3 mb-md-0">
+                    <span class="form-label-premium mr-3 font-weight-bold text-uppercase smallest letter-spacing-1">
                         <i class="fas fa-filter mr-1 text-primary opacity-75"></i> {{ __('Lifecycle:') }}
                     </span>
-                    <ul class="nav nav-pills nav-pills-premium flex-wrap justify-content-center">
+                    <ul class="nav nav-pills nav-pills-premium flex-nowrap bg-light p-1 rounded-pill border">
                         <li class="nav-item">
-                            <a class="nav-link {{ $filter_status === 'all' ? 'active' : '' }}" 
+                            <a class="nav-link px-3 py-1 rounded-pill smallest font-weight-bold {{ $filter_status === 'all' ? 'active' : '' }}" 
                                href="{{ route('admin.withdrawals.index') }}">
                                {{ __('ALL') }}
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {{ $filter_status === 'pending' ? 'active' : '' }}" 
+                            <a class="nav-link px-3 py-1 rounded-pill smallest font-weight-bold {{ $filter_status === 'pending' ? 'active' : '' }}" 
                                href="{{ route('admin.withdrawals.index', ['status' => 'pending']) }}">
                                {{ __('PENDING') }}
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {{ $filter_status === 'approved' ? 'active' : '' }}" 
+                            <a class="nav-link px-3 py-1 rounded-pill smallest font-weight-bold {{ $filter_status === 'approved' ? 'active' : '' }}" 
                                href="{{ route('admin.withdrawals.index', ['status' => 'approved']) }}">
                                {{ __('APPROVED') }}
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {{ $filter_status === 'rejected' ? 'active' : '' }}" 
+                            <a class="nav-link px-3 py-1 rounded-pill smallest font-weight-bold {{ $filter_status === 'rejected' ? 'active' : '' }}" 
                                href="{{ route('admin.withdrawals.index', ['status' => 'rejected']) }}">
                                {{ __('REJECTED') }}
                             </a>
@@ -80,12 +80,12 @@
                     </ul>
                 </div>
                 
-                <div class="w-100 w-md-auto d-flex align-items-center">
-                    <div class="input-group input-group-premium w-100 col-media-280-md">
+                <div class="d-flex align-items-center ml-md-auto">
+                    <div class="input-group input-group-premium col-search-reduced shadow-sm rounded-pill overflow-hidden border">
                         <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-search text-xs"></i></span>
+                            <span class="input-group-text bg-white border-0"><i class="fas fa-search text-xs text-muted"></i></span>
                         </div>
-                        <input type="text" id="custom-search" class="form-control" placeholder="{{ __('Search Intelligence...') }}">
+                        <input type="text" id="custom-search" class="form-control border-0 px-0" style="height: 38px;" placeholder="{{ __('Search...') }}">
                     </div>
                 </div>
             </div>
@@ -110,10 +110,10 @@
                        data-datatable-config='{"paging": true, "searching": true, "ordering": true, "info": true, "order": [[5, "desc"]], "dom": "tr"}'>
                     <thead class="thead-light">
                         <tr>
-                            <th class="pl-4">{{ __('Partner Intelligence') }}</th>
+                            <th class="pl-4 w-25-p">{{ __('Partner Intelligence') }}</th>
                             <th class="text-right">{{ __('Settlement Value') }}</th>
                             <th>{{ __('Protocol') }}</th>
-                            <th class="w-25-p">{{ __('Destination Data') }}</th>
+                            <th class="w-35-p">{{ __('Destination Data') }}</th>
                             <th class="text-center">{{ __('Lifecycle') }}</th>
                             <th>{{ __('Temporal Data') }}</th>
                             <th class="text-right pr-4">{{ __('Operations') }}</th>
