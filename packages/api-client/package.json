@@ -5,7 +5,7 @@
   "main": "src/index.ts",
   "types": "src/index.ts",
   "dependencies": {
-    "@sellio/types": "*",
+    "@sellio/types": "file:../types",
     "axios": "^1.6.0"
   },
   "devDependencies": {

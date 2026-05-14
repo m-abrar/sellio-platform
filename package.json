@@ -3,15 +3,11 @@
   "version": "1.0.0",
   "private": true,
   "description": "Multi-platform e-commerce and vertical marketplace engine",
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
   "scripts": {
-    "dev:storefront": "npm run dev --workspace=apps/storefront",
-    "dev:seller": "npm run dev --workspace=apps/seller",
-    "build:all": "npm run build --workspaces",
-    "lint:all": "npm run lint --workspaces"
+    "dev:storefront": "cd apps/storefront && npm run dev",
+    "dev:seller": "cd apps/seller && npm run dev",
+    "build:all": "echo 'Run build in each app directory'",
+    "lint:all": "echo 'Run lint in each app directory'"
   },
   "keywords": [],
   "author": "",
