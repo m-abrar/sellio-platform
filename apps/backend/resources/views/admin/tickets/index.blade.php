@@ -121,7 +121,7 @@
                                         {{ $ticket->title }}
                                     </a>
                                     <div class="d-flex align-items-center overflow-hidden">
-                                        <span class="badge badge-light border text-muted smallest px-2 mr-2 font-weight-500 flex-shrink-0">ID: #{{ $ticket->id }}</span>
+                                        <span class="badge badge-light border text-muted smallest px-2 mr-2 font-weight-500 flex-shrink-0">{{ __('ID:') }} #{{ $ticket->id }}</span>
                                         <p class="text-muted smallest mb-0 text-truncate w-max-250 opacity-70">{{ $ticket->description }}</p>
                                     </div>
                                 </td>
@@ -195,7 +195,7 @@
 
             @if(method_exists($tickets, 'hasPages') && $tickets->hasPages())
                 <div class="card-footer bg-white border-0 py-4 px-4 d-flex justify-content-between align-items-center">
-                    <div class="text-muted smallest font-weight-bold uppercase">{{ __('Displaying') }} {{ $tickets->firstItem() }} - {{ $tickets->lastItem() }} {{ __('of') }} {{ $tickets->total() }} {{ __('records') }}</div>
+                    <div class="text-muted smallest font-weight-bold uppercase">{{ __('Displaying :first - :last of :total records', ['first' => $tickets->firstItem(), 'last' => $tickets->lastItem(), 'total' => $tickets->total()]) }}</div>
                     <div>{{ $tickets->appends(request()->except('page'))->links('pagination::bootstrap-4') }}</div>
                 </div>
             @endif

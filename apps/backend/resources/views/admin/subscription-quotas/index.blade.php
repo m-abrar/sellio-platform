@@ -15,14 +15,14 @@
 
 @section('plugins.Datatables', true)
 
-@section('title', 'Subscription Quotas')
+@section('title', __('Subscription Quotas'))
 
 @section('content_header')
     <div class="container-fluid pt-4">
         <div class="row mb-2">
             <div class="col-sm-6">
                 <h1 class="m-0 text-dark font-weight-bold">
-                     Subscription Quotas
+                     {{ __('Subscription Quotas') }}
                 </h1>
             </div>
         </div>
@@ -38,7 +38,7 @@
             <div class="row g-2">
                 <div class="col-md-4">
                     <select name="user_id" class="form-control">
-                        <option value="">All Users</option>
+                        <option value="">{{ __('All Users') }}</option>
                         @foreach($users as $user)
                             <option value="{{ $user->id }}" {{ request('user_id') == $user->id ? 'selected' : '' }}>
                                 {{ $user->name }}
@@ -49,7 +49,7 @@
 
                 <div class="col-md-4">
                     <select name="plan_id" class="form-control">
-                        <option value="">All Plans</option>
+                        <option value="">{{ __('All Plans') }}</option>
                         @foreach($plans as $plan)
                             <option value="{{ $plan->id }}" {{ request('plan_id') == $plan->id ? 'selected' : '' }}>
                                 {{ $plan->title }}
@@ -59,7 +59,7 @@
                 </div>
 
                 <div class="col-md-2">
-                    <button type="submit" class="btn btn-outline-secondary w-100">Filter</button>
+                    <button type="submit" class="btn btn-outline-secondary w-100">{{ __('Filter') }}</button>
                 </div>
             </div>
         </form>
@@ -68,19 +68,19 @@
 
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
-        <h3 class="card-title">Quota List</h3>
+        <h3 class="card-title">{{ __('Quota List') }}</h3>
     </div>
     <div class="card-body table-responsive">
         <table class="table table-hover table-premium mb-0 datatable-init"
                data-datatable-config='{"paging": false, "info": false, "searching": false}'>
             <thead class="thead-light">
                 <tr>
-                    <th>User</th>
-                    <th>Plan</th>
-                    <th>Listings Used</th>
-                    <th>Featured Used</th>
-                    <th>Status</th>
-                    <th>Actions</th>
+                    <th>{{ __('User') }}</th>
+                    <th>{{ __('Plan') }}</th>
+                    <th>{{ __('Listings Used') }}</th>
+                    <th>{{ __('Featured Used') }}</th>
+                    <th>{{ __('Status') }}</th>
+                    <th>{{ __('Actions') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -92,13 +92,13 @@
                         <td>{{ $quota->featured_used }} / {{ $quota->subscription->plan->featured_limit ?? '-' }}</td>
                         <td>
                             @php
-                                $status = 'Active';
-                                if($quota->subscription->ends_at && $quota->subscription->ends_at < now()) $status = 'Expired';
+                                $statusLabel = __('Active');
+                                if($quota->subscription->ends_at && $quota->subscription->ends_at < now()) $statusLabel = __('Expired');
                                 elseif($quota->listings_used >= ($quota->subscription->plan->listings_limit ?? 0) ||
-                                       $quota->featured_used >= ($quota->subscription->plan->featured_limit ?? 0)) $status = 'Over Limit';
+                                       $quota->featured_used >= ($quota->subscription->plan->featured_limit ?? 0)) $statusLabel = __('Over Limit');
                             @endphp
-                            <span class="badge {{ $status == 'Active' ? 'bg-success' : ($status == 'Expired' ? 'bg-secondary' : 'bg-danger') }}">
-                                {{ $status }}
+                            <span class="badge {{ $statusLabel == __('Active') ? 'bg-success' : ($statusLabel == __('Expired') ? 'bg-secondary' : 'bg-danger') }}">
+                                {{ $statusLabel }}
                             </span>
                         </td>
                         <td class="d-flex gap-1">
@@ -110,8 +110,8 @@
                                 @csrf
                                 <button type="button" class="btn btn-warning btn-sm"
                                         data-action="delete-trigger"
-                                        data-confirm-title="Reset Quota?"
-                                        data-confirm-text="Reset resource utilization for this user?">
+                                        data-confirm-title="{{ __('Reset Quota?') }}"
+                                        data-confirm-text="{{ __('Reset resource utilization for this user?') }}">
                                     <i class="fas fa-sync-alt"></i>
                                 </button>
                             </form>

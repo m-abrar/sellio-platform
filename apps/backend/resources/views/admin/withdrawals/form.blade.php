@@ -11,7 +11,7 @@
 --}}
 @extends('adminlte::page')
 
-@section('title', 'Payout Request Details | Financials')
+@section('title', __('Payout Request Details | Financials'))
 
 @section('content_header')
     <div class="container-fluid pt-4">
@@ -102,7 +102,7 @@
                     <div class="form-group mb-0">
                         <label class="small font-weight-bold text-muted uppercase mb-2 d-block">{{ __('Destination Credentials') }}</label>
                         <div class="p-4 bg-dark text-white rounded-xl shadow-premium-sm font-weight-600 font-0-9">
-                            <pre class="mb-0 text-white pre-wrap">{{ $withdrawal->details ?: 'No detailed credentials provided.' }}</pre>
+                            <pre class="mb-0 text-white pre-wrap">{{ $withdrawal->details ?: __('No detailed credentials provided.') }}</pre>
                         </div>
                     </div>
                 </div>
@@ -119,7 +119,7 @@
                             @csrf
                             <div class="form-group mb-4">
                                 <label class="small font-weight-bold text-muted uppercase mb-2 d-block">{{ __('Internal Payout Note') }}</label>
-                                <textarea name="admin_note" rows="3" class="form-control form-control-premium" placeholder="Enter transaction ID or notes for the partner..."></textarea>
+                                <textarea name="admin_note" rows="3" class="form-control form-control-premium" placeholder="{{ __('Enter transaction ID or notes for the partner...') }}"></textarea>
                             </div>
                             
                             <div class="d-flex gap-12">
@@ -158,8 +158,8 @@
                     <div class="avatar-box mx-auto mb-3 shadow-premium rounded-circle overflow-hidden border-4-fff icon-box-100">
                         <img src="{{ $withdrawal->user->getFirstMediaUrl(\App\Models\User::PRIMARY_MEDIA) ?: asset('images/fallbacks/avatar.jpg') }}" class="w-100 h-100 object-fit-cover">
                     </div>
-                    <h5 class="font-weight-bold text-dark mb-1">{{ $withdrawal->user->name ?? 'Deleted User' }}</h5>
-                    <p class="text-muted smallest font-weight-bold uppercase letter-spacing-1 mb-4">{{ $withdrawal->user->email ?? 'N/A' }}</p>
+                    <h5 class="font-weight-bold text-dark mb-1">{{ $withdrawal->user->name ?? __('Deleted User') }}</h5>
+                    <p class="text-muted smallest font-weight-bold uppercase letter-spacing-1 mb-4">{{ $withdrawal->user->email ?? __('N/A') }}</p>
                     
                     <div class="border-top pt-4">
                         <div class="d-flex justify-content-between mb-2">
@@ -199,7 +199,7 @@
         <div class="modal-content border-0 shadow-premium rounded-24">
             <div class="modal-header border-0 bg-white px-4 pt-4 pb-0">
                 <h5 class="modal-title text-dark font-weight-bold smallest uppercase letter-spacing-1"><i class="fas fa-ban mr-2 text-danger"></i> {{ __('Reject Payout Request') }}</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-dismiss="modal" aria-label="{{ __('Close') }}">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -208,7 +208,7 @@
                 <div class="modal-body p-4">
                     <div class="form-group mb-0">
                         <label class="small text-muted font-weight-bold text-uppercase mb-2 letter-spacing-1">{{ __('Internal Rejection Reason') }} <span class="text-danger">*</span></label>
-                        <textarea name="admin_note" rows="4" class="form-control form-control-premium" placeholder="Provide clarity for the partner..." required></textarea> 
+                        <textarea name="admin_note" rows="4" class="form-control form-control-premium" placeholder="{{ __('Provide clarity for the partner...') }}" required></textarea> 
                     </div>
                 </div>
                 <div class="modal-footer border-0 p-4 pt-0 d-flex gap-12">

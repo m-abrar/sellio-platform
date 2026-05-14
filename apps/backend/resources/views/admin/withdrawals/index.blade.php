@@ -50,7 +50,7 @@
             <div class="d-flex flex-column flex-md-row align-items-center justify-content-between">
                 <div class="d-flex flex-column flex-md-row align-items-center mb-3 mb-md-0">
                     <span class="form-label-premium mb-3 mb-md-0 mr-md-3 text-center text-md-left">
-                        <i class="fas fa-filter mr-1 text-primary opacity-75"></i> Lifecycle:
+                        <i class="fas fa-filter mr-1 text-primary opacity-75"></i> {{ __('Lifecycle:') }}
                     </span>
                     <ul class="nav nav-pills nav-pills-premium flex-wrap justify-content-center">
                         <li class="nav-item">
@@ -154,7 +154,7 @@
                                     @if ($withdrawal->admin_note)
                                         <div class="mt-2">
                                             <div class="badge badge-danger-light text-danger smallest p-2 border-left-premium-danger note-badge-premium">
-                                                <i class="fas fa-info-circle mr-1"></i> <strong>NOTE:</strong> {{ $withdrawal->admin_note }}
+                                                <i class="fas fa-info-circle mr-1"></i> <strong>{{ __('NOTE:') }}</strong> {{ $withdrawal->admin_note }}
                                             </div>
                                         </div>
                                     @endif
@@ -184,9 +184,9 @@
                                                  <button type="button" class="btn text-success" 
                                                          title="{{ __('Approve Payout') }}" 
                                                          data-action="confirm-trigger"
-                                                         data-confirm-title="Approve Payout?"
-                                                         data-confirm-text="Confirming this will process the settlement of ${{ number_format($withdrawal->amount_dollars, 2) }} to the partner."
-                                                         data-confirm-button="Approve Now">
+                                                         data-confirm-title="{{ __('Approve Payout?') }}"
+                                                         data-confirm-text="{{ __('Confirming this will process the settlement of $:amount to the partner.', ['amount' => number_format($withdrawal->amount_dollars, 2)]) }}"
+                                                         data-confirm-button="{{ __('Approve Now') }}">
                                                      <i class="fas fa-check"></i>
                                                  </button>
                                              </form>
@@ -220,7 +220,7 @@
 
         @if(method_exists($withdrawals, 'hasPages') && $withdrawals->hasPages())
             <div class="card-footer bg-white border-top py-4 px-4 d-flex justify-content-between align-items-center">
-                <div class="text-muted smallest font-weight-bold uppercase letter-spacing-1">Displaying {{ $withdrawals->firstItem() }} - {{ $withdrawals->lastItem() }} of {{ $withdrawals->total() }} records</div>
+                <div class="text-muted smallest font-weight-bold uppercase letter-spacing-1">{{ __('Displaying :first - :last of :total records', ['first' => $withdrawals->firstItem(), 'last' => $withdrawals->lastItem(), 'total' => $withdrawals->total()]) }}</div>
                 <div>{{ $withdrawals->appends(request()->except('page'))->links('pagination::bootstrap-4') }}</div>
             </div>
         @endif
@@ -232,8 +232,8 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content border-0 shadow-premium rounded-24">
             <div class="modal-header border-0 bg-white px-4 pt-4 pb-0">
-                <h5 class="modal-title text-dark font-weight-bold smallest uppercase letter-spacing-1"><i class="fas fa-ban mr-2 text-danger"></i> Reject Payout Request</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <h5 class="modal-title text-dark font-weight-bold smallest uppercase letter-spacing-1"><i class="fas fa-ban mr-2 text-danger"></i> {{ __('Reject Payout Request') }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="{{ __('Close') }}">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -245,13 +245,13 @@
                             <i class="fas fa-exclamation-triangle"></i>
                         </div>
                         <p class="mb-0 text-danger smallest font-weight-bold uppercase letter-spacing-1">
-                            Refunds full balance back to the partner.
+                            {{ __('Refunds full balance back to the partner.') }}
                         </p>
                     </div>
                     <div class="form-group mb-0">
-                        <label class="small text-muted font-weight-bold text-uppercase mb-2 letter-spacing-1">Internal Rejection Reason <span class="text-danger">*</span></label>
+                        <label class="small text-muted font-weight-bold text-uppercase mb-2 letter-spacing-1">{{ __('Internal Rejection Reason') }} <span class="text-danger">*</span></label>
                         <textarea name="admin_note" id="admin_note" rows="4" class="form-control form-control-premium" 
-                                  placeholder="Provide clarity for the partner (e.g., Invalid bank details)..." required></textarea> 
+                                  placeholder="{{ __('Provide clarity for the partner (e.g., Invalid bank details)...') }}" required></textarea> 
                     </div>
                 </div>
                 <div class="modal-footer border-0 p-4 pt-0 d-flex gap-12">

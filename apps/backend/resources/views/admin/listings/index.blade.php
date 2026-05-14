@@ -195,7 +195,7 @@
                                     <td class="align-middle">
                                         <span class="d-block font-weight-bold text-dark mb-0 text-0-95">{{ $listing->title ?? __('Untitled Asset') }}</span>
                                         <div class="d-flex align-items-center mt-1 gap-10">
-                                            <span class="smallest font-weight-bold text-muted text-monospace">ID: #{{ str_pad($listing->id, 5, '0', STR_PAD_LEFT) }}</span>
+                                            <span class="smallest font-weight-bold text-muted text-monospace">{{ __('ID:') }} #{{ str_pad($listing->id, 5, '0', STR_PAD_LEFT) }}</span>
                                             <span class="text-muted smallest font-weight-bold uppercase letter-spacing-1">
                                                 <i class="fas fa-map-marker-alt mr-1 text-danger opacity-50"></i>{{ $listing->location->title ?? __('Global') }}
                                             </span>
@@ -209,7 +209,7 @@
                                                 </div>
                                                 <div>
                                                     <span class="d-block font-weight-bold text-dark mb-0 smallest uppercase letter-spacing-1">{{ $listing->user->name }}</span>
-                                                    <div class="smallest text-muted text-monospace">UID: #{{ $listing->user->id }}</div>
+                                                    <div class="smallest text-muted text-monospace">{{ __('UID:') }} #{{ $listing->user->id }}</div>
                                                 </div>
                                             </div>
                                         @else
@@ -303,7 +303,7 @@
 
             @if(method_exists($listings, 'hasPages') && $listings->hasPages())
                 <div class="card-footer bg-white border-top py-4 px-4 d-flex justify-content-between align-items-center">
-                    <div class="text-muted smallest font-weight-bold uppercase letter-spacing-1">{{ __('Displaying') }} {{ $listings->firstItem() }} - {{ $listings->lastItem() }} {{ __('of') }} {{ $listings->total() }} {{ __('records') }}</div>
+                    <div class="text-muted smallest font-weight-bold uppercase letter-spacing-1">{{ __('Displaying :first - :last of :total records', ['first' => $listings->firstItem(), 'last' => $listings->lastItem(), 'total' => $listings->total()]) }}</div>
                     <div>{{ $listings->appends(request()->except('page'))->links('pagination::bootstrap-4') }}</div>
                 </div>
             @endif

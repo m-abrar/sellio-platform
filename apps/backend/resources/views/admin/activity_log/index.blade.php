@@ -16,7 +16,7 @@
 
 @section('plugins.Datatables', true)
 
-@section('title', 'System Heartbeat | Activity Timeline')
+@section('title', __('System Heartbeat | Activity Timeline'))
 
 @section('content_header')
     <div class="container-fluid pt-4">
@@ -47,8 +47,8 @@
                     </div>
                 </div>
                 <ol class="breadcrumb bg-transparent p-0 m-0 small d-none d-sm-flex">
-                    <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Activity Timeline</li>
+                    <li class="breadcrumb-item"><a href="{{ route('admin.welcome') }}">{{ __('Dashboard') }}</a></li>
+                    <li class="breadcrumb-item active">{{ __('Activity Timeline') }}</li>
                 </ol>
             </div>
         </div>
@@ -60,7 +60,7 @@
     @include('admin.alert') 
 
     <div class="card border-0 shadow-premium overflow-hidden rounded-24">
-        <div class="card-header bg-white border-0 py-4 px-4">
+        <div class="card-header bg-white border-0 py-4 px-4 d-flex align-items-center justify-content-between">
             <h3 class="card-title font-weight-bold text-dark mb-0">{{ __('Operational Logs') }}</h3>
             <div class="card-tools">
                 <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest">
@@ -112,7 +112,7 @@
                                         };
                                     @endphp
                                     <span class="badge badge-{{ $style['text'] }}-light px-3 py-2 rounded-pill font-weight-bold smallest uppercase">
-                                        <i class="fas fa-{{ $style['icon'] }} mr-1"></i> {{ $event }}
+                                        <i class="fas fa-{{ $style['icon'] }} mr-1"></i> {{ __($event) }}
                                     </span>
                                 </td>
                                 <td class="align-middle">
@@ -127,17 +127,17 @@
                                             </div>
                                             <div>
                                                 <span class="font-weight-bold text-dark d-block" style="font-size: 0.8rem;">{{ $modelName }}</span>
-                                                <small class="text-muted font-weight-bold uppercase" style="font-size: 0.6rem;">ID: {{ $activity->subject_id }}</small>
+                                                <small class="text-muted font-weight-bold uppercase" style="font-size: 0.6rem;">{{ __('ID:') }} {{ $activity->subject_id }}</small>
                                             </div>
                                         </div>
                                     @else
-                                        <span class="text-muted smallest font-weight-bold">N/A</span>
+                                        <span class="text-muted smallest font-weight-bold">{{ __('N/A') }}</span>
                                     @endif
                                 </td>
                                 <td class="text-right align-middle pr-4">
                                     @if ($activity->properties->isNotEmpty())
                                         <button type="button" class="btn btn-default btn-sm rounded-pill px-3 font-weight-bold shadow-xs border" data-toggle="modal" data-target="#detailsModal-{{ $activity->id }}">
-                                            <i class="fas fa-database mr-1 text-primary"></i> DATA
+                                            <i class="fas fa-database mr-1 text-primary"></i> {{ __('DATA') }}
                                         </button>
                                     @else
                                         <span class="text-muted smallest font-weight-bold">{{ __('STATIC') }}</span>
@@ -150,7 +150,7 @@
             </div>
         </div>
         <div class="card-footer bg-white border-0 py-4 px-4 d-flex justify-content-between align-items-center">
-            <div class="text-muted smallest font-weight-bold uppercase">{{ __('Showing') }} {{ $activityLogs->firstItem() }} {{ __('to') }} {{ $activityLogs->lastItem() }} {{ __('of') }} {{ $activityLogs->total() }} {{ __('events') }}</div>
+            <div class="text-muted smallest font-weight-bold uppercase">{{ __('Showing :first to :last of :total events', ['first' => $activityLogs->firstItem(), 'last' => $activityLogs->lastItem(), 'total' => $activityLogs->total()]) }}</div>
             <div>{{ $activityLogs->appends(request()->except('page'))->links() }}</div>
         </div>
     </div>
@@ -165,7 +165,7 @@
                 <h5 class="modal-title text-white font-weight-bold" id="detailsModalLabel-{{ $activity->id }}">
                     <i class="fas fa-fingerprint mr-2 text-primary"></i> {{ __('Data Signature (ID: :id)', ['id' => $activity->id]) }}
                 </h5>
-                <button type="button" class="close text-white opacity-50" data-dismiss="alert" data-dismiss="modal">
+                <button type="button" class="close text-white opacity-50" data-dismiss="modal">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>

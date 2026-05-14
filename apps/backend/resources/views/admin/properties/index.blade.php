@@ -77,7 +77,7 @@
                                 <td class="align-middle">
                                     <span class="d-block font-weight-bold text-dark mb-0 text-0-95">{{ $property->title }}</span>
                                     <div class="d-flex align-items-center mt-1 gap-10">
-                                        <span class="smallest font-weight-bold text-muted text-monospace">{{ __('ID') }}: #{{ str_pad($property->id, 5, '0', STR_PAD_LEFT) }}</span>
+                                        <span class="smallest font-weight-bold text-muted text-monospace">{{ __('ID:') }} #{{ str_pad($property->id, 5, '0', STR_PAD_LEFT) }}</span>
                                         <span class="text-muted smallest font-weight-bold uppercase letter-spacing-1">
                                             <i class="fas fa-map-marker-alt mr-1 text-danger opacity-50"></i>{{ $property->location->title ?? $property->city ?? __('Global') }}
                                         </span>
@@ -155,7 +155,7 @@
 
         @if($properties->hasPages())
             <div class="card-footer bg-white border-top py-4 px-4 d-flex justify-content-between align-items-center">
-                <div class="text-muted smallest font-weight-bold uppercase letter-spacing-1">{{ __('Displaying') }} {{ $properties->firstItem() }} - {{ $properties->lastItem() }} {{ __('of') }} {{ $properties->total() }} {{ __('records') }}</div>
+                <div class="text-muted smallest font-weight-bold uppercase letter-spacing-1">{{ __('Displaying :first - :last of :total records', ['first' => $properties->firstItem(), 'last' => $properties->lastItem(), 'total' => $properties->total()]) }}</div>
                 <div>{{ $properties->appends(request()->query())->links('pagination::bootstrap-4') }}</div>
             </div>
         @endif
