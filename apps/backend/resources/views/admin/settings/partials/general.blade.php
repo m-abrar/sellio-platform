@@ -26,7 +26,7 @@
                 <h3 class="card-title font-weight-bold text-dark mb-1 float-none d-block small text-uppercase letter-spacing-1">
                     <i class="fas fa-id-card mr-2 text-primary opacity-50"></i> {{ __('Identity & Localization') }}
                 </h3>
-                <p class="text-muted smallest font-weight-bold text-uppercase letter-spacing-1 mb-0 mt-0">Configure your marketplace name, branding, and regional preferences.</p>
+                <p class="text-muted smallest font-weight-bold text-uppercase letter-spacing-1 mb-0 mt-0">{{ __('Configure your marketplace name, branding, and regional preferences.') }}</p>
             </div>
             <div class="card-body px-4 pb-4">
                 <div class="row">
@@ -228,7 +228,7 @@
                         <div class="form-group">
                             <label class="small font-weight-bold text-secondary">{{ __('Partner Portal URL') }}</label>
                             <input type="url" name="url_partner" class="form-control"
-                                placeholder="https://sellers.lebrince.com"
+                                placeholder="https://partners.sellio.com"
                                 value="{{ old('url_partner', $settings['url_partner'] ?? '') }}">
                         </div>
                     </div>
@@ -236,7 +236,7 @@
                         <div class="form-group">
                             <label class="small font-weight-bold text-secondary">{{ __('Customer App URL') }}</label>
                             <input type="url" name="url_user" class="form-control"
-                                placeholder="https://app.lebrince.com"
+                                placeholder="https://app.sellio.com"
                                 value="{{ old('url_user', $settings['url_user'] ?? '') }}">
                         </div>
                     </div>

@@ -13,7 +13,7 @@
 --}}
 @extends('adminlte::page')
 
-@section('title', 'Amenities')
+@section('title', __('Amenities'))
 
 {{-- Plugin handled by config/adminlte.php --}}
 @section('plugins.Datatables', true)
@@ -82,8 +82,8 @@
                                 </td>
 
                                 <td class="align-middle">
-                                    <span class="d-block font-weight-bold text-dark mb-0 smallest uppercase letter-spacing-1">{{ $amenity->title ?? 'N/A' }}</span>
-                                    <small class="text-muted text-monospace smallest-0-7">REF: #AMN-{{ str_pad($amenity->id, 4, '0', STR_PAD_LEFT) }}</small>
+                                    <span class="d-block font-weight-bold text-dark mb-0 smallest uppercase letter-spacing-1">{{ $amenity->title ?? __('N/A') }}</span>
+                                    <small class="text-muted text-monospace smallest-0-7">{{ __('REF') }}: #AMN-{{ str_pad($amenity->id, 4, '0', STR_PAD_LEFT) }}</small>
                                 </td>
 
                                 <td class="align-middle">

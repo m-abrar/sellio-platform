@@ -12,7 +12,7 @@
 --}}
 @extends('adminlte::page')
 
-@section('title', 'Security Gates | Granular Permissions')
+@section('title', __('Granular Permissions'))
 
 @section('plugins.Datatables', true)
 
@@ -21,17 +21,17 @@
         <div class="row mb-4 align-items-center">
             <div class="col-sm-7">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-fingerprint mr-2 text-primary opacity-50"></i> Granular Permissions
+                    <i class="fas fa-fingerprint mr-2 text-primary"></i> {{ __('Granular Permissions') }}
                 </h1>
-                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">High-fidelity mapping of system gates and low-level access protocols.</p>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">{{ __('High-fidelity mapping of system gates and low-level access protocols.') }}</p>
             </div>
             <div class="col-sm-5 d-flex align-items-center justify-content-end">
                 <div class="d-flex justify-content-end align-items-center gap-12">
                     <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">
-                        <i class="fas fa-th-large"></i> Dashboard
+                        <i class="fas fa-th-large"></i> {{ __('Dashboard') }}
                     </a>
                     <a href="{{ route('admin.roles.index') }}" class="btn-back shadow-sm">
-                        <i class="fas fa-user-shield"></i> Access Roles
+                        <i class="fas fa-user-shield"></i> {{ __('Access Roles') }}
                     </a>
                     <a href="{{ route('admin.permissions.create') }}" class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-premium">
                         <i class="fas fa-plus-circle mr-1"></i> ADD GATED RESOURCE
@@ -52,7 +52,7 @@
                 <i class="fas fa-layer-group mr-2 text-primary opacity-50"></i> System Authority Registry
             </h3>
             <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase ml-auto">
-                {{ count($permissions) }} ACTIVE PROTOCOLS
+                {{ count($permissions) }} {{ __('ACTIVE PROTOCOLS') }}
             </span>
         </div>
 
@@ -62,9 +62,9 @@
                        data-datatable-config='{"paging": true, "lengthChange": false, "searching": true, "ordering": true, "info": true}'>
                     <thead class="thead-light">
                         <tr>
-                            <th class="pl-4">Resource Identifier</th>
-                            <th>Guard Protocol</th>
-                            <th class="text-right pr-4">Metrics</th>
+                            <th class="pl-4">{{ __('Resource Identifier') }}</th>
+                            <th>{{ __('Guard Protocol') }}</th>
+                            <th class="text-right pr-4">{{ __('Metrics') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -78,7 +78,7 @@
                                         <div>
                                             <code class="text-primary font-weight-bold font-0-95 bg-transparent border-0 p-0">{{ $permission->name }}</code>
                                             <small class="d-block text-muted text-uppercase font-weight-bold mt-1 smallest-0-6 ls-0-8">
-                                                System Gate Architecture
+                                                {{ __('System Gate Architecture') }}
                                             </small>
                                         </div>
                                     </div>
@@ -92,17 +92,17 @@
                                     <div class="btn-group btn-group-premium shadow-xs rounded-pill border overflow-hidden">
                                         <a href="{{ route('admin.permissions.edit', $permission->id) }}" 
                                            class="btn btn-white btn-sm text-info py-2" 
-                                           data-toggle="tooltip" title="Modify Identifier">
+                                           data-toggle="tooltip" title="{{ __('Modify Identifier') }}">
                                             <i class="fas fa-pencil-alt"></i>
                                         </a>
                                         
                                         <form id="delete-permission-{{ $permission->id }}" action="{{ route('admin.permissions.destroy', $permission->id) }}" method="POST" class="d-inline">
                                             @csrf @method('DELETE')
                                              <button type="button" class="btn btn-white btn-sm text-danger py-2 px-3" 
-                                                     data-toggle="tooltip" title="Revoke Protocol"
+                                                     data-toggle="tooltip" title="{{ __('Revoke Protocol') }}"
                                                      data-action="delete-trigger"
-                                                     data-confirm-title="Revoke Permission?"
-                                                     data-confirm-text="This will remove the protocol from all associated roles.">
+                                                     data-confirm-title="{{ __('Revoke Permission?') }}"
+                                                     data-confirm-text="{{ __('This will remove the protocol from all associated roles.') }}">
                                                  <i class="fas fa-trash-alt"></i>
                                              </button>
                                         </form>
@@ -110,15 +110,12 @@
                                 </td>
                             </tr>
                         @empty
-                            <tr class="empty-state">
-                                <td colspan="3" class="text-center py-5">
-                                    <div class="py-4">
-                                        <i class="fas fa-lock fa-4x text-muted opacity-25 mb-3"></i>
-                                        <h5 class="text-muted font-weight-bold">Registry Is Vacant</h5>
-                                        <p class="small text-secondary">Individual permissions define granular user capabilities within the system logic.</p>
-                                    </div>
-                                </td>
-                            </tr>
+                        @include('admin._partials._empty-state', [
+                            'colspan' => 3,
+                            'icon' => 'fas fa-lock',
+                            'title' => __('Registry Is Vacant'),
+                            'description' => __('Individual permissions define granular user capabilities within the system logic.'),
+                        ])
                         @endforelse
                     </tbody>
                 </table>

@@ -13,7 +13,7 @@
 --}}
 @extends('adminlte::page')
 
-@section('title', 'Products')
+@section('title', __('Products'))
 
 @section('plugins.Datatables', true)
 
@@ -22,13 +22,13 @@
         <div class="row mb-4 align-items-center">
             <div class="col-sm-8">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-boxes mr-2 text-primary"></i> Inventory & Products
+                    <i class="fas fa-boxes mr-2 text-primary"></i> {{ __('Inventory & Products') }}
                 </h1>
-                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Manage retail inventory, product pricing, and stock levels.</p>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">{{ __('Manage retail inventory, product pricing, and stock levels.') }}</p>
             </div>
             <div class="col-sm-4 text-right">
                 <a href="{{ route('admin.products.create') }}" class="btn btn-primary btn-registry-add">
-                    <i class="fas fa-plus-circle mr-2"></i> Add Product
+                    <i class="fas fa-plus-circle mr-2"></i> {{ __('Add Product') }}
                 </a>
             </div>
         </div>
@@ -43,10 +43,10 @@
 
     <div class="card registry-table-card">
         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
-            <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none letter-spacing-1">Product Catalog</h3>
+            <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none letter-spacing-1">{{ __('Product Catalog') }}</h3>
             <div class="card-tools d-flex align-items-center ml-auto">
                 <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase mr-2">
-                    <i class="fas fa-database mr-1"></i> {{ $products->total() }} PRODUCTS FOUND
+                    <i class="fas fa-database mr-1"></i> {{ $products->total() }} {{ __('PRODUCTS FOUND') }}
                 </span>
                 <button type="button" class="btn btn-tool text-muted" data-card-widget="maximize">
                     <i class="fas fa-expand"></i>
@@ -60,12 +60,12 @@
                        data-datatable-config='{"paging": false, "info": false, "searching": false, "columnDefs": [{"orderable": false, "targets": [0, 5]}]}'>
                     <thead class="thead-light">
                         <tr>
-                            <th class="text-center pl-4 col-media-70">Media</th>
-                            <th>Product Info</th>
-                            <th>Retail Details</th>
-                            <th>Inventory</th>
-                            <th class="text-center">Lifecycle</th>
-                            <th class="text-right pr-4">Actions</th>
+                            <th class="text-center pl-4 col-media-70">{{ __('Media') }}</th>
+                            <th>{{ __('Product Info') }}</th>
+                            <th>{{ __('Retail Details') }}</th>
+                            <th>{{ __('Inventory') }}</th>
+                            <th class="text-center">{{ __('Lifecycle') }}</th>
+                            <th class="text-right pr-4">{{ __('Actions') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -82,13 +82,13 @@
                                     <span class="d-block font-weight-bold text-dark mb-0 text-0-95">
                                         {{ $product->title }}
                                         @if($product->is_featured)
-                                            <i class="fas fa-star text-warning ml-1" data-toggle="tooltip" title="Featured Product"></i>
+                                            <i class="fas fa-star text-warning ml-1" data-toggle="tooltip" title="{{ __('Featured Product') }}"></i>
                                         @endif
                                     </span>
                                     <div class="d-flex align-items-center mt-1 gap-10">
-                                        <span class="smallest font-weight-bold text-muted text-monospace">ID: #{{ $product->sku ?? 'NO-SKU' }}</span>
+                                        <span class="smallest font-weight-bold text-muted text-monospace">{{ __('ID') }}: #{{ $product->sku ?? 'NO-SKU' }}</span>
                                         <span class="text-muted smallest font-weight-bold uppercase letter-spacing-1">
-                                            <i class="fas fa-folder-open mr-1 text-primary opacity-50"></i> {{ $product->category->title ?? 'Uncategorized' }}
+                                            <i class="fas fa-folder-open mr-1 text-primary opacity-50"></i> {{ $product->category->title ?? __('Uncategorized') }}
                                         </span>
                                     </div>
                                 </td>
@@ -110,12 +110,12 @@
                                         $stockStatus = $product->stock_quantity > ($product->low_stock_threshold ?? 5) ? 'text-success' : 'text-danger';
                                     @endphp
                                     <div class="{{ $stockStatus }} font-weight-bold smallest uppercase letter-spacing-1">
-                                        {{ $product->stock_quantity }} UNITS IN STOCK
+                                        {{ $product->stock_quantity }} {{ __('UNITS IN STOCK') }}
                                     </div>
                                     <small class="text-muted smallest uppercase letter-spacing-1">
-                                        {{ $product->manage_stock ? 'Auto-managed' : 'Manual Entry' }}
+                                        {{ $product->manage_stock ? __('Auto-managed') : __('Manual Entry') }}
                                         @if($product->is_digital)
-                                            <span class="ml-1 text-primary"><i class="fas fa-cloud-download-alt"></i> Digital</span>
+                                            <span class="ml-1 text-primary"><i class="fas fa-cloud-download-alt"></i> {{ __('Digital') }}</span>
                                         @endif
                                     </small>
                                 </td>
@@ -138,12 +138,12 @@
                                     <div class="btn-group btn-group-premium">
                                         <a href="{{ route('admin.products.edit', $product->id) }}" 
                                            class="btn text-primary" 
-                                           data-toggle="tooltip" title="Modify Product">
+                                           data-toggle="tooltip" title="{{ __('Modify Product') }}">
                                             <i class="fas fa-pencil-alt"></i>
                                         </a>
                                         <a href="{{ route('admin.products.duplicate', $product->id) }}" 
                                            class="btn text-success" 
-                                           data-toggle="tooltip" title="Clone Entry">
+                                           data-toggle="tooltip" title="{{ __('Clone Entry') }}">
                                             <i class="fas fa-copy"></i>
                                         </a>
                                         <form action="{{ route('admin.products.destroy', $product->id) }}" 
@@ -152,7 +152,7 @@
                                             @csrf
                                             @method('DELETE')
                                             <button type="button" class="btn text-danger" 
-                                                    data-toggle="tooltip" title="Purge Product" data-action="delete-trigger">
+                                                    data-toggle="tooltip" title="{{ __('Purge Product') }}" data-action="delete-trigger">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
                                         </form>
@@ -163,9 +163,9 @@
                             @include('admin._partials._empty-state', [
                                 'colspan' => 6,
                                 'icon' => 'fas fa-boxes',
-                                'title' => 'No retail records detected in catalog.',
-                                'description' => 'Synchronize your inventory or initialize new product entries to populate this registry.',
-                                'button_text' => 'INITIALIZE PRODUCT',
+                                'title' => __('No retail records detected in catalog.'),
+                                'description' => __('Synchronize your inventory or initialize new product entries to populate this registry.'),
+                                'button_text' => __('INITIALIZE PRODUCT'),
                                 'button_link' => route('admin.products.create')
                             ])
                         @endforelse
@@ -176,7 +176,7 @@
 
         @if(method_exists($products, 'hasPages') && $products->hasPages())
             <div class="card-footer bg-white border-top py-4 px-4 d-flex justify-content-between align-items-center">
-                <div class="text-muted smallest font-weight-bold uppercase letter-spacing-1">Displaying {{ $products->firstItem() }} - {{ $products->lastItem() }} of {{ $products->total() }} records</div>
+                <div class="text-muted smallest font-weight-bold uppercase letter-spacing-1">{{ __('Displaying') }} {{ $products->firstItem() }} - {{ $products->lastItem() }} {{ __('of') }} {{ $products->total() }} {{ __('records') }}</div>
                 <div>{{ $products->withQueryString()->links('pagination::bootstrap-4') }}</div>
             </div>
         @endif

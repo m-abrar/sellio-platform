@@ -11,7 +11,7 @@
 --}}
 @extends('adminlte::page')
 
-@section('title', 'Access Architecture | Authority Registry')
+@section('title', __('Access Architecture'))
 
 @section('plugins.Datatables', true)
 

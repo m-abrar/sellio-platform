@@ -21,7 +21,7 @@
         <div class="row mb-4 align-items-center">
             <div class="col-sm-7">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-users-cog mr-2 text-primary opacity-50"></i> {{ $viewTitle ?? 'User Management' }}
+                    <i class="fas fa-users-cog mr-2 text-primary"></i> {{ $viewTitle ?? __('User Management') }}
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">{{ __('Manage registered users, authentication profiles, and access tiers.') }}</p>
             </div>
@@ -46,15 +46,16 @@
 <div class="container-fluid">
     @include('admin.alert')
 
-    <div class="card border-0 shadow-premium overflow-hidden rounded-24">
-        <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center justify-content-between">
-            <h5 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">
-                <i class="fas fa-users mr-2 text-primary opacity-50"></i> {{ $viewTitle ?? __('Registered Users') }} {{ __('Registry') }}
-            </h5>
-            <div class="card-tools ml-auto">
-                <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 shadow-xs">
+    <div class="card registry-table-card">
+        <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
+            <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none letter-spacing-1">{{ $viewTitle ?? __('Registered Users') }}</h3>
+            <div class="card-tools d-flex align-items-center ml-auto">
+                <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase mr-2 shadow-xs">
                     <i class="fas fa-database mr-1"></i> {{ $users->total() }} {{ __('TOTAL PARTICIPANTS') }}
                 </span>
+                <button type="button" class="btn btn-tool text-muted" data-card-widget="maximize">
+                    <i class="fas fa-expand"></i>
+                </button>
             </div>
         </div>
 

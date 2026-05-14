@@ -20,21 +20,16 @@
 @section('content_header')
     <div class="container-fluid pt-4">
         <div class="row mb-4 align-items-center">
-            <div class="col-sm-7">
+            <div class="col-sm-8">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-blog mr-2 text-primary opacity-50"></i> {{ __('Blog Articles') }}
+                    <i class="fas fa-blog mr-2 text-primary"></i> {{ __('Blog Articles') }}
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">{{ __('Compose and curate editorial content for your marketplace community.') }}</p>
             </div>
-            <div class="col-sm-5 d-flex align-items-center justify-content-end">
-                <div class="d-flex justify-content-end align-items-center gap-12">
-                    <a href="{{ route('admin.welcome') }}" class="btn btn-back shadow-sm px-4">
-                        <i class="fas fa-arrow-left mr-1"></i> {{ __('BACK TO DASHBOARD') }}
-                    </a>
-                    <a href="{{ route('admin.blogs.create') }}" class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-premium">
-                        <i class="fas fa-plus-circle mr-1"></i> {{ __('WRITE NEW POST') }}
-                    </a>
-                </div>
+            <div class="col-sm-4 text-right">
+                <a href="{{ route('admin.blogs.create') }}" class="btn btn-primary btn-registry-add">
+                    <i class="fas fa-plus-circle mr-2"></i> {{ __('WRITE NEW POST') }}
+                </a>
             </div>
         </div>
     </div>
@@ -45,15 +40,16 @@
     @include('admin.alert')
 
     {{-- Main Table Card --}}
-    <div class="card border-0 shadow-premium overflow-hidden rounded-24">
+    <div class="card registry-table-card">
         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
-            <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">
-                <i class="fas fa-feather mr-1 text-primary opacity-50"></i> {{ __('Article Registry') }}
-            </h3>
-            <div class="card-tools ml-auto">
-                <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase">
+            <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none letter-spacing-1">{{ __('Article Registry') }}</h3>
+            <div class="card-tools d-flex align-items-center ml-auto">
+                <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase mr-2 shadow-xs">
                     <i class="fas fa-database mr-1"></i> {{ $blogs->total() }} {{ __('POSTS') }}
                 </span>
+                <button type="button" class="btn btn-tool text-muted" data-card-widget="maximize">
+                    <i class="fas fa-expand"></i>
+                </button>
             </div>
         </div>
 
@@ -82,14 +78,14 @@
                                         </div>
                                         <div>
                                             <span class="d-block font-weight-bold text-dark mb-0">{{ Str::limit($blog->title, 40) }}</span>
-                                            <small class="text-muted"><i class="far fa-user mr-1"></i> {{ $blog->user->name ?? 'Admin' }}</small>
+                                            <small class="text-muted"><i class="far fa-user mr-1"></i> {{ $blog->user->name ?? __('Admin') }}</small>
                                         </div>
                                     </div>
                                 </td>
 
                                 <td class="align-middle">
                                     <span class="badge badge-primary-light text-primary text-xs px-2 mb-1">
-                                        {{ $blog->category->name ?? 'Uncategorized' }}
+                                        {{ $blog->category->name ?? __('Uncategorized') }}
                                     </span>
                                     <div class="text-xs text-muted">
                                         <i class="fas fa-link mr-1"></i> /{{ Str::limit($blog->slug, 20) }}
@@ -100,7 +96,7 @@
                                     <div class="text-xs font-weight-bold">
                                         <i class="far fa-eye text-info mr-1"></i> {{ number_format($blog->view_count) }}
                                     </div>
-                                    <small class="text-muted" title="Reading Time">
+                                    <small class="text-muted" title="{{ __('Reading Time') }}">
                                         <i class="far fa-clock mr-1"></i> {{ $blog->reading_time ?? '5' }}m
                                     </small>
                                 </td>

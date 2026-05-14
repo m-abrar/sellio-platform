@@ -24,8 +24,8 @@
         <div class="row align-items-center mb-4">
             <div class="col-sm-7">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-layer-group mr-2 text-primary opacity-50"></i>
-                    {{ $type !== 'all' ? \Illuminate\Support\Str::title($type) : \Illuminate\Support\Str::title($status ?? 'All') }} Marketplace
+                    <i class="fas fa-layer-group mr-2 text-primary"></i>
+                    {{ $type !== 'all' ? __(Str::title($type)) : __(Str::title($status ?? 'All')) }} {{ __('Marketplace') }}
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">{{ __('Audit marketplace submissions, moderation statuses, and lifecycle states.') }}</p>
             </div>
@@ -156,7 +156,7 @@
         <div class="card registry-table-card">
             <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
                 <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none letter-spacing-1">
-                    {{ $type !== 'all' ? __('Filtering for') . ' ' . \Illuminate\Support\Str::title($type) : __('Marketplace Catalog') }}
+                    {{ $type !== 'all' ? __('Filtering for') . ' ' . __(Str::title($type)) : __('Marketplace Catalog') }}
                 </h3>
                 <div class="card-tools d-flex align-items-center ml-auto">
                     <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase mr-2">
@@ -230,7 +230,7 @@
                                                 $style = $styles[$listing->listing_type] ?? ['bg' => 'secondary-soft', 'text' => 'secondary', 'icon' => 'cube'];
                                             @endphp
                                             <span class="badge badge-{{ $style['text'] }}-light px-3 py-1 rounded-pill smallest font-weight-bold uppercase letter-spacing-1">
-                                                <i class="fas fa-{{ $style['icon'] }} mr-1 opacity-50"></i> {{ $listing->listing_type }}
+                                                <i class="fas fa-{{ $style['icon'] }} mr-1 opacity-50"></i> {{ __($listing->listing_type) }}
                                             </span>
                                         </td>
                                     @endif

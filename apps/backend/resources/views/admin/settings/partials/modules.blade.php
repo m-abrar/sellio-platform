@@ -46,8 +46,8 @@
                                     </div>
                                 </div>
                                 
-                                <h6 class="font-weight-bold mb-1 text-dark">{{ ucfirst($section) }}</h6>
-                                <p class="text-muted small mb-0">{{ $data['desc'] }}</p>
+                                <h6 class="font-weight-bold mb-1 text-dark">{{ __(ucfirst($section)) }}</h6>
+                                <p class="text-muted small mb-0">{{ __($data['desc']) }}</p>
                             </div>
                         </div>
                     </div>

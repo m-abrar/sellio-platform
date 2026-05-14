@@ -13,23 +13,21 @@
 --}}
 @extends('adminlte::page')
 
-@section('title', 'Taxonomy Architecture | Market Segments')
+@section('title', __('Categories'))
 
 @section('plugins.Datatables', true)
 
 @section('content_header')
     <div class="container-fluid pt-4">
         <div class="row mb-4 align-items-center">
-            <div class="col-md-8">
+            <div class="col-sm-8">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-folder-open mr-2 text-primary opacity-50"></i> {{ __('Taxonomy Architecture') }}
+                    <i class="fas fa-folder-open mr-2 text-primary"></i> {{ __('Market Segments') }}
                 </h1>
-                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">
-                    {{ __('Organize platform listings into a logical hierarchy and taxonomy.') }}
-                </p>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">{{ __('Organize platform listings into a logical hierarchy and taxonomy.') }}</p>
             </div>
-            <div class="col-md-4 text-right">
-                <a href="{{ route('admin.categories.create') }}" class="btn btn-primary rounded-pill px-4 py-2 font-weight-bold shadow-premium smallest uppercase letter-spacing-1">
+            <div class="col-sm-4 text-right">
+                <a href="{{ route('admin.categories.create') }}" class="btn btn-primary btn-registry-add">
                     <i class="fas fa-plus-circle mr-2"></i> {{ __('Add Category') }}
                 </a>
             </div>
@@ -41,11 +39,11 @@
 <div class="container-fluid pb-5">
     @include('admin.alert')
 
-    <div class="card border-0 shadow-premium overflow-hidden rounded-24 datatable-premium-layout">
+    <div class="card registry-table-card">
         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
-            <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">{{ __('Global Taxonomy Registry') }}</h3>
+            <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none letter-spacing-1">{{ __('Global Taxonomy Registry') }}</h3>
             <div class="card-tools d-flex align-items-center ml-auto">
-                <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase mr-3">
+                <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase mr-2">
                     <i class="fas fa-sitemap mr-1"></i> {{ count($categories) }} {{ __('CATEGORIES FOUND') }}
                 </span>
                 <button type="button" class="btn btn-tool text-muted" data-card-widget="maximize">
@@ -84,7 +82,7 @@
                                         @endif
                                         <div>
                                             <span class="d-block font-weight-bold text-dark mb-0 font-1-0">
-                                                {{ $category->title ?? 'N/A' }}
+                                                {{ $category->title ?? __('N/A') }}
                                             </span>
                                             <small class="text-muted font-weight-bold uppercase smallest letter-spacing-1">
                                                 @if($category->parent)

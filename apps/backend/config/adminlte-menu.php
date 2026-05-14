@@ -57,6 +57,7 @@ return [
         'url'  => 'admin/dashboard/ecommerce',
         'icon' => 'fas fa-shopping-cart',
         'module' => 'products',
+        'can'    => 'manage-products',
     ],
 
     // 2. CORE BUSINESS - PROPERTY & OPERATIONS
@@ -82,42 +83,49 @@ return [
                 'url' => 'admin/products',
                 'icon' => 'fas fa-shopping-bag',
                 'module' => 'products',
+                'can' => 'manage-products',
             ],
             [
                 'text' => 'Properties',
                 'url' => 'admin/properties',
                 'icon' => 'fas fa-building',
                 'module' => 'properties',
+                'can' => 'manage-properties',
             ],
             [
                 'text' => 'Autos',
                 'url' => 'admin/autos',
                 'icon' => 'fas fa-car',
                 'module' => 'autos',
+                'can' => 'manage-autos',
             ],
             [
                 'text' => 'Events',
                 'url' => 'admin/events',
                 'icon' => 'fas fa-calendar-check',
                 'module' => 'events',
+                'can' => 'manage-events',
             ],
             [
                 'text' => 'Jobs',
                 'url' => 'admin/jobs',
                 'icon' => 'fas fa-briefcase',
                 'module' => 'jobs',
+                'can' => 'manage-jobs',
             ],
             [
                 'text' => 'Services',
                 'url' => 'admin/services',
-                'icon' => 'fas fa-hand-holding-heart',
+                'icon' => 'fas fa-handholding-heart',
                 'module' => 'services',
+                'can' => 'manage-services',
             ],
             [
                 'text' => 'Classifieds',
                 'url' => 'admin/classifieds',
                 'icon' => 'fas fa-bullhorn',
                 'module' => 'classifieds',
+                'can' => 'manage-classifieds',
             ],
         ],
     ],
@@ -126,6 +134,7 @@ return [
     [
         'text' => 'Bookings & Inquiries',
         'icon' => 'fas fa-calendar-alt',
+        'can'  => 'manage-bookings',
         'submenu' => [
              [
                 'text' => 'All Bookings & Leads',
@@ -185,6 +194,7 @@ return [
         'text' => 'Manage Attributes',
         'icon' => 'fas fa-sliders-h', // Updated Icon for "attributes"
         'color' => 'secondary', // Applied color
+        'can'   => 'manage-taxonomies',
         'submenu' => [
             // Reordered sub-items to place the most essential/frequently used first
             [
@@ -234,6 +244,7 @@ return [
         'text' => 'Financials',
         'icon' => 'fas fa-chart-line',
         'color' => 'warning', // Applied color
+        'can'   => 'manage-financials',
         'submenu' => [
             [
                 'text' => 'Payments / Checkout',
@@ -307,10 +318,12 @@ return [
         'text' => 'Membership',
         'icon' => 'fas fa-id-card',
         'color' => 'primary', // Applied color
+        'can'   => ['manage-subscriptions', 'manage-plans'],
         'submenu' => [
             [
                 'text' => 'Subscriptions',
                 'icon' => 'fas fa-list-alt',
+                'can'  => 'manage-subscriptions',
                 'submenu' => [
                     [
                         'text' => 'Active Subscriptions',
@@ -334,6 +347,7 @@ return [
             [
                 'text' => 'Plans',
                 'icon' => 'fas fa-box-open',
+                'can'  => 'manage-plans',
                 'submenu' => [
                     [
                         'text' => 'All Plans',
@@ -352,14 +366,14 @@ return [
 
 
     // 5. CONTENT & MARKETING
-    ['header' => 'CONTENT & MARKETING', 'can' => 'edit'],
+    ['header' => 'CONTENT & MARKETING', 'can' => ['manage-blogs', 'manage-pages', 'manage-marketing']],
     
     // A. CMS (Content Management System)
     [
         'text' => 'CMS (Content)',
         'icon' => 'fas fa-edit',
         'color' => 'teal', // Applied color
-        'can' => 'edit',
+        'can' => ['manage-blogs', 'manage-pages'],
         'submenu' => [
             
             // --- BLOG MANAGEMENT ---
@@ -367,7 +381,7 @@ return [
                 'text'    => 'Blog Management',
                 'icon'    => 'fas fa-blog',
                 'color'   => 'orange',
-                'can'     => 'edit',
+                'can'     => 'manage-blogs',
                 'submenu' => [
                     [
                         'text' => 'All Posts',
@@ -390,6 +404,7 @@ return [
                 'text' => 'Pages',
                 'url' => 'admin/pages',
                 'icon' => 'far fa-fw fa-file-alt', // Updated Icon
+                'can' => 'manage-pages',
             ],
             [
                 'text' => 'Headers',
@@ -415,7 +430,7 @@ return [
         'text' => 'Marketing Tools',
         'icon' => 'fas fa-chart-pie', // Updated Icon for "Marketing"
         'color' => 'purple', // Applied color
-        'can' => 'edit',
+        'can' => 'manage-marketing',
         'submenu' => [
             [
                 'text' => 'Newsletter Subscribers',
@@ -431,7 +446,7 @@ return [
                 'text' => 'Manage Ads',
                 'url'  => 'admin/advertisements',
                 'icon' => 'fas fa-bullhorn',
-                'can'  => 'manage-users',
+                'can'  => 'manage-marketing',
             ],
         ],
     ],
@@ -493,6 +508,7 @@ return [
         'url'  => 'admin/tickets',
         'icon' => 'fas fa-ticket-alt',
         'color' => 'success',
+        'can'   => 'manage-tickets',
     ],
 
     // 7. GLOBAL SETTINGS

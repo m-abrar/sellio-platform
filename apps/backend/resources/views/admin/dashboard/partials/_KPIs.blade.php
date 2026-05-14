@@ -9,10 +9,10 @@
 --}}
 @php
     $urgent = [
-        ['val' => $metrics['urgent_actions']['partner_applications'] ?? 0, 'label' => 'Partners Applications', 'route' => 'admin.users.partners', 'color' => 'danger', 'icon' => 'fa-user-shield'],
-        ['val' => $metrics['urgent_actions']['listing_approvals'] ?? 0, 'label' => 'Moderation Approvals', 'route' => 'admin.listings.index', 'color' => 'warning', 'icon' => 'fa-edit'],
-        ['val' => $metrics['urgent_actions']['pending_payouts'] ?? 0, 'label' => 'Pending Payouts', 'route' => 'admin.withdrawals.pending', 'color' => 'info', 'icon' => 'fa-wallet'],
-        ['val' => $metrics['urgent_actions']['unresolved_tickets'] ?? 0, 'label' => 'Unresolved Tickets', 'route' => 'admin.tickets.index', 'color' => 'secondary', 'icon' => 'fa-headset'],
+        ['val' => $metrics['urgent_actions']['partner_applications'] ?? 0, 'label' => __('Partners Applications'), 'route' => 'admin.users.partners', 'color' => 'danger', 'icon' => 'fa-user-shield'],
+        ['val' => $metrics['urgent_actions']['listing_approvals'] ?? 0, 'label' => __('Moderation Approvals'), 'route' => 'admin.listings.index', 'color' => 'warning', 'icon' => 'fa-edit'],
+        ['val' => $metrics['urgent_actions']['pending_payouts'] ?? 0, 'label' => __('Pending Payouts'), 'route' => 'admin.withdrawals.pending', 'color' => 'info', 'icon' => 'fa-wallet'],
+        ['val' => $metrics['urgent_actions']['unresolved_tickets'] ?? 0, 'label' => __('Unresolved Tickets'), 'route' => 'admin.tickets.index', 'color' => 'secondary', 'icon' => 'fa-headset'],
     ];
 @endphp
 
@@ -21,19 +21,19 @@
     <div class="col-lg-4 mb-4">
         <div class="card card-premium-dark h-100">
             <div class="card-body position-relative z-index-1 d-flex flex-column justify-content-center px-4">
-                <p class="text-white-50 text-uppercase smallest font-weight-bold mb-2 letter-spacing-1">Platform Net Revenue (YTD)</p>
+                <p class="text-white-50 text-uppercase smallest font-weight-bold mb-2 letter-spacing-1">{{ __('Platform Net Revenue (YTD)') }}</p>
                 <h1 class="text-white display-4 font-weight-bold mb-3 text-tightest">{{ $metrics['system_kpis']['earnings'] }}</h1>
                 @if(isset($metrics['system_kpis']['yoy_change']))
                 <div class="d-flex align-items-center">
                     <span class="badge badge-success-light border-0 mr-2 font-weight-bold px-3 py-2 rounded-pill smallest">
-                        <i class="fas fa-arrow-up mr-1"></i> {{ $metrics['system_kpis']['yoy_change'] }} YoY
+                        <i class="fas fa-arrow-up mr-1"></i> {{ $metrics['system_kpis']['yoy_change'] }} {{ __('YoY') }}
                     </span>
-                    <span class="text-white-50 smallest font-weight-bold uppercase letter-spacing-1">Analytics Stream</span>
+                    <span class="text-white-50 smallest font-weight-bold uppercase letter-spacing-1">{{ __('Analytics Stream') }}</span>
                 </div>
                 @endif
                 <div class="mt-4">
                     <a href="{{ route('admin.payments.index')}}" class="btn btn-primary rounded-pill px-4 font-weight-bold smallest letter-spacing-1">
-                        FINANCIAL REPORT <i class="fas fa-chevron-right ml-1"></i>
+                        {{ __('FINANCIAL REPORT') }} <i class="fas fa-chevron-right ml-1"></i>
                     </a>
                 </div>
             </div>
@@ -56,21 +56,21 @@
                                 <small class="text-white-50 font-weight-bold uppercase smallest letter-spacing-1">{{ $u['label'] }}</small>
                                 @if ($hasAlert)
                                     <span class="action-badge-pulsing d-flex align-items-center">
-                                        <span class="pulse-glow-dot bg-white mr-1"></span> ACTION
+                                        <span class="pulse-glow-dot bg-white mr-1"></span> {{ __('ACTION') }}
                                     </span>
                                 @endif
                             </div>
 
                             <div class="my-auto">
                                 <h1 class="text-white text-display-premium text-tighter mb-0">{{ $u['val'] }}</h1>
-                                <p class="text-white-50 mb-0 smallest font-weight-bold uppercase letter-spacing-1">Pending Audit</p>
+                                <p class="text-white-50 mb-0 smallest font-weight-bold uppercase letter-spacing-1">{{ __('Pending Audit') }}</p>
                             </div>
 
                             <i class="fas {{ $u['icon'] }} glassmorphic-glow-icon"></i>
                             <a href="{{ route($u['route']) }}" class="stretched-link"></a>
                         </div>
                         <div class="card-footer card-footer-premium d-flex align-items-center justify-content-between py-3">
-                            <span>MANAGE RECORDS</span>
+                            <span>{{ __('MANAGE RECORDS') }}</span>
                             <i class="fas fa-chevron-right"></i>
                         </div>
                     </div>
@@ -82,9 +82,9 @@
                 <div class="row">
                     @php
                         $secondary = [
-                            ['label' => 'Active Partners', 'val' => $metrics['secondary_metrics']['active_partners'], 'icon' => 'fa-user-shield', 'bg' => 'success'],
-                            ['label' => 'Live Listings', 'val' => $metrics['secondary_metrics']['live_properties'], 'icon' => 'fa-globe', 'bg' => 'info'],
-                            ['label' => 'New Leads (24H)', 'val' => $metrics['secondary_metrics']['new_leads_24h'], 'icon' => 'fa-bolt', 'bg' => 'warning'],
+                            ['label' => __('Active Partners'), 'val' => $metrics['secondary_metrics']['active_partners'], 'icon' => 'fa-user-shield', 'bg' => 'success'],
+                            ['label' => __('Live Listings'), 'val' => $metrics['secondary_metrics']['live_properties'], 'icon' => 'fa-globe', 'bg' => 'info'],
+                            ['label' => __('New Leads (24H)'), 'val' => $metrics['secondary_metrics']['new_leads_24h'], 'icon' => 'fa-bolt', 'bg' => 'warning'],
                         ];
                     @endphp
                     @foreach($secondary as $s)

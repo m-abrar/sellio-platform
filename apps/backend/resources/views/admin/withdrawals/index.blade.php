@@ -14,26 +14,23 @@
 --}}
 @extends('adminlte::page')
 
-@section('title', 'Payout Management | Financials')
+@section('title', __('Payout Management'))
 
 @section('plugins.Datatables', true)
 
 @section('content_header')
     <div class="container-fluid pt-4">
         <div class="row mb-4 align-items-center">
-            <div class="col-sm-7">
+            <div class="col-sm-8">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-hand-holding-usd mr-2 text-primary opacity-50"></i> Payout Management
+                    <i class="fas fa-hand-holding-usd mr-2 text-primary"></i> {{ __('Payout Management') }}
                 </h1>
-                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Review and process fund withdrawal requests from marketplace partners.</p>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">{{ __('Review and process fund withdrawal requests from marketplace partners.') }}</p>
             </div>
-            <div class="col-sm-5 d-flex align-items-center justify-content-end gap-12">
-                <span class="badge badge-primary-light px-3 py-2 rounded-pill font-weight-bold smallest uppercase mr-2">
-                    <i class="fas fa-clock mr-1"></i> {{ $withdrawals->total() }} REQUESTS QUEUED
+            <div class="col-sm-4 text-right">
+                <span class="badge badge-primary-light px-3 py-2 rounded-pill font-weight-bold smallest uppercase shadow-xs">
+                    <i class="fas fa-clock mr-1"></i> {{ $withdrawals->total() }} {{ __('REQUESTS QUEUED') }}
                 </span>
-                <a href="{{ route('admin.welcome') }}" class="btn btn-white rounded-pill px-4 py-2 font-weight-bold shadow-sm smallest uppercase letter-spacing-1 border">
-                    <i class="fas fa-th-large mr-2"></i> Dashboard
-                </a>
             </div>
         </div>
     </div>
@@ -98,7 +95,7 @@
     <div class="card registry-table-card">
         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center justify-content-between">
             <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">
-                <i class="fas fa-receipt mr-2 text-primary opacity-50"></i> {{ ucfirst($filter_status) }} Requests Registry
+                <i class="fas fa-receipt mr-2 text-primary"></i> {{ __(ucfirst($filter_status)) }} {{ __('Requests Registry') }}
             </h3>
             <div class="card-tools d-flex align-items-center ml-auto">
                 <button type="button" class="btn btn-tool text-muted" data-card-widget="maximize">
@@ -113,13 +110,13 @@
                        data-datatable-config='{"paging": true, "searching": true, "ordering": true, "info": true, "order": [[5, "desc"]], "dom": "tr"}'>
                     <thead class="thead-light">
                         <tr>
-                            <th class="pl-4">Partner Intelligence</th>
-                            <th class="text-right">Settlement Value</th>
-                            <th>Protocol</th>
-                            <th class="w-25-p">Destination Data</th>
-                            <th class="text-center">Lifecycle</th>
-                            <th>Temporal Data</th>
-                            <th class="text-right pr-4">Operations</th>
+                            <th class="pl-4">{{ __('Partner Intelligence') }}</th>
+                            <th class="text-right">{{ __('Settlement Value') }}</th>
+                            <th>{{ __('Protocol') }}</th>
+                            <th class="w-25-p">{{ __('Destination Data') }}</th>
+                            <th class="text-center">{{ __('Lifecycle') }}</th>
+                            <th>{{ __('Temporal Data') }}</th>
+                            <th class="text-right pr-4">{{ __('Operations') }}</th>
                         </tr>
                     </thead>
 
@@ -132,8 +129,8 @@
                                             <span class="smallest font-weight-bold">{{ strtoupper(substr($withdrawal->user->name ?? '?', 0, 1)) }}</span>
                                         </div>
                                         <div>
-                                            <span class="d-block font-weight-bold text-dark mb-0 smallest uppercase letter-spacing-1">{{ $withdrawal->user->name ?? 'N/A (Deleted)' }}</span>
-                                            <small class="text-muted text-monospace smallest smallest-0-7">ACCOUNT #{{ $withdrawal->user_id }}</small>
+                                            <span class="d-block font-weight-bold text-dark mb-0 smallest uppercase letter-spacing-1">{{ $withdrawal->user->name ?? __('N/A (Deleted)') }}</span>
+                                            <small class="text-muted text-monospace smallest smallest-0-7">{{ __('ACCOUNT') }} #{{ $withdrawal->user_id }}</small>
                                         </div>
                                     </div>
                                 </td>
@@ -146,7 +143,7 @@
                                 
                                 <td class="align-middle">
                                     <span class="smallest font-weight-bold uppercase letter-spacing-1 text-muted">
-                                        <i class="fas fa-university mr-1 opacity-50"></i> {{ $withdrawal->method ?? 'OTHER' }}
+                                        <i class="fas fa-university mr-1 opacity-50"></i> {{ $withdrawal->method ?? __('OTHER') }}
                                     </span>
                                 </td>
 
@@ -203,7 +200,7 @@
                                          </div>
                                     @else
                                         <span class="badge badge-secondary-light px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1">
-                                            <i class="fas fa-archive mr-1 opacity-50"></i> ARCHIVED
+                                            <i class="fas fa-archive mr-1 opacity-50"></i> {{ __('ARCHIVED') }}
                                         </span>
                                     @endif
                                 </td>
@@ -212,8 +209,8 @@
                             @include('admin._partials._empty-state', [
                                 'colspan' => 7,
                                 'icon' => 'fas fa-file-invoice-dollar',
-                                'title' => 'Zero Requests Found',
-                                'description' => "New payouts in the \"$filter_status\" queue will appear here once requested by marketplace partners.",
+                                'title' => __('Zero Requests Found'),
+                                'description' => __('New payouts in the ":status" queue will appear here once requested by marketplace partners.', ['status' => __($filter_status)]),
                             ])
                         @endforelse
                     </tbody>
@@ -258,8 +255,8 @@
                     </div>
                 </div>
                 <div class="modal-footer border-0 p-4 pt-0 d-flex gap-12">
-                    <button type="button" class="btn btn-default shadow-xs rounded-pill px-4 py-2 flex-grow-1 font-weight-bold smallest uppercase" data-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-danger shadow-xs rounded-pill px-4 py-2 flex-grow-1 font-weight-bold smallest uppercase">Confirm Rejection</button>
+                    <button type="button" class="btn btn-default shadow-xs rounded-pill px-4 py-2 flex-grow-1 font-weight-bold smallest uppercase" data-dismiss="modal">{{ __('Cancel') }}</button>
+                    <button type="submit" class="btn btn-danger shadow-xs rounded-pill px-4 py-2 flex-grow-1 font-weight-bold smallest uppercase">{{ __('Confirm Rejection') }}</button>
                 </div>
             </form>
         </div>

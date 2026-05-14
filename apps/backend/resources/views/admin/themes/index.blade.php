@@ -15,17 +15,17 @@
 --}}
 @extends('adminlte::page')
 
-@section('title', 'Theme Manager')
+@section('title', __('Theme Manager'))
 
 @section('content_header')
     <div class="container-fluid pt-4">
         <div class="row mb-4 align-items-center">
             <div class="col-sm-8">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-palette mr-2 text-primary opacity-50"></i> Theme Customization Engine
+                    <i class="fas fa-palette mr-2 text-primary opacity-50"></i> {{ __('Theme Customization Engine') }}
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">
-                    Manage storefront identities and vertical-specific visual architectures.
+                    {{ __('Manage storefront identities and vertical-specific visual architectures.') }}
                 </p>
             </div>
             <div class="col-sm-4 text-right">
@@ -47,8 +47,8 @@
                     <i class="fas fa-magic text-indigo fa-2x"></i>
                 </div>
                 <div class="px-4">
-                    <h5 class="mb-1 font-weight-bold text-dark">Visual Identity Engine</h5>
-                    <p class="mb-0 text-muted smallest font-weight-bold text-uppercase letter-spacing-1">Manage vertical-specific storefront architectures, liquid templates, and multi-tenant skins.</p>
+                    <h5 class="mb-1 font-weight-bold text-dark">{{ __('Visual Identity Engine') }}</h5>
+                    <p class="mb-0 text-muted smallest font-weight-bold text-uppercase letter-spacing-1">{{ __('Manage vertical-specific storefront architectures, liquid templates, and multi-tenant skins.') }}</p>
                 </div>
             </div>
         </div>
@@ -58,8 +58,8 @@
     @if($activeTheme)
     <div class="mb-5">
         <div class="section-title-modern mb-3">
-            <span class="badge badge-primary-light text-primary px-3 py-2 mb-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 shadow-xs">CURRENTLY ACTIVE</span>
-            <h5 class="font-weight-bold text-dark smallest text-uppercase letter-spacing-1">Active Storefront Identity</h5>
+            <span class="badge badge-primary-light text-primary px-3 py-2 mb-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 shadow-xs">{{ __('CURRENTLY ACTIVE') }}</span>
+            <h5 class="font-weight-bold text-dark smallest text-uppercase letter-spacing-1">{{ __('Active Storefront Identity') }}</h5>
         </div>
         <div class="card card-premium active-theme-hero overflow-hidden border-0 shadow-premium rounded-24">
             <div class="row no-gutters">
@@ -67,7 +67,7 @@
                     <div class="position-relative h-100 bg-light">
                         <img src="{{ asset('frontend/images/preview.png') }}" class="img-fluid h-100 w-100 object-fit-cover" alt="{{ $activeTheme->title }}">
                         <div class="active-status-overlay">
-                            <i class="fas fa-check-circle mr-1"></i> LIVE NOW
+                            <i class="fas fa-check-circle mr-1"></i> {{ __('LIVE NOW') }}
                         </div>
                     </div>
                 </div>
@@ -77,22 +77,22 @@
                             <div>
                                 <h2 class="font-weight-bold text-dark mb-1 h3">{{ $activeTheme->title }}</h2>
                                 <span class="badge badge-primary-light text-primary px-3 py-1 text-uppercase smallest font-weight-bold rounded-pill">
-                                    <i class="fas fa-layer-group mr-1 opacity-50"></i> {{ $activeTheme->vertical ?? 'Unified / General' }}
+                                    <i class="fas fa-layer-group mr-1 opacity-50"></i> {{ __($activeTheme->vertical ?: 'Unified / General') }}
                                 </span>
                             </div>
                             <code class="bg-dark text-white px-3 py-1 rounded-pill smallest font-weight-bold shadow-sm">{{ $activeTheme->theme_key }}</code>
                         </div>
                         
                         <p class="text-muted flex-grow-1 font-1-1 leading-1-7">
-                            {{ $activeTheme->description ?? 'This theme is driving your storefront. It utilizes a ' . ($activeTheme->vertical ?? 'unified') . ' layout system with specialized components for ' . ($activeTheme->vertical ?? 'all business operations') . '.' }}
+                            {{ $activeTheme->description ?: __('This theme is driving your storefront. It utilizes a unified layout system with specialized components for all business operations.') }}
                         </p>
 
                         <div class="mt-4 pt-4 border-top d-flex align-items-center gap-15">
                             <a href="{{ url('/') }}" target="_blank" class="btn btn-primary px-4 rounded-pill font-weight-bold shadow-premium smallest">
-                                <i class="fas fa-external-link-alt mr-2"></i> View Site
+                                <i class="fas fa-external-link-alt mr-2"></i> {{ __('View Site') }}
                             </a>
                             <a href="{{ route('admin.themes.edit', $activeTheme->id) }}" class="btn btn-default shadow-xs border px-4 rounded-pill font-weight-bold smallest">
-                                <i class="fas fa-cog mr-2"></i> Theme Settings
+                                <i class="fas fa-cog mr-2"></i> {{ __('Theme Settings') }}
                             </a>
                         </div>
                     </div>
@@ -106,7 +106,7 @@
     @if($recentThemes->count() > 0)
     <div class="mb-5">
         <div class="section-title-modern mb-3">
-            <h5 class="font-weight-bold text-dark smallest text-uppercase letter-spacing-1"><i class="fas fa-history mr-2 text-primary opacity-50"></i> Recently Used</h5>
+            <h5 class="font-weight-bold text-dark smallest text-uppercase letter-spacing-1"><i class="fas fa-history mr-2 text-primary opacity-50"></i> {{ __('Recently Used') }}</h5>
         </div>
         <div class="row">
             @foreach($recentThemes as $theme)
@@ -118,14 +118,14 @@
                             <form action="{{ route('admin.themes.activate', $theme->id) }}" method="POST">
                                 @csrf
                                 <button type="submit" class="btn btn-white btn-sm font-weight-bold px-4 rounded-pill shadow smallest">
-                                    <i class="fas fa-bolt mr-1 text-primary"></i> Activate
+                                    <i class="fas fa-bolt mr-1 text-primary"></i> {{ __('Activate') }}
                                 </button>
                             </form>
                         </div>
                     </div>
                     <div class="card-body p-3 text-center bg-white border-top">
                         <h6 class="font-weight-bold mb-1 text-dark text-truncate">{{ $theme->title }}</h6>
-                        <small class="text-muted smallest uppercase font-weight-bold opacity-75">Used {{ $theme->last_activated_at->diffForHumans() }}</small>
+                        <small class="text-muted smallest uppercase font-weight-bold opacity-75">{{ __('Used') }} {{ $theme->last_activated_at->diffForHumans() }}</small>
                     </div>
                 </div>
             </div>
@@ -139,11 +139,11 @@
         <div class="card card-premium overflow-hidden border-0 shadow-premium rounded-24">
             <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center justify-content-between">
                 <h5 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">
-                    <i class="fas fa-layer-group mr-2 text-primary opacity-50"></i> Global Theme Library Explorer
+                    <i class="fas fa-layer-group mr-2 text-primary opacity-50"></i> {{ __('Global Theme Library Explorer') }}
                 </h5>
                 <div class="card-tools ml-auto">
                     <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase shadow-xs">
-                        <i class="fas fa-palette mr-1"></i> {{ $themesByVertical->flatten()->count() }} TOTAL SKINS
+                        <i class="fas fa-palette mr-1"></i> {{ $themesByVertical->flatten()->count() }} {{ __('TOTAL SKINS') }}
                     </span>
                 </div>
             </div>
@@ -165,15 +165,15 @@
                                         default => 'fa-circle text-secondary'
                                     };
                                     $label = match($vertical) {
-                                        'ecommerce' => 'Online Shop / Retail',
-                                        'properties' => 'Real Estate',
-                                        'autos' => 'Automotive',
-                                        'events' => 'Events & Tickets',
-                                        'jobs' => 'Job Board',
-                                        'services' => 'Service Marketplace',
-                                        'classifieds' => 'Classifieds',
-                                        null, '' => 'Unified / Multi-Purpose',
-                                        default => ucfirst($vertical)
+                                        'ecommerce' => __('Online Shop / Retail'),
+                                        'properties' => __('Real Estate'),
+                                        'autos' => __('Automotive'),
+                                        'events' => __('Events & Tickets'),
+                                        'jobs' => __('Job Board'),
+                                        'services' => __('Service Marketplace'),
+                                        'classifieds' => __('Classifieds'),
+                                        null, '' => __('Unified / Multi-Purpose'),
+                                        default => ucfirst(__($vertical))
                                     };
                                 @endphp
                                 <a class="nav-link mb-2 {{ $first ? 'active shadow-sm' : '' }} smallest uppercase font-weight-bold letter-spacing-1" 
@@ -200,7 +200,7 @@
                                      role="tabpanel">
                                      
                                      <div class="d-flex align-items-center mb-5">
-                                         <h4 class="font-weight-bold mb-0 text-dark smallest text-uppercase letter-spacing-1">{{ $vertical ?: 'Unified Themes' }} Architecture</h4>
+                                         <h4 class="font-weight-bold mb-0 text-dark smallest text-uppercase letter-spacing-1">{{ __($vertical ?: 'Unified Themes') }} {{ __('Architecture') }}</h4>
                                          <div class="ml-4 h-px bg-light flex-grow-1"></div>
                                      </div>
 
@@ -217,7 +217,7 @@
                                                             <form action="{{ route('admin.themes.activate', $theme->id) }}" method="POST">
                                                                 @csrf
                                                                 <button type="submit" class="btn btn-primary btn-sm font-weight-bold px-4 shadow rounded-pill smallest">
-                                                                   Activate
+                                                                   {{ __('Activate') }}
                                                                 </button>
                                                             </form>
                                                          </div>
@@ -226,7 +226,7 @@
                                                          <h6 class="font-weight-bold text-dark mb-1">{{ $theme->title }}</h6>
                                                          <code class="text-xs text-primary mb-3 d-inline-block font-weight-bold">{{ $theme->theme_key }}</code>
                                                          <p class="text-muted small mb-0 line-clamp-2 min-h-40-p">
-                                                             {{ $theme->description ?? 'optimized ' . ($theme->vertical ?: 'unified') . ' layout components.' }}
+                                                             {{ $theme->description ?: __('optimized layout components.') }}
                                                          </p>
                                                      </div>
                                                  </div>

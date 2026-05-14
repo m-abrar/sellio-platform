@@ -14,15 +14,21 @@
 
 @section('plugins.Datatables', true)
 
-@section('title', 'Transactions')
+@section('title', __('Transactions'))
 
 @section('content_header')
     <div class="container-fluid pt-4">
-        <div class="row mb-2">
-            <div class="col-sm-6">
+        <div class="row mb-4 align-items-center">
+            <div class="col-sm-8">
                 <h1 class="m-0 text-dark font-weight-bold">
-                     Transactions
+                    <i class="fas fa-file-invoice-dollar mr-2 text-primary"></i> {{ __('Financial Ledger & Transactions') }}
                 </h1>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">{{ __('Audit financial exchanges, verify payment artifacts, and reconcile bookings.') }}</p>
+            </div>
+            <div class="col-sm-4 text-right">
+                <a href="{{ route('admin.transactions.create') }}" class="btn btn-primary btn-registry-add">
+                    <i class="fas fa-plus-circle mr-2"></i> {{ __('Add Transaction') }}
+                </a>
             </div>
         </div>
     </div>
@@ -32,28 +38,33 @@
 
 @include('admin.alert')
 
-<div class="card card-primary card-outline shadow-sm border-0">
-    <div class="card-header border-0 bg-white py-3">
-        <h3 class="card-title">Recent Transactions List</h3>
-        <a href="{{ route('admin.transactions.create') }}" class="btn btn-primary float-right">
-            <i class="fas fa-plus"></i> Add Transaction
-        </a>
+<div class="card registry-table-card">
+    <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
+        <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none letter-spacing-1">{{ __('Transaction History') }}</h3>
+        <div class="card-tools d-flex align-items-center ml-auto">
+            <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase mr-2">
+                <i class="fas fa-database mr-1"></i> {{ count($transactions) }} {{ __('RECORDS FOUND') }}
+            </span>
+            <button type="button" class="btn btn-tool text-muted" data-card-widget="maximize">
+                <i class="fas fa-expand"></i>
+            </button>
+        </div>
     </div>
     <div class="card-body">
         <table id="transactions-table" class="table table-hover table-premium mb-0 datatable-init"
                data-datatable-config='{"paging": true, "searching": true, "ordering": true, "order": [[7, "desc"]], "responsive": true}'>
             <thead class="thead-light">
                 <tr>
-                    <th>Reference</th>
-                    <th>Amount</th>
-                    <th>Property Name</th>
-                    <th>Guest Name</th>
-                    <th>Booking Dates</th>
-                    <th>Booking Total</th>
-                    <th>Status</th>
-                    <th>Date</th>
-                    <th>Screenshot</th>
-                    <th>Actions</th>
+                    <th>{{ __('Reference') }}</th>
+                    <th>{{ __('Amount') }}</th>
+                    <th>{{ __('Property') }}</th>
+                    <th>{{ __('Customer') }}</th>
+                    <th>{{ __('Booking Dates') }}</th>
+                    <th>{{ __('Total') }}</th>
+                    <th class="text-center">{{ __('Status') }}</th>
+                    <th>{{ __('Timestamp') }}</th>
+                    <th class="text-center">{{ __('Proof') }}</th>
+                    <th class="text-right pr-4">{{ __('Actions') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -65,39 +76,46 @@
                         <td>{{ $transaction->booking->first_name }} {{ $transaction->booking->last_name }}</td>
                         <td>{{ \Carbon\Carbon::parse($transaction->booking->start_date)->format('d M, Y') }} - {{ \Carbon\Carbon::parse($transaction->booking->end_date)->format('d M, Y') }}</td>
                         <td>{{ setting('currency_symbol') }}{{ number_format($transaction->booking->total_price, 2) }}</td>
-                        <td>
+                        <td class="text-center align-middle">
                             @if($transaction->status == 'completed')
-                                <span class="badge badge-success">Completed</span>
+                                <span class="badge badge-success-light px-3 py-1 rounded-pill font-weight-bold smallest uppercase">{{ __('Completed') }}</span>
                             @elseif($transaction->status == 'pending')
-                                <span class="badge badge-warning">Pending</span>
+                                <span class="badge badge-warning-light px-3 py-1 rounded-pill font-weight-bold smallest uppercase">{{ __('Pending') }}</span>
                             @elseif($transaction->status == 'failed')
-                                <span class="badge badge-danger">Failed</span>
+                                <span class="badge badge-danger-light px-3 py-1 rounded-pill font-weight-bold smallest uppercase">{{ __('Failed') }}</span>
                             @else
-                                <span class="badge badge-secondary">{{ ucfirst($transaction->status) }}</span>
+                                <span class="badge badge-secondary-light px-3 py-1 rounded-pill font-weight-bold smallest uppercase">{{ ucfirst($transaction->status) }}</span>
                             @endif
                         </td>
                         <td class="small">{{ $transaction->transaction_date ? $transaction->transaction_date->format('Y-m-d H:i') : '—' }}</td>
-                        <td>
+                        <td class="text-center align-middle">
                             @if ($transaction->getFirstMediaUrl('transaction_screenshots'))
-                                <img src="{{ $transaction->getFirstMediaUrl('transaction_screenshots') }}" alt="Screenshot" class="img-thumbnail icon-box-60 object-fit-cover">
+                                <div class="table-img-preview shadow-sm mx-auto icon-box-60">
+                                    <img src="{{ $transaction->getFirstMediaUrl('transaction_screenshots') }}" alt="{{ __('Screenshot') }}" class="object-fit-cover">
+                                </div>
                             @else
-                                <span class="text-muted">No Image</span>
+                                <span class="text-muted smallest uppercase font-weight-bold">{{ __('No Image') }}</span>
                             @endif
                         </td>
-                        <td class="table-column-actions">
-                            <a href="{{ route('admin.transactions.edit', $transaction->id) }}" class="btn btn-primary btn-sm">
-                                <i class="fas fa-edit"></i>
-                            </a>
-                            <form action="{{ route('admin.transactions.destroy', $transaction->id) }}" method="POST" class="d-inline">
-                                @csrf
-                                @method('DELETE')
-                                <button type="button" class="btn btn-danger btn-sm" 
-                                        data-action="delete-trigger" 
-                                        data-confirm-title="Purge Transaction?" 
-                                        data-confirm-text="Are you sure you want to permanently remove this transaction record?">
-                                    <i class="fas fa-trash-alt"></i>
-                                </button>
-                            </form>
+                        <td class="text-right align-middle pr-4">
+                            <div class="btn-group btn-group-premium">
+                                <a href="{{ route('admin.transactions.edit', $transaction->id) }}" 
+                                   class="btn text-primary" 
+                                   data-toggle="tooltip" title="{{ __('Modify Record') }}">
+                                    <i class="fas fa-pencil-alt"></i>
+                                </a>
+                                <form action="{{ route('admin.transactions.destroy', $transaction->id) }}" method="POST" class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="button" class="btn text-danger" 
+                                            data-toggle="tooltip" title="{{ __('Purge Record') }}"
+                                            data-action="delete-trigger" 
+                                            data-confirm-title="{{ __('Purge Transaction?') }}" 
+                                            data-confirm-text="{{ __('Are you sure you want to permanently remove this transaction record?') }}">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                 @endforeach

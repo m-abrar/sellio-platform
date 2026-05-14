@@ -19,13 +19,13 @@
     ];
 
     $modules = [
-        'is_property'   => ['label' => 'Property',   'icon' => 'fas fa-home'],
-        'is_event'      => ['label' => 'Event',      'icon' => 'fas fa-calendar-alt'],
-        'is_job'        => ['label' => 'Job',        'icon' => 'fas fa-briefcase'],
-        'is_auto'       => ['label' => 'Auto',       'icon' => 'fas fa-car'],
-        'is_service'    => ['label' => 'Service',    'icon' => 'fas fa-tools'],
-        'is_classified' => ['label' => 'Classified', 'icon' => 'fas fa-tag'],
-        'is_product'    => ['label' => 'Product',    'icon' => 'fas fa-shopping-bag'],
+        'is_property'   => ['label' => __('Property'),   'icon' => 'fas fa-home'],
+        'is_event'      => ['label' => __('Event'),      'icon' => 'fas fa-calendar-alt'],
+        'is_job'        => ['label' => __('Job'),        'icon' => 'fas fa-briefcase'],
+        'is_auto'       => ['label' => __('Auto'),       'icon' => 'fas fa-car'],
+        'is_service'    => ['label' => __('Service'),    'icon' => 'fas fa-tools'],
+        'is_classified' => ['label' => __('Classified'), 'icon' => 'fas fa-tag'],
+        'is_product'    => ['label' => __('Product'),    'icon' => 'fas fa-shopping-bag'],
     ];
 @endphp
 
@@ -51,7 +51,7 @@
                         {{ $meta['label'] }}
                     </div>
                     <span class="smallest text-muted toggle-status">
-                        {{ old($column, $model->exists && $model->$column ? true : false) ? 'ENABLED' : 'DISABLED' }}
+                        {{ old($column, $model->exists && $model->$column ? true : false) ? __('ENABLED') : __('DISABLED') }}
                     </span>
                 </div>
             </div>

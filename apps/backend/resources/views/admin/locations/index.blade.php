@@ -14,23 +14,21 @@
 --}}
 @extends('adminlte::page')
 
-@section('title', 'Locations')
+@section('title', __('Locations'))
 
 @section('plugins.Datatables', true)
 
 @section('content_header')
     <div class="container-fluid pt-4">
         <div class="row mb-4 align-items-center">
-            <div class="col-md-8">
+            <div class="col-sm-8">
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-map-marker-alt mr-2 text-primary"></i> {{ __('Geographic Areas') }}
                 </h1>
-                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">
-                    {{ __('Manage regional operational hubs and service availability boundaries.') }}
-                </p>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">{{ __('Manage regional operational hubs and service availability boundaries.') }}</p>
             </div>
-            <div class="col-md-4 text-right">
-                <a href="{{ route('admin.locations.create') }}" class="btn btn-primary rounded-pill px-4 py-2 font-weight-bold shadow-premium smallest uppercase letter-spacing-1">
+            <div class="col-sm-4 text-right">
+                <a href="{{ route('admin.locations.create') }}" class="btn btn-primary btn-registry-add">
                     <i class="fas fa-plus-circle mr-2"></i> {{ __('Add Location') }}
                 </a>
             </div>
@@ -42,11 +40,11 @@
 <div class="container-fluid">
     @include('admin.alert')
 
-    <div class="card border-0 shadow-premium overflow-hidden rounded-24 datatable-premium-layout">
+    <div class="card registry-table-card">
         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
-            <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">{{ __('Geographic Registry') }}</h3>
+            <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none letter-spacing-1">{{ __('Geographic Registry') }}</h3>
             <div class="card-tools d-flex align-items-center ml-auto">
-                <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase mr-3">
+                <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase mr-2 shadow-xs">
                     <i class="fas fa-map-marked-alt mr-1"></i> {{ count($locations) }} {{ __('AREAS FOUND') }}
                 </span>
                 <button type="button" class="btn btn-tool text-muted" data-card-widget="maximize">
@@ -76,20 +74,20 @@
                                 <td class="text-center align-middle">
                                     <div class="table-img-preview shadow-sm">
                                         <img src="{{ $location->thumbnail_url }}" 
-                                             alt="{{ $location->title ?? 'Location' }}" 
+                                             alt="{{ $location->title ?? __('Location') }}" 
                                              data-fallback="{{ asset('images/fallbacks/default.jpg') }}">
                                     </div>
                                 </td>
                                 
                                 <td class="align-middle">
-                                    <span class="d-block font-weight-bold text-dark mb-0 smallest uppercase letter-spacing-1">{{ $location->title ?? 'N/A' }}</span>
-                                    <small class="text-muted text-monospace smallest-0-7">ID: #LOC-{{ $location->id }}</small>
+                                    <span class="d-block font-weight-bold text-dark mb-0 smallest uppercase letter-spacing-1">{{ $location->title ?? __('N/A') }}</span>
+                                    <small class="text-muted text-monospace smallest-0-7">{{ __('ID') }}: #LOC-{{ $location->id }}</small>
                                 </td>
                                 
                                 <td class="align-middle">
                                     <span class="text-muted small font-weight-600">
                                         <i class="fas fa-globe-americas mr-1 text-primary"></i>
-                                        {{ $location->state ?? 'N/A' }}, {{ $location->country ?? 'N/A' }}
+                                        {{ $location->state ?? __('N/A') }}, {{ $location->country ?? __('N/A') }}
                                     </span>
                                 </td>
                                 

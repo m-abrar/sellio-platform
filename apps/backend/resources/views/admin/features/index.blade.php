@@ -13,7 +13,7 @@
 --}}
 @extends('adminlte::page')
 
-@section('title', 'Listing Features')
+@section('title', __('Listing Features'))
 
 {{-- Plugin handled by config/adminlte.php --}}
 @section('plugins.Datatables', true)
@@ -23,15 +23,15 @@
         <div class="row mb-4 align-items-center">
             <div class="col-md-8">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-star mr-2 text-primary"></i> Listing Features
+                    <i class="fas fa-star mr-2 text-primary"></i> {{ __('Listing Features') }}
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">
-                    Manage technical specifications and attribute groupings for listings.
+                    {{ __('Manage technical specifications and attribute groupings for listings.') }}
                 </p>
             </div>
             <div class="col-md-4 text-right">
                 <a href="{{ route('admin.features.create') }}" class="btn btn-primary rounded-pill px-4 py-2 font-weight-bold shadow-premium smallest uppercase letter-spacing-1">
-                    <i class="fas fa-plus-circle mr-2"></i> Add Feature
+                    <i class="fas fa-plus-circle mr-2"></i> {{ __('Add Feature') }}
                 </a>
             </div>
         </div>
@@ -44,10 +44,10 @@
 
     <div class="card border-0 shadow-premium overflow-hidden rounded-24 datatable-premium-layout">
         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
-            <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">Product Features Registry</h3>
+            <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">{{ __('Product Features Registry') }}</h3>
             <div class="card-tools d-flex align-items-center ml-auto">
                 <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase mr-3">
-                    <i class="fas fa-star mr-1"></i> {{ count($features) }} FEATURES FOUND
+                    <i class="fas fa-star mr-1"></i> {{ count($features) }} {{ __('FEATURES FOUND') }}
                 </span>
                 <button type="button" class="btn btn-tool text-muted" data-card-widget="maximize">
                     <i class="fas fa-expand"></i>
@@ -61,11 +61,11 @@
                 <table id="features-table" class="table table-hover table-premium mb-0 datatable-init">
                     <thead class="thead-light">
                         <tr>
-                            <th class="text-center col-media-100">Preview</th>
-                            <th>Feature Identity</th>
-                            <th>Module Availability</th>
-                            <th class="text-center">Status</th>
-                            <th class="text-right px-4">Actions</th>
+                            <th class="text-center col-media-100">{{ __('Preview') }}</th>
+                            <th>{{ __('Feature Identity') }}</th>
+                            <th>{{ __('Module Availability') }}</th>
+                            <th class="text-center">{{ __('Status') }}</th>
+                            <th class="text-right px-4">{{ __('Actions') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -84,7 +84,7 @@
                                 </td>
 
                                 <td class="align-middle">
-                                    <span class="d-block font-weight-bold text-dark smallest uppercase letter-spacing-1">{{ $feature->title ?? 'Untitled' }}</span>
+                                    <span class="d-block font-weight-bold text-dark smallest uppercase letter-spacing-1">{{ $feature->title ?? __('Untitled') }}</span>
                                     <small class="text-muted font-italic">{{ Str::limit($feature->description, 40) }}</small>
                                 </td>
 
@@ -94,20 +94,20 @@
 
                                 <td class="text-center align-middle">
                                     <span class="badge {{ $feature->is_published ? 'badge-success-light text-success' : 'badge-secondary-light text-secondary' }} px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 shadow-xs">
-                                        {{ $feature->is_published ? 'Active' : 'Inactive' }}
+                                        {{ $feature->is_published ? __('Active') : __('Inactive') }}
                                     </span>
                                 </td>
 
                                 <td class="text-right align-middle px-4">
                                     <div class="btn-group btn-group-premium">
-                                        <a href="{{ route('admin.features.edit', $feature->id) }}" class="btn text-info" data-toggle="tooltip" title="Edit Configuration"><i class="fas fa-edit"></i></a>
+                                        <a href="{{ route('admin.features.edit', $feature->id) }}" class="btn text-info" data-toggle="tooltip" title="{{ __('Edit Configuration') }}"><i class="fas fa-edit"></i></a>
                                         <form id="delete-feature-{{ $feature->id }}" action="{{ route('admin.features.destroy', $feature->id) }}" method="POST" class="d-inline">
                                             @csrf @method('DELETE')
                                              <button type="button" class="btn text-danger" 
-                                                    data-toggle="tooltip" title="Remove Feature" 
+                                                    data-toggle="tooltip" title="{{ __('Remove Feature') }}" 
                                                     data-action="delete-trigger"
-                                                    data-confirm-title="Purge Feature?"
-                                                    data-confirm-text="This feature and its associations will be removed.">
+                                                    data-confirm-title="{{ __('Purge Feature?') }}"
+                                                    data-confirm-text="{{ __('This feature and its associations will be removed.') }}">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
                                         </form>
@@ -115,23 +115,16 @@
                                 </td>
                             </tr>
                         @empty
-                            <tr class="empty-state">
-                                <td colspan="5" class="text-center py-5">
-                                    <div class="py-4">
-                                        <i class="fas fa-layer-group fa-4x text-muted mb-3 opacity-25"></i>
-                                        <h5 class="text-muted font-weight-bold">No Features Found</h5>
-                                        @if(request('search'))
-                                            <p class="text-secondary small mb-3">No results matching "<strong>{{ request('search') }}</strong>".</p>
-                                            <a href="{{ route('admin.features.index') }}" class="btn btn-default btn-sm px-4">Clear Search</a>
-                                        @else
-                                            <p class="text-secondary small mb-3">Define characteristics like "Fuel Type", "Experience Level", or "Property Age".</p>
-                                            <a href="{{ route('admin.features.create') }}" class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-premium smallest uppercase letter-spacing-1">
-                                                <i class="fas fa-plus mr-2"></i> Add Your Initial Feature
-                                            </a>
-                                        @endif
-                                    </div>
-                                </td>
-                            </tr>
+                        @include('admin._partials._empty-state', [
+                            'colspan' => 5,
+                            'icon' => 'fas fa-layer-group',
+                            'title' => __('No Features Found'),
+                            'description' => request('search') 
+                                ? __('No results matching ":search"', ['search' => request('search')]) 
+                                : __('Define characteristics like "Fuel Type", "Experience Level", or "Property Age".'),
+                            'button_text' => request('search') ? __('Clear Search') : __('Add Your Initial Feature'),
+                            'button_link' => request('search') ? route('admin.features.index') : route('admin.features.create')
+                        ])
                         @endforelse
                     </tbody>
                 </table>

@@ -13,7 +13,7 @@
 --}}
 @extends('adminlte::page')
 
-@section('title', 'Content Management | Pages Registry')
+@section('title', __('Static Pages'))
 
 @section('plugins.Datatables', true)
 
@@ -22,19 +22,14 @@
         <div class="row mb-4 align-items-center">
             <div class="col-sm-8">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-file-alt mr-2 text-primary opacity-50"></i> Content & Static Pages
+                    <i class="fas fa-file-alt mr-2 text-primary"></i> {{ __('Content & Static Pages') }}
                 </h1>
-                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Manage system blueprints, informational assets, and footer navigation layers.</p>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">{{ __('Manage system blueprints, informational assets, and footer navigation layers.') }}</p>
             </div>
             <div class="col-sm-4 text-right">
-                <div class="d-flex justify-content-end align-items-center gap-12">
-                    <a href="{{ route('admin.welcome') }}" class="btn-back shadow-sm">
-                        <i class="fas fa-th-large"></i> Dashboard
-                    </a>
-                    <a href="{{ route('admin.pages.create') }}" class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-premium">
-                        <i class="fas fa-plus-circle mr-1"></i> ADD PAGE
-                    </a>
-                </div>
+                <a href="{{ route('admin.pages.create') }}" class="btn btn-primary btn-registry-add">
+                    <i class="fas fa-plus-circle mr-1"></i> {{ __('ADD PAGE') }}
+                </a>
             </div>
         </div>
     </div>
@@ -45,13 +40,11 @@
     @include('admin.alert')
 
     {{-- Main Table Card --}}
-    <div class="card card-premium overflow-hidden">
+    <div class="card registry-table-card">
         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center justify-content-between">
-            <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">
-                <i class="fas fa-layer-group mr-2 text-primary opacity-50"></i> Static Content Registry
-            </h3>
+            <h3 class="card-title font-weight-bold text-dark text-uppercase smallest mb-0 float-none letter-spacing-1">{{ __('Static Content Registry') }}</h3>
             <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase ml-auto">
-                {{ count($pages) }} ACTIVE PAGES
+                <i class="fas fa-database mr-1"></i> {{ count($pages) }} {{ __('ACTIVE PAGES') }}
             </span>
         </div>
 
@@ -61,10 +54,10 @@
                        data-datatable-config='{"paging": true, "lengthChange": false, "searching": false, "ordering": true, "info": true}'>
                     <thead class="thead-light">
                         <tr>
-                            <th class="pl-4 w-40-p">Title & Identity</th>
-                            <th class="w-25-p">Permanent Link (Slug)</th>
-                            <th class="text-center">Visibility</th>
-                            <th class="text-right pr-4">Actions</th>
+                            <th class="pl-4 w-40-p">{{ __('Title & Identity') }}</th>
+                            <th class="w-25-p">{{ __('Permanent Link (Slug)') }}</th>
+                            <th class="text-center">{{ __('Visibility') }}</th>
+                            <th class="text-right pr-4">{{ __('Actions') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -85,21 +78,21 @@
                                 </td>
 
                                 <td class="align-middle">
-                                    <div class="smallest text-muted mb-1 font-weight-bold uppercase letter-spacing-1">Segment: <span class="text-primary">{{ $page->slug }}</span></div>
+                                    <div class="smallest text-muted mb-1 font-weight-bold uppercase letter-spacing-1">{{ __('Segment') }}: <span class="text-primary">{{ $page->slug }}</span></div>
                                     <a href="{{ url($page->slug) }}" target="_blank" class="text-secondary smallest font-weight-bold d-flex align-items-center hover-primary">
                                         <i class="fas fa-external-link-alt mr-2"></i> 
-                                        Live View
+                                        {{ __('Live View') }}
                                     </a>
                                 </td>
 
                                 <td class="text-center align-middle">
                                     @if($page->status == 'active')
                                         <span class="badge badge-success-light px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1">
-                                            <i class="fas fa-check-circle mr-1"></i> PUBLISHED
+                                            <i class="fas fa-check-circle mr-1"></i> {{ __('PUBLISHED') }}
                                         </span>
                                     @else
                                         <span class="badge badge-secondary-soft text-secondary px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1">
-                                            <i class="fas fa-eye-slash mr-1"></i> ARCHIVED
+                                            <i class="fas fa-eye-slash mr-1"></i> {{ __('ARCHIVED') }}
                                         </span>
                                     @endif
                                 </td>
@@ -108,16 +101,16 @@
                                     <div class="btn-group btn-group-premium shadow-xs rounded-pill border overflow-hidden">
                                         <a href="{{ route('admin.pages.edit', $page->id) }}" 
                                            class="btn btn-white text-info py-2 px-3 d-inline-flex align-items-center" 
-                                           data-toggle="tooltip" title="Edit Content">
+                                           data-toggle="tooltip" title="{{ __('Edit Content') }}">
                                             <i class="fas fa-pencil-alt"></i>
                                         </a>
                                         <form id="delete-form-{{ $page->id }}" action="{{ route('admin.pages.destroy', $page->id) }}" method="POST" class="d-inline">
                                             @csrf @method('DELETE')
                                             <button type="button" class="btn btn-white text-danger py-2 px-3 border-left d-inline-flex align-items-center" 
-                                                    data-toggle="tooltip" title="Purge Asset"
+                                                    data-toggle="tooltip" title="{{ __('Purge Asset') }}"
                                                     data-action="delete-trigger"
-                                                    data-confirm-title="Purge Page?"
-                                                    data-confirm-text="This content will be permanently removed from the platform.">
+                                                    data-confirm-title="{{ __('Purge Page?') }}"
+                                                    data-confirm-text="{{ __('This content will be permanently removed from the platform.') }}">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
                                         </form>
@@ -128,9 +121,9 @@
                             @include('admin._partials._empty-state', [
                                 'colspan' => 4,
                                 'icon' => 'fas fa-file-signature',
-                                'title' => 'Content Library Is Empty',
-                                'description' => 'No static pages have been architected yet. Initialize your platform informational assets to populate this registry.',
-                                'button_text' => 'INITIALIZE PAGE',
+                                'title' => __('Content Library Is Empty'),
+                                'description' => __('No static pages have been architected yet. Initialize your platform informational assets to populate this registry.'),
+                                'button_text' => __('INITIALIZE PAGE'),
                                 'button_link' => route('admin.pages.create')
                             ])
                         @endforelse

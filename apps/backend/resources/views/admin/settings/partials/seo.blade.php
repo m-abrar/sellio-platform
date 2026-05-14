@@ -21,7 +21,7 @@
             <h3 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1 float-none d-block">
                 <i class="fas fa-search mr-2 text-primary opacity-50"></i> {{ __('Search Engine Optimization') }}
             </h3>
-            <p class="text-muted smallest font-weight-bold text-uppercase letter-spacing-1 mb-0 mt-1">Optimize how your marketplace appears in global search results and social shares.</p>
+            <p class="text-muted smallest font-weight-bold text-uppercase letter-spacing-1 mb-0 mt-1">{{ __('Optimize how your marketplace appears in global search results and social shares.') }}</p>
         </div>
         <div class="card-body px-4 pb-4">
             <div class="row">
@@ -30,8 +30,8 @@
                         <label class="small font-weight-bold text-uppercase text-secondary mb-2" style="letter-spacing: 0.5px;">{{ __('Global Meta Title') }}</label>
                         <input type="text" name="meta_title" class="form-control" value="{{ old('meta_title', $settings['meta_title'] ?? '') }}" placeholder="Primary Title for Search Engines">
                         <div class="d-flex justify-content-between mt-2">
-                            <small class="text-muted smallest font-weight-bold text-uppercase letter-spacing-1">Target Length: 50-60 characters</small>
-                            <small class="text-primary smallest font-weight-bold">{{ strlen($settings['meta_title'] ?? '') }} chars</small>
+                            <small class="text-muted smallest font-weight-bold text-uppercase letter-spacing-1">{{ __('Target Length') }}: 50-60 {{ __('characters') }}</small>
+                            <small class="text-primary smallest font-weight-bold">{{ strlen($settings['meta_title'] ?? '') }} {{ __('chars') }}</small>
                         </div>
                     </div>
                     
@@ -39,8 +39,8 @@
                         <label class="small font-weight-bold text-uppercase text-secondary mb-2" style="letter-spacing: 0.5px;">{{ __('Global Meta Description') }}</label>
                         <textarea name="meta_description" class="form-control" rows="4" style="height: auto !important;" placeholder="Brief summary of your platform...">{{ old('meta_description', $settings['meta_description'] ?? '') }}</textarea>
                         <div class="d-flex justify-content-between mt-2">
-                            <small class="text-muted smallest font-weight-bold text-uppercase letter-spacing-1">Target Length: 150-160 characters</small>
-                            <small class="text-primary smallest font-weight-bold">{{ strlen($settings['meta_description'] ?? '') }} chars</small>
+                            <small class="text-muted smallest font-weight-bold text-uppercase letter-spacing-1">{{ __('Target Length') }}: 150-160 {{ __('characters') }}</small>
+                            <small class="text-primary smallest font-weight-bold">{{ strlen($settings['meta_description'] ?? '') }} {{ __('chars') }}</small>
                         </div>
                     </div>
                 </div>

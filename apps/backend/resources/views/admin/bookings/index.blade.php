@@ -185,7 +185,7 @@
                                         </td>
                                         
                                         <td class="align-middle"> 
-                                            <div class="font-weight-600 text-dark smallest">{{ $booking->created_at->diffForHumans(null, true) }} ago</div>
+                                            <div class="font-weight-600 text-dark smallest">{{ $booking->created_at->diffForHumans(null, true) }} {{ __('ago') }}</div>
                                             <small class="text-muted smallest">{{ $booking->created_at->format('M d, Y') }}</small>
                                         </td>
 
@@ -205,16 +205,16 @@
                                             <div class="btn-group btn-group-premium">
                                                 <a href="{{ ($booking->booking_type && $booking->id) ? route('admin.bookings.show', ['type' => $booking->booking_type, 'id' => $booking->id]) : '#' }}" 
                                                    class="btn text-primary {{ (!$booking->booking_type || !$booking->id) ? 'disabled' : '' }}" 
-                                                   data-toggle="tooltip" title="View Registry Details">
+                                                   data-toggle="tooltip" title="{{ __('View Registry Details') }}">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
                                                 <form action="{{ ($booking->booking_type && $booking->id) ? route('admin.bookings.destroy', [$booking->booking_type, $booking->id]) : '#' }}" method="POST" class="d-inline">
                                                     @csrf @method('DELETE')
                                                      <button type="button" class="btn text-danger" 
-                                                             data-toggle="tooltip" title="Purge Record" 
+                                                             data-toggle="tooltip" title="{{ __('Purge Record') }}" 
                                                              data-action="delete-trigger"
-                                                             data-confirm-title="Purge Record?"
-                                                             data-confirm-text="Are you sure you want to permanently delete this booking?">
+                                                             data-confirm-title="{{ __('Purge Record?') }}"
+                                                             data-confirm-text="{{ __('Are you sure you want to permanently delete this booking?') }}">
                                                          <i class="fas fa-trash-alt"></i>
                                                      </button>
                                                 </form>

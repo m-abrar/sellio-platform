@@ -13,7 +13,7 @@
 --}}
 @extends('adminlte::page')
 
-@section('title', 'Tags')
+@section('title', __('Tags'))
 
 {{-- Plugin handled by config/adminlte.php --}}
 @section('plugins.Datatables', true)
@@ -23,15 +23,15 @@
         <div class="row mb-4 align-items-center">
             <div class="col-md-8">
                 <h1 class="m-0 text-dark font-weight-bold">
-                    <i class="fas fa-tags mr-2 text-primary"></i> Listing Tags
+                    <i class="fas fa-tags mr-2 text-primary"></i> {{ __('Listing Tags') }}
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">
-                    Manage high-level classification labels for quick filtering and discovery.
+                    {{ __('Manage high-level classification labels for quick filtering and discovery.') }}
                 </p>
             </div>
             <div class="col-md-4 text-right">
                 <a href="{{ route('admin.tags.create') }}" class="btn btn-primary rounded-pill px-4 py-2 font-weight-bold shadow-premium smallest uppercase letter-spacing-1">
-                    <i class="fas fa-plus-circle mr-2"></i> Add Tag
+                    <i class="fas fa-plus-circle mr-2"></i> {{ __('Add Tag') }}
                 </a>
             </div>
         </div>
@@ -44,10 +44,10 @@
 
     <div class="card border-0 shadow-premium overflow-hidden rounded-24 datatable-premium-layout">
         <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center">
-            <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">Listing Tags Catalog</h3>
+            <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">{{ __('Listing Tags Catalog') }}</h3>
             <div class="card-tools d-flex align-items-center ml-auto">
                 <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase mr-3">
-                    <i class="fas fa-hashtag mr-1"></i> {{ count($tags) }} TAGS FOUND
+                    <i class="fas fa-hashtag mr-1"></i> {{ count($tags) }} {{ __('TAGS FOUND') }}
                 </span>
                 <button type="button" class="btn btn-tool text-muted" data-card-widget="maximize">
                     <i class="fas fa-expand"></i>
@@ -61,11 +61,11 @@
                        data-datatable-config='{"paging": true, "lengthChange": true, "searching": true, "ordering": true, "info": true, "columnDefs": [{"orderable": false, "targets": [0, 4]}]}'>
                     <thead class="thead-light">
                         <tr>
-                            <th class="text-center col-media-70">Preview</th>
-                            <th>Tag Details</th>
-                            <th>Module Applicability</th>
-                            <th class="text-center">Status</th>
-                            <th class="text-right px-4">Actions</th>
+                            <th class="text-center col-media-70">{{ __('Preview') }}</th>
+                            <th>{{ __('Tag Details') }}</th>
+                            <th>{{ __('Module Applicability') }}</th>
+                            <th class="text-center">{{ __('Status') }}</th>
+                            <th class="text-right px-4">{{ __('Actions') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -80,7 +80,7 @@
                                 </td>
 
                                 <td class="align-middle">
-                                    <span class="d-block font-weight-bold text-dark mb-0 smallest uppercase letter-spacing-1">{{ $tag->title ?? 'N/A' }}</span>
+                                    <span class="d-block font-weight-bold text-dark mb-0 smallest uppercase letter-spacing-1">{{ $tag->title ?? __('N/A') }}</span>
                                     <small class="text-muted text-monospace smallest-0-75">/{{ $tag->slug }}</small>
                                 </td>
 
@@ -90,20 +90,20 @@
 
                                 <td class="text-center align-middle">
                                     <span class="badge {{ $tag->is_published ? 'badge-success-light text-success' : 'badge-danger-light text-danger' }} px-3 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 shadow-xs">
-                                        {{ $tag->is_published ? 'Active' : 'Inactive' }}
+                                        {{ $tag->is_published ? __('Active') : __('Inactive') }}
                                     </span>
                                 </td>
 
                                 <td class="text-right align-middle px-4">
                                     <div class="btn-group btn-group-premium">
-                                        <a href="{{ route('admin.tags.edit', $tag->id) }}" class="btn text-info" data-toggle="tooltip" title="Modify Settings"><i class="fas fa-edit"></i></a>
+                                        <a href="{{ route('admin.tags.edit', $tag->id) }}" class="btn text-info" data-toggle="tooltip" title="{{ __('Modify Settings') }}"><i class="fas fa-edit"></i></a>
                                         <form id="delete-tag-{{ $tag->id }}" action="{{ route('admin.tags.destroy', $tag->id) }}" method="POST" class="d-inline">
                                             @csrf @method('DELETE')
                                              <button type="button" class="btn text-danger" 
-                                                     data-toggle="tooltip" title="Delete Tag"
+                                                     data-toggle="tooltip" title="{{ __('Delete Tag') }}"
                                                      data-action="delete-trigger"
-                                                     data-confirm-title="Delete Tag?"
-                                                     data-confirm-text="Are you sure you want to delete this tag?">
+                                                     data-confirm-title="{{ __('Delete Tag?') }}"
+                                                     data-confirm-text="{{ __('Are you sure you want to delete this tag?') }}">
                                                  <i class="fas fa-trash-alt"></i>
                                              </button>
                                         </form>
@@ -111,23 +111,16 @@
                                 </td>
                             </tr>
                         @empty
-                            <tr class="empty-state">
-                                <td colspan="5" class="text-center py-5">
-                                    <div class="py-4">
-                                        <i class="fas fa-tags fa-4x text-muted mb-3 opacity-25"></i>
-                                        <h5 class="text-muted font-weight-bold">No Tags Found</h5>
-                                        @if(request('search'))
-                                            <p class="text-secondary small mb-3">No results matching "<strong>{{ request('search') }}</strong>".</p>
-                                            <a href="{{ route('admin.tags.index') }}" class="btn btn-default btn-sm px-4">Clear Search</a>
-                                        @else
-                                            <p class="text-secondary small mb-3">Group your items by adding searchable tags.</p>
-                                            <a href="{{ route('admin.tags.create') }}" class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-premium smallest uppercase letter-spacing-1">
-                                                <i class="fas fa-plus mr-2"></i> Add Tag
-                                            </a>
-                                        @endif
-                                    </div>
-                                </td>
-                            </tr>
+                        @include('admin._partials._empty-state', [
+                            'colspan' => 5,
+                            'icon' => 'fas fa-tags',
+                            'title' => __('No Tags Found'),
+                            'description' => request('search') 
+                                ? __('No results matching ":search"', ['search' => request('search')]) 
+                                : __('Group your items by adding searchable tags.'),
+                            'button_text' => request('search') ? __('Clear Search') : __('Add Tag'),
+                            'button_link' => request('search') ? route('admin.tags.index') : route('admin.tags.create')
+                        ])
                         @endforelse
                     </tbody>
                 </table>

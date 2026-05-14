@@ -19,9 +19,9 @@
                                 <i class="fas fa-server"></i>
                             </div>
                             <div>
-                                <h6 class="mb-1 font-weight-bold text-dark smallest text-uppercase letter-spacing-1">Core Engine</h6>
+                                <h6 class="mb-1 font-weight-bold text-dark smallest text-uppercase letter-spacing-1">{{ __('Core Engine') }}</h6>
                                 <span class="badge badge-success-light px-3 py-2 rounded-pill border-0 smallest font-weight-bold animate-pulse-soft ls-05">
-                                    <i class="fas fa-heartbeat mr-1"></i> LIVE PULSE
+                                    <i class="fas fa-heartbeat mr-1"></i> {{ __('LIVE PULSE') }}
                                 </span>
                             </div>
                         </div>
@@ -29,32 +29,32 @@
                     <div class="col-md-9 mt-4 mt-md-0 pl-md-5">
                         <div class="row text-center text-md-left gy-4">
                             <div class="col-6 col-md-2">
-                                <span class="smallest text-muted d-block mb-2 font-weight-bold text-uppercase letter-spacing-1">Environment</span>
+                                <span class="smallest text-muted d-block mb-2 font-weight-bold text-uppercase letter-spacing-1">{{ __('Environment') }}</span>
                                 <span class="badge badge-primary-soft px-3 py-1 font-weight-bold text-uppercase border-0 shadow-none rounded-pill fs-065">
                                     {{ $metrics['system_health']['environment'] }}
                                 </span>
                             </div>
                             <div class="col-6 col-md-2 border-left border-light-soft">
-                                <span class="smallest text-muted d-block mb-2 font-weight-bold text-uppercase letter-spacing-1">Runtime</span>
+                                <span class="smallest text-muted d-block mb-2 font-weight-bold text-uppercase letter-spacing-1">{{ __('Runtime') }}</span>
                                 <span class="font-weight-bold text-dark fs-095 font-outfit">PHP {{ $metrics['system_health']['php_version'] }}</span>
                             </div>
                             <div class="col-6 col-md-2 border-left border-light-soft">
-                                <span class="smallest text-muted d-block mb-2 font-weight-bold text-uppercase letter-spacing-1">Registry</span>
+                                <span class="smallest text-muted d-block mb-2 font-weight-bold text-uppercase letter-spacing-1">{{ __('Registry') }}</span>
                                 <span class="font-weight-bold text-dark fs-095 font-outfit">v{{ $metrics['system_health']['laravel_version'] }}</span>
                             </div>
                             <div class="col-6 col-md-2 border-left border-light-soft">
-                                <span class="smallest text-muted d-block mb-2 font-weight-bold text-uppercase letter-spacing-1">Database</span>
+                                <span class="smallest text-muted d-block mb-2 font-weight-bold text-uppercase letter-spacing-1">{{ __('Database') }}</span>
                                 <div class="d-flex align-items-center justify-content-center justify-content-md-start">
                                     <div class="bg-success rounded-circle mr-2 pulse-glow-dot"></div>
-                                    <span class="text-dark font-weight-bold smallest text-uppercase letter-spacing-1">CONNECTED</span>
+                                    <span class="text-dark font-weight-bold smallest text-uppercase letter-spacing-1">{{ __('CONNECTED') }}</span>
                                 </div>
                             </div>
                             <div class="col-6 col-md-2 border-left border-light-soft">
-                                <span class="smallest text-muted d-block mb-2 font-weight-bold text-uppercase letter-spacing-1">Storage</span>
-                                <span class="text-primary font-weight-bold text-uppercase smallest letter-spacing-1">{{ $metrics['system_health']['cache_status'] }} DRIVE</span>
+                                <span class="smallest text-muted d-block mb-2 font-weight-bold text-uppercase letter-spacing-1">{{ __('Storage') }}</span>
+                                <span class="text-primary font-weight-bold text-uppercase smallest letter-spacing-1">{{ $metrics['system_health']['cache_status'] }} {{ __('DRIVE') }}</span>
                             </div>
                             <div class="col-6 col-md-2 border-left border-light-soft">
-                                <span class="smallest text-muted d-block mb-2 font-weight-bold text-uppercase letter-spacing-1">Network</span>
+                                <span class="smallest text-muted d-block mb-2 font-weight-bold text-uppercase letter-spacing-1">{{ __('Network') }}</span>
                                 <span class="text-muted smallest font-weight-bold letter-spacing-1">{{ $metrics['system_health']['server_ip'] }}</span>
                             </div>
                         </div>

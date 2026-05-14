@@ -23,15 +23,15 @@
                     <i class="fas fa-wallet mr-2 text-primary opacity-50"></i>
                     {{ $pageTitle ?? __('Financial Registry') }}
                 </h1>
-                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Monitor marketplace cashflow, transaction history, and gateway settlements.</p>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">{{ __('Monitor marketplace cashflow, transaction history, and gateway settlements.') }}</p>
             </div>
             <div class="col-sm-5 text-right">
                 <div class="d-flex justify-content-end align-items-center gap-12">
                     <a href="{{ route('admin.payments.create') }}" class="btn btn-primary btn-registry-add">
-                        <i class="fas fa-plus-circle mr-2"></i> Log Transaction
+                        <i class="fas fa-plus-circle mr-2"></i> {{ __('Log Transaction') }}
                     </a>
                     <a href="{{ route('admin.welcome') }}" class="btn btn-white rounded-pill px-4 py-2 font-weight-bold shadow-sm smallest uppercase letter-spacing-1 border">
-                        <i class="fas fa-th-large mr-2"></i> Dashboard
+                        <i class="fas fa-th-large mr-2"></i> {{ __('Dashboard') }}
                     </a>
                 </div>
             </div>
@@ -50,11 +50,11 @@
         <div class="card card-premium shadow-premium border-0 overflow-hidden rounded-24">
             <div class="card-header border-0 bg-white py-4 px-4 d-flex align-items-center justify-content-between">
                 <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1 float-none">
-                    <i class="fas fa-receipt mr-2 text-primary opacity-50"></i> Transaction Ledger
+                    <i class="fas fa-receipt mr-2 text-primary opacity-50"></i> {{ __('Transaction Ledger') }}
                 </h3>
                 <div class="card-tools d-flex align-items-center ml-auto">
                     <span class="badge badge-primary-light text-primary px-3 py-2 rounded-pill font-weight-bold smallest uppercase mr-3">
-                        <i class="fas fa-chart-line mr-1"></i> {{ count($payments) }} TRANSACTIONS FOUND
+                        <i class="fas fa-chart-line mr-1"></i> {{ count($payments) }} {{ __('TRANSACTIONS FOUND') }}
                     </span>
                     <button type="button" class="btn btn-tool text-muted" data-card-widget="maximize">
                         <i class="fas fa-expand"></i>
@@ -82,7 +82,7 @@
 
             @if(method_exists($payments, 'hasPages') && $payments->hasPages())
                 <div class="card-footer bg-white border-top py-4 px-4 d-flex justify-content-between align-items-center">
-                    <div class="text-muted smallest font-weight-bold uppercase letter-spacing-1">Displaying {{ $payments->firstItem() }} - {{ $payments->lastItem() }} of {{ $payments->total() }} records</div>
+                    <div class="text-muted smallest font-weight-bold uppercase letter-spacing-1">{{ __('Displaying') }} {{ $payments->firstItem() }} - {{ $payments->lastItem() }} {{ __('of') }} {{ $payments->total() }} {{ __('records') }}</div>
                     <div>{{ $payments->appends(request()->except('page'))->links('pagination::bootstrap-4') }}</div>
                 </div>
             @endif
