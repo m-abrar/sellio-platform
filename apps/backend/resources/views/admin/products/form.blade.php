@@ -41,6 +41,10 @@
 @stop
 
 @section('content')
+@php
+    $vIndex = ($product->exists && $product->attributes->isNotEmpty()) ? $product->attributes->count() : 0;
+    $aIndex = ($product->exists && $product->addons->isNotEmpty()) ? $product->addons->count() : 0;
+@endphp
 <div class="container-fluid pb-5">
     @include('admin.alert')
 
@@ -142,25 +146,25 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @php $vIndex = 0; @endphp
+                                    @php $vLoopIndex = 0; @endphp
                                     @if($product->exists && $product->attributes->count() > 0)
                                         @foreach($product->attributes as $attr)
-                                            <tr data-index="{{ $vIndex }}">
-                                                <td class="px-4 py-3"><input type="text" name="attributes[{{ $vIndex }}][name]" value="{{ $attr->name }}" class="form-control form-control-premium py-1 px-3 h-auto" required></td>
-                                                <td class="px-4 py-3"><input type="text" name="attributes[{{ $vIndex }}][value]" value="{{ $attr->value }}" class="form-control form-control-premium py-1 px-3 h-auto" required></td>
-                                                <td class="px-4 py-3"><input type="number" step="0.01" name="attributes[{{ $vIndex }}][additional_price]" value="{{ $attr->additional_price }}" class="form-control form-control-premium py-1 px-3 h-auto"></td>
-                                                <td class="px-4 py-3"><input type="text" name="attributes[{{ $vIndex }}][sku_extension]" value="{{ $attr->sku_extension }}" class="form-control form-control-premium py-1 px-3 h-auto"></td>
-                                                <td class="px-4 py-3"><input type="number" name="attributes[{{ $vIndex }}][stock_quantity]" value="{{ $attr->stock_quantity }}" class="form-control form-control-premium py-1 px-3 h-auto"></td>
+                                            <tr data-index="{{ $vLoopIndex }}">
+                                                <td class="px-4 py-3"><input type="text" name="attributes[{{ $vLoopIndex }}][name]" value="{{ $attr->name }}" class="form-control form-control-premium py-1 px-3 h-auto" required></td>
+                                                <td class="px-4 py-3"><input type="text" name="attributes[{{ $vLoopIndex }}][value]" value="{{ $attr->value }}" class="form-control form-control-premium py-1 px-3 h-auto" required></td>
+                                                <td class="px-4 py-3"><input type="number" step="0.01" name="attributes[{{ $vLoopIndex }}][additional_price]" value="{{ $attr->additional_price }}" class="form-control form-control-premium py-1 px-3 h-auto"></td>
+                                                <td class="px-4 py-3"><input type="text" name="attributes[{{ $vLoopIndex }}][sku_extension]" value="{{ $attr->sku_extension }}" class="form-control form-control-premium py-1 px-3 h-auto"></td>
+                                                <td class="px-4 py-3"><input type="number" name="attributes[{{ $vLoopIndex }}][stock_quantity]" value="{{ $attr->stock_quantity }}" class="form-control form-control-premium py-1 px-3 h-auto"></td>
                                                 <td class="px-4 py-3 text-center">
                                                     <div class="custom-control custom-switch custom-switch-premium d-inline-block">
-                                                        <input type="hidden" name="attributes[{{ $vIndex }}][is_variation]" value="0">
-                                                        <input type="checkbox" name="attributes[{{ $vIndex }}][is_variation]" value="1" class="custom-control-input" id="attr_v_{{ $vIndex }}" {{ $attr->is_variation ? 'checked' : '' }}>
-                                                        <label class="custom-control-label" for="attr_v_{{ $vIndex }}"></label>
+                                                        <input type="hidden" name="attributes[{{ $vLoopIndex }}][is_variation]" value="0">
+                                                        <input type="checkbox" name="attributes[{{ $vLoopIndex }}][is_variation]" value="1" class="custom-control-input" id="attr_v_{{ $vLoopIndex }}" {{ $attr->is_variation ? 'checked' : '' }}>
+                                                        <label class="custom-control-label" for="attr_v_{{ $vLoopIndex }}"></label>
                                                     </div>
                                                 </td>
                                                 <td class="px-4 py-3 text-center"><button type="button" class="btn btn-danger btn-xs rounded-circle" data-action="remove-row"><i class="fas fa-trash"></i></button></td>
                                             </tr>
-                                            @php $vIndex++; @endphp
+                                            @php $vLoopIndex++; @endphp
                                         @endforeach
                                     @endif
                                 </tbody>
@@ -191,29 +195,29 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @php $aIndex = 0; @endphp
+                                    @php $aLoopIndex = 0; @endphp
                                     @if($product->exists && $product->addons->count() > 0)
                                         @foreach($product->addons as $addon)
-                                            <tr data-index="{{ $aIndex }}">
-                                                <td class="px-4 py-3"><input type="text" name="addons[{{ $aIndex }}][title]" value="{{ $addon->title }}" class="form-control form-control-premium py-1 px-3 h-auto" required></td>
-                                                <td class="px-4 py-3"><input type="number" step="0.01" name="addons[{{ $aIndex }}][price]" value="{{ $addon->price }}" class="form-control form-control-premium py-1 px-3 h-auto" required></td>
+                                            <tr data-index="{{ $aLoopIndex }}">
+                                                <td class="px-4 py-3"><input type="text" name="addons[{{ $aLoopIndex }}][title]" value="{{ $addon->title }}" class="form-control form-control-premium py-1 px-3 h-auto" required></td>
+                                                <td class="px-4 py-3"><input type="number" step="0.01" name="addons[{{ $aLoopIndex }}][price]" value="{{ $addon->price }}" class="form-control form-control-premium py-1 px-3 h-auto" required></td>
                                                 <td class="px-4 py-3">
-                                                    <select name="addons[{{ $aIndex }}][pricing_type]" class="form-control form-control-premium py-1 px-3 h-auto">
+                                                    <select name="addons[{{ $aLoopIndex }}][pricing_type]" class="form-control form-control-premium py-1 px-3 h-auto">
                                                         <option value="one_time" {{ $addon->pricing_type == 'one_time' ? 'selected' : '' }}>One-Time</option>
                                                         <option value="per_unit" {{ $addon->pricing_type == 'per_unit' ? 'selected' : '' }}>Per Unit</option>
                                                     </select>
                                                 </td>
-                                                <td class="px-4 py-3"><input type="text" name="addons[{{ $aIndex }}][description]" value="{{ $addon->description }}" class="form-control form-control-premium py-1 px-3 h-auto"></td>
+                                                <td class="px-4 py-3"><input type="text" name="addons[{{ $aLoopIndex }}][description]" value="{{ $addon->description }}" class="form-control form-control-premium py-1 px-3 h-auto"></td>
                                                 <td class="px-4 py-3 text-center">
                                                     <div class="custom-control custom-switch custom-switch-premium d-inline-block">
-                                                        <input type="hidden" name="addons[{{ $aIndex }}][is_required]" value="0">
-                                                        <input type="checkbox" name="addons[{{ $aIndex }}][is_required]" value="1" class="custom-control-input" id="addon_r_{{ $aIndex }}" {{ $addon->is_required ? 'checked' : '' }}>
-                                                        <label class="custom-control-label" for="addon_r_{{ $aIndex }}"></label>
+                                                        <input type="hidden" name="addons[{{ $aLoopIndex }}][is_required]" value="0">
+                                                        <input type="checkbox" name="addons[{{ $aLoopIndex }}][is_required]" value="1" class="custom-control-input" id="addon_r_{{ $aLoopIndex }}" {{ $addon->is_required ? 'checked' : '' }}>
+                                                        <label class="custom-control-label" for="addon_r_{{ $aLoopIndex }}"></label>
                                                     </div>
                                                 </td>
                                                 <td class="px-4 py-3 text-center"><button type="button" class="btn btn-danger btn-xs rounded-circle" data-action="remove-row"><i class="fas fa-trash"></i></button></td>
                                             </tr>
-                                            @php $aIndex++; @endphp
+                                            @php $aLoopIndex++; @endphp
                                         @endforeach
                                     @endif
                                 </tbody>
@@ -358,11 +362,6 @@
     </form>
 </div>
 @endsection
-
-    @php
-        $vIndex = ($product->exists && $product->attributes->isNotEmpty()) ? $product->attributes->count() : 0;
-        $aIndex = ($product->exists && $product->addons->isNotEmpty()) ? $product->addons->count() : 0;
-    @endphp
 
     @push('js')
     <script src="{{ asset('admin-assets/pages/product-form.js') }}"></script>
