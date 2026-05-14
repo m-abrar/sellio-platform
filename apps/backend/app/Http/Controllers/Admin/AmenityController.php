@@ -46,7 +46,7 @@ class AmenityController extends Controller
             ->when($request->query('search'), function($q) use ($request) {
                 $q->where('title', 'like', "%{$request->query('search')}%");
             })
-            ->get();
+            ->paginate(20);
 
         return view('admin.amenities.index', compact('amenities'));
     }
