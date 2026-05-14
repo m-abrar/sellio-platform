@@ -23,12 +23,5 @@
             slugInput.on('change', function() { $(this).data('edited', true); });
         }
 
-        // Initialize Select2 if available
-        if ($.fn.select2) {
-            $('.select2').select2({
-                theme: 'bootstrap4',
-                width: '100%'
-            });
-        }
     });
 })(jQuery);

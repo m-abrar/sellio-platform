@@ -152,10 +152,10 @@ class Page extends Model implements HasMedia
     public function getStatusMeta(): array
     {
         return match ($this->status) {
-            self::STATUS_ACTIVE   => ['label' => 'Active', 'color' => 'success'],
-            self::STATUS_INACTIVE => ['label' => 'Inactive', 'color' => 'secondary'],
-            self::STATUS_DRAFT    => ['label' => 'Draft', 'color' => 'warning'],
-            default              => ['label' => 'Unknown', 'color' => 'dark'],
+            self::STATUS_ACTIVE   => ['label' => 'Active', 'color' => 'success', 'icon' => 'check-circle'],
+            self::STATUS_INACTIVE => ['label' => 'Inactive', 'color' => 'secondary', 'icon' => 'times-circle'],
+            self::STATUS_DRAFT    => ['label' => 'Draft', 'color' => 'warning', 'icon' => 'edit'],
+            default              => ['label' => 'Unknown', 'color' => 'dark', 'icon' => 'question-circle'],
         };
     }
 }

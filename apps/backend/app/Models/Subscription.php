@@ -109,13 +109,21 @@ class Subscription extends Model
         );
     }
 
-    // --- Activity Log Configuration ---
+    // --- UI Helpers ---
 
-    public function getActivitylogOptions(): LogOptions
+    /**
+     * Get a human-readable status label with CSS classes and icons.
+     */
+    public function getStatusMeta(): array
     {
-        return LogOptions::defaults()
-            ->logAll()
-            ->logOnlyDirty() 
-            ->dontSubmitEmptyLogs();
+        return match ($this->status) {
+            self::STATUS_ACTIVE    => ['label' => 'Active', 'color' => 'success', 'icon' => 'check-circle'],
+            self::STATUS_ON_TRIAL  => ['label' => 'Trial', 'color' => 'info', 'icon' => 'hourglass-start'],
+            self::STATUS_PAST_DUE  => ['label' => 'Past Due', 'color' => 'danger', 'icon' => 'exclamation-triangle'],
+            self::STATUS_PENDING   => ['label' => 'Pending', 'color' => 'warning', 'icon' => 'clock'],
+            self::STATUS_CANCELLED => ['label' => 'Cancelled', 'color' => 'secondary', 'icon' => 'times-circle'],
+            self::STATUS_EXPIRED   => ['label' => 'Expired', 'color' => 'dark', 'icon' => 'calendar-times'],
+            default               => ['label' => 'Unknown', 'color' => 'dark', 'icon' => 'question-circle'],
+        };
     }
 }

@@ -43,7 +43,7 @@
             <div class="col-md-6">
                 <div class="form-group mb-0">
                     <label class="small font-weight-bold text-muted uppercase mb-2 letter-spacing-1">{{ __('Editorial Category') }} <span class="text-danger">*</span></label>
-                    <select name="category_id" id="category_id" class="form-control select2 custom-select" required>
+                    <select name="category_id" id="category_id" class="form-control select2" required>
                         <option value="">{{ __('Select Category') }}</option>
                         @foreach($categories as $category)
                             <option value="{{ $category->id }}" {{ old('category_id', $blog->category_id ?? '') == $category->id ? 'selected' : '' }}>

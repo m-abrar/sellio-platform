@@ -124,12 +124,12 @@ class Ticket extends Model
     public function getStatusMeta(): array
     {
         return match ($this->status) {
-            self::STATUS_OPEN        => ['label' => 'Open', 'color' => 'success'],
-            self::STATUS_IN_PROGRESS => ['label' => 'In-Progress', 'color' => 'info'],
-            self::STATUS_RESOLVED    => ['label' => 'Resolved', 'color' => 'info'],
-            self::STATUS_CLOSED      => ['label' => 'Closed', 'color' => 'secondary'],
-            self::STATUS_REOPENED    => ['label' => 'Reopened', 'color' => 'primary'],
-            default                  => ['label' => 'Unknown', 'color' => 'dark'],
+            self::STATUS_OPEN        => ['label' => 'Open', 'color' => 'success', 'icon' => 'door-open'],
+            self::STATUS_IN_PROGRESS => ['label' => 'In-Progress', 'color' => 'info', 'icon' => 'sync-alt'],
+            self::STATUS_RESOLVED    => ['label' => 'Resolved', 'color' => 'info', 'icon' => 'check-circle'],
+            self::STATUS_CLOSED      => ['label' => 'Closed', 'color' => 'secondary', 'icon' => 'lock'],
+            self::STATUS_REOPENED    => ['label' => 'Reopened', 'color' => 'primary', 'icon' => 'redo-alt'],
+            default                  => ['label' => 'Unknown', 'color' => 'dark', 'icon' => 'question-circle'],
         };
     }
 
