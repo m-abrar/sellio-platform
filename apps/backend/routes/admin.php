@@ -297,8 +297,8 @@ Route::prefix('admin')
             Route::get('pages/type/{type}', [PageController::class , 'index'])->name('pages.index.type')->middleware('can:manage-pages');
 
             Route::controller(PageBuilderController::class)->prefix('page-builder')->name('page-builder.')->middleware('can:manage-pages')->group(function () {
-            Route::get('/{id}', 'edit')->name('edit');
-            Route::post('/{id}', 'update')->name('update');
+            Route::get('/{page}', 'edit')->name('edit');
+            Route::post('/{page}', 'update')->name('update');
         }
         );
 

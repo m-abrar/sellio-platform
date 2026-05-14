@@ -6,13 +6,6 @@
     'use strict';
 
     $(document).ready(function() {
-        // Initialize Select2
-        if ($.fn.select2) {
-            $('.select2').select2({
-                theme: 'bootstrap4',
-                width: '100%'
-            });
-        }
 
         // Initialize Tooltips
         if ($.fn.tooltip) {

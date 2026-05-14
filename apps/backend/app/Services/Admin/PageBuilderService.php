@@ -36,7 +36,10 @@ class PageBuilderService
             if ($tempPath) {
                 try {
                     $media = $page->addMedia($tempPath)->toMediaCollection('pagebuilder');
-                    $html = str_replace($match[0], '<img src="' . $media->getUrl() . '"', $html);
+                    $newSrc = $media->getUrl();
+                    // Extract the full data URI string from the match
+                    $dataUri = 'data:image/' . $match[1] . ';base64,' . $match[2];
+                    $html = str_replace($dataUri, $newSrc, $html);
                 } finally {
                     File::delete($tempPath);
                 }

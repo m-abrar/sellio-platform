@@ -183,8 +183,16 @@
                 @endforelse
             </div>
 
-            <div class="d-flex justify-content-center mt-4">
-                {{ $mediaItems->links() }}
+            <div class="gallery-pagination-wrapper mt-5 pt-4 border-top">
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
+                    <div class="small text-muted font-weight-bold uppercase letter-spacing-1 mb-3 mb-md-0">
+                        <i class="fas fa-list-ol mr-2 text-primary opacity-50"></i>
+                        Showing <span class="text-dark">{{ $mediaItems->firstItem() }}</span> to <span class="text-dark">{{ $mediaItems->lastItem() }}</span> of <span class="text-dark">{{ $mediaItems->total() }}</span> Global Assets
+                    </div>
+                    <div class="pagination-premium">
+                        {{ $mediaItems->links('pagination::bootstrap-4') }}
+                    </div>
+                </div>
             </div>
         </div>
     </div>
