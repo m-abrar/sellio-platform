@@ -122,14 +122,14 @@
                                         </td>
                                         <td class="align-middle">
                                             @if($order->payment_status === 'paid')
-                                                <span class="badge badge-success-light px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1">{{ __('Paid') }}</span>
+                                                <span class="badge badge-success-light px-3 rounded-pill font-weight-bold smallest uppercase letter-spacing-1">{{ __('Paid') }}</span>
                                             @else
-                                                <span class="badge badge-warning-light px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1">{{ __('Unsettled') }}</span>
+                                                <span class="badge badge-warning-light px-3 rounded-pill font-weight-bold smallest uppercase letter-spacing-1">{{ __('Unsettled') }}</span>
                                             @endif
                                         </td>
                                         <td class="text-center align-middle">
                                             @php $statusMeta = $order->getStatusMeta(); @endphp
-                                            <span class="badge badge-{{ $statusMeta['color'] }}-light px-3 py-1 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 badge-min-90">
+                                            <span class="badge badge-{{ $statusMeta['color'] }}-light px-3 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 badge-min-90">
                                                 {{ $statusMeta['label'] }}
                                             </span>
                                         </td>

@@ -70,7 +70,10 @@
                 "searching": true,
                 "ordering": true,
                 "info": false,
-                "dom": '<"row pt-3"<"col-sm-12"f>>t'
+                "dom": '<"row pt-3"<"col-sm-12"f>>t',
+                "columnDefs": [
+                    { "orderable": false, "targets": 0 }
+                ]
             });
         }
     });
