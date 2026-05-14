@@ -14,8 +14,7 @@
 
 @section('title', __('Settings Explorer'))
 
-@section('breadcrumbs')
-@stop
+@section('breadcrumbs', '')
 
 @section('content_header')
     <div class="container-fluid pt-4">

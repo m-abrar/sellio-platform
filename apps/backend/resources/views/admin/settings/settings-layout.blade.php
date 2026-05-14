@@ -14,8 +14,7 @@
 
 @section('title', __('Platform Logic') . ' | ' . __('Master Configuration'))
 
-@section('breadcrumbs')
-@stop
+@section('breadcrumbs', '')
 
 @section('content_header')
     <div class="d-flex align-items-center justify-content-between mb-4">
