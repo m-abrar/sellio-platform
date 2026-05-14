@@ -182,5 +182,6 @@
 
     // Expose the configured instance
     window.SellioAlert = SellioAlert;
+    window.PremiumConfirm = SellioAlert; // Compatibility Alias
 
 })(window, window.Swal);

@@ -138,23 +138,13 @@
                                 </td>
                                 <td class="align-middle py-4">
                                     @php
-                                        $statusColor = match($ticket->status) {
-                                            'open' => 'success',
-                                            'in-progress' => 'info',
-                                            'closed' => 'dark',
-                                            default => 'warning'
-                                        };
-                                        $priorityColor = match($ticket->priority) {
-                                            'urgent' => 'danger',
-                                            'high' => 'warning',
-                                            'medium' => 'primary',
-                                            default => 'secondary'
-                                        };
+                                        $statusMeta = $ticket->getStatusMeta();
+                                        $priorityMeta = $ticket->getPriorityMeta();
                                     @endphp
-                                    <span class="badge badge-{{ $statusColor }}-light text-{{ $statusColor }} px-3 py-1 smallest font-weight-bold mb-1 rounded-pill">{{ strtoupper(__($ticket->status)) }}</span>
+                                    <span class="badge badge-{{ $statusMeta['color'] }}-light text-{{ $statusMeta['color'] }} px-3 py-1 smallest font-weight-bold mb-1 rounded-pill">{{ strtoupper(__($statusMeta['label'])) }}</span>
                                     <br>
-                                    <span class="text-{{ $priorityColor }} font-weight-bold text-uppercase smallest-0-65 ls-0-5">
-                                        <i class="fas fa-bolt mr-1"></i> {{ __($ticket->priority) }} {{ __('Priority') }}
+                                    <span class="text-{{ $priorityMeta['color'] }} font-weight-bold text-uppercase smallest-0-65 ls-0-5">
+                                        <i class="fas fa-bolt mr-1"></i> {{ __($priorityMeta['label']) }} {{ __('Priority') }}
                                     </span>
                                 </td>
                                 <td class="align-middle py-4">

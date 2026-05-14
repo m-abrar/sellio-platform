@@ -154,7 +154,7 @@
                             'label' => __('Upload New Identity Image'),
                             'multiple' => false,
                             'model' => 'user',
-                            'id' => $user->id ?? null,
+                            'record' => $user,
                             'noCard' => true
                         ])
                     </div>

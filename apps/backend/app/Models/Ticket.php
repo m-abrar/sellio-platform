@@ -27,9 +27,9 @@ class Ticket extends Model
     use HasFactory, SoftDeletes;
 
     // --- Status Constants ---
-    public const STATUS_OPEN     = 'open';
-    public const STATUS_PENDING  = 'pending';
-    public const STATUS_RESOLVED = 'resolved';
+    public const STATUS_OPEN        = 'open';
+    public const STATUS_IN_PROGRESS = 'in-progress';
+    public const STATUS_RESOLVED    = 'resolved';
     public const STATUS_CLOSED   = 'closed';
     public const STATUS_REOPENED = 'reopened';
 
@@ -47,7 +47,7 @@ class Ticket extends Model
     protected $fillable = [
         'title',
         'description',
-        'status',      // e.g., 'open', 'pending', 'resolved', 'closed', 'reopened'
+        'status',      // e.g., 'open', 'in-progress', 'resolved', 'closed', 'reopened'
         'priority',    // e.g., 'low', 'medium', 'high', 'urgent'
         'user_id',
         'viewed_at',   // Tracking for admin/staff read status
@@ -93,7 +93,7 @@ class Ticket extends Model
         return $query->whereIn('status', [
             self::STATUS_OPEN, 
             self::STATUS_REOPENED, 
-            self::STATUS_PENDING
+            self::STATUS_IN_PROGRESS
         ]);
     }
 
@@ -124,12 +124,26 @@ class Ticket extends Model
     public function getStatusMeta(): array
     {
         return match ($this->status) {
-            self::STATUS_OPEN     => ['label' => 'Open', 'color' => 'success'],
-            self::STATUS_PENDING  => ['label' => 'Pending', 'color' => 'warning'],
-            self::STATUS_RESOLVED => ['label' => 'Resolved', 'color' => 'info'],
-            self::STATUS_CLOSED   => ['label' => 'Closed', 'color' => 'secondary'],
-            self::STATUS_REOPENED => ['label' => 'Reopened', 'color' => 'primary'],
-            default               => ['label' => 'Unknown', 'color' => 'dark'],
+            self::STATUS_OPEN        => ['label' => 'Open', 'color' => 'success'],
+            self::STATUS_IN_PROGRESS => ['label' => 'In-Progress', 'color' => 'info'],
+            self::STATUS_RESOLVED    => ['label' => 'Resolved', 'color' => 'info'],
+            self::STATUS_CLOSED      => ['label' => 'Closed', 'color' => 'secondary'],
+            self::STATUS_REOPENED    => ['label' => 'Reopened', 'color' => 'primary'],
+            default                  => ['label' => 'Unknown', 'color' => 'dark'],
+        };
+    }
+
+    /**
+     * Get a human-readable priority label with CSS classes.
+     */
+    public function getPriorityMeta(): array
+    {
+        return match ($this->priority) {
+            self::PRIORITY_URGENT => ['label' => 'Urgent', 'color' => 'danger'],
+            self::PRIORITY_HIGH   => ['label' => 'High', 'color' => 'warning'],
+            self::PRIORITY_MEDIUM => ['label' => 'Medium', 'color' => 'primary'],
+            self::PRIORITY_LOW    => ['label' => 'Low', 'color' => 'secondary'],
+            default               => ['label' => 'Normal', 'color' => 'dark'],
         };
     }
 }

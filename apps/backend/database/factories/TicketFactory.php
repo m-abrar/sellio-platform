@@ -30,7 +30,7 @@ class TicketFactory extends Factory
     public function definition(): array
     {
         // Define the possible statuses based on your migration
-        $statuses = ['open', 'pending', 'resolved', 'closed', 'reopened'];
+        $statuses = ['open', 'in-progress', 'resolved', 'closed', 'reopened'];
         $priorities = ['low', 'medium', 'high', 'urgent'];
         $categories = ['Technical', 'Billing', 'Account', 'Feature Request', 'General Inquiry'];
 
@@ -62,7 +62,7 @@ class TicketFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'assigned_to' => User::factory(),
-            'status' => 'pending',
+            'status' => 'in-progress',
         ]);
     }
 

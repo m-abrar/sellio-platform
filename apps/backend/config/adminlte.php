@@ -349,7 +349,12 @@ return [
                 [
                     'type' => 'css',
                     'asset' => true,
-                    'location' => 'admin-assets/global.css',
+                    'location' => 'admin-assets/style.css',
+                ],
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => 'admin-assets/design-tokens.css',
                 ],
                 [
                     'type' => 'css',
@@ -421,6 +426,11 @@ return [
                     'type' => 'js',
                     'asset' => false,
                     'location' => '//cdn.jsdelivr.net/npm/sweetalert2@11',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'admin-assets/swal-helpers.js',
                 ],
             ],
         ],

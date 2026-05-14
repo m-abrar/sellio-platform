@@ -168,7 +168,7 @@
                             'label' => 'Select Gallery Images',
                             'multiple' => true,
                             'model' => 'service',
-                            'id' => $service->id ?? null,
+                            'record' => $service,
                             'noCard' => true,
                         ])
                     </div>
@@ -277,7 +277,7 @@
                             'label' => __('Main Listing Image'),
                             'multiple' => false,
                             'model' => 'service',
-                            'id' => $service->id ?? null,
+                            'record' => $service,
                             'noCard' => true,
                         ])
                     </div>
