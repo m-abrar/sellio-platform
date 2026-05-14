@@ -12,13 +12,13 @@
 --}}
 @php
     $isEdit = $model->exists;
-    $label = $title ?? 'RECORD';
+    $label = $title ?? __('RECORD');
 @endphp
 
 <div class="card card-sidebar-premium">
     <div class="card-header d-flex align-items-center border-0">
         <h3 class="card-title-side">
-            <i class="fas fa-rocket mr-2 text-primary"></i> Protocol & Actions
+            <i class="fas fa-rocket mr-2 text-primary"></i> {{ __('Protocol & Actions') }}
         </h3>
     </div>
     
@@ -39,8 +39,8 @@
                 <input type="checkbox" name="is_published" value="1" id="publishedSwitch" class="d-none toggle-input" {{ old('is_published', $model->is_published ?? true) ? 'checked' : '' }}>
                 <div class="d-flex justify-content-between align-items-center toggle-card">
                     <div>
-                        <div class="fw-bold small text-dark uppercase letter-spacing-1">Publishing Status</div>
-                        <div class="small toggle-status text-muted">{{ ($isEdit && $model->is_published) ? 'Visible to public' : 'Draft Mode' }}</div>
+                        <div class="fw-bold small text-dark uppercase letter-spacing-1">{{ __('Publishing Status') }}</div>
+                        <div class="small toggle-status text-muted">{{ ($isEdit && $model->is_published) ? __('Visible to public') : __('Draft Mode') }}</div>
                     </div>
                     <div class="toggle-indicator"></div>
                 </div>
@@ -49,28 +49,28 @@
 
         <div class="action-buttons-group">
             <button type="submit" class="btn btn-submit-premium btn-block font-weight-bold py-3 small mb-3 uppercase letter-spacing-1">
-                <i class="fas fa-save mr-2"></i> {{ $isEdit ? "SYNCHRONIZE $label" : "INITIALIZE $label" }}
+                <i class="fas fa-save mr-2"></i> {{ $isEdit ? __('SYNCHRONIZE :label', ['label' => $label]) : __('INITIALIZE :label', ['label' => $label]) }}
             </button>
 
             <div class="d-flex gap-8">
                 @if(isset($back))
                     <a href="{{ route($back) }}" class="btn btn-light flex-grow-1 rounded-pill font-weight-bold small py-2 text-muted border uppercase letter-spacing-1">
-                        <i class="fas fa-times mr-1"></i> Cancel
+                        <i class="fas fa-times mr-1"></i> {{ __('Cancel') }}
                     </a>
                 @endif
                 
                 @if($isEdit)
                     @if(isset($duplicate))
                         <a href="{{ route($duplicate, $model->id) }}" class="btn btn-light flex-grow-1 rounded-pill font-weight-bold small py-2 text-muted border uppercase letter-spacing-1">
-                            <i class="fas fa-copy mr-1"></i> Clone
+                            <i class="fas fa-copy mr-1"></i> {{ __('Clone') }}
                         </a>
                     @endif
                     <button type="button" class="btn btn-light flex-grow-1 rounded-pill font-weight-bold small py-2 text-danger border uppercase letter-spacing-1" 
                         data-action="delete-trigger" 
                         data-form-id="delete-form"
-                        data-confirm-title="Purge {{ $label }}?"
-                        data-confirm-text="This will permanently remove the record from the platform registry.">
-                        <i class="fas fa-trash-alt mr-1"></i> Purge
+                        data-confirm-title="{{ __('Purge :label?', ['label' => $label]) }}"
+                        data-confirm-text="{{ __('This will permanently remove the record from the platform registry.') }}">
+                        <i class="fas fa-trash-alt mr-1"></i> {{ __('Purge') }}
                     </button>
                 @endif
             </div>
@@ -81,7 +81,7 @@
         <div class="card-footer bg-light border-top-0 text-center py-2">
             <small class="text-muted small uppercase letter-spacing-1">
                 <i class="far fa-clock mr-1"></i> 
-                Last Sync: {{ $model->updated_at->format('M d, H:i') }}
+                {{ __('Last Sync') }}: {{ $model->updated_at->format('M d, H:i') }}
             </small>
         </div>
     @endif

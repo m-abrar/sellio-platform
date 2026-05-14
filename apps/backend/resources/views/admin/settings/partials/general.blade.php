@@ -173,7 +173,7 @@
                         <div class="form-group">
                             <label class="small font-weight-bold text-uppercase text-secondary mb-2">{{ __('Default Language') }}</label>
                             <select name="default_language" class="form-control select2 shadow-xs">
-                                @foreach(['en' => 'English', 'fr' => 'French', 'es' => 'Spanish'] as $code => $label)
+                                @foreach(['en' => __('English'), 'fr' => __('French'), 'es' => __('Spanish')] as $code => $label)
                                     <option value="{{ $code }}" {{ (old('default_language', $settings['default_language'] ?? '') == $code) ? 'selected' : '' }}>{{ $label }}</option>
                                 @endforeach
                             </select>

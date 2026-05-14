@@ -10,9 +10,9 @@
 <div class="row">
     @php
         $growthItems = [
-            ['val' => $metrics['user_metrics']['total_users'] ?? 0, 'label' => 'Global User Base', 'pct' => $metrics['user_metrics']['users_growth_percent'] ?? 0, 'desc' => 'Total registered ecosystem accounts', 'color' => 'success', 'icon' => 'fa-users'],
-            ['val' => $metrics['user_metrics']['newsletter_subscribers'] ?? 0, 'label' => 'Network Reach', 'pct' => $metrics['user_metrics']['newsletter_conversion'] ?? 0, 'desc' => 'Newsletter & communication reach', 'color' => 'primary', 'icon' => 'fa-paper-plane'],
-            ['val' => $metrics['user_metrics']['active_subscriptions'] ?? 0, 'label' => 'Elite Membership', 'pct' => $metrics['user_metrics']['subscriptions_percent'] ?? 0, 'desc' => 'Active recurring premium accounts', 'color' => 'info', 'icon' => 'fa-crown'],
+            ['val' => $metrics['user_metrics']['total_users'] ?? 0, 'label' => __('Global User Base'), 'pct' => $metrics['user_metrics']['users_growth_percent'] ?? 0, 'desc' => __('Total registered ecosystem accounts'), 'color' => 'success', 'icon' => 'fa-users'],
+            ['val' => $metrics['user_metrics']['newsletter_subscribers'] ?? 0, 'label' => __('Network Reach'), 'pct' => $metrics['user_metrics']['newsletter_conversion'] ?? 0, 'desc' => __('Newsletter & communication reach'), 'color' => 'primary', 'icon' => 'fa-paper-plane'],
+            ['val' => $metrics['user_metrics']['active_subscriptions'] ?? 0, 'label' => __('Elite Membership'), 'pct' => $metrics['user_metrics']['subscriptions_percent'] ?? 0, 'desc' => __('Active recurring premium accounts'), 'color' => 'info', 'icon' => 'fa-crown'],
         ];
     @endphp
     
@@ -25,7 +25,7 @@
                         <i class="fas {{ $g['icon'] }}"></i>
                     </div>
                     <span class="badge badge-{{ $g['color'] }}-light px-3 py-2 rounded-pill font-weight-bold smallest uppercase">
-                        <i class="fas fa-arrow-up mr-1"></i> {{ $g['pct'] }}% GROWTH
+                        <i class="fas fa-arrow-up mr-1"></i> {{ __(':percent% GROWTH', ['percent' => $g['pct']]) }}
                     </span>
                 </div>
 

@@ -51,9 +51,9 @@
 
                     <div class="text-center mb-4">
                         @if($user->email_verified_at)
-                            <span class="badge badge-success-light px-3 py-2"><i class="fas fa-check-circle mr-1"></i> Verified</span>
+                            <span class="badge badge-success-light px-4 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 shadow-xs"><i class="fas fa-check-circle mr-1"></i> {{ __('Verified') }}</span>
                         @else
-                            <span class="badge badge-warning-light px-3 py-2"><i class="fas fa-clock mr-1"></i> Pending Verification</span>
+                            <span class="badge badge-warning-light px-4 py-2 rounded-pill font-weight-bold smallest uppercase letter-spacing-1 shadow-xs"><i class="fas fa-clock mr-1"></i> {{ __('Pending Verification') }}</span>
                         @endif
                     </div>
 
@@ -134,11 +134,11 @@
                                 <div class="col-md-6">
                                     <ul class="list-group list-group-flush">
                                         <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-                                            <span>Two-Factor Authentication</span>
-                                            <span class="badge badge-pill badge-secondary">Disabled</span>
+                                            <span>{{ __('Two-Factor Authentication') }}</span>
+                                            <span class="badge badge-pill badge-secondary">{{ __('Disabled') }}</span>
                                         </li>
                                         <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-                                            <span>Last Login IP</span>
+                                            <span>{{ __('Last Login IP') }}</span>
                                             <span class="text-monospace small">192.168.1.1</span>
                                         </li>
                                     </ul>
@@ -147,7 +147,7 @@
                                     {{-- Optional: Show account notes or internal admin tags --}}
                                     <div class="p-3 bg-light rounded border border-dashed">
                                         <label class="text-muted small">{{ __('Admin Notes') }}</label>
-                                        <p class="small italic text-secondary mb-0">No internal notes for this user yet.</p>
+                                        <p class="small italic text-secondary mb-0">{{ __('No internal notes for this user yet.') }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -157,7 +157,7 @@
                             {{-- Placeholder for a dynamic list of properties --}}
                             <p class="text-center py-4 text-muted">
                                 <i class="fas fa-layer-group fa-2x mb-2 d-block opacity-25"></i>
-                                Feature to view user-specific properties coming soon.
+                                {{ __('Feature to view user-specific properties coming soon.') }}
                             </p>
                         </div>
                     </div>

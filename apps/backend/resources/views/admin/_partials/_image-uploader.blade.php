@@ -15,7 +15,7 @@
 @if(!($noCard ?? false))
 <div class="card card-premium overflow-hidden mb-0">
     <div class="card-header border-0 bg-white py-3 px-4">
-        <h4 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">{{ $label ?? 'Upload Images' }}</h4>
+        <h4 class="card-title font-weight-bold text-dark mb-0 small text-uppercase letter-spacing-1">{{ $label ?? __('Upload Images') }}</h4>
     </div>
 
     <div class="card-body text-center p-4">
@@ -64,16 +64,16 @@
             </div>
             <h6 class="font-weight-bold text-dark mb-1 position-relative dropzone-title">
                 @if($isEdit)
-                    Quick Image Sync
+                    {{ __('Quick Image Sync') }}
                 @else
-                    System Lock: Initialization Required
+                    {{ __('System Lock: Initialization Required') }}
                 @endif
             </h6>
             <p class="text-muted smallest mb-0 px-4 font-weight-bold uppercase opacity-50 position-relative dropzone-subtitle">
                 @if($isEdit)
-                    Drag & Drop or Click to Explore
+                    {{ __('Drag & Drop or Click to Explore') }}
                 @else
-                    Establish record persistence before attaching assets.
+                    {{ __('Establish record persistence before attaching assets.') }}
                 @endif
             </p>
         </div>

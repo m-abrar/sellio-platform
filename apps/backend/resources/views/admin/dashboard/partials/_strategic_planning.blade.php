@@ -14,7 +14,7 @@
         <div class="card border-0 shadow-premium h-100 overflow-hidden rounded-xl">
             <div class="card-header bg-white py-4 px-4 border-0">
                 <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1">
-                    <i class="fas fa-award mr-2 text-success opacity-50"></i> High Performance Inventory
+                    <i class="fas fa-award mr-2 text-success opacity-50"></i> {{ __('High Performance Inventory') }}
                 </h3>
             </div>
             <div class="card-body p-0">
@@ -22,9 +22,9 @@
                     <table class="table table-hover mb-0 align-middle">
                         <thead class="bg-light-soft">
                             <tr>
-                                <th class="pl-4 smallest font-weight-bold uppercase letter-spacing-1">Rank</th>
-                                <th class="smallest font-weight-bold uppercase letter-spacing-1">Inventory Identity</th>
-                                <th class="text-center pr-4 smallest font-weight-bold uppercase letter-spacing-1">Engagement</th>
+                                <th class="pl-4 smallest font-weight-bold uppercase letter-spacing-1">{{ __('Rank') }}</th>
+                                <th class="smallest font-weight-bold uppercase letter-spacing-1">{{ __('Inventory Identity') }}</th>
+                                <th class="text-center pr-4 smallest font-weight-bold uppercase letter-spacing-1">{{ __('Engagement') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -49,7 +49,7 @@
             </div>
             <div class="card-footer bg-white border-0 text-center py-3">
                 <a href="{{ route('admin.bookings.index')}}" class="smallest font-weight-bold text-primary uppercase letter-spacing-1">
-                    Export Comprehensive Dataset <i class="fas fa-download ml-1"></i>
+                    {{ __('Export Comprehensive Dataset') }} <i class="fas fa-download ml-1"></i>
                 </a>
             </div>
         </div>
@@ -60,19 +60,19 @@
         <div class="card border-0 shadow-premium h-100 overflow-hidden rounded-xl">
             <div class="card-header bg-white py-4 px-4 border-0 d-flex align-items-center justify-content-between">
                 <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1">
-                    <i class="fas fa-map-marked-alt mr-2 text-primary opacity-50"></i> Geospatial Demand Heatmap
+                    <i class="fas fa-map-marked-alt mr-2 text-primary opacity-50"></i> {{ __('Geospatial Demand Heatmap') }}
                 </h3>
-                <span class="badge badge-primary-light ml-auto px-3 py-2 rounded-pill font-weight-bold smallest uppercase animate-pulse">Live Transmission</span>
+                <span class="badge badge-primary-light ml-auto px-3 py-2 rounded-pill font-weight-bold smallest uppercase animate-pulse">{{ __('Live Transmission') }}</span>
             </div>
             <div class="card-body p-0">
                 <div id="heatmap" style="height: 400px; filter: grayscale(0.2) contrast(1.1);"></div> 
             </div>
             <div class="card-footer bg-white py-3 px-4 d-flex justify-content-between align-items-center border-0">
                 <p class="mb-0 smallest text-muted font-weight-bold uppercase letter-spacing-1">
-                    <i class="fas fa-crosshairs mr-1"></i> Resolution focus: 25km Cluster
+                    <i class="fas fa-crosshairs mr-1"></i> {{ __('Resolution focus: :size Cluster', ['size' => '25km']) }}
                 </p>
                 <a href="{{ route('admin.locations.index')}}" class="smallest font-weight-bold text-primary uppercase letter-spacing-1">
-                    Manage Territory Architecture <i class="fas fa-arrow-right ml-1"></i>
+                    {{ __('Manage Territory Architecture') }} <i class="fas fa-arrow-right ml-1"></i>
                 </a>
             </div>
         </div>

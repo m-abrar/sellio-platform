@@ -13,7 +13,7 @@
         <div class="card border-0 shadow-premium h-100 overflow-hidden rounded-xl">
             <div class="card-header bg-white py-4 px-4 border-0 d-flex align-items-center justify-content-between">
                 <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1">
-                    <i class="fas fa-file-signature mr-2 text-warning opacity-50"></i> Submissions Queue
+                    <i class="fas fa-file-signature mr-2 text-warning opacity-50"></i> {{ __('Submissions Queue') }}
                 </h3>
             </div>
             <div class="card-body p-0">
@@ -29,7 +29,7 @@
                                 {{ $item['tag'] }}
                             </span>
                         </div>
-                        <a href="{{ route('admin.listings.edit.type', ['listing_type' => $item['tag'], 'listing_id' => $item['id']]) }}" class="btn btn-sm btn-white rounded-circle shadow-xs border d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;" title="Review Submission">
+                        <a href="{{ route('admin.listings.edit.type', ['listing_type' => $item['tag'], 'listing_id' => $item['id']]) }}" class="btn btn-sm btn-white rounded-circle shadow-xs border d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;" title="{{ __('Review Submission') }}">
                             <i class="fas fa-eye text-primary smallest"></i>
                         </a>
                     </div>
@@ -44,7 +44,7 @@
         <div class="card border-0 shadow-premium h-100 bg-dark overflow-hidden rounded-xl">
             <div class="card-header border-0 bg-transparent py-4 px-4">
                 <h3 class="card-title font-weight-bold text-white mb-0 smallest text-uppercase letter-spacing-1">
-                    <i class="fas fa-shield-alt mr-2 text-danger opacity-50"></i> Intelligence Pulse
+                    <i class="fas fa-shield-alt mr-2 text-danger opacity-50"></i> {{ __('Intelligence Pulse') }}
                 </h3>
             </div>
             <div class="card-body p-0">
@@ -61,7 +61,7 @@
                 @endforeach
             </div>
             <div class="card-footer border-0 text-center py-3" style="background: rgba(0,0,0,0.2) !important;">
-                <p class="mb-0 smallest text-white-50 font-weight-bold uppercase letter-spacing-1">Secured Operational Stream</p>
+                <p class="mb-0 smallest text-white-50 font-weight-bold uppercase letter-spacing-1">{{ __('Secured Operational Stream') }}</p>
             </div>
         </div>
     </div>
@@ -71,16 +71,16 @@
         <div class="card border-0 shadow-premium h-100 overflow-hidden rounded-xl">
             <div class="card-header bg-white py-4 px-4 border-0">
                 <h3 class="card-title font-weight-bold text-dark mb-0 smallest text-uppercase letter-spacing-1">
-                    <i class="fas fa-crown mr-2 text-warning opacity-50"></i> Ecosystem Leaders
+                    <i class="fas fa-crown mr-2 text-warning opacity-50"></i> {{ __('Ecosystem Leaders') }}
                 </h3>
             </div>
             <div class="card-body p-0">
                 {{-- Leader Item Helper Pattern --}}
                 @php
                     $leaders = [
-                        ['label' => 'Top Performing Partner', 'val' => $metrics['top_partners']['partner_name'], 'sub' => $metrics['top_partners']['partner_rating'] . ' RATING', 'icon' => 'fa-user-tie', 'bg' => 'success'],
-                        ['label' => 'Elite Marketplace Asset', 'val' => $metrics['top_partners']['listing_title'], 'sub' => $metrics['top_partners']['listing_rating'] . ' SCORE', 'icon' => 'fa-award', 'bg' => 'primary'],
-                        ['label' => 'Peak Volume Engine', 'val' => $metrics['top_partners']['booked_listing'], 'sub' => $metrics['top_partners']['booked_count'] . ' BOOKINGS', 'icon' => 'fa-chart-line', 'bg' => 'info'],
+                        ['label' => __('Top Performing Partner'), 'val' => $metrics['top_partners']['partner_name'], 'sub' => $metrics['top_partners']['partner_rating'] . ' ' . __('RATING'), 'icon' => 'fa-user-tie', 'bg' => 'success'],
+                        ['label' => __('Elite Marketplace Asset'), 'val' => $metrics['top_partners']['listing_title'], 'sub' => $metrics['top_partners']['listing_rating'] . ' ' . __('SCORE'), 'icon' => 'fa-award', 'bg' => 'primary'],
+                        ['label' => __('Peak Volume Engine'), 'val' => $metrics['top_partners']['booked_listing'], 'sub' => $metrics['top_partners']['booked_count'] . ' ' . __('BOOKINGS'), 'icon' => 'fa-chart-line', 'bg' => 'info'],
                     ];
                 @endphp
 

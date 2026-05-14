@@ -15,7 +15,7 @@
 --}}
 @extends('adminlte::page')
 
-@section('title', ($type !== 'all' ? \Illuminate\Support\Str::title($type) : \Illuminate\Support\Str::title($status ?? 'All')) . ' Listings')
+@section('title', __(':type Listings', ['type' => ($type !== 'all' ? \Illuminate\Support\Str::title($type) : \Illuminate\Support\Str::title($status ?? 'All'))]))
 
 @section('plugins.Datatables', true)
 
@@ -25,7 +25,7 @@
             <div class="col-sm-7 text-center text-sm-left mb-3 mb-sm-0">
                 <h1 class="m-0 text-dark font-weight-bold">
                     <i class="fas fa-layer-group mr-2 text-primary"></i>
-                    {{ $type !== 'all' ? __(Str::title($type)) : __(Str::title($status ?? 'All')) }} {{ __('Marketplace') }}
+                    {{ __(':type Marketplace', ['type' => ($type !== 'all' ? __(Str::title($type)) : __(Str::title($status ?? 'All')))]) }}
                 </h1>
                 <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">{{ __('Audit marketplace submissions, moderation statuses, and lifecycle states.') }}</p>
             </div>

@@ -12,7 +12,7 @@
 --}}
 @extends('adminlte::page')
 
-@section('title', 'Platform Logic | Master Configuration')
+@section('title', __('Platform Logic') . ' | ' . __('Master Configuration'))
 
 @section('breadcrumbs')
 @stop
@@ -21,14 +21,14 @@
     <div class="d-flex align-items-center justify-content-between mb-4">
         <div>
             <h1 class="font-weight-bold text-dark mb-0">
-                <i class="fas fa-microchip mr-2 text-primary"></i> Master Configuration
+                <i class="fas fa-microchip mr-2 text-primary"></i> {{ __('Master Configuration') }}
             </h1>
             <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">
-                Adjusting foundational platform engines and security protocols.
+                {{ __('Adjusting foundational platform engines and security protocols.') }}
             </p>
         </div>
         <div class="text-right">
-            @include('admin._partials._back-button', ['route' => 'admin.settings.index', 'label' => 'EXPLORER'])
+            @include('admin._partials._back-button', ['route' => 'admin.settings.index', 'label' => __('EXPLORER')])
         </div>
     </div>
 @stop
@@ -63,7 +63,7 @@
                                         default => 'circle' 
                                     } }} {{ strtolower($currentSection) == strtolower($section) ? 'text-white' : 'text-primary' }} smallest"></i>
                                 </div>
-                                <span class="font-weight-bold text-uppercase smallest letter-spacing-1">{{ str_replace('-', ' ', $section) }}</span>
+                                <span class="font-weight-bold text-uppercase smallest letter-spacing-1">{{ __(str_replace('-', ' ', $section)) }}</span>
                                 @if(strtolower($currentSection) == strtolower($section))
                                     <i class="fas fa-chevron-right ml-auto smallest opacity-50"></i>
                                 @endif
