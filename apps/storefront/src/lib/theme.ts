@@ -1,4 +1,4 @@
-import { Theme } from "@sellio/types";
+import type { Theme } from "@sellio/types";
 import { api } from "@sellio/api-client";
 import { headers } from "next/headers";
 

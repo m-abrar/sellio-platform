@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
-import { Product, Category, Theme, ApiResponse } from '@sellio/types';
+import type { Product, Category, Theme, ApiResponse } from '@sellio/types';
 
 export class SellioAPI {
   private client: AxiosInstance;
