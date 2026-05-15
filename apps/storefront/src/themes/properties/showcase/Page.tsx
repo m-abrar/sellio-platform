@@ -1,6 +1,6 @@
-
+'use client';
 import React from 'react';
-import { ArtisanPropertyCard } from './components';
+import { CinematicPropertyCard, CuratorStats } from './components';
 
 export default function Page() {
   const properties = [
@@ -35,42 +35,68 @@ export default function Page() {
   ];
 
   return (
-    <div>
-      {/* Hero Section */}
-      <section className="showcase-hero">
-          <div style={{ position: 'absolute', top: '10rem', right: '5%', width: '1px', height: '300px', background: 'var(--show-gold)' }}></div>
-          <h1>Living <br/>As Art.</h1>
-          <p style={{ maxWidth: '600px', fontSize: '1.5rem', fontWeight: 300, color: '#444', lineHeight: 1.6, marginTop: '4rem' }}>
-              The Sellio Collection is a curated distribution of the world's most significant architectural achievements. Verified by the Atelier node.
-          </p>
+    <div className="ps-section">
+      {/* Cinematic Hero */}
+      <section className="ps-hero">
+        <div className="ps-hero-line"></div>
+        <div className="ps-mono" style={{ marginBottom: '4rem' }}>CURATED_ATELIER_COLLECTION_V8</div>
+        <h1 className="ps-heading-xl">
+            Living <br/>
+            As Art.
+        </h1>
+        <p style={{ maxWidth: '750px', fontSize: '1.75rem', fontWeight: 300, color: 'var(--ps-text-dim)', lineHeight: 1.6, marginTop: '6rem' }}>
+            A curated distribution of the world's most significant architectural achievements. Synchronizing institutional curation with museum-grade provenance.
+        </p>
+        <div style={{ marginTop: '8rem', display: 'flex', gap: '4rem' }}>
+            <button className="ps-btn-primary">Explore Curation</button>
+            <button style={{ background: 'transparent', border: 'none', borderBottom: '2px solid var(--ps-canvas)', color: 'white', padding: '1rem 0', fontWeight: 900, fontSize: '1rem', letterSpacing: '4px', cursor: 'pointer' }}>READ_MANIFESTO</button>
+        </div>
       </section>
 
-      {/* Philosophy Bar */}
-      <section style={{ padding: '4rem 5%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#0a0a0a', color: 'var(--show-gold)', fontFamily: 'var(--font-serif)', fontSize: '0.8rem', letterSpacing: '4px' }}>
-          <span>INSTITUTIONAL_CURATION</span>
-          <span>ARCHITECTURAL_INTEGRITY</span>
-          <span>HISTORIC_PRESERVATION</span>
-          <span>EDITORIAL_DISTRIBUTION</span>
+      {/* Intelligence HUD Section */}
+      <section style={{ padding: '15rem 0', display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '15rem', alignItems: 'center' }}>
+          <div>
+              <h2 style={{ fontSize: '5rem', fontWeight: 900, letterSpacing: '-3px', textTransform: 'uppercase', marginBottom: '4rem', lineHeight: 1 }}>
+                  The Architecture <br/>of <span className="ps-italic" style={{ color: 'var(--ps-gold)' }}>Provenance.</span>
+              </h2>
+              <p style={{ fontSize: '1.5rem', color: 'var(--ps-text-dim)', lineHeight: 2 }}>
+                  Every property in the Atelier registry is hand-selected by our board of curators. We validate not just the integrity, but the historical and cultural significance of each node.
+              </p>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8rem' }}>
+              <CuratorStats value="INSTITUTIONAL" label="CURATION_TIER" />
+              <CuratorStats value="MUSEUM" label="GRADE_PROVENANCE" />
+              <CuratorStats value="GLOBAL" label="DISTRIBUTION_SYNC" />
+          </div>
       </section>
 
-      {/* Property Grid (Vertical Editorial) */}
-      <section className="showcase-grid">
-          {properties.map((prop, i) => (
-              <ArtisanPropertyCard key={i} {...prop} />
+      {/* Property Showcase Grid */}
+      <section style={{ marginTop: '10rem' }}>
+          {properties.map((p, i) => (
+            <CinematicPropertyCard key={i} {...p} />
           ))}
       </section>
 
-      {/* Curator CTA */}
-      <section style={{ padding: '20rem 5%', textAlign: 'center', background: '#050505' }}>
-          <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
-              <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '6rem', fontWeight: 900, marginBottom: '4rem', color: 'var(--show-gold)', letterSpacing: '-4px' }}>Begin your <br/>curation.</h2>
-              <p style={{ fontSize: '1.25rem', color: '#333', lineHeight: 2, marginBottom: '6rem' }}>
-                  Our institutional nodes are currently accepting select inquiries for the 2026/27 global collection.
-              </p>
-              <button style={{ padding: '2rem 8rem', background: 'var(--show-gold)', color: 'black', border: 'none', fontFamily: 'var(--font-serif)', fontWeight: 900, fontSize: '1.1rem', letterSpacing: '4px' }}>
-                  REQUEST_PRIVATE_ACCESS
-              </button>
-          </div>
+      {/* Philosophy Bar */}
+      <div style={{ padding: '6rem', border: '1px solid var(--ps-shadow)', borderRadius: '4px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '15rem 0' }}>
+          {['INSTITUTIONAL_CURATION', 'ARCHITECTURAL_INTEGRITY', 'HISTORIC_PRESERVATION', 'EDITORIAL_SYNC'].map(trust => (
+              <div key={trust} className="ps-mono" style={{ fontSize: '0.65rem', opacity: 0.4 }}>{trust}</div>
+          ))}
+      </div>
+
+      {/* Final CTA */}
+      <section style={{ marginTop: '15rem', padding: '20rem 0', textAlign: 'center', background: 'radial-gradient(circle at center, #111 0%, #0d0d0d 100%)', border: '1px solid var(--ps-shadow)' }}>
+          <div className="ps-mono" style={{ marginBottom: '4rem' }}>BEGIN_YOUR_CURATION</div>
+          <h2 style={{ fontFamily: 'var(--ps-font-serif)', fontSize: '8rem', fontWeight: 900, letterSpacing: '-6px', marginBottom: '6rem', lineHeight: 0.9 }}>
+              Authorize Your <br/>
+              <span className="ps-italic" style={{ color: 'var(--ps-gold)' }}>Collection.</span>
+          </h2>
+          <p style={{ maxWidth: '800px', margin: '0 auto 8rem', color: 'var(--ps-text-dim)', fontSize: '1.5rem', lineHeight: 1.8 }}>
+              Our institutional nodes are currently accepting select inquiries for the 2026/27 global collection. Submit your provenance for review.
+          </p>
+          <button className="ps-btn-primary">
+              Request Private Access
+          </button>
       </section>
     </div>
   );

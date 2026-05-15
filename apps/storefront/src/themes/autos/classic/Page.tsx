@@ -1,73 +1,116 @@
+'use client';
 import React from 'react';
-import { InventoryCard, FilterSidebar } from './components';
+import { VintageCarCard, CollectorMetricsHUD } from './components';
 
-export default function ClassicDealerPage() {
+export default function Page() {
   const inventory = [
-    { name: "2024 Porsche 911 Carrera", price: "$124,900", km: "1,200", transmission: "AUTO", fuel: "PETROL", year: 2024, image: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=2070", isCertified: true },
-    { name: "2023 BMW M4 Competition", price: "$89,500", km: "12,400", transmission: "AUTO", fuel: "PETROL", year: 2023, image: "https://images.unsplash.com/photo-1555215695-3004980ad54e?q=80&w=2070", isCertified: true },
-    { name: "2022 Audi RS6 Avant", price: "$105,000", km: "24,000", transmission: "AUTO", fuel: "PETROL", year: 2022, image: "https://images.unsplash.com/photo-1614162692292-7ac56d7fd761?q=80&w=2070" },
-    { name: "2021 Mercedes-AMG G63", price: "$165,000", km: "35,000", transmission: "AUTO", fuel: "PETROL", year: 2021, image: "https://images.unsplash.com/photo-1520031441872-265e4ff70366?q=80&w=2070", isCertified: true },
-    { name: "2023 Range Rover Sport", price: "$98,000", km: "8,500", transmission: "AUTO", fuel: "DIESEL", year: 2023, image: "https://images.unsplash.com/photo-1560958089-b8a1929cea89?q=80&w=2071" },
-    { name: "2022 Tesla Model S Plaid", price: "$82,000", km: "18,000", transmission: "AUTO", fuel: "ELECTRIC", year: 2022, image: "https://images.unsplash.com/photo-1617788131775-ceb2027fd12c?q=80&w=2070" },
+    { name: "1964 Porsche 911 Carrera", price: "$124,900", km: "1,200", transmission: "MANUAL", fuel: "PETROL", year: 1964, image: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=2070", isCertified: true },
+    { name: "1972 BMW M1 Procar", price: "$89,500", km: "12,400", transmission: "MANUAL", fuel: "PETROL", year: 1972, image: "https://images.unsplash.com/photo-1555215695-3004980ad54e?q=80&w=2070", isCertified: true },
+    { name: "1984 Audi Quattro S1", price: "$105,000", km: "24,000", transmission: "MANUAL", fuel: "PETROL", year: 1984, image: "https://images.unsplash.com/photo-1614162692292-7ac56d7fd761?q=80&w=2070" },
+    { name: "1990 Mercedes-Benz 190E", price: "$165,000", km: "35,000", transmission: "AUTO", fuel: "PETROL", year: 1990, image: "https://images.unsplash.com/photo-1520031441872-265e4ff70366?q=80&w=2070", isCertified: true },
+    { name: "1978 Range Rover Classic", price: "$98,000", km: "8,500", transmission: "MANUAL", fuel: "PETROL", year: 1978, image: "https://images.unsplash.com/photo-1560958089-b8a1929cea89?q=80&w=2071" },
+    { name: "1962 Jaguar E-Type", price: "$220,000", km: "18,000", transmission: "MANUAL", fuel: "PETROL", year: 1962, image: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=2000", isCertified: true },
   ];
 
   return (
-    <div>
-      <section style={{ padding: '4rem', background: 'var(--color-charcoal)', color: 'white' }}>
-        <h1 style={{ fontSize: '2.5rem', fontWeight: 900, marginBottom: '1rem' }}>PREMIUM_INVENTORY</h1>
-        <p style={{ opacity: 0.5, letterSpacing: '2px' }}>64 VEHICLES CURRENTLY IN STOCK // UPDATED 2M AGO</p>
-      </section>
-
-      <div className="inventory-layout">
-        <FilterSidebar />
-        
-        <div className="main-inventory-content">
-          <div style={{ marginBottom: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span style={{ fontWeight: 800 }}>SHOWING {inventory.length} VEHICLES</span>
-            <div style={{ display: 'flex', gap: '1rem' }}>
-              <select style={{ padding: '0.5rem', border: '1px solid #ddd', fontSize: '0.8rem', fontWeight: 700 }}>
-                <option>SORT: PRICE (LOW-HIGH)</option>
-              </select>
-            </div>
-          </div>
-          
-          <div className="car-grid-classic">
-            {inventory.map((car, i) => (
-              <InventoryCard key={i} {...car} />
-            ))}
-          </div>
-
-          <div style={{ padding: '4rem 0', textAlign: 'center' }}>
+    <div className="ac-section">
+      {/* Heritage Hero */}
+      <section className="ac-hero">
+        <div>
+          <div className="ac-mono" style={{ marginBottom: '2.5rem' }}>HERITAGE_MOTORS_ARCHIVE_V8</div>
+          <h1 className="ac-heading-xl">
+            The <br/>
+            Art of the <br/>
+            <span className="ac-italic" style={{ color: 'var(--ac-tan)' }}>Machine.</span>
+          </h1>
+          <p style={{ marginTop: '5rem', fontSize: '1.5rem', color: 'var(--ac-text-dim)', lineHeight: 1.6, maxWidth: '600px', fontWeight: 300 }}>
+            A curated high-fidelity archive of the world's most significant automotive assets. Synchronizing historical provenance with artisan restoration nodes.
+          </p>
+          <div style={{ marginTop: '6rem', display: 'flex', gap: '3rem' }}>
+            <button className="ac-btn-primary">Explore Archive</button>
             <button style={{ 
-              border: '2px solid var(--color-red)', 
-              background: 'transparent', 
-              color: 'var(--color-red)', 
-              padding: '1rem 3rem', 
-              fontWeight: 800,
-              cursor: 'pointer'
+                background: 'transparent', 
+                border: '1px solid var(--ac-green)', 
+                color: 'var(--ac-green)', 
+                padding: '1.5rem 4rem', 
+                borderRadius: '2px', 
+                fontWeight: 800, 
+                textTransform: 'uppercase', 
+                cursor: 'pointer',
+                fontFamily: 'var(--ac-font-serif)'
             }}>
-              LOAD_MORE_VEHICLES
+                Request_Appraisal
             </button>
           </div>
         </div>
-      </div>
-
-      <section style={{ padding: '6rem 4rem', background: 'white', borderTop: '1px solid var(--color-border)' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '4rem' }}>
-          <div>
-            <h3 style={{ fontWeight: 900, marginBottom: '1rem' }}>WE_BUY_CARS</h3>
-            <p style={{ opacity: 0.6, fontSize: '0.9rem' }}>Get an instant valuation and trade-in your current vehicle for a premium upgrade today.</p>
-          </div>
-          <div>
-            <h3 style={{ fontWeight: 900, marginBottom: '1rem' }}>FINANCE_SOLUTIONS</h3>
-            <p style={{ opacity: 0.6, fontSize: '0.9rem' }}>Flexible financing options starting from 2.9% APR for qualified buyers.</p>
-          </div>
-          <div>
-            <h3 style={{ fontWeight: 900, marginBottom: '1rem' }}>WORLDWIDE_SHIPPING</h3>
-            <p style={{ opacity: 0.6, fontSize: '0.9rem' }}>Secure, enclosed transport available for our global collectors and buyers.</p>
+        <div className="ac-hero-img-wrapper">
+          <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=2070" alt="Classic Porsche" className="ac-hero-img" />
+          
+          <div style={{ position: 'absolute', bottom: '-4rem', left: '-4rem', background: 'var(--ac-green)', color: 'white', padding: '4rem', boxShadow: '0 40px 80px rgba(0,0,0,0.1)' }}>
+              <div style={{ fontSize: '3rem', fontWeight: 900, fontFamily: 'var(--ac-font-serif)' }}>1964</div>
+              <div className="ac-mono" style={{ fontSize: '0.6rem', color: 'rgba(255,255,255,0.6)' }}>YEAR_OF_ORIGIN</div>
           </div>
         </div>
       </section>
+
+      {/* Collector Metrics Bar */}
+      <div style={{ padding: '8rem 0', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '6rem', borderTop: '1px solid rgba(0, 66, 37, 0.1)', marginTop: '10rem' }}>
+          <CollectorMetricsHUD value="842" label="VERIFIED_ARCHIVES" />
+          <CollectorMetricsHUD value="12" label="ARTISAN_ATELIERS" />
+          <CollectorMetricsHUD value="$1.2B" label="ASSET_TURNOVER" />
+          <CollectorMetricsHUD value="100%" label="PROVENANCE_SYNC" />
+      </div>
+
+      {/* Inventory Registry Section */}
+      <section style={{ marginTop: '15rem' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '8rem' }}>
+              <div>
+                  <div className="ac-mono" style={{ marginBottom: '1.5rem' }}>COLLECTOR_INVENTORY</div>
+                  <h2 style={{ fontFamily: 'var(--ac-font-serif)', fontSize: '5rem', fontWeight: 900, letterSpacing: '-2px', color: 'var(--ac-green)' }}>The <span className="ac-italic">Archive.</span></h2>
+              </div>
+              <div style={{ textAlign: 'right', maxWidth: '400px', fontSize: '1rem', color: 'var(--ac-text-dim)', lineHeight: 1.8 }}>
+                  Our unified protocol ensures every heritage asset is verified and synchronized with historical provenance metadata.
+              </div>
+          </div>
+          
+          <div className="ac-inventory-grid">
+            {inventory.map((car, i) => (
+              <VintageCarCard key={i} {...car} />
+            ))}
+          </div>
+      </section>
+
+      {/* Restoration / Philosophy Section */}
+      <section style={{ marginTop: '20rem', display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '15rem', alignItems: 'center' }}>
+          <div>
+              <div className="ac-mono" style={{ marginBottom: '3rem' }}>ARTISAN_RESTORATION_PROTOCOL</div>
+              <h2 className="ac-heading-xl" style={{ fontSize: '6rem', marginBottom: '4rem' }}>Beyond the <br/><span className="ac-italic">Restoration.</span></h2>
+              <p style={{ fontSize: '1.5rem', color: 'var(--ac-text-dim)', lineHeight: 2, marginBottom: '6rem', fontWeight: 300 }}>
+                  We do not just restore the machine; we preserve the provenance. Every bolt, every seam, and every historical record is synchronized into the global heritage node.
+              </p>
+              <div style={{ display: 'flex', gap: '6rem' }}>
+                  <div>
+                      <div style={{ fontSize: '4rem', fontFamily: 'var(--ac-font-serif)', fontWeight: 900, color: 'var(--ac-tan)' }}>100%</div>
+                      <div className="ac-mono" style={{ fontSize: '0.6rem' }}>ORIGINAL_PARTS_SYNC</div>
+                  </div>
+                  <div>
+                      <div style={{ fontSize: '4rem', fontFamily: 'var(--ac-font-serif)', fontWeight: 900, color: 'var(--ac-tan)' }}>24/7</div>
+                      <div className="ac-mono" style={{ fontSize: '0.6rem' }}>CURATOR_SUPPORT</div>
+                  </div>
+              </div>
+          </div>
+          <div style={{ position: 'relative' }}>
+              <div style={{ height: '800px', background: 'var(--ac-green)', padding: '2rem' }}>
+                <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=2000" alt="Artisan Restoration" style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'sepia(30%) contrast(1.1)' }} />
+              </div>
+              <div style={{ position: 'absolute', top: '-4rem', right: '-4rem', background: 'var(--ac-tan)', color: 'white', width: '300px', height: '300px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '3rem', fontWeight: 900, fontSize: '1.25rem', fontFamily: 'var(--ac-font-serif)', fontStyle: 'italic' }}>
+                  AUTHENTICATED_HERITAGE_SYNC
+              </div>
+          </div>
+      </section>
+
+      {/* Final Space */}
+      <div style={{ height: '15rem' }}></div>
     </div>
   );
 }

@@ -1,154 +1,175 @@
-/* 
-    Properties Unified: The Universal Standard
-    Design Spec: Master Blue, Slate Grays, Clean Grids
-*/
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
-
-:root {
-    --uni-blue: #2563eb;
-    --uni-dark: #1e293b;
-    --uni-slate: #64748b;
-    --uni-bg: #f8fafc;
-    --uni-border: #e2e8f0;
-    --font-base: 'Inter', sans-serif;
+.properties-unified-theme {
+  /* Universal Hub Palette */
+  --uh-indigo: #1a1f2c;
+  --uh-blue: #0066ff;
+  --uh-slate: #64748b;
+  --uh-bg: #f8fafc;
+  --uh-border: #e2e8f0;
+  --uh-white: #ffffff;
+  --uh-ink: #111111;
+  
+  /* Typography */
+  --uh-font: 'Inter', sans-serif;
+  
+  /* Transitions */
+  --uh-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.properties-unified-wrapper {
-    background-color: var(--uni-bg);
-    color: var(--uni-dark);
-    font-family: var(--font-base);
+.properties-unified-theme {
+  background-color: var(--uh-bg);
+  color: var(--uh-ink);
+  font-family: var(--uh-font);
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Header */
-.master-header {
-    background: white;
-    padding: 1rem 5%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    border-bottom: 1px solid var(--uni-border);
+/* Typography Utilities */
+.uh-heading-xl {
+  font-size: clamp(3rem, 5vw, 5rem);
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--uh-indigo);
 }
 
-.uni-logo {
-    font-weight: 900;
-    font-size: 1.5rem;
-    color: var(--uni-blue);
-    letter-spacing: -0.5px;
+.uh-mono {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--uh-blue);
 }
 
-.uni-nav {
-    display: flex;
-    gap: 3rem;
+/* Layout */
+.uh-section {
+  padding: 8rem 6%;
+  max-width: 1600px;
+  margin: 0 auto;
 }
 
-.uni-nav-link {
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: var(--uni-slate);
-    text-decoration: none;
-    transition: color 0.3s ease;
+/* Universal Header */
+.uh-header {
+  padding: 1.5rem 6%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--uh-white);
+  border-bottom: 1px solid var(--uh-border);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
-.uni-nav-link:hover {
-    color: var(--uni-blue);
+.uh-logo {
+  font-weight: 900;
+  font-size: 1.5rem;
+  letter-spacing: -1px;
+  color: var(--uh-indigo);
 }
 
-/* Hero */
-.uni-hero {
-    padding: 6rem 5%;
-    background: white;
-    display: flex;
-    align-items: center;
-    gap: 6rem;
-    border-bottom: 1px solid var(--uni-border);
+.uh-nav {
+  display: flex;
+  gap: 3.5rem;
 }
 
-.uni-hero h1 {
-    font-size: 3.5rem;
-    font-weight: 900;
-    line-height: 1.2;
-    margin-bottom: 2rem;
+.uh-nav-link {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--uh-slate);
+  text-decoration: none;
+  transition: var(--uh-transition);
 }
 
-/* Property Cards */
-.uni-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 2rem;
-    padding: 4rem 5%;
+.uh-nav-link:hover {
+  color: var(--uh-blue);
 }
 
-.standard-card {
-    background: white;
-    border: 1px solid var(--uni-border);
-    border-radius: 8px;
-    overflow: hidden;
-    transition: box-shadow 0.3s ease;
+/* Master Hero */
+.uh-hero {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  align-items: center;
+  gap: 8rem;
+  padding: 10rem 6%;
+  background: var(--uh-white);
 }
 
-.standard-card:hover {
-    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+.uh-hero-img-wrapper {
+  background: var(--uh-bg);
+  padding: 1rem;
+  border: 1px solid var(--uh-border);
+  border-radius: 4px;
 }
 
-.standard-img {
-    width: 100%;
-    aspect-ratio: 16/10;
-    object-fit: cover;
+.uh-hero-img {
+  width: 100%;
+  border-radius: 2px;
+  box-shadow: 0 40px 100px rgba(0,0,0,0.05);
 }
 
-.standard-info {
-    padding: 1.5rem;
+/* Property Grid */
+.uh-prop-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+  margin-top: 4rem;
 }
 
-.standard-title {
-    font-size: 1.1rem;
-    font-weight: 800;
-    margin-bottom: 0.5rem;
+.uh-prop-card {
+  background: var(--uh-white);
+  border: 1px solid var(--uh-border);
+  transition: var(--uh-transition);
+  cursor: pointer;
 }
 
-.standard-price {
-    font-size: 1.25rem;
-    font-weight: 900;
-    color: var(--uni-blue);
-    margin-bottom: 1.5rem;
+.uh-prop-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.03);
+  border-color: var(--uh-blue);
 }
 
-.standard-meta {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.8rem;
-    font-weight: 700;
-    color: var(--uni-slate);
-    padding-top: 1rem;
-    border-top: 1px solid var(--uni-border);
+.uh-card-img {
+  width: 100%;
+  aspect-ratio: 16/10;
+  object-fit: cover;
+}
+
+.uh-card-info {
+  padding: 2rem;
+}
+
+/* Metrics Bar */
+.uh-metrics-bar {
+  display: flex;
+  justify-content: space-between;
+  padding: 3rem 6%;
+  background: var(--uh-white);
+  border-top: 1px solid var(--uh-border);
+  border-bottom: 1px solid var(--uh-border);
+}
+
+/* Buttons */
+.uh-btn-primary {
+  background: var(--uh-blue);
+  color: white;
+  border: none;
+  padding: 1.25rem 3.5rem;
+  font-weight: 800;
+  font-size: 0.9rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: var(--uh-transition);
+}
+
+.uh-btn-primary:hover {
+  background: var(--uh-indigo);
+  transform: translateY(-2px);
 }
 
 /* Footer */
-.unified-footer {
-    padding: 8rem 5%;
-    background: white;
-    border-top: 1px solid var(--uni-border);
-}
-
-.unified-footer h4 {
-    font-size: 0.85rem;
-    font-weight: 900;
-    margin-bottom: 2rem;
-    color: var(--uni-dark);
-}
-
-.unified-footer-link {
-    display: block;
-    color: var(--uni-slate);
-    text-decoration: none;
-    margin-bottom: 1rem;
-    font-size: 0.9rem;
-}
-
-.unified-footer-link:hover {
-    color: var(--uni-blue);
+.uh-footer {
+  padding: 10rem 6% 6rem;
+  background: var(--uh-white);
+  border-top: 1px solid var(--uh-border);
 }

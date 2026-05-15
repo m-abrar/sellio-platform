@@ -1,140 +1,163 @@
-/* 
-    Properties Investment: The Yield Protocol
-    Design Spec: Financial Gold, Analytical Grids, Data-Driven
-*/
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap');
 
-@import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
-
-:root {
-    --inv-gold: #b45309;
-    --inv-charcoal: #111827;
-    --inv-green: #22c55e;
-    --inv-bg: #ffffff;
-    --inv-border: #f1f5f9;
-    --font-base: 'Public Sans', sans-serif;
-    --font-data: 'JetBrains Mono', monospace;
+.properties-investment-theme {
+  /* Yield Node Palette */
+  --pi-midnight: #0f172a;
+  --pi-emerald: #10b981;
+  --pi-slate: #64748b;
+  --pi-bg: #f8fafc;
+  --pi-border: #e2e8f0;
+  --pi-white: #ffffff;
+  --pi-gold: #fbbf24;
+  
+  /* Typography */
+  --pi-font: 'Inter', sans-serif;
+  --pi-font-mono: 'JetBrains Mono', monospace;
+  
+  /* Transitions */
+  --pi-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.properties-investment-wrapper {
-    background-color: var(--inv-bg);
-    color: var(--inv-charcoal);
-    font-family: var(--font-base);
+.properties-investment-theme {
+  background-color: var(--pi-white);
+  color: var(--pi-midnight);
+  font-family: var(--pi-font);
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Header */
-.capital-header {
-    background: white;
-    padding: 1rem 5%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    border-bottom: 2px solid var(--inv-gold);
+/* Typography Utilities */
+.pi-heading-xl {
+  font-size: clamp(3.5rem, 6vw, 6rem);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--pi-midnight);
 }
 
-.inv-logo {
-    font-weight: 900;
-    font-size: 1.5rem;
-    color: var(--inv-charcoal);
-    letter-spacing: -1px;
+.pi-mono {
+  font-family: var(--pi-font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--pi-slate);
 }
 
-.inv-nav {
-    display: flex;
-    gap: 3rem;
+/* Layout */
+.pi-section {
+  padding: 8rem 6%;
+  max-width: 1600px;
+  margin: 0 auto;
 }
 
-.inv-nav-link {
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: #64748b;
-    text-decoration: none;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    transition: color 0.3s ease;
+/* Investment Header */
+.pi-header {
+  padding: 1.5rem 6%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--pi-white);
+  border-bottom: 2px solid var(--pi-midnight);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
-.inv-nav-link:hover {
-    color: var(--inv-gold);
+.pi-logo {
+  font-weight: 900;
+  font-size: 1.5rem;
+  letter-spacing: -1px;
 }
 
-/* Hero */
-.inv-hero {
-    padding: 8rem 5%;
-    background: #f8fafc;
-    display: flex;
-    align-items: center;
-    gap: 6rem;
+.pi-nav {
+  display: flex;
+  gap: 3.5rem;
 }
 
-.inv-hero h1 {
-    font-size: 4rem;
-    font-weight: 900;
-    line-height: 1.1;
-    margin-bottom: 2rem;
+.pi-nav-link {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--pi-slate);
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: var(--pi-transition);
 }
 
-/* Asset Cards */
-.asset-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 3rem;
-    padding: 6rem 5%;
+.pi-nav-link:hover {
+  color: var(--pi-emerald);
 }
 
-.asset-card {
-    background: white;
-    border: 1px solid var(--inv-border);
-    border-radius: 4px;
-    padding: 2.5rem;
-    transition: all 0.3s ease;
+/* Financial Hero */
+.pi-hero {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  align-items: center;
+  gap: 8rem;
+  padding: 12rem 6%;
+  background: var(--pi-bg);
+  border-bottom: 1px solid var(--pi-border);
 }
 
-.asset-card:hover {
-    border-color: var(--inv-gold);
-    box-shadow: 0 20px 40px rgba(180, 83, 9, 0.05);
+.pi-hero-terminal {
+  background: var(--pi-white);
+  border: 1px solid var(--pi-border);
+  padding: 4rem;
+  box-shadow: 0 40px 100px rgba(0,0,0,0.03);
 }
 
-.asset-yield {
-    font-family: var(--font-data);
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--inv-green);
-    margin-bottom: 1.5rem;
-    display: block;
+/* Portfolio Asset Card */
+.pi-asset-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3rem;
+  margin-top: 4rem;
 }
 
-.asset-title {
-    font-size: 1.5rem;
-    font-weight: 900;
-    margin-bottom: 1rem;
+.pi-asset-card {
+  background: var(--pi-white);
+  border: 1px solid var(--pi-border);
+  padding: 3.5rem;
+  transition: var(--pi-transition);
+  cursor: pointer;
+}
+
+.pi-asset-card:hover {
+  transform: translateY(-8px);
+  border-color: var(--pi-emerald);
+  box-shadow: 0 20px 40px rgba(16, 185, 129, 0.05);
+}
+
+.pi-asset-yield {
+  font-family: var(--pi-font-mono);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--pi-emerald);
+  margin-bottom: 1.5rem;
+}
+
+/* Buttons */
+.pi-btn-primary {
+  background: var(--pi-midnight);
+  color: white;
+  border: none;
+  padding: 1.5rem 4rem;
+  font-weight: 800;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: var(--pi-transition);
+}
+
+.pi-btn-primary:hover {
+  background: var(--pi-emerald);
+  transform: translateY(-3px);
 }
 
 /* Footer */
-.yield-footer {
-    padding: 8rem 5%;
-    background: var(--inv-charcoal);
-    color: white;
-}
-
-.yield-footer h4 {
-    font-family: var(--font-data);
-    font-size: 0.75rem;
-    margin-bottom: 2.5rem;
-    color: var(--inv-gold);
-    letter-spacing: 2px;
-}
-
-.yield-footer-link {
-    display: block;
-    color: #4b5563;
-    text-decoration: none;
-    margin-bottom: 1rem;
-    font-size: 0.9rem;
-}
-
-.yield-footer-link:hover {
-    color: white;
+.pi-footer {
+  background: var(--pi-midnight);
+  color: white;
+  padding: 12rem 6% 6rem;
 }

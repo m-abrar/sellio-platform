@@ -1,0 +1,82 @@
+'use client';
+import React from 'react';
+
+export const CommunityHeader = () => (
+  <header className="pn-header">
+    <div className="pn-logo">
+      <span style={{ fontSize: '1.75rem' }}>🏡</span>
+      HOOD<span style={{ color: 'var(--pn-ochre)' }}>Node</span>
+    </div>
+    
+    <nav className="pn-nav">
+        {['Community', 'Local_Guides', 'Safety_Index', 'Support'].map(link => (
+            <a key={link} href="#" className="pn-nav-link">{link}</a>
+        ))}
+    </nav>
+
+    <button className="pn-btn-primary" style={{ padding: '0.7rem 1.8rem', fontSize: '0.8rem' }}>
+      JOIN_HOOD
+    </button>
+  </header>
+);
+
+export const NeighborPropertyCard = ({ title, price, location, status, image }: any) => (
+  <div className="pn-home-card">
+    <div className="pn-card-img-wrapper">
+      <img src={image} alt={title} className="pn-card-img" />
+      <div style={{ position: 'absolute', top: '1.5rem', left: '1.5rem', background: 'white', padding: '0.5rem 1.25rem', borderRadius: '100px', fontWeight: 900, fontSize: '0.7rem', color: 'var(--pn-sage)', boxShadow: '0 10px 20px rgba(0,0,0,0.05)' }}>
+        {status.toUpperCase()}
+      </div>
+    </div>
+    <div style={{ padding: '2.5rem' }}>
+        <h3 style={{ fontFamily: 'var(--pn-font-heading)', fontSize: '1.75rem', fontWeight: 800, marginBottom: '0.5rem' }}>{title}</h3>
+        <div style={{ fontSize: '0.9rem', color: 'var(--pn-text-muted)', marginBottom: '2rem' }}>{location}</div>
+        <div style={{ fontSize: '1.5rem', fontWeight: 900, color: 'var(--pn-forest)', marginBottom: '2.5rem' }}>{price}</div>
+        
+        <div style={{ display: 'flex', gap: '2rem', borderTop: '1px solid var(--pn-border)', paddingTop: '2rem', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.8rem', fontWeight: 700, color: 'var(--pn-sage)' }}>
+                <span>✓</span> VERIFIED_NODE
+            </div>
+            <div style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--pn-ochre)' }}>DETAILS →</div>
+        </div>
+    </div>
+  </div>
+);
+
+export const LocalInsightHUD = ({ label, value }: { label: string, value: string }) => (
+    <div style={{ textAlign: 'center', borderRight: '1px solid var(--pn-border)', padding: '0 3rem' }}>
+        <div className="pn-mono" style={{ marginBottom: '0.75rem', fontSize: '0.65rem' }}>{label}</div>
+        <div style={{ fontSize: '1.25rem', fontWeight: 900, color: 'var(--pn-forest)' }}>{value}</div>
+    </div>
+);
+
+export const HoodFooter = () => (
+    <footer className="pn-footer">
+        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: '8rem' }}>
+            <div>
+                <div className="pn-logo" style={{ color: 'white', fontSize: '2.5rem', marginBottom: '3rem' }}>HOODNODE</div>
+                <p style={{ opacity: 0.6, lineHeight: 2, fontSize: '1rem', maxWidth: '400px' }}>
+                    A high-fidelity neighborhood registry designed for families and high-trust communities. Synchronizing local insights with global residential nodes.
+                </p>
+            </div>
+            {['COMMUNITY', 'GUIDES', 'LOCAL'].map(col => (
+                <div key={col}>
+                    <div className="pn-mono" style={{ color: 'var(--pn-ochre)', marginBottom: '3.5rem' }}>{col}</div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                        {['Registry', 'Safety', 'Schools', 'Events'].map(link => (
+                            <span key={link} style={{ fontSize: '0.95rem', opacity: 0.5, cursor: 'pointer' }}>{link}</span>
+                        ))}
+                    </div>
+                </div>
+            ))}
+        </div>
+        <div style={{ marginTop: '12rem', paddingTop: '4rem', borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div className="pn-mono" style={{ opacity: 0.4, fontSize: '0.65rem' }}>© 2026 SELLIO_NEIGHBORHOOD_OS // TRUST_STABLE</div>
+            <div style={{ display: 'flex', gap: '4rem' }}>
+                {['INSTAGRAM', 'LINKEDIN', 'X_HOOD'].map(social => (
+                    <span key={social} className="pn-mono" style={{ opacity: 0.4, fontSize: '0.65rem' }}>{social}</span>
+                ))}
+            </div>
+        </div>
+    </footer>
+);

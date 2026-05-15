@@ -1,6 +1,6 @@
-
+'use client';
 import React from 'react';
-import { AssetCard } from './components';
+import { AssetRegistryCard, IntelligenceHUD } from './components';
 
 export default function Page() {
   const assets = [
@@ -13,83 +13,94 @@ export default function Page() {
   ];
 
   return (
-    <div>
-      {/* Hero */}
-      <section className="comm-hero">
-          <div className="comm-hero-content">
-              <span style={{ fontSize: '0.8rem', fontWeight: 900, color: 'var(--comm-accent)', letterSpacing: '2px', display: 'block', marginBottom: '1.5rem' }}>INSTITUTIONAL_GRADE_ASSETS</span>
-              <h1>Market <br/>Transparency.</h1>
-              <p style={{ fontSize: '1.25rem', color: '#64748b', lineHeight: 1.6, marginBottom: '4rem' }}>
-                  The Sellio Commercial Registry provides verified data and direct access to off-market institutional real estate assets globally.
-              </p>
-              <div style={{ display: 'flex', gap: '2rem' }}>
-                  <button style={{ padding: '1.25rem 3rem', background: 'var(--comm-primary)', color: 'white', border: 'none', fontWeight: 700 }}>EXPLORE_INVENTORY</button>
-                  <button style={{ padding: '1.25rem 3rem', background: 'none', color: 'var(--comm-primary)', border: '1px solid var(--comm-primary)', fontWeight: 700 }}>REQUEST_APPRAISAL</button>
-              </div>
+    <div className="pc-section">
+      {/* Institutional Hero */}
+      <section className="pc-hero">
+        <div>
+          <div className="pc-mono" style={{ marginBottom: '2.5rem' }}>COMMERCIAL_REGISTRY_V8_DISTRIBUTION</div>
+          <h1 className="pc-heading-xl">
+            Market <br/>
+            Transparency <br/>
+            <span style={{ color: 'var(--pc-blue)' }}>Engineered.</span>
+          </h1>
+          <p style={{ marginTop: '5rem', fontSize: '1.25rem', color: 'var(--pc-slate)', lineHeight: 1.8, maxWidth: '600px' }}>
+            The authoritative commercial registry providing verified yield data and direct access to institutional-grade real estate assets globally.
+          </p>
+          
+          <div className="pc-hero-stats">
+              <div style={{ fontSize: '2.5rem', fontWeight: 900, marginBottom: '0.5rem' }}>$1.4B</div>
+              <div className="pc-mono" style={{ fontSize: '0.6rem', color: 'white', opacity: 0.6 }}>QUARTERLY_TURNOVER</div>
           </div>
-          <div style={{ width: '45%', height: '500px', background: '#f1f5f9', position: 'relative' }}>
-              <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070" alt="Commercial Building" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.8 }} />
-              <div style={{ position: 'absolute', bottom: '2rem', left: '-3rem', background: 'white', padding: '2rem', border: '1px solid #eee', boxShadow: '20px 20px 60px rgba(0,0,0,0.05)' }}>
-                  <div style={{ fontSize: '2rem', fontWeight: 900 }}>$1.4B</div>
-                  <div style={{ fontSize: '0.65rem', fontWeight: 900, opacity: 0.5 }}>QUARTERLY_TURNOVER</div>
-              </div>
+
+          <div style={{ marginTop: '6rem', display: 'flex', gap: '3rem' }}>
+            <button className="pc-btn-primary">Explore_Inventory</button>
+            <button style={{ background: 'transparent', border: '2px solid var(--pc-carbon)', color: 'var(--pc-carbon)', padding: '1.5rem 4rem', fontWeight: 800, textTransform: 'uppercase', cursor: 'pointer' }}>Request_Appraisal</button>
           </div>
+        </div>
+        <div style={{ position: 'relative' }}>
+          <div style={{ background: 'var(--pc-bg)', padding: '2rem', border: '1px solid var(--pc-border)' }}>
+            <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070" alt="Corporate Architecture" style={{ width: '100%', height: '700px', objectFit: 'cover', filter: 'grayscale(100%) brightness(0.9)' }} />
+          </div>
+        </div>
       </section>
 
-      {/* Trust Bar */}
-      <section style={{ padding: '3rem 6rem', background: '#f8fafc', borderBottom: '1px solid var(--comm-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <span style={{ fontSize: '0.75rem', fontWeight: 900, color: '#cbd5e1' }}>AS_FEATURED_IN:</span>
-          {['FINANCIAL_TIMES', 'BLOOMBERG', 'RE_JOURNAL', 'WALL_STREET_POST'].map(brand => (
-              <span key={brand} style={{ fontSize: '0.8rem', fontWeight: 900, color: '#94a3b8' }}>{brand}</span>
-          ))}
+      {/* Intelligence HUD Section */}
+      <section style={{ padding: '12rem 0', display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '15rem', alignItems: 'center' }}>
+          <div>
+              <h2 style={{ fontSize: '4.5rem', fontWeight: 900, letterSpacing: '-3px', textTransform: 'uppercase', marginBottom: '4rem' }}>
+                  The Intelligence <br/>Behind the Asset.
+              </h2>
+              <p style={{ fontSize: '1.25rem', color: 'var(--pc-slate)', lineHeight: 2 }}>
+                  Every asset in our registry undergoes a multi-point verification protocol, including structural audits, zoning compliance checks, and high-fidelity market yield analysis.
+              </p>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '5rem' }}>
+              <IntelligenceHUD label="DUE_DILIGENCE_SPEED" value="48h" />
+              <IntelligenceHUD label="AVG_YIELD_v2026" value="12%" />
+              <IntelligenceHUD label="GLOBAL_NODES" value="142" />
+          </div>
       </section>
 
       {/* Asset Grid */}
-      <section className="asset-grid">
-          {assets.map((asset, i) => (
-              <AssetCard key={i} {...asset} />
-          ))}
+      <section>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '8rem' }}>
+              <div>
+                  <div className="pc-mono" style={{ marginBottom: '1.5rem' }}>INSTITUTIONAL_INVENTORY</div>
+                  <h2 style={{ fontSize: '5rem', fontWeight: 900, letterSpacing: '-2px', textTransform: 'uppercase' }}>Asset <br/>Registry.</h2>
+              </div>
+              <div style={{ textAlign: 'right', maxWidth: '400px', fontSize: '1rem', color: 'var(--pc-slate)', lineHeight: 1.8 }}>
+                  Our unified protocol synchronizes performance data from prime office, industrial, and retail assets into a single authoritative node.
+              </div>
+          </div>
+          
+          <div className="pc-asset-grid">
+            {assets.map((a, i) => (
+              <AssetRegistryCard key={i} {...a} />
+            ))}
+          </div>
       </section>
 
-      {/* Stats / Value Prop */}
-      <section style={{ padding: '12rem 6rem', display: 'flex', gap: '8rem', alignItems: 'center' }}>
-          <div style={{ flex: 1 }}>
-              <h2 style={{ fontSize: '3.5rem', fontWeight: 900, marginBottom: '3rem' }}>The Intelligence <br/>Behind the Asset.</h2>
-              <p style={{ fontSize: '1.1rem', color: '#64748b', lineHeight: 2 }}>
-                  Every asset in our registry undergoes a multi-point verification protocol, including structural audits, zoning compliance checks, and local market yield analysis.
-              </p>
-          </div>
-          <div style={{ flex: 1, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem' }}>
-              <div>
-                  <div style={{ fontSize: '2.5rem', fontWeight: 900, color: 'var(--comm-accent)' }}>48h</div>
-                  <div style={{ fontSize: '0.8rem', fontWeight: 700, marginTop: '0.5rem' }}>DUE_DILIGENCE_SPEED</div>
-              </div>
-              <div>
-                  <div style={{ fontSize: '2.5rem', fontWeight: 900, color: 'var(--comm-accent)' }}>12%</div>
-                  <div style={{ fontSize: '0.8rem', fontWeight: 700, marginTop: '0.5rem' }}>AVG_YIELD_v2026</div>
-              </div>
-              <div>
-                  <div style={{ fontSize: '2.5rem', fontWeight: 900, color: 'var(--comm-accent)' }}>142</div>
-                  <div style={{ fontSize: '0.8rem', fontWeight: 700, marginTop: '0.5rem' }}>GLOBAL_NODES</div>
-              </div>
-              <div>
-                  <div style={{ fontSize: '2.5rem', fontWeight: 900, color: 'var(--comm-accent)' }}>99.9%</div>
-                  <div style={{ fontSize: '0.8rem', fontWeight: 700, marginTop: '0.5rem' }}>DATA_ACCURACY</div>
-              </div>
-          </div>
-      </section>
+      {/* Trust bar / Featured In */}
+      <div style={{ padding: '8rem 0', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid var(--pc-border)', marginTop: '10rem' }}>
+          <span className="pc-mono" style={{ color: 'var(--pc-slate)', opacity: 0.5 }}>AS_FEATURED_IN:</span>
+          {['FINANCIAL_TIMES', 'BLOOMBERG', 'RE_JOURNAL', 'WALL_STREET_POST'].map(brand => (
+              <span key={brand} className="pc-mono" style={{ opacity: 0.3 }}>{brand}</span>
+          ))}
+      </div>
 
       {/* Final CTA */}
-      <section style={{ padding: '10rem 6rem', background: '#f1f5f9', textAlign: 'center' }}>
-          <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-              <h2 style={{ fontSize: '3rem', fontWeight: 900, marginBottom: '3rem' }}>Ready to Scale Your Portfolio?</h2>
-              <p style={{ fontSize: '1.2rem', color: '#64748b', marginBottom: '5rem' }}>
-                  Join over 12,000 institutional investors and family offices currently acquiring on the Sellio Commercial Network.
-              </p>
-              <button style={{ padding: '1.5rem 5rem', background: 'var(--comm-primary)', color: 'white', border: 'none', fontWeight: 900, fontSize: '1rem' }}>
-                  REQUEST_INSTITUTIONAL_ACCESS
-              </button>
-          </div>
+      <section style={{ marginTop: '10rem', padding: '15rem 0', background: 'var(--pc-carbon)', color: 'white', textAlign: 'center' }}>
+          <div className="pc-mono" style={{ color: 'var(--pc-blue)', marginBottom: '3rem' }}>INSTITUTIONAL_ACQUISITION</div>
+          <h2 style={{ fontSize: '6rem', fontWeight: 900, letterSpacing: '-4px', textTransform: 'uppercase', marginBottom: '4rem' }}>
+              Scale Your <br/>
+              Portfolio.
+          </h2>
+          <p style={{ maxWidth: '750px', margin: '0 auto 6rem', opacity: 0.5, fontSize: '1.25rem', lineHeight: 1.8 }}>
+              Join over 12,000 institutional investors and family offices currently acquiring on the Sellio Commercial Network.
+          </p>
+          <button className="pc-btn-primary" style={{ background: 'var(--pc-blue)', padding: '2.5rem 8rem', fontSize: '1.25rem' }}>
+              Request_Institutional_Access
+          </button>
       </section>
     </div>
   );

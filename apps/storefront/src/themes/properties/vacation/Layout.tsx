@@ -1,16 +1,15 @@
-
 import React from 'react';
+import { VacationHeader, EscapeFooter } from './components';
 import './styles.css';
-import { EscapeHeader, SunnyFooter } from './components';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="vacation-wrapper">
-      <EscapeHeader />
+    <div className="properties-vacation-theme">
+      <VacationHeader />
       <main>
         {children}
       </main>
-      <SunnyFooter />
+      <EscapeFooter />
     </div>
   );
 }

@@ -1,16 +1,15 @@
-
 import React from 'react';
+import { InvestmentHeader, InstitutionalFooter } from './components';
 import './styles.css';
-import { CapitalHeader, YieldFooter } from './components';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="properties-investment-wrapper">
-      <CapitalHeader />
+    <div className="properties-investment-theme">
+      <InvestmentHeader />
       <main>
         {children}
       </main>
-      <YieldFooter />
+      <InstitutionalFooter />
     </div>
   );
 }

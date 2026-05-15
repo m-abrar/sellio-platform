@@ -1,6 +1,6 @@
-
+'use client';
 import React from 'react';
-import { AssetCard } from './components';
+import { PortfolioAssetCard, YieldAnalyticsHUD } from './components';
 
 export default function Page() {
   const assets = [
@@ -16,62 +16,77 @@ export default function Page() {
   ];
 
   return (
-    <div>
-      {/* Hero Section */}
-      <section className="inv-hero">
-          <div style={{ flex: 1.2 }}>
-              <div style={{ fontFamily: 'var(--font-data)', fontSize: '0.75rem', color: 'var(--inv-gold)', letterSpacing: '4px', marginBottom: '2rem' }}>PORTFOLIO_SYNC: ACTIVE</div>
-              <h1>Capital <br/>Distribution.</h1>
-              <p style={{ maxWidth: '600px', fontSize: '1.25rem', color: '#64748b', lineHeight: 1.8, marginBottom: '4rem' }}>
-                  The high-fidelity terminal for institutional real estate investment. Deploy capital across verified asset nodes with precision.
-              </p>
-              <div style={{ display: 'flex', gap: '2rem' }}>
-                  <button style={{ padding: '1.5rem 4rem', background: 'var(--inv-charcoal)', color: 'white', border: 'none', fontWeight: 900, fontSize: '0.9rem' }}>EXECUTE_INVESTMENT</button>
-                  <button style={{ padding: '1.5rem 4rem', background: 'none', color: 'var(--inv-charcoal)', border: '1px solid #ddd', fontWeight: 900, fontSize: '0.9rem' }}>VIEW_REPORTS</button>
-              </div>
+    <div className="pi-section">
+      {/* Financial Terminal Hero */}
+      <section className="pi-hero">
+        <div>
+          <div className="pi-mono" style={{ marginBottom: '2.5rem' }}>PORTFOLIO_SYNC_V8_ACTIVE</div>
+          <h1 className="pi-heading-xl">
+            Capital <br/>
+            Distribution <br/>
+            <span style={{ color: 'var(--pi-emerald)' }}>Synchronized.</span>
+          </h1>
+          <p style={{ marginTop: '4rem', fontSize: '1.25rem', color: 'var(--pi-slate)', lineHeight: 1.8, maxWidth: '600px' }}>
+            The global high-fidelity terminal for institutional real estate investment. Deploy capital across verified asset nodes with performance-driven precision.
+          </p>
+          <div style={{ marginTop: '6rem', display: 'flex', gap: '3rem' }}>
+            <button className="pi-btn-primary">Execute_Investment</button>
+            <button style={{ background: 'transparent', border: '2px solid var(--pi-midnight)', color: 'var(--pi-midnight)', padding: '1.5rem 4rem', fontWeight: 800, textTransform: 'uppercase', cursor: 'pointer' }}>View_Reports</button>
           </div>
-          <div style={{ flex: 1, padding: '4rem', background: 'white', border: '1px solid var(--inv-border)', borderRadius: '4px', boxShadow: '0 40px 80px rgba(0,0,0,0.02)' }}>
-              <h3 style={{ fontSize: '1.1rem', fontWeight: 900, marginBottom: '2rem' }}>Network Performance</h3>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3rem' }}>
-                  <div>
-                      <div style={{ fontSize: '0.65rem', fontWeight: 800, color: '#94a3b8', letterSpacing: '2px', marginBottom: '0.5rem' }}>TOTAL_VOLUME</div>
-                      <div style={{ fontSize: '1.8rem', fontWeight: 900, color: 'var(--inv-gold)' }}>$4.2B+</div>
-                  </div>
-                  <div>
-                      <div style={{ fontSize: '0.65rem', fontWeight: 800, color: '#94a3b8', letterSpacing: '2px', marginBottom: '0.5rem' }}>AVG_YIELD</div>
-                      <div style={{ fontSize: '1.8rem', fontWeight: 900, color: 'var(--inv-green)' }}>8.4%</div>
-                  </div>
-              </div>
+        </div>
+        <div className="pi-hero-terminal">
+          <div className="pi-mono" style={{ marginBottom: '3rem', borderBottom: '1px solid var(--pi-border)', paddingBottom: '1.5rem' }}>NETWORK_PERFORMANCE_METRICS</div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem' }}>
+            <YieldAnalyticsHUD label="TOTAL_NETWORK_VOLUME" value="$4.2B+" color="var(--pi-emerald)" />
+            <YieldAnalyticsHUD label="AVERAGE_YIELD_ARR" value="8.4%" />
+            <YieldAnalyticsHUD label="LIQUIDITY_INDEX" value="0.82" />
+            <YieldAnalyticsHUD label="VOLATILITY_HEDGE" value="ACTIVE" color="var(--pi-gold)" />
           </div>
+        </div>
       </section>
 
       {/* Logic Bar */}
-      <section style={{ padding: '2.5rem 5%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#fff', borderBottom: '1px solid var(--inv-border)', color: '#94a3b8', fontFamily: 'var(--font-data)', fontSize: '0.7rem', letterSpacing: '1px' }}>
-          <span>MARKET_STATUS: STABLE</span>
-          <span>LIQUIDITY_INDEX: 0.82</span>
-          <span>VOLATILITY_HEDGE: ACTIVE</span>
-          <span>NODAL_VERIFICATION: 100%</span>
-      </section>
-
-      {/* Asset Grid */}
-      <section className="asset-grid">
-          {assets.map((asset, i) => (
-              <AssetCard key={i} {...asset} />
+      <div style={{ padding: '3rem 6%', background: 'white', borderBottom: '1px solid var(--pi-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          {['MARKET_STATUS: STABLE', 'NODAL_VERIFICATION: 100%', 'INSTITUTIONAL_AUTH: VERIFIED', 'SETTLEMENT: INSTANT'].map(logic => (
+              <div key={logic} className="pi-mono" style={{ fontSize: '0.65rem' }}>{logic}</div>
           ))}
+      </div>
+
+      {/* Asset Performance Grid */}
+      <section style={{ marginTop: '10rem' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '8rem' }}>
+              <div>
+                  <div className="pi-mono" style={{ marginBottom: '1.5rem' }}>YIELD_REGISTRY</div>
+                  <h2 style={{ fontSize: '5rem', fontWeight: 900, letterSpacing: '-2px', textTransform: 'uppercase' }}>Asset <br/>Performance.</h2>
+              </div>
+              <div style={{ textAlign: 'right', maxWidth: '400px', fontSize: '1rem', color: 'var(--pi-slate)', lineHeight: 1.8 }}>
+                  Our unified protocol synchronizes real-time performance metadata from residential, commercial, and industrial yield nodes.
+              </div>
+          </div>
+          
+          <div className="pi-asset-grid">
+            {assets.map((a, i) => (
+              <PortfolioAssetCard key={i} {...a} />
+            ))}
+          </div>
       </section>
 
       {/* Institutional CTA */}
-      <section style={{ padding: '15rem 5%', textAlign: 'center', background: '#f8fafc' }}>
-          <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-              <h2 style={{ fontSize: '4rem', fontWeight: 900, marginBottom: '3rem', letterSpacing: '-2px' }}>Institutional <br/>Grade Logic.</h2>
-              <p style={{ fontSize: '1.1rem', color: '#64748b', lineHeight: 2, marginBottom: '5rem' }}>
-                  Our investment nodes are built on a foundation of verified financial data. Connect your capital node to the Sellio network for high-fidelity asset distribution.
-              </p>
-              <button style={{ padding: '2rem 6rem', background: 'var(--inv-gold)', color: 'white', border: 'none', fontWeight: 900, fontSize: '1rem', boxShadow: '0 20px 50px rgba(180, 83, 9, 0.2)' }}>
-                  CONNECT_CAPITAL_NODE
-              </button>
-          </div>
+      <section style={{ marginTop: '15rem', padding: '12rem 8%', background: 'var(--pi-midnight)', color: 'white', borderRadius: '4px', textAlign: 'center' }}>
+          <div className="pi-mono" style={{ color: 'var(--pi-emerald)', marginBottom: '3rem' }}>INSTITUTIONAL_GRADE_LOGIC</div>
+          <h2 style={{ fontSize: '6rem', fontWeight: 900, letterSpacing: '-4px', textTransform: 'uppercase', marginBottom: '4rem', lineHeight: 1 }}>
+              Scale Your <br/>
+              Portfolio Yield.
+          </h2>
+          <p style={{ maxWidth: '800px', margin: '0 auto 8rem', opacity: 0.5, fontSize: '1.25rem', lineHeight: 1.8 }}>
+              Our investment nodes are built on a foundation of verified financial metadata. Connect your capital node to the Sellio network for high-fidelity asset distribution.
+          </p>
+          <button className="pi-btn-primary" style={{ background: 'var(--pi-emerald)', padding: '2.5rem 8rem', fontSize: '1.25rem' }}>
+              Connect_Capital_Node
+          </button>
       </section>
+      
+      <div style={{ height: '10rem' }}></div>
     </div>
   );
 }

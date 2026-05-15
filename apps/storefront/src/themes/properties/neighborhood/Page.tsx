@@ -1,80 +1,121 @@
-
+'use client';
 import React from 'react';
-import { HomeCard } from './components';
+import { NeighborPropertyCard, LocalInsightHUD } from './components';
 
 export default function Page() {
   const homes = [
     { title: "Maplewood Traditional", price: "$650,000", location: "Maplewood District", status: "New", image: "https://images.unsplash.com/photo-1518780664697-55e3ad937233?q=80&w=2070" },
     { title: "Craftsman Cul-de-sac", price: "$720,000", location: "Silver Springs", status: "Active", image: "https://images.unsplash.com/photo-1484154218962-a197022b5858?q=80&w=2074" },
-    { title: "Modern Colonial Node", price: "$580,000", location: "Oak Ridge", status: "Draft", image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2070" },
+    { title: "Modern Colonial Node", price: "$580,000", location: "Oak Ridge", status: "Hot", image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2070" },
     { title: "Green Valley Bungalow", price: "$490,000", location: "Green Valley", status: "Active", image: "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?q=80&w=2070" },
     { title: "Suburban Retreat", price: "$610,000", location: "Highland Park", status: "Pending", image: "https://images.unsplash.com/photo-1513584684374-8bdb7483fe8f?q=80&w=2070" },
     { title: "Heritage Brick Home", price: "$675,000", location: "Old Town Node", status: "New", image: "https://images.unsplash.com/photo-1568605114967-8130f3a36994?q=80&w=2070" },
   ];
 
   return (
-    <div>
-      {/* Hero Section */}
-      <section className="hood-hero">
-          <div style={{ flex: 1.2 }}>
-              <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: '0.9rem', color: 'var(--hood-green)', letterSpacing: '2px', display: 'block', marginBottom: '1.5rem' }}>COMMUNITY_RESIDENTIAL_PROTOCOL</span>
-              <h1>Find your place <br/>in the community.</h1>
-              <p style={{ fontSize: '1.2rem', color: '#64748b', lineHeight: 1.6, marginBottom: '3.5rem', maxWidth: '500px' }}>
-                  A warm, neighborly approach to property distribution. Verified family homes in high-trust neighborhood nodes.
-              </p>
-              <div style={{ display: 'flex', gap: '1.5rem' }}>
-                  <button style={{ padding: '1.25rem 3.5rem', background: 'var(--hood-green)', color: 'white', border: 'none', borderRadius: '50px', fontWeight: 700, fontFamily: 'var(--font-heading)' }}>SEARCH_HOMES</button>
-                  <button style={{ padding: '1.25rem 3.5rem', background: 'none', color: 'var(--hood-green)', border: '2px solid var(--hood-green)', borderRadius: '50px', fontWeight: 700, fontFamily: 'var(--font-heading)' }}>LOCAL_GUIDES</button>
+    <div className="pn-section">
+      {/* Community Hero */}
+      <section className="pn-hero">
+        <div>
+          <div className="pn-mono" style={{ marginBottom: '2.5rem' }}>COMMUNITY_RESIDENTIAL_PROTOCOL_V8</div>
+          <h1 className="pn-heading-xl">
+            Find Your <br/>
+            Place in the <br/>
+            <span style={{ color: 'var(--pn-sage)' }}>Community.</span>
+          </h1>
+          <p style={{ marginTop: '4rem', fontSize: '1.25rem', color: 'var(--pn-text-muted)', lineHeight: 1.8, maxWidth: '550px' }}>
+            A warm, neighborly approach to property distribution. Verified family homes in high-trust neighborhood nodes with integrated local insights.
+          </p>
+          <div style={{ marginTop: '6rem', display: 'flex', gap: '2.5rem' }}>
+            <button className="pn-btn-primary">Search_Homes</button>
+            <button style={{ 
+                background: 'transparent', 
+                border: '2px solid var(--pn-forest)', 
+                color: 'var(--pn-forest)', 
+                padding: '1.25rem 3.5rem', 
+                borderRadius: '100px', 
+                fontWeight: 800, 
+                cursor: 'pointer',
+                fontFamily: 'var(--pn-font-heading)'
+            }}>
+                Local_Guides
+            </button>
+          </div>
+        </div>
+        <div className="pn-hero-img-wrapper">
+          <img src="https://images.unsplash.com/photo-1449844908441-8829872d2607?q=80&w=2070" alt="Neighborhood Living" className="pn-hero-img" />
+          
+          <div style={{ position: 'absolute', bottom: '2rem', right: '2rem', background: 'white', padding: '2rem', borderRadius: '32px', boxShadow: '0 20px 40px rgba(0,0,0,0.05)', border: '1px solid var(--pn-border)' }}>
+              <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                  <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#22c55e' }}></div>
+                  <div className="pn-mono" style={{ fontSize: '0.65rem' }}>NEIGHBORHOOD_SAFETY_INDEX: 98%</div>
               </div>
           </div>
-          <div style={{ flex: 1 }}>
-              <img src="https://images.unsplash.com/photo-1449844908441-8829872d2607?q=80&w=2070" alt="Family Home" style={{ width: '100%', borderRadius: '40px', boxShadow: '40px 40px 80px rgba(22, 163, 74, 0.05)' }} />
+        </div>
+      </section>
+
+      {/* Local Insight HUD Bar */}
+      <div style={{ padding: '4rem', background: 'white', borderRadius: '100px', border: '1px solid var(--pn-border)', display: 'flex', justifyContent: 'center', margin: '8rem 0' }}>
+          <LocalInsightHUD label="SCHOOL_NODE_RATING" value="A+ SUPERIOR" />
+          <LocalInsightHUD label="TOP_RATED_SCHOOLS" value="12" />
+          <LocalInsightHUD label="AVG_COMMUTE" value="18 MIN" />
+          <div style={{ padding: '0 3rem', textAlign: 'center' }}>
+              <div className="pn-mono" style={{ marginBottom: '0.75rem', fontSize: '0.65rem' }}>COMMUNITY_EVENTS</div>
+              <div style={{ fontSize: '1.25rem', fontWeight: 900, color: 'var(--pn-forest)' }}>42 ACTIVE</div>
+          </div>
+      </div>
+
+      {/* Property Grid */}
+      <section>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '8rem' }}>
+              <div>
+                  <div className="pn-mono" style={{ marginBottom: '1.5rem' }}>RESIDENTIAL_INVENTORY</div>
+                  <h2 style={{ fontFamily: 'var(--pn-font-heading)', fontSize: '4.5rem', fontWeight: 800, letterSpacing: '-2px' }}>Neighborly <br/>Homes.</h2>
+              </div>
+              <div style={{ textAlign: 'right', maxWidth: '400px', fontSize: '1rem', color: 'var(--pn-text-muted)', lineHeight: 1.8 }}>
+                  Our neighborhood protocol ensures every family home is verified and synchronized with local lifestyle metadata.
+              </div>
+          </div>
+          
+          <div className="pn-home-grid">
+            {homes.map((h, i) => (
+              <NeighborPropertyCard key={i} {...h} />
+            ))}
           </div>
       </section>
 
-      {/* Stats bar */}
-      <section style={{ padding: '2.5rem 5%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#fff', borderBottom: '1px solid var(--hood-border)', color: '#94a3b8', fontWeight: 800, fontSize: '0.75rem', letterSpacing: '1px' }}>
-          <span>NEIGHBORHOOD_SAFETY_INDEX: 98%</span>
-          <span>TOP_RATED_SCHOOL_NODES: 12</span>
-          <span>AVERAGE_COMMUTE_TIME: 18min</span>
-          <span>ACTIVE_COMMUNITY_EVENTS: 42</span>
-      </section>
-
-      {/* Home Grid */}
-      <section className="home-grid">
-          {homes.map((home, i) => (
-              <HomeCard key={i} {...home} />
-          ))}
-      </section>
-
-      {/* Community Section */}
-      <section style={{ padding: '10rem 5%', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10rem', alignItems: 'center', background: '#fdfcf8' }}>
+      {/* Community / Philosophy Section */}
+      <section style={{ marginTop: '20rem', padding: '12rem 8%', background: 'white', borderRadius: 'var(--pn-radius)', border: '1px solid var(--pn-border)', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12rem', alignItems: 'center' }}>
           <div>
-              <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: '3.5rem', fontWeight: 700, marginBottom: '2.5rem' }}>Better together.</h2>
-              <p style={{ fontSize: '1.1rem', color: '#64748b', lineHeight: 2, marginBottom: '4rem' }}>
-                  Our neighborhood vertical is designed to help you find more than just a house. We help you find a community. Every listing is integrated with local school data, safety indices, and community event nodes.
+              <h2 style={{ fontFamily: 'var(--pn-font-heading)', fontSize: '5rem', fontWeight: 800, letterSpacing: '-3px', marginBottom: '4rem', lineHeight: 1 }}>Better <br/>Together.</h2>
+              <p style={{ fontSize: '1.25rem', color: 'var(--pn-text-muted)', lineHeight: 2, marginBottom: '6rem' }}>
+                  Our neighborhood vertical is designed to help you find more than just a house. We help you find a community that synchronizes with your lifestyle.
               </p>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6rem' }}>
                   <div>
-                      <div style={{ fontSize: '2.5rem', fontWeight: 700, color: 'var(--hood-green)', fontFamily: 'var(--font-heading)' }}>100%</div>
-                      <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#94a3b8' }}>VERIFIED_LISTINGS</div>
+                      <div style={{ fontSize: '3.5rem', fontFamily: 'var(--pn-font-heading)', fontWeight: 800, color: 'var(--pn-sage)' }}>100%</div>
+                      <div className="pn-mono" style={{ fontSize: '0.6rem' }}>VERIFIED_LISTINGS</div>
                   </div>
                   <div>
-                      <div style={{ fontSize: '2.5rem', fontWeight: 700, color: 'var(--hood-green)', fontFamily: 'var(--font-heading)' }}>24/7</div>
-                      <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#94a3b8' }}>COMMUNITY_SUPPORT</div>
+                      <div style={{ fontSize: '3.5rem', fontFamily: 'var(--pn-font-heading)', fontWeight: 800, color: 'var(--pn-sage)' }}>24/7</div>
+                      <div className="pn-mono" style={{ fontSize: '0.6rem' }}>HOOD_SUPPORT</div>
                   </div>
               </div>
           </div>
-          <div style={{ padding: '5rem', background: 'white', borderRadius: '40px', boxShadow: '0 20px 60px rgba(0,0,0,0.03)', border: '1px solid #eee' }}>
-              <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.8rem', fontWeight: 700, marginBottom: '2rem' }}>Join the neighborhood.</h3>
-              <p style={{ color: '#94a3b8', lineHeight: 2, marginBottom: '3rem' }}>
-                  Receive local alerts and community news directly through your Sellio Hood node.
+          <div style={{ padding: '6rem', background: 'var(--pn-cream)', borderRadius: '48px', border: '1px solid var(--pn-border)' }}>
+              <div className="pn-mono" style={{ marginBottom: '2.5rem' }}>JOIN_THE_NEIGHBORHOOD</div>
+              <h3 style={{ fontFamily: 'var(--pn-font-heading)', fontSize: '2rem', fontWeight: 800, marginBottom: '2.5rem' }}>Synchronize with <br/>Your Community.</h3>
+              <p style={{ color: 'var(--pn-text-muted)', lineHeight: 2, marginBottom: '5rem' }}>
+                  Receive local alerts, school updates, and community event news directly through your Sellio Hood node.
               </p>
-              <button style={{ width: '100%', padding: '1.5rem', background: '#1e293b', color: 'white', border: 'none', borderRadius: '50px', fontWeight: 900, fontFamily: 'var(--font-heading)' }}>
+              <button className="pn-btn-primary" style={{ width: '100%', padding: '2rem', fontSize: '1.1rem', background: 'var(--pn-forest)' }}>
                   CREATE_COMMUNITY_PROFILE
               </button>
           </div>
       </section>
+
+      {/* Final Space */}
+      <div style={{ height: '10rem' }}></div>
     </div>
   );
 }

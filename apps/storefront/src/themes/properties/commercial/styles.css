@@ -1,162 +1,154 @@
-/* 
-    Properties Commercial: The Skyline Registry
-    Design Spec: Deep Navy, Steel Accents, Precision Grids
-*/
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap');
-
-:root {
-    --comm-primary: #0f172a;
-    --comm-secondary: #334155;
-    --comm-accent: #3b82f6;
-    --comm-bg: #ffffff;
-    --comm-border: #e2e8f0;
-    --font-base: 'Inter', sans-serif;
+.properties-commercial-theme {
+  /* Corporate Portfolio Palette */
+  --pc-carbon: #121212;
+  --pc-blue: #3b82f6;
+  --pc-slate: #64748b;
+  --pc-bg: #f8fafc;
+  --pc-border: #e2e8f0;
+  --pc-white: #ffffff;
+  
+  /* Typography */
+  --pc-font: 'Inter', sans-serif;
+  
+  /* Transitions */
+  --pc-transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
-.commercial-wrapper {
-    background-color: var(--comm-bg);
-    color: var(--comm-primary);
-    font-family: var(--font-base);
+.properties-commercial-theme {
+  background-color: var(--pc-white);
+  color: var(--pc-carbon);
+  font-family: var(--pc-font);
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Header */
-.corp-header {
-    background: white;
-    border-bottom: 1px solid var(--comm-border);
-    padding: 1.5rem 6rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
+/* Typography Utilities */
+.pc-heading-xl {
+  font-size: clamp(3.5rem, 7vw, 7rem);
+  font-weight: 900;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
 }
 
-.corp-logo {
-    font-weight: 900;
-    font-size: 1.4rem;
-    letter-spacing: -0.5px;
-    color: var(--comm-primary);
+.pc-mono {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--pc-blue);
 }
 
-.corp-nav {
-    display: flex;
-    gap: 4rem;
+/* Layout */
+.pc-section {
+  padding: 8rem 6%;
+  max-width: 1800px;
+  margin: 0 auto;
 }
 
-.corp-nav-link {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--comm-secondary);
-    text-decoration: none;
-    transition: color 0.3s ease;
+/* Corporate Header */
+.pc-header {
+  padding: 1.5rem 6%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid var(--pc-carbon);
+  background: var(--pc-white);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
-.corp-nav-link:hover {
-    color: var(--comm-accent);
+.pc-logo {
+  font-weight: 900;
+  font-size: 1.5rem;
+  letter-spacing: -1px;
 }
 
-/* Hero */
-.comm-hero {
-    padding: 10rem 6rem;
-    background: linear-gradient(to right, #f8fafc, #ffffff);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 1px solid var(--comm-border);
+.pc-nav {
+  display: flex;
+  gap: 4rem;
 }
 
-.comm-hero-content {
-    max-width: 600px;
+.pc-nav-link {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--pc-slate);
+  text-decoration: none;
+  transition: var(--pc-transition);
 }
 
-.comm-hero-content h1 {
-    font-size: 4.5rem;
-    font-weight: 900;
-    line-height: 1;
-    margin-bottom: 2rem;
-    letter-spacing: -2px;
+.pc-nav-link:hover {
+  color: var(--pc-blue);
 }
 
-/* Asset Cards */
-.asset-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0; /* Tight grid for industrial feel */
-    padding: 0;
-    border-top: 1px solid var(--comm-border);
+/* Institutional Hero */
+.pc-hero {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  align-items: center;
+  gap: 8rem;
+  padding: 12rem 6%;
+  border-bottom: 1px solid var(--pc-border);
 }
 
-.asset-card {
-    border-right: 1px solid var(--comm-border);
-    border-bottom: 1px solid var(--comm-border);
-    padding: 4rem;
-    transition: background 0.4s ease;
+.pc-hero-stats {
+  background: var(--pc-carbon);
+  color: white;
+  padding: 3rem;
+  border-radius: 4px;
+  display: inline-block;
+  margin-top: 4rem;
 }
 
-.asset-card:hover {
-    background: #f1f5f9;
+/* Asset Registry Grid */
+.pc-asset-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  border-left: 1px solid var(--pc-border);
 }
 
-.asset-tag {
-    font-size: 0.7rem;
-    font-weight: 900;
-    color: var(--comm-accent);
-    letter-spacing: 2px;
-    margin-bottom: 1.5rem;
-    display: block;
+.pc-asset-card {
+  padding: 4rem;
+  border-right: 1px solid var(--pc-border);
+  border-bottom: 1px solid var(--pc-border);
+  transition: var(--pc-transition);
+  cursor: pointer;
 }
 
-.asset-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: 1.5rem;
+.pc-asset-card:hover {
+  background: var(--pc-bg);
 }
 
-.asset-specs {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-    font-size: 0.9rem;
-    color: var(--comm-secondary);
+.pc-asset-card:hover .pc-asset-title {
+  color: var(--pc-blue);
 }
 
-.asset-spec-val {
-    font-weight: 700;
-    color: var(--comm-primary);
-    display: block;
+/* Buttons */
+.pc-btn-primary {
+  background: var(--pc-carbon);
+  color: white;
+  border: none;
+  padding: 1.5rem 4rem;
+  font-weight: 800;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: var(--pc-transition);
+}
+
+.pc-btn-primary:hover {
+  background: var(--pc-blue);
+  transform: translateY(-5px);
 }
 
 /* Footer */
-.comm-footer {
-    padding: 8rem 6rem;
-    background: var(--comm-primary);
-    color: white;
-}
-
-.comm-footer-grid {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr;
-    gap: 6rem;
-}
-
-.comm-footer h4 {
-    font-size: 0.8rem;
-    font-weight: 900;
-    letter-spacing: 2px;
-    margin-bottom: 2.5rem;
-    color: var(--comm-accent);
-}
-
-.comm-footer-link {
-    display: block;
-    color: #94a3b8;
-    text-decoration: none;
-    margin-bottom: 1.25rem;
-    font-size: 0.95rem;
-}
-
-.comm-footer-link:hover {
-    color: white;
+.pc-footer {
+  background: var(--pc-carbon);
+  color: white;
+  padding: 10rem 6% 4rem;
 }

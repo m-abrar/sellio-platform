@@ -1,16 +1,15 @@
-
 import React from 'react';
+import { CommercialHeader, InstitutionalFooter } from './components';
 import './styles.css';
-import { CorporateHeader, CommercialFooter } from './components';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="commercial-wrapper">
-      <CorporateHeader />
+    <div className="properties-commercial-theme">
+      <CommercialHeader />
       <main>
         {children}
       </main>
-      <CommercialFooter />
+      <InstitutionalFooter />
     </div>
   );
 }

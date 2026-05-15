@@ -1,15 +1,15 @@
 import React from 'react';
+import { HeritageHeader, ArtisanFooter } from './components';
 import './styles.css';
-import { DealerHeader, ClassicFooter } from './components';
 
-export default function ClassicDealerLayout({ children }: { children: React.ReactNode }) {
+export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="autos-classic">
-      <DealerHeader />
-      <main className="classic-inventory-container">
+    <div className="autos-classic-theme">
+      <HeritageHeader />
+      <main>
         {children}
       </main>
-      <ClassicFooter />
+      <ArtisanFooter />
     </div>
   );
 }

@@ -1,16 +1,15 @@
-
 import React from 'react';
+import { CommunityHeader, HoodFooter } from './components';
 import './styles.css';
-import { CommunityNav, NeighborhoodFooter } from './components';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="neighborhood-wrapper">
-      <CommunityNav />
+    <div className="properties-neighborhood-theme">
+      <CommunityHeader />
       <main>
         {children}
       </main>
-      <NeighborhoodFooter />
+      <HoodFooter />
     </div>
   );
 }
