@@ -172,8 +172,9 @@ export const ThemeSwitcherClient: React.FC<ThemeSwitcherClientProps> = ({ themes
             </div>
           ))}
           
-          <div style={{ marginTop: '15px', pt: '10px', borderTop: '1px solid #eee', fontSize: '9px', color: '#999', textAlign: 'center' }}>
-            {themes.length} Themes Available
+          <div style={{ marginTop: '15px', paddingTop: '10px', borderTop: '1px solid #eee', fontSize: '9px', color: '#999', textAlign: 'center', display: 'flex', justifyContent: 'space-between' }}>
+            <span>{themes.length} Themes Available</span>
+            <span style={{ opacity: 0.7 }}>Ctrl+Shift+H</span>
           </div>
         </div>
       )}
