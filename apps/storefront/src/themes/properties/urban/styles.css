@@ -1,175 +1,182 @@
-/* 
-    Properties Urban: The Metro Pulse
-    Design Spec: Slate Gray, High-Contrast Accents, Vertical Typography
-*/
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
 
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Roboto:wght@300;400;700&display=swap');
-
-:root {
-    --urban-primary: #334155;
-    --urban-accent: #3b82f6;
-    --urban-bg: #ffffff;
-    --urban-text: #0f172a;
-    --urban-border: #f1f5f9;
-    --font-heading: 'Montserrat', sans-serif;
-    --font-body: 'Roboto', sans-serif;
+.properties-urban-theme {
+  /* Skyline Registry Palette */
+  --pu-concrete: #e5e5e5;
+  --pu-steel: #121212;
+  --pu-cobalt: #0047ff;
+  --pu-glass: #fdfdfd;
+  --pu-border: #2a2a2a;
+  --pu-text-muted: #666666;
+  
+  /* Typography */
+  --pu-font: 'Space Grotesk', sans-serif;
+  
+  /* Transitions */
+  --pu-transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-.urban-wrapper {
-    background-color: var(--urban-bg);
-    color: var(--urban-text);
-    font-family: var(--font-body);
+.properties-urban-theme {
+  background-color: var(--pu-glass);
+  color: var(--pu-steel);
+  font-family: var(--pu-font);
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Header */
-.metro-header {
-    background: white;
-    padding: 1.5rem 5%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    box-shadow: 0 4px 30px rgba(0,0,0,0.02);
+/* Typography Utilities */
+.pu-heading-xl {
+  font-size: clamp(4rem, 12vw, 12rem);
+  font-weight: 700;
+  line-height: 0.85;
+  letter-spacing: -0.05em;
+  text-transform: uppercase;
 }
 
-.metro-logo {
-    font-family: var(--font-heading);
-    font-weight: 900;
-    font-size: 1.5rem;
-    color: var(--urban-text);
-    letter-spacing: -1px;
+.pu-mono {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 4px;
+  text-transform: uppercase;
 }
 
-.metro-nav {
-    display: flex;
-    gap: 3rem;
+/* Layout */
+.pu-section {
+  padding: 10rem 6%;
+  max-width: 1800px;
+  margin: 0 auto;
 }
 
-.metro-nav-link {
-    font-family: var(--font-heading);
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: var(--urban-primary);
-    text-decoration: none;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    transition: color 0.3s ease;
+/* Skyline Header */
+.pu-header {
+  padding: 2rem 6%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid var(--pu-steel);
+  background: var(--pu-glass);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
-.metro-nav-link:hover {
-    color: var(--urban-accent);
+.pu-nav {
+  display: flex;
+  gap: 4rem;
 }
 
-/* Hero */
-.metro-hero {
-    height: 90vh;
-    display: flex;
-    align-items: center;
-    padding: 0 10%;
-    background: linear-gradient(to right, rgba(255,255,255,1) 40%, rgba(255,255,255,0)),
-                url('https://images.unsplash.com/photo-1449824913935-59a10b8d2000?q=80&w=2070');
-    background-size: cover;
-    background-position: center;
+.pu-nav-link {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--pu-steel);
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: var(--pu-transition);
 }
 
-.metro-hero-content {
-    max-width: 600px;
+.pu-nav-link:hover {
+  color: var(--pu-cobalt);
 }
 
-.metro-hero-content h1 {
-    font-family: var(--font-heading);
-    font-size: 5rem;
-    font-weight: 900;
-    line-height: 0.9;
-    margin-bottom: 2rem;
-    color: var(--urban-text);
+/* Brutalist Hero */
+.pu-hero {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  align-items: center;
+  gap: 8rem;
+  padding: 12rem 6%;
+  border-bottom: 2px solid var(--pu-steel);
 }
 
-/* Unit Cards */
-.unit-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
-    padding: 6rem 5%;
+.pu-hero-image-wrapper {
+  background: var(--pu-concrete);
+  padding: 2rem;
+  border: 2px solid var(--pu-steel);
 }
 
-.unit-card {
-    background: white;
-    border: 1px solid var(--urban-border);
-    border-radius: 12px;
-    overflow: hidden;
-    transition: transform 0.3s ease;
+.pu-hero-image {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  filter: grayscale(100%);
+  transition: var(--pu-transition);
 }
 
-.unit-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+.pu-hero-image-wrapper:hover .pu-hero-image {
+  filter: grayscale(0%);
 }
 
-.unit-img {
-    width: 100%;
-    aspect-ratio: 4/3;
-    object-fit: cover;
+/* Unit Grid */
+.pu-unit-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--pu-steel);
+  border: 1px solid var(--pu-steel);
 }
 
-.unit-info {
-    padding: 2rem;
+.pu-unit-card {
+  background: var(--pu-glass);
+  padding: 3rem;
+  transition: var(--pu-transition);
+  cursor: pointer;
 }
 
-.unit-price {
-    font-family: var(--font-heading);
-    font-size: 1.5rem;
-    font-weight: 900;
-    margin-bottom: 0.5rem;
+.pu-unit-card:hover {
+  background: var(--pu-steel);
+  color: var(--pu-glass);
 }
 
-.unit-title {
-    font-weight: 700;
-    color: var(--urban-primary);
-    margin-bottom: 1.5rem;
+.pu-unit-img-wrapper {
+  width: 100%;
+  aspect-ratio: 4/3;
+  overflow: hidden;
+  margin-bottom: 3rem;
+  border: 1px solid var(--pu-steel);
 }
 
-.unit-meta {
-    display: flex;
-    gap: 1.5rem;
-    font-size: 0.8rem;
-    color: #64748b;
-    border-top: 1px solid var(--urban-border);
-    padding-top: 1.5rem;
+.pu-unit-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: var(--pu-transition);
 }
 
-/* Footer */
-.urban-footer {
-    padding: 10rem 5%;
-    background: #0f172a;
-    color: white;
+/* Buttons */
+.pu-btn-primary {
+  background: var(--pu-cobalt);
+  color: white;
+  border: none;
+  padding: 1.5rem 4rem;
+  font-family: var(--pu-font);
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: var(--pu-transition);
 }
 
-.urban-footer-grid {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr;
-    gap: 4rem;
+.pu-btn-primary:hover {
+  background: var(--pu-steel);
+  transform: translateX(10px);
 }
 
-.urban-footer h4 {
-    font-family: var(--font-heading);
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-bottom: 2rem;
-    color: #94a3b8;
+/* Stats Node */
+.pu-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4rem;
+  margin-top: 6rem;
 }
 
-.urban-footer-link {
-    display: block;
-    color: #64748b;
-    text-decoration: none;
-    margin-bottom: 1rem;
-    font-size: 0.9rem;
+.pu-stat-node {
+  border-top: 2px solid var(--pu-steel);
+  padding-top: 2rem;
 }
 
-.urban-footer-link:hover {
-    color: white;
+.pu-stat-value {
+  font-size: 4rem;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 1rem;
 }

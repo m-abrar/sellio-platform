@@ -1,6 +1,6 @@
-
+'use client';
 import React from 'react';
-import { EstateBentoCard } from './components';
+import { ShowcaseCard, StatisticsNode } from './components';
 
 export default function Page() {
   const estates = [
@@ -12,66 +12,76 @@ export default function Page() {
   ];
 
   return (
-    <div>
-      {/* Hero */}
-      <section className="lux-hero">
-          <div className="lux-hero-tag">ARCHITECTURAL_ELITE</div>
-          <h1>Structural <br/>Sublimity.</h1>
-          <div style={{ maxWidth: '600px', margin: '0 auto', opacity: 0.6, lineHeight: 2 }}>
-              A curated collection of the world's most significant private estates. Where raw materials meet refined vision.
-          </div>
-          
-          {/* Scroll Down */}
-          <div style={{ position: 'absolute', bottom: '4rem', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem', opacity: 0.3 }}>
-              <div style={{ width: '1px', height: '60px', background: 'white' }}></div>
-              <span style={{ fontSize: '10px', fontWeight: 900, letterSpacing: '4px' }}>DISCOVER</span>
-          </div>
+    <div className="pl-section">
+      {/* Platinum Hero */}
+      <section className="pl-hero">
+        <div className="pl-mono" style={{ color: 'var(--pl-gold)', marginBottom: '3rem' }}>ARCHITECTURAL_SUBLIMITY_V8</div>
+        <h1 className="pl-heading-xl">
+            Structural <br/>
+            Refinement.
+        </h1>
+        <p style={{ marginTop: '5rem', maxWidth: '700px', fontSize: '1.5rem', color: 'var(--pl-text-dim)', lineHeight: 1.6 }}>
+            A curated collection of the world's most significant private estates. Where raw materials meet refined billionaire-minimalist vision.
+        </p>
+        
+        <div className="pl-scroll-indicator">
+            <span className="pl-mono">DISCOVER</span>
+            <div className="pl-scroll-line"></div>
+        </div>
       </section>
 
-      {/* Philosophy Section */}
-      <section style={{ padding: '15rem 10%', textAlign: 'center' }}>
-          <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-              <h2 style={{ fontSize: '4rem', marginBottom: '3rem' }}>The Protocol of Acquisition.</h2>
-              <p style={{ fontSize: '1.2rem', lineHeight: 2, opacity: 0.5, marginBottom: '5rem' }}>
-                  We do not merely list properties. We validate the architectural integrity, historical significance, and future appreciation of every node in our network.
-              </p>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '4rem' }}>
-                  <div>
-                      <div style={{ fontSize: '2.5rem', color: 'var(--prop-lux-gold)', marginBottom: '1rem' }}>92%</div>
-                      <div style={{ fontSize: '0.6rem', fontWeight: 900, letterSpacing: '2px', opacity: 0.4 }}>OFF_MARKET_ACCESS</div>
-                  </div>
-                  <div>
-                      <div style={{ fontSize: '2.5rem', color: 'var(--prop-lux-gold)', marginBottom: '1rem' }}>$4.2B</div>
-                      <div style={{ fontSize: '0.6rem', fontWeight: 900, letterSpacing: '2px', opacity: 0.4 }}>MANAGED_ASSETS</div>
-                  </div>
-                  <div>
-                      <div style={{ fontSize: '2.5rem', color: 'var(--prop-lux-gold)', marginBottom: '1rem' }}>24/7</div>
-                      <div style={{ fontSize: '0.6rem', fontWeight: 900, letterSpacing: '2px', opacity: 0.4 }}>GLOBAL_CONCIERGE</div>
-                  </div>
+      {/* Intelligence Section */}
+      <section style={{ padding: '15rem 0' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '10rem', alignItems: 'center' }}>
+              <div>
+                  <h2 style={{ fontSize: '5rem', fontWeight: 900, letterSpacing: '-3px', marginBottom: '4rem', textTransform: 'uppercase' }}>
+                      The Protocol <br/>of Acquisition.
+                  </h2>
+                  <p style={{ fontSize: '1.25rem', color: 'var(--pl-text-dim)', lineHeight: 2 }}>
+                      We do not merely list properties. We validate the architectural integrity, historical significance, and future appreciation of every node in our network. Each acquisition is handled via our private concierge protocol.
+                  </p>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6rem' }}>
+                  <StatisticsNode label="OFF_MARKET_NODES" value="92%" />
+                  <StatisticsNode label="ASSETS_UNDER_SYNC" value="$4.2B" />
+                  <StatisticsNode label="GLOBAL_CONCIERGE" value="24/7" />
               </div>
           </div>
       </section>
 
-      {/* Bento Grid Estates */}
-      <section className="lux-bento-grid">
-          {estates.map((estate, i) => (
-              <EstateBentoCard key={i} {...estate} />
-          ))}
+      {/* Bento Showcase Grid */}
+      <section>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '6rem' }}>
+              <div className="pl-mono">CINEMATIC_SHOWCASE</div>
+              <div style={{ textAlign: 'right', fontSize: '0.8rem', color: 'var(--pl-text-dim)', letterSpacing: '2px' }}>
+                  FILTER: LUXURY_TIER == "PLATINUM"
+              </div>
+          </div>
+          
+          <div className="pl-bento-grid">
+            {estates.map((e, i) => (
+              <ShowcaseCard key={i} {...e} />
+            ))}
+          </div>
       </section>
 
-      {/* CTA Section */}
-      <section style={{ padding: '10rem 10%', background: 'linear-gradient(to top, #000, var(--prop-lux-bg))' }}>
-          <div style={{ border: '0.5px solid var(--prop-lux-border)', padding: '8rem 4rem', textAlign: 'center' }}>
-              <span style={{ fontSize: '0.7rem', fontWeight: 900, letterSpacing: '6px', color: 'var(--prop-lux-gold)', display: 'block', marginBottom: '2rem' }}>PRIVATE_CONSULTATION</span>
-              <h2 style={{ fontSize: '3.5rem', marginBottom: '4rem' }}>Acquire your legacy.</h2>
+      {/* Private Inquiry CTA */}
+      <section style={{ marginTop: '15rem', padding: '15rem 0', border: '1px solid var(--pl-border)', textAlign: 'center', position: 'relative', background: 'radial-gradient(circle at center, #111 0%, #000 100%)' }}>
+          <div style={{ position: 'relative', zIndex: 2 }}>
+              <div className="pl-mono" style={{ color: 'var(--pl-gold)', marginBottom: '3rem' }}>PRIVATE_CONSULTATION</div>
+              <h2 style={{ fontSize: '6rem', fontWeight: 900, letterSpacing: '-4px', marginBottom: '5rem', textTransform: 'uppercase' }}>
+                  Acquire Your <br/>Legacy.
+              </h2>
               <button style={{ 
-                  background: 'var(--prop-lux-gold)', 
+                  background: 'var(--pl-gold)', 
                   color: 'black', 
                   border: 'none', 
-                  padding: '1.5rem 4rem', 
-                  fontSize: '0.8rem', 
+                  padding: '2.5rem 8rem', 
+                  fontSize: '1rem', 
                   fontWeight: 900, 
-                  letterSpacing: '2px' 
+                  letterSpacing: '4px',
+                  cursor: 'pointer',
+                  transition: 'var(--pl-transition)'
               }}>
                   REQUEST_INVITATION
               </button>

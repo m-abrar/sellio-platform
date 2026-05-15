@@ -1,155 +1,166 @@
-/* 
-    Properties Classic: The Heritage Estate
-    Design Spec: Deep Mahogany, Antique White, Timeless Serif
-*/
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500;600;700;800&display=swap');
 
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Lora:ital,wght@0,400;0,700;1,400&display=swap');
-
-:root {
-    --classic-mahogany: #450a0a;
-    --classic-white: #fafaf9;
-    --classic-sage: #166534;
-    --classic-bg: #fcfcfc;
-    --classic-border: #e7e5e4;
-    --font-serif: 'Playfair Display', serif;
-    --font-body: 'Lora', serif;
+.properties-classic-theme {
+  /* Editorial Estate Palette */
+  --pc-bone: #f8f7f2;
+  --pc-mahogany: #4b2c20;
+  --pc-sage: #708238;
+  --pc-ink: #1a1a1a;
+  --pc-border: #e8e6df;
+  --pc-text-muted: #8c887d;
+  
+  /* Typography */
+  --pc-font-serif: 'Playfair Display', serif;
+  --pc-font-sans: 'Inter', sans-serif;
+  
+  /* Transitions */
+  --pc-transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
-.properties-classic-wrapper {
-    background-color: var(--classic-bg);
-    color: var(--classic-mahogany);
-    font-family: var(--font-body);
+.properties-classic-theme {
+  background-color: var(--pc-bone);
+  color: var(--pc-ink);
+  font-family: var(--pc-font-sans);
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Header */
-.heritage-header {
-    background: white;
-    padding: 2.5rem 6%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    border-bottom: 1px solid var(--classic-border);
+/* Typography Utilities */
+.pc-serif { font-family: var(--pc-font-serif); }
+.pc-italic { font-style: italic; }
+
+.pc-heading-xl {
+  font-family: var(--pc-font-serif);
+  font-size: clamp(3.5rem, 8vw, 8.5rem);
+  font-weight: 900;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
 }
 
-.heritage-logo {
-    font-family: var(--font-serif);
-    font-weight: 900;
-    font-size: 1.8rem;
-    color: var(--classic-mahogany);
-    letter-spacing: -1px;
+/* Layout */
+.pc-section {
+  padding: 10rem 6%;
+  max-width: 1600px;
+  margin: 0 auto;
 }
 
-.heritage-nav {
-    display: flex;
-    gap: 4rem;
+/* Editorial Header */
+.pc-header {
+  padding: 3rem 6%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--pc-border);
+  background: var(--pc-bone);
 }
 
-.heritage-nav-link {
-    font-family: var(--font-serif);
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: #444;
-    text-decoration: none;
-    font-style: italic;
-    transition: color 0.3s ease;
+.pc-nav {
+  display: flex;
+  gap: 4rem;
 }
 
-.heritage-nav-link:hover {
-    color: var(--classic-sage);
+.pc-nav-link {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--pc-ink);
+  text-decoration: none;
+  transition: var(--pc-transition);
 }
 
-/* Hero */
-.heritage-hero {
-    height: 80vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    background: linear-gradient(rgba(255,255,255,0.2), rgba(255,255,255,0.2)),
-                url('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2070');
-    background-size: cover;
-    background-position: center;
-    padding: 0 10%;
+.pc-nav-link:hover {
+  color: var(--pc-sage);
 }
 
-.heritage-hero h1 {
-    font-family: var(--font-serif);
-    font-size: 6rem;
-    font-weight: 900;
-    line-height: 1;
-    margin-bottom: 2rem;
-    color: var(--classic-mahogany);
+/* Heritage Hero */
+.pc-hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 6rem;
+  padding: 10rem 6%;
 }
 
-/* Estate Cards */
-.estate-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 4rem;
-    padding: 8rem 6%;
+.pc-hero-image {
+  width: 100%;
+  aspect-ratio: 4/5;
+  object-fit: cover;
+  border: 1px solid var(--pc-border);
+  padding: 1.5rem;
+  background: white;
 }
 
-.estate-card {
-    background: white;
-    padding: 2rem;
-    border: 1px solid var(--classic-border);
-    transition: all 0.4s ease;
+/* Estate Grid */
+.pc-estate-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4rem;
+  border-top: 1px solid var(--pc-border);
+  padding-top: 6rem;
 }
 
-.estate-card:hover {
-    box-shadow: 0 30px 60px rgba(0,0,0,0.05);
+.pc-estate-card {
+  transition: var(--pc-transition);
+  cursor: pointer;
 }
 
-.estate-img {
-    width: 100%;
-    aspect-ratio: 4/5;
-    object-fit: cover;
-    margin-bottom: 2rem;
+.pc-estate-card:hover {
+  transform: translateY(-10px);
 }
 
-.estate-title {
-    font-family: var(--font-serif);
-    font-size: 1.8rem;
-    font-weight: 900;
-    margin-bottom: 1rem;
+.pc-estate-image-wrapper {
+  width: 100%;
+  aspect-ratio: 1/1;
+  overflow: hidden;
+  margin-bottom: 2.5rem;
+  background: white;
+  border: 1px solid var(--pc-border);
+  padding: 1rem;
 }
 
-.estate-price {
-    font-family: var(--font-serif);
-    font-size: 1.25rem;
-    font-style: italic;
-    color: var(--classic-sage);
-    margin-bottom: 2rem;
-    display: block;
+.pc-estate-image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: sepia(20%) contrast(90%);
+  transition: var(--pc-transition);
+}
+
+.pc-estate-card:hover img {
+  transform: scale(1.05);
+  filter: sepia(0%) contrast(100%);
+}
+
+/* Buttons */
+.pc-btn-primary {
+  background: var(--pc-mahogany);
+  color: white;
+  border: none;
+  padding: 1.5rem 4rem;
+  font-family: var(--pc-font-serif);
+  font-weight: 700;
+  font-style: italic;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: var(--pc-transition);
+}
+
+.pc-btn-primary:hover {
+  background: var(--pc-ink);
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(75, 44, 32, 0.2);
 }
 
 /* Footer */
-.heritage-footer {
-    padding: 10rem 6%;
-    background: var(--classic-mahogany);
-    color: white;
+.pc-footer {
+  background: var(--pc-mahogany);
+  color: var(--pc-bone);
+  padding: 12rem 6% 6rem;
+  margin-top: 10rem;
 }
 
-.heritage-footer h4 {
-    font-family: var(--font-serif);
-    font-size: 1rem;
-    font-style: italic;
-    margin-bottom: 2.5rem;
-    color: var(--classic-white);
-}
-
-.heritage-footer-link {
-    display: block;
-    color: #a8a29e;
-    text-decoration: none;
-    margin-bottom: 1.25rem;
-    font-size: 0.95rem;
-}
-
-.heritage-footer-link:hover {
-    color: white;
+.pc-footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 6rem;
 }

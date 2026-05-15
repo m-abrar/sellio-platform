@@ -1,206 +1,176 @@
-/* 
-    Properties Luxury 2: The Obsidian Estate
-    Design Spec: Midnight High-Contrast, Gold Accents, 0.5px Hairlines
-*/
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@300;400;700;900&display=swap');
-
-:root {
-    --prop-lux-bg: #050505;
-    --prop-lux-text: #ffffff;
-    --prop-lux-gold: #d4af37;
-    --prop-lux-gold-dim: rgba(212, 175, 55, 0.2);
-    --prop-lux-border: rgba(255, 255, 255, 0.1);
-    --prop-lux-hairline: rgba(255, 255, 255, 0.05);
-    --font-serif: 'Playfair Display', serif;
-    --font-sans: 'Inter', sans-serif;
+.properties-luxury-2-theme {
+  /* Platinum Portfolio Palette */
+  --pl-bg: #000000;
+  --pl-surface: #0a0a0a;
+  --pl-silver: #e2e2e2;
+  --pl-gold: #c5a059;
+  --pl-border: rgba(255, 255, 255, 0.08);
+  --pl-text: #ffffff;
+  --pl-text-dim: #666666;
+  
+  /* Typography */
+  --pl-font-sans: 'Inter', sans-serif;
+  
+  /* Transitions */
+  --pl-transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.luxury-wrapper {
-    background-color: var(--prop-lux-bg);
-    color: var(--prop-lux-text);
-    font-family: var(--font-sans);
-    min-height: 100vh;
-    overflow-x: hidden;
+.properties-luxury-2-theme {
+  background-color: var(--pl-bg);
+  color: var(--pl-text);
+  font-family: var(--pl-font-sans);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
-/* Typography Defaults */
-.luxury-wrapper h1, 
-.luxury-wrapper h2, 
-.luxury-wrapper h3 {
-    font-family: var(--font-serif);
-    font-weight: 400;
+/* Typography Utilities */
+.pl-heading-xl {
+  font-size: clamp(3rem, 10vw, 10rem);
+  font-weight: 900;
+  line-height: 0.9;
+  letter-spacing: -0.05em;
+  text-transform: uppercase;
 }
 
-/* Header & Navigation */
-.lux-header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    padding: 2rem 4rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    z-index: 1000;
-    border-bottom: 0.5px solid var(--prop-lux-hairline);
-    background: rgba(5, 5, 5, 0.8);
-    backdrop-filter: blur(20px);
+.pl-mono {
+  font-size: 0.65rem;
+  font-weight: 900;
+  letter-spacing: 5px;
+  text-transform: uppercase;
 }
 
-.lux-logo {
-    font-family: var(--font-serif);
-    font-size: 1.5rem;
-    letter-spacing: 4px;
-    font-weight: 700;
-    color: var(--prop-lux-gold);
+/* Layout */
+.pl-section {
+  padding: 10rem 6%;
+  max-width: 1800px;
+  margin: 0 auto;
 }
 
-.lux-nav {
-    display: flex;
-    gap: 3rem;
+/* Elevated Header */
+.pl-header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  padding: 2.5rem 6%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1000;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
+  backdrop-filter: blur(10px);
 }
 
-.lux-nav-link {
-    font-size: 0.7rem;
-    font-weight: 900;
-    letter-spacing: 3px;
-    color: rgba(255, 255, 255, 0.5);
-    text-decoration: none;
-    transition: color 0.3s ease;
+.pl-logo {
+  font-weight: 900;
+  font-size: 1.5rem;
+  letter-spacing: -1px;
 }
 
-.lux-nav-link:hover {
-    color: var(--prop-lux-gold);
+.pl-nav {
+  display: flex;
+  gap: 4rem;
 }
 
-/* Hero Section */
-.lux-hero {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 0 10%;
-    position: relative;
-    background: linear-gradient(to bottom, rgba(5,5,5,0.7), var(--prop-lux-bg)),
-                url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070');
-    background-size: cover;
-    background-position: center;
+.pl-nav-link {
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 3px;
+  color: var(--pl-text-dim);
+  text-decoration: none;
+  transition: var(--pl-transition);
 }
 
-.lux-hero-tag {
-    color: var(--prop-lux-gold);
-    font-weight: 900;
-    letter-spacing: 10px;
-    font-size: 0.8rem;
-    margin-bottom: 2rem;
+.pl-nav-link:hover {
+  color: var(--pl-text);
 }
 
-.lux-hero h1 {
-    font-size: 6rem;
-    line-height: 1;
-    margin-bottom: 3rem;
-    max-width: 1200px;
+/* Platinum Hero */
+.pl-hero {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 0 6%;
+  position: relative;
+  background: radial-gradient(circle at 80% 20%, #111 0%, #000 100%);
 }
 
-/* Bento Grid */
-.lux-bento-grid {
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    gap: 1.5rem;
-    padding: 6rem 4rem;
+.pl-scroll-indicator {
+  position: absolute;
+  bottom: 4rem;
+  left: 6%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
-.lux-bento-card {
-    background: #0a0a0a;
-    border: 0.5px solid var(--prop-lux-border);
-    position: relative;
-    overflow: hidden;
-    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+.pl-scroll-line {
+  width: 1px;
+  height: 100px;
+  background: linear-gradient(to bottom, var(--pl-gold), transparent);
 }
 
-.lux-bento-card:hover {
-    transform: scale(0.98);
+/* Cinematic Bento Grid */
+.pl-bento-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 2rem;
+  margin-top: 4rem;
 }
 
-.lux-bento-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0.6;
-    transition: opacity 0.6s ease;
+.pl-bento-card {
+  position: relative;
+  overflow: hidden;
+  background: var(--pl-surface);
+  border: 1px solid var(--pl-border);
+  transition: var(--pl-transition);
+  cursor: pointer;
 }
 
-.lux-bento-card:hover .lux-bento-img {
-    opacity: 0.8;
+.pl-bento-card:hover {
+  border-color: var(--pl-gold);
+  transform: translateY(-10px);
 }
 
-.lux-bento-content {
-    position: absolute;
-    bottom: 2rem;
-    left: 2rem;
-    right: 2rem;
+.pl-bento-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.5;
+  transition: var(--pl-transition);
 }
 
-.lux-bento-price {
-    font-family: var(--font-serif);
-    font-size: 2rem;
-    color: var(--prop-lux-gold);
-    margin-bottom: 0.5rem;
+.pl-bento-card:hover .pl-bento-img {
+  opacity: 0.8;
+  transform: scale(1.05);
 }
 
-.lux-bento-title {
-    font-size: 0.9rem;
-    font-weight: 400;
-    color: rgba(255, 255, 255, 0.6);
-    letter-spacing: 1px;
+.pl-bento-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 3rem;
+  background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
 }
 
-/* Footer */
-.lux-footer {
-    padding: 10rem 4rem;
-    background: #000;
-    border-top: 0.5px solid var(--prop-lux-border);
+/* Concierge Footer */
+.pl-footer {
+  padding: 12rem 6% 6rem;
+  background: #050505;
+  border-top: 1px solid var(--pl-border);
 }
 
-.lux-footer-logo {
-    font-family: var(--font-serif);
-    font-size: 3rem;
-    color: var(--prop-lux-gold-dim);
-    margin-bottom: 4rem;
-    display: block;
+.pl-footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 8rem;
 }
 
-.lux-footer-grid {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr;
-    gap: 6rem;
-}
-
-.lux-footer-col h4 {
-    font-size: 0.7rem;
-    letter-spacing: 3px;
-    font-weight: 900;
-    margin-bottom: 2rem;
-    color: var(--prop-lux-gold);
-}
-
-.lux-footer-link {
-    display: block;
-    color: rgba(255, 255, 255, 0.4);
-    text-decoration: none;
-    margin-bottom: 1rem;
-    font-size: 0.9rem;
-}
-
-.lux-footer-link:hover {
-    color: white;
-}
-
-/* Utility */
-.span-6 { grid-column: span 6; height: 600px; }
-.span-4 { grid-column: span 4; height: 500px; }
-.span-8 { grid-column: span 8; height: 500px; }
-.span-12 { grid-column: span 12; height: 400px; }
+/* Column Utilities */
+.pl-span-4 { grid-column: span 4; height: 500px; }
+.pl-span-8 { grid-column: span 8; height: 500px; }
+.pl-span-12 { grid-column: span 12; height: 400px; }

@@ -1,6 +1,6 @@
-
+'use client';
 import React from 'react';
-import { ClassicEstateCard } from './components';
+import { EstateCard, TrustIndicator } from './components';
 
 export default function Page() {
   const estates = [
@@ -13,59 +13,75 @@ export default function Page() {
   ];
 
   return (
-    <div>
-      {/* Hero Section */}
-      <section className="heritage-hero">
-          <div style={{ padding: '4rem', background: 'rgba(255,255,255,0.8)', backdropFilter: 'blur(10px)', border: '1px solid var(--classic-mahogany)' }}>
-              <div style={{ fontFamily: 'var(--font-serif)', fontSize: '0.9rem', color: 'var(--classic-sage)', letterSpacing: '4px', marginBottom: '2rem', fontWeight: 700 }}>ESTABLISHED_REPRESENTATION</div>
-              <h1>Legacy <br/>Ownership.</h1>
-              <p style={{ maxWidth: '600px', fontSize: '1.25rem', fontStyle: 'italic', color: '#444', lineHeight: 1.8, marginBottom: '4rem' }}>
-                  A curated distribution of the world's most significant historic estates. Preserving architectural heritage through institutional nodes.
-              </p>
-              <button style={{ padding: '1.5rem 4rem', background: 'var(--classic-mahogany)', color: 'white', border: 'none', fontFamily: 'var(--font-serif)', fontWeight: 900, fontSize: '0.9rem', fontStyle: 'italic' }}>
-                  REQUEST_PORTFOLIO
-              </button>
+    <div className="pc-section">
+      {/* Editorial Hero */}
+      <section className="pc-hero">
+        <div>
+          <div style={{ fontSize: '0.75rem', fontWeight: 800, letterSpacing: '6px', color: 'var(--pc-sage)', marginBottom: '3rem' }}>CURATED_DISTRIBUTION_V8</div>
+          <h1 className="pc-heading-xl">
+            Legacy <br/>
+            Ownership <br/>
+            <span className="pc-italic" style={{ color: 'var(--pc-mahogany)' }}>Refined.</span>
+          </h1>
+          <p style={{ marginTop: '4rem', fontSize: '1.25rem', color: 'var(--pc-text-muted)', lineHeight: 2, maxWidth: '550px' }}>
+            A curated distribution of the world's most significant historic estates. Preserving architectural heritage through institutional nodes and manorial verification.
+          </p>
+          <div style={{ marginTop: '5rem', display: 'flex', gap: '3rem', alignItems: 'center' }}>
+            <button className="pc-btn-primary">Request Portfolio</button>
+            <span style={{ fontSize: '0.85rem', fontWeight: 800, borderBottom: '1px solid var(--pc-ink)', cursor: 'pointer' }}>READ_PROVENANCE</span>
           </div>
+        </div>
+        <div>
+          <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2070" alt="Estate Hero" className="pc-hero-image" />
+        </div>
       </section>
 
-      {/* Trust bar */}
-      <section style={{ padding: '3rem 6%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#fafaf9', color: '#450a0a', fontSize: '0.75rem', fontWeight: 800, letterSpacing: '3px', fontFamily: 'var(--font-serif)', borderBottom: '1px solid #e7e5e4' }}>
-          <span>HISTORIC_PRESERVATION_CERTIFIED</span>
-          <span>AUTHENTIC_MANORIAL_RECORDS</span>
-          <span>GLOBAL_HERITAGE_SYNC</span>
-          <span>INSTITUTIONAL_REGISTRY_NODE</span>
-      </section>
+      {/* Trust Bar */}
+      <div style={{ margin: '8rem 0' }}>
+        <TrustIndicator />
+      </div>
 
       {/* Estate Grid */}
-      <section className="estate-grid">
+      <section>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '6rem' }}>
+            <h2 style={{ fontFamily: 'var(--pc-font-serif)', fontSize: '5rem', fontWeight: 900, letterSpacing: '-2px' }}>The <span className="pc-italic">Collection.</span></h2>
+            <div style={{ textAlign: 'right', maxWidth: '400px', fontSize: '0.9rem', color: 'var(--pc-text-muted)', lineHeight: 1.8 }}>
+                Every property in our registry is evaluated by our board of curators for historical significance and structural integrity.
+            </div>
+        </div>
+        
+        <div className="pc-estate-grid">
           {estates.map((e, i) => (
-              <ClassicEstateCard key={i} {...e} />
+            <EstateCard key={i} {...e} />
           ))}
+        </div>
       </section>
 
-      {/* Institutional CTA */}
-      <section style={{ padding: '15rem 6%', background: '#fff', borderTop: '1px solid #eee', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10rem', alignItems: 'center' }}>
+      {/* Institutional Inquiry */}
+      <section style={{ marginTop: '15rem', display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '10rem', alignItems: 'center' }}>
           <div>
-              <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '4.5rem', fontWeight: 900, marginBottom: '3rem', fontStyle: 'italic' }}>The Heritage <br/>Registry.</h2>
-              <p style={{ fontSize: '1.1rem', color: '#666', lineHeight: 2, marginBottom: '4rem' }}>
-                  Join an exclusive node of estate holders and historians. Our registry ensures the long-term preservation and distribution of historic assets through the Sellio Heritage protocol.
-              </p>
-              <ul style={{ listStyle: 'none', padding: 0 }}>
-                  {['Manorial Rights Verification', 'Historical Archival Access', 'Restoration Grant Nodes', 'Private Estate Galas'].map(item => (
-                      <li key={item} style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '1.5rem', fontWeight: 700, fontFamily: 'var(--font-serif)', color: 'var(--classic-mahogany)' }}>
-                          <span style={{ color: 'var(--classic-sage)' }}>❦</span> {item.toUpperCase()}
-                      </li>
-                  ))}
-              </ul>
+              <div style={{ height: '800px', background: 'white', border: '1px solid var(--pc-border)', padding: '2rem' }}>
+                <img src="https://images.unsplash.com/photo-1449156001533-cb39c8524490?q=80&w=2070" alt="Registry Detail" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              </div>
           </div>
-          <div style={{ padding: '6rem', border: '2px solid var(--classic-mahogany)', background: 'var(--classic-white)', position: 'relative' }}>
-              <div style={{ position: 'absolute', top: '-1.5rem', left: '-1.5rem', width: '60px', height: '60px', background: 'var(--classic-mahogany)' }}></div>
-              <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '2.5rem', fontWeight: 900, marginBottom: '2rem' }}>Institutional Inquiry.</h3>
-              <p style={{ color: '#999', lineHeight: 2, marginBottom: '3rem' }}>
-                  Our curators are currently evaluating select properties for inclusion in the 2026 registry. Submit your provenance for review.
+          <div>
+              <div className="pc-serif" style={{ fontSize: '1rem', fontStyle: 'italic', color: 'var(--pc-mahogany)', marginBottom: '2rem' }}>The Heritage Registry</div>
+              <h2 className="pc-heading-xl" style={{ fontSize: '5rem', marginBottom: '4rem' }}>Institutional <br/>Inquiry.</h2>
+              <p style={{ fontSize: '1.1rem', color: 'var(--pc-text-muted)', lineHeight: 2, marginBottom: '5rem' }}>
+                  Our curators are currently evaluating select properties for inclusion in the 2026 global registry. Submit your provenance for review by our architectural board.
               </p>
-              <button style={{ width: '100%', padding: '1.5rem', background: 'var(--classic-mahogany)', color: 'white', border: 'none', fontWeight: 900, fontFamily: 'var(--font-serif)', fontStyle: 'italic' }}>
-                  SUBMIT_PROVENANCE_NODE
+              
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+                  {['Manorial Rights Verification', 'Historical Archival Access', 'Institutional Registry Node'].map(item => (
+                      <div key={item} style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
+                          <span style={{ fontSize: '1.5rem', color: 'var(--pc-sage)' }}>❦</span>
+                          <span style={{ fontSize: '0.9rem', fontWeight: 800, letterSpacing: '2px' }}>{item.toUpperCase()}</span>
+                      </div>
+                  ))}
+              </div>
+
+              <button className="pc-btn-primary" style={{ marginTop: '6rem', width: '100%' }}>
+                  Submit Provenance Node
               </button>
           </div>
       </section>

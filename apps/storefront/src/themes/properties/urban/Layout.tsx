@@ -1,16 +1,15 @@
-
 import React from 'react';
+import { SkylineHeader, CityPulseFooter } from './components';
 import './styles.css';
-import { MetroHeader, UrbanFooter } from './components';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="urban-wrapper">
-      <MetroHeader />
+    <div className="properties-urban-theme">
+      <SkylineHeader />
       <main>
         {children}
       </main>
-      <UrbanFooter />
+      <CityPulseFooter />
     </div>
   );
 }

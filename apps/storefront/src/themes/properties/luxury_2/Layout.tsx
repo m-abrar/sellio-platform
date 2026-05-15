@@ -1,16 +1,15 @@
-
 import React from 'react';
+import { Header, Footer } from './components';
 import './styles.css';
-import { LuxuryHeader, ExclusiveFooter } from './components';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="luxury-wrapper">
-      <LuxuryHeader />
+    <div className="properties-luxury-2-theme">
+      <Header />
       <main>
         {children}
       </main>
-      <ExclusiveFooter />
+      <Footer />
     </div>
   );
 }

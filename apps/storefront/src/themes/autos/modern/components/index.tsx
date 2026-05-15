@@ -18,8 +18,8 @@ export const Header = () => (
       borderRadius: '100px', 
       padding: '1rem 3rem', 
       display: 'flex', 
-      justify-content: 'space-between', 
-      align-items: 'center',
+      justifyContent: 'space-between', 
+      alignItems: 'center',
       boxShadow: 'var(--am-glow)'
     }}>
       <div style={{ fontFamily: 'var(--am-font-heading)', fontWeight: 900, fontSize: '1.5rem', letterSpacing: '-1px' }}>

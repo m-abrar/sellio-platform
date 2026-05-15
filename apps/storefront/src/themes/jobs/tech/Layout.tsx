@@ -1,12 +1,12 @@
 import React from 'react';
+import { Header, StatusBar } from './components';
 import './styles.css';
-import { TerminalHeader, StatusBar } from './components';
 
-export default function TechLayout({ children }: { children: React.ReactNode }) {
+export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="jobs-tech">
-      <TerminalHeader />
-      <main className="tech-container">
+    <div className="jobs-tech-theme">
+      <Header />
+      <main>
         {children}
       </main>
       <StatusBar />

@@ -1,16 +1,15 @@
-
 import React from 'react';
+import { Header, Footer } from './components';
 import './styles.css';
-import { HeritageHeader, LegacyFooter } from './components';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="properties-classic-wrapper">
-      <HeritageHeader />
+    <div className="properties-classic-theme">
+      <Header />
       <main>
         {children}
       </main>
-      <LegacyFooter />
+      <Footer />
     </div>
   );
 }

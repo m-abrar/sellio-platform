@@ -17,8 +17,8 @@ export const Header = () => (
       margin: '0 auto', 
       padding: '1.5rem 8%', 
       display: 'flex', 
-      justify-content: 'space-between', 
-      align-items: 'center' 
+      justifyContent: 'space-between', 
+      alignItems: 'center' 
     }}>
       <div style={{ fontWeight: 800, fontSize: '1.25rem', letterSpacing: '-0.5px' }}>
         FORUM<span style={{ color: 'var(--ec-blue)' }}>26</span>
@@ -46,7 +46,7 @@ export const Header = () => (
 );
 
 export const Footer = () => (
-  <footer style={{ background: var(--ec-bone), padding: '8rem 8% 4rem', borderTop: '1px solid var(--ec-border)' }}>
+  <footer style={{ background: 'var(--ec-bone)', padding: '8rem 8% 4rem', borderTop: '1px solid var(--ec-border)' }}>
     <div style={{ maxWidth: '1400px', margin: '0 auto', display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '8rem' }}>
       <div>
         <div style={{ fontWeight: 800, fontSize: '1.5rem', marginBottom: '2rem' }}>FORUM26</div>

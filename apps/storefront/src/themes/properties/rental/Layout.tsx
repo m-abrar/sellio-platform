@@ -1,12 +1,11 @@
-
 import React from 'react';
+import { RentalHeader, TenantFooter } from './components';
 import './styles.css';
-import { LeaseHeader, TenantFooter } from './components';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="rental-wrapper">
-      <LeaseHeader />
+    <div className="properties-rental-theme">
+      <RentalHeader />
       <main>
         {children}
       </main>

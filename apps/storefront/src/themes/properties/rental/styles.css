@@ -1,183 +1,180 @@
-/* 
-    Properties Rental: The Easy Lease
-    Design Spec: Teal Accents, Soft Green Backgrounds, Streamlined UI
-*/
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&display=swap');
-
-:root {
-    --rent-teal: #14b8a6;
-    --rent-dark: #374151;
-    --rent-bg: #f8fafc;
-    --rent-border: #e2e8f0;
-    --font-base: 'Outfit', sans-serif;
+.properties-rental-theme {
+  /* Lease Node Palette */
+  --pr-mint: #00d1ff;
+  --pr-slate: #1e293b;
+  --pr-bg: #f8fafc;
+  --pr-border: #e2e8f0;
+  --pr-white: #ffffff;
+  --pr-text-muted: #64748b;
+  
+  /* Typography */
+  --pr-font: 'Inter', sans-serif;
+  
+  /* Radii */
+  --pr-radius: 32px;
+  
+  /* Transitions */
+  --pr-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.rental-wrapper {
-    background-color: var(--rent-bg);
-    color: var(--rent-dark);
-    font-family: var(--font-base);
+.properties-rental-theme {
+  background-color: var(--pr-bg);
+  color: var(--pr-slate);
+  font-family: var(--pr-font);
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Header */
-.lease-header {
-    background: white;
-    padding: 1.25rem 5%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    border-bottom: 1px solid var(--rent-border);
+/* Typography Utilities */
+.pr-heading-xl {
+  font-size: clamp(3rem, 6vw, 6rem);
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
 }
 
-.lease-logo {
-    font-weight: 900;
-    font-size: 1.4rem;
-    color: var(--rent-teal);
-    letter-spacing: -0.5px;
+.pr-mono {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--pr-mint);
 }
 
-.lease-nav {
-    display: flex;
-    gap: 3rem;
+/* Layout */
+.pr-section {
+  padding: 8rem 6%;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
-.lease-nav-link {
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: #64748b;
-    text-decoration: none;
-    transition: color 0.3s ease;
+/* Rental Header */
+.pr-header {
+  padding: 1.5rem 6%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  border-bottom: 1px solid var(--pr-border);
 }
 
-.lease-nav-link:hover {
-    color: var(--rent-teal);
+.pr-logo {
+  font-weight: 900;
+  font-size: 1.5rem;
+  letter-spacing: -1px;
+  color: var(--pr-slate);
 }
 
-/* Hero */
-.lease-hero {
-    padding: 8rem 5%;
-    background: linear-gradient(to right, #ffffff, #f0fdfa);
-    display: flex;
-    align-items: center;
-    gap: 6rem;
-    border-bottom: 1px solid var(--rent-border);
+.pr-nav {
+  display: flex;
+  gap: 3rem;
 }
 
-.lease-hero-content {
-    flex: 1.2;
+.pr-nav-link {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--pr-text-muted);
+  text-decoration: none;
+  transition: var(--pr-transition);
 }
 
-.lease-hero h1 {
-    font-size: 4rem;
-    font-weight: 900;
-    line-height: 1.1;
-    margin-bottom: 2rem;
-    color: var(--rent-dark);
+.pr-nav-link:hover {
+  color: var(--pr-mint);
 }
 
-/* Rent Cards */
-.rent-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2.5rem;
-    padding: 6rem 5%;
+/* Lease Hero */
+.pr-hero {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  align-items: center;
+  gap: 6rem;
+  padding: 10rem 6%;
 }
 
-.rent-card {
-    background: white;
-    border: 1px solid var(--rent-border);
-    border-radius: 16px;
-    overflow: hidden;
-    transition: all 0.3s ease;
+.pr-hero-image-wrapper {
+  position: relative;
+  background: white;
+  padding: 1.5rem;
+  border-radius: var(--pr-radius);
+  box-shadow: 0 40px 100px rgba(0,0,0,0.05);
 }
 
-.rent-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 40px rgba(20, 184, 166, 0.05);
+.pr-hero-image {
+  width: 100%;
+  border-radius: calc(var(--pr-radius) - 1rem);
+  object-fit: cover;
 }
 
-.rent-img-wrapper {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 4/3;
+/* Rent Grid */
+.pr-rent-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2.5rem;
+  margin-top: 4rem;
 }
 
-.rent-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+.pr-rent-card {
+  background: var(--pr-white);
+  border: 1px solid var(--pr-border);
+  border-radius: var(--pr-radius);
+  overflow: hidden;
+  transition: var(--pr-transition);
+  cursor: pointer;
 }
 
-.rent-badge {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    background: white;
-    padding: 0.5rem 1rem;
-    border-radius: 50px;
-    font-size: 0.75rem;
-    font-weight: 800;
-    color: var(--rent-teal);
+.pr-rent-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 30px 60px rgba(0, 209, 255, 0.08);
+  border-color: var(--pr-mint);
 }
 
-.rent-info {
-    padding: 2rem;
+.pr-card-img-wrapper {
+  width: 100%;
+  aspect-ratio: 4/3;
+  overflow: hidden;
+  position: relative;
 }
 
-.rent-price {
-    font-size: 1.5rem;
-    font-weight: 900;
-    color: var(--rent-teal);
-    margin-bottom: 0.5rem;
+.pr-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: var(--pr-transition);
 }
 
-.rent-title {
-    font-size: 1.1rem;
-    font-weight: 700;
-    margin-bottom: 1.5rem;
+.pr-rent-card:hover .pr-card-img {
+  transform: scale(1.05);
 }
 
-.rent-meta {
-    display: flex;
-    gap: 1.5rem;
-    font-size: 0.85rem;
-    color: #94a3b8;
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--rent-border);
+/* Buttons */
+.pr-btn-primary {
+  background: var(--pr-mint);
+  color: white;
+  border: none;
+  padding: 1.25rem 3.5rem;
+  font-weight: 800;
+  font-size: 0.9rem;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: var(--pr-transition);
+  box-shadow: 0 10px 20px rgba(0, 209, 255, 0.2);
+}
+
+.pr-btn-primary:hover {
+  background: var(--pr-slate);
+  transform: translateY(-3px);
+  box-shadow: 0 15px 30px rgba(30, 41, 59, 0.2);
 }
 
 /* Footer */
-.tenant-footer {
-    padding: 8rem 5%;
-    background: #0f172a;
-    color: white;
-}
-
-.tenant-footer-grid {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr;
-    gap: 4rem;
-}
-
-.tenant-footer h4 {
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-bottom: 2.5rem;
-    color: #2dd4bf;
-}
-
-.tenant-footer-link {
-    display: block;
-    color: #64748b;
-    text-decoration: none;
-    margin-bottom: 1.25rem;
-    font-size: 0.95rem;
-}
-
-.tenant-footer-link:hover {
-    color: white;
+.pr-footer {
+  background: var(--pr-slate);
+  color: white;
+  padding: 10rem 6% 4rem;
+  border-radius: var(--pr-radius) var(--pr-radius) 0 0;
 }
