@@ -1,0 +1,157 @@
+/* 
+    Jobs Blue-Collar: The Trade Protocol
+    Design Spec: Safety Orange, Industrial Gray, Direct Utility
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;700&family=Inter:wght@400;700;900&display=swap');
+
+:root {
+    --trade-orange: #f97316;
+    --trade-gray: #4b5563;
+    --trade-bg: #f3f4f6;
+    --trade-border: #d1d5db;
+    --font-heading: 'Roboto Condensed', sans-serif;
+    --font-body: 'Inter', sans-serif;
+}
+
+.blue-collar-jobs-wrapper {
+    background-color: var(--trade-bg);
+    color: var(--trade-gray);
+    font-family: var(--font-body);
+}
+
+/* Header */
+.utility-nav {
+    background: #111827;
+    padding: 1.25rem 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.trade-logo {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--trade-orange);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.trade-nav-links {
+    display: flex;
+    gap: 3rem;
+}
+
+.trade-nav-link {
+    font-family: var(--font-heading);
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #9ca3af;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 0.3s ease;
+}
+
+.trade-nav-link:hover {
+    color: white;
+}
+
+/* Hero */
+.trade-hero {
+    padding: 6rem 5%;
+    background: #1f2937;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 6rem;
+}
+
+.trade-hero-content {
+    flex: 1.2;
+}
+
+.trade-hero h1 {
+    font-family: var(--font-heading);
+    font-size: 5rem;
+    font-weight: 700;
+    line-height: 0.9;
+    margin-bottom: 2rem;
+    text-transform: uppercase;
+}
+
+/* Trade Cards */
+.trade-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    padding: 4rem 5%;
+}
+
+.trade-card {
+    background: white;
+    border: 2px solid var(--trade-border);
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    transition: border-color 0.3s ease;
+}
+
+.trade-card:hover {
+    border-color: var(--trade-orange);
+}
+
+.trade-title {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+    color: #111827;
+}
+
+.trade-company {
+    font-weight: 700;
+    color: var(--trade-orange);
+    margin-bottom: 1.5rem;
+}
+
+.trade-meta {
+    display: flex;
+    gap: 2rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #6b7280;
+    margin-bottom: 2.5rem;
+}
+
+/* Footer */
+.industrial-footer {
+    padding: 8rem 5%;
+    background: #111827;
+    color: white;
+}
+
+.industrial-footer h4 {
+    font-family: var(--font-heading);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 2.5rem;
+    color: var(--trade-orange);
+}
+
+.industrial-footer-link {
+    display: block;
+    color: #4b5563;
+    text-decoration: none;
+    margin-bottom: 1.25rem;
+    font-size: 0.95rem;
+}
+
+.industrial-footer-link:hover {
+    color: white;
+}

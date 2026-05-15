@@ -18,7 +18,7 @@ This document tracks the implementation status of the **50 official themes** reg
 - [x] Unified Mega
 - [ ] Unified Standard
 - [ ] Unified Classic
-- [ ] Unified Minimal
+- [x] Unified Minimal
 - [ ] Unified Marketplace
 
 ## 🏠 Properties Vertical (13 Themes)
@@ -28,7 +28,7 @@ This document tracks the implementation status of the **50 official themes** reg
 - [ ] Properties Classic
 - [x] Properties Luxury 2
 - [x] Properties Urban
-- [ ] Properties Rental
+- [x] Properties Rental
 - [x] Properties Vacation
 - [ ] Properties Unified
 - [x] Properties Commercial
@@ -68,7 +68,7 @@ This document tracks the implementation status of the **50 official themes** reg
 - [x] Jobs Modern
 - [x] Jobs Startup
 - [x] Jobs Corporate
-- [ ] Jobs Blue-Collar
+- [x] Jobs Blue-Collar
 - [x] Jobs Freelance
 
 ## 📋 Classifieds Vertical (5 Themes)
