@@ -1,4 +1,5 @@
 
-export * from './LifestyleHeader';
-export * from './PropertyBentoCard';
-export * from './SageFooter';
+export * from './UrbanHeader';
+export * from './StructureGrid';
+export * from './SkylineSyncBar';
+export * from './CivicFooter';
