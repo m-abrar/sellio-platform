@@ -1,177 +1,242 @@
 /* 
-    Jobs Startup Theme: High-Growth Venture Hub
-    Design Spec: Vibrant Gradients, Pulse Animations, Modern Bento
+    Jobs Startup: The Growth Node (Envato Elite Edition)
+    Design Spec: Deep Space, Rocket Purple, Neon Green
 */
 
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap');
+
 :root {
-    --startup-primary: #8b5cf6; /* Neon Purple */
-    --startup-secondary: #ec4899; /* Electric Pink */
-    --startup-bg: #0f172a;
-    --startup-card: #1e293b;
-    --startup-text: #f8fafc;
-    --startup-muted: #94a3b8;
-    --startup-glow: 0 0 20px rgba(139, 92, 246, 0.3);
+    --growth-space: #0f172a;
+    --growth-purple: #7c3aed;
+    --growth-neon: #22c55e;
+    --growth-text: #f8fafc;
+    --growth-dim: #94a3b8;
+    --growth-border: rgba(255, 255, 255, 0.1);
+    --font-heading: 'Space Grotesk', sans-serif;
+    --font-body: 'Inter', sans-serif;
 }
 
-.jobs-startup-wrapper {
-    font-family: 'Inter', sans-serif;
-    color: var(--startup-text);
-    background-color: var(--startup-bg);
+.growth-node-wrapper {
+    background-color: var(--growth-space);
+    color: var(--growth-text);
+    font-family: var(--font-body);
+    overflow-x: hidden;
+}
+
+/* Glassmorphism */
+.growth-panel {
+    background: rgba(30, 41, 59, 0.4);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--growth-border);
+    border-radius: 20px;
 }
 
 /* Header */
-.rocket-header {
-    padding: 2rem 4rem;
+.growth-header {
+    height: 90px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 0 6%;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--growth-border);
 }
 
-.rocket-logo {
-    font-weight: 900;
+.growth-logo {
+    font-family: var(--font-heading);
+    font-weight: 700;
     font-size: 1.5rem;
-    background: linear-gradient(to right, var(--startup-primary), var(--startup-secondary));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
-.rocket-nav {
+.growth-logo span {
+    color: var(--growth-neon);
+}
+
+.growth-nav {
     display: flex;
     gap: 3rem;
 }
 
-.rocket-nav-link {
+.growth-nav-link {
     font-size: 0.85rem;
-    font-weight: 700;
-    color: var(--startup-muted);
-    transition: color 0.3s ease;
+    font-weight: 600;
+    color: var(--growth-dim);
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
 }
 
-.rocket-nav-link:hover {
-    color: #fff;
+.growth-nav-link:hover {
+    color: var(--growth-neon);
 }
 
 /* Hero */
 .growth-hero {
-    padding: 8rem 4rem;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     text-align: center;
     position: relative;
-    overflow: hidden;
+    padding: 0 10%;
 }
 
-.hero-gradient-orb {
+.growth-hero-glow {
     position: absolute;
-    top: -200px;
+    top: 30%;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translate(-50%, -50%);
     width: 600px;
     height: 600px;
-    background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%);
-    pointer-events: none;
+    background: radial-gradient(circle, var(--growth-purple) 0%, transparent 70%);
+    opacity: 0.2;
+    filter: blur(100px);
+    z-index: -1;
 }
 
-.growth-title {
-    font-size: 5rem;
-    font-weight: 900;
-    line-height: 1;
-    letter-spacing: -3px;
-    margin-bottom: 2rem;
+.growth-hero h1 {
+    font-family: var(--font-heading);
+    font-size: 7rem;
+    font-weight: 700;
+    line-height: 0.9;
+    letter-spacing: -4px;
+    margin-bottom: 3rem;
+    color: white;
 }
 
-.growth-badge {
-    display: inline-block;
-    padding: 0.5rem 1.5rem;
-    background: rgba(236, 72, 153, 0.1);
-    color: var(--startup-secondary);
-    border-radius: 100px;
-    font-weight: 800;
-    font-size: 0.75rem;
-    letter-spacing: 1px;
-    margin-bottom: 2rem;
-    border: 1px solid rgba(236, 72, 153, 0.2);
+.growth-hero h1 span {
+    background: linear-gradient(to right, var(--growth-neon), #fff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
-/* Venture Cards */
-.startup-section {
-    padding: 6rem 4rem;
-}
-
-.venture-grid {
+/* Opportunity Cards */
+.opportunity-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 2rem;
+    padding: 6rem 6%;
 }
 
-.venture-card {
-    background: var(--startup-card);
-    border-radius: 24px;
+.opportunity-card {
     padding: 2.5rem;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    transition: all 0.4s ease;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.venture-card:hover {
-    transform: translateY(-5px) scale(1.02);
-    border-color: var(--startup-primary);
-    box-shadow: var(--startup-glow);
+.opportunity-card:hover {
+    transform: translateY(-10px);
+    border-color: var(--growth-neon);
+    background: rgba(34, 197, 94, 0.05);
 }
 
-.venture-logo {
-    width: 64px;
-    height: 64px;
-    border-radius: 16px;
-    background: #000;
-    margin-bottom: 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.venture-tag {
+.opp-badge {
+    padding: 0.4rem 1rem;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--growth-border);
+    border-radius: 100px;
     font-size: 0.7rem;
-    font-weight: 800;
-    color: var(--startup-primary);
-    margin-bottom: 1rem;
-    display: block;
+    font-weight: 700;
+    color: var(--growth-neon);
+    margin-bottom: 2rem;
+    display: inline-block;
 }
 
-.venture-title {
+.opp-title {
+    font-family: var(--font-heading);
     font-size: 1.5rem;
-    font-weight: 800;
+    font-weight: 600;
     margin-bottom: 1rem;
+    color: white;
 }
 
-.venture-meta {
-    display: flex;
-    gap: 1.5rem;
+/* Stats */
+.growth-stats {
+    padding: 8rem 6%;
+    background: #0a0f1d;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 4rem;
+}
+
+.stat-value {
+    font-family: var(--font-heading);
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
     font-size: 0.8rem;
-    color: var(--startup-muted);
+    color: var(--growth-dim);
+    letter-spacing: 2px;
+    font-weight: 600;
 }
 
-/* Pulse Footer */
-.pulse-footer {
-    padding: 10rem 4rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
-    background: #080c14;
+/* Footer */
+.network-footer {
+    padding: 10rem 6%;
+    background: #020617;
+    border-top: 1px solid var(--growth-border);
 }
 
-@keyframes pulse {
-    0% { transform: scale(1); opacity: 0.5; }
-    50% { transform: scale(1.05); opacity: 0.8; }
-    100% { transform: scale(1); opacity: 0.5; }
+.footer-link {
+    display: block;
+    color: var(--growth-dim);
+    text-decoration: none;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
 }
 
-.live-pulse {
-    width: 12px;
-    height: 12px;
-    background: #10b981;
-    border-radius: 50%;
-    box-shadow: 0 0 10px #10b981;
-    animation: pulse 2s infinite;
+.footer-link:hover {
+    color: var(--growth-neon);
 }
 
-@media (max-width: 1024px) {
-    .venture-grid { grid-template-columns: 1fr; }
-    .growth-title { font-size: 3rem; }
+/* Buttons */
+.growth-btn-primary {
+    background: var(--growth-neon);
+    color: var(--growth-space);
+    border: none;
+    padding: 1.25rem 3.5rem;
+    border-radius: 12px;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.growth-btn-primary:hover {
+    box-shadow: 0 0 40px rgba(34, 197, 94, 0.4);
+    transform: scale(1.05);
+}
+
+.growth-btn-outline {
+    background: transparent;
+    color: white;
+    border: 1px solid var(--growth-border);
+    padding: 1.25rem 3.5rem;
+    border-radius: 12px;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.growth-btn-outline:hover {
+    background: rgba(255,255,255,0.05);
 }

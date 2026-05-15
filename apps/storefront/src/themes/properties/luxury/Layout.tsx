@@ -1,15 +1,16 @@
+
 import React from 'react';
 import './styles.css';
-import { LuxuryHeader, LuxuryFooter } from './components';
+import { PlatinumHeader, ConciergeFooter } from './components';
 
-export default function LuxuryLayout({ children }: { children: React.ReactNode }) {
+export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="properties-luxury">
-      <LuxuryHeader />
-      <main className="luxury-container">
+    <div className="luxury-premium-wrapper">
+      <PlatinumHeader />
+      <main>
         {children}
       </main>
-      <LuxuryFooter />
+      <ConciergeFooter />
     </div>
   );
 }

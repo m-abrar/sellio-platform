@@ -1,125 +1,228 @@
-.unifieds-modern {
-  --font-outfit: 'Outfit', sans-serif;
-  --font-sans: 'Inter', sans-serif;
-  --color-bg: #f8fafc;
-  --color-midnight: #0f172a;
-  --color-primary: #3b82f6;
-  --glass-bg: rgba(255, 255, 255, 0.7);
-  --glass-border: rgba(255, 255, 255, 0.3);
+/* 
+    Unified Modern: The Nexus Prime (Envato Elite Edition)
+    Design Spec: Midnight Core, Cyan Accents, Glassmorphic Layers
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+    --nexus-bg: #020617;
+    --nexus-card: rgba(15, 23, 42, 0.6);
+    --nexus-cyan: #22d3ee;
+    --nexus-violet: #7c3aed;
+    --nexus-text: #f8fafc;
+    --nexus-dim: #94a3b8;
+    --nexus-border: rgba(255, 255, 255, 0.1);
+    --font-nexus: 'Space Grotesk', sans-serif;
+    --font-ui: 'Inter', sans-serif;
 }
 
-.modern-container {
-  background-color: var(--color-bg);
-  color: var(--color-midnight);
-  font-family: var(--font-sans);
-  min-height: 100vh;
+.nexus-prime-wrapper {
+    background-color: var(--nexus-bg);
+    color: var(--nexus-text);
+    font-family: var(--font-ui);
+    overflow-x: hidden;
 }
 
-.glass-nav {
-  position: fixed;
-  top: 1.5rem;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 90%;
-  max-width: 1200px;
-  background: var(--glass-bg);
-  backdrop-filter: blur(12px);
-  border: 1px solid var(--glass-border);
-  border-radius: 100px;
-  padding: 0.8rem 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  z-index: 1000;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+/* Glassmorphism Utility */
+.glass-panel {
+    background: var(--nexus-card);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--nexus-border);
+    border-radius: 24px;
 }
 
-.modern-logo {
-  font-family: var(--font-outfit);
-  font-weight: 800;
-  font-size: 1.5rem;
-  color: var(--color-midnight);
+/* Header */
+.nexus-header {
+    height: 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 6%;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: rgba(2, 6, 23, 0.8);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--nexus-border);
 }
 
-.bento-hero-section {
-  padding: 10rem 4rem 4rem;
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 2rem;
-  max-width: 1400px;
-  margin: 0 auto;
+.nexus-logo {
+    font-family: var(--font-nexus);
+    font-weight: 700;
+    font-size: 1.5rem;
+    background: linear-gradient(to right, var(--nexus-cyan), var(--nexus-violet));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -1px;
 }
 
-.bento-block {
-  background: white;
-  border-radius: 32px;
-  padding: 3rem;
-  border: 1px solid #edf2f7;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+.nexus-nav {
+    display: flex;
+    gap: 3rem;
 }
 
-.bento-block:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+.nexus-nav-link {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--nexus-dim);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
-.hero-main-block {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+.nexus-nav-link:hover {
+    color: var(--nexus-cyan);
 }
 
-.modern-title {
-  font-family: var(--font-outfit);
-  font-size: 4.5rem;
-  font-weight: 800;
-  line-height: 1.1;
-  margin-bottom: 1.5rem;
-  color: var(--color-midnight);
+/* Hero Section */
+.nexus-hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    padding: 0 10%;
 }
 
-.industry-bento-grid {
-  padding: 4rem;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 2rem;
-  max-width: 1400px;
-  margin: 0 auto;
+.nexus-hero-glow {
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, var(--nexus-violet) 0%, transparent 70%);
+    opacity: 0.2;
+    filter: blur(100px);
+    z-index: -1;
 }
 
-.bento-card-modern {
-  background: white;
-  border-radius: 24px;
-  padding: 2rem;
-  border: 1px solid #edf2f7;
-  text-align: center;
+.nexus-hero h1 {
+    font-family: var(--font-nexus);
+    font-size: 6rem;
+    font-weight: 700;
+    line-height: 0.9;
+    letter-spacing: -4px;
+    margin-bottom: 2rem;
 }
 
-.bento-icon-wrapper {
-  width: 60px;
-  height: 60px;
-  background: #eff6ff;
-  border-radius: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-  margin: 0 auto 1.5rem;
-  color: var(--color-primary);
+.nexus-hero h1 span {
+    background: linear-gradient(to right, var(--nexus-cyan), #fff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
-.bento-card-title {
-  font-family: var(--font-outfit);
-  font-weight: 700;
-  font-size: 1.25rem;
-  margin-bottom: 0.5rem;
+/* Bento Features */
+.nexus-bento-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: repeat(2, 300px);
+    gap: 1.5rem;
+    padding: 6rem 6%;
 }
 
-.saas-footer {
-  padding: 6rem 4rem;
-  background: white;
-  border-top: 1px solid #edf2f7;
-  display: grid;
-  grid-template-columns: 2fr repeat(3, 1fr);
-  gap: 4rem;
+.bento-item {
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.bento-item:hover {
+    transform: translateY(-5px);
+    border-color: var(--nexus-cyan);
+}
+
+.bento-main { grid-column: span 8; grid-row: span 2; }
+.bento-side-top { grid-column: span 4; }
+.bento-side-bottom { grid-column: span 4; }
+
+/* Pricing */
+.nexus-pricing {
+    padding: 10rem 6%;
+    text-align: center;
+}
+
+.pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin-top: 4rem;
+}
+
+.price-card {
+    padding: 3rem;
+    text-align: left;
+}
+
+.price-card.featured {
+    border-color: var(--nexus-cyan);
+    background: linear-gradient(180deg, rgba(34, 211, 238, 0.05) 0%, rgba(2, 6, 23, 0) 100%);
+}
+
+/* Footer */
+.nexus-footer {
+    padding: 8rem 6%;
+    background: #010410;
+    border-top: 1px solid var(--nexus-border);
+}
+
+.nexus-footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 4rem;
+}
+
+.nexus-footer h4 {
+    color: white;
+    font-family: var(--font-nexus);
+    margin-bottom: 2rem;
+}
+
+.footer-link {
+    display: block;
+    color: var(--nexus-dim);
+    text-decoration: none;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+}
+
+.footer-link:hover {
+    color: var(--nexus-cyan);
+}
+
+/* Buttons */
+.nexus-btn-primary {
+    background: var(--nexus-cyan);
+    color: var(--nexus-bg);
+    border: none;
+    padding: 1rem 2.5rem;
+    border-radius: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: var(--font-nexus);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.nexus-btn-primary:hover {
+    box-shadow: 0 0 30px rgba(34, 211, 238, 0.4);
+    transform: scale(1.02);
+}
+
+.nexus-btn-outline {
+    background: transparent;
+    color: white;
+    border: 1px solid var(--nexus-border);
+    padding: 1rem 2.5rem;
+    border-radius: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.nexus-btn-outline:hover {
+    background: rgba(255,255,255,0.05);
 }

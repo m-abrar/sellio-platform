@@ -1,16 +1,16 @@
 
 import React from 'react';
 import './styles.css';
-import { MusicHeader, MusicFooter } from './components';
+import { SonicHeader, VoltageFooter } from './components';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="events-music-wrapper">
-      <MusicHeader />
+    <div className="sonic-pulse-wrapper">
+      <SonicHeader />
       <main>
         {children}
       </main>
-      <MusicFooter />
+      <VoltageFooter />
     </div>
   );
 }

@@ -1,133 +1,214 @@
-.autos-luxury {
-  --color-charcoal: #0a0a0a;
-  --color-silver: #c0c0c0;
-  --color-text: #ffffff;
-  --font-serif: 'Playfair Display', serif;
-  --font-sans: 'Inter', sans-serif;
+/* 
+    Autos Luxury: The Diamond Drive (Envato Elite Edition)
+    Design Spec: Obsidian, Silver, Electric Blue, High-Speed Motion
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+    --drive-obsidian: #0a0a0a;
+    --drive-silver: #e2e8f0;
+    --drive-blue: #3b82f6;
+    --drive-bg: #000000;
+    --drive-card: #111111;
+    --drive-border: rgba(255, 255, 255, 0.1);
+    --font-heading: 'Syne', sans-serif;
+    --font-body: 'Inter', sans-serif;
 }
 
-.luxury-garage-container {
-  background-color: var(--color-charcoal);
-  color: var(--color-text);
-  font-family: var(--font-sans);
-  min-height: 100vh;
+.diamond-drive-wrapper {
+    background-color: var(--drive-bg);
+    color: var(--drive-silver);
+    font-family: var(--font-body);
+    overflow-x: hidden;
 }
 
-.atelier-header {
-  padding: 3rem 6rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: var(--color-charcoal);
-  border-bottom: 1px solid rgba(255,255,255,0.05);
-  position: sticky;
-  top: 0;
-  z-index: 100;
+/* Header */
+.diamond-header {
+    height: 90px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 6%;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--drive-border);
 }
 
-.atelier-logo {
-  font-family: var(--font-serif);
-  font-size: 1.8rem;
-  font-weight: 400;
-  letter-spacing: 5px;
-  text-transform: uppercase;
+.diamond-logo {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: 1.5rem;
+    color: white;
+    letter-spacing: -1px;
 }
 
-.atelier-nav {
-  display: flex;
-  gap: 4rem;
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 3px;
-  text-transform: uppercase;
+.diamond-nav {
+    display: flex;
+    gap: 4rem;
 }
 
-.luxury-car-hero {
-  height: 90vh;
-  padding: 6rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  position: relative;
-  overflow: hidden;
+.diamond-nav-link {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #666;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    transition: all 0.3s ease;
 }
 
-.luxury-car-hero h1 {
-  font-family: var(--font-serif);
-  font-size: 5rem;
-  font-weight: 400;
-  line-height: 1;
-  margin-bottom: 2rem;
-  position: relative;
-  z-index: 10;
+.diamond-nav-link:hover {
+    color: var(--drive-blue);
 }
 
-.monolithic-car-grid {
-  padding: 0;
+/* Hero */
+.diamond-hero {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    padding: 0 10%;
+    background: radial-gradient(circle at center, #111 0%, #000 100%);
 }
 
-.monolithic-block {
-  height: 100vh;
-  position: relative;
-  display: flex;
-  align-items: center;
-  padding: 0 6rem;
+.diamond-hero h1 {
+    font-family: var(--font-heading);
+    font-size: 8rem;
+    font-weight: 800;
+    line-height: 0.85;
+    letter-spacing: -6px;
+    margin-bottom: 3rem;
+    color: white;
 }
 
-.monolithic-image-bg {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
+.diamond-hero h1 span {
+    color: var(--drive-blue);
 }
 
-.monolithic-image-bg img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: brightness(0.6);
+/* Vehicle Showcase */
+.vehicle-showcase {
+    padding: 10rem 6%;
 }
 
-.monolithic-content {
-  position: relative;
-  z-index: 10;
-  max-width: 600px;
+.vehicle-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
 }
 
-.precision-spec-row {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 3rem;
-  margin-top: 3rem;
-  border-top: 1px solid rgba(255,255,255,0.1);
-  padding-top: 2rem;
+.vehicle-card-premium {
+    background: var(--drive-card);
+    border: 1px solid var(--drive-border);
+    border-radius: 4px;
+    overflow: hidden;
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.spec-item {
-  display: flex;
-  flex-direction: column;
+.vehicle-card-premium:hover {
+    border-color: var(--drive-blue);
+    transform: translateY(-10px);
 }
 
-.spec-value {
-  font-family: var(--font-serif);
-  font-size: 1.5rem;
-  color: var(--color-silver);
+.vehicle-img-wrapper {
+    height: 400px;
+    overflow: hidden;
 }
 
-.spec-label {
-  font-size: 0.6rem;
-  letter-spacing: 2px;
-  font-weight: 800;
-  opacity: 0.5;
-  text-transform: uppercase;
-  margin-top: 0.5rem;
+.vehicle-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1s ease;
 }
 
-.concierge-footer {
-  padding: 10rem 6rem;
-  background: #000;
-  text-align: center;
-  border-top: 1px solid rgba(255,255,255,0.05);
+.vehicle-card-premium:hover .vehicle-img {
+    transform: scale(1.1);
+}
+
+.vehicle-info {
+    padding: 3rem;
+}
+
+.vehicle-price {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 1rem;
+}
+
+/* Stats */
+.performance-stats {
+    padding: 8rem 6%;
+    background: #050505;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 4rem;
+}
+
+.stat-item {
+    text-align: left;
+}
+
+.stat-value {
+    font-family: var(--font-heading);
+    font-size: 4rem;
+    font-weight: 800;
+    color: var(--drive-blue);
+    line-height: 1;
+    margin-bottom: 1rem;
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #444;
+    letter-spacing: 2px;
+}
+
+/* Footer */
+.elite-drive-footer {
+    padding: 8rem 6%;
+    background: #000;
+    border-top: 1px solid var(--drive-border);
+}
+
+.footer-link {
+    display: block;
+    color: #444;
+    text-decoration: none;
+    margin-bottom: 1.25rem;
+    font-size: 0.9rem;
+}
+
+.footer-link:hover {
+    color: white;
+}
+
+/* Buttons */
+.drive-btn-primary {
+    background: var(--drive-blue);
+    color: white;
+    border: none;
+    padding: 1.5rem 4.5rem;
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.drive-btn-primary:hover {
+    box-shadow: 0 0 40px rgba(59, 130, 246, 0.4);
+    transform: scale(1.05);
 }

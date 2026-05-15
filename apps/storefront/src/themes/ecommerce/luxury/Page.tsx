@@ -1,65 +1,64 @@
+
 import React from 'react';
-import { ProductTile } from './components';
+import { ProductShowcase, BrandNarrative } from './components';
 
-export default function LuxuryRetailPage() {
-  const products = [
-    { name: "The Obsidian Timepiece", price: "$4,200", category: "HOROLOGY", image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=2070" },
-    { name: "Silk Noir Evening Wrap", price: "$1,850", category: "ACCESSORIES", image: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?q=80&w=2070" },
-    { name: "Aurelian Fragrance", price: "$320", category: "BEAUTY", image: "https://images.unsplash.com/photo-1541643600914-78b084683601?q=80&w=2070" },
-    { name: "Crafted Calfskin Tote", price: "$2,900", category: "LEATHER_GOODS", image: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?q=80&w=2070" },
-  ];
-
+export default function Page() {
   return (
     <div>
-      <section className="luxury-retail-hero">
-        <img 
-          src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=2070" 
-          alt="Boutique Hero" 
-          style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', filter: 'brightness(0.7)' }} 
-        />
-        <div className="hero-overlay-text">
-          <p>COLLECTION_04</p>
-          <h1>The Quiet Minimalist</h1>
-          <button style={{ 
-            marginTop: '2rem', 
-            backgroundColor: 'white', 
-            color: 'black', 
-            padding: '1rem 3rem', 
-            border: 'none', 
-            fontFamily: 'var(--font-serif)', 
-            cursor: 'pointer',
-            letterSpacing: '2px'
-          }}>
-            EXPLORE_ATELIER
-          </button>
-        </div>
+      {/* Hero Section */}
+      <section className="atelier-hero">
+          <div style={{ maxWidth: '1000px' }}>
+              <span style={{ fontSize: '0.8rem', fontWeight: 500, color: 'var(--atelier-gold)', letterSpacing: '8px', display: 'block', marginBottom: '2.5rem' }}>BOUTIQUE_DISTRIBUTION_V1</span>
+              <h1>The <span>Art</span> of <br/>Atmosphere.</h1>
+              <p style={{ fontSize: '1.25rem', color: '#888', lineHeight: 2, marginBottom: '5rem', maxWidth: '700px', margin: '0 auto 5rem' }}>
+                  A curated high-fidelity edit of the world's most significant fashion assets. Precision in construction, verified by the Atelier protocol.
+              </p>
+              <div style={{ display: 'flex', gap: '2rem', justifyContent: 'center' }}>
+                  <button className="atelier-btn-primary">EXPLORE_COLLECTION</button>
+                  <button style={{ background: 'none', border: '1px solid #ddd', padding: '1.25rem 4rem', fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '2px', cursor: 'pointer' }}>READ_THE_JOURNAL</button>
+              </div>
+          </div>
       </section>
 
-      <section style={{ padding: '6rem 4rem', textAlign: 'center' }}>
-        <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '2.5rem', marginBottom: '1rem' }}>Seasonal Curations</h2>
-        <p style={{ opacity: 0.5, letterSpacing: '2px' }}>EXCLUSIVELY CRAFTED // LIMITED_NUMBERS</p>
+      {/* Logic Bar */}
+      <section style={{ padding: '3.5rem 5%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#fff', borderBottom: '1px solid var(--atelier-border)', color: '#ccc', fontSize: '0.7rem', fontWeight: 600, letterSpacing: '4px' }}>
+          <span>AUTHENTICITY_NODES: 100%</span>
+          <span>GLOBAL_DISTRIBUTION: ACTIVE</span>
+          <span>BOUTIQUE_SYNC: VERIFIED</span>
+          <span>BESPOKE_ACCESS: OPEN</span>
       </section>
 
-      <div className="monolithic-product-grid">
-        {products.map((p, i) => (
-          <ProductTile key={i} {...p} />
-        ))}
-      </div>
+      {/* Product Showcase */}
+      <ProductShowcase />
 
-      <section style={{ height: '60vh', display: 'flex', borderTop: '1px solid #f0f0f0' }}>
-        <div style={{ flex: 1, padding: '6rem 4rem', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-          <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '2.5rem', marginBottom: '2rem' }}>Artisanal Heritage</h2>
-          <p style={{ lineHeight: '1.8', opacity: 0.7 }}>
-            Every piece in our collection is a testament to the enduring power of craftsmanship. We collaborate with world-renowned artisans to preserve traditional techniques while embracing modern aesthetic precision.
-          </p>
-        </div>
-        <div style={{ flex: 1 }}>
-          <img 
-            src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=2070" 
-            alt="Craftsmanship" 
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
-          />
-        </div>
+      {/* Narrative Section */}
+      <BrandNarrative />
+
+      {/* Mid-Section Image Grid */}
+      <section style={{ padding: '10rem 5%', display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '2rem' }}>
+          <div style={{ height: '700px', background: 'var(--atelier-silk)', overflow: 'hidden' }}>
+              <img src="https://images.unsplash.com/photo-1490481651871-ab68624d5517?q=80&w=2070" alt="Luxury Fashion" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+              <div style={{ flex: 1, background: 'var(--atelier-silk)', overflow: 'hidden' }}>
+                  <img src="https://images.unsplash.com/photo-1445205170230-053b83016050?q=80&w=2071" alt="Texture" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              </div>
+              <div style={{ padding: '4rem', background: 'white', border: '1px solid var(--atelier-border)' }}>
+                  <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '2rem', marginBottom: '2rem' }}>Timeless Logic.</h3>
+                  <p style={{ color: '#888', lineHeight: 2 }}>Every piece is tracked via the Sellio registry, ensuring a lifetime of high-fidelity authenticity and provenance.</p>
+              </div>
+          </div>
+      </section>
+
+      {/* Final CTA */}
+      <section style={{ padding: '15rem 5%', textAlign: 'center' }}>
+          <div style={{ maxWidth: '700px', margin: '0 auto' }}>
+              <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '5rem', fontWeight: 900, marginBottom: '3rem', letterSpacing: '-3px' }}>The Atelier <br/>Registry.</h2>
+              <p style={{ fontSize: '1.25rem', color: '#888', lineHeight: 2, marginBottom: '5rem' }}>
+                  Join the exclusive distribution node for high-fidelity fashion. Verify your collection and gain access to off-market edits.
+              </p>
+              <button className="atelier-btn-primary" style={{ padding: '2rem 6rem', fontSize: '1rem' }}>CONNECT_TO_ATELIER</button>
+          </div>
       </section>
     </div>
   );

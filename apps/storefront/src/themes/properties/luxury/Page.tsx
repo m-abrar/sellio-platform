@@ -1,41 +1,67 @@
+
 import React from 'react';
-import { PropertyCard } from './components';
+import { EstateShowcase, LuxuryAmenities } from './components';
 
-export default function LuxuryPage() {
-  const properties = [
-    { title: "The Obsidian Villa", price: "$12,500,000", image: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=2071" },
-    { title: "Ethereal Heights", price: "$8,200,000", image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2070" },
-    { title: "Azure Waterfront", price: "$15,000,000", image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070" },
-    { title: "The Gilded Penthouse", price: "$22,000,000", image: "https://images.unsplash.com/photo-1600607687940-c52af096999a?q=80&w=2070" },
-  ];
-
+export default function Page() {
   return (
     <div>
-      <section className="luxury-hero">
-        <img 
-          src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2075" 
-          alt="Luxury Estate" 
-          className="luxury-hero-image"
-        />
-        <div className="luxury-hero-content">
-          <p className="luxury-hero-subtitle">Defining the Art of Living</p>
-          <h1 className="luxury-hero-title">Beyond Excellence</h1>
-        </div>
+      {/* Hero Section */}
+      <section className="platinum-hero">
+          <div className="platinum-hero-content">
+              <span style={{ fontSize: '0.8rem', fontWeight: 800, color: 'var(--luxury-gold)', letterSpacing: '5px', display: 'block', marginBottom: '2rem' }}>ESTABLISHED_REPRESENTATION</span>
+              <h1>The <span>Platinum</span> <br/>Collection.</h1>
+              <p style={{ fontSize: '1.25rem', color: '#666', lineHeight: 2, marginBottom: '4rem', maxWidth: '600px' }}>
+                  A curated distribution of the world's most significant luxury estates. Immersive, high-fidelity representation for the discerning asset holder.
+              </p>
+              <button className="luxury-btn-primary">EXPLORE_COLLECTION</button>
+          </div>
+          <div>
+              <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2070" alt="Luxury Villa" className="platinum-hero-img" />
+          </div>
       </section>
 
-      <div className="asymmetric-grid">
-        {properties.map((p, i) => (
-          <PropertyCard key={i} {...p} />
-        ))}
-      </div>
+      {/* Logic Bar */}
+      <section style={{ padding: '3rem 5%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#fff', borderBottom: '1px solid var(--luxury-border)', color: '#bbb', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '3px' }}>
+          <span>ASSETS_UNDER_MANAGEMENT: $18.4B</span>
+          <span>NODAL_VERIFICATION: ELITE</span>
+          <span>GLOBAL_DISTRIBUTION: ACTIVE</span>
+          <span>PRIVATE_ACCESS: GRANTED</span>
+      </section>
 
-      <section style={{ padding: '10rem 4rem', textAlign: 'center', backgroundColor: '#fff' }}>
-        <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '3rem', marginBottom: '2rem' }}>
-          Unrivaled Expertise
-        </h2>
-        <p style={{ maxWidth: '600px', margin: '0 auto', lineHeight: '1.8', color: '#666' }}>
-          Our global network of real estate professionals provides unparalleled access to the world's most exclusive properties. From London to Dubai, we represent the pinnacle of architectural achievement.
-        </p>
+      {/* Showcase */}
+      <EstateShowcase />
+
+      {/* Middle Section: Editorial */}
+      <section style={{ padding: '15rem 5%', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10rem', alignItems: 'center', background: 'var(--luxury-platinum)' }}>
+          <div style={{ position: 'relative' }}>
+              <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070" alt="Modern Architecture" style={{ width: '100%', borderRadius: '4px', boxShadow: '0 40px 80px rgba(0,0,0,0.05)' }} />
+              <div style={{ position: 'absolute', bottom: '-4rem', right: '-4rem', padding: '4rem', background: 'white', border: '1px solid var(--luxury-border)', boxShadow: '0 20px 40px rgba(0,0,0,0.05)' }}>
+                  <div style={{ fontSize: '3rem', fontWeight: 900, fontFamily: 'var(--font-serif)', color: 'var(--luxury-gold)' }}>50+</div>
+                  <div style={{ fontSize: '0.7rem', fontWeight: 800, color: '#aaa', letterSpacing: '2px' }}>OFF_MARKET_NODES</div>
+              </div>
+          </div>
+          <div>
+              <span style={{ fontSize: '0.8rem', fontWeight: 800, color: 'var(--luxury-gold)', letterSpacing: '5px' }}>EDITORIAL_INSIGHT</span>
+              <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '3.5rem', fontWeight: 900, marginTop: '1rem', marginBottom: '3rem' }}>Bespoke Architecture. <br/>Global Context.</h2>
+              <p style={{ fontSize: '1.1rem', color: '#666', lineHeight: 2, marginBottom: '4rem' }}>
+                  Every property in our Platinum Collection is more than an asset; it is a architectural statement. Our high-fidelity platform ensures that the narrative of each estate is preserved and communicated with surgical precision.
+              </p>
+              <button style={{ background: 'none', border: 'none', borderBottom: '2px solid var(--luxury-charcoal)', padding: '0.5rem 0', fontWeight: 800, fontSize: '0.85rem', cursor: 'pointer' }}>READ_THE_JOURNAL</button>
+          </div>
+      </section>
+
+      {/* Amenities */}
+      <LuxuryAmenities />
+
+      {/* Final CTA */}
+      <section style={{ padding: '15rem 5%', textAlign: 'center', background: 'var(--luxury-charcoal)', color: 'white' }}>
+          <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+              <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '5rem', fontWeight: 900, marginBottom: '3rem', letterSpacing: '-2px' }}>Define your <br/>Legacy.</h2>
+              <p style={{ fontSize: '1.25rem', opacity: 0.6, lineHeight: 2, marginBottom: '5rem' }}>
+                  Our concierge team is standing by to facilitate your next high-fidelity acquisition. Connect with the world's most exclusive distribution network.
+              </p>
+              <button className="luxury-btn-primary" style={{ background: 'var(--luxury-gold)', color: 'white', padding: '2rem 6rem', fontSize: '1.1rem' }}>CONNECT_WITH_CONCIERGE</button>
+          </div>
       </section>
     </div>
   );

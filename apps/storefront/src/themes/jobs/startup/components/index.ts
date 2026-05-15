@@ -1,4 +1,5 @@
 
-export * from './RocketHeader';
-export * from './VentureCard';
-export * from './PulseFooter';
+export * from './GrowthHeader';
+export * from './OpportunityGrid';
+export * from './MissionControlSection';
+export * from './NetworkFooter';

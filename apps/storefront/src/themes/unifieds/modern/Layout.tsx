@@ -1,15 +1,16 @@
+
 import React from 'react';
 import './styles.css';
-import { GlassNav, SaaSFooter } from './components';
+import { NexusHeader, NexusFooter } from './components';
 
-export default function ModernSaaSLayout({ children }: { children: React.ReactNode }) {
+export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="unifieds-modern">
-      <GlassNav />
-      <main className="modern-container">
+    <div className="nexus-prime-wrapper">
+      <NexusHeader />
+      <main>
         {children}
       </main>
-      <SaaSFooter />
+      <NexusFooter />
     </div>
   );
 }

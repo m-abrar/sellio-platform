@@ -1,170 +1,223 @@
-.properties-luxury {
-  --font-serif: 'Playfair Display', serif;
-  --font-sans: 'Inter', sans-serif;
-  --luxury-gold: #c5a059;
-  --luxury-black: #1a1a1a;
-  --luxury-off-white: #fcfcfc;
-  --luxury-glass: rgba(255, 255, 255, 0.05);
+/* 
+    Properties Luxury: The Platinum Estate (Envato Elite Edition)
+    Design Spec: Platinum, Gold, High-Contrast Typography
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Montserrat:wght@300;400;600;800&display=swap');
+
+:root {
+    --luxury-gold: #d4af37;
+    --luxury-platinum: #f8f9fa;
+    --luxury-charcoal: #171717;
+    --luxury-bg: #ffffff;
+    --luxury-border: #e5e5e5;
+    --font-serif: 'Playfair Display', serif;
+    --font-sans: 'Montserrat', sans-serif;
 }
 
-.luxury-container {
-  background-color: var(--luxury-off-white);
-  color: var(--luxury-black);
-  font-family: var(--font-sans);
-  min-height: 100vh;
+.luxury-premium-wrapper {
+    background-color: var(--luxury-bg);
+    color: var(--luxury-charcoal);
+    font-family: var(--font-sans);
+    overflow-x: hidden;
 }
 
-.luxury-header {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  padding: 2rem 4rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  z-index: 100;
-  backdrop-filter: blur(var(--glass-blur, 20px));
-  border-bottom: 1px solid rgba(197, 160, 89, 0.1);
+/* Header */
+.platinum-header {
+    height: 100px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 5%;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--luxury-border);
 }
 
-.luxury-logo {
-  font-family: var(--font-serif);
-  font-size: 1.5rem;
-  font-weight: 700;
-  letter-spacing: 2px;
-  color: var(--luxury-black);
+.platinum-logo {
+    font-family: var(--font-serif);
+    font-weight: 900;
+    font-size: 1.8rem;
+    color: var(--luxury-charcoal);
+    letter-spacing: -1px;
 }
 
-.luxury-nav-orb {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: 1px solid var(--luxury-gold);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 4px;
-  cursor: pointer;
-  transition: all 0.3s ease;
+.platinum-nav {
+    display: flex;
+    gap: 4rem;
 }
 
-.luxury-nav-orb:hover {
-  background-color: var(--luxury-gold);
+.platinum-nav-link {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #888;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    transition: color 0.3s ease;
 }
 
-.luxury-nav-orb span {
-  width: 18px;
-  height: 1px;
-  background-color: var(--luxury-black);
-  transition: all 0.3s ease;
+.platinum-nav-link:hover {
+    color: var(--luxury-gold);
 }
 
-.luxury-nav-orb:hover span {
-  background-color: white;
+/* Hero */
+.platinum-hero {
+    height: 90vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 0 5%;
+    background: var(--luxury-platinum);
 }
 
-.luxury-hero {
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 4rem;
-  overflow: hidden;
-  position: relative;
+.platinum-hero-content {
+    padding-right: 10%;
 }
 
-.luxury-hero-image {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: -1;
-  filter: brightness(0.8);
+.platinum-hero h1 {
+    font-family: var(--font-serif);
+    font-size: 6rem;
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 2.5rem;
+    letter-spacing: -2px;
 }
 
-.luxury-hero-content {
-  text-align: center;
-  max-width: 800px;
+.platinum-hero h1 span {
+    color: var(--luxury-gold);
+    font-style: italic;
+    font-weight: 400;
 }
 
-.luxury-hero-title {
-  font-family: var(--font-serif);
-  font-size: 5rem;
-  line-height: 1;
-  margin-bottom: 2rem;
-  color: white;
-  text-shadow: 0 10px 30px rgba(0,0,0,0.3);
+.platinum-hero-img {
+    height: 80%;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 4px;
+    box-shadow: 40px 40px 80px rgba(0,0,0,0.1);
 }
 
-.luxury-hero-subtitle {
-  font-size: 1.1rem;
-  letter-spacing: 4px;
-  text-transform: uppercase;
-  color: var(--luxury-gold);
-  margin-bottom: 1rem;
+/* Featured Listings */
+.estate-showcase {
+    padding: 10rem 5%;
 }
 
-.asymmetric-grid {
-  padding: 8rem 4rem;
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  gap: 4rem;
+.showcase-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6rem;
 }
 
-.property-card-luxury {
-  grid-column: span 6;
-  position: relative;
-  aspect-ratio: 4/5;
-  overflow: hidden;
-  border: 1px solid rgba(197, 160, 89, 0.2);
-  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+.estate-card-premium {
+    position: relative;
+    overflow: hidden;
 }
 
-.property-card-luxury:nth-child(even) {
-  margin-top: 6rem;
+.estate-card-img {
+    width: 100%;
+    aspect-ratio: 4/5;
+    object-fit: cover;
+    transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.property-card-luxury:hover {
-  transform: translateY(-10px);
-  box-shadow: var(--shadow-premium);
+.estate-card-premium:hover .estate-card-img {
+    transform: scale(1.05);
 }
 
-.luxury-card-overlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  padding: 3rem;
-  background: linear-gradient(transparent, rgba(0,0,0,0.8));
-  color: white;
-  transition: all 0.5s ease;
+.estate-card-info {
+    padding: 2.5rem 0;
 }
 
-.luxury-card-title {
-  font-family: var(--font-serif);
-  font-size: 2rem;
-  margin-bottom: 0.5rem;
+.estate-card-tag {
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: var(--luxury-gold);
+    letter-spacing: 3px;
+    margin-bottom: 1rem;
+    display: block;
 }
 
-.luxury-card-price {
-  color: var(--luxury-gold);
-  font-weight: 600;
-  letter-spacing: 1px;
+.estate-card-title {
+    font-family: var(--font-serif);
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
 }
 
-.luxury-footer {
-  padding: 6rem 4rem;
-  background-color: var(--luxury-black);
-  color: white;
-  text-align: center;
+/* Amenities */
+.luxury-amenities {
+    padding: 10rem 5%;
+    background: var(--luxury-charcoal);
+    color: white;
 }
 
-.luxury-footer-logo {
-  font-family: var(--font-serif);
-  font-size: 2.5rem;
-  margin-bottom: 2rem;
-  display: block;
+.amenity-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 4rem;
+}
+
+.amenity-item {
+    text-align: center;
+}
+
+.amenity-icon {
+    font-size: 3rem;
+    color: var(--luxury-gold);
+    margin-bottom: 1.5rem;
+    display: block;
+}
+
+/* Footer */
+.concierge-footer {
+    padding: 8rem 5%;
+    background: #fdfdfd;
+    border-top: 1px solid var(--luxury-border);
+}
+
+.concierge-footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 5rem;
+}
+
+.concierge-footer h4 {
+    font-family: var(--font-serif);
+    font-size: 1rem;
+    margin-bottom: 2rem;
+    font-style: italic;
+}
+
+.footer-link {
+    display: block;
+    color: #888;
+    text-decoration: none;
+    margin-bottom: 1.25rem;
+    font-size: 0.9rem;
+}
+
+.footer-link:hover {
+    color: var(--luxury-charcoal);
+}
+
+/* Buttons */
+.luxury-btn-primary {
+    background: var(--luxury-charcoal);
+    color: white;
+    border: none;
+    padding: 1.5rem 4rem;
+    font-family: var(--font-serif);
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.luxury-btn-primary:hover {
+    background: var(--luxury-gold);
+    color: white;
 }

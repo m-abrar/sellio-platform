@@ -1,15 +1,16 @@
+
 import React from 'react';
 import './styles.css';
-import { AtelierHeader, ConciergeFooter } from './components';
+import { DiamondHeader, EliteDriveFooter } from './components';
 
-export default function LuxuryGarageLayout({ children }: { children: React.ReactNode }) {
+export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="autos-luxury">
-      <AtelierHeader />
-      <main className="luxury-garage-container">
+    <div className="diamond-drive-wrapper">
+      <DiamondHeader />
+      <main>
         {children}
       </main>
-      <ConciergeFooter />
+      <EliteDriveFooter />
     </div>
   );
 }
