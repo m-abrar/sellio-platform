@@ -156,6 +156,8 @@ When implementing any of the 50 themes, follow this **Golden Prompt**:
 | `unifieds_mega` | Unified | 100% | **Elite** | High-Density Bento |
 | `ecommerce_fashion` | Ecommerce | 100% | **Elite** | Editorial Lookbook |
 | `jobs_startup` | Jobs | 100% | **Elite** | Energetic Venture |
+| `classifieds_premium` | Classifieds | 100% | **Elite** | Elite Curated |
+| `services_health` | Services | 100% | **Elite** | Wellness Serenity |
 
 ---
 

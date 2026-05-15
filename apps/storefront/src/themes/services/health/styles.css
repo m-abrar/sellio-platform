@@ -1,0 +1,164 @@
+/* 
+    Services Health Theme: Wellness & Clinical Trust
+    Design Spec: Soft Palettes, High Whitespace, Professional Serenity
+*/
+
+:root {
+    --health-primary: #0d9488; /* Teal */
+    --health-secondary: #f0fdfa; /* Mint Tint */
+    --health-bg: #ffffff;
+    --health-card: #f9fafb;
+    --health-text: #111827;
+    --health-muted: #6b7280;
+    --health-border: #e5e7eb;
+}
+
+.services-health-wrapper {
+    font-family: 'Inter', sans-serif;
+    color: var(--health-text);
+    background-color: var(--health-bg);
+}
+
+/* Header */
+.clinic-header {
+    padding: 1.5rem 4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--health-border);
+    background: white;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.clinic-logo {
+    font-weight: 800;
+    font-size: 1.25rem;
+    color: var(--health-primary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.clinic-nav {
+    display: flex;
+    gap: 2.5rem;
+}
+
+.clinic-nav-link {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--health-muted);
+    transition: color 0.3s ease;
+}
+
+.clinic-nav-link:hover {
+    color: var(--health-primary);
+}
+
+/* Hero */
+.health-hero {
+    padding: 8rem 4rem;
+    background: linear-gradient(to bottom right, #f0fdfa 0%, #ffffff 100%);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: center;
+}
+
+.hero-health-content {
+    max-width: 600px;
+}
+
+.health-hero-title {
+    font-size: 3.5rem;
+    font-weight: 900;
+    line-height: 1.2;
+    margin-bottom: 2rem;
+    color: #134e4a;
+}
+
+.health-hero-subtitle {
+    font-size: 1.125rem;
+    color: var(--health-muted);
+    line-height: 1.8;
+    margin-bottom: 3rem;
+}
+
+.health-btn {
+    padding: 1rem 2.5rem;
+    background: var(--health-primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    transition: all 0.3s ease;
+}
+
+.health-btn:hover {
+    background: #0f766e;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(13, 148, 136, 0.2);
+}
+
+/* Specialist Cards */
+.health-section {
+    padding: 8rem 4rem;
+}
+
+.health-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+}
+
+.specialist-card {
+    background: white;
+    border: 1px solid var(--health-border);
+    border-radius: 20px;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.specialist-card:hover {
+    border-color: var(--health-primary);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+}
+
+.specialist-img-circle {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    margin: 0 auto 2rem auto;
+    overflow: hidden;
+    background: var(--health-secondary);
+}
+
+.specialist-name {
+    font-weight: 800;
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.specialist-title {
+    font-size: 0.85rem;
+    color: var(--health-primary);
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+}
+
+/* Footer */
+.health-footer {
+    padding: 6rem 4rem;
+    background: #f9fafb;
+    border-top: 1px solid var(--health-border);
+}
+
+@media (max-width: 1024px) {
+    .health-hero { grid-template-columns: 1fr; text-align: center; }
+    .hero-health-content { margin: 0 auto; }
+    .health-grid { grid-template-columns: repeat(2, 1fr); }
+}

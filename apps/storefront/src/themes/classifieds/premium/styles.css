@@ -1,0 +1,187 @@
+/* 
+    Classifieds Premium Theme: Elite Curated Marketplace
+    Design Spec: Midnight Aesthetic, Gold Hairline Accents, Sophisticated Typography
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,900;1,400&display=swap');
+
+:root {
+    --prem-primary: #111111;
+    --prem-accent: #d4af37; /* Gold */
+    --prem-bg: #0a0a0a;
+    --prem-card: #161616;
+    --prem-text: #ffffff;
+    --prem-muted: #666666;
+    --prem-serif: 'Bodoni Moda', serif;
+}
+
+.classifieds-premium-wrapper {
+    font-family: 'Inter', sans-serif;
+    color: var(--prem-text);
+    background-color: var(--prem-bg);
+}
+
+/* Header */
+.elite-header {
+    padding: 2.5rem 4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+}
+
+.elite-logo {
+    font-family: var(--prem-serif);
+    font-weight: 900;
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+    color: var(--prem-accent);
+}
+
+.elite-nav {
+    display: flex;
+    gap: 3rem;
+}
+
+.elite-nav-link {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--prem-muted);
+    transition: color 0.3s ease;
+}
+
+.elite-nav-link:hover {
+    color: var(--prem-accent);
+}
+
+/* Hero */
+.elite-hero {
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 0 2rem;
+    position: relative;
+    background: radial-gradient(circle at center, #1a1a1a 0%, #0a0a0a 100%);
+}
+
+.elite-hero-title {
+    font-family: var(--prem-serif);
+    font-size: 5.5rem;
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 2rem;
+    background: linear-gradient(to bottom, #fff 0%, #aaa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.elite-hero-subtitle {
+    font-size: 1.125rem;
+    color: var(--prem-muted);
+    max-width: 600px;
+    line-height: 1.8;
+    margin-bottom: 4rem;
+}
+
+.elite-btn {
+    padding: 1.25rem 3.5rem;
+    background: transparent;
+    border: 1px solid var(--prem-accent);
+    color: var(--prem-accent);
+    font-weight: 800;
+    font-size: 0.85rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+}
+
+.elite-btn:hover {
+    background: var(--prem-accent);
+    color: #000;
+    box-shadow: 0 0 30px rgba(212, 175, 55, 0.2);
+}
+
+/* Grid */
+.elite-section {
+    padding: 10rem 4rem;
+}
+
+.elite-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3rem;
+}
+
+.elite-card {
+    background: var(--prem-card);
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.5s cubic-bezier(0.2, 1, 0.3, 1);
+}
+
+.elite-card:hover {
+    border-color: var(--prem-accent);
+    transform: translateY(-10px);
+}
+
+.elite-card-img-wrapper {
+    width: 100%;
+    aspect-ratio: 1/1;
+    overflow: hidden;
+}
+
+.elite-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1s ease;
+}
+
+.elite-card:hover .elite-card-img {
+    transform: scale(1.1);
+}
+
+.elite-card-content {
+    padding: 2.5rem;
+}
+
+.elite-card-tag {
+    font-size: 0.65rem;
+    font-weight: 900;
+    color: var(--prem-accent);
+    letter-spacing: 2px;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.elite-card-title {
+    font-family: var(--prem-serif);
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.elite-card-price {
+    font-size: 1.125rem;
+    font-weight: 400;
+    opacity: 0.8;
+}
+
+/* Footer */
+.diamond-footer {
+    padding: 10rem 4rem;
+    background: #000;
+    border-top: 1px solid rgba(212, 175, 55, 0.1);
+}
+
+@media (max-width: 1024px) {
+    .elite-grid { grid-template-columns: 1fr; }
+    .elite-hero-title { font-size: 3rem; }
+}
