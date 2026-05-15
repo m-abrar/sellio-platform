@@ -2,19 +2,7 @@ import type { Theme } from "@sellio/types";
 import { api } from "@sellio/api-client";
 import { headers } from "next/headers";
 
-export type IndustryLayout = 
-  | 'ecommerce/fashion' 
-  | 'ecommerce/electronics' 
-  | 'ecommerce/grocery' 
-  | 'properties'
-  | 'events'
-  | 'autos'
-  | 'services'
-  | 'jobs'
-  | 'classifieds'
-  | 'unified/default'
-  | 'unified/modern'
-  | 'unified/minimal';
+export type IndustryLayout = string;
 
 export interface ResolvedTheme {
   theme: Theme;
@@ -25,30 +13,9 @@ export interface ResolvedTheme {
  * Resolves a database theme key and vertical to a specific Industry Layout path.
  */
 export function resolveIndustryLayout(theme: Theme): IndustryLayout {
-  const vertical = theme.vertical?.toLowerCase();
-  const key = theme.theme_key.toLowerCase();
-  
-  // 1. Handle Ecommerce Vertical
-  if (vertical === 'ecommerce') {
-    if (key.includes('fashion') || key.includes('luxury')) return 'ecommerce/fashion';
-    if (key.includes('tech') || key.includes('electronics')) return 'ecommerce/electronics';
-    if (key.includes('grocery') || key.includes('fresh')) return 'ecommerce/grocery';
-    return 'unified/default';
-  }
-
-  // 2. Handle Unified Series
-  if (key.includes('unifieds_')) {
-    if (key.includes('modern')) return 'unified/modern';
-    if (key.includes('minimal')) return 'unified/minimal';
-    return 'unified/default';
-  }
-
-  // 3. Vertical Fallbacks
-  if (vertical === 'properties') return 'properties' as any; // Map to base vertical
-  if (vertical === 'events') return 'events' as any;
-  if (vertical === 'autos') return 'autos' as any;
-  
-  return 'unified/default';
+  // We now have dedicated folders for each theme key in src/themes/
+  // The layout path matches the theme_key (e.g. properties_luxury)
+  return theme.theme_key.toLowerCase();
 }
 
 /**

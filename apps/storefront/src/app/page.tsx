@@ -1,21 +1,28 @@
 import { getActiveTheme } from "@/lib/theme";
-import FashionPage from "@/themes/ecommerce/fashion/Page";
-import ElectronicsPage from "@/themes/ecommerce/electronics/Page";
-import GroceryPage from "@/themes/ecommerce/grocery/Page";
-import UnifiedDefaultPage from "@/themes/unified/default/Page";
-import UnifiedModernPage from "@/themes/unified/modern/Page";
-import UnifiedMinimalPage from "@/themes/unified/minimal/Page";
+import React from 'react';
 
 export default async function Home() {
   const { layout } = await getActiveTheme();
 
-  switch (layout) {
-    case 'ecommerce/electronics': return <ElectronicsPage />;
-    case 'ecommerce/grocery': return <GroceryPage />;
-    case 'ecommerce/fashion': return <FashionPage />;
-    case 'unified/modern': return <UnifiedModernPage />;
-    case 'unified/minimal': return <UnifiedMinimalPage />;
-    case 'unified/default': 
-    default: return <UnifiedDefaultPage />;
+  // Orchestrate dynamic loading of the vertical-specific theme
+  try {
+    // Attempt to load the dedicated theme component
+    const { default: ThemeComponent } = await import(`@/themes/${layout}`);
+    return <ThemeComponent />;
+  } catch (error) {
+    console.warn(`Theme layout "${layout}" not found, falling back to default.`);
+    
+    // Fallback to the foundational unified default theme
+    try {
+      const { default: FallbackComponent } = await import(`@/themes/unifieds_default`);
+      return <FallbackComponent />;
+    } catch (fallbackError) {
+      return (
+        <div className="p-20 text-center">
+          <h1 className="text-2xl font-bold">Theme System Error</h1>
+          <p className="text-gray-500">Could not load theme: {layout}</p>
+        </div>
+      );
+    }
   }
 }
