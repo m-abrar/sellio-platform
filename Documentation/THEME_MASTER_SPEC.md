@@ -73,7 +73,6 @@ Generic "wrappers" are banned.
 | `autos_electric` | Interactive | High-tech HUD dashboard with real-time range radials. |
 | `events_music` | Modern | Bento-style artist cards with integrated wave-form previews. |
 | `unifieds_minimal` | Minimal | Text-only search with monolithic whitespace feed. |
-| ... | ... | (Repeated for all 50 keys based on matrix above) |
 
 ---
 
@@ -82,15 +81,15 @@ Generic "wrappers" are banned.
 ### Folder Blueprint (Example: `themes/properties/luxury`)
 ```text
 src/themes/properties/luxury/
-├── index.ts          (Entry point)
-├── Page.tsx          (Unique Home Logic)
-├── Layout.tsx        (Unique Nav/Footer)
-├── styles.css        (Theme-Specific Variables)
-├── components/       (LOCAL ONLY - NO SHARED IMPORTS)
-│   ├── LuxuryHero.tsx
-│   ├── PropertyGrid.tsx
-│   └── ContactDrawer.tsx
-└── lib/              (Theme-specific helper logic)
+├── components/          <-- MANDATORY
+│   ├── index.ts         <-- Exports all local components
+│   ├── Header.tsx       
+│   ├── Footer.tsx       
+│   └── [CardName].tsx   
+├── Layout.tsx           
+├── Page.tsx             
+├── index.ts             
+└── styles.css           
 ```
 
 ### The "Silo" Import Rule
@@ -99,85 +98,69 @@ src/themes/properties/luxury/
 
 ---
 
-**This plan is now LOCKED. No deviations are permitted without structural review.**
+## 7. Interactivity & Client Component Protocol
+
+To ensure 100% compatibility with Next.js Server Components while maintaining high-fidelity interactivity:
+
+1.  **Directive Mandate**: Any theme file (Page or Component) containing event handlers (`onClick`, `onSubmit`, `onChange`) MUST include the `'use client';` directive at the very first line.
+2.  **Serialization Safety**: Never pass functions or complex class instances as props from a Server Component (`page.tsx`) to a theme. Themes must handle their own internal state.
+3.  **Form Defaults**: All forms within themes should use `e.preventDefault()` to avoid full-page reloads.
 
 ---
 
-## 7. Theme Generation Protocol (The Developer Prompt)
+## 8. Theme Generation Protocol (The Developer Prompt)
 
-When implementing or generating any of the 50 themes, follow this **Golden Prompt**:
+When implementing any of the 50 themes, follow this **Golden Prompt**:
 
-> **Context**: You are building the `[THEME_KEY]` theme for the Sellio platform. It belongs to the `[VERTICAL]` vertical and uses the `[MODIFIER]` style.
+> **Context**: You are building the `[THEME_KEY]` theme for the Sellio platform.
 > 
 > **Architectural Constraints**:
-> 1.  **Isolation**: DO NOT import components from other themes. Create all buttons, cards, and navs locally in `./components/`.
-> 2.  **Layout**: Apply the `[GRID_STYLE]` from the Structural Divergence Matrix.
-> 3.  **Typography**: Use `[HEADING_FONT]` for headers and `[BASE_FONT]` for body.
-> 4.  **Data**: Map `theme.variables` to CSS variables and use `property.variables` to drive vertical-specific UI (e.g., `sqft` for properties).
+> 1.  **Isolation**: Create all buttons, cards, and navs locally in `./components/`.
+> 2.  **Layout**: Apply the `[GRID_STYLE]` from the Matrix.
+> 3.  **Interactivity**: Use `'use client';` if handlers are present.
 > 
 > **Implementation Steps**:
-> -   **Step 1 (Layout.tsx)**: Build a unique Header/Footer that matches the `[NAV_PATTERN]`. Ensure the logo and primary buttons use theme-specific styling.
-> -   **Step 2 (styles.css)**: Define local CSS variables for primary/secondary colors and font families.
-> -   **Step 3 (Page.tsx)**: Implement the `[HERO_STRATEGY]`. Create a high-density listing grid using the theme's local `ListingCard`.
-> -   **Step 4 (Interactions)**: Apply `[MOTION_PRINCIPLE]` (e.g., Lift/Fade or Horizontal Slide) to all entering elements.
-> 
-> **Success Criteria**:
-> - The theme is 100% self-contained (Zero cross-imports).
-> - The visuals are structurally distinct from other modifiers (e.g., Luxury vs Modern).
-> - The performance is optimized (Zero unused CSS/JS).
-> - The UI feels "Premium" with depth, glassmorphism, and smooth physics.
-
-### Final Implementation Checklist:
-- [ ] Folder created at `src/themes/[vertical]/[key]/`
-- [ ] `index.ts` exports both `default` (Page) and `Layout`.
-- [ ] `styles.css` is imported only within this theme's Layout.
-- [ ] Components are located in `./components/` and have unique HTML structures.
-- [ ] Metadata is correctly resolved via `getActiveTheme()`.
-- [ ] Interactive elements have theme-prefixed classes.
+> -   **Step 1 (Layout.tsx)**: Build a unique Header/Footer.
+> -   **Step 2 (styles.css)**: Define local CSS variables and scoped classes.
+> -   **Step 3 (Page.tsx)**: Implement the high-fidelity vertical-specific experience.
 
 ---
 
-## 8. Vertical Component Divergence (Deep Dive)
-
-To ensure total visual uniqueness, we must vary the internal architecture of shared *concepts* (like a Property Card) based on the theme's modifier.
-
-### Example: The "Property Card" Divergence
+## 9. Vertical Component Divergence (Deep Dive)
 
 | Modifier | HTML/CSS Strategy | Key Visual Element | Micro-Interaction |
 | :--- | :--- | :--- | :--- |
-| **Luxury** | Overlay-style. Text floats over the image with a glassmorphism backdrop. | Gold-leaf border (1px) | Image expands slowly (scale 1.1) on hover while text fades in. |
-| **Modern** | Stacked-style. Image on top, info in a clean white bento-box below. | Large corner radii (32px) | Card "lifts" with a soft, deep shadow and a primary-color glow. |
-| **Minimal** | Text-first. Image is small/square on the left, info on the right. | Hairline borders (0.5px) | Subtle opacity shift (0.8 to 1.0) on hover. |
-| **Classic** | Grid-style. Dense info with multiple icons (Beds, Baths, Sqft) visible. | Badges for "Status" | Border color changes to primary color on hover. |
-
----
-
-## 9. Vertical-Specific Color & Font Logic
-
-### A. The "Vibe" Matrix
-We don't just pick colors; we pick "market-fit" palettes:
-
-1.  **Autos**:
-    *   *Classic*: "Dealer Red" (#D32F2F) + Charcoal. Focus on urgency.
-    *   *Electric*: "Cyber Teal" (#00E5FF) + Dark Navy. Focus on future/tech.
-2.  **Properties**:
-    *   *Urban*: "Concrete Gray" (#718096) + Safety Orange (#ED8936). Focus on city life.
-    *   *Vacation*: "Ocean Blue" (#3182CE) + Sandy Beige (#F6E05E). Focus on relaxation.
-3.  **Jobs**:
-    *   *Tech*: "Code Blue" (#2B6CB0) + Terminal Green. Focus on skills.
-    *   *Blue-Collar*: "Safety Yellow" (#D69E2E) + Work Navy. Focus on stability.
+| **Luxury** | Overlay-style. | Gold-leaf border (1px) | Image scale 1.1 + Fade-in |
+| **Modern** | Stacked-style. | Large radii (32px) | Lift + Glow |
+| **Minimal** | Text-first. | Hairline borders (0.5px) | Opacity shift |
 
 ---
 
 ## 10. Advanced Interaction & Physics Spec
-Every theme must feel "Fluid." Apply these specific values to the local `framer-motion` or CSS transitions:
+- **Hover Scale**: 1.02 (Luxury) / 1.05 (Modern)
+- **Blur Values**: 12px (Modern) / 20px (Luxury)
+- **Transitions**: `cubic-bezier(0.4, 0, 0.2, 1)`
 
-- **Hover Scale**:
-    - *Luxury/Minimal*: 1.02 (Subtle)
-    - *Modern/Interactive*: 1.05 (Assertive)
-- **Parallax Intensity**:
-    - *Properties Showcase*: 30px scroll-offset.
-    - *Events Festival*: 50px scroll-offset for "floating" lineup elements.
-- **Blur Values**:
-    - *Modern Glass*: 12px blur, 0.1 opacity.
-    - *Luxury Glass*: 20px blur, 0.05 opacity (much more subtle/misty).
+---
+
+## 11. Real-World Implementation Tracker (v1.0)
+
+| Theme Key | Vertical | Completion | Spec Compliance | Key Aesthetic |
+| :--- | :--- | :--- | :--- | :--- |
+| `unifieds_default` | Unified | 100% | High | Glassmorphic Bento |
+| `ecommerce_default` | Ecommerce | 100% | High | Refined Retail |
+| `services_marketplace`| Services | 100% | High | Bio-Centric Grid |
+| `properties_modern` | Properties | 100% | **Elite** | Architectural Sage |
+| `autos_electric` | Autos | 100% | **Elite** | Futurist HUD |
+| `events_music` | Events | 100% | **Elite** | Vibrant Poster |
+
+---
+
+### Final Implementation Checklist:
+- [x] Folder created at `src/themes/[vertical]/[key]/`
+- [x] `index.ts` exports both `default` (Page) and `Layout`.
+- [x] `styles.css` is imported only within this theme's Layout.
+- [x] Components siloed in `./components/` with an `index.ts` exporter.
+- [x] `'use client';` directive added if interactivity is present.
+- [ ] Metadata is correctly resolved via `getActiveTheme()`.
+- [ ] Interactive elements have theme-prefixed classes.
