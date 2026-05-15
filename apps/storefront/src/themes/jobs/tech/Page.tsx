@@ -1,69 +1,46 @@
-
 import React from 'react';
+import { JobIDEEntry } from './components';
 
-export default function Page() {
+export default function TechPage() {
+  const jobs = [
+    { title: "Senior Rust Engineer", company: "Flux Systems", salary: "$180k - $240k", tags: ["Rust", "Wasm", "Backend"], index: 1 },
+    { title: "Lead Frontend Architect", company: "Neon Design", salary: "$160k - $210k", tags: ["Next.js", "TypeScript", "Tailwind"], index: 2 },
+    { title: "ML Infrastructure Lead", company: "Tensor Core", salary: "$200k - $280k", tags: ["Python", "Kubernetes", "PyTorch"], index: 3 },
+    { title: "Fullstack Developer", company: "Stack Pulse", salary: "$140k - $190k", tags: ["Node.js", "React", "PostgreSQL"], index: 4 },
+  ];
+
   return (
-    <div style={{ 
-      minHeight: '80vh', 
-      display: 'flex', 
-      flexDirection: 'column', 
-      alignItems: 'center', 
-      justifyContent: 'center', 
-      backgroundColor: '#f9fafb',
-      padding: '2rem',
-      textAlign: 'center',
-      fontFamily: "'Inter', sans-serif"
-    }}>
-      <div style={{ 
-        maxWidth: '42rem', 
-        width: '100%', 
-        backgroundColor: 'white', 
-        borderRadius: '1.5rem', 
-        boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)', 
-        padding: '3rem', 
-        border: '1px solid #f3f4f6' 
-      }}>
-        <div style={{ 
-          width: '5rem', 
-          height: '5rem', 
-          backgroundColor: '#4527a015', 
-          borderRadius: '1rem', 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'center', 
-          margin: '0 auto 2rem auto' 
-        }}>
-          <svg style={{ width: '2.5rem', height: '2.5rem', color: '#4527a0' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-          </svg>
+    <div>
+      <section className="tech-hero">
+        <div className="hero-code-block">
+          <span className="code-keyword">const</span> <span className="code-function">DreamJob</span> = <span className="code-keyword">await</span> <span className="code-function">find</span>({'{'}<br/>
+          &nbsp;&nbsp;vertical: <span className="code-string">"TECH"</span>,<br/>
+          &nbsp;&nbsp;salary: <span className="code-string">"&gt; $150k"</span>,<br/>
+          &nbsp;&nbsp;remote: <span className="code-string">true</span><br/>
+          {'}'});
         </div>
-        <h1 style={{ 
-          fontSize: '2.25rem', 
-          fontWeight: 800, 
-          color: '#111827', 
-          marginBottom: '1rem', 
-          letterSpacing: '-0.025em',
-          lineHeight: 1.2
-        }}>
-          Jobs Tech <span style={{ color: '#4527a0' }}>Coming Soon</span>
-        </h1>
-        <p style={{ 
-          fontSize: '1.125rem', 
-          color: '#4b5563', 
-          marginBottom: '2rem', 
-          maxWidth: '28rem', 
-          margin: '0 auto 2rem auto',
-          lineHeight: 1.6
-        }}>
-          We are currently hand-crafting this elite vertical experience. 
-          Stay tuned for a production-grade layout that will blow your users away.
+        <p style={{ opacity: 0.6, maxWidth: '600px' }}>
+          Stop browsing, start executing. The most high-impact engineering roles in the Sellio network, filtered for performance.
         </p>
-        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
-          <div style={{ height: '0.25rem', width: '3rem', backgroundColor: '#4527a0', borderRadius: '9999px' }}></div>
-          <div style={{ height: '0.25rem', width: '3rem', backgroundColor: '#4527a060', borderRadius: '9999px' }}></div>
-          <div style={{ height: '0.25rem', width: '3rem', backgroundColor: '#4527a030', borderRadius: '9999px' }}></div>
-        </div>
+      </section>
+
+      <div className="job-list-ide">
+        {jobs.map((j, i) => (
+          <JobIDEEntry key={i} {...j} />
+        ))}
       </div>
+
+      <section style={{ padding: '4rem 2rem', backgroundColor: 'rgba(0,0,0,0.2)', marginBottom: '4rem' }}>
+        <div style={{ maxWidth: '1000px', margin: '0 auto', fontFamily: 'var(--font-mono)', fontSize: '0.9rem' }}>
+          <span style={{ color: 'var(--color-green)' }}>$ grep --recursive "perks" .</span>
+          <ul style={{ listSet: 'none', paddingLeft: '1rem', marginTop: '1rem', opacity: 0.7 }}>
+            <li>&gt; Full Remote (Global)</li>
+            <li>&gt; Private Medical + Vision</li>
+            <li>&gt; Learning Budget ($5k/yr)</li>
+            <li>&gt; 30 Days Paid Vacation</li>
+          </ul>
+        </div>
+      </section>
     </div>
   );
 }

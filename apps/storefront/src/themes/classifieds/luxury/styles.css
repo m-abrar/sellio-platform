@@ -1,0 +1,125 @@
+.classifieds-luxury {
+  --color-emerald: #064e3b;
+  --color-gold: #c5a059;
+  --color-ivory: #ffffff;
+  --font-serif: 'Playfair Display', serif;
+  --font-sans: 'Inter', sans-serif;
+}
+
+.curated-collection-container {
+  background-color: var(--color-ivory);
+  color: #1a1a1a;
+  font-family: var(--font-sans);
+  min-height: 100vh;
+}
+
+.collection-header {
+  padding: 3rem 6rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.collection-logo {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  font-weight: 400;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+}
+
+.collection-nav {
+  display: flex;
+  gap: 4rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.curated-hero {
+  height: 80vh;
+  padding: 6rem;
+  display: flex;
+  align-items: center;
+  background: var(--color-emerald);
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.curated-hero h1 {
+  font-family: var(--font-serif);
+  font-size: 5rem;
+  font-weight: 400;
+  line-height: 1.1;
+  max-width: 800px;
+  position: relative;
+  z-index: 10;
+}
+
+.lot-grid {
+  padding: 6rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+  gap: 4rem;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.lot-card {
+  display: flex;
+  flex-direction: column;
+  transition: all 0.4s ease;
+}
+
+.lot-image-wrapper {
+  width: 100%;
+  aspect-ratio: 4/5;
+  background: #000;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+
+.lot-image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 1.2s ease;
+}
+
+.lot-card:hover img {
+  transform: scale(1.05);
+}
+
+.lot-number {
+  font-family: var(--font-serif);
+  font-size: 0.8rem;
+  color: var(--color-gold);
+  letter-spacing: 2px;
+  margin-bottom: 0.5rem;
+}
+
+.lot-title {
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.lot-estimate {
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  opacity: 0.5;
+  text-transform: uppercase;
+}
+
+.collector-footer {
+  padding: 10rem 6rem;
+  background: var(--color-emerald);
+  color: white;
+  text-align: center;
+}

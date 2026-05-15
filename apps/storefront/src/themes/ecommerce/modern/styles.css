@@ -1,0 +1,122 @@
+.ecommerce-modern {
+  --color-coral: #ff6b6b;
+  --color-teal: #4ecdc4;
+  --color-bg: #ffffff;
+  --color-surface: #f8f9fa;
+  --font-display: 'Outfit', sans-serif;
+}
+
+.modern-ecommerce-container {
+  background-color: var(--color-bg);
+  color: #2d3436;
+  font-family: var(--font-display);
+  min-height: 100vh;
+}
+
+.social-header {
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 1px solid #f1f2f6;
+}
+
+.social-logo {
+  font-weight: 900;
+  font-size: 1.5rem;
+  color: var(--color-coral);
+  letter-spacing: -1px;
+}
+
+.story-tray {
+  display: flex;
+  gap: 1.5rem;
+  padding: 2rem;
+  overflow-x: auto;
+  border-bottom: 1px solid #f1f2f6;
+}
+
+.story-bubble {
+  flex-shrink: 0;
+  text-align: center;
+  cursor: pointer;
+}
+
+.bubble-image {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  padding: 3px;
+  border: 2px solid var(--color-coral);
+  margin-bottom: 0.5rem;
+}
+
+.bubble-image img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.modern-product-feed {
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.mobile-style-card {
+  border-radius: 24px;
+  background: var(--color-surface);
+  overflow: hidden;
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+.mobile-style-card:hover {
+  transform: scale(1.02);
+}
+
+.card-wishlist {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 35px;
+  height: 35px;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  color: var(--color-coral);
+}
+
+.modern-price-tag {
+  font-weight: 900;
+  font-size: 1.25rem;
+  color: #2d3436;
+}
+
+.add-to-cart-pill {
+  width: 100%;
+  padding: 1rem;
+  background: var(--color-coral);
+  color: white;
+  border: none;
+  border-radius: 100px;
+  font-weight: 800;
+  margin-top: 1rem;
+  cursor: pointer;
+}
+
+.modern-ecommerce-footer {
+  padding: 4rem 2rem;
+  text-align: center;
+  background: var(--color-surface);
+  margin-top: 4rem;
+}

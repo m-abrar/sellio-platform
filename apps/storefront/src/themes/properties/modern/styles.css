@@ -1,0 +1,136 @@
+.properties-modern {
+  --color-sage: #4b6344;
+  --color-stone: #f8f9fa;
+  --color-charcoal: #1a1a1a;
+  --font-outfit: 'Outfit', sans-serif;
+  --font-sans: 'Inter', sans-serif;
+}
+
+.modern-properties-container {
+  background-color: white;
+  color: var(--color-charcoal);
+  font-family: var(--font-sans);
+  min-height: 100vh;
+}
+
+.lifestyle-header {
+  padding: 2rem 4rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  border-bottom: 1px solid #f0f0f0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.lifestyle-logo {
+  font-family: var(--font-outfit);
+  font-weight: 800;
+  font-size: 1.5rem;
+  letter-spacing: -1px;
+}
+
+.lifestyle-nav {
+  display: flex;
+  gap: 3rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.modern-property-hero {
+  height: 80vh;
+  position: relative;
+  overflow: hidden;
+  padding: 4rem;
+  display: flex;
+  align-items: center;
+}
+
+.hero-lifestyle-text {
+  max-width: 600px;
+  z-index: 10;
+}
+
+.hero-lifestyle-text h1 {
+  font-family: var(--font-outfit);
+  font-size: 4rem;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 2rem;
+}
+
+.lifestyle-grid {
+  padding: 6rem 4rem;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 3rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.lifestyle-block {
+  grid-column: span 6;
+  position: relative;
+}
+
+.lifestyle-block:nth-child(3n) {
+  grid-column: span 12;
+}
+
+.lifestyle-image-wrapper {
+  width: 100%;
+  aspect-ratio: 16/10;
+  border-radius: 24px;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+  background: var(--color-stone);
+}
+
+.lifestyle-image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s ease;
+}
+
+.lifestyle-block:hover img {
+  transform: scale(1.05);
+}
+
+.lifestyle-tag {
+  display: inline-block;
+  padding: 0.4rem 1rem;
+  background: var(--color-stone);
+  border-radius: 100px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-sage);
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+}
+
+.lifestyle-price {
+  font-family: var(--font-outfit);
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+.sage-footer {
+  padding: 8rem 4rem;
+  background: var(--color-stone);
+  color: var(--color-charcoal);
+  text-align: center;
+}
+
+.footer-quote {
+  font-family: var(--font-outfit);
+  font-size: 2.5rem;
+  font-weight: 800;
+  max-width: 800px;
+  margin: 0 auto 3rem;
+  line-height: 1.2;
+}

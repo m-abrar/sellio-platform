@@ -1,0 +1,127 @@
+.jobs-map {
+  --color-indigo: #6366f1;
+  --color-border: #e2e8f0;
+  --color-bg: #ffffff;
+  --font-sans: 'Inter', sans-serif;
+}
+
+.career-map-wrapper {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  font-family: var(--font-sans);
+}
+
+.hub-map-header {
+  height: 80px;
+  background: white;
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  padding: 0 2rem;
+  gap: 2rem;
+  z-index: 10;
+}
+
+.hub-search-box-map {
+  flex: 1;
+  max-width: 450px;
+  background: #f1f5f9;
+  border-radius: 12px;
+  padding: 0.8rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: #64748b;
+}
+
+.career-split-view {
+  flex: 1;
+  display: flex;
+  position: relative;
+}
+
+.hub-job-feed {
+  width: 420px;
+  height: 100%;
+  overflow-y: auto;
+  background: white;
+  border-right: 1px solid var(--color-border);
+  padding: 1.5rem;
+}
+
+.career-map-canvas {
+  flex: 1;
+  background: #f8fafc;
+  position: relative;
+}
+
+.map-job-card-compact {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #f1f5f9;
+  cursor: pointer;
+}
+
+.map-job-initial {
+  width: 48px;
+  height: 48px;
+  background: #eef2ff;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  color: var(--color-indigo);
+  flex-shrink: 0;
+}
+
+.map-job-info {
+  flex: 1;
+}
+
+.map-job-title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 0.2rem;
+}
+
+.map-job-meta {
+  font-size: 0.8rem;
+  opacity: 0.5;
+  margin-bottom: 0.5rem;
+}
+
+.map-job-salary {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-indigo);
+}
+
+.office-location-marker {
+  position: absolute;
+  background: white;
+  border: 2px solid var(--color-indigo);
+  color: var(--color-indigo);
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 0.75rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.office-location-marker:hover {
+  background: var(--color-indigo);
+  color: white;
+  transform: scale(1.15) rotate(5deg);
+  z-index: 100;
+}

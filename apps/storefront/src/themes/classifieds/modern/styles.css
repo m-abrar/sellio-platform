@@ -1,0 +1,126 @@
+.classifieds-modern {
+  --color-blue: #2563eb;
+  --color-bg: #f8fafc;
+  --color-card: #ffffff;
+  --color-text: #0f172a;
+  --font-outfit: 'Outfit', sans-serif;
+  --font-sans: 'Inter', sans-serif;
+}
+
+.modern-hub-container {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  min-height: 100vh;
+}
+
+.hub-header {
+  background: white;
+  padding: 1rem 4rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e2e8f0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.hub-logo {
+  font-family: var(--font-outfit);
+  font-weight: 800;
+  font-size: 1.5rem;
+  color: var(--color-blue);
+}
+
+.hub-search-bar {
+  flex: 1;
+  max-width: 600px;
+  margin: 0 2rem;
+  position: relative;
+}
+
+.hub-search-bar input {
+  width: 100%;
+  padding: 0.8rem 1.5rem;
+  background: #f1f5f9;
+  border: none;
+  border-radius: 12px;
+  font-size: 0.9rem;
+}
+
+.category-tray {
+  padding: 4rem;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 1.5rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.category-tile {
+  background: white;
+  padding: 2rem 1rem;
+  border-radius: 24px;
+  text-align: center;
+  border: 1px solid #edf2f7;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.category-tile:hover {
+  transform: translateY(-5px);
+  border-color: var(--color-blue);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+}
+
+.tile-icon {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.tile-label {
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+}
+
+.hub-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 3rem;
+  padding: 0 4rem 6rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.hub-listing-card {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid #edf2f7;
+  transition: all 0.2s ease;
+}
+
+.hub-listing-card:hover {
+  border-color: var(--color-blue);
+}
+
+.verified-badge {
+  background: #dcfce7;
+  color: #166534;
+  padding: 0.2rem 0.6rem;
+  border-radius: 100px;
+  font-size: 0.65rem;
+  font-weight: 800;
+  display: inline-block;
+  margin-bottom: 0.5rem;
+}
+
+.hub-footer {
+  padding: 6rem 4rem;
+  background: white;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+}

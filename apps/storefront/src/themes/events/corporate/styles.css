@@ -1,0 +1,151 @@
+.events-corporate {
+  --color-navy: #1a2b48;
+  --color-primary: #0066ff;
+  --color-gray: #f8f9fa;
+  --color-border: #e9ecef;
+  --font-sans: 'Inter', sans-serif;
+}
+
+.corporate-container {
+  background-color: white;
+  color: var(--color-navy);
+  font-family: var(--font-sans);
+  min-height: 100vh;
+}
+
+.conf-header {
+  padding: 1.5rem 4rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--color-border);
+  background: white;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.conf-logo {
+  font-weight: 800;
+  font-size: 1.5rem;
+  letter-spacing: -1px;
+}
+
+.conf-nav {
+  display: flex;
+  gap: 2.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.register-btn-header {
+  background: var(--color-primary);
+  color: white;
+  padding: 0.8rem 2rem;
+  border-radius: 4px;
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.corporate-hero {
+  padding: 8rem 4rem;
+  background-color: var(--color-navy);
+  color: white;
+  position: relative;
+}
+
+.hero-conf-title {
+  font-size: 4rem;
+  font-weight: 900;
+  max-width: 800px;
+  line-height: 1.1;
+  margin-bottom: 2rem;
+}
+
+.hero-conf-meta {
+  display: flex;
+  gap: 3rem;
+  font-weight: 600;
+  opacity: 0.8;
+}
+
+.speaker-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3rem;
+  padding: 6rem 4rem;
+}
+
+.speaker-card {
+  text-align: center;
+}
+
+.speaker-image-wrapper {
+  width: 180px;
+  height: 180px;
+  margin: 0 auto 1.5rem;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+  border: 4px solid white;
+}
+
+.speaker-name {
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin-bottom: 0.25rem;
+}
+
+.speaker-role {
+  font-size: 0.85rem;
+  opacity: 0.6;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.agenda-section {
+  padding: 6rem 4rem;
+  background-color: var(--color-gray);
+}
+
+.agenda-row {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  padding: 2rem;
+  background: white;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  border: 1px solid var(--color-border);
+}
+
+.agenda-time {
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: var(--color-primary);
+}
+
+.agenda-content h4 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.agenda-track {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  background: var(--color-gray);
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #6c757d;
+}
+
+.corporate-footer {
+  padding: 4rem;
+  background: var(--color-navy);
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

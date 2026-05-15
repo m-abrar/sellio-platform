@@ -1,0 +1,133 @@
+.autos-luxury {
+  --color-charcoal: #0a0a0a;
+  --color-silver: #c0c0c0;
+  --color-text: #ffffff;
+  --font-serif: 'Playfair Display', serif;
+  --font-sans: 'Inter', sans-serif;
+}
+
+.luxury-garage-container {
+  background-color: var(--color-charcoal);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  min-height: 100vh;
+}
+
+.atelier-header {
+  padding: 3rem 6rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--color-charcoal);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.atelier-logo {
+  font-family: var(--font-serif);
+  font-size: 1.8rem;
+  font-weight: 400;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+}
+
+.atelier-nav {
+  display: flex;
+  gap: 4rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+.luxury-car-hero {
+  height: 90vh;
+  padding: 6rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.luxury-car-hero h1 {
+  font-family: var(--font-serif);
+  font-size: 5rem;
+  font-weight: 400;
+  line-height: 1;
+  margin-bottom: 2rem;
+  position: relative;
+  z-index: 10;
+}
+
+.monolithic-car-grid {
+  padding: 0;
+}
+
+.monolithic-block {
+  height: 100vh;
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 0 6rem;
+}
+
+.monolithic-image-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.monolithic-image-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.6);
+}
+
+.monolithic-content {
+  position: relative;
+  z-index: 10;
+  max-width: 600px;
+}
+
+.precision-spec-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3rem;
+  margin-top: 3rem;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  padding-top: 2rem;
+}
+
+.spec-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.spec-value {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  color: var(--color-silver);
+}
+
+.spec-label {
+  font-size: 0.6rem;
+  letter-spacing: 2px;
+  font-weight: 800;
+  opacity: 0.5;
+  text-transform: uppercase;
+  margin-top: 0.5rem;
+}
+
+.concierge-footer {
+  padding: 10rem 6rem;
+  background: #000;
+  text-align: center;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}

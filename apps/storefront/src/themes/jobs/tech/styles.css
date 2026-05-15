@@ -1,0 +1,127 @@
+.jobs-tech {
+  --color-bg: #0f172a;
+  --color-surface: #1e293b;
+  --color-green: #00ff41;
+  --color-blue: #38bdf8;
+  --color-text: #e2e8f0;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-sans: 'Inter', sans-serif;
+}
+
+.tech-container {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  min-height: 100vh;
+}
+
+.terminal-header {
+  background-color: var(--color-surface);
+  padding: 0.5rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+}
+
+.terminal-path {
+  color: var(--color-blue);
+}
+
+.terminal-tabs {
+  display: flex;
+  gap: 1px;
+}
+
+.terminal-tab {
+  padding: 0.5rem 1rem;
+  background-color: var(--color-bg);
+  border-bottom: 2px solid var(--color-green);
+  color: var(--color-text);
+}
+
+.tech-hero {
+  padding: 6rem 3rem;
+  background: linear-gradient(180deg, var(--color-surface) 0%, var(--color-bg) 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.hero-code-block {
+  font-family: var(--font-mono);
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+}
+
+.code-keyword { color: #f472b6; }
+.code-function { color: var(--color-blue); }
+.code-string { color: var(--color-green); }
+
+.job-list-ide {
+  max-width: 1000px;
+  margin: 4rem auto;
+  padding: 0 2rem;
+}
+
+.job-card-ide {
+  display: flex;
+  background-color: var(--color-surface);
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  overflow: hidden;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.job-card-ide:hover {
+  border-color: var(--color-green);
+  transform: translateX(10px);
+}
+
+.line-numbers {
+  padding: 1.5rem 1rem;
+  background-color: rgba(0, 0, 0, 0.2);
+  color: rgba(255, 255, 255, 0.2);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  text-align: right;
+  min-width: 50px;
+}
+
+.job-content-ide {
+  padding: 1.5rem;
+  flex: 1;
+}
+
+.job-title-ide {
+  font-family: var(--font-mono);
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+  color: var(--color-blue);
+}
+
+.tag-ide {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-family: var(--font-mono);
+  margin-right: 0.5rem;
+  background: rgba(56, 189, 248, 0.1);
+  color: var(--color-blue);
+}
+
+.status-bar-footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: var(--color-blue);
+  color: var(--color-bg);
+  padding: 0.2rem 1.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  display: flex;
+  justify-content: space-between;
+  z-index: 100;
+}

@@ -1,69 +1,61 @@
-
 import React from 'react';
+import { ArtistPoster, TicketStrip } from './components';
 
-export default function Page() {
+export default function MusicPage() {
+  const lineup = [
+    { name: "Neon Paradox", date: "AUG 14", image: "https://images.unsplash.com/photo-1493225255756-d9584f8606e9?q=80&w=2070" },
+    { name: "The Void", date: "AUG 15", image: "https://images.unsplash.com/photo-1501612780327-45045538702b?q=80&w=2070" },
+    { name: "Digital Ghost", date: "AUG 16", image: "https://images.unsplash.com/photo-1524368535928-5b5e00ddc76b?q=80&w=2070" },
+    { name: "Sonic Bloom", date: "AUG 17", image: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=2070" },
+    { name: "Sub_Zero", date: "AUG 18", image: "https://images.unsplash.com/photo-1514525253361-bee8718a74a9?q=80&w=2070" },
+    { name: "Pulse Wave", date: "AUG 19", image: "https://images.unsplash.com/photo-1459749411177-042180ce673c?q=80&w=2070" },
+  ];
+
   return (
-    <div style={{ 
-      minHeight: '80vh', 
-      display: 'flex', 
-      flexDirection: 'column', 
-      alignItems: 'center', 
-      justifyContent: 'center', 
-      backgroundColor: '#f9fafb',
-      padding: '2rem',
-      textAlign: 'center',
-      fontFamily: "'Inter', sans-serif"
-    }}>
-      <div style={{ 
-        maxWidth: '42rem', 
-        width: '100%', 
-        backgroundColor: 'white', 
-        borderRadius: '1.5rem', 
-        boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)', 
-        padding: '3rem', 
-        border: '1px solid #f3f4f6' 
-      }}>
-        <div style={{ 
-          width: '5rem', 
-          height: '5rem', 
-          backgroundColor: '#1e4d4e15', 
-          borderRadius: '1rem', 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'center', 
-          margin: '0 auto 2rem auto' 
-        }}>
-          <svg style={{ width: '2.5rem', height: '2.5rem', color: '#1e4d4e' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-          </svg>
-        </div>
-        <h1 style={{ 
-          fontSize: '2.25rem', 
-          fontWeight: 800, 
-          color: '#111827', 
-          marginBottom: '1rem', 
-          letterSpacing: '-0.025em',
-          lineHeight: 1.2
-        }}>
-          Events Music <span style={{ color: '#1e4d4e' }}>Coming Soon</span>
+    <div>
+      <section className="music-hero">
+        <img 
+          src="https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?q=80&w=2070" 
+          alt="Concert Crowd" 
+          className="music-hero-bg"
+        />
+        <h1 className="music-hero-title">
+          Summer<br/>
+          Heat<br/>
+          <span style={{ color: 'var(--color-accent)' }}>Live</span>
         </h1>
-        <p style={{ 
-          fontSize: '1.125rem', 
-          color: '#4b5563', 
-          marginBottom: '2rem', 
-          maxWidth: '28rem', 
-          margin: '0 auto 2rem auto',
-          lineHeight: 1.6
-        }}>
-          We are currently hand-crafting this elite vertical experience. 
-          Stay tuned for a production-grade layout that will blow your users away.
-        </p>
-        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
-          <div style={{ height: '0.25rem', width: '3rem', backgroundColor: '#1e4d4e', borderRadius: '9999px' }}></div>
-          <div style={{ height: '0.25rem', width: '3rem', backgroundColor: '#1e4d4e60', borderRadius: '9999px' }}></div>
-          <div style={{ height: '0.25rem', width: '3rem', backgroundColor: '#1e4d4e30', borderRadius: '9999px' }}></div>
+      </section>
+
+      <section style={{ padding: '6rem 3rem' }}>
+        <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '4rem', fontWeight: 900, marginBottom: '4rem' }}>
+          THE LINEUP
+        </h2>
+        <div className="poster-grid">
+          {lineup.map((artist, i) => (
+            <ArtistPoster key={i} {...artist} />
+          ))}
         </div>
-      </div>
+      </section>
+
+      <TicketStrip />
+
+      <section style={{ padding: '6rem 3rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem' }}>
+        <div>
+          <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '2rem', fontWeight: 900, marginBottom: '1.5rem' }}>
+            THE VENUE
+          </h3>
+          <p style={{ opacity: 0.7, lineHeight: '1.8' }}>
+            Located in the heart of the arts district, The Underground features state-of-the-art acoustics, immersive 360-degree LED walls, and a multi-sensory light show that redefines the live experience.
+          </p>
+        </div>
+        <div style={{ border: '4px solid white', padding: '2rem' }}>
+          <h4 style={{ fontFamily: 'var(--font-display)', fontSize: '1.2rem', fontWeight: 900, marginBottom: '1rem' }}>
+            DOORS OPEN
+          </h4>
+          <p style={{ fontSize: '3rem', fontWeight: 900 }}>19:00</p>
+          <p style={{ color: 'var(--color-accent)', fontWeight: 'bold' }}>CURFEW 02:00</p>
+        </div>
+      </section>
     </div>
   );
 }

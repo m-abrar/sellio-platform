@@ -1,69 +1,50 @@
-
 import React from 'react';
+import { MonolithicCarBlock } from './components';
 
-export default function Page() {
+export default function LuxuryGaragePage() {
+  const cars = [
+    { title: "Bugatti Chiron Pur Sport", year: 2024, image: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=2070", hp: "1500", torque: "1600Nm", topSpeed: "350km/h" },
+    { title: "Ferrari Daytona SP3", year: 2024, image: "https://images.unsplash.com/photo-1583121274602-3e2820c69888?q=80&w=2070", hp: "840", torque: "697Nm", topSpeed: "340km/h" },
+    { title: "Lamborghini Revuelto", year: 2024, image: "https://images.unsplash.com/photo-1621135802920-133df287f89c?q=80&w=2070", hp: "1015", torque: "725Nm", topSpeed: "350km/h" },
+    { title: "Aston Martin Valhalla", year: 2024, image: "https://images.unsplash.com/photo-1603584173870-7f4295559507?q=80&w=2070", hp: "950", torque: "1000Nm", topSpeed: "330km/h" },
+  ];
+
   return (
-    <div style={{ 
-      minHeight: '80vh', 
-      display: 'flex', 
-      flexDirection: 'column', 
-      alignItems: 'center', 
-      justifyContent: 'center', 
-      backgroundColor: '#f9fafb',
-      padding: '2rem',
-      textAlign: 'center',
-      fontFamily: "'Playfair Display', serif"
-    }}>
-      <div style={{ 
-        maxWidth: '42rem', 
-        width: '100%', 
-        backgroundColor: 'white', 
-        borderRadius: '1.5rem', 
-        boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)', 
-        padding: '3rem', 
-        border: '1px solid #f3f4f6' 
-      }}>
-        <div style={{ 
-          width: '5rem', 
-          height: '5rem', 
-          backgroundColor: '#1a1a1a15', 
-          borderRadius: '1rem', 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'center', 
-          margin: '0 auto 2rem auto' 
-        }}>
-          <svg style={{ width: '2.5rem', height: '2.5rem', color: '#1a1a1a' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-          </svg>
-        </div>
-        <h1 style={{ 
-          fontSize: '2.25rem', 
-          fontWeight: 800, 
-          color: '#111827', 
-          marginBottom: '1rem', 
-          letterSpacing: '-0.025em',
-          lineHeight: 1.2
-        }}>
-          Autos Luxury <span style={{ color: '#1a1a1a' }}>Coming Soon</span>
-        </h1>
-        <p style={{ 
-          fontSize: '1.125rem', 
-          color: '#4b5563', 
-          marginBottom: '2rem', 
-          maxWidth: '28rem', 
-          margin: '0 auto 2rem auto',
-          lineHeight: 1.6
-        }}>
-          We are currently hand-crafting this elite vertical experience. 
-          Stay tuned for a production-grade layout that will blow your users away.
+    <div>
+      <section className="luxury-car-hero">
+        <div style={{ width: '60px', height: '1px', background: 'var(--color-silver)', marginBottom: '3rem' }}></div>
+        <p style={{ letterSpacing: '6px', fontSize: '0.8rem', opacity: 0.5, marginBottom: '2rem' }}>ESTABLISHED_EXCELLENCE</p>
+        <h1>The Atelier<br/>Collection.</h1>
+        <p style={{ maxWidth: '450px', lineHeight: '2', opacity: 0.5, fontSize: '0.9rem' }}>
+          An immersive showcase of the world's most significant automotive achievements. Curated for the collector who demands absolute precision.
         </p>
-        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
-          <div style={{ height: '0.25rem', width: '3rem', backgroundColor: '#1a1a1a', borderRadius: '9999px' }}></div>
-          <div style={{ height: '0.25rem', width: '3rem', backgroundColor: '#1a1a1a60', borderRadius: '9999px' }}></div>
-          <div style={{ height: '0.25rem', width: '3rem', backgroundColor: '#1a1a1a30', borderRadius: '9999px' }}></div>
-        </div>
+      </section>
+
+      <div className="monolithic-car-grid">
+        {cars.map((car, i) => (
+          <MonolithicCarBlock key={i} {...car} />
+        ))}
       </div>
+
+      <section style={{ padding: '10rem 6rem', textAlign: 'center', background: '#000' }}>
+        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+          <div style={{ width: '100px', height: '1px', background: 'var(--color-silver)', margin: '0 auto 4rem' }}></div>
+          <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '3rem', fontWeight: 400, marginBottom: '3rem' }}>Beyond Engineering.</h2>
+          <p style={{ lineHeight: '2.2', opacity: 0.4, fontSize: '1.1rem', marginBottom: '4rem' }}>
+            Our Atelier represents the pinnacle of digital acquisition. Every vehicle in our collection undergoes a rigorous vetting process to ensure it meets our standards of mechanical and aesthetic mastery.
+          </p>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '8rem' }}>
+            <div>
+              <div style={{ fontSize: '3rem', fontFamily: 'var(--font-serif)', color: 'var(--color-silver)' }}>14</div>
+              <div style={{ fontSize: '0.6rem', letterSpacing: '3px', fontWeight: 800, opacity: 0.4 }}>GLOBAL_ATELIERS</div>
+            </div>
+            <div>
+              <div style={{ fontSize: '3rem', fontFamily: 'var(--font-serif)', color: 'var(--color-silver)' }}>24/7</div>
+              <div style={{ fontSize: '0.6rem', letterSpacing: '3px', fontWeight: 800, opacity: 0.4 }}>CONCIERGE_SUPPORT</div>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

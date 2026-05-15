@@ -1,69 +1,64 @@
-
 import React from 'react';
+import { VehicleCard } from './components';
 
-export default function Page() {
+export default function ElectricPage() {
+  const vehicles = [
+    { name: "NEURON_S", range: "640", acceleration: "2.1", image: "https://images.unsplash.com/photo-1560958089-b8a1929cea89?q=80&w=2071" },
+    { name: "PULSE_GT", range: "520", acceleration: "3.4", image: "https://images.unsplash.com/photo-1617788131775-ceb2027fd12c?q=80&w=2070" },
+    { name: "VORTEX_X", range: "800", acceleration: "4.2", image: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=2070" },
+    { name: "ZENITH_EV", range: "450", acceleration: "5.8", image: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=2070" },
+  ];
+
   return (
-    <div style={{ 
-      minHeight: '80vh', 
-      display: 'flex', 
-      flexDirection: 'column', 
-      alignItems: 'center', 
-      justifyContent: 'center', 
-      backgroundColor: '#f9fafb',
-      padding: '2rem',
-      textAlign: 'center',
-      fontFamily: "'Montserrat', sans-serif"
-    }}>
-      <div style={{ 
-        maxWidth: '42rem', 
-        width: '100%', 
-        backgroundColor: 'white', 
-        borderRadius: '1.5rem', 
-        boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)', 
-        padding: '3rem', 
-        border: '1px solid #f3f4f6' 
-      }}>
-        <div style={{ 
-          width: '5rem', 
-          height: '5rem', 
-          backgroundColor: '#d32f2f15', 
-          borderRadius: '1rem', 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'center', 
-          margin: '0 auto 2rem auto' 
-        }}>
-          <svg style={{ width: '2.5rem', height: '2.5rem', color: '#d32f2f' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-          </svg>
+    <div>
+      <section className="electric-hero">
+        <img 
+          src="https://images.unsplash.com/photo-1614162692292-7ac56d7fd761?q=80&w=2070" 
+          alt="Main EV" 
+          className="electric-hero-image"
+        />
+        <div className="hero-readout">
+          <div className="readout-item">
+            <span className="readout-value">0%</span>
+            <span className="readout-label">EMISSIONS</span>
+          </div>
+          <div className="readout-item">
+            <span className="readout-value">100%</span>
+            <span className="readout-label">POWER</span>
+          </div>
+          <div className="readout-item">
+            <span className="readout-value">∞</span>
+            <span className="readout-label">FUTURE</span>
+          </div>
         </div>
-        <h1 style={{ 
-          fontSize: '2.25rem', 
-          fontWeight: 800, 
-          color: '#111827', 
-          marginBottom: '1rem', 
-          letterSpacing: '-0.025em',
-          lineHeight: 1.2
-        }}>
-          Autos Electric <span style={{ color: '#d32f2f' }}>Coming Soon</span>
-        </h1>
-        <p style={{ 
-          fontSize: '1.125rem', 
-          color: '#4b5563', 
-          marginBottom: '2rem', 
-          maxWidth: '28rem', 
-          margin: '0 auto 2rem auto',
-          lineHeight: 1.6
-        }}>
-          We are currently hand-crafting this elite vertical experience. 
-          Stay tuned for a production-grade layout that will blow your users away.
-        </p>
-        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
-          <div style={{ height: '0.25rem', width: '3rem', backgroundColor: '#d32f2f', borderRadius: '9999px' }}></div>
-          <div style={{ height: '0.25rem', width: '3rem', backgroundColor: '#d32f2f60', borderRadius: '9999px' }}></div>
-          <div style={{ height: '0.25rem', width: '3rem', backgroundColor: '#d32f2f30', borderRadius: '9999px' }}></div>
-        </div>
+      </section>
+
+      <div className="vehicle-grid-hud">
+        {vehicles.map((v, i) => (
+          <VehicleCard key={i} {...v} />
+        ))}
       </div>
+
+      <section style={{ padding: '8rem 3rem', borderTop: '1px solid var(--cyber-border)' }}>
+        <div style={{ maxWidth: '800px' }}>
+          <h2 style={{ fontFamily: 'var(--font-orbitron)', fontSize: '2.5rem', marginBottom: '2rem', color: 'var(--cyber-teal)' }}>
+            DIGITAL_INFRASTRUCTURE
+          </h2>
+          <p style={{ lineHeight: '1.8', opacity: 0.7, marginBottom: '2rem' }}>
+            Our vehicles are more than machines; they are nodes in a global intelligence network. Over-the-air updates, neural-link navigation, and autonomous energy management come standard.
+          </p>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
+            <div style={{ borderLeft: '2px solid var(--cyber-teal)', paddingLeft: '1rem' }}>
+              <span style={{ display: 'block', fontSize: '1.5rem', fontWeight: 'bold' }}>99.9%</span>
+              <span style={{ fontSize: '0.7rem', opacity: 0.5 }}>UPTIME</span>
+            </div>
+            <div style={{ borderLeft: '2px solid var(--cyber-teal)', paddingLeft: '1rem' }}>
+              <span style={{ display: 'block', fontSize: '1.5rem', fontWeight: 'bold' }}>12ms</span>
+              <span style={{ fontSize: '0.7rem', opacity: 0.5 }}>LATENCY</span>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

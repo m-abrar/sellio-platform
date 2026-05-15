@@ -1,69 +1,42 @@
-
 import React from 'react';
+import { PropertyCard } from './components';
 
-export default function Page() {
+export default function LuxuryPage() {
+  const properties = [
+    { title: "The Obsidian Villa", price: "$12,500,000", image: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=2071" },
+    { title: "Ethereal Heights", price: "$8,200,000", image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2070" },
+    { title: "Azure Waterfront", price: "$15,000,000", image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070" },
+    { title: "The Gilded Penthouse", price: "$22,000,000", image: "https://images.unsplash.com/photo-1600607687940-c52af096999a?q=80&w=2070" },
+  ];
+
   return (
-    <div style={{ 
-      minHeight: '80vh', 
-      display: 'flex', 
-      flexDirection: 'column', 
-      alignItems: 'center', 
-      justifyContent: 'center', 
-      backgroundColor: '#f9fafb',
-      padding: '2rem',
-      textAlign: 'center',
-      fontFamily: "'Playfair Display', serif"
-    }}>
-      <div style={{ 
-        maxWidth: '42rem', 
-        width: '100%', 
-        backgroundColor: 'white', 
-        borderRadius: '1.5rem', 
-        boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)', 
-        padding: '3rem', 
-        border: '1px solid #f3f4f6' 
-      }}>
-        <div style={{ 
-          width: '5rem', 
-          height: '5rem', 
-          backgroundColor: '#1a1a1a15', 
-          borderRadius: '1rem', 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'center', 
-          margin: '0 auto 2rem auto' 
-        }}>
-          <svg style={{ width: '2.5rem', height: '2.5rem', color: '#1a1a1a' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-          </svg>
+    <div>
+      <section className="luxury-hero">
+        <img 
+          src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2075" 
+          alt="Luxury Estate" 
+          className="luxury-hero-image"
+        />
+        <div className="luxury-hero-content">
+          <p className="luxury-hero-subtitle">Defining the Art of Living</p>
+          <h1 className="luxury-hero-title">Beyond Excellence</h1>
         </div>
-        <h1 style={{ 
-          fontSize: '2.25rem', 
-          fontWeight: 800, 
-          color: '#111827', 
-          marginBottom: '1rem', 
-          letterSpacing: '-0.025em',
-          lineHeight: 1.2
-        }}>
-          Properties Luxury <span style={{ color: '#1a1a1a' }}>Coming Soon</span>
-        </h1>
-        <p style={{ 
-          fontSize: '1.125rem', 
-          color: '#4b5563', 
-          marginBottom: '2rem', 
-          maxWidth: '28rem', 
-          margin: '0 auto 2rem auto',
-          lineHeight: 1.6
-        }}>
-          We are currently hand-crafting this elite vertical experience. 
-          Stay tuned for a production-grade layout that will blow your users away.
-        </p>
-        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
-          <div style={{ height: '0.25rem', width: '3rem', backgroundColor: '#1a1a1a', borderRadius: '9999px' }}></div>
-          <div style={{ height: '0.25rem', width: '3rem', backgroundColor: '#1a1a1a60', borderRadius: '9999px' }}></div>
-          <div style={{ height: '0.25rem', width: '3rem', backgroundColor: '#1a1a1a30', borderRadius: '9999px' }}></div>
-        </div>
+      </section>
+
+      <div className="asymmetric-grid">
+        {properties.map((p, i) => (
+          <PropertyCard key={i} {...p} />
+        ))}
       </div>
+
+      <section style={{ padding: '10rem 4rem', textAlign: 'center', backgroundColor: '#fff' }}>
+        <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '3rem', marginBottom: '2rem' }}>
+          Unrivaled Expertise
+        </h2>
+        <p style={{ maxWidth: '600px', margin: '0 auto', lineHeight: '1.8', color: '#666' }}>
+          Our global network of real estate professionals provides unparalleled access to the world's most exclusive properties. From London to Dubai, we represent the pinnacle of architectural achievement.
+        </p>
+      </section>
     </div>
   );
 }

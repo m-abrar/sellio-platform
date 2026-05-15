@@ -1,0 +1,102 @@
+.jobs-luxury {
+  --color-navy: #0f172a;
+  --color-gold: #c5a059;
+  --color-ivory: #faf9f6;
+  --font-serif: 'Playfair Display', serif;
+  --font-sans: 'Inter', sans-serif;
+}
+
+.executive-portal-container {
+  background-color: var(--color-ivory);
+  color: var(--color-navy);
+  font-family: var(--font-sans);
+  min-height: 100vh;
+}
+
+.executive-header {
+  padding: 2.5rem 6rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  border-bottom: 1px solid #eee;
+}
+
+.executive-logo {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  font-weight: 400;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+}
+
+.mandate-grid {
+  padding: 6rem;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 4rem;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.mandate-block {
+  grid-column: span 6;
+  background: white;
+  padding: 4rem;
+  border: 1px solid #f0f0f0;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.4s ease;
+}
+
+.mandate-block:hover {
+  border-color: var(--color-gold);
+  transform: translateY(-5px);
+}
+
+.mandate-block:nth-child(3n) {
+  grid-column: span 12;
+  flex-direction: row;
+  align-items: center;
+  gap: 6rem;
+}
+
+.mandate-status {
+  font-size: 0.7rem;
+  letter-spacing: 3px;
+  font-weight: 700;
+  color: var(--color-gold);
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+}
+
+.mandate-title {
+  font-family: var(--font-serif);
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.mandate-meta {
+  font-size: 0.9rem;
+  opacity: 0.5;
+  margin-bottom: 2rem;
+  letter-spacing: 1px;
+}
+
+.mandate-apply-btn {
+  font-family: var(--font-serif);
+  font-size: 0.8rem;
+  letter-spacing: 3px;
+  color: var(--color-navy);
+  border-bottom: 1px solid var(--color-gold);
+  width: fit-content;
+  padding-bottom: 0.5rem;
+  cursor: pointer;
+}
+
+.discreet-footer {
+  padding: 8rem 6rem;
+  background: var(--color-navy);
+  color: white;
+  text-align: center;
+}

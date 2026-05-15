@@ -1,0 +1,132 @@
+.unifieds-luxury {
+  --color-gold: #c5a059;
+  --color-charcoal: #111111;
+  --color-ivory: #fcfcfc;
+  --font-serif: 'Playfair Display', serif;
+  --font-sans: 'Inter', sans-serif;
+}
+
+.luxury-portal-container {
+  background-color: var(--color-ivory);
+  color: var(--color-charcoal);
+  font-family: var(--font-sans);
+  min-height: 100vh;
+}
+
+.maison-header {
+  padding: 3rem 6rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.maison-logo {
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  font-weight: 400;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+}
+
+.maison-nav {
+  display: flex;
+  gap: 4rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+.luxury-hero-maison {
+  height: 90vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 6rem;
+  background: #fdfdfd;
+}
+
+.luxury-hero-maison h1 {
+  font-family: var(--font-serif);
+  font-size: 6rem;
+  font-weight: 400;
+  line-height: 1.1;
+  max-width: 900px;
+  margin-bottom: 3rem;
+}
+
+.signature-divider {
+  width: 100px;
+  height: 1px;
+  background: var(--color-gold);
+  margin-bottom: 2rem;
+}
+
+.maison-industry-section {
+  display: flex;
+  height: 80vh;
+  border-top: 1px solid #f0f0f0;
+}
+
+.maison-industry-section:nth-child(even) {
+  flex-direction: row-reverse;
+}
+
+.maison-image-half {
+  flex: 1.2;
+  position: relative;
+  overflow: hidden;
+}
+
+.maison-image-half img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 1.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.maison-industry-section:hover img {
+  transform: scale(1.05);
+}
+
+.maison-text-half {
+  flex: 1;
+  padding: 6rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.maison-category-title {
+  font-family: var(--font-serif);
+  font-size: 3rem;
+  margin-bottom: 1.5rem;
+}
+
+.maison-description {
+  line-height: 1.8;
+  opacity: 0.7;
+  font-size: 1.1rem;
+  margin-bottom: 3rem;
+}
+
+.maison-explore-btn {
+  font-family: var(--font-serif);
+  font-size: 0.8rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--color-gold);
+  border-bottom: 1px solid var(--color-gold);
+  width: fit-content;
+  padding-bottom: 0.5rem;
+  cursor: pointer;
+}
+
+.heritage-footer {
+  padding: 10rem 6rem;
+  background: var(--color-charcoal);
+  color: white;
+  text-align: center;
+}
