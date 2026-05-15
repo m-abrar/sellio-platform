@@ -1,250 +1,174 @@
-/* 
-    Ecommerce Default Theme: Global Aesthetic Architecture
-    Standardized design tokens and utility classes for the base ecommerce experience.
-*/
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
-:root {
-    --ecom-primary: #1e4d4e;
-    --ecom-primary-soft: rgba(30, 77, 78, 0.05);
-    --ecom-secondary: #f3f4f6;
-    --ecom-text-dark: #111827;
-    --ecom-text-muted: #6b7280;
-    --ecom-white: #ffffff;
-    --ecom-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
-    --ecom-shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+.ecommerce-default-theme {
+  /* Transaction Node Palette */
+  --ed-blue: #2563eb;
+  --ed-slate: #1e293b;
+  --ed-white: #ffffff;
+  --ed-frost: #f8fafc;
+  --ed-border: #e2e8f0;
+  --ed-text-muted: #64748b;
+  
+  /* Typography */
+  --ed-font: 'Inter', sans-serif;
+  
+  /* Transitions */
+  --ed-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.ecommerce-default-wrapper {
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    color: var(--ecom-text-dark);
-    background-color: var(--ecom-white);
+.ecommerce-default-theme {
+  background-color: var(--ed-white);
+  color: var(--ed-slate);
+  font-family: var(--ed-font);
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Header & Navigation */
-.ecom-header {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid #f3f4f6;
-    transition: all 0.3s ease;
+/* Typography Utilities */
+.ed-heading-xl {
+  font-size: clamp(3rem, 7vw, 7rem);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--ed-slate);
 }
 
-.ecom-nav-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 1rem 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+.ed-mono {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--ed-blue);
 }
 
-.ecom-logo {
-    font-size: 1.5rem;
-    font-weight: 900;
-    color: var(--ecom-primary);
-    letter-spacing: -1px;
+/* Layout */
+.ed-section {
+  padding: 8rem 6%;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
-.ecom-nav-links {
-    display: flex;
-    gap: 2rem;
+/* Shop Header */
+.ed-header {
+  padding: 1.25rem 6%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  border-bottom: 1px solid var(--ed-border);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
-.ecom-nav-link {
-    font-weight: 600;
-    font-size: 0.875rem;
-    color: var(--ecom-text-muted);
-    transition: color 0.2s ease;
+.ed-logo {
+  font-weight: 900;
+  font-size: 1.5rem;
+  letter-spacing: -1px;
+  color: var(--ed-slate);
 }
 
-.ecom-nav-link:hover {
-    color: var(--ecom-primary);
+.ed-nav {
+  display: flex;
+  gap: 3.5rem;
 }
 
-/* Hero Section */
-.ecom-hero {
-    position: relative;
-    height: 70vh;
-    min-height: 500px;
-    background-color: #f9fafb;
-    display: flex;
-    align-items: center;
-    overflow: hidden;
+.ed-nav-link {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--ed-text-muted);
+  text-decoration: none;
+  transition: var(--ed-transition);
 }
 
-.ecom-hero-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 2rem;
-    width: 100%;
-    position: relative;
-    z-index: 2;
+.ed-nav-link:hover {
+  color: var(--ed-blue);
 }
 
-.ecom-hero-badge {
-    display: inline-block;
-    padding: 0.5rem 1.25rem;
-    background: var(--ecom-primary-soft);
-    color: var(--ecom-primary);
-    border-radius: 9999px;
-    font-weight: 700;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 1.5rem;
+/* Refined Hero */
+.ed-hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 8rem;
+  padding: 10rem 6%;
+  background: var(--ed-frost);
+  border-bottom: 1px solid var(--ed-border);
 }
 
-.ecom-hero-title {
-    font-size: 4.5rem;
-    font-weight: 900;
-    line-height: 1.1;
-    letter-spacing: -2px;
-    margin-bottom: 1.5rem;
-    color: var(--ecom-text-dark);
+.ed-hero-img-wrapper {
+  position: relative;
+  border-radius: 24px;
+  overflow: hidden;
+  aspect-ratio: 4/5;
+  box-shadow: 0 40px 80px rgba(30, 41, 59, 0.05);
 }
 
-.ecom-hero-subtitle {
-    font-size: 1.25rem;
-    color: var(--ecom-text-muted);
-    max-width: 32rem;
-    margin-bottom: 2.5rem;
-    line-height: 1.6;
+.ed-hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-.ecom-btn-primary {
-    background-color: var(--ecom-primary);
-    color: white;
-    padding: 1.25rem 2.5rem;
-    border-radius: 12px;
-    font-weight: 700;
-    transition: all 0.3s ease;
-    display: inline-block;
-    box-shadow: 0 10px 20px rgba(30, 77, 78, 0.2);
+/* Premium Product Card */
+.ed-product-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3rem;
+  margin-top: 5rem;
 }
 
-.ecom-btn-primary:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 15px 30px rgba(30, 77, 78, 0.3);
+.ed-product-card {
+  background: white;
+  transition: var(--ed-transition);
+  cursor: pointer;
 }
 
-/* Product Grid */
-.ecom-section {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 6rem 2rem;
+.ed-product-card:hover {
+  transform: translateY(-8px);
 }
 
-.ecom-section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    margin-bottom: 3rem;
+.ed-img-frame {
+  width: 100%;
+  aspect-ratio: 3/4;
+  background: var(--ed-frost);
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 2rem;
+  position: relative;
 }
 
-.ecom-section-title {
-    font-size: 2rem;
-    font-weight: 800;
-    letter-spacing: -0.5px;
+.ed-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: var(--ed-transition);
 }
 
-.ecom-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 2rem;
+.ed-product-card:hover .ed-img {
+  transform: scale(1.05);
 }
 
-.ecom-product-card {
+/* Buttons */
+.ed-btn-primary {
+  background: var(--ed-slate);
+  color: white;
+  border: none;
+  padding: 1.25rem 3.5rem;
+  font-weight: 800;
+  font-size: 0.9rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: var(--ed-transition);
 }
 
-.ecom-product-image-wrapper {
-    position: relative;
-    aspect-ratio: 4/5;
-    background-color: #f3f4f6;
-    border-radius: 20px;
-    overflow: hidden;
-    margin-bottom: 1.25rem;
-}
-
-.ecom-product-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.5s ease;
-}
-
-.ecom-product-card:hover .ecom-product-image {
-    transform: scale(1.05);
-}
-
-.ecom-product-info {
-    padding: 0.5rem;
-}
-
-.ecom-product-category {
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: var(--ecom-text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 0.5rem;
-}
-
-.ecom-product-name {
-    font-size: 1.125rem;
-    font-weight: 700;
-    margin-bottom: 0.25rem;
-}
-
-.ecom-product-price {
-    font-weight: 600;
-    color: var(--ecom-primary);
+.ed-btn-primary:hover {
+  background: var(--ed-blue);
+  box-shadow: 0 10px 20px rgba(37, 99, 235, 0.2);
 }
 
 /* Footer */
-.ecom-footer {
-    background-color: #fafafa;
-    border-top: 1px solid #f3f4f6;
-    padding: 5rem 2rem;
-}
-
-.ecom-footer-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr;
-    gap: 4rem;
-}
-
-.ecom-footer-column h4 {
-    font-weight: 700;
-    margin-bottom: 1.5rem;
-}
-
-.ecom-footer-links {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-}
-
-.ecom-footer-link {
-    color: var(--ecom-text-muted);
-    font-size: 0.875rem;
-    transition: color 0.2s ease;
-}
-
-.ecom-footer-link:hover {
-    color: var(--ecom-primary);
-}
-
-@media (max-width: 1024px) {
-    .ecom-grid { grid-template-columns: repeat(3, 1fr); }
-}
-
-@media (max-width: 768px) {
-    .ecom-grid { grid-template-columns: repeat(2, 1fr); }
-    .ecom-hero-title { font-size: 3rem; }
-    .ecom-footer-container { grid-template-columns: 1fr 1fr; }
+.ed-footer {
+  background: white;
+  padding: 12rem 6% 6rem;
+  border-top: 1px solid var(--ed-border);
 }

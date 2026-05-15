@@ -1,6 +1,6 @@
-
+'use client';
 import React from 'react';
-import { TechProductCard } from './components';
+import { TechDeviceCard, ComponentHUD } from './components';
 
 export default function Page() {
   const products = [
@@ -13,89 +13,97 @@ export default function Page() {
   ];
 
   return (
-    <div>
-      {/* Hero */}
-      <section className="tech-hero">
-          <div className="tech-hero-content">
-              <span className="tech-badge">LATEST_GEN_AVAILABLE</span>
-              <h1>The Next <br/>Iteration of <br/>Power.</h1>
-              <p style={{ maxWidth: '500px', opacity: 0.6, lineHeight: 1.8, marginBottom: '3rem' }}>
-                  Enterprise-grade hardware architecture optimized for the next decade of computational demand. 
-              </p>
-              <button style={{ 
-                  background: 'var(--tech-primary)', 
-                  color: 'white', 
-                  border: 'none', 
-                  padding: '1.25rem 3rem', 
-                  fontFamily: 'var(--font-tech)',
-                  fontSize: '0.8rem',
-                  letterSpacing: '2px'
-              }}>
-                  ENTER_ECOSYSTEM
-              </button>
+    <div className="el-section">
+      {/* Technical Hero */}
+      <section className="el-hero">
+        <div>
+          <div className="el-label" style={{ marginBottom: '3rem' }}>HARDWARE_ITERATION_V8_ACTIVE</div>
+          <h1 className="el-heading-xl">
+            Next <br/>
+            Iteration of <br/>
+            <span style={{ color: 'var(--el-cyan)' }}>Power.</span>
+          </h1>
+          <p style={{ marginTop: '5.5rem', fontSize: '1.25rem', color: 'rgba(255,255,255,0.4)', lineHeight: 2, maxWidth: '500px' }}>
+            Enterprise-grade hardware architecture optimized for the next decade of computational demand. Precision engineered.
+          </p>
+          <div style={{ marginTop: '7rem', display: 'flex', gap: '3rem' }}>
+            <button className="el-btn-primary">Enter Ecosystem</button>
+            <button style={{ 
+                background: 'transparent', 
+                border: '1px solid var(--el-border)', 
+                color: 'white', 
+                padding: '1.5rem 4rem', 
+                borderRadius: '2px', 
+                fontWeight: 800, 
+                textTransform: 'uppercase', 
+                cursor: 'pointer',
+                fontFamily: 'var(--el-mono)',
+                fontSize: '0.8rem',
+                letterSpacing: '2px'
+            }}>
+                View_Manifesto
+            </button>
           </div>
-          <div style={{ position: 'relative' }}>
-              <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2070" alt="Hardware" style={{ width: '100%', borderRadius: '2px', filter: 'grayscale(1) contrast(1.2)' }} />
-              <div style={{ position: 'absolute', top: '-2rem', right: '-2rem', padding: '2rem', background: 'var(--tech-accent)', color: 'black', fontFamily: 'var(--font-tech)', fontSize: '1rem', fontWeight: 900 }}>
-                  v.4.0
+        </div>
+        <div className="el-hero-img-wrapper">
+          <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2070" alt="Hardware Node" className="el-hero-img" />
+          
+          <div style={{ position: 'absolute', top: '-4rem', right: '-4rem', background: 'var(--el-cyan)', color: 'black', padding: '4rem', fontWeight: 900, fontFamily: 'var(--el-mono)', boxShadow: '0 40px 80px rgba(0,0,0,0.2)' }}>
+              <div style={{ fontSize: '3rem' }}>4.0</div>
+              <div style={{ fontSize: '0.65rem', letterSpacing: '4px' }}>VERSION_CORE</div>
+          </div>
+        </div>
+      </section>
+
+      {/* Component HUD Bar */}
+      <section style={{ padding: '8rem 0', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '4rem', marginTop: '10rem' }}>
+          <ComponentHUD icon="⚡" label="LATENCY_SYNC" status="Optimized data paths for instant response times." />
+          <ComponentHUD icon="🔒" label="CORE_SECURITY" status="Hardware-level encryption for every node." />
+          <ComponentHUD icon="🌐" label="GLOBAL_NODES" status="Seamless integration with the Sellio network." />
+          <ComponentHUD icon="🚀" label="SCALE_PROTOCOL" status="Designed for high-density industrial growth." />
+      </section>
+
+      {/* Device Registry Section */}
+      <section style={{ marginTop: '15rem' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '8rem' }}>
+              <div>
+                  <div className="el-label" style={{ marginBottom: '1.5rem' }}>SILICON_DEVICE_REGISTRY</div>
+                  <h2 style={{ fontSize: '5rem', fontWeight: 800, letterSpacing: '-3px', textTransform: 'uppercase', fontFamily: 'var(--el-mono)' }}>The <span style={{ color: 'var(--el-cyan)' }}>Showcase.</span></h2>
+              </div>
+              <div style={{ textAlign: 'right', maxWidth: '400px', fontSize: '1rem', color: 'rgba(255,255,255,0.3)', lineHeight: 1.8 }}>
+                  Our unified protocol synchronizes hardware availability from the world's most significant engineering nodes.
               </div>
           </div>
-      </section>
-
-      {/* Specs Section */}
-      <section className="spec-grid">
-          <div className="spec-card">
-              <div className="spec-icon">⚡</div>
-              <h3 style={{ fontFamily: 'var(--font-tech)', fontSize: '0.9rem', marginBottom: '1rem' }}>Zero Latency</h3>
-              <p style={{ fontSize: '0.8rem', opacity: 0.6 }}>Optimized data paths for instant response times.</p>
-          </div>
-          <div className="spec-card">
-              <div className="spec-icon">🔒</div>
-              <h3 style={{ fontFamily: 'var(--font-tech)', fontSize: '0.9rem', marginBottom: '1rem' }}>Core Security</h3>
-              <p style={{ fontSize: '0.8rem', opacity: 0.6 }}>Hardware-level encryption for every transaction.</p>
-          </div>
-          <div className="spec-card">
-              <div className="spec-icon">🌐</div>
-              <h3 style={{ fontFamily: 'var(--font-tech)', fontSize: '0.9rem', marginBottom: '1rem' }}>Global Node</h3>
-              <p style={{ fontSize: '0.8rem', opacity: 0.6 }}>Seamless integration with the Sellio network.</p>
-          </div>
-          <div className="spec-card" style={{ background: 'var(--tech-primary)', color: 'white' }}>
-              <div className="spec-icon" style={{ color: 'white' }}>🚀</div>
-              <h3 style={{ fontFamily: 'var(--font-tech)', fontSize: '0.9rem', marginBottom: '1rem' }}>Scale Ready</h3>
-              <p style={{ fontSize: '0.8rem', opacity: 0.8 }}>Designed to grow with your industrial demand.</p>
+          
+          <div className="el-device-grid">
+            {products.map((p, i) => (
+              <TechDeviceCard key={i} {...p} />
+            ))}
           </div>
       </section>
 
-      {/* Product Grid */}
-      <section className="tech-product-grid">
-          {products.map((p, i) => (
-              <TechProductCard key={i} {...p} />
-          ))}
-      </section>
-
-      {/* Full Width Feature */}
-      <section style={{ padding: '10rem 10%', background: '#0a0a0a', color: 'white', display: 'flex', alignItems: 'center', gap: '8rem' }}>
-          <div style={{ flex: 1 }}>
-              <span style={{ color: 'var(--tech-accent)', fontWeight: 900, fontSize: '0.7rem', letterSpacing: '4px' }}>MANUFACTURING_PROTOCOL</span>
-              <h2 style={{ fontFamily: 'var(--font-tech)', fontSize: '3.5rem', marginTop: '2rem', marginBottom: '3rem' }}>Bespoke <br/>Infrastructure.</h2>
-              <p style={{ opacity: 0.5, lineHeight: 2, marginBottom: '4rem' }}>
-                  Need something custom? Our engineering nodes are ready to assemble bespoke hardware configurations tailored to your specific computational requirements.
+      {/* Bespoke Feature Section */}
+      <section style={{ marginTop: '20rem', padding: '15rem 10%', background: 'var(--el-surface)', border: '1px solid var(--el-border)', display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '15rem', alignItems: 'center' }}>
+          <div>
+              <div className="el-label" style={{ marginBottom: '3rem' }}>MANUFACTURING_PROTOCOL_BETA</div>
+              <h2 className="el-heading-xl" style={{ fontSize: '6rem', marginBottom: '4rem' }}>Bespoke <br/>Infrastructure.</h2>
+              <p style={{ fontSize: '1.5rem', color: 'rgba(255,255,255,0.4)', lineHeight: 2, marginBottom: '6rem' }}>
+                  Need something custom? Our engineering nodes are ready to assemble bespoke hardware configurations tailored to your specific requirements.
               </p>
-              <button style={{ border: '1px solid white', background: 'none', color: 'white', padding: '1rem 3rem', fontSize: '0.7rem', fontWeight: 900, letterSpacing: '2px' }}>
-                  CONTACT_ENGINEERING
-              </button>
+              <button className="el-btn-primary">Contact Engineering</button>
           </div>
-          <div style={{ flex: 1, border: '1px solid #222', padding: '4rem' }}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-                  {[1, 2, 3].map(i => (
-                      <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #111', paddingBottom: '1rem' }}>
-                          <span style={{ fontSize: '0.8rem', color: '#666' }}>NODE_0{i}_STATUS</span>
-                          <span style={{ fontSize: '0.8rem', color: 'var(--tech-accent)' }}>OPERATIONAL</span>
-                      </div>
-                  ))}
-              </div>
+          <div style={{ padding: '6rem', background: '#000', border: '1px solid var(--el-border)', display: 'flex', flexDirection: 'column', gap: '3rem' }}>
+              {[1, 2, 3, 4].map(i => (
+                  <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--el-border)', paddingBottom: '2rem' }}>
+                      <span className="el-label" style={{ fontSize: '0.6rem', color: 'rgba(255,255,255,0.3)' }}>NODE_0{i}_STATUS</span>
+                      <span className="el-label" style={{ fontSize: '0.6rem', color: 'var(--el-cyan)' }}>OPERATIONAL</span>
+                  </div>
+              ))}
           </div>
       </section>
+
+      {/* Final Space */}
+      <div style={{ height: '15rem' }}></div>
     </div>
   );
 }

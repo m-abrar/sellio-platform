@@ -1,16 +1,15 @@
-
 import React from 'react';
+import { SelectHeader, RegistryFooter } from './components';
 import './styles.css';
-import { ReliableHeader, TrustFooter } from './components';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="used-autos-wrapper">
-      <ReliableHeader />
+    <div className="autos-used-theme">
+      <SelectHeader />
       <main>
         {children}
       </main>
-      <TrustFooter />
+      <RegistryFooter />
     </div>
   );
 }

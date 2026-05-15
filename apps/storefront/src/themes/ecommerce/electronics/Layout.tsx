@@ -1,16 +1,15 @@
-
 import React from 'react';
+import { SiliconHeader, SystemFooter } from './components';
 import './styles.css';
-import { TechHeader, CircuitFooter } from './components';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="electronics-wrapper">
-      <TechHeader />
+    <div className="ecommerce-electronics-theme">
+      <SiliconHeader />
       <main>
         {children}
       </main>
-      <CircuitFooter />
+      <SystemFooter />
     </div>
   );
 }

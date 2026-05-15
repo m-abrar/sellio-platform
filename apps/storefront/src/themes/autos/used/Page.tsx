@@ -1,6 +1,6 @@
-
+'use client';
 import React from 'react';
-import { VehicleCard } from './components';
+import { CertifiedVehicleCard, TrustHUD } from './components';
 
 export default function Page() {
   const vehicles = [
@@ -15,70 +15,90 @@ export default function Page() {
   ];
 
   return (
-    <div>
-      {/* Hero Section */}
-      <section className="used-hero">
-          <div className="used-hero-content">
-              <span style={{ fontSize: '0.8rem', fontWeight: 900, color: 'var(--auto-accent)', letterSpacing: '2px', display: 'block', marginBottom: '1.5rem' }}>CERTIFIED_SELECT_2026</span>
-              <h1>Transparency in <br/>Every Mile.</h1>
-              <p style={{ fontSize: '1.2rem', color: 'var(--auto-secondary)', lineHeight: 1.6, marginBottom: '3rem' }}>
-                  Explore a curated selection of pre-owned vehicles verified by our 150-point inspection protocol. No hidden history, just high-fidelity performance.
-              </p>
-              <div style={{ display: 'flex', gap: '1.5rem' }}>
-                  <button style={{ padding: '1.25rem 3rem', background: 'var(--auto-primary)', color: 'white', border: 'none', borderRadius: '4px', fontWeight: 700 }}>EXPLORE_INVENTORY</button>
-                  <button style={{ padding: '1.25rem 3rem', background: 'none', color: 'var(--auto-primary)', border: '1px solid var(--auto-primary)', borderRadius: '4px', fontWeight: 700 }}>VALUATE_MY_TRADE</button>
+    <div className="au-section">
+      {/* Professional Trust Hero */}
+      <section className="au-hero">
+        <div>
+          <div className="au-mono" style={{ marginBottom: '2.5rem' }}>CERTIFIED_SELECT_PROTOCOL_V8</div>
+          <h1 className="au-heading-xl">
+            Transparency <br/>
+            in Every <br/>
+            <span style={{ color: 'var(--au-indigo)' }}>Mile.</span>
+          </h1>
+          <p style={{ marginTop: '5rem', fontSize: '1.25rem', color: 'var(--au-text-muted)', lineHeight: 1.8, maxWidth: '600px' }}>
+            Explore a curated selection of pre-owned vehicles verified by our 150-point inspection protocol. No hidden history, just high-fidelity performance.
+          </p>
+          <div style={{ marginTop: '6rem', display: 'flex', gap: '3rem' }}>
+            <button className="au-btn-primary">Explore Inventory</button>
+            <button style={{ background: 'transparent', border: '2px solid var(--au-slate)', color: 'var(--au-slate)', padding: '1.25rem 3.5rem', borderRadius: '8px', fontWeight: 800, textTransform: 'uppercase', cursor: 'pointer' }}>Valuate_Trade</button>
+          </div>
+        </div>
+        <div className="au-hero-img-wrapper">
+          <img src="https://images.unsplash.com/photo-1542362567-b0520002cf71?q=80&w=2070" alt="Certified Vehicle" className="au-hero-img" />
+          
+          <div style={{ position: 'absolute', bottom: '3rem', right: '3rem', background: 'white', padding: '2.5rem', borderRadius: '12px', boxShadow: '0 20px 40px rgba(0,0,0,0.05)', border: '1px solid var(--au-border)' }}>
+              <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                  <div style={{ fontSize: '1.5rem' }}>🛡️</div>
+                  <div>
+                    <div style={{ fontWeight: 900, fontSize: '0.9rem' }}>150-Point Inspection</div>
+                    <div className="au-mono" style={{ fontSize: '0.6rem' }}>VERIFIED_BY_SELLIO_NODE</div>
+                  </div>
               </div>
           </div>
-          <div style={{ flex: 1, position: 'relative' }}>
-              <img src="https://images.unsplash.com/photo-1542362567-b0520002cf71?q=80&w=2070" alt="Certified Vehicle" style={{ width: '100%', borderRadius: '8px', boxShadow: '40px 40px 80px rgba(0,0,0,0.05)' }} />
-          </div>
+        </div>
       </section>
 
-      {/* Trust Grid */}
-      <section style={{ padding: '4rem 5%', background: '#fff', borderBottom: '1px solid var(--auto-border)', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '4rem' }}>
-          <div>
-              <div style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>🛡️</div>
-              <div style={{ fontSize: '0.9rem', fontWeight: 800 }}>Certified Warranty</div>
-              <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: '0.5rem' }}>12-month / 12k mile protection.</div>
-          </div>
-          <div>
-              <div style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>📋</div>
-              <div style={{ fontSize: '0.9rem', fontWeight: 800 }}>Full History</div>
-              <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: '0.5rem' }}>Complete CARFAX reports available.</div>
-          </div>
-          <div>
-              <div style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>🚚</div>
-              <div style={{ fontSize: '0.9rem', fontWeight: 800 }}>Global Delivery</div>
-              <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: '0.5rem' }}>Direct to your node within 72h.</div>
-          </div>
-          <div>
-              <div style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>💵</div>
-              <div style={{ fontSize: '0.9rem', fontWeight: 800 }}>Instant Funding</div>
-              <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: '0.5rem' }}>Pre-approval in under 60 seconds.</div>
-          </div>
+      {/* Trust Grid Section */}
+      <section style={{ padding: '8rem 0', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '6rem', borderTop: '1px solid var(--au-border)', marginTop: '10rem' }}>
+          <TrustHUD icon="🛡️" label="Certified Warranty" sub="12-month / 12k mile protection on every unit." />
+          <TrustHUD icon="📋" label="Full History" sub="Complete digital provenance records via CARFAX." />
+          <TrustHUD icon="🚚" label="Global Delivery" sub="Direct to your node within 72 hours of verification." />
+          <TrustHUD icon="💵" label="Instant Funding" sub="Pre-approval nodes active for all regional clusters." />
       </section>
 
-      {/* Inventory Grid */}
-      <section style={{ background: '#f8fafc' }}>
-          <div className="vehicle-grid">
-              {vehicles.map((v, i) => (
-                  <VehicleCard key={i} {...v} />
-              ))}
+      {/* Inventory Registry Section */}
+      <section style={{ marginTop: '15rem' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '8rem' }}>
+              <div>
+                  <div className="au-mono" style={{ marginBottom: '1.5rem' }}>SELECT_INVENTORY_REGISTRY</div>
+                  <h2 style={{ fontSize: '5rem', fontWeight: 900, letterSpacing: '-2px', textTransform: 'uppercase' }}>Certified <br/>Inventory.</h2>
+              </div>
+              <div style={{ textAlign: 'right', maxWidth: '400px', fontSize: '1rem', color: 'var(--au-text-muted)', lineHeight: 1.8 }}>
+                  Our unified protocol synchronizes verification metadata across our global pre-owned distribution nodes.
+              </div>
+          </div>
+          
+          <div className="au-vehicle-grid">
+            {vehicles.map((v, i) => (
+              <CertifiedVehicleCard key={i} {...v} />
+            ))}
           </div>
       </section>
 
       {/* Valuation CTA */}
-      <section style={{ padding: '12rem 5%', textAlign: 'center' }}>
-          <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-              <h2 style={{ fontSize: '3rem', fontWeight: 900, marginBottom: '2.5rem' }}>Market-Leading Trade Values.</h2>
-              <p style={{ fontSize: '1.2rem', color: 'var(--auto-secondary)', marginBottom: '4rem' }}>
-                  Our AI-driven valuation engine provides the most accurate market price for your current vehicle in seconds.
+      <section style={{ marginTop: '15rem', padding: '12rem 8%', background: 'var(--au-surface)', border: '1px solid var(--au-border)', borderRadius: '24px', display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '12rem', alignItems: 'center' }}>
+          <div>
+              <h2 style={{ fontSize: '4.5rem', fontWeight: 900, letterSpacing: '-3px', textTransform: 'uppercase', marginBottom: '4rem', lineHeight: 1.1 }}>
+                  Market-Leading <br/>
+                  <span style={{ color: 'var(--au-indigo)' }}>Trade Values.</span>
+              </h2>
+              <p style={{ fontSize: '1.25rem', color: 'var(--au-text-muted)', lineHeight: 2 }}>
+                  Our AI-driven valuation engine provides the most accurate market price for your current vehicle in seconds, synchronized with real-time auction nodes.
               </p>
-              <button style={{ padding: '1.5rem 4rem', background: 'var(--auto-accent)', color: 'white', border: 'none', borderRadius: '4px', fontWeight: 900, fontSize: '0.9rem' }}>
-                  GET_INSTANT_OFFER
+          </div>
+          <div style={{ padding: '6rem', background: 'white', borderRadius: '24px', border: '1px solid var(--au-border)', boxShadow: '0 20px 40px rgba(0,0,0,0.02)' }}>
+              <div className="au-mono" style={{ marginBottom: '2.5rem' }}>GET_INSTANT_OFFER</div>
+              <h3 style={{ fontSize: '2rem', fontWeight: 900, marginBottom: '2.5rem' }}>Value Your Asset.</h3>
+              <p style={{ color: 'var(--au-text-muted)', lineHeight: 2, marginBottom: '4rem' }}>
+                  Secure a competitive buy-back offer for your current vehicle from the Sellio Select Network.
+              </p>
+              <button className="au-btn-primary" style={{ width: '100%', padding: '2rem', fontSize: '1.1rem' }}>
+                  START_APPRAISAL
               </button>
           </div>
       </section>
+      
+      <div style={{ height: '15rem' }}></div>
     </div>
   );
 }
