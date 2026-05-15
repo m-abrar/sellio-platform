@@ -1,15 +1,15 @@
 import React from 'react';
+import { Header, Footer } from './components';
 import './styles.css';
-import { ConfHeader, CorporateFooter } from './components';
 
-export default function CorporateLayout({ children }: { children: React.ReactNode }) {
+export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="events-corporate">
-      <ConfHeader />
-      <main className="corporate-container">
+    <div className="events-corporate-theme">
+      <Header />
+      <main>
         {children}
       </main>
-      <CorporateFooter />
+      <Footer />
     </div>
   );
 }

@@ -1,15 +1,15 @@
 import React from 'react';
+import { Header, Footer } from './components';
 import './styles.css';
-import { SleekHeader, ModernAutoFooter } from './components';
 
-export default function ModernAutoLayout({ children }: { children: React.ReactNode }) {
+export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="autos-modern">
-      <SleekHeader />
-      <main className="modern-autos-container">
+    <div className="autos-modern-theme">
+      <Header />
+      <main>
         {children}
       </main>
-      <ModernAutoFooter />
+      <Footer />
     </div>
   );
 }
