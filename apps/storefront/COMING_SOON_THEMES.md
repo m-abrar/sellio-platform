@@ -26,7 +26,7 @@ This document tracks the implementation status of the **50 official themes** reg
 - [x] Properties Luxury
 - [x] Properties Map
 - [ ] Properties Classic
-- [ ] Properties Luxury 2
+- [x] Properties Luxury 2
 - [ ] Properties Urban
 - [ ] Properties Rental
 - [ ] Properties Vacation
