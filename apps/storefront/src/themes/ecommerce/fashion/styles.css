@@ -1,74 +1,173 @@
-.fashion-theme {
-  /* Fallbacks if API variables are missing */
-  --fashion-primary: var(--primary-color, #1a1a1a);
-  --fashion-accent: var(--accent-color, #000000);
-  --fashion-font: var(--font-family, 'Playfair Display', serif);
-  
-  background-color: #ffffff;
-  color: var(--fashion-primary);
-  font-family: var(--fashion-font);
-  min-height: 100vh;
+/* 
+    Ecommerce Fashion Theme: High-Style Lookbook
+    Design Spec: Asymmetric Grids, Serif Typography, Minimalist Navigation
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&display=swap');
+
+:root {
+    --fashion-primary: #1a1a1a;
+    --fashion-bg: #ffffff;
+    --fashion-accent: #c5a059; /* Champagne */
+    --fashion-muted: #f8f8f8;
+    --fashion-text: #1a1a1a;
+    --fashion-serif: 'Playfair Display', serif;
 }
 
-.fashion-theme h1, 
-.fashion-theme h2, 
-.fashion-theme h3 {
-  font-family: var(--fashion-font);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  font-weight: 400;
+.ecommerce-fashion-wrapper {
+    font-family: 'Inter', sans-serif;
+    color: var(--fashion-text);
+    background-color: var(--fashion-bg);
 }
 
-.fashion-header {
-  padding: 2rem 5%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid #eee;
+/* Header */
+.vogue-header {
+    padding: 3rem 4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 100;
 }
 
-.fashion-nav a {
-  margin-left: 2rem;
-  text-decoration: none;
-  color: inherit;
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+.vogue-logo {
+    font-family: var(--fashion-serif);
+    font-weight: 900;
+    font-size: 2rem;
+    letter-spacing: -1px;
 }
 
+.vogue-nav {
+    display: flex;
+    gap: 4rem;
+}
+
+.vogue-nav-link {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--fashion-primary);
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
+}
+
+.vogue-nav-link:hover {
+    opacity: 1;
+}
+
+/* Hero */
 .fashion-hero {
-  position: relative;
-  height: 80vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
+    height: 90vh;
+    padding: 0 4rem;
+    display: flex;
+    gap: 2rem;
 }
 
-.fashion-hero-content {
-  position: relative;
-  z-index: 10;
-  text-align: center;
-  color: white;
-  padding: 2rem;
+.hero-main-frame {
+    flex: 2;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
 }
 
-.fashion-hero-content h1 {
-  font-size: 4rem;
-  margin-bottom: 1rem;
+.hero-side-frame {
+    flex: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
 }
 
-.fashion-btn {
-  background: var(--fashion-accent);
-  color: white;
-  padding: 1rem 2.5rem;
-  border: none;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  cursor: pointer;
-  transition: all 0.3s ease;
+.fashion-img-fill {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1.5s cubic-bezier(0.2, 1, 0.3, 1);
 }
 
-.fashion-btn:hover {
-  filter: brightness(1.2);
+.hero-main-frame:hover .fashion-img-fill {
+    transform: scale(1.05);
+}
+
+.hero-overlay-text {
+    position: absolute;
+    bottom: 4rem;
+    left: 4rem;
+    color: white;
+    z-index: 10;
+}
+
+.hero-title {
+    font-family: var(--fashion-serif);
+    font-size: 6rem;
+    font-weight: 900;
+    line-height: 0.9;
+    margin-bottom: 2rem;
+}
+
+/* Lookbook Grid */
+.fashion-section {
+    padding: 10rem 4rem;
+}
+
+.fashion-lookbook-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 4rem;
+}
+
+.lookbook-card {
+    grid-column: span 4;
+    cursor: pointer;
+}
+
+.lookbook-card:nth-child(even) {
+    margin-top: 6rem;
+}
+
+.lookbook-img-wrapper {
+    aspect-ratio: 3/4;
+    background: var(--fashion-muted);
+    overflow: hidden;
+    margin-bottom: 2rem;
+}
+
+.lookbook-info {
+    text-align: center;
+}
+
+.lookbook-title {
+    font-family: var(--fashion-serif);
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.lookbook-price {
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    opacity: 0.5;
+}
+
+/* Footer */
+.atelier-footer {
+    padding: 10rem 4rem;
+    background: #000;
+    color: white;
+    text-align: center;
+}
+
+.atelier-logo {
+    font-family: var(--fashion-serif);
+    font-weight: 900;
+    font-size: 3rem;
+    margin-bottom: 4rem;
+}
+
+@media (max-width: 1024px) {
+    .fashion-hero { flex-direction: column; height: auto; }
+    .hero-main-frame { height: 600px; }
+    .lookbook-card { grid-column: span 12; margin-top: 0 !important; }
+    .hero-title { font-size: 4rem; }
 }

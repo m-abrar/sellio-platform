@@ -153,6 +153,9 @@ When implementing any of the 50 themes, follow this **Golden Prompt**:
 | `properties_modern` | Properties | 100% | **Elite** | Architectural Sage |
 | `autos_electric` | Autos | 100% | **Elite** | Futurist HUD |
 | `events_music` | Events | 100% | **Elite** | Vibrant Poster |
+| `unifieds_mega` | Unified | 100% | **Elite** | High-Density Bento |
+| `ecommerce_fashion` | Ecommerce | 100% | **Elite** | Editorial Lookbook |
+| `jobs_startup` | Jobs | 100% | **Elite** | Energetic Venture |
 
 ---
 

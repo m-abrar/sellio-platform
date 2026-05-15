@@ -1,0 +1,177 @@
+/* 
+    Jobs Startup Theme: High-Growth Venture Hub
+    Design Spec: Vibrant Gradients, Pulse Animations, Modern Bento
+*/
+
+:root {
+    --startup-primary: #8b5cf6; /* Neon Purple */
+    --startup-secondary: #ec4899; /* Electric Pink */
+    --startup-bg: #0f172a;
+    --startup-card: #1e293b;
+    --startup-text: #f8fafc;
+    --startup-muted: #94a3b8;
+    --startup-glow: 0 0 20px rgba(139, 92, 246, 0.3);
+}
+
+.jobs-startup-wrapper {
+    font-family: 'Inter', sans-serif;
+    color: var(--startup-text);
+    background-color: var(--startup-bg);
+}
+
+/* Header */
+.rocket-header {
+    padding: 2rem 4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.rocket-logo {
+    font-weight: 900;
+    font-size: 1.5rem;
+    background: linear-gradient(to right, var(--startup-primary), var(--startup-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.rocket-nav {
+    display: flex;
+    gap: 3rem;
+}
+
+.rocket-nav-link {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--startup-muted);
+    transition: color 0.3s ease;
+}
+
+.rocket-nav-link:hover {
+    color: #fff;
+}
+
+/* Hero */
+.growth-hero {
+    padding: 8rem 4rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-gradient-orb {
+    position: absolute;
+    top: -200px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.growth-title {
+    font-size: 5rem;
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -3px;
+    margin-bottom: 2rem;
+}
+
+.growth-badge {
+    display: inline-block;
+    padding: 0.5rem 1.5rem;
+    background: rgba(236, 72, 153, 0.1);
+    color: var(--startup-secondary);
+    border-radius: 100px;
+    font-weight: 800;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    margin-bottom: 2rem;
+    border: 1px solid rgba(236, 72, 153, 0.2);
+}
+
+/* Venture Cards */
+.startup-section {
+    padding: 6rem 4rem;
+}
+
+.venture-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+}
+
+.venture-card {
+    background: var(--startup-card);
+    border-radius: 24px;
+    padding: 2.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.4s ease;
+}
+
+.venture-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    border-color: var(--startup-primary);
+    box-shadow: var(--startup-glow);
+}
+
+.venture-logo {
+    width: 64px;
+    height: 64px;
+    border-radius: 16px;
+    background: #000;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.venture-tag {
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: var(--startup-primary);
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.venture-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+}
+
+.venture-meta {
+    display: flex;
+    gap: 1.5rem;
+    font-size: 0.8rem;
+    color: var(--startup-muted);
+}
+
+/* Pulse Footer */
+.pulse-footer {
+    padding: 10rem 4rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    background: #080c14;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 0.5; }
+    50% { transform: scale(1.05); opacity: 0.8; }
+    100% { transform: scale(1); opacity: 0.5; }
+}
+
+.live-pulse {
+    width: 12px;
+    height: 12px;
+    background: #10b981;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #10b981;
+    animation: pulse 2s infinite;
+}
+
+@media (max-width: 1024px) {
+    .venture-grid { grid-template-columns: 1fr; }
+    .growth-title { font-size: 3rem; }
+}
