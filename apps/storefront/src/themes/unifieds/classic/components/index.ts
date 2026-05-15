@@ -1,4 +1,5 @@
 
-export * from './HeritageNav';
-export * from './ClassicAdCard';
-export * from './TraditionalFooter';
+export * from './LegacyHeader';
+export * from './HeritageGrid';
+export * from './ChronicleBar';
+export * from './AncestralFooter';

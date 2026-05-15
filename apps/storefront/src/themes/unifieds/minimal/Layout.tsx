@@ -1,16 +1,16 @@
 
 import React from 'react';
 import './styles.css';
-import { MinimalHeader, SimpleFooter } from './components';
+import { SilentHeader, ZenFooter } from './components';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="minimal-wrapper">
-      <MinimalHeader />
+    <div className="silent-edge-wrapper">
+      <SilentHeader />
       <main>
         {children}
       </main>
-      <SimpleFooter />
+      <ZenFooter />
     </div>
   );
 }

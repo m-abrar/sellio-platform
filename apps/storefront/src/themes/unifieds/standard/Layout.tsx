@@ -1,16 +1,16 @@
 
 import React from 'react';
 import './styles.css';
-import { StandardNav, CorporateFooter } from './components';
+import { ScaleHeader, StandardFooter } from './components';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="unified-standard-wrapper">
-      <StandardNav />
+    <div className="scale-protocol-wrapper">
+      <ScaleHeader />
       <main>
         {children}
       </main>
-      <CorporateFooter />
+      <StandardFooter />
     </div>
   );
 }

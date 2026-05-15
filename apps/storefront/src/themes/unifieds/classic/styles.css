@@ -1,137 +1,167 @@
 /* 
-    Unified Classic: The Heritage Exchange
-    Design Spec: Deep Navy, Parchment, Newspaper Layouts
+    Unified Classic: The Legacy Node (Envato Elite Edition)
+    Design Spec: Regal Burgundy, Warm Cream, Antique Gold
 */
 
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap');
 
 :root {
-    --uni-navy: #1e1b4b;
-    --uni-gold: #a16207;
-    --uni-parchment: #f5f5f4;
-    --uni-bg: #ffffff;
-    --uni-border: #e7e5e4;
-    --font-serif: 'Playfair Display', serif;
-    --font-sans: 'Inter', sans-serif;
+    --legacy-burgundy: #7f1d1d;
+    --legacy-cream: #fffcf2;
+    --legacy-gold: #d4af37;
+    --legacy-text: #1c1917;
+    --legacy-border: #e7e5e4;
+    --font-heading: 'Playfair Display', serif;
+    --font-body: 'Montserrat', sans-serif;
 }
 
-.unified-classic-wrapper {
-    background-color: var(--uni-bg);
-    color: var(--uni-navy);
-    font-family: var(--font-sans);
+.legacy-node-wrapper {
+    background-color: var(--legacy-cream);
+    color: var(--legacy-text);
+    font-family: var(--font-body);
+    overflow-x: hidden;
 }
 
 /* Header */
-.heritage-nav {
-    padding: 2.5rem 5%;
-    background: white;
-    border-bottom: 4px solid var(--uni-navy);
+.legacy-header {
+    height: 110px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 0 6%;
     position: sticky;
     top: 0;
     z-index: 1000;
+    background: rgba(255, 252, 242, 0.9);
+    backdrop-filter: blur(15px);
+    border-bottom: 1px solid var(--legacy-gold);
 }
 
-.uni-heritage-logo {
-    font-family: var(--font-serif);
+.legacy-logo {
+    font-family: var(--font-heading);
     font-weight: 900;
-    font-size: 2rem;
-    color: var(--uni-navy);
+    font-size: 1.8rem;
+    color: var(--legacy-burgundy);
     letter-spacing: -1px;
 }
 
-.uni-heritage-nav {
+.legacy-nav {
     display: flex;
     gap: 4rem;
 }
 
-.uni-heritage-link {
-    font-family: var(--font-serif);
-    font-size: 0.95rem;
+.legacy-nav-link {
+    font-size: 0.8rem;
     font-weight: 700;
-    color: #444;
+    color: #555;
     text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 2px;
     transition: color 0.3s ease;
 }
 
-.uni-heritage-link:hover {
-    color: var(--uni-gold);
+.legacy-nav-link:hover {
+    color: var(--legacy-gold);
 }
 
 /* Hero */
-.uni-heritage-hero {
-    padding: 8rem 5%;
-    background: var(--uni-parchment);
+.legacy-hero {
+    padding: 12rem 6%;
     text-align: center;
-    border-bottom: 1px solid var(--uni-border);
+    background: radial-gradient(circle at center, #fffcf2 0%, #f5f5f4 100%);
+    position: relative;
 }
 
-.uni-heritage-hero h1 {
-    font-family: var(--font-serif);
-    font-size: 5rem;
+.legacy-hero h1 {
+    font-family: var(--font-heading);
+    font-size: 6rem;
     font-weight: 900;
-    line-height: 1;
-    margin-bottom: 2rem;
+    line-height: 1.1;
+    margin-bottom: 3rem;
+    color: var(--legacy-burgundy);
 }
 
-/* Ad Cards */
-.classic-ad-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 4rem;
-    padding: 6rem 5%;
+.legacy-hero h1 span {
+    font-style: italic;
+    color: var(--legacy-gold);
 }
 
-.classic-ad-card {
-    border: 1px solid var(--uni-border);
-    padding: 2.5rem;
+/* Heritage Grid */
+.heritage-grid {
+    padding: 10rem 6%;
+}
+
+.legacy-card {
+    padding: 4rem;
     background: white;
-    transition: all 0.3s ease;
+    border: 1px solid var(--legacy-border);
+    position: relative;
+    transition: all 0.5s ease;
 }
 
-.classic-ad-card:hover {
-    box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+.legacy-card:hover {
+    border-color: var(--legacy-gold);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.03);
 }
 
-.classic-ad-img {
-    width: 100%;
-    aspect-ratio: 16/10;
-    object-fit: cover;
-    margin-bottom: 2rem;
-}
-
-.classic-ad-title {
-    font-family: var(--font-serif);
-    font-size: 1.5rem;
+.card-num {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    font-family: var(--font-heading);
+    font-size: 3rem;
     font-weight: 900;
-    margin-bottom: 1rem;
-    line-height: 1.2;
+    color: var(--legacy-cream);
+    -webkit-text-stroke: 1px var(--legacy-gold);
+}
+
+/* Chronicle Bar */
+.chronicle-bar {
+    padding: 4rem 6%;
+    background: var(--legacy-burgundy);
+    color: var(--legacy-cream);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--font-heading);
+    font-style: italic;
+    font-size: 1.25rem;
 }
 
 /* Footer */
-.traditional-footer {
-    padding: 10rem 5%;
-    background: var(--uni-navy);
-    color: white;
+.ancestral-footer {
+    padding: 10rem 6%;
+    background: #1c1917;
+    color: #d6d3d1;
 }
 
-.traditional-footer h4 {
-    font-family: var(--font-serif);
-    font-size: 1.1rem;
-    margin-bottom: 2.5rem;
-    color: var(--uni-gold);
-}
-
-.traditional-footer-link {
+.footer-link {
     display: block;
-    color: #a1a1aa;
+    color: #78716c;
     text-decoration: none;
-    margin-bottom: 1.25rem;
-    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+    font-weight: 600;
 }
 
-.traditional-footer-link:hover {
+.footer-link:hover {
+    color: var(--legacy-gold);
+}
+
+/* Buttons */
+.legacy-btn-primary {
+    background: var(--legacy-burgundy);
     color: white;
+    border: 2px solid var(--legacy-burgundy);
+    padding: 1.5rem 5rem;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.legacy-btn-primary:hover {
+    background: transparent;
+    color: var(--legacy-burgundy);
 }

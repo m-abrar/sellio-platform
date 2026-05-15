@@ -1,58 +1,70 @@
 
 import React from 'react';
-import { GenericListingCard } from './components';
+import { ProtocolGrid, EfficiencyBar } from './components';
 
 export default function Page() {
-  const listings = [
-    { title: "2024 Luxury Sedan - Blue", price: "$42,500", type: "Autos", image: "https://images.unsplash.com/photo-1555215695-3004980ad54e?q=80&w=2070" },
-    { title: "Senior Software Engineer", price: "$150k - $200k", type: "Jobs", image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=2072" },
-    { title: "Modern 2BR Apartment", price: "$2,400 / mo", type: "Properties", image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?q=80&w=2070" },
-    { title: "Professional Home Cleaning", price: "$80 / session", type: "Services", image: "https://images.unsplash.com/photo-1581578731548-c64695cc6958?q=80&w=2070" },
-    { title: "Mountain Bike - Like New", price: "$850", type: "Marketplace", image: "https://images.unsplash.com/photo-1485965120184-e220f721d03e?q=80&w=2070" },
-    { title: "Marketing Director Role", price: "$120k - $160k", type: "Jobs", image: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=2070" },
-    { title: "Commercial Office Space", price: "$4,500 / mo", type: "Properties", image: "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2069" },
-    { title: "2021 Electric SUV", price: "$38,000", type: "Autos", image: "https://images.unsplash.com/photo-1593941707882-a5bba14938c7?q=80&w=2072" },
-  ];
-
   return (
     <div>
       {/* Hero Section */}
-      <section className="std-hero">
-          <div style={{ fontSize: '0.8rem', fontWeight: 900, color: 'var(--std-blue)', letterSpacing: '4px', marginBottom: '2rem' }}>STANDARD_SCALE_PROTOCOL</div>
-          <h1>Multi-Vertical <br/>Distribution.</h1>
-          <p style={{ maxWidth: '700px', margin: '0 auto', fontSize: '1.25rem', color: 'var(--std-slate)', lineHeight: 1.6, marginBottom: '5rem' }}>
-              The high-fidelity standard for multi-category exchange. Reliable distribution across properties, autos, jobs, and services.
-          </p>
-          <div style={{ display: 'flex', gap: '2rem', justifyContent: 'center' }}>
-              <button style={{ padding: '1.5rem 4rem', background: 'var(--std-blue)', color: 'white', border: 'none', borderRadius: '4px', fontWeight: 900, fontSize: '0.9rem' }}>EXPLORE_ALL</button>
-              <button style={{ padding: '1.5rem 4rem', background: 'white', color: 'var(--std-dark)', border: '1px solid #ddd', borderRadius: '4px', fontWeight: 900, fontSize: '0.9rem' }}>NETWORK_STATUS</button>
+      <section className="scale-hero">
+          <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+              <div style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--scale-gray)', letterSpacing: '8px', marginBottom: '2.5rem' }}>MODULAR_DISTRIBUTION_V1</div>
+              <h1>The <span>Scale</span> <br/>Protocol.</h1>
+              <p style={{ maxWidth: '600px', margin: '0 auto 5rem', fontSize: '1.25rem', color: 'var(--scale-gray)', lineHeight: 1.8 }}>
+                  The world's most efficient high-fidelity distribution node. Modular, precise, and engineered for global multi-vertical commerce.
+              </p>
+              <div style={{ display: 'flex', gap: '2rem', justifyContent: 'center' }}>
+                  <button className="scale-btn-primary">INITIALIZE_NODE</button>
+                  <button style={{ background: 'transparent', border: '1px solid #ddd', padding: '1rem 3rem', borderRadius: '6px', fontWeight: 700, fontSize: '0.9rem', cursor: 'pointer' }}>VIEW_DOCUMENTATION</button>
+              </div>
           </div>
       </section>
 
-      {/* Logic Bar */}
-      <section style={{ padding: '2.5rem 5%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#fff', borderBottom: '1px solid var(--std-border)', color: '#94a3b8', fontWeight: 800, fontSize: '0.75rem', letterSpacing: '1px' }}>
-          <span>GLOBAL_LISTINGS: 1.4M+</span>
-          <span>NODAL_VERIFICATION: 100%</span>
-          <span>SYSTEM_LATENCY: 14ms</span>
-          <span>COMPLIANCE_SCORE: 99.9%</span>
+      {/* Efficiency Bar */}
+      <EfficiencyBar />
+
+      {/* Protocol Grid Section */}
+      <section style={{ padding: '4rem 6% 0', textAlign: 'center' }}>
+          <h2 style={{ fontSize: '3rem', fontWeight: 800, letterSpacing: '-1px' }}>Universal Logic Layers.</h2>
+      </section>
+      <ProtocolGrid />
+
+      {/* Mid-Section: Geometric Precision */}
+      <section style={{ padding: '10rem 6%', background: '#fafafa', borderTop: '1px solid var(--scale-border)', borderBottom: '1px solid var(--scale-border)' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10rem', alignItems: 'center' }}>
+              <div style={{ position: 'relative' }}>
+                  <div style={{ height: '500px', background: 'white', borderRadius: '12px', border: '1px solid var(--scale-border)', overflow: 'hidden' }}>
+                      <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2070" alt="Hardware Tech" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.8 }} />
+                  </div>
+                  <div style={{ position: 'absolute', top: '-1rem', left: '-1rem', width: '60px', height: '60px', borderTop: '2px solid var(--scale-navy)', borderLeft: '2px solid var(--scale-navy)' }}></div>
+              </div>
+              <div>
+                  <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--scale-navy)', letterSpacing: '6px' }}>GEOMETRIC_PRECISION</span>
+                  <h2 style={{ fontSize: '3.5rem', fontWeight: 800, marginTop: '2rem', marginBottom: '3rem', letterSpacing: '-2px' }}>Modular <br/>Efficiency.</h2>
+                  <p style={{ fontSize: '1.1rem', color: 'var(--scale-gray)', lineHeight: 2, marginBottom: '4rem' }}>
+                      Every node in the Scale Protocol is designed for maximum efficiency. By isolating architectural layers and standardizing data mapping, we achieve a distribution latency that is unmatched in the multi-vertical market.
+                  </p>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem' }}>
+                      <div>
+                          <div style={{ fontSize: '2.5rem', fontWeight: 800, color: 'var(--scale-navy)' }}>6ms</div>
+                          <div style={{ fontSize: '0.65rem', fontWeight: 700, color: 'var(--scale-gray)', letterSpacing: '2px' }}>AVERAGE_SYNC</div>
+                      </div>
+                      <div>
+                          <div style={{ fontSize: '2.5rem', fontWeight: 800, color: 'var(--scale-navy)' }}>100%</div>
+                          <div style={{ fontSize: '0.65rem', fontWeight: 700, color: 'var(--scale-gray)', letterSpacing: '2px' }}>ISO_COMPLIANCE</div>
+                      </div>
+                  </div>
+              </div>
+          </div>
       </section>
 
-      {/* Grid */}
-      <section className="std-grid">
-          {listings.map((item, i) => (
-              <GenericListingCard key={i} {...item} />
-          ))}
-      </section>
-
-      {/* Scale CTA */}
-      <section style={{ padding: '12rem 5%', textAlign: 'center', background: '#fff' }}>
-          <h2 style={{ fontSize: '4rem', fontWeight: 900, marginBottom: '3rem', letterSpacing: '-2px' }}>Built to scale.</h2>
-          <p style={{ maxWidth: '600px', margin: '0 auto 5rem', fontSize: '1.25rem', color: 'var(--std-slate)' }}>
-              Join the high-fidelity standard for global distribution. Our unified protocol ensures your listings reach the right node, every time.
+      {/* Final CTA */}
+      <section style={{ padding: '15rem 6%', textAlign: 'center' }}>
+          <h2 style={{ fontSize: '5rem', fontWeight: 800, marginBottom: '4rem', letterSpacing: '-3px' }}>Initialize the <br/>Standard.</h2>
+          <p style={{ maxWidth: '600px', margin: '0 auto 6rem', fontSize: '1.25rem', color: 'var(--scale-gray)' }}>
+              Connect your professional node to the Scale Protocol and gain access to the world's most efficient high-fidelity distribution network.
           </p>
-          <button style={{ padding: '1.5rem 5rem', background: 'var(--std-dark)', color: 'white', border: 'none', borderRadius: '4px', fontWeight: 900, fontSize: '1rem' }}>
-              INITIALIZE_SHOP_NODE
-          </button>
+          <button className="scale-btn-primary" style={{ padding: '2rem 6rem', fontSize: '1.1rem' }}>CONNECT_SCALE_NODE</button>
       </section>
     </div>
   );

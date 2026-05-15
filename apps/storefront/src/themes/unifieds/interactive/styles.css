@@ -1,127 +1,189 @@
-.unifieds-interactive {
-  --color-purple: #4527a0;
-  --color-neon: #ccff00;
-  --color-cyan: #00e5ff;
-  --color-bg: #0a001a;
-  --font-display: 'Montserrat', sans-serif;
-  --font-sans: 'Inter', sans-serif;
+/* 
+    Unified Interactive: The Motion Node (Envato Elite Edition)
+    Design Spec: Electric Indigo, Cyber Yellow, High-Velocity Animations
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+    --motion-indigo: #6366f1;
+    --motion-yellow: #fbbf24;
+    --motion-onyx: #020617;
+    --motion-bg: #000000;
+    --motion-card: #09090b;
+    --motion-border: rgba(255, 255, 255, 0.1);
+    --font-heading: 'Syne', sans-serif;
+    --font-body: 'Inter', sans-serif;
 }
 
-.interactive-container {
-  background-color: var(--color-bg);
-  color: white;
-  font-family: var(--font-sans);
-  min-height: 100vh;
-  overflow-x: hidden;
+.motion-node-wrapper {
+    background-color: var(--motion-bg);
+    color: white;
+    font-family: var(--font-body);
+    overflow-x: hidden;
 }
 
-.interactive-header {
-  padding: 2rem 4rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: absolute;
-  top: 0;
-  width: 100%;
-  z-index: 100;
+/* Header */
+.motion-header {
+    height: 90px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 6%;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: rgba(2, 6, 23, 0.8);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--motion-border);
 }
 
-.interactive-logo {
-  font-family: var(--font-display);
-  font-size: 2rem;
-  font-weight: 900;
-  color: var(--color-neon);
-  text-transform: uppercase;
-  letter-spacing: -2px;
+.motion-logo {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: 1.5rem;
+    color: white;
+    letter-spacing: -1px;
 }
 
-.interactive-hero {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  background: radial-gradient(circle at center, #2e004d 0%, var(--color-bg) 70%);
+.motion-logo span {
+    color: var(--motion-yellow);
 }
 
-.hero-main-title {
-  font-family: var(--font-display);
-  font-size: 6rem;
-  font-weight: 900;
-  line-height: 0.9;
-  margin-bottom: 2rem;
-  background: linear-gradient(to right, #fff, var(--color-cyan));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+.motion-nav {
+    display: flex;
+    gap: 4rem;
 }
 
-.orb-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 3rem;
-  padding: 6rem 4rem;
+.motion-nav-link {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #444;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    transition: all 0.3s ease;
 }
 
-.industry-orb {
-  aspect-ratio: 1;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 50%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  position: relative;
+.motion-nav-link:hover {
+    color: var(--motion-indigo);
+    letter-spacing: 4px;
 }
 
-.industry-orb:hover {
-  transform: scale(1.1);
-  background: var(--color-purple);
-  border-color: var(--color-neon);
-  box-shadow: 0 0 40px rgba(69, 39, 160, 0.6);
+/* Hero */
+.motion-hero {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    padding: 0 10%;
 }
 
-.orb-icon {
-  font-size: 3rem;
-  margin-bottom: 1rem;
+.motion-hero-glow {
+    position: absolute;
+    width: 700px;
+    height: 700px;
+    background: radial-gradient(circle, var(--motion-indigo) 0%, transparent 70%);
+    opacity: 0.2;
+    filter: blur(100px);
+    z-index: -1;
 }
 
-.orb-label {
-  font-family: var(--font-display);
-  font-weight: 900;
-  font-size: 1.2rem;
-  text-transform: uppercase;
+.motion-hero h1 {
+    font-family: var(--font-heading);
+    font-size: 8rem;
+    font-weight: 800;
+    line-height: 0.85;
+    letter-spacing: -6px;
+    margin-bottom: 3rem;
+    text-transform: uppercase;
 }
 
-.stat-pulse-section {
-  padding: 8rem 4rem;
-  background: rgba(255, 255, 255, 0.02);
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 4rem;
-  text-align: center;
+.motion-hero h1 span {
+    color: var(--motion-yellow);
 }
 
-.stat-value {
-  font-family: var(--font-display);
-  font-size: 4rem;
-  font-weight: 900;
-  color: var(--color-neon);
-  display: block;
+/* Interaction Canvas */
+.interaction-canvas {
+    padding: 10rem 6%;
 }
 
-.stat-label {
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 4px;
-  opacity: 0.5;
+.canvas-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: repeat(2, 350px);
+    gap: 1.5rem;
 }
 
-.pulse-footer {
-  padding: 6rem 4rem;
-  text-align: center;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+.canvas-item {
+    background: var(--motion-card);
+    border: 1px solid var(--motion-border);
+    border-radius: 24px;
+    overflow: hidden;
+    position: relative;
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.canvas-item:hover {
+    transform: scale(0.98);
+    border-color: var(--motion-indigo);
+}
+
+.item-main { grid-column: span 8; grid-row: span 2; }
+.item-side { grid-column: span 4; }
+
+/* Fluid Bar */
+.fluid-logic-bar {
+    padding: 4rem 6%;
+    background: var(--motion-indigo);
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: 0.8rem;
+    letter-spacing: 4px;
+}
+
+/* Footer */
+.kinetic-footer {
+    padding: 10rem 6%;
+    background: #000;
+    border-top: 1px solid var(--motion-border);
+}
+
+.footer-link {
+    display: block;
+    color: #333;
+    text-decoration: none;
+    margin-bottom: 1.25rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.footer-link:hover {
+    color: var(--motion-yellow);
+}
+
+/* Buttons */
+.motion-btn-primary {
+    background: var(--motion-indigo);
+    color: white;
+    border: none;
+    padding: 1.5rem 4rem;
+    font-family: var(--font-heading);
+    font-weight: 800;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.motion-btn-primary:hover {
+    background: var(--motion-yellow);
+    color: black;
+    box-shadow: 0 0 40px rgba(251, 191, 36, 0.4);
 }

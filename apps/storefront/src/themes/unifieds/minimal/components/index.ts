@@ -1,4 +1,5 @@
 
-export * from './MinimalHeader';
-export * from './CleanCard';
-export * from './SimpleFooter';
+export * from './SilentHeader';
+export * from './MinimalGrid';
+export * from './VoidSyncBar';
+export * from './ZenFooter';

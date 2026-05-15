@@ -1,16 +1,16 @@
 
 import React from 'react';
 import './styles.css';
-import { MegaHeader, VerticalFooter } from './components';
+import { MegaHeader, AuthorityFooter } from './components';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="unified-mega-wrapper">
+    <div className="heavyweight-grid-wrapper">
       <MegaHeader />
       <main>
         {children}
       </main>
-      <VerticalFooter />
+      <AuthorityFooter />
     </div>
   );
 }

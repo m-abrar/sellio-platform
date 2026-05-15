@@ -1,16 +1,16 @@
 
 import React from 'react';
 import './styles.css';
-import { UnifiedHeader, UnifiedFooter } from './components';
+import { OriginHeader, InstitutionalFooter } from './components';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="unified-default-wrapper">
-      <UnifiedHeader />
+    <div className="core-origin-wrapper">
+      <OriginHeader />
       <main>
         {children}
       </main>
-      <UnifiedFooter />
+      <InstitutionalFooter />
     </div>
   );
 }

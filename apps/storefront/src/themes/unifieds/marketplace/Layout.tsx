@@ -1,16 +1,16 @@
 
 import React from 'react';
 import './styles.css';
-import { GlobalHeader, MarketFooter } from './components';
+import { TradeHeader, ExchangeFooter } from './components';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="unified-marketplace-wrapper">
-      <GlobalHeader />
+    <div className="trade-node-wrapper">
+      <TradeHeader />
       <main>
         {children}
       </main>
-      <MarketFooter />
+      <ExchangeFooter />
     </div>
   );
 }

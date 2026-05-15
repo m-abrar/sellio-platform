@@ -1,162 +1,162 @@
 /* 
-    Unified Default Theme: Versatile Aesthetic Architecture
-    A foundational design system that adapts to various business verticals.
+    Unified Default: The Core Origin (Envato Elite Edition)
+    Design Spec: Institutional Azure, Slate, Clean Grid
 */
 
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap');
+
 :root {
-    --uni-primary: #1e4d4e;
-    --uni-primary-soft: rgba(30, 77, 78, 0.05);
-    --uni-secondary: #f3f4f6;
-    --uni-text-dark: #111827;
-    --uni-text-muted: #4b5563;
-    --uni-white: #ffffff;
-    --uni-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    --uni-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --core-azure: #2563eb;
+    --core-slate: #475569;
+    --core-bg: #ffffff;
+    --core-card: #f8fafc;
+    --core-border: #e2e8f0;
+    --font-heading: 'Outfit', sans-serif;
+    --font-body: 'Inter', sans-serif;
 }
 
-.unified-default-wrapper {
-    font-family: 'Outfit', 'Inter', sans-serif;
-    color: var(--uni-text-dark);
-    background-color: var(--uni-white);
+.core-origin-wrapper {
+    background-color: var(--core-bg);
+    color: #1e293b;
+    font-family: var(--font-body);
+    overflow-x: hidden;
 }
 
 /* Header */
-.uni-header {
-    background: white;
-    border-bottom: 1px solid #f1f5f9;
-    padding: 1.25rem 2rem;
+.origin-header {
+    height: 90px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 6%;
     position: sticky;
     top: 0;
-    z-index: 100;
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(15px);
+    border-bottom: 1px solid var(--core-border);
 }
 
-.uni-header-container {
-    max-width: 1280px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.uni-logo {
-    font-size: 1.75rem;
+.origin-logo {
+    font-family: var(--font-heading);
     font-weight: 800;
-    color: var(--uni-primary);
-    letter-spacing: -1.5px;
+    font-size: 1.5rem;
+    color: var(--core-azure);
+    letter-spacing: -0.5px;
 }
 
-.uni-nav {
+.origin-nav {
     display: flex;
-    gap: 2.5rem;
+    gap: 3rem;
 }
 
-.uni-nav-link {
-    font-weight: 700;
+.origin-nav-link {
     font-size: 0.9rem;
-    color: var(--uni-text-muted);
-    transition: all 0.2s ease;
+    font-weight: 500;
+    color: var(--core-slate);
+    text-decoration: none;
+    transition: color 0.3s ease;
 }
 
-.uni-nav-link:hover {
-    color: var(--uni-primary);
-    transform: translateY(-1px);
+.origin-nav-link:hover {
+    color: var(--core-azure);
 }
 
 /* Hero */
-.uni-hero {
-    padding: 8rem 2rem;
-    background: radial-gradient(circle at top right, #1e4d4e08, transparent 40%),
-                radial-gradient(circle at bottom left, #1e4d4e05, transparent 40%);
-    text-align: center;
+.origin-hero {
+    padding: 10rem 6%;
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 6rem;
+    align-items: center;
+    background: radial-gradient(circle at 100% 0%, #f0f9ff 0%, #ffffff 50%);
 }
 
-.uni-hero-content {
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-.uni-hero-title {
-    font-size: 4rem;
-    font-weight: 900;
+.origin-hero h1 {
+    font-family: var(--font-heading);
+    font-size: 5rem;
+    font-weight: 800;
     line-height: 1.1;
-    letter-spacing: -2.5px;
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
+    letter-spacing: -2px;
 }
 
-.uni-hero-subtitle {
-    font-size: 1.25rem;
-    color: var(--uni-text-muted);
-    margin-bottom: 3rem;
-    line-height: 1.6;
+.origin-hero h1 span {
+    color: var(--core-azure);
 }
 
-/* Featured Section */
-.uni-section {
-    padding: 6rem 2rem;
-    max-width: 1280px;
-    margin: 0 auto;
+/* Features */
+.core-features {
+    padding: 10rem 6%;
 }
 
-.uni-grid {
+.feature-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 3rem;
 }
 
-.uni-card {
-    background: white;
+.feature-card-premium {
+    padding: 3rem;
+    background: var(--core-card);
+    border: 1px solid var(--core-border);
     border-radius: 24px;
-    padding: 2.5rem;
-    border: 1px solid #f1f5f9;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.4s ease;
 }
 
-.uni-card:hover {
-    transform: translateY(-10px);
-    box-shadow: var(--uni-shadow-lg);
-    border-color: var(--uni-primary-soft);
+.feature-card-premium:hover {
+    border-color: var(--core-azure);
+    box-shadow: 0 20px 40px rgba(37, 99, 235, 0.05);
+    transform: translateY(-5px);
 }
 
-.uni-card-icon {
-    width: 60px;
-    height: 60px;
-    background: var(--uni-primary-soft);
-    border-radius: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--uni-primary);
+.feature-icon {
+    font-size: 2.5rem;
     margin-bottom: 2rem;
+    display: block;
 }
 
-.uni-card-title {
-    font-size: 1.5rem;
-    font-weight: 800;
-    margin-bottom: 1rem;
-}
-
-.uni-card-text {
-    color: var(--uni-text-muted);
-    line-height: 1.6;
+/* Trust Bar */
+.trust-bar {
+    padding: 5rem 6%;
+    border-top: 1px solid var(--core-border);
+    border-bottom: 1px solid var(--core-border);
+    text-align: center;
 }
 
 /* Footer */
-.uni-footer {
+.institutional-footer {
+    padding: 8rem 6%;
     background: #0f172a;
     color: white;
-    padding: 5rem 2rem;
 }
 
-.uni-footer-container {
-    max-width: 1280px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.footer-link {
+    display: block;
+    color: #94a3b8;
+    text-decoration: none;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
 }
 
-@media (max-width: 768px) {
-    .uni-hero-title { font-size: 2.5rem; }
-    .uni-grid { grid-template-columns: 1fr; }
-    .uni-nav { display: none; }
+.footer-link:hover {
+    color: white;
+}
+
+/* Buttons */
+.core-btn-primary {
+    background: var(--core-azure);
+    color: white;
+    border: none;
+    padding: 1.25rem 3.5rem;
+    border-radius: 12px;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.core-btn-primary:hover {
+    background: #1d4ed8;
+    box-shadow: 0 10px 20px rgba(37, 99, 235, 0.2);
 }

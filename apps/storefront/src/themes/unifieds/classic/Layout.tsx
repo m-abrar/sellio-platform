@@ -1,16 +1,16 @@
 
 import React from 'react';
 import './styles.css';
-import { HeritageNav, TraditionalFooter } from './components';
+import { LegacyHeader, AncestralFooter } from './components';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="unified-classic-wrapper">
-      <HeritageNav />
+    <div className="legacy-node-wrapper">
+      <LegacyHeader />
       <main>
         {children}
       </main>
-      <TraditionalFooter />
+      <AncestralFooter />
     </div>
   );
 }

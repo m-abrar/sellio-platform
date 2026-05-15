@@ -1,73 +1,69 @@
 
 import React from 'react';
-import { CategoryCard } from './components';
+import { MarketGrid, LiquidSyncBar } from './components';
 
 export default function Page() {
-  const categories = [
-    { title: "Electronics", icon: "📱", count: "14,200" },
-    { title: "Vehicles", icon: "🚗", count: "8,500" },
-    { title: "Real Estate", icon: "🏠", count: "3,100" },
-    { title: "Jobs", icon: "💼", count: "5,400" },
-    { title: "Services", icon: "🛠️", count: "12,800" },
-    { title: "Events", icon: "📅", count: "2,900" },
-    { title: "Fashion", icon: "👗", count: "22,400" },
-    { title: "Collectibles", icon: "🎨", count: "1,200" },
-  ];
-
   return (
     <div>
       {/* Hero Section */}
-      <section className="market-hero">
-          <h1>The Global <br/>Exchange Node.</h1>
-          <p style={{ maxWidth: '700px', margin: '0 auto', fontSize: '1.25rem', color: '#6b7280', lineHeight: 1.6 }}>
-              The world's most expansive multi-category distribution node. High-fidelity commerce, verified by the Sellio global network.
-          </p>
-          <div className="market-search-pill">
-              <input type="text" placeholder="Search for anything (electronics, apartments, roles...)" style={{ flex: 1, padding: '1rem 2rem', border: 'none', background: 'none', outline: 'none', fontSize: '1rem' }} />
-              <button style={{ background: 'var(--market-purple)', color: 'white', border: 'none', padding: '0 3rem', borderRadius: '50px', fontWeight: 800 }}>SEARCH</button>
+      <section className="trade-hero">
+          <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+              <div style={{ fontSize: '0.85rem', fontWeight: 800, color: 'var(--trade-green)', letterSpacing: '10px', marginBottom: '3rem' }}>LIQUID_EXCHANGE_V5</div>
+              <h1>Trade the <br/><span>Future.</span></h1>
+              <p style={{ maxWidth: '800px', margin: '0 auto 6rem', fontSize: '1.5rem', color: '#64748b', lineHeight: 1.8 }}>
+                  The world's most advanced high-fidelity marketplace node. Precision transactional engineering for the modern global economy.
+              </p>
+              <div style={{ display: 'flex', gap: '3rem', justifyContent: 'center' }}>
+                  <button className="trade-btn-primary">START_TRADING</button>
+                  <button style={{ background: 'transparent', border: '1px solid #334155', color: 'white', padding: '1.5rem 5rem', borderRadius: '12px', fontFamily: 'var(--font-heading)', fontWeight: 800, fontSize: '1rem', cursor: 'pointer' }}>MARKET_DATA</button>
+              </div>
           </div>
       </section>
 
-      {/* Trust bar */}
-      <section style={{ padding: '3rem 5%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#fff', borderBottom: '1px solid var(--market-border)', color: '#9ca3af', fontWeight: 800, fontSize: '0.75rem', letterSpacing: '2px' }}>
-          <span>1.2M_ACTIVE_NODES</span>
-          <span>GLOBAL_DISTRIBUTION_READY</span>
-          <span>TRUST_PROTOCOL_v4</span>
-          <span>REALTIME_NETWORK_DATA</span>
-      </section>
+      {/* Liquid Sync Bar */}
+      <LiquidSyncBar />
 
-      {/* Category Grid */}
-      <section className="cat-grid">
-          {categories.map((cat, i) => (
-              <CategoryCard key={i} {...cat} />
-          ))}
-      </section>
+      {/* Market Grid Section */}
+      <MarketGrid />
 
-      {/* Featured Stats Section */}
-      <section style={{ padding: '10rem 5%', display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '4rem', textAlign: 'center', background: '#111827', color: 'white' }}>
+      {/* Mid-Section: Transactional Authority */}
+      <section style={{ padding: '15rem 5%', display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '10rem', alignItems: 'center', background: 'white' }}>
           <div>
-              <div style={{ fontSize: '3.5rem', fontWeight: 800, color: 'var(--market-purple)', marginBottom: '1rem' }}>$4.2B</div>
-              <div style={{ fontSize: '0.8rem', fontWeight: 800, color: '#4b5563', letterSpacing: '2px' }}>ANNUAL_NETWORK_VOLUME</div>
+              <span style={{ fontSize: '0.85rem', fontWeight: 800, color: 'var(--trade-green)', letterSpacing: '6px' }}>TRANSACTIONAL_AUTHORITY</span>
+              <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: '4.5rem', fontWeight: 900, marginTop: '2rem', marginBottom: '3rem', letterSpacing: '-2px' }}>Liquid <br/>Logistics.</h2>
+              <p style={{ fontSize: '1.2rem', color: '#64748b', lineHeight: 2, marginBottom: '4rem' }}>
+                  The Trade Node protocol is designed for high-velocity peer-to-peer commerce. Every transaction is a node in the global Sellio registry, ensuring that your digital and physical assets are distributed with absolute precision.
+              </p>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '5rem' }}>
+                  <div>
+                      <div style={{ fontSize: '3rem', fontWeight: 900, fontFamily: 'var(--font-heading)', color: 'var(--trade-slate)' }}>1.4B+</div>
+                      <div style={{ fontSize: '0.7rem', fontWeight: 800, color: '#94a3b8', letterSpacing: '2px' }}>ANNUAL_VOLUME</div>
+                  </div>
+                  <div>
+                      <div style={{ fontSize: '3rem', fontWeight: 900, fontFamily: 'var(--font-heading)', color: 'var(--trade-slate)' }}>24/7</div>
+                      <div style={{ fontSize: '0.7rem', fontWeight: 800, color: '#94a3b8', letterSpacing: '2px' }}>MARKET_UPTIME</div>
+                  </div>
+              </div>
           </div>
-          <div>
-              <div style={{ fontSize: '3.5rem', fontWeight: 800, color: 'var(--market-purple)', marginBottom: '1rem' }}>180+</div>
-              <div style={{ fontSize: '0.8rem', fontWeight: 800, color: '#4b5563', letterSpacing: '2px' }}>REGIONAL_NODES</div>
-          </div>
-          <div>
-              <div style={{ fontSize: '3.5rem', fontWeight: 800, color: 'var(--market-purple)', marginBottom: '1rem' }}>0%</div>
-              <div style={{ fontSize: '0.8rem', fontWeight: 800, color: '#4b5563', letterSpacing: '2px' }}>NODE_LISTING_FEES</div>
+          <div style={{ position: 'relative' }}>
+              <div style={{ height: '600px', background: 'var(--trade-bg)', borderRadius: '40px', overflow: 'hidden', border: '1px solid var(--trade-border)' }}>
+                  <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=2070" alt="Tech Workplace" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.8 }} />
+              </div>
+              <div style={{ position: 'absolute', top: '-2rem', left: '-2rem', width: '150px', height: '150px', background: 'var(--trade-green)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, color: 'white', letterSpacing: '2px', fontSize: '0.8rem' }}>
+                  VERIFIED
+              </div>
           </div>
       </section>
 
-      {/* Seller CTA */}
-      <section style={{ padding: '12rem 5%', textAlign: 'center' }}>
-          <h2 style={{ fontSize: '4rem', fontWeight: 800, marginBottom: '3rem', letterSpacing: '-2px' }}>Scale your <br/>business globally.</h2>
-          <p style={{ maxWidth: '600px', margin: '0 auto 5rem', fontSize: '1.25rem', color: '#6b7280' }}>
-              Join the elite circle of global sellers. Deploy your products across the entire Sellio ecosystem with a single node connection.
-          </p>
-          <button style={{ padding: '1.5rem 5rem', background: 'var(--market-purple)', color: 'white', border: 'none', borderRadius: '50px', fontWeight: 800, fontSize: '1rem', boxShadow: '0 20px 50px rgba(139, 92, 246, 0.2)' }}>
-              INITIALIZE_SHOP_NODE
-          </button>
+      {/* Final CTA */}
+      <section style={{ padding: '15rem 5%', textAlign: 'center', background: 'var(--trade-bg)' }}>
+          <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+              <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: '6rem', fontWeight: 900, color: 'var(--trade-slate)', marginBottom: '4rem', letterSpacing: '-4px' }}>Liquidate the <br/>Future.</h2>
+              <p style={{ fontSize: '1.5rem', color: '#64748b', lineHeight: 1.8, marginBottom: '6rem' }}>
+                  Connect your trade node to the global exchange and join the world's most liquid high-fidelity distribution network.
+              </p>
+              <button className="trade-btn-primary" style={{ padding: '2rem 8rem', fontSize: '1.5rem' }}>INITIALIZE_TRADE_NODE</button>
+          </div>
       </section>
     </div>
   );

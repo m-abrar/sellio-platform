@@ -1,144 +1,170 @@
 /* 
-    Unified Marketplace: The Social Exchange
-    Design Spec: Vibrant Purple, Jakarta Sans, Social Grids
+    Unified Marketplace: The Trade Node (Envato Elite Edition)
+    Design Spec: Liquid Green, Slate Blue, Transactional Density
 */
 
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 :root {
-    --market-purple: #8b5cf6;
-    --market-charcoal: #111827;
-    --market-bg: #f9fafb;
-    --market-border: #e5e7eb;
-    --font-base: 'Plus Jakarta Sans', sans-serif;
+    --trade-green: #10b981;
+    --trade-blue: #3b82f6;
+    --trade-slate: #1e293b;
+    --trade-bg: #f8fafc;
+    --trade-card: #ffffff;
+    --trade-border: #e2e8f0;
+    --font-heading: 'Jost', sans-serif;
+    --font-body: 'Inter', sans-serif;
 }
 
-.unified-marketplace-wrapper {
-    background-color: var(--market-bg);
-    color: var(--market-charcoal);
-    font-family: var(--font-base);
+.trade-node-wrapper {
+    background-color: var(--trade-bg);
+    color: var(--trade-slate);
+    font-family: var(--font-body);
+    overflow-x: hidden;
 }
 
 /* Header */
-.market-header {
-    background: white;
-    padding: 1rem 5%;
+.trade-header {
+    height: 90px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 0 5%;
     position: sticky;
     top: 0;
     z-index: 1000;
-    border-bottom: 1px solid var(--market-border);
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(15px);
+    border-bottom: 1px solid var(--trade-border);
 }
 
-.market-logo {
+.trade-logo {
+    font-family: var(--font-heading);
     font-weight: 800;
     font-size: 1.5rem;
-    color: var(--market-purple);
-    letter-spacing: -1px;
+    color: var(--trade-slate);
 }
 
-.market-nav {
+.trade-logo span {
+    color: var(--trade-green);
+}
+
+.trade-nav {
     display: flex;
-    gap: 3rem;
+    gap: 3.5rem;
 }
 
-.market-nav-link {
+.trade-nav-link {
     font-size: 0.9rem;
-    font-weight: 700;
-    color: #4b5563;
+    font-weight: 600;
+    color: #64748b;
     text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-.market-nav-link:hover {
-    color: var(--market-purple);
-}
-
-/* Hero */
-.market-hero {
-    padding: 8rem 5%;
-    background: linear-gradient(135deg, #fff 0%, #f5f3ff 100%);
-    text-align: center;
-}
-
-.market-hero h1 {
-    font-size: 4.5rem;
-    font-weight: 800;
-    line-height: 1.1;
-    margin-bottom: 2rem;
-    letter-spacing: -2px;
-}
-
-.market-search-pill {
-    max-width: 700px;
-    margin: 3rem auto 0;
-    padding: 0.5rem;
-    background: white;
-    border-radius: 100px;
-    box-shadow: 0 10px 30px rgba(139, 92, 246, 0.1);
-    display: flex;
-    gap: 1rem;
-}
-
-/* Category Cards */
-.cat-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 2rem;
-    padding: 6rem 5%;
-}
-
-.cat-card {
-    background: white;
-    padding: 3rem;
-    border-radius: 24px;
-    text-align: center;
-    border: 1px solid var(--market-border);
     transition: all 0.3s ease;
 }
 
-.cat-card:hover {
-    transform: translateY(-10px);
-    border-color: var(--market-purple);
-    box-shadow: 0 20px 40px rgba(139, 92, 246, 0.1);
+.trade-nav-link:hover {
+    color: var(--trade-green);
 }
 
-.cat-icon {
-    font-size: 3rem;
-    margin-bottom: 1.5rem;
-    display: block;
+/* Hero */
+.trade-hero {
+    padding: 10rem 5%;
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    color: white;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.trade-hero h1 {
+    font-family: var(--font-heading);
+    font-size: 6rem;
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -3px;
+    margin-bottom: 2.5rem;
+}
+
+.trade-hero h1 span {
+    background: linear-gradient(to right, var(--trade-green), #fff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Market Grid */
+.market-grid-section {
+    padding: 8rem 5%;
+}
+
+.market-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+}
+
+.market-card-premium {
+    background: var(--trade-card);
+    border: 1px solid var(--trade-border);
+    border-radius: 20px;
+    padding: 2.5rem;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.market-card-premium:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 30px 60px rgba(16, 185, 129, 0.1);
+    border-color: var(--trade-green);
+}
+
+/* Liquid Sync Bar */
+.liquid-sync-bar {
+    padding: 3.5rem 5%;
+    background: #fff;
+    border-bottom: 1px solid var(--trade-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: #94a3b8;
+    letter-spacing: 3px;
 }
 
 /* Footer */
-.market-footer {
-    padding: 8rem 5%;
-    background: white;
-    border-top: 1px solid var(--market-border);
+.exchange-footer {
+    padding: 10rem 5%;
+    background: #0f172a;
+    color: white;
 }
 
-.market-footer-grid {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr;
-    gap: 4rem;
-}
-
-.market-footer h4 {
-    font-size: 0.85rem;
-    font-weight: 800;
-    margin-bottom: 2rem;
-    color: var(--market-charcoal);
-}
-
-.market-footer-link {
+.footer-link {
     display: block;
-    color: #6b7280;
+    color: #475569;
     text-decoration: none;
     margin-bottom: 1rem;
     font-size: 0.9rem;
+    font-weight: 600;
 }
 
-.market-footer-link:hover {
-    color: var(--market-purple);
+.footer-link:hover {
+    color: var(--trade-green);
+}
+
+/* Buttons */
+.trade-btn-primary {
+    background: var(--trade-green);
+    color: white;
+    border: none;
+    padding: 1.25rem 4rem;
+    border-radius: 12px;
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.trade-btn-primary:hover {
+    background: #059669;
+    box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2);
 }

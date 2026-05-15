@@ -1,15 +1,16 @@
+
 import React from 'react';
 import './styles.css';
-import { InteractiveHeader, PulseFooter } from './components';
+import { MotionHeader, KineticFooter } from './components';
 
-export default function InteractiveLayout({ children }: { children: React.ReactNode }) {
+export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="unifieds-interactive">
-      <InteractiveHeader />
-      <main className="interactive-container">
+    <div className="motion-node-wrapper">
+      <MotionHeader />
+      <main>
         {children}
       </main>
-      <PulseFooter />
+      <KineticFooter />
     </div>
   );
 }

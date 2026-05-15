@@ -1,131 +1,158 @@
 /* 
-    Unified Minimal: The Swiss Standard
-    Design Spec: Pure Monochrome, High-Contrast Typography, Zero-Depth
+    Unified Minimal: The Silent Edge (Envato Elite Edition)
+    Design Spec: Pure White, Ghost Gray, Zero Noise
 */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500&family=Manrope:wght@200;300;400;500;600;700&display=swap');
 
 :root {
-    --min-ink: #000000;
-    --min-ghost: #f1f1f1;
-    --min-bg: #ffffff;
-    --font-base: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --minimal-bg: #ffffff;
+    --minimal-ghost: #f8fafc;
+    --minimal-ink: #000000;
+    --minimal-border: #f1f5f9;
+    --font-heading: 'Manrope', sans-serif;
+    --font-body: 'Inter', sans-serif;
 }
 
-.minimal-wrapper {
-    background-color: var(--min-bg);
-    color: var(--min-ink);
-    font-family: var(--font-base);
-    line-height: 1.5;
+.silent-edge-wrapper {
+    background-color: var(--minimal-bg);
+    color: var(--minimal-ink);
+    font-family: var(--font-body);
+    overflow-x: hidden;
 }
 
 /* Header */
-.minimal-header {
-    padding: 3rem 5%;
+.silent-header {
+    height: 70px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 2px solid var(--min-ink);
+    padding: 0 6%;
     position: sticky;
     top: 0;
-    background: white;
     z-index: 1000;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(20px);
 }
 
-.min-logo {
-    font-weight: 900;
-    font-size: 1.2rem;
-    letter-spacing: -1px;
+.silent-logo {
+    font-family: var(--font-heading);
+    font-weight: 200;
+    font-size: 1rem;
+    letter-spacing: 12px;
     text-transform: uppercase;
 }
 
-.min-nav {
+.silent-nav {
     display: flex;
     gap: 4rem;
 }
 
-.min-nav-link {
+.silent-nav-link {
     font-size: 0.75rem;
-    font-weight: 900;
-    color: var(--min-ink);
+    font-weight: 400;
+    color: #888;
     text-decoration: none;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 2px;
+    transition: all 0.4s ease;
+}
+
+.silent-nav-link:hover {
+    color: var(--minimal-ink);
+    letter-spacing: 4px;
 }
 
 /* Hero */
-.min-hero {
-    padding: 12rem 5%;
-    border-bottom: 2px solid var(--min-ink);
+.silent-hero {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 0 10%;
 }
 
-.min-hero h1 {
-    font-size: 10rem;
-    font-weight: 900;
-    line-height: 0.8;
-    letter-spacing: -8px;
-    margin-bottom: 4rem;
-    text-transform: uppercase;
+.silent-hero h1 {
+    font-family: var(--font-heading);
+    font-size: 4rem;
+    font-weight: 200;
+    line-height: 1.2;
+    letter-spacing: -1px;
+    margin-bottom: 3rem;
 }
 
-/* Clean Cards */
-.min-grid {
+.silent-hero h1 span {
+    font-weight: 700;
+    color: #ddd;
+}
+
+/* Minimal Grid */
+.minimal-grid {
+    padding: 10rem 6%;
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 0;
-    border-bottom: 2px solid var(--min-ink);
-}
-
-.min-card {
-    border-right: 2px solid var(--min-ink);
-    padding: 3rem;
-    transition: background 0.2s ease;
-}
-
-.min-card:last-child {
-    border-right: none;
-}
-
-.min-card:hover {
-    background: var(--min-ghost);
-}
-
-.min-card-img {
-    width: 100%;
-    aspect-ratio: 1/1;
-    object-fit: cover;
-    filter: grayscale(100%);
-    margin-bottom: 2rem;
-    mix-blend-mode: multiply;
-}
-
-.min-card-title {
-    font-size: 1rem;
-    font-weight: 900;
-    text-transform: uppercase;
-    margin-bottom: 1rem;
-}
-
-/* Footer */
-.simple-footer {
-    padding: 10rem 5%;
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-columns: repeat(3, 1fr);
     gap: 4rem;
 }
 
-.simple-footer h4 {
-    font-size: 0.75rem;
-    font-weight: 900;
-    text-transform: uppercase;
-    margin-bottom: 2.5rem;
+.minimal-card {
+    padding: 2rem;
+    border-top: 1px solid var(--minimal-border);
+    transition: all 0.3s ease;
 }
 
-.simple-footer-link {
+.minimal-card:hover {
+    border-top-color: var(--minimal-ink);
+}
+
+/* Void Sync Bar */
+.void-sync-bar {
+    padding: 2.5rem 6%;
+    border-top: 1px solid var(--minimal-border);
+    border-bottom: 1px solid var(--minimal-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.65rem;
+    font-weight: 300;
+    color: #ccc;
+    letter-spacing: 6px;
+}
+
+/* Footer */
+.zen-footer {
+    padding: 8rem 6%;
+    background: #fafafa;
+}
+
+.footer-link {
     display: block;
-    color: var(--min-ink);
+    color: #bbb;
     text-decoration: none;
-    margin-bottom: 0.75rem;
-    font-size: 0.85rem;
-    font-weight: 400;
+    margin-bottom: 1rem;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+}
+
+.footer-link:hover {
+    color: var(--minimal-ink);
+}
+
+/* Buttons */
+.silent-btn-primary {
+    background: var(--minimal-ink);
+    color: white;
+    border: none;
+    padding: 1rem 4rem;
+    font-family: var(--font-heading);
+    font-weight: 500;
+    font-size: 0.8rem;
+    letter-spacing: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.silent-btn-primary:hover {
+    background: #333;
+    letter-spacing: 6px;
 }

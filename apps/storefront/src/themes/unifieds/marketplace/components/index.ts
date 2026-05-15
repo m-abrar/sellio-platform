@@ -1,4 +1,5 @@
 
-export * from './GlobalHeader';
-export * from './CategoryCard';
-export * from './MarketFooter';
+export * from './TradeHeader';
+export * from './MarketGrid';
+export * from './LiquidSyncBar';
+export * from './ExchangeFooter';
