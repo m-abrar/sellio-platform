@@ -20,7 +20,7 @@ class ApiThemeController extends Controller
         $theme = null;
 
         if ($themeKey) {
-            $theme = Theme::where('theme_key', $themeKey)->where('is_active', true)->first();
+            $theme = Theme::where('theme_key', $themeKey)->first();
         }
 
         if (!$theme) {

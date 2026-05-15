@@ -166,7 +166,7 @@
                         <div class="form-group">
                             <label class="small font-weight-bold text-secondary">{{ __('Public Storefront URL') }}</label>
                             <input type="url" name="url_frontend" class="form-control"
-                                value="{{ old('url_frontend', $settings['url_frontend'] ?? 'http://127.0.0.1:8000') }}">
+                                value="{{ old('url_frontend', $settings['url_frontend'] ?? 'http://localhost:3000') }}">
                         </div>
                     </div>
                     <div class="col-md-6">

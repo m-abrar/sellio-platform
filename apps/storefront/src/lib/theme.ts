@@ -56,8 +56,8 @@ export function resolveIndustryLayout(theme: Theme): IndustryLayout {
  */
 export async function getActiveTheme(): Promise<ResolvedTheme> {
   const headerList = await headers();
-  const cookieHeader = headerList.get("cookie") || "";
-  const themeOverride = cookieHeader.match(/theme=([^;]+)/)?.[1];
+  const themeOverride = headerList.get("x-theme-key") || 
+                        headerList.get("cookie")?.match(/(?:^|; )theme=([^;]*)/)?.[1];
 
   try {
     const theme = await api.getActiveTheme(themeOverride);

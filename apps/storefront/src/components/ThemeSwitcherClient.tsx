@@ -5,9 +5,10 @@ import type { Theme } from "@sellio/types";
 
 interface ThemeSwitcherClientProps {
   themes: Theme[];
+  activeThemeKey: string;
 }
 
-export const ThemeSwitcherClient: React.FC<ThemeSwitcherClientProps> = ({ themes }) => {
+export const ThemeSwitcherClient: React.FC<ThemeSwitcherClientProps> = ({ themes, activeThemeKey }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   React.useEffect(() => {
@@ -30,6 +31,21 @@ export const ThemeSwitcherClient: React.FC<ThemeSwitcherClientProps> = ({ themes
     acc[vertical].push(theme);
     return acc;
   }, {} as Record<string, Theme[]>);
+
+  const handleThemeSwitch = (e: React.MouseEvent, key: string) => {
+    e.preventDefault();
+    
+    // Construct the preview URL while preserving the current path
+    // Strip any existing /preview/[themeKey] prefix to prevent nesting
+    const currentPath = window.location.pathname;
+    const cleanPath = currentPath.replace(/^\/preview\/[^/]+/, '') || '/';
+    
+    // Build the final preview URL
+    const previewUrl = `/preview/${key}${cleanPath === '/' ? '' : cleanPath}`;
+    
+    // Jump to the dedicated preview URL
+    window.location.href = previewUrl;
+  };
 
   return (
     <div style={{
@@ -148,26 +164,31 @@ export const ThemeSwitcherClient: React.FC<ThemeSwitcherClientProps> = ({ themes
                 {vertical}
               </div>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-                {verticalThemes.map(t => (
-                  <a 
-                    key={t.theme_key} 
-                    href={`?theme=${t.theme_key}`}
-                    title={t.title}
-                    style={{
-                      fontSize: '10px',
-                      textDecoration: 'none',
-                      color: t.is_active ? '#1e4d4e' : '#666',
-                      fontWeight: t.is_active ? 700 : 500,
-                      padding: '4px 10px',
-                      background: t.is_active ? '#e1f2f2' : '#f5f5f5',
-                      borderRadius: '6px',
-                      border: t.is_active ? '1px solid #1e4d4e' : '1px solid transparent',
-                      transition: 'all 0.2s ease'
-                    }}
-                  >
-                    {t.title.replace('Properties ', '').replace('Events ', '').replace('Unified ', '').replace('Universal ', '')}
-                  </a>
-                ))}
+                {verticalThemes.map(t => {
+                  const isActive = t.theme_key === activeThemeKey;
+                  return (
+                    <a 
+                      key={t.theme_key} 
+                      href="#"
+                      onClick={(e) => handleThemeSwitch(e, t.theme_key)}
+                      title={t.title}
+                      style={{
+                        fontSize: '10px',
+                        textDecoration: 'none',
+                        color: isActive ? '#1e4d4e' : '#666',
+                        fontWeight: isActive ? 700 : 500,
+                        padding: '4px 10px',
+                        background: isActive ? '#e1f2f2' : '#f5f5f5',
+                        borderRadius: '6px',
+                        border: isActive ? '1px solid #1e4d4e' : '1px solid transparent',
+                        transition: 'all 0.2s ease',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      {t.title.replace('Properties ', '').replace('Events ', '').replace('Unified ', '').replace('Universal ', '')}
+                    </a>
+                  );
+                })}
               </div>
             </div>
           ))}

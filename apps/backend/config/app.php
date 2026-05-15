@@ -59,6 +59,7 @@ return [
     */
 
     'url' => env('APP_URL', 'http://localhost'),
+    'storefront_url' => env('STOREFRONT_URL', 'http://localhost:3000'),
 
     /*
     |--------------------------------------------------------------------------

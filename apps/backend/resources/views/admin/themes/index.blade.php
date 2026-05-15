@@ -28,7 +28,7 @@
     .theme-card {
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .theme-card:hover {
+    .theme-card:hover, .theme-card-sm:hover {
         transform: translateY(-8px);
         box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12) !important;
     }
@@ -49,13 +49,16 @@
         align-items: center;
         justify-content: center;
         opacity: 0;
+        visibility: hidden;
         transition: all 0.3s ease;
         backdrop-filter: blur(4px);
         z-index: 10;
     }
     
-    .theme-card:hover .theme-overlay {
+    .theme-card:hover .theme-overlay, 
+    .theme-card-sm:hover .theme-overlay {
         opacity: 1;
+        visibility: visible;
     }
 
     .h-140-p { height: 140px; }
@@ -75,6 +78,37 @@
     }
     
     .gap-15 { gap: 15px; }
+    .gap-10 { gap: 10px; }
+    .gap-5 { gap: 5px; }
+    
+    .btn-xs {
+        padding: 0.125rem 0.5rem;
+        font-size: 0.75rem;
+        line-height: 1.5;
+        border-radius: 0.2rem;
+    }
+
+    .btn-preview-premium {
+        background: #1e4d4e;
+        color: white !important;
+        border: none;
+        transition: all 0.2s ease;
+    }
+    .btn-preview-premium:hover {
+        background: #2a6b6c;
+        transform: scale(1.05);
+    }
+
+    .btn-settings-premium {
+        background: #edf2f7;
+        color: #2d3748 !important;
+        border: none;
+        transition: all 0.2s ease;
+    }
+    .btn-settings-premium:hover {
+        background: #e2e8f0;
+        transform: scale(1.05);
+    }
 </style>
 @endsection
 
@@ -149,7 +183,7 @@
                         </p>
 
                         <div class="mt-4 pt-4 border-top d-flex align-items-center gap-15">
-                            <a href="{{ url('/') }}" target="_blank" class="btn btn-primary px-4 rounded-pill font-weight-bold shadow-premium smallest">
+                            <a href="{{ config('app.storefront_url') }}" target="_blank" class="btn btn-primary px-4 rounded-pill font-weight-bold shadow-premium smallest">
                                 <i class="fas fa-external-link-alt mr-2"></i> {{ __('View Site') }}
                             </a>
                             <a href="{{ route('admin.themes.edit', $activeTheme->id) }}" class="btn btn-default shadow-xs border px-4 rounded-pill font-weight-bold smallest">
@@ -175,14 +209,7 @@
                 <div class="card theme-card-sm shadow-premium border-0 overflow-hidden rounded-16">
                     <div class="position-relative">
                         <img src="{{ asset('frontend/images/preview.png') }}" class="card-img-top h-140-p object-fit-cover" alt="{{ $theme->title }}">
-                        <div class="theme-overlay">
-                            <form action="{{ route('admin.themes.activate', $theme->id) }}" method="POST">
-                                @csrf
-                                <button type="submit" class="btn btn-white btn-sm font-weight-bold px-4 rounded-pill shadow smallest">
-                                    <i class="fas fa-bolt mr-1 text-primary"></i> {{ __('Activate') }}
-                                </button>
-                            </form>
-                        </div>
+                        @include('admin.themes.partials._overlay')
                     </div>
                     <div class="card-body p-3 text-center bg-white border-top">
                         <h6 class="font-weight-bold mb-1 text-dark text-truncate">{{ $theme->title }}</h6>
@@ -271,23 +298,7 @@
                                                  <div class="card h-100 theme-card shadow-xs border-0 overflow-hidden rounded-20">
                                                      <div class="position-relative overflow-hidden theme-thumbnail-container h-180-p">
                                                          <img src="{{ asset('frontend/images/preview.png') }}" class="card-img-top w-100 h-100 object-fit-cover" alt="{{ $theme->title }}">
-                                                         <div class="theme-overlay">
-                                                             @if($theme->is_active)
-                                                                <span class="btn btn-success btn-sm font-weight-bold px-4 rounded-pill smallest shadow-premium">
-                                                                    <i class="fas fa-check-circle mr-1"></i> {{ __('Active') }}
-                                                                </span>
-                                                             @else
-                                                                <a href="{{ route('admin.themes.edit', $theme->id) }}" class="btn btn-white btn-sm font-weight-bold px-3 shadow mr-2 rounded-pill" title="{{ __('Settings') }}">
-                                                                   <i class="fas fa-cog text-info"></i>
-                                                                </a>
-                                                                <form action="{{ route('admin.themes.activate', $theme->id) }}" method="POST" class="m-0">
-                                                                    @csrf
-                                                                    <button type="submit" class="btn btn-primary btn-sm font-weight-bold px-4 shadow rounded-pill smallest">
-                                                                       <i class="fas fa-bolt mr-1"></i> {{ __('Activate') }}
-                                                                    </button>
-                                                                </form>
-                                                             @endif
-                                                          </div>
+                                                          @include('admin.themes.partials._overlay')
                                                      </div>
                                                      <div class="card-body p-4 bg-white border-top">
                                                          <h6 class="font-weight-bold text-dark mb-1">{{ $theme->title }}</h6>

@@ -50,7 +50,7 @@
                         <li class="nav-item mb-2">
                             <a href="{{ route('admin.settings.group', ['section' => $section]) }}" 
                              class="nav-link py-3 px-3 d-flex align-items-center @if(strtolower($currentSection) == strtolower($section)) active shadow-sm @endif rounded-16 transition-cubic">
-                                <div class="icon-box-soft {{ strtolower($currentSection) == strtolower($section) ? 'bg-white bg-opacity-20' : 'bg-primary-soft' }} rounded-circle mr-3 d-flex align-items-center justify-content-center icon-box-32">
+                                <div class="icon-box-soft {{ strtolower($currentSection) == strtolower($section) ? 'bg-white shadow-sm' : 'bg-primary-soft' }} rounded-circle mr-3 d-flex align-items-center justify-content-center icon-box-32">
                                     <i class="fas fa-{{ match(strtolower($section)) { 
                                         'general' => 'cog', 
                                         'modules' => 'boxes', 
@@ -60,7 +60,7 @@
                                         'pages' => 'file-alt', 
                                         'apis' => 'code', 
                                         default => 'circle' 
-                                    } }} {{ strtolower($currentSection) == strtolower($section) ? 'text-white' : 'text-primary' }} smallest"></i>
+                                    } }} {{ strtolower($currentSection) == strtolower($section) ? 'text-primary' : 'text-primary' }} smallest"></i>
                                 </div>
                                 <span class="font-weight-bold text-uppercase smallest letter-spacing-1">{{ __(str_replace('-', ' ', $section)) }}</span>
                                 @if(strtolower($currentSection) == strtolower($section))
