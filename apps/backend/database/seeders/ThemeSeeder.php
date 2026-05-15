@@ -135,28 +135,77 @@ class ThemeSeeder extends Seeder
 
     private function getDefaultVariables(string $themeKey): array
     {
-        // Default color palette
+        // Global Base Palette
         $defaults = [
             "--color-primary" => "#1e4d4e",
             "--color-secondary" => "#f4f2ed",
             "--color-accent" => "#d4af37",
             "--color-text" => "#333333",
-            "--font-family-heading" => "'Playfair Display', serif",
+            "--font-family-heading" => "'Inter', sans-serif",
             "--font-family-base" => "'Inter', sans-serif",
-            "--border-radius" => "8px"
+            "--border-radius" => "12px",
+            "--shadow-premium" => "0 20px 40px rgba(0,0,0,0.1)",
+            "--glass-blur" => "12px"
         ];
 
-        // Custom overrides for specific themes if needed
-        if (str_contains($themeKey, 'modern')) {
-            $defaults["--color-primary"] = "#1e88e5";
-            $defaults["--border-radius"] = "12px";
-            $defaults["--font-family-heading"] = "'Outfit', sans-serif";
+        // 1. Properties Vertical Overrides
+        if (str_contains($themeKey, 'properties_')) {
+            if (str_contains($themeKey, 'luxury')) {
+                $defaults["--color-primary"] = "#1a1a1a";
+                $defaults["--color-accent"] = "#c5a059";
+                $defaults["--font-family-heading"] = "'Playfair Display', serif";
+                $defaults["--glass-blur"] = "20px";
+            } elseif (str_contains($themeKey, 'urban')) {
+                $defaults["--color-primary"] = "#718096";
+                $defaults["--color-accent"] = "#ed8936";
+            } elseif (str_contains($themeKey, 'vacation')) {
+                $defaults["--color-primary"] = "#3182ce";
+                $defaults["--color-accent"] = "#f6e05e";
+            }
         }
 
-        if (str_contains($themeKey, 'luxury')) {
-            $defaults["--color-primary"] = "#1a1a1a";
-            $defaults["--color-accent"] = "#c5a059";
-            $defaults["--font-family-heading"] = "'Playfair Display', serif";
+        // 2. Autos Vertical Overrides
+        if (str_contains($themeKey, 'autos_')) {
+            $defaults["--font-family-heading"] = "'Montserrat', sans-serif";
+            if (str_contains($themeKey, 'electric')) {
+                $defaults["--color-primary"] = "#0a0a0a";
+                $defaults["--color-accent"] = "#00e5ff";
+                $defaults["--font-family-heading"] = "'Orbitron', sans-serif";
+            } elseif (str_contains($themeKey, 'classic')) {
+                $defaults["--color-primary"] = "#d32f2f";
+                $defaults["--color-accent"] = "#1a202c";
+            } elseif (str_contains($themeKey, 'luxury')) {
+                $defaults["--color-primary"] = "#000000";
+                $defaults["--color-accent"] = "#ffffff";
+            }
+        }
+
+        // 3. Jobs Vertical Overrides
+        if (str_contains($themeKey, 'jobs_')) {
+            if (str_contains($themeKey, 'tech')) {
+                $defaults["--color-primary"] = "#2b6cb0";
+                $defaults["--color-accent"] = "#00ff41";
+            } elseif (str_contains($themeKey, 'blue_collar')) {
+                $defaults["--color-primary"] = "#1a202c";
+                $defaults["--color-accent"] = "#d69e2e";
+            }
+        }
+
+        // 4. Events Vertical Overrides
+        if (str_contains($themeKey, 'events_')) {
+            $defaults["--font-family-heading"] = "'Montserrat', sans-serif";
+            if (str_contains($themeKey, 'music')) {
+                $defaults["--color-primary"] = "#000000";
+                $defaults["--color-accent"] = "#ff0080";
+            }
+        }
+
+        // 5. Modern Modifier Catch-all
+        if (str_contains($themeKey, 'modern')) {
+            if (!isset($defaults["--font-family-heading"])) {
+                $defaults["--font-family-heading"] = "'Outfit', sans-serif";
+            }
+            $defaults["--border-radius"] = "24px";
         }
 
         return $defaults;
