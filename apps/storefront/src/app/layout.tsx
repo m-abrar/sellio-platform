@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { getActiveTheme } from "@/lib/theme";
-import UnifiedDefaultLayout from "@/themes/unified/default/Layout";
+import UnifiedDefaultLayout from "@/themes/unifieds/default/Layout";
 import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 import "./globals.css";
 

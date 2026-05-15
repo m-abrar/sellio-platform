@@ -14,7 +14,7 @@ export default async function Home() {
     
     // Fallback to the foundational unified default theme
     try {
-      const { default: FallbackComponent } = await import(`@/themes/unifieds_default`);
+      const { default: FallbackComponent } = await import(`@/themes/unifieds/default`);
       return <FallbackComponent />;
     } catch (fallbackError) {
       return (

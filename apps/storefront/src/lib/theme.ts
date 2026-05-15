@@ -13,9 +13,9 @@ export interface ResolvedTheme {
  * Resolves a database theme key and vertical to a specific Industry Layout path.
  */
 export function resolveIndustryLayout(theme: Theme): IndustryLayout {
-  // We now have dedicated folders for each theme key in src/themes/
-  // The layout path matches the theme_key (e.g. properties_luxury)
-  return theme.theme_key.toLowerCase();
+  // We now have dedicated folders for each theme key in src/themes/vertical/key/
+  // Convert theme_key (e.g. properties_luxury) to path (properties/luxury)
+  return theme.theme_key.toLowerCase().replace('_', '/');
 }
 
 /**
