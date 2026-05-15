@@ -46,7 +46,7 @@ This document tracks the implementation status of the **50 official themes** reg
 ## 🛍️ Ecommerce Vertical (4 Themes)
 - [x] Ecommerce Default
 - [x] Ecommerce Luxury
-- [ ] Ecommerce Electronics
+- [x] Ecommerce Electronics
 - [x] Ecommerce Fashion
 
 ## 📅 Events Vertical (5 Themes)

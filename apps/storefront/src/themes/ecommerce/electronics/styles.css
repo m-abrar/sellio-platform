@@ -1,63 +1,193 @@
-.electronics-theme {
-  --elec-bg: #050505;
-  --elec-text: #ffffff;
-  --elec-accent: #00f2ff;
-  --elec-accent-glow: rgba(0, 242, 255, 0.5);
-  --elec-glass: rgba(255, 255, 255, 0.05);
-  --elec-glass-border: rgba(255, 255, 255, 0.1);
-  
-  background-color: var(--elec-bg);
-  color: var(--elec-text);
-  font-family: 'Orbitron', sans-serif;
-  min-height: 100vh;
+/* 
+    Ecommerce Electronics: The Circuit Edition
+    Design Spec: Cyber Blue, Neon Accents, Spec-First Layout
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;700&display=swap');
+
+:root {
+    --tech-primary: #0066ff;
+    --tech-bg: #ffffff;
+    --tech-text: #050505;
+    --tech-accent: #00ffcc;
+    --tech-border: #eeeeee;
+    --font-tech: 'Orbitron', sans-serif;
+    --font-base: 'Inter', sans-serif;
 }
 
-.electronics-header {
-  padding: 1.5rem 5%;
-  background: var(--elec-glass);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--elec-glass-border);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: sticky;
-  top: 0;
-  z-index: 100;
+.electronics-wrapper {
+    background-color: var(--tech-bg);
+    color: var(--tech-text);
+    font-family: var(--font-base);
 }
 
-.electronics-logo {
-  font-weight: 900;
-  color: var(--elec-accent);
-  text-shadow: 0 0 10px var(--elec-accent-glow);
-  font-size: 1.5rem;
+/* Header */
+.tech-header {
+    background: #000;
+    color: white;
+    padding: 1.5rem 4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 2px solid var(--tech-primary);
 }
 
-.electronics-hero {
-  height: 90vh;
-  display: flex;
-  align-items: center;
-  background-size: cover;
-  background-position: center;
+.tech-logo {
+    font-family: var(--font-tech);
+    font-weight: 900;
+    font-size: 1.2rem;
+    color: var(--tech-accent);
 }
 
-.electronics-glass-card {
-  background: var(--elec-glass);
-  backdrop-filter: blur(20px);
-  border: 1px solid var(--elec-glass-border);
-  padding: 3rem;
-  border-radius: 20px;
-  max-width: 600px;
-  margin-left: 5%;
+.tech-nav {
+    display: flex;
+    gap: 2.5rem;
 }
 
-.electronics-btn {
-  background: var(--elec-accent);
-  color: black;
-  padding: 1rem 2rem;
-  border: none;
-  border-radius: 5px;
-  font-weight: bold;
-  text-transform: uppercase;
-  box-shadow: 0 0 20px var(--elec-accent-glow);
-  cursor: pointer;
+.tech-nav-link {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #888;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.tech-nav-link:hover {
+    color: var(--tech-accent);
+}
+
+/* Hero */
+.tech-hero {
+    padding: 8rem 10%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    background: radial-gradient(circle at top right, rgba(0, 102, 255, 0.05), transparent);
+}
+
+.tech-hero-content h1 {
+    font-family: var(--font-tech);
+    font-size: 4rem;
+    line-height: 1.1;
+    margin-bottom: 2rem;
+}
+
+.tech-badge {
+    background: var(--tech-primary);
+    color: white;
+    padding: 0.5rem 1rem;
+    font-size: 0.7rem;
+    font-weight: 900;
+    display: inline-block;
+    margin-bottom: 1.5rem;
+}
+
+/* Spec Cards */
+.spec-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    padding: 4rem 10%;
+    background: #fafafa;
+}
+
+.spec-card {
+    background: white;
+    border: 1px solid var(--tech-border);
+    padding: 2rem;
+    transition: all 0.3s ease;
+}
+
+.spec-card:hover {
+    border-color: var(--tech-primary);
+    box-shadow: 0 10px 30px rgba(0, 102, 255, 0.1);
+}
+
+.spec-icon {
+    font-size: 2rem;
+    color: var(--tech-primary);
+    margin-bottom: 1.5rem;
+}
+
+/* Product Cards */
+.tech-product-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3rem;
+    padding: 6rem 10%;
+}
+
+.tech-product-card {
+    border: 1px solid var(--tech-border);
+    position: relative;
+    overflow: hidden;
+}
+
+.tech-product-img {
+    width: 100%;
+    aspect-ratio: 1;
+    background: #f4f4f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tech-product-info {
+    padding: 2rem;
+}
+
+.tech-product-category {
+    font-size: 0.65rem;
+    font-weight: 900;
+    color: var(--tech-primary);
+    letter-spacing: 2px;
+    margin-bottom: 0.5rem;
+}
+
+.tech-product-title {
+    font-family: var(--font-tech);
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+}
+
+.tech-product-price {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+/* Footer */
+.tech-footer {
+    background: #000;
+    color: white;
+    padding: 6rem 10%;
+}
+
+.tech-footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 4rem;
+}
+
+.tech-footer h4 {
+    font-family: var(--font-tech);
+    font-size: 0.8rem;
+    margin-bottom: 2rem;
+    color: var(--tech-accent);
+}
+
+.tech-footer-link {
+    display: block;
+    color: #666;
+    text-decoration: none;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+}
+
+.tech-footer-link:hover {
+    color: white;
 }
