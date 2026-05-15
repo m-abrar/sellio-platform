@@ -1,214 +1,180 @@
-/* 
-    Autos Luxury: The Diamond Drive (Envato Elite Edition)
-    Design Spec: Obsidian, Silver, Electric Blue, High-Speed Motion
-*/
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
 
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap');
-
-:root {
-    --drive-obsidian: #0a0a0a;
-    --drive-silver: #e2e8f0;
-    --drive-blue: #3b82f6;
-    --drive-bg: #000000;
-    --drive-card: #111111;
-    --drive-border: rgba(255, 255, 255, 0.1);
-    --font-heading: 'Syne', sans-serif;
-    --font-body: 'Inter', sans-serif;
+.autos-luxury-theme {
+  /* Platinum Drive Palette */
+  --al-obsidian: #050505;
+  --al-platinum: #e2e8f0;
+  --al-cyan: #22d3ee;
+  --al-carbon: #111827;
+  --al-surface: #0f172a;
+  --al-border: rgba(34, 211, 238, 0.1);
+  
+  /* Typography */
+  --al-font: 'Outfit', sans-serif;
+  
+  /* Transitions */
+  --al-transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.diamond-drive-wrapper {
-    background-color: var(--drive-bg);
-    color: var(--drive-silver);
-    font-family: var(--font-body);
-    overflow-x: hidden;
+.autos-luxury-theme {
+  background-color: var(--al-obsidian);
+  color: var(--al-platinum);
+  font-family: var(--al-font);
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Header */
-.diamond-header {
-    height: 90px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 6%;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    background: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--drive-border);
+/* Typography Utilities */
+.al-heading-xl {
+  font-size: clamp(4rem, 12vw, 12rem);
+  font-weight: 900;
+  line-height: 0.85;
+  letter-spacing: -0.05em;
+  color: white;
 }
 
-.diamond-logo {
-    font-family: var(--font-heading);
-    font-weight: 800;
-    font-size: 1.5rem;
-    color: white;
-    letter-spacing: -1px;
+.al-mono {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: var(--al-cyan);
 }
 
-.diamond-nav {
-    display: flex;
-    gap: 4rem;
+/* Layout */
+.al-section {
+  padding: 10rem 8%;
+  max-width: 1800px;
+  margin: 0 auto;
 }
 
-.diamond-nav-link {
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: #666;
-    text-decoration: none;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    transition: all 0.3s ease;
+/* Platinum Header */
+.al-header {
+  padding: 1.5rem 8%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(5, 5, 5, 0.8);
+  backdrop-filter: blur(20px);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  border-bottom: 1px solid var(--al-border);
 }
 
-.diamond-nav-link:hover {
-    color: var(--drive-blue);
+.al-logo {
+  font-weight: 900;
+  font-size: 1.75rem;
+  letter-spacing: -1px;
+  color: white;
 }
 
-/* Hero */
-.diamond-hero {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    position: relative;
-    padding: 0 10%;
-    background: radial-gradient(circle at center, #111 0%, #000 100%);
+.al-nav {
+  display: flex;
+  gap: 4.5rem;
 }
 
-.diamond-hero h1 {
-    font-family: var(--font-heading);
-    font-size: 8rem;
-    font-weight: 800;
-    line-height: 0.85;
-    letter-spacing: -6px;
-    margin-bottom: 3rem;
-    color: white;
+.al-nav-link {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: rgba(226, 232, 240, 0.4);
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  transition: var(--al-transition);
 }
 
-.diamond-hero h1 span {
-    color: var(--drive-blue);
+.al-nav-link:hover {
+  color: var(--al-cyan);
 }
 
-/* Vehicle Showcase */
-.vehicle-showcase {
-    padding: 10rem 6%;
+/* Futuristic Hero */
+.al-hero {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 0 8%;
+  background: radial-gradient(circle at center, #111 0%, #050505 100%);
+  position: relative;
+  overflow: hidden;
 }
 
-.vehicle-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 2rem;
+.al-hero-glow {
+  position: absolute;
+  width: 1000px;
+  height: 1000px;
+  background: radial-gradient(circle, rgba(34, 211, 238, 0.05) 0%, transparent 70%);
+  pointer-events: none;
 }
 
-.vehicle-card-premium {
-    background: var(--drive-card);
-    border: 1px solid var(--drive-border);
-    border-radius: 4px;
-    overflow: hidden;
-    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+/* Luxury Asset Card */
+.al-showcase-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 4rem;
+  margin-top: 6rem;
 }
 
-.vehicle-card-premium:hover {
-    border-color: var(--drive-blue);
-    transform: translateY(-10px);
+.al-asset-card {
+  background: var(--al-surface);
+  border: 1px solid var(--al-border);
+  border-radius: 4px;
+  overflow: hidden;
+  transition: var(--al-transition);
+  cursor: pointer;
 }
 
-.vehicle-img-wrapper {
-    height: 400px;
-    overflow: hidden;
+.al-asset-card:hover {
+  border-color: var(--al-cyan);
+  transform: translateY(-20px);
+  box-shadow: 0 40px 100px rgba(34, 211, 238, 0.1);
 }
 
-.vehicle-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 1s ease;
+.al-img-frame {
+  width: 100%;
+  aspect-ratio: 16/9;
+  overflow: hidden;
+  position: relative;
 }
 
-.vehicle-card-premium:hover .vehicle-img {
-    transform: scale(1.1);
+.al-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.8) contrast(1.1);
+  transition: var(--al-transition);
 }
 
-.vehicle-info {
-    padding: 3rem;
-}
-
-.vehicle-price {
-    font-family: var(--font-heading);
-    font-size: 2rem;
-    font-weight: 700;
-    color: white;
-    margin-bottom: 1rem;
-}
-
-/* Stats */
-.performance-stats {
-    padding: 8rem 6%;
-    background: #050505;
-}
-
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 4rem;
-}
-
-.stat-item {
-    text-align: left;
-}
-
-.stat-value {
-    font-family: var(--font-heading);
-    font-size: 4rem;
-    font-weight: 800;
-    color: var(--drive-blue);
-    line-height: 1;
-    margin-bottom: 1rem;
-}
-
-.stat-label {
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: #444;
-    letter-spacing: 2px;
-}
-
-/* Footer */
-.elite-drive-footer {
-    padding: 8rem 6%;
-    background: #000;
-    border-top: 1px solid var(--drive-border);
-}
-
-.footer-link {
-    display: block;
-    color: #444;
-    text-decoration: none;
-    margin-bottom: 1.25rem;
-    font-size: 0.9rem;
-}
-
-.footer-link:hover {
-    color: white;
+.al-asset-card:hover .al-img {
+  filter: brightness(1);
+  transform: scale(1.05);
 }
 
 /* Buttons */
-.drive-btn-primary {
-    background: var(--drive-blue);
-    color: white;
-    border: none;
-    padding: 1.5rem 4.5rem;
-    font-family: var(--font-heading);
-    font-size: 1rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.3s ease;
+.al-btn-primary {
+  background: var(--al-cyan);
+  color: var(--al-obsidian);
+  border: none;
+  padding: 1.75rem 5rem;
+  font-weight: 900;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  cursor: pointer;
+  transition: var(--al-transition);
 }
 
-.drive-btn-primary:hover {
-    box-shadow: 0 0 40px rgba(59, 130, 246, 0.4);
-    transform: scale(1.05);
+.al-btn-primary:hover {
+  background: white;
+  box-shadow: 0 0 60px rgba(34, 211, 238, 0.4);
+}
+
+/* Footer */
+.al-footer {
+  background: #000;
+  color: white;
+  padding: 15rem 8% 6rem;
+  border-top: 1px solid var(--al-border);
 }

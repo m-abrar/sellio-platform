@@ -1,16 +1,15 @@
-
 import React from 'react';
+import { PlatinumHeader, PilotFooter } from './components';
 import './styles.css';
-import { DiamondHeader, EliteDriveFooter } from './components';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="diamond-drive-wrapper">
-      <DiamondHeader />
+    <div className="autos-luxury-theme">
+      <PlatinumHeader />
       <main>
         {children}
       </main>
-      <EliteDriveFooter />
+      <PilotFooter />
     </div>
   );
 }
