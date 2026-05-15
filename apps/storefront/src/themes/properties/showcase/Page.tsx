@@ -1,69 +1,77 @@
 
 import React from 'react';
+import { ArtisanPropertyCard } from './components';
 
 export default function Page() {
+  const properties = [
+    { 
+        title: "The Obsidian Villa", 
+        price: "$12,400,000", 
+        location: "Santorini, Greece", 
+        description: "A masterwork of volcanic architecture, integrated into the cliffside with seamless indoor-outdoor flow and panoramic caldera views.", 
+        image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2070" 
+    },
+    { 
+        title: "MCM Desert Pavilion", 
+        price: "$8,900,000", 
+        location: "Palm Springs, USA", 
+        description: "A meticulously restored 1958 steel-and-glass sanctuary, celebrating the golden era of California modernism.", 
+        image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?q=80&w=2070" 
+    },
+    { 
+        title: "Brutalist Sky Garden", 
+        price: "$15,200,000", 
+        location: "Singapore", 
+        description: "An experimental vertical forest encased in raw concrete and architectural glass, defining the future of tropical living.", 
+        image: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?q=80&w=2070" 
+    },
+    { 
+        title: "The Florentine Atelier", 
+        price: "$22,000,000", 
+        location: "Florence, Italy", 
+        description: "A 16th-century Palazzo refitted for the modern era, featuring original frescoes alongside museum-grade automation systems.", 
+        image: "https://images.unsplash.com/photo-1518780664697-55e3ad937233?q=80&w=2070" 
+    },
+  ];
+
   return (
-    <div style={{ 
-      minHeight: '80vh', 
-      display: 'flex', 
-      flexDirection: 'column', 
-      alignItems: 'center', 
-      justifyContent: 'center', 
-      backgroundColor: '#f9fafb',
-      padding: '2rem',
-      textAlign: 'center',
-      fontFamily: "'Inter', sans-serif"
-    }}>
-      <div style={{ 
-        maxWidth: '42rem', 
-        width: '100%', 
-        backgroundColor: 'white', 
-        borderRadius: '1.5rem', 
-        boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)', 
-        padding: '3rem', 
-        border: '1px solid #f3f4f6' 
-      }}>
-        <div style={{ 
-          width: '5rem', 
-          height: '5rem', 
-          backgroundColor: '#2e7d3215', 
-          borderRadius: '1rem', 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'center', 
-          margin: '0 auto 2rem auto' 
-        }}>
-          <svg style={{ width: '2.5rem', height: '2.5rem', color: '#2e7d32' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-          </svg>
-        </div>
-        <h1 style={{ 
-          fontSize: '2.25rem', 
-          fontWeight: 800, 
-          color: '#111827', 
-          marginBottom: '1rem', 
-          letterSpacing: '-0.025em',
-          lineHeight: 1.2
-        }}>
-          Properties Showcase <span style={{ color: '#2e7d32' }}>Coming Soon</span>
-        </h1>
-        <p style={{ 
-          fontSize: '1.125rem', 
-          color: '#4b5563', 
-          marginBottom: '2rem', 
-          maxWidth: '28rem', 
-          margin: '0 auto 2rem auto',
-          lineHeight: 1.6
-        }}>
-          We are currently hand-crafting this elite vertical experience. 
-          Stay tuned for a production-grade layout that will blow your users away.
-        </p>
-        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
-          <div style={{ height: '0.25rem', width: '3rem', backgroundColor: '#2e7d32', borderRadius: '9999px' }}></div>
-          <div style={{ height: '0.25rem', width: '3rem', backgroundColor: '#2e7d3260', borderRadius: '9999px' }}></div>
-          <div style={{ height: '0.25rem', width: '3rem', backgroundColor: '#2e7d3230', borderRadius: '9999px' }}></div>
-        </div>
-      </div>
+    <div>
+      {/* Hero Section */}
+      <section className="showcase-hero">
+          <div style={{ position: 'absolute', top: '10rem', right: '5%', width: '1px', height: '300px', background: 'var(--show-gold)' }}></div>
+          <h1>Living <br/>As Art.</h1>
+          <p style={{ maxWidth: '600px', fontSize: '1.5rem', fontWeight: 300, color: '#444', lineHeight: 1.6, marginTop: '4rem' }}>
+              The Sellio Collection is a curated distribution of the world's most significant architectural achievements. Verified by the Atelier node.
+          </p>
+      </section>
+
+      {/* Philosophy Bar */}
+      <section style={{ padding: '4rem 5%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#0a0a0a', color: 'var(--show-gold)', fontFamily: 'var(--font-serif)', fontSize: '0.8rem', letterSpacing: '4px' }}>
+          <span>INSTITUTIONAL_CURATION</span>
+          <span>ARCHITECTURAL_INTEGRITY</span>
+          <span>HISTORIC_PRESERVATION</span>
+          <span>EDITORIAL_DISTRIBUTION</span>
+      </section>
+
+      {/* Property Grid (Vertical Editorial) */}
+      <section className="showcase-grid">
+          {properties.map((prop, i) => (
+              <ArtisanPropertyCard key={i} {...prop} />
+          ))}
+      </section>
+
+      {/* Curator CTA */}
+      <section style={{ padding: '20rem 5%', textAlign: 'center', background: '#050505' }}>
+          <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+              <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '6rem', fontWeight: 900, marginBottom: '4rem', color: 'var(--show-gold)', letterSpacing: '-4px' }}>Begin your <br/>curation.</h2>
+              <p style={{ fontSize: '1.25rem', color: '#333', lineHeight: 2, marginBottom: '6rem' }}>
+                  Our institutional nodes are currently accepting select inquiries for the 2026/27 global collection.
+              </p>
+              <button style={{ padding: '2rem 8rem', background: 'var(--show-gold)', color: 'black', border: 'none', fontFamily: 'var(--font-serif)', fontWeight: 900, fontSize: '1.1rem', letterSpacing: '4px' }}>
+                  REQUEST_PRIVATE_ACCESS
+              </button>
+          </div>
+      </section>
     </div>
   );
 }

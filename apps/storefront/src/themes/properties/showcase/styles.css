@@ -1,0 +1,169 @@
+/* 
+    Properties Showcase: The Editorial Gallery
+    Design Spec: Obsidian, Champagne Gold, Museum-Grade Layouts
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,900;1,400&family=Inter:wght@300;400;700&display=swap');
+
+:root {
+    --show-gold: #e2c499;
+    --show-obsidian: #0a0a0a;
+    --show-pearl: #ffffff;
+    --show-bg: #000000;
+    --show-border: #1a1a1a;
+    --font-serif: 'Bodoni Moda', serif;
+    --font-sans: 'Inter', sans-serif;
+}
+
+.properties-showcase-wrapper {
+    background-color: var(--show-bg);
+    color: var(--show-pearl);
+    font-family: var(--font-sans);
+}
+
+/* Header */
+.editorial-header {
+    padding: 3rem 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    background: rgba(0,0,0,0.9);
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+    border-bottom: 1px solid var(--show-border);
+}
+
+.showcase-logo {
+    font-family: var(--font-serif);
+    font-weight: 900;
+    font-size: 2rem;
+    color: var(--show-gold);
+    letter-spacing: -2px;
+}
+
+.showcase-nav {
+    display: flex;
+    gap: 5rem;
+}
+
+.showcase-nav-link {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #444;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    transition: color 0.3s ease;
+}
+
+.showcase-nav-link:hover {
+    color: var(--show-gold);
+}
+
+/* Hero */
+.showcase-hero {
+    height: 100vh;
+    padding: 0 5%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    position: relative;
+    overflow: hidden;
+}
+
+.showcase-hero h1 {
+    font-family: var(--font-serif);
+    font-size: 12rem;
+    font-weight: 900;
+    line-height: 0.8;
+    margin-bottom: 4rem;
+    letter-spacing: -10px;
+    color: var(--show-gold);
+}
+
+/* Property Cards */
+.showcase-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 15rem;
+    padding: 15rem 5%;
+}
+
+.artisan-card {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 8rem;
+    align-items: center;
+}
+
+.artisan-card:nth-child(even) {
+    direction: rtl;
+}
+
+.artisan-card:nth-child(even) * {
+    direction: ltr;
+}
+
+.artisan-img-wrapper {
+    position: relative;
+    overflow: hidden;
+}
+
+.artisan-img {
+    width: 100%;
+    aspect-ratio: 16/10;
+    object-fit: cover;
+    filter: sepia(20%) contrast(110%);
+    transition: transform 1s ease;
+}
+
+.artisan-img:hover {
+    transform: scale(1.05);
+}
+
+.artisan-info h3 {
+    font-family: var(--font-serif);
+    font-size: 4rem;
+    font-weight: 900;
+    margin-bottom: 2rem;
+    line-height: 1;
+}
+
+.artisan-price {
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    font-style: italic;
+    color: var(--show-gold);
+    margin-bottom: 3rem;
+    display: block;
+}
+
+/* Footer */
+.atelier-footer {
+    padding: 10rem 5%;
+    background: var(--show-obsidian);
+    border-top: 1px solid var(--show-border);
+}
+
+.atelier-footer h4 {
+    font-family: var(--font-serif);
+    font-size: 1rem;
+    font-style: italic;
+    margin-bottom: 2.5rem;
+    color: var(--show-gold);
+}
+
+.atelier-footer-link {
+    display: block;
+    color: #333;
+    text-decoration: none;
+    margin-bottom: 1.25rem;
+    font-size: 0.9rem;
+}
+
+.atelier-footer-link:hover {
+    color: white;
+}

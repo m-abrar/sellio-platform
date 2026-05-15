@@ -1,0 +1,137 @@
+/* 
+    Unified Classic: The Heritage Exchange
+    Design Spec: Deep Navy, Parchment, Newspaper Layouts
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@400;600;700&display=swap');
+
+:root {
+    --uni-navy: #1e1b4b;
+    --uni-gold: #a16207;
+    --uni-parchment: #f5f5f4;
+    --uni-bg: #ffffff;
+    --uni-border: #e7e5e4;
+    --font-serif: 'Playfair Display', serif;
+    --font-sans: 'Inter', sans-serif;
+}
+
+.unified-classic-wrapper {
+    background-color: var(--uni-bg);
+    color: var(--uni-navy);
+    font-family: var(--font-sans);
+}
+
+/* Header */
+.heritage-nav {
+    padding: 2.5rem 5%;
+    background: white;
+    border-bottom: 4px solid var(--uni-navy);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.uni-heritage-logo {
+    font-family: var(--font-serif);
+    font-weight: 900;
+    font-size: 2rem;
+    color: var(--uni-navy);
+    letter-spacing: -1px;
+}
+
+.uni-heritage-nav {
+    display: flex;
+    gap: 4rem;
+}
+
+.uni-heritage-link {
+    font-family: var(--font-serif);
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #444;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.uni-heritage-link:hover {
+    color: var(--uni-gold);
+}
+
+/* Hero */
+.uni-heritage-hero {
+    padding: 8rem 5%;
+    background: var(--uni-parchment);
+    text-align: center;
+    border-bottom: 1px solid var(--uni-border);
+}
+
+.uni-heritage-hero h1 {
+    font-family: var(--font-serif);
+    font-size: 5rem;
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 2rem;
+}
+
+/* Ad Cards */
+.classic-ad-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4rem;
+    padding: 6rem 5%;
+}
+
+.classic-ad-card {
+    border: 1px solid var(--uni-border);
+    padding: 2.5rem;
+    background: white;
+    transition: all 0.3s ease;
+}
+
+.classic-ad-card:hover {
+    box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+}
+
+.classic-ad-img {
+    width: 100%;
+    aspect-ratio: 16/10;
+    object-fit: cover;
+    margin-bottom: 2rem;
+}
+
+.classic-ad-title {
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    font-weight: 900;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+
+/* Footer */
+.traditional-footer {
+    padding: 10rem 5%;
+    background: var(--uni-navy);
+    color: white;
+}
+
+.traditional-footer h4 {
+    font-family: var(--font-serif);
+    font-size: 1.1rem;
+    margin-bottom: 2.5rem;
+    color: var(--uni-gold);
+}
+
+.traditional-footer-link {
+    display: block;
+    color: #a1a1aa;
+    text-decoration: none;
+    margin-bottom: 1.25rem;
+    font-size: 0.95rem;
+}
+
+.traditional-footer-link:hover {
+    color: white;
+}

@@ -1,0 +1,144 @@
+/* 
+    Unified Marketplace: The Social Exchange
+    Design Spec: Vibrant Purple, Jakarta Sans, Social Grids
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
+
+:root {
+    --market-purple: #8b5cf6;
+    --market-charcoal: #111827;
+    --market-bg: #f9fafb;
+    --market-border: #e5e7eb;
+    --font-base: 'Plus Jakarta Sans', sans-serif;
+}
+
+.unified-marketplace-wrapper {
+    background-color: var(--market-bg);
+    color: var(--market-charcoal);
+    font-family: var(--font-base);
+}
+
+/* Header */
+.market-header {
+    background: white;
+    padding: 1rem 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 1px solid var(--market-border);
+}
+
+.market-logo {
+    font-weight: 800;
+    font-size: 1.5rem;
+    color: var(--market-purple);
+    letter-spacing: -1px;
+}
+
+.market-nav {
+    display: flex;
+    gap: 3rem;
+}
+
+.market-nav-link {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #4b5563;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.market-nav-link:hover {
+    color: var(--market-purple);
+}
+
+/* Hero */
+.market-hero {
+    padding: 8rem 5%;
+    background: linear-gradient(135deg, #fff 0%, #f5f3ff 100%);
+    text-align: center;
+}
+
+.market-hero h1 {
+    font-size: 4.5rem;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 2rem;
+    letter-spacing: -2px;
+}
+
+.market-search-pill {
+    max-width: 700px;
+    margin: 3rem auto 0;
+    padding: 0.5rem;
+    background: white;
+    border-radius: 100px;
+    box-shadow: 0 10px 30px rgba(139, 92, 246, 0.1);
+    display: flex;
+    gap: 1rem;
+}
+
+/* Category Cards */
+.cat-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    padding: 6rem 5%;
+}
+
+.cat-card {
+    background: white;
+    padding: 3rem;
+    border-radius: 24px;
+    text-align: center;
+    border: 1px solid var(--market-border);
+    transition: all 0.3s ease;
+}
+
+.cat-card:hover {
+    transform: translateY(-10px);
+    border-color: var(--market-purple);
+    box-shadow: 0 20px 40px rgba(139, 92, 246, 0.1);
+}
+
+.cat-icon {
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+    display: block;
+}
+
+/* Footer */
+.market-footer {
+    padding: 8rem 5%;
+    background: white;
+    border-top: 1px solid var(--market-border);
+}
+
+.market-footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 4rem;
+}
+
+.market-footer h4 {
+    font-size: 0.85rem;
+    font-weight: 800;
+    margin-bottom: 2rem;
+    color: var(--market-charcoal);
+}
+
+.market-footer-link {
+    display: block;
+    color: #6b7280;
+    text-decoration: none;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+}
+
+.market-footer-link:hover {
+    color: var(--market-purple);
+}

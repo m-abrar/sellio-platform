@@ -16,25 +16,25 @@ This document tracks the implementation status of the **50 official themes** reg
 - [x] Unified Modern
 - [x] Unified Interactive
 - [x] Unified Mega
-- [ ] Unified Standard
-- [ ] Unified Classic
+- [x] Unified Standard
+- [x] Unified Classic
 - [x] Unified Minimal
-- [ ] Unified Marketplace
+- [x] Unified Marketplace
 
 ## 🏠 Properties Vertical (13 Themes)
 - [x] Properties Modern
 - [x] Properties Luxury
 - [x] Properties Map
-- [ ] Properties Classic
+- [x] Properties Classic
 - [x] Properties Luxury 2
 - [x] Properties Urban
 - [x] Properties Rental
 - [x] Properties Vacation
-- [ ] Properties Unified
+- [x] Properties Unified
 - [x] Properties Commercial
-- [ ] Properties Showcase
-- [ ] Properties Neighborhood
-- [ ] Properties Investment
+- [x] Properties Showcase
+- [x] Properties Neighborhood
+- [x] Properties Investment
 
 ## 🚗 Autos Vertical (5 Themes)
 - [x] Autos Classic
@@ -52,8 +52,8 @@ This document tracks the implementation status of the **50 official themes** reg
 ## 📅 Events Vertical (5 Themes)
 - [x] Events Music
 - [x] Events Corporate
-- [ ] Events Classic
-- [ ] Events Creative
+- [x] Events Classic
+- [x] Events Creative
 - [x] Events Festival
 
 ## 🤝 Services Vertical (5 Themes)
@@ -61,7 +61,7 @@ This document tracks the implementation status of the **50 official themes** reg
 - [x] Services Health
 - [x] Services Corporate
 - [x] Services Creative
-- [ ] Services Local
+- [x] Services Local
 
 ## 💼 Jobs Vertical (5 Themes)
 - [x] Jobs Tech
@@ -76,7 +76,7 @@ This document tracks the implementation status of the **50 official themes** reg
 - [x] Classifieds Deals
 - [x] Classifieds Premium
 - [x] Classifieds General
-- [ ] Classifieds Local
+- [x] Classifieds Local
 
 ---
 

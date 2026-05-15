@@ -1,0 +1,170 @@
+/* 
+    Properties Neighborhood: The Community Living
+    Design Spec: Leaf Green, Wood Brown, Warm Grids
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&family=Inter:wght@400;600;700;800&display=swap');
+
+:root {
+    --hood-green: #16a34a;
+    --hood-brown: #78350f;
+    --hood-yellow: #fef08a;
+    --hood-bg: #fdfcf8;
+    --hood-text: #1e293b;
+    --hood-border: #e2e8f0;
+    --font-heading: 'Quicksand', sans-serif;
+    --font-body: 'Inter', sans-serif;
+}
+
+.neighborhood-wrapper {
+    background-color: var(--hood-bg);
+    color: var(--hood-text);
+    font-family: var(--font-body);
+}
+
+/* Header */
+.community-nav {
+    background: white;
+    padding: 1.25rem 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+}
+
+.hood-logo {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--hood-green);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.hood-nav-links {
+    display: flex;
+    gap: 3rem;
+}
+
+.hood-nav-link {
+    font-family: var(--font-heading);
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #64748b;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.hood-nav-link:hover {
+    color: var(--hood-green);
+}
+
+/* Hero */
+.hood-hero {
+    padding: 6rem 5%;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    gap: 6rem;
+    border-bottom: 1px solid var(--hood-border);
+}
+
+.hood-hero h1 {
+    font-family: var(--font-heading);
+    font-size: 4rem;
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 2rem;
+}
+
+/* Home Cards */
+.home-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3rem;
+    padding: 6rem 5%;
+}
+
+.home-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    border: 1px solid var(--hood-border);
+}
+
+.home-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(22, 163, 74, 0.05);
+}
+
+.home-img-wrapper {
+    aspect-ratio: 16/10;
+    position: relative;
+}
+
+.home-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.home-badge {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    background: rgba(255,255,255,0.9);
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: var(--hood-green);
+}
+
+.home-info {
+    padding: 2.5rem;
+}
+
+.home-title {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+}
+
+.home-price {
+    font-size: 1.25rem;
+    font-weight: 900;
+    color: var(--hood-brown);
+    margin-bottom: 2rem;
+}
+
+/* Footer */
+.neighborhood-footer {
+    padding: 8rem 5%;
+    background: #1e293b;
+    color: white;
+}
+
+.neighborhood-footer h4 {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    margin-bottom: 2.5rem;
+    color: var(--hood-yellow);
+}
+
+.hood-footer-link {
+    display: block;
+    color: #475569;
+    text-decoration: none;
+    margin-bottom: 1.25rem;
+    font-size: 0.95rem;
+}
+
+.hood-footer-link:hover {
+    color: white;
+}

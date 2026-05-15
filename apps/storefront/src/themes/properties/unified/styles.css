@@ -1,0 +1,154 @@
+/* 
+    Properties Unified: The Universal Standard
+    Design Spec: Master Blue, Slate Grays, Clean Grids
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
+
+:root {
+    --uni-blue: #2563eb;
+    --uni-dark: #1e293b;
+    --uni-slate: #64748b;
+    --uni-bg: #f8fafc;
+    --uni-border: #e2e8f0;
+    --font-base: 'Inter', sans-serif;
+}
+
+.properties-unified-wrapper {
+    background-color: var(--uni-bg);
+    color: var(--uni-dark);
+    font-family: var(--font-base);
+}
+
+/* Header */
+.master-header {
+    background: white;
+    padding: 1rem 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 1px solid var(--uni-border);
+}
+
+.uni-logo {
+    font-weight: 900;
+    font-size: 1.5rem;
+    color: var(--uni-blue);
+    letter-spacing: -0.5px;
+}
+
+.uni-nav {
+    display: flex;
+    gap: 3rem;
+}
+
+.uni-nav-link {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--uni-slate);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.uni-nav-link:hover {
+    color: var(--uni-blue);
+}
+
+/* Hero */
+.uni-hero {
+    padding: 6rem 5%;
+    background: white;
+    display: flex;
+    align-items: center;
+    gap: 6rem;
+    border-bottom: 1px solid var(--uni-border);
+}
+
+.uni-hero h1 {
+    font-size: 3.5rem;
+    font-weight: 900;
+    line-height: 1.2;
+    margin-bottom: 2rem;
+}
+
+/* Property Cards */
+.uni-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    padding: 4rem 5%;
+}
+
+.standard-card {
+    background: white;
+    border: 1px solid var(--uni-border);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: box-shadow 0.3s ease;
+}
+
+.standard-card:hover {
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.standard-img {
+    width: 100%;
+    aspect-ratio: 16/10;
+    object-fit: cover;
+}
+
+.standard-info {
+    padding: 1.5rem;
+}
+
+.standard-title {
+    font-size: 1.1rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+}
+
+.standard-price {
+    font-size: 1.25rem;
+    font-weight: 900;
+    color: var(--uni-blue);
+    margin-bottom: 1.5rem;
+}
+
+.standard-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--uni-slate);
+    padding-top: 1rem;
+    border-top: 1px solid var(--uni-border);
+}
+
+/* Footer */
+.unified-footer {
+    padding: 8rem 5%;
+    background: white;
+    border-top: 1px solid var(--uni-border);
+}
+
+.unified-footer h4 {
+    font-size: 0.85rem;
+    font-weight: 900;
+    margin-bottom: 2rem;
+    color: var(--uni-dark);
+}
+
+.unified-footer-link {
+    display: block;
+    color: var(--uni-slate);
+    text-decoration: none;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+}
+
+.unified-footer-link:hover {
+    color: var(--uni-blue);
+}

@@ -1,0 +1,155 @@
+/* 
+    Properties Classic: The Heritage Estate
+    Design Spec: Deep Mahogany, Antique White, Timeless Serif
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Lora:ital,wght@0,400;0,700;1,400&display=swap');
+
+:root {
+    --classic-mahogany: #450a0a;
+    --classic-white: #fafaf9;
+    --classic-sage: #166534;
+    --classic-bg: #fcfcfc;
+    --classic-border: #e7e5e4;
+    --font-serif: 'Playfair Display', serif;
+    --font-body: 'Lora', serif;
+}
+
+.properties-classic-wrapper {
+    background-color: var(--classic-bg);
+    color: var(--classic-mahogany);
+    font-family: var(--font-body);
+}
+
+/* Header */
+.heritage-header {
+    background: white;
+    padding: 2.5rem 6%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 1px solid var(--classic-border);
+}
+
+.heritage-logo {
+    font-family: var(--font-serif);
+    font-weight: 900;
+    font-size: 1.8rem;
+    color: var(--classic-mahogany);
+    letter-spacing: -1px;
+}
+
+.heritage-nav {
+    display: flex;
+    gap: 4rem;
+}
+
+.heritage-nav-link {
+    font-family: var(--font-serif);
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #444;
+    text-decoration: none;
+    font-style: italic;
+    transition: color 0.3s ease;
+}
+
+.heritage-nav-link:hover {
+    color: var(--classic-sage);
+}
+
+/* Hero */
+.heritage-hero {
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: linear-gradient(rgba(255,255,255,0.2), rgba(255,255,255,0.2)),
+                url('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2070');
+    background-size: cover;
+    background-position: center;
+    padding: 0 10%;
+}
+
+.heritage-hero h1 {
+    font-family: var(--font-serif);
+    font-size: 6rem;
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 2rem;
+    color: var(--classic-mahogany);
+}
+
+/* Estate Cards */
+.estate-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4rem;
+    padding: 8rem 6%;
+}
+
+.estate-card {
+    background: white;
+    padding: 2rem;
+    border: 1px solid var(--classic-border);
+    transition: all 0.4s ease;
+}
+
+.estate-card:hover {
+    box-shadow: 0 30px 60px rgba(0,0,0,0.05);
+}
+
+.estate-img {
+    width: 100%;
+    aspect-ratio: 4/5;
+    object-fit: cover;
+    margin-bottom: 2rem;
+}
+
+.estate-title {
+    font-family: var(--font-serif);
+    font-size: 1.8rem;
+    font-weight: 900;
+    margin-bottom: 1rem;
+}
+
+.estate-price {
+    font-family: var(--font-serif);
+    font-size: 1.25rem;
+    font-style: italic;
+    color: var(--classic-sage);
+    margin-bottom: 2rem;
+    display: block;
+}
+
+/* Footer */
+.heritage-footer {
+    padding: 10rem 6%;
+    background: var(--classic-mahogany);
+    color: white;
+}
+
+.heritage-footer h4 {
+    font-family: var(--font-serif);
+    font-size: 1rem;
+    font-style: italic;
+    margin-bottom: 2.5rem;
+    color: var(--classic-white);
+}
+
+.heritage-footer-link {
+    display: block;
+    color: #a8a29e;
+    text-decoration: none;
+    margin-bottom: 1.25rem;
+    font-size: 0.95rem;
+}
+
+.heritage-footer-link:hover {
+    color: white;
+}

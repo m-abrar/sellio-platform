@@ -1,0 +1,159 @@
+/* 
+    Unified Standard: The Scale Protocol
+    Design Spec: Corporate Blue, Neutral Grays, Highly Scalable
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+:root {
+    --std-blue: #1e40af;
+    --std-dark: #0f172a;
+    --std-slate: #64748b;
+    --std-bg: #f8fafc;
+    --std-border: #e2e8f0;
+    --font-ui: 'Inter', sans-serif;
+}
+
+.unified-standard-wrapper {
+    background-color: var(--std-bg);
+    color: var(--std-dark);
+    font-family: var(--font-ui);
+}
+
+/* Header */
+.standard-nav {
+    background: white;
+    padding: 1rem 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 1px solid var(--std-border);
+}
+
+.std-logo {
+    font-weight: 900;
+    font-size: 1.5rem;
+    color: var(--std-blue);
+    letter-spacing: -0.5px;
+}
+
+.std-nav-links {
+    display: flex;
+    gap: 3rem;
+}
+
+.std-nav-link {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--std-slate);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.std-nav-link:hover {
+    color: var(--std-blue);
+}
+
+/* Hero */
+.std-hero {
+    padding: 10rem 5%;
+    background: white;
+    text-align: center;
+    border-bottom: 1px solid var(--std-border);
+}
+
+.std-hero h1 {
+    font-size: 4rem;
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 2rem;
+    letter-spacing: -1.5px;
+}
+
+/* Listing Cards */
+.std-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    padding: 4rem 5%;
+}
+
+.generic-listing-card {
+    background: white;
+    border: 1px solid var(--std-border);
+    border-radius: 4px;
+    overflow: hidden;
+    transition: all 0.2s ease;
+}
+
+.generic-listing-card:hover {
+    border-color: var(--std-blue);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.03);
+}
+
+.gen-img {
+    width: 100%;
+    aspect-ratio: 16/10;
+    object-fit: cover;
+}
+
+.gen-info {
+    padding: 1.25rem;
+}
+
+.gen-type {
+    font-size: 0.65rem;
+    font-weight: 800;
+    color: var(--std-blue);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.gen-title {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    height: 2.5rem;
+    overflow: hidden;
+}
+
+.gen-price {
+    font-size: 1.1rem;
+    font-weight: 900;
+}
+
+/* Footer */
+.corporate-footer {
+    padding: 6rem 5%;
+    background: white;
+    border-top: 1px solid var(--std-border);
+}
+
+.corp-footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 4rem;
+}
+
+.corporate-footer h4 {
+    font-size: 0.75rem;
+    font-weight: 900;
+    margin-bottom: 2rem;
+    color: var(--std-dark);
+}
+
+.corp-footer-link {
+    display: block;
+    color: var(--std-slate);
+    text-decoration: none;
+    margin-bottom: 0.75rem;
+    font-size: 0.85rem;
+}
+
+.corp-footer-link:hover {
+    color: var(--std-blue);
+}

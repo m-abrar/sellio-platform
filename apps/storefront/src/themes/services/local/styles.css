@@ -1,0 +1,148 @@
+/* 
+    Services Local: The Neighborly Pro
+    Design Spec: Friendly Green, Warm Yellow, Rounded UI
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Inter:wght@400;600&display=swap');
+
+:root {
+    --local-green: #10b981;
+    --local-yellow: #fbbf24;
+    --local-bg: #f8fafc;
+    --local-text: #1e293b;
+    --local-border: #e2e8f0;
+    --font-friendly: 'Nunito', sans-serif;
+    --font-base: 'Inter', sans-serif;
+}
+
+.services-local-wrapper {
+    background-color: var(--local-bg);
+    color: var(--local-text);
+    font-family: var(--font-base);
+}
+
+/* Header */
+.neighbor-header {
+    background: white;
+    padding: 1rem 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+}
+
+.local-logo {
+    font-family: var(--font-friendly);
+    font-weight: 900;
+    font-size: 1.5rem;
+    color: var(--local-green);
+}
+
+.local-nav {
+    display: flex;
+    gap: 3rem;
+}
+
+.local-nav-link {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #64748b;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.local-nav-link:hover {
+    color: var(--local-green);
+}
+
+/* Hero */
+.local-hero {
+    padding: 6rem 5%;
+    background: white;
+    display: flex;
+    align-items: center;
+    gap: 6rem;
+    border-bottom: 1px solid var(--local-border);
+}
+
+.local-hero h1 {
+    font-family: var(--font-friendly);
+    font-size: 4rem;
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 2rem;
+}
+
+/* Service Cards */
+.pro-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    padding: 4rem 5%;
+}
+
+.pro-card {
+    background: white;
+    border: 1px solid var(--local-border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.2s ease;
+}
+
+.pro-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(16, 185, 129, 0.05);
+}
+
+.pro-img {
+    width: 100%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+}
+
+.pro-info {
+    padding: 1.5rem;
+}
+
+.pro-title {
+    font-family: var(--font-friendly);
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.pro-rating {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--local-yellow);
+    margin-bottom: 1.5rem;
+}
+
+/* Footer */
+.local-footer {
+    padding: 8rem 5%;
+    background: #0f172a;
+    color: white;
+}
+
+.local-footer h4 {
+    font-family: var(--font-friendly);
+    font-size: 1rem;
+    margin-bottom: 2rem;
+    color: var(--local-green);
+}
+
+.local-footer-link {
+    display: block;
+    color: #4b5563;
+    text-decoration: none;
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+}
+
+.local-footer-link:hover {
+    color: white;
+}

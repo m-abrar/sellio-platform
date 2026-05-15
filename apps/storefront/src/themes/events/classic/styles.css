@@ -1,0 +1,159 @@
+/* 
+    Events Classic: The Cultural Legacy
+    Design Spec: Deep Burgundy, Antique Gold, Serif Elegance
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@300;400;600&display=swap');
+
+:root {
+    --classic-burgundy: #7f1d1d;
+    --classic-gold: #d4af37;
+    --classic-bg: #fdfdfb;
+    --classic-text: #1a1a1a;
+    --classic-border: #e7e5e4;
+    --font-serif: 'Playfair Display', serif;
+    --font-sans: 'Inter', sans-serif;
+}
+
+.events-classic-wrapper {
+    background-color: var(--classic-bg);
+    color: var(--classic-text);
+    font-family: var(--font-sans);
+}
+
+/* Header */
+.elegant-header {
+    background: white;
+    padding: 2rem 6%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 1px solid var(--classic-border);
+}
+
+.classic-logo {
+    font-family: var(--font-serif);
+    font-weight: 900;
+    font-size: 1.8rem;
+    color: var(--classic-burgundy);
+    letter-spacing: -1px;
+}
+
+.classic-nav {
+    display: flex;
+    gap: 4rem;
+}
+
+.classic-nav-link {
+    font-family: var(--font-serif);
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #444;
+    text-decoration: none;
+    font-style: italic;
+    transition: color 0.3s ease;
+}
+
+.classic-nav-link:hover {
+    color: var(--classic-gold);
+}
+
+/* Hero */
+.classic-hero {
+    height: 85vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
+                url('https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=2070');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    padding: 0 10%;
+}
+
+.classic-hero h1 {
+    font-family: var(--font-serif);
+    font-size: 7rem;
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 2rem;
+}
+
+.classic-hero-sep {
+    width: 80px;
+    height: 2px;
+    background: var(--classic-gold);
+    margin-bottom: 3rem;
+}
+
+/* Event Cards */
+.cultural-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4rem;
+    padding: 10rem 6%;
+}
+
+.cultural-card {
+    background: white;
+    border: 1px solid var(--classic-border);
+    padding: 3rem;
+    text-align: center;
+    transition: all 0.4s ease;
+}
+
+.cultural-card:hover {
+    box-shadow: 0 30px 60px rgba(0,0,0,0.05);
+}
+
+.cultural-card-date {
+    font-family: var(--font-serif);
+    font-weight: 700;
+    font-size: 0.8rem;
+    color: var(--classic-gold);
+    letter-spacing: 3px;
+    margin-bottom: 2rem;
+    display: block;
+}
+
+.cultural-card-title {
+    font-family: var(--font-serif);
+    font-size: 2.2rem;
+    font-weight: 900;
+    margin-bottom: 1.5rem;
+    line-height: 1.1;
+}
+
+/* Footer */
+.legacy-footer {
+    padding: 10rem 6%;
+    background: #0a0a0a;
+    color: white;
+}
+
+.legacy-footer h4 {
+    font-family: var(--font-serif);
+    font-size: 1.1rem;
+    font-style: italic;
+    margin-bottom: 2.5rem;
+    color: var(--classic-gold);
+}
+
+.legacy-footer-link {
+    display: block;
+    color: #444;
+    text-decoration: none;
+    margin-bottom: 1.25rem;
+    font-size: 0.95rem;
+    transition: color 0.3s ease;
+}
+
+.legacy-footer-link:hover {
+    color: white;
+}

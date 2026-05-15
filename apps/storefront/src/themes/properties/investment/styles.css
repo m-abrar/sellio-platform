@@ -1,0 +1,140 @@
+/* 
+    Properties Investment: The Yield Protocol
+    Design Spec: Financial Gold, Analytical Grids, Data-Driven
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+
+:root {
+    --inv-gold: #b45309;
+    --inv-charcoal: #111827;
+    --inv-green: #22c55e;
+    --inv-bg: #ffffff;
+    --inv-border: #f1f5f9;
+    --font-base: 'Public Sans', sans-serif;
+    --font-data: 'JetBrains Mono', monospace;
+}
+
+.properties-investment-wrapper {
+    background-color: var(--inv-bg);
+    color: var(--inv-charcoal);
+    font-family: var(--font-base);
+}
+
+/* Header */
+.capital-header {
+    background: white;
+    padding: 1rem 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 2px solid var(--inv-gold);
+}
+
+.inv-logo {
+    font-weight: 900;
+    font-size: 1.5rem;
+    color: var(--inv-charcoal);
+    letter-spacing: -1px;
+}
+
+.inv-nav {
+    display: flex;
+    gap: 3rem;
+}
+
+.inv-nav-link {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #64748b;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: color 0.3s ease;
+}
+
+.inv-nav-link:hover {
+    color: var(--inv-gold);
+}
+
+/* Hero */
+.inv-hero {
+    padding: 8rem 5%;
+    background: #f8fafc;
+    display: flex;
+    align-items: center;
+    gap: 6rem;
+}
+
+.inv-hero h1 {
+    font-size: 4rem;
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 2rem;
+}
+
+/* Asset Cards */
+.asset-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3rem;
+    padding: 6rem 5%;
+}
+
+.asset-card {
+    background: white;
+    border: 1px solid var(--inv-border);
+    border-radius: 4px;
+    padding: 2.5rem;
+    transition: all 0.3s ease;
+}
+
+.asset-card:hover {
+    border-color: var(--inv-gold);
+    box-shadow: 0 20px 40px rgba(180, 83, 9, 0.05);
+}
+
+.asset-yield {
+    font-family: var(--font-data);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--inv-green);
+    margin-bottom: 1.5rem;
+    display: block;
+}
+
+.asset-title {
+    font-size: 1.5rem;
+    font-weight: 900;
+    margin-bottom: 1rem;
+}
+
+/* Footer */
+.yield-footer {
+    padding: 8rem 5%;
+    background: var(--inv-charcoal);
+    color: white;
+}
+
+.yield-footer h4 {
+    font-family: var(--font-data);
+    font-size: 0.75rem;
+    margin-bottom: 2.5rem;
+    color: var(--inv-gold);
+    letter-spacing: 2px;
+}
+
+.yield-footer-link {
+    display: block;
+    color: #4b5563;
+    text-decoration: none;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+}
+
+.yield-footer-link:hover {
+    color: white;
+}

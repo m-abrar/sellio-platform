@@ -1,0 +1,163 @@
+/* 
+    Events Creative: The Experimental Node
+    Design Spec: Electric Lime, Cyber Purple, High-Contrast Dark
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+
+:root {
+    --event-lime: #bef264;
+    --event-purple: #a855f7;
+    --event-matte: #09090b;
+    --event-bg: #000000;
+    --event-border: #18181b;
+    --font-space: 'Space Grotesk', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+}
+
+.events-creative-wrapper {
+    background-color: var(--event-bg);
+    color: white;
+    font-family: var(--font-space);
+}
+
+/* Header */
+.cyber-header {
+    background: rgba(9, 9, 11, 0.8);
+    backdrop-filter: blur(20px);
+    padding: 1.5rem 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 1px solid var(--event-border);
+}
+
+.cyber-logo {
+    font-weight: 900;
+    font-size: 1.5rem;
+    color: var(--event-lime);
+    letter-spacing: -2px;
+}
+
+.cyber-nav {
+    display: flex;
+    gap: 3rem;
+}
+
+.cyber-nav-link {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #52525b;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    transition: color 0.3s ease;
+}
+
+.cyber-nav-link:hover {
+    color: var(--event-lime);
+}
+
+/* Hero */
+.cyber-hero {
+    padding: 10rem 5%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.cyber-hero h1 {
+    font-size: 8rem;
+    font-weight: 900;
+    line-height: 0.85;
+    margin-bottom: 3rem;
+    letter-spacing: -6px;
+    background: linear-gradient(to bottom, #fff, #52525b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.cyber-hero-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 800px;
+    height: 800px;
+    background: radial-gradient(circle, var(--event-purple) 0%, transparent 70%);
+    opacity: 0.15;
+    filter: blur(100px);
+    z-index: -1;
+}
+
+/* Event Cards */
+.exp-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    padding: 6rem 5%;
+}
+
+.exp-card {
+    background: var(--event-matte);
+    border: 1px solid var(--event-border);
+    padding: 2.5rem;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.exp-card:hover {
+    border-color: var(--event-lime);
+    transform: translateY(-5px);
+}
+
+.exp-card-tag {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--event-lime);
+    border: 1px solid var(--event-lime);
+    padding: 0.25rem 0.75rem;
+    display: inline-block;
+    margin-bottom: 2rem;
+}
+
+.exp-card-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    line-height: 1.1;
+}
+
+/* Footer */
+.deep-footer {
+    padding: 10rem 5%;
+    background: var(--event-matte);
+    border-top: 1px solid var(--event-border);
+}
+
+.deep-footer h4 {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    margin-bottom: 2.5rem;
+    color: var(--event-purple);
+    letter-spacing: 2px;
+}
+
+.deep-footer-link {
+    display: block;
+    color: #3f3f46;
+    text-decoration: none;
+    margin-bottom: 1.25rem;
+    font-size: 0.9rem;
+}
+
+.deep-footer-link:hover {
+    color: white;
+}
