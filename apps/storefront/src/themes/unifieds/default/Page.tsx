@@ -1,69 +1,93 @@
 
 import React from 'react';
+import { ServiceCard } from './components';
 
 export default function Page() {
+  const services = [
+    { 
+        title: "Dynamic Commerce", 
+        description: "Scale your retail operations with our high-performance ecommerce engine optimized for speed and conversion.",
+        icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+    },
+    { 
+        title: "Real Estate Nexus", 
+        description: "Transform property management with interactive listings, map integrations, and seamless lead generation.",
+        icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+    },
+    { 
+        title: "Auto Intelligence", 
+        description: "The premier solution for automotive marketplaces, featuring technical specs, VIN decoding, and sleek galleries.",
+        icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg>
+    }
+  ];
+
   return (
-    <div style={{ 
-      minHeight: '80vh', 
-      display: 'flex', 
-      flexDirection: 'column', 
-      alignItems: 'center', 
-      justifyContent: 'center', 
-      backgroundColor: '#f9fafb',
-      padding: '2rem',
-      textAlign: 'center',
-      fontFamily: "'Inter', sans-serif"
-    }}>
-      <div style={{ 
-        maxWidth: '42rem', 
-        width: '100%', 
-        backgroundColor: 'white', 
-        borderRadius: '1.5rem', 
-        boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)', 
-        padding: '3rem', 
-        border: '1px solid #f3f4f6' 
-      }}>
-        <div style={{ 
-          width: '5rem', 
-          height: '5rem', 
-          backgroundColor: '#1e4d4e15', 
-          borderRadius: '1rem', 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'center', 
-          margin: '0 auto 2rem auto' 
-        }}>
-          <svg style={{ width: '2.5rem', height: '2.5rem', color: '#1e4d4e' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-          </svg>
+    <div>
+      {/* Hero */}
+      <section className="uni-hero">
+        <div className="uni-hero-content">
+            <h1 className="uni-hero-title">One Platform. <br/>Infinite Possibilities.</h1>
+            <p className="uni-hero-subtitle">
+                StyleTime is the world's most flexible multi-vertical marketplace engine, designed to power everything from global retail to local property listings.
+            </p>
+            <div style={{ display: 'flex', gap: '1.5rem', justifyContent: 'center' }}>
+                <button style={{ 
+                    padding: '1.25rem 3rem', 
+                    borderRadius: '16px', 
+                    border: 'none', 
+                    background: '#1e4d4e', 
+                    color: 'white', 
+                    fontWeight: 800,
+                    fontSize: '1rem',
+                    boxShadow: '0 10px 20px rgba(30, 77, 78, 0.2)'
+                }}>EXPLORE_ECOSYSTEM</button>
+                <button style={{ 
+                    padding: '1.25rem 3rem', 
+                    borderRadius: '16px', 
+                    border: '1px solid #e2e8f0', 
+                    background: 'white', 
+                    color: '#1e293b', 
+                    fontWeight: 800,
+                    fontSize: '1rem'
+                }}>VIEW_DOCUMENTATION</button>
+            </div>
         </div>
-        <h1 style={{ 
-          fontSize: '2.25rem', 
-          fontWeight: 800, 
-          color: '#111827', 
-          marginBottom: '1rem', 
-          letterSpacing: '-0.025em',
-          lineHeight: 1.2
-        }}>
-          Unifieds Default <span style={{ color: '#1e4d4e' }}>Coming Soon</span>
-        </h1>
-        <p style={{ 
-          fontSize: '1.125rem', 
-          color: '#4b5563', 
-          marginBottom: '2rem', 
-          maxWidth: '28rem', 
-          margin: '0 auto 2rem auto',
-          lineHeight: 1.6
-        }}>
-          We are currently hand-crafting this elite vertical experience. 
-          Stay tuned for a production-grade layout that will blow your users away.
-        </p>
-        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
-          <div style={{ height: '0.25rem', width: '3rem', backgroundColor: '#1e4d4e', borderRadius: '9999px' }}></div>
-          <div style={{ height: '0.25rem', width: '3rem', backgroundColor: '#1e4d4e60', borderRadius: '9999px' }}></div>
-          <div style={{ height: '0.25rem', width: '3rem', backgroundColor: '#1e4d4e30', borderRadius: '9999px' }}></div>
+      </section>
+
+      {/* Services Grid */}
+      <section className="uni-section">
+        <div style={{ textAlign: 'center', marginBottom: '5rem' }}>
+            <p style={{ color: '#1e4d4e', fontWeight: 800, fontSize: '0.85rem', letterSpacing: '3px', marginBottom: '1rem' }}>VERTICAL_SOLUTIONS</p>
+            <h2 style={{ fontSize: '2.5rem', fontWeight: 900 }}>Powering Every Industry.</h2>
         </div>
-      </div>
+        
+        <div className="uni-grid">
+            {services.map((s, i) => (
+                <ServiceCard key={i} {...s} />
+            ))}
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section style={{ backgroundColor: '#0f172a', padding: '10rem 2rem', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
+        <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0.1, background: 'url(https://www.transparenttextures.com/patterns/cubes.png)' }}></div>
+        <div style={{ position: 'relative', zIndex: 1, maxWidth: '800px', margin: '0 auto' }}>
+            <h2 style={{ color: 'white', fontSize: '3.5rem', fontWeight: 900, marginBottom: '2rem', letterSpacing: '-2px' }}>Ready to transform your marketplace?</h2>
+            <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '1.25rem', marginBottom: '4rem', lineHeight: 1.6 }}>
+                Join thousands of businesses already scaling with the StyleTime architecture. Deployment is seamless, performance is unmatched.
+            </p>
+            <button style={{ 
+                padding: '1.5rem 4rem', 
+                borderRadius: '20px', 
+                border: 'none', 
+                background: 'white', 
+                color: '#0f172a', 
+                fontWeight: 900,
+                fontSize: '1.1rem',
+                boxShadow: '0 20px 40px rgba(0,0,0,0.3)'
+            }}>START_YOUR_JOURNEY</button>
+        </div>
+      </section>
     </div>
   );
 }

@@ -1,0 +1,159 @@
+/* 
+    Services Marketplace Theme: Professional & Accessible
+    Designed for service-based businesses, quotes, and appointments.
+*/
+
+:root {
+    --srv-primary: #1e4d4e;
+    --srv-primary-soft: rgba(30, 77, 78, 0.08);
+    --srv-accent: #3b82f6;
+    --srv-text-dark: #0f172a;
+    --srv-text-muted: #64748b;
+    --srv-bg-light: #f8fafc;
+}
+
+.services-marketplace-wrapper {
+    font-family: 'Inter', sans-serif;
+    color: var(--srv-text-dark);
+}
+
+/* Header */
+.srv-header {
+    background: white;
+    padding: 1rem 4rem;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Hero */
+.srv-hero {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    padding: 8rem 4rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+}
+
+.srv-hero-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 2rem;
+}
+
+.srv-hero-subtitle {
+    font-size: 1.125rem;
+    color: var(--srv-text-muted);
+    margin-bottom: 3rem;
+    line-height: 1.8;
+}
+
+/* Category Grid */
+.srv-section {
+    padding: 6rem 4rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.srv-cat-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+}
+
+.srv-cat-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    text-align: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.srv-cat-card:hover {
+    border-color: var(--srv-primary);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+}
+
+.srv-cat-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+/* Expert Cards */
+.srv-expert-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem;
+}
+
+.srv-expert-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+    transition: all 0.3s ease;
+}
+
+.srv-expert-card:hover {
+    box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+}
+
+.srv-expert-image {
+    height: 240px;
+    background-color: #f1f5f9;
+    position: relative;
+}
+
+.srv-expert-info {
+    padding: 2rem;
+}
+
+.srv-rating {
+    color: #f59e0b;
+    font-weight: 700;
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.srv-expert-name {
+    font-size: 1.25rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+}
+
+.srv-expert-category {
+    font-size: 0.875rem;
+    color: var(--srv-primary);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 1.5rem;
+    display: block;
+}
+
+.srv-btn-quote {
+    display: block;
+    width: 100%;
+    padding: 1rem;
+    text-align: center;
+    background: var(--srv-bg-light);
+    color: var(--srv-text-dark);
+    font-weight: 700;
+    border-radius: 12px;
+    transition: all 0.2s ease;
+}
+
+.srv-expert-card:hover .srv-btn-quote {
+    background: var(--srv-primary);
+    color: white;
+}

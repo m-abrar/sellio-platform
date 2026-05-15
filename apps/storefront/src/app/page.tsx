@@ -1,3 +1,4 @@
+// Rebuild trigger
 import { getActiveTheme } from "@/lib/theme";
 import React from 'react';
 

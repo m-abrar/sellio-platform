@@ -1,0 +1,162 @@
+/* 
+    Unified Default Theme: Versatile Aesthetic Architecture
+    A foundational design system that adapts to various business verticals.
+*/
+
+:root {
+    --uni-primary: #1e4d4e;
+    --uni-primary-soft: rgba(30, 77, 78, 0.05);
+    --uni-secondary: #f3f4f6;
+    --uni-text-dark: #111827;
+    --uni-text-muted: #4b5563;
+    --uni-white: #ffffff;
+    --uni-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --uni-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.unified-default-wrapper {
+    font-family: 'Outfit', 'Inter', sans-serif;
+    color: var(--uni-text-dark);
+    background-color: var(--uni-white);
+}
+
+/* Header */
+.uni-header {
+    background: white;
+    border-bottom: 1px solid #f1f5f9;
+    padding: 1.25rem 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.uni-header-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.uni-logo {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--uni-primary);
+    letter-spacing: -1.5px;
+}
+
+.uni-nav {
+    display: flex;
+    gap: 2.5rem;
+}
+
+.uni-nav-link {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--uni-text-muted);
+    transition: all 0.2s ease;
+}
+
+.uni-nav-link:hover {
+    color: var(--uni-primary);
+    transform: translateY(-1px);
+}
+
+/* Hero */
+.uni-hero {
+    padding: 8rem 2rem;
+    background: radial-gradient(circle at top right, #1e4d4e08, transparent 40%),
+                radial-gradient(circle at bottom left, #1e4d4e05, transparent 40%);
+    text-align: center;
+}
+
+.uni-hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.uni-hero-title {
+    font-size: 4rem;
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: -2.5px;
+    margin-bottom: 2rem;
+}
+
+.uni-hero-subtitle {
+    font-size: 1.25rem;
+    color: var(--uni-text-muted);
+    margin-bottom: 3rem;
+    line-height: 1.6;
+}
+
+/* Featured Section */
+.uni-section {
+    padding: 6rem 2rem;
+    max-width: 1280px;
+    margin: 0 auto;
+}
+
+.uni-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3rem;
+}
+
+.uni-card {
+    background: white;
+    border-radius: 24px;
+    padding: 2.5rem;
+    border: 1px solid #f1f5f9;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.uni-card:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--uni-shadow-lg);
+    border-color: var(--uni-primary-soft);
+}
+
+.uni-card-icon {
+    width: 60px;
+    height: 60px;
+    background: var(--uni-primary-soft);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--uni-primary);
+    margin-bottom: 2rem;
+}
+
+.uni-card-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+}
+
+.uni-card-text {
+    color: var(--uni-text-muted);
+    line-height: 1.6;
+}
+
+/* Footer */
+.uni-footer {
+    background: #0f172a;
+    color: white;
+    padding: 5rem 2rem;
+}
+
+.uni-footer-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+@media (max-width: 768px) {
+    .uni-hero-title { font-size: 2.5rem; }
+    .uni-grid { grid-template-columns: 1fr; }
+    .uni-nav { display: none; }
+}
