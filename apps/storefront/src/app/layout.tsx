@@ -1,12 +1,6 @@
 import type { Metadata } from "next";
 import { getActiveTheme } from "@/lib/theme";
-import FashionLayout from "@/themes/ecommerce/fashion/Layout";
-import ElectronicsLayout from "@/themes/ecommerce/electronics/Layout";
-import GroceryLayout from "@/themes/ecommerce/grocery/Layout";
 import UnifiedDefaultLayout from "@/themes/unified/default/Layout";
-import UnifiedModernLayout from "@/themes/unified/modern/Layout";
-import UnifiedMinimalLayout from "@/themes/unified/minimal/Layout";
-
 import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 import "./globals.css";
 
@@ -25,16 +19,14 @@ export default async function RootLayout({
 }) {
   const { theme, layout } = await getActiveTheme();
   
-  // Select Layout Component
+  // Dynamically resolve the industry-specific layout orchestration
   let IndustryLayout;
-  switch (layout) {
-    case 'ecommerce/electronics': IndustryLayout = ElectronicsLayout; break;
-    case 'ecommerce/grocery': IndustryLayout = GroceryLayout; break;
-    case 'ecommerce/fashion': IndustryLayout = FashionLayout; break;
-    case 'unified/modern': IndustryLayout = UnifiedModernLayout; break;
-    case 'unified/minimal': IndustryLayout = UnifiedMinimalLayout; break;
-    case 'unified/default': 
-    default: IndustryLayout = UnifiedDefaultLayout; break;
+  try {
+    const themeModule = await import(`@/themes/${layout}`);
+    IndustryLayout = themeModule.Layout || UnifiedDefaultLayout;
+  } catch (error) {
+    console.warn(`Layout for "${layout}" not found, using default.`);
+    IndustryLayout = UnifiedDefaultLayout;
   }
 
   const dynamicStyles = theme.variables ? Object.entries(theme.variables)
