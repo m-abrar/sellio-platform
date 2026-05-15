@@ -1,0 +1,174 @@
+/* 
+    Autos Used: The Certified Select
+    Design Spec: Classic Navy, Silver Accents, Transparency-First Layout
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap');
+
+:root {
+    --auto-primary: #1e3a8a;
+    --auto-secondary: #64748b;
+    --auto-accent: #059669;
+    --auto-bg: #ffffff;
+    --auto-border: #e2e8f0;
+    --font-base: 'Inter', sans-serif;
+}
+
+.used-autos-wrapper {
+    background-color: var(--auto-bg);
+    color: var(--auto-primary);
+    font-family: var(--font-base);
+}
+
+/* Header */
+.used-header {
+    background: white;
+    border-bottom: 1px solid var(--auto-border);
+    padding: 1.25rem 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.used-logo {
+    font-weight: 900;
+    font-size: 1.3rem;
+    color: var(--auto-primary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.used-nav {
+    display: flex;
+    gap: 3rem;
+}
+
+.used-nav-link {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--auto-secondary);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.used-nav-link:hover {
+    color: var(--auto-primary);
+}
+
+/* Hero */
+.used-hero {
+    padding: 6rem 5%;
+    background: #f8fafc;
+    display: flex;
+    align-items: center;
+    gap: 6rem;
+    border-bottom: 1px solid var(--auto-border);
+}
+
+.used-hero-content {
+    flex: 1;
+}
+
+.used-hero-content h1 {
+    font-size: 4rem;
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 2rem;
+    letter-spacing: -1px;
+}
+
+/* Vehicle Cards */
+.vehicle-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    padding: 6rem 5%;
+}
+
+.vehicle-card {
+    border: 1px solid var(--auto-border);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.vehicle-card:hover {
+    border-color: var(--auto-primary);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+}
+
+.vehicle-img {
+    width: 100%;
+    aspect-ratio: 16/10;
+    object-fit: cover;
+    background: #f1f5f9;
+}
+
+.vehicle-info {
+    padding: 1.5rem;
+}
+
+.vehicle-year-make {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--auto-secondary);
+    margin-bottom: 0.5rem;
+}
+
+.vehicle-model {
+    font-size: 1.1rem;
+    font-weight: 900;
+    margin-bottom: 1rem;
+}
+
+.vehicle-price {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--auto-accent);
+}
+
+.vehicle-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: #94a3b8;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--auto-border);
+}
+
+/* Footer */
+.used-footer {
+    padding: 8rem 5%;
+    background: white;
+    border-top: 1px solid var(--auto-border);
+}
+
+.used-footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 4rem;
+}
+
+.used-footer h4 {
+    font-size: 0.8rem;
+    font-weight: 900;
+    margin-bottom: 2rem;
+    color: var(--auto-primary);
+}
+
+.used-footer-link {
+    display: block;
+    color: var(--auto-secondary);
+    text-decoration: none;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+}
+
+.used-footer-link:hover {
+    color: var(--auto-primary);
+}

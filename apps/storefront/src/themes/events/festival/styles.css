@@ -1,0 +1,180 @@
+/* 
+    Events Festival: The Neon Pulse
+    Design Spec: Cyber Pink, Electric Blue, Immersive Gradients
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Space+Grotesk:wght@300;400;700&display=swap');
+
+:root {
+    --fest-pink: #ff0080;
+    --fest-purple: #7928ca;
+    --fest-blue: #0070f3;
+    --fest-bg: #000000;
+    --fest-text: #ffffff;
+    --font-fest: 'Montserrat', sans-serif;
+    --font-base: 'Space Grotesk', sans-serif;
+}
+
+.festival-wrapper {
+    background-color: var(--fest-bg);
+    color: var(--fest-text);
+    font-family: var(--font-base);
+    min-height: 100vh;
+}
+
+/* Header */
+.vibe-header {
+    background: rgba(0,0,0,0.8);
+    backdrop-filter: blur(20px);
+    padding: 1.5rem 4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.fest-logo {
+    font-family: var(--font-fest);
+    font-weight: 900;
+    font-size: 1.5rem;
+    background: linear-gradient(to right, var(--fest-pink), var(--fest-purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -1px;
+}
+
+.fest-nav {
+    display: flex;
+    gap: 3rem;
+}
+
+.fest-nav-link {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.6);
+    text-decoration: none;
+    letter-spacing: 1px;
+    transition: color 0.3s ease;
+}
+
+.fest-nav-link:hover {
+    color: var(--fest-pink);
+}
+
+/* Hero */
+.fest-hero {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: radial-gradient(circle at center, var(--fest-purple) 0%, transparent 70%),
+                url('https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?q=80&w=2070');
+    background-size: cover;
+    background-position: center;
+    padding: 0 10%;
+}
+
+.fest-hero h1 {
+    font-family: var(--font-fest);
+    font-size: 8rem;
+    font-weight: 900;
+    line-height: 0.8;
+    margin-bottom: 2rem;
+    text-transform: uppercase;
+}
+
+.fest-hero-badge {
+    background: var(--fest-pink);
+    color: white;
+    padding: 0.5rem 1.5rem;
+    font-size: 0.8rem;
+    font-weight: 900;
+    letter-spacing: 4px;
+    margin-bottom: 3rem;
+}
+
+/* Festival Cards */
+.fest-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    padding: 6rem 4rem;
+}
+
+.fest-card {
+    background: #0a0a0a;
+    border: 1px solid rgba(255,255,255,0.05);
+    position: relative;
+    overflow: hidden;
+    height: 600px;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.fest-card:hover {
+    transform: translateY(-20px);
+}
+
+.fest-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.6;
+    transition: transform 0.6s ease;
+}
+
+.fest-card:hover .fest-card-img {
+    transform: scale(1.1);
+    opacity: 0.8;
+}
+
+.fest-card-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 3rem;
+    background: linear-gradient(to top, #000, transparent);
+}
+
+.fest-card-title {
+    font-family: var(--font-fest);
+    font-size: 2.5rem;
+    font-weight: 900;
+    margin-bottom: 1rem;
+    line-height: 1;
+}
+
+/* Footer */
+.neon-footer {
+    padding: 8rem 4rem;
+    background: #000;
+    border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+.neon-footer h4 {
+    font-family: var(--font-fest);
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    margin-bottom: 2rem;
+    color: var(--fest-purple);
+}
+
+.neon-footer-link {
+    display: block;
+    color: #444;
+    text-decoration: none;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
+}
+
+.neon-footer-link:hover {
+    color: var(--fest-pink);
+}

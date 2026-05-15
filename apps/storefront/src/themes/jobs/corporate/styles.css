@@ -1,0 +1,153 @@
+/* 
+    Jobs Corporate: The Career Pinnacle
+    Design Spec: Deep Blue, Structured Grids, Leadership Typography
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap');
+
+:root {
+    --corp-blue: #1e3a8a;
+    --corp-slate: #475569;
+    --corp-bg: #ffffff;
+    --corp-border: #e2e8f0;
+    --font-base: 'Inter', sans-serif;
+}
+
+.corporate-jobs-wrapper {
+    background-color: var(--corp-bg);
+    color: var(--corp-blue);
+    font-family: var(--font-base);
+}
+
+/* Header */
+.career-header {
+    background: white;
+    border-bottom: 1px solid var(--corp-border);
+    padding: 1.5rem 6rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.career-logo {
+    font-weight: 900;
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+    color: var(--corp-blue);
+}
+
+.career-nav {
+    display: flex;
+    gap: 3.5rem;
+}
+
+.career-nav-link {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--corp-slate);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.career-nav-link:hover {
+    color: var(--corp-blue);
+}
+
+/* Hero */
+.career-hero {
+    padding: 10rem 6rem;
+    background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    border-bottom: 1px solid var(--corp-border);
+}
+
+.career-hero h1 {
+    font-size: 4.5rem;
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 2rem;
+    letter-spacing: -2px;
+}
+
+.career-tagline {
+    font-size: 1.25rem;
+    color: var(--corp-slate);
+    max-width: 800px;
+    line-height: 1.6;
+}
+
+/* Job Cards */
+.role-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    padding: 0 6rem;
+}
+
+.role-card {
+    border-bottom: 1px solid var(--corp-border);
+    padding: 3rem 0;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr auto;
+    align-items: center;
+    transition: background 0.2s ease;
+}
+
+.role-card:hover {
+    background: #fdfdfd;
+}
+
+.role-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+}
+
+.role-dept {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--corp-slate);
+}
+
+.role-location {
+    font-size: 0.85rem;
+    color: #94a3b8;
+}
+
+/* Footer */
+.leadership-footer {
+    padding: 8rem 6rem;
+    background: var(--corp-blue);
+    color: white;
+}
+
+.leadership-footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 6rem;
+}
+
+.leadership-footer h4 {
+    font-size: 0.75rem;
+    font-weight: 900;
+    letter-spacing: 2px;
+    margin-bottom: 2.5rem;
+    color: #93c5fd;
+}
+
+.leadership-footer-link {
+    display: block;
+    color: #94a3b8;
+    text-decoration: none;
+    margin-bottom: 1.25rem;
+    font-size: 0.95rem;
+}
+
+.leadership-footer-link:hover {
+    color: white;
+}

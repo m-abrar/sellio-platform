@@ -1,0 +1,152 @@
+/* 
+    Services Corporate: The Institutional Hub
+    Design Spec: Royal Blue, Graphite Accents, Global Scaling
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Inter:wght@300;400;600;700&display=swap');
+
+:root {
+    --corp-primary: #1a365d;
+    --corp-accent: #2b6cb0;
+    --corp-bg: #ffffff;
+    --corp-text: #2d3748;
+    --corp-border: #e2e8f0;
+    --font-heading: 'Montserrat', sans-serif;
+    --font-body: 'Inter', sans-serif;
+}
+
+.corporate-services-wrapper {
+    background-color: var(--corp-bg);
+    color: var(--corp-text);
+    font-family: var(--font-body);
+}
+
+/* Header */
+.global-header {
+    background: white;
+    border-bottom: 1px solid var(--corp-border);
+    padding: 1.5rem 6%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.global-logo {
+    font-family: var(--font-heading);
+    font-weight: 900;
+    font-size: 1.4rem;
+    color: var(--corp-primary);
+    letter-spacing: -1px;
+}
+
+.global-nav {
+    display: flex;
+    gap: 3.5rem;
+}
+
+.global-nav-link {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #4a5568;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.global-nav-link:hover {
+    color: var(--corp-primary);
+}
+
+/* Hero */
+.corp-hero {
+    padding: 10rem 6%;
+    background: linear-gradient(135deg, #f7fafc 0%, #ffffff 100%);
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 6rem;
+    align-items: center;
+    border-bottom: 1px solid var(--corp-border);
+}
+
+.corp-hero-content h1 {
+    font-family: var(--font-heading);
+    font-size: 4.5rem;
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 2rem;
+    color: var(--corp-primary);
+}
+
+/* Service Cards */
+.service-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3rem;
+    padding: 8rem 6%;
+}
+
+.service-card {
+    padding: 3rem;
+    border: 1px solid var(--corp-border);
+    transition: all 0.3s ease;
+}
+
+.service-card:hover {
+    border-color: var(--corp-primary);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+}
+
+.service-icon {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    color: var(--corp-accent);
+}
+
+.service-title {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+}
+
+.service-desc {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: #718096;
+}
+
+/* Footer */
+.inst-footer {
+    padding: 8rem 6%;
+    background: var(--corp-primary);
+    color: white;
+}
+
+.inst-footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 4rem;
+}
+
+.inst-footer h4 {
+    font-family: var(--font-heading);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 2.5rem;
+    color: #90cdf4;
+}
+
+.inst-footer-link {
+    display: block;
+    color: #a0aec0;
+    text-decoration: none;
+    margin-bottom: 1.25rem;
+    font-size: 0.95rem;
+}
+
+.inst-footer-link:hover {
+    color: white;
+}

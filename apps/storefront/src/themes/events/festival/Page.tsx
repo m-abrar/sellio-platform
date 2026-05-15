@@ -1,69 +1,68 @@
 
 import React from 'react';
+import { FestivalCard } from './components';
 
 export default function Page() {
+  const festivals = [
+    { title: "Neon Horizon", location: "Berlin Core", date: "AUG_24_2026", image: "https://images.unsplash.com/photo-1514525253361-bee8718a300c?q=80&w=2000" },
+    { title: "Cyber Sound", location: "Tokyo Node", date: "SEP_12_2026", image: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=2070" },
+    { title: "Vortex Summit", location: "Austin Tech", date: "OCT_05_2026", image: "https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?q=80&w=2074" },
+    { title: "Echo Valley", location: "Swiss Alps", date: "DEC_15_2026", image: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=2070" },
+    { title: "Quantum Art", location: "London East", date: "JAN_20_2027", image: "https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?q=80&w=2070" },
+    { title: "Solar Pulse", location: "Ibiza Node", date: "JUL_10_2027", image: "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?q=80&w=2070" },
+  ];
+
   return (
-    <div style={{ 
-      minHeight: '80vh', 
-      display: 'flex', 
-      flexDirection: 'column', 
-      alignItems: 'center', 
-      justifyContent: 'center', 
-      backgroundColor: '#f9fafb',
-      padding: '2rem',
-      textAlign: 'center',
-      fontFamily: "'Inter', sans-serif"
-    }}>
-      <div style={{ 
-        maxWidth: '42rem', 
-        width: '100%', 
-        backgroundColor: 'white', 
-        borderRadius: '1.5rem', 
-        boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)', 
-        padding: '3rem', 
-        border: '1px solid #f3f4f6' 
-      }}>
-        <div style={{ 
-          width: '5rem', 
-          height: '5rem', 
-          backgroundColor: '#1e4d4e15', 
-          borderRadius: '1rem', 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'center', 
-          margin: '0 auto 2rem auto' 
-        }}>
-          <svg style={{ width: '2.5rem', height: '2.5rem', color: '#1e4d4e' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-          </svg>
-        </div>
-        <h1 style={{ 
-          fontSize: '2.25rem', 
-          fontWeight: 800, 
-          color: '#111827', 
-          marginBottom: '1rem', 
-          letterSpacing: '-0.025em',
-          lineHeight: 1.2
-        }}>
-          Events Festival <span style={{ color: '#1e4d4e' }}>Coming Soon</span>
-        </h1>
-        <p style={{ 
-          fontSize: '1.125rem', 
-          color: '#4b5563', 
-          marginBottom: '2rem', 
-          maxWidth: '28rem', 
-          margin: '0 auto 2rem auto',
-          lineHeight: 1.6
-        }}>
-          We are currently hand-crafting this elite vertical experience. 
-          Stay tuned for a production-grade layout that will blow your users away.
-        </p>
-        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
-          <div style={{ height: '0.25rem', width: '3rem', backgroundColor: '#1e4d4e', borderRadius: '9999px' }}></div>
-          <div style={{ height: '0.25rem', width: '3rem', backgroundColor: '#1e4d4e60', borderRadius: '9999px' }}></div>
-          <div style={{ height: '0.25rem', width: '3rem', backgroundColor: '#1e4d4e30', borderRadius: '9999px' }}></div>
-        </div>
-      </div>
+    <div>
+      {/* Hero Section */}
+      <section className="fest-hero">
+          <div className="fest-hero-badge">THE_GLOBAL_COLLECTIVE</div>
+          <h1>Neon <br/>Pulse.</h1>
+          <p style={{ maxWidth: '600px', fontSize: '1.25rem', opacity: 0.6, lineHeight: 1.8, marginBottom: '4rem' }}>
+              The most immersive festival experiences on the planet. Curated, authenticated, and distributed via the Sellio Neon network.
+          </p>
+          <div style={{ display: 'flex', gap: '2rem' }}>
+              <button style={{ padding: '1.5rem 4rem', background: 'white', color: 'black', border: 'none', fontWeight: 900, fontSize: '0.9rem', letterSpacing: '2px' }}>EXPLORE_LINEUP</button>
+              <button style={{ padding: '1.5rem 4rem', background: 'none', color: 'white', border: '2px solid white', fontWeight: 900, fontSize: '0.9rem', letterSpacing: '2px' }}>JOIN_THE_PULSE</button>
+          </div>
+      </section>
+
+      {/* Stats Bar */}
+      <section style={{ padding: '4rem 10%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #111' }}>
+          <div>
+              <div style={{ fontSize: '3rem', fontWeight: 900, color: 'var(--fest-pink)' }}>500k+</div>
+              <div style={{ fontSize: '0.7rem', fontWeight: 900, opacity: 0.3, letterSpacing: '2px' }}>GLOBAL_ATTENDEES</div>
+          </div>
+          <div>
+              <div style={{ fontSize: '3rem', fontWeight: 900, color: 'var(--fest-purple)' }}>142</div>
+              <div style={{ fontSize: '0.7rem', fontWeight: 900, opacity: 0.3, letterSpacing: '2px' }}>FESTIVAL_NODES</div>
+          </div>
+          <div>
+              <div style={{ fontSize: '3rem', fontWeight: 900, color: 'var(--fest-blue)' }}>99%</div>
+              <div style={{ fontSize: '0.7rem', fontWeight: 900, opacity: 0.3, letterSpacing: '2px' }}>VIBE_RATING</div>
+          </div>
+      </section>
+
+      {/* Festival Grid */}
+      <section className="fest-grid">
+          {festivals.map((f, i) => (
+              <FestivalCard key={i} {...f} />
+          ))}
+      </section>
+
+      {/* Call to Action */}
+      <section style={{ padding: '15rem 10%', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
+          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'radial-gradient(circle at center, var(--fest-pink) 0%, transparent 80%)', opacity: 0.1 }}></div>
+          <div style={{ position: 'relative', zIndex: 10 }}>
+              <h2 style={{ fontFamily: 'var(--font-fest)', fontSize: '4rem', fontWeight: 900, marginBottom: '3rem' }}>Ready to <br/>Lose Control?</h2>
+              <p style={{ fontSize: '1.25rem', opacity: 0.5, maxWidth: '700px', margin: '0 auto 5rem' }}>
+                  The 2026/27 season is officially live. Secure your access to the world's most exclusive high-vibe environments.
+              </p>
+              <button style={{ padding: '2rem 6rem', background: 'var(--fest-pink)', color: 'white', border: 'none', fontWeight: 900, fontSize: '1rem', letterSpacing: '4px' }}>
+                  SECURE_TICKETS_NOW
+              </button>
+          </div>
+      </section>
     </div>
   );
 }

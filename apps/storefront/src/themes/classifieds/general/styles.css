@@ -1,0 +1,170 @@
+/* 
+    Classifieds General: The Utility Hub
+    Design Spec: Primary Yellow, Charcoal, High-Readability Grids
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;600;700;900&display=swap');
+
+:root {
+    --gen-yellow: #fbbf24;
+    --gen-charcoal: #1f2937;
+    --gen-bg: #f9fafb;
+    --gen-border: #e5e7eb;
+    --font-base: 'Public Sans', sans-serif;
+}
+
+.classifieds-general-wrapper {
+    background-color: var(--gen-bg);
+    color: var(--gen-charcoal);
+    font-family: var(--font-base);
+}
+
+/* Header */
+.utility-header {
+    background: white;
+    border-bottom: 1px solid var(--gen-border);
+    padding: 1rem 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.gen-logo {
+    font-weight: 900;
+    font-size: 1.5rem;
+    color: var(--gen-charcoal);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.gen-nav {
+    display: flex;
+    gap: 2.5rem;
+}
+
+.gen-nav-link {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #4b5563;
+    text-decoration: none;
+}
+
+.gen-nav-link:hover {
+    color: var(--gen-yellow);
+}
+
+/* Hero / Search */
+.gen-hero {
+    padding: 6rem 5%;
+    background: white;
+    border-bottom: 1px solid var(--gen-border);
+    text-align: center;
+}
+
+.gen-hero h1 {
+    font-size: 3.5rem;
+    font-weight: 900;
+    margin-bottom: 2.5rem;
+    letter-spacing: -1px;
+}
+
+.gen-search-box {
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    gap: 1rem;
+    padding: 0.5rem;
+    background: #f3f4f6;
+    border-radius: 8px;
+}
+
+/* Listing Cards */
+.listing-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1.5rem;
+    padding: 4rem 5%;
+}
+
+.listing-card {
+    background: white;
+    border: 1px solid var(--gen-border);
+    border-radius: 4px;
+    overflow: hidden;
+    transition: transform 0.2s ease;
+}
+
+.listing-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+}
+
+.listing-img {
+    width: 100%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+}
+
+.listing-info {
+    padding: 1rem;
+}
+
+.listing-price {
+    font-size: 1.1rem;
+    font-weight: 900;
+    margin-bottom: 0.25rem;
+}
+
+.listing-title {
+    font-size: 0.85rem;
+    color: #4b5563;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.listing-meta {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #f3f4f6;
+    font-size: 0.7rem;
+    color: #9ca3af;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Footer */
+.community-footer {
+    padding: 6rem 5%;
+    background: white;
+    border-top: 1px solid var(--gen-border);
+}
+
+.community-footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 4rem;
+}
+
+.community-footer h4 {
+    font-size: 0.8rem;
+    font-weight: 900;
+    margin-bottom: 2rem;
+    color: var(--gen-charcoal);
+}
+
+.community-footer-link {
+    display: block;
+    color: #6b7280;
+    text-decoration: none;
+    margin-bottom: 0.75rem;
+    font-size: 0.9rem;
+}
+
+.community-footer-link:hover {
+    color: var(--gen-yellow);
+}

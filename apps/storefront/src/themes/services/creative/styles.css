@@ -1,0 +1,165 @@
+/* 
+    Services Creative: The Avant Studio
+    Design Spec: Electric Indigo, Vivid Peach, Fluid Layouts
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Inter:wght@300;400;600&display=swap');
+
+:root {
+    --create-indigo: #6366f1;
+    --create-peach: #ffedd5;
+    --create-onyx: #18181b;
+    --create-bg: #ffffff;
+    --create-border: #f4f4f5;
+    --font-syne: 'Syne', sans-serif;
+    --font-base: 'Inter', sans-serif;
+}
+
+.creative-services-wrapper {
+    background-color: var(--create-bg);
+    color: var(--create-onyx);
+    font-family: var(--font-base);
+}
+
+/* Header */
+.studio-header {
+    padding: 2rem 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    background: rgba(255,255,255,0.8);
+    backdrop-filter: blur(20px);
+    z-index: 1000;
+    border-bottom: 1px solid var(--create-border);
+}
+
+.studio-logo {
+    font-family: var(--font-syne);
+    font-weight: 800;
+    font-size: 1.5rem;
+    letter-spacing: -2px;
+}
+
+.studio-nav {
+    display: flex;
+    gap: 4rem;
+}
+
+.studio-nav-link {
+    font-family: var(--font-syne);
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #a1a1aa;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: color 0.3s ease;
+}
+
+.studio-nav-link:hover {
+    color: var(--create-indigo);
+}
+
+/* Hero */
+.studio-hero {
+    padding: 12rem 5%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    position: relative;
+    overflow: hidden;
+}
+
+.studio-hero h1 {
+    font-family: var(--font-syne);
+    font-size: 8rem;
+    font-weight: 800;
+    line-height: 0.9;
+    margin-bottom: 4rem;
+    letter-spacing: -6px;
+}
+
+.studio-hero-orb {
+    position: absolute;
+    top: 50%;
+    right: -10%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, var(--create-indigo) 0%, transparent 70%);
+    opacity: 0.1;
+    filter: blur(80px);
+}
+
+/* Creative Cards */
+.creative-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 4rem;
+    padding: 8rem 5%;
+}
+
+.creative-card {
+    background: #fcfcfc;
+    border: 1px solid var(--create-border);
+    padding: 4rem;
+    transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.creative-card:hover {
+    background: var(--create-indigo);
+    color: white;
+    transform: scale(1.02);
+}
+
+.creative-card-index {
+    font-family: var(--font-syne);
+    font-size: 0.8rem;
+    font-weight: 800;
+    margin-bottom: 2rem;
+    opacity: 0.4;
+    display: block;
+}
+
+.creative-card-title {
+    font-family: var(--font-syne);
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    line-height: 1;
+}
+
+/* Footer */
+.avant-footer {
+    padding: 10rem 5%;
+    background: var(--create-onyx);
+    color: white;
+}
+
+.avant-footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 6rem;
+}
+
+.avant-footer h4 {
+    font-family: var(--font-syne);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 2.5rem;
+    color: #52525b;
+}
+
+.avant-footer-link {
+    display: block;
+    color: #71717a;
+    text-decoration: none;
+    margin-bottom: 1.25rem;
+    font-size: 0.9rem;
+}
+
+.avant-footer-link:hover {
+    color: white;
+}

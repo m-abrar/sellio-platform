@@ -1,0 +1,175 @@
+/* 
+    Properties Urban: The Metro Pulse
+    Design Spec: Slate Gray, High-Contrast Accents, Vertical Typography
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Roboto:wght@300;400;700&display=swap');
+
+:root {
+    --urban-primary: #334155;
+    --urban-accent: #3b82f6;
+    --urban-bg: #ffffff;
+    --urban-text: #0f172a;
+    --urban-border: #f1f5f9;
+    --font-heading: 'Montserrat', sans-serif;
+    --font-body: 'Roboto', sans-serif;
+}
+
+.urban-wrapper {
+    background-color: var(--urban-bg);
+    color: var(--urban-text);
+    font-family: var(--font-body);
+}
+
+/* Header */
+.metro-header {
+    background: white;
+    padding: 1.5rem 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 30px rgba(0,0,0,0.02);
+}
+
+.metro-logo {
+    font-family: var(--font-heading);
+    font-weight: 900;
+    font-size: 1.5rem;
+    color: var(--urban-text);
+    letter-spacing: -1px;
+}
+
+.metro-nav {
+    display: flex;
+    gap: 3rem;
+}
+
+.metro-nav-link {
+    font-family: var(--font-heading);
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--urban-primary);
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: color 0.3s ease;
+}
+
+.metro-nav-link:hover {
+    color: var(--urban-accent);
+}
+
+/* Hero */
+.metro-hero {
+    height: 90vh;
+    display: flex;
+    align-items: center;
+    padding: 0 10%;
+    background: linear-gradient(to right, rgba(255,255,255,1) 40%, rgba(255,255,255,0)),
+                url('https://images.unsplash.com/photo-1449824913935-59a10b8d2000?q=80&w=2070');
+    background-size: cover;
+    background-position: center;
+}
+
+.metro-hero-content {
+    max-width: 600px;
+}
+
+.metro-hero-content h1 {
+    font-family: var(--font-heading);
+    font-size: 5rem;
+    font-weight: 900;
+    line-height: 0.9;
+    margin-bottom: 2rem;
+    color: var(--urban-text);
+}
+
+/* Unit Cards */
+.unit-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    padding: 6rem 5%;
+}
+
+.unit-card {
+    background: white;
+    border: 1px solid var(--urban-border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.unit-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+}
+
+.unit-img {
+    width: 100%;
+    aspect-ratio: 4/3;
+    object-fit: cover;
+}
+
+.unit-info {
+    padding: 2rem;
+}
+
+.unit-price {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 900;
+    margin-bottom: 0.5rem;
+}
+
+.unit-title {
+    font-weight: 700;
+    color: var(--urban-primary);
+    margin-bottom: 1.5rem;
+}
+
+.unit-meta {
+    display: flex;
+    gap: 1.5rem;
+    font-size: 0.8rem;
+    color: #64748b;
+    border-top: 1px solid var(--urban-border);
+    padding-top: 1.5rem;
+}
+
+/* Footer */
+.urban-footer {
+    padding: 10rem 5%;
+    background: #0f172a;
+    color: white;
+}
+
+.urban-footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 4rem;
+}
+
+.urban-footer h4 {
+    font-family: var(--font-heading);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 2rem;
+    color: #94a3b8;
+}
+
+.urban-footer-link {
+    display: block;
+    color: #64748b;
+    text-decoration: none;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+}
+
+.urban-footer-link:hover {
+    color: white;
+}

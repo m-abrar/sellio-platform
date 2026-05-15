@@ -1,69 +1,70 @@
 
 import React from 'react';
+import { CreativeServiceCard } from './components';
 
 export default function Page() {
+  const services = [
+    { title: "Brand Identity Systems", description: "Architecting the visual DNA of modern commercial entities through high-fidelity design systems.", index: "01" },
+    { title: "Digital Product Design", description: "Crafting immersive user interfaces and experimental commercial platforms for the next decade.", index: "02" },
+    { title: "Motion Architecture", description: "Defining the kinetic language of brand expression through advanced motion design and cinematic rendering.", index: "03" },
+    { title: "3D & Spatial Design", description: "Developing three-dimensional assets and spatial environments for institutional distribution.", index: "04" },
+    { title: "Content Strategy Node", description: "Providing high-fidelity strategic guidance for commercial storytelling and platform positioning.", index: "05" },
+    { title: "Experimental Labs", description: "Exploring the intersection of creative expression and emerging commercial technology protocols.", index: "06" },
+  ];
+
   return (
-    <div style={{ 
-      minHeight: '80vh', 
-      display: 'flex', 
-      flexDirection: 'column', 
-      alignItems: 'center', 
-      justifyContent: 'center', 
-      backgroundColor: '#f9fafb',
-      padding: '2rem',
-      textAlign: 'center',
-      fontFamily: "'Inter', sans-serif"
-    }}>
-      <div style={{ 
-        maxWidth: '42rem', 
-        width: '100%', 
-        backgroundColor: 'white', 
-        borderRadius: '1.5rem', 
-        boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)', 
-        padding: '3rem', 
-        border: '1px solid #f3f4f6' 
-      }}>
-        <div style={{ 
-          width: '5rem', 
-          height: '5rem', 
-          backgroundColor: '#1e4d4e15', 
-          borderRadius: '1rem', 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'center', 
-          margin: '0 auto 2rem auto' 
-        }}>
-          <svg style={{ width: '2.5rem', height: '2.5rem', color: '#1e4d4e' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-          </svg>
-        </div>
-        <h1 style={{ 
-          fontSize: '2.25rem', 
-          fontWeight: 800, 
-          color: '#111827', 
-          marginBottom: '1rem', 
-          letterSpacing: '-0.025em',
-          lineHeight: 1.2
-        }}>
-          Services Creative <span style={{ color: '#1e4d4e' }}>Coming Soon</span>
-        </h1>
-        <p style={{ 
-          fontSize: '1.125rem', 
-          color: '#4b5563', 
-          marginBottom: '2rem', 
-          maxWidth: '28rem', 
-          margin: '0 auto 2rem auto',
-          lineHeight: 1.6
-        }}>
-          We are currently hand-crafting this elite vertical experience. 
-          Stay tuned for a production-grade layout that will blow your users away.
-        </p>
-        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
-          <div style={{ height: '0.25rem', width: '3rem', backgroundColor: '#1e4d4e', borderRadius: '9999px' }}></div>
-          <div style={{ height: '0.25rem', width: '3rem', backgroundColor: '#1e4d4e60', borderRadius: '9999px' }}></div>
-          <div style={{ height: '0.25rem', width: '3rem', backgroundColor: '#1e4d4e30', borderRadius: '9999px' }}></div>
-        </div>
-      </div>
+    <div>
+      {/* Hero Section */}
+      <section className="studio-hero">
+          <div className="studio-hero-orb"></div>
+          <h1>Design <br/>As a <br/>Protocol.</h1>
+          <div style={{ maxWidth: '600px', marginTop: '4rem' }}>
+              <p style={{ fontSize: '1.5rem', lineHeight: 1.6, fontWeight: 400, opacity: 0.6 }}>
+                  Sellio Studio is an avant-garde collective of designers and architects standardizing creative excellence through the global node network.
+              </p>
+              <button style={{ 
+                  marginTop: '4rem', 
+                  background: 'var(--create-onyx)', 
+                  color: 'white', 
+                  border: 'none', 
+                  padding: '1.5rem 4rem', 
+                  fontFamily: 'var(--font-syne)',
+                  fontSize: '0.9rem',
+                  fontWeight: 800,
+                  letterSpacing: '2px'
+              }}>
+                  START_COLLABORATION
+              </button>
+          </div>
+      </section>
+
+      {/* Philosophy bar */}
+      <section style={{ padding: '4rem 5%', borderBottom: '1px solid var(--create-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--create-peach)', color: 'var(--create-onyx)', fontFamily: 'var(--font-syne)', fontWeight: 800, fontSize: '0.75rem', letterSpacing: '2px' }}>
+          <span>ELITE_CRAFT</span>
+          <span>SYSTEMIC_DESIGN</span>
+          <span>GLOBAL_DISTRIBUTION</span>
+          <span>HIGH_FIDELITY_OUTCOMES</span>
+      </section>
+
+      {/* Services Grid */}
+      <section className="creative-grid">
+          {services.map((service, i) => (
+              <CreativeServiceCard key={i} {...service} />
+          ))}
+      </section>
+
+      {/* Final CTA Section */}
+      <section style={{ padding: '15rem 5%', background: '#fafafa', textAlign: 'center' }}>
+          <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+              <h2 style={{ fontFamily: 'var(--font-syne)', fontSize: '5rem', fontWeight: 800, marginBottom: '3rem', letterSpacing: '-4px' }}>Let's build <br/>the future of <br/>industry.</h2>
+              <p style={{ fontSize: '1.25rem', opacity: 0.5, marginBottom: '6rem' }}>
+                  Our creative nodes are currently accepting select institutional inquiries for the 2026/27 cycle.
+              </p>
+              <button style={{ padding: '2rem 6rem', border: '2px solid var(--create-onyx)', background: 'none', color: 'var(--create-onyx)', fontFamily: 'var(--font-syne)', fontWeight: 800, fontSize: '1rem', letterSpacing: '4px' }}>
+                  REQUEST_PORTFOLIO_ACCESS
+              </button>
+          </div>
+      </section>
     </div>
   );
 }

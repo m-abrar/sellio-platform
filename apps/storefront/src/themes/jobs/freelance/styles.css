@@ -1,0 +1,169 @@
+/* 
+    Jobs Freelance: The Independent Protocol
+    Design Spec: Mint Green, Space Mono Accents, Modular Cards
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;600;700;900&family=Space+Mono:wght@400;700&display=swap');
+
+:root {
+    --flex-mint: #10b981;
+    --flex-graphite: #2d3748;
+    --flex-bg: #ffffff;
+    --flex-border: #edf2f7;
+    --flex-yellow: #facc15;
+    --font-flex: 'Work Sans', sans-serif;
+    --font-mono: 'Space Mono', monospace;
+}
+
+.freelance-jobs-wrapper {
+    background-color: var(--flex-bg);
+    color: var(--flex-graphite);
+    font-family: var(--font-flex);
+}
+
+/* Header */
+.flex-header {
+    background: white;
+    padding: 1.5rem 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 2px solid var(--flex-mint);
+}
+
+.flex-logo {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--flex-mint);
+}
+
+.flex-nav {
+    display: flex;
+    gap: 3rem;
+}
+
+.flex-nav-link {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #718096;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.flex-nav-link:hover {
+    color: var(--flex-mint);
+}
+
+/* Hero */
+.flex-hero {
+    padding: 8rem 5%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background: radial-gradient(circle at top right, rgba(16, 185, 129, 0.05), transparent);
+}
+
+.flex-hero h1 {
+    font-size: 5rem;
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 2rem;
+    letter-spacing: -2px;
+}
+
+.flex-badge {
+    background: var(--flex-graphite);
+    color: var(--flex-yellow);
+    font-family: var(--font-mono);
+    padding: 0.5rem 1.5rem;
+    font-size: 0.8rem;
+    margin-bottom: 2rem;
+}
+
+/* Gig Cards */
+.gig-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    padding: 6rem 5%;
+}
+
+.gig-card {
+    border: 1px solid var(--flex-border);
+    padding: 2.5rem;
+    border-radius: 12px;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.gig-card:hover {
+    border-color: var(--flex-mint);
+    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.1);
+}
+
+.gig-rate {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--flex-mint);
+    margin-bottom: 1rem;
+}
+
+.gig-title {
+    font-size: 1.4rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+}
+
+.gig-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+}
+
+.gig-tag {
+    background: #f7fafc;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #a0aec0;
+    border-radius: 4px;
+}
+
+/* Footer */
+.network-footer {
+    padding: 8rem 5%;
+    background: var(--flex-graphite);
+    color: white;
+}
+
+.network-footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 4rem;
+}
+
+.network-footer h4 {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    margin-bottom: 2.5rem;
+    color: var(--flex-mint);
+}
+
+.network-footer-link {
+    display: block;
+    color: #718096;
+    text-decoration: none;
+    margin-bottom: 1.25rem;
+    font-size: 0.95rem;
+}
+
+.network-footer-link:hover {
+    color: white;
+}

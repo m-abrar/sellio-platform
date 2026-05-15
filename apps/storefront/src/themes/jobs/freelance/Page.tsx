@@ -1,69 +1,76 @@
 
 import React from 'react';
+import { GigCard } from './components';
 
 export default function Page() {
+  const gigs = [
+    { title: "Elite UI/UX Architecture", rate: "$120/hr", duration: "3 Months", tags: ["Figma", "Design Systems", "Prototyping"] },
+    { title: "Backend Scaling Protocol", rate: "$150/hr", duration: "6 Months", tags: ["Go", "Kubernetes", "gRPC"] },
+    { title: "Smart Contract Audit", rate: "$200/hr", duration: "1 Month", tags: ["Solidity", "Security", "EVM"] },
+    { title: "AI Model Fine-Tuning", rate: "$180/hr", duration: "2 Months", tags: ["PyTorch", "LLMs", "Python"] },
+    { title: "Conversion Copywriting", rate: "$90/hr", duration: "Ongoing", tags: ["Strategy", "SEO", "Sales"] },
+    { title: "Fullstack App Node", rate: "$130/hr", duration: "4 Months", tags: ["Next.js", "TypeScript", "PostgreSQL"] },
+  ];
+
   return (
-    <div style={{ 
-      minHeight: '80vh', 
-      display: 'flex', 
-      flexDirection: 'column', 
-      alignItems: 'center', 
-      justifyContent: 'center', 
-      backgroundColor: '#f9fafb',
-      padding: '2rem',
-      textAlign: 'center',
-      fontFamily: "'Inter', sans-serif"
-    }}>
-      <div style={{ 
-        maxWidth: '42rem', 
-        width: '100%', 
-        backgroundColor: 'white', 
-        borderRadius: '1.5rem', 
-        boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)', 
-        padding: '3rem', 
-        border: '1px solid #f3f4f6' 
-      }}>
-        <div style={{ 
-          width: '5rem', 
-          height: '5rem', 
-          backgroundColor: '#4527a015', 
-          borderRadius: '1rem', 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'center', 
-          margin: '0 auto 2rem auto' 
-        }}>
-          <svg style={{ width: '2.5rem', height: '2.5rem', color: '#4527a0' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-          </svg>
-        </div>
-        <h1 style={{ 
-          fontSize: '2.25rem', 
-          fontWeight: 800, 
-          color: '#111827', 
-          marginBottom: '1rem', 
-          letterSpacing: '-0.025em',
-          lineHeight: 1.2
-        }}>
-          Jobs Freelance <span style={{ color: '#4527a0' }}>Coming Soon</span>
-        </h1>
-        <p style={{ 
-          fontSize: '1.125rem', 
-          color: '#4b5563', 
-          marginBottom: '2rem', 
-          maxWidth: '28rem', 
-          margin: '0 auto 2rem auto',
-          lineHeight: 1.6
-        }}>
-          We are currently hand-crafting this elite vertical experience. 
-          Stay tuned for a production-grade layout that will blow your users away.
-        </p>
-        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
-          <div style={{ height: '0.25rem', width: '3rem', backgroundColor: '#4527a0', borderRadius: '9999px' }}></div>
-          <div style={{ height: '0.25rem', width: '3rem', backgroundColor: '#4527a060', borderRadius: '9999px' }}></div>
-          <div style={{ height: '0.25rem', width: '3rem', backgroundColor: '#4527a030', borderRadius: '9999px' }}></div>
-        </div>
-      </div>
+    <div>
+      {/* Hero Section */}
+      <section className="flex-hero">
+          <div className="flex-badge">v.4.0_DECENTRALIZED_PROTOCOL</div>
+          <h1>The New <br/>Independence.</h1>
+          <p style={{ maxWidth: '700px', fontSize: '1.25rem', color: '#718096', lineHeight: 1.8, marginBottom: '4rem' }}>
+              High-leverage projects for independent builders. Direct peer-to-peer distribution with zero platform overhead. Verified by the Sellio Flex protocol.
+          </p>
+          <div style={{ display: 'flex', gap: '1.5rem' }}>
+              <button style={{ padding: '1.25rem 3.5rem', background: 'var(--flex-graphite)', color: 'white', border: 'none', borderRadius: '4px', fontWeight: 900 }}>BROWSE_PROJECTS</button>
+              <button style={{ padding: '1.25rem 3.5rem', background: 'none', color: 'var(--flex-graphite)', border: '2px solid var(--flex-graphite)', borderRadius: '4px', fontWeight: 900 }}>DEPLOY_TALENT</button>
+          </div>
+      </section>
+
+      {/* Trust Bar */}
+      <section style={{ padding: '3rem 5%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#f7fafc', color: '#a0aec0', fontFamily: 'var(--font-mono)', fontSize: '0.7rem' }}>
+          <span>NODE_SYNC: 100%</span>
+          <span>ESCROW_READY: YES</span>
+          <span>GAS_OPTIMIZED: ACTIVE</span>
+          <span>TOTAL_NETWORK_VALUE: $42.5M</span>
+      </section>
+
+      {/* Gig Grid */}
+      <section className="gig-grid">
+          {gigs.map((gig, i) => (
+              <GigCard key={i} {...gig} />
+          ))}
+      </section>
+
+      {/* Philosophy Section */}
+      <section style={{ padding: '12rem 5%', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10rem', alignItems: 'center' }}>
+          <div>
+              <h2 style={{ fontSize: '3.5rem', fontWeight: 900, marginBottom: '3rem' }}>The Protocol <br/>of Autonomy.</h2>
+              <p style={{ fontSize: '1.1rem', color: '#718096', lineHeight: 2, marginBottom: '4rem' }}>
+                  We believe in a world where talent is distributed directly to demand. No middlemen, no centralized fees, just pure execution and high-fidelity project outcomes.
+              </p>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3rem' }}>
+                  <div>
+                      <div style={{ fontSize: '2.5rem', fontWeight: 900, color: 'var(--flex-mint)' }}>0%</div>
+                      <div style={{ fontSize: '0.7rem', fontWeight: 800, color: '#a0aec0', letterSpacing: '2px' }}>PLATFORM_FEES</div>
+                  </div>
+                  <div>
+                      <div style={{ fontSize: '2.5rem', fontWeight: 900, color: 'var(--flex-mint)' }}>Instant</div>
+                      <div style={{ fontSize: '0.7rem', fontWeight: 800, color: '#a0aec0', letterSpacing: '2px' }}>NODE_SETTLEMENT</div>
+                  </div>
+              </div>
+          </div>
+          <div style={{ background: '#fcfcfc', border: '1px solid #eee', padding: '5rem', position: 'relative' }}>
+              <div style={{ position: 'absolute', top: '-1rem', left: '-1rem', width: '60px', height: '60px', background: 'var(--flex-yellow)' }}></div>
+              <h3 style={{ fontSize: '2rem', fontWeight: 900, marginBottom: '2rem' }}>Join the Network.</h3>
+              <p style={{ color: '#a0aec0', lineHeight: 2, marginBottom: '3rem' }}>
+                  Our talent nodes are currently accepting new high-fidelity contributors. Submit your proof-of-work to join the elite decentralized workforce.
+              </p>
+              <button style={{ width: '100%', padding: '1.5rem', background: 'var(--flex-graphite)', color: 'white', border: 'none', fontWeight: 900, letterSpacing: '1px' }}>
+                  GENERATE_TALENT_NODE
+              </button>
+          </div>
+      </section>
     </div>
   );
 }

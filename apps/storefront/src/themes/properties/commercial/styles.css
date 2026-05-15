@@ -1,0 +1,162 @@
+/* 
+    Properties Commercial: The Skyline Registry
+    Design Spec: Deep Navy, Steel Accents, Precision Grids
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap');
+
+:root {
+    --comm-primary: #0f172a;
+    --comm-secondary: #334155;
+    --comm-accent: #3b82f6;
+    --comm-bg: #ffffff;
+    --comm-border: #e2e8f0;
+    --font-base: 'Inter', sans-serif;
+}
+
+.commercial-wrapper {
+    background-color: var(--comm-bg);
+    color: var(--comm-primary);
+    font-family: var(--font-base);
+}
+
+/* Header */
+.corp-header {
+    background: white;
+    border-bottom: 1px solid var(--comm-border);
+    padding: 1.5rem 6rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.corp-logo {
+    font-weight: 900;
+    font-size: 1.4rem;
+    letter-spacing: -0.5px;
+    color: var(--comm-primary);
+}
+
+.corp-nav {
+    display: flex;
+    gap: 4rem;
+}
+
+.corp-nav-link {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--comm-secondary);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.corp-nav-link:hover {
+    color: var(--comm-accent);
+}
+
+/* Hero */
+.comm-hero {
+    padding: 10rem 6rem;
+    background: linear-gradient(to right, #f8fafc, #ffffff);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--comm-border);
+}
+
+.comm-hero-content {
+    max-width: 600px;
+}
+
+.comm-hero-content h1 {
+    font-size: 4.5rem;
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 2rem;
+    letter-spacing: -2px;
+}
+
+/* Asset Cards */
+.asset-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0; /* Tight grid for industrial feel */
+    padding: 0;
+    border-top: 1px solid var(--comm-border);
+}
+
+.asset-card {
+    border-right: 1px solid var(--comm-border);
+    border-bottom: 1px solid var(--comm-border);
+    padding: 4rem;
+    transition: background 0.4s ease;
+}
+
+.asset-card:hover {
+    background: #f1f5f9;
+}
+
+.asset-tag {
+    font-size: 0.7rem;
+    font-weight: 900;
+    color: var(--comm-accent);
+    letter-spacing: 2px;
+    margin-bottom: 1.5rem;
+    display: block;
+}
+
+.asset-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+}
+
+.asset-specs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    font-size: 0.9rem;
+    color: var(--comm-secondary);
+}
+
+.asset-spec-val {
+    font-weight: 700;
+    color: var(--comm-primary);
+    display: block;
+}
+
+/* Footer */
+.comm-footer {
+    padding: 8rem 6rem;
+    background: var(--comm-primary);
+    color: white;
+}
+
+.comm-footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 6rem;
+}
+
+.comm-footer h4 {
+    font-size: 0.8rem;
+    font-weight: 900;
+    letter-spacing: 2px;
+    margin-bottom: 2.5rem;
+    color: var(--comm-accent);
+}
+
+.comm-footer-link {
+    display: block;
+    color: #94a3b8;
+    text-decoration: none;
+    margin-bottom: 1.25rem;
+    font-size: 0.95rem;
+}
+
+.comm-footer-link:hover {
+    color: white;
+}
