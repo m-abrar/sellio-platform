@@ -8,9 +8,7 @@ use App\Models\Theme;
 /**
  * Class ThemeSeeder
  *
- * Registers all available frontend themes (Unified, Properties, Autos, Events,
- * Jobs, Services, Classifieds, E-Commerce) with CSS variable overrides and
- * vertical-specific bindings for the storefront theming engine.
+ * Registers all available frontend themes based on the landing-pages-map.html.
  */
 class ThemeSeeder extends Seeder
 {
@@ -19,76 +17,148 @@ class ThemeSeeder extends Seeder
         // Clear all existing themes
         Theme::query()->delete();
 
-        $themes = [
-            // ==========================================
-            // UNIFIED SERIES
-            // ==========================================
-            [
-                'theme_key'   => 'unifieds_default',
-                'vertical'  => null,
-                'title'     => 'Unified Default',
-                'order'     => 10,
-                'is_active' => true,
-                'status'    => 'active',
-                'is_premium'=> false,
-                'is_verified'=> true,
-                'admin_note'=> 'System default unified theme.',
-                'variables' => ["--color-primary" => "#1e4d4e", "--color-secondary" => "#f4f2ed", "--color-text" => "#333333", "--color-light-gray" => "#e9ecef", "--font-family-heading" => "'Playfair Display', serif", "--font-family-base" => "'Lora', serif", "--shadow-card" => "0 4px 8px rgba(0, 0, 0, 0.08)", "--shadow-hover" => "0 8px 16px rgba(0, 0, 0, 0.15)"],
-                'config'    => null,
+        $themeGroups = [
+            'Unified' => [
+                'vertical' => null,
+                'themes' => [
+                    'default' => 'Universal Default',
+                    'standard' => 'Universal Standard',
+                    'classic' => 'Universal Classic',
+                    'modern' => 'Universal Modern',
+                    'mega' => 'Universal Mega',
+                    'interactive' => 'Universal Interactive',
+                    'minimal' => 'Universal Minimal',
+                    'marketplace' => 'Universal Marketplace',
+                ]
             ],
-            [
-                'theme_key'   => 'unifieds_modern',
-                'vertical'  => null,
-                'title'     => 'Unified Modern',
-                'order'     => 20,
-                'is_active' => false,
-                'status'    => 'active',
-                'is_premium'=> true,
-                'is_verified'=> true,
-                'admin_note'=> 'Premium glassmorphic modern theme.',
-                'variables' => ["--primary-color" => "#1e88e5", "--secondary-color" => "#3949ab", "--accent-color" => "#ff7043", "--background-color" => "#f8f9fa", "--text-color" => "#212529", "--font-family-base" => "Roboto, sans-serif", "--font-family-heading" => "Montserrat, sans-serif", "--border-radius" => "0.375rem", "--container-width" => "1140px"],
-                'config'    => null,
+            'Properties' => [
+                'vertical' => 'properties',
+                'themes' => [
+                    'classic' => 'Properties Classic',
+                    'modern' => 'Properties Modern',
+                    'luxury' => 'Properties Luxury',
+                    'luxury_2' => 'Properties Luxury 2',
+                    'urban' => 'Properties Urban',
+                    'rental' => 'Properties Rental / Vacation',
+                    'vacation' => 'Properties Vacation',
+                    'map' => 'Properties Map View',
+                    'unified' => 'Properties Unified / All-in-One',
+                    'commercial' => 'Properties Commercial Real Estate',
+                    'showcase' => 'Single Property Showcase',
+                    'neighborhood' => 'Neighborhood Focused',
+                    'investment' => 'Investment / ROI Focused',
+                ]
             ],
-            // ... (Rest of themes would follow same pattern, I will apply to a few key ones and use a map for others)
+            'Events' => [
+                'vertical' => 'events',
+                'themes' => [
+                    'classic' => 'Events Classic',
+                    'creative' => 'Events Creative',
+                    'corporate' => 'Events Corporate',
+                    'music' => 'Events Music / Concert',
+                    'festival' => 'Events Festival / Outdoor',
+                ]
+            ],
+            'Autos' => [
+                'vertical' => 'autos',
+                'themes' => [
+                    'classic' => 'Autos Classic / Dealer',
+                    'modern' => 'Autos Modern / Showcase',
+                    'used' => 'Autos Used / Marketplace',
+                    'luxury' => 'Autos Luxury / Premium',
+                    'electric' => 'Autos Electric / Green Cars',
+                ]
+            ],
+            'Services' => [
+                'vertical' => 'services',
+                'themes' => [
+                    'corporate' => 'Services Corporate / Agency',
+                    'marketplace' => 'Services Marketplace / Freelance',
+                    'creative' => 'Services Creative / Studio',
+                    'local' => 'Services Home / Local',
+                    'health' => 'Services Health & Wellness',
+                ]
+            ],
+            'Jobs' => [
+                'vertical' => 'jobs',
+                'themes' => [
+                    'corporate' => 'Jobs Corporate / Professional',
+                    'startup' => 'Jobs Startup / Modern',
+                    'tech' => 'Jobs Tech / IT',
+                    'blue_collar' => 'Jobs Blue-Collar / Local',
+                    'freelance' => 'Jobs Freelance / Gig Economy',
+                ]
+            ],
+            'Classifieds' => [
+                'vertical' => 'classifieds',
+                'themes' => [
+                    'general' => 'Classifieds General / Marketplace',
+                    'modern' => 'Classifieds Modern / Card Style',
+                    'local' => 'Classifieds Local / Community',
+                    'deals' => 'Classifieds Deals / Bargain',
+                    'premium' => 'Classifieds Premium',
+                ]
+            ],
+            'Ecommerce' => [
+                'vertical' => 'ecommerce',
+                'themes' => [
+                    'default' => 'Ecommerce Standard',
+                    'luxury' => 'Ecommerce Luxury',
+                    'fashion' => 'Ecommerce Fashion',
+                    'electronics' => 'Ecommerce Electronics',
+                ]
+            ]
         ];
 
-        // Process all themes with defaults for hardened fields
-        $processedThemes = collect($themes)->map(function ($theme) {
-            return array_merge([
-                'status'     => 'active',
-                'is_premium' => false,
-                'is_verified'=> true,
-                'admin_note' => 'Marketplace starter theme.',
-            ], $theme);
-        })->toArray();
+        $order = 10;
+        foreach ($themeGroups as $groupName => $group) {
+            $vertical = $group['vertical'];
+            $prefix = ($groupName === 'Unified') ? 'unifieds' : strtolower($groupName);
+            
+            foreach ($group['themes'] as $key => $title) {
+                $themeKey = "{$prefix}_{$key}";
+                
+                Theme::create([
+                    'theme_key' => $themeKey,
+                    'vertical' => $vertical,
+                    'title' => $title,
+                    'order' => $order,
+                    'is_active' => ($themeKey === 'unifieds_default'),
+                    'variables' => $this->getDefaultVariables($themeKey),
+                    'config' => null,
+                ]);
+                
+                $order += 10;
+            }
+        }
+    }
 
-        // Standardize vertical slugs for all remaining themes
-        $baseThemes = [
-            ['theme_key' => 'properties_default', 'vertical' => 'property', 'title' => 'Properties Default', 'order' => 80],
-            ['theme_key' => 'autos_default',  'vertical' => 'auto', 'title' => 'Autos Default', 'order' => 280],
-            ['theme_key' => 'events_default',   'vertical' => 'event', 'title' => 'Events Default', 'order' => 220],
-            ['theme_key' => 'jobs_default',     'vertical' => 'job', 'title' => 'Jobs Default', 'order' => 400],
-            ['theme_key' => 'services_default',     'vertical' => 'service', 'title' => 'Services Default', 'order' => 340],
-            ['theme_key' => 'classifieds_default',  'vertical' => 'classified', 'title' => 'Classifieds Default', 'order' => 460],
-            ['theme_key' => 'ecommerce_default',  'vertical' => 'product', 'title' => 'Ecommerce Standard', 'order' => 520],
+    private function getDefaultVariables(string $themeKey): array
+    {
+        // Default color palette
+        $defaults = [
+            "--color-primary" => "#1e4d4e",
+            "--color-secondary" => "#f4f2ed",
+            "--color-accent" => "#d4af37",
+            "--color-text" => "#333333",
+            "--font-family-heading" => "'Playfair Display', serif",
+            "--font-family-base" => "'Inter', sans-serif",
+            "--border-radius" => "8px"
         ];
 
-        foreach ($baseThemes as $bt) {
-            Theme::updateOrCreate(['theme_key' => $bt['theme_key']], array_merge([
-                'is_active' => false,
-                'status'    => 'active',
-                'is_premium'=> false,
-                'is_verified'=> true,
-                'admin_note'=> 'Vertical specific theme.',
-            ], $bt));
+        // Custom overrides for specific themes if needed
+        if (str_contains($themeKey, 'modern')) {
+            $defaults["--color-primary"] = "#1e88e5";
+            $defaults["--border-radius"] = "12px";
+            $defaults["--font-family-heading"] = "'Outfit', sans-serif";
         }
 
-        foreach ($processedThemes as $theme) {
-            Theme::updateOrCreate(['theme_key' => $theme['theme_key']], $theme);
+        if (str_contains($themeKey, 'luxury')) {
+            $defaults["--color-primary"] = "#1a1a1a";
+            $defaults["--color-accent"] = "#c5a059";
+            $defaults["--font-family-heading"] = "'Playfair Display', serif";
         }
 
-        foreach ($themes as $theme) {
-            Theme::updateOrCreate(['theme_key' => $theme['theme_key']], $theme);
-        }
+        return $defaults;
     }
 }

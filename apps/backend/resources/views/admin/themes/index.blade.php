@@ -17,6 +17,67 @@
 
 @section('title', __('Theme Manager'))
 
+@section('css')
+<style>
+    .rounded-24 { border-radius: 24px !important; }
+    .rounded-20 { border-radius: 20px !important; }
+    .rounded-16 { border-radius: 16px !important; }
+    .shadow-premium { box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05) !important; }
+    .shadow-premium-lg { box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08) !important; }
+    
+    .theme-card {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .theme-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12) !important;
+    }
+    
+    .theme-thumbnail-container {
+        position: relative;
+        background: #f8f9fa;
+    }
+    
+    .theme-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(30, 77, 78, 0.85); /* Use primary color with alpha */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(4px);
+        z-index: 10;
+    }
+    
+    .theme-card:hover .theme-overlay {
+        opacity: 1;
+    }
+
+    .h-140-p { height: 140px; }
+    .h-180-p { height: 180px; }
+    .object-fit-cover { object-fit: cover; }
+    
+    .vertical-theme-nav .nav-link {
+        color: #4a5568;
+        padding: 12px 20px;
+        border-radius: 12px;
+        transition: all 0.2s ease;
+    }
+    .vertical-theme-nav .nav-link.active {
+        background: #fff !important;
+        color: #1e4d4e !important;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05) !important;
+    }
+    
+    .gap-15 { gap: 15px; }
+</style>
+@endsection
+
 @section('content_header')
     <div class="container-fluid pt-4">
         <div class="row mb-4 align-items-center">
@@ -211,16 +272,22 @@
                                                      <div class="position-relative overflow-hidden theme-thumbnail-container h-180-p">
                                                          <img src="{{ asset('frontend/images/preview.png') }}" class="card-img-top w-100 h-100 object-fit-cover" alt="{{ $theme->title }}">
                                                          <div class="theme-overlay">
-                                                              <a href="{{ route('admin.themes.edit', $theme->id) }}" class="btn btn-white btn-sm font-weight-bold px-3 shadow mr-2 rounded-pill">
-                                                                 <i class="fas fa-cog text-info"></i>
-                                                              </a>
-                                                            <form action="{{ route('admin.themes.activate', $theme->id) }}" method="POST">
-                                                                @csrf
-                                                                <button type="submit" class="btn btn-primary btn-sm font-weight-bold px-4 shadow rounded-pill smallest">
-                                                                   {{ __('Activate') }}
-                                                                </button>
-                                                            </form>
-                                                         </div>
+                                                             @if($theme->is_active)
+                                                                <span class="btn btn-success btn-sm font-weight-bold px-4 rounded-pill smallest shadow-premium">
+                                                                    <i class="fas fa-check-circle mr-1"></i> {{ __('Active') }}
+                                                                </span>
+                                                             @else
+                                                                <a href="{{ route('admin.themes.edit', $theme->id) }}" class="btn btn-white btn-sm font-weight-bold px-3 shadow mr-2 rounded-pill" title="{{ __('Settings') }}">
+                                                                   <i class="fas fa-cog text-info"></i>
+                                                                </a>
+                                                                <form action="{{ route('admin.themes.activate', $theme->id) }}" method="POST" class="m-0">
+                                                                    @csrf
+                                                                    <button type="submit" class="btn btn-primary btn-sm font-weight-bold px-4 shadow rounded-pill smallest">
+                                                                       <i class="fas fa-bolt mr-1"></i> {{ __('Activate') }}
+                                                                    </button>
+                                                                </form>
+                                                             @endif
+                                                          </div>
                                                      </div>
                                                      <div class="card-body p-4 bg-white border-top">
                                                          <h6 class="font-weight-bold text-dark mb-1">{{ $theme->title }}</h6>
