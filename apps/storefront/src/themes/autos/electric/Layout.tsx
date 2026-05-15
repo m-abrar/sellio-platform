@@ -1,15 +1,16 @@
+
 import React from 'react';
 import './styles.css';
-import { HUDHeader, NeonFooter } from './components';
+import { HUDHeader, FutureFooter } from './components';
 
-export default function ElectricLayout({ children }: { children: React.ReactNode }) {
+export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="autos-electric">
+    <div className="autos-electric-wrapper">
       <HUDHeader />
-      <main className="electric-container">
+      <main>
         {children}
       </main>
-      <NeonFooter />
+      <FutureFooter />
     </div>
   );
 }

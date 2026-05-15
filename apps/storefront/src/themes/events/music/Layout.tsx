@@ -1,12 +1,13 @@
+
 import React from 'react';
 import './styles.css';
 import { MusicHeader, MusicFooter } from './components';
 
-export default function MusicLayout({ children }: { children: React.ReactNode }) {
+export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="events-music">
+    <div className="events-music-wrapper">
       <MusicHeader />
-      <main className="music-container">
+      <main>
         {children}
       </main>
       <MusicFooter />

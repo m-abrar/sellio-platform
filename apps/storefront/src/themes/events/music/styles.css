@@ -1,153 +1,177 @@
-.events-music {
-  --font-display: 'Montserrat', sans-serif;
-  --font-sans: 'Inter', sans-serif;
-  --color-accent: #ff0080;
-  --color-bg: #000000;
-  --color-text: #ffffff;
+/* 
+    Events Music Theme: Vibrant Poster Aesthetic
+    Design Spec: Bold Typography, Immersive Imagery, Neon Overlays
+*/
+
+:root {
+    --music-primary: #ff3e00; /* Neon Orange */
+    --music-secondary: #7e22ce; /* Vibrant Purple */
+    --music-bg: #000000;
+    --music-text: #ffffff;
+    --music-muted: rgba(255, 255, 255, 0.5);
+    --music-glass: rgba(255, 255, 255, 0.05);
 }
 
-.music-container {
-  background-color: var(--color-bg);
-  color: var(--color-text);
-  font-family: var(--font-sans);
-  min-height: 100vh;
+.events-music-wrapper {
+    font-family: 'Montserrat', sans-serif;
+    color: var(--music-text);
+    background-color: var(--music-bg);
 }
 
+/* Header */
 .music-header {
-  position: absolute;
-  top: 0;
-  width: 100%;
-  padding: 2rem 3rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  z-index: 100;
+    padding: 2.5rem 4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
 }
 
 .music-logo {
-  font-family: var(--font-display);
-  font-size: 2rem;
-  font-weight: 900;
-  font-style: italic;
-  letter-spacing: -2px;
-  color: white;
+    font-weight: 900;
+    font-size: 1.5rem;
+    letter-spacing: -1px;
+    text-transform: uppercase;
 }
 
+.music-nav {
+    display: flex;
+    gap: 3rem;
+}
+
+.music-nav-link {
+    font-weight: 800;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+/* Hero */
 .music-hero {
-  height: 100vh;
-  display: flex;
-  align-items: flex-end;
-  padding: 0 3rem 6rem;
-  position: relative;
-  overflow: hidden;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
 }
 
-.music-hero-bg {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: -1;
-  filter: saturate(1.5) contrast(1.2);
+.music-hero-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.4);
 }
 
-.music-hero-bg::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(0deg, var(--color-bg) 0%, transparent 100%);
+.music-hero-content {
+    position: relative;
+    z-index: 10;
+    max-width: 1000px;
+    padding: 0 2rem;
 }
 
 .music-hero-title {
-  font-family: var(--font-display);
-  font-size: 8rem;
-  font-weight: 900;
-  font-style: italic;
-  line-height: 0.8;
-  text-transform: uppercase;
-  margin-bottom: 2rem;
+    font-size: 8rem;
+    font-weight: 900;
+    line-height: 0.9;
+    letter-spacing: -6px;
+    margin-bottom: 2rem;
+    text-transform: uppercase;
 }
 
-.poster-grid {
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  gap: 2rem;
-  padding: 4rem 3rem;
+.music-btn {
+    background: var(--music-primary);
+    color: white;
+    border: none;
+    padding: 1.5rem 4rem;
+    font-weight: 900;
+    font-size: 1rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.music-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 40px rgba(255, 62, 0, 0.4);
+}
+
+/* Lineup Section */
+.music-section {
+    padding: 10rem 4rem;
+}
+
+.music-section-title {
+    font-size: 4rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -2px;
+    margin-bottom: 6rem;
+}
+
+.music-lineup-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
 }
 
 .artist-poster {
-  grid-column: span 4;
-  position: relative;
-  aspect-ratio: 3/4;
-  overflow: hidden;
-  border: 4px solid white;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    aspect-ratio: 3/4;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
 }
 
-.artist-poster:nth-child(2n) {
-  transform: rotate(2deg);
-  margin-top: 4rem;
+.artist-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s cubic-bezier(0.2, 1, 0.3, 1);
 }
 
-.artist-poster:nth-child(3n) {
-  transform: rotate(-2deg);
-  grid-column: span 6;
+.artist-poster:hover .artist-img {
+    transform: scale(1.1) rotate(1deg);
 }
 
-.artist-poster:hover {
-  transform: scale(1.05) rotate(0deg);
-  border-color: var(--color-accent);
-  box-shadow: 0 0 50px var(--color-accent);
-  z-index: 10;
-}
-
-.poster-overlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  padding: 2rem;
-  background: var(--color-accent);
-  color: white;
-  transform: translateY(100%);
-  transition: transform 0.3s ease;
-}
-
-.artist-poster:hover .poster-overlay {
-  transform: translateY(0);
+.artist-info {
+    position: absolute;
+    bottom: 2rem;
+    left: 2rem;
+    right: 2rem;
+    z-index: 5;
 }
 
 .artist-name {
-  font-family: var(--font-display);
-  font-size: 1.5rem;
-  font-weight: 900;
-  text-transform: uppercase;
+    font-size: 1.5rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    margin-bottom: 0.25rem;
 }
 
-.ticket-strip {
-  background: var(--color-accent);
-  padding: 2rem 3rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 4rem 0;
-  transform: skewY(-2deg);
+.artist-date {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    opacity: 0.7;
 }
 
-.ticket-title {
-  font-family: var(--font-display);
-  font-size: 2rem;
-  font-weight: 900;
-  color: black;
-}
-
+/* Footer */
 .music-footer {
-  padding: 8rem 3rem;
-  text-align: center;
-  border-top: 10px solid white;
+    padding: 10rem 4rem;
+    background: #000;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+@media (max-width: 1024px) {
+    .music-lineup-grid { grid-template-columns: repeat(2, 1fr); }
+    .music-hero-title { font-size: 4rem; }
 }
