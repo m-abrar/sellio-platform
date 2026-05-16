@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unify - Your Mega Marketplace</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --bs-font-sans-serif: 'Inter', sans-serif;
+            --properties-color: #008080; /* Teal */
+            --events-color: #F97316;    /* Orange */
+            --autos-color: #1E3A8A;     /* Dark Blue */
+            --services-color: #16A34A;  /* Green */
+            --jobs-color: #7C3AED;      /* Purple */
+            --classifieds-color: #DC2626; /* Red */
+        }
+
+        body {
+            font-family: var(--bs-font-sans-serif);
+            background-color: #f8f9fa;
+        }
+
+        .navbar-brand img {
+            height: 30px;
+        }
+
+        .navbar-search-global {
+            width: 500px; /* Adjust as needed */
+            border-radius: 50px;
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .btn-accent-properties { background-color: var(--properties-color); border-color: var(--properties-color); color: #fff; }
+        .btn-accent-properties:hover { background-color: #006666; border-color: #006666; color: #fff; }
+        .btn-accent-events { background-color: var(--events-color); border-color: var(--events-color); color: #fff; }
+        .btn-accent-events:hover { background-color: #d15c0e; border-color: #d15c0e; color: #fff; }
+        .btn-accent-autos { background-color: var(--autos-color); border-color: var(--autos-color); color: #fff; }
+        .btn-accent-autos:hover { background-color: #152c6b; border-color: #152c6b; color: #fff; }
+        .btn-accent-services { background-color: var(--services-color); border-color: var(--services-color); color: #fff; }
+        .btn-accent-services:hover { background-color: #107e3a; border-color: #107e3a; color: #fff; }
+        .btn-accent-jobs { background-color: var(--jobs-color); border-color: var(--jobs-color); color: #fff; }
+        .btn-accent-jobs:hover { background-color: #632faf; border-color: #632faf; color: #fff; }
+        .btn-accent-classifieds { background-color: var(--classifieds-color); border-color: var(--classifieds-color); color: #fff; }
+        .btn-accent-classifieds:hover { background-color: #b01f1f; border-color: #b01f1f; color: #fff; }
+
+        .hero-banner {
+            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('https://via.placeholder.com/1600x400/3498db/ffffff?text=Lifestyle+Collage') no-repeat center center/cover;
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+        .hero-search-bar {
+            background-color: white;
+            border-radius: 50px;
+            padding: 5px 20px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .hero-search-bar .form-control {
+            border: none;
+            box-shadow: none;
+        }
+        .hero-search-bar .dropdown-toggle {
+            background-color: transparent;
+            color: #333;
+            border: none;
+        }
+        .hero-search-bar .dropdown-toggle::after {
+            margin-left: 0.5em;
+        }
+
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            overflow: hidden;
+            border: none;
+        }
+        .card-img-top {
+            height: 180px;
+            object-fit: cover;
+        }
+        .card-title {
+            font-weight: 600;
+        }
+        .card-category-strip {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: rgba(0,0,0,0.6);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-bottom-right-radius: 10px;
+            font-size: 0.85rem;
+        }
+
+        .category-tab-nav .nav-link {
+            border: none;
+            border-bottom: 2px solid transparent;
+            color: #6c757d;
+            font-weight: 500;
+            padding-bottom: 0.75rem;
+        }
+        .category-tab-nav .nav-link.active {
+            color: #333;
+            border-color: var(--bs-primary); /* Default primary, can override with specific category color */
+        }
+        .category-tab-nav .nav-link[data-bs-target="#properties"].active { border-color: var(--properties-color); color: var(--properties-color); }
+        .category-tab-nav .nav-link[data-bs-target="#events"].active { border-color: var(--events-color); color: var(--events-color); }
+        .category-tab-nav .nav-link[data-bs-target="#autos"].active { border-color: var(--autos-color); color: var(--autos-color); }
+        .category-tab-nav .nav-link[data-bs-target="#services"].active { border-color: var(--services-color); color: var(--services-color); }
+        .category-tab-nav .nav-link[data-bs-target="#jobs"].active { border-color: var(--jobs-color); color: var(--jobs-color); }
+        .category-tab-nav .nav-link[data-bs-target="#classifieds"].active { border-color: var(--classifieds-color); color: var(--classifieds-color); }
+
+        .category-spotlight-card {
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+        }
+        .category-spotlight-card .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1;
+        }
+        .category-spotlight-card .content {
+            position: relative;
+            z-index: 2;
+            padding: 20px;
+        }
+        .category-spotlight-card .btn {
+            margin-top: 10px;
+            background-color: rgba(255,255,255,0.2);
+            border: 1px solid white;
+            color: white;
+        }
+        .category-spotlight-card .btn:hover {
+            background-color: rgba(255,255,255,0.4);
+        }
+
+        .stats-section .stat-item {
+            text-align: center;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+        }
+        .stats-section .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--bs-primary); /* Use a general accent or a specific one */
+        }
+        .stats-section .stat-label {
+            font-size: 1.1rem;
+            color: #6c757d;
+        }
+
+        .how-it-works-section .step-icon {
+            font-size: 3rem;
+            color: var(--bs-primary);
+            margin-bottom: 15px;
+        }
+        .how-it-works-section .card {
+            background-color: white;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .testimonial-carousel .carousel-item {
+            padding: 40px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+            min-height: 200px; /* Ensure consistent height */
+        }
+        .testimonial-carousel .quote-icon {
+            font-size: 2.5rem;
+            color: var(--bs-gray-400);
+            margin-bottom: 15px;
+        }
+        .testimonial-carousel .author-info {
+            font-weight: 600;
+            margin-top: 15px;
+        }
+        .testimonial-carousel .carousel-indicators [data-bs-target] {
+            background-color: var(--bs-primary);
+        }
+
+        .cta-section {
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://via.placeholder.com/1600x300/6c757d/ffffff?text=Explore+More') no-repeat center center/cover;
+            color: white;
+            padding: 60px 0;
+            border-radius: 15px;
+            text-align: center;
+        }
+        .cta-section h2 {
+            font-weight: 700;
+            margin-bottom: 30px;
+        }
+
+        .footer {
+            background-color: #343a40;
+            color: #adb5bd;
+            padding: 60px 0 30px;
+        }
+        .footer h5 {
+            color: white;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        .footer a {
+            color: #adb5bd;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .footer a:hover {
+            color: white;
+        }
+        .footer .social-icons a {
+            font-size: 1.5rem;
+            margin-right: 15px;
+        }
+
+        /* Category specific card styles for featured listings */
+        .card.card-properties .card-body .btn { background-color: var(--properties-color); border-color: var(--properties-color); }
+        .card.card-properties .card-body .btn:hover { background-color: #006666; border-color: #006666; }
+        .card.card-events .card-body .btn { background-color: var(--events-color); border-color: var(--events-color); }
+        .card.card-events .card-body .btn:hover { background-color: #d15c0e; border-color: #d15c0e; }
+        .card.card-autos .card-body .btn { background-color: var(--autos-color); border-color: var(--autos-color); }
+        .card.card-autos .card-body .btn:hover { background-color: #152c6b; border-color: #152c6b; }
+        .card.card-services .card-body .btn { background-color: var(--services-color); border-color: var(--services-color); }
+        .card.card-services .card-body .btn:hover { background-color: #107e3a; border-color: #107e3a; }
+        .card.card-jobs .card-body .btn { background-color: var(--jobs-color); border-color: var(--jobs-color); }
+        .card.card-jobs .card-body .btn:hover { background-color: #632faf; border-color: #632faf; }
+        .card.card-classifieds .card-body .btn { background-color: var(--classifieds-color); border-color: var(--classifieds-color); }
+        .card.card-classifieds .card-body .btn:hover { background-color: #b01f1f; border-color: #b01f1f; }
+
+
+        /* Trending Tabs Section Specifics */
+        .trending-section .nav-tabs .nav-link {
+            border-bottom: 2px solid transparent;
+            color: #6c757d;
+            font-weight: 500;
+            padding-bottom: 0.75rem;
+        }
+        .trending-section .nav-tabs .nav-link.active {
+            border-color: var(--bs-primary);
+            color: var(--bs-primary);
+        }
+        .trending-section .nav-tabs .nav-link[data-bs-target="#trending-properties"].active { border-color: var(--properties-color); color: var(--properties-color); }
+        .trending-section .nav-tabs .nav-link[data-bs-target="#trending-events"].active { border-color: var(--events-color); color: var(--events-color); }
+        .trending-section .nav-tabs .nav-link[data-bs-target="#trending-autos"].active { border-color: var(--autos-color); color: var(--autos-color); }
+        .trending-section .nav-tabs .nav-link[data-bs-target="#trending-services"].active { border-color: var(--services-color); color: var(--services-color); }
+        .trending-section .nav-tabs .nav-link[data-bs-target="#trending-jobs"].active { border-color: var(--jobs-color); color: var(--jobs-color); }
+        .trending-section .nav-tabs .nav-link[data-bs-target="#trending-classifieds"].active { border-color: var(--classifieds-color); color: var(--classifieds-color); }
+
+        /* Custom scrollable for trending items on mobile */
+        @media (max-width: 767.98px) {
+            .trending-items-scrollable {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                white-space: nowrap;
+            }
+            .trending-items-scrollable .col-md-3 {
+                display: inline-block;
+                float: none;
+                width: 70%; /* Adjust card width for mobile scroll */
+                margin-right: 15px;
+            }
+            .trending-items-scrollable .col-md-3:last-child {
+                margin-right: 0;
+            }
+            .hero-search-bar {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .hero-search-bar .form-control {
+                flex-basis: 100%;
+                margin-bottom: 10px;
+            }
+            .hero-search-bar .dropdown {
+                margin-bottom: 10px;
+            }
+            .navbar-search-global {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg bg-white sticky-top shadow-sm py-3">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <img src="https://via.placeholder.com/30x30/008080/ffffff?text=U" alt="Unify Logo" class="me-2">
+                <span class="fw-bold fs-5 text-dark">Unify</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
+                <form class="d-flex mx-auto my-2 my-lg-0">
+                    <input class="form-control me-2 navbar-search-global" type="search" placeholder="Search across all categories..." aria-label="Search">
+                </form>
+                <ul class="navbar-nav align-items-center">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-dark" href="#" id="propertiesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Properties
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="propertiesDropdown">
+                            <li><a class="dropdown-item" href="#">Rentals</a></li>
+                            <li><a class="dropdown-item" href="#">For Sale</a></li>
+                            <li><a class="dropdown-item" href="#">Commercial</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-dark" href="#" id="eventsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Events
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="eventsDropdown">
+                            <li><a class="dropdown-item" href="#">Concerts</a></li>
+                            <li><a class="dropdown-item" href="#">Workshops</a></li>
+                            <li><a class="dropdown-item" href="#">Festivals</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-dark" href="#" id="autosDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Autos
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="autosDropdown">
+                            <li><a class="dropdown-item" href="#">Cars</a></li>
+                            <li><a class="dropdown-item" href="#">Motorcycles</a></li>
+                            <li><a class="dropdown-item" href="#">Parts</a></li>
+                        </ul>
+                    </li>
+                     <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-dark" href="#" id="servicesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Services
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="servicesDropdown">
+                            <li><a class="dropdown-item" href="#">Home Repair</a></li>
+                            <li><a class="dropdown-item" href="#">Digital Marketing</a></li>
+                            <li><a class="dropdown-item" href="#">Tutoring</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-dark" href="#" id="jobsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Jobs
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="jobsDropdown">
+                            <li><a class="dropdown-item" href="#">Full-time</a></li>
+                            <li><a class="dropdown-item" href="#">Part-time</a></li>
+                            <li><a class="dropdown-item" href="#">Freelance</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-dark" href="#" id="classifiedsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Classifieds
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="classifiedsDropdown">
+                            <li><a class="dropdown-item" href="#">Electronics</a></li>
+                            <li><a class="dropdown-item" href="#">Furniture</a></li>
+                            <li><a class="dropdown-item" href="#">Fashion</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item ms-lg-3">
+                        <a class="btn btn-outline-dark rounded-pill px-3" href="#">
+                            <i class="fas fa-user-circle me-1"></i> Account
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container my-5">
+
+        <section class="hero-banner p-5 mb-5">
+            <h1 class="display-4 fw-bold mb-3">Your Unified Marketplace</h1>
+            <p class="lead mb-4">Discover, Connect, and Transact Across Categories</p>
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="hero-search-bar mb-4">
+                        <div class="dropdown me-2">
+                            <button class="btn dropdown-toggle" type="button" id="categorySelector" data-bs-toggle="dropdown" aria-expanded="false">
+                                All Categories
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="categorySelector">
+                                <li><a class="dropdown-item" href="#">Properties</a></li>
+                                <li><a class="dropdown-item" href="#">Events</a></li>
+                                <li><a class="dropdown-item" href="#">Autos</a></li>
+                                <li><a class="dropdown-item" href="#">Services</a></li>
+                                <li><a class="dropdown-item" href="#">Jobs</a></li>
+                                <li><a class="dropdown-item" href="#">Classifieds</a></li>
+                            </ul>
+                        </div>
+                        <input type="text" class="form-control flex-grow-1" placeholder="What are you looking for?">
+                        <button class="btn btn-primary rounded-pill ms-2"><i class="fas fa-search"></i> Search</button>
+                    </div>
+                    <div class="d-flex justify-content-center flex-wrap">
+                        <a href="#" class="btn btn-light rounded-pill px-4 py-2 me-2 mb-2">Browse All Categories</a>
+                        <a href="#" class="btn btn-outline-light rounded-pill px-4 py-2 mb-2">Post Your Listing</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="trending-section my-5">
+            <h2 class="text-center fw-bold mb-4">Trending Listings</h2>
+            <ul class="nav nav-tabs justify-content-center mb-4 category-tab-nav" id="trendingTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="trending-properties-tab" data-bs-toggle="tab" data-bs-target="#trending-properties" type="button" role="tab" aria-controls="trending-properties" aria-selected="true">Properties</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="trending-events-tab" data-bs-toggle="tab" data-bs-target="#trending-events" type="button" role="tab" aria-controls="trending-events" aria-selected="false">Events</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="trending-autos-tab" data-bs-toggle="tab" data-bs-target="#trending-autos" type="button" role="tab" aria-controls="trending-autos" aria-selected="false">Autos</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="trending-services-tab" data-bs-toggle="tab" data-bs-target="#trending-services" type="button" role="tab" aria-controls="trending-services" aria-selected="false">Services</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="trending-jobs-tab" data-bs-toggle="tab" data-bs-target="#trending-jobs" type="button" role="tab" aria-controls="trending-jobs" aria-selected="false">Jobs</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="trending-classifieds-tab" data-bs-toggle="tab" data-bs-target="#trending-classifieds" type="button" role="tab" aria-controls="trending-classifieds" aria-selected="false">Classifieds</button>
+                </li>
+            </ul>
+            <div class="tab-content" id="trendingTabsContent">
+                <div class="tab-pane fade show active" id="trending-properties" role="tabpanel" aria-labelledby="trending-properties-tab">
+                    <div class="row trending-items-scrollable flex-nowrap">
+                        <div class="col-md-3">
+                            <div class="card h-100">
+                                <img src="https://via.placeholder.com/400x250/008080/ffffff?text=Modern+Apartment" class="card-img-top" alt="Modern Apartment">
+                                <span class="card-category-strip bg-info">Properties</span>
+                                <div class="card-body">
+                                    <h5 class="card-title text-properties-color">Modern Apartment</h5>
+                                    <p class="card-text text-muted small">Downtown Living, 2 Beds</p>
+                                    <p class="card-text fw-bold">$2,500/month</p>
+                                    <a href="#" class="btn btn-accent-properties btn-sm rounded-pill">View Listing</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card h-100">
+                                <img src="https://via.placeholder.com/400x250/008080/ffffff?text=Suburban+Home" class="card-img-top" alt="Suburban Home">
+                                <span class="card-category-strip bg-info">Properties</span>
+                                <div class="card-body">
+                                    <h5 class="card-title text-properties-color">Spacious Suburban Home</h5>
+                                    <p class="card-text text-muted small">3 Beds, Large Yard</p>
+                                    <p class="card-text fw-bold">$450,000</p>
+                                    <a href="#" class="btn btn-accent-properties btn-sm rounded-pill">View Listing</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card h-100">
+                                <img src="https://via.placeholder.com/400x250/008080/ffffff?text=Cozy+Studio" class="card-img-top" alt="Cozy Studio">
+                                <span class="card-category-strip bg-info">Properties</span>
+                                <div class="card-body">
+                                    <h5 class="card-title text-properties-color">Cozy Studio Apartment</h5>
+                                    <p class="card-text text-muted small">City Center, Furnished</p>
+                                    <p class="card-text fw-bold">$1,800/month</p>
+                                    <a href="#" class="btn btn-accent-properties btn-sm rounded-pill">View Listing</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card h-100">
+                                <img src="https://via.placeholder.com/400x250/008080/ffffff?text=Luxury+Villa" class="card-img-top" alt="Luxury Villa">
+                                <span class="card-category-strip bg-info">Properties</span>
+                                <div class="card-body">
+                                    <h5 class="card-title text-properties-color">Luxury Waterfront Villa</h5>
+                                    <p class="card-text text-muted small">5 Beds, Pool, Ocean View</p>
+                                    <p class="card-text fw-bold">$1,200,000</p>
+                                    <a href="#" class="btn btn-accent-properties btn-sm rounded-pill">View Listing</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="trending-events" role="tabpanel" aria-labelledby="trending-events-tab">
+                    <div class="row trending-items-scrollable flex-nowrap">
+                        <div class="col-md-3">
+                            <div class="card h-100">
+                                <img src="https://via.placeholder.com/400x250/F97316/ffffff?text=Concert+Night" class="card-img-top" alt="Concert Night">
+                                <span class="card-category-strip bg-warning">Events</span>
+                                <div class="card-body">
+                                    <h5 class="card-title">Summer Music Fest</h5>
+                                    <p class="card-text text-muted small">July 15th, City Park</p>
+                                    <p class="card-text fw-bold">$45</p>
+                                    <a href="#" class="btn btn-accent-events btn-sm rounded-pill">Get Tickets</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card h-100">
+                                <img src="https://via.placeholder.com/400x250/F97316/ffffff?text=Business+Expo" class="card-img-top" alt="Business Expo">
+                                <span class="card-category-strip bg-warning">Events</span>
+                                <div class="card-body">
+                                    <h5 class="card-title">Annual Tech Expo</h5>
+                                    <p class="card-text text-muted small">Aug 20-22, Convention Center</p>
+                                    <p class="card-text fw-bold">Free</p>
+                                    <a href="#" class="btn btn-accent-events btn-sm rounded-pill">Register Now</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card h-100">
+                                <img src="https://via.placeholder.com/400x250/F97316/ffffff?text=Art+Exhibition" class="card-img-top" alt="Art Exhibition">
+                                <span class="card-category-strip bg-warning">Events</span>
+                                <div class="card-body">
+                                    <h5 class="card-title">Modern Art Exhibition</h5>
+                                    <p class="card-text text-muted small">Sept 1-30, City Gallery</p>
+                                    <p class="card-text fw-bold">$20</p>
+                                    <a href="#" class="btn btn-accent-events btn-sm rounded-pill">View Details</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card h-100">
+                                <img src="https://via.placeholder.com/400x250/F97316/ffffff?text=Food+Festival" class="card-img-top" alt="Food Festival">
+                                <span class="card-category-strip bg-warning">Events</span>
+                                <div class="card-body">
+                                    <h5 class="card-title">International Food Festival</h5>
+                                    <p class="card-text text-muted small">Oct 5-7, Waterfront Plaza</p>
+                                    <p class="card-text fw-bold">$10</p>
+                                    <a href="#" class="btn btn-accent-events btn-sm rounded-pill">Learn More</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="trending-autos" role="tabpanel" aria-labelledby="trending-autos-tab">
+                    <div class="row trending-items-scrollable flex-nowrap">
+                        <div class="col-md-3">
+                            <div class="card h-100">
+                                <img src="https://via.placeholder.com/400x250/1E3A8A/ffffff?text=Luxury+Sedan" class="card-img-top" alt="Luxury Sedan">
+                                <span class="card-category-strip bg-primary">Autos</span>
+                                <div class="card-body">
+                                    <h5 class="card-title">2022 Luxury Sedan</h5>
+                                    <p class="card-text text-muted small">Low Mileage, Fully Loaded</p>
+                                    <p class="card-text fw-bold">$65,000</p>
+                                    <a href="#" class="btn btn-accent-autos btn-sm rounded-pill">Shop Now</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card h-100">
+                                <img src="https://via.placeholder.com/400x250/1E3A8A/ffffff?text=Used+SUV" class="card-img-top" alt="Used SUV">
+                                <span class="card-category-strip bg-primary">Autos</span>
+                                <div class="card-body">
+                                    <h5 class="card-title">Used Family SUV</h5>
+                                    <p class="card-text text-muted small">Reliable, Great Condition</p>
+                                    <p class="card-text fw-bold">$22,000</p>
+                                    <a href="#" class="btn btn-accent-autos btn-sm rounded-pill">Shop Now</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card h-100">
+                                <img src="https://via.placeholder.com/400x250/1E3A8A/ffffff?text=Sport+Car" class="card-img-top" alt="Sport Car">
+                                <span class="card-category-strip bg-primary">Autos</span>
+                                <div class="card-body">
+                                    <h5 class="card-title">2023 Sport Coupe</h5>
+                                    <p class="card-text text-muted small">High Performance, New</p>
+                                    <p class="card-text fw-bold">$85,000</p>
+                                    <a href="#" class="btn btn-accent-autos btn-sm rounded-pill">Shop Now</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card h-100">
+                                <img src="https://via.placeholder.com/400x250/1E3A8A/ffffff?text=Electric+Vehicle" class="card-img-top" alt="Electric Vehicle">
+                                <span class="card-category-strip bg-primary">Autos</span>
+                                <div class="card-body">
+                                    <h5 class="card-title">Electric City Car</h5>
+                                    <p class="card-text text-muted small">Eco-friendly, Compact</p>
+                                    <p class="card-text fw-bold">$35,000</p>
+                                    <a href="#" class="btn btn-accent-autos btn-sm rounded-pill">Shop Now</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="trending-services" role="tabpanel" aria-labelledby="trending-services-tab">
+                    <div class="row trending-items-scrollable flex-nowrap">
+                        <div class="col-md-3">
+                            <div class="card h-100">
+                                <img src="https://via.placeholder.com/400x250/16A34A/ffffff?text=Cleaning+Service" class="card-img-top" alt="Cleaning Service">
+                                <span class="card-category-strip bg-success">Services</span>
+                                <div class="card-body">
+                                    <h5 class="card-title">Professional Cleaning</h5>
+                                    <p class="card-text text-muted small">Home & Office Cleaning</p>
+                                    <p class="card-text fw-bold">From $50/hr</p>
+                                    <a href="#" class="btn btn-accent-services btn-sm rounded-pill">Book Service</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card h-100">
+                                <img src="https://via.placeholder.com/400x250/16A34A/ffffff?text=Digital+Marketing" class="card-img-top" alt="Digital Marketing">
+                                <span class="card-category-strip bg-success">Services</span>
+                                <div class="card-body">
+                                    <h5 class="card-title">Digital Marketing Expert</h5>
+                                    <p class="card-text text-muted small">SEO, Social Media, Ads</p>
+                                    <p class="card-text fw-bold">Custom Quote</p>
+                                    <a href="#" class="btn btn-accent-services btn-sm rounded-pill">Get Quote</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card h-100">
+                                <img src="https://via.placeholder.com/400x250/16A34A/ffffff?text=Personal+Trainer" class="card-img-top" alt="Personal Trainer">
+                                <span class="card-category-strip bg-success">Services</span>
+                                <div class="card-body">
+                                    <h5 class="card-title">Certified Personal Trainer</h5>
+                                    <p class="card-text text-muted small">Fitness Coaching, Meal Plans</p>
+                                    <p class="card-text fw-bold">From $60/session</p>
+                                    <a href="#" class="btn btn-accent-services btn-sm rounded-pill">Inquire</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card h-100">
+                                <img src="https://via.placeholder.com/400x250/16A34A/ffffff?text=Web+Design" class="card-img-top" alt="Web Design">
+                                <span class="card-category-strip bg-success">Services</span>
+                                <div class="card-body">
+                                    <h5 class="card-title">Custom Web Design</h5>
+                                    <p class="card-text text-muted small">Modern, Responsive Websites</p>
+                                    <p class="card-text fw-bold">Starting at $800</p>
+                                    <a href="#" class="btn btn-accent-services btn-sm rounded-pill">Get a Quote</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="trending-jobs" role="tabpanel" aria-labelledby="trending-jobs-tab">
+                    <div class="row trending-items-scrollable flex-nowrap">
+                        <div class="col-md-3">
+                            <div class="card h-100">
+                                <img src="https://via.placeholder.com/400x250/7C3AED/ffffff?text=Software+Engineer" class="card-img-top" alt="Software Engineer">
+                                <span class="card-category-strip bg-purple">Jobs</span>
+                                <div class="card-body">
+                                    <h5 class="card-title">Senior Software Engineer</h5>
+                                    <p class="card-text text-muted small">Full-time, Remote, Tech Co.</p>
+                                    <p class="card-text fw-bold">$120k - $150k</p>
+                                    <a href="#" class="btn btn-accent-jobs btn-sm rounded-pill">Apply Now</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card h-100">
+                                <img src="https://via.placeholder.com/400x250/7C3AED/ffffff?text=Graphic+Designer" class="card-img-top" alt="Graphic Designer">
+                                <span class="card-category-strip bg-purple">Jobs</span>
+                                <div class="card-body">
+                                    <h5 class="card-title">Graphic Designer</h5>
+                                    <p class="card-text text-muted small">Freelance, Creative Agency</p>
+                                    <p class="card-text fw-bold">$40 - $60/hr</p>
+                                    <a href="#" class="btn btn-accent-jobs btn-sm rounded-pill">Apply Now</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card h-100">
+                                <img src="https://via.placeholder.com/400x250/7C3AED/ffffff?text=Marketing+Manager" class="card-img-top" alt="Marketing Manager">
+                                <span class="card-category-strip bg-purple">Jobs</span>
+                                <div class="card-body">
+                                    <h5 class="card-title">Marketing Manager</h5>
+                                    <p class="card-text text-muted small">Full-time, Hybrid, Startup</p>
+                                    <p class="card-text fw-bold">$80k - $100k</p>
+                                    <a href="#" class="btn btn-accent-jobs btn-sm rounded-pill">Apply Now</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card h-100">
+                                <img src="https://via.placeholder.com/400x250/7C3AED/ffffff?text=Customer+Service" class="card-img-top" alt="Customer Service">
+                                <span class="card-category-strip bg-purple">Jobs</span>
+                                <div class="card-body">
+                                    <h5 class="card-title">Customer Service Rep</h5>
+                                    <p class="card-text text-muted small">Part-time, Remote, Retail</p>
+                                    <p class="card-text fw-bold">$18 - $22/hr</p>
+                                    <a href="#" class="btn btn-accent-jobs btn-sm rounded-pill">Apply Now</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="trending-classifieds" role="tabpanel" aria-labelledby="trending-classifieds-tab">
+                    <div class="row trending-items-scrollable flex-nowrap">
+                        <div class="col-md-3">
+                            <div class="card h-100">
+                                <img src="https://via.placeholder.com/400x250/DC2626/ffffff?text=Electronics" class="card-img-top" alt="Electronics">
+                                <span class="card-category-strip bg-danger">Classifieds</span>
+                                <div class="card-body">
+                                    <h5 class="card-title">Used iPhone 13 Pro</h5>
+                                    <p class="card-text text-muted small">Great Condition, Unlocked</p>
+                                    <p class="card-text fw-bold">$600</p>
+                                    <a href="#" class="btn btn-accent-classifieds btn-sm rounded-pill">Message Seller</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card h-100">
+                                <img src="https://via.placeholder.com/400x250/DC2626/ffffff?text=Furniture" class="card-img-top" alt="Furniture">
+                                <span class="card-category-strip bg-danger">Classifieds</span>
+                                <div class="card-body">
+                                    <h5 class="card-title">Modern Sofa Set</h5>
+                                    <p class="card-text text-muted small">Barely Used, Pick Up Only</p>
+                                    <p class="card-text fw-bold">$350</p>
+                                    <a href="#" class="btn btn-accent-classifieds btn-sm rounded-pill">Message Seller</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card h-100">
+                                <img src="https://via.placeholder.com/400x250/DC2626/ffffff?text=Books" class="card-img-top" alt="Books">
+                                <span class="card-category-strip bg-danger">Classifieds</span>
+                                <div class="card-body">
+                                    <h5 class="card-title">Science Fiction Book Lot</h5>
+                                    <p class="card-text text-muted small">Collection of 10 bestsellers</p>
+                                    <p class="card-text fw-bold">$50</p>
+                                    <a href="#" class="btn btn-accent-classifieds btn-sm rounded-pill">Message Seller</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card h-100">
+                                <img src="https://via.placeholder.com/400x250/DC2626/ffffff?text=Collectibles" class="card-img-top" alt="Collectibles">
+                                <span class="card-category-strip bg-danger">Classifieds</span>
+                                <div class="card-body">
+                                    <h5 class="card-title">Vintage Stamp Collection</h5>
+                                    <p class="card-text text-muted small">Rare finds, good condition</p>
+                                    <p class="card-text fw-bold">$150</p>
+                                    <a href="#" class="btn btn-accent-classifieds btn-sm rounded-pill">Message Seller</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="featured-listings-section my-5">
+            <h2 class="text-center fw-bold mb-4">Our Top Picks</h2>
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-3">
+                    <div class="card h-100 card-properties">
+                        <img src="https://via.placeholder.com/400x250/008080/ffffff?text=Featured+Property" class="card-img-top" alt="Featured Property">
+                        <span class="card-category-strip bg-info">Properties</span>
+                        <div class="card-body">
+                            <h5 class="card-title">Cozy Family Home</h5>
+                            <p class="card-text text-muted small">3 Beds, 2 Baths, Garden</p>
+                            <p class="card-text fw-bold text-properties-color">$380,000</p>
+                            <a href="#" class="btn btn-properties btn-sm rounded-pill">View Details</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="card h-100 card-events">
+                        <img src="https://via.placeholder.com/400x250/F97316/ffffff?text=Featured+Event" class="card-img-top" alt="Featured Event">
+                        <span class="card-category-strip bg-warning">Events</span>
+                        <div class="card-body">
+                            <h5 class="card-title">Charity Marathon</h5>
+                            <p class="card-text text-muted small">October 28th, Central Park</p>
+                            <p class="card-text fw-bold text-events-color">Register Now</p>
+                            <a href="#" class="btn btn-events btn-sm rounded-pill">Participate</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="card h-100 card-autos">
+                        <img src="https://via.placeholder.com/400x250/1E3A8A/ffffff?text=Featured+Car" class="card-img-top" alt="Featured Car">
+                        <span class="card-category-strip bg-primary">Autos</span>
+                        <div class="card-body">
+                            <h5 class="card-title">2020 Electric Hatchback</h5>
+                            <p class="card-text text-muted small">Low mileage, Fast charging</p>
+                            <p class="card-text fw-bold text-autos-color">$32,000</p>
+                            <a href="#" class="btn btn-autos btn-sm rounded-pill">Explore</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="card h-100 card-jobs">
+                        <img src="https://via.placeholder.com/400x250/7C3AED/ffffff?text=Featured+Job" class="card-img-top" alt="Featured Job">
+                        <span class="card-category-strip bg-purple">Jobs</span>
+                        <div class="card-body">
+                            <h5 class="card-title">Data Scientist</h5>
+                            <p class="card-text text-muted small">Full-time, Startup, Remote</p>
+                            <p class="card-text fw-bold text-jobs-color">$100k - $130k</p>
+                            <a href="#" class="btn btn-jobs btn-sm rounded-pill">Apply</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="category-spotlights-section my-5">
+            <h2 class="text-center fw-bold mb-4">Discover More by Category</h2>
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-4">
+                    <div class="category-spotlight-card" style="background-image: url('https://via.placeholder.com/600x400/008080/ffffff?text=Find+Your+Dream+Home');">
+                        <div class="overlay" style="background-color: rgba(0, 128, 128, 0.7);"></div>
+                        <div class="content">
+                            <h3>Find Your Dream Home</h3>
+                            <p>Explore properties for sale and rent.</p>
+                            <a href="#" class="btn btn-outline-light rounded-pill">Browse Properties</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="category-spotlight-card" style="background-image: url('https://via.placeholder.com/600x400/F97316/ffffff?text=Discover+Local+Events');">
+                        <div class="overlay" style="background-color: rgba(249, 115, 22, 0.7);"></div>
+                        <div class="content">
+                            <h3>Discover Local Events</h3>
+                            <p>Concerts, workshops, and more.</p>
+                            <a href="#" class="btn btn-outline-light rounded-pill">Find Events</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="category-spotlight-card" style="background-image: url('https://via.placeholder.com/600x400/1E3A8A/ffffff?text=Shop+New+and+Used+Cars');">
+                        <div class="overlay" style="background-color: rgba(30, 58, 138, 0.7);"></div>
+                        <div class="content">
+                            <h3>Shop New & Used Cars</h3>
+                            <p>Vehicles for every budget and need.</p>
+                            <a href="#" class="btn btn-outline-light rounded-pill">Explore Autos</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="category-spotlight-card" style="background-image: url('https://via.placeholder.com/600x400/16A34A/ffffff?text=Hire+Trusted+Experts');">
+                        <div class="overlay" style="background-color: rgba(22, 163, 74, 0.7);"></div>
+                        <div class="content">
+                            <h3>Hire Trusted Experts</h3>
+                            <p>Find professionals for any service.</p>
+                            <a href="#" class="btn btn-outline-light rounded-pill">Find Services</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="category-spotlight-card" style="background-image: url('https://via.placeholder.com/600x400/7C3AED/ffffff?text=Grow+Your+Career');">
+                        <div class="overlay" style="background-color: rgba(124, 58, 237, 0.7);"></div>
+                        <div class="content">
+                            <h3>Grow Your Career</h3>
+                            <p>Discover job openings across industries.</p>
+                            <a href="#" class="btn btn-outline-light rounded-pill">Browse Jobs</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="category-spotlight-card" style="background-image: url('https://via.placeholder.com/600x400/DC2626/ffffff?text=Browse+Local+Deals');">
+                        <div class="overlay" style="background-color: rgba(220, 38, 38, 0.7);"></div>
+                        <div class="content">
+                            <h3>Browse Local Deals</h3>
+                            <p>Buy and sell items in your community.</p>
+                            <a href="#" class="btn btn-outline-light rounded-pill">View Classifieds</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="stats-section my-5 py-5 bg-white rounded-3 shadow-sm">
+            <h2 class="text-center fw-bold mb-5">Trust & Transparency</h2>
+            <div class="row text-center">
+                <div class="col-md-3 stat-item">
+                    <p class="stat-value text-properties-color">50,000+</p>
+                    <p class="stat-label">Listings</p>
+                </div>
+                <div class="col-md-3 stat-item">
+                    <p class="stat-value text-events-color">20,000+</p>
+                    <p class="stat-label">Active Users</p>
+                </div>
+                <div class="col-md-3 stat-item">
+                    <p class="stat-value text-autos-color">500+</p>
+                    <p class="stat-label">Cities Covered</p>
+                </div>
+                <div class="col-md-3 stat-item">
+                    <p class="stat-value text-services-color">99%</p>
+                    <p class="stat-label">Verified Listings</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="how-it-works-section my-5">
+            <h2 class="text-center fw-bold mb-4">How It Works</h2>
+            <div class="row g-4 justify-content-center">
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <i class="fas fa-search step-icon text-primary"></i>
+                            <h5 class="card-title fw-bold">1. Search & Discover</h5>
+                            <p class="card-text text-muted">Easily find what you need across all categories with our powerful search.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <i class="fas fa-handshake step-icon text-success"></i>
+                            <h5 class="card-title fw-bold">2. Connect & Communicate</h5>
+                            <p class="card-text text-muted">Get in touch with sellers, service providers, or event organizers directly.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <i class="fas fa-dollar-sign step-icon text-warning"></i>
+                            <h5 class="card-title fw-bold">3. Secure Your Deal</h5>
+                            <p class="card-text text-muted">Transact confidently with verified listings and secure communication.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="testimonials-section my-5">
+            <h2 class="text-center fw-bold mb-4">What Our Users Say</h2>
+            <div id="testimonialsCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#testimonialsCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                    <button type="button" data-bs-target="#testimonialsCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                    <button type="button" data-bs-target="#testimonialsCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                </div>
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div class="d-flex flex-column align-items-center">
+                            <i class="fas fa-quote-left quote-icon"></i>
+                            <p class="lead text-center mb-3">"Finding my dream apartment was effortless with Unify! The property listings were extensive and easy to navigate."</p>
+                            <div class="author-info text-properties-color">- Jane Doe, Property Buyer</div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="d-flex flex-column align-items-center">
+                            <i class="fas fa-quote-left quote-icon"></i>
+                            <p class="lead text-center mb-3">"I sold my car faster than I expected! The platform is intuitive, and connecting with buyers was seamless."</p>
+                            <div class="author-info text-autos-color">- John Smith, Auto Seller</div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="d-flex flex-column align-items-center">
+                            <i class="fas fa-quote-left quote-icon"></i>
+                            <p class="lead text-center mb-3">"Unify helped me land my first freelance client. The job postings are relevant and connect you with great opportunities!"</p>
+                            <div class="author-info text-jobs-color">- Emily White, Job Seeker</div>
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#testimonialsCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#testimonialsCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </section>
+
+        <section class="cta-section my-5 p-5">
+            <h2 class="display-5">Ready to Start Exploring Today?</h2>
+            <p class="lead mb-4">Join our growing community and unlock a world of possibilities.</p>
+            <div class="d-flex justify-content-center flex-wrap">
+                <a href="#" class="btn btn-primary btn-lg rounded-pill px-5 me-md-3 mb-2 mb-md-0">Browse Listings</a>
+                <a href="#" class="btn btn-outline-light btn-lg rounded-pill px-5">Post a Listing</a>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        <div class="container py-5">
+            <div class="row">
+                <div class="col-md-3">
+                    <h5 class="fw-bold">Unify</h5>
+                    <p class="text-muted">Your ultimate marketplace for everything you need, all in one place.</p>
+                    <div class="social-icons">
+                        <a href="#" class="text-white-50"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-white-50"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-white-50"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-white-50"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <h5>About Us</h5>
+                    <a href="#">Our Story</a>
+                    <a href="#">Careers</a>
+                    <a href="#">Press</a>
+                    <a href="#">Blog</a>
+                </div>
+                <div class="col-md-2">
+                    <h5>Categories</h5>
+                    <a href="#">Properties</a>
+                    <a href="#">Events</a>
+                    <a href="#">Autos</a>
+                    <a href="#">Services</a>
+                    <a href="#">Jobs</a>
+                    <a href="#">Classifieds</a>
+                </div>
+                <div class="col-md-2">
+                    <h5>Resources</h5>
+                    <a href="#">Help Center</a>
+                    <a href="#">Safety Tips</a>
+                    <a href="#">FAQ</a>
+                    <a href="#">Affiliates</a>
+                </div>
+                <div class="col-md-3">
+                    <h5>Contact Us</h5>
+                    <p><i class="fas fa-map-marker-alt me-2"></i> 123 Marketplace Ave, City, Country</p>
+                    <p><i class="fas fa-phone me-2"></i> +1 234 567 8900</p>
+                    <p><i class="fas fa-envelope me-2"></i> info@unify.com</p>
+                </div>
+            </div>
+            <hr class="my-4 border-secondary">
+            <div class="row">
+                <div class="col-12 text-center text-muted">
+                    <p class="mb-0">&copy; 2023 Unify. All rights reserved. | <a href="#" class="text-muted">Privacy Policy</a> | <a href="#" class="text-muted">Terms of Service</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

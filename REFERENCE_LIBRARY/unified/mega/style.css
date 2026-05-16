@@ -1,0 +1,393 @@
+ /* Global Typography & Spacing Polish */
+    body {
+        font-family: var(--font-body);
+        background: var(--bg);
+        color: var(--text-dark);
+        font-size: 0.95rem;
+        line-height: 1.6;
+        overflow-x: hidden;
+    }
+    a { text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--secondary-accent) !important; }
+    .no-radius { border-radius: 0 !important; }
+    .card-no-radius { border-radius: 0 !important; overflow: hidden; }
+    .py-6 { padding-top: 5rem !important; padding-bottom: 5rem !important; }
+    .pt-6 { padding-top: 5rem !important; }
+
+    /* Custom style for main section headings to match the bold, branded logo style */
+    .mega-title {
+        font-family: var(--font-heading);
+        font-size: 2.5rem !important; 
+        font-weight: 900; 
+        letter-spacing: -1px; 
+        color: var(--text-dark); 
+    }
+    .mega-title span.accent-word {
+        color: var(--secondary-accent);
+    }
+
+    /* --- HEADER STYLES --- */
+    
+    .utility-bar {
+        background: var(--top-bar-bg);
+        color: var(--text-dark);
+        font-size: 0.85rem;
+        padding: 5px 0;
+        border-bottom: 1px solid #eee;
+    }
+    .utility-bar a { color: var(--text-dark); opacity: 0.7; }
+
+    .top-header-row { 
+      background: var(--bg); 
+      padding: 15px 0;
+      border-bottom: 1px solid #ddd; 
+    }
+
+    /* Logo Styling */
+    .top-header-row .logo-text { 
+        font-family: var(--font-heading); 
+        font-size: 2.1rem !important; 
+        font-weight: 900;
+        letter-spacing: -0.5px;
+        color: var(--accent); 
+    }
+    .top-header-row .logo-text span.market-word { color: var(--secondary-accent); } 
+
+    /* Search Bar Button Color */
+    .top-header-row .search-bar .btn {
+        background-color: var(--secondary-accent) !important; 
+        border-color: var(--secondary-accent) !important; 
+        color: var(--light-icon-color) !important;
+    }
+    
+    /* Action Button Colors */
+    .top-header-row .action-buttons .btn-outline-primary { 
+        color: var(--accent); 
+        border-color: var(--accent); 
+    }
+    .top-header-row .action-buttons .btn-outline-primary:hover { 
+        background-color: var(--accent); 
+        color: var(--light-icon-color); 
+    }
+    
+    /* Post Ad Button (Teal on hover) */
+    .top-header-row .action-buttons .btn-primary { 
+        /* Default State */
+        background-color: var(--secondary-accent); 
+        border-color: var(--secondary-accent); 
+        transition: all 0.2s ease; /* Added transition for smooth effect */
+    }
+    .top-header-row .action-buttons .btn-primary:hover { 
+        /* Hover State: Swap to Primary Teal */
+        background-color: var(--accent) !important; 
+        border-color: var(--accent) !important;
+        color: var(--light-icon-color) !important; 
+    }
+
+
+    .search-form-category {
+      max-width: 160px;
+    }
+
+
+    /* Bottom Navigation (Soft Brand Gradient) */
+    .bottom-nav {
+        background: var(--nav-soft-gradient) !important; 
+        border-bottom: 1px solid var(--soft-teal-border); 
+    }
+    .bottom-nav .nav-link, .bottom-nav .dropdown-toggle {
+        color: var(--text-dark) !important; 
+        font-weight: 600; 
+        padding: 1rem;
+        margin-right: 1rem;
+    }
+    .bottom-nav .nav-link:hover {
+        color: var(--accent) !important; 
+    }
+    .bottom-nav .nav-item:first-child .dropdown-toggle {
+        background-color: var(--soft-gold); 
+        color: var(--light-icon-color) !important; 
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+    }
+    .bottom-nav .nav-item:first-child .dropdown-toggle:hover {
+        background-color: #212529; 
+    }
+    .bottom-nav .dropdown-menu {
+        border-top: 3px solid var(--secondary-accent); 
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+
+    /* --- FEATURE SECTION STYLES (UPDATED: Teal Gradient Container) --- */
+    .feature-section-plain {
+        background: var(--main-gradient); 
+    }
+
+    /* --- NEW: Style for the feature section's text callout --- */
+    .feature-section-plain p.lead {
+        line-height: 1.8; /* Increased line height for better readability of white text */
+    }
+
+    .horizontal-rule-light {
+        height: 2px;
+        width: 150px; /* Small, focused line */
+        background-color: var(--secondary-accent); /* Vibrant Orange separator */
+        opacity: 0.8; 
+        border-radius: 2px;
+    }
+    /* -------------------------------------------------------- */
+
+
+
+    .feature-box {
+        background-color: var(--bg); 
+        color: var(--text-dark) !important; 
+        padding: 40px; 
+        min-height: 250px;
+        position: relative;
+        border: 1px solid #ddd; 
+        transition: all 0.3s ease;
+    }
+    .feature-box h4, .feature-box p {
+        color: var(--text-dark) !important; 
+    }
+    .feature-box h4 { 
+        font-size: 1.3rem !important; 
+        margin-bottom: 0.5rem; 
+    }
+    .feature-box .btn-cta {
+        background-color: var(--secondary-accent) !important; 
+        color: var(--light-icon-color) !important; 
+        border: 1px solid var(--secondary-accent);
+    }
+    .feature-box .btn-cta:hover {
+        background-color: var(--accent) !important; 
+        color: var(--light-icon-color) !important;
+        border-color: var(--accent);
+    }
+    .feature-box .icon-bg {
+        position: absolute;
+        bottom: 0px;
+        right: 20px;
+        font-size: 10rem; 
+        line-height: 1;
+        opacity: 0.05; 
+        color: var(--accent); 
+        z-index: 1;
+    }
+    
+    /* --- CATEGORY CAROUSEL STYLES & INLINE MOVES --- */
+    /* Shared styles for both old and new category sections */
+    .category-box {
+        position: relative;
+        overflow: hidden;
+        border: 1px solid #ddd;
+    }
+    /* Fixed Heights for Categories (moved from inline) */
+    .category-box[data-id="properties"] { height: 420px; }
+    .category-box[data-id="autos"] { height: 210px; }
+    .category-box[data-id="events"] { height: 200px; }
+    .category-box[data-id="classifieds"] { height: 200px; }
+    .category-box[data-id="services"] { height: 320px; }
+    .category-box[data-id="jobs"] { height: 320px; }
+    .category-box .carousel-inner, .category-box img { height: 100%; }
+
+
+    .category-box img {
+        object-fit: cover;
+    }
+    .category-box .overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 20px;
+        color: var(--light-icon-color);
+        z-index: 5;
+    }
+    .category-box h3, .category-box h5 {
+        color: var(--light-icon-color); 
+        font-weight: 700;
+        margin-bottom: 0.25rem;
+    }
+    /* Specific Overlay Colors (moved from inline styles) */
+    .category-box[data-id="properties"] .overlay { background: linear-gradient(to top, #007bffbb, transparent); }
+    .category-box[data-id="autos"] .overlay { background: linear-gradient(to top, #28a745bb, transparent); }
+    .category-box[data-id="events"] .overlay { background: linear-gradient(to top, #6f42c1bb, transparent); }
+    .category-box[data-id="classifieds"] .overlay { background: linear-gradient(to top, #fd7e14bb, transparent); }
+    .category-box[data-id="services"] .overlay { background: linear-gradient(to top, #20c997bb, transparent); }
+    .category-box[data-id="jobs"] .overlay { background: linear-gradient(to top, #343a40bb, transparent); }
+
+    /* --- CTA BANNER STYLE --- */
+    .cta-banner {
+      background: var(--main-gradient); 
+      color: var(--light-icon-color); 
+    }
+    .cta-banner h2, .cta-banner p {
+      color: var(--light-icon-color) !important;
+    }
+    /* FIX: Apply hover effect and transition */
+    .cta-banner .btn-primary { 
+        background-color: var(--secondary-accent) !important; 
+        border-color: var(--secondary-accent) !important; 
+        color: var(--text-dark) !important; 
+        transition: all 0.2s ease; /* Added transition for smooth effect */
+    }
+    .cta-banner .btn-primary:hover {
+        background-color: var(--accent) !important; /* Change to Primary Teal on hover */
+        border-color: var(--accent) !important; /* Ensure border matches the new background */
+        color: var(--light-icon-color) !important; /* Ensure text is white for contrast */
+    }
+
+
+    /* --- CAROUSEL CUSTOMIZATIONS --- */
+    
+    /* 1. Trending Listings (outside arrows, no background, smaller) */
+    .trending-wrapper {
+        position: relative;
+    }
+    .trending-wrapper .carousel-control-prev,
+    .trending-wrapper .carousel-control-next {
+        position: absolute;
+        top: 50%;
+        height: 1.8rem; 
+        margin-top: -0.9rem;
+        width: 1.8rem;
+        z-index: 10;
+        opacity: 0.8;
+        transition: opacity .15s ease;
+    }
+    .trending-wrapper .carousel-control-prev {
+        left: -3rem; 
+    }
+    .trending-wrapper .carousel-control-next {
+        right: -3rem; 
+    }
+    .trending-wrapper .carousel-control-prev:hover,
+    .trending-wrapper .carousel-control-next:hover {
+        opacity: 1;
+    }
+    .trending-wrapper .carousel-control-prev-icon {
+        height: 100%;
+        width: 100%;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23008080'%3e%3cpath d='M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z'/%3e%3c/svg%3e"); 
+    }
+    .trending-wrapper .carousel-control-next-icon {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23008080'%3e%3cpath d='M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e"); 
+    }
+
+    /* Hover state for the actual icon SVG: make it Charcoal */
+    .trending-wrapper .carousel-control-prev:hover .carousel-control-prev-icon,
+    .trending-wrapper .carousel-control-next:hover .carousel-control-next-icon {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23343a40'%3e%3cpath d='M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z'/%3e%3c/svg%3e"); 
+    }
+    .trending-wrapper .carousel-control-next:hover .carousel-control-next-icon {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23343a40'%3e%3cpath d='M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e"); 
+    }
+
+    /* Button Hover: Trending Listings (Price and Button colors moved here) */
+    .listing-card .btn-outline-primary {
+        transition: all 0.2s ease;
+        color: var(--accent); 
+        border-color: var(--accent);
+    }
+    .listing-card .btn-outline-primary:hover {
+        background-color: var(--accent) !important; 
+        color: var(--light-icon-color) !important; 
+        border-color: var(--accent) !important;
+    }
+    .listing-card .fw-bolder {
+        color: var(--secondary-accent);
+    }
+    
+    /* FIX: Explicitly color the 'View All' link in the Trending Listings section */
+    .trending-wrapper-container .d-flex a.text-decoration-none.fw-semibold {
+        color: var(--secondary-accent) !important;
+    }
+    .trending-wrapper-container .d-flex a.text-decoration-none.fw-semibold:hover {
+        color: var(--text-dark) !important; 
+    }
+
+    /* 2. Testimonials (explicit color for visibility) */
+    .testimonial-card .carousel-control-prev-icon,
+    .testimonial-card .carousel-control-next-icon {
+        background-color: var(--accent); 
+        height: 2rem;
+        width: 2rem;
+        border-radius: 50%;
+    }
+    .testimonial-card .carousel-control-prev:hover .carousel-control-prev-icon,
+    .testimonial-card .carousel-control-next:hover .carousel-control-next-icon {
+        background-color: var(--soft-gold); 
+    }
+
+    /* Testimonial Carousel Indicators Color */
+    #testimonialsCarousel .carousel-indicators button {
+        background-color: var(--accent); 
+        opacity: 0.5;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        margin: 0 4px;
+        transition: opacity 0.2s ease, background-color 0.2s ease;
+    }
+    #testimonialsCarousel .carousel-indicators button.active {
+        opacity: 1;
+        background-color: var(--accent);
+    }
+
+    /* --- TESTIMONIALS STYLE --- */
+    .testimonial-card {
+        padding: 30px;
+        background: var(--dark-bg);
+        border: none;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        border-radius: 0;
+        min-height: 250px; 
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .testimonial-card blockquote {
+        font-style: italic;
+        font-size: 1.1rem;
+        border-left: 4px solid var(--accent);
+        padding-left: 15px;
+        margin-left: -15px;
+    }
+    .testimonial-card .quote-icon {
+        color: var(--secondary-accent);
+        font-size: 2.5rem;
+        opacity: 0.2;
+        margin-bottom: 20px;
+        margin-top: -20px;
+    }
+
+
+    /* --- FOOTER & NEWSLETTER FIXES --- */
+    .footer-newsletter {
+        background: var(--top-bar-bg); 
+        padding: 2.5rem 0; 
+    }
+    .footer-newsletter h4, .footer-newsletter p {
+        color: var(--text-dark) !important; 
+    }
+    .footer-newsletter .btn-primary {
+        background-color: var(--accent) !important; 
+        border-color: var(--accent) !important;
+    }
+    .footer-newsletter .btn-primary:hover {
+        background-color: var(--soft-gold) !important; 
+        border-color: var(--soft-gold) !important;
+    }
+
+    footer { 
+        background: var(--footer-bg); 
+        color: var(--footer-text-color); 
+    }
+    footer a { color:var(--footer-text-color); opacity:.85; } 
+
+    footer .border-top {
+        border-color: var(--footer-border-color) !important;
+    }

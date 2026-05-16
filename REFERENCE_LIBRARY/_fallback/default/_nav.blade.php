@@ -1,0 +1,85 @@
+{{-- 
+    HEADER NAVIGATION 
+    Description: Smart sticky navbar with transparency toggling and dynamic user controls.
+    Features: Responsive menu, auth-aware actions, and cart integration.
+--}}
+<nav @class([
+    'navbar navbar-expand-lg sticky-top transition-all',
+    'navbar-transparent' => request()->is('/'),
+    'navbar-light bg-white shadow-sm' => !request()->is('/')
+    ]) id="mainNav" data-aos="fade-in" data-aos-duration="800">
+    
+    <div class="container-xl">
+        {{-- Brand Identity --}}
+        <a class="navbar-brand fw-bolder d-flex align-items-center" href="{{ url('/') }}">
+            <img src="{{ page_content('global.header.brand_logo', setting('site_logo') ? Storage::url(setting('site_logo')) : asset('images/app-logo.webp')) }}" 
+                alt="{{ setting('site_name') }}" />
+            
+            <span class="fw-bold ms-2 d-none d-sm-inline-block text-uppercase">
+                @editable('global.header.brand_text', setting('site_name'))
+            </span>
+        </a>
+
+        {{-- Mobile Interface Toggler --}}
+        <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            {{-- Dynamic Navigation Links --}}
+            <ul class="navbar-nav me-auto">
+                @foreach(menu_items('main_header') as $menuitem)
+                    <li class="nav-item" data-aos="fade-down" data-aos-delay="{{ $loop->iteration * 100 }}">
+                        <a @class(['nav-link fw-semibold text-uppercase', 'active' => $menuitem->is_active]) href="{{ $menuitem->url }}">
+                            {{ __($menuitem->title) }}
+                        </a>
+                    </li>
+                @endforeach
+            </ul>
+
+            {{-- User Actions & Global Controls --}}
+            <div class="navbar-actions-group d-flex align-items-center gap-2 gap-lg-3" data-aos="fade-left" data-aos-delay="400">
+                @auth
+                    {{-- Profile Menu --}}
+                    <div class="dropdown">
+                        <a href="#" class="dropdown-toggle d-block link-dark text-decoration-none" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="{{ Auth::user()->avatar_url }}" width="35" height="35" class="rounded-circle border border-primary border-opacity-25" alt="Profile">
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2 p-2 rounded-3 scale-up-center">
+                            <li><a class="dropdown-item rounded-2 text-uppercase" href="{{ route('dashboard.user.welcome') }}"><i class="bi bi-speedometer2 me-2"></i> {{ __('Dashboard') }}</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item text-danger rounded-2 text-uppercase" href="#" 
+                                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                   <i class="bi bi-box-arrow-right me-2"></i> {{ __('Logout') }}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                @else
+                    <a href="{{ route('login') }}" class="btn btn-link text-decoration-none text-muted fw-semibold text-uppercase">{{ __('Login') }}</a>
+                @endauth
+
+                {{-- Shopping Cart Badge --}}
+                @if(isset($cartCount) && $cartCount > 0)
+                    <a href="{{ route('cart.index') }}" class="btn btn-outline-dark border-0 position-relative hvr-icon-pop">
+                        <i class="bi bi-cart3 fs-5 hvr-icon"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            {{ $cartCount }}
+                        </span>
+                    </a>
+                @endif
+
+                {{-- Primary Conversion Button --}}
+                <a href="{{ route('#') }}" class="btn btn-primary rounded-pill fw-bold px-4 shadow-sm hover-lift text-uppercase">
+                    <i class="bi bi-plus-lg me-1"></i> {{ __('Post Listing') }}
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+{{-- Global Logout Handler --}}
+<form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+    @csrf
+</form>

@@ -1,0 +1,143 @@
+/* Theme Specific Utility Classes & Overrides */
+.text-earthy-green { color: var(--bs-earthy-green) !important; }
+.text-accent-orange { color: var(--bs-accent-orange) !important; }
+.bg-warm-gray { background-color: var(--bs-warm-gray); }
+
+/* Custom Button Styles (Already handled by global layout overrides, but kept for specificity) */
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+}
+.btn-primary:hover {
+    background-color: #e07c2a;
+    border-color: #e07c2a;
+}
+.btn-outline-secondary {
+    color: var(--secondary-color);
+    border-color: var(--secondary-color);
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+}
+.btn-outline-secondary:hover {
+    background-color: var(--secondary-color);
+    color: #fff;
+}
+
+/* Navbar Customization */
+.navbar {
+    background-color: #fff;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+.navbar-brand {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    color: var(--bs-earthy-green) !important;
+}
+.nav-link {
+    color: var(--bs-earthy-green) !important;
+    font-weight: 500;
+}
+
+/* Hero Section */
+.hero-banner {
+    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('https://picsum.photos/1000/1000') no-repeat center center;
+    background-size: cover;
+    color: #fff;
+    padding: 8rem 0;
+    text-align: center;
+}
+.hero-banner h1 {
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    color: #fff;
+}
+.hero-banner p {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+/* General Layout */
+.section-padding { padding: 5rem 0; }
+@media (max-width: 768px) {
+    .hero-banner h1 { font-size: 2.5rem; }
+    .hero-banner p { font-size: 1.2rem; }
+    .section-padding { padding: 3rem 0; }
+}
+
+/* Cards and Features */
+.card {
+    border: none;
+    box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+.card-img-top { height: 200px; object-fit: cover; }
+.feature-card {
+    text-align: center;
+    padding: 2rem;
+    background-color: #fff;
+    box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+}
+.feature-card:hover { transform: translateY(-5px); }
+.feature-card .icon { font-size: 2.5rem; color: var(--bs-earthy-green); margin-bottom: 1rem; }
+.icon { font-size: 2rem; color: var(--bs-accent-orange); } /* For Highlights cards */
+
+/* Footer */
+.footer {
+    background-color: var(--bs-earthy-green);
+    color: #fff;
+    padding: 3rem 0;
+}
+.footer a {
+    color: #fff;
+    text-decoration: none;
+}
+.footer a:hover { text-decoration: underline; }
+
+/* Testimonials */
+#testimonials .carousel-item { padding: 3rem 0; text-align: center; }
+#testimonials img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border: 3px solid var(--bs-accent-orange);
+}
+
+/* Agent Section */
+.agent-section {
+    background-color: #fff;
+    padding: 3rem;
+    box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.05);
+}
+.agent-section img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border: 5px solid var(--bs-accent-orange);
+}
+
+/* Map Styling */
+.map-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    height: 0;
+    overflow: hidden;
+}
+.map-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+.map-sidebar { border-radius: 0.75rem; }
+@media (max-width: 768px) {
+    .map-sidebar { margin-top: 2rem; }
+}

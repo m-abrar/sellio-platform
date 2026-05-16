@@ -1,0 +1,157 @@
+
+body {
+    font-family: var(--font-body);
+    color: var(--secondary-steel);
+    background-color: var(--light-gray);
+}
+
+h1, h2, h3, h4, .navbar-brand {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    color: var(--primary-navy);
+}
+
+.navbar-brand span {
+    font-family: 'Poppins', sans-serif !important; /* Specific font for logo text */
+}
+
+/* Custom Button Styles */
+.btn-primary-green {
+    background-color: var(--accent-green);
+    border-color: var(--accent-green);
+    color: white;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    transition: background-color 0.3s;
+}
+
+.btn-primary-green:hover {
+    background-color: #2F855A; /* Darker green on hover */
+    border-color: #2F855A;
+}
+
+.btn-outline-navy {
+    color: var(--primary-navy);
+    border-color: var(--primary-navy);
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.btn-outline-navy:hover {
+    background-color: var(--primary-navy);
+    color: white;
+}
+
+/* Color Utilities */
+.bg-navy {
+    background-color: var(--primary-navy);
+    color: white;
+}
+
+.text-accent-green {
+    color: var(--accent-green) !important;
+}
+
+.text-navy {
+    color: var(--primary-navy) !important;
+}
+
+/* Hero Specific Styles */
+#hero-chart {
+    height: 350px;
+    background: linear-gradient(135deg, var(--primary-navy), #1A4064); /* Gradient background for the chart area */
+    border-radius: var(--border-radius);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Mock Chart Illustration */
+.chart-line {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+}
+
+.chart-line::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    /* Embedded SVG for the line graph with a circle and text */
+    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M0 70 C 20 50, 40 80, 60 40 C 80 0, 100 30' stroke='white' stroke-width='3' fill='none'/><circle cx='60' cy='40' r='3' fill='%2338A169'/><text x='62' y='35' fill='%2338A169' font-size='8' font-weight='bold'>%2B18%25</text></svg>") no-repeat center center / 90% auto;
+    animation: growLine 3s ease-out forwards;
+}
+
+@keyframes growLine {
+    0% { clip-path: inset(0 100% 0 0); }
+    100% { clip-path: inset(0 0 0 0); }
+}
+
+/* Card and KPI Styles */
+.kpi-card {
+    border: none;
+    border-radius: 12px;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.kpi-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+}
+
+.feature-card {
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: box-shadow 0.3s;
+}
+
+.feature-card:hover {
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Mock Chart Placeholder Styles */
+.chart-placeholder {
+    min-height: 250px;
+    background-color: white;
+    border: 1px solid #E2E8F0;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--secondary-steel);
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.calculator-output-chart {
+    height: 200px;
+    background-color: var(--light-gray);
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+}
+
+.calculator-output-chart::before {
+    content: 'Projected ROI Growth';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 0.9rem;
+    color: #C8D1DB;
+}
+
+/* Table Styles */
+.comparison-table th {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    background-color: var(--light-gray);
+}
+
+.comparison-table td, .comparison-table th {
+    vertical-align: middle;
+}

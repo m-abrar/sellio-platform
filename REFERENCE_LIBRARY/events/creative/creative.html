@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neonwave Events | Experience Creativity Live</title>
+    <!-- Bootstrap 5 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" xintegrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- Google Font - Inter & Poppins for a modern look -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Poppins:wght@100;400;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* --- Neon Color Palette & Variables --- */
+        :root {
+            --color-dark-purple: #1a0033; /* Main background */
+            --color-primary-purple: #4A0080; /* Section background */
+            --color-neon-pink: #FF007F;
+            --color-neon-teal: #00FFFF;
+            --color-neon-orange: #FF8800;
+            --color-gradient-hero: linear-gradient(135deg, var(--color-neon-pink) 0%, var(--color-neon-teal) 100%);
+            --font-heading: 'Poppins', sans-serif;
+            --font-body: 'Inter', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--color-dark-purple);
+            color: #E8E8E8;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* --- Typography & Headings --- */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-heading);
+            font-weight: 900;
+        }
+
+        .display-creative {
+            font-size: 3.5rem;
+            background: -webkit-linear-gradient(45deg, var(--color-neon-pink), var(--color-neon-teal));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px rgba(255, 0, 127, 0.5), 0 0 20px rgba(0, 255, 255, 0.5);
+        }
+        
+        @media (min-width: 992px) {
+            .display-creative {
+                font-size: 5rem;
+            }
+        }
+
+        /* --- Custom Buttons --- */
+        .btn-neon-pink, .btn-neon-teal {
+            font-weight: 700;
+            border-radius: 50px;
+            padding: 10px 30px;
+            border: none;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transform: scale(1);
+        }
+        .btn-neon-pink {
+            background-color: var(--color-neon-pink);
+            color: var(--color-dark-purple);
+            box-shadow: 0 0 15px var(--color-neon-pink);
+        }
+        .btn-neon-pink:hover {
+            background-color: var(--color-neon-pink);
+            transform: scale(1.05);
+            box-shadow: 0 0 25px var(--color-neon-pink);
+            color: var(--color-dark-purple);
+        }
+        .btn-neon-teal {
+            background-color: var(--color-neon-teal);
+            color: var(--color-dark-purple);
+            box-shadow: 0 0 15px var(--color-neon-teal);
+        }
+        .btn-neon-teal:hover {
+            background-color: var(--color-neon-teal);
+            transform: scale(1.05);
+            box-shadow: 0 0 25px var(--color-neon-teal);
+            color: var(--color-dark-purple);
+        }
+
+        /* --- Navbar Styling --- */
+        .navbar-creative {
+            background-color: rgba(26, 0, 51, 0.95); /* Semi-transparent dark purple */
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.4);
+            z-index: 1030;
+        }
+        .nav-link-creative {
+            font-weight: 700;
+            color: #fff !important;
+            margin: 0 10px;
+            padding: 8px 15px;
+            border-radius: 50px;
+            transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s;
+        }
+        .nav-link-creative:hover, .nav-link-creative.active {
+            color: var(--color-dark-purple) !important;
+            background-color: var(--color-neon-teal);
+            box-shadow: 0 0 10px var(--color-neon-teal);
+            transform: translateY(-2px);
+        }
+        .logo-text {
+            color: var(--color-neon-pink);
+            font-size: 1.5rem;
+            font-weight: 900;
+            text-shadow: 0 0 5px var(--color-neon-pink);
+        }
+        .search-icon {
+            color: var(--color-neon-teal);
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        .search-icon:hover {
+            color: var(--color-neon-pink);
+        }
+        /* Mobile Off-canvas adjustment */
+        .offcanvas-creative {
+            background-color: var(--color-primary-purple);
+        }
+
+        /* --- Hero Section --- */
+        .hero-section {
+            background: var(--color-primary-purple);
+            background-image: url('https://picsum.photos/1920/1080?random=1'); /* Placeholder for abstract creative background */
+            background-size: cover;
+            background-position: center;
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            text-align: center;
+        }
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5); /* Darken background slightly for text contrast */
+        }
+        /* Creative background simulation (optional, can be replaced by an image) */
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 10% 20%, rgba(255,0,127,0.3) 0%, rgba(0,255,255,0.1) 50%, rgba(26,0,51,0.5) 100%);
+            z-index: 1;
+        }
+        .hero-content {
+            z-index: 2;
+        }
+
+        /* --- Filters Section --- */
+        .filter-pill {
+            background-color: var(--color-primary-purple);
+            color: #fff;
+            border: 2px solid var(--color-neon-teal);
+            padding: 8px 20px;
+            margin: 5px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+        .filter-pill:hover {
+            background-color: var(--color-neon-teal);
+            color: var(--color-dark-purple);
+            box-shadow: 0 0 10px var(--color-neon-teal);
+        }
+        .filter-pill.active {
+            background-color: var(--color-neon-pink);
+            border-color: var(--color-neon-pink);
+            color: var(--color-dark-purple);
+            box-shadow: 0 0 15px var(--color-neon-pink);
+            transform: scale(1.05);
+        }
+
+        /* --- Event Card Styling --- */
+        .event-card {
+            background: var(--color-primary-purple);
+            border: none;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+        }
+        .event-card-featured {
+            background: linear-gradient(145deg, var(--color-primary-purple), rgba(74, 0, 128, 0.8));
+            border: 2px solid var(--color-neon-pink);
+            box-shadow: 0 0 30px rgba(255, 0, 127, 0.5);
+        }
+        .event-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
+        }
+        .event-card img {
+            height: 200px;
+            object-fit: cover;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+        .event-card:hover img {
+            opacity: 1;
+        }
+        .card-title-neon {
+            background: -webkit-linear-gradient(90deg, var(--color-neon-teal), var(--color-neon-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 900;
+            text-shadow: 0 0 5px rgba(0, 255, 255, 0.3);
+        }
+        
+        /* Upcoming Events Cards - Smaller, more compact */
+        .upcoming-card {
+            background: var(--color-dark-purple);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 15px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+        .upcoming-card:hover {
+            background: rgba(74, 0, 128, 0.5);
+            border-color: var(--color-neon-teal);
+            transform: translateX(5px);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+        }
+
+        /* --- Creative Spotlight --- */
+        .spotlight-section {
+            background: var(--color-primary-purple);
+            border-radius: 25px;
+            padding: 40px;
+            box-shadow: inset 0 0 30px rgba(255, 0, 127, 0.3);
+            border: 2px solid var(--color-neon-pink);
+        }
+        .spotlight-image-container {
+            position: relative;
+            width: 100%;
+            padding-top: 100%; /* 1:1 Aspect Ratio */
+            margin: 0 auto 20px;
+        }
+        .spotlight-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 5px solid var(--color-neon-teal);
+            box-shadow: 0 0 30px var(--color-neon-teal);
+        }
+
+        /* --- Newsletter Section --- */
+        .newsletter-section {
+            background: linear-gradient(90deg, var(--color-neon-pink) 0%, var(--color-neon-teal) 100%);
+            padding: 60px 0;
+            color: var(--color-dark-purple);
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
+        }
+        .newsletter-section h2 {
+            font-size: 2.5rem;
+            font-weight: 900;
+        }
+        .form-control-newsletter {
+            border-radius: 50px;
+            border: none;
+            padding: 12px 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* --- Footer Styling --- */
+        .footer-creative {
+            background: linear-gradient(180deg, var(--color-dark-purple) 0%, #0d001a 100%);
+            padding: 40px 0 20px;
+            border-top: 5px solid var(--color-neon-pink);
+        }
+        .footer-link, .footer-text {
+            color: #bbb;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .footer-link:hover {
+            color: var(--color-neon-teal);
+        }
+        .social-icon {
+            font-size: 1.5rem;
+            color: var(--color-neon-pink);
+            margin: 0 8px;
+            transition: transform 0.3s, color 0.3s;
+        }
+        .social-icon:hover {
+            color: var(--color-neon-teal);
+            transform: scale(1.2);
+        }
+    </style>
+    <!-- Font Awesome for Icons (using a lightweight version for quick access) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLMDJc5GIs5Hk6+Pz7c/J/yG1o5w5l5d2kYj8F1k4c1zT8O/X8I6x4zM5+h2cQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+
+    <!-- Sticky Header (Navbar) -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top p-3 navbar-creative">
+        <div class="container-fluid container-xl">
+            <a class="navbar-brand logo-text" href="#">
+                <!-- Simple Logo SVG placeholder -->
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="d-inline-block align-text-top me-2">
+                    <path d="M12 2L2 12L12 22L22 12L12 2Z" fill="#FF007F" stroke="#00FFFF" stroke-width="2"/>
+                    <path d="M12 6L6 12L12 18L18 12L12 6Z" fill="#1a0033"/>
+                </svg>
+                NEONWAVE
+            </a>
+            
+            <!-- Mobile Offcanvas Toggle -->
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Desktop Nav Links & Offcanvas Menu -->
+            <div class="offcanvas offcanvas-end offcanvas-creative" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title logo-text" id="offcanvasNavbarLabel">Menu</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <ul class="navbar-nav justify-content-center flex-grow-1 pe-3">
+                        <li class="nav-item">
+                            <a class="nav-link nav-link-creative active" aria-current="page" href="#home">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link nav-link-creative" href="#events">Events</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link nav-link-creative" href="#artists">Artists</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link nav-link-creative" href="#tickets">Tickets</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link nav-link-creative" href="#contact">Contact</a>
+                        </li>
+                    </ul>
+                    <a class="search-icon ms-lg-3" href="#"><i class="fas fa-search"></i></a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header id="home" class="hero-section text-white position-relative">
+        <div class="hero-overlay"></div>
+        <div class="container hero-content py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <h1 class="display-creative mb-3 mb-md-4 text-center">
+                        Experience Creativity Live
+                    </h1>
+                    <p class="lead mb-4 mb-md-5 text-center text-light opacity-75">
+                        Discover the world's most vibrant creative festivals, cutting-edge art shows, and innovative design conferences.
+                    </p>
+                    <div class="d-flex flex-column flex-sm-row justify-content-center gap-3">
+                        <a href="#featured" class="btn btn-neon-pink btn-lg shadow-lg">Explore Events</a>
+                        <a href="#tickets" class="btn btn-neon-teal btn-lg shadow-lg">Get Tickets</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="py-5">
+        <!-- Filters Section -->
+        <section id="filters" class="container-xl py-5">
+            <h2 class="text-center h4 mb-4 text-uppercase fw-bold" style="color: var(--color-neon-orange);">Filter by Vibe</h2>
+            <div class="d-flex flex-wrap justify-content-center mb-5">
+                <span class="filter-pill active">All Categories</span>
+                <span class="filter-pill"><i class="fas fa-music me-2"></i>Music</span>
+                <span class="filter-pill"><i class="fas fa-paint-brush me-2"></i>Art</span>
+                <span class="filter-pill"><i class="fas fa-drafting-compass me-2"></i>Design</span>
+                <span class="filter-pill"><i class="fas fa-microchip me-2"></i>Tech</span>
+                <span class="filter-pill"><i class="fas fa-theater-masks me-2"></i>Theater</span>
+            </div>
+        </section>
+
+        <!-- Featured Events Section (Masonry-style card grid) -->
+        <section id="featured" class="container-xl py-5">
+            <h2 class="text-center display-5 mb-5">Featured **Experiences**</h2>
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+
+                <!-- Card 1 -->
+                <div class="col">
+                    <div class="card h-100 event-card event-card-featured">
+                        <img src="https://picsum.photos/600/400?random=2" class="card-img-top" alt="Design Week 2025">
+                        <div class="card-body p-4">
+                            <h3 class="card-title card-title-neon h4">Design Week 2025</h3>
+                            <p class="card-text text-light opacity-75 mb-3">
+                                <i class="far fa-calendar-alt me-2"></i>August 12, 2025<br>
+                                <i class="fas fa-map-marker-alt me-2"></i>Berlin, Germany
+                            </p>
+                            <a href="#" class="btn btn-sm btn-neon-pink w-100">VIEW DETAILS</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="col">
+                    <div class="card h-100 event-card">
+                        <img src="https://picsum.photos/600/400?random=3" class="card-img-top" alt="Creative Arts Festival">
+                        <div class="card-body p-4">
+                            <h3 class="card-title card-title-neon h4">Creative Arts Festival</h3>
+                            <p class="card-text text-light opacity-75 mb-3">
+                                <i class="far fa-calendar-alt me-2"></i>June 20, 2025<br>
+                                <i class="fas fa-map-marker-alt me-2"></i>Barcelona, Spain
+                            </p>
+                            <a href="#" class="btn btn-sm btn-neon-teal w-100">VIEW DETAILS</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="col">
+                    <div class="card h-100 event-card event-card-featured">
+                        <img src="https://picsum.photos/600/400?random=4" class="card-img-top" alt="Digital Media Expo">
+                        <div class="card-body p-4">
+                            <h3 class="card-title card-title-neon h4">Digital Media Expo</h3>
+                            <p class="card-text text-light opacity-75 mb-3">
+                                <i class="far fa-calendar-alt me-2"></i>September 3, 2025<br>
+                                <i class="fas fa-map-marker-alt me-2"></i>Los Angeles, USA
+                            </p>
+                            <a href="#" class="btn btn-sm btn-neon-pink w-100">VIEW DETAILS</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Creative Spotlight Section -->
+        <section id="artists" class="container-xl py-5">
+            <h2 class="text-center display-5 mb-5">Creative **Spotlight**</h2>
+            <div class="spotlight-section mx-auto p-4 p-md-5">
+                <div class="row align-items-center">
+                    <div class="col-md-3 text-center mb-4 mb-md-0">
+                        <div class="spotlight-image-container">
+                            <img src="https://picsum.photos/400/400?random=5" class="spotlight-image" alt="Maria Gonzalez Portrait">
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <h3 class="h2 mb-2 card-title-neon">Artist in Focus: Maria Gonzalez</h3>
+                        <p class="lead fw-bold text-uppercase" style="color: var(--color-neon-orange);">Contemporary Installation Artist</p>
+                        <p class="text-light opacity-75">
+                            Maria Gonzalez is a multidisciplinary artist known for her vibrant, interactive light installations that explore themes of urban decay and digital identity. Her work, 'Echo Chamber,' will be featured exclusively at the upcoming Barcelona Arts Festival. She blends recycled materials with custom LED sequences to create fully immersive, sensory experiences.
+                        </p>
+                        <a href="#" class="btn btn-sm btn-outline-light mt-3" style="border-color: var(--color-neon-teal); color: var(--color-neon-teal);">Read Full Bio <i class="fas fa-arrow-right ms-2"></i></a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Upcoming Events Section -->
+        <section id="events" class="container-xl py-5">
+            <h2 class="text-center display-5 mb-5">More **Upcoming Events**</h2>
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3 g-md-4">
+                
+                <!-- Upcoming Card 1 -->
+                <div class="col">
+                    <div class="d-flex upcoming-card align-items-center">
+                        <i class="fas fa-calendar-alt fa-2x me-3" style="color: var(--color-neon-teal);"></i>
+                        <div>
+                            <p class="mb-0 fw-bold" style="color: var(--color-neon-pink);">Dec 15, 2025</p>
+                            <h4 class="h6 mb-1 text-light">Future Tech Summit</h4>
+                            <small class="text-muted">New York City, USA</small>
+                        </div>
+                        <a href="#" class="btn btn-sm ms-auto" style="color: var(--color-neon-pink);"><i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+
+                <!-- Upcoming Card 2 -->
+                <div class="col">
+                    <div class="d-flex upcoming-card align-items-center">
+                        <i class="fas fa-calendar-alt fa-2x me-3" style="color: var(--color-neon-teal);"></i>
+                        <div>
+                            <p class="mb-0 fw-bold" style="color: var(--color-neon-pink);">Jan 22, 2026</p>
+                            <h4 class="h6 mb-1 text-light">Interactive Media Lab</h4>
+                            <small class="text-muted">Seoul, South Korea</small>
+                        </div>
+                        <a href="#" class="btn btn-sm ms-auto" style="color: var(--color-neon-pink);"><i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Upcoming Card 3 -->
+                <div class="col">
+                    <div class="d-flex upcoming-card align-items-center">
+                        <i class="fas fa-calendar-alt fa-2x me-3" style="color: var(--color-neon-teal);"></i>
+                        <div>
+                            <p class="mb-0 fw-bold" style="color: var(--color-neon-pink);">Feb 01, 2026</p>
+                            <h4 class="h6 mb-1 text-light">Urban Art Jam</h4>
+                            <small class="text-muted">London, UK</small>
+                        </div>
+                        <a href="#" class="btn btn-sm ms-auto" style="color: var(--color-neon-pink);"><i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+
+                <!-- Upcoming Card 4 -->
+                <div class="col">
+                    <div class="d-flex upcoming-card align-items-center">
+                        <i class="fas fa-calendar-alt fa-2x me-3" style="color: var(--color-neon-teal);"></i>
+                        <div>
+                            <p class="mb-0 fw-bold" style="color: var(--color-neon-pink);">Mar 10, 2026</p>
+                            <h4 class="h6 mb-1 text-light">Sound Design Showcase</h4>
+                            <small class="text-muted">Berlin, Germany</small>
+                        </div>
+                        <a href="#" class="btn btn-sm ms-auto" style="color: var(--color-neon-pink);"><i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+
+                <!-- Upcoming Card 5 -->
+                <div class="col">
+                    <div class="d-flex upcoming-card align-items-center">
+                        <i class="fas fa-calendar-alt fa-2x me-3" style="color: var(--color-neon-teal);"></i>
+                        <div>
+                            <p class="mb-0 fw-bold" style="color: var(--color-neon-pink);">Apr 05, 2026</p>
+                            <h4 class="h6 mb-1 text-light">Indie Game Dev Meetup</h4>
+                            <small class="text-muted">Tokyo, Japan</small>
+                        </div>
+                        <a href="#" class="btn btn-sm ms-auto" style="color: var(--color-neon-pink);"><i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+
+                <!-- Upcoming Card 6 -->
+                <div class="col">
+                    <div class="d-flex upcoming-card align-items-center">
+                        <i class="fas fa-calendar-alt fa-2x me-3" style="color: var(--color-neon-teal);"></i>
+                        <div>
+                            <p class="mb-0 fw-bold" style="color: var(--color-neon-pink);">May 15, 2026</p>
+                            <h4 class="h6 mb-1 text-light">Future of Film VR</h4>
+                            <small class="text-muted">Paris, France</small>
+                        </div>
+                        <a href="#" class="btn btn-sm ms-auto" style="color: var(--color-neon-pink);"><i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Newsletter Section -->
+        <section id="subscribe" class="newsletter-section">
+            <div class="container-xl">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8 text-center">
+                        <h2 class="mb-4">Stay Inspired – **Subscribe Now**</h2>
+                        <p class="lead mb-4 fw-normal">Get the latest updates on global creativity delivered straight to your inbox.</p>
+                        <form class="d-sm-flex justify-content-center gap-2">
+                            <input type="email" class="form-control form-control-lg form-control-newsletter mb-3 mb-sm-0" placeholder="Enter your email..." required>
+                            <button type="submit" class="btn btn-neon-pink btn-lg shadow-sm">Subscribe</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer-creative">
+        <div class="container-xl py-4">
+            <div class="row align-items-center mb-4">
+                <div class="col-md-4 text-center text-md-start mb-3 mb-md-0">
+                    <a class="navbar-brand logo-text" href="#">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="d-inline-block align-text-top me-2">
+                            <path d="M12 2L2 12L12 22L22 12L12 2Z" fill="#FF007F" stroke="#00FFFF" stroke-width="2"/>
+                            <path d="M12 6L6 12L12 18L18 12L12 6Z" fill="#1a0033"/>
+                        </svg>
+                        NEONWAVE
+                    </a>
+                </div>
+                <div class="col-md-4 text-center mb-3 mb-md-0">
+                    <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+                <div class="col-md-4 text-center text-md-end">
+                    <a href="#" class="footer-link mx-2">Privacy Policy</a>
+                    <span class="footer-text mx-1">|</span>
+                    <a href="#" class="footer-link mx-2">Terms of Use</a>
+                </div>
+            </div>
+            <div class="text-center pt-3 border-top border-secondary opacity-50">
+                <p class="footer-text mb-0">&copy; 2025 Neonwave Creative Events. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JavaScript Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" xintegrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+</body>
+</html>

@@ -1,0 +1,142 @@
+body {
+    background-color: var(--bg-light);
+    font-family: 'Poppins', sans-serif; /* Applied a modern font */
+}
+
+/* Utility for Primary/Accent Colors */
+.text-primary-orange { color: var(--primary-orange) !important; }
+.bg-primary-orange { background-color: var(--primary-orange) !important; }
+
+/* Bold, Modern Typography */
+.navbar-brand, .card-title, .price {
+    font-weight: 700 !important;
+}
+.navbar-brand {
+    color: var(--text-dark) !important;
+    font-size: 1.8rem;
+}
+
+/* --- Header & Search Bar --- */
+.navbar {
+    box-shadow: 0 4px 8px rgba(0,0,0,.04); /* Deeper but softer shadow */
+    border-bottom: 1px solid #eee; /* Subtle bottom separator */
+}
+.search-container {
+    flex-grow: 1; /* Allows search bar to take up available space */
+    max-width: 500px; /* Constrain desktop search width */
+}
+.search-input {
+    border-radius: 25px;
+    border: 1px solid #dee2e6; /* Lighter border */
+    padding: .5rem 1.25rem; /* Increased padding */
+    transition: border-color 0.2s, box-shadow 0.2s;
+    background-color: #fff; /* Ensure it's white */
+}
+.search-input:focus {
+    border-color: var(--primary-orange);
+    box-shadow: 0 0 0 .25rem rgba(255, 103, 0, .15); /* Orange focus glow */
+}
+.search-input-mobile {
+    /* Inherits most styles from search-input in a smaller context */
+    border-radius: 20px;
+    padding: .3rem 1rem;
+    width: 100%;
+}
+.btn-post-ad {
+    background-color: var(--primary-orange);
+    color: white;
+    font-weight: 600;
+    border-radius: 25px; /* Rounded corners for the CTA button */
+    padding: 8px 20px;
+    transition: background-color 0.2s, transform 0.2s;
+}
+.btn-post-ad:hover {
+    background-color: #e65c00; /* Darker Orange */
+    color: white;
+    transform: translateY(-1px); /* Slight lift on hover */
+}
+.nav-link.accent-cyan {
+    color: var(--accent-cyan) !important;
+    font-weight: 600;
+    transition: color 0.2s;
+}
+.nav-link.accent-cyan:hover {
+    color: var(--primary-orange) !important; /* Consistent hover color */
+}
+.nav-link.active {
+    color: var(--primary-orange) !important; /* Consistent hover color */
+}
+/* --- Classified Card Grid --- */
+.card-classified {
+    border: 1px solid #f0f0f0; /* Added a very light border */
+    border-radius: 0.75rem; /* Increased rounding */
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+}
+
+/* Smooth Hover Animation */
+.card-classified:hover {
+    transform: translateY(-3px); /* Slightly less dramatic lift */
+    box-shadow: 0 12px 25px var(--card-shadow); /* Softer, more elevated shadow */
+}
+
+.card-img-top {
+    height: 220px; /* Slightly taller images */
+    object-fit: cover;
+    border-bottom: 1px solid #eee; /* Visual separator for image/body */
+}
+
+/* Price/Badge Overlay */
+.card-badge {
+    position: absolute;
+    top: 15px; /* Moved slightly inward */
+    left: 15px; /* Moved to the left for better balance */
+    background-color: var(--primary-orange);
+    color: white;
+    padding: 4px 10px; /* Increased padding */
+    border-radius: 5px; /* Increased rounding */
+    font-size: 0.75rem; /* Slightly smaller font */
+    font-weight: 700;
+    z-index: 10;
+}
+
+.card-title {
+    font-size: 1.15rem;
+    color: var(--text-dark);
+    line-height: 1.3;
+}
+
+.price {
+    color: var(--primary-orange);
+    font-size: 1.5rem; /* Slightly larger price */
+}
+
+/* Location/Time Info */
+.card-body .text-muted.small {
+    font-size: 0.8rem;
+}
+
+/* Icon Buttons (Like, Quick View, Share) */
+.icon-btn {
+    color: #ccc; /* Started with a muted gray */
+    transition: color 0.2s;
+}
+.icon-btn:hover {
+    color: var(--primary-orange); /* Vibrant hover color */
+}
+
+/* --- Footer Styles --- */
+.footer-link, .footer-social {
+    color: var(--text-dark) !important; /* Ensure links are initially dark */
+}
+.footer-social:hover {
+    color: var(--primary-orange) !important; /* Orange hover for social icons */
+}
+/* Added class for cleaner list on small devices */
+@media (max-width: 768px) {
+    .footer-nav-list {
+        flex-direction: column;
+        gap: 5px;
+    }
+}

@@ -1,0 +1,742 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Luxe Estate</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --charcoal: #222222;
+            --gold: #C59A45;
+            --soft-gray: #E8E8E8;
+            --white: #FFFFFF;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--charcoal);
+            background-color: var(--white);
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+            color: var(--charcoal);
+        }
+
+        .navbar-custom {
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 2px 4px rgba(0,0,0,.05);
+            transition: background-color 0.3s ease-in-out;
+        }
+        .navbar-brand {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: var(--charcoal) !important;
+        }
+        .navbar-nav .nav-link {
+            color: var(--charcoal) !important;
+            font-weight: 500;
+            margin-right: 1.5rem;
+            transition: color 0.3s ease;
+        }
+        .navbar-nav .nav-link:hover {
+            color: var(--gold) !important;
+        }
+        .btn-gold-filled {
+            background-color: var(--gold);
+            color: var(--white);
+            border: 1px solid var(--gold);
+            padding: 0.75rem 1.75rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .btn-gold-filled:hover {
+            background-color: var(--charcoal);
+            border-color: var(--charcoal);
+            color: var(--white);
+        }
+        .btn-outline-gold {
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            padding: 0.75rem 1.75rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .btn-outline-gold:hover {
+            background-color: var(--gold);
+            color: var(--white);
+        }
+
+        /* Hero Carousel */
+        #heroCarousel .carousel-item {
+            height: 80vh; /* Adjust height as needed */
+            min-height: 500px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        #heroCarousel .carousel-caption {
+            position: absolute;
+            left: 10%;
+            bottom: 10%;
+            text-align: left;
+            padding: 0;
+            color: var(--white);
+            z-index: 1;
+        }
+        #heroCarousel .carousel-caption::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 100%);
+            z-index: -1;
+            padding-right: 2rem; /* Extend gradient area slightly */
+        }
+        #heroCarousel .carousel-caption h1 {
+            color: var(--white);
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            line-height: 1.1;
+        }
+        #heroCarousel .carousel-caption p {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        .carousel-indicators [data-bs-target] {
+            background-color: var(--gold);
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            opacity: 0.5;
+            transition: opacity 0.3s ease;
+        }
+        .carousel-indicators .active {
+            opacity: 1;
+        }
+        .carousel-control-prev-icon, .carousel-control-next-icon {
+            background-color: rgba(0,0,0,0.4);
+            border-radius: 50%;
+            padding: 1.5rem;
+        }
+
+        /* Featured Collection & Listings Cards */
+        .card-custom {
+            border: none;
+            border-radius: 0;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+        .card-custom:hover {
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+            transform: translateY(-5px);
+        }
+        .card-custom img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        .card-custom:hover img {
+            transform: scale(1.05);
+        }
+        .card-custom .card-body {
+            position: relative;
+            padding: 1.5rem;
+        }
+        .price-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background-color: var(--gold);
+            color: var(--white);
+            padding: 0.4rem 0.8rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border-radius: 5px;
+            z-index: 2;
+        }
+        .card-overlay-badge {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background-color: var(--gold);
+            color: var(--white);
+            padding: 0.3rem 0.8rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border-radius: 3px;
+            z-index: 2;
+        }
+        .card-title-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 100%);
+            color: var(--white);
+            padding: 1rem;
+            padding-top: 3rem;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+        }
+        .card-title-overlay h5 {
+            color: var(--white);
+            font-size: 1.3rem;
+            margin-bottom: 0.3rem;
+        }
+        .card-title-overlay p {
+            font-size: 0.9rem;
+            margin-bottom: 0;
+        }
+        .heart-icon {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            color: var(--white);
+            font-size: 1.5rem;
+            cursor: pointer;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+            z-index: 2;
+        }
+        .heart-icon.liked {
+            color: var(--gold);
+        }
+        .agent-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--soft-gray);
+        }
+        .agent-card {
+            background-color: var(--white);
+            border: 1px solid var(--soft-gray);
+            border-radius: 5px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        .agent-card:hover {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transform: translateY(-3px);
+        }
+
+        /* Property Detail Teaser */
+        .property-teaser-img {
+            height: 400px;
+            object-fit: cover;
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+        .property-thumb-img {
+            height: 80px;
+            width: 100px;
+            object-fit: cover;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: border-color 0.2s ease;
+        }
+        .property-thumb-img.active {
+            border-color: var(--gold);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--charcoal);
+            color: rgba(255, 255, 255, 0.7);
+            padding: 3rem 0;
+        }
+        footer a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        footer a:hover {
+            color: var(--gold);
+        }
+        .social-icon {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.5rem;
+            margin-right: 1rem;
+            transition: color 0.3s ease;
+        }
+        .social-icon:hover {
+            color: var(--gold);
+        }
+
+        /* Utility/Spacing */
+        .section-padding {
+            padding-top: 5rem;
+            padding-bottom: 5rem;
+        }
+        .container-max {
+            max-width: 1300px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 991.98px) {
+            .navbar-nav {
+                background-color: rgba(255, 255, 255, 0.95);
+                padding: 1rem;
+                border-radius: 5px;
+            }
+            #heroCarousel .carousel-caption h1 {
+                font-size: 2.5rem;
+            }
+            #heroCarousel .carousel-caption p {
+                font-size: 1rem;
+            }
+            .section-padding {
+                padding-top: 3rem;
+                padding-bottom: 3rem;
+            }
+        }
+        @media (max-width: 767.98px) {
+            #heroCarousel .carousel-item {
+                height: 60vh;
+                min-height: 400px;
+            }
+            #heroCarousel .carousel-caption {
+                left: 5%;
+                bottom: 5%;
+                right: 5%;
+                text-align: center;
+            }
+            #heroCarousel .carousel-caption h1 {
+                font-size: 2rem;
+            }
+            #heroCarousel .carousel-caption p {
+                font-size: 0.9rem;
+            }
+            #heroCarousel .carousel-caption .d-flex {
+                flex-direction: column;
+                align-items: center;
+            }
+            #heroCarousel .carousel-caption .d-flex .btn {
+                margin-bottom: 0.5rem;
+                width: 80%;
+            }
+            .card-custom img {
+                height: 200px;
+            }
+            .property-teaser-img {
+                height: 300px;
+            }
+            .property-thumb-img {
+                width: 80px;
+                height: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top navbar-custom" aria-label="Main navigation">
+        <div class="container container-max">
+            <a class="navbar-brand" href="#">LUXE <span style="font-weight: 400;">ESTATES</span></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Listings</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Agents</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contact</a>
+                    </li>
+                </ul>
+                <div class="d-flex align-items-center">
+                    <button class="btn btn-link text-decoration-none p-0 me-3" aria-label="Search">
+                        <i class="fas fa-search fa-lg text-charcoal"></i>
+                    </button>
+                    <input type="text" class="form-control me-2 d-none" placeholder="Search..." aria-label="Search input">
+                    <button class="btn btn-link text-decoration-none p-0" aria-label="Dark mode toggle">
+                        <i class="fas fa-moon fa-lg text-charcoal"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="5000">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        </div>
+        <div class="carousel-inner">
+            <div class="carousel-item active" style="background-image: url('https://picsum.photos/1920/1080/000000/FFFFFF?text=Oceanfront+Mansion+Hero');" aria-label="Image of oceanfront mansion">
+                <div class="carousel-caption d-block">
+                    <h1>Oceanfront Mansion</h1>
+                    <p>Malibu, CA | $10,000,000</p>
+                    <div class="d-flex gap-3 mt-4">
+                        <a href="#" class="btn btn-gold-filled" aria-label="View details for oceanfront mansion">View Details</a>
+                        <a href="#" class="btn btn-outline-gold" aria-label="Schedule tour for oceanfront mansion">Schedule Tour</a>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item" style="background-image: url('https://picsum.photos/1920/1080/1A1A1A/FFFFFF?text=Private+Penthouse+Hero');" aria-label="Image of private penthouse">
+                <div class="carousel-caption d-block">
+                    <h1>Private Penthouse</h1>
+                    <p>Manhattan, NY | $7,500,000</p>
+                    <div class="d-flex gap-3 mt-4">
+                        <a href="#" class="btn btn-gold-filled" aria-label="View details for private penthouse">View Details</a>
+                        <a href="#" class="btn btn-outline-gold" aria-label="Schedule tour for private penthouse">Schedule Tour</a>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item" style="background-image: url('https://picsum.photos/1920x1080/333333/FFFFFF?text=Modern+Luxury+Villa+Hero');" aria-label="Image of modern luxury villa">
+                <div class="carousel-caption d-block">
+                    <h1>Modern Luxury Villa</h1>
+                    <p>Miami, FL | $5,500,000</p>
+                    <div class="d-flex gap-3 mt-4">
+                        <a href="#" class="btn btn-gold-filled" aria-label="View details for modern luxury villa">View Details</a>
+                        <a href="#" class="btn btn-outline-gold" aria-label="Schedule tour for modern luxury villa">Schedule Tour</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev" aria-label="Previous slide">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next" aria-label="Next slide">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+
+    <main>
+        <section class="container container-max section-padding">
+            <h2 class="text-center mb-5">Featured Collection</h2>
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6">
+                    <div class="card card-custom h-100">
+                        <div class="position-relative">
+                            <img src="https://picsum.photos/600/400/000000/FFFFFF?text=Oceanfront+Mansion+Malibu" class="card-img-top" alt="Oceanfront Mansion Malibu">
+                            <span class="card-overlay-badge">Exclusive</span>
+                            <i class="far fa-heart heart-icon" aria-label="Add to favorites"></i>
+                            <div class="card-title-overlay">
+                                <h5>Oceanfront Mansion</h5>
+                                <p class="mb-1">Malibu, CA</p>
+                                <p>$10,000,000</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="card card-custom h-100">
+                        <div class="position-relative">
+                            <img src="https://picsum.photos/600/400/1A1A1A/FFFFFF?text=Private+Penthouse+Manhattan" class="card-img-top" alt="Private Penthouse Manhattan">
+                            <span class="card-overlay-badge">Featured</span>
+                            <i class="far fa-heart heart-icon" aria-label="Add to favorites"></i>
+                            <div class="card-title-overlay">
+                                <h5>Private Penthouse</h5>
+                                <p class="mb-1">Manhattan, NY</p>
+                                <p>$7,500,000</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-12">
+                    <div class="card card-custom h-100">
+                        <div class="position-relative">
+                            <img src="https://picsum.photos/600/400/333333/FFFFFF?text=Modern+Luxury+Villa+Miami" class="card-img-top" alt="Modern Luxury Villa Miami">
+                            <i class="far fa-heart heart-icon" aria-label="Add to favorites"></i>
+                            <div class="card-title-overlay">
+                                <h5>Modern Luxury Villa</h5>
+                                <p class="mb-1">Miami, FL</p>
+                                <p>$5,500,000</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="container container-max section-padding bg-light">
+            <h2 class="text-center mb-5">Exclusive Listings</h2>
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6">
+                    <div class="card card-custom h-100">
+                        <div class="position-relative">
+                            <img src="https://picsum.photos/600/400/444444/FFFFFF?text=Coastal+Retreat" class="card-img-top" alt="Coastal Retreat">
+                            <span class="card-overlay-badge">Featured</span>
+                            <i class="far fa-heart heart-icon" aria-label="Add to favorites"></i>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Coastal Retreat</h5>
+                            <h6 class="text-gold mb-2">$4,800,000</h6>
+                            <p class="card-text text-muted small">4 Beds, 5 Baths, 3,200 sqft</p>
+                            <div class="d-flex align-items-center mt-3">
+                                <img src="https://picsum.photos/50/50/DDDDDD/000000?text=AG" alt="Agent Avatar" class="agent-avatar me-2">
+                                <span class="small text-muted">Agent: Jane Doe</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="card card-custom h-100">
+                        <div class="position-relative">
+                            <img src="https://picsum.photos/600/400/555555/FFFFFF?text=Urban+Skyline+Loft" class="card-img-top" alt="Urban Skyline Loft">
+                            <i class="far fa-heart heart-icon" aria-label="Add to favorites"></i>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Urban Skyline Loft</h5>
+                            <h6 class="text-gold mb-2">$3,200,000</h6>
+                            <p class="card-text text-muted small">3 Beds, 4 Baths, 2,800 sqft</p>
+                            <div class="d-flex align-items-center mt-3">
+                                <img src="https://picsum.photos/50/50/CCCCCC/000000?text=AG" alt="Agent Avatar" class="agent-avatar me-2">
+                                <span class="small text-muted">Agent: John Smith</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="card card-custom h-100">
+                        <div class="position-relative">
+                            <img src="https://picsum.photos/600/400/666666/FFFFFF?text=Luxury+Penthouse" class="card-img-top" alt="Luxury Penthouse">
+                            <span class="card-overlay-badge">Exclusive</span>
+                            <i class="far fa-heart heart-icon" aria-label="Add to favorites"></i>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Luxury Penthouse</h5>
+                            <h6 class="text-gold mb-2">$6,100,000</h6>
+                            <p class="card-text text-muted small">5 Beds, 6 Baths, 4,500 sqft</p>
+                            <div class="d-flex align-items-center mt-3">
+                                <img src="https://picsum.photos/50/50/BBBBBB/000000?text=AG" alt="Agent Avatar" class="agent-avatar me-2">
+                                <span class="small text-muted">Agent: Sarah Chen</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="card card-custom h-100">
+                        <div class="position-relative">
+                            <img src="https://picsum.photos/600/400/777777/FFFFFF?text=Lakeside+Villa" class="card-img-top" alt="Lakeside Villa">
+                            <i class="far fa-heart heart-icon" aria-label="Add to favorites"></i>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Lakeside Villa</h5>
+                            <h6 class="text-gold mb-2">$2,950,000</h6>
+                            <p class="card-text text-muted small">4 Beds, 4 Baths, 3,800 sqft</p>
+                            <div class="d-flex align-items-center mt-3">
+                                <img src="https://picsum.photos/50/50/AAAAAA/000000?text=AG" alt="Agent Avatar" class="agent-avatar me-2">
+                                <span class="small text-muted">Agent: Robert Green</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="card card-custom h-100">
+                        <div class="position-relative">
+                            <img src="https://picsum.photos/600/400/888888/FFFFFF?text=Historic+Estate" class="card-img-top" alt="Historic Estate">
+                            <i class="far fa-heart heart-icon" aria-label="Add to favorites"></i>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Historic Estate</h5>
+                            <h6 class="text-gold mb-2">$5,300,000</h6>
+                            <p class="card-text text-muted small">7 Beds, 8 Baths, 6,000 sqft</p>
+                            <div class="d-flex align-items-center mt-3">
+                                <img src="https://picsum.photos/50/50/999999/000000?text=AG" alt="Agent Avatar" class="agent-avatar me-2">
+                                <span class="small text-muted">Agent: Emily White</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="card card-custom h-100">
+                        <div class="position-relative">
+                            <img src="https://picsum.photos/600/400/999999/FFFFFF?text=Desert+Oasis" class="card-img-top" alt="Desert Oasis">
+                            <span class="card-overlay-badge">New</span>
+                            <i class="far fa-heart heart-icon" aria-label="Add to favorites"></i>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Desert Oasis</h5>
+                            <h6 class="text-gold mb-2">$3,900,000</h6>
+                            <p class="card-text text-muted small">4 Beds, 5 Baths, 3,500 sqft</p>
+                            <div class="d-flex align-items-center mt-3">
+                                <img src="https://picsum.photos/50/50/888888/000000?text=AG" alt="Agent Avatar" class="agent-avatar me-2">
+                                <span class="small text-muted">Agent: David Lee</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="container container-max section-padding">
+            <h2 class="text-center mb-5">Meet Our Top Agents</h2>
+            <div class="row g-4 justify-content-center">
+                <div class="col-lg-4 col-md-6">
+                    <div class="agent-card">
+                        <img src="https://picsum.photos/100x100/C59A45/FFFFFF?text=SC" alt="Agent Sarah Chen" class="agent-avatar mb-3">
+                        <h5 class="mb-1">Sarah Chen</h5>
+                        <p class="small text-muted mb-2">Luxury Waterfront Specialist</p>
+                        <div class="text-warning mb-3">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i> (4.8)
+                        </div>
+                        <button class="btn btn-outline-gold btn-sm">Contact</button>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="agent-card">
+                        <img src="https://picsum.photos/100x100/222222/FFFFFF?text=JR" alt="Agent John Rhee" class="agent-avatar mb-3">
+                        <h5 class="mb-1">John Rhee</h5>
+                        <p class="small text-muted mb-2">High-Rise & Urban Expert</p>
+                        <div class="text-warning mb-3">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> (5.0)
+                        </div>
+                        <button class="btn btn-outline-gold btn-sm">Contact</button>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="agent-card">
+                        <img src="https://picsum.photos/100x100/AAAAAA/FFFFFF?text=EL" alt="Agent Emily Lee" class="agent-avatar mb-3">
+                        <h5 class="mb-1">Emily Lee</h5>
+                        <p class="small text-muted mb-2">Exclusive Estates Curator</p>
+                        <div class="text-warning mb-3">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i> (4.0)
+                        </div>
+                        <button class="btn btn-outline-gold btn-sm">Contact</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="container container-max section-padding bg-light">
+            <h2 class="text-center mb-5">Highlight Property</h2>
+            <div class="row g-5">
+                <div class="col-lg-7">
+                    <img src="https://picsum.photos/800x500/000000/FFFFFF?text=Featured+Property+Main" class="property-teaser-img" alt="Main image of featured property">
+                    <div class="d-flex flex-wrap gap-2 justify-content-center justify-content-lg-start">
+                        <img src="https://picsum.photos/100x80/111111/FFFFFF?text=Interior+1" class="property-thumb-img active" alt="Interior thumbnail 1">
+                        <img src="https://picsum.photos/100x80/222222/FFFFFF?text=Interior+2" class="property-thumb-img" alt="Interior thumbnail 2">
+                        <img src="https://picsum.photos/100x80/333333/FFFFFF?text=Exterior+2" class="property-thumb-img" alt="Exterior thumbnail 2">
+                        <img src="https://picsum.photos/100x80/444444/FFFFFF?text=Pool" class="property-thumb-img" alt="Pool thumbnail">
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <h3>The Grand Estate</h3>
+                    <p class="lead text-gold mb-3">$12,500,000</p>
+                    <p class="text-muted small mb-4">Located in Beverly Hills, CA. An epitome of luxury and privacy.</p>
+
+                    <div class="row mb-4">
+                        <div class="col-6">
+                            <p class="mb-1"><i class="fas fa-bed text-gold me-2"></i> 6 Beds</p>
+                            <p class="mb-1"><i class="fas fa-bath text-gold me-2"></i> 7 Baths</p>
+                        </div>
+                        <div class="col-6">
+                            <p class="mb-1"><i class="fas fa-ruler-combined text-gold me-2"></i> 8,000 SqFt</p>
+                            <p class="mb-1"><i class="fas fa-building text-gold me-2"></i> Built 2020</p>
+                        </div>
+                    </div>
+
+                    <h5>Key Features</h5>
+                    <ul class="list-unstyled small text-muted">
+                        <li><i class="fas fa-check-circle text-gold me-2"></i> Infinity Pool & Spa</li>
+                        <li><i class="fas fa-check-circle text-gold me-2"></i> Private Home Theater</li>
+                        <li><i class="fas fa-check-circle text-gold me-2"></i> Panoramic City Views</li>
+                        <li><i class="fas fa-check-circle text-gold me-2"></i> Smart Home Technology</li>
+                    </ul>
+
+                    <div class="d-grid gap-3 mt-4">
+                        <a href="#" class="btn btn-gold-filled btn-lg" aria-label="Request Info about The Grand Estate">Request Info</a>
+                        <a href="#" class="btn btn-outline-gold btn-lg" aria-label="View Full Listing for The Grand Estate">View Full Listing</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="mt-auto">
+        <div class="container container-max">
+            <div class="row">
+                <div class="col-lg-4 mb-4 mb-lg-0">
+                    <h5 class="text-white mb-3">Luxe Estates</h5>
+                    <p class="small">Luxury properties for discerning clients. Your dream home awaits.</p>
+                </div>
+                <div class="col-lg-2 col-md-4 mb-4 mb-lg-0">
+                    <h5 class="text-white mb-3">Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-4 mb-4 mb-lg-0">
+                    <h5 class="text-white mb-3">Stay Connected</h5>
+                    <form>
+                        <div class="input-group mb-3">
+                            <input type="email" class="form-control" placeholder="Your email" aria-label="Email for newsletter signup">
+                            <button class="btn btn-gold-filled" type="button" aria-label="Subscribe to newsletter">Subscribe</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-lg-3 col-md-4 mb-4 mb-lg-0 text-lg-end text-md-end">
+                    <h5 class="text-white mb-3">Follow Us</h5>
+                    <a href="#" class="social-icon" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-icon" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-icon" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-icon" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            <hr class="my-4 border-secondary">
+            <div class="text-center small">
+                &copy; 2023 Luxe Estates. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Bootstrap Carousel
+            var heroCarousel = document.getElementById('heroCarousel');
+            var carousel = new bootstrap.Carousel(heroCarousel, {
+                interval: 5000, // Autoplay interval in milliseconds
+                ride: 'carousel'
+            });
+
+            // Mobile Nav Toggle (Bootstrap's JS handles most of this)
+            // Just ensure visual state if needed, though Bootstrap usually handles it well.
+
+            // Example for dynamic image loading in Property Detail Teaser
+            const mainTeaserImg = document.querySelector('.property-teaser-img');
+            document.querySelectorAll('.property-thumb-img').forEach(thumb => {
+                thumb.addEventListener('click', function() {
+                    document.querySelectorAll('.property-thumb-img').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    mainTeaserImg.src = this.src;
+                    mainTeaserImg.alt = this.alt;
+                });
+            });
+
+            // Example for heart icon toggle
+            document.querySelectorAll('.heart-icon').forEach(icon => {
+                icon.addEventListener('click', function() {
+                    this.classList.toggle('far'); // Outline heart
+                    this.classList.toggle('fas'); // Solid heart
+                    this.classList.toggle('liked'); // Apply gold color if liked
+                });
+            });
+        });
+    </script>
+</body>
+</html>

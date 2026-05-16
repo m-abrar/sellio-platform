@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HomeFinder - Map-Centric Real Estate</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .navbar-search-bar {
+            max-width: 600px;
+            width: 100%;
+        }
+        .main-content {
+            flex-grow: 1;
+            display: flex;
+            overflow: hidden; /* Prevent body scroll when map/listings are scrollable */
+        }
+        .listings-panel, .map-container {
+            height: calc(100vh - 72px); /* Adjust based on navbar height */
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch; /* For smoother scrolling on iOS */
+        }
+        .listings-panel {
+            background-color: #f8f9fa; /* Light background for listings */
+        }
+        .property-card {
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            border-left: 5px solid transparent; /* For highlight */
+        }
+        .property-card:hover, .property-card.active {
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+            transform: translateY(-3px);
+            border-left-color: #007bff; /* Accent color for highlight */
+        }
+        .map-placeholder {
+            background-color: #e0e0e0; /* A light grey to simulate a map */
+            background-image: url('https://picsum.photos/1500x800/e0e0e0/ffffff?text=Interactive+Map+Goes+Here'); /* Placeholder map image */
+            background-size: cover;
+            background-position: center;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #6c757d;
+            font-size: 1.5rem;
+        }
+        .map-pin {
+            position: absolute;
+            background-color: #007bff; /* Accent color for pins */
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            cursor: pointer;
+            white-space: nowrap;
+            transform: translate(-50%, -100%); /* Position pin correctly above the location */
+            z-index: 10;
+        }
+        .map-pin.active {
+            background-color: #28a745; /* Green for active pin */
+            z-index: 11;
+        }
+        /* Example pin positioning (relative to map-placeholder if needed, or dynamic via JS) */
+        #pin1 { top: 20%; left: 30%; }
+        #pin2 { top: 45%; left: 60%; }
+        #pin3 { top: 70%; left: 40%; }
+        #pin4 { top: 35%; left: 75%; }
+        #pin5 { top: 60%; left: 20%; }
+
+
+        .featured-listing {
+            position: relative;
+            background-color: #343a40; /* Dark background */
+            color: white;
+            padding: 3rem 0;
+            margin-top: 1.5rem; /* Space below listings */
+            background-image: url('https://picsum.photos/1500x400/343a40/ffffff?text=Modern+Loft+Image');
+            background-size: cover;
+            background-position: center;
+            text-align: center;
+            overflow: hidden; /* Ensure overlay stays within bounds */
+        }
+        .featured-listing::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5); /* Dark overlay */
+            z-index: 1;
+        }
+        .featured-listing .container {
+            position: relative;
+            z-index: 2;
+        }
+        .footer {
+            background-color: #343a40;
+            color: #adb5bd;
+            padding: 2rem 0;
+        }
+        .footer a {
+            color: #adb5bd;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            color: white;
+        }
+        .app-badge {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        /* Mobile specific styles */
+        @media (max-width: 991.98px) {
+            .main-content {
+                flex-direction: column;
+                overflow-y: auto; /* Allow scrolling on main content on mobile */
+            }
+            .listings-panel, .map-container {
+                height: auto; /* Reset height for mobile */
+                flex-shrink: 0; /* Prevent shrinking when content overflows */
+            }
+            .map-container {
+                min-height: 400px; /* Give map some height on mobile */
+            }
+            .navbar-search-bar {
+                margin-top: 10px;
+            }
+            /* Adjust map/list view toggle for mobile */
+            .mobile-view-toggle {
+                display: flex !important; /* Show toggle on mobile */
+                margin-bottom: 1rem;
+            }
+            .map-view-active .listings-panel {
+                display: none;
+            }
+            .list-view-active .map-container {
+                display: none;
+            }
+        }
+
+        /* Hide mobile view toggle on desktop */
+        @media (min-width: 992px) {
+            .mobile-view-toggle {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold text-primary" href="#">
+                <i class="bi bi-house-door-fill me-2"></i>HomeFinder
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="#">Buy</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Rent</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Agents</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+                </ul>
+                <form class="d-flex navbar-search-bar mt-2 mt-lg-0">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Location, Price, Type..." aria-label="Search">
+                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Filters
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end p-3">
+                            <li><h6 class="dropdown-header">Price Range</h6></li>
+                            <li><input type="range" class="form-range" min="0" max="2000000" step="10000" value="500000"></li>
+                            <li><div class="d-flex justify-content-between"><small>$0</small><small>$2M+</small></div></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><h6 class="dropdown-header">Property Type</h6></li>
+                            <li><div class="form-check"><input class="form-check-input" type="checkbox" id="apt"><label class="form-check-label" for="apt">Apartment</label></div></li>
+                            <li><div class="form-check"><input class="form-check-input" type="checkbox" id="condo"><label class="form-check-label" for="condo">Condo</label></div></li>
+                            <li><div class="form-check"><input class="form-check-input" type="checkbox" id="house"><label class="form-check-label" for="house">House</label></div></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><button type="submit" class="btn btn-primary w-100">Apply Filters</button></li>
+                        </ul>
+                        <button class="btn btn-primary" type="submit"><i class="bi bi-search"></i></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-content d-flex flex-grow-1">
+
+        <div class="listings-panel col-lg-5 p-3">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="mb-0">Listings <span class="badge bg-secondary rounded-pill">42</span></h4>
+                <div class="d-flex align-items-center">
+                    <div class="btn-group btn-group-sm mobile-view-toggle me-3" role="group" aria-label="View toggle">
+                        <button type="button" class="btn btn-outline-primary active" id="mapViewBtn">Map View</button>
+                        <button type="button" class="btn btn-outline-primary" id="listViewBtn">List View</button>
+                    </div>
+                    <div class="dropdown me-2">
+                        <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuFilters" data-bs-toggle="dropdown" aria-expanded="false">
+                            Filters
+                        </button>
+                        <ul class="dropdown-menu p-3" aria-labelledby="dropdownMenuFilters">
+                            <li><h6 class="dropdown-header">Price</h6></li>
+                            <li><input type="range" class="form-range" min="0" max="2000000" step="10000" value="500000"></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><h6 class="dropdown-header">Bedrooms</h6></li>
+                            <li>
+                                <select class="form-select form-select-sm">
+                                    <option selected>Any</option>
+                                    <option value="1">1+</option>
+                                    <option value="2">2+</option>
+                                    <option value="3">3+</option>
+                                </select>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="dropdown">
+                        <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuSort" data-bs-toggle="dropdown" aria-expanded="false">
+                            Sort by
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuSort">
+                            <li><a class="dropdown-item" href="#">Newest</a></li>
+                            <li><a class="dropdown-item" href="#">Lowest Price</a></li>
+                            <li><a class="dropdown-item" href="#">Highest Price</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="property-list">
+                <div class="card mb-3 property-card" data-pin-id="pin1">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="https://picsum.photos/150x100?text=Property+1" class="img-fluid rounded-start h-100 object-fit-cover" alt="City Apartment">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title text-primary">$450K</h5>
+                                <p class="card-text mb-1">City Apartment – 2 Bed, 2 Bath</p>
+                                <p class="card-text"><small class="text-muted">Downtown</small></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-3 property-card" data-pin-id="pin2">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="https://picsum.photos/150x100?text=Property+2" class="img-fluid rounded-start h-100 object-fit-cover" alt="Luxury Condo">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title text-primary">$1.2M</h5>
+                                <p class="card-text mb-1">Luxury Condo – 3 Bed, 3 Bath</p>
+                                <p class="card-text"><small class="text-muted">Uptown</small></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-3 property-card" data-pin-id="pin3">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="https://picsum.photos/150x100?text=Property+3" class="img-fluid rounded-start h-100 object-fit-cover" alt="Suburban House">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title text-primary">$800K</h5>
+                                <p class="card-text mb-1">Suburban House – 4 Bed, 3 Bath</p>
+                                <p class="card-text"><small class="text-muted">Near Schools</small></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-3 property-card" data-pin-id="pin4">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="https://picsum.photos/150x100?text=Property+4" class="img-fluid rounded-start h-100 object-fit-cover" alt="Modern Loft">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title text-primary">$950K</h5>
+                                <p class="card-text mb-1">Modern Loft – 2 Bed, 2.5 Bath</p>
+                                <p class="card-text"><small class="text-muted">Arts District</small></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-3 property-card" data-pin-id="pin5">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="https://picsum.photos/150x100?text=Property+5" class="img-fluid rounded-start h-100 object-fit-cover" alt="Beachfront Villa">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title text-primary">$2.5M</h5>
+                                <p class="card-text mb-1">Beachfront Villa – 5 Bed, 4 Bath</p>
+                                <p class="card-text"><small class="text-muted">Coastal Views</small></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="map-container col-lg-7 position-relative">
+            <div class="map-placeholder d-flex align-items-center justify-content-center h-100 w-100">
+                <div class="map-pin" id="pin1" data-card-id="pin1">$450K</div>
+                <div class="map-pin" id="pin2" data-card-id="pin2">$1.2M</div>
+                <div class="map-pin" id="pin3" data-card-id="pin3">$800K</div>
+                <div class="map-pin" id="pin4" data-card-id="pin4">$950K</div>
+                <div class="map-pin" id="pin5" data-card-id="pin5">$2.5M</div>
+            </div>
+        </div>
+    </div>
+
+    <section class="featured-listing mt-4 mb-4">
+        <div class="container text-center">
+            <h2 class="display-5 fw-bold mb-3">Featured Listing</h2>
+            <p class="lead mb-4">Modern Loft in the heart of the city – $950K</p>
+            <a href="#" class="btn btn-success btn-lg">Schedule a Tour <i class="bi bi-arrow-right"></i></a>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <h5>HomeFinder</h5>
+                    <p>Your ultimate destination for finding your dream home.</p>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <h5>Get Our App</h5>
+                    <a href="#"><img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play" class="app-badge"></a>
+                    <a href="#"><img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="App Store" class="app-badge"></a>
+                    <h5 class="mt-3">Newsletter</h5>
+                    <form class="d-flex">
+                        <input type="email" class="form-control me-2" placeholder="Your email">
+                        <button class="btn btn-primary" type="submit">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+            <div class="text-center mt-4">
+                <small>&copy; 2023 HomeFinder. All rights reserved.</small>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const propertyCards = document.querySelectorAll('.property-card');
+            const mapPins = document.querySelectorAll('.map-pin');
+            const listingsPanel = document.querySelector('.listings-panel');
+            const mainContent = document.querySelector('.main-content');
+            const mapViewBtn = document.getElementById('mapViewBtn');
+            const listViewBtn = document.getElementById('listViewBtn');
+
+            function highlightItem(cardElement, pinElement) {
+                // Remove active from all cards and pins
+                propertyCards.forEach(card => card.classList.remove('active'));
+                mapPins.forEach(pin => pin.classList.remove('active'));
+
+                // Add active to selected card and pin
+                if (cardElement) cardElement.classList.add('active');
+                if (pinElement) pinElement.classList.add('active');
+            }
+
+            // Card hover/click interaction
+            propertyCards.forEach(card => {
+                const pinId = card.dataset.pinId;
+                const correspondingPin = document.getElementById(pinId);
+
+                card.addEventListener('mouseenter', () => highlightItem(card, correspondingPin));
+                card.addEventListener('mouseleave', () => highlightItem(null, null)); // De-highlight
+                card.addEventListener('click', () => {
+                    highlightItem(card, correspondingPin);
+                    // Scroll map into view on mobile if card is clicked
+                    if (window.innerWidth < 992) {
+                        mainContent.classList.remove('list-view-active');
+                        mainContent.classList.add('map-view-active');
+                        mapViewBtn.classList.add('active');
+                        listViewBtn.classList.remove('active');
+                    }
+                });
+            });
+
+            // Pin click interaction
+            mapPins.forEach(pin => {
+                const cardId = pin.dataset.cardId;
+                const correspondingCard = document.querySelector(`.property-card[data-pin-id="${cardId}"]`);
+
+                pin.addEventListener('click', () => {
+                    highlightItem(correspondingCard, pin);
+                    if (correspondingCard) {
+                        correspondingCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                    // On mobile, switch to list view if map pin is clicked
+                    if (window.innerWidth < 992) {
+                        mainContent.classList.remove('map-view-active');
+                        mainContent.classList.add('list-view-active');
+                        listViewBtn.classList.add('active');
+                        mapViewBtn.classList.remove('active');
+                    }
+                });
+            });
+
+            // Mobile view toggle functionality
+            if (window.innerWidth < 992) {
+                mainContent.classList.add('map-view-active'); // Default to map view on mobile
+                mapViewBtn.classList.add('active');
+            }
+
+            mapViewBtn.addEventListener('click', () => {
+                mainContent.classList.remove('list-view-active');
+                mainContent.classList.add('map-view-active');
+                mapViewBtn.classList.add('active');
+                listViewBtn.classList.remove('active');
+            });
+
+            listViewBtn.addEventListener('click', () => {
+                mainContent.classList.remove('map-view-active');
+                mainContent.classList.add('list-view-active');
+                listViewBtn.classList.add('active');
+                mapViewBtn.classList.remove('active');
+            });
+        });
+    </script>
+</body>
+</html>

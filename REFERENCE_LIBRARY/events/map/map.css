@@ -1,0 +1,463 @@
+/* Custom CSS for Compass Events - Polished UI/UX */
+
+:root {
+    --primary-blue: #0d6efd;
+    --deep-blue: #1a2a44; /* Darker sidebar/footer */
+    --accent-teal: #00bcd4; /* Bright accent */
+    --text-dark: #212529;
+    --text-light: #f8f9fa;
+    --light-gray: #e9ecef; /* For subtle backgrounds */
+    --border-color: rgba(255, 255, 255, 0.2);
+    --input-bg: rgba(255, 255, 255, 0.1);
+    --input-hover-bg: rgba(255, 255, 255, 0.15);
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--light-gray); /* Slightly off-white */
+    color: var(--text-dark);
+    line-height: 1.6;
+}
+
+/* Navbar Customization */
+.custom-navbar {
+    background-color: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(8px);
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+.custom-navbar.scrolled {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.custom-navbar .navbar-brand .text-dark {
+    color: var(--text-dark) !important;
+}
+
+.custom-navbar .nav-link {
+    font-weight: 500;
+    color: var(--text-dark);
+    margin: 0 12px;
+    padding: 8px 0;
+    position: relative;
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.custom-navbar .nav-link:hover {
+    color: var(--primary-blue);
+    transform: translateY(-2px);
+}
+
+.custom-navbar .nav-link.active::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0px; /* Aligns more naturally */
+    height: 2px;
+    background-color: var(--primary-blue);
+    border-radius: 2px;
+}
+
+.custom-navbar .nav-cta {
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+}
+.custom-navbar .nav-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(13, 110, 253, 0.3);
+}
+
+/* Hero + Map Section */
+.hero-map-section {
+    min-height: calc(100vh - 76px);
+    margin-top: 76px;
+    display: flex;
+}
+
+.container-fluid.h-100 {
+    height: 100%;
+}
+
+.row.g-0.h-100 {
+    height: 100%;
+}
+
+.sidebar-filter {
+    background: var(--deep-blue);
+    color: white;
+    min-height: 100%;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-filter h4 {
+    font-weight: 600;
+}
+
+.sidebar-filter .input-group-text {
+    background-color: var(--input-bg);
+    border: 1px solid var(--border-color);
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.sidebar-filter .form-control {
+    background-color: var(--input-bg);
+    border: 1px solid var(--border-color);
+    color: white;
+    border-left: none; /* Blend with input-group-text */
+}
+
+.sidebar-filter .form-control::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.sidebar-filter .form-control:focus {
+    background-color: var(--input-hover-bg);
+    border-color: var(--accent-teal);
+    box-shadow: 0 0 0 0.25rem rgba(0, 188, 212, 0.25);
+    color: white;
+}
+
+.sidebar-filter .search-btn {
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+.sidebar-filter .search-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(13, 110, 253, 0.3);
+}
+
+
+/* Custom Switches */
+.custom-switch {
+    width: 48px; /* Slightly wider */
+}
+.custom-switch .form-check-input {
+    height: 1.25em; /* Match default height */
+    width: 2.25em; /* Match default width */
+    background-color: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: none;
+    transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+}
+.custom-switch .form-check-input:checked {
+    background-color: var(--accent-teal);
+    border-color: var(--accent-teal);
+}
+.custom-switch .form-check-input:focus {
+    box-shadow: 0 0 0 0.25rem rgba(0, 188, 212, 0.25);
+}
+
+
+.map-container-col {
+    padding: 20px;
+    background-color: var(--light-gray);
+}
+
+#map-placeholder {
+    height: 55vh;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    /* UPDATED: Simple gradient background to replace the image URL */
+    background: linear-gradient(135deg, #f2f7ff, #e6f0ff); 
+    border: 1px solid #d4e3f8; /* Subtle border for map definition */
+    filter: none; /* Remove filter since we're using a plain background */
+}
+
+
+.map-overlay-text {
+    background-color: rgba(255, 255, 255, 0.85);
+    border-radius: 10px;
+    padding: 20px 30px;
+    pointer-events: none;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.current-location-btn {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    z-index: 10;
+    font-size: 0.9em;
+    padding: 8px 15px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.current-location-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15) !important;
+}
+
+
+.event-card {
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%; /* Ensure equal height */
+}
+
+.event-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+}
+
+.event-card .card-img-top {
+    height: 180px;
+    object-fit: cover;
+}
+
+.event-card .card-body {
+    padding: 1rem 1.2rem;
+}
+
+.event-card .card-title {
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.event-card .card-text.small {
+    font-size: 0.85em;
+    color: #6c757d;
+}
+
+.event-card .category-badge {
+    font-size: 0.7em;
+    padding: 0.35em 0.8em;
+    border-radius: 50rem;
+    font-weight: 500;
+    margin-top: 5px;
+    display: inline-block; /* For better spacing */
+}
+
+.event-card .view-details-btn {
+    font-weight: 500;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+.event-card .view-details-btn:hover {
+    background-color: var(--primary-blue);
+    color: white;
+}
+
+
+/* Featured Cities */
+.featured-cities {
+    background: linear-gradient(to right, #f7f9fc, #edf2f7);
+    padding-top: 60px;
+    padding-bottom: 60px;
+}
+
+.featured-cities h2 {
+    color: var(--text-dark);
+}
+
+.city-card {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    height: 220px;
+    display: flex;
+    align-items: flex-end;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.city-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+}
+
+.city-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.8); /* Slightly less dark initially */
+    transition: filter 0.3s ease;
+}
+
+.city-card:hover img {
+    filter: brightness(0.9);
+}
+
+.city-card-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+    padding: 15px 20px;
+    color: white;
+    text-align: center;
+    opacity: 1;
+    transition: background 0.3s ease, padding 0.3s ease;
+}
+.city-card-overlay h5 {
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+.city-card-overlay p {
+    font-size: 0.9em;
+}
+
+
+/* Popular Events Carousel (cards are styled similar to event-card) */
+.popular-events {
+    padding-top: 60px;
+    padding-bottom: 60px;
+    background-color: white;
+}
+
+.popular-events h2 {
+    color: var(--text-dark);
+}
+
+.popular-event-card {
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.popular-event-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+}
+
+.popular-event-card .card-img-top {
+    height: 160px;
+    object-fit: cover;
+}
+
+/* Organizer CTA */
+.organizer-cta {
+    background: linear-gradient(45deg, #007bff, var(--accent-teal)); /* Stronger gradient */
+    border-radius: 15px;
+    margin: 60px auto;
+    max-width: 1300px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+    padding: 70px 30px;
+}
+
+.organizer-cta h2 {
+    font-weight: 700;
+    color: white;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.organizer-cta p {
+    color: rgba(255, 255, 255, 0.9);
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.organizer-cta .cta-button {
+    font-weight: 600;
+    padding: 12px 40px;
+    transition: transform 0.2s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+}
+.organizer-cta .cta-button:hover {
+    transform: translateY(-5px);
+    background-color: var(--text-light);
+    color: var(--primary-blue);
+    box-shadow: 0 8px 20px rgba(255, 255, 255, 0.3);
+}
+
+/* Footer */
+.footer {
+    background-color: var(--deep-blue) !important;
+    padding-top: 60px;
+    padding-bottom: 60px;
+}
+
+.footer h5 {
+    color: var(--text-light);
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+.footer ul li a.footer-link {
+    color: rgba(255, 255, 255, 0.6);
+    transition: color 0.3s ease;
+    padding: 5px 0;
+    display: block;
+}
+
+.footer ul li a.footer-link:hover {
+    color: var(--accent-teal);
+    text-decoration: none !important; /* Remove default underline */
+}
+
+.footer .social-icons a {
+    font-size: 1.4rem; /* Slightly larger */
+    color: rgba(255, 255, 255, 0.7);
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.footer .social-icons a:hover {
+    color: var(--accent-teal);
+    transform: translateY(-3px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 991.98px) {
+    .sidebar-filter {
+        min-height: auto;
+        max-height: 450px; /* Slightly more room */
+        overflow-y: auto;
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .hero-map-section {
+        margin-top: 0;
+        flex-direction: column;
+    }
+    .map-container-col {
+        padding: 15px;
+    }
+    #map-placeholder {
+        height: 40vh;
+    }
+    .organizer-cta {
+        margin: 40px 20px;
+        padding: 50px 20px;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .navbar-collapse {
+        background-color: rgba(255, 255, 255, 0.98);
+        padding: 15px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        border-radius: 0 0 8px 8px;
+    }
+    .navbar-nav .nav-item {
+        margin: 5px 0;
+    }
+    .navbar-nav .nav-link {
+        padding: 8px 0;
+    }
+    .navbar-nav .nav-link.active::after {
+        left: 0;
+        right: auto;
+        width: 30px;
+    }
+    .event-card .card-img-top {
+        height: 150px;
+    }
+    .organizer-cta h2 {
+        font-size: 1.8rem;
+    }
+    .organizer-cta p {
+        font-size: 1rem;
+    }
+    .footer h5 {
+        margin-bottom: 1rem;
+    }
+}
+
+

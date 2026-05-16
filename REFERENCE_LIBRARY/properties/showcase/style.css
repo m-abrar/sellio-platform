@@ -1,0 +1,125 @@
+/* Utility Classes for Custom Colors (Necessary due to !important or for custom Bootstrap classes) */
+.bg-gold { background-color: var(--gold) !important; }
+.text-gold { color: var(--gold) !important; }
+.bg-charcoal { background-color: var(--charcoal) !important; }
+.text-charcoal { color: var(--charcoal) !important; }
+.bg-beige { background-color: var(--beige) !important; }
+.border-gold { border-color: var(--gold) !important; }
+
+/* Hero Styling */
+.hero-section {
+    height: 100vh;
+    background: url('https://picsum.photos/1600/1000/') center/cover no-repeat;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: var(--white);
+}
+
+.hero-overlay {
+    background-color: rgba(28, 28, 28, 0.4); /* Charcoal overlay */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.hero-content {
+    z-index: 10;
+}
+
+.hero-content h1 {
+    font-size: 4.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--gold);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.hero-content p {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    color: var(--white);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.btn-gold {
+    background-color: var(--gold);
+    border-color: var(--gold);
+    color: var(--charcoal);
+    padding: 0.75rem 1.5rem;
+    font-weight: 500;
+    transition: background-color 0.3s, opacity 0.3s;
+}
+.btn-gold:hover {
+    /* Note: SCSS darken() function is not native CSS. Use a fixed hex for pure CSS */
+    background-color: #C39F2F; /* A darker gold equivalent */
+    border-color: #C39F2F;
+    opacity: 0.9;
+    color: var(--charcoal);
+}
+
+.btn-outline-white {
+    color: var(--white);
+    border-color: var(--white);
+    padding: 0.75rem 1.5rem;
+    font-weight: 500;
+    transition: background-color 0.3s, color 0.3s;
+}
+.btn-outline-white:hover {
+    background-color: var(--white);
+    color: var(--charcoal);
+}
+
+/* Overview Section Styling */
+.overview-stat {
+    position: relative;
+    padding: 1.5rem 0;
+    text-align: center;
+}
+
+.overview-stat h2 {
+    font-size: 2.5rem;
+    margin-bottom: 0.25rem;
+    font-weight: 700;
+}
+
+.overview-stat small {
+    font-weight: 400;
+    opacity: 0.7;
+    letter-spacing: 0.05rem;
+}
+
+/* Features Icon Grid */
+.feature-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--gold);
+}
+
+/* Floor Plans Tabs */
+.nav-link.active {
+    background-color: var(--charcoal) !important;
+    color: var(--gold) !important;
+    border-color: var(--gold) !important;
+    border-left: 5px solid var(--gold) !important;
+}
+
+.nav-link {
+    color: var(--charcoal);
+    border-radius: 0;
+}
+
+/* Agent Card */
+.agent-card {
+    border: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.agent-photo {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+}

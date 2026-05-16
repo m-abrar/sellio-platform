@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PULSE - Music Events & Festival Homepage</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
+    <!-- Load Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <style>
+        /* Base Styling & Custom Fonts */
+        :root {
+            --neon-pink: #FF00FF;
+            --neon-blue: #00FFFF;
+            --neon-lime: #CCFF00;
+            --dark-bg: #0A0A0A;
+            --card-border: #222;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--dark-bg);
+            color: #E0E0E0;
+            scroll-behavior: smooth;
+        }
+
+        .font-headline {
+            font-family: 'Orbitron', sans-serif;
+            text-shadow: 0 0 10px var(--neon-pink), 0 0 20px var(--neon-purple);
+        }
+        
+        /* Neon Glow Keyframes */
+        @keyframes neon-pulse {
+            0% { box-shadow: 0 0 5px var(--neon-pink); }
+            50% { box-shadow: 0 0 15px var(--neon-pink), 0 0 30px var(--neon-blue); }
+            100% { box-shadow: 0 0 5px var(--neon-pink); }
+        }
+
+        @keyframes neon-border-glow {
+            0% { box-shadow: 0 0 5px var(--neon-blue); }
+            50% { box-shadow: 0 0 10px var(--neon-pink), 0 0 20px var(--neon-blue); }
+            100% { box-shadow: 0 0 5px var(--neon-blue); }
+        }
+
+        /* Custom Neon Classes */
+        .neon-cta-button {
+            background: linear-gradient(90deg, #FF00FF, #00FFFF);
+            color: var(--dark-bg);
+            border: 2px solid transparent;
+            transition: all 0.3s ease-in-out;
+            animation: neon-pulse 2s infinite alternate;
+        }
+        .neon-cta-button:hover {
+            animation: none;
+            box-shadow: 0 0 20px var(--neon-pink), 0 0 40px var(--neon-blue);
+            transform: scale(1.05);
+        }
+
+        .neon-pill {
+            border: 1px solid var(--neon-blue);
+            box-shadow: 0 0 5px var(--neon-blue);
+            transition: all 0.2s;
+        }
+        .neon-pill:hover {
+            background-color: var(--neon-blue);
+            color: var(--dark-bg);
+            box-shadow: 0 0 10px var(--neon-blue), 0 0 20px var(--neon-pink);
+        }
+        .neon-pill.active {
+             background: linear-gradient(45deg, var(--neon-pink), var(--neon-lime));
+             color: var(--dark-bg);
+             border: none;
+             box-shadow: 0 0 15px var(--neon-lime);
+        }
+
+        /* Card Hover Effects */
+        .neon-card {
+            border: 2px solid var(--card-border);
+            background-color: #111;
+            transition: all 0.4s ease-in-out;
+            transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
+        }
+
+        .neon-card:hover {
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.6), 0 0 30px rgba(255, 0, 255, 0.4);
+            transform: perspective(1000px) rotateX(2deg) rotateY(-2deg) scale(1.03);
+        }
+
+        /* Newsletter Gradient */
+        .newsletter-neon-bg {
+            background: linear-gradient(135deg, rgba(255, 0, 255, 0.1), rgba(0, 255, 255, 0.1));
+            border: 2px solid;
+            border-image-slice: 1;
+            border-width: 2px;
+            border-image-source: linear-gradient(to right, var(--neon-pink), var(--neon-blue));
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
+        }
+
+        /* Hero Background with Dimming Overlay */
+        .hero-bg {
+            background-image: url('https://picsum.photos/1600/900?grayscale&blur=5');
+            background-size: cover;
+            background-position: center;
+        }
+        .hero-overlay {
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(2px);
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <!-- Header (Sticky Nav) -->
+    <nav id="navbar" class="sticky top-0 z-50 bg-black/90 backdrop-blur-sm shadow-xl shadow-fuchsia-900/20">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-20">
+            <!-- Logo -->
+            <a href="#" class="font-headline text-3xl text-white tracking-widest" style="text-shadow: 0 0 5px var(--neon-blue);">PULSE</a>
+            
+            <!-- Desktop Nav Links -->
+            <div class="hidden lg:flex space-x-8 text-lg">
+                <a href="#home" class="text-white hover:text-cyan-400 transition duration-300">Home</a>
+                <a href="#lineup" class="text-white hover:text-cyan-400 transition duration-300">Lineup</a>
+                <a href="#tickets" class="text-white hover:text-cyan-400 transition duration-300">Tickets</a>
+                <a href="#gallery" class="text-white hover:text-cyan-400 transition duration-300">Gallery</a>
+                <a href="#contact" class="text-white hover:text-cyan-400 transition duration-300">Contact</a>
+            </div>
+
+            <!-- CTA Button (Desktop) -->
+            <a href="#tickets" class="hidden lg:block px-6 py-2 rounded-full font-bold uppercase neon-cta-button">Buy Tickets</a>
+
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-btn" class="lg:hidden text-white text-2xl hover:text-cyan-400 transition duration-300">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Menu (Off-Canvas Style) -->
+        <div id="mobile-menu" class="hidden fixed inset-0 bg-black/95 z-40 p-6 transition-transform transform translate-x-full lg:hidden">
+            <div class="flex justify-end">
+                <button id="close-menu-btn" class="text-white text-3xl">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="flex flex-col space-y-8 mt-10 text-3xl font-headline text-center">
+                <a href="#home" class="text-white hover:text-cyan-400" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Home</a>
+                <a href="#lineup" class="text-white hover:text-cyan-400" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Lineup</a>
+                <a href="#tickets" class="text-white hover:text-cyan-400" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Tickets</a>
+                <a href="#gallery" class="text-white hover:text-cyan-400" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Gallery</a>
+                <a href="#contact" class="text-white hover:text-cyan-400" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Contact</a>
+                <a href="#tickets" class="mt-8 px-6 py-3 rounded-full font-bold text-lg uppercase neon-cta-button" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Buy Tickets</a>
+            </div>
+        </div>
+    </nav>
+    <!-- End Header -->
+
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="hero-bg h-[80vh] flex items-center justify-center text-center">
+            <div class="hero-overlay absolute inset-0"></div>
+            <div class="container mx-auto px-4 z-10">
+                <h1 class="font-headline text-5xl sm:text-7xl lg:text-8xl font-black text-white mb-4 leading-tight tracking-wider" style="text-shadow: 0 0 20px var(--neon-pink), 0 0 40px var(--neon-blue);">
+                    FEEL THE MUSIC LIVE
+                </h1>
+                <p class="text-lg sm:text-2xl text-gray-200 mb-10">
+                    Discover concerts & music festivals near you.
+                </p>
+                <div class="flex justify-center space-x-4">
+                    <a href="#events" class="px-8 py-3 rounded-full font-bold uppercase text-white tracking-wider border-2 border-cyan-400 hover:bg-cyan-400/20 transition neon-cta-button" style="animation: none; box-shadow: 0 0 10px var(--neon-blue);">
+                        See Events
+                    </a>
+                    <a href="#tickets" class="px-8 py-3 rounded-full font-bold uppercase text-white tracking-wider border-2 border-pink-400 hover:bg-pink-400/20 transition neon-cta-button" style="animation: neon-pulse 2s infinite alternate;">
+                        Get Tickets
+                    </a>
+                </div>
+            </div>
+        </section>
+        <!-- End Hero Section -->
+
+        <!-- Filters Section -->
+        <section class="py-12 bg-black">
+            <div class="container mx-auto px-4">
+                <div class="flex flex-col lg:flex-row gap-4 items-center justify-between">
+                    <!-- Category Pills -->
+                    <div class="flex flex-wrap justify-center lg:justify-start gap-3">
+                        <button class="px-5 py-2 text-sm font-semibold rounded-full neon-pill active">All</button>
+                        <button class="px-5 py-2 text-sm font-semibold rounded-full neon-pill" style="--neon-blue: #FF0000; --neon-pink: #FF9900;">Rock</button>
+                        <button class="px-5 py-2 text-sm font-semibold rounded-full neon-pill" style="--neon-blue: #00FFCC; --neon-pink: #0099FF;">EDM</button>
+                        <button class="px-5 py-2 text-sm font-semibold rounded-full neon-pill" style="--neon-blue: #FF33CC; --neon-pink: #9900FF;">Pop</button>
+                        <button class="px-5 py-2 text-sm font-semibold rounded-full neon-pill" style="--neon-blue: #CCCC00; --neon-pink: #FFFF66;">Jazz</button>
+                        <button class="px-5 py-2 text-sm font-semibold rounded-full neon-pill" style="--neon-blue: #FF6600; --neon-pink: #CC3300;">Hip-Hop</button>
+                    </div>
+
+                    <!-- Search Bar -->
+                    <div class="relative w-full lg:w-1/3 mt-4 lg:mt-0">
+                        <input type="text" placeholder="Search by artist, venue, or genre..." class="w-full bg-transparent border-2 border-purple-500 text-white rounded-full py-2 pl-6 pr-12 focus:ring-4 focus:ring-purple-500/50 outline-none" style="box-shadow: 0 0 10px rgba(168, 85, 247, 0.5);">
+                        <i class="fas fa-search absolute right-5 top-1/2 -translate-y-1/2 text-purple-400"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- End Filters Section -->
+
+        <!-- Featured Lineup Section -->
+        <section id="lineup" class="py-20">
+            <div class="container mx-auto px-4">
+                <h2 class="font-headline text-4xl font-bold text-center mb-12 uppercase" style="color: var(--neon-lime); text-shadow: 0 0 10px rgba(204, 255, 0, 0.5);">Featured Lineup</h2>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- Artist Card 1 -->
+                    <div class="neon-card rounded-xl overflow-hidden group">
+                        <img src="https://picsum.photos/600/400?random=1" alt="Featured Artist" class="w-full h-48 object-cover transition duration-300 group-hover:scale-105">
+                        <div class="p-5 text-center">
+                            <h3 class="font-headline text-2xl font-semibold mb-1 text-pink-400">DJ Nova</h3>
+                            <p class="text-gray-400 text-sm">Performing at Sunset EDM Festival</p>
+                            <p class="font-bold text-lg mt-2 text-cyan-400">August 25, 2025</p>
+                        </div>
+                    </div>
+                    <!-- Artist Card 2 -->
+                    <div class="neon-card rounded-xl overflow-hidden group">
+                        <img src="https://picsum.photos/600/400?random=2" alt="Featured Artist" class="w-full h-48 object-cover transition duration-300 group-hover:scale-105">
+                        <div class="p-5 text-center">
+                            <h3 class="font-headline text-2xl font-semibold mb-1 text-pink-400">The Producer</h3>
+                            <p class="text-gray-400 text-sm">Main Stage Headliner</p>
+                            <p class="font-bold text-lg mt-2 text-cyan-400">July 19, 2025</p>
+                        </div>
+                    </div>
+                    <!-- Artist Card 3 -->
+                    <div class="neon-card rounded-xl overflow-hidden group">
+                        <img src="https://picsum.photos/600/400?random=3" alt="Featured Artist" class="w-full h-48 object-cover transition duration-300 group-hover:scale-105">
+                        <div class="p-5 text-center">
+                            <h3 class="font-headline text-2xl font-semibold mb-1 text-pink-400">Pop Starlet</h3>
+                            <p class="text-gray-400 text-sm">The Dome Arena</p>
+                            <p class="font-bold text-lg mt-2 text-cyan-400">October 10, 2025</p>
+                        </div>
+                    </div>
+                    <!-- Artist Card 4 -->
+                    <div class="neon-card rounded-xl overflow-hidden group">
+                        <img src="https://picsum.photos/600/400?random=4" alt="Featured Artist" class="w-full h-48 object-cover transition duration-300 group-hover:scale-105">
+                        <div class="p-5 text-center">
+                            <h3 class="font-headline text-2xl font-semibold mb-1 text-pink-400">Rock Legend</h3>
+                            <p class="text-gray-400 text-sm">Final Tour Stop</p>
+                            <p class="font-bold text-lg mt-2 text-cyan-400">November 30, 2025</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- End Featured Lineup Section -->
+
+        <!-- Upcoming Events Section -->
+        <section id="events" class="py-20 bg-[#0F0F0F]">
+            <div class="container mx-auto px-4">
+                <h2 class="font-headline text-4xl font-bold text-center mb-12 uppercase text-white" style="text-shadow: 0 0 10px var(--neon-pink);">Upcoming Events</h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Event Card 1: Rock Nation Tour -->
+                    <div class="rounded-xl overflow-hidden shadow-2xl p-6 bg-[#181818] neon-card">
+                        <img src="https://picsum.photos/800/1000?random=5" alt="Rock Nation Tour Poster" class="w-full h-96 object-cover rounded-lg mb-4 opacity-80" style="border: 2px solid var(--neon-pink); box-shadow: 0 0 15px rgba(255, 0, 255, 0.4);">
+                        <h3 class="font-headline text-3xl font-bold text-pink-500 mb-1">Rock Nation Tour</h3>
+                        <p class="text-gray-300 mb-4">Madison Square Garden</p>
+                        <p class="text-lg font-bold text-cyan-400 mb-4">July 18, 2025</p>
+                        <a href="#tickets" class="block w-full text-center px-4 py-2 rounded-full font-bold uppercase neon-cta-button">
+                            Get Tickets
+                        </a>
+                    </div>
+
+                    <!-- Event Card 2: Sunset EDM Festival -->
+                    <div class="rounded-xl overflow-hidden shadow-2xl p-6 bg-[#181818] neon-card" style="--neon-blue: #00FFCC; --neon-pink: #0099FF;">
+                        <img src="https://picsum.photos/800/1000?random=6" alt="Sunset EDM Festival Poster" class="w-full h-96 object-cover rounded-lg mb-4 opacity-80" style="border: 2px solid var(--neon-blue); box-shadow: 0 0 15px rgba(0, 255, 204, 0.4);">
+                        <h3 class="font-headline text-3xl font-bold text-cyan-400 mb-1">Sunset EDM Festival</h3>
+                        <p class="text-gray-300 mb-4">Miami Beach</p>
+                        <p class="text-lg font-bold text-lime-400 mb-4">August 25, 2025</p>
+                        <a href="#tickets" class="block w-full text-center px-4 py-2 rounded-full font-bold uppercase neon-cta-button" style="background: linear-gradient(90deg, #00FFCC, #0099FF);">
+                            Get Tickets
+                        </a>
+                    </div>
+                    
+                    <!-- Event Card 3: Jazz Nights -->
+                    <div class="rounded-xl overflow-hidden shadow-2xl p-6 bg-[#181818] neon-card" style="--neon-blue: #CCFF00; --neon-pink: #FFCC00;">
+                        <img src="https://picsum.photos/800/1000?random=7" alt="Jazz Nights Poster" class="w-full h-96 object-cover rounded-lg mb-4 opacity-80" style="border: 2px solid var(--neon-lime); box-shadow: 0 0 15px rgba(204, 255, 0, 0.4);">
+                        <h3 class="font-headline text-3xl font-bold text-lime-400 mb-1">Jazz Nights</h3>
+                        <p class="text-gray-300 mb-4">New Orleans</p>
+                        <p class="text-lg font-bold text-pink-400 mb-4">October 10, 2025</p>
+                        <a href="#tickets" class="block w-full text-center px-4 py-2 rounded-full font-bold uppercase neon-cta-button" style="background: linear-gradient(90deg, #CCFF00, #FFCC00);">
+                            Get Tickets
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- End Upcoming Events Section -->
+
+        <!-- Gallery Section -->
+        <section id="gallery" class="py-20">
+            <div class="container mx-auto px-4">
+                <h2 class="font-headline text-4xl font-bold text-center mb-12 uppercase text-white" style="text-shadow: 0 0 10px var(--neon-blue);">Gallery</h2>
+
+                <!-- Masonry-style Grid using columns/gap -->
+                <div class="columns-2 md:columns-3 lg:columns-4 gap-4">
+                    <img src="https://picsum.photos/600/800?random=10" alt="Concert Photo" class="w-full mb-4 rounded-lg shadow-xl hover:opacity-75 transition duration-300">
+                    <img src="https://picsum.photos/600/400?random=11" alt="Concert Photo" class="w-full mb-4 rounded-lg shadow-xl hover:opacity-75 transition duration-300">
+                    <img src="https://picsum.photos/600/900?random=12" alt="Concert Photo" class="w-full mb-4 rounded-lg shadow-xl hover:opacity-75 transition duration-300">
+                    <img src="https://picsum.photos/600/500?random=13" alt="Concert Photo" class="w-full mb-4 rounded-lg shadow-xl hover:opacity-75 transition duration-300">
+                    <img src="https://picsum.photos/600/700?random=14" alt="Concert Photo" class="w-full mb-4 rounded-lg shadow-xl hover:opacity-75 transition duration-300">
+                    <img src="https://picsum.photos/600/450?random=15" alt="Concert Photo" class="w-full mb-4 rounded-lg shadow-xl hover:opacity-75 transition duration-300">
+                    <img src="https://picsum.photos/600/850?random=16" alt="Concert Photo" class="w-full mb-4 rounded-lg shadow-xl hover:opacity-75 transition duration-300">
+                    <img src="https://picsum.photos/600/600?random=17" alt="Concert Photo" class="w-full mb-4 rounded-lg shadow-xl hover:opacity-75 transition duration-300">
+                </div>
+            </div>
+        </section>
+        <!-- End Gallery Section -->
+
+        <!-- Newsletter Section -->
+        <section id="contact" class="py-16">
+            <div class="container mx-auto px-4">
+                <div class="newsletter-neon-bg p-8 rounded-2xl text-center">
+                    <h2 class="font-headline text-3xl sm:text-4xl font-bold uppercase mb-2 text-white" style="text-shadow: 0 0 10px var(--neon-pink);">
+                        Join the Music Community
+                    </h2>
+                    <p class="text-xl mb-8 text-gray-200">– Subscribe Now –</p>
+                    
+                    <form class="max-w-xl mx-auto flex flex-col sm:flex-row gap-4">
+                        <input type="email" placeholder="Enter your email address" required class="flex-grow bg-black/50 border-2 border-transparent text-white rounded-full py-3 px-6 focus:ring-4 focus:ring-cyan-500/50 outline-none placeholder-gray-400 transition" style="box-shadow: 0 0 5px rgba(0, 255, 255, 0.5);">
+                        <button type="submit" class="sm:w-auto px-8 py-3 rounded-full font-bold uppercase neon-cta-button">
+                            Subscribe
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+        <!-- End Newsletter Section -->
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-black/90 pt-12 pb-8 mt-12 border-t border-purple-900/50">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                <!-- Logo -->
+                <div class="col-span-2 md:col-span-1">
+                    <a href="#" class="font-headline text-3xl text-white tracking-widest mb-4 inline-block" style="text-shadow: 0 0 5px var(--neon-lime);">PULSE</a>
+                    <p class="text-gray-400 text-sm">The heartbeat of live music events.</p>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="font-bold uppercase mb-3 text-cyan-400">Quick Links</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#events" class="hover:text-cyan-200 transition">Events Calendar</a></li>
+                        <li><a href="#lineup" class="hover:text-cyan-200 transition">Artists Lineup</a></li>
+                        <li><a href="#gallery" class="hover:text-cyan-200 transition">Media Gallery</a></li>
+                        <li><a href="#" class="hover:text-cyan-200 transition">Venue Info</a></li>
+                    </ul>
+                </div>
+
+                <!-- Legal -->
+                <div>
+                    <h4 class="font-bold uppercase mb-3 text-pink-400">Legal</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-pink-200 transition">Terms of Service</a></li>
+                        <li><a href="#" class="hover:text-pink-200 transition">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-pink-200 transition">Ticket Policy</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact -->
+                <div>
+                    <h4 class="font-bold uppercase mb-3 text-lime-400">Connect</h4>
+                    <p class="text-gray-400 text-sm">Email: info@pulse.com</p>
+                    <p class="text-gray-400 text-sm">Phone: (555) 555-PULSE</p>
+                </div>
+            </div>
+            
+            <hr class="my-8 border-gray-800">
+
+            <!-- Social Icons and Copyright -->
+            <div class="flex flex-col sm:flex-row justify-between items-center text-sm text-gray-500">
+                <p>&copy; 2025 PULSE Events. All Rights Reserved.</p>
+                <div class="flex space-x-6 mt-4 sm:mt-0">
+                    <a href="#" class="text-xl text-white hover:text-pink-400 transition duration-300" style="text-shadow: 0 0 5px var(--neon-pink);"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="text-xl text-white hover:text-cyan-400 transition duration-300" style="text-shadow: 0 0 5px var(--neon-blue);"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-xl text-white hover:text-lime-400 transition duration-300" style="text-shadow: 0 0 5px var(--neon-lime);"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="text-xl text-white hover:text-purple-400 transition duration-300" style="text-shadow: 0 0 5px #A855F7;"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- End Footer -->
+
+    <!-- JavaScript for Mobile Menu Functionality -->
+    <script>
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const closeMenuBtn = document.getElementById('close-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        // Toggle mobile menu visibility and slide animation
+        function toggleMobileMenu() {
+            if (mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.remove('hidden');
+                // Force layout reflow before starting transition
+                void mobileMenu.offsetWidth; 
+                mobileMenu.classList.remove('translate-x-full');
+            } else {
+                mobileMenu.classList.add('translate-x-full');
+                // Hide after transition is complete (approx 300ms)
+                setTimeout(() => {
+                    mobileMenu.classList.add('hidden');
+                }, 300);
+            }
+        }
+
+        mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+        closeMenuBtn.addEventListener('click', toggleMobileMenu);
+
+        // Close menu when a link is clicked
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('translate-x-full');
+                setTimeout(() => {
+                    mobileMenu.classList.add('hidden');
+                }, 300);
+            });
+        });
+
+        // Set up the sticky/shadow effect on scroll
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('shadow-2xl', 'bg-black/95');
+            } else {
+                navbar.classList.remove('shadow-2xl', 'bg-black/95');
+            }
+        });
+
+    </script>
+</body>
+</html>

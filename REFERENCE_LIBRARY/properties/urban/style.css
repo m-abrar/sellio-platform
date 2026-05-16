@@ -1,0 +1,208 @@
+/* Apply custom styles that need to go before general layout styles */
+.btn-primary { 
+    /* Match the original button style from the Metro template */
+    background-color: var(--color-primary) !important;
+    border-color: var(--color-primary) !important;
+}
+
+/* --- Navbar --- */
+/* NOTE: We must override the base layout's navbar styles */
+.navbar {
+    /* Override base layout's backdrop-filter and background */
+    backdrop-filter: none !important;
+    background: transparent !important;
+    border-bottom: none !important; 
+    transition: background-color 0.4s ease-in-out;
+}
+
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--color-primary) !important; /* Default for transparent state */
+}
+
+.navbar-transparent {
+    background-color: transparent !important;
+    /* Links should be white in transparent mode */
+}
+.navbar-transparent .nav-link,
+.navbar-transparent .navbar-brand {
+    color: white !important;
+}
+.navbar-transparent .navbar-brand {
+    color: var(--color-primary) !important; /* Keeping brand blue even on dark background */
+}
+
+
+.navbar-solid {
+    background-color: #fff !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-solid .nav-link,
+.navbar-solid .navbar-brand {
+    color: var(--dark-color) !important;
+}
+
+.navbar-solid .navbar-brand {
+    color: var(--color-primary) !important;
+}
+
+
+.nav-link {
+    font-weight: 500;
+}
+
+.navbar-toggler {
+    border: none;
+}
+.navbar-toggler:focus {
+    box-shadow: none;
+}
+
+/* --- Hero Section --- */
+.hero-section {
+    background: url('https://images.unsplash.com/photo-1501594907352-04cda38ebc29?q=80&w=2070&auto=format&fit=crop') no-repeat center center;
+    background-size: cover;
+    position: relative;
+    height: 80vh;
+    min-height: 500px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.hero-section::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(10, 22, 40, 0.6);
+    z-index: 1;
+}
+
+.hero-section .container {
+    position: relative;
+    z-index: 2;
+}
+
+.hero-section h1 {
+    font-weight: 700;
+    font-size: 3.5rem;
+}
+
+.hero-section .btn {
+    padding: 0.75rem 2rem;
+    font-weight: 600;
+    border-radius: 50px;
+}
+
+/* --- Featured Properties Card --- */
+.property-card {
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease-in-out;
+    border: none;
+}
+
+.property-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.property-card .card-img-top {
+    transition: transform 0.3s ease-in-out;
+    height: 220px;
+    object-fit: cover;
+}
+
+.property-card:hover .card-img-top {
+    transform: scale(1.05);
+}
+
+.price-badge {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    background-color: var(--color-accent);
+    color: white;
+    font-weight: 600;
+    padding: 0.4rem 0.8rem;
+    border-radius: 50px;
+}
+
+.card-title {
+    font-weight: 600;
+}
+
+/* --- Map Section --- */
+.map-container {
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+/* --- Agent Section --- */
+.agent-card img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+}
+.agent-card .star-rating {
+    color: #ffc107;
+}
+
+/* --- Footer --- */
+footer {
+    background-color: var(--color-secondary) !important; /* Override base layout footer */
+    color: #adb5bd;
+    position: relative;
+    padding-top: 5rem !important; 
+    margin-top: 0 !important; 
+    border-top: none !important;
+}
+
+footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('https://images.unsplash.com/photo-1449824913935-59a10b8d2000?q=80&w=2070&auto=format&fit=crop') no-repeat center center;
+    background-size: cover;
+    opacity: 0.1;
+    z-index: 1;
+}
+
+footer .container {
+    position: relative;
+    z-index: 2;
+}
+
+footer a {
+    color: #e9ecef;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+footer a:hover {
+    color: #fff;
+}
+
+footer .footer-logo {
+    font-weight: 700;
+    font-size: 1.8rem;
+    color: #fff;
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 768px) {
+    .hero-section h1 {
+        font-size: 2.5rem;
+    }
+}

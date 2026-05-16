@@ -1,0 +1,129 @@
+/* Override layout font for this specific page's body and use Inter */
+body {
+    font-family: 'Inter', sans-serif !important;
+}
+
+.navbar-search-bar {
+    max-width: 600px;
+    width: 100%;
+}
+.main-content {
+    flex-grow: 1;
+    display: flex;
+    overflow: hidden; /* Prevent body scroll when map/listings are scrollable */
+}
+.listings-panel, .map-container {
+    height: calc(100vh - 72px); /* Adjust based on navbar height */
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch; /* For smoother scrolling on iOS */
+}
+.listings-panel {
+    background-color: #f8f9fa; /* Light background for listings */
+}
+.property-card {
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    border-left: 5px solid transparent; /* For highlight */
+}
+.property-card:hover, .property-card.active {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    transform: translateY(-3px);
+    border-left-color: var(--primary-color); /* Use primary color for highlight */
+}
+.map-placeholder {
+    background-color: #e0e0e0; /* A light grey to simulate a map */
+    background-image: url('https://picsum.photos/1500/800/e0e0e0/ffffff?text=Interactive+Map+Goes+Here');
+    background-size: cover;
+    background-position: center;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #6c757d;
+    font-size: 1.5rem;
+}
+.map-pin {
+    position: absolute;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    cursor: pointer;
+    white-space: nowrap;
+    transform: translate(-50%, -100%);
+    z-index: 10;
+}
+.map-pin.active {
+    background-color: var(--success-color); /* Green for active pin */
+    z-index: 11;
+}
+/* Example pin positioning (relative to map-placeholder) */
+#pin1 { top: 20%; left: 30%; }
+#pin2 { top: 45%; left: 60%; }
+#pin3 { top: 70%; left: 40%; }
+#pin4 { top: 35%; left: 75%; }
+#pin5 { top: 60%; left: 20%; }
+
+.featured-listing {
+    position: relative;
+    background-color: var(--dark-color);
+    color: white;
+    padding: 3rem 0;
+    margin-top: 1.5rem;
+    background-image: url('https://picsum.photos/1500/400/343a40/ffffff?text=Modern+Loft+Image');
+    background-size: cover;
+    background-position: center;
+    text-align: center;
+    overflow: hidden;
+}
+.featured-listing::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5); /* Dark overlay */
+    z-index: 1;
+}
+.featured-listing .container {
+    position: relative;
+    z-index: 2;
+}
+
+/* Mobile specific styles */
+@media (max-width: 991.98px) {
+    .main-content {
+        flex-direction: column;
+        overflow-y: auto;
+    }
+    .listings-panel, .map-container {
+        height: auto;
+        flex-shrink: 0;
+    }
+    .map-container {
+        min-height: 400px;
+    }
+    .navbar-search-bar {
+        margin-top: 10px;
+    }
+    .mobile-view-toggle {
+        display: flex !important;
+        margin-bottom: 1rem;
+    }
+    .map-view-active .listings-panel {
+        display: none;
+    }
+    .list-view-active .map-container {
+        display: none;
+    }
+}
+/* Hide mobile view toggle on desktop */
+@media (min-width: 992px) {
+    .mobile-view-toggle {
+        display: none !important;
+    }
+}

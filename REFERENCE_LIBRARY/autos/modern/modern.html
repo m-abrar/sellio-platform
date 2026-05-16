@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Autos | Drive the Future Today</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bs-primary: #007bff; /* Electric Blue */
+            --bs-secondary: #001f40; /* Dark Navy */
+            --bs-font-sans-serif: 'Poppins', sans-serif;
+        }
+
+        body {
+            font-family: var(--bs-font-sans-serif);
+            background-color: #f4f7fa; /* Light Gray Base */
+            color: #333;
+            scroll-behavior: smooth;
+        }
+
+        /* Custom Navigation Styling */
+        .navbar {
+            transition: background-color 0.3s ease;
+        }
+        .navbar-brand, .nav-link, .btn-outline-light {
+            font-weight: 600;
+        }
+        .nav-link:hover {
+            color: var(--bs-primary) !important;
+        }
+        .btn-cta {
+            background-color: var(--bs-primary);
+            border-color: var(--bs-primary);
+            color: white;
+            border-radius: 50px;
+            padding: 8px 25px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .btn-cta:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+            transform: translateY(-2px);
+            color: white;
+        }
+
+        /* Hero Section Styling */
+        .hero-section {
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://picsum.photos/1600/900?random=1') no-repeat center center/cover;
+            height: 80vh;
+            color: white;
+            display: flex;
+            align-items: center;
+            text-align: center;
+        }
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+        }
+        .hero-subtitle {
+            font-weight: 300;
+            margin-bottom: 2rem;
+        }
+
+        /* Filters Section Styling */
+        .filters-section {
+            background-color: white;
+            padding: 1.5rem 0;
+            margin-top: -50px; /* Overlap with hero */
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        .form-control, .form-select {
+            border-radius: 8px;
+            border-color: #ddd;
+        }
+
+        /* Featured Autos Card Styling */
+        .car-card {
+            border: none;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+        .car-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+        .card-img-top {
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .car-card:hover .card-img-top {
+            transform: scale(1.05);
+        }
+        .car-card .btn-primary {
+            background-color: var(--bs-primary);
+            border-color: var(--bs-primary);
+            border-radius: 50px;
+            font-weight: 600;
+        }
+
+        /* Comparison Section */
+        .comparison-item {
+            border: 1px solid #eee;
+            border-radius: 10px;
+            padding: 1rem;
+            transition: box-shadow 0.3s;
+        }
+        .comparison-item:hover {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+        .comparison-item img {
+            max-height: 120px;
+            object-fit: contain;
+        }
+        /* Mobile Swipeable (Custom CSS for Carousel/Scrolling) */
+        @media (max-width: 767.98px) {
+            .comparison-row {
+                overflow-x: scroll;
+                -webkit-overflow-scrolling: touch;
+                white-space: nowrap;
+                padding-bottom: 10px;
+            }
+            .comparison-item {
+                display: inline-block;
+                width: 70vw; /* Make items take up part of the viewport width */
+                margin-right: 15px;
+            }
+        }
+
+        /* Top Brands Section */
+        .brand-logo-img {
+            max-width: 100%;
+            height: auto;
+            max-height: 50px;
+            filter: grayscale(100%);
+            opacity: 0.6;
+            transition: filter 0.3s, opacity 0.3s;
+        }
+        .brand-logo-img:hover {
+            filter: grayscale(0%);
+            opacity: 1;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--bs-secondary);
+            color: #ccc;
+            padding: 3rem 0 1.5rem;
+        }
+        .footer a {
+            color: #aaa;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .footer a:hover {
+            color: var(--bs-primary);
+        }
+        .footer .social-icon {
+            font-size: 1.5rem;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-secondary fixed-top shadow-sm">
+            <div class="container">
+                <a class="navbar-brand fw-bold text-uppercase" href="#">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-lightning-charge-fill text-primary me-2" viewBox="0 0 16 16">
+                        <path d="M11.251.068a.5.5 0 0 1 .227.58L9.677 6.5H13a.5.5 0 0 1 .364.843l-8 8.5a.5.5 0 0 1-.842-.49L6.323 9.5H3a.5.5 0 0 1-.364-.843l8-8.5a.5.5 0 0 1 .49-.004z"/>
+                    </svg>
+                    MODERN <span class="text-primary">AUTOS</span>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav mx-auto">
+                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="#hero">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#listings">Listings</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#brands">Brands</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#compare">Compare</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+                    </ul>
+                    <a href="#" class="btn btn-cta">Sell Your Car</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <section id="hero" class="hero-section">
+        <div class="container text-center">
+            <h1 class="hero-title display-2">Drive the Future Today</h1>
+            <p class="hero-subtitle lead">Explore revolutionary vehicles and redefine your journey.</p>
+            <div>
+                <a href="#listings" class="btn btn-cta btn-lg me-3">Browse Cars</a>
+                <a href="#compare" class="btn btn-outline-light btn-lg rounded-pill">Compare Models</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="filters-section container shadow-lg mb-5">
+        <div class="row g-3 align-items-center">
+            <div class="col-md-2">
+                <select class="form-select" aria-label="Brand">
+                    <option selected>Brand</option>
+                    <option value="1">Tesla</option>
+                    <option value="2">BMW</option>
+                    <option value="3">Toyota</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select class="form-select" aria-label="Model">
+                    <option selected>Model</option>
+                    <option value="1">Model 3</option>
+                    <option value="2">i4</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select class="form-select" aria-label="Price Range">
+                    <option selected>Price Range</option>
+                    <option value="1">$20k - $40k</option>
+                    <option value="2">$40k - $60k</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select class="form-select" aria-label="Year">
+                    <option selected>Year</option>
+                    <option value="1">2025</option>
+                    <option value="2">2024</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <form class="d-flex">
+                    <input class="form-control me-2" type="search" placeholder="Search by Keyword" aria-label="Search">
+                    <button class="btn btn-primary" type="submit">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                        </svg>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <section id="listings" class="container py-5">
+        <h2 class="text-center mb-5 fw-bold">Featured Electric & Modern Autos</h2>
+        <div class="row g-4">
+
+            <div class="col-lg-3 col-md-6">
+                <div class="card car-card">
+                    <img src="https://picsum.photos/600/400?random=2" class="card-img-top" alt="2025 Tesla Model 3">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">2025 Tesla Model 3</h5>
+                        <p class="card-text text-muted mb-2">Available Now | Premium</p>
+                        <h4 class="text-primary fw-bold mb-3">$39,000</h4>
+                        <a href="#" class="btn btn-primary w-100">View Details</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <div class="card car-card">
+                    <img src="https://picsum.photos/600/400?random=3" class="card-img-top" alt="2025 BMW i4">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">2025 BMW i4</h5>
+                        <p class="card-text text-muted mb-2">Premium Electric Sedan</p>
+                        <h4 class="text-primary fw-bold mb-3">$55,000</h4>
+                        <a href="#" class="btn btn-primary w-100">View Details</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <div class="card car-card">
+                    <img src="https://picsum.photos/600/400?random=4" class="card-img-top" alt="2025 Toyota Corolla">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">2025 Toyota Corolla</h5>
+                        <p class="card-text text-muted mb-2">Reliable Everyday Car</p>
+                        <h4 class="text-primary fw-bold mb-3">$22,000</h4>
+                        <a href="#" class="btn btn-primary w-100">View Details</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <div class="card car-card">
+                    <img src="https://picsum.photos/600/400?random=5" class="card-img-top" alt="2025 Audi e-tron GT">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">2025 Audi e-tron GT</h5>
+                        <p class="card-text text-muted mb-2">Luxury Performance EV</p>
+                        <h4 class="text-primary fw-bold mb-3">$88,000</h4>
+                        <a href="#" class="btn btn-primary w-100">View Details</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section id="compare" class="bg-white py-5">
+        <div class="container">
+            <h2 class="text-center mb-5 fw-bold">Compare Top Models Head-to-Head</h2>
+            
+            <div class="row flex-nowrap flex-md-wrap comparison-row gx-4">
+
+                <div class="col-12 col-md-4 mb-4">
+                    <div class="comparison-item text-center">
+                        <img src="https://picsum.photos/200/120?random=6" alt="Tesla Model 3" class="img-fluid mb-3">
+                        <h4 class="fw-bold">Tesla Model 3</h4>
+                        <p class="text-muted small">Range: 333 mi | 0-60: 4.2s | Price: $39k</p>
+                        <a href="#" class="btn btn-sm btn-outline-primary mt-2 rounded-pill">Full Specs</a>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-4 mb-4">
+                    <div class="comparison-item text-center border-primary border-3 shadow-sm">
+                        <img src="https://picsum.photos/200/120?random=7" alt="BMW i4" class="img-fluid mb-3">
+                        <h4 class="fw-bold text-primary">BMW i4</h4>
+                        <p class="text-muted small">Range: 301 mi | 0-60: 5.5s | Price: $55k</p>
+                        <a href="#" class="btn btn-sm btn-primary mt-2 rounded-pill">Full Specs</a>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-4 mb-4">
+                    <div class="comparison-item text-center">
+                        <img src="https://picsum.photos/200/120?random=8" alt="Hyundai IONIQ 6" class="img-fluid mb-3">
+                        <h4 class="fw-bold">Hyundai IONIQ 6</h4>
+                        <p class="text-muted small">Range: 361 mi | 0-60: 5.1s | Price: $46k</p>
+                        <a href="#" class="btn btn-sm btn-outline-primary mt-2 rounded-pill">Full Specs</a>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-4">
+                <a href="#" class="btn btn-cta">Start Your Custom Comparison</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="brands" class="container py-5 text-center">
+        <h2 class="mb-5 fw-bold">Driving Innovation with Top Brands</h2>
+        <div class="row row-cols-3 row-cols-sm-4 row-cols-lg-6 g-4 align-items-center">
+            <div class="col"><img src="https://picsum.photos/100/50?random=9" alt="Tesla Logo" class="brand-logo-img"></div>
+            <div class="col"><img src="https://picsum.photos/100/50?random=10" alt="BMW Logo" class="brand-logo-img"></div>
+            <div class="col"><img src="https://picsum.photos/100/50?random=11" alt="Mercedes Logo" class="brand-logo-img"></div>
+            <div class="col"><img src="https://picsum.photos/100/50?random=12" alt="Toyota Logo" class="brand-logo-img"></div>
+            <div class="col"><img src="https://picsum.photos/100/50?random=13" alt="Ford Logo" class="brand-logo-img"></div>
+            <div class="col"><img src="https://picsum.photos/100/50?random=14" alt="Audi Logo" class="brand-logo-img"></div>
+        </div>
+    </section>
+
+    <section class="container py-5">
+        <h2 class="text-center mb-5 fw-bold">Experience Next-Generation Technology</h2>
+        <div class="row align-items-center gx-5 bg-white p-4 rounded-3 shadow-sm">
+            
+            <div class="col-md-6 mb-4 mb-md-0">
+                <h3 class="text-primary fw-bold">Autonomous AI Driving</h3>
+                <p class="lead">Our vehicles are equipped with cutting-edge **Level 3+ Autonomy**, allowing for supervised self-driving on major highways. Experience a safer, more relaxed commute.</p>
+                <p class="text-muted">Advanced sensor fusion, real-time mapping, and predictive algorithms ensure unparalleled safety and performance in various conditions.</p>
+            </div>
+            <div class="col-md-6">
+                <img src="https://picsum.photos/600/400?random=15" alt="AI Driving System Interface" class="img-fluid rounded-3 shadow-lg">
+            </div>
+            
+            <hr class="my-5">
+            
+            <div class="col-md-6 order-md-2 mb-4 mb-md-0">
+                <h3 class="text-primary fw-bold">Hybrid & Electric Powertrains</h3>
+                <p class="lead">Choose from a selection of the most efficient **Electric and Hybrid engines**. Maximum performance meets minimal environmental impact.</p>
+                <p class="text-muted">Innovative battery technology provides faster charging, longer range, and a dynamic driving feel, all backed by comprehensive warranties.</p>
+            </div>
+            <div class="col-md-6 order-md-1">
+                <img src="https://picsum.photos/600/400?random=16" alt="Electric Engine Diagram" class="img-fluid rounded-3 shadow-lg">
+            </div>
+
+        </div>
+    </section>
+
+    <footer class="footer mt-5">
+        <div class="container">
+            <div class="row">
+                
+                <div class="col-lg-4 mb-4">
+                    <a class="navbar-brand fw-bold text-uppercase text-white" href="#">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-lightning-charge-fill text-primary me-2" viewBox="0 0 16 16">
+                            <path d="M11.251.068a.5.5 0 0 1 .227.58L9.677 6.5H13a.5.5 0 0 1 .364.843l-8 8.5a.5.5 0 0 1-.842-.49L6.323 9.5H3a.5.5 0 0 1-.364-.843l8-8.5a.5.5 0 0 1 .49-.004z"/>
+                        </svg>
+                        MODERN <span class="text-primary">AUTOS</span>
+                    </a>
+                    <p class="mt-3 small">The future of mobility is here. Driven by technology, fueled by vision.</p>
+                </div>
+
+                <div class="col-lg-2 col-6 mb-4">
+                    <h5 class="text-white fw-bold mb-3">Company</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press</a></li>
+                        <li><a href="#">Sitemap</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-2 col-6 mb-4">
+                    <h5 class="text-white fw-bold mb-3">Support</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Contact Sales</a></li>
+                        <li><a href="#">Vehicle Reviews</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-4 mb-4">
+                    <h5 class="text-white fw-bold mb-3">Connect</h5>
+                    <div>
+                        <a href="#" class="social-icon text-primary"><i class="bi bi-twitter"></i></a>
+                        <a href="#" class="social-icon text-primary"><i class="bi bi-linkedin"></i></a>
+                        <a href="#" class="social-icon text-primary"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="social-icon text-primary"><i class="bi bi-instagram"></i></a>
+                    </div>
+                    <p class="mt-3 small">&copy; 2024 Modern Autos, Inc. All rights reserved.</p>
+                </div>
+
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</body>
+</html>

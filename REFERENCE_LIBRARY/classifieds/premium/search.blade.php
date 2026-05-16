@@ -1,0 +1,1 @@
+@include('frontend.themes.properties.premium.index')

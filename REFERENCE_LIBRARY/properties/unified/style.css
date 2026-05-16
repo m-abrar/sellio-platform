@@ -1,0 +1,142 @@
+/* Body style is handled by the layout now, but we'll include any other overrides */
+body {
+    /* Ensures custom body font is applied */
+    font-family: var(--bs-font-inter);
+    background-color: #f4f7fa;
+}
+
+/* Hero Split Design */
+.hero-split {
+    min-height: 60vh;
+    display: flex;
+}
+
+.hero-left, .hero-right {
+    padding: 5rem 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    color: #fff;
+    background-size: cover;
+    background-position: center;
+    flex: 1;
+}
+
+.hero-left {
+    background-image: linear-gradient(rgba(28, 63, 113, 0.7), rgba(28, 63, 113, 0.7)), url('https://picsum.photos/seed/villa/1000/600'); /* Sales Image */
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+
+.hero-right {
+    background-image: linear-gradient(rgba(55, 126, 111, 0.7), rgba(55, 126, 111, 0.7)), url('https://picsum.photos/seed/apartment/1000/600'); /* Rentals Image */
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+.hero-split h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+}
+
+/* Mobile Hero - Stacked */
+@media (max-width: 991.98px) {
+    .hero-split {
+        flex-direction: column;
+    }
+    .hero-left, .hero-right {
+        border-radius: 0;
+    }
+    .hero-left {
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+    }
+    .hero-right {
+        border-bottom-left-radius: 8px;
+        border-bottom-right-radius: 8px;
+    }
+    .hero-search-bar {
+        margin-top: 1rem;
+    }
+}
+
+/* Property Card Styling */
+.property-card {
+    transition: all 0.3s ease-in-out;
+    border-radius: 8px;
+}
+
+.card-sales {
+    border: 2px solid #ddd;
+}
+
+.card-sales:hover {
+    box-shadow: 0 8px 16px rgba(28, 63, 113, 0.2);
+    border-color: var(--bs-sales-blue);
+    transform: translateY(-3px);
+}
+
+.card-rental {
+    border: 2px solid #ddd;
+}
+
+.card-rental:hover {
+    box-shadow: 0 8px 16px rgba(55, 126, 111, 0.2);
+    border-color: var(--bs-rental-green);
+    transform: translateY(-3px);
+}
+
+.card-title-sales {
+    color: var(--bs-sales-blue);
+    font-weight: 600;
+}
+
+.card-title-rental {
+    color: var(--bs-rental-green);
+    font-weight: 600;
+}
+
+/* Testimonials Section Styling */
+.testimonial-sales {
+    background-color: var(--bs-sales-light-blue);
+    color: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+}
+
+.testimonial-rental {
+    background-color: var(--bs-rental-light-green);
+    color: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+}
+
+/* Custom Buttons */
+.btn-sales {
+    background-color: var(--bs-sales-blue);
+    border-color: var(--bs-sales-blue);
+    color: #fff;
+}
+.btn-sales:hover {
+    background-color: var(--bs-sales-light-blue);
+    border-color: var(--bs-sales-light-blue);
+    color: #fff;
+}
+
+.btn-rental {
+    background-color: var(--bs-rental-green);
+    border-color: var(--bs-rental-green);
+    color: #fff;
+}
+.btn-rental:hover {
+    background-color: var(--bs-rental-light-green);
+    border-color: var(--bs-rental-light-green);
+    color: #fff;
+}
+
+/* Search Bar Buy/Rent Toggle */
+.search-toggle-group .btn {
+    border-radius: 0.25rem !important;
+}

@@ -1,0 +1,71 @@
+
+body {
+    font-family: var(--font-family);
+    color: var(--dark-text);
+    background-color: white;
+    overflow: hidden; /* Prevent body scroll */
+}
+.navbar-brand, .btn-success { font-weight: 600; }
+
+/* Layout */
+.main-content { height: calc(100vh - 72px); } /* Full height minus navbar */
+.listing-panel {
+    width: 380px; /* Fixed, comfortable width for the list */
+    max-width: 450px;
+    overflow-y: auto;
+}
+.map-container {
+    flex-grow: 1;
+    position: relative;
+    background-color: var(--light-bg);
+    /* Simulate a map background */
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><rect width="100%" height="100%" fill="%23f7f7f7"/><line x1="0" y1="50%" x2="100%" y2="50%" stroke="%23e0e0e0" stroke-width="1"/><line x1="50%" y1="0" x2="50%" y2="100%" stroke="%23e0e0e0" stroke-width="1"/><circle cx="30%" cy="30%" r="20" fill="%23fff" stroke="%2342a5f5" stroke-width="2"/><circle cx="70%" cy="60%" r="20" fill="%23fff" stroke="%2342a5f5" stroke-width="2"/></svg>');
+    background-size: 100% 100%;
+}
+
+/* Styling Overrides */
+.btn-success {
+    background-color: var(--primary-green) !important;
+    border-color: var(--primary-green) !important;
+    border-radius: 50rem;
+}
+.btn-outline-primary {
+    color: var(--primary-blue);
+    border-color: var(--primary-blue);
+    border-radius: 50rem;
+    transition: all 0.2s;
+}
+.card-listing {
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+}
+.card-listing:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+    border-left: 4px solid var(--primary-blue) !important;
+}
+
+/* Map UI Elements */
+.map-pin {
+    position: absolute;
+    cursor: pointer;
+    z-index: 10;
+    transform: translate(-50%, -100%); /* Position tip at exact coordinates */
+}
+.pin-body {
+    width: 30px;
+    height: 30px;
+    background-color: var(--primary-green);
+    border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.pin-icon {
+    transform: rotate(45deg);
+    color: white;
+}

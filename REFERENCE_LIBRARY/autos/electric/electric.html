@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EVOLVE: The Future is Electric | Marketplace</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-dark: #0f172a; /* Slate-like dark background */
+            --accent-green: #39ff14; /* Neon Green */
+            --accent-blue: #00ffff; /* Electric Blue */
+            --card-bg: #1e293b; /* Slightly lighter dark for cards */
+            --text-light: #f1f5f9;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            scroll-behavior: smooth;
+        }
+
+        /* Utility Classes */
+        .text-neon-green { color: var(--accent-green) !important; }
+        .bg-card { background-color: var(--card-bg); }
+        .border-neon-green { border-color: var(--accent-green) !important; }
+        .border-neon-blue { border-color: var(--accent-blue) !important; }
+
+        /* Custom Buttons */
+        .btn-neon-green, .btn-neon-blue {
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            padding: 0.75rem 2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 5px var(--accent-green); /* Base shadow */
+        }
+
+        .btn-neon-green {
+            background-color: var(--accent-green);
+            color: var(--bg-dark);
+        }
+        .btn-neon-green:hover {
+            background-color: var(--accent-green);
+            color: var(--bg-dark);
+            box-shadow: 0 0 15px var(--accent-green), 0 0 5px rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .btn-neon-blue {
+            background-color: transparent;
+            color: var(--accent-blue);
+            border: 2px solid var(--accent-blue);
+            box-shadow: 0 0 5px var(--accent-blue);
+        }
+        .btn-neon-blue:hover {
+            background-color: var(--accent-blue);
+            color: var(--bg-dark);
+            box-shadow: 0 0 15px var(--accent-blue), 0 0 5px rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+        }
+
+        /* Header/Nav */
+        .navbar {
+            background-color: rgba(15, 23, 42, 0.95); /* Semi-transparent dark for sticky nav */
+            backdrop-filter: blur(5px);
+            z-index: 1030;
+        }
+        .navbar-brand .logo-text {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--accent-green);
+        }
+        .nav-link {
+            color: var(--text-light) !important;
+            border-bottom: 2px solid transparent;
+            transition: border-color 0.3s ease;
+        }
+        .nav-link:hover {
+            color: var(--accent-blue) !important;
+            border-bottom: 2px solid var(--accent-blue);
+        }
+
+        /* Hero Section */
+        #hero {
+            position: relative;
+            height: 85vh;
+            background: url('https://picsum.photos/1920/1080?random=1') no-repeat center center/cover;
+            display: flex;
+            align-items: center;
+            text-align: left;
+        }
+        #hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+        }
+        .hero-content {
+            z-index: 2;
+            padding-top: 5rem; /* Space below sticky nav */
+        }
+        .hero-title {
+            font-size: 4.5rem;
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(57, 255, 20, 0.8);
+        }
+
+        /* Featured EV Cards */
+        .ev-card {
+            background-color: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .ev-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 255, 255, 0.3), 0 0 5px var(--accent-blue);
+        }
+        .card-spec-icon {
+            color: var(--accent-green);
+        }
+        .card-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-blue);
+        }
+        
+        /* Comparison Section */
+        .compare-table-header {
+            background-color: var(--accent-green);
+            color: var(--bg-dark);
+            font-weight: 700;
+        }
+        .compare-row {
+            border-bottom: 1px dashed var(--card-bg);
+        }
+        .compare-col:hover {
+            background-color: rgba(0, 255, 255, 0.1); /* Glow effect on hover */
+            transition: background-color 0.3s ease;
+        }
+        .compare-feature {
+            font-weight: 600;
+            color: var(--accent-green);
+        }
+
+        /* Sustainability Icons */
+        .icon-box {
+            background-color: var(--card-bg);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+        .icon-box:hover {
+            border-color: var(--accent-green);
+            box-shadow: 0 0 10px var(--accent-green);
+            transform: translateY(-3px);
+        }
+        .icon-box i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--accent-blue);
+            transition: color 0.3s ease;
+        }
+        .icon-box:hover i {
+            color: var(--accent-green);
+        }
+
+        /* Footer */
+        footer {
+            background-color: #0c121e; /* Even darker shade */
+            border-top: 5px solid var(--accent-green);
+        }
+        .footer-link {
+            color: var(--text-light);
+            text-decoration: none;
+        }
+        .footer-link:hover {
+            color: var(--accent-blue);
+        }
+        .social-icon {
+            color: var(--accent-green);
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
+        }
+        .social-icon:hover {
+            color: var(--accent-blue);
+        }
+
+        /* Custom Scrollbar for Mobile-Swipeable Comparison */
+        .swipe-container {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .swipe-content {
+            display: flex;
+            min-width: 700px; /* Ensure content is wide enough to scroll on mobile */
+        }
+        @media (min-width: 992px) {
+            .swipe-container {
+                overflow-x: hidden; /* Hide on desktop */
+            }
+            .swipe-content {
+                display: block;
+                min-width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="sticky-top">
+        <nav class="navbar navbar-expand-lg py-3">
+            <div class="container">
+                <a class="navbar-brand" href="#">
+                    <span class="logo-text">EV<span class="text-neon-blue">OLVE</span></span>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="text-neon-green"><i class="fas fa-bars"></i></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
+                        <li class="nav-item"><a class="nav-link" href="#hero">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#featured-evs">EV Models</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#charging-network">Charging</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#compare-evs">Compare</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#footer">Contact</a></li>
+                        <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
+                            <a class="btn btn-neon-green" href="#">Find Your EV</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <section id="hero" class="d-flex align-items-center mb-5">
+        <div class="container hero-content">
+            <div class="row">
+                <div class="col-lg-8">
+                    <h1 class="hero-title mb-4">The Future is <span class="text-neon-green">Electric</span></h1>
+                    <p class="lead mb-5 text-light opacity-75">
+                        Explore revolutionary vehicles and sustainable living. Experience peak performance with zero emissions.
+                    </p>
+                    <a href="#featured-evs" class="btn btn-neon-green me-3 mb-2 mb-md-0">Browse EVs</a>
+                    <a href="#charging-network" class="btn btn-neon-blue">Locate Charging Stations</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <main class="container py-5">
+        
+        <section id="filters" class="mb-5 p-4 rounded-3 bg-card shadow">
+            <h2 class="h5 mb-3 text-neon-green">Quick Search</h2>
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <select class="form-select bg-dark text-light border-neon-blue" aria-label="Brand">
+                        <option selected>Brand</option>
+                        <option value="1">Tesla</option>
+                        <option value="2">Rivian</option>
+                        <option value="3">Lucid</option>
+                        <option value="4">Kia</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select bg-dark text-light border-neon-blue" aria-label="Range">
+                        <option selected>Range (Miles)</option>
+                        <option value="1">300+</option>
+                        <option value="2">250+</option>
+                        <option value="3">200+</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select bg-dark text-light border-neon-blue" aria-label="Price">
+                        <option selected>Price (USD)</option>
+                        <option value="1">$40,000 - $60,000</option>
+                        <option value="2">$60,000 - $80,000</option>
+                        <option value="3">$80,000+</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select bg-dark text-light border-neon-blue" aria-label="Charging Type">
+                        <option selected>Charging Type</option>
+                        <option value="1">DC Fast</option>
+                        <option value="2">Level 2</option>
+                        <option value="3">Wireless</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <section id="featured-evs" class="py-5">
+            <h2 class="display-6 fw-bold mb-5 text-center">Featured <span class="text-neon-blue">EV Models</span></h2>
+            
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+
+                <div class="col">
+                    <div class="ev-card shadow">
+                        <img src="https://picsum.photos/600/400?random=2" class="card-img-top" alt="Tesla Model Y">
+                        <div class="p-4">
+                            <h5 class="card-title text-neon-green">2025 Tesla Model Y</h5>
+                            <p class="card-price mb-3">$47,000 USD</p>
+                            <ul class="list-unstyled">
+                                <li class="d-flex justify-content-between mb-1">
+                                    <span><i class="fas fa-route card-spec-icon me-2"></i>Range:</span> 
+                                    <span class="fw-bold">330 Miles</span>
+                                </li>
+                                <li class="d-flex justify-content-between mb-1">
+                                    <span><i class="fas fa-battery-full card-spec-icon me-2"></i>Battery:</span> 
+                                    <span class="fw-bold">75 kWh</span>
+                                </li>
+                                <li class="d-flex justify-content-between">
+                                    <span><i class="fas fa-bolt card-spec-icon me-2"></i>Charge (DC):</span> 
+                                    <span class="fw-bold">250 kW</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="ev-card shadow">
+                        <img src="https://picsum.photos/600/400?random=3" class="card-img-top" alt="Rivian R1T">
+                        <div class="p-4">
+                            <h5 class="card-title text-neon-green">2025 Rivian R1T</h5>
+                            <p class="card-price mb-3">$70,000 USD</p>
+                            <ul class="list-unstyled">
+                                <li class="d-flex justify-content-between mb-1">
+                                    <span><i class="fas fa-route card-spec-icon me-2"></i>Range:</span> 
+                                    <span class="fw-bold">314 Miles</span>
+                                </li>
+                                <li class="d-flex justify-content-between mb-1">
+                                    <span><i class="fas fa-battery-full card-spec-icon me-2"></i>Battery:</span> 
+                                    <span class="fw-bold">135 kWh</span>
+                                </li>
+                                <li class="d-flex justify-content-between">
+                                    <span><i class="fas fa-bolt card-spec-icon me-2"></i>Charge (DC):</span> 
+                                    <span class="fw-bold">200 kW</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="ev-card shadow">
+                        <img src="https://picsum.photos/600/400?random=4" class="card-img-top" alt="Kia EV6">
+                        <div class="p-4">
+                            <h5 class="card-title text-neon-green">2024 Kia EV6</h5>
+                            <p class="card-price mb-3">$42,000 USD</p>
+                            <ul class="list-unstyled">
+                                <li class="d-flex justify-content-between mb-1">
+                                    <span><i class="fas fa-route card-spec-icon me-2"></i>Range:</span> 
+                                    <span class="fw-bold">310 Miles</span>
+                                </li>
+                                <li class="d-flex justify-content-between mb-1">
+                                    <span><i class="fas fa-battery-full card-spec-icon me-2"></i>Battery:</span> 
+                                    <span class="fw-bold">77.4 kWh</span>
+                                </li>
+                                <li class="d-flex justify-content-between">
+                                    <span><i class="fas fa-bolt card-spec-icon me-2"></i>Charge (DC):</span> 
+                                    <span class="fw-bold">350 kW</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="ev-card shadow">
+                        <img src="https://picsum.photos/600/400?random=5" class="card-img-top" alt="Lucid Air">
+                        <div class="p-4">
+                            <h5 class="card-title text-neon-green">2024 Lucid Air</h5>
+                            <p class="card-price mb-3">$87,400 USD</p>
+                            <ul class="list-unstyled">
+                                <li class="d-flex justify-content-between mb-1">
+                                    <span><i class="fas fa-route card-spec-icon me-2"></i>Range:</span> 
+                                    <span class="fw-bold">410 Miles</span>
+                                </li>
+                                <li class="d-flex justify-content-between mb-1">
+                                    <span><i class="fas fa-battery-full card-spec-icon me-2"></i>Battery:</span> 
+                                    <span class="fw-bold">112 kWh</span>
+                                </li>
+                                <li class="d-flex justify-content-between">
+                                    <span><i class="fas fa-bolt card-spec-icon me-2"></i>Charge (DC):</span> 
+                                    <span class="fw-bold">300 kW</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <hr class="my-5 border-neon-blue opacity-25">
+
+        <section id="compare-evs" class="py-5">
+            <h2 class="display-6 fw-bold mb-5 text-center">Compare The <span class="text-neon-green">Top EVs</span></h2>
+
+            <div class="swipe-container">
+                <div class="swipe-content border border-neon-blue rounded-3 overflow-hidden shadow">
+                    <div class="d-flex text-center">
+                        
+                        <div class="col-4 col-md-3 compare-col bg-dark border-end border-neon-green">
+                            <div class="p-3 compare-table-header rounded-top">Feature</div>
+                            <div class="p-3 compare-row compare-feature">Starting Price</div>
+                            <div class="p-3 compare-row compare-feature">Max Range (EPA)</div>
+                            <div class="p-3 compare-row compare-feature">0-60 MPH (Est.)</div>
+                            <div class="p-3 compare-row compare-feature">Max DC Charging</div>
+                            <div class="p-3 compare-row compare-feature">Passenger Capacity</div>
+                        </div>
+
+                        <div class="col-4 col-md-3 compare-col">
+                            <div class="p-3 compare-table-header bg-card text-neon-blue">Tesla Model Y</div>
+                            <div class="p-3 compare-row">$47,000</div>
+                            <div class="p-3 compare-row">330 mi</div>
+                            <div class="p-3 compare-row">4.8s</div>
+                            <div class="p-3 compare-row">250 kW</div>
+                            <div class="p-3 compare-row">5</div>
+                        </div>
+
+                        <div class="col-4 col-md-3 compare-col border-start border-end">
+                            <div class="p-3 compare-table-header bg-card text-neon-blue">Rivian R1T</div>
+                            <div class="p-3 compare-row">$70,000</div>
+                            <div class="p-3 compare-row">314 mi</div>
+                            <div class="p-3 compare-row">3.0s</div>
+                            <div class="p-3 compare-row">200 kW</div>
+                            <div class="p-3 compare-row">5</div>
+                        </div>
+
+                        <div class="col-md-3 compare-col d-none d-md-block">
+                            <div class="p-3 compare-table-header bg-card text-neon-blue">Kia EV6</div>
+                            <div class="p-3 compare-row">$42,000</div>
+                            <div class="p-3 compare-row">310 mi</div>
+                            <div class="p-3 compare-row">4.6s</div>
+                            <div class="p-3 compare-row">350 kW</div>
+                            <div class="p-3 compare-row">5</div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <p class="text-center text-muted mt-3 d-md-none"><small>← Swipe to view all models →</small></p>
+        </section>
+
+        <hr class="my-5 border-neon-green opacity-25">
+
+        <section id="charging-network" class="py-5">
+            <div class="row align-items-center">
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <h2 class="display-6 fw-bold mb-4">An Expansive <span class="text-neon-blue">Charging Network</span></h2>
+                    <p class="lead opacity-75 mb-4">
+                        Never worry about range anxiety. Our marketplace integrates with thousands of Level 2 and DC Fast Charging stations globally. Find, reserve, and pay—all in one app.
+                    </p>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-check-circle text-neon-green me-2"></i> Real-time availability updates</li>
+                        <li class="mb-2"><i class="fas fa-check-circle text-neon-green me-2"></i> Integrated payment solutions</li>
+                        <li class="mb-2"><i class="fas fa-check-circle text-neon-green me-2"></i> Filter by plug type (CCS, NACS, CHAdeMO)</li>
+                    </ul>
+                    <a href="#" class="btn btn-neon-green mt-3">View Live Map</a>
+                </div>
+                <div class="col-lg-6">
+                    <div class="ratio ratio-16x9 bg-card rounded-3 d-flex align-items-center justify-content-center border border-neon-blue p-5 shadow-lg">
+                        <i class="fas fa-map-marked-alt text-neon-green" style="font-size: 5rem;"></i>
+                        <span class="ms-3 h3">Map Placeholder</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <hr class="my-5 border-neon-blue opacity-25">
+
+        <section id="sustainability" class="py-5">
+            <h2 class="display-6 fw-bold mb-5 text-center">Sustainability <span class="text-neon-green">Highlights</span></h2>
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 text-center">
+                
+                <div class="col">
+                    <div class="icon-box shadow">
+                        <i class="fas fa-leaf"></i>
+                        <h5 class="text-neon-green mt-3">Zero Emissions</h5>
+                        <p class="text-light opacity-75"><small>Contribute to a cleaner planet with every mile driven.</small></p>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="icon-box shadow">
+                        <i class="fas fa-microchip"></i>
+                        <h5 class="text-neon-green mt-3">Smart Tech Integration</h5>
+                        <p class="text-light opacity-75"><small>Over-the-air updates and advanced driver-assistance systems.</small></p>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="icon-box shadow">
+                        <i class="fas fa-dollar-sign"></i>
+                        <h5 class="text-neon-green mt-3">Lower Costs</h5>
+                        <p class="text-light opacity-75"><small>Significantly reduced fuel and maintenance expenses over time.</small></p>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="icon-box shadow">
+                        <i class="fas fa-sun"></i>
+                        <h5 class="text-neon-green mt-3">Renewable Charging</h5>
+                        <p class="text-light opacity-75"><small>Options to filter and select charging stations powered by renewable energy.</small></p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <footer id="footer" class="py-5 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <a class="navbar-brand" href="#">
+                        <span class="logo-text">EV<span class="text-neon-blue">OLVE</span></span>
+                    </a>
+                    <p class="text-light opacity-75 mt-3"><small>Driving the future of sustainable mobility, one electric vehicle at a time.</small></p>
+                    <div class="mt-4">
+                        <a href="#" class="social-icon me-3"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon me-3"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-icon me-3"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+
+                <div class="col-6 col-md-2 mb-4">
+                    <h6 class="text-neon-green mb-3">Explore</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#featured-evs" class="footer-link">EV Models</a></li>
+                        <li><a href="#compare-evs" class="footer-link">Compare</a></li>
+                        <li><a href="#charging-network" class="footer-link">Charging Map</a></li>
+                        <li><a href="#" class="footer-link">Financing</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-6 col-md-2 mb-4">
+                    <h6 class="text-neon-green mb-3">Company</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="footer-link">About Us</a></li>
+                        <li><a href="#" class="footer-link">Careers</a></li>
+                        <li><a href="#" class="footer-link">Press</a></li>
+                        <li><a href="#" class="footer-link">Partnerships</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-md-4 mb-4">
+                    <h6 class="text-neon-green mb-3">Legal & Support</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="footer-link">Privacy Policy</a></li>
+                        <li><a href="#" class="footer-link">Terms of Service</a></li>
+                        <li><a href="#" class="footer-link">FAQ</a></li>
+                        <li><a href="#" class="footer-link">Contact Support</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="text-center pt-4 border-top border-secondary opacity-25 mt-4">
+                <p class="mb-0 text-light opacity-50"><small>&copy; 2025 EVOLVE Marketplace. All rights reserved. Powering the electric revolution.</small></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>

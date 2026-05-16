@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Marketplace Homepage - Final High-Fidelity Design</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+    /* Base Styles */
+    :root {
+        --bs-body-font-family: 'Inter', sans-serif;
+        --bs-heading-font-family: 'Poppins', sans-serif;
+        --bg-light: #F9FAFB;
+        --bg-secondary-light: #F3F4F6;
+        --color-indigo: #4F46E5; /* Primary Brand Color (Properties) */
+        --color-cyan: #22D3EE; /* Autos Color */
+        --color-green: #10B981; /* Jobs Color */
+        --color-orange: #F97316; /* Services Color */
+        --color-teal: #14B8A6; /* Classifieds Color */
+        --color-red: #EF4444; /* Events Color */
+        --color-violet: #8B5CF6; /* CTA Gradient Secondary */
+        --button-height: 2.5rem; 
+        --card-button-height: 2.25rem; 
+    }
+
+    body {
+        font-family: var(--bs-body-font-family);
+        background-color: var(--bg-light);
+        color: #1F2937;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        font-family: var(--bs-heading-font-family);
+        font-weight: 700;
+    }
+
+    /* Utility Spacing Fixes */
+    .container { padding-left: 1rem; padding-right: 1rem; }
+    section { padding-top: 4rem; padding-bottom: 4rem; }
+    .module-section { padding-top: 3rem; padding-bottom: 3rem; }
+
+    /* --- 1. Header & Navigation --- */
+    header { border-bottom: 1px solid #E5E7EB; }
+    
+    .nav-link {
+        position: relative;
+        color: #374151 !important;
+        transition: color 0.3s ease, padding 0.3s ease;
+        font-weight: 500;
+        padding: 0.5rem 0.75rem !important;
+        overflow: hidden;
+        z-index: 1;
+    }
+    .nav-link::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background-color: var(--color-indigo);
+        transform: translateX(-100%);
+        transition: transform 0.3s ease-out;
+        z-index: -1;
+    }
+    .nav-link:hover::before, .nav-link.active::before { transform: translateX(0); }
+    .nav-link:hover, .nav-link.active { 
+        color: #fff !important; 
+        padding-left: 1rem !important; 
+        padding-right: 1rem !important; 
+    }
+
+    /* --- 2. Button Mixins --- */
+    .btn-interactive {
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+        transition: color 0.3s, transform 0.3s;
+        height: var(--button-height); 
+        display: inline-flex;
+        align-items: center;
+    }
+    .btn-interactive::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background-color: #4338CA; /* Darker shade of indigo for interaction */
+        transform: translateX(-100%);
+        transition: transform 0.3s ease-out;
+        z-index: -1;
+    }
+    .btn-interactive:hover::before { transform: translateX(0); }
+    .hero-cta-btn:hover { transform: translateY(-2px); color: #fff !important; }
+
+    .btn-primary-interactive {
+        background-color: var(--color-indigo);
+        border-color: var(--color-indigo);
+        font-weight: 600;
+        color: #fff !important;
+    }
+
+    /* Secondary Button (Hero Post Listing) */
+    .btn-secondary-interactive {
+        color: var(--color-indigo) !important;
+        border: 2px solid var(--color-indigo); 
+        background-color: transparent;
+        font-weight: 600;
+    }
+    .btn-secondary-interactive::before { background-color: var(--color-indigo); }
+    .btn-secondary-interactive:hover { 
+        color: #fff !important; 
+        border-color: var(--color-indigo); 
+    }
+
+    /* CTA Section Button (Using Orange for high contrast and urgency) */
+    .btn-cta-interactive {
+        /* background-color: var(--color-orange); */
+        border: 2px solid var(--bg-light);
+        color: #fff !important;
+        font-weight: 700;
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+        transition: transform 0.3s ease;
+    }
+    .btn-cta-interactive:hover {
+        transform: scale(1.05) translateY(-2px);
+        background-color: var(--bg-light);
+        border-color: var(--color-indigo);
+        color: var(--color-indigo) !important;
+    }
+    .btn-cta-interactive:active {
+        transform: scale(1.0) translateY(0);
+    }
+    
+    /* View All Button */
+    .btn-view-all {
+        color: #374151;
+        border: none;
+        background-color: transparent;
+        transition: color 0.2s, transform 0.2s;
+        font-weight: 500;
+        margin-top: -1.5rem; 
+        position: relative;
+        padding: 0.25rem 0.5rem;
+        text-decoration: none;
+        overflow: hidden;
+    }
+    .btn-view-all::after {
+        content: '';
+        position: absolute;
+        bottom: 0; right: 0;
+        height: 2px; width: 0;
+        background-color: var(--color-indigo); 
+        transition: width 0.3s ease-out;
+    }
+    .btn-view-all:hover {
+        color: var(--color-indigo);
+        transform: translateY(-1px);
+    }
+    .btn-view-all:hover::after {
+        width: 100%;
+        right: auto;
+        left: 0;
+    }
+    /* View All Color Synchronization */
+    .module-autos .btn-view-all:hover { color: var(--color-cyan); }
+    .module-autos .btn-view-all:hover::after { background-color: var(--color-cyan); }
+    .module-jobs .btn-view-all:hover { color: var(--color-green); }
+    .module-jobs .btn-view-all:hover::after { background-color: var(--color-green); }
+    .module-services .btn-view-all:hover { color: var(--color-orange); }
+    .module-services .btn-view-all:hover::after { background-color: var(--color-orange); }
+    .module-classifieds .btn-view-all:hover { color: var(--color-teal); }
+    .module-classifieds .btn-view-all:hover::after { background-color: var(--color-teal); }
+    .module-events .btn-view-all:hover { color: var(--color-red); }
+    .module-events .btn-view-all:hover::after { background-color: var(--color-red); }
+
+    /* --- 3. Category Tiles (Icon Tilt and White Color Fix) --- */
+    .category-tile {
+        display: block;
+        background-color: #fff;
+        padding: 1.5rem;
+        text-decoration: none;
+        color: #374151;
+        border: 1px solid #E5E7EB;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+    .category-tile:hover {
+        transform: translateY(-5px);
+        color: #fff;
+    }
+    .category-tile .icon-wrapper {
+        font-size: 2.5rem;
+        width: 5rem;
+        height: 5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+        border: 2px solid;
+        transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+    }
+
+    /* Icon Wrapper Hover (Tilt and White Icon) */
+    .category-tile:hover .icon-wrapper { 
+        color: #fff; 
+        transform: rotate(-3deg) scale(1.1); 
+    }
+
+    /* Category Icon Base Colors */
+    .category-tile.tile-properties .icon-wrapper { color: var(--color-indigo); border-color: var(--color-indigo); }
+    .category-tile.tile-autos .icon-wrapper { color: var(--color-cyan); border-color: var(--color-cyan); }
+    .category-tile.tile-jobs .icon-wrapper { color: var(--color-green); border-color: var(--color-green); }
+    .category-tile.tile-services .icon-wrapper { color: var(--color-orange); border-color: var(--color-orange); }
+    .category-tile.tile-classifieds .icon-wrapper { color: var(--color-teal); border-color: var(--color-teal); }
+    .category-tile.tile-events .icon-wrapper { color: var(--color-red); border-color: var(--color-red); }
+
+    /* Color specific background on hover */
+    .category-tile.tile-properties:hover { background-color: var(--color-indigo); }
+    .category-tile.tile-properties:hover .icon-wrapper { background-color: var(--color-indigo); border-color: #fff; color:#fff; }
+    .category-tile.tile-autos:hover { background-color: var(--color-cyan); }
+    .category-tile.tile-autos:hover .icon-wrapper { background-color: var(--color-cyan); border-color: #fff; color:#fff; }
+    .category-tile.tile-jobs:hover { background-color: var(--color-green); }
+    .category-tile.tile-jobs:hover .icon-wrapper { background-color: var(--color-green); border-color: #fff; color:#fff; }
+    .category-tile.tile-services:hover { background-color: var(--color-orange); }
+    .category-tile.tile-services:hover .icon-wrapper { background-color: var(--color-orange); border-color: #fff; color:#fff; }
+    .category-tile.tile-classifieds:hover { background-color: var(--color-teal); }
+    .category-tile.tile-classifieds:hover .icon-wrapper { background-color: var(--color-teal); border-color: #fff; color:#fff; }
+    .category-tile.tile-events:hover { background-color: var(--color-red); }
+    .category-tile.tile-events:hover .icon-wrapper { background-color: var(--color-red); border-color: #fff; color:#fff; }
+    
+    /* --- 4. Module Headers --- */
+    .module-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        padding-bottom: 0.5rem;
+        margin-bottom: 2rem;
+        border-bottom: 3px solid; 
+        border-color: var(--color-indigo); 
+    }
+    
+    /* Module Header Icon & Divider Colors */
+    .module-properties .module-header i { color: var(--color-indigo); }
+    .module-autos .module-header i { color: var(--color-cyan); }
+    .module-jobs .module-header i { color: var(--color-green); }
+    .module-services .module-header i { color: var(--color-orange); }
+    .module-classifieds .module-header i { color: var(--color-teal); }
+    .module-events .module-header i { color: var(--color-red); }
+
+    .module-autos .module-header { border-color: var(--color-cyan); }
+    .module-jobs .module-header { border-color: var(--color-green); }
+    .module-services .module-header { border-color: var(--color-orange); }
+    .module-classifieds .module-header { border-color: var(--color-teal); }
+    .module-events .module-header { border-color: var(--color-red); }
+
+    /* Autos Section Background */
+    .module-autos {
+        background-color: var(--bg-secondary-light);
+        border: none;
+    }
+    .module-autos .container {
+        background-color: var(--bg-secondary-light); 
+        border: none;
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+
+    /* --- 5. Card Styles (Common) --- */
+    .interactive-card {
+        overflow: hidden;
+        background-color: #fff;
+        border: 1px solid #E5E7EB; 
+        border-top: none; 
+        border-left: none; 
+        border-right: none;
+        transition: transform 0.3s ease;
+        position: relative;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05); 
+    }
+    .interactive-card::after {
+        content: '';
+        position: absolute;
+        bottom: 0; left: 0;
+        height: 4px; width: 0;
+        transition: width 0.3s ease-out;
+    }
+    .interactive-card:hover { 
+        transform: translateY(-5px); 
+        border-color: #E5E7EB; 
+        box-shadow: 0 8px 15px rgba(0,0,0,0.1); 
+    } 
+    /* Bottom Border Hover Color Synchronization */
+    .interactive-card:hover::after { width: 100%; background-color: var(--color-indigo); }
+    .module-autos .interactive-card:hover::after { background-color: var(--color-cyan); }
+    .module-services .interactive-card:hover::after { background-color: var(--color-orange); }
+    .module-classifieds .interactive-card:hover::after { background-color: var(--color-teal); }
+    .module-events .interactive-card:hover::after { background-color: var(--color-red); }
+    .module-jobs .interactive-card:hover::after { background-color: var(--color-green); }
+
+    /* Card Labels */
+    .card-img-container {
+        position: relative;
+        overflow: hidden;
+    }
+    .status-badge {
+        position: absolute;
+        top: 10px; 
+        right: 10px;
+        background-color: var(--color-indigo);
+        color: white;
+        padding: 0.25rem 0.75rem;
+        font-size: 0.75rem;
+        font-weight: 700;
+        z-index: 10;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+    }
+    .type-badge { 
+        position: absolute;
+        top: 10px; 
+        left: 10px;
+        background-color: #000;
+        color: white;
+        padding: 0.25rem 0.75rem;
+        font-size: 0.75rem;
+        font-weight: 700;
+        z-index: 10;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        opacity: 0.85;
+    }
+    /* Status badge overrides */
+    .module-autos .status-badge { background-color: var(--color-cyan); }
+    .module-services .status-badge { background-color: var(--color-orange); }
+    .module-classifieds .status-badge { background-color: var(--color-teal); }
+    .module-events .status-badge { background-color: var(--color-red); }
+    /* Property type overrides */
+    .card-property-rent .type-badge { background-color: var(--color-green); }
+    /* Autos Details Colors */
+    .module-autos .card-body .small.text-cyan { color: var(--color-cyan) !important; }
+
+    /* --- 6. Jobs Card Fix (List-style Card) --- */
+    .module-jobs .interactive-card {
+        border: 1px solid #E5E7EB; 
+        border-bottom: 4px solid #E5E7EB; /* Standard interactive-card bottom border */
+        padding: 0; 
+        margin-bottom: 1.5rem; 
+    }
+
+    .job-card-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5rem; /* Re-introduce padding inside the card for structure */
+    }
+
+    .job-card-button-wrapper {
+        opacity: 0;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    .interactive-card:hover .job-card-button-wrapper {
+        opacity: 1;
+        transform: translateX(0); 
+    }
+    
+    /* Apply Now Button Colors (Green) */
+    .btn-apply-now {
+        color: var(--color-green) !important; 
+        border: 2px solid var(--color-green);
+        height: var(--card-button-height);
+    }
+    .btn-apply-now::before {
+        background-color: var(--color-green);
+    }
+    .btn-apply-now:hover {
+        border-color: var(--color-green);
+        color: #fff !important; 
+    }
+
+    /* --- 7. View Item Buttons (Card CTA) --- */
+    .btn-view-item {
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+        color: var(--color-indigo) !important; 
+        border: 2px solid var(--color-indigo);
+        background-color: transparent;
+        font-weight: 600;
+        transition: color 0.3s, transform 0.3s;
+        height: var(--card-button-height); 
+        display: inline-flex;
+        align-items: center;
+    }
+    .btn-view-item::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background-color: var(--color-indigo);
+        transform: translateX(-100%);
+        transition: transform 0.3s ease-out;
+        z-index: -1;
+    }
+    .btn-view-item:hover::before { transform: translateX(0); }
+    .btn-view-item:hover { 
+        color: #fff !important; 
+        transform: translateY(-1px); 
+        border-color: var(--color-indigo); 
+    }
+    
+    /* Module specific button colors */
+    .module-autos .btn-view-item { color: var(--color-cyan) !important; border-color: var(--color-cyan); }
+    .module-autos .btn-view-item::before { background-color: var(--color-cyan); }
+    .module-autos .btn-view-item:hover { border-color: var(--color-cyan); color: #fff !important;  }
+
+    .module-services .btn-view-item { color: var(--color-orange) !important; border-color: var(--color-orange); }
+    .module-services .btn-view-item::before { background-color: var(--color-orange); }
+    .module-services .btn-view-item:hover { border-color: var(--color-orange); color: #fff !important;  }
+
+    .module-classifieds .btn-view-item { color: var(--color-teal) !important; border-color: var(--color-teal); }
+    .module-classifieds .btn-view-item::before { background-color: var(--color-teal); }
+    .module-classifieds .btn-view-item:hover { border-color: var(--color-teal); color: #fff !important;  }
+
+    .module-events .btn-view-item { color: var(--color-red) !important; border-color: var(--color-red); }
+    .module-events .btn-view-item::before { background-color: var(--color-red); }
+    .module-events .btn-view-item:hover { border-color: var(--color-red); color: #fff !important;  }
+
+    /* --- 8. Event Card Specific Fixes --- */
+    .event-card-img {
+        height: 150px; 
+        object-fit: cover;
+    }
+    .event-card-date {
+        background-color: #fff;
+        color: var(--color-red);
+        font-size: 1.5rem;
+        font-weight: 700;
+        padding: 0.25rem 0.5rem;
+        line-height: 1;
+        text-align: center;
+        box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+        position: absolute; 
+        bottom: 0; 
+        right: 0;
+    }
+    .event-card-date small {
+        display: block;
+        font-size: 0.7rem;
+        font-weight: 500;
+        text-transform: uppercase;
+    }
+    .host-profile {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%; 
+        object-fit: cover;
+        border: 2px solid var(--color-red);
+    }
+    .event-badge-live { 
+        background-color: var(--color-red); 
+        left: 0; 
+        right: auto;
+        position: absolute;
+        top: 0;
+    }
+    .event-badge-volunteers { 
+        background-color: var(--color-green); 
+        left: 0; 
+        right: auto;
+        position: absolute;
+        top: 0;
+    }
+    .event-badge-soldout { 
+        background-color: var(--color-red); 
+        left: 0; 
+        right: auto;
+        position: absolute;
+        top: 0;
+    }
+
+    /* --- 9. CTA Section Fix --- */
+    .cta-section {
+        background: linear-gradient(135deg, var(--color-indigo) 0%, var(--color-violet) 100%); 
+        border-top: 5px solid #fff;
+        border-bottom: 5px solid #fff;
+        margin-top: 5rem !important;
+        margin-bottom: 5rem !important;
+    }
+    
+
+    /* --- 10. Footer Fix --- */
+    .footer-link {
+        /* Base styles */
+        position: relative; /* Essential for the ::after element */
+        color: #6B7280;
+        text-decoration: none; /* Ensure no default underline */
+        padding-bottom: 2px; /* Add a little space for the border */
+        overflow: hidden; /* Important for the fill effect */
+        display: inline-block; /* Treat it like a block element for sizing */
+    }
+    .footer-link::after {
+        /* The bottom border element */
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0; /* Starts at zero width */
+        height: 2px;
+        background-color: var(--color-indigo); /* Primary brand color for the fill */
+        transition: width 0.3s ease-out; /* Smooth transition for the fill */
+    }
+    .footer-link:hover {
+        color: var(--color-indigo);
+    }
+    .footer-link:hover::after {
+        width: 100%; /* Expands to full width on hover */
+    }
+
+    /* Footer Signup Button (Keep as-is for block button style) */
+    .footer-signup-btn {
+        background-color: var(--color-indigo);
+        border: 1px solid var(--color-indigo);
+        transition: background-color 0.2s;
+        color: #fff;
+    }
+    .footer-signup-btn:hover {
+        background-color: #4338CA;
+    }
+    .footer-signup-btn:active {
+        background-color: #4F46E5;
+        border-color: #4F46E5;
+    }
+
+
+
+
+
+</style>
+</head>
+<body>
+
+    <header class="bg-white sticky-top">
+        <nav class="navbar navbar-expand-lg py-3 container">
+            <a class="navbar-brand text-dark" href="#">INTERACTIVE<span class="text-secondary">.</span></a>
+            <button class="navbar-toggler rounded-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item"><a class="nav-link active rounded-0" aria-current="page" href="#">Home</a></li>
+                    <li class="nav-item"><a class="nav-link rounded-0" href="#properties">Properties</a></li>
+                    <li class="nav-item"><a class="nav-link rounded-0" href="#autos">Autos</a></li>
+                    <li class="nav-item"><a class="nav-link rounded-0" href="#jobs">Jobs</a></li>
+                    <li class="nav-item"><a class="nav-link rounded-0" href="#services">Services</a></li>
+                    <li class="nav-item"><a class="nav-link rounded-0" href="#classifieds">Classifieds</a></li>
+                    <li class="nav-item"><a class="nav-link rounded-0" href="#events">Events</a></li>
+                </ul>
+                <div class="d-flex align-items-center">
+                    <a href="#" class="nav-link me-3 p-0 text-dark">Login</a>
+                    <a href="#" class="btn btn-primary-interactive btn-interactive btn-post-listing rounded-0 px-4">
+                        <i class="bi bi-plus-circle-fill me-2"></i>Post Listing
+                    </a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <section class="hero-section mb-5 bg-white">
+        <div class="container py-5 position-relative z-1">
+            <div class="row align-items-center">
+                <div class="col-lg-7">
+                    <h1 class="display-2 fw-bold mb-4 hero-headline text-dark">
+                        The Dynamic <span class="text-indigo-hero">Marketplace</span> Reimagined
+                    </h1>
+                    <p class="lead mb-4 fs-4 text-secondary">
+                        Engage, Explore, and Interact with Your next great find. Experience listings like never before.
+                    </p>
+                    <div class="d-flex gap-3">
+                        <a href="#categories" class="btn btn-primary-interactive btn-interactive hero-cta-btn btn-lg rounded-0 px-5">Explore Listings</a>
+                        <a href="#" class="btn btn-secondary-interactive btn-interactive hero-cta-btn btn-lg rounded-0 px-5">Post a Listing</a>
+                    </div>
+                </div>
+                <div class="col-lg-5 d-none d-lg-block">
+                    <img src="https://picsum.photos/1200/400?random=1&blur=2" class="img-fluid rounded-0" alt="Interactive Marketplace Illustration">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="categories" class="container py-5">
+        <h2 class="text-center mb-5 display-5">Select Your Interactive Experience</h2>
+        <div class="row g-4 justify-content-center">
+            
+            <div class="col-6 col-md-4 col-lg-3 col-xl-2">
+                <a href="#" class="category-tile tile-properties text-center rounded-0">
+                    <div class="icon-wrapper rounded-0"><i class="bi bi-house-door-fill"></i></div>
+                    <p class="h5 mb-0 fw-bold">Properties</p>
+                </a>
+            </div>
+            <div class="col-6 col-md-4 col-lg-3 col-xl-2">
+                <a href="#" class="category-tile tile-autos text-center rounded-0">
+                    <div class="icon-wrapper rounded-0"><i class="bi bi-car-front-fill"></i></div>
+                    <p class="h5 mb-0 fw-bold">Autos</p>
+                </a>
+            </div>
+            <div class="col-6 col-md-4 col-lg-3 col-xl-2">
+                <a href="#" class="category-tile tile-jobs text-center rounded-0">
+                    <div class="icon-wrapper rounded-0"><i class="bi bi-briefcase-fill"></i></div>
+                    <p class="h5 mb-0 fw-bold">Jobs</p>
+                </a>
+            </div>
+            <div class="col-6 col-md-4 col-lg-3 col-xl-2">
+                <a href="#" class="category-tile tile-services text-center rounded-0">
+                    <div class="icon-wrapper rounded-0"><i class="bi bi-tools"></i></div>
+                    <p class="h5 mb-0 fw-bold">Services</p>
+                </a>
+            </div>
+            <div class="col-6 col-md-4 col-lg-3 col-xl-2">
+                <a href="#" class="category-tile tile-classifieds text-center rounded-0">
+                    <div class="icon-wrapper rounded-0"><i class="bi bi-tags-fill"></i></div>
+                    <p class="h5 mb-0 fw-bold">Classifieds</p>
+                </a>
+            </div>
+            <div class="col-6 col-md-4 col-lg-3 col-xl-2">
+                <a href="#" class="category-tile tile-events text-center rounded-0">
+                    <div class="icon-wrapper rounded-0"><i class="bi bi-calendar-event-fill"></i></div>
+                    <p class="h5 mb-0 fw-bold">Events</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section id="properties" class="container module-section module-properties">
+        <div class="module-header">
+            <h2 class="display-5 fw-bold text-dark">
+                <i class="bi bi-house-door me-2"></i> Premium Properties
+            </h2>
+            <a href="#" class="btn btn-sm btn-view-all rounded-0">View All <i class="bi bi-arrow-right"></i></a>
+        </div>
+        <div class="row">
+            
+            <div class="col-lg-3 col-md-6">
+                <div class="card interactive-card rounded-0">
+                    <div class="position-relative card-img-container">
+                        <img src="https://picsum.photos/600/450?random=100" class="card-img-top rounded-0" alt="Featured Property">
+                        <span class="status-badge rounded-0">FEATURED</span>
+                        <span class="type-badge rounded-0">FOR SALE</span>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title text-dark fs-5 fw-bold">Modern Loft with Terrace</h3>
+                        <p class="card-text mb-2 text-muted small">
+                            <i class="bi bi-geo-alt-fill me-1"></i> Downtown Core 
+                        </p>
+                        <div class="d-flex justify-content-between small text-secondary mb-3">
+                            <span><i class="bi bi-bed-fill me-1"></i> 3 Beds</span>
+                            <span><i class="bi bi-bathtub-fill me-1"></i> 2 Baths</span>
+                            <span><i class="bi bi-arrows-fullscreen me-1"></i> 1800 SqFt</span>
+                        </div>
+                        <p class="fw-bold text-success fs-5 mb-3">$1.2M</p>
+                        <a href="#" class="btn btn-sm btn-view-item rounded-0">View Listing</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6">
+                <div class="card interactive-card rounded-0">
+                    <div class="position-relative card-img-container card-property-rent">
+                        <img src="https://picsum.photos/600/450?random=101" class="card-img-top rounded-0" alt="Property">
+                        <span class="type-badge rounded-0">FOR RENT</span>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title text-dark fs-5 fw-bold">Suburban Family Home</h3>
+                        <p class="card-text mb-2 text-muted small">
+                            <i class="bi bi-geo-alt-fill me-1"></i> Northside Estates
+                        </p>
+                        <div class="d-flex justify-content-between small text-secondary mb-3">
+                            <span><i class="bi bi-bed-fill me-1"></i> 4 Beds</span>
+                            <span><i class="bi bi-bathtub-fill me-1"></i> 3 Baths</span>
+                            <span><i class="bi bi-arrows-fullscreen me-1"></i> 2500 SqFt</span>
+                        </div>
+                        <p class="fw-bold text-success fs-5 mb-3">$3,500/mo</p>
+                        <a href="#" class="btn btn-sm btn-view-item rounded-0">View Listing</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6">
+                <div class="card interactive-card rounded-0">
+                    <div class="position-relative card-img-container">
+                        <img src="https://picsum.photos/600/450?random=102" class="card-img-top rounded-0" alt="Property">
+                        <span class="type-badge rounded-0">FOR SALE</span>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title text-dark fs-5 fw-bold">Luxury Beachfront Villa</h3>
+                        <p class="card-text mb-2 text-muted small">
+                            <i class="bi bi-geo-alt-fill me-1"></i> Coastal Haven
+                        </p>
+                        <div class="d-flex justify-content-between small text-secondary mb-3">
+                            <span><i class="bi bi-bed-fill me-1"></i> 5 Beds</span>
+                            <span><i class="bi bi-bathtub-fill me-1"></i> 4 Baths</span>
+                            <span><i class="bi bi-arrows-fullscreen me-1"></i> 3800 SqFt</span>
+                        </div>
+                        <p class="fw-bold text-success fs-5 mb-3">$3.5M</p>
+                        <a href="#" class="btn btn-sm btn-view-item rounded-0">View Listing</a>
+                    </div>
+                </div>
+            </div>
+
+             <div class="col-lg-3 col-md-6">
+                <div class="card interactive-card rounded-0">
+                    <div class="position-relative card-img-container">
+                        <img src="https://picsum.photos/600/450?random=103" class="card-img-top rounded-0" alt="Property">
+                        <span class="status-badge rounded-0 status-badge-auction">AUCTION</span>
+                        <span class="type-badge rounded-0">FOR SALE</span>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title text-dark fs-5 fw-bold">Historic Row House</h3>
+                        <p class="card-text mb-2 text-muted small">
+                            <i class="bi bi-geo-alt-fill me-1"></i> Old Town District
+                        </p>
+                        <div class="d-flex justify-content-between small text-secondary mb-3">
+                            <span><i class="bi bi-bed-fill me-1"></i> 2 Beds</span>
+                            <span><i class="bi bi-bathtub-fill me-1"></i> 1 Bath</span>
+                            <span><i class="bi bi-arrows-fullscreen me-1"></i> 1200 SqFt</span>
+                        </div>
+                        <p class="fw-bold text-success fs-5 mb-3">Min Bid $310K</p>
+                        <a href="#" class="btn btn-sm btn-view-item rounded-0">View Listing</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section id="autos" class="module-section module-autos rounded-0 mt-5">
+        <div class="container">
+            <div class="module-header">
+                <h2 class="display-5 fw-bold text-dark">
+                    <i class="bi bi-car-front me-2"></i> Dynamic Autos
+                </h2>
+                <a href="#" class="btn btn-sm btn-view-all rounded-0">View All <i class="bi bi-arrow-right"></i></a>
+            </div>
+            <div class="row">
+                
+                <div class="col-lg-3 col-md-6">
+                    <div class="card interactive-card rounded-0">
+                        <div class="position-relative card-img-container">
+                            <img src="https://picsum.photos/600/450?random=200" class="card-img-top rounded-0" alt="Car">
+                        </div>
+                        <div class="card-body">
+                            <h3 class="card-title text-dark fs-5 fw-bold">Performance Coupe</h3>
+                            <div class="d-flex justify-content-between small text-muted mb-2">
+                                <span><i class="bi bi-calendar-event me-1"></i> 2023</span>
+                                <span><i class="bi bi-speedometer2 me-1"></i> 18K Miles</span>
+                            </div>
+                            <p class="card-text mb-3 small text-cyan">
+                                <i class="bi bi-gear-fill me-1"></i> Automatic | AWD
+                            </p>
+                            <p class="fw-bold text-dark fs-5 mb-3">$45,900</p>
+                            <a href="#" class="btn btn-sm btn-view-item rounded-0">View Listing</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6">
+                    <div class="card interactive-card rounded-0">
+                        <div class="position-relative card-img-container">
+                            <img src="https://picsum.photos/600/450?random=201" class="card-img-top rounded-0" alt="Car">
+                        </div>
+                        <div class="card-body">
+                            <h3 class="card-title text-dark fs-5 fw-bold">All-Electric SUV</h3>
+                            <div class="d-flex justify-content-between small text-muted mb-2">
+                                <span><i class="bi bi-calendar-event me-1"></i> 2024</span>
+                                <span><i class="bi bi-battery-charging me-1"></i> New</span>
+                            </div>
+                            <p class="card-text mb-3 small text-cyan">
+                                <i class="bi bi-lightning-charge-fill me-1"></i> Electric | RWD
+                            </p>
+                            <p class="fw-bold text-dark fs-5 mb-3">$58,000</p>
+                            <a href="#" class="btn btn-sm btn-view-item rounded-0">View Listing</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6">
+                    <div class="card interactive-card rounded-0">
+                        <div class="position-relative card-img-container">
+                            <img src="https://picsum.photos/600/450?random=202" class="card-img-top rounded-0" alt="Car">
+                            <span class="status-badge rounded-0">HOT DEAL</span>
+                        </div>
+                        <div class="card-body">
+                            <h3 class="card-title text-dark fs-5 fw-bold">Heavy-Duty Pickup</h3>
+                            <div class="d-flex justify-content-between small text-muted mb-2">
+                                <span><i class="bi bi-calendar-event me-1"></i> 2019</span>
+                                <span><i class="bi bi-truck-flatbed me-1"></i> 62K Miles</span>
+                            </div>
+                            <p class="card-text mb-3 small text-cyan">
+                                <i class="bi bi-gear-fill me-1"></i> Manual | 4x4
+                            </p>
+                            <p class="fw-bold text-dark fs-5 mb-3">$31,500</p>
+                            <a href="#" class="btn btn-sm btn-view-item rounded-0">View Listing</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6">
+                    <div class="card interactive-card rounded-0">
+                        <div class="position-relative card-img-container">
+                            <img src="https://picsum.photos/600/450?random=203" class="card-img-top rounded-0" alt="Car">
+                        </div>
+                        <div class="card-body">
+                            <h3 class="card-title text-dark fs-5 fw-bold">Vintage Motorcycle</h3>
+                            <div class="d-flex justify-content-between small text-muted mb-2">
+                                <span><i class="bi bi-calendar-event me-1"></i> 1982</span>
+                                <span><i class="bi bi-bicycle me-1"></i> Custom Build</span>
+                            </div>
+                            <p class="card-text mb-3 small text-cyan">
+                                <i class="bi bi-wrench-adjustable-fill me-1"></i> 5-Speed | Chain
+                            </p>
+                            <p class="fw-bold text-dark fs-5 mb-3">$18,750</p>
+                            <a href="#" class="btn btn-sm btn-view-item rounded-0">View Listing</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section id="jobs" class="container module-section module-jobs">
+        <div class="module-header d-flex justify-content-between align-items-center">
+            <h2 class="display-5 fw-bold text-dark">
+                <i class="bi bi-briefcase me-2"></i> Top Tier Job Listings
+            </h2>
+            <a href="#" class="btn btn-sm btn-view-all rounded-0">View All <i class="bi bi-arrow-right"></i></a>
+        </div>
+
+        <div class="d-grid gap-3">
+
+            <!-- Job Card -->
+            <div class="interactive-card rounded-0 text-decoration-none p-3">
+                <div class="job-card-content d-flex flex-column h-100 w-100">
+                    
+                    <!-- Title + Price row -->
+                    <div class="d-flex justify-content-between align-items-center mb-1 w-100">
+                        <h3 class="text-dark fs-5 fw-bold mb-0">Lead Software Architect</h3>
+                        <small class="fw-bold fs-6 text-success">+ $180,000/yr</small>
+                    </div>
+
+                    <p class="mb-1 small text-muted w-100"><i class="bi bi-building me-1"></i> Global FinTech | Full-Time | Remote (HQ Support)</p>
+                    <small class="text-secondary d-block mb-2 w-100">Design and oversee scalable microservices architecture. Must have 10+ years experience.</small>
+
+                    <!-- Bottom row: Dates + Button -->
+                    <div class="d-flex justify-content-between align-items-center mt-auto w-100">
+                        <div class="small text-muted">
+                            <span class="me-3"><i class="bi bi-calendar-check me-1 text-success"></i><strong>Deadline:</strong> Oct 31, 2025</span>
+                            <span><i class="bi bi-calendar-event me-1"></i><strong>Posted:</strong> Oct 1, 2025</span>
+                        </div>
+                        <a href="#" class="btn btn-sm btn-apply-now btn-interactive rounded-0 px-4">Apply Now <i class="bi bi-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Job Card -->
+            <div class="interactive-card rounded-0 text-decoration-none p-3">
+                <div class="job-card-content d-flex flex-column h-100 w-100">
+                    
+                    <div class="d-flex justify-content-between align-items-center mb-1 w-100">
+                        <h3 class="text-dark fs-5 fw-bold mb-0">Marketing Campaign Manager</h3>
+                        <small class="fw-bold fs-6 text-success">$90,000 - $110,000/yr</small>
+                    </div>
+
+                    <p class="mb-1 small text-muted w-100"><i class="bi bi-building me-1"></i> Digital Agency | Full-Time | Hybrid</p>
+                    <small class="text-secondary d-block mb-2 w-100">Develop and execute multi-channel digital campaigns across Europe and US markets.</small>
+
+                    <div class="d-flex justify-content-between align-items-center mt-auto w-100">
+                        <div class="small text-muted">
+                            <span class="me-3"><i class="bi bi-calendar-check me-1 text-success"></i><strong>Deadline:</strong> Nov 15, 2025</span>
+                            <span><i class="bi bi-calendar-event me-1"></i><strong>Posted:</strong> Sep 20, 2025</span>
+                        </div>
+                        <a href="#" class="btn btn-sm btn-apply-now btn-interactive rounded-0 px-4">Apply Now <i class="bi bi-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Job Card -->
+            <div class="interactive-card rounded-0 text-decoration-none p-3">
+                <div class="job-card-content d-flex flex-column h-100 w-100">
+                    
+                    <div class="d-flex justify-content-between align-items-center mb-1 w-100">
+                        <h3 class="text-dark fs-5 fw-bold mb-0">Apprentice Electrician</h3>
+                        <small class="fw-bold fs-6 text-success">$25 - $35/hour</small>
+                    </div>
+
+                    <p class="mb-1 small text-muted w-100"><i class="bi bi-building me-1"></i> Local Construction Firm | Full-Time | On-Site</p>
+                    <small class="text-secondary d-block mb-2 w-100">Hands-on role, learning from master electricians. Opportunity for full certification.</small>
+
+                    <div class="d-flex justify-content-between align-items-center mt-auto w-100">
+                        <div class="small text-muted">
+                            <span class="me-3"><i class="bi bi-calendar-check me-1 text-success"></i><strong>Deadline:</strong> Oct 10, 2025</span>
+                            <span><i class="bi bi-calendar-event me-1"></i><strong>Posted:</strong> Sep 25, 2025</span>
+                        </div>
+                        <a href="#" class="btn btn-sm btn-apply-now btn-interactive rounded-0 px-4">Apply Now <i class="bi bi-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+
+
+    <section id="services" class="container module-section module-services">
+        <div class="module-header">
+            <h2 class="display-5 fw-bold text-dark">
+                <i class="bi bi-tools me-2"></i> Professional Services
+            </h2>
+            <a href="#" class="btn btn-sm btn-view-all rounded-0">View All <i class="bi bi-arrow-right"></i></a>
+        </div>
+        <div class="row">
+            
+            <div class="col-lg-4 col-md-6">
+                <div class="card interactive-card rounded-0">
+                    <div class="position-relative card-img-container">
+                        <img src="https://picsum.photos/600/450?random=500" class="card-img-top rounded-0" alt="Web Design">
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title text-dark fs-5 fw-bold">Freelance Web Design</h3>
+                        <p class="card-text mb-2 small text-muted text-orange-service">
+                            <i class="bi bi-code-slash me-1"></i> Jane Doe | Starting at $800
+                        </p>
+                        <p class="small text-secondary mb-3">Modern, responsive, and SEO-friendly websites. Fast turnaround.</p>
+                        <a href="#" class="btn btn-sm btn-view-item rounded-0">Book Service</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6">
+                <div class="card interactive-card rounded-0">
+                    <div class="position-relative card-img-container">
+                        <img src="https://picsum.photos/600/450?random=501" class="card-img-top rounded-0" alt="Home Renovation">
+                        <span class="status-badge rounded-0">TOP RATED</span>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title text-dark fs-5 fw-bold">Home Renovation Expert</h3>
+                        <p class="card-text mb-2 small text-muted text-orange-service">
+                            <i class="bi bi-paint-bucket me-1"></i> RenovaBuild Inc. | By Quote
+                        </p>
+                        <p class="small text-secondary mb-3">Full kitchen and bathroom remodels. Fully licensed.</p>
+                        <a href="#" class="btn btn-sm btn-view-item rounded-0">Get Quote</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6">
+                <div class="card interactive-card rounded-0">
+                    <div class="position-relative card-img-container">
+                        <img src="https://picsum.photos/600/450?random=502" class="card-img-top rounded-0" alt="Financial Planning">
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title text-dark fs-5 fw-bold">Certified Financial Planning</h3>
+                        <p class="card-text mb-2 small text-muted text-orange-service">
+                            <i class="bi bi-bar-chart-fill me-1"></i> Wealth Strategies Group | Consultations
+                        </p>
+                        <p class="small text-secondary mb-3">Retirement, investment, and tax planning.</p>
+                        <a href="#" class="btn btn-sm btn-view-item rounded-0">Inquire</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+    
+    <section id="classifieds" class="container module-section module-classifieds">
+        <div class="module-header">
+            <h2 class="display-5 fw-bold text-dark">
+                <i class="bi bi-tags me-2"></i> Local Classifieds
+            </h2>
+            <a href="#" class="btn btn-sm btn-view-all rounded-0">View All <i class="bi bi-arrow-right"></i></a>
+        </div>
+        <div class="row">
+            <div class="col-lg-3 col-md-6">
+                <div class="card interactive-card rounded-0">
+                    <div class="position-relative card-img-container">
+                        <img src="https://picsum.photos/600/450?random=300" class="card-img-top rounded-0" alt="Item">
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title text-dark fs-5 fw-bold">Vintage Stereo Receiver</h3>
+                        <p class="card-text mb-2 small text-teal-classified">
+                            <i class="bi bi-music-note-beamed me-1"></i> Excellent Condition
+                        </p>
+                        <p class="fw-bold text-dark fs-5 mb-3">$150</p>
+                        <a href="#" class="btn btn-sm btn-view-item rounded-0">View Listing</a>
+                    </div>
+                </div>
+            </div>
+             <div class="col-lg-3 col-md-6">
+                <div class="card interactive-card rounded-0">
+                    <div class="position-relative card-img-container">
+                        <img src="https://picsum.photos/600/450?random=301" class="card-img-top rounded-0" alt="Item">
+                         <span class="status-badge rounded-0">URGENT</span>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title text-dark fs-5 fw-bold">Mountain Bike (Large)</h3>
+                        <p class="card-text mb-2 small text-teal-classified">
+                            <i class="bi bi-bicycle me-1"></i> Needs Tune-up
+                        </p>
+                        <p class="fw-bold text-dark fs-5 mb-3">$350</p>
+                        <a href="#" class="btn btn-sm btn-view-item rounded-0">View Listing</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="card interactive-card rounded-0">
+                    <div class="position-relative card-img-container">
+                        <img src="https://picsum.photos/600/450?random=302" class="card-img-top rounded-0" alt="Item">
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title text-dark fs-5 fw-bold">Antique Dining Table</h3>
+                        <p class="card-text mb-2 small text-teal-classified">
+                            <i class="bi bi-house-door me-1"></i> Solid Oak Wood
+                        </p>
+                        <p class="fw-bold text-dark fs-5 mb-3">$800</p>
+                        <a href="#" class="btn btn-sm btn-view-item rounded-0">View Listing</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="card interactive-card rounded-0">
+                    <div class="position-relative card-img-container">
+                        <img src="https://picsum.photos/600/450?random=303" class="card-img-top rounded-0" alt="Item">
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title text-dark fs-5 fw-bold">Guitar Amplifier (Tube)</h3>
+                        <p class="card-text mb-2 small text-teal-classified">
+                            <i class="bi bi-speaker me-1"></i> Barely Used
+                        </p>
+                        <p class="fw-bold text-dark fs-5 mb-3">$425</p>
+                        <a href="#" class="btn btn-sm btn-view-item rounded-0">View Listing</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section py-5 my-5">
+        <div class="container text-center py-5">
+            <h2 class="display-4 fw-bold mb-4 text-white">
+                <i class="bi bi-lightning-charge-fill me-2"></i> Join the Interaction Revolution
+            </h2>
+            <p class="lead mb-5 fs-4 text-light">
+                Ready to list your item or find your next opportunity? Get started in seconds.
+            </p>
+            <a href="#" class="btn btn-cta-interactive btn-lg rounded-0 px-5">Engage Now <i class="bi bi-arrow-right"></i></a>
+        </div>
+    </section>
+    
+    <section id="events" class="container module-section module-events">
+        <div class="module-header">
+            <h2 class="display-5 fw-bold text-dark">
+                <i class="bi bi-calendar-event me-2"></i> Local Events
+            </h2>
+            <a href="#" class="btn btn-sm btn-view-all rounded-0">View All <i class="bi bi-arrow-right"></i></a>
+        </div>
+        <div class="row">
+            
+            <div class="col-lg-4 col-md-6">
+                <div class="card interactive-card rounded-0 p-0">
+                    <div class="position-relative">
+                        <img src="https://picsum.photos/600/300?random=400" class="card-img-top rounded-0 event-card-img" alt="Event Image">
+                        <span class="status-badge position-absolute text-white event-badge-live">TICKETS LIVE</span>
+                        <div class="event-card-date">
+                            <small>Oct</small>25
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex w-100 justify-content-between align-items-center mb-3">
+                            <div>
+                                <h3 class="mb-0 text-dark fs-5 fw-bold">Tech Innovation Summit</h3>
+                                <small class="text-muted"><i class="bi bi-geo-alt me-1"></i> Convention Center | $199</small>
+                            </div>
+                            <img src="https://picsum.photos/50/50?random=401" alt="Host" class="host-profile shadow-sm">
+                        </div>
+                        <a href="#" class="btn btn-sm btn-view-item rounded-0">Get Tickets</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="card interactive-card rounded-0 p-0">
+                    <div class="position-relative">
+                        <img src="https://picsum.photos/600/300?random=402" class="card-img-top rounded-0 event-card-img" alt="Event Image">
+                        <span class="status-badge position-absolute text-white event-badge-volunteers">VOLUNTEERS NEEDED</span>
+                        <div class="event-card-date">
+                            <small>Nov</small>05
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex w-100 justify-content-between align-items-center mb-3">
+                            <div>
+                                <h3 class="mb-0 text-dark fs-5 fw-bold">Community Food Drive</h3>
+                                <small class="text-muted"><i class="bi bi-geo-alt me-1"></i> Central Park | Free</small>
+                            </div>
+                            <img src="https://picsum.photos/50/50?random=403" alt="Host" class="host-profile shadow-sm">
+                        </div>
+                        <a href="#" class="btn btn-sm btn-view-item rounded-0">Volunteer</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="card interactive-card rounded-0 p-0">
+                    <div class="position-relative">
+                        <img src="https://picsum.photos/600/300?random=404" class="card-img-top rounded-0 event-card-img" alt="Event Image">
+                        <span class="status-badge position-absolute text-white event-badge-soldout">SOLD OUT</span>
+                        <div class="event-card-date">
+                            <small>Nov</small>15
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex w-100 justify-content-between align-items-center mb-3">
+                            <div>
+                                <h3 class="mb-0 text-dark fs-5 fw-bold">Annual Jazz Festival</h3>
+                                <small class="text-muted"><i class="bi bi-geo-alt me-1"></i> City Arena | $45</small>
+                            </div>
+                            <img src="https://picsum.photos/50/50?random=405" alt="Host" class="host-profile shadow-sm">
+                        </div>
+                        <a href="#" class="btn btn-sm btn-view-item rounded-0">Details</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-5 mt-5" style="background-color: var(--bg-secondary-light);">
+        <div class="container">
+            <div class="row g-4">
+                
+                <div class="col-lg-3 col-md-6">
+                    <h5 class="fw-bold mb-3">INTERACTIVE<span class="text-secondary">.</span></h5>
+                    <p class="small text-muted">The dynamic, high-fidelity platform for seamless transactions and engagement.</p>
+                    <div class="d-flex gap-3 fs-5">
+                        <a href="#" class="text-muted"><i class="bi bi-twitter footer-link"></i></a>
+                        <a href="#" class="text-muted"><i class="bi bi-facebook footer-link"></i></a>
+                        <a href="#" class="text-muted"><i class="bi bi-linkedin footer-link"></i></a>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                    <h5 class="fw-bold mb-3">Marketplace Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#properties" class="text-decoration-none footer-link">Properties</a></li>
+                        <li><a href="#autos" class="text-decoration-none footer-link">Autos</a></li>
+                        <li><a href="#jobs" class="text-decoration-none footer-link">Jobs</a></li>
+                        <li><a href="#events" class="text-decoration-none footer-link">Events</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                    <h5 class="fw-bold mb-3">Support</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-decoration-none footer-link">Contact Center</a></li>
+                        <li><a href="#" class="text-decoration-none footer-link">Documentation</a></li>
+                        <li><a href="#" class="text-decoration-none footer-link">Trust & Safety</a></li>
+                        <li><a href="#" class="text-decoration-none footer-link">Legal</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                    <h5 class="fw-bold mb-3">Stay Updated</h5>
+                    <p class="small text-muted">Subscribe to our newsletter for exclusive early access to listings.</p>
+                    <form>
+                        <div class="input-group">
+                            <input type="email" class="form-control rounded-0" placeholder="Your Email">
+                            <button class="btn btn-primary-interactive footer-signup-btn rounded-0" type="button">Sign Up</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="text-center pt-4 mt-4 border-top">
+                <p class="mb-0 small text-muted">&copy; 2025 Interactive Marketplace. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>

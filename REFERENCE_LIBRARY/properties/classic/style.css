@@ -1,0 +1,79 @@
+/* Classic Theme Variables */
+:root {
+    --color-primary: #1e4d4e; /* Dark Teal */
+    --color-secondary: #f4f2ed; /* Soft Beige/Cream */
+    --color-text: #333333;
+    --color-light-gray: #e9ecef;
+    --font-family-heading: 'Playfair Display', serif;
+    --font-family-base: 'Lora', serif;
+    --shadow-card: 0 4px 8px rgba(0, 0, 0, 0.08);
+    --shadow-hover: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+body {
+    font-family: var(--font-family-base);
+    color: var(--color-text);
+    background-color: var(--color-secondary);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-family-heading);
+    color: var(--color-primary);
+}
+
+/* Navbar & Header */
+.classic-navbar {
+    box-shadow: var(--shadow-card);
+    background-color: white !important;
+}
+
+/* Hero Section */
+.hero-banner {
+    height: 60vh; /* Adjust height as needed */
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+.hero-overlay {
+    background-color: rgba(0, 0, 0, 0.3); /* Dark overlay */
+}
+
+/* Property Cards */
+.property-card {
+    border: 1px solid var(--color-light-gray);
+    border-radius: 0; /* Classic look, no rounded corners */
+    box-shadow: var(--shadow-card);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.property-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-hover);
+}
+
+.featured-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: var(--color-primary);
+    color: white;
+    padding: 5px 10px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* Footer Styling */
+.classic-footer {
+    background-color: var(--color-primary);
+    color: white;
+}
+
+.footer-link a {
+    color: #ccc;
+    text-decoration: none;
+}
+.footer-link a:hover {
+    color: white;
+}

@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ServiceConnect - Find Trusted Services Near You</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLMDJ8u7k8gS96eYg5s/29VfK8yE/Fm9DqH3A5jF6f/q0I/wB6v0E0uNf6J2eKzQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        :root {
+            --bs-primary: #198754; /* Green accent */
+            --bs-secondary: #fd7e14; /* Orange accent */
+            --bs-font-sans-serif: 'Nunito', sans-serif;
+        }
+        body {
+            font-family: var(--bs-font-sans-serif);
+            background-color: #f8f9fa; /* Light gray base */
+        }
+        /* Custom Button Styles */
+        .btn-primary {
+            background-color: var(--bs-primary);
+            border-color: var(--bs-primary);
+            border-radius: 50px;
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #157347;
+            border-color: #157347;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .btn-secondary-custom {
+            background-color: var(--bs-secondary);
+            border-color: var(--bs-secondary);
+            color: white;
+            border-radius: 50px;
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        .btn-secondary-custom:hover {
+            background-color: #e8710f;
+            border-color: #e8710f;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        /* Navbar Customization */
+        .navbar-nav .nav-link {
+            font-weight: 600;
+            color: #343a40 !important;
+        }
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://picsum.photos/1200/600?random=1');
+            background-size: cover;
+            background-position: center;
+            height: 60vh;
+            display: flex;
+            align-items: center;
+            color: white;
+            position: relative;
+        }
+        /* Category Card Hover Effect */
+        .category-card {
+            border: none;
+            border-radius: 1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+        }
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(25, 135, 84, 0.1); /* Light green shadow on hover */
+            border-bottom: 5px solid var(--bs-primary);
+        }
+        .category-icon {
+            font-size: 3rem;
+            color: var(--bs-primary);
+            transition: color 0.3s ease;
+        }
+        .category-card:hover .category-icon {
+            color: var(--bs-secondary); /* Icon changes color on hover */
+        }
+
+        /* Provider Card Hover Effect */
+        .provider-card .hire-btn {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .provider-card:hover .hire-btn {
+            opacity: 1;
+        }
+        .provider-card {
+            border-radius: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+        }
+        .provider-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        /* How It Works Icons */
+        .step-icon {
+            font-size: 3rem;
+            color: var(--bs-primary);
+            background-color: rgba(25, 135, 84, 0.1);
+            padding: 1rem;
+            border-radius: 50%;
+            margin-bottom: 1rem;
+        }
+
+        /* Testimonial Carousel Customization */
+        .testimonial-card {
+            background-color: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        .carousel-control-prev-icon, .carousel-control-next-icon {
+            background-color: var(--bs-primary);
+            border-radius: 50%;
+            padding: 1.5rem;
+        }
+        
+        /* Mobile Category Scroll (Bootstrap utility for horizontal scrolling) */
+        @media (max-width: 767.98px) {
+            .categories-scroll {
+                overflow-x: auto;
+                white-space: nowrap;
+                padding-bottom: 1rem;
+            }
+            .categories-scroll .col-6 {
+                display: inline-block;
+                float: none;
+                width: 50%; /* Adjust width for scrollable cards */
+            }
+            .hero-section {
+                height: 45vh;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm">
+            <div class="container">
+                <a class="navbar-brand fw-bold fs-4 text-primary" href="#">Service<span class="text-secondary-custom">Connect</span></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav mx-auto">
+                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Categories</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Providers</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Pricing</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+                    </ul>
+                    <a href="#" class="btn btn-primary ms-lg-3">Post a Service</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <section class="hero-section mb-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <h1 class="display-3 fw-bolder mb-3">Find Trusted Services Near You</h1>
+                    <p class="lead mb-4 text-white-50">Connecting you with skilled professionals, fast and reliably.</p>
+                    <a href="#" class="btn btn-primary btn-lg me-3">Browse Services</a>
+                    <a href="#" class="btn btn-secondary-custom btn-lg">Become a Provider</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <main class="container">
+
+        <section class="mb-5 p-4 bg-white rounded-3 shadow-sm">
+            <div class="row g-3 align-items-center">
+                <div class="col-lg-4 col-md-12">
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-0"><i class="fas fa-search"></i></span>
+                        <input type="search" class="form-control form-control-lg border-0" placeholder="Search for services...">
+                    </div>
+                </div>
+                <div class="col-lg-2 col-6">
+                    <select class="form-select form-select-lg border-0 bg-light">
+                        <option selected>Category</option>
+                        <option value="1">Home Repair</option>
+                        <option value="2">Design</option>
+                    </select>
+                </div>
+                <div class="col-lg-2 col-6">
+                    <select class="form-select form-select-lg border-0 bg-light">
+                        <option selected>Location</option>
+                        <option value="1">New York</option>
+                        <option value="2">London</option>
+                    </select>
+                </div>
+                <div class="col-lg-2 col-6">
+                    <select class="form-select form-select-lg border-0 bg-light">
+                        <option selected>Price Range</option>
+                        <option value="1">$0 - $50</option>
+                        <option value="2">$50+</option>
+                    </select>
+                </div>
+                <div class="col-lg-2 col-6">
+                    <select class="form-select form-select-lg border-0 bg-light">
+                        <option selected>Ratings</option>
+                        <option value="1">4.5★ & up</option>
+                        <option value="2">4.0★ & up</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <h2 class="text-center mb-4 fw-bold">Popular Categories</h2>
+            <div class="row row-cols-2 row-cols-md-3 row-cols-lg-6 g-3 categories-scroll">
+                
+                <div class="col">
+                    <a href="#" class="text-decoration-none">
+                        <div class="card category-card text-center p-3 h-100">
+                            <div class="card-body">
+                                <i class="fas fa-tools category-icon mb-3"></i>
+                                <p class="card-title fw-semibold text-dark">Home Repair</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col">
+                    <a href="#" class="text-decoration-none">
+                        <div class="card category-card text-center p-3 h-100">
+                            <div class="card-body">
+                                <i class="fas fa-paint-brush category-icon mb-3 text-secondary-custom"></i>
+                                <p class="card-title fw-semibold text-dark">Design</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col">
+                    <a href="#" class="text-decoration-none">
+                        <div class="card category-card text-center p-3 h-100">
+                            <div class="card-body">
+                                <i class="fas fa-graduation-cap category-icon mb-3"></i>
+                                <p class="card-title fw-semibold text-dark">Education</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                
+                <div class="col">
+                    <a href="#" class="text-decoration-none">
+                        <div class="card category-card text-center p-3 h-100">
+                            <div class="card-body">
+                                <i class="fas fa-heartbeat category-icon mb-3 text-secondary-custom"></i>
+                                <p class="card-title fw-semibold text-dark">Health</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col">
+                    <a href="#" class="text-decoration-none">
+                        <div class="card category-card text-center p-3 h-100">
+                            <div class="card-body">
+                                <i class="fas fa-calendar-alt category-icon mb-3"></i>
+                                <p class="card-title fw-semibold text-dark">Events</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col">
+                    <a href="#" class="text-decoration-none">
+                        <div class="card category-card text-center p-3 h-100">
+                            <div class="card-body">
+                                <i class="fas fa-laptop-code category-icon mb-3 text-secondary-custom"></i>
+                                <p class="card-title fw-semibold text-dark">Tech Support</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <h2 class="text-center mb-4 fw-bold">Top Rated Professionals</h2>
+            <div class="row g-4">
+                
+                <div class="col-lg-3 col-md-6 col-sm-12">
+                    <div class="card provider-card text-center p-3 h-100">
+                        <img src="https://picsum.photos/100/100?random=2" class="rounded-circle mx-auto mt-3" alt="Provider Photo">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">Anna J.</h5>
+                            <p class="card-text text-muted mb-2">Professional Designer</p>
+                            <p class="text-warning mb-3">
+                                <i class="fas fa-star"></i> 4.9<span class="text-muted small">★</span>
+                            </p>
+                            <a href="#" class="btn btn-primary hire-btn">Hire Now</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6 col-sm-12">
+                    <div class="card provider-card text-center p-3 h-100">
+                        <img src="https://picsum.photos/100/100?random=3" class="rounded-circle mx-auto mt-3" alt="Provider Photo">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">Mark T.</h5>
+                            <p class="card-text text-muted mb-2">24/7 Plumber Expert</p>
+                            <p class="text-warning mb-3">
+                                <i class="fas fa-star"></i> 4.7<span class="text-muted small">★</span>
+                            </p>
+                            <a href="#" class="btn btn-primary hire-btn">Hire Now</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6 col-sm-12">
+                    <div class="card provider-card text-center p-3 h-100">
+                        <img src="https://picsum.photos/100/100?random=4" class="rounded-circle mx-auto mt-3" alt="Provider Photo">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">Ben L.</h5>
+                            <p class="card-text text-muted mb-2">Advanced Math Tutor</p>
+                            <p class="text-warning mb-3">
+                                <i class="fas fa-star"></i> 5.0<span class="text-muted small">★</span>
+                            </p>
+                            <a href="#" class="btn btn-primary hire-btn">Hire Now</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6 col-sm-12">
+                    <div class="card provider-card text-center p-3 h-100">
+                        <img src="https://picsum.photos/100/100?random=5" class="rounded-circle mx-auto mt-3" alt="Provider Photo">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">Laura S.</h5>
+                            <p class="card-text text-muted mb-2">Certified Electrician</p>
+                            <p class="text-warning mb-3">
+                                <i class="fas fa-star"></i> 4.8<span class="text-muted small">★</span>
+                            </p>
+                            <a href="#" class="btn btn-primary hire-btn">Hire Now</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="mb-5 py-5 text-center">
+            <h2 class="mb-5 fw-bold">How It Works</h2>
+            <div class="row g-4 align-items-center">
+                
+                <div class="col-lg-4">
+                    <div class="p-3">
+                        <i class="fas fa-search step-icon"></i>
+                        <h4 class="fw-bold mt-2">1. Search Services</h4>
+                        <p class="text-muted">Easily search through thousands of verified local professionals.</p>
+                    </div>
+                </div>
+
+                <div class="col-lg-1 d-none d-lg-block">
+                    <i class="fas fa-arrow-right text-muted fs-4"></i>
+                </div>
+                
+                <div class="col-lg-3">
+                    <div class="p-3">
+                        <i class="fas fa-users-cog step-icon"></i>
+                        <h4 class="fw-bold mt-2">2. Compare Options</h4>
+                        <p class="text-muted">Read reviews, compare prices, and check provider portfolios.</p>
+                    </div>
+                </div>
+
+                <div class="col-lg-1 d-none d-lg-block">
+                    <i class="fas fa-arrow-right text-muted fs-4"></i>
+                </div>
+
+                <div class="col-lg-3">
+                    <div class="p-3">
+                        <i class="fas fa-lock step-icon"></i>
+                        <h4 class="fw-bold mt-2">3. Hire Securely</h4>
+                        <p class="text-muted">Book and pay securely through our trusted platform.</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="mb-5 py-5">
+            <h2 class="text-center mb-4 fw-bold">What Our Clients Say</h2>
+            <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    
+                    <div class="carousel-item active">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8">
+                                <div class="testimonial-card text-center">
+                                    <p class="fst-italic lead">"Hiring a plumber was seamless and fast! Mark T. fixed our leak within an hour. Highly recommend this platform for reliable services."</p>
+                                    <footer class="blockquote-footer mt-3">
+                                        Client: John D. <cite title="Source Title">for Plumbing Repairs</cite>
+                                    </footer>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="carousel-item">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8">
+                                <div class="testimonial-card text-center">
+                                    <p class="fst-italic lead">"Anna J. designed our entire brand identity. She was professional, creative, and delivered beyond expectations. ServiceConnect made the search easy."</p>
+                                    <footer class="blockquote-footer mt-3">
+                                        Client: Sarah K. <cite title="Source Title">for Graphic Design</cite>
+                                    </footer>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="carousel-item">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8">
+                                <div class="testimonial-card text-center">
+                                    <p class="fst-italic lead">"Found a fantastic math tutor, Ben L., in minutes. My son's grades improved almost instantly. Great service, simple interface."</p>
+                                    <footer class="blockquote-footer mt-3">
+                                        Client: Michael R. <cite title="Source Title">for Math Tutoring</cite>
+                                    </footer>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </section>
+
+        <section class="mb-5 py-5 rounded-3 text-white" style="background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://picsum.photos/1200/300?random=6'); background-size: cover; background-position: center;">
+            <div class="text-center">
+                <h2 class="display-5 fw-bold mb-3">Ready to Hire or Offer Services?</h2>
+                <p class="lead mb-4">Join our growing community today and connect with thousands of users.</p>
+                <a href="#" class="btn btn-primary btn-lg me-3">Find Services</a>
+                <a href="#" class="btn btn-secondary-custom btn-lg">Offer Your Services</a>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-light pt-5 pb-3 mt-5">
+        <div class="container">
+            <div class="row g-4">
+                
+                <div class="col-lg-4 col-md-6">
+                    <h5 class="fw-bold text-primary">Service<span class="text-secondary-custom">Connect</span></h5>
+                    <p class="text-muted small">Your trusted marketplace for local services. Connecting quality professionals with clients who need them.</p>
+                    <p class="text-muted small">Email: support@serviceconnect.com</p>
+                </div>
+
+                <div class="col-lg-2 col-md-6">
+                    <h6 class="fw-bold">Quick Links</h6>
+                    <ul class="list-unstyled small">
+                        <li><a href="#" class="text-decoration-none text-muted">About Us</a></li>
+                        <li><a href="#" class="text-decoration-none text-muted">Careers</a></li>
+                        <li><a href="#" class="text-decoration-none text-muted">Blog</a></li>
+                        <li><a href="#" class="text-decoration-none text-muted">Press</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-2 col-md-6">
+                    <h6 class="fw-bold">Providers</h6>
+                    <ul class="list-unstyled small">
+                        <li><a href="#" class="text-decoration-none text-muted">Join as Provider</a></li>
+                        <li><a href="#" class="text-decoration-none text-muted">Provider Login</a></li>
+                        <li><a href="#" class="text-decoration-none text-muted">Pricing Plans</a></li>
+                        <li><a href="#" class="text-decoration-none text-muted">Trust & Safety</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-2 col-md-6">
+                    <h6 class="fw-bold">Support</h6>
+                    <ul class="list-unstyled small">
+                        <li><a href="#" class="text-decoration-none text-muted">Help Center</a></li>
+                        <li><a href="#" class="text-decoration-none text-muted">Contact Us</a></li>
+                        <li><a href="#" class="text-decoration-none text-muted">Privacy Policy</a></li>
+                        <li><a href="#" class="text-decoration-none text-muted">Terms of Service</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-2 col-md-6">
+                    <h6 class="fw-bold">Follow Us</h6>
+                    <div class="d-flex fs-5">
+                        <a href="#" class="text-dark me-3"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-dark me-3"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-dark me-3"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="text-dark"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+
+            </div>
+            
+            <hr class="my-4">
+            
+            <div class="text-center small text-muted">
+                &copy; 2024 ServiceConnect. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script>
+        // Optional: Initialize carousel if needed, though data attributes handle most of it.
+        var myCarousel = document.querySelector('#testimonialCarousel')
+        var carousel = new bootstrap.Carousel(myCarousel, {
+            interval: 5000,
+            wrap: true
+        })
+
+        // Optional: Mobile-specific scroll for categories
+        if (window.innerWidth < 768) {
+            document.querySelector('.categories-scroll').classList.add('flex-nowrap');
+        }
+    </script>
+</body>
+</html>

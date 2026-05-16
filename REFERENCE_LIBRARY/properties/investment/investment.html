@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InvestStream - Invest with Confidence: Proven ROI Real Estate</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Montserrat:wght@700;800&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+        :root {
+            --primary-navy: #0A2540;
+            --secondary-steel: #4A5568;
+            --accent-green: #38A169;
+            --light-gray: #F7FAFC;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--secondary-steel);
+            background-color: var(--light-gray);
+        }
+
+        h1, h2, h3, h4, .navbar-brand {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            color: var(--primary-navy);
+        }
+
+        .btn-primary-green {
+            background-color: var(--accent-green);
+            border-color: var(--accent-green);
+            color: white;
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            transition: background-color 0.3s;
+        }
+
+        .btn-primary-green:hover {
+            background-color: #2F855A; /* Darker green on hover */
+            border-color: #2F855A;
+        }
+
+        .btn-outline-navy {
+            color: var(--primary-navy);
+            border-color: var(--primary-navy);
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .btn-outline-navy:hover {
+            background-color: var(--primary-navy);
+            color: white;
+        }
+
+        .bg-navy {
+            background-color: var(--primary-navy);
+            color: white;
+        }
+
+        .text-accent-green {
+            color: var(--accent-green) !important;
+        }
+
+        .text-navy {
+            color: var(--primary-navy) !important;
+        }
+
+        /* Hero Specific Styles */
+        #hero-chart {
+            height: 350px;
+            background: linear-gradient(135deg, #0A2540, #1A4064); /* Gradient background for the chart area */
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Mock Chart Illustration */
+        .chart-line {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            padding: 20px;
+        }
+
+        .chart-line::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M0 70 C 20 50, 40 80, 60 40 C 80 0, 100 30' stroke='white' stroke-width='3' fill='none'/><circle cx='60' cy='40' r='3' fill='%2338A169'/><text x='62' y='35' fill='%2338A169' font-size='8' font-weight='bold'>+18%</text></svg>") no-repeat center center / 90% auto;
+            animation: growLine 3s ease-out forwards;
+        }
+
+        @keyframes growLine {
+            0% { clip-path: inset(0 100% 0 0); }
+            100% { clip-path: inset(0 0 0 0); }
+        }
+
+        /* Card and KPI Styles */
+        .kpi-card {
+            border: none;
+            border-radius: 12px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .feature-card {
+            border: 1px solid #E2E8F0;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: box-shadow 0.3s;
+        }
+
+        .feature-card:hover {
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Mock Chart Placeholder Styles */
+        .chart-placeholder {
+            min-height: 250px;
+            background-color: white;
+            border: 1px solid #E2E8F0;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--secondary-steel);
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .calculator-output-chart {
+            height: 200px;
+            background-color: var(--light-gray);
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .calculator-output-chart::before {
+            content: 'Projected ROI Growth';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 0.9rem;
+            color: #C8D1DB;
+        }
+
+        .comparison-table th {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            background-color: var(--light-gray);
+        }
+
+        .comparison-table td, .comparison-table th {
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+        <div class="container py-2">
+            <a class="navbar-brand d-flex align-items-center fw-bold fs-3 text-navy" href="#">
+                <i class="bi bi-graph-up-arrow me-2 text-accent-green"></i>
+                <span style="font-family: 'Poppins', sans-serif;">INVESTSTREAM</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav fw-bold">
+                    <li class="nav-item">
+                        <a class="nav-link text-navy" href="#metrics">Market Reports</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-navy" href="#opportunities">Opportunities</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-navy" href="#advisor">Advisers</a>
+                    </li>
+                    <li class="nav-item ms-lg-3">
+                        <a class="btn btn-primary-green" href="#contact">Sign Up</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <header class="bg-navy py-5 py-lg-0">
+        <div class="container">
+            <div class="row align-items-center py-5">
+                <div class="col-lg-6 order-lg-1 mb-4 mb-lg-0 text-center text-lg-start">
+                    <h1 class="display-3 fw-bolder text-white mb-4" style="line-height: 1.2;">Invest with Confidence</h1>
+                    <p class="lead text-white-50 mb-5">Discover properties with **proven ROI** and long-term growth tailored for serious investors.</p>
+                    <div class="d-grid gap-3 d-md-block">
+                        <a href="#opportunities" class="btn btn-primary-green btn-lg px-4 me-md-2 mb-2 mb-md-0">
+                            <i class="bi bi-house-door me-2"></i> Browse Investment Properties
+                        </a>
+                        <a href="#calculator" class="btn btn-outline-light btn-lg px-4">
+                            <i class="bi bi-calculator me-2"></i> Calculate ROI
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-6 order-lg-2">
+                    <div id="hero-chart" class="p-4">
+                        <div class="chart-line"></div>
+                        <h4 class="text-white mt-3 ps-3">Portfolio Value Growth</h4>
+                        <p class="text-white-50 ps-3">Year-over-Year Performance</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <section id="metrics" class="py-5 bg-white shadow-sm">
+        <div class="container">
+            <h2 class="text-center mb-5 text-navy">Key Investment Metrics</h2>
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+                <div class="col">
+                    <div class="card kpi-card p-4 text-center">
+                        <div class="card-body">
+                            <i class="bi bi-percent fs-1 text-accent-green mb-3"></i>
+                            <h3 class="display-6 fw-bold text-navy">12%</h3>
+                            <p class="card-text text-uppercase fw-bold text-secondary">Avg. ROI</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card kpi-card p-4 text-center">
+                        <div class="card-body">
+                            <i class="bi bi-person-check fs-1 text-accent-green mb-3"></i>
+                            <h3 class="display-6 fw-bold text-navy">95%</h3>
+                            <p class="card-text text-uppercase fw-bold text-secondary">Occupancy Rate</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card kpi-card p-4 text-center">
+                        <div class="card-body">
+                            <i class="bi bi-building-up fs-1 text-accent-green mb-3"></i>
+                            <h3 class="display-6 fw-bold text-navy">8%</h3>
+                            <p class="card-text text-uppercase fw-bold text-secondary">Avg. Appreciation (Y)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card kpi-card p-4 text-center">
+                        <div class="card-body">
+                            <i class="bi bi-people fs-1 text-accent-green mb-3"></i>
+                            <h3 class="display-6 fw-bold text-navy">10K+</h3>
+                            <p class="card-text text-uppercase fw-bold text-secondary">Investors Served</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="opportunities" class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">Featured Investment Opportunities</h2>
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+
+                <div class="col">
+                    <div class="card feature-card h-100">
+                        <img src="https://images.unsplash.com/photo-1544377193-33e1467e2a9b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0MDkzMTR8MHwxfHNlYXJjaHwzfHdlbGwlMjRmaW5hbmNpYWwlMjBvZmZpY2UlMjBidWlsZGluZ3xlbnwwfHx8fDE3MjU4NTAwNTB8MA&ixlib=rb-4.0.3&q=80&w=400" class="card-img-top" alt="Office Tower in Downtown" style="height: 200px; object-fit: cover;">
+                        <div class="card-body d-flex flex-column">
+                            <h4 class="card-title text-navy">Office Tower in Downtown</h4>
+                            <p class="card-text text-secondary mb-3">Prime commercial space in a major financial district.</p>
+                            <div class="row mb-3 g-2">
+                                <div class="col-6">
+                                    <p class="mb-0 fw-bold fs-5 text-navy">$1.2M</p>
+                                    <small class="text-secondary">Price</small>
+                                </div>
+                                <div class="col-6 text-end">
+                                    <p class="mb-0 fw-bold fs-5 text-accent-green">14%</p>
+                                    <small class="text-secondary">Projected ROI</small>
+                                </div>
+                            </div>
+                            <p class="mb-3 text-secondary">Annual Yield: <span class="fw-bold text-navy">$180K</span></p>
+                            <div class="mt-auto">
+                                <a href="#" class="btn btn-sm btn-primary-green w-100">View Projections</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="card feature-card h-100">
+                        <img src="https://images.unsplash.com/photo-1628173428987-a2f7c006509a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0MDkzMTR8MHwxfHNlYXJjaHw1fG11bHRpJTI0ZmFtaWx5JTIwcmVhbCUyMGVzdGF0ZXxlbnwwfHx8fDE3MjU4NTAwNTF8MA&ixlib=rb-4.0.3&q=80&w=400" class="card-img-top" alt="Residential Complex" style="height: 200px; object-fit: cover;">
+                        <div class="card-body d-flex flex-column">
+                            <h4 class="card-title text-navy">Luxury Residential Complex</h4>
+                            <p class="card-text text-secondary mb-3">High-demand rental units near a university campus.</p>
+                            <div class="row mb-3 g-2">
+                                <div class="col-6">
+                                    <p class="mb-0 fw-bold fs-5 text-navy">$3.5M</p>
+                                    <small class="text-secondary">Price</small>
+                                </div>
+                                <div class="col-6 text-end">
+                                    <p class="mb-0 fw-bold fs-5 text-accent-green">10.5%</p>
+                                    <small class="text-secondary">Projected ROI</small>
+                                </div>
+                            </div>
+                            <p class="mb-3 text-secondary">Annual Yield: <span class="fw-bold text-navy">$367K</span></p>
+                            <div class="mt-auto">
+                                <a href="#" class="btn btn-sm btn-primary-green w-100">View Projections</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="card feature-card h-100">
+                        <img src="https://images.unsplash.com/photo-1621609764095-b91c0628e932?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0MDkzMTR8MHwxfHNlYXJjaHw0fHJldGFpbCUyMHNwYWNlfGVufDB8fHx8MTcyNTg1MDA1MXww&ixlib=rb-4.0.3&q=80&w=400" class="card-img-top" alt="Retail Space" style="height: 200px; object-fit: cover;">
+                        <div class="card-body d-flex flex-column">
+                            <h4 class="card-title text-navy">Suburban Retail Strip</h4>
+                            <p class="card-text text-secondary mb-3">Fully leased space with stable anchor tenants.</p>
+                            <div class="row mb-3 g-2">
+                                <div class="col-6">
+                                    <p class="mb-0 fw-bold fs-5 text-navy">$950K</p>
+                                    <small class="text-secondary">Price</small>
+                                </div>
+                                <div class="col-6 text-end">
+                                    <p class="mb-0 fw-bold fs-5 text-accent-green">13.2%</p>
+                                    <small class="text-secondary">Projected ROI</small>
+                                </div>
+                            </div>
+                            <p class="mb-3 text-secondary">Annual Yield: <span class="fw-bold text-navy">$125K</span></p>
+                            <div class="mt-auto">
+                                <a href="#" class="btn btn-sm btn-primary-green w-100">View Projections</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="text-center mt-5">
+                <a href="#" class="btn btn-outline-navy btn-lg">Explore All 50+ Opportunities <i class="bi bi-arrow-right"></i></a>
+            </div>
+        </div>
+    </section>
+    <section id="calculator" class="py-5 bg-white">
+        <div class="container">
+            <div class="row g-5 align-items-center">
+                <div class="col-lg-6">
+                    <h2 class="mb-4">Interactive ROI Calculator</h2>
+                    <p class="lead mb-4 text-secondary">Input your key variables to instantly estimate the Return on Investment for any property.</p>
+                    <form>
+                        <div class="mb-3">
+                            <label for="purchasePrice" class="form-label fw-bold">Purchase Price ($)</label>
+                            <input type="number" class="form-control" id="purchasePrice" placeholder="e.g., 500000" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="rentalYield" class="form-label fw-bold">Annual Rental Yield ($)</label>
+                            <input type="number" class="form-control" id="rentalYield" placeholder="e.g., 40000" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="annualExpenses" class="form-label fw-bold">Annual Expenses ($)</label>
+                            <input type="number" class="form-control" id="annualExpenses" placeholder="e.g., 8000" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary-green btn-lg">
+                            <i class="bi bi-calculator me-2"></i> Calculate Estimated ROI
+                        </button>
+                    </form>
+                </div>
+                <div class="col-lg-6">
+                    <h3 class="text-center text-navy mb-4">Estimated 5-Year ROI Projection</h3>
+                    <div class="calculator-output-chart chart-placeholder shadow-sm">
+                        <i class="bi bi-graph-up-arrow fs-1 text-secondary opacity-50"></i>
+                    </div>
+                    <div class="text-center mt-3">
+                        <p class="fs-4 fw-bold text-accent-green mb-0">Estimated ROI: 11.2%</p>
+                        <small class="text-secondary">Based on current inputs and average market conditions.</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="data-visualization" class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">Market Trends & Data Visualization</h2>
+            <div class="row g-4">
+                <div class="col-lg-6">
+                    <div class="card p-4 h-100 shadow-sm">
+                        <h4 class="card-title text-navy">Property Value Appreciation (5 Yrs)</h4>
+                        <div class="chart-placeholder">
+                            <i class="bi bi-graph-up-arrow me-2"></i> Line Graph Placeholder
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="card p-4 h-100 shadow-sm">
+                        <h4 class="card-title text-navy">Income vs Expenses</h4>
+                        <div class="chart-placeholder">
+                            <i class="bi bi-pie-chart me-2"></i> Pie Chart Placeholder
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="card p-4 h-100 shadow-sm">
+                        <h4 class="card-title text-navy">ROI by City (Top 3)</h4>
+                        <div class="chart-placeholder">
+                            <i class="bi bi-bar-chart me-2"></i> Bar Chart Placeholder
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="comparison" class="py-5 bg-white">
+        <div class="container">
+            <h2 class="text-center mb-5">Property Investment Comparison</h2>
+            <div class="table-responsive shadow-lg rounded-3 overflow-hidden">
+                <table class="table table-hover align-middle mb-0 comparison-table">
+                    <thead class="bg-light">
+                        <tr>
+                            <th scope="col">Property</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">ROI</th>
+                            <th scope="col">Cap Rate</th>
+                            <th scope="col">Cash Flow (M)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Office Tower (Downtown)</td>
+                            <td>$1.2M</td>
+                            <td class="text-accent-green fw-bold">14.0%</td>
+                            <td>8.5%</td>
+                            <td>$15,000</td>
+                        </tr>
+                        <tr>
+                            <td>Residential Complex (Lux)</td>
+                            <td>$3.5M</td>
+                            <td class="text-accent-green fw-bold">10.5%</td>
+                            <td>6.2%</td>
+                            <td>$30,600</td>
+                        </tr>
+                        <tr>
+                            <td>Retail Strip (Suburban)</td>
+                            <td>$950K</td>
+                            <td class="text-accent-green fw-bold">13.2%</td>
+                            <td>7.9%</td>
+                            <td>$10,400</td>
+                        </tr>
+                        <tr>
+                            <td>Industrial Warehouse</td>
+                            <td>$2.1M</td>
+                            <td class="text-accent-green fw-bold">11.8%</td>
+                            <td>7.1%</td>
+                            <td>$18,800</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+    <section id="case-studies" class="py-5">
+        <div class="container">
+            <div class="row g-5">
+                <div class="col-lg-6">
+                    <div class="card p-4 h-100 border-0 shadow-lg">
+                        <h3 class="text-navy mb-4">Investor Success Story</h3>
+                        <div class="d-flex align-items-center mb-4">
+                            <img src="https://images.unsplash.com/photo-1544717297-fa95b1ee4c0c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0MDkzMTR8MHwxfHNlYXJjaHwzfGludmVzdG9yJTIwcG9ydHJhaXR8ZW58MHx8fHwxNzI1ODUwMDUxfDA&ixlib=rb-4.0.3&q=80&w=100" alt="Sarah J. Investor" class="rounded-circle me-3" style="width: 80px; height: 80px; object-fit: cover;">
+                            <div>
+                                <h5 class="fw-bold mb-0 text-navy">Sarah J., Portfolio Manager</h5>
+                                <p class="text-secondary mb-0">Invested: 3 Years</p>
+                            </div>
+                        </div>
+                        <p class="lead fw-bold text-dark">"How Sarah grew her portfolio by <span class="text-accent-green">35% in 3 years</span> using our data-driven approach."</p>
+                        <p class="text-secondary">Our financial insights allowed Sarah to identify high-potential secondary markets, significantly outperforming her previous investment strategy. The transparency of the ROI projections was key.</p>
+                        <a href="#" class="btn btn-outline-navy mt-auto align-self-start">Read Full Case Study</a>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="card p-4 h-100 border-0 shadow-lg">
+                        <h3 class="text-navy mb-4">Video Explainer: Investment Fundamentals</h3>
+                        <p class="lead mb-4 text-secondary">Watch our quick guide on real estate as the #1 long-term investment vehicle.</p>
+                        <div class="ratio ratio-16x9 rounded-3 overflow-hidden shadow">
+                            <div class="d-flex align-items-center justify-content-center bg-dark text-white-50">
+                                <i class="bi bi-play-circle-fill fs-1 text-white"></i>
+                            </div>
+                        </div>
+                        <p class="mt-3 text-center text-secondary"><small>Video Placeholder: Why Real Estate is the #1 Long-Term Investment.</small></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="contact" class="py-5 bg-navy text-white">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <h2 class="display-5 fw-bolder text-white mb-3">Ready to Maximize Your ROI?</h2>
+                    <p class="lead text-white-50">Talk to a dedicated Investment Advisor today and receive a personalized portfolio review.</p>
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-check-circle-fill fs-4 me-2 text-accent-green"></i>
+                        <p class="mb-0 fw-bold">Data-backed property selection.</p>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-check-circle-fill fs-4 me-2 text-accent-green"></i>
+                        <p class="mb-0 fw-bold">Long-term growth strategies.</p>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card p-4 shadow-lg">
+                        <h4 class="text-navy mb-3">Book Your Free Consultation</h4>
+                        <form>
+                            <div class="mb-3">
+                                <input type="text" class="form-control" placeholder="Your Name" required>
+                            </div>
+                            <div class="mb-3">
+                                <input type="email" class="form-control" placeholder="Work Email" required>
+                            </div>
+                            <div class="mb-4">
+                                <select class="form-select" required>
+                                    <option selected disabled>Investment Budget ($)</option>
+                                    <option>Under $500K</option>
+                                    <option>$500K - $2M</option>
+                                    <option>Over $2M</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary-green btn-lg w-100">
+                                <i class="bi bi-send me-2"></i> Talk to an Investment Advisor
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <footer class="bg-dark py-4">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                    <p class="text-white-50 mb-0">&copy; 2025 InvestStream. All Rights Reserved. Data-Driven Investment.</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <ul class="list-inline mb-0">
+                        <li class="list-inline-item"><a href="#" class="text-white-50 text-decoration-none">Market Reports</a></li>
+                        <li class="list-inline-item"><a href="#" class="text-white-50 text-decoration-none mx-3">Investor Guides</a></li>
+                        <li class="list-inline-item"><a href="#" class="text-white-50 text-decoration-none">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+</body>
+</html>

@@ -1,0 +1,386 @@
+/* Color Variables */
+:root {
+    --primary-red: #c0392b;
+    --dark-blue: #2c3e50; /* A dark color for contrast, or use Bootstrap's dark */
+    --light-gray: #f8f9fa;
+    --medium-gray: #e9ecef;
+    --text-muted: #6c757d;
+}
+
+/* Global Styles */
+body {
+    font-family: 'Open Sans', sans-serif;
+    color: var(--dark-blue);
+    line-height: 1.6;
+    overflow-x: hidden; /* Prevent horizontal scroll from animations */
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+}
+
+/* Custom Utilities */
+.text-primary {
+    color: var(--primary-red) !important;
+}
+
+.bg-primary {
+    background-color: var(--primary-red) !important;
+}
+
+.btn-primary {
+    background-color: var(--primary-red);
+    border-color: var(--primary-red);
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #a03024; /* Darker red on hover */
+    border-color: #a03024;
+    transform: translateY(-2px); /* Subtle lift */
+}
+
+.btn-outline-primary {
+    color: var(--primary-red);
+    border-color: var(--primary-red);
+    transition: all 0.3s ease;
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--primary-red);
+    color: white;
+    transform: translateY(-2px);
+}
+
+.btn-light {
+    color: var(--primary-red);
+    border-color: #fff;
+    transition: all 0.3s ease;
+}
+
+.btn-light:hover {
+    background-color: var(--medium-gray);
+    border-color: var(--medium-gray);
+    transform: translateY(-2px);
+}
+
+/* Header Section */
+.navbar-brand span {
+    color: var(--primary-red);
+}
+
+.navbar .nav-link {
+    font-weight: 600;
+    color: var(--dark-blue);
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+.navbar .nav-link::after {
+    content: '';
+    position: absolute;
+    width: 0%;
+    height: 2px;
+    background-color: var(--primary-red);
+    bottom: -5px;
+    left: 0;
+    transition: width 0.3s ease-in-out;
+}
+
+.navbar .nav-link:hover::after,
+.navbar .nav-link.active::after {
+    width: 100%;
+}
+
+.navbar-toggler {
+    border-color: rgba(0,0,0,.1);
+}
+
+/* Hero Section */
+.hero-section {
+    position: relative;
+    height: 80vh; /* Adjust as needed */
+    min-height: 500px;
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://via.placeholder.com/1920x1080/4682B4/ffffff?text=Event+Hero+Image') center/cover no-repeat;
+    animation: fadeIn 2s ease-out;
+}
+
+.hero-section h1 {
+    font-size: 4.5rem;
+}
+
+.hero-section p.lead {
+    font-weight: 300;
+}
+
+/* Animations for Hero Section */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.animate__animated {
+    opacity: 0; /* Default hidden state for animation */
+}
+
+/* Placeholder for actual animation classes from a library like Animate.css,
+   or define simple custom animations like below */
+.animate__fadeInUp {
+    animation-name: fadeInUp;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+}
+
+.animate__delay-1s { animation-delay: 1s; }
+.animate__delay-2s { animation-delay: 2s; }
+.animate__delay-3s { animation-delay: 3s; }
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 100%, 0);
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+
+/* About Section */
+.about-section .card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.about-section .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175) !important;
+}
+
+/* Events Grid */
+.events-grid .card {
+    border: none;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.events-grid .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+.events-grid .card-img-top {
+    height: 200px; /* Fixed height for images */
+    object-fit: cover;
+}
+
+.events-grid .date-badge {
+    min-width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.9em;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.events-grid .date-badge br {
+    display: none; /* Hide <br> on larger screens if needed */
+}
+
+@media (max-width: 575.98px) {
+    .events-grid .date-badge {
+        font-size: 0.8em;
+        min-width: 50px;
+        height: 50px;
+    }
+    .events-grid .date-badge br {
+        display: block; /* Show <br> on small screens */
+    }
+}
+
+
+/* Organizers Section */
+.organizer-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.organizer-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1) !important;
+}
+
+.organizer-card img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+}
+
+.organizer-card .social-icons a {
+    color: var(--text-muted);
+    transition: color 0.3s ease;
+}
+
+.organizer-card .social-icons a:hover {
+    color: var(--primary-red);
+}
+
+/* Gallery Section */
+.gallery-section img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.gallery-section .hover-grow:hover {
+    transform: scale(1.03); /* Subtle zoom effect */
+}
+
+/* Testimonials Section */
+.testimonials-section .carousel-item {
+    padding: 3rem 0;
+}
+
+.testimonials-section .carousel-control-prev-icon,
+.testimonials-section .carousel-control-next-icon {
+    background-color: var(--primary-red);
+    border-radius: 50%;
+    padding: 15px;
+}
+
+.sponsor-logo {
+    max-height: 75px;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+
+.sponsor-logo:hover {
+    opacity: 1;
+}
+
+/* CTA Section */
+.cta-section {
+    background: linear-gradient(45deg, var(--primary-red), #e74c3c); /* Gradient background */
+    padding: 80px 0;
+}
+
+.cta-section .btn-light:hover {
+    background-color: #f8f9fa; /* Slightly darker light color */
+    color: var(--primary-red);
+}
+
+/* Footer */
+.footer {
+    background-color: var(--dark-blue) !important; /* Using a darker tone for footer */
+}
+
+.footer .list-unstyled a {
+    transition: color 0.3s ease;
+}
+
+.footer .list-unstyled a:hover {
+    color: var(--primary-red) !important;
+}
+
+.footer .social-icons a {
+    transition: color 0.3s ease;
+}
+
+.footer .social-icons a:hover {
+    color: var(--primary-red) !important;
+}
+
+/* Fade-in on scroll animations */
+.fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.fade-in.appear {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.fade-in-card {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.fade-in-card.appear {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Responsive adjustments */
+@media (max-width: 991.98px) {
+    .hero-section h1 {
+        font-size: 3rem;
+    }
+    .hero-section p.fs-4 {
+        font-size: 1.2rem !important;
+    }
+    .about-section .col-lg-6:first-child {
+        margin-bottom: 2rem;
+    }
+    .navbar-collapse {
+        text-align: center;
+    }
+    .navbar-nav .nav-item {
+        margin: 0.5rem 0;
+    }
+    .navbar .nav-link::after {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+
+@media (max-width: 767.98px) {
+    .hero-section {
+        height: 60vh;
+        min-height: 400px;
+        padding-top: 80px; /* Adjust for fixed header */
+    }
+    .hero-section h1 {
+        font-size: 2.5rem;
+    }
+    .hero-section p.lead {
+        font-size: 1rem;
+    }
+    .hero-section p.fs-4 {
+        font-size: 1rem !important;
+    }
+    .cta-section h2 {
+        font-size: 2.5rem;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .navbar-brand {
+        font-size: 1.8rem !important;
+    }
+    .hero-section h1 {
+        font-size: 2rem;
+    }
+    .hero-section .btn-lg {
+        font-size: 1rem;
+        padding: 0.8rem 2rem;
+    }
+    .cta-section h2 {
+        font-size: 2rem;
+    }
+    .footer .col-lg-4, .footer .col-lg-2, .footer .col-lg-3 {
+        text-align: center;
+    }
+    .footer .list-unstyled, .footer .social-icons {
+        justify-content: center;
+        display: flex; /* For social icons */
+        flex-wrap: wrap;
+    }
+}

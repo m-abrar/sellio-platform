@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Classifieds - Local Map View (Enhanced)</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-green: #66BB6A; /* Friendly Green */
+            --primary-blue: #42A5F5;  /* Calming Blue */
+            --dark-text: #424242;     /* Dark Gray for text */
+            --light-bg: #F5F5F5;      /* Light Gray for dividers/UI */
+            --font-family: 'Poppins', sans-serif;
+        }
+        body {
+            font-family: var(--font-family);
+            color: var(--dark-text);
+            background-color: white;
+            overflow: hidden; /* Prevent body scroll */
+        }
+        .navbar-brand, .btn-success { font-weight: 600; }
+        
+        /* Layout */
+        .main-content { height: calc(100vh - 72px); } /* Full height minus navbar */
+        .listing-panel {
+            width: 380px; /* Fixed, comfortable width for the list */
+            max-width: 450px;
+            overflow-y: auto;
+        }
+        .map-container {
+            flex-grow: 1;
+            position: relative;
+            background-color: var(--light-bg);
+            /* Simulate a map background */
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><rect width="100%" height="100%" fill="%23f7f7f7"/><line x1="0" y1="50%" x2="100%" y2="50%" stroke="%23e0e0e0" stroke-width="1"/><line x1="50%" y1="0" x2="50%" y2="100%" stroke="%23e0e0e0" stroke-width="1"/><circle cx="30%" cy="30%" r="20" fill="%23fff" stroke="%2342a5f5" stroke-width="2"/><circle cx="70%" cy="60%" r="20" fill="%23fff" stroke="%2342a5f5" stroke-width="2"/></svg>');
+            background-size: 100% 100%;
+        }
+
+        /* Styling Overrides */
+        .btn-success {
+            background-color: var(--primary-green) !important;
+            border-color: var(--primary-green) !important;
+            border-radius: 50rem;
+        }
+        .btn-outline-primary {
+            color: var(--primary-blue);
+            border-color: var(--primary-blue);
+            border-radius: 50rem;
+            transition: all 0.2s;
+        }
+        .card-listing {
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+        .card-listing:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+            border-left: 4px solid var(--primary-blue) !important;
+        }
+
+        /* Map UI Elements */
+        .map-pin {
+            position: absolute;
+            cursor: pointer;
+            z-index: 10;
+            transform: translate(-50%, -100%); /* Position tip at exact coordinates */
+        }
+        .pin-body {
+            width: 30px;
+            height: 30px;
+            background-color: var(--primary-green);
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(-45deg);
+            box-shadow: 0 0 5px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .pin-icon {
+            transform: rotate(45deg);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm sticky-top">
+        <div class="container-fluid mx-4">
+            <a class="navbar-brand text-primary" href="#">
+                <i class="bi bi-house-door-fill me-2 text-success"></i>
+                <span class="text-success">Community</span> Classifieds
+            </a>
+            <form class="d-flex mx-auto" style="width: 400px;">
+                <input class="form-control rounded-pill border-0" type="search" placeholder="Search for items, services, neighborhoods..." style="background-color: var(--light-bg);">
+            </form>
+            <div class="d-flex align-items-center">
+                <button class="btn btn-success me-3"><i class="bi bi-plus-lg me-1"></i> Post Ad</button>
+                <i class="bi bi-bell-fill fs-5 text-dark me-3" style="cursor:pointer;"></i>
+                <i class="bi bi-person-circle fs-4 text-dark" style="cursor:pointer;"></i>
+            </div>
+        </div>
+    </nav>
+
+    <div class="d-flex main-content">
+        
+        <div class="p-4 listing-panel">
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="fw-bold mb-0 text-primary">Nearby Listings</h4>
+                <div class="dropdown">
+                    <button class="btn btn-outline-secondary btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Sort: Newest
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Price: Low to High</a></li>
+                        <li><a class="dropdown-item" href="#">Distance: Closest</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card card-listing mb-3 p-3 border-0" onclick="focusMapPin('pin-1')">
+                <div class="d-flex align-items-center">
+                    <div class="me-3 bg-light rounded d-flex justify-content-center align-items-center" style="width: 60px; height: 60px;">
+                        <i class="bi bi-bicycle fs-4 text-secondary"></i>
+                    </div>
+                    <div>
+                        <h6 class="mb-1 fw-bold text-truncate" style="max-width: 250px;">Retro Mountain Bike (Barely Used)</h6>
+                        <p class="text-success fw-bold mb-1 fs-5">$130</p>
+                        <small class="text-muted"><i class="bi bi-geo-alt-fill me-1"></i>Greenwood neighborhood</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card card-listing mb-3 p-3 border-0" onclick="focusMapPin('pin-2')">
+                <div class="d-flex align-items-center">
+                    <div class="me-3 bg-light rounded d-flex justify-content-center align-items-center" style="width: 60px; height: 60px;">
+                        <i class="bi bi-music-note-beamed fs-4 text-secondary"></i>
+                    </div>
+                    <div>
+                        <h6 class="mb-1 fw-bold text-truncate" style="max-width: 250px;">Beginner Guitar Lessons</h6>
+                        <p class="text-success fw-bold mb-1 fs-5">$40/hr</p>
+                        <small class="text-muted"><i class="bi bi-pin-map-fill me-1"></i>7 miles away</small>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="my-4" style="border-color: var(--light-bg);">
+
+            <h5 class="fw-bold mb-3 text-primary">Your Neighborhood Alerts</h5>
+            <div class="alert alert-success d-flex align-items-center p-2 rounded-3 mb-2" role="alert" style="background-color: #E8F5E9; border-left: 4px solid var(--primary-green); border-color: transparent;">
+                <i class="bi bi-megaphone-fill me-2"></i>
+                <div style="font-size: 0.9rem;">New **free couch** posted in **Central Park!**</div>
+            </div>
+            
+            <hr class="my-4" style="border-color: var(--light-bg);">
+
+            <h5 class="fw-bold mb-3 text-primary">Browse By Category</h5>
+            <div class="d-flex flex-wrap gap-2">
+                <button class="btn btn-outline-primary rounded-pill d-flex align-items-center" type="button"><i class="bi bi-box-seam me-2"></i> For Sale</button>
+                <button class="btn btn-outline-primary rounded-pill d-flex align-items-center" type="button"><i class="bi bi-tools me-2"></i> Services</button>
+                <button class="btn btn-outline-primary rounded-pill d-flex align-items-center" type="button"><i class="bi bi-calendar-event me-2"></i> Events</button>
+                <button class="btn btn-outline-primary rounded-pill d-flex align-items-center" type="button"><i class="bi bi-search me-2"></i> Lost & Found</button>
+            </div>
+
+        </div>
+
+        <div class="map-container">
+            <div class="position-absolute d-flex flex-column rounded-3 overflow-hidden shadow" style="top: 20px; right: 20px; z-index: 20;">
+                <button class="btn btn-light border-bottom p-2" title="Zoom In"><i class="bi bi-plus-lg"></i></button>
+                <button class="btn btn-light border-bottom p-2" title="Zoom Out"><i class="bi bi-dash-lg"></i></button>
+                <button class="btn btn-light p-2" title="Recenter"><i class="bi bi-crosshair"></i></button>
+            </div>
+
+
+            <div id="pin-1" class="map-pin" style="top: 30%; left: 35%;" onclick="showPopup('popup-1')">
+                <div class="pin-body"><i class="bi bi-bicycle pin-icon"></i></div>
+            </div>
+
+            <div id="pin-2" class="map-pin" style="top: 60%; left: 65%;" onclick="showPopup('popup-2')">
+                <div class="pin-body" style="background-color: var(--primary-blue);"><i class="bi bi-music-note-beamed pin-icon"></i></div>
+            </div>
+            
+            <div id="popup-1" class="card p-3 shadow rounded-3 position-absolute d-none" style="top: 30%; left: 37%; width: 250px; border-left: 4px solid var(--primary-green); z-index: 20;">
+                <h6 class="fw-bold mb-1 text-truncate">Retro Mountain Bike</h6>
+                <p class="text-success fw-bold fs-5 mb-2">$130</p>
+                <div class="d-flex align-items-center mb-3">
+                    <i class="bi bi-person-circle fs-5 me-2 text-muted"></i>
+                    <small class="text-muted">Posted by **Sarah K.**</small>
+                </div>
+                <div class="d-grid gap-2">
+                    <button class="btn btn-success btn-sm">Message Seller</button>
+                    <button class="btn btn-outline-primary btn-sm">View Details</button>
+                </div>
+                <button class="btn-close position-absolute top-0 end-0 m-2" onclick="hidePopup('popup-1')" aria-label="Close"></button>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        function hideAllPopups() {
+            document.querySelectorAll('.card[id^="popup"]').forEach(popup => {
+                popup.classList.add('d-none');
+            });
+        }
+        function showPopup(popupId) {
+            hideAllPopups();
+            const popup = document.getElementById(popupId);
+            if (popup) {
+                popup.classList.remove('d-none');
+            }
+        }
+        function hidePopup(popupId) {
+            document.getElementById(popupId).classList.add('d-none');
+        }
+        // Simulate focusing a pin when clicking the list item
+        function focusMapPin(pinId) {
+             // In a real app, this would pan the map to the pin's coordinates
+             showPopup(pinId.replace('pin', 'popup'));
+             // Optional: highlight the pin with a CSS class
+             console.log(`Simulating map pan to ${pinId}`);
+        }
+    </script>
+</body>
+</html>

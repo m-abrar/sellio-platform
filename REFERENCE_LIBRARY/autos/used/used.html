@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DriveHub - Find Your Perfect Used Car</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLMDJz9a90uS+06oD6X5p2q2eB+fA8J5yS5g6M2K1u9l2y5D4W4P2U5p3L7Z6K4A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        :root {
+            --dh-blue: #0A3D62; /* Deep Blue Accent */
+            --dh-orange: #FF7F50; /* Warm Orange Accent */
+            --dh-light-gray: #f8f9fa;
+            --dh-white: #ffffff;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--dh-light-gray);
+            color: #333;
+        }
+
+        /* Utility Classes */
+        .bg-blue { background-color: var(--dh-blue) !important; }
+        .text-orange { color: var(--dh-orange) !important; }
+        .btn-orange {
+            background-color: var(--dh-orange);
+            border-color: var(--dh-orange);
+            color: var(--dh-white);
+            border-radius: 50rem;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+        .btn-orange:hover {
+            background-color: #ff6a39; /* Darker orange for hover */
+            border-color: #ff6a39;
+            color: var(--dh-white);
+        }
+        .btn-outline-blue {
+            color: var(--dh-blue);
+            border-color: var(--dh-blue);
+            border-radius: 50rem;
+        }
+        .btn-outline-blue:hover {
+            background-color: var(--dh-blue);
+            color: var(--dh-white);
+        }
+        .shadow-trusty { box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05) !important; }
+
+        /* Header Styling */
+        .navbar {
+            box-shadow: 0 2px 4px rgba(0,0,0,.04);
+        }
+
+        /* Hero Section Styling */
+        #hero {
+            background: linear-gradient(rgba(10, 61, 98, 0.7), rgba(10, 61, 98, 0.7)), url('https://picsum.photos/1600/600?grayscale') center center no-repeat;
+            background-size: cover;
+            color: var(--dh-white);
+            padding: 5rem 0;
+            min-height: 70vh;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Filter Bar Styling */
+        #search-filters .card {
+            margin-top: -3rem; /* Overlap with hero for prominence */
+            border-radius: 0.75rem;
+        }
+        .form-control, .form-select {
+            border-radius: 0.5rem;
+        }
+
+        /* Car Card Interactions */
+        .car-card-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(10, 61, 98, 0.8); /* Deep Blue Overlay */
+            opacity: 0;
+            transition: opacity 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 0.35rem; /* Match card image border-radius */
+        }
+        .car-card:hover .car-card-overlay {
+            opacity: 1;
+        }
+        .car-card {
+            overflow: hidden;
+            border-radius: 0.35rem;
+            transition: transform 0.3s ease-in-out;
+            border: none;
+        }
+        .car-card:hover {
+            transform: translateY(-5px); /* Subtle lift effect */
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+        }
+        .car-card img {
+            border-radius: 0.35rem;
+        }
+
+        /* Deal of the Week Styling */
+        #deal-of-the-week .card {
+            border: 3px solid var(--dh-orange);
+            border-radius: 1rem;
+            box-shadow: 0 0 20px rgba(255, 127, 80, 0.5); /* Soft orange glow */
+            overflow: hidden;
+        }
+        .badge-deal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.1rem;
+            padding: 0.5rem 1rem;
+            z-index: 10;
+        }
+
+        /* Trusted Dealers Styling */
+        .dealer-logo-container {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: box-shadow 0.3s;
+            background-color: var(--dh-white);
+        }
+        .dealer-logo-container:hover {
+            box-shadow: 0 0 15px rgba(10, 61, 98, 0.3); /* Subtle blue glow */
+        }
+        .dealer-logo-container img {
+            max-height: 60px;
+            width: auto;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+        .dealer-logo-container:hover img {
+            opacity: 1;
+        }
+        .star-rating {
+            color: gold;
+            font-size: 0.9rem;
+        }
+        
+        /* How It Works Icons */
+        #how-it-works .icon-circle {
+            background-color: var(--dh-orange);
+            color: var(--dh-white);
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body data-bs-spy="scroll" data-bs-target="#mainNav" data-bs-root-margin="0px 0px -40%" data-bs-smooth-scroll="true" tabindex="0">
+
+    <header>
+        <nav id="mainNav" class="navbar navbar-expand-lg navbar-light bg-white sticky-top py-3 shadow-trusty">
+            <div class="container">
+                <a class="navbar-brand fw-bold fs-3 text-blue" href="#">
+                    <span class="text-orange">Drive</span>Hub
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav mx-auto">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#hero">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#featured-listings">Browse Cars</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#trusted-dealers">Dealers</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#how-it-works">Sell Your Car</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#footer">Contact</a>
+                        </li>
+                    </ul>
+                    <a href="#" class="btn btn-orange d-none d-lg-inline-flex">
+                        <i class="fas fa-bullhorn me-2"></i> Post Your Ad
+                    </a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section id="hero" class="text-center">
+            <div class="container">
+                <h1 class="display-3 fw-bolder mb-3">Find Your Perfect Used Car Today</h1>
+                <p class="lead mb-5 fs-4">Trusted listings, verified sellers, and transparent pricing. Your next drive starts here.</p>
+                <div>
+                    <a href="#featured-listings" class="btn btn-orange btn-lg me-3 mb-2">
+                        <i class="fas fa-car me-2"></i> Browse Cars
+                    </a>
+                    <a href="#how-it-works" class="btn btn-outline-light btn-lg mb-2">
+                        <i class="fas fa-hand-holding-usd me-2"></i> Sell a Car
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="search-filters" class="mb-5">
+            <div class="container">
+                <div class="card p-4 shadow-lg border-0">
+                    <h5 class="mb-3 fw-bold text-center text-blue">Quick Search</h5>
+                    <form class="row g-3 align-items-end">
+                        <div class="col-md-3 col-sm-6">
+                            <label for="brand-filter" class="form-label visually-hidden">Brand</label>
+                            <select id="brand-filter" class="form-select">
+                                <option selected>Brand (e.g., Honda)</option>
+                                <option value="1">Honda</option>
+                                <option value="2">Toyota</option>
+                                <option value="3">Ford</option>
+                                <option value="4">BMW</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2 col-sm-6">
+                            <label for="model-filter" class="form-label visually-hidden">Model</label>
+                            <select id="model-filter" class="form-select">
+                                <option selected>Model</option>
+                                <option value="1">Civic</option>
+                                <option value="2">Camry</option>
+                                <option value="3">Focus</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2 col-sm-6">
+                            <label for="price-filter" class="form-label visually-hidden">Price Range</label>
+                            <select id="price-filter" class="form-select">
+                                <option selected>Price Range</option>
+                                <option value="1">$0 - $10k</option>
+                                <option value="2">$10k - $20k</option>
+                                <option value="3">$20k+</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2 col-sm-6">
+                            <label for="mileage-filter" class="form-label visually-hidden">Mileage</label>
+                            <select id="mileage-filter" class="form-select">
+                                <option selected>Max Mileage</option>
+                                <option value="1">20,000</option>
+                                <option value="2">50,000</option>
+                                <option value="3">100,000</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2 col-sm-6">
+                            <label for="location-filter" class="form-label visually-hidden">Location</label>
+                            <select id="location-filter" class="form-select">
+                                <option selected>Location</option>
+                                <option value="1">New York</option>
+                                <option value="2">Los Angeles</option>
+                                <option value="3">Chicago</option>
+                            </select>
+                        </div>
+                        <div class="col-md-1 col-sm-6 d-grid">
+                            <button type="submit" class="btn btn-orange">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <section id="featured-listings" class="py-5">
+            <div class="container">
+                <h2 class="text-center fw-bold mb-5">Featured Listings</h2>
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                    <div class="col">
+                        <div class="card h-100 car-card shadow-trusty border-0">
+                            <div class="position-relative">
+                                <img src="https://picsum.photos/600/400?random=1" class="card-img-top" alt="2018 Honda Civic">
+                                <div class="car-card-overlay">
+                                    <a href="#" class="btn btn-orange btn-lg">Contact Seller</a>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold text-blue">2018 Honda Civic</h5>
+                                <p class="card-text text-orange fs-4 fw-bold mb-1">$15,500</p>
+                                <p class="card-text text-muted mb-2">
+                                    <i class="fas fa-tachometer-alt me-1"></i> 40,000 miles | <i class="fas fa-map-marker-alt me-1"></i> New York
+                                </p>
+                                <small class="text-secondary">
+                                    <i class="fas fa-store me-1"></i> AutoWorld Dealership
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div class="card h-100 car-card shadow-trusty border-0">
+                            <div class="position-relative">
+                                <img src="https://picsum.photos/600/400?random=2" class="card-img-top" alt="2020 Toyota Camry">
+                                <div class="car-card-overlay">
+                                    <a href="#" class="btn btn-orange btn-lg">Contact Seller</a>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold text-blue">2020 Toyota Camry</h5>
+                                <p class="card-text text-orange fs-4 fw-bold mb-1">$19,800</p>
+                                <p class="card-text text-muted mb-2">
+                                    <i class="fas fa-tachometer-alt me-1"></i> 25,000 miles | <i class="fas fa-map-marker-alt me-1"></i> Los Angeles
+                                </p>
+                                <small class="text-secondary">
+                                    <i class="fas fa-store me-1"></i> City Motors
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div class="card h-100 car-card shadow-trusty border-0">
+                            <div class="position-relative">
+                                <img src="https://picsum.photos/600/400?random=3" class="card-img-top" alt="2016 Ford Focus">
+                                <div class="car-card-overlay">
+                                    <a href="#" class="btn btn-orange btn-lg">Contact Seller</a>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold text-blue">2016 Ford Focus</h5>
+                                <p class="card-text text-orange fs-4 fw-bold mb-1">$9,200</p>
+                                <p class="card-text text-muted mb-2">
+                                    <i class="fas fa-tachometer-alt me-1"></i> 60,000 miles | <i class="fas fa-map-marker-alt me-1"></i> Chicago
+                                </p>
+                                <small class="text-secondary">
+                                    <i class="fas fa-store me-1"></i> Honest Used Cars
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6 d-none d-lg-block">
+                        <div class="card h-100 car-card shadow-trusty border-0">
+                            <div class="position-relative">
+                                <img src="https://picsum.photos/600/400?random=4" class="card-img-top" alt="2019 Mazda 3">
+                                <div class="car-card-overlay">
+                                    <a href="#" class="btn btn-orange btn-lg">Contact Seller</a>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold text-blue">2019 Mazda 3</h5>
+                                <p class="card-text text-orange fs-4 fw-bold mb-1">$17,000</p>
+                                <p class="card-text text-muted mb-2">
+                                    <i class="fas fa-tachometer-alt me-1"></i> 30,000 miles | <i class="fas fa-map-marker-alt me-1"></i> Dallas
+                                </p>
+                                <small class="text-secondary">
+                                    <i class="fas fa-store me-1"></i> Zoom Motors
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-5">
+                    <a href="#" class="btn btn-outline-blue btn-lg">View All Listings <i class="fas fa-arrow-right ms-2"></i></a>
+                </div>
+            </div>
+        </section>
+
+        <hr class="my-5">
+
+        <section id="deal-of-the-week" class="py-5 bg-white">
+            <div class="container">
+                <h2 class="text-center fw-bold mb-4">⭐ Deal of the Week! ⭐</h2>
+                <div class="card mx-auto" style="max-width: 900px;">
+                    <span class="badge rounded-pill bg-orange badge-deal shadow-lg">SAVE $3,000!</span>
+                    <div class="row g-0">
+                        <div class="col-md-6">
+                            <img src="https://picsum.photos/800/600?random=5" class="img-fluid rounded-start h-100 object-fit-cover" alt="Special Deal Car">
+                        </div>
+                        <div class="col-md-6 d-flex align-items-center">
+                            <div class="card-body p-4">
+                                <h3 class="card-title fw-bold text-blue">2021 Hyundai Elantra Limited</h3>
+                                <p class="text-muted mb-3">Low Mileage, Single Owner, Full Service History.</p>
+                                <p class="fs-2 fw-bolder mb-1">
+                                    <span class="text-orange">$21,995</span>
+                                </p>
+                                <p class="text-decoration-line-through text-secondary mb-3">$24,995</p>
+                                <ul class="list-unstyled mb-4">
+                                    <li><i class="fas fa-tachometer-alt me-2 text-orange"></i> Only 15,000 Miles</li>
+                                    <li><i class="fas fa-calendar-alt me-2 text-orange"></i> Model Year 2021</li>
+                                    <li><i class="fas fa-gas-pump me-2 text-orange"></i> Great MPG</li>
+                                </ul>
+                                <a href="#" class="btn btn-orange btn-lg w-100">Claim This Deal Now</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <hr class="my-5">
+
+        <section id="trusted-dealers" class="py-5">
+            <div class="container">
+                <h2 class="text-center fw-bold mb-5">Trusted Dealers</h2>
+                <p class="text-center text-muted mb-4">We partner with top-rated, verified dealerships to ensure a safe transaction.</p>
+                <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4 text-center">
+                    <div class="col">
+                        <div class="dealer-logo-container">
+                            <img src="https://picsum.photos/150/60?grayscale&random=10" alt="Dealer Logo 1" class="img-fluid mb-2">
+                            <div class="star-rating">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i> (4.8)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="dealer-logo-container">
+                            <img src="https://picsum.photos/150/60?grayscale&random=11" alt="Dealer Logo 2" class="img-fluid mb-2">
+                            <div class="star-rating">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i> (4.1)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="dealer-logo-container">
+                            <img src="https://picsum.photos/150/60?grayscale&random=12" alt="Dealer Logo 3" class="img-fluid mb-2">
+                            <div class="star-rating">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> (5.0)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="dealer-logo-container">
+                            <img src="https://picsum.photos/150/60?grayscale&random=13" alt="Dealer Logo 4" class="img-fluid mb-2">
+                            <div class="star-rating">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i><i class="far fa-star"></i> (3.6)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col d-none d-lg-block">
+                        <div class="dealer-logo-container">
+                            <img src="https://picsum.photos/150/60?grayscale&random=14" alt="Dealer Logo 5" class="img-fluid mb-2">
+                            <div class="star-rating">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i> (4.7)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col d-none d-lg-block">
+                        <div class="dealer-logo-container">
+                            <img src="https://picsum.photos/150/60?grayscale&random=15" alt="Dealer Logo 6" class="img-fluid mb-2">
+                            <div class="star-rating">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> (4.9)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <hr class="my-5">
+
+        <section id="how-it-works" class="py-5">
+            <div class="container">
+                <h2 class="text-center fw-bold mb-5">How It Works: 3 Simple Steps</h2>
+                <div class="row text-center">
+                    <div class="col-lg-4 mb-4 mb-lg-0">
+                        <div class="card p-4 h-100 shadow-trusty border-0">
+                            <div class="icon-circle mx-auto">
+                                <i class="fas fa-search"></i>
+                            </div>
+                            <h4 class="fw-bold text-blue mt-3">1. Search & Filter</h4>
+                            <p class="text-muted">Easily find your dream car with our powerful, intuitive search tools.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 mb-4 mb-lg-0">
+                        <div class="card p-4 h-100 shadow-trusty border-0">
+                            <div class="icon-circle mx-auto">
+                                <i class="fas fa-comments"></i>
+                            </div>
+                            <h4 class="fw-bold text-blue mt-3">2. Contact a Seller</h4>
+                            <p class="text-muted">Talk directly to verified dealers or private sellers, all from one place.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card p-4 h-100 shadow-trusty border-0">
+                            <div class="icon-circle mx-auto">
+                                <i class="fas fa-road"></i>
+                            </div>
+                            <h4 class="fw-bold text-blue mt-3">3. Test Drive & Drive</h4>
+                            <p class="text-muted">Take a test drive, finalize the deal, and hit the open road!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer id="footer" class="bg-blue text-white py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4 mb-md-0">
+                    <h4 class="fw-bold fs-3 mb-3">
+                        <span class="text-orange">Drive</span>Hub
+                    </h4>
+                    <p class="text-white-50">Your trusted marketplace for quality used vehicles.</p>
+                </div>
+                
+                <div class="col-6 col-md-2">
+                    <h6 class="text-orange fw-bold mb-3">Quick Links</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#featured-listings" class="text-white-50 text-decoration-none">Browse Cars</a></li>
+                        <li><a href="#how-it-works" class="text-white-50 text-decoration-none">Sell Your Car</a></li>
+                        <li><a href="#trusted-dealers" class="text-white-50 text-decoration-none">Our Dealers</a></li>
+                        <li><a href="#" class="text-white-50 text-decoration-none">FAQs</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-6 col-md-2">
+                    <h6 class="text-orange fw-bold mb-3">About</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white-50 text-decoration-none">About Us</a></li>
+                        <li><a href="#" class="text-white-50 text-decoration-none">Terms of Service</a></li>
+                        <li><a href="#" class="text-white-50 text-decoration-none">Privacy Policy</a></li>
+                        <li><a href="#footer" class="text-white-50 text-decoration-none">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-md-4">
+                    <h6 class="text-orange fw-bold mb-3">Connect With Us</h6>
+                    <div class="fs-4">
+                        <a href="#" class="text-white me-3"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                    <p class="mt-3 text-white-50"><i class="fas fa-envelope me-2"></i> info@drivehub.com</p>
+                </div>
+            </div>
+            <div class="row mt-4 pt-3 border-top border-secondary">
+                <div class="col text-center text-white-50">
+                    <p class="mb-0">&copy; <span id="currentYear"></span> DriveHub Marketplace. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script>
+        // Set current year in footer
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>

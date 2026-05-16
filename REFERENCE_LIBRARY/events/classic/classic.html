@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Website - Classic & Modern</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/simpleLightbox/2.15.2/simpleLightbox.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="classic.css">
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm py-3">
+        <div class="container">
+            <a class="navbar-brand fw-bold fs-3 text-dark" href="#">Event<span class="text-primary">ify</span></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link mx-2 active" aria-current="page" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link mx-2" href="#about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link mx-2" href="#events">Events</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link mx-2" href="#organizers">Organizers</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link mx-2" href="#contact">Contact</a>
+                    </li>
+                </ul>
+                <a href="#" class="btn btn-primary ms-lg-3 rounded-pill px-4 py-2">Buy Tickets</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero-section text-white d-flex align-items-center justify-content-center text-center">
+        <div class="container">
+            <h1 class="display-2 fw-bold mb-3 hero-animate-1">The Grand Annual Tech Summit</h1>
+            <p class="lead mb-4 hero-animate-2">Innovate. Connect. Inspire. Your Future Starts Here.</p>
+            <p class="fs-4 hero-animate-3"><i class="far fa-calendar-alt me-2"></i> Oct 26-28, 2024 <span class="mx-3">|</span> <i class="fas fa-map-marker-alt me-2"></i> New York City</p>
+            <a href="#" class="btn btn-light btn-lg mt-4 rounded-pill px-5 py-3 shadow-lg hero-animate-4">Get Tickets Now</a>
+        </div>
+    </section>
+
+    <section id="about" class="about-section py-5 fade-in">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 text-center text-lg-start mb-4 mb-lg-0">
+                    <h2 class="display-5 fw-bold mb-4">About Our Event</h2>
+                    <p class="lead text-muted mb-4">Join us for a transformative experience bringing together leaders, innovators, and enthusiasts from across the globe. Our events are meticulously curated to spark creativity, foster collaboration, and provide unparalleled insights into the future of technology.</p>
+                    <a href="#" class="btn btn-outline-primary rounded-pill px-4 py-2">Learn More About Us</a>
+                </div>
+                <div class="col-lg-6">
+                    <div class="row row-cols-1 row-cols-md-2 g-4">
+                        <div class="col">
+                            <div class="card h-100 shadow-sm border-0 fade-in-card" style="--card-animation-delay: 0s;">
+                                <img src="https://via.placeholder.com/400x250/c0392b/ffffff?text=Tech+Innovation" class="card-img-top" alt="Featured Event 1">
+                                <div class="card-body">
+                                    <h5 class="card-title fw-bold">AI & Future Tech Expo</h5>
+                                    <p class="card-text text-muted small"><i class="far fa-calendar-alt me-1"></i> Nov 15, 2024</p>
+                                    <p class="card-text">Explore groundbreaking advancements in AI, robotics, and emerging technologies.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card h-100 shadow-sm border-0 fade-in-card" style="--card-animation-delay: 0.1s;">
+                                <img src="https://via.placeholder.com/400x250/2c3e50/ffffff?text=Design+Workshop" class="card-img-top" alt="Featured Event 2">
+                                <div class="card-body">
+                                    <h5 class="card-title fw-bold">Design Thinking Workshop</h5>
+                                    <p class="card-text text-muted small"><i class="far fa-calendar-alt me-1"></i> Dec 01, 2024</p>
+                                    <p class="card-text">Hands-on sessions to master human-centered design principles.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="events" class="events-grid py-5 bg-light fade-in">
+        <div class="container">
+            <h2 class="text-center display-5 fw-bold mb-5">Upcoming Events</h2>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4" data-masonry='{"percentPosition": true }'>
+
+                <div class="col">
+                    <div class="card h-100 shadow-sm border-0 event-card fade-in-card" style="--card-animation-delay: 0s;">
+                        <img src="https://via.placeholder.com/600x400/3498db/ffffff?text=Cyber+Security" class="card-img-top" alt="Event Image">
+                        <div class="card-body d-flex flex-column">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="badge bg-primary text-white date-badge">NOV<br>10</span>
+                                <small class="text-muted"><i class="fas fa-user-tie me-1"></i> Global Connect</small>
+                            </div>
+                            <h5 class="card-title fw-bold">Cyber Security Summit 2024</h5>
+                            <p class="card-text text-muted flex-grow-1">Protecting tomorrow, today. Insights from leading experts.</p>
+                            <a href="#" class="btn btn-outline-primary rounded-pill mt-3 align-self-start">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="card h-100 shadow-sm border-0 event-card fade-in-card" style="--card-animation-delay: 0.1s;">
+                        <img src="https://via.placeholder.com/600x400/e67e22/ffffff?text=Marketing+Conf" class="card-img-top" alt="Event Image">
+                        <div class="card-body d-flex flex-column">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="badge bg-primary text-white date-badge">DEC<br>05</span>
+                                <small class="text-muted"><i class="fas fa-user-tie me-1"></i> AdVantage Corp</small>
+                            </div>
+                            <h5 class="card-title fw-bold">Digital Marketing Conference</h5>
+                            <p class="card-text text-muted flex-grow-1">Master the latest trends in digital marketing strategies.</p>
+                            <a href="#" class="btn btn-outline-primary rounded-pill mt-3 align-self-start">Book Now</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="card h-100 shadow-sm border-0 event-card fade-in-card" style="--card-animation-delay: 0.2s;">
+                        <img src="https://via.placeholder.com/600x400/27ae60/ffffff?text=Health+Tech" class="card-img-top" alt="Event Image">
+                        <div class="card-body d-flex flex-column">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="badge bg-primary text-white date-badge">JAN<br>18</span>
+                                <small class="text-muted"><i class="fas fa-user-tie me-1"></i> MediFuture</small>
+                            </div>
+                            <h5 class="card-title fw-bold">HealthTech Innovations Summit</h5>
+                            <p class="card-text text-muted flex-grow-1">Revolutionizing healthcare with technology and data.</p>
+                            <a href="#" class="btn btn-outline-primary rounded-pill mt-3 align-self-start">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="card h-100 shadow-sm border-0 event-card fade-in-card" style="--card-animation-delay: 0.3s;">
+                        <img src="https://via.placeholder.com/600x400/9b59b6/ffffff?text=Fintech+Forum" class="card-img-top" alt="Event Image">
+                        <div class="card-body d-flex flex-column">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="badge bg-primary text-white date-badge">FEB<br>22</span>
+                                <small class="text-muted"><i class="fas fa-user-tie me-1"></i> FinConnect Global</small>
+                            </div>
+                            <h5 class="card-title fw-bold">Global Fintech Forum</h5>
+                            <p class="card-text text-muted flex-grow-1">Navigating the future of finance and blockchain.</p>
+                            <a href="#" class="btn btn-outline-primary rounded-pill mt-3 align-self-start">Book Now</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="card h-100 shadow-sm border-0 event-card fade-in-card" style="--card-animation-delay: 0.4s;">
+                        <img src="https://via.placeholder.com/600x400/f1c40f/ffffff?text=AI+Expo" class="card-img-top" alt="Event Image">
+                        <div class="card-body d-flex flex-column">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="badge bg-primary text-white date-badge">MAR<br>10</span>
+                                <small class="text-muted"><i class="fas fa-user-tie me-1"></i> Synapse AI</small>
+                            </div>
+                            <h5 class="card-title fw-bold">AI Innovation Expo</h5>
+                            <p class="card-text text-muted flex-grow-1">Showcasing the latest breakthroughs in artificial intelligence.</p>
+                            <a href="#" class="btn btn-outline-primary rounded-pill mt-3 align-self-start">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="card h-100 shadow-sm border-0 event-card fade-in-card" style="--card-animation-delay: 0.5s;">
+                        <img src="https://via.placeholder.com/600x400/e74c3c/ffffff?text=Gaming+Fest" class="card-img-top" alt="Event Image">
+                        <div class="card-body d-flex flex-column">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="badge bg-primary text-white date-badge">APR<br>01</span>
+                                <small class="text-muted"><i class="fas fa-user-tie me-1"></i> PixelPlay Studios</small>
+                            </div>
+                            <h5 class="card-title fw-bold">Global Gaming Festival</h5>
+                            <p class="card-text text-muted flex-grow-1">Celebrate the world of gaming with tournaments and previews.</p>
+                            <a href="#" class="btn btn-outline-primary rounded-pill mt-3 align-self-start">Book Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="organizers" class="organizers-section py-5 fade-in">
+        <div class="container">
+            <h2 class="text-center display-5 fw-bold mb-5">Our Esteemed Organizers</h2>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+                <div class="col">
+                    <div class="card h-100 text-center border-0 shadow-sm organizer-card fade-in-card" style="--card-animation-delay: 0s;">
+                        <div class="card-body">
+                            <img src="https://via.placeholder.com/150/c0392b/ffffff?text=JD" class="rounded-circle mb-3 img-fluid border border-3 border-primary" alt="John Doe">
+                            <h5 class="card-title fw-bold mb-1">John Doe</h5>
+                            <p class="card-text text-muted small">Lead Event Strategist</p>
+                            <div class="social-icons mt-3">
+                                <a href="#" class="text-dark mx-2"><i class="fab fa-twitter"></i></a>
+                                <a href="#" class="text-dark mx-2"><i class="fab fa-linkedin-in"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100 text-center border-0 shadow-sm organizer-card fade-in-card" style="--card-animation-delay: 0.1s;">
+                        <div class="card-body">
+                            <img src="https://via.placeholder.com/150/2c3e50/ffffff?text=JS" class="rounded-circle mb-3 img-fluid border border-3 border-primary" alt="Jane Smith">
+                            <h5 class="card-title fw-bold mb-1">Jane Smith</h5>
+                            <p class="card-text text-muted small">Head of Partnerships</p>
+                            <div class="social-icons mt-3">
+                                <a href="#" class="text-dark mx-2"><i class="fab fa-twitter"></i></a>
+                                <a href="#" class="text-dark mx-2"><i class="fab fa-linkedin-in"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100 text-center border-0 shadow-sm organizer-card fade-in-card" style="--card-animation-delay: 0.2s;">
+                        <div class="card-body">
+                            <img src="https://via.placeholder.com/150/e67e22/ffffff?text=MM" class="rounded-circle mb-3 img-fluid border border-3 border-primary" alt="Michael Miller">
+                            <h5 class="card-title fw-bold mb-1">Michael Miller</h5>
+                            <p class="card-text text-muted small">Creative Director</p>
+                            <div class="social-icons mt-3">
+                                <a href="#" class="text-dark mx-2"><i class="fab fa-twitter"></i></a>
+                                <a href="#" class="text-dark mx-2"><i class="fab fa-linkedin-in"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100 text-center border-0 shadow-sm organizer-card fade-in-card" style="--card-animation-delay: 0.3s;">
+                        <div class="card-body">
+                            <img src="https://via.placeholder.com/150/3498db/ffffff?text=AL" class="rounded-circle mb-3 img-fluid border border-3 border-primary" alt="Anna Lee">
+                            <h5 class="card-title fw-bold mb-1">Anna Lee</h5>
+                            <p class="card-text text-muted small">Community Manager</p>
+                            <div class="social-icons mt-3">
+                                <a href="#" class="text-dark mx-2"><i class="fab fa-twitter"></i></a>
+                                <a href="#" class="text-dark mx-2"><i class="fab fa-linkedin-in"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="gallery-section py-5 bg-light fade-in">
+        <div class="container">
+            <h2 class="text-center display-5 fw-bold mb-5">Event Highlights</h2>
+            <div class="row g-3" data-masonry='{"percentPosition": true }'>
+                <div class="col-lg-4 col-md-6 fade-in-card" style="--card-animation-delay: 0s;">
+                    <a href="https://via.placeholder.com/800x600/c0392b/ffffff?text=Highlight+1" data-lightbox="event-gallery">
+                        <img src="https://via.placeholder.com/400x300/c0392b/ffffff?text=Highlight+1" class="img-fluid rounded shadow-sm hover-grow" alt="Event Highlight">
+                    </a>
+                </div>
+                <div class="col-lg-4 col-md-6 fade-in-card" style="--card-animation-delay: 0.1s;">
+                    <a href="https://via.placeholder.com/800x1000/2c3e50/ffffff?text=Highlight+2" data-lightbox="event-gallery">
+                        <img src="https://via.placeholder.com/400x500/2c3e50/ffffff?text=Highlight+2" class="img-fluid rounded shadow-sm hover-grow" alt="Event Highlight">
+                    </a>
+                </div>
+                <div class="col-lg-4 col-md-6 fade-in-card" style="--card-animation-delay: 0.2s;">
+                    <a href="https://via.placeholder.com/800x600/e67e22/ffffff?text=Highlight+3" data-lightbox="event-gallery">
+                        <img src="https://via.placeholder.com/400x300/e67e22/ffffff?text=Highlight+3" class="img-fluid rounded shadow-sm hover-grow" alt="Event Highlight">
+                    </a>
+                </div>
+                <div class="col-lg-4 col-md-6 fade-in-card" style="--card-animation-delay: 0.3s;">
+                    <a href="https://via.placeholder.com/800x600/3498db/ffffff?text=Highlight+4" data-lightbox="event-gallery">
+                        <img src="https://via.placeholder.com/400x300/3498db/ffffff?text=Highlight+4" class="img-fluid rounded shadow-sm hover-grow" alt="Event Highlight">
+                    </a>
+                </div>
+                <div class="col-lg-4 col-md-6 fade-in-card" style="--card-animation-delay: 0.4s;">
+                    <a href="https://via.placeholder.com/800x1200/9b59b6/ffffff?text=Highlight+5" data-lightbox="event-gallery">
+                        <img src="https://via.placeholder.com/400x600/9b59b6/ffffff?text=Highlight+5" class="img-fluid rounded shadow-sm hover-grow" alt="Event Highlight">
+                    </a>
+                </div>
+                <div class="col-lg-4 col-md-6 fade-in-card" style="--card-animation-delay: 0.5s;">
+                    <a href="https://via.placeholder.com/800x600/1abc9c/ffffff?text=Highlight+6" data-lightbox="event-gallery">
+                        <img src="https://via.placeholder.com/400x300/1abc9c/ffffff?text=Highlight+6" class="img-fluid rounded shadow-sm hover-grow" alt="Event Highlight">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials-section py-5 fade-in">
+        <div class="container">
+            <h2 class="text-center display-5 fw-bold mb-5">What Our Attendees Say</h2>
+            <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div class="d-flex justify-content-center">
+                            <div class="col-lg-8 text-center">
+                                <p class="lead fst-italic mb-4">"Absolutely phenomenal event! The speakers were inspiring, and the networking opportunities were invaluable. I left feeling energized and full of new ideas."</p>
+                                <h5 class="fw-bold mb-1">- Sarah J., Tech Enthusiast</h5>
+                                <div class="text-warning">
+                                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="d-flex justify-content-center">
+                            <div class="col-lg-8 text-center">
+                                <p class="lead fst-italic mb-4">"The organization was flawless, and the content was highly relevant to my industry. A must-attend for anyone serious about innovation."</p>
+                                <h5 class="fw-bold mb-1">- David L., Startup Founder</h5>
+                                <div class="text-warning">
+                                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="d-flex justify-content-center">
+                            <div class="col-lg-8 text-center">
+                                <p class="lead fst-italic mb-4">"I loved the interactive workshops! It wasn't just lectures; it was a true learning experience. Can't wait for next year!"</p>
+                                <h5 class="fw-bold mb-1">- Emily R., Designer</h5>
+                                <div class="text-warning">
+                                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+            <hr class="my-5">
+            <h3 class="text-center fw-bold mb-4">Our Valued Sponsors</h3>
+            <div class="d-flex flex-wrap justify-content-center align-items-center gap-4">
+                <img src="https://via.placeholder.com/150x75/adb5bd/ffffff?text=Sponsor+1" alt="Sponsor Logo" class="img-fluid sponsor-logo">
+                <img src="https://via.placeholder.com/150x75/adb5bd/ffffff?text=Sponsor+2" alt="Sponsor Logo" class="img-fluid sponsor-logo">
+                <img src="https://via.placeholder.com/150x75/adb5bd/ffffff?text=Sponsor+3" alt="Sponsor Logo" class="img-fluid sponsor-logo">
+                <img src="https://via.placeholder.com/150x75/adb5bd/ffffff?text=Sponsor+4" alt="Sponsor Logo" class="img-fluid sponsor-logo">
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section text-white text-center py-5 fade-in">
+        <div class="container">
+            <h2 class="display-4 fw-bold mb-4">Join the Experience – Book Your Spot Now!</h2>
+            <p class="lead mb-5">Don't miss out on the most anticipated events of the year. Secure your place today.</p>
+            <a href="#" class="btn btn-light btn-lg rounded-pill px-5 py-3 shadow-lg">Register Today</a>
+        </div>
+    </section>
+
+    <footer id="contact" class="footer bg-dark text-white py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4 mb-lg-0">
+                    <a class="navbar-brand fw-bold fs-3 text-white" href="#">Event<span class="text-primary">ify</span></a>
+                    <p class="small text-muted mt-3">Connecting people through unforgettable experiences.</p>
+                </div>
+                <div class="col-lg-2 col-md-4 mb-4 mb-md-0">
+                    <h5 class="fw-bold mb-3">Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white text-decoration-none py-1 d-block">Home</a></li>
+                        <li><a href="#about" class="text-white text-decoration-none py-1 d-block">About</a></li>
+                        <li><a href="#events" class="text-white text-decoration-none py-1 d-block">Events</a></li>
+                        <li><a href="#organizers" class="text-white text-decoration-none py-1 d-block">Organizers</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-4 mb-4 mb-md-0">
+                    <h5 class="fw-bold mb-3">Contact Us</h5>
+                    <ul class="list-unstyled text-muted">
+                        <li><i class="fas fa-map-marker-alt me-2"></i> 123 Event Lane, City, Country</li>
+                        <li><i class="fas fa-phone me-2"></i> +1 (123) 456-7890</li>
+                        <li><i class="fas fa-envelope me-2"></i> info@eventify.com</li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-4">
+                    <h5 class="fw-bold mb-3">Follow Us</h5>
+                    <div class="social-icons fs-4">
+                        <a href="#" class="text-white me-3"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr class="mt-4 border-secondary">
+            <div class="text-center small text-muted mt-3">
+                &copy; <span id="currentYear"></span> Eventify. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/masonry/4.2.2/masonry.pkgd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/simpleLightbox/2.15.2/simpleLightbox.min.js"></script>
+
+    <script>
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        // Initialize SimpleLightbox
+        document.addEventListener('DOMContentLoaded', function() {
+            var gallery = new SimpleLightbox('.gallery-section a', {
+                // options here
+            });
+
+            // Masonry initialization (moved here for DOMContentLoaded)
+            var masonryGrids = document.querySelectorAll('[data-masonry]');
+            masonryGrids.forEach(function(grid) {
+                new Masonry(grid, {
+                    itemSelector: '.col',
+                    percentPosition: true
+                });
+            });
+        });
+
+
+        // Intersection Observer for general fade-in sections
+        const faders = document.querySelectorAll(".fade-in");
+        const appearOptions = {
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px"
+        };
+        const appearOnScroll = new IntersectionObserver(function(entries, appearOnScroll) {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) {
+                    return;
+                } else {
+                    entry.target.classList.add("appear");
+                    appearOnScroll.unobserve(entry.target);
+                }
+            });
+        }, appearOptions);
+
+        faders.forEach(fader => {
+            appearOnScroll.observe(fader);
+        });
+
+        // Intersection Observer for staggered fade-in cards
+        const cardFaders = document.querySelectorAll(".fade-in-card");
+        const cardAppearOptions = {
+            threshold: 0.2,
+            rootMargin: "0px 0px -100px 0px"
+        };
+        const cardAppearOnScroll = new IntersectionObserver(function(entries, cardAppearOnScroll) {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) {
+                    return;
+                } else {
+                    entry.target.classList.add("appear");
+                    cardAppearOnScroll.unobserve(entry.target);
+                }
+            });
+        }, cardAppearOptions);
+
+        cardFaders.forEach(cardFader => {
+            appearOnScroll.observe(cardFader); // Use the same observer or a new one
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,677 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Maplewood Homes - A Neighborhood You'll Love</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --bs-soft-beige: #FAF3E0;
+            --bs-warm-gray: #ECECEC;
+            --bs-earthy-green: #2F4F4F;
+            --bs-accent-orange: #F28C38;
+            --bs-font-heading: 'Nunito', sans-serif;
+            --bs-font-body: 'Inter', sans-serif;
+        }
+
+        body {
+            font-family: var(--bs-font-body);
+            background-color: var(--bs-soft-beige);
+            color: #333;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--bs-font-heading);
+            color: var(--bs-earthy-green);
+        }
+
+        .navbar {
+            background-color: #fff; /* or transparent on hero, white on scroll */
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+
+        .navbar-brand {
+            font-family: var(--bs-font-heading);
+            font-weight: 700;
+            color: var(--bs-earthy-green) !important;
+        }
+
+        .nav-link {
+            color: var(--bs-earthy-green) !important;
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background-color: var(--bs-accent-orange);
+            border-color: var(--bs-accent-orange);
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+        }
+
+        .btn-primary:hover {
+            background-color: #e07c2a;
+            border-color: #e07c2a;
+        }
+
+        .btn-outline-secondary {
+            color: var(--bs-earthy-green);
+            border-color: var(--bs-earthy-green);
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+        }
+
+        .btn-outline-secondary:hover {
+            background-color: var(--bs-earthy-green);
+            color: #fff;
+        }
+
+        .hero-banner {
+            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('https://images.unsplash.com/photo-1570129476810-749e3e7f09f0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218fHxtYXBsZXdvb2QsbmVpZ2hib3Job29kLHJvb2Z8fHx8fHwxNzAzMzc3MDA1&ixlib=rb-4.0.3&q=80&w=1080') no-repeat center center;
+            background-size: cover;
+            color: #fff;
+            padding: 8rem 0;
+            text-align: center;
+        }
+
+        .hero-banner h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+
+        .hero-banner p {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .section-padding {
+            padding: 5rem 0;
+        }
+
+        .card {
+            border: none;
+            border-radius: 0.75rem;
+            box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            background-color: #fff;
+        }
+
+        .card-img-top {
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .icon-large {
+            font-size: 3rem;
+            color: var(--bs-accent-orange);
+            margin-bottom: 1rem;
+        }
+
+        .feature-card {
+            text-align: center;
+            padding: 2rem;
+            background-color: #fff;
+            border-radius: 0.75rem;
+            box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-card .icon {
+            font-size: 2.5rem;
+            color: var(--bs-earthy-green);
+            margin-bottom: 1rem;
+        }
+
+        .bg-warm-gray {
+            background-color: var(--bs-warm-gray);
+        }
+
+        .bg-earthy-green {
+            background-color: var(--bs-earthy-green);
+            color: #fff;
+        }
+
+        .bg-earthy-green h2, .bg-earthy-green h3, .bg-earthy-green h4 {
+            color: #fff;
+        }
+
+        .footer {
+            background-color: var(--bs-earthy-green);
+            color: #fff;
+            padding: 3rem 0;
+        }
+
+        .footer a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        .testimonial-carousel .carousel-item {
+            padding: 3rem;
+            text-align: center;
+        }
+
+        .testimonial-carousel img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 1rem;
+            border: 3px solid var(--bs-accent-orange);
+        }
+
+        .agent-section {
+            background-color: #fff;
+            padding: 3rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.05);
+        }
+
+        .agent-section img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 1rem;
+            border: 5px solid var(--bs-accent-orange);
+        }
+
+        /* Map styling for responsive behavior */
+        .map-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+            border-radius: 0.75rem;
+        }
+
+        .map-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        @media (max-width: 768px) {
+            .hero-banner h1 {
+                font-size: 2.5rem;
+            }
+            .hero-banner p {
+                font-size: 1.2rem;
+            }
+            .section-padding {
+                padding: 3rem 0;
+            }
+            .feature-card {
+                margin-bottom: 1.5rem;
+            }
+            .map-sidebar {
+                margin-top: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg bg-light sticky-top shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-home me-2"></i>Maplewood Homes
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#hero">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#community-overview">Community</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#local-highlights">Highlights</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#featured-properties">Properties</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#interactive-map">Map</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#testimonials">Testimonials</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact-agent">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section id="hero" class="hero-banner d-flex align-items-center">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-9">
+                    <h1>Welcome to Maplewood's Charm</h1>
+                    <p class="lead">A neighborhood you'll love to call home.</p>
+                    <a href="#featured-properties" class="btn btn-primary btn-lg me-3 mb-2">View Homes in This Area</a>
+                    <a href="#community-overview" class="btn btn-outline-secondary btn-lg mb-2">Explore Community</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="community-overview" class="section-padding bg-warm-gray">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <h2 class="mb-4">Discover Maplewood: Where Life Flourishes</h2>
+                    <p class="lead">Family-friendly, urban convenience, and a strong sense of community define Maplewood. Discover tree-lined streets, diverse dining, and top-rated schools that make this neighborhood truly special.</p>
+                    <p>Maplewood boasts a vibrant atmosphere with something for everyone. From bustling local markets to serene parks, living here means enjoying the best of both worlds – a peaceful retreat with easy access to city amenities.</p>
+                    <a href="#featured-properties" class="btn btn-primary me-3 mb-2">Find Your Home</a>
+                    <a href="#interactive-map" class="btn btn-outline-secondary mb-2">Explore Amenities</a>
+                </div>
+                <div class="col-lg-5 offset-lg-1">
+                    <div class="row text-center">
+                        <div class="col-6 mb-4">
+                            <div class="feature-card h-100">
+                                <i class="fas fa-school icon"></i>
+                                <h3>Schools</h3>
+                                <p class="h4 fw-bold text-earthy-green">5 Highly-Rated</p>
+                            </div>
+                        </div>
+                        <div class="col-6 mb-4">
+                            <div class="feature-card h-100">
+                                <i class="fas fa-tree icon"></i>
+                                <h3>Parks</h3>
+                                <p class="h4 fw-bold text-earthy-green">12 Lush Greenspaces</p>
+                            </div>
+                        </div>
+                        <div class="col-6 mb-4">
+                            <div class="feature-card h-100">
+                                <i class="fas fa-utensils icon"></i>
+                                <h3>Restaurants</h3>
+                                <p class="h4 fw-bold text-earthy-green">40+ Eateries</p>
+                            </div>
+                        </div>
+                        <div class="col-6 mb-4">
+                            <div class="feature-card h-100">
+                                <i class="fas fa-train icon"></i>
+                                <h3>Transit</h3>
+                                <p class="h4 fw-bold text-earthy-green">3 Convenient Lines</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="local-highlights" class="section-padding">
+        <div class="container">
+            <h2 class="text-center mb-5">Maplewood's Irresistible Local Highlights</h2>
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="https://images.unsplash.com/photo-1574637651817-f58c4a1b1836?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218fHxzY2hvb2wscGFyZW50cyxjcmFzaHxyfHx8fHwxNzAzMzc3MDEx&ixlib=rb-4.0.3&q=80&w=1080" class="card-img-top" alt="School building">
+                        <div class="card-body text-center">
+                            <i class="fas fa-graduation-cap icon mb-2"></i>
+                            <h5 class="card-title">Top Schools Nearby</h5>
+                            <p class="card-text">Access to highly-rated public and private schools, ensuring a bright future for your children.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="https://images.unsplash.com/photo-1551603504-20a8d50f8c87?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218fHxkYW50ZWxpb24sbmF0dXJhbCxwYXJrfHx8fHwxNzAzMzc3MDE5&ixlib=rb-4.0.3&q=80&w=1080" class="card-img-top" alt="Kids playing in park">
+                        <div class="card-body text-center">
+                            <i class="fas fa-child icon mb-2"></i>
+                            <h5 class="card-title">Walkable Parks & Playgrounds</h5>
+                            <p class="card-text">Endless green spaces, perfect for family picnics, morning jogs, or letting kids play freely.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="https://images.unsplash.com/photo-1549488340-97217e29a8d9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218fHxjYWZlLGxpZmUsc3RyZWV0fHx8fHwxNzAzMzc3MDI2&ixlib=rb-4.0.3&q=80&w=1080" class="card-img-top" alt="People at outdoor cafe">
+                        <div class="card-body text-center">
+                            <i class="fas fa-store icon mb-2"></i>
+                            <h5 class="card-title">Shopping & Dining Hotspots</h5>
+                            <p class="card-text">From cozy cafes to gourmet restaurants and unique boutiques, everything is within reach.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="https://images.unsplash.com/photo-1565985860244-a62629e46a2a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218fHxmYW1pbHksc2FmZXR5LHN0cmVldHwxfHx8fHwxNzAzMzc3MDM3&ixlib=rb-4.0.3&q=80&w=1080" class="card-img-top" alt="Quiet residential street">
+                        <div class="card-body text-center">
+                            <i class="fas fa-shield-alt icon mb-2"></i>
+                            <h5 class="card-title">Safe, Family-Friendly Community</h5>
+                            <p class="card-text">Enjoy peace of mind in a welcoming environment where neighbors look out for each other.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="https://images.unsplash.com/photo-1582260273767-e9a3b61882d4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218fHxtZXRybyx0cmFuc2l0LGNpdHl8fHx8fHwxNzAzMzc3MDQ3&ixlib=rb-4.0.3&q=80&w=1080" class="card-img-top" alt="Train station">
+                        <div class="card-body text-center">
+                            <i class="fas fa-bus-alt icon mb-2"></i>
+                            <h5 class="card-title">Easy Commute & Transit Access</h5>
+                            <p class="card-text">Convenient public transportation options make getting around the city a breeze.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="https://images.unsplash.com/photo-1586504289456-c56d1e433f4a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218fHxiaWtlcyxmYW1pbHksb3V0ZG9vcnN8fHx8fHwxNzAzMzc3MDU1&ixlib=rb-4.0.3&q=80&w=1080" class="card-img-top" alt="People biking">
+                        <div class="card-body text-center">
+                            <i class="fas fa-bicycle icon mb-2"></i>
+                            <h5 class="card-title">Active Lifestyle Opportunities</h5>
+                            <p class="card-text">Miles of biking trails, community sports, and fitness centers to keep you moving.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="featured-properties" class="section-padding bg-warm-gray">
+        <div class="container">
+            <h2 class="text-center mb-5">Homes for Sale in Maplewood</h2>
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="https://images.unsplash.com/photo-1580582823617-64906fc4b29c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218fGhvcnJvZmljLGhvcnJvcmxpfHwxfHx8fHwxNzAzMzc3MDYz&ixlib=rb-4.0.3&q=80&w=1080" class="card-img-top" alt="Modern home exterior">
+                        <div class="card-body">
+                            <h5 class="card-title text-earthy-green">123 Elm Street</h5>
+                            <p class="card-text fw-bold text-accent-orange">$785,000</p>
+                            <p class="card-text"><i class="fas fa-bed me-2"></i>4 Beds <i class="fas fa-bath ms-3 me-2"></i>3 Baths</p>
+                            <a href="#" class="btn btn-primary btn-sm">View Details</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="https://images.unsplash.com/photo-1576941089067-2fd3d7d74557?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218fGxvY2Fscixob3VzZXxlbnwwfHx8fHwxNzAzMzc3MDc2&ixlib=rb-4.0.3&q=80&w=1080" class="card-img-top" alt="Suburban home">
+                        <div class="card-body">
+                            <h5 class="card-title text-earthy-green">456 Oak Avenue</h5>
+                            <p class="card-text fw-bold text-accent-orange">$620,000</p>
+                            <p class="card-text"><i class="fas fa-bed me-2"></i>3 Beds <i class="fas fa-bath ms-3 me-2"></i>2.5 Baths</p>
+                            <a href="#" class="btn btn-primary btn-sm">View Details</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="https://images.unsplash.com/photo-1600585152220-908e74e6f61f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218fGZhY2FkZSxodXJpcyxhcmNoaXRlY3R1cmV8fHx8fHwxNzAzMzc3MDg3&ixlib=rb-4.0.3&q=80&w=1080" class="card-img-top" alt="Charming bungalow">
+                        <div class="card-body">
+                            <h5 class="card-title text-earthy-green">789 Pine Street</h5>
+                            <p class="card-text fw-bold text-accent-orange">$545,000</p>
+                            <p class="card-text"><i class="fas fa-bed me-2"></i>3 Beds <i class="fas fa-bath ms-3 me-2"></i>2 Baths</p>
+                            <a href="#" class="btn btn-primary btn-sm">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-5">
+                <a href="#" class="btn btn-outline-secondary btn-lg">View All Properties in Maplewood</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="interactive-map" class="section-padding">
+        <div class="container">
+            <h2 class="text-center mb-5">Explore Maplewood Visually</h2>
+            <div class="row">
+                <div class="col-lg-8 mb-4 mb-lg-0">
+                    <div class="map-container">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15767.140228308527!2d-74.2709403565691!3d40.73033570081033!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25528258e8b61%3A0xcb18129a27072a4d!2sMaplewood%2C%20NJ!5e0!3m2!1sen!2sus!4v1703377109749!5m2!1sen!2sus" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                </div>
+                <div class="col-lg-4 map-sidebar">
+                    <h3 class="mb-3">Neighborhood Hotspots</h3>
+                    <div class="list-group">
+                        <a href="#" class="list-group-item list-group-item-action d-flex align-items-center">
+                            <i class="fas fa-school me-3 text-earthy-green"></i> Top Schools
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action d-flex align-items-center">
+                            <i class="fas fa-utensils me-3 text-earthy-green"></i> Popular Restaurants
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action d-flex align-items-center">
+                            <i class="fas fa-tree me-3 text-earthy-green"></i> Community Parks
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action d-flex align-items-center">
+                            <i class="fas fa-coffee me-3 text-earthy-green"></i> Local Cafes
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action d-flex align-items-center">
+                            <i class="fas fa-shopping-bag me-3 text-earthy-green"></i> Boutiques & Shops
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action d-flex align-items-center">
+                            <i class="fas fa-subway me-3 text-earthy-green"></i> Transit Stations
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="testimonials" class="section-padding bg-warm-gray">
+        <div class="container">
+            <h2 class="text-center mb-5">What Our Neighbors Say About Maplewood</h2>
+            <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                    <button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                    <button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                </div>
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8">
+                                <img src="https://images.unsplash.com/photo-1507003211169-e63ba1db6a45?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218fHBvcnRyYWl0LHBlb3BsZSxoYXBweXwxfHx8fHwxNzAzMzc3MTE0&ixlib=rb-4.0.3&q=80&w=1080" class="d-block mx-auto rounded-circle mb-3" alt="Resident 1">
+                                <figure class="text-center">
+                                    <blockquote class="blockquote">
+                                        <p class="mb-0 fs-4">"We absolutely love Maplewood! It's safe, quiet, and the schools are fantastic for our kids. Best decision we ever made."</p>
+                                    </blockquote>
+                                    <figcaption class="blockquote-footer mt-2">
+                                        Sarah & Tom R., <cite title="Source Title">Maplewood Residents since 2018</cite>
+                                    </figcaption>
+                                </figure>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8">
+                                <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218fGNhdWNhc2lhbiwgcG9ydHJhaXQsYWR1bHR8fHx8fHwxNzAzMzc3MTIz&ixlib=rb-4.0.3&q=80&w=1080" class="d-block mx-auto rounded-circle mb-3" alt="Resident 2">
+                                <figure class="text-center">
+                                    <blockquote class="blockquote">
+                                        <p class="mb-0 fs-4">"The community events and local shops in Maplewood make it feel like a small town, but with all the conveniences of city living."</p>
+                                    </blockquote>
+                                    <figcaption class="blockquote-footer mt-2">
+                                        Maria S., <cite title="Source Title">New Maplewood Homeowner</cite>
+                                    </figcaption>
+                                </figure>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8">
+                                <img src="https://images.unsplash.com/photo-1520813792240-56ff426379a4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218fGJsYWNrLXBvcnRyYWl0LGNpdHksc21pbGV8fHx8fHwxNzAzMzc3MTMx&ixlib=rb-4.0.3&q=80&w=1080" class="d-block mx-auto rounded-circle mb-3" alt="Resident 3">
+                                <figure class="text-center">
+                                    <blockquote class="blockquote">
+                                        <p class="mb-0 fs-4">"As someone who commutes, the easy access to transit lines from Maplewood has been a game-changer. Plus, the parks are amazing!"</p>
+                                    </blockquote>
+                                    <figcaption class="blockquote-footer mt-2">
+                                        David L., <cite title="Source Title">Maplewood Resident for 10+ Years</cite>
+                                    </figcaption>
+                                </figure>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <section id="lifestyle-gallery" class="section-padding">
+        <div class="container">
+            <h2 class="text-center mb-5">Experience the Maplewood Lifestyle</h2>
+            <div class="row g-3">
+                <div class="col-6 col-md-4 col-lg-3">
+                    <img src="https://images.unsplash.com/photo-1534002626284-37c02b217315?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218fGZhcm1lcnMtbWFya2V0LG91dGRvb3IscGxhY2V8fHx8fHwxNzAzMzc3MTQ1&ixlib=rb-4.0.3&q=80&w=1080" class="img-fluid rounded shadow-sm" alt="Farmer's Market">
+                </div>
+                <div class="col-6 col-md-4 col-lg-3">
+                    <img src="https://images.unsplash.com/photo-1552597286-63e5e412a87d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218fGNvb2xpbmd1bSxrb2l5dXQsb2NlYW4xfHx8fHwxNzAzMzc3MTU2&ixlib=rb-4.0.3&q=80&w=1080" class="img-fluid rounded shadow-sm" alt="Family biking">
+                </div>
+                <div class="col-6 col-md-4 col-lg-3">
+                    <img src="https://images.unsplash.com/photo-1506197660505-1a868bf192f1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218fGNhZmV0ZXJpYSxraW5kZXJzLGJvb2tzfHx8fHwxNzAzMzc3MTY1&ixlib=rb-4.0.3&q=80&w=1080" class="img-fluid rounded shadow-sm" alt="Cozy cafe interior">
+                </div>
+                <div class="col-6 col-md-4 col-lg-3">
+                    <img src="https://images.unsplash.com/photo-1517594042861-c6729a4a7966?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218fHBhcmt3YXkscGxheWdyb3VuZCxraWRzZm9ydGhlZnV0dXJlfHx8fHwxNzAzMzc3MTg3&ixlib=rb-4.0.3&q=80&w=1080" class="img-fluid rounded shadow-sm" alt="Kids at playground">
+                </div>
+                <div class="col-6 col-md-4 col-lg-3">
+                    <img src="https://images.unsplash.com/photo-1577717495262-d249f76d91ac?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218fHN0cmVldHNjYXBlLGluY2x1ZGUscGxhY2VzZm9ydGhlcmVuZ2luZWVyc3x8fHx8MTcwMzM3NzE5OA&ixlib=rb-4.0.3&q=80&w=1080" class="img-fluid rounded shadow-sm" alt="Outdoor dining">
+                </div>
+                <div class="col-6 col-md-4 col-lg-3">
+                    <img src="https://images.unsplash.com/photo-1563820921095-257a44f3e3a9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218fGNvbW11bml0eWV2ZW50LHBlb3BsZSxoYXBweXwxfHx8fHwxNzAzMzc3MjA5&ixlib=rb-4.0.3&q=80&w=1080" class="img-fluid rounded shadow-sm" alt="Community event">
+                </div>
+                <div class="col-6 col-md-4 col-lg-3">
+                    <img src="https://images.unsplash.com/photo-1560965319-e58f01b38f87?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218fHNtb290aCxncmVlbixtb3VudGFpbnN8fHx8fHwxNzAzMzc3MjI3&ixlib=rb-4.0.3&q=80&w=1080" class="img-fluid rounded shadow-sm" alt="People walking dogs">
+                </div>
+                <div class="col-6 col-md-4 col-lg-3">
+                    <img src="https://images.unsplash.com/photo-1520271349114-3e3579796850?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218fHxkYW5jZSxwYXJ0eSwgZnJpZW5kc3wxfHx8fHwxNzAzMzc3MjM0&ixlib=rb-4.0.3&q=80&w=1080" class="img-fluid rounded shadow-sm" alt="Friends enjoying drinks">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="local-blog" class="section-padding bg-warm-gray">
+        <div class="container">
+            <h2 class="text-center mb-5">Maplewood Local Buzz & News</h2>
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="https://images.unsplash.com/photo-1511920170104-aa8a22bc13d4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218fGNvZmZlZSwgcmVsYXgsZHJpbmtzfHx8fHwxNzAzMzc3MjQ2&ixlib=rb-4.0.3&q=80&w=1080" class="card-img-top" alt="Coffee shop">
+                        <div class="card-body">
+                            <h5 class="card-title text-earthy-green">Best Coffee Shops in Maplewood</h5>
+                            <p class="card-text">Discover your new favorite spot for a morning brew or an afternoon pick-me-up.</p>
+                            <a href="#" class="btn btn-outline-secondary btn-sm">Read More</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="https://images.unsplash.com/photo-1565538356396-987819194212?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218fGNsb3V0LHRoaW5ncywgbGlmZXx8fHx8MTcwMzM3NzI2MQ&ixlib=rb-4.0.3&q=80&w=1080" class="card-img-top" alt="Kids playing">
+                        <div class="card-body">
+                            <h5 class="card-title text-earthy-green">5 Weekend Activities with Kids in Maplewood</h5>
+                            <p class="card-text">Ideas for family fun, from park adventures to creative workshops.</p>
+                            <a href="#" class="btn btn-outline-secondary btn-sm">Read More</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="https://images.unsplash.com/photo-1517865261313-09439c7a6e7f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218fGxvY2FsLWV2ZW50LHBlb3BsZSxwYXJ0eXwxfHx8fHwxNzAzMzc3Mjcz&ixlib=rb-4.0.3&q=80&w=1080" class="card-img-top" alt="Community festival">
+                        <div class="card-body">
+                            <h5 class="card-title text-earthy-green">Upcoming Maplewood Community Events</h5>
+                            <p class="card-text">Stay updated on festivals, markets, and gatherings in your neighborhood.</p>
+                            <a href="#" class="btn btn-outline-secondary btn-sm">Read More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact-agent" class="section-padding">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 text-center agent-section">
+                    <h2 class="mb-4">Connect with a Maplewood Specialist</h2>
+                    <img src="https://images.unsplash.com/photo-1531891437562-4301cf35b7e4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218fHJlYWwtZXN0YXRlYWdlbnQsY2xvc2V1cCxwZW9wbGV8fHx8fHwxNzAzMzc3Mjg4&ixlib=rb-4.0.3&q=80&w=1080" alt="Agent Headshot" class="img-fluid mb-3">
+                    <h3>Jane Doe</h3>
+                    <p class="lead text-muted">Your Trusted Maplewood Real Estate Expert</p>
+                    <p>With over 10 years of experience and a deep understanding of the Maplewood market, Jane is dedicated to helping you find your dream home or sell your current property with ease.</p>
+                    <a href="tel:+15551234567" class="btn btn-primary btn-lg me-3 mb-2"><i class="fas fa-phone-alt me-2"></i>Call Jane</a>
+                    <a href="mailto:jane.doe@maplewoodhomes.com" class="btn btn-outline-secondary btn-lg mb-2"><i class="fas fa-envelope me-2"></i>Email Jane</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container py-4">
+            <div class="row">
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <h5 class="mb-3 text-white"><i class="fas fa-home me-2"></i>Maplewood Homes</h5>
+                    <p class="text-white-50">Dedicated to finding you the perfect home in the heart of Maplewood.</p>
+                </div>
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <h5 class="mb-3">Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#community-overview">Our Community</a></li>
+                        <li><a href="#featured-properties">Available Homes</a></li>
+                        <li><a href="#local-blog">Local News</a></li>
+                        <li><a href="#contact-agent">Contact an Agent</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5 class="mb-3">Connect With Us</h5>
+                    <ul class="list-unstyled d-flex">
+                        <li class="me-3"><a href="#" aria-label="Facebook"><i class="fab fa-facebook-f fa-lg"></i></a></li>
+                        <li class="me-3"><a href="#" aria-label="Twitter"><i class="fab fa-twitter fa-lg"></i></a></li>
+                        <li class="me-3"><a href="#" aria-label="Instagram"><i class="fab fa-instagram fa-lg"></i></a></li>
+                        <li><a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in fa-lg"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="mt-4 mb-3 border-secondary">
+            <div class="text-center text-white-50">
+                <p class="mb-0">&copy; 2023 Maplewood Homes. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Smooth scroll for internal links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>

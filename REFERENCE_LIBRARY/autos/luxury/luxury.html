@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Velvet Wheels - Luxury Car Marketplace</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bs-body-bg: #1a1a1a;
+            --bs-body-color: #ffffff;
+            --gold: #c3a16d;
+            --gold-light: #ffd700;
+        }
+
+        body {
+            background-color: var(--bs-body-bg);
+            color: var(--bs-body-color);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        h1, h2, h3, .display-4 {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Gold Button Styling */
+        .btn-gold {
+            background-color: var(--gold);
+            border-color: var(--gold);
+            color: #1a1a1a;
+            font-weight: 500;
+            transition: all 0.3s ease-in-out;
+            border-radius: 50px;
+        }
+
+        .btn-gold:hover {
+            background-color: var(--gold-light);
+            border-color: var(--gold-light);
+            color: #000000;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline-gold {
+            border: 2px solid var(--gold);
+            color: var(--gold);
+            font-weight: 500;
+            border-radius: 50px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .btn-outline-gold:hover {
+            background-color: var(--gold);
+            color: #1a1a1a;
+            box-shadow: 0 0 10px rgba(195, 161, 109, 0.4);
+        }
+
+        /* Header Styling */
+        .navbar-luxury {
+            background-color: rgba(26, 26, 26, 0.8); /* Semi-transparent background */
+            backdrop-filter: blur(5px);
+            transition: background-color 0.3s ease;
+        }
+        
+        .navbar-luxury .nav-link {
+            color: white;
+            font-weight: 300;
+            transition: color 0.3s;
+        }
+
+        .navbar-luxury .nav-link:hover {
+            color: var(--gold);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            color: var(--gold);
+            font-family: 'Playfair Display', serif;
+            letter-spacing: 2px;
+        }
+
+        /* Hero Section Styling */
+        .hero-section {
+            height: 100vh;
+            background: url('https://picsum.photos/1920/1080?random=1') no-repeat center center/cover;
+            position: relative;
+            display: flex;
+            align-items: center;
+            text-align: left;
+            padding-top: 56px; /* Offset for sticky header */
+        }
+
+        .hero-overlay {
+            background-color: rgba(0, 0, 0, 0.4);
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+
+        .hero-content {
+            z-index: 10;
+        }
+
+        /* Search/Filters Styling */
+        .filter-bar {
+            background-color: #2c2c2c;
+            border-radius: 10px;
+            padding: 1rem 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            margin-top: -3rem; /* Lift onto the hero section */
+            position: relative;
+            z-index: 20;
+        }
+        
+        .filter-bar .form-select, .filter-bar .form-control {
+            background-color: #3b3b3b;
+            color: white;
+            border: 1px solid #4a4a4a;
+            border-radius: 8px;
+        }
+        
+        .filter-bar .form-select option {
+            background-color: #3b3b3b;
+        }
+        
+        .filter-bar .form-select:focus, .filter-bar .form-control:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 0.25rem rgba(195, 161, 109, 0.25);
+        }
+
+        /* Car Card Styling */
+        .car-card {
+            background-color: #242424;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            border: 1px solid #333;
+        }
+
+        .car-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 20px var(--gold-light); /* Glossy shine effect */
+        }
+        
+        .car-card-img {
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .car-card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .car-card:hover .card-img-top {
+            transform: scale(1.05);
+        }
+
+        .price-tag {
+            color: var(--gold);
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        /* Exclusive Showcase Carousel */
+        .carousel-item-exclusive {
+            background-color: #2c2c2c;
+            border-radius: 10px;
+            overflow: hidden;
+            padding: 20px;
+            transition: transform 0.5s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            border: 2px solid var(--gold);
+        }
+        
+        .carousel-item-exclusive img {
+            border-radius: 8px;
+        }
+        
+        /* Brand Logos Section */
+        .brand-logo-item {
+            padding: 20px;
+            border: 1px solid #333;
+            border-radius: 8px;
+            opacity: 0.7;
+            transition: all 0.3s ease;
+            filter: grayscale(100%);
+        }
+        
+        .brand-logo-item:hover {
+            opacity: 1;
+            filter: grayscale(0%);
+            box-shadow: 0 0 15px rgba(195, 161, 109, 0.8);
+            transform: scale(1.05);
+            border-color: var(--gold);
+        }
+        
+        .brand-logo-item img {
+            max-height: 50px;
+            width: auto;
+            display: block;
+            margin: auto;
+        }
+
+        /* Testimonials */
+        .testimonial-card {
+            background-color: #242424;
+            border-left: 5px solid var(--gold);
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            min-height: 200px;
+        }
+        
+        .testimonial-img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid var(--gold);
+        }
+        
+        /* Footer */
+        .footer-luxury {
+            background-color: #111111;
+            padding: 3rem 0;
+            border-top: 1px solid #333;
+        }
+        
+        .footer-link {
+            color: #aaa;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-link:hover {
+            color: var(--gold);
+        }
+        
+        .social-icon {
+            color: var(--gold);
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .social-icon:hover {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top navbar-luxury">
+            <div class="container">
+                <a class="navbar-brand logo" href="#">Velvet Wheels</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
+                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Collections</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Brands</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Dealers</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+                        <li class="nav-item ms-lg-3">
+                            <a class="btn btn-gold px-4" href="#">Book a Test Drive</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <section class="hero-section text-white">
+        <div class="hero-overlay"></div>
+        <div class="container hero-content">
+            <div class="row">
+                <div class="col-lg-8 col-xl-6">
+                    <h1 class="display-2 mb-3 fw-bold">Experience the Luxury You Deserve</h1>
+                    <p class="lead mb-4 fw-light">
+                        Your journey into unparalleled elegance and performance starts here. Discover hand-picked masterpieces.
+                    </p>
+                    <a href="#" class="btn btn-gold btn-lg me-3 mb-2">Explore Collection</a>
+                    <a href="#" class="btn btn-outline-gold btn-lg mb-2">Book Now</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="container filter-section">
+        <div class="filter-bar">
+            <form class="row g-3 align-items-center">
+                <div class="col-md">
+                    <label for="brand" class="visually-hidden">Brand</label>
+                    <select id="brand" class="form-select">
+                        <option selected>Brand</option>
+                        <option>Mercedes</option>
+                        <option>Rolls Royce</option>
+                        <option>Porsche</option>
+                        <option>Lamborghini</option>
+                    </select>
+                </div>
+                <div class="col-md">
+                    <label for="price" class="visually-hidden">Price Range</label>
+                    <select id="price" class="form-select">
+                        <option selected>Price Range</option>
+                        <option>$100k - $200k</option>
+                        <option>$200k - $400k</option>
+                        <option>$400k+</option>
+                    </select>
+                </div>
+                <div class="col-md">
+                    <label for="year" class="visually-hidden">Year</label>
+                    <select id="year" class="form-select">
+                        <option selected>Year</option>
+                        <option>2024+</option>
+                        <option>2020-2023</option>
+                    </select>
+                </div>
+                <div class="col-md">
+                    <label for="category" class="visually-hidden">Category</label>
+                    <select id="category" class="form-select">
+                        <option selected>Category</option>
+                        <option>Sedan</option>
+                        <option>SUV</option>
+                        <option>Coupe</option>
+                        <option>Convertible</option>
+                    </select>
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-gold w-100"><i class="fas fa-search"></i> Search</button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <section class="py-5 bg-darker">
+        <div class="container mt-5">
+            <h2 class="display-4 mb-5 text-center fw-bold">Featured Masterpieces</h2>
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                
+                <div class="col">
+                    <div class="card car-card h-100">
+                        <div class="car-card-img">
+                            <img src="https://picsum.photos/600/400?random=2" class="card-img-top" alt="2025 Mercedes S-Class">
+                        </div>
+                        <div class="card-body p-4">
+                            <h5 class="card-title fw-bold">2025 Mercedes S-Class</h5>
+                            <p class="card-text text-muted mb-3">Sleek Sedan | 5,000 mi</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="price-tag">$110,000</span>
+                                <a href="#" class="btn btn-outline-gold btn-sm">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="card car-card h-100">
+                        <div class="car-card-img">
+                            <img src="https://picsum.photos/600/400?random=3" class="card-img-top" alt="2024 Rolls Royce Phantom">
+                        </div>
+                        <div class="card-body p-4">
+                            <h5 class="card-title fw-bold">2024 Rolls Royce Phantom</h5>
+                            <p class="card-text text-muted mb-3">Ultra Luxury | 2,100 mi</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="price-tag">$420,000</span>
+                                <a href="#" class="btn btn-outline-gold btn-sm">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="card car-card h-100">
+                        <div class="car-card-img">
+                            <img src="https://picsum.photos/600/400?random=4" class="card-img-top" alt="2025 Porsche Taycan Turbo">
+                        </div>
+                        <div class="card-body p-4">
+                            <h5 class="card-title fw-bold">2025 Porsche Taycan Turbo</h5>
+                            <p class="card-text text-muted mb-3">Electric Coupe | 800 mi</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="price-tag">$160,000</span>
+                                <a href="#" class="btn btn-outline-gold btn-sm">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col d-none d-lg-block">
+                    <div class="card car-card h-100">
+                        <div class="car-card-img">
+                            <img src="https://picsum.photos/600/400?random=5" class="card-img-top" alt="2023 Bentley Continental GT">
+                        </div>
+                        <div class="card-body p-4">
+                            <h5 class="card-title fw-bold">2023 Bentley Continental GT</h5>
+                            <p class="card-text text-muted mb-3">Grand Tourer | 6,500 mi</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="price-tag">$245,000</span>
+                                <a href="#" class="btn btn-outline-gold btn-sm">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="text-center mt-5">
+                <a href="#" class="btn btn-gold btn-lg px-5">View All Inventory</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5 bg-dark">
+        <div class="container my-5">
+            <h2 class="display-4 mb-5 text-center fw-bold text-white">Exclusive Showcase</h2>
+            
+            <div id="exclusiveCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
+                <div class="carousel-inner">
+                    
+                    <div class="carousel-item active">
+                        <div class="row align-items-center carousel-item-exclusive">
+                            <div class="col-lg-7">
+                                <img src="https://picsum.photos/800/500?random=6" class="d-block w-100" alt="Rare Ferrari">
+                            </div>
+                            <div class="col-lg-5 p-4 p-lg-5">
+                                <h3 class="fw-bold text-gold">The Crimson Legend</h3>
+                                <p class="lead text-muted mb-3">1963 Ferrari 250 GTO</p>
+                                <p>A one-of-a-kind vintage masterpiece, meticulously restored. This vehicle represents automotive history and unparalleled exclusivity.</p>
+                                <a href="#" class="btn btn-gold mt-3">Inquire About Price</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="carousel-item">
+                        <div class="row align-items-center carousel-item-exclusive">
+                            <div class="col-lg-7">
+                                <img src="https://picsum.photos/800/500?random=7" class="d-block w-100" alt="Concept Lamborghini">
+                            </div>
+                            <div class="col-lg-5 p-4 p-lg-5">
+                                <h3 class="fw-bold text-gold">Future's Edge</h3>
+                                <p class="lead text-muted mb-3">Lamborghini Sian FKP 37</p>
+                                <p>Hybrid super sports car with groundbreaking design and performance. A limited production hypercar for the true collector.</p>
+                                <a href="#" class="btn btn-gold mt-3">Request Brochure</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <button class="carousel-control-prev" type="button" data-bs-target="#exclusiveCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#exclusiveCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5">
+        <div class="container my-5">
+            <h2 class="display-4 mb-5 text-center fw-bold">Our Curated Brands</h2>
+            <div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-4 text-center">
+                
+                <div class="col">
+                    <div class="brand-logo-item h-100">
+                        <img src="https://via.placeholder.com/150x50?text=Ferrari" alt="Ferrari Logo">
+                    </div>
+                </div>
+                
+                <div class="col">
+                    <div class="brand-logo-item h-100">
+                        <img src="https://via.placeholder.com/150x50?text=Lamborghini" alt="Lamborghini Logo">
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="brand-logo-item h-100">
+                        <img src="https://via.placeholder.com/150x50?text=Mercedes" alt="Mercedes Logo">
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="brand-logo-item h-100">
+                        <img src="https://via.placeholder.com/150x50?text=Rolls+Royce" alt="Rolls Royce Logo">
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="brand-logo-item h-100">
+                        <img src="https://via.placeholder.com/150x50?text=Porsche" alt="Porsche Logo">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5 bg-dark">
+        <div class="container my-5">
+            <h2 class="display-4 mb-5 text-center fw-bold">Client Experiences</h2>
+            <div class="row g-4">
+                
+                <div class="col-md-6 col-lg-4">
+                    <div class="testimonial-card">
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="https://picsum.photos/60/60?random=8" alt="Client Profile" class="testimonial-img me-3">
+                            <div>
+                                <h5 class="mb-0 fw-bold text-white">Julian D.</h5>
+                                <small class="text-muted">Collector</small>
+                            </div>
+                        </div>
+                        <p class="fst-italic">"The service was impeccable and discreet. Found my dream classic car with ease. Truly a five-star experience from start to finish."</p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <div class="testimonial-card">
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="https://picsum.photos/60/60?random=9" alt="Client Profile" class="testimonial-img me-3">
+                            <div>
+                                <h5 class="mb-0 fw-bold text-white">Sarah K.</h5>
+                                <small class="text-muted">Entrepreneur</small>
+                            </div>
+                        </div>
+                        <p class="fst-italic">"Seamless, professional, and unparalleled inventory. They connected me with the perfect new SUV before it was even publicly listed."</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-4 mx-auto">
+                    <div class="testimonial-card">
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="https://picsum.photos/60/60?random=10" alt="Client Profile" class="testimonial-img me-3">
+                            <div>
+                                <h5 class="mb-0 fw-bold text-white">Marcus T.</h5>
+                                <small class="text-muted">Investor</small>
+                            </div>
+                        </div>
+                        <p class="fst-italic">"Beyond expectations. The attention to detail and personalized guidance made the acquisition of my Rolls Royce a pleasure."</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer-luxury">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4 mb-lg-0">
+                    <h4 class="logo mb-3">Velvet Wheels</h4>
+                    <p class="text-muted">Curating the world's finest automobiles for the most discerning clientele.</p>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <h5 class="text-white mb-3 fw-bold">Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="footer-link">Inventory</a></li>
+                        <li><a href="#" class="footer-link">Finance</a></li>
+                        <li><a href="#" class="footer-link">About Us</a></li>
+                        <li><a href="#" class="footer-link">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <h5 class="text-white mb-3 fw-bold">Support</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="footer-link">Contact</a></li>
+                        <li><a href="#" class="footer-link">Dealers</a></li>
+                        <li><a href="#" class="footer-link">Privacy Policy</a></li>
+                        <li><a href="#" class="footer-link">Terms</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4">
+                    <h5 class="text-white mb-3 fw-bold">Connect</h5>
+                    <div class="d-flex">
+                        <a href="#" class="me-3 social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="me-3 social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="me-3 social-icon"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                    <p class="text-muted mt-3">info@velvetwheels.com</p>
+                </div>
+            </div>
+            <div class="text-center pt-4 mt-4 border-top border-secondary-subtle">
+                <p class="text-muted mb-0">&copy; 2024 Velvet Wheels. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script> 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Font Awesome
+            if (typeof FontAwesome !== 'undefined') {
+                FontAwesome.dom.i2svg();
+            }
+
+            // Custom Interaction: Car Card Glossy Shine (CSS handles the main hover, this is for future JS enhancement)
+            const carCards = document.querySelectorAll('.car-card');
+            carCards.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    // console.log('Card hover effect activated');
+                });
+            });
+
+            // Smooth Scroll (Bootstrap 5 only requires data-bs-scrollspy)
+            // No extra JS needed for basic Bootstrap functionality
+
+        });
+    </script>
+</body>
+</html>

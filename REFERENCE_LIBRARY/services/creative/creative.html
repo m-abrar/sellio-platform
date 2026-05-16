@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRTV | Hire Creative Talent Worldwide</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <style>
+        /* Custom Styles & Overrides */
+        :root {
+            --bs-font-sans-serif: 'Nunito', sans-serif;
+            --bs-heading-font-family: 'Montserrat', sans-serif;
+            --gradient-primary: linear-gradient(90deg, #ff69b4, #8a2be2); /* Pink to Purple */
+            --gradient-secondary: linear-gradient(90deg, #00ced1, #4682b4); /* Teal to Steel Blue */
+            --gradient-cta: linear-gradient(90deg, #8a2be2, #ff69b4); /* Purple to Pink */
+            --bs-white: #ffffff;
+            --bs-dark: #121212;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 { font-family: var(--bs-heading-font-family); }
+        
+        /* Gradient Button Styles */
+        .btn-gradient {
+            background-image: var(--gradient-cta);
+            color: var(--bs-white);
+            border: none;
+            border-radius: 50px;
+            padding: 10px 30px;
+            transition: all 0.3s ease;
+        }
+        .btn-gradient:hover {
+            background-image: var(--gradient-primary);
+            box-shadow: 0 4px 20px rgba(138, 43, 226, 0.5);
+            color: var(--bs-white);
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background-image: url('https://picsum.photos/1920/800/?blur=5&random=1');
+            background-size: cover;
+            background-position: center;
+            height: 550px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            border-radius: 0 0 50px 50px;
+            overflow: hidden;
+            margin-bottom: 5rem;
+        }
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 1;
+        }
+        .hero-content {
+            z-index: 2;
+            color: var(--bs-white);
+        }
+        .hero-content h1 {
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 900;
+        }
+
+        /* Search/Filters Section */
+        .search-filters {
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            transform: translateY(-50%); /* Lift the search bar over the hero/content */
+            background: var(--bs-white);
+        }
+        .filter-item .form-control, .filter-item .btn {
+            border: none;
+            border-radius: 0.75rem;
+        }
+        
+        /* Featured Categories Cards */
+        .category-card {
+            background: var(--bs-white);
+            border: none;
+            border-radius: 1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            overflow: hidden;
+            position: relative;
+            color: var(--bs-dark);
+        }
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            background: var(--gradient-primary);
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+        .category-card:hover::before {
+            opacity: 0.1;
+        }
+        .category-card-content {
+            position: relative;
+            z-index: 2;
+        }
+        .category-icon {
+            font-size: 2rem;
+            background: var(--gradient-secondary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        /* Portfolio Showcase (Masonry Style) */
+        .portfolio-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        .portfolio-item img {
+            transition: transform 0.5s ease;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .portfolio-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(138, 43, 226, 0.8);
+            color: var(--bs-white);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            text-align: center;
+            padding: 1rem;
+        }
+        .portfolio-item:hover .portfolio-overlay {
+            opacity: 1;
+        }
+        .portfolio-item:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Top Creatives Card */
+        .creative-card {
+            border: none;
+            border-radius: 1rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+        .creative-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        .creative-photo {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid #ff69b4;
+        }
+
+        /* CTA Banner */
+        .cta-banner {
+            background-image: var(--gradient-cta);
+            color: var(--bs-white);
+            padding: 4rem 0;
+            text-align: center;
+            border-radius: 1rem;
+        }
+        
+        /* Footer */
+        .dark-footer {
+            background-color: var(--bs-dark);
+            color: rgba(255, 255, 255, 0.75);
+        }
+        .dark-footer a {
+            color: var(--bs-white);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        .dark-footer a:hover {
+            color: #ff69b4;
+        }
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--bs-white) !important;
+            letter-spacing: 2px;
+        }
+        
+        /* Utility for Gradient Text */
+        .gradient-text {
+            background: var(--gradient-cta);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+        }
+
+        /* Masonry Grid (Simple Flex-based for BS5) */
+        @media (min-width: 992px) {
+            .masonry-grid {
+                display: flex;
+                flex-flow: column wrap;
+                max-height: 1000px; /* Adjust based on content height */
+            }
+            .masonry-item {
+                width: 33.33%; /* Adjust column width */
+            }
+            .portfolio-item {
+                margin-right: 1.5rem;
+            }
+        }
+        @media (max-width: 991px) {
+            .masonry-item {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top py-3 shadow-sm">
+        <div class="container">
+            <a class="navbar-brand footer-logo gradient-text" href="#">CRTV</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#categories">Categories</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#portfolio">Portfolios</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#pricing">Pricing</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+                </ul>
+                <a href="#" class="btn btn-gradient ms-lg-3">Hire a Creative</a>
+            </div>
+        </div>
+    </nav>
+    
+    <main>
+
+        <section class="hero-section">
+            <div class="hero-overlay"></div>
+            <div class="container hero-content">
+                <h1 class="display-3 mb-3">Hire Creative Talent Worldwide</h1>
+                <p class="lead mb-4">Discover exceptional freelancers for your projects, from design to development.</p>
+                <a href="#search" class="btn btn-lg btn-gradient me-3">Browse Creatives</a>
+                <a href="#join" class="btn btn-lg btn-outline-light rounded-pill">Showcase Your Work</a>
+            </div>
+        </section>
+
+        <section id="search" class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="card search-filters p-4 p-md-5">
+                        <form class="row g-3 align-items-center">
+                            <div class="col-12 col-md-5 filter-item">
+                                <label for="searchInput" class="visually-hidden">Search Keyword</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white border-0"><i class="bi bi-search"></i></span>
+                                    <input type="text" class="form-control border-0" id="searchInput" placeholder="Search for skills, creatives, or projects...">
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-2 filter-item">
+                                <select class="form-select border-0" aria-label="Category select">
+                                    <option selected>Category</option>
+                                    <option value="1">Design</option>
+                                    <option value="2">Writing</option>
+                                    <option value="3">Development</option>
+                                </select>
+                            </div>
+                            <div class="col-6 col-md-2 filter-item">
+                                <select class="form-select border-0" aria-label="Budget select">
+                                    <option selected>Budget</option>
+                                    <option value="1">Low</option>
+                                    <option value="2">Medium</option>
+                                    <option value="3">High</option>
+                                </select>
+                            </div>
+                            <div class="col-6 col-md-2 filter-item">
+                                <select class="form-select border-0" aria-label="Rating select">
+                                    <option selected>Rating</option>
+                                    <option value="1">4★ & Up</option>
+                                    <option value="2">5★ Only</option>
+                                </select>
+                            </div>
+                            <div class="col-6 col-md-1 filter-item text-end">
+                                <button type="submit" class="btn btn-outline-secondary border-0"><i class="bi bi-sliders"></i></button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="categories" class="py-5">
+            <div class="container">
+                <h2 class="text-center mb-5 gradient-text">Featured Creative Categories</h2>
+                <div class="row row-cols-2 row-cols-md-3 row-cols-lg-6 g-4">
+                    <div class="col">
+                        <a href="#" class="text-decoration-none">
+                            <div class="card category-card p-4 text-center h-100">
+                                <div class="category-card-content">
+                                    <i class="bi bi-palette-fill category-icon mb-3"></i>
+                                    <h5 class="card-title fw-bold">Graphic Design</h5>
+                                    <p class="card-text small text-muted">From $100</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col">
+                        <a href="#" class="text-decoration-none">
+                            <div class="card category-card p-4 text-center h-100">
+                                <div class="category-card-content">
+                                    <i class="bi bi-pencil-square category-icon mb-3"></i>
+                                    <h5 class="card-title fw-bold">Writing & Content</h5>
+                                    <p class="card-text small text-muted">Copywriting, SEO</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col">
+                        <a href="#" class="text-decoration-none">
+                            <div class="card category-card p-4 text-center h-100">
+                                <div class="category-card-content">
+                                    <i class="bi bi-camera-fill category-icon mb-3"></i>
+                                    <h5 class="card-title fw-bold">Photography</h5>
+                                    <p class="card-text small text-muted">Events, Products</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col">
+                        <a href="#" class="text-decoration-none">
+                            <div class="card category-card p-4 text-center h-100">
+                                <div class="category-card-content">
+                                    <i class="bi bi-code-slash category-icon mb-3"></i>
+                                    <h5 class="card-title fw-bold">Web Development</h5>
+                                    <p class="card-text small text-muted">Full Stack, CMS</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col">
+                        <a href="#" class="text-decoration-none">
+                            <div class="card category-card p-4 text-center h-100">
+                                <div class="category-card-content">
+                                    <i class="bi bi-speaker-fill category-icon mb-3"></i>
+                                    <h5 class="card-title fw-bold">Music & Audio</h5>
+                                    <p class="card-text small text-muted">Sound Design</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <a href="#" class="text-decoration-none">
+                            <div class="card category-card p-4 text-center h-100">
+                                <div class="category-card-content">
+                                    <i class="bi bi-graph-up category-icon mb-3"></i>
+                                    <h5 class="card-title fw-bold">Marketing</h5>
+                                    <p class="card-text small text-muted">Social Media</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="py-5 bg-light">
+            <div class="container">
+                <h2 class="text-center mb-5">Meet Our <span class="gradient-text">Top Creatives</span></h2>
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                    
+                    <div class="col">
+                        <div class="card creative-card h-100 p-3">
+                            <div class="d-flex align-items-center">
+                                <img src="https://picsum.photos/100/100/?random=2" alt="Sophia L." class="creative-photo me-3">
+                                <div>
+                                    <h5 class="card-title mb-0">Sophia L.</h5>
+                                    <p class="text-muted mb-1">UX Designer</p>
+                                    <span class="badge rounded-pill bg-warning text-dark"><i class="bi bi-star-fill"></i> 5.0</span>
+                                </div>
+                            </div>
+                            <div class="mt-3 d-flex justify-content-between align-items-center">
+                                <span class="fw-bold fs-5 text-success">$50/hr</span>
+                                <a href="#" class="btn btn-sm btn-gradient">Hire Now</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col">
+                        <div class="card creative-card h-100 p-3">
+                            <div class="d-flex align-items-center">
+                                <img src="https://picsum.photos/100/100/?random=3" alt="David P." class="creative-photo me-3">
+                                <div>
+                                    <h5 class="card-title mb-0">David P.</h5>
+                                    <p class="text-muted mb-1">Professional Photographer</p>
+                                    <span class="badge rounded-pill bg-warning text-dark"><i class="bi bi-star-fill"></i> 4.8</span>
+                                </div>
+                            </div>
+                            <div class="mt-3 d-flex justify-content-between align-items-center">
+                                <span class="fw-bold fs-5 text-success">$75/hr</span>
+                                <a href="#" class="btn btn-sm btn-gradient">Hire Now</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div class="card creative-card h-100 p-3">
+                            <div class="d-flex align-items-center">
+                                <img src="https://picsum.photos/100/100/?random=4" alt="Marco V." class="creative-photo me-3">
+                                <div>
+                                    <h5 class="card-title mb-0">Marco V.</h5>
+                                    <p class="text-muted mb-1">Senior Front-End Dev</p>
+                                    <span class="badge rounded-pill bg-warning text-dark"><i class="bi bi-star-fill"></i> 4.9</span>
+                                </div>
+                            </div>
+                            <div class="mt-3 d-flex justify-content-between align-items-center">
+                                <span class="fw-bold fs-5 text-success">$80/hr</span>
+                                <a href="#" class="btn btn-sm btn-gradient">Hire Now</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </section>
+
+        <section id="portfolio" class="py-5">
+            <div class="container">
+                <h2 class="text-center mb-5 gradient-text">Inspiring Portfolio Showcase</h2>
+                
+                <div class="row masonry-grid">
+                    <div class="col-12 col-lg-4 masonry-item">
+                        <div class="portfolio-item">
+                            <img src="https://picsum.photos/600/800/?random=5" alt="Design work 1" class="img-fluid">
+                            <div class="portfolio-overlay">
+                                <h5>Modern UI Kit</h5>
+                                <p class="small">Category: Graphic Design</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-4 masonry-item">
+                        <div class="portfolio-item">
+                            <img src="https://picsum.photos/600/400/?random=6" alt="Design work 2" class="img-fluid">
+                            <div class="portfolio-overlay">
+                                <h5>Brand Identity</h5>
+                                <p class="small">Category: Branding</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-4 masonry-item">
+                        <div class="portfolio-item">
+                            <img src="https://picsum.photos/600/700/?random=7" alt="Design work 3" class="img-fluid">
+                            <div class="portfolio-overlay">
+                                <h5>Urban Photography</h5>
+                                <p class="small">Category: Photography</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-4 masonry-item">
+                        <div class="portfolio-item">
+                            <img src="https://picsum.photos/600/450/?random=8" alt="Design work 4" class="img-fluid">
+                            <div class="portfolio-overlay">
+                                <h5>SaaS Website Mockup</h5>
+                                <p class="small">Category: UX/UI Design</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-4 masonry-item">
+                        <div class="portfolio-item">
+                            <img src="https://picsum.photos/600/550/?random=9" alt="Design work 5" class="img-fluid">
+                            <div class="portfolio-overlay">
+                                <h5>Product Ad Copy</h5>
+                                <p class="small">Category: Writing</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-4 masonry-item">
+                        <div class="portfolio-item">
+                            <img src="https://picsum.photos/600/900/?random=10" alt="Design work 6" class="img-fluid">
+                            <div class="portfolio-overlay">
+                                <h5>Mobile App Concept</h5>
+                                <p class="small">Category: Development</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-5 bg-light">
+            <div class="container">
+                <h2 class="text-center mb-5">Trusted by Clients & Creatives</h2>
+                <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <div class="text-center p-4 p-md-5 bg-white shadow-sm rounded-3 mx-auto" style="max-width: 800px;">
+                                <i class="bi bi-quote fs-1 gradient-text"></i>
+                                <p class="lead fst-italic">"I found my dream design job here! The platform made it incredibly easy to showcase my UI/UX work and connect with top-tier clients globally. Highly recommended for any serious creative."</p>
+                                <footer class="blockquote-footer mt-3">
+                                    <cite title="Source Title">Josh T., Client</cite> - Hired a UX Designer
+                                </footer>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <div class="text-center p-4 p-md-5 bg-white shadow-sm rounded-3 mx-auto" style="max-width: 800px;">
+                                <i class="bi bi-quote fs-1 gradient-text"></i>
+                                <p class="lead fst-italic">"Working with a freelance writer through CRTV was seamless. The quality of the blog posts was amazing, and the project management tools kept everything on track. Exceptional talent pool."</p>
+                                <footer class="blockquote-footer mt-3">
+                                    <cite title="Source Title">Amanda R., Client</cite> - Hired a Content Writer
+                                </footer>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <div class="text-center p-4 p-md-5 bg-white shadow-sm rounded-3 mx-auto" style="max-width: 800px;">
+                                <i class="bi bi-quote fs-1 gradient-text"></i>
+                                <p class="lead fst-italic">"Amazing platform to grow my photography business. The client brief quality is high, and the payment system is reliable. I've gained amazing international exposure."</p>
+                                <footer class="blockquote-footer mt-3">
+                                    <cite title="Source Title">Li W., Freelancer</cite> - Photographer
+                                </footer>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon bg-secondary rounded-circle" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon bg-secondary rounded-circle" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section id="join" class="container py-5">
+            <div class="cta-banner rounded-5">
+                <div class="container text-center">
+                    <h2 class="display-5 fw-bold mb-3">Ready to Hire or Get Hired?</h2>
+                    <p class="lead mb-4">Join the Creative Community Today and turn your vision into reality.</p>
+                    <a href="#" class="btn btn-lg bg-white text-dark fw-bold rounded-pill shadow-lg">Sign Up Now <i class="bi bi-arrow-right"></i></a>
+                </div>
+            </div>
+        </section>
+        
+    </main>
+
+    <footer class="dark-footer py-5 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 mb-4">
+                    <a class="footer-logo" href="#">CRTV</a>
+                    <p class="mt-2 small">Connecting visionary clients with the world's finest creative talent.</p>
+                    <div class="d-flex social-icons mt-3">
+                        <a href="#" class="me-3"><i class="bi bi-facebook fs-5"></i></a>
+                        <a href="#" class="me-3"><i class="bi bi-twitter fs-5"></i></a>
+                        <a href="#" class="me-3"><i class="bi bi-instagram fs-5"></i></a>
+                        <a href="#" class="me-3"><i class="bi bi-linkedin fs-5"></i></a>
+                    </div>
+                </div>
+
+                <div class="col-6 col-lg-3 mb-4">
+                    <h5 class="text-white mb-3">About Us</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#">Careers</a></li>
+                        <li class="mb-2"><a href="#">Our Story</a></li>
+                        <li class="mb-2"><a href="#">Press</a></li>
+                        <li class="mb-2"><a href="#">Blog</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-6 col-lg-3 mb-4">
+                    <h5 class="text-white mb-3">Services</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#">Hire a Creative</a></li>
+                        <li class="mb-2"><a href="#">Post a Project</a></li>
+                        <li class="mb-2"><a href="#">Freelancer Sign Up</a></li>
+                        <li class="mb-2"><a href="#">Affiliate Program</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-12 col-lg-3 mb-4">
+                    <h5 class="text-white mb-3">Support & Legal</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#">Help Center</a></li>
+                        <li class="mb-2"><a href="#">Terms of Service</a></li>
+                        <li class="mb-2"><a href="#">Privacy Policy</a></li>
+                        <li class="mb-2"><a href="#">Cookie Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="row pt-4 border-top border-secondary">
+                <div class="col-12 text-center small mt-3">
+                    &copy; 2024 CRTV. All Rights Reserved.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+</body>
+</html>

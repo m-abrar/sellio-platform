@@ -1,0 +1,637 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Paradise Found - Luxury Vacation Stays</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --turquoise: #2EC4B6;
+            --deep-teal: #0E8A86;
+            --sandy-beige: #F5E6D3;
+            --coral: #FF6B6B;
+            --white: #FFFFFF;
+            --light-gray: #f8f9fa;
+            --dark-text: #343a40;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--dark-text);
+            background-color: var(--white);
+        }
+
+        h1, h2, h3, h4, h5, h6, .display-font {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* --- Components --- */
+        .btn-primary {
+            background-color: var(--coral);
+            border-color: var(--coral);
+        }
+        .btn-primary:hover {
+            background-color: #e65c5c;
+            border-color: #e65c5c;
+        }
+        .btn-secondary {
+            background-color: transparent;
+            border-color: var(--turquoise);
+            color: var(--turquoise);
+        }
+        .btn-secondary:hover {
+            background-color: var(--turquoise);
+            border-color: var(--turquoise);
+            color: var(--white);
+        }
+        .btn-light-outline {
+             background-color: transparent;
+             border-color: var(--white);
+             color: var(--white);
+        }
+        .btn-light-outline:hover {
+             background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* --- Header & Nav --- */
+        .navbar {
+            transition: background-color 0.3s ease;
+        }
+        .navbar.scrolled {
+            background-color: rgba(255, 255, 255, 0.95) !important;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        /* --- Hero Section --- */
+        .hero-section {
+            background: url('https://images.unsplash.com/photo-1582719508461-905c673771fd?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1925&q=80') no-repeat center center;
+            background-size: cover;
+            height: 80vh;
+            min-height: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            position: relative;
+        }
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+        }
+        .booking-panel {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            color: var(--dark-text);
+            backdrop-filter: blur(10px);
+        }
+
+        /* --- Featured Collections Cards --- */
+        .collection-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 1rem;
+            height: 350px;
+        }
+        .collection-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+        .collection-card:hover img {
+            transform: scale(1.05);
+        }
+        .collection-card .card-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 60%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 1.5rem;
+            color: var(--white);
+        }
+
+        /* --- Top Stays Grid --- */
+        .stay-card {
+            border: none;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background-color: var(--sandy-beige);
+        }
+        .stay-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        .stay-card .card-img-top {
+            height: 220px;
+            object-fit: cover;
+        }
+        .stay-card .price-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background-color: var(--coral);
+            color: var(--white);
+            font-weight: 600;
+            border-radius: 20px;
+            padding: 0.3rem 0.8rem;
+            font-size: 0.9rem;
+        }
+        .stay-card .host-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .stay-card .rating {
+            color: #ffc107;
+        }
+        .stay-card .quick-actions {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .stay-card:hover .quick-actions {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-transparent fixed-top py-3">
+        <div class="container">
+            <a class="navbar-brand display-font fw-bold" href="#"><i class="bi bi-compass-fill text-info"></i> Paradise Found</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item"><a class="nav-link active" href="#">Stays</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Resorts</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Destinations</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Hosts</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+                </ul>
+                <ul class="navbar-nav align-items-center">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-globe"></i> EN/USD
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="#">EN / EUR</a></li>
+                            <li><a class="dropdown-item" href="#">ES / USD</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-person-circle fs-5"></i></a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <section class="hero-section">
+        <div class="container text-center position-relative">
+            <h1 class="display-3 fw-bold mb-4">Find Your Perfect Escape</h1>
+            <p class="lead mb-5">Discover luxury villas, cozy cabins, and stunning resorts.</p>
+            
+            <div class="booking-panel mx-auto" style="max-width: 800px;">
+                <form class="row g-3 align-items-center">
+                    <div class="col-lg-4">
+                        <input type="text" class="form-control form-control-lg" placeholder="Location (e.g., Maldives)">
+                    </div>
+                    <div class="col-lg-4">
+                        <input type="text" class="form-control form-control-lg" placeholder="Check-in / Check-out">
+                    </div>
+                    <div class="col-lg-2">
+                        <input type="number" class="form-control form-control-lg" placeholder="Guests">
+                    </div>
+                    <div class="col-lg-2">
+                        <button type="submit" class="btn btn-primary btn-lg w-100">Search</button>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="mt-4">
+                <a href="#" class="btn btn-light-outline mx-2">Explore Destinations</a>
+                <a href="#" class="btn btn-light-outline mx-2">Luxury Collection</a>
+                <a href="#" class="btn btn-light-outline mx-2">Instant Book</a>
+            </div>
+        </div>
+    </section>
+    <main class="py-5">
+        
+        <section class="container my-5">
+            <h2 class="text-center display-font mb-5">Featured Collections</h2>
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <div class="collection-card">
+                        <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" alt="Beach Villas">
+                        <div class="card-overlay">
+                            <h3 class="display-font">Beach Villas</h3>
+                            <p>Ocean view escapes, private pools</p>
+                            <a href="#" class="btn btn-secondary btn-sm" style="width: 120px;">Explore</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="collection-card">
+                        <img src="https://images.unsplash.com/photo-1559738947-753a0f723192?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" alt="Mountain Cabins">
+                        <div class="card-overlay">
+                            <h3 class="display-font">Mountain Cabins</h3>
+                            <p>Cozy retreats, nature access</p>
+                            <a href="#" class="btn btn-secondary btn-sm" style="width: 120px;">Explore</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="collection-card">
+                        <img src="https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1349&q=80" alt="Luxury Resorts">
+                        <div class="card-overlay">
+                            <h3 class="display-font">Luxury Resorts</h3>
+                            <p>All-inclusive resort experiences</p>
+                            <a href="#" class="btn btn-secondary btn-sm" style="width: 120px;">Explore</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="container my-5 py-5 bg-light rounded-3">
+            <h2 class="text-center display-font mb-5">Top Rated Stays</h2>
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6">
+                    <div class="card stay-card h-100">
+                        <img src="https://images.unsplash.com/photo-1613553497126-a44624272b63?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" class="card-img-top" alt="Beachside Villa">
+                        <span class="price-badge">$850 / night</span>
+                        <div class="card-body">
+                            <h5 class="card-title">Beachside Villa</h5>
+                            <p class="card-text text-muted mb-2">4 Bed, 3 Bath — Maldives</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <span class="rating"><i class="bi bi-star-fill"></i> 4.95</span> <small>(120 reviews)</small>
+                                </div>
+                                <img src="https://i.pravatar.cc/150?img=1" alt="Host Avatar" class="host-avatar">
+                            </div>
+                            <hr>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="amenities">
+                                    <i class="bi bi-wifi" title="Wifi"></i>
+                                    <i class="bi bi-p-circle-fill ms-2" title="Pool"></i>
+                                    <i class="bi bi-cup-straw ms-2" title="Breakfast"></i>
+                                </div>
+                                <div class="quick-actions">
+                                    <a href="#" class="text-muted me-2"><i class="bi bi-heart"></i></a>
+                                    <a href="#" class="text-muted"><i class="bi bi-share"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent border-0 p-3">
+                           <button class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#bookingModal">Book Now</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="card stay-card h-100">
+                        <img src="https://images.unsplash.com/photo-1598533890253-06a09a5df23a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" class="card-img-top" alt="Clifftop Infinity Villa">
+                        <span class="price-badge">$1,250 / night</span>
+                        <div class="card-body">
+                            <h5 class="card-title">Clifftop Infinity Villa</h5>
+                            <p class="card-text text-muted mb-2">5 Bed, Private Pool — Santorini</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <span class="rating"><i class="bi bi-star-fill"></i> 5.0</span> <small>(98 reviews)</small>
+                                </div>
+                                <img src="https://i.pravatar.cc/150?img=2" alt="Host Avatar" class="host-avatar">
+                            </div>
+                            <hr>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="amenities">
+                                    <i class="bi bi-wifi" title="Wifi"></i>
+                                    <i class="bi bi-p-circle-fill ms-2" title="Pool"></i>
+                                </div>
+                                <div class="quick-actions">
+                                    <a href="#" class="text-muted me-2"><i class="bi bi-heart"></i></a>
+                                    <a href="#" class="text-muted"><i class="bi bi-share"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent border-0 p-3">
+                           <button class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#bookingModal">Book Now</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="card stay-card h-100">
+                        <img src="https://images.unsplash.com/photo-1542718610-4109725a386b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" class="card-img-top" alt="Forest Cabin Retreat">
+                        <span class="price-badge">$220 / night</span>
+                        <div class="card-body">
+                            <h5 class="card-title">Forest Cabin Retreat</h5>
+                            <p class="card-text text-muted mb-2">2 Bed, Hot Tub — Aspen</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <span class="rating"><i class="bi bi-star-fill"></i> 4.8</span> <small>(248 reviews)</small>
+                                </div>
+                                <img src="https://i.pravatar.cc/150?img=3" alt="Host Avatar" class="host-avatar">
+                            </div>
+                            <hr>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="amenities">
+                                    <i class="bi bi-wifi" title="Wifi"></i>
+                                    <i class="bi bi-snow" title="Hot Tub"></i>
+                                    <i class="bi bi-fire ms-2" title="Fireplace"></i>
+                                </div>
+                                <div class="quick-actions">
+                                    <a href="#" class="text-muted me-2"><i class="bi bi-heart"></i></a>
+                                    <a href="#" class="text-muted"><i class="bi bi-share"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent border-0 p-3">
+                           <button class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#bookingModal">Book Now</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="card stay-card h-100">
+                        <img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80" class="card-img-top" alt="Luxury Resort Suite">
+                        <span class="price-badge">$600 / night</span>
+                        <div class="card-body">
+                            <h5 class="card-title">Luxury Resort Suite</h5>
+                            <p class="card-text text-muted mb-2">All Inclusive — Bali</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <span class="rating"><i class="bi bi-star-fill"></i> 4.9</span> <small>(412 reviews)</small>
+                                </div>
+                                <img src="https://i.pravatar.cc/150?img=4" alt="Host Avatar" class="host-avatar">
+                            </div>
+                            <hr>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="amenities">
+                                    <i class="bi bi-p-circle-fill" title="Pool"></i>
+                                    <i class="bi bi-cup-straw ms-2" title="All-Inclusive"></i>
+                                </div>
+                                <div class="quick-actions">
+                                    <a href="#" class="text-muted me-2"><i class="bi bi-heart"></i></a>
+                                    <a href="#" class="text-muted"><i class="bi bi-share"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent border-0 p-3">
+                           <button class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#bookingModal">Book Now</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="card stay-card h-100">
+                        <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" class="card-img-top" alt="Downtown Penthouse">
+                        <span class="price-badge">$450 / night</span>
+                        <div class="card-body">
+                            <h5 class="card-title">Downtown Penthouse</h5>
+                            <p class="card-text text-muted mb-2">City Views — Barcelona</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <span class="rating"><i class="bi bi-star-fill"></i> 4.7</span> <small>(85 reviews)</small>
+                                </div>
+                                <img src="https://i.pravatar.cc/150?img=5" alt="Host Avatar" class="host-avatar">
+                            </div>
+                             <hr>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="amenities">
+                                    <i class="bi bi-wifi" title="Wifi"></i>
+                                    <i class="bi bi-tv ms-2" title="TV"></i>
+                                </div>
+                                <div class="quick-actions">
+                                    <a href="#" class="text-muted me-2"><i class="bi bi-heart"></i></a>
+                                    <a href="#" class="text-muted"><i class="bi bi-share"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent border-0 p-3">
+                           <button class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#bookingModal">Book Now</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="card stay-card h-100">
+                        <img src="https://images.unsplash.com/photo-1585671962217-2d415783391f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" class="card-img-top" alt="Secluded Cottage">
+                        <span class="price-badge">$180 / night</span>
+                        <div class="card-body">
+                            <h5 class="card-title">Secluded Cottage</h5>
+                            <p class="card-text text-muted mb-2">Pet Friendly — Cornwall</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <span class="rating"><i class="bi bi-star-fill"></i> 4.9</span> <small>(310 reviews)</small>
+                                </div>
+                                <img src="https://i.pravatar.cc/150?img=6" alt="Host Avatar" class="host-avatar">
+                            </div>
+                            <hr>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="amenities">
+                                    <i class="bi bi-fire" title="Fireplace"></i>
+                                    <i class="bi bi-heart-fill ms-2" title="Pet Friendly"></i>
+                                </div>
+                                <div class="quick-actions">
+                                    <a href="#" class="text-muted me-2"><i class="bi bi-heart"></i></a>
+                                    <a href="#" class="text-muted"><i class="bi bi-share"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent border-0 p-3">
+                           <button class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#bookingModal">Book Now</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="container my-5">
+             <div class="row align-items-center">
+                 <div class="col-lg-7">
+                    <div id="experienceCarousel" class="carousel slide" data-bs-ride="carousel">
+                      <div class="carousel-inner rounded-3">
+                        <div class="carousel-item active">
+                          <img src="https://images.unsplash.com/photo-1562438668-bcf0ca6578f0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" class="d-block w-100" alt="Interior view">
+                        </div>
+                        <div class="carousel-item">
+                          <img src="https://images.unsplash.com/photo-1600585152220-90363fe7e115?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" class="d-block w-100" alt="Living room view">
+                        </div>
+                        <div class="carousel-item">
+                          <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1400&q=80" class="d-block w-100" alt="Bedroom view">
+                        </div>
+                      </div>
+                    </div>
+                 </div>
+                 <div class="col-lg-5 ps-lg-5 mt-4 mt-lg-0">
+                     <h2 class="display-font">Unforgettable Experiences</h2>
+                     <p class="lead">Beyond a beautiful stay, unlock a world of unique experiences. Our hosts can arrange everything you need to make your trip truly special.</p>
+                     <p>Indulge in exclusive activities: Private chef dinners, guided island snorkeling tours, sunrise yoga on your private deck, and much more. Just ask your host.</p>
+                 </div>
+             </div>
+        </section>
+        <section class="container my-5 py-5">
+            <h2 class="text-center display-font mb-5">Meet Our Superhosts</h2>
+            <div class="row g-4 text-center">
+                <div class="col-md-4">
+                    <img src="https://i.pravatar.cc/150?img=11" class="rounded-circle mb-3" width="120" height="120" alt="Host Luca">
+                    <h5>Luca <span class="badge bg-info">Superhost</span></h5>
+                    <p class="text-muted">Island Host</p>
+                    <p>Sharing the magic of the Mediterranean is my passion. Let me show you the hidden gems of my island.</p>
+                </div>
+                <div class="col-md-4">
+                    <img src="https://i.pravatar.cc/150?img=12" class="rounded-circle mb-3" width="120" height="120" alt="Host Maya">
+                    <h5>Maya <span class="badge bg-info">Superhost</span></h5>
+                    <p class="text-muted">Mountain Retreats</p>
+                    <p>I curate peaceful, nature-first getaways where you can disconnect and recharge in the mountains.</p>
+                </div>
+                <div class="col-md-4">
+                    <img src="https://i.pravatar.cc/150?img=13" class="rounded-circle mb-3" width="120" height="120" alt="Host Sophie">
+                    <h5>Sophie <span class="badge bg-info">Superhost</span></h5>
+                    <p class="text-muted">Luxury Villas</p>
+                    <p>Every detail matters. I ensure my guests experience unparalleled luxury and comfort from start to finish.</p>
+                </div>
+            </div>
+        </section>
+        <section class="container-fluid g-0 my-5">
+            <div id="map-placeholder" style="height: 400px; background: url('https://i.imgur.com/YjGkCIs.png') center center; background-size: cover;">
+                </div>
+        </section>
+        </main>
+
+
+    <footer class="bg-dark text-white pt-5 pb-4">
+        <div class="container text-center text-md-start">
+            <div class="row">
+                <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+                    <h6 class="text-uppercase fw-bold">Paradise Found</h6>
+                    <hr class="mb-4 mt-0 d-inline-block mx-auto" style="width: 60px; background-color: var(--turquoise); height: 2px"/>
+                    <p>Your destination for curated luxury stays and unforgettable vacations around the world.</p>
+                </div>
+
+                <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+                    <h6 class="text-uppercase fw-bold">Explore</h6>
+                    <hr class="mb-4 mt-0 d-inline-block mx-auto" style="width: 60px; background-color: var(--turquoise); height: 2px"/>
+                    <p><a href="#!" class="text-white">Destinations</a></p>
+                    <p><a href="#!" class="text-white">Stays</a></p>
+                    <p><a href="#!" class="text-white">Resorts</a></p>
+                    <p><a href="#!" class="text-white">Special Offers</a></p>
+                </div>
+
+                <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+                    <h6 class="text-uppercase fw-bold">Useful links</h6>
+                    <hr class="mb-4 mt-0 d-inline-block mx-auto" style="width: 60px; background-color: var(--turquoise); height: 2px"/>
+                    <p><a href="#!" class="text-white">Your Account</a></p>
+                    <p><a href="#!" class="text-white">Become a Host</a></p>
+                    <p><a href="#!" class="text-white">Help</a></p>
+                </div>
+
+                <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+                    <h6 class="text-uppercase fw-bold">Contact</h6>
+                    <hr class="mb-4 mt-0 d-inline-block mx-auto" style="width: 60px; background-color: var(--turquoise); height: 2px"/>
+                    <p><i class="bi bi-geo-alt-fill me-3"></i> New York, NY 10012, US</p>
+                    <p><i class="bi bi-envelope-fill me-3"></i> info@paradisefound.com</p>
+                    <p><i class="bi bi-telephone-fill me-3"></i> + 01 234 567 88</p>
+                </div>
+            </div>
+             <div class="row pt-4 mt-4 border-top border-secondary">
+                 <div class="col-md-6 text-center text-md-start">
+                     <p>&copy; 2025 Paradise Found. All Rights Reserved.</p>
+                 </div>
+                 <div class="col-md-6 text-center text-md-end">
+                     <a href="#" class="text-white me-4"><i class="bi bi-facebook"></i></a>
+                     <a href="#" class="text-white me-4"><i class="bi bi-twitter"></i></a>
+                     <a href="#" class="text-white me-4"><i class="bi bi-instagram"></i></a>
+                 </div>
+             </div>
+        </div>
+    </footer>
+    <div class="modal fade" id="bookingModal" tabindex="-1" aria-labelledby="bookingModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title display-font" id="bookingModalLabel">Book Your Stay: Beachside Villa</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form>
+                <div class="mb-3">
+                    <label for="booking-dates" class="form-label">Dates</label>
+                    <input type="text" class="form-control" id="booking-dates" value="10/25/2025 - 10/30/2025">
+                </div>
+                <div class="mb-3">
+                    <label for="booking-guests" class="form-label">Guests</label>
+                    <select class="form-select" id="booking-guests">
+                        <option selected>2 Guests</option>
+                        <option value="1">1 Guest</option>
+                        <option value="3">3 Guests</option>
+                        <option value="4">4 Guests</option>
+                    </select>
+                </div>
+                <hr>
+                <ul class="list-group list-group-flush mb-3">
+                  <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
+                    $850 x 5 nights
+                    <span>$4,250</span>
+                  </li>
+                  <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
+                    Service fee
+                    <span>$350</span>
+                  </li>
+                  <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 fw-bold">
+                    <div>
+                      <strong>Total</strong>
+                    </div>
+                    <span><strong>$4,600</strong></span>
+                  </li>
+                </ul>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Confirm Booking</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+    <script>
+        // Simple script to add a class to the navbar on scroll for a subtle background effect
+        document.addEventListener('DOMContentLoaded', function() {
+            const nav = document.querySelector('.navbar');
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 50) {
+                    nav.classList.add('scrolled', 'bg-light', 'navbar-light');
+                    nav.classList.remove('bg-transparent', 'navbar-dark');
+                } else {
+                    nav.classList.remove('scrolled', 'bg-light', 'navbar-light');
+                    nav.classList.add('bg-transparent', 'navbar-dark');
+                }
+            });
+
+            // Initialize Bootstrap components that require it (e.g., tooltips)
+            // Example:
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+              return new bootstrap.Tooltip(tooltipTriggerEl)
+            });
+        });
+    </script>
+</body>
+</html>

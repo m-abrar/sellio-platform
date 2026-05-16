@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classic Motors | Timeless Classic Cars Marketplace</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        /* Custom Variables & Colors */
+        :root {
+            --bs-primary: #800020; /* Deep Burgundy */
+            --bs-secondary: #D4AF37; /* Gold Accent */
+            --bs-dark: #001f3f; /* Deep Navy/Dark Blue */
+            --bs-light: #f5f5dc; /* Cream Base */
+            --bs-body-bg: var(--bs-light);
+            --bs-body-color: #333;
+        }
+
+        body {
+            background-color: var(--bs-body-bg);
+            font-family: 'Inter', sans-serif;
+            color: var(--bs-body-color);
+            scroll-behavior: smooth;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4, .display-4 {
+            font-family: 'Playfair Display', serif;
+            color: var(--bs-dark);
+        }
+
+        /* Header/Navigation */
+        .navbar {
+            background-color: rgba(255, 255, 255, 0.95); /* Slightly transparent white/cream */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .navbar-brand img {
+            height: 40px;
+        }
+        .nav-link {
+            font-weight: 600;
+            color: var(--bs-dark) !important;
+            transition: color 0.3s ease;
+        }
+        .nav-link:hover {
+            color: var(--bs-primary) !important;
+        }
+
+        /* CTA Button Styling (Burgundy/Gold) */
+        .btn-cta {
+            background-color: var(--bs-primary);
+            color: white;
+            border-color: var(--bs-primary);
+            border-radius: 50px;
+            padding: 0.5rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-cta:hover {
+            background-color: var(--bs-dark);
+            border-color: var(--bs-dark);
+            box-shadow: 0 0 15px var(--bs-secondary);
+            color: var(--bs-secondary);
+        }
+
+        .btn-gold {
+            background-color: var(--bs-secondary);
+            color: var(--bs-dark);
+            border-color: var(--bs-secondary);
+            font-weight: 700;
+        }
+        .btn-gold:hover {
+            background-color: #c9a331;
+            border-color: #c9a331;
+            color: var(--bs-dark);
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: url('https://picsum.photos/1920/1080?vintage-car-showroom') no-repeat center center;
+            background-size: cover;
+            height: 85vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+        .hero-overlay {
+            background-color: rgba(0, 0, 0, 0.3);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .hero-content {
+            z-index: 10;
+            color: white;
+            max-width: 700px;
+        }
+        .hero-content h1 {
+            color: white;
+            font-size: 4rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+        }
+
+        /* Car Card Styling & Hover Effect */
+        .car-card {
+            border: none;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: transform 0.4s ease-in-out, box-shadow 0.4s ease-in-out;
+            background-color: white;
+        }
+        .car-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15), 0 0 0 3px var(--bs-secondary);
+        }
+        .car-card-img {
+            height: 200px;
+            object-fit: cover;
+            width: 100%;
+        }
+        .card-price {
+            color: var(--bs-primary);
+            font-weight: 900;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+        }
+
+        /* Auction Spotlight Styling */
+        .auction-card {
+            background-color: var(--bs-dark);
+            color: white;
+            border: 3px solid var(--bs-secondary);
+            text-align: center;
+        }
+        .countdown-timer {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--bs-secondary);
+            margin-top: 10px;
+            font-family: 'Inter', sans-serif;
+            letter-spacing: 2px;
+        }
+        .badge-live {
+            background-color: var(--bs-primary);
+            color: white;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(212, 175, 55, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
+        }
+
+        /* Filters Section */
+        .filter-section {
+            background-color: white;
+            padding: 2rem 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        .form-select, .form-control {
+            border-radius: 8px;
+        }
+
+        /* Dealers Section */
+        .dealer-logo {
+            filter: grayscale(80%);
+            opacity: 0.7;
+            height: 60px;
+            width: auto;
+            object-fit: contain;
+            transition: all 0.3s ease;
+        }
+        .dealer-logo:hover {
+            filter: grayscale(0%);
+            opacity: 1;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--bs-dark);
+            color: var(--bs-light);
+            padding: 3rem 0 1rem;
+        }
+        .footer a {
+            color: var(--bs-light);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .footer a:hover {
+            color: var(--bs-secondary);
+        }
+        .footer h5 {
+            color: var(--bs-secondary);
+            font-family: 'Playfair Display', serif;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light sticky-top py-3">
+            <div class="container">
+                <a class="navbar-brand" href="#">
+                    <span style="font-family: 'Playfair Display', serif; font-weight: 900; color: var(--bs-primary);">CLASSIC</span>
+                    <span style="font-family: 'Playfair Display', serif; font-weight: 900; color: var(--bs-dark);">MOTORS</span>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav mx-auto">
+                        <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#listings">Listings</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#auctions">Auctions</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#dealers">Dealers</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+                    </ul>
+                    <a href="#" class="btn btn-cta">Sell Your Car</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <section class="hero-section" id="home">
+        <div class="hero-overlay"></div>
+        <div class="container hero-content">
+            <p class="h4 mb-3 text-uppercase">The Collector's Choice</p>
+            <h1 class="display-4 fw-bold mb-4">Discover Timeless Classics</h1>
+            <p class="lead mb-5">Your journey into automotive history begins here. Find, bid, or sell the world's most desired vintage automobiles.</p>
+            <a href="#listings" class="btn btn-cta btn-lg me-3">Browse Cars</a>
+            <a href="#" class="btn btn-gold btn-lg">Start Selling</a>
+        </div>
+    </section>
+
+    <section class="filter-section py-5">
+        <div class="container">
+            <h2 class="text-center mb-4">Find Your Dream Classic</h2>
+            <form class="row g-3 align-items-end">
+                <div class="col-md-3">
+                    <label for="make" class="form-label visually-hidden">Make</label>
+                    <select id="make" class="form-select" aria-label="Select Make">
+                        <option selected>Make (e.g., Ford)</option>
+                        <option value="1">Ford</option>
+                        <option value="2">Chevrolet</option>
+                        <option value="3">Porsche</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="model" class="form-label visually-hidden">Model</label>
+                    <select id="model" class="form-select" aria-label="Select Model">
+                        <option selected>Model (e.g., Mustang)</option>
+                        <option value="1">Mustang</option>
+                        <option value="2">Bel Air</option>
+                        <option value="3">911</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label for="year" class="form-label visually-hidden">Year</label>
+                    <select id="year" class="form-select" aria-label="Select Year">
+                        <option selected>Year (e.g., 1965)</option>
+                        <option value="1">1960-1970</option>
+                        <option value="2">1970-1980</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label for="price" class="form-label visually-hidden">Price Range</label>
+                    <select id="price" class="form-select" aria-label="Select Price Range">
+                        <option selected>Price Range</option>
+                        <option value="1">$0 - $50k</option>
+                        <option value="2">$50k - $100k</option>
+                        <option value="3">$100k+</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100 btn-cta">Search</button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <section class="py-5" id="listings">
+        <div class="container">
+            <h2 class="text-center mb-5">Featured Classics for Sale</h2>
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+                
+                <div class="col">
+                    <div class="card car-card">
+                        <img src="https://picsum.photos/600/400?mustang" class="card-img-top car-card-img" alt="1965 Ford Mustang">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">1965 Ford Mustang</h5>
+                            <p class="card-text text-muted mb-1">Convertible, V8 Engine</p>
+                            <p class="card-price mb-3">$45,000</p>
+                            <a href="#" class="btn btn-cta w-100">View Details</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="card car-card">
+                        <img src="https://picsum.photos/600/400?porsche-911-classic" class="card-img-top car-card-img" alt="1970 Porsche 911">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">1970 Porsche 911 T</h5>
+                            <p class="card-text text-muted mb-1">Rally-Ready, Matching Numbers</p>
+                            <p class="card-price mb-3">$120,000</p>
+                            <a href="#" class="btn btn-cta w-100">View Details</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="card car-card">
+                        <img src="https://picsum.photos/600/400?jaguar-e-type" class="card-img-top car-card-img" alt="1961 Jaguar E-Type">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">1961 Jaguar E-Type</h5>
+                            <p class="card-text text-muted mb-1">Series 1 Coupe, Restored</p>
+                            <p class="card-price mb-3">$185,000</p>
+                            <a href="#" class="btn btn-cta w-100">View Details</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="card car-card">
+                        <img src="https://picsum.photos/600/400?mercedes-benz-sl" class="card-img-top car-card-img" alt="1955 Mercedes 300 SL">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">1955 Mercedes 300 SL</h5>
+                            <p class="card-text text-muted mb-1">Gullwing, Highly Original</p>
+                            <p class="card-price mb-3">$1,500,000</p>
+                            <a href="#" class="btn btn-cta w-100">View Details</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5 bg-light" id="auctions">
+        <div class="container">
+            <h2 class="text-center mb-5">Live Auction Spotlight <span class="badge badge-live ms-2">LIVE</span></h2>
+            <div class="row g-4 justify-content-center">
+
+                <div class="col-md-6 col-lg-5">
+                    <div class="card auction-card text-white">
+                        <img src="https://picsum.photos/800/500?chevrolet-bel-air" class="card-img-top car-card-img" alt="1957 Chevrolet Bel Air">
+                        <div class="card-body">
+                            <h4 class="card-title fw-bold">1957 Chevrolet Bel Air</h4>
+                            <p class="card-text text-uppercase mb-2">Iconic American Classic - No Reserve</p>
+                            <p class="h5 mb-1">Current Bid: <span class="text-warning">$78,000</span></p>
+                            <div class="countdown-timer mb-3" data-target-date="2025-10-20T18:00:00">00D : 00H : 00M : 00S</div>
+                            <a href="#" class="btn btn-gold w-75">Place Bid Now</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-5">
+                    <div class="card auction-card text-white">
+                        <img src="https://picsum.photos/800/500?ferrari-classic" class="card-img-top car-card-img" alt="1962 Ferrari 250 GTO">
+                        <div class="card-body">
+                            <h4 class="card-title fw-bold">1962 Ferrari 250 GTO</h4>
+                            <p class="card-text text-uppercase mb-2">Highly Sought-After Investment</p>
+                            <p class="h5 mb-1">Current Bid: <span class="text-warning">$38,000,000</span></p>
+                            <div class="countdown-timer mb-3" data-target-date="2025-11-05T12:00:00">00D : 00H : 00M : 00S</div>
+                            <a href="#" class="btn btn-gold w-75">View Auction</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="py-5" id="about">
+        <div class="container">
+            <div class="row align-items-center g-4">
+                <div class="col-lg-6">
+                    <img src="https://picsum.photos/800/600?classic-car-detail" class="img-fluid rounded shadow-lg" alt="Why Collect Classic Cars">
+                </div>
+                <div class="col-lg-6">
+                    <h2 class="display-6 mb-4">Why Collect Classic Cars?</h2>
+                    <p class="lead">More than just vehicles, classic cars are **rolling investments**, passionate hobbies, and tangible links to history.</p>
+                    <p>Each curve, engine note, and stitch of leather tells a story of innovation, design, and a bygone era. We connect discerning collectors with meticulously curated classics, ensuring authenticity, provenance, and investment quality.</p>
+                    <p>Whether you're looking for a weekend cruiser, a concours winner, or a reliable investment, **Classic Motors** is your trusted partner.</p>
+                    <a href="#" class="btn btn-cta mt-3">Read Our Story</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5 bg-white" id="dealers">
+        <div class="container">
+            <h2 class="text-center mb-5">Trusted Global Dealers</h2>
+            <div class="row row-cols-2 row-cols-md-3 row-cols-lg-6 g-4 text-center align-items-center">
+                
+                <div class="col">
+                    <div class="p-3">
+                        <img src="https://picsum.photos/150/60?logo1" class="dealer-logo mb-2" alt="Dealer Logo 1">
+                        <p class="small fw-bold mb-0">Berlin Classics</p>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="p-3">
+                        <img src="https://picsum.photos/150/60?logo2" class="dealer-logo mb-2" alt="Dealer Logo 2">
+                        <p class="small fw-bold mb-0">Vintage Auto House</p>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="p-3">
+                        <img src="https://picsum.photos/150/60?logo3" class="dealer-logo mb-2" alt="Dealer Logo 3">
+                        <p class="small fw-bold mb-0">The Heritage Collection</p>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="p-3">
+                        <img src="https://picsum.photos/150/60?logo4" class="dealer-logo mb-2" alt="Dealer Logo 4">
+                        <p class="small fw-bold mb-0">British Motoring Co.</p>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="p-3">
+                        <img src="https://picsum.photos/150/60?logo5" class="dealer-logo mb-2" alt="Dealer Logo 5">
+                        <p class="small fw-bold mb-0">Classic Auto House</p>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="p-3">
+                        <img src="https://picsum.photos/150/60?logo6" class="dealer-logo mb-2" alt="Dealer Logo 6">
+                        <p class="small fw-bold mb-0">Milan Motors</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer" id="contact">
+        <div class="container">
+            <div class="row py-4">
+                <div class="col-lg-4 mb-4 mb-lg-0">
+                    <a class="navbar-brand d-block mb-3" href="#">
+                        <span style="font-family: 'Playfair Display', serif; font-weight: 900; color: var(--bs-secondary);">CLASSIC</span>
+                        <span style="font-family: 'Playfair Display', serif; font-weight: 900; color: var(--bs-light);">MOTORS</span>
+                    </a>
+                    <p class="small">The world's premier destination for buying and selling vintage and collector automobiles.</p>
+                </div>
+
+                <div class="col-6 col-lg-2 mb-4 mb-lg-0">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#listings">Current Listings</a></li>
+                        <li><a href="#auctions">Live Auctions</a></li>
+                        <li><a href="#dealers">Dealer Network</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-6 col-lg-2 mb-4 mb-lg-0">
+                    <h5>Support</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#">FAQs</a></li>
+                        <li><a href="#">Terms & Conditions</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Careers</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-4">
+                    <h5>Contact Us</h5>
+                    <p class="small mb-1">Email: info@classicmotors.com</p>
+                    <p class="small">Phone: +1 (555) CLASSIC</p>
+                    <div class="mt-3">
+                        <a href="#" class="me-3"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="me-3"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="me-3"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col text-center pt-3 border-top border-secondary">
+                    <p class="small mb-0">&copy; 2024 Classic Motors. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    
+    <script>
+        function updateCountdown() {
+            document.querySelectorAll('.countdown-timer').forEach(timerEl => {
+                const targetDate = new Date(timerEl.getAttribute('data-target-date')).getTime();
+                const now = new Date().getTime();
+                const distance = targetDate - now;
+
+                if (distance < 0) {
+                    timerEl.innerHTML = "AUCTION ENDED";
+                    return;
+                }
+
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                timerEl.innerHTML = 
+                    (days < 10 ? '0' + days : days) + 'D : ' + 
+                    (hours < 10 ? '0' + hours : hours) + 'H : ' + 
+                    (minutes < 10 ? '0' + minutes : minutes) + 'M : ' + 
+                    (seconds < 10 ? '0' + seconds : seconds) + 'S';
+            });
+        }
+
+        // Initialize and run the countdown
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+    </script>
+</body>
+</html>

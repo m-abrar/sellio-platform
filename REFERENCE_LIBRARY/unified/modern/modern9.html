@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Marketplace UI - Final Hybrid Design</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Poppins:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Theme Colors */
+            --color-bg-page: #21212B; 
+            --color-bg-header-nav: #282A36; 
+            --color-bg-content-wrapper: #373A47; 
+            --color-bg-main-content: #1E1E28; 
+            
+            --color-bg-search-bar-transparent: rgba(255, 255, 255, 0.1); 
+            --color-bg-list-card: #F2F2F2; 
+            
+            --color-text-dark: #2C3E50; 
+            --color-text-light: #F8F8F2; 
+            --color-text-secondary-dark: #555555; 
+            --color-text-footer: rgba(248, 248, 242, 0.7); 
+            
+            /* Accent Colors */
+            --color-accent-home: #5F636F; 
+            --color-accent-events: #50B3E6; 
+            --color-accent-autos: #FFAC41; 
+            --color-accent-services: #6CBE5E; 
+            --color-accent-jobs: #B27BFF; 
+            --color-accent-classifieds: #F56565; 
+            
+            /* Radius */
+            --radius-card: 10px;
+            --radius-image: 8px; 
+            --radius-small: 6px;
+        }
+
+        body {
+            background-color: var(--color-bg-page); 
+            color: var(--color-text-dark);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.5;
+            padding: 0;
+        }
+        
+        /* Logo Styling */
+        .logo-text { 
+            color: var(--color-text-light); 
+            font-weight: 900; 
+            font-size: 1.8rem; 
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            align-items: center;
+        }
+        .logo-text i {
+            color: var(--color-accent-autos);
+            font-size: 1.6rem;
+            margin-right: 5px;
+        }
+
+        /* --- Main Content Wrapper & Main Content BG --- */
+        .content-wrapper { 
+            background-color: var(--color-bg-content-wrapper); 
+            padding: 30px 0; 
+        }
+        main.py-section { 
+            background-color: var(--color-bg-main-content); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            border-radius: 10px; 
+            /* NEW: Increased horizontal padding */
+            padding-left: 30px !important; 
+            padding-right: 30px !important; 
+            /* NEW: Added shadow */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+        
+        .main-container { padding-left: 15px; padding-right: 15px; }
+        .top-header { background-color: var(--color-bg-header-nav); }
+        
+        /* Section Title and Divider */
+        .section-title { color: var(--color-text-light); margin-bottom: 5px; }
+        .section-divider {
+            height: 3px;
+            width: 50px; 
+            background-color: var(--color-accent-autos);
+            margin-bottom: 25px;
+            border-radius: 2px;
+        }
+        
+        /* Search Field & Button (Perfect Circle enforced) */
+        .top-header .search-input { height: 45px; background-color: var(--color-bg-search-bar-transparent); color: var(--color-text-light); border: 1px solid rgba(255, 255, 255, 0.2); padding-left: 15px; padding-right: 15px; }
+        .top-header .search-btn { 
+            height: 45px; 
+            width: 45px; 
+            background-color: var(--color-accent-autos); 
+            color: var(--color-text-light); 
+            border-radius: 50% !important; 
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+        }
+
+        /* Category Nav */
+        .category-nav-bar { background-color: var(--color-bg-header-nav); padding: 10px 0 35px; white-space: nowrap; overflow-x: auto; scrollbar-width: none; }
+        .category-nav-bar::-webkit-scrollbar { display: none; }
+        .category-item-wrapper { 
+            display: inline-flex; flex-direction: column; align-items: center; margin-right: 20px; flex-shrink: 0; position: relative; text-decoration: none; margin-bottom: -15px; padding-bottom: 15px;
+        }
+        .category-link { 
+            display: flex; flex-direction: column; align-items: center; justify-content: center; text-decoration: none; color: var(--color-text-light); font-size: 0.9rem; font-weight: 600; line-height: 1.2; padding-top: 5px; flex-shrink: 0;
+        }
+        .category-link i { font-size: 1.8rem; margin-bottom: 7px; color: var(--color-text-light); } 
+        .category-link.circle, .category-link.pill { width: 90px; height: 90px; border-radius: 50%; padding: 5px; }
+
+        .bg-home { background-color: var(--color-accent-home); }
+        .bg-events { background-color: var(--color-accent-events); }
+        .bg-autos { background-color: var(--color-accent-autos); }
+        .bg-services { background-color: var(--color-accent-services); }
+        .bg-jobs { background-color: var(--color-accent-jobs); }
+        .bg-classifieds { background-color: var(--color-accent-classifieds); }
+
+        .active-line-bar {
+            position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); height: 5px; width: 80%; border-radius: 3px; background-color: rgba(255, 255, 255, 0.1); transition: background-color 0.2s;
+        }
+        .category-item-wrapper:hover .active-line-bar,
+        .category-item-wrapper.active .active-line-bar { background-color: var(--active-line-color, var(--color-accent-home)); }
+
+        /* --- Card Styles --- */
+        .card { padding: 15px; background-color: #FFFFFF; border: 1px solid #EEEEEE; border-radius: var(--radius-card) !important; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); }
+        
+        .list-card {
+            background-color: var(--color-bg-list-card); 
+            border: 1px solid #DDDDDD; 
+            border-radius: var(--radius-card) !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            padding: 15px;
+        }
+        
+        .list-thumbnail { width: 65px; height: 65px; border-radius: var(--radius-image); overflow: hidden; flex-shrink: 0; border: 1px solid #EEEEEE; }
+        .list-thumbnail img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .card-img-container { position: relative; margin-bottom: 10px; overflow: hidden; }
+        .price-tag { position: absolute; top: 15px; left: 15px; z-index: 10; padding: 5px 10px; font-size: 0.85rem; font-weight: 700; border-radius: var(--radius-small); color: var(--color-text-light); }
+        .card-body { padding: 0 0 5px 0; } 
+        
+        .card-title-subtle, .classified-title { color: var(--color-text-dark); font-weight: 700 !important; }
+        .card-subtitle-small { color: var(--color-text-secondary-dark); font-size: 0.85rem; }
+
+        /* Spacing */
+        .py-section { padding-top: 3rem; padding-bottom: 3rem; }
+        .mb-section { margin-bottom: 3rem; }
+        
+        /* Footer Styles */
+        .main-footer { background-color: var(--color-bg-header-nav); padding: 40px 0 20px; color: var(--color-text-footer); font-size: 0.9rem; }
+        .main-footer h5 { color: var(--color-text-light); font-size: 1rem; margin-bottom: 15px; font-weight: 700; }
+        .main-footer a { color: var(--color-text-footer); text-decoration: none; display: block; margin-bottom: 8px; transition: color 0.2s; }
+        .main-footer a:hover { color: var(--color-accent-autos); }
+    </style>
+</head>
+<body>
+
+    <header class="top-header">
+        <div class="container-fluid container-xl">
+            <div class="d-flex justify-content-between align-items-center main-container py-3">
+                <span class="logo-text"><i class="bi bi-geo-alt-fill"></i>Marketplace</span>
+                <div class="d-flex align-items-center">
+                    <input type="text" class="form-control search-input rounded-pill me-2 d-none d-md-block" placeholder="Search Listings..." aria-label="Search">
+                    <button class="btn search-btn" type="button"><i class="bi bi-search"></i></button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="category-nav-bar">
+        <div class="container-fluid container-xl main-container d-flex">
+            
+            <a href="#" class="category-item-wrapper active">
+                <div class="category-link circle bg-home"><i class="bi bi-house-door-fill"></i>Home</div>
+                <div class="active-line-bar" style="--active-line-color: var(--color-accent-home);"></div>
+            </a>
+            
+            <a href="#" class="category-item-wrapper">
+                <div class="category-link circle bg-events"><i class="bi bi-calendar-event-fill"></i>Events</div>
+                <div class="active-line-bar" style="--active-line-color: var(--color-accent-events);"></div>
+            </a>
+            
+            <a href="#" class="category-item-wrapper">
+                <div class="category-link circle bg-autos"><i class="bi bi-car-front-fill"></i>Autos</div>
+                <div class="active-line-bar" style="--active-line-color: var(--color-accent-autos);"></div>
+            </a>
+            
+            <a href="#" class="category-item-wrapper">
+                <div class="category-link circle bg-services"><i class="bi bi-tools"></i>Services</div>
+                <div class="active-line-bar" style="--active-line-color: var(--color-accent-services);"></div>
+            </a>
+            
+            <a href="#" class="category-item-wrapper">
+                <div class="category-link circle bg-jobs"><i class="bi bi-briefcase-fill"></i>Jobs</div>
+                <div class="active-line-bar" style="--active-line-color: var(--color-accent-jobs);"></div>
+            </a>
+            
+            <a href="#" class="category-item-wrapper">
+                <div class="category-link pill bg-classifieds"><i class="bi bi-tags-fill"></i><span>Classifieds</span></div>
+                <div class="active-line-bar" style="--active-line-color: var(--color-accent-classifieds);"></div>
+            </a>
+
+        </div>
+    </nav>
+
+
+    <div class="content-wrapper">
+        <div class="container container-xl main-container">
+            <main class="py-section">
+                
+                <section class="mb-section">
+                    <h2 class="section-title">Properties</h2>
+                    <div class="section-divider"></div>
+                    <div class="row row-cols-1 row-cols-md-3 g-4">
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-img-container">
+                                    <img src="https://picsum.photos/500/300?random=1" alt="Modern Apartment" class="w-100">
+                                    <span class="price-tag" style="background-color: var(--color-accent-events);">$1.2M</span>
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="card-title-subtle">Modern Apartment</h5>
+                                    <p class="card-subtitle-small mb-3">Downtown - 3 Bed, 3 Bath</p>
+                                    <a href="#" class="btn btn-small-square rounded-pill" style="background-color: var(--color-accent-events);">View Details</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-img-container">
+                                    <img src="https://picsum.photos/500/300?random=2" alt="Classic House" class="w-100">
+                                    <span class="price-tag" style="background-color: var(--color-accent-autos);">$350K</span>
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="card-title-subtle">Classic House</h5>
+                                    <p class="card-subtitle-small mb-3">Suburbs - 4 Bed, 3 Bath</p>
+                                    <a href="#" class="btn btn-small-square rounded-pill" style="background-color: var(--color-accent-autos);">View Details</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-img-container">
+                                    <img src="https://picsum.photos/500/300?random=3" alt="Luxury Villa" class="w-100">
+                                    <span class="price-tag" style="background-color: var(--color-accent-jobs);">$3.5M</span>
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="card-title-subtle">Luxury Villa</h5>
+                                    <p class="card-subtitle-small mb-3">Beachfront - 5 Bed, 5 Bath</p>
+                                    <a href="#" class="btn btn-small-square rounded-pill" style="background-color: var(--color-accent-jobs);">View Details</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="mb-section">
+                    <h2 class="section-title">Events</h2>
+                    <div class="section-divider"></div>
+                    <div class="row row-cols-1 row-cols-md-3 g-4">
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-img-container">
+                                    <img src="https://picsum.photos/500/300?random=4" alt="Music Festival" class="w-100">
+                                    <span class="price-tag" style="background-color: var(--color-accent-events);">Music Festival</span>
+                                </div>
+                                <div class="card-body d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h5 class="card-title-subtle">Summer Music Festival</h5>
+                                        <p class="card-subtitle-small mb-0">July 20 - Central Park</p>
+                                    </div>
+                                    <a href="#" class="btn btn-small-square rounded-pill" style="background-color: var(--color-accent-classifieds);">RSVP</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-img-container">
+                                    <img src="https://picsum.photos/500/300?random=5" alt="Corporate Conference" class="w-100">
+                                    <span class="price-tag" style="background-color: var(--color-accent-services);">Conference</span>
+                                </div>
+                                <div class="card-body d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h5 class="card-title-subtle">Corporate Conference</h5>
+                                        <p class="card-subtitle-small mb-0">Aug 5 - Downtown Hall</p>
+                                    </div>
+                                    <a href="#" class="btn btn-small-square rounded-pill" style="background-color: var(--color-accent-classifieds);">RSVP</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-img-container">
+                                    <img src="https://picsum.photos/500/300?random=6" alt="Art Festival" class="w-100">
+                                    <span class="price-tag" style="background-color: var(--color-accent-jobs);">Art Festival</span>
+                                </div>
+                                <div class="card-body d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h5 class="card-title-subtle">Modern Art Festival</h5>
+                                        <p class="card-subtitle-small mb-0">Sep 10 - City Gallery</p>
+                                    </div>
+                                    <a href="#" class="btn btn-small-square rounded-pill" style="background-color: var(--color-accent-classifieds);">RSVP</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="mb-section">
+                    <h2 class="section-title">Services</h2>
+                    <div class="section-divider"></div>
+                    <div class="row row-cols-1 row-cols-md-2 g-3">
+                        <div class="col">
+                            <div class="list-card d-flex align-items-center">
+                                <div class="list-thumbnail me-3">
+                                    <img src="https://picsum.photos/80/80?random=7" alt="Photography Studio Thumbnail">
+                                </div>
+                                <div class="classified-info">
+                                    <p class="classified-title mb-0">Photography Studio</p>
+                                    <p class="card-subtitle-small mb-1">Full-service studio, weddings and portraits.</p>
+                                    <p class="card-subtitle-small mb-0">5-star rating</p>
+                                </div>
+                                <a href="#" class="btn btn-small-square ms-auto rounded-pill" style="background-color: var(--color-accent-autos); color: var(--color-text-light);">Book Now</a>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="list-card d-flex align-items-center">
+                                <div class="list-thumbnail me-3">
+                                    <img src="https://picsum.photos/80/80?random=8" alt="Home Repair Services Thumbnail">
+                                </div>
+                                <div class="classified-info">
+                                    <p class="classified-title mb-0">Home Repair Services</p>
+                                    <p class="card-subtitle-small mb-1">Certified professionals, 24/7 emergency calls.</p>
+                                    <p class="card-subtitle-small mb-0">Plumbing & Electric</p>
+                                </div>
+                                <a href="#" class="btn btn-small-square ms-auto rounded-pill" style="background-color: var(--color-accent-autos); color: var(--color-text-light);">Book Now</a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="mb-section">
+                    <h2 class="section-title">Classifieds</h2>
+                    <div class="section-divider"></div>
+                    <div class="row row-cols-1 row-cols-md-3 g-3">
+                        <div class="col">
+                            <div class="list-card d-flex align-items-center">
+                                <div class="list-thumbnail me-3">
+                                    <img src="https://picsum.photos/80/80?random=9" alt="Software Engineer Job Thumbnail">
+                                </div>
+                                <div class="classified-info">
+                                    <p class="classified-title mb-0">Software Engineer</p>
+                                    <p class="card-subtitle-small mb-1">Full-stack opportunity, requires 3+ years experience.</p>
+                                    <p class="card-subtitle-small mb-0">TechCorp - Remote</p>
+                                </div>
+                                <a href="#" class="btn btn-small-square ms-auto rounded-pill" style="background-color: var(--color-accent-jobs); color: var(--color-text-light);">Apply</a>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="list-card d-flex align-items-center">
+                                <div class="list-thumbnail me-3">
+                                    <img src="https://picsum.photos/80/80?random=10" alt="Used Laptop Thumbnail">
+                                </div>
+                                <div class="classified-info">
+                                    <p class="classified-title mb-0">Used Laptop</p>
+                                    <p class="card-subtitle-small mb-1">Intel i7, 16GB RAM, excellent condition.</p>
+                                    <p class="card-subtitle-small mb-0">Seller: TechShop</p>
+                                </div>
+                                <a href="#" class="btn btn-small-square ms-auto rounded-pill" style="background-color: var(--color-accent-services); color: var(--color-text-light);">Live</a>
+                            </div>
+                        </div>
+                        <div class="col">
+                             <div class="list-card d-flex align-items-center">
+                                <div class="list-thumbnail me-3">
+                                    <img src="https://picsum.photos/80/80?random=11" alt="Vintage Watch Thumbnail">
+                                </div>
+                                <div class="classified-info">
+                                    <p class="classified-title mb-0">Vintage Watch</p>
+                                    <p class="card-subtitle-small mb-1">Swiss movement, limited edition, circa 1980.</p>
+                                    <p class="card-subtitle-small mb-0">Seller: John D.</p>
+                                </div>
+                                <a href="#" class="btn btn-small-square ms-auto rounded-pill" style="background-color: var(--color-accent-services); color: var(--color-text-light);">Live</a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <footer class="main-footer">
+        <div class="container container-xl main-container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h5>Marketplace</h5>
+                    <p class="small">Connecting communities through localized listings for properties, jobs, services, and more.</p>
+                    <p class="small">&copy; 2025 Universal Marketplace Demo</p>
+                </div>
+                <div class="col-md-2 col-6">
+                    <h5>Links</h5>
+                    <a href="#">Properties</a>
+                    <a href="#">Events</a>
+                    <a href="#">Jobs</a>
+                    <a href="#">Services</a>
+                </div>
+                <div class="col-md-2 col-6">
+                    <h5>Resources</h5>
+                    <a href="#">Help Center</a>
+                    <a href="#">Advertise</a>
+                    <a href="#">Post Listing</a>
+                    <a href="#">Blog</a>
+                </div>
+                <div class="col-md-4">
+                    <h5>Legal</h5>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Cookie Settings</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+</body>
+</html>

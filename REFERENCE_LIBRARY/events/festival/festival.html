@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Festivals 2025 - Celebrate Life</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Google Fonts: Baloo 2 (Headings) and Inter (Body) -->
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Festival Color Palette */
+            --bs-primary-festive: #FF6B35; /* Bright Orange */
+            --bs-secondary-festive: #35A7FF; /* Teal/Blue */
+            --bs-accent-yellow: #FFC43A; /* Yellow */
+            --bs-accent-magenta: #FF35B3; /* Magenta */
+            --bs-dark-bg: #1A1A1A;
+            --bs-light-bg: #F8F9FA;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+            background-color: var(--bs-light-bg);
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Baloo 2', sans-serif;
+            font-weight: 800;
+        }
+
+        /* --- Custom Navbar Styling --- */
+        .navbar {
+            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        .nav-link {
+            color: var(--bs-dark-bg) !important;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+        .nav-link:hover {
+            color: var(--bs-primary-festive) !important;
+        }
+        .btn-festive-cta {
+            background-color: var(--bs-accent-magenta);
+            border-color: var(--bs-accent-magenta);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(255, 53, 179, 0.3);
+        }
+        .btn-festive-cta:hover {
+            background-color: var(--bs-primary-festive);
+            border-color: var(--bs-primary-festive);
+            box-shadow: 0 6px 15px rgba(255, 107, 53, 0.5);
+            transform: translateY(-2px);
+        }
+
+        /* --- Hero Section Styling --- */
+        .hero-section {
+            background: url('https://picsum.photos/1600/900?random=1') no-repeat center center;
+            background-size: cover;
+            height: 100vh;
+            min-height: 500px;
+            position: relative;
+            color: white;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+        }
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.35); /* Dark overlay for text readability */
+        }
+        .hero-content {
+            z-index: 2;
+        }
+        .hero-title {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            line-height: 1;
+            margin-bottom: 1rem;
+        }
+        
+        .btn-hero {
+            padding: 0.8rem 2.5rem;
+            margin: 0.5rem;
+            border-radius: 50px;
+            font-weight: 800;
+            font-size: 1.1rem;
+            transition: transform 0.3s ease;
+        }
+        .btn-hero-primary {
+            background-color: var(--bs-primary-festive);
+            border-color: var(--bs-primary-festive);
+        }
+        .btn-hero-secondary {
+            background-color: var(--bs-secondary-festive);
+            border-color: var(--bs-secondary-festive);
+        }
+        .btn-hero:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* --- Highlights Card Styling --- */
+        .highlight-card {
+            border: none;
+            border-radius: 1.5rem;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            cursor: pointer;
+        }
+        .highlight-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+        }
+        .highlight-card img {
+            transition: transform 0.5s ease;
+        }
+        .highlight-card:hover img {
+            transform: scale(1.05);
+        }
+        .card-body-festive {
+            background: linear-gradient(135deg, var(--bs-light-bg) 70%, var(--bs-accent-yellow));
+        }
+        
+        /* --- Lineup/Activities Styling --- */
+        .activity-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 1rem;
+            border-radius: 1rem;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .activity-item:hover {
+            background-color: rgba(255, 107, 53, 0.1);
+            transform: translateY(-3px);
+        }
+        .activity-icon {
+            font-size: 3rem;
+            color: var(--bs-secondary-festive);
+            margin-bottom: 0.5rem;
+            border: 3px solid var(--bs-accent-yellow);
+            border-radius: 50%;
+            padding: 0.75rem;
+            background-color: white;
+        }
+
+        /* --- Tickets Section Styling --- */
+        .ticket-card {
+            background-color: white;
+            border-radius: 1.5rem;
+            padding: 2.5rem 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            border: 5px solid transparent;
+        }
+        .ticket-card-general { border-color: var(--bs-primary-festive); }
+        .ticket-card-vip { border-color: var(--bs-accent-magenta); transform: scale(1.05); }
+        .ticket-card-family { border-color: var(--bs-secondary-festive); }
+
+        .ticket-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+        .price {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: var(--bs-primary-festive);
+        }
+        .ticket-card-vip .price {
+            color: var(--bs-accent-magenta);
+        }
+
+        .btn-ticket-buy {
+            width: 100%;
+            border-radius: 50px;
+            font-weight: 700;
+            padding: 0.75rem 0;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        /* Glow Effect for Buttons */
+        .btn-ticket-buy:before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transition: all 0.5s ease-out;
+            transform: translate(-50%, -50%) scale(0);
+            z-index: -1;
+        }
+        .btn-ticket-buy:hover:before {
+            transform: translate(-50%, -50%) scale(1);
+        }
+        .btn-ticket-buy-general { background-color: var(--bs-primary-festive); border-color: var(--bs-primary-festive); }
+        .btn-ticket-buy-vip { background-color: var(--bs-accent-magenta); border-color: var(--bs-accent-magenta); }
+        .btn-ticket-buy-family { background-color: var(--bs-secondary-festive); border-color: var(--bs-secondary-festive); }
+
+        /* --- Gallery Masonry Effect --- */
+        .gallery-item img {
+            width: 100%;
+            height: auto;
+            border-radius: 1rem;
+            margin-bottom: 1rem;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        .gallery-item img:hover {
+            transform: scale(1.03);
+        }
+        
+        /* Mobile adjustment for gallery (using Bootstrap's columns for a lightweight masonry effect) */
+        .masonry-grid {
+            --bs-columns: 2; /* 2 columns on mobile */
+        }
+        @media (min-width: 768px) {
+            .masonry-grid {
+                --bs-columns: 3; /* 3 columns on tablet/desktop */
+            }
+        }
+        @media (min-width: 1200px) {
+            .masonry-grid {
+                --bs-columns: 4; /* 4 columns on large desktop */
+            }
+        }
+
+        /* --- Sponsors Styling --- */
+        .sponsor-logo {
+            filter: grayscale(100%);
+            opacity: 0.7;
+            max-height: 50px;
+            transition: all 0.3s ease;
+        }
+        .sponsor-logo:hover {
+            filter: grayscale(0%);
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        /* --- Footer Styling --- */
+        .footer-festive {
+            background-color: var(--bs-dark-bg);
+            color: white;
+            padding-top: 4rem;
+        }
+        .footer-festive a {
+            color: var(--bs-secondary-festive);
+            text-decoration: none;
+        }
+        .footer-festive a:hover {
+            color: var(--bs-accent-yellow);
+        }
+        .social-icon-btn {
+            background-color: var(--bs-primary-festive);
+            color: white;
+            width: 40px;
+            height: 40px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            margin: 0 0.25rem;
+            transition: background-color 0.3s;
+        }
+        .social-icon-btn:hover {
+            background-color: var(--bs-accent-magenta);
+            transform: scale(1.1);
+        }
+
+        /* Custom Logo Font Styling */
+        .logo-text {
+            font-family: 'Baloo 2', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--bs-primary-festive);
+        }
+
+        /* Utility for color/bg */
+        .text-festive-primary { color: var(--bs-primary-festive) !important; }
+        .bg-festive-accent { background-color: var(--bs-accent-yellow) !important; }
+    </style>
+</head>
+<body data-bs-spy="scroll" data-bs-target="#mainNav" data-bs-offset="56">
+
+    <!-- Header (Sticky Navbar) -->
+    <nav class="navbar navbar-expand-lg sticky-top" id="mainNav">
+        <div class="container-fluid container-xl">
+            <a class="navbar-brand logo-text" href="#home">Festivals <span class="text-festive-primary">2025</span></a>
+            
+            <!-- Mobile Toggler & Off-Canvas Setup -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title logo-text" id="offcanvasNavbarLabel">Menu</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="#home">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#highlights">Highlights</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#lineup">Lineup</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#tickets">Tickets</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#gallery">Gallery</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#info">Info</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+                    </ul>
+                    <a href="#tickets" class="btn btn-festive-cta ms-lg-3 mt-3 mt-lg-0">Book Now</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header id="home" class="hero-section">
+        <div class="hero-overlay"></div>
+        <div class="container hero-content">
+            <div class="row">
+                <div class="col-lg-10 col-xl-8 mx-auto text-center">
+                    <h1 class="hero-title display-1 fw-bolder">CELEBRATE LIFE AT <br><span style="color: var(--bs-accent-yellow);">FESTIVALS 2025</span></h1>
+                    <p class="lead mb-4 fs-4 fw-light">Your passport to unforgettable global food, music, and cultural events. Let the good times roll!</p>
+                    <a href="#highlights" class="btn btn-hero btn-hero-primary btn-lg">Explore Festivals</a>
+                    <a href="#tickets" class="btn btn-hero btn-hero-secondary btn-lg">Get Tickets</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Festival Highlights Section -->
+    <section id="highlights" class="py-5 py-md-5 py-lg-7 bg-light">
+        <div class="container container-xl">
+            <h2 class="text-center mb-5 pb-3">Festival Highlights</h2>
+            <div class="row g-4 justify-content-center">
+                
+                <!-- Highlight Card 1 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card highlight-card shadow-lg">
+                        <img src="https://picsum.photos/600/400?random=2" class="card-img-top" alt="Summer Carnival in Rio">
+                        <div class="card-body card-body-festive p-4">
+                            <h3 class="h4 card-title fw-bolder text-festive-primary">Summer Carnival</h3>
+                            <p class="card-text mb-2"><i class="bi bi-calendar-event"></i> <span class="fw-semibold">July 22, 2025</span></p>
+                            <p class="card-text mb-3"><i class="bi bi-geo-alt"></i> Rio de Janeiro, Brazil</p>
+                            <a href="#" class="btn btn-sm btn-outline-dark fw-bold rounded-pill">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Highlight Card 2 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card highlight-card shadow-lg">
+                        <img src="https://picsum.photos/600/400?random=3" class="card-img-top" alt="Global Food Fest in Rome">
+                        <div class="card-body card-body-festive p-4">
+                            <h3 class="h4 card-title fw-bolder text-festive-primary">Global Food Fest</h3>
+                            <p class="card-text mb-2"><i class="bi bi-calendar-event"></i> <span class="fw-semibold">Sept 10, 2025</span></p>
+                            <p class="card-text mb-3"><i class="bi bi-geo-alt"></i> Rome, Italy</p>
+                            <a href="#" class="btn btn-sm btn-outline-dark fw-bold rounded-pill">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Highlight Card 3 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card highlight-card shadow-lg">
+                        <img src="https://picsum.photos/600/400?random=4" class="card-img-top" alt="Cultural Arts Festival in Kyoto">
+                        <div class="card-body card-body-festive p-4">
+                            <h3 class="h4 card-title fw-bolder text-festive-primary">Cultural Arts Festival</h3>
+                            <p class="card-text mb-2"><i class="bi bi-calendar-event"></i> <span class="fw-semibold">Oct 30, 2025</span></p>
+                            <p class="card-text mb-3"><i class="bi bi-geo-alt"></i> Kyoto, Japan</p>
+                            <a href="#" class="btn btn-sm btn-outline-dark fw-bold rounded-pill">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Highlight Card 4 (Optional) -->
+                <div class="col-md-6 col-lg-4 d-none d-lg-block">
+                    <div class="card highlight-card shadow-lg">
+                        <img src="https://picsum.photos/600/400?random=5" class="card-img-top" alt="Music Festival in the desert">
+                        <div class="card-body card-body-festive p-4">
+                            <h3 class="h4 card-title fw-bolder text-festive-primary">Desert Beats</h3>
+                            <p class="card-text mb-2"><i class="bi bi-calendar-event"></i> <span class="fw-semibold">May 05, 2025</span></p>
+                            <p class="card-text mb-3"><i class="bi bi-geo-alt"></i> Mojave Desert, USA</p>
+                            <a href="#" class="btn btn-sm btn-outline-dark fw-bold rounded-pill">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Lineup/Activities Section -->
+    <section id="lineup" class="py-5 py-lg-7">
+        <div class="container container-xl">
+            <h2 class="text-center mb-5 pb-3">Lineup & Activities</h2>
+            <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4 text-center">
+                
+                <div class="col"><div class="activity-item"><i class="bi bi-mic-fill activity-icon" style="color: var(--bs-accent-magenta); border-color: var(--bs-primary-festive);"></i><p class="fw-bold mb-0">Main Stage Acts</p></div></div>
+                <div class="col"><div class="activity-item"><i class="bi bi-heart-fill activity-icon" style="color: var(--bs-primary-festive); border-color: var(--bs-secondary-festive);"></i><p class="fw-bold mb-0">Dance Workshops</p></div></div>
+                <div class="col"><div class="activity-item"><i class="bi bi-truck-flatbed activity-icon" style="color: var(--bs-secondary-festive); border-color: var(--bs-accent-magenta);"></i><p class="fw-bold mb-0">Food Vendors</p></div></div>
+                <div class="col"><div class="activity-item"><i class="bi bi-palette-fill activity-icon" style="color: var(--bs-accent-yellow); border-color: var(--bs-primary-festive);"></i><p class="fw-bold mb-0">Art Installations</p></div></div>
+                <div class="col"><div class="activity-item"><i class="bi bi-flower3 activity-icon" style="color: var(--bs-primary-festive); border-color: var(--bs-accent-yellow);"></i><p class="fw-bold mb-0">Wellness Retreat</p></div></div>
+                <div class="col"><div class="activity-item"><i class="bi bi-lightbulb-fill activity-icon" style="color: var(--bs-accent-magenta); border-color: var(--bs-secondary-festive);"></i><p class="fw-bold mb-0">Speaker Series</p></div></div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Tickets Section -->
+    <section id="tickets" class="py-5 py-lg-7 bg-festive-accent">
+        <div class="container container-xl">
+            <h2 class="text-center mb-5 pb-3">Ticket Options</h2>
+            <div class="row g-4 justify-content-center">
+                
+                <!-- Ticket Card 1: General Pass -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="ticket-card text-center ticket-card-general">
+                        <h3 class="h3 fw-bolder">General Pass</h3>
+                        <p class="text-muted mb-4">Access all basic areas for the entire weekend.</p>
+                        <div class="price text-festive-primary mb-3">$50<span class="fs-5 fw-normal">/day</span></div>
+                        <ul class="list-unstyled text-start mb-4">
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> All Main Stages Access</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Food & Drink Vendors</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> General Restrooms</li>
+                            <li class="text-muted"><i class="bi bi-x-circle-fill text-danger me-2"></i> VIP Lounge Access</li>
+                            <li class="text-muted"><i class="bi bi-x-circle-fill text-danger me-2"></i> Priority Entry</li>
+                        </ul>
+                        <a href="#" class="btn btn-primary btn-ticket-buy btn-ticket-buy-general">Buy General Pass</a>
+                    </div>
+                </div>
+
+                <!-- Ticket Card 2: VIP Pass (Highlighted) -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="ticket-card text-center ticket-card-vip shadow-lg">
+                        <h3 class="h3 fw-bolder">VIP Pass</h3>
+                        <p class="text-muted mb-4">The ultimate festival experience with premium perks.</p>
+                        <div class="price mb-3" style="color: var(--bs-accent-magenta);">$120<span class="fs-5 fw-normal">/day</span></div>
+                        <ul class="list-unstyled text-start mb-4">
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> All Main Stages Access</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> <span class="fw-bold">Exclusive VIP Lounge</span></li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Air-Conditioned Restrooms</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Priority Entry Lane</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Dedicated Bar Service</li>
+                        </ul>
+                        <a href="#" class="btn btn-primary btn-ticket-buy btn-ticket-buy-vip">Go VIP!</a>
+                    </div>
+                </div>
+                
+                <!-- Ticket Card 3: Family Pack -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="ticket-card text-center ticket-card-family">
+                        <h3 class="h3 fw-bolder">Family Pack</h3>
+                        <p class="text-muted mb-4">Fun for the whole family (2 Adults, 2 Kids).</p>
+                        <div class="price" style="color: var(--bs-secondary-festive);"> $180<span class="fs-5 fw-normal">/day</span></div>
+                        <p class="text-muted mb-4">(Save $20!)</p>
+                        <ul class="list-unstyled text-start mb-4">
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> All General Access</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> <span class="fw-bold">Kids Zone Access</span></li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Designated Seating Area</li>
+                            <li class="text-muted"><i class="bi bi-x-circle-fill text-danger me-2"></i> VIP Lounge Access</li>
+                            <li class="text-muted"><i class="bi bi-x-circle-fill text-danger me-2"></i> Priority Entry</li>
+                        </ul>
+                        <a href="#" class="btn btn-primary btn-ticket-buy btn-ticket-buy-family">Grab the Pack</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section (Masonry-style Grid) -->
+    <section id="gallery" class="py-5 py-lg-7">
+        <div class="container container-xl">
+            <h2 class="text-center mb-5 pb-3">Gallery - The Vibe</h2>
+            <div class="row masonry-grid" data-masonry='{"percentPosition": true }'>
+                
+                <div class="col gallery-item"><img src="https://picsum.photos/400/600?random=6" alt="Festival Crowd" class="img-fluid shadow"></div>
+                <div class="col gallery-item"><img src="https://picsum.photos/600/450?random=7" alt="Food Stall" class="img-fluid shadow"></div>
+                <div class="col gallery-item"><img src="https://picsum.photos/400/500?random=8" alt="Fire Dancers" class="img-fluid shadow"></div>
+                <div class="col gallery-item"><img src="https://picsum.photos/600/300?random=9" alt="Sunset View" class="img-fluid shadow"></div>
+                <div class="col gallery-item"><img src="https://picsum.photos/500/700?random=10" alt="Cultural Performance" class="img-fluid shadow"></div>
+                <div class="col gallery-item"><img src="https://picsum.photos/600/400?random=11" alt="Fireworks" class="img-fluid shadow"></div>
+                <div class="col gallery-item"><img src="https://picsum.photos/450/600?random=12" alt="Happy Crowd" class="img-fluid shadow"></div>
+                <div class="col gallery-item d-none d-md-block"><img src="https://picsum.photos/600/350?random=13" alt="Workshop" class="img-fluid shadow"></div>
+            
+            </div>
+            <p class="text-center mt-4">Photography by our community of attendees.</p>
+        </div>
+    </section>
+
+    <!-- Sponsors/Partners Section -->
+    <section id="info" class="py-5 py-lg-7 bg-white">
+        <div class="container container-xl">
+            <h2 class="text-center mb-5 pb-3">Our Amazing Partners</h2>
+            <div class="row row-cols-3 row-cols-md-6 g-4 align-items-center justify-content-center">
+                
+                <div class="col text-center"><img src="https://placehold.co/150x50/35A7FF/FFFFFF?text=JazzyCo" alt="Sponsor 1" class="img-fluid sponsor-logo"></div>
+                <div class="col text-center"><img src="https://placehold.co/150x50/FF6B35/FFFFFF?text=FlavorFuel" alt="Sponsor 2" class="img-fluid sponsor-logo"></div>
+                <div class="col text-center"><img src="https://placehold.co/150x50/FFC43A/000000?text=CultureHub" alt="Sponsor 3" class="img-fluid sponsor-logo"></div>
+                <div class="col text-center"><img src="https://placehold.co/150x50/FF35B3/FFFFFF?text=RhythmWave" alt="Sponsor 4" class="img-fluid sponsor-logo"></div>
+                <div class="col text-center"><img src="https://placehold.co/150x50/1A1A1A/FFFFFF?text=GlobalTix" alt="Sponsor 5" class="img-fluid sponsor-logo"></div>
+                <div class="col text-center"><img src="https://placehold.co/150x50/50C878/FFFFFF?text=EcoPlanet" alt="Sponsor 6" class="img-fluid sponsor-logo"></div>
+                
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact" class="footer-festive">
+        <div class="container container-xl">
+            <div class="row pt-5 pb-4">
+                
+                <!-- Logo & Contact Info -->
+                <div class="col-md-4 mb-4 mb-md-0">
+                    <div class="logo-text mb-3" style="color: white; font-size: 2rem;">Festivals <span class="text-festive-primary">2025</span></div>
+                    <p>Your ultimate guide to global celebrations.</p>
+                    <p class="mb-1"><i class="bi bi-envelope me-2"></i> <a href="mailto:info@festivals2025.com">info@festivals2025.com</a></p>
+                    <p><i class="bi bi-telephone me-2"></i> +1 (555) FEST-NOW</p>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="col-6 col-md-3">
+                    <h5 class="fw-bold mb-3" style="color: var(--bs-accent-yellow);">Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#highlights">Highlights</a></li>
+                        <li><a href="#lineup">Full Lineup</a></li>
+                        <li><a href="#tickets">Buy Tickets</a></li>
+                        <li><a href="#info">Festival FAQ</a></li>
+                    </ul>
+                </div>
+
+                <!-- Legal/Policy -->
+                <div class="col-6 col-md-3">
+                    <h5 class="fw-bold mb-3" style="color: var(--bs-accent-yellow);">Policies</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Refund Policy</a></li>
+                        <li><a href="#">Press Kit</a></li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="row pb-4 border-top border-secondary-subtle align-items-center">
+                <!-- Social Icons -->
+                <div class="col-md-6 text-center text-md-start pt-3">
+                    <a href="#" class="social-icon-btn"><i class="bi bi-facebook"></i></a>
+                    <a href="#" class="social-icon-btn"><i class="bi bi-instagram"></i></a>
+                    <a href="#" class="social-icon-btn"><i class="bi bi-twitter-x"></i></a>
+                    <a href="#" class="social-icon-btn"><i class="bi bi-youtube"></i></a>
+                </div>
+                <!-- Copyright -->
+                <div class="col-md-6 text-center text-md-end pt-3">
+                    <p class="mb-0 fs-6">&copy; 2025 Festivals Worldwide. All Rights Reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle (includes Popper for Navbar/Offcanvas) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Masonry JS for the Gallery Grid -->
+    <script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" async></script>
+    
+    <script>
+        // Smooth scrolling for all internal anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                // Check if it's a link to a section ID and not just a button placeholder
+                if (this.getAttribute('href').length > 1) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+
+                    // Close the offcanvas menu after clicking a link (mobile UX)
+                    const offcanvasElement = document.getElementById('offcanvasNavbar');
+                    const offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
+                    if (offcanvas) {
+                        offcanvas.hide();
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

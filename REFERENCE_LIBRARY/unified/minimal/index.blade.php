@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universal Minimal – Polished & Elegant Marketplace</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+        /* CSS Variables & Global Setup */
+        :root {
+            --primary-color: #4F46E5; /* Deep Indigo Accent */
+            --text-dark: #111111;
+            --text-muted: #666666;
+            --bg-light: #FFFFFF;
+            --bg-section: #F8F9FA; /* Soft Gray Surface for depth */
+            --radius-lg: 1rem;
+            --radius-sm: 0.5rem;
+            --shadow-subtle: 0 4px 16px rgba(0, 0, 0, 0.03);
+            --border-color: rgba(0, 0, 0, 0.08);
+            --bs-body-line-height: 1.8; 
+            --bs-body-font-weight: 300; 
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-light);
+            color: var(--text-dark);
+            line-height: var(--bs-body-line-height);
+            font-weight: var(--bs-body-font-weight);
+            overflow-x: hidden;
+        }
+
+        /* Typography & Hierarchy */
+        h1, h2, h3, h4, .font-poppins {
+            font-family: 'Poppins', sans-serif;
+            letter-spacing: -0.02em;
+            font-weight: 500;
+        }
+        h1 { font-size: 4.5rem; line-height: 1.1; }
+        h2 { font-size: 2.75rem; }
+        .text-lead { font-size: 1.25rem; font-weight: 300; }
+        
+        /* Spacing */
+        section { padding: 8rem 0; }
+        .section-light { background-color: var(--bg-section); padding: 7rem 0; }
+
+        /* Buttons & Accent */
+        .text-accent { color: var(--primary-color) !important; }
+        .btn {
+            border-radius: var(--radius-sm);
+            padding: 0.75rem 1.75rem;
+            transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+            font-weight: 500;
+        }
+        .btn-primary {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        .btn-primary:hover {
+            background: #4338CA;
+            border-color: #4338CA;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+        }
+        .btn-outline-dark {
+            border-color: var(--border-color);
+            color: var(--text-dark);
+        }
+        .btn-outline-dark:hover {
+            background-color: var(--bg-section);
+            border-color: rgba(0, 0, 0, 0.15);
+            color: var(--text-dark);
+            transform: translateY(-2px);
+        }
+
+        /* Navigation Style */
+        .navbar-universal {
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            padding-top: 1.5rem;
+            padding-bottom: 1.5rem;
+        }
+        .navbar-universal.scrolled {
+            background-color: var(--bg-light) !important;
+            box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
+            padding-top: 0.75rem;
+            padding-bottom: 0.75rem;
+        }
+        .nav-link { letter-spacing: 0.02em; }
+
+        /* HERO STYLING (FINAL RELIABLE FIX) */
+        .hero-section {
+            min-height: 95vh; /* Increased slightly for the search bar */
+            display: flex;
+            align-items: center;
+            position: relative;
+            background-color: var(--bg-light); 
+            z-index: 0; 
+        }
+
+        /* NEW: Dedicated DIV for Background Pattern (Most reliable stacking) */
+        .hero-background {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: var(--bg-light); 
+            /* Pattern: slightly visible grey */
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cdefs%3E%3Cpattern id='p' width='100' height='100' patternUnits='userSpaceOnUse'%3E%3Cpath stroke='%23e9e9e9' stroke-width='.7' d='M-1 15l15-15M-1 35l35-35M-1 55l55-55M-1 75l75-75M-1 95l95-95M15 101l85-85M35 101l65-65M55 101l45-45M75 101l25-25'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23p)'/%3E%3C/svg%3E");
+            z-index: 1; /* Pattern sits at Z:1 */
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            /* White fade on top of the pattern */
+            background: linear-gradient(to bottom, rgba(255,255,255,0.95) 0%, rgba(255,255,255,1) 50%);
+            z-index: 2; /* Overlay sits at Z:2 */
+        }
+
+        .hero-content { 
+            z-index: 3; /* Content sits at Z:3 */
+        }
+        
+        /* Hero Search Bar Style */
+        .hero-search-bar {
+            background: var(--bg-light);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 0.5rem 0.5rem 0.5rem 1.5rem;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            max-width: 600px;
+        }
+
+        /* Listing Card Style */
+        .listing-card {
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-subtle);
+            overflow: hidden;
+            transition: all 0.3s ease-in-out;
+            background: var(--bg-light);
+        }
+        .listing-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+            border-color: rgba(79, 70, 229, 0.1);
+        }
+        .card-img-top-minimal { height: 260px; overflow: hidden; background-color: var(--bg-section); }
+
+        /* CATEGORY CARD STYLE (POLISHED) */
+        .category-card {
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 2.5rem 1.5rem;
+            transition: all 0.3s ease;
+            text-align: center;
+            background: var(--bg-light);
+            display: block;
+            text-decoration: none; 
+        }
+        .category-card:hover {
+            box-shadow: var(--shadow-subtle);
+            border-color: var(--primary-color);
+            transform: scale(1.02);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.1);
+        }
+        .category-icon {
+            font-size: 2.5rem !important;
+            transition: color 0.3s ease;
+        }
+        .category-card:hover .category-icon {
+            color: var(--primary-color) !important;
+        }
+        .category-card:hover .category-title {
+            color: var(--primary-color) !important;
+        }
+
+        /* Blog/Testimonial Card Styles */
+        .article-card {
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+        }
+        .testimonial-card {
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 3rem;
+            background: var(--bg-light);
+        }
+
+        /* Animation Utility: Slight fade-up */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(15px);
+            transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+        }
+        .fade-in-up.in-view {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 991.98px) {
+            h1 { font-size: 3.25rem; }
+            section { padding: 5rem 0; }
+        }
+    </style>
+</head>
+<body data-bs-spy="scroll" data-bs-target="#mainNav">
+
+    <nav id="mainNav" class="navbar navbar-expand-lg navbar-light fixed-top navbar-universal bg-transparent">
+        <div class="container-xl">
+            <a class="navbar-brand font-poppins fs-4 fw-bold text-dark" href="#">Universal<span class="text-accent">.</span></a>
+            
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
+                <ul class="navbar-nav mx-auto my-3 my-lg-0 fw-medium">
+                    <li class="nav-item px-3"><a class="nav-link text-dark" href="#home">Home</a></li>
+                    <li class="nav-item px-3"><a class="nav-link text-dark" href="#about">About</a></li>
+                    <li class="nav-item px-3"><a class="nav-link text-dark" href="#categories">Explore</a></li>
+                    <li class="nav-item px-3"><a class="nav-link text-dark" href="#featured">Listings</a></li>
+                    <li class="nav-item px-3"><a class="nav-link text-dark" href="#resources">Resources</a></li>
+                </ul>
+
+                <div class="d-flex align-items-center gap-3">
+                    <a class="text-dark fw-medium text-decoration-none d-none d-lg-block" href="#">Log In</a>
+                    <a class="btn btn-outline-dark btn-sm fw-medium" href="#">
+                        <i class="bi bi-box-arrow-up-right me-1"></i> Post Listing
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <header id="home" class="hero-section text-center">
+        <div class="hero-background"></div>
+        
+        <div class="hero-overlay"></div>
+
+        <div class="container-xl hero-content">
+            <div class="row justify-content-center">
+                <div class="col-lg-10 col-xl-8">
+                    <h1 class="font-poppins fw-bold mb-4 fade-in-up">
+                        Discover the Art of Simplicity.
+                    </h1>
+                    <p class="text-muted-subtle text-lead mb-5 fade-in-up" style="transition-delay: 0.2s;">
+                        Your marketplace, meticulously curated and thoughtfully designed for elegance and focus.
+                    </p>
+                    
+                    <div class="d-flex justify-content-center fade-in-up mb-4" style="transition-delay: 0.4s;">
+                        <div class="hero-search-bar d-flex align-items-center">
+                            <i class="bi bi-search text-muted me-3"></i>
+                            <input type="text" class="form-control border-0 bg-white shadow-none" placeholder="Search for minimal furniture, luxury vehicles, or professional services..." aria-label="Search marketplace">
+                            <button class="btn btn-primary flex-shrink-0 ms-2">Search</button>
+                        </div>
+                    </div>
+
+                    <div class="fade-in-up" style="transition-delay: 0.6s;">
+                        <span class="text-muted small fw-medium me-2">Popular:</span>
+                        <a href="#" class="badge rounded-pill bg-light text-dark fw-normal py-2 px-3 me-2 border" style="border-color: var(--border-color) !important;">#RealEstate</a>
+                        <a href="#" class="badge rounded-pill bg-light text-dark fw-normal py-2 px-3 me-2 border" style="border-color: var(--border-color) !important;">#VintageCars</a>
+                        <a href="#" class="badge rounded-pill bg-light text-dark fw-normal py-2 px-3 border" style="border-color: var(--border-color) !important;">#DesignServices</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section id="about" class="py-5 section-light"> 
+        <div class="container-xl">
+            <div class="row g-5 align-items-center">
+                <div class="col-lg-6 order-lg-2 fade-in-up">
+                    <h2 class="font-poppins fw-medium mb-4">
+                        The Core Principles of Universal
+                    </h2>
+                    <p class="text-lead text-muted mb-4">
+                        We believe a marketplace should be a clean, curated experience. Our platform is built on **Clarity**, **Trust**, and **Impeccable Design**. We strip away the noise so you can find quality effortlessly.
+                    </p>
+                    <ul class="list-unstyled d-grid gap-3">
+                        <li class="d-flex align-items-start">
+                            <i class="bi bi-check-circle-fill text-accent fs-5 me-3 flex-shrink-0"></i>
+                            <div>Zero Distractions, Maximum Focus</div>
+                        </li>
+                        <li class="d-flex align-items-start">
+                            <i class="bi bi-check-circle-fill text-accent fs-5 me-3 flex-shrink-0"></i>
+                            <div>Verified Sellers and Authentic Listings</div>
+                        </li>
+                        <li class="d-flex align-items-start">
+                            <i class="bi bi-check-circle-fill text-accent fs-5 me-3 flex-shrink-0"></i>
+                            <div>Seamless Mobile and Desktop Experience</div>
+                        </li>
+                    </ul>
+                    <a href="#" class="btn btn-outline-dark mt-4">Learn More About Our Mission</a>
+                </div>
+
+                <div class="col-lg-6 order-lg-1 fade-in-up">
+                    <div class="shadow-sm p-3 bg-white" style="border-radius: var(--radius-lg);">
+                        <img src="https://picsum.photos/id/400/800/600" class="img-fluid" style="border-radius: var(--radius-lg);" alt="Minimalist office setup with computer">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="container-xl">
+            <div class="row g-4 g-lg-5 justify-content-center">
+                <div class="col-md-6 col-lg-4 fade-in-up" style="transition-delay: 0.1s;">
+                    <div class="card h-100 p-4" style="border-radius: var(--radius-lg);">
+                        <div class="mb-4">
+                            <i class="bi bi-compass fs-3 text-accent"></i>
+                        </div>
+                        <h4 class="font-poppins fw-semibold mb-3">Precision Design</h4>
+                        <p class="text-muted fw-light mb-0">Every pixel is intentional, ensuring a balanced, distraction-free user journey.</p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4 fade-in-up" style="transition-delay: 0.2s;">
+                    <div class="card h-100 p-4" style="border-radius: var(--radius-lg);">
+                        <div class="mb-4">
+                            <i class="bi bi-lightbulb fs-3 text-accent"></i>
+                        </div>
+                        <h4 class="font-poppins fw-semibold mb-3">Visual Clarity</h4>
+                        <p class="text-muted fw-light mb-0">Superior typography and ample whitespace highlight what truly matters: your content.</p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4 fade-in-up" style="transition-delay: 0.3s;">
+                    <div class="card h-100 p-4" style="border-radius: var(--radius-lg);">
+                        <div class="mb-4">
+                            <i class="bi bi-arrow-up-right-square fs-3 text-accent"></i>
+                        </div>
+                        <h4 class="font-poppins fw-semibold mb-3">Effortless Flow</h4>
+                        <p class="text-muted fw-light mb-0">From browsing to posting, the process is streamlined and intuitively structured.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="categories" class="section-light">
+        <div class="container-xl">
+            <div class="row justify-content-center text-center mb-5 pb-3">
+                <div class="col-lg-8 fade-in-up">
+                    <h2 class="font-poppins fw-medium">Explore with Focus</h2>
+                    <p class="text-muted text-lead">Navigate our marketplace using clear, icon-driven categories.</p>
+                </div>
+            </div>
+
+            <div class="row g-4 justify-content-center">
+                
+                <div class="col-6 col-md-4 col-lg-3 fade-in-up" style="transition-delay: 0.1s;">
+                    <a href="#" class="category-card">
+                        <i class="bi bi-house-door text-accent mb-3 category-icon"></i>
+                        <h5 class="font-poppins fw-medium mb-0 category-title text-dark">Properties</h5>
+                    </a>
+                </div>
+                <div class="col-6 col-md-4 col-lg-3 fade-in-up" style="transition-delay: 0.2s;">
+                    <a href="#" class="category-card">
+                        <i class="bi bi-briefcase text-accent mb-3 category-icon"></i>
+                        <h5 class="font-poppins fw-medium mb-0 category-title text-dark">Professional</h5>
+                    </a>
+                </div>
+                <div class="col-6 col-md-4 col-lg-3 fade-in-up" style="transition-delay: 0.3s;">
+                    <a href="#" class="category-card">
+                        <i class="bi bi-car-front text-accent mb-3 category-icon"></i>
+                        <h5 class="font-poppins fw-medium mb-0 category-title text-dark">Vehicles</h5>
+                    </a>
+                </div>
+                <div class="col-6 col-md-4 col-lg-3 fade-in-up" style="transition-delay: 0.4s;">
+                    <a href="#" class="category-card">
+                        <i class="bi bi-easel text-accent mb-3 category-icon"></i>
+                        <h5 class="font-poppins fw-medium mb-0 category-title text-dark">Creative Arts</h5>
+                    </a>
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+
+
+    <section id="featured" class="section-light">
+        <div class="container-xl">
+            <div class="row justify-content-center text-center mb-5 pb-3">
+                <div class="col-lg-8 fade-in-up">
+                    <h2 class="font-poppins fw-medium">Curated Highlights</h2>
+                    <p class="text-muted text-lead">A selection of premium listings that embody quality and minimalist elegance.</p>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-4 fade-in-up" style="transition-delay: 0.1s;">
+                    <div class="listing-card">
+                        <div class="card-img-top-minimal">
+                            <img src="https://picsum.photos/id/10/600/400" class="w-100 h-100 object-fit-cover" alt="Modern Apartment">
+                        </div>
+                        <div class="p-4">
+                            <h5 class="font-poppins fw-semibold mb-1">Modern Minimalist Apartment</h5>
+                            <p class="text-muted small mb-1">Real Estate / New York</p>
+                            <p class="text-accent fw-bold fs-5 mb-0">$3,200 / mo</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4 fade-in-up" style="transition-delay: 0.2s;">
+                    <div class="listing-card">
+                        <div class="card-img-top-minimal">
+                            <img src="https://picsum.photos/id/160/600/400" class="w-100 h-100 object-fit-cover" alt="Desk">
+                        </div>
+                        <div class="p-4">
+                            <h5 class="font-poppins fw-semibold mb-1">Architectural Standing Desk</h5>
+                            <p class="text-muted small mb-1">Furniture / Office</p>
+                            <p class="text-accent fw-bold fs-5 mb-0">$980</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4 fade-in-up" style="transition-delay: 0.3s;">
+                    <div class="listing-card">
+                        <div class="card-img-top-minimal">
+                            <img src="https://picsum.photos/id/250/600/400" class="w-100 h-100 object-fit-cover" alt="Watch">
+                        </div>
+                        <div class="p-4">
+                            <h5 class="font-poppins fw-semibold mb-1">Swiss Minimal Automatic Watch</h5>
+                            <p class="text-muted small mb-1">Luxury Goods / Accessories</p>
+                            <p class="text-accent fw-bold fs-5 mb-0">$2,400</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="resources">
+        <div class="container-xl">
+            <div class="row justify-content-center text-center mb-5 pb-3">
+                <div class="col-lg-8 fade-in-up">
+                    <h2 class="font-poppins fw-medium">The Universal Resource Hub</h2>
+                    <p class="text-muted text-lead">Insights on design, quality curation, and market trends.</p>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-4 fade-in-up" style="transition-delay: 0.1s;">
+                    <a href="#" class="article-card d-block text-decoration-none text-dark">
+                        <img src="https://picsum.photos/id/169/600/350" class="w-100 object-fit-cover" style="height: 200px; border-top-left-radius: var(--radius-lg); border-top-right-radius: var(--radius-lg);" alt="Article image about minimalism">
+                        <div class="p-4">
+                            <p class="small text-accent mb-2 fw-medium">DESIGN</p>
+                            <h5 class="font-poppins fw-semibold mb-2">Why Minimalism is the Future of Commerce</h5>
+                            <p class="text-muted small mb-0">Discover how clean design leads to better purchasing decisions.</p>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-4 fade-in-up" style="transition-delay: 0.2s;">
+                    <a href="#" class="article-card d-block text-decoration-none text-dark">
+                        <img src="https://picsum.photos/id/350/600/350" class="w-100 object-fit-cover" style="height: 200px; border-top-left-radius: var(--radius-lg); border-top-right-radius: var(--radius-lg);" alt="Article image about market trends">
+                        <div class="p-4">
+                            <p class="small text-accent mb-2 fw-medium">TRENDS</p>
+                            <h5 class="font-poppins fw-semibold mb-2">2025 Market Forecast: Curated Goods Rise</h5>
+                            <p class="text-muted small mb-0">An in-depth look at premium item growth and consumer behaviour.</p>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-4 fade-in-up" style="transition-delay: 0.3s;">
+                    <a href="#" class="article-card d-block text-decoration-none text-dark">
+                        <img src="https://picsum.photos/id/405/600/350" class="w-100 object-fit-cover" style="height: 200px; border-top-left-radius: var(--radius-lg); border-top-right-radius: var(--radius-lg);" alt="Article image about photography">
+                        <div class="p-4">
+                            <p class="small text-accent mb-2 fw-medium">SELLER TIPS</p>
+                            <h5 class="font-poppins fw-semibold mb-2">Mastering Product Photography for Universal</h5>
+                            <p class="text-muted small mb-0">Simple tips to make your listings visually impeccable.</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="pt-0">
+        <div class="container-xl">
+            <div class="row justify-content-center text-center">
+                <div class="col-lg-9 fade-in-up">
+                    <i class="bi bi-quote fs-1 text-accent opacity-50 mb-4"></i>
+                    <h3 class="font-poppins display-5 fw-bold mb-4" style="line-height: 1.3;">
+                        "The marketplace we needed—calm, confident, and focused purely on quality."
+                    </h3>
+                    <p class="text-muted fw-normal fs-5">— A Leading Design Journal</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="section-light py-5">
+        <div class="container-xl">
+            <div class="row justify-content-between align-items-center p-4 p-md-5" style="background-color: var(--bg-light); border-radius: var(--radius-lg); border: 1px solid var(--border-color); box-shadow: var(--shadow-subtle);">
+                <div class="col-md-8 fade-in-up">
+                    <h3 class="font-poppins fw-medium mb-2">Ready for the Universal Experience?</h3>
+                    <p class="text-muted fw-light mb-0 text-lead">List your first item or find your next essential.</p>
+                </div>
+                <div class="col-md-4 text-md-end mt-4 mt-md-0 fade-in-up" style="transition-delay: 0.2s;">
+                    <a href="#" class="btn btn-primary btn-lg">Get Started Today</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="pt-5 pb-4">
+        <div class="container-xl">
+            <div class="row pb-5 border-top pt-4" style="border-top-color: var(--border-color) !important;">
+                <div class="col-md-4 mb-4 mb-md-0">
+                    <a class="navbar-brand font-poppins fs-4 fw-bold text-dark" href="#">Universal<span class="text-accent">.</span></a>
+                    <p class="text-muted small mt-2 fw-light" style="max-width: 250px;">The luxury standard in marketplace design. Simple, precise, and timeless.</p>
+                </div>
+
+                <div class="col-md-8">
+                    <div class="row">
+                        <div class="col-6 col-sm-4">
+                            <h6 class="font-poppins fw-semibold mb-3">Company</h6>
+                            <ul class="list-unstyled d-grid gap-2 small">
+                                <li><a class="text-muted text-decoration-none fw-light" href="#">About Us</a></li>
+                                <li><a class="text-muted text-decoration-none fw-light" href="#">Careers</a></li>
+                                <li><a class="text-muted text-decoration-none fw-light" href="#">Press</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-6 col-sm-4">
+                            <h6 class="font-poppins fw-semibold mb-3">Support</h6>
+                            <ul class="list-unstyled d-grid gap-2 small">
+                                <li><a class="text-muted text-decoration-none fw-light" href="#">Contact</a></li>
+                                <li><a class="text-muted text-decoration-none fw-light" href="#">Help Center</a></li>
+                                <li><a class="text-muted text-decoration-none fw-light" href="#">FAQs</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-6 col-sm-4 mt-4 mt-sm-0">
+                            <h6 class="font-poppins fw-semibold mb-3">Legal</h6>
+                            <ul class="list-unstyled d-grid gap-2 small">
+                                <li><a class="text-muted text-decoration-none fw-light" href="#">Terms of Use</a></li>
+                                <li><a class="text-muted text-decoration-none fw-light" href="#">Privacy Policy</a></li>
+                                <li><a class="text-muted text-decoration-none fw-light" href="#">Cookies</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row pt-3">
+                <div class="col-12 text-center text-md-start">
+                    <p class="text-muted small mb-0 fw-light">
+                        &copy; 2025 Universal Marketplace. All rights reserved.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    
+    <script>
+        // Header Scroll Transition
+        const navbar = document.getElementById('mainNav');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Intersection Observer for Fade-in-Up Animation
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('in-view');
+                    observer.unobserve(entry.target); // Animate once
+                }
+            });
+        }, {
+            rootMargin: '0px',
+            threshold: 0.1 
+        });
+
+        document.querySelectorAll('.fade-in-up').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>

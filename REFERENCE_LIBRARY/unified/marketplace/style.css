@@ -1,0 +1,222 @@
+
+        /*
+        ========================================
+        2. Global Styles & Typography
+        ========================================
+        */
+        body {
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--bs-bg-light); 
+            color: var(--bs-text-dark); 
+        }
+        
+        .main-content-box {
+            max-width: 1400px; 
+            margin-left: auto;
+            margin-right: auto;
+            background-color: var(--bs-bg-content);
+            box-shadow: var(--bs-box-shadow);
+            padding: 2rem;
+        }
+
+        /* ============================
+        BUTTON STYLING (MERGED)
+        ============================ */
+
+        .btn { 
+            border-radius: var(--bs-border-radius); 
+            font-weight: 600; 
+            transition: all 0.2s; 
+        }
+
+        /* --- Primary Button --- */
+        .btn-primary { 
+            --bs-btn-bg: var(--bs-primary);
+            --bs-btn-border-color: var(--bs-primary);
+            --bs-btn-hover-bg: var(--bs-secondary); 
+            --bs-btn-hover-border-color: var(--bs-secondary);
+            padding: 0.6rem 1.75rem; 
+        }
+
+        /* --- Secondary Button --- */
+        .btn-secondary {
+            --bs-btn-bg: var(--bs-secondary);
+            --bs-btn-border-color: var(--bs-secondary);
+            --bs-btn-hover-bg: var(--bs-primary);
+            --bs-btn-hover-border-color: var(--bs-primary);
+        }
+
+        /* --- Outline Primary Button (Red Palette) --- */
+        .btn-outline-primary {
+            --bs-btn-color: var(--bs-primary);
+            --bs-btn-border-color: var(--bs-primary);
+            --bs-btn-hover-bg: var(--bs-primary);
+            --bs-btn-hover-border-color: var(--bs-primary);
+            --bs-btn-hover-color: #fff;
+            --bs-btn-active-bg: var(--bs-secondary); 
+            --bs-btn-active-border-color: var(--bs-secondary);
+        }
+
+        /* --- Accent Button (For use on accent backgrounds) --- */
+        .btn-on-accent {
+            --bs-btn-bg: var(--bs-primary);
+            --bs-btn-border-color: var(--bs-primary);
+            --bs-btn-color: #fff;
+            --bs-btn-hover-bg: var(--bs-secondary);
+            --bs-btn-hover-border-color: var(--bs-secondary);
+            --bs-btn-hover-color: #fff;
+        }
+
+
+
+
+        /* Color Utilities */
+        .bg-primary { background-color: var(--bs-primary) !important; }
+        .text-primary { color: var(--bs-primary) !important; }
+        .bg-secondary { background-color: var(--bs-secondary) !important; }
+        .text-secondary { color: var(--bs-secondary) !important; }
+        .bg-accent { background-color: var(--bs-accent) !important; }
+        .text-accent { color: var(--bs-accent) !important; }
+
+        /*
+        ========================================
+        3. Header & Navigation (FULL WIDTH)
+        ========================================
+        */
+        .top-bar { border-bottom: 1px solid #eee; }
+        .main-header { padding-top: 15px; padding-bottom: 15px; background-color: var(--bs-bg-content); }
+        .bottom-nav { border-top: 1px solid #eee; padding: 0.5rem 0; background-color: var(--bs-bg-content); }
+        .navbar-brand h1 { font-size: 1.8rem; font-weight: 800; }
+        .search-input-group .form-control { border-right: none !important; }
+        .search-btn { 
+            border-radius: 0 var(--bs-border-radius) var(--bs-border-radius) 0 !important; 
+        }
+        .nav-link { font-weight: 500; color: var(--bs-text-dark); }
+        .nav-tabs .nav-link.active { font-weight: 700; color: var(--bs-primary) !important; border-bottom: 3px solid var(--bs-primary) !important; }
+
+        /* Main Hero Banner specific styling */
+        .hero-banner-section {
+            max-width: 1300px;
+            margin: 2rem auto; /* Centers and adds bottom margin */
+            border-radius: var(--bs-border-radius);
+            overflow: hidden;
+            box-shadow: var(--bs-box-shadow);
+        }
+        .hero-banner-section .hero-image-col {
+            background-size: cover; 
+            background-position: center; 
+            height: 450px; 
+            position: relative; 
+            display: flex; 
+            align-items: center;
+        }
+        .hero-banner-section .hero-overlay {
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            right: 0; 
+            bottom: 0; 
+            background: linear-gradient(to right, rgba(0,0,0,0.5), rgba(0,0,0,0.1));
+        }
+        .hero-banner-section .hero-text {
+            position: relative; 
+            z-index: 2; 
+            max-width: 80%;
+        }
+
+
+        /*
+        ========================================
+        4. Services Grid (Icon colors)
+        ========================================
+        */
+        .service-grid-card {
+            padding: 0.5rem;
+            /* background-color: var(--bs-bg-content); */
+            /* border-radius: var(--bs-border-radius); */
+            transition: all 0.3s;
+            /* border: 1px solid #f0f0f0;  */
+        }
+        .service-grid-card:hover {
+            /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);  */
+            transform: translateY(-2px); 
+        }
+        .icon-wrapper {
+            width: 48px; 
+            height: 48px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50% !important; 
+            margin-bottom: 0.5rem; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+        }
+        .service-grid-icon { font-size: 1.4rem; }
+        .service-grid-title { font-weight: 600; font-size: 0.85rem; line-height: 1.2; }
+        
+        /* Unique Icon Colors */
+        .service-1 .icon-wrapper { background-color: var(--banner-green); }
+        .service-2 .icon-wrapper { background-color: var(--banner-blue); }
+        .service-3 .icon-wrapper { background-color: var(--banner-purple); }
+        .service-4 .icon-wrapper { background-color: var(--banner-orange); }
+        .service-5 .icon-wrapper { background-color: var(--banner-coral); }
+        .service-6 .icon-wrapper { background-color: var(--banner-gray); }
+        .service-7 .icon-wrapper { background-color: var(--banner-teal); }
+
+        /*
+        ========================================
+        5. Product Cards
+        ========================================
+        */
+        .trending-card {
+            border: 1px solid #f0f0f0;
+            border-radius: var(--bs-border-radius);
+            box-shadow: none; 
+            transition: all 0.3s ease;
+        }
+        .trending-card:hover {
+            box-shadow: var(--bs-card-shadow); 
+            transform: translateY(-3px); 
+        }
+        .trending-card .card-img-top {
+            height: 200px;
+            object-fit: cover;
+            border-radius: var(--bs-border-radius) var(--bs-border-radius) 0 0;
+        }
+        .product-price {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--bs-primary);
+        }
+        .product-meta {
+            font-size: 0.8rem;
+            color: #6B7280;
+        }
+
+        /*
+        ========================================
+        6. Dark Mode Styles
+        ========================================
+        */
+        body.dark-mode { 
+            background-color: #121212 !important; 
+            color: #E5E7EB !important; 
+        }
+        body.dark-mode .main-content-box { 
+            background-color: #1F2937 !important; 
+            box-shadow: 0 4px 12px rgba(255, 255, 255, 0.05); 
+        }
+        body.dark-mode .nav-link, body.dark-mode .text-dark, body.dark-mode .text-muted, body.dark-mode h1, body.dark-mode h5, body.dark-mode h6, body.dark-mode p { 
+            color: #E5E7EB !important; 
+        }
+        body.dark-mode .trending-card, body.dark-mode .service-grid-card, body.dark-mode .banner-footer, body.dark-mode .top-bar, body.dark-mode .main-header, body.dark-mode .bottom-nav, body.dark-mode .hero-banner-section { 
+            background-color: #374151 !important; 
+            border-color: #4B5563 !important;
+        }
+        body.dark-mode .search-input-group .form-control, body.dark-mode .search-input-group .input-group-text, body.dark-mode .form-select { 
+            background-color: #4B5563 !important; 
+            color: #E5E7EB !important; 
+            border-color: #6B7280 !important; 
+        }
+        body.dark-mode .hero-banner-section .bg-primary { background-color: var(--bs-secondary) !important; } /* Dark mode adjustment for main red */
+        body.dark-mode .hero-banner-section .bg-accent { background-color: var(--bs-primary) !important; } /* Dark mode adjustment for accent yellow */
+        body.dark-mode .newsletter-footer { background-color: var(--bs-secondary) !important; }

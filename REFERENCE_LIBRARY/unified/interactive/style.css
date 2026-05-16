@@ -1,0 +1,532 @@
+    /* Base Styles */
+    :root {
+        --bs-body-font-family: 'Inter', sans-serif;
+        --bs-heading-font-family: 'Poppins', sans-serif;
+        --bg-light: #F9FAFB;
+        --bg-secondary-light: #F3F4F6;
+        --color-indigo: #4F46E5; /* Primary Brand Color (Properties) */
+        --color-cyan: #22D3EE; /* Autos Color */
+        --color-green: #10B981; /* Jobs Color */
+        --color-orange: #F97316; /* Services Color */
+        --color-teal: #14B8A6; /* Classifieds Color */
+        --color-red: #EF4444; /* Events Color */
+        --color-violet: #8B5CF6; /* CTA Gradient Secondary */
+        --button-height: 2.5rem; 
+        --card-button-height: 2.25rem; 
+    }
+
+    body {
+        font-family: var(--bs-body-font-family);
+        background-color: var(--bg-light);
+        color: #1F2937;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        font-family: var(--bs-heading-font-family);
+        font-weight: 700;
+    }
+
+    /* Utility Spacing Fixes */
+    .container { padding-left: 1rem; padding-right: 1rem; }
+    section { padding-top: 4rem; padding-bottom: 4rem; }
+    .module-section { padding-top: 3rem; padding-bottom: 3rem; }
+
+    /* --- 1. Header & Navigation --- */
+    header { border-bottom: 1px solid #E5E7EB; }
+    .text-indigo-hero {
+        color: var(--color-indigo);
+    }
+    .nav-link {
+        position: relative;
+        color: #374151 !important;
+        transition: color 0.3s ease, padding 0.3s ease;
+        font-weight: 500;
+        padding: 0.5rem 0.75rem !important;
+        overflow: hidden;
+        z-index: 1;
+    }
+    .nav-link::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background-color: var(--color-indigo);
+        transform: translateX(-100%);
+        transition: transform 0.3s ease-out;
+        z-index: -1;
+    }
+    .nav-link:hover::before, .nav-link.active::before { transform: translateX(0); }
+    .nav-link:hover, .nav-link.active { 
+        color: #fff !important; 
+        padding-left: 1rem !important; 
+        padding-right: 1rem !important; 
+    }
+
+    /* --- 2. Button Mixins --- */
+    .btn-interactive {
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+        transition: color 0.3s, transform 0.3s;
+        height: var(--button-height); 
+        display: inline-flex;
+        align-items: center;
+    }
+    .btn-interactive::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background-color: #4338CA; /* Darker shade of indigo for interaction */
+        transform: translateX(-100%);
+        transition: transform 0.3s ease-out;
+        z-index: -1;
+    }
+    .btn-interactive:hover::before { transform: translateX(0); }
+    .hero-cta-btn:hover { transform: translateY(-2px); color: #fff !important; }
+
+    .btn-primary-interactive {
+        background-color: var(--color-indigo);
+        border-color: var(--color-indigo);
+        font-weight: 600;
+        color: #fff !important;
+    }
+
+    /* Secondary Button (Hero Post Listing) */
+    .btn-secondary-interactive {
+        color: var(--color-indigo) !important;
+        border: 2px solid var(--color-indigo); 
+        background-color: transparent;
+        font-weight: 600;
+    }
+    .btn-secondary-interactive::before { background-color: var(--color-indigo); }
+    .btn-secondary-interactive:hover { 
+        color: #fff !important; 
+        border-color: var(--color-indigo); 
+    }
+
+    /* CTA Section Button (Using Orange for high contrast and urgency) */
+    .btn-cta-interactive {
+        /* background-color: var(--color-orange); */
+        border: 2px solid var(--bg-light);
+        color: #fff !important;
+        font-weight: 700;
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+        transition: transform 0.3s ease;
+    }
+    .btn-cta-interactive:hover {
+        transform: scale(1.05) translateY(-2px);
+        background-color: var(--bg-light);
+        border-color: var(--color-indigo);
+        color: var(--color-indigo) !important;
+    }
+    .btn-cta-interactive:active {
+        transform: scale(1.0) translateY(0);
+    }
+    
+    /* View All Button */
+    .btn-view-all {
+        color: #374151;
+        border: none;
+        background-color: transparent;
+        transition: color 0.2s, transform 0.2s;
+        font-weight: 500;
+        margin-top: -1.5rem; 
+        position: relative;
+        padding: 0.25rem 0.5rem;
+        text-decoration: none;
+        overflow: hidden;
+    }
+    .btn-view-all::after {
+        content: '';
+        position: absolute;
+        bottom: 0; right: 0;
+        height: 2px; width: 0;
+        background-color: var(--color-indigo); 
+        transition: width 0.3s ease-out;
+    }
+    .btn-view-all:hover {
+        color: var(--color-indigo);
+        transform: translateY(-1px);
+    }
+    .btn-view-all:hover::after {
+        width: 100%;
+        right: auto;
+        left: 0;
+    }
+    /* View All Color Synchronization */
+    .module-autos .btn-view-all:hover { color: var(--color-cyan); }
+    .module-autos .btn-view-all:hover::after { background-color: var(--color-cyan); }
+    .module-jobs .btn-view-all:hover { color: var(--color-green); }
+    .module-jobs .btn-view-all:hover::after { background-color: var(--color-green); }
+    .module-services .btn-view-all:hover { color: var(--color-orange); }
+    .module-services .btn-view-all:hover::after { background-color: var(--color-orange); }
+    .module-classifieds .btn-view-all:hover { color: var(--color-teal); }
+    .module-classifieds .btn-view-all:hover::after { background-color: var(--color-teal); }
+    .module-events .btn-view-all:hover { color: var(--color-red); }
+    .module-events .btn-view-all:hover::after { background-color: var(--color-red); }
+
+    /* --- 3. Category Tiles (Icon Tilt and White Color Fix) --- */
+    .category-tile {
+        display: block;
+        background-color: #fff;
+        padding: 1.5rem;
+        text-decoration: none;
+        color: #374151;
+        border: 1px solid #E5E7EB;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+    .category-tile:hover {
+        transform: translateY(-5px);
+        color: #fff;
+    }
+    .category-tile .icon-wrapper {
+        font-size: 2.5rem;
+        width: 5rem;
+        height: 5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+        border: 2px solid;
+        transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+    }
+
+    /* Icon Wrapper Hover (Tilt and White Icon) */
+    .category-tile:hover .icon-wrapper { 
+        color: #fff; 
+        transform: rotate(-3deg) scale(1.1); 
+    }
+
+    /* Category Icon Base Colors */
+    .category-tile.tile-properties .icon-wrapper { color: var(--color-indigo); border-color: var(--color-indigo); }
+    .category-tile.tile-autos .icon-wrapper { color: var(--color-cyan); border-color: var(--color-cyan); }
+    .category-tile.tile-jobs .icon-wrapper { color: var(--color-green); border-color: var(--color-green); }
+    .category-tile.tile-services .icon-wrapper { color: var(--color-orange); border-color: var(--color-orange); }
+    .category-tile.tile-classifieds .icon-wrapper { color: var(--color-teal); border-color: var(--color-teal); }
+    .category-tile.tile-events .icon-wrapper { color: var(--color-red); border-color: var(--color-red); }
+
+    /* Color specific background on hover */
+    .category-tile.tile-properties:hover { background-color: var(--color-indigo); }
+    .category-tile.tile-properties:hover .icon-wrapper { background-color: var(--color-indigo); border-color: #fff; color:#fff; }
+    .category-tile.tile-autos:hover { background-color: var(--color-cyan); }
+    .category-tile.tile-autos:hover .icon-wrapper { background-color: var(--color-cyan); border-color: #fff; color:#fff; }
+    .category-tile.tile-jobs:hover { background-color: var(--color-green); }
+    .category-tile.tile-jobs:hover .icon-wrapper { background-color: var(--color-green); border-color: #fff; color:#fff; }
+    .category-tile.tile-services:hover { background-color: var(--color-orange); }
+    .category-tile.tile-services:hover .icon-wrapper { background-color: var(--color-orange); border-color: #fff; color:#fff; }
+    .category-tile.tile-classifieds:hover { background-color: var(--color-teal); }
+    .category-tile.tile-classifieds:hover .icon-wrapper { background-color: var(--color-teal); border-color: #fff; color:#fff; }
+    .category-tile.tile-events:hover { background-color: var(--color-red); }
+    .category-tile.tile-events:hover .icon-wrapper { background-color: var(--color-red); border-color: #fff; color:#fff; }
+    
+    /* --- 4. Module Headers --- */
+    .module-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        padding-bottom: 0.5rem;
+        margin-bottom: 2rem;
+        border-bottom: 3px solid; 
+        border-color: var(--color-indigo); 
+    }
+    
+    /* Module Header Icon & Divider Colors */
+    .module-properties .module-header i { color: var(--color-indigo); }
+    .module-autos .module-header i { color: var(--color-cyan); }
+    .module-jobs .module-header i { color: var(--color-green); }
+    .module-services .module-header i { color: var(--color-orange); }
+    .module-classifieds .module-header i { color: var(--color-teal); }
+    .module-events .module-header i { color: var(--color-red); }
+
+    .module-autos .module-header { border-color: var(--color-cyan); }
+    .module-jobs .module-header { border-color: var(--color-green); }
+    .module-services .module-header { border-color: var(--color-orange); }
+    .module-classifieds .module-header { border-color: var(--color-teal); }
+    .module-events .module-header { border-color: var(--color-red); }
+
+    /* Autos Section Background */
+    .module-autos {
+        background-color: var(--bg-secondary-light);
+        border: none;
+    }
+    .module-autos .container {
+        background-color: var(--bg-secondary-light); 
+        border: none;
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+
+    /* --- 5. Card Styles (Common) --- */
+    .interactive-card {
+        overflow: hidden;
+        background-color: #fff;
+        border: 1px solid #E5E7EB; 
+        border-top: none; 
+        border-left: none; 
+        border-right: none;
+        transition: transform 0.3s ease;
+        position: relative;
+        /* margin-bottom: 1.5rem; */
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05); 
+    }
+    .interactive-card::after {
+        content: '';
+        position: absolute;
+        bottom: 0; left: 0;
+        height: 4px; width: 0;
+        transition: width 0.3s ease-out;
+    }
+    .interactive-card:hover { 
+        transform: translateY(-5px); 
+        border-color: #E5E7EB; 
+        box-shadow: 0 8px 15px rgba(0,0,0,0.1); 
+    } 
+    /* Bottom Border Hover Color Synchronization */
+    .interactive-card:hover::after { width: 100%; background-color: var(--color-indigo); }
+    .module-autos .interactive-card:hover::after { background-color: var(--color-cyan); }
+    .module-services .interactive-card:hover::after { background-color: var(--color-orange); }
+    .module-classifieds .interactive-card:hover::after { background-color: var(--color-teal); }
+    .module-events .interactive-card:hover::after { background-color: var(--color-red); }
+    .module-jobs .interactive-card:hover::after { background-color: var(--color-green); }
+
+    /* Card Labels */
+    .card-img-container {
+        position: relative;
+        overflow: hidden;
+    }
+    .status-badge {
+        position: absolute;
+        top: 10px; 
+        right: 10px;
+        background-color: var(--color-indigo);
+        color: white;
+        padding: 0.25rem 0.75rem;
+        font-size: 0.75rem;
+        font-weight: 700;
+        z-index: 10;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+    }
+    .type-badge { 
+        position: absolute;
+        top: 10px; 
+        left: 10px;
+        background-color: #000;
+        color: white;
+        padding: 0.25rem 0.75rem;
+        font-size: 0.75rem;
+        font-weight: 700;
+        z-index: 10;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        opacity: 0.85;
+    }
+    /* Status badge overrides */
+    .module-autos .status-badge { background-color: var(--color-cyan); }
+    .module-services .status-badge { background-color: var(--color-orange); }
+    .module-classifieds .status-badge { background-color: var(--color-teal); }
+    .module-events .status-badge { background-color: var(--color-red); }
+    /* Property type overrides */
+    .card-property-rent .type-badge { background-color: var(--color-green); }
+    /* Autos Details Colors */
+    .module-autos .card-body .small.text-cyan { color: var(--color-cyan) !important; }
+
+    /* --- 6. Jobs Card Fix (List-style Card) --- */
+    .module-jobs .interactive-card {
+        border: 1px solid #E5E7EB; 
+        border-bottom: 4px solid #E5E7EB; /* Standard interactive-card bottom border */
+        padding: 0; 
+        margin-bottom: 0.5rem; 
+    }
+
+    .job-card-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5rem; /* Re-introduce padding inside the card for structure */
+    }
+
+    .job-card-button-wrapper {
+        opacity: 0;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    .interactive-card:hover .job-card-button-wrapper {
+        opacity: 1;
+        transform: translateX(0); 
+    }
+    
+    /* Apply Now Button Colors (Green) */
+    .btn-apply-now {
+        color: var(--color-green) !important; 
+        border: 2px solid var(--color-green);
+        height: var(--card-button-height);
+        font-weight: 600;
+    }
+    .btn-apply-now::before {
+        background-color: var(--color-green);
+    }
+    .btn-apply-now:hover {
+        border-color: var(--color-green);
+        color: #fff !important; 
+    }
+
+    /* --- 7. View Item Buttons (Card CTA) --- */
+    .btn-view-item {
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+        color: var(--color-indigo) !important; 
+        border: 2px solid var(--color-indigo);
+        background-color: transparent;
+        font-weight: 600;
+        transition: color 0.3s, transform 0.3s;
+        height: var(--card-button-height); 
+        display: inline-flex;
+        align-items: center;
+    }
+    .btn-view-item::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background-color: var(--color-indigo);
+        transform: translateX(-100%);
+        transition: transform 0.3s ease-out;
+        z-index: -1;
+    }
+    .btn-view-item:hover::before { transform: translateX(0); }
+    .btn-view-item:hover { 
+        color: #fff !important; 
+        transform: translateY(-1px); 
+        border-color: var(--color-indigo); 
+    }
+    
+    /* Module specific button colors */
+    .module-autos .btn-view-item { color: var(--color-cyan) !important; border-color: var(--color-cyan); }
+    .module-autos .btn-view-item::before { background-color: var(--color-cyan); }
+    .module-autos .btn-view-item:hover { border-color: var(--color-cyan); color: #fff !important;  }
+
+    .module-services .btn-view-item { color: var(--color-orange) !important; border-color: var(--color-orange); }
+    .module-services .btn-view-item::before { background-color: var(--color-orange); }
+    .module-services .btn-view-item:hover { border-color: var(--color-orange); color: #fff !important;  }
+
+    .module-classifieds .btn-view-item { color: var(--color-teal) !important; border-color: var(--color-teal); }
+    .module-classifieds .btn-view-item::before { background-color: var(--color-teal); }
+    .module-classifieds .btn-view-item:hover { border-color: var(--color-teal); color: #fff !important;  }
+
+    .module-events .btn-view-item { color: var(--color-red) !important; border-color: var(--color-red); }
+    .module-events .btn-view-item::before { background-color: var(--color-red); }
+    .module-events .btn-view-item:hover { border-color: var(--color-red); color: #fff !important;  }
+
+    /* --- 8. Event Card Specific Fixes --- */
+    .event-card-img {
+        height: 250px; 
+        object-fit: cover;
+    }
+    .event-card-date {
+        background-color: #fff;
+        color: var(--color-red);
+        font-size: 1.5rem;
+        font-weight: 700;
+        padding: 0.25rem 0.5rem;
+        line-height: 1;
+        text-align: center;
+        box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+        position: absolute; 
+        bottom: 0; 
+        right: 0;
+    }
+    .event-card-date small {
+        display: block;
+        font-size: 0.7rem;
+        font-weight: 500;
+        text-transform: uppercase;
+    }
+    .host-profile {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%; 
+        object-fit: cover;
+        border: 2px solid var(--color-red);
+    }
+    .event-badge-live { 
+        background-color: var(--color-red); 
+        left: 0; 
+        right: auto;
+        position: absolute;
+        top: 0;
+    }
+    .event-badge-volunteers { 
+        background-color: var(--color-green); 
+        left: 0; 
+        right: auto;
+        position: absolute;
+        top: 0;
+    }
+    .event-badge-soldout { 
+        background-color: var(--color-red); 
+        left: 0; 
+        right: auto;
+        position: absolute;
+        top: 0;
+    }
+
+    /* --- 9. CTA Section Fix --- */
+    .cta-section {
+        background: linear-gradient(135deg, var(--color-indigo) 0%, var(--color-violet) 100%); 
+        border-top: 5px solid #fff;
+        border-bottom: 5px solid #fff;
+        margin-top: 5rem !important;
+        margin-bottom: 5rem !important;
+    }
+    
+
+    /* --- 10. Footer Fix --- */
+    .footer-link {
+        /* Base styles */
+        position: relative; /* Essential for the ::after element */
+        color: #6B7280;
+        text-decoration: none; /* Ensure no default underline */
+        padding-bottom: 2px; /* Add a little space for the border */
+        overflow: hidden; /* Important for the fill effect */
+        display: inline-block; /* Treat it like a block element for sizing */
+    }
+    .footer-link::after {
+        /* The bottom border element */
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0; /* Starts at zero width */
+        height: 2px;
+        background-color: var(--color-indigo); /* Primary brand color for the fill */
+        transition: width 0.3s ease-out; /* Smooth transition for the fill */
+    }
+    .footer-link:hover {
+        color: var(--color-indigo);
+    }
+    .footer-link:hover::after {
+        width: 100%; /* Expands to full width on hover */
+    }
+
+    /* Footer Signup Button (Keep as-is for block button style) */
+    .footer-signup-btn {
+        background-color: var(--color-indigo);
+        border: 1px solid var(--color-indigo);
+        transition: background-color 0.2s;
+        color: #fff;
+    }
+    .footer-signup-btn:hover {
+        background-color: #4338CA;
+    }
+    .footer-signup-btn:active {
+        background-color: #4F46E5;
+        border-color: #4F46E5;
+    }
+
+
+
+

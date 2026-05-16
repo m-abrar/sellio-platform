@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>H&R Homes - Buy or Rent Your Perfect Property</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bs-sales-blue: #1C3F71; /* Dark Navy/Blue */
+            --bs-sales-light-blue: #2A68B2;
+            --bs-rental-green: #377E6F; /* Dark Teal/Green */
+            --bs-rental-light-green: #48A796;
+            --bs-font-inter: 'Inter', sans-serif;
+        }
+
+        body {
+            font-family: var(--bs-font-inter);
+            background-color: #f4f7fa;
+        }
+
+        /* Hero Split Design */
+        .hero-split {
+            min-height: 60vh;
+            display: flex;
+        }
+        
+        .hero-left, .hero-right {
+            padding: 5rem 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            color: #fff;
+            background-size: cover;
+            background-position: center;
+            flex: 1;
+        }
+
+        .hero-left {
+            background-image: linear-gradient(rgba(28, 63, 113, 0.7), rgba(28, 63, 113, 0.7)), url('https://picsum.photos/seed/villa/1000/600'); /* Sales Image */
+            border-top-left-radius: 8px;
+            border-bottom-left-radius: 8px;
+        }
+
+        .hero-right {
+            background-image: linear-gradient(rgba(55, 126, 111, 0.7), rgba(55, 126, 111, 0.7)), url('https://picsum.photos/seed/apartment/1000/600'); /* Rentals Image */
+            border-top-right-radius: 8px;
+            border-bottom-right-radius: 8px;
+        }
+
+        .hero-split h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+        
+        /* Mobile Hero - Stacked */
+        @media (max-width: 991.98px) {
+            .hero-split {
+                flex-direction: column;
+            }
+            .hero-left, .hero-right {
+                border-radius: 0;
+            }
+            .hero-left {
+                border-top-left-radius: 8px;
+                border-top-right-radius: 8px;
+            }
+            .hero-right {
+                border-bottom-left-radius: 8px;
+                border-bottom-right-radius: 8px;
+            }
+            .hero-search-bar {
+                margin-top: 1rem;
+            }
+        }
+        
+        /* Property Card Styling */
+        .property-card {
+            transition: all 0.3s ease-in-out;
+            border-radius: 8px;
+        }
+        
+        .card-sales {
+            border: 2px solid #ddd;
+        }
+        
+        .card-sales:hover {
+            box-shadow: 0 8px 16px rgba(28, 63, 113, 0.2);
+            border-color: var(--bs-sales-blue);
+            transform: translateY(-3px);
+        }
+        
+        .card-rental {
+            border: 2px solid #ddd;
+        }
+
+        .card-rental:hover {
+            box-shadow: 0 8px 16px rgba(55, 126, 111, 0.2);
+            border-color: var(--bs-rental-green);
+            transform: translateY(-3px);
+        }
+        
+        .card-title-sales {
+            color: var(--bs-sales-blue);
+            font-weight: 600;
+        }
+        
+        .card-title-rental {
+            color: var(--bs-rental-green);
+            font-weight: 600;
+        }
+
+        /* Testimonials Section Styling */
+        .testimonial-sales {
+            background-color: var(--bs-sales-light-blue);
+            color: #fff;
+            padding: 2rem;
+            border-radius: 8px;
+        }
+        
+        .testimonial-rental {
+            background-color: var(--bs-rental-light-green);
+            color: #fff;
+            padding: 2rem;
+            border-radius: 8px;
+        }
+        
+        /* Custom Buttons */
+        .btn-sales {
+            background-color: var(--bs-sales-blue);
+            border-color: var(--bs-sales-blue);
+            color: #fff;
+        }
+        .btn-sales:hover {
+            background-color: var(--bs-sales-light-blue);
+            border-color: var(--bs-sales-light-blue);
+            color: #fff;
+        }
+
+        .btn-rental {
+            background-color: var(--bs-rental-green);
+            border-color: var(--bs-rental-green);
+            color: #fff;
+        }
+        .btn-rental:hover {
+            background-color: var(--bs-rental-light-green);
+            border-color: var(--bs-rental-light-green);
+            color: #fff;
+        }
+        
+        /* Search Bar Buy/Rent Toggle */
+        .search-toggle-group .btn {
+            border-radius: 0.25rem !important;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm">
+        <div class="container-xl">
+            <a class="navbar-brand text-uppercase fw-bold" href="#" style="color: var(--bs-sales-blue);">H&R Homes</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Buy</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Rent</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Agents</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+                </ul>
+                <a href="#" class="btn btn-sales text-nowrap">List Your Property</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-xl py-3 hero-search-bar">
+        <div class="row g-2 align-items-center bg-white p-3 rounded shadow-sm">
+            <div class="col-auto">
+                <div class="btn-group search-toggle-group" role="group">
+                    <input type="radio" class="btn-check" name="mode" id="buy-mode" autocomplete="off" checked>
+                    <label class="btn btn-outline-primary" for="buy-mode">BUY</label>
+                    <input type="radio" class="btn-check" name="mode" id="rent-mode" autocomplete="off">
+                    <label class="btn btn-outline-success" for="rent-mode">RENT</label>
+                </div>
+            </div>
+            <div class="col-lg-3 col-12">
+                <input type="text" class="form-control" placeholder="Location (e.g., Miami, NYC)">
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-6 col-6">
+                <select class="form-select">
+                    <option selected>Price Range</option>
+                    <option>$100K - $500K</option>
+                    <option>$500K - $1M</option>
+                </select>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-6 col-6">
+                <select class="form-select">
+                    <option selected>Property Type</option>
+                    <option>House</option>
+                    <option>Condo</option>
+                    <option>Apartment</option>
+                </select>
+            </div>
+            <div class="col-lg-2 col-md-4 col-12">
+                <button class="btn btn-primary w-100" type="button"><i class="bi bi-search"></i> Search</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-xl mb-5">
+        <div class="row g-0 hero-split shadow-lg">
+            <div class="col-lg-6 hero-left">
+                <h1>Buy Your Dream Home</h1>
+                <p class="lead">From starter homes to luxury estates, find your perfect match.</p>
+                <a href="#" class="btn btn-lg btn-light mt-3">Browse Sales</a>
+            </div>
+            <div class="col-lg-6 hero-right">
+                <h1>Find the Perfect Rental</h1>
+                <p class="lead">Short-term leases, apartments, and vacation homes for every lifestyle.</p>
+                <a href="#" class="btn btn-lg btn-light mt-3">Browse Rentals</a>
+            </div>
+        </div>
+    </div>
+
+    <main class="container-xl py-5">
+        
+        <h2 class="text-center mb-4" style="color: var(--bs-sales-blue);">Featured Sales Properties</h2>
+        <div class="row g-4 mb-5">
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <div class="card property-card card-sales h-100">
+                    <img src="https://picsum.photos/seed/sale1/400/250" class="card-img-top" alt="Luxury Villa">
+                    <div class="card-body text-center">
+                        <h5 class="card-title card-title-sales">Luxury Villa</h5>
+                        <p class="card-text fw-bold">$2.8M</p>
+                        <p class="card-text text-muted small">5 Bed, 4 Bath – Miami</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <div class="card property-card card-sales h-100">
+                    <img src="https://picsum.photos/seed/sale2/400/250" class="card-img-top" alt="Modern Condo">
+                    <div class="card-body text-center">
+                        <h5 class="card-title card-title-sales">Modern Condo</h5>
+                        <p class="card-text fw-bold">$1.2M</p>
+                        <p class="card-text text-muted small">3 Bed, 2 Bath – NYC</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <div class="card property-card card-sales h-100">
+                    <img src="https://picsum.photos/seed/sale3/400/250" class="card-img-top" alt="Suburban House">
+                    <div class="card-body text-center">
+                        <h5 class="card-title card-title-sales">Suburban House</h5>
+                        <p class="card-text fw-bold">$750K</p>
+                        <p class="card-text text-muted small">4 Bed, 3 Bath – Dallas</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <div class="card property-card card-sales h-100">
+                    <img src="https://picsum.photos/seed/sale4/400/250" class="card-img-top" alt="Farmhouse">
+                    <div class="card-body text-center">
+                        <h5 class="card-title card-title-sales">Country Farmhouse</h5>
+                        <p class="card-text fw-bold">$620K</p>
+                        <p class="card-text text-muted small">3 Bed, 2 Bath – Austin</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h2 class="text-center mb-4" style="color: var(--bs-rental-green);">Featured Rental Properties</h2>
+        <div class="row g-4 mb-5">
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <div class="card property-card card-rental h-100">
+                    <img src="https://picsum.photos/seed/rent1/400/250" class="card-img-top" alt="Downtown Loft">
+                    <div class="card-body text-center">
+                        <h5 class="card-title card-title-rental">Downtown Loft</h5>
+                        <p class="card-text fw-bold">$1,800/month</p>
+                        <p class="card-text text-muted small">2 Bed, 2 Bath</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <div class="card property-card card-rental h-100">
+                    <img src="https://picsum.photos/seed/rent2/400/250" class="card-img-top" alt="Vacation Cottage">
+                    <div class="card-body text-center">
+                        <h5 class="card-title card-title-rental">Vacation Cottage</h5>
+                        <p class="card-text fw-bold">$220/night</p>
+                        <p class="card-text text-muted small">3 Bed, 2 Bath</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <div class="card property-card card-rental h-100">
+                    <img src="https://picsum.photos/seed/rent3/400/250" class="card-img-top" alt="Student Apartment">
+                    <div class="card-body text-center">
+                        <h5 class="card-title card-title-rental">Student Apartment</h5>
+                        <p class="card-text fw-bold">$950/month</p>
+                        <p class="card-text text-muted small">1 Bed, 1 Bath</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <div class="card property-card card-rental h-100">
+                    <img src="https://picsum.photos/seed/rent4/400/250" class="card-img-top" alt="Family Townhouse">
+                    <div class="card-body text-center">
+                        <h5 class="card-title card-title-rental">Family Townhouse</h5>
+                        <p class="card-text fw-bold">$3,200/month</p>
+                        <p class="card-text text-muted small">4 Bed, 3 Bath</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h3 class="text-center mb-4 pt-4 text-secondary">Sales vs. Rentals - Key Differences</h3>
+        <div class="row justify-content-center mb-5">
+            <div class="col-lg-8">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover text-center bg-white shadow-sm rounded">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Feature</th>
+                                <th style="color: var(--bs-sales-blue);">Sales (Buying)</th>
+                                <th style="color: var(--bs-rental-green);">Rentals (Leasing)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Ownership</td>
+                                <td class="fw-bold">Full</td>
+                                <td>Temporary (Lease)</td>
+                            </tr>
+                            <tr>
+                                <td>Investment</td>
+                                <td class="fw-bold">High Potential</td>
+                                <td>None (Expense)</td>
+                            </tr>
+                            <tr>
+                                <td>Flexibility</td>
+                                <td>Low (High commitment)</td>
+                                <td class="fw-bold">High (Short-term leases)</td>
+                            </tr>
+                            <tr>
+                                <td>Initial Cost</td>
+                                <td>High (Down Payment, Fees)</td>
+                                <td class="fw-bold">Low (Security Deposit, First Month)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <h3 class="text-center mb-5 pt-4 text-secondary">What Our Clients Say</h3>
+        <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                
+                <div class="carousel-item active">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-5 mb-3">
+                            <div class="p-4 testimonial-sales text-center shadow">
+                                <p class="fst-italic lead">"The H&R team helped us navigate a complex market and close on our dream home! Exceptional service."</p>
+                                <p class="mb-0 fw-bold">- Sarah K. (Buyer)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="carousel-item">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-5 mb-3">
+                            <div class="p-4 testimonial-rental text-center shadow">
+                                <p class="fst-italic lead">"Found the perfect apartment in downtown in just 3 days! Quick, easy, and professional rental experience."</p>
+                                <p class="mb-0 fw-bold">- Alex D. (Renter)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="carousel-item">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-5 mb-3">
+                            <div class="p-4 testimonial-sales text-center shadow">
+                                <p class="fst-italic lead">"Selling our previous home and buying a new one was seamless thanks to the dedicated agents."</p>
+                                <p class="mb-0 fw-bold">- David M. (Seller & Buyer)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+        </main>
+
+    <footer style="background-color: var(--bs-sales-blue);">
+        <div class="container-xl py-5">
+            <div class="row text-white g-4">
+                
+                <div class="col-md-4">
+                    <h5 class="fw-bold mb-3">H&R Homes</h5>
+                    <p>123 Main St, Suite 500<br>Real Estate City, RE 10001</p>
+                    <p>Email: info@hrhomes.com<br>Phone: (555) 123-4567</p>
+                </div>
+                
+                <div class="col-md-4">
+                    <h5 class="fw-bold mb-3">Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white text-decoration-none">About Us</a></li>
+                        <li><a href="#" class="text-white text-decoration-none">Careers</a></li>
+                        <li><a href="#" class="text-white text-decoration-none">FAQ</a></li>
+                    </ul>
+                    <div class="d-flex gap-2 mt-3">
+                        <a href="#" class="btn btn-sm btn-light text-nowrap" style="color: var(--bs-sales-blue); font-weight: 600;">Sell Your Home</a>
+                        <a href="#" class="btn btn-sm btn-light text-nowrap" style="color: var(--bs-rental-green); font-weight: 600;">Rent Your Place</a>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <h5 class="fw-bold mb-3">Stay Updated</h5>
+                    <p>Subscribe to our newsletter for market updates.</p>
+                    <form>
+                        <div class="input-group mb-3">
+                            <input type="email" class="form-control" placeholder="Your Email" aria-label="Recipient's email" required>
+                            <button class="btn btn-rental" type="submit">Subscribe</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="text-center text-white-50 py-3" style="background-color: rgba(0, 0, 0, 0.2);">
+            &copy; 2025 H&R Homes. All rights reserved.
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
