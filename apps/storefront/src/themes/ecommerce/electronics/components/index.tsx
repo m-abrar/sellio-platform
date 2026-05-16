@@ -72,7 +72,7 @@ export const SystemFooter = () => (
                     <div className="el-label" style={{ marginBottom: '4rem' }}>{col}</div>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                         {['Processors', 'Graphics', 'Security', 'Telemetry'].map(link => (
-                            <span key={link} style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.2)', cursor: 'pointer', fontFamily: var(--el-mono) }}>{link}</span>
+                            <span key={link} style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.2)', cursor: 'pointer', fontFamily: 'var(--el-mono)' }}>{link}</span>
                         ))}
                     </div>
                 </div>

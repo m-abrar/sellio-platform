@@ -42,7 +42,7 @@ export const BargainCard = ({ title, price, oldPrice, location, time, image, isH
   return (
     <div className="bargain-card">
       <div className="deal-image-wrapper">
-        <img src={image} alt={title} style={{ width: '100%', height: '100%', object-fit: 'cover' }} />
+        <img src={image} alt={title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
         {isHot && <div className="deal-badge">HOT_DEAL</div>}
         <div className="deal-price-cut">-{savings}%</div>
       </div>
