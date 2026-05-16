@@ -1,1 +1,0 @@
-@include('frontend.themes.autos.default.show.partials._breadcrumbs')

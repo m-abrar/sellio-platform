@@ -1,1 +1,0 @@
-@include('frontend.themes._fallback.default._partials._pagination_links')

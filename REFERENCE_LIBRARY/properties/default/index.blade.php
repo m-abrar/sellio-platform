@@ -1,1 +1,0 @@
-@include('frontend.themes.properties.default.search')
