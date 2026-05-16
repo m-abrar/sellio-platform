@@ -85,6 +85,7 @@ class ThemeSeeder extends Seeder
                     'corporate' => 'Jobs Corporate / Professional',
                     'startup' => 'Jobs Startup / Modern',
                     'tech' => 'Jobs Tech / IT',
+                    'modern' => 'Jobs Modern',
                     'blue_collar' => 'Jobs Blue-Collar / Local',
                     'freelance' => 'Jobs Freelance / Gig Economy',
                 ]
