@@ -1,88 +1,120 @@
+
 'use client';
 import React from 'react';
-import { EstateCard, TrustIndicator } from './components';
+import { EstateCard, FilterSidebar } from './components';
 
 export default function Page() {
   const estates = [
-    { title: "The Pemberley Manor", price: "$14,200,000", location: "Hertfordshire, UK", year: "1815", image: "https://images.unsplash.com/photo-1518780664697-55e3ad937233?q=80&w=2070" },
+    { title: "The Pemberley Manor", price: "$14,200,000", location: "Hertfordshire, UK", year: "1815", image: "https://images.unsplash.com/photo-1518780664697-55e3ad937233?q=80&w=2070", isFeatured: true },
     { title: "Florentine Palazzo", price: "$22,500,000", location: "Florence, Italy", year: "1540", image: "https://images.unsplash.com/photo-1528909514045-2fa4ac7a08ba?q=80&w=2070" },
     { title: "Colonial River Estate", price: "$8,900,000", location: "Virginia, USA", year: "1742", image: "https://images.unsplash.com/photo-1449156001533-cb39c8524490?q=80&w=2070" },
-    { title: "Loire Valley Chateau", price: "$35,000,000", location: "Loire, France", year: "1620", image: "https://images.unsplash.com/photo-1505912469419-f76eb1424430?q=80&w=2070" },
+    { title: "Loire Valley Chateau", price: "$35,000,000", location: "Loire, France", year: "1620", image: "https://images.unsplash.com/photo-1505912469419-f76eb1424430?q=80&w=2070", isFeatured: true },
     { title: "Scottish Highland Castle", price: "$12,400,000", location: "Inverness, Scotland", year: "1480", image: "https://images.unsplash.com/photo-1533154683836-84ea7a0bc310?q=80&w=2069" },
     { title: "Bavarian Hunting Lodge", price: "$6,500,000", location: "Bavaria, Germany", year: "1895", image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2070" },
   ];
 
   return (
-    <div className="pc-section">
-      {/* Editorial Hero */}
+    <div className="pc-container-base">
+      {/* Cinematic Parallax Hero */}
       <section className="pc-hero">
-        <div>
-          <div style={{ fontSize: '0.75rem', fontWeight: 800, letterSpacing: '6px', color: 'var(--pc-sage)', marginBottom: '3rem' }}>CURATED_DISTRIBUTION_V8</div>
-          <h1 className="pc-heading-xl">
-            Legacy <br/>
-            Ownership <br/>
-            <span className="pc-italic" style={{ color: 'var(--pc-mahogany)' }}>Refined.</span>
-          </h1>
-          <p style={{ marginTop: '4rem', fontSize: '1.25rem', color: 'var(--pc-text-muted)', lineHeight: 2, maxWidth: '550px' }}>
-            A curated distribution of the world's most significant historic estates. Preserving architectural heritage through institutional nodes and manorial verification.
-          </p>
-          <div style={{ marginTop: '5rem', display: 'flex', gap: '3rem', alignItems: 'center' }}>
-            <button className="pc-btn-primary">Request Portfolio</button>
-            <span style={{ fontSize: '0.85rem', fontWeight: 800, borderBottom: '1px solid var(--pc-ink)', cursor: 'pointer' }}>READ_PROVENANCE</span>
-          </div>
-        </div>
-        <div>
-          <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2070" alt="Estate Hero" className="pc-hero-image" />
-        </div>
-      </section>
-
-      {/* Trust Bar */}
-      <div style={{ margin: '8rem 0' }}>
-        <TrustIndicator />
-      </div>
-
-      {/* Estate Grid */}
-      <section>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '6rem' }}>
-            <h2 style={{ fontFamily: 'var(--pc-font-serif)', fontSize: '5rem', fontWeight: 900, letterSpacing: '-2px' }}>The <span className="pc-italic">Collection.</span></h2>
-            <div style={{ textAlign: 'right', maxWidth: '400px', fontSize: '0.9rem', color: 'var(--pc-text-muted)', lineHeight: 1.8 }}>
-                Every property in our registry is evaluated by our board of curators for historical significance and structural integrity.
-            </div>
+        <div className="pc-hero-bg">
+          <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2070" alt="Classic Estate" />
         </div>
         
-        <div className="pc-estate-grid">
-          {estates.map((e, i) => (
-            <EstateCard key={i} {...e} />
-          ))}
+        <div className="pc-hero-card">
+          <div className="pc-caps" style={{ color: 'var(--pc-teal)', marginBottom: '2.5rem', opacity: 0.4 }}>Global Registry // Vol. 2026</div>
+          <h1 className="pc-hero-title">
+            The <span className="pc-italic" style={{ fontWeight: 400 }}>Heritage</span> <br/> 
+            Registry.
+          </h1>
+          <p className="pc-hero-desc">
+            A curated distribution of the world's most distinguished historic properties. Every acquisition is verified for architectural provenance and manorial integrity.
+          </p>
+          
+          <div style={{ background: 'var(--pc-border)', padding: '1px', boxShadow: '0 30px 60px rgba(0,0,0,0.05)' }} className="pc-search-bar">
+            <div className="pc-search-inner" style={{ flex: 1, background: 'white', gap: '0.5rem' }}>
+                <span style={{ fontSize: '0.7rem', fontWeight: 900, color: 'var(--pc-teal)', opacity: 0.4, letterSpacing: '2px' }}>SEARCH</span>
+                <input 
+                    type="text" 
+                    placeholder="By Region, Era..." 
+                    style={{ flex: 1, border: 'none', background: 'transparent', outline: 'none', fontFamily: 'var(--pc-font-body)', fontSize: '1rem' }} 
+                />
+            </div>
+            <button className="pc-btn-primary" style={{ background: 'var(--pc-teal)', color: 'white' }}>
+                DISCOVER
+            </button>
+          </div>
         </div>
       </section>
 
-      {/* Institutional Inquiry */}
-      <section style={{ marginTop: '15rem', display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '10rem', alignItems: 'center' }}>
+      {/* Orchestrated Collection Grid */}
+      <section className="pc-section">
+        <div className="pc-main-grid">
+          <FilterSidebar />
+          
           <div>
-              <div style={{ height: '800px', background: 'white', border: '1px solid var(--pc-border)', padding: '2rem' }}>
-                <img src="https://images.unsplash.com/photo-1449156001533-cb39c8524490?q=80&w=2070" alt="Registry Detail" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              </div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '6rem', gap: '2rem' }}>
+                <div>
+                    <div className="pc-caps" style={{ color: 'var(--pc-teal)', marginBottom: '1.25rem', opacity: 0.4 }}>Collection Node // 01</div>
+                    <h2 className="pc-serif" style={{ fontSize: 'clamp(3rem, 5vw, 4.5rem)', fontWeight: 900, letterSpacing: '-2px', color: 'var(--pc-teal)' }}>
+                        The <span className="pc-italic" style={{ fontWeight: 400 }}>Collection.</span>
+                    </h2>
+                </div>
+                <div style={{ textAlign: 'right', maxWidth: '350px', fontSize: '0.9rem', color: 'var(--pc-text-muted)', lineHeight: 1.8 }}>
+                    Current distribution includes verified manorial rights and significant historical provenance. 
+                </div>
+            </div>
+
+            <div className="pc-estate-grid">
+              {estates.map((e, i) => (
+                <EstateCard key={i} {...e} />
+              ))}
+            </div>
+            
+            <div style={{ marginTop: '8rem', textAlign: 'center' }}>
+                <button className="pc-btn-primary" style={{ background: 'transparent', border: '1px solid var(--pc-teal)', color: 'var(--pc-teal)' }}>
+                    LOAD MORE PROVENANCE
+                </button>
+            </div>
           </div>
-          <div>
-              <div className="pc-serif" style={{ fontSize: '1rem', fontStyle: 'italic', color: 'var(--pc-mahogany)', marginBottom: '2rem' }}>The Heritage Registry</div>
-              <h2 className="pc-heading-xl" style={{ fontSize: '5rem', marginBottom: '4rem' }}>Institutional <br/>Inquiry.</h2>
-              <p style={{ fontSize: '1.1rem', color: 'var(--pc-text-muted)', lineHeight: 2, marginBottom: '5rem' }}>
-                  Our curators are currently evaluating select properties for inclusion in the 2026 global registry. Submit your provenance for review by our architectural board.
-              </p>
+        </div>
+      </section>
+
+      <div className="pc-divider" />
+
+      {/* Editorial Testimonials */}
+      <section className="pc-section" style={{ paddingBottom: '12rem' }}>
+          <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+              <div style={{ textAlign: 'center', marginBottom: '8rem' }}>
+                  <div className="pc-caps" style={{ color: 'var(--pc-teal)', marginBottom: '1.5rem', opacity: 0.4 }}>Patron Feedback</div>
+                  <h3 className="pc-serif" style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: 900, letterSpacing: '-2px', color: 'var(--pc-teal)' }}>
+                    Voices of <span className="pc-italic" style={{ fontWeight: 400 }}>Trust.</span>
+                  </h3>
+              </div>
               
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-                  {['Manorial Rights Verification', 'Historical Archival Access', 'Institutional Registry Node'].map(item => (
-                      <div key={item} style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
-                          <span style={{ fontSize: '1.5rem', color: 'var(--pc-sage)' }}>❦</span>
-                          <span style={{ fontSize: '0.9rem', fontWeight: 800, letterSpacing: '2px' }}>{item.toUpperCase()}</span>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '3rem' }} className="pc-testimonials-grid">
+                  <style dangerouslySetInnerHTML={{ __html: `
+                    @media (min-width: 768px) {
+                      .pc-testimonials-grid { grid-template-columns: repeat(2, 1fr) !important; }
+                    }
+                    @media (min-width: 1200px) {
+                      .pc-testimonials-grid { grid-template-columns: repeat(3, 1fr) !important; }
+                    }
+                  ` }} />
+                  {[
+                      { quote: "Estate & Heritage turned a daunting task into a delightful journey. Their market knowledge is unmatched.", client: "A. Bennett", title: "Estate Patron" },
+                      { quote: "Personalized service and fantastic negotiation. Highly recommend for classic property sales.", client: "M. Chen", title: "Institutional Lead" },
+                      { quote: "They understand the nuances of classic architecture and helped us secure a property of historical significance.", client: "T. Davis", title: "Heritage Collector" }
+                  ].map((t, i) => (
+                      <div key={i} style={{ padding: '2.5rem', background: 'var(--pc-white)', border: '1px solid var(--pc-border)', position: 'relative' }}>
+                          <p style={{ fontStyle: 'italic', fontSize: '1.2rem', marginBottom: '3rem', lineHeight: 1.7, color: 'var(--pc-teal)' }}>"{t.quote}"</p>
+                          <div>
+                            <div style={{ fontWeight: 800, fontSize: '0.8rem', letterSpacing: '2px', color: 'var(--pc-teal)' }}>{t.client.toUpperCase()}</div>
+                            <div style={{ fontSize: '0.65rem', color: 'var(--pc-text-muted)', marginTop: '0.5rem', textTransform: 'uppercase', letterSpacing: '1px' }}>{t.title}</div>
+                          </div>
                       </div>
                   ))}
               </div>
-
-              <button className="pc-btn-primary" style={{ marginTop: '6rem', width: '100%' }}>
-                  Submit Provenance Node
-              </button>
           </div>
       </section>
     </div>

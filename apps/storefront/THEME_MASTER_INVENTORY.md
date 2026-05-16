@@ -24,7 +24,7 @@
 - [x] **Properties Modern** — *[PREMIUM_ENVATO_LEVEL]*
 - [x] **Properties Luxury** — *[PREMIUM_ENVATO_LEVEL]*
 - [x] **Properties Map** — *[PREMIUM_ENVATO_LEVEL]*
-- [x] **Properties Classic** — *[PREMIUM_ENVATO_LEVEL]*
+- [x] **Properties Classic** — *[ELITE_PREMIUM_ENVATO]*
 - [x] **Properties Luxury 2** — *[PREMIUM_ENVATO_LEVEL]*
 - [x] **Properties Urban** — *[PREMIUM_ENVATO_LEVEL]*
 - [x] **Properties Rental** — *[PREMIUM_ENVATO_LEVEL]*

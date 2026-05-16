@@ -118,6 +118,7 @@ When implementing any of the 50 themes, follow this **Golden Prompt**:
 > 1.  **Isolation**: Create all buttons, cards, and navs locally in `./components/`.
 > 2.  **Layout**: Apply the `[GRID_STYLE]` from the Matrix.
 > 3.  **Interactivity**: Use `'use client';` if handlers are present.
+> 4.  **Reference Alignment**: Read the `BLUEPRINT_INSTRUCTIONS.md` and review screenshots in the root `REFERENCE_LIBRARY` for this vertical/archetype before implementation.
 > 
 > **Implementation Steps**:
 > -   **Step 1 (Layout.tsx)**: Build a unique Header/Footer.
@@ -169,3 +170,17 @@ When implementing any of the 50 themes, follow this **Golden Prompt**:
 - [x] `'use client';` directive added if interactivity is present.
 - [ ] Metadata is correctly resolved via `getActiveTheme()`.
 - [ ] Interactive elements have theme-prefixed classes.
+
+---
+
+## 12. The "Reference-to-Implementation" Protocol
+
+When building or refining a theme, the **REFERENCE_LIBRARY** at the root of the workspace must be used as the primary design and architectural source of truth.
+
+### Workflow:
+1.  **Analyze Guidelines**: Read the `BLUEPRINT_INSTRUCTIONS.md` within the relevant folder in the `REFERENCE_LIBRARY`. These contain the original design prompts, color palettes, and layout rules.
+2.  **Review Visuals**: Examine the screenshots (`*.png`) and HTML demos to understand the high-fidelity visual expectations and spatial relationships.
+3.  **Inspect Heritage Code**: Reference the legacy `.blade.php` and `.css` files. These are not working files but provide the structural "DNA" and design nuances that must be translated into modern Next.js/React components.
+4.  **Consolidate & Elevate**: Merge the architectural silo requirements of this Spec with the visual guidelines from the library to create a "Fully Premium" Envato-level storefront theme.
+
+Every Next.js theme implementation must be an **"Elite" evolution** of its reference counterpart, maintaining the design spirit while utilizing modern component patterns.
