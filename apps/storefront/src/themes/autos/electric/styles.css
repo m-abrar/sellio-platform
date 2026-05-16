@@ -1,19 +1,23 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
 .autos-electric-theme {
-  /* Volt Node Palette */
-  --ae-slate: #0f172a;
-  --ae-cyan: #22d3ee;
-  --ae-green: #4ade80;
-  --ae-clean: #f8fafc;
-  --ae-border: rgba(34, 211, 238, 0.15);
+  /* EVOLVE Elite Palette */
+  --ae-slate: #0f172a;        /* Deep Space Dark */
+  --ae-slate-rgb: 15, 23, 42;
+  --ae-cyan: #00ffff;         /* Electric Blue */
+  --ae-green: #39ff14;        /* Neon Green */
+  --ae-card-bg: #1e293b;      /* Glassmorphic Base */
+  --ae-clean: #f1f5f9;
+  --ae-border: rgba(57, 255, 20, 0.15); /* Green Glow Border */
   --ae-glass: rgba(255, 255, 255, 0.03);
   
   /* Typography */
   --ae-font: 'Inter', sans-serif;
   
-  /* Transitions */
-  --ae-transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  /* Dynamics */
+  --ae-transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  --ae-glow-green: 0 0 20px rgba(57, 255, 20, 0.3);
+  --ae-glow-blue: 0 0 20px rgba(0, 255, 255, 0.3);
 }
 
 .autos-electric-theme {
@@ -21,19 +25,38 @@
   color: var(--ae-clean);
   font-family: var(--ae-font);
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden !important;
+  max-width: 100vw !important;
+  width: 100%;
 }
 
 /* Typography Utilities */
 .ae-heading-xl {
-  font-size: clamp(4rem, 10vw, 10rem);
+  font-size: clamp(2.8rem, 10vw, 10rem);
   font-weight: 900;
-  line-height: 0.9;
+  line-height: 0.95;
   letter-spacing: -0.05em;
   color: white;
 }
 
+.ae-heading-l {
+  font-size: clamp(2.2rem, 6vw, 6rem);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+}
+
+.ae-heading-m {
+  font-size: clamp(1.8rem, 4vw, 4rem);
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
 .ae-mono {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 800;
   letter-spacing: 4px;
   text-transform: uppercase;
@@ -53,8 +76,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: rgba(15, 23, 42, 0.8);
-  backdrop-filter: blur(24px);
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(40px) saturate(180%);
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -189,4 +212,130 @@
   color: white;
   padding: 15rem 8% 6rem;
   border-top: 1px solid var(--ae-border);
+}
+
+/* Elite Comparison Matrix */
+.ae-swipe-container {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 2rem;
+  margin: 0 -8%;
+  padding: 0 8% 2rem;
+}
+
+.ae-matrix {
+  min-width: 1000px;
+  background: var(--ae-glass);
+  border: 1px solid var(--ae-border);
+  border-radius: 24px;
+  overflow: hidden;
+}
+
+.ae-matrix-row {
+  display: grid;
+  grid-template-columns: 300px repeat(3, 1fr);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.ae-matrix-cell {
+  padding: 2rem 3rem;
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+}
+
+.ae-matrix-header {
+  background: rgba(57, 255, 20, 0.1);
+  color: var(--ae-green);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.ae-matrix-label {
+  font-weight: 800;
+  color: rgba(255,255,255,0.4);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  background: rgba(0,0,0,0.2);
+}
+
+/* Sustainability Pulse */
+.ae-icon-box {
+  background: var(--ae-glass);
+  padding: 4rem;
+  border-radius: 24px;
+  border: 1px solid transparent;
+  transition: var(--ae-transition);
+  text-align: center;
+}
+
+.ae-icon-box:hover {
+  border-color: var(--ae-green);
+  background: rgba(57, 255, 20, 0.02);
+  transform: translateY(-8px);
+  box-shadow: var(--ae-glow-green);
+}
+
+.ae-icon-box i {
+  font-size: 3rem;
+  color: var(--ae-cyan);
+  margin-bottom: 2rem;
+  display: block;
+}
+
+@media (max-width: 1024px) {
+  .ae-fleet-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Analytics HUD */
+.ae-analytics-hud {
+  padding: 10rem 0;
+}
+
+.ae-analytics-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8rem;
+  align-items: center;
+  margin-bottom: 8rem;
+}
+
+@media (max-width: 1200px) {
+  .ae-analytics-inner {
+    grid-template-columns: 1fr;
+    gap: 4rem;
+  }
+}
+
+/* Charging Hub */
+.ae-grid-hub {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 15rem;
+  align-items: center;
+}
+
+@media (max-width: 1200px) {
+  .ae-grid-hub {
+    grid-template-columns: 1fr;
+    gap: 8rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .ae-fleet-grid {
+    grid-template-columns: 1fr;
+  }
+  .ae-heading-xl {
+    font-size: 3.5rem;
+  }
+  .ae-section {
+    padding: 6rem 6%;
+  }
+  .ae-analytics-hud {
+    padding: 4rem 0;
+  }
 }
