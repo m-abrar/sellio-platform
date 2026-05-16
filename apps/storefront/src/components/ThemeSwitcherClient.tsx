@@ -32,26 +32,16 @@ export const ThemeSwitcherClient: React.FC<ThemeSwitcherClientProps> = ({ themes
     return acc;
   }, {} as Record<string, Theme[]>);
 
-  const handleThemeSwitch = (e: React.MouseEvent, key: string) => {
-    e.preventDefault();
-    
-    // Construct the preview URL while preserving the current path
-    // Strip any existing /preview/[themeKey] prefix to prevent nesting
-    const currentPath = window.location.pathname;
-    const cleanPath = currentPath.replace(/^\/preview\/[^/]+/, '') || '/';
-    
-    // Build the final preview URL
-    const previewUrl = `/preview/${key}${cleanPath === '/' ? '' : cleanPath}`;
-    
-    // Jump to the dedicated preview URL
-    window.location.href = previewUrl;
-  };
+  // Prepare the clean path once for all links
+  const currentPath = typeof window !== 'undefined' ? window.location.pathname : '/';
+  const cleanPath = currentPath.replace(/^\/preview\/[^/]+/, '') || '/';
 
   return (
     <div style={{
       position: 'fixed',
-      bottom: '20px',
-      right: '20px',
+      top: '25%',
+      left: '20px',
+      transform: 'translateY(-50%)',
       zIndex: 1000,
       fontFamily: 'Inter, sans-serif'
     }}>
@@ -101,24 +91,24 @@ export const ThemeSwitcherClient: React.FC<ThemeSwitcherClientProps> = ({ themes
           strokeLinecap="round" 
           strokeLinejoin="round"
         >
-          <path d="M12.22 2h-.44a2 2 0 0 0-2 2a2 2 0 0 1-2 2a2 2 0 0 0-2 2a2 2 0 0 1-2 2a2 2 0 0 0-2 2v.44a2 2 0 0 0 2 2a2 2 0 0 1 2 2a2 2 0 0 0 2 2a2 2 0 0 1 2 2a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2a2 2 0 0 1 2-2a2 2 0 0 0 2-2a2 2 0 0 1 2-2a2 2 0 0 0 2-2v-.44a2 2 0 0 0-2-2a2 2 0 0 1-2-2a2 2 0 0 0-2-2a2 2 0 0 1-2-2a2 2 0 0 0-2-2z"></path>
           <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
         </svg>
         
         {/* Small secondary gear hint */}
         <svg 
           className="gear-icon-fast"
-          style={{ position: 'absolute', top: '12px', right: '12px', opacity: 0.4 }}
-          width="12" 
-          height="12" 
+          style={{ position: 'absolute', top: '8px', right: '8px', opacity: 0.8, filter: 'drop-shadow(0 0 2px rgba(255,255,255,0.2))' }}
+          width="16" 
+          height="16" 
           viewBox="0 0 24 24" 
           fill="none" 
           stroke="currentColor" 
-          strokeWidth="2" 
+          strokeWidth="2.5" 
           strokeLinecap="round" 
           strokeLinejoin="round"
         >
-          <path d="M12.22 2h-.44a2 2 0 0 0-2 2a2 2 0 0 1-2 2a2 2 0 0 0-2 2a2 2 0 0 1-2 2a2 2 0 0 0-2 2v.44a2 2 0 0 0 2 2a2 2 0 0 1 2 2a2 2 0 0 0 2 2a2 2 0 0 1 2 2a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2a2 2 0 0 1 2-2a2 2 0 0 0 2-2a2 2 0 0 1 2-2a2 2 0 0 0 2-2v-.44a2 2 0 0 0-2-2a2 2 0 0 1-2-2a2 2 0 0 0-2-2a2 2 0 0 1-2-2a2 2 0 0 0-2-2z"></path>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
         </svg>
       </button>
 
@@ -126,22 +116,22 @@ export const ThemeSwitcherClient: React.FC<ThemeSwitcherClientProps> = ({ themes
       {isOpen && (
         <div style={{
           position: 'absolute',
-          bottom: '60px',
-          right: '0',
+          top: '70px',
+          left: '0',
           background: 'rgba(255, 255, 255, 0.95)',
           backdropFilter: 'blur(10px)',
           padding: '20px',
           borderRadius: '16px',
           boxShadow: '0 10px 40px rgba(0,0,0,0.15)',
           width: '320px',
-          maxHeight: '70vh',
+          maxHeight: '60vh',
           overflowY: 'auto',
           border: '1px solid rgba(0,0,0,0.05)',
-          animation: 'slideUp 0.3s ease-out'
+          animation: 'slideDown 0.3s ease-out'
         }}>
           <style dangerouslySetInnerHTML={{ __html: `
-            @keyframes slideUp {
-              from { opacity: 0; transform: translateY(10px); }
+            @keyframes slideDown {
+              from { opacity: 0; transform: translateY(-10px); }
               to { opacity: 1; transform: translateY(0); }
             }
           ` }} />
@@ -166,11 +156,12 @@ export const ThemeSwitcherClient: React.FC<ThemeSwitcherClientProps> = ({ themes
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
                 {verticalThemes.map(t => {
                   const isActive = t.theme_key === activeThemeKey;
+                  const previewUrl = `/preview/${t.theme_key}${cleanPath === '/' ? '' : cleanPath}`;
+                  
                   return (
                     <a 
                       key={t.theme_key} 
-                      href="#"
-                      onClick={(e) => handleThemeSwitch(e, t.theme_key)}
+                      href={previewUrl}
                       title={t.title}
                       style={{
                         fontSize: '10px',
