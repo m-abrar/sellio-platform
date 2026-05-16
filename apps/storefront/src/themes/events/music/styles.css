@@ -6,13 +6,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 :root {
-    --sonic-pink: #f472b6;
-    --sonic-purple: #a855f7;
-    --sonic-midnight: #09090b;
-    --sonic-bg: #000000;
-    --sonic-card: #0c0c0e;
-    --sonic-border: rgba(255, 255, 255, 0.05);
-    --font-heading: 'Clash Display', sans-serif;
+    --neon-pink: #FF00FF;
+    --neon-blue: #00FFFF;
+    --neon-lime: #CCFF00;
+    --sonic-bg: #0A0A0A;
+    --sonic-card: #111111;
+    --sonic-border: #222222;
+    --font-heading: 'Orbitron', sans-serif;
     --font-body: 'Inter', sans-serif;
 }
 
@@ -40,12 +40,11 @@
 
 .sonic-logo {
     font-family: var(--font-heading);
-    font-weight: 700;
-    font-size: 2rem;
-    background: linear-gradient(to right, var(--sonic-pink), var(--sonic-purple));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    letter-spacing: -2px;
+    font-weight: 900;
+    font-size: 2.5rem;
+    color: white;
+    text-shadow: 0 0 10px var(--neon-blue), 0 0 20px var(--neon-pink);
+    letter-spacing: 4px;
 }
 
 .sonic-nav {
@@ -93,27 +92,55 @@
 
 .sonic-hero h1 {
     font-family: var(--font-heading);
-    font-size: 10rem;
-    font-weight: 700;
-    line-height: 0.8;
-    letter-spacing: -8px;
-    margin-bottom: 4rem;
+    font-size: clamp(3.5rem, 10vw, 8rem);
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: 4px;
+    margin-bottom: 3rem;
     text-transform: uppercase;
+    text-shadow: 0 0 20px var(--neon-pink), 0 0 40px var(--neon-blue);
+}
+
+@keyframes neon-pulse {
+    0% { box-shadow: 0 0 10px var(--neon-pink); }
+    50% { box-shadow: 0 0 20px var(--neon-pink), 0 0 40px var(--neon-blue); }
+    100% { box-shadow: 0 0 10px var(--neon-pink); }
 }
 
 /* Lineup Grid */
 .lineup-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 1rem;
+    gap: 2rem;
     padding: 2rem 6%;
 }
 
+@media (max-width: 1024px) {
+    .lineup-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .lineup-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
 .artist-card-premium {
-    aspect-ratio: 1/1;
+    aspect-ratio: 4/5;
     position: relative;
     overflow: hidden;
     background: var(--sonic-card);
+    border: 2px solid var(--sonic-border);
+    border-radius: 12px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.artist-card-premium:hover {
+    border-color: var(--neon-blue);
+    box-shadow: 0 0 20px var(--neon-blue);
+    transform: translateY(-10px) perspective(1000px) rotateX(2deg);
 }
 
 .artist-img {
@@ -183,20 +210,26 @@
 
 /* Buttons */
 .sonic-btn-primary {
-    background: white;
+    background: linear-gradient(90deg, var(--neon-pink), var(--neon-blue));
     color: black;
     border: none;
     padding: 1.5rem 5rem;
     font-family: var(--font-heading);
-    font-weight: 700;
+    font-weight: 900;
     font-size: 1.2rem;
     text-transform: uppercase;
     cursor: pointer;
     transition: all 0.3s ease;
+    border-radius: 50px;
+    animation: neon-pulse 2s infinite alternate;
 }
 
 .sonic-btn-primary:hover {
-    background: var(--sonic-pink);
-    color: white;
-    box-shadow: 0 0 50px rgba(244, 114, 182, 0.5);
+    transform: scale(1.05);
+    box-shadow: 0 0 60px var(--neon-pink);
+}
+
+.sonic-nav-link:hover {
+    color: var(--neon-blue);
+    text-shadow: 0 0 10px var(--neon-blue);
 }
