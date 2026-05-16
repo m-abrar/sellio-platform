@@ -1,16 +1,15 @@
-
 import React from 'react';
+import { FestivalHeader, NexusFooter } from './components';
 import './styles.css';
-import { VibeHeader, NeonFooter } from './components';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="festival-wrapper">
-      <VibeHeader />
+    <div className="events-festival-theme">
+      <FestivalHeader />
       <main>
         {children}
       </main>
-      <NeonFooter />
+      <NexusFooter />
     </div>
   );
 }

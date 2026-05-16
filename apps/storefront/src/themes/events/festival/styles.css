@@ -1,180 +1,183 @@
-/* 
-    Events Festival: The Neon Pulse
-    Design Spec: Cyber Pink, Electric Blue, Immersive Gradients
-*/
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
 
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Space+Grotesk:wght@300;400;700&display=swap');
-
-:root {
-    --fest-pink: #ff0080;
-    --fest-purple: #7928ca;
-    --fest-blue: #0070f3;
-    --fest-bg: #000000;
-    --fest-text: #ffffff;
-    --font-fest: 'Montserrat', sans-serif;
-    --font-base: 'Space Grotesk', sans-serif;
+.events-festival-theme {
+  /* Collective Node Palette */
+  --ef-magenta: #d946ef;
+  --ef-blue: #3b82f6;
+  --ef-purple: #7c3aed;
+  --ef-black: #000000;
+  --ef-white: #ffffff;
+  --ef-grey: #4b5563;
+  
+  /* Typography */
+  --ef-font: 'Montserrat', sans-serif;
+  --ef-alt: 'Space Grotesk', sans-serif;
+  
+  /* Transitions */
+  --ef-transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.festival-wrapper {
-    background-color: var(--fest-bg);
-    color: var(--fest-text);
-    font-family: var(--font-base);
-    min-height: 100vh;
+.events-festival-theme {
+  background-color: var(--ef-black);
+  color: var(--ef-white);
+  font-family: var(--ef-font);
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Header */
-.vibe-header {
-    background: rgba(0,0,0,0.8);
-    backdrop-filter: blur(20px);
-    padding: 1.5rem 4rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1000;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
+/* Typography Utilities */
+.ef-heading-xl {
+  font-size: clamp(5rem, 15vw, 15rem);
+  font-weight: 900;
+  line-height: 0.75;
+  letter-spacing: -0.06em;
+  text-transform: uppercase;
 }
 
-.fest-logo {
-    font-family: var(--font-fest);
-    font-weight: 900;
-    font-size: 1.5rem;
-    background: linear-gradient(to right, var(--fest-pink), var(--fest-purple));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    letter-spacing: -1px;
+.ef-mono {
+  font-family: var(--ef-alt);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: var(--ef-magenta);
 }
 
-.fest-nav {
-    display: flex;
-    gap: 3rem;
+/* Layout */
+.ef-section {
+  padding: 10rem 6%;
+  max-width: 1800px;
+  margin: 0 auto;
 }
 
-.fest-nav-link {
-    font-size: 0.8rem;
-    font-weight: 700;
-    color: rgba(255,255,255,0.6);
-    text-decoration: none;
-    letter-spacing: 1px;
-    transition: color 0.3s ease;
+/* Festival Header */
+.ef-header {
+  padding: 1.5rem 6%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(30px);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.fest-nav-link:hover {
-    color: var(--fest-pink);
+.ef-logo {
+  font-weight: 900;
+  font-size: 1.5rem;
+  letter-spacing: -1px;
+  background: linear-gradient(to right, var(--ef-magenta), var(--ef-blue));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-/* Hero */
-.fest-hero {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    background: radial-gradient(circle at center, var(--fest-purple) 0%, transparent 70%),
-                url('https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?q=80&w=2070');
-    background-size: cover;
-    background-position: center;
-    padding: 0 10%;
+.ef-nav {
+  display: flex;
+  gap: 4rem;
 }
 
-.fest-hero h1 {
-    font-family: var(--font-fest);
-    font-size: 8rem;
-    font-weight: 900;
-    line-height: 0.8;
-    margin-bottom: 2rem;
-    text-transform: uppercase;
+.ef-nav-link {
+  font-family: var(--ef-alt);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.4);
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  transition: var(--ef-transition);
 }
 
-.fest-hero-badge {
-    background: var(--fest-pink);
-    color: white;
-    padding: 0.5rem 1.5rem;
-    font-size: 0.8rem;
-    font-weight: 900;
-    letter-spacing: 4px;
-    margin-bottom: 3rem;
+.ef-nav-link:hover {
+  color: var(--ef-magenta);
 }
 
-/* Festival Cards */
-.fest-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
-    padding: 6rem 4rem;
+/* Pulse Hero */
+.ef-hero {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
 }
 
-.fest-card {
-    background: #0a0a0a;
-    border: 1px solid rgba(255,255,255,0.05);
-    position: relative;
-    overflow: hidden;
-    height: 600px;
-    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+.ef-hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at center, rgba(124, 58, 237, 0.2) 0%, #000 80%);
+  z-index: 1;
 }
 
-.fest-card:hover {
-    transform: translateY(-20px);
+/* Stage Lineup Card */
+.ef-festival-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3rem;
+  margin-top: 6rem;
 }
 
-.fest-card-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0.6;
-    transition: transform 0.6s ease;
+.ef-stage-card {
+  height: 600px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: var(--ef-transition);
+  cursor: pointer;
 }
 
-.fest-card:hover .fest-card-img {
-    transform: scale(1.1);
-    opacity: 0.8;
+.ef-stage-card:hover {
+  transform: translateY(-20px) scale(1.02);
+  border-color: var(--ef-magenta);
 }
 
-.fest-card-overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 3rem;
-    background: linear-gradient(to top, #000, transparent);
+.ef-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.5;
+  transition: var(--ef-transition);
 }
 
-.fest-card-title {
-    font-family: var(--font-fest);
-    font-size: 2.5rem;
-    font-weight: 900;
-    margin-bottom: 1rem;
-    line-height: 1;
+.ef-stage-card:hover .ef-img {
+  opacity: 0.8;
+  transform: scale(1.1);
+}
+
+/* Buttons */
+.ef-btn-primary {
+  background: var(--ef-magenta);
+  color: white;
+  border: none;
+  padding: 1.5rem 4.5rem;
+  font-weight: 900;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  cursor: pointer;
+  transition: var(--ef-transition);
+  position: relative;
+  z-index: 2;
+}
+
+.ef-btn-primary:hover {
+  background: var(--ef-white);
+  color: var(--ef-black);
+  box-shadow: 0 0 60px rgba(217, 70, 239, 0.4);
 }
 
 /* Footer */
-.neon-footer {
-    padding: 8rem 4rem;
-    background: #000;
-    border-top: 1px solid rgba(255,255,255,0.05);
-}
-
-.neon-footer h4 {
-    font-family: var(--font-fest);
-    font-size: 0.8rem;
-    letter-spacing: 2px;
-    margin-bottom: 2rem;
-    color: var(--fest-purple);
-}
-
-.neon-footer-link {
-    display: block;
-    color: #444;
-    text-decoration: none;
-    margin-bottom: 1rem;
-    font-size: 0.9rem;
-    transition: color 0.3s ease;
-}
-
-.neon-footer-link:hover {
-    color: var(--fest-pink);
+.ef-footer {
+  background: #000;
+  padding: 15rem 6% 6rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
 }

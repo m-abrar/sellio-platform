@@ -1,16 +1,15 @@
-
 import React from 'react';
+import { CorporateHeader, EnterpriseFooter } from './components';
 import './styles.css';
-import { GlobalHeader, InstitutionalFooter } from './components';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="corporate-services-wrapper">
-      <GlobalHeader />
+    <div className="services-corporate-theme">
+      <CorporateHeader />
       <main>
         {children}
       </main>
-      <InstitutionalFooter />
+      <EnterpriseFooter />
     </div>
   );
 }

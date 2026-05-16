@@ -1,12 +1,13 @@
+
 import React from 'react';
 import './styles.css';
 import { HubHeader, HubFooter } from './components';
 
-export default function ModernHubLayout({ children }: { children: React.ReactNode }) {
+export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="classifieds-modern">
+    <div className="cm-wrapper">
       <HubHeader />
-      <main className="modern-hub-container">
+      <main className="cm-main">
         {children}
       </main>
       <HubFooter />

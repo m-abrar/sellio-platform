@@ -1,152 +1,164 @@
-/* 
-    Services Corporate: The Institutional Hub
-    Design Spec: Royal Blue, Graphite Accents, Global Scaling
-*/
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
 
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Inter:wght@300;400;600;700&display=swap');
-
-:root {
-    --corp-primary: #1a365d;
-    --corp-accent: #2b6cb0;
-    --corp-bg: #ffffff;
-    --corp-text: #2d3748;
-    --corp-border: #e2e8f0;
-    --font-heading: 'Montserrat', sans-serif;
-    --font-body: 'Inter', sans-serif;
+.services-corporate-theme {
+  /* Enterprise Node Palette */
+  --sc-navy: #0f172a;
+  --sc-blue: #1e40af;
+  --sc-slate: #334155;
+  --sc-white: #ffffff;
+  --sc-frost: #f8fafc;
+  --sc-border: #e2e8f0;
+  --sc-grey: #64748b;
+  
+  /* Typography */
+  --sc-font: 'Inter', sans-serif;
+  --sc-alt: 'Space Grotesk', sans-serif;
+  
+  /* Transitions */
+  --sc-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.corporate-services-wrapper {
-    background-color: var(--corp-bg);
-    color: var(--corp-text);
-    font-family: var(--font-body);
+.services-corporate-theme {
+  background-color: var(--sc-white);
+  color: var(--sc-navy);
+  font-family: var(--sc-font);
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Header */
-.global-header {
-    background: white;
-    border-bottom: 1px solid var(--corp-border);
-    padding: 1.5rem 6%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
+/* Typography Utilities */
+.sc-heading-xl {
+  font-size: clamp(3.5rem, 8vw, 8rem);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--sc-navy);
 }
 
-.global-logo {
-    font-family: var(--font-heading);
-    font-weight: 900;
-    font-size: 1.4rem;
-    color: var(--corp-primary);
-    letter-spacing: -1px;
+.sc-mono {
+  font-family: var(--sc-alt);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--sc-blue);
 }
 
-.global-nav {
-    display: flex;
-    gap: 3.5rem;
+/* Layout */
+.sc-section {
+  padding: 10rem 6%;
+  max-width: 1600px;
+  margin: 0 auto;
 }
 
-.global-nav-link {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: #4a5568;
-    text-decoration: none;
-    transition: color 0.3s ease;
+/* Corporate Header */
+.sc-header {
+  padding: 1.5rem 6%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  border-bottom: 1px solid var(--sc-border);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
-.global-nav-link:hover {
-    color: var(--corp-primary);
+.sc-logo {
+  font-weight: 900;
+  font-size: 1.5rem;
+  letter-spacing: -1px;
+  color: var(--sc-navy);
 }
 
-/* Hero */
-.corp-hero {
-    padding: 10rem 6%;
-    background: linear-gradient(135deg, #f7fafc 0%, #ffffff 100%);
-    display: grid;
-    grid-template-columns: 1.2fr 1fr;
-    gap: 6rem;
-    align-items: center;
-    border-bottom: 1px solid var(--corp-border);
+.sc-nav {
+  display: flex;
+  gap: 4rem;
 }
 
-.corp-hero-content h1 {
-    font-family: var(--font-heading);
-    font-size: 4.5rem;
-    font-weight: 900;
-    line-height: 1.1;
-    margin-bottom: 2rem;
-    color: var(--corp-primary);
+.sc-nav-link {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--sc-grey);
+  text-decoration: none;
+  transition: var(--sc-transition);
 }
 
-/* Service Cards */
-.service-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 3rem;
-    padding: 8rem 6%;
+.sc-nav-link:hover {
+  color: var(--sc-blue);
 }
 
-.service-card {
-    padding: 3rem;
-    border: 1px solid var(--corp-border);
-    transition: all 0.3s ease;
+/* Institutional Hero */
+.sc-hero {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  align-items: center;
+  gap: 10rem;
+  padding: 12rem 6%;
+  background: var(--sc-frost);
+  border-bottom: 1px solid var(--sc-border);
 }
 
-.service-card:hover {
-    border-color: var(--corp-primary);
-    box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+.sc-hero-img-wrapper {
+  position: relative;
+  background: white;
+  padding: 0.75rem;
+  border: 1px solid var(--sc-border);
+  box-shadow: 0 40px 80px rgba(15, 23, 42, 0.05);
 }
 
-.service-icon {
-    font-size: 2.5rem;
-    margin-bottom: 2rem;
-    color: var(--corp-accent);
+.sc-hero-img {
+  width: 100%;
 }
 
-.service-title {
-    font-family: var(--font-heading);
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: 1.5rem;
+/* Service Node Card */
+.sc-service-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3.5rem;
+  margin-top: 6rem;
 }
 
-.service-desc {
-    font-size: 1rem;
-    line-height: 1.8;
-    color: #718096;
+.sc-service-card {
+  background: white;
+  border: 1px solid var(--sc-border);
+  padding: 4rem;
+  transition: var(--sc-transition);
+  cursor: pointer;
+  position: relative;
+}
+
+.sc-service-card:hover {
+  border-color: var(--sc-blue);
+  transform: translateY(-10px);
+  box-shadow: 0 30px 60px rgba(15, 23, 42, 0.05);
+}
+
+.sc-icon {
+  font-size: 3rem;
+  margin-bottom: 3rem;
+  display: inline-block;
+}
+
+/* Buttons */
+.sc-btn-primary {
+  background: var(--sc-navy);
+  color: white;
+  border: none;
+  padding: 1.5rem 4.5rem;
+  font-weight: 900;
+  font-size: 0.9rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: var(--sc-transition);
+}
+
+.sc-btn-primary:hover {
+  background: var(--sc-blue);
+  box-shadow: 0 15px 30px rgba(30, 64, 175, 0.2);
 }
 
 /* Footer */
-.inst-footer {
-    padding: 8rem 6%;
-    background: var(--corp-primary);
-    color: white;
-}
-
-.inst-footer-grid {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr;
-    gap: 4rem;
-}
-
-.inst-footer h4 {
-    font-family: var(--font-heading);
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-bottom: 2.5rem;
-    color: #90cdf4;
-}
-
-.inst-footer-link {
-    display: block;
-    color: #a0aec0;
-    text-decoration: none;
-    margin-bottom: 1.25rem;
-    font-size: 0.95rem;
-}
-
-.inst-footer-link:hover {
-    color: white;
+.sc-footer {
+  background: var(--sc-navy);
+  padding: 15rem 6% 6rem;
 }

@@ -1,15 +1,16 @@
+
 import React from 'react';
-import { WellnessHeader, ClinicFooter } from './components';
 import './styles.css';
+import { JobsHeader, JobsFooter } from './components';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="services-health-theme">
-      <WellnessHeader />
-      <main>
+    <div className="jm-wrapper">
+      <JobsHeader />
+      <main className="jm-main">
         {children}
       </main>
-      <ClinicFooter />
+      <JobsFooter />
     </div>
   );
 }

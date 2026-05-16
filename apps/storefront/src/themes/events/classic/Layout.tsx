@@ -1,12 +1,11 @@
-
 import React from 'react';
+import { VenueHeader, LegacyFooter } from './components';
 import './styles.css';
-import { ElegantHeader, LegacyFooter } from './components';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="events-classic-wrapper">
-      <ElegantHeader />
+    <div className="events-classic-theme">
+      <VenueHeader />
       <main>
         {children}
       </main>

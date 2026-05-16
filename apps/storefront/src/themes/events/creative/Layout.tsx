@@ -1,16 +1,15 @@
-
 import React from 'react';
+import { CreativeHeader, VibrantFooter } from './components';
 import './styles.css';
-import { CyberHeader, DeepFooter } from './components';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="events-creative-wrapper">
-      <CyberHeader />
+    <div className="events-creative-theme">
+      <CreativeHeader />
       <main>
         {children}
       </main>
-      <DeepFooter />
+      <VibrantFooter />
     </div>
   );
 }

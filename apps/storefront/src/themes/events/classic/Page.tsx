@@ -1,6 +1,6 @@
-
+'use client';
 import React from 'react';
-import { CulturalEventCard } from './components';
+import { OccasionCard, BookingHUD } from './components';
 
 export default function Page() {
   const events = [
@@ -13,60 +13,80 @@ export default function Page() {
   ];
 
   return (
-    <div>
-      {/* Hero Section */}
-      <section className="classic-hero">
-          <div className="classic-hero-sep"></div>
-          <h1>Cultural <br/>Heritage.</h1>
-          <p style={{ maxWidth: '600px', fontSize: '1.25rem', fontStyle: 'italic', opacity: 0.8, lineHeight: 1.8, marginBottom: '4rem' }}>
+    <div className="events-classic-theme">
+      {/* Cinematic Cultural Hero */}
+      <section className="ec-hero">
+          <div style={{ width: '100px', height: '1px', background: 'var(--ec-gold)', marginBottom: '4rem' }}></div>
+          <h1 className="ec-heading-xl" style={{ color: 'white' }}>
+            Cultural <br/>
+            <span className="ec-italic">Heritage.</span>
+          </h1>
+          <p style={{ maxWidth: '750px', fontSize: '1.5rem', fontStyle: 'italic', color: 'rgba(255,255,255,0.7)', lineHeight: 1.8, marginTop: '5rem', fontWeight: 300 }}>
               A curated distribution of the world's most significant cultural repertoire. Authenticated experiences for the discerning patron.
           </p>
-          <button style={{ padding: '1.5rem 4rem', background: 'white', color: 'black', border: 'none', fontFamily: 'var(--font-serif)', fontWeight: 900, fontSize: '0.9rem', fontStyle: 'italic' }}>
-              EXPLORE_REPERTOIRE
-          </button>
-      </section>
-
-      {/* Trust bar */}
-      <section style={{ padding: '3rem 6%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#f5f5dc', color: '#7f1d1d', fontSize: '0.75rem', fontWeight: 800, letterSpacing: '3px' }}>
-          <span>AUTHENTIC_INSTITUTIONAL_NODES</span>
-          <span>CURATED_ARTISTIC_PROTOCOL</span>
-          <span>GLOBAL_CULTURAL_EXCHANGE</span>
-          <span>PATRON_PRIVACY_SECURED</span>
-      </section>
-
-      {/* Cultural Grid */}
-      <section className="cultural-grid">
-          {events.map((e, i) => (
-              <CulturalEventCard key={i} {...e} />
-          ))}
-      </section>
-
-      {/* Institutional CTA */}
-      <section style={{ padding: '15rem 6%', background: '#fff', borderTop: '1px solid #eee', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10rem', alignItems: 'center' }}>
-          <div>
-              <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '4rem', fontWeight: 900, marginBottom: '3rem', fontStyle: 'italic' }}>The Patron's <br/>Circle.</h2>
-              <p style={{ fontSize: '1.1rem', color: '#666', lineHeight: 2, marginBottom: '4rem' }}>
-                  Join an exclusive network of cultural institutions and patrons. Support the arts through the Sellio Legacy protocol and gain early access to global premieres.
-              </p>
-              <ul style={{ listStyle: 'none', padding: 0 }}>
-                  {['Priority Box Seating', 'Private Artists Galas', 'Institutional Voting Rights', 'Legacy Archive Access'].map(item => (
-                      <li key={item} style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '1rem', fontWeight: 700, fontFamily: 'var(--font-serif)', color: 'var(--classic-burgundy)' }}>
-                          <span style={{ color: 'var(--classic-gold)' }}>◆</span> {item.toUpperCase()}
-                      </li>
-                  ))}
-              </ul>
+          <div style={{ marginTop: '7rem' }}>
+            <button className="ec-btn-primary" style={{ background: 'white', color: 'var(--ec-burgundy)' }}>Explore Repertoire</button>
           </div>
-          <div style={{ padding: '6rem', border: '1px solid var(--classic-gold)', background: 'var(--classic-bg)', position: 'relative' }}>
-              <div style={{ position: 'absolute', top: '-1rem', left: '-1rem', width: '50px', height: '50px', background: 'var(--classic-burgundy)' }}></div>
-              <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '2.5rem', fontWeight: 900, marginBottom: '2rem' }}>Become a Patron.</h3>
-              <p style={{ color: '#999', lineHeight: 2, marginBottom: '3rem' }}>
+      </section>
+
+      {/* Trust & Logistics Bar */}
+      <div style={{ padding: '4rem 8%', background: 'var(--ec-stone)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(0,0,0,0.05)' }}>
+          {['AUTHENTIC_INSTITUTIONAL_NODES', 'CURATED_ARTISTIC_PROTOCOL', 'GLOBAL_CULTURAL_EXCHANGE', 'PATRON_PRIVACY_SECURED'].map(logic => (
+              <div key={logic} className="ec-mono" style={{ fontSize: '0.65rem', opacity: 0.5 }}>{logic}</div>
+          ))}
+      </div>
+
+      {/* Booking HUD Section */}
+      <section className="ec-section" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '6rem', borderBottom: '1px solid var(--ec-stone)' }}>
+          <BookingHUD label="VERIFIED_VENUES" value="42" />
+          <BookingHUD label="INSTITUTIONAL_NODES" value="156" />
+          <BookingHUD label="PATRON_SYNC_SPEED" value="0.01s" />
+          <BookingHUD label="ARCHIVE_STABILITY" value="100%" />
+      </section>
+
+      {/* Repertoire Registry Section */}
+      <section className="ec-section">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '8rem' }}>
+              <div>
+                  <div className="ec-mono" style={{ marginBottom: '1.5rem' }}>OFFICIAL_CULTURAL_REGISTRY</div>
+                  <h2 className="ec-heading-xl" style={{ fontSize: '6rem' }}>The <span className="ec-italic">Repertoire.</span></h2>
+              </div>
+              <div style={{ textAlign: 'right', maxWidth: '400px', fontSize: '1rem', color: 'rgba(26, 26, 26, 0.4)', lineHeight: 1.8 }}>
+                  Our unified protocol synchronizes performance availability from the world's most significant institutional nodes.
+              </div>
+          </div>
+          
+          <div className="ec-repertoire-grid">
+            {events.map((e, i) => (
+              <OccasionCard key={i} {...e} />
+            ))}
+          </div>
+      </section>
+
+      {/* Institutional / Patron Section */}
+      <section className="ec-section" style={{ background: 'white', border: '1px solid var(--ec-stone)', display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '15rem', alignItems: 'center', marginBottom: '10rem' }}>
+          <div style={{ padding: '8rem' }}>
+              <div className="ec-mono" style={{ marginBottom: '3rem' }}>PATRON_CIRCLE_PROTOCOL</div>
+              <h2 className="ec-heading-xl" style={{ fontSize: '5rem', marginBottom: '4rem' }}>The Patron's <br/><span className="ec-italic">Circle.</span></h2>
+              <p style={{ fontSize: '1.25rem', color: 'rgba(26, 26, 26, 0.4)', lineHeight: 2, marginBottom: '6rem' }}>
+                  Join an exclusive network of cultural institutions and patrons. Support the arts through the Sellio Legacy protocol and gain early access to premieres.
+              </p>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem' }}>
+                  {['Priority_Box', 'Private_Galas', 'Voting_Rights', 'Archive_Access'].map(item => (
+                      <div key={item} style={{ fontSize: '0.85rem', fontWeight: 900, color: 'var(--ec-burgundy)', letterSpacing: '2px' }}>◆ {item.toUpperCase()}</div>
+                  ))}
+              </div>
+          </div>
+          <div style={{ padding: '8rem', background: 'var(--ec-ivory)', borderLeft: '1px solid var(--ec-stone)', height: '100%' }}>
+              <h3 style={{ fontFamily: 'var(--ec-serif)', fontSize: '2.5rem', fontWeight: 900, marginBottom: '2.5rem' }}>Become a Patron.</h3>
+              <p style={{ color: 'rgba(26, 26, 26, 0.4)', lineHeight: 2, marginBottom: '4rem' }}>
                   Institutional inquiry nodes are currently active for the 2026/27 cycle. Submit your credentials for evaluation.
               </p>
-              <button style={{ width: '100%', padding: '1.5rem', background: 'var(--classic-burgundy)', color: 'white', border: 'none', fontWeight: 900, fontFamily: 'var(--font-serif)', fontStyle: 'italic' }}>
-                  REQUEST_INSTITUTIONAL_ACCESS
-              </button>
+              <button className="ec-btn-primary" style={{ width: '100%', padding: '2rem' }}>Request Institutional Access</button>
           </div>
       </section>
+      
+      <div style={{ height: '10rem' }}></div>
     </div>
   );
 }

@@ -1,12 +1,11 @@
-
 import React from 'react';
+import { RunwayHeader, AtelierFooter } from './components';
 import './styles.css';
-import { VogueHeader, AtelierFooter } from './components';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="ecommerce-fashion-wrapper">
-      <VogueHeader />
+    <div className="ecommerce-fashion-theme">
+      <RunwayHeader />
       <main>
         {children}
       </main>

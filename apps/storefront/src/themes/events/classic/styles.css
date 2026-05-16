@@ -1,159 +1,155 @@
-/* 
-    Events Classic: The Cultural Legacy
-    Design Spec: Deep Burgundy, Antique Gold, Serif Elegance
-*/
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@300;400;600&display=swap');
-
-:root {
-    --classic-burgundy: #7f1d1d;
-    --classic-gold: #d4af37;
-    --classic-bg: #fdfdfb;
-    --classic-text: #1a1a1a;
-    --classic-border: #e7e5e4;
-    --font-serif: 'Playfair Display', serif;
-    --font-sans: 'Inter', sans-serif;
+.events-classic-theme {
+  /* Grand Venue Palette */
+  --ec-burgundy: #7f1d1d;
+  --ec-gold: #d4af37;
+  --ec-ivory: #fdfdfb;
+  --ec-stone: #e7e5e4;
+  --ec-black: #1a1a1a;
+  
+  /* Typography */
+  --ec-serif: 'Playfair Display', serif;
+  --ec-sans: 'Inter', sans-serif;
+  
+  /* Transitions */
+  --ec-transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-.events-classic-wrapper {
-    background-color: var(--classic-bg);
-    color: var(--classic-text);
-    font-family: var(--font-sans);
+.events-classic-theme {
+  background-color: var(--ec-ivory);
+  color: var(--ec-black);
+  font-family: var(--ec-sans);
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Header */
-.elegant-header {
-    background: white;
-    padding: 2rem 6%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    border-bottom: 1px solid var(--classic-border);
+/* Typography Utilities */
+.ec-serif { font-family: var(--ec-serif); }
+.ec-italic { font-style: italic; }
+
+.ec-heading-xl {
+  font-family: var(--ec-serif);
+  font-size: clamp(4rem, 10vw, 10rem);
+  font-weight: 900;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  color: var(--ec-burgundy);
 }
 
-.classic-logo {
-    font-family: var(--font-serif);
-    font-weight: 900;
-    font-size: 1.8rem;
-    color: var(--classic-burgundy);
-    letter-spacing: -1px;
+.ec-mono {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--ec-gold);
 }
 
-.classic-nav {
-    display: flex;
-    gap: 4rem;
+/* Layout */
+.ec-section {
+  padding: 10rem 8%;
+  max-width: 1600px;
+  margin: 0 auto;
 }
 
-.classic-nav-link {
-    font-family: var(--font-serif);
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: #444;
-    text-decoration: none;
-    font-style: italic;
-    transition: color 0.3s ease;
+/* Venue Header */
+.ec-header {
+  padding: 2rem 8%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(253, 253, 251, 0.9);
+  backdrop-filter: blur(20px);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  border-bottom: 1px solid var(--ec-stone);
 }
 
-.classic-nav-link:hover {
-    color: var(--classic-gold);
+.ec-logo {
+  font-family: var(--ec-serif);
+  font-weight: 900;
+  font-size: 1.75rem;
+  letter-spacing: -1px;
 }
 
-/* Hero */
-.classic-hero {
-    height: 85vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
-                url('https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=2070');
-    background-size: cover;
-    background-position: center;
-    color: white;
-    padding: 0 10%;
+.ec-nav {
+  display: flex;
+  gap: 4.5rem;
 }
 
-.classic-hero h1 {
-    font-family: var(--font-serif);
-    font-size: 7rem;
-    font-weight: 900;
-    line-height: 1;
-    margin-bottom: 2rem;
+.ec-nav-link {
+  font-family: var(--ec-serif);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: rgba(26, 26, 26, 0.4);
+  text-decoration: none;
+  font-style: italic;
+  transition: var(--ec-transition);
 }
 
-.classic-hero-sep {
-    width: 80px;
-    height: 2px;
-    background: var(--classic-gold);
-    margin-bottom: 3rem;
+.ec-nav-link:hover {
+  color: var(--ec-burgundy);
 }
 
-/* Event Cards */
-.cultural-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 4rem;
-    padding: 10rem 6%;
+/* Cultural Hero */
+.ec-hero {
+  height: 90vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 0 8%;
+  position: relative;
+  background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)),
+              url('https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=2070') center/cover;
 }
 
-.cultural-card {
-    background: white;
-    border: 1px solid var(--classic-border);
-    padding: 3rem;
-    text-align: center;
-    transition: all 0.4s ease;
+/* Occasion Card */
+.ec-repertoire-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4rem;
+  margin-top: 6rem;
 }
 
-.cultural-card:hover {
-    box-shadow: 0 30px 60px rgba(0,0,0,0.05);
+.ec-occasion-card {
+  background: white;
+  border: 1px solid var(--ec-stone);
+  padding: 4rem;
+  text-align: center;
+  transition: var(--ec-transition);
+  cursor: pointer;
 }
 
-.cultural-card-date {
-    font-family: var(--font-serif);
-    font-weight: 700;
-    font-size: 0.8rem;
-    color: var(--classic-gold);
-    letter-spacing: 3px;
-    margin-bottom: 2rem;
-    display: block;
+.ec-occasion-card:hover {
+  transform: translateY(-15px);
+  box-shadow: 0 40px 100px rgba(127, 29, 29, 0.05);
+  border-color: var(--ec-gold);
 }
 
-.cultural-card-title {
-    font-family: var(--font-serif);
-    font-size: 2.2rem;
-    font-weight: 900;
-    margin-bottom: 1.5rem;
-    line-height: 1.1;
+/* Buttons */
+.ec-btn-primary {
+  background: var(--ec-burgundy);
+  color: white;
+  border: none;
+  padding: 1.5rem 4.5rem;
+  font-family: var(--ec-serif);
+  font-weight: 900;
+  font-size: 0.95rem;
+  font-style: italic;
+  cursor: pointer;
+  transition: var(--ec-transition);
+}
+
+.ec-btn-primary:hover {
+  background: var(--ec-black);
+  transform: translateY(-5px);
 }
 
 /* Footer */
-.legacy-footer {
-    padding: 10rem 6%;
-    background: #0a0a0a;
-    color: white;
-}
-
-.legacy-footer h4 {
-    font-family: var(--font-serif);
-    font-size: 1.1rem;
-    font-style: italic;
-    margin-bottom: 2.5rem;
-    color: var(--classic-gold);
-}
-
-.legacy-footer-link {
-    display: block;
-    color: #444;
-    text-decoration: none;
-    margin-bottom: 1.25rem;
-    font-size: 0.95rem;
-    transition: color 0.3s ease;
-}
-
-.legacy-footer-link:hover {
-    color: white;
+.ec-footer {
+  background: #000;
+  color: white;
+  padding: 15rem 8% 6rem;
 }

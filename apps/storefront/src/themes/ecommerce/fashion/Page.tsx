@@ -1,6 +1,6 @@
-
+'use client';
 import React from 'react';
-import { ProductLookbookCard } from './components';
+import { EditorialLookCard, TrendHUD } from './components';
 
 export default function Page() {
   const collection = [
@@ -13,74 +13,69 @@ export default function Page() {
   ];
 
   return (
-    <div>
-      {/* Fashion Hero */}
-      <section className="fashion-hero">
-        <div className="hero-main-frame">
-            <img 
-                src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=2070" 
-                alt="Main Editorial" 
-                className="fashion-img-fill"
-            />
-            <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: 'linear-gradient(to top, rgba(0,0,0,0.4) 0%, transparent 40%)' }}></div>
-            <div className="hero-overlay-text">
-                <span style={{ fontSize: '0.8rem', letterSpacing: '5px', fontWeight: 800 }}>FALL_WINTER_2026</span>
-                <h1 className="hero-title">Silent <br/>Luxury.</h1>
-                <button style={{ 
-                    padding: '1.25rem 3.5rem', 
-                    background: 'white', 
-                    color: '#1a1a1a', 
-                    border: 'none', 
-                    fontWeight: 900,
-                    fontSize: '0.8rem',
-                    letterSpacing: '2px'
-                }}>EXPLORE_EDITORIAL</button>
-            </div>
+    <div className="ef-section">
+      {/* Editorial Fashion Hero */}
+      <section className="ef-hero">
+        <div className="ef-hero-main">
+          <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=2070" alt="Main Editorial" className="ef-hero-img" />
+          <div style={{ position: 'absolute', bottom: '4rem', left: '4rem', color: 'white' }}>
+              <div className="ef-mono" style={{ marginBottom: '1.5rem', color: 'white' }}>FALL_WINTER_2026_COLLECTION</div>
+              <h1 className="ef-heading-xl" style={{ color: 'white' }}>Silent <br/><span className="ef-italic">Luxury.</span></h1>
+              <div style={{ marginTop: '4rem' }}>
+                  <button className="ef-btn-primary" style={{ background: 'white', color: 'black' }}>Explore Editorial</button>
+              </div>
+          </div>
         </div>
-        <div className="hero-side-frame">
+        <div className="ef-hero-side">
             <div style={{ flex: 1, overflow: 'hidden', position: 'relative' }}>
-                <img 
-                    src="https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=2070" 
-                    alt="Side Look 1" 
-                    className="fashion-img-fill"
-                />
-                <div style={{ position: 'absolute', bottom: '2rem', left: '2rem', color: 'white', fontWeight: 800, fontSize: '0.7rem', letterSpacing: '2px' }}>ACCESSORIES_01</div>
+                <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=2070" alt="Side Look 1" className="ef-hero-img" />
+                <div style={{ position: 'absolute', bottom: '2rem', left: '2rem', color: 'white' }}>
+                    <div className="ef-mono" style={{ fontSize: '0.55rem', color: 'white' }}>ACCESSORIES_01</div>
+                </div>
             </div>
             <div style={{ flex: 1, overflow: 'hidden', position: 'relative' }}>
-                <img 
-                    src="https://images.unsplash.com/photo-1445205170230-053b830c6050?q=80&w=2071" 
-                    alt="Side Look 2" 
-                    className="fashion-img-fill"
-                />
-                <div style={{ position: 'absolute', bottom: '2rem', left: '2rem', color: 'white', fontWeight: 800, fontSize: '0.7rem', letterSpacing: '2px' }}>READY_TO_WEAR_04</div>
+                <img src="https://images.unsplash.com/photo-1445205170230-053b830c6050?q=80&w=2071" alt="Side Look 2" className="ef-hero-img" />
+                <div style={{ position: 'absolute', bottom: '2rem', left: '2rem', color: 'white' }}>
+                    <div className="ef-mono" style={{ fontSize: '0.55rem', color: 'white' }}>READY_TO_WEAR_04</div>
+                </div>
             </div>
         </div>
       </section>
 
-      {/* Lookbook Grid */}
-      <section className="fashion-section">
-        <div style={{ marginBottom: '10rem', textAlign: 'center' }}>
-            <p style={{ fontFamily: 'var(--fashion-serif)', fontSize: '1.5rem', fontStyle: 'italic', color: 'var(--fashion-accent)', marginBottom: '1.5rem' }}>The Autumn Capsule</p>
-            <h2 style={{ fontSize: '4rem', fontWeight: 900, fontFamily: 'var(--fashion-serif)', letterSpacing: '-2px' }}>Lookbook_26</h2>
-        </div>
-        
-        <div className="fashion-lookbook-grid">
+      {/* Trend HUD Section */}
+      <section style={{ padding: '10rem 0', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '6rem', borderBottom: '1px solid var(--ef-border)', marginBottom: '12rem' }}>
+          <TrendHUD label="ACTIVE_CURATIONS" value="124" />
+          <TrendHUD label="ATELIER_NODES" value="08" />
+          <TrendHUD label="SILHOUETTE_PRECISION" value="100%" />
+          <TrendHUD label="GLOBAL_SYNC" value="STABLE" />
+      </section>
+
+      {/* Lookbook Registry Section */}
+      <section>
+          <div style={{ textAlign: 'center', marginBottom: '10rem' }}>
+              <div className="ef-mono" style={{ marginBottom: '2rem' }}>THE_AUTUMN_CAPSULE_V8</div>
+              <h2 className="ef-heading-xl" style={{ fontSize: '6rem' }}>Lookbook <span className="ef-italic">26.</span></h2>
+          </div>
+          
+          <div className="ef-lookbook-grid">
             {collection.map((item, i) => (
-                <ProductLookbookCard key={i} {...item} />
+              <EditorialLookCard key={i} {...item} />
             ))}
-        </div>
+          </div>
       </section>
 
-      {/* Brand Statement */}
-      <section style={{ padding: '15rem 4rem', backgroundColor: '#f5f5f5' }}>
-        <div style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center' }}>
-            <h2 style={{ fontFamily: 'var(--fashion-serif)', fontSize: '3rem', fontWeight: 900, marginBottom: '3rem', lineHeight: 1.2 }}>
-                "We do not build garments. We architect confidence through the precision of silhouette and the purity of material."
-            </h2>
-            <div style={{ width: '60px', height: '2px', background: 'var(--fashion-accent)', margin: '0 auto 3rem auto' }}></div>
-            <p style={{ fontSize: '0.75rem', fontWeight: 900, letterSpacing: '4px', opacity: 0.5 }}>ATELIER_PHILOSOPHY</p>
-        </div>
+      {/* Philosophy Section */}
+      <section style={{ marginTop: '20rem', padding: '15rem 10%', background: 'var(--ef-oyster)', textAlign: 'center' }}>
+          <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+              <h2 style={{ fontFamily: 'var(--ef-serif)', fontSize: '3.5rem', fontWeight: 900, lineHeight: 1.3, marginBottom: '4rem' }}>
+                  "We do not build garments. We architect confidence through the precision of silhouette and the purity of material."
+              </h2>
+              <div style={{ width: '80px', height: '1px', background: 'var(--ef-champagne)', margin: '0 auto 4rem' }}></div>
+              <div className="ef-mono" style={{ opacity: 0.5 }}>ATELIER_PHILOSOPHY_SYNC</div>
+          </div>
       </section>
+      
+      <div style={{ height: '15rem' }}></div>
     </div>
   );
 }

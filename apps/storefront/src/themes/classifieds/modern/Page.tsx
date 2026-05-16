@@ -1,14 +1,16 @@
+
+'use client';
 import React from 'react';
 import { CategoryTile, HubListingCard } from './components';
 
-export default function ModernHubPage() {
+export default function Page() {
   const categories = [
-    { label: "Electronics", icon: "💻", count: "12k+" },
-    { label: "Vehicles", icon: "🚗", count: "8k+" },
-    { label: "Property", icon: "🏠", count: "4k+" },
-    { label: "Home/Garden", icon: "🌿", count: "15k+" },
-    { label: "Jobs", icon: "💼", count: "2k+" },
-    { label: "Services", icon: "🛠️", count: "6k+" },
+    { label: "Electronics", icon: "💻", count: "12,402" },
+    { label: "Vehicles", icon: "🚗", count: "8,110" },
+    { label: "Property", icon: "🏠", count: "4,293" },
+    { label: "Home", icon: "🌿", count: "15,802" },
+    { label: "Collectibles", icon: "💎", count: "2,105" },
+    { label: "Services", icon: "🛠️", count: "6,441" },
   ];
 
   const items = [
@@ -22,69 +24,80 @@ export default function ModernHubPage() {
 
   return (
     <div>
-      <section style={{ padding: '4rem 4rem 0', textAlign: 'center' }}>
-        <h1 style={{ fontFamily: 'var(--font-outfit)', fontSize: '3rem', fontWeight: 800, marginBottom: '1rem' }}>Local Deals, Global Reach.</h1>
-        <p style={{ opacity: 0.5, fontSize: '1.1rem' }}>The community-first marketplace for everything you need.</p>
+      <section className="cm-hero">
+        <div style={{ display: 'inline-block', background: 'rgba(20, 184, 166, 0.1)', color: 'var(--cm-primary)', padding: '0.6rem 1.2rem', borderRadius: '50px', fontWeight: 800, fontSize: '0.75rem', letterSpacing: '2px', marginBottom: '2rem' }}>
+          DECENTRALIZED_LOCAL_COMMERCE
+        </div>
+        <h1>Local Deals, <br/><span>Global Velocity.</span></h1>
+        <p style={{ maxWidth: '600px', margin: '0 auto', fontSize: '1.2rem', color: 'var(--cm-text-dim)', lineHeight: 1.8 }}>
+          The high-fidelity distribution hub for verified local listings. Connect directly with your community node and discover premium value.
+        </p>
       </section>
 
-      <div className="category-tray">
+      <section className="cm-bento-categories">
         {categories.map((cat, i) => (
           <CategoryTile key={i} {...cat} />
         ))}
-      </div>
+      </section>
 
-      <div className="hub-layout">
-        <aside style={{ height: 'fit-content', position: 'sticky', top: '120px' }}>
-          <div style={{ background: 'white', padding: '2rem', borderRadius: '24px', border: '1px solid #edf2f7' }}>
-            <h4 style={{ fontWeight: 800, marginBottom: '1.5rem', fontSize: '0.9rem' }}>Refine Search</h4>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+      <section className="cm-main-grid">
+        <aside className="cm-sidebar">
+          <div style={{ background: 'white', padding: '2.5rem', borderRadius: '24px', border: '1px solid var(--cm-border)' }}>
+            <h4 style={{ fontWeight: 900, marginBottom: '2rem', fontSize: '0.8rem', letterSpacing: '1px' }}>REFINE_SEARCH</h4>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
               <div>
-                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 800, opacity: 0.5, marginBottom: '0.5rem' }}>LOCATION</label>
-                <select style={{ width: '100%', padding: '0.6rem', border: '1px solid #eee', borderRadius: '8px' }}>
-                  <option>Anywhere (50mi)</option>
-                </select>
-              </div>
-              <div>
-                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 800, opacity: 0.5, marginBottom: '0.5rem' }}>PRICE_RANGE</label>
-                <div style={{ display: 'flex', gap: '0.5rem' }}>
-                  <input type="text" placeholder="Min" style={{ width: '50%', padding: '0.6rem', border: '1px solid #eee', borderRadius: '8px' }} />
-                  <input type="text" placeholder="Max" style={{ width: '50%', padding: '0.6rem', border: '1px solid #eee', borderRadius: '8px' }} />
+                <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 800, color: 'var(--cm-text-dim)', marginBottom: '0.75rem' }}>LOCATION_RADIUS</label>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: '#f8fafc', padding: '0.75rem', borderRadius: '12px', border: '1px solid var(--cm-border)' }}>
+                  <span style={{ fontSize: '1rem' }}>📍</span>
+                  <input type="text" placeholder="San Francisco, CA" style={{ flex: 1, background: 'none', border: 'none', outline: 'none', fontWeight: 700, fontSize: '0.85rem' }} />
                 </div>
               </div>
-              <button style={{ width: '100%', padding: '0.8rem', background: 'var(--color-blue)', color: 'white', border: 'none', borderRadius: '8px', fontWeight: 700 }}>Apply Filters</button>
+              <div>
+                <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 800, color: 'var(--cm-text-dim)', marginBottom: '0.75rem' }}>PRICE_RANGE</label>
+                <div style={{ display: 'flex', gap: '1rem' }}>
+                  <input type="text" placeholder="Min" style={{ width: '50%', background: '#f8fafc', padding: '0.75rem', borderRadius: '12px', border: '1px solid var(--cm-border)', fontWeight: 700 }} />
+                  <input type="text" placeholder="Max" style={{ width: '50%', background: '#f8fafc', padding: '0.75rem', borderRadius: '12px', border: '1px solid var(--cm-border)', fontWeight: 700 }} />
+                </div>
+              </div>
+              <div>
+                <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 800, color: 'var(--cm-text-dim)', marginBottom: '1.5rem' }}>CONDITION</label>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                  {['New / Unused', 'Certified Refurbished', 'Premium Used', 'Classic / Vintage'].map(opt => (
+                    <label key={opt} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: '0.85rem', fontWeight: 700, cursor: 'pointer' }}>
+                      <input type="checkbox" style={{ accentColor: 'var(--cm-primary)', width: '16px', height: '16px' }} />
+                      {opt}
+                    </label>
+                  ))}
+                </div>
+              </div>
+              <button className="cm-btn-primary" style={{ marginTop: '1rem' }}>UPDATE_RESULTS</button>
             </div>
           </div>
         </aside>
 
-        <div className="main-hub-content">
-          <div style={{ marginBottom: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span style={{ fontWeight: 800 }}>{items.length} RESULTS_FOUND</span>
-            <select style={{ border: 'none', background: 'none', fontWeight: 700, fontSize: '0.85rem' }}>
-              <option>Sort: Most Recent</option>
-            </select>
+        <div className="cm-feed">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.5rem' }}>
+            <div style={{ fontWeight: 800, fontSize: '0.9rem', color: 'var(--cm-text-dim)' }}>{items.length} ACTIVE_LISTINGS_IN_NODE</div>
+            <div style={{ display: 'flex', gap: '1.5rem' }}>
+              <span style={{ fontWeight: 800, fontSize: '0.8rem', color: 'var(--cm-primary)', borderBottom: '2px solid var(--cm-primary)' }}>LATEST</span>
+              <span style={{ fontWeight: 800, fontSize: '0.8rem', color: 'var(--cm-text-dim)' }}>PRICE_LOW</span>
+              <span style={{ fontWeight: 800, fontSize: '0.8rem', color: 'var(--cm-text-dim)' }}>DISTANCE</span>
+            </div>
           </div>
-          
+
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
             {items.map((item, i) => (
               <HubListingCard key={i} {...item} />
             ))}
           </div>
 
-          <div style={{ padding: '4rem 0', textAlign: 'center' }}>
-            <button style={{ 
-              background: 'white', 
-              border: '1px solid var(--color-blue)', 
-              color: 'var(--color-blue)', 
-              padding: '1rem 3rem', 
-              borderRadius: '100px', 
-              fontWeight: 800,
-              cursor: 'pointer'
-            }}>
-              Load More Listings
+          <div style={{ marginTop: '6rem', textAlign: 'center' }}>
+            <button style={{ background: 'none', border: '2px solid var(--cm-border)', color: 'var(--cm-text)', padding: '1.5rem 5rem', borderRadius: '50px', fontWeight: 800, fontSize: '1rem', cursor: 'pointer', transition: 'all 0.3s ease' }} onMouseOver={(e:any) => e.target.style.borderColor = 'var(--cm-primary)'} onMouseOut={(e:any) => e.target.style.borderColor = 'var(--cm-border)'}>
+              LOAD_MORE_NODES
             </button>
           </div>
         </div>
-      </div>
+      </section>
     </div>
   );
 }

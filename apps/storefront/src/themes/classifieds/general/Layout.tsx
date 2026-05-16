@@ -7,7 +7,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="classifieds-general-wrapper">
       <UtilityHeader />
-      <main>
+      <main className="gen-main-content">
         {children}
       </main>
       <CommunityFooter />

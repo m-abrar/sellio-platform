@@ -1,6 +1,6 @@
-
+'use client';
 import React from 'react';
-import { ServiceFeatureCard } from './components';
+import { ServiceNodeCard, OperationalHUD } from './components';
 
 export default function Page() {
   const services = [
@@ -13,67 +13,84 @@ export default function Page() {
   ];
 
   return (
-    <div>
-      {/* Hero Section */}
-      <section className="corp-hero">
-          <div className="corp-hero-content">
-              <span style={{ fontSize: '0.8rem', fontWeight: 900, color: 'var(--corp-accent)', letterSpacing: '4px', display: 'block', marginBottom: '1.5rem' }}>GLOBAL_INSTITUTIONAL_NETWORK</span>
-              <h1>Standardizing <br/>Global Scale.</h1>
-              <p style={{ fontSize: '1.2rem', color: '#718096', lineHeight: 1.8, marginBottom: '3.5rem' }}>
-                  The Sellio Institutional Hub provides the foundational services required for global commercial distribution. Trusted by over 140 industrial nodes.
-              </p>
-              <div style={{ display: 'flex', gap: '2rem' }}>
-                  <button style={{ padding: '1.25rem 3.5rem', background: 'var(--corp-primary)', color: 'white', border: 'none', fontWeight: 700 }}>EXPLORE_SOLUTIONS</button>
-                  <button style={{ padding: '1.25rem 3.5rem', background: 'none', color: 'var(--corp-primary)', border: '1px solid var(--corp-primary)', fontWeight: 700 }}>REQUEST_ADVISORY</button>
+    <div className="services-corporate-theme">
+      {/* Authoritative Institutional Hero */}
+      <section className="sc-hero">
+        <div>
+          <div className="sc-mono" style={{ marginBottom: '3rem' }}>GLOBAL_INSTITUTIONAL_NETWORK</div>
+          <h1 className="sc-heading-xl">
+            Standardizing <br/>
+            Global <br/>
+            <span style={{ color: 'var(--sc-blue)' }}>Scale.</span>
+          </h1>
+          <p style={{ marginTop: '5rem', fontSize: '1.25rem', color: 'var(--sc-grey)', lineHeight: 1.8, maxWidth: '650px' }}>
+            The Sellio Institutional Hub provides the foundational services required for global commercial distribution. Trusted by over 140 industrial nodes.
+          </p>
+          <div style={{ marginTop: '7rem', display: 'flex', gap: '3rem' }}>
+            <button className="sc-btn-primary">Explore Solutions</button>
+            <button style={{ 
+                background: 'transparent', 
+                border: '1px solid var(--sc-border)', 
+                color: 'var(--sc-navy)', 
+                padding: '1.5rem 4.5rem', 
+                fontWeight: 900, 
+                textTransform: 'uppercase', 
+                cursor: 'pointer',
+                fontSize: '0.8rem',
+                letterSpacing: '3px'
+            }}>
+                Request_Advisory
+            </button>
+          </div>
+        </div>
+        <div className="sc-hero-img-wrapper">
+          <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2070" alt="Corporate Office" className="sc-hero-img" />
+          <div style={{ position: 'absolute', top: '4rem', right: '-4rem', background: 'white', padding: '3rem', border: '1px solid var(--sc-border)', boxShadow: '0 30px 60px rgba(0,0,0,0.05)' }}>
+              <div className="sc-mono" style={{ fontSize: '0.65rem' }}>ESTABLISHED_2018</div>
+          </div>
+        </div>
+      </section>
+
+      {/* Operational HUD Section */}
+      <section className="sc-section" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '4rem', marginTop: '5rem' }}>
+          <OperationalHUD label="ACTIVE_NODES" value="142" sub="Verified industrial distribution nodes." />
+          <OperationalHUD label="VOLUME_SYNC" value="$4.2B+" sub="Institutional transaction throughput." />
+          <OperationalHUD label="SYSTEM_UPTIME" value="99.99%" sub="High-availability infrastructure status." />
+          <OperationalHUD label="NODAL_SUPPORT" value="24/7" sub="Active institutional advisory latency." />
+      </section>
+
+      {/* Service Registry Section */}
+      <section className="sc-section">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '8rem' }}>
+              <div>
+                  <div className="sc-mono" style={{ marginBottom: '1.5rem' }}>INSTITUTIONAL_SERVICE_REGISTRY</div>
+                  <h2 className="sc-heading-xl" style={{ fontSize: '6rem' }}>Foundational <br/>Solutions.</h2>
+              </div>
+              <div style={{ textAlign: 'right', maxWidth: '400px', fontSize: '1rem', color: 'var(--sc-grey)', lineHeight: 1.8 }}>
+                  Our unified protocol ensures that every service provided by the Institutional Hub meets global compliance and operational standards.
               </div>
           </div>
-          <div style={{ position: 'relative' }}>
-              <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2070" alt="Corporate Office" style={{ width: '100%', borderRadius: '4px', boxShadow: '20px 20px 60px rgba(0,0,0,0.05)' }} />
-              <div style={{ position: 'absolute', top: '-2rem', left: '-2rem', padding: '2rem', background: 'white', border: '1px solid #eee', fontWeight: 900, fontSize: '0.9rem' }}>
-                  ESTABLISHED_2018
-              </div>
+          
+          <div className="sc-service-grid">
+            {services.map((s, i) => (
+              <ServiceNodeCard key={i} {...s} />
+            ))}
           </div>
       </section>
 
-      {/* Trust Stats Bar */}
-      <section style={{ padding: '4rem 6%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #eee', background: '#fcfcfc' }}>
-          <div>
-              <div style={{ fontSize: '2.5rem', fontWeight: 900, color: 'var(--corp-primary)' }}>142</div>
-              <div style={{ fontSize: '0.7rem', fontWeight: 900, color: '#a0aec0', letterSpacing: '2px' }}>ACTIVE_NODES</div>
-          </div>
-          <div>
-              <div style={{ fontSize: '2.5rem', fontWeight: 900, color: 'var(--corp-primary)' }}>$4.2B+</div>
-              <div style={{ fontSize: '0.7rem', fontWeight: 900, color: '#a0aec0', letterSpacing: '2px' }}>TRANSACTION_VOLUME</div>
-          </div>
-          <div>
-              <div style={{ fontSize: '2.5rem', fontWeight: 900, color: 'var(--corp-primary)' }}>99.99%</div>
-              <div style={{ fontSize: '0.7rem', fontWeight: 900, color: '#a0aec0', letterSpacing: '2px' }}>SYSTEM_UPTIME</div>
-          </div>
-          <div>
-              <div style={{ fontSize: '2.5rem', fontWeight: 900, color: 'var(--corp-primary)' }}>24/7</div>
-              <div style={{ fontSize: '0.7rem', fontWeight: 900, color: '#a0aec0', letterSpacing: '2px' }}>NODAL_SUPPORT</div>
-          </div>
-      </section>
-
-      {/* Services Grid */}
-      <section className="service-grid">
-          {services.map((service, i) => (
-              <ServiceFeatureCard key={i} {...service} />
-          ))}
-      </section>
-
-      {/* Partner CTA */}
-      <section style={{ padding: '12rem 6%', background: 'linear-gradient(to bottom, #f7fafc, #fff)', textAlign: 'center' }}>
-          <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-              <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: '3.5rem', fontWeight: 900, marginBottom: '3rem' }}>Join the Institutional <br/>Standard.</h2>
-              <p style={{ fontSize: '1.25rem', color: '#718096', marginBottom: '5rem' }}>
+      {/* Partnership Section */}
+      <section className="sc-section" style={{ background: 'var(--sc-frost)', borderTop: '1px solid var(--sc-border)', textAlign: 'center' }}>
+          <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+              <div className="sc-mono" style={{ marginBottom: '4rem' }}>JOIN_THE_INSTITUTIONAL_STANDARD</div>
+              <h2 className="sc-heading-xl" style={{ fontSize: '6rem', marginBottom: '5rem' }}>Scale Your <br/><span style={{ color: 'var(--sc-blue)' }}>Distribution.</span></h2>
+              <p style={{ fontSize: '1.5rem', color: 'var(--sc-grey)', lineHeight: 1.8, marginBottom: '8rem' }}>
                   Ready to scale your industrial distribution? Partner with Sellio and gain access to the world's most advanced commercial infrastructure.
               </p>
-              <button style={{ padding: '1.5rem 5rem', background: 'var(--corp-primary)', color: 'white', border: 'none', fontWeight: 900, fontSize: '0.9rem', letterSpacing: '2px' }}>
-                  APPLY_FOR_PARTNERSHIP
-              </button>
+              <button className="sc-btn-primary" style={{ padding: '2rem 8rem' }}>Apply for Partnership</button>
           </div>
       </section>
+      
+      <div style={{ height: '15rem' }}></div>
     </div>
   );
 }
