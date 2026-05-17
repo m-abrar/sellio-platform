@@ -1,24 +1,41 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 
-export const CommunityHeader = () => (
-  <header className="pn-header">
-    <div className="pn-logo">
-      <span style={{ fontSize: '1.75rem' }}>🏡</span>
-      HOOD<span style={{ color: 'var(--pn-ochre)' }}>Node</span>
-    </div>
-    
-    <nav className="pn-nav">
-        {['Community', 'Local_Guides', 'Safety_Index', 'Support'].map(link => (
-            <a key={link} href="#" className="pn-nav-link">{link}</a>
-        ))}
-    </nav>
+export const CommunityHeader = () => {
+  const [isOpen, setIsOpen] = useState(false);
 
-    <button className="pn-btn-primary" style={{ padding: '0.7rem 1.8rem', fontSize: '0.8rem' }}>
-      JOIN_HOOD
-    </button>
-  </header>
-);
+  return (
+    <header className="pn-header">
+      <div className="pn-logo">
+        <span style={{ fontSize: '1.75rem' }}>🏡</span>
+        HOOD<span style={{ color: 'var(--pn-ochre)' }}>Node</span>
+      </div>
+      
+      <button 
+          className={`pn-hamburger ${isOpen ? 'pn-hamburger-open' : ''}`} 
+          onClick={() => setIsOpen(!isOpen)}
+          aria-label="Toggle Navigation"
+      >
+          <span className="pn-hamburger-bar"></span>
+          <span className="pn-hamburger-bar"></span>
+          <span className="pn-hamburger-bar"></span>
+      </button>
+
+      <nav className={`pn-nav ${isOpen ? 'pn-nav-open' : ''}`}>
+          {['Community', 'Local_Guides', 'Safety_Index', 'Support'].map(link => (
+              <a key={link} href="#" className="pn-nav-link" onClick={() => setIsOpen(false)}>{link}</a>
+          ))}
+          <button className="pn-btn-primary pn-mobile-auth-btn" style={{ padding: '1rem 3rem', fontSize: '0.9rem', marginTop: '2rem' }}>
+            JOIN_HOOD
+          </button>
+      </nav>
+
+      <button className="pn-btn-primary pn-desktop-auth-btn" style={{ padding: '0.7rem 1.8rem', fontSize: '0.8rem' }}>
+        JOIN_HOOD
+      </button>
+    </header>
+  );
+};
 
 export const NeighborPropertyCard = ({ title, price, location, status, image }: any) => (
   <div className="pn-home-card">

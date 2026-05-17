@@ -4,12 +4,12 @@ import { NeighborPropertyCard, LocalInsightHUD } from './components';
 
 export default function Page() {
   const homes = [
-    { title: "Maplewood Traditional", price: "$650,000", location: "Maplewood District", status: "New", image: "https://images.unsplash.com/photo-1518780664697-55e3ad937233?q=80&w=2070" },
-    { title: "Craftsman Cul-de-sac", price: "$720,000", location: "Silver Springs", status: "Active", image: "https://images.unsplash.com/photo-1484154218962-a197022b5858?q=80&w=2074" },
-    { title: "Modern Colonial Node", price: "$580,000", location: "Oak Ridge", status: "Hot", image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2070" },
-    { title: "Green Valley Bungalow", price: "$490,000", location: "Green Valley", status: "Active", image: "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?q=80&w=2070" },
-    { title: "Suburban Retreat", price: "$610,000", location: "Highland Park", status: "Pending", image: "https://images.unsplash.com/photo-1513584684374-8bdb7483fe8f?q=80&w=2070" },
-    { title: "Heritage Brick Home", price: "$675,000", location: "Old Town Node", status: "New", image: "https://images.unsplash.com/photo-1568605114967-8130f3a36994?q=80&w=2070" },
+    { title: "Maplewood Traditional", price: "$650,000", location: "Maplewood District", status: "New", image: "/themes/properties/neighborhood/1.webp" },
+    { title: "Craftsman Cul-de-sac", price: "$720,000", location: "Silver Springs", status: "Active", image: "/themes/properties/neighborhood/2.webp" },
+    { title: "Modern Colonial Node", price: "$580,000", location: "Oak Ridge", status: "Hot", image: "/themes/properties/neighborhood/3.webp" },
+    { title: "Green Valley Bungalow", price: "$490,000", location: "Green Valley", status: "Active", image: "/themes/properties/neighborhood/4.webp" },
+    { title: "Suburban Retreat", price: "$610,000", location: "Highland Park", status: "Pending", image: "/themes/properties/neighborhood/5.webp" },
+    { title: "Heritage Brick Home", price: "$675,000", location: "Old Town Node", status: "New", image: "/themes/properties/neighborhood/6.webp" },
   ];
 
   return (
@@ -43,7 +43,7 @@ export default function Page() {
           </div>
         </div>
         <div className="pn-hero-img-wrapper">
-          <img src="https://images.unsplash.com/photo-1449844908441-8829872d2607?q=80&w=2070" alt="Neighborhood Living" className="pn-hero-img" />
+          <img src="/themes/properties/neighborhood/7.webp" alt="Neighborhood Living" className="pn-hero-img" />
           
           <div style={{ position: 'absolute', bottom: '2rem', right: '2rem', background: 'white', padding: '2rem', borderRadius: '32px', boxShadow: '0 20px 40px rgba(0,0,0,0.05)', border: '1px solid var(--pn-border)' }}>
               <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
