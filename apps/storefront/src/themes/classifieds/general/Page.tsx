@@ -1,5 +1,5 @@
 'use client';
-import React, from 'react';
+import React from 'react';
 import { GeneralHeader, ListingCard, GeneralFooter } from './components';
 
 export default function Page() {
