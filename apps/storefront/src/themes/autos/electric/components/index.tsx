@@ -1,92 +1,88 @@
-
 'use client';
 import React from 'react';
 
-export const EvolveHeader = () => (
-  <header className="ae-header">
-    <div className="ae-logo">
-      EV<span style={{ color: 'var(--ae-cyan)' }}>OLVE</span>
-    </div>
-    
-    <nav className="ae-nav" style={{ display: 'none' }}>
-        <style dangerouslySetInnerHTML={{ __html: `
-            @media (min-width: 1024px) {
-                .ae-nav { display: flex !important; gap: 4rem; }
-            }
-        ` }} />
-        {['Registry', 'Network', 'Charging', 'Provenance'].map(link => (
-            <a key={link} href="#" className="ae-nav-link">{link}</a>
-        ))}
-    </nav>
-
-    <div className="ae-mono" style={{ fontSize: '0.65rem', color: 'var(--ae-green)', padding: '0.6rem 1.5rem', border: '1px solid var(--ae-green)', boxShadow: 'var(--ae-glow-green)' }}>
-      NODE_SYNC_ACTIVE
-    </div>
-  </header>
-);
-
-export const ElectricAssetCard = ({ name, price, range, accel, topSpeed, image }: any) => (
-  <div className="ae-asset-card">
-    <div className="ae-img-frame">
-      <img src={image} alt={name} className="ae-img" />
-    </div>
-    <div style={{ padding: '0 0.5rem' }}>
-        <div className="ae-mono" style={{ marginBottom: '1.25rem', opacity: 0.4, fontSize: '0.6rem' }}>HIGH_FIDELITY_ASSET</div>
-        <h3 style={{ fontSize: '1.8rem', fontWeight: 900, marginBottom: '2.5rem', color: 'white', letterSpacing: '-0.5px' }}>{name}</h3>
-        
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '3.5rem' }}>
-            <div>
-                <div className="ae-mono" style={{ fontSize: '0.55rem', opacity: 0.3, marginBottom: '0.5rem' }}>MAX_RANGE</div>
-                <div style={{ fontWeight: 800, fontSize: '1.2rem', color: 'var(--ae-cyan)' }}>{range}</div>
-            </div>
-            <div>
-                <div className="ae-mono" style={{ fontSize: '0.55rem', opacity: 0.3, marginBottom: '0.5rem' }}>0-60_MPH</div>
-                <div style={{ fontWeight: 800, fontSize: '1.2rem', color: 'white' }}>{accel}</div>
-            </div>
-        </div>
-        
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '2.5rem' }}>
-            <div style={{ fontSize: '1.6rem', fontWeight: 900, color: 'var(--ae-green)' }}>{price}</div>
-            <div style={{ fontSize: '0.75rem', fontWeight: 900, color: 'var(--ae-cyan)', letterSpacing: '2px', cursor: 'pointer' }}>CONFIGURE →</div>
-        </div>
-    </div>
-  </div>
-);
-
-export const RangeAnalyticsHUD = ({ value, label }: { value: string, label: string }) => (
-    <div className="ae-hud-stat" style={{ borderLeft: '2px solid var(--ae-green)', paddingLeft: '2.5rem' }}>
-        <div style={{ fontSize: '3.5rem', fontWeight: 900, color: 'white', lineHeight: 1, marginBottom: '0.5rem' }}>{value}</div>
-        <div className="ae-mono" style={{ opacity: 0.4, fontSize: '0.6rem', color: 'var(--ae-cyan)' }}>{label}</div>
-    </div>
-);
-
-export const EvolveFooter = () => (
-    <footer className="ae-footer">
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '6rem' }}>
-            <div>
-                <div className="ae-logo" style={{ color: 'white', fontSize: '2.5rem', marginBottom: '3rem' }}>EVOLVE</div>
-                <p style={{ opacity: 0.3, lineHeight: 2, fontSize: '0.95rem', maxWidth: '400px' }}>
-                    The definitive electric asset distribution protocol. Synchronizing high-fidelity energy telemetry with global fleet nodes.
-                </p>
-            </div>
-            {['COLLECTION', 'PROTOCOL', 'GOVERNANCE'].map(col => (
-                <div key={col}>
-                    <div className="ae-mono" style={{ color: 'var(--ae-green)', marginBottom: '3.5rem', opacity: 0.8 }}>{col}</div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                        {['Registry', 'Telemetry', 'Charging', 'Provenance'].map(link => (
-                            <span key={link} style={{ fontSize: '0.9rem', opacity: 0.4, cursor: 'pointer' }}>{link}</span>
-                        ))}
-                    </div>
-                </div>
+export const ElectricHeader = () => (
+    <header className="ev-header">
+        <a href="#" className="ev-logo text-neon-green">
+            EV<span className="ev-text-blue">OLVE</span>
+        </a>
+        <nav className="ev-nav">
+            {['Home', 'EV Models', 'Charging', 'Compare', 'Contact'].map(link => (
+                <a key={link} href={`#${link.toLowerCase().replace(' ', '-')}`} className="ev-nav-link">{link}</a>
             ))}
-        </div>
-        <div style={{ marginTop: '12rem', paddingTop: '4rem', borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '2rem' }}>
-            <div className="ae-mono" style={{ opacity: 0.2, fontSize: '0.6rem' }}>© 2026 EVOLVE // NEURAL_ASSET_HUB</div>
-            <div style={{ display: 'flex', gap: '5rem' }}>
-                {['INSTAGRAM', 'LINKEDIN', 'X_SYSTEM'].map(social => (
-                    <span key={social} className="ae-mono" style={{ opacity: 0.2, fontSize: '0.6rem' }}>{social}</span>
-                ))}
+            <a href="#" className="ev-btn ev-btn-green">Find Your EV</a>
+        </nav>
+    </header>
+);
+
+export const EVCard = ({ title, price, range, battery, charge, image }: any) => (
+    <div className="ev-card">
+        <img src={image} className="ev-card-img" alt={title} />
+        <div className="ev-card-body">
+            <h5 className="ev-card-title">{title}</h5>
+            <p className="ev-card-price">{price}</p>
+            <div className="ev-spec">
+                <span><span className="ev-text-green" style={{marginRight: '8px'}}>⚡</span>Range:</span>
+                <span style={{ fontWeight: 600 }}>{range}</span>
             </div>
+            <div className="ev-spec">
+                <span><span className="ev-text-green" style={{marginRight: '8px'}}>🔋</span>Battery:</span>
+                <span style={{ fontWeight: 600 }}>{battery}</span>
+            </div>
+            <div className="ev-spec">
+                <span><span className="ev-text-green" style={{marginRight: '8px'}}>🔌</span>Charge (DC):</span>
+                <span style={{ fontWeight: 600 }}>{charge}</span>
+            </div>
+        </div>
+    </div>
+);
+
+export const IconBox = ({ icon, title, desc }: any) => (
+    <div className="ev-icon-box">
+        <div className="icon">{icon}</div>
+        <h5 className="ev-text-green" style={{ marginBottom: '0.5rem', fontWeight: 600 }}>{title}</h5>
+        <p style={{ opacity: 0.7, fontSize: '0.9rem', margin: 0 }}>{desc}</p>
+    </div>
+);
+
+export const ElectricFooter = () => (
+    <footer className="ev-footer">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '3rem', marginBottom: '3rem' }}>
+            <div>
+                <a className="ev-logo text-neon-green" href="#" style={{ display: 'block', marginBottom: '1rem' }}>
+                    EV<span className="ev-text-blue">OLVE</span>
+                </a>
+                <p style={{ fontSize: '0.9rem', opacity: 0.75, marginBottom: '1.5rem' }}>Driving the future of sustainable mobility, one electric vehicle at a time.</p>
+                <div>
+                    <a href="#" className="ev-social-icon">F</a>
+                    <a href="#" className="ev-social-icon">T</a>
+                    <a href="#" className="ev-social-icon">I</a>
+                </div>
+            </div>
+            <div>
+                <h6 className="ev-text-green" style={{ marginBottom: '1rem', fontWeight: 600 }}>Explore</h6>
+                <a href="#featured-evs" className="ev-footer-link">EV Models</a>
+                <a href="#compare-evs" className="ev-footer-link">Compare</a>
+                <a href="#charging" className="ev-footer-link">Charging Map</a>
+                <a href="#" className="ev-footer-link">Financing</a>
+            </div>
+            <div>
+                <h6 className="ev-text-green" style={{ marginBottom: '1rem', fontWeight: 600 }}>Company</h6>
+                <a href="#" className="ev-footer-link">About Us</a>
+                <a href="#" className="ev-footer-link">Careers</a>
+                <a href="#" className="ev-footer-link">Press</a>
+                <a href="#" className="ev-footer-link">Partnerships</a>
+            </div>
+            <div>
+                <h6 className="ev-text-green" style={{ marginBottom: '1rem', fontWeight: 600 }}>Legal & Support</h6>
+                <a href="#" className="ev-footer-link">Privacy Policy</a>
+                <a href="#" className="ev-footer-link">Terms of Service</a>
+                <a href="#" className="ev-footer-link">FAQ</a>
+                <a href="#" className="ev-footer-link">Contact Support</a>
+            </div>
+        </div>
+        <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '1.5rem', textAlign: 'center', fontSize: '0.85rem', opacity: 0.5 }}>
+            &copy; 2026 EVOLVE Marketplace. All rights reserved. Powering the electric revolution.
         </div>
     </footer>
 );

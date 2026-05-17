@@ -1,184 +1,263 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Montserrat:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700;900&display=swap');
 
-.autos-classic-theme {
-  /* Heritage Motors Palette */
-  --ac-green: #004225;
-  --ac-tan: #c68642;
-  --ac-ivory: #fffff0;
-  --ac-chrome: #e2e8f0;
-  --ac-charcoal: #1a1a1a;
-  --ac-text-dim: #5c5c5c;
-  
-  /* Typography */
-  --ac-font-serif: 'Playfair Display', serif;
-  --ac-font-sans: 'Montserrat', sans-serif;
-  
-  /* Transitions */
-  --ac-transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+:root {
+    --ac-primary: #800020; /* Deep Burgundy */
+    --ac-secondary: #D4AF37; /* Gold Accent */
+    --ac-dark: #001f3f; /* Deep Navy/Dark Blue */
+    --ac-light: #f5f5dc; /* Cream Base */
+    --ac-body-color: #333333;
+    --ac-font-body: 'Inter', sans-serif;
+    --ac-font-heading: 'Playfair Display', serif;
+    --ac-transition: all 0.3s ease;
 }
 
-.autos-classic-theme {
-  background-color: var(--ac-ivory);
-  color: var(--ac-charcoal);
-  font-family: var(--ac-font-sans);
-  -webkit-font-smoothing: antialiased;
+.autos-classic-wrapper {
+    background-color: var(--ac-light);
+    font-family: var(--ac-font-body);
+    color: var(--ac-body-color);
+    -webkit-font-smoothing: antialiased;
 }
 
-/* Typography Utilities */
-.ac-serif { font-family: var(--ac-font-serif); }
-.ac-italic { font-style: italic; }
-
-.ac-heading-xl {
-  font-family: var(--ac-font-serif);
-  font-size: clamp(3.5rem, 8vw, 8rem);
-  font-weight: 900;
-  line-height: 1;
-  letter-spacing: -0.03em;
-  color: var(--ac-green);
+.ac-heading {
+    font-family: var(--ac-font-heading);
+    color: var(--ac-dark);
 }
 
-.ac-mono {
-  font-size: 0.7rem;
-  font-weight: 800;
-  letter-spacing: 4px;
-  text-transform: uppercase;
-  color: var(--ac-tan);
-}
-
-/* Layout */
-.ac-section {
-  padding: 8rem 6%;
-  max-width: 1600px;
-  margin: 0 auto;
-}
-
-/* Heritage Header */
+/* Header */
 .ac-header {
-  padding: 2rem 6%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: rgba(255, 255, 240, 0.9);
-  backdrop-filter: blur(20px);
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  border-bottom: 1px solid rgba(0, 66, 37, 0.1);
+    background-color: rgba(255, 255, 255, 0.95);
+    padding: 1rem 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
 .ac-logo {
-  font-family: var(--ac-font-serif);
-  font-weight: 900;
-  font-size: 1.75rem;
-  letter-spacing: -1px;
-  color: var(--ac-green);
-  font-style: italic;
+    text-decoration: none;
+    font-family: var(--ac-font-heading);
+    font-weight: 900;
+    font-size: 1.5rem;
 }
 
 .ac-nav {
-  display: flex;
-  gap: 4rem;
+    display: flex;
+    gap: 2rem;
 }
 
 .ac-nav-link {
-  font-size: 0.8rem;
-  font-weight: 700;
-  color: var(--ac-text-dim);
-  text-decoration: none;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  transition: var(--ac-transition);
+    font-weight: 600;
+    color: var(--ac-dark);
+    text-decoration: none;
+    transition: var(--ac-transition);
 }
 
 .ac-nav-link:hover {
-  color: var(--ac-green);
-}
-
-/* Heritage Hero */
-.ac-hero {
-  display: grid;
-  grid-template-columns: 1fr 1.2fr;
-  align-items: center;
-  gap: 8rem;
-  padding: 12rem 6%;
-}
-
-.ac-hero-img-wrapper {
-  position: relative;
-  background: white;
-  padding: 1rem;
-  box-shadow: 0 40px 100px rgba(0, 66, 37, 0.05);
-}
-
-.ac-hero-img {
-  width: 100%;
-  filter: sepia(20%) contrast(1.1);
-}
-
-/* Vintage Car Card */
-.ac-inventory-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 4rem;
-  margin-top: 4rem;
-}
-
-.ac-car-card {
-  background: white;
-  transition: var(--ac-transition);
-  cursor: pointer;
-  border-bottom: 4px solid transparent;
-}
-
-.ac-car-card:hover {
-  transform: translateY(-15px);
-  border-bottom-color: var(--ac-tan);
-  box-shadow: 0 40px 80px rgba(0, 0, 0, 0.05);
-}
-
-.ac-card-img-wrapper {
-  width: 100%;
-  aspect-ratio: 16/10;
-  overflow: hidden;
-  position: relative;
-}
-
-.ac-card-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: grayscale(20%);
-  transition: var(--ac-transition);
-}
-
-.ac-car-card:hover .ac-card-img {
-  filter: grayscale(0%);
-  transform: scale(1.1);
+    color: var(--ac-primary);
 }
 
 /* Buttons */
-.ac-btn-primary {
-  background: var(--ac-green);
-  color: white;
-  border: none;
-  padding: 1.5rem 4.5rem;
-  font-family: var(--ac-font-serif);
-  font-weight: 800;
-  font-size: 0.9rem;
-  border-radius: 2px;
-  cursor: pointer;
-  transition: var(--ac-transition);
-  box-shadow: 0 10px 20px rgba(0, 66, 37, 0.2);
+.ac-btn {
+    border-radius: 50px;
+    padding: 0.6rem 1.8rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: var(--ac-transition);
+    cursor: pointer;
+    border: 2px solid transparent;
+    display: inline-block;
+    text-align: center;
 }
 
-.ac-btn-primary:hover {
-  background: var(--ac-tan);
-  transform: translateY(-5px);
+.ac-btn-cta {
+    background-color: var(--ac-primary);
+    color: white;
+    border-color: var(--ac-primary);
+}
+
+.ac-btn-cta:hover {
+    background-color: var(--ac-dark);
+    border-color: var(--ac-dark);
+    box-shadow: 0 0 15px var(--ac-secondary);
+    color: var(--ac-secondary);
+}
+
+.ac-btn-gold {
+    background-color: var(--ac-secondary);
+    color: var(--ac-dark);
+    border-color: var(--ac-secondary);
+    font-weight: 700;
+}
+
+.ac-btn-gold:hover {
+    background-color: #c9a331;
+    border-color: #c9a331;
+    color: var(--ac-dark);
+}
+
+/* Hero Section */
+.ac-hero {
+    background: url('https://images.unsplash.com/photo-1583121274602-3e2820c69888?q=80&w=2070') no-repeat center center;
+    background-size: cover;
+    height: 85vh;
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 0 5%;
+}
+
+.ac-hero-overlay {
+    background-color: rgba(0, 0, 0, 0.4);
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+}
+
+.ac-hero-content {
+    z-index: 2;
+    color: white;
+    max-width: 800px;
+}
+
+.ac-hero h1 {
+    font-family: var(--ac-font-heading);
+    color: white;
+    font-size: clamp(3rem, 5vw, 4.5rem);
+    font-weight: 900;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+    margin-bottom: 1.5rem;
+    line-height: 1.1;
+}
+
+/* Filters */
+.ac-filter-section {
+    background-color: white;
+    padding: 2.5rem 5%;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    align-items: flex-end;
+}
+
+.ac-filter-group {
+    flex: 1;
+    min-width: 150px;
+}
+
+.ac-select {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    font-family: var(--ac-font-body);
+}
+
+/* Card Styling */
+.ac-section {
+    padding: 5rem 5%;
+}
+
+.ac-section-title {
+    text-align: center;
+    font-family: var(--ac-font-heading);
+    color: var(--ac-dark);
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+}
+
+.ac-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+}
+
+.ac-car-card {
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transition: transform 0.4s ease-in-out, box-shadow 0.4s ease-in-out;
+}
+
+.ac-car-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15), 0 0 0 3px var(--ac-secondary);
+}
+
+.ac-car-img {
+    height: 220px;
+    width: 100%;
+    object-fit: cover;
+}
+
+.ac-car-details {
+    padding: 1.5rem;
+}
+
+.ac-car-price {
+    color: var(--ac-primary);
+    font-weight: 900;
+    font-family: var(--ac-font-heading);
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Auction Spotlight */
+.ac-auction-section {
+    background-color: white;
+    padding: 5rem 5%;
+}
+
+.ac-auction-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 2rem;
+    justify-content: center;
+}
+
+.ac-auction-card {
+    background-color: var(--ac-dark);
+    color: white;
+    border: 3px solid var(--ac-secondary);
+    text-align: center;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.ac-countdown {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--ac-secondary);
+    margin: 1rem 0;
+    font-family: var(--ac-font-body);
+    letter-spacing: 2px;
 }
 
 /* Footer */
 .ac-footer {
-  background: var(--ac-charcoal);
-  color: white;
-  padding: 12rem 6% 6rem;
+    background-color: var(--ac-dark);
+    color: var(--ac-light);
+    padding: 4rem 5% 2rem;
+}
+
+.ac-footer-link {
+    color: var(--ac-light);
+    text-decoration: none;
+    transition: var(--ac-transition);
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.ac-footer-link:hover {
+    color: var(--ac-secondary);
+}
+
+.ac-footer h5 {
+    color: var(--ac-secondary);
+    font-family: var(--ac-font-heading);
+    margin-bottom: 1.5rem;
 }

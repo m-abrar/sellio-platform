@@ -1,104 +1,117 @@
 'use client';
 import React from 'react';
-import { CertifiedVehicleCard, TrustHUD } from './components';
+import { UsedHeader, UsedCarCard, DealerLogo, StepCard, UsedFooter } from './components';
 
 export default function Page() {
-  const vehicles = [
-    { year: "2022", make: "BMW", model: "X5 xDrive40i", price: "$58,400", mileage: "24,500 mi", transmission: "Automatic", image: "https://images.unsplash.com/photo-1555215695-3004980ad54e?q=80&w=2070" },
-    { year: "2021", make: "Audi", model: "A6 Premium Plus", price: "$42,900", mileage: "31,200 mi", transmission: "Automatic", image: "https://images.unsplash.com/photo-1606152424101-ad2f8a45340c?q=80&w=2070" },
-    { year: "2023", make: "Tesla", model: "Model 3 Long Range", price: "$39,500", mileage: "12,100 mi", transmission: "Direct Drive", image: "https://images.unsplash.com/photo-1560958089-b8a1929cea89?q=80&w=2071" },
-    { year: "2020", make: "Lexus", model: "RX 350 Luxury", price: "$36,800", mileage: "45,000 mi", transmission: "Automatic", image: "https://images.unsplash.com/photo-1583121274602-3e2820c69888?q=80&w=2070" },
-    { year: "2022", make: "Mercedes-Benz", model: "GLC 300", price: "$47,200", mileage: "18,900 mi", transmission: "Automatic", image: "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?q=80&w=2070" },
-    { year: "2021", make: "Porsche", model: "Macan S", price: "$64,500", mileage: "22,400 mi", transmission: "PDK", image: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=2070" },
-    { year: "2023", make: "Land Rover", model: "Defender 110", price: "$72,900", mileage: "8,500 mi", transmission: "Automatic", image: "https://images.unsplash.com/photo-1625235338069-44971230011d?q=80&w=2070" },
-    { year: "2019", make: "Jaguar", model: "F-Type R-Dynamic", price: "$49,800", mileage: "38,200 mi", transmission: "Automatic", image: "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?q=80&w=2070" },
+  const cars = [
+    { title: "2018 Honda Civic", price: "$15,500", mileage: "40,000 miles", location: "New York", dealer: "AutoWorld Dealership", image: "https://images.unsplash.com/photo-1590362891991-f776e747a588?q=80&w=600" },
+    { title: "2020 Toyota Camry", price: "$19,800", mileage: "25,000 miles", location: "Los Angeles", dealer: "City Motors", image: "https://images.unsplash.com/photo-1621007947382-bb3c3994e3fd?q=80&w=600" },
+    { title: "2016 Ford Focus", price: "$9,200", mileage: "60,000 miles", location: "Chicago", dealer: "Honest Used Cars", image: "https://images.unsplash.com/photo-1580273916550-e323be2ae537?q=80&w=600" },
+    { title: "2019 Mazda 3", price: "$17,000", mileage: "30,000 miles", location: "Dallas", dealer: "Zoom Motors", image: "https://images.unsplash.com/photo-1606132712398-b8070940428d?q=80&w=600" },
   ];
 
   return (
-    <div className="au-section">
-      {/* Professional Trust Hero */}
-      <section className="au-hero">
-        <div>
-          <div className="au-mono" style={{ marginBottom: '2.5rem' }}>CERTIFIED_SELECT_PROTOCOL_V8</div>
-          <h1 className="au-heading-xl">
-            Transparency <br/>
-            in Every <br/>
-            <span style={{ color: 'var(--au-indigo)' }}>Mile.</span>
-          </h1>
-          <p style={{ marginTop: '5rem', fontSize: '1.25rem', color: 'var(--au-text-muted)', lineHeight: 1.8, maxWidth: '600px' }}>
-            Explore a curated selection of pre-owned vehicles verified by our 150-point inspection protocol. No hidden history, just high-fidelity performance.
-          </p>
-          <div style={{ marginTop: '6rem', display: 'flex', gap: '3rem' }}>
-            <button className="au-btn-primary">Explore Inventory</button>
-            <button style={{ background: 'transparent', border: '2px solid var(--au-slate)', color: 'var(--au-slate)', padding: '1.25rem 3.5rem', borderRadius: '8px', fontWeight: 800, textTransform: 'uppercase', cursor: 'pointer' }}>Valuate_Trade</button>
-          </div>
-        </div>
-        <div className="au-hero-img-wrapper">
-          <img src="https://images.unsplash.com/photo-1542362567-b0520002cf71?q=80&w=2070" alt="Certified Vehicle" className="au-hero-img" />
-          
-          <div style={{ position: 'absolute', bottom: '3rem', right: '3rem', background: 'white', padding: '2.5rem', borderRadius: '12px', boxShadow: '0 20px 40px rgba(0,0,0,0.05)', border: '1px solid var(--au-border)' }}>
-              <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                  <div style={{ fontSize: '1.5rem' }}>🛡️</div>
-                  <div>
-                    <div style={{ fontWeight: 900, fontSize: '0.9rem' }}>150-Point Inspection</div>
-                    <div className="au-mono" style={{ fontSize: '0.6rem' }}>VERIFIED_BY_SELLIO_NODE</div>
-                  </div>
-              </div>
-          </div>
+    <div className="autos-used-wrapper">
+      <UsedHeader />
+
+      {/* Hero */}
+      <section className="us-hero" id="home">
+        <h1 className="us-hero-title">Find Your Perfect Used Car Today</h1>
+        <p className="us-hero-subtitle">Trusted listings, verified sellers, and transparent pricing. Your next drive starts here.</p>
+        <div style={{ display: 'flex', gap: '1rem' }}>
+            <a href="#featured-listings" className="us-btn us-btn-orange">Browse Cars</a>
+            <a href="#how-it-works" className="us-btn us-btn-outline" style={{ color: 'white', borderColor: 'white' }}>Sell a Car</a>
         </div>
       </section>
 
-      {/* Trust Grid Section */}
-      <section style={{ padding: '8rem 0', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '6rem', borderTop: '1px solid var(--au-border)', marginTop: '10rem' }}>
-          <TrustHUD icon="🛡️" label="Certified Warranty" sub="12-month / 12k mile protection on every unit." />
-          <TrustHUD icon="📋" label="Full History" sub="Complete digital provenance records via CARFAX." />
-          <TrustHUD icon="🚚" label="Global Delivery" sub="Direct to your node within 72 hours of verification." />
-          <TrustHUD icon="💵" label="Instant Funding" sub="Pre-approval nodes active for all regional clusters." />
-      </section>
+      {/* Filter Card */}
+      <div className="us-filter-card">
+        <h5 className="us-text-blue us-fw-bold" style={{ textAlign: 'center', marginBottom: '1.5rem', fontSize: '1.2rem' }}>Quick Search</h5>
+        <div className="us-filter-grid">
+            <div className="us-filter-group"><select className="us-select"><option>Brand (e.g., Honda)</option></select></div>
+            <div className="us-filter-group"><select className="us-select"><option>Model</option></select></div>
+            <div className="us-filter-group"><select className="us-select"><option>Price Range</option></select></div>
+            <div className="us-filter-group"><select className="us-select"><option>Max Mileage</option></select></div>
+            <div className="us-filter-group"><select className="us-select"><option>Location</option></select></div>
+            <button className="us-btn us-btn-orange" style={{ padding: '0.8rem 2rem' }}>Search</button>
+        </div>
+      </div>
 
-      {/* Inventory Registry Section */}
-      <section style={{ marginTop: '15rem' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '8rem' }}>
-              <div>
-                  <div className="au-mono" style={{ marginBottom: '1.5rem' }}>SELECT_INVENTORY_REGISTRY</div>
-                  <h2 style={{ fontSize: '5rem', fontWeight: 900, letterSpacing: '-2px', textTransform: 'uppercase' }}>Certified <br/>Inventory.</h2>
-              </div>
-              <div style={{ textAlign: 'right', maxWidth: '400px', fontSize: '1rem', color: 'var(--au-text-muted)', lineHeight: 1.8 }}>
-                  Our unified protocol synchronizes verification metadata across our global pre-owned distribution nodes.
-              </div>
-          </div>
-          
-          <div className="au-vehicle-grid">
-            {vehicles.map((v, i) => (
-              <CertifiedVehicleCard key={i} {...v} />
+      {/* Listings */}
+      <section className="us-section" id="featured-listings">
+        <h2 className="us-section-title">Featured Listings</h2>
+        <div className="us-grid">
+            {cars.map((car, i) => (
+                <UsedCarCard key={i} {...car} />
             ))}
-          </div>
+        </div>
+        <div style={{ textAlign: 'center', marginTop: '3rem' }}>
+            <a href="#" className="us-btn us-btn-outline">View All Listings →</a>
+        </div>
       </section>
 
-      {/* Valuation CTA */}
-      <section style={{ marginTop: '15rem', padding: '12rem 8%', background: 'var(--au-surface)', border: '1px solid var(--au-border)', borderRadius: '24px', display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '12rem', alignItems: 'center' }}>
-          <div>
-              <h2 style={{ fontSize: '4.5rem', fontWeight: 900, letterSpacing: '-3px', textTransform: 'uppercase', marginBottom: '4rem', lineHeight: 1.1 }}>
-                  Market-Leading <br/>
-                  <span style={{ color: 'var(--au-indigo)' }}>Trade Values.</span>
-              </h2>
-              <p style={{ fontSize: '1.25rem', color: 'var(--au-text-muted)', lineHeight: 2 }}>
-                  Our AI-driven valuation engine provides the most accurate market price for your current vehicle in seconds, synchronized with real-time auction nodes.
-              </p>
-          </div>
-          <div style={{ padding: '6rem', background: 'white', borderRadius: '24px', border: '1px solid var(--au-border)', boxShadow: '0 20px 40px rgba(0,0,0,0.02)' }}>
-              <div className="au-mono" style={{ marginBottom: '2.5rem' }}>GET_INSTANT_OFFER</div>
-              <h3 style={{ fontSize: '2rem', fontWeight: 900, marginBottom: '2.5rem' }}>Value Your Asset.</h3>
-              <p style={{ color: 'var(--au-text-muted)', lineHeight: 2, marginBottom: '4rem' }}>
-                  Secure a competitive buy-back offer for your current vehicle from the Sellio Select Network.
-              </p>
-              <button className="au-btn-primary" style={{ width: '100%', padding: '2rem', fontSize: '1.1rem' }}>
-                  START_APPRAISAL
-              </button>
-          </div>
+      {/* Deal of the Week */}
+      <section className="us-section" style={{ backgroundColor: 'white' }}>
+        <h2 className="us-section-title">⭐ Deal of the Week! ⭐</h2>
+        <div className="us-deal-card">
+            <span className="us-badge-deal">SAVE $3,000!</span>
+            <div>
+                <img src="https://images.unsplash.com/photo-1549399542-7e3f8b79c341?q=80&w=800" alt="Deal" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            </div>
+            <div style={{ padding: '3rem 2rem', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                <h3 className="us-text-blue us-fw-bold" style={{ fontSize: '1.8rem', marginBottom: '1rem' }}>2021 Hyundai Elantra Limited</h3>
+                <p style={{ color: '#666', marginBottom: '1.5rem', fontSize: '1.1rem' }}>Low Mileage, Single Owner, Full Service History.</p>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
+                    <span className="us-text-orange us-fw-bold" style={{ fontSize: '2.5rem' }}>$21,995</span>
+                    <span style={{ color: '#999', textDecoration: 'line-through', fontSize: '1.25rem' }}>$24,995</span>
+                </div>
+                <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 2rem 0', color: '#555', lineHeight: 2 }}>
+                    <li>⏱️ Only 15,000 Miles</li>
+                    <li>📅 Model Year 2021</li>
+                    <li>⛽ Great MPG</li>
+                </ul>
+                <a href="#" className="us-btn us-btn-orange" style={{ width: '100%' }}>Claim This Deal Now</a>
+            </div>
+        </div>
       </section>
-      
-      <div style={{ height: '15rem' }}></div>
+
+      {/* Trusted Dealers */}
+      <section className="us-section" id="trusted-dealers">
+        <h2 className="us-section-title">Trusted Dealers</h2>
+        <p style={{ textAlign: 'center', color: '#666', marginBottom: '3rem', fontSize: '1.1rem' }}>We partner with top-rated, verified dealerships to ensure a safe transaction.</p>
+        <div className="us-dealer-grid">
+            <DealerLogo name="AutoWorld" rating={4.8} />
+            <DealerLogo name="City Motors" rating={4.1} />
+            <DealerLogo name="Honest Used Cars" rating={5.0} />
+            <DealerLogo name="Zoom Motors" rating={3.6} />
+            <DealerLogo name="Prime Autos" rating={4.7} />
+            <DealerLogo name="Elite Drives" rating={4.9} />
+        </div>
+      </section>
+
+      {/* How It Works */}
+      <section className="us-section" id="how-it-works" style={{ backgroundColor: 'white' }}>
+        <h2 className="us-section-title">How It Works: 3 Simple Steps</h2>
+        <div className="us-step-grid">
+            <StepCard 
+                icon="🔍" 
+                title="1. Search & Filter" 
+                desc="Easily find your dream car with our powerful, intuitive search tools." 
+            />
+            <StepCard 
+                icon="💬" 
+                title="2. Contact a Seller" 
+                desc="Talk directly to verified dealers or private sellers, all from one place." 
+            />
+            <StepCard 
+                icon="🛣️" 
+                title="3. Test Drive & Drive" 
+                desc="Take a test drive, finalize the deal, and hit the open road!" 
+            />
+        </div>
+      </section>
+
+      <UsedFooter />
     </div>
   );
 }

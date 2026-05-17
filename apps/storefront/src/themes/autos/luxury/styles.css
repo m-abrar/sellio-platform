@@ -1,180 +1,306 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Poppins:wght@300;400;500;600;700&display=swap');
 
-.autos-luxury-theme {
-  /* Platinum Drive Palette */
-  --al-obsidian: #050505;
-  --al-platinum: #e2e8f0;
-  --al-cyan: #22d3ee;
-  --al-carbon: #111827;
-  --al-surface: #0f172a;
-  --al-border: rgba(34, 211, 238, 0.1);
-  
-  /* Typography */
-  --al-font: 'Outfit', sans-serif;
-  
-  /* Transitions */
-  --al-transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+:root {
+    --lx-bg-dark: #1a1a1a;
+    --lx-bg-darker: #111111;
+    --lx-bg-card: #242424;
+    --lx-bg-filter: #2c2c2c;
+    --lx-gold: #c3a16d;
+    --lx-gold-light: #ffd700;
+    --lx-text-light: #ffffff;
+    --lx-text-muted: #aaaaaa;
+    --lx-font-body: 'Poppins', sans-serif;
+    --lx-font-heading: 'Playfair Display', serif;
+    --lx-transition: all 0.3s ease;
 }
 
-.autos-luxury-theme {
-  background-color: var(--al-obsidian);
-  color: var(--al-platinum);
-  font-family: var(--al-font);
-  -webkit-font-smoothing: antialiased;
+.autos-luxury-wrapper {
+    background-color: var(--lx-bg-dark);
+    font-family: var(--lx-font-body);
+    color: var(--lx-text-light);
+    -webkit-font-smoothing: antialiased;
 }
 
-/* Typography Utilities */
-.al-heading-xl {
-  font-size: clamp(4rem, 12vw, 12rem);
-  font-weight: 900;
-  line-height: 0.85;
-  letter-spacing: -0.05em;
-  color: white;
+.lx-heading {
+    font-family: var(--lx-font-heading);
 }
 
-.al-mono {
-  font-size: 0.75rem;
-  font-weight: 800;
-  letter-spacing: 5px;
-  text-transform: uppercase;
-  color: var(--al-cyan);
+.lx-text-gold {
+    color: var(--lx-gold);
 }
 
-/* Layout */
-.al-section {
-  padding: 10rem 8%;
-  max-width: 1800px;
-  margin: 0 auto;
+/* Header */
+.lx-header {
+    background-color: rgba(26, 26, 26, 0.8);
+    backdrop-filter: blur(5px);
+    padding: 1rem 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    transition: var(--lx-transition);
 }
 
-/* Platinum Header */
-.al-header {
-  padding: 1.5rem 8%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: rgba(5, 5, 5, 0.8);
-  backdrop-filter: blur(20px);
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  border-bottom: 1px solid var(--al-border);
+.lx-logo {
+    font-family: var(--lx-font-heading);
+    font-size: 1.8rem;
+    color: var(--lx-gold);
+    letter-spacing: 2px;
+    text-decoration: none;
 }
 
-.al-logo {
-  font-weight: 900;
-  font-size: 1.75rem;
-  letter-spacing: -1px;
-  color: white;
+.lx-nav {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
 }
 
-.al-nav {
-  display: flex;
-  gap: 4.5rem;
+.lx-nav-link {
+    color: var(--lx-text-light);
+    font-weight: 300;
+    text-decoration: none;
+    transition: var(--lx-transition);
 }
 
-.al-nav-link {
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: rgba(226, 232, 240, 0.4);
-  text-decoration: none;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  transition: var(--al-transition);
-}
-
-.al-nav-link:hover {
-  color: var(--al-cyan);
-}
-
-/* Futuristic Hero */
-.al-hero {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  padding: 0 8%;
-  background: radial-gradient(circle at center, #111 0%, #050505 100%);
-  position: relative;
-  overflow: hidden;
-}
-
-.al-hero-glow {
-  position: absolute;
-  width: 1000px;
-  height: 1000px;
-  background: radial-gradient(circle, rgba(34, 211, 238, 0.05) 0%, transparent 70%);
-  pointer-events: none;
-}
-
-/* Luxury Asset Card */
-.al-showcase-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 4rem;
-  margin-top: 6rem;
-}
-
-.al-asset-card {
-  background: var(--al-surface);
-  border: 1px solid var(--al-border);
-  border-radius: 4px;
-  overflow: hidden;
-  transition: var(--al-transition);
-  cursor: pointer;
-}
-
-.al-asset-card:hover {
-  border-color: var(--al-cyan);
-  transform: translateY(-20px);
-  box-shadow: 0 40px 100px rgba(34, 211, 238, 0.1);
-}
-
-.al-img-frame {
-  width: 100%;
-  aspect-ratio: 16/9;
-  overflow: hidden;
-  position: relative;
-}
-
-.al-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: brightness(0.8) contrast(1.1);
-  transition: var(--al-transition);
-}
-
-.al-asset-card:hover .al-img {
-  filter: brightness(1);
-  transform: scale(1.05);
+.lx-nav-link:hover {
+    color: var(--lx-gold);
 }
 
 /* Buttons */
-.al-btn-primary {
-  background: var(--al-cyan);
-  color: var(--al-obsidian);
-  border: none;
-  padding: 1.75rem 5rem;
-  font-weight: 900;
-  font-size: 1rem;
-  text-transform: uppercase;
-  letter-spacing: 3px;
-  cursor: pointer;
-  transition: var(--al-transition);
+.lx-btn {
+    border-radius: 50px;
+    padding: 0.6rem 2rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: var(--lx-transition);
+    display: inline-block;
+    cursor: pointer;
+    text-align: center;
 }
 
-.al-btn-primary:hover {
-  background: white;
-  box-shadow: 0 0 60px rgba(34, 211, 238, 0.4);
+.lx-btn-gold {
+    background-color: var(--lx-gold);
+    border: 2px solid var(--lx-gold);
+    color: #1a1a1a;
+}
+
+.lx-btn-gold:hover {
+    background-color: var(--lx-gold-light);
+    border-color: var(--lx-gold-light);
+    color: #000000;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+    transform: translateY(-2px);
+}
+
+.lx-btn-outline {
+    border: 2px solid var(--lx-gold);
+    color: var(--lx-gold);
+    background-color: transparent;
+}
+
+.lx-btn-outline:hover {
+    background-color: var(--lx-gold);
+    color: #1a1a1a;
+    box-shadow: 0 0 10px rgba(195, 161, 109, 0.4);
+}
+
+/* Hero Section */
+.lx-hero {
+    height: 100vh;
+    background: url('https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?q=80&w=2070') no-repeat center center/cover;
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 0 5%;
+}
+
+.lx-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
+.lx-hero-content {
+    z-index: 2;
+    max-width: 700px;
+}
+
+.lx-hero-title {
+    font-family: var(--lx-font-heading);
+    font-size: clamp(3rem, 5vw, 4.5rem);
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
+}
+
+/* Filters */
+.lx-filter-bar {
+    background-color: var(--lx-bg-filter);
+    border-radius: 10px;
+    padding: 1.5rem 2rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    margin: -3rem 5% 4rem;
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+}
+
+.lx-select {
+    flex: 1;
+    min-width: 150px;
+    background-color: #3b3b3b;
+    color: var(--lx-text-light);
+    border: 1px solid #4a4a4a;
+    border-radius: 8px;
+    padding: 0.8rem 1rem;
+    font-family: var(--lx-font-body);
+}
+
+.lx-select:focus {
+    outline: none;
+    border-color: var(--lx-gold);
+    box-shadow: 0 0 0 2px rgba(195, 161, 109, 0.25);
+}
+
+/* Cars */
+.lx-section {
+    padding: 4rem 5%;
+}
+
+.lx-section-title {
+    text-align: center;
+    font-family: var(--lx-font-heading);
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 3rem;
+}
+
+.lx-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.lx-car-card {
+    background-color: var(--lx-bg-card);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: var(--lx-transition);
+    border: 1px solid #333;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+}
+
+.lx-car-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 20px var(--lx-gold-light);
+}
+
+.lx-car-img {
+    height: 250px;
+    width: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.lx-car-card:hover .lx-car-img {
+    transform: scale(1.05);
+}
+
+.lx-car-body {
+    padding: 1.5rem;
+}
+
+.lx-car-title {
+    font-weight: 700;
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.lx-car-price {
+    color: var(--lx-gold);
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+/* Exclusive Showcase */
+.lx-showcase-item {
+    background-color: var(--lx-bg-filter);
+    border-radius: 10px;
+    overflow: hidden;
+    padding: 2rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    border: 2px solid var(--lx-gold);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+/* Brands */
+.lx-brand-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1.5rem;
+    text-align: center;
+}
+
+.lx-brand-item {
+    padding: 1.5rem;
+    border: 1px solid #333;
+    border-radius: 8px;
+    opacity: 0.7;
+    transition: var(--lx-transition);
+    filter: grayscale(100%);
+    font-weight: 600;
+    font-size: 1.25rem;
+    letter-spacing: 1px;
+}
+
+.lx-brand-item:hover {
+    opacity: 1;
+    filter: grayscale(0%);
+    box-shadow: 0 0 15px rgba(195, 161, 109, 0.8);
+    transform: scale(1.05);
+    border-color: var(--lx-gold);
+    color: var(--lx-gold);
+}
+
+/* Testimonials */
+.lx-testimonial-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.lx-testimonial-card {
+    background-color: var(--lx-bg-card);
+    border-left: 5px solid var(--lx-gold);
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 
 /* Footer */
-.al-footer {
-  background: #000;
-  color: white;
-  padding: 15rem 8% 6rem;
-  border-top: 1px solid var(--al-border);
+.lx-footer {
+    background-color: var(--lx-bg-darker);
+    padding: 4rem 5% 2rem;
+    border-top: 1px solid #333;
+}
+
+.lx-footer-link {
+    color: var(--lx-text-muted);
+    text-decoration: none;
+    transition: var(--lx-transition);
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.lx-footer-link:hover {
+    color: var(--lx-gold);
 }

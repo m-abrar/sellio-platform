@@ -1,106 +1,112 @@
 'use client';
 import React from 'react';
-import { LuxuryAssetCard, ConciergeHUD } from './components';
+import { LuxuryHeader, LuxuryCarCard, LuxuryFooter } from './components';
 
 export default function Page() {
-  const assets = [
-    { title: "Bugatti Chiron Super Sport", price: "$3,825,000", hp: "1578", acceleration: "2.3", image: "https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?q=80&w=2070" },
-    { title: "Ferrari SF90 Stradale", price: "$625,000", hp: "986", acceleration: "2.5", image: "https://images.unsplash.com/photo-1592198084033-aade902d1aae?q=80&w=2070" },
-    { title: "Lamborghini Revuelto", price: "$604,000", hp: "1001", acceleration: "2.5", image: "https://images.unsplash.com/photo-1544829099-b9a0c07fad1a?q=80&w=2070" },
-    { title: "McLaren P1 GTR", price: "$3,100,000", hp: "986", acceleration: "2.4", image: "https://images.unsplash.com/photo-1621135802920-133df287f89c?q=80&w=2070" },
+  const cars = [
+    { title: "2025 Mercedes S-Class", specs: "Sleek Sedan | 5,000 mi", price: "$110,000", image: "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?q=80&w=600" },
+    { title: "2024 Rolls Royce Phantom", specs: "Ultra Luxury | 2,100 mi", price: "$420,000", image: "https://images.unsplash.com/photo-1631501869871-331ff328221b?q=80&w=600" },
+    { title: "2025 Porsche Taycan Turbo", specs: "Electric Coupe | 800 mi", price: "$160,000", image: "https://images.unsplash.com/photo-1503375837330-1b7fcd2cba9e?q=80&w=600" },
+    { title: "2023 Bentley Continental GT", specs: "Grand Tourer | 6,500 mi", price: "$245,000", image: "https://images.unsplash.com/photo-1571127236794-81c0bbef1651?q=80&w=600" }
+  ];
+
+  const testimonials = [
+    { name: "Julian D.", role: "Collector", quote: "The service was impeccable and discreet. Found my dream classic car with ease. Truly a five-star experience from start to finish.", avatar: "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=100" },
+    { name: "Sarah K.", role: "Entrepreneur", quote: "Seamless, professional, and unparalleled inventory. They connected me with the perfect new SUV before it was even publicly listed.", avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=100" },
+    { name: "Marcus T.", role: "Investor", quote: "Beyond expectations. The attention to detail and personalized guidance made the acquisition of my Rolls Royce a pleasure.", avatar: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=100" }
   ];
 
   return (
-    <div className="al-section">
-      {/* Sleek Futuristic Hero */}
-      <section className="al-hero">
-        <div className="al-hero-glow"></div>
-        <div className="al-mono" style={{ marginBottom: '4rem' }}>HIGH_SPEED_DISTRIBUTION_V8</div>
-        <h1 className="al-heading-xl">
-            The <br/>
-            Platinum <br/>
-            <span style={{ color: 'var(--al-cyan)' }}>Drive.</span>
-        </h1>
-        <p style={{ maxWidth: '850px', margin: '6rem auto', fontSize: '1.5rem', color: 'rgba(226, 232, 240, 0.4)', lineHeight: 1.8, fontWeight: 300 }}>
-            The world's most advanced high-fidelity automotive distribution node. Precision engineered for the exotic collector and high-performance enthusiast.
-        </p>
-        <div style={{ display: 'flex', gap: '3rem', justifyContent: 'center' }}>
-            <button className="al-btn-primary">Explore Inventory</button>
-            <button style={{ 
-                background: 'transparent', 
-                color: 'white', 
-                border: '1px solid rgba(255,255,255,0.1)', 
-                padding: '1.75rem 5rem', 
-                fontWeight: 900, 
-                fontSize: '1rem', 
-                cursor: 'pointer',
-                letterSpacing: '3px'
-            }}>
-                THE_REGISTRY
-            </button>
+    <div className="autos-luxury-wrapper">
+      <LuxuryHeader />
+
+      {/* Hero Section */}
+      <section className="lx-hero">
+        <div className="lx-hero-overlay"></div>
+        <div className="lx-hero-content">
+            <h1 className="lx-hero-title">Experience the Luxury You Deserve</h1>
+            <p style={{ fontSize: '1.25rem', fontWeight: 300, marginBottom: '2rem', lineHeight: 1.6 }}>
+                Your journey into unparalleled elegance and performance starts here. Discover hand-picked masterpieces.
+            </p>
+            <div style={{ display: 'flex', gap: '1rem' }}>
+                <a href="#collections" className="lx-btn lx-btn-gold">Explore Collection</a>
+                <a href="#contact" className="lx-btn lx-btn-outline">Book Now</a>
+            </div>
         </div>
       </section>
 
-      {/* Trust Bar (Logic Oriented) */}
-      <div style={{ padding: '4rem 0', borderTop: '1px solid var(--al-border)', borderBottom: '1px solid var(--al-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10rem' }}>
-          {['ASSET_VERIFICATION: ACTIVE', 'GLOBAL_DISTRIBUTION_SYNC', 'PILOT_ACCESS: GRANTED', 'NODAL_SYNC: 100%'].map(logic => (
-              <div key={logic} className="al-mono" style={{ fontSize: '0.65rem', opacity: 0.5 }}>{logic}</div>
-          ))}
-      </div>
-
-      {/* Concierge HUD Section */}
-      <section style={{ padding: '10rem 0', display: 'grid', gridTemplateColumns: '1fr 1.5fr', gap: '15rem', alignItems: 'center' }}>
-          <div>
-              <h2 style={{ fontSize: '4.5rem', fontWeight: 900, letterSpacing: '-3px', textTransform: 'uppercase', marginBottom: '4rem', color: 'white' }}>
-                  Precision <br/>Engineering.
-              </h2>
-              <p style={{ fontSize: '1.25rem', color: 'rgba(226, 232, 240, 0.4)', lineHeight: 2 }}>
-                  Our Platinum Drive protocol is built on the foundation of high-fidelity data and surgical verification. Every exotic asset undergoes a rigorous multi-node authentication process.
-              </p>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8rem' }}>
-              <ConciergeHUD value="0.01s" label="AUTH_SPEED" />
-              <ConciergeHUD value="142" label="GLOBAL_NODES" />
-              <ConciergeHUD value="770HP" label="AVG_OUTPUT" />
-              <ConciergeHUD value="100%" label="CLIENT_SYNC" />
-          </div>
+      {/* Filter Bar */}
+      <section className="lx-filter-bar">
+        <select className="lx-select"><option>Brand</option></select>
+        <select className="lx-select"><option>Price Range</option></select>
+        <select className="lx-select"><option>Year</option></select>
+        <select className="lx-select"><option>Category</option></select>
+        <button className="lx-btn lx-btn-gold" style={{ flex: 1, padding: '0.8rem' }}>Search</button>
       </section>
 
-      {/* Showcase Grid */}
-      <section style={{ marginTop: '10rem' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '8rem' }}>
-              <div>
-                  <div className="al-mono" style={{ marginBottom: '1.5rem' }}>HIGH_FIDELITY_INVENTORY</div>
-                  <h2 style={{ fontSize: '5.5rem', fontWeight: 900, letterSpacing: '-3px', textTransform: 'uppercase', color: 'white' }}>The <span style={{ color: 'var(--al-cyan)' }}>Showcase.</span></h2>
-              </div>
-              <div style={{ textAlign: 'right', maxWidth: '400px', fontSize: '1rem', color: 'rgba(226, 232, 240, 0.4)', lineHeight: 1.8 }}>
-                  The definitive registry of high-performance automotive assets, synchronized across our global distribution network.
-              </div>
-          </div>
-          
-          <div className="al-showcase-grid">
-            {assets.map((a, i) => (
-              <LuxuryAssetCard key={i} {...a} />
+      {/* Featured Masterpieces */}
+      <section className="lx-section" id="collections">
+        <h2 className="lx-section-title">Featured Masterpieces</h2>
+        <div className="lx-grid">
+            {cars.map((car, i) => (
+                <LuxuryCarCard key={i} {...car} />
             ))}
-          </div>
+        </div>
+        <div style={{ textAlign: 'center', marginTop: '4rem' }}>
+            <a href="#" className="lx-btn lx-btn-gold" style={{ padding: '1rem 3rem' }}>View All Inventory</a>
+        </div>
       </section>
 
-      {/* Final Launch CTA */}
-      <section style={{ marginTop: '20rem', padding: '20rem 0', background: 'var(--al-carbon)', border: '1px solid var(--al-border)', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
-          <div className="al-mono" style={{ marginBottom: '4rem' }}>PILOT_AUTHORIZATION_REQUIRED</div>
-          <h2 style={{ fontSize: '9rem', fontWeight: 900, letterSpacing: '-6px', textTransform: 'uppercase', color: 'white', marginBottom: '6rem', lineHeight: 0.9 }}>
-              Ready for <br/>
-              <span style={{ color: 'var(--al-cyan)' }}>Launch?</span>
-          </h2>
-          <p style={{ maxWidth: '800px', margin: '0 auto 8rem', color: 'rgba(226, 232, 240, 0.3)', fontSize: '1.5rem', lineHeight: 1.8 }}>
-              Connect your pilot node to the Platinum Drive network and gain access to the world's most exclusive high-performance registry.
-          </p>
-          <button className="al-btn-primary" style={{ padding: '2.5rem 8rem', fontSize: '1.25rem' }}>
-              Initialize Pilot Node
-          </button>
+      {/* Exclusive Showcase */}
+      <section className="lx-section" style={{ backgroundColor: '#111111' }}>
+        <h2 className="lx-section-title" style={{ color: 'white' }}>Exclusive Showcase</h2>
+        <div className="lx-showcase-item">
+            <div>
+                <img src="https://images.unsplash.com/photo-1592853625511-9426f4f22ab1?q=80&w=800" style={{ width: '100%', borderRadius: '8px' }} alt="Ferrari" />
+            </div>
+            <div>
+                <h3 className="lx-heading lx-text-gold" style={{ fontSize: '2rem', marginBottom: '1rem' }}>The Crimson Legend</h3>
+                <p style={{ fontSize: '1.2rem', color: 'var(--lx-text-muted)', marginBottom: '1.5rem' }}>1963 Ferrari 250 GTO</p>
+                <p style={{ marginBottom: '2rem', lineHeight: 1.6 }}>
+                    A one-of-a-kind vintage masterpiece, meticulously restored. This vehicle represents automotive history and unparalleled exclusivity.
+                </p>
+                <a href="#" className="lx-btn lx-btn-gold">Inquire About Price</a>
+            </div>
+        </div>
       </section>
-      
-      <div style={{ height: '15rem' }}></div>
+
+      {/* Brands */}
+      <section className="lx-section" id="brands">
+        <h2 className="lx-section-title">Our Curated Brands</h2>
+        <div className="lx-brand-grid">
+            <div className="lx-brand-item">Ferrari</div>
+            <div className="lx-brand-item">Lamborghini</div>
+            <div className="lx-brand-item">Mercedes</div>
+            <div className="lx-brand-item">Rolls Royce</div>
+            <div className="lx-brand-item">Porsche</div>
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section className="lx-section" style={{ backgroundColor: '#111111' }}>
+        <h2 className="lx-section-title" style={{ color: 'white' }}>Client Experiences</h2>
+        <div className="lx-testimonial-grid">
+            {testimonials.map((t, i) => (
+                <div key={i} className="lx-testimonial-card">
+                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1.5rem' }}>
+                        <img src={t.avatar} alt={t.name} style={{ width: '60px', height: '60px', borderRadius: '50%', border: '2px solid var(--lx-gold)', marginRight: '1rem', objectFit: 'cover' }} />
+                        <div>
+                            <h5 style={{ fontWeight: 700, margin: 0 }}>{t.name}</h5>
+                            <small style={{ color: 'var(--lx-text-muted)' }}>{t.role}</small>
+                        </div>
+                    </div>
+                    <p style={{ fontStyle: 'italic', lineHeight: 1.6 }}>"{t.quote}"</p>
+                </div>
+            ))}
+        </div>
+      </section>
+
+      <LuxuryFooter />
     </div>
   );
 }

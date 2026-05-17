@@ -1,15 +1,12 @@
 import React from 'react';
-import { EvolveHeader, EvolveFooter } from './components';
 import './styles.css';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="autos-electric-theme">
-      <EvolveHeader />
+    <div className="autos-electric-wrapper">
       <main>
         {children}
       </main>
-      <EvolveFooter />
     </div>
   );
 }

@@ -1,136 +1,121 @@
 'use client';
 import React from 'react';
-import { CarCard, Gauge } from './components';
+import { ModernHeader, ModernCarCard, CompareItem, ModernFooter } from './components';
 
 export default function Page() {
   const cars = [
-    { name: "Audi RS e-tron GT", price: "$147,000", year: 2024, fuel: "ELECTRIC", hp: "637", transmission: "AUTO", image: "https://images.unsplash.com/photo-1614162692292-7ac56d7fd761?q=80&w=2070", span: 8 },
-    { name: "BMW i7 M70", price: "$168,500", year: 2024, fuel: "ELECTRIC", hp: "650", transmission: "AUTO", image: "https://images.unsplash.com/photo-1555215695-3004980ad54e?q=80&w=2070", span: 4 },
-    { name: "Porsche Taycan S", price: "$194,900", year: 2024, fuel: "ELECTRIC", hp: "750", transmission: "AUTO", image: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=2070", span: 4 },
-    { name: "Lucid Air Sapphire", price: "$249,000", year: 2024, fuel: "ELECTRIC", hp: "1,234", transmission: "AUTO", image: "https://images.unsplash.com/photo-1560958089-b8a1929cea89?q=80&w=2071", span: 8 },
+    { title: "2025 Tesla Model 3", desc: "Available Now | Premium", price: "$39,000", image: "https://images.unsplash.com/photo-1560958089-b8a1929cea89?q=80&w=600" },
+    { title: "2025 BMW i4", desc: "Premium Electric Sedan", price: "$55,000", image: "https://images.unsplash.com/photo-1617814076367-b759c7d7e738?q=80&w=600" },
+    { title: "2025 Toyota Corolla", desc: "Reliable Everyday Car", price: "$22,000", image: "https://images.unsplash.com/photo-1590362891991-f776e747a588?q=80&w=600" },
+    { title: "2025 Audi e-tron GT", desc: "Luxury Performance EV", price: "$88,000", image: "https://images.unsplash.com/photo-1614200179396-2bdb77ebf81b?q=80&w=600" }
   ];
 
   return (
-    <div>
+    <div className="autos-modern-wrapper">
+      <ModernHeader />
+
       {/* Hero Section */}
-      <section className="am-section am-hero">
-        <div className="hero-text-block">
-          <div className="am-mono" style={{ marginBottom: '2rem' }}>[ NODE_ID: AUTO_MODERN_V8 ]</div>
-          <h1 className="am-heading-xl">
-            Engineering<br/>
-            <span style={{ color: 'var(--am-blue)' }}>Absolute</span><br/>
-            Motion.
-          </h1>
-          
-          <div className="am-hero-stats">
-            <div className="am-stat-node">
-                <span className="am-stat-value">0.19</span>
-                <span className="am-stat-label">DRAG_COEF</span>
-            </div>
-            <div className="am-stat-node">
-                <span className="am-stat-value">2.1s</span>
-                <span className="am-stat-label">0-60_MPH</span>
-            </div>
-            <div className="am-stat-node">
-                <span className="am-stat-value">800V</span>
-                <span className="am-stat-label">ARCHITECTURE</span>
-            </div>
-          </div>
-
-          <div style={{ marginTop: '5rem', display: 'flex', gap: '2rem' }}>
-              <button className="am-btn-primary">EXPLORE_INVENTORY</button>
-              <button style={{ 
-                  background: 'transparent', 
-                  border: '1px solid var(--am-border)', 
-                  color: 'white',
-                  padding: '1.25rem 3.5rem',
-                  borderRadius: '100px',
-                  fontWeight: 900,
-                  cursor: 'pointer'
-              }}>
-                  VIRTUAL_ENGINEERING
-              </button>
-          </div>
-        </div>
-
-        <div className="am-hero-image-frame">
-          <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=2070" alt="Main Showcase" />
-          
-          <div className="am-hud-overlay">
-              <div className="am-mono" style={{ marginBottom: '1.5rem', borderBottom: '1px solid var(--am-border)', paddingBottom: '0.5rem' }}>
-                  SYSTEM_DIAGNOSTICS
-              </div>
-              <Gauge label="CORE_TEMPERATURE" value="34°C" percentage={45} />
-              <Gauge label="BATTERY_RESERVE" value="98%" percentage={98} />
-              <Gauge label="NEURAL_SYNC" value="ACTIVE" percentage={100} />
-          </div>
+      <section className="md-hero" id="home">
+        <h1 className="md-hero-title">Drive the Future Today</h1>
+        <p className="md-hero-subtitle">Explore revolutionary vehicles and redefine your journey.</p>
+        <div style={{ display: 'flex', gap: '1rem' }}>
+            <a href="#listings" className="md-btn md-btn-cta">Browse Cars</a>
+            <a href="#compare" className="md-btn md-btn-outline">Compare Models</a>
         </div>
       </section>
 
-      {/* Technical Inventory Section */}
-      <section className="am-section">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '4rem' }}>
+      {/* Filter Section */}
+      <section className="md-filter-section">
+        <select className="md-select"><option>Brand</option></select>
+        <select className="md-select"><option>Model</option></select>
+        <select className="md-select"><option>Price Range</option></select>
+        <select className="md-select"><option>Year</option></select>
+        <div style={{ display: 'flex', flex: 2, minWidth: '250px' }}>
+            <input type="text" className="md-search-input" placeholder="Search by Keyword..." style={{ borderRight: 'none', borderTopRightRadius: 0, borderBottomRightRadius: 0 }} />
+            <button className="md-btn md-btn-cta" style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0, padding: '0 1.5rem' }}>🔍</button>
+        </div>
+      </section>
+
+      {/* Listings */}
+      <section className="md-section" id="listings">
+        <h2 className="md-section-title">Featured Electric & Modern Autos</h2>
+        <div className="md-grid">
+            {cars.map((car, i) => (
+                <ModernCarCard key={i} {...car} />
+            ))}
+        </div>
+      </section>
+
+      {/* Compare Head-to-Head */}
+      <section className="md-section" id="compare" style={{ backgroundColor: 'white' }}>
+        <h2 className="md-section-title">Compare Top Models Head-to-Head</h2>
+        <div className="md-compare-grid" style={{ maxWidth: '1000px', margin: '0 auto' }}>
+            <CompareItem 
+                title="Tesla Model 3" 
+                stats="Range: 333 mi | 0-60: 4.2s" 
+                price="$39k" 
+                image="https://images.unsplash.com/photo-1560958089-b8a1929cea89?q=80&w=400" 
+            />
+            <CompareItem 
+                title="BMW i4" 
+                stats="Range: 301 mi | 0-60: 5.5s" 
+                price="$55k" 
+                image="https://images.unsplash.com/photo-1617814076367-b759c7d7e738?q=80&w=400" 
+                highlight={true}
+            />
+            <CompareItem 
+                title="Hyundai IONIQ 6" 
+                stats="Range: 361 mi | 0-60: 5.1s" 
+                price="$46k" 
+                image="https://images.unsplash.com/photo-1678129571167-db3fb7a488f2?q=80&w=400" 
+            />
+        </div>
+        <div style={{ textAlign: 'center', marginTop: '3rem' }}>
+            <a href="#" className="md-btn md-btn-cta">Start Your Custom Comparison</a>
+        </div>
+      </section>
+
+      {/* Brands */}
+      <section className="md-section" id="brands">
+        <h2 className="md-section-title">Driving Innovation with Top Brands</h2>
+        <div className="md-brand-grid">
+            <div className="md-brand-img">Tesla</div>
+            <div className="md-brand-img">BMW</div>
+            <div className="md-brand-img">Mercedes</div>
+            <div className="md-brand-img">Toyota</div>
+            <div className="md-brand-img">Ford</div>
+            <div className="md-brand-img">Audi</div>
+        </div>
+      </section>
+
+      {/* Tech Features */}
+      <section className="md-section">
+        <h2 className="md-section-title">Experience Next-Generation Technology</h2>
+        
+        <div className="md-feature-row">
             <div>
-                <div className="am-mono">CATALOG_SYNC // 2024_COLLECTION</div>
-                <h2 style={{ fontSize: '4rem', fontWeight: 900, marginTop: '1rem' }}>Technical <span style={{ color: 'var(--am-blue)' }}>Inventory</span></h2>
+                <h3 className="md-text-primary md-fw-bold" style={{ fontSize: '1.8rem', marginBottom: '1rem' }}>Autonomous AI Driving</h3>
+                <p style={{ fontSize: '1.1rem', marginBottom: '1rem', lineHeight: 1.6 }}>Our vehicles are equipped with cutting-edge <strong>Level 3+ Autonomy</strong>, allowing for supervised self-driving on major highways. Experience a safer, more relaxed commute.</p>
+                <p style={{ color: '#666', lineHeight: 1.6 }}>Advanced sensor fusion, real-time mapping, and predictive algorithms ensure unparalleled safety and performance in various conditions.</p>
             </div>
-            <p style={{ maxWidth: '400px', color: 'var(--am-text-muted)', textAlign: 'right', fontSize: '0.9rem', lineHeight: 1.8 }}>
-                Every vehicle in our digital registry is synchronized with its real-world twin, ensuring absolute precision in spec delivery and availability.
-            </p>
+            <div>
+                <img src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?q=80&w=800" alt="AI Driving" style={{ width: '100%', borderRadius: '12px', boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }} />
+            </div>
         </div>
 
-        <div className="am-bento-grid">
-          {cars.map((car, i) => (
-            <CarCard key={i} {...car} />
-          ))}
+        <div className="md-feature-row">
+            <div style={{ order: 2 }}>
+                <h3 className="md-text-primary md-fw-bold" style={{ fontSize: '1.8rem', marginBottom: '1rem' }}>Hybrid & Electric Powertrains</h3>
+                <p style={{ fontSize: '1.1rem', marginBottom: '1rem', lineHeight: 1.6 }}>Choose from a selection of the most efficient <strong>Electric and Hybrid engines</strong>. Maximum performance meets minimal environmental impact.</p>
+                <p style={{ color: '#666', lineHeight: 1.6 }}>Innovative battery technology provides faster charging, longer range, and a dynamic driving feel, all backed by comprehensive warranties.</p>
+            </div>
+            <div style={{ order: 1 }}>
+                <img src="https://images.unsplash.com/photo-1614200179396-2bdb77ebf81b?q=80&w=800" alt="EV Tech" style={{ width: '100%', borderRadius: '12px', boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }} />
+            </div>
         </div>
       </section>
 
-      {/* Call to Action: The Configurator */}
-      <section className="am-section">
-          <div style={{ 
-              background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
-              padding: '10rem 6%',
-              borderRadius: 'var(--am-radius)',
-              border: '1px solid var(--am-border)',
-              position: 'relative',
-              overflow: 'hidden',
-              textAlign: 'center'
-          }}>
-              <div style={{ position: 'relative', zIndex: 2 }}>
-                  <div className="am-mono" style={{ marginBottom: '2rem' }}>INITIALIZE_CUSTOM_BUILD</div>
-                  <h2 style={{ fontSize: '6rem', fontWeight: 900, letterSpacing: '-3px', marginBottom: '3rem' }}>
-                      Authorize Your <br/>
-                      <span style={{ color: 'var(--am-blue)' }}>Performance.</span>
-                  </h2>
-                  <p style={{ maxWidth: '700px', margin: '0 auto 5rem', color: 'var(--am-text-muted)', fontSize: '1.25rem', lineHeight: 1.8 }}>
-                      Access the world's most advanced automotive configuration engine. Build, simulate, and authorize your elite vehicle across the Sellio global node network.
-                  </p>
-                  <button className="am-btn-primary" style={{ padding: '2rem 6rem', fontSize: '1.2rem' }}>
-                      OPEN_CONFIGURATOR_NODE
-                  </button>
-              </div>
-              
-              {/* Background HUD decorative elements */}
-              <div style={{ 
-                  position: 'absolute', 
-                  top: '0', 
-                  left: '0', 
-                  width: '100%', 
-                  height: '100%', 
-                  opacity: 0.05,
-                  pointerEvents: 'none',
-                  fontFamily: 'var(--am-font-mono)',
-                  fontSize: '20rem',
-                  fontWeight: 900,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-              }}>
-                  010101
-              </div>
-          </div>
-      </section>
+      <ModernFooter />
     </div>
   );
 }
