@@ -1,23 +1,41 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 
-export const CommercialHeader = () => (
-  <header className="pc-header">
-    <div className="pc-logo">
-      CORP<span style={{ color: 'var(--pc-blue)' }}>Portfolio</span>
-    </div>
-    
-    <nav className="pc-nav">
-        {['Registry', 'Yield_Sync', 'Institutional', 'Master_Auth'].map(link => (
-            <a key={link} href="#" className="pc-nav-link">{link}</a>
-        ))}
-    </nav>
+export const CommercialHeader = () => {
+  const [isOpen, setIsOpen] = useState(false);
 
-    <div className="pc-mono" style={{ padding: '0.6rem 1.5rem', background: 'var(--pc-bg)', borderRadius: '4px' }}>
-      AUDIT_STABLE
-    </div>
-  </header>
-);
+  return (
+    <header className="pc-header">
+      <div className="pc-logo">
+        CORP<span style={{ color: 'var(--pc-blue)' }}>Portfolio</span>
+      </div>
+      
+      <button 
+          className={`pc-hamburger ${isOpen ? 'pc-hamburger-open' : ''}`} 
+          onClick={() => setIsOpen(!isOpen)}
+          aria-label="Toggle Navigation"
+      >
+          <span className="pc-hamburger-bar"></span>
+          <span className="pc-hamburger-bar"></span>
+          <span className="pc-hamburger-bar"></span>
+      </button>
+
+      <nav className={`pc-nav ${isOpen ? 'pc-nav-open' : ''}`}>
+          {['Registry', 'Yield_Sync', 'Institutional', 'Master_Auth'].map(link => (
+              <a key={link} href="#" className="pc-nav-link" onClick={() => setIsOpen(false)}>{link}</a>
+          ))}
+          
+          <div className="pc-mono pc-mobile-auth-btn" style={{ padding: '0.8rem 2rem', background: 'var(--pc-bg)', borderRadius: '4px', marginTop: '2rem' }}>
+            AUDIT_STABLE
+          </div>
+      </nav>
+
+      <div className="pc-mono pc-desktop-auth-btn" style={{ padding: '0.6rem 1.5rem', background: 'var(--pc-bg)', borderRadius: '4px' }}>
+        AUDIT_STABLE
+      </div>
+    </header>
+  );
+};
 
 export const AssetRegistryCard = ({ title, type, area, status, id }: any) => (
   <div className="pc-asset-card">

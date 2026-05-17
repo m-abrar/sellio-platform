@@ -39,7 +39,7 @@ export default function Page() {
         </div>
         <div style={{ position: 'relative' }}>
           <div style={{ background: 'var(--pc-bg)', padding: '2rem', border: '1px solid var(--pc-border)' }}>
-            <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070" alt="Corporate Architecture" style={{ width: '100%', height: '700px', objectFit: 'cover', filter: 'grayscale(100%) brightness(0.9)' }} />
+            <img src="/themes/properties/commercial/8.webp" alt="Corporate Architecture" style={{ width: '100%', height: '700px', objectFit: 'cover', filter: 'grayscale(100%) brightness(0.9)' }} />
           </div>
         </div>
       </section>

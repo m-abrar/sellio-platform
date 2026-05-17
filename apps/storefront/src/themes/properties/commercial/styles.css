@@ -48,7 +48,7 @@
 }
 
 /* Corporate Header */
-.pc-header {
+.corp-header {
   padding: 1.5rem 6%;
   display: flex;
   justify-content: space-between;
@@ -60,18 +60,18 @@
   z-index: 1000;
 }
 
-.pc-logo {
+.corp-logo {
   font-weight: 900;
   font-size: 1.5rem;
   letter-spacing: -1px;
 }
 
-.pc-nav {
+.corp-nav {
   display: flex;
   gap: 4rem;
 }
 
-.pc-nav-link {
+.corp-nav-link {
   font-size: 0.8rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -80,7 +80,7 @@
   transition: var(--pc-transition);
 }
 
-.pc-nav-link:hover {
+.corp-nav-link:hover {
   color: var(--pc-blue);
 }
 
@@ -151,4 +151,140 @@
   background: var(--pc-carbon);
   color: white;
   padding: 10rem 6% 4rem;
+}
+
+/* Premium Elite Mobile Drawer & Responsive Degradation */
+.pc-mobile-auth-btn {
+  display: none;
+}
+
+.pc-hamburger {
+  display: none;
+}
+
+@media (max-width: 1024px) {
+  .pc-hamburger {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 26px;
+    height: 18px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 1050;
+  }
+
+  .pc-hamburger-bar {
+    width: 100%;
+    height: 2px;
+    background-color: var(--pc-carbon);
+    transition: var(--pc-transition);
+  }
+
+  .pc-hamburger-open .pc-hamburger-bar:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+    background-color: var(--pc-blue);
+  }
+
+  .pc-hamburger-open .pc-hamburger-bar:nth-child(2) {
+    opacity: 0;
+  }
+
+  .pc-hamburger-open .pc-hamburger-bar:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+    background-color: var(--pc-blue);
+  }
+
+  .pc-nav {
+    display: flex !important;
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 320px;
+    height: 100vh;
+    background-color: var(--pc-bg);
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2.5rem;
+    padding: 3rem 2rem;
+    transition: right 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+    z-index: 1040;
+    box-shadow: -15px 0 30px rgba(0,0,0,0.05);
+    border-left: 1px solid var(--pc-border);
+  }
+
+  .pc-nav-open {
+    right: 0;
+  }
+
+  .pc-nav-link {
+    font-size: 1.2rem;
+    color: var(--pc-carbon);
+  }
+
+  .pc-desktop-auth-btn {
+    display: none !important;
+  }
+
+  .pc-mobile-auth-btn {
+    display: block !important;
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Structural Refolding */
+  .pc-section {
+    padding: 4rem 5%;
+  }
+
+  .pc-hero {
+    grid-template-columns: 1fr !important;
+    gap: 4rem !important;
+    padding: 6rem 5% !important;
+  }
+
+  .pc-hero img {
+    height: 400px !important;
+  }
+
+  .pc-hero-stats {
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Intelligence HUD Refolding */
+  section[style*="gridTemplateColumns"] {
+    grid-template-columns: 1fr !important;
+    gap: 5rem !important;
+    padding: 6rem 5% !important;
+  }
+
+  section[style*="gridTemplateColumns"] h2 {
+    font-size: 3rem !important;
+    margin-bottom: 2rem !important;
+  }
+
+  /* Asset Grid Refolding */
+  .pc-asset-grid {
+    grid-template-columns: 1fr !important;
+    border-left: none !important;
+    border-top: 1px solid var(--pc-border);
+  }
+
+  .pc-asset-card {
+    padding: 3rem 5% !important;
+    border-right: none !important;
+  }
+
+  /* Bottom CTA */
+  section[style*="background: 'var(--pc-carbon)'"] {
+    padding: 8rem 5% !important;
+  }
+
+  section[style*="background: 'var(--pc-carbon)'"] h2 {
+    font-size: 3.5rem !important;
+  }
 }
