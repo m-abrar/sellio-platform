@@ -1,169 +1,305 @@
-/* 
-    Jobs Freelance: The Independent Protocol
-    Design Spec: Mint Green, Space Mono Accents, Modular Cards
-*/
-
-@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;600;700;900&family=Space+Mono:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
 
 :root {
-    --flex-mint: #10b981;
-    --flex-graphite: #2d3748;
-    --flex-bg: #ffffff;
-    --flex-border: #edf2f7;
-    --flex-yellow: #facc15;
-    --font-flex: 'Work Sans', sans-serif;
-    --font-mono: 'Space Mono', monospace;
+    --jf-bg-main: #f9f9f9;
+    --jf-bg-card: #ffffff;
+    --jf-primary: #10b981; /* Emerald Green */
+    --jf-primary-hover: #059669;
+    --jf-accent: #6366f1; /* Indigo */
+    --jf-text-main: #1f2937;
+    --jf-text-muted: #6b7280;
+    --jf-border: #e5e7eb;
+    --jf-font: 'Outfit', sans-serif;
+    --jf-transition: all 0.3s ease;
+    --jf-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    --jf-shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
 }
 
-.freelance-jobs-wrapper {
-    background-color: var(--flex-bg);
-    color: var(--flex-graphite);
-    font-family: var(--font-flex);
+.jobs-freelance-wrapper {
+    background-color: var(--jf-bg-main);
+    font-family: var(--jf-font);
+    color: var(--jf-text-main);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
 }
+
+/* Utilities */
+.jf-text-emerald { color: var(--jf-primary); }
+.jf-text-indigo { color: var(--jf-accent); }
 
 /* Header */
-.flex-header {
-    background: white;
-    padding: 1.5rem 5%;
+.jf-header {
+    background-color: var(--jf-bg-card);
+    border-bottom: 1px solid var(--jf-border);
+    padding: 1rem 5%;
     display: flex;
     justify-content: space-between;
     align-items: center;
     position: sticky;
     top: 0;
     z-index: 1000;
-    border-bottom: 2px solid var(--flex-mint);
 }
 
-.flex-logo {
-    font-family: var(--font-mono);
-    font-weight: 700;
-    font-size: 1.2rem;
-    color: var(--flex-mint);
-}
-
-.flex-nav {
-    display: flex;
-    gap: 3rem;
-}
-
-.flex-nav-link {
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: #718096;
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-.flex-nav-link:hover {
-    color: var(--flex-mint);
-}
-
-/* Hero */
-.flex-hero {
-    padding: 8rem 5%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    background: radial-gradient(circle at top right, rgba(16, 185, 129, 0.05), transparent);
-}
-
-.flex-hero h1 {
-    font-size: 5rem;
-    font-weight: 900;
-    line-height: 1;
-    margin-bottom: 2rem;
-    letter-spacing: -2px;
-}
-
-.flex-badge {
-    background: var(--flex-graphite);
-    color: var(--flex-yellow);
-    font-family: var(--font-mono);
-    padding: 0.5rem 1.5rem;
-    font-size: 0.8rem;
-    margin-bottom: 2rem;
-}
-
-/* Gig Cards */
-.gig-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
-    padding: 6rem 5%;
-}
-
-.gig-card {
-    border: 1px solid var(--flex-border);
-    padding: 2.5rem;
-    border-radius: 12px;
-    position: relative;
-    transition: all 0.3s ease;
-}
-
-.gig-card:hover {
-    border-color: var(--flex-mint);
-    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.1);
-}
-
-.gig-rate {
-    font-family: var(--font-mono);
-    font-weight: 700;
-    font-size: 1.5rem;
-    color: var(--flex-mint);
-    margin-bottom: 1rem;
-}
-
-.gig-title {
-    font-size: 1.4rem;
+.jf-logo {
     font-weight: 800;
+    font-size: 1.5rem;
+    color: var(--jf-text-main);
+    text-decoration: none;
+    letter-spacing: -0.5px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.jf-nav {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+}
+
+.jf-nav-link {
+    color: var(--jf-text-muted);
+    font-weight: 500;
+    text-decoration: none;
+    transition: var(--jf-transition);
+}
+
+.jf-nav-link:hover {
+    color: var(--jf-text-main);
+}
+
+/* Buttons */
+.jf-btn {
+    font-family: var(--jf-font);
+    font-weight: 600;
+    padding: 0.6rem 1.5rem;
+    border-radius: 50px;
+    transition: var(--jf-transition);
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid transparent;
+}
+
+.jf-btn-primary {
+    background-color: var(--jf-primary);
+    color: white;
+}
+
+.jf-btn-primary:hover {
+    background-color: var(--jf-primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2);
+}
+
+.jf-btn-outline {
+    background-color: transparent;
+    border-color: var(--jf-border);
+    color: var(--jf-text-main);
+}
+
+.jf-btn-outline:hover {
+    border-color: var(--jf-text-main);
+}
+
+/* Hero Section */
+.jf-hero {
+    background-color: #064e3b; /* Dark Green */
+    color: white;
+    padding: 6rem 5% 8rem;
+    text-align: center;
+    background-image: radial-gradient(circle at 80% 20%, rgba(16, 185, 129, 0.3) 0%, transparent 50%);
+    border-radius: 0 0 30px 30px;
+}
+
+.jf-hero-title {
+    font-size: clamp(3rem, 6vw, 4.5rem);
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    letter-spacing: -1px;
+}
+
+.jf-hero-subtitle {
+    font-size: 1.25rem;
+    color: rgba(255, 255, 255, 0.8);
+    max-width: 600px;
+    margin: 0 auto 3rem;
+    line-height: 1.6;
+}
+
+/* Search Bar */
+.jf-search-container {
+    background-color: var(--jf-bg-card);
+    border-radius: 50px;
+    padding: 0.5rem;
+    display: flex;
+    max-width: 800px;
+    margin: -3rem auto 3rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    align-items: center;
+    position: relative;
+    z-index: 10;
+}
+
+.jf-search-input {
+    flex: 1;
+    border: none;
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+    font-family: var(--jf-font);
+    outline: none;
+    background: transparent;
+}
+
+/* Categories Slider */
+.jf-categories {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem 5%;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+.jf-categories::-webkit-scrollbar {
+    display: none;
+}
+
+.jf-cat-pill {
+    background-color: white;
+    border: 1px solid var(--jf-border);
+    padding: 0.75rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 500;
+    color: var(--jf-text-main);
+    white-space: nowrap;
+    cursor: pointer;
+    transition: var(--jf-transition);
+}
+
+.jf-cat-pill:hover, .jf-cat-pill.active {
+    background-color: var(--jf-primary);
+    color: white;
+    border-color: var(--jf-primary);
+}
+
+/* Gig Layout */
+.jf-section {
+    padding: 3rem 5%;
+}
+
+.jf-section-title {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.jf-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+/* Gig Card */
+.jf-gig-card {
+    background-color: var(--jf-bg-card);
+    border: 1px solid var(--jf-border);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: var(--jf-transition);
+    box-shadow: var(--jf-shadow);
+}
+
+.jf-gig-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--jf-shadow-hover);
+    border-color: #d1d5db;
+}
+
+.jf-gig-img {
+    height: 180px;
+    width: 100%;
+    object-fit: cover;
+}
+
+.jf-gig-body {
+    padding: 1.5rem;
+}
+
+.jf-freelancer-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
     margin-bottom: 1rem;
 }
 
-.gig-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-bottom: 2rem;
+.jf-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
 }
 
-.gig-tag {
-    background: #f7fafc;
-    padding: 0.25rem 0.75rem;
-    font-size: 0.7rem;
+.jf-freelancer-name {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--jf-text-main);
+}
+
+.jf-gig-title {
+    font-size: 1.1rem;
     font-weight: 700;
-    color: #a0aec0;
-    border-radius: 4px;
+    margin-bottom: 1rem;
+    line-height: 1.4;
+}
+
+.jf-gig-rating {
+    color: #fbbf24;
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.jf-gig-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1rem;
+    border-top: 1px solid var(--jf-border);
+}
+
+.jf-gig-price {
+    font-size: 0.85rem;
+    color: var(--jf-text-muted);
+}
+
+.jf-gig-price strong {
+    color: var(--jf-text-main);
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+/* Promo Block */
+.jf-promo {
+    background-color: var(--jf-accent);
+    border-radius: 24px;
+    padding: 4rem;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 4rem 5%;
 }
 
 /* Footer */
-.network-footer {
-    padding: 8rem 5%;
-    background: var(--flex-graphite);
-    color: white;
-}
-
-.network-footer-grid {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr;
-    gap: 4rem;
-}
-
-.network-footer h4 {
-    font-family: var(--font-mono);
-    font-size: 0.8rem;
-    margin-bottom: 2.5rem;
-    color: var(--flex-mint);
-}
-
-.network-footer-link {
-    display: block;
-    color: #718096;
-    text-decoration: none;
-    margin-bottom: 1.25rem;
-    font-size: 0.95rem;
-}
-
-.network-footer-link:hover {
-    color: white;
+.jf-footer {
+    background-color: white;
+    border-top: 1px solid var(--jf-border);
+    padding: 4rem 5% 2rem;
 }

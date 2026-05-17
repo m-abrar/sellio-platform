@@ -1,76 +1,74 @@
-
+'use client';
 import React from 'react';
-import { GigCard } from './components';
+import { FreelanceHeader, GigCard, FreelanceFooter } from './components';
 
 export default function Page() {
   const gigs = [
-    { title: "Elite UI/UX Architecture", rate: "$120/hr", duration: "3 Months", tags: ["Figma", "Design Systems", "Prototyping"] },
-    { title: "Backend Scaling Protocol", rate: "$150/hr", duration: "6 Months", tags: ["Go", "Kubernetes", "gRPC"] },
-    { title: "Smart Contract Audit", rate: "$200/hr", duration: "1 Month", tags: ["Solidity", "Security", "EVM"] },
-    { title: "AI Model Fine-Tuning", rate: "$180/hr", duration: "2 Months", tags: ["PyTorch", "LLMs", "Python"] },
-    { title: "Conversion Copywriting", rate: "$90/hr", duration: "Ongoing", tags: ["Strategy", "SEO", "Sales"] },
-    { title: "Fullstack App Node", rate: "$130/hr", duration: "4 Months", tags: ["Next.js", "TypeScript", "PostgreSQL"] },
+    { title: "I will design a modern minimalist logo for your brand", name: "Alex Design", avatar: "https://images.unsplash.com/photo-1599566150163-29194dcaad36?q=80&w=100&auto=format&fit=crop", image: "https://images.unsplash.com/photo-1626785774573-4b799315345d?q=80&w=400", rating: 4.9, reviews: 1043, price: "$50" },
+    { title: "I will build a responsive Next.js web application", name: "Sarah Code", avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=100&auto=format&fit=crop", image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=400", rating: 5.0, reviews: 312, price: "$200" },
+    { title: "I will write SEO optimized blog posts and articles", name: "John Writes", avatar: "https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?q=80&w=100&auto=format&fit=crop", image: "https://images.unsplash.com/photo-1455390582262-044cdead2708?q=80&w=400", rating: 4.8, reviews: 890, price: "$25" },
+    { title: "I will edit your YouTube videos professionally", name: "Mike Visuals", avatar: "https://images.unsplash.com/photo-1527980965255-d3b416303d12?q=80&w=100&auto=format&fit=crop", image: "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?q=80&w=400", rating: 4.9, reviews: 567, price: "$40" },
   ];
 
   return (
-    <div>
-      {/* Hero Section */}
-      <section className="flex-hero">
-          <div className="flex-badge">v.4.0_DECENTRALIZED_PROTOCOL</div>
-          <h1>The New <br/>Independence.</h1>
-          <p style={{ maxWidth: '700px', fontSize: '1.25rem', color: '#718096', lineHeight: 1.8, marginBottom: '4rem' }}>
-              High-leverage projects for independent builders. Direct peer-to-peer distribution with zero platform overhead. Verified by the Sellio Flex protocol.
-          </p>
-          <div style={{ display: 'flex', gap: '1.5rem' }}>
-              <button style={{ padding: '1.25rem 3.5rem', background: 'var(--flex-graphite)', color: 'white', border: 'none', borderRadius: '4px', fontWeight: 900 }}>BROWSE_PROJECTS</button>
-              <button style={{ padding: '1.25rem 3.5rem', background: 'none', color: 'var(--flex-graphite)', border: '2px solid var(--flex-graphite)', borderRadius: '4px', fontWeight: 900 }}>DEPLOY_TALENT</button>
+    <div className="jobs-freelance-wrapper">
+      <FreelanceHeader />
+
+      {/* Hero */}
+      <section className="jf-hero">
+        <h1 className="jf-hero-title">Find the perfect <span style={{ fontStyle: 'italic' }}>freelance</span> services<br/>for your business</h1>
+        
+      </section>
+
+      {/* Search Bar */}
+      <div className="jf-search-container">
+          <span style={{ padding: '1rem', fontSize: '1.25rem', color: 'var(--jf-text-muted)' }}>🔍</span>
+          <input type="text" className="jf-search-input" placeholder='Try "logo design" or "React developer"' />
+          <button className="jf-btn jf-btn-primary" style={{ padding: '1rem 2rem', fontSize: '1.1rem' }}>Search</button>
+      </div>
+
+      {/* Categories Slider */}
+      <div className="jf-categories">
+          <div className="jf-cat-pill active">All Categories</div>
+          <div className="jf-cat-pill">Graphics & Design</div>
+          <div className="jf-cat-pill">Programming & Tech</div>
+          <div className="jf-cat-pill">Digital Marketing</div>
+          <div className="jf-cat-pill">Video & Animation</div>
+          <div className="jf-cat-pill">Writing & Translation</div>
+          <div className="jf-cat-pill">Music & Audio</div>
+          <div className="jf-cat-pill">Business</div>
+      </div>
+
+      {/* Popular Gigs */}
+      <section className="jf-section" id="explore">
+          <h2 className="jf-section-title">
+              Popular professional services
+          </h2>
+          <div className="jf-grid">
+              {gigs.map((gig, i) => (
+                  <GigCard key={i} {...gig} />
+              ))}
           </div>
       </section>
 
-      {/* Trust Bar */}
-      <section style={{ padding: '3rem 5%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#f7fafc', color: '#a0aec0', fontFamily: 'var(--font-mono)', fontSize: '0.7rem' }}>
-          <span>NODE_SYNC: 100%</span>
-          <span>ESCROW_READY: YES</span>
-          <span>GAS_OPTIMIZED: ACTIVE</span>
-          <span>TOTAL_NETWORK_VALUE: $42.5M</span>
-      </section>
-
-      {/* Gig Grid */}
-      <section className="gig-grid">
-          {gigs.map((gig, i) => (
-              <GigCard key={i} {...gig} />
-          ))}
-      </section>
-
-      {/* Philosophy Section */}
-      <section style={{ padding: '12rem 5%', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10rem', alignItems: 'center' }}>
+      {/* Promo Block */}
+      <section className="jf-promo">
           <div>
-              <h2 style={{ fontSize: '3.5rem', fontWeight: 900, marginBottom: '3rem' }}>The Protocol <br/>of Autonomy.</h2>
-              <p style={{ fontSize: '1.1rem', color: '#718096', lineHeight: 2, marginBottom: '4rem' }}>
-                  We believe in a world where talent is distributed directly to demand. No middlemen, no centralized fees, just pure execution and high-fidelity project outcomes.
-              </p>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3rem' }}>
-                  <div>
-                      <div style={{ fontSize: '2.5rem', fontWeight: 900, color: 'var(--flex-mint)' }}>0%</div>
-                      <div style={{ fontSize: '0.7rem', fontWeight: 800, color: '#a0aec0', letterSpacing: '2px' }}>PLATFORM_FEES</div>
-                  </div>
-                  <div>
-                      <div style={{ fontSize: '2.5rem', fontWeight: 900, color: 'var(--flex-mint)' }}>Instant</div>
-                      <div style={{ fontSize: '0.7rem', fontWeight: 800, color: '#a0aec0', letterSpacing: '2px' }}>NODE_SETTLEMENT</div>
-                  </div>
-              </div>
+              <h2 style={{ fontSize: '3rem', fontWeight: 800, marginBottom: '1.5rem', lineHeight: 1.1 }}>A whole world of freelance talent at your fingertips</h2>
+              <ul style={{ listStyle: 'none', padding: 0, marginBottom: '2rem', fontSize: '1.2rem', lineHeight: 1.8 }}>
+                  <li>✓ The best for every budget</li>
+                  <li>✓ Quality work done quickly</li>
+                  <li>✓ Protected payments, every time</li>
+                  <li>✓ 24/7 support</li>
+              </ul>
+              <button className="jf-btn" style={{ backgroundColor: 'white', color: 'var(--jf-accent)' }}>Explore GigHive Pro</button>
           </div>
-          <div style={{ background: '#fcfcfc', border: '1px solid #eee', padding: '5rem', position: 'relative' }}>
-              <div style={{ position: 'absolute', top: '-1rem', left: '-1rem', width: '60px', height: '60px', background: 'var(--flex-yellow)' }}></div>
-              <h3 style={{ fontSize: '2rem', fontWeight: 900, marginBottom: '2rem' }}>Join the Network.</h3>
-              <p style={{ color: '#a0aec0', lineHeight: 2, marginBottom: '3rem' }}>
-                  Our talent nodes are currently accepting new high-fidelity contributors. Submit your proof-of-work to join the elite decentralized workforce.
-              </p>
-              <button style={{ width: '100%', padding: '1.5rem', background: 'var(--flex-graphite)', color: 'white', border: 'none', fontWeight: 900, letterSpacing: '1px' }}>
-                  GENERATE_TALENT_NODE
-              </button>
+          <div className="d-none d-lg-block" style={{ width: '40%' }}>
+              <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=800" alt="Team" style={{ width: '100%', borderRadius: '16px', transform: 'rotate(5deg)', boxShadow: '0 20px 40px rgba(0,0,0,0.2)' }} />
           </div>
       </section>
+
+      <FreelanceFooter />
     </div>
   );
 }

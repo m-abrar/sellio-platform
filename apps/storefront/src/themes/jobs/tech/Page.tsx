@@ -1,117 +1,91 @@
-
 'use client';
 import React from 'react';
-import { JobNexusEntry } from './components';
+import { TechHeader, TechJobCard, TechFooter } from './components';
 
 export default function Page() {
   const jobs = [
-    { role: "Principal Engineer", company: "CyberNexus", salary: "$240k - $310k", tags: ["Rust", "Distributed Systems"], description: "Lead the architecture of our next-gen decentralized cloud infrastructure. Focus on high-throughput node synchronization and protocol integrity." },
-    { role: "Senior UX Architect", company: "Aura Design", salary: "$180k - $220k", tags: ["Figma", "Spatial UI"], description: "Define the visual language for our spatial computing platform. Create seamless, immersive interfaces for the future of work." },
-    { role: "Data Integrity Lead", company: "BlockSecure", salary: "$200k - $250k", tags: ["Cryptography", "ZKP"], description: "Optimize zero-knowledge proof protocols for institutional-grade transaction security. Ensure absolute data privacy across the global mesh." },
-    { role: "Cloud Infra Expert", company: "VectorMesh", salary: "$190k - $240k", tags: ["Go", "Kubernetes"], description: "Manage large-scale multi-cloud deployments. Focus on auto-scaling latency-sensitive compute clusters." },
+    { title: "Senior React Engineer", company: "Vercel", location: "Remote - Worldwide", type: "Full-Time", salary: "$140k - $180k", time: "2h ago", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Vercel_logo_black.svg/512px-Vercel_logo_black.svg.png", skills: ["React", "Next.js", "TypeScript"] },
+    { title: "Backend Systems Developer", company: "Stripe", location: "Remote - US/Canada", type: "Full-Time", salary: "$160k - $210k", time: "5h ago", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Stripe_Logo%2C_revised_2016.svg/512px-Stripe_Logo%2C_revised_2016.svg.png", skills: ["Go", "Ruby", "PostgreSQL", "AWS"] },
+    { title: "Frontend Architect", company: "Linear", location: "San Francisco, CA", type: "Full-Time", salary: "$180k - $220k", time: "1d ago", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Linear_Logo_1.svg/512px-Linear_Logo_1.svg.png", skills: ["React", "GraphQL", "MobX"] },
+    { title: "DevOps Engineer", company: "Discord", location: "Remote - US", type: "Full-Time", salary: "$150k - $190k", time: "1d ago", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/9/98/Discord_logo.svg/512px-Discord_logo.svg.png", skills: ["Kubernetes", "Rust", "GCP"] },
+    { title: "Full Stack Developer", company: "Supabase", location: "Remote - EMEA", type: "Full-Time", salary: "$120k - $150k", time: "2d ago", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Supabase_logo.svg/512px-Supabase_logo.svg.png", skills: ["TypeScript", "PostgreSQL", "Elixir"] },
   ];
 
   return (
-    <div className="jt-nexus-wrapper">
-      <header className="jt-terminal-nav">
-          <div className="jt-nexus-logo">
-              CYBER<span style={{ color: 'var(--jt-purple)' }}>NEXUS</span> // JOBS
-          </div>
-          <div style={{ display: 'flex', gap: '4rem', color: 'var(--jt-text-dim)', fontWeight: 800, fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '1px' }}>
-              <style dangerouslySetInnerHTML={{ __html: `
-                @media (max-width: 1024px) {
-                  .jt-nav-links { display: none !important; }
-                }
-              ` }} />
-              <div className="jt-nav-links" style={{ display: 'flex', gap: '4rem' }}>
-                  <span style={{ color: 'var(--jt-text)' }}>Registry</span>
-                  <span>Experts</span>
-                  <span>Deployments</span>
-                  <span>Manifesto</span>
-              </div>
-          </div>
-          <div style={{ padding: '0.5rem 1.5rem', background: 'rgba(178, 123, 255, 0.1)', border: '1px solid var(--jt-border)', color: 'var(--jt-purple)', fontWeight: 800, fontSize: '0.65rem' }}>
-              SIGNAL_STABLE: 100%
-          </div>
-      </header>
+    <div className="jobs-tech-wrapper">
+      <TechHeader />
 
-      <section className="jt-section jt-hero">
-        <div style={{ marginBottom: '4rem', color: 'var(--jt-text-dim)', fontSize: '0.85rem' }}>
-          <span className="jt-comment">// THE NEXT GENERATION OF TECH RECRUITMENT</span>
-        </div>
-        <h1 className="jt-heading-xl">
-          Deploy Your <br/>
-          Next <span style={{ color: 'var(--jt-purple)' }}>Evolution.</span>
-        </h1>
-        <p style={{ marginTop: '5rem', fontSize: '1.25rem', color: 'var(--jt-text-dim)', lineHeight: 1.8, maxWidth: '600px', fontFamily: 'var(--jt-font-main)' }}>
-          Access the most critical engineering roles in the decentralized ecosystem. Directly integrated with high-fidelity community nodes.
-        </p>
-        
-        <div style={{ marginTop: '8rem', display: 'flex', gap: '3rem', flexWrap: 'wrap' }}>
-            <button className="jt-btn-primary">Browse Registry</button>
-            <button style={{ background: 'transparent', border: '1px solid var(--jt-border)', color: 'var(--jt-text)', padding: '1rem 3rem', fontWeight: 800, cursor: 'pointer', fontFamily: 'var(--jt-font-mono)', fontSize: '0.85rem' }}>Access Manifest</button>
+      {/* Hero */}
+      <section className="jt-hero">
+        <div className="jt-hero-content">
+            <h1 className="jt-hero-title">Find the <span className="jt-text-purple">best tech jobs</span><br/>for your stack.</h1>
+            <p className="jt-hero-subtitle">Connecting world-class developers with top-tier tech companies. Skip the recruiters and apply directly to the engineering team.</p>
+            
+            <div className="jt-search-box">
+                <div style={{ padding: '1rem', color: 'var(--jt-text-muted)' }}>$</div>
+                <input type="text" className="jt-search-input" placeholder="grep -i 'React OR Go OR Rust'" />
+                <button className="jt-btn jt-btn-primary" style={{ margin: '0.25rem' }}>Search</button>
+            </div>
         </div>
       </section>
 
-      <section className="jt-section" style={{ paddingTop: 0 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '6rem', flexWrap: 'wrap', gap: '3rem' }}>
-            <div>
-                <div style={{ fontSize: '0.75rem', color: 'var(--jt-purple)', fontWeight: 800, marginBottom: '1.5rem', letterSpacing: '2px' }}>[ JOB_REGISTRY_V4 ]</div>
-                <h2 style={{ fontSize: 'clamp(2.5rem, 4vw, 4rem)', fontWeight: 800, letterSpacing: '-2px' }}>Open <span style={{ color: 'var(--jt-purple)' }}>Protocols.</span></h2>
-            </div>
-            <div style={{ display: 'flex', gap: '3rem' }}>
-                <div style={{ textAlign: 'right' }}>
-                    <div style={{ fontSize: '1.5rem', fontWeight: 800 }}>1,240</div>
-                    <div style={{ fontSize: '0.65rem', color: 'var(--jt-text-dim)', fontWeight: 800 }}>ACTIVE_SLOTS</div>
-                </div>
-                <div style={{ textAlign: 'right' }}>
-                    <div style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--jt-purple)' }}>0.01ms</div>
-                    <div style={{ fontSize: '0.65rem', color: 'var(--jt-text-dim)', fontWeight: 800 }}>MATCH_LATENCY</div>
-                </div>
-            </div>
-        </div>
-
-        <div className="jt-job-list">
-          {jobs.map((job, i) => (
-            <JobNexusEntry key={i} {...job} index={i + 1} />
-          ))}
-        </div>
-
-        <div style={{ marginTop: '10rem', textAlign: 'center' }}>
-            <button style={{ background: 'none', border: '1px solid var(--jt-border)', color: 'var(--jt-text-dim)', padding: '1.5rem 6rem', fontWeight: 800, fontSize: '1rem', cursor: 'pointer' }}>
-                INITIALIZE_LOAD_MORE
-            </button>
-        </div>
-      </section>
-
-      <footer style={{ padding: '8rem 6% 4rem', borderTop: '1px solid var(--jt-border)', background: '#000' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '6rem' }}>
-              <div>
-                  <div className="jt-nexus-logo" style={{ fontSize: '2rem', marginBottom: '3rem' }}>CYBERNEXUS</div>
-                  <p style={{ color: 'var(--jt-text-dim)', lineHeight: 2, fontSize: '0.95rem' }}>
-                      The world's first decentralized talent distribution protocol. Verified engineering nodes, 100% data integrity.
-                  </p>
-              </div>
-              {['INFRASTRUCTURE', 'RESOURCES', 'LEGAL'].map(col => (
-                  <div key={col}>
-                      <div style={{ fontSize: '0.75rem', fontWeight: 800, marginBottom: '3rem', color: 'var(--jt-purple)', letterSpacing: '2px' }}>{col}</div>
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                          {['Core Registry', 'Node Status', 'Whitepaper', 'API Documentation'].map(link => (
-                              <span key={link} style={{ color: 'var(--jt-text-dim)', fontSize: '0.85rem', cursor: 'pointer' }}>{link}</span>
-                          ))}
-                      </div>
+      {/* Main Layout */}
+      <div className="jt-layout">
+          {/* Sidebar */}
+          <aside className="jt-sidebar">
+              <div style={{ marginBottom: '2rem' }}>
+                  <h4 className="jt-sidebar-title">Tech Stack</h4>
+                  <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+                      <span className="jt-tag">React</span>
+                      <span className="jt-tag">Vue.js</span>
+                      <span className="jt-tag">Node.js</span>
+                      <span className="jt-tag">Python</span>
+                      <span className="jt-tag">Go</span>
+                      <span className="jt-tag">Rust</span>
+                      <span className="jt-tag">TypeScript</span>
+                      <span className="jt-tag">GraphQL</span>
                   </div>
-              ))}
-          </div>
-          <div style={{ marginTop: '10rem', paddingTop: '4rem', borderTop: '1px solid var(--jt-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '3rem' }}>
-              <div style={{ fontSize: '0.65rem', color: 'var(--jt-text-dim)', fontWeight: 800 }}>© 2026 CYBERNEXUS // CORE_PROTOCOL_STABLE</div>
-              <div style={{ display: 'flex', gap: '4rem' }}>
-                  {['GITHUB', 'DISCORD', 'X_NEXUS'].map(s => (
-                      <span key={s} style={{ fontSize: '0.65rem', color: 'var(--jt-text-dim)', fontWeight: 800 }}>{s}</span>
+              </div>
+
+              <div style={{ marginBottom: '2rem' }}>
+                  <h4 className="jt-sidebar-title">Job Type</h4>
+                  <label style={{ display: 'block', color: 'var(--jt-text-muted)', marginBottom: '0.5rem', cursor: 'pointer', fontSize: '0.9rem' }}><input type="checkbox" defaultChecked /> Full-Time</label>
+                  <label style={{ display: 'block', color: 'var(--jt-text-muted)', marginBottom: '0.5rem', cursor: 'pointer', fontSize: '0.9rem' }}><input type="checkbox" /> Contract</label>
+                  <label style={{ display: 'block', color: 'var(--jt-text-muted)', marginBottom: '0.5rem', cursor: 'pointer', fontSize: '0.9rem' }}><input type="checkbox" /> Freelance</label>
+              </div>
+
+              <div>
+                  <h4 className="jt-sidebar-title">Location</h4>
+                  <label style={{ display: 'block', color: 'var(--jt-text-muted)', marginBottom: '0.5rem', cursor: 'pointer', fontSize: '0.9rem' }}><input type="checkbox" defaultChecked /> Remote Worldwide</label>
+                  <label style={{ display: 'block', color: 'var(--jt-text-muted)', marginBottom: '0.5rem', cursor: 'pointer', fontSize: '0.9rem' }}><input type="checkbox" /> Remote US/CA</label>
+                  <label style={{ display: 'block', color: 'var(--jt-text-muted)', marginBottom: '0.5rem', cursor: 'pointer', fontSize: '0.9rem' }}><input type="checkbox" /> Remote EMEA</label>
+              </div>
+          </aside>
+
+          {/* Job Listings */}
+          <main>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', borderBottom: '1px solid var(--jt-border)', paddingBottom: '1rem' }}>
+                  <div style={{ fontFamily: 'var(--jt-font-mono)', color: 'var(--jt-text-muted)' }}>Found <span className="jt-text-main">342</span> jobs</div>
+                  <select style={{ backgroundColor: 'transparent', border: 'none', color: 'var(--jt-text-main)', fontFamily: 'var(--jt-font-mono)', outline: 'none', cursor: 'pointer' }}>
+                      <option>Latest</option>
+                      <option>Highest Paid</option>
+                      <option>Most Relevant</option>
+                  </select>
+              </div>
+
+              <div className="jt-job-list">
+                  {jobs.map((job, i) => (
+                      <TechJobCard key={i} {...job} />
                   ))}
               </div>
-          </div>
-      </footer>
+              
+              <div style={{ textAlign: 'center', marginTop: '3rem' }}>
+                  <button className="jt-btn jt-btn-outline">./load_more.sh</button>
+              </div>
+          </main>
+      </div>
+
+      <TechFooter />
     </div>
   );
 }

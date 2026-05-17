@@ -3,7 +3,7 @@ import './styles.css';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="jobs-tech-theme">
+    <div className="jobs-tech-wrapper">
       <main>
         {children}
       </main>

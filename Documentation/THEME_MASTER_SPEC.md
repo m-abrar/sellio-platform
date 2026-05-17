@@ -165,6 +165,9 @@ When implementing any of the 50 themes, follow this **Golden Prompt**:
 | `ecommerce_default` | Ecommerce | 100% | High | Refined Retail |
 | `ecommerce_fashion` | Ecommerce | 100% | **Elite** | Editorial Lookbook |
 | `jobs_startup` | Jobs | 100% | **Elite** | Energetic Venture |
+| `jobs_corporate` | Jobs | 100% | **Elite** | Corporate Professional |
+| `jobs_tech` | Jobs | 100% | **Elite** | Developer Terminal |
+| `jobs_freelance` | Jobs | 100% | **Elite** | Creative Gig Economy |
 | `classifieds_premium` | Classifieds | 100% | **Elite** | Elite Curated |
 | `ecommerce_electronics` | Ecommerce | 100% | **Elite** | Futurist Cyber/Tech |
 | `ecommerce_luxury` | Ecommerce | 100% | **Elite** | High-Fidelity Gold/Slate |
