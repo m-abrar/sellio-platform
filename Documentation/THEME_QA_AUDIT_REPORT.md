@@ -68,7 +68,7 @@ Individual QA Audit reports are stored sequentially in the `reports/` directory.
 - **[🏠 Theme 16: `properties/modern`](file:///d:/Sellio/documentation/reports/theme_properties_modern_audit.md) — 🟢 Certified Elite Pass**
 - **[🏠 Theme 17: `properties/neighborhood`](file:///d:/Sellio/documentation/reports/theme_properties_neighborhood_audit.md) — 🟢 Certified Elite Pass**
 - **[🏠 Theme 18: `properties/rental`](file:///d:/Sellio/documentation/reports/theme_properties_rental_audit.md) — 🟢 Certified Elite Pass**
-- [ ] Theme 19: `properties/showcase`
+- **[🏠 Theme 19: `properties/showcase`](file:///d:/Sellio/documentation/reports/theme_properties_showcase_audit.md) — 🟢 Certified Elite Pass**
 - [ ] Theme 20: `properties/unified`
 - [ ] Theme 21: `properties/urban`
 - [ ] Theme 22: `properties/vacation`
