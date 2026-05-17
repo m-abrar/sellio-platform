@@ -1,64 +1,57 @@
 
-/* 
-    Services Local: Pro Local
-    Design Spec: Forest Green, Warm Amber, Friendly & Premium UI
-*/
-
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Nunito:wght@400;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
 
 :root {
-    --local-green: #059669;
-    --local-green-light: #D1FAE5;
-    --local-yellow: #F59E0B;
-    --local-yellow-light: #FEF3C7;
-    --local-navy: #0F172A;
-    --local-bg: #F8FAFC;
-    --local-surface: #FFFFFF;
-    --local-border: #E2E8F0;
-    --local-text: #334155;
-    --font-heading: 'Plus Jakarta Sans', sans-serif;
-    --font-body: 'Nunito', sans-serif;
-    --local-transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    --local-green: #198754;
+    --local-green-dark: #146c43;
+    --local-yellow: #ffc107;
+    --local-yellow-dark: #e0a800;
+    --local-bg: #f8f9fa;
+    --local-surface: #ffffff;
+    --local-border: #dee2e6;
+    --local-text: #212529;
+    --local-text-muted: #6c757d;
+    --font-base: 'Inter', sans-serif;
+    --local-transition: all 0.3s ease;
 }
 
 .services-local-wrapper {
     background-color: var(--local-bg);
     color: var(--local-text);
-    font-family: var(--font-body);
+    font-family: var(--font-base);
     -webkit-font-smoothing: antialiased;
 }
 
 /* Header */
-.neighbor-header {
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(12px);
-    padding: 1.25rem 6%;
+.local-header {
+    background: var(--local-surface);
+    padding: 1rem 5%;
     display: flex;
     justify-content: space-between;
     align-items: center;
     position: sticky;
     top: 0;
     z-index: 1000;
-    border-bottom: 1px solid var(--local-border);
+    box-shadow: 0 2px 4px rgba(0,0,0,.05);
 }
 
 .local-logo {
-    font-family: var(--font-heading);
-    font-weight: 900;
-    font-size: 1.6rem;
-    color: var(--local-navy);
-    letter-spacing: -0.5px;
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--local-green);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .local-nav {
     display: flex;
-    gap: 3.5rem;
+    gap: 2rem;
 }
 
 .local-nav-link {
-    font-family: var(--font-heading);
-    font-size: 0.85rem;
-    font-weight: 700;
+    font-size: 1rem;
+    font-weight: 600;
     color: var(--local-text);
     text-decoration: none;
     transition: var(--local-transition);
@@ -68,103 +61,183 @@
     color: var(--local-green);
 }
 
+/* Buttons */
+.local-btn {
+    border-radius: 50px;
+    font-weight: 600;
+    transition: var(--local-transition);
+    padding: 0.8rem 2rem;
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-base);
+}
+
+.local-btn-primary {
+    background-color: var(--local-yellow);
+    color: var(--local-text);
+}
+
+.local-btn-primary:hover {
+    background-color: var(--local-yellow-dark);
+    transform: translateY(-2px);
+}
+
+.local-btn-outline {
+    background-color: transparent;
+    border: 2px solid white;
+    color: white;
+}
+
+.local-btn-outline:hover {
+    background-color: rgba(255,255,255,0.1);
+    transform: translateY(-2px);
+}
+
 /* Hero */
 .local-hero {
-    padding: 8rem 6% 6rem;
-    background: var(--local-surface);
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1581578731548-c64695cc6958?q=80&w=2070') center center no-repeat;
+    background-size: cover;
+    height: 80vh;
+    color: white;
     display: flex;
     align-items: center;
-    gap: 8rem;
+    justify-content: center;
+    text-align: center;
+    padding: 0 5%;
 }
 
 .local-hero h1 {
-    font-family: var(--font-heading);
-    font-size: clamp(3rem, 6vw, 4.5rem);
-    font-weight: 900;
-    line-height: 1.05;
-    margin-bottom: 2rem;
-    color: var(--local-navy);
-    letter-spacing: -1px;
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: 800;
+    margin-bottom: 1.5rem;
 }
 
-/* Service Cards */
-.pro-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 2.5rem;
-    padding: 6rem 6%;
+.local-hero p {
+    font-size: 1.25rem;
+    margin-bottom: 2.5rem;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-.pro-card {
+/* Filter Bar */
+.local-filter-bar {
     background: var(--local-surface);
-    border: 1px solid var(--local-border);
-    border-radius: 20px;
-    overflow: hidden;
-    transition: var(--local-transition);
+    padding: 1.5rem 5%;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
     position: relative;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+    z-index: 10;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
-.pro-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 40px rgba(5, 150, 105, 0.08);
-    border-color: var(--local-green-light);
+.local-select {
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--local-border);
+    border-radius: 8px;
+    flex: 1;
+    min-width: 200px;
+    font-family: var(--font-base);
 }
 
-.pro-img {
+/* Service Card */
+.local-section {
+    padding: 5rem 5%;
+}
+
+.local-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.local-service-card {
+    background: var(--local-surface);
+    padding: 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,.05);
+    transition: var(--local-transition);
+    border: 1px solid var(--local-border);
+    cursor: pointer;
+    text-align: center;
+}
+
+.local-service-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    border-color: var(--local-yellow);
+}
+
+/* Provider Card */
+.local-provider-card {
+    background: var(--local-surface);
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 5px 15px rgba(0,0,0,.05);
+    transition: var(--local-transition);
+}
+
+.local-provider-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.local-provider-img {
     width: 100%;
-    aspect-ratio: 4/3;
+    height: 200px;
     object-fit: cover;
 }
 
-.pro-info {
-    padding: 1.8rem;
-}
-
-.pro-title {
-    font-family: var(--font-heading);
-    font-size: 1.25rem;
-    font-weight: 800;
-    margin-bottom: 0.5rem;
-    color: var(--local-navy);
-}
-
-.pro-rating {
-    font-size: 0.9rem;
-    font-weight: 800;
-    color: var(--local-yellow);
-    margin-bottom: 1.5rem;
+.local-cta-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 200px;
+    background: rgba(0,0,0,0.5);
     display: flex;
     align-items: center;
-    gap: 0.4rem;
+    justify-content: center;
+    opacity: 0;
+    transition: var(--local-transition);
+}
+
+.local-provider-card:hover .local-cta-overlay {
+    opacity: 1;
+}
+
+/* How It Works */
+.local-step-icon {
+    width: 80px; height: 80px;
+    background: var(--local-yellow);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    margin: 0 auto 1.5rem;
 }
 
 /* Footer */
 .local-footer {
-    padding: 10rem 6% 6rem;
-    background: var(--local-navy);
-    color: white;
+    background: var(--local-surface);
+    border-top: 1px solid var(--local-border);
+    padding: 5rem 5% 2rem;
 }
 
-.local-footer h4 {
-    font-family: var(--font-heading);
-    font-size: 1rem;
-    margin-bottom: 2rem;
-    color: var(--local-green);
-    letter-spacing: 1px;
+.local-footer h6 {
+    font-weight: 700;
+    margin-bottom: 1.5rem;
 }
 
 .local-footer-link {
     display: block;
-    color: rgba(255,255,255,0.6);
+    color: var(--local-text-muted);
     text-decoration: none;
-    margin-bottom: 1rem;
-    font-size: 0.95rem;
-    font-weight: 600;
+    margin-bottom: 0.75rem;
     transition: var(--local-transition);
 }
 
 .local-footer-link:hover {
-    color: white;
-    transform: translateX(5px);
+    color: var(--local-green);
 }

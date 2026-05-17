@@ -1,127 +1,108 @@
-
 'use client';
 import React from 'react';
-import { CreativeServiceCard, StudioHeader, StudioFooter } from './components';
+import { CrtvHeader, CrtvCategoryCard, CrtvCreativeCard, CrtvPortfolioItem, CrtvFooter } from './components';
 
 export default function Page() {
-  const services = [
-    { 
-        title: "Brand Identity Systems", 
-        description: "Architecting the visual DNA of modern luxury through high-fidelity design systems and typography.", 
-        index: "01",
-        image: "https://images.unsplash.com/photo-1634942537034-2531766767d1?q=80&w=2000"
-    },
-    { 
-        title: "Digital Product Design", 
-        description: "Crafting immersive interfaces and experimental digital showrooms for the world's most visionary brands.", 
-        index: "02",
-        image: "https://images.unsplash.com/photo-1558655146-d09347e92766?q=80&w=2000"
-    },
-    { 
-        title: "Motion Architecture", 
-        description: "Defining the kinetic language of brand expression through cinematic rendering and fluid motion.", 
-        index: "03",
-        image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2000"
-    },
-    { 
-        title: "Spatial Experience", 
-        description: "Developing immersive physical and digital environments that redefine the boundaries of interaction.", 
-        index: "04",
-        image: "https://images.unsplash.com/photo-1600607687940-4e7a43f59663?q=80&w=2000"
-    },
-    { 
-        title: "Creative Strategy", 
-        description: "Strategic guidance for institutional storytelling and global platform positioning.", 
-        index: "05",
-        image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2000"
-    },
-    { 
-        title: "The Laboratory", 
-        description: "Exploring the intersection of artistry and emerging technology at the frontier of industry.", 
-        index: "06",
-        image: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=2000"
-    },
+  const categories = [
+    { title: "Graphic Design", rate: "From $100", icon: "🎨" },
+    { title: "Writing & Content", rate: "Copywriting, SEO", icon: "✍️" },
+    { title: "Photography", rate: "Events, Products", icon: "📸" },
+    { title: "Web Development", rate: "Full Stack, CMS", icon: "💻" },
+    { title: "Music & Audio", rate: "Sound Design", icon: "🎵" },
+    { title: "Marketing", rate: "Social Media", icon: "📈" }
+  ];
+
+  const creatives = [
+    { name: "Sophia L.", title: "UX Designer", rating: "5.0", rate: "$50/hr", image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=400" },
+    { name: "David P.", title: "Professional Photographer", rating: "4.8", rate: "$75/hr", image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=400" },
+    { name: "Marco V.", title: "Senior Front-End Dev", rating: "4.9", rate: "$80/hr", image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=400" }
+  ];
+
+  const portfolios = [
+    { title: "Modern UI Kit", category: "Graphic Design", image: "https://images.unsplash.com/photo-1561070791-2526d30994b5?q=80&w=600" },
+    { title: "Brand Identity", category: "Branding", image: "https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?q=80&w=600" },
+    { title: "Urban Photography", category: "Photography", image: "https://images.unsplash.com/photo-1511497584788-876760111969?q=80&w=600" },
+    { title: "SaaS Website", category: "UX/UI Design", image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=600" },
+    { title: "Product Ad Copy", category: "Writing", image: "https://images.unsplash.com/photo-1542435503-956c469947f6?q=80&w=600" },
+    { title: "Mobile App Concept", category: "Development", image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?q=80&w=600" }
   ];
 
   return (
-    <div className="creative-services-wrapper">
-      {/* Editorial Hero */}
-      <section className="studio-hero">
-          <div style={{ color: 'var(--atelier-gold)', fontWeight: 800, letterSpacing: '4px', fontSize: '0.8rem', marginBottom: '3rem' }}>EST. 2026 // GLOBAL DESIGN NODE</div>
-          <h1>The Standard <br/>for Global <br/><span style={{ fontStyle: 'italic' }}>Craft.</span></h1>
-          <div style={{ maxWidth: '700px', marginTop: '6rem' }}>
-              <p>
-                  The Atelier is a collective of visionary designers and spatial architects dedicated to defining the aesthetic standard of the next decade.
-              </p>
-              <button style={{ 
-                  marginTop: '5rem', 
-                  background: 'var(--atelier-black)', 
-                  color: 'white', 
-                  border: 'none', 
-                  padding: '1.8rem 5rem', 
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '0.75rem',
-                  fontWeight: 800,
-                  letterSpacing: '3px',
-                  cursor: 'pointer',
-                  textTransform: 'uppercase'
-              }}>
-                  VIEW PORTFOLIO
-              </button>
+    <div className="services-creative-theme">
+      <CrtvHeader />
+
+      {/* Hero Section */}
+      <section className="crtv-hero">
+        <div className="crtv-hero-overlay"></div>
+        <div className="crtv-hero-content">
+          <h1>Hire Creative Talent Worldwide</h1>
+          <p style={{ fontSize: '1.25rem', marginBottom: '2.5rem', opacity: 0.9 }}>Discover exceptional freelancers for your projects, from design to development.</p>
+          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+            <button className="crtv-btn crtv-btn-gradient" style={{ padding: '1rem 2.5rem', fontSize: '1.1rem' }}>Browse Creatives</button>
+            <button className="crtv-btn crtv-btn-outline" style={{ padding: '1rem 2.5rem', fontSize: '1.1rem' }}>Showcase Your Work</button>
           </div>
+        </div>
       </section>
 
-      {/* Marquee Ticker */}
-      <section style={{ 
-          padding: '2.5rem 0', 
-          background: 'var(--atelier-black)', 
-          color: 'white', 
-          overflow: 'hidden',
-          whiteSpace: 'nowrap',
-          borderY: '1px solid var(--atelier-gold)'
-      }}>
-          <div style={{ display: 'flex', gap: '6rem', fontSize: '0.7rem', fontWeight: 800, letterSpacing: '5px', textTransform: 'uppercase', opacity: 0.8 }}>
-              <span>ELITE CRAFT</span> • <span>SYSTEMIC DESIGN</span> • <span>GLOBAL DISTRIBUTION</span> • <span>HIGH FIDELITY OUTCOMES</span> • <span>LUXURY EXPERIENCE</span> • <span>ELITE CRAFT</span> • <span>SYSTEMIC DESIGN</span>
-          </div>
+      {/* Search Filters */}
+      <section className="crtv-search-bar">
+        <input type="text" className="crtv-search-input" placeholder="Search for skills, creatives, or projects..." style={{ flex: 2 }} />
+        <select className="crtv-select"><option>Category</option></select>
+        <select className="crtv-select"><option>Budget</option></select>
+        <select className="crtv-select"><option>Rating</option></select>
+        <button className="crtv-btn" style={{ background: '#6c757d', color: 'white' }}>Filter</button>
       </section>
 
-      {/* Editorial Grid */}
-      <section style={{ padding: '15rem 0' }}>
-          <div style={{ textAlign: 'center', marginBottom: '10rem', padding: '0 6%' }}>
-              <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(3rem, 6vw, 5rem)', fontWeight: 900 }}>Curated Works</h2>
-          </div>
-          <div className="creative-grid">
-              {services.map((service, i) => (
-                  <CreativeServiceCard key={i} {...service} />
-              ))}
-          </div>
+      {/* Categories */}
+      <section className="crtv-section">
+        <h2 className="crtv-section-title"><span className="gradient-text">Featured Creative Categories</span></h2>
+        <div className="crtv-category-grid">
+          {categories.map((c, i) => (
+            <CrtvCategoryCard key={i} {...c} />
+          ))}
+        </div>
       </section>
 
-      {/* Legacy Spotlight */}
-      <section style={{ padding: '15rem 6%', background: 'white', textAlign: 'center', borderTop: '1px solid var(--atelier-border)' }}>
-          <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
-              <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(2.5rem, 6vw, 6rem)', fontWeight: 900, marginBottom: '5rem', lineHeight: 1.1 }}>
-                  Let's redefine the <br/>boundaries of <span style={{ color: 'var(--atelier-gold)', fontStyle: 'italic' }}>industry.</span>
-              </h2>
-              <p style={{ fontSize: '1.25rem', fontWeight: 300, color: 'rgba(0,0,0,0.5)', marginBottom: '8rem', maxWidth: '700px', margin: '0 auto 8rem' }}>
-                  Our studios are currently accepting institutional inquiries for the 2026/27 cycle. Connect with our principal architects.
-              </p>
-              <button style={{ 
-                  padding: '2.5rem 8rem', 
-                  border: '1px solid var(--atelier-black)', 
-                  background: 'none', 
-                  color: 'var(--atelier-black)', 
-                  fontFamily: 'var(--font-body)', 
-                  fontWeight: 800, 
-                  fontSize: '0.85rem', 
-                  letterSpacing: '5px',
-                  cursor: 'pointer',
-                  textTransform: 'uppercase'
-              }}>
-                  REQUEST ACCESS
-              </button>
-          </div>
+      {/* Top Creatives */}
+      <section className="crtv-section" style={{ background: 'white' }}>
+        <h2 className="crtv-section-title">Meet Our <span className="gradient-text">Top Creatives</span></h2>
+        <div className="crtv-creative-grid">
+          {creatives.map((c, i) => (
+            <CrtvCreativeCard key={i} {...c} />
+          ))}
+        </div>
       </section>
+
+      {/* Portfolio Showcase */}
+      <section className="crtv-section">
+        <h2 className="crtv-section-title"><span className="gradient-text">Inspiring Portfolio Showcase</span></h2>
+        <div className="crtv-masonry">
+          {portfolios.map((p, i) => (
+            <CrtvPortfolioItem key={i} {...p} />
+          ))}
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section className="crtv-section" style={{ background: 'white' }}>
+        <h2 className="crtv-section-title">Trusted by Clients & Creatives</h2>
+        <div style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center', background: 'var(--crtv-bg)', padding: '4rem', borderRadius: '1rem' }}>
+            <div style={{ fontSize: '3rem', marginBottom: '1rem' }} className="gradient-text">"</div>
+            <p style={{ fontSize: '1.25rem', fontStyle: 'italic', marginBottom: '2rem', lineHeight: 1.6 }}>
+                "I found my dream design job here! The platform made it incredibly easy to showcase my UI/UX work and connect with top-tier clients globally. Highly recommended for any serious creative."
+            </p>
+            <p style={{ fontWeight: 800 }}>Josh T., Client <span style={{ color: 'var(--crtv-text)', fontWeight: 400, opacity: 0.7 }}>- Hired a UX Designer</span></p>
+        </div>
+      </section>
+
+      {/* CTA Banner */}
+      <section className="crtv-cta-banner">
+        <h2 style={{ fontSize: '3rem', fontWeight: 900, marginBottom: '1rem' }}>Ready to Hire or Get Hired?</h2>
+        <p style={{ fontSize: '1.25rem', marginBottom: '2.5rem', opacity: 0.9 }}>Join the Creative Community Today and turn your vision into reality.</p>
+        <button className="crtv-btn" style={{ background: 'white', color: '#121212', padding: '1.2rem 3rem', fontSize: '1.1rem' }}>Sign Up Now</button>
+      </section>
+
+      <CrtvFooter />
     </div>
   );
 }

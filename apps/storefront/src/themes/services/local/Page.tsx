@@ -1,86 +1,128 @@
 
+'use client';
 import React from 'react';
-import { ProServiceCard } from './components';
+import { LocalHeader, LocalServiceCard, ProviderCard, LocalFooter } from './components';
 
 export default function Page() {
-  const pros = [
-    { title: "Deep Home Cleaning", rating: "4.9", reviews: "128", image: "https://images.unsplash.com/photo-1581578731548-c64695cc6958?q=80&w=2070", starting: "$80" },
-    { title: "Master Plumbing Node", rating: "4.8", reviews: "256", image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=2070", starting: "$120" },
-    { title: "Precision Gardening", rating: "5.0", reviews: "64", image: "https://images.unsplash.com/photo-1592419044706-39796d40f98c?q=80&w=2000", starting: "$60" },
-    { title: "Elite Math Tutoring", rating: "4.9", reviews: "92", image: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=2070", starting: "$45" },
-    { title: "Smart Home Setup", rating: "4.7", reviews: "42", image: "https://images.unsplash.com/photo-1558002038-103792e01081?q=80&w=2070", starting: "$150" },
-    { title: "Pet Grooming Hub", rating: "4.9", reviews: "184", image: "https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?q=80&w=2071", starting: "$55" },
-    { title: "Local Logistics Node", rating: "4.6", reviews: "310", image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=2070", starting: "$40" },
-    { title: "Interior Design Consult", rating: "5.0", reviews: "15", image: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=2000", starting: "$200" },
+  const services = [
+    { title: "Home Cleaning – From $60", description: "Reliable and thorough cleaning services for homes and apartments. Book weekly or one-time visits.", icon: "🏠" },
+    { title: "Plumbing Repair – From $75", description: "Fast and professional repairs for leaks, clogged drains, and fixture installation.", icon: "🔧" },
+    { title: "Electrical Wiring – Free Quote", description: "Certified electricians for safe installations, repairs, and electrical system upgrades.", icon: "⚡" },
+    { title: "Lawn Care & Gardening", description: "Keep your yard pristine with mowing, trimming, and seasonal planting services.", icon: "🌳" },
+    { title: "HVAC Maintenance", description: "Ensure your heating and cooling systems run efficiently all year long with expert tune-ups.", icon: "🌡️" },
+    { title: "Handyman Services", description: "For all those small jobs: mounting TVs, furniture assembly, patching drywall, and more.", icon: "🔨" }
+  ];
+
+  const providers = [
+    { name: "John D.", title: "Handyman Expert", rating: "4.8", jobs: "120", image: "https://images.unsplash.com/photo-1540569014015-19a7be504e3a?q=80&w=400" },
+    { name: "Sarah K.", title: "Professional Cleaner", rating: "4.9", jobs: "210", image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=400" },
+    { name: "Mike A.", title: "Certified Plumber", rating: "4.7", jobs: "85", image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=400" },
+    { name: "Lisa M.", title: "Lawn & Garden Specialist", rating: "5.0", jobs: "55", image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=400" },
   ];
 
   return (
-    <div>
+    <div className="services-local-wrapper">
+      <LocalHeader />
+
       {/* Hero Section */}
       <section className="local-hero">
-          <div style={{ flex: 1.2 }}>
-              <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 800, fontSize: '0.85rem', color: 'var(--local-green)', letterSpacing: '2px', display: 'block', marginBottom: '1.5rem', textTransform: 'uppercase' }}>Verified Local Experts</span>
-              <h1>Quality service, <br/>just around the corner.</h1>
-              <p style={{ fontSize: '1.25rem', color: 'var(--local-text)', lineHeight: 1.8, marginBottom: '3.5rem', maxWidth: '500px', fontWeight: 500, opacity: 0.8 }}>
-                  Connecting your neighborhood with verified local professionals for everything from cleaning to consulting. 100% satisfaction guaranteed.
-              </p>
-              <div style={{ display: 'flex', gap: '1.5rem' }}>
-                  <button style={{ padding: '1.25rem 3.5rem', background: 'var(--local-green)', color: 'white', border: 'none', borderRadius: '50px', fontWeight: 800, fontSize: '0.95rem', cursor: 'pointer', transition: 'var(--local-transition)' }}>Find a Pro</button>
-                  <button style={{ padding: '1.25rem 3.5rem', background: 'transparent', color: 'var(--local-navy)', border: '2px solid var(--local-border)', borderRadius: '50px', fontWeight: 800, fontSize: '0.95rem', cursor: 'pointer', transition: 'var(--local-transition)' }}>Join as a Pro</button>
-              </div>
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          <h1>Trusted Services for <br/>Your Home & Family</h1>
+          <p>Find background-checked professionals for cleaning, repair, maintenance, and more—all in one place.</p>
+          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+            <button className="local-btn local-btn-primary">Explore Services</button>
+            <button className="local-btn local-btn-outline">Read Testimonials</button>
           </div>
-          <div style={{ flex: 1, position: 'relative' }}>
-              <div style={{ position: 'absolute', top: '-2rem', right: '-2rem', width: '100%', height: '100%', background: 'var(--local-green-light)', borderRadius: '24px', zIndex: 0 }}></div>
-              <img src="https://images.unsplash.com/photo-1521791136368-79c11d73f8f3?q=80&w=2070" alt="Local Professional" style={{ width: '100%', borderRadius: '24px', position: 'relative', zIndex: 1, boxShadow: '0 40px 80px rgba(15, 23, 42, 0.1)' }} />
-          </div>
+        </div>
       </section>
 
-      {/* Trust bar */}
-      <section style={{ padding: '2rem 6%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--local-navy)', color: 'white', fontSize: '0.8rem', fontWeight: 800, letterSpacing: '1px', textTransform: 'uppercase' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><span style={{ color: 'var(--local-green)' }}>✓</span> 100% Verified Professionals</div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><span style={{ color: 'var(--local-green)' }}>✓</span> Secure Local Payments</div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><span style={{ color: 'var(--local-yellow)' }}>★</span> Neighborhood Trust Score: 4.9/5.0</div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><span style={{ color: 'var(--local-green)' }}>✓</span> Instant Booking Ready</div>
+      {/* Filter Bar */}
+      <section className="local-filter-bar">
+        <div style={{ fontWeight: 600, color: 'var(--local-text-muted)', marginRight: '1rem' }}>Quick Filter:</div>
+        <select className="local-select"><option>Service Type</option></select>
+        <select className="local-select"><option>Location (e.g., Zip)</option></select>
+        <select className="local-select"><option>Availability</option></select>
+        <select className="local-select"><option>Price Range</option></select>
+        <button className="local-btn" style={{ background: 'var(--local-green)', color: 'white', border: 'none', flex: 1, minWidth: '150px' }}>Search</button>
       </section>
 
-      {/* Pro Grid */}
-      <section className="pro-grid">
-          {pros.map((pro, i) => (
-              <ProServiceCard key={i} {...pro} />
+      {/* Popular Services */}
+      <section id="services" className="local-section">
+        <h2 style={{ textAlign: 'center', fontWeight: 800, marginBottom: '4rem', fontSize: '2.5rem' }}>Our Popular Services</h2>
+        <div className="local-grid">
+          {services.map((s, i) => (
+            <LocalServiceCard key={i} {...s} />
           ))}
+        </div>
       </section>
 
-      {/* Philosophy Section */}
-      <section style={{ padding: '10rem 6%', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10rem', alignItems: 'center', background: 'var(--local-surface)' }}>
-          <div>
-              <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: '3.5rem', fontWeight: 900, marginBottom: '2.5rem', color: 'var(--local-navy)', letterSpacing: '-1px' }}>Neighbors helping <br/>neighbors.</h2>
-              <p style={{ fontSize: '1.15rem', color: 'var(--local-text)', lineHeight: 1.8, marginBottom: '4rem', fontWeight: 500, opacity: 0.8 }}>
-                  Our local services vertical is built on a foundation of community trust. Every professional is manually verified, ensuring the highest standards of service for your home and family.
-              </p>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3rem' }}>
-                  <div>
-                      <div style={{ fontFamily: 'var(--font-heading)', fontSize: '3rem', fontWeight: 900, color: 'var(--local-green)', letterSpacing: '-1px' }}>1.2k+</div>
-                      <div style={{ fontSize: '0.8rem', fontWeight: 800, color: 'var(--local-text)', opacity: 0.6, letterSpacing: '1px' }}>VERIFIED PROS</div>
-                  </div>
-                  <div>
-                      <div style={{ fontFamily: 'var(--font-heading)', fontSize: '3rem', fontWeight: 900, color: 'var(--local-green)', letterSpacing: '-1px' }}>30min</div>
-                      <div style={{ fontSize: '0.8rem', fontWeight: 800, color: 'var(--local-text)', opacity: 0.6, letterSpacing: '1px' }}>AVG RESPONSE TIME</div>
-                  </div>
-              </div>
-          </div>
-          <div style={{ padding: '5rem', background: 'var(--local-navy)', borderRadius: '24px', position: 'relative', color: 'white' }}>
-              <div style={{ position: 'absolute', top: '-1.5rem', left: '-1.5rem', width: '80px', height: '80px', background: 'var(--local-yellow)', borderRadius: '20px', zIndex: 0 }}></div>
-              <div style={{ position: 'relative', zIndex: 1 }}>
-                  <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '2.2rem', fontWeight: 900, marginBottom: '1.5rem', letterSpacing: '-0.5px' }}>Are you a local expert?</h3>
-                  <p style={{ color: 'rgba(255,255,255,0.7)', lineHeight: 1.8, marginBottom: '3rem', fontSize: '1.05rem', fontWeight: 500 }}>
-                      Grow your business by joining the Pro Local network. Reach thousands of potential clients right in your neighborhood.
-                  </p>
-                  <button style={{ width: '100%', padding: '1.25rem', background: 'var(--local-green)', color: 'white', border: 'none', borderRadius: '50px', fontWeight: 800, fontSize: '0.95rem', cursor: 'pointer', transition: 'var(--local-transition)' }}>
-                      Apply as a Pro
-                  </button>
-              </div>
-          </div>
+      {/* Top Providers */}
+      <section id="providers" className="local-section" style={{ background: 'white' }}>
+        <h2 style={{ textAlign: 'center', fontWeight: 800, marginBottom: '4rem', fontSize: '2.5rem' }}>Meet Our Top-Rated Providers</h2>
+        <div className="local-grid">
+          {providers.map((p, i) => (
+            <ProviderCard key={i} {...p} />
+          ))}
+        </div>
       </section>
+
+      {/* How It Works */}
+      <section className="local-section text-center">
+        <h2 style={{ textAlign: 'center', fontWeight: 800, marginBottom: '4rem', fontSize: '2.5rem' }}>How HomeFix Works in 3 Simple Steps</h2>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '3rem' }}>
+            <div>
+                <div className="local-step-icon">🔍</div>
+                <h4 style={{ fontWeight: 700, marginBottom: '1rem' }}>1. Search & Filter</h4>
+                <p style={{ color: 'var(--local-text-muted)' }}>Easily find the service you need by location, type, and availability using our smart filters.</p>
+            </div>
+            <div>
+                <div className="local-step-icon">📅</div>
+                <h4 style={{ fontWeight: 700, marginBottom: '1rem' }}>2. Book & Confirm</h4>
+                <p style={{ color: 'var(--local-text-muted)' }}>Select a top-rated professional and instantly book a time slot that works for your schedule.</p>
+            </div>
+            <div>
+                <div className="local-step-icon">❤️</div>
+                <h4 style={{ fontWeight: 700, marginBottom: '1rem' }}>3. Relax & Enjoy</h4>
+                <p style={{ color: 'var(--local-text-muted)' }}>A trusted pro arrives, gets the job done right, and you rate your experience. Simple as that!</p>
+            </div>
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section id="testimonials" className="local-section" style={{ background: 'white', textAlign: 'center' }}>
+        <h2 style={{ fontWeight: 800, marginBottom: '4rem', fontSize: '2.5rem' }}>What Our Community Says</h2>
+        <div style={{ maxWidth: '800px', margin: '0 auto', background: 'var(--local-bg)', padding: '4rem', borderRadius: '16px' }}>
+            <div style={{ fontSize: '3rem', color: 'var(--local-yellow)', marginBottom: '1.5rem', lineHeight: 1 }}>"</div>
+            <p style={{ fontStyle: 'italic', fontSize: '1.25rem', marginBottom: '2rem', color: 'var(--local-text-muted)' }}>
+                "The easiest way I've ever found a reliable cleaner! Sarah K. was punctual, professional, and my house sparkled. Highly recommend HomeFix to my neighbors."
+            </p>
+            <p style={{ fontWeight: 700 }}>- Jessica L. (Home Cleaning Client)</p>
+        </div>
+      </section>
+
+      {/* Trust/Safety */}
+      <section className="local-section text-center">
+        <h2 style={{ fontWeight: 800, marginBottom: '4rem', fontSize: '2.5rem' }}>Your Safety is Our Priority</h2>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '2rem' }}>
+            <div style={{ background: 'white', padding: '3rem 2rem', borderRadius: '12px', boxShadow: '0 4px 6px rgba(0,0,0,0.02)' }}>
+                <div style={{ fontSize: '3rem', color: 'var(--local-green)', marginBottom: '1rem' }}>🛡️</div>
+                <h5 style={{ fontWeight: 700, marginBottom: '0.5rem' }}>Background-Checked</h5>
+                <p style={{ color: 'var(--local-text-muted)' }}>Every professional is vetted for your peace of mind.</p>
+            </div>
+            <div style={{ background: 'white', padding: '3rem 2rem', borderRadius: '12px', boxShadow: '0 4px 6px rgba(0,0,0,0.02)' }}>
+                <div style={{ fontSize: '3rem', color: 'var(--local-green)', marginBottom: '1rem' }}>✅</div>
+                <h5 style={{ fontWeight: 700, marginBottom: '0.5rem' }}>Insured & Guaranteed</h5>
+                <p style={{ color: 'var(--local-text-muted)' }}>Workmanship is covered by our service guarantee.</p>
+            </div>
+            <div style={{ background: 'white', padding: '3rem 2rem', borderRadius: '12px', boxShadow: '0 4px 6px rgba(0,0,0,0.02)' }}>
+                <div style={{ fontSize: '3rem', color: 'var(--local-green)', marginBottom: '1rem' }}>📞</div>
+                <h5 style={{ fontWeight: 700, marginBottom: '0.5rem' }}>24/7 Support</h5>
+                <p style={{ color: 'var(--local-text-muted)' }}>Help is always just a call or click away, day or night.</p>
+            </div>
+        </div>
+      </section>
+
+      <LocalFooter />
     </div>
   );
 }
