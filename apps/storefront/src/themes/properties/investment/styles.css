@@ -161,3 +161,122 @@
   color: white;
   padding: 12rem 6% 6rem;
 }
+
+/* Premium Elite Mobile Drawer & Responsive Degradation */
+.pi-mobile-auth-btn {
+  display: none;
+}
+
+.pi-hamburger {
+  display: none;
+}
+
+@media (max-width: 1024px) {
+  .pi-hamburger {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 26px;
+    height: 18px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 1050;
+  }
+
+  .pi-hamburger-bar {
+    width: 100%;
+    height: 2px;
+    background-color: var(--pi-midnight);
+    transition: var(--pi-transition);
+  }
+
+  .pi-hamburger-open .pi-hamburger-bar:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+    background-color: var(--pi-emerald);
+  }
+
+  .pi-hamburger-open .pi-hamburger-bar:nth-child(2) {
+    opacity: 0;
+  }
+
+  .pi-hamburger-open .pi-hamburger-bar:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+    background-color: var(--pi-emerald);
+  }
+
+  .pi-nav {
+    display: flex !important;
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 320px;
+    height: 100vh;
+    background-color: var(--pi-bg);
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2.5rem;
+    padding: 3rem 2rem;
+    transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1040;
+    box-shadow: -15px 0 30px rgba(0,0,0,0.05);
+    border-left: 1px solid var(--pi-border);
+  }
+
+  .pi-nav-open {
+    right: 0;
+  }
+
+  .pi-nav-link {
+    font-size: 1.2rem;
+    color: var(--pi-midnight);
+  }
+
+  .pi-desktop-auth-btn {
+    display: none !important;
+  }
+
+  .pi-mobile-auth-btn {
+    display: block !important;
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Structural Refolding */
+  .pi-section {
+    padding: 4rem 5%;
+  }
+
+  .pi-hero {
+    grid-template-columns: 1fr !important;
+    gap: 4rem !important;
+    padding: 6rem 5% !important;
+  }
+
+  .pi-hero-terminal {
+    padding: 2.5rem !important;
+  }
+
+  /* Asset Grid Refolding */
+  .pi-asset-grid {
+    grid-template-columns: 1fr !important;
+    gap: 2rem !important;
+  }
+
+  /* Intelligence HUD Refolding */
+  .pi-hero-terminal > div:nth-child(2) {
+    grid-template-columns: 1fr !important;
+    gap: 2.5rem !important;
+  }
+
+  /* Bottom CTA */
+  section[style*="background: 'var(--pi-midnight)'"] {
+    padding: 8rem 5% !important;
+  }
+
+  section[style*="background: 'var(--pi-midnight)'"] h2 {
+    font-size: 3.5rem !important;
+  }
+}

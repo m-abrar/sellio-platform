@@ -1,23 +1,41 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 
-export const InvestmentHeader = () => (
-  <header className="pi-header">
-    <div className="pi-logo">
-      YIELD<span style={{ color: 'var(--pi-emerald)' }}>Node</span>
-    </div>
-    
-    <nav className="pi-nav">
-        {['Registry', 'Portfolio_Sync', 'Institutional', 'Master_Auth'].map(link => (
-            <a key={link} href="#" className="pi-nav-link">{link}</a>
-        ))}
-    </nav>
+export const InvestmentHeader = () => {
+  const [isOpen, setIsOpen] = useState(false);
 
-    <div className="pi-mono" style={{ fontSize: '0.6rem', color: 'var(--pi-emerald)' }}>
-      NETWORK_STABLE_V8
-    </div>
-  </header>
-);
+  return (
+    <header className="pi-header">
+      <div className="pi-logo">
+        YIELD<span style={{ color: 'var(--pi-emerald)' }}>Node</span>
+      </div>
+      
+      <button 
+          className={`pi-hamburger ${isOpen ? 'pi-hamburger-open' : ''}`} 
+          onClick={() => setIsOpen(!isOpen)}
+          aria-label="Toggle Navigation"
+      >
+          <span className="pi-hamburger-bar"></span>
+          <span className="pi-hamburger-bar"></span>
+          <span className="pi-hamburger-bar"></span>
+      </button>
+
+      <nav className={`pi-nav ${isOpen ? 'pi-nav-open' : ''}`}>
+          {['Registry', 'Portfolio_Sync', 'Institutional', 'Master_Auth'].map(link => (
+              <a key={link} href="#" className="pi-nav-link" onClick={() => setIsOpen(false)}>{link}</a>
+          ))}
+          
+          <div className="pi-mono pi-mobile-auth-btn" style={{ fontSize: '0.6rem', color: 'var(--pi-emerald)', marginTop: '2rem' }}>
+            NETWORK_STABLE_V8
+          </div>
+      </nav>
+
+      <div className="pi-mono pi-desktop-auth-btn" style={{ fontSize: '0.6rem', color: 'var(--pi-emerald)' }}>
+        NETWORK_STABLE_V8
+      </div>
+    </header>
+  );
+};
 
 export const PortfolioAssetCard = ({ title, yield: yieldVal, price, type, status }: any) => (
   <div className="pi-asset-card">
