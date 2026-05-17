@@ -1,78 +1,79 @@
-
+'use client';
 import React from 'react';
-import { TradeCard } from './components';
+import { BlueCollarHeader, BlueCollarJobCard, BlueCollarFooter } from './components';
 
 export default function Page() {
   const jobs = [
-    { title: "Heavy Equipment Operator", company: "Metro Earthworks", pay: "$35 - $45 / hr", location: "Chicago, IL", type: "Full-Time" },
-    { title: "Structural Welder (Flux-Core)", company: "Skyline Steel", pay: "$40 - $55 / hr", location: "Dallas, TX", type: "Contract" },
-    { title: "Industrial Electrician", company: "PowerGrid Solutions", pay: "$38 - $48 / hr", location: "Detroit, MI", type: "Full-Time" },
-    { title: "Logistics Fleet Manager", company: "SwiftMove Logistics", pay: "$75k - $95k / yr", location: "Atlanta, GA", type: "Full-Time" },
-    { title: "CNC Precision Machinist", company: "Alpha Parts Inc.", pay: "$32 - $42 / hr", location: "Phoenix, AZ", type: "Full-Time" },
-    { title: "Hvac System Specialist", company: "CoolAir Controls", pay: "$35 - $50 / hr", location: "Miami, FL", type: "Full-Time" },
+    { title: "Heavy Equipment Operator", company: "BuildRight Construction", location: "Denver, CO", type: "Full-Time", wage: "$28 - $35/hr", time: "Posted Today" },
+    { title: "Journeyman Electrician", company: "Spark Energy Solutions", location: "Austin, TX", type: "Full-Time", wage: "$35 - $45/hr", time: "1 Day Ago" },
+    { title: "Commercial Plumber", company: "PipeMasters LLC", location: "Chicago, IL", type: "Contract", wage: "$40/hr", time: "2 Days Ago" },
+    { title: "CDL Class A Truck Driver", company: "National Freight Movers", location: "Omaha, NE", type: "Full-Time", wage: "$75,000/yr", time: "3 Days Ago" },
+    { title: "CNC Machinist", company: "Precision Parts Manufacturing", location: "Detroit, MI", type: "Shift Work", wage: "$25 - $30/hr", time: "3 Days Ago" },
+    { title: "HVAC Technician", company: "CoolAir Services", location: "Phoenix, AZ", type: "Full-Time", wage: "$26 - $34/hr", time: "4 Days Ago" },
   ];
 
   return (
-    <div>
-      {/* Hero Section */}
-      <section className="trade-hero">
-          <div className="trade-hero-content">
-              <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: '0.9rem', color: 'var(--trade-orange)', letterSpacing: '2px', display: 'block', marginBottom: '1.5rem' }}>SKILLED_LABOR_PROTOCOL</span>
-              <h1>Build the <br/>Infrastructure.</h1>
-              <p style={{ fontSize: '1.2rem', opacity: 0.6, lineHeight: 1.6, marginBottom: '3.5rem', maxWidth: '600px' }}>
-                  The direct pipeline for skilled trades. No middlemen, no complicated resumes. Just verified experience and industrial-grade opportunities.
-              </p>
-              <div style={{ display: 'flex', gap: '1.5rem' }}>
-                  <button style={{ padding: '1.5rem 4rem', background: 'var(--trade-orange)', color: 'white', border: 'none', fontWeight: 900, fontFamily: 'var(--font-heading)', textTransform: 'uppercase' }}>BROWSE_TRADES</button>
-                  <button style={{ padding: '1.5rem 4rem', background: 'none', color: 'white', border: '2px solid white', fontWeight: 900, fontFamily: 'var(--font-heading)', textTransform: 'uppercase' }}>GET_CERTIFIED</button>
-              </div>
-          </div>
-          <div style={{ flex: 1 }}>
-              <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=2070" alt="Construction Worker" style={{ width: '100%', border: '10px solid #111827', boxShadow: '20px 20px 0 var(--trade-orange)' }} />
+    <div className="jobs-blue-collar-wrapper">
+      <BlueCollarHeader />
+
+      {/* Hero */}
+      <section className="jbc-hero">
+        <div className="jbc-hero-overlay"></div>
+        <div className="jbc-hero-content">
+            <h1 className="jbc-hero-title">Hard Work <span>Pays Off.</span></h1>
+            <p className="jbc-hero-subtitle">Find high-paying jobs in construction, manufacturing, transportation, and skilled trades. No desk required.</p>
+            
+            <div className="jbc-search-box">
+                <input type="text" className="jbc-search-input" placeholder="Job Title or Trade (e.g., Welder)" />
+                <div className="jbc-search-divider"></div>
+                <input type="text" className="jbc-search-input" placeholder="City or ZIP Code" />
+                <button className="jbc-btn jbc-btn-primary" style={{ border: 'none', margin: '4px' }}>Search</button>
+            </div>
+        </div>
+      </section>
+
+      {/* Categories */}
+      <section className="jbc-section" style={{ backgroundColor: 'white' }}>
+          <h2 className="jbc-section-title">Browse By Trade</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '1rem', textAlign: 'center' }}>
+              {['Construction', 'Manufacturing', 'Transportation', 'Maintenance', 'Warehousing', 'Energy'].map(trade => (
+                  <a href="#" key={trade} style={{ padding: '1.5rem 1rem', border: '1px solid var(--jbc-border)', borderRadius: '4px', textDecoration: 'none', color: 'var(--jbc-secondary)', fontWeight: 700, textTransform: 'uppercase', transition: 'var(--jbc-transition)' }} 
+                     onMouseOver={(e) => e.currentTarget.style.borderColor = 'var(--jbc-primary)'}
+                     onMouseOut={(e) => e.currentTarget.style.borderColor = 'var(--jbc-border)'}>
+                      {trade}
+                  </a>
+              ))}
           </div>
       </section>
 
-      {/* Trust bar */}
-      <section style={{ padding: '2rem 5%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#e5e7eb', color: '#374151', fontSize: '0.75rem', fontWeight: 900, letterSpacing: '1px' }}>
-          <span>OSHA_VERIFIED_ROLES</span>
-          <span>GUARANTEED_PAY_CYCLES</span>
-          <span>UNION_FRIENDLY_NODES</span>
-          <span>SKILL_CERTIFICATION_SYNCED</span>
-      </section>
-
-      {/* Trade Grid */}
-      <section className="trade-grid">
-          {jobs.map((job, i) => (
-              <TradeCard key={i} {...job} />
-          ))}
-      </section>
-
-      {/* Industrial CTA */}
-      <section style={{ padding: '10rem 5%', background: '#111827', color: 'white', display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '8rem', alignItems: 'center' }}>
-          <div>
-              <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: '4rem', fontWeight: 700, marginBottom: '2.5rem', textTransform: 'uppercase' }}>Ready to <br/>Move Steel?</h2>
-              <p style={{ color: '#9ca3af', lineHeight: 2, fontSize: '1.1rem', marginBottom: '4rem' }}>
-                  Our industrial nodes are looking for verified talent in construction, manufacturing, and logistics. Join the backbone of the global economy.
-              </p>
-              <ul style={{ listStyle: 'none', padding: 0 }}>
-                  {['Weekly Direct Deposits', 'Safety Protocol Insurance', 'Nodal Relocation Support', 'Career Growth Blueprint'].map(item => (
-                      <li key={item} style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '1rem', fontWeight: 700, color: 'var(--trade-orange)' }}>
-                          <span>[✔]</span> <span style={{ color: 'white' }}>{item.toUpperCase()}</span>
-                      </li>
-                  ))}
-              </ul>
+      {/* Job Grid */}
+      <section className="jbc-section" id="jobs">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '2rem' }}>
+              <h2 className="jbc-section-title" style={{ marginBottom: 0 }}>Latest Openings</h2>
+              <select style={{ padding: '0.5rem', fontWeight: 700, border: '2px solid var(--jbc-border)', outline: 'none' }}>
+                  <option>Most Recent</option>
+                  <option>Highest Wage</option>
+                  <option>Closest to Me</option>
+              </select>
           </div>
-          <div style={{ padding: '5rem', background: 'white', color: 'black', position: 'relative' }}>
-              <div style={{ position: 'absolute', top: '-1rem', left: '-1rem', width: '60px', height: '60px', background: 'var(--trade-orange)' }}></div>
-              <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '2.5rem', fontWeight: 700, marginBottom: '2rem', textTransform: 'uppercase' }}>Join the Union.</h3>
-              <p style={{ color: '#6b7280', lineHeight: 2, marginBottom: '3rem' }}>
-                  Submit your trade experience to the Sellio Industrial network for immediate role matching.
-              </p>
-              <button style={{ width: '100%', padding: '1.5rem', background: '#111827', color: 'white', border: 'none', fontWeight: 900, fontFamily: 'var(--font-heading)', textTransform: 'uppercase' }}>
-                  ACTIVATE_WORKER_NODE
-              </button>
+          
+          <div className="jbc-job-grid">
+              {jobs.map((job, i) => <BlueCollarJobCard key={i} {...job} />)}
+          </div>
+          
+          <div style={{ textAlign: 'center', marginTop: '3rem' }}>
+              <button className="jbc-btn jbc-btn-secondary">Load More Jobs</button>
           </div>
       </section>
+
+      {/* CTA */}
+      <section className="jbc-cta">
+          <h2>Need Workers Fast?</h2>
+          <p style={{ fontSize: '1.2rem', marginBottom: '2rem', fontWeight: 500 }}>Access our database of over 50,000 certified tradespeople ready to start tomorrow.</p>
+          <a href="#employers" className="jbc-btn jbc-btn-primary" style={{ fontSize: '1.25rem', padding: '1rem 3rem' }}>Post Your Job Now</a>
+      </section>
+
+      <BlueCollarFooter />
     </div>
   );
 }

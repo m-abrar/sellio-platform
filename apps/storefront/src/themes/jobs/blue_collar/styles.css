@@ -1,157 +1,286 @@
-/* 
-    Jobs Blue-Collar: The Trade Protocol
-    Design Spec: Safety Orange, Industrial Gray, Direct Utility
-*/
-
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;700&family=Inter:wght@400;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap');
 
 :root {
-    --trade-orange: #f97316;
-    --trade-gray: #4b5563;
-    --trade-bg: #f3f4f6;
-    --trade-border: #d1d5db;
-    --font-heading: 'Roboto Condensed', sans-serif;
-    --font-body: 'Inter', sans-serif;
+    --jbc-bg-main: #f5f5f5;
+    --jbc-bg-card: #ffffff;
+    --jbc-primary: #ffcc00; /* Industrial Yellow */
+    --jbc-secondary: #212121; /* Charcoal/Black */
+    --jbc-accent: #d32f2f; /* Alert Red */
+    --jbc-text-main: #212121;
+    --jbc-text-muted: #757575;
+    --jbc-border: #e0e0e0;
+    --jbc-font: 'Roboto', sans-serif;
+    --jbc-transition: all 0.2s ease;
+    --jbc-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
-.blue-collar-jobs-wrapper {
-    background-color: var(--trade-bg);
-    color: var(--trade-gray);
-    font-family: var(--font-body);
+.jobs-blue-collar-wrapper {
+    background-color: var(--jbc-bg-main);
+    font-family: var(--jbc-font);
+    color: var(--jbc-text-main);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
 }
+
+/* Utilities */
+.jbc-text-primary { color: var(--jbc-primary); }
+.jbc-text-secondary { color: var(--jbc-secondary); }
 
 /* Header */
-.utility-nav {
-    background: #111827;
-    padding: 1.25rem 5%;
+.jbc-header {
+    background-color: var(--jbc-secondary);
+    color: white;
+    padding: 1rem 5%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
+    border-bottom: 4px solid var(--jbc-primary);
 }
 
-.trade-logo {
-    font-family: var(--font-heading);
-    font-weight: 700;
-    font-size: 1.5rem;
-    color: var(--trade-orange);
+.jbc-logo {
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: white;
+    text-decoration: none;
     text-transform: uppercase;
     letter-spacing: 1px;
 }
 
-.trade-nav-links {
-    display: flex;
-    gap: 3rem;
+.jbc-logo span {
+    color: var(--jbc-primary);
 }
 
-.trade-nav-link {
-    font-family: var(--font-heading);
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: #9ca3af;
+.jbc-nav {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+}
+
+.jbc-nav-link {
+    color: white;
+    font-weight: 500;
     text-decoration: none;
     text-transform: uppercase;
-    transition: color 0.3s ease;
+    font-size: 0.9rem;
+    transition: var(--jbc-transition);
 }
 
-.trade-nav-link:hover {
+.jbc-nav-link:hover {
+    color: var(--jbc-primary);
+}
+
+/* Buttons */
+.jbc-btn {
+    font-family: var(--jbc-font);
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    text-transform: uppercase;
+    cursor: pointer;
+    text-align: center;
+    border: 2px solid transparent;
+    transition: var(--jbc-transition);
+    text-decoration: none;
+    display: inline-block;
+}
+
+.jbc-btn-primary {
+    background-color: var(--jbc-primary);
+    color: var(--jbc-secondary);
+}
+
+.jbc-btn-primary:hover {
+    background-color: #ffd633;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(255, 204, 0, 0.3);
+}
+
+.jbc-btn-secondary {
+    background-color: var(--jbc-secondary);
     color: white;
+    border-color: var(--jbc-secondary);
 }
 
-/* Hero */
-.trade-hero {
+.jbc-btn-secondary:hover {
+    background-color: #333333;
+}
+
+/* Hero Section */
+.jbc-hero {
+    background: url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=2070') no-repeat center center/cover;
+    position: relative;
     padding: 6rem 5%;
-    background: #1f2937;
-    color: white;
     display: flex;
     align-items: center;
-    gap: 6rem;
 }
 
-.trade-hero-content {
-    flex: 1.2;
+.jbc-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(33, 33, 33, 0.75);
 }
 
-.trade-hero h1 {
-    font-family: var(--font-heading);
-    font-size: 5rem;
-    font-weight: 700;
-    line-height: 0.9;
-    margin-bottom: 2rem;
+.jbc-hero-content {
+    position: relative;
+    z-index: 2;
+    color: white;
+    max-width: 600px;
+}
+
+.jbc-hero-title {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 900;
     text-transform: uppercase;
+    line-height: 1.1;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
 }
 
-/* Trade Cards */
-.trade-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
+.jbc-hero-title span {
+    color: var(--jbc-primary);
+}
+
+.jbc-hero-subtitle {
+    font-size: 1.25rem;
+    margin-bottom: 2rem;
+    font-weight: 400;
+}
+
+/* Search Bar */
+.jbc-search-box {
+    display: flex;
+    flex-wrap: wrap;
+    background-color: white;
+    padding: 0.5rem;
+    border-radius: 4px;
+    box-shadow: var(--jbc-shadow);
+}
+
+.jbc-search-input {
+    flex: 1;
+    min-width: 200px;
+    border: none;
+    padding: 1rem;
+    font-size: 1rem;
+    font-family: var(--jbc-font);
+    outline: none;
+}
+
+.jbc-search-divider {
+    width: 2px;
+    background-color: var(--jbc-border);
+    margin: 0.5rem 0;
+}
+
+/* Main Layout */
+.jbc-section {
     padding: 4rem 5%;
 }
 
-.trade-card {
-    background: white;
-    border: 2px solid var(--trade-border);
-    padding: 2.5rem;
-    display: flex;
-    flex-direction: column;
-    transition: border-color 0.3s ease;
-}
-
-.trade-card:hover {
-    border-color: var(--trade-orange);
-}
-
-.trade-title {
-    font-family: var(--font-heading);
+.jbc-section-title {
     font-size: 2rem;
-    font-weight: 700;
+    font-weight: 900;
     text-transform: uppercase;
-    margin-bottom: 0.5rem;
-    color: #111827;
+    color: var(--jbc-secondary);
+    margin-bottom: 2rem;
+    border-left: 6px solid var(--jbc-primary);
+    padding-left: 1rem;
 }
 
-.trade-company {
+/* Job Cards */
+.jbc-job-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+}
+
+.jbc-job-card {
+    background-color: var(--jbc-bg-card);
+    border: 2px solid var(--jbc-border);
+    border-radius: 4px;
+    padding: 1.5rem;
+    transition: var(--jbc-transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.jbc-job-card:hover {
+    border-color: var(--jbc-secondary);
+    box-shadow: var(--jbc-shadow);
+    transform: translateY(-2px);
+}
+
+.jbc-job-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 6px;
+    height: 100%;
+    background-color: var(--jbc-primary);
+}
+
+.jbc-job-title {
+    font-size: 1.4rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: var(--jbc-secondary);
+    margin-bottom: 0.25rem;
+}
+
+.jbc-job-company {
     font-weight: 700;
-    color: var(--trade-orange);
+    color: var(--jbc-text-muted);
+    margin-bottom: 1rem;
+    font-size: 1rem;
+}
+
+.jbc-job-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
     margin-bottom: 1.5rem;
 }
 
-.trade-meta {
+.jbc-meta-item {
     display: flex;
-    gap: 2rem;
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: #6b7280;
-    margin-bottom: 2.5rem;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    background-color: var(--jbc-bg-main);
+    padding: 0.25rem 0.5rem;
+    border-radius: 2px;
+}
+
+.jbc-wage {
+    font-size: 1.25rem;
+    font-weight: 900;
+    color: #2e7d32; /* Green for money */
+}
+
+/* Call to Action */
+.jbc-cta {
+    background-color: var(--jbc-secondary);
+    color: white;
+    padding: 4rem 5%;
+    text-align: center;
+    border-top: 6px solid var(--jbc-primary);
+    border-bottom: 6px solid var(--jbc-primary);
+    margin: 4rem 0;
+}
+
+.jbc-cta h2 {
+    font-size: 2.5rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
 }
 
 /* Footer */
-.industrial-footer {
-    padding: 8rem 5%;
-    background: #111827;
+.jbc-footer {
+    background-color: #111111;
     color: white;
-}
-
-.industrial-footer h4 {
-    font-family: var(--font-heading);
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-bottom: 2.5rem;
-    color: var(--trade-orange);
-}
-
-.industrial-footer-link {
-    display: block;
-    color: #4b5563;
-    text-decoration: none;
-    margin-bottom: 1.25rem;
-    font-size: 0.95rem;
-}
-
-.industrial-footer-link:hover {
-    color: white;
+    padding: 4rem 5% 2rem;
 }

@@ -1,174 +1,339 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
 
 :root {
-  --jm-primary: #3b82f6;
-  --jm-primary-glow: rgba(59, 130, 246, 0.5);
-  --jm-bg: #f8fafc;
-  --jm-card-bg: rgba(255, 255, 255, 0.8);
-  --jm-border: rgba(226, 232, 240, 0.8);
-  --jm-text: #0f172a;
-  --jm-text-dim: #64748b;
-  --jm-radius: 32px;
-  --jm-font-main: 'Inter', sans-serif;
-  --jm-font-display: 'Outfit', sans-serif;
+    --jm-bg-main: #f8fafc;
+    --jm-bg-card: rgba(255, 255, 255, 0.7);
+    --jm-primary: #8b5cf6; /* Violet */
+    --jm-secondary: #ec4899; /* Pink */
+    --jm-text-main: #0f172a;
+    --jm-text-muted: #64748b;
+    --jm-border: rgba(255, 255, 255, 0.5);
+    --jm-font: 'Outfit', sans-serif;
+    --jm-transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    --jm-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
+    --jm-shadow-hover: 0 20px 40px -10px rgba(139, 92, 246, 0.15);
 }
 
-.jm-wrapper {
-  background-color: var(--jm-bg);
-  color: var(--jm-text);
-  font-family: var(--jm-font-main);
-  min-height: 100vh;
+.jobs-modern-wrapper {
+    background-color: var(--jm-bg-main);
+    background-image: 
+        radial-gradient(at 0% 0%, rgba(139, 92, 246, 0.15) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(236, 72, 153, 0.15) 0px, transparent 50%);
+    background-attachment: fixed;
+    font-family: var(--jm-font);
+    color: var(--jm-text-main);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Utilities */
+.jm-glass {
+    background-color: var(--jm-bg-card);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--jm-border);
+    box-shadow: var(--jm-shadow);
+}
+
+.jm-text-gradient {
+    background: linear-gradient(135deg, var(--jm-primary), var(--jm-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Header */
+.jm-header-container {
+    padding: 1.5rem 5%;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
 .jm-header {
-  position: sticky;
-  top: 2rem;
-  left: 5%;
-  width: 90%;
-  height: 80px;
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(16px);
-  border: 1px solid var(--jm-border);
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 3rem;
-  z-index: 1000;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    border-radius: 100px;
+}
+
+.jm-logo {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--jm-text-main);
+    text-decoration: none;
+    letter-spacing: -0.5px;
+}
+
+.jm-nav {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
 }
 
 .jm-nav-link {
-  font-weight: 600;
-  color: var(--jm-text-dim);
-  text-decoration: none;
-  transition: color 0.3s ease;
-  font-size: 0.95rem;
+    color: var(--jm-text-muted);
+    font-weight: 500;
+    text-decoration: none;
+    transition: var(--jm-transition);
 }
 
 .jm-nav-link:hover {
-  color: var(--jm-primary);
+    color: var(--jm-text-main);
 }
 
-.jm-hero {
-  padding: 10rem 5% 5rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-
-.jm-hero h1 {
-  font-family: var(--jm-font-display);
-  font-size: 5.5rem;
-  font-weight: 800;
-  letter-spacing: -2px;
-  line-height: 1.1;
-  margin-bottom: 2.5rem;
-}
-
-.jm-hero h1 span {
-  color: var(--jm-primary);
-  position: relative;
-}
-
-.jm-hero h1 span::after {
-  content: '';
-  position: absolute;
-  bottom: 10px;
-  left: 0;
-  width: 100%;
-  height: 8px;
-  background: var(--jm-primary-glow);
-  z-index: -1;
-  border-radius: 4px;
-}
-
-.jm-bento-grid {
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  grid-auto-rows: minmax(200px, auto);
-  gap: 2rem;
-  padding: 0 5% 10rem;
-}
-
-.jm-card {
-  background: var(--jm-card-bg);
-  backdrop-filter: blur(12px);
-  border: 1px solid var(--jm-border);
-  border-radius: var(--jm-radius);
-  padding: 2.5rem;
-  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  overflow: hidden;
-}
-
-.jm-card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 30px 60px rgba(59, 130, 246, 0.1);
-  border-color: var(--jm-primary);
-}
-
-.jm-job-card {
-  grid-column: span 4;
-}
-
-.jm-stat-card {
-  grid-column: span 3;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.jm-featured-card {
-  grid-column: span 6;
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-  color: white;
-}
-
-.jm-featured-card .jm-text-dim {
-  color: rgba(255, 255, 255, 0.7);
+/* Buttons */
+.jm-btn {
+    font-family: var(--jm-font);
+    font-weight: 600;
+    padding: 0.8rem 1.8rem;
+    border-radius: 100px;
+    transition: var(--jm-transition);
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
 }
 
 .jm-btn-primary {
-  background: var(--jm-primary);
-  color: white;
-  padding: 1rem 2.5rem;
-  border-radius: 16px;
-  font-weight: 700;
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-family: var(--jm-font-display);
+    background: linear-gradient(135deg, var(--jm-primary), var(--jm-secondary));
+    color: white;
 }
 
 .jm-btn-primary:hover {
-  background: #2563eb;
-  box-shadow: 0 10px 20px var(--jm-primary-glow);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 10px 20px rgba(139, 92, 246, 0.3);
+}
+
+.jm-btn-outline {
+    background-color: transparent;
+    border: 2px solid var(--jm-primary);
+    color: var(--jm-primary);
+}
+
+.jm-btn-outline:hover {
+    background-color: var(--jm-primary);
+    color: white;
+}
+
+/* Hero Section */
+.jm-hero {
+    padding: 5rem 5% 8rem;
+    text-align: center;
+}
+
+.jm-hero-badge {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border-radius: 100px;
+    background-color: white;
+    color: var(--jm-primary);
+    font-weight: 600;
+    font-size: 0.85rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--jm-shadow);
+}
+
+.jm-hero-title {
+    font-size: clamp(3.5rem, 7vw, 5.5rem);
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    letter-spacing: -2px;
+}
+
+.jm-hero-subtitle {
+    font-size: 1.25rem;
+    color: var(--jm-text-muted);
+    max-width: 600px;
+    margin: 0 auto 3rem;
+    line-height: 1.6;
+}
+
+/* Search Bar */
+.jm-search-box {
+    display: flex;
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 0.5rem;
+    border-radius: 100px;
+    background-color: white;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+}
+
+.jm-search-input {
+    flex: 1;
+    border: none;
+    padding: 1rem 1.5rem;
+    font-size: 1.1rem;
+    font-family: var(--jm-font);
+    outline: none;
+    background: transparent;
+    color: var(--jm-text-main);
+}
+
+.jm-search-divider {
+    width: 1px;
+    background-color: #e2e8f0;
+    margin: 0.5rem 0;
+}
+
+/* Job Cards Grid */
+.jm-section {
+    padding: 4rem 5%;
+}
+
+.jm-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3rem;
+}
+
+.jm-section-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    letter-spacing: -1px;
+}
+
+.jm-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 2rem;
+}
+
+.jm-job-card {
+    border-radius: 24px;
+    padding: 2rem;
+    transition: var(--jm-transition);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.jm-job-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--jm-shadow-hover);
+    border-color: rgba(139, 92, 246, 0.3);
+}
+
+.jm-company-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.jm-company-logo {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: var(--jm-shadow);
+    overflow: hidden;
+}
+
+.jm-company-logo img {
+    max-width: 70%;
+    max-height: 70%;
+    object-fit: contain;
+}
+
+.jm-company-name {
+    font-weight: 600;
+    color: var(--jm-text-muted);
+}
+
+.jm-job-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.jm-job-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
 }
 
 .jm-tag {
-  background: rgba(59, 130, 246, 0.1);
-  color: var(--jm-primary);
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+    padding: 0.4rem 1rem;
+    border-radius: 100px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    background-color: rgba(15, 23, 42, 0.05);
+    color: var(--jm-text-main);
 }
 
-.jm-progress-container {
-  width: 100%;
-  height: 6px;
-  background: rgba(226, 232, 240, 0.5);
-  border-radius: 3px;
-  margin-top: 1.5rem;
-  overflow: hidden;
+.jm-job-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(0,0,0,0.05);
 }
 
-.jm-progress-bar {
-  height: 100%;
-  background: var(--jm-primary);
-  border-radius: 3px;
+.jm-salary {
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--jm-primary);
+}
+
+.jm-apply-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--jm-text-main);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    cursor: pointer;
+    transition: var(--jm-transition);
+}
+
+.jm-job-card:hover .jm-apply-btn {
+    background-color: var(--jm-primary);
+    transform: rotate(-45deg);
+}
+
+/* Promo Stats Section */
+.jm-stats {
+    display: flex;
+    justify-content: center;
+    gap: 4rem;
+    padding: 4rem 5%;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+}
+
+.jm-stat-item {
+    text-align: center;
+}
+
+.jm-stat-number {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+}
+
+.jm-stat-label {
+    color: var(--jm-text-muted);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Footer */
+.jm-footer {
+    padding: 6rem 5% 2rem;
+    margin-top: 4rem;
 }

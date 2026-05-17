@@ -168,6 +168,8 @@ When implementing any of the 50 themes, follow this **Golden Prompt**:
 | `jobs_corporate` | Jobs | 100% | **Elite** | Corporate Professional |
 | `jobs_tech` | Jobs | 100% | **Elite** | Developer Terminal |
 | `jobs_freelance` | Jobs | 100% | **Elite** | Creative Gig Economy |
+| `jobs_blue_collar` | Jobs | 100% | **Elite** | Industrial Trades |
+| `jobs_modern` | Jobs | 100% | **Elite** | Glassmorphic Startups |
 | `classifieds_premium` | Classifieds | 100% | **Elite** | Elite Curated |
 | `ecommerce_electronics` | Ecommerce | 100% | **Elite** | Futurist Cyber/Tech |
 | `ecommerce_luxury` | Ecommerce | 100% | **Elite** | High-Fidelity Gold/Slate |
