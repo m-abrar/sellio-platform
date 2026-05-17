@@ -1,41 +1,70 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 
-export const MapHeader = () => (
-  <header style={{ 
-    height: '80px', 
-    background: 'var(--pm-obsidian)', 
-    borderBottom: '1px solid var(--pm-border)', 
-    display: 'flex', 
-    justifyContent: 'space-between', 
-    alignItems: 'center', 
-    padding: '0 2rem' 
-  }}>
-    <div style={{ fontFamily: 'var(--pm-font-heading)', fontWeight: 800, fontSize: '1.25rem', letterSpacing: '-1px' }}>
-      MAP<span style={{ color: 'var(--pm-gold)' }}>NEXUS</span>
-    </div>
-    
-    <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '100px', padding: '0.5rem 2rem', display: 'flex', gap: '2rem' }}>
-        {['SATELLITE', 'TERRAIN', 'INFRASTRUCTURE'].map(mode => (
-            <span key={mode} style={{ fontSize: '0.65rem', fontWeight: 800, letterSpacing: '2px', cursor: 'pointer', opacity: mode === 'SATELLITE' ? 1 : 0.4 }}>
-                {mode}
-            </span>
-        ))}
-    </div>
+export const MapHeader = () => {
+  const [isOpen, setIsOpen] = useState(false);
 
-    <button style={{ 
-        background: 'var(--pm-gold)', 
-        color: 'var(--pm-obsidian)', 
-        padding: '0.6rem 1.5rem', 
-        borderRadius: '100px', 
-        border: 'none', 
-        fontWeight: 800, 
-        fontSize: '0.75rem' 
+  return (
+    <header className="pm-header" style={{ 
+      height: '80px', 
+      background: 'var(--pm-obsidian)', 
+      borderBottom: '1px solid var(--pm-border)', 
+      display: 'flex', 
+      justifyContent: 'space-between', 
+      alignItems: 'center', 
+      padding: '0 2rem' 
     }}>
-      ACCESS_REGISTRY
-    </button>
-  </header>
-);
+      <div style={{ fontFamily: 'var(--pm-font-heading)', fontWeight: 800, fontSize: '1.25rem', letterSpacing: '-1px', zIndex: 1100 }}>
+        MAP<span style={{ color: 'var(--pm-gold)' }}>NEXUS</span>
+      </div>
+      
+      <button 
+          className={`pm-hamburger ${isOpen ? 'pm-hamburger-open' : ''}`} 
+          onClick={() => setIsOpen(!isOpen)}
+          aria-label="Toggle Navigation"
+      >
+          <span className="pm-hamburger-bar"></span>
+          <span className="pm-hamburger-bar"></span>
+          <span className="pm-hamburger-bar"></span>
+      </button>
+
+      <nav className={`pm-nav ${isOpen ? 'pm-nav-open' : ''}`}>
+        <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '100px', padding: '0.5rem 2rem', display: 'flex', gap: '2rem' }}>
+            {['SATELLITE', 'TERRAIN', 'INFRASTRUCTURE'].map(mode => (
+                <span key={mode} style={{ fontSize: '0.65rem', fontWeight: 800, letterSpacing: '2px', cursor: 'pointer', opacity: mode === 'SATELLITE' ? 1 : 0.4 }}>
+                    {mode}
+                </span>
+            ))}
+        </div>
+
+        <button className="pm-mobile-auth-btn" style={{ 
+            background: 'var(--pm-gold)', 
+            color: 'var(--pm-obsidian)', 
+            padding: '0.8rem 2rem', 
+            borderRadius: '100px', 
+            border: 'none', 
+            fontWeight: 800, 
+            fontSize: '0.75rem',
+            marginTop: '2rem'
+        }}>
+          ACCESS_REGISTRY
+        </button>
+      </nav>
+
+      <button className="pm-desktop-auth-btn" style={{ 
+          background: 'var(--pm-gold)', 
+          color: 'var(--pm-obsidian)', 
+          padding: '0.6rem 1.5rem', 
+          borderRadius: '100px', 
+          border: 'none', 
+          fontWeight: 800, 
+          fontSize: '0.75rem' 
+      }}>
+        ACCESS_REGISTRY
+      </button>
+    </header>
+  );
+};
 
 export const MapListCard = ({ price, address, beds, baths, sqft, image }: any) => (
   <div className="pm-list-card">

@@ -4,12 +4,12 @@ import { MapListCard, MapPriceMarker, MapHUD } from './components';
 
 export default function Page() {
   const listings = [
-    { price: "$1,250,000", address: "142 E 16th St, New York, NY", beds: 2, baths: 1, sqft: "1,150", image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070" },
-    { price: "$2,800,000", address: "55 Water St, New York, NY", beds: 3, baths: 2, sqft: "2,200", image: "https://images.unsplash.com/photo-1600607687940-c52af096999a?q=80&w=2070" },
-    { price: "$950,000", address: "300 Albany St, New York, NY", beds: 1, baths: 1, sqft: "850", image: "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?q=80&w=2070" },
-    { price: "$4,500,000", address: "10 CPW, New York, NY", beds: 4, baths: 3, sqft: "3,100", image: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=2071" },
-    { price: "$1,100,000", address: "88 Greenwich St, New York, NY", beds: 2, baths: 2, sqft: "1,200", image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2070" },
-    { price: "$1,850,000", address: "420 West End Ave, NY", beds: 2, baths: 2, sqft: "1,450", image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2070" },
+    { price: "$1,250,000", address: "142 E 16th St, New York, NY", beds: 2, baths: 1, sqft: "1,150", image: "/themes/properties/map/1.webp" },
+    { price: "$2,800,000", address: "55 Water St, New York, NY", beds: 3, baths: 2, sqft: "2,200", image: "/themes/properties/map/2.webp" },
+    { price: "$950,000", address: "300 Albany St, New York, NY", beds: 1, baths: 1, sqft: "850", image: "/themes/properties/map/3.webp" },
+    { price: "$4,500,000", address: "10 CPW, New York, NY", beds: 4, baths: 3, sqft: "3,100", image: "/themes/properties/map/4.webp" },
+    { price: "$1,100,000", address: "88 Greenwich St, New York, NY", beds: 2, baths: 2, sqft: "1,200", image: "/themes/properties/map/5.webp" },
+    { price: "$1,850,000", address: "420 West End Ave, NY", beds: 2, baths: 2, sqft: "1,450", image: "/themes/properties/map/6.webp" },
   ];
 
   return (

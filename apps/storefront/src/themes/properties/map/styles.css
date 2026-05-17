@@ -156,3 +156,105 @@
   letter-spacing: 2px;
   margin-bottom: 0.5rem;
 }
+
+/* Premium Elite Mobile Drawer & Responsive Degradation */
+.pm-mobile-auth-btn {
+  display: none;
+}
+
+.pm-hamburger {
+  display: none;
+}
+
+@media (max-width: 1024px) {
+  .pm-hamburger {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 26px;
+    height: 18px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 1050;
+  }
+
+  .pm-hamburger-bar {
+    width: 100%;
+    height: 2px;
+    background-color: white;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .pm-hamburger-open .pm-hamburger-bar:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+    background-color: var(--pm-gold);
+  }
+
+  .pm-hamburger-open .pm-hamburger-bar:nth-child(2) {
+    opacity: 0;
+  }
+
+  .pm-hamburger-open .pm-hamburger-bar:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+    background-color: var(--pm-gold);
+  }
+
+  .pm-nav {
+    display: flex !important;
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 320px;
+    height: 100vh;
+    background-color: var(--pm-obsidian);
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2.5rem;
+    padding: 3rem 2rem;
+    transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 1040;
+    box-shadow: -15px 0 30px rgba(0,0,0,0.5);
+    border-left: 1px solid var(--pm-border);
+  }
+
+  .pm-nav-open {
+    right: 0;
+  }
+
+  .pm-desktop-auth-btn {
+    display: none !important;
+  }
+
+  .pm-mobile-auth-btn {
+    display: block !important;
+    width: 100%;
+    text-align: center;
+  }
+
+  .pm-nav > div {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  /* Structural Refolding: Dual-Pane to Stacked */
+  .map-page-wrapper {
+    height: auto !important;
+    min-height: 100vh;
+  }
+
+  .split-view-container {
+    flex-direction: column !important;
+  }
+
+  .pm-sidebar {
+    width: 100% !important;
+    height: 50vh !important;
+  }
+
+  .pm-map-canvas {
+    height: 50vh !important;
+  }
+}
