@@ -1,23 +1,41 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 
-export const Header = () => (
-  <header className="pl-header">
-    <div className="pl-logo">
-      PLATINUM<span style={{ color: 'var(--pl-gold)' }}>Registry</span>
-    </div>
-    
-    <nav className="pl-nav">
-        {['Collection', 'Insights', 'Concierge', 'Private_Auth'].map(link => (
-            <a key={link} href="#" className="pl-nav-link">{link}</a>
-        ))}
-    </nav>
+export const Header = () => {
+  const [isOpen, setIsOpen] = useState(false);
 
-    <div className="pl-mono" style={{ color: 'white', border: '1px solid var(--pl-border)', padding: '0.6rem 1.5rem', borderRadius: '4px' }}>
-      ACCESS_SECURE_NODE
-    </div>
-  </header>
-);
+  return (
+    <header className="pl-header">
+      <div className="pl-logo">
+        PLATINUM<span style={{ color: 'var(--pl-gold)' }}>Registry</span>
+      </div>
+      
+      <button 
+          className={`pl-hamburger ${isOpen ? 'pl-hamburger-open' : ''}`} 
+          onClick={() => setIsOpen(!isOpen)}
+          aria-label="Toggle Navigation"
+      >
+          <span className="pl-hamburger-bar"></span>
+          <span className="pl-hamburger-bar"></span>
+          <span className="pl-hamburger-bar"></span>
+      </button>
+
+      <nav className={`pl-nav ${isOpen ? 'pl-nav-open' : ''}`}>
+          {['Collection', 'Insights', 'Concierge', 'Private_Auth'].map(link => (
+              <a key={link} href="#" className="pl-nav-link" onClick={() => setIsOpen(false)}>{link}</a>
+          ))}
+          
+          <div className="pl-mono pl-mobile-auth-btn" style={{ color: 'white', border: '1px solid var(--pl-border)', padding: '0.8rem 2rem', borderRadius: '4px', marginTop: '2rem' }}>
+            ACCESS_SECURE_NODE
+          </div>
+      </nav>
+
+      <div className="pl-mono pl-desktop-auth-btn" style={{ color: 'white', border: '1px solid var(--pl-border)', padding: '0.6rem 1.5rem', borderRadius: '4px' }}>
+        ACCESS_SECURE_NODE
+      </div>
+    </header>
+  );
+};
 
 export const ShowcaseCard = ({ title, price, image, span }: any) => (
   <div className={`pl-bento-card pl-${span}`}>

@@ -174,3 +174,135 @@
 .pl-span-4 { grid-column: span 4; height: 500px; }
 .pl-span-8 { grid-column: span 8; height: 500px; }
 .pl-span-12 { grid-column: span 12; height: 400px; }
+
+/* Premium Elite Mobile Drawer & Responsive Degradation */
+.pl-mobile-auth-btn {
+  display: none;
+}
+
+.pl-hamburger {
+  display: none;
+}
+
+@media (max-width: 1024px) {
+  .pl-hamburger {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 26px;
+    height: 18px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 1050;
+  }
+
+  .pl-hamburger-bar {
+    width: 100%;
+    height: 2px;
+    background-color: white;
+    transition: var(--pl-transition);
+  }
+
+  .pl-hamburger-open .pl-hamburger-bar:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+    background-color: var(--pl-gold);
+  }
+
+  .pl-hamburger-open .pl-hamburger-bar:nth-child(2) {
+    opacity: 0;
+  }
+
+  .pl-hamburger-open .pl-hamburger-bar:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+    background-color: var(--pl-gold);
+  }
+
+  .pl-nav {
+    display: flex !important;
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 320px;
+    height: 100vh;
+    background-color: #111;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2.5rem;
+    padding: 3rem 2rem;
+    transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 1040;
+    box-shadow: -15px 0 30px rgba(0,0,0,0.5);
+    border-left: 1px solid var(--pl-border);
+  }
+
+  .pl-nav-open {
+    right: 0;
+  }
+
+  .pl-nav-link {
+    font-size: 1.2rem;
+    color: white;
+  }
+
+  .pl-desktop-auth-btn {
+    display: none !important;
+  }
+
+  .pl-mobile-auth-btn {
+    display: block !important;
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Structural Refolding */
+  .pl-section {
+    padding: 4rem 5%;
+  }
+
+  .pl-hero {
+    padding: 6rem 5% !important;
+    height: auto !important;
+    min-height: 80vh;
+  }
+
+  .pl-hero h1 {
+    font-size: 4rem !important;
+  }
+
+  /* Bento Grid Refolding */
+  .pl-bento-grid {
+    grid-template-columns: 1fr !important;
+    gap: 2rem !important;
+  }
+
+  .pl-span-4, .pl-span-8, .pl-span-12 {
+    grid-column: span 1 !important;
+    height: 350px !important;
+  }
+
+  .pl-bento-overlay {
+    padding: 1.5rem !important;
+  }
+
+  .pl-bento-overlay h3 {
+    font-size: 1.5rem !important;
+  }
+
+  .pl-bento-overlay div {
+    font-size: 1rem !important;
+  }
+
+  .pl-footer-grid {
+    grid-template-columns: 1fr !important;
+    gap: 3rem !important;
+  }
+
+  section[style*="gridTemplateColumns"] {
+    grid-template-columns: 1fr !important;
+    gap: 4rem !important;
+    padding: 6rem 5% !important;
+  }
+}
