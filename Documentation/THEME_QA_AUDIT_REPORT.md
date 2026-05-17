@@ -30,6 +30,7 @@ Every theme is subjected to the following 20-point inspection criteria across 5 
 - [ ] **Semantic HTML5**: Are proper landmark tags used (`<header>`, `<main>`, `<section>`) instead of generic `<div>` soup?
 - [ ] **Component Granularity**: Are complex pages broken down into manageable chunks inside `components/index.tsx`?
 - [ ] **Next.js Compatibility**: Is the `'use client';` directive included where interactive states exist?
+- [ ] **SEO & Unique IDs**: Does the page contain a unique, highly descriptive `<h1>` title tag, proper page heading structures, and descriptive interactive IDs/attributes?
 
 ### 🌐 5. Live Browser & Subagent Verification (DYNAMIC TESTING)
 - [ ] **Console Health**: Are there zero runtime React errors, hydration mismatches, or missing key warnings in the browser console?
@@ -41,17 +42,13 @@ Every theme is subjected to the following 20-point inspection criteria across 5 
 ---
 
 ## 🔍 Detailed Audit Logs
+Individual QA Audit reports are stored sequentially in the `reports/` directory.
 
-### 🚗 Theme 1: `autos/classic`
-*Static Analysis Only.*
-| Audit Category | Status | Detailed Findings & Technical Notes |
-| :--- | :--- | :--- |
-| **Blueprint Fidelity** | 🟡 *Upgraded* | Upgraded to Deep Burgundy (`#800020`) and Gold (`#D4AF37`) for 'Premium Vintage Dealership' archetype. |
-| **Structural Porting** | ✅ Pass | Legacy 3-column grid and sidebar filters successfully ported. Live auction countdowns retained. |
-| **UI/UX Aesthetics** | ✅ Pass | Excellent dual-font setup: `Playfair Display` (serif) & `Inter`. Cards use `transform: translateY(-5px) scale(1.02)`. |
-| **Architectural Siloing** | ✅ Pass | Verified 100% compliance. All classes are scoped with `.ac-`. Zero external imports. |
-| **Code Quality** | ✅ Pass | `<section>` semantic tags used perfectly. `'use client';` explicitly defined. |
-| **Browser Subagent Testing** | ⚪ *Pending* | *(Theme was statically audited before subagent protocol was enforced).* |
+- [🚗 Theme 1: `autos/classic`](file:///d:/Sellio/documentation/reports/theme_autos_classic_audit.md)
+- [🚗 Theme 2: `autos/electric`](file:///d:/Sellio/documentation/reports/theme_autos_electric_audit.md)
+- [🚗 Theme 3: `autos/luxury`](file:///d:/Sellio/documentation/reports/theme_autos_luxury_audit.md)
+- [🚗 Theme 4: `autos/used`](file:///d:/Sellio/documentation/reports/theme_autos_used_audit.md)
+- [🚗 Theme 5: `autos/modern`](file:///d:/Sellio/documentation/reports/theme_autos_modern_audit.md)
 
 ---
-*Next Theme to be Audited with Browser Agent: `autos/electric`*
+*Next Theme to be Audited with Browser Agent: `ecommerce/default`*
