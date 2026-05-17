@@ -5,12 +5,12 @@ import { EstateCard, FilterSidebar } from './components';
 
 export default function Page() {
   const estates = [
-    { title: "The Pemberley Manor", price: "$14,200,000", location: "Hertfordshire, UK", year: "1815", image: "https://images.unsplash.com/photo-1518780664697-55e3ad937233?q=80&w=2070", isFeatured: true },
-    { title: "Florentine Palazzo", price: "$22,500,000", location: "Florence, Italy", year: "1540", image: "https://images.unsplash.com/photo-1528909514045-2fa4ac7a08ba?q=80&w=2070" },
-    { title: "Colonial River Estate", price: "$8,900,000", location: "Virginia, USA", year: "1742", image: "https://images.unsplash.com/photo-1449156001533-cb39c8524490?q=80&w=2070" },
-    { title: "Loire Valley Chateau", price: "$35,000,000", location: "Loire, France", year: "1620", image: "https://images.unsplash.com/photo-1505912469419-f76eb1424430?q=80&w=2070", isFeatured: true },
-    { title: "Scottish Highland Castle", price: "$12,400,000", location: "Inverness, Scotland", year: "1480", image: "https://images.unsplash.com/photo-1533154683836-84ea7a0bc310?q=80&w=2069" },
-    { title: "Bavarian Hunting Lodge", price: "$6,500,000", location: "Bavaria, Germany", year: "1895", image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2070" },
+    { title: "The Pemberley Manor", price: "$14,200,000", location: "Hertfordshire, UK", year: "1815", image: "/themes/properties/classic/1.webp", isFeatured: true },
+    { title: "Florentine Palazzo", price: "$22,500,000", location: "Florence, Italy", year: "1540", image: "/themes/properties/classic/2.webp" },
+    { title: "Colonial River Estate", price: "$8,900,000", location: "Virginia, USA", year: "1742", image: "/themes/properties/classic/3.webp" },
+    { title: "Loire Valley Chateau", price: "$35,000,000", location: "Loire, France", year: "1620", image: "/themes/properties/classic/4.webp", isFeatured: true },
+    { title: "Scottish Highland Castle", price: "$12,400,000", location: "Inverness, Scotland", year: "1480", image: "/themes/properties/classic/5.webp" },
+    { title: "Bavarian Hunting Lodge", price: "$6,500,000", location: "Bavaria, Germany", year: "1895", image: "/themes/properties/classic/6.webp" },
   ];
 
   return (
@@ -18,7 +18,7 @@ export default function Page() {
       {/* Cinematic Parallax Hero */}
       <section className="pc-hero">
         <div className="pc-hero-bg">
-          <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2070" alt="Classic Estate" />
+          <img src="/themes/properties/classic/7.webp" alt="Classic Estate" />
         </div>
         
         <div className="pc-hero-card">
