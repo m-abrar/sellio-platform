@@ -1,84 +1,87 @@
-
+'use client';
 import React from 'react';
-import { LocalAdCard } from './components';
+import { LocalHeader, LocalCard, LocalFooter } from './components';
 
 export default function Page() {
-  const ads = [
-    { title: "Gently Used Coffee Table", price: "$45", location: "Maplewood", category: "Furniture", image: "https://images.unsplash.com/photo-1533090161767-e6ffed986c88?q=80&w=2070" },
-    { title: "Bicycle Maintenance Workshop", price: "Free", location: "Community Center", category: "Events", image: "https://images.unsplash.com/photo-1485965120184-e220f721d03e?q=80&w=2070" },
-    { title: "Moving Sale - Books & Kitchen", price: "Varies", location: "Highland Park", category: "For Sale", image: "https://images.unsplash.com/photo-1530018607912-eff2df114fbe?q=80&w=2070" },
-    { title: "Lost Golden Retriever - 'Buddy'", price: "Reward", location: "Riverside", category: "Lost & Found", image: "https://images.unsplash.com/photo-1552053831-71594a27632d?q=80&w=2000" },
-    { title: "Organic Garden Veggies", price: "$5 / lb", location: "Green Valley", category: "Food", image: "https://images.unsplash.com/photo-1592419044706-39796d40f98c?q=80&w=2000" },
-    { title: "Babysitting Services", price: "$20 / hr", location: "Downtown", category: "Wanted", image: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=2070" },
-    { title: "Vintage Record Player", price: "$120", location: "West Side", category: "Electronics", image: "https://images.unsplash.com/photo-1511467687858-23d96c32e4ae?q=80&w=2070" },
-    { title: "Garage Sale - This Saturday", price: "Multi", location: "East End", category: "Events", image: "https://images.unsplash.com/photo-1472851294608-062f824d29cc?q=80&w=2070" },
+  const categories = [
+    { name: "All Nearby", active: true },
+    { name: "🆓 Free Stuff", active: false },
+    { name: "🏡 Home & Garden", active: false },
+    { name: "🧸 Kids & Baby", active: false },
+    { name: "🚲 Bikes & Outdoor", active: false },
+    { name: "🐾 Pet Supplies", active: false },
+    { name: "🏷️ Garage Sales", active: false },
+  ];
+
+  const localItems = [
+    { title: "Like-New Trek Mountain Bike", price: "$350", distance: "0.8", neighborhood: "Capitol Hill", image: "https://images.unsplash.com/photo-1532298229144-0ec0c57515c7?q=80&w=400", sellerInitials: "JS" },
+    { title: "Wooden Dining Table + 4 Chairs", price: "$150", distance: "1.2", neighborhood: "First Hill", image: "https://images.unsplash.com/photo-1604578762246-41134e37f9cc?q=80&w=400", sellerInitials: "ML" },
+    { title: "Box of Baby Clothes (0-6 months)", price: "Free", distance: "0.3", neighborhood: "Capitol Hill", image: "https://images.unsplash.com/photo-1522771930-78848d92871d?q=80&w=400", sellerInitials: "AB" },
+    { title: "Monstera Deliciosa Plant (Large)", price: "$40", distance: "2.1", neighborhood: "Queen Anne", image: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?q=80&w=400", sellerInitials: "RT" },
+    { title: "IKEA Kallax Shelf Unit", price: "$45", distance: "1.5", neighborhood: "Belltown", image: "https://images.unsplash.com/photo-1595514535115-d52fdfbc3075?q=80&w=400", sellerInitials: "KD" },
+    { title: "Moving Sale - Sunday 9am", price: "Varies", distance: "0.5", neighborhood: "Capitol Hill", image: "https://images.unsplash.com/photo-1555529733-0e670560f7e1?q=80&w=400", sellerInitials: "EW" },
   ];
 
   return (
-    <div>
-      {/* Hero Section */}
-      <section className="local-hero">
-          <div style={{ flex: 1.2 }}>
-              <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 800, color: 'var(--local-orange)', letterSpacing: '2px', display: 'block', marginBottom: '1.5rem' }}>COMMUNITY_DISTRIBUTION_NODE</span>
-              <h1>Your neighborhood, <br/>connected.</h1>
-              <p style={{ fontSize: '1.25rem', color: '#64748b', lineHeight: 1.6, marginBottom: '3.5rem', maxWidth: '500px' }}>
-                  The high-fidelity hub for everything happening in your community. Sell your items, find local events, and connect with your neighbors.
-              </p>
-              <div style={{ display: 'flex', gap: '1.5rem' }}>
-                  <button style={{ padding: '1.25rem 3.5rem', background: 'var(--local-orange)', color: 'white', border: 'none', borderRadius: '50px', fontWeight: 800, fontFamily: 'var(--font-heading)' }}>POST_AN_AD</button>
-                  <button style={{ padding: '1.25rem 3.5rem', background: 'white', color: '#1e293b', border: '1px solid #ddd', borderRadius: '50px', fontWeight: 800, fontFamily: 'var(--font-heading)' }}>BROWSE_MAP</button>
+    <div className="classifieds-local-wrapper">
+      <LocalHeader />
+
+      {/* Hero / Map */}
+      <section className="cl-hero">
+          <div className="cl-hero-content">
+              <h1 className="cl-hero-title">Discover what's selling right down the street.</h1>
+              <p className="cl-hero-subtitle">Connect with verified neighbors to buy, sell, and trade locally.</p>
+              
+              <div className="cl-search-box">
+                  <input type="text" className="cl-search-input" placeholder="Search for bikes, furniture, free items..." />
+                  <button className="cl-btn-primary" style={{ padding: '0.8rem 2rem' }}>Search</button>
               </div>
           </div>
-          <div style={{ flex: 1 }}>
-              <img src="https://images.unsplash.com/photo-1516738901171-8eb4fc13bd20?q=80&w=2070" alt="Neighborhood Street" style={{ width: '100%', borderRadius: '24px', boxShadow: '40px 40px 80px rgba(0,0,0,0.05)' }} />
+          <div className="cl-hero-map d-none d-md-block">
+              <div className="cl-map-overlay"></div>
+              {/* Mock Map Markers */}
+              <div className="cl-map-marker" style={{ top: '30%', left: '40%' }}>$350</div>
+              <div className="cl-map-marker" style={{ top: '60%', left: '70%' }}>$150</div>
+              <div className="cl-map-marker" style={{ top: '45%', left: '55%', backgroundColor: 'var(--cl-secondary)' }}>Free</div>
+              <div className="cl-map-marker" style={{ top: '80%', left: '30%' }}>$40</div>
+              <div className="cl-map-marker" style={{ top: '20%', left: '80%' }}>$45</div>
           </div>
       </section>
 
-      {/* Community Bar */}
-      <section style={{ padding: '2.5rem 5%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#fff', borderBottom: '1px solid var(--local-border)' }}>
-          <div style={{ display: 'flex', gap: '3rem' }}>
-              {['Maplewood', 'Highland Park', 'Riverside', 'Green Valley', 'Downtown'].map(area => (
-                  <span key={area} style={{ fontSize: '0.9rem', fontWeight: 800, color: '#94a3b8', cursor: 'pointer' }}>{area.toUpperCase()}</span>
+      {/* Categories */}
+      <div className="cl-categories">
+          {categories.map(cat => (
+              <a href="#" key={cat.name} className={`cl-cat-pill ${cat.active ? 'active' : ''}`}>{cat.name}</a>
+          ))}
+      </div>
+
+      {/* Local Feed */}
+      <section className="cl-section">
+          <div className="cl-section-header">
+              <h2 className="cl-section-title">
+                  <span style={{ fontSize: '2rem' }}>👋</span> Fresh in your neighborhood
+              </h2>
+              <select style={{ padding: '0.5rem 1rem', borderRadius: '50px', border: '1px solid var(--cl-border)', fontFamily: 'var(--cl-font)', fontWeight: 700, outline: 'none' }}>
+                  <option>Distance: Nearest First</option>
+                  <option>Newly Listed</option>
+                  <option>Price: Low to High</option>
+              </select>
+          </div>
+          
+          <div className="cl-grid">
+              {localItems.map((item, i) => (
+                  <LocalCard key={i} {...item} />
               ))}
           </div>
-          <div style={{ fontSize: '0.8rem', fontWeight: 800, color: 'var(--local-orange)' }}>LIVE_ALERTS: 12_NEW_ADS</div>
-      </section>
 
-      {/* Ad Grid */}
-      <section className="ad-grid">
-          {ads.map((ad, i) => (
-              <LocalAdCard key={i} {...ad} />
-          ))}
-      </section>
-
-      {/* Community Story Section */}
-      <section style={{ padding: '10rem 5%', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10rem', alignItems: 'center', background: 'var(--local-cream)' }}>
-          <div>
-              <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: '3.5rem', fontWeight: 900, marginBottom: '2.5rem' }}>Built by the <br/>neighborhood.</h2>
-              <p style={{ fontSize: '1.1rem', color: '#64748b', lineHeight: 2, marginBottom: '4rem' }}>
-                  Our local classifieds vertical is more than just a marketplace. It is a community distribution protocol designed to strengthen local ties and promote neighborly exchange.
-              </p>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3rem' }}>
-                  <div>
-                      <div style={{ fontSize: '2.5rem', fontWeight: 900, color: 'var(--local-orange)' }}>500+</div>
-                      <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#94a3b8' }}>LOCAL_MEETUPS</div>
-                  </div>
-                  <div>
-                      <div style={{ fontSize: '2.5rem', fontWeight: 900, color: 'var(--local-orange)' }}>$0</div>
-                      <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#94a3b8' }}>PLATFORM_FEES</div>
-                  </div>
-              </div>
-          </div>
-          <div style={{ padding: '4rem', background: 'white', borderRadius: '24px', boxShadow: '0 20px 50px rgba(0,0,0,0.05)' }}>
-              <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.8rem', fontWeight: 900, marginBottom: '2rem' }}>Safety first.</h3>
-              <p style={{ color: '#94a3b8', lineHeight: 2, marginBottom: '3rem' }}>
-                  We use verified neighbor nodes to ensure every listing and interaction is safe and reliable. Join the most trusted local network today.
-              </p>
-              <button style={{ width: '100%', padding: '1.5rem', background: '#1e293b', color: 'white', border: 'none', borderRadius: '50px', fontWeight: 900, fontFamily: 'var(--font-heading)' }}>
-                  CREATE_COMMUNITY_ACCOUNT
+          <div style={{ textAlign: 'center', marginTop: '4rem' }}>
+              <button className="cl-btn-primary" style={{ backgroundColor: 'white', color: 'var(--cl-secondary)', border: '2px solid var(--cl-secondary)' }}>
+                  Expand Search Radius (+5 mi)
               </button>
           </div>
       </section>
+
+      <LocalFooter />
     </div>
   );
 }
