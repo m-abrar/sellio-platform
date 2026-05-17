@@ -1,70 +1,72 @@
+
 'use client';
 import React from 'react';
 
 export const CorporateHeader = () => (
   <header className="sc-header">
     <div className="sc-logo">
-      INSTITUTIONAL<span style={{ color: 'var(--sc-blue)', fontWeight: 400 }}>Hub</span>
+      SELLIO<span style={{ color: 'var(--sc-accent)', fontWeight: 400 }}>ADVISORY</span>
     </div>
     
     <nav className="sc-nav">
-        {['Solutions', 'Governance', 'Intelligence', 'Partner_Auth'].map(link => (
-            <a key={link} href="#" className="sc-nav-link">{link}</a>
+        {['Solutions', 'Governance', 'Intelligence', 'Network'].map(link => (
+            <a key={link} href="#" className="sc-nav-link" style={{ color: 'var(--sc-text)', opacity: 0.6 }}>{link}</a>
         ))}
     </nav>
 
-    <div className="sc-mono" style={{ fontSize: '0.65rem', border: '1px solid var(--sc-border)', padding: '0.5rem 2.5rem' }}>
-      SYSTEM_INTEGRITY_LEVEL_01
+    <div style={{ display: 'flex', gap: '3rem', alignItems: 'center' }}>
+        <button style={{ background: 'transparent', border: 'none', color: 'var(--sc-text)', fontWeight: 800, fontSize: '0.8rem', letterSpacing: '2px', cursor: 'pointer' }}>LOGIN</button>
+        <button className="sc-btn-primary" style={{ padding: '0.8rem 2.5rem', fontSize: '0.75rem' }}>GET ADVICE</button>
     </div>
   </header>
 );
 
 export const ServiceNodeCard = ({ title, description, icon }: any) => (
   <div className="sc-service-card">
-    <div className="sc-icon">{icon}</div>
-    <div className="sc-mono" style={{ marginBottom: '1.5rem', fontSize: '0.55rem' }}>PROTOCOL_NODE</div>
-    <h3 style={{ fontSize: '1.75rem', fontWeight: 900, marginBottom: '2rem', lineHeight: 1.1 }}>{title}</h3>
-    <p style={{ color: 'var(--sc-grey)', lineHeight: 1.8, fontSize: '1rem', marginBottom: '4rem' }}>{description}</p>
+    <div className="sc-icon" style={{ filter: 'grayscale(1) brightness(2)' }}>{icon}</div>
+    <div className="sc-subheading" style={{ marginBottom: '1.5rem', fontSize: '0.6rem' }}>EXECUTIVE SERVICE</div>
+    <h3 style={{ fontSize: '2rem', fontFamily: 'var(--sc-font-heading)', fontWeight: 900, marginBottom: '2rem', lineHeight: 1.1 }}>{title}</h3>
+    <p style={{ color: 'var(--sc-text-dim)', lineHeight: 1.8, fontSize: '1rem', marginBottom: '4rem', fontWeight: 300 }}>{description}</p>
     
     <div style={{ borderTop: '1px solid var(--sc-border)', paddingTop: '2.5rem' }}>
-        <div style={{ fontSize: '0.75rem', fontWeight: 900, color: 'var(--sc-blue)', letterSpacing: '2px' }}>INITIALIZE_ADVISORY →</div>
+        <div style={{ fontSize: '0.75rem', fontWeight: 900, color: 'var(--sc-accent)', letterSpacing: '2px' }}>LEARN MORE →</div>
     </div>
   </div>
 );
 
 export const OperationalHUD = ({ label, value, sub }: { label: string, value: string, sub: string }) => (
-    <div style={{ padding: '3.5rem', background: 'var(--sc-frost)', border: '1px solid var(--sc-border)' }}>
-        <div className="sc-mono" style={{ marginBottom: '2rem' }}>{label}</div>
-        <div style={{ fontSize: '4rem', fontWeight: 900, color: 'var(--sc-navy)', marginBottom: '1.5rem', letterSpacing: '-3px' }}>{value}</div>
-        <div style={{ fontSize: '0.9rem', color: 'var(--sc-grey)', fontWeight: 600 }}>{sub}</div>
+    <div style={{ padding: '4rem', background: 'var(--sc-surface)', border: '1px solid var(--sc-border)', borderRadius: '8px' }}>
+        <div className="sc-subheading" style={{ marginBottom: '2.5rem' }}>{label}</div>
+        <div style={{ fontSize: '4.5rem', fontWeight: 900, color: 'white', marginBottom: '1.5rem', letterSpacing: '-2px', fontFamily: 'var(--sc-font-heading)' }}>{value}</div>
+        <div style={{ fontSize: '0.9rem', color: 'var(--sc-text-dim)', fontWeight: 400, lineHeight: 1.6 }}>{sub}</div>
     </div>
 );
 
 export const EnterpriseFooter = () => (
-    <footer className="sc-footer">
-        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: '10rem' }}>
+    <footer className="sc-footer" style={{ background: '#080E1E' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10rem' }}>
             <div>
                 <div className="sc-logo" style={{ color: 'white', fontSize: '2.5rem', marginBottom: '3.5rem' }}>SELLIO</div>
-                <p style={{ opacity: 0.4, lineHeight: 2, fontSize: '1.1rem', maxWidth: '450px' }}>
-                    The world's most advanced distribution node for institutional services. Synchronizing enterprise strategy with global industrial nodes.
+                <p style={{ color: 'var(--sc-text-dim)', lineHeight: 2, fontSize: '1.1rem', maxWidth: '450px', fontWeight: 300 }}>
+                    The world's most advanced distribution node for institutional services. Synchronizing enterprise strategy with global excellence.
                 </p>
             </div>
             {['SOLUTIONS', 'GOVERNANCE', 'NETWORK'].map(col => (
                 <div key={col}>
-                    <div className="sc-mono" style={{ color: 'var(--sc-blue)', marginBottom: '4rem' }}>{col}</div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                        {['Strategy', 'Logistics', 'Security', 'Auth'].map(link => (
-                            <span key={link} style={{ fontSize: '1rem', opacity: 0.4, cursor: 'pointer' }}>{link}</span>
+                    <div className="sc-subheading" style={{ color: 'var(--sc-accent)', marginBottom: '4rem' }}>{col}</div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+                        {['Institutional Strategy', 'Supply Chain Logic', 'Risk & Compliance', 'Digital Transformation'].map(link => (
+                            <span key={link} style={{ fontSize: '0.95rem', color: 'var(--sc-text-dim)', cursor: 'pointer', transition: 'all 0.3s ease' }}>{link}</span>
                         ))}
                     </div>
                 </div>
             ))}
         </div>
-        <div style={{ marginTop: '12rem', paddingTop: '4rem', borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <div className="sc-mono" style={{ opacity: 0.2, fontSize: '0.65rem' }}>© 2026 SELLIO_INSTITUTIONAL_HUB // ISO_STABLE</div>
-            <div style={{ display: 'flex', gap: '6rem' }}>
-                {['INSTAGRAM', 'LINKEDIN', 'X_SELLIO'].map(social => (
-                    <span key={social} className="sc-mono" style={{ opacity: 0.2, fontSize: '0.65rem' }}>{social}</span>
+        <div style={{ marginTop: '12rem', paddingTop: '4rem', borderTop: '1px solid var(--sc-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '4rem' }}>
+            <div style={{ color: 'var(--sc-text-dim)', fontSize: '0.75rem', fontWeight: 800, letterSpacing: '2px' }}>© 2026 SELLIO ADVISORY HUB // GLOBAL COMPLIANCE</div>
+            <div style={{ display: 'flex', gap: '4rem' }}>
+                {['LINKEDIN', 'X', 'CRUNCHBASE'].map(social => (
+                    <span key={social} style={{ color: 'var(--sc-accent)', fontSize: '0.7rem', fontWeight: 900, letterSpacing: '2px', cursor: 'pointer' }}>{social}</span>
                 ))}
             </div>
         </div>

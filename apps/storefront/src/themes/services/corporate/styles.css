@@ -1,46 +1,45 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&display=swap');
 
 .services-corporate-theme {
-  /* Enterprise Node Palette */
-  --sc-navy: #0f172a;
-  --sc-blue: #1e40af;
-  --sc-slate: #334155;
-  --sc-white: #ffffff;
-  --sc-frost: #f8fafc;
-  --sc-border: #e2e8f0;
-  --sc-grey: #64748b;
+  /* Executive Elite Palette */
+  --sc-bg: #0F172A;
+  --sc-surface: #1E293B;
+  --sc-accent: #10B981;
+  --sc-accent-soft: rgba(16, 185, 129, 0.1);
+  --sc-text: #F8FAFC;
+  --sc-text-dim: #94A3B8;
+  --sc-border: rgba(255, 255, 255, 0.05);
   
   /* Typography */
-  --sc-font: 'Inter', sans-serif;
-  --sc-alt: 'Space Grotesk', sans-serif;
+  --sc-font-heading: 'Playfair Display', serif;
+  --sc-font-body: 'Inter', sans-serif;
   
   /* Transitions */
-  --sc-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --sc-transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .services-corporate-theme {
-  background-color: var(--sc-white);
-  color: var(--sc-navy);
-  font-family: var(--sc-font);
+  background-color: var(--sc-bg);
+  color: var(--sc-text);
+  font-family: var(--sc-font-body);
   -webkit-font-smoothing: antialiased;
 }
 
-/* Typography Utilities */
 .sc-heading-xl {
-  font-size: clamp(3.5rem, 8vw, 8rem);
+  font-family: var(--sc-font-heading);
+  font-size: clamp(3rem, 10vw, 9rem);
   font-weight: 900;
-  line-height: 1;
-  letter-spacing: -0.04em;
-  color: var(--sc-navy);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
 }
 
-.sc-mono {
-  font-family: var(--sc-alt);
-  font-size: 0.75rem;
+.sc-subheading {
+  font-family: var(--sc-font-body);
+  font-size: 0.7rem;
   font-weight: 800;
-  letter-spacing: 3px;
+  letter-spacing: 5px;
   text-transform: uppercase;
-  color: var(--sc-blue);
+  color: var(--sc-accent);
 }
 
 /* Layout */
@@ -56,7 +55,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: white;
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--sc-border);
   position: sticky;
   top: 0;
@@ -64,10 +64,10 @@
 }
 
 .sc-logo {
+  font-family: var(--sc-font-heading);
   font-weight: 900;
-  font-size: 1.5rem;
+  font-size: 2rem;
   letter-spacing: -1px;
-  color: var(--sc-navy);
 }
 
 .sc-nav {
@@ -119,18 +119,26 @@
 }
 
 .sc-service-card {
-  background: white;
+  background: var(--sc-surface);
   border: 1px solid var(--sc-border);
-  padding: 4rem;
+  padding: 5rem 4rem;
   transition: var(--sc-transition);
   cursor: pointer;
   position: relative;
+  border-radius: 8px;
 }
 
 .sc-service-card:hover {
-  border-color: var(--sc-blue);
-  transform: translateY(-10px);
-  box-shadow: 0 30px 60px rgba(15, 23, 42, 0.05);
+  border-color: var(--sc-accent);
+  transform: translateY(-8px);
+  box-shadow: 0 40px 100px rgba(16, 185, 129, 0.05);
+}
+
+.sc-exec-img-wrapper {
+  position: relative;
+  border: 1px solid var(--sc-border);
+  border-radius: 4px;
+  overflow: hidden;
 }
 
 .sc-icon {
@@ -141,20 +149,22 @@
 
 /* Buttons */
 .sc-btn-primary {
-  background: var(--sc-navy);
-  color: white;
+  background: var(--sc-accent);
+  color: var(--sc-bg);
   border: none;
-  padding: 1.5rem 4.5rem;
-  font-weight: 900;
-  font-size: 0.9rem;
-  border-radius: 4px;
+  padding: 1.8rem 5rem;
+  font-weight: 800;
+  font-size: 0.85rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
   cursor: pointer;
   transition: var(--sc-transition);
+  border-radius: 2px;
 }
 
 .sc-btn-primary:hover {
-  background: var(--sc-blue);
-  box-shadow: 0 15px 30px rgba(30, 64, 175, 0.2);
+  background: white;
+  box-shadow: 0 20px 40px rgba(16, 185, 129, 0.2);
 }
 
 /* Footer */

@@ -5,15 +5,19 @@ interface CreativeServiceCardProps {
     title: string;
     description: string;
     index: string;
+    image?: string;
 }
 
-export const CreativeServiceCard = ({ title, description, index }: CreativeServiceCardProps) => (
+export const CreativeServiceCard = ({ title, description, index, image }: CreativeServiceCardProps) => (
     <div className="creative-card">
-        <span className="creative-card-index">{index}</span>
+        <div className="creative-image-wrapper">
+            <img src={image || 'https://images.unsplash.com/photo-1634942537034-2531766767d1?q=80&w=2000'} alt={title} />
+        </div>
+        <span className="creative-card-index">{index} / NETWORK</span>
         <h3 className="creative-card-title">{title}</h3>
-        <p style={{ opacity: 0.6, lineHeight: 1.8, fontSize: '1.1rem' }}>{description}</p>
-        <div style={{ marginTop: '4rem', display: 'flex', alignItems: 'center', gap: '1rem', fontWeight: 800, fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '2px' }}>
-            START_PROJECT_PROTOCOL
+        <p style={{ fontWeight: 300, lineHeight: 1.8, fontSize: '1.05rem', color: 'rgba(0,0,0,0.6)' }}>{description}</p>
+        <div style={{ marginTop: '3rem', fontWeight: 800, fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '3px', color: 'var(--atelier-gold)' }}>
+            EXPLORE CASE STUDY →
         </div>
     </div>
 );

@@ -19,27 +19,28 @@ export default function Page() {
       {/* Hero Section */}
       <section className="local-hero">
           <div style={{ flex: 1.2 }}>
-              <span style={{ fontFamily: 'var(--font-friendly)', fontWeight: 900, fontSize: '0.85rem', color: 'var(--local-green)', letterSpacing: '2px', display: 'block', marginBottom: '1.5rem' }}>TRUSTED_LOCAL_PROS</span>
+              <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 800, fontSize: '0.85rem', color: 'var(--local-green)', letterSpacing: '2px', display: 'block', marginBottom: '1.5rem', textTransform: 'uppercase' }}>Verified Local Experts</span>
               <h1>Quality service, <br/>just around the corner.</h1>
-              <p style={{ fontSize: '1.2rem', color: '#64748b', lineHeight: 1.6, marginBottom: '3.5rem', maxWidth: '500px' }}>
+              <p style={{ fontSize: '1.25rem', color: 'var(--local-text)', lineHeight: 1.8, marginBottom: '3.5rem', maxWidth: '500px', fontWeight: 500, opacity: 0.8 }}>
                   Connecting your neighborhood with verified local professionals for everything from cleaning to consulting. 100% satisfaction guaranteed.
               </p>
               <div style={{ display: 'flex', gap: '1.5rem' }}>
-                  <button style={{ padding: '1.25rem 3.5rem', background: 'var(--local-green)', color: 'white', border: 'none', borderRadius: '50px', fontWeight: 700 }}>FIND_A_PRO</button>
-                  <button style={{ padding: '1.25rem 3.5rem', background: 'none', color: 'var(--local-green)', border: '2px solid var(--local-green)', borderRadius: '50px', fontWeight: 700 }}>LIST_YOUR_SERVICE</button>
+                  <button style={{ padding: '1.25rem 3.5rem', background: 'var(--local-green)', color: 'white', border: 'none', borderRadius: '50px', fontWeight: 800, fontSize: '0.95rem', cursor: 'pointer', transition: 'var(--local-transition)' }}>Find a Pro</button>
+                  <button style={{ padding: '1.25rem 3.5rem', background: 'transparent', color: 'var(--local-navy)', border: '2px solid var(--local-border)', borderRadius: '50px', fontWeight: 800, fontSize: '0.95rem', cursor: 'pointer', transition: 'var(--local-transition)' }}>Join as a Pro</button>
               </div>
           </div>
-          <div style={{ flex: 1 }}>
-              <img src="https://images.unsplash.com/photo-1521791136368-79c11d73f8f3?q=80&w=2070" alt="Local Professional" style={{ width: '100%', borderRadius: '24px', boxShadow: '40px 40px 80px rgba(16, 185, 129, 0.05)' }} />
+          <div style={{ flex: 1, position: 'relative' }}>
+              <div style={{ position: 'absolute', top: '-2rem', right: '-2rem', width: '100%', height: '100%', background: 'var(--local-green-light)', borderRadius: '24px', zIndex: 0 }}></div>
+              <img src="https://images.unsplash.com/photo-1521791136368-79c11d73f8f3?q=80&w=2070" alt="Local Professional" style={{ width: '100%', borderRadius: '24px', position: 'relative', zIndex: 1, boxShadow: '0 40px 80px rgba(15, 23, 42, 0.1)' }} />
           </div>
       </section>
 
       {/* Trust bar */}
-      <section style={{ padding: '2rem 5%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#fdf6e3', color: '#92400e', fontSize: '0.75rem', fontWeight: 800, letterSpacing: '1px' }}>
-          <span>100%_VERIFIED_PROFESSIONALS</span>
-          <span>SECURE_LOCAL_PAYMENTS</span>
-          <span>NEIGHBORHOOD_TRUST_SCORE: 4.9/5.0</span>
-          <span>INSTANT_BOOKING_READY</span>
+      <section style={{ padding: '2rem 6%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--local-navy)', color: 'white', fontSize: '0.8rem', fontWeight: 800, letterSpacing: '1px', textTransform: 'uppercase' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><span style={{ color: 'var(--local-green)' }}>✓</span> 100% Verified Professionals</div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><span style={{ color: 'var(--local-green)' }}>✓</span> Secure Local Payments</div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><span style={{ color: 'var(--local-yellow)' }}>★</span> Neighborhood Trust Score: 4.9/5.0</div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><span style={{ color: 'var(--local-green)' }}>✓</span> Instant Booking Ready</div>
       </section>
 
       {/* Pro Grid */}
@@ -50,32 +51,34 @@ export default function Page() {
       </section>
 
       {/* Philosophy Section */}
-      <section style={{ padding: '10rem 5%', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10rem', alignItems: 'center', background: '#fff' }}>
+      <section style={{ padding: '10rem 6%', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10rem', alignItems: 'center', background: 'var(--local-surface)' }}>
           <div>
-              <h2 style={{ fontFamily: 'var(--font-friendly)', fontSize: '3.5rem', fontWeight: 900, marginBottom: '2.5rem' }}>Neighbors helping <br/>neighbors.</h2>
-              <p style={{ fontSize: '1.1rem', color: '#64748b', lineHeight: 2, marginBottom: '4rem' }}>
-                  Our local services vertical is built on a foundation of community trust. Every professional is manually verified by a local node, ensuring the highest standards of service for your home and family.
+              <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: '3.5rem', fontWeight: 900, marginBottom: '2.5rem', color: 'var(--local-navy)', letterSpacing: '-1px' }}>Neighbors helping <br/>neighbors.</h2>
+              <p style={{ fontSize: '1.15rem', color: 'var(--local-text)', lineHeight: 1.8, marginBottom: '4rem', fontWeight: 500, opacity: 0.8 }}>
+                  Our local services vertical is built on a foundation of community trust. Every professional is manually verified, ensuring the highest standards of service for your home and family.
               </p>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3rem' }}>
                   <div>
-                      <div style={{ fontSize: '2.5rem', fontWeight: 900, color: 'var(--local-green)' }}>1.2k+</div>
-                      <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#94a3b8' }}>VERIFIED_PROS</div>
+                      <div style={{ fontFamily: 'var(--font-heading)', fontSize: '3rem', fontWeight: 900, color: 'var(--local-green)', letterSpacing: '-1px' }}>1.2k+</div>
+                      <div style={{ fontSize: '0.8rem', fontWeight: 800, color: 'var(--local-text)', opacity: 0.6, letterSpacing: '1px' }}>VERIFIED PROS</div>
                   </div>
                   <div>
-                      <div style={{ fontSize: '2.5rem', fontWeight: 900, color: 'var(--local-green)' }}>30min</div>
-                      <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#94a3b8' }}>AVG_RESPONSE_TIME</div>
+                      <div style={{ fontFamily: 'var(--font-heading)', fontSize: '3rem', fontWeight: 900, color: 'var(--local-green)', letterSpacing: '-1px' }}>30min</div>
+                      <div style={{ fontSize: '0.8rem', fontWeight: 800, color: 'var(--local-text)', opacity: 0.6, letterSpacing: '1px' }}>AVG RESPONSE TIME</div>
                   </div>
               </div>
           </div>
-          <div style={{ padding: '5rem', background: '#f8fafc', borderRadius: '24px', position: 'relative' }}>
-              <div style={{ position: 'absolute', top: '-1rem', left: '-1rem', width: '60px', height: '60px', background: 'var(--local-yellow)', borderRadius: '12px' }}></div>
-              <h3 style={{ fontFamily: 'var(--font-friendly)', fontSize: '1.8rem', fontWeight: 900, marginBottom: '2rem' }}>Are you a local expert?</h3>
-              <p style={{ color: '#94a3b8', lineHeight: 2, marginBottom: '3rem' }}>
-                  Grow your business by joining the Sellio Local network. Reach thousands of potential clients in your neighborhood.
-              </p>
-              <button style={{ width: '100%', padding: '1.5rem', background: 'var(--local-green)', color: 'white', border: 'none', borderRadius: '50px', fontWeight: 900 }}>
-                  APPLY_AS_A_PRO
-              </button>
+          <div style={{ padding: '5rem', background: 'var(--local-navy)', borderRadius: '24px', position: 'relative', color: 'white' }}>
+              <div style={{ position: 'absolute', top: '-1.5rem', left: '-1.5rem', width: '80px', height: '80px', background: 'var(--local-yellow)', borderRadius: '20px', zIndex: 0 }}></div>
+              <div style={{ position: 'relative', zIndex: 1 }}>
+                  <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '2.2rem', fontWeight: 900, marginBottom: '1.5rem', letterSpacing: '-0.5px' }}>Are you a local expert?</h3>
+                  <p style={{ color: 'rgba(255,255,255,0.7)', lineHeight: 1.8, marginBottom: '3rem', fontSize: '1.05rem', fontWeight: 500 }}>
+                      Grow your business by joining the Pro Local network. Reach thousands of potential clients right in your neighborhood.
+                  </p>
+                  <button style={{ width: '100%', padding: '1.25rem', background: 'var(--local-green)', color: 'white', border: 'none', borderRadius: '50px', fontWeight: 800, fontSize: '0.95rem', cursor: 'pointer', transition: 'var(--local-transition)' }}>
+                      Apply as a Pro
+                  </button>
+              </div>
           </div>
       </section>
     </div>

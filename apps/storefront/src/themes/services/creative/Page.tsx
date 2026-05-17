@@ -1,67 +1,124 @@
 
+'use client';
 import React from 'react';
-import { CreativeServiceCard } from './components';
+import { CreativeServiceCard, StudioHeader, StudioFooter } from './components';
 
 export default function Page() {
   const services = [
-    { title: "Brand Identity Systems", description: "Architecting the visual DNA of modern commercial entities through high-fidelity design systems.", index: "01" },
-    { title: "Digital Product Design", description: "Crafting immersive user interfaces and experimental commercial platforms for the next decade.", index: "02" },
-    { title: "Motion Architecture", description: "Defining the kinetic language of brand expression through advanced motion design and cinematic rendering.", index: "03" },
-    { title: "3D & Spatial Design", description: "Developing three-dimensional assets and spatial environments for institutional distribution.", index: "04" },
-    { title: "Content Strategy Node", description: "Providing high-fidelity strategic guidance for commercial storytelling and platform positioning.", index: "05" },
-    { title: "Experimental Labs", description: "Exploring the intersection of creative expression and emerging commercial technology protocols.", index: "06" },
+    { 
+        title: "Brand Identity Systems", 
+        description: "Architecting the visual DNA of modern luxury through high-fidelity design systems and typography.", 
+        index: "01",
+        image: "https://images.unsplash.com/photo-1634942537034-2531766767d1?q=80&w=2000"
+    },
+    { 
+        title: "Digital Product Design", 
+        description: "Crafting immersive interfaces and experimental digital showrooms for the world's most visionary brands.", 
+        index: "02",
+        image: "https://images.unsplash.com/photo-1558655146-d09347e92766?q=80&w=2000"
+    },
+    { 
+        title: "Motion Architecture", 
+        description: "Defining the kinetic language of brand expression through cinematic rendering and fluid motion.", 
+        index: "03",
+        image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2000"
+    },
+    { 
+        title: "Spatial Experience", 
+        description: "Developing immersive physical and digital environments that redefine the boundaries of interaction.", 
+        index: "04",
+        image: "https://images.unsplash.com/photo-1600607687940-4e7a43f59663?q=80&w=2000"
+    },
+    { 
+        title: "Creative Strategy", 
+        description: "Strategic guidance for institutional storytelling and global platform positioning.", 
+        index: "05",
+        image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2000"
+    },
+    { 
+        title: "The Laboratory", 
+        description: "Exploring the intersection of artistry and emerging technology at the frontier of industry.", 
+        index: "06",
+        image: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=2000"
+    },
   ];
 
   return (
-    <div>
-      {/* Hero Section */}
+    <div className="creative-services-wrapper">
+      {/* Editorial Hero */}
       <section className="studio-hero">
-          <div className="studio-hero-orb"></div>
-          <h1>Design <br/>As a <br/>Protocol.</h1>
-          <div style={{ maxWidth: '600px', marginTop: '4rem' }}>
-              <p style={{ fontSize: '1.5rem', lineHeight: 1.6, fontWeight: 400, opacity: 0.6 }}>
-                  Sellio Studio is an avant-garde collective of designers and architects standardizing creative excellence through the global node network.
+          <div style={{ color: 'var(--atelier-gold)', fontWeight: 800, letterSpacing: '4px', fontSize: '0.8rem', marginBottom: '3rem' }}>EST. 2026 // GLOBAL DESIGN NODE</div>
+          <h1>The Standard <br/>for Global <br/><span style={{ fontStyle: 'italic' }}>Craft.</span></h1>
+          <div style={{ maxWidth: '700px', marginTop: '6rem' }}>
+              <p>
+                  The Atelier is a collective of visionary designers and spatial architects dedicated to defining the aesthetic standard of the next decade.
               </p>
               <button style={{ 
-                  marginTop: '4rem', 
-                  background: 'var(--create-onyx)', 
+                  marginTop: '5rem', 
+                  background: 'var(--atelier-black)', 
                   color: 'white', 
                   border: 'none', 
-                  padding: '1.5rem 4rem', 
-                  fontFamily: 'var(--font-syne)',
-                  fontSize: '0.9rem',
+                  padding: '1.8rem 5rem', 
+                  fontFamily: 'var(--font-body)',
+                  fontSize: '0.75rem',
                   fontWeight: 800,
-                  letterSpacing: '2px'
+                  letterSpacing: '3px',
+                  cursor: 'pointer',
+                  textTransform: 'uppercase'
               }}>
-                  START_COLLABORATION
+                  VIEW PORTFOLIO
               </button>
           </div>
       </section>
 
-      {/* Philosophy bar */}
-      <section style={{ padding: '4rem 5%', borderBottom: '1px solid var(--create-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--create-peach)', color: 'var(--create-onyx)', fontFamily: 'var(--font-syne)', fontWeight: 800, fontSize: '0.75rem', letterSpacing: '2px' }}>
-          <span>ELITE_CRAFT</span>
-          <span>SYSTEMIC_DESIGN</span>
-          <span>GLOBAL_DISTRIBUTION</span>
-          <span>HIGH_FIDELITY_OUTCOMES</span>
+      {/* Marquee Ticker */}
+      <section style={{ 
+          padding: '2.5rem 0', 
+          background: 'var(--atelier-black)', 
+          color: 'white', 
+          overflow: 'hidden',
+          whiteSpace: 'nowrap',
+          borderY: '1px solid var(--atelier-gold)'
+      }}>
+          <div style={{ display: 'flex', gap: '6rem', fontSize: '0.7rem', fontWeight: 800, letterSpacing: '5px', textTransform: 'uppercase', opacity: 0.8 }}>
+              <span>ELITE CRAFT</span> • <span>SYSTEMIC DESIGN</span> • <span>GLOBAL DISTRIBUTION</span> • <span>HIGH FIDELITY OUTCOMES</span> • <span>LUXURY EXPERIENCE</span> • <span>ELITE CRAFT</span> • <span>SYSTEMIC DESIGN</span>
+          </div>
       </section>
 
-      {/* Services Grid */}
-      <section className="creative-grid">
-          {services.map((service, i) => (
-              <CreativeServiceCard key={i} {...service} />
-          ))}
+      {/* Editorial Grid */}
+      <section style={{ padding: '15rem 0' }}>
+          <div style={{ textAlign: 'center', marginBottom: '10rem', padding: '0 6%' }}>
+              <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(3rem, 6vw, 5rem)', fontWeight: 900 }}>Curated Works</h2>
+          </div>
+          <div className="creative-grid">
+              {services.map((service, i) => (
+                  <CreativeServiceCard key={i} {...service} />
+              ))}
+          </div>
       </section>
 
-      {/* Final CTA Section */}
-      <section style={{ padding: '15rem 5%', background: '#fafafa', textAlign: 'center' }}>
-          <div style={{ maxWidth: '900px', margin: '0 auto' }}>
-              <h2 style={{ fontFamily: 'var(--font-syne)', fontSize: '5rem', fontWeight: 800, marginBottom: '3rem', letterSpacing: '-4px' }}>Let's build <br/>the future of <br/>industry.</h2>
-              <p style={{ fontSize: '1.25rem', opacity: 0.5, marginBottom: '6rem' }}>
-                  Our creative nodes are currently accepting select institutional inquiries for the 2026/27 cycle.
+      {/* Legacy Spotlight */}
+      <section style={{ padding: '15rem 6%', background: 'white', textAlign: 'center', borderTop: '1px solid var(--atelier-border)' }}>
+          <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+              <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(2.5rem, 6vw, 6rem)', fontWeight: 900, marginBottom: '5rem', lineHeight: 1.1 }}>
+                  Let's redefine the <br/>boundaries of <span style={{ color: 'var(--atelier-gold)', fontStyle: 'italic' }}>industry.</span>
+              </h2>
+              <p style={{ fontSize: '1.25rem', fontWeight: 300, color: 'rgba(0,0,0,0.5)', marginBottom: '8rem', maxWidth: '700px', margin: '0 auto 8rem' }}>
+                  Our studios are currently accepting institutional inquiries for the 2026/27 cycle. Connect with our principal architects.
               </p>
-              <button style={{ padding: '2rem 6rem', border: '2px solid var(--create-onyx)', background: 'none', color: 'var(--create-onyx)', fontFamily: 'var(--font-syne)', fontWeight: 800, fontSize: '1rem', letterSpacing: '4px' }}>
-                  REQUEST_PORTFOLIO_ACCESS
+              <button style={{ 
+                  padding: '2.5rem 8rem', 
+                  border: '1px solid var(--atelier-black)', 
+                  background: 'none', 
+                  color: 'var(--atelier-black)', 
+                  fontFamily: 'var(--font-body)', 
+                  fontWeight: 800, 
+                  fontSize: '0.85rem', 
+                  letterSpacing: '5px',
+                  cursor: 'pointer',
+                  textTransform: 'uppercase'
+              }}>
+                  REQUEST ACCESS
               </button>
           </div>
       </section>

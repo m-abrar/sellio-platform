@@ -1,7 +1,7 @@
 
 import React from 'react';
 import './styles.css';
-import { StudioHeader, AvantFooter } from './components';
+import { StudioHeader, StudioFooter } from './components';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -10,7 +10,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <main>
         {children}
       </main>
-      <AvantFooter />
+      <StudioFooter />
     </div>
   );
 }

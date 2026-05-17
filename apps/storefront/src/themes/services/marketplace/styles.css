@@ -1,45 +1,44 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
+
 .services-marketplace-theme {
-  /* Bio-Centric Palette */
-  --sm-forest: #1e4d4e;
-  --sm-sage: #ecf3f3;
-  --sm-clay: #d97757;
-  --sm-white: #fdfdfc;
-  --sm-border: rgba(30, 77, 78, 0.1);
-  --sm-glass: rgba(236, 243, 243, 0.8);
-  --sm-text: #0f172a;
-  --sm-text-muted: #64748b;
+  /* Talent Grid Palette */
+  --sm-bg: #0F172A;
+  --sm-surface: #1E293B;
+  --sm-accent: #7C3AED;
+  --sm-accent-soft: rgba(124, 58, 237, 0.1);
+  --sm-text: #F8FAFC;
+  --sm-text-dim: #94A3B8;
+  --sm-border: rgba(255, 255, 255, 0.05);
   
   /* Typography */
   --sm-font-heading: 'Outfit', sans-serif;
-  --sm-font-sans: 'Inter', sans-serif;
+  --sm-font-body: 'Inter', sans-serif;
   
   /* Transitions */
-  --sm-transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  --sm-radius: 40px;
-  --sm-radius-sm: 20px;
+  --sm-transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  --sm-radius: 12px;
 }
 
 .services-marketplace-theme {
-  background-color: var(--sm-white);
+  background-color: var(--sm-bg);
   color: var(--sm-text);
-  font-family: var(--sm-font-sans);
-  min-height: 100vh;
+  font-family: var(--sm-font-body);
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Typography Utilities */
 .sm-heading-xl {
   font-family: var(--sm-font-heading);
-  font-size: clamp(3.5rem, 7vw, 7rem);
-  font-weight: 800;
-  line-height: 1.1;
+  font-size: clamp(3rem, 8vw, 7rem);
+  font-weight: 900;
+  line-height: 1;
   letter-spacing: -0.04em;
 }
 
-.sm-mono {
+.sm-subheading {
   font-size: 0.75rem;
   font-weight: 800;
-  letter-spacing: 0.2em;
-  color: var(--sm-forest);
+  letter-spacing: 0.3em;
+  color: var(--sm-accent);
   text-transform: uppercase;
 }
 
@@ -80,25 +79,35 @@
 }
 
 .sm-expert-card {
-  background: white;
+  background: var(--sm-surface);
   border-radius: var(--sm-radius);
   padding: 1.5rem;
   border: 1px solid var(--sm-border);
   transition: var(--sm-transition);
+  position: relative;
+  overflow: hidden;
 }
 
 .sm-expert-card:hover {
-  transform: translateY(-12px);
-  box-shadow: 0 40px 80px rgba(30, 77, 78, 0.08);
-  border-color: var(--sm-forest);
+  transform: translateY(-8px);
+  border-color: var(--sm-accent);
+  box-shadow: 0 40px 100px rgba(124, 58, 237, 0.1);
+}
+
+.sm-expert-image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 2rem;
 }
 
 .sm-expert-image {
   width: 100%;
-  height: 320px;
-  border-radius: calc(var(--sm-radius) - 10px);
+  height: 100%;
   object-fit: cover;
-  margin-bottom: 2rem;
+  transition: transform 0.5s ease;
 }
 
 /* Category Grid */
@@ -109,56 +118,61 @@
 }
 
 .sm-cat-card {
-  background: var(--sm-sage);
+  background: var(--sm-surface);
   padding: 3rem 2rem;
-  border-radius: var(--sm-radius-sm);
+  border-radius: 12px;
   text-align: center;
   transition: var(--sm-transition);
-  border: 1px solid transparent;
+  border: 1px solid var(--sm-border);
   cursor: pointer;
 }
 
 .sm-cat-card:hover {
-  background: white;
-  border-color: var(--sm-forest);
+  background: var(--sm-accent-soft);
+  border-color: var(--sm-accent);
   transform: scale(1.05);
 }
 
 /* Search Bar */
 .sm-search-container {
   display: flex;
-  gap: 1rem;
-  background: var(--sm-sage);
+  gap: 1.5rem;
+  background: var(--sm-surface);
   padding: 1rem;
-  border-radius: 100px;
+  border-radius: 8px;
   border: 1px solid var(--sm-border);
-  margin-top: 4rem;
+  margin-top: 5rem;
+  backdrop-filter: blur(10px);
 }
 
 .sm-search-input {
   flex: 1;
   background: transparent;
   border: none;
-  padding: 0 2rem;
-  font-family: var(--sm-font-sans);
+  padding: 0 1.5rem;
+  font-family: var(--sm-font-body);
   font-weight: 500;
+  color: white;
   outline: none;
 }
 
 /* Buttons */
 .sm-btn-primary {
-  background: var(--sm-forest);
+  background: var(--sm-accent);
   color: white;
-  padding: 1.25rem 3.5rem;
-  border-radius: 100px;
+  padding: 1.4rem 4rem;
+  border-radius: 6px;
   font-family: var(--sm-font-heading);
-  font-weight: 700;
+  font-weight: 800;
   border: none;
   cursor: pointer;
   transition: var(--sm-transition);
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .sm-btn-primary:hover {
-  background: var(--sm-clay);
-  box-shadow: 0 15px 30px rgba(217, 119, 87, 0.3);
+  background: white;
+  color: var(--sm-bg);
+  box-shadow: 0 20px 40px rgba(124, 58, 237, 0.3);
 }

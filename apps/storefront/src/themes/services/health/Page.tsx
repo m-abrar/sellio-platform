@@ -12,45 +12,47 @@ export default function Page() {
 
   return (
     <div className="services-health-theme">
-      {/* Serene Clinical Hero */}
+      {/* Precision Clinical Hero */}
       <section className="sh-hero">
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2.5rem' }}>
-              <div style={{ padding: '0.4rem 1.2rem', background: 'var(--sh-teal)', color: 'white', borderRadius: '50px', fontSize: '0.7rem', fontWeight: 900 }}>TRUSTED_CARE</div>
-              <div className="sh-mono" style={{ fontSize: '0.65rem' }}>VERIFIED_BY_SELLIO_HEALTH_NODE</div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '3rem' }}>
+              <div style={{ padding: '0.5rem 1.5rem', background: 'var(--sh-teal-light)', color: 'var(--sh-teal)', borderRadius: '4px', fontSize: '0.7rem', fontWeight: 900, letterSpacing: '1px' }}>VITALITY PROTOCOL</div>
+              <div className="sh-mono" style={{ fontSize: '0.65rem', opacity: 0.6 }}>CLINICAL GRADE V2</div>
           </div>
           <h1 className="sh-heading-xl">
-            Your Health, <br/>
-            Expertly <br/>
-            <span style={{ color: 'var(--sh-teal)' }}>Curated.</span>
+            Precision <br/>
+            Medicine, <br/>
+            <span style={{ color: 'var(--sh-teal)' }}>Delivered.</span>
           </h1>
-          <p style={{ marginTop: '5rem', fontSize: '1.25rem', color: 'var(--sh-grey)', lineHeight: 1.8, maxWidth: '600px' }}>
-            Connect with world-class medical specialists and wellness practitioners. Personalized healthcare protocols designed for your unique physiology.
+          <p style={{ marginTop: '4rem', fontSize: '1.25rem', color: 'var(--sh-grey)', lineHeight: 1.8, maxWidth: '600px', fontWeight: 300 }}>
+            Connect with an elite network of specialists and diagnosticians. We engineer personalized physiological protocols for peak human performance.
           </p>
-          <div style={{ marginTop: '6rem', display: 'flex', gap: '3rem' }}>
-            <button className="sh-btn-primary">Book Consultation</button>
+          <div style={{ marginTop: '5rem', display: 'flex', gap: '2rem' }}>
+            <button className="sh-btn-primary">INITIALIZE CONSULTATION</button>
             <button style={{ 
                 background: 'transparent', 
                 border: '1px solid var(--sh-border)', 
                 color: 'var(--sh-blue)', 
                 padding: '1.25rem 3.5rem', 
-                borderRadius: '12px', 
+                borderRadius: '8px', 
                 fontWeight: 800, 
                 textTransform: 'uppercase', 
                 cursor: 'pointer',
-                fontSize: '0.85rem'
+                fontSize: '0.85rem',
+                letterSpacing: '1px',
+                transition: 'var(--sh-transition)'
             }}>
-                Find_Specialist
+                VIEW CLINICIANS
             </button>
           </div>
         </div>
         <div className="sh-hero-img-wrapper">
           <img src="https://images.unsplash.com/photo-1504813184591-01592fd039e5?q=80&w=2071" alt="Clinical Excellence" className="sh-hero-img" />
-          <div style={{ position: 'absolute', bottom: '3rem', left: '3rem', background: 'white', padding: '3rem', borderRadius: '24px', boxShadow: '0 20px 40px rgba(0,0,0,0.05)', display: 'flex', gap: '2rem', alignItems: 'center' }}>
-              <div style={{ width: '56px', height: '56px', borderRadius: '16px', background: 'var(--sh-mint)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--sh-teal)', fontSize: '1.5rem' }}>🛡️</div>
+          <div style={{ position: 'absolute', bottom: '2rem', left: '2rem', background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(10px)', padding: '2rem', borderRadius: '16px', border: '1px solid var(--sh-border)', display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
+              <div style={{ width: '48px', height: '48px', borderRadius: '8px', background: 'var(--sh-teal-light)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--sh-teal)', fontSize: '1.25rem' }}>+</div>
               <div>
-                  <div style={{ fontWeight: 900, fontSize: '1.25rem' }}>99.9% Secure</div>
-                  <div className="sh-mono" style={{ fontSize: '0.65rem', opacity: 0.5 }}>HIPAA_COMPLIANT_NODE</div>
+                  <div style={{ fontWeight: 800, fontSize: '1rem', color: 'var(--sh-blue)' }}>End-to-End Encrypted</div>
+                  <div className="sh-mono" style={{ fontSize: '0.6rem', opacity: 0.6, marginTop: '0.2rem' }}>HIPAA COMPLIANT</div>
               </div>
           </div>
         </div>
@@ -58,16 +60,16 @@ export default function Page() {
 
       {/* Vitality HUD Section */}
       <section className="sh-section" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '4rem', marginTop: '5rem' }}>
-          <VitalityHUD label="PRACTITIONER_SYNC" value="1.2k+" sub="Vetted specialists active across our global clinical network." />
-          <VitalityHUD label="TELEMETRY_ACCURACY" value="99.9%" sub="High-fidelity data synchronization for real-time monitoring." />
-          <VitalityHUD label="RESPONSE_LATENCY" value="0.01s" sub="Instant consultation availability for critical wellness nodes." />
+          <VitalityHUD label="PRACTITIONERS" value="1.2k+" sub="Vetted specialists active across our global clinical network." />
+          <VitalityHUD label="ACCURACY" value="99.9%" sub="High-fidelity data synchronization for real-time monitoring." />
+          <VitalityHUD label="RESPONSE RATE" value="0.01s" sub="Instant consultation availability for critical wellness nodes." />
       </section>
 
       {/* Specialist Registry Section */}
       <section className="sh-section">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '8rem' }}>
               <div>
-                  <div className="sh-mono" style={{ marginBottom: '1.5rem' }}>OFFICIAL_PRACTITIONER_REGISTRY</div>
+                  <div className="sh-mono" style={{ marginBottom: '1.5rem' }}>OFFICIAL REGISTRY</div>
                   <h2 className="sh-heading-xl" style={{ fontSize: '5rem' }}>Top Rated <br/>Practitioners.</h2>
               </div>
               <div style={{ textAlign: 'right', maxWidth: '400px', fontSize: '1rem', color: 'var(--sh-grey)', lineHeight: 1.8 }}>
@@ -83,32 +85,36 @@ export default function Page() {
       </section>
 
       {/* Wellness Protocols Section */}
-      <section className="sh-section" style={{ background: 'var(--sh-blue)', borderRadius: '48px', display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '12rem', alignItems: 'center', color: 'white', marginBottom: '10rem' }}>
-          <div style={{ padding: '8rem' }}>
-              <div className="sh-mono" style={{ marginBottom: '3rem', color: 'var(--sh-teal)' }}>COMPREHENSIVE_WELLNESS_PROTOCOLS</div>
-              <h2 className="sh-heading-xl" style={{ color: 'white', fontSize: '4.5rem', marginBottom: '4rem' }}>Optimized <br/>Care.</h2>
-              <p style={{ fontSize: '1.25rem', opacity: 0.5, lineHeight: 2, marginBottom: '6rem' }}>
-                  Beyond reactive care. Our wellness plans integrate preventive medicine, nutritional optimization, and biometric tracking.
+      <section className="sh-section" style={{ background: 'var(--sh-blue)', borderRadius: '24px', display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '8rem', alignItems: 'center', color: 'white', marginBottom: '10rem', overflow: 'hidden' }}>
+          <div style={{ padding: '6rem 4rem 6rem 6rem' }}>
+              <div className="sh-mono" style={{ marginBottom: '2rem', color: 'var(--sh-teal)' }}>CLINICAL TIERS</div>
+              <h2 className="sh-heading-xl" style={{ color: 'white', fontSize: 'clamp(3rem, 5vw, 4.5rem)', marginBottom: '3rem' }}>Optimized <br/>Physiology.</h2>
+              <p style={{ fontSize: '1.1rem', opacity: 0.7, lineHeight: 1.8, marginBottom: '4rem', fontWeight: 300 }}>
+                  Move beyond reactive care. Our elite protocols integrate preventive diagnostics, continuous biomarker tracking, and personalized nutritional algorithms.
               </p>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '2rem' }}>
-                  {['Biometric_Analysis_Sync', 'Nutritional_Genetic_Mapping', '24/7_Specialist_Access'].map(item => (
-                      <div key={item} style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', fontSize: '0.9rem', fontWeight: 700, letterSpacing: '2px' }}>
-                          <div style={{ width: '24px', height: '24px', borderRadius: '50%', background: 'var(--sh-teal)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.6rem' }}>✓</div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '1.5rem' }}>
+                  {['Biomarker Telemetry', 'Genetic Mapping', '24/7 Concierge'].map(item => (
+                      <div key={item} style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', fontSize: '0.85rem', fontWeight: 600, letterSpacing: '1px', opacity: 0.9 }}>
+                          <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: 'var(--sh-teal)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.5rem', color: 'white' }}>✓</div>
                           {item.toUpperCase()}
                       </div>
                   ))}
               </div>
           </div>
-          <div style={{ padding: '8rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3rem' }}>
-              <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)', padding: '4rem', borderRadius: '32px' }}>
-                  <div className="sh-mono" style={{ marginBottom: '1.5rem' }}>BASIC_NODE</div>
-                  <div style={{ fontSize: '3rem', fontWeight: 900, marginBottom: '1.5rem' }}>$49<span style={{ fontSize: '1rem', opacity: 0.3 }}>/mo</span></div>
-                  <button style={{ width: '100%', padding: '1rem', background: 'transparent', border: '1px solid rgba(255,255,255,0.2)', color: 'white', fontWeight: 800, borderRadius: '8px' }}>INITIALIZE</button>
+          <div style={{ padding: '6rem 6rem 6rem 0', display: 'grid', gridTemplateColumns: '1fr', gap: '2rem' }}>
+              <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)', padding: '3rem', borderRadius: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div>
+                      <div className="sh-mono" style={{ marginBottom: '0.5rem' }}>STANDARD PLAN</div>
+                      <div style={{ fontSize: '2rem', fontWeight: 800 }}>$49<span style={{ fontSize: '1rem', opacity: 0.5 }}>/mo</span></div>
+                  </div>
+                  <button style={{ padding: '1rem 2rem', background: 'transparent', border: '1px solid rgba(255,255,255,0.3)', color: 'white', fontWeight: 700, borderRadius: '6px', fontSize: '0.8rem', letterSpacing: '1px' }}>SELECT</button>
               </div>
-              <div style={{ background: 'var(--sh-teal)', padding: '4rem', borderRadius: '32px', transform: 'scale(1.05)', boxShadow: '0 40px 80px rgba(20, 184, 166, 0.2)' }}>
-                  <div className="sh-mono" style={{ marginBottom: '1.5rem', color: 'white' }}>OPTIMUM_V8</div>
-                  <div style={{ fontSize: '3rem', fontWeight: 900, marginBottom: '1.5rem' }}>$129<span style={{ fontSize: '1rem', opacity: 0.6 }}>/mo</span></div>
-                  <button style={{ width: '100%', padding: '1rem', background: 'white', color: 'var(--sh-teal)', border: 'none', fontWeight: 800, borderRadius: '8px' }}>INITIALIZE</button>
+              <div style={{ background: 'var(--sh-teal)', padding: '3rem', borderRadius: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', boxShadow: '0 20px 40px rgba(13,148,136,0.3)' }}>
+                  <div>
+                      <div className="sh-mono" style={{ marginBottom: '0.5rem', color: 'white' }}>VITALITY PRO</div>
+                      <div style={{ fontSize: '2rem', fontWeight: 800 }}>$149<span style={{ fontSize: '1rem', opacity: 0.7 }}>/mo</span></div>
+                  </div>
+                  <button style={{ padding: '1rem 2rem', background: 'white', color: 'var(--sh-teal)', border: 'none', fontWeight: 800, borderRadius: '6px', fontSize: '0.8rem', letterSpacing: '1px' }}>INITIALIZE</button>
               </div>
           </div>
       </section>
