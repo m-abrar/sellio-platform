@@ -174,6 +174,7 @@ When implementing any of the 50 themes, follow this **Golden Prompt**:
 | `classifieds_general` | Classifieds | 100% | **Elite** | Classic Marketplace |
 | `classifieds_deals` | Classifieds | 100% | **Elite** | Urgent Bargain/Discount |
 | `classifieds_local` | Classifieds | 100% | **Elite** | Friendly Community Map |
+| `classifieds_modern` | Classifieds | 100% | **Elite** | Vibrant Pinterest-Style |
 | `ecommerce_electronics` | Ecommerce | 100% | **Elite** | Futurist Cyber/Tech |
 | `ecommerce_luxury` | Ecommerce | 100% | **Elite** | High-Fidelity Gold/Slate |
 
