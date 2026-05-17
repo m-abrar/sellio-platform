@@ -1,4 +1,4 @@
-# ⚡ Sellio QA Audit Report: Theme 14 (`properties/luxury_2`)
+# ⚡ Sellio QA Audit Report: Theme 14 (`properties/platinum`)
 
 ## 1. UI/UX & Envato Premium Quality
 - **Verdict**: 🟢 **Certified Elite Pass**
@@ -24,7 +24,7 @@
 - **Verdict**: 🟢 **Certified Elite Pass**
 - **Findings**:
   - [x] **State Management**: Refactored the generic `Header` into a robust `use client` component that intelligently tracks state via `useState` for the custom off-canvas mobile drawer.
-  - [x] **Asset Siloing**: Evaluated `Page.tsx` and removed 5 rate-limited Unsplash placeholder dependencies. Cloned, mapped, and deployed 5 elite WebP architectural property images directly from the local `/themes/properties/luxury_2/` silo directory.
+  - [x] **Asset Siloing**: Evaluated `Page.tsx` and removed 5 rate-limited Unsplash placeholder dependencies. Cloned, mapped, and deployed 5 elite WebP architectural property images directly from the local `/themes/properties/platinum/` silo directory.
 
 ## 5. Live Browser & Subagent Verification (DYNAMIC TESTING)
 - **Verdict**: 🟢 **Certified Elite Pass**

@@ -4,11 +4,11 @@ import { ShowcaseCard, StatisticsNode } from './components';
 
 export default function Page() {
   const estates = [
-    { title: "The Obsidian Monolith", price: "$42,500,000", image: "/themes/properties/luxury_2/1.webp", span: "span-8" },
-    { title: "Glass Pavilion | Alpine", price: "$18,200,000", image: "/themes/properties/luxury_2/2.webp", span: "span-4" },
-    { title: "Desert Sanctuary", price: "$12,400,000", image: "/themes/properties/luxury_2/3.webp", span: "span-4" },
-    { title: "Coastal Brutalist", price: "$24,800,000", image: "/themes/properties/luxury_2/4.webp", span: "span-8" },
-    { title: "The Zen Atrium", price: "$31,500,000", image: "/themes/properties/luxury_2/5.webp", span: "span-12" },
+    { title: "The Obsidian Monolith", price: "$42,500,000", image: "/themes/properties/platinum/1.webp", span: "span-8" },
+    { title: "Glass Pavilion | Alpine", price: "$18,200,000", image: "/themes/properties/platinum/2.webp", span: "span-4" },
+    { title: "Desert Sanctuary", price: "$12,400,000", image: "/themes/properties/platinum/3.webp", span: "span-4" },
+    { title: "Coastal Brutalist", price: "$24,800,000", image: "/themes/properties/platinum/4.webp", span: "span-8" },
+    { title: "The Zen Atrium", price: "$31,500,000", image: "/themes/properties/platinum/5.webp", span: "span-12" },
   ];
 
   return (

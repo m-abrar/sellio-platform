@@ -37,7 +37,7 @@ class ThemeSeeder extends Seeder
                     'classic' => 'Properties Classic',
                     'modern' => 'Properties Modern',
                     'luxury' => 'Properties Luxury',
-                    'luxury_2' => 'Properties Luxury 2',
+                    'platinum' => 'Properties Platinum',
                     'urban' => 'Properties Urban',
                     'rental' => 'Properties Rental / Vacation',
                     'vacation' => 'Properties Vacation',
