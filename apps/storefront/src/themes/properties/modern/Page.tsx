@@ -20,7 +20,7 @@ export default function Page() {
           </div>
           <div style={{ position: 'relative' }}>
               <div style={{ height: '600px', background: '#f0f9ff', borderRadius: '40px', overflow: 'hidden', border: '1px solid var(--urban-border)' }}>
-                  <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070" alt="High-rise Building" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.8 }} />
+                  <img src="/themes/properties/modern/1.webp" alt="High-rise Building" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.8 }} />
               </div>
               <div style={{ position: 'absolute', bottom: '-3rem', right: '-3rem', padding: '3rem', background: 'white', borderRadius: '24px', boxShadow: '0 20px 40px rgba(0,0,0,0.05)', border: '1px solid var(--urban-border)' }}>
                   <div style={{ fontSize: '2.5rem', fontWeight: 900, color: 'var(--urban-skyline)', fontFamily: 'var(--font-heading)' }}>84</div>
@@ -39,7 +39,7 @@ export default function Page() {
       <section style={{ padding: '15rem 6%', display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '10rem', alignItems: 'center', background: '#f8fafc' }}>
           <div style={{ position: 'relative' }}>
               <div style={{ height: '700px', background: 'white', border: '1px solid var(--urban-border)', overflow: 'hidden', borderRadius: '24px' }}>
-                  <img src="https://images.unsplash.com/photo-1449156001931-828320f71acb?q=80&w=2070" alt="Modern Architecture" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.8 }} />
+                  <img src="/themes/properties/modern/2.webp" alt="Modern Architecture" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.8 }} />
               </div>
               <div style={{ position: 'absolute', top: '-2rem', left: '-2rem', width: '200px', height: '200px', borderTop: '3px solid var(--urban-skyline)', borderLeft: '3px solid var(--urban-skyline)' }}></div>
           </div>
