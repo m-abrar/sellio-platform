@@ -1,16 +1,26 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import { LeaseUnitCard, TrustMetrics } from './components';
 
 export default function Page() {
+  const [searchLocation, setSearchLocation] = useState('');
+  const [checkIn, setCheckIn] = useState('');
+  const [checkOut, setCheckOut] = useState('');
+  const [guests, setGuests] = useState('1 Guest');
+
   const rentals = [
-    { title: "The North Tower Studio", price: "$1,850", type: "Studio", location: "Downtown Core", beds: "0", baths: "1", image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?q=80&w=2070" },
-    { title: "Riverside 2BR Apartment", price: "$2,400", type: "Apartment", location: "West End", beds: "2", baths: "2", image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?q=80&w=2070" },
-    { title: "Modern Industrial Loft", price: "$3,100", type: "Loft", location: "Arts District", beds: "1", baths: "1.5", image: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?q=80&w=2070" },
-    { title: "Skyline Penthouse Unit", price: "$5,500", type: "Penthouse", location: "Financial Center", beds: "3", baths: "3", image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2070" },
-    { title: "Family Townhouse", price: "$3,800", type: "Townhouse", location: "Suburbs", beds: "4", baths: "3", image: "https://images.unsplash.com/photo-1484154218962-a197022b5858?q=80&w=2074" },
-    { title: "Compact City Studio", price: "$1,400", type: "Studio", location: "South Side", beds: "0", baths: "1", image: "https://images.unsplash.com/photo-1493809842364-78817add7ffb?q=80&w=2070" },
+    { title: "The North Tower Studio", price: "$1,850", type: "Studio", location: "Downtown Core", beds: "1", baths: "1", sqft: "480", rating: 4.8, reviews: 142, image: "/themes/properties/rental/1.webp" },
+    { title: "Riverside 2BR Apartment", price: "$2,400", type: "Apartment", location: "West End District", beds: "2", baths: "2", sqft: "950", rating: 4.9, reviews: 89, image: "/themes/properties/rental/2.webp" },
+    { title: "Modern Industrial Loft", price: "$3,100", type: "Loft", location: "Arts & Culture Center", beds: "1", baths: "1.5", sqft: "820", rating: 4.7, reviews: 63, image: "/themes/properties/rental/3.webp" },
+    { title: "Skyline Penthouse Unit", price: "$5,500", type: "Penthouse", location: "Financial Hub District", beds: "3", baths: "3", sqft: "1650", rating: 5.0, reviews: 27, image: "/themes/properties/rental/4.webp" },
+    { title: "Sunlit Family Townhouse", price: "$3,800", type: "Townhouse", location: "Suburban Pines", beds: "4", baths: "3", sqft: "1900", rating: 4.9, reviews: 52, image: "/themes/properties/rental/5.webp" },
+    { title: "Compact Downtown Micro-Studio", price: "$1,400", type: "Studio", location: "South Side Loop", beds: "1", baths: "1", sqft: "350", rating: 4.6, reviews: 104, image: "/themes/properties/rental/6.webp" },
   ];
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    alert(`Searching rentals in: ${searchLocation || 'Anywhere'} | Check-in: ${checkIn || 'Anytime'} | Check-out: ${checkOut || 'Anytime'} | Guests: ${guests}`);
+  };
 
   return (
     <div className="pr-section">
@@ -23,11 +33,14 @@ export default function Page() {
             Next Home <br/>
             <span style={{ color: 'var(--pr-mint)' }}>with Ease.</span>
           </h1>
-          <p style={{ marginTop: '4rem', fontSize: '1.25rem', color: 'var(--pr-text-muted)', lineHeight: 1.8, maxWidth: '500px' }}>
-            A high-fidelity rental experience designed for the modern tenant. Verified properties, digital leases, and automated maintenance nodes.
+          <p style={{ marginTop: '3rem', fontSize: '1.2rem', color: 'var(--pr-text-muted)', lineHeight: 1.8, maxWidth: '540px' }}>
+            A high-fidelity rental protocol designed for modern residential nodes. Certified properties, digital instant leases, and automated utility routing nodes.
           </p>
-          <div style={{ marginTop: '5rem', display: 'flex', gap: '2.5rem' }}>
-            <button className="pr-btn-primary">Find_a_Rental</button>
+          
+          <div style={{ marginTop: '4rem', display: 'flex', gap: '2rem' }} className="pr-hero-buttons">
+            <button className="pr-btn-primary" id="pr-btn-discover" onClick={() => document.getElementById('pr-discovery-grid')?.scrollIntoView({ behavior: 'smooth' })}>
+              Find a Rental
+            </button>
             <button style={{ 
                 background: 'transparent', 
                 border: '2px solid var(--pr-slate)', 
@@ -35,33 +48,104 @@ export default function Page() {
                 padding: '1.25rem 3.5rem', 
                 borderRadius: '100px', 
                 fontWeight: 800, 
-                cursor: 'pointer' 
-            }}>
-                List_Unit
+                cursor: 'pointer',
+                transition: 'all 0.3s ease'
+            }} id="pr-btn-list" onClick={() => alert('List your residential node starting program. Developer active.')}>
+                List Unit
             </button>
           </div>
         </div>
+        
         <div className="pr-hero-image-wrapper">
-          <img src="https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?q=80&w=2070" alt="Modern Living" className="pr-hero-image" />
+          <img src="/themes/properties/rental/7.webp" alt="High Fidelity Modern Living Concept" className="pr-hero-image" />
           
-          <div style={{ position: 'absolute', bottom: '-2rem', left: '-2rem', background: 'white', padding: '2.5rem', borderRadius: '24px', boxShadow: '0 20px 40px rgba(0,0,0,0.05)', border: '1px solid var(--pr-border)' }}>
+          <div style={{ position: 'absolute', bottom: '-2rem', left: '-2rem', background: 'white', padding: '2rem', borderRadius: '24px', boxShadow: '0 20px 40px rgba(0,0,0,0.05)', border: '1px solid var(--pr-border)' }} className="pr-badge-floater">
               <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
                   <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#22c55e' }}></div>
-                  <div className="pr-mono" style={{ fontSize: '0.65rem' }}>842_RENTALS_AVAILABLE_NOW</div>
+                  <div className="pr-mono" style={{ fontSize: '0.65rem', color: 'var(--pr-slate)' }}>842 RENTALS VERIFIED NOW</div>
               </div>
           </div>
         </div>
       </section>
 
+      {/* Stateful Calendar & Guest Selector Booking Search Panel */}
+      <section style={{ marginTop: '4rem', marginBottom: '8rem' }}>
+        <form onSubmit={handleSearchSubmit} className="pr-booking-widget" aria-label="Properties Search Panel">
+          <div className="pr-booking-field">
+            <label className="pr-booking-label" htmlFor="pr-search-loc">Destination Location</label>
+            <input 
+              id="pr-search-loc"
+              type="text" 
+              placeholder="e.g. Downtown Core" 
+              className="pr-booking-input"
+              value={searchLocation}
+              onChange={(e) => setSearchLocation(e.target.value)}
+            />
+          </div>
+          
+          <div className="pr-booking-field">
+            <label className="pr-booking-label" htmlFor="pr-checkin">Check In Date</label>
+            <input 
+              id="pr-checkin"
+              type="date" 
+              className="pr-booking-input"
+              value={checkIn}
+              onChange={(e) => setCheckIn(e.target.value)}
+            />
+          </div>
+          
+          <div className="pr-booking-field">
+            <label className="pr-booking-label" htmlFor="pr-checkout">Check Out Date</label>
+            <input 
+              id="pr-checkout"
+              type="date" 
+              className="pr-booking-input"
+              value={checkOut}
+              onChange={(e) => setCheckOut(e.target.value)}
+            />
+          </div>
+          
+          <div className="pr-booking-field">
+            <label className="pr-booking-label" htmlFor="pr-guests-selector">Lease Terms</label>
+            <select 
+              id="pr-guests-selector"
+              className="pr-booking-input"
+              value={guests}
+              onChange={(e) => setGuests(e.target.value)}
+            >
+              <option value="1 Guest">Single Tenant</option>
+              <option value="2 Guests">Shared Lease (2)</option>
+              <option value="3 Guests">Family Lease (3+)</option>
+              <option value="Commercial">Commercial Tenant</option>
+            </select>
+          </div>
+          
+          <button 
+            type="submit" 
+            className="pr-btn-primary" 
+            style={{ 
+              gridColumn: 'span 4', 
+              marginTop: '1rem', 
+              padding: '1.5rem', 
+              borderRadius: '16px',
+              fontSize: '1rem' 
+            }}
+            id="pr-booking-submit"
+          >
+            ⚡ Synchronize Rental Search
+          </button>
+        </form>
+      </section>
+
       {/* Trust Metrics Section */}
-      <section style={{ padding: '12rem 0', display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '10rem', alignItems: 'center' }}>
-          <div>
-              <h2 style={{ fontSize: '4rem', fontWeight: 900, letterSpacing: '-2px', marginBottom: '3rem' }}>Digital First <br/>Leasing.</h2>
-              <p style={{ fontSize: '1.2rem', color: 'var(--pr-text-muted)', lineHeight: 2 }}>
-                  Our rental vertical is built on a "Digital First" philosophy. From virtual tours to cryptographic lease signing, we have removed the friction from finding your next residential node.
+      <section style={{ padding: '8rem 0', display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '8rem', alignItems: 'center' }} className="pr-hero">
+          <div style={{ textAlign: 'left' }}>
+              <h2 style={{ fontSize: '3.5rem', fontWeight: 900, letterSpacing: '-2px', marginBottom: '2.5rem', lineHeight: 1.1, color: 'var(--pr-slate)' }}>Digital First <br/>Lease Protocols.</h2>
+              <p style={{ fontSize: '1.15rem', color: 'var(--pr-text-muted)', lineHeight: 1.8 }}>
+                  Our property leasing vertical is engineered from scratch for high-fidelity compliance. From immersive virtual galleries to automated cryptographic lease signing nodes, we have removed the friction from securing residential nodes.
               </p>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '5rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }} className="pr-stats-grid">
               <TrustMetrics value="100%" label="DIGITAL_LEASES" />
               <TrustMetrics value="24h" label="MAINTENANCE_SLA" />
               <TrustMetrics value="Instant" label="APPROVAL_SYNC" />
@@ -69,18 +153,23 @@ export default function Page() {
           </div>
       </section>
 
-      {/* Search Bar Placeholder */}
-      <div style={{ background: 'white', padding: '2.5rem', borderRadius: '100px', border: '1px solid var(--pr-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6rem' }}>
-          <div style={{ display: 'flex', gap: '4rem', paddingLeft: '2rem' }}>
-              {['Studio', 'Apartment', 'Loft', 'Penthouse'].map(type => (
-                  <span key={type} className="pr-mono" style={{ color: 'var(--pr-text-muted)', cursor: 'pointer' }}>{type}</span>
+      {/* Navigation Filter Selector */}
+      <div style={{ background: 'var(--pr-white)', padding: '2rem', borderRadius: '100px', border: '1px solid var(--pr-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4rem', boxShadow: '0 4px 20px rgba(0,0,0,0.02)' }} className="pr-filter-bar">
+          <div style={{ display: 'flex', gap: '3rem', paddingLeft: '1.5rem' }} className="pr-filter-links">
+              {['Studio', 'Apartment', 'Loft', 'Penthouse', 'Townhouse'].map(type => (
+                  <span key={type} className="pr-mono" style={{ color: 'var(--pr-text-muted)', cursor: 'pointer', fontWeight: 700 }} onClick={() => alert(`Filtering by category: ${type}`)}>{type}</span>
               ))}
           </div>
-          <div style={{ color: 'var(--pr-mint)', fontWeight: 800 }}>SORT: NEWEST_FIRST ⌄</div>
+          <div style={{ color: 'var(--pr-mint)', fontWeight: 800, fontSize: '0.85rem', cursor: 'pointer', paddingRight: '1.5rem' }} className="pr-mono" onClick={() => alert('Sort controls activated.')}>
+            SORT: NEWEST_FIRST ⌄
+          </div>
       </div>
 
       {/* Rent Grid */}
-      <section>
+      <section id="pr-discovery-grid">
+        <h2 style={{ fontSize: '2.5rem', fontWeight: 900, marginBottom: '1rem', letterSpacing: '-1px' }}>Featured Certified Properties</h2>
+        <p style={{ color: 'var(--pr-text-muted)', marginBottom: '3rem', fontSize: '1rem' }}>Siloed verified residential units matching active Elite standards.</p>
+        
         <div className="pr-rent-grid">
           {rentals.map((r, i) => (
             <LeaseUnitCard key={i} {...r} />
@@ -89,17 +178,17 @@ export default function Page() {
       </section>
 
       {/* Final CTA */}
-      <section style={{ marginTop: '15rem', padding: '10rem', background: 'linear-gradient(135deg, #f0fdfa 0%, #fff 100%)', borderRadius: '48px', border: '1px solid var(--pr-border)', textAlign: 'center' }}>
-          <div className="pr-mono" style={{ marginBottom: '3rem' }}>AUTHORIZE_NEW_RESIDENCE</div>
-          <h2 style={{ fontSize: '5rem', fontWeight: 900, letterSpacing: '-3px', marginBottom: '4rem' }}>
+      <section style={{ marginTop: '12rem', padding: '8rem 4rem', background: 'linear-gradient(135deg, #f0fdfa 0%, #fff 100%)', borderRadius: '48px', border: '1px solid var(--pr-border)', textAlign: 'center', boxShadow: 'var(--pr-shadow-lg)' }} className="pr-cta-box">
+          <div className="pr-mono" style={{ marginBottom: '2.5rem' }}>AUTHORIZE_NEW_RESIDENCE</div>
+          <h2 style={{ fontSize: '4.5rem', fontWeight: 900, letterSpacing: '-3px', marginBottom: '3rem', color: 'var(--pr-slate)', lineHeight: 1.1 }}>
               Ready to <br/>
               Move In?
           </h2>
-          <p style={{ maxWidth: '600px', margin: '0 auto 6rem', color: 'var(--pr-text-muted)', fontSize: '1.25rem', lineHeight: 1.8 }}>
-              Join thousands of tenants currently using the Sellio rental protocol for a high-fidelity living experience.
+          <p style={{ maxWidth: '580px', margin: '0 auto 5rem', color: 'var(--pr-text-muted)', fontSize: '1.2rem', lineHeight: 1.8 }}>
+              Join thousands of verified tenants utilizing the Sellio platform for securing residential properties with absolute transparency.
           </p>
-          <button className="pr-btn-primary" style={{ padding: '2.5rem 8rem', fontSize: '1.25rem' }}>
-              CREATE_TENANT_NODE
+          <button className="pr-btn-primary" style={{ padding: '2rem 7rem', fontSize: '1.15rem' }} id="pr-btn-cta-auth" onClick={() => alert('Authentication and signature pipeline initializing.')}>
+              CREATE TENANT NODE
           </button>
       </section>
     </div>
