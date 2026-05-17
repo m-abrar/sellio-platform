@@ -1,114 +1,79 @@
 'use client';
 import React from 'react';
-import { TechDeviceCard, ComponentHUD } from './components';
+import { ElectronicsHeader, ProductCard, SpecFeature, ElectronicsFooter } from './components';
 
 export default function Page() {
-  const products = [
-    { title: "NVIDIA RTX 5090 Ti", price: "$2,199", category: "GRAPHICS", image: "https://images.unsplash.com/photo-1591488320449-011701bb6704?q=80&w=2070" },
-    { title: "Quantum-X UltraWide", price: "$1,499", category: "DISPLAY", image: "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?q=80&w=2070" },
-    { title: "Core-i11 16th Gen", price: "$699", category: "PROCESSOR", image: "https://images.unsplash.com/photo-1591405351990-4726e33df58d?q=80&w=2070" },
-    { title: "NeuroMechanical K7", price: "$299", category: "INTERFACE", image: "https://images.unsplash.com/photo-1511467687858-23d96c32e4ae?q=80&w=2070" },
-    { title: "HyperLink 10G Router", price: "$450", category: "NETWORK", image: "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?q=80&w=2070" },
-    { title: "ZeroLat Sonic Pods", price: "$199", category: "AUDIO", image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=2070" },
+  const trendingProducts = [
+    { title: "NVIDIA RTX 5090 Ti Founders Edition", category: "Graphics Cards", price: "$1,999.00", image: "https://images.unsplash.com/photo-1591488320449-011701bb6704?q=80&w=400", badge: "IN STOCK" },
+    { title: "AMD Ryzen 9 9950X Processor", category: "Processors", price: "$699.99", oldPrice: "$749.99", image: "https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?q=80&w=400", badge: "SALE" },
+    { title: "Corsair Dominator Titanium 64GB DDR5", category: "Memory", price: "$349.99", image: "https://images.unsplash.com/photo-1562976540-1502c2145186?q=80&w=400" },
+    { title: "ASUS ROG Swift OLED 32\" 4K 240Hz", category: "Monitors", price: "$1,299.00", image: "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?q=80&w=400", badge: "NEW" },
+  ];
+
+  const peripheralProducts = [
+    { title: "Logitech G Pro X Superlight 2", category: "Mice", price: "$159.99", image: "https://images.unsplash.com/photo-1615663245857-ac93bb022f46?q=80&w=400" },
+    { title: "Wooting 60HE+ Analog Keyboard", category: "Keyboards", price: "$174.99", image: "https://images.unsplash.com/photo-1595225476474-87563907a212?q=80&w=400" },
+    { title: "Audeze Maxwell Wireless Gaming Headset", category: "Audio", price: "$299.00", image: "https://images.unsplash.com/photo-1618366712010-f4ae9c647dcb?q=80&w=400" },
+    { title: "Elgato Stream Deck +", category: "Streaming", price: "$199.99", image: "https://images.unsplash.com/photo-1586816879360-004f5b0c51e3?q=80&w=400" },
   ];
 
   return (
-    <div className="el-section">
-      {/* Technical Hero */}
+    <div className="ecommerce-electronics-wrapper">
+      <ElectronicsHeader />
+
+      {/* Hero */}
       <section className="el-hero">
-        <div>
-          <div className="el-label" style={{ marginBottom: '3rem' }}>Core Adaptive Hardware System</div>
-          <h1 className="el-heading-xl">
-            Precision <br/>
-            Engineered <br/>
-            <span style={{ color: 'var(--el-cyan)' }}>Performance.</span>
-          </h1>
-          <p style={{ marginTop: '5.5rem', fontSize: '1.25rem', color: 'rgba(255,255,255,0.4)', lineHeight: 2, maxWidth: '500px' }}>
-            Enterprise-grade hardware architecture optimized for the next decade of computational demand. Engineered for the world's most critical nodes.
-          </p>
-          <div style={{ marginTop: '7rem', display: 'flex', gap: '3rem', flexWrap: 'wrap', justifyContent: 'inherit' }}>
-            <button className="el-btn-primary">Enter Ecosystem</button>
-            <button style={{ 
-                background: 'transparent', 
-                border: '1px solid var(--el-border)', 
-                color: 'white', 
-                padding: '1.5rem 4rem', 
-                borderRadius: '2px', 
-                fontWeight: 800, 
-                textTransform: 'uppercase', 
-                cursor: 'pointer',
-                fontFamily: 'var(--el-mono)',
-                fontSize: '0.8rem',
-                letterSpacing: '2px'
-            }}>
-                Explore Manifest
-            </button>
-          </div>
+        <div className="el-hero-bg"></div>
+        <div className="el-hero-content">
+            <div className="el-badge" style={{ position: 'relative', top: 0, left: 0, display: 'inline-block', marginBottom: '1.5rem' }}>NEXT GEN RELEASE</div>
+            <h1 className="el-hero-title">QUANTUM<br/>PERFORMANCE</h1>
+            <p style={{ fontSize: '1.25rem', color: 'var(--el-text-muted)', marginBottom: '2rem', lineHeight: 1.6 }}>
+                Experience untethered speed with the all-new line of RTX 50-Series Architecture. Built for the creators of tomorrow.
+            </p>
+            <div style={{ display: 'flex', gap: '1rem' }}>
+                <a href="#components" className="el-btn el-btn-primary">Shop Now</a>
+                <a href="#specs" className="el-btn el-btn-outline">View Specs</a>
+            </div>
         </div>
-        <div className="el-hero-img-wrapper">
-          <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2070" alt="Hardware Node" className="el-hero-img" />
-          
-          <div style={{ position: 'absolute', top: '-4rem', right: '-4rem', background: 'var(--el-cyan)', color: 'black', padding: '4rem', fontWeight: 900, fontFamily: 'var(--el-mono)', boxShadow: '0 40px 80px rgba(0,0,0,0.2)', display: 'none' }}>
-              <style dangerouslySetInnerHTML={{ __html: `
-                @media (min-width: 1024px) {
-                  div[style*="top: -4rem"] { display: block !important; }
-                }
-              ` }} />
-              <div style={{ fontSize: '3rem' }}>6.0</div>
-              <div style={{ fontSize: '0.65rem', letterSpacing: '4px' }}>VERSION_CORE</div>
-          </div>
+        <div style={{ position: 'absolute', right: '5%', top: '50%', transform: 'translateY(-50%)', zIndex: 2, width: '45%' }}>
+            <img src="https://images.unsplash.com/photo-1587202372634-32705e3bf49c?q=80&w=800" alt="Hero GPU" style={{ width: '100%', filter: 'drop-shadow(0 0 30px rgba(0, 229, 255, 0.3))' }} />
         </div>
       </section>
 
-      {/* Component HUD Bar */}
-      <section style={{ padding: '8rem 0', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '4rem', marginTop: '10rem' }}>
-          <ComponentHUD icon="⚡" label="Near-Zero Latency" status="0.01ms optimized data paths for instant response." />
-          <ComponentHUD icon="🔒" label="Hardware Shield" status="Kernel-level hardware encryption for every node." />
-          <ComponentHUD icon="🌐" label="Grid Integration" status="Seamless synchronization with the global network." />
-          <ComponentHUD icon="🚀" label="Scaling Protocol" status="Designed for high-density industrial growth." />
-      </section>
+      {/* Features Row */}
+      <div className="el-spec-row" id="specs">
+          <SpecFeature icon="⚡" title="Overclocked Out-of-Box" desc="Every component is stress-tested and pre-tuned for maximum stable performance." />
+          <SpecFeature icon="🛡️" title="3-Year Warranty Plus" desc="Extended coverage on all premium hardware, including accidental damage protection." />
+          <SpecFeature icon="🚀" title="Same-Day Dispatch" desc="Order by 4 PM EST for guaranteed same-day shipping via overnight couriers." />
+      </div>
 
-      {/* Device Registry Section */}
-      <section style={{ marginTop: '15rem' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '8rem', flexWrap: 'wrap', gap: '4rem' }}>
-              <div>
-                  <div className="el-label" style={{ marginBottom: '1.5rem' }}>Core Hardware Registry</div>
-                  <h2 style={{ fontSize: 'clamp(3rem, 5vw, 5rem)', fontWeight: 800, letterSpacing: '-3px', textTransform: 'uppercase', fontFamily: 'var(--el-mono)' }}>The <span style={{ color: 'var(--el-cyan)' }}>Showcase.</span></h2>
-              </div>
-              <div style={{ textAlign: 'right', maxWidth: '400px', fontSize: '1rem', color: 'rgba(255,255,255,0.3)', lineHeight: 1.8 }}>
-                  Our unified protocol synchronizes hardware availability from the world's most significant engineering nodes.
-              </div>
-          </div>
-          
-          <div className="el-device-grid">
-            {products.map((p, i) => (
-              <TechDeviceCard key={i} {...p} />
-            ))}
+      {/* Trending Products */}
+      <section className="el-section" id="components">
+          <h2 className="el-section-title">TRENDING HARDWARE</h2>
+          <div className="el-grid">
+              {trendingProducts.map((p, i) => <ProductCard key={i} {...p} />)}
           </div>
       </section>
 
-      {/* Bespoke Feature Section */}
-      <section style={{ marginTop: '20rem', padding: '15rem 10%', background: 'var(--el-surface)', border: '1px solid var(--el-border)', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '15rem', alignItems: 'center' }}>
-          <div>
-              <div className="el-label" style={{ marginBottom: '3rem' }}>Hardware Synthesis Hub</div>
-              <h2 className="el-heading-xl" style={{ fontSize: 'clamp(3rem, 6vw, 6rem)', marginBottom: '4rem' }}>Bespoke <br/>Infrastructure.</h2>
-              <p style={{ fontSize: '1.5rem', color: 'rgba(255,255,255,0.4)', lineHeight: 2, marginBottom: '6rem' }}>
-                  Need something custom? Our engineering nodes are ready to assemble bespoke hardware configurations tailored to your specific requirements.
-              </p>
-              <button className="el-btn-primary">Contact Engineering</button>
+      {/* Promo Banner */}
+      <section style={{ margin: '2rem 5%', background: 'linear-gradient(90deg, #1a1d24, #0f1115)', border: '1px solid var(--el-primary)', borderRadius: '8px', padding: '3rem', position: 'relative', overflow: 'hidden' }}>
+          <div style={{ position: 'relative', zIndex: 2, maxWidth: '500px' }}>
+              <h2 className="el-tech-font" style={{ fontSize: '2.5rem', marginBottom: '1rem', color: 'white' }}>BUILD YOUR DREAM PC</h2>
+              <p style={{ color: 'var(--el-text-muted)', marginBottom: '2rem', fontSize: '1.1rem' }}>Use our interactive 3D configurator to ensure 100% compatibility and visualize your custom rig before you buy.</p>
+              <button className="el-btn el-btn-primary">Launch Configurator</button>
           </div>
-          <div style={{ padding: '6rem', background: '#000', border: '1px solid var(--el-border)', display: 'flex', flexDirection: 'column', gap: '3rem' }}>
-              {[1, 2, 3, 4].map(i => (
-                  <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--el-border)', paddingBottom: '2rem' }}>
-                      <span className="el-label" style={{ fontSize: '0.6rem', color: 'rgba(255,255,255,0.3)' }}>Node Verified</span>
-                      <span className="el-label" style={{ fontSize: '0.6rem', color: 'var(--el-cyan)' }}>Stable Signal</span>
-                  </div>
-              ))}
+          <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: '50%', background: 'url(https://images.unsplash.com/photo-1555680202-c86f0e12f086?q=80&w=800) center/cover', opacity: 0.4, maskImage: 'linear-gradient(to left, black, transparent)', WebkitMaskImage: 'linear-gradient(to left, black, transparent)' }}></div>
+      </section>
+
+      {/* Peripherals */}
+      <section className="el-section" id="peripherals">
+          <h2 className="el-section-title">PRO PERIPHERALS</h2>
+          <div className="el-grid">
+              {peripheralProducts.map((p, i) => <ProductCard key={i} {...p} />)}
           </div>
       </section>
 
-      {/* Final Space */}
-      <div style={{ height: '15rem' }}></div>
+      <ElectronicsFooter />
     </div>
   );
 }

@@ -1,88 +1,93 @@
-
 'use client';
 import React from 'react';
 
-export const CoreHeader = () => (
-  <header className="el-header">
-    <div className="el-logo">
-      CORE<span style={{ color: 'var(--el-cyan)' }}>//HARDWARE</span>
-    </div>
-    
-    <nav className="el-nav">
-        {['Infrastructure', 'Compute', 'Graphics', 'Registry'].map(link => (
-            <a key={link} href="#" className="el-nav-link">{link}</a>
-        ))}
-    </nav>
-
-    <div className="el-label" style={{ fontSize: '0.65rem', padding: '0.6rem 1.5rem', background: 'rgba(34, 211, 238, 0.05)', border: '1px solid var(--el-cyan)', boxShadow: '0 0 20px rgba(34, 211, 238, 0.1)' }}>
-      System Status: Online
-    </div>
-  </header>
+export const ElectronicsHeader = () => (
+    <header className="el-header">
+        <a href="#" className="el-logo">
+            NEURAL<span className="el-text-cyan">GEAR</span>
+        </a>
+        <div className="el-search-bar d-none d-md-flex">
+            <span>🔍</span>
+            <input type="text" className="el-search-input" placeholder="Search components, devices..." />
+        </div>
+        <nav className="el-nav">
+            <a href="#components" className="el-nav-link">Components</a>
+            <a href="#systems" className="el-nav-link">Systems</a>
+            <a href="#peripherals" className="el-nav-link">Peripherals</a>
+            <div className="el-cart-icon">
+                🛒
+                <span className="el-cart-badge">3</span>
+            </div>
+        </nav>
+    </header>
 );
 
-export const TechDeviceCard = ({ title, price, category, image }: any) => (
-  <div className="el-device-card">
-    <div className="el-img-frame">
-      <img src={image} alt={title} className="el-img" />
-    </div>
-    <div style={{ padding: '3rem' }}>
-        <div className="el-label" style={{ marginBottom: '1.25rem', fontSize: '0.55rem', color: 'var(--el-cyan)', opacity: 0.8 }}>{category} Architecture</div>
-        <h3 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '2.5rem', fontFamily: 'var(--el-mono)', color: 'white', letterSpacing: '-0.5px' }}>{title}</h3>
-        
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '3.5rem' }}>
-            <div>
-                <div className="el-label" style={{ fontSize: '0.45rem', opacity: 0.4, marginBottom: '0.75rem' }}>Signal Status</div>
-                <div style={{ fontWeight: 800, fontSize: '0.8rem', color: 'var(--el-cyan)', fontFamily: 'var(--el-mono)' }}>Verified</div>
-            </div>
-            <div>
-                <div className="el-label" style={{ fontSize: '0.45rem', opacity: 0.4, marginBottom: '0.75rem' }}>Base Latency</div>
-                <div style={{ fontWeight: 800, fontSize: '0.8rem', fontFamily: 'var(--el-mono)', color: 'white' }}>0.01 MS</div>
-            </div>
+export const ProductCard = ({ title, category, price, oldPrice, image, badge }: any) => (
+    <div className="el-product-card">
+        {badge && <span className="el-badge">{badge}</span>}
+        <div className="el-product-img-wrap">
+            <img src={image} className="el-product-img" alt={title} />
         </div>
-        
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '2.5rem' }}>
-            <div style={{ fontSize: '1.6rem', fontWeight: 800, fontFamily: 'var(--el-mono)', color: 'white' }}>{price}</div>
-            <div style={{ fontSize: '0.7rem', fontWeight: 800, color: 'var(--el-cyan)', letterSpacing: '2px', fontFamily: 'var(--el-mono)', cursor: 'pointer' }}>ACQUIRE →</div>
+        <div className="el-product-category">{category}</div>
+        <h3 className="el-product-title">{title}</h3>
+        <div className="el-product-footer">
+            <div>
+                <span className="el-price">{price}</span>
+                {oldPrice && <span className="el-price-old">{oldPrice}</span>}
+            </div>
+            <button className="el-add-cart" title="Add to Cart">
+                +
+            </button>
         </div>
     </div>
-  </div>
 );
 
-export const ComponentHUD = ({ icon, label, status }: { icon: string, label: string, status: string }) => (
-    <div style={{ padding: '4rem', border: '1px solid var(--el-border)', background: 'rgba(255,255,255,0.02)', transition: 'all 0.3s ease' }}>
-        <div style={{ fontSize: '2.5rem', marginBottom: '2.5rem' }}>{icon}</div>
-        <div className="el-label" style={{ marginBottom: '1rem', fontSize: '0.65rem', color: 'var(--el-cyan)' }}>{label}</div>
-        <div style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.4)', lineHeight: 1.8 }}>{status}</div>
+export const SpecFeature = ({ icon, title, desc }: any) => (
+    <div className="el-spec-item">
+        <div className="el-spec-icon">{icon}</div>
+        <h4 className="el-tech-font" style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>{title}</h4>
+        <p style={{ color: 'var(--el-text-muted)', lineHeight: 1.6, fontSize: '0.95rem' }}>{desc}</p>
     </div>
 );
 
-export const CoreFooter = () => (
+export const ElectronicsFooter = () => (
     <footer className="el-footer">
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '8rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '3rem', marginBottom: '3rem' }}>
             <div>
-                <div className="el-logo" style={{ fontSize: '2.5rem', marginBottom: '3.5rem' }}>CORE</div>
-                <p style={{ color: 'rgba(255,255,255,0.3)', lineHeight: 2, fontSize: '1rem', maxWidth: '450px' }}>
-                    The definitive hardware distribution protocol for high-fidelity computation. Synchronizing bespoke infrastructure with global engineering nodes.
-                </p>
+                <a href="#" className="el-logo" style={{ marginBottom: '1rem', display: 'inline-block' }}>
+                    NEURAL<span className="el-text-cyan">GEAR</span>
+                </a>
+                <p style={{ color: 'var(--el-text-muted)', fontSize: '0.9rem', lineHeight: 1.6 }}>Next-generation hardware for builders, gamers, and creators. Power your future.</p>
             </div>
-            {['RESOURCES', 'GOVERNANCE', 'NETWORK'].map(col => (
-                <div key={col}>
-                    <div className="el-label" style={{ marginBottom: '4rem', color: 'var(--el-cyan)' }}>{col}</div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                        {['Processors', 'Graphics', 'Security', 'Telemetry'].map(link => (
-                            <span key={link} style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.2)', cursor: 'pointer', fontFamily: 'var(--el-mono)' }}>{link}</span>
-                        ))}
-                    </div>
+            <div>
+                <h5 className="el-tech-font" style={{ marginBottom: '1.5rem', color: 'white' }}>Hardware</h5>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
+                    <a href="#" style={{ color: 'var(--el-text-muted)', textDecoration: 'none' }}>Processors (CPU)</a>
+                    <a href="#" style={{ color: 'var(--el-text-muted)', textDecoration: 'none' }}>Graphics Cards (GPU)</a>
+                    <a href="#" style={{ color: 'var(--el-text-muted)', textDecoration: 'none' }}>Motherboards</a>
+                    <a href="#" style={{ color: 'var(--el-text-muted)', textDecoration: 'none' }}>Memory (RAM)</a>
                 </div>
-            ))}
-        </div>
-        <div style={{ marginTop: '12rem', paddingTop: '4rem', borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '4rem' }}>
-            <div className="el-label" style={{ opacity: 0.2, fontSize: '0.6rem' }}>© 2026 CORE HARDWARE // GLOBAL_STABLE</div>
-            <div style={{ display: 'flex', gap: '6rem' }}>
-                {['INSTAGRAM', 'LINKEDIN', 'X_CORE'].map(social => (
-                    <span key={social} className="el-label" style={{ opacity: 0.2, fontSize: '0.6rem' }}>{social}</span>
-                ))}
             </div>
+            <div>
+                <h5 className="el-tech-font" style={{ marginBottom: '1.5rem', color: 'white' }}>Support</h5>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
+                    <a href="#" style={{ color: 'var(--el-text-muted)', textDecoration: 'none' }}>Track Order</a>
+                    <a href="#" style={{ color: 'var(--el-text-muted)', textDecoration: 'none' }}>Returns & Warranty</a>
+                    <a href="#" style={{ color: 'var(--el-text-muted)', textDecoration: 'none' }}>Technical Support</a>
+                    <a href="#" style={{ color: 'var(--el-text-muted)', textDecoration: 'none' }}>Contact Us</a>
+                </div>
+            </div>
+            <div>
+                <h5 className="el-tech-font" style={{ marginBottom: '1.5rem', color: 'white' }}>Newsletter</h5>
+                <p style={{ color: 'var(--el-text-muted)', fontSize: '0.9rem', marginBottom: '1rem' }}>Get updates on latest drops and tech news.</p>
+                <div style={{ display: 'flex' }}>
+                    <input type="email" placeholder="Email Address" style={{ background: 'var(--el-bg-card)', border: '1px solid var(--el-border)', padding: '0.8rem', color: 'white', outline: 'none', borderRadius: '4px 0 0 4px', width: '100%' }} />
+                    <button style={{ background: 'var(--el-primary)', border: 'none', padding: '0.8rem 1rem', borderRadius: '0 4px 4px 0', cursor: 'pointer', fontWeight: 'bold' }}>→</button>
+                </div>
+            </div>
+        </div>
+        <div style={{ textAlign: 'center', paddingTop: '2rem', borderTop: '1px solid var(--el-border)', color: 'var(--el-text-muted)', fontSize: '0.85rem' }}>
+            &copy; 2026 NeuralGear Electronics. All rights reserved.
         </div>
     </footer>
 );

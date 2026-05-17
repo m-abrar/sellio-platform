@@ -148,17 +148,26 @@ When implementing any of the 50 themes, follow this **Golden Prompt**:
 
 | Theme Key | Vertical | Completion | Spec Compliance | Key Aesthetic |
 | :--- | :--- | :--- | :--- | :--- |
-| `unifieds_default` | Unified | 100% | High | Glassmorphic Bento |
-| `ecommerce_default` | Ecommerce | 100% | High | Refined Retail |
-| `services_marketplace`| Services | 100% | High | Bio-Centric Grid |
-| `properties_modern` | Properties | 100% | **Elite** | Architectural Sage |
+| `autos_classic` | Autos | 100% | **Elite** | Burgundy/Gold Premium |
 | `autos_electric` | Autos | 100% | **Elite** | Futurist HUD |
+| `autos_luxury` | Autos | 100% | **Elite** | Velvet Wheels Dark/Gold |
+| `autos_modern` | Autos | 100% | **Elite** | Sleek Black/White |
+| `autos_used` | Autos | 100% | **Elite** | Trustworthy Blue/Orange |
+| `services_corporate` | Services | 100% | **Elite** | Corporate Professional |
+| `services_creative` | Services | 100% | **Elite** | Bold Portfolio |
+| `services_local` | Services | 100% | **Elite** | Local Community |
+| `services_marketplace`| Services | 100% | **Elite** | Bio-Centric Grid |
+| `services_health` | Services | 100% | **Elite** | Wellness Serenity |
+| `properties_modern` | Properties | 100% | **Elite** | Architectural Sage |
 | `events_music` | Events | 100% | **Elite** | Vibrant Poster |
+| `unifieds_default` | Unified | 100% | High | Glassmorphic Bento |
 | `unifieds_mega` | Unified | 100% | **Elite** | High-Density Bento |
+| `ecommerce_default` | Ecommerce | 100% | High | Refined Retail |
 | `ecommerce_fashion` | Ecommerce | 100% | **Elite** | Editorial Lookbook |
 | `jobs_startup` | Jobs | 100% | **Elite** | Energetic Venture |
 | `classifieds_premium` | Classifieds | 100% | **Elite** | Elite Curated |
-| `services_health` | Services | 100% | **Elite** | Wellness Serenity |
+| `ecommerce_electronics` | Ecommerce | 100% | **Elite** | Futurist Cyber/Tech |
+| `ecommerce_luxury` | Ecommerce | 100% | **Elite** | High-Fidelity Gold/Slate |
 
 ---
 

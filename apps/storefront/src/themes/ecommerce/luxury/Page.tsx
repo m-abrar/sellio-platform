@@ -1,65 +1,54 @@
-
+'use client';
 import React from 'react';
-import { ProductShowcase, BrandNarrative } from './components';
+import { LuxuryHeader, LuxuryProduct, LuxuryFooter } from './components';
 
 export default function Page() {
+  const products = [
+    { title: "Lumina Diamond Watch", price: "$12,500", image: "https://images.unsplash.com/photo-1587836374828-cb4387856d25?q=80&w=600" },
+    { title: "Onyx Statement Ring", price: "$4,200", image: "https://images.unsplash.com/photo-1605100804763-247f66126e28?q=80&w=600" },
+    { title: "The Imperial Chronograph", price: "$34,000", image: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=600" },
+  ];
+
   return (
-    <div>
-      {/* Hero Section */}
-      <section className="atelier-hero">
-          <div style={{ maxWidth: '1000px' }}>
-              <span style={{ fontSize: '0.8rem', fontWeight: 500, color: 'var(--atelier-gold)', letterSpacing: '8px', display: 'block', marginBottom: '2.5rem' }}>BOUTIQUE_DISTRIBUTION_V1</span>
-              <h1>The <span>Art</span> of <br/>Atmosphere.</h1>
-              <p style={{ fontSize: '1.25rem', color: '#888', lineHeight: 2, marginBottom: '5rem', maxWidth: '700px', margin: '0 auto 5rem' }}>
-                  A curated high-fidelity edit of the world's most significant fashion assets. Precision in construction, verified by the Atelier protocol.
-              </p>
-              <div style={{ display: 'flex', gap: '2rem', justifyContent: 'center' }}>
-                  <button className="atelier-btn-primary">EXPLORE_COLLECTION</button>
-                  <button style={{ background: 'none', border: '1px solid #ddd', padding: '1.25rem 4rem', fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '2px', cursor: 'pointer' }}>READ_THE_JOURNAL</button>
-              </div>
-          </div>
+    <div className="ecommerce-luxury-wrapper">
+      <LuxuryHeader />
+
+      {/* Hero */}
+      <section className="ecl-hero">
+        <div className="ecl-hero-content">
+            <h2 className="ecl-hero-subtitle">The High Jewelry Collection</h2>
+            <h1 className="ecl-heading ecl-hero-title">CELESTIAL<br/>ELEGANCE</h1>
+            <a href="#explore" className="ecl-btn-gold">Discover the Collection</a>
+        </div>
       </section>
 
-      {/* Logic Bar */}
-      <section style={{ padding: '3.5rem 5%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#fff', borderBottom: '1px solid var(--atelier-border)', color: '#ccc', fontSize: '0.7rem', fontWeight: 600, letterSpacing: '4px' }}>
-          <span>AUTHENTICITY_NODES: 100%</span>
-          <span>GLOBAL_DISTRIBUTION: ACTIVE</span>
-          <span>BOUTIQUE_SYNC: VERIFIED</span>
-          <span>BESPOKE_ACCESS: OPEN</span>
+      {/* Signature Pieces */}
+      <section className="ecl-section" id="explore">
+        <div className="ecl-section-header">
+            <h2 className="ecl-heading ecl-section-title">Signature Creations</h2>
+            <p style={{ color: 'var(--ecl-text-muted)', letterSpacing: '1px', textTransform: 'uppercase', fontSize: '0.85rem' }}>Exquisite craftsmanship meets timeless design</p>
+        </div>
+        <div className="ecl-grid">
+            {products.map((p, i) => <LuxuryProduct key={i} {...p} />)}
+        </div>
+        <div style={{ textAlign: 'center', marginTop: '5rem' }}>
+            <a href="#" className="ecl-btn-gold" style={{ color: 'var(--ecl-text-dark)', borderColor: 'var(--ecl-border)' }}>View All Masterpieces</a>
+        </div>
       </section>
 
-      {/* Product Showcase */}
-      <ProductShowcase />
-
-      {/* Narrative Section */}
-      <BrandNarrative />
-
-      {/* Mid-Section Image Grid */}
-      <section style={{ padding: '10rem 5%', display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '2rem' }}>
-          <div style={{ height: '700px', background: 'var(--atelier-silk)', overflow: 'hidden' }}>
-              <img src="https://images.unsplash.com/photo-1490481651871-ab68624d5517?q=80&w=2070" alt="Luxury Fashion" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-              <div style={{ flex: 1, background: 'var(--atelier-silk)', overflow: 'hidden' }}>
-                  <img src="https://images.unsplash.com/photo-1445205170230-053b83016050?q=80&w=2071" alt="Texture" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              </div>
-              <div style={{ padding: '4rem', background: 'white', border: '1px solid var(--atelier-border)' }}>
-                  <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '2rem', marginBottom: '2rem' }}>Timeless Logic.</h3>
-                  <p style={{ color: '#888', lineHeight: 2 }}>Every piece is tracked via the Sellio registry, ensuring a lifetime of high-fidelity authenticity and provenance.</p>
-              </div>
-          </div>
+      {/* Lookbook Split */}
+      <section className="ecl-split">
+        <div className="ecl-split-img"></div>
+        <div className="ecl-split-content">
+            <h2 className="ecl-heading" style={{ fontSize: '3.5rem', marginBottom: '2rem' }}>Artistry in Every Detail</h2>
+            <p style={{ fontSize: '1.1rem', lineHeight: 2, color: 'rgba(255,255,255,0.7)', marginBottom: '3rem' }}>
+                For over a century, our master artisans have poured their passion into every facet. We source only the rarest gems, setting them in designs that transcend time and trend. Experience the weight of true luxury.
+            </p>
+            <a href="#" className="ecl-btn-gold" style={{ color: '#fff', borderColor: '#fff' }}>Explore Our Heritage</a>
+        </div>
       </section>
 
-      {/* Final CTA */}
-      <section style={{ padding: '15rem 5%', textAlign: 'center' }}>
-          <div style={{ maxWidth: '700px', margin: '0 auto' }}>
-              <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '5rem', fontWeight: 900, marginBottom: '3rem', letterSpacing: '-3px' }}>The Atelier <br/>Registry.</h2>
-              <p style={{ fontSize: '1.25rem', color: '#888', lineHeight: 2, marginBottom: '5rem' }}>
-                  Join the exclusive distribution node for high-fidelity fashion. Verify your collection and gain access to off-market edits.
-              </p>
-              <button className="atelier-btn-primary" style={{ padding: '2rem 6rem', fontSize: '1rem' }}>CONNECT_TO_ATELIER</button>
-          </div>
-      </section>
+      <LuxuryFooter />
     </div>
   );
 }
