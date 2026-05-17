@@ -4,9 +4,9 @@ import { LuxuryHeader, LuxuryProduct, LuxuryFooter } from './components';
 
 export default function Page() {
   const products = [
-    { title: "Lumina Diamond Watch", price: "$12,500", image: "https://images.unsplash.com/photo-1587836374828-cb4387856d25?q=80&w=600" },
-    { title: "Onyx Statement Ring", price: "$4,200", image: "https://images.unsplash.com/photo-1605100804763-247f66126e28?q=80&w=600" },
-    { title: "The Imperial Chronograph", price: "$34,000", image: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=600" },
+    { title: "Lumina Diamond Watch", price: "$12,500", image: "/themes/ecommerce/luxury/31.webp" },
+    { title: "Onyx Statement Ring", price: "$4,200", image: "/themes/ecommerce/luxury/32.webp" },
+    { title: "The Imperial Chronograph", price: "$34,000", image: "/themes/ecommerce/luxury/33.webp" },
   ];
 
   return (

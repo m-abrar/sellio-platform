@@ -1,26 +1,45 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 
-export const ElectronicsHeader = () => (
-    <header className="el-header">
-        <a href="#" className="el-logo">
-            NEURAL<span className="el-text-cyan">GEAR</span>
-        </a>
-        <div className="el-search-bar d-none d-md-flex">
-            <span>🔍</span>
-            <input type="text" className="el-search-input" placeholder="Search components, devices..." />
-        </div>
-        <nav className="el-nav">
-            <a href="#components" className="el-nav-link">Components</a>
-            <a href="#systems" className="el-nav-link">Systems</a>
-            <a href="#peripherals" className="el-nav-link">Peripherals</a>
-            <div className="el-cart-icon">
-                🛒
-                <span className="el-cart-badge">3</span>
+export const ElectronicsHeader = () => {
+    const [isOpen, setIsOpen] = useState(false);
+    return (
+        <header className="el-header">
+            <a href="#" className="el-logo">
+                NEURAL<span className="el-text-cyan">GEAR</span>
+            </a>
+            <div className="el-search-bar el-desktop-search">
+                <span>🔍</span>
+                <input type="text" className="el-search-input" placeholder="Search components, devices..." />
             </div>
-        </nav>
-    </header>
-);
+            
+            <button 
+                className={`el-hamburger ${isOpen ? 'el-hamburger-open' : ''}`} 
+                onClick={() => setIsOpen(!isOpen)}
+                aria-label="Toggle Navigation"
+                id="el-hamburger-toggle"
+            >
+                <span className="el-hamburger-bar"></span>
+                <span className="el-hamburger-bar"></span>
+                <span className="el-hamburger-bar"></span>
+            </button>
+
+            <nav className={`el-nav ${isOpen ? 'el-nav-open' : ''}`}>
+                <div className="el-search-bar el-mobile-search" style={{ marginBottom: '2rem' }}>
+                    <span>🔍</span>
+                    <input type="text" className="el-search-input" placeholder="Search components, devices..." />
+                </div>
+                <a href="#components" className="el-nav-link" onClick={() => setIsOpen(false)}>Components</a>
+                <a href="#systems" className="el-nav-link" onClick={() => setIsOpen(false)}>Systems</a>
+                <a href="#peripherals" className="el-nav-link" onClick={() => setIsOpen(false)}>Peripherals</a>
+                <div className="el-cart-icon" onClick={() => setIsOpen(false)}>
+                    🛒
+                    <span className="el-cart-badge">3</span>
+                </div>
+            </nav>
+        </header>
+    );
+};
 
 export const ProductCard = ({ title, category, price, oldPrice, image, badge }: any) => (
     <div className="el-product-card">

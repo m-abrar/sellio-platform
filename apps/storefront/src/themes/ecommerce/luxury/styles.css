@@ -219,7 +219,7 @@
 .ecl-split-img {
     flex: 1;
     height: 800px;
-    background: url('https://images.unsplash.com/photo-1594882645126-14020914d58d?q=80&w=1000') no-repeat center center/cover;
+    background: url('/themes/ecommerce/luxury/35.webp') no-repeat center center/cover;
 }
 
 .ecl-split-content {
@@ -233,4 +233,176 @@
     background-color: #fff;
     padding: 6rem 5% 2rem;
     border-top: 1px solid var(--ecl-border);
+}
+
+/* Premium Elite Luxury Gold Details & Navigation Drawer */
+.ecl-desktop-icons {
+    display: flex;
+}
+
+.ecl-mobile-icons {
+    display: none;
+}
+
+.ecl-hamburger {
+    display: none;
+}
+
+/* Update hero background with local WebP asset */
+.ecl-hero {
+    background: url('/themes/ecommerce/luxury/34.webp') no-repeat center center/cover !important;
+}
+
+@media (max-width: 768px) {
+    .ecl-header {
+        position: sticky !important;
+        background-color: var(--ecl-bg-dark) !important;
+        padding: 1.25rem 5% !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .ecl-logo {
+        font-size: 1.5rem !important;
+        color: white !important;
+    }
+
+    .ecl-hamburger {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 24px;
+        height: 16px;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        z-index: 1040;
+    }
+
+    .ecl-hamburger-bar {
+        width: 100%;
+        height: 1px;
+        background-color: white;
+        transition: var(--ecl-transition);
+    }
+
+    /* Animate Hamburger to 'X' */
+    .ecl-hamburger-open .ecl-hamburger-bar:nth-child(1) {
+        transform: translateY(7px) rotate(45deg);
+        background-color: var(--ecl-primary);
+    }
+
+    .ecl-hamburger-open .ecl-hamburger-bar:nth-child(2) {
+        opacity: 0;
+    }
+
+    .ecl-hamburger-open .ecl-hamburger-bar:nth-child(3) {
+        transform: translateY(-8px) rotate(-45deg);
+        background-color: var(--ecl-primary);
+    }
+
+    .ecl-nav {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 280px;
+        height: 100vh;
+        background-color: rgba(26, 26, 26, 0.98);
+        backdrop-filter: blur(15px);
+        border-left: 1px solid rgba(255, 255, 255, 0.05);
+        box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 2.5rem;
+        padding: 3rem 2rem;
+        transition: right 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        z-index: 1035;
+    }
+
+    .ecl-nav-open {
+        right: 0;
+    }
+
+    .ecl-nav-link {
+        font-size: 1.1rem;
+        font-weight: 400;
+        letter-spacing: 2px;
+        color: rgba(255, 255, 255, 0.6) !important;
+    }
+
+    .ecl-nav-link:hover {
+        color: var(--ecl-primary) !important;
+    }
+
+    .ecl-desktop-icons {
+        display: none !important;
+    }
+
+    .ecl-mobile-icons {
+        display: flex !important;
+        justify-content: center;
+        gap: 2rem;
+        color: white;
+    }
+
+    /* Layout responsive collapse */
+    .ecl-hero {
+        height: 70vh !important;
+    }
+
+    .ecl-hero-title {
+        font-size: 2.5rem !important;
+    }
+
+    .ecl-section {
+        padding: 4rem 5% !important;
+    }
+
+    .ecl-section-title {
+        font-size: 2rem !important;
+    }
+
+    .ecl-grid {
+        grid-template-columns: 1fr !important;
+        gap: 3rem !important;
+    }
+
+    .ecl-product-img {
+        height: 260px !important;
+    }
+
+    /* Lookbook Split layout */
+    .ecl-split {
+        flex-direction: column !important;
+    }
+
+    .ecl-split-img {
+        width: 100% !important;
+        height: 300px !important;
+    }
+
+    .ecl-split-content {
+        width: 100% !important;
+        padding: 4rem 5% !important;
+    }
+
+    .ecl-split-content h2 {
+        font-size: 2rem !important;
+    }
+
+    /* Footer collapsing */
+    .ecl-footer {
+        padding: 4rem 5% 2rem !important;
+    }
+
+    .ecl-footer > div:nth-child(1) {
+        grid-template-columns: 1fr !important;
+        gap: 3rem !important;
+    }
+
+    .ecl-footer h2.ecl-logo {
+        color: var(--ecl-bg-dark) !important;
+    }
 }

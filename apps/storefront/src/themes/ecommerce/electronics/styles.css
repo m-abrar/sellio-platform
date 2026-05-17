@@ -351,3 +351,178 @@
     padding: 4rem 5% 2rem;
     margin-top: 4rem;
 }
+
+/* Premium Elite Cyberpunk Overclocking glows & responsive navigation drawer */
+.el-desktop-search {
+    display: flex;
+}
+
+.el-mobile-search {
+    display: none;
+}
+
+.el-hamburger {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .el-hamburger {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 28px;
+        height: 20px;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        z-index: 1040;
+    }
+
+    .el-hamburger-bar {
+        width: 100%;
+        height: 2px;
+        background-color: var(--el-text-main);
+        border-radius: 4px;
+        transition: var(--el-transition);
+        box-shadow: 0 0 5px var(--el-primary);
+    }
+
+    /* Animate Hamburger to 'X' */
+    .el-hamburger-open .el-hamburger-bar:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
+        background-color: var(--el-primary);
+    }
+
+    .el-hamburger-open .el-hamburger-bar:nth-child(2) {
+        opacity: 0;
+    }
+
+    .el-hamburger-open .el-hamburger-bar:nth-child(3) {
+        transform: translateY(-9px) rotate(-45deg);
+        background-color: var(--el-primary);
+    }
+
+    .el-nav {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 280px;
+        height: 100vh;
+        background-color: rgba(15, 17, 21, 0.98);
+        backdrop-filter: blur(12px);
+        border-left: 2px solid var(--el-primary);
+        box-shadow: -10px 0 30px rgba(0, 229, 255, 0.2);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 2.5rem;
+        padding: 3rem 2rem;
+        transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 1035;
+    }
+
+    .el-nav-open {
+        right: 0;
+    }
+
+    .el-nav-link {
+        font-size: 1.2rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+    }
+
+    .el-desktop-search {
+        display: none !important;
+    }
+
+    .el-mobile-search {
+        display: flex !important;
+        width: 100%;
+    }
+
+    /* Layout & Hero collapse */
+    .el-hero {
+        height: auto !important;
+        flex-direction: column !important;
+        padding: 4rem 5% 3rem !important;
+        text-align: center !important;
+    }
+
+    .el-hero-content {
+        max-width: 100% !important;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .el-hero-title {
+        font-size: 2.5rem !important;
+    }
+
+    .el-hero-content p {
+        font-size: 1.1rem !important;
+    }
+
+    /* Target the absolute hero GPU image wrapper */
+    .el-hero > div:nth-child(3) {
+        position: static !important;
+        width: 80% !important;
+        margin: 3rem auto 0 !important;
+        transform: none !important;
+    }
+
+    /* Spec feature row */
+    .el-spec-row {
+        flex-direction: column !important;
+        gap: 2rem !important;
+        padding: 2rem !important;
+        margin: 2rem 5% !important;
+    }
+
+    /* Trending Grids */
+    .el-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 1rem !important;
+    }
+
+    .el-product-card {
+        padding: 1rem !important;
+    }
+
+    .el-product-title {
+        font-size: 0.95rem !important;
+    }
+
+    .el-price {
+        font-size: 1.2rem !important;
+    }
+
+    /* Promo Configurator banner row */
+    section[style*="background: 'linear-gradient(90deg, #1a1d24, #0f1115)'"] {
+        padding: 2rem !important;
+        margin: 2rem 5% !important;
+        text-align: center !important;
+    }
+
+    section[style*="background: 'linear-gradient(90deg, #1a1d24, #0f1115)'"] > div:nth-child(1) {
+        max-width: 100% !important;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    section[style*="background: 'linear-gradient(90deg, #1a1d24, #0f1115)'"] h2 {
+        font-size: 1.8rem !important;
+    }
+
+    section[style*="background: 'linear-gradient(90deg, #1a1d24, #0f1115)'"] button {
+        width: 100% !important;
+    }
+
+    /* Hide configuration banner background absolute cover to prevent overlapping on mobile */
+    section[style*="background: 'linear-gradient(90deg, #1a1d24, #0f1115)'"] > div:nth-child(2) {
+        display: none !important;
+    }
+}

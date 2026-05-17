@@ -4,17 +4,17 @@ import { ElectronicsHeader, ProductCard, SpecFeature, ElectronicsFooter } from '
 
 export default function Page() {
   const trendingProducts = [
-    { title: "NVIDIA RTX 5090 Ti Founders Edition", category: "Graphics Cards", price: "$1,999.00", image: "https://images.unsplash.com/photo-1591488320449-011701bb6704?q=80&w=400", badge: "IN STOCK" },
-    { title: "AMD Ryzen 9 9950X Processor", category: "Processors", price: "$699.99", oldPrice: "$749.99", image: "https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?q=80&w=400", badge: "SALE" },
-    { title: "Corsair Dominator Titanium 64GB DDR5", category: "Memory", price: "$349.99", image: "https://images.unsplash.com/photo-1562976540-1502c2145186?q=80&w=400" },
-    { title: "ASUS ROG Swift OLED 32\" 4K 240Hz", category: "Monitors", price: "$1,299.00", image: "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?q=80&w=400", badge: "NEW" },
+    { title: "NVIDIA RTX 5090 Ti Founders Edition", category: "Graphics Cards", price: "$1,999.00", image: "/themes/ecommerce/electronics/21.webp", badge: "IN STOCK" },
+    { title: "AMD Ryzen 9 9950X Processor", category: "Processors", price: "$699.99", oldPrice: "$749.99", image: "/themes/ecommerce/electronics/22.webp", badge: "SALE" },
+    { title: "Corsair Dominator Titanium 64GB DDR5", category: "Memory", price: "$349.99", image: "/themes/ecommerce/electronics/23.webp" },
+    { title: "ASUS ROG Swift OLED 32\" 4K 240Hz", category: "Monitors", price: "$1,299.00", image: "/themes/ecommerce/electronics/24.webp", badge: "NEW" },
   ];
 
   const peripheralProducts = [
-    { title: "Logitech G Pro X Superlight 2", category: "Mice", price: "$159.99", image: "https://images.unsplash.com/photo-1615663245857-ac93bb022f46?q=80&w=400" },
-    { title: "Wooting 60HE+ Analog Keyboard", category: "Keyboards", price: "$174.99", image: "https://images.unsplash.com/photo-1595225476474-87563907a212?q=80&w=400" },
-    { title: "Audeze Maxwell Wireless Gaming Headset", category: "Audio", price: "$299.00", image: "https://images.unsplash.com/photo-1618366712010-f4ae9c647dcb?q=80&w=400" },
-    { title: "Elgato Stream Deck +", category: "Streaming", price: "$199.99", image: "https://images.unsplash.com/photo-1586816879360-004f5b0c51e3?q=80&w=400" },
+    { title: "Logitech G Pro X Superlight 2", category: "Mice", price: "$159.99", image: "/themes/ecommerce/electronics/25.webp" },
+    { title: "Wooting 60HE+ Analog Keyboard", category: "Keyboards", price: "$174.99", image: "/themes/ecommerce/electronics/26.webp" },
+    { title: "Audeze Maxwell Wireless Gaming Headset", category: "Audio", price: "$299.00", image: "/themes/ecommerce/electronics/27.webp" },
+    { title: "Elgato Stream Deck +", category: "Streaming", price: "$199.99", image: "/themes/ecommerce/electronics/28.webp" },
   ];
 
   return (
@@ -36,7 +36,7 @@ export default function Page() {
             </div>
         </div>
         <div style={{ position: 'absolute', right: '5%', top: '50%', transform: 'translateY(-50%)', zIndex: 2, width: '45%' }}>
-            <img src="https://images.unsplash.com/photo-1587202372634-32705e3bf49c?q=80&w=800" alt="Hero GPU" style={{ width: '100%', filter: 'drop-shadow(0 0 30px rgba(0, 229, 255, 0.3))' }} />
+            <img src="/themes/ecommerce/electronics/29.webp" alt="Hero GPU" style={{ width: '100%', filter: 'drop-shadow(0 0 30px rgba(0, 229, 255, 0.3))' }} />
         </div>
       </section>
 
@@ -62,7 +62,7 @@ export default function Page() {
               <p style={{ color: 'var(--el-text-muted)', marginBottom: '2rem', fontSize: '1.1rem' }}>Use our interactive 3D configurator to ensure 100% compatibility and visualize your custom rig before you buy.</p>
               <button className="el-btn el-btn-primary">Launch Configurator</button>
           </div>
-          <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: '50%', background: 'url(https://images.unsplash.com/photo-1555680202-c86f0e12f086?q=80&w=800) center/cover', opacity: 0.4, maskImage: 'linear-gradient(to left, black, transparent)', WebkitMaskImage: 'linear-gradient(to left, black, transparent)' }}></div>
+          <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: '50%', background: 'url(/themes/ecommerce/electronics/30.webp) center/cover', opacity: 0.4, maskImage: 'linear-gradient(to left, black, transparent)', WebkitMaskImage: 'linear-gradient(to left, black, transparent)' }}></div>
       </section>
 
       {/* Peripherals */}

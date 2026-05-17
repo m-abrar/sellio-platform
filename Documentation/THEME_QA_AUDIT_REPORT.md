@@ -49,16 +49,14 @@ Individual QA Audit reports are stored sequentially in the `reports/` directory.
 - **[🚗 Theme 3: `autos/luxury`](file:///d:/Sellio/documentation/reports/theme_autos_luxury_audit.md) — 🟢 Certified Elite Pass**
 - **[🚗 Theme 4: `autos/used`](file:///d:/Sellio/documentation/reports/theme_autos_used_audit.md) — 🟢 Certified Elite Pass**
 - **[🚗 Theme 5: `autos/modern`](file:///d:/Sellio/documentation/reports/theme_autos_modern_audit.md) — 🟢 Certified Elite Pass**
+- **[🛍️ Theme 6: `ecommerce/default`](file:///d:/Sellio/documentation/reports/theme_ecommerce_default_audit.md) — 🟢 Certified Elite Pass**
+- **[🛍️ Theme 7: `ecommerce/electronics`](file:///d:/Sellio/documentation/reports/theme_ecommerce_electronics_audit.md) — 🟢 Certified Elite Pass**
+- **[🛍️ Theme 8: `ecommerce/fashion`](file:///d:/Sellio/documentation/reports/theme_ecommerce_fashion_audit.md) — 🟢 Certified Elite Pass**
+- **[🛍️ Theme 9: `ecommerce/luxury`](file:///d:/Sellio/documentation/reports/theme_ecommerce_luxury_audit.md) — 🟢 Certified Elite Pass**
 
 ---
 
 ## 🔮 Next Themes Queue (Pending Audits)
-
-### 🛍️ Ecommerce Vertical (4 Themes)
-- [ ] Theme 6: `ecommerce/default`
-- [ ] Theme 7: `ecommerce/electronics`
-- [ ] Theme 8: `ecommerce/fashion`
-- [ ] Theme 9: `ecommerce/luxury`
 
 ### 🏠 Properties Vertical (13 Themes)
 - [ ] Theme 10: `properties/classic`

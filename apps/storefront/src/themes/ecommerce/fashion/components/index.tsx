@@ -1,23 +1,47 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 
-export const RunwayHeader = () => (
-  <header className="ef-header">
-    <div className="ef-logo">
-      ATELIER<span style={{ fontWeight: 400, fontStyle: 'italic' }}>Runway</span>
-    </div>
-    
-    <nav className="ef-nav">
-        {['Collection', 'Editorial', 'Lookbook', 'Atelier_Auth'].map(link => (
-            <a key={link} href="#" className="ef-nav-link">{link}</a>
-        ))}
-    </nav>
+export const RunwayHeader = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  return (
+    <header className="ef-header">
+      <div className="ef-logo">
+        ATELIER<span style={{ fontWeight: 400, fontStyle: 'italic' }}>Runway</span>
+      </div>
+      
+      <button 
+        className={`ef-hamburger ${isOpen ? 'ef-hamburger-open' : ''}`} 
+        onClick={() => setIsOpen(!isOpen)}
+        aria-label="Toggle Navigation"
+        id="ef-hamburger-toggle"
+      >
+        <span className="ef-hamburger-bar"></span>
+        <span className="ef-hamburger-bar"></span>
+        <span className="ef-hamburger-bar"></span>
+      </button>
 
-    <div className="ef-mono" style={{ fontSize: '0.6rem', border: '1px solid var(--ef-ebony)', padding: '0.5rem 1.5rem' }}>
-      AUTUMN_WINTER_26
-    </div>
-  </header>
-);
+      <nav className={`ef-nav ${isOpen ? 'ef-nav-open' : ''}`}>
+          {['Collection', 'Editorial', 'Lookbook', 'Atelier_Auth'].map(link => (
+              <a 
+                key={link} 
+                href="#" 
+                className="ef-nav-link"
+                onClick={() => setIsOpen(false)}
+              >
+                {link}
+              </a>
+          ))}
+          <div className="ef-mono ef-mobile-header-meta" style={{ fontSize: '0.6rem', border: '1px solid var(--ef-ebony)', padding: '0.5rem 1.5rem', marginTop: '2rem' }}>
+            AUTUMN_WINTER_26
+          </div>
+      </nav>
+
+      <div className="ef-mono ef-desktop-header-meta" style={{ fontSize: '0.6rem', border: '1px solid var(--ef-ebony)', padding: '0.5rem 1.5rem' }}>
+        AUTUMN_WINTER_26
+      </div>
+    </header>
+  );
+};
 
 export const EditorialLookCard = ({ name, price, image }: any) => (
   <div className="ef-look-card">

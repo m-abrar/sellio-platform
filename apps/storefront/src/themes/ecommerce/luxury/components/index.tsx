@@ -1,22 +1,43 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 
-export const LuxuryHeader = () => (
-    <header className="ecl-header">
-        <a href="#" className="ecl-logo">AURELIA</a>
-        <nav className="ecl-nav d-none d-md-flex">
-            <a href="#collections" className="ecl-nav-link">Collections</a>
-            <a href="#watches" className="ecl-nav-link">Timepieces</a>
-            <a href="#jewelry" className="ecl-nav-link">Jewelry</a>
-            <a href="#heritage" className="ecl-nav-link">Heritage</a>
-        </nav>
-        <div className="ecl-icon-group">
-            <span style={{ cursor: 'pointer' }}>🔍</span>
-            <span style={{ cursor: 'pointer' }}>👤</span>
-            <span style={{ cursor: 'pointer' }}>👜</span>
-        </div>
-    </header>
-);
+export const LuxuryHeader = () => {
+    const [isOpen, setIsOpen] = useState(false);
+    return (
+        <header className="ecl-header">
+            <a href="#" className="ecl-logo">AURELIA</a>
+            
+            <button 
+                className={`ecl-hamburger ${isOpen ? 'ecl-hamburger-open' : ''}`} 
+                onClick={() => setIsOpen(!isOpen)}
+                aria-label="Toggle Navigation"
+                id="ecl-hamburger-toggle"
+            >
+                <span className="ecl-hamburger-bar"></span>
+                <span className="ecl-hamburger-bar"></span>
+                <span className="ecl-hamburger-bar"></span>
+            </button>
+
+            <nav className={`ecl-nav ${isOpen ? 'ecl-nav-open' : ''}`}>
+                <a href="#collections" className="ecl-nav-link" onClick={() => setIsOpen(false)}>Collections</a>
+                <a href="#watches" className="ecl-nav-link" onClick={() => setIsOpen(false)}>Timepieces</a>
+                <a href="#jewelry" className="ecl-nav-link" onClick={() => setIsOpen(false)}>Jewelry</a>
+                <a href="#heritage" className="ecl-nav-link" onClick={() => setIsOpen(false)}>Heritage</a>
+                <div className="ecl-icon-group ecl-mobile-icons" style={{ marginTop: '2rem' }}>
+                    <span style={{ cursor: 'pointer' }}>🔍</span>
+                    <span style={{ cursor: 'pointer' }}>👤</span>
+                    <span style={{ cursor: 'pointer' }}>👜</span>
+                </div>
+            </nav>
+
+            <div className="ecl-icon-group ecl-desktop-icons">
+                <span style={{ cursor: 'pointer' }}>🔍</span>
+                <span style={{ cursor: 'pointer' }}>👤</span>
+                <span style={{ cursor: 'pointer' }}>👜</span>
+            </div>
+        </header>
+    );
+};
 
 export const LuxuryProduct = ({ title, price, image }: any) => (
     <div className="ecl-product-card">

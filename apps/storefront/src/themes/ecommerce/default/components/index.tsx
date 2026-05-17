@@ -1,24 +1,49 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 
-export const ShopHeader = () => (
-  <header className="ed-header">
-    <div className="ed-logo">
-      SELLIO<span style={{ color: 'var(--ed-blue)' }}>Shop</span>
-    </div>
-    
-    <nav className="ed-nav">
-        {['Collection', 'Essentials', 'Lookbook', 'Support'].map(link => (
-            <a key={link} href="#" className="ed-nav-link">{link}</a>
-        ))}
-    </nav>
+export const ShopHeader = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  return (
+    <header className="ed-header">
+      <div className="ed-logo">
+        SELLIO<span style={{ color: 'var(--ed-blue)' }}>Shop</span>
+      </div>
+      
+      <button 
+        className={`ed-hamburger ${isOpen ? 'ed-hamburger-open' : ''}`} 
+        onClick={() => setIsOpen(!isOpen)}
+        aria-label="Toggle Navigation"
+        id="ed-hamburger-toggle"
+      >
+        <span className="ed-hamburger-bar"></span>
+        <span className="ed-hamburger-bar"></span>
+        <span className="ed-hamburger-bar"></span>
+      </button>
 
-    <div className="ed-mono" style={{ fontSize: '0.65rem', display: 'flex', gap: '2rem' }}>
-      <span>CART (0)</span>
-      <span>SEARCH</span>
-    </div>
-  </header>
-);
+      <nav className={`ed-nav ${isOpen ? 'ed-nav-open' : ''}`}>
+          {['Collection', 'Essentials', 'Lookbook', 'Support'].map(link => (
+              <a 
+                key={link} 
+                href="#" 
+                className="ed-nav-link"
+                onClick={() => setIsOpen(false)}
+              >
+                {link}
+              </a>
+          ))}
+          <div className="ed-mono ed-mobile-header-meta" style={{ fontSize: '0.65rem', gap: '2rem', marginTop: '2rem' }}>
+            <span>CART (0)</span>
+            <span>SEARCH</span>
+          </div>
+      </nav>
+
+      <div className="ed-mono ed-desktop-header-meta" style={{ fontSize: '0.65rem', display: 'flex', gap: '2rem' }}>
+        <span>CART (0)</span>
+        <span>SEARCH</span>
+      </div>
+    </header>
+  );
+};
 
 export const PremiumProductCard = ({ name, price, category, image }: any) => (
   <div className="ed-product-card">
