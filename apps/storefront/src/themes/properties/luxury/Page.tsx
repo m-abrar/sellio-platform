@@ -16,7 +16,7 @@ export default function Page() {
               <button className="luxury-btn-primary">EXPLORE_COLLECTION</button>
           </div>
           <div>
-              <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2070" alt="Luxury Villa" className="platinum-hero-img" />
+              <img src="/themes/properties/luxury/1.webp" alt="Luxury Villa" className="platinum-hero-img" />
           </div>
       </section>
 
@@ -34,7 +34,7 @@ export default function Page() {
       {/* Middle Section: Editorial */}
       <section style={{ padding: '15rem 5%', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10rem', alignItems: 'center', background: 'var(--luxury-platinum)' }}>
           <div style={{ position: 'relative' }}>
-              <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070" alt="Modern Architecture" style={{ width: '100%', borderRadius: '4px', boxShadow: '0 40px 80px rgba(0,0,0,0.05)' }} />
+              <img src="/themes/properties/luxury/2.webp" alt="Modern Architecture" style={{ width: '100%', borderRadius: '4px', boxShadow: '0 40px 80px rgba(0,0,0,0.05)' }} />
               <div style={{ position: 'absolute', bottom: '-4rem', right: '-4rem', padding: '4rem', background: 'white', border: '1px solid var(--luxury-border)', boxShadow: '0 20px 40px rgba(0,0,0,0.05)' }}>
                   <div style={{ fontSize: '3rem', fontWeight: 900, fontFamily: 'var(--font-serif)', color: 'var(--luxury-gold)' }}>50+</div>
                   <div style={{ fontSize: '0.7rem', fontWeight: 800, color: '#aaa', letterSpacing: '2px' }}>OFF_MARKET_NODES</div>

@@ -221,3 +221,126 @@
     background: var(--luxury-gold);
     color: white;
 }
+
+/* Premium Elite Mobile Drawer & Responsive Degradation */
+.luxury-mobile-inquire-btn {
+  display: none;
+}
+
+.luxury-hamburger {
+  display: none;
+}
+
+@media (max-width: 1024px) {
+  .luxury-hamburger {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 26px;
+    height: 18px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 1050;
+  }
+
+  .luxury-hamburger-bar {
+    width: 100%;
+    height: 2px;
+    background-color: var(--luxury-charcoal);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .luxury-hamburger-open .luxury-hamburger-bar:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+    background-color: var(--luxury-gold);
+  }
+
+  .luxury-hamburger-open .luxury-hamburger-bar:nth-child(2) {
+    opacity: 0;
+  }
+
+  .luxury-hamburger-open .luxury-hamburger-bar:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+    background-color: var(--luxury-gold);
+  }
+
+  .platinum-nav {
+    display: flex !important;
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 320px;
+    height: 100vh;
+    background-color: var(--luxury-platinum);
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2.5rem;
+    padding: 3rem 2rem;
+    transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 1040;
+    box-shadow: -15px 0 30px rgba(0,0,0,0.05);
+    border-left: 1px solid var(--luxury-border);
+  }
+
+  .platinum-nav-open {
+    right: 0;
+  }
+
+  .platinum-nav-link {
+    font-size: 1.2rem;
+    color: var(--luxury-charcoal);
+  }
+
+  .luxury-desktop-inquire-btn {
+    display: none !important;
+  }
+
+  .luxury-mobile-inquire-btn {
+    display: block !important;
+    width: 100%;
+  }
+
+  /* Structural Refolding */
+  .platinum-hero {
+    grid-template-columns: 1fr !important;
+    padding: 6rem 5% !important;
+    height: auto !important;
+    gap: 4rem !important;
+  }
+
+  .platinum-hero-content {
+    padding-right: 0 !important;
+  }
+
+  .platinum-hero h1 {
+    font-size: 3.5rem !important;
+  }
+
+  .platinum-hero-img {
+    height: 400px !important;
+  }
+
+  .showcase-grid {
+    grid-template-columns: 1fr !important;
+    gap: 3rem !important;
+  }
+
+  .amenity-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 3rem !important;
+  }
+
+  .concierge-footer-grid {
+    grid-template-columns: 1fr !important;
+    gap: 3rem !important;
+  }
+
+  section[style*="gridTemplateColumns"] {
+    grid-template-columns: 1fr !important;
+    gap: 4rem !important;
+    padding: 6rem 5% !important;
+  }
+}

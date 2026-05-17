@@ -27,8 +27,8 @@ const EstateCard = ({ title, price, location, tag, image }: EstateCardProps) => 
 
 export const EstateShowcase = () => {
     const estates = [
-        { title: "The Obsidian Villa", price: "$12,400,000", location: "Beverly Hills", tag: "NEW_LISTING", image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2070" },
-        { title: "Azure Coast Estate", price: "$8,900,000", location: "Malibu", tag: "FEATURED", image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?q=80&w=2080" },
+        { title: "The Obsidian Villa", price: "$12,400,000", location: "Beverly Hills", tag: "NEW_LISTING", image: "/themes/properties/luxury/3.webp" },
+        { title: "Azure Coast Estate", price: "$8,900,000", location: "Malibu", tag: "FEATURED", image: "/themes/properties/luxury/4.webp" },
     ];
 
     return (
