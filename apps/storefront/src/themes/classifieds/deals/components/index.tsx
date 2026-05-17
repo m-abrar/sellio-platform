@@ -1,68 +1,97 @@
-
+'use client';
 import React from 'react';
 
 export const DealsHeader = () => (
-  <header className="deals-header">
-    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-        <div style={{ width: '40px', height: '40px', background: 'white', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-deal-red)', fontWeight: 900, fontSize: '1.5rem' }}>%</div>
-        <span style={{ fontWeight: 900, fontSize: '1.5rem', letterSpacing: '-1px' }}>SELLIO_DEALS</span>
-      </div>
-      <div className="deals-search-bar" style={{ flex: 0.6 }}>
-        <span style={{ marginRight: '1rem' }}>🔍</span>
-        <input type="text" placeholder="Search 1,200+ active bargains..." style={{ border: 'none', background: 'none', outline: 'none', width: '100%', fontWeight: 600 }} />
-      </div>
-      <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
-        <div style={{ textAlign: 'right' }}>
-          <div style={{ fontSize: '0.65rem', fontWeight: 800, opacity: 0.8 }}>ACTIVE_DEALS</div>
-          <div style={{ fontSize: '1.1rem', fontWeight: 900 }}>4,291</div>
+    <>
+        <div className="cd-header-top">
+            <div>🔥 FLASH SALE: UP TO 80% OFF CLEARANCE ITEMS</div>
+            <div>Ends in: <span style={{ fontWeight: 800, color: 'var(--cd-secondary-yellow)' }}>04:12:39</span></div>
         </div>
-        <button style={{ background: 'white', color: 'var(--color-deal-red)', padding: '0.75rem 1.5rem', borderRadius: '8px', border: 'none', fontWeight: 800, cursor: 'pointer' }}>SELL_FAST</button>
-      </div>
-    </div>
-    <div className="trending-pills">
-      {['#iPhone15', '#HermanMiller', '#PS5', '#RoadBikes', '#VintageLenses', '#DesignerFurniture'].map(tag => (
-        <span key={tag} className="trending-pill">{tag}</span>
-      ))}
-    </div>
-  </header>
+        <header className="cd-header-main">
+            <a href="#" className="cd-logo">
+                Deal<span>Dash</span>
+            </a>
+            
+            <div className="cd-search-bar d-none d-lg-flex">
+                <span style={{ fontSize: '1.2rem', color: 'var(--cd-text-muted)', marginLeft: '0.5rem' }}>🔍</span>
+                <input type="text" className="cd-search-input" placeholder="Search for bargains, tech, fashion..." />
+                <button className="cd-search-btn">Search</button>
+            </div>
+            
+            <div className="cd-nav-actions">
+                <a href="#" style={{ color: 'var(--cd-text-main)', textDecoration: 'none', fontWeight: 600 }}>Login</a>
+                <a href="#" className="cd-btn-post">Post a Deal</a>
+            </div>
+        </header>
+        <div className="cd-category-ribbon">
+            <a href="#" className="cd-cat-link">🔥 Trending Now</a>
+            <a href="#" className="cd-cat-link">💻 Electronics</a>
+            <a href="#" className="cd-cat-link">👕 Fashion</a>
+            <a href="#" className="cd-cat-link">🛋️ Home & Garden</a>
+            <a href="#" className="cd-cat-link">🚗 Vehicles</a>
+            <a href="#" className="cd-cat-link">🛠️ Tools</a>
+            <a href="#" className="cd-cat-link">🎮 Gaming</a>
+        </div>
+    </>
 );
 
-export const UrgencyTicker = () => (
-  <div className="urgency-ticker">
-    <div className="ticker-content">
-      🔥 JUST_SOLD: MacBook Pro M2 for $1,200 (Saved 35%) • ⚡ NEW_DEAL: Sony A7IV - $1,800 • 🚀 POPULAR: 12 users watching Aeron Chair Size B • 🔥 JUST_SOLD: Canon R5 Body for $2,100 • ⚡ NEW_DEAL: RTX 4090 - $1,400
+export const DealCard = ({ title, currentPrice, originalPrice, discount, image, seller, isTopSeller }: any) => (
+    <div className="cd-deal-card">
+        <div className="cd-discount-tag">-{discount}%</div>
+        <div className="cd-card-img-wrap">
+            <img src={image} className="cd-card-img" alt={title} />
+        </div>
+        <div className="cd-card-body">
+            <h3 className="cd-card-title">{title}</h3>
+            <div className="cd-price-row">
+                <span className="cd-current-price">{currentPrice}</span>
+                <span className="cd-original-price">{originalPrice}</span>
+            </div>
+            <div className="cd-seller-info">
+                <span>👤 {seller}</span>
+                {isTopSeller && <span className="cd-seller-badge">Trusted Seller</span>}
+            </div>
+        </div>
     </div>
-  </div>
 );
 
-export const BargainCard = ({ title, price, oldPrice, location, time, image, isHot }: any) => {
-  const savings = Math.round((1 - (parseFloat(price.replace('$', '').replace(',', '')) / parseFloat(oldPrice.replace('$', '').replace(',', '')))) * 100);
-  
-  return (
-    <div className="bargain-card">
-      <div className="deal-image-wrapper">
-        <img src={image} alt={title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-        {isHot && <div className="deal-badge">HOT_DEAL</div>}
-        <div className="deal-price-cut">-{savings}%</div>
-      </div>
-      <div className="deal-content">
-        <h3 className="deal-title">{title}</h3>
-        <div className="deal-price-wrapper">
-          <span className="deal-price-current">{price}</span>
-          <span className="deal-price-old">{oldPrice}</span>
+export const DealsFooter = () => (
+    <footer className="cd-footer">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '3rem', marginBottom: '3rem' }}>
+            <div>
+                <a href="#" className="cd-logo" style={{ marginBottom: '1rem', display: 'block' }}>
+                    Deal<span>Dash</span>
+                </a>
+                <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.9rem', lineHeight: 1.6 }}>Your ultimate destination for community bargains, flash sales, and hidden gems.</p>
+            </div>
+            <div>
+                <h4 style={{ fontWeight: 700, marginBottom: '1.5rem', textTransform: 'uppercase' }}>Buyer Protection</h4>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
+                    <a href="#">Money Back Guarantee</a>
+                    <a href="#">Safe Trading Guide</a>
+                    <a href="#">Report an Item</a>
+                    <a href="#">Customer Support</a>
+                </div>
+            </div>
+            <div>
+                <h4 style={{ fontWeight: 700, marginBottom: '1.5rem', textTransform: 'uppercase' }}>Sell on DealDash</h4>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
+                    <a href="#">Post an Item</a>
+                    <a href="#">Seller Dashboard</a>
+                    <a href="#">Promote your listings</a>
+                    <a href="#">Fee Schedule</a>
+                </div>
+            </div>
+            <div>
+                <h4 style={{ fontWeight: 700, marginBottom: '1.5rem', textTransform: 'uppercase' }}>Never miss a deal</h4>
+                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                    <input type="email" placeholder="Email address" style={{ padding: '0.75rem', borderRadius: '4px', border: 'none', outline: 'none', width: '100%' }} />
+                    <button style={{ backgroundColor: 'var(--cd-primary-red)', color: 'white', border: 'none', padding: '0.75rem 1rem', borderRadius: '4px', fontWeight: 700, cursor: 'pointer' }}>Go</button>
+                </div>
+            </div>
         </div>
-        <div style={{ marginTop: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <div style={{ flex: 1, height: '4px', background: '#eee', borderRadius: '2px', overflow: 'hidden' }}>
-            <div style={{ width: isHot ? '85%' : '40%', height: '100%', background: 'var(--color-deal-red)' }}></div>
-          </div>
-          <span style={{ fontSize: '0.65rem', fontWeight: 800, color: 'var(--color-deal-red)' }}>{isHot ? 'HIGH_INTEREST' : 'STABLE'}</span>
+        <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '1.5rem', textAlign: 'center', fontSize: '0.85rem', color: 'rgba(255,255,255,0.5)' }}>
+            &copy; 2026 DealDash Marketplace. All rights reserved.
         </div>
-      </div>
-      <div className="deal-footer">
-        <span>📍 {location}</span>
-        <span>🕒 {time}</span>
-      </div>
-    </div>
-  );
-};
+    </footer>
+);

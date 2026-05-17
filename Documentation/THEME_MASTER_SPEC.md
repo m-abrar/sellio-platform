@@ -172,6 +172,7 @@ When implementing any of the 50 themes, follow this **Golden Prompt**:
 | `jobs_modern` | Jobs | 100% | **Elite** | Glassmorphic Startups |
 | `classifieds_premium` | Classifieds | 100% | **Elite** | Elite Curated |
 | `classifieds_general` | Classifieds | 100% | **Elite** | Classic Marketplace |
+| `classifieds_deals` | Classifieds | 100% | **Elite** | Urgent Bargain/Discount |
 | `ecommerce_electronics` | Ecommerce | 100% | **Elite** | Futurist Cyber/Tech |
 | `ecommerce_luxury` | Ecommerce | 100% | **Elite** | High-Fidelity Gold/Slate |
 
