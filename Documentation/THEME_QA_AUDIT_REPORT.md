@@ -44,11 +44,72 @@ Every theme is subjected to the following 20-point inspection criteria across 5 
 ## 🔍 Detailed Audit Logs
 Individual QA Audit reports are stored sequentially in the `reports/` directory.
 
-- [🚗 Theme 1: `autos/classic`](file:///d:/Sellio/documentation/reports/theme_autos_classic_audit.md)
-- [🚗 Theme 2: `autos/electric`](file:///d:/Sellio/documentation/reports/theme_autos_electric_audit.md)
-- [🚗 Theme 3: `autos/luxury`](file:///d:/Sellio/documentation/reports/theme_autos_luxury_audit.md)
-- [🚗 Theme 4: `autos/used`](file:///d:/Sellio/documentation/reports/theme_autos_used_audit.md)
-- [🚗 Theme 5: `autos/modern`](file:///d:/Sellio/documentation/reports/theme_autos_modern_audit.md)
+- **[🚗 Theme 1: `autos/classic`](file:///d:/Sellio/documentation/reports/theme_autos_classic_audit.md) — 🟢 Certified Elite Pass**
+- **[🚗 Theme 2: `autos/electric`](file:///d:/Sellio/documentation/reports/theme_autos_electric_audit.md) — 🟢 Certified Elite Pass**
+- **[🚗 Theme 3: `autos/luxury`](file:///d:/Sellio/documentation/reports/theme_autos_luxury_audit.md) — 🟢 Certified Elite Pass**
+- **[🚗 Theme 4: `autos/used`](file:///d:/Sellio/documentation/reports/theme_autos_used_audit.md) — 🟢 Certified Elite Pass**
+- **[🚗 Theme 5: `autos/modern`](file:///d:/Sellio/documentation/reports/theme_autos_modern_audit.md) — 🟢 Certified Elite Pass**
 
 ---
-*Next Theme to be Audited with Browser Agent: `ecommerce/default`*
+
+## 🔮 Next Themes Queue (Pending Audits)
+
+### 🛍️ Ecommerce Vertical (4 Themes)
+- [ ] Theme 6: `ecommerce/default`
+- [ ] Theme 7: `ecommerce/electronics`
+- [ ] Theme 8: `ecommerce/fashion`
+- [ ] Theme 9: `ecommerce/luxury`
+
+### 🏠 Properties Vertical (13 Themes)
+- [ ] Theme 10: `properties/classic`
+- [ ] Theme 11: `properties/commercial`
+- [ ] Theme 12: `properties/investment`
+- [ ] Theme 13: `properties/luxury`
+- [ ] Theme 14: `properties/luxury_2`
+- [ ] Theme 15: `properties/map`
+- [ ] Theme 16: `properties/modern`
+- [ ] Theme 17: `properties/neighborhood`
+- [ ] Theme 18: `properties/rental`
+- [ ] Theme 19: `properties/showcase`
+- [ ] Theme 20: `properties/unified`
+- [ ] Theme 21: `properties/urban`
+- [ ] Theme 22: `properties/vacation`
+
+### 🌐 Unified Vertical (8 Themes)
+- [ ] Theme 23: `unifieds/classic`
+- [ ] Theme 24: `unifieds/default`
+- [ ] Theme 25: `unifieds/interactive`
+- [ ] Theme 26: `unifieds/marketplace`
+- [ ] Theme 27: `unifieds/mega`
+- [ ] Theme 28: `unifieds/minimal`
+- [ ] Theme 29: `unifieds/modern`
+- [ ] Theme 30: `unifieds/standard`
+
+### 📅 Events Vertical (5 Themes)
+- [ ] Theme 31: `events/classic`
+- [ ] Theme 32: `events/corporate`
+- [ ] Theme 33: `events/creative`
+- [ ] Theme 34: `events/festival`
+- [ ] Theme 35: `events/music`
+
+### 🤝 Services Vertical (5 Themes)
+- [ ] Theme 36: `services/corporate`
+- [ ] Theme 37: `services/creative`
+- [ ] Theme 38: `services/health`
+- [ ] Theme 39: `services/local`
+- [ ] Theme 40: `services/marketplace`
+
+### 💼 Jobs Vertical (6 Themes)
+- [ ] Theme 41: `jobs/blue_collar`
+- [ ] Theme 42: `jobs/corporate`
+- [ ] Theme 43: `jobs/freelance`
+- [ ] Theme 44: `jobs/modern`
+- [ ] Theme 45: `jobs/startup`
+- [ ] Theme 46: `jobs/tech`
+
+### 📋 Classifieds Vertical (5 Themes)
+- [ ] Theme 47: `classifieds/deals`
+- [ ] Theme 48: `classifieds/general`
+- [ ] Theme 49: `classifieds/local`
+- [ ] Theme 50: `classifieds/modern`
+- [ ] Theme 51: `classifieds/premium`

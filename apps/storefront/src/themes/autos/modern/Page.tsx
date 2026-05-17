@@ -4,10 +4,10 @@ import { ModernHeader, ModernCarCard, CompareItem, ModernFooter } from './compon
 
 export default function Page() {
   const cars = [
-    { title: "2025 Tesla Model 3", desc: "Available Now | Premium", price: "$39,000", image: "https://images.unsplash.com/photo-1560958089-b8a1929cea89?q=80&w=600" },
-    { title: "2025 BMW i4", desc: "Premium Electric Sedan", price: "$55,000", image: "https://images.unsplash.com/photo-1617814076367-b759c7d7e738?q=80&w=600" },
-    { title: "2025 Toyota Corolla", desc: "Reliable Everyday Car", price: "$22,000", image: "https://images.unsplash.com/photo-1590362891991-f776e747a588?q=80&w=600" },
-    { title: "2025 Audi e-tron GT", desc: "Luxury Performance EV", price: "$88,000", image: "https://images.unsplash.com/photo-1614200179396-2bdb77ebf81b?q=80&w=600" }
+    { title: "2025 Tesla Model 3", desc: "Available Now | Premium", price: "$39,000", image: "/themes/autos/modern/11.webp" },
+    { title: "2025 BMW i4", desc: "Premium Electric Sedan", price: "$55,000", image: "/themes/autos/modern/12.webp" },
+    { title: "2025 Toyota Corolla", desc: "Reliable Everyday Car", price: "$22,000", image: "/themes/autos/modern/13.webp" },
+    { title: "2025 Audi e-tron GT", desc: "Luxury Performance EV", price: "$88,000", image: "/themes/autos/modern/14.webp" }
   ];
 
   return (
@@ -54,20 +54,20 @@ export default function Page() {
                 title="Tesla Model 3" 
                 stats="Range: 333 mi | 0-60: 4.2s" 
                 price="$39k" 
-                image="https://images.unsplash.com/photo-1560958089-b8a1929cea89?q=80&w=400" 
+                image="/themes/autos/modern/11.webp" 
             />
             <CompareItem 
                 title="BMW i4" 
                 stats="Range: 301 mi | 0-60: 5.5s" 
                 price="$55k" 
-                image="https://images.unsplash.com/photo-1617814076367-b759c7d7e738?q=80&w=400" 
+                image="/themes/autos/modern/12.webp" 
                 highlight={true}
             />
             <CompareItem 
                 title="Hyundai IONIQ 6" 
                 stats="Range: 361 mi | 0-60: 5.1s" 
                 price="$46k" 
-                image="https://images.unsplash.com/photo-1678129571167-db3fb7a488f2?q=80&w=400" 
+                image="/themes/autos/modern/15.webp" 
             />
         </div>
         <div style={{ textAlign: 'center', marginTop: '3rem' }}>
@@ -99,7 +99,7 @@ export default function Page() {
                 <p style={{ color: '#666', lineHeight: 1.6 }}>Advanced sensor fusion, real-time mapping, and predictive algorithms ensure unparalleled safety and performance in various conditions.</p>
             </div>
             <div>
-                <img src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?q=80&w=800" alt="AI Driving" style={{ width: '100%', borderRadius: '12px', boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }} />
+                <img src="/themes/autos/modern/16.webp" alt="AI Driving" style={{ width: '100%', borderRadius: '12px', boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }} />
             </div>
         </div>
 
@@ -110,7 +110,7 @@ export default function Page() {
                 <p style={{ color: '#666', lineHeight: 1.6 }}>Innovative battery technology provides faster charging, longer range, and a dynamic driving feel, all backed by comprehensive warranties.</p>
             </div>
             <div style={{ order: 1 }}>
-                <img src="https://images.unsplash.com/photo-1614200179396-2bdb77ebf81b?q=80&w=800" alt="EV Tech" style={{ width: '100%', borderRadius: '12px', boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }} />
+                <img src="/themes/autos/modern/17.webp" alt="EV Tech" style={{ width: '100%', borderRadius: '12px', boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }} />
             </div>
         </div>
       </section>

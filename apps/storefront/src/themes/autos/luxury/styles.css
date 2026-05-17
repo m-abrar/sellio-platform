@@ -109,7 +109,7 @@
 /* Hero Section */
 .lx-hero {
     height: 100vh;
-    background: url('https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?q=80&w=2070') no-repeat center center/cover;
+    background: url('/themes/autos/luxury/hero.png') no-repeat center center/cover;
     position: relative;
     display: flex;
     align-items: center;
@@ -303,4 +303,101 @@
 
 .lx-footer-link:hover {
     color: var(--lx-gold);
+}
+
+/* Premium Responsive Navigation Overrides */
+.lx-hamburger {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .lx-hamburger {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 28px;
+        height: 20px;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        z-index: 1040;
+    }
+
+    .lx-hamburger-bar {
+        width: 100%;
+        height: 3px;
+        background-color: var(--lx-gold);
+        border-radius: 4px;
+        transition: var(--lx-transition);
+        box-shadow: 0 0 5px var(--lx-gold);
+    }
+
+    /* Animate Hamburger to 'X' */
+    .lx-hamburger-open .lx-hamburger-bar:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
+        background-color: var(--lx-gold);
+        box-shadow: 0 0 5px var(--lx-gold);
+    }
+
+    .lx-hamburger-open .lx-hamburger-bar:nth-child(2) {
+        opacity: 0;
+    }
+
+    .lx-hamburger-open .lx-hamburger-bar:nth-child(3) {
+        transform: translateY(-9px) rotate(-45deg);
+        background-color: var(--lx-gold);
+        box-shadow: 0 0 5px var(--lx-gold);
+    }
+
+    .lx-nav {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 280px;
+        height: 100vh;
+        background-color: rgba(26, 26, 26, 0.98);
+        backdrop-filter: blur(10px);
+        border-left: 2px solid var(--lx-gold);
+        box-shadow: -10px 0 30px rgba(195, 161, 109, 0.15);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 2.5rem;
+        padding: 3rem 2rem;
+        transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 1035;
+    }
+
+    .lx-nav-open {
+        right: 0;
+    }
+
+    .lx-nav-link {
+        font-size: 1.2rem;
+        font-weight: 500;
+        letter-spacing: 1px;
+    }
+
+    /* Grid & Layout Adjustments */
+    .lx-filter-bar {
+        margin: -2rem 5% 3rem;
+        padding: 1.5rem;
+        gap: 0.75rem;
+    }
+    
+    .lx-select {
+        flex: 1 1 100%;
+    }
+
+    .lx-showcase-item {
+        grid-template-columns: 1fr !important;
+        gap: 2rem !important;
+        padding: 1.5rem !important;
+    }
+
+    .lx-section {
+        padding: 3rem 5%;
+    }
 }

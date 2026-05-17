@@ -1,19 +1,41 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 
-export const UsedHeader = () => (
-    <header className="us-header">
-        <a href="#" className="us-logo">
-            <span className="us-text-orange">Drive</span>Hub
-        </a>
-        <nav className="us-nav">
-            {['Home', 'Browse Cars', 'Dealers', 'Sell Your Car', 'Contact'].map(link => (
-                <a key={link} href={`#${link.toLowerCase().replace(/ /g, '-')}`} className="us-nav-link">{link}</a>
-            ))}
-            <a href="#" className="us-btn us-btn-orange">Post Your Ad</a>
-        </nav>
-    </header>
-);
+export const UsedHeader = () => {
+    const [isOpen, setIsOpen] = useState(false);
+    return (
+        <header className="us-header">
+            <a href="#" className="us-logo">
+                <span className="us-text-orange">Drive</span>Hub
+            </a>
+            
+            <button 
+                className={`us-hamburger ${isOpen ? 'us-hamburger-open' : ''}`} 
+                onClick={() => setIsOpen(!isOpen)}
+                aria-label="Toggle Navigation"
+                id="us-hamburger-toggle"
+            >
+                <span className="us-hamburger-bar"></span>
+                <span className="us-hamburger-bar"></span>
+                <span className="us-hamburger-bar"></span>
+            </button>
+
+            <nav className={`us-nav ${isOpen ? 'us-nav-open' : ''}`}>
+                {['Home', 'Browse Cars', 'Dealers', 'Sell Your Car', 'Contact'].map(link => (
+                    <a 
+                        key={link} 
+                        href={`#${link.toLowerCase().replace(/ /g, '-')}`} 
+                        className="us-nav-link"
+                        onClick={() => setIsOpen(false)}
+                    >
+                        {link}
+                    </a>
+                ))}
+                <a href="#" className="us-btn us-btn-orange" onClick={() => setIsOpen(false)}>Post Your Ad</a>
+            </nav>
+        </header>
+    );
+};
 
 export const UsedCarCard = ({ title, price, mileage, location, dealer, image }: any) => (
     <div className="us-car-card">

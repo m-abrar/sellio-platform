@@ -4,10 +4,10 @@ import { LuxuryHeader, LuxuryCarCard, LuxuryFooter } from './components';
 
 export default function Page() {
   const cars = [
-    { title: "2025 Mercedes S-Class", specs: "Sleek Sedan | 5,000 mi", price: "$110,000", image: "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?q=80&w=600" },
-    { title: "2024 Rolls Royce Phantom", specs: "Ultra Luxury | 2,100 mi", price: "$420,000", image: "https://images.unsplash.com/photo-1631501869871-331ff328221b?q=80&w=600" },
-    { title: "2025 Porsche Taycan Turbo", specs: "Electric Coupe | 800 mi", price: "$160,000", image: "https://images.unsplash.com/photo-1503375837330-1b7fcd2cba9e?q=80&w=600" },
-    { title: "2023 Bentley Continental GT", specs: "Grand Tourer | 6,500 mi", price: "$245,000", image: "https://images.unsplash.com/photo-1571127236794-81c0bbef1651?q=80&w=600" }
+    { title: "2025 Mercedes S-Class", specs: "Sleek Sedan | 5,000 mi", price: "$110,000", image: "/themes/autos/luxury/mercedes.png" },
+    { title: "2024 Rolls Royce Phantom", specs: "Ultra Luxury | 2,100 mi", price: "$420,000", image: "/themes/autos/luxury/rolls.png" },
+    { title: "2025 Porsche Taycan Turbo", specs: "Electric Coupe | 800 mi", price: "$160,000", image: "/themes/autos/luxury/porsche.png" },
+    { title: "2023 Bentley Continental GT", specs: "Grand Tourer | 6,500 mi", price: "$245,000", image: "/themes/autos/luxury/bentley.png" }
   ];
 
   const testimonials = [
@@ -62,7 +62,7 @@ export default function Page() {
         <h2 className="lx-section-title" style={{ color: 'white' }}>Exclusive Showcase</h2>
         <div className="lx-showcase-item">
             <div>
-                <img src="https://images.unsplash.com/photo-1592853625511-9426f4f22ab1?q=80&w=800" style={{ width: '100%', borderRadius: '8px' }} alt="Ferrari" />
+                <img src="/themes/autos/luxury/ferrari.png" style={{ width: '100%', borderRadius: '8px' }} alt="Ferrari" />
             </div>
             <div>
                 <h3 className="lx-heading lx-text-gold" style={{ fontSize: '2rem', marginBottom: '1rem' }}>The Crimson Legend</h3>

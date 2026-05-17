@@ -1,19 +1,41 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 
-export const ElectricHeader = () => (
-    <header className="ev-header">
-        <a href="#" className="ev-logo text-neon-green">
-            EV<span className="ev-text-blue">OLVE</span>
-        </a>
-        <nav className="ev-nav">
-            {['Home', 'EV Models', 'Charging', 'Compare', 'Contact'].map(link => (
-                <a key={link} href={`#${link.toLowerCase().replace(' ', '-')}`} className="ev-nav-link">{link}</a>
-            ))}
-            <a href="#" className="ev-btn ev-btn-green">Find Your EV</a>
-        </nav>
-    </header>
-);
+export const ElectricHeader = () => {
+    const [isOpen, setIsOpen] = useState(false);
+    return (
+        <header className="ev-header">
+            <a href="#" className="ev-logo text-neon-green">
+                EV<span className="ev-text-blue">OLVE</span>
+            </a>
+            
+            <button 
+                className={`ev-hamburger ${isOpen ? 'ev-hamburger-open' : ''}`} 
+                onClick={() => setIsOpen(!isOpen)}
+                aria-label="Toggle Navigation"
+                id="ev-hamburger-toggle"
+            >
+                <span className="ev-hamburger-bar"></span>
+                <span className="ev-hamburger-bar"></span>
+                <span className="ev-hamburger-bar"></span>
+            </button>
+
+            <nav className={`ev-nav ${isOpen ? 'ev-nav-open' : ''}`}>
+                {['Home', 'EV Models', 'Charging', 'Compare', 'Contact'].map(link => (
+                    <a 
+                        key={link} 
+                        href={`#${link.toLowerCase().replace(' ', '-')}`} 
+                        className="ev-nav-link"
+                        onClick={() => setIsOpen(false)}
+                    >
+                        {link}
+                    </a>
+                ))}
+                <a href="#" className="ev-btn ev-btn-green" onClick={() => setIsOpen(false)}>Find Your EV</a>
+            </nav>
+        </header>
+    );
+};
 
 export const EVCard = ({ title, price, range, battery, charge, image }: any) => (
     <div className="ev-card">

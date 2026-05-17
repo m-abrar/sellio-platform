@@ -1,19 +1,43 @@
 'use client';
 import React from 'react';
 
-export const ClassicHeader = () => (
-    <header className="ac-header">
-        <a href="#" className="ac-logo">
-            <span style={{ color: 'var(--ac-primary)' }}>CLASSIC</span> <span style={{ color: 'var(--ac-dark)' }}>MOTORS</span>
-        </a>
-        <nav className="ac-nav">
-            {['Home', 'Listings', 'Auctions', 'Dealers', 'Contact'].map(link => (
-                <a key={link} href={`#${link.toLowerCase()}`} className="ac-nav-link">{link}</a>
-            ))}
-        </nav>
-        <a href="#sell" className="ac-btn ac-btn-cta">Sell Your Car</a>
-    </header>
-);
+export const ClassicHeader = () => {
+    const [isOpen, setIsOpen] = React.useState(false);
+    return (
+        <header className="ac-header">
+            <a href="#" className="ac-logo">
+                <span style={{ color: 'var(--ac-primary)' }}>CLASSIC</span> <span style={{ color: 'var(--ac-dark)' }}>MOTORS</span>
+            </a>
+            
+            <button 
+                className="ac-menu-toggle" 
+                onClick={() => setIsOpen(!isOpen)}
+                aria-label="Toggle Menu"
+                aria-expanded={isOpen}
+            >
+                <span className={`ac-bar ${isOpen ? 'open' : ''}`}></span>
+                <span className={`ac-bar ${isOpen ? 'open' : ''}`}></span>
+                <span className={`ac-bar ${isOpen ? 'open' : ''}`}></span>
+            </button>
+
+            <nav className={`ac-nav ${isOpen ? 'open' : ''}`}>
+                {['Home', 'Listings', 'Auctions', 'Dealers', 'Contact'].map(link => (
+                    <a 
+                        key={link} 
+                        href={`#${link.toLowerCase()}`} 
+                        className="ac-nav-link"
+                        onClick={() => setIsOpen(false)}
+                    >
+                        {link}
+                    </a>
+                ))}
+                <a href="#sell" className="ac-btn ac-btn-cta ac-nav-cta" onClick={() => setIsOpen(false)}>Sell Your Car</a>
+            </nav>
+
+            <a href="#sell" className="ac-btn ac-btn-cta ac-desktop-cta">Sell Your Car</a>
+        </header>
+    );
+};
 
 export const ClassicCarCard = ({ title, desc, price, image }: any) => (
     <div className="ac-car-card">

@@ -96,7 +96,7 @@
 
 /* Hero Section */
 .us-hero {
-    background: linear-gradient(rgba(10, 61, 98, 0.7), rgba(10, 61, 98, 0.7)), url('https://images.unsplash.com/photo-1554045511-dfb54eaeb2f9?q=80&w=2070') no-repeat center center/cover;
+    background: linear-gradient(rgba(10, 61, 98, 0.7), rgba(10, 61, 98, 0.7)), url('/themes/autos/used/10.webp') no-repeat center center/cover;
     color: var(--us-white);
     padding: 6rem 5%;
     min-height: 70vh;
@@ -344,4 +344,109 @@
 
 .us-social:hover {
     color: var(--us-orange);
+}
+
+/* Premium Responsive Navigation Overrides */
+.us-hamburger {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .us-hamburger {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 28px;
+        height: 20px;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        z-index: 1040;
+    }
+
+    .us-hamburger-bar {
+        width: 100%;
+        height: 3px;
+        background-color: var(--us-blue);
+        border-radius: 4px;
+        transition: var(--us-transition);
+    }
+
+    /* Animate Hamburger to 'X' */
+    .us-hamburger-open .us-hamburger-bar:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
+        background-color: var(--us-orange);
+    }
+
+    .us-hamburger-open .us-hamburger-bar:nth-child(2) {
+        opacity: 0;
+    }
+
+    .us-hamburger-open .us-hamburger-bar:nth-child(3) {
+        transform: translateY(-9px) rotate(-45deg);
+        background-color: var(--us-orange);
+    }
+
+    .us-nav {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 280px;
+        height: 100vh;
+        background-color: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(10px);
+        border-left: 2px solid var(--us-orange);
+        box-shadow: -10px 0 30px rgba(10, 61, 98, 0.15);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 2.5rem;
+        padding: 3rem 2rem;
+        transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 1035;
+    }
+
+    .us-nav-open {
+        right: 0;
+    }
+
+    .us-nav-link {
+        font-size: 1.2rem;
+        font-weight: 600;
+        letter-spacing: 1px;
+    }
+
+    /* Grid & Layout Adjustments */
+    .us-filter-card {
+        margin: -2rem 5% 3rem;
+        padding: 1.5rem;
+    }
+    
+    .us-filter-grid {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .us-filter-group {
+        width: 100%;
+    }
+
+    .us-deal-card {
+        grid-template-columns: 1fr !important;
+        padding: 0 !important;
+    }
+
+    .us-deal-card > div:nth-child(2) {
+        height: 250px;
+    }
+
+    .us-deal-card > div:nth-child(3) {
+        padding: 2rem 1.5rem !important;
+    }
+
+    .us-section {
+        padding: 3rem 5%;
+    }
 }

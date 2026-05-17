@@ -4,10 +4,10 @@ import { ElectricHeader, EVCard, IconBox, ElectricFooter } from './components';
 
 export default function Page() {
   const evs = [
-    { title: "2025 Tesla Model Y", price: "$47,000 USD", range: "330 Miles", battery: "75 kWh", charge: "250 kW", image: "https://images.unsplash.com/photo-1560958089-b8a1929cea89?q=80&w=600" },
-    { title: "2025 Rivian R1T", price: "$70,000 USD", range: "314 Miles", battery: "135 kWh", charge: "200 kW", image: "https://images.unsplash.com/photo-1662491179069-b5f791e86095?q=80&w=600" },
-    { title: "2024 Kia EV6", price: "$42,000 USD", range: "310 Miles", battery: "77.4 kWh", charge: "350 kW", image: "https://images.unsplash.com/photo-1647209703417-380ff9821876?q=80&w=600" },
-    { title: "2024 Lucid Air", price: "$87,400 USD", range: "410 Miles", battery: "112 kWh", charge: "300 kW", image: "https://images.unsplash.com/photo-1658428570375-38c2919b4bba?q=80&w=600" },
+    { title: "2025 Tesla Model Y", price: "$47,000 USD", range: "330 Miles", battery: "75 kWh", charge: "250 kW", image: "/themes/autos/electric/tesla_y.png" },
+    { title: "2025 Rivian R1T", price: "$70,000 USD", range: "314 Miles", battery: "135 kWh", charge: "200 kW", image: "/themes/autos/electric/rivian_r1t.png" },
+    { title: "2024 Kia EV6", price: "$42,000 USD", range: "310 Miles", battery: "77.4 kWh", charge: "350 kW", image: "/themes/autos/electric/kia_ev6.png" },
+    { title: "2024 Lucid Air", price: "$87,400 USD", range: "410 Miles", battery: "112 kWh", charge: "300 kW", image: "/themes/autos/electric/lucid_air.png" },
   ];
 
   return (

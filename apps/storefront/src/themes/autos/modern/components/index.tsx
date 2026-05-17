@@ -1,19 +1,41 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 
-export const ModernHeader = () => (
-    <header className="md-header">
-        <a href="#" className="md-logo">
-            <span style={{ color: 'var(--md-primary)' }}>⚡</span> MODERN <span style={{ color: 'var(--md-primary)' }}>AUTOS</span>
-        </a>
-        <nav className="md-nav">
-            {['Home', 'Listings', 'Brands', 'Compare', 'Contact'].map(link => (
-                <a key={link} href={`#${link.toLowerCase()}`} className="md-nav-link">{link}</a>
-            ))}
-            <a href="#" className="md-btn md-btn-cta">Sell Your Car</a>
-        </nav>
-    </header>
-);
+export const ModernHeader = () => {
+    const [isOpen, setIsOpen] = useState(false);
+    return (
+        <header className="md-header">
+            <a href="#" className="md-logo">
+                <span style={{ color: 'var(--md-primary)' }}>⚡</span> MODERN <span style={{ color: 'var(--md-primary)' }}>AUTOS</span>
+            </a>
+            
+            <button 
+                className={`md-hamburger ${isOpen ? 'md-hamburger-open' : ''}`} 
+                onClick={() => setIsOpen(!isOpen)}
+                aria-label="Toggle Navigation"
+                id="md-hamburger-toggle"
+            >
+                <span className="md-hamburger-bar"></span>
+                <span className="md-hamburger-bar"></span>
+                <span className="md-hamburger-bar"></span>
+            </button>
+
+            <nav className={`md-nav ${isOpen ? 'md-nav-open' : ''}`}>
+                {['Home', 'Listings', 'Brands', 'Compare', 'Contact'].map(link => (
+                    <a 
+                        key={link} 
+                        href={`#${link.toLowerCase()}`} 
+                        className="md-nav-link"
+                        onClick={() => setIsOpen(false)}
+                    >
+                        {link}
+                    </a>
+                ))}
+                <a href="#" className="md-btn md-btn-cta" onClick={() => setIsOpen(false)}>Sell Your Car</a>
+            </nav>
+        </header>
+    );
+};
 
 export const ModernCarCard = ({ title, desc, price, image }: any) => (
     <div className="md-car-card">

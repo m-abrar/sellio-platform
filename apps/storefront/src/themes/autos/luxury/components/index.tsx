@@ -1,17 +1,39 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 
-export const LuxuryHeader = () => (
-    <header className="lx-header">
-        <a href="#" className="lx-logo">Velvet Wheels</a>
-        <nav className="lx-nav">
-            {['Home', 'Collections', 'Brands', 'Dealers', 'Contact'].map(link => (
-                <a key={link} href={`#${link.toLowerCase()}`} className="lx-nav-link">{link}</a>
-            ))}
-            <a href="#" className="lx-btn lx-btn-gold">Book a Test Drive</a>
-        </nav>
-    </header>
-);
+export const LuxuryHeader = () => {
+    const [isOpen, setIsOpen] = useState(false);
+    return (
+        <header className="lx-header">
+            <a href="#" className="lx-logo">Velvet Wheels</a>
+            
+            <button 
+                className={`lx-hamburger ${isOpen ? 'lx-hamburger-open' : ''}`} 
+                onClick={() => setIsOpen(!isOpen)}
+                aria-label="Toggle Navigation"
+                id="lx-hamburger-toggle"
+            >
+                <span className="lx-hamburger-bar"></span>
+                <span className="lx-hamburger-bar"></span>
+                <span className="lx-hamburger-bar"></span>
+            </button>
+
+            <nav className={`lx-nav ${isOpen ? 'lx-nav-open' : ''}`}>
+                {['Home', 'Collections', 'Brands', 'Dealers', 'Contact'].map(link => (
+                    <a 
+                        key={link} 
+                        href={`#${link.toLowerCase()}`} 
+                        className="lx-nav-link"
+                        onClick={() => setIsOpen(false)}
+                    >
+                        {link}
+                    </a>
+                ))}
+                <a href="#" className="lx-btn lx-btn-gold" onClick={() => setIsOpen(false)}>Book a Test Drive</a>
+            </nav>
+        </header>
+    );
+};
 
 export const LuxuryCarCard = ({ title, specs, price, image }: any) => (
     <div className="lx-car-card">
