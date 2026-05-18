@@ -15,29 +15,29 @@ export default function Page() {
   return (
     <div className="events-classic-theme">
       {/* Cinematic Cultural Hero */}
-      <section className="ec-hero">
-          <div style={{ width: '100px', height: '1px', background: 'var(--ec-gold)', marginBottom: '4rem' }}></div>
-          <h1 className="ec-heading-xl" style={{ color: 'white' }}>
+      <section className="ecl-hero" aria-labelledby="ecl-hero-title">
+          <div style={{ width: '100px', height: '1px', background: 'var(--ecl-gold)', marginBottom: '4rem' }}></div>
+          <h1 className="ecl-heading-xl" style={{ color: 'white' }} id="ecl-hero-title">
             Cultural <br/>
-            <span className="ec-italic">Heritage.</span>
+            <span className="ecl-italic">Heritage.</span>
           </h1>
           <p style={{ maxWidth: '750px', fontSize: '1.5rem', fontStyle: 'italic', color: 'rgba(255,255,255,0.7)', lineHeight: 1.8, marginTop: '5rem', fontWeight: 300 }}>
               A curated distribution of the world's most significant cultural repertoire. Authenticated experiences for the discerning patron.
           </p>
           <div style={{ marginTop: '7rem' }}>
-            <button className="ec-btn-primary" style={{ background: 'white', color: 'var(--ec-burgundy)' }}>Explore Repertoire</button>
+            <button className="ec-btn-primary" style={{ background: 'white', color: 'var(--ecl-burgundy)' }} id="ecl-btn-explore" onClick={() => document.getElementById('ecl-exchange-section')?.scrollIntoView({ behavior: 'smooth' })}>Explore Repertoire</button>
           </div>
       </section>
 
       {/* Trust & Logistics Bar */}
-      <div style={{ padding: '4rem 8%', background: 'var(--ec-stone)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(0,0,0,0.05)' }}>
+      <section className="ecl-trust-bar" aria-label="Artistic Integrity Status">
           {['AUTHENTIC_INSTITUTIONAL_NODES', 'CURATED_ARTISTIC_PROTOCOL', 'GLOBAL_CULTURAL_EXCHANGE', 'PATRON_PRIVACY_SECURED'].map(logic => (
-              <div key={logic} className="ec-mono" style={{ fontSize: '0.65rem', opacity: 0.5 }}>{logic}</div>
+              <div key={logic} className="ecl-mono" style={{ fontSize: '0.65rem', opacity: 0.5 }}>{logic}</div>
           ))}
-      </div>
+      </section>
 
       {/* Booking HUD Section */}
-      <section className="ec-section" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '6rem', borderBottom: '1px solid var(--ec-stone)' }}>
+      <section className="ecl-section ecl-hud-section" aria-label="Live Statistics Dashboard">
           <BookingHUD label="VERIFIED_VENUES" value="42" />
           <BookingHUD label="INSTITUTIONAL_NODES" value="156" />
           <BookingHUD label="PATRON_SYNC_SPEED" value="0.01s" />
@@ -45,11 +45,11 @@ export default function Page() {
       </section>
 
       {/* Repertoire Registry Section */}
-      <section className="ec-section">
+      <section className="ecl-section" id="ecl-exchange-section" aria-labelledby="ecl-repertoire-title">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '8rem' }}>
               <div>
-                  <div className="ec-mono" style={{ marginBottom: '1.5rem' }}>OFFICIAL_CULTURAL_REGISTRY</div>
-                  <h2 className="ec-heading-xl" style={{ fontSize: '6rem' }}>The <span className="ec-italic">Repertoire.</span></h2>
+                  <div className="ecl-mono" style={{ marginBottom: '1.5rem' }}>OFFICIAL_CULTURAL_REGISTRY</div>
+                  <h2 className="ecl-heading-xl" style={{ fontSize: 'clamp(3rem, 8vw, 6rem)' }} id="ecl-repertoire-title">The <span className="ecl-italic">Repertoire.</span></h2>
               </div>
               <div style={{ textAlign: 'right', maxWidth: '400px', fontSize: '1rem', color: 'rgba(26, 26, 26, 0.4)', lineHeight: 1.8 }}>
                   Our unified protocol synchronizes performance availability from the world's most significant institutional nodes.
@@ -64,25 +64,25 @@ export default function Page() {
       </section>
 
       {/* Institutional / Patron Section */}
-      <section className="ec-section" style={{ background: 'white', border: '1px solid var(--ec-stone)', display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '15rem', alignItems: 'center', marginBottom: '10rem' }}>
+      <section className="ecl-section ecl-patron-section" aria-labelledby="ecl-patron-title">
           <div style={{ padding: '8rem' }}>
-              <div className="ec-mono" style={{ marginBottom: '3rem' }}>PATRON_CIRCLE_PROTOCOL</div>
-              <h2 className="ec-heading-xl" style={{ fontSize: '5rem', marginBottom: '4rem' }}>The Patron's <br/><span className="ec-italic">Circle.</span></h2>
-              <p style={{ fontSize: '1.25rem', color: 'rgba(26, 26, 26, 0.4)', lineHeight: 2, marginBottom: '6rem' }}>
+              <div className="ecl-mono" style={{ marginBottom: '3rem' }}>PATRON_CIRCLE_PROTOCOL</div>
+              <h2 className="ecl-heading-xl" style={{ fontSize: 'clamp(2.5rem, 6vw, 5rem)', marginBottom: '4rem' }} id="ecl-patron-title">The Patron's <br/><span className="ecl-italic">Circle.</span></h2>
+              <p style={{ fontSize: '1.25rem', color: 'rgba(26, 26, 26, 0.4)', lineHeight: 2, marginBottom: '6rem', fontWeight: 300 }}>
                   Join an exclusive network of cultural institutions and patrons. Support the arts through the Sellio Legacy protocol and gain early access to premieres.
               </p>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem' }} className="ecl-patron-perks">
                   {['Priority_Box', 'Private_Galas', 'Voting_Rights', 'Archive_Access'].map(item => (
-                      <div key={item} style={{ fontSize: '0.85rem', fontWeight: 900, color: 'var(--ec-burgundy)', letterSpacing: '2px' }}>◆ {item.toUpperCase()}</div>
+                      <div key={item} style={{ fontSize: '0.85rem', fontWeight: 900, color: 'var(--ecl-burgundy)', letterSpacing: '2px' }}>◆ {item.toUpperCase()}</div>
                   ))}
               </div>
           </div>
-          <div style={{ padding: '8rem', background: 'var(--ec-ivory)', borderLeft: '1px solid var(--ec-stone)', height: '100%' }}>
-              <h3 style={{ fontFamily: 'var(--ec-serif)', fontSize: '2.5rem', fontWeight: 900, marginBottom: '2.5rem' }}>Become a Patron.</h3>
+          <div style={{ padding: '8rem', background: '#fdfdfb', borderLeft: '1px solid var(--ecl-stone)', height: '100%' }}>
+              <h3 style={{ fontFamily: 'var(--ecl-serif)', fontSize: '2.5rem', fontWeight: 900, marginBottom: '2.5rem', color: 'var(--ecl-burgundy)' }}>Become a Patron.</h3>
               <p style={{ color: 'rgba(26, 26, 26, 0.4)', lineHeight: 2, marginBottom: '4rem' }}>
                   Institutional inquiry nodes are currently active for the 2026/27 cycle. Submit your credentials for evaluation.
               </p>
-              <button className="ec-btn-primary" style={{ width: '100%', padding: '2rem' }}>Request Institutional Access</button>
+              <button className="ecl-btn-primary" style={{ width: '100%', padding: '2rem' }} id="ecl-btn-patron-apply" onClick={() => alert('Patron circle application transmitted.')}>Request Institutional Access</button>
           </div>
       </section>
       
