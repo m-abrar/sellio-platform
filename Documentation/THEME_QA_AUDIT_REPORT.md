@@ -107,13 +107,14 @@ Individual QA Audit reports are stored sequentially in the `reports/` directory.
 - **[💼 Theme 41: `jobs/blue_collar`](file:///d:/Sellio/documentation/reports/theme_jobs_blue_collar_audit.md) — 🟢 Certified Elite Pass**
 - **[💼 Theme 42: `jobs/corporate`](file:///d:/Sellio/documentation/reports/theme_jobs_corporate_audit.md) — 🟢 Certified Elite Pass**
 - **[💼 Theme 43: `jobs/freelance`](file:///d:/Sellio/documentation/reports/theme_jobs_freelance_audit.md) — 🟢 Certified Elite Pass**
-- [ ] Theme 44: `jobs/modern`
-- [ ] Theme 45: `jobs/startup`
-- [ ] Theme 46: `jobs/tech`
+- **[💼 Theme 44: `jobs/modern`](file:///d:/Sellio/documentation/reports/theme_jobs_modern_audit.md) — 🟢 Certified Elite Pass**
+- **[💼 Theme 45: `jobs/startup`](file:///d:/Sellio/documentation/reports/theme_jobs_startup_audit.md) — 🟢 Certified Elite Pass**
+- **[💼 Theme 46: `jobs/tech`](file:///d:/Sellio/documentation/reports/theme_jobs_tech_audit.md) — 🟢 Certified Elite Pass**
 
 ### 📋 Classifieds Vertical (5 Themes)
-- [ ] Theme 47: `classifieds/deals`
-- [ ] Theme 48: `classifieds/general`
-- [ ] Theme 49: `classifieds/local`
-- [ ] Theme 50: `classifieds/modern`
-- [ ] Theme 51: `classifieds/premium`
+- **[📋 Theme 47: `classifieds/deals`](file:///d:/Sellio/documentation/reports/theme_classifieds_deals_audit.md) — 🟢 Certified Elite Pass**
+- **[📋 Theme 48: `classifieds/general`](file:///d:/Sellio/documentation/reports/theme_classifieds_general_audit.md) — 🟢 Certified Elite Pass**
+- **[📋 Theme 49: `classifieds/local`](file:///d:/Sellio/documentation/reports/theme_classifieds_local_audit.md) — 🟢 Certified Elite Pass**
+- **[📋 Theme 50: `classifieds/modern`](file:///d:/Sellio/documentation/reports/theme_classifieds_modern_audit.md) — 🟢 Certified Elite Pass**
+- **[📋 Theme 51: `classifieds/premium`](file:///d:/Sellio/documentation/reports/theme_classifieds_premium_audit.md) — 🟢 Certified Elite Pass**
+
