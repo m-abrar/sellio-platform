@@ -1,0 +1,1328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sellio - Multi-Vendor eCommerce Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* RESET & CORE CANVAS */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      background-color: #f1f5f9;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      padding: 40px 0;
+      color: #334155;
+    }
+    
+    /* ENVELOPE DISPLAY WRAPPER (White Canvas) */
+    .showcase-wrapper {
+      max-width: 768px;
+      margin: 0 auto;
+      background: #ffffff;
+      padding: 32px 24px;
+      border-radius: 36px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 30px 100px rgba(15, 23, 42, 0.08);
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      position: relative;
+    }
+    
+    /* TYPOGRAPHY */
+    h1, h2, h3, h4 {
+      font-family: 'Outfit', sans-serif;
+      color: #ffffff;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .section-title {
+      font-size: 24px;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, #ffffff 60%, #cbd5e1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-align: left;
+    }
+    
+    .section-desc {
+      color: #94a3b8;
+      font-size: 13.5px;
+      margin-bottom: 32px;
+      text-align: left;
+      line-height: 1.6;
+    }
+    
+    /* =======================================
+       DARK CARD CORE FRAME
+       ======================================= */
+    .dark-card {
+      background: #090d16;
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 40px 32px;
+      box-shadow: 0 20px 45px rgba(9, 13, 22, 0.25);
+      position: relative;
+      overflow: hidden;
+      z-index: 2;
+    }
+    
+    /* EMBEDDED DYNAMIC GLOWS */
+    .card-glow {
+      position: absolute;
+      top: -20%;
+      right: -10%;
+      width: 250px;
+      height: 250px;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.08) 0%, transparent 70%);
+      filter: blur(50px);
+      pointer-events: none;
+      z-index: 1;
+    }
+    
+    /* TRANSLUCENT BG GRAPHICS CONTAINER */
+    .card-bg-graphic {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0.06;
+      pointer-events: none;
+      z-index: 1;
+    }
+    
+    .card-content {
+      position: relative;
+      z-index: 3;
+    }
+
+    /* =======================================
+       1. HERO CARD
+       ======================================= */
+    .hero-card {
+      background: radial-gradient(circle at top left, #0e1628 0%, #090d16 100%);
+      text-align: center;
+      padding: 48px 32px;
+    }
+    
+    .badge-hero {
+      display: inline-flex;
+      background: rgba(99, 102, 241, 0.12);
+      color: #818cf8;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 6px 16px;
+      border-radius: 100px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 24px;
+      border: 1px solid rgba(99, 102, 241, 0.2);
+    }
+    
+    .hero-h1 {
+      font-size: clamp(24px, 5.5vw, 36px);
+      line-height: 1.2;
+      margin-bottom: 18px;
+      background: linear-gradient(135deg, #ffffff 40%, #cbd5e1 80%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .hero-subhead {
+      font-size: 14.5px;
+      color: #94a3b8;
+      max-width: 580px;
+      margin: 0 auto 32px;
+      line-height: 1.7;
+    }
+    
+    .hero-chips {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 36px;
+    }
+    
+    .chip {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      color: #94a3b8;
+    }
+    
+    .chip-glow {
+      background: rgba(99, 102, 241, 0.08);
+      border-color: rgba(99, 102, 241, 0.2);
+      color: #818cf8;
+    }
+    
+    .hero-cta {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    
+    .btn {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 13.5px;
+      padding: 12px 24px;
+      border-radius: 10px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+    
+    .btn-main {
+      background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+      color: #ffffff;
+      border: 1px solid rgba(99, 102, 241, 0.4);
+    }
+    
+    .btn-alt {
+      background: rgba(255,255,255,0.03);
+      color: #cbd5e1;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    /* =======================================
+       2. WHY THIS PRODUCT
+       ======================================= */
+    .benefit-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    
+    .benefit-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+    
+    .benefit-icon {
+      font-size: 20px;
+      margin-bottom: 12px;
+      display: inline-flex;
+      background: rgba(255, 255, 255, 0.03);
+      width: 40px;
+      height: 40px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+    }
+    
+    .benefit-title {
+      font-size: 13.5px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: #ffffff;
+    }
+    
+    .benefit-desc {
+      font-size: 12px;
+      color: #94a3b8;
+      line-height: 1.5;
+    }
+
+    /* =======================================
+       3. KEY FEATURES
+       ======================================= */
+    .feats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    
+    .feat-box {
+      background: rgba(255, 255, 255, 0.01);
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      border-radius: 16px;
+      padding: 20px;
+    }
+    
+    .feat-box-title {
+      font-size: 13.5px;
+      font-weight: 800;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .tb-admin { color: #3b82f6; }
+    .tb-vendor { color: #10b981; }
+    .tb-mobile { color: #a78bfa; }
+    .tb-customer { color: #f59e0b; }
+    
+    .feat-ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    
+    .feat-li {
+      font-size: 12px;
+      color: #cbd5e1;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .feat-node {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+    }
+    
+    .tb-admin .feat-node { background: #3b82f6; }
+    .tb-vendor .feat-node { background: #10b981; }
+    .tb-mobile .feat-node { background: #a78bfa; }
+    .tb-customer .feat-node { background: #f59e0b; }
+
+    /* =======================================
+       4. SCREENS / UI SHOWCASE
+       ======================================= */
+    .devices-showcase {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    
+    /* Laptop Frame */
+    .macbook-shell {
+      max-width: 460px;
+      margin: 0 auto;
+    }
+    
+    .macbook-screen {
+      background: #06090f;
+      border-radius: 12px 12px 0 0;
+      border: 5px solid #1e293b;
+      border-bottom: none;
+      aspect-ratio: 16 / 10;
+      overflow: hidden;
+      padding: 10px;
+    }
+    
+    .macbook-header {
+      background: #0b111e;
+      border-radius: 4px;
+      padding: 4px 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    
+    .macbook-logo {
+      font-size: 7px;
+      font-weight: 800;
+      color: #6366f1;
+    }
+    
+    .macbook-grid {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 8px;
+    }
+    
+    .macbook-item {
+      background: #0f172a;
+      border-radius: 4px;
+      padding: 6px;
+    }
+    
+    .macbook-bar {
+      height: 4px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 2px;
+      margin-bottom: 4px;
+    }
+    
+    .macbook-base {
+      height: 10px;
+      background: #334155;
+      border-radius: 0 0 12px 12px;
+      position: relative;
+    }
+
+    /* Device Deck (Tablet + Phone) */
+    .deck-container {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      gap: 24px;
+    }
+    
+    .tablet-shell {
+      width: 180px;
+      border: 5px solid #1e293b;
+      border-radius: 18px;
+      background: #06090f;
+      aspect-ratio: 3 / 4;
+      padding: 6px;
+      position: relative;
+    }
+    
+    .tablet-screen {
+      width: 100%;
+      height: 100%;
+      background: #090d16;
+      border-radius: 10px;
+      padding: 6px;
+      overflow: hidden;
+    }
+    
+    .phone-shell {
+      width: 120px;
+      border: 4px solid #1e293b;
+      border-radius: 20px;
+      background: #06090f;
+      aspect-ratio: 9 / 19;
+      padding: 5px;
+      position: relative;
+    }
+    
+    .phone-screen {
+      width: 100%;
+      height: 100%;
+      background: #090d16;
+      border-radius: 14px;
+      padding: 8px 4px;
+      overflow: hidden;
+    }
+
+    /* =======================================
+       5. BUSINESS FLOW / HOW IT WORKS
+       ======================================= */
+    .infographic-flow {
+      background: rgba(255, 255, 255, 0.01);
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      border-radius: 20px;
+      padding: 24px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 2px;
+    }
+    
+    .flow-card-node {
+      flex: 1;
+      text-align: center;
+    }
+    
+    .flow-card-badge {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 8px;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 13px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    
+    .cnode-1 { background: rgba(37,99,235,0.15); color: #60a5fa; border-color: rgba(37,99,235,0.2) !important; }
+    .cnode-2 { background: rgba(168,85,247,0.15); color: #c084fc; border-color: rgba(168,85,247,0.2) !important; }
+    .cnode-3 { background: rgba(16,185,129,0.15); color: #34d399; border-color: rgba(16,185,129,0.2) !important; }
+    .cnode-4 { background: rgba(245,158,11,0.15); color: #fbbf24; border-color: rgba(245,158,11,0.2) !important; }
+    .cnode-5 { background: rgba(14,165,233,0.15); color: #38bdf8; border-color: rgba(14,165,233,0.2) !important; }
+    
+    .flow-card-label {
+      font-size: 9.5px;
+      font-weight: 800;
+      color: #ffffff;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* =======================================
+       6. TECH STACK
+       ======================================= */
+    .stack-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+    }
+    
+    .stack-item-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      border-radius: 12px;
+      padding: 14px 6px;
+      text-align: center;
+    }
+    
+    .stack-item-layer {
+      font-size: 8px;
+      font-weight: 800;
+      color: #94a3b8;
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 6px;
+    }
+    
+    .stack-item-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 10px;
+      font-weight: 800;
+      color: #ffffff;
+    }
+    
+    .s-red { border-top: 2px solid #ef4444; }
+    .s-blue { border-top: 2px solid #6366f1; }
+    .s-sky { border-top: 2px solid #38bdf8; }
+    .s-orange { border-top: 2px solid #fb923c; }
+    .s-green { border-top: 2px solid #10b981; }
+
+    /* =======================================
+       7. PAYMENT GATEWAYS
+       ======================================= */
+    .gw-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+    
+    .gw-item-pill {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      padding: 10px;
+      text-align: center;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+    
+    .gw-indicator {
+      width: 5px;
+      height: 5px;
+      background: #10b981;
+      border-radius: 50%;
+    }
+
+    /* =======================================
+       8. MODULES BREAKDOWN
+       ======================================= */
+    .mod-cards-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    
+    .mod-card-box {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      border-radius: 14px;
+      padding: 16px;
+    }
+    
+    .mod-card-title {
+      font-size: 12.5px;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 4px;
+    }
+    
+    .mod-card-desc {
+      font-size: 11px;
+      color: #94a3b8;
+      line-height: 1.5;
+    }
+
+    /* =======================================
+       9. INSTALLATION STEPS
+       ======================================= */
+    .install-deck {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.01);
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      border-radius: 16px;
+      padding: 20px 12px;
+    }
+    
+    .install-card-step {
+      flex: 1;
+      text-align: center;
+    }
+    
+    .install-card-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #3b82f6;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 8px;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 11px;
+    }
+    
+    .install-card-title {
+      font-size: 9.5px;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 2px;
+      text-transform: uppercase;
+    }
+    
+    .install-card-desc {
+      font-size: 9px;
+      color: #94a3b8;
+      line-height: 1.3;
+    }
+
+    /* =======================================
+       10. PERFORMANCE / SECURITY
+       ======================================= */
+    .performance-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    
+    .performance-card-panel {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      border-radius: 16px;
+      padding: 18px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    
+    .performance-circle-gauge {
+      width: 48px;
+      height: 48px;
+      position: relative;
+      flex-shrink: 0;
+    }
+    
+    .gauge-circle-svg {
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+    }
+    
+    .gauge-percentage-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 11px;
+      color: #10b981;
+    }
+    
+    .performance-card-title {
+      font-size: 12.5px;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 2px;
+    }
+    
+    .performance-card-desc {
+      font-size: 11px;
+      color: #94a3b8;
+      line-height: 1.4;
+    }
+
+    /* =======================================
+       11. FAQS ACCORDION
+       ======================================= */
+    .faqs-layout {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .faq-card-box {
+      background: rgba(255, 255, 255, 0.01);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      border-radius: 12px;
+      padding: 14px;
+    }
+    
+    .faq-card-q {
+      font-size: 12.5px;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .faq-card-a {
+      font-size: 11.5px;
+      color: #94a3b8;
+      line-height: 1.5;
+      padding-left: 10px;
+    }
+
+    /* =======================================
+       12. SUPPORT + UPDATES
+       ======================================= */
+    .support-highlight-card {
+      background: radial-gradient(circle at 100% 0%, rgba(212, 175, 55, 0.12) 0%, transparent 50%), #0d121f;
+      border: 1px solid rgba(212, 175, 55, 0.2);
+      border-radius: 24px;
+      padding: 40px 24px;
+      text-align: center;
+    }
+    
+    .support-badge-star {
+      display: inline-flex;
+      font-size: 20px;
+      background: rgba(212, 175, 55, 0.06);
+      width: 44px;
+      height: 44px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      margin-bottom: 16px;
+      border: 1px solid rgba(212, 175, 55, 0.15);
+    }
+    
+    .support-badge-title {
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      color: #ffffff;
+    }
+    
+    .support-badge-desc {
+      font-size: 13px;
+      color: #94a3b8;
+      max-width: 460px;
+      margin: 0 auto 24px;
+      line-height: 1.6;
+    }
+    
+    .support-action-ctas {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    
+    .btn-support-gold {
+      background: linear-gradient(135deg, #d4af37 0%, #b8901c 100%);
+      color: #030712;
+      border: 1px solid rgba(212, 175, 55, 0.3);
+    }
+    
+    .btn-support-alt {
+      background: rgba(255, 255, 255, 0.02);
+      color: #d4af37;
+      border: 1px solid rgba(212, 175, 55, 0.2);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="showcase-wrapper">
+
+    <!-- =======================================
+         1. HERO CARD
+         ======================================= -->
+    <div class="dark-card hero-card">
+      <div class="card-glow"></div>
+      
+      <!-- Faint Transparent Grid Background -->
+      <svg class="card-bg-graphic" width="100%" height="100%">
+        <defs>
+          <pattern id="gridPattern" width="24" height="24" patternUnits="userSpaceOnUse">
+            <path d="M 24 0 L 0 0 0 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="0.5"/>
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#gridPattern)" />
+      </svg>
+      
+      <div class="card-content">
+        <span class="badge-hero">Version 2.0 — Production Ready</span>
+        
+        <h1 class="hero-h1">
+          Multi-Vendor eCommerce Platform<br>Laravel + React + Mobile Apps
+        </h1>
+        
+        <p class="hero-subhead">
+          Launch a fully automated, multi-vendor digital ecosystem in 24 hours. Built with a robust Laravel API engine, a blazing-fast Next.js storefront, and native mobile apps.
+        </p>
+        
+        <div class="hero-chips">
+          <span class="chip chip-glow">Laravel</span>
+          <span class="chip chip-glow">React / Next.js</span>
+          <span class="chip chip-glow">Android</span>
+          <span class="chip chip-glow">iOS</span>
+          <span class="chip">API Engine</span>
+          <span class="chip">Admin Panel</span>
+          <span class="chip">Multi-language</span>
+          <span class="chip">RTL Ready</span>
+          <span class="chip">Payment Gateways</span>
+        </div>
+        
+        <div class="hero-cta">
+          <a href="#" class="btn btn-main">
+            View Live Demo
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="#" class="btn btn-alt">Documentation</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- =======================================
+         2. WHY THIS PRODUCT
+         ======================================= -->
+    <div class="dark-card">
+      <div class="card-glow"></div>
+      
+      <!-- Faint Diagonal Wave SVG Graphic -->
+      <svg class="card-bg-graphic" width="100%" height="100%">
+        <path d="M0,80 Q100,20 200,80 T400,80 T600,80 T800,80" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1" />
+        <path d="M0,120 Q100,60 200,120 T400,120 T600,120 T800,120" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="0.5" />
+      </svg>
+      
+      <div class="card-content">
+        <h2 class="section-title">Why Choose Sellio?</h2>
+        <p class="section-desc">Save hundreds of engineering hours. Skip the foundational logic and go straight to launch.</p>
+        
+        <div class="benefit-grid">
+          <div class="benefit-card">
+            <div class="benefit-icon">⏳</div>
+            <h3 class="benefit-title">Save 6 Months Development</h3>
+            <p class="benefit-desc">Skip complex database setups, role configurations, billing interfaces, and payouts logic.</p>
+          </div>
+          <div class="benefit-card">
+            <div class="benefit-icon">🚀</div>
+            <h3 class="benefit-title">Ready Production Blueprint</h3>
+            <p class="benefit-desc">Tested under high transaction volume load parameters out of the box.</p>
+          </div>
+          <div class="benefit-card">
+            <div class="benefit-icon">🔌</div>
+            <h3 class="benefit-title">Scalable REST APIs</h3>
+            <p class="benefit-desc">Completely decoupled REST microservices built to power external channels and integrations.</p>
+          </div>
+          <div class="benefit-card">
+            <div class="benefit-icon">👑</div>
+            <h3 class="benefit-title">Clean Admin Console</h3>
+            <p class="benefit-desc">Gives system administrators absolute operational authority over users and finances.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =======================================
+         3. KEY FEATURES
+         ======================================= -->
+    <div class="dark-card">
+      <div class="card-glow"></div>
+      
+      <!-- Faint Transparent Dotted Mesh Background -->
+      <svg class="card-bg-graphic" width="100%" height="100%">
+        <defs>
+          <pattern id="dotPattern" width="16" height="16" patternUnits="userSpaceOnUse">
+            <circle cx="2" cy="2" r="1" fill="rgba(255,255,255,0.6)" />
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#dotPattern)" />
+      </svg>
+      
+      <div class="card-content">
+        <h2 class="section-title">Granular Feature Ecosystem</h2>
+        <p class="section-desc">Four highly engineered custom systems working in complete operational harmony.</p>
+        
+        <div class="feats-grid">
+          <!-- Admin Panel -->
+          <div class="feat-box">
+            <h3 class="feat-box-title tb-admin">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="9" y1="9" x2="21" y2="9"/></svg>
+              Admin Panel
+            </h3>
+            <ul class="feat-ul">
+              <li class="feat-li"><span class="feat-node"></span> Telemetry Dashboard</li>
+              <li class="feat-li"><span class="feat-node"></span> User Management</li>
+              <li class="feat-li"><span class="feat-node"></span> Financial Reports</li>
+              <li class="feat-li"><span class="feat-node"></span> Global Setup Controls</li>
+              <li class="feat-li"><span class="feat-node"></span> Custom User Roles</li>
+            </ul>
+          </div>
+          
+          <!-- Vendor Panel -->
+          <div class="feat-box">
+            <h3 class="feat-box-title tb-vendor">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              Seller / Vendor Panel
+            </h3>
+            <ul class="feat-ul">
+              <li class="feat-li"><span class="feat-node"></span> Catalog Controls</li>
+              <li class="feat-li"><span class="feat-node"></span> Order Management</li>
+              <li class="feat-li"><span class="feat-node"></span> Vendor Analytics</li>
+              <li class="feat-li"><span class="feat-node"></span> Withdrawals Wallet</li>
+            </ul>
+          </div>
+          
+          <!-- Mobile App -->
+          <div class="feat-box">
+            <h3 class="feat-box-title tb-mobile">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+              Mobile App Features
+            </h3>
+            <ul class="feat-ul">
+              <li class="feat-li"><span class="feat-node"></span> OAuth Quick Login</li>
+              <li class="feat-li"><span class="feat-node"></span> Fast Catalog Browsing</li>
+              <li class="feat-li"><span class="feat-node"></span> Mobile Checkout</li>
+              <li class="feat-li"><span class="feat-node"></span> Push Notifications</li>
+            </ul>
+          </div>
+          
+          <!-- Customer Features -->
+          <div class="feat-box">
+            <h3 class="feat-box-title tb-customer">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+              Customer Features
+            </h3>
+            <ul class="feat-ul">
+              <li class="feat-li"><span class="feat-node"></span> Customer Wishlist</li>
+              <li class="feat-li"><span class="feat-node"></span> Product Reviews</li>
+              <li class="feat-li"><span class="feat-node"></span> Digital In-App Wallet</li>
+              <li class="feat-li"><span class="feat-node"></span> Custom Coupons</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =======================================
+         4. SCREENS / UI SHOWCASE
+         ======================================= -->
+    <div class="dark-card">
+      <div class="card-glow"></div>
+      
+      <!-- Faint Radar Rings Background -->
+      <svg class="card-bg-graphic" width="100%" height="100%">
+        <circle cx="50%" cy="50%" r="80" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="0.5" />
+        <circle cx="50%" cy="50%" r="160" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="0.5" />
+        <circle cx="50%" cy="50%" r="240" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="0.5" stroke-dasharray="4" />
+      </svg>
+      
+      <div class="card-content">
+        <h2 class="section-title">Visual UI Showcase</h2>
+        <p class="section-desc">Fully responsive modern device templates mapped to clean visual dashboards.</p>
+        
+        <div class="devices-showcase">
+          <!-- Laptop Shell -->
+          <div class="macbook-shell">
+            <div class="macbook-screen">
+              <div class="macbook-header">
+                <span class="macbook-logo">⚡ SELLIO_SYS</span>
+                <div style="width: 8px; height: 8px; border-radius: 50%; background: #3b82f6;"></div>
+              </div>
+              <div class="macbook-grid">
+                <div class="macbook-item">
+                  <div class="macbook-bar" style="width: 30px; background: #6366f1;"></div>
+                  <div class="macbook-bar" style="width: 20px; height: 10px; background: rgba(255,255,255,0.05); margin-top: 6px;"></div>
+                </div>
+                <div class="macbook-item">
+                  <div class="macbook-bar" style="width: 50px; background: #10b981;"></div>
+                  <div style="height: 50px; width: 100%; margin-top: 4px;">
+                    <svg width="100%" height="100%" viewBox="0 0 100 40" preserveAspectRatio="none">
+                      <path d="M 0 40 L 0 25 Q 30 15 60 30 T 100 8 L 100 40 Z" fill="rgba(16, 185, 129, 0.1)" />
+                      <path d="M 0 25 Q 30 15 60 30 T 100 8" fill="none" stroke="#10b981" stroke-width="2" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="macbook-base"></div>
+          </div>
+          
+          <!-- Deck -->
+          <div class="deck-container">
+            <!-- Tablet -->
+            <div class="tablet-shell">
+              <div class="tablet-screen">
+                <div style="height: 6px; background: rgba(255,255,255,0.1); border-radius: 2px; width: 50%; margin-bottom: 6px;"></div>
+                <div style="height: 24px; background: #1e293b; border-radius: 4px; margin-bottom: 6px;"></div>
+                <div style="display: flex; gap: 4px;">
+                  <div style="flex:1; height: 36px; background: rgba(255,255,255,0.02); border-radius: 4px; border: 1px solid rgba(255,255,255,0.04);"></div>
+                  <div style="flex:1; height: 36px; background: rgba(255,255,255,0.02); border-radius: 4px; border: 1px solid rgba(255,255,255,0.04);"></div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Phone -->
+            <div class="phone-shell">
+              <div class="phone-screen">
+                <div style="height: 5px; background: rgba(255,255,255,0.1); border-radius: 2px; width: 40px; margin-bottom: 8px;"></div>
+                <div style="background: linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%); border-radius: 6px; padding: 6px; border: 1px solid rgba(99, 102, 241, 0.15); height: 80px;">
+                  <div style="height: 4px; background: #a5b4fc; border-radius: 2px; width: 25px; margin-bottom: 6px;"></div>
+                  <div style="height: 6px; background: rgba(255,255,255,0.05); border-radius: 1px; width: 100%;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =======================================
+         5. BUSINESS FLOW / HOW IT WORKS
+         ======================================= -->
+    <div class="dark-card">
+      <div class="card-glow"></div>
+      
+      <!-- Faint Platform Connecting Lines Background -->
+      <svg class="card-bg-graphic" width="100%" height="100%">
+        <line x1="10%" y1="50%" x2="90%" y2="50%" stroke="rgba(255,255,255,0.3)" stroke-width="1" stroke-dasharray="6" />
+      </svg>
+      
+      <div class="card-content">
+        <h2 class="section-title">Platform Business Flow</h2>
+        <p class="section-desc">Understand the clean routing of transactions and delivery pipelines across players.</p>
+        
+        <div class="infographic-flow">
+          <div class="flow-card-node">
+            <div class="flow-card-badge cnode-1">1</div>
+            <div class="flow-card-label">Customer</div>
+          </div>
+          <div class="flow-arrow">→</div>
+          
+          <div class="flow-card-node">
+            <div class="flow-card-badge cnode-2">2</div>
+            <div class="flow-card-label">Order Node</div>
+          </div>
+          <div class="flow-arrow">→</div>
+          
+          <div class="flow-card-node">
+            <div class="flow-card-badge cnode-3">3</div>
+            <div class="flow-card-label">Merchant</div>
+          </div>
+          <div class="flow-arrow">→</div>
+          
+          <div class="flow-card-node">
+            <div class="flow-card-badge cnode-4">4</div>
+            <div class="flow-card-label">Admin</div>
+          </div>
+          <div class="flow-arrow">→</div>
+          
+          <div class="flow-card-node">
+            <div class="flow-card-badge cnode-5">5</div>
+            <div class="flow-card-label">Delivery</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =======================================
+         6. TECH STACK
+         ======================================= -->
+    <div class="dark-card">
+      <div class="card-glow"></div>
+      
+      <!-- Faint Tech Honeycomb Mesh Background -->
+      <svg class="card-bg-graphic" width="100%" height="100%">
+        <polygon points="40,20 80,0 120,20 120,60 80,80 40,60" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="0.5"/>
+        <polygon points="120,60 160,40 200,60 200,100 160,120 120,100" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="0.5"/>
+      </svg>
+      
+      <div class="card-content">
+        <h2 class="section-title">Modern Engineering Stack</h2>
+        <p class="section-desc">Fully optimized frameworks deployed to guarantee speed and ease of custom upgrades.</p>
+        
+        <div class="stack-cards-grid">
+          <div class="stack-item-card s-red">
+            <span class="stack-item-layer">Backend</span>
+            <span class="stack-item-title">Laravel 11</span>
+          </div>
+          <div class="stack-item-card s-blue">
+            <span class="stack-item-layer">Storefront</span>
+            <span class="stack-item-title">Next.js 15</span>
+          </div>
+          <div class="stack-item-card s-sky">
+            <span class="stack-item-layer">Mobile</span>
+            <span class="stack-item-title">Flutter SDK</span>
+          </div>
+          <div class="stack-item-card s-orange">
+            <span class="stack-item-layer">Database</span>
+            <span class="stack-item-title">MySQL 8.0</span>
+          </div>
+          <div class="stack-item-card s-green">
+            <span class="stack-item-layer">Server</span>
+            <span class="stack-item-title">AWS / VPS</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =======================================
+         7. PAYMENT GATEWAYS
+         ======================================= -->
+    <div class="dark-card">
+      <div class="card-glow"></div>
+      
+      <!-- Faint Interlocking Rings SVG Graphic -->
+      <svg class="card-bg-graphic" width="100%" height="100%">
+        <circle cx="20%" cy="50%" r="40" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="0.5" />
+        <circle cx="25%" cy="50%" r="40" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="0.5" />
+      </svg>
+      
+      <div class="card-content">
+        <h2 class="section-title">Payment Gateways</h2>
+        <p class="section-desc">Provide seamless checkout with pre-integrated global and local payment processors.</p>
+        
+        <div class="gw-cards-grid">
+          <div class="gw-item-pill"><span class="gw-indicator"></span> Stripe</div>
+          <div class="gw-item-pill"><span class="gw-indicator"></span> PayPal</div>
+          <div class="gw-item-pill"><span class="gw-indicator"></span> Razorpay</div>
+          <div class="gw-item-pill"><span class="gw-indicator"></span> Flutterwave</div>
+          <div class="gw-item-pill"><span class="gw-indicator"></span> Paystack</div>
+          <div class="gw-item-pill"><span class="gw-indicator"></span> Mollie</div>
+          <div class="gw-item-pill"><span class="gw-indicator"></span> CoinGate</div>
+          <div class="gw-item-pill"><span class="gw-indicator"></span> SSLCommerz</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =======================================
+         8. MODULES BREAKDOWN
+         ======================================= -->
+    <div class="dark-card">
+      <div class="card-glow"></div>
+      
+      <!-- Faint Circular Compass Guide Background -->
+      <svg class="card-bg-graphic" width="100%" height="100%">
+        <circle cx="80%" cy="50%" r="60" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="0.5" />
+        <line x1="80%" y1="10%" x2="80%" y2="90%" stroke="rgba(255,255,255,0.3)" stroke-width="0.5" />
+      </svg>
+      
+      <div class="card-content">
+        <h2 class="section-title">Fully Integrated Modules</h2>
+        <p class="section-desc">Six high-density custom microservice engines compiled out of the box.</p>
+        
+        <div class="mod-cards-grid">
+          <div class="mod-card-box">
+            <h3 class="mod-card-title">💳 Subscription Module</h3>
+            <p class="mod-card-desc">Offer merchant tier memberships with automated recurring monthly/annual billing packages.</p>
+          </div>
+          <div class="mod-card-box">
+            <h3 class="mod-card-title">🎗️ Membership Engine</h3>
+            <p class="mod-card-desc">Dynamic validation checkpoints and active merchant badges to establish trust grids.</p>
+          </div>
+          <div class="mod-card-box">
+            <h3 class="mod-card-title">💼 Digital Wallet Ledger</h3>
+            <p class="mod-card-desc">Track virtual balances, log granular logs, and process automated payouts.</p>
+          </div>
+          <div class="mod-card-box">
+            <h3 class="mod-card-title">🏬 Multi-Vendor Systems</h3>
+            <p class="mod-card-desc">Supports isolated store profiles, separate merchant accounts, and custom commissions.</p>
+          </div>
+          <div class="mod-card-box">
+            <h3 class="mod-card-title">🖥️ Point-Of-Sale Terminal</h3>
+            <p class="mod-card-desc">Blazing-fast physical checkouts for vendor personnel operating offline outlets.</p>
+          </div>
+          <div class="mod-card-box">
+            <h3 class="mod-card-title">📦 Smart Inventory Control</h3>
+            <p class="mod-card-desc">Automated catalog warning thresholds, active stock level signals, and shortage metrics.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =======================================
+         9. INSTALLATION STEPS
+         ======================================= -->
+    <div class="dark-card">
+      <div class="card-glow"></div>
+      
+      <!-- Faint Installation Pipeline Arrows Background -->
+      <svg class="card-bg-graphic" width="100%" height="100%">
+        <path d="M 0,40 L 800,40" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="0.5" stroke-dasharray="5" />
+      </svg>
+      
+      <div class="card-content">
+        <h2 class="section-title">5-Minute Onboarding Setup</h2>
+        <p class="section-desc">Fast, step-by-step visual browser wizard setup configuration.</p>
+        
+        <div class="install-deck">
+          <div class="install-card-step">
+            <div class="install-card-num">1</div>
+            <h4 class="install-card-title">Upload</h4>
+            <p class="install-card-desc">Transfer your package files to directory.</p>
+          </div>
+          
+          <div class="install-card-step">
+            <div class="install-card-num">2</div>
+            <h4 class="install-card-title">DB Schema</h4>
+            <p class="install-card-desc">Import clean base SQL schema files.</p>
+          </div>
+          
+          <div class="install-card-step">
+            <div class="install-card-num">3</div>
+            <h4 class="install-card-title">Configure</h4>
+            <p class="install-card-desc">Connect database credentials & keys.</p>
+          </div>
+          
+          <div class="install-card-step">
+            <div class="install-card-num">4</div>
+            <h4 class="install-card-title">Migrate</h4>
+            <p class="install-card-desc">Run migration scripts via wizard console.</p>
+          </div>
+          
+          <div class="install-card-step">
+            <div class="install-card-num" style="background: #10b981;">✓</div>
+            <h4 class="install-card-title" style="color: #34d399;">Launch</h4>
+            <p class="install-card-desc">Ecosystem live and taking transactions!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =======================================
+         10. PERFORMANCE / SECURITY
+         ======================================= -->
+    <div class="dark-card">
+      <div class="card-glow"></div>
+      
+      <!-- Faint Radial Speed Curves Background -->
+      <svg class="card-bg-graphic" width="100%" height="100%">
+        <path d="M 0,20 Q 200,60 400,20 T 800,20" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="0.5" />
+      </svg>
+      
+      <div class="card-content">
+        <h2 class="section-title">Performance &amp; Advanced Security</h2>
+        <p class="section-desc">Fully optimized source builds audited against strict security standards.</p>
+        
+        <div class="performance-grid">
+          <div class="performance-card-panel">
+            <div class="performance-circle-gauge">
+              <svg class="gauge-circle-svg" viewBox="0 0 36 36">
+                <path stroke="rgba(255,255,255,0.05)" stroke-width="3" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <path stroke="#10b981" stroke-dasharray="99, 100" stroke-width="3" stroke-linecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+              </svg>
+              <div class="gauge-percentage-text">99%</div>
+            </div>
+            <div>
+              <h3 class="performance-card-title">Speed Index</h3>
+              <p class="performance-card-desc">Excellent Next.js server-side renders load instantly.</p>
+            </div>
+          </div>
+          
+          <div class="performance-card-panel">
+            <div class="performance-circle-gauge">
+              <svg class="gauge-circle-svg" viewBox="0 0 36 36">
+                <path stroke="rgba(255,255,255,0.05)" stroke-width="3" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <path stroke="#10b981" stroke-dasharray="97, 100" stroke-width="3" stroke-linecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+              </svg>
+              <div class="gauge-percentage-text" style="font-size: 10px;">🛡️</div>
+            </div>
+            <div>
+              <h3 class="performance-card-title">Enterprise Shield</h3>
+              <p class="performance-card-desc">SQL-injection blocks, CSRF protection, and XSS filtering.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =======================================
+         11. FAQS ACCORDION
+         ======================================= -->
+    <div class="dark-card">
+      <div class="card-glow"></div>
+      
+      <!-- Faint Grid Overlays Background -->
+      <svg class="card-bg-graphic" width="100%" height="100%">
+        <defs>
+          <pattern id="faqGrid" width="40" height="40" patternUnits="userSpaceOnUse">
+            <rect width="40" height="40" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="0.5"/>
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#faqGrid)" />
+      </svg>
+      
+      <div class="card-content">
+        <h2 class="section-title">Frequently Asked Questions</h2>
+        <p class="section-desc">Find answers to the most common queries regarding our platform features.</p>
+        
+        <div class="faqs-layout">
+          <div class="faq-card-box">
+            <h4 class="faq-card-q"><span style="color:#6366f1;">✦</span> Does it support RTL and Multi-language?</h4>
+            <p class="faq-card-a">Yes. Features translation mapping sheets and RTL stylesheets out of the box.</p>
+          </div>
+          <div class="faq-card-box">
+            <h4 class="faq-card-q"><span style="color:#6366f1;">✦</span> Can I customize branding?</h4>
+            <p class="faq-card-a">Absolutely. All color palettes, settings, and logos are configurable via the Admin Panel.</p>
+          </div>
+          <div class="faq-card-box">
+            <h4 class="faq-card-q"><span style="color:#6366f1;">✦</span> Is source code fully included?</h4>
+            <p class="faq-card-a">Yes. Your purchase grants you 100% access to all un-obfuscated clean source files.</p>
+          </div>
+          <div class="faq-card-box">
+            <h4 class="faq-card-q"><span style="color:#6366f1;">✦</span> Is installation easy?</h4>
+            <p class="faq-card-a">Yes. Our interactive installation browser wizard makes database setup a 5-minute task.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =======================================
+         12. SUPPORT + UPDATES
+         ======================================= -->
+    <div class="support-highlight-card">
+      <div class="support-badge-star">⭐</div>
+      <h3 class="support-badge-title">World-Class Support &amp; Updates</h3>
+      <p class="support-badge-desc">
+        Your purchase grants you lifetime access to continuous framework updates, system documentation revisions, and ticketing support.
+      </p>
+      <div class="support-action-ctas">
+        <a href="#" class="btn btn-support-gold">Open Ticket Desk</a>
+        <a href="#" class="btn btn-secondary btn-support-alt">Knowledge Base</a>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
