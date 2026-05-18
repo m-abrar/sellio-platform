@@ -94,8 +94,10 @@ Individual QA Audit reports are stored sequentially in the `reports/` directory.
 ### 🤝 Services Vertical (5 Themes)
 - **[🤝 Theme 36: `services/corporate`](file:///d:/Sellio/documentation/reports/theme_services_corporate_audit.md) — 🟢 Certified Elite Pass**
 
-- [ ] Theme 37: `services/creative`
-- [ ] Theme 38: `services/health`
+- **[🤝 Theme 37: `services/creative`](file:///d:/Sellio/documentation/reports/theme_services_creative_audit.md) — 🟢 Certified Elite Pass**
+
+- **[🤝 Theme 38: `services/health`](file:///d:/Sellio/documentation/reports/theme_services_health_audit.md) — 🟢 Certified Elite Pass**
+
 - [ ] Theme 39: `services/local`
 - [ ] Theme 40: `services/marketplace`
 

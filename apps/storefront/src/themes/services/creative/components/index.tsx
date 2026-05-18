@@ -1,17 +1,64 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 
-export const CrtvHeader = () => (
+export const CrtvHeader = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
     <header className="crtv-header">
-        <a href="#" className="crtv-logo gradient-text">CRTV</a>
-        <nav className="crtv-nav">
-            {['Home', 'Categories', 'Portfolios', 'Pricing', 'Contact'].map(link => (
-                <a key={link} href={`#${link.toLowerCase()}`} className="crtv-nav-link">{link}</a>
-            ))}
-        </nav>
-        <button className="crtv-btn crtv-btn-gradient">Hire a Creative</button>
+      <a href="#" className="crtv-logo gradient-text">CRTV</a>
+      
+      {/* Mobile Hamburger Trigger */}
+      <button 
+        className={`crtv-hamburger ${isOpen ? 'crtv-hamburger-open' : ''}`}
+        onClick={() => setIsOpen(!isOpen)}
+        aria-label="Toggle Navigation"
+        id="crtv-hamburger-toggle"
+      >
+        <span className="crtv-hamburger-bar"></span>
+        <span className="crtv-hamburger-bar"></span>
+        <span className="crtv-hamburger-bar"></span>
+      </button>
+
+      {/* Navigation Links */}
+      <nav className={`crtv-nav ${isOpen ? 'crtv-nav-open' : ''}`}>
+        {['Home', 'Categories', 'Portfolios', 'Pricing', 'Contact'].map(link => (
+          <a 
+            key={link} 
+            href={`#${link.toLowerCase()}`} 
+            className="crtv-nav-link"
+            onClick={(e) => {
+              e.preventDefault();
+              setIsOpen(false);
+              const targetId = link === 'Home' ? 'crtv-hero-section' : link.toLowerCase();
+              document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth' });
+            }}
+          >
+            {link}
+          </a>
+        ))}
+        <button 
+          className="crtv-btn crtv-btn-gradient crtv-mobile-btn" 
+          onClick={() => alert('Vibe-matching dynamic portal activated!')}
+        >
+          Hire a Creative
+        </button>
+      </nav>
+
+      {/* Desktop Actions */}
+      <div className="crtv-desktop-btn-container">
+        <button 
+          className="crtv-btn crtv-btn-gradient crtv-desktop-btn" 
+          onClick={() => alert('Consultation portal activated.')}
+          id="crtv-btn-vibe-status"
+        >
+          Hire a Creative
+        </button>
+      </div>
     </header>
-);
+  );
+};
+
 
 export const CrtvCategoryCard = ({ title, rate, icon }: any) => (
     <div className="crtv-category-card">

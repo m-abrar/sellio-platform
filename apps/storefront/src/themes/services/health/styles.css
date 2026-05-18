@@ -95,7 +95,7 @@
   align-items: center;
   gap: 8rem;
   padding: 10rem 6%;
-  background: linear-gradient(135deg, var(--sh-mint) 0%, #fff 100%);
+  background: linear-gradient(135deg, #f0fdfa 0%, #fff 100%);
 }
 
 .sh-hero-img-wrapper {
@@ -111,6 +111,49 @@
   height: 100%;
   object-fit: cover;
   border-radius: 24px;
+  display: block;
+}
+
+.sh-btn-outline-clinicians {
+  background: transparent; 
+  border: 1px solid var(--sh-border); 
+  color: var(--sh-blue); 
+  padding: 1.25rem 3.5rem; 
+  border-radius: 8px; 
+  font-weight: 800; 
+  text-transform: uppercase; 
+  cursor: pointer;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  transition: var(--sh-transition);
+}
+
+.sh-btn-outline-clinicians:hover {
+  background: rgba(13, 148, 136, 0.05);
+  border-color: var(--sh-teal);
+}
+
+/* HUD Section */
+.sh-hud-section {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4rem;
+  margin-top: 5rem;
+}
+
+/* Registry Section */
+.sh-registry-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 8rem;
+}
+
+.sh-registry-desc {
+  max-width: 400px;
+  font-size: 1rem;
+  color: var(--sh-grey);
+  line-height: 1.8;
 }
 
 /* Practitioner Card */
@@ -174,9 +217,216 @@
   box-shadow: 0 15px 30px rgba(13, 148, 136, 0.2);
 }
 
+/* Pricing Section */
+.sh-pricing-section {
+  background: var(--sh-blue);
+  border-radius: 24px;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 8rem;
+  align-items: center;
+  color: white;
+  margin-bottom: 10rem;
+  overflow: hidden;
+}
+
+.sh-pricing-body {
+  padding: 6rem 4rem 6rem 6rem;
+}
+
+.sh-pricing-cards {
+  padding: 6rem 6rem 6rem 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+.sh-plan-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 3rem;
+  border-radius: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sh-plan-card-pro {
+  background: var(--sh-teal);
+  box-shadow: 0 20px 40px rgba(13,148,136,0.3);
+}
+
+.sh-plan-btn {
+  padding: 1rem 2rem;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.3);
+  color: white;
+  font-weight: 700;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: var(--sh-transition);
+}
+
+.sh-plan-btn:hover {
+  background: white;
+  color: var(--sh-blue);
+}
+
+.sh-plan-btn-pro {
+  padding: 1rem 2rem;
+  background: white;
+  color: var(--sh-teal);
+  border: none;
+  font-weight: 800;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: var(--sh-transition);
+}
+
+.sh-plan-btn-pro:hover {
+  background: var(--sh-blue);
+  color: white;
+}
+
 /* Footer */
 .sh-footer {
   background: var(--sh-blue);
   color: white;
   padding: 12rem 6% 6rem;
+}
+
+/* Hamburger & Mobile Responsive Controls */
+.sh-hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 25px;
+  height: 18px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 1010;
+}
+
+.sh-hamburger-bar {
+  width: 100%;
+  height: 2px;
+  background-color: var(--sh-blue);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sh-hamburger-open .sh-hamburger-bar:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+  background-color: var(--sh-teal);
+}
+
+.sh-hamburger-open .sh-hamburger-bar:nth-child(2) {
+  opacity: 0;
+}
+
+.sh-hamburger-open .sh-hamburger-bar:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+  background-color: var(--sh-teal);
+}
+
+@media (max-width: 1200px) {
+  .sh-specialist-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 1024px) {
+  .sh-header {
+    padding: 1rem 6%;
+  }
+
+  .sh-hamburger {
+    display: flex;
+  }
+
+  .sh-secure-node {
+    display: none !important;
+  }
+
+  .sh-nav {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 300px;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(20px);
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.05);
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 8rem 2.5rem 2.5rem;
+    gap: 2.5rem;
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 1005;
+    border-left: 1px solid var(--sh-border);
+  }
+
+  .sh-nav-open {
+    right: 0;
+  }
+
+  .sh-hero {
+    grid-template-columns: 1fr;
+    gap: 4rem;
+    padding: 6rem 6%;
+  }
+
+  .sh-hud-section {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .sh-registry-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2rem;
+    margin-bottom: 4rem;
+  }
+
+  .sh-pricing-section {
+    grid-template-columns: 1fr;
+    gap: 4rem;
+  }
+
+  .sh-pricing-cards {
+    padding: 0 6rem 6rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .sh-section {
+    padding: 5rem 6%;
+  }
+
+  .sh-pricing-cards {
+    padding: 0 6% 5rem;
+  }
+
+  .sh-pricing-body {
+    padding: 5rem 6% 2rem;
+  }
+
+  .sh-heading-xl {
+    font-size: clamp(2.5rem, 8vw, 4rem);
+  }
+
+  .sh-specialist-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sh-footer-grid {
+    grid-template-columns: 1fr !important;
+    gap: 4rem !important;
+  }
 }
