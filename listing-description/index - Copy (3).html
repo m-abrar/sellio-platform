@@ -17,29 +17,23 @@
     }
     
     body {
-      background-color: #030712;
+      background-color: #f1f5f9;
       font-family: 'Plus Jakarta Sans', sans-serif;
       padding: 80px 0;
-      color: #f1f5f9;
+      color: #1e293b;
       position: relative;
       overflow-x: hidden;
-      
-      /* FUTURISTIC LASER GRID BACKGROUND OVERLAY */
-      background-image: 
-        linear-gradient(rgba(99, 102, 241, 0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(99, 102, 241, 0.04) 1px, transparent 1px);
-      background-size: 40px 40px;
     }
     
-    /* VIBRANT GLOWING COSMIC GAS NEBULA BACKGROUNDS */
-    .bg-sphere-cyan {
+    /* VIBRANT Figma CANVAS DECORATIVE GLOW SPHERES */
+    .bg-sphere-pink {
       position: absolute;
       top: 5%;
       left: -15%;
-      width: 750px;
-      height: 750px;
-      background: radial-gradient(circle, rgba(6, 182, 212, 0.16) 0%, transparent 70%);
-      filter: blur(160px);
+      width: 700px;
+      height: 700px;
+      background: radial-gradient(circle, rgba(244, 63, 94, 0.25) 0%, transparent 70%);
+      filter: blur(150px);
       z-index: 1;
       pointer-events: none;
     }
@@ -48,22 +42,22 @@
       position: absolute;
       top: 35%;
       right: -20%;
-      width: 850px;
-      height: 850px;
-      background: radial-gradient(circle, rgba(99, 102, 241, 0.18) 0%, transparent 70%);
-      filter: blur(180px);
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.25) 0%, transparent 70%);
+      filter: blur(170px);
       z-index: 1;
       pointer-events: none;
     }
 
-    .bg-sphere-fuchsia {
+    .bg-sphere-emerald {
       position: absolute;
       bottom: 20%;
       left: -20%;
-      width: 750px;
-      height: 750px;
-      background: radial-gradient(circle, rgba(217, 70, 239, 0.15) 0%, transparent 70%);
-      filter: blur(160px);
+      width: 700px;
+      height: 700px;
+      background: radial-gradient(circle, rgba(16, 185, 129, 0.2) 0%, transparent 70%);
+      filter: blur(150px);
       z-index: 1;
       pointer-events: none;
     }
@@ -72,24 +66,24 @@
       position: absolute;
       bottom: 5%;
       right: -10%;
-      width: 650px;
-      height: 650px;
-      background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, transparent 70%);
-      filter: blur(150px);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(168, 85, 247, 0.18) 0%, transparent 70%);
+      filter: blur(140px);
       z-index: 1;
       pointer-events: none;
     }
     
-    /* SHOWCASE DOCK SHELL */
+    /* SHOWCASE CONTAINER */
     .showcase-wrapper {
       max-width: 840px;
       margin: 0 auto;
-      background: rgba(10, 15, 30, 0.45);
-      backdrop-filter: blur(40px);
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(35px);
       padding: 48px 36px;
       border-radius: 48px;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      box-shadow: 0 50px 150px rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      box-shadow: 0 50px 150px rgba(15, 23, 42, 0.08);
       display: flex;
       flex-direction: column;
       gap: 48px;
@@ -97,13 +91,14 @@
       z-index: 2;
     }
     
-    /* HEADINGS & TYPOGRAPHY STYLE DICTATIONS */
+    /* HEADINGS & TYPOGRAPHY */
     h1, h2, h3, h4 {
       font-family: 'Outfit', sans-serif;
       font-weight: 800;
       letter-spacing: -0.03em;
     }
 
+    /* POLISHED BIGGER gradient HEADINGS */
     .section-title {
       font-size: 34px;
       margin-bottom: 12px;
@@ -117,24 +112,21 @@
       font-size: 14.5px;
       margin-bottom: 36px;
       text-align: left;
-      line-height: 1.75;
+      line-height: 1.7;
       font-weight: 500;
-      opacity: 0.85;
     }
     
-    /* OBSIDIAN GLASS CARD PANEL */
+    /* PREMIUM GLOW CARD SHELL */
     .glow-card {
       border-radius: 36px;
       padding: 56px 44px;
-      background: rgba(17, 24, 39, 0.65);
-      backdrop-filter: blur(25px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      box-shadow: 0 35px 80px -15px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 35px 80px -15px rgba(15, 23, 42, 0.16);
       position: relative;
       overflow: hidden;
       z-index: 5;
     }
     
+    /* AMBIENT GLOW SPHERES INSIDE CARDS */
     .card-neon-sphere {
       position: absolute;
       width: 320px;
@@ -151,7 +143,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      opacity: 0.08;
+      opacity: 0.12;
       pointer-events: none;
       z-index: 2;
     }
@@ -162,134 +154,140 @@
     }
 
     /* =======================================
-       OBSIDIAN ACCENT INDIVIDUAL COLOR SCHEMES
+       12-SECTION MIXED-MODE DYNAMIC SCHEMES
        ======================================= */
        
-    /* 1. HERO - Cosmic Gradient Indigo (Dark) */
+    /* 1. HERO - Cosmic Gradient (Dark Mode) */
     .theme-hero {
-      background: linear-gradient(135deg, #090518 0%, #1e1b4b 50%, #2a083b 100%);
-      border: 1px solid rgba(165, 180, 252, 0.3);
-    }
-    .theme-hero .hero-main-h1 {
-      background: linear-gradient(135deg, #ffffff 20%, #c7d2fe 50%, #f472b6 80%, #fb7185 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      background: linear-gradient(135deg, #0b0720 0%, #1e1b4b 50%, #311042 100%);
+      border: 1px solid rgba(165, 180, 252, 0.25);
     }
     
-    /* 2. WHY THIS PRODUCT - Emerald Mint Obsidian */
+    /* 2. WHY THIS PRODUCT - Faded Mint Glass (Light Mode) */
     .theme-benefits {
-      border: 1px solid rgba(16, 185, 129, 0.35);
-      box-shadow: 0 30px 60px rgba(16, 185, 129, 0.03);
+      background: rgba(209, 250, 229, 0.55);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      box-shadow: 0 30px 60px rgba(16, 185, 129, 0.04);
     }
     .theme-benefits .section-title {
-      background: linear-gradient(135deg, #ffffff 40%, #a7f3d0 75%, #34d399 100%);
+      background: linear-gradient(135deg, #044e36 0%, #065f46 50%, #0fa573 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-    .theme-benefits .section-desc { color: #a7f3d0; }
+    .theme-benefits .section-desc { color: #045f43; }
     
-    /* 3. KEY FEATURES - Deep Purple Amethyst Obsidian */
+    /* 3. KEY FEATURES - Deep Cosmic Amethyst (Dark Mode) */
     .theme-features {
-      border: 1px solid rgba(216, 180, 254, 0.35);
-      box-shadow: 0 30px 60px rgba(168, 85, 247, 0.03);
+      background: linear-gradient(135deg, #25103f 0%, #0d0614 100%);
+      border: 1px solid rgba(216, 180, 254, 0.22);
     }
     .theme-features .section-title {
-      background: linear-gradient(135deg, #ffffff 40%, #e9d5ff 75%, #d8b4fe 100%);
+      background: linear-gradient(135deg, #ffffff 30%, #e9d5ff 70%, #d8b4fe 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-    .theme-features .section-desc { color: #e9d5ff; }
+    .theme-features .section-desc { color: #d8b4fe; opacity: 0.85; }
     
-    /* 4. UI SHOWCASE - Cyan Cyber Glass Obsidian */
+    /* 4. UI SHOWCASE - Cyber Light-Blue Glass (Light Mode) */
     .theme-ui {
-      border: 1px solid rgba(56, 189, 248, 0.35);
-      box-shadow: 0 30px 60px rgba(56, 189, 248, 0.03);
+      background: rgba(224, 242, 254, 0.55);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      box-shadow: 0 30px 60px rgba(56, 189, 248, 0.04);
     }
     .theme-ui .section-title {
-      background: linear-gradient(135deg, #ffffff 40%, #bae6fd 75%, #38bdf8 100%);
+      background: linear-gradient(135deg, #035b88 0%, #0284c7 50%, #38bdf8 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-    .theme-ui .section-desc { color: #bae6fd; }
+    .theme-ui .section-desc { color: #0369a1; }
     
-    /* 5. BUSINESS FLOW - Sunset Coral Obsidian */
+    /* 5. BUSINESS FLOW - Sunset Coral (Dark Mode) */
     .theme-flow {
-      border: 1px solid rgba(251, 113, 133, 0.35);
-      box-shadow: 0 30px 60px rgba(244, 63, 94, 0.03);
+      background: linear-gradient(135deg, #440c1e 0%, #1e1115 100%);
+      border: 1px solid rgba(251, 113, 133, 0.22);
     }
     .theme-flow .section-title {
       background: linear-gradient(135deg, #ffffff 40%, #fca5a5 75%, #f43f5e 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-    .theme-flow .section-desc { color: #fca5a5; }
+    .theme-flow .section-desc { color: #fda4af; }
     
-    /* 6. TECH STACK - Titanium White Obsidian */
+    /* 6. TECH STACK - Frosted Platinum Slate (Light Mode) */
     .theme-tech {
-      border: 1px solid rgba(148, 163, 184, 0.35);
-      box-shadow: 0 30px 60px rgba(148, 163, 184, 0.03);
+      background: rgba(241, 245, 249, 0.65);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      box-shadow: 0 30px 60px rgba(148, 163, 184, 0.04);
     }
     .theme-tech .section-title {
-      background: linear-gradient(135deg, #ffffff 40%, #e2e8f0 75%, #cbd5e1 100%);
+      background: linear-gradient(135deg, #0f172a 0%, #334155 60%, #64748b 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-    .theme-tech .section-desc { color: #e2e8f0; }
+    .theme-tech .section-desc { color: #334155; }
     
-    /* 7. PAYMENT GATEWAYS - Silver Metal Obsidian */
+    /* 7. PAYMENT GATEWAYS - Dark Graphite (Dark Mode) */
     .theme-gateways {
-      border: 1px solid rgba(203, 213, 225, 0.3);
-      box-shadow: 0 30px 60px rgba(203, 213, 225, 0.03);
+      background: linear-gradient(135deg, #131a26 0%, #0f172a 100%);
+      border: 1px solid rgba(203, 213, 225, 0.2);
     }
     .theme-gateways .section-title {
-      background: linear-gradient(135deg, #ffffff 40%, #cbd5e1 75%, #94a3b8 100%);
+      background: linear-gradient(135deg, #ffffff 50%, #cbd5e1 80%, #94a3b8 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
     .theme-gateways .section-desc { color: #cbd5e1; }
     
-    /* 8. MODULES BREAKDOWN - Amber Gold Obsidian */
+    /* 8. MODULES BREAKDOWN - Frosted Golden Amber (Light Mode) */
     .theme-modules {
-      border: 1px solid rgba(245, 158, 11, 0.35);
-      box-shadow: 0 30px 60px rgba(245, 158, 11, 0.03);
+      background: rgba(254, 243, 199, 0.55);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      box-shadow: 0 30px 60px rgba(245, 158, 11, 0.04);
     }
     .theme-modules .section-title {
-      background: linear-gradient(135deg, #ffffff 40%, #fde68a 75%, #f59e0b 100%);
+      background: linear-gradient(135deg, #5c2c06 0%, #78350f 50%, #d97706 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-    .theme-modules .section-desc { color: #fde68a; }
+    .theme-modules .section-desc { color: #78350f; }
     
-    /* 9. INSTALLATION STEPS - Ocean Teal Obsidian */
+    /* 9. INSTALLATION STEPS - Deep Ocean Teal (Dark Mode) */
     .theme-install {
-      border: 1px solid rgba(45, 212, 191, 0.35);
-      box-shadow: 0 30px 60px rgba(45, 212, 191, 0.03);
+      background: linear-gradient(135deg, #022325 0%, #020617 100%);
+      border: 1px solid rgba(45, 212, 191, 0.22);
     }
     .theme-install .section-title {
-      background: linear-gradient(135deg, #ffffff 40%, #99f6e4 75%, #2dd4bf 100%);
+      background: linear-gradient(135deg, #ffffff 40%, #a7f3d0 75%, #34d399 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
     .theme-install .section-desc { color: #99f6e4; }
     
-    /* 10. PERFORMANCE - Lime Mint Obsidian */
+    /* 10. PERFORMANCE - Frosted Lime Mint (Light Mode) */
     .theme-perf {
-      border: 1px solid rgba(52, 211, 153, 0.35);
-      box-shadow: 0 30px 60px rgba(52, 211, 153, 0.03);
+      background: rgba(236, 253, 245, 0.6);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(52, 211, 153, 0.4);
+      box-shadow: 0 30px 60px rgba(52, 211, 153, 0.04);
     }
     .theme-perf .section-title {
-      background: linear-gradient(135deg, #ffffff 40%, #a7f3d0 75%, #10b981 100%);
+      background: linear-gradient(135deg, #022c22 0%, #065f46 50%, #10b981 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-    .theme-perf .section-desc { color: #a7f3d0; }
+    .theme-perf .section-desc { color: #064e3b; }
     
-    /* 11. FAQS ACCORDION - Dark Space Charcoal */
+    /* 11. FAQS ACCORDION - Space Charcoal (Dark Mode) */
     .theme-faqs {
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: linear-gradient(135deg, #090e18 0%, #0d131f 100%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
     .theme-faqs .section-title {
-      background: linear-gradient(135deg, #ffffff 40%, #cbd5e1 80%, #94a3b8 100%);
+      background: linear-gradient(135deg, #ffffff 40%, #e2e8f0 80%, #cbd5e1 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
@@ -305,7 +303,7 @@
     
     .badge-canva {
       display: inline-flex;
-      background: rgba(255, 255, 255, 0.06);
+      background: rgba(255, 255, 255, 0.08);
       backdrop-filter: blur(12px);
       color: #e0e7ff;
       font-size: 11.5px;
@@ -315,15 +313,18 @@
       text-transform: uppercase;
       letter-spacing: 2.5px;
       margin-bottom: 28px;
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      box-shadow: 0 4px 20px rgba(99, 102, 241, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      box-shadow: 0 4px 20px rgba(99, 102, 241, 0.15);
     }
     
     .hero-main-h1 {
       font-size: clamp(28px, 6vw, 44px);
       line-height: 1.15;
       margin-bottom: 24px;
-      text-shadow: 0 2px 25px rgba(165, 180, 252, 0.1);
+      background: linear-gradient(135deg, #ffffff 20%, #c7d2fe 50%, #f472b6 80%, #fb7185 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 2px 25px rgba(165, 180, 252, 0.15);
     }
     
     .hero-main-subhead {
@@ -332,7 +333,6 @@
       max-width: 620px;
       margin: 0 auto 40px;
       line-height: 1.75;
-      opacity: 0.9;
     }
     
     .hero-chips-wrap {
@@ -351,23 +351,24 @@
       letter-spacing: 1px;
       padding: 6px 14px;
       border-radius: 10px;
-      background: rgba(255, 255, 255, 0.04);
+      background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.08);
       color: #cbd5e1;
+      transition: all 0.3s ease;
     }
     
     .chip-badge-highlight {
-      background: linear-gradient(135deg, rgba(99, 102, 241, 0.25) 0%, rgba(244, 63, 94, 0.25) 100%);
-      border-color: rgba(244, 63, 94, 0.4);
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.3) 0%, rgba(244, 63, 94, 0.3) 100%);
+      border-color: rgba(244, 63, 94, 0.45);
       color: #ffffff;
-      box-shadow: 0 6px 15px rgba(244, 63, 94, 0.15);
+      box-shadow: 0 6px 15px rgba(244, 63, 94, 0.2);
     }
     
     .btn-main-glow {
       background: linear-gradient(135deg, #6366f1 0%, #ec4899 100%);
       color: #ffffff;
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      box-shadow: 0 12px 30px rgba(236, 72, 153, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 12px 30px rgba(236, 72, 153, 0.35);
     }
 
     .btn {
@@ -384,13 +385,13 @@
     }
     
     .btn-alt {
-      background: rgba(255, 255, 255, 0.03);
+      background: rgba(255, 255, 255, 0.05);
       color: #cbd5e1;
-      border: 1px solid rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.09);
     }
 
     /* =======================================
-       2. WHY THIS PRODUCT (Emerald Mint Obsidian)
+       2. WHY THIS PRODUCT
        ======================================= */
     .canva-benefit-grid {
       display: grid;
@@ -399,42 +400,42 @@
     }
     
     .canva-benefit-box {
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid rgba(16, 185, 129, 0.18);
+      background: rgba(255, 255, 255, 0.5);
+      border: 1px solid rgba(16, 185, 129, 0.25);
       padding: 24px;
       border-radius: 22px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 10px 25px rgba(16, 185, 129, 0.03);
     }
     
     .canva-benefit-icon {
       font-size: 22px;
       margin-bottom: 14px;
       display: inline-flex;
-      background: rgba(16, 185, 129, 0.1);
+      background: #ffffff;
       width: 46px;
       height: 46px;
       align-items: center;
       justify-content: center;
       border-radius: 14px;
-      border: 1px solid rgba(16, 185, 129, 0.2);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      box-shadow: 0 4px 10px rgba(16, 185, 129, 0.06);
     }
     
     .canva-benefit-title {
       font-size: 15.5px;
       font-weight: 800;
-      color: #ffffff;
+      color: #044e36;
       margin-bottom: 6px;
     }
     
     .canva-benefit-desc {
       font-size: 12.5px;
-      color: #a7f3d0;
+      color: #065f46;
       line-height: 1.6;
-      opacity: 0.85;
     }
 
     /* =======================================
-       3. KEY FEATURES (Deep Purple Amethyst Obsidian)
+       3. KEY FEATURES (Premium Glass Cards)
        ======================================= */
     .canva-feats-grid {
       display: grid;
@@ -443,10 +444,11 @@
     }
     
     .canva-feat-panel {
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid rgba(255, 255, 255, 0.06);
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.07);
       border-radius: 22px;
       padding: 26px;
+      box-shadow: inset 0 0 12px rgba(255, 255, 255, 0.01);
     }
     
     .canva-feat-header {
@@ -456,12 +458,13 @@
       display: flex;
       align-items: center;
       gap: 10px;
+      letter-spacing: -0.01em;
     }
     
-    .c-blue { color: #38bdf8; }
-    .c-green { color: #34d399; }
-    .c-purple { color: #c084fc; }
-    .c-orange { color: #fbbf24; }
+    .c-blue { color: #38bdf8; text-shadow: 0 0 10px rgba(56,189,248,0.15); }
+    .c-green { color: #34d399; text-shadow: 0 0 10px rgba(52,211,153,0.15); }
+    .c-purple { color: #c084fc; text-shadow: 0 0 10px rgba(192,132,252,0.15); }
+    .c-orange { color: #fbbf24; text-shadow: 0 0 10px rgba(251,191,36,0.15); }
     
     .canva-feat-ul {
       list-style: none;
@@ -472,7 +475,7 @@
     
     .canva-feat-li {
       font-size: 13px;
-      color: #cbd5e1;
+      color: #e2e8f0;
       display: flex;
       align-items: center;
       gap: 10px;
@@ -491,7 +494,7 @@
     .c-orange .canva-feat-dot { background: #fbbf24; box-shadow: 0 0 6px #fbbf24; }
 
     /* =======================================
-       4. SCREENS / UI SHOWCASE (Cyan Cyber Glass Obsidian)
+       4. UI SHOWCASE (Laptop, Tablet, Mobile Frames)
        ======================================= */
     .canva-showcase {
       display: flex;
@@ -506,30 +509,31 @@
     }
     
     .laptop-viewscreen {
-      background: #090d16;
+      background: #ffffff;
       border-radius: 16px 16px 0 0;
-      border: 8px solid #1e293b;
+      border: 8px solid #cbd5e1;
       border-bottom: none;
       aspect-ratio: 16 / 10;
       overflow: hidden;
       padding: 14px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.03);
     }
     
     .laptop-viewheader {
-      background: #0f172a;
+      background: #f1f5f9;
       border-radius: 8px;
       padding: 6px 12px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 14px;
-      border: 1px solid rgba(255,255,255,0.03);
+      border: 1px solid #e2e8f0;
     }
     
     .laptop-viewsys {
       font-size: 9px;
       font-weight: 800;
-      color: #38bdf8;
+      color: #0284c7;
       letter-spacing: 0.5px;
     }
     
@@ -540,24 +544,24 @@
     }
     
     .laptop-viewitem {
-      background: #0b0f19;
+      background: #ffffff;
       border-radius: 8px;
       padding: 10px;
-      border: 1px solid rgba(255,255,255,0.03);
+      border: 1px solid #e2e8f0;
     }
     
     .laptop-viewbar {
       height: 5px;
-      background: rgba(255,255,255,0.1);
+      background: #cbd5e1;
       border-radius: 2.5px;
       margin-bottom: 6px;
     }
     
     .laptop-base-dock {
       height: 12px;
-      background: #334155;
+      background: #94a3b8;
       border-radius: 0 0 16px 16px;
-      border-top: 1px solid #475569;
+      border-top: 1px solid #64748b;
     }
 
     /* Device deck */
@@ -570,48 +574,52 @@
     
     .tablet-device {
       width: 180px;
-      border: 8px solid #1e293b;
+      border: 8px solid #cbd5e1;
       border-radius: 24px;
-      background: #06090f;
+      background: #ffffff;
       aspect-ratio: 3 / 4;
       padding: 8px;
       position: relative;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.03);
     }
     
     .tablet-view {
       width: 100%;
       height: 100%;
-      background: #090d16;
+      background: #f8fafc;
       border-radius: 16px;
       padding: 10px;
       overflow: hidden;
+      border: 1px solid #e2e8f0;
     }
     
     .phone-device {
       width: 120px;
-      border: 6px solid #1e293b;
+      border: 6px solid #cbd5e1;
       border-radius: 24px;
-      background: #06090f;
+      background: #ffffff;
       aspect-ratio: 9 / 19;
       padding: 6px;
       position: relative;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.03);
     }
     
     .phone-view {
       width: 100%;
       height: 100%;
-      background: #090d16;
+      background: #f8fafc;
       border-radius: 18px;
       padding: 10px 6px;
       overflow: hidden;
+      border: 1px solid #e2e8f0;
     }
 
     /* =======================================
-       5. BUSINESS FLOW / HOW IT WORKS (Sunset Coral Obsidian)
+       5. BUSINESS FLOW / HOW IT WORKS
        ======================================= */
     .canva-flow-graphic {
       background: rgba(255, 255, 255, 0.02);
-      border: 1px solid rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.05);
       border-radius: 24px;
       padding: 32px 18px;
       display: flex;
@@ -636,14 +644,14 @@
       font-family: 'Outfit', sans-serif;
       font-weight: 800;
       font-size: 14px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.12);
     }
     
-    .cf-1 { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border-color: rgba(59, 130, 246, 0.25) !important; }
-    .cf-2 { background: rgba(168, 85, 247, 0.15); color: #c084fc; border-color: rgba(168, 85, 247, 0.25) !important; }
-    .cf-3 { background: rgba(16, 185, 129, 0.15); color: #34d399; border-color: rgba(16, 185, 129, 0.25) !important; }
-    .cf-4 { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border-color: rgba(245, 158, 11, 0.25) !important; }
-    .cf-5 { background: rgba(14, 165, 233, 0.15); color: #38bdf8; border-color: rgba(14, 165, 233, 0.25) !important; }
+    .cf-1 { background: rgba(59, 130, 246, 0.18); color: #60a5fa; border-color: rgba(59, 130, 246, 0.3) !important; box-shadow: 0 0 12px rgba(59, 130, 246, 0.15); }
+    .cf-2 { background: rgba(168, 85, 247, 0.18); color: #c084fc; border-color: rgba(168, 85, 247, 0.3) !important; box-shadow: 0 0 12px rgba(168, 85, 247, 0.15); }
+    .cf-3 { background: rgba(16, 185, 129, 0.18); color: #34d399; border-color: rgba(16, 185, 129, 0.3) !important; box-shadow: 0 0 12px rgba(16, 185, 129, 0.15); }
+    .cf-4 { background: rgba(245, 158, 11, 0.18); color: #fbbf24; border-color: rgba(245, 158, 11, 0.3) !important; box-shadow: 0 0 12px rgba(245, 158, 11, 0.15); }
+    .cf-5 { background: rgba(14, 165, 233, 0.18); color: #38bdf8; border-color: rgba(14, 165, 233, 0.3) !important; box-shadow: 0 0 12px rgba(14, 165, 233, 0.15); }
     
     .canva-flow-label {
       font-size: 10px;
@@ -660,7 +668,7 @@
     }
 
     /* =======================================
-       6. TECH STACK (Titanium White Obsidian)
+       6. TECH STACK (Polished Tiles)
        ======================================= */
     .canva-stack-grid {
       display: grid;
@@ -669,17 +677,19 @@
     }
     
     .canva-stack-item {
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid rgba(255, 255, 255, 0.04);
+      background: #ffffff;
+      border: 1px solid rgba(148, 163, 184, 0.25);
       border-radius: 18px;
       padding: 20px 10px;
       text-align: center;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.02);
+      transition: all 0.3s ease;
     }
     
     .canva-stack-layer {
       font-size: 8.5px;
       font-weight: 800;
-      color: #cbd5e1;
+      color: #64748b;
       text-transform: uppercase;
       display: block;
       margin-bottom: 8px;
@@ -690,7 +700,7 @@
       font-family: 'Outfit', sans-serif;
       font-size: 11px;
       font-weight: 800;
-      color: #ffffff;
+      color: #0f172a;
     }
     
     .c-red { border-top: 3px solid #ef4444; }
@@ -700,7 +710,7 @@
     .c-green-t { border-top: 3px solid #10b981; }
 
     /* =======================================
-       7. PAYMENT GATEWAYS (Silver Metal Obsidian)
+       7. PAYMENT GATEWAYS
        ======================================= */
     .canva-gateways-grid {
       display: grid;
@@ -709,8 +719,8 @@
     }
     
     .canva-gateway-pill {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.06);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 14px;
       padding: 12px;
       text-align: center;
@@ -721,6 +731,7 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
     
     .canva-gateway-dot {
@@ -732,7 +743,7 @@
     }
 
     /* =======================================
-       8. MODULES BREAKDOWN (Amber Gold Obsidian)
+       8. MODULES BREAKDOWN
        ======================================= */
     .canva-modules-grid {
       display: grid;
@@ -741,36 +752,35 @@
     }
     
     .canva-module-card {
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid rgba(245, 158, 11, 0.18);
+      background: rgba(255, 255, 255, 0.5);
+      border: 1px solid rgba(245, 158, 11, 0.25);
       border-radius: 20px;
       padding: 22px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 8px 20px rgba(245, 158, 11, 0.02);
     }
     
     .canva-module-title {
       font-size: 14px;
       font-weight: 800;
-      color: #ffffff;
+      color: #5c2c06;
       margin-bottom: 6px;
     }
     
     .canva-module-desc {
       font-size: 12px;
-      color: #fde68a;
+      color: #78350f;
       line-height: 1.55;
-      opacity: 0.85;
     }
 
     /* =======================================
-       9. INSTALLATION STEPS (Ocean Teal Obsidian)
+       9. INSTALLATION STEPS
        ======================================= */
     .canva-install-deck {
       display: flex;
       justify-content: space-between;
       gap: 10px;
       background: rgba(255, 255, 255, 0.02);
-      border: 1px solid rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.05);
       border-radius: 22px;
       padding: 26px 14px;
     }
@@ -812,7 +822,7 @@
     }
 
     /* =======================================
-       10. PERFORMANCE / SECURITY (Lime Mint Obsidian)
+       10. PERFORMANCE / SECURITY
        ======================================= */
     .canva-perf-grid {
       display: grid;
@@ -821,14 +831,14 @@
     }
     
     .canva-perf-panel {
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid rgba(52, 211, 153, 0.18);
+      background: rgba(255, 255, 255, 0.55);
+      border: 1px solid rgba(52, 211, 153, 0.25);
       border-radius: 22px;
       padding: 24px;
       display: flex;
       align-items: center;
       gap: 20px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 10px 25px rgba(52, 211, 153, 0.02);
     }
     
     .canva-perf-circle {
@@ -852,25 +862,24 @@
       font-family: 'Outfit', sans-serif;
       font-weight: 850;
       font-size: 12px;
-      color: #10b981;
+      color: #046e4d;
     }
     
     .canva-perf-title {
       font-size: 14px;
       font-weight: 800;
-      color: #ffffff;
+      color: #022c22;
       margin-bottom: 4px;
     }
     
     .canva-perf-desc {
       font-size: 12px;
-      color: #a7f3d0;
+      color: #065f46;
       line-height: 1.45;
-      opacity: 0.85;
     }
 
     /* =======================================
-       11. FAQS ACCORDION (Space Charcoal)
+       11. FAQS ACCORDION
        ======================================= */
     .canva-faq-stack {
       display: flex;
@@ -879,8 +888,8 @@
     }
     
     .canva-faq-box {
-      background: rgba(255, 255, 255, 0.01);
-      border: 1px solid rgba(255, 255, 255, 0.04);
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
       border-radius: 16px;
       padding: 18px;
     }
@@ -906,12 +915,12 @@
        12. SUPPORT + UPDATES (Figma Black-Gold VIP)
        ======================================= */
     .vip-support-card {
-      background: radial-gradient(circle at 0% 0%, rgba(99, 102, 241, 0.15) 0%, transparent 50%), radial-gradient(circle at 100% 100%, rgba(212, 175, 55, 0.15) 0%, transparent 50%), #0c0a0f;
-      border: 1px solid rgba(212, 175, 55, 0.25);
+      background: radial-gradient(circle at 0% 0%, rgba(99, 102, 241, 0.18) 0%, transparent 50%), radial-gradient(circle at 100% 100%, rgba(212, 175, 55, 0.18) 0%, transparent 50%), #0b070f;
+      border: 1px solid rgba(212, 175, 55, 0.3);
       border-radius: 36px;
       padding: 56px 36px;
       text-align: center;
-      box-shadow: 0 35px 80px rgba(0,0,0,0.5);
+      box-shadow: 0 35px 80px rgba(0,0,0,0.45);
       position: relative;
       overflow: hidden;
     }
@@ -919,14 +928,14 @@
     .vip-badge {
       display: inline-flex;
       font-size: 24px;
-      background: rgba(212, 175, 55, 0.08);
+      background: rgba(212, 175, 55, 0.1);
       width: 52px;
       height: 52px;
       align-items: center;
       justify-content: center;
       border-radius: 50%;
       margin-bottom: 24px;
-      border: 1px solid rgba(212, 175, 55, 0.2);
+      border: 1px solid rgba(212, 175, 55, 0.25);
       box-shadow: 0 0 15px rgba(212, 175, 55, 0.15);
     }
     
@@ -958,23 +967,23 @@
     .btn-gold-support {
       background: linear-gradient(135deg, #d4af37 0%, #b8901c 100%);
       color: #07090e;
-      border: 1px solid rgba(212, 175, 55, 0.35);
-      box-shadow: 0 10px 30px rgba(212, 175, 55, 0.25);
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
     }
     
     .btn-gold-alt {
-      background: rgba(255, 255, 255, 0.02);
+      background: rgba(255, 255, 255, 0.03);
       color: #d4af37;
-      border: 1px solid rgba(212, 175, 55, 0.2);
+      border: 1px solid rgba(212, 175, 55, 0.25);
     }
   </style>
 </head>
 <body>
 
-  <!-- FUTURISTIC DUST GAS NEBULAE SPHERES -->
-  <div class="bg-sphere-cyan"></div>
+  <!-- Figma PRO BACKDROP FLOATING SPHERES -->
+  <div class="bg-sphere-pink"></div>
   <div class="bg-sphere-indigo"></div>
-  <div class="bg-sphere-fuchsia"></div>
+  <div class="bg-sphere-emerald"></div>
   <div class="bg-sphere-violet"></div>
 
   <div class="showcase-wrapper">
@@ -983,16 +992,16 @@
          1. HERO CARD (Dark Cosmic Indigo)
          ======================================= -->
     <div class="glow-card theme-hero hero-card-align">
-      <div class="card-neon-sphere" style="top: -20%; right: -10%; background: radial-gradient(circle, rgba(165,180,252,0.25) 0%, transparent 70%);"></div>
+      <div class="card-neon-sphere" style="top: -20%; right: -10%; background: radial-gradient(circle, rgba(165,180,252,0.3) 0%, transparent 70%);"></div>
       
-      <!-- Grid overlay -->
+      <!-- Faint Tech Grid Background Overlay -->
       <svg class="card-bg-vector" width="100%" height="100%">
         <defs>
-          <pattern id="figmaGridHero" width="24" height="24" patternUnits="userSpaceOnUse">
-            <path d="M 24 0 L 0 0 0 24" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="0.7"/>
+          <pattern id="figmaGrid" width="24" height="24" patternUnits="userSpaceOnUse">
+            <path d="M 24 0 L 0 0 0 24" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="0.7"/>
           </pattern>
         </defs>
-        <rect width="100%" height="100%" fill="url(#figmaGridHero)" />
+        <rect width="100%" height="100%" fill="url(#figmaGrid)" />
       </svg>
       
       <div class="card-content-block">
@@ -1029,15 +1038,14 @@
     </div>
 
     <!-- =======================================
-         2. WHY THIS PRODUCT (Emerald Mint Obsidian)
+         2. WHY THIS PRODUCT (Frosted Emerald Mint)
          ======================================= -->
     <div class="glow-card theme-benefits">
-      <div class="card-neon-sphere" style="top: -20%; right: -10%; background: radial-gradient(circle, rgba(16,185,129,0.18) 0%, transparent 70%);"></div>
       
-      <!-- Blueprint Waves Overlay -->
+      <!-- Faint Wave Graphic Overlay -->
       <svg class="card-bg-vector" width="100%" height="100%">
-        <path d="M0,80 Q120,30 240,80 T480,80 T720,80" fill="none" stroke="rgba(16,185,129,0.12)" stroke-width="1" />
-        <path d="M0,110 Q120,60 240,110 T480,110 T720,110" fill="none" stroke="rgba(16,185,129,0.12)" stroke-width="0.5" />
+        <path d="M0,80 Q120,30 240,80 T480,80 T720,80" fill="none" stroke="rgba(16,185,129,0.18)" stroke-width="1" />
+        <path d="M0,110 Q120,60 240,110 T480,110 T720,110" fill="none" stroke="rgba(16,185,129,0.18)" stroke-width="0.5" />
       </svg>
       
       <div class="card-content-block">
@@ -1070,19 +1078,19 @@
     </div>
 
     <!-- =======================================
-         3. KEY FEATURES (Deep Purple Amethyst Obsidian)
+         3. KEY FEATURES (Deep Cosmic Amethyst)
          ======================================= -->
     <div class="glow-card theme-features">
       <div class="card-neon-sphere" style="top: -20%; left: -10%; background: radial-gradient(circle, rgba(167,139,250,0.2) 0%, transparent 70%);"></div>
       
-      <!-- Faint mesh overlay -->
+      <!-- Faint Dotted Mesh Overlay -->
       <svg class="card-bg-vector" width="100%" height="100%">
         <defs>
-          <pattern id="canvaDotDark" width="18" height="18" patternUnits="userSpaceOnUse">
-            <circle cx="2" cy="2" r="1" fill="rgba(255,255,255,0.05)" />
+          <pattern id="canvaDot" width="18" height="18" patternUnits="userSpaceOnUse">
+            <circle cx="2" cy="2" r="1" fill="rgba(255,255,255,0.06)" />
           </pattern>
         </defs>
-        <rect width="100%" height="100%" fill="url(#canvaDotDark)" />
+        <rect width="100%" height="100%" fill="url(#canvaDot)" />
       </svg>
       
       <div class="card-content-block">
@@ -1151,15 +1159,15 @@
     </div>
 
     <!-- =======================================
-         4. SCREENS / UI SHOWCASE (Cyan Cyber Glass Obsidian)
+         4. SCREENS / UI SHOWCASE (Cyber Light-Blue Glass)
          ======================================= -->
     <div class="glow-card theme-ui">
       
       <!-- Faint concentric radar waves -->
       <svg class="card-bg-vector" width="100%" height="100%">
-        <circle cx="50%" cy="50%" r="90" fill="none" stroke="rgba(56,189,248,0.06)" stroke-width="0.7" />
-        <circle cx="50%" cy="50%" r="180" fill="none" stroke="rgba(56,189,248,0.06)" stroke-width="0.7" />
-        <circle cx="50%" cy="50%" r="270" fill="none" stroke="rgba(56,189,248,0.06)" stroke-width="0.7" stroke-dasharray="4" />
+        <circle cx="50%" cy="50%" r="90" fill="none" stroke="rgba(3,105,161,0.12)" stroke-width="0.7" />
+        <circle cx="50%" cy="50%" r="180" fill="none" stroke="rgba(3,105,161,0.12)" stroke-width="0.7" />
+        <circle cx="50%" cy="50%" r="270" fill="none" stroke="rgba(3,105,161,0.12)" stroke-width="0.7" stroke-dasharray="4" />
       </svg>
       
       <div class="card-content-block">
@@ -1172,18 +1180,18 @@
             <div class="laptop-viewscreen">
               <div class="laptop-viewheader">
                 <span class="laptop-viewsys">⚡ SELLIO_CONSOLE</span>
-                <div style="width: 8px; height: 8px; border-radius: 50%; background: #38bdf8;"></div>
+                <div style="width: 8px; height: 8px; border-radius: 50%; background: #0284c7;"></div>
               </div>
               <div class="laptop-viewgrid">
                 <div class="laptop-viewitem">
                   <div class="laptop-viewbar" style="width: 35px; background: #6366f1;"></div>
-                  <div class="laptop-viewbar" style="width: 25px; height: 12px; background: rgba(255,255,255,0.03); margin-top: 8px;"></div>
+                  <div class="laptop-viewbar" style="width: 25px; height: 12px; background: rgba(0,0,0,0.03); margin-top: 8px;"></div>
                 </div>
                 <div class="laptop-viewitem">
                   <div class="laptop-viewbar" style="width: 55px; background: #10b981;"></div>
                   <div style="height: 52px; width: 100%; margin-top: 6px;">
                     <svg width="100%" height="100%" viewBox="0 0 100 40" preserveAspectRatio="none">
-                      <path d="M 0 40 L 0 25 Q 30 15 60 30 T 100 8 L 100 40 Z" fill="rgba(16, 185, 129, 0.04)" />
+                      <path d="M 0 40 L 0 25 Q 30 15 60 30 T 100 8 L 100 40 Z" fill="rgba(16, 185, 129, 0.08)" />
                       <path d="M 0 25 Q 30 15 60 30 T 100 8" fill="none" stroke="#10b981" stroke-width="2.5" />
                     </svg>
                   </div>
@@ -1198,11 +1206,11 @@
             <!-- Tablet -->
             <div class="tablet-device">
               <div class="tablet-view">
-                <div style="height: 7px; background: rgba(255,255,255,0.06); border-radius: 3px; width: 55%; margin-bottom: 8px;"></div>
-                <div style="height: 26px; background: rgba(255,255,255,0.03); border-radius: 6px; margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.05);"></div>
+                <div style="height: 7px; background: rgba(0,0,0,0.08); border-radius: 3px; width: 55%; margin-bottom: 8px;"></div>
+                <div style="height: 26px; background: #e2e8f0; border-radius: 6px; margin-bottom: 8px;"></div>
                 <div style="display: flex; gap: 5px;">
-                  <div style="flex:1; height: 38px; background: rgba(255,255,255,0.01); border-radius: 5px; border: 1px solid rgba(255,255,255,0.04);"></div>
-                  <div style="flex:1; height: 38px; background: rgba(255,255,255,0.01); border-radius: 5px; border: 1px solid rgba(255,255,255,0.04);"></div>
+                  <div style="flex:1; height: 38px; background: rgba(0,0,0,0.02); border-radius: 5px; border: 1px solid rgba(0,0,0,0.06);"></div>
+                  <div style="flex:1; height: 38px; background: rgba(0,0,0,0.02); border-radius: 5px; border: 1px solid rgba(0,0,0,0.06);"></div>
                 </div>
               </div>
             </div>
@@ -1210,11 +1218,11 @@
             <!-- Phone -->
             <div class="phone-device">
               <div class="phone-view">
-                <div style="height: 6px; background: rgba(255,255,255,0.06); border-radius: 3px; width: 42px; margin-bottom: 10px; margin-left: auto; margin-right: auto;"></div>
-                <div style="background: linear-gradient(135deg, #0f172a 0%, #090d16 100%); border-radius: 8px; padding: 6px; border: 1px solid rgba(255,255,255,0.05); height: 84px;">
+                <div style="height: 6px; background: rgba(0,0,0,0.08); border-radius: 3px; width: 42px; margin-bottom: 10px; margin-left: auto; margin-right: auto;"></div>
+                <div style="background: linear-gradient(135deg, #f1f5f9 0%, #ffffff 100%); border-radius: 8px; padding: 6px; border: 1px solid #e2e8f0; height: 84px;">
                   <div style="height: 5px; background: #3b82f6; border-radius: 2px; width: 28px; margin-bottom: 8px;"></div>
-                  <div style="height: 6px; background: rgba(255,255,255,0.03); border-radius: 2px; width: 100%; margin-bottom: 4px;"></div>
-                  <div style="height: 6px; background: rgba(255,255,255,0.03); border-radius: 2px; width: 80%;"></div>
+                  <div style="height: 6px; background: rgba(0,0,0,0.03); border-radius: 2px; width: 100%; margin-bottom: 4px;"></div>
+                  <div style="height: 6px; background: rgba(0,0,0,0.03); border-radius: 2px; width: 80%;"></div>
                 </div>
               </div>
             </div>
@@ -1224,14 +1232,14 @@
     </div>
 
     <!-- =======================================
-         5. BUSINESS FLOW / HOW IT WORKS (Sunset Coral Obsidian)
+         5. BUSINESS FLOW / HOW IT WORKS (Sunset Coral)
          ======================================= -->
     <div class="glow-card theme-flow">
-      <div class="card-neon-sphere" style="top: -20%; left: -10%; background: radial-gradient(circle, rgba(244,63,94,0.2) 0%, transparent 70%);"></div>
+      <div class="card-neon-sphere" style="top: -20%; left: -10%; background: radial-gradient(circle, rgba(244,63,94,0.18) 0%, transparent 70%);"></div>
       
-      <!-- Flow connecting lines -->
+      <!-- Flow network lines -->
       <svg class="card-bg-vector" width="100%" height="100%">
-        <line x1="8%" y1="50%" x2="92%" y2="50%" stroke="rgba(255,255,255,0.06)" stroke-width="1.2" stroke-dasharray="6 4" />
+        <line x1="8%" y1="50%" x2="92%" y2="50%" stroke="rgba(255,255,255,0.08)" stroke-width="1.2" stroke-dasharray="6 4" />
       </svg>
       
       <div class="card-content-block">
@@ -1272,14 +1280,14 @@
     </div>
 
     <!-- =======================================
-         6. TECH STACK (Titanium White Obsidian)
+         6. TECH STACK (Frosted Platinum Slate)
          ======================================= -->
     <div class="glow-card theme-tech">
       
       <!-- Honeycomb design pattern overlay -->
       <svg class="card-bg-vector" width="100%" height="100%">
-        <polygon points="40,20 80,0 120,20 120,60 80,80 40,60" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="0.7"/>
-        <polygon points="120,60 160,40 200,60 200,100 160,120 120,100" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="0.7"/>
+        <polygon points="40,20 80,0 120,20 120,60 80,80 40,60" fill="none" stroke="rgba(15,23,42,0.12)" stroke-width="0.7"/>
+        <polygon points="120,60 160,40 200,60 200,100 160,120 120,100" fill="none" stroke="rgba(15,23,42,0.12)" stroke-width="0.7"/>
       </svg>
       
       <div class="card-content-block">
@@ -1312,15 +1320,15 @@
     </div>
 
     <!-- =======================================
-         7. PAYMENT GATEWAYS (Silver Metal Obsidian)
+         7. PAYMENT GATEWAYS (Dark Graphite)
          ======================================= -->
     <div class="glow-card theme-gateways">
-      <div class="card-neon-sphere" style="top: -20%; left: -10%; background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);"></div>
+      <div class="card-neon-sphere" style="top: -20%; left: -10%; background: radial-gradient(circle, rgba(203,213,225,0.15) 0%, transparent 70%);"></div>
       
       <!-- Intersecting rings overlay -->
       <svg class="card-bg-vector" width="100%" height="100%">
-        <circle cx="20%" cy="50%" r="50" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="0.8" />
-        <circle cx="26%" cy="50%" r="50" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="0.8" />
+        <circle cx="20%" cy="50%" r="50" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="0.8" />
+        <circle cx="26%" cy="50%" r="50" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="0.8" />
       </svg>
       
       <div class="card-content-block">
@@ -1341,14 +1349,14 @@
     </div>
 
     <!-- =======================================
-         8. MODULES BREAKDOWN (Amber Gold Obsidian)
+         8. MODULES BREAKDOWN (Frosted Golden Amber)
          ======================================= -->
     <div class="glow-card theme-modules">
       
       <!-- Compass radial grid overlay -->
       <svg class="card-bg-vector" width="100%" height="100%">
-        <circle cx="85%" cy="50%" r="70" fill="none" stroke="rgba(245,158,11,0.08)" stroke-width="0.7" />
-        <line x1="85%" y1="10%" x2="85%" y2="90%" stroke="rgba(245,158,11,0.08)" stroke-width="0.7" />
+        <circle cx="85%" cy="50%" r="70" fill="none" stroke="rgba(120,53,15,0.12)" stroke-width="0.7" />
+        <line x1="85%" y1="10%" x2="85%" y2="90%" stroke="rgba(120,53,15,0.12)" stroke-width="0.7" />
       </svg>
       
       <div class="card-content-block">
@@ -1385,14 +1393,14 @@
     </div>
 
     <!-- =======================================
-         9. INSTALLATION STEPS (Ocean Teal Obsidian)
+         9. INSTALLATION STEPS (Deep Ocean Teal)
          ======================================= -->
     <div class="glow-card theme-install">
       <div class="card-neon-sphere" style="top: -20%; right: -10%; background: radial-gradient(circle, rgba(45,212,191,0.2) 0%, transparent 70%);"></div>
       
       <!-- Linear dash arrow tracks -->
       <svg class="card-bg-vector" width="100%" height="100%">
-        <path d="M 0,50 L 840,50" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="0.7" stroke-dasharray="6" />
+        <path d="M 0,50 L 840,50" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="0.7" stroke-dasharray="6" />
       </svg>
       
       <div class="card-content-block">
@@ -1434,13 +1442,13 @@
     </div>
 
     <!-- =======================================
-         10. PERFORMANCE / SECURITY (Lime Mint Obsidian)
+         10. PERFORMANCE / SECURITY (Frosted Lime Mint)
          ======================================= -->
     <div class="glow-card theme-perf">
       
       <!-- Faint speed lines -->
       <svg class="card-bg-vector" width="100%" height="100%">
-        <path d="M 0,25 Q 200,65 400,25 T 800,25" fill="none" stroke="rgba(52,211,153,0.1)" stroke-width="0.7" />
+        <path d="M 0,25 Q 200,65 400,25 T 800,25" fill="none" stroke="rgba(16,185,129,0.12)" stroke-width="0.7" />
       </svg>
       
       <div class="card-content-block">
@@ -1451,8 +1459,8 @@
           <div class="canva-perf-panel">
             <div class="canva-perf-circle">
               <svg class="canva-circle-svg" viewBox="0 0 36 36">
-                <path stroke="rgba(255,255,255,0.05)" stroke-width="3.5" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                <path stroke="#10b981" stroke-dasharray="99, 100" stroke-width="3.5" stroke-linecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <path stroke="rgba(0,0,0,0.05)" stroke-width="3.5" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <path stroke="#047857" stroke-dasharray="99, 100" stroke-width="3.5" stroke-linecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
               </svg>
               <div class="canva-percentage">99%</div>
             </div>
@@ -1465,8 +1473,8 @@
           <div class="canva-perf-panel">
             <div class="canva-perf-circle">
               <svg class="canva-circle-svg" viewBox="0 0 36 36">
-                <path stroke="rgba(255,255,255,0.05)" stroke-width="3.5" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                <path stroke="#10b981" stroke-dasharray="97, 100" stroke-width="3.5" stroke-linecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <path stroke="rgba(0,0,0,0.05)" stroke-width="3.5" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <path stroke="#047857" stroke-dasharray="97, 100" stroke-width="3.5" stroke-linecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
               </svg>
               <div class="canva-percentage" style="font-size: 11px;">🛡️</div>
             </div>
@@ -1487,11 +1495,11 @@
       <!-- Tech grids -->
       <svg class="card-bg-vector" width="100%" height="100%">
         <defs>
-          <pattern id="faqGridDark" width="40" height="40" patternUnits="userSpaceOnUse">
-            <rect width="40" height="40" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="0.7"/>
+          <pattern id="faqGrid" width="40" height="40" patternUnits="userSpaceOnUse">
+            <rect width="40" height="40" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="0.7"/>
           </pattern>
         </defs>
-        <rect width="100%" height="100%" fill="url(#faqGridDark)" />
+        <rect width="100%" height="100%" fill="url(#faqGrid)" />
       </svg>
       
       <div class="card-content-block">
@@ -1520,7 +1528,7 @@
     </div>
 
     <!-- =======================================
-         12. SUPPORT + UPDATES (Figma VIP Black-Gold)
+         12. SUPPORT + UPDATES (Figma VIP VIP Gold)
          ======================================= -->
     <div class="vip-support-card">
       <div class="vip-badge">⭐</div>
