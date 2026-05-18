@@ -1,25 +1,65 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 
-export const ModernHeader = () => (
+export const ModernHeader = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
     <div className="jm-header-container">
-        <header className="jm-header jm-glass">
-            <a href="#" className="jm-logo">
-                Nex<span className="jm-text-gradient">Role</span>
+      <header className="jm-header jm-glass">
+        <a href="#" className="jm-logo">
+          Nex<span className="jm-text-gradient">Role</span>
+        </a>
+
+        {/* Mobile Hamburger Trigger */}
+        <button 
+          className={`jm-hamburger ${isOpen ? 'jm-hamburger-open' : ''}`}
+          onClick={() => setIsOpen(!isOpen)}
+          aria-label="Toggle Navigation"
+          id="jm-hamburger-toggle"
+        >
+          <span className="jm-hamburger-bar"></span>
+          <span className="jm-hamburger-bar"></span>
+          <span className="jm-hamburger-bar"></span>
+        </button>
+
+        {/* Navigation Links */}
+        <nav className={`jm-nav ${isOpen ? 'jm-nav-open' : ''}`}>
+          {[
+            { name: 'Discover', target: 'discover' },
+            { name: 'Top Companies', target: 'companies' },
+            { name: 'Salaries', target: 'salaries' },
+            { name: 'Career Paths', target: 'career' }
+          ].map(link => (
+            <a 
+              key={link.name} 
+              href={`#${link.target}`} 
+              className="jm-nav-link"
+              onClick={(e) => {
+                e.preventDefault();
+                setIsOpen(false);
+                const targetId = link.target;
+                document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth' });
+              }}
+            >
+              {link.name}
             </a>
-            <nav className="jm-nav d-none d-lg-flex">
-                <a href="#discover" className="jm-nav-link">Discover</a>
-                <a href="#companies" className="jm-nav-link">Top Companies</a>
-                <a href="#salaries" className="jm-nav-link">Salaries</a>
-                <a href="#career" className="jm-nav-link">Career Paths</a>
-            </nav>
-            <div style={{ display: 'flex', gap: '1rem' }}>
-                <a href="#" className="jm-nav-link" style={{ alignSelf: 'center', fontWeight: 600 }}>Login</a>
-                <a href="#" className="jm-btn jm-btn-primary">Post a Job</a>
-            </div>
-        </header>
+          ))}
+          <div className="jm-mobile-actions">
+            <a href="#" className="jm-nav-link jm-mobile-action-link" style={{ fontWeight: 600 }}>Login</a>
+            <a href="#" className="jm-btn jm-btn-primary jm-mobile-action-btn">Post a Job</a>
+          </div>
+        </nav>
+
+        {/* Desktop Actions */}
+        <div className="jm-desktop-actions">
+          <a href="#" className="jm-nav-link" style={{ alignSelf: 'center', fontWeight: 600 }}>Login</a>
+          <a href="#" className="jm-btn jm-btn-primary" id="jm-btn-vibe-status">Post a Job</a>
+        </div>
+      </header>
     </div>
-);
+  );
+};
 
 export const ModernJobCard = ({ title, company, location, type, level, salary, logo }: any) => (
     <div className="jm-job-card jm-glass">

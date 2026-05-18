@@ -1,22 +1,62 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 
-export const FreelanceHeader = () => (
+export const FreelanceHeader = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
     <header className="jf-header">
-        <a href="#" className="jf-logo">
-            Gig<span className="jf-text-emerald">Hive</span>
-        </a>
-        <nav className="jf-nav d-none d-md-flex">
-            <a href="#explore" className="jf-nav-link">Explore</a>
-            <a href="#how-it-works" className="jf-nav-link">How it Works</a>
-            <a href="#pro" className="jf-nav-link">GigHive Pro</a>
-        </nav>
-        <div style={{ display: 'flex', gap: '1rem' }}>
-            <a href="#" className="jf-btn jc-btn-outline" style={{ color: 'var(--jf-text-main)' }}>Sign In</a>
-            <a href="#" className="jf-btn jf-btn-primary">Join</a>
+      <a href="#" className="jf-logo">
+        Gig<span className="jf-text-emerald">Hive</span>
+      </a>
+
+      {/* Mobile Hamburger Trigger */}
+      <button 
+        className={`jf-hamburger ${isOpen ? 'jf-hamburger-open' : ''}`}
+        onClick={() => setIsOpen(!isOpen)}
+        aria-label="Toggle Navigation"
+        id="jf-hamburger-toggle"
+      >
+        <span className="jf-hamburger-bar"></span>
+        <span className="jf-hamburger-bar"></span>
+        <span className="jf-hamburger-bar"></span>
+      </button>
+
+      {/* Navigation Links */}
+      <nav className={`jf-nav ${isOpen ? 'jf-nav-open' : ''}`}>
+        {[
+          { name: 'Explore Gigs', target: 'explore' },
+          { name: 'How it Works', target: 'how-it-works' },
+          { name: 'GigHive Pro', target: 'pro' }
+        ].map(link => (
+          <a 
+            key={link.name} 
+            href={`#${link.target}`} 
+            className="jf-nav-link"
+            onClick={(e) => {
+              e.preventDefault();
+              setIsOpen(false);
+              const targetId = link.target;
+              document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth' });
+            }}
+          >
+            {link.name}
+          </a>
+        ))}
+        <div className="jf-mobile-actions">
+          <a href="#" className="jf-btn jf-btn-outline jf-mobile-action-btn">Sign In</a>
+          <a href="#" className="jf-btn jf-btn-primary jf-mobile-action-btn">Join</a>
         </div>
+      </nav>
+
+      {/* Desktop Actions */}
+      <div className="jf-desktop-actions">
+        <a href="#" className="jf-btn jf-btn-outline" style={{ color: 'var(--jf-text-main)' }}>Sign In</a>
+        <a href="#" className="jf-btn jf-btn-primary" id="jf-btn-vibe-status">Join</a>
+      </div>
     </header>
-);
+  );
+};
 
 export const GigCard = ({ title, name, avatar, image, rating, reviews, price }: any) => (
     <div className="jf-gig-card">

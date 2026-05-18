@@ -104,9 +104,9 @@ Individual QA Audit reports are stored sequentially in the `reports/` directory.
 
 
 ### 💼 Jobs Vertical (6 Themes)
-- [ ] Theme 41: `jobs/blue_collar`
-- [ ] Theme 42: `jobs/corporate`
-- [ ] Theme 43: `jobs/freelance`
+- **[💼 Theme 41: `jobs/blue_collar`](file:///d:/Sellio/documentation/reports/theme_jobs_blue_collar_audit.md) — 🟢 Certified Elite Pass**
+- **[💼 Theme 42: `jobs/corporate`](file:///d:/Sellio/documentation/reports/theme_jobs_corporate_audit.md) — 🟢 Certified Elite Pass**
+- **[💼 Theme 43: `jobs/freelance`](file:///d:/Sellio/documentation/reports/theme_jobs_freelance_audit.md) — 🟢 Certified Elite Pass**
 - [ ] Theme 44: `jobs/modern`
 - [ ] Theme 45: `jobs/startup`
 - [ ] Theme 46: `jobs/tech`

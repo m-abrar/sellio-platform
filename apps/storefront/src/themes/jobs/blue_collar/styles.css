@@ -108,11 +108,12 @@
 
 /* Hero Section */
 .jbc-hero {
-    background: url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=2070') no-repeat center center/cover;
+    background: url('/themes/jobs/blue_collar/10.webp') no-repeat center center/cover;
     position: relative;
-    padding: 6rem 5%;
+    padding: 8rem 5%;
     display: flex;
     align-items: center;
+    min-height: 60vh;
 }
 
 .jbc-hero-overlay {
@@ -125,15 +126,17 @@
     position: relative;
     z-index: 2;
     color: white;
-    max-width: 600px;
+    max-width: 700px;
+    margin: 0 auto;
+    text-align: center;
 }
 
 .jbc-hero-title {
-    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
     font-weight: 900;
     text-transform: uppercase;
     line-height: 1.1;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
 }
 
@@ -143,8 +146,10 @@
 
 .jbc-hero-subtitle {
     font-size: 1.25rem;
-    margin-bottom: 2rem;
+    margin-bottom: 3rem;
     font-weight: 400;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.9);
 }
 
 /* Search Bar */
@@ -155,6 +160,7 @@
     padding: 0.5rem;
     border-radius: 4px;
     box-shadow: var(--jbc-shadow);
+    border: 1px solid var(--jbc-border);
 }
 
 .jbc-search-input {
@@ -165,6 +171,7 @@
     font-size: 1rem;
     font-family: var(--jbc-font);
     outline: none;
+    color: var(--jbc-text-main);
 }
 
 .jbc-search-divider {
@@ -175,17 +182,64 @@
 
 /* Main Layout */
 .jbc-section {
-    padding: 4rem 5%;
+    padding: 5rem 5%;
 }
 
 .jbc-section-title {
-    font-size: 2rem;
+    font-size: 2.25rem;
     font-weight: 900;
     text-transform: uppercase;
     color: var(--jbc-secondary);
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
     border-left: 6px solid var(--jbc-primary);
     padding-left: 1rem;
+}
+
+/* Trades Categories */
+.jbc-trades-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1.5rem;
+    text-align: center;
+}
+
+.jbc-trade-link {
+    padding: 2rem 1rem;
+    border: 2px solid var(--jbc-border);
+    border-radius: 8px;
+    text-decoration: none;
+    color: var(--jbc-secondary);
+    font-weight: 800;
+    text-transform: uppercase;
+    transition: var(--jbc-transition);
+}
+
+.jbc-trade-link:hover {
+    border-color: var(--jbc-secondary);
+    background-color: var(--jbc-secondary);
+    color: var(--jbc-primary);
+    transform: translateY(-3px);
+    box-shadow: var(--jbc-shadow);
+}
+
+/* Jobs Header Layout */
+.jbc-jobs-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+}
+
+.jbc-sort-select {
+    padding: 0.75rem 1.5rem;
+    font-weight: 700;
+    border: 2px solid var(--jbc-border);
+    outline: none;
+    background: white;
+    font-family: var(--jbc-font);
+    border-radius: 4px;
 }
 
 /* Job Cards */
@@ -199,7 +253,7 @@
     background-color: var(--jbc-bg-card);
     border: 2px solid var(--jbc-border);
     border-radius: 4px;
-    padding: 1.5rem;
+    padding: 2rem;
     transition: var(--jbc-transition);
     position: relative;
     overflow: hidden;
@@ -255,16 +309,16 @@
 }
 
 .jbc-wage {
-    font-size: 1.25rem;
+    font-size: 1.35rem;
     font-weight: 900;
     color: #2e7d32; /* Green for money */
 }
 
 /* Call to Action */
 .jbc-cta {
-    background-color: var(--jbc-secondary);
+    background: linear-gradient(rgba(33, 33, 33, 0.8), rgba(33, 33, 33, 0.8)), url('/themes/jobs/blue_collar/11.webp') no-repeat center center/cover;
     color: white;
-    padding: 4rem 5%;
+    padding: 6rem 5%;
     text-align: center;
     border-top: 6px solid var(--jbc-primary);
     border-bottom: 6px solid var(--jbc-primary);
@@ -272,15 +326,126 @@
 }
 
 .jbc-cta h2 {
-    font-size: 2.5rem;
+    font-size: 2.75rem;
     font-weight: 900;
     text-transform: uppercase;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
 }
 
 /* Footer */
 .jbc-footer {
     background-color: #111111;
     color: white;
-    padding: 4rem 5% 2rem;
+    padding: 5rem 5% 2rem;
 }
+
+/* Hamburger & Mobile Responsive Controls */
+.jbc-hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 25px;
+    height: 18px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 1010;
+}
+
+.jbc-hamburger-bar {
+    width: 100%;
+    height: 2px;
+    background-color: white;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.jbc-hamburger-open .jbc-hamburger-bar:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+    background-color: var(--jbc-primary);
+}
+
+.jbc-hamburger-open .jbc-hamburger-bar:nth-child(2) {
+    opacity: 0;
+}
+
+.jbc-hamburger-open .jbc-hamburger-bar:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+    background-color: var(--jbc-primary);
+}
+
+.jbc-mobile-btn {
+    display: none !important;
+}
+
+.jbc-desktop-btn {
+    display: block !important;
+}
+
+@media (max-width: 1024px) {
+    .jbc-header {
+        padding: 1rem 5%;
+    }
+
+    .jbc-hamburger {
+        display: flex;
+    }
+
+    .jbc-desktop-btn {
+        display: none !important;
+    }
+
+    .jbc-mobile-btn {
+        display: block !important;
+        margin-top: 2rem;
+        width: 100%;
+        text-align: center;
+    }
+
+    .jbc-nav {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 300px;
+        height: 100vh;
+        background: rgba(33, 33, 33, 0.98);
+        backdrop-filter: blur(20px);
+        box-shadow: -10px 0 30px rgba(0, 0, 0, 0.2);
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        padding: 8rem 2.5rem 2.5rem;
+        gap: 2rem;
+        transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        z-index: 1005;
+        border-left: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .jbc-nav-open {
+        right: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .jbc-section {
+        padding: 4rem 6%;
+    }
+
+    .jbc-hero {
+        padding: 6rem 5%;
+    }
+
+    .jbc-search-divider {
+        display: none;
+    }
+
+    .jbc-search-input {
+        border-bottom: 1px solid var(--jbc-border) !important;
+    }
+
+    .jbc-footer-grid {
+        grid-template-columns: 1fr !important;
+        gap: 3rem !important;
+    }
+}
+

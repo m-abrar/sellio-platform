@@ -17,29 +17,29 @@ export default function Page() {
       <BlueCollarHeader />
 
       {/* Hero */}
-      <section className="jbc-hero">
+      <section className="jbc-hero" id="jbc-hero-section" aria-labelledby="jbc-hero-title">
         <div className="jbc-hero-overlay"></div>
         <div className="jbc-hero-content">
-            <h1 className="jbc-hero-title">Hard Work <span>Pays Off.</span></h1>
+            <h1 className="jbc-hero-title" id="jbc-hero-title">Hard Work <span>Pays Off.</span></h1>
             <p className="jbc-hero-subtitle">Find high-paying jobs in construction, manufacturing, transportation, and skilled trades. No desk required.</p>
             
-            <div className="jbc-search-box">
-                <input type="text" className="jbc-search-input" placeholder="Job Title or Trade (e.g., Welder)" />
+            <div className="jbc-search-box" aria-label="Search Filter Bar">
+                <input type="text" className="jbc-search-input" placeholder="Job Title or Trade (e.g., Welder)" aria-label="Trade Search Input" />
                 <div className="jbc-search-divider"></div>
-                <input type="text" className="jbc-search-input" placeholder="City or ZIP Code" />
-                <button className="jbc-btn jbc-btn-primary" style={{ border: 'none', margin: '4px' }}>Search</button>
+                <input type="text" className="jbc-search-input" placeholder="City or ZIP Code" aria-label="City Search Input" />
+                <button className="jbc-btn jbc-btn-primary" style={{ border: 'none', margin: '4px' }} onClick={() => alert('Searching listings...')}>Search</button>
             </div>
         </div>
       </section>
 
       {/* Categories */}
-      <section className="jbc-section" style={{ backgroundColor: 'white' }}>
-          <h2 className="jbc-section-title">Browse By Trade</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '1rem', textAlign: 'center' }}>
+      <section className="jbc-section" id="jbc-trades-section" style={{ backgroundColor: 'white' }} aria-labelledby="jbc-trades-title">
+          <h2 className="jbc-section-title" id="jbc-trades-title">Browse By Trade</h2>
+          <div className="jbc-trades-grid">
               {['Construction', 'Manufacturing', 'Transportation', 'Maintenance', 'Warehousing', 'Energy'].map(trade => (
-                  <a href="#" key={trade} style={{ padding: '1.5rem 1rem', border: '1px solid var(--jbc-border)', borderRadius: '4px', textDecoration: 'none', color: 'var(--jbc-secondary)', fontWeight: 700, textTransform: 'uppercase', transition: 'var(--jbc-transition)' }} 
-                     onMouseOver={(e) => e.currentTarget.style.borderColor = 'var(--jbc-primary)'}
-                     onMouseOut={(e) => e.currentTarget.style.borderColor = 'var(--jbc-border)'}>
+                  <a href="#" key={trade} className="jbc-trade-link"
+                     onClick={(e) => { e.preventDefault(); alert(`Filtering jobs for ${trade}...`); }}
+                  >
                       {trade}
                   </a>
               ))}
@@ -47,10 +47,10 @@ export default function Page() {
       </section>
 
       {/* Job Grid */}
-      <section className="jbc-section" id="jobs">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '2rem' }}>
-              <h2 className="jbc-section-title" style={{ marginBottom: 0 }}>Latest Openings</h2>
-              <select style={{ padding: '0.5rem', fontWeight: 700, border: '2px solid var(--jbc-border)', outline: 'none' }}>
+      <section className="jbc-section" id="jobs" aria-labelledby="jbc-jobs-title">
+          <div className="jbc-jobs-header">
+              <h2 className="jbc-section-title" id="jbc-jobs-title" style={{ marginBottom: 0 }}>Latest Openings</h2>
+              <select className="jbc-sort-select" aria-label="Sort Jobs Select">
                   <option>Most Recent</option>
                   <option>Highest Wage</option>
                   <option>Closest to Me</option>
@@ -62,15 +62,15 @@ export default function Page() {
           </div>
           
           <div style={{ textAlign: 'center', marginTop: '3rem' }}>
-              <button className="jbc-btn jbc-btn-secondary">Load More Jobs</button>
+              <button className="jbc-btn jbc-btn-secondary" onClick={() => alert('Loading more blue-collar jobs...')}>Load More Jobs</button>
           </div>
       </section>
 
       {/* CTA */}
-      <section className="jbc-cta">
+      <section className="jbc-cta" id="jbc-employers-section">
           <h2>Need Workers Fast?</h2>
           <p style={{ fontSize: '1.2rem', marginBottom: '2rem', fontWeight: 500 }}>Access our database of over 50,000 certified tradespeople ready to start tomorrow.</p>
-          <a href="#employers" className="jbc-btn jbc-btn-primary" style={{ fontSize: '1.25rem', padding: '1rem 3rem' }}>Post Your Job Now</a>
+          <button className="jbc-btn jbc-btn-primary" style={{ fontSize: '1.25rem', padding: '1rem 3rem' }} onClick={() => alert('Employer onboarding portal...')}>Post Your Job Now</button>
       </section>
 
       <BlueCollarFooter />

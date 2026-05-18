@@ -1,23 +1,63 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 
-export const CorporateHeader = () => (
+export const CorporateHeader = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
     <header className="jc-header">
-        <a href="#" className="jc-logo">
-            <span style={{ color: 'var(--jc-blue-accent)' }}>Talent</span>Corp
-        </a>
-        <nav className="jc-nav d-none d-md-flex">
-            <a href="#jobs" className="jc-nav-link">Find Jobs</a>
-            <a href="#companies" className="jc-nav-link">Companies</a>
-            <a href="#tracker" className="jc-nav-link">Application Tracker</a>
-            <a href="#resume" className="jc-nav-link">Upload Resume</a>
-        </nav>
-        <div style={{ display: 'flex', gap: '1rem' }}>
-            <a href="#" className="jc-btn jc-btn-outline">Sign In</a>
-            <a href="#" className="jc-btn jc-btn-navy">Post a Job</a>
+      <a href="#" className="jc-logo">
+        <span style={{ color: 'var(--jc-blue-accent)' }}>Talent</span>Corp
+      </a>
+
+      {/* Mobile Hamburger Trigger */}
+      <button 
+        className={`jc-hamburger ${isOpen ? 'jc-hamburger-open' : ''}`}
+        onClick={() => setIsOpen(!isOpen)}
+        aria-label="Toggle Navigation"
+        id="jc-hamburger-toggle"
+      >
+        <span className="jc-hamburger-bar"></span>
+        <span className="jc-hamburger-bar"></span>
+        <span className="jc-hamburger-bar"></span>
+      </button>
+
+      {/* Navigation Links */}
+      <nav className={`jc-nav ${isOpen ? 'jc-nav-open' : ''}`}>
+        {[
+          { name: 'Find Jobs', target: 'jobs' },
+          { name: 'Companies', target: 'companies' },
+          { name: 'Application Tracker', target: 'tracker' },
+          { name: 'Upload Resume', target: 'resume' }
+        ].map(link => (
+          <a 
+            key={link.name} 
+            href={`#${link.target}`} 
+            className="jc-nav-link"
+            onClick={(e) => {
+              e.preventDefault();
+              setIsOpen(false);
+              const targetId = link.target;
+              document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth' });
+            }}
+          >
+            {link.name}
+          </a>
+        ))}
+        <div className="jc-mobile-actions">
+          <a href="#" className="jc-btn jc-btn-outline jc-mobile-action-btn">Sign In</a>
+          <a href="#" className="jc-btn jc-btn-navy jc-mobile-action-btn">Post a Job</a>
         </div>
+      </nav>
+
+      {/* Desktop Actions */}
+      <div className="jc-desktop-actions">
+        <a href="#" className="jc-btn jc-btn-outline">Sign In</a>
+        <a href="#" className="jc-btn jc-btn-navy" id="jc-btn-vibe-status">Post a Job</a>
+      </div>
     </header>
-);
+  );
+};
 
 export const JobCard = ({ title, company, location, type, salary, time, logo }: any) => (
     <div className="jc-job-card">

@@ -4,12 +4,12 @@ import { ModernHeader, ModernJobCard, ModernFooter } from './components';
 
 export default function Page() {
   const jobs = [
-    { title: "Lead Product Designer", company: "Figma", location: "San Francisco, CA", type: "Full-Time", level: "Senior", salary: "$160k - $210k", logo: "https://upload.wikimedia.org/wikipedia/commons/3/33/Figma-logo.svg" },
-    { title: "VP of Engineering", company: "Spotify", location: "Remote - Global", type: "Full-Time", level: "Executive", salary: "$250k+", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Spotify_logo_without_text.svg/512px-Spotify_logo_without_text.svg.png" },
-    { title: "Senior Data Scientist", company: "Airbnb", location: "New York, NY", type: "Full-Time", level: "Senior", salary: "$150k - $190k", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Airbnb_Logo_B%C3%A9lo.svg/512px-Airbnb_Logo_B%C3%A9lo.svg.png" },
-    { title: "Brand Marketing Manager", company: "Nike", location: "Portland, OR", type: "Hybrid", level: "Mid-Level", salary: "$110k - $140k", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Logo_NIKE.svg/512px-Logo_NIKE.svg.png" },
-    { title: "iOS Developer", company: "Apple", location: "Cupertino, CA", type: "On-site", level: "Mid-Level", salary: "$140k - $170k", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Apple_logo_black.svg/512px-Apple_logo_black.svg.png" },
-    { title: "UX Researcher", company: "Google", location: "Remote - US", type: "Full-Time", level: "Mid-Level", salary: "$130k - $160k", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png" },
+    { title: "Lead Product Designer", company: "Figma", location: "San Francisco, CA", type: "Full-Time", level: "Senior", salary: "$160k - $210k", logo: "/themes/jobs/modern/1.webp" },
+    { title: "VP of Engineering", company: "Spotify", location: "Remote - Global", type: "Full-Time", level: "Executive", salary: "$250k+", logo: "/themes/jobs/modern/2.webp" },
+    { title: "Senior Data Scientist", company: "Airbnb", location: "New York, NY", type: "Full-Time", level: "Senior", salary: "$150k - $190k", logo: "/themes/jobs/modern/3.webp" },
+    { title: "Brand Marketing Manager", company: "Nike", location: "Portland, OR", type: "Hybrid", level: "Mid-Level", salary: "$110k - $140k", logo: "/themes/jobs/modern/4.webp" },
+    { title: "iOS Developer", company: "Apple", location: "Cupertino, CA", type: "On-site", level: "Mid-Level", salary: "$140k - $170k", logo: "/themes/jobs/modern/5.webp" },
+    { title: "UX Researcher", company: "Google", location: "Remote - US", type: "Full-Time", level: "Mid-Level", salary: "$130k - $160k", logo: "/themes/jobs/modern/6.webp" },
   ];
 
   return (

@@ -4,11 +4,11 @@ import { CorporateHeader, JobCard, DashboardCard, CorporateFooter } from './comp
 
 export default function Page() {
   const jobs = [
-    { title: "Senior Enterprise Architect", company: "Globex Corporation", location: "New York, NY", type: "Full-Time", salary: "$160k - $200k", time: "2h ago", logo: "https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?q=80&w=100&auto=format&fit=crop" },
-    { title: "Director of Product Management", company: "Initech", location: "Remote", type: "Full-Time", salary: "$180k - $220k", time: "5h ago", logo: "https://images.unsplash.com/photo-1613588718956-c2e80305bf61?q=80&w=100&auto=format&fit=crop" },
-    { title: "Financial Analyst II", company: "Acme Corp", location: "Chicago, IL", type: "Contract", salary: "$80 - $100/hr", time: "1d ago", logo: "https://images.unsplash.com/photo-1599305090598-fe179d501227?q=80&w=100&auto=format&fit=crop" },
-    { title: "Lead HR Business Partner", company: "Soylent", location: "San Francisco, CA", type: "Full-Time", salary: "$140k - $170k", time: "1d ago", logo: "https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?q=80&w=100&auto=format&fit=crop" },
-    { title: "Cybersecurity Operations Center Analyst", company: "Umbrella Corp", location: "Austin, TX", type: "Full-Time", salary: "$110k - $140k", time: "2d ago", logo: "https://images.unsplash.com/photo-1599305090598-fe179d501227?q=80&w=100&auto=format&fit=crop" },
+    { title: "Senior Enterprise Architect", company: "Globex Corporation", location: "New York, NY", type: "Full-Time", salary: "$160k - $200k", time: "2h ago", logo: "/themes/jobs/corporate/1.webp" },
+    { title: "Director of Product Management", company: "Initech", location: "Remote", type: "Full-Time", salary: "$180k - $220k", time: "5h ago", logo: "/themes/jobs/corporate/2.webp" },
+    { title: "Financial Analyst II", company: "Acme Corp", location: "Chicago, IL", type: "Contract", salary: "$80 - $100/hr", time: "1d ago", logo: "/themes/jobs/corporate/3.webp" },
+    { title: "Lead HR Business Partner", company: "Soylent", location: "San Francisco, CA", type: "Full-Time", salary: "$140k - $170k", time: "1d ago", logo: "/themes/jobs/corporate/4.webp" },
+    { title: "Cybersecurity Operations Center Analyst", company: "Umbrella Corp", location: "Austin, TX", type: "Full-Time", salary: "$110k - $140k", time: "2d ago", logo: "/themes/jobs/corporate/5.webp" },
   ];
 
   return (
