@@ -19,19 +19,20 @@ const ArtistCard = ({ name, image, genre }: ArtistCardProps) => (
 
 export const LineupGrid = () => {
     const artists = [
-        { name: "Void Phase", genre: "Techno", image: "https://images.unsplash.com/photo-1574672280600-4accfa5b6f98?q=80&w=2070" },
-        { name: "Neon Pulse", genre: "Synthwave", image: "https://images.unsplash.com/photo-1493225255756-d9584f8606e9?q=80&w=2070" },
-        { name: "Static Ghost", genre: "Ambient", image: "https://images.unsplash.com/photo-1514525253361-b83f859b73c0?q=80&w=2070" },
-        { name: "Iron Logic", genre: "Industrial", image: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=2070" },
-        { name: "Digital Riot", genre: "Glitch", image: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=2070" },
-        { name: "Hyper Drive", genre: "Drum & Bass", image: "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?q=80&w=2070" },
-        { name: "Sonic Bloom", genre: "Experimental", image: "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?q=80&w=2070" },
-        { name: "Nodal Flow", genre: "Deep House", image: "https://images.unsplash.com/photo-1459749411177-042180ce673c?q=80&w=2070" },
+        { name: "Void Phase", genre: "Techno", image: "/themes/events/music/21.webp" },
+        { name: "Neon Pulse", genre: "Synthwave", image: "/themes/events/music/22.webp" },
+        { name: "Static Ghost", genre: "Ambient", image: "/themes/events/music/23.webp" },
+        { name: "Iron Logic", genre: "Industrial", image: "/themes/events/music/24.webp" },
+        { name: "Digital Riot", genre: "Glitch", image: "/themes/events/music/25.webp" },
+        { name: "Hyper Drive", genre: "Drum & Bass", image: "/themes/events/music/26.webp" },
+        { name: "Sonic Bloom", genre: "Experimental", image: "/themes/events/music/27.webp" },
+        { name: "Nodal Flow", genre: "Deep House", image: "/themes/events/music/28.webp" },
     ];
 
     return (
-        <section className="lineup-grid">
+        <section className="lineup-grid" id="sonic-lineup-section">
             {artists.map((a, i) => <ArtistCard key={i} {...a} />)}
         </section>
     );
 };
+

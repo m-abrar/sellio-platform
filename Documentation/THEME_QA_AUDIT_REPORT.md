@@ -88,10 +88,12 @@ Individual QA Audit reports are stored sequentially in the `reports/` directory.
 - **[📅 Theme 32: `events/corporate`](file:///d:/Sellio/documentation/reports/theme_events_corporate_audit.md) — 🟢 Certified Elite Pass**
 - **[📅 Theme 33: `events/creative`](file:///d:/Sellio/documentation/reports/theme_events_creative_audit.md) — 🟢 Certified Elite Pass**
 - **[📅 Theme 34: `events/festival`](file:///d:/Sellio/documentation/reports/theme_events_festival_audit.md) — 🟢 Certified Elite Pass**
-- [ ] Theme 35: `events/music`
+- **[📅 Theme 35: `events/music`](file:///d:/Sellio/documentation/reports/theme_events_music_audit.md) — 🟢 Certified Elite Pass**
+
 
 ### 🤝 Services Vertical (5 Themes)
-- [ ] Theme 36: `services/corporate`
+- **[🤝 Theme 36: `services/corporate`](file:///d:/Sellio/documentation/reports/theme_services_corporate_audit.md) — 🟢 Certified Elite Pass**
+
 - [ ] Theme 37: `services/creative`
 - [ ] Theme 38: `services/health`
 - [ ] Theme 39: `services/local`

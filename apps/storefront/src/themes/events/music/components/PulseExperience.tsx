@@ -24,7 +24,7 @@ export const PulseExperience = () => (
             <div style={{ position: 'relative' }}>
                 <div style={{ position: 'absolute', top: '-2rem', right: '-2rem', width: '200px', height: '200px', borderTop: '4px solid var(--neon-pink)', borderRight: '4px solid var(--neon-pink)', boxShadow: '0 0 20px var(--neon-pink)', borderRadius: '0 20px 0 0' }}></div>
                 <div style={{ height: '600px', background: 'var(--sonic-card)', border: '1px solid var(--sonic-border)', overflow: 'hidden', borderRadius: '20px' }}>
-                    <img src="https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?q=80&w=2070" alt="Concert Crowd" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.6 }} />
+                    <img src="/themes/events/music/15.webp" alt="Concert Crowd" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.6 }} />
                 </div>
                 <div style={{ position: 'absolute', bottom: '2rem', left: '-2rem', padding: '2rem', background: 'var(--sonic-bg)', border: '1px solid var(--neon-blue)', boxShadow: '0 0 20px var(--neon-blue)', borderRadius: '12px' }}>
                     <div style={{ fontSize: '0.75rem', fontWeight: 900, color: 'var(--neon-blue)', letterSpacing: '2px' }}>NEXT_UP: IBIZA_MESH</div>

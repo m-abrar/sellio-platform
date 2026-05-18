@@ -1,24 +1,71 @@
 
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 
-export const CorporateHeader = () => (
-  <header className="sc-header">
-    <div className="sc-logo">
-      <span className="text-primary">Corporate</span> <span style={{ color: 'var(--sc-text-dim)' }}>Services</span>
-    </div>
-    
-    <nav className="sc-nav">
+export const CorporateHeader = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <header className="sc-header">
+      <div className="sc-logo">
+        <span className="text-primary">Corporate</span> <span style={{ color: 'var(--sc-text-dim)' }}>Services</span>
+      </div>
+      
+      {/* Mobile Hamburger Trigger */}
+      <button 
+        className={`sc-hamburger ${isOpen ? 'sc-hamburger-open' : ''}`}
+        onClick={() => setIsOpen(!isOpen)}
+        aria-label="Toggle Navigation"
+        id="sc-hamburger-toggle"
+      >
+        <span className="sc-hamburger-bar"></span>
+        <span className="sc-hamburger-bar"></span>
+        <span className="sc-hamburger-bar"></span>
+      </button>
+
+      {/* Navigation Links */}
+      <nav className={`sc-nav ${isOpen ? 'sc-nav-open' : ''}`}>
         {['Home', 'Services', 'About', 'Case Studies', 'Contact'].map(link => (
-            <a key={link} href={`#${link.toLowerCase().replace(' ', '-')}`} className="sc-nav-link">{link}</a>
+          <a 
+            key={link} 
+            href={`#${link.toLowerCase().replace(' ', '-')}`} 
+            className="sc-nav-link"
+            onClick={(e) => {
+              e.preventDefault();
+              setIsOpen(false);
+              const targetId = link === 'Home' ? 'sc-hero-section' : link.toLowerCase().replace(' ', '-');
+              document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth' });
+            }}
+          >
+            {link}
+          </a>
         ))}
-    </nav>
+        <button 
+          className="sc-btn sc-btn-primary sc-mobile-btn" 
+          onClick={() => alert('Consultation portal activated.')}
+        >
+          Get a Quote
+        </button>
+      </nav>
 
-    <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-        <a href="#contact" className="sc-btn sc-btn-primary">Get a Quote</a>
-    </div>
-  </header>
-);
+      {/* Desktop Actions */}
+      <div className="sc-desktop-btn-container">
+        <a 
+          href="#contact" 
+          className="sc-btn sc-btn-primary sc-desktop-btn"
+          onClick={(e) => {
+            e.preventDefault();
+            document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+          }}
+          id="sc-btn-vibe-status"
+        >
+          Get a Quote
+        </a>
+      </div>
+    </header>
+  );
+};
+
 
 export const ServiceCard = ({ title, description, icon }: any) => (
   <div className="sc-service-card">
