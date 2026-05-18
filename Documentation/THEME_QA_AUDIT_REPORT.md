@@ -75,7 +75,7 @@ Individual QA Audit reports are stored sequentially in the `reports/` directory.
 
 ### 🌐 Unified Vertical (8 Themes)
 - **[🌐 Theme 23: `unifieds/classic`](file:///d:/Sellio/documentation/reports/theme_unifieds_classic_audit.md) — 🟢 Certified Elite Pass**
-- [ ] Theme 24: `unifieds/default`
+- **[🌐 Theme 24: `unifieds/default`](file:///d:/Sellio/documentation/reports/theme_unifieds_default_audit.md) — 🟢 Certified Elite Pass**
 - [ ] Theme 25: `unifieds/interactive`
 - [ ] Theme 26: `unifieds/marketplace`
 - [ ] Theme 27: `unifieds/mega`
