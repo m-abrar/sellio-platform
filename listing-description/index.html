@@ -1,259 +1,1096 @@
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sellio - The Ultimate SaaS Marketplace Solution</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800;900&family=Fira+Code:wght@500;700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* RESET & CORE SYSTEM */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      background-color: #030712;
+      padding: 20px 0;
+    }
+    
+    /* MARKETING SHEET CONTAINER */
+    .container {
+      max-width: 768px;
+      margin: 0 auto;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: #f3f4f6;
+      background: #030712;
+      line-height: 1.6;
+      padding: 40px 24px;
+      box-sizing: border-box;
+      -webkit-font-smoothing: antialiased;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid #111827;
+      border-radius: 32px;
+      box-shadow: 0 30px 100px rgba(0, 0, 0, 0.8);
+    }
+    
+    /* FUTURISTIC GLOWS */
+    .glow-indigo {
+      position: absolute;
+      top: -10%;
+      right: -20%;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: 1;
+    }
+    
+    .glow-purple {
+      position: absolute;
+      bottom: 20%;
+      left: -20%;
+      width: 450px;
+      height: 450px;
+      background: radial-gradient(circle, rgba(168, 85, 247, 0.12) 0%, transparent 70%);
+      filter: blur(90px);
+      pointer-events: none;
+      z-index: 1;
+    }
+    
+    /* SECTION DIVIDER & DECORATIONS */
+    .divider {
+      border: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(243, 244, 246, 0.08) 20%, rgba(243, 244, 246, 0.08) 80%, transparent);
+      margin: 56px 0;
+    }
+    
+    /* TYPOGRAPHY */
+    h1, h2, h3, h4 {
+      font-family: 'Outfit', sans-serif;
+      color: #ffffff;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+    
+    /* HERO SECTION */
+    .hero {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 24px 0 40px;
+    }
+    
+    .badge-premium {
+      display: inline-flex;
+      align-items: center;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(168, 85, 247, 0.15) 100%);
+      color: #a5b4fc;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 6px 16px;
+      border-radius: 100px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 24px;
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      box-shadow: 0 4px 20px rgba(99, 102, 241, 0.15);
+    }
+    
+    .hero-title {
+      font-size: clamp(28px, 6vw, 42px);
+      line-height: 1.15;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, #ffffff 30%, #c7d2fe 70%, #a5b4fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 2px 10px rgba(0,0,0,0.5));
+    }
+    
+    .hero-desc {
+      font-size: 15px;
+      color: #9ca3af;
+      max-width: 580px;
+      margin: 0 auto 36px;
+      line-height: 1.7;
+    }
+    
+    .hero-cta {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 48px;
+    }
+    
+    .btn {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      padding: 14px 28px;
+      border-radius: 12px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+      letter-spacing: 0.5px;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+      color: #ffffff;
+      box-shadow: 0 8px 30px rgba(79, 70, 229, 0.4), inset 0 1px 0 rgba(255,255,255,0.2);
+      border: 1px solid rgba(99, 102, 241, 0.5);
+    }
+    
+    .btn-secondary {
+      background: #0f172a;
+      color: #e2e8f0;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+    
+    /* Device Mockup - HIGH FIDELITY APPS ENGINE */
+    .device-mockup {
+      background: linear-gradient(160deg, #0b0f19 0%, #030712 100%);
+      border-radius: 24px;
+      padding: 24px 20px 0;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), 0 0 40px rgba(99, 102, 241, 0.1);
+      min-height: 320px;
+    }
+    
+    .device-mockup::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.3), transparent);
+    }
+    
+    /* Browser UI */
+    .browser-frame {
+      background: #090d16;
+      border-radius: 12px 12px 0 0;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-bottom: none;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+      overflow: hidden;
+    }
+    
+    .browser-bar {
+      background: #06090f;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    
+    .dot-red { background: #ef4444; }
+    .dot-yellow { background: #f59e0b; }
+    .dot-green { background: #10b981; }
+    
+    .browser-address {
+      flex: 1;
+      background: #0d1527;
+      border-radius: 6px;
+      height: 20px;
+      margin-left: 16px;
+      max-width: 220px;
+      border: 1px solid rgba(255,255,255,0.03);
+      display: flex;
+      align-items: center;
+      padding-left: 10px;
+      color: rgba(255,255,255,0.3);
+      font-size: 8px;
+      font-family: monospace;
+    }
+    
+    /* High Fidelity Interface Inside Mockup */
+    .mockup-body {
+      padding: 16px;
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 16px;
+      background: #090d16;
+    }
+    
+    .mockup-sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      border-right: 1px solid rgba(255,255,255,0.03);
+      padding-right: 12px;
+    }
+    
+    .sidebar-item {
+      height: 24px;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      padding: 0 8px;
+      gap: 6px;
+    }
+    
+    .sidebar-icon {
+      width: 8px;
+      height: 8px;
+      background: #4f46e5;
+      border-radius: 50%;
+    }
+    
+    .sidebar-line {
+      height: 6px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 2px;
+      flex: 1;
+    }
+    
+    .dashboard-panel {
+      background: #0f172a;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.05);
+      padding: 14px;
+      position: relative;
+    }
+    
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    
+    .dashboard-title {
+      font-size: 10px;
+      font-weight: 700;
+      color: #94a3b8;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    
+    .dashboard-value {
+      font-size: 18px;
+      font-weight: 900;
+      color: #ffffff;
+      font-family: 'Outfit', sans-serif;
+      margin-top: 2px;
+    }
+    
+    /* Interactive Graph representation using SVG */
+    .chart-container {
+      width: 100%;
+      height: 100px;
+      position: relative;
+      margin-top: 8px;
+    }
+    
+    /* Badges */
+    .trust-badges {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 28px;
+    }
+    
+    .badge-card {
+      background: rgba(17, 24, 39, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 14px;
+      padding: 14px 10px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
+    }
+    
+    .badge-card span.emoji {
+      font-size: 16px;
+      background: rgba(255,255,255,0.04);
+      padding: 4px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.03);
+    }
+    
+    /* SECTION: WHY CHOOSE - BENTO GRID */
+    .section-title {
+      font-size: 24px;
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, #ffffff 60%, #c7d2fe 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .section-subtitle {
+      text-align: center;
+      color: #9ca3af;
+      font-size: 14px;
+      margin-bottom: 40px;
+    }
+    
+    .bento-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+    
+    .bento-card {
+      background: rgba(15, 23, 42, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      padding: 24px;
+      border-radius: 20px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .bento-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at top left, rgba(99, 102, 241, 0.06) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    
+    .bento-icon {
+      font-size: 26px;
+      margin-bottom: 16px;
+      display: inline-flex;
+      background: rgba(255, 255, 255, 0.03);
+      width: 48px;
+      height: 48px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    
+    .bento-title {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #ffffff;
+      letter-spacing: -0.01em;
+    }
+    
+    .bento-desc {
+      font-size: 13px;
+      color: #9ca3af;
+      line-height: 1.6;
+    }
+    
+    /* SECTION: GRANULAR FEATURE ARCHITECTURE */
+    .feature-panels {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    
+    .feature-panel {
+      border-radius: 20px;
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.03);
+    }
+    
+    /* Custom Gradients for Panels */
+    .panel-admin {
+      background: linear-gradient(145deg, rgba(30, 58, 138, 0.2) 0%, rgba(15, 23, 42, 0.6) 100%);
+      border-left: 3px solid #3b82f6;
+    }
+    
+    .panel-admin::before {
+      content: '';
+      position: absolute;
+      top: -20%;
+      right: -10%;
+      width: 180px;
+      height: 180px;
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+      filter: blur(30px);
+    }
+    
+    .panel-merchant {
+      background: linear-gradient(145deg, rgba(6, 78, 59, 0.2) 0%, rgba(15, 23, 42, 0.6) 100%);
+      border-left: 3px solid #10b981;
+    }
+    
+    .panel-merchant::before {
+      content: '';
+      position: absolute;
+      top: -20%;
+      right: -10%;
+      width: 180px;
+      height: 180px;
+      background: radial-gradient(circle, rgba(16, 185, 129, 0.08) 0%, transparent 70%);
+      filter: blur(30px);
+    }
+    
+    .panel-consumer {
+      background: linear-gradient(145deg, rgba(88, 28, 135, 0.2) 0%, rgba(15, 23, 42, 0.6) 100%);
+      border-left: 3px solid #8b5cf6;
+    }
+    
+    .panel-consumer::before {
+      content: '';
+      position: absolute;
+      top: -20%;
+      right: -10%;
+      width: 180px;
+      height: 180px;
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.08) 0%, transparent 70%);
+      filter: blur(30px);
+    }
+    
+    .panel-header {
+      font-size: 16px;
+      font-weight: 800;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      letter-spacing: -0.02em;
+    }
+    
+    .panel-header.admin { color: #60a5fa; }
+    .panel-header.merchant { color: #34d399; }
+    .panel-header.consumer { color: #a78bfa; }
+    
+    .panel-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px 20px;
+      list-style: none;
+    }
+    
+    .panel-item {
+      font-size: 13px;
+      color: #e5e7eb;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 500;
+    }
+    
+    .panel-bullet {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    
+    .panel-admin .panel-bullet { background: #3b82f6; box-shadow: 0 0 6px #3b82f6; }
+    .panel-merchant .panel-bullet { background: #10b981; box-shadow: 0 0 6px #10b981; }
+    .panel-consumer .panel-bullet { background: #8b5cf6; box-shadow: 0 0 6px #8b5cf6; }
+    
+    /* SECTION: PLATFORM FLOW */
+    .flow-container {
+      background: rgba(17, 24, 39, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      border-radius: 24px;
+      padding: 32px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+      position: relative;
+    }
+    
+    .flow-step {
+      flex: 1;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+    
+    .flow-badge {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 12px;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 900;
+      font-size: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    }
+    
+    .step-1 { background: linear-gradient(135deg, rgba(37,99,235,0.2) 0%, rgba(37,99,235,0.4) 100%); color: #60a5fa; border-color: rgba(37,99,235,0.4) !important; }
+    .step-2 { background: linear-gradient(135deg, rgba(245,158,11,0.2) 0%, rgba(245,158,11,0.4) 100%); color: #fbbf24; border-color: rgba(245,158,11,0.4) !important; }
+    .step-3 { background: linear-gradient(135deg, rgba(16,185,129,0.2) 0%, rgba(16,185,129,0.4) 100%); color: #34d399; border-color: rgba(16,185,129,0.4) !important; }
+    .step-4 { background: linear-gradient(135deg, rgba(139,92,246,0.2) 0%, rgba(139,92,246,0.4) 100%); color: #a78bfa; border-color: rgba(139,92,246,0.4) !important; }
+    .step-5 { background: linear-gradient(135deg, rgba(14,165,233,0.2) 0%, rgba(14,165,233,0.4) 100%); color: #38bdf8; border-color: rgba(14,165,233,0.4) !important; }
+    
+    .flow-name {
+      font-size: 11px;
+      font-weight: 800;
+      color: #ffffff;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .flow-arrow {
+      color: rgba(255,255,255,0.1);
+      font-size: 18px;
+      font-weight: 900;
+      flex-shrink: 0;
+      position: relative;
+      top: -8px;
+    }
+    
+    /* SECTION: TECH STACK - HIGH FIDELITY DASH */
+    .tech-stack-container {
+      background: rgba(17, 24, 39, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+    }
+    
+    .tech-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    
+    .tech-th {
+      background: rgba(255, 255, 255, 0.02);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 16px 20px;
+      font-weight: 800;
+      color: #9ca3af;
+      text-align: left;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .tech-tr {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+      transition: background 0.3s ease;
+    }
+    
+    .tech-tr:last-child {
+      border-bottom: none;
+    }
+    
+    .tech-td-layer {
+      padding: 16px 20px;
+      font-weight: 700;
+      color: #ffffff;
+      font-size: 14px;
+      font-family: 'Outfit', sans-serif;
+    }
+    
+    .tech-td-badge {
+      padding: 16px 20px;
+    }
+    
+    .tech-pill {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 11px;
+      padding: 5px 12px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid transparent;
+    }
+    
+    .pill-laravel { background: rgba(239, 68, 68, 0.15); color: #f87171; border-color: rgba(239, 68, 68, 0.25); }
+    .pill-nextjs { background: rgba(255, 255, 255, 0.05); color: #ffffff; border-color: rgba(255, 255, 255, 0.1); }
+    .pill-flutter { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border-color: rgba(56, 189, 248, 0.25); }
+    .pill-mysql { background: rgba(249, 115, 22, 0.15); color: #fb923c; border-color: rgba(249, 115, 22, 0.25); }
+    
+    /* SECTION: ONBOARDING TIMELINE */
+    .timeline {
+      position: relative;
+      padding-left: 48px;
+    }
+    
+    .timeline-track {
+      position: absolute;
+      left: 14px;
+      top: 16px;
+      bottom: 16px;
+      width: 2px;
+      background: linear-gradient(180deg, #4f46e5 0%, #10b981 100%);
+      box-shadow: 0 0 10px rgba(79, 70, 229, 0.3);
+    }
+    
+    .timeline-item {
+      margin-bottom: 36px;
+      position: relative;
+    }
+    
+    .timeline-item:last-child {
+      margin-bottom: 0;
+    }
+    
+    .timeline-node {
+      position: absolute;
+      left: -48px;
+      top: 0;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Outfit', sans-serif;
+      font-size: 13px;
+      font-weight: 800;
+      z-index: 2;
+      border: 2px solid #030712;
+      box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.2);
+    }
+    
+    .node-blue { background: #4f46e5; color: #ffffff; box-shadow: 0 0 12px rgba(79, 70, 229, 0.6), 0 0 0 4px rgba(79, 70, 229, 0.2); }
+    .node-green { background: #10b981; color: #ffffff; box-shadow: 0 0 12px rgba(16, 185, 129, 0.6), 0 0 0 4px rgba(16, 185, 129, 0.2); }
+    
+    .timeline-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 6px;
+      letter-spacing: -0.01em;
+    }
+    
+    .timeline-desc {
+      font-size: 13px;
+      color: #9ca3af;
+      line-height: 1.6;
+    }
+    
+    /* SECTION: CTA GOLD CARD */
+    .cta-card {
+      background: radial-gradient(circle at 100% 0%, rgba(212, 175, 55, 0.15) 0%, transparent 50%), #090e18;
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      border-radius: 28px;
+      padding: 48px 32px;
+      text-align: center;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(212, 175, 55, 0.05);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .cta-badge {
+      display: inline-flex;
+      font-size: 26px;
+      background: rgba(212, 175, 55, 0.1);
+      width: 56px;
+      height: 56px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      margin-bottom: 20px;
+      border: 1px solid rgba(212, 175, 55, 0.25);
+      box-shadow: 0 8px 25px rgba(212, 175, 55, 0.1);
+    }
+    
+    .cta-title {
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 12px;
+      color: #ffffff;
+      letter-spacing: -0.02em;
+    }
+    
+    .cta-desc {
+      font-size: 14px;
+      color: #94a3b8;
+      max-width: 520px;
+      margin: 0 auto 32px;
+      line-height: 1.7;
+    }
+    
+    .cta-buttons {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    
+    .btn-gold {
+      background: linear-gradient(135deg, #d4af37 0%, #b8901c 100%);
+      color: #030712;
+      box-shadow: 0 8px 30px rgba(212, 175, 55, 0.3), inset 0 1px 0 rgba(255,255,255,0.3);
+      border: 1px solid rgba(212, 175, 55, 0.4);
+    }
+    
+    .btn-gold-outline {
+      background: rgba(255, 255, 255, 0.02);
+      color: #d4af37;
+      border: 1px solid rgba(212, 175, 55, 0.3);
+    }
+  </style>
+</head>
+<body>
 
-<div style="max-width: 768px; margin: 0 auto; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; color: #0f172a; background: #ffffff; line-height: 1.6; padding: 0 20px; box-sizing: border-box; -webkit-font-smoothing: antialiased;">
+  <div class="container">
+    <!-- AMBIENT DESIGN LIGHTS -->
+    <div class="glow-indigo"></div>
+    <div class="glow-purple"></div>
 
-  <!-- HERO -->
-  <div style="padding: 56px 0 48px; text-align: center;">
-    <span style="display: inline-block; background: linear-gradient(135deg, #dbeafe, #ede9fe); color: #1d4ed8; font-size: 11px; font-weight: 700; padding: 5px 14px; border-radius: 100px; text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 20px;">
-      Version 2.0 — Production Ready
-    </span>
+    <!-- HERO SECTION -->
+    <div class="hero">
+      <span class="badge-premium">
+        Version 2.0 — Production Ready
+      </span>
 
-    <h1 style="font-size: clamp(24px, 5vw, 34px); font-weight: 800; color: #0f172a; line-height: 1.2; margin: 0 0 16px; letter-spacing: -0.8px;">
-      The Ultimate All-In-One<br>SaaS Marketplace Solution
-    </h1>
+      <h1 class="hero-title">
+        The Ultimate All-In-One<br>SaaS Marketplace Solution
+      </h1>
 
-    <p style="font-size: 15px; color: #64748b; max-width: 560px; margin: 0 auto 32px; line-height: 1.7;">
-      Launch a fully automated, multi-vendor digital ecosystem in 24 hours. Built with a Laravel API engine and a blazing-fast Next.js storefront.
-    </p>
+      <p class="hero-desc">
+        Launch a fully automated, multi-vendor digital ecosystem in 24 hours. Built with a robust Laravel API engine and a blazing-fast Next.js storefront.
+      </p>
 
-    <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 48px;">
-      <a href="#" style="background: #2563eb; color: #fff; font-weight: 600; font-size: 14px; padding: 12px 24px; border-radius: 8px; text-decoration: none; box-shadow: 0 4px 14px rgba(37,99,235,0.3); display: inline-block;">View Live Demo</a>
-      <a href="#" style="background: #f8fafc; color: #1e293b; font-weight: 600; font-size: 14px; padding: 12px 24px; border-radius: 8px; text-decoration: none; border: 1px solid #e2e8f0; display: inline-block;">Documentation</a>
-    </div>
+      <div class="hero-cta">
+        <a href="#" class="btn btn-primary">
+          View Live Demo
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="#" class="btn btn-secondary">
+          Documentation
+        </a>
+      </div>
 
-    <!-- Device Mockup -->
-    <div style="background: linear-gradient(160deg, #f1f5f9 0%, #e2e8f0 100%); border-radius: 16px; padding: 32px 24px 0; position: relative; overflow: hidden; border: 1px solid #e2e8f0; min-height: 280px;">
-      <!-- Browser window -->
-      <div style="background: #fff; border-radius: 10px 10px 0 0; border: 1px solid #e2e8f0; box-shadow: 0 20px 40px rgba(0,0,0,0.1); overflow: hidden;">
-        <div style="background: #f8fafc; border-bottom: 1px solid #e2e8f0; padding: 10px 14px; display: flex; align-items: center; gap: 6px;">
-          <span style="width: 10px; height: 10px; background: #ef4444; border-radius: 50%; display: inline-block;"></span>
-          <span style="width: 10px; height: 10px; background: #f59e0b; border-radius: 50%; display: inline-block;"></span>
-          <span style="width: 10px; height: 10px; background: #10b981; border-radius: 50%; display: inline-block;"></span>
-          <div style="flex: 1; background: #e2e8f0; border-radius: 4px; height: 8px; margin-left: 8px; max-width: 180px;"></div>
-        </div>
-        <div style="padding: 20px; display: grid; grid-template-columns: 1fr 2fr; gap: 14px;">
-          <div style="display: flex; flex-direction: column; gap: 10px;">
-            <div style="height: 10px; background: #e2e8f0; border-radius: 4px; width: 70%;"></div>
-            <div style="height: 60px; background: #f1f5f9; border-radius: 8px; border: 1px dashed #cbd5e1; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: #94a3b8;">Analytics</div>
-            <div style="height: 60px; background: #f1f5f9; border-radius: 8px; border: 1px dashed #cbd5e1; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: #94a3b8;">Orders</div>
+      <!-- DEVICE MOCKUP - HIGH FIDELITY -->
+      <div class="device-mockup">
+        <!-- Browser frame -->
+        <div class="browser-frame">
+          <div class="browser-bar">
+            <span class="dot dot-red"></span>
+            <span class="dot dot-yellow"></span>
+            <span class="dot dot-green"></span>
+            <div class="browser-address">https://admin.sellio.app/analytics</div>
           </div>
-          <div style="background: #f8fafc; border-radius: 8px; border: 1px dashed #cbd5e1; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #94a3b8; min-height: 140px;">Revenue Chart</div>
+          
+          <div class="mockup-body">
+            <!-- Sidebar -->
+            <div class="mockup-sidebar">
+              <div class="sidebar-item" style="background: rgba(79, 70, 229, 0.1); border: 1px solid rgba(79,70,229,0.2);"><div class="sidebar-icon"></div><div class="sidebar-line" style="background: #a5b4fc;"></div></div>
+              <div class="sidebar-item"><div class="sidebar-icon" style="background: #94a3b8;"></div><div class="sidebar-line"></div></div>
+              <div class="sidebar-item"><div class="sidebar-icon" style="background: #94a3b8;"></div><div class="sidebar-line"></div></div>
+              <div class="sidebar-item"><div class="sidebar-icon" style="background: #94a3b8;"></div><div class="sidebar-line"></div></div>
+            </div>
+            
+            <!-- Dashboard Content panel -->
+            <div class="dashboard-panel">
+              <div class="dashboard-header">
+                <div>
+                  <div class="dashboard-title">Platform Sales Metrics</div>
+                  <div class="dashboard-value">$148,290.00</div>
+                </div>
+                <div style="background: rgba(16, 185, 129, 0.15); color: #34d399; font-size: 8px; font-weight: 800; padding: 3px 8px; border-radius: 30px; font-family: monospace;">+24.8% ▲</div>
+              </div>
+              
+              <!-- Sparkline Trend Chart SVG -->
+              <div class="chart-container">
+                <svg width="100%" height="100%" viewBox="0 0 350 100" preserveAspectRatio="none">
+                  <defs>
+                    <linearGradient id="chartGlow" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stop-color="#4f46e5" stop-opacity="0.4"/>
+                      <stop offset="100%" stop-color="#4f46e5" stop-opacity="0.0"/>
+                    </linearGradient>
+                  </defs>
+                  <!-- Gridlines -->
+                  <line x1="0" y1="20" x2="350" y2="20" stroke="rgba(255,255,255,0.03)" stroke-width="1" />
+                  <line x1="0" y1="50" x2="350" y2="50" stroke="rgba(255,255,255,0.03)" stroke-width="1" />
+                  <line x1="0" y1="80" x2="350" y2="80" stroke="rgba(255,255,255,0.03)" stroke-width="1" />
+                  
+                  <!-- Filled Path -->
+                  <path d="M 0 100 L 0 75 Q 40 45 80 65 T 160 30 T 240 55 T 320 15 L 350 10 L 350 100 Z" fill="url(#chartGlow)" />
+                  <!-- Stroke Path -->
+                  <path d="M 0 75 Q 40 45 80 65 T 160 30 T 240 55 T 320 15 L 350 10" fill="none" stroke="#6366f1" stroke-width="3" stroke-linecap="round" />
+                  
+                  <!-- Glowing active dot -->
+                  <circle cx="320" cy="15" r="5" fill="#10b981" filter="drop-shadow(0 0 4px #10b981)" />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Trust Badges -->
+      <div class="trust-badges">
+        <div class="badge-card">
+          <span class="emoji">🌍</span> Multi-Language
+        </div>
+        <div class="badge-card">
+          <span class="emoji">↔️</span> Native RTL
+        </div>
+        <div class="badge-card">
+          <span class="emoji">🔌</span> REST API
         </div>
       </div>
     </div>
 
-    <!-- Trust badges -->
-    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 24px;">
-      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px 10px; font-size: 12px; font-weight: 600; color: #334155; display: flex; align-items: center; gap: 7px;">
-        <span style="font-size: 16px;">🌍</span> Multi-Language
-      </div>
-      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px 10px; font-size: 12px; font-weight: 600; color: #334155; display: flex; align-items: center; gap: 7px;">
-        <span style="font-size: 16px;">↔️</span> Native RTL
-      </div>
-      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px 10px; font-size: 12px; font-weight: 600; color: #334155; display: flex; align-items: center; gap: 7px;">
-        <span style="font-size: 16px;">🔌</span> REST API
+    <hr class="divider">
+
+    <!-- WHY CHOOSE BENTO GRID -->
+    <div style="position: relative; z-index: 2;">
+      <h2 class="section-title">Engineered for Scale, Built for Conversions</h2>
+      <p class="section-subtitle">Save 400+ engineering hours. Skip setup, go straight to monetization.</p>
+
+      <div class="bento-grid">
+        <div class="bento-card">
+          <div class="bento-icon">⏳</div>
+          <h3 class="bento-title">Save Development Time</h3>
+          <p class="bento-desc">Skip complex backend routing, foundational logic, multi-vendor payout cycles, and billing webhooks from scratch.</p>
+        </div>
+        
+        <div class="bento-card">
+          <div class="bento-icon">🚀</div>
+          <h3 class="bento-title">Production-Ready Blueprint</h3>
+          <p class="bento-desc">Rigidly stress-tested package constructed to withstand high-volume transaction volumes and intensive load metrics.</p>
+        </div>
+        
+        <div class="bento-card">
+          <div class="bento-icon">🏗️</div>
+          <h3 class="bento-title">Clean Modular Architecture</h3>
+          <p class="bento-desc">Engineered strictly following clean OOP paradigms, decoupled microservice APIs, NextJS directories, and PSR standards.</p>
+        </div>
+        
+        <div class="bento-card">
+          <div class="bento-icon">💎</div>
+          <h3 class="bento-title">Premium UI/UX Experience</h3>
+          <p class="bento-desc">Sophisticated minimal visual guidelines, fine-tuned micro-interactions, and flawless pixel density optimized for conversions.</p>
+        </div>
       </div>
     </div>
+
+    <hr class="divider">
+
+    <!-- FEATURE ARCHITECTURE CONTROL PANELS -->
+    <div style="position: relative; z-index: 2;">
+      <h2 class="section-title" style="margin-bottom: 32px;">Granular Feature Architecture</h2>
+
+      <div class="feature-panels">
+        <!-- Panel 1 -->
+        <div class="feature-panel panel-admin">
+          <div class="panel-header admin">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="9" y1="9" x2="21" y2="9"/></svg>
+            Central Administrative Engine
+          </div>
+          <ul class="panel-grid">
+            <li class="panel-item"><span class="panel-bullet"></span> Dynamic Role Permissions</li>
+            <li class="panel-item"><span class="panel-bullet"></span> Financial Report Tracking</li>
+            <li class="panel-item"><span class="panel-bullet"></span> System Telemetry Dashboards</li>
+            <li class="panel-item"><span class="panel-bullet"></span> Global Configuration Hub</li>
+            <li class="panel-item"><span class="panel-bullet"></span> KYC Verification Controls</li>
+            <li class="panel-item"><span class="panel-bullet"></span> Tax Mapping Matrices</li>
+          </ul>
+        </div>
+
+        <!-- Panel 2 -->
+        <div class="feature-panel panel-merchant">
+          <div class="panel-header merchant">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Merchant / Vendor Command Center
+          </div>
+          <ul class="panel-grid">
+            <li class="panel-item"><span class="panel-bullet"></span> Smart Catalog Controls</li>
+            <li class="panel-item"><span class="panel-bullet"></span> Automated Wallet Payouts</li>
+            <li class="panel-item"><span class="panel-bullet"></span> Stock Shortage Signals</li>
+            <li class="panel-item"><span class="panel-bullet"></span> Storefront Personalization</li>
+            <li class="panel-item"><span class="panel-bullet"></span> Batch CSV Listing Uploads</li>
+            <li class="panel-item"><span class="panel-bullet"></span> Direct Multi-option SKU Maps</li>
+          </ul>
+        </div>
+
+        <!-- Panel 3 -->
+        <div class="feature-panel panel-consumer">
+          <div class="panel-header consumer">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+            Unified Consumer Storefront
+          </div>
+          <ul class="panel-grid">
+            <li class="panel-item"><span class="panel-bullet"></span> Social OAuth Integration</li>
+            <li class="panel-item"><span class="panel-bullet"></span> Smart Cart Validation</li>
+            <li class="panel-item"><span class="panel-bullet"></span> Single-Page Checkout</li>
+            <li class="panel-item"><span class="panel-bullet"></span> Live Map Order Tracking</li>
+            <li class="panel-item"><span class="panel-bullet"></span> Automated In-App Alerts</li>
+            <li class="panel-item"><span class="panel-bullet"></span> Dynamic Invoice Archiving</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- PLATFORM INFRASTRUCTURE FLOW -->
+    <div style="position: relative; z-index: 2;">
+      <h2 class="section-title" style="margin-bottom: 32px;">Automated Platform Infrastructure Flow</h2>
+
+      <div class="flow-container">
+        <div class="flow-step">
+          <div class="flow-badge step-1">1</div>
+          <div class="flow-name">Customer</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        
+        <div class="flow-step">
+          <div class="flow-badge step-2">2</div>
+          <div class="flow-name">Platform</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        
+        <div class="flow-step">
+          <div class="flow-badge step-3">3</div>
+          <div class="flow-name">Merchant</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        
+        <div class="flow-step">
+          <div class="flow-badge step-4">4</div>
+          <div class="flow-name">Escrow</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        
+        <div class="flow-step">
+          <div class="flow-badge step-5">5</div>
+          <div class="flow-name">Delivery</div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- TECH STACK TABLE -->
+    <div style="position: relative; z-index: 2;">
+      <h2 class="section-title" style="margin-bottom: 32px;">Modern Engineering Stack</h2>
+
+      <div class="tech-stack-container">
+        <table class="tech-table">
+          <thead>
+            <tr>
+              <th class="tech-th">Architecture Layer</th>
+              <th class="tech-th">Core Technology Integration</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="tech-tr">
+              <td class="tech-td-layer">API Backend Engine</td>
+              <td class="tech-td-badge"><span class="tech-pill pill-laravel">Laravel 11</span></td>
+            </tr>
+            <tr class="tech-tr">
+              <td class="tech-td-layer">Sleek Web Storefront</td>
+              <td class="tech-td-badge"><span class="tech-pill pill-nextjs">Next.js 15 + React</span></td>
+            </tr>
+            <tr class="tech-tr">
+              <td class="tech-td-layer">Native Mobile Clients</td>
+              <td class="tech-td-badge"><span class="tech-pill pill-flutter">Flutter SDK</span></td>
+            </tr>
+            <tr class="tech-tr">
+              <td class="tech-td-layer">Database Layer</td>
+              <td class="tech-td-badge"><span class="tech-pill pill-mysql">MySQL 8.0</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- ONBOARDING TIMELINE -->
+    <div style="position: relative; z-index: 2;">
+      <h2 class="section-title" style="margin-bottom: 40px;">5-Minute Onboarding Pipeline</h2>
+
+      <div class="timeline">
+        <div class="timeline-track"></div>
+
+        <div class="timeline-item">
+          <div class="timeline-node node-blue">1</div>
+          <h4 class="timeline-title">Extract & Drop Source Assets</h4>
+          <p class="timeline-desc">Decompress your high-fidelity package files and securely transfer them to your staging server.</p>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-node node-blue">2</div>
+          <h4 class="timeline-title">Establish Relational Database</h4>
+          <p class="timeline-desc">Generate a pristine database schema container from your hosting admin panel in one click.</p>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-node node-blue">3</div>
+          <h4 class="timeline-title">Launch Virtual Wizard Installer</h4>
+          <p class="timeline-desc">Navigate directly to your platform domain to boot up our sophisticated browser installation wizard.</p>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-node node-blue">4</div>
+          <h4 class="timeline-title">Input Secure Configurations</h4>
+          <p class="timeline-desc">Connect database credentials, assign your Envato activation key, and construct your core admin node.</p>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-node node-green">✓</div>
+          <h4 class="timeline-title" style="color: #34d399;">Ecosystem Live — Open for Business!</h4>
+          <p class="timeline-desc">Wizard cleans up credentials instantly. Your premium automated SaaS marketplace is live and taking requests.</p>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- WORLD-CLASS SUPPORT CTA CARD -->
+    <div style="position: relative; z-index: 2;">
+      <div class="cta-card">
+        <div class="cta-badge">⭐</div>
+        <h3 class="cta-title">World-Class Support & Lifetime Updates</h3>
+        <p class="cta-desc">
+          Your purchase unlocks elite access to our central support hub, continuous structural revisions, modern typography refinements, and perpetual system revisions.
+        </p>
+        <div class="cta-buttons">
+          <a href="#" class="btn btn-gold">Open Ticket Desk</a>
+          <a href="#" class="btn btn-secondary btn-gold-outline">Knowledge Base</a>
+        </div>
+      </div>
+    </div>
+
   </div>
 
-  <hr style="border: 0; height: 1px; background: #e2e8f0; margin: 8px 0 48px;">
-
-  <!-- WHY CHOOSE -->
-  <div style="padding-bottom: 48px;">
-    <h2 style="font-size: 22px; font-weight: 800; color: #0f172a; text-align: center; margin: 0 0 8px; letter-spacing: -0.5px;">Engineered for Scale, Built for Conversions</h2>
-    <p style="text-align: center; color: #64748b; font-size: 14px; margin: 0 0 32px;">Save 400+ engineering hours. Skip setup, go straight to monetization.</p>
-
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-      <div style="background: #fff; border: 1px solid #e2e8f0; padding: 22px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
-        <div style="font-size: 22px; margin-bottom: 10px;">⏳</div>
-        <h3 style="font-size: 14px; font-weight: 700; margin: 0 0 6px; color: #1e293b;">Save Development Time</h3>
-        <p style="margin: 0; font-size: 13px; color: #64748b; line-height: 1.6;">Skip foundational logic, user routing, and billing webhooks from scratch.</p>
-      </div>
-      <div style="background: #fff; border: 1px solid #e2e8f0; padding: 22px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
-        <div style="font-size: 22px; margin-bottom: 10px;">🚀</div>
-        <h3 style="font-size: 14px; font-weight: 700; margin: 0 0 6px; color: #1e293b;">Production-Ready Blueprint</h3>
-        <p style="margin: 0; font-size: 13px; color: #64748b; line-height: 1.6;">Tested to withstand intense web application load metrics out of the box.</p>
-      </div>
-      <div style="background: #fff; border: 1px solid #e2e8f0; padding: 22px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
-        <div style="font-size: 22px; margin-bottom: 10px;">🏗️</div>
-        <h3 style="font-size: 14px; font-weight: 700; margin: 0 0 6px; color: #1e293b;">Clean Modular Architecture</h3>
-        <p style="margin: 0; font-size: 13px; color: #64748b; line-height: 1.6;">Written following modern framework design patterns and PSR standards.</p>
-      </div>
-      <div style="background: #fff; border: 1px solid #e2e8f0; padding: 22px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
-        <div style="font-size: 22px; margin-bottom: 10px;">💎</div>
-        <h3 style="font-size: 14px; font-weight: 700; margin: 0 0 6px; color: #1e293b;">Premium UI/UX Experience</h3>
-        <p style="margin: 0; font-size: 13px; color: #64748b; line-height: 1.6;">Minimalist visual styling optimized to actively enhance conversion rates.</p>
-      </div>
-    </div>
-  </div>
-
-  <hr style="border: 0; height: 1px; background: #e2e8f0; margin: 0 0 48px;">
-
-  <!-- FEATURE ARCHITECTURE -->
-  <div style="padding-bottom: 48px;">
-    <h2 style="font-size: 22px; font-weight: 800; color: #0f172a; text-align: center; margin: 0 0 28px; letter-spacing: -0.5px;">Granular Feature Architecture</h2>
-
-    <div style="margin-bottom: 16px; background: #eff6ff; border-radius: 12px; padding: 22px 24px; border: 1px solid #bfdbfe;">
-      <h3 style="font-size: 14px; font-weight: 700; color: #1d4ed8; margin: 0 0 14px; display: flex; align-items: center; gap: 8px;">⚙️ Central Administrative Engine</h3>
-      <ul style="margin: 0; padding-left: 18px; font-size: 13px; color: #334155; display: grid; grid-template-columns: 1fr 1fr; gap: 7px; line-height: 1.5;">
-        <li>Dynamic Role Permissions</li>
-        <li>Financial Report Tracking</li>
-        <li>System Telemetry Dashboards</li>
-        <li>Global Configuration Hub</li>
-        <li>KYC Verification Controls</li>
-        <li>Tax Mapping Matrices</li>
-      </ul>
-    </div>
-
-    <div style="margin-bottom: 16px; background: #f0fdf4; border-radius: 12px; padding: 22px 24px; border: 1px solid #bbf7d0;">
-      <h3 style="font-size: 14px; font-weight: 700; color: #15803d; margin: 0 0 14px; display: flex; align-items: center; gap: 8px;">🏪 Merchant / Vendor Command Center</h3>
-      <ul style="margin: 0; padding-left: 18px; font-size: 13px; color: #334155; display: grid; grid-template-columns: 1fr 1fr; gap: 7px; line-height: 1.5;">
-        <li>Smart Catalog Controls</li>
-        <li>Automated Wallet Payouts</li>
-        <li>Stock Shortage Signals</li>
-        <li>Storefront Personalization</li>
-        <li>Batch CSV Listing Uploads</li>
-        <li>Direct Multi-option SKU Maps</li>
-      </ul>
-    </div>
-
-    <div style="background: #faf5ff; border-radius: 12px; padding: 22px 24px; border: 1px solid #e9d5ff;">
-      <h3 style="font-size: 14px; font-weight: 700; color: #7c3aed; margin: 0 0 14px; display: flex; align-items: center; gap: 8px;">🛍️ Unified Consumer Storefront</h3>
-      <ul style="margin: 0; padding-left: 18px; font-size: 13px; color: #334155; display: grid; grid-template-columns: 1fr 1fr; gap: 7px; line-height: 1.5;">
-        <li>Social OAuth Integration</li>
-        <li>Smart Cart Validation</li>
-        <li>Single-Page Checkout</li>
-        <li>Live Map Order Tracking</li>
-        <li>Automated In-App Alerts</li>
-        <li>Dynamic Invoice Archiving</li>
-      </ul>
-    </div>
-  </div>
-
-  <hr style="border: 0; height: 1px; background: #e2e8f0; margin: 0 0 48px;">
-
-  <!-- PLATFORM FLOW -->
-  <div style="padding-bottom: 48px; text-align: center;">
-    <h2 style="font-size: 22px; font-weight: 800; color: #0f172a; margin: 0 0 28px; letter-spacing: -0.5px;">Automated Platform Infrastructure Flow</h2>
-
-    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; padding: 28px 20px; display: flex; justify-content: space-between; align-items: center; gap: 4px; overflow-x: auto;">
-      <div style="flex: 1; min-width: 56px;">
-        <div style="width: 44px; height: 44px; background: #dbeafe; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 8px; color: #1d4ed8; font-weight: 800; font-size: 15px;">1</div>
-        <div style="font-size: 11px; font-weight: 700; color: #1e293b;">Customer</div>
-      </div>
-      <div style="color: #cbd5e1; font-size: 18px; flex-shrink: 0;">→</div>
-      <div style="flex: 1; min-width: 56px;">
-        <div style="width: 44px; height: 44px; background: #fef3c7; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 8px; color: #b45309; font-weight: 800; font-size: 15px;">2</div>
-        <div style="font-size: 11px; font-weight: 700; color: #1e293b;">Platform</div>
-      </div>
-      <div style="color: #cbd5e1; font-size: 18px; flex-shrink: 0;">→</div>
-      <div style="flex: 1; min-width: 56px;">
-        <div style="width: 44px; height: 44px; background: #d1fae5; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 8px; color: #15803d; font-weight: 800; font-size: 15px;">3</div>
-        <div style="font-size: 11px; font-weight: 700; color: #1e293b;">Merchant</div>
-      </div>
-      <div style="color: #cbd5e1; font-size: 18px; flex-shrink: 0;">→</div>
-      <div style="flex: 1; min-width: 56px;">
-        <div style="width: 44px; height: 44px; background: #f3e8ff; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 8px; color: #7c3aed; font-weight: 800; font-size: 15px;">4</div>
-        <div style="font-size: 11px; font-weight: 700; color: #1e293b;">Escrow</div>
-      </div>
-      <div style="color: #cbd5e1; font-size: 18px; flex-shrink: 0;">→</div>
-      <div style="flex: 1; min-width: 56px;">
-        <div style="width: 44px; height: 44px; background: #e0f2fe; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 8px; color: #0369a1; font-weight: 800; font-size: 15px;">5</div>
-        <div style="font-size: 11px; font-weight: 700; color: #1e293b;">Delivery</div>
-      </div>
-    </div>
-  </div>
-
-  <hr style="border: 0; height: 1px; background: #e2e8f0; margin: 0 0 48px;">
-
-  <!-- TECH STACK -->
-  <div style="padding-bottom: 48px;">
-    <h2 style="font-size: 22px; font-weight: 800; color: #0f172a; text-align: center; margin: 0 0 24px; letter-spacing: -0.5px;">Modern Engineering Stack</h2>
-
-    <div style="border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden;">
-      <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
-        <thead>
-          <tr style="background: #f8fafc; border-bottom: 2px solid #e2e8f0;">
-            <th style="padding: 12px 16px; font-weight: 700; color: #334155; text-align: left;">Layer</th>
-            <th style="padding: 12px 16px; font-weight: 700; color: #334155; text-align: left;">Technology</th>
-            <th style="padding: 12px 16px; font-weight: 700; color: #334155; text-align: left; display: none;">Advantage</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr style="border-bottom: 1px solid #f1f5f9;">
-            <td style="padding: 14px 16px; font-weight: 600; color: #0f172a;">API Backend</td>
-            <td style="padding: 14px 16px;"><span style="background: #dbeafe; color: #1d4ed8; font-weight: 700; font-size: 12px; padding: 3px 10px; border-radius: 100px;">Laravel 11</span></td>
-          </tr>
-          <tr style="border-bottom: 1px solid #f1f5f9;">
-            <td style="padding: 14px 16px; font-weight: 600; color: #0f172a;">Storefront</td>
-            <td style="padding: 14px 16px;"><span style="background: #f0fdf4; color: #15803d; font-weight: 700; font-size: 12px; padding: 3px 10px; border-radius: 100px;">Next.js 15 + React</span></td>
-          </tr>
-          <tr style="border-bottom: 1px solid #f1f5f9;">
-            <td style="padding: 14px 16px; font-weight: 600; color: #0f172a;">Mobile Apps</td>
-            <td style="padding: 14px 16px;"><span style="background: #faf5ff; color: #7c3aed; font-weight: 700; font-size: 12px; padding: 3px 10px; border-radius: 100px;">Flutter</span></td>
-          </tr>
-          <tr>
-            <td style="padding: 14px 16px; font-weight: 600; color: #0f172a;">Database</td>
-            <td style="padding: 14px 16px;"><span style="background: #fff7ed; color: #c2410c; font-weight: 700; font-size: 12px; padding: 3px 10px; border-radius: 100px;">MySQL 8.0</span></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <hr style="border: 0; height: 1px; background: #e2e8f0; margin: 0 0 48px;">
-
-  <!-- DEPLOYMENT STEPS -->
-  <div style="padding-bottom: 48px;">
-    <h2 style="font-size: 22px; font-weight: 800; color: #0f172a; text-align: center; margin: 0 0 32px; letter-spacing: -0.5px;">5-Minute Onboarding Pipeline</h2>
-
-    <div style="position: relative; padding-left: 52px;">
-      <div style="position: absolute; left: 11px; top: 12px; bottom: 12px; width: 2px; background: linear-gradient(to bottom, #2563eb, #10b981);"></div>
-
-      <div style="margin-bottom: 28px; position: relative;">
-        <div style="position: absolute; left: -41px; top: 0; width: 26px; height: 26px; background: #2563eb; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; box-shadow: 0 0 0 3px #fff, 0 0 0 4px #bfdbfe;">1</div>
-        <h4 style="margin: 0 0 4px; font-size: 14px; font-weight: 700; color: #1e293b;">Extract &amp; Drop Source Assets</h4>
-        <p style="margin: 0; font-size: 13px; color: #64748b; line-height: 1.6;">Decompress your source files and upload them to your Linux server.</p>
-      </div>
-
-      <div style="margin-bottom: 28px; position: relative;">
-        <div style="position: absolute; left: -41px; top: 0; width: 26px; height: 26px; background: #2563eb; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; box-shadow: 0 0 0 3px #fff, 0 0 0 4px #bfdbfe;">2</div>
-        <h4 style="margin: 0 0 4px; font-size: 14px; font-weight: 700; color: #1e293b;">Establish Relational Database</h4>
-        <p style="margin: 0; font-size: 13px; color: #64748b; line-height: 1.6;">Create an empty MySQL database from your hosting control panel.</p>
-      </div>
-
-      <div style="margin-bottom: 28px; position: relative;">
-        <div style="position: absolute; left: -41px; top: 0; width: 26px; height: 26px; background: #2563eb; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; box-shadow: 0 0 0 3px #fff, 0 0 0 4px #bfdbfe;">3</div>
-        <h4 style="margin: 0 0 4px; font-size: 14px; font-weight: 700; color: #1e293b;">Open the Installer in Your Browser</h4>
-        <p style="margin: 0; font-size: 13px; color: #64748b; line-height: 1.6;">Navigate to your domain URL to launch the visual setup wizard.</p>
-      </div>
-
-      <div style="margin-bottom: 28px; position: relative;">
-        <div style="position: absolute; left: -41px; top: 0; width: 26px; height: 26px; background: #2563eb; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; box-shadow: 0 0 0 3px #fff, 0 0 0 4px #bfdbfe;">4</div>
-        <h4 style="margin: 0 0 4px; font-size: 14px; font-weight: 700; color: #1e293b;">Input Configuration Keys</h4>
-        <p style="margin: 0; font-size: 13px; color: #64748b; line-height: 1.6;">Enter your database credentials, Envato purchase code, and admin details.</p>
-      </div>
-
-      <div style="position: relative;">
-        <div style="position: absolute; left: -41px; top: 0; width: 26px; height: 26px; background: #10b981; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; box-shadow: 0 0 0 3px #fff, 0 0 0 4px #bbf7d0;">✓</div>
-        <h4 style="margin: 0 0 4px; font-size: 14px; font-weight: 700; color: #047857;">Ecosystem Live — Open for Business!</h4>
-        <p style="margin: 0; font-size: 13px; color: #64748b; line-height: 1.6;">Remove the installer folder. Your marketplace is ready to take orders.</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- CTA BLOCK -->
-  <div style="margin-bottom: 64px; background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-radius: 20px; padding: 48px 40px; text-align: center; box-shadow: 0 24px 48px rgba(0,0,0,0.15);">
-    <div style="width: 48px; height: 48px; background: linear-gradient(135deg, #fbbf24, #f59e0b); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; font-size: 22px;">⭐</div>
-    <h3 style="font-size: 22px; font-weight: 800; margin: 0 0 12px; color: #ffffff; letter-spacing: -0.5px;">World-Class Support &amp; Lifetime Updates</h3>
-    <p style="font-size: 14px; color: #94a3b8; max-width: 480px; margin: 0 auto 28px; line-height: 1.7;">
-      Your purchase unlocks access to our support portal, incremental design updates, documentation modules, and lifetime code revisions.
-    </p>
-    <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
-      <a href="#" style="background: #2563eb; color: #fff; font-weight: 600; font-size: 14px; padding: 12px 26px; border-radius: 8px; text-decoration: none; display: inline-block; box-shadow: 0 4px 14px rgba(37,99,235,0.4);">Open Ticket Desk</a>
-      <a href="#" style="background: transparent; color: #94a3b8; font-weight: 600; font-size: 14px; padding: 12px 26px; border-radius: 8px; text-decoration: none; border: 1px solid #334155; display: inline-block;">Knowledge Base</a>
-    </div>
-  </div>
-
-</div>
+</body>
+</html>
