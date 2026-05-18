@@ -4,6 +4,7 @@
   /* Getaway Node Palette */
   --pv-azure: #0077ff;
   --pv-coral: #ff5a5f;
+  --pv-coral-hover: #e04b50;
   --pv-sand: #e7c18f;
   --pv-cloud: #f8fafc;
   --pv-ink: #1e293b;
@@ -26,6 +27,7 @@
   color: var(--pv-ink);
   font-family: var(--pv-font-sans);
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
 /* Typography Utilities */
@@ -41,32 +43,34 @@
 }
 
 .pv-mono {
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   font-weight: 900;
   letter-spacing: 5px;
   text-transform: uppercase;
   color: var(--pv-azure);
+  font-family: monospace;
 }
 
 /* Layout */
 .pv-section {
-  padding: 10rem 6%;
+  padding: 8rem 6%;
   max-width: 1600px;
   margin: 0 auto;
 }
 
-/* Vacation Header */
+/* --- VACATION HEADER --- */
 .pv-header {
-  padding: 2rem 6%;
+  padding: 1.5rem 6%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(20px);
   position: sticky;
   top: 0;
   z-index: 1000;
   border-bottom: 1px solid var(--pv-border);
+  transition: var(--pv-transition);
 }
 
 .pv-logo {
@@ -81,15 +85,29 @@
 .pv-nav {
   display: flex;
   gap: 4rem;
+  align-items: center;
 }
 
 .pv-nav-link {
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   font-weight: 700;
   color: var(--pv-text-muted);
   text-decoration: none;
   text-transform: uppercase;
   letter-spacing: 1px;
+  transition: var(--pv-transition);
+  position: relative;
+  padding: 0.5rem 0;
+}
+
+.pv-nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--pv-coral);
   transition: var(--pv-transition);
 }
 
@@ -97,18 +115,64 @@
   color: var(--pv-coral);
 }
 
-/* Escape Hero */
+.pv-nav-link:hover::after {
+  width: 100%;
+}
+
+.pv-desktop-btn {
+  display: block !important;
+}
+
+.pv-mobile-btn {
+  display: none !important;
+}
+
+/* Mobile Hamburger Trigger */
+.pv-hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 24px;
+  height: 16px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 1010;
+}
+
+.pv-hamburger-bar {
+  width: 100%;
+  height: 2px;
+  background-color: var(--pv-ink);
+  transition: var(--pv-transition);
+}
+
+.pv-hamburger-open .pv-hamburger-bar:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.pv-hamburger-open .pv-hamburger-bar:nth-child(2) {
+  opacity: 0;
+}
+
+.pv-hamburger-open .pv-hamburger-bar:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* --- ESCAPE HERO --- */
 .pv-hero {
   text-align: center;
-  padding: 12rem 6% 8rem;
+  padding: 10rem 6% 6rem;
   background: radial-gradient(circle at center, #f0f7ff 0%, #fff 100%);
+  border-bottom: 1px solid var(--pv-border);
 }
 
 .pv-hero-tag {
   margin-bottom: 3rem;
 }
 
-/* Retreat Bento Grid */
+/* --- RETREAT BENTO GRID --- */
 .pv-retreat-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -127,7 +191,8 @@
 
 .pv-retreat-card:hover {
   transform: translateY(-15px);
-  box-shadow: 0 40px 80px rgba(0, 119, 255, 0.1);
+  box-shadow: 0 40px 80px rgba(0, 119, 255, 0.08);
+  border-color: var(--pv-azure);
 }
 
 .pv-card-img-wrapper {
@@ -145,45 +210,211 @@
 }
 
 .pv-retreat-card:hover .pv-card-img {
-  transform: scale(1.1);
+  transform: scale(1.08);
 }
 
 .pv-card-rating {
   position: absolute;
   top: 2rem;
   right: 2rem;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
-  padding: 0.5rem 1rem;
+  padding: 0.6rem 1.2rem;
   border-radius: 100px;
   font-weight: 800;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
 }
 
-/* Buttons */
+.pv-card-cta {
+  transition: var(--pv-transition);
+}
+
+.pv-retreat-card:hover .pv-card-cta {
+  color: var(--pv-azure) !important;
+  transform: translateX(5px);
+}
+
+/* --- BUTTONS --- */
 .pv-btn-primary {
   background: var(--pv-azure);
   color: white;
   border: none;
   padding: 1.5rem 4.5rem;
   font-weight: 800;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   border-radius: 100px;
   cursor: pointer;
   transition: var(--pv-transition);
-  box-shadow: 0 20px 40px rgba(0, 119, 255, 0.2);
+  box-shadow: 0 15px 30px rgba(0, 119, 255, 0.15);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .pv-btn-primary:hover {
   background: var(--pv-coral);
   transform: translateY(-5px);
-  box-shadow: 0 30px 60px rgba(255, 90, 95, 0.3);
+  box-shadow: 0 25px 50px rgba(255, 90, 95, 0.25);
 }
 
-/* Footer */
+/* --- TRUST BAR --- */
+.pv-trust-bar {
+  background: var(--pv-cloud);
+  padding: 3rem 6%;
+  border-radius: 100px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 8rem 0;
+  border: 1px solid var(--pv-border);
+}
+
+/* --- FOOTER --- */
 .pv-footer {
   background: var(--pv-ink);
   color: white;
-  padding: 12rem 6% 6rem;
+  padding: 10rem 6% 6rem;
   border-radius: var(--pv-radius) var(--pv-radius) 0 0;
+}
+
+.pv-footer-link {
+  transition: var(--pv-transition);
+}
+
+.pv-footer-link:hover {
+  color: var(--pv-sand) !important;
+  opacity: 1 !important;
+}
+
+/* --- RESPONSIVE & MOBILE STRUCTURAL REFOLDING --- */
+@media (max-width: 1200px) {
+  .pv-philosophy-grid {
+    grid-template-columns: 1fr !important;
+    gap: 6rem !important;
+    text-align: center;
+  }
+  
+  .pv-philosophy-grid div:first-child p {
+    margin: 3rem auto !important;
+  }
+  
+  .pv-philosophy-grid div:last-child {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .pv-philosophy-grid div:last-child div:first-child {
+    height: 550px !important;
+  }
+}
+
+@media (max-width: 1024px) {
+  .pv-hamburger {
+    display: flex;
+  }
+  
+  .pv-desktop-btn {
+    display: none !important;
+  }
+  
+  .pv-mobile-btn {
+    display: block !important;
+  }
+  
+  /* Off-canvas slider navigation drawer */
+  .pv-nav {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 320px;
+    height: 100vh;
+    background: white;
+    box-shadow: -10px 0 30px rgba(0,0,0,0.05);
+    flex-direction: column;
+    padding: 8rem 3rem 3rem;
+    gap: 2rem;
+    align-items: flex-start;
+    transition: var(--pv-transition);
+    z-index: 1005;
+  }
+  
+  .pv-nav-open {
+    right: 0;
+  }
+  
+  .pv-retreat-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .pv-trust-bar {
+    border-radius: var(--pv-radius);
+    flex-direction: column;
+    gap: 2rem;
+    text-align: center;
+  }
+  
+  .pv-footer-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 4rem !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .pv-section {
+    padding: 6rem 4%;
+  }
+  
+  .pv-hero {
+    padding: 6rem 0;
+  }
+  
+  .pv-hero p {
+    margin: 3rem auto !important;
+  }
+  
+  .pv-hero div:last-child {
+    flex-direction: column;
+    gap: 1.5rem !important;
+    align-items: center;
+  }
+  
+  .pv-hero div:last-child button {
+    width: 100%;
+    max-width: 350px;
+  }
+  
+  .pv-retreat-grid {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  
+  .pv-retreat-card {
+    border-radius: 24px;
+  }
+  
+  .pv-philosophy-grid div:last-child div:first-child {
+    height: 400px !important;
+  }
+  
+  .pv-philosophy-grid div:last-child div:last-child {
+    top: -2rem !important;
+    right: -2rem !important;
+    width: 180px !important;
+    height: 180px !important;
+    font-size: 0.95rem !important;
+    padding: 1rem !important;
+  }
+  
+  .pv-footer-grid {
+    grid-template-columns: 1fr !important;
+    gap: 3rem !important;
+  }
+  
+  .pv-footer-bottom {
+    margin-top: 6rem !important;
+    flex-direction: column;
+    gap: 2rem;
+    text-align: center;
+  }
 }

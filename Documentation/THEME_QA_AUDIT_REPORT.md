@@ -70,11 +70,11 @@ Individual QA Audit reports are stored sequentially in the `reports/` directory.
 - **[🏠 Theme 18: `properties/rental`](file:///d:/Sellio/documentation/reports/theme_properties_rental_audit.md) — 🟢 Certified Elite Pass**
 - **[🏠 Theme 19: `properties/showcase`](file:///d:/Sellio/documentation/reports/theme_properties_showcase_audit.md) — 🟢 Certified Elite Pass**
 - **[🏠 Theme 20: `properties/unified`](file:///d:/Sellio/documentation/reports/theme_properties_unified_audit.md) — 🟢 Certified Elite Pass**
-- [ ] Theme 21: `properties/urban`
-- [ ] Theme 22: `properties/vacation`
+- **[🏠 Theme 21: `properties/urban`](file:///d:/Sellio/documentation/reports/theme_properties_urban_audit.md) — 🟢 Certified Elite Pass**
+- **[🏠 Theme 22: `properties/vacation`](file:///d:/Sellio/documentation/reports/theme_properties_vacation_audit.md) — 🟢 Certified Elite Pass**
 
 ### 🌐 Unified Vertical (8 Themes)
-- [ ] Theme 23: `unifieds/classic`
+- **[🌐 Theme 23: `unifieds/classic`](file:///d:/Sellio/documentation/reports/theme_unifieds_classic_audit.md) — 🟢 Certified Elite Pass**
 - [ ] Theme 24: `unifieds/default`
 - [ ] Theme 25: `unifieds/interactive`
 - [ ] Theme 26: `unifieds/marketplace`
