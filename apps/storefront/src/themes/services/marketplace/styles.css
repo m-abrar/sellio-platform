@@ -100,23 +100,26 @@
 
 /* Hero */
 .sm-hero {
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=2070') center center no-repeat;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/themes/services/marketplace/10.webp') center center no-repeat;
     background-size: cover;
     height: 60vh;
     display: flex;
     align-items: center;
+    justify-content: center;
     color: white;
     padding: 0 5%;
+    text-align: center;
 }
 
 .sm-hero-content {
     max-width: 800px;
+    margin: 0 auto;
 }
 
 .sm-hero h1 {
     font-size: clamp(2.5rem, 5vw, 4.5rem);
     font-weight: 800;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
 }
 
 .sm-hero p {
@@ -138,6 +141,7 @@
     gap: 1rem;
     align-items: center;
     flex-wrap: wrap;
+    border: 1px solid var(--sm-border);
 }
 
 .sm-filter-input, .sm-filter-select {
@@ -158,14 +162,14 @@
 .sm-section-title {
     text-align: center;
     font-weight: 800;
-    font-size: 2rem;
-    margin-bottom: 3rem;
+    font-size: 2.5rem;
+    margin-bottom: 4rem;
 }
 
 /* Category Card */
 .sm-category-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     gap: 1.5rem;
 }
 
@@ -178,6 +182,7 @@
     transition: var(--sm-transition);
     box-shadow: 0 0 20px rgba(0,0,0,0.02);
     border-bottom: 5px solid transparent;
+    border: 1px solid var(--sm-border);
 }
 
 .sm-category-card:hover {
@@ -207,11 +212,11 @@
 .sm-provider-card {
     background: var(--sm-surface);
     border-radius: 16px;
-    padding: 2rem;
-    text-align: center;
+    overflow: hidden;
     transition: var(--sm-transition);
     box-shadow: 0 0 15px rgba(0,0,0,0.03);
     position: relative;
+    border: 1px solid var(--sm-border);
 }
 
 .sm-provider-card:hover {
@@ -219,22 +224,23 @@
     box-shadow: 0 8px 25px rgba(0,0,0,0.08);
 }
 
-.sm-provider-card .hire-btn {
-    opacity: 0;
-    transition: var(--sm-transition);
-    margin-top: 1rem;
-}
-
-.sm-provider-card:hover .hire-btn {
-    opacity: 1;
+.sm-provider-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: var(--sm-secondary);
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 800;
+    padding: 0.25rem 0.75rem;
+    border-radius: 50px;
+    letter-spacing: 1px;
 }
 
 .sm-provider-img {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
+    width: 100%;
+    height: 220px;
     object-fit: cover;
-    margin-bottom: 1rem;
 }
 
 /* How It Works */
@@ -244,6 +250,14 @@
     gap: 2rem;
     align-items: center;
     text-align: center;
+}
+
+.sm-step-card {
+    background: white;
+    padding: 3rem 2rem;
+    border-radius: 16px;
+    box-shadow: 0 5px 15px rgba(0,0,0,.02);
+    border: 1px solid var(--sm-border);
 }
 
 .sm-step-icon {
@@ -261,20 +275,20 @@
 
 /* CTA */
 .sm-cta-section {
-    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=2070') center center no-repeat;
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/themes/services/marketplace/11.webp') center center no-repeat;
     background-size: cover;
     padding: 6rem 5%;
     text-align: center;
     color: white;
-    margin: 4rem 0;
+    margin: 4rem 5%;
     border-radius: 16px;
 }
 
 /* Footer */
 .sm-footer {
-    background: var(--sm-surface);
+    background: #111827; /* Dark slate */
+    color: white;
     padding: 5rem 5% 2rem;
-    border-top: 1px solid var(--sm-border);
 }
 
 .sm-footer-link {
@@ -287,5 +301,121 @@
 }
 
 .sm-footer-link:hover {
-    color: var(--sm-primary);
+    color: var(--sm-secondary);
 }
+
+/* Hamburger & Mobile Responsive Controls */
+.sm-hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 25px;
+    height: 18px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 1010;
+}
+
+.sm-hamburger-bar {
+    width: 100%;
+    height: 2px;
+    background-color: var(--sm-text);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sm-hamburger-open .sm-hamburger-bar:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+    background-color: var(--sm-primary);
+}
+
+.sm-hamburger-open .sm-hamburger-bar:nth-child(2) {
+    opacity: 0;
+}
+
+.sm-hamburger-open .sm-hamburger-bar:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+    background-color: var(--sm-primary);
+}
+
+.sm-mobile-btn {
+    display: none !important;
+}
+
+.sm-desktop-btn {
+    display: block !important;
+}
+
+@media (max-width: 1024px) {
+    .sm-header {
+        padding: 1rem 5%;
+    }
+
+    .sm-hamburger {
+        display: flex;
+    }
+
+    .sm-desktop-btn {
+        display: none !important;
+    }
+
+    .sm-mobile-btn {
+        display: block !important;
+        margin-top: 2rem;
+        width: 100%;
+        text-align: center;
+    }
+
+    .sm-nav {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 300px;
+        height: 100vh;
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(20px);
+        box-shadow: -10px 0 30px rgba(0, 0, 0, 0.05);
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        padding: 8rem 2.5rem 2.5rem;
+        gap: 2rem;
+        transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        z-index: 1005;
+        border-left: 1px solid var(--sm-border);
+    }
+
+    .sm-nav-open {
+        right: 0;
+    }
+
+    .sm-step-grid {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+    }
+
+    .sm-step-arrow {
+        display: none !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .sm-section {
+        padding: 4rem 6%;
+    }
+
+    .sm-hero {
+        height: 50vh;
+    }
+
+    .sm-hero h1 {
+        font-size: clamp(2rem, 8vw, 3.2rem);
+    }
+
+    .sm-footer-grid {
+        grid-template-columns: 1fr !important;
+        gap: 3rem !important;
+    }
+}
+

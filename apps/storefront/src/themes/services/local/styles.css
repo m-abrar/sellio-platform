@@ -95,7 +95,7 @@
 
 /* Hero */
 .local-hero {
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1581578731548-c64695cc6958?q=80&w=2070') center center no-repeat;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/themes/services/local/10.webp') center center no-repeat;
     background-size: cover;
     height: 80vh;
     color: white;
@@ -131,6 +131,7 @@
     gap: 1rem;
     align-items: center;
     flex-wrap: wrap;
+    border-bottom: 1px solid var(--local-border);
 }
 
 .local-select {
@@ -178,6 +179,7 @@
     position: relative;
     box-shadow: 0 5px 15px rgba(0,0,0,.05);
     transition: var(--local-transition);
+    border: 1px solid var(--local-border);
 }
 
 .local-provider-card:hover {
@@ -187,13 +189,13 @@
 
 .local-provider-img {
     width: 100%;
-    height: 200px;
+    height: 250px;
     object-fit: cover;
 }
 
 .local-cta-overlay {
     position: absolute;
-    top: 0; left: 0; right: 0; height: 200px;
+    top: 0; left: 0; right: 0; height: 250px;
     background: rgba(0,0,0,0.5);
     display: flex;
     align-items: center;
@@ -207,6 +209,12 @@
 }
 
 /* How It Works */
+.local-steps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 3rem;
+}
+
 .local-step-icon {
     width: 80px; height: 80px;
     background: var(--local-yellow);
@@ -218,10 +226,25 @@
     margin: 0 auto 1.5rem;
 }
 
+/* Safety Section */
+.local-safety-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.local-safety-card {
+    background: white;
+    padding: 3rem 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+    border: 1px solid var(--local-border);
+}
+
 /* Footer */
 .local-footer {
-    background: var(--local-surface);
-    border-top: 1px solid var(--local-border);
+    background: #111827; /* Dark slate */
+    color: white;
     padding: 5rem 5% 2rem;
 }
 
@@ -239,5 +262,112 @@
 }
 
 .local-footer-link:hover {
-    color: var(--local-green);
+    color: var(--local-yellow);
 }
+
+/* Hamburger & Mobile Responsive Controls */
+.local-hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 25px;
+    height: 18px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 1010;
+}
+
+.local-hamburger-bar {
+    width: 100%;
+    height: 2px;
+    background-color: var(--local-text);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.local-hamburger-open .local-hamburger-bar:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+    background-color: var(--local-green);
+}
+
+.local-hamburger-open .local-hamburger-bar:nth-child(2) {
+    opacity: 0;
+}
+
+.local-hamburger-open .local-hamburger-bar:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+    background-color: var(--local-green);
+}
+
+.local-mobile-btn {
+    display: none !important;
+}
+
+.local-desktop-btn {
+    display: block !important;
+}
+
+@media (max-width: 1024px) {
+    .local-header {
+        padding: 1rem 5%;
+    }
+
+    .local-hamburger {
+        display: flex;
+    }
+
+    .local-desktop-btn {
+        display: none !important;
+    }
+
+    .local-mobile-btn {
+        display: block !important;
+        margin-top: 2rem;
+        width: 100%;
+        text-align: center;
+    }
+
+    .local-nav {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 300px;
+        height: 100vh;
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(20px);
+        box-shadow: -10px 0 30px rgba(0, 0, 0, 0.05);
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        padding: 8rem 2.5rem 2.5rem;
+        gap: 2rem;
+        transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        z-index: 1005;
+        border-left: 1px solid var(--local-border);
+    }
+
+    .local-nav-open {
+        right: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .local-section {
+        padding: 4rem 6%;
+    }
+
+    .local-hero {
+        height: 60vh;
+    }
+
+    .local-hero h1 {
+        font-size: clamp(2rem, 8vw, 3.2rem);
+    }
+
+    .local-footer-grid {
+        grid-template-columns: 1fr !important;
+        gap: 3rem !important;
+    }
+}
+
