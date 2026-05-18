@@ -4,96 +4,84 @@ import { ArtisanEventCard, PulseHUD } from './components';
 
 export default function Page() {
   const events = [
-    { title: "Hack the Protocol 0.1", location: "Virtual_Node_01", date: "SEPT_15", status: "Active" },
-    { title: "Immersive VR Gala", location: "Meta_Sphere_London", date: "OCT_02", status: "Full" },
-    { title: "Bio-Digital Summit", location: "Stockholm_Lab", date: "OCT_22", status: "Open" },
-    { title: "Synthetic Art Expo", location: "Neo_Tokyo", date: "NOV_05", status: "Open" },
-    { title: "AI Music Conclave", location: "Berlin_Central", date: "NOV_20", status: "Draft" },
-    { title: "Quantum Logic Workshop", location: "Zurich_Node", date: "DEC_12", status: "Open" },
+    { title: "Generative Acoustics", location: "Laboratory Node // SF", date: "SEPTEMBER_18_2026", status: "experimental" },
+    { title: "Bio-Synthetic Visions", location: "Warehouse 09 // NYC", date: "OCTOBER_02_2026", status: "synthetic" },
+    { title: "Distributed Rave Protocol", location: "Sublevel 4 // BERLIN", date: "OCTOBER_31_2026", status: "active" },
+    { title: "Holographic Manifestation", location: "Dome Stage // TOKYO", date: "NOVEMBER_12_2026", status: "experimental" },
+    { title: "Neural Synthesis Lab", location: "Basement Node // LONDON", date: "DECEMBER_05_2026", status: "synthetic" },
+    { title: "Hyperobject Assembly", location: "Plaza Stage // PARIS", date: "DECEMBER_18_2026", status: "active" },
   ];
 
   return (
     <div className="events-creative-theme">
-      {/* Experimental High-Energy Hero */}
-      <section className="ev-hero">
-          <div className="ev-hero-glow"></div>
-          <div className="ev-label" style={{ marginBottom: '3rem' }}>SYSTEM_STATUS: EXPERIMENTAL_V8_ACTIVE</div>
-          <h1 className="ev-heading-xl">
-            Future <br/>
-            Is <span style={{ color: 'var(--ev-lime)' }}>Now.</span>
+      {/* Cinematic Creative Hero */}
+      <section className="evc-hero" aria-labelledby="evc-hero-title">
+          <div className="evc-hero-glow"></div>
+          <div className="evc-label" style={{ marginBottom: '3rem' }}>SYNTHETIC_CULTURE_EXCHANGE // 2026</div>
+          <h1 className="evc-heading-xl" id="evc-hero-title">
+            Creative <br/>
+            <span style={{ color: 'var(--evc-lime)' }}>Pulses.</span>
           </h1>
-          <p style={{ marginTop: '5.5rem', fontSize: '1.5rem', color: 'var(--ev-grey)', lineHeight: 1.8, maxWidth: '800px' }}>
-              High-fidelity distribution of experimental event modules. From decentralized hackathons to immersive synthetic art exhibitions.
+          <p style={{ maxWidth: '750px', fontSize: '1.4rem', color: 'var(--evc-grey)', lineHeight: 1.8, marginTop: '4rem', fontWeight: 300 }}>
+              A curated decentralized architecture for experimental audio-visual modules and algorithmic community assemblies.
           </p>
-          <div style={{ marginTop: '7rem', display: 'flex', gap: '3rem' }}>
-            <button className="ev-btn-primary">Initialize Exploration</button>
-            <button style={{ 
-                background: 'transparent', 
-                border: '1px solid var(--ev-zinc)', 
-                color: 'white', 
-                padding: '1.5rem 4.5rem', 
-                fontWeight: 900, 
-                textTransform: 'uppercase', 
-                cursor: 'pointer',
-                fontFamily: 'var(--ev-mono)',
-                fontSize: '0.8rem',
-                letterSpacing: '3px'
-            }}>
-                View_Archive
-            </button>
+          <div style={{ marginTop: '6rem' }}>
+            <button className="evc-btn-primary" id="evc-btn-explore" onClick={() => document.getElementById('evc-protocols-section')?.scrollIntoView({ behavior: 'smooth' })}>Launch Labs</button>
           </div>
       </section>
 
-      {/* Logic Sync Bar */}
-      <div style={{ padding: '4rem 6%', background: '#000', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid var(--ev-zinc)', borderBottom: '1px solid var(--ev-zinc)' }}>
-          {['NODE_SYNC: 100%', 'LATENCY: 12ms', 'ENCRYPTION: ACTIVE', 'VIRTUAL_CAPACITY: ∞'].map(stat => (
-              <div key={stat} className="ev-label" style={{ fontSize: '0.65rem', color: 'var(--ev-grey)' }}>{stat}</div>
-          ))}
-      </div>
-
-      {/* Pulse HUD Section */}
-      <section className="ev-section" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '4rem' }}>
-          <PulseHUD label="CREATIVE_NODES" value="256" />
-          <PulseHUD label="ACTIVE_EXPERIMENTS" value="84" />
-          <PulseHUD label="PULSE_STABILITY" value="99%" />
-          <PulseHUD label="GLOBAL_SYNC" value="STABLE" />
+      {/* Pulse HUD Grid */}
+      <section className="evc-section evc-hud-section" aria-label="Pulse Monitoring Dashboard">
+          <PulseHUD label="ACTIVE_RESONANCE_NODES" value="84" />
+          <PulseHUD label="TOTAL_MUTED_SATELLITES" value="1,240" />
+          <PulseHUD label="FABRICATION_STABILITY" value="99.98%" />
       </section>
 
       {/* Artisan Registry Section */}
-      <section className="ev-section">
+      <section className="evc-section" id="evc-protocols-section" aria-labelledby="evc-protocols-title">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '8rem' }}>
               <div>
-                  <div className="ev-label" style={{ marginBottom: '1.5rem' }}>EXPERIMENTAL_EVENT_REGISTRY</div>
-                  <h2 className="ev-heading-xl" style={{ fontSize: '7rem' }}>The <span style={{ color: 'var(--ev-lime)' }}>Pulse.</span></h2>
+                  <div className="evc-label" style={{ marginBottom: '1.5rem' }}>EXPERIMENTAL_EVENT_REGISTRY</div>
+                  <h2 className="evc-heading-xl" style={{ fontSize: 'clamp(2.5rem, 8vw, 5.5rem)' }} id="evc-protocols-title">Registry.</h2>
               </div>
-              <div style={{ textAlign: 'right', maxWidth: '400px', fontSize: '1.1rem', color: 'var(--ev-grey)', lineHeight: 1.8 }}>
-                  Our unified protocol synchronizes experimental event availability across the world's most significant creative nodes.
+              <div style={{ textAlign: 'right', maxWidth: '400px', fontSize: '1rem', color: 'var(--evc-grey)', lineHeight: 1.8 }}>
+                  Our unified decentralized distribution node synchronizes experimental availability from the world's most vibrant hubs.
               </div>
           </div>
           
-          <div className="ev-artisan-grid">
+          <div className="evc-artisan-grid">
             {events.map((e, i) => (
               <ArtisanEventCard key={i} {...e} />
             ))}
           </div>
       </section>
 
-      {/* Experimental Collective Section */}
-      <section style={{ marginTop: '20rem', padding: '15rem 8%', background: 'linear-gradient(to bottom, #111, #000)', border: '1px solid var(--ev-zinc)', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
-          <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: 'radial-gradient(circle at center, rgba(124, 58, 237, 0.05) 0%, transparent 80%)' }}></div>
-          <div style={{ position: 'relative', zIndex: 1 }}>
-              <div className="ev-label" style={{ marginBottom: '4rem' }}>JOIN_THE_EXPERIMENTAL_COLLECTIVE</div>
-              <h2 className="ev-heading-xl" style={{ fontSize: '8rem', marginBottom: '4rem' }}>Synchronize <br/>Your <span style={{ color: 'var(--ev-lime)' }}>Node.</span></h2>
-              <p style={{ maxWidth: '800px', margin: '0 auto 8rem', fontSize: '1.5rem', color: 'var(--ev-grey)', lineHeight: 1.8 }}>
-                  Our creative nodes are currently synchronizing for the 2027 cycle. Connect your node to receive early access to experimental protocols.
-              </p>
-              <button className="ev-btn-primary" style={{ background: 'var(--ev-violet)', color: 'white', border: 'none' }}>
-                  SYNC_NODE_ACCESS
-              </button>
+      {/* Lab manifesto section */}
+      <section className="evc-section" id="evc-lab-section" aria-labelledby="evc-lab-title" style={{ borderTop: '1px solid var(--evc-zinc)' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8rem', alignItems: 'center' }} className="evc-lab-content">
+              <div>
+                  <div className="evc-label" style={{ marginBottom: '3rem' }}>LABORATORY_MANIFESTO</div>
+                  <h2 className="evc-heading-xl" style={{ fontSize: 'clamp(2.5rem, 7vw, 4.5rem)', marginBottom: '4rem' }} id="evc-lab-title">Synthetic <br/><span style={{ color: 'var(--evc-lime)' }}>Artistry.</span></h2>
+                  <p style={{ fontSize: '1.2rem', color: 'var(--evc-grey)', lineHeight: 1.8, marginBottom: '6rem', fontWeight: 300 }}>
+                      We operate on the boundary of bio-digital synthesis. Elevating community interactions through raw algorithmic installations and real-time auditory sync.
+                  </p>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem' }} className="evc-lab-capabilities">
+                      {['Synthetizers', 'Generators', 'Decentralizers', 'Transmitters'].map(cap => (
+                          <div key={cap} style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--evc-lime)', letterSpacing: '2px', fontFamily: 'var(--evc-mono)' }}>◆ {cap.toUpperCase()}</div>
+                      ))}
+                  </div>
+              </div>
+              <div style={{ background: '#111', border: '1px solid var(--evc-zinc)', padding: '6rem', borderRadius: '8px' }}>
+                  <h3 style={{ fontSize: '2.5rem', fontWeight: 900, marginBottom: '2.5rem', color: 'white', letterSpacing: '-1.5px' }}>Node Sync Request</h3>
+                  <p style={{ color: 'var(--evc-grey)', lineHeight: 1.8, marginBottom: '4rem' }}>
+                      Transmission pathways are currently active for the autumn cluster. Submit your digital signature for synchronized resonance.
+                  </p>
+                  <button className="evc-btn-primary" style={{ width: '100%', padding: '2rem' }} id="evc-btn-sync" onClick={() => alert('Resonance wave broadcasted successfully.')}>Initiate Synchronous Wave</button>
+              </div>
           </div>
       </section>
       
-      <div style={{ height: '15rem' }}></div>
+      <div style={{ height: '10rem' }}></div>
     </div>
   );
 }
