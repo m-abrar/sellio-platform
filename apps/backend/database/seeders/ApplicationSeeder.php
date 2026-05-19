@@ -513,6 +513,15 @@ class ApplicationSeeder extends Seeder
                 'is_active' => false,
                 'variables' => null,
                 'config' => null,
+            ],
+            [
+                'app_key' => 'classifieds_elite',
+                'vertical' => 'classifieds',
+                'title' => 'Classifieds Elite',
+                'order' => 450,
+                'is_active' => false,
+                'variables' => null,
+                'config' => null,
             ]
         ];
 

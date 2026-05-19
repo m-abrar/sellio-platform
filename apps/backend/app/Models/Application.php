@@ -86,4 +86,15 @@ class Application extends Model implements HasMedia
     {
         return $this->config[$key] ?? $default;
     }
+
+    /**
+     * Get the options for logging activity.
+     */
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
 }

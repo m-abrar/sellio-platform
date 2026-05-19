@@ -123,5 +123,6 @@ return [
     'classifieds_local'     => \App\Http\Controllers\ClassifiedController::class,
     'classifieds_deals'     => \App\Http\Controllers\ClassifiedController::class,
     'classifieds_premium'   => \App\Http\Controllers\ClassifiedController::class,
+    'classifieds_elite'     => \App\Http\Controllers\ClassifiedController::class,
     ],
 ];

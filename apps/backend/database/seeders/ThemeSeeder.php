@@ -98,6 +98,7 @@ class ThemeSeeder extends Seeder
                     'local' => 'Classifieds Local / Community',
                     'deals' => 'Classifieds Deals / Bargain',
                     'premium' => 'Classifieds Premium',
+                    'elite' => 'Classifieds Elite',
                 ]
             ],
             'Ecommerce' => [

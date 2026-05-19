@@ -63,9 +63,9 @@ Every theme, regardless of its vertical, must adhere to these "Elite" standards:
     - **Visuals**: High-contrast readability, company logo prominence.
     - **Utility**: Salary range filters, "One-Click Apply" buttons, and application tracking progress bars.
 
-### G. Classifieds Vertical (5 Themes)
+### G. Classifieds Vertical (6 Themes)
 *Target: Local Community Boards, Bargain Hubs.*
-- **Themes**: General, Modern, Local, Deals, Premium.
+- **Themes**: General, Modern, Local, Deals, Premium, Elite.
 - **Key UI/UX**:
     - **Visuals**: Efficient, high-density listing grids (more items per screen).
     - **Utility**: Location-based radius searches and "Quick-Chat" seller integration.

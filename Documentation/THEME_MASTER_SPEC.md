@@ -199,6 +199,7 @@ When implementing any of the 50 themes, follow this **Golden Prompt**:
 | `classifieds_local` | Classifieds | 100% | **Elite** | Friendly Neighbor Map Grid |
 | `classifieds_modern` | Classifieds | 100% | **Elite** | Pinterest-Style Cards |
 | `classifieds_premium` | Classifieds | 100% | **Elite** | Gold-Accented Curated Listings |
+| `classifieds_elite` | Classifieds | 100% | **Elite** | Ultra-Premium Glassmorphic Elite Listings |
 
 ---
 

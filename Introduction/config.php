@@ -171,6 +171,7 @@
         ['cat' => 'Classifieds', 'name' => 'Classifieds Local', 'slug' => 'classifieds_local', 'img' => 'images/classifieds_local.webp', 'status' => 'active'],
         ['cat' => 'Classifieds', 'name' => 'Classifieds Deals', 'slug' => 'classifieds_deals', 'img' => 'images/classifieds_deals.webp', 'status' => 'active'],
         ['cat' => 'Classifieds', 'name' => 'Classifieds Premium', 'slug' => 'classifieds_premium', 'img' => 'images/classifieds_premium.webp', 'status' => 'active'],
+        ['cat' => 'Classifieds', 'name' => 'Classifieds Elite', 'slug' => 'classifieds_elite', 'img' => 'images/classifieds_elite.webp', 'status' => 'active'],
     ];
 
 $category_counts = array_count_values(array_column($demos, 'cat'));
