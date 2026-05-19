@@ -6,8 +6,8 @@ export const SilentHeader = () => {
 
   return (
     <header className="usm-header">
-      <div className="usm-logo">
-        SILENT<span>EDGE</span>
+      <div className="usm-logo" style={{ textTransform: 'none', letterSpacing: 'normal', fontSize: '1.4rem', fontWeight: 700 }}>
+        Universal<span style={{ color: 'var(--usm-primary)' }}>.</span>
       </div>
       
       <button 
@@ -22,84 +22,83 @@ export const SilentHeader = () => {
       </button>
 
       <nav className={`usm-nav ${isOpen ? 'usm-nav-open' : ''}`}>
-          {['Quietude', 'Telemetry', 'Presence', 'Void'].map(link => (
-              <a key={link} href="#" className="usm-nav-link" onClick={() => setIsOpen(false)}>{link}</a>
+          {[
+            { label: 'Home', target: '#home' },
+            { label: 'Explore', target: '#usm-explore-section' },
+            { label: 'Listings', target: '#usm-curated-section' },
+            { label: 'Contact', target: '#' }
+          ].map(link => (
+              <a 
+                key={link.label} 
+                href={link.target} 
+                className="usm-nav-link" 
+                style={{ textTransform: 'none', letterSpacing: '0.02em', fontSize: '0.9rem', fontWeight: 400 }}
+                onClick={(e) => {
+                  setIsOpen(false);
+                  if (link.target.startsWith('#')) {
+                    e.preventDefault();
+                    const targetEl = document.querySelector(link.target);
+                    if (targetEl) {
+                      targetEl.scrollIntoView({ behavior: 'smooth' });
+                    }
+                  }
+                }}
+              >
+                {link.label}
+              </a>
           ))}
-          <button className="usm-btn-primary usm-mobile-btn" style={{ padding: '1rem 3rem', fontSize: '0.8rem', marginTop: '2rem', width: '100%' }} onClick={() => alert('Silent sync active.')}>
-            INITIALIZE VOID
+          <button className="usm-btn-primary usm-mobile-btn" style={{ padding: '0.85rem 2rem', fontSize: '0.8rem', marginTop: '2rem', width: '100%' }} onClick={() => alert('Post Listing initiated.')}>
+            Post Listing
           </button>
       </nav>
 
-      <button className="usm-btn-primary usm-desktop-btn" style={{ padding: '0.8rem 2rem', fontSize: '0.75rem', borderRadius: '0' }} onClick={() => alert('Silent sync active.')} id="usm-btn-header-access">
-        INITIALIZE VOID
+      <button className="usm-btn-primary usm-desktop-btn" style={{ padding: '0.6rem 1.5rem', fontSize: '0.8rem', borderRadius: '4px' }} onClick={() => alert('Post Listing initiated.')} id="usm-btn-header-access">
+        Post Listing
       </button>
     </header>
   );
 };
 
-interface MinimalItemProps {
-    title: string;
-    description: string;
-}
-
-const MinimalItem = ({ title, description }: MinimalItemProps) => (
-    <div className="usm-grid-item" onClick={() => alert(`Reviewing: ${title}`)}>
-        <h3 style={{ fontFamily: 'var(--usm-font-heading)', fontSize: '1rem', fontWeight: 600, letterSpacing: '4px', textTransform: 'uppercase', marginBottom: '2rem', color: '#000000' }}>{title}</h3>
-        <p style={{ color: '#888', lineHeight: 2, fontSize: '0.85rem', fontWeight: 300 }}>{description}</p>
-    </div>
-);
-
-export const MinimalGrid = () => {
-    const items = [
-        { title: "Reductionist Logic", description: "A high-fidelity distribution node stripped of all non-essential telemetry." },
-        { title: "Zero Latency", description: "Synchronizing global commerce through invisible architectural transitions." },
-        { title: "Pure Presence", description: "Establishing structural authority through minimalist geometric precision." },
-    ];
-
-    return (
-        <section className="usm-minimal-grid" id="usm-exchange-section">
-            <div className="usm-grid">
-                {items.map((item, i) => <MinimalItem key={i} {...item} />)}
-            </div>
-        </section>
-    );
-};
-
-export const VoidSyncBar = () => (
-    <div className="usm-void-sync-bar">
-        <span>★ TELEMETRY SYNC: INACTIVE // 100% PURE REDUCTIONIST CAPACITY</span>
-        <span className="usm-bar-separator">//</span>
-        <span>LATENCY TARGET: &lt;1ms ZEN PIPELINES</span>
-        <span className="usm-bar-separator">//</span>
-        <span>SECURE ULTRA MINIMAL GHOST PROTOCOL</span>
-    </div>
-);
-
 export const ZenFooter = () => (
-    <footer className="usm-zen-footer">
+    <footer className="usm-zen-footer" style={{ borderTop: '1px solid var(--usm-border)' }}>
         <div className="usm-footer-grid">
             <div>
-                <div className="usm-logo" style={{ color: 'black', fontSize: '1.5rem', marginBottom: '3rem' }}>SILENTEDGE</div>
-                <p style={{ opacity: 0.5, lineHeight: 2, fontSize: '0.95rem', maxWidth: '400px' }}>
-                    The advanced reductionist multi-category distribution node. Engineered for pure minimalist performance and zero operational noise.
+                <div className="usm-logo" style={{ color: 'black', textTransform: 'none', letterSpacing: 'normal', fontSize: '1.4rem', fontWeight: 700, marginBottom: '2rem' }}>
+                  Universal<span style={{ color: 'var(--usm-primary)' }}>.</span>
+                </div>
+                <p style={{ opacity: 0.6, lineHeight: 1.8, fontSize: '0.9rem', maxWidth: '300px', fontWeight: 300 }}>
+                    The luxury standard in marketplace design. Simple, precise, elegant and timeless.
                 </p>
             </div>
-            {['PRACTICES', 'PARADIGMS', 'REDUCTIONS'].map(col => (
-                <div key={col}>
-                    <div className="usm-mono usm-footer-title" style={{ color: 'black', marginBottom: '3rem', fontWeight: 500 }}>{col}</div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }} className="usm-footer-link-group">
-                        {['Zen Registry', 'Silent Hub', 'Ghost Spec', 'Invisible Sync'].map(link => (
-                            <span key={link} className="usm-footer-link" onClick={() => alert(`Navigating: ${link}`)}>{link}</span>
+            {[
+              {
+                title: 'Company',
+                links: ['About Us', 'Careers', 'Press']
+              },
+              {
+                title: 'Support',
+                links: ['Contact', 'Help Center', 'FAQs']
+              },
+              {
+                title: 'Legal',
+                links: ['Terms of Use', 'Privacy Policy', 'Cookies']
+              }
+            ].map(col => (
+                <div key={col.title}>
+                    <div style={{ color: 'black', marginBottom: '2rem', fontSize: '0.95rem', fontWeight: 600 }}>{col.title}</div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }} className="usm-footer-link-group">
+                        {col.links.map(link => (
+                            <span key={link} className="usm-footer-link" onClick={() => alert(`Navigating: ${link}`)} style={{ fontSize: '0.85rem', fontWeight: 300 }}>{link}</span>
                         ))}
                     </div>
                 </div>
             ))}
         </div>
-        <div className="usm-footer-bottom">
-            <div className="usm-mono" style={{ opacity: 0.4, fontSize: '0.65rem' }}>© 2026 SELLIO_SILENTEDGE_OS // ZERO_NOISE</div>
-            <div className="usm-footer-socials">
-                {['INSTAGRAM', 'LINKEDIN', 'X_OS'].map(social => (
-                    <span key={social} className="usm-mono" style={{ opacity: 0.4, fontSize: '0.65rem', cursor: 'pointer' }}>{social}</span>
+        <div className="usm-footer-bottom" style={{ marginTop: '6rem', paddingTop: '2rem', borderTop: '1px solid var(--usm-border)' }}>
+            <div style={{ opacity: 0.6, fontSize: '0.85rem', fontWeight: 300 }}>© 2026 Universal Marketplace. All rights reserved.</div>
+            <div className="usm-footer-socials" style={{ display: 'flex', gap: '2rem' }}>
+                {['Instagram', 'LinkedIn', 'Twitter'].map(social => (
+                    <span key={social} style={{ opacity: 0.6, fontSize: '0.85rem', cursor: 'pointer', fontWeight: 300 }} onClick={() => alert(`Opening: ${social}`)}>{social}</span>
                 ))}
             </div>
         </div>

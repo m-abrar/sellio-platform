@@ -3,15 +3,16 @@
     Design Spec: Pure White, Ghost Gray, Zero Noise
 */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500&family=Manrope:wght@200;300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap');
 
 .silent-edge-wrapper {
     /* Custom Scoped Variables */
     --usm-bg: #ffffff;
     --usm-ghost: #f8fafc;
-    --usm-ink: #000000;
+    --usm-ink: #111111;
     --usm-border: #f1f5f9;
-    --usm-font-heading: 'Manrope', sans-serif;
+    --usm-primary: #4F46E5;
+    --usm-font-heading: 'Poppins', sans-serif;
     --usm-font-body: 'Inter', sans-serif;
     --usm-transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -151,12 +152,36 @@
     align-items: center;
     text-align: center;
     padding: 0 10%;
+    position: relative;
+    background-color: var(--usm-bg);
     border-bottom: 1px solid var(--usm-border);
+}
+
+.silent-hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 1;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cdefs%3E%3Cpattern id='p' width='100' height='100' patternUnits='userSpaceOnUse'%3E%3Cpath stroke='%23e0e0e0' stroke-width='.7' d='M-1 15l15-15M-1 35l35-35M-1 55l55-55M-1 75l75-75M-1 95l95-95M15 101l85-85M35 101l65-65M55 101l45-45M75 101l25-25'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23p)'/%3E%3C/svg%3E");
+    opacity: 0.6;
+}
+
+.silent-hero::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.92) 0%, rgba(255,255,255,1) 50%);
+    z-index: 2;
+}
+
+.silent-hero > * {
+    position: relative;
+    z-index: 3;
 }
 
 .silent-hero h1 span {
     font-weight: 700;
-    color: #ddd;
+    color: var(--usm-primary);
 }
 
 /* --- VOID SYNC BAR --- */
@@ -244,45 +269,49 @@
 
 /* --- BUTTONS --- */
 .usm-btn-primary {
-    background: var(--usm-ink);
+    background: var(--usm-primary);
     color: white;
     border: none;
-    padding: 1rem 4rem;
+    padding: 0.85rem 2.2rem;
     font-family: var(--usm-font-heading);
     font-weight: 500;
     font-size: 0.8rem;
-    letter-spacing: 4px;
+    letter-spacing: 2px;
     cursor: pointer;
     transition: var(--usm-transition);
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    border-radius: 4px;
 }
 
 .usm-btn-primary:hover {
-    background: #333;
-    letter-spacing: 6px;
+    background: #4338CA;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
 }
 
 .silent-btn-primary {
-    background: var(--usm-ink);
+    background: var(--usm-primary);
     color: white;
     border: none;
-    padding: 1rem 4rem;
+    padding: 1rem 3.5rem;
     font-family: var(--usm-font-heading);
     font-weight: 500;
-    font-size: 0.8rem;
-    letter-spacing: 4px;
+    font-size: 0.85rem;
+    letter-spacing: 3px;
     cursor: pointer;
     transition: var(--usm-transition);
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    border-radius: 4px;
 }
 
 .silent-btn-primary:hover {
-    background: #333;
-    letter-spacing: 6px;
+    background: #4338CA;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
 }
 
 /* --- RESPONSIVE & MOBILE STRUCTURAL REFOLDING --- */
@@ -425,4 +454,113 @@
     .usm-footer-socials {
         gap: 2rem !important;
     }
+}
+
+/* --- PREMIUM CARDS & LAYOUTS --- */
+.usm-listing-card {
+    border: 1px solid var(--usm-border);
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
+    overflow: hidden;
+    transition: var(--usm-transition);
+    background: var(--usm-bg);
+    display: flex;
+    flex-direction: column;
+}
+
+.usm-listing-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(79, 70, 229, 0.08);
+    border-color: rgba(79, 70, 229, 0.15);
+}
+
+.usm-card-img-wrap {
+    height: 240px;
+    overflow: hidden;
+    background-color: var(--usm-ghost);
+    position: relative;
+}
+
+.usm-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: var(--usm-transition);
+}
+
+.usm-listing-card:hover .usm-card-img {
+    transform: scale(1.05);
+}
+
+.usm-card-body {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.usm-card-category {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #888;
+    font-weight: 500;
+}
+
+.usm-card-title {
+    font-family: var(--usm-font-heading);
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--usm-ink);
+    margin: 0;
+    line-height: 1.3;
+}
+
+.usm-card-price {
+    font-family: var(--usm-font-heading);
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--usm-primary);
+    margin-top: 0.5rem;
+}
+
+/* Category Card Style */
+.usm-category-card {
+    border: 1px solid var(--usm-border);
+    border-radius: 12px;
+    padding: 2rem 1.5rem;
+    transition: var(--usm-transition);
+    text-align: center;
+    background: var(--usm-bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.usm-category-card:hover {
+    border-color: var(--usm-primary);
+    transform: scale(1.03);
+    box-shadow: 0 8px 20px rgba(79, 70, 229, 0.08);
+}
+
+.usm-category-icon {
+    font-size: 2.2rem;
+    color: var(--usm-primary);
+    transition: var(--usm-transition);
+}
+
+.usm-category-title {
+    font-family: var(--usm-font-heading);
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--usm-ink);
+    margin: 0;
+    transition: var(--usm-transition);
+}
+
+.usm-category-card:hover .usm-category-title {
+    color: var(--usm-primary);
 }
