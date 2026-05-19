@@ -100,7 +100,7 @@ class ProductResource extends JsonResource
                 'is_featured'  => (bool) $this->is_featured,
                 'is_new'       => (bool) $this->is_new,
                 'rating'       => (float) ($this->reviews_avg_rating ?? 0),
-                'review_count' => (int) $this->whenCounted('reviews'),
+                'review_count' => $this->whenCounted('reviews'),
                 'approved_at'  => $this->approved_at?->toIso8601String(),
             ],
 
