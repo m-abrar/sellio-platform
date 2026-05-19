@@ -26,25 +26,23 @@ export default function Page() {
     loadData();
   }, []);
 
+  const SYSTEM_PLACEHOLDER = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'><rect width='100%' height='100%' fill='%23F9FAFB'/><g transform='translate(176,110)' stroke='%23D1D5DB' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='2' width='44' height='44' rx='4'/><circle cx='15' cy='15' r='4'/><path d='M42 34L30 22 8 44'/></g><text x='50%' y='64%' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='12' font-weight='500' fill='%239CA3AF'>No image uploaded</text></svg>";
+
   const getProductImage = (product: Product, index: number) => {
-    if (product.media && product.media.length > 0) {
-      return product.media[0].original_url || product.media[0].preview_url;
+    if (product.media?.featured_image) {
+      return product.media.featured_image;
     }
-    // High-quality unsplash curated placeholders for minimal aesthetic
-    const fallbackImages = [
-      "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=600&q=80", // Minimal Room
-      "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80", // Minimal Watch
-      "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80", // Standing Desk/Desk Space
-      "https://images.unsplash.com/photo-1581404917879-53e1925d374d?auto=format&fit=crop&w=600&q=80", // Office/Aesthetic chair
-    ];
-    return fallbackImages[index % fallbackImages.length];
+    if (product.image_url) {
+      return product.image_url;
+    }
+    return SYSTEM_PLACEHOLDER;
   };
 
   // Fallback listings if database has none
   const defaultListings = [
-    { title: "Modern Minimalist Apartment", category: "Real Estate / New York", price: "$3,200 / mo", image: "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=600&q=80" },
-    { title: "Architectural Standing Desk", category: "Furniture / Office", price: "$980", image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80" },
-    { title: "Swiss Minimal Automatic Watch", category: "Luxury Goods / Accessories", price: "$2,400", image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80" }
+    { title: "Modern Minimalist Apartment", category: "Real Estate / New York", price: "$3,200 / mo", image: SYSTEM_PLACEHOLDER },
+    { title: "Architectural Standing Desk", category: "Furniture / Office", price: "$980", image: SYSTEM_PLACEHOLDER },
+    { title: "Swiss Minimal Automatic Watch", category: "Luxury Goods / Accessories", price: "$2,400", image: SYSTEM_PLACEHOLDER }
   ];
 
   const defaultCategories = [
@@ -166,7 +164,7 @@ export default function Page() {
                   <span className="usm-card-category">{product.category?.title || 'Featured Deal'}</span>
                   <h3 className="usm-card-title">{product.title}</h3>
                   <div className="usm-card-price">
-                    {product.price ? `$${Number(product.price).toLocaleString()}` : '$980'}
+                    {product.pricing?.formatted || (product.price ? `$${Number(product.price).toLocaleString()}` : '$980')}
                   </div>
                 </div>
               </div>

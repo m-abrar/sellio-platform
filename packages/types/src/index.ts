@@ -29,6 +29,17 @@ export interface Product {
   price: number;
   image_url?: string;
   category_id: number;
+  media?: {
+    featured_image?: string | null;
+    video_url?: string | null;
+  } | null;
+  pricing?: {
+    base_price: number;
+    sale_price: number;
+    current_price: number;
+    formatted: string;
+    currency_symbol: string;
+  } | null;
 }
 
 export interface Category {
