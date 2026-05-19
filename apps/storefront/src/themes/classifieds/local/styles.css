@@ -1,18 +1,21 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
 
 :root {
-    --cl-bg-main: #f0fdf4; /* Light friendly green tint */
+    --cl-primary-green: #66BB6A;      /* Friendly Green from blueprint */
+    --cl-primary-blue: #42A5F5;       /* Calming Blue from blueprint */
+    --cl-bg-main: #f8fafc;
     --cl-bg-card: #ffffff;
-    --cl-primary: #10b981; /* Friendly Green */
-    --cl-primary-light: #d1fae5;
-    --cl-secondary: #3b82f6; /* Trustworthy Blue */
-    --cl-text-main: #1f2937;
-    --cl-text-muted: #6b7280;
-    --cl-border: #e5e7eb;
-    --cl-font: 'Nunito', sans-serif;
-    --cl-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    --cl-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-    --cl-shadow-hover: 0 10px 15px -3px rgba(16, 185, 129, 0.1), 0 4px 6px -2px rgba(16, 185, 129, 0.05);
+    --cl-text-main: #334155;          /* Professional Slate Dark text */
+    --cl-text-muted: #64748b;         /* Neutral slate gray text */
+    --cl-border: #e2e8f0;             /* Soft border */
+    --cl-font: 'Outfit', sans-serif;
+    --cl-transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    /* Premium Shadows & Glows */
+    --cl-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+    --cl-shadow-md: 0 6px 20px rgba(66, 187, 106, 0.06);
+    --cl-shadow-hover: 0 12px 30px rgba(66, 187, 106, 0.12);
+    --cl-shadow-pin: 0 4px 12px rgba(66, 165, 245, 0.25);
 }
 
 .classifieds-local-wrapper {
@@ -20,53 +23,76 @@
     font-family: var(--cl-font);
     color: var(--cl-text-main);
     min-height: 100vh;
-    -webkit-font-smoothing: antialiased;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Lock viewport scroll for map-first app layout */
 }
 
-/* Header */
+/* Scrollbar styling */
+.classifieds-local-wrapper *::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+.classifieds-local-wrapper *::-webkit-scrollbar-track {
+    background: transparent;
+}
+.classifieds-local-wrapper *::-webkit-scrollbar-thumb {
+    background-color: rgba(100, 116, 139, 0.2);
+    border-radius: 20px;
+}
+
+/* --- Header / Navbar --- */
 .cl-header {
     background-color: var(--cl-bg-card);
-    padding: 1rem 5%;
+    padding: 0.85rem 4%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: var(--cl-shadow);
-    position: sticky;
-    top: 0;
+    border-bottom: 1.5px solid var(--cl-border);
     z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.02);
 }
 
 .cl-logo {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     font-weight: 900;
-    color: var(--cl-secondary);
+    color: var(--cl-primary-blue);
     text-decoration: none;
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    letter-spacing: -0.5px;
+    letter-spacing: -0.75px;
 }
 
 .cl-logo-icon {
-    color: var(--cl-primary);
+    color: var(--cl-primary-green);
+    font-size: 1.5rem;
+    animation: clBounce 2s infinite alternate;
+}
+
+@keyframes clBounce {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-4px); }
 }
 
 .cl-location-picker {
     display: flex;
     align-items: center;
-    background-color: var(--cl-primary-light);
-    color: var(--cl-primary);
-    padding: 0.5rem 1rem;
+    background-color: rgba(66, 165, 245, 0.08);
+    color: var(--cl-primary-blue);
+    padding: 0.45rem 1.1rem;
     border-radius: 50px;
     font-weight: 700;
-    gap: 0.5rem;
+    font-size: 0.85rem;
+    gap: 0.4rem;
     cursor: pointer;
     transition: var(--cl-transition);
+    border: 1px dashed var(--cl-primary-blue);
 }
 
 .cl-location-picker:hover {
-    background-color: var(--cl-primary);
-    color: white;
+    background-color: var(--cl-primary-blue);
+    color: #ffffff;
 }
 
 .cl-nav {
@@ -79,295 +105,493 @@
     color: var(--cl-text-main);
     text-decoration: none;
     font-weight: 700;
+    font-size: 0.9rem;
     transition: var(--cl-transition);
 }
 
 .cl-nav-link:hover {
-    color: var(--cl-primary);
+    color: var(--cl-primary-blue);
 }
 
-.cl-btn-primary {
-    background-color: var(--cl-secondary);
-    color: white;
+.cl-btn-post {
+    background-color: var(--cl-primary-green);
+    color: #ffffff;
     font-weight: 800;
-    padding: 0.6rem 1.5rem;
+    padding: 0.65rem 1.25rem;
     border-radius: 50px;
-    text-decoration: none;
-    transition: var(--cl-transition);
     border: none;
     cursor: pointer;
+    font-size: 0.85rem;
+    transition: var(--cl-transition);
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.4rem;
+    box-shadow: 0 4px 10px rgba(102, 187, 106, 0.25);
 }
 
-.cl-btn-primary:hover {
-    background-color: #2563eb;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+.cl-btn-post:hover {
+    background-color: #55a059;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 14px rgba(102, 187, 106, 0.35);
 }
 
-/* Map Hero Layout */
-.cl-hero {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    height: 70vh;
-    min-height: 500px;
-    border-bottom: 1px solid var(--cl-border);
+/* --- Split Panel Layout --- */
+.cl-main-layout {
+    display: flex;
+    flex: 1;
+    height: calc(100vh - 66px); /* Lock height exactly below header */
+    overflow: hidden;
 }
 
-.cl-hero-map {
-    background: url('https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=1200&auto=format&fit=crop') center center / cover;
-    position: relative;
+@media (max-width: 768px) {
+    .cl-main-layout {
+        flex-direction: column-reverse;
+        height: auto;
+        overflow: visible;
+    }
 }
 
-.cl-map-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to right, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 20%);
-}
-
-.cl-map-marker {
-    position: absolute;
-    background-color: var(--cl-primary);
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 50px;
-    font-weight: 800;
-    font-size: 0.9rem;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    cursor: pointer;
-    transition: var(--cl-transition);
-    border: 2px solid white;
-}
-
-.cl-map-marker:hover {
-    transform: scale(1.1);
-    z-index: 10;
-}
-
-.cl-map-marker::after {
-    content: '';
-    position: absolute;
-    bottom: -6px;
-    left: 50%;
-    transform: translateX(-50%);
-    border-width: 6px 6px 0;
-    border-style: solid;
-    border-color: var(--cl-primary) transparent transparent transparent;
-}
-
-.cl-hero-content {
+/* --- Left Side Listing Panel --- */
+.cl-listing-panel {
+    width: 410px;
+    min-width: 410px;
+    overflow-y: auto;
     background-color: var(--cl-bg-card);
-    padding: 3rem 4rem;
+    border-right: 1.5px solid var(--cl-border);
+    padding: 1.5rem 1.25rem;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    gap: 1.5rem;
+    z-index: 500;
 }
 
-.cl-hero-title {
-    font-size: 3rem;
-    font-weight: 900;
-    line-height: 1.1;
-    margin-bottom: 1rem;
-    color: var(--cl-secondary);
+@media (max-width: 768px) {
+    .cl-listing-panel {
+        width: 100%;
+        min-width: auto;
+        overflow-y: visible;
+    }
 }
 
-.cl-hero-subtitle {
-    font-size: 1.2rem;
-    color: var(--cl-text-muted);
-    font-weight: 600;
-    margin-bottom: 2rem;
-}
-
-.cl-search-box {
-    display: flex;
-    background-color: var(--cl-bg-main);
-    border-radius: 50px;
-    padding: 0.5rem;
-    box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
-}
-
-.cl-search-input {
-    flex: 1;
-    background: transparent;
-    border: none;
-    outline: none;
-    padding: 0.5rem 1rem;
-    font-family: var(--cl-font);
-    font-size: 1rem;
-    font-weight: 600;
-}
-
-/* Category Pills */
-.cl-categories {
-    padding: 2rem 5%;
-    display: flex;
-    gap: 1rem;
-    overflow-x: auto;
-    scrollbar-width: none;
-}
-.cl-categories::-webkit-scrollbar { display: none; }
-
-.cl-cat-pill {
-    padding: 0.8rem 1.5rem;
-    border-radius: 50px;
-    background-color: var(--cl-bg-card);
-    border: 1px solid var(--cl-border);
-    color: var(--cl-text-main);
-    font-weight: 700;
-    text-decoration: none;
-    white-space: nowrap;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    transition: var(--cl-transition);
-}
-
-.cl-cat-pill:hover, .cl-cat-pill.active {
-    background-color: var(--cl-primary);
-    color: white;
-    border-color: var(--cl-primary);
-    box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2);
-}
-
-/* Local Feed */
-.cl-section {
-    padding: 3rem 5%;
-}
-
-.cl-section-header {
+.cl-panel-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 2rem;
 }
 
-.cl-section-title {
-    font-size: 2rem;
+.cl-panel-title {
+    font-size: 1.25rem;
     font-weight: 800;
-    color: var(--cl-text-main);
+    color: var(--cl-primary-blue);
+}
+
+.cl-select {
+    padding: 0.4rem 0.85rem;
+    border-radius: 50px;
+    border: 1.5px solid var(--cl-border);
+    font-family: var(--cl-font);
+    font-size: 0.8rem;
+    font-weight: 700;
+    outline: none;
+    cursor: pointer;
+    background-color: #ffffff;
+}
+
+/* --- Friendly Listing Cards --- */
+.cl-listing-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.cl-card-listing {
+    background-color: var(--cl-bg-card);
+    border-radius: 12px;
+    border: 1.5px solid var(--cl-border);
+    padding: 0.9rem;
+    cursor: pointer;
+    transition: var(--cl-transition);
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-}
-
-.cl-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 2rem;
-}
-
-/* Listing Card */
-.cl-card {
-    background-color: var(--cl-bg-card);
-    border-radius: 20px;
-    overflow: hidden;
-    box-shadow: var(--cl-shadow);
-    transition: var(--cl-transition);
+    gap: 1rem;
+    box-shadow: var(--cl-shadow-sm);
     position: relative;
+    overflow: hidden;
 }
 
-.cl-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--cl-shadow-hover);
-}
-
-.cl-distance-badge {
+.cl-card-listing::before {
+    content: '';
     position: absolute;
-    top: 15px;
-    left: 15px;
-    background-color: rgba(255,255,255,0.9);
-    backdrop-filter: blur(4px);
-    color: var(--cl-primary);
-    padding: 0.4rem 0.8rem;
-    border-radius: 50px;
-    font-weight: 800;
-    font-size: 0.8rem;
-    z-index: 2;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background-color: transparent;
+    transition: var(--cl-transition);
+}
+
+.cl-card-listing:hover, .cl-card-listing.cl-focused {
+    transform: translateX(2px);
+    box-shadow: var(--cl-shadow-md);
+    border-color: rgba(66, 165, 245, 0.4);
+}
+
+.cl-card-listing:hover::before, .cl-card-listing.cl-focused::before {
+    background-color: var(--cl-primary-blue);
+}
+
+.cl-card-img-wrap {
+    width: 68px;
+    height: 68px;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #f1f5f9;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .cl-card-img {
     width: 100%;
-    height: 220px;
+    height: 100%;
     object-fit: cover;
 }
 
-.cl-card-body {
-    padding: 1.5rem;
+.cl-card-info {
+    flex: 1;
+    min-width: 0;
 }
 
 .cl-card-title {
-    font-size: 1.2rem;
-    font-weight: 800;
-    margin-bottom: 0.5rem;
-    line-height: 1.3;
+    font-size: 0.95rem;
+    font-weight: 750;
+    margin-bottom: 0.2rem;
+    color: var(--cl-text-main);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
-.cl-card-price {
-    font-size: 1.5rem;
-    font-weight: 900;
-    color: var(--cl-primary);
-    margin-bottom: 1rem;
-}
-
-.cl-seller-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-top: 1rem;
-    border-top: 1px solid var(--cl-border);
-}
-
-.cl-seller-info {
+.cl-price-row {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    margin-bottom: 0.2rem;
 }
 
-.cl-avatar {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background-color: var(--cl-primary-light);
-    color: var(--cl-primary);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.cl-price {
+    color: var(--cl-primary-green);
     font-weight: 800;
-    font-size: 0.9rem;
+    font-size: 1.15rem;
 }
 
-.cl-neighborhood {
-    font-size: 0.85rem;
-    font-weight: 600;
+.cl-badge {
+    background-color: rgba(102, 187, 106, 0.1);
+    color: var(--cl-primary-green);
+    font-size: 0.65rem;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 50px;
+    text-transform: uppercase;
+}
+
+.cl-geo-text {
+    font-size: 0.75rem;
     color: var(--cl-text-muted);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 2px;
 }
 
-.cl-action-btn {
-    background-color: var(--cl-bg-main);
-    color: var(--cl-secondary);
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
+/* --- Neighborhood Megaphone Alerts --- */
+.cl-alerts-container {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.cl-alert-card {
+    background-color: #f0fdf4;
+    border-left: 4px solid var(--cl-primary-green);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    display: flex;
     align-items: center;
-    border: none;
-    cursor: pointer;
+    gap: 0.75rem;
+    box-shadow: var(--cl-shadow-sm);
     transition: var(--cl-transition);
 }
 
-.cl-action-btn:hover {
-    background-color: var(--cl-secondary);
-    color: white;
+.cl-alert-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(102, 187, 106, 0.1);
 }
 
-/* Footer */
-.cl-footer {
-    background-color: white;
-    padding: 4rem 5% 2rem;
-    border-top: 1px solid var(--cl-border);
-    margin-top: 4rem;
+.cl-alert-icon {
+    font-size: 1.2rem;
+    color: var(--cl-primary-green);
+    flex-shrink: 0;
+}
+
+.cl-alert-body {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #166534;
+    line-height: 1.4;
+}
+
+/* --- Sidebar Categories Showcase --- */
+.cl-pills-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.cl-cat-btn {
+    background: transparent;
+    border: 1.5px solid var(--cl-primary-blue);
+    color: var(--cl-primary-blue);
+    padding: 0.4rem 1.1rem;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: var(--cl-transition);
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.cl-cat-btn:hover, .cl-cat-btn.cl-active {
+    background-color: var(--cl-primary-blue);
+    color: #ffffff;
+    box-shadow: 0 4px 10px rgba(66, 165, 245, 0.25);
+}
+
+/* --- Right Map Window Container --- */
+.cl-map-view {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    background-color: #f1f5f9;
+}
+
+/* Grid Street Blueprint Map Vector Simulation */
+.cl-map-grid-mesh {
+    position: absolute;
+    inset: 0;
+    opacity: 0.85;
+    background-color: #f1f5f9;
+    /* High detail map graphics: parks, highways, water bodies, secondary grids */
+    background-image: 
+        radial-gradient(circle at 10% 20%, #dbeafe 300px, transparent 301px),
+        radial-gradient(circle at 80% 70%, #dcfce7 400px, transparent 401px),
+        linear-gradient(rgba(226, 232, 240, 0.8) 2px, transparent 2px),
+        linear-gradient(90deg, rgba(226, 232, 240, 0.8) 2px, transparent 2px),
+        linear-gradient(rgba(203, 213, 225, 0.4) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(203, 213, 225, 0.4) 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 120px 120px, 120px 120px, 20px 20px, 20px 20px;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Map Controller Box */
+.cl-map-controls {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+}
+
+.cl-ctrl-btn {
+    background-color: #ffffff;
+    border: none;
+    border-bottom: 1.5px solid var(--cl-border);
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--cl-text-main);
+    transition: var(--cl-transition);
+}
+
+.cl-ctrl-btn:last-child {
+    border-bottom: none;
+}
+
+.cl-ctrl-btn:hover {
+    background-color: var(--cl-primary-blue);
+    color: #ffffff;
+}
+
+/* --- Map Pins teardrop and icons --- */
+.cl-map-pin {
+    position: absolute;
+    cursor: pointer;
+    z-index: 50;
+    transform: translate(-50%, -100%);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.cl-pin-body {
+    width: 34px;
+    height: 34px;
+    background-color: var(--cl-primary-green);
+    border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
+    box-shadow: var(--cl-shadow-pin);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #ffffff;
+    transition: var(--cl-transition);
+}
+
+.cl-pin-icon {
+    transform: rotate(45deg);
+    color: #ffffff;
+    font-size: 0.95rem;
+}
+
+/* Focused Pin States */
+.cl-map-pin:hover .cl-pin-body, .cl-map-pin.cl-focused .cl-pin-body {
+    background-color: var(--cl-primary-blue);
+    transform: rotate(-45deg) scale(1.15);
+    box-shadow: 0 6px 16px rgba(66, 165, 245, 0.4);
+}
+
+/* --- Popup Info Cards --- */
+.cl-map-popup {
+    position: absolute;
+    background-color: var(--cl-bg-card);
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    padding: 1.2rem;
+    width: 260px;
+    z-index: 150;
+    transform: translate(-50%, -125%); /* Center above pins coordinates */
+    border-left: 5px solid var(--cl-primary-green);
+    animation: clPopupFade 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes clPopupFade {
+    from { transform: translate(-50%, -115%) scale(0.95); opacity: 0; }
+    to { transform: translate(-50%, -125%) scale(1); opacity: 1; }
+}
+
+.cl-popup-close {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    background: transparent;
+    border: none;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    color: var(--cl-text-muted);
+}
+
+.cl-popup-close:hover {
+    color: #ef4444;
+}
+
+.cl-popup-title {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: var(--cl-text-main);
+    margin-bottom: 0.5rem;
+    padding-right: 15px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.cl-popup-img-wrap {
+    height: 110px;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 0.6rem;
+    background-color: #f1f5f9;
+}
+
+.cl-popup-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.cl-popup-price {
+    font-size: 1.25rem;
+    font-weight: 900;
+    color: var(--cl-primary-green);
+    margin-bottom: 0.5rem;
+}
+
+.cl-popup-poster {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.75rem;
+    color: var(--cl-text-muted);
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+}
+
+.cl-popup-poster-avatar {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background-color: var(--cl-primary-light);
+    color: var(--cl-primary-blue);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.65rem;
+}
+
+.cl-popup-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+}
+
+.cl-popup-btn {
+    padding: 0.45rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: center;
+    transition: var(--cl-transition);
+    border: 1.5px solid transparent;
+}
+
+.cl-popup-btn-message {
+    background-color: var(--cl-primary-green);
+    color: #ffffff;
+}
+
+.cl-popup-btn-message:hover {
+    background-color: #55a059;
+}
+
+.cl-popup-btn-details {
+    background-color: transparent;
+    border-color: var(--cl-primary-blue);
+    color: var(--cl-primary-blue);
+}
+
+.cl-popup-btn-details:hover {
+    background-color: rgba(66, 165, 245, 0.08);
 }

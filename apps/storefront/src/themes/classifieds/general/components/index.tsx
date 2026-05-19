@@ -1,60 +1,107 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 
-export const GeneralHeader = () => (
+interface HeaderProps {
+  searchTerm: string;
+  onSearchChange: (val: string) => void;
+  onReset: () => void;
+}
+
+export const GeneralHeader = ({ searchTerm, onSearchChange, onReset }: HeaderProps) => {
+  return (
     <header className="cg-header">
-        <a href="#" className="cg-logo">
-            <span style={{ fontSize: '1.5rem', marginRight: '0.25rem' }}>📦</span>
-            CLASAFIND
+      <a href="#" className="cg-logo" onClick={(e) => { e.preventDefault(); onReset(); }}>
+        <div className="cg-logo-icon">📦</div>
+        <span>CLASA</span>FIND
+      </a>
+      
+      <div className="cg-search-bar">
+        <span style={{ fontSize: '1rem', color: 'var(--cg-text-muted)', userSelect: 'none' }}>🔍</span>
+        <input 
+          type="text" 
+          className="cg-search-input" 
+          placeholder="Search for anything..." 
+          value={searchTerm}
+          onChange={(e) => onSearchChange(e.target.value)}
+        />
+      </div>
+      
+      <nav className="cg-nav">
+        <a href="#" className="cg-nav-link" onClick={(e) => { e.preventDefault(); alert("Login service dynamically integrated."); }}>Log In</a>
+        <a href="#" className="cg-nav-link" onClick={(e) => { e.preventDefault(); alert("Registration wizard launched."); }}>Sign Up</a>
+        <a 
+          href="#" 
+          className="cg-btn cg-btn-primary" 
+          onClick={(e) => { e.preventDefault(); alert("Post Classified Ad: Redirecting to partner dashboard in sandbox mode."); }}
+        >
+          <span>➕</span> Post Ad
         </a>
-        <div className="cg-search-bar d-none d-md-flex">
-            <span style={{ color: 'var(--cg-text-muted)' }}>🔍</span>
-            <input type="text" className="cg-search-input" placeholder="Search for anything..." />
-        </div>
-        <nav className="cg-nav">
-            <a href="#" className="cg-nav-link d-none d-md-block">Log In</a>
-            <a href="#" className="cg-nav-link d-none d-md-block">Sign Up</a>
-            <a href="#" className="cg-btn cg-btn-primary">➕ Post Ad</a>
-        </nav>
+      </nav>
     </header>
-);
+  );
+};
 
-export const ListingCard = ({ title, price, image, seller, isSaved }: any) => (
+interface ListingCardProps {
+  title: string;
+  price: string;
+  image: string;
+  seller: string;
+  isSaved: boolean;
+  category: string;
+  onMessageClick: () => void;
+  onToggleSave: () => void;
+}
+
+export const ListingCard = ({ title, price, image, seller, isSaved, onMessageClick, onToggleSave }: ListingCardProps) => {
+  return (
     <div className="cg-card">
-        <div className="cg-card-img-wrap">
-            <img src={image} className="cg-card-img" alt={title} />
+      <div className="cg-card-img-wrap">
+        <img src={image} className="cg-card-img" alt={title} />
+      </div>
+      
+      <div className="cg-card-body">
+        <h3 className="cg-card-title" title={title}>{title}</h3>
+        <div className="cg-card-price">{price}</div>
+        
+        <div className="cg-card-footer">
+          <div className="cg-seller-info">
+            <div className="cg-seller-avatar">👤</div>
+            <span>{seller}</span>
+          </div>
+          
+          <div className="cg-action-buttons">
+            <button 
+              className="cg-action-btn" 
+              title="Message Seller" 
+              onClick={(e) => { e.stopPropagation(); onMessageClick(); }}
+            >
+              ✉️
+            </button>
+            <button 
+              className={`cg-action-btn cg-action-btn-heart ${isSaved ? 'active' : ''}`}
+              title="Save Listing" 
+              onClick={(e) => { e.stopPropagation(); onToggleSave(); }}
+            >
+              {isSaved ? '♥' : '♡'}
+            </button>
+          </div>
         </div>
-        <div className="cg-card-body">
-            <h3 className="cg-card-title">{title}</h3>
-            <div className="cg-card-price">{price}</div>
-            
-            <div className="cg-card-footer">
-                <div className="cg-seller-info">
-                    <div className="cg-seller-avatar">👤</div>
-                    {seller}
-                </div>
-                <div style={{ display: 'flex', gap: '0.5rem' }}>
-                    <button className="cg-action-btn" title="Message Seller">✉️</button>
-                    <button className="cg-action-btn" title="Save Item" style={{ color: isSaved ? 'var(--cg-primary)' : 'var(--cg-text-muted)' }}>
-                        {isSaved ? '♥' : '♡'}
-                    </button>
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
-);
+  );
+};
 
 export const GeneralFooter = () => (
-    <footer className="cg-footer">
-        <div className="cg-footer-links">
-            <a href="#" className="cg-footer-link">About Us</a>
-            <a href="#" className="cg-footer-link">Help & Support</a>
-            <a href="#" className="cg-footer-link">Trust & Safety</a>
-            <a href="#" className="cg-footer-link">Terms of Service</a>
-            <a href="#" className="cg-footer-link">Privacy Policy</a>
-        </div>
-        <p style={{ color: 'var(--cg-text-muted)', fontSize: '0.85rem', marginTop: '1rem' }}>
-            &copy; 2026 ClasaFind Classifieds. All rights reserved.
-        </p>
-    </footer>
+  <footer className="cg-footer">
+    <div className="cg-footer-links">
+      <a href="#" className="cg-footer-link" onClick={(e) => e.preventDefault()}>About Us</a>
+      <a href="#" className="cg-footer-link" onClick={(e) => e.preventDefault()}>Help & Support</a>
+      <a href="#" className="cg-footer-link" onClick={(e) => e.preventDefault()}>Trust & Safety Guidelines</a>
+      <a href="#" className="cg-footer-link" onClick={(e) => e.preventDefault()}>Terms of Service</a>
+      <a href="#" className="cg-footer-link" onClick={(e) => e.preventDefault()}>Privacy Protection Policy</a>
+    </div>
+    <p style={{ color: 'var(--cg-text-muted)', fontSize: '0.8rem', marginTop: '1.25rem', fontWeight: 500 }}>
+      &copy; 2026 ClasaFind Classifieds Suite. All rights reserved. Engineered to Elite Standards.
+    </p>
+  </footer>
 );
