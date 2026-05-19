@@ -148,35 +148,57 @@ When implementing any of the 50 themes, follow this **Golden Prompt**:
 
 | Theme Key | Vertical | Completion | Spec Compliance | Key Aesthetic |
 | :--- | :--- | :--- | :--- | :--- |
-| `autos_classic` | Autos | 100% | **Elite** | Burgundy/Gold Premium |
-| `autos_electric` | Autos | 100% | **Elite** | Futurist HUD |
+| `autos_classic` | Autos | 100% | **Elite** | Burgundy/Gold Premium Vintage |
+| `autos_electric` | Autos | 100% | **Elite** | Futurist HUD Range Radials |
 | `autos_luxury` | Autos | 100% | **Elite** | Velvet Wheels Dark/Gold |
-| `autos_modern` | Autos | 100% | **Elite** | Sleek Black/White |
-| `autos_used` | Autos | 100% | **Elite** | Trustworthy Blue/Orange |
-| `services_corporate` | Services | 100% | **Elite** | Corporate Professional |
-| `services_creative` | Services | 100% | **Elite** | Bold Portfolio |
-| `services_local` | Services | 100% | **Elite** | Local Community |
-| `services_marketplace`| Services | 100% | **Elite** | Bio-Centric Grid |
-| `services_health` | Services | 100% | **Elite** | Wellness Serenity |
-| `properties_modern` | Properties | 100% | **Elite** | Architectural Sage |
-| `events_music` | Events | 100% | **Elite** | Vibrant Poster |
-| `unifieds_default` | Unified | 100% | High | Glassmorphic Bento |
-| `unifieds_mega` | Unified | 100% | **Elite** | High-Density Bento |
-| `ecommerce_default` | Ecommerce | 100% | High | Refined Retail |
-| `ecommerce_fashion` | Ecommerce | 100% | **Elite** | Editorial Lookbook |
-| `jobs_startup` | Jobs | 100% | **Elite** | Energetic Venture |
-| `jobs_corporate` | Jobs | 100% | **Elite** | Corporate Professional |
-| `jobs_tech` | Jobs | 100% | **Elite** | Developer Terminal |
-| `jobs_freelance` | Jobs | 100% | **Elite** | Creative Gig Economy |
-| `jobs_blue_collar` | Jobs | 100% | **Elite** | Industrial Trades |
-| `jobs_modern` | Jobs | 100% | **Elite** | Glassmorphic Startups |
-| `classifieds_premium` | Classifieds | 100% | **Elite** | Elite Curated |
-| `classifieds_general` | Classifieds | 100% | **Elite** | Classic Marketplace |
-| `classifieds_deals` | Classifieds | 100% | **Elite** | Urgent Bargain/Discount |
-| `classifieds_local` | Classifieds | 100% | **Elite** | Friendly Community Map |
-| `classifieds_modern` | Classifieds | 100% | **Elite** | Vibrant Pinterest-Style |
-| `ecommerce_electronics` | Ecommerce | 100% | **Elite** | Futurist Cyber/Tech |
+| `autos_modern` | Autos | 100% | **Elite** | Sleek High-Contrast Cyber |
+| `autos_used` | Autos | 100% | **Elite** | Trustworthy Blue/Orange Grid |
+| `ecommerce_default` | Ecommerce | 100% | **Elite** | Refined Minimalist Retail |
+| `ecommerce_electronics` | Ecommerce | 100% | **Elite** | Futurist Neon Cyber/Tech |
+| `ecommerce_fashion` | Ecommerce | 100% | **Elite** | Elegant Editorial Lookbook |
 | `ecommerce_luxury` | Ecommerce | 100% | **Elite** | High-Fidelity Gold/Slate |
+| `properties_classic` | Properties | 100% | **Elite** | Traditional Real Estate |
+| `properties_commercial` | Properties | 100% | **Elite** | Commercial Glass/Steel Grid |
+| `properties_investment` | Properties | 100% | **Elite** | ROI Focus & Live Calculations |
+| `properties_luxury` | Properties | 100% | **Elite** | Asymmetric Parallax Gold-Leaf |
+| `properties_platinum` | Properties | 100% | **Elite** | High-Depth Luxury Platinum |
+| `properties_map` | Properties | 100% | **Elite** | Map-First Geolocation |
+| `properties_modern` | Properties | 100% | **Elite** | Architectural Sage Glassmorphism |
+| `properties_neighborhood` | Properties | 100% | **Elite** | Curated Community Guide |
+| `properties_rental` | Properties | 100% | **Elite** | High-Urgency Rental Badges |
+| `properties_showcase` | Properties | 100% | **Elite** | High-Visual Immersive Gallery |
+| `properties_unified` | Properties | 100% | **Elite** | Integrated Unified Properties |
+| `properties_urban` | Properties | 100% | **Elite** | Urban High-Density Bento Grid |
+| `properties_vacation` | Properties | 100% | **Elite** | Warm Resort Booking Gallery |
+| `unifieds_classic` | Unifieds | 100% | **Elite** | Multi-Category Search Portal |
+| `unifieds_default` | Unifieds | 100% | **Elite** | Glassmorphic Modular Bento |
+| `unifieds_interactive` | Unifieds | 100% | **Elite** | Motion-First Fluid Bento |
+| `unifieds_marketplace` | Unifieds | 100% | **Elite** | High-Density Portal Grid |
+| `unifieds_mega` | Unifieds | 100% | **Elite** | Multi-Feature Bento Carousel |
+| `unifieds_minimal` | Unifieds | 100% | **Elite** | Monolithic Whitespace Portal |
+| `unifieds_modern` | Unifieds | 100% | **Elite** | Sleek Pinterest-Style Bento |
+| `unifieds_standard` | Unifieds | 100% | **Elite** | Symmetrical Bento Blocks |
+| `events_classic` | Events | 100% | **Elite** | Standard Structured Event Grid |
+| `events_corporate` | Events | 100% | **Elite** | Professional Corporate Schedule |
+| `events_creative` | Events | 100% | **Elite** | Bold Avant-Garde Event Poster |
+| `events_festival` | Events | 100% | **Elite** | High-Vibrancy Lineup Grid |
+| `events_music` | Events | 100% | **Elite** | Immersive Audio Poster Player |
+| `services_corporate` | Services | 100% | **Elite** | Corporate Agency Professional |
+| `services_creative` | Services | 100% | **Elite** | Interactive Creative Portfolio |
+| `services_health` | Services | 100% | **Elite** | Serene Health & Wellness Scheduler |
+| `services_local` | Services | 100% | **Elite** | Local Business Map Scheduler |
+| `services_marketplace` | Services | 100% | **Elite** | Bio-Centric Professional Directory |
+| `jobs_blue_collar` | Jobs | 100% | **Elite** | Industrial Trades Application |
+| `jobs_corporate` | Jobs | 100% | **Elite** | Clean Corporate Board |
+| `jobs_freelance` | Jobs | 100% | **Elite** | Creative Gig Showcase |
+| `jobs_modern` | Jobs | 100% | **Elite** | Glassmorphic Venture Board |
+| `jobs_startup` | Jobs | 100% | **Elite** | High-Energy Growth Startup |
+| `jobs_tech` | Jobs | 100% | **Elite** | Console Developer Terminal |
+| `classifieds_deals` | Classifieds | 100% | **Elite** | Flash Deal Red-Light Urgent |
+| `classifieds_general` | Classifieds | 100% | **Elite** | High-Density Classic Listing |
+| `classifieds_local` | Classifieds | 100% | **Elite** | Friendly Neighbor Map Grid |
+| `classifieds_modern` | Classifieds | 100% | **Elite** | Pinterest-Style Cards |
+| `classifieds_premium` | Classifieds | 100% | **Elite** | Gold-Accented Curated Listings |
 
 ---
 
