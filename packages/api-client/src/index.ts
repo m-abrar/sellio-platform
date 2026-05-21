@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
-import type { Product, Category, Theme, ApiResponse, Property, Location } from '@sellio/types';
+import type { Product, Category, Theme, ApiResponse, Property, Location, Vehicle } from '@sellio/types';
 
 export class SellioAPI {
   private client: AxiosInstance;
@@ -104,6 +104,44 @@ export class SellioAPI {
       check_out: checkOut,
     });
     return response.data.data;
+  }
+
+  // === Vehicle Vertical Endpoints ===
+
+  async getVehicles(params?: Record<string, any>): Promise<{
+    data: Vehicle[];
+    meta?: {
+      current_page: number;
+      last_page: number;
+      per_page: number;
+      total: number;
+    };
+    sidebar?: {
+      categories: Category[];
+      locations: Location[];
+      types: any[];
+      tags: any[];
+      brands: any[];
+      transaction_types: any[];
+      transmission_options: string[];
+    };
+  }> {
+    const response = await this.client.get('/v1/vehicles', { params });
+    return response.data;
+  }
+
+  async getVehicleBySlug(slug: string): Promise<Vehicle> {
+    return this.request<Vehicle>(`/v1/vehicles/${slug}`);
+  }
+
+  async getVehicleDetails(slug: string): Promise<{
+    success: boolean;
+    message: string | null;
+    data: Vehicle;
+    related_vehicles?: Vehicle[];
+  }> {
+    const response = await this.client.get(`/v1/vehicles/${slug}`);
+    return response.data;
   }
 }
 

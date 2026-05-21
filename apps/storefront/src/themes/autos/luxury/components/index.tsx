@@ -35,21 +35,59 @@ export const LuxuryHeader = () => {
     );
 };
 
-export const LuxuryCarCard = ({ title, specs, price, image }: any) => (
-    <div className="lx-car-card">
-        <div style={{ overflow: 'hidden', height: '200px' }}>
-            <img src={image} className="lx-car-img" alt={title} />
-        </div>
-        <div className="lx-car-body">
-            <h5 className="lx-car-title">{title}</h5>
-            <p style={{ color: 'var(--lx-text-muted)', marginBottom: '1rem', fontSize: '0.9rem' }}>{specs}</p>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span className="lx-car-price">{price}</span>
-                <a href="#" className="lx-btn lx-btn-outline" style={{ padding: '0.4rem 1rem', fontSize: '0.8rem' }}>View Details</a>
+const getThemeLink = (path: string) => {
+    if (typeof window !== 'undefined') {
+        const isPreview = window.location.pathname.startsWith('/preview/');
+        if (isPreview) {
+            return `/preview/autos_luxury${path}`;
+        }
+    }
+    return path;
+};
+
+export const LuxuryCarCard = ({ title, specs, price, image, slug, onClick }: any) => {
+    const cursorStyle = onClick || slug ? { cursor: 'pointer' } : {};
+    
+    // Resolve link if slug is provided
+    const linkPath = slug ? getThemeLink(`/product/${slug}`) : "#";
+    
+    const handleCardClick = (e: React.MouseEvent) => {
+        if (onClick) {
+            onClick(e);
+        } else if (slug && typeof window !== 'undefined') {
+            window.location.href = linkPath;
+        }
+    };
+
+    return (
+        <div className="lx-car-card" style={cursorStyle} onClick={handleCardClick}>
+            <div style={{ overflow: 'hidden', height: '200px' }}>
+                <img src={image} className="lx-car-img" alt={title} />
+            </div>
+            <div className="lx-car-body">
+                <h5 className="lx-car-title">{title}</h5>
+                <p style={{ color: 'var(--lx-text-muted)', marginBottom: '1rem', fontSize: '0.9rem' }}>{specs}</p>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span className="lx-car-price">{price}</span>
+                    <a 
+                        href={linkPath} 
+                        className="lx-btn lx-btn-outline" 
+                        style={{ padding: '0.4rem 1rem', fontSize: '0.8rem' }}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            if (onClick) {
+                                e.preventDefault();
+                                onClick(e);
+                            }
+                        }}
+                    >
+                        View Details
+                    </a>
+                </div>
             </div>
         </div>
-    </div>
-);
+    );
+};
 
 export const LuxuryFooter = () => (
     <footer className="lx-footer">

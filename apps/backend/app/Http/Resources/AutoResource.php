@@ -98,7 +98,7 @@ class AutoResource extends JsonResource
                 'is_featured'    => (bool) $this->is_featured,
                 'is_new_arrival' => (bool) $this->is_new,
                 'approved_at'    => $this->approved_at?->toIso8601String(),
-                'inquiry_count'  => (int) $this->whenCounted('inquiries'),
+                'inquiry_count'  => $this->inquiries_count !== null ? (int) $this->inquiries_count : null,
             ],
 
             'seo' => [

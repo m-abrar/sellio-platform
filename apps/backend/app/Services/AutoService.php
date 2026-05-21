@@ -27,13 +27,15 @@ class AutoService
     {
         // Define common vertical relations to count for the dashboard/sidebar
         $verticals = ['properties', 'autos', 'events', 'jobs', 'services', 'classifieds', 'products'];
+        $locationVerticals = ['properties', 'autos', 'events', 'jobs', 'services', 'classifieds'];
+        $tagVerticals = ['properties', 'autos', 'events', 'jobs', 'services', 'classifieds'];
 
         return [
             'autos' => $this->getFilteredAutos($filters, $user),
             'categories' => Category::where('is_auto', true)->withCount($verticals)->get(),
-            'locations' => Location::where('is_auto', true)->withCount($verticals)->get(),
+            'locations' => Location::where('is_auto', true)->withCount($locationVerticals)->get(),
             'types' => Type::where('is_auto', true)->withCount($verticals)->get(),
-            'tags' => Tag::where('is_auto', true)->withCount($verticals)->get(),
+            'tags' => Tag::where('is_auto', true)->withCount($tagVerticals)->get(),
             'brands' => Brand::where('is_auto', true)->get(),
             'transactionType' => $this->getTransactionTypes(),
             'transmissionOptions' => [__('Automatic'), __('Manual')],

@@ -170,3 +170,88 @@ export interface Property {
   primary_image_url?: string;
   thumbnail_url?: string;
 }
+
+export interface Vehicle {
+  id: number;
+  title: string;
+  slug: string;
+  description: string;
+  short_description?: string | null;
+  featured_image?: string | null;
+  pricing: {
+    base_price: number;
+    sale_price?: number | null;
+    formatted?: string | null;
+    formatted_short?: string | null;
+    is_lease: boolean;
+    is_selling: boolean;
+  };
+  specs: {
+    year: number;
+    make: string;
+    model: string;
+    vin?: string | null;
+    condition?: string | null;
+    mileage?: string | null;
+    raw_mileage?: number | null;
+    mileage_units?: string | null;
+    engine?: string | null;
+    transmission?: string | null;
+    fuel_economy?: string | null;
+    drivetrain?: string | null;
+    exterior_color?: string | null;
+    warranty?: string | null;
+  };
+  media: {
+    main_photo?: string | null;
+    preview?: string | null;
+    gallery?: Array<{
+      id: number;
+      url: string;
+      thumbnail?: string;
+      name?: string;
+    }>;
+  };
+  taxonomy: {
+    category?: {
+      id: number;
+      title: string;
+    } | null;
+    brand?: {
+      id: number;
+      title: string;
+    } | null;
+    features?: Array<{
+      title: string;
+      icon?: string | null;
+    }>;
+    tags?: string[];
+  };
+  location: {
+    address?: string | null;
+    city?: string | null;
+    state?: string | null;
+    country?: string | null;
+    zip_code?: string | null;
+    latitude?: number | null;
+    longitude?: number | null;
+  };
+  status: {
+    is_published: boolean;
+    is_featured: boolean;
+    is_new_arrival: boolean;
+    approved_at?: string | null;
+    inquiry_count?: number;
+  };
+  seo?: {
+    meta_title?: string | null;
+    meta_description?: string | null;
+  };
+  owner?: {
+    id: number;
+    name: string;
+    avatar?: string | null;
+  };
+  created_at?: string;
+}
+

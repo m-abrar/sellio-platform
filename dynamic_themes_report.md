@@ -6,15 +6,16 @@ This report documents the status of dynamic conversion across the Sellio storefr
 
 ## 📊 Summary of Converted Themes
 
-Out of the available industry verticals in the codebase, **three themes** have been converted to fully dynamic dynamic templates:
+Out of the available industry verticals in the codebase, **four themes** have been converted to fully dynamic templates:
 
 | Vertical | Theme Key / Directory | Conversion Status | Dynamic Views Implemented |
 | :--- | :--- | :--- | :--- |
+| **Autos** | `autos_luxury` (`autos/luxury`) | **100% Dynamic** | Homepage Showroom, Explore Catalog, Product details |
 | **Properties** | `properties_classic` (`properties/classic`) | **100% Dynamic** | Homepage, Explore Page, Product details, Cart Page |
 | **Properties** | `properties_luxury` (`properties/luxury`) | **100% Dynamic** | Homepage Curated Showcase, Explore Ledger, Product Provenance details |
 | **Unified** | `unifieds_minimal` (`unifieds/minimal`) | **100% Dynamic** | Homepage, Explore Page, Product details |
 
-All other themes within `autos`, `classifieds`, `ecommerce`, `events`, `jobs`, `services`, and remaining sub-themes of `properties` are currently **static prototypes** containing hardcoded mockup variables.
+All other themes within `autos` (except `autos_luxury`), `classifieds`, `ecommerce`, `events`, `jobs`, `services`, and remaining sub-themes of `properties` are currently **static prototypes** containing hardcoded mockup variables.
 
 ---
 
@@ -48,10 +49,16 @@ The streamlined, minimal generic theme operates dynamically for quick deployment
 * **Catalogue Search (`ExplorePage.tsx`)**: Simple grid lists supporting keyword queries.
 * **Product Details (`ProductPage.tsx`)**: Basic checkout structures and asset spec breakdowns.
 
+### 4. Autos Luxury Theme (`autos_luxury`)
+The Elite Showroom edition operates fully dynamically with live-database assets:
+* **Showroom Showcase (`Page.tsx`)**: Queries top luxury vehicle assets on mount (`api.getVehicles({ per_page: 6 })`) with sleek redirects.
+* **Explore Catalog Showcase (`ExplorePage.tsx`)**: Multi-faceted filter system (brand, categories, locations, price tiers, and keyword inputs) fully synced to Next.js query parameters.
+* **Product Provenance Page (`ProductPage.tsx`)**: High-contrast details view showcasing VIN codes, drivetrain specs, an interactive leasing rate estimator, and LocalStorage-backed VIP reservation desk (`sellio_autos_luxury_inquiries`).
+
 ---
 
 ## 🛡 Network Resilience & Connection Handling
-Both `properties_classic` and `properties_luxury` feature a **Resiliency Layer**:
+The `autos_luxury`, `properties_classic`, and `properties_luxury` themes feature a robust **Offline Connection Resiliency Layer**:
 - If the Laravel API server is shut down, MySQL databases are empty, or network latency fails, they capture the exceptions cleanly.
-- Instead of crashing, the components smoothly load high-fidelity static mock backups (*The Obsidian Villa*, *Azure Coast Estate*).
-- Both themes render elegant, visually matched diagnostics alerts displaying the raw Axios connection exceptions, keeping developers fully informed of server states.
+- Instead of crashing, the components smoothly load high-fidelity static mock backups.
+- These themes render elegant, visually matched diagnostics alerts displaying the raw Axios connection exceptions, keeping developers fully informed of server states.

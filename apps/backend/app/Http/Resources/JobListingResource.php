@@ -75,7 +75,7 @@ class JobListingResource extends JsonResource
                 'deadline'          => $this->application_deadline?->toIso8601String(),
                 'is_expired'        => $this->application_deadline?->isPast() ?? false,
                 'approved_at'       => $this->approved_at?->toIso8601String(),
-                'application_count' => (int) $this->whenCounted('applications'),
+                'application_count' => $this->applications_count !== null ? (int) $this->applications_count : null,
             ],
 
             'employer' => $this->whenLoaded('employer', fn() => [

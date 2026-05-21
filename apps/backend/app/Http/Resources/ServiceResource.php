@@ -99,8 +99,8 @@ class ServiceResource extends JsonResource
                 'is_featured'  => (bool) $this->is_featured,
                 'approved_at'  => $this->approved_at?->toIso8601String(),
                 'lead_counts'  => [
-                    'quotes'       => (int) $this->whenCounted('quotes'),
-                    'appointments' => (int) $this->whenCounted('appointments'),
+                    'quotes'       => $this->quotes_count !== null ? (int) $this->quotes_count : null,
+                    'appointments' => $this->appointments_count !== null ? (int) $this->appointments_count : null,
                 ],
             ],
 

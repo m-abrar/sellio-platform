@@ -83,7 +83,7 @@ class ClassifiedResource extends JsonResource
                 'is_new_listing' => (bool) $this->is_new,
                 'is_shipping'    => (bool) $this->is_shipping,
                 'approved_at'    => $this->approved_at?->toIso8601String(),
-                'inquiry_count'  => (int) $this->whenCounted('inquiries'),
+                'inquiry_count'  => $this->inquiries_count !== null ? (int) $this->inquiries_count : null,
             ],
 
             'seller' => $this->whenLoaded('user', fn() => [
