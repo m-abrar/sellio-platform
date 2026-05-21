@@ -12,11 +12,25 @@ export const Header = () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
+    const getThemeLink = (path: string) => {
+        if (typeof window !== 'undefined') {
+            const isPreview = window.location.pathname.startsWith('/preview/');
+            if (isPreview) {
+                const themeKey = window.location.pathname.split('/')[2];
+                return `/preview/${themeKey}${path}`;
+            }
+        }
+        return path;
+    };
+
     return (
         <header className={`pc-header ${scrolled ? 'scrolled' : ''}`}>
-            <div style={{ fontFamily: 'var(--pc-font-serif)', fontSize: '1.4rem', fontWeight: 900, color: 'var(--pc-teal)', letterSpacing: '-1px', cursor: 'pointer', zIndex: 1045, position: 'relative' }}>
+            <a 
+                href={getThemeLink('/')}
+                style={{ textDecoration: 'none', fontFamily: 'var(--pc-font-serif)', fontSize: '1.4rem', fontWeight: 900, color: 'var(--pc-teal)', letterSpacing: '-1px', cursor: 'pointer', zIndex: 1045, position: 'relative' }}
+            >
                 ESTATE <span style={{ fontWeight: 400, opacity: scrolled ? 0.3 : 0.6 }}>&</span> HERITAGE
-            </div>
+            </a>
             
             <button 
                 className={`pc-hamburger ${isOpen ? 'pc-hamburger-open' : ''}`} 
@@ -29,19 +43,19 @@ export const Header = () => {
             </button>
 
             <nav className={`pc-nav ${isOpen ? 'pc-nav-open' : ''}`}>
-                <a href="#" className="pc-nav-link" onClick={() => setIsOpen(false)}>COLLECTION</a>
-                <a href="#" className="pc-nav-link" onClick={() => setIsOpen(false)}>AGENTS</a>
-                <a href="#" className="pc-nav-link" onClick={() => setIsOpen(false)}>PROVENANCE</a>
-                <a href="#" className="pc-nav-link" onClick={() => setIsOpen(false)}>REGISTRY</a>
+                <a href={getThemeLink('/explore')} className="pc-nav-link" onClick={() => setIsOpen(false)}>COLLECTION</a>
+                <a href={getThemeLink('/explore')} className="pc-nav-link" onClick={() => setIsOpen(false)}>AGENTS</a>
+                <a href={getThemeLink('/explore')} className="pc-nav-link" onClick={() => setIsOpen(false)}>PROVENANCE</a>
+                <a href={getThemeLink('/cart')} className="pc-nav-link" onClick={() => setIsOpen(false)}>REGISTRY</a>
                 
                 {/* Mobile version of right-side links */}
                 <div className="pc-mobile-header-right" style={{ marginTop: '2rem' }}>
                     <div style={{ fontSize: '0.85rem', fontWeight: 900, letterSpacing: '3px', color: 'var(--pc-teal)', cursor: 'pointer', opacity: 0.8, marginBottom: '1.5rem' }} className="pc-nav-link">
                         LOGIN
                     </div>
-                    <button className="pc-btn-primary" style={{ padding: '0.8rem 2.5rem', fontSize: '0.85rem' }}>
+                    <a href={getThemeLink('/cart')} className="pc-btn-primary" style={{ padding: '0.8rem 2.5rem', fontSize: '0.85rem', textDecoration: 'none' }}>
                         INQUIRE
-                    </button>
+                    </a>
                 </div>
             </nav>
 
@@ -49,9 +63,9 @@ export const Header = () => {
                 <div style={{ fontSize: '0.7rem', fontWeight: 900, letterSpacing: '3px', color: 'var(--pc-teal)', cursor: 'pointer', opacity: 0.6 }} className="pc-nav-link">
                     LOGIN
                 </div>
-                <button className="pc-btn-primary" style={{ padding: '0.8rem 2.5rem', fontSize: '0.85rem' }}>
+                <a href={getThemeLink('/cart')} className="pc-btn-primary" style={{ padding: '0.8rem 2.5rem', fontSize: '0.85rem', textDecoration: 'none' }}>
                     INQUIRE
-                </button>
+                </a>
             </div>
         </header>
     );

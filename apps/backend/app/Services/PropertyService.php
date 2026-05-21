@@ -63,12 +63,14 @@ class PropertyService
 
         // Retrieve Taxonomies (Cached)
         $verticals = ['properties', 'autos', 'events', 'jobs', 'services', 'classifieds', 'products'];
+        $locationVerticals = ['properties', 'autos', 'events', 'jobs', 'services', 'classifieds'];
+        $tagVerticals = ['properties', 'autos', 'events', 'jobs', 'services', 'classifieds'];
 
         $categories = \Illuminate\Support\Facades\Cache::remember('property_categories', 3600, fn() => Category::where('is_property', true)->withCount($verticals)->get());
-        $locations  = \Illuminate\Support\Facades\Cache::remember('property_locations', 3600, fn() => Location::where('is_property', true)->withCount($verticals)->get());
+        $locations  = \Illuminate\Support\Facades\Cache::remember('property_locations', 3600, fn() => Location::where('is_property', true)->withCount($locationVerticals)->get());
         $amenities  = \Illuminate\Support\Facades\Cache::remember('property_amenities', 3600, fn() => \App\Models\Amenity::where('is_property', true)->pluck('title', 'id'));
         $features   = \Illuminate\Support\Facades\Cache::remember('property_features', 3600, fn() => \App\Models\Feature::where('is_property', true)->pluck('title', 'id'));
-        $tags       = \Illuminate\Support\Facades\Cache::remember('property_tags', 3600, fn() => \App\Models\Tag::where('is_property', true)->withCount($verticals)->get());
+        $tags       = \Illuminate\Support\Facades\Cache::remember('property_tags', 3600, fn() => Tag::where('is_property', true)->withCount($tagVerticals)->get());
         $agents     = \Illuminate\Support\Facades\Cache::remember('property_top_agents', 600, fn() => User::orderByRating()->take(6)->with('media')->get());
 
         return [

@@ -1,9 +1,13 @@
-
 'use client';
 import React, { useEffect, useState } from 'react';
-import { EstateCard, FilterSidebar } from './components';
 import { api } from '@sellio/api-client';
 import type { Property, Category, Location } from '@sellio/types';
+import { EstateCard, FilterSidebar } from './components';
+import { useSearchParams, useRouter } from 'next/navigation';
+
+interface ExplorePageProps {
+  initialCategorySlug?: string;
+}
 
 const FALLBACK_CATEGORIES: Category[] = [
   { id: 1, title: 'Country Manors', slug: 'country-manors' },
@@ -27,25 +31,67 @@ const FALLBACK_ESTATES: Property[] = [
   { id: 6, user_id: 1, category_id: 1, type_id: 1, location_id: 1, title: "Bavarian Hunting Lodge", slug: "bavarian-hunting-lodge", description: "An alpine timber lodge surrounded by deep Bavarian forests, offering ultimate privacy, heated floors, and a gorgeous stone hearth.", base_price: 6500000, number_of_bedrooms: 4, number_of_bathrooms: 3, maximum_guests: 6, minimum_rental_days: 3, maximum_rental_days: 30, area_sq_ft: 5800, area_sq_m: 538, number_of_parking_spots: 2, hoa: 150, year_built: 1895, address: "Alpine Lodge Weg", city: "Bavaria", state: "Bavaria", country: "Germany", zip_code: "80331", status: "active", is_published: true, is_featured: false, is_rental: false, is_sale: true, created_at: "", updated_at: "", pricing: { base_price: 6500000, price_formatted: "$6,500,000", currency_symbol: "$" }, location: { id: 1, title: "Bavaria", country: "Germany", slug: "bavaria" }, specs: { bedrooms: 4, bathrooms: 3, area_formatted: "5,800 Sq Ft", year_built: 1895, category: "Country Manors", property_type: "Sale" }, featured_image: "/themes/properties/classic/6.webp", short_description: "An alpine timber lodge surrounded by deep Bavarian forests, offering ultimate privacy, heated floors, and a gorgeous stone hearth." }
 ];
 
-export default function Page() {
+export default function ExplorePage({ initialCategorySlug }: ExplorePageProps) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // Read initial states from URL Search Params (or props)
+  const initialSearch = searchParams.get('q') || '';
+  const initialLoc = searchParams.get('loc') || '';
+  const initialCat = searchParams.get('cat') || '';
+  const initialBeds = searchParams.get('beds') || '';
+  const initialPrice = searchParams.get('price') || '';
+
   const [estates, setEstates] = useState<Property[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [locations, setLocations] = useState<Location[]>([]);
-  
+
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [useFallback, setUseFallback] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
-  
-  // Filter States
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedLocation, setSelectedLocation] = useState<string | number>('');
-  const [selectedCategory, setSelectedCategory] = useState<string | number>('');
-  const [selectedBedrooms, setSelectedBedrooms] = useState<string>('');
-  const [selectedPriceRange, setSelectedPriceRange] = useState<string>('');
-  
+
+  // Filter States synced with URL
+  const [searchQuery, setSearchQuery] = useState(initialSearch);
+  const [selectedLocation, setSelectedLocation] = useState<string | number>(initialLoc);
+  const [selectedCategory, setSelectedCategory] = useState<string | number>(initialCat);
+  const [selectedBedrooms, setSelectedBedrooms] = useState<string>(initialBeds);
+  const [selectedPriceRange, setSelectedPriceRange] = useState<string>(initialPrice);
+
   const [currentPage, setCurrentPage] = useState(1);
   const [lastPage, setLastPage] = useState(1);
+
+  // If a category slug is passed in via the dynamic route, map it on mount
+  useEffect(() => {
+    if (initialCategorySlug) {
+      // Find category match
+      const matched = FALLBACK_CATEGORIES.find(c => c.slug === initialCategorySlug);
+      if (matched) {
+        setSelectedCategory(matched.id);
+      }
+    }
+  }, [initialCategorySlug]);
+
+  const updateUrlParams = (
+    query: string,
+    loc: string | number,
+    cat: string | number,
+    beds: string,
+    price: string
+  ) => {
+    const params = new URLSearchParams();
+    if (query) params.set('q', query);
+    if (loc) params.set('loc', String(loc));
+    if (cat) params.set('cat', String(cat));
+    if (beds) params.set('beds', beds);
+    if (price) params.set('price', price);
+
+    // Maintain theme preview path prefix if present
+    if (typeof window !== 'undefined') {
+      const pathname = window.location.pathname;
+      router.push(`${pathname}?${params.toString()}`, { scroll: false });
+    }
+  };
 
   const fetchProperties = async (pageToFetch = 1, isLoadMore = false) => {
     if (isLoadMore) {
@@ -63,10 +109,10 @@ export default function Page() {
       if (searchQuery) params.search = searchQuery;
       if (selectedCategory) params.category_id = selectedCategory;
       if (selectedLocation) params.location = selectedLocation;
-      
+
       // Handle Price range mapping for the API
       if (selectedPriceRange) {
-        params.property_type = 'sale'; // backend filters by min/max price only when property_type is 'sale'
+        params.property_type = 'sale';
         if (selectedPriceRange === '1m-5m') {
           params.min_price = 1000000;
           params.max_price = 5000000;
@@ -79,8 +125,8 @@ export default function Page() {
       }
 
       const response = await api.getProperties(params);
-      console.log("Classic Properties Theme: Successfully fetched dynamic properties:", response);
-      
+      console.log("Classic Properties Explorer: Successfully fetched dynamic properties:", response);
+
       if (response && response.data && response.data.length > 0) {
         if (isLoadMore) {
           setEstates(prev => [...prev, ...response.data]);
@@ -88,7 +134,6 @@ export default function Page() {
           setEstates(response.data);
         }
 
-        // Apply fallback if sidebar categories/locations are empty
         if (response.sidebar) {
           setCategories(response.sidebar.categories || []);
           setLocations(response.sidebar.locations || []);
@@ -101,12 +146,12 @@ export default function Page() {
         setUseFallback(false);
         setApiError(null);
       } else {
-        console.warn("Classic Properties Theme: API returned empty properties collection. Falling back to static data.");
+        console.warn("Classic Properties Explorer: API returned empty properties collection. Falling back to static data.");
         setApiError("Database returned no listings. Ensure seeders have run.");
         triggerFallbacks(isLoadMore);
       }
     } catch (error) {
-      console.error("Classic Properties Theme: Failed to load dynamic real estate listings from API:", error);
+      console.error("Classic Properties Explorer: Failed to load dynamic real estate listings from API:", error);
       setApiError(error instanceof Error ? error.message : String(error));
       triggerFallbacks(isLoadMore);
     } finally {
@@ -119,14 +164,14 @@ export default function Page() {
     setUseFallback(true);
     setCategories(FALLBACK_CATEGORIES);
     setLocations(FALLBACK_LOCATIONS);
-    
+
     // Apply local client-side filter to the fallback array
     let filtered = [...FALLBACK_ESTATES];
-    
+
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
-      filtered = filtered.filter(e => 
-        e.title.toLowerCase().includes(q) || 
+      filtered = filtered.filter(e =>
+        e.title.toLowerCase().includes(q) ||
         e.description.toLowerCase().includes(q)
       );
     }
@@ -134,10 +179,7 @@ export default function Page() {
       filtered = filtered.filter(e => e.category_id === Number(selectedCategory));
     }
     if (selectedLocation) {
-      filtered = filtered.filter(e => 
-        e.location?.slug === selectedLocation || 
-        String(e.location_id) === String(selectedLocation)
-      );
+      filtered = filtered.filter(e => e.location_id === Number(selectedLocation));
     }
     if (selectedBedrooms) {
       filtered = filtered.filter(e => (e.specs?.bedrooms ?? e.number_of_bedrooms) >= Number(selectedBedrooms));
@@ -161,27 +203,28 @@ export default function Page() {
     setLastPage(1);
   };
 
-  // Perform initial search
+  // Perform search whenever any primary filter triggers
   useEffect(() => {
     fetchProperties(1, false);
-  }, []);
+    updateUrlParams(searchQuery, selectedLocation, selectedCategory, selectedBedrooms, selectedPriceRange);
+  }, [selectedLocation, selectedCategory, selectedBedrooms, selectedPriceRange]);
 
   const handleRefineSearch = () => {
     fetchProperties(1, false);
+    updateUrlParams(searchQuery, selectedLocation, selectedCategory, selectedBedrooms, selectedPriceRange);
   };
 
   const handleLoadMore = () => {
-    if (useFallback) return; // Fallbacks loaded all at once
+    if (useFallback) return;
     if (currentPage < lastPage) {
       fetchProperties(currentPage + 1, true);
     }
   };
 
-  // Client side extra filter to filter listings currently loaded (if needed for Bed specs when using backend API)
-  const displayEstates = useFallback 
-    ? estates 
+  // Local client-side filters for bedrooms on raw API responses
+  const displayEstates = useFallback
+    ? estates
     : estates.filter(e => {
-        // If selected bedrooms filter is set, refine locally on API properties since backend applyFilters doesn't filter bedroom columns.
         if (selectedBedrooms) {
           const beds = e.specs?.bedrooms ?? e.number_of_bedrooms ?? 0;
           if (beds < Number(selectedBedrooms)) return false;
@@ -190,50 +233,45 @@ export default function Page() {
       });
 
   return (
-    <div className="pc-container-base">
-      {/* Cinematic Parallax Hero */}
-      <section className="pc-hero">
-        <div className="pc-hero-bg">
-          <img src="/themes/properties/classic/7.webp" alt="Classic Estate" />
-        </div>
-        
-        <div className="pc-hero-card">
-          <div className="pc-caps" style={{ color: 'var(--pc-teal)', marginBottom: '2.5rem', opacity: 0.4 }}>Global Registry // Vol. 2026</div>
-          <h1 className="pc-hero-title">
-            The <span className="pc-italic" style={{ fontWeight: 400 }}>Heritage</span> <br/> 
-            Registry.
-          </h1>
-          <p className="pc-hero-desc">
-            A curated distribution of the world's most distinguished historic properties. Every acquisition is verified for architectural provenance and manorial integrity.
-          </p>
-          
-          <div style={{ background: 'var(--pc-border)', padding: '1px', boxShadow: '0 30px 60px rgba(0,0,0,0.05)' }} className="pc-search-bar">
-            <div className="pc-search-inner" style={{ flex: 1, background: 'white', gap: '0.5rem' }}>
-                <span style={{ fontSize: '0.7rem', fontWeight: 900, color: 'var(--pc-teal)', opacity: 0.4, letterSpacing: '2px' }}>SEARCH</span>
-                <input 
-                    type="text" 
-                    placeholder="By Region, Era..." 
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    onKeyDown={(e) => { if (e.key === 'Enter') handleRefineSearch(); }}
-                    style={{ flex: 1, border: 'none', background: 'transparent', outline: 'none', fontFamily: 'var(--pc-font-body)', fontSize: '1rem' }} 
+    <div className="pc-container-base" style={{ background: 'var(--pc-bone)', minHeight: '100vh', paddingTop: '8rem' }}>
+      
+      {/* Explorer Editorial Header */}
+      <section className="pc-section" style={{ paddingTop: '4rem', paddingBottom: '4rem' }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--pc-border)', paddingBottom: '4rem', gap: '2rem' }}>
+          <div>
+            <div className="pc-caps" style={{ color: 'var(--pc-teal)', marginBottom: '1.25rem', opacity: 0.4 }}>Global Provenance Catalog</div>
+            <h1 className="pc-serif" style={{ fontSize: 'clamp(3rem, 5vw, 4.5rem)', fontWeight: 900, letterSpacing: '-2px', color: 'var(--pc-teal)', margin: 0 }}>
+              The <span className="pc-italic" style={{ fontWeight: 400 }}>Catalogue.</span>
+            </h1>
+          </div>
+          <div style={{ maxWidth: '400px' }}>
+            <div style={{ background: 'var(--pc-border)', padding: '1px' }} className="pc-search-bar">
+              <div className="pc-search-inner" style={{ flex: 1, background: 'white', padding: '1rem', gap: '0.5rem' }}>
+                <input
+                  type="text"
+                  placeholder="Filter region, manor..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === 'Enter') handleRefineSearch(); }}
+                  style={{ width: '100%', border: 'none', background: 'transparent', outline: 'none', fontFamily: 'var(--pc-font-body)', fontSize: '0.9rem' }}
                 />
+              </div>
+              <button
+                className="pc-btn-primary"
+                style={{ background: 'var(--pc-teal)', color: 'white', padding: '1rem 2rem' }}
+                onClick={handleRefineSearch}
+              >
+                FIND
+              </button>
             </div>
-            <button 
-              className="pc-btn-primary" 
-              style={{ background: 'var(--pc-teal)', color: 'white' }}
-              onClick={handleRefineSearch}
-            >
-                DISCOVER
-            </button>
           </div>
         </div>
       </section>
 
-      {/* Orchestrated Collection Grid */}
-      <section className="pc-section">
+      {/* Main Split Grid View */}
+      <section className="pc-section" style={{ paddingTop: '2rem', paddingBottom: '12rem' }}>
         <div className="pc-main-grid">
-          <FilterSidebar 
+          <FilterSidebar
             categories={categories}
             locations={locations}
             selectedLocation={selectedLocation}
@@ -246,22 +284,8 @@ export default function Page() {
             onPriceRangeChange={setSelectedPriceRange}
             onRefine={handleRefineSearch}
           />
-          
-          <div>
-            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '6rem', gap: '2rem' }}>
-                <div>
-                    <div className="pc-caps" style={{ color: 'var(--pc-teal)', marginBottom: '1.25rem', opacity: 0.4 }}>
-                      {useFallback ? "Provincial Node // Fallback" : "Collection Node // 01"}
-                    </div>
-                    <h2 className="pc-serif" style={{ fontSize: 'clamp(3rem, 5vw, 4.5rem)', fontWeight: 900, letterSpacing: '-2px', color: 'var(--pc-teal)' }}>
-                        The <span className="pc-italic" style={{ fontWeight: 400 }}>Collection.</span>
-                    </h2>
-                </div>
-                <div style={{ textAlign: 'right', maxWidth: '350px', fontSize: '0.9rem', color: 'var(--pc-text-muted)', lineHeight: 1.8 }}>
-                    Current distribution includes verified manorial rights and significant historical provenance.
-                </div>
-            </div>
 
+          <div>
             {useFallback && apiError && (
               <div style={{
                 background: 'var(--pc-white)',
@@ -289,7 +313,7 @@ export default function Page() {
                     Unable to Synchronize with Core Registry
                   </h3>
                   <p style={{ color: 'var(--pc-text-muted)', fontSize: '0.9rem', margin: 0, lineHeight: '1.7' }}>
-                    We are currently displaying the Provincial Fallback Collection because the connection to the live Sellio database could not be established. 
+                    We are currently displaying the Provincial Fallback Catalogue because the connection to the live Sellio database could not be established. 
                     This ensures uninterrupted browsing while the network or local database server is being configured.
                   </p>
                 </div>
@@ -331,74 +355,48 @@ export default function Page() {
                 <div className="pc-skeleton-card" />
               </div>
             ) : displayEstates.length > 0 ? (
-              <div className="pc-estate-grid">
-                {displayEstates.map((property) => (
-                  <EstateCard 
-                    key={property.id} 
-                    property={property} 
-                  />
-                ))}
+              <div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3rem', fontSize: '0.8rem', color: 'var(--pc-text-muted)' }}>
+                  <div className="pc-caps" style={{ opacity: 0.5 }}>
+                    {displayEstates.length} Listing{displayEstates.length !== 1 ? 's' : ''} Cataloged
+                  </div>
+                  <div style={{ fontWeight: 800 }}>SORT: PROVENANCE DEFAULT</div>
+                </div>
+
+                <div className="pc-estate-grid">
+                  {displayEstates.map((property) => (
+                    <EstateCard
+                      key={property.id}
+                      property={property}
+                    />
+                  ))}
+                </div>
               </div>
             ) : (
-              <div style={{ textAlign: 'center', padding: '6rem 2rem', border: '1px dashed var(--pc-border)', background: 'var(--pc-white)' }}>
-                <h4 className="pc-serif" style={{ fontSize: '1.8rem', color: 'var(--pc-teal)', marginBottom: '1rem' }}>No Listings Registered</h4>
-                <p style={{ color: 'var(--pc-text-muted)', fontSize: '0.95rem' }}>No heritage estates match the requested refine criteria. Try adjusting your parameters.</p>
+              <div style={{ textAlign: 'center', padding: '8rem 2rem', border: '1px dashed var(--pc-border)', background: 'var(--pc-white)' }}>
+                <h4 className="pc-serif" style={{ fontSize: '2rem', color: 'var(--pc-teal)', marginBottom: '1rem' }}>No Listings Located</h4>
+                <p style={{ color: 'var(--pc-text-muted)', fontSize: '1rem', maxWidth: '400px', margin: '0 auto' }}>
+                  Adjust your search guidelines or filter specifications to locate available estates.
+                </p>
               </div>
             )}
-            
+
             {!useFallback && currentPage < lastPage && (
               <div style={{ marginTop: '8rem', textAlign: 'center' }}>
-                  <button 
-                    className="pc-btn-primary" 
-                    style={{ background: 'transparent', border: '1px solid var(--pc-teal)', color: 'var(--pc-teal)' }}
-                    onClick={handleLoadMore}
-                    disabled={loadingMore}
-                  >
-                      {loadingMore ? 'VERIFYING PROVENANCE...' : 'LOAD MORE PROVENANCE'}
-                  </button>
+                <button
+                  className="pc-btn-primary"
+                  style={{ background: 'transparent', border: '1px solid var(--pc-teal)', color: 'var(--pc-teal)' }}
+                  onClick={handleLoadMore}
+                  disabled={loadingMore}
+                >
+                  {loadingMore ? 'LOCATING ARCHIVES...' : 'LOAD MORE ESTATES'}
+                </button>
               </div>
             )}
           </div>
         </div>
       </section>
 
-      <div className="pc-divider" />
-
-      {/* Editorial Testimonials */}
-      <section className="pc-section" style={{ paddingBottom: '12rem' }}>
-          <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
-              <div style={{ textAlign: 'center', marginBottom: '8rem' }}>
-                  <div className="pc-caps" style={{ color: 'var(--pc-teal)', marginBottom: '1.5rem', opacity: 0.4 }}>Patron Feedback</div>
-                  <h3 className="pc-serif" style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: 900, letterSpacing: '-2px', color: 'var(--pc-teal)' }}>
-                    Voices of <span className="pc-italic" style={{ fontWeight: 400 }}>Trust.</span>
-                  </h3>
-              </div>
-              
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '3rem' }} className="pc-testimonials-grid">
-                  <style dangerouslySetInnerHTML={{ __html: `
-                    @media (min-width: 768px) {
-                      .pc-testimonials-grid { grid-template-columns: repeat(2, 1fr) !important; }
-                    }
-                    @media (min-width: 1200px) {
-                      .pc-testimonials-grid { grid-template-columns: repeat(3, 1fr) !important; }
-                    }
-                  ` }} />
-                  {[
-                      { quote: "Estate & Heritage turned a daunting task into a delightful journey. Their market knowledge is unmatched.", client: "A. Bennett", title: "Estate Patron" },
-                      { quote: "Personalized service and fantastic negotiation. Highly recommend for classic property sales.", client: "M. Chen", title: "Institutional Lead" },
-                      { quote: "They understand the nuances of classic architecture and helped us secure a property of historical significance.", client: "T. Davis", title: "Heritage Collector" }
-                  ].map((t, i) => (
-                      <div key={i} style={{ padding: '2.5rem', background: 'var(--pc-white)', border: '1px solid var(--pc-border)', position: 'relative' }}>
-                          <p style={{ fontStyle: 'italic', fontSize: '1.2rem', marginBottom: '3rem', lineHeight: 1.7, color: 'var(--pc-teal)' }}>"{t.quote}"</p>
-                          <div>
-                            <div style={{ fontWeight: 800, fontSize: '0.8rem', letterSpacing: '2px', color: 'var(--pc-teal)' }}>{t.client.toUpperCase()}</div>
-                            <div style={{ fontSize: '0.65rem', color: 'var(--pc-text-muted)', marginTop: '0.5rem', textTransform: 'uppercase', letterSpacing: '1px' }}>{t.title}</div>
-                          </div>
-                      </div>
-                  ))}
-              </div>
-          </div>
-      </section>
     </div>
   );
 }
