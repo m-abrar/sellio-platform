@@ -1,0 +1,57 @@
+# Dynamic Theme Conversion Status Report
+
+This report documents the status of dynamic conversion across the Sellio storefront monorepo. It details which templates, layouts, and components have been successfully migrated from static mock markup to live, stateful React components integrated with the Laravel API database.
+
+---
+
+## 📊 Summary of Converted Themes
+
+Out of the available industry verticals in the codebase, **three themes** have been converted to fully dynamic dynamic templates:
+
+| Vertical | Theme Key / Directory | Conversion Status | Dynamic Views Implemented |
+| :--- | :--- | :--- | :--- |
+| **Properties** | `properties_classic` (`properties/classic`) | **100% Dynamic** | Homepage, Explore Page, Product details, Cart Page |
+| **Properties** | `properties_luxury` (`properties/luxury`) | **100% Dynamic** | Homepage Curated Showcase, Explore Ledger, Product Provenance details |
+| **Unified** | `unifieds_minimal` (`unifieds/minimal`) | **100% Dynamic** | Homepage, Explore Page, Product details |
+
+All other themes within `autos`, `classifieds`, `ecommerce`, `events`, `jobs`, `services`, and remaining sub-themes of `properties` are currently **static prototypes** containing hardcoded mockup variables.
+
+---
+
+## 🛠 Detailed Breakdown of Converted Views
+
+### 1. Properties Luxury Theme (`properties_luxury`)
+The Platinum Estate elite edition now features a fully cohesive live-database workflow:
+* **Homepage Curated Showcase (`components/EstateShowcase.tsx`)**:
+  - Stateful Client component loading dynamic residences on mount (`api.getProperties({ per_page: 6 })`).
+  - Sleek pointer hover zooms, fleur-de-lis specifications, and deep navigation to detail paths.
+* **The Exploration Ledger (`ExplorePage.tsx`)**:
+  - Synchronizes dynamic filtering criteria (Bedroom count, HSL categories, locations, price brackets, and search terms) directly with browser search parameters (`?q=...&loc=...`).
+  - Scoped horizontal filter bar with thin gold outlines and Montserrat typography.
+  - Centered stateful "Load More Assets" dynamic pagination.
+* **Manorial Provenance Details (`ProductPage.tsx`)**:
+  - Pulls listing-specific provenance accounts by URL slug (`api.getPropertyDetails(slug)`).
+  - Floating acquisition valuation badges and custom image zoom galleries.
+  - Sticky reserving Inquiry Desk with localized heritage catalog collectors (`localStorage`).
+  - Dynamic daily lodging seasonal rate estimator querying `api.calculateLodgingPrice()`.
+
+### 2. Properties Classic Theme (`properties_classic`)
+The Classic sovereign heritage vertical contains the complete standard dynamic catalog:
+* **Homepage View (`Page.tsx`)**: Queries top listings dynamically, maps amenities, and links directly to products.
+* **Search Directory (`ExplorePage.tsx`)**: Complete listing directory with dynamic search and sorting filters.
+* **Single Product Details (`ProductPage.tsx`)**: Dynamic parallax hero backdrop details page with date rate calculators.
+* **Registry Inquiry Desk (`CartPage.tsx`)**: Captures collected heritage listings stored in local storage and manages bulk inquiry dispatches.
+
+### 3. Unifieds Minimal Theme (`unifieds_minimal`)
+The streamlined, minimal generic theme operates dynamically for quick deployments:
+* **Homepage View (`Page.tsx`)**: Renders clean product collections.
+* **Catalogue Search (`ExplorePage.tsx`)**: Simple grid lists supporting keyword queries.
+* **Product Details (`ProductPage.tsx`)**: Basic checkout structures and asset spec breakdowns.
+
+---
+
+## 🛡 Network Resilience & Connection Handling
+Both `properties_classic` and `properties_luxury` feature a **Resiliency Layer**:
+- If the Laravel API server is shut down, MySQL databases are empty, or network latency fails, they capture the exceptions cleanly.
+- Instead of crashing, the components smoothly load high-fidelity static mock backups (*The Obsidian Villa*, *Azure Coast Estate*).
+- Both themes render elegant, visually matched diagnostics alerts displaying the raw Axios connection exceptions, keeping developers fully informed of server states.
