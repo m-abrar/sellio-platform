@@ -156,18 +156,20 @@ export default function Page() {
             ))
           ) : products.length > 0 ? (
             products.slice(0, 6).map((product, i) => (
-              <div key={product.id || i} className="usm-listing-card" onClick={() => alert(`Selected Listing: ${product.title}`)}>
+              <a href={`/preview/unifieds_minimal/product/${product.slug}`} key={product.id || i} className="usm-listing-card" style={{ textDecoration: 'none', color: 'inherit' }}>
                 <div className="usm-card-img-wrap">
                   <img src={getProductImage(product, i)} className="usm-card-img" alt={product.title} />
                 </div>
                 <div className="usm-card-body">
-                  <span className="usm-card-category">{product.category?.title || 'Featured Deal'}</span>
+                  <span className="usm-card-category">
+                    {categories.find(c => c.id === product.category_id)?.title || 'Featured Deal'}
+                  </span>
                   <h3 className="usm-card-title">{product.title}</h3>
                   <div className="usm-card-price">
                     {product.pricing?.formatted || (product.price ? `$${Number(product.price).toLocaleString()}` : '$980')}
                   </div>
                 </div>
-              </div>
+              </a>
             ))
           ) : (
             defaultListings.map((item, i) => (
@@ -196,17 +198,17 @@ export default function Page() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '2rem', justifyContent: 'center' }}>
           {categories.length > 0 ? (
             categories.slice(0, 8).map((cat, i) => (
-              <div key={cat.id || i} className="usm-category-card" onClick={() => alert(`Exploring category: ${cat.title}`)}>
+              <a href={`/preview/unifieds_minimal/explore/${cat.slug.toLowerCase()}`} key={cat.id || i} className="usm-category-card">
                 {defaultCategories[i % defaultCategories.length].icon}
                 <h5 className="usm-category-title">{cat.title}</h5>
-              </div>
+              </a>
             ))
           ) : (
             defaultCategories.map((cat, i) => (
-              <div key={i} className="usm-category-card" onClick={() => alert(`Exploring category: ${cat.title}`)}>
+              <a href={`/preview/unifieds_minimal/explore/${cat.slug.toLowerCase()}`} key={i} className="usm-category-card">
                 {cat.icon}
                 <h5 className="usm-category-title">{cat.title}</h5>
-              </div>
+              </a>
             ))
           )}
         </div>

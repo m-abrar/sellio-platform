@@ -23,6 +23,10 @@ export class SellioAPI {
     return this.request<Product[]>('/v1/products');
   }
 
+  async getProductBySlug(slug: string): Promise<Product> {
+    return this.request<Product>(`/v1/products/${slug}`);
+  }
+
   async getCategories(): Promise<Category[]> {
     return this.request<Category[]>('/v1/categories');
   }
