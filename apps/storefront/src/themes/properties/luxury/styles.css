@@ -115,6 +115,7 @@
 .estate-card-premium {
     position: relative;
     overflow: hidden;
+    cursor: pointer;
 }
 
 .estate-card-img {
@@ -343,4 +344,182 @@
     gap: 4rem !important;
     padding: 6rem 5% !important;
   }
+}
+
+/* Scoped luxury filter bar and interactive input styling */
+.luxury-filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    background: #ffffff;
+    border: 1px solid var(--luxury-border);
+    border-radius: 4px;
+    margin-bottom: 5rem;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+}
+
+.luxury-filter-input {
+    flex: 2;
+    min-width: 200px;
+    padding: 1rem 1.5rem;
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: var(--luxury-charcoal);
+    background: var(--luxury-platinum);
+    border: 1px solid var(--luxury-border);
+    border-radius: 2px;
+    outline: none;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    text-transform: uppercase;
+}
+
+.luxury-filter-input::placeholder {
+    color: #aaa;
+}
+
+.luxury-filter-input:focus {
+    border-color: var(--luxury-gold);
+    background: #ffffff;
+    box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.15);
+}
+
+.luxury-filter-select {
+    flex: 1;
+    min-width: 160px;
+    padding: 1rem 1.5rem;
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--luxury-charcoal);
+    background: var(--luxury-platinum) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23d4af37'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E") no-repeat right 1rem center/1.5rem;
+    border: 1px solid var(--luxury-border);
+    border-radius: 2px;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    padding-right: 2.5rem;
+}
+
+.luxury-filter-select:focus {
+    border-color: var(--luxury-gold);
+    background-color: #ffffff;
+    box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.15);
+}
+
+@media (max-width: 768px) {
+    .luxury-filter-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+        padding: 1rem;
+    }
+    
+    .luxury-filter-input,
+    .luxury-filter-select {
+        width: 100%;
+        min-width: unset;
+    }
+}
+
+/* Premium Details Page Layout */
+.luxury-details-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 6rem;
+    align-items: start;
+}
+
+@media (min-width: 1024px) {
+    .luxury-details-container {
+        grid-template-columns: 1fr 420px;
+    }
+}
+
+.luxury-spec-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+}
+
+@media (min-width: 600px) {
+    .luxury-spec-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.luxury-spec-tile {
+    border: 1px solid var(--luxury-border);
+    background: #ffffff;
+    padding: 2.5rem 2rem;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.01);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.luxury-spec-tile:hover {
+    border-color: var(--luxury-gold);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(212, 175, 55, 0.05);
+}
+
+.luxury-inquiry-card {
+    background: #ffffff;
+    border: 1px solid var(--luxury-border);
+    padding: 3.5rem 3rem;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.03);
+    position: sticky;
+    top: 140px;
+    z-index: 10;
+}
+
+.luxury-inquiry-title {
+    font-family: var(--font-serif);
+    font-size: 2rem;
+    color: var(--luxury-charcoal);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.luxury-inquiry-title span {
+    font-weight: 400;
+    font-style: italic;
+}
+
+.luxury-gallery-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+}
+
+@media (min-width: 600px) {
+    .luxury-gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.luxury-gallery-img-wrapper {
+    height: 320px;
+    border: 1px solid var(--luxury-border);
+    overflow: hidden;
+    position: relative;
+}
+
+.luxury-gallery-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.luxury-gallery-img-wrapper:hover img {
+    transform: scale(1.05);
 }
