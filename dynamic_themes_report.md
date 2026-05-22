@@ -6,7 +6,7 @@ This report documents the status of dynamic conversion across the Sellio storefr
 
 ## 📊 Summary of Converted Themes
 
-Out of the available industry verticals in the codebase, **five themes** have been converted to fully dynamic templates:
+Out of the available industry verticals in the codebase, **nine themes** have been converted to fully dynamic templates:
 
 | Vertical | Theme Key / Directory | Conversion Status | Dynamic Views Implemented |
 | :--- | :--- | :--- | :--- |
@@ -17,9 +17,10 @@ Out of the available industry verticals in the codebase, **five themes** have be
 | **Services** | `services_marketplace` (`services/marketplace`) | **100% Dynamic** | Homepage Directory, Faceted Filters, Bookings Modal |
 | **Events** | `events_corporate` (`events/corporate`) | **100% Dynamic** | Homepage Summit Showcase, Explore Finder Console, Ticket Reservation Product Page |
 | **E-commerce** | `ecommerce_electronics` (`ecommerce/electronics`) | **100% Dynamic** | Homepage Hardware Showroom, Product details page |
+| **E-commerce** | `ecommerce_fashion` (`ecommerce/fashion`) | **100% Dynamic** | Homepage Lookbook capsule, Product details, Bespoke measurement request form |
 | **Unified** | `unifieds_minimal` (`unifieds/minimal`) | **100% Dynamic** | Homepage, Explore Page, Product details |
 
-All other themes within `autos` (except `autos_luxury`), `classifieds`, and remaining sub-themes of `ecommerce` and `properties` are currently **static prototypes** containing hardcoded mockup variables.
+All other themes within `autos` (except `autos_luxury`), `classifieds`, and remaining sub-themes of `properties` are currently **static prototypes** containing hardcoded mockup variables.
 
 ---
 
@@ -85,10 +86,15 @@ The cyberpunk NeuralGear-themed high-fidelity computer hardware storefront verti
 * **Hardware Showroom Homepage (`Page.tsx`)**: Fetches active inventory components from the database (`api.getProducts()`) and dynamically maps them to trending hardware and professional peripherals sections. Custom assets mapping fall back gracefully based on item list sequence.
 * **Rig Rigging & Ordering Console (`ProductPage.tsx`)**: Renders custom hardware specifications dynamically from URL slugs (`api.getProductBySlug()`). Features an interactive order volume selector, custom performance overclocking spec input dispatch forms, and localized client-side order list tracking using browser state and `LocalStorage` key (`sellio_ecommerce_electronics_orders`).
 
+### 9. E-commerce Fashion Theme (`ecommerce_fashion`)
+The minimal, high-end "ATELIER Runway" silent luxury catalog storefront vertical is fully dynamic:
+* **Lookbook Showcase Homepage (`Page.tsx`)**: Fetches active inventory apparel items from the database (`api.getProducts()`) and dynamically maps them to the Lookbook 26 editorial registry. Features premium shimmer loading skeletons, active metadata counters, and a luxury oyster-cream styled warning console for Axios connection diagnostics errors.
+* **Atelier Bespoke Fitting & Ordering details (`ProductPage.tsx`)**: Fetches individual luxury fashion pieces dynamically from URL slugs (`api.getProductBySlug()`). Features an interactive standard size selector (XS to XL), custom physical measurement inputs (height, chest, waist), bespoke tailoring request notes, and local client-side inquiry tracking in LocalStorage under the key `sellio_ecommerce_fashion_orders`.
+
 ---
 
 ## 🛡 Network Resilience & Connection Handling
-The `autos_luxury`, `jobs_startup`, `properties_classic`, `properties_luxury`, `services_marketplace`, `events_corporate`, and `ecommerce_electronics` themes feature a robust **Offline Connection Resiliency Layer**:
+The `autos_luxury`, `jobs_startup`, `properties_classic`, `properties_luxury`, `services_marketplace`, `events_corporate`, `ecommerce_electronics`, and `ecommerce_fashion` themes feature a robust **Offline Connection Resiliency Layer**:
 - If the Laravel API server is shut down, MySQL databases are empty, or network latency fails, they capture the exceptions cleanly.
 - Instead of crashing, the components smoothly load high-fidelity static mock backups.
 - These themes render elegant, visually matched diagnostics alerts displaying the raw Axios connection exceptions, keeping developers fully informed of server states.

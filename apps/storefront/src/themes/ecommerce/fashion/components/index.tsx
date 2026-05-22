@@ -43,12 +43,12 @@ export const RunwayHeader = () => {
   );
 };
 
-export const EditorialLookCard = ({ name, price, image }: any) => (
-  <div className="ef-look-card">
+export const EditorialLookCard = ({ name, price, image, lookNumber = "LOOK_07", onClick }: any) => (
+  <div className="ef-look-card" onClick={onClick}>
     <div className="ef-img-frame">
       <img src={image} alt={name} className="ef-img" />
       <div style={{ position: 'absolute', bottom: '2rem', right: '2rem', background: 'white', padding: '0.5rem 1rem', fontWeight: 900, fontSize: '0.65rem', letterSpacing: '2px' }}>
-        LOOK_07
+        {lookNumber}
       </div>
     </div>
     <div style={{ textAlign: 'center' }}>
