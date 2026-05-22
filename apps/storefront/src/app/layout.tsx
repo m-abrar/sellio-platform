@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getActiveTheme } from "@/lib/theme";
 import UnifiedDefaultLayout from "@/themes/unifieds/default/Layout";
 import { ThemeSwitcher } from "@/components/ThemeSwitcher";
+import DatabaseOfflineResilience from "@/components/DatabaseOfflineResilience";
 import "./globals.css";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -17,7 +18,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { theme, layout } = await getActiveTheme();
+  const { theme, layout, databaseOffline, errorDetails } = await getActiveTheme();
   
   // Dynamically resolve the industry-specific layout orchestration
   let IndustryLayout;
@@ -47,6 +48,7 @@ export default async function RootLayout({
         <IndustryLayout>
           {children}
         </IndustryLayout>
+        {databaseOffline && <DatabaseOfflineResilience errorDetails={errorDetails} />}
         <ThemeSwitcher />
       </body>
     </html>

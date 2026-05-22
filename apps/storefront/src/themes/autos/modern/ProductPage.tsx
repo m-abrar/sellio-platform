@@ -527,7 +527,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
           <div className="md-grid">
             {relatedVehicles.length > 0 ? (
               relatedVehicles.slice(0, 3).map((car) => {
-                const specLabel = `${car.specs?.year || car.year || '2025'} | ${car.specs?.engine || car.fuel_type || 'Electric'} | ${car.specs?.transmission || car.transmission || 'Automatic'}`;
+                const specLabel = `${car.specs?.year || (car as any).year || '2025'} | ${car.specs?.engine || (car as any).fuel_type || 'Electric'} | ${car.specs?.transmission || (car as any).transmission || 'Automatic'}`;
                 return (
                   <ModernCarCard 
                     key={car.id} 

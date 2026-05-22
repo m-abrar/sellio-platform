@@ -233,7 +233,7 @@ export default function Page() {
           <div className="md-grid">
             {vehicles.length > 0 ? (
               vehicles.slice(0, 6).map((car) => {
-                const specLabel = `${car.specs?.year || car.year || '2025'} | ${car.specs?.engine || car.fuel_type || 'Electric'} | ${car.specs?.transmission || car.transmission || 'Automatic'}`;
+                const specLabel = `${car.specs?.year || (car as any).year || '2025'} | ${car.specs?.engine || (car as any).fuel_type || 'Electric'} | ${car.specs?.transmission || (car as any).transmission || 'Automatic'}`;
                 return (
                   <ModernCarCard 
                     key={car.id} 
@@ -278,7 +278,7 @@ export default function Page() {
             ) : (
               vehicles.length >= 3 ? (
                 vehicles.slice(0, 3).map((car, idx) => {
-                  const statsLabel = `Transmission: ${car.specs?.transmission || car.transmission || 'Auto'} | Drivetrain: ${car.specs?.drivetrain || 'RWD'}`;
+                  const statsLabel = `Transmission: ${car.specs?.transmission || (car as any).transmission || 'Auto'} | Drivetrain: ${car.specs?.drivetrain || 'RWD'}`;
                   return (
                     <CompareItem 
                       key={car.id}

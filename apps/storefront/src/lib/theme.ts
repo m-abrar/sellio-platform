@@ -7,6 +7,13 @@ export type IndustryLayout = string;
 export interface ResolvedTheme {
   theme: Theme;
   layout: IndustryLayout;
+  databaseOffline?: boolean;
+  errorDetails?: {
+    success: boolean;
+    message: string;
+    code: string;
+    status: number;
+  };
 }
 
 /**
@@ -31,9 +38,10 @@ export async function getActiveTheme(): Promise<ResolvedTheme> {
     
     return {
       theme,
-      layout: resolveIndustryLayout(theme)
+      layout: resolveIndustryLayout(theme),
+      databaseOffline: false
     };
-  } catch (error) {
+  } catch (error: any) {
     console.error("Failed to fetch theme from API", error);
     
     return {
@@ -45,7 +53,14 @@ export async function getActiveTheme(): Promise<ResolvedTheme> {
         variables: {},
         app_settings: { site_name: 'Sellio', site_logo: '', hide_site_name: '0' }
       },
-      layout: 'unified/default'
+      layout: 'unifieds/default',
+      databaseOffline: true,
+      errorDetails: {
+        success: false,
+        message: error.response?.data?.message || "Database service is currently unavailable. Please try again later.",
+        code: error.response?.data?.code || "DB_CONNECTION_REFUSED",
+        status: error.response?.status || 503
+      }
     };
   }
 }
