@@ -19,8 +19,9 @@ Out of the available industry verticals in the codebase, **nine themes** have be
 | **E-commerce** | `ecommerce_electronics` (`ecommerce/electronics`) | **100% Dynamic** | Homepage Hardware Showroom, Product details page |
 | **E-commerce** | `ecommerce_fashion` (`ecommerce/fashion`) | **100% Dynamic** | Homepage Lookbook capsule, Product details, Bespoke measurement request form |
 | **Unified** | `unifieds_minimal` (`unifieds/minimal`) | **100% Dynamic** | Homepage, Explore Page, Product details |
+| **Classifieds** | `classifieds_deals` (`classifieds/deals`) | **100% Dynamic** | Homepage Flash Feed, Product Single Bargain details |
 
-All other themes within `autos` (except `autos_luxury`), `classifieds`, and remaining sub-themes of `properties` are currently **static prototypes** containing hardcoded mockup variables.
+All other themes within `autos` (except `autos_luxury`), `classifieds` (except `classifieds_deals`), and remaining sub-themes of `properties` are currently **static prototypes** containing hardcoded mockup variables.
 
 ---
 
@@ -91,10 +92,15 @@ The minimal, high-end "ATELIER Runway" silent luxury catalog storefront vertical
 * **Lookbook Showcase Homepage (`Page.tsx`)**: Fetches active inventory apparel items from the database (`api.getProducts()`) and dynamically maps them to the Lookbook 26 editorial registry. Features premium shimmer loading skeletons, active metadata counters, and a luxury oyster-cream styled warning console for Axios connection diagnostics errors.
 * **Atelier Bespoke Fitting & Ordering details (`ProductPage.tsx`)**: Fetches individual luxury fashion pieces dynamically from URL slugs (`api.getProductBySlug()`). Features an interactive standard size selector (XS to XL), custom physical measurement inputs (height, chest, waist), bespoke tailoring request notes, and local client-side inquiry tracking in LocalStorage under the key `sellio_ecommerce_fashion_orders`.
 
+### 10. Classifieds Deals Theme (`classifieds_deals`)
+The energetic dark-and-red styled flash-sale storefront vertical is fully dynamic:
+* **Flash Feed Homepage (`Page.tsx`)**: Fetches active classifieds dynamically (`api.getClassifieds({ per_page: 6 })`) with stateful mount handlers, glowing red shimmers, and the offline diagnostics panel fallback.
+* **Single Bargain Details (`ProductPage.tsx`)**: Loads individual bargain details dynamically by URL slug (`api.getClassifiedDetails(slug)`). Displays conditions (rating stars and condition labels), dimensions, age, and warranty with dynamic fallbacks. Includes an interactive "Snag This Deal" checkout booking form persisting reservation logs to LocalStorage (`sellio_classifieds_deals_orders`) and a related deals carousel drawer.
+
 ---
 
 ## 🛡 Network Resilience & Connection Handling
-The `autos_luxury`, `jobs_startup`, `properties_classic`, `properties_luxury`, `services_marketplace`, `events_corporate`, `ecommerce_electronics`, and `ecommerce_fashion` themes feature a robust **Offline Connection Resiliency Layer**:
+The `autos_luxury`, `jobs_startup`, `properties_classic`, `properties_luxury`, `services_marketplace`, `events_corporate`, `ecommerce_electronics`, `ecommerce_fashion`, and `classifieds_deals` themes feature a robust **Offline Connection Resiliency Layer**:
 - If the Laravel API server is shut down, MySQL databases are empty, or network latency fails, they capture the exceptions cleanly.
 - Instead of crashing, the components smoothly load high-fidelity static mock backups.
 - These themes render elegant, visually matched diagnostics alerts displaying the raw Axios connection exceptions, keeping developers fully informed of server states.
