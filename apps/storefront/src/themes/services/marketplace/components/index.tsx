@@ -1,5 +1,6 @@
 'use client';
 import React, { useState } from 'react';
+import type { ServiceListing } from '@sellio/types';
 
 export const MarketplaceHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -21,6 +22,7 @@ export const MarketplaceHeader = () => {
         <span className="sm-hamburger-bar"></span>
         <span className="sm-hamburger-bar"></span>
       </button>
+      
 
       {/* Navigation Links */}
       <nav className={`sm-nav ${isOpen ? 'sm-nav-open' : ''}`}>
@@ -67,28 +69,87 @@ export const MarketplaceHeader = () => {
   );
 };
 
-export const SmCategoryCard = ({ title, icon }: any) => (
-    <div className="sm-category-card" onClick={() => alert(`Opening category list for ${title}...`)}>
+export const SmCategoryCard = ({ title, icon, onClick, active }: { title: string; icon: string; onClick?: () => void; active?: boolean }) => (
+    <div 
+      className="sm-category-card" 
+      onClick={onClick}
+      style={active ? { borderColor: 'var(--sm-primary)', background: 'var(--sm-primary-light)' } : {}}
+    >
         <div className="sm-category-icon">{icon}</div>
         <h5 style={{ fontWeight: 700, margin: 0, fontSize: '1.15rem' }}>{title}</h5>
     </div>
 );
 
-export const SmProviderCard = ({ name, title, rating, image }: any) => (
-    <div className="sm-provider-card">
+interface SmProviderCardProps {
+  name?: string;
+  title?: string;
+  rating?: string | number;
+  image?: string;
+  service?: ServiceListing;
+  onHire?: (service: ServiceListing) => void;
+}
+
+export const SmProviderCard = ({ name, title, rating, image, service, onHire }: SmProviderCardProps) => {
+  const isDynamic = !!service;
+  const displayName = isDynamic ? service.title : name;
+  const displayTitle = isDynamic ? (service.professional?.category || 'Professional Service') : title;
+  const displayRating = isDynamic ? (4.6 + (service.id % 5) * 0.1).toFixed(1) : rating;
+  const displayImage = isDynamic ? (service.media?.main_photo || '/themes/services/marketplace/15.webp') : image;
+  const isTopPro = isDynamic ? service.status?.is_featured : true;
+  const priceLabel = isDynamic ? (service.pricing?.formatted || `$${service.pricing?.base_price}`) : null;
+
+  return (
+    <div className="sm-provider-card" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
         <div style={{ position: 'relative', overflow: 'hidden', borderRadius: '12px 12px 0 0' }}>
-            <img src={image} alt={name} className="sm-provider-img" />
-            <div className="sm-provider-badge">TOP PRO</div>
+            <img src={displayImage} alt={displayName} className="sm-provider-img" />
+            {isTopPro && <div className="sm-provider-badge">TOP PRO</div>}
         </div>
-        <div style={{ padding: '2rem 1.5rem', textAlign: 'center' }}>
-            <h5 style={{ fontWeight: 800, marginBottom: '0.25rem', fontSize: '1.25rem' }}>{name}</h5>
-            <p style={{ color: 'var(--sm-text-muted)', fontSize: '0.9rem', marginBottom: '1rem', fontWeight: 500 }}>{title}</p>
-            <p style={{ color: '#ffc107', fontWeight: 700, marginBottom: '2rem', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.25rem' }}>
-                ★ {rating} <span style={{ color: 'var(--sm-text-muted)', fontWeight: 400, fontSize: '0.8rem' }}>(120 reviews)</span>
+        <div style={{ padding: '2rem 1.5rem', textAlign: 'center', display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+            <h5 style={{ fontWeight: 800, marginBottom: '0.25rem', fontSize: '1.25rem', lineClamp: 1, WebkitLineClamp: 1, WebkitBoxOrient: 'vertical', display: '-webkit-box', overflow: 'hidden' }}>{displayName}</h5>
+            <p style={{ color: 'var(--sm-text-muted)', fontSize: '0.9rem', marginBottom: '0.5rem', fontWeight: 500 }}>{displayTitle}</p>
+            {priceLabel && (
+              <p style={{ color: 'var(--sm-primary)', fontWeight: 800, fontSize: '1.1rem', margin: '0.25rem 0' }}>
+                {priceLabel} <span style={{ color: 'var(--sm-text-muted)', fontSize: '0.8rem', fontWeight: 400 }}>{service?.pricing?.billing_type?.is_project_based ? '/ project' : '/ hr'}</span>
+              </p>
+            )}
+            <p style={{ color: '#ffc107', fontWeight: 700, marginBottom: '1.5rem', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.25rem', marginTop: 'auto' }}>
+                ★ {displayRating} <span style={{ color: 'var(--sm-text-muted)', fontWeight: 400, fontSize: '0.8rem' }}>(120 reviews)</span>
             </p>
-            <button className="sm-btn sm-btn-primary hire-btn" style={{ width: '100%' }} onClick={() => alert(`Direct hiring interface initialized for ${name}...`)}>Hire Now</button>
+            <button 
+              className="sm-btn sm-btn-primary hire-btn" 
+              style={{ width: '100%', marginTop: 'auto' }} 
+              onClick={() => {
+                if (isDynamic && onHire && service) {
+                  onHire(service);
+                } else {
+                  alert(`Direct hiring interface initialized for ${displayName}...`);
+                }
+              }}
+            >
+              Hire Now
+            </button>
         </div>
     </div>
+  );
+};
+
+export const SmCategorySkeleton = () => (
+  <div className="sm-category-card sm-skeleton" style={{ height: '140px', border: '1px solid var(--sm-border)' }}>
+    <div className="sm-skeleton-circle sm-skeleton" style={{ width: '60px', height: '60px', margin: '0 auto 1rem' }}></div>
+    <div className="sm-skeleton-text sm-skeleton" style={{ width: '60%', margin: '0 auto' }}></div>
+  </div>
+);
+
+export const SmProviderSkeleton = () => (
+  <div className="sm-provider-card" style={{ height: '420px', border: '1px solid var(--sm-border)', display: 'flex', flexDirection: 'column' }}>
+    <div className="sm-skeleton-rect sm-skeleton" style={{ height: '220px', width: '100%' }}></div>
+    <div style={{ padding: '2rem 1.5rem', textAlign: 'center', flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+      <div className="sm-skeleton-text sm-skeleton" style={{ width: '75%', margin: '0 auto 0.75rem', height: '1.25rem' }}></div>
+      <div className="sm-skeleton-text sm-skeleton" style={{ width: '50%', margin: '0 auto 1.5rem' }}></div>
+      <div className="sm-skeleton-text sm-skeleton" style={{ width: '40%', margin: '0 auto 1.5rem' }}></div>
+      <div className="sm-skeleton-text sm-skeleton" style={{ width: '100%', margin: '0 auto', height: '2.5rem', borderRadius: '50px' }}></div>
+    </div>
+  </div>
 );
 
 export const MarketplaceFooter = () => (

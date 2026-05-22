@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
-import type { Product, Category, Theme, ApiResponse, Property, Location, Vehicle } from '@sellio/types';
+import type { Product, Category, Theme, ApiResponse, Property, Location, Vehicle, JobListing, ServiceListing, EventListing } from '@sellio/types';
 
 export class SellioAPI {
   private client: AxiosInstance;
@@ -143,6 +143,106 @@ export class SellioAPI {
     const response = await this.client.get(`/v1/vehicles/${slug}`);
     return response.data;
   }
+
+  // === Job Vertical Endpoints ===
+
+  async getJobs(params?: Record<string, any>): Promise<{
+    data: JobListing[];
+    meta?: {
+      current_page: number;
+      last_page: number;
+      per_page: number;
+      total: number;
+    };
+    sidebar?: {
+      categories: Category[];
+      locations: Location[];
+      types: any[];
+      tags: any[];
+      experience_levels: string[];
+      workplace_types: string[];
+    };
+  }> {
+    const response = await this.client.get('/v1/jobs', { params });
+    return response.data;
+  }
+
+  async getJobBySlug(slug: string): Promise<JobListing> {
+    return this.request<JobListing>(`/v1/jobs/${slug}`);
+  }
+
+  async getJobDetails(slug: string): Promise<{
+    success: boolean;
+    message: string | null;
+    data: JobListing;
+    related_jobs?: JobListing[];
+  }> {
+    const response = await this.client.get(`/v1/jobs/${slug}`);
+    return response.data;
+  }
+
+  // === Service Vertical Endpoints ===
+
+  async getServices(params?: Record<string, any>): Promise<{
+    data: ServiceListing[];
+    meta?: {
+      current_page: number;
+      last_page: number;
+      per_page: number;
+      total: number;
+    };
+    sidebar?: {
+      categories: Category[];
+      locations: Location[];
+      types: any[];
+      tags: any[];
+      expertise_levels: Record<number, string>;
+    };
+  }> {
+    const response = await this.client.get('/v1/services', { params });
+    return response.data;
+  }
+
+  async getServiceBySlug(slug: string): Promise<ServiceListing> {
+    return this.request<ServiceListing>(`/v1/services/${slug}`);
+  }
+
+  // === Event Vertical Endpoints ===
+
+  async getEvents(params?: Record<string, any>): Promise<{
+    data: EventListing[];
+    meta?: {
+      current_page: number;
+      last_page: number;
+      per_page: number;
+      total: number;
+    };
+    sidebar?: {
+      categories: Category[];
+      locations: Location[];
+      types: any[];
+      tags: any[];
+      event_genres?: string[];
+    };
+  }> {
+    const response = await this.client.get('/v1/events', { params });
+    return response.data;
+  }
+
+  async getEventBySlug(slug: string): Promise<EventListing> {
+    return this.request<EventListing>(`/v1/events/${slug}`);
+  }
+
+  async getEventDetails(slug: string): Promise<{
+    success: boolean;
+    message: string | null;
+    data: EventListing;
+    related_events?: EventListing[];
+  }> {
+    const response = await this.client.get(`/v1/events/${slug}`);
+    return response.data;
+  }
 }
+
 
 export const api = new SellioAPI();

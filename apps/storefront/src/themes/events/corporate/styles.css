@@ -479,3 +479,479 @@
     justify-content: center;
   }
 }
+
+/* ==========================================================================
+   --- SELLIO DYNAMIC VERTICAL INTEGRATION STYLES (Scoped under .ecc- / .ec-) ---
+   ========================================================================== */
+
+/* Shimmer / Skeleton Animation keyframes */
+@keyframes ecc-shimmer-anim {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.ecc-shimmer {
+  background: linear-gradient(90deg, #f2f2f4 25%, #e4e4e7 50%, #f2f2f4 75%);
+  background-size: 200% 100%;
+  animation: ecc-shimmer-anim 1.5s infinite linear;
+  border-radius: var(--ecc-radius-sm);
+}
+
+.ecc-shimmer-card {
+  background: white;
+  border: 1px solid var(--ecc-border);
+  border-radius: var(--ecc-radius-md);
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  height: 480px;
+}
+
+.ecc-shimmer-image {
+  width: 100%;
+  height: 200px;
+  border-radius: var(--ecc-radius-sm);
+}
+
+.ecc-shimmer-title {
+  height: 28px;
+  width: 85%;
+  border-radius: 4px;
+}
+
+.ecc-shimmer-meta {
+  height: 18px;
+  width: 55%;
+  border-radius: 4px;
+}
+
+.ecc-shimmer-text {
+  height: 14px;
+  width: 90%;
+  border-radius: 4px;
+}
+
+/* Offline Connection Resiliency trace notifications */
+.ecc-diagnostics-card {
+  background: #fdf2f2;
+  border: 1.5px dashed #f8b4b4;
+  border-radius: var(--ecc-radius-sm);
+  padding: 2rem;
+  margin-bottom: 4rem;
+  color: #9b1c1c;
+}
+
+.ecc-diagnostics-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 800;
+  font-size: 1rem;
+  letter-spacing: 0.05em;
+  margin-bottom: 1rem;
+}
+
+.ecc-diagnostics-trace {
+  font-family: 'Courier New', Courier, monospace;
+  background: #fde8e8;
+  padding: 1.5rem;
+  border-radius: var(--ecc-radius-sm);
+  overflow-x: auto;
+  font-size: 0.85rem;
+  margin-top: 1rem;
+  border: 1px solid #fbd5d5;
+  line-height: 1.5;
+  color: #c81e1e;
+}
+
+/* Exploration Finder Filters Console */
+.ecc-explore-filters {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 5rem;
+}
+
+.ecc-filter-input,
+.ecc-filter-select {
+  width: 100%;
+  padding: 1.25rem 1.75rem;
+  border-radius: 50px;
+  border: 1.5px solid var(--ecc-border);
+  background: white;
+  color: var(--ecc-obsidian);
+  font-family: var(--ecc-font-sans);
+  font-size: 0.9rem;
+  font-weight: 600;
+  outline: none;
+  transition: var(--ecc-transition);
+}
+
+.ecc-filter-input:focus,
+.ecc-filter-select:focus {
+  border-color: var(--ecc-blue);
+  box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.12);
+}
+
+/* Dynamic Event Card component */
+.ecc-event-card {
+  background: white;
+  border: 1px solid var(--ecc-border);
+  border-radius: var(--ecc-radius-md);
+  overflow: hidden;
+  transition: var(--ecc-transition);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  cursor: pointer;
+}
+
+.ecc-event-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.15);
+}
+
+.ecc-event-poster-wrapper {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 16/10;
+  background: var(--ecc-bone);
+}
+
+.ecc-event-poster {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: var(--ecc-transition);
+}
+
+.ecc-event-card:hover .ecc-event-poster {
+  transform: scale(1.04);
+}
+
+.ecc-event-card-body {
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.ecc-event-card-tag {
+  display: inline-block;
+  padding: 0.4rem 0.9rem;
+  border-radius: 50px;
+  background: var(--ecc-bone);
+  color: var(--ecc-text-muted);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 1.5rem;
+  align-self: flex-start;
+}
+
+.ecc-event-card-title {
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: var(--ecc-obsidian);
+  line-height: 1.25;
+  margin-bottom: 1rem;
+  letter-spacing: -0.5px;
+}
+
+.ecc-event-card-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  margin-bottom: 2rem;
+  color: var(--ecc-text-muted);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.ecc-event-card-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.ecc-event-card-footer {
+  margin-top: auto;
+  border-top: 1px solid var(--ecc-border);
+  padding-top: 1.75rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ecc-event-card-price {
+  font-weight: 800;
+  font-size: 1.2rem;
+  color: var(--ecc-obsidian);
+}
+
+/* Event Directory Grid Layout */
+.ecc-explore-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2.5rem;
+  margin-bottom: 6rem;
+}
+
+/* Immersive Event Details Portal styles */
+.ecc-detail-header {
+  background: var(--ecc-bone);
+  padding: 14rem 8% 8rem;
+  border-bottom: 1px solid var(--ecc-border);
+}
+
+.ecc-detail-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 8rem 8%;
+}
+
+.ecc-detail-grid {
+  display: grid;
+  grid-template-columns: 1.8fr 1.2fr;
+  gap: 6rem;
+  align-items: start;
+}
+
+.ecc-rich-description {
+  font-size: 1.15rem;
+  line-height: 1.9;
+  color: var(--ecc-text-main);
+  font-weight: 300;
+}
+
+.ecc-rich-description p {
+  margin-bottom: 2rem;
+}
+
+.ecc-specs-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2.5rem;
+  margin: 4rem 0;
+  padding: 3rem 0;
+  border-top: 1px solid var(--ecc-border);
+  border-bottom: 1px solid var(--ecc-border);
+}
+
+.ecc-spec-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.ecc-spec-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--ecc-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.ecc-spec-value {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--ecc-obsidian);
+}
+
+/* Stateful Booking Desk widget */
+.ecc-booking-desk {
+  background: white;
+  border: 1px solid var(--ecc-border);
+  border-radius: var(--ecc-radius-md);
+  padding: 3.5rem;
+  position: sticky;
+  top: 140px;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.02);
+}
+
+.ecc-booking-title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  letter-spacing: -0.75px;
+  margin-bottom: 2rem;
+  color: var(--ecc-obsidian);
+}
+
+.ecc-ticket-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: var(--ecc-bone);
+  border-radius: 50px;
+  padding: 0.35rem;
+  margin-bottom: 2.5rem;
+}
+
+.ecc-ticket-tab {
+  border: none;
+  background: transparent;
+  padding: 0.85rem;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: var(--ecc-text-muted);
+  cursor: pointer;
+  transition: var(--ecc-transition);
+  font-family: var(--ecc-font-sans);
+}
+
+.ecc-ticket-tab-active {
+  background: white;
+  color: var(--ecc-obsidian);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.ecc-price-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 2.5rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--ecc-border);
+}
+
+.ecc-summary-label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--ecc-text-muted);
+}
+
+.ecc-summary-val {
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: var(--ecc-blue);
+}
+
+.ecc-booking-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.ecc-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.ecc-form-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--ecc-obsidian);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ecc-form-input {
+  padding: 1.1rem 1.4rem;
+  border-radius: var(--ecc-radius-sm);
+  border: 1.5px solid var(--ecc-border);
+  outline: none;
+  font-family: var(--ecc-font-sans);
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: var(--ecc-transition);
+}
+
+.ecc-form-input:focus {
+  border-color: var(--ecc-blue);
+}
+
+.ecc-success-alert {
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  border-radius: var(--ecc-radius-sm);
+  padding: 1.5rem;
+  color: #065f46;
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+/* Related items carousel section */
+.ecc-related-section {
+  padding: 8rem 8%;
+  border-top: 1px solid var(--ecc-border);
+  background: var(--ecc-bone);
+}
+
+.ecc-carousel-container {
+  overflow-x: auto;
+  padding: 2rem 0;
+  margin-top: 3rem;
+  scrollbar-width: none; /* Firefox */
+}
+
+.ecc-carousel-container::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+}
+
+.ecc-carousel-grid {
+  display: flex;
+  gap: 2.5rem;
+  min-width: max-content;
+}
+
+.ecc-carousel-item {
+  width: 380px;
+}
+
+/* Responsive updates for explore and details views */
+@media (max-width: 1024px) {
+  .ecc-explore-filters {
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  .ecc-explore-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .ecc-detail-grid {
+    grid-template-columns: 1fr;
+    gap: 5rem;
+  }
+  
+  .ecc-booking-desk {
+    position: static;
+  }
+}
+
+@media (max-width: 768px) {
+  .ecc-explore-filters {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .ecc-explore-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .ecc-detail-header {
+    padding: 10rem 4% 5rem;
+  }
+  
+  .ecc-detail-container {
+    padding: 4rem 4%;
+  }
+  
+  .ecc-booking-desk {
+    padding: 2.5rem;
+  }
+  
+  .ecc-carousel-item {
+    width: 300px;
+  }
+}
+

@@ -240,3 +240,232 @@
 .growth-btn-outline:hover {
     background: rgba(255,255,255,0.05);
 }
+
+/* Cyberpunk Platform Skeletons */
+.growth-skeleton-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.growth-skeleton {
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.03) 25%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.03) 75%);
+    background-size: 200% 100%;
+    animation: growth-shimmer 1.5s infinite;
+}
+
+@keyframes growth-shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* Offline Diagnostics Desks */
+.growth-offline-panel {
+    background: rgba(239, 68, 68, 0.06);
+    border: 1px solid rgba(239, 68, 68, 0.25);
+    border-radius: 16px;
+    padding: 2rem;
+    margin: 2rem 0;
+    color: #fca5a5;
+    font-family: monospace;
+    font-size: 0.9rem;
+    box-shadow: 0 0 30px rgba(239, 68, 68, 0.05);
+}
+
+/* Talent Exploration Directory Console */
+.growth-explore-container {
+    padding: 6rem 6%;
+    min-height: 100vh;
+}
+
+.growth-explore-layout {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 3rem;
+}
+
+.growth-filter-panel {
+    padding: 2.5rem;
+    height: fit-content;
+    position: sticky;
+    top: 120px;
+}
+
+.growth-filter-group {
+    margin-bottom: 2rem;
+}
+
+.growth-filter-group:last-child {
+    margin-bottom: 0;
+}
+
+.growth-filter-label {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--growth-dim);
+    margin-bottom: 0.75rem;
+    text-transform: uppercase;
+}
+
+.growth-input {
+    width: 100%;
+    padding: 1rem 1.25rem;
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid var(--growth-border);
+    color: white;
+    border-radius: 10px;
+    outline: none;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.growth-input:focus {
+    border-color: var(--growth-neon);
+    box-shadow: 0 0 15px rgba(34, 197, 94, 0.1);
+}
+
+.growth-select {
+    width: 100%;
+    padding: 1rem 1.25rem;
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid var(--growth-border);
+    color: white;
+    border-radius: 10px;
+    outline: none;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    appearance: none;
+}
+
+.growth-select:focus {
+    border-color: var(--growth-neon);
+}
+
+.growth-select-wrapper {
+    position: relative;
+}
+
+.growth-select-wrapper::after {
+    content: '▼';
+    font-size: 0.6rem;
+    color: var(--growth-dim);
+    position: absolute;
+    right: 1.25rem;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+/* Job Provenance Dashboard Layout */
+.growth-details-header {
+    background: rgba(15, 23, 42, 0.85);
+    border-bottom: 1px solid var(--growth-border);
+    padding: 8rem 6% 4rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.growth-details-glow {
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(124, 58, 237, 0.15) 0%, transparent 70%);
+    filter: blur(100px);
+    z-index: 1;
+}
+
+.growth-details-grid {
+    display: grid;
+    grid-template-columns: 1.8fr 1.2fr;
+    gap: 4rem;
+    padding: 6rem 6%;
+}
+
+.growth-detail-main {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+.growth-detail-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+}
+
+.growth-spec-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+}
+
+.growth-spec-card {
+    padding: 1.5rem;
+    border-radius: 12px;
+}
+
+.growth-spec-title {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--growth-dim);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 0.5rem;
+}
+
+.growth-spec-value {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: white;
+}
+
+.growth-apply-desk {
+    padding: 3rem;
+}
+
+.growth-form-group {
+    margin-bottom: 1.5rem;
+}
+
+.growth-form-group label {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: var(--growth-dim);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+}
+
+.growth-textarea {
+    width: 100%;
+    padding: 1rem 1.25rem;
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid var(--growth-border);
+    color: white;
+    border-radius: 10px;
+    outline: none;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    min-height: 120px;
+    resize: vertical;
+}
+
+.growth-textarea:focus {
+    border-color: var(--growth-neon);
+}
+
+.opp-join-btn:hover {
+    background: var(--growth-neon) !important;
+    color: var(--growth-space) !important;
+    box-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
+}

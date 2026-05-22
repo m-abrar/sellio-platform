@@ -255,3 +255,212 @@ export interface Vehicle {
   created_at?: string;
 }
 
+export interface JobListing {
+  id: number;
+  title: string;
+  slug: string;
+  description: string;
+  employment: {
+    type: string;
+    workplace: string;
+    workplace_id: number;
+    experience_level: string;
+    education: string | null;
+    is_full_time: boolean;
+    is_contract: boolean;
+  };
+  compensation: {
+    min: number;
+    max: number;
+    frequency: string;
+    range_compact: string;
+    range_full: string;
+  };
+  company: {
+    name: string;
+    logo?: string | null;
+    logo_card?: string | null;
+    photos?: Array<{ url: string; thumb: string }> | null;
+  };
+  taxonomy: {
+    category?: string | null;
+    badge_class?: string | null;
+    tags?: string[];
+  };
+  location: {
+    display: string;
+    address?: string | null;
+    city?: string | null;
+    state?: string | null;
+    country?: string | null;
+    latitude?: number | null;
+    longitude?: number | null;
+  };
+  status: {
+    is_published: boolean;
+    is_featured: boolean;
+    deadline?: string | null;
+    is_expired: boolean;
+    approved_at?: string | null;
+    application_count?: number | null;
+  };
+  employer?: {
+    id: number;
+    name: string;
+  } | null;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface ServiceListing {
+  id: number;
+  title: string;
+  slug: string;
+  description: string;
+  short_description?: string | null;
+  pricing: {
+    base_price: number;
+    sale_price?: number | null;
+    formatted?: string | null;
+    formatted_short?: string | null;
+    billing_type: {
+      is_subscription: boolean;
+      is_project_based: boolean;
+    };
+    min_contract?: string | null;
+  };
+  operations: {
+    is_open: boolean;
+    hours_label?: string | null;
+    days_label?: string | null;
+    radius?: string | null;
+    client_slots?: {
+      max?: number;
+      available: boolean;
+    } | null;
+  };
+  professional: {
+    expertise_id?: string | number | null;
+    schedule_id?: string | number | null;
+    certifications?: string | null;
+    category?: string | null;
+    type?: string | null;
+  };
+  media: {
+    main_photo?: string | null;
+    gallery?: Array<{
+      id: number;
+      url: string;
+      thumbnail?: string;
+      name?: string;
+    }>;
+  };
+  location: {
+    address?: string | null;
+    city?: string | null;
+    state?: string | null;
+    country?: string | null;
+    latitude?: number | null;
+    longitude?: number | null;
+    meta?: string | null;
+  };
+  provider?: {
+    id: number;
+    name: string;
+    avatar?: string | null;
+    rating: number;
+  } | null;
+  features?: Array<{
+    id: number;
+    title: string;
+    value?: string | null;
+    icon?: string | null;
+  }>;
+  tags?: string[];
+  status: {
+    is_published: boolean;
+    is_featured: boolean;
+    approved_at?: string | null;
+    lead_counts?: {
+      quotes?: number | null;
+      appointments?: number | null;
+    } | null;
+  };
+  seo?: {
+    meta_title?: string | null;
+    meta_description?: string | null;
+  };
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface EventListing {
+  id: number;
+  title: string;
+  slug: string;
+  description: string;
+  schedule: {
+    start_at?: string | null;
+    end_at?: string | null;
+    duration_hours?: number | null;
+    is_virtual: boolean;
+  };
+  ticketing: {
+    is_paid: boolean;
+    is_free: boolean;
+    on_sale?: boolean;
+    base_price: number;
+    sale_price: number;
+    price_formatted?: string | null;
+    price_formatted_k?: string | null;
+    max_attendees?: number | null;
+    tickets_left?: number | null;
+  };
+  specs: {
+    category?: string | null;
+    type?: string | null;
+    brand?: string | null;
+    event_genre?: string | null;
+    venue_size?: string | number | null;
+    tags?: string[] | null;
+  };
+  media: {
+    poster?: string | null;
+    preview?: string | null;
+    gallery?: Array<{
+      id: number;
+      url: string;
+      thumbnail?: string | null;
+      order?: number | null;
+    }> | null;
+  };
+  location: {
+    address?: string | null;
+    city?: string | null;
+    state?: string | null;
+    country?: string | null;
+    latitude?: number | null;
+    longitude?: number | null;
+    map_title?: string | null;
+  };
+  organizer?: {
+    id: number;
+    name: string;
+    avatar?: string | null;
+  } | null;
+  status: {
+    is_published: boolean;
+    is_featured: boolean;
+    approved_at?: string | null;
+    rating?: number | null;
+  };
+  seo?: {
+    title?: string | null;
+    description?: string | null;
+  } | null;
+  created_at?: string | null;
+  updated_at?: string | null;
+}
+
+
+

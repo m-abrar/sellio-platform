@@ -1,8 +1,9 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { api } from '@sellio/api-client';
 import { EventListing } from '@sellio/types';
-import { SpeakerCard, AgendaItem, EventCard, ShimmerCard } from './components';
+import { EventCard, ShimmerCard } from './components';
 
 const FALLBACK_EVENTS: EventListing[] = [
   {
@@ -203,62 +204,89 @@ const FALLBACK_EVENTS: EventListing[] = [
   }
 ];
 
-export default function Page() {
+function ExploreDirectory() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  // Filter states sync from URL parameters
+  const [search, setSearch] = useState<string>(searchParams.get('q') || '');
+  const [category, setCategory] = useState<string>(searchParams.get('category') || '');
+  const [location, setLocation] = useState<string>(searchParams.get('location') || '');
+  const [genre, setGenre] = useState<string>(searchParams.get('genre') || '');
+
+  // Pagination states
   const [events, setEvents] = useState<EventListing[]>([]);
+  const [page, setPage] = useState<number>(1);
+  const [hasMore, setHasMore] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(true);
+  const [loadingMore, setLoadingMore] = useState<boolean>(false);
   const [errorTrace, setErrorTrace] = useState<string | null>(null);
 
-  // Stateful filters
-  const [search, setSearch] = useState<string>('');
-  const [category, setCategory] = useState<string>('');
-  const [location, setLocation] = useState<string>('');
-  const [genre, setGenre] = useState<string>('');
-
-  // Sidebar dynamic unique items
+  // Sidebar filters populated dynamically
   const [categories, setCategories] = useState<string[]>([]);
   const [locations, setLocations] = useState<string[]>([]);
   const [genres, setGenres] = useState<string[]>([]);
 
-  const speakers = [
-    { name: "Dr. Sarah Chen", role: "Chief AI Officer", company: "Nexus Logic", image: "/themes/events/corporate/1.webp" },
-    { name: "Marcus Thorne", role: "VP of Engineering", company: "Scale Flow", image: "/themes/events/corporate/2.webp" },
-    { name: "Elena Rodriguez", role: "Product Director", company: "Cloud Core", image: "/themes/events/corporate/3.webp" },
-    { name: "James Wilson", role: "Security Lead", company: "Cyber Shield", image: "/themes/events/corporate/4.webp" },
-  ];
+  // Synchronize state back to URL parameters
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (search) params.set('q', search);
+    if (category) params.set('category', category);
+    if (location) params.set('location', location);
+    if (genre) params.set('genre', genre);
+    
+    router.replace(`/preview/events_corporate/explore?${params.toString()}`);
+    setPage(1); // Reset page on filter changes
+  }, [search, category, location, genre, router]);
 
-  const agenda = [
-    { time: "09:00 AM", title: "Opening Keynote: The Future of Distributed Intelligence", speaker: "Dr. Sarah Chen", track: "KEYNOTE" },
-    { time: "11:00 AM", title: "Scaling High-Availability Microservices", speaker: "Marcus Thorne", track: "ENGINEERING" },
-    { time: "01:30 PM", title: "Designing for Global User Adoption", speaker: "Elena Rodriguez", track: "PRODUCT" },
-    { time: "03:30 PM", title: "Hardening the Digital Core", speaker: "James Wilson", track: "SECURITY" },
-  ];
-
+  // Load events
   useEffect(() => {
     async function loadData() {
       try {
         setLoading(true);
-        const res = await api.getEvents({ per_page: 20 });
+        setErrorTrace(null);
+        
+        // Fetch from dynamic backend
+        const res = await api.getEvents({
+          q: search || undefined,
+          category: category || undefined,
+          location: location || undefined,
+          genre: genre || undefined,
+          page: 1,
+          per_page: 6
+        });
+
         if (res && res.data) {
           setEvents(res.data);
+          setHasMore(res.meta ? res.meta.current_page < res.meta.last_page : false);
           extractUniqueFilters(res.data);
         } else {
-          throw new Error("No data received from API");
+          throw new Error("Invalid API response format");
         }
       } catch (err: any) {
-        console.error("Laravel Database connection failure. Activating resilience fallback.", err);
+        console.error("Explore API query exception. Falling back...", err);
         setErrorTrace(
           `DATABASE_OFFLINE_DIAGNOSTICS_TRACE\n` +
           `STATUS: [OFFLINE] | LATENCY: [TIMEOUT] | REASON: [${err.message || 'axios connection refused'}]\n` +
           `ACTION: Gracefully activated premium offline node resilience. Loading high-fidelity local catalog backups...`
         );
-        setEvents(FALLBACK_EVENTS);
+        // Client side filtering for fallback
+        const filteredMock = FALLBACK_EVENTS.filter(e => {
+          const matchesQ = search ? e.title.toLowerCase().includes(search.toLowerCase()) || e.description.toLowerCase().includes(search.toLowerCase()) : true;
+          const matchesCat = category ? e.specs?.category === category : true;
+          const matchesLoc = location ? e.location?.city === location : true;
+          const matchesGen = genre ? e.specs?.event_genre === genre : true;
+          return matchesQ && matchesCat && matchesLoc && matchesGen;
+        });
+        setEvents(filteredMock);
+        setHasMore(false);
         extractUniqueFilters(FALLBACK_EVENTS);
       } finally {
         setLoading(false);
       }
     }
     loadData();
-  }, []);
+  }, [search, category, location, genre]);
 
   function extractUniqueFilters(data: EventListing[]) {
     const cats = new Set<string>();
@@ -276,62 +304,47 @@ export default function Page() {
     setGenres(Array.from(gens));
   }
 
-  // Frontend filter processing
-  const filteredEvents = events.filter(e => {
-    const matchesSearch = search ? e.title.toLowerCase().includes(search.toLowerCase()) || e.description.toLowerCase().includes(search.toLowerCase()) : true;
-    const matchesCategory = category ? e.specs?.category === category : true;
-    const matchesLocation = location ? e.location?.city === location : true;
-    const matchesGenre = genre ? e.specs?.event_genre === genre : true;
-    return matchesSearch && matchesCategory && matchesLocation && matchesGenre;
-  });
+  // Handle Load More pagination
+  async function loadMore() {
+    if (loadingMore || !hasMore) return;
+    try {
+      setLoadingMore(true);
+      const nextPage = page + 1;
+      const res = await api.getEvents({
+        q: search || undefined,
+        category: category || undefined,
+        location: location || undefined,
+        genre: genre || undefined,
+        page: nextPage,
+        per_page: 6
+      });
+
+      if (res && res.data) {
+        setEvents(prev => [...prev, ...res.data]);
+        setPage(nextPage);
+        setHasMore(res.meta ? res.meta.current_page < res.meta.last_page : false);
+      }
+    } catch (err) {
+      console.error("Pagination load failed.", err);
+      setHasMore(false);
+    } finally {
+      setLoadingMore(false);
+    }
+  }
 
   return (
-    <div>
-      {/* Hero Section */}
-      <section className="ec-hero" aria-labelledby="ecc-hero-title">
-        <div className="ecc-mono" style={{ marginBottom: '2rem' }}>WORLD_ENGINEERING_SUMMIT // 2026</div>
-        <h1 className="ecc-heading-xl" id="ecc-hero-title">
-          The Future of <br/>
-          <span style={{ color: 'var(--ecc-blue)' }}>Structural</span> Excellence.
+    <div style={{ background: 'white', minHeight: '100vh' }}>
+      <section className="ecc-detail-header" aria-labelledby="ecc-explore-header-title">
+        <div className="ecc-mono" style={{ marginBottom: '1.5rem' }}>GLOBAL_SUMMITS // CONFERENCES</div>
+        <h1 style={{ fontSize: 'clamp(2.5rem, 6vw, 4rem)', fontWeight: 800, color: 'var(--ecc-obsidian)', letterSpacing: '-2px', lineHeight: 1.1 }} id="ecc-explore-header-title">
+          Explore Technical Conventions
         </h1>
-        
-        <div className="ec-hero-meta">
-            <div>
-                <div className="ecc-mono" style={{ color: 'var(--ecc-text-muted)', marginBottom: '0.5rem' }}>DATE</div>
-                <div style={{ fontWeight: 800, fontSize: '1.25rem', color: 'var(--ecc-obsidian)' }}>OCTOBER 14-16</div>
-            </div>
-            <div>
-                <div className="ecc-mono" style={{ color: 'var(--ecc-text-muted)', marginBottom: '0.5rem' }}>LOCATION</div>
-                <div style={{ fontWeight: 800, fontSize: '1.25rem', color: 'var(--ecc-obsidian)' }}>SAN FRANCISCO, CA</div>
-            </div>
-            <div>
-                <div className="ecc-mono" style={{ color: 'var(--ecc-text-muted)', marginBottom: '0.5rem' }}>CAPACITY</div>
-                <div style={{ fontWeight: 800, fontSize: '1.25rem', color: 'var(--ecc-obsidian)' }}>5,000 DELEGATES</div>
-            </div>
-        </div>
-
-        <div style={{ marginTop: '5rem', display: 'flex', gap: '2rem', justifyContent: 'center', flexWrap: 'wrap' }} className="ecc-hero-buttons">
-            <button className="ec-btn-primary" id="ecc-btn-explore" onClick={() => document.getElementById('ecc-explore-section')?.scrollIntoView({ behavior: 'smooth' })}>
-              GET DELEGATE PASS
-            </button>
-            <button className="ec-btn-outline" id="ecc-btn-schedule" onClick={() => document.getElementById('ecc-agenda-section')?.scrollIntoView({ behavior: 'smooth' })}>
-              VIEW FULL SCHEDULE
-            </button>
-        </div>
       </section>
 
-      {/* Dynamic Explore & Search Section */}
-      <section className="ecc-section" id="ecc-explore-section" aria-labelledby="ecc-explore-title" style={{ paddingBottom: '4rem' }}>
-        <div style={{ textAlign: 'center', marginBottom: '6rem' }}>
-            <div className="ecc-mono">CONVENTIONS_CATALOG // DIRECTORY</div>
-            <h2 style={{ fontSize: 'clamp(2.2rem, 6vw, 3.5rem)', fontWeight: 800, marginTop: '1.5rem', letterSpacing: '-2px', color: 'var(--ecc-obsidian)', lineHeight: 1.1 }} id="ecc-explore-title">
-              Active Summits & Expos
-            </h2>
-        </div>
-
-        {/* Resilience Diagnostic Tracer block */}
+      <section className="ecc-detail-container" style={{ paddingTop: '5rem' }}>
+        {/* Offline Warning Panel */}
         {errorTrace && (
-          <div className="ecc-diagnostics-card" id="ecc-diagnostics-notice">
+          <div className="ecc-diagnostics-card" id="ecc-explore-diagnostics">
             <div className="ecc-diagnostics-header">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
               <span>DATABASE CONNECTION WARNING</span>
@@ -343,16 +356,16 @@ export default function Page() {
           </div>
         )}
 
-        {/* Stateful Filters Console */}
+        {/* Stateful Filters bar */}
         <div className="ecc-explore-filters">
           <div>
             <input 
               type="text" 
-              placeholder="Search by keywords..." 
+              placeholder="Search conventions..." 
               className="ecc-filter-input"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              aria-label="Keyword search"
+              aria-label="Keyword input search"
             />
           </div>
           <div>
@@ -360,7 +373,7 @@ export default function Page() {
               className="ecc-filter-select"
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              aria-label="Category filter"
+              aria-label="Filter by Category"
             >
               <option value="">All Categories</option>
               {categories.map(c => <option key={c} value={c}>{c}</option>)}
@@ -371,7 +384,7 @@ export default function Page() {
               className="ecc-filter-select"
               value={location}
               onChange={(e) => setLocation(e.target.value)}
-              aria-label="Location filter"
+              aria-label="Filter by Location"
             >
               <option value="">All Locations</option>
               {locations.map(l => <option key={l} value={l}>{l}</option>)}
@@ -382,7 +395,7 @@ export default function Page() {
               className="ecc-filter-select"
               value={genre}
               onChange={(e) => setGenre(e.target.value)}
-              aria-label="Genre filter"
+              aria-label="Filter by Genre"
             >
               <option value="">All Genres</option>
               {genres.map(g => <option key={g} value={g}>{g}</option>)}
@@ -390,85 +403,72 @@ export default function Page() {
           </div>
         </div>
 
-        {/* Event Cards Grid */}
+        {/* Main Grid */}
         {loading ? (
           <div className="ecc-explore-grid">
-            {[1, 2, 3].map(n => <ShimmerCard key={n} />)}
+            {[1, 2, 3, 4, 5, 6].map(n => <ShimmerCard key={n} />)}
           </div>
-        ) : filteredEvents.length > 0 ? (
-          <div className="ecc-explore-grid">
-            {filteredEvents.map(event => (
-              <EventCard key={event.id} event={event} />
-            ))}
+        ) : events.length > 0 ? (
+          <div>
+            <div className="ecc-explore-grid">
+              {events.map(event => (
+                <EventCard key={event.id} event={event} />
+              ))}
+            </div>
+
+            {hasMore && (
+              <div style={{ textAlign: 'center', marginTop: '6rem' }}>
+                <button 
+                  className="ec-btn-primary" 
+                  style={{ padding: '1.25rem 5rem' }} 
+                  onClick={loadMore}
+                  disabled={loadingMore}
+                  id="ecc-btn-load-more"
+                >
+                  {loadingMore ? 'SYNCING_NODES...' : 'LOAD MORE CONVENTIONS'}
+                </button>
+              </div>
+            )}
           </div>
         ) : (
-          <div style={{ textAlign: 'center', padding: '6rem 0', color: 'var(--ecc-text-muted)' }}>
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{ marginBottom: '2rem' }}><circle cx="12" cy="12" r="10"></circle><line x1="8" y1="12" x2="16" y2="12"></line></svg>
-            <h3 style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--ecc-obsidian)', marginBottom: '0.5rem' }}>No Events Found</h3>
-            <p style={{ fontWeight: 300 }}>Try altering your search filters or clear inputs to recover listings.</p>
+          <div style={{ textAlign: 'center', padding: '8rem 0', color: 'var(--ecc-text-muted)' }}>
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{ marginBottom: '2.5rem' }}><circle cx="12" cy="12" r="10"></circle><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+            <h3 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--ecc-obsidian)', marginBottom: '0.75rem', letterSpacing: '-0.5px' }}>No Conventions Listed</h3>
+            <p style={{ fontWeight: 300, fontSize: '1.05rem' }}>No dynamic events matched the selected facet settings.</p>
             <button 
               className="ec-btn-outline" 
-              style={{ marginTop: '2.5rem', padding: '1rem 3rem' }}
+              style={{ marginTop: '3rem', padding: '1.1rem 3.5rem' }}
               onClick={() => { setSearch(''); setCategory(''); setLocation(''); setGenre(''); }}
             >
-              CLEAR FILTER CRITERIA
+              RESET ALL FACETS
             </button>
           </div>
         )}
       </section>
+    </div>
+  );
+}
 
-      {/* Speakers Section */}
-      <section className="ecc-section" id="ecc-speakers-section" aria-labelledby="ecc-speakers-title">
-        <div style={{ textAlign: 'center', marginBottom: '6rem' }}>
-            <div className="ecc-mono">FACULTY_SYNC // 2026</div>
-            <h2 style={{ fontSize: 'clamp(2.2rem, 6vw, 3.5rem)', fontWeight: 800, marginTop: '1.5rem', letterSpacing: '-2px', color: 'var(--ecc-obsidian)', lineHeight: 1.1 }} id="ecc-speakers-title">Distinguished Speakers</h2>
-        </div>
-        
-        <div className="ec-speaker-grid">
-          {speakers.map((s, i) => (
-            <SpeakerCard key={i} {...s} />
-          ))}
-        </div>
+function ShimmerDirectory() {
+  return (
+    <div style={{ background: 'white', minHeight: '100vh' }}>
+      <section className="ecc-detail-header">
+        <div className="ecc-mono ecc-shimmer" style={{ width: '120px', height: '16px' }}></div>
+        <div className="ecc-shimmer" style={{ width: '400px', height: '48px', marginTop: '1.5rem' }}></div>
       </section>
-
-      {/* Agenda Section */}
-      <section className="ecc-section" style={{ background: 'var(--ecc-bone)', borderRadius: 'var(--ecc-radius-md)' }} id="ecc-agenda-section" aria-labelledby="ecc-agenda-title">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '6rem' }}>
-            <div>
-                <div className="ecc-mono">CURATED_SCHEDULE // DAY_01</div>
-                <h2 style={{ fontSize: 'clamp(2.2rem, 6vw, 3.5rem)', fontWeight: 800, marginTop: '1.5rem', letterSpacing: '-2px', color: 'var(--ecc-obsidian)', lineHeight: 1.1 }} id="ecc-agenda-title">The Agenda</h2>
-            </div>
-            <p style={{ maxWidth: '400px', color: 'var(--ecc-text-muted)', fontSize: '1.1rem', lineHeight: 1.8, fontWeight: 300 }} className="ecc-agenda-intro">
-                Four tracks of intense technical exploration, ranging from core infrastructure to product design philosophy.
-            </p>
+      <section className="ecc-detail-container" style={{ paddingTop: '5rem' }}>
+        <div className="ecc-explore-grid">
+          {[1, 2, 3].map(n => <ShimmerCard key={n} />)}
         </div>
-
-        <div className="ec-agenda-list">
-          {agenda.map((item, i) => (
-            <AgendaItem key={i} {...item} />
-          ))}
-        </div>
-        
-        <div style={{ textAlign: 'center', marginTop: '6rem' }}>
-            <button className="ec-btn-outline" id="ecc-btn-agenda-pdf" onClick={() => alert('Downloading technical agenda program PDF.')}>DOWNLOAD FULL PROGRAM PDF</button>
-        </div>
-      </section>
-
-      {/* Final Call to Action */}
-      <section className="ecc-section" style={{ textAlign: 'center' }} aria-labelledby="ecc-cta-title">
-          <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-              <h2 style={{ fontSize: 'clamp(2.8rem, 8vw, 5rem)', fontWeight: 900, letterSpacing: '-3px', marginBottom: '3rem', color: 'var(--ecc-obsidian)', lineHeight: 1.1 }} id="ecc-cta-title">
-                  Secure Your <br/>
-                  <span style={{ color: 'var(--ecc-blue)' }}>Seat in History.</span>
-              </h2>
-              <p style={{ color: 'var(--ecc-text-muted)', fontSize: '1.5rem', lineHeight: 1.6, marginBottom: '5rem', fontWeight: 300 }}>
-                  Registration closes September 30. Join 5,000+ industry leaders for the most influential engineering event of the year.
-              </p>
-              <button className="ec-btn-primary" style={{ padding: '2rem 6rem', fontSize: '1.25rem' }} id="ecc-btn-cta-pass" onClick={() => document.getElementById('ecc-explore-section')?.scrollIntoView({ behavior: 'smooth' })}>
-                  RESERVE MY FORUM PASS
-              </button>
-          </div>
       </section>
     </div>
+  );
+}
+
+export default function ExplorePage() {
+  return (
+    <Suspense fallback={<ShimmerDirectory />}>
+      <ExploreDirectory />
+    </Suspense>
   );
 }
