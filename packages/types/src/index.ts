@@ -462,5 +462,86 @@ export interface EventListing {
   updated_at?: string | null;
 }
 
+export interface ClassifiedPricing {
+  base_price: number;
+  sale_price: number;
+  is_on_sale: boolean;
+  discount: string | null;
+  formatted?: string | null;
+  formatted_short?: string | null;
+  transaction_type: {
+    for_sale: boolean;
+    for_rent: boolean;
+  };
+}
+
+export interface ClassifiedItemSpecs {
+  condition_rating: number;
+  condition_label: string;
+  badge_class: string;
+  age_years?: number | null;
+  quantity: number;
+  dimensions?: string | null;
+  warranty?: string | null;
+}
+
+export interface ClassifiedMedia {
+  main_photo: string | null;
+  thumbnail?: string | null;
+  gallery?: Array<{
+    id: number;
+    url: string;
+    thumb?: string | null;
+  }> | null;
+  all_photos_count?: number | null;
+}
+
+export interface ClassifiedTaxonomy {
+  category?: string | null;
+  type?: string | null;
+  brand?: string | null;
+  tags?: string[] | null;
+}
+
+export interface ClassifiedLocation {
+  city?: string | null;
+  state?: string | null;
+  country?: string | null;
+  address?: string | null;
+  zip_code?: string | null;
+  latitude?: number | null;
+  longitude?: number | null;
+}
+
+export interface ClassifiedSeller {
+  id: number;
+  name: string;
+  avatar?: string | null;
+}
+
+export interface ClassifiedListing {
+  id: number;
+  title: string;
+  slug: string;
+  description: string;
+  short_description?: string | null;
+  pricing: ClassifiedPricing;
+  item_specs: ClassifiedItemSpecs;
+  media: ClassifiedMedia;
+  taxonomy: ClassifiedTaxonomy;
+  location: ClassifiedLocation;
+  status: {
+    is_published: boolean;
+    is_featured: boolean;
+    is_new_listing: boolean;
+    is_shipping: boolean;
+    approved_at?: string | null;
+    inquiry_count?: number | null;
+  };
+  seller?: ClassifiedSeller | null;
+  created_at?: string | null;
+  updated_at?: string | null;
+}
+
 
 

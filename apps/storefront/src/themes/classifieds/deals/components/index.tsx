@@ -136,9 +136,11 @@ interface DealCardProps {
   isTopSeller: boolean;
   category: string;
   isHotBargain?: boolean;
+  onClick?: (slug: string) => void;
+  slug?: string;
 }
 
-export const DealCard = ({ title, currentPrice, originalPrice, discount, image, seller, isTopSeller, isHotBargain }: DealCardProps) => {
+export const DealCard = ({ title, currentPrice, originalPrice, discount, image, seller, isTopSeller, isHotBargain, onClick, slug }: DealCardProps) => {
   const [isFollowing, setIsFollowing] = useState(false);
   const [claimed, setClaimed] = useState(false);
 
@@ -147,7 +149,15 @@ export const DealCard = ({ title, currentPrice, originalPrice, discount, image, 
   const randomMinutes = Math.floor(Math.random() * 59);
 
   return (
-    <div className={`cd-deal-card ${isHotBargain ? 'cd-hot-card' : ''}`}>
+    <div 
+      className={`cd-deal-card ${isHotBargain ? 'cd-hot-card' : ''}`}
+      onClick={(e) => {
+        if (onClick && slug) {
+          onClick(slug);
+        }
+      }}
+      style={onClick && slug ? { cursor: 'pointer' } : undefined}
+    >
       <span className="cd-sale-badge">SALE!</span>
       <span className="cd-discount-tag-card">-{discount}% OFF</span>
       
@@ -184,7 +194,15 @@ export const DealCard = ({ title, currentPrice, originalPrice, discount, image, 
 
         <button 
           className="cd-btn-buy"
-          onClick={() => { setClaimed(true); alert(`🎉 Deal Snagged! Redirecting to checkout for ${title}...`); }}
+          onClick={(e) => {
+            if (onClick && slug) {
+              e.stopPropagation();
+              onClick(slug);
+            } else {
+              setClaimed(true);
+              alert(`🎉 Deal Snagged! Redirecting to checkout for ${title}...`);
+            }
+          }}
           disabled={claimed}
         >
           {claimed ? 'Claimed ✓' : 'Snag This Deal ⚡'}

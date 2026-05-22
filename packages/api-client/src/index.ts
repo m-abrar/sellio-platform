@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
-import type { Product, Category, Theme, ApiResponse, Property, Location, Vehicle, JobListing, ServiceListing, EventListing } from '@sellio/types';
+import type { Product, Category, Theme, ApiResponse, Property, Location, Vehicle, JobListing, ServiceListing, EventListing, ClassifiedListing } from '@sellio/types';
 
 export class SellioAPI {
   private client: AxiosInstance;
@@ -196,7 +196,7 @@ export class SellioAPI {
       locations: Location[];
       types: any[];
       tags: any[];
-      expertise_levels: Record<number, string>;
+      experience_levels: Record<number, string>;
     };
   }> {
     const response = await this.client.get('/v1/services', { params });
@@ -242,7 +242,43 @@ export class SellioAPI {
     const response = await this.client.get(`/v1/events/${slug}`);
     return response.data;
   }
-}
 
+  // === Classifieds Vertical Endpoints ===
+
+  async getClassifieds(params?: Record<string, any>): Promise<{
+    data: ClassifiedListing[];
+    meta?: {
+      current_page: number;
+      last_page: number;
+      per_page: number;
+      total: number;
+    };
+    sidebar?: {
+      categories: Category[];
+      locations: Location[];
+      types: any[];
+      tags: any[];
+      brands: any[];
+      transaction_types: any[];
+    };
+  }> {
+    const response = await this.client.get('/v1/classifieds', { params });
+    return response.data;
+  }
+
+  async getClassifiedBySlug(slug: string): Promise<ClassifiedListing> {
+    return this.request<ClassifiedListing>(`/v1/classifieds/${slug}`);
+  }
+
+  async getClassifiedDetails(slug: string): Promise<{
+    success: boolean;
+    message: string | null;
+    data: ClassifiedListing;
+    related_classifieds?: ClassifiedListing[];
+  }> {
+    const response = await this.client.get(`/v1/classifieds/${slug}`);
+    return response.data;
+  }
+}
 
 export const api = new SellioAPI();
