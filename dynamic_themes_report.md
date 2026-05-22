@@ -15,9 +15,11 @@ Out of the available industry verticals in the codebase, **five themes** have be
 | **Properties** | `properties_classic` (`properties/classic`) | **100% Dynamic** | Homepage, Explore Page, Product details, Cart Page |
 | **Properties** | `properties_luxury` (`properties/luxury`) | **100% Dynamic** | Homepage Curated Showcase, Explore Ledger, Product Provenance details |
 | **Services** | `services_marketplace` (`services/marketplace`) | **100% Dynamic** | Homepage Directory, Faceted Filters, Bookings Modal |
+| **Events** | `events_corporate` (`events/corporate`) | **100% Dynamic** | Homepage Summit Showcase, Explore Finder Console, Ticket Reservation Product Page |
+| **E-commerce** | `ecommerce_electronics` (`ecommerce/electronics`) | **100% Dynamic** | Homepage Hardware Showroom, Product details page |
 | **Unified** | `unifieds_minimal` (`unifieds/minimal`) | **100% Dynamic** | Homepage, Explore Page, Product details |
 
-All other themes within `autos` (except `autos_luxury`), `classifieds`, `ecommerce`, `events`, and remaining sub-themes of `properties` are currently **static prototypes** containing hardcoded mockup variables.
+All other themes within `autos` (except `autos_luxury`), `classifieds`, and remaining sub-themes of `ecommerce` and `properties` are currently **static prototypes** containing hardcoded mockup variables.
 
 ---
 
@@ -73,10 +75,20 @@ The premium teal-accented local professional service directory functions dynamic
   - Saves completed bookings securely under client `LocalStorage` registry (`sellio_services_marketplace_bookings`).
   - Pre-built shimmering skeletons for categories and professional cards ensure visual fluidness during server wait times.
 
+### 7. Events Corporate Theme (`events_corporate`)
+The obsidian-and-blue executive convention directory vertical operates dynamically:
+* **Summit Showcase Homepage (`Page.tsx`)**: Loads active summit listings dynamically on component mount (`api.getEvents()`), populating premium showcase cards. Features real-time filters by keyword, categories, locations, and pricing bands.
+* **Seat & Pass Reservation details (`ProductPage.tsx`)**: Renders dynamically based on url slug (`api.getEventDetails()`). Implements General Admission vs. VIP pass selectors with automatic price adjustments, live seat availability counts, and stateful reservation processing persisting inside client `LocalStorage` registry (`sellio_events_corporate_registrations`).
+
+### 8. E-commerce Electronics Theme (`ecommerce_electronics`)
+The cyberpunk NeuralGear-themed high-fidelity computer hardware storefront vertical is fully dynamic:
+* **Hardware Showroom Homepage (`Page.tsx`)**: Fetches active inventory components from the database (`api.getProducts()`) and dynamically maps them to trending hardware and professional peripherals sections. Custom assets mapping fall back gracefully based on item list sequence.
+* **Rig Rigging & Ordering Console (`ProductPage.tsx`)**: Renders custom hardware specifications dynamically from URL slugs (`api.getProductBySlug()`). Features an interactive order volume selector, custom performance overclocking spec input dispatch forms, and localized client-side order list tracking using browser state and `LocalStorage` key (`sellio_ecommerce_electronics_orders`).
+
 ---
 
 ## 🛡 Network Resilience & Connection Handling
-The `autos_luxury`, `jobs_startup`, `properties_classic`, `properties_luxury`, and `services_marketplace` themes feature a robust **Offline Connection Resiliency Layer**:
+The `autos_luxury`, `jobs_startup`, `properties_classic`, `properties_luxury`, `services_marketplace`, `events_corporate`, and `ecommerce_electronics` themes feature a robust **Offline Connection Resiliency Layer**:
 - If the Laravel API server is shut down, MySQL databases are empty, or network latency fails, they capture the exceptions cleanly.
 - Instead of crashing, the components smoothly load high-fidelity static mock backups.
 - These themes render elegant, visually matched diagnostics alerts displaying the raw Axios connection exceptions, keeping developers fully informed of server states.

@@ -41,8 +41,8 @@ export const ElectronicsHeader = () => {
     );
 };
 
-export const ProductCard = ({ title, category, price, oldPrice, image, badge }: any) => (
-    <div className="el-product-card">
+export const ProductCard = ({ title, category, price, oldPrice, image, badge, onClick }: any) => (
+    <div className="el-product-card" onClick={onClick} style={{ cursor: onClick ? 'pointer' : 'default' }}>
         {badge && <span className="el-badge">{badge}</span>}
         <div className="el-product-img-wrap">
             <img src={image} className="el-product-img" alt={title} />
@@ -54,7 +54,15 @@ export const ProductCard = ({ title, category, price, oldPrice, image, badge }: 
                 <span className="el-price">{price}</span>
                 {oldPrice && <span className="el-price-old">{oldPrice}</span>}
             </div>
-            <button className="el-add-cart" title="Add to Cart">
+            <button 
+                className="el-add-cart" 
+                title="Add to Cart"
+                onClick={(e) => {
+                    if (onClick) {
+                        e.stopPropagation();
+                    }
+                }}
+            >
                 +
             </button>
         </div>
