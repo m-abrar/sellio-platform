@@ -37,8 +37,8 @@ export const ElectricHeader = () => {
     );
 };
 
-export const EVCard = ({ title, price, range, battery, charge, image }: any) => (
-    <div className="ev-card">
+export const EVCard = ({ title, price, range, battery, charge, image, onClick }: any) => (
+    <div className="ev-card" onClick={onClick} style={{ cursor: 'pointer' }}>
         <img src={image} className="ev-card-img" alt={title} />
         <div className="ev-card-body">
             <h5 className="ev-card-title">{title}</h5>
