@@ -412,3 +412,25 @@
         font-size: 2rem;
     }
 }
+
+/* ==========================================================================
+   Autos Classic Detail Page & Shimmer Animations
+   ========================================================================== */
+
+/* Shimmer Pulse Micro-Animation */
+@keyframes acPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+.ac-shimmer-pulse {
+  animation: acPulse 1.6s infinite ease-in-out;
+}
+
+/* Detail page grid layout details */
+@media (max-width: 992px) {
+    .ac-details-grid {
+        grid-template-columns: 1fr !important;
+        gap: 2.5rem !important;
+    }
+}
+

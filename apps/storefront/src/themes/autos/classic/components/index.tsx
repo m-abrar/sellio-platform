@@ -39,17 +39,18 @@ export const ClassicHeader = () => {
     );
 };
 
-export const ClassicCarCard = ({ title, desc, price, image }: any) => (
-    <div className="ac-car-card">
-        <img src={image} className="ac-car-img" alt={title} />
+export const ClassicCarCard = ({ title, desc, price, image, onClick }: any) => (
+    <div className="ac-car-card" onClick={onClick} style={{ cursor: onClick ? 'pointer' : 'default', transition: 'transform 0.3s ease, box-shadow 0.3s ease' }}>
+        <img src={image} className="ac-car-img" alt={title} style={{ height: '220px', width: '100%', objectFit: 'cover' }} />
         <div className="ac-car-details">
             <h5 style={{ fontFamily: 'var(--ac-font-heading)', color: 'var(--ac-dark)', fontWeight: 700, fontSize: '1.25rem', marginBottom: '0.25rem' }}>{title}</h5>
-            <p style={{ color: '#6c757d', marginBottom: '0.5rem' }}>{desc}</p>
+            <p style={{ color: '#6c757d', marginBottom: '0.5rem', fontSize: '0.9rem' }}>{desc}</p>
             <p className="ac-car-price">{price}</p>
-            <a href="#" className="ac-btn ac-btn-cta" style={{ width: '100%', boxSizing: 'border-box' }}>View Details</a>
+            <span className="ac-btn ac-btn-cta" style={{ width: '100%', boxSizing: 'border-box', display: 'inline-block', textAlign: 'center' }}>View Details</span>
         </div>
     </div>
 );
+
 
 export const AuctionCard = ({ title, desc, currentBid, timeRemaining, image }: any) => (
     <div className="ac-auction-card">
