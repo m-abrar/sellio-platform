@@ -1,5 +1,9 @@
 'use client';
+
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { api } from '@sellio/api-client';
+import type { ClassifiedListing, Category } from '@sellio/types';
 import { GeneralHeader, ListingCard, GeneralFooter } from './components';
 
 interface ListingItem {
@@ -14,45 +18,304 @@ interface ListingItem {
   localPickup: boolean;
   delivery: boolean;
   dateAdded: number; // Timestamp order
+  slug: string;
 }
 
+// Fallback high-fidelity Classifieds General database opportunities matching ClassifiedListing schema perfectly
+const FALLBACK_CLASSIFIEDS: ClassifiedListing[] = [
+  {
+    id: 1,
+    title: "iPhone 13 Pro - 256GB Gold Unlocked",
+    slug: "iphone-13-pro-256gb-gold-unlocked",
+    description: "Pristine gold iPhone 13 Pro. 256GB storage, fully factory unlocked. Battery health is at 90%, screen and chassis are free of major scratches.",
+    pricing: {
+      base_price: 799,
+      sale_price: 799,
+      is_on_sale: false,
+      discount: null,
+      formatted: "$799",
+      formatted_short: "$799",
+      transaction_type: { for_sale: true, for_rent: false }
+    },
+    location: { city: "Dallas", state: "TX" },
+    taxonomy: { category: "electronics", brand: "User113" },
+    media: { main_photo: "https://images.unsplash.com/photo-1632661674596-df8be070a5c5?q=80&w=400" },
+    item_specs: { condition_rating: 4, condition_label: "Great", badge_class: "cg-badge-great", quantity: 1 },
+    status: { is_featured: false, is_published: true, is_new_listing: true, is_shipping: true }
+  },
+  {
+    id: 2,
+    title: "Sony A7III Mirrorless Camera Body",
+    slug: "sony-a7iii-mirrorless-camera-body",
+    description: "Well-maintained Sony A7III body only. Low shutter count, comes with original strap, box, and 2 batteries.",
+    pricing: {
+      base_price: 1200,
+      sale_price: 1200,
+      is_on_sale: false,
+      discount: null,
+      formatted: "$1,200",
+      formatted_short: "$1.2K",
+      transaction_type: { for_sale: true, for_rent: false }
+    },
+    location: { city: "Seattle", state: "WA" },
+    taxonomy: { category: "electronics", brand: "PhotoPro" },
+    media: { main_photo: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=400" },
+    item_specs: { condition_rating: 5, condition_label: "Excellent", badge_class: "cg-badge-excellent", quantity: 1 },
+    status: { is_featured: false, is_published: true, is_new_listing: false, is_shipping: false }
+  },
+  {
+    id: 3,
+    title: "Sony Noise Canceling Headphones WH-CH720N",
+    slug: "sony-noise-canceling-headphones-wh-ch720n",
+    description: "Lightweight over-ear headphones with superior active noise canceling. Comes with charging cable.",
+    pricing: {
+      base_price: 120,
+      sale_price: 120,
+      is_on_sale: false,
+      discount: null,
+      formatted: "$120",
+      formatted_short: "$120",
+      transaction_type: { for_sale: true, for_rent: false }
+    },
+    location: { city: "Boston", state: "MA" },
+    taxonomy: { category: "electronics", brand: "AudioFan" },
+    media: { main_photo: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=400" },
+    item_specs: { condition_rating: 4, condition_label: "Great", badge_class: "cg-badge-great", quantity: 1 },
+    status: { is_featured: false, is_published: true, is_new_listing: true, is_shipping: true }
+  },
+  {
+    id: 4,
+    title: "2018 Honda Civic EX - Low Mileage",
+    slug: "2018-honda-civic-ex-low-mileage",
+    description: "EX trim model with only 45k miles. Single owner, clean title, and up-to-date maintenance records.",
+    pricing: {
+      base_price: 16500,
+      sale_price: 16500,
+      is_on_sale: false,
+      discount: null,
+      formatted: "$16,500",
+      formatted_short: "$16.5K",
+      transaction_type: { for_sale: true, for_rent: false }
+    },
+    location: { city: "Dallas", state: "TX" },
+    taxonomy: { category: "vehicles", brand: "AutoSeller99" },
+    media: { main_photo: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?q=80&w=400" },
+    item_specs: { condition_rating: 4, condition_label: "Great", badge_class: "cg-badge-great", quantity: 1 },
+    status: { is_featured: false, is_published: true, is_new_listing: false, is_shipping: false }
+  },
+  {
+    id: 5,
+    title: "Classic Road Bike - Excellent Frame",
+    slug: "classic-road-bike-excellent-frame",
+    description: "Vintage steel frame road bike, recently tuned up with brand new tires, tubes, and handlebar tape.",
+    pricing: {
+      base_price: 450,
+      sale_price: 450,
+      is_on_sale: false,
+      discount: null,
+      formatted: "$450",
+      formatted_short: "$450",
+      transaction_type: { for_sale: true, for_rent: false }
+    },
+    location: { city: "Chicago", state: "IL" },
+    taxonomy: { category: "vehicles", brand: "CyclistJoe" },
+    media: { main_photo: "https://images.unsplash.com/photo-1485965120184-e220f721d03e?q=80&w=400" },
+    item_specs: { condition_rating: 5, condition_label: "Excellent", badge_class: "cg-badge-excellent", quantity: 1 },
+    status: { is_featured: false, is_published: true, is_new_listing: true, is_shipping: true }
+  },
+  {
+    id: 6,
+    title: "Cozy 1-Bedroom Condo near Downtown",
+    slug: "cozy-1-bedroom-condo-near-downtown",
+    description: "Charming 1-bedroom condo with updated appliances, in-unit laundry, and a beautiful balcony view.",
+    pricing: {
+      base_price: 145000,
+      sale_price: 145000,
+      is_on_sale: false,
+      discount: null,
+      formatted: "$145,000",
+      formatted_short: "$145K",
+      transaction_type: { for_sale: true, for_rent: false }
+    },
+    location: { city: "Denver", state: "CO" },
+    taxonomy: { category: "real-estate", brand: "AgentSarah" },
+    media: { main_photo: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?q=80&w=400" },
+    item_specs: { condition_rating: 4, condition_label: "Great", badge_class: "cg-badge-great", quantity: 1 },
+    status: { is_featured: false, is_published: true, is_new_listing: false, is_shipping: false }
+  },
+  {
+    id: 7,
+    title: "Spacious Suburb Family Home (4B/3B)",
+    slug: "spacious-suburb-family-home-4b-3b",
+    description: "Stunning 4-bedroom, 3-bathroom suburban home with huge backyard and renovated kitchen.",
+    pricing: {
+      base_price: 320000,
+      sale_price: 320000,
+      is_on_sale: false,
+      discount: null,
+      formatted: "$320,000",
+      formatted_short: "$320K",
+      transaction_type: { for_sale: true, for_rent: false }
+    },
+    location: { city: "Dallas", state: "TX" },
+    taxonomy: { category: "real-estate", brand: "AgentDave" },
+    media: { main_photo: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?q=80&w=400" },
+    item_specs: { condition_rating: 5, condition_label: "Excellent", badge_class: "cg-badge-excellent", quantity: 1 },
+    status: { is_featured: false, is_published: true, is_new_listing: false, is_shipping: false }
+  },
+  {
+    id: 8,
+    title: "Mid-Century Modern Sofa (Teal Velvet)",
+    slug: "mid-century-modern-sofa-teal-velvet",
+    description: "Vibrant teal velvet sofa, mid-century design. Extremely comfortable, minor wear on legs.",
+    pricing: {
+      base_price: 600,
+      sale_price: 600,
+      is_on_sale: false,
+      discount: null,
+      formatted: "$600",
+      formatted_short: "$600",
+      transaction_type: { for_sale: true, for_rent: false }
+    },
+    location: { city: "New York", state: "NY" },
+    taxonomy: { category: "home", brand: "UsesM83" },
+    media: { main_photo: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=400" },
+    item_specs: { condition_rating: 4, condition_label: "Great", badge_class: "cg-badge-great", quantity: 1 },
+    status: { is_featured: false, is_published: true, is_new_listing: false, is_shipping: false }
+  },
+  {
+    id: 9,
+    title: "Modern Elegant Brass Desk Lamp",
+    slug: "modern-elegant-brass-desk-lamp",
+    description: "Heavy solid brass desk lamp. Minimalist design, casts a warm downward glow.",
+    pricing: {
+      base_price: 85,
+      sale_price: 85,
+      is_on_sale: false,
+      discount: null,
+      formatted: "$85",
+      formatted_short: "$85",
+      transaction_type: { for_sale: true, for_rent: false }
+    },
+    location: { city: "Austin", state: "TX" },
+    taxonomy: { category: "home", brand: "ShopLux" },
+    media: { main_photo: "https://images.unsplash.com/photo-1507473885765-e6ed057f7821?q=80&w=400" },
+    item_specs: { condition_rating: 4, condition_label: "Great", badge_class: "cg-badge-great", quantity: 1 },
+    status: { is_featured: false, is_published: true, is_new_listing: true, is_shipping: true }
+  },
+  {
+    id: 10,
+    title: "Retro Leather Bomber Jacket (Large)",
+    slug: "retro-leather-bomber-jacket-large",
+    description: "Thick premium leather bomber jacket. Classic vintage fit, fully lined.",
+    pricing: {
+      base_price: 180,
+      sale_price: 180,
+      is_on_sale: false,
+      discount: null,
+      formatted: "$180",
+      formatted_short: "$180",
+      transaction_type: { for_sale: true, for_rent: false }
+    },
+    location: { city: "Portland", state: "OR" },
+    taxonomy: { category: "fashion", brand: "VintageHQ" },
+    media: { main_photo: "https://images.unsplash.com/photo-1551028719-00167b16eac5?q=80&w=400" },
+    item_specs: { condition_rating: 4, condition_label: "Great", badge_class: "cg-badge-great", quantity: 1 },
+    status: { is_featured: false, is_published: true, is_new_listing: true, is_shipping: true }
+  },
+  {
+    id: 11,
+    title: "Designer Chronograph Gold Watch",
+    slug: "designer-chronograph-gold-watch",
+    description: "Heavy gold plated luxury wristwatch. Chronograph functions are fully operational.",
+    pricing: {
+      base_price: 350,
+      sale_price: 350,
+      is_on_sale: false,
+      discount: null,
+      formatted: "$350",
+      formatted_short: "$350",
+      transaction_type: { for_sale: true, for_rent: false }
+    },
+    location: { city: "Miami", state: "FL" },
+    taxonomy: { category: "fashion", brand: "StyleVault" },
+    media: { main_photo: "https://images.unsplash.com/photo-1524592094714-0f0654e20314?q=80&w=400" },
+    item_specs: { condition_rating: 5, condition_label: "Excellent", badge_class: "cg-badge-excellent", quantity: 1 },
+    status: { is_featured: false, is_published: true, is_new_listing: false, is_shipping: false }
+  },
+  {
+    id: 12,
+    title: "Professional Guitar & Bass Lessons",
+    slug: "professional-guitar-bass-lessons",
+    description: "One-on-one lessons for beginner to intermediate levels. Taught by certified instructor.",
+    pricing: {
+      base_price: 45,
+      sale_price: 45,
+      is_on_sale: false,
+      discount: null,
+      formatted: "$45",
+      formatted_short: "$45",
+      transaction_type: { for_sale: true, for_rent: false }
+    },
+    location: { city: "Chicago", state: "IL" },
+    taxonomy: { category: "services", brand: "GuitarGuru" },
+    media: { main_photo: "https://images.unsplash.com/photo-1510915361894-db8b60106cb1?q=80&w=400" },
+    item_specs: { condition_rating: 5, condition_label: "Excellent", badge_class: "cg-badge-excellent", quantity: 1 },
+    status: { is_featured: false, is_published: true, is_new_listing: true, is_shipping: true }
+  }
+];
+
+const getCategoryIcon = (slug: string): string => {
+  if (slug === 'electronics') return '📱';
+  if (slug === 'vehicles') return '🚗';
+  if (slug === 'real-estate') return '🏠';
+  if (slug === 'home') return '🛋️';
+  if (slug === 'fashion') return '👕';
+  if (slug === 'services') return '🔧';
+  return '📦';
+};
+
+const translateListing = (item: ClassifiedListing): ListingItem => {
+  const generatedSlug = item.slug || item.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+  return {
+    id: item.id,
+    title: item.title,
+    price: item.pricing?.formatted || item.pricing?.formatted_short || `$${(item.pricing?.sale_price || item.pricing?.base_price || 0).toLocaleString()}`,
+    numericPrice: item.pricing?.sale_price || item.pricing?.base_price || 0,
+    image: item.media?.main_photo || item.media?.thumbnail || "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=400",
+    seller: item.taxonomy?.brand || "Verified Seller",
+    isSaved: false,
+    category: item.taxonomy?.category || "electronics",
+    localPickup: item.status?.is_shipping ? false : true,
+    delivery: item.status?.is_shipping || false,
+    dateAdded: item.id,
+    slug: generatedSlug
+  };
+};
+
 export default function Page() {
-  // Mock listing catalog
-  const [listings, setListings] = useState<ListingItem[]>([
-    // Electronics
-    { id: 1, title: "iPhone 13 Pro - 256GB Gold Unlocked", price: "$799", numericPrice: 799, image: "https://images.unsplash.com/photo-1632661674596-df8be070a5c5?q=80&w=400", seller: "User113", isSaved: false, category: "electronics", localPickup: true, delivery: true, dateAdded: 4 },
-    { id: 2, title: "Sony A7III Mirrorless Camera Body", price: "$1,200", numericPrice: 1200, image: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=400", seller: "PhotoPro", isSaved: true, category: "electronics", localPickup: true, delivery: false, dateAdded: 9 },
-    { id: 3, title: "Sony Noise Canceling Headphones WH-CH720N", price: "$120", numericPrice: 120, image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=400", seller: "AudioFan", isSaved: false, category: "electronics", localPickup: false, delivery: true, dateAdded: 1 },
+  const router = useRouter();
 
-    // Vehicles
-    { id: 4, title: "2018 Honda Civic EX - Low Mileage", price: "$16,500", numericPrice: 16500, image: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?q=80&w=400", seller: "AutoSeller99", isSaved: false, category: "vehicles", localPickup: true, delivery: false, dateAdded: 10 },
-    { id: 5, title: "Classic Road Bike - Excellent Frame", price: "$450", numericPrice: 450, image: "https://images.unsplash.com/photo-1485965120184-e220f721d03e?q=80&w=400", seller: "CyclistJoe", isSaved: true, category: "vehicles", localPickup: true, delivery: true, dateAdded: 5 },
+  const getThemeLink = (path: string) => {
+    if (typeof window !== 'undefined') {
+      const isPreview = window.location.pathname.startsWith('/preview/');
+      if (isPreview) {
+        return `/preview/classifieds_general${path}`;
+      }
+    }
+    return path;
+  };
 
-    // Real Estate
-    { id: 6, title: "Cozy 1-Bedroom Condo near Downtown", price: "$145,000", numericPrice: 145000, image: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?q=80&w=400", seller: "AgentSarah", isSaved: false, category: "real-estate", localPickup: true, delivery: false, dateAdded: 12 },
-    { id: 7, title: "Spacious Suburb Family Home (4B/3B)", price: "$320,000", numericPrice: 320000, image: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?q=80&w=400", seller: "AgentDave", isSaved: false, category: "real-estate", localPickup: true, delivery: false, dateAdded: 11 },
-
-    // Home Goods
-    { id: 8, title: "Mid-Century Modern Sofa (Teal Velvet)", price: "$600", numericPrice: 600, image: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=400", seller: "UsesM83", isSaved: false, category: "home", localPickup: true, delivery: false, dateAdded: 3 },
-    { id: 9, title: "Modern Elegant Brass Desk Lamp", price: "$85", numericPrice: 85, image: "https://images.unsplash.com/photo-1507473885765-e6ed057f7821?q=80&w=400", seller: "ShopLux", isSaved: false, category: "home", localPickup: false, delivery: true, dateAdded: 2 },
-    
-    // Fashion
-    { id: 10, title: "Retro Leather Bomber Jacket (Large)", price: "$180", numericPrice: 180, image: "https://images.unsplash.com/photo-1551028719-00167b16eac5?q=80&w=400", seller: "VintageHQ", isSaved: false, category: "fashion", localPickup: false, delivery: true, dateAdded: 6 },
-    { id: 11, title: "Designer Chronograph Gold Watch", price: "$350", numericPrice: 350, image: "https://images.unsplash.com/photo-1524592094714-0f0654e20314?q=80&w=400", seller: "StyleVault", isSaved: false, category: "fashion", localPickup: true, delivery: true, dateAdded: 7 },
-
-    // Services
-    { id: 12, title: "Professional Guitar & Bass Lessons", price: "$45", numericPrice: 45, image: "https://images.unsplash.com/photo-1510915361894-db8b60106cb1?q=80&w=400", seller: "GuitarGuru", isSaved: false, category: "services", localPickup: true, delivery: true, dateAdded: 8 },
+  // Dynamic state bindings
+  const [listings, setListings] = useState<ListingItem[]>([]);
+  const [categories, setCategories] = useState<{ id: string; name: string; icon: string }[]>([
+    { id: 'all', name: 'All Listings', icon: '📂' }
   ]);
 
-  // Categories list corresponding to reference instructions
-  const categoriesList = [
-    { id: "electronics", name: "Electronics", icon: "📱" },
-    { id: "vehicles", name: "Vehicles", icon: "🚗" },
-    { id: "real-estate", name: "Real Estate", icon: "🏠" },
-    { id: "home", name: "Home Goods", icon: "🛋️" },
-    { id: "fashion", name: "Fashion", icon: "👕" },
-    { id: "services", name: "Services", icon: "🔧" },
-  ];
+  // Loading & network resilience state tracking
+  const [loading, setLoading] = useState(true);
+  const [useFallback, setUseFallback] = useState(false);
+  const [errorTrace, setErrorTrace] = useState<string>('');
 
   // Filtering states
   const [searchTerm, setSearchTerm] = useState('');
@@ -63,7 +326,7 @@ export default function Page() {
   const [sortBy, setSortBy] = useState('new');
   
   // Pagination / Load More states
-  const [visibleCount, setVisibleCount] = useState(6);
+  const [visibleCount, setVisibleCount] = useState(12); // symmetry-locked initial visibleCount of 12!
   const [loadingListings, setLoadingListings] = useState(false);
 
   // Chat/Messaging States
@@ -84,6 +347,85 @@ export default function Page() {
     }
   }, [chatMessages]);
 
+  useEffect(() => {
+    const fetchGeneralClassifieds = async () => {
+      setLoading(true);
+      try {
+        const response = await api.getClassifieds();
+        if (response && response.data && response.data.length > 0) {
+          const mapped = response.data.map(translateListing);
+          setListings(mapped);
+          setUseFallback(false);
+
+          // Extract category ribbon from API categories metadata if populated
+          if (response.sidebar?.categories) {
+            const mappedCats = response.sidebar.categories.map((cat: Category) => ({
+              id: cat.slug || String(cat.id),
+              name: cat.title,
+              icon: getCategoryIcon(cat.slug || '')
+            }));
+            const deduplicated = [{ id: "all", name: "All Listings", icon: "📂" }];
+            mappedCats.forEach((c) => {
+              if (!deduplicated.some(d => d.id === c.id)) {
+                deduplicated.push(c);
+              }
+            });
+            setCategories(deduplicated);
+          } else {
+            // Deduplicate from loaded listing records taxonomy
+            const dynamicCategories = [{ id: "all", name: "All Listings", icon: "📂" }];
+            response.data.forEach((item) => {
+              const catSlug = item.taxonomy?.category;
+              if (catSlug && !dynamicCategories.some(d => d.id === catSlug)) {
+                let label = catSlug;
+                if (catSlug === 'electronics') label = 'Electronics';
+                else if (catSlug === 'vehicles') label = 'Vehicles';
+                else if (catSlug === 'real-estate') label = 'Real Estate';
+                else if (catSlug === 'home') label = 'Home Goods';
+                else if (catSlug === 'fashion') label = 'Fashion';
+                else if (catSlug === 'services') label = 'Services';
+                else label = catSlug.charAt(0).toUpperCase() + catSlug.slice(1);
+
+                dynamicCategories.push({
+                  id: catSlug,
+                  name: label,
+                  icon: getCategoryIcon(catSlug)
+                });
+              }
+            });
+            setCategories(dynamicCategories);
+          }
+        } else {
+          console.warn("Classifieds General database returned empty. Running backups.");
+          setErrorTrace("Classifieds General database returned empty.");
+          loadLocalFallback();
+        }
+      } catch (err: any) {
+        console.error("AxiosError: Connection failure while fetching general classifieds:", err);
+        setErrorTrace(err?.stack || err?.message || String(err));
+        loadLocalFallback();
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const loadLocalFallback = () => {
+      setListings(FALLBACK_CLASSIFIEDS.map(translateListing));
+      setCategories([
+        { id: "all", name: "All Listings", icon: "📂" },
+        { id: "electronics", name: "Electronics", icon: "📱" },
+        { id: "vehicles", name: "Vehicles", icon: "🚗" },
+        { id: "real-estate", name: "Real Estate", icon: "🏠" },
+        { id: "home", name: "Home Goods", icon: "🛋️" },
+        { id: "fashion", name: "Fashion", icon: "👕" },
+        { id: "services", name: "Services", icon: "🔧" }
+      ]);
+      setUseFallback(true);
+    };
+
+    fetchGeneralClassifieds();
+  }, []);
+
   // Handle message send & mock seller response
   const handleSendMessage = (e: React.FormEvent) => {
     e.preventDefault();
@@ -98,7 +440,7 @@ export default function Page() {
     setChatMessages((prev) => [...prev, userMsg]);
     setTypedMessage('');
 
-    // Trigger mock seller smart response after 1.2 seconds
+    // Trigger mock seller response after 1.2 seconds
     setTimeout(() => {
       const sellerMsg: ChatMessage = {
         sender: 'seller',
@@ -126,12 +468,7 @@ export default function Page() {
     setListings(
       listings.map((item) => {
         if (item.id === id) {
-          const nextSaved = !item.isSaved;
-          // Simple visual feedback alerts
-          if (nextSaved) {
-            console.log(`Saved: ${item.title}`);
-          }
-          return { ...item, isSaved: nextSaved };
+          return { ...item, isSaved: !item.isSaved };
         }
         return item;
       })
@@ -146,7 +483,7 @@ export default function Page() {
     setIncludesDelivery(false);
     setMaxPrice(25000);
     setSortBy('new');
-    setVisibleCount(6);
+    setVisibleCount(12);
   };
 
   // Filter and sort general listings matching sidebar controls
@@ -176,7 +513,7 @@ export default function Page() {
   const handleLoadMore = () => {
     setLoadingListings(true);
     setTimeout(() => {
-      setVisibleCount((prev) => prev + 6);
+      setVisibleCount((prev) => prev + 12); // symmetry increments of 12!
       setLoadingListings(false);
     }, 650);
   };
@@ -190,7 +527,7 @@ export default function Page() {
         onReset={resetFilters} 
       />
 
-      {/* Main Two Column Column Grid */}
+      {/* Main Two Column Grid */}
       <div className="cg-layout">
         
         {/* Left Side Category sidebar panel */}
@@ -198,14 +535,7 @@ export default function Page() {
           <div className="cg-sidebar">
             <div className="cg-sidebar-title">Explore Categories</div>
             <div className="cg-category-list">
-              <a 
-                href="#" 
-                className={`cg-category-link ${selectedCategory === 'all' ? 'cg-active' : ''}`}
-                onClick={(e) => { e.preventDefault(); setSelectedCategory('all'); }}
-              >
-                <span>📂</span> All Listings
-              </a>
-              {categoriesList.map((cat) => (
+              {categories.map((cat) => (
                 <a 
                   key={cat.id} 
                   href="#" 
@@ -280,13 +610,28 @@ export default function Page() {
 
         {/* Right General Listings Panel */}
         <main>
+
+          {/* Resilient Diagnostics Connection Overlay on Server Outage */}
+          {useFallback && (
+            <div className="cg-resilience-panel">
+              <div className="cg-resilience-header">
+                🛰️ VETTED NETWORK DIAGNOSTICS & RESILIENCE PANEL
+              </div>
+              <div style={{ fontWeight: 600 }}>
+                Status: Local Database Node Offline. Activating Vetted sovereign proxy backup assets gracefully.
+              </div>
+              <div className="cg-resilience-trace">
+                {errorTrace || 'api.getClassifieds returned empty listings feed.'}
+              </div>
+            </div>
+          )}
           
           {/* List Header controls */}
           <div className="cg-grid-header">
             <h1 className="cg-grid-title">
               {selectedCategory === 'all' 
                 ? 'All Recommended Listings' 
-                : `${categoriesList.find(c => c.id === selectedCategory)?.name || ''} Showcase`}
+                : `${categories.find(c => c.id === selectedCategory)?.name || ''} Showcase`}
             </h1>
             
             <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
@@ -305,9 +650,25 @@ export default function Page() {
           </div>
 
           {/* listings Grid */}
-          {filteredListings.length === 0 ? (
+          {loading ? (
+            <div className="cg-grid">
+              {Array.from({ length: 8 }).map((_, idx) => (
+                <div key={idx} className="cg-shimmer-card">
+                  <div className="cg-shimmer-img" />
+                  <div className="cg-shimmer-body">
+                    <div className="cg-shimmer-title" />
+                    <div className="cg-shimmer-price" />
+                    <div className="cg-shimmer-footer">
+                      <div className="cg-shimmer-seller" />
+                      <div className="cg-shimmer-btns" />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : filteredListings.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '5rem 1rem', background: '#ffffff', borderRadius: '12px', border: '1px solid var(--cg-border)' }}>
-              <span style={{ fontSize: '3.5rem', display: 'block', marginBottom: '1.25rem' }}>📦</span>
+              <span style={{ fontSize: '2.5rem', display: 'block', marginBottom: '1.25rem' }}>📦</span>
               <h2 style={{ fontWeight: 800, marginBottom: '0.5rem' }}>No Listings Found</h2>
               <p style={{ color: 'var(--cg-text-muted)', maxWidth: '400px', margin: '0 auto 1.5rem' }}>We couldn't find items that match your current sidebar filters or search tags.</p>
               <button className="cg-btn cg-btn-primary" onClick={resetFilters}>Reset Settings</button>
@@ -325,13 +686,14 @@ export default function Page() {
                   category={item.category}
                   onMessageClick={() => initiateChat(item)}
                   onToggleSave={() => toggleSaveItem(item.id)}
+                  onClick={() => router.push(getThemeLink(`/product/${item.slug}`))}
                 />
               ))}
             </div>
           )}
 
           {/* Load More Trigger */}
-          {filteredListings.length > visibleCount && (
+          {!loading && filteredListings.length > visibleCount && (
             <div style={{ textAlign: 'center', marginTop: '3rem' }}>
               <button 
                 className="cg-btn cg-btn-outline" 

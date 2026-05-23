@@ -50,11 +50,12 @@ interface ListingCardProps {
   category: string;
   onMessageClick: () => void;
   onToggleSave: () => void;
+  onClick?: () => void;
 }
 
-export const ListingCard = ({ title, price, image, seller, isSaved, onMessageClick, onToggleSave }: ListingCardProps) => {
+export const ListingCard = ({ title, price, image, seller, isSaved, onMessageClick, onToggleSave, onClick }: ListingCardProps) => {
   return (
-    <div className="cg-card">
+    <div className="cg-card" onClick={onClick} style={{ cursor: 'pointer' }}>
       <div className="cg-card-img-wrap">
         <img src={image} className="cg-card-img" alt={title} />
       </div>

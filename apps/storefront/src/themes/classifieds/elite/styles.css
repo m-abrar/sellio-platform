@@ -721,3 +721,416 @@
     max-width: 1400px;
     margin: 5rem auto 0 auto;
 }
+
+/* --- Single Product Details Page --- */
+.elite-product-wrapper {
+    background-color: var(--prem-bg-main);
+    font-family: var(--prem-font);
+    color: var(--prem-text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.elite-product-container {
+    max-width: 1200px;
+    margin: 3rem auto;
+    padding: 0 1.5rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+}
+
+.elite-product-back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--prem-accent);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: var(--prem-transition);
+    margin-bottom: 0.5rem;
+}
+
+.elite-product-back-link:hover {
+    color: #ffffff;
+    transform: translateX(-2px);
+}
+
+.elite-product-main-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 3rem;
+}
+
+@media (max-width: 992px) {
+    .elite-product-main-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+}
+
+.elite-product-gallery {
+    background-color: #121212;
+    border: 1px solid var(--prem-border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: var(--prem-shadow-sm);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.elite-product-main-img-wrap {
+    width: 100%;
+    aspect-ratio: 4/3;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #1a1a1a;
+    border: 1px solid var(--prem-border);
+}
+
+.elite-product-main-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: var(--prem-transition);
+}
+
+.elite-product-main-img:hover {
+    transform: scale(1.01);
+}
+
+.elite-product-details-block {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.elite-product-meta-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.elite-product-title {
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: #ffffff;
+    line-height: 1.2;
+    margin: 0;
+    font-family: var(--prem-serif);
+}
+
+.elite-product-price {
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: var(--prem-accent);
+    margin: 0.5rem 0;
+    font-family: var(--prem-serif);
+}
+
+.elite-product-meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.elite-product-badge {
+    background-color: #18181b;
+    color: var(--prem-accent);
+    border: 1px solid var(--prem-border);
+    padding: 0.45rem 1rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.elite-product-description-card {
+    background-color: #121212;
+    border: 1px solid var(--prem-border);
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: var(--prem-shadow-sm);
+}
+
+.elite-product-card-title {
+    font-size: 0.9rem;
+    font-weight: 900;
+    color: var(--prem-accent);
+    margin-bottom: 1rem;
+    margin-top: 0;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.elite-product-description {
+    font-size: 0.9rem;
+    color: var(--prem-muted);
+    line-height: 1.7;
+    margin: 0;
+    font-weight: 500;
+}
+
+.elite-product-specs-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+}
+
+.elite-product-spec-item {
+    background-color: #18181b;
+    border: 1px solid var(--prem-border);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.elite-product-spec-label {
+    font-size: 0.7rem;
+    color: var(--prem-muted);
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.elite-product-spec-value {
+    font-size: 1rem;
+    color: #ffffff;
+    font-weight: 800;
+    font-family: var(--prem-serif);
+}
+
+.elite-product-seller-card {
+    background-color: #121212;
+    border: 1px solid var(--prem-border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: var(--prem-shadow-sm);
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.elite-product-seller-avatar {
+    width: 56px;
+    height: 56px;
+    background-color: #18181b;
+    border: 1px solid var(--prem-border);
+    color: var(--prem-accent);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    font-weight: 800;
+}
+
+.elite-product-seller-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.elite-product-seller-name {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #ffffff;
+    margin: 0;
+    font-family: var(--prem-serif);
+}
+
+.elite-product-seller-badge {
+    font-size: 0.7rem;
+    color: var(--prem-muted);
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+/* --- Inline Reservation Drawer/Card --- */
+.elite-product-booking-drawer {
+    background-color: #121212;
+    border: 1px solid var(--prem-border);
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: var(--prem-shadow-sm);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.elite-booking-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.elite-booking-label {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: var(--prem-muted);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+
+.elite-booking-input {
+    padding: 0.8rem 1.25rem;
+    border: 1px solid var(--prem-border);
+    background-color: #18181b;
+    color: #ffffff;
+    border-radius: 4px;
+    font-family: var(--prem-font);
+    font-size: 0.9rem;
+    outline: none;
+    transition: var(--prem-transition);
+    font-weight: 600;
+}
+
+.elite-booking-input:focus {
+    border-color: var(--prem-accent);
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
+}
+
+.elite-product-btn-reserve {
+    padding: 0.85rem 2rem;
+    background-color: var(--prem-accent);
+    color: #000000;
+    border: none;
+    font-weight: 800;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: var(--prem-transition);
+    width: 100%;
+}
+
+.elite-product-btn-reserve:hover {
+    background-color: #ffffff;
+    box-shadow: 0 4px 20px rgba(255,255,255,0.25);
+}
+
+.elite-booking-receipt {
+    background-color: rgba(212, 175, 55, 0.05);
+    border: 1.5px dashed var(--prem-accent);
+    border-radius: 8px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    font-size: 0.85rem;
+    animation: eliteReceiptFade 0.4s ease-out;
+}
+
+@keyframes eliteReceiptFade {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.elite-receipt-row {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 700;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    padding-bottom: 0.4rem;
+}
+
+/* --- Related Listings Grid --- */
+.elite-related-section {
+    margin-top: 4rem;
+    border-top: 1px dashed var(--prem-border);
+    padding-top: 3rem;
+    margin-bottom: 2rem;
+}
+
+.elite-related-title {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: #ffffff;
+    margin-bottom: 2rem;
+    margin-top: 0;
+    font-family: var(--prem-serif);
+    text-align: center;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.elite-related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+}
+
+.elite-related-card {
+    background-color: #121212;
+    border-radius: 8px;
+    border: 1px solid var(--prem-border);
+    overflow: hidden;
+    cursor: pointer;
+    transition: var(--prem-transition);
+    box-shadow: var(--prem-shadow-sm);
+    display: flex;
+    flex-direction: column;
+}
+
+.elite-related-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(212,175,55,0.1);
+    border-color: var(--prem-accent);
+}
+
+.elite-related-img-wrap {
+    width: 100%;
+    aspect-ratio: 16/10;
+    overflow: hidden;
+    background-color: #1a1a1a;
+}
+
+.elite-related-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.elite-related-info {
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    flex: 1;
+}
+
+.elite-related-card-title {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: #ffffff;
+    margin: 0;
+    line-height: 1.4;
+    font-family: var(--prem-serif);
+}
+
+.elite-related-price-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+}
+
+.elite-related-price {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--prem-accent);
+    font-family: var(--prem-serif);
+}

@@ -30,6 +30,7 @@ interface PremiumCardProps {
   onQuickView: () => void;
   onToggleFavorite: () => void;
   onShare: () => void;
+  onClick?: () => void;
 }
 
 export const PremiumCard = ({ 
@@ -40,15 +41,16 @@ export const PremiumCard = ({
   isFavorite, 
   onQuickView, 
   onToggleFavorite, 
-  onShare 
+  onShare,
+  onClick
 }: PremiumCardProps) => {
   return (
-    <div className="elite-card">
+    <div className="elite-card" onClick={onClick} style={{ cursor: 'pointer' }}>
       <div className="elite-card-img-wrapper">
         <img src={image} className="elite-card-img" alt={title} />
         
         {/* Luxury Action Overlay Hover Buttons */}
-        <div className="elite-card-overlay">
+        <div className="elite-card-overlay" onClick={(e) => e.stopPropagation()}>
           <button className="elite-action-btn" title="Quick View" onClick={onQuickView}>👁️</button>
           <button className="elite-action-btn" title="Toggle Favorite" onClick={onToggleFavorite} style={{ color: isFavorite ? '#ef4444' : 'var(--prem-accent)' }}>
             {isFavorite ? '❤️' : '♡'}

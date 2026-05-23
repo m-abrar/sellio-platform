@@ -42,7 +42,7 @@ export async function getActiveTheme(): Promise<ResolvedTheme> {
       databaseOffline: false
     };
   } catch (error: any) {
-    console.error("Failed to fetch theme from API", error);
+    console.error(`[Offline Resilience] Failed to fetch active theme from API (${error.response?.status || 503}: ${error.message || error})`);
     
     return {
       theme: {

@@ -1,3 +1,6 @@
+import Page from './Page';
+import Layout from './Layout';
+import ProductPage from './ProductPage';
 
-export { default } from './Page';
-export { default as Layout } from './Layout';
+export { Layout, ProductPage };
+export default Page;
