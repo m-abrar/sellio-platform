@@ -240,6 +240,13 @@
     gap: 1.5rem; /* blueprint: minimal spacing */
 }
 
+@media (min-width: 1200px) {
+    .cm-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+
 /* --- Modern Card Structure --- */
 .cm-card {
     background-color: var(--cm-bg-card);

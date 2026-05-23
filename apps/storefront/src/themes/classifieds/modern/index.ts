@@ -1,6 +1,8 @@
 
 import Page from './Page';
 import Layout from './Layout';
+import ProductPage from './ProductPage';
 
-export { Layout };
+export { Layout, ProductPage };
 export default Page;
+

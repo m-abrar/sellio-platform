@@ -37,6 +37,7 @@ interface ModernCardProps {
   onQuickView: () => void;
   onToggleFavorite: () => void;
   onShare: () => void;
+  onCardClick?: () => void;
 }
 
 export const ModernCard = ({ 
@@ -51,11 +52,12 @@ export const ModernCard = ({
   isFavorite, 
   onQuickView, 
   onToggleFavorite, 
-  onShare 
+  onShare,
+  onCardClick
 }: ModernCardProps) => {
   return (
     <div className="cm-card">
-      <div className="cm-card-image-wrap">
+      <div className="cm-card-image-wrap" onClick={onCardClick} style={{ cursor: onCardClick ? 'pointer' : 'default' }}>
         {/* Badge styling overlay */}
         {isFeatured && <span className="cm-card-badge">Featured</span>}
         {isRecent && <span className="cm-card-badge cyan">Recent</span>}
@@ -64,7 +66,7 @@ export const ModernCard = ({
         <img src={image} className="cm-card-image" alt={title} />
         
         {/* Blueprint Action Overlay hover buttons */}
-        <div className="cm-card-overlay">
+        <div className="cm-card-overlay" onClick={(e) => e.stopPropagation()}>
           <button className="cm-action-btn" title="Quick View" onClick={onQuickView}>👁️</button>
           <button 
             className={`cm-action-btn ${isFavorite ? 'active-favorite' : ''}`} 
@@ -77,7 +79,7 @@ export const ModernCard = ({
         </div>
       </div>
       
-      <div className="cm-card-body">
+      <div className="cm-card-body" onClick={onCardClick} style={{ cursor: onCardClick ? 'pointer' : 'default' }}>
         <div className="cm-card-price">{price}</div>
         <h3 className="cm-card-title" title={title}>{title}</h3>
         
