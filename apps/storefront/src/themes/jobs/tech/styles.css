@@ -299,3 +299,19 @@
     padding: 4rem 5% 2rem;
     margin-top: 4rem;
 }
+
+/* --- DEV_JOBS EXTRA STYLES --- */
+:root {
+  --jt-purple: var(--jt-accent-alt);
+  --jt-bg-light: var(--jt-bg-card);
+}
+
+.jt-skill-tag {
+  transition: var(--jt-transition);
+}
+
+.jt-skill-tag:hover {
+  background-color: rgba(210, 168, 255, 0.15);
+  border-color: var(--jt-accent-alt);
+}
+

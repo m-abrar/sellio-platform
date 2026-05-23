@@ -18,8 +18,8 @@ export const TechHeader = () => (
     </header>
 );
 
-export const TechJobCard = ({ title, company, location, type, salary, time, logo, skills }: any) => (
-    <div className="jt-job-card">
+export const TechJobCard = ({ title, company, location, type, salary, time, logo, skills, onClick }: any) => (
+    <div className="jt-job-card" onClick={onClick} style={{ cursor: onClick ? 'pointer' : 'default' }}>
         <div className="jt-company-logo">
             <img src={logo} alt={company} />
         </div>
@@ -39,7 +39,7 @@ export const TechJobCard = ({ title, company, location, type, salary, time, logo
         </div>
         <div className="jt-job-action">
             <div style={{ fontSize: '0.8rem', color: 'var(--jt-text-muted)' }}>{time}</div>
-            <button className="jt-btn jt-btn-primary">Apply</button>
+            <button className="jt-btn jt-btn-primary" onClick={(e) => { e.stopPropagation(); if (onClick) onClick(); }}>Apply</button>
         </div>
     </div>
 );
