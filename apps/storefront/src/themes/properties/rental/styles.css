@@ -413,3 +413,35 @@
     text-align: center;
   }
 }
+
+/* --- LEASE SINGLE PROTOCOL EXTRA STYLES --- */
+.pr-detail-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 6rem;
+  align-items: start;
+}
+
+.pr-addon-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  padding: 1rem 1.5rem;
+  border: 1px solid var(--pr-border);
+  borderRadius: 12px;
+  transition: var(--pr-transition);
+}
+
+.pr-addon-item:hover {
+  border-color: var(--pr-mint);
+  background: rgba(0, 209, 255, 0.02);
+}
+
+@media (max-width: 1200px) {
+  .pr-detail-grid {
+    grid-template-columns: 1fr;
+    gap: 4rem;
+  }
+}
+

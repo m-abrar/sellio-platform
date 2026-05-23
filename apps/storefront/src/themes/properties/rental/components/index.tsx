@@ -38,7 +38,7 @@ export const RentalHeader = () => {
   );
 };
 
-export const LeaseUnitCard = ({ title, price, type, location, beds, baths, sqft, rating, reviews, image }: any) => {
+export const LeaseUnitCard = ({ title, price, type, location, beds, baths, sqft, rating, reviews, image, onClick }: any) => {
   // Generate high-fidelity SVG star ratings
   const renderStars = (ratingVal: number) => {
     const stars = [];
@@ -54,7 +54,7 @@ export const LeaseUnitCard = ({ title, price, type, location, beds, baths, sqft,
   };
 
   return (
-    <div className="pr-rent-card">
+    <div className="pr-rent-card" onClick={onClick} style={{ cursor: onClick ? 'pointer' : 'default' }}>
       <div className="pr-card-img-wrapper">
         <img src={image} alt={title} className="pr-card-img" />
         <div style={{ 
