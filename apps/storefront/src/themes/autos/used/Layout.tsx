@@ -1,12 +1,16 @@
 import React from 'react';
 import './styles.css';
+import { UsedHeader, UsedFooter } from './components';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="autos-used-wrapper">
-      <main>
+      <UsedHeader />
+      <main style={{ minHeight: '80vh' }}>
         {children}
       </main>
+      <UsedFooter />
     </div>
   );
 }
+

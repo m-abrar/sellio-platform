@@ -450,3 +450,34 @@
         padding: 3rem 5%;
     }
 }
+
+/* ==========================================================================
+   Autos Used Detail Page & Animations Styles
+   ========================================================================== */
+
+/* Shimmer Pulse Micro-Animation */
+@keyframes usPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+.us-shimmer-pulse {
+  animation: usPulse 1.6s infinite ease-in-out;
+}
+
+/* Details grid layout adjustments */
+@media (max-width: 992px) {
+    .us-details-grid {
+        grid-template-columns: 1fr !important;
+        gap: 2rem !important;
+    }
+}
+
+/* Used Car Card Hover Premium transition */
+.us-car-card {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+.us-car-card:hover {
+    transform: translateY(-6px) !important;
+    box-shadow: 0 12px 24px rgba(0,0,0,0.12) !important;
+}
+

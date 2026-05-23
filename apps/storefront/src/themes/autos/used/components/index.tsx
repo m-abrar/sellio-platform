@@ -37,12 +37,12 @@ export const UsedHeader = () => {
     );
 };
 
-export const UsedCarCard = ({ title, price, mileage, location, dealer, image }: any) => (
-    <div className="us-car-card">
+export const UsedCarCard = ({ title, price, mileage, location, dealer, image, onClick }: any) => (
+    <div className="us-car-card" onClick={onClick} style={{ cursor: onClick ? 'pointer' : 'default' }}>
         <div className="us-car-img-container">
-            <img src={image} className="us-car-img" alt={title} />
+            <img src={image} className="us-car-img" alt={title} style={{ height: '220px', width: '100%', objectFit: 'cover' }} />
             <div className="us-car-overlay">
-                <a href="#" className="us-btn us-btn-orange">Contact Seller</a>
+                <span className="us-btn us-btn-orange">View Details</span>
             </div>
         </div>
         <div className="us-car-body">
@@ -51,12 +51,14 @@ export const UsedCarCard = ({ title, price, mileage, location, dealer, image }: 
             <p className="us-car-meta">
                 <span>⏱️ {mileage}</span> | <span>📍 {location}</span>
             </p>
-            <small style={{ color: '#888' }}>
-                <span>🏪 {dealer}</span>
-            </small>
+            <div style={{ marginTop: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                <span style={{ fontSize: '0.9rem' }}>🏪</span>
+                <span style={{ color: '#666', fontSize: '0.85rem', fontWeight: 600 }}>{dealer}</span>
+            </div>
         </div>
     </div>
 );
+
 
 export const DealerLogo = ({ name, rating }: any) => (
     <div className="us-dealer-logo">
