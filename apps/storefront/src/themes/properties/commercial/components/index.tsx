@@ -37,10 +37,15 @@ export const CommercialHeader = () => {
   );
 };
 
-export const AssetRegistryCard = ({ title, type, area, status, id }: any) => (
-  <div className="pc-asset-card">
+export const AssetRegistryCard = ({ title, type, area, status, id, image, onClick }: any) => (
+  <div className="pc-asset-card" onClick={onClick} style={{ cursor: onClick ? 'pointer' : 'default', display: 'flex', flexDirection: 'column', height: '100%' }}>
+    {image && (
+      <div style={{ width: '100%', height: '220px', overflow: 'hidden', marginBottom: '2.5rem', border: '1px solid var(--pc-border)', padding: '0.5rem', background: 'var(--pc-bg)' }}>
+        <img src={image} alt={title} className="pc-card-img" style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'grayscale(100%) brightness(0.95)', transition: 'var(--pc-transition)' }} />
+      </div>
+    )}
     <div className="pc-mono" style={{ marginBottom: '1.5rem', fontSize: '0.65rem' }}>{id} // {type}</div>
-    <h3 className="pc-asset-title" style={{ fontSize: '1.75rem', fontWeight: 900, marginBottom: '2rem', transition: 'var(--pc-transition)' }}>{title}</h3>
+    <h3 className="pc-asset-title" style={{ fontSize: '1.75rem', fontWeight: 900, marginBottom: '2rem', transition: 'var(--pc-transition)', flexGrow: 1 }}>{title}</h3>
     
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '3rem' }}>
         <div>
@@ -53,7 +58,7 @@ export const AssetRegistryCard = ({ title, type, area, status, id }: any) => (
         </div>
     </div>
     
-    <div style={{ fontSize: '0.75rem', fontWeight: 900, letterSpacing: '2px', borderTop: '1px solid var(--pc-border)', paddingTop: '1.5rem', display: 'flex', justifyContent: 'space-between' }}>
+    <div style={{ fontSize: '0.75rem', fontWeight: 900, letterSpacing: '2px', borderTop: '1px solid var(--pc-border)', paddingTop: '1.5rem', display: 'flex', justifyContent: 'space-between', marginTop: 'auto' }}>
         <span>REQUEST_AUDIT</span>
         <span style={{ color: 'var(--pc-blue)' }}>VIEW_YIELD →</span>
     </div>
@@ -69,7 +74,7 @@ export const IntelligenceHUD = ({ label, value }: { label: string, value: string
 
 export const InstitutionalFooter = () => (
     <footer className="pc-footer">
-        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: '8rem' }}>
+        <div className="pc-footer-grid">
             <div>
                 <div className="pc-logo" style={{ fontSize: '2.5rem', marginBottom: '3.5rem' }}>CORP</div>
                 <p style={{ opacity: 0.5, lineHeight: 2, fontSize: '0.95rem', maxWidth: '400px' }}>
