@@ -418,3 +418,25 @@
     text-align: center;
   }
 }
+
+/* ==========================================================================
+   Properties Vacation Detail Page & Shimmer Animations
+   ========================================================================== */
+
+/* Shimmer Pulse Micro-Animation */
+@keyframes pvPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+.pv-shimmer-pulse {
+  animation: pvPulse 1.6s infinite ease-in-out;
+}
+
+/* Detail page grid layout details */
+@media (max-width: 992px) {
+    .ac-details-grid {
+        grid-template-columns: 1fr !important;
+        gap: 2.5rem !important;
+    }
+}
+

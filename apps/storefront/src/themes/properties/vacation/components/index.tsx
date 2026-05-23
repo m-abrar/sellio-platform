@@ -37,8 +37,8 @@ export const VacationHeader = () => {
   );
 };
 
-export const RetreatBentoCard = ({ title, location, price, rating, image }: any) => (
-  <div className="pv-retreat-card" onClick={() => alert(`Opening secure booking portal for: ${title}`)}>
+export const RetreatBentoCard = ({ title, location, price, rating, image, onClick }: any) => (
+  <div className="pv-retreat-card" onClick={onClick}>
     <div className="pv-card-img-wrapper">
       <img src={image} alt={title} className="pv-card-img" />
       <div className="pv-card-rating">
@@ -57,6 +57,7 @@ export const RetreatBentoCard = ({ title, location, price, rating, image }: any)
     </div>
   </div>
 );
+
 
 export const ExperienceStats = ({ value, label }: { value: string, label: string }) => (
     <div style={{ textAlign: 'center' }} className="pv-stat-item">
