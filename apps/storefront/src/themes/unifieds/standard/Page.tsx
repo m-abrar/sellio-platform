@@ -1,8 +1,57 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { api } from '@sellio/api-client';
+import type { Product } from '@sellio/types';
 import { ProtocolGrid, EfficiencyBar } from './components';
 
 export default function Page() {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loadingListings, setLoadingListings] = useState(true);
+  const [listingError, setListingError] = useState<string | null>(null);
+
+  const placeholderImage = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='720' height='520' viewBox='0 0 720 520'><rect width='100%' height='100%' fill='%23f8fafc'/><g transform='translate(328,214)' stroke='%2394a3b8' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='2' width='60' height='60' rx='8'/><circle cx='20' cy='20' r='6'/><path d='M58 46L42 30 12 60'/></g><text x='50%' y='61%' dominant-baseline='middle' text-anchor='middle' font-family='Inter, sans-serif' font-size='13' font-weight='700' letter-spacing='2' fill='%2364758b'>SCALE LISTING</text></svg>";
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadListings() {
+      try {
+        const fetchedProducts = await api.getProducts();
+        if (!isMounted) {
+          return;
+        }
+
+        setProducts(Array.isArray(fetchedProducts) ? fetchedProducts : []);
+        setListingError(null);
+      } catch (error: unknown) {
+        if (!isMounted) {
+          return;
+        }
+
+        console.error('Failed to load unified standard listings:', error);
+        setListingError(error instanceof Error ? error.message : 'Listings are temporarily unavailable.');
+      } finally {
+        if (isMounted) {
+          setLoadingListings(false);
+        }
+      }
+    }
+
+    loadListings();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const getProductImage = (product: Product) => (
+    product.media?.featured_image || product.image_url || placeholderImage
+  );
+
+  const formatPrice = (product: Product) => (
+    product.pricing?.formatted || (product.price ? `$${Number(product.price).toLocaleString()}` : 'Contact for pricing')
+  );
+
   return (
     <div>
       {/* Hero Section */}
@@ -13,7 +62,7 @@ export default function Page() {
                 The <span>Scale</span> <br/>Protocol.
               </h1>
               <p style={{ maxWidth: '600px', margin: '2rem auto 5rem', fontSize: '1.25rem', color: 'var(--usp-gray)', lineHeight: 1.8, fontWeight: 300 }}>
-                  The world's most efficient high-fidelity distribution node. Modular, precise, and engineered for global multi-vertical commerce.
+                  The world&apos;s most efficient high-fidelity distribution node. Modular, precise, and engineered for global multi-vertical commerce.
               </p>
               <div style={{ display: 'flex', gap: '2rem', justifyContent: 'center', flexWrap: 'wrap' }} className="usp-hero-buttons">
                   <button className="scale-btn-primary" id="usp-btn-explore" onClick={() => document.getElementById('usp-exchange-section')?.scrollIntoView({ behavior: 'smooth' })}>
@@ -34,6 +83,61 @@ export default function Page() {
           <h2 style={{ fontSize: 'clamp(2.2rem, 6vw, 3.5rem)', fontWeight: 800, letterSpacing: '-1.5px', color: 'var(--usp-navy)', lineHeight: 1.1 }} id="usp-layers-title">Universal Logic Layers.</h2>
       </section>
       <ProtocolGrid />
+
+      {/* Live Listings */}
+      <section className="usp-listings-section" id="usp-exchange-section" aria-labelledby="usp-exchange-title">
+          <div className="usp-listings-header">
+              <div className="usp-mono" style={{ color: 'var(--usp-gray)', marginBottom: '1.5rem' }}>LIVE_EXCHANGE</div>
+              <h2 id="usp-exchange-title">Standard Listings Exchange.</h2>
+              <p>Live product records synchronized into the Scale Protocol for clean, modular marketplace discovery.</p>
+          </div>
+
+          {loadingListings ? (
+              <div className="usp-listings-grid" aria-label="Loading live listings">
+                  {[1, 2, 3].map((item) => (
+                      <div className="usp-listing-card usp-listing-skeleton" key={item}>
+                          <div className="usp-listing-image-wrap" />
+                          <div className="usp-listing-body">
+                              <span />
+                              <strong />
+                              <em />
+                          </div>
+                      </div>
+                  ))}
+              </div>
+          ) : listingError ? (
+              <div className="usp-listing-state" role="status">
+                  <div className="usp-mono" style={{ color: 'var(--usp-gray)', marginBottom: '1rem' }}>EXCHANGE_OFFLINE</div>
+                  <h3>Listings could not be synchronized.</h3>
+                  <p>{listingError}</p>
+              </div>
+          ) : products.length === 0 ? (
+              <div className="usp-listing-state" role="status">
+                  <div className="usp-mono" style={{ color: 'var(--usp-gray)', marginBottom: '1rem' }}>EMPTY_EXCHANGE</div>
+                  <h3>No live listings are available yet.</h3>
+                  <p>Add product records in the backend and this exchange will hydrate automatically.</p>
+              </div>
+          ) : (
+              <div className="usp-listings-grid">
+                  {products.slice(0, 6).map((product) => (
+                      <a href={`/product/${product.slug}`} className="usp-listing-card" key={product.id}>
+                          <div className="usp-listing-image-wrap">
+                              <img src={getProductImage(product)} alt={product.title} />
+                          </div>
+                          <div className="usp-listing-body">
+                              <div className="usp-mono">NODE_{product.id}</div>
+                              <h3>{product.title}</h3>
+                              <p>{product.description || 'Verified marketplace listing synchronized into the Scale Protocol.'}</p>
+                              <div className="usp-listing-meta">
+                                  <span>{formatPrice(product)}</span>
+                                  <span>Open Node</span>
+                              </div>
+                          </div>
+                      </a>
+                  ))}
+              </div>
+          )}
+      </section>
 
       {/* Mid-Section: Geometric Precision */}
       <section className="usp-geometric-section" aria-labelledby="usp-mid-title">
@@ -68,7 +172,7 @@ export default function Page() {
       <section style={{ padding: '15rem 6%', textAlign: 'center' }} aria-labelledby="usp-cta-title">
           <h2 style={{ fontSize: 'clamp(3rem, 8vw, 5rem)', fontWeight: 800, marginBottom: '4rem', letterSpacing: '-3px', color: 'var(--usp-navy)', lineHeight: 1.1 }} id="usp-cta-title">Initialize the <br/>Standard.</h2>
           <p style={{ maxWidth: '600px', margin: '0 auto 6rem', fontSize: '1.25rem', color: 'var(--usp-gray)', fontWeight: 300 }}>
-              Connect your professional node to the Scale Protocol and gain access to the world's most efficient high-fidelity distribution network.
+              Connect your professional node to the Scale Protocol and gain access to the world&apos;s most efficient high-fidelity distribution network.
           </p>
           <button className="scale-btn-primary" id="usp-btn-cta-handshake" onClick={() => alert('Scale Protocol handshakes active.')}>CONNECT SCALE NODE</button>
       </section>

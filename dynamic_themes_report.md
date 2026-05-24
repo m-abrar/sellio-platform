@@ -12,8 +12,8 @@ This report tracks which Sellio storefront themes have moved from static prototy
 | :--- | ---: |
 | Seeded themes in `ThemeSeeder` | 52 |
 | Matching storefront theme folders | 52 |
-| API-backed themes found in source scan | 24 |
-| Static / mostly static themes remaining | 28 |
+| API-backed themes found in source scan | 25 |
+| Static / mostly static themes remaining | 27 |
 
 Definition: "API-backed" means the theme contains direct `api.*` usage in `.tsx` source files. Some API-backed themes may still need view parity work, polish, error-state review, and full QA.
 
@@ -47,6 +47,7 @@ Definition: "API-backed" means the theme contains direct `api.*` usage in `.tsx`
 | Services | `services_marketplace` | `services/marketplace` | Homepage uses services API data |
 | Unified | `unifieds_default` | `unifieds/default` | Homepage listing section and product details use product API data |
 | Unified | `unifieds_minimal` | `unifieds/minimal` | Homepage, explore, and product details use product/category API data |
+| Unified | `unifieds_standard` | `unifieds/standard` | Homepage listing section and product details use product API data |
 
 ---
 
@@ -56,14 +57,14 @@ These themes have matching storefront folders but no direct `api.*` usage in the
 
 | Vertical | Remaining Themes | Count |
 | :--- | :--- | ---: |
-| Unified | `unifieds_standard`, `unifieds_classic`, `unifieds_modern`, `unifieds_mega`, `unifieds_interactive`, `unifieds_marketplace` | 6 |
+| Unified | `unifieds_classic`, `unifieds_modern`, `unifieds_mega`, `unifieds_interactive`, `unifieds_marketplace` | 5 |
 | Properties | `properties_modern`, `properties_platinum`, `properties_urban`, `properties_map`, `properties_unified`, `properties_showcase`, `properties_neighborhood`, `properties_investment` | 8 |
 | Events | `events_classic`, `events_creative`, `events_music`, `events_festival` | 4 |
 | Services | `services_corporate`, `services_creative`, `services_local`, `services_health` | 4 |
 | Jobs | `jobs_corporate`, `jobs_modern`, `jobs_blue_collar`, `jobs_freelance` | 4 |
 | Ecommerce | `ecommerce_default`, `ecommerce_luxury` | 2 |
 
-Total remaining: 28 themes.
+Total remaining: 27 themes.
 
 ---
 
@@ -83,12 +84,11 @@ Target: make each vertical follow the same minimum dynamic surface.
 
 Convert the generic themes first because they can act as reusable reference patterns for QA and smoke testing.
 
-1. `unifieds_standard`
-2. `unifieds_modern`
-3. `unifieds_classic`
-4. `unifieds_mega`
-5. `unifieds_interactive`
-6. `unifieds_marketplace`
+1. `unifieds_modern`
+2. `unifieds_classic`
+3. `unifieds_mega`
+4. `unifieds_interactive`
+5. `unifieds_marketplace`
 
 Recommended API family: product/category APIs, matching `unifieds_minimal`.
 
@@ -153,5 +153,5 @@ Recommended API family: property APIs plus lodging price calculation where booki
 ## Notes
 
 - `apps/storefront/THEME_MASTER_INVENTORY.md` previously reported 50 themes, but the current seeder and folders contain 52.
-- The previous dynamic report said fifteen dynamic themes while listing sixteen. The source scan now finds 24 API-backed themes.
+- The previous dynamic report said fifteen dynamic themes while listing sixteen. The source scan now finds 25 API-backed themes.
 - This report intentionally distinguishes "API-backed" from "fully QA-certified dynamic." The next pass should validate each API-backed theme view-by-view.
