@@ -314,6 +314,11 @@ h1, h2, h3, h4, h5, h6 {
     border-radius: 1rem;
 }
 
+.crtv-testimonials-layout {
+    display: grid;
+    gap: 2rem;
+}
+
 /* CTA Banner */
 .crtv-cta-banner {
     background-image: var(--crtv-gradient-cta);

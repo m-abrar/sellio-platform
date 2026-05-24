@@ -836,4 +836,18 @@
     }
 }
 
+.sm-testimonials-layout {
+    display: grid;
+    gap: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.sm-testimonial-card {
+    text-align: center;
+    background: var(--sm-surface);
+    padding: 4rem;
+    border-radius: 16px;
+    border: 1px solid var(--sm-border);
+}
 

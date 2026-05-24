@@ -2,6 +2,7 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { EstateCard, FilterSidebar } from './components';
+import { DynamicTestimonials } from '@/components/testimonials/DynamicTestimonials';
 import { api } from '@sellio/api-client';
 import type { Property, Category, Location } from '@sellio/types';
 
@@ -362,41 +363,33 @@ export default function Page() {
 
       <div className="pc-divider" />
 
-      {/* Editorial Testimonials */}
-      <section className="pc-section" style={{ paddingBottom: '12rem' }}>
-          <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
-              <div style={{ textAlign: 'center', marginBottom: '8rem' }}>
-                  <div className="pc-caps" style={{ color: 'var(--pc-teal)', marginBottom: '1.5rem', opacity: 0.4 }}>Patron Feedback</div>
-                  <h3 className="pc-serif" style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: 900, letterSpacing: '-2px', color: 'var(--pc-teal)' }}>
-                    Voices of <span className="pc-italic" style={{ fontWeight: 400 }}>Trust.</span>
-                  </h3>
-              </div>
-              
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '3rem' }} className="pc-testimonials-grid">
-                  <style dangerouslySetInnerHTML={{ __html: `
-                    @media (min-width: 768px) {
-                      .pc-testimonials-grid { grid-template-columns: repeat(2, 1fr) !important; }
-                    }
-                    @media (min-width: 1200px) {
-                      .pc-testimonials-grid { grid-template-columns: repeat(3, 1fr) !important; }
-                    }
-                  ` }} />
-                  {[
-                      { quote: "Estate & Heritage turned a daunting task into a delightful journey. Their market knowledge is unmatched.", client: "A. Bennett", title: "Estate Patron" },
-                      { quote: "Personalized service and fantastic negotiation. Highly recommend for classic property sales.", client: "M. Chen", title: "Institutional Lead" },
-                      { quote: "They understand the nuances of classic architecture and helped us secure a property of historical significance.", client: "T. Davis", title: "Heritage Collector" }
-                  ].map((t, i) => (
-                      <div key={i} style={{ padding: '2.5rem', background: 'var(--pc-white)', border: '1px solid var(--pc-border)', position: 'relative' }}>
-                          <p style={{ fontStyle: 'italic', fontSize: '1.2rem', marginBottom: '3rem', lineHeight: 1.7, color: 'var(--pc-teal)' }}>"{t.quote}"</p>
-                          <div>
-                            <div style={{ fontWeight: 800, fontSize: '0.8rem', letterSpacing: '2px', color: 'var(--pc-teal)' }}>{t.client.toUpperCase()}</div>
-                            <div style={{ fontSize: '0.65rem', color: 'var(--pc-text-muted)', marginTop: '0.5rem', textTransform: 'uppercase', letterSpacing: '1px' }}>{t.title}</div>
-                          </div>
-                      </div>
-                  ))}
-              </div>
-          </div>
-      </section>
+      <DynamicTestimonials
+        eyebrow="Patron Feedback"
+        title="Voices of Trust."
+        limit={3}
+        variant="editorial"
+        sectionClassName="pc-section"
+        sectionStyle={{ paddingBottom: '12rem' }}
+        titleClassName="pc-serif"
+        titleStyle={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: 900, letterSpacing: '-2px', color: 'var(--pc-teal)' }}
+        layoutClassName="pc-testimonials-grid"
+        headingId="pc-testimonials-title"
+      />
+      <style dangerouslySetInnerHTML={{ __html: `
+        .pc-testimonials-grid {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 3rem;
+          max-width: 1400px;
+          margin: 0 auto;
+        }
+        @media (min-width: 768px) {
+          .pc-testimonials-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (min-width: 1200px) {
+          .pc-testimonials-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+      ` }} />
     </div>
   );
 }

@@ -668,3 +668,16 @@
     }
 }
 
+.local-testimonials-layout {
+    display: grid;
+    gap: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.local-testimonial-card {
+    background: var(--local-bg);
+    padding: 4rem;
+    border-radius: 16px;
+    border: 1px solid var(--local-border);
+}

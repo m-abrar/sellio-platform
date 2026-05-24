@@ -286,6 +286,11 @@
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 
+.lx-testimonial-avatar {
+    border: 2px solid var(--lx-gold);
+    margin-right: 1rem;
+}
+
 /* Footer */
 .lx-footer {
     background-color: var(--lx-bg-darker);

@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { api } from '@sellio/api-client';
 import type { ServiceListing } from '@sellio/types';
 import { LocalHeader, LocalServiceCard, ProviderCard, LocalFooter } from './components';
+import { DynamicTestimonials } from '@/components/testimonials/DynamicTestimonials';
 
 const serviceIcons = ['🏠', '🔧', '⚡', '🌳', '🌡️', '🔨'];
 
@@ -175,17 +176,19 @@ export default function Page() {
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section id="testimonials" className="local-section" style={{ background: 'white', textAlign: 'center' }} aria-labelledby="local-testimonials-title">
-        <h2 id="local-testimonials-title" style={{ fontWeight: 800, marginBottom: '4rem', fontSize: '2.5rem' }}>What Our Community Says</h2>
-        <div style={{ maxWidth: '800px', margin: '0 auto', background: 'var(--local-bg)', padding: '4rem', borderRadius: '16px', border: '1px solid var(--local-border)' }}>
-            <div style={{ fontSize: '3rem', color: 'var(--local-yellow)', marginBottom: '1.5rem', lineHeight: 1 }}>"</div>
-            <p style={{ fontStyle: 'italic', fontSize: '1.25rem', marginBottom: '2rem', color: 'var(--local-text-muted)', lineHeight: 1.6 }}>
-                "The easiest way I've ever found a reliable cleaner! Sarah K. was punctual, professional, and my house sparkled. Highly recommend HomeFix to my neighbors."
-            </p>
-            <p style={{ fontWeight: 700 }}>- Jessica L. (Home Cleaning Client)</p>
-        </div>
-      </section>
+      <DynamicTestimonials
+        title="What Our Community Says"
+        limit={3}
+        variant="centered"
+        quoteDecor="local"
+        sectionId="testimonials"
+        sectionClassName="local-section"
+        sectionStyle={{ background: 'white', textAlign: 'center' }}
+        titleStyle={{ fontWeight: 800, marginBottom: '4rem', fontSize: '2.5rem' }}
+        layoutClassName="local-testimonials-layout"
+        cardClassName="local-testimonial-card"
+        headingId="local-testimonials-title"
+      />
 
       {/* Trust/Safety */}
       <section className="local-section text-center" aria-labelledby="local-safety-title">

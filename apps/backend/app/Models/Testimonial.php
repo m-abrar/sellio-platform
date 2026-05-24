@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\HasImageAccess;
+use App\Traits\Models\HasStatusModeration;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -16,7 +17,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class Testimonial extends Model implements HasMedia
 {
-    use HasFactory, HasImageAccess, InteractsWithMedia, LogsActivity, SoftDeletes;
+    use HasFactory, HasImageAccess, HasStatusModeration, InteractsWithMedia, LogsActivity, SoftDeletes;
 
     public const STATUS_DRAFT = 'draft';
     public const STATUS_PUBLISHED = 'published';

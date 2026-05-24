@@ -11,6 +11,7 @@ import {
 } from './components';
 import { api } from '@sellio/api-client';
 import type { ServiceListing, Category, Location } from '@sellio/types';
+import { DynamicTestimonials } from '@/components/testimonials/DynamicTestimonials';
 
 const FALLBACK_CATEGORIES = [
   { id: 1, title: "Home Repair", slug: "home-repair", icon: "🛠️" },
@@ -530,16 +531,18 @@ export default function Page() {
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="sm-section" id="sm-testimonials-section" style={{ background: 'white' }} aria-labelledby="sm-testimonials-title">
-        <h2 className="sm-section-title" id="sm-testimonials-title">What Our Clients Say</h2>
-        <div style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center', background: 'var(--sm-surface)', padding: '4rem', borderRadius: '16px', border: '1px solid var(--sm-border)' }}>
-            <p style={{ fontSize: '1.25rem', fontStyle: 'italic', color: 'var(--sm-text-muted)', marginBottom: '2rem', lineHeight: 1.7 }}>
-                "Hiring a plumber was seamless and fast! Mark T. fixed our leak within an hour. Highly recommend this platform for reliable services."
-            </p>
-            <p style={{ fontWeight: 800, fontSize: '1.05rem', color: 'var(--sm-primary)' }}>Client: John D. <span style={{ color: 'var(--sm-text-muted)', fontWeight: 400 }}>for Plumbing Repairs</span></p>
-        </div>
-      </section>
+      <DynamicTestimonials
+        title="What Our Clients Say"
+        limit={3}
+        variant="centered"
+        sectionId="sm-testimonials-section"
+        sectionClassName="sm-section"
+        sectionStyle={{ background: 'white' }}
+        titleClassName="sm-section-title"
+        layoutClassName="sm-testimonials-layout"
+        cardClassName="sm-testimonial-card"
+        headingId="sm-testimonials-title"
+      />
 
       {/* CTA */}
       <section className="sm-cta-section">

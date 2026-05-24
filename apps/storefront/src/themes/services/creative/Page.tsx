@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { api } from '@sellio/api-client';
 import type { ServiceListing } from '@sellio/types';
 import { CrtvHeader, CrtvCategoryCard, CrtvCreativeCard, CrtvPortfolioItem, CrtvFooter } from './components';
+import { DynamicTestimonials } from '@/components/testimonials/DynamicTestimonials';
 
 const fallbackImages = [
   '/themes/services/creative/15.webp',
@@ -184,17 +185,18 @@ export default function Page() {
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="crtv-section" style={{ background: 'white' }} aria-labelledby="crtv-testimonial-title">
-        <h2 className="crtv-section-title" id="crtv-testimonial-title">Trusted by Clients & Creatives</h2>
-        <div className="crtv-testimonial-container">
-            <div style={{ fontSize: '3rem', marginBottom: '1rem' }} className="gradient-text">"</div>
-            <p style={{ fontSize: '1.25rem', fontStyle: 'italic', marginBottom: '2rem', lineHeight: 1.6 }}>
-                "I found my dream design job here! The platform made it incredibly easy to showcase my UI/UX work and connect with top-tier clients globally. Highly recommended for any serious creative."
-            </p>
-            <p style={{ fontWeight: 800 }}>Josh T., Client <span style={{ color: 'var(--crtv-text)', fontWeight: 400, opacity: 0.7 }}>- Hired a UX Designer</span></p>
-        </div>
-      </section>
+      <DynamicTestimonials
+        title="Trusted by Clients & Creatives"
+        limit={3}
+        variant="centered"
+        quoteDecor="creative"
+        sectionClassName="crtv-section"
+        sectionStyle={{ background: 'white' }}
+        titleClassName="crtv-section-title"
+        layoutClassName="crtv-testimonials-layout"
+        cardClassName="crtv-testimonial-container"
+        headingId="crtv-testimonial-title"
+      />
 
       {/* CTA Banner */}
       <section className="crtv-cta-banner" id="contact" aria-labelledby="crtv-cta-title">

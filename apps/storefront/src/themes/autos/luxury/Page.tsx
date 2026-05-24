@@ -5,6 +5,7 @@ import { api } from '@sellio/api-client';
 import type { Vehicle, Category } from '@sellio/types';
 import { useRouter } from 'next/navigation';
 import { LuxuryHeader, LuxuryCarCard, LuxuryFooter } from './components';
+import { DynamicTestimonials } from '@/components/testimonials/DynamicTestimonials';
 
 export default function Page() {
   const router = useRouter();
@@ -28,12 +29,6 @@ export default function Page() {
     { title: "2024 Rolls Royce Phantom", specs: "Ultra Luxury | 2,100 mi", price: "$420,000", image: "/themes/autos/luxury/rolls.png", slug: "rolls-royce-phantom" },
     { title: "2025 Porsche Taycan Turbo", specs: "Electric Coupe | 800 mi", price: "$160,000", image: "/themes/autos/luxury/porsche.png", slug: "porsche-taycan" },
     { title: "2023 Bentley Continental GT", specs: "Grand Tourer | 6,500 mi", price: "$245,000", image: "/themes/autos/luxury/bentley.png", slug: "bentley-continental" }
-  ];
-
-  const testimonials = [
-    { name: "Julian D.", role: "Collector", quote: "The service was impeccable and discreet. Found my dream classic car with ease. Truly a five-star experience from start to finish.", avatar: "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=100" },
-    { name: "Sarah K.", role: "Entrepreneur", quote: "Seamless, professional, and unparalleled inventory. They connected me with the perfect new SUV before it was even publicly listed.", avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=100" },
-    { name: "Marcus T.", role: "Investor", quote: "Beyond expectations. The attention to detail and personalized guidance made the acquisition of my Rolls Royce a pleasure.", avatar: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=100" }
   ];
 
   const getThemeLink = (path: string) => {
@@ -293,24 +288,18 @@ export default function Page() {
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="lx-section" style={{ backgroundColor: '#111111' }}>
-        <h2 className="lx-section-title" style={{ color: 'white' }}>Client Experiences</h2>
-        <div className="lx-testimonial-grid">
-            {testimonials.map((t, i) => (
-                <div key={i} className="lx-testimonial-card">
-                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1.5rem' }}>
-                        <img src={t.avatar} alt={t.name} style={{ width: '60px', height: '60px', borderRadius: '50%', border: '2px solid var(--lx-gold)', marginRight: '1rem', objectFit: 'cover' }} />
-                        <div>
-                            <h5 style={{ fontWeight: 700, margin: 0 }}>{t.name}</h5>
-                            <small style={{ color: 'var(--lx-text-muted)' }}>{t.role}</small>
-                        </div>
-                    </div>
-                    <p style={{ fontStyle: 'italic', lineHeight: 1.6 }}>"{t.quote}"</p>
-                </div>
-            ))}
-        </div>
-      </section>
+      <DynamicTestimonials
+        title="Client Experiences"
+        limit={3}
+        variant="luxury"
+        sectionClassName="lx-section"
+        sectionStyle={{ backgroundColor: '#111111' }}
+        titleClassName="lx-section-title"
+        titleStyle={{ color: 'white' }}
+        layoutClassName="lx-testimonial-grid"
+        cardClassName="lx-testimonial-card"
+        headingId="lx-testimonials-title"
+      />
 
       <LuxuryFooter />
     </div>
