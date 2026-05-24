@@ -21,6 +21,22 @@ export interface Theme {
   app_settings?: AppSettings;
 }
 
+export interface Testimonial {
+  id: number;
+  author_name: string;
+  author_title?: string | null;
+  company?: string | null;
+  quote: string;
+  rating?: number | null;
+  status: 'draft' | 'published' | 'archived';
+  sort_order: number;
+  avatar_url?: string | null;
+  theme_priority?: number | null;
+  is_featured?: boolean;
+  created_at?: string;
+  updated_at?: string;
+}
+
 export interface Product {
   id: number;
   title: string;
@@ -596,5 +612,4 @@ export const MENU_LOCATIONS: MenuLocationKey[] = [
   'footer_bottom_bar',
   'social_footer',
 ];
-
 

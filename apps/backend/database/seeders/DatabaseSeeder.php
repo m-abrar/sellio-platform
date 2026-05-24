@@ -72,6 +72,7 @@ class DatabaseSeeder extends Seeder
         // Core Modules (Always Seeded)
         $this->call([
             BlogSeeder::class,
+            TestimonialSeeder::class,
         ]);
 
         // Optional Marketplace Modules
