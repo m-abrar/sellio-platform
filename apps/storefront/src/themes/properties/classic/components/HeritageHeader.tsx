@@ -7,11 +7,14 @@ import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
 import { getThemeLink } from '@/lib/links';
 import { useMenuContext } from '@/components/menu/MenuProvider';
+import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 
 export const Header = () => {
     const [scrolled, setScrolled] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const { themeKey, isPreview } = useMenuContext();
+    const brandLabel = useThemeContent('header.brand_label', 'ESTATE & HERITAGE');
+    const [brandPrimary, brandSecondary] = brandLabel.split('&').map((part) => part.trim());
 
     useEffect(() => {
         const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -25,7 +28,11 @@ export const Header = () => {
                 href={getThemeLink('/', themeKey, isPreview)}
                 style={{ textDecoration: 'none', fontFamily: 'var(--pc-font-serif)', fontSize: '1.4rem', fontWeight: 900, color: 'var(--pc-teal)', letterSpacing: '-1px', cursor: 'pointer', zIndex: 1045, position: 'relative' }}
             >
-                ESTATE <span style={{ fontWeight: 400, opacity: scrolled ? 0.3 : 0.6 }}>&</span> HERITAGE
+                {brandSecondary ? (
+                    <>
+                        {brandPrimary} <span style={{ fontWeight: 400, opacity: scrolled ? 0.3 : 0.6 }}>&</span> {brandSecondary}
+                    </>
+                ) : brandLabel}
             </a>
             
             <button 

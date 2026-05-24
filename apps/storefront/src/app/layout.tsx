@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { getActiveTheme } from "@/lib/theme";
 import { getMenus } from "@/lib/menu";
+import { getThemeContent } from "@/lib/theme-content";
 import { MenuProvider } from "@/components/menu/MenuProvider";
+import { ThemeContentProvider } from "@/components/theme-content/ThemeContentProvider";
 import UnifiedDefaultLayout from "@/themes/unifieds/default/Layout";
 import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 import DatabaseOfflineResilience from "@/components/DatabaseOfflineResilience";
@@ -23,7 +25,10 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const { theme, layout, databaseOffline, errorDetails } = await getActiveTheme();
-  const { menus } = await getMenus(MENU_LOCATIONS, theme.theme_key);
+  const [{ menus }, themeContent] = await Promise.all([
+    getMenus(MENU_LOCATIONS, theme.theme_key),
+    getThemeContent('home', theme.theme_key),
+  ]);
   const headerList = await headers();
   const pathname = headerList.get('x-pathname') ?? '';
   const isPreview = headerList.get('x-preview-mode') === '1' || pathname.startsWith('/preview/');
@@ -54,9 +59,11 @@ export default async function RootLayout({
       </head>
       <body>
         <MenuProvider menus={menus} themeKey={theme.theme_key} isPreview={isPreview}>
-          <IndustryLayout>
-            {children}
-          </IndustryLayout>
+          <ThemeContentProvider content={themeContent}>
+            <IndustryLayout>
+              {children}
+            </IndustryLayout>
+          </ThemeContentProvider>
         </MenuProvider>
         {databaseOffline && <DatabaseOfflineResilience errorDetails={errorDetails} />}
         <ThemeSwitcher />

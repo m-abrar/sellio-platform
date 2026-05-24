@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { EstateCard, FilterSidebar } from './components';
 import { DynamicTestimonials } from '@/components/testimonials/DynamicTestimonials';
+import { useThemeContent, useThemeMedia, useThemeConfig } from '@/components/theme-content/ThemeContentProvider';
 import { api } from '@sellio/api-client';
 import type { Property, Category, Location } from '@sellio/types';
 
@@ -29,6 +30,22 @@ const FALLBACK_ESTATES: Property[] = [
 ];
 
 export default function Page() {
+  const heroEyebrow = useThemeContent('hero.eyebrow', 'Global Registry // Vol. 2026');
+  const heroTitle = useThemeContent('hero.title', 'The Heritage\nRegistry.');
+  const heroDescription = useThemeContent(
+    'hero.description',
+    "A curated distribution of the world's most distinguished historic properties. Every acquisition is verified for architectural provenance and manorial integrity.",
+  );
+  const heroImage = useThemeMedia('hero.image', '/themes/properties/classic/7.webp');
+  const heroCtaLabel = useThemeContent('hero.primary_cta_label', 'DISCOVER');
+  const collectionHeading = useThemeContent('collection.heading', 'The Collection.');
+  const collectionDescription = useThemeContent(
+    'collection.description',
+    'Current distribution includes verified manorial rights and significant historical provenance.',
+  );
+  const testimonialsEyebrow = useThemeContent('testimonials.eyebrow', 'Patron Feedback');
+  const testimonialsTitle = useThemeContent('testimonials.title', 'Voices of Trust.');
+  const showTestimonials = useThemeConfig('show_testimonials', true);
   const [estates, setEstates] = useState<Property[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [locations, setLocations] = useState<Location[]>([]);
@@ -56,7 +73,7 @@ export default function Page() {
     }
 
     try {
-      const params: Record<string, any> = {
+      const params: Record<string, string | number> = {
         page: pageToFetch,
         per_page: 9,
       };
@@ -162,7 +179,9 @@ export default function Page() {
 
   // Perform initial search
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchProperties(1, false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleRefineSearch = () => {
@@ -193,17 +212,21 @@ export default function Page() {
       {/* Cinematic Parallax Hero */}
       <section className="pc-hero">
         <div className="pc-hero-bg">
-          <img src="/themes/properties/classic/7.webp" alt="Classic Estate" />
+          <img src={heroImage} alt="" />
         </div>
         
         <div className="pc-hero-card">
-          <div className="pc-caps" style={{ color: 'var(--pc-teal)', marginBottom: '2.5rem', opacity: 0.4 }}>Global Registry // Vol. 2026</div>
+          <div className="pc-caps" style={{ color: 'var(--pc-teal)', marginBottom: '2.5rem', opacity: 0.4 }}>{heroEyebrow}</div>
           <h1 className="pc-hero-title">
-            The <span className="pc-italic" style={{ fontWeight: 400 }}>Heritage</span> <br/> 
-            Registry.
+            {heroTitle.split('\n').map((line, index) => (
+              <React.Fragment key={`${line}-${index}`}>
+                {index > 0 && <br />}
+                {line}
+              </React.Fragment>
+            ))}
           </h1>
           <p className="pc-hero-desc">
-            A curated distribution of the world's most distinguished historic properties. Every acquisition is verified for architectural provenance and manorial integrity.
+            {heroDescription}
           </p>
           
           <div style={{ background: 'var(--pc-border)', padding: '1px', boxShadow: '0 30px 60px rgba(0,0,0,0.05)' }} className="pc-search-bar">
@@ -223,7 +246,7 @@ export default function Page() {
               style={{ background: 'var(--pc-teal)', color: 'white' }}
               onClick={handleRefineSearch}
             >
-                DISCOVER
+                {heroCtaLabel}
             </button>
           </div>
         </div>
@@ -253,11 +276,11 @@ export default function Page() {
                       {useFallback ? "Provincial Node // Fallback" : "Collection Node // 01"}
                     </div>
                     <h2 className="pc-serif" style={{ fontSize: 'clamp(3rem, 5vw, 4.5rem)', fontWeight: 900, letterSpacing: '-2px', color: 'var(--pc-teal)' }}>
-                        The <span className="pc-italic" style={{ fontWeight: 400 }}>Collection.</span>
+                        {collectionHeading}
                     </h2>
                 </div>
                 <div style={{ textAlign: 'right', maxWidth: '350px', fontSize: '0.9rem', color: 'var(--pc-text-muted)', lineHeight: 1.8 }}>
-                    Current distribution includes verified manorial rights and significant historical provenance.
+                    {collectionDescription}
                 </div>
             </div>
 
@@ -363,18 +386,20 @@ export default function Page() {
 
       <div className="pc-divider" />
 
-      <DynamicTestimonials
-        eyebrow="Patron Feedback"
-        title="Voices of Trust."
-        limit={3}
-        variant="editorial"
-        sectionClassName="pc-section"
-        sectionStyle={{ paddingBottom: '12rem' }}
-        titleClassName="pc-serif"
-        titleStyle={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: 900, letterSpacing: '-2px', color: 'var(--pc-teal)' }}
-        layoutClassName="pc-testimonials-grid"
-        headingId="pc-testimonials-title"
-      />
+      {showTestimonials && (
+        <DynamicTestimonials
+          eyebrow={testimonialsEyebrow}
+          title={testimonialsTitle}
+          limit={3}
+          variant="editorial"
+          sectionClassName="pc-section"
+          sectionStyle={{ paddingBottom: '12rem' }}
+          titleClassName="pc-serif"
+          titleStyle={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: 900, letterSpacing: '-2px', color: 'var(--pc-teal)' }}
+          layoutClassName="pc-testimonials-grid"
+          headingId="pc-testimonials-title"
+        />
+      )}
       <style dangerouslySetInnerHTML={{ __html: `
         .pc-testimonials-grid {
           display: grid;

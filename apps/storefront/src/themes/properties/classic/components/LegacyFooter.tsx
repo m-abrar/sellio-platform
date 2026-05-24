@@ -3,17 +3,31 @@
 import React from 'react';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { MenuNav } from '@/components/menu/MenuNav';
+import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 
-export const Footer = () => (
+export const Footer = () => {
+    const brandLabel = useThemeContent('header.brand_label', 'ESTATE & HERITAGE');
+    const footerDescription = useThemeContent(
+        'footer.description',
+        "A curated distribution of the world's most distinguished historic properties. Every acquisition is verified for architectural provenance and legacy value.",
+    );
+    const subscribeText = useThemeContent('footer.subscribe_text', 'Subscribe to our global heritage distribution protocol.');
+    const [brandPrimary, brandSecondary] = brandLabel.split('&').map((part) => part.trim());
+
+    return (
     <footer className="pc-footer">
         <div className="pc-footer-grid">
             <div style={{ paddingRight: '1rem' }}>
                 <h2 className="pc-serif pc-footer-title">
-                    ESTATE <br/> 
-                    <span className="pc-italic" style={{ fontWeight: 400 }}>&</span> HERITAGE
+                    {brandSecondary ? (
+                        <>
+                            {brandPrimary} <br/>
+                            <span className="pc-italic" style={{ fontWeight: 400 }}>&</span> {brandSecondary}
+                        </>
+                    ) : brandLabel}
                 </h2>
                 <p style={{ color: 'var(--pc-beige)', opacity: 0.8, lineHeight: 2, fontSize: '0.95rem', marginBottom: '3rem', maxWidth: '400px' }}>
-                    A curated distribution of the world's most distinguished historic properties. Every acquisition is verified for architectural provenance and legacy value.
+                    {footerDescription}
                 </p>
                 <div style={{ display: 'flex', gap: '2rem', opacity: 0.6, fontWeight: 900, fontSize: '0.7rem', letterSpacing: '3px' }}>
                    {['FB', 'TW', 'IG', 'LI'].map(s => <span key={s} style={{ cursor: 'pointer' }}>{s}</span>)}
@@ -47,7 +61,7 @@ export const Footer = () => (
                     listClassName=""
                     linkClassName="pc-footer-link"
                 />
-                <p style={{ fontSize: '0.9rem', opacity: 0.8, marginBottom: '2rem', lineHeight: 1.6 }}>Subscribe to our global heritage distribution protocol.</p>
+                <p style={{ fontSize: '0.9rem', opacity: 0.8, marginBottom: '2rem', lineHeight: 1.6 }}>{subscribeText}</p>
                 <div style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.1)' }} className="pc-footer-subscribe">
                     <input 
                         type="email" 
@@ -96,4 +110,5 @@ export const Footer = () => (
             </div>
         </div>
     </footer>
-);
+    );
+};

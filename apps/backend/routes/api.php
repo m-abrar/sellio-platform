@@ -24,6 +24,7 @@ use App\Http\Controllers\Api\V1\ApiJobController;
 use App\Http\Controllers\Api\V1\ApiServiceController;
 use App\Http\Controllers\Api\V1\ApiClassifiedController;
 use App\Http\Controllers\Api\V1\ApiTestimonialController;
+use App\Http\Controllers\Api\V1\ApiThemeContentController;
 use App\Http\Controllers\Api\V1\ApiCartController;
 use App\Http\Controllers\Api\V1\ApiOrderController;
 use App\Http\Controllers\Api\V1\Auth\AuthController;
@@ -56,6 +57,7 @@ Route::prefix('menus')->group(function () {
 // Testimonial Routes
 // =======================
 Route::get('testimonials', [ApiTestimonialController::class, 'index']);
+Route::get('theme-content', [ApiThemeContentController::class, 'show']);
 
 // =======================
 // Category Routes

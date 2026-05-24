@@ -189,6 +189,9 @@
                             <a href="{{ route('admin.themes.edit', $activeTheme->id) }}" class="btn btn-default shadow-xs border px-4 rounded-pill font-weight-bold smallest">
                                 <i class="fas fa-cog mr-2"></i> {{ __('Theme Settings') }}
                             </a>
+                            <a href="{{ route('admin.content.edit', ['page' => 'home', 'theme_key' => $activeTheme->theme_key]) }}" class="btn btn-default shadow-xs border px-4 rounded-pill font-weight-bold smallest">
+                                <i class="fas fa-edit mr-2"></i> {{ __('Customize Content') }}
+                            </a>
                         </div>
                     </div>
                 </div>

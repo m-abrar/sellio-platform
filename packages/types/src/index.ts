@@ -21,6 +21,14 @@ export interface Theme {
   app_settings?: AppSettings;
 }
 
+export interface ThemeContentResponse {
+  theme_key: string;
+  page: string;
+  content: Record<string, string | null>;
+  media: Record<string, string | null>;
+  config: Record<string, unknown>;
+}
+
 export interface Testimonial {
   id: number;
   author_name: string;
@@ -612,4 +620,3 @@ export const MENU_LOCATIONS: MenuLocationKey[] = [
   'footer_bottom_bar',
   'social_footer',
 ];
-

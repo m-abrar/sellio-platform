@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Theme;
+use App\Models\PageContent;
 
 /**
  * Class ThemeSeeder
@@ -133,6 +134,8 @@ class ThemeSeeder extends Seeder
                 $order += 10;
             }
         }
+
+        $this->seedPropertiesClassicContent();
     }
 
     private function getDefaultVariables(string $themeKey): array
@@ -211,5 +214,35 @@ class ThemeSeeder extends Seeder
         }
 
         return $defaults;
+    }
+
+    private function seedPropertiesClassicContent(): void
+    {
+        $slots = [
+            ['section' => 'header', 'content_key' => 'brand_label', 'input_type' => 'text', 'value' => 'ESTATE & HERITAGE'],
+            ['section' => 'hero', 'content_key' => 'eyebrow', 'input_type' => 'text', 'value' => 'Global Registry // Vol. 2026'],
+            ['section' => 'hero', 'content_key' => 'title', 'input_type' => 'textarea', 'value' => "The Heritage\nRegistry."],
+            ['section' => 'hero', 'content_key' => 'description', 'input_type' => 'textarea', 'value' => "A curated distribution of the world's most distinguished historic properties. Every acquisition is verified for architectural provenance and manorial integrity."],
+            ['section' => 'hero', 'content_key' => 'image', 'input_type' => 'image', 'value' => '/themes/properties/classic/7.webp'],
+            ['section' => 'hero', 'content_key' => 'primary_cta_label', 'input_type' => 'text', 'value' => 'DISCOVER'],
+            ['section' => 'collection', 'content_key' => 'heading', 'input_type' => 'text', 'value' => 'The Collection.'],
+            ['section' => 'collection', 'content_key' => 'description', 'input_type' => 'textarea', 'value' => 'Current distribution includes verified manorial rights and significant historical provenance.'],
+            ['section' => 'testimonials', 'content_key' => 'eyebrow', 'input_type' => 'text', 'value' => 'Patron Feedback'],
+            ['section' => 'testimonials', 'content_key' => 'title', 'input_type' => 'text', 'value' => 'Voices of Trust.'],
+            ['section' => 'footer', 'content_key' => 'description', 'input_type' => 'textarea', 'value' => "A curated distribution of the world's most distinguished historic properties. Every acquisition is verified for architectural provenance and legacy value."],
+            ['section' => 'footer', 'content_key' => 'subscribe_text', 'input_type' => 'text', 'value' => 'Subscribe to our global heritage distribution protocol.'],
+        ];
+
+        foreach ($slots as $slot) {
+            PageContent::updateOrCreate([
+                'theme_key' => 'properties_classic',
+                'page' => 'home',
+                'section' => $slot['section'],
+                'content_key' => $slot['content_key'],
+            ], [
+                'input_type' => $slot['input_type'],
+                'value' => $slot['value'],
+            ]);
+        }
     }
 }
