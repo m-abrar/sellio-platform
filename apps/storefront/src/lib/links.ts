@@ -2,6 +2,10 @@
  * Build theme-aware links that preserve /preview/{theme_key} routing.
  */
 export function getThemeLink(path: string, _themeKey?: string): string {
+  if (path.startsWith('#') || path.startsWith('http://') || path.startsWith('https://')) {
+    return path;
+  }
+
   const normalizedPath = path.startsWith('/') ? path : `/${path}`;
 
   if (typeof window !== 'undefined') {

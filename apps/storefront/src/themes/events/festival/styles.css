@@ -331,6 +331,15 @@
 
 .eff-footer-link {
   transition: var(--eff-transition);
+  font-size: 1rem;
+  color: var(--eff-grey);
+  text-decoration: none;
+}
+
+.eff-footer-link-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
 .eff-footer-link:hover {

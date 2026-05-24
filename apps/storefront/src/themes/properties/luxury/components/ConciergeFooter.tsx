@@ -1,5 +1,7 @@
+'use client';
 
 import React from 'react';
+import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 
 export const ConciergeFooter = () => (
     <footer className="concierge-footer">
@@ -10,27 +12,21 @@ export const ConciergeFooter = () => (
                     The world's most exclusive high-fidelity luxury distribution network. Tailored for the discerning estate holder.
                 </p>
             </div>
-            <div>
-                <h4>COLLECTION</h4>
-                <a href="#" className="footer-link">The Residences</a>
-                <a href="#" className="footer-link">Off-Market Nodes</a>
-                <a href="#" className="footer-link">New Developments</a>
-                <a href="#" className="footer-link">Island Portfolio</a>
-            </div>
-            <div>
-                <h4>SERVICES</h4>
-                <a href="#" className="footer-link">Private Concierge</a>
-                <a href="#" className="footer-link">Asset Management</a>
-                <a href="#" className="footer-link">Global Logistics</a>
-                <a href="#" className="footer-link">Legal Protocol</a>
-            </div>
-            <div>
-                <h4>INSTITUTION</h4>
-                <a href="#" className="footer-link">The Registry</a>
-                <a href="#" className="footer-link">Partnerships</a>
-                <a href="#" className="footer-link">Contact</a>
-                <a href="#" className="footer-link">Privacy</a>
-            </div>
+            <FooterMenuColumn
+                location="footer_column_1"
+                titleTag="h4"
+                linkClassName="footer-link"
+            />
+            <FooterMenuColumn
+                location="footer_column_2"
+                titleTag="h4"
+                linkClassName="footer-link"
+            />
+            <FooterMenuColumn
+                location="footer_column_3"
+                titleTag="h4"
+                linkClassName="footer-link"
+            />
         </div>
         <div style={{ marginTop: '8rem', paddingTop: '4rem', borderTop: '1px solid var(--luxury-border)', display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', color: '#aaa', fontWeight: 600, letterSpacing: '2px' }}>
             <span>© 2026 PLATINUM_ESTATE_GROUP. ALL_ASSETS_VERIFIED.</span>

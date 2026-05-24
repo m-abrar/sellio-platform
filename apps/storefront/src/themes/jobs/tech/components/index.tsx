@@ -1,19 +1,32 @@
 'use client';
 import React from 'react';
+import { MenuNav } from '@/components/menu/MenuNav';
+import { MenuUtilityNav } from '@/components/menu/MenuUtilityNav';
+import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
+import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
+import { hashAwareNavItemRenderer } from '@/components/menu/menu-renderers';
 
 export const TechHeader = () => (
     <header className="jt-header">
         <a href="#" className="jt-logo">
             <span className="jt-text-accent">{'>'}</span>dev_jobs_
         </a>
-        <nav className="jt-nav d-none d-md-flex">
-            <a href="#jobs" className="jt-nav-link">Jobs</a>
-            <a href="#companies" className="jt-nav-link">Companies</a>
-            <a href="#salaries" className="jt-nav-link">Salaries</a>
-        </nav>
+        <MenuNav
+          location="main_header"
+          flat
+          className="jt-nav d-none d-md-flex"
+          linkClassName="jt-nav-link"
+          renderItem={hashAwareNavItemRenderer}
+        />
         <div style={{ display: 'flex', gap: '1rem' }}>
-            <a href="#" className="jt-btn jt-btn-outline">Log in</a>
-            <a href="#" className="jt-btn jt-btn-primary">Post a Job</a>
+            <MenuUtilityNav
+              location="utility_header"
+              linkClassName="jt-btn jt-btn-outline"
+            />
+            <MenuActionButtons
+              location="action_buttons"
+              linkClassName="jt-btn jt-btn-primary"
+            />
         </div>
     </header>
 );
@@ -53,30 +66,31 @@ export const TechFooter = () => (
                 </a>
                 <p style={{ color: 'var(--jt-text-muted)', fontSize: '0.9rem', lineHeight: 1.6 }}>The #1 job board for software engineers, product managers, and data scientists.</p>
             </div>
-            <div>
-                <h4 className="jt-sidebar-title">Developers</h4>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
-                    <a href="#" style={{ color: 'var(--jt-text-muted)', textDecoration: 'none', fontSize: '0.9rem' }}>Job Search</a>
-                    <a href="#" style={{ color: 'var(--jt-text-muted)', textDecoration: 'none', fontSize: '0.9rem' }}>Salary Calculator</a>
-                    <a href="#" style={{ color: 'var(--jt-text-muted)', textDecoration: 'none', fontSize: '0.9rem' }}>Create Profile</a>
-                </div>
-            </div>
-            <div>
-                <h4 className="jt-sidebar-title">Employers</h4>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
-                    <a href="#" style={{ color: 'var(--jt-text-muted)', textDecoration: 'none', fontSize: '0.9rem' }}>Post Jobs</a>
-                    <a href="#" style={{ color: 'var(--jt-text-muted)', textDecoration: 'none', fontSize: '0.9rem' }}>Search Developers</a>
-                    <a href="#" style={{ color: 'var(--jt-text-muted)', textDecoration: 'none', fontSize: '0.9rem' }}>Pricing</a>
-                </div>
-            </div>
+            <FooterMenuColumn
+              location="footer_column_1"
+              titleClassName="jt-sidebar-title"
+              titleTag="h4"
+              listClassName="jt-footer-links"
+              linkClassName="jt-footer-link"
+            />
+            <FooterMenuColumn
+              location="footer_column_2"
+              titleClassName="jt-sidebar-title"
+              titleTag="h4"
+              listClassName="jt-footer-links"
+              linkClassName="jt-footer-link"
+            />
         </div>
         <div style={{ borderTop: '1px solid var(--jt-border)', paddingTop: '1.5rem', display: 'flex', justifyContent: 'space-between', color: 'var(--jt-text-muted)', fontSize: '0.85rem' }}>
             <span>&copy; 2026 DevJobs. All rights reserved.</span>
-            <div style={{ display: 'flex', gap: '1rem' }}>
-                <a href="#" style={{ color: 'var(--jt-text-muted)', textDecoration: 'none' }}>Terms</a>
-                <a href="#" style={{ color: 'var(--jt-text-muted)', textDecoration: 'none' }}>Privacy</a>
-                <a href="#" style={{ color: 'var(--jt-text-muted)', textDecoration: 'none' }}>API</a>
-            </div>
+            <MenuNav
+              location="footer_bottom_bar"
+              flat
+              className="jt-footer-bottom-links"
+              renderItem={(item, { href, className, onNavigate }) => (
+                <a href={href} className={className} onClick={onNavigate} style={{ color: 'var(--jt-text-muted)', textDecoration: 'none' }}>{item.title}</a>
+              )}
+            />
         </div>
     </footer>
 );

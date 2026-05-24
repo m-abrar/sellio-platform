@@ -1,5 +1,32 @@
 'use client';
 import React, { useState } from 'react';
+import { MenuNav } from '@/components/menu/MenuNav';
+import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
+import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
+import { hashAwareNavItemRenderer } from '@/components/menu/menu-renderers';
+import type { MenuItem } from '@sellio/types';
+import type { MenuItemRenderProps } from '@/components/menu/menu-renderers';
+
+function freelanceUtilityRenderer(variant: 'mobile' | 'desktop') {
+  return (item: MenuItem, { href, onNavigate }: MenuItemRenderProps) => {
+    const isJoin = item.title.toLowerCase().includes('join');
+    const btnClass = isJoin
+      ? `jf-btn jf-btn-primary${variant === 'mobile' ? ' jf-mobile-action-btn' : ''}`
+      : `jf-btn jf-btn-outline${variant === 'mobile' ? ' jf-mobile-action-btn' : ''}`;
+
+    return (
+      <a
+        href={href}
+        className={btnClass}
+        id={isJoin ? 'jf-btn-vibe-status' : undefined}
+        onClick={onNavigate}
+        style={!isJoin && variant === 'desktop' ? { color: 'var(--jf-text-main)' } : undefined}
+      >
+        {item.title}
+      </a>
+    );
+  };
+}
 
 export const FreelanceHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -10,7 +37,6 @@ export const FreelanceHeader = () => {
         Gig<span className="jf-text-emerald">Hive</span>
       </a>
 
-      {/* Mobile Hamburger Trigger */}
       <button 
         className={`jf-hamburger ${isOpen ? 'jf-hamburger-open' : ''}`}
         onClick={() => setIsOpen(!isOpen)}
@@ -22,38 +48,29 @@ export const FreelanceHeader = () => {
         <span className="jf-hamburger-bar"></span>
       </button>
 
-      {/* Navigation Links */}
-      <nav className={`jf-nav ${isOpen ? 'jf-nav-open' : ''}`}>
-        {[
-          { name: 'Explore Gigs', target: 'explore' },
-          { name: 'How it Works', target: 'how-it-works' },
-          { name: 'GigHive Pro', target: 'pro' }
-        ].map(link => (
-          <a 
-            key={link.name} 
-            href={`#${link.target}`} 
-            className="jf-nav-link"
-            onClick={(e) => {
-              e.preventDefault();
-              setIsOpen(false);
-              const targetId = link.target;
-              document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth' });
-            }}
-          >
-            {link.name}
-          </a>
-        ))}
-        <div className="jf-mobile-actions">
-          <a href="#" className="jf-btn jf-btn-outline jf-mobile-action-btn">Sign In</a>
-          <a href="#" className="jf-btn jf-btn-primary jf-mobile-action-btn">Join</a>
-        </div>
-      </nav>
+      <MenuNav
+        location="main_header"
+        flat
+        className={`jf-nav ${isOpen ? 'jf-nav-open' : ''}`}
+        linkClassName="jf-nav-link"
+        onNavigate={() => setIsOpen(false)}
+        renderItem={hashAwareNavItemRenderer}
+      />
 
-      {/* Desktop Actions */}
-      <div className="jf-desktop-actions">
-        <a href="#" className="jf-btn jf-btn-outline" style={{ color: 'var(--jf-text-main)' }}>Sign In</a>
-        <a href="#" className="jf-btn jf-btn-primary" id="jf-btn-vibe-status">Join</a>
-      </div>
+      <MenuNav
+        location="utility_header"
+        flat
+        className="jf-mobile-actions"
+        onNavigate={() => setIsOpen(false)}
+        renderItem={freelanceUtilityRenderer('mobile')}
+      />
+
+      <MenuNav
+        location="utility_header"
+        flat
+        className="jf-desktop-actions"
+        renderItem={freelanceUtilityRenderer('desktop')}
+      />
     </header>
   );
 };
@@ -89,33 +106,27 @@ export const FreelanceFooter = () => (
                 </a>
                 <p style={{ color: 'var(--jf-text-muted)', fontSize: '0.9rem', lineHeight: 1.6 }}>Find the perfect freelance services for your business. Fast, secure, and professional.</p>
             </div>
-            <div>
-                <h4 style={{ fontWeight: 700, marginBottom: '1.5rem' }}>Categories</h4>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
-                    <a href="#" style={{ color: 'var(--jf-text-muted)', textDecoration: 'none' }}>Graphics & Design</a>
-                    <a href="#" style={{ color: 'var(--jf-text-muted)', textDecoration: 'none' }}>Digital Marketing</a>
-                    <a href="#" style={{ color: 'var(--jf-text-muted)', textDecoration: 'none' }}>Writing & Translation</a>
-                    <a href="#" style={{ color: 'var(--jf-text-muted)', textDecoration: 'none' }}>Video & Animation</a>
-                </div>
-            </div>
-            <div>
-                <h4 style={{ fontWeight: 700, marginBottom: '1.5rem' }}>About</h4>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
-                    <a href="#" style={{ color: 'var(--jf-text-muted)', textDecoration: 'none' }}>Careers</a>
-                    <a href="#" style={{ color: 'var(--jf-text-muted)', textDecoration: 'none' }}>Press & News</a>
-                    <a href="#" style={{ color: 'var(--jf-text-muted)', textDecoration: 'none' }}>Partnerships</a>
-                    <a href="#" style={{ color: 'var(--jf-text-muted)', textDecoration: 'none' }}>Privacy Policy</a>
-                </div>
-            </div>
-            <div>
-                <h4 style={{ fontWeight: 700, marginBottom: '1.5rem' }}>Support</h4>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
-                    <a href="#" style={{ color: 'var(--jf-text-muted)', textDecoration: 'none' }}>Help & Support</a>
-                    <a href="#" style={{ color: 'var(--jf-text-muted)', textDecoration: 'none' }}>Trust & Safety</a>
-                    <a href="#" style={{ color: 'var(--jf-text-muted)', textDecoration: 'none' }}>Selling on GigHive</a>
-                    <a href="#" style={{ color: 'var(--jf-text-muted)', textDecoration: 'none' }}>Buying on GigHive</a>
-                </div>
-            </div>
+            <FooterMenuColumn
+              location="footer_column_1"
+              titleClassName="jf-footer-col-title"
+              titleTag="h4"
+              listClassName="jf-footer-links"
+              linkClassName="jf-footer-link"
+            />
+            <FooterMenuColumn
+              location="footer_column_2"
+              titleClassName="jf-footer-col-title"
+              titleTag="h4"
+              listClassName="jf-footer-links"
+              linkClassName="jf-footer-link"
+            />
+            <FooterMenuColumn
+              location="footer_column_3"
+              titleClassName="jf-footer-col-title"
+              titleTag="h4"
+              listClassName="jf-footer-links"
+              linkClassName="jf-footer-link"
+            />
         </div>
         <div style={{ borderTop: '1px solid var(--jf-border)', paddingTop: '1.5rem', display: 'flex', justifyContent: 'space-between', color: 'var(--jf-text-muted)', fontSize: '0.85rem' }}>
             <span>&copy; 2026 GigHive International Ltd.</span>

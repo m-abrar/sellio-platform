@@ -1,5 +1,8 @@
 'use client';
 import React, { useState } from 'react';
+import { MenuNav } from '@/components/menu/MenuNav';
+import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
+import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
 
 export const RunwayHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,21 +23,19 @@ export const RunwayHeader = () => {
         <span className="ef-hamburger-bar"></span>
       </button>
 
-      <nav className={`ef-nav ${isOpen ? 'ef-nav-open' : ''}`}>
-          {['Collection', 'Editorial', 'Lookbook', 'Atelier_Auth'].map(link => (
-              <a 
-                key={link} 
-                href="#" 
-                className="ef-nav-link"
-                onClick={() => setIsOpen(false)}
-              >
-                {link}
-              </a>
-          ))}
-          <div className="ef-mono ef-mobile-header-meta" style={{ fontSize: '0.6rem', border: '1px solid var(--ef-ebony)', padding: '0.5rem 1.5rem', marginTop: '2rem' }}>
-            AUTUMN_WINTER_26
-          </div>
-      </nav>
+      <div className={`ef-nav ${isOpen ? 'ef-nav-open' : ''}`}>
+        <MenuNav
+          location="main_header"
+          flat
+          style={{ display: 'contents' }}
+          linkClassName="ef-nav-link"
+          onNavigate={() => setIsOpen(false)}
+          renderItem={defaultNavItemRenderer}
+        />
+        <div className="ef-mono ef-mobile-header-meta" style={{ fontSize: '0.6rem', border: '1px solid var(--ef-ebony)', padding: '0.5rem 1.5rem', marginTop: '2rem' }}>
+          AUTUMN_WINTER_26
+        </div>
+      </div>
 
       <div className="ef-mono ef-desktop-header-meta" style={{ fontSize: '0.6rem', border: '1px solid var(--ef-ebony)', padding: '0.5rem 1.5rem' }}>
         AUTUMN_WINTER_26
@@ -76,24 +77,39 @@ export const AtelierFooter = () => (
                     We do not build garments. We architect confidence through the precision of silhouette and the purity of material.
                 </p>
             </div>
-            {['COLLECTIONS', 'ATELIER', 'GOVERNANCE'].map(col => (
-                <div key={col}>
-                    <div className="ef-mono" style={{ color: 'var(--ef-champagne)', marginBottom: '3.5rem' }}>{col}</div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                        {['Runway', 'Editorial', 'Bespoke', 'Auth'].map(link => (
-                            <span key={link} style={{ fontSize: '0.9rem', opacity: 0.3, cursor: 'pointer' }}>{link}</span>
-                        ))}
-                    </div>
-                </div>
-            ))}
+            <FooterMenuColumn
+                location="footer_column_1"
+                renderTitle={(title) => (
+                    <div className="ef-mono" style={{ color: 'var(--ef-champagne)', marginBottom: '3.5rem' }}>{title}</div>
+                )}
+                linkClassName=""
+            />
+            <FooterMenuColumn
+                location="footer_column_2"
+                renderTitle={(title) => (
+                    <div className="ef-mono" style={{ color: 'var(--ef-champagne)', marginBottom: '3.5rem' }}>{title}</div>
+                )}
+            />
+            <FooterMenuColumn
+                location="footer_column_3"
+                renderTitle={(title) => (
+                    <div className="ef-mono" style={{ color: 'var(--ef-champagne)', marginBottom: '3.5rem' }}>{title}</div>
+                )}
+            />
         </div>
         <div style={{ marginTop: '12rem', paddingTop: '4rem', borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div className="ef-mono" style={{ opacity: 0.2, fontSize: '0.6rem' }}>© 2026 SELLIO_ATELIER_NODE // SILHOUETTE_STABLE</div>
-            <div style={{ display: 'flex', gap: '5rem' }}>
-                {['INSTAGRAM', 'LINKEDIN', 'X_ATELIER'].map(social => (
-                    <span key={social} className="ef-mono" style={{ opacity: 0.2, fontSize: '0.6rem' }}>{social}</span>
-                ))}
-            </div>
+            <MenuNav
+                location="social_footer"
+                flat
+                style={{ display: 'flex', gap: '5rem' }}
+                linkClassName="ef-mono"
+                renderItem={(item, { href, className, onNavigate }) => (
+                    <a href={href} className={className} style={{ opacity: 0.2, fontSize: '0.6rem' }} onClick={onNavigate}>
+                        {item.title}
+                    </a>
+                )}
+            />
         </div>
     </footer>
 );

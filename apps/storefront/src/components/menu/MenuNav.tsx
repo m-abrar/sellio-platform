@@ -8,6 +8,7 @@ import { MenuLink } from '@/components/menu/MenuLink';
 interface MenuNavProps {
   location: MenuLocationKey;
   className?: string;
+  style?: React.CSSProperties;
   listClassName?: string;
   itemClassName?: string;
   linkClassName?: string;
@@ -25,6 +26,7 @@ interface MenuNavProps {
 export function MenuNav({
   location,
   className,
+  style,
   listClassName,
   itemClassName,
   linkClassName,
@@ -51,11 +53,11 @@ export function MenuNav({
   ));
 
   if (flat) {
-    return <nav className={className} aria-label={location.replace('_', ' ')}>{nodes}</nav>;
+    return <nav className={className} style={style} aria-label={location.replace('_', ' ')}>{nodes}</nav>;
   }
 
   return (
-    <nav className={className} aria-label={location.replace('_', ' ')}>
+    <nav className={className} style={style} aria-label={location.replace('_', ' ')}>
       <ul className={listClassName} style={listClassName ? undefined : { display: 'contents', listStyle: 'none', margin: 0, padding: 0 }}>
         {nodes}
       </ul>

@@ -1,5 +1,9 @@
 'use client';
 import React, { useState } from 'react';
+import { MenuNav } from '@/components/menu/MenuNav';
+import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
+import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
+import { hashAwareNavItemRenderer } from '@/components/menu/menu-renderers';
 
 export const UsedHeader = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -21,17 +25,18 @@ export const UsedHeader = () => {
             </button>
 
             <nav className={`us-nav ${isOpen ? 'us-nav-open' : ''}`}>
-                {['Home', 'Browse Cars', 'Dealers', 'Sell Your Car', 'Contact'].map(link => (
-                    <a 
-                        key={link} 
-                        href={`#${link.toLowerCase().replace(/ /g, '-')}`} 
-                        className="us-nav-link"
-                        onClick={() => setIsOpen(false)}
-                    >
-                        {link}
-                    </a>
-                ))}
-                <a href="#" className="us-btn us-btn-orange" onClick={() => setIsOpen(false)}>Post Your Ad</a>
+                <MenuNav
+                    location="main_header"
+                    flat
+                    style={{ display: 'contents' }}
+                    linkClassName="us-nav-link"
+                    onNavigate={() => setIsOpen(false)}
+                    renderItem={hashAwareNavItemRenderer}
+                />
+                <MenuActionButtons
+                    linkClassName="us-btn us-btn-orange"
+                    onNavigate={() => setIsOpen(false)}
+                />
             </nav>
         </header>
     );
@@ -88,27 +93,38 @@ export const UsedFooter = () => (
                 </h4>
                 <p style={{ color: 'rgba(255,255,255,0.7)', lineHeight: 1.6 }}>Your trusted marketplace for quality used vehicles.</p>
             </div>
+            <FooterMenuColumn
+                location="footer_column_1"
+                titleTag="h6"
+                titleClassName="us-text-orange us-fw-bold"
+                titleStyle={{ marginBottom: '1.5rem', textTransform: 'uppercase' }}
+                linkClassName="us-footer-link"
+            />
+            <FooterMenuColumn
+                location="footer_column_2"
+                titleTag="h6"
+                titleClassName="us-text-orange us-fw-bold"
+                titleStyle={{ marginBottom: '1.5rem', textTransform: 'uppercase' }}
+                linkClassName="us-footer-link"
+            />
             <div>
-                <h6 className="us-text-orange us-fw-bold" style={{ marginBottom: '1.5rem', textTransform: 'uppercase' }}>Quick Links</h6>
-                <a href="#featured-listings" className="us-footer-link">Browse Cars</a>
-                <a href="#how-it-works" className="us-footer-link">Sell Your Car</a>
-                <a href="#trusted-dealers" className="us-footer-link">Our Dealers</a>
-                <a href="#" className="us-footer-link">FAQs</a>
-            </div>
-            <div>
-                <h6 className="us-text-orange us-fw-bold" style={{ marginBottom: '1.5rem', textTransform: 'uppercase' }}>About</h6>
-                <a href="#" className="us-footer-link">About Us</a>
-                <a href="#" className="us-footer-link">Terms of Service</a>
-                <a href="#" className="us-footer-link">Privacy Policy</a>
-                <a href="#" className="us-footer-link">Contact</a>
-            </div>
-            <div>
-                <h6 className="us-text-orange us-fw-bold" style={{ marginBottom: '1.5rem', textTransform: 'uppercase' }}>Connect With Us</h6>
+                <FooterMenuColumn
+                    location="footer_column_3"
+                    renderTitle={() => (
+                        <h6 className="us-text-orange us-fw-bold" style={{ marginBottom: '1.5rem', textTransform: 'uppercase' }}>Connect With Us</h6>
+                    )}
+                    linkClassName="us-footer-link"
+                />
                 <div style={{ marginBottom: '1.5rem' }}>
-                    <a href="#" className="us-social">F</a>
-                    <a href="#" className="us-social">T</a>
-                    <a href="#" className="us-social">I</a>
-                    <a href="#" className="us-social">L</a>
+                    <MenuNav
+                        location="social_footer"
+                        flat
+                        renderItem={(item, { href, onNavigate }) => (
+                            <a href={href} className="us-social" onClick={onNavigate}>
+                                {item.title.charAt(0)}
+                            </a>
+                        )}
+                    />
                 </div>
                 <p style={{ color: 'rgba(255,255,255,0.7)' }}>✉️ info@drivehub.com</p>
             </div>

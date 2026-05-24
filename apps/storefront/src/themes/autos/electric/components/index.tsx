@@ -1,5 +1,9 @@
 'use client';
 import React, { useState } from 'react';
+import { MenuNav } from '@/components/menu/MenuNav';
+import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
+import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
+import { hashAwareNavItemRenderer } from '@/components/menu/menu-renderers';
 
 export const ElectricHeader = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -21,17 +25,18 @@ export const ElectricHeader = () => {
             </button>
 
             <nav className={`ev-nav ${isOpen ? 'ev-nav-open' : ''}`}>
-                {['Home', 'EV Models', 'Charging', 'Compare', 'Contact'].map(link => (
-                    <a 
-                        key={link} 
-                        href={`#${link.toLowerCase().replace(' ', '-')}`} 
-                        className="ev-nav-link"
-                        onClick={() => setIsOpen(false)}
-                    >
-                        {link}
-                    </a>
-                ))}
-                <a href="#" className="ev-btn ev-btn-green" onClick={() => setIsOpen(false)}>Find Your EV</a>
+                <MenuNav
+                    location="main_header"
+                    flat
+                    style={{ display: 'contents' }}
+                    linkClassName="ev-nav-link"
+                    onNavigate={() => setIsOpen(false)}
+                    renderItem={hashAwareNavItemRenderer}
+                />
+                <MenuActionButtons
+                    linkClassName="ev-btn ev-btn-green"
+                    onNavigate={() => setIsOpen(false)}
+                />
             </nav>
         </header>
     );
@@ -75,33 +80,37 @@ export const ElectricFooter = () => (
                     EV<span className="ev-text-blue">OLVE</span>
                 </a>
                 <p style={{ fontSize: '0.9rem', opacity: 0.75, marginBottom: '1.5rem' }}>Driving the future of sustainable mobility, one electric vehicle at a time.</p>
-                <div>
-                    <a href="#" className="ev-social-icon">F</a>
-                    <a href="#" className="ev-social-icon">T</a>
-                    <a href="#" className="ev-social-icon">I</a>
-                </div>
+                <MenuNav
+                    location="social_footer"
+                    flat
+                    renderItem={(item, { href, onNavigate }) => (
+                        <a href={href} className="ev-social-icon" onClick={onNavigate}>
+                            {item.title.charAt(0)}
+                        </a>
+                    )}
+                />
             </div>
-            <div>
-                <h6 className="ev-text-green" style={{ marginBottom: '1rem', fontWeight: 600 }}>Explore</h6>
-                <a href="#featured-evs" className="ev-footer-link">EV Models</a>
-                <a href="#compare-evs" className="ev-footer-link">Compare</a>
-                <a href="#charging" className="ev-footer-link">Charging Map</a>
-                <a href="#" className="ev-footer-link">Financing</a>
-            </div>
-            <div>
-                <h6 className="ev-text-green" style={{ marginBottom: '1rem', fontWeight: 600 }}>Company</h6>
-                <a href="#" className="ev-footer-link">About Us</a>
-                <a href="#" className="ev-footer-link">Careers</a>
-                <a href="#" className="ev-footer-link">Press</a>
-                <a href="#" className="ev-footer-link">Partnerships</a>
-            </div>
-            <div>
-                <h6 className="ev-text-green" style={{ marginBottom: '1rem', fontWeight: 600 }}>Legal & Support</h6>
-                <a href="#" className="ev-footer-link">Privacy Policy</a>
-                <a href="#" className="ev-footer-link">Terms of Service</a>
-                <a href="#" className="ev-footer-link">FAQ</a>
-                <a href="#" className="ev-footer-link">Contact Support</a>
-            </div>
+            <FooterMenuColumn
+                location="footer_column_1"
+                titleTag="h6"
+                titleClassName="ev-text-green"
+                titleStyle={{ marginBottom: '1rem', fontWeight: 600 }}
+                linkClassName="ev-footer-link"
+            />
+            <FooterMenuColumn
+                location="footer_column_2"
+                titleTag="h6"
+                titleClassName="ev-text-green"
+                titleStyle={{ marginBottom: '1rem', fontWeight: 600 }}
+                linkClassName="ev-footer-link"
+            />
+            <FooterMenuColumn
+                location="footer_column_3"
+                titleTag="h6"
+                titleClassName="ev-text-green"
+                titleStyle={{ marginBottom: '1rem', fontWeight: 600 }}
+                linkClassName="ev-footer-link"
+            />
         </div>
         <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '1.5rem', textAlign: 'center', fontSize: '0.85rem', opacity: 0.5 }}>
             &copy; 2026 EVOLVE Marketplace. All rights reserved. Powering the electric revolution.

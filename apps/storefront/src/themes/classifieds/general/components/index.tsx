@@ -1,5 +1,9 @@
 'use client';
 import React, { useState } from 'react';
+import { MenuUtilityNav } from '@/components/menu/MenuUtilityNav';
+import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
+import { MenuNav } from '@/components/menu/MenuNav';
+import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
 
 interface HeaderProps {
   searchTerm: string;
@@ -26,17 +30,28 @@ export const GeneralHeader = ({ searchTerm, onSearchChange, onReset }: HeaderPro
         />
       </div>
       
-      <nav className="cg-nav">
-        <a href="#" className="cg-nav-link" onClick={(e) => { e.preventDefault(); alert("Login service dynamically integrated."); }}>Log In</a>
-        <a href="#" className="cg-nav-link" onClick={(e) => { e.preventDefault(); alert("Registration wizard launched."); }}>Sign Up</a>
-        <a 
-          href="#" 
-          className="cg-btn cg-btn-primary" 
-          onClick={(e) => { e.preventDefault(); alert("Post Classified Ad: Redirecting to partner dashboard in sandbox mode."); }}
-        >
-          <span>➕</span> Post Ad
-        </a>
-      </nav>
+      <div className="cg-nav">
+        <MenuUtilityNav
+          className="cg-nav"
+          linkClassName="cg-nav-link"
+        />
+        <MenuActionButtons
+          linkClassName="cg-btn cg-btn-primary"
+          renderItem={(item, { href, className, onNavigate }) => (
+            <a
+              href={href}
+              className={className}
+              onClick={(e) => {
+                e.preventDefault();
+                alert("Post Classified Ad: Redirecting to partner dashboard in sandbox mode.");
+                onNavigate?.();
+              }}
+            >
+              <span>➕</span> {item.title}
+            </a>
+          )}
+        />
+      </div>
     </header>
   );
 };
@@ -94,13 +109,13 @@ export const ListingCard = ({ title, price, image, seller, isSaved, onMessageCli
 
 export const GeneralFooter = () => (
   <footer className="cg-footer">
-    <div className="cg-footer-links">
-      <a href="#" className="cg-footer-link" onClick={(e) => e.preventDefault()}>About Us</a>
-      <a href="#" className="cg-footer-link" onClick={(e) => e.preventDefault()}>Help & Support</a>
-      <a href="#" className="cg-footer-link" onClick={(e) => e.preventDefault()}>Trust & Safety Guidelines</a>
-      <a href="#" className="cg-footer-link" onClick={(e) => e.preventDefault()}>Terms of Service</a>
-      <a href="#" className="cg-footer-link" onClick={(e) => e.preventDefault()}>Privacy Protection Policy</a>
-    </div>
+    <MenuNav
+      location="footer_bottom_bar"
+      flat
+      className="cg-footer-links"
+      linkClassName="cg-footer-link"
+      renderItem={defaultNavItemRenderer}
+    />
     <p style={{ color: 'var(--cg-text-muted)', fontSize: '0.8rem', marginTop: '1.25rem', fontWeight: 500 }}>
       &copy; 2026 ClasaFind Classifieds Suite. All rights reserved. Engineered to Elite Standards.
     </p>

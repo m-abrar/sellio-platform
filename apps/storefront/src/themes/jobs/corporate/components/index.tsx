@@ -1,5 +1,10 @@
 'use client';
 import React, { useState } from 'react';
+import { MenuNav } from '@/components/menu/MenuNav';
+import { MenuUtilityNav } from '@/components/menu/MenuUtilityNav';
+import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
+import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
+import { hashAwareNavItemRenderer } from '@/components/menu/menu-renderers';
 
 export const CorporateHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -10,7 +15,6 @@ export const CorporateHeader = () => {
         <span style={{ color: 'var(--jc-blue-accent)' }}>Talent</span>Corp
       </a>
 
-      {/* Mobile Hamburger Trigger */}
       <button 
         className={`jc-hamburger ${isOpen ? 'jc-hamburger-open' : ''}`}
         onClick={() => setIsOpen(!isOpen)}
@@ -22,38 +26,40 @@ export const CorporateHeader = () => {
         <span className="jc-hamburger-bar"></span>
       </button>
 
-      {/* Navigation Links */}
-      <nav className={`jc-nav ${isOpen ? 'jc-nav-open' : ''}`}>
-        {[
-          { name: 'Find Jobs', target: 'jobs' },
-          { name: 'Companies', target: 'companies' },
-          { name: 'Application Tracker', target: 'tracker' },
-          { name: 'Upload Resume', target: 'resume' }
-        ].map(link => (
-          <a 
-            key={link.name} 
-            href={`#${link.target}`} 
-            className="jc-nav-link"
-            onClick={(e) => {
-              e.preventDefault();
-              setIsOpen(false);
-              const targetId = link.target;
-              document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth' });
-            }}
-          >
-            {link.name}
-          </a>
-        ))}
-        <div className="jc-mobile-actions">
-          <a href="#" className="jc-btn jc-btn-outline jc-mobile-action-btn">Sign In</a>
-          <a href="#" className="jc-btn jc-btn-navy jc-mobile-action-btn">Post a Job</a>
-        </div>
-      </nav>
+      <MenuNav
+        location="main_header"
+        flat
+        className={`jc-nav ${isOpen ? 'jc-nav-open' : ''}`}
+        linkClassName="jc-nav-link"
+        onNavigate={() => setIsOpen(false)}
+        renderItem={hashAwareNavItemRenderer}
+      />
 
-      {/* Desktop Actions */}
+      <div className="jc-mobile-actions">
+        <MenuUtilityNav
+          location="utility_header"
+          linkClassName="jc-btn jc-btn-outline jc-mobile-action-btn"
+          onNavigate={() => setIsOpen(false)}
+        />
+        <MenuActionButtons
+          location="action_buttons"
+          linkClassName="jc-btn jc-btn-navy jc-mobile-action-btn"
+          onNavigate={() => setIsOpen(false)}
+        />
+      </div>
+
       <div className="jc-desktop-actions">
-        <a href="#" className="jc-btn jc-btn-outline">Sign In</a>
-        <a href="#" className="jc-btn jc-btn-navy" id="jc-btn-vibe-status">Post a Job</a>
+        <MenuUtilityNav
+          location="utility_header"
+          linkClassName="jc-btn jc-btn-outline"
+        />
+        <MenuActionButtons
+          location="action_buttons"
+          linkClassName="jc-btn jc-btn-navy"
+          renderItem={(item, { href, className, onNavigate }) => (
+            <a href={href} className={className} id="jc-btn-vibe-status" onClick={onNavigate}>{item.title}</a>
+          )}
+        />
       </div>
     </header>
   );
@@ -102,22 +108,22 @@ export const CorporateFooter = () => (
                 </a>
                 <p style={{ color: 'var(--jc-text-muted)', fontSize: '0.9rem', lineHeight: 1.6 }}>Empowering professionals and leading enterprises to connect seamlessly.</p>
             </div>
-            <div>
-                <h4 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--jc-navy)', marginBottom: '1.5rem' }}>For Candidates</h4>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
-                    <a href="#" style={{ color: 'var(--jc-text-muted)', textDecoration: 'none' }}>Browse Jobs</a>
-                    <a href="#" style={{ color: 'var(--jc-text-muted)', textDecoration: 'none' }}>Salary Tools</a>
-                    <a href="#" style={{ color: 'var(--jc-text-muted)', textDecoration: 'none' }}>Career Advice</a>
-                </div>
-            </div>
-            <div>
-                <h4 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--jc-navy)', marginBottom: '1.5rem' }}>For Employers</h4>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
-                    <a href="#" style={{ color: 'var(--jc-text-muted)', textDecoration: 'none' }}>Post a Job</a>
-                    <a href="#" style={{ color: 'var(--jc-text-muted)', textDecoration: 'none' }}>Search Resumes</a>
-                    <a href="#" style={{ color: 'var(--jc-text-muted)', textDecoration: 'none' }}>ATS Integration</a>
-                </div>
-            </div>
+            <FooterMenuColumn
+              location="footer_column_1"
+              renderTitle={(title) => (
+                <h4 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--jc-navy)', marginBottom: '1.5rem' }}>{title}</h4>
+              )}
+              listClassName="jc-footer-links"
+              linkClassName="jc-footer-link"
+            />
+            <FooterMenuColumn
+              location="footer_column_2"
+              renderTitle={(title) => (
+                <h4 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--jc-navy)', marginBottom: '1.5rem' }}>{title}</h4>
+              )}
+              listClassName="jc-footer-links"
+              linkClassName="jc-footer-link"
+            />
             <div>
                 <h4 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--jc-navy)', marginBottom: '1.5rem' }}>Subscribe</h4>
                 <p style={{ color: 'var(--jc-text-muted)', fontSize: '0.9rem', marginBottom: '1rem' }}>Get daily job alerts.</p>

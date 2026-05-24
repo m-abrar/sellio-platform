@@ -304,6 +304,16 @@
 
 .ecl-footer-link {
   transition: var(--ecl-transition);
+  font-size: 0.9rem;
+  opacity: 0.3;
+  color: white;
+  text-decoration: none;
+}
+
+.ecl-footer-link-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
 .ecl-footer-link:hover {

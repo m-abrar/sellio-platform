@@ -1,5 +1,9 @@
 'use client';
 import React, { useState } from 'react';
+import { MenuNav } from '@/components/menu/MenuNav';
+import { MenuUtilityNav } from '@/components/menu/MenuUtilityNav';
+import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
+import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
 
 export const ShopHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,27 +24,24 @@ export const ShopHeader = () => {
         <span className="ed-hamburger-bar"></span>
       </button>
 
-      <nav className={`ed-nav ${isOpen ? 'ed-nav-open' : ''}`}>
-          {['Collection', 'Essentials', 'Lookbook', 'Support'].map(link => (
-              <a 
-                key={link} 
-                href="#" 
-                className="ed-nav-link"
-                onClick={() => setIsOpen(false)}
-              >
-                {link}
-              </a>
-          ))}
-          <div className="ed-mono ed-mobile-header-meta" style={{ fontSize: '0.65rem', gap: '2rem', marginTop: '2rem' }}>
-            <span>CART (0)</span>
-            <span>SEARCH</span>
-          </div>
-      </nav>
-
-      <div className="ed-mono ed-desktop-header-meta" style={{ fontSize: '0.65rem', display: 'flex', gap: '2rem' }}>
-        <span>CART (0)</span>
-        <span>SEARCH</span>
+      <div className={`ed-nav ${isOpen ? 'ed-nav-open' : ''}`}>
+        <MenuNav
+          location="main_header"
+          flat
+          style={{ display: 'contents' }}
+          linkClassName="ed-nav-link"
+          onNavigate={() => setIsOpen(false)}
+          renderItem={defaultNavItemRenderer}
+        />
+        <MenuUtilityNav
+          className="ed-mono ed-mobile-header-meta"
+          onNavigate={() => setIsOpen(false)}
+        />
       </div>
+
+      <MenuUtilityNav
+        className="ed-mono ed-desktop-header-meta"
+      />
     </header>
   );
 };
@@ -77,24 +78,40 @@ export const TransactionFooter = () => (
                     The world's most advanced transaction protocol for high-fidelity retail. Synchronizing refined essentials with global distribution nodes.
                 </p>
             </div>
-            {['SHOP', 'COLLECTIVE', 'SUPPORT'].map(col => (
-                <div key={col}>
-                    <div className="ed-mono" style={{ marginBottom: '3.5rem' }}>{col}</div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                        {['New Arrivals', 'Essentials', 'Lookbook', 'Shipping'].map(link => (
-                            <span key={link} style={{ fontSize: '1rem', color: 'var(--ed-text-muted)', cursor: 'pointer' }}>{link}</span>
-                        ))}
-                    </div>
-                </div>
-            ))}
+            <FooterMenuColumn
+                location="footer_column_1"
+                renderTitle={(title) => (
+                    <div className="ed-mono" style={{ marginBottom: '3.5rem' }}>{title}</div>
+                )}
+                listClassName=""
+                linkClassName=""
+            />
+            <FooterMenuColumn
+                location="footer_column_2"
+                renderTitle={(title) => (
+                    <div className="ed-mono" style={{ marginBottom: '3.5rem' }}>{title}</div>
+                )}
+            />
+            <FooterMenuColumn
+                location="footer_column_3"
+                renderTitle={(title) => (
+                    <div className="ed-mono" style={{ marginBottom: '3.5rem' }}>{title}</div>
+                )}
+            />
         </div>
         <div style={{ marginTop: '12rem', paddingTop: '4rem', borderTop: '1px solid var(--ed-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div className="ed-mono" style={{ color: 'var(--ed-text-muted)', fontSize: '0.65rem' }}>© 2026 SELLIO_SHOP // TRANSACTION_SYNC_STABLE</div>
-            <div style={{ display: 'flex', gap: '5rem' }}>
-                {['INSTAGRAM', 'LINKEDIN', 'X_SHOP'].map(social => (
-                    <span key={social} className="ed-mono" style={{ color: 'var(--ed-text-muted)', fontSize: '0.65rem' }}>{social}</span>
-                ))}
-            </div>
+            <MenuNav
+                location="social_footer"
+                flat
+                style={{ display: 'flex', gap: '5rem' }}
+                linkClassName="ed-mono"
+                renderItem={(item, { href, className, onNavigate }) => (
+                    <a href={href} className={className} style={{ color: 'var(--ed-text-muted)', fontSize: '0.65rem' }} onClick={onNavigate}>
+                        {item.title}
+                    </a>
+                )}
+            />
         </div>
     </footer>
 );

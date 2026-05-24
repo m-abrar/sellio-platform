@@ -1,5 +1,9 @@
 'use client';
 import React, { useState } from 'react';
+import { MenuNav } from '@/components/menu/MenuNav';
+import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
+import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
+import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
 
 export const NexusHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -22,17 +26,30 @@ export const NexusHeader = () => {
       </button>
 
       <nav className={`unp-nav ${isOpen ? 'unp-nav-open' : ''}`}>
-          {['Core Engine', 'Showcase', 'Subscription', 'Nodal Tech'].map(link => (
-              <a key={link} href="#" className="unp-nav-link" onClick={() => setIsOpen(false)}>{link}</a>
-          ))}
-          <button className="unp-btn-primary unp-mobile-btn" style={{ padding: '1rem 3rem', fontSize: '0.8rem', marginTop: '2rem', width: '100%', borderRadius: '12px' }} onClick={() => alert('Nexus Prime sync active.')}>
-            INITIALIZE NODE
-          </button>
+          <MenuNav
+            location="main_header"
+            flat
+            linkClassName="unp-nav-link"
+            onNavigate={() => setIsOpen(false)}
+            renderItem={defaultNavItemRenderer}
+          />
+          <MenuActionButtons
+            as="button"
+            buttonClassName="unp-btn-primary unp-mobile-btn"
+            onNavigate={() => setIsOpen(false)}
+            renderItem={(item, { className, onNavigate }) => (
+              <button type="button" className={className} style={{ padding: '1rem 3rem', fontSize: '0.8rem', marginTop: '2rem', width: '100%', borderRadius: '12px' }} onClick={onNavigate}>{item.title}</button>
+            )}
+          />
       </nav>
 
-      <button className="unp-btn-primary unp-desktop-btn" style={{ padding: '0.8rem 2rem', fontSize: '0.75rem', borderRadius: '12px' }} onClick={() => alert('Nexus Prime sync active.')} id="unp-btn-header-access">
-        INITIALIZE NODE
-      </button>
+      <MenuActionButtons
+        as="button"
+        buttonClassName="unp-btn-primary unp-desktop-btn"
+        renderItem={(item, { className, onNavigate }) => (
+          <button type="button" className={className} style={{ padding: '0.8rem 2rem', fontSize: '0.75rem', borderRadius: '12px' }} onClick={onNavigate} id="unp-btn-header-access">{item.title}</button>
+        )}
+      />
     </header>
   );
 };
@@ -110,23 +127,38 @@ export const NexusFooter = () => (
                     The advanced heavyweight app-like distribution node. Engineered for real-time high-fidelity multi-category scaling operations.
                 </p>
             </div>
-            {['RESOURCES', 'PARADIGMS', 'COMPANY'].map(col => (
-                <div key={col}>
-                    <div className="unp-mono" style={{ color: 'white', marginBottom: '3rem', fontWeight: 700 }}>{col}</div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }} className="unp-footer-link-group">
-                        {['Nodal Registry', 'Capacity Hub', 'System Spec', 'Stable Sync'].map(link => (
-                            <span key={link} className="unp-footer-link" onClick={() => alert(`Navigating: ${link}`)}>{link}</span>
-                        ))}
-                    </div>
-                </div>
-            ))}
+            <FooterMenuColumn
+                location="footer_column_1"
+                renderTitle={(title) => <div className="unp-mono" style={{ color: 'white', marginBottom: '3rem', fontWeight: 700 }}>{title}</div>}
+                listClassName="unp-footer-link-group"
+                linkClassName="unp-footer-link"
+            />
+            <FooterMenuColumn
+                location="footer_column_2"
+                renderTitle={(title) => <div className="unp-mono" style={{ color: 'white', marginBottom: '3rem', fontWeight: 700 }}>{title}</div>}
+                listClassName="unp-footer-link-group"
+                linkClassName="unp-footer-link"
+            />
+            <FooterMenuColumn
+                location="footer_column_3"
+                renderTitle={(title) => <div className="unp-mono" style={{ color: 'white', marginBottom: '3rem', fontWeight: 700 }}>{title}</div>}
+                listClassName="unp-footer-link-group"
+                linkClassName="unp-footer-link"
+            />
         </div>
         <div className="unp-footer-bottom">
             <div className="unp-mono" style={{ opacity: 0.4, fontSize: '0.65rem' }}>© 2026 SELLIO_NEXUSPRIME_OS // CORE_ACTIVE</div>
             <div className="unp-footer-socials">
-                {['INSTAGRAM', 'LINKEDIN', 'X_OS'].map(social => (
-                    <span key={social} className="unp-mono" style={{ opacity: 0.4, fontSize: '0.65rem', cursor: 'pointer' }}>{social}</span>
-                ))}
+                <MenuNav
+                    location="social_footer"
+                    flat
+                    linkClassName="unp-mono"
+                    renderItem={(item, { href, className, onNavigate }) => (
+                        <span className={className} style={{ opacity: 0.4, fontSize: '0.65rem', cursor: 'pointer' }}>
+                            <a href={href} onClick={onNavigate} style={{ color: 'inherit', textDecoration: 'none' }}>{item.title}</a>
+                        </span>
+                    )}
+                />
             </div>
         </div>
     </footer>

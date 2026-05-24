@@ -1,5 +1,7 @@
 'use client';
 import React from 'react';
+import { MenuNav } from '@/components/menu/MenuNav';
+import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 
 export const VoltageFooter = () => (
     <footer className="voltage-footer">
@@ -10,24 +12,44 @@ export const VoltageFooter = () => (
                     The heartbeat of live music. Access the world's most immersive sonic distribution network. Verified high-fidelity experiences.
                 </p>
             </div>
-            {['RESOURCES', 'COMMUNITY', 'LEGAL'].map(col => (
-                <div key={col}>
-                    <div style={{ fontFamily: 'var(--font-heading)', fontSize: '0.7rem', fontWeight: 900, marginBottom: '3rem', color: 'var(--neon-pink)', letterSpacing: '3px' }}>{col}</div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                        {['Registry Access', 'Artist Nodes', 'Sonic Manifest', 'Security Protocol'].map(link => (
-                            <span key={link} className="footer-link" style={{ cursor: 'pointer' }}>{link}</span>
-                        ))}
-                    </div>
-                </div>
-            ))}
+            <FooterMenuColumn
+              location="footer_column_1"
+              renderTitle={(title) => (
+                <div style={{ fontFamily: 'var(--font-heading)', fontSize: '0.7rem', fontWeight: 900, marginBottom: '3rem', color: 'var(--neon-pink)', letterSpacing: '3px' }}>{title}</div>
+              )}
+              listClassName="voltage-footer-links"
+              linkClassName="footer-link"
+            />
+            <FooterMenuColumn
+              location="footer_column_2"
+              renderTitle={(title) => (
+                <div style={{ fontFamily: 'var(--font-heading)', fontSize: '0.7rem', fontWeight: 900, marginBottom: '3rem', color: 'var(--neon-pink)', letterSpacing: '3px' }}>{title}</div>
+              )}
+              listClassName="voltage-footer-links"
+              linkClassName="footer-link"
+            />
+            <FooterMenuColumn
+              location="footer_column_3"
+              renderTitle={(title) => (
+                <div style={{ fontFamily: 'var(--font-heading)', fontSize: '0.7rem', fontWeight: 900, marginBottom: '3rem', color: 'var(--neon-pink)', letterSpacing: '3px' }}>{title}</div>
+              )}
+              listClassName="voltage-footer-links"
+              linkClassName="footer-link"
+            />
         </div>
         <div style={{ marginTop: '10rem', paddingTop: '4rem', borderTop: '1px solid var(--sonic-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '3rem' }}>
             <div style={{ fontSize: '0.7rem', color: '#444', fontWeight: 900, letterSpacing: '2px' }}>© 2026 PULSE EVENTS // SONIC_REGISTRY_V2</div>
-            <div style={{ display: 'flex', gap: '3rem' }}>
-                {['INSTAGRAM', 'DISCORD', 'TWITTER'].map(social => (
-                    <span key={social} style={{ fontSize: '0.7rem', color: '#444', fontWeight: 900, letterSpacing: '2px', cursor: 'pointer' }}>{social}</span>
-                ))}
-            </div>
+            <MenuNav
+              location="social_footer"
+              flat
+              className="voltage-footer-socials"
+              linkClassName=""
+              renderItem={(item, { href, className, onNavigate }) => (
+                <span key={item.title} style={{ fontSize: '0.7rem', color: '#444', fontWeight: 900, letterSpacing: '2px', cursor: 'pointer' }}>
+                  <a href={href} className={className} onClick={onNavigate} style={{ color: 'inherit', textDecoration: 'none' }}>{item.title}</a>
+                </span>
+              )}
+            />
         </div>
     </footer>
 );

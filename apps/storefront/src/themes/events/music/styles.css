@@ -208,6 +208,17 @@
     color: var(--sonic-pink);
 }
 
+.voltage-footer-links {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.voltage-footer-socials {
+    display: flex;
+    gap: 3rem;
+}
+
 /* Buttons */
 .sonic-btn-primary {
     background: linear-gradient(90deg, var(--neon-pink), var(--neon-blue));

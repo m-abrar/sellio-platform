@@ -1,5 +1,8 @@
 'use client';
 import React, { useState } from 'react';
+import { MenuNav } from '@/components/menu/MenuNav';
+import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
+import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
 
 export const InvestmentHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,15 +23,19 @@ export const InvestmentHeader = () => {
           <span className="pi-hamburger-bar"></span>
       </button>
 
-      <nav className={`pi-nav ${isOpen ? 'pi-nav-open' : ''}`}>
-          {['Registry', 'Portfolio_Sync', 'Institutional', 'Master_Auth'].map(link => (
-              <a key={link} href="#" className="pi-nav-link" onClick={() => setIsOpen(false)}>{link}</a>
-          ))}
+      <div role="navigation" className={`pi-nav ${isOpen ? 'pi-nav-open' : ''}`}>
+          <MenuNav
+            location="main_header"
+            flat
+            linkClassName="pi-nav-link"
+            onNavigate={() => setIsOpen(false)}
+            renderItem={defaultNavItemRenderer}
+          />
           
           <div className="pi-mono pi-mobile-auth-btn" style={{ fontSize: '0.6rem', color: 'var(--pi-emerald)', marginTop: '2rem' }}>
             NETWORK_STABLE_V8
           </div>
-      </nav>
+      </div>
 
       <div className="pi-mono pi-desktop-auth-btn" style={{ fontSize: '0.6rem', color: 'var(--pi-emerald)' }}>
         NETWORK_STABLE_V8
@@ -69,24 +76,39 @@ export const InstitutionalFooter = () => (
                     The global high-fidelity terminal for institutional real estate investment. Synchronizing capital distribution with verified asset nodes.
                 </p>
             </div>
-            {['PORTFOLIO', 'INSTITUTIONAL', 'GOVERNANCE'].map(col => (
-                <div key={col}>
-                    <div className="pi-mono" style={{ color: 'var(--pi-emerald)', marginBottom: '3.5rem' }}>{col}</div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                        {['Registry', 'Analytics', 'Support', 'Auth'].map(link => (
-                            <span key={link} style={{ fontSize: '0.9rem', opacity: 0.4, cursor: 'pointer' }}>{link}</span>
-                        ))}
-                    </div>
-                </div>
-            ))}
+            <FooterMenuColumn
+                location="footer_column_1"
+                renderTitle={(title) => <div className="pi-mono" style={{ color: 'var(--pi-emerald)', marginBottom: '3.5rem' }}>{title}</div>}
+                listClassName=""
+                linkClassName=""
+                className=""
+            />
+            <FooterMenuColumn
+                location="footer_column_2"
+                renderTitle={(title) => <div className="pi-mono" style={{ color: 'var(--pi-emerald)', marginBottom: '3.5rem' }}>{title}</div>}
+                listClassName=""
+                linkClassName=""
+            />
+            <FooterMenuColumn
+                location="footer_column_3"
+                renderTitle={(title) => <div className="pi-mono" style={{ color: 'var(--pi-emerald)', marginBottom: '3.5rem' }}>{title}</div>}
+                listClassName=""
+                linkClassName=""
+            />
         </div>
         <div style={{ marginTop: '12rem', paddingTop: '4rem', borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div className="pi-mono" style={{ opacity: 0.3, fontSize: '0.65rem' }}>© 2026 SELLIO_CAPITAL_GRP // SYNC_STABLE</div>
-            <div style={{ display: 'flex', gap: '4rem' }}>
-                {['INSTAGRAM', 'LINKEDIN', 'X_CAPITAL'].map(social => (
-                    <span key={social} className="pi-mono" style={{ opacity: 0.3, fontSize: '0.65rem' }}>{social}</span>
-                ))}
-            </div>
+            <MenuNav
+                location="social_footer"
+                flat
+                className=""
+                linkClassName="pi-mono"
+                renderItem={(item, { href, className, onNavigate }) => (
+                    <span className={className} style={{ opacity: 0.3, fontSize: '0.65rem', marginLeft: '4rem' }}>
+                        <a href={href} onClick={onNavigate} style={{ color: 'inherit', textDecoration: 'none' }}>{item.title}</a>
+                    </span>
+                )}
+            />
         </div>
     </footer>
 );

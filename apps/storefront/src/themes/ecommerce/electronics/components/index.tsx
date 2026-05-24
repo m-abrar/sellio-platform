@@ -1,5 +1,9 @@
 'use client';
 import React, { useState } from 'react';
+import { MenuNav } from '@/components/menu/MenuNav';
+import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
+import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
+import { hashAwareNavItemRenderer } from '@/components/menu/menu-renderers';
 
 export const ElectronicsHeader = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -29,13 +33,33 @@ export const ElectronicsHeader = () => {
                     <span>🔍</span>
                     <input type="text" className="el-search-input" placeholder="Search components, devices..." />
                 </div>
-                <a href="#components" className="el-nav-link" onClick={() => setIsOpen(false)}>Components</a>
-                <a href="#systems" className="el-nav-link" onClick={() => setIsOpen(false)}>Systems</a>
-                <a href="#peripherals" className="el-nav-link" onClick={() => setIsOpen(false)}>Peripherals</a>
-                <div className="el-cart-icon" onClick={() => setIsOpen(false)}>
-                    🛒
-                    <span className="el-cart-badge">3</span>
-                </div>
+                <MenuNav
+                    location="main_header"
+                    flat
+                    style={{ display: 'contents' }}
+                    linkClassName="el-nav-link"
+                    onNavigate={() => setIsOpen(false)}
+                    renderItem={hashAwareNavItemRenderer}
+                />
+                <MenuActionButtons
+                    linkClassName="el-nav-link"
+                    onNavigate={() => setIsOpen(false)}
+                    renderItem={(item, { href, className, onNavigate }) => {
+                        if (item.title === 'CART') {
+                            return (
+                                <div className="el-cart-icon" onClick={onNavigate}>
+                                    🛒
+                                    <span className="el-cart-badge">3</span>
+                                </div>
+                            );
+                        }
+                        return (
+                            <a href={href} className={className} onClick={onNavigate}>
+                                {item.title}
+                            </a>
+                        );
+                    }}
+                />
             </nav>
         </header>
     );
@@ -86,24 +110,21 @@ export const ElectronicsFooter = () => (
                 </a>
                 <p style={{ color: 'var(--el-text-muted)', fontSize: '0.9rem', lineHeight: 1.6 }}>Next-generation hardware for builders, gamers, and creators. Power your future.</p>
             </div>
-            <div>
-                <h5 className="el-tech-font" style={{ marginBottom: '1.5rem', color: 'white' }}>Hardware</h5>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
-                    <a href="#" style={{ color: 'var(--el-text-muted)', textDecoration: 'none' }}>Processors (CPU)</a>
-                    <a href="#" style={{ color: 'var(--el-text-muted)', textDecoration: 'none' }}>Graphics Cards (GPU)</a>
-                    <a href="#" style={{ color: 'var(--el-text-muted)', textDecoration: 'none' }}>Motherboards</a>
-                    <a href="#" style={{ color: 'var(--el-text-muted)', textDecoration: 'none' }}>Memory (RAM)</a>
-                </div>
-            </div>
-            <div>
-                <h5 className="el-tech-font" style={{ marginBottom: '1.5rem', color: 'white' }}>Support</h5>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
-                    <a href="#" style={{ color: 'var(--el-text-muted)', textDecoration: 'none' }}>Track Order</a>
-                    <a href="#" style={{ color: 'var(--el-text-muted)', textDecoration: 'none' }}>Returns & Warranty</a>
-                    <a href="#" style={{ color: 'var(--el-text-muted)', textDecoration: 'none' }}>Technical Support</a>
-                    <a href="#" style={{ color: 'var(--el-text-muted)', textDecoration: 'none' }}>Contact Us</a>
-                </div>
-            </div>
+            <FooterMenuColumn
+                location="footer_column_1"
+                titleTag="h5"
+                titleClassName="el-tech-font"
+                titleStyle={{ marginBottom: '1.5rem', color: 'white' }}
+                linkClassName=""
+            />
+            <FooterMenuColumn
+                location="footer_column_2"
+                titleTag="h5"
+                titleClassName="el-tech-font"
+                titleStyle={{ marginBottom: '1.5rem', color: 'white' }}
+                listClassName=""
+                linkClassName=""
+            />
             <div>
                 <h5 className="el-tech-font" style={{ marginBottom: '1.5rem', color: 'white' }}>Newsletter</h5>
                 <p style={{ color: 'var(--el-text-muted)', fontSize: '0.9rem', marginBottom: '1rem' }}>Get updates on latest drops and tech news.</p>

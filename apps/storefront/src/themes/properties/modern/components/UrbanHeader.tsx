@@ -1,14 +1,9 @@
 
 'use client';
 import React, { useEffect, useState } from 'react';
-import { scrollToSection } from '../utils';
-
-const navItems = [
-    { label: 'RESIDENTIAL', target: 'urban-structure-grid' },
-    { label: 'COMMERCIAL', target: 'urban-precision-section' },
-    { label: 'DISTRICTS', target: 'urban-structure-grid' },
-    { label: 'SKYLINE', target: 'urban-hero-section' },
-];
+import { MenuNav } from '@/components/menu/MenuNav';
+import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
+import { hashAwareNavItemRenderer } from '@/components/menu/menu-renderers';
 
 export const UrbanHeader = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -19,17 +14,6 @@ export const UrbanHeader = () => {
             document.body.style.overflow = '';
         };
     }, [isOpen]);
-
-    const handleNavClick = (event: React.MouseEvent, target: string) => {
-        event.preventDefault();
-        setIsOpen(false);
-        scrollToSection(target);
-    };
-
-    const handleExplore = () => {
-        setIsOpen(false);
-        scrollToSection('urban-structure-grid');
-    };
 
     return (
         <header className="urban-header">
@@ -57,33 +41,25 @@ export const UrbanHeader = () => {
             </button>
 
             <nav className={`urban-nav ${isOpen ? 'urban-nav-open' : ''}`} aria-label="Primary">
-                {navItems.map((item) => (
-                    <a
-                        key={item.label}
-                        href={`#${item.target}`}
-                        className="urban-nav-link"
-                        onClick={(event) => handleNavClick(event, item.target)}
-                    >
-                        {item.label}
-                    </a>
-                ))}
+                <MenuNav
+                    location="main_header"
+                    flat
+                    linkClassName="urban-nav-link"
+                    onNavigate={() => setIsOpen(false)}
+                    renderItem={hashAwareNavItemRenderer}
+                />
 
-                <button
-                    type="button"
-                    className="urban-btn-primary urban-mobile-auth-btn"
-                    onClick={handleExplore}
-                >
-                    EXPLORE_UNITS
-                </button>
+                <MenuActionButtons
+                    linkClassName="urban-btn-primary urban-mobile-auth-btn"
+                    onNavigate={() => setIsOpen(false)}
+                    renderItem={(item, props) => hashAwareNavItemRenderer(item, { ...props, isActive: false })}
+                />
             </nav>
 
-            <button
-                type="button"
-                className="urban-btn-primary urban-desktop-auth-btn"
-                onClick={handleExplore}
-            >
-                EXPLORE_UNITS
-            </button>
+            <MenuActionButtons
+                linkClassName="urban-btn-primary urban-desktop-auth-btn"
+                renderItem={(item, props) => hashAwareNavItemRenderer(item, { ...props, isActive: false })}
+            />
         </header>
     );
 };

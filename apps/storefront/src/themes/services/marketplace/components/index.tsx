@@ -1,6 +1,10 @@
 'use client';
 import React, { useState } from 'react';
 import type { ServiceListing } from '@sellio/types';
+import { MenuNav } from '@/components/menu/MenuNav';
+import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
+import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
+import { hashAwareNavItemRenderer } from '@/components/menu/menu-renderers';
 
 function getThemeLink(path: string) {
   if (typeof window !== 'undefined' && window.location.pathname.startsWith('/preview/')) {
@@ -32,46 +36,28 @@ export const MarketplaceHeader = () => {
       </button>
       
 
-      {/* Navigation Links */}
-      <nav className={`sm-nav ${isOpen ? 'sm-nav-open' : ''}`}>
-        {[
-          { name: 'Home', target: 'sm-hero-section' },
-          { name: 'Categories', target: 'sm-categories-section' },
-          { name: 'Providers', target: 'sm-providers-section' },
-          { name: 'How It Works', target: 'sm-how-it-works' },
-          { name: 'Testimonials', target: 'sm-testimonials-section' }
-        ].map(link => (
-          <a 
-            key={link.name} 
-            href={`#${link.target}`} 
-            className="sm-nav-link"
-            onClick={(e) => {
-              e.preventDefault();
-              setIsOpen(false);
-              const targetId = link.target;
-              document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth' });
-            }}
-          >
-            {link.name}
-          </a>
-        ))}
-        <button 
-          className="sm-btn sm-btn-primary sm-mobile-btn" 
-          onClick={() => alert('Service posting wizard starting...')}
-        >
-          Post a Service
-        </button>
-      </nav>
+      <div className={`sm-nav ${isOpen ? 'sm-nav-open' : ''}`}>
+        <MenuNav
+          location="main_header"
+          flat
+          linkClassName="sm-nav-link"
+          onNavigate={() => setIsOpen(false)}
+          renderItem={hashAwareNavItemRenderer}
+        />
+        <MenuActionButtons
+          linkClassName="sm-btn sm-btn-primary sm-mobile-btn"
+          as="button"
+          onAction={() => alert('Service posting wizard starting...')}
+          onNavigate={() => setIsOpen(false)}
+        />
+      </div>
 
-      {/* Desktop Actions */}
       <div className="sm-desktop-btn-container">
-        <button 
-          className="sm-btn sm-btn-primary sm-desktop-btn" 
-          onClick={() => alert('Service posting wizard starting...')}
-          id="sm-btn-vibe-status"
-        >
-          Post a Service
-        </button>
+        <MenuActionButtons
+          linkClassName="sm-btn sm-btn-primary sm-desktop-btn"
+          as="button"
+          onAction={() => alert('Service posting wizard starting...')}
+        />
       </div>
     </header>
   );
@@ -192,27 +178,24 @@ export const MarketplaceFooter = () => (
                 </p>
                 <p style={{ color: 'white', fontSize: '0.95rem', marginTop: '1.5rem', fontWeight: 600 }}>support@serviceconnect.com</p>
             </div>
-            <div>
-                <h6 style={{ fontWeight: 700, marginBottom: '1.5rem', fontSize: '1.1rem', color: 'white' }}>Quick Links</h6>
-                <a href="#" className="sm-footer-link" onClick={() => alert('About us.')}>About Us</a>
-                <a href="#" className="sm-footer-link" onClick={() => alert('Careers listings.')}>Careers</a>
-                <a href="#" className="sm-footer-link" onClick={() => alert('Blog portal.')}>Blog</a>
-                <a href="#" className="sm-footer-link" onClick={() => alert('Press center.')}>Press</a>
-            </div>
-            <div>
-                <h6 style={{ fontWeight: 700, marginBottom: '1.5rem', fontSize: '1.1rem', color: 'white' }}>Providers</h6>
-                <a href="#" className="sm-footer-link" onClick={() => alert('Become a provider.')}>Join as Provider</a>
-                <a href="#" className="sm-footer-link" onClick={() => alert('Provider login page.')}>Provider Login</a>
-                <a href="#" className="sm-footer-link" onClick={() => alert('Pricing tiers.')}>Pricing Plans</a>
-                <a href="#" className="sm-footer-link" onClick={() => alert('Safety portal.')}>Trust & Safety</a>
-            </div>
-            <div>
-                <h6 style={{ fontWeight: 700, marginBottom: '1.5rem', fontSize: '1.1rem', color: 'white' }}>Support</h6>
-                <a href="#" className="sm-footer-link" onClick={() => alert('Help center.')}>Help Center</a>
-                <a href="#" className="sm-footer-link" onClick={() => alert('Contact portal.')}>Contact Us</a>
-                <a href="#" className="sm-footer-link" onClick={() => alert('Privacy policy.')}>Privacy Policy</a>
-                <a href="#" className="sm-footer-link" onClick={() => alert('Terms of Service.')}>Terms of Service</a>
-            </div>
+            <FooterMenuColumn
+                location="footer_column_1"
+                titleTag="h6"
+                titleStyle={{ fontWeight: 700, marginBottom: '1.5rem', fontSize: '1.1rem', color: 'white' }}
+                linkClassName="sm-footer-link"
+            />
+            <FooterMenuColumn
+                location="footer_column_2"
+                titleTag="h6"
+                titleStyle={{ fontWeight: 700, marginBottom: '1.5rem', fontSize: '1.1rem', color: 'white' }}
+                linkClassName="sm-footer-link"
+            />
+            <FooterMenuColumn
+                location="footer_column_3"
+                titleTag="h6"
+                titleStyle={{ fontWeight: 700, marginBottom: '1.5rem', fontSize: '1.1rem', color: 'white' }}
+                linkClassName="sm-footer-link"
+            />
         </div>
         <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: '1.5rem', textAlign: 'center', color: 'var(--sm-text-muted)', fontSize: '0.9rem' }}>
             &copy; 2026 ServiceConnect. All rights reserved.

@@ -1,5 +1,8 @@
 'use client';
 import React, { useState } from 'react';
+import { MenuNav } from '@/components/menu/MenuNav';
+import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
+import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
 
 export const ArtisanHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -22,9 +25,13 @@ export const ArtisanHeader = () => {
       </button>
 
       <nav className={`ps-nav ${isOpen ? 'ps-nav-open' : ''}`}>
-          {['Collection', 'Atelier_Specs', 'Provenance_Data', 'Private_Auth'].map(link => (
-              <a key={link} href="#" className="ps-nav-link" onClick={() => setIsOpen(false)}>{link.replace('_', ' ')}</a>
-          ))}
+          <MenuNav
+            location="main_header"
+            flat
+            linkClassName="ps-nav-link"
+            onNavigate={() => setIsOpen(false)}
+            renderItem={defaultNavItemRenderer}
+          />
           <div className="ps-mono ps-mobile-status" style={{ fontSize: '0.6rem', border: '1px solid var(--ps-gold)', padding: '0.5rem 1.5rem', marginTop: '2rem', textAlign: 'center' }}>
             CURATION_SYNC_ACTIVE
           </div>
@@ -87,23 +94,35 @@ export const EditorialFooter = () => (
                     A curated high-fidelity distribution of the world's most significant architectural achievements. Synchronizing institutional curation with global provenance.
                 </p>
             </div>
-            {['COLLECTION', 'ATELIER', 'INSTITUTIONAL'].map(col => (
-                <div key={col}>
-                    <div className="ps-mono" style={{ marginBottom: '3.5rem' }}>{col}</div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                        {['Registry', 'Provenance', 'Curators', 'Auth Registry'].map(link => (
-                            <span key={link} style={{ fontSize: '0.9rem', color: 'var(--ps-text-dim)', cursor: 'pointer', transition: 'color 0.3s ease' }} className="ps-footer-link" onClick={() => alert(`Navigating registry pipeline node: ${link}`)}>{link}</span>
-                        ))}
-                    </div>
-                </div>
-            ))}
+            <FooterMenuColumn
+                location="footer_column_1"
+                renderTitle={(title) => <div className="ps-mono" style={{ marginBottom: '3.5rem' }}>{title}</div>}
+                linkClassName="ps-footer-link"
+            />
+            <FooterMenuColumn
+                location="footer_column_2"
+                renderTitle={(title) => <div className="ps-mono" style={{ marginBottom: '3.5rem' }}>{title}</div>}
+                linkClassName="ps-footer-link"
+            />
+            <FooterMenuColumn
+                location="footer_column_3"
+                renderTitle={(title) => <div className="ps-mono" style={{ marginBottom: '3.5rem' }}>{title}</div>}
+                linkClassName="ps-footer-link"
+            />
         </div>
         <div style={{ marginTop: '12rem', paddingTop: '4rem', borderTop: '1px solid var(--ps-shadow)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} className="ps-footer-bottom">
             <div className="ps-mono" style={{ color: 'var(--ps-text-dim)', fontSize: '0.65rem' }}>© 2026 SELLIO_ATELIER_NODE // DATA_STABLE</div>
             <div style={{ display: 'flex', gap: '5rem' }} className="ps-footer-socials">
-                {['INSTAGRAM', 'LINKEDIN', 'X_ATELIER'].map(social => (
-                    <span key={social} className="ps-mono" style={{ color: 'var(--ps-text-dim)', fontSize: '0.65rem', cursor: 'pointer' }}>{social}</span>
-                ))}
+                <MenuNav
+                    location="social_footer"
+                    flat
+                    linkClassName="ps-mono"
+                    renderItem={(item, { href, className, onNavigate }) => (
+                        <span className={className} style={{ color: 'var(--ps-text-dim)', fontSize: '0.65rem', cursor: 'pointer' }}>
+                            <a href={href} onClick={onNavigate} style={{ color: 'inherit', textDecoration: 'none' }}>{item.title}</a>
+                        </span>
+                    )}
+                />
             </div>
         </div>
     </footer>

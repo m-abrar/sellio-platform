@@ -1,5 +1,9 @@
 'use client';
 import React from 'react';
+import { MenuNav } from '@/components/menu/MenuNav';
+import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
+import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
+import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
 
 interface HeaderProps {
   onPostClick: () => void;
@@ -11,13 +15,25 @@ export const PremiumHeader = ({ onPostClick }: HeaderProps) => (
       Sellio<span>Premium</span>
     </a>
     
-    <nav className="cp-nav">
-      <a href="#" className="cp-nav-link active" onClick={(e) => { e.preventDefault(); alert("Browsing active corporate acquisition listings..."); }}>Businesses</a>
-      <a href="#" className="cp-nav-link" onClick={(e) => { e.preventDefault(); alert("Accessing professional appraisal advisory services..."); }}>Appraisals</a>
-      <a href="#" className="cp-nav-link" onClick={(e) => { e.preventDefault(); alert("Connecting with elite M&A brokers..."); }}>Brokers</a>
-      <a href="#" className="cp-nav-link" onClick={(e) => { e.preventDefault(); alert("Opening private members forum..."); }}>Private Hub</a>
-      <button className="cp-btn-post" onClick={onPostClick}>💼 List Business</button>
-    </nav>
+    <div className="cp-nav">
+      <MenuNav
+        location="main_header"
+        flat
+        linkClassName="cp-nav-link"
+        activeClassName="active"
+        renderItem={defaultNavItemRenderer}
+      />
+      <MenuActionButtons
+        buttonClassName="cp-btn-post"
+        as="button"
+        onAction={onPostClick}
+        renderItem={(item, { className, onNavigate }) => (
+          <button type="button" className={className} onClick={() => { onPostClick(); onNavigate?.(); }}>
+            💼 {item.title}
+          </button>
+        )}
+      />
+    </div>
   </header>
 );
 
@@ -73,32 +89,27 @@ export const PremiumFooter = () => (
         </p>
       </div>
       
-      <div>
-        <h4 style={{ fontSize: '0.85rem', fontWeight: 900, color: 'var(--cp-navy)', marginBottom: '1.25rem', letterSpacing: '1px', textTransform: 'uppercase' }}>Acquisitions</h4>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', fontSize: '0.85rem' }}>
-          <span style={{ color: '#64748b', cursor: 'pointer' }} onClick={() => alert("Technology & SaaS acquisitions catalog")}>SaaS & Tech Platforms</span>
-          <span style={{ color: '#64748b', cursor: 'pointer' }} onClick={() => alert("F&B and Hospitality acquisitions catalog")}>Hospitality & F&B</span>
-          <span style={{ color: '#64748b', cursor: 'pointer' }} onClick={() => alert("Local service businesses catalog")}>Local Retail Routes</span>
-        </div>
-      </div>
-
-      <div>
-        <h4 style={{ fontSize: '0.85rem', fontWeight: 900, color: 'var(--cp-navy)', marginBottom: '1.25rem', letterSpacing: '1px', textTransform: 'uppercase' }}>Professional Services</h4>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', fontSize: '0.85rem' }}>
-          <span style={{ color: '#64748b', cursor: 'pointer' }} onClick={() => alert("Business Valuations program")}>Business Valuations</span>
-          <span style={{ color: '#64748b', cursor: 'pointer' }} onClick={() => alert("M&A advisory & escrow programs")}>M&A Advisory</span>
-          <span style={{ color: '#64748b', cursor: 'pointer' }} onClick={() => alert("Due Diligence vetting reports")}>Due Diligence Hub</span>
-        </div>
-      </div>
-
-      <div>
-        <h4 style={{ fontSize: '0.85rem', fontWeight: 900, color: 'var(--cp-navy)', marginBottom: '1.25rem', letterSpacing: '1px', textTransform: 'uppercase' }}>Legal & Trust</h4>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', fontSize: '0.85rem' }}>
-          <span style={{ color: '#64748b', cursor: 'pointer' }} onClick={() => alert("Vetting guidelines terms")}>Vetting Guidelines</span>
-          <span style={{ color: '#64748b', cursor: 'pointer' }} onClick={() => alert("Non-Disclosure Agreement patterns")}>NDA Agreement</span>
-          <span style={{ color: '#64748b', cursor: 'pointer' }} onClick={() => alert("Sovereign Escrow Protection")}>Escrow & Safety</span>
-        </div>
-      </div>
+      <FooterMenuColumn
+        location="footer_column_1"
+        titleTag="h4"
+        titleStyle={{ fontSize: '0.85rem', fontWeight: 900, color: 'var(--cp-navy)', marginBottom: '1.25rem', letterSpacing: '1px', textTransform: 'uppercase' }}
+        listClassName="cp-footer-links"
+        linkClassName="cp-footer-link"
+      />
+      <FooterMenuColumn
+        location="footer_column_2"
+        titleTag="h4"
+        titleStyle={{ fontSize: '0.85rem', fontWeight: 900, color: 'var(--cp-navy)', marginBottom: '1.25rem', letterSpacing: '1px', textTransform: 'uppercase' }}
+        listClassName="cp-footer-links"
+        linkClassName="cp-footer-link"
+      />
+      <FooterMenuColumn
+        location="footer_column_3"
+        titleTag="h4"
+        titleStyle={{ fontSize: '0.85rem', fontWeight: 900, color: 'var(--cp-navy)', marginBottom: '1.25rem', letterSpacing: '1px', textTransform: 'uppercase' }}
+        listClassName="cp-footer-links"
+        linkClassName="cp-footer-link"
+      />
     </div>
     
     <div style={{ borderTop: '1.5px solid var(--cp-border)', paddingTop: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', fontSize: '0.8rem', color: '#64748b', fontWeight: 500 }}>

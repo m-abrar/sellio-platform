@@ -9,18 +9,45 @@ import { useMenuContext } from '@/components/menu/MenuProvider';
 interface FooterMenuColumnProps {
   location: MenuLocationKey;
   title?: string;
+  titleClassName?: string;
+  titleTag?: 'h4' | 'h5' | 'h6' | 'div';
+  titleStyle?: React.CSSProperties;
   linkClassName?: string;
+  listClassName?: string;
+  className?: string;
+  renderTitle?: (title: string) => React.ReactNode;
 }
 
-export function FooterMenuColumn({ location, title, linkClassName }: FooterMenuColumnProps) {
+export function FooterMenuColumn({
+  location,
+  title,
+  titleClassName,
+  titleTag: TitleTag = 'h6',
+  titleStyle,
+  linkClassName,
+  listClassName,
+  className,
+  renderTitle,
+}: FooterMenuColumnProps) {
   const items = useMenu(location);
   const menuTitle = useMenuTitle(location);
   const { themeKey } = useMenuContext();
+  const resolvedTitle = title ?? menuTitle;
+
+  if (items.length === 0 && !resolvedTitle) {
+    return null;
+  }
 
   return (
-    <div>
-      <h6>{title ?? menuTitle}</h6>
-      <nav aria-label={menuTitle}>
+    <div className={className}>
+      {renderTitle ? (
+        renderTitle(resolvedTitle)
+      ) : (
+        <TitleTag className={titleClassName} style={titleStyle}>
+          {resolvedTitle}
+        </TitleTag>
+      )}
+      <nav aria-label={resolvedTitle} className={listClassName}>
         {items.map((item: MenuItem) => (
           <MenuLink
             key={`${item.id ?? item.title}-${item.url}`}

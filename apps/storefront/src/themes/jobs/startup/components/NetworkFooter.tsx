@@ -1,5 +1,6 @@
-
+'use client';
 import React from 'react';
+import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 
 export const NetworkFooter = () => (
     <footer className="network-footer">
@@ -10,25 +11,21 @@ export const NetworkFooter = () => (
                     The world's most advanced high-fidelity startup distribution node. Synchronizing talent with high-growth capital.
                 </p>
             </div>
-            <div>
-                <h4>VENTURES</h4>
-                <a href="#" className="footer-link">Seed Hub</a>
-                <a href="#" className="footer-link">Series Alpha</a>
-                <a href="#" className="footer-link">Unicorn Registry</a>
-                <a href="#" className="footer-link">Exit Protocol</a>
-            </div>
-            <div>
-                <h4>RESOURCES</h4>
-                <a href="#" className="footer-link">Equity Logic</a>
-                <a href="#" className="footer-link">Funding Map</a>
-                <a href="#" className="footer-link">Market Status</a>
-            </div>
-            <div>
-                <h4>NETWORK</h4>
-                <a href="#" className="footer-link">The Foundation</a>
-                <a href="#" className="footer-link">Node Registry</a>
-                <a href="#" className="footer-link">Contact Hub</a>
-            </div>
+            <FooterMenuColumn
+              location="footer_column_1"
+              titleTag="h4"
+              linkClassName="footer-link"
+            />
+            <FooterMenuColumn
+              location="footer_column_2"
+              titleTag="h4"
+              linkClassName="footer-link"
+            />
+            <FooterMenuColumn
+              location="footer_column_3"
+              titleTag="h4"
+              linkClassName="footer-link"
+            />
         </div>
         <div style={{ marginTop: '8rem', paddingTop: '4rem', borderTop: '1px solid var(--growth-border)', display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', color: '#334155', fontWeight: 700, letterSpacing: '2px' }}>
             <span>© 2026 GROWTH_NODE_SYSTEMS. ALL_SYSTEMS_GO.</span>

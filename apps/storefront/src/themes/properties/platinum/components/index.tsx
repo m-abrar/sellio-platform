@@ -1,14 +1,10 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { scrollToSection } from '../utils';
-
-const navItems = [
-  { label: 'Collection', target: 'pl-showcase-section' },
-  { label: 'Insights', target: 'pl-protocol-section' },
-  { label: 'Concierge', target: 'pl-cta-section' },
-  { label: 'Private Auth', target: 'pl-cta-section' },
-];
+import { MenuNav } from '@/components/menu/MenuNav';
+import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
+import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
+import { hashAwareNavItemRenderer } from '@/components/menu/menu-renderers';
 
 export const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,17 +15,6 @@ export const Header = () => {
       document.body.style.overflow = '';
     };
   }, [isOpen]);
-
-  const handleNavClick = (event: React.MouseEvent, target: string) => {
-    event.preventDefault();
-    setIsOpen(false);
-    scrollToSection(target);
-  };
-
-  const handleAccess = () => {
-    setIsOpen(false);
-    scrollToSection('pl-showcase-section');
-  };
 
   return (
     <header className="pl-header">
@@ -59,25 +44,25 @@ export const Header = () => {
       </button>
 
       <nav className={`pl-nav ${isOpen ? 'pl-nav-open' : ''}`} aria-label="Primary">
-        {navItems.map((item) => (
-          <a
-            key={item.label}
-            href={`#${item.target}`}
-            className="pl-nav-link"
-            onClick={(event) => handleNavClick(event, item.target)}
-          >
-            {item.label.replace('_', ' ')}
-          </a>
-        ))}
+        <MenuNav
+          location="main_header"
+          flat
+          linkClassName="pl-nav-link"
+          onNavigate={() => setIsOpen(false)}
+          renderItem={hashAwareNavItemRenderer}
+        />
 
-        <button type="button" className="pl-access-btn pl-mobile-auth-btn" onClick={handleAccess}>
-          ACCESS_SECURE_NODE
-        </button>
+        <MenuActionButtons
+          linkClassName="pl-access-btn pl-mobile-auth-btn"
+          onNavigate={() => setIsOpen(false)}
+          renderItem={(item, props) => hashAwareNavItemRenderer(item, { ...props, isActive: false })}
+        />
       </nav>
 
-      <button type="button" className="pl-access-btn pl-desktop-auth-btn" onClick={handleAccess}>
-        ACCESS_SECURE_NODE
-      </button>
+      <MenuActionButtons
+        linkClassName="pl-access-btn pl-desktop-auth-btn"
+        renderItem={(item, props) => hashAwareNavItemRenderer(item, { ...props, isActive: false })}
+      />
     </header>
   );
 };
@@ -117,24 +102,38 @@ export const Footer = () => (
           The world's most exclusive distribution network for ultra-high-fidelity private estates.
         </p>
       </div>
-      {['ACQUISITION', 'RESOURCES', 'LEGAL'].map((col) => (
-        <div key={col}>
-          <div className="pl-mono pl-footer-heading">{col}</div>
-          <div className="pl-footer-links">
-            {['Registry', 'Insights', 'Concierge', 'Node Auth'].map((link) => (
-              <span key={link} className="pl-footer-link">{link}</span>
-            ))}
-          </div>
-        </div>
-      ))}
+      <FooterMenuColumn
+        location="footer_column_1"
+        renderTitle={(title) => <div className="pl-mono pl-footer-heading">{title}</div>}
+        listClassName="pl-footer-links"
+        linkClassName="pl-footer-link"
+      />
+      <FooterMenuColumn
+        location="footer_column_2"
+        renderTitle={(title) => <div className="pl-mono pl-footer-heading">{title}</div>}
+        listClassName="pl-footer-links"
+        linkClassName="pl-footer-link"
+      />
+      <FooterMenuColumn
+        location="footer_column_3"
+        renderTitle={(title) => <div className="pl-mono pl-footer-heading">{title}</div>}
+        listClassName="pl-footer-links"
+        linkClassName="pl-footer-link"
+      />
     </div>
     <div className="pl-footer-bottom">
       <div className="pl-mono pl-footer-copyright">© 2026 SELLIO_PLATINUM_GRP // NODE_STABLE</div>
-      <div className="pl-footer-social">
-        {['INSTAGRAM', 'LINKEDIN', 'X_OS'].map((social) => (
-          <span key={social} className="pl-mono pl-footer-social-link">{social}</span>
-        ))}
-      </div>
+      <MenuNav
+        location="social_footer"
+        flat
+        className="pl-footer-social"
+        linkClassName="pl-mono pl-footer-social-link"
+        renderItem={(item, { href, className, onNavigate }) => (
+          <span className={className}>
+            <a href={href} onClick={onNavigate} style={{ color: 'inherit', textDecoration: 'none' }}>{item.title}</a>
+          </span>
+        )}
+      />
     </div>
   </footer>
 );

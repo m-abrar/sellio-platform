@@ -559,22 +559,42 @@ export interface Menu {
 }
 
 export type MenuLocationKey =
+  | 'utility_topbar'
   | 'main_header'
+  | 'mobile_nav'
+  | 'utility_header'
+  | 'action_buttons'
+  | 'secondary_nav'
+  | 'footer_column_1'
+  | 'footer_column_2'
+  | 'footer_column_3'
+  | 'footer_column_4'
+  | 'footer_bottom_bar'
   | 'social_footer'
+  /** @deprecated Use footer_column_1..4 */
   | 'company_footer'
+  /** @deprecated Use footer_column_1..4 */
   | 'support_footer'
+  /** @deprecated Use footer_column_1..4 */
   | 'resources_footer'
+  /** @deprecated Use footer_bottom_bar */
   | 'settings_footer';
 
 export type MenuMap = Partial<Record<MenuLocationKey, Menu>>;
 
 export const MENU_LOCATIONS: MenuLocationKey[] = [
+  'utility_topbar',
   'main_header',
+  'mobile_nav',
+  'utility_header',
+  'action_buttons',
+  'secondary_nav',
+  'footer_column_1',
+  'footer_column_2',
+  'footer_column_3',
+  'footer_column_4',
+  'footer_bottom_bar',
   'social_footer',
-  'company_footer',
-  'support_footer',
-  'resources_footer',
-  'settings_footer',
 ];
 
 

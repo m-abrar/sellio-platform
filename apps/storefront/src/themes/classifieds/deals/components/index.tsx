@@ -1,5 +1,10 @@
 'use client';
 import React, { useState, useEffect } from 'react';
+import { MenuNav } from '@/components/menu/MenuNav';
+import { MenuUtilityNav } from '@/components/menu/MenuUtilityNav';
+import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
+import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
+import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
 
 // Custom reusable Countdown Timer component that ticks in real-time
 export const CountdownTimer = ({ hours: initialHours = 4, seconds: initialSeconds = 0 }: { hours?: number; seconds?: number }) => {
@@ -41,18 +46,19 @@ interface HeaderProps {
   selectedCategory: string;
 }
 
+const secondaryCategoryMap: Record<string, string> = {
+  'All Deals': 'all',
+  'Trending Now': 'trending',
+  'Electronics': 'electronics',
+  'Fashion': 'fashion',
+  'Home & Garden': 'home',
+  'Vehicles': 'vehicles',
+  'Tools': 'tools',
+  'Gaming': 'gaming',
+};
+
 export const DealsHeader = ({ onSearch, onSelectCategory, selectedCategory }: HeaderProps) => {
   const [searchTerm, setSearchTerm] = useState('');
-
-  const categories = [
-    { name: '🔥 Trending Now', id: 'trending' },
-    { name: '💻 Electronics', id: 'electronics' },
-    { name: '👕 Fashion', id: 'fashion' },
-    { name: '🛋️ Home & Garden', id: 'home' },
-    { name: '🚗 Vehicles', id: 'vehicles' },
-    { name: '🛠️ Tools', id: 'tools' },
-    { name: '🎮 Gaming', id: 'gaming' },
-  ];
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -61,18 +67,24 @@ export const DealsHeader = ({ onSearch, onSelectCategory, selectedCategory }: He
 
   return (
     <>
-      {/* Top Banner Ribbon with Ticking Timer */}
       <div className="cd-header-top">
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <span className="cd-pulse-dot"></span>
-          <span>🔥 FLASH SALE: UP TO 80% OFF CLEARANCE ITEMS</span>
+          <MenuNav
+            location="utility_topbar"
+            flat
+            renderItem={(item, { href, className, onNavigate }) => (
+              <span className={className}>
+                🔥 {item.title.toUpperCase()}: UP TO 80% OFF CLEARANCE ITEMS
+              </span>
+            )}
+          />
         </div>
         <div>
           ENDS IN: <span className="cd-top-timer"><CountdownTimer hours={4} /></span>
         </div>
       </div>
 
-      {/* Main Header / Navbar */}
       <header className="cd-header-main">
         <a href="#" className="cd-logo" onClick={() => { onSelectCategory('all'); setSearchTerm(''); onSearch(''); }}>
           <span className="cd-logo-highlight">Deal</span>
@@ -95,33 +107,50 @@ export const DealsHeader = ({ onSearch, onSelectCategory, selectedCategory }: He
         </form>
         
         <div className="cd-nav-actions">
-          <a href="#" className="cd-nav-link">Login</a>
-          <a href="#" className="cd-btn-post" onClick={(e) => { e.preventDefault(); alert("Feature coming soon! In compliance with monorepo rules, posting is routed to dynamic state."); }}>
-            <span>➕</span> Post a Deal
-          </a>
+          <MenuUtilityNav linkClassName="cd-nav-link" />
+          <MenuActionButtons
+            linkClassName="cd-btn-post"
+            renderItem={(item, { href, className, onNavigate }) => (
+              <a
+                href={href}
+                className={className}
+                onClick={(e) => {
+                  e.preventDefault();
+                  alert("Feature coming soon! In compliance with monorepo rules, posting is routed to dynamic state.");
+                  onNavigate?.();
+                }}
+              >
+                <span>➕</span> {item.title}
+              </a>
+            )}
+          />
         </div>
       </header>
 
-      {/* Category Ribbon */}
-      <div className="cd-category-ribbon">
-        <a 
-          href="#" 
-          className={`cd-cat-link ${selectedCategory === 'all' ? 'cd-active' : ''}`}
-          onClick={(e) => { e.preventDefault(); onSelectCategory('all'); }}
-        >
-          📂 All Deals
-        </a>
-        {categories.map((cat) => (
-          <a 
-            key={cat.id}
-            href="#" 
-            className={`cd-cat-link ${selectedCategory === cat.id ? 'cd-active' : ''}`}
-            onClick={(e) => { e.preventDefault(); onSelectCategory(cat.id); }}
-          >
-            {cat.name}
-          </a>
-        ))}
-      </div>
+      <MenuNav
+        location="secondary_nav"
+        flat
+        className="cd-category-ribbon"
+        linkClassName="cd-cat-link"
+        activeClassName="cd-active"
+        renderItem={(item, { href, className, onNavigate, isActive }) => {
+          const categoryId = secondaryCategoryMap[item.title] ?? 'all';
+          const resolvedClassName = [className, selectedCategory === categoryId ? 'cd-active' : ''].filter(Boolean).join(' ');
+          return (
+            <a
+              href={href}
+              className={resolvedClassName}
+              onClick={(e) => {
+                e.preventDefault();
+                onSelectCategory(categoryId);
+                onNavigate?.();
+              }}
+            >
+              {item.title === 'All Deals' ? '📂 All Deals' : item.title === 'Trending Now' ? '🔥 Trending Now' : item.title === 'Electronics' ? '💻 Electronics' : item.title === 'Fashion' ? '👕 Fashion' : item.title === 'Home & Garden' ? '🛋️ Home & Garden' : item.title === 'Vehicles' ? '🚗 Vehicles' : item.title === 'Tools' ? '🛠️ Tools' : item.title === 'Gaming' ? '🎮 Gaming' : item.title}
+            </a>
+          );
+        }}
+      />
     </>
   );
 };
@@ -233,24 +262,20 @@ export const DealsFooter = () => {
           </a>
           <p className="cd-footer-desc">Your ultimate high-velocity destination for daily community bargains, premium flash sales, and hidden discount gems.</p>
         </div>
-        <div>
-          <h4 className="cd-footer-title">Buyer Protection</h4>
-          <div className="cd-footer-links">
-            <a href="#" className="cd-footer-link" onClick={(e) => e.preventDefault()}>Money Back Guarantee</a>
-            <a href="#" className="cd-footer-link" onClick={(e) => e.preventDefault()}>Safe Trading Guide</a>
-            <a href="#" className="cd-footer-link" onClick={(e) => e.preventDefault()}>Report a Seller / Listing</a>
-            <a href="#" className="cd-footer-link" onClick={(e) => e.preventDefault()}>Customer Support Hub</a>
-          </div>
-        </div>
-        <div>
-          <h4 className="cd-footer-title">Sell on DealDash</h4>
-          <div className="cd-footer-links">
-            <a href="#" className="cd-footer-link" onClick={(e) => e.preventDefault()}>Post a Bargain Item</a>
-            <a href="#" className="cd-footer-link" onClick={(e) => e.preventDefault()}>Merchant Dashboard</a>
-            <a href="#" className="cd-footer-link" onClick={(e) => e.preventDefault()}>Promote Listing Placement</a>
-            <a href="#" className="cd-footer-link" onClick={(e) => e.preventDefault()}>Partner Fee Schedule</a>
-          </div>
-        </div>
+        <FooterMenuColumn
+          location="footer_column_1"
+          titleTag="h4"
+          titleClassName="cd-footer-title"
+          listClassName="cd-footer-links"
+          linkClassName="cd-footer-link"
+        />
+        <FooterMenuColumn
+          location="footer_column_2"
+          titleTag="h4"
+          titleClassName="cd-footer-title"
+          listClassName="cd-footer-links"
+          linkClassName="cd-footer-link"
+        />
         <div>
           <h4 className="cd-footer-title">Never Miss a Bargain</h4>
           <p className="cd-footer-desc" style={{ marginBottom: '1rem' }}>Subscribe to custom alerts and get the hottest price drops straight to your inbox.</p>
@@ -277,12 +302,13 @@ export const DealsFooter = () => {
         <div>
           &copy; 2026 DealDash Marketplace. All rights reserved. Engineered for Envato Elite Performance.
         </div>
-        <div className="cd-footer-socials">
-          <a href="#" className="cd-social-link" onClick={(e) => e.preventDefault()}>f</a>
-          <a href="#" className="cd-social-link" onClick={(e) => e.preventDefault()}>t</a>
-          <a href="#" className="cd-social-link" onClick={(e) => e.preventDefault()}>in</a>
-          <a href="#" className="cd-social-link" onClick={(e) => e.preventDefault()}>yt</a>
-        </div>
+        <MenuNav
+          location="social_footer"
+          flat
+          className="cd-footer-socials"
+          linkClassName="cd-social-link"
+          renderItem={defaultNavItemRenderer}
+        />
       </div>
     </footer>
   );

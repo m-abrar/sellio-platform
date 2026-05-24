@@ -1,5 +1,8 @@
 'use client';
 import React, { useState } from 'react';
+import { MenuNav } from '@/components/menu/MenuNav';
+import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
+import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
 
 export const UniversalHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -22,9 +25,13 @@ export const UniversalHeader = () => {
       </button>
 
       <nav className={`uh-nav ${isOpen ? 'uh-nav-open' : ''}`}>
-          {['All_Assets', 'Intelligence', 'Distribution', 'Master_Auth'].map(link => (
-              <a key={link} href="#" className="uh-nav-link" onClick={() => setIsOpen(false)}>{link.replace('_', ' ')}</a>
-          ))}
+          <MenuNav
+            location="main_header"
+            flat
+            linkClassName="uh-nav-link"
+            onNavigate={() => setIsOpen(false)}
+            renderItem={defaultNavItemRenderer}
+          />
           <div className="uh-mono uh-mobile-status" style={{ fontSize: '0.65rem', border: '1px solid var(--uh-border)', padding: '0.5rem 1.5rem', marginTop: '2rem', textAlign: 'center', borderRadius: '4px' }}>
             SYNC_STABLE
           </div>
@@ -92,23 +99,35 @@ export const GlobalFooter = () => (
                     The world's most robust universal property protocol. Synchronizing residential, commercial, and industrial nodes with institutional precision.
                 </p>
             </div>
-            {['NETWORK', 'VALUATION', 'GOVERNANCE'].map(col => (
-                <div key={col}>
-                    <div className="uh-mono" style={{ color: 'var(--uh-indigo)', marginBottom: '3.5rem' }}>{col}</div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                        {['Registry', 'Insights', 'Support', 'Legal Registry'].map(link => (
-                            <span key={link} style={{ fontSize: '0.9rem', color: 'var(--uh-slate)', cursor: 'pointer', transition: 'color 0.3s ease' }} className="uh-footer-link" onClick={() => alert(`Accessing node registry: ${link}`)}>{link}</span>
-                        ))}
-                    </div>
-                </div>
-            ))}
+            <FooterMenuColumn
+                location="footer_column_1"
+                renderTitle={(title) => <div className="uh-mono" style={{ color: 'var(--uh-indigo)', marginBottom: '3.5rem' }}>{title}</div>}
+                linkClassName="uh-footer-link"
+            />
+            <FooterMenuColumn
+                location="footer_column_2"
+                renderTitle={(title) => <div className="uh-mono" style={{ color: 'var(--uh-indigo)', marginBottom: '3.5rem' }}>{title}</div>}
+                linkClassName="uh-footer-link"
+            />
+            <FooterMenuColumn
+                location="footer_column_3"
+                renderTitle={(title) => <div className="uh-mono" style={{ color: 'var(--uh-indigo)', marginBottom: '3.5rem' }}>{title}</div>}
+                linkClassName="uh-footer-link"
+            />
         </div>
         <div style={{ marginTop: '10rem', paddingTop: '4rem', borderTop: '1px solid var(--uh-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} className="uh-footer-bottom">
             <div className="uh-mono" style={{ color: 'var(--uh-slate)', fontSize: '0.65rem' }}>© 2026 SELLIO_UNIFIED_PROTOCOL // GLOBAL_SYNC_STABLE</div>
             <div style={{ display: 'flex', gap: '4rem' }} className="uh-footer-socials">
-                {['INSTAGRAM', 'LINKEDIN', 'X_OS'].map(social => (
-                    <span key={social} className="uh-mono" style={{ color: 'var(--uh-slate)', fontSize: '0.65rem', cursor: 'pointer' }}>{social}</span>
-                ))}
+                <MenuNav
+                    location="social_footer"
+                    flat
+                    linkClassName="uh-mono"
+                    renderItem={(item, { href, className, onNavigate }) => (
+                        <span className={className} style={{ color: 'var(--uh-slate)', fontSize: '0.65rem', cursor: 'pointer' }}>
+                            <a href={href} onClick={onNavigate} style={{ color: 'inherit', textDecoration: 'none' }}>{item.title}</a>
+                        </span>
+                    )}
+                />
             </div>
         </div>
     </footer>

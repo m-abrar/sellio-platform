@@ -2,6 +2,10 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { MenuNav } from '@/components/menu/MenuNav';
+import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
+import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
+import { hashAwareNavItemRenderer } from '@/components/menu/menu-renderers';
 
 // Utility helper to preserve active preview theme directories during routing transitions
 const getThemeLink = (path: string) => {
@@ -34,21 +38,18 @@ export const ModernHeader = () => {
             </button>
 
             <nav className={`md-nav ${isOpen ? 'md-nav-open' : ''}`}>
-                <Link href={getThemeLink('/')} className="md-nav-link" onClick={() => setIsOpen(false)}>
-                    Home
-                </Link>
-                <Link href={getThemeLink('/explore')} className="md-nav-link" onClick={() => setIsOpen(false)}>
-                    Listings
-                </Link>
-                <a href="#brands" className="md-nav-link" onClick={() => setIsOpen(false)}>
-                    Brands
-                </a>
-                <a href="#compare" className="md-nav-link" onClick={() => setIsOpen(false)}>
-                    Compare
-                </a>
-                <Link href={getThemeLink('/explore')} className="md-btn md-btn-cta" onClick={() => setIsOpen(false)}>
-                    Sell Your Car
-                </Link>
+                <MenuNav
+                    location="main_header"
+                    flat
+                    style={{ display: 'contents' }}
+                    linkClassName="md-nav-link"
+                    onNavigate={() => setIsOpen(false)}
+                    renderItem={hashAwareNavItemRenderer}
+                />
+                <MenuActionButtons
+                    linkClassName="md-btn md-btn-cta"
+                    onNavigate={() => setIsOpen(false)}
+                />
             </nav>
         </header>
     );
@@ -102,28 +103,34 @@ export const ModernFooter = () => (
                 </Link>
                 <p style={{ fontSize: '0.9rem', lineHeight: 1.6 }}>The future of mobility is here. Driven by technology, fueled by vision.</p>
             </div>
+            <FooterMenuColumn
+                location="footer_column_1"
+                titleTag="h5"
+                titleStyle={{ color: 'white', fontWeight: 700, marginBottom: '1.5rem' }}
+                linkClassName="md-footer-link"
+            />
+            <FooterMenuColumn
+                location="footer_column_2"
+                titleTag="h5"
+                titleStyle={{ color: 'white', fontWeight: 700, marginBottom: '1.5rem' }}
+                linkClassName="md-footer-link"
+            />
             <div>
-                <h5 style={{ color: 'white', fontWeight: 700, marginBottom: '1.5rem' }}>Company</h5>
-                <Link href={getThemeLink('/')} className="md-footer-link">About Us</Link>
-                <Link href={getThemeLink('/')} className="md-footer-link">Careers</Link>
-                <Link href={getThemeLink('/')} className="md-footer-link">Press</Link>
-                <Link href={getThemeLink('/')} className="md-footer-link">Sitemap</Link>
-            </div>
-            <div>
-                <h5 style={{ color: 'white', fontWeight: 700, marginBottom: '1.5rem' }}>Support</h5>
-                <Link href={getThemeLink('/')} className="md-footer-link">Help Center</Link>
-                <Link href={getThemeLink('/')} className="md-footer-link">FAQ</Link>
-                <Link href={getThemeLink('/')} className="md-footer-link">Contact Sales</Link>
-                <Link href={getThemeLink('/explore')} className="md-footer-link">Vehicle Reviews</Link>
-            </div>
-            <div>
-                <h5 style={{ color: 'white', fontWeight: 700, marginBottom: '1.5rem' }}>Connect</h5>
-                <div>
-                    <a href="#" className="md-social">T</a>
-                    <a href="#" className="md-social">L</a>
-                    <a href="#" className="md-social">F</a>
-                    <a href="#" className="md-social">I</a>
-                </div>
+                <FooterMenuColumn
+                    location="footer_column_3"
+                    titleTag="h5"
+                    titleStyle={{ color: 'white', fontWeight: 700, marginBottom: '1.5rem' }}
+                    linkClassName="md-footer-link"
+                />
+                <MenuNav
+                    location="social_footer"
+                    flat
+                    renderItem={(item, { href, onNavigate }) => (
+                        <a href={href} className="md-social" onClick={onNavigate}>
+                            {item.title.charAt(0)}
+                        </a>
+                    )}
+                />
                 <p style={{ fontSize: '0.85rem', marginTop: '1rem' }}>&copy; 2026 Modern Autos, Inc. All rights reserved.</p>
             </div>
         </div>

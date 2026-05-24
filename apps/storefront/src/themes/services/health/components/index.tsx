@@ -1,5 +1,9 @@
 'use client';
 import React, { useState } from 'react';
+import { MenuNav } from '@/components/menu/MenuNav';
+import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
+import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
+import { hashAwareNavItemRenderer } from '@/components/menu/menu-renderers';
 
 export const WellnessHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -22,33 +26,24 @@ export const WellnessHeader = () => {
         <span className="sh-hamburger-bar"></span>
       </button>
 
-      {/* Navigation Links */}
-      <nav className={`sh-nav ${isOpen ? 'sh-nav-open' : ''}`}>
-        {[
-          { name: 'Clinicians', target: 'registry' },
-          { name: 'Protocols', target: 'protocols' },
-          { name: 'Telemetry', target: 'telemetry' },
-          { name: 'Patient Portal', target: 'contact' }
-        ].map(link => (
-          <a 
-            key={link.name} 
-            href={`#${link.target}`} 
-            className="sh-nav-link"
-            onClick={(e) => {
-              e.preventDefault();
-              setIsOpen(false);
-              const targetId = link.target;
-              document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth' });
-            }}
-          >
-            {link.name}
-          </a>
-        ))}
-      </nav>
+      <MenuNav
+        location="main_header"
+        flat
+        className={`sh-nav ${isOpen ? 'sh-nav-open' : ''}`}
+        linkClassName="sh-nav-link"
+        onNavigate={() => setIsOpen(false)}
+        renderItem={hashAwareNavItemRenderer}
+      />
 
-      <div className="sh-mono sh-secure-node" style={{ fontSize: '0.65rem', border: '1px solid var(--sh-teal)', padding: '0.5rem 2rem', borderRadius: '4px', background: 'var(--sh-teal-light)' }}>
-        SECURE NODE ACTIVE
-      </div>
+      <MenuActionButtons
+        className="sh-mono sh-secure-node"
+        linkClassName="sh-mono sh-secure-node"
+        renderItem={(item, { className }) => (
+          <div className={className} style={{ fontSize: '0.65rem', border: '1px solid var(--sh-teal)', padding: '0.5rem 2rem', borderRadius: '4px', background: 'var(--sh-teal-light)' }}>
+            {item.title}
+          </div>
+        )}
+      />
     </header>
   );
 };
@@ -96,23 +91,44 @@ export const ClinicFooter = () => (
                     The world's most trusted distribution node for high-fidelity clinical care. Synchronizing personal telemetry with global medical protocols.
                 </p>
             </div>
-            {['CLINICIANS', 'GOVERNANCE', 'SUPPORT'].map(col => (
-                <div key={col}>
-                    <div className="sh-mono" style={{ color: 'var(--sh-teal)', marginBottom: '4rem' }}>{col}</div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                        {['Registry', 'Protocols', 'Research', 'Secure Auth'].map(link => (
-                            <span key={link} style={{ fontSize: '0.9rem', opacity: 0.5, cursor: 'pointer', fontWeight: 500 }} onClick={() => alert(`${link} portal secured.`)}>{link}</span>
-                        ))}
-                    </div>
-                </div>
-            ))}
+            <FooterMenuColumn
+                location="footer_column_1"
+                renderTitle={(title) => (
+                    <div className="sh-mono" style={{ color: 'var(--sh-teal)', marginBottom: '4rem' }}>{title}</div>
+                )}
+                listClassName="sh-footer-link-list"
+                linkClassName="sh-footer-link"
+            />
+            <FooterMenuColumn
+                location="footer_column_2"
+                renderTitle={(title) => (
+                    <div className="sh-mono" style={{ color: 'var(--sh-teal)', marginBottom: '4rem' }}>{title}</div>
+                )}
+                listClassName="sh-footer-link-list"
+                linkClassName="sh-footer-link"
+            />
+            <FooterMenuColumn
+                location="footer_column_3"
+                renderTitle={(title) => (
+                    <div className="sh-mono" style={{ color: 'var(--sh-teal)', marginBottom: '4rem' }}>{title}</div>
+                )}
+                listClassName="sh-footer-link-list"
+                linkClassName="sh-footer-link"
+            />
         </div>
         <div style={{ marginTop: '12rem', paddingTop: '4rem', borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '2rem' }}>
             <div className="sh-mono" style={{ opacity: 0.3, fontSize: '0.65rem' }}>© 2026 VITALITY LABS // CLINICAL GRADE NODE</div>
             <div style={{ display: 'flex', gap: '6rem', flexWrap: 'wrap' }}>
-                {['INSTAGRAM', 'LINKEDIN', 'TELEMETRY STATUS'].map(social => (
-                    <span key={social} className="sh-mono" style={{ opacity: 0.3, fontSize: '0.65rem', cursor: 'pointer' }} onClick={() => alert(`Connecting to ${social} node...`)}>{social}</span>
-                ))}
+                <MenuNav
+                    location="social_footer"
+                    flat
+                    linkClassName="sh-mono"
+                    renderItem={(item, { href, className, onNavigate }) => (
+                        <span className={className} style={{ opacity: 0.3, fontSize: '0.65rem', cursor: 'pointer' }} onClick={onNavigate}>
+                            <a href={href} style={{ color: 'inherit', textDecoration: 'none' }}>{item.title}</a>
+                        </span>
+                    )}
+                />
             </div>
         </div>
     </footer>

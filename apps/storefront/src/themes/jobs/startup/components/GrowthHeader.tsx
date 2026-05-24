@@ -1,5 +1,8 @@
-
+'use client';
 import React from 'react';
+import { MenuNav } from '@/components/menu/MenuNav';
+import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
+import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
 
 export const GrowthHeader = () => (
     <header className="growth-header">
@@ -7,14 +10,27 @@ export const GrowthHeader = () => (
             <div style={{ width: '24px', height: '24px', background: 'var(--growth-neon)', borderRadius: '4px', transform: 'rotate(45deg)' }}></div>
             GROWTH_NODE<span>.</span>
         </div>
-        <nav className="growth-nav">
-            <a href="#" className="growth-nav-link">VENTURES</a>
-            <a href="#" className="growth-nav-link">CAPITAL</a>
-            <a href="#" className="growth-nav-link">NETWORK</a>
-            <a href="#" className="growth-nav-link">MISSION</a>
-        </nav>
-        <button className="growth-btn-primary" style={{ padding: '0.7rem 2rem', fontSize: '0.8rem' }}>
-            CONNECT_HUB
-        </button>
+        <MenuNav
+          location="main_header"
+          flat
+          className="growth-nav"
+          linkClassName="growth-nav-link"
+          renderItem={defaultNavItemRenderer}
+        />
+        <MenuActionButtons
+          location="action_buttons"
+          as="button"
+          buttonClassName="growth-btn-primary"
+          renderItem={(item, { className, onNavigate }) => (
+            <button
+              type="button"
+              className={className}
+              style={{ padding: '0.7rem 2rem', fontSize: '0.8rem' }}
+              onClick={onNavigate}
+            >
+              {item.title}
+            </button>
+          )}
+        />
     </header>
 );

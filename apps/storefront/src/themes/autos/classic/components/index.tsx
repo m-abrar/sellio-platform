@@ -1,5 +1,9 @@
 'use client';
 import React from 'react';
+import { MenuNav } from '@/components/menu/MenuNav';
+import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
+import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
+import { hashAwareNavItemRenderer } from '@/components/menu/menu-renderers';
 
 export const ClassicHeader = () => {
     const [isOpen, setIsOpen] = React.useState(false);
@@ -21,20 +25,21 @@ export const ClassicHeader = () => {
             </button>
 
             <nav className={`ac-nav ${isOpen ? 'open' : ''}`}>
-                {['Home', 'Listings', 'Auctions', 'Dealers', 'Contact'].map(link => (
-                    <a 
-                        key={link} 
-                        href={`#${link.toLowerCase()}`} 
-                        className="ac-nav-link"
-                        onClick={() => setIsOpen(false)}
-                    >
-                        {link}
-                    </a>
-                ))}
-                <a href="#sell" className="ac-btn ac-btn-cta ac-nav-cta" onClick={() => setIsOpen(false)}>Sell Your Car</a>
+                <MenuNav
+                    location="main_header"
+                    flat
+                    style={{ display: 'contents' }}
+                    linkClassName="ac-nav-link"
+                    onNavigate={() => setIsOpen(false)}
+                    renderItem={hashAwareNavItemRenderer}
+                />
+                <MenuActionButtons
+                    linkClassName="ac-btn ac-btn-cta ac-nav-cta"
+                    onNavigate={() => setIsOpen(false)}
+                />
             </nav>
 
-            <a href="#sell" className="ac-btn ac-btn-cta ac-desktop-cta">Sell Your Car</a>
+            <MenuActionButtons linkClassName="ac-btn ac-btn-cta ac-desktop-cta" />
         </header>
     );
 };
@@ -74,20 +79,16 @@ export const ClassicFooter = () => (
                 </a>
                 <p style={{ fontSize: '0.9rem', lineHeight: 1.6, opacity: 0.8 }}>The world's premier destination for buying and selling vintage and collector automobiles.</p>
             </div>
-            <div>
-                <h5>Quick Links</h5>
-                <a href="#home" className="ac-footer-link">Home</a>
-                <a href="#listings" className="ac-footer-link">Current Listings</a>
-                <a href="#auctions" className="ac-footer-link">Live Auctions</a>
-                <a href="#dealers" className="ac-footer-link">Dealer Network</a>
-            </div>
-            <div>
-                <h5>Support</h5>
-                <a href="#" className="ac-footer-link">FAQs</a>
-                <a href="#" className="ac-footer-link">Terms & Conditions</a>
-                <a href="#" className="ac-footer-link">Privacy Policy</a>
-                <a href="#" className="ac-footer-link">Careers</a>
-            </div>
+            <FooterMenuColumn
+                location="footer_column_1"
+                titleTag="h5"
+                linkClassName="ac-footer-link"
+            />
+            <FooterMenuColumn
+                location="footer_column_2"
+                titleTag="h5"
+                linkClassName="ac-footer-link"
+            />
             <div>
                 <h5>Contact Us</h5>
                 <p style={{ fontSize: '0.9rem', marginBottom: '0.5rem', opacity: 0.8 }}>Email: info@classicmotors.com</p>

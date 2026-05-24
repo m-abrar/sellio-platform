@@ -2,6 +2,9 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { MenuNav } from '@/components/menu/MenuNav';
+import { MenuUtilityNav } from '@/components/menu/MenuUtilityNav';
+import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
+import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
 import { getThemeLink } from '@/lib/links';
 import { useMenuContext } from '@/components/menu/MenuProvider';
 
@@ -41,29 +44,37 @@ export const Header = () => {
                 className={`pc-nav ${isOpen ? 'pc-nav-open' : ''}`}
                 linkClassName="pc-nav-link"
                 onNavigate={() => setIsOpen(false)}
-                renderItem={(item, { href, className, onNavigate }) => (
-                    <a href={href} className={className} onClick={onNavigate}>{item.title}</a>
-                )}
+                renderItem={defaultNavItemRenderer}
             />
 
             {isOpen && (
                 <div className="pc-mobile-header-right" style={{ marginTop: '2rem' }}>
-                    <div style={{ fontSize: '0.85rem', fontWeight: 900, letterSpacing: '3px', color: 'var(--pc-teal)', cursor: 'pointer', opacity: 0.8, marginBottom: '1.5rem' }} className="pc-nav-link">
-                        LOGIN
-                    </div>
-                    <a href={getThemeLink('/cart', themeKey)} className="pc-btn-primary" style={{ padding: '0.8rem 2.5rem', fontSize: '0.85rem', textDecoration: 'none' }}>
-                        INQUIRE
-                    </a>
+                    <MenuUtilityNav
+                        linkClassName="pc-nav-link"
+                        onNavigate={() => setIsOpen(false)}
+                        className=""
+                    />
+                    <MenuActionButtons
+                        linkClassName="pc-btn-primary"
+                        onNavigate={() => setIsOpen(false)}
+                        renderItem={(item, { href, className, onNavigate }) => (
+                            <a href={href} className={className} style={{ padding: '0.8rem 2.5rem', fontSize: '0.85rem', textDecoration: 'none', display: 'inline-block', marginTop: '1.5rem' }} onClick={onNavigate}>{item.title}</a>
+                        )}
+                    />
                 </div>
             )}
 
             <div className="pc-header-right">
-                <div style={{ fontSize: '0.7rem', fontWeight: 900, letterSpacing: '3px', color: 'var(--pc-teal)', cursor: 'pointer', opacity: 0.6 }} className="pc-nav-link">
-                    LOGIN
-                </div>
-                <a href={getThemeLink('/cart', themeKey)} className="pc-btn-primary" style={{ padding: '0.8rem 2.5rem', fontSize: '0.85rem', textDecoration: 'none' }}>
-                    INQUIRE
-                </a>
+                <MenuUtilityNav
+                    linkClassName="pc-nav-link"
+                    className=""
+                />
+                <MenuActionButtons
+                    linkClassName="pc-btn-primary"
+                    renderItem={(item, { href, className, onNavigate }) => (
+                        <a href={href} className={className} style={{ padding: '0.8rem 2.5rem', fontSize: '0.85rem', textDecoration: 'none' }} onClick={onNavigate}>{item.title}</a>
+                    )}
+                />
             </div>
         </header>
     );

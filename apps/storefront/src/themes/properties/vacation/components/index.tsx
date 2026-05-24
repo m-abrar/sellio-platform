@@ -1,5 +1,9 @@
 'use client';
 import React, { useState } from 'react';
+import { MenuNav } from '@/components/menu/MenuNav';
+import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
+import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
+import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
 
 export const VacationHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -22,17 +26,30 @@ export const VacationHeader = () => {
       </button>
 
       <nav className={`pv-nav ${isOpen ? 'pv-nav-open' : ''}`}>
-          {['Destinations', 'Experiences', 'Retreats', 'Local_Nodes'].map(link => (
-              <a key={link} href="#" className="pv-nav-link" onClick={() => setIsOpen(false)}>{link.replace('_', ' ')}</a>
-          ))}
-          <button className="pv-btn-primary pv-mobile-btn" style={{ padding: '1rem 3rem', fontSize: '0.8rem', marginTop: '2rem', width: '100%' }} onClick={() => alert('Booking panel active.')}>
-            BOOK NOW
-          </button>
+          <MenuNav
+            location="main_header"
+            flat
+            linkClassName="pv-nav-link"
+            onNavigate={() => setIsOpen(false)}
+            renderItem={defaultNavItemRenderer}
+          />
+          <MenuActionButtons
+            as="button"
+            buttonClassName="pv-btn-primary pv-mobile-btn"
+            onNavigate={() => setIsOpen(false)}
+            renderItem={(item, { className, onNavigate }) => (
+              <button type="button" className={className} style={{ padding: '1rem 3rem', fontSize: '0.8rem', marginTop: '2rem', width: '100%' }} onClick={onNavigate}>{item.title}</button>
+            )}
+          />
       </nav>
 
-      <button className="pv-btn-primary pv-desktop-btn" style={{ padding: '0.8rem 2rem', fontSize: '0.75rem', boxShadow: 'none' }} onClick={() => alert('Booking panel active.')} id="pv-btn-header-book">
-        BOOK NOW
-      </button>
+      <MenuActionButtons
+        as="button"
+        buttonClassName="pv-btn-primary pv-desktop-btn"
+        renderItem={(item, { className, onNavigate }) => (
+          <button type="button" className={className} style={{ padding: '0.8rem 2rem', fontSize: '0.75rem', boxShadow: 'none' }} onClick={onNavigate} id="pv-btn-header-book">{item.title}</button>
+        )}
+      />
     </header>
   );
 };
@@ -75,23 +92,38 @@ export const EscapeFooter = () => (
                     A high-fidelity vacation registry designed for the global traveler. Synchronizing authentic retreats with local expertise.
                 </p>
             </div>
-            {['DESTINATIONS', 'PROTOCOL', 'COMPANY'].map(col => (
-                <div key={col}>
-                    <div className="pv-mono" style={{ color: 'var(--pv-sand)', marginBottom: '3rem' }}>{col}</div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }} className="pv-footer-link-group">
-                        {['Registry', 'Verification', 'Support', 'Auth Registry'].map(link => (
-                            <span key={link} style={{ fontSize: '0.9rem', opacity: 0.5, cursor: 'pointer', transition: 'all 0.3s ease' }} className="pv-footer-link" onClick={() => alert(`Navigating escape nodes: ${link}`)}>{link}</span>
-                        ))}
-                    </div>
-                </div>
-            ))}
+            <FooterMenuColumn
+                location="footer_column_1"
+                renderTitle={(title) => <div className="pv-mono" style={{ color: 'var(--pv-sand)', marginBottom: '3rem' }}>{title}</div>}
+                listClassName="pv-footer-link-group"
+                linkClassName="pv-footer-link"
+            />
+            <FooterMenuColumn
+                location="footer_column_2"
+                renderTitle={(title) => <div className="pv-mono" style={{ color: 'var(--pv-sand)', marginBottom: '3rem' }}>{title}</div>}
+                listClassName="pv-footer-link-group"
+                linkClassName="pv-footer-link"
+            />
+            <FooterMenuColumn
+                location="footer_column_3"
+                renderTitle={(title) => <div className="pv-mono" style={{ color: 'var(--pv-sand)', marginBottom: '3rem' }}>{title}</div>}
+                listClassName="pv-footer-link-group"
+                linkClassName="pv-footer-link"
+            />
         </div>
         <div style={{ marginTop: '10rem', paddingTop: '4rem', borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} className="pv-footer-bottom">
             <div className="pv-mono" style={{ opacity: 0.4, fontSize: '0.65rem' }}>© 2026 SELLIO_VACATION_OS // HORIZON_SYNC_STABLE</div>
             <div style={{ display: 'flex', gap: '4rem' }} className="pv-footer-socials">
-                {['INSTAGRAM', 'LINKEDIN', 'X_OS'].map(social => (
-                    <span key={social} className="pv-mono" style={{ opacity: 0.4, fontSize: '0.65rem', cursor: 'pointer' }}>{social}</span>
-                ))}
+                <MenuNav
+                    location="social_footer"
+                    flat
+                    linkClassName="pv-mono"
+                    renderItem={(item, { href, className, onNavigate }) => (
+                        <span className={className} style={{ opacity: 0.4, fontSize: '0.65rem', cursor: 'pointer' }}>
+                            <a href={href} onClick={onNavigate} style={{ color: 'inherit', textDecoration: 'none' }}>{item.title}</a>
+                        </span>
+                    )}
+                />
             </div>
         </div>
     </footer>

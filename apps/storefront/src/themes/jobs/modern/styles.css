@@ -338,6 +338,11 @@
     margin-top: 4rem;
 }
 
+.jm-footer-bottom-links {
+    display: flex;
+    gap: 2rem;
+}
+
 /* Responsive hamburger trigger & controls */
 .jm-hamburger {
     display: none;

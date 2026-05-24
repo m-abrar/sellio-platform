@@ -34,6 +34,15 @@ function links(...entries: [string, string][]): MenuItem[] {
   }));
 }
 
+function emptyMenu(location: MenuLocationKey, title: string): Menu {
+  return {
+    location_key: location,
+    title,
+    source: 'fallback',
+    items: [],
+  };
+}
+
 function footerMenu(location: MenuLocationKey, title: string, items: MenuItem[]): Menu {
   return {
     location_key: location,
@@ -76,6 +85,30 @@ export function getDefaultMenu(location: MenuLocationKey, themeKey?: string): Me
     return footerMenu(location, 'Main Header Menu', fallbackHeaderItems(themeKey));
   }
 
+  if (location === 'utility_header') {
+    return footerMenu(location, 'Utility Header', links(['Login', '#']));
+  }
+
+  if (location === 'action_buttons') {
+    return footerMenu(location, 'Header Actions', links(['Inquire', '/cart']));
+  }
+
+  if (location.startsWith('footer_column_')) {
+    return footerMenu(location, 'Footer', links(['About', '#'], ['Contact', '#']));
+  }
+
+  if (location === 'footer_bottom_bar') {
+    return footerMenu(location, 'Legal', links(['Privacy', '#'], ['Terms', '#']));
+  }
+
+  if (location === 'social_footer') {
+    return footerMenu(location, 'Social', links(['Instagram', '#'], ['LinkedIn', '#'], ['X', '#']));
+  }
+
+  if (location === 'utility_topbar' || location === 'mobile_nav' || location === 'secondary_nav') {
+    return emptyMenu(location, location.replace(/_/g, ' '));
+  }
+
   if (location === 'company_footer') {
     return footerMenu(location, 'Company', links(['About', '#'], ['Careers', '#'], ['Press', '#']));
   }
@@ -86,10 +119,6 @@ export function getDefaultMenu(location: MenuLocationKey, themeKey?: string): Me
 
   if (location === 'resources_footer') {
     return footerMenu(location, 'Resources', links(['Documentation', '#'], ['Terms', '#'], ['Privacy', '#']));
-  }
-
-  if (location === 'social_footer') {
-    return footerMenu(location, 'Social Footer Menu', links(['Facebook', '#'], ['Instagram', '#'], ['X', '#']));
   }
 
   return footerMenu(location, 'Settings', links(['Language', '#'], ['Region', '#']));

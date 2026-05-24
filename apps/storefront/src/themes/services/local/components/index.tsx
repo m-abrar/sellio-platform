@@ -1,5 +1,8 @@
 'use client';
 import React, { useState } from 'react';
+import { MenuNav } from '@/components/menu/MenuNav';
+import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
+import { hashAwareNavItemRenderer } from '@/components/menu/menu-renderers';
 
 export const LocalHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -22,37 +25,22 @@ export const LocalHeader = () => {
         <span className="local-hamburger-bar"></span>
       </button>
 
-      {/* Navigation Links */}
-      <nav className={`local-nav ${isOpen ? 'local-nav-open' : ''}`}>
-        {[
-          { name: 'Home', target: 'local-hero-section' },
-          { name: 'Services', target: 'services' },
-          { name: 'Providers', target: 'providers' },
-          { name: 'Testimonials', target: 'testimonials' }
-        ].map(link => (
-          <a 
-            key={link.name} 
-            href={`#${link.target}`} 
-            className="local-nav-link"
-            onClick={(e) => {
-              e.preventDefault();
-              setIsOpen(false);
-              const targetId = link.target;
-              document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth' });
-            }}
-          >
-            {link.name}
-          </a>
-        ))}
+      <div className={`local-nav ${isOpen ? 'local-nav-open' : ''}`}>
+        <MenuNav
+          location="main_header"
+          flat
+          linkClassName="local-nav-link"
+          onNavigate={() => setIsOpen(false)}
+          renderItem={hashAwareNavItemRenderer}
+        />
         <button 
           className="local-btn local-btn-primary local-mobile-btn" 
           onClick={() => alert('Booking portal initializing...')}
         >
           Book a Service
         </button>
-      </nav>
+      </div>
 
-      {/* Desktop Actions */}
       <div className="local-desktop-btn-container">
         <button 
           className="local-btn local-btn-primary local-desktop-btn" 
@@ -110,19 +98,18 @@ export const LocalFooter = () => (
                     Connecting you with trusted local service professionals quickly and safely.
                 </p>
             </div>
-            <div>
-                <h6 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '1rem', color: 'white' }}>Quick Links</h6>
-                <a href="#" className="local-footer-link" onClick={() => alert('About us portal.')}>About Us</a>
-                <a href="#" className="local-footer-link" onClick={() => alert('Services listings.')}>Services</a>
-                <a href="#" className="local-footer-link" onClick={() => alert('Careers details.')}>Careers</a>
-                <a href="#" className="local-footer-link" onClick={() => alert('FAQ portal.')}>FAQ</a>
-            </div>
-            <div>
-                <h6 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '1rem', color: 'white' }}>For Pros</h6>
-                <a href="#" className="local-footer-link" onClick={() => alert('Sign up sequence.')}>Sign Up</a>
-                <a href="#" className="local-footer-link" onClick={() => alert('Provider login page.')}>Provider Login</a>
-                <a href="#" className="local-footer-link" onClick={() => alert('Safety portal.')}>Safety Guidelines</a>
-            </div>
+            <FooterMenuColumn
+                location="footer_column_1"
+                titleTag="h6"
+                titleStyle={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '1rem', color: 'white' }}
+                linkClassName="local-footer-link"
+            />
+            <FooterMenuColumn
+                location="footer_column_2"
+                titleTag="h6"
+                titleStyle={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '1rem', color: 'white' }}
+                linkClassName="local-footer-link"
+            />
             <div>
                 <h6 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '1rem', color: 'white' }}>Contact Us</h6>
                 <p style={{ color: 'var(--local-text-muted)', fontSize: '0.95rem', marginBottom: '0.5rem' }}>support@homefix.com</p>

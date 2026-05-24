@@ -14,8 +14,22 @@ class MenuService
     public const GLOBAL_FALLBACK_THEME = 'unifieds_default';
 
     public const MENU_LOCATIONS = [
+        'utility_topbar',
         'main_header',
+        'mobile_nav',
+        'utility_header',
+        'action_buttons',
+        'secondary_nav',
+        'footer_column_1',
+        'footer_column_2',
+        'footer_column_3',
+        'footer_column_4',
+        'footer_bottom_bar',
         'social_footer',
+    ];
+
+    /** @deprecated Use footer_column_1..4 — kept for legacy cache keys during migration */
+    public const LEGACY_MENU_LOCATIONS = [
         'company_footer',
         'support_footer',
         'resources_footer',
@@ -412,12 +426,17 @@ class MenuService
     protected function fallbackFooterItems(string $locationKey): array
     {
         return match ($locationKey) {
-            'social_footer'    => $this->dtoLinks(['Facebook' => '#', 'Instagram' => '#', 'X' => '#']),
-            'company_footer'   => $this->dtoLinks(['About' => '#', 'Careers' => '#', 'Press' => '#']),
-            'support_footer'   => $this->dtoLinks(['Help Center' => '#', 'Contact' => '#', 'Status' => '#']),
-            'resources_footer' => $this->dtoLinks(['Documentation' => '#', 'Terms' => '#', 'Privacy' => '#']),
-            'settings_footer'  => $this->dtoLinks(['Language' => '#', 'Region' => '#']),
-            default            => [],
+            'social_footer'      => $this->dtoLinks(['Instagram' => '#', 'LinkedIn' => '#', 'X' => '#']),
+            'footer_bottom_bar'  => $this->dtoLinks(['Privacy' => '#', 'Terms' => '#']),
+            'footer_column_1',
+            'footer_column_2',
+            'footer_column_3',
+            'footer_column_4'    => $this->dtoLinks(['About' => '#', 'Contact' => '#']),
+            'company_footer'     => $this->dtoLinks(['About' => '#', 'Careers' => '#', 'Press' => '#']),
+            'support_footer'     => $this->dtoLinks(['Help Center' => '#', 'Contact' => '#', 'Status' => '#']),
+            'resources_footer'   => $this->dtoLinks(['Documentation' => '#', 'Terms' => '#', 'Privacy' => '#']),
+            'settings_footer'    => $this->dtoLinks(['Language' => '#', 'Region' => '#']),
+            default              => [],
         };
     }
 

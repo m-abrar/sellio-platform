@@ -1,5 +1,8 @@
 'use client';
 import React, { useState } from 'react';
+import { MenuNav } from '@/components/menu/MenuNav';
+import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
+import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
 
 export const MapHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -29,39 +32,52 @@ export const MapHeader = () => {
       </button>
 
       <nav className={`pm-nav ${isOpen ? 'pm-nav-open' : ''}`}>
-        <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '100px', padding: '0.5rem 2rem', display: 'flex', gap: '2rem' }}>
-            {['SATELLITE', 'TERRAIN', 'INFRASTRUCTURE'].map(mode => (
-                <span key={mode} style={{ fontSize: '0.65rem', fontWeight: 800, letterSpacing: '2px', cursor: 'pointer', opacity: mode === 'SATELLITE' ? 1 : 0.4 }}>
-                    {mode}
-                </span>
-            ))}
-        </div>
+        <MenuNav
+          location="main_header"
+          flat
+          linkClassName="pm-nav-link"
+          onNavigate={() => setIsOpen(false)}
+          renderItem={defaultNavItemRenderer}
+        />
 
-        <button className="pm-mobile-auth-btn" style={{ 
-            background: 'var(--pm-gold)', 
-            color: 'var(--pm-obsidian)', 
-            padding: '0.8rem 2rem', 
-            borderRadius: '100px', 
-            border: 'none', 
-            fontWeight: 800, 
-            fontSize: '0.75rem',
-            marginTop: '2rem'
-        }}>
-          ACCESS_REGISTRY
-        </button>
+        <MenuActionButtons
+          as="button"
+          buttonClassName="pm-mobile-auth-btn"
+          onNavigate={() => setIsOpen(false)}
+          renderItem={(item, { className, onNavigate }) => (
+            <button type="button" className={className} style={{ 
+                background: 'var(--pm-gold)', 
+                color: 'var(--pm-obsidian)', 
+                padding: '0.8rem 2rem', 
+                borderRadius: '100px', 
+                border: 'none', 
+                fontWeight: 800, 
+                fontSize: '0.75rem',
+                marginTop: '2rem'
+            }} onClick={onNavigate}>
+              {item.title}
+            </button>
+          )}
+        />
       </nav>
 
-      <button className="pm-desktop-auth-btn" style={{ 
-          background: 'var(--pm-gold)', 
-          color: 'var(--pm-obsidian)', 
-          padding: '0.6rem 1.5rem', 
-          borderRadius: '100px', 
-          border: 'none', 
-          fontWeight: 800, 
-          fontSize: '0.75rem' 
-      }}>
-        ACCESS_REGISTRY
-      </button>
+      <MenuActionButtons
+        as="button"
+        buttonClassName="pm-desktop-auth-btn"
+        renderItem={(item, { className, onNavigate }) => (
+          <button type="button" className={className} style={{ 
+              background: 'var(--pm-gold)', 
+              color: 'var(--pm-obsidian)', 
+              padding: '0.6rem 1.5rem', 
+              borderRadius: '100px', 
+              border: 'none', 
+              fontWeight: 800, 
+              fontSize: '0.75rem' 
+          }} onClick={onNavigate}>
+            {item.title}
+          </button>
+        )}
+      />
     </header>
   );
 };

@@ -1,5 +1,9 @@
 'use client';
 import React, { useState } from 'react';
+import { MenuNav } from '@/components/menu/MenuNav';
+import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
+import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
+import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
 
 export const TradeHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -22,17 +26,30 @@ export const TradeHeader = () => {
       </button>
 
       <nav className={`um-nav ${isOpen ? 'um-nav-open' : ''}`}>
-          {['Exchange', 'Grid', 'Analytics', 'Institutions'].map(link => (
-              <a key={link} href="#" className="um-nav-link" onClick={() => setIsOpen(false)}>{link}</a>
-          ))}
-          <button className="um-btn-primary um-mobile-btn" style={{ padding: '1rem 3rem', fontSize: '0.8rem', marginTop: '2rem', width: '100%' }} onClick={() => alert('Trade Node exchange active.')}>
-            START TRADING
-          </button>
+          <MenuNav
+            location="main_header"
+            flat
+            linkClassName="um-nav-link"
+            onNavigate={() => setIsOpen(false)}
+            renderItem={defaultNavItemRenderer}
+          />
+          <MenuActionButtons
+            as="button"
+            buttonClassName="um-btn-primary um-mobile-btn"
+            onNavigate={() => setIsOpen(false)}
+            renderItem={(item, { className, onNavigate }) => (
+              <button type="button" className={className} style={{ padding: '1rem 3rem', fontSize: '0.8rem', marginTop: '2rem', width: '100%' }} onClick={onNavigate}>{item.title}</button>
+            )}
+          />
       </nav>
 
-      <button className="um-btn-primary um-desktop-btn" style={{ padding: '0.8rem 2rem', fontSize: '0.75rem', borderRadius: '8px' }} onClick={() => alert('Trade Node exchange active.')} id="um-btn-header-access">
-        START TRADING
-      </button>
+      <MenuActionButtons
+        as="button"
+        buttonClassName="um-btn-primary um-desktop-btn"
+        renderItem={(item, { className, onNavigate }) => (
+          <button type="button" className={className} style={{ padding: '0.8rem 2rem', fontSize: '0.75rem', borderRadius: '8px' }} onClick={onNavigate} id="um-btn-header-access">{item.title}</button>
+        )}
+      />
     </header>
   );
 };
@@ -101,23 +118,38 @@ export const ExchangeFooter = () => (
                     The advanced high-fidelity marketplace exchange node. Built for liquid trading and precise multi-vertical logistics.
                 </p>
             </div>
-            {['EXCHANGES', 'LOGISTICS', 'COMPLIANCE'].map(col => (
-                <div key={col}>
-                    <div className="um-mono" style={{ color: 'var(--um-green)', marginBottom: '3rem' }}>{col}</div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }} className="um-footer-link-group">
-                        {['Liquid Exchange', 'Authority Hub', 'Provenances OS', 'Market Registry'].map(link => (
-                            <span key={link} className="um-footer-link" onClick={() => alert(`Navigating marketplace: ${link}`)}>{link}</span>
-                        ))}
-                    </div>
-                </div>
-            ))}
+            <FooterMenuColumn
+                location="footer_column_1"
+                renderTitle={(title) => <div className="um-mono" style={{ color: 'var(--um-green)', marginBottom: '3rem' }}>{title}</div>}
+                listClassName="um-footer-link-group"
+                linkClassName="um-footer-link"
+            />
+            <FooterMenuColumn
+                location="footer_column_2"
+                renderTitle={(title) => <div className="um-mono" style={{ color: 'var(--um-green)', marginBottom: '3rem' }}>{title}</div>}
+                listClassName="um-footer-link-group"
+                linkClassName="um-footer-link"
+            />
+            <FooterMenuColumn
+                location="footer_column_3"
+                renderTitle={(title) => <div className="um-mono" style={{ color: 'var(--um-green)', marginBottom: '3rem' }}>{title}</div>}
+                listClassName="um-footer-link-group"
+                linkClassName="um-footer-link"
+            />
         </div>
         <div className="um-footer-bottom">
             <div className="um-mono" style={{ opacity: 0.4, fontSize: '0.65rem' }}>© 2026 SELLIO_TRADE_OS // SECURE_SYNC_STABLE</div>
             <div className="um-footer-socials">
-                {['INSTAGRAM', 'LINKEDIN', 'X_OS'].map(social => (
-                    <span key={social} className="um-mono" style={{ opacity: 0.4, fontSize: '0.65rem', cursor: 'pointer' }}>{social}</span>
-                ))}
+                <MenuNav
+                    location="social_footer"
+                    flat
+                    linkClassName="um-mono"
+                    renderItem={(item, { href, className, onNavigate }) => (
+                        <span className={className} style={{ opacity: 0.4, fontSize: '0.65rem', cursor: 'pointer' }}>
+                            <a href={href} onClick={onNavigate} style={{ color: 'inherit', textDecoration: 'none' }}>{item.title}</a>
+                        </span>
+                    )}
+                />
             </div>
         </div>
     </footer>

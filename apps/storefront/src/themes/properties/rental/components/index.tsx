@@ -1,5 +1,9 @@
 'use client';
 import React, { useState } from 'react';
+import { MenuNav } from '@/components/menu/MenuNav';
+import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
+import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
+import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
 
 export const RentalHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -23,17 +27,30 @@ export const RentalHeader = () => {
       </button>
 
       <nav className={`pr-nav ${isOpen ? 'pr-nav-open' : ''}`}>
-          {['Discover', 'Verified_Nodes', 'Tenants', 'Leasing_FAQ'].map(link => (
-              <a key={link} href="#" className="pr-nav-link" onClick={() => setIsOpen(false)}>{link.replace('_', ' ')}</a>
-          ))}
-          <button className="pr-btn-primary pr-mobile-auth-btn" style={{ padding: '1rem 3rem', fontSize: '0.9rem', marginTop: '2rem' }}>
-            GET_STARTED
-          </button>
+          <MenuNav
+            location="main_header"
+            flat
+            linkClassName="pr-nav-link"
+            onNavigate={() => setIsOpen(false)}
+            renderItem={defaultNavItemRenderer}
+          />
+          <MenuActionButtons
+            as="button"
+            buttonClassName="pr-btn-primary pr-mobile-auth-btn"
+            onNavigate={() => setIsOpen(false)}
+            renderItem={(item, { className, onNavigate }) => (
+              <button type="button" className={className} style={{ padding: '1rem 3rem', fontSize: '0.9rem', marginTop: '2rem' }} onClick={onNavigate}>{item.title}</button>
+            )}
+          />
       </nav>
 
-      <button className="pr-btn-primary pr-desktop-auth-btn" style={{ padding: '0.7rem 1.8rem', fontSize: '0.8rem' }}>
-        GET_STARTED
-      </button>
+      <MenuActionButtons
+        as="button"
+        buttonClassName="pr-btn-primary pr-desktop-auth-btn"
+        renderItem={(item, { className, onNavigate }) => (
+          <button type="button" className={className} style={{ padding: '0.7rem 1.8rem', fontSize: '0.8rem' }} onClick={onNavigate}>{item.title}</button>
+        )}
+      />
     </header>
   );
 };
@@ -141,23 +158,35 @@ export const TenantFooter = () => (
                     A high-fidelity rental and leasing protocol designed for modern residential nodes. Secure transactions, instant verification, and automated maintenance routing.
                 </p>
             </div>
-            {['RESOURCES', 'TENANTS', 'LEGAL'].map(col => (
-                <div key={col}>
-                    <div className="pr-mono" style={{ color: 'white', marginBottom: '2.5rem' }}>{col}</div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                        {['Registry', 'Verification', 'Support Portal', 'Auth Registry'].map(link => (
-                            <span key={link} style={{ fontSize: '0.9rem', opacity: 0.4, cursor: 'pointer' }} className="pr-footer-link">{link}</span>
-                        ))}
-                    </div>
-                </div>
-            ))}
+            <FooterMenuColumn
+                location="footer_column_1"
+                renderTitle={(title) => <div className="pr-mono" style={{ color: 'white', marginBottom: '2.5rem' }}>{title}</div>}
+                linkClassName="pr-footer-link"
+            />
+            <FooterMenuColumn
+                location="footer_column_2"
+                renderTitle={(title) => <div className="pr-mono" style={{ color: 'white', marginBottom: '2.5rem' }}>{title}</div>}
+                linkClassName="pr-footer-link"
+            />
+            <FooterMenuColumn
+                location="footer_column_3"
+                renderTitle={(title) => <div className="pr-mono" style={{ color: 'white', marginBottom: '2.5rem' }}>{title}</div>}
+                linkClassName="pr-footer-link"
+            />
         </div>
         <div style={{ marginTop: '10rem', paddingTop: '3rem', borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} className="pr-footer-bottom">
             <div className="pr-mono" style={{ opacity: 0.3, fontSize: '0.65rem' }}>© 2026 SELLIO_RENTAL_OS // NODE_STABLE</div>
             <div style={{ display: 'flex', gap: '3rem' }}>
-                {['X_PROTOCOL', 'INSTAGRAM', 'LINKEDIN_NODE'].map(social => (
-                    <span key={social} className="pr-mono" style={{ opacity: 0.3, fontSize: '0.65rem', cursor: 'pointer' }}>{social}</span>
-                ))}
+                <MenuNav
+                    location="social_footer"
+                    flat
+                    linkClassName="pr-mono"
+                    renderItem={(item, { href, className, onNavigate }) => (
+                        <span className={className} style={{ opacity: 0.3, fontSize: '0.65rem', cursor: 'pointer' }}>
+                            <a href={href} onClick={onNavigate} style={{ color: 'inherit', textDecoration: 'none' }}>{item.title}</a>
+                        </span>
+                    )}
+                />
             </div>
         </div>
     </footer>

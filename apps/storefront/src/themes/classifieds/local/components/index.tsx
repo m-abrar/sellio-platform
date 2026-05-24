@@ -1,5 +1,8 @@
 'use client';
 import React from 'react';
+import { MenuNav } from '@/components/menu/MenuNav';
+import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
+import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 
 interface HeaderProps {
   onPostClick: () => void;
@@ -18,11 +21,43 @@ export const LocalHeader = ({ onPostClick, onLocationClick, locationName }: Head
       </div>
     </div>
     
-    <nav className="cl-nav">
-      <a href="#" className="cl-nav-link d-none d-md-block" onClick={(e) => { e.preventDefault(); alert("Viewing local community board posts..."); }}>Activity Feed</a>
-      <a href="#" className="cl-nav-link d-none d-md-block" onClick={(e) => { e.preventDefault(); alert("Opening neighbors messaging panel..."); }}>Messages <span style={{ backgroundColor: 'var(--cl-primary-green)', color: 'white', borderRadius: '50px', padding: '0.1rem 0.4rem', fontSize: '0.7rem', fontWeight: 800 }}>3</span></a>
-      <button className="cl-btn-post" onClick={onPostClick}>📸 Post Item</button>
-    </nav>
+    <div className="cl-nav">
+      <MenuNav
+        location="main_header"
+        flat
+        linkClassName="cl-nav-link d-none d-md-block"
+        renderItem={(item, { href, className, onNavigate }) => (
+          <a
+            href={href}
+            className={`${className} d-none d-md-block`}
+            onClick={(e) => {
+              e.preventDefault();
+              if (item.title === 'Messages') {
+                alert("Opening neighbors messaging panel...");
+              } else {
+                alert("Viewing local community board posts...");
+              }
+              onNavigate?.();
+            }}
+          >
+            {item.title}
+            {item.title === 'Messages' && (
+              <span style={{ backgroundColor: 'var(--cl-primary-green)', color: 'white', borderRadius: '50px', padding: '0.1rem 0.4rem', fontSize: '0.7rem', fontWeight: 800 }}>3</span>
+            )}
+          </a>
+        )}
+      />
+      <MenuActionButtons
+        buttonClassName="cl-btn-post"
+        as="button"
+        onAction={onPostClick}
+        renderItem={(item, { className, onNavigate }) => (
+          <button type="button" className={className} onClick={() => { onPostClick(); onNavigate?.(); }}>
+            📸 {item.title}
+          </button>
+        )}
+      />
+    </div>
   </header>
 );
 
@@ -82,22 +117,20 @@ export const LocalFooter = () => (
         </p>
       </div>
       <div style={{ display: 'flex', gap: '4rem', flexWrap: 'wrap' }}>
-        <div>
-          <h4 style={{ fontWeight: 800, fontSize: '0.95rem', marginBottom: '1rem', color: 'var(--cl-primary-blue)', textTransform: 'uppercase' }}>Community Rules</h4>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', fontSize: '0.85rem' }}>
-            <a href="#" style={{ color: 'var(--cl-text-muted)', textDecoration: 'none', fontWeight: 600 }} onClick={(e) => e.preventDefault()}>Member Guidelines</a>
-            <a href="#" style={{ color: 'var(--cl-text-muted)', textDecoration: 'none', fontWeight: 600 }} onClick={(e) => e.preventDefault()}>Verification Process</a>
-            <a href="#" style={{ color: 'var(--cl-text-muted)', textDecoration: 'none', fontWeight: 600 }} onClick={(e) => e.preventDefault()}>Safe Exchange Zones</a>
-          </div>
-        </div>
-        <div>
-          <h4 style={{ fontWeight: 800, fontSize: '0.95rem', marginBottom: '1rem', color: 'var(--cl-primary-blue)', textTransform: 'uppercase' }}>Popular Channels</h4>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', fontSize: '0.85rem' }}>
-            <a href="#" style={{ color: 'var(--cl-text-muted)', textDecoration: 'none', fontWeight: 600 }} onClick={(e) => e.preventDefault()}>🎁 Neighborhood Freebies</a>
-            <a href="#" style={{ color: 'var(--cl-text-muted)', textDecoration: 'none', fontWeight: 600 }} onClick={(e) => e.preventDefault()}>🧸 Kids & Baby Gear</a>
-            <a href="#" style={{ color: 'var(--cl-text-muted)', textDecoration: 'none', fontWeight: 600 }} onClick={(e) => e.preventDefault()}>🚲 Bikes & Trails</a>
-          </div>
-        </div>
+        <FooterMenuColumn
+          location="footer_column_1"
+          titleTag="h4"
+          titleStyle={{ fontWeight: 800, fontSize: '0.95rem', marginBottom: '1rem', color: 'var(--cl-primary-blue)', textTransform: 'uppercase' }}
+          listClassName="cl-footer-links"
+          linkClassName="cl-footer-link"
+        />
+        <FooterMenuColumn
+          location="footer_column_2"
+          titleTag="h4"
+          titleStyle={{ fontWeight: 800, fontSize: '0.95rem', marginBottom: '1rem', color: 'var(--cl-primary-blue)', textTransform: 'uppercase' }}
+          listClassName="cl-footer-links"
+          linkClassName="cl-footer-link"
+        />
       </div>
     </div>
     <div style={{ borderTop: '2px dashed var(--cl-border)', paddingTop: '1.5rem', textAlign: 'center', fontWeight: 700, fontSize: '0.8rem', color: 'var(--cl-text-muted)' }}>

@@ -1,5 +1,9 @@
 'use client';
 import React, { useState } from 'react';
+import { MenuNav } from '@/components/menu/MenuNav';
+import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
+import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
+import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
 
 export const CommunityHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -22,17 +26,30 @@ export const CommunityHeader = () => {
       </button>
 
       <nav className={`pn-nav ${isOpen ? 'pn-nav-open' : ''}`}>
-          {['Community', 'Local_Guides', 'Safety_Index', 'Support'].map(link => (
-              <a key={link} href="#" className="pn-nav-link" onClick={() => setIsOpen(false)}>{link}</a>
-          ))}
-          <button className="pn-btn-primary pn-mobile-auth-btn" style={{ padding: '1rem 3rem', fontSize: '0.9rem', marginTop: '2rem' }}>
-            JOIN_HOOD
-          </button>
+          <MenuNav
+            location="main_header"
+            flat
+            linkClassName="pn-nav-link"
+            onNavigate={() => setIsOpen(false)}
+            renderItem={defaultNavItemRenderer}
+          />
+          <MenuActionButtons
+            as="button"
+            buttonClassName="pn-btn-primary pn-mobile-auth-btn"
+            onNavigate={() => setIsOpen(false)}
+            renderItem={(item, { className, onNavigate }) => (
+              <button type="button" className={className} style={{ padding: '1rem 3rem', fontSize: '0.9rem', marginTop: '2rem' }} onClick={onNavigate}>{item.title}</button>
+            )}
+          />
       </nav>
 
-      <button className="pn-btn-primary pn-desktop-auth-btn" style={{ padding: '0.7rem 1.8rem', fontSize: '0.8rem' }}>
-        JOIN_HOOD
-      </button>
+      <MenuActionButtons
+        as="button"
+        buttonClassName="pn-btn-primary pn-desktop-auth-btn"
+        renderItem={(item, { className, onNavigate }) => (
+          <button type="button" className={className} style={{ padding: '0.7rem 1.8rem', fontSize: '0.8rem' }} onClick={onNavigate}>{item.title}</button>
+        )}
+      />
     </header>
   );
 };
@@ -76,23 +93,35 @@ export const HoodFooter = () => (
                     A high-fidelity neighborhood registry designed for families and high-trust communities. Synchronizing local insights with global residential nodes.
                 </p>
             </div>
-            {['COMMUNITY', 'GUIDES', 'LOCAL'].map(col => (
-                <div key={col}>
-                    <div className="pn-mono" style={{ color: 'var(--pn-ochre)', marginBottom: '3.5rem' }}>{col}</div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                        {['Registry', 'Safety', 'Schools', 'Events'].map(link => (
-                            <span key={link} style={{ fontSize: '0.95rem', opacity: 0.5, cursor: 'pointer' }}>{link}</span>
-                        ))}
-                    </div>
-                </div>
-            ))}
+            <FooterMenuColumn
+                location="footer_column_1"
+                renderTitle={(title) => <div className="pn-mono" style={{ color: 'var(--pn-ochre)', marginBottom: '3.5rem' }}>{title}</div>}
+                linkClassName=""
+            />
+            <FooterMenuColumn
+                location="footer_column_2"
+                renderTitle={(title) => <div className="pn-mono" style={{ color: 'var(--pn-ochre)', marginBottom: '3.5rem' }}>{title}</div>}
+                linkClassName=""
+            />
+            <FooterMenuColumn
+                location="footer_column_3"
+                renderTitle={(title) => <div className="pn-mono" style={{ color: 'var(--pn-ochre)', marginBottom: '3.5rem' }}>{title}</div>}
+                linkClassName=""
+            />
         </div>
         <div style={{ marginTop: '12rem', paddingTop: '4rem', borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div className="pn-mono" style={{ opacity: 0.4, fontSize: '0.65rem' }}>© 2026 SELLIO_NEIGHBORHOOD_OS // TRUST_STABLE</div>
             <div style={{ display: 'flex', gap: '4rem' }}>
-                {['INSTAGRAM', 'LINKEDIN', 'X_HOOD'].map(social => (
-                    <span key={social} className="pn-mono" style={{ opacity: 0.4, fontSize: '0.65rem' }}>{social}</span>
-                ))}
+                <MenuNav
+                    location="social_footer"
+                    flat
+                    linkClassName="pn-mono"
+                    renderItem={(item, { href, className, onNavigate }) => (
+                        <span className={className} style={{ opacity: 0.4, fontSize: '0.65rem' }}>
+                            <a href={href} onClick={onNavigate} style={{ color: 'inherit', textDecoration: 'none' }}>{item.title}</a>
+                        </span>
+                    )}
+                />
             </div>
         </div>
     </footer>

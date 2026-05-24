@@ -1,5 +1,8 @@
 'use client';
 import React, { useState } from 'react';
+import { MenuNav } from '@/components/menu/MenuNav';
+import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
+import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
 
 export const SilentHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -79,34 +82,34 @@ export const SilentHeader = () => {
       </button>
 
       <nav className={`usm-nav ${isOpen ? 'usm-nav-open' : ''}`}>
-          {[
-            { label: 'Home', target: '/preview/unifieds_minimal' },
-            { label: 'Explore', target: '/preview/unifieds_minimal/explore' },
-            { label: 'Cart', target: '/preview/unifieds_minimal/cart', badge: true },
-          ].map(link => (
-              <a 
-                key={link.label} 
-                href={link.target} 
-                className="usm-nav-link" 
-                style={{ 
-                  textTransform: 'none', 
-                  letterSpacing: '0.02em', 
-                  fontSize: '0.9rem', 
+          <MenuNav
+            location="main_header"
+            flat
+            linkClassName="usm-nav-link"
+            onNavigate={() => setIsOpen(false)}
+            renderItem={(item, { href, className, onNavigate }) => (
+              <a
+                href={href}
+                className={className}
+                style={{
+                  textTransform: 'none',
+                  letterSpacing: '0.02em',
+                  fontSize: '0.9rem',
                   fontWeight: 400,
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '0.4rem'
                 }}
-                onClick={() => setIsOpen(false)}
+                onClick={onNavigate}
               >
-                {link.label}
-                {link.badge && cartCount > 0 && (
-                  <span 
-                    style={{ 
-                      background: 'var(--usm-primary)', 
-                      color: '#fff', 
-                      borderRadius: '10px', 
-                      padding: '0.1rem 0.5rem', 
+                {item.title}
+                {item.title === 'Cart' && cartCount > 0 && (
+                  <span
+                    style={{
+                      background: 'var(--usm-primary)',
+                      color: '#fff',
+                      borderRadius: '10px',
+                      padding: '0.1rem 0.5rem',
                       fontSize: '0.75rem',
                       fontWeight: 600
                     }}
@@ -116,24 +119,45 @@ export const SilentHeader = () => {
                   </span>
                 )}
               </a>
-          ))}
-          <button 
-            className="usm-btn-primary usm-mobile-btn" 
-            style={{ padding: '0.85rem 2rem', fontSize: '0.8rem', marginTop: '2rem', width: '100%' }} 
-            onClick={handleOpenModal}
-          >
-            Post Listing
-          </button>
+            )}
+          />
+          <MenuNav
+            location="utility_header"
+            flat
+            renderItem={(item, { className, onNavigate }) => (
+              <button
+                type="button"
+                className="usm-btn-primary usm-mobile-btn"
+                style={{ padding: '0.85rem 2rem', fontSize: '0.8rem', marginTop: '2rem', width: '100%' }}
+                onClick={() => {
+                  onNavigate?.();
+                  handleOpenModal();
+                }}
+              >
+                {item.title}
+              </button>
+            )}
+          />
       </nav>
 
-      <button 
-        className="usm-btn-primary usm-desktop-btn" 
-        style={{ padding: '0.6rem 1.5rem', fontSize: '0.8rem', borderRadius: '4px' }} 
-        onClick={handleOpenModal} 
-        id="usm-btn-header-access"
-      >
-        Post Listing
-      </button>
+      <MenuNav
+        location="utility_header"
+        flat
+        renderItem={(item, { onNavigate }) => (
+          <button
+            type="button"
+            className="usm-btn-primary usm-desktop-btn"
+            style={{ padding: '0.6rem 1.5rem', fontSize: '0.8rem', borderRadius: '4px' }}
+            onClick={() => {
+              onNavigate?.();
+              handleOpenModal();
+            }}
+            id="usm-btn-header-access"
+          >
+            {item.title}
+          </button>
+        )}
+      />
 
       {/* Glassmorphic Post Listing Modal */}
       {showModal && (
@@ -336,36 +360,37 @@ export const ZenFooter = () => (
                     The luxury standard in marketplace design. Simple, precise, elegant and timeless.
                 </p>
             </div>
-            {[
-              {
-                title: 'Company',
-                links: ['About Us', 'Careers', 'Press']
-              },
-              {
-                title: 'Support',
-                links: ['Contact', 'Help Center', 'FAQs']
-              },
-              {
-                title: 'Legal',
-                links: ['Terms of Use', 'Privacy Policy', 'Cookies']
-              }
-            ].map(col => (
-                <div key={col.title}>
-                    <div style={{ color: 'black', marginBottom: '2rem', fontSize: '0.95rem', fontWeight: 600 }}>{col.title}</div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }} className="usm-footer-link-group">
-                        {col.links.map(link => (
-                            <span key={link} className="usm-footer-link" onClick={() => alert(`Navigating: ${link}`)} style={{ fontSize: '0.85rem', fontWeight: 300 }}>{link}</span>
-                        ))}
-                    </div>
-                </div>
-            ))}
+            <FooterMenuColumn
+                location="footer_column_1"
+                renderTitle={(title) => <div style={{ color: 'black', marginBottom: '2rem', fontSize: '0.95rem', fontWeight: 600 }}>{title}</div>}
+                listClassName="usm-footer-link-group"
+                linkClassName="usm-footer-link"
+            />
+            <FooterMenuColumn
+                location="footer_column_2"
+                renderTitle={(title) => <div style={{ color: 'black', marginBottom: '2rem', fontSize: '0.95rem', fontWeight: 600 }}>{title}</div>}
+                listClassName="usm-footer-link-group"
+                linkClassName="usm-footer-link"
+            />
+            <FooterMenuColumn
+                location="footer_column_3"
+                renderTitle={(title) => <div style={{ color: 'black', marginBottom: '2rem', fontSize: '0.95rem', fontWeight: 600 }}>{title}</div>}
+                listClassName="usm-footer-link-group"
+                linkClassName="usm-footer-link"
+            />
         </div>
         <div className="usm-footer-bottom" style={{ marginTop: '6rem', paddingTop: '2rem', borderTop: '1px solid var(--usm-border)' }}>
             <div style={{ opacity: 0.6, fontSize: '0.85rem', fontWeight: 300 }}>© 2026 Universal Marketplace. All rights reserved.</div>
             <div className="usm-footer-socials" style={{ display: 'flex', gap: '2rem' }}>
-                {['Instagram', 'LinkedIn', 'Twitter'].map(social => (
-                    <span key={social} style={{ opacity: 0.6, fontSize: '0.85rem', cursor: 'pointer', fontWeight: 300 }} onClick={() => alert(`Opening: ${social}`)}>{social}</span>
-                ))}
+                <MenuNav
+                    location="social_footer"
+                    flat
+                    renderItem={(item, { href, className, onNavigate }) => (
+                        <span style={{ opacity: 0.6, fontSize: '0.85rem', cursor: 'pointer', fontWeight: 300 }}>
+                            <a href={href} className={className} onClick={onNavigate} style={{ color: 'inherit', textDecoration: 'none' }}>{item.title}</a>
+                        </span>
+                    )}
+                />
             </div>
         </div>
     </footer>

@@ -1,5 +1,8 @@
 'use client';
 import React, { useState } from 'react';
+import { MenuNav } from '@/components/menu/MenuNav';
+import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
+import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
 
 export const SkylineHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -22,9 +25,13 @@ export const SkylineHeader = () => {
       </button>
 
       <nav className={`pu-nav ${isOpen ? 'pu-nav-open' : ''}`}>
-          {['Districts', 'Verticals', 'Intelligence', 'Node_Auth'].map(link => (
-              <a key={link} href="#" className="pu-nav-link" onClick={() => setIsOpen(false)}>{link.replace('_', ' ')}</a>
-          ))}
+          <MenuNav
+            location="main_header"
+            flat
+            linkClassName="pu-nav-link"
+            onNavigate={() => setIsOpen(false)}
+            renderItem={defaultNavItemRenderer}
+          />
           <div className="pu-mono pu-mobile-status" style={{ padding: '0.5rem 1.5rem', background: 'var(--pu-steel)', color: 'white', marginTop: '2rem', textAlign: 'center' }}>
             SYNC_ACTIVE
           </div>
@@ -73,23 +80,38 @@ export const CityPulseFooter = () => (
                     The world's most advanced high-fidelity urban distribution network. Engineering the future of vertical living.
                 </p>
             </div>
-            {['DISTRICTS', 'PROTOCOL', 'INSTITUTIONAL'].map(col => (
-                <div key={col}>
-                    <div className="pu-mono" style={{ color: 'var(--pu-cobalt)', marginBottom: '3rem' }}>{col}</div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }} className="pu-footer-link-group">
-                        {['Registry', 'Verticals', 'Intelligence', 'Auth Registry'].map(link => (
-                            <span key={link} style={{ fontSize: '0.9rem', opacity: 0.4, cursor: 'pointer', transition: 'all 0.3s ease' }} className="pu-footer-link" onClick={() => alert(`Loading registry metadata: ${link}`)}>{link}</span>
-                        ))}
-                    </div>
-                </div>
-            ))}
+            <FooterMenuColumn
+                location="footer_column_1"
+                renderTitle={(title) => <div className="pu-mono" style={{ color: 'var(--pu-cobalt)', marginBottom: '3rem' }}>{title}</div>}
+                listClassName="pu-footer-link-group"
+                linkClassName="pu-footer-link"
+            />
+            <FooterMenuColumn
+                location="footer_column_2"
+                renderTitle={(title) => <div className="pu-mono" style={{ color: 'var(--pu-cobalt)', marginBottom: '3rem' }}>{title}</div>}
+                listClassName="pu-footer-link-group"
+                linkClassName="pu-footer-link"
+            />
+            <FooterMenuColumn
+                location="footer_column_3"
+                renderTitle={(title) => <div className="pu-mono" style={{ color: 'var(--pu-cobalt)', marginBottom: '3rem' }}>{title}</div>}
+                listClassName="pu-footer-link-group"
+                linkClassName="pu-footer-link"
+            />
         </div>
         <div style={{ marginTop: '10rem', paddingTop: '3rem', borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} className="pu-footer-bottom">
             <div className="pu-mono" style={{ opacity: 0.3, fontSize: '0.65rem' }}>© 2026 SELLIO_SKYLINE_OS // VERTICAL_SYNC_STABLE</div>
             <div style={{ display: 'flex', gap: '3rem' }} className="pu-footer-socials">
-                {['INSTAGRAM', 'LINKEDIN', 'X_OS'].map(social => (
-                    <span key={social} className="pu-mono" style={{ opacity: 0.3, cursor: 'pointer' }}>{social}</span>
-                ))}
+                <MenuNav
+                    location="social_footer"
+                    flat
+                    linkClassName="pu-mono"
+                    renderItem={(item, { href, className, onNavigate }) => (
+                        <span className={className} style={{ opacity: 0.3, cursor: 'pointer' }}>
+                            <a href={href} onClick={onNavigate} style={{ color: 'inherit', textDecoration: 'none' }}>{item.title}</a>
+                        </span>
+                    )}
+                />
             </div>
         </div>
     </footer>

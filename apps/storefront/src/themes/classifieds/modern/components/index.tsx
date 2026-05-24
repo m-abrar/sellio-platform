@@ -1,5 +1,8 @@
 'use client';
 import React from 'react';
+import { MenuNav } from '@/components/menu/MenuNav';
+import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
+import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
 
 interface HeaderProps {
   onPostClick: () => void;
@@ -14,12 +17,23 @@ export const ModernHeader = ({ onPostClick, searchTerm, onSearchChange }: Header
     </a>
     
     <div style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
-      <nav className="cm-nav d-none d-md-flex">
-        <a href="#" className="cm-nav-link" onClick={(e) => { e.preventDefault(); alert("Browsing full network..."); }}>Browse</a>
-        <a href="#" className="cm-nav-link" onClick={(e) => { e.preventDefault(); alert("Opening modern inbox chats..."); }}>Messages</a>
-        <a href="#" className="cm-nav-link" onClick={(e) => { e.preventDefault(); alert("Loading user preferences..."); }}>Profile</a>
-      </nav>
-      <button className="cm-btn cm-btn-primary" onClick={onPostClick}>📸 Post Ad</button>
+      <MenuNav
+        location="main_header"
+        flat
+        className="cm-nav d-none d-md-flex"
+        linkClassName="cm-nav-link"
+        renderItem={defaultNavItemRenderer}
+      />
+      <MenuActionButtons
+        buttonClassName="cm-btn cm-btn-primary"
+        as="button"
+        onAction={onPostClick}
+        renderItem={(item, { className, onNavigate }) => (
+          <button type="button" className={className} onClick={() => { onPostClick(); onNavigate?.(); }}>
+            📸 {item.title}
+          </button>
+        )}
+      />
     </div>
   </header>
 );
@@ -98,12 +112,13 @@ export const ModernFooter = () => (
       <a href="#" className="cm-logo" onClick={(e) => e.preventDefault()}>
         Classifieds<span>.</span>
       </a>
-      <div className="cm-footer-links">
-        <a href="#" className="cm-footer-link" onClick={(e) => e.preventDefault()}>Terms & Rules</a>
-        <a href="#" className="cm-footer-link" onClick={(e) => e.preventDefault()}>Privacy Center</a>
-        <a href="#" className="cm-footer-link" onClick={(e) => e.preventDefault()}>Safety Advice</a>
-        <a href="#" className="cm-footer-link" onClick={(e) => e.preventDefault()}>Contact Support</a>
-      </div>
+      <MenuNav
+        location="footer_bottom_bar"
+        flat
+        className="cm-footer-links"
+        linkClassName="cm-footer-link"
+        renderItem={defaultNavItemRenderer}
+      />
       <div style={{ color: 'var(--cm-text-muted)', fontWeight: 600, fontSize: '0.8rem' }}>
         &copy; 2026 Modern ClassiGroup. All rights reserved. Envato Elite Standard.
       </div>

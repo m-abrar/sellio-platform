@@ -1,5 +1,8 @@
+'use client';
 
 import React from 'react';
+import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
+import { MenuNav } from '@/components/menu/MenuNav';
 
 export const Footer = () => (
     <footer className="pc-footer">
@@ -17,31 +20,33 @@ export const Footer = () => (
                 </div>
             </div>
 
-            <div>
-                <h4 className="pc-caps" style={{ color: 'var(--pc-beige)', marginBottom: '2.5rem', opacity: 0.8 }}>Collections</h4>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-                    <a href="#" className="pc-footer-link">Manorial Estates</a>
-                    <a href="#" className="pc-footer-link">Historic Chateaus</a>
-                    <a href="#" className="pc-footer-link">Urban Heritage</a>
-                    <a href="#" className="pc-footer-link">Legacy Registry</a>
-                </div>
-            </div>
+            <FooterMenuColumn
+                location="footer_column_1"
+                renderTitle={(title) => (
+                    <h4 className="pc-caps" style={{ color: 'var(--pc-beige)', marginBottom: '2.5rem', opacity: 0.8 }}>{title}</h4>
+                )}
+                listClassName=""
+                linkClassName="pc-footer-link"
+            />
+
+            <FooterMenuColumn
+                location="footer_column_2"
+                renderTitle={(title) => (
+                    <h4 className="pc-caps" style={{ color: 'var(--pc-beige)', marginBottom: '2.5rem', opacity: 0.8 }}>{title}</h4>
+                )}
+                listClassName=""
+                linkClassName="pc-footer-link"
+            />
 
             <div>
-                <h4 className="pc-caps" style={{ color: 'var(--pc-beige)', marginBottom: '2.5rem', opacity: 0.8 }}>Heritage Spotlight</h4>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-                    <div style={{ width: '60px', height: '60px', background: 'rgba(255,255,255,0.1)', overflow: 'hidden', borderRadius: '50%' }}>
-                        <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?crop=entropy&cs=tinysrgb&fit=crop&h=80&w=80" alt="Agent" style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'grayscale(100%) brightness(1.2)' }} />
-                    </div>
-                    <div>
-                        <div style={{ fontWeight: 800, fontSize: '0.9rem', color: 'var(--pc-beige)', marginBottom: '0.25rem' }}>Julian St. Claire</div>
-                        <div style={{ fontSize: '0.75rem', opacity: 0.7, lineHeight: 1.4 }}>Heritage Specialist // <br/> Institutional Lead</div>
-                    </div>
-                </div>
-            </div>
-
-            <div>
-                <h4 className="pc-caps" style={{ color: 'var(--pc-beige)', marginBottom: '2.5rem', opacity: 0.85 }}>Registry Updates</h4>
+                <FooterMenuColumn
+                    location="footer_column_3"
+                    renderTitle={(title) => (
+                        <h4 className="pc-caps" style={{ color: 'var(--pc-beige)', marginBottom: '2.5rem', opacity: 0.85 }}>{title}</h4>
+                    )}
+                    listClassName=""
+                    linkClassName="pc-footer-link"
+                />
                 <p style={{ fontSize: '0.9rem', opacity: 0.8, marginBottom: '2rem', lineHeight: 1.6 }}>Subscribe to our global heritage distribution protocol.</p>
                 <div style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.1)' }} className="pc-footer-subscribe">
                     <input 
@@ -77,11 +82,16 @@ export const Footer = () => (
                             .pc-footer-links { flex-direction: row !important; gap: 4rem !important; }
                         }
                     ` }} />
-                    <div className="pc-footer-links" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', alignItems: 'center' }}>
-                        <span style={{ cursor: 'pointer' }}>PRIVACY</span>
-                        <span style={{ cursor: 'pointer' }}>TERMS</span>
-                        <span style={{ cursor: 'pointer' }}>PROVENANCE</span>
-                    </div>
+                    <MenuNav
+                        location="footer_bottom_bar"
+                        flat
+                        className="pc-footer-links"
+                        renderItem={(item, { href, className, onNavigate }) => (
+                            <span style={{ cursor: 'pointer' }}>
+                                <a href={href} className={className} onClick={onNavigate} style={{ color: 'inherit', textDecoration: 'none' }}>{item.title}</a>
+                            </span>
+                        )}
+                    />
                 </div>
             </div>
         </div>

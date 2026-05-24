@@ -1,5 +1,16 @@
 'use client';
 import React, { useState } from 'react';
+import { MenuNav } from '@/components/menu/MenuNav';
+import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
+import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
+import { hashAwareNavItemRenderer } from '@/components/menu/menu-renderers';
+
+const experimentModeStyle = {
+  fontSize: '0.65rem',
+  border: '1px solid var(--evc-lime)',
+  color: 'var(--evc-lime)',
+  cursor: 'pointer',
+} as const;
 
 export const CreativeHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -22,30 +33,52 @@ export const CreativeHeader = () => {
             <span className="evc-hamburger-bar"></span>
         </button>
 
-        <nav className={`evc-nav ${isOpen ? 'evc-nav-open' : ''}`}>
-            {['Protocols', 'Laboratory', 'Manifesto', 'Node_Auth'].map(link => (
-                <a 
-                    key={link} 
-                    href="#" 
-                    className="evc-nav-link" 
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setIsOpen(false);
-                      if (link === 'Protocols') document.getElementById('evc-protocols-section')?.scrollIntoView({ behavior: 'smooth' });
-                      if (link === 'Laboratory') document.getElementById('evc-lab-section')?.scrollIntoView({ behavior: 'smooth' });
-                    }}
-                >
-                  {link}
-                </a>
-            ))}
-            <div className="evc-label evc-mobile-btn" style={{ fontSize: '0.65rem', border: '1px solid var(--evc-lime)', padding: '1rem 2rem', color: 'var(--evc-lime)', textAlign: 'center', marginTop: '2rem', width: '100%', cursor: 'pointer' }} onClick={() => alert('Experiment mode active.')}>
-              EXPERIMENT_MODE: ACTIVE
-            </div>
-        </nav>
+        <MenuNav
+          location="main_header"
+          flat
+          className={`evc-nav ${isOpen ? 'evc-nav-open' : ''}`}
+          linkClassName="evc-nav-link"
+          onNavigate={() => setIsOpen(false)}
+          renderItem={hashAwareNavItemRenderer}
+        />
 
-        <div className="evc-label evc-desktop-btn" style={{ fontSize: '0.65rem', border: '1px solid var(--evc-lime)', padding: '0.5rem 1.5rem', color: 'var(--evc-lime)', cursor: 'pointer' }} onClick={() => alert('Experiment mode active.')} id="evc-btn-experiment-status">
-          EXPERIMENT_MODE: ACTIVE
-        </div>
+        <MenuActionButtons
+          location="action_buttons"
+          className="evc-label evc-mobile-btn"
+          as="button"
+          onNavigate={() => setIsOpen(false)}
+          renderItem={(item, { className, onNavigate }) => (
+            <div
+              className={className}
+              style={{ ...experimentModeStyle, padding: '1rem 2rem', textAlign: 'center', marginTop: '2rem', width: '100%' }}
+              onClick={() => {
+                alert('Experiment mode active.');
+                onNavigate?.();
+              }}
+            >
+              {item.title.toUpperCase()}: ACTIVE
+            </div>
+          )}
+        />
+
+        <MenuActionButtons
+          location="action_buttons"
+          className="evc-label evc-desktop-btn"
+          as="button"
+          renderItem={(item, { className, onNavigate }) => (
+            <div
+              className={className}
+              style={{ ...experimentModeStyle, padding: '0.5rem 1.5rem' }}
+              onClick={() => {
+                alert('Experiment mode active.');
+                onNavigate?.();
+              }}
+              id="evc-btn-experiment-status"
+            >
+              {item.title.toUpperCase()}: ACTIVE
+            </div>
+          )}
+        />
       </div>
     </header>
   );
@@ -80,24 +113,44 @@ export const VibrantFooter = () => (
                     The world's most vibrant distribution node for experimental event modules. Synchronizing creative pulses with global community nodes.
                 </p>
             </div>
-            {['PROTOCOLS', 'LABORATORY', 'COMMUNITY'].map(col => (
-                <div key={col}>
-                    <div className="evc-label" style={{ marginBottom: '3.5rem' }}>{col}</div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }} className="evc-footer-link-group">
-                        {['Hackathons', 'Synthetic Art', 'Bio-Digital', 'Auth'].map(link => (
-                            <span key={link} style={{ fontSize: '1rem', color: 'var(--evc-grey)', cursor: 'pointer' }} className="evc-footer-link" onClick={() => alert(`Navigating: ${link}`)}>{link}</span>
-                        ))}
-                    </div>
-                </div>
-            ))}
+            <FooterMenuColumn
+              location="footer_column_1"
+              renderTitle={(title) => (
+                <div className="evc-label" style={{ marginBottom: '3.5rem' }}>{title}</div>
+              )}
+              listClassName="evc-footer-link-group"
+              linkClassName="evc-footer-link"
+            />
+            <FooterMenuColumn
+              location="footer_column_2"
+              renderTitle={(title) => (
+                <div className="evc-label" style={{ marginBottom: '3.5rem' }}>{title}</div>
+              )}
+              listClassName="evc-footer-link-group"
+              linkClassName="evc-footer-link"
+            />
+            <FooterMenuColumn
+              location="footer_column_3"
+              renderTitle={(title) => (
+                <div className="evc-label" style={{ marginBottom: '3.5rem' }}>{title}</div>
+              )}
+              listClassName="evc-footer-link-group"
+              linkClassName="evc-footer-link"
+            />
         </div>
         <div className="evc-footer-bottom">
             <div className="evc-label" style={{ opacity: 0.2, fontSize: '0.65rem' }}>© 2026 SELLIO_CREATIVE_NODE // PULSE_STABLE</div>
-            <div style={{ display: 'flex', gap: '5rem' }} className="evc-footer-socials">
-                {['INSTAGRAM', 'LINKEDIN', 'X_CREATIVE'].map(social => (
-                    <span key={social} className="evc-label" style={{ opacity: 0.2, fontSize: '0.65rem', cursor: 'pointer' }}>{social}</span>
-                ))}
-            </div>
+            <MenuNav
+              location="social_footer"
+              flat
+              className="evc-footer-socials"
+              linkClassName="evc-label"
+              renderItem={(item, { href, className, onNavigate }) => (
+                <span className={className} style={{ opacity: 0.2, fontSize: '0.65rem', cursor: 'pointer' }}>
+                  <a href={href} onClick={onNavigate} style={{ color: 'inherit', textDecoration: 'none' }}>{item.title}</a>
+                </span>
+              )}
+            />
         </div>
     </footer>
 );

@@ -1,5 +1,16 @@
 'use client';
 import React, { useState } from 'react';
+import { MenuNav } from '@/components/menu/MenuNav';
+import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
+import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
+import { hashAwareNavItemRenderer } from '@/components/menu/menu-renderers';
+
+const luxuryActionIcon = (title: string) => {
+    if (title === 'Search') return '🔍';
+    if (title === 'Account') return '👤';
+    if (title === 'Bag') return '👜';
+    return title;
+};
 
 export const LuxuryHeader = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -18,23 +29,36 @@ export const LuxuryHeader = () => {
                 <span className="ecl-hamburger-bar"></span>
             </button>
 
-            <nav className={`ecl-nav ${isOpen ? 'ecl-nav-open' : ''}`}>
-                <a href="#collections" className="ecl-nav-link" onClick={() => setIsOpen(false)}>Collections</a>
-                <a href="#watches" className="ecl-nav-link" onClick={() => setIsOpen(false)}>Timepieces</a>
-                <a href="#jewelry" className="ecl-nav-link" onClick={() => setIsOpen(false)}>Jewelry</a>
-                <a href="#heritage" className="ecl-nav-link" onClick={() => setIsOpen(false)}>Heritage</a>
-                <div className="ecl-icon-group ecl-mobile-icons" style={{ marginTop: '2rem' }}>
-                    <span style={{ cursor: 'pointer' }}>🔍</span>
-                    <span style={{ cursor: 'pointer' }}>👤</span>
-                    <span style={{ cursor: 'pointer' }}>👜</span>
+            <div className={`ecl-nav ${isOpen ? 'ecl-nav-open' : ''}`}>
+                <MenuNav
+                    location="main_header"
+                    flat
+                    style={{ display: 'contents' }}
+                    linkClassName="ecl-nav-link"
+                    onNavigate={() => setIsOpen(false)}
+                    renderItem={hashAwareNavItemRenderer}
+                />
+                <div style={{ marginTop: '2rem' }}>
+                    <MenuActionButtons
+                        className="ecl-icon-group ecl-mobile-icons"
+                        onNavigate={() => setIsOpen(false)}
+                        renderItem={(item, { href, onNavigate }) => (
+                            <a href={href} style={{ cursor: 'pointer' }} onClick={onNavigate}>
+                                {luxuryActionIcon(item.title)}
+                            </a>
+                        )}
+                    />
                 </div>
-            </nav>
-
-            <div className="ecl-icon-group ecl-desktop-icons">
-                <span style={{ cursor: 'pointer' }}>🔍</span>
-                <span style={{ cursor: 'pointer' }}>👤</span>
-                <span style={{ cursor: 'pointer' }}>👜</span>
             </div>
+
+            <MenuActionButtons
+                className="ecl-icon-group ecl-desktop-icons"
+                renderItem={(item, { href, onNavigate }) => (
+                    <a href={href} style={{ cursor: 'pointer' }} onClick={onNavigate}>
+                        {luxuryActionIcon(item.title)}
+                    </a>
+                )}
+            />
         </header>
     );
 };
@@ -53,15 +77,13 @@ export const LuxuryProduct = ({ title, price, image }: any) => (
 export const LuxuryFooter = () => (
     <footer className="ecl-footer">
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '4rem', marginBottom: '4rem', textAlign: 'center' }}>
-            <div>
-                <h4 style={{ fontFamily: 'var(--ecl-font-serif)', fontSize: '1.5rem', marginBottom: '1.5rem' }}>Client Services</h4>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                    <a href="#" style={{ color: 'var(--ecl-text-muted)', textDecoration: 'none', fontSize: '0.9rem', letterSpacing: '1px' }}>Contact Us</a>
-                    <a href="#" style={{ color: 'var(--ecl-text-muted)', textDecoration: 'none', fontSize: '0.9rem', letterSpacing: '1px' }}>Track Order</a>
-                    <a href="#" style={{ color: 'var(--ecl-text-muted)', textDecoration: 'none', fontSize: '0.9rem', letterSpacing: '1px' }}>Returns & Exchanges</a>
-                    <a href="#" style={{ color: 'var(--ecl-text-muted)', textDecoration: 'none', fontSize: '0.9rem', letterSpacing: '1px' }}>Care Guidelines</a>
-                </div>
-            </div>
+            <FooterMenuColumn
+                location="footer_column_1"
+                renderTitle={(title) => (
+                    <h4 style={{ fontFamily: 'var(--ecl-font-serif)', fontSize: '1.5rem', marginBottom: '1.5rem' }}>{title}</h4>
+                )}
+                linkClassName=""
+            />
             <div>
                 <h2 className="ecl-logo" style={{ color: 'var(--ecl-bg-dark)', marginBottom: '1.5rem', display: 'block' }}>AURELIA</h2>
                 <p style={{ color: 'var(--ecl-text-muted)', fontSize: '0.9rem', lineHeight: 1.8, marginBottom: '2rem' }}>Subscribe to receive updates on exclusive collections, private events, and our latest creations.</p>
@@ -70,15 +92,12 @@ export const LuxuryFooter = () => (
                     <button style={{ background: 'transparent', border: 'none', color: 'var(--ecl-text-dark)', cursor: 'pointer', textTransform: 'uppercase', letterSpacing: '1px', fontSize: '0.8rem' }}>Subscribe</button>
                 </div>
             </div>
-            <div>
-                <h4 style={{ fontFamily: 'var(--ecl-font-serif)', fontSize: '1.5rem', marginBottom: '1.5rem' }}>The Maison</h4>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                    <a href="#" style={{ color: 'var(--ecl-text-muted)', textDecoration: 'none', fontSize: '0.9rem', letterSpacing: '1px' }}>La Maison</a>
-                    <a href="#" style={{ color: 'var(--ecl-text-muted)', textDecoration: 'none', fontSize: '0.9rem', letterSpacing: '1px' }}>Careers</a>
-                    <a href="#" style={{ color: 'var(--ecl-text-muted)', textDecoration: 'none', fontSize: '0.9rem', letterSpacing: '1px' }}>Sustainability</a>
-                    <a href="#" style={{ color: 'var(--ecl-text-muted)', textDecoration: 'none', fontSize: '0.9rem', letterSpacing: '1px' }}>Boutiques</a>
-                </div>
-            </div>
+            <FooterMenuColumn
+                location="footer_column_2"
+                renderTitle={(title) => (
+                    <h4 style={{ fontFamily: 'var(--ecl-font-serif)', fontSize: '1.5rem', marginBottom: '1.5rem' }}>{title}</h4>
+                )}
+            />
         </div>
         <div style={{ textAlign: 'center', color: 'var(--ecl-text-muted)', fontSize: '0.8rem', letterSpacing: '1px', textTransform: 'uppercase' }}>
             &copy; 2026 Aurelia Maison. All Rights Reserved.

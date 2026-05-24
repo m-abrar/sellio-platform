@@ -1,5 +1,9 @@
 'use client';
 import React, { useState } from 'react';
+import { MenuNav } from '@/components/menu/MenuNav';
+import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
+import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
+import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
 
 export const ScaleHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -22,17 +26,30 @@ export const ScaleHeader = () => {
       </button>
 
       <nav className={`usp-nav ${isOpen ? 'usp-nav-open' : ''}`}>
-          {['Logic Layers', 'Efficiency', 'Precision Spec', 'Verified Nodes'].map(link => (
-              <a key={link} href="#" className="usp-nav-link" onClick={() => setIsOpen(false)}>{link}</a>
-          ))}
-          <button className="usp-btn-primary usp-mobile-btn" style={{ padding: '1rem 3rem', fontSize: '0.8rem', marginTop: '2rem', width: '100%', borderRadius: '6px' }} onClick={() => alert('Scale node sync active.')}>
-            INITIALIZE NODE
-          </button>
+          <MenuNav
+            location="main_header"
+            flat
+            linkClassName="usp-nav-link"
+            onNavigate={() => setIsOpen(false)}
+            renderItem={defaultNavItemRenderer}
+          />
+          <MenuActionButtons
+            as="button"
+            buttonClassName="usp-btn-primary usp-mobile-btn"
+            onNavigate={() => setIsOpen(false)}
+            renderItem={(item, { className, onNavigate }) => (
+              <button type="button" className={className} style={{ padding: '1rem 3rem', fontSize: '0.8rem', marginTop: '2rem', width: '100%', borderRadius: '6px' }} onClick={onNavigate}>{item.title}</button>
+            )}
+          />
       </nav>
 
-      <button className="usp-btn-primary usp-desktop-btn" style={{ padding: '0.8rem 2rem', fontSize: '0.75rem', borderRadius: '6px' }} onClick={() => alert('Scale node sync active.')} id="usp-btn-header-access">
-        INITIALIZE NODE
-      </button>
+      <MenuActionButtons
+        as="button"
+        buttonClassName="usp-btn-primary usp-desktop-btn"
+        renderItem={(item, { className, onNavigate }) => (
+          <button type="button" className={className} style={{ padding: '0.8rem 2rem', fontSize: '0.75rem', borderRadius: '6px' }} onClick={onNavigate} id="usp-btn-header-access">{item.title}</button>
+        )}
+      />
     </header>
   );
 };
@@ -89,23 +106,38 @@ export const StandardFooter = () => (
                     The advanced heavyweight standard distribution node. Engineered for real-time professional multi-category operations.
                 </p>
             </div>
-            {['RESOURCES', 'PRECISION', 'COMPANY'].map(col => (
-                <div key={col}>
-                    <div className="usp-mono" style={{ color: 'var(--usp-navy)', marginBottom: '3rem', fontWeight: 700 }}>{col}</div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }} className="usp-footer-link-group">
-                        {['Nodal Registry', 'Capacity Hub', 'System Spec', 'Stable Sync'].map(link => (
-                            <span key={link} className="usp-footer-link" onClick={() => alert(`Navigating: ${link}`)}>{link}</span>
-                        ))}
-                    </div>
-                </div>
-            ))}
+            <FooterMenuColumn
+                location="footer_column_1"
+                renderTitle={(title) => <div className="usp-mono" style={{ color: 'var(--usp-navy)', marginBottom: '3rem', fontWeight: 700 }}>{title}</div>}
+                listClassName="usp-footer-link-group"
+                linkClassName="usp-footer-link"
+            />
+            <FooterMenuColumn
+                location="footer_column_2"
+                renderTitle={(title) => <div className="usp-mono" style={{ color: 'var(--usp-navy)', marginBottom: '3rem', fontWeight: 700 }}>{title}</div>}
+                listClassName="usp-footer-link-group"
+                linkClassName="usp-footer-link"
+            />
+            <FooterMenuColumn
+                location="footer_column_3"
+                renderTitle={(title) => <div className="usp-mono" style={{ color: 'var(--usp-navy)', marginBottom: '3rem', fontWeight: 700 }}>{title}</div>}
+                listClassName="usp-footer-link-group"
+                linkClassName="usp-footer-link"
+            />
         </div>
         <div className="usp-footer-bottom">
             <div className="usp-mono" style={{ opacity: 0.4, fontSize: '0.65rem' }}>© 2026 SELLIO_SCALEPROTOCOL_OS // STANDARDS_ACTIVE</div>
             <div className="usp-footer-socials">
-                {['INSTAGRAM', 'LINKEDIN', 'X_OS'].map(social => (
-                    <span key={social} className="usp-mono" style={{ opacity: 0.4, fontSize: '0.65rem', cursor: 'pointer' }}>{social}</span>
-                ))}
+                <MenuNav
+                    location="social_footer"
+                    flat
+                    linkClassName="usp-mono"
+                    renderItem={(item, { href, className, onNavigate }) => (
+                        <span className={className} style={{ opacity: 0.4, fontSize: '0.65rem', cursor: 'pointer' }}>
+                            <a href={href} onClick={onNavigate} style={{ color: 'inherit', textDecoration: 'none' }}>{item.title}</a>
+                        </span>
+                    )}
+                />
             </div>
         </div>
     </footer>

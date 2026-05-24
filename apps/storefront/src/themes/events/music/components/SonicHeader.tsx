@@ -1,5 +1,8 @@
 'use client';
 import React, { useState } from 'react';
+import { MenuNav } from '@/components/menu/MenuNav';
+import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
+import { hashAwareNavItemRenderer } from '@/components/menu/menu-renderers';
 
 export const SonicHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -8,7 +11,6 @@ export const SonicHeader = () => {
     <header className="sonic-header">
       <div className="sonic-logo">PULSE</div>
       
-      {/* Mobile Hamburger Trigger */}
       <button 
         className={`sonic-hamburger ${isOpen ? 'sonic-hamburger-open' : ''}`} 
         onClick={() => setIsOpen(!isOpen)}
@@ -20,47 +22,46 @@ export const SonicHeader = () => {
         <span className="sonic-hamburger-bar"></span>
       </button>
 
-      {/* Nav Menu */}
-      <nav className={`sonic-nav ${isOpen ? 'sonic-nav-open' : ''}`}>
-        {['Home', 'Lineup', 'Tickets', 'Gallery', 'Contact'].map(link => (
-          <a 
-            key={link} 
-            href="#" 
-            className="sonic-nav-link"
-            onClick={(e) => {
-              e.preventDefault();
-              setIsOpen(false);
-              if (link === 'Lineup') {
-                document.getElementById('sonic-lineup-section')?.scrollIntoView({ behavior: 'smooth' });
-              } else if (link === 'Tickets') {
-                document.getElementById('sonic-cta-section')?.scrollIntoView({ behavior: 'smooth' });
-              } else if (link === 'Gallery') {
-                document.getElementById('sonic-gallery-section')?.scrollIntoView({ behavior: 'smooth' });
-              }
-            }}
-          >
-            {link}
-          </a>
-        ))}
-        <button 
-          className="sonic-btn-primary sonic-mobile-btn" 
-          onClick={() => alert('Ticket registration protocol activated.')}
-        >
-          Buy Tickets
-        </button>
-      </nav>
+      <MenuNav
+        location="main_header"
+        flat
+        className={`sonic-nav ${isOpen ? 'sonic-nav-open' : ''}`}
+        linkClassName="sonic-nav-link"
+        onNavigate={() => setIsOpen(false)}
+        renderItem={hashAwareNavItemRenderer}
+      />
 
-      {/* Desktop Header Actions */}
+      <MenuActionButtons
+        location="action_buttons"
+        className="sonic-mobile-btn"
+        as="button"
+        buttonClassName="sonic-btn-primary sonic-mobile-btn"
+        onNavigate={() => setIsOpen(false)}
+        onAction={() => alert('Ticket registration protocol activated.')}
+      />
+
       <div className="sonic-desktop-btn-container">
-        <button 
-          className="sonic-btn-primary sonic-desktop-btn" 
-          onClick={() => alert('Ticket registration protocol activated.')}
-          id="sonic-btn-vibe-status"
-        >
-          Buy Tickets
-        </button>
+        <MenuActionButtons
+          location="action_buttons"
+          className="sonic-desktop-btn-container"
+          as="button"
+          buttonClassName="sonic-btn-primary sonic-desktop-btn"
+          onAction={() => alert('Ticket registration protocol activated.')}
+          renderItem={(item, { className, onNavigate }) => (
+            <button
+              type="button"
+              className={className}
+              id="sonic-btn-vibe-status"
+              onClick={() => {
+                alert('Ticket registration protocol activated.');
+                onNavigate?.();
+              }}
+            >
+              {item.title}
+            </button>
+          )}
+        />
       </div>
     </header>
   );
 };
-

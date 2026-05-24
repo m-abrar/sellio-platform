@@ -1,5 +1,9 @@
 'use client';
 import React, { useState } from 'react';
+import { MenuNav } from '@/components/menu/MenuNav';
+import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
+import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
+import { hashAwareNavItemRenderer } from '@/components/menu/menu-renderers';
 
 export const CrtvHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,40 +24,28 @@ export const CrtvHeader = () => {
         <span className="crtv-hamburger-bar"></span>
       </button>
 
-      {/* Navigation Links */}
-      <nav className={`crtv-nav ${isOpen ? 'crtv-nav-open' : ''}`}>
-        {['Home', 'Categories', 'Portfolios', 'Pricing', 'Contact'].map(link => (
-          <a 
-            key={link} 
-            href={`#${link.toLowerCase()}`} 
-            className="crtv-nav-link"
-            onClick={(e) => {
-              e.preventDefault();
-              setIsOpen(false);
-              const targetId = link === 'Home' ? 'crtv-hero-section' : link.toLowerCase();
-              document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth' });
-            }}
-          >
-            {link}
-          </a>
-        ))}
-        <button 
-          className="crtv-btn crtv-btn-gradient crtv-mobile-btn" 
-          onClick={() => alert('Vibe-matching dynamic portal activated!')}
-        >
-          Hire a Creative
-        </button>
-      </nav>
+      <div className={`crtv-nav ${isOpen ? 'crtv-nav-open' : ''}`}>
+        <MenuNav
+          location="main_header"
+          flat
+          linkClassName="crtv-nav-link"
+          onNavigate={() => setIsOpen(false)}
+          renderItem={hashAwareNavItemRenderer}
+        />
+        <MenuActionButtons
+          linkClassName="crtv-btn crtv-btn-gradient crtv-mobile-btn"
+          as="button"
+          onAction={() => alert('Vibe-matching dynamic portal activated!')}
+          onNavigate={() => setIsOpen(false)}
+        />
+      </div>
 
-      {/* Desktop Actions */}
       <div className="crtv-desktop-btn-container">
-        <button 
-          className="crtv-btn crtv-btn-gradient crtv-desktop-btn" 
-          onClick={() => alert('Consultation portal activated.')}
-          id="crtv-btn-vibe-status"
-        >
-          Hire a Creative
-        </button>
+        <MenuActionButtons
+          linkClassName="crtv-btn crtv-btn-gradient crtv-desktop-btn"
+          as="button"
+          onAction={() => alert('Consultation portal activated.')}
+        />
       </div>
     </header>
   );
@@ -106,27 +98,24 @@ export const CrtvFooter = () => (
                 <a href="#" className="crtv-logo" style={{ color: 'white' }}>CRTV</a>
                 <p style={{ marginTop: '1rem', fontSize: '0.9rem', lineHeight: 1.6 }}>Connecting visionary clients with the world's finest creative talent.</p>
             </div>
-            <div>
-                <h5 style={{ color: 'white', marginBottom: '1.5rem', fontWeight: 800 }}>About Us</h5>
-                <a href="#" className="crtv-footer-link">Careers</a>
-                <a href="#" className="crtv-footer-link">Our Story</a>
-                <a href="#" className="crtv-footer-link">Press</a>
-                <a href="#" className="crtv-footer-link">Blog</a>
-            </div>
-            <div>
-                <h5 style={{ color: 'white', marginBottom: '1.5rem', fontWeight: 800 }}>Services</h5>
-                <a href="#" className="crtv-footer-link">Hire a Creative</a>
-                <a href="#" className="crtv-footer-link">Post a Project</a>
-                <a href="#" className="crtv-footer-link">Freelancer Sign Up</a>
-                <a href="#" className="crtv-footer-link">Affiliate Program</a>
-            </div>
-            <div>
-                <h5 style={{ color: 'white', marginBottom: '1.5rem', fontWeight: 800 }}>Support & Legal</h5>
-                <a href="#" className="crtv-footer-link">Help Center</a>
-                <a href="#" className="crtv-footer-link">Terms of Service</a>
-                <a href="#" className="crtv-footer-link">Privacy Policy</a>
-                <a href="#" className="crtv-footer-link">Cookie Policy</a>
-            </div>
+            <FooterMenuColumn
+                location="footer_column_1"
+                titleTag="h5"
+                titleStyle={{ color: 'white', marginBottom: '1.5rem', fontWeight: 800 }}
+                linkClassName="crtv-footer-link"
+            />
+            <FooterMenuColumn
+                location="footer_column_2"
+                titleTag="h5"
+                titleStyle={{ color: 'white', marginBottom: '1.5rem', fontWeight: 800 }}
+                linkClassName="crtv-footer-link"
+            />
+            <FooterMenuColumn
+                location="footer_column_3"
+                titleTag="h5"
+                titleStyle={{ color: 'white', marginBottom: '1.5rem', fontWeight: 800 }}
+                linkClassName="crtv-footer-link"
+            />
         </div>
         <div style={{ borderTop: '1px solid rgba(255,255,255,0.2)', paddingTop: '1.5rem', textAlign: 'center', fontSize: '0.85rem' }}>
             &copy; 2026 CRTV. All Rights Reserved.

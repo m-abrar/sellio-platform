@@ -1,6 +1,9 @@
 'use client';
 import React, { useState } from 'react';
 import { MenuNav } from '@/components/menu/MenuNav';
+import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
+import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
+import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
 
 export const OriginHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -28,18 +31,25 @@ export const OriginHeader = () => {
         className={`ud-nav ${isOpen ? 'ud-nav-open' : ''}`}
         linkClassName="ud-nav-link"
         onNavigate={() => setIsOpen(false)}
-        renderItem={(item, { href, className, onNavigate }) => (
-          <a href={href} className={className} onClick={onNavigate}>{item.title}</a>
+        renderItem={defaultNavItemRenderer}
+      />
+
+      <MenuActionButtons
+        as="button"
+        buttonClassName="ud-btn-primary ud-mobile-btn"
+        onNavigate={() => setIsOpen(false)}
+        renderItem={(item, { className, onNavigate }) => (
+          <button type="button" className={className} style={{ padding: '1rem 3rem', fontSize: '0.8rem', marginTop: '2rem', width: '100%' }} onClick={onNavigate}>{item.title}</button>
         )}
       />
 
-      <button className="ud-btn-primary ud-mobile-btn" style={{ padding: '1rem 3rem', fontSize: '0.8rem', marginTop: '2rem', width: '100%' }} onClick={() => alert('Core Origin distribution active.')}>
-        GET STARTED CORE
-      </button>
-
-      <button className="ud-btn-primary ud-desktop-btn" style={{ padding: '0.8rem 2rem', fontSize: '0.75rem', borderRadius: '8px' }} onClick={() => alert('Core Origin distribution active.')} id="ud-btn-header-access">
-        GET STARTED
-      </button>
+      <MenuActionButtons
+        as="button"
+        buttonClassName="ud-btn-primary ud-desktop-btn"
+        renderItem={(item, { className, onNavigate }) => (
+          <button type="button" className={className} style={{ padding: '0.8rem 2rem', fontSize: '0.75rem', borderRadius: '8px' }} onClick={onNavigate} id="ud-btn-header-access">{item.title}</button>
+        )}
+      />
     </header>
   );
 };
@@ -89,24 +99,38 @@ export const InstitutionalFooter = () => (
                     The high-fidelity core distribution platform for global commerce pipelines. Authority and provenance guaranteed.
                 </p>
             </div>
-            {['RESOURCES', 'PRODUCTS', 'COMPANY'].map(col => (
-                <div key={col}>
-                    <div className="ud-mono" style={{ color: 'white', marginBottom: '3rem' }}>{col}</div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }} className="ud-footer-link-group">
-                        {['Registry System', 'Features Node', 'Analytics Hub', 'Secure Protocol'].map(link => (
-                            <span key={link} className="ud-footer-link" onClick={() => alert(`Navigating core nodes: ${link}`)}>{link}</span>
-                        ))}
-                    </div>
-                </div>
-            ))}
+            <FooterMenuColumn
+                location="footer_column_1"
+                renderTitle={(title) => <div className="ud-mono" style={{ color: 'white', marginBottom: '3rem' }}>{title}</div>}
+                listClassName="ud-footer-link-group"
+                linkClassName="ud-footer-link"
+            />
+            <FooterMenuColumn
+                location="footer_column_2"
+                renderTitle={(title) => <div className="ud-mono" style={{ color: 'white', marginBottom: '3rem' }}>{title}</div>}
+                listClassName="ud-footer-link-group"
+                linkClassName="ud-footer-link"
+            />
+            <FooterMenuColumn
+                location="footer_column_3"
+                renderTitle={(title) => <div className="ud-mono" style={{ color: 'white', marginBottom: '3rem' }}>{title}</div>}
+                listClassName="ud-footer-link-group"
+                linkClassName="ud-footer-link"
+            />
         </div>
         <div className="ud-footer-bottom">
             <div className="ud-mono" style={{ opacity: 0.4, fontSize: '0.65rem' }}>© 2026 SELLIO_CORE_OS // HORIZON_SYNC_STABLE</div>
-            <div className="ud-footer-socials">
-                {['INSTAGRAM', 'LINKEDIN', 'X_OS'].map(social => (
-                    <span key={social} className="ud-mono" style={{ opacity: 0.4, fontSize: '0.65rem', cursor: 'pointer' }}>{social}</span>
-                ))}
-            </div>
+            <MenuNav
+                location="social_footer"
+                flat
+                className="ud-footer-socials"
+                linkClassName="ud-mono"
+                renderItem={(item, { href, className, onNavigate }) => (
+                    <span className={className} style={{ opacity: 0.4, fontSize: '0.65rem', cursor: 'pointer' }}>
+                        <a href={href} onClick={onNavigate} style={{ color: 'inherit', textDecoration: 'none' }}>{item.title}</a>
+                    </span>
+                )}
+            />
         </div>
     </footer>
 );

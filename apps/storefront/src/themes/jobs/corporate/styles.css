@@ -575,3 +575,14 @@
         grid-template-columns: 1fr;
     }
 }
+
+.jc-footer-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.jc-footer-link {
+    color: var(--jc-text-muted);
+    text-decoration: none;
+}

@@ -1,5 +1,8 @@
 'use client';
 import React, { useState } from 'react';
+import { MenuNav } from '@/components/menu/MenuNav';
+import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
+import { hashAwareNavItemRenderer } from '@/components/menu/menu-renderers';
 
 export const ModernHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -11,7 +14,6 @@ export const ModernHeader = () => {
           Nex<span className="jm-text-gradient">Role</span>
         </a>
 
-        {/* Mobile Hamburger Trigger */}
         <button 
           className={`jm-hamburger ${isOpen ? 'jm-hamburger-open' : ''}`}
           onClick={() => setIsOpen(!isOpen)}
@@ -23,38 +25,50 @@ export const ModernHeader = () => {
           <span className="jm-hamburger-bar"></span>
         </button>
 
-        {/* Navigation Links */}
-        <nav className={`jm-nav ${isOpen ? 'jm-nav-open' : ''}`}>
-          {[
-            { name: 'Discover', target: 'discover' },
-            { name: 'Top Companies', target: 'companies' },
-            { name: 'Salaries', target: 'salaries' },
-            { name: 'Career Paths', target: 'career' }
-          ].map(link => (
-            <a 
-              key={link.name} 
-              href={`#${link.target}`} 
-              className="jm-nav-link"
-              onClick={(e) => {
-                e.preventDefault();
-                setIsOpen(false);
-                const targetId = link.target;
-                document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth' });
-              }}
-            >
-              {link.name}
-            </a>
-          ))}
-          <div className="jm-mobile-actions">
-            <a href="#" className="jm-nav-link jm-mobile-action-link" style={{ fontWeight: 600 }}>Login</a>
-            <a href="#" className="jm-btn jm-btn-primary jm-mobile-action-btn">Post a Job</a>
-          </div>
-        </nav>
+        <MenuNav
+          location="main_header"
+          flat
+          className={`jm-nav ${isOpen ? 'jm-nav-open' : ''}`}
+          linkClassName="jm-nav-link"
+          onNavigate={() => setIsOpen(false)}
+          renderItem={hashAwareNavItemRenderer}
+        />
 
-        {/* Desktop Actions */}
+        <div className="jm-mobile-actions">
+          <MenuNav
+            location="utility_header"
+            flat
+            linkClassName="jm-nav-link jm-mobile-action-link"
+            onNavigate={() => setIsOpen(false)}
+            renderItem={(item, { href, className, onNavigate }) => (
+              <a href={href} className={className} onClick={onNavigate} style={{ fontWeight: 600 }}>{item.title}</a>
+            )}
+          />
+          <MenuActionButtons
+            location="action_buttons"
+            linkClassName="jm-btn jm-btn-primary jm-mobile-action-btn"
+            onNavigate={() => setIsOpen(false)}
+          />
+        </div>
+
         <div className="jm-desktop-actions">
-          <a href="#" className="jm-nav-link" style={{ alignSelf: 'center', fontWeight: 600 }}>Login</a>
-          <a href="#" className="jm-btn jm-btn-primary" id="jm-btn-vibe-status">Post a Job</a>
+          <MenuNav
+            location="utility_header"
+            flat
+            linkClassName="jm-nav-link"
+            renderItem={(item, { href, className, onNavigate }) => (
+              <a href={href} className={className} onClick={onNavigate} style={{ alignSelf: 'center', fontWeight: 600 }}>{item.title}</a>
+            )}
+          />
+          <MenuActionButtons
+            location="action_buttons"
+            linkClassName="jm-btn jm-btn-primary"
+            renderItem={(item, { href, className, onNavigate }) => (
+              <a href={href} className={className} id="jm-btn-vibe-status" onClick={onNavigate} style={{ alignSelf: 'center' }}>
+                {item.title}
+              </a>
+            )}
+          />
         </div>
       </header>
     </div>
@@ -95,12 +109,12 @@ export const ModernFooter = () => (
             <a href="#" className="jm-logo">
                 Nex<span className="jm-text-gradient">Role</span>
             </a>
-            <div style={{ display: 'flex', gap: '2rem' }}>
-                <a href="#" className="jm-nav-link">About</a>
-                <a href="#" className="jm-nav-link">Terms</a>
-                <a href="#" className="jm-nav-link">Privacy</a>
-                <a href="#" className="jm-nav-link">Contact</a>
-            </div>
+            <MenuNav
+              location="footer_bottom_bar"
+              flat
+              className="jm-footer-bottom-links"
+              linkClassName="jm-nav-link"
+            />
             <div style={{ color: 'var(--jm-text-muted)', fontSize: '0.9rem' }}>
                 &copy; 2026 NexRole Inc.
             </div>

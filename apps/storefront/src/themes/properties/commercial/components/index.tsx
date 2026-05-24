@@ -1,14 +1,10 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { scrollToSection } from '../utils';
-
-const navItems = [
-  { label: 'Registry', target: 'pc-inventory-section' },
-  { label: 'Yield Sync', target: 'pc-intelligence-section' },
-  { label: 'Institutional', target: 'pc-cta-section' },
-  { label: 'Master Auth', target: 'pc-cta-section' },
-];
+import { MenuNav } from '@/components/menu/MenuNav';
+import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
+import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
+import { hashAwareNavItemRenderer } from '@/components/menu/menu-renderers';
 
 export const CommercialHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,12 +15,6 @@ export const CommercialHeader = () => {
       document.body.style.overflow = '';
     };
   }, [isOpen]);
-
-  const handleNavClick = (event: React.MouseEvent, target: string) => {
-    event.preventDefault();
-    setIsOpen(false);
-    scrollToSection(target);
-  };
 
   return (
     <header className="pc-header">
@@ -53,34 +43,27 @@ export const CommercialHeader = () => {
         <span className="pc-hamburger-bar"></span>
       </button>
 
-      <nav className={`pc-nav ${isOpen ? 'pc-nav-open' : ''}`} aria-label="Primary">
-        {navItems.map((item) => (
-          <a
-            key={item.label}
-            href={`#${item.target}`}
-            className="pc-nav-link"
-            onClick={(event) => handleNavClick(event, item.target)}
-          >
-            {item.label}
-          </a>
-        ))}
+      <div role="navigation" className={`pc-nav ${isOpen ? 'pc-nav-open' : ''}`} aria-label="Primary">
+        <MenuNav
+          location="main_header"
+          flat
+          className=""
+          linkClassName="pc-nav-link"
+          onNavigate={() => setIsOpen(false)}
+          renderItem={hashAwareNavItemRenderer}
+        />
 
-        <button
-          type="button"
-          className="pc-audit-badge pc-mobile-auth-btn"
-          onClick={() => handleNavClick({ preventDefault: () => {} } as React.MouseEvent, 'pc-inventory-section')}
-        >
-          AUDIT_STABLE
-        </button>
-      </nav>
+        <MenuActionButtons
+          linkClassName="pc-audit-badge pc-mobile-auth-btn"
+          onNavigate={() => setIsOpen(false)}
+          renderItem={(item, props) => hashAwareNavItemRenderer(item, { ...props, isActive: false, className: 'pc-audit-badge pc-mobile-auth-btn' })}
+        />
+      </div>
 
-      <button
-        type="button"
-        className="pc-audit-badge pc-desktop-auth-btn"
-        onClick={() => scrollToSection('pc-inventory-section')}
-      >
-        AUDIT_STABLE
-      </button>
+      <MenuActionButtons
+        linkClassName="pc-audit-badge pc-desktop-auth-btn"
+        renderItem={(item, props) => hashAwareNavItemRenderer(item, { ...props, isActive: false, className: 'pc-audit-badge pc-desktop-auth-btn' })}
+      />
     </header>
   );
 };
@@ -137,24 +120,38 @@ export const InstitutionalFooter = () => (
           The global authoritative registry for institutional-grade commercial assets. Synchronizing yield and structural metadata.
         </p>
       </div>
-      {['ACQUISITION', 'AUDIT', 'GOVERNANCE'].map((col) => (
-        <div key={col}>
-          <div className="pc-mono pc-footer-heading">{col}</div>
-          <div className="pc-footer-links">
-            {['Registry', 'Verification', 'Support', 'Auth'].map((link) => (
-              <span key={link} className="pc-footer-link">{link}</span>
-            ))}
-          </div>
-        </div>
-      ))}
+      <FooterMenuColumn
+        location="footer_column_1"
+        renderTitle={(title) => <div className="pc-mono pc-footer-heading">{title}</div>}
+        listClassName="pc-footer-links"
+        linkClassName="pc-footer-link"
+      />
+      <FooterMenuColumn
+        location="footer_column_2"
+        renderTitle={(title) => <div className="pc-mono pc-footer-heading">{title}</div>}
+        listClassName="pc-footer-links"
+        linkClassName="pc-footer-link"
+      />
+      <FooterMenuColumn
+        location="footer_column_3"
+        renderTitle={(title) => <div className="pc-mono pc-footer-heading">{title}</div>}
+        listClassName="pc-footer-links"
+        linkClassName="pc-footer-link"
+      />
     </div>
     <div className="pc-footer-bottom">
       <div className="pc-mono pc-footer-copyright">© 2026 SELLIO_COMMERCIAL_GRP // NODE_STABLE</div>
-      <div className="pc-footer-social">
-        {['INSTAGRAM', 'LINKEDIN', 'X_OS'].map((social) => (
-          <span key={social} className="pc-mono pc-footer-social-link">{social}</span>
-        ))}
-      </div>
+      <MenuNav
+        location="social_footer"
+        flat
+        className="pc-footer-social"
+        linkClassName="pc-mono pc-footer-social-link"
+        renderItem={(item, { href, className, onNavigate }) => (
+          <span className={className}>
+            <a href={href} onClick={onNavigate} style={{ color: 'inherit', textDecoration: 'none' }}>{item.title}</a>
+          </span>
+        )}
+      />
     </div>
   </footer>
 );

@@ -2,6 +2,10 @@
 import React, { useState } from 'react';
 import { EventListing } from '@sellio/types';
 import Link from 'next/link';
+import { MenuNav } from '@/components/menu/MenuNav';
+import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
+import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
+import { hashAwareNavItemRenderer } from '@/components/menu/menu-renderers';
 
 export const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -26,46 +30,41 @@ export const Header = () => {
             <span className="ecc-hamburger-bar"></span>
         </button>
 
-        <nav className={`ecc-nav ${isOpen ? 'ecc-nav-open' : ''}`}>
-          {['SPEAKERS', 'SCHEDULE', 'EXPLORE'].map(item => {
-            if (item === 'EXPLORE') {
-              return (
-                <Link 
-                  key={item} 
-                  href="/preview/events_corporate/explore" 
-                  className="ecc-nav-link"
-                  onClick={() => setIsOpen(false)}
-                >
-                  {item}
-                </Link>
-              );
-            }
-            return (
-              <span 
-                  key={item} 
-                  className="ecc-nav-link" 
-                  onClick={() => {
-                    setIsOpen(false);
-                    if (item === 'SPEAKERS') document.getElementById('ecc-speakers-section')?.scrollIntoView({ behavior: 'smooth' });
-                    if (item === 'SCHEDULE') document.getElementById('ecc-agenda-section')?.scrollIntoView({ behavior: 'smooth' });
-                  }}
-              >
-                {item}
-              </span>
-            );
-          })}
-          <Link href="/preview/events_corporate/explore" style={{ width: '100%', textDecoration: 'none' }}>
-            <button className="ecc-btn-primary ecc-mobile-btn" style={{ width: '100%', borderRadius: '100px', padding: '1rem 3rem', marginTop: '2rem' }}>
-              REGISTER NOW
-            </button>
-          </Link>
-        </nav>
+        <MenuNav
+          location="main_header"
+          flat
+          className={`ecc-nav ${isOpen ? 'ecc-nav-open' : ''}`}
+          linkClassName="ecc-nav-link"
+          onNavigate={() => setIsOpen(false)}
+          renderItem={hashAwareNavItemRenderer}
+        />
 
-        <Link href="/preview/events_corporate/explore" style={{ textDecoration: 'none' }} className="ecc-desktop-btn">
-          <button className="ecc-btn-primary" id="ecc-btn-header-register">
-            REGISTER NOW
-          </button>
-        </Link>
+        <MenuActionButtons
+          location="action_buttons"
+          className="ecc-mobile-btn"
+          linkClassName="ecc-btn-primary ecc-mobile-btn"
+          onNavigate={() => setIsOpen(false)}
+          renderItem={(item, { href, className, onNavigate }) => (
+            <Link href={href} style={{ width: '100%', textDecoration: 'none' }} onClick={onNavigate}>
+              <button className={className} style={{ width: '100%', borderRadius: '100px', padding: '1rem 3rem', marginTop: '2rem' }}>
+                {item.title}
+              </button>
+            </Link>
+          )}
+        />
+
+        <MenuActionButtons
+          location="action_buttons"
+          className="ecc-desktop-btn"
+          linkClassName="ecc-btn-primary"
+          renderItem={(item, { href, className, onNavigate }) => (
+            <Link href={href} style={{ textDecoration: 'none' }} className="ecc-desktop-btn" onClick={onNavigate}>
+              <button className={className} id="ecc-btn-header-register">
+                {item.title}
+              </button>
+            </Link>
+          )}
+        />
       </div>
     </header>
   );
@@ -81,20 +80,14 @@ export const Footer = () => (
         </p>
       </div>
       
-      <div>
-          <div className="ecc-mono" style={{ marginBottom: '2rem', color: 'var(--ecc-text-main)' }}>EXPLORE</div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }} className="ecc-footer-link-group">
-            <Link href="/preview/events_corporate/explore" style={{ color: 'var(--ecc-text-muted)', fontSize: '0.95rem', cursor: 'pointer', textDecoration: 'none' }} className="ecc-footer-link">
-              Search Events
-            </Link>
-            <span style={{ color: 'var(--ecc-text-muted)', fontSize: '0.95rem', cursor: 'pointer' }} className="ecc-footer-link" onClick={() => document.getElementById('ecc-speakers-section')?.scrollIntoView({ behavior: 'smooth' })}>
-              Speakers
-            </span>
-            <span style={{ color: 'var(--ecc-text-muted)', fontSize: '0.95rem', cursor: 'pointer' }} className="ecc-footer-link" onClick={() => document.getElementById('ecc-agenda-section')?.scrollIntoView({ behavior: 'smooth' })}>
-              Curated Agenda
-            </span>
-          </div>
-      </div>
+      <FooterMenuColumn
+        location="footer_column_1"
+        renderTitle={(title) => (
+          <div className="ecc-mono" style={{ marginBottom: '2rem', color: 'var(--ecc-text-main)' }}>{title}</div>
+        )}
+        listClassName="ecc-footer-link-group"
+        linkClassName="ecc-footer-link"
+      />
 
       <div>
           <div className="ecc-mono" style={{ marginBottom: '2rem', color: 'var(--ecc-text-main)' }}>CONTACT</div>
@@ -107,11 +100,17 @@ export const Footer = () => (
     
     <div className="ecc-footer-bottom">
         <div style={{ color: 'var(--ecc-text-muted)', fontSize: '0.85rem' }}>© 2026 SELLIO_EVENTS_GRP</div>
-        <div style={{ display: 'flex', gap: '3rem' }} className="ecc-footer-socials">
-            {['PRIVACY', 'TERMS', 'CODE_OF_CONDUCT'].map(item => (
-                <span key={item} className="ecc-mono" style={{ fontSize: '0.65rem', cursor: 'pointer' }} onClick={() => alert(`Reviewing: ${item}`)}>{item}</span>
-            ))}
-        </div>
+        <MenuNav
+          location="footer_bottom_bar"
+          flat
+          className="ecc-footer-socials"
+          linkClassName="ecc-mono"
+          renderItem={(item, { href, className, onNavigate }) => (
+            <span className={className} style={{ fontSize: '0.65rem', cursor: 'pointer' }}>
+              <a href={href} onClick={onNavigate} style={{ color: 'inherit', textDecoration: 'none' }}>{item.title}</a>
+            </span>
+          )}
+        />
     </div>
   </footer>
 );

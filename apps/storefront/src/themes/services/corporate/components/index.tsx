@@ -1,6 +1,10 @@
 
 'use client';
 import React, { useState } from 'react';
+import { MenuNav } from '@/components/menu/MenuNav';
+import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
+import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
+import { hashAwareNavItemRenderer } from '@/components/menu/menu-renderers';
 
 export const CorporateHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -23,44 +27,27 @@ export const CorporateHeader = () => {
         <span className="sc-hamburger-bar"></span>
       </button>
 
-      {/* Navigation Links */}
-      <nav className={`sc-nav ${isOpen ? 'sc-nav-open' : ''}`}>
-        {['Home', 'Services', 'About', 'Case Studies', 'Contact'].map(link => (
-          <a 
-            key={link} 
-            href={`#${link.toLowerCase().replace(' ', '-')}`} 
-            className="sc-nav-link"
-            onClick={(e) => {
-              e.preventDefault();
-              setIsOpen(false);
-              const targetId = link === 'Home' ? 'sc-hero-section' : link.toLowerCase().replace(' ', '-');
-              document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth' });
-            }}
-          >
-            {link}
-          </a>
-        ))}
-        <button 
-          className="sc-btn sc-btn-primary sc-mobile-btn" 
-          onClick={() => alert('Consultation portal activated.')}
-        >
-          Get a Quote
-        </button>
-      </nav>
+      <div className={`sc-nav ${isOpen ? 'sc-nav-open' : ''}`}>
+        <MenuNav
+          location="main_header"
+          flat
+          linkClassName="sc-nav-link"
+          onNavigate={() => setIsOpen(false)}
+          renderItem={hashAwareNavItemRenderer}
+        />
+        <MenuActionButtons
+          linkClassName="sc-btn sc-btn-primary sc-mobile-btn"
+          as="button"
+          onAction={() => alert('Consultation portal activated.')}
+          onNavigate={() => setIsOpen(false)}
+        />
+      </div>
 
-      {/* Desktop Actions */}
       <div className="sc-desktop-btn-container">
-        <a 
-          href="#contact" 
-          className="sc-btn sc-btn-primary sc-desktop-btn"
-          onClick={(e) => {
-            e.preventDefault();
-            document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
-          }}
-          id="sc-btn-vibe-status"
-        >
-          Get a Quote
-        </a>
+        <MenuActionButtons
+          linkClassName="sc-btn sc-btn-primary sc-desktop-btn"
+          renderItem={(item, props) => hashAwareNavItemRenderer(item, { ...props, isActive: false })}
+        />
       </div>
     </header>
   );
@@ -113,20 +100,20 @@ export const CorporateFooter = () => (
                     ))}
                 </div>
             </div>
-            <div>
-                <h5 style={{ fontFamily: 'var(--sc-font-heading)', fontWeight: 600, color: 'white', marginBottom: '1.5rem', fontSize: '1.1rem' }}>Quick Links</h5>
-                <a href="#" className="sc-footer-link">Home</a>
-                <a href="#" className="sc-footer-link">Services</a>
-                <a href="#" className="sc-footer-link">About Us</a>
-                <a href="#" className="sc-footer-link">Case Studies</a>
-            </div>
-            <div>
-                <h5 style={{ fontFamily: 'var(--sc-font-heading)', fontWeight: 600, color: 'white', marginBottom: '1.5rem', fontSize: '1.1rem' }}>Our Services</h5>
-                <a href="#" className="sc-footer-link">Business Strategy</a>
-                <a href="#" className="sc-footer-link">Corporate Finance</a>
-                <a href="#" className="sc-footer-link">Digital Transformation</a>
-                <a href="#" className="sc-footer-link">M&A Advisory</a>
-            </div>
+            <FooterMenuColumn
+                location="footer_column_1"
+                titleTag="h5"
+                titleClassName="sc-footer-col-title"
+                titleStyle={{ fontFamily: 'var(--sc-font-heading)', fontWeight: 600, color: 'white', marginBottom: '1.5rem', fontSize: '1.1rem' }}
+                linkClassName="sc-footer-link"
+            />
+            <FooterMenuColumn
+                location="footer_column_2"
+                titleTag="h5"
+                titleClassName="sc-footer-col-title"
+                titleStyle={{ fontFamily: 'var(--sc-font-heading)', fontWeight: 600, color: 'white', marginBottom: '1.5rem', fontSize: '1.1rem' }}
+                linkClassName="sc-footer-link"
+            />
             <div>
                 <h5 style={{ fontFamily: 'var(--sc-font-heading)', fontWeight: 600, color: 'white', marginBottom: '1.5rem', fontSize: '1.1rem' }}>Contact Us</h5>
                 <p style={{ color: '#adb5bd', fontSize: '0.95rem', marginBottom: '0.5rem' }}>123 Business Rd, City, State 12345</p>

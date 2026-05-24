@@ -323,6 +323,15 @@
 
 .evc-footer-link {
   transition: var(--evc-transition);
+  font-size: 1rem;
+  color: var(--evc-grey);
+  text-decoration: none;
+}
+
+.evc-footer-link-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
 .evc-footer-link:hover {

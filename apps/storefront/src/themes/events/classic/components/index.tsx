@@ -1,5 +1,16 @@
 'use client';
 import React, { useState } from 'react';
+import { MenuNav } from '@/components/menu/MenuNav';
+import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
+import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
+import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
+
+const patronPortalStyle = {
+  fontSize: '0.65rem',
+  border: '1px solid var(--ecl-burgundy)',
+  color: 'var(--ecl-burgundy)',
+  cursor: 'pointer',
+} as const;
 
 export const VenueHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -21,18 +32,55 @@ export const VenueHeader = () => {
           <span className="ecl-hamburger-bar"></span>
       </button>
 
-      <nav className={`ecl-nav ${isOpen ? 'ecl-nav-open' : ''}`}>
-          {['The Repertoire', 'Patrons', 'Archives', 'Institutional'].map(link => (
-              <a key={link} href="#" className="ecl-nav-link" onClick={() => setIsOpen(false)}>{link}</a>
-          ))}
-          <div className="ecl-mono ecl-mobile-btn" style={{ fontSize: '0.65rem', border: '1px solid var(--ecl-burgundy)', padding: '1rem 2rem', color: 'var(--ecl-burgundy)', textAlign: 'center', marginTop: '2rem', width: '100%', cursor: 'pointer' }} onClick={() => alert('Patron Portal synchronized.')}>
-            PATRON PORTAL ACTIVE
-          </div>
-      </nav>
+      <MenuNav
+        location="main_header"
+        flat
+        className={`ecl-nav ${isOpen ? 'ecl-nav-open' : ''}`}
+        linkClassName="ecl-nav-link"
+        onNavigate={() => setIsOpen(false)}
+        renderItem={defaultNavItemRenderer}
+      />
 
-      <div className="ecl-mono ecl-desktop-btn" style={{ fontSize: '0.65rem', border: '1px solid var(--ecl-burgundy)', padding: '0.5rem 2rem', color: 'var(--ecl-burgundy)', cursor: 'pointer' }} onClick={() => alert('Patron Portal synchronized.')} id="ecl-btn-patron-portal">
-        PATRON PORTAL ACTIVE
-      </div>
+      <MenuActionButtons
+        location="action_buttons"
+        className="ecl-mono ecl-mobile-btn"
+        buttonClassName="ecl-mono ecl-mobile-btn"
+        as="button"
+        onNavigate={() => setIsOpen(false)}
+        renderItem={(item, { className, onNavigate }) => (
+          <div
+            className={className}
+            style={{ ...patronPortalStyle, padding: '1rem 2rem', textAlign: 'center', marginTop: '2rem', width: '100%' }}
+            onClick={() => {
+              alert('Patron Portal synchronized.');
+              onNavigate?.();
+            }}
+            id="ecl-btn-patron-portal-mobile"
+          >
+            {item.title.toUpperCase()} ACTIVE
+          </div>
+        )}
+      />
+
+      <MenuActionButtons
+        location="action_buttons"
+        className="ecl-mono ecl-desktop-btn"
+        buttonClassName="ecl-mono ecl-desktop-btn"
+        as="button"
+        renderItem={(item, { className, onNavigate }) => (
+          <div
+            className={className}
+            style={{ ...patronPortalStyle, padding: '0.5rem 2rem' }}
+            onClick={() => {
+              alert('Patron Portal synchronized.');
+              onNavigate?.();
+            }}
+            id="ecl-btn-patron-portal"
+          >
+            {item.title.toUpperCase()} ACTIVE
+          </div>
+        )}
+      />
     </header>
   );
 };
@@ -65,24 +113,44 @@ export const LegacyFooter = () => (
                     The world's most significant archive of cultural repertoire. Synchronizing institutional archives with global patron nodes.
                 </p>
             </div>
-            {['REPERTOIRE', 'PATRONS', 'GOVERNANCE'].map(col => (
-                <div key={col}>
-                    <div className="ecl-mono" style={{ color: 'var(--ecl-gold)', marginBottom: '3.5rem' }}>{col}</div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }} className="ecl-footer-link-group">
-                        {['Registry', 'Archives', 'Protocols', 'Auth'].map(link => (
-                            <span key={link} style={{ fontSize: '0.9rem', opacity: 0.3, cursor: 'pointer', color: 'white' }} className="ecl-footer-link" onClick={() => alert(`Navigating: ${link}`)}>{link}</span>
-                        ))}
-                    </div>
-                </div>
-            ))}
+            <FooterMenuColumn
+              location="footer_column_1"
+              renderTitle={(title) => (
+                <div className="ecl-mono" style={{ color: 'var(--ecl-gold)', marginBottom: '3.5rem' }}>{title}</div>
+              )}
+              listClassName="ecl-footer-link-group"
+              linkClassName="ecl-footer-link"
+            />
+            <FooterMenuColumn
+              location="footer_column_2"
+              renderTitle={(title) => (
+                <div className="ecl-mono" style={{ color: 'var(--ecl-gold)', marginBottom: '3.5rem' }}>{title}</div>
+              )}
+              listClassName="ecl-footer-link-group"
+              linkClassName="ecl-footer-link"
+            />
+            <FooterMenuColumn
+              location="footer_column_3"
+              renderTitle={(title) => (
+                <div className="ecl-mono" style={{ color: 'var(--ecl-gold)', marginBottom: '3.5rem' }}>{title}</div>
+              )}
+              listClassName="ecl-footer-link-group"
+              linkClassName="ecl-footer-link"
+            />
         </div>
         <div className="ecl-footer-bottom">
             <div className="ecl-mono" style={{ opacity: 0.2, fontSize: '0.65rem', color: 'white' }}>© 2026 SELLIO_LEGACY_ARTS // ARCHIVE_STABLE</div>
-            <div style={{ display: 'flex', gap: '5rem' }} className="ecl-footer-socials">
-                {['INSTAGRAM', 'LINKEDIN', 'X_LEGACY'].map(social => (
-                    <span key={social} className="ecl-mono" style={{ opacity: 0.2, fontSize: '0.65rem', cursor: 'pointer', color: 'white' }}>{social}</span>
-                ))}
-            </div>
+            <MenuNav
+              location="social_footer"
+              flat
+              className="ecl-footer-socials"
+              linkClassName="ecl-mono"
+              renderItem={(item, { href, className, onNavigate }) => (
+                <span className={className} style={{ opacity: 0.2, fontSize: '0.65rem', cursor: 'pointer', color: 'white' }}>
+                  <a href={href} onClick={onNavigate} style={{ color: 'inherit', textDecoration: 'none' }}>{item.title}</a>
+                </span>
+              )}
+            />
         </div>
     </footer>
 );
