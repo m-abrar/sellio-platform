@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { getActiveTheme } from "@/lib/theme";
 import { getMenus } from "@/lib/menu";
 import { MenuProvider } from "@/components/menu/MenuProvider";
@@ -23,6 +24,9 @@ export default async function RootLayout({
 }) {
   const { theme, layout, databaseOffline, errorDetails } = await getActiveTheme();
   const { menus } = await getMenus(MENU_LOCATIONS, theme.theme_key);
+  const headerList = await headers();
+  const pathname = headerList.get('x-pathname') ?? '';
+  const isPreview = headerList.get('x-preview-mode') === '1' || pathname.startsWith('/preview/');
   
   // Dynamically resolve the industry-specific layout orchestration
   let IndustryLayout;
@@ -49,7 +53,7 @@ export default async function RootLayout({
         )}
       </head>
       <body>
-        <MenuProvider menus={menus} themeKey={theme.theme_key}>
+        <MenuProvider menus={menus} themeKey={theme.theme_key} isPreview={isPreview}>
           <IndustryLayout>
             {children}
           </IndustryLayout>

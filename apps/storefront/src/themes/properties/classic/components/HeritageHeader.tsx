@@ -11,7 +11,7 @@ import { useMenuContext } from '@/components/menu/MenuProvider';
 export const Header = () => {
     const [scrolled, setScrolled] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
-    const { themeKey } = useMenuContext();
+    const { themeKey, isPreview } = useMenuContext();
 
     useEffect(() => {
         const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -22,7 +22,7 @@ export const Header = () => {
     return (
         <header className={`pc-header ${scrolled ? 'scrolled' : ''}`}>
             <a 
-                href={getThemeLink('/', themeKey)}
+                href={getThemeLink('/', themeKey, isPreview)}
                 style={{ textDecoration: 'none', fontFamily: 'var(--pc-font-serif)', fontSize: '1.4rem', fontWeight: 900, color: 'var(--pc-teal)', letterSpacing: '-1px', cursor: 'pointer', zIndex: 1045, position: 'relative' }}
             >
                 ESTATE <span style={{ fontWeight: 400, opacity: scrolled ? 0.3 : 0.6 }}>&</span> HERITAGE

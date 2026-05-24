@@ -7,22 +7,26 @@ import { getDefaultMenu } from '@/lib/menu-defaults';
 interface MenuContextValue {
   menus: MenuMap;
   themeKey?: string;
+  isPreview?: boolean;
 }
 
 const MenuContext = createContext<MenuContextValue>({
   menus: {},
+  isPreview: false,
 });
 
 export function MenuProvider({
   menus,
   themeKey,
+  isPreview = false,
   children,
 }: {
   menus: MenuMap;
   themeKey?: string;
+  isPreview?: boolean;
   children: React.ReactNode;
 }) {
-  const value = useMemo(() => ({ menus, themeKey }), [menus, themeKey]);
+  const value = useMemo(() => ({ menus, themeKey, isPreview }), [menus, themeKey, isPreview]);
 
   return <MenuContext.Provider value={value}>{children}</MenuContext.Provider>;
 }

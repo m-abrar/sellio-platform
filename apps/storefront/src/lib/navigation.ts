@@ -4,13 +4,13 @@ import { usePathname } from 'next/navigation';
 import { useMemo } from 'react';
 import { getThemeLink } from '@/lib/links';
 
-export function useThemePath(path: string, themeKey?: string): string {
-  return getThemeLink(path, themeKey);
+export function useThemePath(path: string, themeKey?: string, isPreview = false): string {
+  return getThemeLink(path, themeKey, isPreview);
 }
 
-export function useNavActive(path: string, themeKey?: string): boolean {
+export function useNavActive(path: string, themeKey?: string, isPreview = false): boolean {
   const pathname = usePathname();
-  const href = getThemeLink(path, themeKey);
+  const href = getThemeLink(path, themeKey, isPreview);
   const normalizedPath = stripPreviewPrefix(pathname);
   const normalizedHref = stripPreviewPrefix(href);
 
@@ -31,6 +31,6 @@ export function stripPreviewPrefix(path: string): string {
   return (match[1] ?? '/').replace(/^\//, '');
 }
 
-export function useResolvedMenuHref(url: string, themeKey?: string): string {
-  return useMemo(() => getThemeLink(url, themeKey), [url, themeKey]);
+export function useResolvedMenuHref(url: string, themeKey?: string, isPreview = false): string {
+  return useMemo(() => getThemeLink(url, themeKey, isPreview), [url, themeKey, isPreview]);
 }

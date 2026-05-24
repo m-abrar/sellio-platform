@@ -4,6 +4,7 @@ import React from 'react';
 import type { MenuItem } from '@sellio/types';
 import { getThemeLink } from '@/lib/links';
 import { useNavActive } from '@/lib/navigation';
+import { useMenuContext } from '@/components/menu/MenuProvider';
 
 interface MenuLinkProps {
   item: MenuItem;
@@ -27,8 +28,10 @@ export function MenuLink({
   onNavigate,
   render,
 }: MenuLinkProps) {
-  const href = getThemeLink(item.url, themeKey);
-  const isActive = useNavActive(item.url, themeKey);
+  const { themeKey: contextThemeKey, isPreview } = useMenuContext();
+  const resolvedThemeKey = themeKey ?? contextThemeKey;
+  const href = getThemeLink(item.url, resolvedThemeKey, isPreview);
+  const isActive = useNavActive(item.url, resolvedThemeKey, isPreview);
   const resolvedClassName = [className, isActive ? activeClassName : undefined].filter(Boolean).join(' ');
 
   if (render) {

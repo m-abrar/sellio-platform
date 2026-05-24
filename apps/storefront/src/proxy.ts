@@ -23,12 +23,16 @@ export function proxy(request: NextRequest) {
     // Transparent rewrite to the actual path while keeping the theme URL
     const requestHeaders = new Headers(request.headers);
     requestHeaders.set('x-theme-key', themeKey);
+    requestHeaders.set('x-preview-mode', '1');
+    requestHeaders.set('x-pathname', pathname);
 
     const response = NextResponse.rewrite(new URL(restOfPath, request.url), {
       request: { headers: requestHeaders },
     });
 
     response.headers.set('x-theme-key', themeKey);
+    response.headers.set('x-preview-mode', '1');
+    response.headers.set('x-pathname', pathname);
     response.cookies.set('theme', themeKey, {
       path: '/',
       maxAge: 60 * 60 * 24,
@@ -60,13 +64,6 @@ export function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - api (API routes)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     */
     '/((?!api|_next/static|_next/image|favicon.ico).*)',
   ],
 };

@@ -1,30 +1,25 @@
 /**
  * Build theme-aware links that preserve /preview/{theme_key} routing.
  */
-export function getThemeLink(path: string, _themeKey?: string): string {
+export function getThemeLink(path: string, themeKey?: string, isPreview = false): string {
   if (path.startsWith('#') || path.startsWith('http://') || path.startsWith('https://')) {
     return path;
   }
 
   const normalizedPath = path.startsWith('/') ? path : `/${path}`;
 
-  if (typeof window !== 'undefined') {
-    const pathname = window.location.pathname;
-
-    if (pathname.startsWith('/preview/')) {
-      const previewTheme = pathname.split('/')[2];
-      if (previewTheme) {
-        return `/preview/${previewTheme}${normalizedPath === '/' ? '' : normalizedPath}`;
-      }
-    }
+  if (isPreview && themeKey) {
+    return `/preview/${themeKey}${normalizedPath === '/' ? '' : normalizedPath}`;
   }
 
   return normalizedPath;
 }
 
-export function getThemeLinkFromPathname(path: string, pathname: string): string {
-  if (pathname.startsWith('/preview/')) {
-    const previewTheme = pathname.split('/')[2];
+export function getThemeLinkFromPathname(path: string, pathname: string, themeKey?: string): string {
+  const isPreview = pathname.startsWith('/preview/');
+
+  if (isPreview) {
+    const previewTheme = pathname.split('/')[2] ?? themeKey;
     if (previewTheme) {
       const normalizedPath = path.startsWith('/') ? path : `/${path}`;
       return `/preview/${previewTheme}${normalizedPath === '/' ? '' : normalizedPath}`;
