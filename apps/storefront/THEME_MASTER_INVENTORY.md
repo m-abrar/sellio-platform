@@ -1,134 +1,134 @@
-# 💎 Sellio Elite: Theme Master Inventory
-*Status: 50/50 Themes Production-Ready | Premium Conversion: 50/50*
+# Sellio Theme Master Inventory
+
+Status: 52/52 storefront theme folders present and aligned with `ThemeSeeder`.
+
+Last verified: 2026-05-24
 
 ---
 
-## 🏗️ Progress Summary
-- **Total Official Themes**: 50
-- **Production-Ready (Elite Spec)**: 50
-- **Premium Quality (Envato Level)**: 50
+## Source Of Truth
+
+- Seeder registry: `apps/backend/database/seeders/ThemeSeeder.php`
+- Storefront implementations: `apps/storefront/src/themes`
+- Dynamic conversion tracker: `dynamic_themes_report.md`
+- Theme runtime resolver: `apps/storefront/src/lib/theme.ts`
+
+The storefront loads themes by converting a database `theme_key` into a folder path:
+
+- `properties_luxury` -> `properties/luxury`
+- `unifieds_default` -> `unifieds/default`
+
+Theme overrides are supported through `/preview/{theme_key}/...`, `?theme={theme_key}`, and the persisted `theme` cookie.
 
 ---
 
-## 🌐 Unified Vertical (8 Themes)
-- [x] **Unified Modern** — *[PREMIUM_ENVATO_LEVEL]*
-- [x] **Unified Default** — *[PREMIUM_ENVATO_LEVEL]*
-- [x] **Unified Interactive** — *[PREMIUM_ENVATO_LEVEL]*
-- [x] **Unified Mega** — *[PREMIUM_ENVATO_LEVEL]*
-- [x] **Unified Standard** — *[PREMIUM_ENVATO_LEVEL]*
-- [x] **Unified Classic** — *[PREMIUM_ENVATO_LEVEL]*
-- [x] **Unified Minimal** — *[PREMIUM_ENVATO_LEVEL]*
-- [x] **Unified Marketplace** — *[PREMIUM_ENVATO_LEVEL]*
+## Progress Summary
 
-## 🏠 Properties Vertical (13 Themes)
-- [x] **Properties Modern** — *[PREMIUM_ENVATO_LEVEL]*
-- [x] **Properties Luxury** — *[PREMIUM_ENVATO_LEVEL]*
-- [x] **Properties Map** — *[PREMIUM_ENVATO_LEVEL]*
-- [x] **Properties Classic** — *[ELITE_PREMIUM_ENVATO]*
-- [x] **Properties Luxury 2** — *[PREMIUM_ENVATO_LEVEL]*
-- [x] **Properties Urban** — *[PREMIUM_ENVATO_LEVEL]*
-- [x] **Properties Rental** — *[PREMIUM_ENVATO_LEVEL]*
-- [x] **Properties Vacation** — *[PREMIUM_ENVATO_LEVEL]*
-- [x] **Properties Unified** — *[PREMIUM_ENVATO_LEVEL]*
-- [x] **Properties Commercial** — *[PREMIUM_ENVATO_LEVEL]*
-- [x] **Properties Showcase** — *[PREMIUM_ENVATO_LEVEL]*
-- [x] **Properties Neighborhood** — *[PREMIUM_ENVATO_LEVEL]*
-- [x] **Properties Investment** — *[PREMIUM_ENVATO_LEVEL]*
-
-## 🚗 Autos Vertical (5 Themes)
-- [x] **Autos Classic** — *[PREMIUM_ENVATO_LEVEL]*
-- [x] **Autos Modern** — *[PREMIUM_ENVATO_LEVEL]*
-- [x] **Autos Luxury** — *[PREMIUM_ENVATO_LEVEL]*
-- [x] **Autos Electric** — *[PREMIUM_ENVATO_LEVEL]*
-- [x] **Autos Used** — *[PREMIUM_ENVATO_LEVEL]*
-
-## 🛍️ Ecommerce Vertical (4 Themes)
-- [x] **Ecommerce Default** — *[PREMIUM_ENVATO_LEVEL]*
-- [x] **Ecommerce Luxury** — *[PREMIUM_ENVATO_LEVEL]*
-- [x] **Ecommerce Electronics** — *[PREMIUM_ENVATO_LEVEL]*
-- [x] **Ecommerce Fashion** — *[PREMIUM_ENVATO_LEVEL]*
-
-## 📅 Events Vertical (5 Themes)
-- [x] **Events Music** — *[PREMIUM_ENVATO_LEVEL]*
-- [x] **Events Corporate** — *[PREMIUM_ENVATO_LEVEL]*
-- [x] **Events Classic** — *[PREMIUM_ENVATO_LEVEL]*
-- [x] **Events Creative** — *[PREMIUM_ENVATO_LEVEL]*
-- [x] **Events Festival** — *[PREMIUM_ENVATO_LEVEL]*
-
-## 🤝 Services Vertical (5 Themes)
-- [x] **Services Marketplace** — *[PREMIUM_ENVATO_LEVEL]*
-- [x] **Services Health** — *[PREMIUM_ENVATO_LEVEL]*
-- [x] **Services Corporate** — *[PREMIUM_ENVATO_LEVEL]*
-- [x] **Services Creative** — *[PREMIUM_ENVATO_LEVEL]*
-- [x] **Services Local** — *[PREMIUM_ENVATO_LEVEL]*
-
-## 💼 Jobs Vertical (6 Themes)
-- [x] **Jobs Tech** — *[PREMIUM_ENVATO_LEVEL]*
-- [x] **Jobs Modern** — *[PREMIUM_ENVATO_LEVEL]*
-- [x] **Jobs Startup** — *[PREMIUM_ENVATO_LEVEL]*
-- [x] **Jobs Corporate** — *[PREMIUM_ENVATO_LEVEL]*
-- [x] **Jobs Blue-Collar** — *[PREMIUM_ENVATO_LEVEL]*
-- [x] **Jobs Freelance** — *[PREMIUM_ENVATO_LEVEL]*
-
-## 📋 Classifieds Vertical (5 Themes)
-- [x] **Classifieds Modern** — *[PREMIUM_ENVATO_LEVEL]*
-- [x] **Classifieds Deals** — *[PREMIUM_ENVATO_LEVEL]*
-- [x] **Classifieds Premium** — *[PREMIUM_ENVATO_LEVEL]*
-- [x] **Classifieds General** — *[PREMIUM_ENVATO_LEVEL]*
-- [x] **Classifieds Local** — *[PREMIUM_ENVATO_LEVEL]*
+| Metric | Count | Notes |
+| :--- | ---: | :--- |
+| Seeded themes | 52 | Registered by `ThemeSeeder` |
+| Storefront folders | 52 | All seeded keys have matching theme folders |
+| API-backed themes | 23 | Themes with live `api.*` usage in `.tsx` files |
+| Static / mostly static themes remaining | 29 | No direct live API usage found in theme `.tsx` files |
 
 ---
 
-## 🚀 Premium Conversion Pipeline
-The goal is to elevate all 50 themes to **Envato Level** design quality, featuring granular components, high-fidelity mockups, and glassmorphic aesthetics.
+## Unified Vertical (8 Themes)
 
-1. **Unified Modern**: Completed.
-2. **Properties Luxury**: Completed.
-3. **Autos Modern**: Completed.
-4. **Events Corporate**: Completed.
-5. **Services Marketplace**: Completed.
-6. **Properties Map**: Completed.
-7. **Jobs Tech**: Completed.
-8. **Properties Classic**: Completed.
-9. **Properties Luxury 2**: Completed.
-10. **Properties Urban**: Completed.
-11. **Properties Rental**: Completed.
-12. **Properties Vacation**: Completed.
-13. **Properties Unified**: Completed.
-14. **Properties Commercial**: Completed.
-15. **Properties Showcase**: Completed.
-16. **Properties Neighborhood**: Completed.
-17. **Properties Investment**: Completed.
-18. **Autos Classic**: Completed.
-19. **Autos Modern**: Completed (Previously Refactored).
-20. **Autos Luxury**: Completed.
-22. **Autos Used**: Completed.
-23. **Ecommerce Default**: Completed.
-24. **Ecommerce Electronics**: Completed.
-25. **Ecommerce Fashion**: Completed.
-26. **Events Classic**: Completed.
-27. **Events Creative**: Completed.
-28. **Events Festival**: Completed.
-112. **Services Health**: Completed.
-113. **Services Corporate**: Completed.
-114. **Services Creative**: Completed.
-115. **Services Local**: Completed.
-116. **Jobs Tech**: Completed.
-117. **Jobs Startup**: Completed.
-118. **Jobs Modern**: Completed.
-119. **Jobs Corporate**: Completed.
-120. **Jobs Blue-Collar**: Completed.
-121. **Jobs Freelance**: Completed.
-122. **Classifieds Modern**: Completed.
-123. **Classifieds Deals**: Completed.
-124. **Classifieds Premium**: Completed.
-125. **Classifieds General**: Completed.
-126. **Classifieds Local**: Completed.
+| Theme Key | Folder | Frontend Folder | API Backed |
+| :--- | :--- | :---: | :---: |
+| `unifieds_default` | `unifieds/default` | Yes | No |
+| `unifieds_standard` | `unifieds/standard` | Yes | No |
+| `unifieds_classic` | `unifieds/classic` | Yes | No |
+| `unifieds_modern` | `unifieds/modern` | Yes | No |
+| `unifieds_mega` | `unifieds/mega` | Yes | No |
+| `unifieds_interactive` | `unifieds/interactive` | Yes | No |
+| `unifieds_minimal` | `unifieds/minimal` | Yes | Yes |
+| `unifieds_marketplace` | `unifieds/marketplace` | Yes | No |
+
+## Properties Vertical (13 Themes)
+
+| Theme Key | Folder | Frontend Folder | API Backed |
+| :--- | :--- | :---: | :---: |
+| `properties_classic` | `properties/classic` | Yes | Yes |
+| `properties_modern` | `properties/modern` | Yes | No |
+| `properties_luxury` | `properties/luxury` | Yes | Yes |
+| `properties_platinum` | `properties/platinum` | Yes | No |
+| `properties_urban` | `properties/urban` | Yes | No |
+| `properties_rental` | `properties/rental` | Yes | Yes |
+| `properties_vacation` | `properties/vacation` | Yes | Yes |
+| `properties_map` | `properties/map` | Yes | No |
+| `properties_unified` | `properties/unified` | Yes | No |
+| `properties_commercial` | `properties/commercial` | Yes | Yes |
+| `properties_showcase` | `properties/showcase` | Yes | No |
+| `properties_neighborhood` | `properties/neighborhood` | Yes | No |
+| `properties_investment` | `properties/investment` | Yes | No |
+
+## Autos Vertical (5 Themes)
+
+| Theme Key | Folder | Frontend Folder | API Backed |
+| :--- | :--- | :---: | :---: |
+| `autos_classic` | `autos/classic` | Yes | Yes |
+| `autos_modern` | `autos/modern` | Yes | Yes |
+| `autos_used` | `autos/used` | Yes | Yes |
+| `autos_luxury` | `autos/luxury` | Yes | Yes |
+| `autos_electric` | `autos/electric` | Yes | Yes |
+
+## Events Vertical (5 Themes)
+
+| Theme Key | Folder | Frontend Folder | API Backed |
+| :--- | :--- | :---: | :---: |
+| `events_classic` | `events/classic` | Yes | No |
+| `events_creative` | `events/creative` | Yes | No |
+| `events_corporate` | `events/corporate` | Yes | Yes |
+| `events_music` | `events/music` | Yes | No |
+| `events_festival` | `events/festival` | Yes | No |
+
+## Services Vertical (5 Themes)
+
+| Theme Key | Folder | Frontend Folder | API Backed |
+| :--- | :--- | :---: | :---: |
+| `services_corporate` | `services/corporate` | Yes | No |
+| `services_marketplace` | `services/marketplace` | Yes | Yes |
+| `services_creative` | `services/creative` | Yes | No |
+| `services_local` | `services/local` | Yes | No |
+| `services_health` | `services/health` | Yes | No |
+
+## Jobs Vertical (6 Themes)
+
+| Theme Key | Folder | Frontend Folder | API Backed |
+| :--- | :--- | :---: | :---: |
+| `jobs_corporate` | `jobs/corporate` | Yes | No |
+| `jobs_startup` | `jobs/startup` | Yes | Yes |
+| `jobs_tech` | `jobs/tech` | Yes | Yes |
+| `jobs_modern` | `jobs/modern` | Yes | No |
+| `jobs_blue_collar` | `jobs/blue_collar` | Yes | No |
+| `jobs_freelance` | `jobs/freelance` | Yes | No |
+
+## Classifieds Vertical (6 Themes)
+
+| Theme Key | Folder | Frontend Folder | API Backed |
+| :--- | :--- | :---: | :---: |
+| `classifieds_general` | `classifieds/general` | Yes | Yes |
+| `classifieds_modern` | `classifieds/modern` | Yes | Yes |
+| `classifieds_local` | `classifieds/local` | Yes | Yes |
+| `classifieds_deals` | `classifieds/deals` | Yes | Yes |
+| `classifieds_premium` | `classifieds/premium` | Yes | Yes |
+| `classifieds_elite` | `classifieds/elite` | Yes | Yes |
+
+## Ecommerce Vertical (4 Themes)
+
+| Theme Key | Folder | Frontend Folder | API Backed |
+| :--- | :--- | :---: | :---: |
+| `ecommerce_default` | `ecommerce/default` | Yes | No |
+| `ecommerce_luxury` | `ecommerce/luxury` | Yes | No |
+| `ecommerce_fashion` | `ecommerce/fashion` | Yes | Yes |
+| `ecommerce_electronics` | `ecommerce/electronics` | Yes | Yes |
 
 ---
-## 🎉 PROJECT COMPLETE: 50/50 Elite Themes Finalized
-All 50 vertical-specific themes have been converted to **Envato-Level Premium Standards** with a siloed, high-fidelity architecture.
 
----
-> [!IMPORTANT]
-> Every implementation must adhere to the **Siloed Architecture** and **Zero-Template** rules defined in `THEME_MASTER_SPEC.md`.
+## Documentation Notes
+
+- This file tracks registry and folder parity plus API-backed status.
+- `dynamic_themes_report.md` tracks conversion detail and the remaining delivery plan.
+- "API Backed" means at least one theme `.tsx` file directly calls the shared API client. It does not guarantee that every view in the theme is fully dynamic.
