@@ -1,9 +1,10 @@
 'use client';
-import React, { useState } from 'react';
+import React from 'react';
 import { MenuUtilityNav } from '@/components/menu/MenuUtilityNav';
 import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { MenuNav } from '@/components/menu/MenuNav';
 import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
+import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 
 interface HeaderProps {
   searchTerm: string;
@@ -12,11 +13,15 @@ interface HeaderProps {
 }
 
 export const GeneralHeader = ({ searchTerm, onSearchChange, onReset }: HeaderProps) => {
+  const brandLabel = useThemeContent('header.brand_label', 'CLASAFIND');
+  const brandSplit = Math.ceil(brandLabel.length / 2);
+  const searchPlaceholder = useThemeContent('search.placeholder', 'Search for anything...');
+
   return (
     <header className="cg-header">
       <a href="#" className="cg-logo" onClick={(e) => { e.preventDefault(); onReset(); }}>
         <div className="cg-logo-icon">📦</div>
-        <span>CLASA</span>FIND
+        <span>{brandLabel.slice(0, brandSplit)}</span>{brandLabel.slice(brandSplit)}
       </a>
       
       <div className="cg-search-bar">
@@ -24,7 +29,7 @@ export const GeneralHeader = ({ searchTerm, onSearchChange, onReset }: HeaderPro
         <input 
           type="text" 
           className="cg-search-input" 
-          placeholder="Search for anything..." 
+          placeholder={searchPlaceholder}
           value={searchTerm}
           onChange={(e) => onSearchChange(e.target.value)}
         />
@@ -107,17 +112,24 @@ export const ListingCard = ({ title, price, image, seller, isSaved, onMessageCli
   );
 };
 
-export const GeneralFooter = () => (
-  <footer className="cg-footer">
-    <MenuNav
-      location="footer_bottom_bar"
-      flat
-      className="cg-footer-links"
-      linkClassName="cg-footer-link"
-      renderItem={defaultNavItemRenderer}
-    />
-    <p style={{ color: 'var(--cg-text-muted)', fontSize: '0.8rem', marginTop: '1.25rem', fontWeight: 500 }}>
-      &copy; 2026 ClasaFind Classifieds Suite. All rights reserved. Engineered to Elite Standards.
-    </p>
-  </footer>
-);
+export const GeneralFooter = () => {
+  const footerDescription = useThemeContent(
+    'footer.description',
+    '2026 ClasaFind Classifieds Suite. All rights reserved. Engineered to Elite Standards.'
+  );
+
+  return (
+    <footer className="cg-footer">
+      <MenuNav
+        location="footer_bottom_bar"
+        flat
+        className="cg-footer-links"
+        linkClassName="cg-footer-link"
+        renderItem={defaultNavItemRenderer}
+      />
+      <p style={{ color: 'var(--cg-text-muted)', fontSize: '0.8rem', marginTop: '1.25rem', fontWeight: 500 }}>
+        &copy; {footerDescription}
+      </p>
+    </footer>
+  );
+};

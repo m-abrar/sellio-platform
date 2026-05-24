@@ -1,10 +1,11 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { api } from '@sellio/api-client';
 import type { Vehicle } from '@sellio/types';
 import { ClassicCarCard, AuctionCard } from './components';
+import { useThemeContent, useThemeMedia } from '@/components/theme-content/ThemeContentProvider';
 
 interface ClassicCarItem {
   id: number;
@@ -31,8 +32,18 @@ const FALLBACK_AUCTIONS = [
   { title: "1962 Ferrari 250 GTO", desc: "Highly Sought-After Investment", currentBid: "$38,000,000", timeRemaining: "05D : 08H : 15M : 00S", image: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=600" }
 ];
 
+type VehicleRecord = Vehicle & {
+  slug?: string;
+  title: string;
+  pricing?: { base_price?: number | string; formatted?: string };
+  specs?: { year?: number | string; make?: string; model?: string; transmission?: string; engine?: string };
+  featured_image?: string;
+  media?: { main_photo?: string };
+  image?: string;
+};
+
 const translateVehicle = (rawItem: Vehicle): ClassicCarItem => {
-  const item = rawItem as any;
+  const item = rawItem as VehicleRecord;
   const generatedSlug = item.slug || item.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
   
   const numericPrice = Number(item.pricing?.base_price) || 45000;
@@ -86,6 +97,37 @@ const ShimmerCard = () => (
 
 export default function Page() {
   const router = useRouter();
+  const heroEyebrow = useThemeContent('hero.eyebrow', "The Collector's Choice");
+  const heroTitle = useThemeContent('hero.title', 'Discover Timeless Classics');
+  const heroDescription = useThemeContent(
+    'hero.description',
+    "Your journey into automotive history begins here. Find, bid, or sell the world's most desired vintage automobiles."
+  );
+  const heroPrimaryCta = useThemeContent('hero.primary_cta_label', 'Browse Showcase');
+  const heroSecondaryCta = useThemeContent('hero.secondary_cta_label', 'Live Auctions');
+  const filterTitle = useThemeContent('filters.title', 'Find Your Dream Classic');
+  const clearFiltersLabel = useThemeContent('filters.clear_label', 'Clear Filters');
+  const makeLabel = useThemeContent('filters.make_label', 'Make / Manufacturer');
+  const modelLabel = useThemeContent('filters.model_label', 'Model Series');
+  const yearLabel = useThemeContent('filters.year_label', 'Era / Year');
+  const priceLabel = useThemeContent('filters.price_label', 'Valuation Bracket');
+  const collectionTitle = useThemeContent('collection.title', 'Featured Classics for Sale');
+  const collectionCountLabel = useThemeContent('collection.count_label', 'Masterpieces');
+  const emptyTitle = useThemeContent('empty.title', 'No Classics Found');
+  const emptyDescription = useThemeContent('empty.description', 'No vintage automobiles matched your current search filters.');
+  const emptyButtonLabel = useThemeContent('empty.button_label', 'Reset Refinements');
+  const auctionsTitle = useThemeContent('auctions.title', 'Live Auction Spotlight');
+  const aboutTitle = useThemeContent('about.title', 'Why Collect Classic Cars?');
+  const aboutDescription = useThemeContent(
+    'about.description',
+    'More than just vehicles, classic cars are rolling investments, passionate hobbies, and tangible links to history.'
+  );
+  const aboutSecondaryDescription = useThemeContent(
+    'about.secondary_description',
+    'Each curve, engine note, and stitch of leather tells a story of innovation, design, and a bygone era. We connect discerning collectors with meticulously curated classics, ensuring authenticity, provenance, and investment quality.'
+  );
+  const aboutCta = useThemeContent('about.cta_label', 'Read Our Story');
+  const aboutImage = useThemeMedia('about.image', 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?q=80&w=600');
 
   // Dynamic States
   const [cars, setCars] = useState<ClassicCarItem[]>([]);
@@ -95,13 +137,25 @@ export default function Page() {
 
   // Dropdown options
   const [makesList, setMakesList] = useState<string[]>([]);
-  const [modelsList, setModelsList] = useState<string[]>([]);
-
   // Filters State
   const [selectedMake, setSelectedMake] = useState('');
   const [selectedModel, setSelectedModel] = useState('');
   const [selectedYear, setSelectedYear] = useState('');
   const [selectedPrice, setSelectedPrice] = useState('');
+  const modelsList = useMemo(() => {
+    if (!selectedMake) {
+      return [];
+    }
+
+    return Array.from(
+      new Set(
+        cars
+          .filter(c => c.make.toLowerCase() === selectedMake.toLowerCase())
+          .map(c => c.model)
+          .filter(Boolean)
+      )
+    );
+  }, [selectedMake, cars]);
 
   const getThemeLink = (path: string) => {
     if (typeof window !== 'undefined') {
@@ -130,9 +184,9 @@ export default function Page() {
           console.warn("Autos Classic database empty. Engaging custom simulated showroom.");
           loadFallbacks();
         }
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error("Autos Classic Database connection exception caught:", err);
-        setErrorTrace(err.stack || err.message || String(err));
+        setErrorTrace(err instanceof Error ? (err.stack || err.message) : String(err));
         loadFallbacks();
       } finally {
         setLoading(false);
@@ -147,25 +201,6 @@ export default function Page() {
 
     fetchVehicles();
   }, []);
-
-  // Update models list whenever selected make changes
-  useEffect(() => {
-    if (selectedMake) {
-      const models = Array.from(
-        new Set(
-          cars
-            .filter(c => c.make.toLowerCase() === selectedMake.toLowerCase())
-            .map(c => c.model)
-            .filter(Boolean)
-        )
-      );
-      setModelsList(models);
-      setSelectedModel('');
-    } else {
-      setModelsList([]);
-      setSelectedModel('');
-    }
-  }, [selectedMake, cars]);
 
   // Stateful filtering matching HUD filters
   const filteredCars = cars.filter(car => {
@@ -203,14 +238,14 @@ export default function Page() {
       <section className="ac-hero">
         <div className="ac-hero-overlay"></div>
         <div className="ac-hero-content">
-            <p style={{ textTransform: 'uppercase', letterSpacing: '2px', fontWeight: 600, marginBottom: '1rem', color: 'var(--ac-secondary)' }}>The Collector's Choice</p>
-            <h1>Discover Timeless Classics</h1>
+            <p style={{ textTransform: 'uppercase', letterSpacing: '2px', fontWeight: 600, marginBottom: '1rem', color: 'var(--ac-secondary)' }}>{heroEyebrow}</p>
+            <h1>{heroTitle}</h1>
             <p style={{ fontSize: '1.25rem', marginBottom: '2.5rem', lineHeight: 1.6, textShadow: '1px 1px 3px rgba(0,0,0,0.8)' }}>
-                Your journey into automotive history begins here. Find, bid, or sell the world's most desired vintage automobiles.
+                {heroDescription}
             </p>
             <div className="ac-hero-buttons">
-                <a href="#listings" className="ac-btn ac-btn-cta" style={{ padding: '1rem 2.5rem', fontSize: '1.1rem' }}>Browse Showcase</a>
-                <a href="#auctions" className="ac-btn ac-btn-gold" style={{ padding: '1rem 2.5rem', fontSize: '1.1rem' }}>Live Auctions</a>
+                <a href="#listings" className="ac-btn ac-btn-cta" style={{ padding: '1rem 2.5rem', fontSize: '1.1rem' }}>{heroPrimaryCta}</a>
+                <a href="#auctions" className="ac-btn ac-btn-gold" style={{ padding: '1rem 2.5rem', fontSize: '1.1rem' }}>{heroSecondaryCta}</a>
             </div>
         </div>
       </section>
@@ -218,23 +253,26 @@ export default function Page() {
       {/* Stateful Refinement filters HUD */}
       <section className="ac-filter-section">
         <div style={{ flex: 1, minWidth: '100%', marginBottom: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <h2 className="ac-heading" style={{ fontSize: '1.6rem', margin: 0 }}>Find Your Dream Classic</h2>
+            <h2 className="ac-heading" style={{ fontSize: '1.6rem', margin: 0 }}>{filterTitle}</h2>
             {(selectedMake || selectedModel || selectedYear || selectedPrice) && (
               <button 
                 onClick={clearFilters}
                 style={{ background: 'none', border: 'none', color: 'var(--ac-primary)', cursor: 'pointer', fontWeight: 600, fontSize: '0.9rem' }}
               >
-                Clear Filters ↺
+                {clearFiltersLabel} ↺
               </button>
             )}
         </div>
         
         <div className="ac-filter-group">
-            <label style={{ fontSize: '0.8rem', textTransform: 'uppercase', color: '#888', fontWeight: 600, display: 'block', marginBottom: '0.4rem' }}>Make / Manufacturer</label>
+            <label style={{ fontSize: '0.8rem', textTransform: 'uppercase', color: '#888', fontWeight: 600, display: 'block', marginBottom: '0.4rem' }}>{makeLabel}</label>
             <select 
               className="ac-select"
               value={selectedMake}
-              onChange={(e) => setSelectedMake(e.target.value)}
+              onChange={(e) => {
+                setSelectedMake(e.target.value);
+                setSelectedModel('');
+              }}
             >
                 <option value="">All Makes</option>
                 {makesList.map(make => (
@@ -244,7 +282,7 @@ export default function Page() {
         </div>
         
         <div className="ac-filter-group">
-            <label style={{ fontSize: '0.8rem', textTransform: 'uppercase', color: '#888', fontWeight: 600, display: 'block', marginBottom: '0.4rem' }}>Model Series</label>
+            <label style={{ fontSize: '0.8rem', textTransform: 'uppercase', color: '#888', fontWeight: 600, display: 'block', marginBottom: '0.4rem' }}>{modelLabel}</label>
             <select 
               className="ac-select"
               value={selectedModel}
@@ -259,7 +297,7 @@ export default function Page() {
         </div>
         
         <div className="ac-filter-group">
-            <label style={{ fontSize: '0.8rem', textTransform: 'uppercase', color: '#888', fontWeight: 600, display: 'block', marginBottom: '0.4rem' }}>Era / Year</label>
+            <label style={{ fontSize: '0.8rem', textTransform: 'uppercase', color: '#888', fontWeight: 600, display: 'block', marginBottom: '0.4rem' }}>{yearLabel}</label>
             <select 
               className="ac-select"
               value={selectedYear}
@@ -275,7 +313,7 @@ export default function Page() {
         </div>
         
         <div className="ac-filter-group">
-            <label style={{ fontSize: '0.8rem', textTransform: 'uppercase', color: '#888', fontWeight: 600, display: 'block', marginBottom: '0.4rem' }}>Valuation Bracket</label>
+            <label style={{ fontSize: '0.8rem', textTransform: 'uppercase', color: '#888', fontWeight: 600, display: 'block', marginBottom: '0.4rem' }}>{priceLabel}</label>
             <select 
               className="ac-select"
               value={selectedPrice}
@@ -308,9 +346,9 @@ export default function Page() {
       {/* Featured Listings */}
       <section className="ac-section" id="listings">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
-          <h2 className="ac-section-title" style={{ margin: 0 }}>Featured Classics for Sale</h2>
+          <h2 className="ac-section-title" style={{ margin: 0 }}>{collectionTitle}</h2>
           <span style={{ color: '#555', fontWeight: 600, fontSize: '1.05rem', fontFamily: 'var(--ac-font-heading)' }}>
-            Showcasing {filteredCars.length} of {cars.length} Masterpieces
+            Showcasing {filteredCars.length} of {cars.length} {collectionCountLabel}
           </span>
         </div>
 
@@ -323,9 +361,9 @@ export default function Page() {
         ) : filteredCars.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '5rem 2rem', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 4px 15px rgba(0,0,0,0.05)' }}>
             <span style={{ fontSize: '3rem' }}>🏎️</span>
-            <h3 style={{ color: 'var(--ac-dark)', fontWeight: 700, marginTop: '1rem', marginBottom: '0.5rem', fontFamily: 'var(--ac-font-heading)' }}>No Classics Found</h3>
-            <p style={{ color: '#666', margin: '0 0 1.5rem 0' }}>No vintage automobiles matched your current search filters.</p>
-            <button onClick={clearFilters} className="ac-btn ac-btn-cta">Reset Refinements</button>
+            <h3 style={{ color: 'var(--ac-dark)', fontWeight: 700, marginTop: '1rem', marginBottom: '0.5rem', fontFamily: 'var(--ac-font-heading)' }}>{emptyTitle}</h3>
+            <p style={{ color: '#666', margin: '0 0 1.5rem 0' }}>{emptyDescription}</p>
+            <button onClick={clearFilters} className="ac-btn ac-btn-cta">{emptyButtonLabel}</button>
           </div>
         ) : (
           <div className="ac-grid">
@@ -342,7 +380,7 @@ export default function Page() {
 
       {/* Live Auctions Spotlight */}
       <section className="ac-auction-section" id="auctions">
-        <h2 className="ac-section-title">Live Auction Spotlight <span style={{ background: 'var(--ac-primary)', color: 'white', fontSize: '1rem', padding: '0.2rem 0.6rem', borderRadius: '4px', verticalAlign: 'middle', animation: 'pulse 1.5s infinite' }}>LIVE</span></h2>
+        <h2 className="ac-section-title">{auctionsTitle} <span style={{ background: 'var(--ac-primary)', color: 'white', fontSize: '1rem', padding: '0.2rem 0.6rem', borderRadius: '4px', verticalAlign: 'middle', animation: 'pulse 1.5s infinite' }}>LIVE</span></h2>
         <div className="ac-auction-grid">
             {FALLBACK_AUCTIONS.map((a, i) => (
                 <AuctionCard key={i} {...a} />
@@ -355,20 +393,20 @@ export default function Page() {
         <div className="ac-about-grid">
             <div>
                 <img 
-                  src="https://images.unsplash.com/photo-1549399542-7e3f8b79c341?q=80&w=600" 
+                  src={aboutImage} 
                   alt="Why Collect Classic Cars" 
                   style={{ width: '100%', height: '350px', objectFit: 'cover', borderRadius: '8px', boxShadow: '0 20px 40px rgba(0,0,0,0.1)' }} 
                 />
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                <h2 className="ac-heading" style={{ fontSize: '2.5rem', marginBottom: '1.5rem' }}>Why Collect Classic Cars?</h2>
+                <h2 className="ac-heading" style={{ fontSize: '2.5rem', marginBottom: '1.5rem' }}>{aboutTitle}</h2>
                 <p style={{ fontSize: '1.1rem', marginBottom: '1.5rem', lineHeight: 1.8 }}>
-                    More than just vehicles, classic cars are <strong>rolling investments</strong>, passionate hobbies, and tangible links to history.
+                    {aboutDescription}
                 </p>
                 <p style={{ color: '#555', marginBottom: '1.5rem', lineHeight: 1.8 }}>
-                    Each curve, engine note, and stitch of leather tells a story of innovation, design, and a bygone era. We connect discerning collectors with meticulously curated classics, ensuring authenticity, provenance, and investment quality.
+                    {aboutSecondaryDescription}
                 </p>
-                <a href="#listings" className="ac-btn ac-btn-cta">Read Our Story</a>
+                <a href="#listings" className="ac-btn ac-btn-cta">{aboutCta}</a>
             </div>
         </div>
       </section>

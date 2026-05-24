@@ -6,9 +6,31 @@ import type { Vehicle, Category } from '@sellio/types';
 import { useRouter } from 'next/navigation';
 import { LuxuryHeader, LuxuryCarCard, LuxuryFooter } from './components';
 import { DynamicTestimonials } from '@/components/testimonials/DynamicTestimonials';
+import { useThemeContent, useThemeMedia } from '@/components/theme-content/ThemeContentProvider';
 
 export default function Page() {
   const router = useRouter();
+  const heroTitle = useThemeContent('hero.title', 'Experience the Luxury You Deserve');
+  const heroDescription = useThemeContent(
+    'hero.description',
+    'Your journey into unparalleled elegance and performance starts here. Discover hand-picked masterpieces.',
+  );
+  const heroPrimaryCta = useThemeContent('hero.primary_cta_label', 'Explore Collection');
+  const heroSecondaryCta = useThemeContent('hero.secondary_cta_label', 'Book Now');
+  const searchButtonLabel = useThemeContent('search.button_label', 'Search');
+  const collectionTitle = useThemeContent('collection.title', 'Featured Masterpieces');
+  const viewAllLabel = useThemeContent('collection.view_all_label', 'View All Inventory');
+  const showcaseTitle = useThemeContent('showcase.title', 'Exclusive Showcase');
+  const showcaseImage = useThemeMedia('showcase.image', '/themes/autos/luxury/ferrari.png');
+  const showcaseHeading = useThemeContent('showcase.heading', 'The Crimson Legend');
+  const showcaseSubtitle = useThemeContent('showcase.subtitle', '1963 Ferrari 250 GTO');
+  const showcaseDescription = useThemeContent(
+    'showcase.description',
+    'A one-of-a-kind vintage masterpiece, meticulously restored. This vehicle represents automotive history and unparalleled exclusivity.',
+  );
+  const showcaseCta = useThemeContent('showcase.cta_label', 'Inquire About Price');
+  const brandsTitle = useThemeContent('brands.title', 'Our Curated Brands');
+  const testimonialsTitle = useThemeContent('testimonials.title', 'Client Experiences');
   
   // Dynamic States
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
@@ -57,10 +79,18 @@ export default function Page() {
           }
         }
         setError(null);
-      } catch (err: any) {
+      } catch (err: unknown) {
+        const apiError = err as {
+          message?: string;
+          response?: {
+            data?: {
+              message?: string;
+            };
+          };
+        };
         console.error("Failed to load live showroom data from API:", err);
         // Capture connection error string for luxury diagnostics trace
-        const errorMsg = err.response?.data?.message || err.message || "AxiosError: Network Error - Server offline at http://127.0.0.1:8000/api";
+        const errorMsg = apiError.response?.data?.message || apiError.message || "AxiosError: Network Error - Server offline at http://127.0.0.1:8000/api";
         setError(errorMsg);
       } finally {
         setLoading(false);
@@ -93,13 +123,13 @@ export default function Page() {
       <section className="lx-hero">
         <div className="lx-hero-overlay"></div>
         <div className="lx-hero-content">
-            <h1 className="lx-hero-title">Experience the Luxury You Deserve</h1>
+            <h1 className="lx-hero-title">{heroTitle}</h1>
             <p style={{ fontSize: '1.25rem', fontWeight: 300, marginBottom: '2rem', lineHeight: 1.6 }}>
-                Your journey into unparalleled elegance and performance starts here. Discover hand-picked masterpieces.
+                {heroDescription}
             </p>
             <div style={{ display: 'flex', gap: '1rem' }}>
-                <a href="#collections" className="lx-btn lx-btn-gold">Explore Collection</a>
-                <a href="#contact" className="lx-btn lx-btn-outline">Book Now</a>
+                <a href="#collections" className="lx-btn lx-btn-gold">{heroPrimaryCta}</a>
+                <a href="#contact" className="lx-btn lx-btn-outline">{heroSecondaryCta}</a>
             </div>
         </div>
       </section>
@@ -167,7 +197,7 @@ export default function Page() {
             </>
           )}
         </select>
-        <button className="lx-btn lx-btn-gold" style={{ flex: 1, padding: '0.8rem' }} onClick={handleSearchSubmit}>Search</button>
+        <button className="lx-btn lx-btn-gold" style={{ flex: 1, padding: '0.8rem' }} onClick={handleSearchSubmit}>{searchButtonLabel}</button>
       </section>
 
       {/* Showroom Diagnostics Panel */}
@@ -203,7 +233,7 @@ export default function Page() {
 
       {/* Featured Masterpieces */}
       <section className="lx-section" id="collections">
-        <h2 className="lx-section-title">Featured Masterpieces</h2>
+        <h2 className="lx-section-title">{collectionTitle}</h2>
         
         {loading ? (
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
@@ -254,31 +284,31 @@ export default function Page() {
         )}
 
         <div style={{ textAlign: 'center', marginTop: '4rem' }}>
-            <a href={getThemeLink('/explore')} className="lx-btn lx-btn-gold" style={{ padding: '1rem 3rem' }}>View All Inventory</a>
+            <a href={getThemeLink('/explore')} className="lx-btn lx-btn-gold" style={{ padding: '1rem 3rem' }}>{viewAllLabel}</a>
         </div>
       </section>
 
       {/* Exclusive Showcase */}
       <section className="lx-section" style={{ backgroundColor: '#111111' }}>
-        <h2 className="lx-section-title" style={{ color: 'white' }}>Exclusive Showcase</h2>
+        <h2 className="lx-section-title" style={{ color: 'white' }}>{showcaseTitle}</h2>
         <div className="lx-showcase-item">
             <div>
-                <img src="/themes/autos/luxury/ferrari.png" style={{ width: '100%', borderRadius: '8px' }} alt="Ferrari" />
+                <img src={showcaseImage} style={{ width: '100%', borderRadius: '8px' }} alt="" />
             </div>
             <div>
-                <h3 className="lx-heading lx-text-gold" style={{ fontSize: '2rem', marginBottom: '1rem' }}>The Crimson Legend</h3>
-                <p style={{ fontSize: '1.2rem', color: 'var(--lx-text-muted)', marginBottom: '1.5rem' }}>1963 Ferrari 250 GTO</p>
+                <h3 className="lx-heading lx-text-gold" style={{ fontSize: '2rem', marginBottom: '1rem' }}>{showcaseHeading}</h3>
+                <p style={{ fontSize: '1.2rem', color: 'var(--lx-text-muted)', marginBottom: '1.5rem' }}>{showcaseSubtitle}</p>
                 <p style={{ marginBottom: '2rem', lineHeight: 1.6 }}>
-                    A one-of-a-kind vintage masterpiece, meticulously restored. This vehicle represents automotive history and unparalleled exclusivity.
+                    {showcaseDescription}
                 </p>
-                <a href={getThemeLink('/explore?search=Ferrari')} className="lx-btn lx-btn-gold">Inquire About Price</a>
+                <a href={getThemeLink('/explore?search=Ferrari')} className="lx-btn lx-btn-gold">{showcaseCta}</a>
             </div>
         </div>
       </section>
 
       {/* Brands */}
       <section className="lx-section" id="brands">
-        <h2 className="lx-section-title">Our Curated Brands</h2>
+        <h2 className="lx-section-title">{brandsTitle}</h2>
         <div className="lx-brand-grid">
             <a href={getThemeLink('/explore?brand=Ferrari')} className="lx-brand-item" style={{ color: 'white', textDecoration: 'none' }}>Ferrari</a>
             <a href={getThemeLink('/explore?brand=Lamborghini')} className="lx-brand-item" style={{ color: 'white', textDecoration: 'none' }}>Lamborghini</a>
@@ -289,7 +319,7 @@ export default function Page() {
       </section>
 
       <DynamicTestimonials
-        title="Client Experiences"
+        title={testimonialsTitle}
         limit={3}
         variant="luxury"
         sectionClassName="lx-section"

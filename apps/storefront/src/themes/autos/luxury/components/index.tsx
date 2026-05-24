@@ -4,12 +4,14 @@ import { MenuNav } from '@/components/menu/MenuNav';
 import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { hashAwareNavItemRenderer } from '@/components/menu/menu-renderers';
+import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 
 export const LuxuryHeader = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const brandLabel = useThemeContent('header.brand_label', 'Velvet Wheels');
     return (
         <header className="lx-header">
-            <a href="#" className="lx-logo">Velvet Wheels</a>
+            <a href="#" className="lx-logo">{brandLabel}</a>
             
             <button 
                 className={`lx-hamburger ${isOpen ? 'lx-hamburger-open' : ''}`} 
@@ -50,7 +52,16 @@ const getThemeLink = (path: string) => {
     return path;
 };
 
-export const LuxuryCarCard = ({ title, specs, price, image, slug, onClick }: any) => {
+interface LuxuryCarCardProps {
+    title: string;
+    specs: string;
+    price: string;
+    image: string;
+    slug?: string;
+    onClick?: (event: React.MouseEvent) => void;
+}
+
+export const LuxuryCarCard = ({ title, specs, price, image, slug, onClick }: LuxuryCarCardProps) => {
     const cursorStyle = onClick || slug ? { cursor: 'pointer' } : {};
     
     // Resolve link if slug is provided
@@ -94,12 +105,19 @@ export const LuxuryCarCard = ({ title, specs, price, image, slug, onClick }: any
     );
 };
 
-export const LuxuryFooter = () => (
+export const LuxuryFooter = () => {
+    const brandLabel = useThemeContent('header.brand_label', 'Velvet Wheels');
+    const footerDescription = useThemeContent(
+        'footer.description',
+        "Curating the world's finest automobiles for the most discerning clientele.",
+    );
+
+    return (
     <footer className="lx-footer">
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '3rem', marginBottom: '3rem' }}>
             <div>
-                <h4 className="lx-logo" style={{ marginBottom: '1rem', display: 'block' }}>Velvet Wheels</h4>
-                <p style={{ color: 'var(--lx-text-muted)', fontSize: '0.95rem', lineHeight: 1.6 }}>Curating the world's finest automobiles for the most discerning clientele.</p>
+                <h4 className="lx-logo" style={{ marginBottom: '1rem', display: 'block' }}>{brandLabel}</h4>
+                <p style={{ color: 'var(--lx-text-muted)', fontSize: '0.95rem', lineHeight: 1.6 }}>{footerDescription}</p>
             </div>
             <FooterMenuColumn
                 location="footer_column_1"
@@ -124,4 +142,5 @@ export const LuxuryFooter = () => (
             &copy; 2026 Velvet Wheels. All Rights Reserved.
         </div>
     </footer>
-);
+    );
+};

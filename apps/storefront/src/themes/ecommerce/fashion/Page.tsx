@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { api } from '@sellio/api-client';
 import type { Product } from '@sellio/types';
 import { EditorialLookCard, TrendHUD } from './components';
+import { useThemeContent, useThemeMedia } from '@/components/theme-content/ThemeContentProvider';
 
 // Curated high-fidelity mock capsule collection fallbacks
 const FALLBACK_COLLECTION: Product[] = [
@@ -106,9 +107,48 @@ const FALLBACK_COLLECTION: Product[] = [
   }
 ];
 
+type FashionProduct = Product & {
+  media?: {
+    featured_image?: string | null;
+  } | null;
+};
+
+type ApiSyncError = {
+  message?: string;
+  code?: string;
+  config?: {
+    baseURL?: string;
+    url?: string;
+    method?: string;
+  };
+  response?: {
+    status?: number;
+  };
+};
+
 export default function Page() {
   const router = useRouter();
-  const [products, setProducts] = useState<Product[]>([]);
+  const heroEyebrow = useThemeContent('hero.eyebrow', 'FALL_WINTER_2026_COLLECTION');
+  const heroTitle = useThemeContent('hero.title', 'Silent\nLuxury.');
+  const heroCtaLabel = useThemeContent('hero.primary_cta_label', 'Explore Editorial');
+  const heroImage = useThemeMedia('hero.image', '/themes/ecommerce/fashion/17.webp');
+  const sideImageOne = useThemeMedia('hero.side_image_1', '/themes/ecommerce/fashion/18.webp');
+  const sideImageOneLabel = useThemeContent('hero.side_image_1_label', 'ACCESSORIES_01');
+  const sideImageTwo = useThemeMedia('hero.side_image_2', '/themes/ecommerce/fashion/19.webp');
+  const sideImageTwoLabel = useThemeContent('hero.side_image_2_label', 'READY_TO_WEAR_04');
+  const collectionEyebrow = useThemeContent('collection.eyebrow', 'THE_AUTUMN_CAPSULE_V8');
+  const collectionTitle = useThemeContent('collection.title', 'Lookbook 26.');
+  const diagnosticsTitle = useThemeContent('diagnostics.title', 'Atelier Node Connection Alert');
+  const diagnosticsDescription = useThemeContent(
+    'diagnostics.description',
+    'The dynamic Laravel API database is currently offline. Activating premium local node resilience fallback. Loading high-fidelity local catalog backups...',
+  );
+  const philosophyQuote = useThemeContent(
+    'philosophy.quote',
+    'We do not build garments. We architect confidence through the precision of silhouette and the purity of material.',
+  );
+  const philosophyEyebrow = useThemeContent('philosophy.eyebrow', 'ATELIER_PHILOSOPHY_SYNC');
+  const [products, setProducts] = useState<FashionProduct[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [errorTrace, setErrorTrace] = useState<string | null>(null);
 
@@ -127,15 +167,16 @@ export default function Page() {
           // Empty state resilience
           setProducts(FALLBACK_COLLECTION);
         }
-      } catch (err: any) {
+      } catch (err: unknown) {
+        const apiError = err as ApiSyncError;
         console.error("Atelier Node API Sync Failed:", err);
         // Build robust, descriptive trace content
         const traceInfo = {
-          message: err.message || "Unknown Connection Exception",
-          url: err.config?.url ? `${err.config.baseURL || ''}${err.config.url}` : "v1/products",
-          method: err.config?.method?.toUpperCase() || "GET",
-          status: err.response?.status || "TIMEOUT",
-          reason: err.code || "ERR_NETWORK"
+          message: apiError.message || "Unknown Connection Exception",
+          url: apiError.config?.url ? `${apiError.config.baseURL || ''}${apiError.config.url}` : "v1/products",
+          method: apiError.config?.method?.toUpperCase() || "GET",
+          status: apiError.response?.status || "TIMEOUT",
+          reason: apiError.code || "ERR_NETWORK"
         };
         setErrorTrace(JSON.stringify(traceInfo, null, 2));
         setProducts(FALLBACK_COLLECTION);
@@ -177,26 +218,33 @@ export default function Page() {
       {/* Editorial Fashion Hero */}
       <section className="ef-hero">
         <div className="ef-hero-main">
-          <img src="/themes/ecommerce/fashion/17.webp" alt="Main Editorial" className="ef-hero-img" />
+          <img src={heroImage} alt="" className="ef-hero-img" />
           <div style={{ position: 'absolute', bottom: '4rem', left: '4rem', color: 'white' }}>
-              <div className="ef-mono" style={{ marginBottom: '1.5rem', color: 'white' }}>FALL_WINTER_2026_COLLECTION</div>
-              <h1 className="ef-heading-xl" style={{ color: 'white' }}>Silent <br/><span className="ef-italic">Luxury.</span></h1>
+              <div className="ef-mono" style={{ marginBottom: '1.5rem', color: 'white' }}>{heroEyebrow}</div>
+              <h1 className="ef-heading-xl" style={{ color: 'white' }}>
+                {heroTitle.split('\n').map((line, index) => (
+                  <React.Fragment key={`${line}-${index}`}>
+                    {index > 0 && <br/>}
+                    {index > 0 ? <span className="ef-italic">{line}</span> : line}
+                  </React.Fragment>
+                ))}
+              </h1>
               <div style={{ marginTop: '4rem' }}>
-                  <button className="ef-btn-primary" style={{ background: 'white', color: 'black' }}>Explore Editorial</button>
+                  <button className="ef-btn-primary" style={{ background: 'white', color: 'black' }}>{heroCtaLabel}</button>
               </div>
           </div>
         </div>
         <div className="ef-hero-side">
             <div style={{ flex: 1, overflow: 'hidden', position: 'relative' }}>
-                <img src="/themes/ecommerce/fashion/18.webp" alt="Side Look 1" className="ef-hero-img" />
+                <img src={sideImageOne} alt="" className="ef-hero-img" />
                 <div style={{ position: 'absolute', bottom: '2rem', left: '2rem', color: 'white' }}>
-                    <div className="ef-mono" style={{ fontSize: '0.55rem', color: 'white' }}>ACCESSORIES_01</div>
+                    <div className="ef-mono" style={{ fontSize: '0.55rem', color: 'white' }}>{sideImageOneLabel}</div>
                 </div>
             </div>
             <div style={{ flex: 1, overflow: 'hidden', position: 'relative' }}>
-                <img src="/themes/ecommerce/fashion/19.webp" alt="Side Look 2" className="ef-hero-img" />
+                <img src={sideImageTwo} alt="" className="ef-hero-img" />
                 <div style={{ position: 'absolute', bottom: '2rem', left: '2rem', color: 'white' }}>
-                    <div className="ef-mono" style={{ fontSize: '0.55rem', color: 'white' }}>READY_TO_WEAR_04</div>
+                    <div className="ef-mono" style={{ fontSize: '0.55rem', color: 'white' }}>{sideImageTwoLabel}</div>
                 </div>
             </div>
         </div>
@@ -225,12 +273,12 @@ export default function Page() {
           <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', marginBottom: '1.5rem' }}>
             <span style={{ color: 'var(--ef-champagne)', fontSize: '1.8rem', fontWeight: 'bold' }}>✦</span>
             <h3 style={{ fontFamily: 'var(--ef-serif)', fontSize: '1.6rem', fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', margin: 0 }}>
-              Atelier Node Connection Alert
+              {diagnosticsTitle}
             </h3>
           </div>
           
           <p style={{ fontSize: '0.9rem', color: 'var(--ef-ebony)', opacity: 0.8, lineHeight: '1.8', marginBottom: '2rem' }}>
-            The dynamic Laravel API database is currently offline. Activating premium local node resilience fallback. Loading high-fidelity local catalog backups...
+            {diagnosticsDescription}
           </p>
 
           <div style={{ background: 'white', border: '1px solid var(--ef-border)', padding: '1.5rem' }}>
@@ -255,8 +303,8 @@ export default function Page() {
       {/* Lookbook Registry Section */}
       <section>
           <div style={{ textAlign: 'center', marginBottom: '10rem' }}>
-              <div className="ef-mono" style={{ marginBottom: '2rem' }}>THE_AUTUMN_CAPSULE_V8</div>
-              <h2 className="ef-heading-xl" style={{ fontSize: '6rem' }}>Lookbook <span className="ef-italic">26.</span></h2>
+              <div className="ef-mono" style={{ marginBottom: '2rem' }}>{collectionEyebrow}</div>
+              <h2 className="ef-heading-xl" style={{ fontSize: '6rem' }}>{collectionTitle}</h2>
           </div>
           
           <div className="ef-lookbook-grid">
@@ -273,7 +321,7 @@ export default function Page() {
                 </div>
               ))
             ) : (
-              products.map((item: any, i: number) => {
+              products.map((item, i: number) => {
                 // Safely extract price, mapping fallback correctly
                 const priceFormatted = item.pricing?.formatted || 
                   (typeof item.price === 'number' ? `$${item.price.toLocaleString()}` : item.price);
@@ -300,10 +348,10 @@ export default function Page() {
       <section style={{ marginTop: '20rem', padding: '15rem 10%', background: 'var(--ef-oyster)', textAlign: 'center' }}>
           <div style={{ maxWidth: '900px', margin: '0 auto' }}>
               <h2 style={{ fontFamily: 'var(--ef-serif)', fontSize: '3.5rem', fontWeight: 900, lineHeight: 1.3, marginBottom: '4rem' }}>
-                  "We do not build garments. We architect confidence through the precision of silhouette and the purity of material."
+                  &quot;{philosophyQuote}&quot;
               </h2>
               <div style={{ width: '80px', height: '1px', background: 'var(--ef-champagne)', margin: '0 auto 4rem' }}></div>
-              <div className="ef-mono" style={{ opacity: 0.5 }}>ATELIER_PHILOSOPHY_SYNC</div>
+              <div className="ef-mono" style={{ opacity: 0.5 }}>{philosophyEyebrow}</div>
           </div>
       </section>
       

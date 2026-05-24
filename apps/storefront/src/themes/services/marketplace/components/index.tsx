@@ -5,6 +5,7 @@ import { MenuNav } from '@/components/menu/MenuNav';
 import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { hashAwareNavItemRenderer } from '@/components/menu/menu-renderers';
+import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 
 function getThemeLink(path: string) {
   if (typeof window !== 'undefined' && window.location.pathname.startsWith('/preview/')) {
@@ -16,11 +17,15 @@ function getThemeLink(path: string) {
 
 export const MarketplaceHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const brandLabel = useThemeContent('header.brand_label', 'ServiceConnect');
+  const connectIndex = brandLabel.toLowerCase().indexOf('connect');
+  const brandPrimary = connectIndex >= 0 ? brandLabel.slice(0, connectIndex) : brandLabel;
+  const brandSecondary = connectIndex >= 0 ? brandLabel.slice(connectIndex) : '';
 
   return (
     <header className="sm-header">
       <div className="sm-logo">
-        Service<span>Connect</span>
+        {brandPrimary}<span>{brandSecondary}</span>
       </div>
       
       {/* Mobile Hamburger Trigger */}
@@ -169,15 +174,26 @@ export const SmProviderSkeleton = () => (
   </div>
 );
 
-export const MarketplaceFooter = () => (
+export const MarketplaceFooter = () => {
+    const brandLabel = useThemeContent('header.brand_label', 'ServiceConnect');
+    const footerDescription = useThemeContent(
+      'footer.description',
+      'Your trusted marketplace for local services. Connecting quality professionals with clients who need them.',
+    );
+    const footerEmail = useThemeContent('footer.email', 'support@serviceconnect.com');
+    const connectIndex = brandLabel.toLowerCase().indexOf('connect');
+    const brandPrimary = connectIndex >= 0 ? brandLabel.slice(0, connectIndex) : brandLabel;
+    const brandSecondary = connectIndex >= 0 ? brandLabel.slice(connectIndex) : '';
+
+    return (
     <footer className="sm-footer">
         <div className="sm-footer-grid" style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr 1fr 1fr', gap: '3rem', marginBottom: '3rem' }}>
             <div>
-                <h5 style={{ fontWeight: 800, color: 'var(--sm-primary)', marginBottom: '1.5rem', fontSize: '1.5rem' }}>Service<span style={{ color: 'var(--sm-secondary)' }}>Connect</span></h5>
+                <h5 style={{ fontWeight: 800, color: 'var(--sm-primary)', marginBottom: '1.5rem', fontSize: '1.5rem' }}>{brandPrimary}<span style={{ color: 'var(--sm-secondary)' }}>{brandSecondary}</span></h5>
                 <p style={{ color: 'var(--sm-text-muted)', fontSize: '0.95rem', lineHeight: 1.7 }}>
-                    Your trusted marketplace for local services. Connecting quality professionals with clients who need them.
+                    {footerDescription}
                 </p>
-                <p style={{ color: 'white', fontSize: '0.95rem', marginTop: '1.5rem', fontWeight: 600 }}>support@serviceconnect.com</p>
+                <p style={{ color: 'white', fontSize: '0.95rem', marginTop: '1.5rem', fontWeight: 600 }}>{footerEmail}</p>
             </div>
             <FooterMenuColumn
                 location="footer_column_1"
@@ -202,4 +218,5 @@ export const MarketplaceFooter = () => (
             &copy; 2026 ServiceConnect. All rights reserved.
         </div>
     </footer>
-);
+    );
+};

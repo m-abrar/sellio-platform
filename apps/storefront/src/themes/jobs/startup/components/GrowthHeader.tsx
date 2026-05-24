@@ -3,12 +3,16 @@ import React from 'react';
 import { MenuNav } from '@/components/menu/MenuNav';
 import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
+import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 
-export const GrowthHeader = () => (
+export const GrowthHeader = () => {
+  const brandLabel = useThemeContent('header.brand_label', 'GROWTH_NODE.');
+
+  return (
     <header className="growth-header">
         <div className="growth-logo">
             <div style={{ width: '24px', height: '24px', background: 'var(--growth-neon)', borderRadius: '4px', transform: 'rotate(45deg)' }}></div>
-            GROWTH_NODE<span>.</span>
+            {brandLabel.endsWith('.') ? brandLabel.slice(0, -1) : brandLabel}<span>.</span>
         </div>
         <MenuNav
           location="main_header"
@@ -33,4 +37,5 @@ export const GrowthHeader = () => (
           )}
         />
     </header>
-);
+  );
+};

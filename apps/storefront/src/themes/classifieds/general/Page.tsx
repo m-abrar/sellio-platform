@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { api } from '@sellio/api-client';
 import type { ClassifiedListing, Category } from '@sellio/types';
 import { GeneralHeader, ListingCard, GeneralFooter } from './components';
+import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 
 interface ListingItem {
   id: number;
@@ -295,6 +296,21 @@ const translateListing = (item: ClassifiedListing): ListingItem => {
 
 export default function Page() {
   const router = useRouter();
+  const sidebarCategoriesTitle = useThemeContent('sidebar.categories_title', 'Explore Categories');
+  const sidebarFiltersTitle = useThemeContent('sidebar.filters_title', 'Filters');
+  const pickupOnlyLabel = useThemeContent('filters.pickup_label', 'Local pickup only');
+  const deliveryLabel = useThemeContent('filters.delivery_label', 'Includes delivery');
+  const priceLimitLabel = useThemeContent('filters.price_limit_label', 'Price Limit:');
+  const clearFiltersLabel = useThemeContent('filters.clear_label', 'Clear all filters');
+  const allListingsTitle = useThemeContent('collection.all_title', 'All Recommended Listings');
+  const categoryShowcaseSuffix = useThemeContent('collection.category_suffix', 'Showcase');
+  const sortLabel = useThemeContent('collection.sort_label', 'Sort:');
+  const emptyTitle = useThemeContent('empty.title', 'No Listings Found');
+  const emptyDescription = useThemeContent('empty.description', "We couldn't find items that match your current sidebar filters or search tags.");
+  const emptyButtonLabel = useThemeContent('empty.button_label', 'Reset Settings');
+  const loadMoreLabel = useThemeContent('collection.load_more_label', 'Load More Listings');
+  const loadingMoreLabel = useThemeContent('collection.loading_more_label', 'Syncing Classifieds...');
+  const chatPlaceholder = useThemeContent('chat.placeholder', 'Type your offer or ask questions...');
 
   const getThemeLink = (path: string) => {
     if (typeof window !== 'undefined') {
@@ -400,9 +416,9 @@ export default function Page() {
           setErrorTrace("Classifieds General database returned empty.");
           loadLocalFallback();
         }
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error("AxiosError: Connection failure while fetching general classifieds:", err);
-        setErrorTrace(err?.stack || err?.message || String(err));
+        setErrorTrace(err instanceof Error ? (err.stack || err.message) : String(err));
         loadLocalFallback();
       } finally {
         setLoading(false);
@@ -533,7 +549,7 @@ export default function Page() {
         {/* Left Side Category sidebar panel */}
         <aside>
           <div className="cg-sidebar">
-            <div className="cg-sidebar-title">Explore Categories</div>
+            <div className="cg-sidebar-title">{sidebarCategoriesTitle}</div>
             <div className="cg-category-list">
               {categories.map((cat) => (
                 <a 
@@ -548,7 +564,7 @@ export default function Page() {
             </div>
 
             {/* Structured Sidebar filters */}
-            <div className="cg-sidebar-title">Filters</div>
+            <div className="cg-sidebar-title">{sidebarFiltersTitle}</div>
             <div className="cg-filter-section">
               <label className="cg-checkbox-label">
                 <input 
@@ -556,7 +572,7 @@ export default function Page() {
                   checked={localPickupOnly} 
                   onChange={(e) => setLocalPickupOnly(e.target.checked)} 
                 />
-                📍 Local pickup only
+                📍 {pickupOnlyLabel}
               </label>
               
               <label className="cg-checkbox-label">
@@ -565,13 +581,13 @@ export default function Page() {
                   checked={includesDelivery} 
                   onChange={(e) => setIncludesDelivery(e.target.checked)} 
                 />
-                📦 Includes delivery
+                📦 {deliveryLabel}
               </label>
 
               {/* Price Range Slider */}
               <div className="cg-range-box">
                 <div className="cg-range-labels">
-                  <span>Price Limit:</span>
+                  <span>{priceLimitLabel}</span>
                   <span style={{ color: 'var(--cg-primary)', fontWeight: 700 }}>
                     {maxPrice >= 25000 ? 'Any Price' : `$${maxPrice.toLocaleString()}`}
                   </span>
@@ -602,7 +618,7 @@ export default function Page() {
                   textTransform: 'uppercase'
                 }}
               >
-                Clear all filters
+                {clearFiltersLabel}
               </button>
             </div>
           </div>
@@ -630,12 +646,12 @@ export default function Page() {
           <div className="cg-grid-header">
             <h1 className="cg-grid-title">
               {selectedCategory === 'all' 
-                ? 'All Recommended Listings' 
-                : `${categories.find(c => c.id === selectedCategory)?.name || ''} Showcase`}
+                ? allListingsTitle 
+                : `${categories.find(c => c.id === selectedCategory)?.name || ''} ${categoryShowcaseSuffix}`}
             </h1>
             
             <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-              <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--cg-text-muted)', textTransform: 'uppercase' }}>Sort:</span>
+              <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--cg-text-muted)', textTransform: 'uppercase' }}>{sortLabel}</span>
               <select 
                 className="cg-select"
                 value={sortBy}
@@ -669,9 +685,9 @@ export default function Page() {
           ) : filteredListings.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '5rem 1rem', background: '#ffffff', borderRadius: '12px', border: '1px solid var(--cg-border)' }}>
               <span style={{ fontSize: '2.5rem', display: 'block', marginBottom: '1.25rem' }}>📦</span>
-              <h2 style={{ fontWeight: 800, marginBottom: '0.5rem' }}>No Listings Found</h2>
-              <p style={{ color: 'var(--cg-text-muted)', maxWidth: '400px', margin: '0 auto 1.5rem' }}>We couldn't find items that match your current sidebar filters or search tags.</p>
-              <button className="cg-btn cg-btn-primary" onClick={resetFilters}>Reset Settings</button>
+              <h2 style={{ fontWeight: 800, marginBottom: '0.5rem' }}>{emptyTitle}</h2>
+              <p style={{ color: 'var(--cg-text-muted)', maxWidth: '400px', margin: '0 auto 1.5rem' }}>{emptyDescription}</p>
+              <button className="cg-btn cg-btn-primary" onClick={resetFilters}>{emptyButtonLabel}</button>
             </div>
           ) : (
             <div className="cg-grid">
@@ -701,7 +717,7 @@ export default function Page() {
                 disabled={loadingListings}
                 style={{ minWidth: '220px' }}
               >
-                {loadingListings ? 'Syncing Classifieds...' : 'Load More Listings'}
+                {loadingListings ? loadingMoreLabel : loadMoreLabel}
               </button>
             </div>
           )}
@@ -741,7 +757,7 @@ export default function Page() {
             <input 
               type="text" 
               className="cg-chat-input" 
-              placeholder="Type your offer or ask questions..." 
+              placeholder={chatPlaceholder}
               required
               value={typedMessage}
               onChange={(e) => setTypedMessage(e.target.value)}

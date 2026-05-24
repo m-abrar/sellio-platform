@@ -3,13 +3,15 @@ import React, { useState } from 'react';
 import { MenuNav } from '@/components/menu/MenuNav';
 import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { hashAwareNavItemRenderer } from '@/components/menu/menu-renderers';
+import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 
 export const SonicHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const brandLabel = useThemeContent('header.brand_label', 'PULSE');
 
   return (
     <header className="sonic-header">
-      <div className="sonic-logo">PULSE</div>
+      <div className="sonic-logo">{brandLabel}</div>
       
       <button 
         className={`sonic-hamburger ${isOpen ? 'sonic-hamburger-open' : ''}`} 

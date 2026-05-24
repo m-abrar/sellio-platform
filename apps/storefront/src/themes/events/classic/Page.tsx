@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { api } from '@sellio/api-client';
 import type { EventListing } from '@sellio/types';
 import { OccasionCard, BookingHUD } from './components';
+import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 
 const months = ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'];
 
@@ -35,6 +36,35 @@ export default function Page() {
   const [events, setEvents] = useState<EventListing[]>([]);
   const [loadingEvents, setLoadingEvents] = useState(true);
   const [eventError, setEventError] = useState<string | null>(null);
+  const heroTitle = useThemeContent('hero.title', 'Cultural\nHeritage.');
+  const heroDescription = useThemeContent(
+    'hero.description',
+    "A curated distribution of the world's most significant cultural repertoire. Authenticated experiences for the discerning patron."
+  );
+  const heroCta = useThemeContent('hero.primary_cta_label', 'Explore Repertoire');
+  const trustItems = useThemeContent(
+    'trust.items',
+    'AUTHENTIC_INSTITUTIONAL_NODES|CURATED_ARTISTIC_PROTOCOL|GLOBAL_CULTURAL_EXCHANGE|PATRON_PRIVACY_SECURED'
+  ).split('|').map((item) => item.trim()).filter(Boolean);
+  const registryEyebrow = useThemeContent('collection.eyebrow', 'OFFICIAL_CULTURAL_REGISTRY');
+  const registryTitle = useThemeContent('collection.title', 'The\nRepertoire.');
+  const registryDescription = useThemeContent(
+    'collection.description',
+    "Our unified protocol synchronizes performance availability from the world's most significant institutional nodes."
+  );
+  const patronEyebrow = useThemeContent('patron.eyebrow', 'PATRON_CIRCLE_PROTOCOL');
+  const patronTitle = useThemeContent('patron.title', "The Patron's\nCircle.");
+  const patronDescription = useThemeContent(
+    'patron.description',
+    'Join an exclusive network of cultural institutions and patrons. Support the arts through the Sellio Legacy protocol and gain early access to premieres.'
+  );
+  const patronPerks = useThemeContent('patron.perks', 'Priority_Box|Private_Galas|Voting_Rights|Archive_Access').split('|').map((item) => item.trim()).filter(Boolean);
+  const patronCardTitle = useThemeContent('patron.card_title', 'Become a Patron.');
+  const patronCardDescription = useThemeContent(
+    'patron.card_description',
+    'Institutional inquiry nodes are currently active for the 2026/27 cycle. Submit your credentials for evaluation.'
+  );
+  const patronCardCta = useThemeContent('patron.card_cta_label', 'Request Institutional Access');
 
   useEffect(() => {
     let isMounted = true;
@@ -75,20 +105,24 @@ export default function Page() {
       <section className="ecl-hero" aria-labelledby="ecl-hero-title">
           <div style={{ width: '100px', height: '1px', background: 'var(--ecl-gold)', marginBottom: '4rem' }}></div>
           <h1 className="ecl-heading-xl" style={{ color: 'white' }} id="ecl-hero-title">
-            Cultural <br/>
-            <span className="ecl-italic">Heritage.</span>
+            {heroTitle.split('\n').map((line, index) => (
+              <React.Fragment key={`${line}-${index}`}>
+                {index > 0 && <br />}
+                {index === heroTitle.split('\n').length - 1 ? <span className="ecl-italic">{line}</span> : line}
+              </React.Fragment>
+            ))}
           </h1>
           <p style={{ maxWidth: '750px', fontSize: '1.5rem', fontStyle: 'italic', color: 'rgba(255,255,255,0.7)', lineHeight: 1.8, marginTop: '5rem', fontWeight: 300 }}>
-              A curated distribution of the world's most significant cultural repertoire. Authenticated experiences for the discerning patron.
+              {heroDescription}
           </p>
           <div style={{ marginTop: '7rem' }}>
-            <button className="ec-btn-primary" style={{ background: 'white', color: 'var(--ecl-burgundy)' }} id="ecl-btn-explore" onClick={() => document.getElementById('ecl-exchange-section')?.scrollIntoView({ behavior: 'smooth' })}>Explore Repertoire</button>
+            <button className="ec-btn-primary" style={{ background: 'white', color: 'var(--ecl-burgundy)' }} id="ecl-btn-explore" onClick={() => document.getElementById('ecl-exchange-section')?.scrollIntoView({ behavior: 'smooth' })}>{heroCta}</button>
           </div>
       </section>
 
       {/* Trust & Logistics Bar */}
       <section className="ecl-trust-bar" aria-label="Artistic Integrity Status">
-          {['AUTHENTIC_INSTITUTIONAL_NODES', 'CURATED_ARTISTIC_PROTOCOL', 'GLOBAL_CULTURAL_EXCHANGE', 'PATRON_PRIVACY_SECURED'].map(logic => (
+          {trustItems.map(logic => (
               <div key={logic} className="ecl-mono" style={{ fontSize: '0.65rem', opacity: 0.5 }}>{logic}</div>
           ))}
       </section>
@@ -105,11 +139,18 @@ export default function Page() {
       <section className="ecl-section" id="ecl-exchange-section" aria-labelledby="ecl-repertoire-title">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '8rem' }}>
               <div>
-                  <div className="ecl-mono" style={{ marginBottom: '1.5rem' }}>OFFICIAL_CULTURAL_REGISTRY</div>
-                  <h2 className="ecl-heading-xl" style={{ fontSize: 'clamp(3rem, 8vw, 6rem)' }} id="ecl-repertoire-title">The <span className="ecl-italic">Repertoire.</span></h2>
+                  <div className="ecl-mono" style={{ marginBottom: '1.5rem' }}>{registryEyebrow}</div>
+                  <h2 className="ecl-heading-xl" style={{ fontSize: 'clamp(3rem, 8vw, 6rem)' }} id="ecl-repertoire-title">
+                    {registryTitle.split('\n').map((line, index) => (
+                      <React.Fragment key={`${line}-${index}`}>
+                        {index > 0 && ' '}
+                        {index === registryTitle.split('\n').length - 1 ? <span className="ecl-italic">{line}</span> : line}
+                      </React.Fragment>
+                    ))}
+                  </h2>
               </div>
               <div style={{ textAlign: 'right', maxWidth: '400px', fontSize: '1rem', color: 'rgba(26, 26, 26, 0.4)', lineHeight: 1.8 }}>
-                  Our unified protocol synchronizes performance availability from the world's most significant institutional nodes.
+                  {registryDescription}
               </div>
           </div>
 
@@ -150,23 +191,30 @@ export default function Page() {
       {/* Institutional / Patron Section */}
       <section className="ecl-section ecl-patron-section" aria-labelledby="ecl-patron-title">
           <div style={{ padding: '8rem' }}>
-              <div className="ecl-mono" style={{ marginBottom: '3rem' }}>PATRON_CIRCLE_PROTOCOL</div>
-              <h2 className="ecl-heading-xl" style={{ fontSize: 'clamp(2.5rem, 6vw, 5rem)', marginBottom: '4rem' }} id="ecl-patron-title">The Patron's <br/><span className="ecl-italic">Circle.</span></h2>
+              <div className="ecl-mono" style={{ marginBottom: '3rem' }}>{patronEyebrow}</div>
+              <h2 className="ecl-heading-xl" style={{ fontSize: 'clamp(2.5rem, 6vw, 5rem)', marginBottom: '4rem' }} id="ecl-patron-title">
+                {patronTitle.split('\n').map((line, index) => (
+                  <React.Fragment key={`${line}-${index}`}>
+                    {index > 0 && <br />}
+                    {index === patronTitle.split('\n').length - 1 ? <span className="ecl-italic">{line}</span> : line}
+                  </React.Fragment>
+                ))}
+              </h2>
               <p style={{ fontSize: '1.25rem', color: 'rgba(26, 26, 26, 0.4)', lineHeight: 2, marginBottom: '6rem', fontWeight: 300 }}>
-                  Join an exclusive network of cultural institutions and patrons. Support the arts through the Sellio Legacy protocol and gain early access to premieres.
+                  {patronDescription}
               </p>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem' }} className="ecl-patron-perks">
-                  {['Priority_Box', 'Private_Galas', 'Voting_Rights', 'Archive_Access'].map(item => (
+                  {patronPerks.map(item => (
                       <div key={item} style={{ fontSize: '0.85rem', fontWeight: 900, color: 'var(--ecl-burgundy)', letterSpacing: '2px' }}>◆ {item.toUpperCase()}</div>
                   ))}
               </div>
           </div>
           <div style={{ padding: '8rem', background: '#fdfdfb', borderLeft: '1px solid var(--ecl-stone)', height: '100%' }}>
-              <h3 style={{ fontFamily: 'var(--ecl-serif)', fontSize: '2.5rem', fontWeight: 900, marginBottom: '2.5rem', color: 'var(--ecl-burgundy)' }}>Become a Patron.</h3>
+              <h3 style={{ fontFamily: 'var(--ecl-serif)', fontSize: '2.5rem', fontWeight: 900, marginBottom: '2.5rem', color: 'var(--ecl-burgundy)' }}>{patronCardTitle}</h3>
               <p style={{ color: 'rgba(26, 26, 26, 0.4)', lineHeight: 2, marginBottom: '4rem' }}>
-                  Institutional inquiry nodes are currently active for the 2026/27 cycle. Submit your credentials for evaluation.
+                  {patronCardDescription}
               </p>
-              <button className="ecl-btn-primary" style={{ width: '100%', padding: '2rem' }} id="ecl-btn-patron-apply" onClick={() => alert('Patron circle application transmitted.')}>Request Institutional Access</button>
+              <button className="ecl-btn-primary" style={{ width: '100%', padding: '2rem' }} id="ecl-btn-patron-apply" onClick={() => alert('Patron circle application transmitted.')}>{patronCardCta}</button>
           </div>
       </section>
 

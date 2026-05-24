@@ -4,13 +4,18 @@ import { MenuNav } from '@/components/menu/MenuNav';
 import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { hashAwareNavItemRenderer } from '@/components/menu/menu-renderers';
+import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 
 export const ClassicHeader = () => {
     const [isOpen, setIsOpen] = React.useState(false);
+    const brandLabel = useThemeContent('header.brand_label', 'CLASSIC MOTORS');
+    const [brandPrimary, ...brandRest] = brandLabel.split(' ');
+    const brandSecondary = brandRest.join(' ');
+
     return (
         <header className="ac-header">
             <a href="#" className="ac-logo">
-                <span style={{ color: 'var(--ac-primary)' }}>CLASSIC</span> <span style={{ color: 'var(--ac-dark)' }}>MOTORS</span>
+                <span style={{ color: 'var(--ac-primary)' }}>{brandPrimary}</span> <span style={{ color: 'var(--ac-dark)' }}>{brandSecondary}</span>
             </a>
             
             <button 
@@ -44,7 +49,15 @@ export const ClassicHeader = () => {
     );
 };
 
-export const ClassicCarCard = ({ title, desc, price, image, onClick }: any) => (
+interface ClassicCarCardProps {
+    title: string;
+    desc: string;
+    price: string;
+    image: string;
+    onClick?: () => void;
+}
+
+export const ClassicCarCard = ({ title, desc, price, image, onClick }: ClassicCarCardProps) => (
     <div className="ac-car-card" onClick={onClick} style={{ cursor: onClick ? 'pointer' : 'default', transition: 'transform 0.3s ease, box-shadow 0.3s ease' }}>
         <img src={image} className="ac-car-img" alt={title} style={{ height: '220px', width: '100%', objectFit: 'cover' }} />
         <div className="ac-car-details">
@@ -57,7 +70,15 @@ export const ClassicCarCard = ({ title, desc, price, image, onClick }: any) => (
 );
 
 
-export const AuctionCard = ({ title, desc, currentBid, timeRemaining, image }: any) => (
+interface AuctionCardProps {
+    title: string;
+    desc: string;
+    currentBid: string;
+    timeRemaining: string;
+    image: string;
+}
+
+export const AuctionCard = ({ title, desc, currentBid, timeRemaining, image }: AuctionCardProps) => (
     <div className="ac-auction-card">
         <img src={image} className="ac-car-img" alt={title} style={{ height: '300px' }} />
         <div style={{ padding: '2rem' }}>
@@ -70,14 +91,26 @@ export const AuctionCard = ({ title, desc, currentBid, timeRemaining, image }: a
     </div>
 );
 
-export const ClassicFooter = () => (
+export const ClassicFooter = () => {
+    const brandLabel = useThemeContent('header.brand_label', 'CLASSIC MOTORS');
+    const footerDescription = useThemeContent(
+        'footer.description',
+        "The world's premier destination for buying and selling vintage and collector automobiles."
+    );
+    const footerEmail = useThemeContent('footer.email', 'info@classicmotors.com');
+    const footerPhone = useThemeContent('footer.phone', '+1 (555) CLASSIC');
+    const footerCopyright = useThemeContent('footer.copyright', '2026 Classic Motors. All rights reserved.');
+    const [brandPrimary, ...brandRest] = brandLabel.split(' ');
+    const brandSecondary = brandRest.join(' ');
+
+    return (
     <footer className="ac-footer">
         <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr 1fr 1fr', gap: '3rem', marginBottom: '3rem' }}>
             <div>
                 <a className="ac-logo" href="#" style={{ display: 'block', marginBottom: '1.5rem' }}>
-                    <span style={{ color: 'var(--ac-secondary)' }}>CLASSIC</span> <span style={{ color: 'var(--ac-light)' }}>MOTORS</span>
+                    <span style={{ color: 'var(--ac-secondary)' }}>{brandPrimary}</span> <span style={{ color: 'var(--ac-light)' }}>{brandSecondary}</span>
                 </a>
-                <p style={{ fontSize: '0.9rem', lineHeight: 1.6, opacity: 0.8 }}>The world's premier destination for buying and selling vintage and collector automobiles.</p>
+                <p style={{ fontSize: '0.9rem', lineHeight: 1.6, opacity: 0.8 }}>{footerDescription}</p>
             </div>
             <FooterMenuColumn
                 location="footer_column_1"
@@ -91,12 +124,13 @@ export const ClassicFooter = () => (
             />
             <div>
                 <h5>Contact Us</h5>
-                <p style={{ fontSize: '0.9rem', marginBottom: '0.5rem', opacity: 0.8 }}>Email: info@classicmotors.com</p>
-                <p style={{ fontSize: '0.9rem', marginBottom: '1.5rem', opacity: 0.8 }}>Phone: +1 (555) CLASSIC</p>
+                <p style={{ fontSize: '0.9rem', marginBottom: '0.5rem', opacity: 0.8 }}>Email: {footerEmail}</p>
+                <p style={{ fontSize: '0.9rem', marginBottom: '1.5rem', opacity: 0.8 }}>Phone: {footerPhone}</p>
             </div>
         </div>
         <div style={{ borderTop: '1px solid rgba(255,255,255,0.2)', paddingTop: '1.5rem', textAlign: 'center', fontSize: '0.85rem', opacity: 0.7 }}>
-            &copy; 2026 Classic Motors. All rights reserved.
+            &copy; {footerCopyright}
         </div>
     </footer>
-);
+    );
+};

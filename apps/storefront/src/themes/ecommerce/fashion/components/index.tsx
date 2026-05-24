@@ -3,13 +3,20 @@ import React, { useState } from 'react';
 import { MenuNav } from '@/components/menu/MenuNav';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
+import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 
 export const RunwayHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const brandLabel = useThemeContent('header.brand_label', 'ATELIERRunway');
+  const seasonLabel = useThemeContent('header.season_label', 'AUTUMN_WINTER_26');
+  const runwayIndex = brandLabel.toLowerCase().indexOf('runway');
+  const brandPrimary = runwayIndex >= 0 ? brandLabel.slice(0, runwayIndex) : brandLabel;
+  const brandSecondary = runwayIndex >= 0 ? brandLabel.slice(runwayIndex) : '';
+
   return (
     <header className="ef-header">
       <div className="ef-logo">
-        ATELIER<span style={{ fontWeight: 400, fontStyle: 'italic' }}>Runway</span>
+        {brandPrimary}<span style={{ fontWeight: 400, fontStyle: 'italic' }}>{brandSecondary}</span>
       </div>
       
       <button 
@@ -33,18 +40,26 @@ export const RunwayHeader = () => {
           renderItem={defaultNavItemRenderer}
         />
         <div className="ef-mono ef-mobile-header-meta" style={{ fontSize: '0.6rem', border: '1px solid var(--ef-ebony)', padding: '0.5rem 1.5rem', marginTop: '2rem' }}>
-          AUTUMN_WINTER_26
+          {seasonLabel}
         </div>
       </div>
 
       <div className="ef-mono ef-desktop-header-meta" style={{ fontSize: '0.6rem', border: '1px solid var(--ef-ebony)', padding: '0.5rem 1.5rem' }}>
-        AUTUMN_WINTER_26
+        {seasonLabel}
       </div>
     </header>
   );
 };
 
-export const EditorialLookCard = ({ name, price, image, lookNumber = "LOOK_07", onClick }: any) => (
+interface EditorialLookCardProps {
+  name: string;
+  price: string | number;
+  image: string;
+  lookNumber?: string;
+  onClick?: () => void;
+}
+
+export const EditorialLookCard = ({ name, price, image, lookNumber = "LOOK_07", onClick }: EditorialLookCardProps) => (
   <div className="ef-look-card" onClick={onClick}>
     <div className="ef-img-frame">
       <img src={image} alt={name} className="ef-img" />
@@ -67,14 +82,21 @@ export const TrendHUD = ({ label, value }: { label: string, value: string }) => 
     </div>
 );
 
-export const AtelierFooter = () => (
+export const AtelierFooter = () => {
+    const brandLabel = useThemeContent('footer.brand_label', 'ATELIER');
+    const footerDescription = useThemeContent(
+        'footer.description',
+        'We do not build garments. We architect confidence through the precision of silhouette and the purity of material.',
+    );
+
+    return (
     <footer className="ef-footer">
-        <div className="ef-logo" style={{ fontSize: '4rem', marginBottom: '6rem' }}>ATELIER</div>
+        <div className="ef-logo" style={{ fontSize: '4rem', marginBottom: '6rem' }}>{brandLabel}</div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '6rem', maxWidth: '1200px', margin: '0 auto', textAlign: 'left' }}>
             <div>
                 <div className="ef-mono" style={{ color: 'var(--ef-champagne)', marginBottom: '3.5rem' }}>PHILOSOPHY</div>
                 <p style={{ opacity: 0.3, lineHeight: 2, fontSize: '0.9rem' }}>
-                    We do not build garments. We architect confidence through the precision of silhouette and the purity of material.
+                    {footerDescription}
                 </p>
             </div>
             <FooterMenuColumn
@@ -112,4 +134,5 @@ export const AtelierFooter = () => (
             />
         </div>
     </footer>
-);
+    );
+};

@@ -2,14 +2,22 @@
 import React from 'react';
 import { MenuNav } from '@/components/menu/MenuNav';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
+import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 
-export const VoltageFooter = () => (
+export const VoltageFooter = () => {
+    const brandLabel = useThemeContent('header.brand_label', 'PULSE');
+    const footerDescription = useThemeContent(
+      'footer.description',
+      "The heartbeat of live music. Access the world's most immersive sonic distribution network. Verified high-fidelity experiences.",
+    );
+
+    return (
     <footer className="voltage-footer">
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '6rem' }}>
             <div>
-                <div className="sonic-logo" style={{ fontSize: '3rem', marginBottom: '3rem' }}>PULSE</div>
+                <div className="sonic-logo" style={{ fontSize: '3rem', marginBottom: '3rem' }}>{brandLabel}</div>
                 <p style={{ color: '#666', lineHeight: 2, fontSize: '0.95rem' }}>
-                    The heartbeat of live music. Access the world's most immersive sonic distribution network. Verified high-fidelity experiences.
+                    {footerDescription}
                 </p>
             </div>
             <FooterMenuColumn
@@ -52,4 +60,5 @@ export const VoltageFooter = () => (
             />
         </div>
     </footer>
-);
+    );
+};

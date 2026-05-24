@@ -12,6 +12,7 @@ import {
 import { api } from '@sellio/api-client';
 import type { ServiceListing, Category, Location } from '@sellio/types';
 import { DynamicTestimonials } from '@/components/testimonials/DynamicTestimonials';
+import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 
 const FALLBACK_CATEGORIES = [
   { id: 1, title: "Home Repair", slug: "home-repair", icon: "🛠️" },
@@ -22,7 +23,7 @@ const FALLBACK_CATEGORIES = [
   { id: 6, title: "Tech Support", slug: "tech-support", icon: "💻" }
 ];
 
-const FALLBACK_PROVIDERS: any[] = [
+const FALLBACK_PROVIDERS = [
   { 
     id: 991, 
     title: "Anna J.", 
@@ -55,9 +56,28 @@ const FALLBACK_PROVIDERS: any[] = [
     media: { main_photo: "/themes/services/marketplace/18.webp" },
     pricing: { base_price: 90, billing_type: { is_project_based: false } }
   }
-];
+] as ServiceListing[];
 
 export default function Page() {
+  const heroTitle = useThemeContent('hero.title', 'Find Trusted Services Near You');
+  const heroDescription = useThemeContent('hero.description', 'Connecting you with skilled professionals, fast and reliably.');
+  const heroPrimaryCta = useThemeContent('hero.primary_cta_label', 'Browse Services');
+  const heroSecondaryCta = useThemeContent('hero.secondary_cta_label', 'Become a Provider');
+  const searchPlaceholder = useThemeContent('search.placeholder', 'Search for services...');
+  const categoriesTitle = useThemeContent('categories.title', 'Popular Categories');
+  const providersTitle = useThemeContent('providers.title', 'Top Rated Professionals');
+  const howTitle = useThemeContent('how_it_works.title', 'How It Works');
+  const stepOneTitle = useThemeContent('how_it_works.step_1_title', '1. Search Services');
+  const stepOneDescription = useThemeContent('how_it_works.step_1_description', 'Easily search through thousands of verified local professionals.');
+  const stepTwoTitle = useThemeContent('how_it_works.step_2_title', '2. Compare Options');
+  const stepTwoDescription = useThemeContent('how_it_works.step_2_description', 'Read reviews, compare prices, and check provider portfolios.');
+  const stepThreeTitle = useThemeContent('how_it_works.step_3_title', '3. Hire Securely');
+  const stepThreeDescription = useThemeContent('how_it_works.step_3_description', 'Book and pay securely through our trusted platform.');
+  const testimonialsTitle = useThemeContent('testimonials.title', 'What Our Clients Say');
+  const ctaTitle = useThemeContent('cta.title', 'Ready to Hire or Offer Services?');
+  const ctaDescription = useThemeContent('cta.description', 'Join our growing community today and connect with thousands of users.');
+  const ctaPrimary = useThemeContent('cta.primary_cta_label', 'Find Services');
+  const ctaSecondary = useThemeContent('cta.secondary_cta_label', 'Offer Your Services');
   // Dynamic collections
   const [services, setServices] = useState<ServiceListing[] | null>(null);
   const [categoriesList, setCategoriesList] = useState<Category[]>([]);
@@ -83,13 +103,13 @@ export default function Page() {
   const [bookingSuccess, setBookingSuccess] = useState(false);
 
   // Fetch data
-  const fetchServicesData = useCallback(async (isSearchClick = false) => {
+  const fetchServicesData = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
 
       // Map active UI filter selections to API search params
-      const params: Record<string, any> = {
+      const params: Record<string, string | number> = {
         per_page: 8
       };
 
@@ -126,9 +146,10 @@ export default function Page() {
           setLocationsList(response.sidebar.locations);
         }
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const apiError = err as { message?: string };
       console.error("Failed to load live services backend, loading offline resilience backups:", err);
-      setError(err.message || 'Service backend database node is currently offline.');
+      setError(apiError.message || 'Service backend database node is currently offline.');
       // Load fallback mockups for resilient failover
       setServices(FALLBACK_PROVIDERS);
     } finally {
@@ -138,7 +159,9 @@ export default function Page() {
 
   // Initial load
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchServicesData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Handle direct category badge clicks
@@ -154,7 +177,9 @@ export default function Page() {
 
   // Re-run search query whenever selection categories change
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchServicesData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCategory]);
 
   // Submit booking
@@ -208,20 +233,20 @@ export default function Page() {
       {/* Hero Section */}
       <section className="sm-hero" id="sm-hero-section" aria-labelledby="sm-hero-title">
         <div className="sm-hero-content">
-          <h1 id="sm-hero-title">Find Trusted Services Near You</h1>
-          <p>Connecting you with skilled professionals, fast and reliably.</p>
+          <h1 id="sm-hero-title">{heroTitle}</h1>
+          <p>{heroDescription}</p>
           <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', justifyContent: 'center', marginTop: '3rem' }}>
             <button 
               className="sm-btn sm-btn-primary"
               onClick={() => document.getElementById('sm-categories-section')?.scrollIntoView({ behavior: 'smooth' })}
             >
-              Browse Services
+              {heroPrimaryCta}
             </button>
             <button 
               className="sm-btn sm-btn-secondary"
               onClick={() => alert('Becoming a provider flow starting...')}
             >
-              Become a Provider
+              {heroSecondaryCta}
             </button>
           </div>
         </div>
@@ -231,14 +256,14 @@ export default function Page() {
       <section className="sm-filter-bar" aria-label="Search Filter Bar">
         <input 
           type="search" 
-          placeholder="Search for services..." 
+          placeholder={searchPlaceholder} 
           className="sm-filter-input" 
           aria-label="Service Search Input"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
-              fetchServicesData(true);
+              fetchServicesData();
             }
           }}
         />
@@ -298,7 +323,7 @@ export default function Page() {
         <button 
           className="sm-btn sm-btn-primary" 
           style={{ flex: 1, minWidth: '150px' }} 
-          onClick={() => fetchServicesData(true)}
+          onClick={() => fetchServicesData()}
         >
           Search
         </button>
@@ -325,7 +350,7 @@ export default function Page() {
 
       {/* Categories */}
       <section className="sm-section" id="sm-categories-section" aria-labelledby="sm-categories-title" style={{ paddingTop: '2rem' }}>
-        <h2 className="sm-section-title" id="sm-categories-title">Popular Categories</h2>
+        <h2 className="sm-section-title" id="sm-categories-title">{categoriesTitle}</h2>
         <div className="sm-category-grid">
           {loading && categoriesList.length === 0 ? (
             Array.from({ length: 6 }).map((_, i) => (
@@ -364,7 +389,7 @@ export default function Page() {
 
       {/* Providers */}
       <section className="sm-section" id="sm-providers-section" aria-labelledby="sm-providers-title">
-        <h2 className="sm-section-title" id="sm-providers-title">Top Rated Professionals</h2>
+        <h2 className="sm-section-title" id="sm-providers-title">{providersTitle}</h2>
         
         {loading ? (
           <div className="sm-provider-grid">
@@ -388,7 +413,7 @@ export default function Page() {
               <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🔍</div>
               <h4 style={{ fontWeight: 800, marginBottom: '0.5rem' }}>No Providers Found</h4>
               <p style={{ color: 'var(--sm-text-muted)', fontSize: '0.95rem' }}>
-                We couldn't find any professionals matching your exact criteria. Try resetting filters.
+                We couldn&apos;t find any professionals matching your exact criteria. Try resetting filters.
               </p>
               <button 
                 className="sm-btn sm-btn-primary" 
@@ -509,30 +534,30 @@ export default function Page() {
 
       {/* How It Works */}
       <section className="sm-section" id="sm-how-it-works" aria-labelledby="sm-how-title">
-        <h2 className="sm-section-title" id="sm-how-title">How It Works</h2>
+        <h2 className="sm-section-title" id="sm-how-title">{howTitle}</h2>
         <div className="sm-step-grid">
             <div className="sm-step-card">
                 <div className="sm-step-icon">🔍</div>
-                <h4 style={{ fontWeight: 800, marginBottom: '1rem', fontSize: '1.25rem' }}>1. Search Services</h4>
-                <p style={{ color: 'var(--sm-text-muted)', lineHeight: 1.6 }}>Easily search through thousands of verified local professionals.</p>
+                <h4 style={{ fontWeight: 800, marginBottom: '1rem', fontSize: '1.25rem' }}>{stepOneTitle}</h4>
+                <p style={{ color: 'var(--sm-text-muted)', lineHeight: 1.6 }}>{stepOneDescription}</p>
             </div>
             <div className="sm-step-arrow" style={{ fontSize: '2.5rem', color: 'var(--sm-border)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>➔</div>
             <div className="sm-step-card">
                 <div className="sm-step-icon">👥</div>
-                <h4 style={{ fontWeight: 800, marginBottom: '1rem', fontSize: '1.25rem' }}>2. Compare Options</h4>
-                <p style={{ color: 'var(--sm-text-muted)', lineHeight: 1.6 }}>Read reviews, compare prices, and check provider portfolios.</p>
+                <h4 style={{ fontWeight: 800, marginBottom: '1rem', fontSize: '1.25rem' }}>{stepTwoTitle}</h4>
+                <p style={{ color: 'var(--sm-text-muted)', lineHeight: 1.6 }}>{stepTwoDescription}</p>
             </div>
             <div className="sm-step-arrow" style={{ fontSize: '2.5rem', color: 'var(--sm-border)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>➔</div>
             <div className="sm-step-card">
                 <div className="sm-step-icon">🔒</div>
-                <h4 style={{ fontWeight: 800, marginBottom: '1rem', fontSize: '1.25rem' }}>3. Hire Securely</h4>
-                <p style={{ color: 'var(--sm-text-muted)', lineHeight: 1.6 }}>Book and pay securely through our trusted platform.</p>
+                <h4 style={{ fontWeight: 800, marginBottom: '1rem', fontSize: '1.25rem' }}>{stepThreeTitle}</h4>
+                <p style={{ color: 'var(--sm-text-muted)', lineHeight: 1.6 }}>{stepThreeDescription}</p>
             </div>
         </div>
       </section>
 
       <DynamicTestimonials
-        title="What Our Clients Say"
+        title={testimonialsTitle}
         limit={3}
         variant="centered"
         sectionId="sm-testimonials-section"
@@ -546,13 +571,13 @@ export default function Page() {
 
       {/* CTA */}
       <section className="sm-cta-section">
-        <h2 style={{ fontSize: '3rem', fontWeight: 800, marginBottom: '1.5rem' }}>Ready to Hire or Offer Services?</h2>
+        <h2 style={{ fontSize: '3rem', fontWeight: 800, marginBottom: '1.5rem' }}>{ctaTitle}</h2>
         <p style={{ fontSize: '1.25rem', marginBottom: '3.5rem', color: 'rgba(255,255,255,0.9)', maxWidth: '700px', marginLeft: 'auto', marginRight: 'auto', lineHeight: 1.6 }}>
-            Join our growing community today and connect with thousands of users.
+            {ctaDescription}
         </p>
         <div style={{ display: 'flex', gap: '1.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <button className="sm-btn sm-btn-primary" onClick={() => document.getElementById('sm-categories-section')?.scrollIntoView({ behavior: 'smooth' })}>Find Services</button>
-            <button className="sm-btn sm-btn-secondary" onClick={() => alert('Provider signup wizard opened.')}>Offer Your Services</button>
+            <button className="sm-btn sm-btn-primary" onClick={() => document.getElementById('sm-categories-section')?.scrollIntoView({ behavior: 'smooth' })}>{ctaPrimary}</button>
+            <button className="sm-btn sm-btn-secondary" onClick={() => alert('Provider signup wizard opened.')}>{ctaSecondary}</button>
         </div>
       </section>
 
