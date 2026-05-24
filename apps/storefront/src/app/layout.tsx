@@ -57,7 +57,7 @@ export default async function RootLayout({
           <style dangerouslySetInnerHTML={{ __html: `:root { ${dynamicStyles} }` }} />
         )}
       </head>
-      <body>
+      <body suppressHydrationWarning>
         <MenuProvider menus={menus} themeKey={theme.theme_key} isPreview={isPreview}>
           <ThemeContentProvider content={themeContent}>
             <IndustryLayout>
