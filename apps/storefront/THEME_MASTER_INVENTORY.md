@@ -28,8 +28,8 @@ Theme overrides are supported through `/preview/{theme_key}/...`, `?theme={theme
 | :--- | ---: | :--- |
 | Seeded themes | 52 | Registered by `ThemeSeeder` |
 | Storefront folders | 52 | All seeded keys have matching theme folders |
-| API-backed themes | 25 | Themes with live `api.*` usage in `.tsx` files |
-| Static / mostly static themes remaining | 27 | No direct live API usage found in theme `.tsx` files |
+| API-backed themes | 26 | Themes with live `api.*` usage in `.tsx` files |
+| Static / mostly static themes remaining | 26 | No direct live API usage found in theme `.tsx` files |
 
 ---
 
@@ -40,7 +40,7 @@ Theme overrides are supported through `/preview/{theme_key}/...`, `?theme={theme
 | `unifieds_default` | `unifieds/default` | Yes | Yes |
 | `unifieds_standard` | `unifieds/standard` | Yes | Yes |
 | `unifieds_classic` | `unifieds/classic` | Yes | No |
-| `unifieds_modern` | `unifieds/modern` | Yes | No |
+| `unifieds_modern` | `unifieds/modern` | Yes | Yes |
 | `unifieds_mega` | `unifieds/mega` | Yes | No |
 | `unifieds_interactive` | `unifieds/interactive` | Yes | No |
 | `unifieds_minimal` | `unifieds/minimal` | Yes | Yes |
