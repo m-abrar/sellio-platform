@@ -1,8 +1,57 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { api } from '@sellio/api-client';
+import type { Product } from '@sellio/types';
 import { MarketGrid, LiquidSyncBar } from './components';
 
 export default function Page() {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loadingListings, setLoadingListings] = useState(true);
+  const [listingError, setListingError] = useState<string | null>(null);
+
+  const placeholderImage = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='720' height='520' viewBox='0 0 720 520'><rect width='100%' height='100%' fill='%23f8fafc'/><g transform='translate(328,214)' stroke='%2310b981' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='2' width='60' height='60' rx='10'/><circle cx='20' cy='20' r='6'/><path d='M58 46L42 30 12 60'/></g><text x='50%' y='61%' dominant-baseline='middle' text-anchor='middle' font-family='Inter, sans-serif' font-size='13' font-weight='800' letter-spacing='2' fill='%231e293b'>TRADE RECORD</text></svg>";
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadListings() {
+      try {
+        const fetchedProducts = await api.getProducts();
+        if (!isMounted) {
+          return;
+        }
+
+        setProducts(Array.isArray(fetchedProducts) ? fetchedProducts : []);
+        setListingError(null);
+      } catch (error: unknown) {
+        if (!isMounted) {
+          return;
+        }
+
+        console.error('Failed to load unified marketplace listings:', error);
+        setListingError(error instanceof Error ? error.message : 'Listings are temporarily unavailable.');
+      } finally {
+        if (isMounted) {
+          setLoadingListings(false);
+        }
+      }
+    }
+
+    loadListings();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const getProductImage = (product: Product) => (
+    product.media?.featured_image || product.image_url || placeholderImage
+  );
+
+  const formatPrice = (product: Product) => (
+    product.pricing?.formatted || (product.price ? `$${Number(product.price).toLocaleString()}` : 'Open bid')
+  );
+
   return (
     <div>
       {/* Hero Section */}
@@ -13,7 +62,7 @@ export default function Page() {
                 Trade the <br/><span>Future.</span>
               </h1>
               <p style={{ maxWidth: '800px', margin: '3rem auto 6rem', fontSize: '1.5rem', color: '#94a3b8', lineHeight: 1.8 }}>
-                  The world's most advanced high-fidelity marketplace node. Precision transactional engineering for the modern global economy.
+                  The world&apos;s most advanced high-fidelity marketplace node. Precision transactional engineering for the modern global economy.
               </p>
               <div style={{ display: 'flex', gap: '3rem', justifyContent: 'center', flexWrap: 'wrap' }} className="um-hero-buttons">
                   <button className="trade-btn-primary" id="um-btn-explore" onClick={() => document.getElementById('um-exchange-section')?.scrollIntoView({ behavior: 'smooth' })}>
@@ -42,6 +91,61 @@ export default function Page() {
 
       {/* Market Grid Section */}
       <MarketGrid />
+
+      {/* Live Listings */}
+      <section className="um-listings-section" id="um-exchange-section" aria-labelledby="um-exchange-title">
+          <div className="um-listings-header">
+              <div className="um-mono" style={{ color: 'var(--um-green)', marginBottom: '1.5rem' }}>LIVE_TRADE_EXCHANGE</div>
+              <h2 id="um-exchange-title">Marketplace Listings.</h2>
+              <p>Live product records synchronized into the Trade Node exchange for liquid marketplace discovery.</p>
+          </div>
+
+          {loadingListings ? (
+              <div className="um-listings-grid" aria-label="Loading live listings">
+                  {[1, 2, 3].map((item) => (
+                      <div className="um-listing-card um-listing-skeleton" key={item}>
+                          <div className="um-listing-image-wrap" />
+                          <div className="um-listing-body">
+                              <span />
+                              <strong />
+                              <em />
+                          </div>
+                      </div>
+                  ))}
+              </div>
+          ) : listingError ? (
+              <div className="um-listing-state" role="status">
+                  <div className="um-mono" style={{ color: 'var(--um-green)', marginBottom: '1rem' }}>EXCHANGE_OFFLINE</div>
+                  <h3>Listings could not be synchronized.</h3>
+                  <p>{listingError}</p>
+              </div>
+          ) : products.length === 0 ? (
+              <div className="um-listing-state" role="status">
+                  <div className="um-mono" style={{ color: 'var(--um-green)', marginBottom: '1rem' }}>EMPTY_EXCHANGE</div>
+                  <h3>No live listings are available yet.</h3>
+                  <p>Add product records in the backend and this marketplace will hydrate automatically.</p>
+              </div>
+          ) : (
+              <div className="um-listings-grid">
+                  {products.slice(0, 6).map((product) => (
+                      <a href={`/product/${product.slug}`} className="um-listing-card" key={product.id}>
+                          <div className="um-listing-image-wrap">
+                              <img src={getProductImage(product)} alt={product.title} />
+                          </div>
+                          <div className="um-listing-body">
+                              <div className="um-mono">TRADE_ID_{product.id}</div>
+                              <h3>{product.title}</h3>
+                              <p>{product.description || 'Verified marketplace record synchronized into the Trade Node exchange.'}</p>
+                              <div className="um-listing-meta">
+                                  <span>{formatPrice(product)}</span>
+                                  <span>Open Trade</span>
+                              </div>
+                          </div>
+                      </a>
+                  ))}
+              </div>
+          )}
+      </section>
 
       {/* Mid-Section: Transactional Authority */}
       <section className="um-logistics-grid" aria-labelledby="um-logistics-title">
@@ -79,7 +183,7 @@ export default function Page() {
           <div style={{ maxWidth: '800px', margin: '0 auto' }}>
               <h2 style={{ fontFamily: 'var(--um-font-heading)', fontSize: 'clamp(3rem, 7vw, 6rem)', fontWeight: 900, color: 'var(--um-slate)', marginBottom: '4rem', letterSpacing: '-4px', lineHeight: 1.1 }} id="um-cta-title">Liquidate the <br/>Future.</h2>
               <p style={{ fontSize: '1.5rem', color: '#64748b', lineHeight: 1.8, marginBottom: '6rem' }}>
-                  Connect your trade node to the global exchange and join the world's most liquid high-fidelity distribution network.
+                  Connect your trade node to the global exchange and join the world&apos;s most liquid high-fidelity distribution network.
               </p>
               <button className="trade-btn-primary" style={{ padding: '2rem 8rem', fontSize: '1.4rem' }} id="um-btn-cta-handshake" onClick={() => alert('Exchange node handshake synchronized.')}>INITIALIZE TRADE NODE</button>
           </div>
