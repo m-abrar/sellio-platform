@@ -28,16 +28,23 @@ class MenuController extends Controller
      */
     public function index(Request $request): View
     {
-        $menus = Menu::orderBy('theme_key')
-            ->when($request->query('theme'), fn($q, $theme) => $q->where('theme_key', $theme)) 
+        $selectedTheme = $request->query('theme') ?: $request->route('theme');
+
+        $menus = Menu::withCount([
+                'items',
+                'items as top_level_items_count' => fn ($query) => $query->whereNull('parent_id'),
+            ])
+            ->orderBy('theme_key')
+            ->when($selectedTheme, fn($q, $theme) => $q->where('theme_key', $theme))
             ->orderBy('location_key')
             ->get();
             
-        $themeKeys = Menu::select('theme_key')->distinct()->pluck('theme_key');
+        $themeKeys = Menu::select('theme_key')->distinct()->orderBy('theme_key')->pluck('theme_key');
 
         return view('admin.menu.index', [
-            'menus'     => $menus,
-            'themeKeys' => $themeKeys,
+            'menus'         => $menus,
+            'themeKeys'     => $themeKeys,
+            'selectedTheme' => $selectedTheme,
         ]);
     }
     
