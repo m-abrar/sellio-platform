@@ -448,6 +448,12 @@ return [
                 'icon' => 'fas fa-bullhorn',
                 'can'  => 'manage-marketing',
             ],
+            [
+                'text' => 'Testimonials',
+                'url'  => 'admin/testimonials',
+                'icon' => 'fas fa-comment-dots',
+                'can'  => 'manage-marketing',
+            ],
         ],
     ],
 

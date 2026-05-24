@@ -26,6 +26,7 @@ class MediaController extends Controller
         'blog'          => \App\Models\Blog::class,
         'user'          => \App\Models\User::class,
         'advertisement' => \App\Models\Advertisement::class,
+        'testimonial'   => \App\Models\Testimonial::class,
         'location'      => \App\Models\Location::class,
         'addon'         => \App\Models\ProductAddon::class,
         'category'      => \App\Models\Category::class,

@@ -68,6 +68,7 @@ AdvertisementController,
 NewsletterSubscriberController,
 NotificationController,
 ReportController,
+TestimonialController,
     TicketController,
     SettingController,
     SystemController,
@@ -321,6 +322,7 @@ Route::prefix('admin')
 
         Route::resource('email-templates', EmailTemplateController::class)->except(['create', 'store', 'destroy'])->middleware('can:app-settings');
         Route::resource('advertisements', AdvertisementController::class)->middleware('can:manage-pages');
+        Route::resource('testimonials', TestimonialController::class)->except(['show'])->middleware('can:manage-marketing');
         Route::get('newsletter-subscribers/export', [NewsletterSubscriberController::class, 'export'])->name('newsletter-subscribers.export')->middleware('can:manage-users');
         Route::resource('newsletter-subscribers', NewsletterSubscriberController::class)->middleware('can:manage-users');
 
@@ -431,4 +433,3 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::post('/upload-image', [MediaController::class, 'upload'])->name('upload.image');
     Route::post('/delete-image', [MediaController::class, 'delete'])->name('delete.image');
 });
-

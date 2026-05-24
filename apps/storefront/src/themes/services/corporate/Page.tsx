@@ -3,7 +3,8 @@
 import React, { useEffect, useState } from 'react';
 import { api } from '@sellio/api-client';
 import type { ServiceListing } from '@sellio/types';
-import { CorporateHeader, CaseStudyCard, TestimonialCard, CorporateFooter } from './components';
+import { CorporateHeader, CaseStudyCard, CorporateFooter } from './components';
+import { DynamicTestimonials } from '@/components/testimonials/DynamicTestimonials';
 
 const serviceIcons = ['01', '02', '03', '04', '05', '06'];
 
@@ -16,12 +17,6 @@ export default function Page() {
     { title: "GlobalTech Solutions", description: "Implemented a new operational strategy, boosting efficiency by 40% and reducing costs by 15%.", image: "/themes/services/corporate/12.webp" },
     { title: "Innovate Pharmaceuticals", description: "Facilitated a successful market entry for a new drug, capturing 10% market share in the first year.", image: "/themes/services/corporate/13.webp" },
     { title: "Future Retail Group", description: "Developed a digital transformation roadmap, leading to a 25% increase in online sales.", image: "/themes/services/corporate/14.webp" },
-  ];
-
-  const testimonials = [
-    { name: "Jane Doe", title: "CEO, Global Solutions Inc.", quote: "Partnering with Corporate Services was a game-changer for our business. Their strategic insights and dedicated team helped us navigate complex market shifts and achieve unprecedented growth.", avatar: "/themes/services/corporate/15.webp" },
-    { name: "John Smith", title: "CFO, Tech Innovations", quote: "The team at Corporate Services provided invaluable support in optimizing our financial strategies. Their expertise directly led to significant cost savings and improved our overall financial health.", avatar: "/themes/services/corporate/16.webp" },
-    { name: "Emily White", title: "COO, Apex Ventures", quote: "We were thoroughly impressed by their commitment to understanding our unique challenges and delivering tailored solutions. The results speak for themselves - a stronger team and a clearer path forward.", avatar: "/themes/services/corporate/17.webp" }
   ];
 
   useEffect(() => {
@@ -173,18 +168,17 @@ export default function Page() {
         </div>
       </section>
 
-      {/* Testimonials Section */}
-      <section id="testimonials" className="sc-section" aria-labelledby="sc-testimonials-title">
-        <div className="sc-section-title">
-          <h2 id="sc-testimonials-title">What Our Clients Say</h2>
-          <p>Hear from those who have experienced our impact firsthand.</p>
-        </div>
-        <div className="sc-testimonials-layout">
-          {testimonials.map((t, i) => (
-            <TestimonialCard key={i} {...t} />
-          ))}
-        </div>
-      </section>
+      <DynamicTestimonials
+        title="What Our Clients Say"
+        subtitle="Hear from those who have experienced our impact firsthand."
+        limit={3}
+        sectionId="testimonials"
+        sectionClassName="sc-section"
+        titleWrapClassName="sc-section-title"
+        layoutClassName="sc-testimonials-layout"
+        cardClassName="sc-testimonial-card"
+        headingId="sc-testimonials-title"
+      />
 
       {/* CTA Banner Section */}
       <section id="contact" className="sc-cta-banner" aria-labelledby="sc-cta-title">
