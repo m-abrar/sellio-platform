@@ -113,7 +113,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
           <div className="urban-detail-kicker">Structure Unavailable</div>
           <h1>Property could not be loaded.</h1>
           <p>{errorMessage || 'The requested structure does not exist or has been removed.'}</p>
-          <a href={getThemeLink('')} className="urban-btn urban-btn-primary">Return to Structures</a>
+          <a href={getThemeLink('')} className="urban-btn-primary">Return to Structures</a>
         </section>
       </main>
     );
@@ -157,7 +157,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
             <label>Full Name<input required type="text" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /></label>
             <label>Email<input required type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} /></label>
             <label>Message<textarea rows={4} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} /></label>
-            <button className="urban-btn urban-btn-primary" type="submit">Send Inquiry</button>
+            <button className="urban-btn-primary" type="submit">Send Inquiry</button>
           </form>
         )}
       </section>

@@ -21,6 +21,7 @@
     color: var(--urban-midnight);
     font-family: var(--font-body);
     overflow-x: hidden;
+    scroll-behavior: smooth;
 }
 
 /* Header */
@@ -79,6 +80,78 @@
     align-items: center;
 }
 
+.urban-hero-copy {
+    min-width: 0;
+}
+
+.urban-hero-kicker {
+    color: var(--urban-skyline);
+    font-size: 0.85rem;
+    font-weight: 800;
+    letter-spacing: 10px;
+    margin-bottom: 3rem;
+}
+
+.urban-hero-description {
+    color: var(--urban-concrete);
+    font-size: 1.25rem;
+    line-height: 1.8;
+    margin-bottom: 5rem;
+    max-width: 600px;
+}
+
+.urban-hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+}
+
+.urban-hero-visual {
+    min-width: 0;
+    position: relative;
+}
+
+.urban-hero-image-frame {
+    background: #f0f9ff;
+    border: 1px solid var(--urban-border);
+    border-radius: 40px;
+    height: 600px;
+    overflow: hidden;
+}
+
+.urban-hero-image {
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.9;
+    width: 100%;
+}
+
+.urban-hero-stat-card {
+    background: white;
+    border: 1px solid var(--urban-border);
+    border-radius: 24px;
+    bottom: -2rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+    padding: 2rem 2.5rem;
+    position: absolute;
+    right: 0;
+}
+
+.urban-hero-stat-value {
+    color: var(--urban-skyline);
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    font-weight: 900;
+}
+
+.urban-hero-stat-label {
+    color: var(--urban-concrete);
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    margin-top: 0.35rem;
+}
+
 .urban-hero h1 {
     font-family: var(--font-heading);
     font-size: 5.5rem;
@@ -97,6 +170,30 @@
     padding: 10rem 6%;
 }
 
+.structure-grid-header {
+    margin-bottom: 6rem;
+}
+
+.structure-grid-kicker,
+.urban-section-kicker {
+    color: var(--urban-skyline);
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 800;
+    letter-spacing: 6px;
+}
+
+.structure-grid-header h2,
+.urban-precision-copy h2,
+.urban-final-cta h2 {
+    font-family: var(--font-heading);
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: 900;
+    letter-spacing: -2px;
+    line-height: 1.05;
+    margin: 1.5rem 0 0;
+}
+
 .structure-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -107,14 +204,115 @@
     background: var(--urban-card);
     border: 1px solid var(--urban-border);
     border-radius: 24px;
-    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+    padding: 0;
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.structure-card-premium:hover {
-    transform: translateY(-10px);
+.prop-structure-link:hover .structure-card-premium {
     border-color: var(--urban-skyline);
-    box-shadow: 0 30px 60px rgba(14, 165, 233, 0.05);
+    box-shadow: 0 30px 60px rgba(14, 165, 233, 0.08);
+    transform: translateY(-8px);
+}
+
+.structure-card-image {
+    aspect-ratio: 16 / 10;
+    background: #e2e8f0;
+    overflow: hidden;
+    width: 100%;
+}
+
+.structure-card-image img {
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+    width: 100%;
+}
+
+.prop-structure-link:hover .structure-card-image img {
+    transform: scale(1.04);
+}
+
+.structure-card-image-fallback {
+    align-items: center;
+    background: linear-gradient(135deg, #f0f9ff, #e2e8f0);
+    display: flex;
+    font-size: 3rem;
+    height: 100%;
+    justify-content: center;
+}
+
+.structure-card-body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    padding: 1.75rem;
+}
+
+.structure-card-body h3 {
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: 800;
+    -webkit-line-clamp: 2;
+    line-height: 1.3;
+    margin: 0 0 0.5rem;
+    overflow: hidden;
+}
+
+.structure-card-location {
+    color: var(--urban-concrete);
+    font-size: 0.9rem;
+    margin: 0 0 0.75rem;
+}
+
+.structure-card-price {
+    color: var(--urban-skyline);
+    font-size: 1.15rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+}
+
+.structure-card-meta {
+    border-top: 1px solid var(--urban-border);
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    margin-top: auto;
+    padding-top: 1.25rem;
+}
+
+.structure-card-meta-label {
+    color: var(--urban-concrete);
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    margin-bottom: 0.35rem;
+}
+
+.structure-card-meta-value {
+    color: var(--urban-skyline);
+    font-size: 1rem;
+    font-weight: 800;
+}
+
+.structure-card-meta-area {
+    color: var(--urban-midnight);
+}
+
+.structure-card-skeleton-image {
+    animation: prop-shimmer 1.5s infinite;
+    background: linear-gradient(90deg, #f0f9ff 25%, #ffffff 50%, #f0f9ff 75%);
+    background-size: 200% 100%;
+    min-height: 180px;
+}
+
+.prop-listing-skeleton {
+    pointer-events: none;
 }
 
 /* Skyline Sync Bar */
@@ -123,6 +321,8 @@
     background: var(--urban-midnight);
     color: white;
     display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem 2rem;
     justify-content: space-between;
     align-items: center;
     font-family: var(--font-heading);
@@ -131,11 +331,150 @@
     letter-spacing: 4px;
 }
 
+/* Mid section */
+.urban-precision-section {
+    align-items: center;
+    background: #f8fafc;
+    display: grid;
+    gap: 10rem;
+    grid-template-columns: 1fr 1.2fr;
+    padding: 15rem 6%;
+}
+
+.urban-precision-visual {
+    min-width: 0;
+    position: relative;
+}
+
+.urban-precision-image-frame {
+    background: white;
+    border: 1px solid var(--urban-border);
+    border-radius: 24px;
+    height: 700px;
+    overflow: hidden;
+}
+
+.urban-precision-image {
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.9;
+    width: 100%;
+}
+
+.urban-precision-accent {
+    border-left: 3px solid var(--urban-skyline);
+    border-top: 3px solid var(--urban-skyline);
+    height: 200px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 200px;
+}
+
+.urban-precision-copy {
+    min-width: 0;
+}
+
+.urban-precision-copy p {
+    color: var(--urban-concrete);
+    font-size: 1.2rem;
+    line-height: 2;
+    margin: 3rem 0 4rem;
+}
+
+.urban-precision-stats {
+    display: grid;
+    gap: 5rem;
+    grid-template-columns: 1fr 1fr;
+}
+
+.urban-stat-value {
+    color: var(--urban-midnight);
+    font-family: var(--font-heading);
+    font-size: 3rem;
+    font-weight: 900;
+}
+
+.urban-stat-label {
+    color: #aaa;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    margin-top: 0.5rem;
+}
+
+/* Final CTA */
+.urban-final-cta {
+    background: white;
+    padding: 12rem 6%;
+    text-align: center;
+}
+
+.urban-final-cta-inner {
+    margin: 0 auto;
+    max-width: 800px;
+}
+
+.urban-final-cta p {
+    color: var(--urban-concrete);
+    font-size: clamp(1.1rem, 2vw, 1.5rem);
+    line-height: 1.8;
+    margin: 0 auto 4rem;
+    max-width: 700px;
+}
+
+.urban-final-cta-btn {
+    font-size: 1.25rem;
+    padding: 1.5rem 4rem;
+}
+
 /* Footer */
 .civic-footer {
     padding: 10rem 6%;
     background: #fafafa;
     border-top: 1px solid var(--urban-border);
+}
+
+.civic-footer-grid {
+    display: grid;
+    gap: 3rem;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+}
+
+.civic-footer-logo {
+    color: var(--urban-midnight);
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+}
+
+.civic-footer-copy {
+    color: var(--urban-concrete);
+    font-size: 1rem;
+    line-height: 2;
+    margin: 0;
+}
+
+.civic-footer-heading {
+    color: var(--urban-midnight);
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    margin: 0 0 1.5rem;
+}
+
+.civic-footer-bottom {
+    border-top: 1px solid var(--urban-border);
+    color: #cbd5e1;
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 0.8rem;
+    font-weight: 800;
+    gap: 1rem;
+    justify-content: space-between;
+    letter-spacing: 3px;
+    margin-top: 8rem;
+    padding-top: 4rem;
 }
 
 .footer-link {
@@ -168,6 +507,33 @@
 .urban-btn-primary:hover {
     background: #0284c7;
     box-shadow: 0 10px 20px rgba(14, 165, 233, 0.2);
+}
+
+.urban-btn-secondary {
+    background: transparent;
+    border: 1px solid var(--urban-border);
+    border-radius: 12px;
+    color: var(--urban-midnight);
+    cursor: pointer;
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    font-weight: 800;
+    padding: 1.25rem 4rem;
+    transition: all 0.3s ease;
+}
+
+.urban-btn-secondary:hover {
+    border-color: var(--urban-skyline);
+    color: var(--urban-skyline);
+}
+
+.urban-nav-backdrop {
+    background: rgba(15, 23, 42, 0.45);
+    border: none;
+    cursor: pointer;
+    inset: 0;
+    position: fixed;
+    z-index: 1035;
 }
 
 /* Premium Elite Mobile Drawer & Responsive Degradation */
@@ -248,22 +614,40 @@
 
   .urban-mobile-auth-btn {
     display: block !important;
+    margin-top: 2rem;
+    padding: 1rem 3rem;
     width: 100%;
   }
 
   /* Structural Refolding */
   .urban-hero {
     grid-template-columns: 1fr !important;
-    padding: 6rem 6% !important;
-    gap: 4rem !important;
+    padding: 6rem 6% 8rem !important;
+    gap: 3rem !important;
   }
 
   .urban-hero h1 {
-    font-size: 3.5rem !important;
+    font-size: clamp(2.5rem, 10vw, 3.5rem) !important;
   }
 
-  .urban-hero img {
-    height: 400px !important;
+  .urban-hero-kicker {
+    letter-spacing: 4px;
+    margin-bottom: 2rem;
+  }
+
+  .urban-hero-description {
+    font-size: 1.05rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .urban-hero-image-frame {
+    height: 360px;
+  }
+
+  .urban-hero-stat-card {
+    bottom: -1.5rem;
+    padding: 1.5rem 2rem;
+    right: 1rem;
   }
 
   .structure-grid {
@@ -271,21 +655,50 @@
     gap: 2rem !important;
   }
 
-  section[style*="gridTemplateColumns"] {
-    grid-template-columns: 1fr !important;
+  .urban-precision-section {
     gap: 4rem !important;
+    grid-template-columns: 1fr !important;
     padding: 6rem 6% !important;
   }
 
-  section[style*="gridTemplateColumns"] img {
-    height: 400px !important;
+  .urban-precision-image-frame {
+    height: 360px;
+  }
+
+  .urban-precision-accent {
+    height: 120px;
+    width: 120px;
+  }
+
+  .urban-precision-stats {
+    gap: 2rem;
+    grid-template-columns: 1fr;
+  }
+
+  .urban-final-cta {
+    padding: 6rem 6% !important;
+  }
+
+  .civic-footer-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .civic-footer-bottom {
+    flex-direction: column;
+    text-align: center;
   }
 
   .skyline-sync-bar {
     flex-direction: column !important;
-    gap: 1.5rem !important;
+    gap: 1rem !important;
     text-align: center !important;
     padding: 3rem 6% !important;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1100px) {
+  .structure-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 

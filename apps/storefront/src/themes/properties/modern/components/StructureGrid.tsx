@@ -1,5 +1,10 @@
 
+'use client';
+
+'use client';
+
 import React from 'react';
+import { getThemeLink } from '../utils';
 
 interface StructureItemProps {
     title: string;
@@ -7,21 +12,34 @@ interface StructureItemProps {
     area: string;
     icon: string;
     slug?: string;
+    image?: string;
+    price?: string;
+    location?: string;
 }
 
-const StructureItem = ({ title, units, area, icon, slug }: StructureItemProps) => {
+const StructureItem = ({ title, units, area, icon, slug, image, price, location }: StructureItemProps) => {
     const content = (
         <div className="structure-card-premium">
-            <div style={{ fontSize: '2.5rem', marginBottom: '2rem' }}>{icon}</div>
-            <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.5rem', fontWeight: 800, marginBottom: '1rem' }}>{title}</h3>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '2.5rem', paddingTop: '1.5rem', borderTop: '1px solid var(--urban-border)' }}>
-                <div>
-                    <div style={{ fontSize: '0.65rem', fontWeight: 800, color: 'var(--urban-concrete)', letterSpacing: '2px' }}>AVAILABLE_UNITS</div>
-                    <div style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--urban-skyline)' }}>{units}</div>
-                </div>
-                <div>
-                    <div style={{ fontSize: '0.65rem', fontWeight: 800, color: 'var(--urban-concrete)', letterSpacing: '2px' }}>TOTAL_AREA</div>
-                    <div style={{ fontSize: '1.1rem', fontWeight: 800 }}>{area}</div>
+            <div className="structure-card-image">
+                {image ? (
+                    <img src={image} alt={title} loading="lazy" />
+                ) : (
+                    <div className="structure-card-image-fallback" aria-hidden="true">{icon}</div>
+                )}
+            </div>
+            <div className="structure-card-body">
+                <h3>{title}</h3>
+                {location && <p className="structure-card-location">{location}</p>}
+                {price && <div className="structure-card-price">{price}</div>}
+                <div className="structure-card-meta">
+                    <div>
+                        <div className="structure-card-meta-label">AVAILABLE_UNITS</div>
+                        <div className="structure-card-meta-value">{units}</div>
+                    </div>
+                    <div>
+                        <div className="structure-card-meta-label">TOTAL_AREA</div>
+                        <div className="structure-card-meta-value structure-card-meta-area">{area}</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -29,7 +47,7 @@ const StructureItem = ({ title, units, area, icon, slug }: StructureItemProps) =
 
     if (slug) {
         return (
-            <a className="prop-structure-link" href={`/product/${slug}`}>
+            <a className="prop-structure-link" href={getThemeLink(`/product/${slug}`)}>
                 {content}
             </a>
         );
@@ -45,18 +63,21 @@ interface StructureGridProps {
 }
 
 export const StructureGrid = ({ items = [], loading = false, error = null }: StructureGridProps) => (
-    <section className="structure-grid-section">
-        <div style={{ marginBottom: '6rem' }}>
-            <span style={{ fontSize: '0.85rem', fontWeight: 800, color: 'var(--urban-skyline)', letterSpacing: '6px' }}>STRUCTURAL_SCHEMA_V4</span>
-            <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: '4rem', fontWeight: 900, marginTop: '1.5rem', letterSpacing: '-2px' }}>Urban Assets.</h2>
+    <section className="structure-grid-section" id="urban-structure-grid">
+        <div className="structure-grid-header">
+            <span className="structure-grid-kicker">STRUCTURAL_SCHEMA_V4</span>
+            <h2>Urban Assets.</h2>
         </div>
         <div className="structure-grid">
             {loading ? (
-                [1, 2, 3].map((item) => (
-                    <div className="structure-card-premium prop-listing-skeleton" key={item}>
-                        <div className="prop-skeleton-line prop-skeleton-line-title" />
-                        <div className="prop-skeleton-line" />
-                        <div className="prop-skeleton-line prop-skeleton-line-short" />
+                Array.from({ length: 6 }).map((_, index) => (
+                    <div className="structure-card-premium prop-listing-skeleton" key={index}>
+                        <div className="structure-card-image structure-card-skeleton-image" />
+                        <div className="structure-card-body">
+                            <div className="prop-skeleton-line prop-skeleton-line-title" />
+                            <div className="prop-skeleton-line" />
+                            <div className="prop-skeleton-line prop-skeleton-line-short" />
+                        </div>
                     </div>
                 ))
             ) : error ? (

@@ -1,104 +1,160 @@
 'use client';
-import React, { useState } from 'react';
+
+import React, { useEffect, useState } from 'react';
+import { scrollToSection } from '../utils';
+
+const navItems = [
+  { label: 'Registry', target: 'pc-inventory-section' },
+  { label: 'Yield Sync', target: 'pc-intelligence-section' },
+  { label: 'Institutional', target: 'pc-cta-section' },
+  { label: 'Master Auth', target: 'pc-cta-section' },
+];
 
 export const CommercialHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
+
+  const handleNavClick = (event: React.MouseEvent, target: string) => {
+    event.preventDefault();
+    setIsOpen(false);
+    scrollToSection(target);
+  };
 
   return (
     <header className="pc-header">
       <div className="pc-logo">
         CORP<span style={{ color: 'var(--pc-blue)' }}>Portfolio</span>
       </div>
-      
-      <button 
-          className={`pc-hamburger ${isOpen ? 'pc-hamburger-open' : ''}`} 
-          onClick={() => setIsOpen(!isOpen)}
-          aria-label="Toggle Navigation"
+
+      {isOpen && (
+        <button
+          type="button"
+          className="pc-nav-backdrop"
+          aria-label="Close navigation menu"
+          onClick={() => setIsOpen(false)}
+        />
+      )}
+
+      <button
+        type="button"
+        className={`pc-hamburger ${isOpen ? 'pc-hamburger-open' : ''}`}
+        onClick={() => setIsOpen(!isOpen)}
+        aria-label="Toggle Navigation"
+        aria-expanded={isOpen}
       >
-          <span className="pc-hamburger-bar"></span>
-          <span className="pc-hamburger-bar"></span>
-          <span className="pc-hamburger-bar"></span>
+        <span className="pc-hamburger-bar"></span>
+        <span className="pc-hamburger-bar"></span>
+        <span className="pc-hamburger-bar"></span>
       </button>
 
-      <nav className={`pc-nav ${isOpen ? 'pc-nav-open' : ''}`}>
-          {['Registry', 'Yield_Sync', 'Institutional', 'Master_Auth'].map(link => (
-              <a key={link} href="#" className="pc-nav-link" onClick={() => setIsOpen(false)}>{link}</a>
-          ))}
-          
-          <div className="pc-mono pc-mobile-auth-btn" style={{ padding: '0.8rem 2rem', background: 'var(--pc-bg)', borderRadius: '4px', marginTop: '2rem' }}>
-            AUDIT_STABLE
-          </div>
+      <nav className={`pc-nav ${isOpen ? 'pc-nav-open' : ''}`} aria-label="Primary">
+        {navItems.map((item) => (
+          <a
+            key={item.label}
+            href={`#${item.target}`}
+            className="pc-nav-link"
+            onClick={(event) => handleNavClick(event, item.target)}
+          >
+            {item.label}
+          </a>
+        ))}
+
+        <button
+          type="button"
+          className="pc-audit-badge pc-mobile-auth-btn"
+          onClick={() => handleNavClick({ preventDefault: () => {} } as React.MouseEvent, 'pc-inventory-section')}
+        >
+          AUDIT_STABLE
+        </button>
       </nav>
 
-      <div className="pc-mono pc-desktop-auth-btn" style={{ padding: '0.6rem 1.5rem', background: 'var(--pc-bg)', borderRadius: '4px' }}>
+      <button
+        type="button"
+        className="pc-audit-badge pc-desktop-auth-btn"
+        onClick={() => scrollToSection('pc-inventory-section')}
+      >
         AUDIT_STABLE
-      </div>
+      </button>
     </header>
   );
 };
 
-export const AssetRegistryCard = ({ title, type, area, status, id, image, onClick }: any) => (
-  <div className="pc-asset-card" onClick={onClick} style={{ cursor: onClick ? 'pointer' : 'default', display: 'flex', flexDirection: 'column', height: '100%' }}>
+export const AssetRegistryCard = ({ title, type, area, status, id, image, onClick }: {
+  title: string;
+  type: string;
+  area: string;
+  status: string;
+  id: string;
+  image?: string;
+  onClick?: () => void;
+}) => (
+  <div className="pc-asset-card" onClick={onClick} role={onClick ? 'button' : undefined} tabIndex={onClick ? 0 : undefined}>
     {image && (
-      <div style={{ width: '100%', height: '220px', overflow: 'hidden', marginBottom: '2.5rem', border: '1px solid var(--pc-border)', padding: '0.5rem', background: 'var(--pc-bg)' }}>
-        <img src={image} alt={title} className="pc-card-img" style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'grayscale(100%) brightness(0.95)', transition: 'var(--pc-transition)' }} />
+      <div className="pc-card-image-frame">
+        <img src={image} alt={title} className="pc-card-img" loading="lazy" />
       </div>
     )}
-    <div className="pc-mono" style={{ marginBottom: '1.5rem', fontSize: '0.65rem' }}>{id} // {type}</div>
-    <h3 className="pc-asset-title" style={{ fontSize: '1.75rem', fontWeight: 900, marginBottom: '2rem', transition: 'var(--pc-transition)', flexGrow: 1 }}>{title}</h3>
-    
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '3rem' }}>
-        <div>
-            <div className="pc-mono" style={{ fontSize: '0.6rem', color: 'var(--pc-slate)', marginBottom: '0.5rem' }}>TOTAL_AREA</div>
-            <div style={{ fontWeight: 800 }}>{area}</div>
-        </div>
-        <div>
-            <div className="pc-mono" style={{ fontSize: '0.6rem', color: 'var(--pc-slate)', marginBottom: '0.5rem' }}>STATUS</div>
-            <div style={{ fontWeight: 800, color: status === 'AVAILABLE' ? 'var(--pc-blue)' : 'inherit' }}>{status}</div>
-        </div>
+    <div className="pc-mono pc-asset-id">{id} // {type}</div>
+    <h3 className="pc-asset-title">{title}</h3>
+
+    <div className="pc-asset-meta">
+      <div>
+        <div className="pc-mono pc-asset-meta-label">TOTAL_AREA</div>
+        <div className="pc-asset-meta-value">{area}</div>
+      </div>
+      <div>
+        <div className="pc-mono pc-asset-meta-label">STATUS</div>
+        <div className={`pc-asset-meta-value ${status === 'AVAILABLE' ? 'pc-status-available' : ''}`}>{status}</div>
+      </div>
     </div>
-    
-    <div style={{ fontSize: '0.75rem', fontWeight: 900, letterSpacing: '2px', borderTop: '1px solid var(--pc-border)', paddingTop: '1.5rem', display: 'flex', justifyContent: 'space-between', marginTop: 'auto' }}>
-        <span>REQUEST_AUDIT</span>
-        <span style={{ color: 'var(--pc-blue)' }}>VIEW_YIELD →</span>
+
+    <div className="pc-asset-footer">
+      <span>REQUEST_AUDIT</span>
+      <span className="pc-asset-cta">VIEW_YIELD →</span>
     </div>
   </div>
 );
 
-export const IntelligenceHUD = ({ label, value }: { label: string, value: string }) => (
-    <div style={{ borderBottom: '1px solid var(--pc-border)', paddingBottom: '2.5rem' }}>
-        <div className="pc-mono" style={{ marginBottom: '1rem', color: 'var(--pc-slate)' }}>{label}</div>
-        <div style={{ fontSize: '3rem', fontWeight: 900, letterSpacing: '-2px' }}>{value}</div>
-    </div>
+export const IntelligenceHUD = ({ label, value }: { label: string; value: string }) => (
+  <div className="pc-hud-node">
+    <div className="pc-mono pc-hud-label">{label}</div>
+    <div className="pc-hud-value">{value}</div>
+  </div>
 );
 
 export const InstitutionalFooter = () => (
-    <footer className="pc-footer">
-        <div className="pc-footer-grid">
-            <div>
-                <div className="pc-logo" style={{ fontSize: '2.5rem', marginBottom: '3.5rem' }}>CORP</div>
-                <p style={{ opacity: 0.5, lineHeight: 2, fontSize: '0.95rem', maxWidth: '400px' }}>
-                    The global authoritative registry for institutional-grade commercial assets. Synchronizing yield and structural metadata.
-                </p>
-            </div>
-            {['ACQUISITION', 'AUDIT', 'GOVERNANCE'].map(col => (
-                <div key={col}>
-                    <div className="pc-mono" style={{ color: 'var(--pc-blue)', marginBottom: '3.5rem' }}>{col}</div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                        {['Registry', 'Verification', 'Support', 'Auth'].map(link => (
-                            <span key={link} style={{ fontSize: '0.9rem', opacity: 0.4, cursor: 'pointer' }}>{link}</span>
-                        ))}
-                    </div>
-                </div>
+  <footer className="pc-footer">
+    <div className="pc-footer-grid">
+      <div>
+        <div className="pc-logo pc-footer-logo">CORP</div>
+        <p className="pc-footer-copy">
+          The global authoritative registry for institutional-grade commercial assets. Synchronizing yield and structural metadata.
+        </p>
+      </div>
+      {['ACQUISITION', 'AUDIT', 'GOVERNANCE'].map((col) => (
+        <div key={col}>
+          <div className="pc-mono pc-footer-heading">{col}</div>
+          <div className="pc-footer-links">
+            {['Registry', 'Verification', 'Support', 'Auth'].map((link) => (
+              <span key={link} className="pc-footer-link">{link}</span>
             ))}
+          </div>
         </div>
-        <div style={{ marginTop: '10rem', paddingTop: '4rem', borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <div className="pc-mono" style={{ opacity: 0.3, fontSize: '0.65rem' }}>© 2026 SELLIO_COMMERCIAL_GRP // NODE_STABLE</div>
-            <div style={{ display: 'flex', gap: '4rem' }}>
-                {['INSTAGRAM', 'LINKEDIN', 'X_OS'].map(social => (
-                    <span key={social} className="pc-mono" style={{ opacity: 0.3, fontSize: '0.65rem' }}>{social}</span>
-                ))}
-            </div>
-        </div>
-    </footer>
+      ))}
+    </div>
+    <div className="pc-footer-bottom">
+      <div className="pc-mono pc-footer-copyright">© 2026 SELLIO_COMMERCIAL_GRP // NODE_STABLE</div>
+      <div className="pc-footer-social">
+        {['INSTAGRAM', 'LINKEDIN', 'X_OS'].map((social) => (
+          <span key={social} className="pc-mono pc-footer-social-link">{social}</span>
+        ))}
+      </div>
+    </div>
+  </footer>
 );

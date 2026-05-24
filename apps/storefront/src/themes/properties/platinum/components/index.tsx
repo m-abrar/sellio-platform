@@ -1,91 +1,140 @@
 'use client';
-import React, { useState } from 'react';
+
+import React, { useEffect, useState } from 'react';
+import { scrollToSection } from '../utils';
+
+const navItems = [
+  { label: 'Collection', target: 'pl-showcase-section' },
+  { label: 'Insights', target: 'pl-protocol-section' },
+  { label: 'Concierge', target: 'pl-cta-section' },
+  { label: 'Private Auth', target: 'pl-cta-section' },
+];
 
 export const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
+
+  const handleNavClick = (event: React.MouseEvent, target: string) => {
+    event.preventDefault();
+    setIsOpen(false);
+    scrollToSection(target);
+  };
+
+  const handleAccess = () => {
+    setIsOpen(false);
+    scrollToSection('pl-showcase-section');
+  };
 
   return (
     <header className="pl-header">
       <div className="pl-logo">
         PLATINUM<span style={{ color: 'var(--pl-gold)' }}>Registry</span>
       </div>
-      
-      <button 
-          className={`pl-hamburger ${isOpen ? 'pl-hamburger-open' : ''}`} 
-          onClick={() => setIsOpen(!isOpen)}
-          aria-label="Toggle Navigation"
+
+      {isOpen && (
+        <button
+          type="button"
+          className="pl-nav-backdrop"
+          aria-label="Close navigation menu"
+          onClick={() => setIsOpen(false)}
+        />
+      )}
+
+      <button
+        type="button"
+        className={`pl-hamburger ${isOpen ? 'pl-hamburger-open' : ''}`}
+        onClick={() => setIsOpen(!isOpen)}
+        aria-label="Toggle Navigation"
+        aria-expanded={isOpen}
       >
-          <span className="pl-hamburger-bar"></span>
-          <span className="pl-hamburger-bar"></span>
-          <span className="pl-hamburger-bar"></span>
+        <span className="pl-hamburger-bar"></span>
+        <span className="pl-hamburger-bar"></span>
+        <span className="pl-hamburger-bar"></span>
       </button>
 
-      <nav className={`pl-nav ${isOpen ? 'pl-nav-open' : ''}`}>
-          {['Collection', 'Insights', 'Concierge', 'Private_Auth'].map(link => (
-              <a key={link} href="#" className="pl-nav-link" onClick={() => setIsOpen(false)}>{link}</a>
-          ))}
-          
-          <div className="pl-mono pl-mobile-auth-btn" style={{ color: 'white', border: '1px solid var(--pl-border)', padding: '0.8rem 2rem', borderRadius: '4px', marginTop: '2rem' }}>
-            ACCESS_SECURE_NODE
-          </div>
+      <nav className={`pl-nav ${isOpen ? 'pl-nav-open' : ''}`} aria-label="Primary">
+        {navItems.map((item) => (
+          <a
+            key={item.label}
+            href={`#${item.target}`}
+            className="pl-nav-link"
+            onClick={(event) => handleNavClick(event, item.target)}
+          >
+            {item.label.replace('_', ' ')}
+          </a>
+        ))}
+
+        <button type="button" className="pl-access-btn pl-mobile-auth-btn" onClick={handleAccess}>
+          ACCESS_SECURE_NODE
+        </button>
       </nav>
 
-      <div className="pl-mono pl-desktop-auth-btn" style={{ color: 'white', border: '1px solid var(--pl-border)', padding: '0.6rem 1.5rem', borderRadius: '4px' }}>
+      <button type="button" className="pl-access-btn pl-desktop-auth-btn" onClick={handleAccess}>
         ACCESS_SECURE_NODE
-      </div>
+      </button>
     </header>
   );
 };
 
-export const ShowcaseCard = ({ title, price, image, span }: any) => (
-  <div className={`pl-bento-card pl-${span}`}>
-    <img src={image} alt={title} className="pl-bento-img" />
+export const ShowcaseCard = ({ title, price, image }: {
+  title: string;
+  price: string;
+  image: string;
+}) => (
+  <div className="pl-bento-card">
+    <img src={image} alt={title} className="pl-bento-img" loading="lazy" />
     <div className="pl-bento-overlay">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-            <div>
-                <h3 style={{ fontSize: '2rem', fontWeight: 900, marginBottom: '0.5rem', textTransform: 'uppercase' }}>{title}</h3>
-                <div className="pl-mono" style={{ color: 'var(--pl-gold)' }}>CERTIFIED_ACQUISITION</div>
-            </div>
-            <div style={{ fontSize: '1.5rem', fontWeight: 800 }}>{price}</div>
+      <div className="pl-bento-overlay-row">
+        <div className="pl-bento-overlay-copy">
+          <h3>{title}</h3>
+          <div className="pl-mono pl-bento-tag">CERTIFIED_ACQUISITION</div>
         </div>
+        <div className="pl-bento-price">{price}</div>
+      </div>
     </div>
   </div>
 );
 
-export const StatisticsNode = ({ label, value }: { label: string, value: string }) => (
-    <div style={{ borderLeft: '1px solid var(--pl-gold)', paddingLeft: '2.5rem' }}>
-        <div className="pl-mono" style={{ color: 'var(--pl-text-dim)', marginBottom: '1rem' }}>{label}</div>
-        <div style={{ fontSize: '3rem', fontWeight: 900, letterSpacing: '-2px' }}>{value}</div>
-    </div>
+export const StatisticsNode = ({ label, value }: { label: string; value: string }) => (
+  <div className="pl-stat-node">
+    <div className="pl-mono pl-stat-label">{label}</div>
+    <div className="pl-stat-value">{value}</div>
+  </div>
 );
 
 export const Footer = () => (
-    <footer className="pl-footer">
-        <div className="pl-footer-grid">
-            <div style={{ gridColumn: 'span 1' }}>
-                <div className="pl-logo" style={{ fontSize: '2.5rem', marginBottom: '3rem' }}>PLATINUM</div>
-                <p style={{ color: 'var(--pl-text-dim)', lineHeight: 2, fontSize: '0.95rem' }}>
-                    The world's most exclusive distribution network for ultra-high-fidelity private estates. 
-                </p>
-            </div>
-            {['ACQUISITION', 'RESOURCES', 'LEGAL'].map(col => (
-                <div key={col}>
-                    <div className="pl-mono" style={{ color: 'var(--pl-gold)', marginBottom: '3rem' }}>{col}</div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                        {['Registry', 'Insights', 'Concierge', 'Node_Auth'].map(link => (
-                            <span key={link} style={{ fontSize: '0.9rem', color: 'var(--pl-text-dim)', cursor: 'pointer' }}>{link}</span>
-                        ))}
-                    </div>
-                </div>
+  <footer className="pl-footer">
+    <div className="pl-footer-grid">
+      <div>
+        <div className="pl-logo pl-footer-logo">PLATINUM</div>
+        <p className="pl-footer-copy">
+          The world's most exclusive distribution network for ultra-high-fidelity private estates.
+        </p>
+      </div>
+      {['ACQUISITION', 'RESOURCES', 'LEGAL'].map((col) => (
+        <div key={col}>
+          <div className="pl-mono pl-footer-heading">{col}</div>
+          <div className="pl-footer-links">
+            {['Registry', 'Insights', 'Concierge', 'Node Auth'].map((link) => (
+              <span key={link} className="pl-footer-link">{link}</span>
             ))}
+          </div>
         </div>
-        <div style={{ marginTop: '10rem', paddingTop: '4rem', borderTop: '1px solid var(--pl-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <div className="pl-mono" style={{ color: 'var(--pl-text-dim)' }}>© 2026 SELLIO_PLATINUM_GRP // NODE_STABLE</div>
-            <div style={{ display: 'flex', gap: '3rem' }}>
-                {['INSTAGRAM', 'LINKEDIN', 'X_OS'].map(social => (
-                    <span key={social} className="pl-mono" style={{ color: 'var(--pl-text-dim)' }}>{social}</span>
-                ))}
-            </div>
-        </div>
-    </footer>
+      ))}
+    </div>
+    <div className="pl-footer-bottom">
+      <div className="pl-mono pl-footer-copyright">© 2026 SELLIO_PLATINUM_GRP // NODE_STABLE</div>
+      <div className="pl-footer-social">
+        {['INSTAGRAM', 'LINKEDIN', 'X_OS'].map((social) => (
+          <span key={social} className="pl-mono pl-footer-social-link">{social}</span>
+        ))}
+      </div>
+    </div>
+  </footer>
 );
