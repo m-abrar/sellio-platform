@@ -38,11 +38,11 @@ class MenuItem extends Model
         'title',
         'menu_id',
         'parent_id',
-        'label',
         'url',
-        'target',
-        'icon',
         'order',
+        'status',
+        'admin_note',
+        'module',
     ];
 
     /**
@@ -97,6 +97,11 @@ class MenuItem extends Model
         return $this->hasMany(MenuItem::class, 'parent_id')->orderBy('order');
     }
 
+    public function childrenRecursive(): HasMany
+    {
+        return $this->children()->with('childrenRecursive');
+    }
+
     // --- Scopes ---
 
     /**
@@ -113,5 +118,10 @@ class MenuItem extends Model
     public function scopeOrdered(Builder $query): Builder
     {
         return $query->orderBy('order', 'asc');
+    }
+
+    public function scopeActive(Builder $query): Builder
+    {
+        return $query->where('status', 'active');
     }
 }

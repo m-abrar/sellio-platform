@@ -543,5 +543,38 @@ export interface ClassifiedListing {
   updated_at?: string | null;
 }
 
+export interface MenuItem {
+  id: number | null;
+  title: string;
+  url: string;
+  target?: '_self' | '_blank';
+  children?: MenuItem[];
+}
+
+export interface Menu {
+  location_key: string;
+  title: string;
+  source?: 'theme' | 'vertical' | 'global' | 'fallback';
+  items: MenuItem[];
+}
+
+export type MenuLocationKey =
+  | 'main_header'
+  | 'social_footer'
+  | 'company_footer'
+  | 'support_footer'
+  | 'resources_footer'
+  | 'settings_footer';
+
+export type MenuMap = Partial<Record<MenuLocationKey, Menu>>;
+
+export const MENU_LOCATIONS: MenuLocationKey[] = [
+  'main_header',
+  'social_footer',
+  'company_footer',
+  'support_footer',
+  'resources_footer',
+  'settings_footer',
+];
 
 

@@ -4,125 +4,312 @@ namespace App\Services;
 
 use App\Models\Menu;
 use App\Models\MenuItem;
-use Illuminate\Support\Facades\{Cache, Route, Config};
-use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\{Cache, Config, Route};
+use Illuminate\Support\Str;
 
 class MenuService
 {
-    /**
-     * Use nullable string to prevent TypeErrors during early boot or CLI tasks.
-     */
+    public const GLOBAL_FALLBACK_THEME = 'unifieds_default';
+
+    public const MENU_LOCATIONS = [
+        'main_header',
+        'social_footer',
+        'company_footer',
+        'support_footer',
+        'resources_footer',
+        'settings_footer',
+    ];
+
     protected ?string $activeTheme;
     protected string $currentPath;
 
     public function __construct(Request $request)
     {
-        // 1. Resolve active theme with a reliable fallback
-        // We check request, then fall back to the DB's active theme, then finally config.
-        $requestedTheme = $request->get('theme_key') ?? $request->themeKey;
-        
-        if ($requestedTheme) {
-            // Verify the theme exists to prevent database hammering via firstOrCreate in get()
-            $themeExists = Cache::remember("theme_exists.{$requestedTheme}", 3600, function () use ($requestedTheme) {
-                return \App\Models\Theme::where('theme_key', $requestedTheme)->exists();
-            });
+        $this->activeTheme = $this->resolveThemeKey(
+            $request->header('X-Theme-Key')
+                ?? $request->get('theme_key')
+                ?? $request->themeKey
+        );
 
-            if ($themeExists) {
-                $this->activeTheme = $requestedTheme;
-            }
-        }
-
-        if (!isset($this->activeTheme)) {
-            $this->activeTheme = \App\Models\Theme::where('is_active', 1)->value('theme_key')
-                ?? Config::get('app.default_theme', 'default');
-        }
-
-        // 2. Normalize current path for comparison
-        $this->currentPath = trim($request->path(), '/'); 
+        $this->currentPath = trim($request->path(), '/');
     }
 
     /**
-     * Retrieves the menu structure for an application location.
+     * Headless API: fetch a single menu location for a theme.
+     */
+    public function getForApi(string $locationKey, ?string $themeKey = null): array
+    {
+        return $this->getStructure($locationKey, $themeKey ?? $this->activeTheme, false);
+    }
+
+    /**
+     * Headless API: fetch multiple menu locations in one call.
+     *
+     * @param  array<int, string>  $locationKeys
+     */
+    public function getForApiBatch(array $locationKeys, ?string $themeKey = null): array
+    {
+        $themeKey = $themeKey ?? $this->activeTheme;
+        $result = [];
+
+        foreach ($locationKeys as $locationKey) {
+            $result[$locationKey] = $this->getStructure($locationKey, $themeKey, false);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Blade / legacy helper: returns top-level MenuItem models with active state.
      */
     public function get(string $locationKey): Collection
     {
-        $cacheKey = $this->generateCacheKey($locationKey);
-
-        // Retrieve structured items (Safe to cache forever)
-        $items = Cache::rememberForever($cacheKey, function () use ($locationKey) {
-            
-            $menu = Menu::firstOrCreate([
-                'theme_key' => $this->activeTheme,
-                'location_key' => $locationKey,
-            ], [
-                'title' => Str::of($locationKey)->replace('_', ' ')->title() . ' Menu',
-            ]);
-            
-            $items = $menu->items()
-                ->whereNull('parent_id')
-                ->with('children') 
-                ->get();
-
-            $this->resolveUrlsRecursively($items);
-
-            return $items;
-        });
-
-        // 3. Dynamic State: Determine 'active' class on every request
-        // Clone to avoid polluting the cached Eloquent models in memory
-        $items = clone $items;
+        $structure = $this->getStructure($locationKey, $this->activeTheme, true);
+        $items = $this->hydrateItemsFromStructure($structure['items']);
         $this->setActiveStateRecursively($items);
-        
+
         return $items;
     }
 
-    /**
-     * Resolves URLs and Routes. 
-     * Refactored for cleaner logic and marketplace standards.
-     */
-    protected function resolveUrlsRecursively(Collection $items): void
+    public function getMenuName(string $locationKey, ?string $defaultName = null): string
     {
-        foreach ($items as $item) {
-            if ($item->url && is_string($item->url)) {
-                $url = $item->url;
+        $structure = $this->getStructure($locationKey, $this->activeTheme, false);
 
-                // Only process internal links
-                if (!Str::contains($url, '://') && !Str::startsWith($url, '//')) {
-                    $cleanPath = trim($url, '/');
-                    $routeName = str_replace('/', '.', $cleanPath);
-                    
-                    if (Route::has($routeName)) {
-                        $item->url = route($routeName);
-                    } elseif (Route::has($routeName . '.index')) {
-                        $item->url = route($routeName . '.index');
-                    } else {
-                        $item->url = url($url); 
+        return $structure['title']
+            ?? $defaultName
+            ?? Str::of($locationKey)->replace('_', ' ')->title() . ' Menu';
+    }
+
+    public function getMenusList(): Collection
+    {
+        $cacheKey = "menu.list.{$this->activeTheme}";
+
+        return Cache::rememberForever($cacheKey, function () {
+            return Menu::where('theme_key', $this->activeTheme)
+                ->where('status', 'active')
+                ->orderBy('title')
+                ->get();
+        });
+    }
+
+    public function forgetCache(Menu $menu): void
+    {
+        foreach ($this->resolveThemeKeys($menu->theme_key) as $themeKey) {
+            Cache::forget($this->generateStructureCacheKey($themeKey, $menu->location_key));
+        }
+
+        Cache::forget("menu.list.{$menu->theme_key}");
+        Cache::forget("menu.list.{$this->activeTheme}");
+    }
+
+    public function forgetCacheByLocation(string $locationKey): void
+    {
+        foreach ($this->resolveThemeKeys($this->activeTheme) as $themeKey) {
+            Cache::forget($this->generateStructureCacheKey($themeKey, $locationKey));
+        }
+
+        Cache::forget("menu.list.{$this->activeTheme}");
+    }
+
+    public function updateStructure(Menu $menu, array $data): void
+    {
+        \Illuminate\Support\Facades\DB::transaction(function () use ($menu, $data) {
+            if (! empty($data['new_items'])) {
+                foreach ($data['new_items'] as $newItem) {
+                    if (! empty($newItem['title']) && ! empty($newItem['url'])) {
+                        MenuItem::create([
+                            'menu_id' => $menu->id,
+                            'title'   => $newItem['title'],
+                            'url'     => $newItem['url'],
+                            'order'   => 9999,
+                            'status'  => 'active',
+                        ]);
                     }
                 }
             }
 
-            if ($item->children->isNotEmpty()) {
-                $this->resolveUrlsRecursively($item->children);
+            $menuStructure = [];
+            if (! empty($data['menu_structure'])) {
+                $decoded = json_decode($data['menu_structure'], true);
+                if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+                    $menuStructure = $decoded;
+                }
+            }
+
+            if (! empty($menuStructure)) {
+                $this->processNestedItems($menuStructure, $menu->id);
+            }
+
+            $this->forgetCache($menu);
+        });
+    }
+
+    protected function getStructure(string $locationKey, string $themeKey, bool $resolveLaravelRoutes): array
+    {
+        $cacheKey = $this->generateStructureCacheKey($themeKey, $locationKey);
+
+        $structure = Cache::rememberForever($cacheKey, function () use ($locationKey, $themeKey) {
+            return $this->buildStructure($locationKey, $themeKey);
+        });
+
+        if ($resolveLaravelRoutes) {
+            $structure = $this->resolveUrlsInStructure($structure);
+        }
+
+        return $structure;
+    }
+
+    protected function buildStructure(string $locationKey, string $themeKey): array
+    {
+        foreach ($this->resolveThemeKeys($themeKey) as $index => $candidateTheme) {
+            $menu = Menu::query()
+                ->where('theme_key', $candidateTheme)
+                ->where('location_key', $locationKey)
+                ->where('status', 'active')
+                ->first();
+
+            if (! $menu) {
+                continue;
+            }
+
+            $items = $menu->items()
+                ->whereNull('parent_id')
+                ->active()
+                ->with('childrenRecursive')
+                ->orderBy('order')
+                ->get();
+
+            $itemTree = $this->mapItemsToDto($items);
+
+            if (! empty($itemTree) || $index === 0) {
+                return [
+                    'location_key' => $locationKey,
+                    'title'        => $menu->title,
+                    'source'       => $this->resolveSource($candidateTheme, $themeKey),
+                    'items'        => ! empty($itemTree) ? $itemTree : $this->fallbackItems($locationKey, $themeKey),
+                ];
             }
         }
+
+        return [
+            'location_key' => $locationKey,
+            'title'        => Str::of($locationKey)->replace('_', ' ')->title() . ' Menu',
+            'source'       => 'fallback',
+            'items'        => $this->fallbackItems($locationKey, $themeKey),
+        ];
     }
-    
-    /**
-     * Performance-optimized active state checker
-     */
+
+    protected function mapItemsToDto(Collection $items): array
+    {
+        return $items
+            ->map(fn (MenuItem $item) => $this->toItemDto($item))
+            ->filter()
+            ->values()
+            ->all();
+    }
+
+    protected function toItemDto(MenuItem $item): ?array
+    {
+        if ($item->module && ! module_enabled($item->module)) {
+            return null;
+        }
+
+        $children = $item->relationLoaded('childrenRecursive')
+            ? collect($item->childrenRecursive)
+                ->map(fn (MenuItem $child) => $this->toItemDto($child))
+                ->filter()
+                ->values()
+                ->all()
+            : [];
+
+        return [
+            'id'       => $item->id,
+            'title'    => $item->title,
+            'url'      => $this->normalizeUrl($item->url),
+            'target'   => Str::startsWith($item->url, ['http://', 'https://', '//']) ? '_blank' : '_self',
+            'children' => $children,
+        ];
+    }
+
+    protected function normalizeUrl(?string $url): string
+    {
+        $url = trim((string) $url);
+
+        if ($url === '') {
+            return '#';
+        }
+
+        if (Str::startsWith($url, ['http://', 'https://', '//', '#'])) {
+            return $url;
+        }
+
+        return Str::startsWith($url, '/') ? $url : '/' . $url;
+    }
+
+    protected function resolveUrlsInStructure(array $structure): array
+    {
+        $structure['items'] = $this->resolveUrlsRecursively($structure['items']);
+
+        return $structure;
+    }
+
+    protected function resolveUrlsRecursively(array $items): array
+    {
+        foreach ($items as &$item) {
+            $url = $item['url'] ?? '#';
+
+            if ($url !== '#' && ! Str::contains($url, '://') && ! Str::startsWith($url, '//')) {
+                $cleanPath = trim($url, '/');
+                $routeName = str_replace('/', '.', $cleanPath);
+
+                if (Route::has($routeName)) {
+                    $item['url'] = route($routeName);
+                } elseif (Route::has($routeName . '.index')) {
+                    $item['url'] = route($routeName . '.index');
+                } else {
+                    $item['url'] = url($url);
+                }
+            }
+
+            if (! empty($item['children'])) {
+                $item['children'] = $this->resolveUrlsRecursively($item['children']);
+            }
+        }
+
+        return $items;
+    }
+
+    protected function hydrateItemsFromStructure(array $items): Collection
+    {
+        return collect($items)->map(function (array $item) {
+            $model = new MenuItem([
+                'id'    => $item['id'] ?? null,
+                'title' => $item['title'],
+                'url'   => $item['url'],
+            ]);
+
+            if (! empty($item['children'])) {
+                $model->setRelation('children', $this->hydrateItemsFromStructure($item['children']));
+            } else {
+                $model->setRelation('children', collect());
+            }
+
+            return $model;
+        });
+    }
+
     protected function setActiveStateRecursively(Collection $items): void
     {
         foreach ($items as $item) {
             $item->is_active = false;
-            
-            $itemPath = trim(parse_url($item->url, PHP_URL_PATH), '/');
+
+            $itemPath = trim(parse_url($item->url, PHP_URL_PATH) ?? '', '/');
 
             if ($itemPath === $this->currentPath) {
                 $item->is_active = true;
             } elseif ($itemPath !== '' && Str::startsWith($this->currentPath, $itemPath . '/')) {
-                // Catches sub-pages (e.g. /blog/my-post makes /blog active)
                 $item->is_active = true;
             }
 
@@ -132,119 +319,10 @@ class MenuService
         }
     }
 
-    
-    /**
-     * Retrieves the human-readable name of the Menu associated with a location key.
-     * @param string $locationKey The unique identifier for the menu slot (e.g., 'main_header').
-     * @param string|null $defaultName An optional fallback name if the menu is created on the fly.
-     * @return string The human-readable menu name.
-     */
-    public function getMenuName(string $locationKey, ?string $defaultName = null): string
-    {
-        $cacheKey = $this->generateMenuNameCacheKey($locationKey);
-        // Determine the name to use if the record needs to be created
-        $defaultName = $defaultName ?? Str::of($locationKey)->replace('_', ' ')->title().' Menu';
-
-        // Retrieve the name from cache or generate and store forever
-        return Cache::rememberForever($cacheKey, function () use ($locationKey, $defaultName) {
-            
-            // Find the parent Menu Location record, or create it if not found
-            $menu = Menu::firstOrCreate([
-                'theme_key' => $this->activeTheme,
-                'location_key' => $locationKey,
-            ], [
-                // Use the provided default name or the generated one
-                'title' => $defaultName,
-            ]);
-
-            return $menu->title;
-        });
-    }
-
-    /**
-     * Retrieves all Menu locations for the currently active theme.
-     * @return Collection|Menu[] A collection of Menu models.
-     */
-    public function getMenusList(): Collection
-    {
-        $cacheKey = $this->generateMenusListCacheKey();
-
-        return Cache::rememberForever($cacheKey, function () {
-            // Fetch all menus that belong to the active theme
-            return Menu::where('theme_key', $this->activeTheme)
-                ->orderBy('title')
-                ->get();
-        });
-    }
-
-    public function forgetCache(Menu $menu): void
-    {
-        // Forget the menu items cache
-        Cache::forget($this->generateCacheKey($menu->location_key));
-        // Forget the menu name cache
-        Cache::forget($this->generateMenuNameCacheKey($menu->location_key));
-        // Forget the general menu list cache for this theme
-        Cache::forget($this->generateMenusListCacheKey());
-    }
-    
-    // Alias to easily clear cache by location key (useful after CRUD operations)
-    public function forgetCacheByLocation(string $locationKey): void
-    {
-        // Forget the menu items cache
-        Cache::forget($this->generateCacheKey($locationKey));
-        // Forget the menu name cache
-        Cache::forget($this->generateMenuNameCacheKey($locationKey));
-        // Forget the general menu list cache for this theme
-        Cache::forget($this->generateMenusListCacheKey());
-    }
-
-    /**
-     * Synchronize a menu structure with hierarchical data.
-     */
-    public function updateStructure(Menu $menu, array $data): void
-    {
-        \Illuminate\Support\Facades\DB::transaction(function () use ($menu, $data) {
-            // 1. Process New Items
-            if (!empty($data['new_items'])) {
-                foreach ($data['new_items'] as $newItem) {
-                    if (!empty($newItem['title']) && !empty($newItem['url'])) {
-                        MenuItem::create([
-                            'menu_id' => $menu->id,
-                            'title'   => $newItem['title'],
-                            'url'     => $newItem['url'],
-                            'order'   => 9999,
-                        ]);
-                    }
-                }
-            }
-
-            // 2. Process Hierarchical Structure
-            $menuStructure = [];
-            if (!empty($data['menu_structure'])) {
-                $decoded = json_decode($data['menu_structure'], true);
-                if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
-                    $menuStructure = $decoded;
-                }
-            }
-
-            if (!empty($menuStructure)) {
-                $this->processNestedItems($menuStructure, $menu->id);
-            }
-
-            // 3. Invalidate Cache
-            $this->forgetCache($menu);
-        });
-    }
-
-    /**
-     * Recursively update item hierarchy.
-     */
     protected function processNestedItems(array $items, int $menuId, ?int $parentId = null): void
     {
-        // Optimization: Collect all IDs to avoid N+1 if needed, 
-        // but for nested trees, standard updates are often clearer.
         foreach ($items as $index => $itemData) {
-            if (isset($itemData['id']) && !Str::startsWith($itemData['id'], 'new-')) {
+            if (isset($itemData['id']) && ! Str::startsWith($itemData['id'], 'new-')) {
                 MenuItem::where('id', $itemData['id'])
                     ->where('menu_id', $menuId)
                     ->update([
@@ -252,28 +330,134 @@ class MenuService
                         'parent_id' => $parentId,
                     ]);
 
-                if (!empty($itemData['children'])) {
-                    $this->processNestedItems($itemData['children'], $menuId, (int)$itemData['id']);
+                if (! empty($itemData['children'])) {
+                    $this->processNestedItems($itemData['children'], $menuId, (int) $itemData['id']);
                 }
             }
         }
     }
 
-    protected function generateCacheKey(string $locationKey): string
+    protected function resolveThemeKey(?string $requestedTheme): string
     {
-        $roleHash = auth()->check() ? md5(implode(',', auth()->user()->getRoleNames()->toArray())) : 'guest';
-        return "menu.{$this->activeTheme}.{$locationKey}.{$roleHash}"; 
-    }
-    
-    protected function generateMenuNameCacheKey(string $locationKey): string
-    {
-        $roleHash = auth()->check() ? md5(implode(',', auth()->user()->getRoleNames()->toArray())) : 'guest';
-        return "menu.name.{$this->activeTheme}.{$locationKey}.{$roleHash}";
+        if ($requestedTheme) {
+            $themeExists = Cache::remember("theme_exists.{$requestedTheme}", 3600, function () use ($requestedTheme) {
+                return \App\Models\Theme::where('theme_key', $requestedTheme)->exists();
+            });
+
+            if ($themeExists) {
+                return $requestedTheme;
+            }
+        }
+
+        return \App\Models\Theme::where('is_active', 1)->value('theme_key')
+            ?? Config::get('app.default_theme', self::GLOBAL_FALLBACK_THEME);
     }
 
-    protected function generateMenusListCacheKey(): string
+    /**
+     * @return array<int, string>
+     */
+    protected function resolveThemeKeys(string $themeKey): array
     {
-        $roleHash = auth()->check() ? md5(implode(',', auth()->user()->getRoleNames()->toArray())) : 'guest';
-        return "menu.list.{$this->activeTheme}.{$roleHash}"; 
+        $keys = [$themeKey];
+
+        if (str_contains($themeKey, '_')) {
+            [$prefix] = explode('_', $themeKey, 2);
+            $verticalDefault = "{$prefix}_default";
+
+            if ($verticalDefault !== $themeKey) {
+                $keys[] = $verticalDefault;
+            }
+        }
+
+        if ($themeKey !== self::GLOBAL_FALLBACK_THEME) {
+            $keys[] = self::GLOBAL_FALLBACK_THEME;
+        }
+
+        return array_values(array_unique($keys));
+    }
+
+    protected function resolveSource(string $resolvedTheme, string $requestedTheme): string
+    {
+        if ($resolvedTheme === $requestedTheme) {
+            return 'theme';
+        }
+
+        if (str_contains($resolvedTheme, '_') && str_starts_with($requestedTheme, explode('_', $resolvedTheme, 2)[0] . '_')) {
+            return 'vertical';
+        }
+
+        return $resolvedTheme === self::GLOBAL_FALLBACK_THEME ? 'global' : 'fallback';
+    }
+
+    protected function fallbackItems(string $locationKey, string $themeKey): array
+    {
+        if ($locationKey !== 'main_header') {
+            return $this->fallbackFooterItems($locationKey);
+        }
+
+        $vertical = $this->resolveVertical($themeKey);
+
+        return match ($vertical) {
+            'properties'   => $this->dtoLinks(['Explore' => '/explore', 'Cart' => '/cart']),
+            'autos'        => $this->dtoLinks(['Inventory' => '/explore', 'Explore' => '/explore']),
+            'events'       => $this->dtoLinks(['Events' => '/explore']),
+            'jobs'         => $this->dtoLinks(['Jobs' => '/explore']),
+            'services'     => $this->dtoLinks(['Services' => '/explore']),
+            'classifieds'  => $this->dtoLinks(['Listings' => '/explore']),
+            'ecommerce'    => $this->dtoLinks(['Shop' => '/explore', 'Explore' => '/explore']),
+            default        => $this->dtoLinks(['Home' => '/', 'Explore' => '/explore', 'Shop' => '/explore']),
+        };
+    }
+
+    protected function fallbackFooterItems(string $locationKey): array
+    {
+        return match ($locationKey) {
+            'social_footer'    => $this->dtoLinks(['Facebook' => '#', 'Instagram' => '#', 'X' => '#']),
+            'company_footer'   => $this->dtoLinks(['About' => '#', 'Careers' => '#', 'Press' => '#']),
+            'support_footer'   => $this->dtoLinks(['Help Center' => '#', 'Contact' => '#', 'Status' => '#']),
+            'resources_footer' => $this->dtoLinks(['Documentation' => '#', 'Terms' => '#', 'Privacy' => '#']),
+            'settings_footer'  => $this->dtoLinks(['Language' => '#', 'Region' => '#']),
+            default            => [],
+        };
+    }
+
+    /**
+     * @param  array<string, string>  $links
+     */
+    protected function dtoLinks(array $links): array
+    {
+        $order = 1;
+        $items = [];
+
+        foreach ($links as $title => $url) {
+            $items[] = [
+                'id'       => null,
+                'title'    => $title,
+                'url'      => $url,
+                'target'   => Str::startsWith($url, ['http://', 'https://']) ? '_blank' : '_self',
+                'children' => [],
+            ];
+            $order++;
+        }
+
+        return $items;
+    }
+
+    protected function resolveVertical(string $themeKey): ?string
+    {
+        if (str_starts_with($themeKey, 'unifieds_')) {
+            return 'unifieds';
+        }
+
+        if (! str_contains($themeKey, '_')) {
+            return null;
+        }
+
+        return explode('_', $themeKey, 2)[0];
+    }
+
+    protected function generateStructureCacheKey(string $themeKey, string $locationKey): string
+    {
+        return "menu.structure.{$themeKey}.{$locationKey}";
     }
 }

@@ -32,16 +32,9 @@ class Menu extends Model
         'theme_key',
         'title',
         'location_key',
-        'is_active',
-    ];
-
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'is_active' => 'boolean',
+        'status',
+        'admin_note',
+        'is_system',
     ];
 
     // --- Relationships ---
@@ -61,7 +54,7 @@ class Menu extends Model
      */
     public function scopeActive(Builder $query): Builder
     {
-        return $query->where('is_active', true);
+        return $query->where('status', 'active');
     }
 
     /**

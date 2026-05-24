@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
 import { getActiveTheme } from "@/lib/theme";
+import { getMenus } from "@/lib/menu";
+import { MenuProvider } from "@/components/menu/MenuProvider";
 import UnifiedDefaultLayout from "@/themes/unifieds/default/Layout";
 import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 import DatabaseOfflineResilience from "@/components/DatabaseOfflineResilience";
+import { MENU_LOCATIONS } from "@sellio/types";
 import "./globals.css";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -19,6 +22,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const { theme, layout, databaseOffline, errorDetails } = await getActiveTheme();
+  const { menus } = await getMenus(MENU_LOCATIONS, theme.theme_key);
   
   // Dynamically resolve the industry-specific layout orchestration
   let IndustryLayout;
@@ -45,9 +49,11 @@ export default async function RootLayout({
         )}
       </head>
       <body>
-        <IndustryLayout>
-          {children}
-        </IndustryLayout>
+        <MenuProvider menus={menus} themeKey={theme.theme_key}>
+          <IndustryLayout>
+            {children}
+          </IndustryLayout>
+        </MenuProvider>
         {databaseOffline && <DatabaseOfflineResilience errorDetails={errorDetails} />}
         <ThemeSwitcher />
       </body>

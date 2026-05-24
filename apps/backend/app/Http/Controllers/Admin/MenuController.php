@@ -51,7 +51,8 @@ class MenuController extends Controller
     {
         $items = $menu->items()
             ->whereNull('parent_id')
-            ->with('children')
+            ->active()
+            ->with('childrenRecursive')
             ->get();
             
         return view('admin.menu.edit', [

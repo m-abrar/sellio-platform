@@ -1,5 +1,6 @@
 'use client';
 import React, { useState } from 'react';
+import { MenuNav } from '@/components/menu/MenuNav';
 
 export const OriginHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -21,14 +22,20 @@ export const OriginHeader = () => {
           <span className="ud-hamburger-bar"></span>
       </button>
 
-      <nav className={`ud-nav ${isOpen ? 'ud-nav-open' : ''}`}>
-          {['Registry', 'Features', 'Analytics', 'Enterprise'].map(link => (
-              <a key={link} href="#" className="ud-nav-link" onClick={() => setIsOpen(false)}>{link}</a>
-          ))}
-          <button className="ud-btn-primary ud-mobile-btn" style={{ padding: '1rem 3rem', fontSize: '0.8rem', marginTop: '2rem', width: '100%' }} onClick={() => alert('Core Origin distribution active.')}>
-            GET STARTED CORE
-          </button>
-      </nav>
+      <MenuNav
+        location="main_header"
+        flat
+        className={`ud-nav ${isOpen ? 'ud-nav-open' : ''}`}
+        linkClassName="ud-nav-link"
+        onNavigate={() => setIsOpen(false)}
+        renderItem={(item, { href, className, onNavigate }) => (
+          <a href={href} className={className} onClick={onNavigate}>{item.title}</a>
+        )}
+      />
+
+      <button className="ud-btn-primary ud-mobile-btn" style={{ padding: '1rem 3rem', fontSize: '0.8rem', marginTop: '2rem', width: '100%' }} onClick={() => alert('Core Origin distribution active.')}>
+        GET STARTED CORE
+      </button>
 
       <button className="ud-btn-primary ud-desktop-btn" style={{ padding: '0.8rem 2rem', fontSize: '0.75rem', borderRadius: '8px' }} onClick={() => alert('Core Origin distribution active.')} id="ud-btn-header-access">
         GET STARTED

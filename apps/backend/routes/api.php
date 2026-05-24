@@ -27,6 +27,7 @@ use App\Http\Controllers\Api\V1\ApiCartController;
 use App\Http\Controllers\Api\V1\ApiOrderController;
 use App\Http\Controllers\Api\V1\Auth\AuthController;
 use App\Http\Controllers\Api\ApiThemeController;
+use App\Http\Controllers\Api\V1\ApiMenuController;
 use Illuminate\Http\Request;
 
 /*
@@ -41,6 +42,14 @@ Route::prefix('themes')->group(function () {
 });
 
 Route::prefix('v1')->group(function () {
+
+// =======================
+// Menu Routes
+// =======================
+Route::prefix('menus')->group(function () {
+    Route::get('/', [ApiMenuController::class, 'index']);
+    Route::get('{locationKey}', [ApiMenuController::class, 'show']);
+});
 
 // =======================
 // Category Routes

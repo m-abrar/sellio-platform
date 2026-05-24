@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
-import type { Product, Category, Theme, ApiResponse, Property, Location, Vehicle, JobListing, ServiceListing, EventListing, ClassifiedListing } from '@sellio/types';
+import type { Product, Category, Theme, ApiResponse, Property, Location, Vehicle, JobListing, ServiceListing, EventListing, ClassifiedListing, Menu, MenuMap, MenuLocationKey } from '@sellio/types';
 
 export class SellioAPI {
   private client: AxiosInstance;
@@ -54,6 +54,19 @@ export class SellioAPI {
   async getActiveTheme(key?: string): Promise<Theme> {
     const options = key ? { headers: { 'X-Theme-Key': key } } : {};
     return this.request<Theme>('/themes/active', options);
+  }
+
+  async getMenu(locationKey: MenuLocationKey | string, themeKey?: string): Promise<Menu> {
+    const options = themeKey ? { headers: { 'X-Theme-Key': themeKey } } : {};
+    return this.request<Menu>(`/v1/menus/${locationKey}`, options);
+  }
+
+  async getMenus(locations: MenuLocationKey[] | string[], themeKey?: string): Promise<MenuMap> {
+    const options = {
+      params: { locations: locations.join(',') },
+      ...(themeKey ? { headers: { 'X-Theme-Key': themeKey } } : {}),
+    };
+    return this.request<MenuMap>('/v1/menus', options);
   }
 
   // === Property Vertical Endpoints ===
