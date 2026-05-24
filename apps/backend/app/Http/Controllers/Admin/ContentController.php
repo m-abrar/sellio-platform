@@ -52,16 +52,21 @@ class ContentController extends Controller
         $this->ensureStructuredSlots('properties_classic', 'home');
 
         $contentPages = PageContent::select('page', 'theme_key')
+            ->selectRaw('COUNT(*) as slots_count')
+            ->selectRaw('MAX(updated_at) as latest_update')
             ->distinct()
+            ->groupBy('page', 'theme_key')
             ->orderBy('page')
             ->orderBy('theme_key')
             ->get();
 
         $themeKeys = PageContent::select('theme_key')->distinct()->pluck('theme_key');
+        $themes = Theme::whereIn('theme_key', $themeKeys)->get()->keyBy('theme_key');
 
         return view('admin.content.index', [
             'contentPages' => $contentPages,
             'themeKeys'    => $themeKeys,
+            'themes'       => $themes,
         ]);
     }
     
