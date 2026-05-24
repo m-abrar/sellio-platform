@@ -24,6 +24,12 @@ export function MenuProvider({
 }) {
   const value = useMemo(() => ({ menus, themeKey }), [menus, themeKey]);
 
+  // #region agent log
+  React.useEffect(() => {
+    fetch('http://127.0.0.1:7444/ingest/7299bd34-d23f-4a85-8035-1e1996ea1a56',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'706e24'},body:JSON.stringify({sessionId:'706e24',location:'MenuProvider.tsx:mount',message:'client menu context',data:{themeKey,menuKeys:Object.keys(menus??{}),mainHeaderCount:menus?.main_header?.items?.length??null,mainHeaderTitles:(menus?.main_header?.items??[]).slice(0,4).map((i)=>i.title)},timestamp:Date.now(),hypothesisId:'C,E'})}).catch(()=>{});
+  }, [menus, themeKey]);
+  // #endregion
+
   return <MenuContext.Provider value={value}>{children}</MenuContext.Provider>;
 }
 
