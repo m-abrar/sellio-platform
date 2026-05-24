@@ -28,8 +28,8 @@ Theme overrides are supported through `/preview/{theme_key}/...`, `?theme={theme
 | :--- | ---: | :--- |
 | Seeded themes | 52 | Registered by `ThemeSeeder` |
 | Storefront folders | 52 | All seeded keys have matching theme folders |
-| API-backed themes | 32 | Themes with live `api.*` usage in `.tsx` files |
-| Static / mostly static themes remaining | 20 | No direct live API usage found in theme `.tsx` files |
+| API-backed themes | 33 | Themes with live `api.*` usage in `.tsx` files |
+| Static / mostly static themes remaining | 19 | No direct live API usage found in theme `.tsx` files |
 
 ---
 
@@ -88,7 +88,7 @@ Theme overrides are supported through `/preview/{theme_key}/...`, `?theme={theme
 
 | Theme Key | Folder | Frontend Folder | API Backed |
 | :--- | :--- | :---: | :---: |
-| `services_corporate` | `services/corporate` | Yes | No |
+| `services_corporate` | `services/corporate` | Yes | Yes |
 | `services_marketplace` | `services/marketplace` | Yes | Yes |
 | `services_creative` | `services/creative` | Yes | No |
 | `services_local` | `services/local` | Yes | No |

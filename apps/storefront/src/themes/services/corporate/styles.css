@@ -188,6 +188,12 @@
   height: 100%;
 }
 
+.sc-service-link-card {
+  color: inherit;
+  display: block;
+  text-decoration: none;
+}
+
 .sc-service-card:hover {
   border-color: var(--sc-primary);
   box-shadow: 0 15px 35px rgba(0,0,0,0.08);
@@ -203,6 +209,322 @@
 
 .sc-service-card:hover .icon {
   color: var(--sc-accent);
+}
+
+.sc-service-price {
+  color: var(--sc-primary);
+  font-weight: 700;
+  margin-top: 1.5rem;
+}
+
+.sc-service-state {
+  background: white;
+  border: 1px solid var(--sc-border);
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.03);
+  grid-column: 1 / -1;
+  margin: 0 auto;
+  max-width: 680px;
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.sc-service-state h3 {
+  color: var(--sc-dark);
+  font-family: var(--sc-font-heading);
+  font-size: 2rem;
+  margin: 0 0 1rem;
+}
+
+.sc-service-state p {
+  color: var(--sc-text-dim);
+  line-height: 1.7;
+  margin: 0;
+}
+
+.sc-service-kicker {
+  color: var(--sc-primary);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+}
+
+.sc-service-skeleton .icon,
+.sc-service-line,
+.sc-detail-skeleton,
+.sc-detail-back-skeleton,
+.sc-detail-line {
+  background: linear-gradient(90deg, #eef4fb 25%, #ffffff 50%, #eef4fb 75%);
+  background-size: 200% 100%;
+  animation: scShimmer 1.6s ease-in-out infinite;
+}
+
+.sc-service-skeleton .icon {
+  border-radius: 50%;
+  height: 64px;
+  margin: 0 auto 1.5rem;
+  width: 64px;
+}
+
+.sc-service-line {
+  border-radius: 999px;
+  height: 16px;
+  margin: 0 auto 1rem;
+  width: 100%;
+}
+
+.sc-service-line-title {
+  height: 22px;
+  width: 72%;
+}
+
+.sc-service-line-short {
+  width: 58%;
+}
+
+@keyframes scShimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Service Detail */
+.sc-detail-page {
+  background: #ffffff;
+  min-height: 100vh;
+  padding: 6rem 5%;
+}
+
+.sc-detail-back,
+.sc-detail-back-skeleton {
+  margin-bottom: 3rem;
+}
+
+.sc-detail-back {
+  align-items: center;
+  color: var(--sc-primary);
+  display: inline-flex;
+  font-weight: 700;
+  gap: 0.65rem;
+  text-decoration: none;
+}
+
+.sc-detail-back-skeleton {
+  border-radius: 999px;
+  height: 18px;
+  width: 200px;
+}
+
+.sc-detail-grid {
+  display: grid;
+  gap: 4rem;
+  grid-template-columns: minmax(0, 1fr) minmax(360px, 0.9fr);
+  margin: 0 auto;
+  max-width: 1280px;
+}
+
+.sc-detail-media {
+  align-items: center;
+  background: var(--sc-gray-light);
+  border: 1px solid var(--sc-border);
+  border-radius: 18px;
+  display: flex;
+  justify-content: center;
+  min-height: 520px;
+  overflow: hidden;
+}
+
+.sc-detail-media img {
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+.sc-detail-panel {
+  align-self: center;
+}
+
+.sc-detail-panel h1,
+.sc-detail-state h1,
+.sc-detail-lead h2 {
+  color: var(--sc-dark);
+  font-family: var(--sc-font-heading);
+  font-weight: 800;
+  line-height: 1.15;
+  margin: 0;
+}
+
+.sc-detail-panel h1 {
+  font-size: clamp(2.6rem, 5vw, 4.5rem);
+}
+
+.sc-detail-price {
+  color: var(--sc-primary);
+  font-size: 1.35rem;
+  font-weight: 800;
+  margin-top: 1.5rem;
+}
+
+.sc-detail-description {
+  color: var(--sc-text-dim);
+  font-size: 1.08rem;
+  line-height: 1.8;
+  margin: 2rem 0;
+}
+
+.sc-detail-specs {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.sc-detail-specs div {
+  background: var(--sc-gray-light);
+  border: 1px solid var(--sc-border);
+  border-radius: 12px;
+  min-width: 0;
+  padding: 1.25rem;
+}
+
+.sc-detail-specs span,
+.sc-detail-specs strong {
+  display: block;
+}
+
+.sc-detail-specs span {
+  color: var(--sc-text-dim);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+
+.sc-detail-specs strong {
+  color: var(--sc-dark);
+  overflow-wrap: anywhere;
+}
+
+.sc-detail-features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+
+.sc-detail-features span {
+  background: rgba(0, 123, 255, 0.08);
+  border-radius: 999px;
+  color: var(--sc-primary-dark);
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 0.65rem 1rem;
+}
+
+.sc-detail-lead {
+  background: var(--sc-gray-light);
+  border-radius: 18px;
+  display: grid;
+  gap: 4rem;
+  grid-template-columns: 0.85fr 1fr;
+  margin: 6rem auto 0;
+  max-width: 1280px;
+  padding: 4rem;
+}
+
+.sc-detail-lead h2 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  margin-bottom: 1rem;
+}
+
+.sc-detail-lead p {
+  color: var(--sc-text-dim);
+  line-height: 1.7;
+  margin: 0;
+}
+
+.sc-detail-lead form,
+.sc-detail-lead label {
+  display: flex;
+  flex-direction: column;
+}
+
+.sc-detail-lead form {
+  gap: 1rem;
+}
+
+.sc-detail-lead label {
+  color: var(--sc-dark);
+  font-size: 0.85rem;
+  font-weight: 700;
+  gap: 0.5rem;
+  letter-spacing: 0.4px;
+}
+
+.sc-detail-lead input,
+.sc-detail-lead textarea {
+  background: white;
+  border: 1px solid var(--sc-border);
+  border-radius: 10px;
+  color: var(--sc-text);
+  font: inherit;
+  padding: 0.9rem 1rem;
+}
+
+.sc-detail-success {
+  background: rgba(23, 162, 184, 0.12);
+  border: 1px solid rgba(23, 162, 184, 0.3);
+  border-radius: 10px;
+  color: var(--sc-navy);
+  font-weight: 800;
+  padding: 1rem;
+}
+
+.sc-detail-state {
+  background: var(--sc-gray-light);
+  border: 1px solid var(--sc-border);
+  border-radius: 18px;
+  margin: 5rem auto;
+  max-width: 720px;
+  padding: 5rem 3rem;
+  text-align: center;
+}
+
+.sc-detail-state h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.sc-detail-state p {
+  color: var(--sc-text-dim);
+  line-height: 1.7;
+  margin: 0 auto 2rem;
+  max-width: 520px;
+}
+
+.sc-detail-line {
+  border-radius: 999px;
+  height: 18px;
+  margin-bottom: 1.25rem;
+}
+
+.sc-detail-line-small {
+  width: 32%;
+}
+
+.sc-detail-line-title {
+  border-radius: 18px;
+  height: 92px;
+  width: 90%;
+}
+
+.sc-detail-line-price {
+  width: 26%;
+}
+
+.sc-detail-line-short {
+  width: 70%;
 }
 
 /* Case Studies */
@@ -385,6 +707,15 @@
     grid-template-columns: 1fr;
     gap: 3rem;
   }
+
+  .sc-detail-grid,
+  .sc-detail-lead {
+    grid-template-columns: 1fr;
+  }
+
+  .sc-detail-specs {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 768px) {
@@ -404,5 +735,16 @@
     grid-template-columns: 1fr !important;
     gap: 3rem !important;
   }
-}
 
+  .sc-detail-page {
+    padding: 4rem 6%;
+  }
+
+  .sc-detail-media {
+    min-height: 320px;
+  }
+
+  .sc-detail-lead {
+    padding: 2rem;
+  }
+}

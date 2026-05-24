@@ -1,16 +1,16 @@
 'use client';
-import React from 'react';
-import { CorporateHeader, ServiceCard, CaseStudyCard, TestimonialCard, CorporateFooter } from './components';
+
+import React, { useEffect, useState } from 'react';
+import { api } from '@sellio/api-client';
+import type { ServiceListing } from '@sellio/types';
+import { CorporateHeader, CaseStudyCard, TestimonialCard, CorporateFooter } from './components';
+
+const serviceIcons = ['01', '02', '03', '04', '05', '06'];
 
 export default function Page() {
-  const services = [
-    { title: "Business Strategy Consulting", description: "Unlock growth opportunities and build resilient business models for the future.", icon: "📈" },
-    { title: "Corporate Finance", description: "Optimize capital structure, manage risks, and maximize shareholder value.", icon: "💰" },
-    { title: "Organizational Development", description: "Enhance team performance, streamline operations, and foster a culture of innovation.", icon: "👥" },
-    { title: "Innovation & Transformation", description: "Leverage cutting-edge technology to stay ahead in a rapidly evolving market.", icon: "💡" },
-    { title: "Mergers & Acquisitions", description: "Navigate complex transactions with expert advice from due diligence to integration.", icon: "🤝" },
-    { title: "Market Entry Strategies", description: "Successfully expand into new markets with comprehensive research and planning.", icon: "🌍" },
-  ];
+  const [services, setServices] = useState<ServiceListing[]>([]);
+  const [loadingServices, setLoadingServices] = useState(true);
+  const [serviceError, setServiceError] = useState<string | null>(null);
 
   const caseStudies = [
     { title: "GlobalTech Solutions", description: "Implemented a new operational strategy, boosting efficiency by 40% and reducing costs by 15%.", image: "/themes/services/corporate/12.webp" },
@@ -21,8 +21,51 @@ export default function Page() {
   const testimonials = [
     { name: "Jane Doe", title: "CEO, Global Solutions Inc.", quote: "Partnering with Corporate Services was a game-changer for our business. Their strategic insights and dedicated team helped us navigate complex market shifts and achieve unprecedented growth.", avatar: "/themes/services/corporate/15.webp" },
     { name: "John Smith", title: "CFO, Tech Innovations", quote: "The team at Corporate Services provided invaluable support in optimizing our financial strategies. Their expertise directly led to significant cost savings and improved our overall financial health.", avatar: "/themes/services/corporate/16.webp" },
-    { name: "Emily White", title: "COO, Apex Ventures", quote: "We were thoroughly impressed by their commitment to understanding our unique challenges and delivering tailored solutions. The results speak for themselves – a stronger team and a clearer path forward.", avatar: "/themes/services/corporate/17.webp" }
+    { name: "Emily White", title: "COO, Apex Ventures", quote: "We were thoroughly impressed by their commitment to understanding our unique challenges and delivering tailored solutions. The results speak for themselves - a stronger team and a clearer path forward.", avatar: "/themes/services/corporate/17.webp" }
   ];
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadServices() {
+      try {
+        const response = await api.getServices({ per_page: 6 });
+        if (!isMounted) {
+          return;
+        }
+
+        setServices(Array.isArray(response.data) ? response.data : []);
+        setServiceError(null);
+      } catch (error: unknown) {
+        if (!isMounted) {
+          return;
+        }
+
+        console.error('Failed to load services corporate listings:', error);
+        setServiceError(error instanceof Error ? error.message : 'Services are temporarily unavailable.');
+      } finally {
+        if (isMounted) {
+          setLoadingServices(false);
+        }
+      }
+    }
+
+    loadServices();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const getServiceDescription = (service: ServiceListing) => (
+    service.short_description || service.description || 'A live service record synchronized from the Sellio service catalog.'
+  );
+
+  const getServicePrice = (service: ServiceListing) => (
+    service.pricing?.formatted || service.pricing?.formatted_short || (
+      service.pricing?.base_price ? `$${Number(service.pricing.base_price).toLocaleString()}` : 'Request quote'
+    )
+  );
 
   return (
     <div className="services-corporate-theme">
@@ -36,13 +79,13 @@ export default function Page() {
             Strategic insights and innovative solutions to drive your success forward.
           </p>
           <div style={{ display: 'flex', gap: '1.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <button 
+            <button
               className="sc-btn sc-btn-primary"
               onClick={() => document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })}
             >
               Explore Services
             </button>
-            <button 
+            <button
               className="sc-btn sc-btn-outline"
               onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
             >
@@ -59,11 +102,37 @@ export default function Page() {
           <p>Solutions designed to meet your unique business challenges.</p>
         </div>
         <div className="sc-services-grid">
-          {services.map((s, i) => (
-            <div key={i} onClick={() => alert(`Inquiring about service: ${s.title}`)}>
-              <ServiceCard {...s} />
+          {loadingServices ? (
+            [1, 2, 3, 4, 5, 6].map((item) => (
+              <div className="sc-service-card sc-service-skeleton" key={item}>
+                <div className="icon" />
+                <div className="sc-service-line sc-service-line-title" />
+                <div className="sc-service-line" />
+                <div className="sc-service-line sc-service-line-short" />
+              </div>
+            ))
+          ) : serviceError ? (
+            <div className="sc-service-state">
+              <div className="sc-service-kicker">Service Sync Offline</div>
+              <h3>Core services could not be loaded.</h3>
+              <p>{serviceError}</p>
             </div>
-          ))}
+          ) : services.length === 0 ? (
+            <div className="sc-service-state">
+              <div className="sc-service-kicker">Empty Service Registry</div>
+              <h3>No live services are published yet.</h3>
+              <p>Add service records in the backend and this corporate grid will hydrate automatically.</p>
+            </div>
+          ) : (
+            services.slice(0, 6).map((service, index) => (
+              <a className="sc-service-card sc-service-link-card" href={`/product/${service.slug}`} key={service.id}>
+                <div className="icon">{serviceIcons[index % serviceIcons.length]}</div>
+                <h4 style={{ fontFamily: 'var(--sc-font-heading)', fontWeight: 600, color: 'var(--sc-dark)', marginBottom: '1rem', fontSize: '1.25rem' }}>{service.title}</h4>
+                <p style={{ color: 'var(--sc-text-dim)', lineHeight: 1.6, fontSize: '0.95rem' }}>{getServiceDescription(service)}</p>
+                <div className="sc-service-price">{getServicePrice(service)}</div>
+              </a>
+            ))
+          )}
         </div>
       </section>
 
@@ -79,11 +148,11 @@ export default function Page() {
                     We are committed to delivering exceptional value through our deep expertise and client-centric approach.
                 </p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', fontSize: '1.1rem', fontWeight: 500, color: 'var(--sc-dark)' }}>
-                    <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}><span style={{ color: 'var(--sc-accent)', fontWeight: 'bold' }}>✔</span> Proven Track Record of Success</div>
-                    <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}><span style={{ color: 'var(--sc-accent)', fontWeight: 'bold' }}>✔</span> Expert Team with Diverse Industry Experience</div>
-                    <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}><span style={{ color: 'var(--sc-accent)', fontWeight: 'bold' }}>✔</span> Tailored Solutions for Unique Challenges</div>
-                    <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}><span style={{ color: 'var(--sc-accent)', fontWeight: 'bold' }}>✔</span> Data-Driven Insights and Strategies</div>
-                    <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}><span style={{ color: 'var(--sc-accent)', fontWeight: 'bold' }}>✔</span> Unwavering Commitment to Client Satisfaction</div>
+                    <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}><span style={{ color: 'var(--sc-accent)', fontWeight: 'bold' }}>✓</span> Proven Track Record of Success</div>
+                    <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}><span style={{ color: 'var(--sc-accent)', fontWeight: 'bold' }}>✓</span> Expert Team with Diverse Industry Experience</div>
+                    <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}><span style={{ color: 'var(--sc-accent)', fontWeight: 'bold' }}>✓</span> Tailored Solutions for Unique Challenges</div>
+                    <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}><span style={{ color: 'var(--sc-accent)', fontWeight: 'bold' }}>✓</span> Data-Driven Insights and Strategies</div>
+                    <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}><span style={{ color: 'var(--sc-accent)', fontWeight: 'bold' }}>✓</span> Unwavering Commitment to Client Satisfaction</div>
                 </div>
             </div>
         </div>
