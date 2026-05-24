@@ -12,8 +12,8 @@ This report tracks which Sellio storefront themes have moved from static prototy
 | :--- | ---: |
 | Seeded themes in `ThemeSeeder` | 52 |
 | Matching storefront theme folders | 52 |
-| API-backed themes found in source scan | 30 |
-| Static / mostly static themes remaining | 22 |
+| API-backed themes found in source scan | 31 |
+| Static / mostly static themes remaining | 21 |
 
 Definition: "API-backed" means the theme contains direct `api.*` usage in `.tsx` source files. Some API-backed themes may still need view parity work, polish, error-state review, and full QA.
 
@@ -35,6 +35,7 @@ Definition: "API-backed" means the theme contains direct `api.*` usage in `.tsx`
 | Classifieds | `classifieds_modern` | `classifieds/modern` | Homepage and product details use classifieds API data |
 | Classifieds | `classifieds_premium` | `classifieds/premium` | Homepage and product details use classifieds API data |
 | Ecommerce | `ecommerce_electronics` | `ecommerce/electronics` | Homepage and product details use product API data |
+| Ecommerce | `ecommerce_default` | `ecommerce/default` | Homepage listing section and product details use product API data |
 | Ecommerce | `ecommerce_fashion` | `ecommerce/fashion` | Homepage and product details use product API data |
 | Events | `events_corporate` | `events/corporate` | Homepage, explore, and product details use events API data |
 | Jobs | `jobs_startup` | `jobs/startup` | Homepage, explore, and product details use jobs API data |
@@ -66,9 +67,9 @@ These themes have matching storefront folders but no direct `api.*` usage in the
 | Events | `events_classic`, `events_creative`, `events_music`, `events_festival` | 4 |
 | Services | `services_corporate`, `services_creative`, `services_local`, `services_health` | 4 |
 | Jobs | `jobs_corporate`, `jobs_modern`, `jobs_blue_collar`, `jobs_freelance` | 4 |
-| Ecommerce | `ecommerce_default`, `ecommerce_luxury` | 2 |
+| Ecommerce | `ecommerce_luxury` | 1 |
 
-Total remaining: 22 themes.
+Total remaining: 21 themes.
 
 ---
 
@@ -96,12 +97,11 @@ Recommended API family: product/category APIs, matching `unifieds_minimal`.
 
 These are compact groups with clear existing API references.
 
-1. `ecommerce_default`
-2. `ecommerce_luxury`
-3. `services_corporate`
-4. `services_creative`
-5. `services_local`
-6. `services_health`
+1. `ecommerce_luxury`
+2. `services_corporate`
+3. `services_creative`
+4. `services_local`
+5. `services_health`
 
 Recommended API families: product/category APIs for ecommerce; services/category/provider APIs for services.
 
@@ -153,5 +153,5 @@ Recommended API family: property APIs plus lodging price calculation where booki
 ## Notes
 
 - `apps/storefront/THEME_MASTER_INVENTORY.md` previously reported 50 themes, but the current seeder and folders contain 52.
-- The previous dynamic report said fifteen dynamic themes while listing sixteen. The source scan now finds 30 API-backed themes.
+- The previous dynamic report said fifteen dynamic themes while listing sixteen. The source scan now finds 31 API-backed themes.
 - This report intentionally distinguishes "API-backed" from "fully QA-certified dynamic." The next pass should validate each API-backed theme view-by-view.

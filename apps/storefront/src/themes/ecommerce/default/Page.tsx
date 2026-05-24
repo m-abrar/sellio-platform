@@ -1,18 +1,56 @@
 'use client';
-import React from 'react';
-import { PremiumProductCard, CategoryRibbon } from './components';
+import React, { useEffect, useState } from 'react';
+import { api } from '@sellio/api-client';
+import type { Product } from '@sellio/types';
+import { CategoryRibbon } from './components';
 
 export default function Page() {
-  const featuredProducts = [
-    { name: "Nordic Minimalist Tee", price: "$45.00", category: "ESSENTIALS", image: "/themes/ecommerce/default/1.webp" },
-    { name: "Urban Cargo Trousers", price: "$120.00", category: "APPAREL", image: "/themes/ecommerce/default/2.webp" },
-    { name: "Classic Chelsea Boot", price: "$240.00", category: "FOOTWEAR", image: "/themes/ecommerce/default/3.webp" },
-    { name: "Merino Wool Beanie", price: "$35.00", category: "ACCESSORIES", image: "/themes/ecommerce/default/4.webp" },
-    { name: "Technical Shell Jacket", price: "$320.00", category: "OUTERWEAR", image: "/themes/ecommerce/default/5.webp" },
-    { name: "Raw Denim Jeans", price: "$180.00", category: "APPAREL", image: "/themes/ecommerce/default/6.webp" },
-    { name: "Linen Weekend Shirt", price: "$95.00", category: "ESSENTIALS", image: "/themes/ecommerce/default/7.webp" },
-    { name: "Canvas Tote Bag", price: "$55.00", category: "ACCESSORIES", image: "/themes/ecommerce/default/8.webp" },
-  ];
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loadingProducts, setLoadingProducts] = useState(true);
+  const [productError, setProductError] = useState<string | null>(null);
+
+  const placeholderImage = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='640' height='820' viewBox='0 0 640 820'><rect width='100%' height='100%' fill='%23f8fafc'/><g transform='translate(288,350)' stroke='%232563eb' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='2' width='60' height='60' rx='10'/><circle cx='20' cy='20' r='6'/><path d='M58 46L42 30 12 60'/></g><text x='50%' y='57%' dominant-baseline='middle' text-anchor='middle' font-family='Inter, sans-serif' font-size='13' font-weight='800' letter-spacing='2' fill='%2364748b'>PRODUCT IMAGE</text></svg>";
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadProducts() {
+      try {
+        const fetchedProducts = await api.getProducts();
+        if (!isMounted) {
+          return;
+        }
+
+        setProducts(Array.isArray(fetchedProducts) ? fetchedProducts : []);
+        setProductError(null);
+      } catch (error: unknown) {
+        if (!isMounted) {
+          return;
+        }
+
+        console.error('Failed to load ecommerce default products:', error);
+        setProductError(error instanceof Error ? error.message : 'Products are temporarily unavailable.');
+      } finally {
+        if (isMounted) {
+          setLoadingProducts(false);
+        }
+      }
+    }
+
+    loadProducts();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const getProductImage = (product: Product) => (
+    product.media?.featured_image || product.image_url || placeholderImage
+  );
+
+  const formatPrice = (product: Product) => (
+    product.pricing?.formatted || (product.price ? `$${Number(product.price).toLocaleString()}` : 'Contact for price')
+  );
 
   return (
     <div className="ed-section">
@@ -57,14 +95,46 @@ export default function Page() {
                   <h2 style={{ fontSize: '5rem', fontWeight: 900, letterSpacing: '-2px', textTransform: 'uppercase' }}>New <br/>Arrivals.</h2>
               </div>
               <div style={{ textAlign: 'right', maxWidth: '400px', fontSize: '1rem', color: 'var(--ed-text-muted)', lineHeight: 1.8 }}>
-                  Our unified protocol synchronizes product availability from the world's most significant garment nodes.
+                  Our unified protocol synchronizes product availability from the world&apos;s most significant garment nodes.
               </div>
           </div>
           
           <div className="ed-product-grid">
-            {featuredProducts.map((p, i) => (
-              <PremiumProductCard key={i} {...p} />
-            ))}
+            {loadingProducts ? (
+              [1, 2, 3, 4].map((item) => (
+                <div className="ed-product-card ed-product-skeleton" key={item}>
+                  <div className="ed-img-frame" />
+                  <div className="ed-product-copy">
+                    <span />
+                    <strong />
+                    <em />
+                  </div>
+                </div>
+              ))
+            ) : productError ? (
+              <div className="ed-product-state">
+                <div className="ed-mono" style={{ marginBottom: '1rem' }}>PRODUCT_SYNC_OFFLINE</div>
+                <h3>Products could not be synchronized.</h3>
+                <p>{productError}</p>
+              </div>
+            ) : products.length === 0 ? (
+              <div className="ed-product-state">
+                <div className="ed-mono" style={{ marginBottom: '1rem' }}>EMPTY_PRODUCT_REGISTRY</div>
+                <h3>No live products are available yet.</h3>
+                <p>Add product records in the backend and this collection will hydrate automatically.</p>
+              </div>
+            ) : (
+              products.slice(0, 8).map((product) => (
+                <a href={`/product/${product.slug}`} className="ed-product-card" key={product.id}>
+                  <div className="ed-img-frame">
+                    <img src={getProductImage(product)} alt={product.title} className="ed-img" />
+                  </div>
+                  <div className="ed-mono" style={{ marginBottom: '0.8rem' }}>PRODUCT_{product.id}</div>
+                  <h3>{product.title}</h3>
+                  <div className="ed-product-price">{formatPrice(product)}</div>
+                </a>
+              ))
+            )}
           </div>
       </section>
 
