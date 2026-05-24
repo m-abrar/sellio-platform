@@ -21,12 +21,13 @@ export function middleware(request: NextRequest) {
     const restOfPath = '/' + segments.slice(3).join('/');
     
     // Transparent rewrite to the actual path while keeping the theme URL
-    const response = NextResponse.rewrite(new URL(restOfPath, request.url));
+    const requestHeaders = new Headers(request.headers);
+    requestHeaders.set('x-theme-key', themeKey);
 
-    // #region agent log
-    fetch('http://127.0.0.1:7444/ingest/7299bd34-d23f-4a85-8035-1e1996ea1a56',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'706e24'},body:JSON.stringify({sessionId:'706e24',location:'middleware.ts:preview',message:'preview rewrite',data:{pathname,themeKey,restOfPath,requestCookieTheme:request.cookies.get('theme')??null},timestamp:Date.now(),hypothesisId:'A'})}).catch(()=>{});
-    // #endregion
-    
+    const response = NextResponse.rewrite(new URL(restOfPath, request.url), {
+      request: { headers: requestHeaders },
+    });
+
     response.headers.set('x-theme-key', themeKey);
     response.cookies.set('theme', themeKey, {
       path: '/',
@@ -40,7 +41,11 @@ export function middleware(request: NextRequest) {
   // 2. Check for query parameter: ?theme=[themeKey]
   else if (themeParam) {
     themeKey = themeParam;
-    const response = NextResponse.next();
+    const requestHeaders = new Headers(request.headers);
+    requestHeaders.set('x-theme-key', themeKey);
+    const response = NextResponse.next({
+      request: { headers: requestHeaders },
+    });
     response.headers.set('x-theme-key', themeKey);
     response.cookies.set('theme', themeKey, {
       path: '/',

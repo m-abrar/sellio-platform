@@ -38,14 +38,6 @@ export function MenuNav({
   const items = useMenu(location);
   const { themeKey } = useMenuContext();
 
-  // #region agent log
-  React.useEffect(() => {
-    if (location === 'main_header') {
-      fetch('http://127.0.0.1:7444/ingest/7299bd34-d23f-4a85-8035-1e1996ea1a56',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'706e24'},body:JSON.stringify({sessionId:'706e24',location:'MenuNav.tsx:main_header',message:'MenuNav render items',data:{location,themeKey,itemCount:items.length,titles:items.slice(0,4).map((i)=>i.title),className},timestamp:Date.now(),hypothesisId:'D,E'})}).catch(()=>{});
-    }
-  }, [location, themeKey, items, className]);
-  // #endregion
-
   const nodes = items.map((item) => (
     <MenuNavNode
       key={`${item.id ?? item.title}-${item.url}`}

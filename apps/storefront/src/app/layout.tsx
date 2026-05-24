@@ -23,10 +23,7 @@ export default async function RootLayout({
 }) {
   const { theme, layout, databaseOffline, errorDetails } = await getActiveTheme();
   const { menus } = await getMenus(MENU_LOCATIONS, theme.theme_key);
-
-  // #region agent log
-  fetch('http://127.0.0.1:7444/ingest/7299bd34-d23f-4a85-8035-1e1996ea1a56',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'706e24'},body:JSON.stringify({sessionId:'706e24',location:'layout.tsx:root',message:'layout menu bootstrap',data:{themeKey:theme.theme_key,layout,databaseOffline,mainHeaderCount:menus?.main_header?.items?.length??null,mainHeaderTitles:(menus?.main_header?.items??[]).slice(0,4).map((i)=>i.title)},timestamp:Date.now(),hypothesisId:'A,C'})}).catch(()=>{});
-  // #endregion
+  
   // Dynamically resolve the industry-specific layout orchestration
   let IndustryLayout;
   try {

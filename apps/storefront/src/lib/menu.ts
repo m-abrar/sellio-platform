@@ -48,14 +48,8 @@ export async function getMenus(
 
   try {
     const menus = await fetchMenusFromApi(locations, resolvedThemeKey);
-    // #region agent log
-    fetch('http://127.0.0.1:7444/ingest/7299bd34-d23f-4a85-8035-1e1996ea1a56',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'706e24'},body:JSON.stringify({sessionId:'706e24',runId:'post-fix',location:'menu.ts:getMenus:success',message:'menus fetched',data:{resolvedThemeKey,locationCount:locations.length,mainHeaderCount:menus?.main_header?.items?.length??null,actionButtonsCount:menus?.action_buttons?.items?.length??null,menuKeys:Object.keys(menus??{}),mainHeaderTitles:(menus?.main_header?.items??[]).slice(0,4).map((i)=>i.title)},timestamp:Date.now(),hypothesisId:'B'})}).catch(()=>{});
-    // #endregion
     return { menus, offline: false };
-  } catch (error) {
-    // #region agent log
-    fetch('http://127.0.0.1:7444/ingest/7299bd34-d23f-4a85-8035-1e1996ea1a56',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'706e24'},body:JSON.stringify({sessionId:'706e24',runId:'post-fix',location:'menu.ts:getMenus:error',message:'menus fetch failed',data:{resolvedThemeKey,error:String(error)},timestamp:Date.now(),hypothesisId:'B'})}).catch(()=>{});
-    // #endregion
+  } catch {
     return {
       menus: getMenuDefaults(resolvedThemeKey, locations),
       offline: true,

@@ -30,13 +30,8 @@ export function resolveIndustryLayout(theme: Theme): IndustryLayout {
  */
 export async function getActiveTheme(): Promise<ResolvedTheme> {
   const headerList = await headers();
-  const headerTheme = headerList.get("x-theme-key");
-  const cookieTheme = headerList.get("cookie")?.match(/(?:^|; )theme=([^;]*)/)?.[1];
-  const themeOverride = headerTheme || cookieTheme;
-
-  // #region agent log
-  fetch('http://127.0.0.1:7444/ingest/7299bd34-d23f-4a85-8035-1e1996ea1a56',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'706e24'},body:JSON.stringify({sessionId:'706e24',location:'theme.ts:getActiveTheme',message:'theme resolution inputs',data:{headerTheme,cookieTheme,themeOverride},timestamp:Date.now(),hypothesisId:'A'})}).catch(()=>{});
-  // #endregion
+  const themeOverride = headerList.get("x-theme-key") || 
+                        headerList.get("cookie")?.match(/(?:^|; )theme=([^;]*)/)?.[1];
 
   try {
     const theme = await api.getActiveTheme(themeOverride);
