@@ -29,7 +29,7 @@ export default async function RootLayout({
   try {
     const themeModule = await import(`@/themes/${layout}`);
     IndustryLayout = themeModule.Layout || UnifiedDefaultLayout;
-  } catch (error) {
+  } catch {
     console.warn(`Layout for "${layout}" not found, using default.`);
     IndustryLayout = UnifiedDefaultLayout;
   }

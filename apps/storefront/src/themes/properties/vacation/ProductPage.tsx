@@ -186,9 +186,9 @@ export default function ProductPage({ slug }: { slug: string }) {
       setCalculatingPrice(true);
       const calculatePrice = async () => {
         try {
-          const res = await api.calculateLodgingPrice({ slug, start_date: checkIn, end_date: checkOut });
-          if (res && res.data) {
-            setEstimatedPrice(res.data.total_formatted || `$${res.data.total_price?.toLocaleString()}`);
+          const res = await api.calculateLodgingPrice(retreat.id, checkIn, checkOut);
+          if (res) {
+            setEstimatedPrice(res.estimated_lodging_total);
           }
         } catch (calcErr) {
           console.error("API calculate price exception, fallback to local mathematics:", calcErr);

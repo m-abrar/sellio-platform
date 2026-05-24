@@ -52,7 +52,6 @@ export default function ProductPage({ slug }: ProductPageProps) {
       setLoading(true);
       try {
         const response = await api.getPropertyDetails(slug);
-        console.log("Classic Property ProductPage: Successfully fetched dynamic property details:", response);
         if (response && response.success && response.data) {
           setProperty(response.data);
           setRelated(response.related_properties || []);

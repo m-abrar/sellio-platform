@@ -41,8 +41,19 @@ export async function getActiveTheme(): Promise<ResolvedTheme> {
       layout: resolveIndustryLayout(theme),
       databaseOffline: false
     };
-  } catch (error: any) {
-    console.error(`[Offline Resilience] Failed to fetch active theme from API (${error.response?.status || 503}: ${error.message || error})`);
+  } catch (error: unknown) {
+    const apiError = error as {
+      response?: {
+        status?: number;
+        data?: {
+          message?: string;
+          code?: string;
+        };
+      };
+      message?: string;
+    };
+
+    console.error(`[Offline Resilience] Failed to fetch active theme from API (${apiError.response?.status || 503}: ${apiError.message || error})`);
     
     return {
       theme: {
@@ -57,9 +68,9 @@ export async function getActiveTheme(): Promise<ResolvedTheme> {
       databaseOffline: true,
       errorDetails: {
         success: false,
-        message: error.response?.data?.message || "Database service is currently unavailable. Please try again later.",
-        code: error.response?.data?.code || "DB_CONNECTION_REFUSED",
-        status: error.response?.status || 503
+        message: apiError.response?.data?.message || "Database service is currently unavailable. Please try again later.",
+        code: apiError.response?.data?.code || "DB_CONNECTION_REFUSED",
+        status: apiError.response?.status || 503
       }
     };
   }

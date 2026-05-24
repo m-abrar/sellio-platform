@@ -69,6 +69,9 @@ export default function ProductPage({ slug }: ProductPageProps) {
   };
 
   const area = property?.specs?.area_formatted || (property?.area_sq_ft ? `${Number(property.area_sq_ft).toLocaleString()} sqft` : null);
+  const latitude = Number(property?.location?.latitude);
+  const longitude = Number(property?.location?.longitude);
+  const hasCoordinates = Number.isFinite(latitude) && Number.isFinite(longitude);
 
   if (loading) {
     return (
@@ -105,8 +108,8 @@ export default function ProductPage({ slug }: ProductPageProps) {
           <div className="pm-detail-specs">
             <div><span>Location</span><strong>{getPropertyLocation(property)}</strong></div>
             {area && <div><span>Area</span><strong>{area}</strong></div>}
-            {property.location?.latitude && property.location?.longitude && (
-              <div><span>Coordinates</span><strong>{property.location.latitude.toFixed(4)}, {property.location.longitude.toFixed(4)}</strong></div>
+            {hasCoordinates && (
+              <div><span>Coordinates</span><strong>{latitude.toFixed(4)}, {longitude.toFixed(4)}</strong></div>
             )}
           </div>
         </article>

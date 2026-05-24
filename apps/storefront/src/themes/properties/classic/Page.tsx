@@ -79,8 +79,6 @@ export default function Page() {
       }
 
       const response = await api.getProperties(params);
-      console.log("Classic Properties Theme: Successfully fetched dynamic properties:", response);
-      
       if (response && response.data && response.data.length > 0) {
         if (isLoadMore) {
           setEstates(prev => [...prev, ...response.data]);

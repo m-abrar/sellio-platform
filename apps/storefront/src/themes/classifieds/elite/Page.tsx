@@ -445,7 +445,6 @@ export default function Page() {
             />
             <button 
               className="elite-search-btn"
-              onClick={() => console.log(`Search triggered: ${searchTerm}`)}
             >
               Search
             </button>

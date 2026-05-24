@@ -442,10 +442,8 @@ export default function Page() {
   const toggleFavoriteItem = (id: number) => {
     if (favorites.includes(id)) {
       setFavorites(favorites.filter((favId) => favId !== id));
-      console.log(`Favorite removed for item ID: ${id}`);
     } else {
       setFavorites([...favorites, id]);
-      console.log(`Favorite added for item ID: ${id}`);
     }
   };
 
@@ -569,7 +567,6 @@ export default function Page() {
             <button 
               className="cm-btn cm-btn-primary" 
               style={{ margin: '0.25rem', padding: '0.65rem 2rem' }}
-              onClick={() => console.log(`Searching for keyword: ${searchTerm}`)}
             >
               Search
             </button>

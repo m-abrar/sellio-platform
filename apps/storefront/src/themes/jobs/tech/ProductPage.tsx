@@ -97,8 +97,6 @@ export default function ProductPage({ slug }: { slug: string }) {
     setLoading(true);
     try {
       const response = await api.getJobDetails(slug);
-      console.log("Jobs Tech Theme: Successfully loaded detailed node:", response);
-      
       if (response && response.data) {
         const translated = translateJob(response.data);
         setJob(translated);

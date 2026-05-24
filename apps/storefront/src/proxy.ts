@@ -7,7 +7,7 @@ import type { NextRequest } from 'next/server';
  * Intercepts theme-specific URLs and query parameters to inject 
  * theme overrides into the request cycle via headers and cookies.
  */
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const url = new URL(request.url);
   const themeParam = url.searchParams.get('theme');
   const pathname = url.pathname;

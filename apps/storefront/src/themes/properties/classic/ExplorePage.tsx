@@ -125,8 +125,6 @@ export default function ExplorePage({ initialCategorySlug }: ExplorePageProps) {
       }
 
       const response = await api.getProperties(params);
-      console.log("Classic Properties Explorer: Successfully fetched dynamic properties:", response);
-
       if (response && response.data && response.data.length > 0) {
         if (isLoadMore) {
           setEstates(prev => [...prev, ...response.data]);

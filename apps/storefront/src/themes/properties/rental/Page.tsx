@@ -92,8 +92,6 @@ export default function Page() {
     try {
       // Query properties from Sellio API
       const response = await api.getProperties({ per_page: 20 });
-      console.log("Properties Rental Theme: Successfully fetched dynamic records:", response);
-      
       if (response && response.data && response.data.length > 0) {
         const translated = response.data.map((p: any) => translateProperty(p));
         setRentals(translated);

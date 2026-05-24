@@ -107,8 +107,6 @@ export default function ProductPage({ slug }: { slug: string }) {
     setLoading(true);
     try {
       const response = await api.getPropertyDetails(slug);
-      console.log("Properties Rental Theme: Successfully loaded detailed node:", response);
-      
       if (response && response.data) {
         const translated = translateProperty(response.data);
         setProperty(translated);

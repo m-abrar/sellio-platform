@@ -92,9 +92,9 @@ export const HeritageGrid = () => {
 export const ChronicleBar = () => (
     <div className="uc-chronicle-bar">
         <span>★ CORE LEGACY HANDSHAKE PROTOCOL ENFORCED // SECURE STABLE</span>
-        <span className="uc-chronicle-separator">//</span>
+        <span className="uc-chronicle-separator">{'//'}</span>
         <span>PROVENANCE TRUST METRIC: 100% SECURE INTEGRATION</span>
-        <span className="uc-chronicle-separator">//</span>
+        <span className="uc-chronicle-separator">{'//'}</span>
         <span>VERIFIABLE ARCHIVE STABILITY: v8.4.1</span>
     </div>
 );

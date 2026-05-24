@@ -631,7 +631,7 @@ export default function Page() {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <button className="cp-search-btn" onClick={() => console.log("Opportunity search synced.")}>
+          <button className="cp-search-btn">
             🔍 Find Opportunity
           </button>
         </div>

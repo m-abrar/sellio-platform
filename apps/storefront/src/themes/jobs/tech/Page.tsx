@@ -102,8 +102,6 @@ export default function Page() {
     setLoading(true);
     try {
       const response = await api.getJobs({ per_page: 20 });
-      console.log("Jobs Tech Theme: Successfully loaded database items:", response);
-      
       if (response && response.data && response.data.length > 0) {
         const translated = response.data.map((j: any) => translateJob(j));
         setJobs(translated);

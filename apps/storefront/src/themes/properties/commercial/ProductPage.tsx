@@ -134,8 +134,6 @@ export default function ProductPage({ slug }: { slug: string }) {
     setLoading(true);
     try {
       const response = await api.getPropertyDetails(slug);
-      console.log("Properties Commercial: Live asset detail response:", response);
-      
       if (response && response.data) {
         const translated = translateProperty(response.data);
         setAsset(translated);
