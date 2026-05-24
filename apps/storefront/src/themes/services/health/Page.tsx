@@ -1,14 +1,67 @@
 'use client';
-import React from 'react';
+
+import React, { useEffect, useState } from 'react';
+import { api } from '@sellio/api-client';
+import type { ServiceListing } from '@sellio/types';
 import { PractitionerCard, VitalityHUD } from './components';
 
+const fallbackImages = [
+  '/themes/services/health/15.webp',
+  '/themes/services/health/16.webp',
+  '/themes/services/health/17.webp',
+  '/themes/services/health/18.webp',
+];
+
+function mapServiceToPractitioner(service: ServiceListing, index: number) {
+  const specialty = service.professional?.category || service.professional?.type || 'SPECIALIST';
+
+  return {
+    name: service.provider?.name || service.title,
+    title: specialty.toUpperCase(),
+    image: service.media?.main_photo || service.provider?.avatar || fallbackImages[index % fallbackImages.length],
+    rating: service.provider?.rating ? service.provider.rating.toFixed(1) : '4.9',
+    availability: service.operations?.hours_label || service.operations?.days_label || 'AVAILABLE',
+    slug: service.slug,
+  };
+}
+
 export default function Page() {
-  const specialists = [
-    { name: "Dr. Sarah Chen", title: "DERMATOLOGIST", image: "/themes/services/health/15.webp", rating: "4.9", availability: "TOMORROW" },
-    { name: "Dr. Marcus Thorne", title: "CARDIOLOGIST", image: "/themes/services/health/16.webp", rating: "5.0", availability: "TODAY" },
-    { name: "Dr. Elena Rossi", title: "PSYCHOLOGIST", image: "/themes/services/health/17.webp", rating: "4.8", availability: "MON, AUG 18" },
-    { name: "Dr. Julian Voss", title: "NUTRITIONIST", image: "/themes/services/health/18.webp", rating: "4.9", availability: "WED, AUG 20" },
-  ];
+  const [services, setServices] = useState<ServiceListing[]>([]);
+  const [loadingServices, setLoadingServices] = useState(true);
+  const [serviceError, setServiceError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadServices() {
+      try {
+        const response = await api.getServices({ per_page: 6 });
+        if (!isMounted) {
+          return;
+        }
+
+        setServices(Array.isArray(response.data) ? response.data : []);
+        setServiceError(null);
+      } catch (error: unknown) {
+        if (!isMounted) {
+          return;
+        }
+
+        console.error('Failed to load services health listings:', error);
+        setServiceError(error instanceof Error ? error.message : 'Services are temporarily unavailable.');
+      } finally {
+        if (isMounted) {
+          setLoadingServices(false);
+        }
+      }
+    }
+
+    loadServices();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   return (
     <div className="services-health-theme">
@@ -31,7 +84,7 @@ export default function Page() {
             <button className="sh-btn-primary" onClick={() => document.getElementById('protocols')?.scrollIntoView({ behavior: 'smooth' })}>
               INITIALIZE CONSULTATION
             </button>
-            <button 
+            <button
               className="sh-btn-outline-clinicians"
               onClick={() => document.getElementById('registry')?.scrollIntoView({ behavior: 'smooth' })}
             >
@@ -69,11 +122,39 @@ export default function Page() {
                   Our unified protocol vetting process ensures that every specialist on the node meets our high-fidelity clinical standards.
               </div>
           </div>
-          
+
           <div className="sh-specialist-grid">
-            {specialists.map((s, i) => (
-              <PractitionerCard key={i} {...s} />
-            ))}
+            {loadingServices ? (
+              [1, 2, 3, 4].map((item) => (
+                <div className="sh-specialist-card sh-listing-skeleton" key={item}>
+                  <div className="sh-skeleton-circle" />
+                  <div className="sh-skeleton-line sh-skeleton-line-title" />
+                  <div className="sh-skeleton-line" />
+                  <div className="sh-skeleton-line sh-skeleton-line-short" />
+                </div>
+              ))
+            ) : serviceError ? (
+              <div className="sh-listing-state">
+                <div className="sh-listing-kicker">Clinical Sync Offline</div>
+                <h3>Practitioner registry could not be loaded.</h3>
+                <p>{serviceError}</p>
+              </div>
+            ) : services.length === 0 ? (
+              <div className="sh-listing-state">
+                <div className="sh-listing-kicker">Empty Clinical Registry</div>
+                <h3>No live services are published yet.</h3>
+                <p>Add service records in the backend and this practitioner grid will hydrate automatically.</p>
+              </div>
+            ) : (
+              services.slice(0, 6).map((service, index) => {
+                const practitioner = mapServiceToPractitioner(service, index);
+                return (
+                  <a className="sh-practitioner-link" href={`/product/${practitioner.slug}`} key={service.id}>
+                    <PractitionerCard {...practitioner} />
+                  </a>
+                );
+              })
+            )}
           </div>
       </section>
 
@@ -114,7 +195,7 @@ export default function Page() {
 
       {/* Direct inquiry consult trigger section */}
       <section className="sh-section sh-consultation-section" id="contact" style={{ display: 'none' }}></section>
-      
+
       <div style={{ height: '6rem' }}></div>
     </div>
   );

@@ -1,38 +1,75 @@
 'use client';
-import React from 'react';
+
+import React, { useEffect, useState } from 'react';
+import { api } from '@sellio/api-client';
+import type { Property } from '@sellio/types';
 import { CinematicPropertyCard, CuratorStats } from './components';
 
+const fallbackImages = [
+  '/themes/properties/showcase/9.webp',
+  '/themes/properties/showcase/10.webp',
+  '/themes/properties/showcase/11.webp',
+  '/themes/properties/showcase/12.webp',
+];
+
+function getPropertyPrice(property: Property) {
+  return property.pricing?.price_formatted || (
+    property.base_price ? `$${Number(property.base_price).toLocaleString()}` : 'Price on request'
+  );
+}
+
+function getPropertyLocation(property: Property) {
+  return property.location?.title || [property.city, property.state, property.country].filter(Boolean).join(', ') || 'Exclusive Location';
+}
+
+function mapPropertyToShowcase(property: Property, index: number) {
+  return {
+    title: property.title,
+    price: getPropertyPrice(property),
+    location: getPropertyLocation(property),
+    description: property.short_description || property.description || 'A curated architectural node synchronized from the Sellio property registry.',
+    image: property.featured_image || property.thumbnail_image || fallbackImages[index % fallbackImages.length],
+    slug: property.slug,
+  };
+}
+
 export default function Page() {
-  const properties = [
-    { 
-        title: "The Obsidian Villa", 
-        price: "$12,400,000", 
-        location: "Santorini, Greece", 
-        description: "A masterwork of volcanic architecture, integrated into the cliffside with seamless indoor-outdoor flow and panoramic caldera views.", 
-        image: "/themes/properties/showcase/9.webp" 
-    },
-    { 
-        title: "MCM Desert Pavilion", 
-        price: "$8,900,000", 
-        location: "Palm Springs, USA", 
-        description: "A meticulously restored 1958 steel-and-glass sanctuary, celebrating the golden era of California modernism.", 
-        image: "/themes/properties/showcase/10.webp" 
-    },
-    { 
-        title: "Brutalist Sky Garden", 
-        price: "$15,200,000", 
-        location: "Singapore", 
-        description: "An experimental vertical forest encased in raw concrete and architectural glass, defining the future of tropical living.", 
-        image: "/themes/properties/showcase/11.webp" 
-    },
-    { 
-        title: "The Florentine Atelier", 
-        price: "$22,000,000", 
-        location: "Florence, Italy", 
-        description: "A 16th-century Palazzo refitted for the modern era, featuring original frescoes alongside museum-grade automation systems.", 
-        image: "/themes/properties/showcase/12.webp" 
-    },
-  ];
+  const [properties, setProperties] = useState<Property[]>([]);
+  const [loadingProperties, setLoadingProperties] = useState(true);
+  const [propertyError, setPropertyError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadProperties() {
+      try {
+        const response = await api.getProperties({ per_page: 6 });
+        if (!isMounted) {
+          return;
+        }
+
+        setProperties(Array.isArray(response.data) ? response.data : []);
+        setPropertyError(null);
+      } catch (error: unknown) {
+        if (!isMounted) {
+          return;
+        }
+
+        console.error('Failed to load properties showcase listings:', error);
+        setPropertyError(error instanceof Error ? error.message : 'Properties are temporarily unavailable.');
+      } finally {
+        if (isMounted) {
+          setLoadingProperties(false);
+        }
+      }
+    }
+
+    loadProperties();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   return (
     <div className="ps-section">
@@ -78,9 +115,36 @@ export default function Page() {
 
       {/* Property Showcase Grid */}
       <section id="ps-story-grid" aria-label="Curated Properties Showcase">
-          {properties.map((p, i) => (
-            <CinematicPropertyCard key={i} {...p} />
-          ))}
+          {loadingProperties ? (
+            [1, 2, 3, 4].map((item) => (
+              <div className="ps-showcase-skeleton prop-listing-skeleton" key={item}>
+                <div className="prop-skeleton-line prop-skeleton-line-title" />
+                <div className="prop-skeleton-line" />
+                <div className="prop-skeleton-line prop-skeleton-line-short" />
+              </div>
+            ))
+          ) : propertyError ? (
+            <div className="prop-listing-state ps-listing-state">
+              <div className="prop-listing-kicker">Property Sync Offline</div>
+              <h3>Curated showcase could not be loaded.</h3>
+              <p>{propertyError}</p>
+            </div>
+          ) : properties.length === 0 ? (
+            <div className="prop-listing-state ps-listing-state">
+              <div className="prop-listing-kicker">Empty Property Registry</div>
+              <h3>No live properties are published yet.</h3>
+              <p>Add property records in the backend and this showcase will hydrate automatically.</p>
+            </div>
+          ) : (
+            properties.slice(0, 6).map((property, index) => {
+              const card = mapPropertyToShowcase(property, index);
+              return (
+                <a className="ps-showcase-link" href={`/product/${card.slug}`} key={property.id}>
+                  <CinematicPropertyCard {...card} />
+                </a>
+              );
+            })
+          )}
       </section>
 
       {/* Philosophy Bar */}

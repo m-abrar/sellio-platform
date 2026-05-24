@@ -1,16 +1,73 @@
 'use client';
-import React from 'react';
+
+import React, { useEffect, useState } from 'react';
+import { api } from '@sellio/api-client';
+import type { EventListing } from '@sellio/types';
 import { ArtisanEventCard, PulseHUD } from './components';
 
+const months = ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'];
+
+function formatEventDateUnderscore(dateStr?: string | null) {
+  if (!dateStr) {
+    return 'DATE_TBA';
+  }
+
+  const date = new Date(dateStr);
+  return `${months[date.getMonth()]}_${String(date.getDate()).padStart(2, '0')}_${date.getFullYear()}`;
+}
+
+function mapEventToArtisan(event: EventListing) {
+  const location = event.location?.map_title
+    || [event.location?.city, event.location?.state].filter(Boolean).join(' // ')
+    || event.location?.address
+    || 'NODE_TBA';
+
+  return {
+    title: event.title,
+    location,
+    date: formatEventDateUnderscore(event.schedule?.start_at),
+    status: event.specs?.event_genre || event.specs?.category || 'active',
+    slug: event.slug,
+  };
+}
+
 export default function Page() {
-  const events = [
-    { title: "Generative Acoustics", location: "Laboratory Node // SF", date: "SEPTEMBER_18_2026", status: "experimental" },
-    { title: "Bio-Synthetic Visions", location: "Warehouse 09 // NYC", date: "OCTOBER_02_2026", status: "synthetic" },
-    { title: "Distributed Rave Protocol", location: "Sublevel 4 // BERLIN", date: "OCTOBER_31_2026", status: "active" },
-    { title: "Holographic Manifestation", location: "Dome Stage // TOKYO", date: "NOVEMBER_12_2026", status: "experimental" },
-    { title: "Neural Synthesis Lab", location: "Basement Node // LONDON", date: "DECEMBER_05_2026", status: "synthetic" },
-    { title: "Hyperobject Assembly", location: "Plaza Stage // PARIS", date: "DECEMBER_18_2026", status: "active" },
-  ];
+  const [events, setEvents] = useState<EventListing[]>([]);
+  const [loadingEvents, setLoadingEvents] = useState(true);
+  const [eventError, setEventError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadEvents() {
+      try {
+        const response = await api.getEvents({ per_page: 6 });
+        if (!isMounted) {
+          return;
+        }
+
+        setEvents(Array.isArray(response.data) ? response.data : []);
+        setEventError(null);
+      } catch (error: unknown) {
+        if (!isMounted) {
+          return;
+        }
+
+        console.error('Failed to load events creative listings:', error);
+        setEventError(error instanceof Error ? error.message : 'Events are temporarily unavailable.');
+      } finally {
+        if (isMounted) {
+          setLoadingEvents(false);
+        }
+      }
+    }
+
+    loadEvents();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   return (
     <div className="events-creative-theme">
@@ -48,11 +105,38 @@ export default function Page() {
                   Our unified decentralized distribution node synchronizes experimental availability from the world's most vibrant hubs.
               </div>
           </div>
-          
+
           <div className="evc-artisan-grid">
-            {events.map((e, i) => (
-              <ArtisanEventCard key={i} {...e} />
-            ))}
+            {loadingEvents ? (
+              [1, 2, 3, 4, 5, 6].map((item) => (
+                <div className="evc-artisan-card evc-listing-skeleton" key={item}>
+                  <div className="evc-skeleton-line evc-skeleton-line-title" />
+                  <div className="evc-skeleton-line" />
+                  <div className="evc-skeleton-line evc-skeleton-line-short" />
+                </div>
+              ))
+            ) : eventError ? (
+              <div className="evc-listing-state">
+                <div className="evc-listing-kicker">Registry Sync Offline</div>
+                <h3>Experimental events could not be loaded.</h3>
+                <p>{eventError}</p>
+              </div>
+            ) : events.length === 0 ? (
+              <div className="evc-listing-state">
+                <div className="evc-listing-kicker">Empty Event Registry</div>
+                <h3>No live events are published yet.</h3>
+                <p>Add event records in the backend and this registry grid will hydrate automatically.</p>
+              </div>
+            ) : (
+              events.slice(0, 6).map((event) => {
+                const artisan = mapEventToArtisan(event);
+                return (
+                  <a className="evc-artisan-link" href={`/product/${artisan.slug}`} key={event.id}>
+                    <ArtisanEventCard {...artisan} />
+                  </a>
+                );
+              })
+            )}
           </div>
       </section>
 
@@ -80,7 +164,7 @@ export default function Page() {
               </div>
           </div>
       </section>
-      
+
       <div style={{ height: '10rem' }}></div>
     </div>
   );

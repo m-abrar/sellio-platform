@@ -1,8 +1,65 @@
+'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { api } from '@sellio/api-client';
+import type { Property } from '@sellio/types';
 import { StructureGrid, SkylineSyncBar } from './components';
 
+const icons = ['🏙️', '🏢', '🏗️', '🏬', '🏛️', '🏘️'];
+
+function mapPropertyToStructure(property: Property, index: number) {
+  const area = property.specs?.area_formatted
+    || (property.area_sq_ft ? `${Number(property.area_sq_ft).toLocaleString()} sqft` : 'Area TBA');
+
+  return {
+    title: property.title,
+    units: String(property.specs?.total_units || property.maximum_guests || property.number_of_bedrooms || 1),
+    area,
+    icon: icons[index % icons.length],
+    slug: property.slug,
+  };
+}
+
 export default function Page() {
+  const [properties, setProperties] = useState<Property[]>([]);
+  const [loadingProperties, setLoadingProperties] = useState(true);
+  const [propertyError, setPropertyError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadProperties() {
+      try {
+        const response = await api.getProperties({ per_page: 6 });
+        if (!isMounted) {
+          return;
+        }
+
+        setProperties(Array.isArray(response.data) ? response.data : []);
+        setPropertyError(null);
+      } catch (error: unknown) {
+        if (!isMounted) {
+          return;
+        }
+
+        console.error('Failed to load properties modern listings:', error);
+        setPropertyError(error instanceof Error ? error.message : 'Properties are temporarily unavailable.');
+      } finally {
+        if (isMounted) {
+          setLoadingProperties(false);
+        }
+      }
+    }
+
+    loadProperties();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const structureItems = properties.slice(0, 6).map(mapPropertyToStructure);
+
   return (
     <div>
       {/* Hero Section */}
@@ -23,7 +80,7 @@ export default function Page() {
                   <img src="/themes/properties/modern/1.webp" alt="High-rise Building" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.8 }} />
               </div>
               <div style={{ position: 'absolute', bottom: '-3rem', right: '-3rem', padding: '3rem', background: 'white', borderRadius: '24px', boxShadow: '0 20px 40px rgba(0,0,0,0.05)', border: '1px solid var(--urban-border)' }}>
-                  <div style={{ fontSize: '2.5rem', fontWeight: 900, color: 'var(--urban-skyline)', fontFamily: 'var(--font-heading)' }}>84</div>
+                  <div style={{ fontSize: '2.5rem', fontWeight: 900, color: 'var(--urban-skyline)', fontFamily: 'var(--font-heading)' }}>{loadingProperties ? '...' : properties.length || 84}</div>
                   <div style={{ fontSize: '0.7rem', color: 'var(--urban-concrete)', fontWeight: 800, letterSpacing: '2px' }}>DISTRICT_NODES</div>
               </div>
           </div>
@@ -33,7 +90,7 @@ export default function Page() {
       <SkylineSyncBar />
 
       {/* Structure Grid Section */}
-      <StructureGrid />
+      <StructureGrid items={structureItems} loading={loadingProperties} error={propertyError} />
 
       {/* Mid-Section: Structural Precision */}
       <section style={{ padding: '15rem 6%', display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '10rem', alignItems: 'center', background: '#f8fafc' }}>

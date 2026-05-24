@@ -258,3 +258,91 @@
     height: 50vh !important;
   }
 }
+
+.pm-list-link {
+  color: inherit;
+  display: block;
+  text-decoration: none;
+}
+
+.pm-listing-state {
+  margin: 2rem 0;
+}
+
+.prop-listing-state {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--pm-border);
+  border-radius: 8px;
+  padding: 3rem 2rem;
+  text-align: center;
+}
+
+.prop-listing-state h3 {
+  color: white;
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin: 0 0 1rem;
+}
+
+.prop-listing-state p {
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.7;
+  margin: 0;
+}
+
+.prop-listing-kicker {
+  color: var(--pm-accent, #60a5fa);
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  margin-bottom: 1rem;
+}
+
+.prop-skeleton-line {
+  animation: prop-shimmer 1.5s infinite;
+  background: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 75%);
+  background-size: 200% 100%;
+  border-radius: 4px;
+  height: 14px;
+  margin-bottom: 0.75rem;
+  width: 100%;
+}
+
+.prop-skeleton-line-title { height: 20px; width: 75%; }
+.prop-skeleton-line-short { width: 50%; }
+
+@keyframes prop-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.pm-detail-page { background: #0b1220; color: white; min-height: 100vh; padding: 6rem 5%; }
+.pm-detail-back { color: var(--pm-accent, #60a5fa); display: inline-block; font-weight: 700; margin-bottom: 2rem; text-decoration: none; }
+.pm-detail-grid { display: grid; gap: 3rem; grid-template-columns: minmax(0, 1fr) minmax(360px, 0.9fr); margin: 0 auto; max-width: 1280px; }
+.pm-detail-media { border: 1px solid var(--pm-border); min-height: 480px; overflow: hidden; }
+.pm-detail-media img { height: 100%; min-height: 480px; object-fit: cover; width: 100%; }
+.pm-detail-kicker { color: var(--pm-accent, #60a5fa); font-size: 0.75rem; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; }
+.pm-detail-panel h1 { font-size: clamp(2rem, 5vw, 3rem); font-weight: 800; margin: 0; }
+.pm-detail-price { color: var(--pm-accent, #60a5fa); font-size: 1.5rem; font-weight: 800; margin: 1rem 0; }
+.pm-detail-description { color: rgba(255,255,255,0.65); line-height: 1.8; margin: 0; }
+.pm-detail-specs { display: grid; gap: 1rem; grid-template-columns: repeat(2, 1fr); margin-top: 2rem; }
+.pm-detail-specs div { background: rgba(255,255,255,0.04); border: 1px solid var(--pm-border); padding: 1rem; }
+.pm-detail-specs span, .pm-detail-specs strong { display: block; }
+.pm-detail-specs span { color: rgba(255,255,255,0.5); font-size: 0.7rem; font-weight: 700; letter-spacing: 1px; margin-bottom: 0.35rem; text-transform: uppercase; }
+.pm-detail-inquiry { background: rgba(255,255,255,0.04); border: 1px solid var(--pm-border); margin: 4rem auto 0; max-width: 1280px; padding: 3rem; }
+.pm-detail-inquiry h2 { font-size: 1.5rem; font-weight: 800; margin: 0 0 1.5rem; }
+.pm-detail-inquiry form, .pm-detail-inquiry label { display: flex; flex-direction: column; }
+.pm-detail-inquiry form { gap: 1rem; max-width: 520px; }
+.pm-detail-inquiry label { font-size: 0.85rem; font-weight: 700; gap: 0.4rem; }
+.pm-detail-inquiry input, .pm-detail-inquiry textarea { background: rgba(0,0,0,0.3); border: 1px solid var(--pm-border); color: white; padding: 0.75rem; }
+.pm-detail-btn { background: var(--pm-accent, #60a5fa); border: none; color: #0b1220; cursor: pointer; display: inline-block; font-weight: 800; padding: 0.85rem 1.5rem; text-decoration: none; }
+.pm-detail-success { background: rgba(96, 165, 250, 0.15); border: 1px solid var(--pm-accent, #60a5fa); color: var(--pm-accent, #60a5fa); padding: 1rem; }
+.pm-detail-state { background: rgba(255,255,255,0.04); border: 1px solid var(--pm-border); margin: 5rem auto; max-width: 680px; padding: 4rem 2rem; text-align: center; }
+.pm-detail-skeleton, .pm-detail-line { animation: prop-shimmer 1.5s infinite; background: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 75%); background-size: 200% 100%; border-radius: 8px; }
+.pm-detail-hero-skeleton { height: 480px; margin: 0 auto 2rem; max-width: 1280px; }
+.pm-detail-line { height: 16px; margin-bottom: 1rem; max-width: 1280px; width: 60%; }
+.pm-detail-line-title { height: 48px; }
+
+@media (max-width: 768px) {
+  .pm-detail-grid { grid-template-columns: 1fr; }
+}

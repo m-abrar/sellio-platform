@@ -405,3 +405,90 @@
     text-align: center;
   }
 }
+
+.uh-prop-link {
+  color: inherit;
+  display: block;
+  text-decoration: none;
+}
+
+.prop-listing-state {
+  background: white;
+  border: 1px solid var(--uh-border, #e5e7eb);
+  border-radius: 12px;
+  grid-column: 1 / -1;
+  margin: 0 auto;
+  max-width: 680px;
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.prop-listing-state h3 {
+  color: var(--uh-ink);
+  font-size: 1.75rem;
+  font-weight: 800;
+  margin: 0 0 1rem;
+}
+
+.prop-listing-state p {
+  color: var(--uh-text-muted);
+  line-height: 1.7;
+  margin: 0;
+}
+
+.prop-listing-kicker {
+  color: var(--uh-accent);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+}
+
+.prop-skeleton-line {
+  animation: prop-shimmer 1.5s infinite;
+  background: linear-gradient(90deg, #f3f4f6 25%, #fff 50%, #f3f4f6 75%);
+  background-size: 200% 100%;
+  border-radius: 6px;
+  height: 14px;
+  margin-bottom: 0.75rem;
+  width: 100%;
+}
+
+.prop-skeleton-line-title { height: 22px; width: 75%; }
+.prop-skeleton-line-short { width: 50%; }
+
+@keyframes prop-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.uh-detail-page { background: var(--uh-surface, #f8fafc); min-height: 100vh; padding: 6rem 5%; }
+.uh-detail-back { color: var(--uh-accent); display: inline-block; font-weight: 700; margin-bottom: 2rem; text-decoration: none; }
+.uh-detail-grid { display: grid; gap: 3rem; grid-template-columns: minmax(0, 1fr) minmax(360px, 0.9fr); margin: 0 auto; max-width: 1280px; }
+.uh-detail-media { background: white; border: 1px solid var(--uh-border, #e5e7eb); border-radius: 12px; min-height: 480px; overflow: hidden; }
+.uh-detail-media img { height: 100%; min-height: 480px; object-fit: cover; width: 100%; }
+.uh-detail-kicker { color: var(--uh-accent); font-size: 0.75rem; font-weight: 700; letter-spacing: 2px; margin-bottom: 1rem; text-transform: uppercase; }
+.uh-detail-panel h1 { color: var(--uh-ink); font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800; margin: 0; }
+.uh-detail-price { color: var(--uh-accent); font-size: 1.5rem; font-weight: 800; margin: 1rem 0; }
+.uh-detail-description { color: var(--uh-text-muted); line-height: 1.8; margin: 0; }
+.uh-detail-specs { display: grid; gap: 1rem; grid-template-columns: repeat(2, 1fr); margin-top: 2rem; }
+.uh-detail-specs div { background: white; border: 1px solid var(--uh-border, #e5e7eb); border-radius: 10px; padding: 1rem; }
+.uh-detail-specs span, .uh-detail-specs strong { display: block; }
+.uh-detail-specs span { color: var(--uh-text-muted); font-size: 0.7rem; font-weight: 700; letter-spacing: 1px; margin-bottom: 0.35rem; text-transform: uppercase; }
+.uh-detail-inquiry { background: white; border: 1px solid var(--uh-border, #e5e7eb); border-radius: 12px; margin: 4rem auto 0; max-width: 1280px; padding: 3rem; }
+.uh-detail-inquiry h2 { color: var(--uh-ink); font-size: 1.75rem; font-weight: 800; margin: 0 0 1.5rem; }
+.uh-detail-inquiry form, .uh-detail-inquiry label { display: flex; flex-direction: column; }
+.uh-detail-inquiry form { gap: 1rem; max-width: 520px; }
+.uh-detail-inquiry label { font-size: 0.85rem; font-weight: 700; gap: 0.4rem; }
+.uh-detail-inquiry input, .uh-detail-inquiry textarea { border: 1px solid var(--uh-border, #e5e7eb); border-radius: 8px; font: inherit; padding: 0.75rem; }
+.uh-detail-success { background: rgba(99, 102, 241, 0.1); border-radius: 8px; color: var(--uh-accent); font-weight: 700; padding: 1rem; }
+.uh-detail-state { background: white; border: 1px solid var(--uh-border, #e5e7eb); border-radius: 12px; margin: 5rem auto; max-width: 680px; padding: 4rem 2rem; text-align: center; }
+.uh-detail-skeleton, .uh-detail-line { animation: prop-shimmer 1.5s infinite; background: linear-gradient(90deg, #f3f4f6 25%, #fff 50%, #f3f4f6 75%); background-size: 200% 100%; border-radius: 8px; }
+.uh-detail-hero-skeleton { height: 480px; margin: 0 auto 2rem; max-width: 1280px; }
+.uh-detail-line { height: 16px; margin-bottom: 1rem; max-width: 1280px; width: 60%; }
+.uh-detail-line-title { height: 48px; }
+
+@media (max-width: 768px) {
+  .uh-detail-grid { grid-template-columns: 1fr; }
+}

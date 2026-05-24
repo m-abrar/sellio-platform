@@ -1,16 +1,81 @@
 'use client';
-import React from 'react';
+
+import React, { useEffect, useState } from 'react';
+import { api } from '@sellio/api-client';
+import type { Property } from '@sellio/types';
 import { BrutalistUnitCard, StructuralStat } from './components';
 
+const fallbackImages = [
+  '/themes/properties/urban/9.webp',
+  '/themes/properties/urban/10.webp',
+  '/themes/properties/urban/11.webp',
+  '/themes/properties/urban/12.webp',
+  '/themes/properties/urban/13.webp',
+  '/themes/properties/urban/14.webp',
+];
+
+function getPropertyPrice(property: Property) {
+  return property.pricing?.price_formatted || (
+    property.base_price ? `$${Number(property.base_price).toLocaleString()}` : 'Price on request'
+  );
+}
+
+function getPropertyLocation(property: Property) {
+  return property.location?.title || [property.city, property.state].filter(Boolean).join(', ') || property.address || 'Urban Node';
+}
+
+function mapPropertyToUnit(property: Property, index: number) {
+  const sqft = property.specs?.area_formatted?.replace(/[^\d]/g, '')
+    || String(property.area_sq_ft || property.specs?.area_sq_ft || '');
+
+  return {
+    title: property.title,
+    price: getPropertyPrice(property),
+    location: getPropertyLocation(property),
+    beds: String(property.specs?.bedrooms ?? property.number_of_bedrooms ?? 1),
+    sqft: sqft || 'N/A',
+    image: property.featured_image || property.thumbnail_image || fallbackImages[index % fallbackImages.length],
+    slug: property.slug,
+  };
+}
+
 export default function Page() {
-  const units = [
-    { title: "The Skyline Penthouse", price: "$4,250,000", location: "Downtown Core Node", beds: "3", sqft: "2,400", image: "/themes/properties/urban/9.webp" },
-    { title: "Industrial Loft v2", price: "$850,000", location: "Arts District Sector", beds: "1", sqft: "1,100", image: "/themes/properties/urban/10.webp" },
-    { title: "Glass Terrace Unit", price: "$1,200,000", location: "West End Hub", beds: "2", sqft: "1,450", image: "/themes/properties/urban/11.webp" },
-    { title: "The Metro Studio", price: "$450,000", location: "Financial Center Node", beds: "0", sqft: "550", image: "/themes/properties/urban/12.webp" },
-    { title: "Harbor View Duplex", price: "$2,800,000", location: "Waterfront Hub", beds: "3", sqft: "1,900", image: "/themes/properties/urban/13.webp" },
-    { title: "Concrete Minimalist", price: "$920,000", location: "South Side Sector", beds: "2", sqft: "1,200", image: "/themes/properties/urban/14.webp" },
-  ];
+  const [properties, setProperties] = useState<Property[]>([]);
+  const [loadingProperties, setLoadingProperties] = useState(true);
+  const [propertyError, setPropertyError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadProperties() {
+      try {
+        const response = await api.getProperties({ per_page: 6 });
+        if (!isMounted) {
+          return;
+        }
+
+        setProperties(Array.isArray(response.data) ? response.data : []);
+        setPropertyError(null);
+      } catch (error: unknown) {
+        if (!isMounted) {
+          return;
+        }
+
+        console.error('Failed to load properties urban listings:', error);
+        setPropertyError(error instanceof Error ? error.message : 'Properties are temporarily unavailable.');
+      } finally {
+        if (isMounted) {
+          setLoadingProperties(false);
+        }
+      }
+    }
+
+    loadProperties();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   return (
     <div className="pu-section">
@@ -29,13 +94,13 @@ export default function Page() {
             <button className="pu-btn-primary" id="pu-btn-explore" onClick={() => document.getElementById('pu-registry-grid')?.scrollIntoView({ behavior: 'smooth' })}>
               Explore Inventory
             </button>
-            <button style={{ 
-                background: 'transparent', 
-                border: '2px solid var(--pu-steel)', 
-                color: 'var(--pu-steel)', 
-                padding: '1.5rem 4rem', 
-                fontWeight: 700, 
-                textTransform: 'uppercase', 
+            <button style={{
+                background: 'transparent',
+                border: '2px solid var(--pu-steel)',
+                color: 'var(--pu-steel)',
+                padding: '1.5rem 4rem',
+                fontWeight: 700,
+                textTransform: 'uppercase',
                 cursor: 'pointer',
                 transition: 'all 0.3s ease'
             }} id="pu-btn-list" onClick={() => alert('Registering new urban unit node.')}>
@@ -79,11 +144,38 @@ export default function Page() {
                   Every architectural unit is synchronized with our global registry node, ensuring 100% data integrity and availability status.
               </div>
           </div>
-          
+
           <div className="pu-unit-grid">
-            {units.map((u, i) => (
-              <BrutalistUnitCard key={i} {...u} />
-            ))}
+            {loadingProperties ? (
+              [1, 2, 3, 4, 5, 6].map((item) => (
+                <div className="pu-unit-card prop-listing-skeleton" key={item}>
+                  <div className="prop-skeleton-line prop-skeleton-line-title" />
+                  <div className="prop-skeleton-line" />
+                  <div className="prop-skeleton-line prop-skeleton-line-short" />
+                </div>
+              ))
+            ) : propertyError ? (
+              <div className="prop-listing-state">
+                <div className="prop-listing-kicker">Property Sync Offline</div>
+                <h3>Registry units could not be loaded.</h3>
+                <p>{propertyError}</p>
+              </div>
+            ) : properties.length === 0 ? (
+              <div className="prop-listing-state">
+                <div className="prop-listing-kicker">Empty Property Registry</div>
+                <h3>No live properties are published yet.</h3>
+                <p>Add property records in the backend and this urban grid will hydrate automatically.</p>
+              </div>
+            ) : (
+              properties.slice(0, 6).map((property, index) => {
+                const unit = mapPropertyToUnit(property, index);
+                return (
+                  <a className="pu-unit-link" href={`/product/${unit.slug}`} key={property.id}>
+                    <BrutalistUnitCard {...unit} />
+                  </a>
+                );
+              })
+            )}
           </div>
       </section>
 

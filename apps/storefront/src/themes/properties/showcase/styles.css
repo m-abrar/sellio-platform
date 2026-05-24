@@ -355,3 +355,98 @@
     gap: 2.5rem !important;
   }
 }
+
+.ps-showcase-link {
+  color: inherit;
+  display: block;
+  text-decoration: none;
+}
+
+.ps-listing-state {
+  grid-column: 1 / -1;
+}
+
+.prop-listing-state {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  margin: 0 auto;
+  max-width: 680px;
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.prop-listing-state h3 {
+  color: white;
+  font-size: 1.75rem;
+  font-weight: 800;
+  margin: 0 0 1rem;
+}
+
+.prop-listing-state p {
+  color: rgba(255, 255, 255, 0.65);
+  line-height: 1.7;
+  margin: 0;
+}
+
+.prop-listing-kicker {
+  color: var(--ps-gold, #d4af37);
+  font-size: 0.75rem;
+  letter-spacing: 2px;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+}
+
+.prop-skeleton-line {
+  animation: prop-shimmer 1.5s infinite;
+  background: linear-gradient(90deg, rgba(255,255,255,0.06) 25%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0.06) 75%);
+  background-size: 200% 100%;
+  border-radius: 6px;
+  height: 14px;
+  margin-bottom: 0.75rem;
+  width: 100%;
+}
+
+.prop-skeleton-line-title { height: 22px; width: 75%; }
+.prop-skeleton-line-short { width: 50%; }
+
+.ps-showcase-skeleton {
+  min-height: 320px;
+  padding: 2rem;
+}
+
+@keyframes prop-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.ps-detail-page { background: #0a0a0a; color: white; min-height: 100vh; padding: 6rem 5%; }
+.ps-detail-back { color: var(--ps-gold, #d4af37); display: inline-block; font-weight: 700; margin-bottom: 2rem; text-decoration: none; }
+.ps-detail-hero { margin: 0 auto 3rem; max-width: 1280px; overflow: hidden; position: relative; border-radius: 12px; }
+.ps-detail-hero img { display: block; height: 500px; object-fit: cover; width: 100%; }
+.ps-detail-hero-overlay { background: linear-gradient(to top, rgba(0,0,0,0.92), transparent); bottom: 0; left: 0; padding: 3rem; position: absolute; right: 0; }
+.ps-detail-hero-overlay h1 { font-size: clamp(2rem, 5vw, 4rem); font-weight: 800; margin: 0.5rem 0; }
+.ps-detail-kicker { color: var(--ps-gold, #d4af37); font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; }
+.ps-detail-meta { color: rgba(255,255,255,0.65); display: flex; flex-wrap: wrap; gap: 1.5rem; margin-top: 1rem; }
+.ps-detail-grid { display: grid; gap: 3rem; grid-template-columns: minmax(0, 1fr) 360px; margin: 0 auto; max-width: 1280px; }
+.ps-detail-main h2 { font-size: 1.75rem; font-weight: 800; margin: 0 0 1rem; }
+.ps-detail-main p { color: rgba(255,255,255,0.65); line-height: 1.8; margin: 0; }
+.ps-detail-specs { display: grid; gap: 1rem; grid-template-columns: repeat(2, 1fr); margin-top: 2rem; }
+.ps-detail-specs div { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 1rem; }
+.ps-detail-specs span, .ps-detail-specs strong { display: block; }
+.ps-detail-specs span { color: rgba(255,255,255,0.5); font-size: 0.7rem; letter-spacing: 1px; margin-bottom: 0.35rem; text-transform: uppercase; }
+.ps-detail-sidebar { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; padding: 2rem; }
+.ps-detail-sidebar form, .ps-detail-sidebar label { display: flex; flex-direction: column; }
+.ps-detail-sidebar form { gap: 1rem; }
+.ps-detail-sidebar label { font-size: 0.85rem; font-weight: 700; gap: 0.4rem; }
+.ps-detail-sidebar input, .ps-detail-sidebar textarea { background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.12); border-radius: 8px; color: white; padding: 0.75rem; }
+.ps-detail-success { background: rgba(212, 175, 55, 0.12); border: 1px solid var(--ps-gold, #d4af37); border-radius: 8px; color: var(--ps-gold, #d4af37); padding: 1rem; }
+.ps-detail-state { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; margin: 5rem auto; max-width: 680px; padding: 4rem 2rem; text-align: center; }
+.ps-detail-skeleton, .ps-detail-line { animation: prop-shimmer 1.5s infinite; background: linear-gradient(90deg, rgba(255,255,255,0.06) 25%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0.06) 75%); background-size: 200% 100%; border-radius: 8px; }
+.ps-detail-hero-skeleton { height: 500px; margin: 0 auto 2rem; max-width: 1280px; }
+.ps-detail-line { height: 16px; margin-bottom: 1rem; max-width: 1280px; width: 60%; }
+.ps-detail-line-title { height: 48px; }
+
+@media (max-width: 768px) {
+  .ps-detail-grid, .ps-detail-specs { grid-template-columns: 1fr; }
+}

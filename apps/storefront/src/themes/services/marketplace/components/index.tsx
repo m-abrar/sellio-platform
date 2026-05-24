@@ -2,6 +2,14 @@
 import React, { useState } from 'react';
 import type { ServiceListing } from '@sellio/types';
 
+function getThemeLink(path: string) {
+  if (typeof window !== 'undefined' && window.location.pathname.startsWith('/preview/')) {
+    const themeKey = window.location.pathname.split('/')[2];
+    return `/preview/${themeKey}${path}`;
+  }
+  return path || '/';
+}
+
 export const MarketplaceHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -97,27 +105,49 @@ export const SmProviderCard = ({ name, title, rating, image, service, onHire }: 
   const displayImage = isDynamic ? (service.media?.main_photo || '/themes/services/marketplace/15.webp') : image;
   const isTopPro = isDynamic ? service.status?.is_featured : true;
   const priceLabel = isDynamic ? (service.pricing?.formatted || `$${service.pricing?.base_price}`) : null;
+  const productHref = isDynamic && service.slug ? getThemeLink(`/product/${service.slug}`) : null;
+
+  const imageBlock = (
+    <>
+      <img src={displayImage} alt={displayName || 'Provider'} className="sm-provider-img" />
+      {isTopPro && <div className="sm-provider-badge">TOP PRO</div>}
+    </>
+  );
+
+  const titleBlock = (
+    <h5 style={{ fontWeight: 800, marginBottom: '0.25rem', fontSize: '1.25rem', lineClamp: 1, WebkitLineClamp: 1, WebkitBoxOrient: 'vertical', display: '-webkit-box', overflow: 'hidden' }}>{displayName}</h5>
+  );
 
   return (
     <div className="sm-provider-card" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
         <div style={{ position: 'relative', overflow: 'hidden', borderRadius: '12px 12px 0 0' }}>
-            <img src={displayImage} alt={displayName} className="sm-provider-img" />
-            {isTopPro && <div className="sm-provider-badge">TOP PRO</div>}
+            {productHref ? (
+              <a href={productHref} className="sm-provider-link" aria-label={`View profile for ${displayName}`}>
+                {imageBlock}
+              </a>
+            ) : imageBlock}
         </div>
         <div style={{ padding: '2rem 1.5rem', textAlign: 'center', display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-            <h5 style={{ fontWeight: 800, marginBottom: '0.25rem', fontSize: '1.25rem', lineClamp: 1, WebkitLineClamp: 1, WebkitBoxOrient: 'vertical', display: '-webkit-box', overflow: 'hidden' }}>{displayName}</h5>
+            {productHref ? (
+              <a href={productHref} className="sm-provider-link" aria-label={`View profile for ${displayName}`}>
+                {titleBlock}
+              </a>
+            ) : titleBlock}
             <p style={{ color: 'var(--sm-text-muted)', fontSize: '0.9rem', marginBottom: '0.5rem', fontWeight: 500 }}>{displayTitle}</p>
             {priceLabel && (
               <p style={{ color: 'var(--sm-primary)', fontWeight: 800, fontSize: '1.1rem', margin: '0.25rem 0' }}>
                 {priceLabel} <span style={{ color: 'var(--sm-text-muted)', fontSize: '0.8rem', fontWeight: 400 }}>{service?.pricing?.billing_type?.is_project_based ? '/ project' : '/ hr'}</span>
               </p>
             )}
-            <p style={{ color: '#ffc107', fontWeight: 700, marginBottom: '1.5rem', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.25rem', marginTop: 'auto' }}>
+            <p style={{ color: '#ffc107', fontWeight: 700, marginBottom: '1rem', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.25rem', marginTop: 'auto' }}>
                 ★ {displayRating} <span style={{ color: 'var(--sm-text-muted)', fontWeight: 400, fontSize: '0.8rem' }}>(120 reviews)</span>
             </p>
+            {productHref && (
+              <a href={productHref} className="sm-view-profile">View Profile</a>
+            )}
             <button 
               className="sm-btn sm-btn-primary hire-btn" 
-              style={{ width: '100%', marginTop: 'auto' }} 
+              style={{ width: '100%', marginTop: productHref ? 0 : 'auto' }} 
               onClick={() => {
                 if (isDynamic && onHire && service) {
                   onHire(service);

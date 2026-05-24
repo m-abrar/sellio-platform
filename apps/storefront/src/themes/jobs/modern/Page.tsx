@@ -1,16 +1,69 @@
 'use client';
-import React from 'react';
+
+import React, { useEffect, useState } from 'react';
+import { api } from '@sellio/api-client';
+import type { JobListing } from '@sellio/types';
 import { ModernHeader, ModernJobCard, ModernFooter } from './components';
 
+const fallbackLogos = [
+  '/themes/jobs/modern/1.webp',
+  '/themes/jobs/modern/2.webp',
+  '/themes/jobs/modern/3.webp',
+  '/themes/jobs/modern/4.webp',
+  '/themes/jobs/modern/5.webp',
+  '/themes/jobs/modern/6.webp',
+];
+
+function mapJobToCard(job: JobListing, index: number) {
+  return {
+    title: job.title,
+    company: job.company?.name || job.employer?.name || 'Innovative Company',
+    location: job.location?.display || [job.location?.city, job.location?.state].filter(Boolean).join(', ') || 'Remote',
+    type: job.employment?.workplace || job.employment?.type || 'Full-Time',
+    level: job.employment?.experience_level || 'Mid-Level',
+    salary: job.compensation?.range_compact || job.compensation?.range_full || 'Competitive',
+    logo: job.company?.logo_card || job.company?.logo || fallbackLogos[index % fallbackLogos.length],
+    slug: job.slug,
+  };
+}
+
 export default function Page() {
-  const jobs = [
-    { title: "Lead Product Designer", company: "Figma", location: "San Francisco, CA", type: "Full-Time", level: "Senior", salary: "$160k - $210k", logo: "/themes/jobs/modern/1.webp" },
-    { title: "VP of Engineering", company: "Spotify", location: "Remote - Global", type: "Full-Time", level: "Executive", salary: "$250k+", logo: "/themes/jobs/modern/2.webp" },
-    { title: "Senior Data Scientist", company: "Airbnb", location: "New York, NY", type: "Full-Time", level: "Senior", salary: "$150k - $190k", logo: "/themes/jobs/modern/3.webp" },
-    { title: "Brand Marketing Manager", company: "Nike", location: "Portland, OR", type: "Hybrid", level: "Mid-Level", salary: "$110k - $140k", logo: "/themes/jobs/modern/4.webp" },
-    { title: "iOS Developer", company: "Apple", location: "Cupertino, CA", type: "On-site", level: "Mid-Level", salary: "$140k - $170k", logo: "/themes/jobs/modern/5.webp" },
-    { title: "UX Researcher", company: "Google", location: "Remote - US", type: "Full-Time", level: "Mid-Level", salary: "$130k - $160k", logo: "/themes/jobs/modern/6.webp" },
-  ];
+  const [jobs, setJobs] = useState<JobListing[]>([]);
+  const [loadingJobs, setLoadingJobs] = useState(true);
+  const [jobError, setJobError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadJobs() {
+      try {
+        const response = await api.getJobs({ per_page: 6 });
+        if (!isMounted) {
+          return;
+        }
+
+        setJobs(Array.isArray(response.data) ? response.data : []);
+        setJobError(null);
+      } catch (error: unknown) {
+        if (!isMounted) {
+          return;
+        }
+
+        console.error('Failed to load jobs modern listings:', error);
+        setJobError(error instanceof Error ? error.message : 'Jobs are temporarily unavailable.');
+      } finally {
+        if (isMounted) {
+          setLoadingJobs(false);
+        }
+      }
+    }
+
+    loadJobs();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   return (
     <div className="jobs-modern-wrapper">
@@ -21,7 +74,7 @@ export default function Page() {
         <div className="jm-hero-badge">🚀 Over 10,000+ new roles added this week</div>
         <h1 className="jm-hero-title">Find work that <br/><span className="jm-text-gradient">matches your ambition.</span></h1>
         <p className="jm-hero-subtitle">The modern way to discover roles at innovative startups and world-class tech companies.</p>
-        
+
         <div className="jm-search-box">
             <input type="text" className="jm-search-input" placeholder="Job title, skill, or company" />
             <div className="jm-search-divider"></div>
@@ -52,9 +105,39 @@ export default function Page() {
               <h2 className="jm-section-title">Curated for you</h2>
               <a href="#" className="jm-btn jm-btn-outline">View All Roles</a>
           </div>
-          
+
           <div className="jm-grid">
-              {jobs.map((job, i) => <ModernJobCard key={i} {...job} />)}
+              {loadingJobs ? (
+                [1, 2, 3, 4, 5, 6].map((item) => (
+                  <div className="jm-job-card jm-glass jm-listing-skeleton" key={item}>
+                    <div className="jm-skeleton-logo" />
+                    <div className="jm-skeleton-line jm-skeleton-line-title" />
+                    <div className="jm-skeleton-line" />
+                    <div className="jm-skeleton-line jm-skeleton-line-short" />
+                  </div>
+                ))
+              ) : jobError ? (
+                <div className="jm-listing-state">
+                  <div className="jm-listing-kicker">Job Sync Offline</div>
+                  <h3>Curated roles could not be loaded.</h3>
+                  <p>{jobError}</p>
+                </div>
+              ) : jobs.length === 0 ? (
+                <div className="jm-listing-state">
+                  <div className="jm-listing-kicker">Empty Job Registry</div>
+                  <h3>No live jobs are published yet.</h3>
+                  <p>Add job records in the backend and this modern grid will hydrate automatically.</p>
+                </div>
+              ) : (
+                jobs.slice(0, 6).map((job, index) => {
+                  const card = mapJobToCard(job, index);
+                  return (
+                    <a className="jm-job-link" href={`/product/${card.slug}`} key={job.id}>
+                      <ModernJobCard {...card} />
+                    </a>
+                  );
+                })
+              )}
           </div>
       </section>
 

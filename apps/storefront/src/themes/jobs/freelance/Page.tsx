@@ -1,14 +1,77 @@
 'use client';
-import React from 'react';
+
+import React, { useEffect, useState } from 'react';
+import { api } from '@sellio/api-client';
+import type { JobListing } from '@sellio/types';
 import { FreelanceHeader, GigCard, FreelanceFooter } from './components';
 
+const fallbackAvatars = [
+  '/themes/jobs/freelance/1.webp',
+  '/themes/jobs/freelance/2.webp',
+  '/themes/jobs/freelance/3.webp',
+  '/themes/jobs/freelance/4.webp',
+];
+
+const fallbackImages = [
+  '/themes/jobs/freelance/10.webp',
+  '/themes/jobs/freelance/11.webp',
+  '/themes/jobs/freelance/12.webp',
+  '/themes/jobs/freelance/13.webp',
+];
+
+function mapJobToGig(job: JobListing, index: number) {
+  const companyName = job.company?.name || job.employer?.name || 'Top Freelancer';
+  const price = job.compensation?.range_compact || job.compensation?.range_full || 'Quote';
+
+  return {
+    title: job.title,
+    name: companyName,
+    avatar: job.company?.logo_card || job.company?.logo || fallbackAvatars[index % fallbackAvatars.length],
+    image: job.company?.photos?.[0]?.url || fallbackImages[index % fallbackImages.length],
+    rating: 4.9,
+    reviews: job.status?.application_count || 100 + index * 47,
+    price,
+    slug: job.slug,
+  };
+}
+
 export default function Page() {
-  const gigs = [
-    { title: "I will design a modern minimalist logo for your brand", name: "Alex Design", avatar: "/themes/jobs/freelance/1.webp", image: "/themes/jobs/freelance/10.webp", rating: 4.9, reviews: 1043, price: "$50" },
-    { title: "I will build a responsive Next.js web application", name: "Sarah Code", avatar: "/themes/jobs/freelance/2.webp", image: "/themes/jobs/freelance/11.webp", rating: 5.0, reviews: 312, price: "$200" },
-    { title: "I will write SEO optimized blog posts and articles", name: "John Writes", avatar: "/themes/jobs/freelance/3.webp", image: "/themes/jobs/freelance/12.webp", rating: 4.8, reviews: 890, price: "$25" },
-    { title: "I will edit your YouTube videos professionally", name: "Mike Visuals", avatar: "/themes/jobs/freelance/4.webp", image: "/themes/jobs/freelance/13.webp", rating: 4.9, reviews: 567, price: "$40" },
-  ];
+  const [jobs, setJobs] = useState<JobListing[]>([]);
+  const [loadingJobs, setLoadingJobs] = useState(true);
+  const [jobError, setJobError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadJobs() {
+      try {
+        const response = await api.getJobs({ per_page: 6 });
+        if (!isMounted) {
+          return;
+        }
+
+        setJobs(Array.isArray(response.data) ? response.data : []);
+        setJobError(null);
+      } catch (error: unknown) {
+        if (!isMounted) {
+          return;
+        }
+
+        console.error('Failed to load jobs freelance listings:', error);
+        setJobError(error instanceof Error ? error.message : 'Jobs are temporarily unavailable.');
+      } finally {
+        if (isMounted) {
+          setLoadingJobs(false);
+        }
+      }
+    }
+
+    loadJobs();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   return (
     <div className="jobs-freelance-wrapper">
@@ -17,7 +80,6 @@ export default function Page() {
       {/* Hero */}
       <section className="jf-hero">
         <h1 className="jf-hero-title">Find the perfect <span style={{ fontStyle: 'italic' }}>freelance</span> services<br/>for your business</h1>
-        
       </section>
 
       {/* Search Bar */}
@@ -45,9 +107,37 @@ export default function Page() {
               Popular professional services
           </h2>
           <div className="jf-grid">
-              {gigs.map((gig, i) => (
-                  <GigCard key={i} {...gig} />
-              ))}
+              {loadingJobs ? (
+                [1, 2, 3, 4].map((item) => (
+                  <div className="jf-gig-card jf-listing-skeleton" key={item}>
+                    <div className="jf-skeleton-image" />
+                    <div className="jf-skeleton-line jf-skeleton-line-title" />
+                    <div className="jf-skeleton-line" />
+                    <div className="jf-skeleton-line jf-skeleton-line-short" />
+                  </div>
+                ))
+              ) : jobError ? (
+                <div className="jf-listing-state">
+                  <div className="jf-listing-kicker">Gig Sync Offline</div>
+                  <h3>Popular services could not be loaded.</h3>
+                  <p>{jobError}</p>
+                </div>
+              ) : jobs.length === 0 ? (
+                <div className="jf-listing-state">
+                  <div className="jf-listing-kicker">Empty Gig Registry</div>
+                  <h3>No live jobs are published yet.</h3>
+                  <p>Add job records in the backend and this freelance grid will hydrate automatically.</p>
+                </div>
+              ) : (
+                jobs.slice(0, 6).map((job, index) => {
+                  const gig = mapJobToGig(job, index);
+                  return (
+                    <a className="jf-gig-link" href={`/product/${gig.slug}`} key={job.id}>
+                      <GigCard {...gig} />
+                    </a>
+                  );
+                })
+              )}
           </div>
       </section>
 

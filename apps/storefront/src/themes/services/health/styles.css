@@ -404,6 +404,283 @@
   }
 }
 
+.sh-practitioner-link {
+    color: inherit;
+    display: block;
+    text-decoration: none;
+}
+
+.sh-listing-state {
+    background: white;
+    border: 1px solid var(--sh-border);
+    border-radius: 16px;
+    grid-column: 1 / -1;
+    margin: 0 auto;
+    max-width: 680px;
+    padding: 4rem 2rem;
+    text-align: center;
+}
+
+.sh-listing-state h3 {
+    color: var(--sh-blue);
+    font-size: 1.75rem;
+    font-weight: 800;
+    margin: 0 0 1rem;
+}
+
+.sh-listing-state p {
+    color: var(--sh-grey);
+    line-height: 1.7;
+    margin: 0;
+}
+
+.sh-listing-kicker {
+    color: var(--sh-teal);
+    font-family: var(--font-mono, monospace);
+    font-size: 0.65rem;
+    font-weight: 900;
+    letter-spacing: 2px;
+    margin-bottom: 1rem;
+}
+
+.sh-skeleton-circle,
+.sh-skeleton-line {
+    animation: sh-shimmer 1.5s infinite;
+    background: linear-gradient(90deg, #f0f4f8 25%, #ffffff 50%, #f0f4f8 75%);
+    background-size: 200% 100%;
+    border-radius: 8px;
+}
+
+.sh-skeleton-circle {
+    border-radius: 50%;
+    height: 120px;
+    margin: 0 auto 1.5rem;
+    width: 120px;
+}
+
+.sh-skeleton-line {
+    height: 14px;
+    margin: 0 auto 0.75rem;
+    width: 70%;
+}
+
+.sh-skeleton-line-title {
+    height: 20px;
+    width: 55%;
+}
+
+.sh-skeleton-line-short {
+    width: 40%;
+}
+
+@keyframes sh-shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+@keyframes sh-shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* Practitioner Detail */
+.sh-detail-page {
+    background: var(--sh-surface);
+    min-height: 100vh;
+    padding: 6rem 5%;
+}
+
+.sh-detail-back,
+.sh-detail-back-skeleton { margin-bottom: 3rem; }
+
+.sh-detail-back {
+    align-items: center;
+    color: var(--sh-teal);
+    display: inline-flex;
+    font-weight: 700;
+    gap: 0.65rem;
+    text-decoration: none;
+}
+
+.sh-detail-back-skeleton,
+.sh-detail-skeleton,
+.sh-detail-line {
+    animation: sh-shimmer 1.5s infinite;
+    background: linear-gradient(90deg, #e6fffa 25%, #fff 50%, #e6fffa 75%);
+    background-size: 200% 100%;
+    border-radius: 8px;
+}
+
+.sh-detail-back-skeleton { height: 18px; width: 260px; }
+
+.sh-detail-grid {
+    display: grid;
+    gap: 4rem;
+    grid-template-columns: minmax(0, 1fr) minmax(360px, 0.9fr);
+    margin: 0 auto;
+    max-width: 1280px;
+}
+
+.sh-detail-media {
+    align-items: center;
+    background: white;
+    border: 1px solid var(--sh-border);
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    min-height: 520px;
+    overflow: hidden;
+}
+
+.sh-detail-media img { height: 100%; object-fit: cover; width: 100%; }
+
+.sh-detail-panel { align-self: center; }
+
+.sh-detail-panel h1,
+.sh-detail-state h1,
+.sh-detail-lead h2 {
+    color: var(--sh-blue);
+    font-weight: 800;
+    line-height: 1.15;
+    margin: 0;
+}
+
+.sh-detail-panel h1 { font-size: clamp(2.4rem, 5vw, 4rem); }
+
+.sh-detail-kicker {
+    color: var(--sh-teal);
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+}
+
+.sh-detail-price {
+    color: var(--sh-teal);
+    font-size: 1.35rem;
+    font-weight: 800;
+    margin-top: 1.5rem;
+}
+
+.sh-detail-description {
+    color: var(--sh-grey);
+    font-size: 1.08rem;
+    line-height: 1.8;
+    margin: 2rem 0;
+}
+
+.sh-detail-specs {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.sh-detail-specs div {
+    background: white;
+    border: 1px solid var(--sh-border);
+    border-radius: 14px;
+    padding: 1.25rem;
+}
+
+.sh-detail-specs span,
+.sh-detail-specs strong { display: block; }
+
+.sh-detail-specs span {
+    color: var(--sh-grey);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+}
+
+.sh-detail-features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 2rem;
+}
+
+.sh-detail-features span {
+    background: var(--sh-teal-light);
+    border-radius: 999px;
+    color: var(--sh-teal);
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 0.65rem 1rem;
+}
+
+.sh-detail-lead {
+    background: white;
+    border: 1px solid var(--sh-border);
+    border-radius: 20px;
+    display: grid;
+    gap: 4rem;
+    grid-template-columns: 0.85fr 1fr;
+    margin: 6rem auto 0;
+    max-width: 1280px;
+    padding: 4rem;
+}
+
+.sh-detail-lead h2 { font-size: clamp(2rem, 4vw, 3rem); margin-bottom: 1rem; }
+
+.sh-detail-lead p { color: var(--sh-grey); line-height: 1.7; margin: 0; }
+
+.sh-detail-lead form,
+.sh-detail-lead label { display: flex; flex-direction: column; }
+
+.sh-detail-lead form { gap: 1rem; }
+
+.sh-detail-lead label {
+    color: var(--sh-blue);
+    font-size: 0.85rem;
+    font-weight: 700;
+    gap: 0.5rem;
+}
+
+.sh-detail-lead input,
+.sh-detail-lead textarea {
+    border: 1px solid var(--sh-border);
+    border-radius: 12px;
+    font: inherit;
+    padding: 0.9rem 1rem;
+}
+
+.sh-detail-success {
+    background: var(--sh-teal-light);
+    border: 1px solid rgba(13, 148, 136, 0.25);
+    border-radius: 12px;
+    color: var(--sh-teal);
+    font-weight: 800;
+    padding: 1rem;
+}
+
+.sh-detail-state {
+    background: white;
+    border: 1px solid var(--sh-border);
+    border-radius: 20px;
+    margin: 5rem auto;
+    max-width: 720px;
+    padding: 5rem 3rem;
+    text-align: center;
+}
+
+.sh-detail-state h1 { font-size: 3rem; margin-bottom: 1rem; }
+
+.sh-detail-state p {
+    color: var(--sh-grey);
+    line-height: 1.7;
+    margin: 0 auto 2rem;
+    max-width: 520px;
+}
+
+.sh-detail-line { height: 18px; margin-bottom: 1.25rem; width: 100%; }
+.sh-detail-line-small { width: 32%; }
+.sh-detail-line-title { border-radius: 18px; height: 92px; width: 90%; }
+.sh-detail-line-price { width: 26%; }
+.sh-detail-line-short { width: 70%; }
+
 @media (max-width: 768px) {
   .sh-section {
     padding: 5rem 6%;
@@ -428,5 +705,14 @@
   .sh-footer-grid {
     grid-template-columns: 1fr !important;
     gap: 4rem !important;
+  }
+
+  .sh-detail-grid,
+  .sh-detail-lead {
+    grid-template-columns: 1fr;
+  }
+
+  .sh-detail-specs {
+    grid-template-columns: 1fr;
   }
 }

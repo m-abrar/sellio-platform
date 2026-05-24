@@ -1,15 +1,72 @@
 'use client';
-import React from 'react';
+
+import React, { useEffect, useState } from 'react';
+import { api } from '@sellio/api-client';
+import type { Property } from '@sellio/types';
 import { ShowcaseCard, StatisticsNode } from './components';
 
+const spans = ['span-8', 'span-4', 'span-4', 'span-8', 'span-12', 'span-8'];
+const fallbackImages = [
+  '/themes/properties/platinum/1.webp',
+  '/themes/properties/platinum/2.webp',
+  '/themes/properties/platinum/3.webp',
+  '/themes/properties/platinum/4.webp',
+  '/themes/properties/platinum/5.webp',
+];
+
+function getPropertyPrice(property: Property) {
+  return property.pricing?.price_formatted || (
+    property.base_price ? `$${Number(property.base_price).toLocaleString()}` : 'Price on request'
+  );
+}
+
+function mapPropertyToShowcase(property: Property, index: number) {
+  return {
+    title: property.title,
+    price: getPropertyPrice(property),
+    image: property.featured_image || property.thumbnail_image || fallbackImages[index % fallbackImages.length],
+    span: spans[index % spans.length],
+    slug: property.slug,
+  };
+}
+
 export default function Page() {
-  const estates = [
-    { title: "The Obsidian Monolith", price: "$42,500,000", image: "/themes/properties/platinum/1.webp", span: "span-8" },
-    { title: "Glass Pavilion | Alpine", price: "$18,200,000", image: "/themes/properties/platinum/2.webp", span: "span-4" },
-    { title: "Desert Sanctuary", price: "$12,400,000", image: "/themes/properties/platinum/3.webp", span: "span-4" },
-    { title: "Coastal Brutalist", price: "$24,800,000", image: "/themes/properties/platinum/4.webp", span: "span-8" },
-    { title: "The Zen Atrium", price: "$31,500,000", image: "/themes/properties/platinum/5.webp", span: "span-12" },
-  ];
+  const [properties, setProperties] = useState<Property[]>([]);
+  const [loadingProperties, setLoadingProperties] = useState(true);
+  const [propertyError, setPropertyError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadProperties() {
+      try {
+        const response = await api.getProperties({ per_page: 6 });
+        if (!isMounted) {
+          return;
+        }
+
+        setProperties(Array.isArray(response.data) ? response.data : []);
+        setPropertyError(null);
+      } catch (error: unknown) {
+        if (!isMounted) {
+          return;
+        }
+
+        console.error('Failed to load properties platinum listings:', error);
+        setPropertyError(error instanceof Error ? error.message : 'Properties are temporarily unavailable.');
+      } finally {
+        if (isMounted) {
+          setLoadingProperties(false);
+        }
+      }
+    }
+
+    loadProperties();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   return (
     <div className="pl-section">
@@ -23,7 +80,7 @@ export default function Page() {
         <p style={{ marginTop: '5rem', maxWidth: '700px', fontSize: '1.5rem', color: 'var(--pl-text-dim)', lineHeight: 1.6 }}>
             A curated collection of the world's most significant private estates. Where raw materials meet refined billionaire-minimalist vision.
         </p>
-        
+
         <div className="pl-scroll-indicator">
             <span className="pl-mono">DISCOVER</span>
             <div className="pl-scroll-line"></div>
@@ -57,11 +114,37 @@ export default function Page() {
                   FILTER: LUXURY_TIER == "PLATINUM"
               </div>
           </div>
-          
+
           <div className="pl-bento-grid">
-            {estates.map((e, i) => (
-              <ShowcaseCard key={i} {...e} />
-            ))}
+            {loadingProperties ? (
+              [1, 2, 3, 4, 5].map((item) => (
+                <div className={`pl-showcase-skeleton ${spans[item % spans.length]}`} key={item}>
+                  <div className="prop-skeleton-line prop-skeleton-line-title" />
+                  <div className="prop-skeleton-line prop-skeleton-line-short" />
+                </div>
+              ))
+            ) : propertyError ? (
+              <div className="prop-listing-state pl-listing-state">
+                <div className="prop-listing-kicker">Property Sync Offline</div>
+                <h3>Cinematic showcase could not be loaded.</h3>
+                <p>{propertyError}</p>
+              </div>
+            ) : properties.length === 0 ? (
+              <div className="prop-listing-state pl-listing-state">
+                <div className="prop-listing-kicker">Empty Property Registry</div>
+                <h3>No live properties are published yet.</h3>
+                <p>Add property records in the backend and this platinum grid will hydrate automatically.</p>
+              </div>
+            ) : (
+              properties.slice(0, 6).map((property, index) => {
+                const card = mapPropertyToShowcase(property, index);
+                return (
+                  <a className="pl-showcase-link" href={`/product/${card.slug}`} key={property.id}>
+                    <ShowcaseCard title={card.title} price={card.price} image={card.image} span={card.span} />
+                  </a>
+                );
+              })
+            )}
           </div>
       </section>
 
@@ -72,13 +155,13 @@ export default function Page() {
               <h2 style={{ fontSize: '6rem', fontWeight: 900, letterSpacing: '-4px', marginBottom: '5rem', textTransform: 'uppercase' }}>
                   Acquire Your <br/>Legacy.
               </h2>
-              <button style={{ 
-                  background: 'var(--pl-gold)', 
-                  color: 'black', 
-                  border: 'none', 
-                  padding: '2.5rem 8rem', 
-                  fontSize: '1rem', 
-                  fontWeight: 900, 
+              <button style={{
+                  background: 'var(--pl-gold)',
+                  color: 'black',
+                  border: 'none',
+                  padding: '2.5rem 8rem',
+                  fontSize: '1rem',
+                  fontWeight: 900,
                   letterSpacing: '4px',
                   cursor: 'pointer',
                   transition: 'var(--pl-transition)'

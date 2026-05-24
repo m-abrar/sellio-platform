@@ -1,15 +1,88 @@
 'use client';
-import React from 'react';
+
+import React, { useEffect, useState } from 'react';
+import { api } from '@sellio/api-client';
+import type { JobListing } from '@sellio/types';
 import { CorporateHeader, JobCard, DashboardCard, CorporateFooter } from './components';
 
+const fallbackLogos = [
+  '/themes/jobs/corporate/1.webp',
+  '/themes/jobs/corporate/2.webp',
+  '/themes/jobs/corporate/3.webp',
+  '/themes/jobs/corporate/4.webp',
+  '/themes/jobs/corporate/5.webp',
+];
+
+function formatTimeAgo(dateStr?: string | null) {
+  if (!dateStr) {
+    return 'Recently';
+  }
+
+  const diff = Date.now() - new Date(dateStr).getTime();
+  const hours = Math.floor(diff / (1000 * 60 * 60));
+
+  if (hours < 1) {
+    return 'Just now';
+  }
+
+  if (hours < 24) {
+    return `${hours}h ago`;
+  }
+
+  const days = Math.floor(hours / 24);
+  return days === 1 ? '1d ago' : `${days}d ago`;
+}
+
+function mapJobToCard(job: JobListing, index: number) {
+  return {
+    title: job.title,
+    company: job.company?.name || job.employer?.name || 'Enterprise Partner',
+    location: job.location?.display || [job.location?.city, job.location?.state].filter(Boolean).join(', ') || 'Remote',
+    type: job.employment?.type || 'Full-Time',
+    salary: job.compensation?.range_compact || job.compensation?.range_full || 'Competitive',
+    time: formatTimeAgo(job.created_at),
+    logo: job.company?.logo_card || job.company?.logo || fallbackLogos[index % fallbackLogos.length],
+    slug: job.slug,
+  };
+}
+
 export default function Page() {
-  const jobs = [
-    { title: "Senior Enterprise Architect", company: "Globex Corporation", location: "New York, NY", type: "Full-Time", salary: "$160k - $200k", time: "2h ago", logo: "/themes/jobs/corporate/1.webp" },
-    { title: "Director of Product Management", company: "Initech", location: "Remote", type: "Full-Time", salary: "$180k - $220k", time: "5h ago", logo: "/themes/jobs/corporate/2.webp" },
-    { title: "Financial Analyst II", company: "Acme Corp", location: "Chicago, IL", type: "Contract", salary: "$80 - $100/hr", time: "1d ago", logo: "/themes/jobs/corporate/3.webp" },
-    { title: "Lead HR Business Partner", company: "Soylent", location: "San Francisco, CA", type: "Full-Time", salary: "$140k - $170k", time: "1d ago", logo: "/themes/jobs/corporate/4.webp" },
-    { title: "Cybersecurity Operations Center Analyst", company: "Umbrella Corp", location: "Austin, TX", type: "Full-Time", salary: "$110k - $140k", time: "2d ago", logo: "/themes/jobs/corporate/5.webp" },
-  ];
+  const [jobs, setJobs] = useState<JobListing[]>([]);
+  const [loadingJobs, setLoadingJobs] = useState(true);
+  const [jobError, setJobError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadJobs() {
+      try {
+        const response = await api.getJobs({ per_page: 6 });
+        if (!isMounted) {
+          return;
+        }
+
+        setJobs(Array.isArray(response.data) ? response.data : []);
+        setJobError(null);
+      } catch (error: unknown) {
+        if (!isMounted) {
+          return;
+        }
+
+        console.error('Failed to load jobs corporate listings:', error);
+        setJobError(error instanceof Error ? error.message : 'Jobs are temporarily unavailable.');
+      } finally {
+        if (isMounted) {
+          setLoadingJobs(false);
+        }
+      }
+    }
+
+    loadJobs();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   return (
     <div className="jobs-corporate-wrapper">
@@ -19,7 +92,7 @@ export default function Page() {
       <section className="jc-hero">
         <h1 className="jc-hero-title">Advance Your Corporate Career</h1>
         <p className="jc-hero-subtitle">Discover premium opportunities at Fortune 500 companies and high-growth enterprises worldwide.</p>
-        
+
         <div className="jc-search-container">
             <input type="text" className="jc-search-input" placeholder="Job title, keywords, or company" />
             <div className="jc-search-divider"></div>
@@ -58,7 +131,7 @@ export default function Page() {
           {/* Job Listings */}
           <main>
               <DashboardCard />
-              
+
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
                   <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--jc-navy)' }}>Recommended for You</h2>
                   <select style={{ padding: '0.5rem', border: '1px solid var(--jc-border)', borderRadius: '4px', color: 'var(--jc-text-main)', outline: 'none' }}>
@@ -69,11 +142,41 @@ export default function Page() {
               </div>
 
               <div className="jc-job-list">
-                  {jobs.map((job, i) => (
-                      <JobCard key={i} {...job} />
-                  ))}
+                  {loadingJobs ? (
+                    [1, 2, 3, 4, 5].map((item) => (
+                      <div className="jc-job-card jc-listing-skeleton" key={item}>
+                        <div className="jc-skeleton-logo" />
+                        <div className="jc-skeleton-body">
+                          <div className="jc-skeleton-line jc-skeleton-line-title" />
+                          <div className="jc-skeleton-line" />
+                          <div className="jc-skeleton-line jc-skeleton-line-short" />
+                        </div>
+                      </div>
+                    ))
+                  ) : jobError ? (
+                    <div className="jc-listing-state">
+                      <div className="jc-listing-kicker">Job Sync Offline</div>
+                      <h3>Recommended jobs could not be loaded.</h3>
+                      <p>{jobError}</p>
+                    </div>
+                  ) : jobs.length === 0 ? (
+                    <div className="jc-listing-state">
+                      <div className="jc-listing-kicker">Empty Job Registry</div>
+                      <h3>No live jobs are published yet.</h3>
+                      <p>Add job records in the backend and this corporate listing will hydrate automatically.</p>
+                    </div>
+                  ) : (
+                    jobs.slice(0, 6).map((job, index) => {
+                      const card = mapJobToCard(job, index);
+                      return (
+                        <a className="jc-job-link" href={`/product/${card.slug}`} key={job.id}>
+                          <JobCard {...card} />
+                        </a>
+                      );
+                    })
+                  )}
               </div>
-              
+
               <div style={{ textAlign: 'center', marginTop: '3rem' }}>
                   <button className="jc-btn jc-btn-outline">Load More Results</button>
               </div>

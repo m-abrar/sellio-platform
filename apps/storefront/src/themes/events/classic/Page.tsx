@@ -1,16 +1,73 @@
 'use client';
-import React from 'react';
+
+import React, { useEffect, useState } from 'react';
+import { api } from '@sellio/api-client';
+import type { EventListing } from '@sellio/types';
 import { OccasionCard, BookingHUD } from './components';
 
+const months = ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'];
+
+function formatEventDateUnderscore(dateStr?: string | null) {
+  if (!dateStr) {
+    return 'DATE_TBA';
+  }
+
+  const date = new Date(dateStr);
+  return `${months[date.getMonth()]}_${String(date.getDate()).padStart(2, '0')}_${date.getFullYear()}`;
+}
+
+function mapEventToOccasion(event: EventListing) {
+  const location = event.location?.map_title
+    || [event.location?.city, event.location?.state].filter(Boolean).join(', ')
+    || event.location?.address
+    || 'Venue TBA';
+
+  return {
+    title: event.title,
+    location,
+    date: formatEventDateUnderscore(event.schedule?.start_at),
+    category: event.specs?.category || event.specs?.type || 'Event',
+    slug: event.slug,
+  };
+}
+
 export default function Page() {
-  const events = [
-    { title: "La Traviata", location: "Royal Opera House", date: "SEPTEMBER_12_2026", category: "Opera" },
-    { title: "Symphony No. 9", location: "The Grand Concert Hall", date: "OCTOBER_05_2026", category: "Classical" },
-    { title: "Modernist Retrospective", location: "National Art Gallery", date: "NOVEMBER_15_2026", category: "Exhibition" },
-    { title: "Hamlet: A New Interpretation", location: "Old Globe Theatre", date: "DECEMBER_01_2026", category: "Theatre" },
-    { title: "The Nutcracker", location: "Plaza Ballet Center", date: "DECEMBER_24_2026", category: "Ballet" },
-    { title: "Jazz in the Square", location: "Heritage Garden", date: "JANUARY_10_2027", category: "Live Music" },
-  ];
+  const [events, setEvents] = useState<EventListing[]>([]);
+  const [loadingEvents, setLoadingEvents] = useState(true);
+  const [eventError, setEventError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadEvents() {
+      try {
+        const response = await api.getEvents({ per_page: 6 });
+        if (!isMounted) {
+          return;
+        }
+
+        setEvents(Array.isArray(response.data) ? response.data : []);
+        setEventError(null);
+      } catch (error: unknown) {
+        if (!isMounted) {
+          return;
+        }
+
+        console.error('Failed to load events classic listings:', error);
+        setEventError(error instanceof Error ? error.message : 'Events are temporarily unavailable.');
+      } finally {
+        if (isMounted) {
+          setLoadingEvents(false);
+        }
+      }
+    }
+
+    loadEvents();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   return (
     <div className="events-classic-theme">
@@ -55,11 +112,38 @@ export default function Page() {
                   Our unified protocol synchronizes performance availability from the world's most significant institutional nodes.
               </div>
           </div>
-          
+
           <div className="ec-repertoire-grid">
-            {events.map((e, i) => (
-              <OccasionCard key={i} {...e} />
-            ))}
+            {loadingEvents ? (
+              [1, 2, 3, 4, 5, 6].map((item) => (
+                <div className="ecl-occasion-card ecl-listing-skeleton" key={item}>
+                  <div className="ecl-skeleton-line ecl-skeleton-line-title" />
+                  <div className="ecl-skeleton-line" />
+                  <div className="ecl-skeleton-line ecl-skeleton-line-short" />
+                </div>
+              ))
+            ) : eventError ? (
+              <div className="ecl-listing-state">
+                <div className="ecl-listing-kicker">Cultural Sync Offline</div>
+                <h3>The repertoire could not be loaded.</h3>
+                <p>{eventError}</p>
+              </div>
+            ) : events.length === 0 ? (
+              <div className="ecl-listing-state">
+                <div className="ecl-listing-kicker">Empty Event Registry</div>
+                <h3>No live events are published yet.</h3>
+                <p>Add event records in the backend and this repertoire grid will hydrate automatically.</p>
+              </div>
+            ) : (
+              events.slice(0, 6).map((event) => {
+                const occasion = mapEventToOccasion(event);
+                return (
+                  <a className="ecl-occasion-link" href={`/product/${occasion.slug}`} key={event.id}>
+                    <OccasionCard {...occasion} />
+                  </a>
+                );
+              })
+            )}
           </div>
       </section>
 
@@ -85,7 +169,7 @@ export default function Page() {
               <button className="ecl-btn-primary" style={{ width: '100%', padding: '2rem' }} id="ecl-btn-patron-apply" onClick={() => alert('Patron circle application transmitted.')}>Request Institutional Access</button>
           </div>
       </section>
-      
+
       <div style={{ height: '10rem' }}></div>
     </div>
   );

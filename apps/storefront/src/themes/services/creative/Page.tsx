@@ -1,31 +1,88 @@
 'use client';
-import React from 'react';
+
+import React, { useEffect, useState } from 'react';
+import { api } from '@sellio/api-client';
+import type { ServiceListing } from '@sellio/types';
 import { CrtvHeader, CrtvCategoryCard, CrtvCreativeCard, CrtvPortfolioItem, CrtvFooter } from './components';
 
+const fallbackImages = [
+  '/themes/services/creative/15.webp',
+  '/themes/services/creative/16.webp',
+  '/themes/services/creative/17.webp',
+];
+
+const categories = [
+  { title: 'Graphic Design', rate: 'From $100', icon: '🎨' },
+  { title: 'Writing & Content', rate: 'Copywriting, SEO', icon: '✍️' },
+  { title: 'Photography', rate: 'Events, Products', icon: '📸' },
+  { title: 'Web Development', rate: 'Full Stack, CMS', icon: '💻' },
+  { title: 'Music & Audio', rate: 'Sound Design', icon: '🎵' },
+  { title: 'Marketing', rate: 'Social Media', icon: '📈' },
+];
+
+const portfolios = [
+  { title: 'Modern UI Kit', category: 'Graphic Design', image: '/themes/services/creative/11.webp' },
+  { title: 'Brand Identity', category: 'Branding', image: '/themes/services/creative/12.webp' },
+  { title: 'Urban Photography', category: 'Photography', image: '/themes/services/creative/13.webp' },
+  { title: 'SaaS Website', category: 'UX/UI Design', image: '/themes/services/creative/14.webp' },
+  { title: 'Product Ad Copy', category: 'Writing', image: '/themes/services/creative/2.webp' },
+  { title: 'Mobile App Concept', category: 'Development', image: '/themes/services/creative/3.webp' },
+];
+
+function getServicePrice(service: ServiceListing) {
+  return service.pricing?.formatted || service.pricing?.formatted_short || (
+    service.pricing?.base_price ? `$${Number(service.pricing.base_price).toLocaleString()}/hr` : 'Request quote'
+  );
+}
+
+function mapServiceToCreative(service: ServiceListing, index: number) {
+  return {
+    name: service.provider?.name || service.title,
+    title: service.professional?.category || service.professional?.type || service.short_description || 'Creative Professional',
+    rating: service.provider?.rating ? service.provider.rating.toFixed(1) : '5.0',
+    rate: getServicePrice(service),
+    image: service.media?.main_photo || service.provider?.avatar || fallbackImages[index % fallbackImages.length],
+    slug: service.slug,
+  };
+}
+
 export default function Page() {
-  const categories = [
-    { title: "Graphic Design", rate: "From $100", icon: "🎨" },
-    { title: "Writing & Content", rate: "Copywriting, SEO", icon: "✍️" },
-    { title: "Photography", rate: "Events, Products", icon: "📸" },
-    { title: "Web Development", rate: "Full Stack, CMS", icon: "💻" },
-    { title: "Music & Audio", rate: "Sound Design", icon: "🎵" },
-    { title: "Marketing", rate: "Social Media", icon: "📈" }
-  ];
+  const [services, setServices] = useState<ServiceListing[]>([]);
+  const [loadingServices, setLoadingServices] = useState(true);
+  const [serviceError, setServiceError] = useState<string | null>(null);
 
-  const creatives = [
-    { name: "Sophia L.", title: "UX Designer", rating: "5.0", rate: "$50/hr", image: "/themes/services/creative/15.webp" },
-    { name: "David P.", title: "Professional Photographer", rating: "4.8", rate: "$75/hr", image: "/themes/services/creative/16.webp" },
-    { name: "Marco V.", title: "Senior Front-End Dev", rating: "4.9", rate: "$80/hr", image: "/themes/services/creative/17.webp" }
-  ];
+  useEffect(() => {
+    let isMounted = true;
 
-  const portfolios = [
-    { title: "Modern UI Kit", category: "Graphic Design", image: "/themes/services/creative/11.webp" },
-    { title: "Brand Identity", category: "Branding", image: "/themes/services/creative/12.webp" },
-    { title: "Urban Photography", category: "Photography", image: "/themes/services/creative/13.webp" },
-    { title: "SaaS Website", category: "UX/UI Design", image: "/themes/services/creative/14.webp" },
-    { title: "Product Ad Copy", category: "Writing", image: "/themes/services/creative/2.webp" },
-    { title: "Mobile App Concept", category: "Development", image: "/themes/services/creative/3.webp" }
-  ];
+    async function loadServices() {
+      try {
+        const response = await api.getServices({ per_page: 6 });
+        if (!isMounted) {
+          return;
+        }
+
+        setServices(Array.isArray(response.data) ? response.data : []);
+        setServiceError(null);
+      } catch (error: unknown) {
+        if (!isMounted) {
+          return;
+        }
+
+        console.error('Failed to load services creative listings:', error);
+        setServiceError(error instanceof Error ? error.message : 'Services are temporarily unavailable.');
+      } finally {
+        if (isMounted) {
+          setLoadingServices(false);
+        }
+      }
+    }
+
+    loadServices();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   return (
     <div className="services-creative-theme">
@@ -40,15 +97,15 @@ export default function Page() {
             Discover exceptional freelancers for your projects, from design to development.
           </p>
           <div style={{ display: 'flex', gap: '1.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <button 
-              className="crtv-btn crtv-btn-gradient" 
+            <button
+              className="crtv-btn crtv-btn-gradient"
               style={{ padding: '1rem 2.5rem', fontSize: '1.1rem' }}
               onClick={() => document.getElementById('categories')?.scrollIntoView({ behavior: 'smooth' })}
             >
               Browse Creatives
             </button>
-            <button 
-              className="crtv-btn crtv-btn-outline" 
+            <button
+              className="crtv-btn crtv-btn-outline"
               style={{ padding: '1rem 2.5rem', fontSize: '1.1rem' }}
               onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
             >
@@ -83,9 +140,37 @@ export default function Page() {
       <section className="crtv-section" style={{ background: 'white' }} id="pricing" aria-labelledby="crtv-creatives-title">
         <h2 className="crtv-section-title" id="crtv-creatives-title">Meet Our <span className="gradient-text">Top Creatives</span></h2>
         <div className="crtv-creative-grid">
-          {creatives.map((c, i) => (
-            <CrtvCreativeCard key={i} {...c} />
-          ))}
+          {loadingServices ? (
+            [1, 2, 3].map((item) => (
+              <div className="crtv-creative-card crtv-listing-skeleton" key={item}>
+                <div className="crtv-skeleton-avatar" />
+                <div className="crtv-skeleton-line crtv-skeleton-line-title" />
+                <div className="crtv-skeleton-line" />
+                <div className="crtv-skeleton-line crtv-skeleton-line-short" />
+              </div>
+            ))
+          ) : serviceError ? (
+            <div className="crtv-listing-state">
+              <div className="crtv-listing-kicker">Creative Sync Offline</div>
+              <h3>Top creatives could not be loaded.</h3>
+              <p>{serviceError}</p>
+            </div>
+          ) : services.length === 0 ? (
+            <div className="crtv-listing-state">
+              <div className="crtv-listing-kicker">Empty Creative Registry</div>
+              <h3>No live services are published yet.</h3>
+              <p>Add service records in the backend and this creative grid will hydrate automatically.</p>
+            </div>
+          ) : (
+            services.slice(0, 6).map((service, index) => {
+              const creative = mapServiceToCreative(service, index);
+              return (
+                <a className="crtv-creative-link" href={`/product/${creative.slug}`} key={service.id}>
+                  <CrtvCreativeCard {...creative} />
+                </a>
+              );
+            })
+          )}
         </div>
       </section>
 

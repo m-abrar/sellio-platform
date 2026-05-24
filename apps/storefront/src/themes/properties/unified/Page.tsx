@@ -1,18 +1,81 @@
 'use client';
-import React from 'react';
+
+import React, { useEffect, useState } from 'react';
+import { api } from '@sellio/api-client';
+import type { Property } from '@sellio/types';
 import { UnifiedPropCard, MarketMetricsHUD } from './components';
 
+const fallbackImages = [
+  '/themes/properties/unified/1.webp',
+  '/themes/properties/unified/2.webp',
+  '/themes/properties/unified/3.webp',
+  '/themes/properties/unified/4.webp',
+  '/themes/properties/unified/5.webp',
+  '/themes/properties/unified/6.webp',
+  '/themes/properties/unified/7.webp',
+  '/themes/properties/unified/8.webp',
+];
+
+function getPropertyPrice(property: Property) {
+  return property.pricing?.price_formatted || (
+    property.base_price ? `$${Number(property.base_price).toLocaleString()}` : 'Price on request'
+  );
+}
+
+function getPropertyLocation(property: Property) {
+  return property.location?.title || [property.city, property.state].filter(Boolean).join(', ') || property.address || 'Global Node';
+}
+
+function mapPropertyToCard(property: Property, index: number) {
+  const type = property.specs?.property_type || property.specs?.category || 'RESIDENTIAL';
+
+  return {
+    title: property.title,
+    price: getPropertyPrice(property),
+    location: getPropertyLocation(property),
+    type: typeof type === 'string' ? type.toUpperCase() : 'RESIDENTIAL',
+    image: property.featured_image || property.thumbnail_image || fallbackImages[index % fallbackImages.length],
+    slug: property.slug,
+  };
+}
+
 export default function Page() {
-  const properties = [
-    { title: "Westside Corporate Center", price: "$14,500,000", location: "Downtown Core", type: "COMMERCIAL", image: "/themes/properties/unified/1.webp" },
-    { title: "Harbor Industrial Park", price: "$8,200,000", location: "Port Logistics District", type: "INDUSTRIAL", image: "/themes/properties/unified/2.webp" },
-    { title: "Modern Family Estate", price: "$1,250,000", location: "Suburban Pines", type: "RESIDENTIAL", image: "/themes/properties/unified/3.webp" },
-    { title: "Agricultural Growth Node", price: "$450,000", location: "Rural Sector Alpha", type: "LAND", image: "/themes/properties/unified/4.webp" },
-    { title: "Tech Park Office Suite", price: "$2,800,000", location: "Innovation Hub", type: "COMMERCIAL", image: "/themes/properties/unified/5.webp" },
-    { title: "Riverside Loft Complex", price: "$12,000,000", location: "Arts & Heritage District", type: "RESIDENTIAL", image: "/themes/properties/unified/6.webp" },
-    { title: "Central Distribution Hub", price: "$5,400,000", location: "Logistics Zone B", type: "INDUSTRIAL", image: "/themes/properties/unified/7.webp" },
-    { title: "Mountain Retreat Land", price: "$320,000", location: "Alpine Ridge Sector", type: "LAND", image: "/themes/properties/unified/8.webp" },
-  ];
+  const [properties, setProperties] = useState<Property[]>([]);
+  const [loadingProperties, setLoadingProperties] = useState(true);
+  const [propertyError, setPropertyError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadProperties() {
+      try {
+        const response = await api.getProperties({ per_page: 8 });
+        if (!isMounted) {
+          return;
+        }
+
+        setProperties(Array.isArray(response.data) ? response.data : []);
+        setPropertyError(null);
+      } catch (error: unknown) {
+        if (!isMounted) {
+          return;
+        }
+
+        console.error('Failed to load properties unified listings:', error);
+        setPropertyError(error instanceof Error ? error.message : 'Properties are temporarily unavailable.');
+      } finally {
+        if (isMounted) {
+          setLoadingProperties(false);
+        }
+      }
+    }
+
+    loadProperties();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   return (
     <div className="uh-section">
@@ -32,13 +95,13 @@ export default function Page() {
             <button className="uh-btn-primary" id="uh-btn-explore" onClick={() => document.getElementById('uh-registry-grid')?.scrollIntoView({ behavior: 'smooth' })}>
               Search All Assets
             </button>
-            <button style={{ 
-                background: 'transparent', 
-                border: '2px solid var(--uh-indigo)', 
-                color: 'var(--uh-indigo)', 
-                padding: '1.25rem 3.5rem', 
-                borderRadius: '8px', 
-                fontWeight: 800, 
+            <button style={{
+                background: 'transparent',
+                border: '2px solid var(--uh-indigo)',
+                color: 'var(--uh-indigo)',
+                padding: '1.25rem 3.5rem',
+                borderRadius: '8px',
+                fontWeight: 800,
                 cursor: 'pointer',
                 transition: 'all 0.3s ease'
             }} id="uh-btn-list" onClick={() => alert('Registering new properties node. Developer active.')}>
@@ -67,11 +130,38 @@ export default function Page() {
                   Our unified protocol synchronizes metadata from multiple property verticals into a single authoritative and searchable catalog registry node.
               </div>
           </div>
-          
+
           <div className="uh-prop-grid">
-            {properties.map((p, i) => (
-              <UnifiedPropCard key={i} {...p} />
-            ))}
+            {loadingProperties ? (
+              [1, 2, 3, 4, 5, 6, 7, 8].map((item) => (
+                <div className="uh-prop-card prop-listing-skeleton" key={item}>
+                  <div className="prop-skeleton-line prop-skeleton-line-title" />
+                  <div className="prop-skeleton-line" />
+                  <div className="prop-skeleton-line prop-skeleton-line-short" />
+                </div>
+              ))
+            ) : propertyError ? (
+              <div className="prop-listing-state">
+                <div className="prop-listing-kicker">Property Sync Offline</div>
+                <h3>High-fidelity inventory could not be loaded.</h3>
+                <p>{propertyError}</p>
+              </div>
+            ) : properties.length === 0 ? (
+              <div className="prop-listing-state">
+                <div className="prop-listing-kicker">Empty Property Registry</div>
+                <h3>No live properties are published yet.</h3>
+                <p>Add property records in the backend and this unified grid will hydrate automatically.</p>
+              </div>
+            ) : (
+              properties.slice(0, 8).map((property, index) => {
+                const card = mapPropertyToCard(property, index);
+                return (
+                  <a className="uh-prop-link" href={`/product/${card.slug}`} key={property.id}>
+                    <UnifiedPropCard {...card} />
+                  </a>
+                );
+              })
+            )}
           </div>
       </section>
 
@@ -84,13 +174,13 @@ export default function Page() {
                   Our unified protocol allows for cross-vertical property management and distribution. Deploy your assets across the entire Sellio ecosystem with 100% nodal integrity.
               </p>
           </div>
-          
+
           <div style={{ zIndex: 2 }}>
             <button className="uh-btn-primary" style={{ padding: '2rem 7rem', fontSize: '1.15rem' }} id="uh-btn-cta-initialize" onClick={() => alert('Authentication and master node allocation protocol running.')}>
                 Initialize Master Node
             </button>
           </div>
-          
+
           <div style={{ position: 'absolute', right: '-10%', bottom: '-10%', width: '300px', height: '300px', borderRadius: '50%', background: 'var(--uh-blue)', opacity: 0.15, filter: 'blur(80px)' }}></div>
       </section>
     </div>

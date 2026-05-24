@@ -1,14 +1,76 @@
 'use client';
-import React from 'react';
+
+import React, { useEffect, useState } from 'react';
+import { api } from '@sellio/api-client';
+import type { EventListing } from '@sellio/types';
 import { PulseExperience, LineupGrid } from './components';
 
+const fallbackImages = [
+  '/themes/events/music/11.webp',
+  '/themes/events/music/12.webp',
+  '/themes/events/music/13.webp',
+  '/themes/events/music/14.webp',
+];
+
+function formatEventDateReadable(dateStr?: string | null) {
+  if (!dateStr) {
+    return 'Date TBA';
+  }
+
+  return new Date(dateStr).toLocaleDateString('en-US', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+  });
+}
+
+function mapEventToHeadliner(event: EventListing, index: number) {
+  return {
+    name: event.specs?.brand || event.organizer?.name || event.specs?.category || 'HEADLINER',
+    event: event.title,
+    date: formatEventDateReadable(event.schedule?.start_at),
+    image: event.media?.poster || event.media?.preview || fallbackImages[index % fallbackImages.length],
+    slug: event.slug,
+  };
+}
+
 export default function Page() {
-  const headliners = [
-    { name: "DJ NOVA", event: "Sunset EDM Festival", date: "August 25, 2026", image: "/themes/events/music/11.webp" },
-    { name: "THE PRODUCER", event: "Main Stage Headliner", date: "July 19, 2026", image: "/themes/events/music/12.webp" },
-    { name: "POP STARLET", event: "The Dome Arena", date: "October 10, 2026", image: "/themes/events/music/13.webp" },
-    { name: "ROCK LEGEND", event: "Final Tour Stop", date: "November 30, 2026", image: "/themes/events/music/14.webp" },
-  ];
+  const [events, setEvents] = useState<EventListing[]>([]);
+  const [loadingEvents, setLoadingEvents] = useState(true);
+  const [eventError, setEventError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadEvents() {
+      try {
+        const response = await api.getEvents({ per_page: 6 });
+        if (!isMounted) {
+          return;
+        }
+
+        setEvents(Array.isArray(response.data) ? response.data : []);
+        setEventError(null);
+      } catch (error: unknown) {
+        if (!isMounted) {
+          return;
+        }
+
+        console.error('Failed to load events music listings:', error);
+        setEventError(error instanceof Error ? error.message : 'Events are temporarily unavailable.');
+      } finally {
+        if (isMounted) {
+          setLoadingEvents(false);
+        }
+      }
+    }
+
+    loadEvents();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   return (
     <div className="sonic-pulse-wrapper">
@@ -23,7 +85,7 @@ export default function Page() {
               </p>
               <div style={{ display: 'flex', gap: '3rem', marginTop: '6rem', justifyContent: 'center', flexWrap: 'wrap' }}>
                   <button className="sonic-btn-primary" onClick={() => document.getElementById('sonic-cta-section')?.scrollIntoView({ behavior: 'smooth' })}>Get Your Tickets</button>
-                  <button 
+                  <button
                     style={{ background: 'transparent', border: '2px solid var(--neon-blue)', color: 'white', padding: '1.5rem 5rem', fontFamily: 'var(--font-heading)', fontWeight: 900, fontSize: '1.1rem', cursor: 'pointer', borderRadius: '50px', boxShadow: '0 0 20px var(--neon-blue)', transition: 'all 0.3s ease' }}
                     onClick={() => document.getElementById('sonic-lineup-section')?.scrollIntoView({ behavior: 'smooth' })}
                   >
@@ -56,17 +118,44 @@ export default function Page() {
 
       <section style={{ padding: '0 6% 8rem' }}>
           <div className="lineup-grid" style={{ padding: 0 }}>
-              {headliners.map((artist, i) => (
-                  <div key={i} className="artist-card-premium" onClick={() => alert(`Securing pass for headliner: ${artist.name}`)}>
-                      <img src={artist.image} alt={artist.name} className="artist-img" />
-                      <div className="artist-info">
-                          <div style={{ fontSize: '0.7rem', color: 'var(--neon-blue)', fontWeight: 900, marginBottom: '0.5rem' }}>{artist.event}</div>
-                          <div className="artist-name">{artist.name}</div>
-                          <div style={{ fontSize: '0.85rem', color: 'var(--neon-pink)', fontWeight: 800, marginTop: '1rem' }}>{artist.date}</div>
-                      </div>
-                      <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 60%)' }}></div>
+              {loadingEvents ? (
+                [1, 2, 3, 4].map((item) => (
+                  <div className="artist-card-premium evm-listing-skeleton" key={item}>
+                    <div className="evm-skeleton-image" />
+                    <div className="evm-skeleton-line evm-skeleton-line-title" />
+                    <div className="evm-skeleton-line evm-skeleton-line-short" />
                   </div>
-              ))}
+                ))
+              ) : eventError ? (
+                <div className="evm-listing-state">
+                  <div className="evm-listing-kicker">Lineup Sync Offline</div>
+                  <h3>The core lineup could not be loaded.</h3>
+                  <p>{eventError}</p>
+                </div>
+              ) : events.length === 0 ? (
+                <div className="evm-listing-state">
+                  <div className="evm-listing-kicker">Empty Event Registry</div>
+                  <h3>No live events are published yet.</h3>
+                  <p>Add event records in the backend and this lineup grid will hydrate automatically.</p>
+                </div>
+              ) : (
+                events.slice(0, 6).map((event, index) => {
+                  const headliner = mapEventToHeadliner(event, index);
+                  return (
+                    <a className="evm-headliner-link" href={`/product/${headliner.slug}`} key={event.id}>
+                      <div className="artist-card-premium">
+                        <img src={headliner.image} alt={headliner.name} className="artist-img" />
+                        <div className="artist-info">
+                          <div style={{ fontSize: '0.7rem', color: 'var(--neon-blue)', fontWeight: 900, marginBottom: '0.5rem' }}>{headliner.event}</div>
+                          <div className="artist-name">{headliner.name}</div>
+                          <div style={{ fontSize: '0.85rem', color: 'var(--neon-pink)', fontWeight: 800, marginTop: '1rem' }}>{headliner.date}</div>
+                        </div>
+                        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 60%)' }}></div>
+                      </div>
+                    </a>
+                  );
+                })
+              )}
           </div>
       </section>
 

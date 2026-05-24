@@ -405,6 +405,103 @@
   }
 }
 
+.evf-stage-link {
+  color: inherit;
+  display: block;
+  text-decoration: none;
+}
+
+.evf-listing-state {
+  background: #050505;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  grid-column: 1 / -1;
+  margin: 0 auto;
+  max-width: 680px;
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.evf-listing-state h3 {
+  color: white;
+  font-size: 1.75rem;
+  font-weight: 900;
+  margin: 0 0 1rem;
+  text-transform: uppercase;
+}
+
+.evf-listing-state p {
+  color: var(--eff-grey);
+  line-height: 1.7;
+  margin: 0;
+}
+
+.evf-listing-kicker {
+  color: var(--eff-magenta);
+  font-family: var(--eff-mono);
+  font-size: 0.65rem;
+  letter-spacing: 2px;
+  margin-bottom: 1rem;
+}
+
+.evf-skeleton-image,
+.evf-skeleton-line {
+  animation: evf-shimmer 1.5s infinite;
+  background: linear-gradient(90deg, #111 25%, #1a1a1a 50%, #111 75%);
+  background-size: 200% 100%;
+  border-radius: 4px;
+}
+
+.evf-skeleton-image {
+  height: 100%;
+  width: 100%;
+}
+
+.evf-skeleton-line {
+  height: 14px;
+  margin: 1.5rem auto 0.75rem;
+  width: 70%;
+}
+
+.evf-skeleton-line-title {
+  height: 22px;
+  width: 60%;
+}
+
+.evf-skeleton-line-short {
+  width: 40%;
+}
+
+@keyframes evf-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.eff-detail-page { background: var(--eff-black); color: white; min-height: 100vh; padding: 6rem 5%; }
+.eff-detail-back { color: var(--eff-magenta); display: inline-block; font-weight: 700; margin-bottom: 2rem; text-decoration: none; }
+.eff-detail-hero { margin: 0 auto 3rem; max-width: 1280px; overflow: hidden; position: relative; }
+.eff-detail-hero img { display: block; height: 420px; object-fit: cover; width: 100%; }
+.eff-detail-hero-overlay { background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); bottom: 0; left: 0; padding: 3rem; position: absolute; right: 0; }
+.eff-detail-hero-overlay h1 { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 900; margin: 0.5rem 0; text-transform: uppercase; }
+.eff-detail-kicker { color: var(--eff-magenta); font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; }
+.eff-detail-meta { color: var(--eff-grey); display: flex; flex-wrap: wrap; gap: 1.5rem; margin-top: 1rem; }
+.eff-detail-grid { display: grid; gap: 3rem; grid-template-columns: minmax(0, 1fr) 360px; margin: 0 auto; max-width: 1280px; }
+.eff-detail-main h2 { font-size: 1.75rem; font-weight: 900; margin: 0 0 1rem; text-transform: uppercase; }
+.eff-detail-main p { color: var(--eff-grey); line-height: 1.8; margin: 0; }
+.eff-detail-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 2rem; }
+.eff-detail-tags span { background: rgba(217, 70, 239, 0.15); color: var(--eff-magenta); font-size: 0.8rem; padding: 0.4rem 0.9rem; }
+.eff-detail-sidebar { background: #111; border: 1px solid #333; padding: 2rem; }
+.eff-detail-price { color: var(--eff-magenta); font-size: 1.5rem; font-weight: 900; margin: 0 0 1.5rem; }
+.eff-detail-sidebar form, .eff-detail-sidebar label { display: flex; flex-direction: column; }
+.eff-detail-sidebar form { gap: 1rem; }
+.eff-detail-sidebar label { font-size: 0.85rem; font-weight: 700; gap: 0.4rem; text-transform: uppercase; }
+.eff-detail-sidebar input, .eff-detail-sidebar select { background: black; border: 1px solid #333; color: white; padding: 0.75rem; }
+.eff-detail-success { background: rgba(217, 70, 239, 0.15); border: 1px solid var(--eff-magenta); color: var(--eff-magenta); padding: 1rem; }
+.eff-detail-state { background: #111; border: 1px solid #333; margin: 5rem auto; max-width: 680px; padding: 4rem 2rem; text-align: center; }
+.eff-detail-skeleton, .eff-detail-line { animation: evf-shimmer 1.5s infinite; background: linear-gradient(90deg, #111 25%, #222 50%, #111 75%); background-size: 200% 100%; border-radius: 8px; }
+.eff-detail-hero-skeleton { height: 420px; margin: 0 auto 2rem; max-width: 1280px; }
+.eff-detail-line { height: 16px; margin-bottom: 1rem; max-width: 1280px; }
+.eff-detail-line-title { height: 48px; width: 60%; }
+
 @media (max-width: 768px) {
   .eff-header-container {
     height: 80px;

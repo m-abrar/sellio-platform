@@ -1,16 +1,79 @@
 'use client';
-import React from 'react';
+
+import React, { useEffect, useState } from 'react';
+import { api } from '@sellio/api-client';
+import type { Property } from '@sellio/types';
 import { NeighborPropertyCard, LocalInsightHUD } from './components';
 
+const fallbackImages = [
+  '/themes/properties/neighborhood/1.webp',
+  '/themes/properties/neighborhood/2.webp',
+  '/themes/properties/neighborhood/3.webp',
+  '/themes/properties/neighborhood/4.webp',
+  '/themes/properties/neighborhood/5.webp',
+  '/themes/properties/neighborhood/6.webp',
+];
+
+const statusLabels = ['New', 'Active', 'Hot', 'Pending'];
+
+function getPropertyPrice(property: Property) {
+  return property.pricing?.price_formatted || (
+    property.base_price ? `$${Number(property.base_price).toLocaleString()}` : 'Price on request'
+  );
+}
+
+function getPropertyLocation(property: Property) {
+  return property.location?.title || property.city || property.address || 'Neighborhood Node';
+}
+
+function mapPropertyToHome(property: Property, index: number) {
+  return {
+    title: property.title,
+    price: getPropertyPrice(property),
+    location: getPropertyLocation(property),
+    status: property.is_featured ? 'Hot' : statusLabels[index % statusLabels.length],
+    image: property.featured_image || property.thumbnail_image || fallbackImages[index % fallbackImages.length],
+    slug: property.slug,
+  };
+}
+
 export default function Page() {
-  const homes = [
-    { title: "Maplewood Traditional", price: "$650,000", location: "Maplewood District", status: "New", image: "/themes/properties/neighborhood/1.webp" },
-    { title: "Craftsman Cul-de-sac", price: "$720,000", location: "Silver Springs", status: "Active", image: "/themes/properties/neighborhood/2.webp" },
-    { title: "Modern Colonial Node", price: "$580,000", location: "Oak Ridge", status: "Hot", image: "/themes/properties/neighborhood/3.webp" },
-    { title: "Green Valley Bungalow", price: "$490,000", location: "Green Valley", status: "Active", image: "/themes/properties/neighborhood/4.webp" },
-    { title: "Suburban Retreat", price: "$610,000", location: "Highland Park", status: "Pending", image: "/themes/properties/neighborhood/5.webp" },
-    { title: "Heritage Brick Home", price: "$675,000", location: "Old Town Node", status: "New", image: "/themes/properties/neighborhood/6.webp" },
-  ];
+  const [properties, setProperties] = useState<Property[]>([]);
+  const [loadingProperties, setLoadingProperties] = useState(true);
+  const [propertyError, setPropertyError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadProperties() {
+      try {
+        const response = await api.getProperties({ per_page: 6 });
+        if (!isMounted) {
+          return;
+        }
+
+        setProperties(Array.isArray(response.data) ? response.data : []);
+        setPropertyError(null);
+      } catch (error: unknown) {
+        if (!isMounted) {
+          return;
+        }
+
+        console.error('Failed to load properties neighborhood listings:', error);
+        setPropertyError(error instanceof Error ? error.message : 'Properties are temporarily unavailable.');
+      } finally {
+        if (isMounted) {
+          setLoadingProperties(false);
+        }
+      }
+    }
+
+    loadProperties();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   return (
     <div className="pn-section">
@@ -28,13 +91,13 @@ export default function Page() {
           </p>
           <div style={{ marginTop: '6rem', display: 'flex', gap: '2.5rem' }}>
             <button className="pn-btn-primary">Search_Homes</button>
-            <button style={{ 
-                background: 'transparent', 
-                border: '2px solid var(--pn-forest)', 
-                color: 'var(--pn-forest)', 
-                padding: '1.25rem 3.5rem', 
-                borderRadius: '100px', 
-                fontWeight: 800, 
+            <button style={{
+                background: 'transparent',
+                border: '2px solid var(--pn-forest)',
+                color: 'var(--pn-forest)',
+                padding: '1.25rem 3.5rem',
+                borderRadius: '100px',
+                fontWeight: 800,
                 cursor: 'pointer',
                 fontFamily: 'var(--pn-font-heading)'
             }}>
@@ -44,7 +107,7 @@ export default function Page() {
         </div>
         <div className="pn-hero-img-wrapper">
           <img src="/themes/properties/neighborhood/7.webp" alt="Neighborhood Living" className="pn-hero-img" />
-          
+
           <div style={{ position: 'absolute', bottom: '2rem', right: '2rem', background: 'white', padding: '2rem', borderRadius: '32px', boxShadow: '0 20px 40px rgba(0,0,0,0.05)', border: '1px solid var(--pn-border)' }}>
               <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
                   <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#22c55e' }}></div>
@@ -76,11 +139,38 @@ export default function Page() {
                   Our neighborhood protocol ensures every family home is verified and synchronized with local lifestyle metadata.
               </div>
           </div>
-          
+
           <div className="pn-home-grid">
-            {homes.map((h, i) => (
-              <NeighborPropertyCard key={i} {...h} />
-            ))}
+            {loadingProperties ? (
+              [1, 2, 3, 4, 5, 6].map((item) => (
+                <div className="pn-home-card prop-listing-skeleton" key={item}>
+                  <div className="prop-skeleton-line prop-skeleton-line-title" />
+                  <div className="prop-skeleton-line" />
+                  <div className="prop-skeleton-line prop-skeleton-line-short" />
+                </div>
+              ))
+            ) : propertyError ? (
+              <div className="prop-listing-state">
+                <div className="prop-listing-kicker">Property Sync Offline</div>
+                <h3>Neighborly homes could not be loaded.</h3>
+                <p>{propertyError}</p>
+              </div>
+            ) : properties.length === 0 ? (
+              <div className="prop-listing-state">
+                <div className="prop-listing-kicker">Empty Property Registry</div>
+                <h3>No live properties are published yet.</h3>
+                <p>Add property records in the backend and this neighborhood grid will hydrate automatically.</p>
+              </div>
+            ) : (
+              properties.slice(0, 6).map((property, index) => {
+                const home = mapPropertyToHome(property, index);
+                return (
+                  <a className="pn-home-link" href={`/product/${home.slug}`} key={property.id}>
+                    <NeighborPropertyCard {...home} />
+                  </a>
+                );
+              })
+            )}
           </div>
       </section>
 

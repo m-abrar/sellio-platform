@@ -440,6 +440,286 @@ h1, h2, h3, h4, h5, h6 {
     }
 }
 
+.crtv-creative-link {
+    color: inherit;
+    display: block;
+    text-decoration: none;
+}
+
+.crtv-listing-state {
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 16px;
+    grid-column: 1 / -1;
+    margin: 0 auto;
+    max-width: 680px;
+    padding: 4rem 2rem;
+    text-align: center;
+}
+
+.crtv-listing-state h3 {
+    font-size: 1.75rem;
+    font-weight: 800;
+    margin: 0 0 1rem;
+}
+
+.crtv-listing-state p {
+    color: var(--crtv-text);
+    line-height: 1.7;
+    margin: 0;
+    opacity: 0.75;
+}
+
+.crtv-listing-kicker {
+    color: #198754;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+}
+
+.crtv-skeleton-avatar,
+.crtv-skeleton-line {
+    animation: crtv-shimmer 1.5s infinite;
+    background: linear-gradient(90deg, #f0f0f0 25%, #fafafa 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    border-radius: 8px;
+}
+
+.crtv-skeleton-avatar {
+    border-radius: 50%;
+    height: 64px;
+    margin-bottom: 1.5rem;
+    width: 64px;
+}
+
+.crtv-skeleton-line {
+    height: 14px;
+    margin-bottom: 0.75rem;
+    width: 100%;
+}
+
+.crtv-skeleton-line-title {
+    height: 20px;
+    width: 70%;
+}
+
+.crtv-skeleton-line-short {
+    width: 45%;
+}
+
+@keyframes crtv-shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+@keyframes crtv-shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* Creative Detail */
+.crtv-detail-page {
+    background: var(--crtv-bg);
+    min-height: 100vh;
+    padding: 6rem 5%;
+}
+
+.crtv-detail-back,
+.crtv-detail-back-skeleton { margin-bottom: 3rem; }
+
+.crtv-detail-back {
+    align-items: center;
+    background: var(--crtv-gradient-cta);
+    -webkit-background-clip: text;
+    display: inline-flex;
+    font-weight: 700;
+    gap: 0.65rem;
+    -webkit-text-fill-color: transparent;
+    text-decoration: none;
+}
+
+.crtv-detail-back-skeleton,
+.crtv-detail-skeleton,
+.crtv-detail-line {
+    animation: crtv-shimmer 1.5s infinite;
+    background: linear-gradient(90deg, #f3e8ff 25%, #fff 50%, #f3e8ff 75%);
+    background-size: 200% 100%;
+    border-radius: 8px;
+}
+
+.crtv-detail-back-skeleton { height: 18px; width: 200px; }
+
+.crtv-detail-grid {
+    display: grid;
+    gap: 4rem;
+    grid-template-columns: minmax(0, 1fr) minmax(360px, 0.9fr);
+    margin: 0 auto;
+    max-width: 1280px;
+}
+
+.crtv-detail-media {
+    align-items: center;
+    background: white;
+    border: 1px solid var(--crtv-border);
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    min-height: 520px;
+    overflow: hidden;
+}
+
+.crtv-detail-media img { height: 100%; object-fit: cover; width: 100%; }
+
+.crtv-detail-panel { align-self: center; }
+
+.crtv-detail-panel h1,
+.crtv-detail-state h1,
+.crtv-detail-lead h2 {
+    font-family: var(--crtv-font-heading);
+    font-weight: 900;
+    line-height: 1.15;
+    margin: 0;
+}
+
+.crtv-detail-panel h1 { font-size: clamp(2.4rem, 5vw, 4rem); }
+
+.crtv-detail-kicker {
+    color: #ff69b4;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+}
+
+.crtv-detail-price {
+    background: var(--crtv-gradient-cta);
+    -webkit-background-clip: text;
+    font-size: 1.35rem;
+    font-weight: 800;
+    margin-top: 1.5rem;
+    -webkit-text-fill-color: transparent;
+}
+
+.crtv-detail-description {
+    color: #666;
+    font-size: 1.08rem;
+    line-height: 1.8;
+    margin: 2rem 0;
+}
+
+.crtv-detail-specs {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.crtv-detail-specs div {
+    background: white;
+    border: 1px solid var(--crtv-border);
+    border-radius: 14px;
+    padding: 1.25rem;
+}
+
+.crtv-detail-specs span,
+.crtv-detail-specs strong { display: block; }
+
+.crtv-detail-specs span {
+    color: #888;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+}
+
+.crtv-detail-features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 2rem;
+}
+
+.crtv-detail-features span {
+    background: rgba(138, 43, 226, 0.08);
+    border-radius: 999px;
+    color: #8a2be2;
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 0.65rem 1rem;
+}
+
+.crtv-detail-lead {
+    background: white;
+    border: 1px solid var(--crtv-border);
+    border-radius: 20px;
+    display: grid;
+    gap: 4rem;
+    grid-template-columns: 0.85fr 1fr;
+    margin: 6rem auto 0;
+    max-width: 1280px;
+    padding: 4rem;
+}
+
+.crtv-detail-lead h2 { font-size: clamp(2rem, 4vw, 3rem); margin-bottom: 1rem; }
+
+.crtv-detail-lead p { color: #666; line-height: 1.7; margin: 0; }
+
+.crtv-detail-lead form,
+.crtv-detail-lead label { display: flex; flex-direction: column; }
+
+.crtv-detail-lead form { gap: 1rem; }
+
+.crtv-detail-lead label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    gap: 0.5rem;
+}
+
+.crtv-detail-lead input,
+.crtv-detail-lead textarea {
+    border: 1px solid var(--crtv-border);
+    border-radius: 12px;
+    font: inherit;
+    padding: 0.9rem 1rem;
+}
+
+.crtv-detail-success {
+    background: rgba(138, 43, 226, 0.1);
+    border: 1px solid rgba(138, 43, 226, 0.25);
+    border-radius: 12px;
+    color: #8a2be2;
+    font-weight: 800;
+    padding: 1rem;
+}
+
+.crtv-detail-state {
+    background: white;
+    border: 1px solid var(--crtv-border);
+    border-radius: 20px;
+    margin: 5rem auto;
+    max-width: 720px;
+    padding: 5rem 3rem;
+    text-align: center;
+}
+
+.crtv-detail-state h1 { font-size: 3rem; margin-bottom: 1rem; }
+
+.crtv-detail-state p {
+    color: #666;
+    line-height: 1.7;
+    margin: 0 auto 2rem;
+    max-width: 520px;
+}
+
+.crtv-detail-line { height: 18px; margin-bottom: 1.25rem; width: 100%; }
+.crtv-detail-line-small { width: 32%; }
+.crtv-detail-line-title { border-radius: 18px; height: 92px; width: 90%; }
+.crtv-detail-line-price { width: 26%; }
+.crtv-detail-line-short { width: 70%; }
+
 @media (max-width: 768px) {
     .crtv-section {
         padding: 3rem 6%;
@@ -465,6 +745,15 @@ h1, h2, h3, h4, h5, h6 {
     .crtv-footer div:first-child {
         grid-template-columns: 1fr !important;
         gap: 3rem !important;
+    }
+
+    .crtv-detail-grid,
+    .crtv-detail-lead {
+        grid-template-columns: 1fr;
+    }
+
+    .crtv-detail-specs {
+        grid-template-columns: 1fr;
     }
 }
 

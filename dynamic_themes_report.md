@@ -12,8 +12,11 @@ This report tracks which Sellio storefront themes have moved from static prototy
 | :--- | ---: |
 | Seeded themes in `ThemeSeeder` | 52 |
 | Matching storefront theme folders | 52 |
-| API-backed themes found in source scan | 33 |
-| Static / mostly static themes remaining | 19 |
+| API-backed themes found in source scan | 52 |
+| Static / mostly static themes remaining | 0 |
+| Round 1 listings dynamic (homepage grid only) | 52 |
+| Round 2 product detail pages complete | 52 |
+| Round 2 remaining (product detail) | 0 |
 
 Definition: "API-backed" means the theme contains direct `api.*` usage in `.tsx` source files. Some API-backed themes may still need view parity work, polish, error-state review, and full QA.
 
@@ -39,15 +42,34 @@ Definition: "API-backed" means the theme contains direct `api.*` usage in `.tsx`
 | Ecommerce | `ecommerce_fashion` | `ecommerce/fashion` | Homepage and product details use product API data |
 | Ecommerce | `ecommerce_luxury` | `ecommerce/luxury` | Homepage listing section and product details use product API data |
 | Events | `events_corporate` | `events/corporate` | Homepage, explore, and product details use events API data |
+| Events | `events_classic` | `events/classic` | Homepage Repertoire grid + product details use events API (Round 2) |
+| Events | `events_creative` | `events/creative` | Homepage Registry grid + product details use events API (Round 2) |
+| Events | `events_music` | `events/music` | Homepage Core Lineup grid + product details use events API (Round 2) |
+| Events | `events_festival` | `events/festival` | Homepage Neon Stages grid + product details use events API (Round 2) |
 | Jobs | `jobs_startup` | `jobs/startup` | Homepage, explore, and product details use jobs API data |
 | Jobs | `jobs_tech` | `jobs/tech` | Homepage and product details use jobs API data |
+| Jobs | `jobs_corporate` | `jobs/corporate` | Homepage job listing grid + product details use jobs API (Round 2) |
+| Jobs | `jobs_modern` | `jobs/modern` | Homepage curated job grid + product details use jobs API (Round 2) |
+| Jobs | `jobs_blue_collar` | `jobs/blue_collar` | Homepage Latest Openings grid + product details use jobs API (Round 2) |
+| Jobs | `jobs_freelance` | `jobs/freelance` | Homepage Popular Gigs grid + product details use jobs API (Round 2) |
 | Properties | `properties_classic` | `properties/classic` | Homepage, explore, product details, and cart use property/lodging API data |
 | Properties | `properties_commercial` | `properties/commercial` | Homepage and product details use property API data |
 | Properties | `properties_luxury` | `properties/luxury` | Showcase, explore, and product details use property/lodging API data |
 | Properties | `properties_rental` | `properties/rental` | Homepage and product details use property/lodging API data |
 | Properties | `properties_vacation` | `properties/vacation` | Homepage and product details use property/lodging API data |
+| Properties | `properties_modern` | `properties/modern` | Homepage Structure Grid + product details use property API (Round 2) |
+| Properties | `properties_platinum` | `properties/platinum` | Homepage Bento Showcase grid + product details use property API (Round 2) |
+| Properties | `properties_urban` | `properties/urban` | Homepage Registry Node Units grid + product details use property API (Round 2) |
+| Properties | `properties_map` | `properties/map` | Homepage sidebar registry list + product details use property API (Round 2) |
+| Properties | `properties_unified` | `properties/unified` | Homepage High-Fidelity Inventory grid + product details use property API (Round 2) |
+| Properties | `properties_showcase` | `properties/showcase` | Homepage Curated Properties Showcase + product details use property API (Round 2) |
+| Properties | `properties_neighborhood` | `properties/neighborhood` | Homepage Neighborly Homes grid + product details use property API (Round 2) |
+| Properties | `properties_investment` | `properties/investment` | Homepage Asset Performance grid + product details use property API (Round 2) |
 | Services | `services_corporate` | `services/corporate` | Homepage listing section and product details use services API data |
-| Services | `services_marketplace` | `services/marketplace` | Homepage uses services API data |
+| Services | `services_marketplace` | `services/marketplace` | Homepage provider grid + product details use services API (Round 2) |
+| Services | `services_creative` | `services/creative` | Homepage Top Creatives grid + product details use services API (Round 2) |
+| Services | `services_local` | `services/local` | Homepage Popular Services grid + product details use services API (Round 2) |
+| Services | `services_health` | `services/health` | Homepage Practitioner Registry grid + product details use services API (Round 2) |
 | Unified | `unifieds_classic` | `unifieds/classic` | Homepage listing section and product details use product API data |
 | Unified | `unifieds_default` | `unifieds/default` | Homepage listing section and product details use product API data |
 | Unified | `unifieds_interactive` | `unifieds/interactive` | Homepage listing section and product details use product API data |
@@ -61,16 +83,11 @@ Definition: "API-backed" means the theme contains direct `api.*` usage in `.tsx`
 
 ## Remaining Static / Mostly Static Themes
 
-These themes have matching storefront folders but no direct `api.*` usage in their `.tsx` files at the time of this scan.
+All 52 seeded storefront themes now contain direct `api.*` usage in their `.tsx` files for at least the homepage listing grid (Round 1 scope).
 
-| Vertical | Remaining Themes | Count |
-| :--- | :--- | ---: |
-| Properties | `properties_modern`, `properties_platinum`, `properties_urban`, `properties_map`, `properties_unified`, `properties_showcase`, `properties_neighborhood`, `properties_investment` | 8 |
-| Events | `events_classic`, `events_creative`, `events_music`, `events_festival` | 4 |
-| Services | `services_creative`, `services_local`, `services_health` | 3 |
-| Jobs | `jobs_corporate`, `jobs_modern`, `jobs_blue_collar`, `jobs_freelance` | 4 |
+**Properties vertical complete for Round 1** (2026-05-24): `properties_modern`, `properties_platinum`, `properties_urban`, `properties_map`, `properties_unified`, `properties_showcase`, `properties_neighborhood`, and `properties_investment` now have live homepage listing grids.
 
-Total remaining: 19 themes.
+**Events vertical complete for Round 1** (2026-05-24): `events_classic`, `events_creative`, `events_music`, `events_festival` now have live homepage listing grids.
 
 ---
 
@@ -96,41 +113,19 @@ Recommended API family: product/category APIs, matching `unifieds_minimal`.
 
 ### Phase 3: Complete Commerce And Services Gaps
 
-These are compact groups with clear existing API references.
+**Services vertical — Round 2 complete (2026-05-24).** All 5 services themes have homepage listing grids and product detail pages.
 
-1. `services_creative`
-2. `services_local`
-3. `services_health`
-
-Recommended API families: product/category APIs for ecommerce; services/category/provider APIs for services.
+Recommended API families: services/category/provider APIs for services.
 
 ### Phase 4: Complete Jobs And Events
 
-These verticals should follow existing patterns from `jobs_startup`, `jobs_tech`, and `events_corporate`.
-
-1. `jobs_corporate`
-2. `jobs_modern`
-3. `jobs_blue_collar`
-4. `jobs_freelance`
-5. `events_classic`
-6. `events_creative`
-7. `events_music`
-8. `events_festival`
+**Jobs and Events verticals — Round 2 complete (2026-05-24).** All jobs and events themes have homepage listing grids and product detail pages.
 
 Recommended API families: jobs APIs and events APIs.
 
 ### Phase 5: Complete Remaining Properties Themes
 
-Properties has the largest remaining block and should be handled after the patterns are stable.
-
-1. `properties_modern`
-2. `properties_platinum`
-3. `properties_urban`
-4. `properties_map`
-5. `properties_unified`
-6. `properties_showcase`
-7. `properties_neighborhood`
-8. `properties_investment`
+**Properties vertical — Round 2 complete (2026-05-24).** All 13 properties themes have homepage listing grids and product detail pages.
 
 Recommended API family: property APIs plus lodging price calculation where booking/date flows exist.
 
@@ -152,5 +147,9 @@ Recommended API family: property APIs plus lodging price calculation where booki
 ## Notes
 
 - `apps/storefront/THEME_MASTER_INVENTORY.md` previously reported 50 themes, but the current seeder and folders contain 52.
-- The previous dynamic report said fifteen dynamic themes while listing sixteen. The source scan now finds 33 API-backed themes.
-- This report intentionally distinguishes "API-backed" from "fully QA-certified dynamic." The next pass should validate each API-backed theme view-by-view.
+- The previous dynamic report said fifteen dynamic themes while listing sixteen. The source scan now finds 52 API-backed themes.
+**Properties vertical — Round 2 complete (2026-05-24).** All 13 properties themes now have live homepage listing grids and product detail pages.
+
+**Round 2 complete (2026-05-24):** All 52 themes now have `ProductPage.tsx` with live API-backed product detail views. The final gap was `services_marketplace`, which received a provider detail page, homepage `/product/{slug}` links, and inquiry form wiring.
+
+- **Round 1 complete (2026-05-24):** All 52 themes have homepage listing grids wired to live API data. ExplorePage/CartPage parity and full QA remain where applicable.

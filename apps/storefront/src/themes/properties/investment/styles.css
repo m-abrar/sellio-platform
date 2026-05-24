@@ -280,3 +280,90 @@
     font-size: 3.5rem !important;
   }
 }
+
+.pi-asset-link {
+  color: inherit;
+  display: block;
+  text-decoration: none;
+}
+
+.prop-listing-state {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  grid-column: 1 / -1;
+  margin: 0 auto;
+  max-width: 680px;
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.prop-listing-state h3 {
+  color: white;
+  font-size: 1.75rem;
+  font-weight: 800;
+  margin: 0 0 1rem;
+  text-transform: uppercase;
+}
+
+.prop-listing-state p {
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.7;
+  margin: 0;
+}
+
+.prop-listing-kicker {
+  color: var(--pi-gold);
+  font-size: 0.75rem;
+  letter-spacing: 2px;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+}
+
+.prop-skeleton-line {
+  animation: prop-shimmer 1.5s infinite;
+  background: linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.04) 75%);
+  background-size: 200% 100%;
+  border-radius: 4px;
+  height: 14px;
+  margin-bottom: 0.75rem;
+  width: 100%;
+}
+
+.prop-skeleton-line-title { height: 22px; width: 75%; }
+.prop-skeleton-line-short { width: 50%; }
+
+@keyframes prop-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.pi-detail-page { background: var(--pi-midnight, #0f172a); color: white; min-height: 100vh; padding: 6rem 5%; }
+.pi-detail-back { color: var(--pi-gold); display: inline-block; font-weight: 700; margin-bottom: 2rem; text-decoration: none; text-transform: uppercase; }
+.pi-detail-grid { display: grid; gap: 3rem; grid-template-columns: minmax(0, 1fr) minmax(360px, 0.9fr); margin: 0 auto; max-width: 1280px; }
+.pi-detail-media { border: 1px solid rgba(255,255,255,0.1); min-height: 480px; overflow: hidden; }
+.pi-detail-media img { height: 100%; min-height: 480px; object-fit: cover; width: 100%; }
+.pi-detail-kicker { color: var(--pi-gold); font-size: 0.75rem; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; }
+.pi-detail-panel h1 { font-size: clamp(2rem, 5vw, 3rem); font-weight: 900; margin: 0; text-transform: uppercase; }
+.pi-detail-price { color: var(--pi-gold); font-size: 1.5rem; font-weight: 900; margin: 1rem 0; }
+.pi-detail-description { color: rgba(255,255,255,0.6); line-height: 1.8; margin: 0; }
+.pi-detail-specs { display: grid; gap: 1rem; grid-template-columns: repeat(3, 1fr); margin-top: 2rem; }
+.pi-detail-specs div { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); padding: 1rem; }
+.pi-detail-specs span, .pi-detail-specs strong { display: block; }
+.pi-detail-specs span { color: rgba(255,255,255,0.5); font-size: 0.7rem; font-weight: 800; letter-spacing: 1px; margin-bottom: 0.35rem; text-transform: uppercase; }
+.pi-detail-inquiry { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); margin: 4rem auto 0; max-width: 1280px; padding: 3rem; }
+.pi-detail-inquiry h2 { font-size: 1.5rem; font-weight: 900; margin: 0 0 1.5rem; text-transform: uppercase; }
+.pi-detail-inquiry form, .pi-detail-inquiry label { display: flex; flex-direction: column; }
+.pi-detail-inquiry form { gap: 1rem; max-width: 520px; }
+.pi-detail-inquiry label { font-size: 0.85rem; font-weight: 700; gap: 0.4rem; text-transform: uppercase; }
+.pi-detail-inquiry input, .pi-detail-inquiry textarea { background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 0.75rem; }
+.pi-detail-success { background: rgba(212, 175, 55, 0.12); border: 1px solid var(--pi-gold); color: var(--pi-gold); padding: 1rem; }
+.pi-detail-state { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); margin: 5rem auto; max-width: 680px; padding: 4rem 2rem; text-align: center; }
+.pi-detail-skeleton, .pi-detail-line { animation: prop-shimmer 1.5s infinite; background: linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.04) 75%); background-size: 200% 100%; border-radius: 4px; }
+.pi-detail-hero-skeleton { height: 480px; margin: 0 auto 2rem; max-width: 1280px; }
+.pi-detail-line { height: 16px; margin-bottom: 1rem; max-width: 1280px; width: 60%; }
+.pi-detail-line-title { height: 48px; }
+
+@media (max-width: 768px) {
+  .pi-detail-grid, .pi-detail-specs { grid-template-columns: 1fr; }
+}

@@ -1,16 +1,82 @@
 'use client';
-import React from 'react';
+
+import React, { useEffect, useState } from 'react';
+import { api } from '@sellio/api-client';
+import type { EventListing } from '@sellio/types';
 import { StageLineupCard, AtmosphereHUD } from './components';
 
+const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+
+const fallbackImages = [
+  '/themes/events/festival/11.webp',
+  '/themes/events/festival/12.webp',
+  '/themes/events/festival/13.webp',
+  '/themes/events/festival/14.webp',
+  '/themes/events/festival/15.webp',
+  '/themes/events/festival/16.webp',
+];
+
+function formatEventDateShort(dateStr?: string | null) {
+  if (!dateStr) {
+    return 'TBA';
+  }
+
+  const date = new Date(dateStr);
+  return `${months[date.getMonth()]}_${String(date.getDate()).padStart(2, '0')}_${date.getFullYear()}`;
+}
+
+function mapEventToStage(event: EventListing, index: number) {
+  const location = event.location?.city
+    || event.location?.map_title
+    || [event.location?.state, event.location?.country].filter(Boolean).join(' ')
+    || 'Global Node';
+
+  return {
+    title: event.title,
+    location,
+    date: formatEventDateShort(event.schedule?.start_at),
+    image: event.media?.poster || event.media?.preview || fallbackImages[index % fallbackImages.length],
+    slug: event.slug,
+  };
+}
+
 export default function Page() {
-  const festivals = [
-    { title: "Neon Horizon", location: "Berlin Core", date: "AUG_24_2026", image: "/themes/events/festival/11.webp" },
-    { title: "Cyber Sound", location: "Tokyo Node", date: "SEP_12_2026", image: "/themes/events/festival/12.webp" },
-    { title: "Vortex Summit", location: "Austin Tech", date: "OCT_05_2026", image: "/themes/events/festival/13.webp" },
-    { title: "Echo Valley", location: "Swiss Alps", date: "DEC_15_2026", image: "/themes/events/festival/14.webp" },
-    { title: "Quantum Art", location: "London East", date: "JAN_20_2027", image: "/themes/events/festival/15.webp" },
-    { title: "Solar Pulse", location: "Ibiza Node", date: "JUL_10_2027", image: "/themes/events/festival/16.webp" },
-  ];
+  const [events, setEvents] = useState<EventListing[]>([]);
+  const [loadingEvents, setLoadingEvents] = useState(true);
+  const [eventError, setEventError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadEvents() {
+      try {
+        const response = await api.getEvents({ per_page: 6 });
+        if (!isMounted) {
+          return;
+        }
+
+        setEvents(Array.isArray(response.data) ? response.data : []);
+        setEventError(null);
+      } catch (error: unknown) {
+        if (!isMounted) {
+          return;
+        }
+
+        console.error('Failed to load events festival listings:', error);
+        setEventError(error instanceof Error ? error.message : 'Events are temporarily unavailable.');
+      } finally {
+        if (isMounted) {
+          setLoadingEvents(false);
+        }
+      }
+    }
+
+    loadEvents();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   return (
     <div className="events-festival-theme">
@@ -25,13 +91,13 @@ export default function Page() {
               </p>
               <div style={{ marginTop: '7rem', display: 'flex', gap: '3rem', justifyContent: 'center', flexWrap: 'wrap' }} className="eff-hero-buttons">
                 <button className="eff-btn-primary" id="eff-btn-explore" onClick={() => document.getElementById('eff-stages-section')?.scrollIntoView({ behavior: 'smooth' })}>Explore Lineup</button>
-                <button style={{ 
-                    background: 'transparent', 
-                    border: '1px solid rgba(255,255,255,0.2)', 
-                    color: 'white', 
-                    padding: '1.5rem 4.5rem', 
-                    fontWeight: 900, 
-                    textTransform: 'uppercase', 
+                <button style={{
+                    background: 'transparent',
+                    border: '1px solid rgba(255,255,255,0.2)',
+                    color: 'white',
+                    padding: '1.5rem 4.5rem',
+                    fontWeight: 900,
+                    textTransform: 'uppercase',
                     cursor: 'pointer',
                     fontFamily: 'var(--eff-alt)',
                     fontSize: '0.8rem',
@@ -61,11 +127,38 @@ export default function Page() {
                   Our unified protocol synchronizes high-vibe environments across the world's most significant neon nodes.
               </div>
           </div>
-          
+
           <div className="ef-festival-grid">
-            {festivals.map((f, i) => (
-              <StageLineupCard key={i} {...f} />
-            ))}
+            {loadingEvents ? (
+              [1, 2, 3, 4, 5, 6].map((item) => (
+                <div className="eff-stage-card evf-listing-skeleton" key={item}>
+                  <div className="evf-skeleton-image" />
+                  <div className="evf-skeleton-line evf-skeleton-line-title" />
+                  <div className="evf-skeleton-line evf-skeleton-line-short" />
+                </div>
+              ))
+            ) : eventError ? (
+              <div className="evf-listing-state">
+                <div className="evf-listing-kicker">Festival Sync Offline</div>
+                <h3>Neon stages could not be loaded.</h3>
+                <p>{eventError}</p>
+              </div>
+            ) : events.length === 0 ? (
+              <div className="evf-listing-state">
+                <div className="evf-listing-kicker">Empty Event Registry</div>
+                <h3>No live events are published yet.</h3>
+                <p>Add event records in the backend and this festival grid will hydrate automatically.</p>
+              </div>
+            ) : (
+              events.slice(0, 6).map((event, index) => {
+                const stage = mapEventToStage(event, index);
+                return (
+                  <a className="evf-stage-link" href={`/product/${stage.slug}`} key={event.id}>
+                    <StageLineupCard {...stage} />
+                  </a>
+                );
+              })
+            )}
           </div>
       </section>
 
@@ -83,7 +176,7 @@ export default function Page() {
               </button>
           </div>
       </section>
-      
+
       <div style={{ height: '15rem' }}></div>
     </div>
   );

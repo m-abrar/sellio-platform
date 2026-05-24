@@ -306,3 +306,105 @@
     padding: 6rem 5% !important;
   }
 }
+
+.pl-showcase-link {
+  color: inherit;
+  display: block;
+  text-decoration: none;
+}
+
+.pl-listing-state {
+  grid-column: 1 / -1;
+}
+
+.prop-listing-state {
+  background: #111;
+  border: 1px solid var(--pl-border);
+  border-radius: 8px;
+  margin: 0 auto;
+  max-width: 680px;
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.prop-listing-state h3 {
+  color: white;
+  font-size: 1.75rem;
+  font-weight: 900;
+  margin: 0 0 1rem;
+  text-transform: uppercase;
+}
+
+.prop-listing-state p {
+  color: var(--pl-text-dim);
+  line-height: 1.7;
+  margin: 0;
+}
+
+.prop-listing-kicker {
+  color: var(--pl-gold);
+  font-size: 0.75rem;
+  letter-spacing: 2px;
+  margin-bottom: 1rem;
+}
+
+.prop-skeleton-line {
+  animation: prop-shimmer 1.5s infinite;
+  background: linear-gradient(90deg, #1a1a1a 25%, #222 50%, #1a1a1a 75%);
+  background-size: 200% 100%;
+  border-radius: 4px;
+  height: 14px;
+  margin-bottom: 0.75rem;
+  width: 100%;
+}
+
+.prop-skeleton-line-title {
+  height: 22px;
+  width: 75%;
+}
+
+.prop-skeleton-line-short {
+  width: 50%;
+}
+
+.pl-showcase-skeleton {
+  min-height: 280px;
+  padding: 2rem;
+}
+
+@keyframes prop-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.pl-detail-page { background: #0a0a0a; color: white; min-height: 100vh; padding: 6rem 5%; }
+.pl-detail-back { color: var(--pl-gold); display: inline-block; font-weight: 700; margin-bottom: 2rem; text-decoration: none; }
+.pl-detail-hero { margin: 0 auto 3rem; max-width: 1280px; overflow: hidden; position: relative; }
+.pl-detail-hero img { display: block; height: 460px; object-fit: cover; width: 100%; }
+.pl-detail-hero-overlay { background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); bottom: 0; left: 0; padding: 3rem; position: absolute; right: 0; }
+.pl-detail-hero-overlay h1 { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 900; margin: 0.5rem 0; text-transform: uppercase; }
+.pl-detail-kicker { color: var(--pl-gold); font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; }
+.pl-detail-meta { color: var(--pl-text-dim); display: flex; flex-wrap: wrap; gap: 1.5rem; margin-top: 1rem; }
+.pl-detail-grid { display: grid; gap: 3rem; grid-template-columns: minmax(0, 1fr) 360px; margin: 0 auto; max-width: 1280px; }
+.pl-detail-main h2 { font-size: 1.5rem; font-weight: 900; margin: 0 0 1rem; text-transform: uppercase; }
+.pl-detail-main p { color: var(--pl-text-dim); line-height: 1.8; margin: 0; }
+.pl-detail-specs { display: grid; gap: 1rem; grid-template-columns: repeat(3, 1fr); margin-top: 2rem; }
+.pl-detail-specs div { background: #111; border: 1px solid var(--pl-border); padding: 1rem; }
+.pl-detail-specs span, .pl-detail-specs strong { display: block; }
+.pl-detail-specs span { color: var(--pl-text-dim); font-size: 0.7rem; letter-spacing: 1px; margin-bottom: 0.35rem; text-transform: uppercase; }
+.pl-detail-sidebar { background: #111; border: 1px solid var(--pl-border); padding: 2rem; }
+.pl-detail-sidebar form, .pl-detail-sidebar label { display: flex; flex-direction: column; }
+.pl-detail-sidebar form { gap: 1rem; }
+.pl-detail-sidebar label { font-size: 0.85rem; font-weight: 700; gap: 0.4rem; }
+.pl-detail-sidebar input, .pl-detail-sidebar textarea { background: #0a0a0a; border: 1px solid var(--pl-border); color: white; padding: 0.75rem; }
+.pl-detail-btn { background: var(--pl-gold); border: none; color: black; cursor: pointer; display: inline-block; font-weight: 800; padding: 0.85rem 1.5rem; text-decoration: none; text-transform: uppercase; }
+.pl-detail-success { background: rgba(212, 175, 55, 0.15); border: 1px solid var(--pl-gold); color: var(--pl-gold); padding: 1rem; }
+.pl-detail-state { background: #111; border: 1px solid var(--pl-border); margin: 5rem auto; max-width: 680px; padding: 4rem 2rem; text-align: center; }
+.pl-detail-skeleton, .pl-detail-line { animation: prop-shimmer 1.5s infinite; background: linear-gradient(90deg, #1a1a1a 25%, #222 50%, #1a1a1a 75%); background-size: 200% 100%; border-radius: 8px; }
+.pl-detail-hero-skeleton { height: 460px; margin: 0 auto 2rem; max-width: 1280px; }
+.pl-detail-line { height: 16px; margin-bottom: 1rem; max-width: 1280px; width: 60%; }
+.pl-detail-line-title { height: 48px; }
+
+@media (max-width: 768px) {
+  .pl-detail-grid, .pl-detail-specs { grid-template-columns: 1fr; }
+}

@@ -28,8 +28,10 @@ Theme overrides are supported through `/preview/{theme_key}/...`, `?theme={theme
 | :--- | ---: | :--- |
 | Seeded themes | 52 | Registered by `ThemeSeeder` |
 | Storefront folders | 52 | All seeded keys have matching theme folders |
-| API-backed themes | 33 | Themes with live `api.*` usage in `.tsx` files |
-| Static / mostly static themes remaining | 19 | No direct live API usage found in theme `.tsx` files |
+| API-backed themes | 52 | Themes with live `api.*` usage in `.tsx` files |
+| Static / mostly static themes remaining | 0 | All seeded themes have homepage listing API integration |
+| Round 1 listings dynamic | 52 | Homepage listing grid wired to live API |
+| Product detail pages (`ProductPage.tsx`) | 52 | All themes export `ProductPage` from `index.ts` |
 
 ---
 
@@ -51,18 +53,18 @@ Theme overrides are supported through `/preview/{theme_key}/...`, `?theme={theme
 | Theme Key | Folder | Frontend Folder | API Backed |
 | :--- | :--- | :---: | :---: |
 | `properties_classic` | `properties/classic` | Yes | Yes |
-| `properties_modern` | `properties/modern` | Yes | No |
+| `properties_modern` | `properties/modern` | Yes | Yes |
 | `properties_luxury` | `properties/luxury` | Yes | Yes |
-| `properties_platinum` | `properties/platinum` | Yes | No |
-| `properties_urban` | `properties/urban` | Yes | No |
+| `properties_platinum` | `properties/platinum` | Yes | Yes |
+| `properties_urban` | `properties/urban` | Yes | Yes |
 | `properties_rental` | `properties/rental` | Yes | Yes |
 | `properties_vacation` | `properties/vacation` | Yes | Yes |
-| `properties_map` | `properties/map` | Yes | No |
-| `properties_unified` | `properties/unified` | Yes | No |
+| `properties_map` | `properties/map` | Yes | Yes |
+| `properties_unified` | `properties/unified` | Yes | Yes |
 | `properties_commercial` | `properties/commercial` | Yes | Yes |
-| `properties_showcase` | `properties/showcase` | Yes | No |
-| `properties_neighborhood` | `properties/neighborhood` | Yes | No |
-| `properties_investment` | `properties/investment` | Yes | No |
+| `properties_showcase` | `properties/showcase` | Yes | Yes |
+| `properties_neighborhood` | `properties/neighborhood` | Yes | Yes |
+| `properties_investment` | `properties/investment` | Yes | Yes |
 
 ## Autos Vertical (5 Themes)
 
@@ -78,11 +80,11 @@ Theme overrides are supported through `/preview/{theme_key}/...`, `?theme={theme
 
 | Theme Key | Folder | Frontend Folder | API Backed |
 | :--- | :--- | :---: | :---: |
-| `events_classic` | `events/classic` | Yes | No |
-| `events_creative` | `events/creative` | Yes | No |
+| `events_classic` | `events/classic` | Yes | Yes (R1) |
+| `events_creative` | `events/creative` | Yes | Yes (R1) |
 | `events_corporate` | `events/corporate` | Yes | Yes |
-| `events_music` | `events/music` | Yes | No |
-| `events_festival` | `events/festival` | Yes | No |
+| `events_music` | `events/music` | Yes | Yes (R1) |
+| `events_festival` | `events/festival` | Yes | Yes (R1) |
 
 ## Services Vertical (5 Themes)
 
@@ -90,20 +92,20 @@ Theme overrides are supported through `/preview/{theme_key}/...`, `?theme={theme
 | :--- | :--- | :---: | :---: |
 | `services_corporate` | `services/corporate` | Yes | Yes |
 | `services_marketplace` | `services/marketplace` | Yes | Yes |
-| `services_creative` | `services/creative` | Yes | No |
-| `services_local` | `services/local` | Yes | No |
-| `services_health` | `services/health` | Yes | No |
+| `services_creative` | `services/creative` | Yes | Yes (R1) |
+| `services_local` | `services/local` | Yes | Yes (R1) |
+| `services_health` | `services/health` | Yes | Yes (R1) |
 
 ## Jobs Vertical (6 Themes)
 
 | Theme Key | Folder | Frontend Folder | API Backed |
 | :--- | :--- | :---: | :---: |
-| `jobs_corporate` | `jobs/corporate` | Yes | No |
+| `jobs_corporate` | `jobs/corporate` | Yes | Yes (R1) |
 | `jobs_startup` | `jobs/startup` | Yes | Yes |
 | `jobs_tech` | `jobs/tech` | Yes | Yes |
-| `jobs_modern` | `jobs/modern` | Yes | No |
-| `jobs_blue_collar` | `jobs/blue_collar` | Yes | No |
-| `jobs_freelance` | `jobs/freelance` | Yes | No |
+| `jobs_modern` | `jobs/modern` | Yes | Yes (R1) |
+| `jobs_blue_collar` | `jobs/blue_collar` | Yes | Yes (R1) |
+| `jobs_freelance` | `jobs/freelance` | Yes | Yes (R1) |
 
 ## Classifieds Vertical (6 Themes)
 

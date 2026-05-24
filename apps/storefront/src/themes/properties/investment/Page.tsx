@@ -1,19 +1,70 @@
 'use client';
-import React from 'react';
+
+import React, { useEffect, useState } from 'react';
+import { api } from '@sellio/api-client';
+import type { Property } from '@sellio/types';
 import { PortfolioAssetCard, YieldAnalyticsHUD } from './components';
 
+const assetTypes = ['Residential', 'Commercial', 'Industrial', 'Retail', 'Specialty', 'Development', 'Infrastructure', 'Commercial'];
+const statusLabels = ['VERIFIED', 'ACTIVE', 'PREMIUM', 'INSTITUTIONAL'];
+
+function getPropertyPrice(property: Property) {
+  return property.pricing?.price_formatted || (
+    property.base_price ? `$${Number(property.base_price).toLocaleString()}` : 'Price on request'
+  );
+}
+
+function mapPropertyToAsset(property: Property, index: number) {
+  const yieldRate = `${((property.id % 8) + 6 + (index % 3) * 0.5).toFixed(1)}% ARR`;
+  const type = property.specs?.property_type || property.specs?.category || assetTypes[index % assetTypes.length];
+
+  return {
+    title: property.title,
+    yield: yieldRate,
+    price: getPropertyPrice(property),
+    type: typeof type === 'string' ? type : assetTypes[index % assetTypes.length],
+    status: property.is_featured ? 'PREMIUM' : statusLabels[index % statusLabels.length],
+    slug: property.slug,
+  };
+}
+
 export default function Page() {
-  const assets = [
-    { title: "Metro Multi-Family Node", yield: "8.4% ARR", price: "$12,500,000", type: "Residential", status: "VERIFIED" },
-    { title: "Innovation Tech Plaza", yield: "7.2% ARR", price: "$42,000,000", type: "Commercial", status: "ACTIVE" },
-    { title: "Logistics Core Hub", yield: "9.1% ARR", price: "$18,200,000", type: "Industrial", status: "PREMIUM" },
-    { title: "Retail Strip Portfolio", yield: "6.8% ARR", price: "$5,400,000", type: "Retail", status: "VERIFIED" },
-    { title: "Solar Infrastructure Node", yield: "12.5% ARR", price: "$8,900,000", type: "Specialty", status: "ACTIVE" },
-    { title: "Waterfront Development", yield: "15.0% IRR", price: "$120,000,000", type: "Development", status: "INSTITUTIONAL" },
-    { title: "Data Center Alpha", yield: "10.2% ARR", price: "$55,000,000", type: "Infrastructure", status: "ACTIVE" },
-    { title: "Medical Office Suites", yield: "7.5% ARR", price: "$3,200,000", type: "Commercial", status: "VERIFIED" },
-    { title: "Downtown Mixed-Use", yield: "8.9% ARR", price: "$28,000,000", type: "Residential", status: "ACTIVE" },
-  ];
+  const [properties, setProperties] = useState<Property[]>([]);
+  const [loadingProperties, setLoadingProperties] = useState(true);
+  const [propertyError, setPropertyError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadProperties() {
+      try {
+        const response = await api.getProperties({ per_page: 9 });
+        if (!isMounted) {
+          return;
+        }
+
+        setProperties(Array.isArray(response.data) ? response.data : []);
+        setPropertyError(null);
+      } catch (error: unknown) {
+        if (!isMounted) {
+          return;
+        }
+
+        console.error('Failed to load properties investment listings:', error);
+        setPropertyError(error instanceof Error ? error.message : 'Properties are temporarily unavailable.');
+      } finally {
+        if (isMounted) {
+          setLoadingProperties(false);
+        }
+      }
+    }
+
+    loadProperties();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   return (
     <div className="pi-section">
@@ -63,11 +114,38 @@ export default function Page() {
                   Our unified protocol synchronizes real-time performance metadata from residential, commercial, and industrial yield nodes.
               </div>
           </div>
-          
+
           <div className="pi-asset-grid">
-            {assets.map((a, i) => (
-              <PortfolioAssetCard key={i} {...a} />
-            ))}
+            {loadingProperties ? (
+              [1, 2, 3, 4, 5, 6, 7, 8, 9].map((item) => (
+                <div className="pi-asset-card prop-listing-skeleton" key={item}>
+                  <div className="prop-skeleton-line prop-skeleton-line-title" />
+                  <div className="prop-skeleton-line" />
+                  <div className="prop-skeleton-line prop-skeleton-line-short" />
+                </div>
+              ))
+            ) : propertyError ? (
+              <div className="prop-listing-state">
+                <div className="prop-listing-kicker">Property Sync Offline</div>
+                <h3>Asset performance registry could not be loaded.</h3>
+                <p>{propertyError}</p>
+              </div>
+            ) : properties.length === 0 ? (
+              <div className="prop-listing-state">
+                <div className="prop-listing-kicker">Empty Property Registry</div>
+                <h3>No live properties are published yet.</h3>
+                <p>Add property records in the backend and this investment grid will hydrate automatically.</p>
+              </div>
+            ) : (
+              properties.slice(0, 9).map((property, index) => {
+                const asset = mapPropertyToAsset(property, index);
+                return (
+                  <a className="pi-asset-link" href={`/product/${asset.slug}`} key={property.id}>
+                    <PortfolioAssetCard {...asset} />
+                  </a>
+                );
+              })
+            )}
           </div>
       </section>
 
@@ -85,7 +163,7 @@ export default function Page() {
               Connect_Capital_Node
           </button>
       </section>
-      
+
       <div style={{ height: '10rem' }}></div>
     </div>
   );

@@ -1,23 +1,73 @@
 'use client';
-import React from 'react';
+
+import React, { useEffect, useState } from 'react';
+import { api } from '@sellio/api-client';
+import type { ServiceListing } from '@sellio/types';
 import { LocalHeader, LocalServiceCard, ProviderCard, LocalFooter } from './components';
 
-export default function Page() {
-  const services = [
-    { title: "Home Cleaning – From $60", description: "Reliable and thorough cleaning services for homes and apartments. Book weekly or one-time visits.", icon: "🏠" },
-    { title: "Plumbing Repair – From $75", description: "Fast and professional repairs for leaks, clogged drains, and fixture installation.", icon: "🔧" },
-    { title: "Electrical Wiring – Free Quote", description: "Certified electricians for safe installations, repairs, and electrical system upgrades.", icon: "⚡" },
-    { title: "Lawn Care & Gardening", description: "Keep your yard pristine with mowing, trimming, and seasonal planting services.", icon: "🌳" },
-    { title: "HVAC Maintenance", description: "Ensure your heating and cooling systems run efficiently all year long with expert tune-ups.", icon: "🌡️" },
-    { title: "Handyman Services", description: "For all those small jobs: mounting TVs, furniture assembly, patching drywall, and more.", icon: "🔨" }
-  ];
+const serviceIcons = ['🏠', '🔧', '⚡', '🌳', '🌡️', '🔨'];
 
-  const providers = [
-    { name: "John D.", title: "Handyman Expert", rating: "4.8", jobs: "120", image: "/themes/services/local/15.webp" },
-    { name: "Sarah K.", title: "Professional Cleaner", rating: "4.9", jobs: "210", image: "/themes/services/local/16.webp" },
-    { name: "Mike A.", title: "Certified Plumber", rating: "4.7", jobs: "85", image: "/themes/services/local/17.webp" },
-    { name: "Lisa M.", title: "Lawn & Garden Specialist", rating: "5.0", jobs: "55", image: "/themes/services/local/18.webp" },
-  ];
+const providers = [
+  { name: 'John D.', title: 'Handyman Expert', rating: '4.8', jobs: '120', image: '/themes/services/local/15.webp' },
+  { name: 'Sarah K.', title: 'Professional Cleaner', rating: '4.9', jobs: '210', image: '/themes/services/local/16.webp' },
+  { name: 'Mike A.', title: 'Certified Plumber', rating: '4.7', jobs: '85', image: '/themes/services/local/17.webp' },
+  { name: 'Lisa M.', title: 'Lawn & Garden Specialist', rating: '5.0', jobs: '55', image: '/themes/services/local/18.webp' },
+];
+
+function getServicePrice(service: ServiceListing) {
+  return service.pricing?.formatted || service.pricing?.formatted_short || (
+    service.pricing?.base_price ? `From $${Number(service.pricing.base_price).toLocaleString()}` : 'Free Quote'
+  );
+}
+
+function mapServiceToCard(service: ServiceListing, index: number) {
+  const price = getServicePrice(service);
+
+  return {
+    title: `${service.title} – ${price}`,
+    description: service.short_description || service.description || 'A trusted local service available through the HomeFix network.',
+    icon: serviceIcons[index % serviceIcons.length],
+    slug: service.slug,
+  };
+}
+
+export default function Page() {
+  const [services, setServices] = useState<ServiceListing[]>([]);
+  const [loadingServices, setLoadingServices] = useState(true);
+  const [serviceError, setServiceError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadServices() {
+      try {
+        const response = await api.getServices({ per_page: 6 });
+        if (!isMounted) {
+          return;
+        }
+
+        setServices(Array.isArray(response.data) ? response.data : []);
+        setServiceError(null);
+      } catch (error: unknown) {
+        if (!isMounted) {
+          return;
+        }
+
+        console.error('Failed to load services local listings:', error);
+        setServiceError(error instanceof Error ? error.message : 'Services are temporarily unavailable.');
+      } finally {
+        if (isMounted) {
+          setLoadingServices(false);
+        }
+      }
+    }
+
+    loadServices();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   return (
     <div className="services-local-wrapper">
@@ -29,14 +79,14 @@ export default function Page() {
           <h1 id="local-hero-title">Trusted Services for <br/>Your Home & Family</h1>
           <p>Find background-checked professionals for cleaning, repair, maintenance, and more—all in one place.</p>
           <div style={{ display: 'flex', gap: '1.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <button 
-              className="local-btn local-btn-primary" 
+            <button
+              className="local-btn local-btn-primary"
               onClick={() => document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })}
             >
               Explore Services
             </button>
-            <button 
-              className="local-btn local-btn-outline" 
+            <button
+              className="local-btn local-btn-outline"
               onClick={() => document.getElementById('testimonials')?.scrollIntoView({ behavior: 'smooth' })}
             >
               Read Testimonials
@@ -59,9 +109,37 @@ export default function Page() {
       <section id="services" className="local-section" aria-labelledby="local-services-title">
         <h2 id="local-services-title" style={{ textAlign: 'center', fontWeight: 800, marginBottom: '4rem', fontSize: '2.5rem' }}>Our Popular Services</h2>
         <div className="local-grid">
-          {services.map((s, i) => (
-            <LocalServiceCard key={i} {...s} />
-          ))}
+          {loadingServices ? (
+            [1, 2, 3, 4, 5, 6].map((item) => (
+              <div className="local-service-card local-listing-skeleton" key={item}>
+                <div className="local-skeleton-icon" />
+                <div className="local-skeleton-line local-skeleton-line-title" />
+                <div className="local-skeleton-line" />
+                <div className="local-skeleton-line local-skeleton-line-short" />
+              </div>
+            ))
+          ) : serviceError ? (
+            <div className="local-listing-state">
+              <div className="local-listing-kicker">Service Sync Offline</div>
+              <h3>Popular services could not be loaded.</h3>
+              <p>{serviceError}</p>
+            </div>
+          ) : services.length === 0 ? (
+            <div className="local-listing-state">
+              <div className="local-listing-kicker">Empty Service Registry</div>
+              <h3>No live services are published yet.</h3>
+              <p>Add service records in the backend and this local services grid will hydrate automatically.</p>
+            </div>
+          ) : (
+            services.slice(0, 6).map((service, index) => {
+              const card = mapServiceToCard(service, index);
+              return (
+                <a className="local-service-link" href={`/product/${card.slug}`} key={service.id}>
+                  <LocalServiceCard title={card.title} description={card.description} icon={card.icon} />
+                </a>
+              );
+            })
+          )}
         </div>
       </section>
 
