@@ -188,9 +188,16 @@ const FALLBACK_CLASSIFIEDS: ClassifiedListing[] = [
   }
 ];
 
+const parseMapCoords = (dimensions: unknown): string[] => {
+  if (typeof dimensions === 'string') {
+    return dimensions.split(',').map((part) => part.trim()).filter(Boolean);
+  }
+  return [];
+};
+
 const translateListing = (item: ClassifiedListing): LocalItem => {
   const generatedSlug = item.slug || item.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-  const coords = item.item_specs?.dimensions?.split(",") || [];
+  const coords = parseMapCoords(item.item_specs?.dimensions);
   const mapTop = coords.length === 2 ? parseInt(coords[0]) : (20 + (item.id * 7) % 70);
   const mapLeft = coords.length === 2 ? parseInt(coords[1]) : (15 + (item.id * 9) % 75);
   const numericDistance = item.id * 0.45;

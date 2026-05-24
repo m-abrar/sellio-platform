@@ -48,6 +48,12 @@
     text-transform: uppercase;
 }
 
+.ecl-nav-panel {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
 .ecl-nav {
     display: flex;
     gap: 3rem;
@@ -561,7 +567,7 @@
         background-color: var(--ecl-primary);
     }
 
-    .ecl-nav {
+    .ecl-nav-panel {
         position: fixed;
         top: 0;
         right: -100%;
@@ -579,6 +585,12 @@
         padding: 3rem 2rem;
         transition: right 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         z-index: 1035;
+    }
+
+    .ecl-nav-panel .ecl-nav {
+        flex-direction: column;
+        gap: 2.5rem;
+        align-items: center;
     }
 
     .ecl-nav-open {

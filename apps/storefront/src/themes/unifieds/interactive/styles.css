@@ -68,6 +68,12 @@
     letter-spacing: -1px;
 }
 
+.ui-nav-panel {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
 .ui-nav {
     display: flex;
     gap: 4rem;
@@ -751,7 +757,7 @@
     }
     
     /* Off-canvas slider navigation drawer */
-    .ui-nav {
+    .ui-nav-panel {
         position: fixed;
         top: 0;
         right: -100%;
@@ -767,7 +773,13 @@
         z-index: 1005;
         border-left: 1px solid var(--ui-border);
     }
-    
+
+    .ui-nav-panel .ui-nav {
+        flex-direction: column;
+        gap: 2rem;
+        align-items: flex-start;
+    }
+
     .ui-nav-open {
         right: 0;
     }

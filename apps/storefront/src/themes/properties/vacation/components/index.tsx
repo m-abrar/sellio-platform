@@ -25,10 +25,11 @@ export const VacationHeader = () => {
           <span className="pv-hamburger-bar"></span>
       </button>
 
-      <nav className={`pv-nav ${isOpen ? 'pv-nav-open' : ''}`}>
+      <div className={`pv-nav-panel ${isOpen ? 'pv-nav-open' : ''}`}>
           <MenuNav
             location="main_header"
             flat
+            className="pv-nav"
             linkClassName="pv-nav-link"
             onNavigate={() => setIsOpen(false)}
             renderItem={defaultNavItemRenderer}
@@ -41,7 +42,7 @@ export const VacationHeader = () => {
               <button type="button" className={className} style={{ padding: '1rem 3rem', fontSize: '0.8rem', marginTop: '2rem', width: '100%' }} onClick={onNavigate}>{item.title}</button>
             )}
           />
-      </nav>
+      </div>
 
       <MenuActionButtons
         as="button"

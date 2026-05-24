@@ -61,6 +61,12 @@
   letter-spacing: -1px;
 }
 
+.pc-nav-panel {
+  display: flex;
+  align-items: center;
+    gap: 2rem;
+}
+
 .pc-nav {
   display: flex;
   gap: 4rem;
@@ -648,7 +654,11 @@
 
 /* Mobile */
 .pc-mobile-auth-btn {
-  display: none;
+  display: none !important;
+}
+
+.pc-desktop-auth-btn {
+  display: inline-flex !important;
 }
 
 .pc-hamburger {
@@ -690,7 +700,7 @@
     transform: translateY(-8px) rotate(-45deg);
   }
 
-  .pc-nav {
+  .pc-nav-panel {
     align-items: center;
     background-color: var(--pc-bg);
     border-left: 1px solid var(--pc-border);
@@ -707,6 +717,12 @@
     transition: right 0.4s cubic-bezier(0.19, 1, 0.22, 1);
     width: 320px;
     z-index: 1040;
+  }
+
+  .pc-nav-panel .pc-nav {
+    flex-direction: column;
+    gap: 2.5rem;
+    align-items: center;
   }
 
   .pc-nav-open {

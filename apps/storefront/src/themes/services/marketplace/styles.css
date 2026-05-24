@@ -45,6 +45,12 @@
     color: var(--sm-secondary);
 }
 
+.sm-nav-panel {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
 .sm-nav {
     display: flex;
     gap: 2rem;
@@ -367,7 +373,7 @@
         text-align: center;
     }
 
-    .sm-nav {
+    .sm-nav-panel {
         position: fixed;
         top: 0;
         right: -100%;
@@ -384,6 +390,12 @@
         transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         z-index: 1005;
         border-left: 1px solid var(--sm-border);
+    }
+
+    .sm-nav-panel .sm-nav {
+        flex-direction: column;
+        gap: 2rem;
+        align-items: flex-start;
     }
 
     .sm-nav-open {

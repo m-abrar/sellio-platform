@@ -64,6 +64,12 @@
   transition: var(--pu-transition);
 }
 
+.pu-nav-panel {
+  display: flex;
+  align-items: center;
+    gap: 2rem;
+}
+
 .pu-nav {
   display: flex;
   gap: 4rem;
@@ -310,7 +316,7 @@
   }
   
   /* Off-canvas slider navigation drawer */
-  .pu-nav {
+  .pu-nav-panel {
     position: fixed;
     top: 0;
     right: -100%;
@@ -325,7 +331,13 @@
     transition: var(--pu-transition);
     z-index: 1005;
   }
-  
+
+  .pu-nav-panel .pu-nav {
+    flex-direction: column;
+    gap: 2rem;
+    align-items: flex-start;
+  }
+
   .pu-nav-open {
     right: 0;
   }

@@ -95,6 +95,12 @@
     color: #ffffff;
 }
 
+.cl-nav-panel {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
 .cl-nav {
     display: flex;
     gap: 1.5rem;

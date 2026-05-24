@@ -70,6 +70,12 @@
     color: var(--ugm-orange);
 }
 
+.ugm-nav-panel {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
 .ugm-nav {
     display: flex;
     gap: 3.5rem;
@@ -737,7 +743,7 @@
     }
     
     /* Off-canvas slider navigation drawer */
-    .ugm-nav {
+    .ugm-nav-panel {
         position: fixed;
         top: 0;
         right: -100%;
@@ -753,7 +759,13 @@
         z-index: 1005;
         border-left: 2px solid var(--ugm-charcoal);
     }
-    
+
+    .ugm-nav-panel .ugm-nav {
+        flex-direction: column;
+        gap: 2rem;
+        align-items: flex-start;
+    }
+
     .ugm-nav-open {
         right: 0;
     }

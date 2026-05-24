@@ -28,7 +28,7 @@ export const ElectronicsHeader = () => {
                 <span className="el-hamburger-bar"></span>
             </button>
 
-            <nav className={`el-nav ${isOpen ? 'el-nav-open' : ''}`}>
+            <div className={`el-nav-panel ${isOpen ? 'el-nav-open' : ''}`}>
                 <div className="el-search-bar el-mobile-search" style={{ marginBottom: '2rem' }}>
                     <span>🔍</span>
                     <input type="text" className="el-search-input" placeholder="Search components, devices..." />
@@ -36,12 +36,13 @@ export const ElectronicsHeader = () => {
                 <MenuNav
                     location="main_header"
                     flat
-                    style={{ display: 'contents' }}
+                    className="el-nav"
                     linkClassName="el-nav-link"
                     onNavigate={() => setIsOpen(false)}
                     renderItem={hashAwareNavItemRenderer}
                 />
                 <MenuActionButtons
+                    className="el-header-actions"
                     linkClassName="el-nav-link"
                     onNavigate={() => setIsOpen(false)}
                     renderItem={(item, { href, className, onNavigate }) => {
@@ -54,13 +55,13 @@ export const ElectronicsHeader = () => {
                             );
                         }
                         return (
-                            <a href={href} className={className} onClick={onNavigate}>
+                            <a href={href} className={`${className} el-header-search-link`} onClick={onNavigate}>
                                 {item.title}
                             </a>
                         );
                     }}
                 />
-            </nav>
+            </div>
         </header>
     );
 };

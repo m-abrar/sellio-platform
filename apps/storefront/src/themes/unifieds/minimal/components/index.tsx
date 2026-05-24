@@ -81,10 +81,11 @@ export const SilentHeader = () => {
           <span className="usm-hamburger-bar"></span>
       </button>
 
-      <nav className={`usm-nav ${isOpen ? 'usm-nav-open' : ''}`}>
+      <div className={`usm-nav-panel ${isOpen ? 'usm-nav-open' : ''}`}>
           <MenuNav
             location="main_header"
             flat
+            className="usm-nav"
             linkClassName="usm-nav-link"
             onNavigate={() => setIsOpen(false)}
             renderItem={(item, { href, className, onNavigate }) => (
@@ -138,7 +139,7 @@ export const SilentHeader = () => {
               </button>
             )}
           />
-      </nav>
+      </div>
 
       <MenuNav
         location="utility_header"

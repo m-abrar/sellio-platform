@@ -26,10 +26,11 @@ export const RentalHeader = () => {
           <span className="pr-hamburger-bar"></span>
       </button>
 
-      <nav className={`pr-nav ${isOpen ? 'pr-nav-open' : ''}`}>
+      <div className={`pr-nav-panel ${isOpen ? 'pr-nav-open' : ''}`}>
           <MenuNav
             location="main_header"
             flat
+            className="pr-nav"
             linkClassName="pr-nav-link"
             onNavigate={() => setIsOpen(false)}
             renderItem={defaultNavItemRenderer}
@@ -42,7 +43,7 @@ export const RentalHeader = () => {
               <button type="button" className={className} style={{ padding: '1rem 3rem', fontSize: '0.9rem', marginTop: '2rem' }} onClick={onNavigate}>{item.title}</button>
             )}
           />
-      </nav>
+      </div>
 
       <MenuActionButtons
         as="button"

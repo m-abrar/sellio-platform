@@ -24,11 +24,11 @@ export const ClassicHeader = () => {
                 <span className={`ac-bar ${isOpen ? 'open' : ''}`}></span>
             </button>
 
-            <nav className={`ac-nav ${isOpen ? 'open' : ''}`}>
+            <div className={`ac-nav-panel ${isOpen ? 'open' : ''}`}>
                 <MenuNav
                     location="main_header"
                     flat
-                    style={{ display: 'contents' }}
+                    className="ac-nav"
                     linkClassName="ac-nav-link"
                     onNavigate={() => setIsOpen(false)}
                     renderItem={hashAwareNavItemRenderer}
@@ -37,7 +37,7 @@ export const ClassicHeader = () => {
                     linkClassName="ac-btn ac-btn-cta ac-nav-cta"
                     onNavigate={() => setIsOpen(false)}
                 />
-            </nav>
+            </div>
 
             <MenuActionButtons linkClassName="ac-btn ac-btn-cta ac-desktop-cta" />
         </header>

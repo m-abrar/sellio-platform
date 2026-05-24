@@ -31,10 +31,11 @@ export const MapHeader = () => {
           <span className="pm-hamburger-bar"></span>
       </button>
 
-      <nav className={`pm-nav ${isOpen ? 'pm-nav-open' : ''}`}>
+      <div className={`pm-nav-panel ${isOpen ? 'pm-nav-open' : ''}`}>
         <MenuNav
           location="main_header"
           flat
+          className="pm-nav"
           linkClassName="pm-nav-link"
           onNavigate={() => setIsOpen(false)}
           renderItem={defaultNavItemRenderer}
@@ -59,7 +60,7 @@ export const MapHeader = () => {
             </button>
           )}
         />
-      </nav>
+      </div>
 
       <MenuActionButtons
         as="button"

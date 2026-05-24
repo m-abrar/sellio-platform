@@ -25,10 +25,11 @@ export const MotionHeader = () => {
           <span className="ui-hamburger-bar"></span>
       </button>
 
-      <nav className={`ui-nav ${isOpen ? 'ui-nav-open' : ''}`}>
+      <div className={`ui-nav-panel ${isOpen ? 'ui-nav-open' : ''}`}>
           <MenuNav
             location="main_header"
             flat
+            className="ui-nav"
             linkClassName="ui-nav-link"
             onNavigate={() => setIsOpen(false)}
             renderItem={defaultNavItemRenderer}
@@ -41,7 +42,7 @@ export const MotionHeader = () => {
               <button type="button" className={className} style={{ padding: '1rem 3rem', fontSize: '0.8rem', marginTop: '2rem', width: '100%' }} onClick={onNavigate}>{item.title}</button>
             )}
           />
-      </nav>
+      </div>
 
       <MenuActionButtons
         as="button"

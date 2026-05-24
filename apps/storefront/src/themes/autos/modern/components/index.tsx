@@ -37,11 +37,11 @@ export const ModernHeader = () => {
                 <span className="md-hamburger-bar"></span>
             </button>
 
-            <nav className={`md-nav ${isOpen ? 'md-nav-open' : ''}`}>
+            <div className={`md-nav-panel ${isOpen ? 'md-nav-open' : ''}`}>
                 <MenuNav
                     location="main_header"
                     flat
-                    style={{ display: 'contents' }}
+                    className="md-nav"
                     linkClassName="md-nav-link"
                     onNavigate={() => setIsOpen(false)}
                     renderItem={hashAwareNavItemRenderer}
@@ -50,7 +50,7 @@ export const ModernHeader = () => {
                     linkClassName="md-btn md-btn-cta"
                     onNavigate={() => setIsOpen(false)}
                 />
-            </nav>
+            </div>
         </header>
     );
 };

@@ -73,6 +73,12 @@
   letter-spacing: -1px;
 }
 
+.pl-nav-panel {
+  display: flex;
+  align-items: center;
+    gap: 2rem;
+}
+
 .pl-nav {
   display: flex;
   gap: 4rem;
@@ -432,7 +438,11 @@
 
 /* Premium Elite Mobile Drawer & Responsive Degradation */
 .pl-mobile-auth-btn {
-  display: none;
+  display: none !important;
+}
+
+.pl-desktop-auth-btn {
+  display: inline-block !important;
 }
 
 .pl-hamburger {
@@ -474,7 +484,7 @@
     background-color: var(--pl-gold);
   }
 
-  .pl-nav {
+  .pl-nav-panel {
     display: flex !important;
     position: fixed;
     top: 0;
@@ -491,6 +501,12 @@
     z-index: 1040;
     box-shadow: -15px 0 30px rgba(0,0,0,0.5);
     border-left: 1px solid var(--pl-border);
+  }
+
+  .pl-nav-panel .pl-nav {
+    flex-direction: column;
+    gap: 2.5rem;
+    align-items: center;
   }
 
   .pl-nav-open {

@@ -15,10 +15,11 @@ export const PremiumHeader = ({ onPostClick }: HeaderProps) => (
       Sellio<span>Premium</span>
     </a>
     
-    <div className="cp-nav">
+    <div className="cp-nav-panel">
       <MenuNav
         location="main_header"
         flat
+        className="cp-nav"
         linkClassName="cp-nav-link"
         activeClassName="active"
         renderItem={defaultNavItemRenderer}

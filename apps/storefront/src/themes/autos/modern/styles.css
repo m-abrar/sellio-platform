@@ -44,6 +44,12 @@
     gap: 0.5rem;
 }
 
+.md-nav-panel {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
 .md-nav {
     display: flex;
     gap: 2rem;
@@ -408,7 +414,7 @@
         background-color: var(--md-primary);
     }
 
-    .md-nav {
+    .md-nav-panel {
         position: fixed;
         top: 0;
         right: -100%;
@@ -426,6 +432,12 @@
         padding: 3rem 2rem;
         transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         z-index: 1035;
+    }
+
+    .md-nav-panel .md-nav {
+        flex-direction: column;
+        gap: 2.5rem;
+        align-items: center;
     }
 
     .md-nav-open {

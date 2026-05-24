@@ -10,23 +10,21 @@ export const BlueCollarHeader = () => {
 
   return (
     <header className="jbc-header">
-      <div className="jbc-header-container" style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', width: '100%', justifyContent: 'space-between' }}>
-        <a href="#" className="jbc-logo">
-            Trades<span>Work</span>
-        </a>
+      <a href="#" className="jbc-logo">
+        Trades<span>Work</span>
+      </a>
 
-        <button 
-          className={`jbc-hamburger ${isOpen ? 'jbc-hamburger-open' : ''}`}
-          onClick={() => setIsOpen(!isOpen)}
-          aria-label="Toggle Navigation"
-          id="jbc-hamburger-toggle"
-        >
-          <span className="jbc-hamburger-bar"></span>
-          <span className="jbc-hamburger-bar"></span>
-          <span className="jbc-hamburger-bar"></span>
-        </button>
-      </div>
-      
+      <button 
+        className={`jbc-hamburger ${isOpen ? 'jbc-hamburger-open' : ''}`}
+        onClick={() => setIsOpen(!isOpen)}
+        aria-label="Toggle Navigation"
+        id="jbc-hamburger-toggle"
+      >
+        <span className="jbc-hamburger-bar"></span>
+        <span className="jbc-hamburger-bar"></span>
+        <span className="jbc-hamburger-bar"></span>
+      </button>
+
       <MenuNav
         location="main_header"
         flat
@@ -48,7 +46,6 @@ export const BlueCollarHeader = () => {
       <div className="jbc-desktop-btn-container">
         <MenuActionButtons
           location="action_buttons"
-          className="jbc-desktop-btn-container"
           as="button"
           buttonClassName="jbc-btn jbc-btn-primary jbc-desktop-btn"
           onAction={() => alert('Job posting form starting...')}

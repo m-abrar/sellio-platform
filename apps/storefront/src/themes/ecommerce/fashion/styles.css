@@ -72,6 +72,12 @@
   letter-spacing: -1px;
 }
 
+.ef-nav-panel {
+  display: flex;
+  align-items: center;
+    gap: 2rem;
+}
+
 .ef-nav {
   display: flex;
   gap: 4.5rem;
@@ -239,7 +245,7 @@
     background-color: var(--ef-champagne);
   }
 
-  .ef-nav {
+  .ef-nav-panel {
     position: fixed;
     top: 0;
     right: -100%;
@@ -257,6 +263,12 @@
     padding: 3rem 2rem;
     transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     z-index: 1035;
+  }
+
+  .ef-nav-panel .ef-nav {
+    flex-direction: column;
+    gap: 2.5rem;
+    align-items: center;
   }
 
   .ef-nav-open {

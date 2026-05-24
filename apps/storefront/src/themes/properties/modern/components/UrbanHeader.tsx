@@ -40,10 +40,11 @@ export const UrbanHeader = () => {
                 <span className="urban-hamburger-bar"></span>
             </button>
 
-            <nav className={`urban-nav ${isOpen ? 'urban-nav-open' : ''}`} aria-label="Primary">
+            <div className={`urban-nav-panel ${isOpen ? 'urban-nav-open' : ''}`}>
                 <MenuNav
                     location="main_header"
                     flat
+                    className="urban-nav"
                     linkClassName="urban-nav-link"
                     onNavigate={() => setIsOpen(false)}
                     renderItem={hashAwareNavItemRenderer}
@@ -54,7 +55,7 @@ export const UrbanHeader = () => {
                     onNavigate={() => setIsOpen(false)}
                     renderItem={(item, props) => hashAwareNavItemRenderer(item, { ...props, isActive: false })}
                 />
-            </nav>
+            </div>
 
             <MenuActionButtons
                 linkClassName="urban-btn-primary urban-desktop-auth-btn"

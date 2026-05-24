@@ -29,11 +29,11 @@ export const LuxuryHeader = () => {
                 <span className="ecl-hamburger-bar"></span>
             </button>
 
-            <div className={`ecl-nav ${isOpen ? 'ecl-nav-open' : ''}`}>
+            <div className={`ecl-nav-panel ${isOpen ? 'ecl-nav-open' : ''}`}>
                 <MenuNav
                     location="main_header"
                     flat
-                    style={{ display: 'contents' }}
+                    className="ecl-nav"
                     linkClassName="ecl-nav-link"
                     onNavigate={() => setIsOpen(false)}
                     renderItem={hashAwareNavItemRenderer}

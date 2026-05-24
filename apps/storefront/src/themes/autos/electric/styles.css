@@ -81,6 +81,12 @@
     text-decoration: none;
 }
 
+.ev-nav-panel {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
 .ev-nav {
     display: flex;
     gap: 2rem;
@@ -368,7 +374,7 @@
         box-shadow: 0 0 5px var(--ev-accent-green);
     }
 
-    .ev-nav {
+    .ev-nav-panel {
         position: fixed;
         top: 0;
         right: -100%;
@@ -386,6 +392,12 @@
         padding: 3rem 2rem;
         transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         z-index: 1035;
+    }
+
+    .ev-nav-panel .ev-nav {
+        flex-direction: column;
+        gap: 2.5rem;
+        align-items: center;
     }
 
     .ev-nav-open {

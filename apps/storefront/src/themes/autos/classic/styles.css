@@ -43,6 +43,12 @@
     font-size: 1.5rem;
 }
 
+.ac-nav-panel {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
 .ac-nav {
     display: flex;
     gap: 2rem;
@@ -331,7 +337,7 @@
         display: none;
     }
 
-    .ac-nav {
+    .ac-nav-panel {
         position: fixed;
         top: 0;
         right: -100%;
@@ -348,7 +354,13 @@
         z-index: 1000;
     }
 
-    .ac-nav.open {
+    .ac-nav-panel .ac-nav {
+        flex-direction: column;
+        gap: 2rem;
+        align-items: center;
+    }
+
+    .ac-nav-panel.open {
         right: 0;
     }
 

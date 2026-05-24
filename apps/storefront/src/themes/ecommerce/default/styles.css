@@ -67,6 +67,12 @@
   color: var(--ed-slate);
 }
 
+.ed-nav-panel {
+  display: flex;
+  align-items: center;
+    gap: 2rem;
+}
+
 .ed-nav {
   display: flex;
   gap: 3.5rem;
@@ -535,7 +541,7 @@
     background-color: var(--ed-blue);
   }
 
-  .ed-nav {
+  .ed-nav-panel {
     position: fixed;
     top: 0;
     right: -100%;
@@ -553,6 +559,12 @@
     padding: 3rem 2rem;
     transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 1035;
+  }
+
+  .ed-nav-panel .ed-nav {
+    flex-direction: column;
+    gap: 2.5rem;
+    align-items: center;
   }
 
   .ed-nav-open {

@@ -27,10 +27,11 @@ export const CorporateHeader = () => {
         <span className="sc-hamburger-bar"></span>
       </button>
 
-      <div className={`sc-nav ${isOpen ? 'sc-nav-open' : ''}`}>
+      <div className={`sc-nav-panel ${isOpen ? 'sc-nav-open' : ''}`}>
         <MenuNav
           location="main_header"
           flat
+          className="sc-nav"
           linkClassName="sc-nav-link"
           onNavigate={() => setIsOpen(false)}
           renderItem={hashAwareNavItemRenderer}

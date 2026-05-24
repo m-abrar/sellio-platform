@@ -24,11 +24,11 @@ export const ElectricHeader = () => {
                 <span className="ev-hamburger-bar"></span>
             </button>
 
-            <nav className={`ev-nav ${isOpen ? 'ev-nav-open' : ''}`}>
+            <div className={`ev-nav-panel ${isOpen ? 'ev-nav-open' : ''}`}>
                 <MenuNav
                     location="main_header"
                     flat
-                    style={{ display: 'contents' }}
+                    className="ev-nav"
                     linkClassName="ev-nav-link"
                     onNavigate={() => setIsOpen(false)}
                     renderItem={hashAwareNavItemRenderer}
@@ -37,7 +37,7 @@ export const ElectricHeader = () => {
                     linkClassName="ev-btn ev-btn-green"
                     onNavigate={() => setIsOpen(false)}
                 />
-            </nav>
+            </div>
         </header>
     );
 };

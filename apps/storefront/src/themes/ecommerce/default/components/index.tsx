@@ -24,11 +24,11 @@ export const ShopHeader = () => {
         <span className="ed-hamburger-bar"></span>
       </button>
 
-      <div className={`ed-nav ${isOpen ? 'ed-nav-open' : ''}`}>
+      <div className={`ed-nav-panel ${isOpen ? 'ed-nav-open' : ''}`}>
         <MenuNav
           location="main_header"
           flat
-          style={{ display: 'contents' }}
+          className="ed-nav"
           linkClassName="ed-nav-link"
           onNavigate={() => setIsOpen(false)}
           renderItem={defaultNavItemRenderer}

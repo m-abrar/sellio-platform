@@ -25,10 +25,11 @@ export const LocalHeader = () => {
         <span className="local-hamburger-bar"></span>
       </button>
 
-      <div className={`local-nav ${isOpen ? 'local-nav-open' : ''}`}>
+      <div className={`local-nav-panel ${isOpen ? 'local-nav-open' : ''}`}>
         <MenuNav
           location="main_header"
           flat
+          className="local-nav"
           linkClassName="local-nav-link"
           onNavigate={() => setIsOpen(false)}
           renderItem={hashAwareNavItemRenderer}

@@ -24,10 +24,11 @@ export const ArtisanHeader = () => {
           <span className="ps-hamburger-bar"></span>
       </button>
 
-      <nav className={`ps-nav ${isOpen ? 'ps-nav-open' : ''}`}>
+      <div className={`ps-nav-panel ${isOpen ? 'ps-nav-open' : ''}`}>
           <MenuNav
             location="main_header"
             flat
+            className="ps-nav"
             linkClassName="ps-nav-link"
             onNavigate={() => setIsOpen(false)}
             renderItem={defaultNavItemRenderer}
@@ -35,7 +36,7 @@ export const ArtisanHeader = () => {
           <div className="ps-mono ps-mobile-status" style={{ fontSize: '0.6rem', border: '1px solid var(--ps-gold)', padding: '0.5rem 1.5rem', marginTop: '2rem', textAlign: 'center' }}>
             CURATION_SYNC_ACTIVE
           </div>
-      </nav>
+      </div>
 
       <div className="ps-mono ps-desktop-status" style={{ fontSize: '0.6rem', border: '1px solid var(--ps-gold)', padding: '0.5rem 1.5rem' }}>
         CURATION_SYNC_ACTIVE

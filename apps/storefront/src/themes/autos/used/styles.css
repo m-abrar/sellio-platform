@@ -42,6 +42,12 @@
     text-decoration: none;
 }
 
+.us-nav-panel {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
 .us-nav {
     display: flex;
     gap: 2rem;
@@ -388,7 +394,7 @@
         background-color: var(--us-orange);
     }
 
-    .us-nav {
+    .us-nav-panel {
         position: fixed;
         top: 0;
         right: -100%;
@@ -406,6 +412,12 @@
         padding: 3rem 2rem;
         transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         z-index: 1035;
+    }
+
+    .us-nav-panel .us-nav {
+        flex-direction: column;
+        gap: 2.5rem;
+        align-items: center;
     }
 
     .us-nav-open {

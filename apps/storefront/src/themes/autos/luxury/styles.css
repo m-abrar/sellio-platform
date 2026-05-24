@@ -51,6 +51,12 @@
     text-decoration: none;
 }
 
+.lx-nav-panel {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
 .lx-nav {
     display: flex;
     gap: 2rem;
@@ -355,7 +361,7 @@
         box-shadow: 0 0 5px var(--lx-gold);
     }
 
-    .lx-nav {
+    .lx-nav-panel {
         position: fixed;
         top: 0;
         right: -100%;
@@ -373,6 +379,12 @@
         padding: 3rem 2rem;
         transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         z-index: 1035;
+    }
+
+    .lx-nav-panel .lx-nav {
+        flex-direction: column;
+        gap: 2.5rem;
+        align-items: center;
     }
 
     .lx-nav-open {

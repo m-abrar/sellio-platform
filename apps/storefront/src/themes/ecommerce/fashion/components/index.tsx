@@ -23,11 +23,11 @@ export const RunwayHeader = () => {
         <span className="ef-hamburger-bar"></span>
       </button>
 
-      <div className={`ef-nav ${isOpen ? 'ef-nav-open' : ''}`}>
+      <div className={`ef-nav-panel ${isOpen ? 'ef-nav-open' : ''}`}>
         <MenuNav
           location="main_header"
           flat
-          style={{ display: 'contents' }}
+          className="ef-nav"
           linkClassName="ef-nav-link"
           onNavigate={() => setIsOpen(false)}
           renderItem={defaultNavItemRenderer}

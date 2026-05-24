@@ -23,10 +23,11 @@ export const InvestmentHeader = () => {
           <span className="pi-hamburger-bar"></span>
       </button>
 
-      <div role="navigation" className={`pi-nav ${isOpen ? 'pi-nav-open' : ''}`}>
+      <div role="navigation" className={`pi-nav-panel ${isOpen ? 'pi-nav-open' : ''}`}>
           <MenuNav
             location="main_header"
             flat
+            className="pi-nav"
             linkClassName="pi-nav-link"
             onNavigate={() => setIsOpen(false)}
             renderItem={defaultNavItemRenderer}

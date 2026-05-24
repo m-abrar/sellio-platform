@@ -82,6 +82,12 @@
   font-style: italic;
 }
 
+.pv-nav-panel {
+  display: flex;
+  align-items: center;
+    gap: 2rem;
+}
+
 .pv-nav {
   display: flex;
   gap: 4rem;
@@ -323,7 +329,7 @@
   }
   
   /* Off-canvas slider navigation drawer */
-  .pv-nav {
+  .pv-nav-panel {
     position: fixed;
     top: 0;
     right: -100%;
@@ -338,7 +344,13 @@
     transition: var(--pv-transition);
     z-index: 1005;
   }
-  
+
+  .pv-nav-panel .pv-nav {
+    flex-direction: column;
+    gap: 2rem;
+    align-items: flex-start;
+  }
+
   .pv-nav-open {
     right: 0;
   }

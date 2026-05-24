@@ -8,10 +8,11 @@ import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
 export const EliteHeader = () => (
     <header className="elite-header">
         <div className="elite-logo">SELLIO_ELITE</div>
-        <div className="elite-nav">
+        <div className="elite-nav-panel">
             <MenuNav
                 location="main_header"
                 flat
+                className="elite-nav"
                 linkClassName="elite-nav-link"
                 renderItem={defaultNavItemRenderer}
             />

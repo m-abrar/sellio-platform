@@ -61,6 +61,12 @@
     color: var(--cp-gold);
 }
 
+.cp-nav-panel {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
 .cp-nav {
     display: flex;
     gap: 2.25rem;

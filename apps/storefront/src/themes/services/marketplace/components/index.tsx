@@ -36,10 +36,11 @@ export const MarketplaceHeader = () => {
       </button>
       
 
-      <div className={`sm-nav ${isOpen ? 'sm-nav-open' : ''}`}>
+      <div className={`sm-nav-panel ${isOpen ? 'sm-nav-open' : ''}`}>
         <MenuNav
           location="main_header"
           flat
+          className="sm-nav"
           linkClassName="sm-nav-link"
           onNavigate={() => setIsOpen(false)}
           renderItem={hashAwareNavItemRenderer}

@@ -52,6 +52,12 @@ h1, h2, h3, h4, h5, h6 {
     text-decoration: none;
 }
 
+.crtv-nav-panel {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
 .crtv-nav {
     display: flex;
     gap: 2rem;
@@ -411,7 +417,7 @@ h1, h2, h3, h4, h5, h6 {
         text-align: center;
     }
 
-    .crtv-nav {
+    .crtv-nav-panel {
         position: fixed;
         top: 0;
         right: -100%;
@@ -428,6 +434,12 @@ h1, h2, h3, h4, h5, h6 {
         transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         z-index: 1005;
         border-left: 1px solid var(--crtv-border);
+    }
+
+    .crtv-nav-panel .crtv-nav {
+        flex-direction: column;
+        gap: 2rem;
+        align-items: flex-start;
     }
 
     .crtv-nav-open {

@@ -24,10 +24,11 @@ export const CrtvHeader = () => {
         <span className="crtv-hamburger-bar"></span>
       </button>
 
-      <div className={`crtv-nav ${isOpen ? 'crtv-nav-open' : ''}`}>
+      <div className={`crtv-nav-panel ${isOpen ? 'crtv-nav-open' : ''}`}>
         <MenuNav
           location="main_header"
           flat
+          className="crtv-nav"
           linkClassName="crtv-nav-link"
           onNavigate={() => setIsOpen(false)}
           renderItem={hashAwareNavItemRenderer}

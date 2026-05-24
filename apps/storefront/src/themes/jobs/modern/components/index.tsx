@@ -38,11 +38,8 @@ export const ModernHeader = () => {
           <MenuNav
             location="utility_header"
             flat
-            linkClassName="jm-nav-link jm-mobile-action-link"
+            linkClassName="jm-btn jm-btn-outline jm-mobile-action-btn"
             onNavigate={() => setIsOpen(false)}
-            renderItem={(item, { href, className, onNavigate }) => (
-              <a href={href} className={className} onClick={onNavigate} style={{ fontWeight: 600 }}>{item.title}</a>
-            )}
           />
           <MenuActionButtons
             location="action_buttons"
@@ -55,16 +52,14 @@ export const ModernHeader = () => {
           <MenuNav
             location="utility_header"
             flat
-            linkClassName="jm-nav-link"
-            renderItem={(item, { href, className, onNavigate }) => (
-              <a href={href} className={className} onClick={onNavigate} style={{ alignSelf: 'center', fontWeight: 600 }}>{item.title}</a>
-            )}
+            className="jm-utility-nav"
+            linkClassName="jm-btn jm-btn-outline"
           />
           <MenuActionButtons
             location="action_buttons"
             linkClassName="jm-btn jm-btn-primary"
             renderItem={(item, { href, className, onNavigate }) => (
-              <a href={href} className={className} id="jm-btn-vibe-status" onClick={onNavigate} style={{ alignSelf: 'center' }}>
+              <a href={href} className={className} id="jm-btn-vibe-status" onClick={onNavigate}>
                 {item.title}
               </a>
             )}

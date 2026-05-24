@@ -22,10 +22,11 @@ export const PlatinumHeader = () => {
                 <span className="luxury-hamburger-bar"></span>
             </button>
 
-            <nav className={`platinum-nav ${isOpen ? 'platinum-nav-open' : ''}`}>
+            <div className={`platinum-nav-panel ${isOpen ? 'platinum-nav-open' : ''}`}>
                 <MenuNav
                     location="main_header"
                     flat
+                    className="platinum-nav"
                     linkClassName="platinum-nav-link"
                     onNavigate={() => setIsOpen(false)}
                     renderItem={defaultNavItemRenderer}
@@ -48,7 +49,7 @@ export const PlatinumHeader = () => {
                         }} onClick={onNavigate}>{item.title}</button>
                     )}
                 />
-            </nav>
+            </div>
             
             <MenuActionButtons
                 as="button"

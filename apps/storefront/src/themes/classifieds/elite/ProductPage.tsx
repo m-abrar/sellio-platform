@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { api } from '@sellio/api-client';
 import type { ClassifiedListing } from '@sellio/types';
-import { PremiumHeader, PremiumFooter } from './components';
 
 // Premium high-fidelity Classifieds Elite fallback listings matching Page.tsx
 const FALLBACK_CLASSIFIEDS: ClassifiedListing[] = [
@@ -400,10 +399,6 @@ export default function ProductPage({ slug }: { slug: string }) {
 
   return (
     <div className="elite-product-wrapper">
-      <PremiumHeader 
-        onPostClick={() => alert("🔑 Secure Vault Authentication Required:\nPlease insert your physical Sellio Elite keycard or supply biometric broker pass keys.")} 
-      />
-
       <div className="elite-product-container">
         <div>
           <a href="#" className="elite-product-back-link" onClick={handleBackNavigation}>
@@ -643,7 +638,6 @@ export default function ProductPage({ slug }: { slug: string }) {
         }
       `}</style>
 
-      <PremiumFooter />
     </div>
   );
 }

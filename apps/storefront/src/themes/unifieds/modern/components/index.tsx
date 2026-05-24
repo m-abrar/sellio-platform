@@ -25,10 +25,11 @@ export const NexusHeader = () => {
           <span className="unp-hamburger-bar"></span>
       </button>
 
-      <nav className={`unp-nav ${isOpen ? 'unp-nav-open' : ''}`}>
+      <div className={`unp-nav-panel ${isOpen ? 'unp-nav-open' : ''}`}>
           <MenuNav
             location="main_header"
             flat
+            className="unp-nav"
             linkClassName="unp-nav-link"
             onNavigate={() => setIsOpen(false)}
             renderItem={defaultNavItemRenderer}
@@ -41,7 +42,7 @@ export const NexusHeader = () => {
               <button type="button" className={className} style={{ padding: '1rem 3rem', fontSize: '0.8rem', marginTop: '2rem', width: '100%', borderRadius: '12px' }} onClick={onNavigate}>{item.title}</button>
             )}
           />
-      </nav>
+      </div>
 
       <MenuActionButtons
         as="button"

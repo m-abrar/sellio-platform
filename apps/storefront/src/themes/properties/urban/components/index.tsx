@@ -24,10 +24,11 @@ export const SkylineHeader = () => {
           <span className="pu-hamburger-bar"></span>
       </button>
 
-      <nav className={`pu-nav ${isOpen ? 'pu-nav-open' : ''}`}>
+      <div className={`pu-nav-panel ${isOpen ? 'pu-nav-open' : ''}`}>
           <MenuNav
             location="main_header"
             flat
+            className="pu-nav"
             linkClassName="pu-nav-link"
             onNavigate={() => setIsOpen(false)}
             renderItem={defaultNavItemRenderer}
@@ -35,7 +36,7 @@ export const SkylineHeader = () => {
           <div className="pu-mono pu-mobile-status" style={{ padding: '0.5rem 1.5rem', background: 'var(--pu-steel)', color: 'white', marginTop: '2rem', textAlign: 'center' }}>
             SYNC_ACTIVE
           </div>
-      </nav>
+      </div>
 
       <div className="pu-mono pu-desktop-status" style={{ padding: '0.5rem 1.5rem', background: 'var(--pu-steel)', color: 'white' }}>
         SYNC_ACTIVE

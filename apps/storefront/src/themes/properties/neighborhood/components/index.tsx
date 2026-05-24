@@ -25,10 +25,11 @@ export const CommunityHeader = () => {
           <span className="pn-hamburger-bar"></span>
       </button>
 
-      <nav className={`pn-nav ${isOpen ? 'pn-nav-open' : ''}`}>
+      <div className={`pn-nav-panel ${isOpen ? 'pn-nav-open' : ''}`}>
           <MenuNav
             location="main_header"
             flat
+            className="pn-nav"
             linkClassName="pn-nav-link"
             onNavigate={() => setIsOpen(false)}
             renderItem={defaultNavItemRenderer}
@@ -41,7 +42,7 @@ export const CommunityHeader = () => {
               <button type="button" className={className} style={{ padding: '1rem 3rem', fontSize: '0.9rem', marginTop: '2rem' }} onClick={onNavigate}>{item.title}</button>
             )}
           />
-      </nav>
+      </div>
 
       <MenuActionButtons
         as="button"

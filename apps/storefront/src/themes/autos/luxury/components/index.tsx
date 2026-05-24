@@ -22,11 +22,11 @@ export const LuxuryHeader = () => {
                 <span className="lx-hamburger-bar"></span>
             </button>
 
-            <nav className={`lx-nav ${isOpen ? 'lx-nav-open' : ''}`}>
+            <div className={`lx-nav-panel ${isOpen ? 'lx-nav-open' : ''}`}>
                 <MenuNav
                     location="main_header"
                     flat
-                    style={{ display: 'contents' }}
+                    className="lx-nav"
                     linkClassName="lx-nav-link"
                     onNavigate={() => setIsOpen(false)}
                     renderItem={hashAwareNavItemRenderer}
@@ -35,7 +35,7 @@ export const LuxuryHeader = () => {
                     linkClassName="lx-btn lx-btn-gold"
                     onNavigate={() => setIsOpen(false)}
                 />
-            </nav>
+            </div>
         </header>
     );
 };

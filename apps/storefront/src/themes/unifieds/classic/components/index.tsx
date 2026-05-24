@@ -25,11 +25,11 @@ export const LegacyHeader = () => {
           <span className="uc-hamburger-bar"></span>
       </button>
 
-      <div className={`uc-nav ${isOpen ? 'uc-nav-open' : ''}`}>
+      <div className={`uc-nav-panel ${isOpen ? 'uc-nav-open' : ''}`}>
           <MenuNav
             location="main_header"
             flat
-            style={{ display: 'contents' }}
+            className="uc-nav"
             linkClassName="uc-nav-link"
             onNavigate={() => setIsOpen(false)}
             renderItem={defaultNavItemRenderer}

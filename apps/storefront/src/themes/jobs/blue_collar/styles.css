@@ -34,7 +34,9 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 1.5rem;
     border-bottom: 4px solid var(--jbc-primary);
+    min-width: 0;
 }
 
 .jbc-logo {
@@ -44,6 +46,7 @@
     text-decoration: none;
     text-transform: uppercase;
     letter-spacing: 1px;
+    flex-shrink: 0;
 }
 
 .jbc-logo span {
@@ -54,6 +57,9 @@
     display: flex;
     gap: 1.5rem;
     align-items: center;
+    flex: 1;
+    min-width: 0;
+    justify-content: center;
 }
 
 .jbc-nav-link {
@@ -374,12 +380,18 @@
     background-color: var(--jbc-primary);
 }
 
+.jbc-desktop-btn-container {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
 .jbc-mobile-btn {
     display: none !important;
 }
 
 .jbc-desktop-btn {
-    display: block !important;
+    display: inline-flex !important;
 }
 
 @media (max-width: 1024px) {

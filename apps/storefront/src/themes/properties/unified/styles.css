@@ -79,6 +79,12 @@
   color: var(--uh-indigo);
 }
 
+.uh-nav-panel {
+  display: flex;
+  align-items: center;
+    gap: 2rem;
+}
+
 .uh-nav {
   display: flex;
   gap: 3.5rem;
@@ -328,7 +334,7 @@
   }
   
   /* Off-canvas slider navigation drawer */
-  .uh-nav {
+  .uh-nav-panel {
     position: fixed;
     top: 0;
     right: -100%;
@@ -343,7 +349,13 @@
     transition: var(--uh-transition);
     z-index: 1005;
   }
-  
+
+  .uh-nav-panel .uh-nav {
+    flex-direction: column;
+    gap: 2rem;
+    align-items: flex-start;
+  }
+
   .uh-nav-open {
     right: 0;
   }

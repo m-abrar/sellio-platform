@@ -25,10 +25,11 @@ export const ScaleHeader = () => {
           <span className="usp-hamburger-bar"></span>
       </button>
 
-      <nav className={`usp-nav ${isOpen ? 'usp-nav-open' : ''}`}>
+      <div className={`usp-nav-panel ${isOpen ? 'usp-nav-open' : ''}`}>
           <MenuNav
             location="main_header"
             flat
+            className="usp-nav"
             linkClassName="usp-nav-link"
             onNavigate={() => setIsOpen(false)}
             renderItem={defaultNavItemRenderer}
@@ -41,7 +42,7 @@ export const ScaleHeader = () => {
               <button type="button" className={className} style={{ padding: '1rem 3rem', fontSize: '0.8rem', marginTop: '2rem', width: '100%', borderRadius: '6px' }} onClick={onNavigate}>{item.title}</button>
             )}
           />
-      </nav>
+      </div>
 
       <MenuActionButtons
         as="button"

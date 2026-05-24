@@ -24,10 +24,11 @@ export const UniversalHeader = () => {
           <span className="uh-hamburger-bar"></span>
       </button>
 
-      <nav className={`uh-nav ${isOpen ? 'uh-nav-open' : ''}`}>
+      <div className={`uh-nav-panel ${isOpen ? 'uh-nav-open' : ''}`}>
           <MenuNav
             location="main_header"
             flat
+            className="uh-nav"
             linkClassName="uh-nav-link"
             onNavigate={() => setIsOpen(false)}
             renderItem={defaultNavItemRenderer}
@@ -35,7 +36,7 @@ export const UniversalHeader = () => {
           <div className="uh-mono uh-mobile-status" style={{ fontSize: '0.65rem', border: '1px solid var(--uh-border)', padding: '0.5rem 1.5rem', marginTop: '2rem', textAlign: 'center', borderRadius: '4px' }}>
             SYNC_STABLE
           </div>
-      </nav>
+      </div>
 
       <div className="uh-mono uh-desktop-status" style={{ padding: '0.6rem 1.5rem', border: '1px solid var(--uh-border)', borderRadius: '4px', fontSize: '0.65rem' }}>
         SYNC_STABLE

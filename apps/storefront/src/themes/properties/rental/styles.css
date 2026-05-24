@@ -83,6 +83,12 @@
   align-items: center;
 }
 
+.pr-nav-panel {
+  display: flex;
+  align-items: center;
+    gap: 2rem;
+}
+
 .pr-nav {
   display: flex;
   gap: 3rem;
@@ -120,11 +126,11 @@
 
 /* Desktop & Mobile Auth Button Spacing */
 .pr-desktop-auth-btn {
-  display: inline-block;
+  display: inline-flex !important;
 }
 
 .pr-mobile-auth-btn {
-  display: none;
+  display: none !important;
 }
 
 /* Hamburger Toggle Button */
@@ -352,15 +358,15 @@
   }
   
   .pr-desktop-auth-btn {
-    display: none;
+    display: none !important;
   }
   
   .pr-mobile-auth-btn {
-    display: inline-block;
+    display: inline-flex !important;
   }
   
   /* Navigation Drawer overlay */
-  .pr-nav {
+  .pr-nav-panel {
     position: fixed;
     top: 0;
     right: -100%;
@@ -375,7 +381,13 @@
     align-items: flex-start;
     z-index: 1005;
   }
-  
+
+  .pr-nav-panel .pr-nav {
+    flex-direction: column;
+    gap: 2rem;
+    align-items: flex-start;
+  }
+
   .pr-nav-open {
     right: 0;
   }

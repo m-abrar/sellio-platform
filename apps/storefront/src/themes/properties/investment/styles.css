@@ -69,6 +69,12 @@
   letter-spacing: -1px;
 }
 
+.pi-nav-panel {
+  display: flex;
+  align-items: center;
+    gap: 2rem;
+}
+
 .pi-nav {
   display: flex;
   gap: 3.5rem;
@@ -164,7 +170,11 @@
 
 /* Premium Elite Mobile Drawer & Responsive Degradation */
 .pi-mobile-auth-btn {
-  display: none;
+  display: none !important;
+}
+
+.pi-desktop-auth-btn {
+  display: block !important;
 }
 
 .pi-hamburger {
@@ -206,7 +216,7 @@
     background-color: var(--pi-emerald);
   }
 
-  .pi-nav {
+  .pi-nav-panel {
     display: flex !important;
     position: fixed;
     top: 0;
@@ -223,6 +233,12 @@
     z-index: 1040;
     box-shadow: -15px 0 30px rgba(0,0,0,0.05);
     border-left: 1px solid var(--pi-border);
+  }
+
+  .pi-nav-panel .pi-nav {
+    flex-direction: column;
+    gap: 2.5rem;
+    align-items: center;
   }
 
   .pi-nav-open {

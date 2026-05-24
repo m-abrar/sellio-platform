@@ -46,6 +46,12 @@
     text-shadow: 0 0 10px rgba(212, 175, 55, 0.15);
 }
 
+.elite-nav-panel {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
 .elite-nav {
     display: flex;
     gap: 3rem;

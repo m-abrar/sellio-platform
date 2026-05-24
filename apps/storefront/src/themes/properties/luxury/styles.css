@@ -45,6 +45,12 @@
     letter-spacing: -1px;
 }
 
+.platinum-nav-panel {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
 .platinum-nav {
     display: flex;
     gap: 4rem;
@@ -267,7 +273,7 @@
     background-color: var(--luxury-gold);
   }
 
-  .platinum-nav {
+  .platinum-nav-panel {
     display: flex !important;
     position: fixed;
     top: 0;
@@ -284,6 +290,12 @@
     z-index: 1040;
     box-shadow: -15px 0 30px rgba(0,0,0,0.05);
     border-left: 1px solid var(--luxury-border);
+  }
+
+  .platinum-nav-panel .platinum-nav {
+    flex-direction: column;
+    gap: 2.5rem;
+    align-items: center;
   }
 
   .platinum-nav-open {

@@ -43,11 +43,11 @@ export const CommercialHeader = () => {
         <span className="pc-hamburger-bar"></span>
       </button>
 
-      <div role="navigation" className={`pc-nav ${isOpen ? 'pc-nav-open' : ''}`} aria-label="Primary">
+      <div role="navigation" className={`pc-nav-panel ${isOpen ? 'pc-nav-open' : ''}`} aria-label="Primary">
         <MenuNav
           location="main_header"
           flat
-          className=""
+          className="pc-nav"
           linkClassName="pc-nav-link"
           onNavigate={() => setIsOpen(false)}
           renderItem={hashAwareNavItemRenderer}

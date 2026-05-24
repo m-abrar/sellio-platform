@@ -35,9 +35,11 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 1.25rem;
     position: sticky;
     top: 0;
     z-index: 1000;
+    min-width: 0;
 }
 
 .el-logo {
@@ -47,6 +49,43 @@
     color: var(--el-text-main);
     text-decoration: none;
     letter-spacing: 2px;
+    flex-shrink: 0;
+}
+
+.el-nav-panel {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    flex-shrink: 1;
+    min-width: 0;
+}
+
+.el-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    flex-shrink: 0;
+}
+
+.el-header-search-link {
+    white-space: nowrap;
+}
+
+@media (min-width: 1201px) {
+    .el-header-search-link {
+        display: none;
+    }
+}
+
+@media (max-width: 1200px) {
+    .el-desktop-search {
+        display: none;
+    }
+
+    .el-header-search-link {
+        display: inline-flex;
+        align-items: center;
+    }
 }
 
 .el-nav {
@@ -77,7 +116,9 @@
     border: 1px solid var(--el-border);
     border-radius: 50px;
     padding: 0.5rem 1rem;
-    width: 300px;
+    width: min(300px, 28vw);
+    min-width: 0;
+    flex-shrink: 1;
     transition: var(--el-transition);
 }
 
@@ -100,12 +141,18 @@
     position: relative;
     cursor: pointer;
     font-size: 1.25rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    padding: 4px 10px 4px 4px;
+    flex-shrink: 0;
 }
 
 .el-cart-badge {
     position: absolute;
-    top: -8px;
-    right: -8px;
+    top: -4px;
+    right: 0;
     background-color: var(--el-secondary);
     color: white;
     font-size: 0.7rem;
@@ -361,6 +408,20 @@
     display: none;
 }
 
+@media (max-width: 1100px) {
+    .el-nav {
+        gap: 1.25rem;
+    }
+
+    .el-nav-link {
+        font-size: 0.85rem;
+    }
+
+    .el-nav-panel {
+        gap: 1.25rem;
+    }
+}
+
 .el-hamburger {
     display: none;
 }
@@ -403,7 +464,7 @@
         background-color: var(--el-primary);
     }
 
-    .el-nav {
+    .el-nav-panel {
         position: fixed;
         top: 0;
         right: -100%;
@@ -421,6 +482,12 @@
         padding: 3rem 2rem;
         transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         z-index: 1035;
+    }
+
+    .el-nav-panel .el-nav {
+        flex-direction: column;
+        gap: 2.5rem;
+        align-items: center;
     }
 
     .el-nav-open {

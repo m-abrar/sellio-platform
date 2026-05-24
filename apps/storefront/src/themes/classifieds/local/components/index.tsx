@@ -21,10 +21,11 @@ export const LocalHeader = ({ onPostClick, onLocationClick, locationName }: Head
       </div>
     </div>
     
-    <div className="cl-nav">
+    <div className="cl-nav-panel">
       <MenuNav
         location="main_header"
         flat
+        className="cl-nav"
         linkClassName="cl-nav-link d-none d-md-block"
         renderItem={(item, { href, className, onNavigate }) => (
           <a

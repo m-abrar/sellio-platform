@@ -91,6 +91,12 @@
 
 .sc-logo span.text-primary { color: var(--sc-primary) !important; }
 
+.sc-nav-panel {
+  display: flex;
+  align-items: center;
+    gap: 2rem;
+}
+
 .sc-nav {
   display: flex;
   gap: 2.5rem;
@@ -680,7 +686,7 @@
     text-align: center;
   }
 
-  .sc-nav {
+  .sc-nav-panel {
     position: fixed;
     top: 0;
     right: -100%;
@@ -697,6 +703,12 @@
     transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     z-index: 1005;
     border-left: 1px solid var(--sc-border);
+  }
+
+  .sc-nav-panel .sc-nav {
+    flex-direction: column;
+    gap: 2rem;
+    align-items: flex-start;
   }
 
   .sc-nav-open {

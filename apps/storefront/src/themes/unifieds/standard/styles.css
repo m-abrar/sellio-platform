@@ -69,6 +69,12 @@
     color: var(--usp-gray);
 }
 
+.usp-nav-panel {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
 .usp-nav {
     display: flex;
     gap: 3rem;
@@ -721,7 +727,7 @@
     }
     
     /* Off-canvas slider navigation drawer */
-    .usp-nav {
+    .usp-nav-panel {
         position: fixed;
         top: 0;
         right: -100%;
@@ -737,7 +743,13 @@
         z-index: 1005;
         border-left: 1px solid var(--usp-border);
     }
-    
+
+    .usp-nav-panel .usp-nav {
+        flex-direction: column;
+        gap: 2rem;
+        align-items: flex-start;
+    }
+
     .usp-nav-open {
         right: 0;
     }

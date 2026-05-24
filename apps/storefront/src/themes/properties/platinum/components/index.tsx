@@ -43,10 +43,11 @@ export const Header = () => {
         <span className="pl-hamburger-bar"></span>
       </button>
 
-      <nav className={`pl-nav ${isOpen ? 'pl-nav-open' : ''}`} aria-label="Primary">
+      <div className={`pl-nav-panel ${isOpen ? 'pl-nav-open' : ''}`} aria-label="Primary">
         <MenuNav
           location="main_header"
           flat
+          className="pl-nav"
           linkClassName="pl-nav-link"
           onNavigate={() => setIsOpen(false)}
           renderItem={hashAwareNavItemRenderer}
@@ -57,7 +58,7 @@ export const Header = () => {
           onNavigate={() => setIsOpen(false)}
           renderItem={(item, props) => hashAwareNavItemRenderer(item, { ...props, isActive: false })}
         />
-      </nav>
+      </div>
 
       <MenuActionButtons
         linkClassName="pl-access-btn pl-desktop-auth-btn"
