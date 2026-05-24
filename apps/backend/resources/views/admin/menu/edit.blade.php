@@ -23,10 +23,14 @@
                     <i class="fas fa-sitemap mr-2 text-primary"></i> 
                     Navigation Architect
                 </h1>
-                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Structural editor for <span class="text-primary font-weight-bold">{{ $menu->title }}</span> ({{ $menu->theme_key }} • {{ $menu->location_key }})</p>
+                <p class="text-muted mt-2 small text-uppercase letter-spacing-1 mb-0">Structural editor for <span class="text-primary font-weight-bold">{{ $menu->title }}</span> ({{ $menu->theme_key }} &middot; {{ $menu->location_key }})</p>
             </div>
             <div class="col-sm-6 d-flex align-items-center justify-content-end">
-                @include('admin._partials._back-button', ['label' => 'REGISTRY'])
+                @include('admin._partials._back-button', [
+                    'route' => 'admin.menu.index',
+                    'params' => ['theme' => $menu->theme_key],
+                    'label' => 'MENU EXPLORER',
+                ])
             </div>
         </div>
     </div>
