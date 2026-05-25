@@ -3,16 +3,14 @@
 namespace App\Http\Controllers\Api\V1\Dashboard\Partner;
 
 use App\Http\Controllers\Controller;
-use App\Models\JobListing;
-use App\Models\Category;
-use App\Models\Location;
-use App\Services\Partner\JobListingService;
 use App\Http\Requests\Partner\JobListingRequest;
-use Illuminate\Http\RedirectResponse;
+use App\Http\Resources\JobListingResource;
+use App\Models\JobListing;
+use App\Services\Partner\JobListingService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\View\View;
-use App\Http\Resources\JobListingResource;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * Class JobListingController
@@ -20,154 +18,114 @@ use App\Http\Resources\JobListingResource;
  */
 class JobListingController extends Controller
 {
-    /**
-     * @var JobListingService
-     */
-    protected $jobService;
+    protected JobListingService $jobService;
 
-    /**
-     * JobListingController constructor.
-     *
-     * @param JobListingService $jobService
-     */
     public function __construct(JobListingService $jobService)
     {
         $this->jobService = $jobService;
     }
 
-    /**
-     * Display a listing of the partner's jobs.
-     *
-     * @return View
-     */
-    /**
-     * Display a listing of the partner's jobs.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function index(Request $request): \Illuminate\Http\JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $jobs = JobListing::where('user_id', Auth::id())
+        $jobs = $this->jobService->getPartnerJobs(
+            Auth::user(),
+            $request->integer('per_page', 120)
+        );
+
+        return $this->successResponse(
+            JobListingResource::collection($jobs),
+            null,
+            200,
+            ['form' => $this->jobService->getFormData()]
+        );
+    }
+
+    public function create(): JsonResponse
+    {
+        return $this->successResponse($this->jobService->getFormData());
+    }
+
+    public function store(JobListingRequest $request): JsonResponse
+    {
+        $data = $request->validated();
+        $job = $this->jobService->saveJob(Auth::user(), $data);
+        $this->handleMedia($job, $request);
+
+        return $this->successResponse(
+            new JobListingResource($job->load(['media', 'category', 'location', 'brand', 'employer'])),
+            __('Job created successfully!'),
+            201
+        );
+    }
+
+    public function show($joblisting): JsonResponse
+    {
+        $model = JobListing::where('user_id', Auth::id())
+            ->where(is_numeric($joblisting) ? 'id' : 'slug', $joblisting)
             ->withCount(['applications', 'applicationsNew'])
-            ->with(['category', 'location', 'brand', 'tags', 'employer'])
-            ->latest()
-            ->paginate(15);
+            ->with(['media', 'category', 'location', 'brand', 'tags', 'employer'])
+            ->firstOrFail();
 
-        return $this->successResponse(JobListingResource::collection($jobs));
+        return $this->successResponse(new JobListingResource($model));
     }
 
-    /**
-     * Show the form for creating a new job.
-     *
-     * @return View
-     */
-    public function create() {
-        return $this->successResponse($this->getFormData());
-    }
-
-    /**
-     * Store a newly created job.
-     *
-     * @param JobListingRequest $request
-     * @return RedirectResponse
-     */
-    public function store(JobListingRequest $request)
-    {
-        $job = $this->jobService->saveJob(Auth::user(), $request->validated());
-
-        if ($request->wantsJson()) {
-            return $this->successResponse(
-                new JobListingResource($job),
-                __('Job created successfully!'),
-                201
-            );
-        }
-
-        return $this->successResponse(null, __('Job created successfully!'));
-    }
-
-    /**
-     * Show the form for editing a specific job.
-     *
-     * @param JobListing $joblisting
-     * @return View
-     */
-    public function edit(JobListing $joblisting): \Illuminate\Http\JsonResponse
+    public function edit(JobListing $joblisting): JsonResponse
     {
         $this->authorizeOwner($joblisting);
 
-        $data = array_merge($this->getFormData(), [
-            'job' => new JobListingResource($joblisting->load(['category', 'location', 'tags']))
-        ]);
-
-        return $this->successResponse($data, __('Job details retrieved successfully.'));
+        return $this->successResponse(
+            new JobListingResource($joblisting->load(['media', 'category', 'location', 'brand', 'tags', 'employer']))
+        );
     }
 
-    /**
-     * Update the specified job.
-     *
-     * @param JobListingRequest $request
-     * @param JobListing $joblisting
-     * @return RedirectResponse
-     */
-    public function update(JobListingRequest $request, JobListing $joblisting)
+    public function update(JobListingRequest $request, JobListing $joblisting): JsonResponse
     {
         $this->authorizeOwner($joblisting);
-
         $this->jobService->saveJob(Auth::user(), $request->validated(), $joblisting);
+        $this->handleMedia($joblisting, $request);
 
-        if ($request->wantsJson()) {
-            return $this->successResponse(
-                new JobListingResource($joblisting->fresh()),
-                __('Job updated successfully!')
-            );
-        }
-
-        return $this->successResponse(null, __('Job updated successfully!'));
+        return $this->successResponse(
+            new JobListingResource($joblisting->fresh(['media', 'category', 'location', 'brand', 'employer'])),
+            __('Job updated successfully!')
+        );
     }
 
-    /**
-     * Remove the specified job.
-     *
-     * @param JobListing $joblisting
-     * @return RedirectResponse
-     */
-    public function destroy(JobListing $joblisting)
+    public function destroy(JobListing $joblisting): JsonResponse
     {
         $this->authorizeOwner($joblisting);
-        $joblisting->delete();
-
-        if (request()->wantsJson()) {
-            return $this->successResponse(null, __('Job deleted successfully.')
-            );
-        }
+        $this->jobService->deleteJob($joblisting);
 
         return $this->successResponse(null, __('Job deleted successfully.'));
     }
 
-    /**
-     * Get categories and locations filtered for jobs.
-     *
-     * @return array
-     */
-    protected function getFormData(): array
-    {
-        return [
-            'categories' => Category::where('is_job', true)->get(),
-            'locations'  => Location::where('is_job', true)->get(),
-        ];
-    }
-
-    /**
-     * Authorize that the partner owns the job listing.
-     *
-     * @param JobListing $job
-     * @return void
-     */
     protected function authorizeOwner(JobListing $job): void
     {
         if (Auth::id() !== $job->user_id) {
             abort(403, __('You do not have permission to modify this job.'));
+        }
+    }
+
+    protected function handleMedia(JobListing $job, Request $request): void
+    {
+        if ($request->hasFile('main_image')) {
+            $job->clearMediaCollection(JobListing::PRIMARY_MEDIA);
+            $job->addMediaFromRequest('main_image')->toMediaCollection(JobListing::PRIMARY_MEDIA);
+        }
+
+        if ($request->has('existing_media_ids')) {
+            $keepIds = array_map('intval', (array) $request->input('existing_media_ids'));
+
+            $job->getMedia(JobListing::GALLERY_MEDIA)
+                ->reject(fn ($media) => in_array($media->id, $keepIds))
+                ->each(fn ($media) => $media->delete());
+
+            Media::setNewOrder($keepIds);
+        }
+
+        if ($request->hasFile('gallery')) {
+            foreach ($request->file('gallery') as $file) {
+                $job->addMedia($file)->toMediaCollection(JobListing::GALLERY_MEDIA);
+            }
         }
     }
 }

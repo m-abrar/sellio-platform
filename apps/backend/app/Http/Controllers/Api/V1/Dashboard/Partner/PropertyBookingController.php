@@ -48,7 +48,7 @@ class PropertyBookingController extends Controller
             ->latest()
             ->paginate(10);
 
-        return PropertyBookingResource::collection($propertyBookings);
+        return $this->successResponse(PropertyBookingResource::collection($propertyBookings));
     }
 
     /**

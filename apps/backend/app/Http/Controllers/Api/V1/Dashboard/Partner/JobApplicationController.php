@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\JobApplication;
 use App\Http\Resources\JobApplicationResource;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
@@ -51,7 +52,19 @@ class JobApplicationController extends Controller
             ->latest()
             ->paginate(10);
 
-        return JobApplicationResource::collection($jobApplications);
+        return $this->successResponse(JobApplicationResource::collection($jobApplications));
+    }
+
+    /**
+     * Update the hiring status of the application.
+     */
+    public function update(Request $request, JobApplication $jobApplication)
+    {
+        $validated = $request->validate([
+            'status' => ['required', 'string'],
+        ]);
+
+        return $this->updateStatus($jobApplication, $validated['status']);
     }
 
     /**

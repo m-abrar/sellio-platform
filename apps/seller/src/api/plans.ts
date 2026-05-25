@@ -1,0 +1,60 @@
+import { apiClient, extractListData, unwrapData } from '../lib/apiClient';
+import { normalizePlan, normalizeSubscription } from '../lib/planAdapter';
+
+export const getPlans = async () => {
+  const response = await apiClient.get('/dashboard/partner/plans');
+  const records = extractListData<Record<string, unknown>>(response);
+
+  return {
+    data: records,
+  };
+};
+
+export const getSubscriptions = async () => {
+  const response = await apiClient.get('/dashboard/partner/subscriptions');
+  const records = extractListData<Record<string, unknown>>(response);
+
+  return {
+    data: records.map(normalizeSubscription),
+  };
+};
+
+export const subscribeToPlan = async (planId: number) => {
+  const response = await apiClient.post('/dashboard/partner/subscriptions', {
+    plan_id: planId,
+  });
+
+  return {
+    message: response.data.message,
+  };
+};
+
+export const cancelSubscription = async (subscriptionId: number) => {
+  const response = await apiClient.delete(`/dashboard/partner/subscriptions/${subscriptionId}`);
+
+  return {
+    message: response.data.message,
+  };
+};
+
+export const getMembershipPlans = async () => {
+  const [plansResponse, subscriptionsResponse] = await Promise.all([
+    getPlans(),
+    getSubscriptions(),
+  ]);
+
+  const activeSubscription = subscriptionsResponse.data.find(
+    (subscription) => subscription.status === 'active' || subscription.status === 'on_trial',
+  );
+
+  const activePlanId = activeSubscription?.planId ?? null;
+
+  return {
+    data: {
+      data: plansResponse.data.map((plan) => normalizePlan(plan, activePlanId)),
+      activeSubscription,
+    },
+  };
+};
+
+export const getMembershipOverview = getMembershipPlans;

@@ -10,73 +10,212 @@ import {
   HiOutlineChevronLeft,
   HiOutlineClock
 } from 'react-icons/hi2';
-
-// Studio Components
 import MediaStudio from '../../components/studio/MediaStudio';
 import PageHeader from '../../components/layout/PageHeader';
 import ActionPill from '../../utils/ActionPill';
+import { createEvent, getEventBySlug, getEventFormMeta, updateEvent } from '../../api/events';
+import { ApiError } from '../../lib/apiError';
+
+const containerClass = 'bg-white border border-slate-100 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.04)] p-8 md:p-12';
+const labelClass = 'text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3 block ml-2';
+const inputClass = 'w-full bg-slate-50 border-2 border-transparent focus:border-[#6610f2] focus:bg-white rounded-[1.5rem] px-6 py-5 text-slate-900 font-bold transition-all outline-none placeholder:text-slate-300';
+
+const defaultForm = {
+  title: '',
+  date: '',
+  time: '',
+  venue: '',
+  location: '',
+  capacity: '',
+  organizer: '',
+  price: '',
+  description: '',
+  category_id: '',
+  is_published: true,
+};
 
 export default function CreateEvent() {
   const { slug } = useParams();
   const navigate = useNavigate();
   const isEditMode = Boolean(slug);
 
-  const containerClass = "bg-white border border-slate-100 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.04)] p-8 md:p-12";
-  const labelClass = "text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3 block ml-2";
-  const inputClass = "w-full bg-slate-50 border-2 border-transparent focus:border-[#6610f2] focus:bg-white rounded-[1.5rem] px-6 py-5 text-slate-900 font-bold transition-all outline-none placeholder:text-slate-300";
-
-  const [isLoading, setIsLoading] = useState(false);
+  const [formMeta, setFormMeta] = useState<any>({ categories: [], types: [], locations: [] });
+  const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const [eventId, setEventId] = useState<number | null>(null);
   const [files, setFiles] = useState<any[]>([]);
+  const [form, setForm] = useState(defaultForm);
+  const [ticketMeta, setTicketMeta] = useState({ id: 'NEW_1', title: 'General Admission', durationHours: 3 });
+  const [occurrenceMeta, setOccurrenceMeta] = useState({ id: 'NEW_1' });
 
-  const [form, setForm] = useState<any>({
-    title: '',
-    date: '',
-    time: '',
-    venue: '',
-    location: '',
-    capacity: '',
-    organizer: '',
-    price: '',
-    description: '',
-    is_published: true,
-  });
-
-  const updateForm = useCallback((field: string, value: any) => {
-    setForm((prev: any) => ({ ...prev, [field]: value }));
+  const updateForm = useCallback((field: string, value: unknown) => {
+    setForm((prev) => ({ ...prev, [field]: value }));
   }, []);
 
   const progress = useMemo(() => {
     let score = 0;
-    if (form.title.length > 5) score += 20;
-    if (files.length > 0) score += 20;
-    if (form.date !== '') score += 20;
-    if (form.venue !== '') score += 20;
-    if (form.price !== '') score += 20;
+    if (form.title.length > 5) score += 15;
+    if (files.some((f) => f.isMain)) score += 15;
+    if (form.date !== '') score += 15;
+    if (form.venue !== '') score += 15;
+    if (form.price !== '') score += 15;
+    if (form.category_id !== '') score += 15;
+    if (form.description.length > 20) score += 10;
     return score;
   }, [form, files]);
 
+  useEffect(() => {
+    const initialize = async () => {
+      setIsLoading(true);
+      try {
+        const meta = await getEventFormMeta();
+        setFormMeta(meta);
+
+        if (isEditMode && slug) {
+          const { data: event } = await getEventBySlug(slug);
+          const ticket = event.ticket_types?.[0];
+          const occurrence = event.occurrences?.[0];
+
+          setEventId(event.id);
+          setTicketMeta({
+            id: ticket ? String(ticket.id) : 'NEW_1',
+            title: ticket?.title || 'General Admission',
+            durationHours: occurrence?.duration_hours || 3,
+          });
+          setOccurrenceMeta({
+            id: occurrence ? String(occurrence.id) : 'NEW_1',
+          });
+          setForm({
+            title: event.title || '',
+            date: event.date || '',
+            time: event.time || '',
+            venue: event.venue || '',
+            location: event.location || '',
+            capacity: event.capacity != null ? String(event.capacity) : '',
+            organizer: event.organizer || '',
+            price: event.base_price != null ? String(event.base_price) : '',
+            description: event.description || '',
+            category_id: event.category_id ? String(event.category_id) : '',
+            is_published: event.is_published ?? true,
+          });
+
+          const initialMedia: any[] = [];
+          if (event.featured_image) {
+            initialMedia.push({
+              id: event.gallery[0]?.id,
+              url: event.featured_image,
+              preview: event.featured_image,
+              isMain: true,
+              existing: true,
+            });
+          }
+          event.gallery.forEach((item: any) => {
+            if (item.url !== event.featured_image) {
+              initialMedia.push({
+                id: item.id,
+                url: item.url,
+                preview: item.thumbnail || item.url,
+                isMain: false,
+                existing: true,
+              });
+            }
+          });
+          setFiles(initialMedia);
+        }
+      } catch (error) {
+        console.error('Failed to initialize event form', error);
+        toast.error('Failed to load event data.');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    initialize();
+  }, [isEditMode, slug]);
+
+  const buildFormData = () => {
+    const formData = new FormData();
+    const basePrice = parseFloat(form.price) || 0;
+    const capacity = parseInt(form.capacity, 10) || 0;
+    const startDateTime = `${form.date} ${form.time}:00`;
+
+    formData.append('title', form.title);
+    formData.append('description', form.description);
+    formData.append('category_id', form.category_id);
+    formData.append('base_price', String(basePrice));
+    formData.append('is_paid', basePrice > 0 ? '1' : '0');
+    formData.append('is_published', form.is_published ? '1' : '0');
+    formData.append('is_virtual', '0');
+
+    if (form.location) formData.append('city', form.location);
+    if (form.organizer) formData.append('organizer_name', form.organizer);
+
+    formData.append('tickets[0][id]', ticketMeta.id);
+    formData.append('tickets[0][title]', ticketMeta.title);
+    formData.append('tickets[0][base_price]', String(basePrice));
+
+    formData.append('occurrences[0][id]', occurrenceMeta.id);
+    formData.append('occurrences[0][start_date_time]', startDateTime);
+    formData.append('occurrences[0][duration_hours]', String(ticketMeta.durationHours));
+    formData.append('occurrences[0][max_attendees]', String(capacity));
+    formData.append('occurrences[0][venue_details]', form.venue);
+    formData.append(`occurrences[0][inventory][${ticketMeta.id}][available_quantity]`, String(capacity));
+    formData.append(`occurrences[0][inventory][${ticketMeta.id}][override_price]`, '0');
+
+    files.forEach((fileObj) => {
+      if (fileObj.file) {
+        if (fileObj.isMain) formData.append('main_image', fileObj.file);
+        else formData.append('gallery[]', fileObj.file);
+      } else if (fileObj.existing) {
+        formData.append('existing_media_ids[]', String(fileObj.id));
+      }
+    });
+
+    return formData;
+  };
+
   const handleSave = async () => {
+    if (!form.title || !form.description || !form.category_id || !form.date || !form.time) {
+      toast.error('Please complete the required event fields.');
+      return;
+    }
+
     setIsSaving(true);
     const toastId = toast.loading('Publishing event...');
-    
+
     try {
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      toast.success(`${form.title || 'Event'} published successfully.`, { id: toastId });
-      setIsSaving(false);
+      const formData = buildFormData();
+
+      if (isEditMode && eventId) {
+        await updateEvent(eventId, formData);
+      } else {
+        await createEvent(formData);
+      }
+
+      toast.success(`${form.title || 'Event'} saved successfully.`, { id: toastId });
       await triggerCelebration();
-      setTimeout(() => navigate('/dashboard/events'), 2000);
-    } catch (err) {
+      setTimeout(() => navigate('/dashboard/events'), 1500);
+    } catch (error) {
+      const message = error instanceof ApiError ? error.message : 'Failed to publish event.';
+      toast.error(message, { id: toastId });
+    } finally {
       setIsSaving(false);
-      toast.error("Failed to publish event.", { id: toastId });
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="h-screen flex items-center justify-center">
+        <span className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-300 animate-pulse">Loading Event Studio...</span>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-10 md:space-y-16 pb-40 animate-in fade-in slide-in-from-bottom-6 duration-1000">
       <PageHeader
         badge="Experience Protocol"
-        title={isEditMode ? "Modify" : "Create"}
+        title={isEditMode ? 'Modify' : 'Create'}
         subtitle="Event"
       >
         <button
@@ -104,6 +243,19 @@ export default function CreateEvent() {
                     className={`${inputClass} text-2xl italic tracking-tighter`}
                     placeholder="e.g. Summer Tech Summit 2026"
                   />
+                </div>
+                <div>
+                  <label className={labelClass}>Category</label>
+                  <select
+                    value={form.category_id}
+                    onChange={(e) => updateForm('category_id', e.target.value)}
+                    className={inputClass}
+                  >
+                    <option value="">Select category</option>
+                    {formMeta.categories.map((category: any) => (
+                      <option key={category.id} value={category.id}>{category.title}</option>
+                    ))}
+                  </select>
                 </div>
                 <div>
                   <label className={labelClass}>Organizer</label>

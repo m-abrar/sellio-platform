@@ -8,9 +8,10 @@ import {
   HiOutlineClock,
   HiOutlineTicket,
   HiOutlineUserGroup,
-  HiOutlineStar
 } from 'react-icons/hi2';
 import PageHeader from '../../components/layout/PageHeader';
+import { getEventBySlug } from '../../api/events';
+import { toast } from 'sonner';
 
 export default function EventDetailPage() {
   const { slug } = useParams();
@@ -19,31 +20,22 @@ export default function EventDetailPage() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate API fetch
-    setTimeout(() => {
-      setEvent({
-        id: 1,
-        title: 'Global Tech Summit 2024',
-        slug: 'global-tech-summit-2024',
-        price: '$499.00',
-        location: 'Convention Center, San Francisco',
-        description: 'Join the world\'s leading innovators, developers, and tech enthusiasts for three days of groundbreaking keynotes, hands-on workshops, and unparalleled networking opportunities. The Global Tech Summit 2024 explores the future of AI, sustainable technology, and the next generation of digital transformation.',
-        is_active: true,
-        date: 'Oct 15 - 17, 2024',
-        time: '09:00 AM - 06:00 PM',
-        category: 'Technology',
-        capacity: '5,000 Attendees',
-        organizer: 'TechVision Global',
-        speakers: ['Dr. Sarah Chen (AI Ethics)', 'Marcus Vane (Future of Web)', 'Elena Rodriguez (Green Tech)'],
-        features: ['VIP Networking Lounge', 'Interactive Demo Zone', 'Gala Dinner', 'Hackathon Access', 'Digital Certificate'],
-        media: [
-          { original_url: 'https://images.unsplash.com/photo-1540575861501-7cf05a4b125a?w=1200' },
-          { original_url: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=800' },
-          { original_url: 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=800' }
-        ]
-      });
-      setIsLoading(false);
-    }, 800);
+    const fetchEvent = async () => {
+      if (!slug) return;
+
+      setIsLoading(true);
+      try {
+        const { data } = await getEventBySlug(slug);
+        setEvent(data);
+      } catch (error) {
+        console.error('Failed to fetch event', error);
+        toast.error('Failed to load event details.');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchEvent();
   }, [slug]);
 
   if (isLoading) {
@@ -59,7 +51,22 @@ export default function EventDetailPage() {
     );
   }
 
-  const containerClass = "bg-white border border-slate-100 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.04)] p-8 md:p-12";
+  if (!event) {
+    return (
+      <div className="h-screen flex items-center justify-center">
+        <span className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-300">Event not found</span>
+      </div>
+    );
+  }
+
+  const containerClass = 'bg-white border border-slate-100 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.04)] p-8 md:p-12';
+  const formattedDate = event.date
+    ? new Date(`${event.date}T${event.time || '00:00'}`).toLocaleDateString(undefined, {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+      })
+    : 'TBD';
 
   return (
     <div className="space-y-10 md:space-y-16 pb-40 animate-in fade-in slide-in-from-bottom-6 duration-1000">
@@ -85,27 +92,25 @@ export default function EventDetailPage() {
       </PageHeader>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-        {/* LEFT COLUMN: MEDIA & DESCRIPTION */}
         <div className="lg:col-span-8 space-y-10">
-          {/* MAIN IMAGE */}
           <div className="rounded-[3rem] overflow-hidden shadow-2xl border-4 border-white">
             <img 
-              src={event.media[0].original_url} 
+              src={event.media[0]?.original_url} 
               className="w-full aspect-video object-cover" 
               alt={event.title} 
             />
           </div>
 
-          {/* GALLERY GRID */}
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-            {event.media.slice(1).map((img: any, i: number) => (
-              <div key={i} className="rounded-[2rem] overflow-hidden border-2 border-white shadow-md">
-                <img src={img.original_url} className="w-full aspect-square object-cover" alt="" />
-              </div>
-            ))}
-          </div>
+          {event.media.length > 1 && (
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+              {event.media.slice(1).map((img: any, i: number) => (
+                <div key={i} className="rounded-[2rem] overflow-hidden border-2 border-white shadow-md">
+                  <img src={img.original_url} className="w-full aspect-square object-cover" alt="" />
+                </div>
+              ))}
+            </div>
+          )}
 
-          {/* DESCRIPTION */}
           <div className={containerClass}>
             <h3 className="text-2xl font-black text-slate-900 tracking-tight italic mb-8 flex items-center gap-3">
               <span className="w-2 h-8 bg-[#6610f2] rounded-full" /> Event Narrative.
@@ -114,33 +119,16 @@ export default function EventDetailPage() {
               {event.description}
             </p>
           </div>
-
-          {/* SPEAKERS */}
-          <div className={containerClass}>
-            <h3 className="text-2xl font-black text-slate-900 tracking-tight italic mb-8 flex items-center gap-3">
-              <span className="w-2 h-8 bg-pink-500 rounded-full" /> Keynote Speakers.
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {event.speakers.map((speaker: string, i: number) => (
-                <div key={i} className="flex items-center gap-3 p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                  <HiOutlineStar className="w-5 h-5 text-pink-500" />
-                  <span className="text-sm font-bold text-slate-700">{speaker}</span>
-                </div>
-              ))}
-            </div>
-          </div>
         </div>
 
-        {/* RIGHT COLUMN: STATS & TICKETS */}
         <div className="lg:col-span-4 space-y-10">
-          {/* PRICE CARD */}
           <div className="bg-slate-900 rounded-[3rem] p-10 text-white shadow-2xl relative overflow-hidden">
             <div className="relative z-10">
               <p className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-4">Standard Admission</p>
-              <h4 className="text-5xl font-black italic tracking-tighter mb-8">{event.price}</h4>
+              <h4 className="text-5xl font-black italic tracking-tighter mb-8">{event.price || 'Free'}</h4>
               <div className="flex items-center gap-3 text-pink-400 font-bold text-sm">
                 <div className="w-2 h-2 bg-pink-400 rounded-full animate-pulse" />
-                TICKETS AVAILABLE
+                {event.is_active ? 'LIVE LISTING' : 'DRAFT'}
               </div>
             </div>
             <div className="absolute -right-4 -bottom-4 opacity-10">
@@ -148,7 +136,6 @@ export default function EventDetailPage() {
             </div>
           </div>
 
-          {/* QUICK STATS */}
           <div className={containerClass}>
             <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-8">Event Logistics</h4>
             <div className="space-y-6">
@@ -157,53 +144,46 @@ export default function EventDetailPage() {
                   <HiOutlineCalendarDays className="w-5 h-5" />
                   <span className="text-sm font-bold">Date</span>
                 </div>
-                <span className="text-sm font-black text-slate-900">{event.date}</span>
+                <span className="text-sm font-black text-slate-900">{formattedDate}</span>
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3 text-slate-500">
                   <HiOutlineClock className="w-5 h-5" />
                   <span className="text-sm font-bold">Time</span>
                 </div>
-                <span className="text-sm font-black text-slate-900">{event.time}</span>
+                <span className="text-sm font-black text-slate-900">{event.time || 'TBD'}</span>
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3 text-slate-500">
                   <HiOutlineMapPin className="w-5 h-5" />
                   <span className="text-sm font-bold">Venue</span>
                 </div>
-                <span className="text-sm font-black text-slate-900 text-right max-w-[150px]">{event.location}</span>
+                <span className="text-sm font-black text-slate-900 text-right max-w-[150px]">{event.venue || event.location}</span>
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3 text-slate-500">
                   <HiOutlineUserGroup className="w-5 h-5" />
                   <span className="text-sm font-bold">Capacity</span>
                 </div>
-                <span className="text-sm font-black text-slate-900">{event.capacity}</span>
+                <span className="text-sm font-black text-slate-900">{event.capacity || 'N/A'}</span>
               </div>
             </div>
           </div>
 
-          {/* ORGANIZER INFO */}
-          <div className={containerClass}>
-            <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-8">Event Organizer</h4>
-            <div className="flex items-center gap-4 mb-8">
-              <div className="w-16 h-16 bg-slate-100 rounded-[1.5rem] flex items-center justify-center text-pink-600 border-2 border-white shadow-sm">
-                <HiOutlineTicket className="w-8 h-8" />
-              </div>
-              <div>
-                <p className="text-lg font-black text-slate-900 leading-none mb-1">{event.organizer}</p>
-                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Verified Host</p>
-              </div>
-            </div>
-            <div className="space-y-3">
-              <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100 text-sm font-bold text-slate-600">
-                events@techvision.com
-              </div>
-              <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100 text-sm font-bold text-slate-600">
-                +1 (415) 555-0122
+          {event.organizer && (
+            <div className={containerClass}>
+              <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-8">Event Organizer</h4>
+              <div className="flex items-center gap-4">
+                <div className="w-16 h-16 bg-slate-100 rounded-[1.5rem] flex items-center justify-center text-pink-600 border-2 border-white shadow-sm">
+                  <HiOutlineTicket className="w-8 h-8" />
+                </div>
+                <div>
+                  <p className="text-lg font-black text-slate-900 leading-none mb-1">{event.organizer}</p>
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Verified Host</p>
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </div>

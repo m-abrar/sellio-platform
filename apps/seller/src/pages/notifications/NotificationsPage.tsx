@@ -12,7 +12,7 @@ import {
   HiOutlineStar 
 } from 'react-icons/hi2';
 import { toast } from 'sonner';
-import { getNotifications } from '../../api/notifications';
+import { getNotifications, markNotificationAsRead, markAllNotificationsAsRead, deleteNotification as deleteNotificationApi } from '../../api/notifications';
 
 const getIcon = (type: string) => {
   switch (type) {
@@ -57,19 +57,37 @@ export default function NotificationsPage() {
     fetchNotifications();
   }, []);
 
-  const markAsRead = (id: number) => {
-    setNotifications(prev => prev.map(n => n.id === id ? { ...n, read: true } : n));
-    toast.success('Marked as read');
+  const markAsRead = async (id: string) => {
+    try {
+      await markNotificationAsRead(id);
+      setNotifications((prev) => prev.map((n) => (n.id === id ? { ...n, read: true } : n)));
+      toast.success('Marked as read');
+    } catch (error) {
+      console.error('Failed to mark notification as read', error);
+      toast.error('Failed to mark notification as read');
+    }
   };
 
-  const markAllAsRead = () => {
-    setNotifications(prev => prev.map(n => ({ ...n, read: true })));
-    toast.success('All notifications marked as read');
+  const markAllAsRead = async () => {
+    try {
+      await markAllNotificationsAsRead();
+      setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
+      toast.success('All notifications marked as read');
+    } catch (error) {
+      console.error('Failed to mark all notifications as read', error);
+      toast.error('Failed to mark all notifications as read');
+    }
   };
 
-  const deleteNotification = (id: number) => {
-    setNotifications(prev => prev.filter(n => n.id !== id));
-    toast.success('Notification deleted');
+  const deleteNotification = async (id: string) => {
+    try {
+      await deleteNotificationApi(id);
+      setNotifications((prev) => prev.filter((n) => n.id !== id));
+      toast.success('Notification deleted');
+    } catch (error) {
+      console.error('Failed to delete notification', error);
+      toast.error('Failed to delete notification');
+    }
   };
 
   const filteredNotifications = filter === 'all' 

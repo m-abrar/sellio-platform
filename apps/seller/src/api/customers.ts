@@ -1,14 +1,36 @@
-import axios from 'axios';
-import { API_BASE_URL } from '../config/api';
+import { apiClient, extractListData } from '../lib/apiClient';
 
-const API_URL = `${API_BASE_URL}/customers`;
+export interface CustomerListItem {
+  id: number;
+  key: string;
+  name: string;
+  email: string;
+  phone: string;
+  total_orders: number;
+  total_spent: string;
+  status: string;
+  joined: string;
+  last_interaction_at?: string | null;
+  interactions?: Array<Record<string, unknown>>;
+}
 
 export const getCustomers = async () => {
-  try {
-    const response = await axios.get(API_URL);
-    return response.data;
-  } catch (error) {
-    console.warn('Backend not reachable, falling back to mock data');
-    return { data: { data: [] } };
-  }
+  const response = await apiClient.get('/dashboard/partner/customers/');
+  const customers = extractListData<CustomerListItem>(response);
+
+  return {
+    data: {
+      data: customers,
+    },
+    meta: response.data.meta,
+  };
 };
+
+export const getCustomerById = async (id: string) => {
+  const response = await apiClient.get(`/dashboard/partner/customers/${encodeURIComponent(id)}`);
+  const customer = response.data.data as CustomerListItem;
+
+  return customer ? { data: customer } : null;
+};
+
+export const getCustomerByKey = async (key: string) => getCustomerById(key);

@@ -3,35 +3,45 @@ import { useNavigate } from 'react-router-dom';
 import PageHeader from '../../components/layout/PageHeader';
 import { HiOutlinePencilSquare, HiOutlineTrash, HiOutlinePlus } from 'react-icons/hi2';
 import { toast } from 'sonner';
-import { getServices } from '../../api/services';
+import { deleteService, getServices } from '../../api/services';
+import { triggerDeletion } from '../../utils/animations';
 
 export default function ServicesPage() {
   const navigate = useNavigate();
   const [services, setServices] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  const fetchServices = async () => {
+    setIsLoading(true);
+    try {
+      const response = await getServices();
+      setServices(response.data);
+    } catch (error) {
+      console.error('Failed to fetch services', error);
+      toast.error('Failed to synchronize services.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchServices = async () => {
-      try {
-        const response = await getServices();
-        setServices(response.data.data);
-      } catch (error) {
-        console.error("Failed to fetch services", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
     fetchServices();
   }, []);
 
   const handleDelete = (id: number, title: string) => {
     toast(`Decommission "${title}"?`, {
-      description: "This action cannot be undone.",
+      description: 'This action cannot be undone.',
       action: {
-        label: "Confirm",
-        onClick: () => {
-          setServices(prev => prev.filter(s => s.id !== id));
-          toast.success(`${title} decommissioned successfully.`);
+        label: 'Confirm',
+        onClick: async () => {
+          try {
+            await deleteService(id);
+            triggerDeletion();
+            setServices((prev) => prev.filter((s) => s.id !== id));
+            toast.success(`${title} decommissioned successfully.`);
+          } catch (err: any) {
+            toast.error(err.message || 'Failed to delete service.');
+          }
         },
       },
     });
@@ -56,15 +66,18 @@ export default function ServicesPage() {
         <div className="h-64 flex items-center justify-center">
           <span className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-300 animate-pulse">Syncing Services...</span>
         </div>
+      ) : services.length === 0 ? (
+        <div className="text-center py-24 bg-white rounded-[2.5rem] border border-slate-100">
+          <p className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-300">No services found</p>
+        </div>
       ) : (
         <>
-          {/* MOBILE VIEW */}
           <div className="lg:hidden space-y-6">
             {services.map((service) => (
               <div key={service.id} className="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-premium relative overflow-hidden group">
                 <div className="flex gap-6">
                   <div className="w-24 h-24 rounded-[2rem] overflow-hidden bg-slate-50 shrink-0 border-4 border-white shadow-md cursor-pointer" onClick={() => navigate(`/dashboard/services/view/${service.slug}`)}>
-                    <img src={service.media[0].original_url} className="w-full h-full object-cover" alt={service.title} />
+                    <img src={service.media[0]?.original_url} className="w-full h-full object-cover" alt={service.title} />
                   </div>
                   <div className="min-w-0 flex-1 pt-1">
                     <span className="text-[9px] font-black text-[#6610f2] bg-[#6610f2]/5 px-3 py-1 rounded-full uppercase tracking-widest">{service.sku}</span>
@@ -74,12 +87,12 @@ export default function ServicesPage() {
                     >
                       {service.title}
                     </h3>
-                    <p className="text-2xl font-black text-slate-900 mt-1 tracking-tighter">{service.price}</p>
+                    <p className="text-2xl font-black text-slate-900 mt-1 tracking-tighter">{service.price || 'Quote'}</p>
                   </div>
                 </div>
                 <div className="flex items-center justify-between mt-6 pt-6 border-t border-slate-50">
                   <div className="flex flex-col text-left">
-                    <span className="text-[9px] font-black text-slate-300 uppercase tracking-widest mb-1">Location</span>
+                    <span className="text-[9px] font-black text-slate-300 uppercase tracking-widest mb-1">Coverage</span>
                     <span className="text-xs font-black uppercase text-slate-600">{service.location}</span>
                   </div>
                   <div className="flex gap-2">
@@ -96,7 +109,6 @@ export default function ServicesPage() {
             ))}
           </div>
 
-          {/* DESKTOP VIEW */}
           <div className="hidden lg:block">
             <table className="w-full border-separate border-spacing-y-4">
               <thead>
@@ -115,7 +127,7 @@ export default function ServicesPage() {
                           className="w-20 h-16 rounded-[1.2rem] overflow-hidden bg-slate-100 border-2 border-white shadow-sm shrink-0 cursor-pointer"
                           onClick={() => navigate(`/dashboard/services/view/${service.slug}`)}
                         >
-                          <img src={service.media[0].original_url} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="" />
+                          <img src={service.media[0]?.original_url} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="" />
                         </div>
                         <div className="min-w-0">
                           <p 
@@ -129,7 +141,7 @@ export default function ServicesPage() {
                       </div>
                     </td>
                     <td className="bg-white group-hover:bg-slate-50/50 border-y border-slate-100 group-hover:border-[#6610f2]/20 px-10 py-6 transition-all duration-300">
-                      <span className="text-xl font-black text-slate-900 tracking-tighter">{service.price}</span>
+                      <span className="text-xl font-black text-slate-900 tracking-tighter">{service.price || 'Quote'}</span>
                       <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-1">Starting From</p>
                     </td>
                     <td className="bg-white group-hover:bg-slate-50/50 border-y border-r border-slate-100 group-hover:border-[#6610f2]/20 rounded-r-[2rem] px-10 py-6 text-right transition-all duration-300 relative overflow-hidden">

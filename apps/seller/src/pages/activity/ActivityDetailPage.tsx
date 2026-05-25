@@ -15,7 +15,7 @@ import { getActivityById } from '../../api/activity';
 import { toast } from 'sonner';
 
 export default function ActivityDetailPage() {
-  const { type, id } = useParams();
+  const { module, type, id } = useParams();
   const navigate = useNavigate();
   const [activity, setActivity] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -25,7 +25,7 @@ export default function ActivityDetailPage() {
       if (!id) return;
       setIsLoading(true);
       try {
-        const response = await getActivityById(id);
+        const response = await getActivityById(module, type, id);
         if (response && response.data) {
           setActivity(response.data);
         } else {
@@ -39,7 +39,7 @@ export default function ActivityDetailPage() {
       }
     };
     fetchActivity();
-  }, [id]);
+  }, [module, type, id]);
 
   const handleStatusUpdate = (newStatus: string) => {
     toast.success(`Status updated to ${newStatus}`);

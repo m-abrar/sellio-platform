@@ -35,6 +35,7 @@ class EventOccurrence extends Model
         'end_date_time',
         'max_attendees',
         'duration_hours',
+        'venue_details',
     ];
 
     /**

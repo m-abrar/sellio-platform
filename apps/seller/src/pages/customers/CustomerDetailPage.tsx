@@ -11,7 +11,7 @@ import {
   HiOutlineChatBubbleLeftRight,
   HiOutlineMapPin
 } from 'react-icons/hi2';
-import { mockCustomers } from '../../api/mockData';
+import { getCustomerById } from '../../api/customers';
 
 export default function CustomerDetailPage() {
   const { id } = useParams();
@@ -20,12 +20,21 @@ export default function CustomerDetailPage() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setIsLoading(true);
-    setTimeout(() => {
-      const item = mockCustomers.find(c => c.id === Number(id));
-      setCustomer(item);
-      setIsLoading(false);
-    }, 600);
+    const fetchCustomer = async () => {
+      if (!id) return;
+      setIsLoading(true);
+      try {
+        const response = await getCustomerById(id);
+        setCustomer(response?.data ?? null);
+      } catch (error) {
+        console.error('Failed to fetch customer', error);
+        setCustomer(null);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchCustomer();
   }, [id]);
 
   if (isLoading) {

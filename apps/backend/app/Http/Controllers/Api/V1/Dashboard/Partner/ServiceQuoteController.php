@@ -51,7 +51,7 @@ class ServiceQuoteController extends Controller
             ->latest()
             ->paginate(10);
 
-        return ServiceQuoteResource::collection($serviceQuotes);
+        return $this->successResponse(ServiceQuoteResource::collection($serviceQuotes));
     }
 
     /**

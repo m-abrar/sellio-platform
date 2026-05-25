@@ -39,6 +39,20 @@ class SubscriptionController extends Controller
         }
     }
     
+    public function destroy(Subscription $subscription)
+    {
+        if ($subscription->user_id !== Auth::id()) {
+            abort(403, __('Unauthorized access to this subscription.'));
+        }
+
+        $subscription->forceFill([
+            'status' => Subscription::STATUS_CANCELLED,
+            'ends_at' => now(),
+        ])->save();
+
+        return $this->successResponse(null, __('Subscription cancelled successfully.'));
+    }
+
     public function scheduleDowngrade(StoreSubscriptionRequest $request)
     {
 

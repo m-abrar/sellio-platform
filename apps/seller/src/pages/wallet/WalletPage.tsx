@@ -55,7 +55,7 @@ export default function WalletPage() {
     }
 
     try {
-      await withdrawFunds(amount, 'Chase Bank **** 4290');
+      await withdrawFunds(amount);
       toast.success(`Withdrawal of $${amount.toFixed(2)} initiated!`);
       setIsWithdrawModalOpen(false);
       setWithdrawAmount('');
@@ -121,8 +121,8 @@ export default function WalletPage() {
 
           <div className="grid grid-cols-2 gap-6">
             <div className="bg-emerald-50 p-8 rounded-[2rem] border border-emerald-100">
-              <p className="text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-2">This Month</p>
-              <h4 className="text-2xl font-black text-emerald-900 tracking-tight">+$4,250</h4>
+              <p className="text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-2">Lifetime</p>
+              <h4 className="text-2xl font-black text-emerald-900 tracking-tight">+${wallet?.lifetimeEarnings?.toLocaleString() || '0'}</h4>
             </div>
             <div className="bg-slate-50 p-8 rounded-[2rem] border border-slate-100">
               <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Pending</p>

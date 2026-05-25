@@ -18,6 +18,8 @@ class EventResource extends JsonResource
             'title'       => $this->title,
             'slug'        => $this->slug,
             'description' => $this->description,
+            'category_id' => $this->category_id,
+            'organizer_name' => $this->organizer_name,
 
             // Schedule & Duration
             'schedule' => [
@@ -87,6 +89,28 @@ class EventResource extends JsonResource
                 'approved_at'  => $this->approved_at?->toIso8601String(),
                 'rating'       => (float) ($this->reviews_avg_rating ?? 0),
             ],
+
+            'ticket_types' => $this->whenLoaded('ticketTypes', fn () => $this->ticketTypes->map(fn ($ticket) => [
+                'id'         => $ticket->id,
+                'title'      => $ticket->title,
+                'base_price' => (float) $ticket->base_price,
+            ])),
+
+            'occurrences' => $this->whenLoaded('occurrences', fn () => $this->occurrences->map(fn ($occurrence) => [
+                'id'              => $occurrence->id,
+                'start_date_time' => $occurrence->start_date_time?->toIso8601String(),
+                'duration_hours'  => (float) $occurrence->duration_hours,
+                'max_attendees'   => (int) $occurrence->max_attendees,
+                'venue_details'   => $occurrence->venue_details,
+                'inventory'       => $occurrence->relationLoaded('inventory')
+                    ? $occurrence->inventory->mapWithKeys(fn ($item) => [
+                        (string) $item->event_ticket_type_id => [
+                            'available_quantity' => (int) $item->available_quantity,
+                            'override_price'     => (float) $item->override_price,
+                        ],
+                    ])
+                    : [],
+            ])),
 
             'seo' => [
                 'title'       => $this->meta_title,

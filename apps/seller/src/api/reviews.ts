@@ -1,14 +1,22 @@
-import axios from 'axios';
-import { API_BASE_URL } from '../config/api';
-
-const API_URL = `${API_BASE_URL}/reviews`;
+import { apiClient, extractListData, unwrapData } from '../lib/apiClient';
+import { normalizeReview } from '../lib/reviewAdapter';
 
 export const getReviews = async () => {
-  try {
-    const response = await axios.get(API_URL);
-    return response.data;
-  } catch (error) {
-    console.warn('Backend not reachable, falling back to mock data');
-    return { data: { data: [] } };
-  }
+  const response = await apiClient.get('/dashboard/partner/reviews/');
+  const records = extractListData<Record<string, unknown>>(response);
+
+  return {
+    data: {
+      data: records.map(normalizeReview),
+    },
+  };
+};
+
+export const replyToReview = async (reviewId: number, reply: string) => {
+  const response = await apiClient.post(`/dashboard/partner/reviews/${reviewId}/reply`, { reply });
+
+  return {
+    data: normalizeReview(unwrapData<Record<string, unknown>>(response)),
+    message: response.data.message,
+  };
 };

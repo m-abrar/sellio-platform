@@ -4,14 +4,13 @@ namespace App\Http\Controllers\Api\V1\Dashboard\Partner;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Partner\EventRequest;
+use App\Http\Resources\EventResource;
 use App\Models\Event;
 use App\Services\Partner\EventService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\View\View;
-use App\Http\Resources\EventResource;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * Class EventController
@@ -19,138 +18,86 @@ use App\Http\Resources\EventResource;
  */
 class EventController extends Controller
 {
-    /**
-     * @var EventService
-     */
-    protected $eventService;
+    protected EventService $eventService;
 
-    /**
-     * EventController constructor.
-     *
-     * @param EventService $eventService
-     */
     public function __construct(EventService $eventService)
     {
         $this->eventService = $eventService;
     }
 
-    /**
-     * Display a listing of the partner's events.
-     *
-     * @return View
-     */
-    public function index()
+    public function index(Request $request): JsonResponse
     {
         $events = Event::where('user_id', Auth::id())
+            ->with(['media', 'category', 'ticketTypes', 'occurrences'])
             ->orderBy('start_date_time', 'desc')
-            ->paginate(10);
+            ->paginate($request->integer('per_page', 120));
 
-        return $this->successResponse(EventResource::collection($events));
+        return $this->successResponse(
+            EventResource::collection($events),
+            null,
+            200,
+            ['form' => $this->eventService->getFormData()]
+        );
     }
 
-    /**
-     * Show the form for creating a new event.
-     *
-     * @return View
-     */
-    public function create() {
-        return $this->successResponse(null, 'Success');
+    public function create(): JsonResponse
+    {
+        return $this->successResponse($this->eventService->getFormData());
     }
 
-    /**
-     * Store a newly created event in storage.
-     *
-     * @param EventRequest $request
-     * @return RedirectResponse
-     */
-    public function store(EventRequest $request)
+    public function store(EventRequest $request): JsonResponse
     {
         $event = $this->eventService->saveEvent($request->validated());
+        $this->handleMedia($event, $request);
 
-        if ($request->wantsJson()) {
-            return $this->successResponse(
-                new EventResource($event),
-                __('Event created successfully.'),
-                201
-            );
-        }
-
-        return $this->successResponse(null, __('Event ":title" created and schedule/tickets configured.', ['title' => $event->title]));
+        return $this->successResponse(
+            new EventResource($event->load(['media', 'category', 'ticketTypes', 'occurrences.inventory'])),
+            __('Event created successfully.'),
+            201
+        );
     }
 
-    /**
-     * Display the specified event.
-     *
-     * @param Event $event
-     * @return View
-     */
-    public function show(Event $event)
+    public function show($event): JsonResponse
+    {
+        $model = Event::where('user_id', Auth::id())
+            ->where(is_numeric($event) ? 'id' : 'slug', $event)
+            ->with(['media', 'category', 'ticketTypes', 'occurrences.inventory'])
+            ->firstOrFail();
+
+        return $this->successResponse(new EventResource($model));
+    }
+
+    public function edit(Event $event): JsonResponse
     {
         $this->authorizeOwner($event);
 
-        return $this->successResponse(new EventResource($event->load(['tickettypes', 'occurrences.inventory'])));
+        return $this->successResponse(
+            new EventResource($event->load(['media', 'category', 'ticketTypes', 'occurrences.inventory']))
+        );
     }
 
-    /**
-     * Show the form for editing the specified event.
-     *
-     * @param Event $event
-     * @return View
-     */
-    public function edit(Event $event) {
-        $this->authorizeOwner($event);
-
-        return $this->successResponse(new EventResource($event->load(['tickettypes', 'occurrences.inventory'])));
-    }
-
-    /**
-     * Update the specified event in storage.
-     *
-     * @param EventRequest $request
-     * @param Event $event
-     * @return RedirectResponse
-     */
-    public function update(EventRequest $request, Event $event)
+    public function update(EventRequest $request, Event $event): JsonResponse
     {
         $this->authorizeOwner($event);
         $this->eventService->saveEvent($request->validated(), $event);
+        $this->handleMedia($event, $request);
 
-        if ($request->wantsJson()) {
-            return $this->successResponse(
-                new EventResource($event->fresh()),
-                __('Event updated successfully.')
-            );
-        }
-
-        return $this->successResponse(null, __('Event ":title" updated successfully!', ['title' => $event->title]));
+        return $this->successResponse(
+            new EventResource($event->fresh(['media', 'category', 'ticketTypes', 'occurrences.inventory'])),
+            __('Event updated successfully.')
+        );
     }
 
-    /**
-     * Remove the specified event from storage.
-     *
-     * @param Event $event
-     * @return RedirectResponse
-     */
-    public function destroy(Event $event)
+    public function destroy(Event $event): JsonResponse
     {
         $this->authorizeOwner($event);
         $title = $event->title;
         $event->delete();
 
-        if (request()->wantsJson()) {
-            return $this->successResponse(null, __('Event ":title" deleted successfully.', ['title' => $title]));
-        }
-
         return $this->successResponse(null, __('Event ":title" deleted successfully.', ['title' => $title]));
     }
 
-    /**
-     * Render a dynamic row for event occurrences via AJAX.
-     *
-     * @param Request $request
-     * @return string|JsonResponse
-     */
-    public function renderOccurrenceRow(Request $request)
+    public function renderOccurrenceRow(Request $request): JsonResponse
     {
         $nextOccurrenceIndex = (int) $request->input('index');
         $currentTicketsData = json_decode($request->input('tickets', '[]'), true);
@@ -160,22 +107,40 @@ class EventController extends Controller
         }
 
         return $this->successResponse([
-            'occurrence' => null,
-            'nextOccurrenceIndex' => $nextOccurrenceIndex,
-            'currentTicketsData' => $currentTicketsData,
+            'occurrence'           => null,
+            'nextOccurrenceIndex'  => $nextOccurrenceIndex,
+            'currentTicketsData'   => $currentTicketsData,
         ]);
     }
 
-    /**
-     * Authorization helper to ensure partner owns the event.
-     *
-     * @param Event $event
-     * @return void
-     */
     protected function authorizeOwner(Event $event): void
     {
         if (Auth::id() !== $event->user_id) {
             abort(403, __('Unauthorized access to this event.'));
+        }
+    }
+
+    protected function handleMedia(Event $event, Request $request): void
+    {
+        if ($request->hasFile('main_image')) {
+            $event->clearMediaCollection(Event::PRIMARY_MEDIA);
+            $event->addMediaFromRequest('main_image')->toMediaCollection(Event::PRIMARY_MEDIA);
+        }
+
+        if ($request->has('existing_media_ids')) {
+            $keepIds = array_map('intval', (array) $request->input('existing_media_ids'));
+
+            $event->getMedia(Event::GALLERY_MEDIA)
+                ->reject(fn ($media) => in_array($media->id, $keepIds))
+                ->each(fn ($media) => $media->delete());
+
+            Media::setNewOrder($keepIds);
+        }
+
+        if ($request->hasFile('gallery')) {
+            foreach ($request->file('gallery') as $file) {
+                $event->addMedia($file)->toMediaCollection(Event::GALLERY_MEDIA);
+            }
         }
     }
 }

@@ -77,4 +77,11 @@ class StorePropertyRequest extends FormRequest
             'amenities'   => __('Property Amenities'),
         ];
     }
+
+    protected function prepareForValidation(): void
+    {
+        if ($this->has('title') && !$this->has('slug')) {
+            $this->merge(['slug' => \Illuminate\Support\Str::slug($this->title)]);
+        }
+    }
 }

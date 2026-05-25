@@ -95,10 +95,6 @@ class MessageController extends Controller
             broadcast(new NewMessageSent($message, $recipient))->toOthers();
         }
 
-        if ($request->wantsJson()) {
-            return $this->successResponse(null, $message, 201);
-        }
-
-        return $this->successResponse(null, 'Message sent successfully.');
+        return $this->successResponse($message->fresh(), __('Message sent successfully.'), 201);
     }
 }

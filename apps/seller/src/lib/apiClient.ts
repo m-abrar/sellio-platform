@@ -116,3 +116,17 @@ export const unwrapData = <T>(response: AxiosResponse<LaravelResponse<T>>): T =>
 export const unwrapMessage = (response: AxiosResponse<LaravelResponse<unknown>>): string => {
   return response.data.message;
 };
+
+export const extractListData = <T>(response: AxiosResponse<LaravelResponse<unknown>>): T[] => {
+  const payload = response.data?.data;
+
+  if (Array.isArray(payload)) {
+    return payload as T[];
+  }
+
+  if (payload && typeof payload === 'object' && Array.isArray((payload as { data?: T[] }).data)) {
+    return (payload as { data: T[] }).data;
+  }
+
+  return [];
+};

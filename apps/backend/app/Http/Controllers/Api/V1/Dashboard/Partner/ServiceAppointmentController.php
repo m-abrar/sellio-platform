@@ -51,7 +51,7 @@ class ServiceAppointmentController extends Controller
             ->latest()
             ->paginate(10);
 
-        return ServiceAppointmentResource::collection($serviceAppointments);
+        return $this->successResponse(ServiceAppointmentResource::collection($serviceAppointments));
     }
 
     /**

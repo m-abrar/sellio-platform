@@ -19,17 +19,17 @@ class WalletController extends Controller
     {
         $partner = $request->user();
         
-        $balance = $partner->balance; 
+        $balance = $partner->wallet_balance;
         
-        $lifetimeEarnings = $partner->transactions()
+        $lifetimeEarnings = ($partner->transactions()
             ->where('type', 'deposit')
-            ->sum('amount');
+            ->sum('amount') ?? 0) / 100;
             
-        $pendingWithdrawals = $partner->transactions()
+        $pendingWithdrawals = abs($partner->transactions()
             ->where('type', 'withdraw')
             ->where('confirmed', true)
             ->whereJsonContains('meta', ['type' => 'withdrawal_request'])
-            ->sum('amount'); 
+            ->sum('amount') ?? 0) / 100;
 
         $transactions = $partner->transactions()
             ->orderBy('created_at', 'desc')
@@ -40,7 +40,7 @@ class WalletController extends Controller
             'balance' => $balance,
             'lifetimeEarnings' => $lifetimeEarnings,
             'pendingWithdrawals' => $pendingWithdrawals,
-            'transactions' => TransactionResource::collection($transactions),
+            'transactions' => TransactionResource::collection($transactions)->resolve(),
         ]);
     }
 
@@ -58,7 +58,7 @@ class WalletController extends Controller
     public function withdrawals(Request $request)
     {
         $partner = $request->user();
-        $balance = $partner->balance; 
+        $balance = $partner->wallet_balance;
         
         $withdrawalRecords = $partner->withdrawals()
             ->latest()

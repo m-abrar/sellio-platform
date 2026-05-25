@@ -31,9 +31,11 @@ class EventTicketType extends Model
      */
     protected $fillable = [
         'event_id',
-        'name',
+        'title',
+        'base_price',
         'description',
-        'is_active',
+        'max_quantity',
+        'sort_order',
     ];
 
     /**

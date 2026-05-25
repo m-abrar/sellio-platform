@@ -38,7 +38,7 @@ class Classified extends Model implements HasMedia
         'title', 'slug', 'description', 'base_price', 'sale_price',
         'item_condition', 'item_year_age', 'item_quantity', 'item_dimensions',
         'warranty_months', 'min_ad_duration', 'address', 'city', 'state',
-        'country', 'zip_code', 'latitude', 'longitude', 'is_published',
+        'country', 'zip_code', 'latitude', 'longitude', 'is_published', 'is_featured',
         'is_for_rent', 'is_for_sale', 'expires_at',
     ];
 

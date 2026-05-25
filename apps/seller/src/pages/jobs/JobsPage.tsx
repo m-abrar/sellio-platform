@@ -3,35 +3,45 @@ import { useNavigate } from 'react-router-dom';
 import PageHeader from '../../components/layout/PageHeader';
 import { HiOutlinePencilSquare, HiOutlineTrash, HiOutlinePlus } from 'react-icons/hi2';
 import { toast } from 'sonner';
-import { getJobs } from '../../api/jobs';
+import { deleteJob, getJobs } from '../../api/jobs';
+import { triggerDeletion } from '../../utils/animations';
 
 export default function JobsPage() {
   const navigate = useNavigate();
   const [jobs, setJobs] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  const fetchJobs = async () => {
+    setIsLoading(true);
+    try {
+      const response = await getJobs();
+      setJobs(response.data);
+    } catch (error) {
+      console.error('Failed to fetch jobs', error);
+      toast.error('Failed to synchronize opportunities.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchJobs = async () => {
-      try {
-        const response = await getJobs();
-        setJobs(response.data.data);
-      } catch (error) {
-        console.error("Failed to fetch jobs", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
     fetchJobs();
   }, []);
 
   const handleDelete = (id: number, title: string) => {
     toast(`Decommission "${title}"?`, {
-      description: "This action cannot be undone.",
+      description: 'This action cannot be undone.',
       action: {
-        label: "Confirm",
-        onClick: () => {
-          setJobs(prev => prev.filter(j => j.id !== id));
-          toast.success(`${title} decommissioned successfully.`);
+        label: 'Confirm',
+        onClick: async () => {
+          try {
+            await deleteJob(id);
+            triggerDeletion();
+            setJobs((prev) => prev.filter((j) => j.id !== id));
+            toast.success(`${title} decommissioned successfully.`);
+          } catch (err: any) {
+            toast.error(err.message || 'Failed to delete job.');
+          }
         },
       },
     });
@@ -56,15 +66,18 @@ export default function JobsPage() {
         <div className="h-64 flex items-center justify-center">
           <span className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-300 animate-pulse">Syncing Opportunities...</span>
         </div>
+      ) : jobs.length === 0 ? (
+        <div className="text-center py-24 bg-white rounded-[2.5rem] border border-slate-100">
+          <p className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-300">No job listings found</p>
+        </div>
       ) : (
         <>
-          {/* MOBILE VIEW */}
           <div className="lg:hidden space-y-6">
             {jobs.map((job) => (
               <div key={job.id} className="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-premium relative overflow-hidden group">
                 <div className="flex gap-6">
                   <div className="w-24 h-24 rounded-[2rem] overflow-hidden bg-slate-50 shrink-0 border-4 border-white shadow-md cursor-pointer" onClick={() => navigate(`/dashboard/joblistings/view/${job.slug}`)}>
-                    <img src={job.media[0].original_url} className="w-full h-full object-cover" alt={job.title} />
+                    <img src={job.media[0]?.original_url} className="w-full h-full object-cover" alt={job.title} />
                   </div>
                   <div className="min-w-0 flex-1 pt-1">
                     <span className="text-[9px] font-black text-[#6610f2] bg-[#6610f2]/5 px-3 py-1 rounded-full uppercase tracking-widest">{job.sku}</span>
@@ -74,7 +87,7 @@ export default function JobsPage() {
                     >
                       {job.title}
                     </h3>
-                    <p className="text-2xl font-black text-slate-900 mt-1 tracking-tighter">{job.price}</p>
+                    <p className="text-2xl font-black text-slate-900 mt-1 tracking-tighter">{job.price || 'Negotiable'}</p>
                   </div>
                 </div>
                 <div className="flex items-center justify-between mt-6 pt-6 border-t border-slate-50">
@@ -96,7 +109,6 @@ export default function JobsPage() {
             ))}
           </div>
 
-          {/* DESKTOP VIEW */}
           <div className="hidden lg:block">
             <table className="w-full border-separate border-spacing-y-4">
               <thead>
@@ -115,7 +127,7 @@ export default function JobsPage() {
                           className="w-20 h-16 rounded-[1.2rem] overflow-hidden bg-slate-100 border-2 border-white shadow-sm shrink-0 cursor-pointer"
                           onClick={() => navigate(`/dashboard/joblistings/view/${job.slug}`)}
                         >
-                          <img src={job.media[0].original_url} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="" />
+                          <img src={job.media[0]?.original_url} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="" />
                         </div>
                         <div className="min-w-0">
                           <p 
@@ -129,7 +141,7 @@ export default function JobsPage() {
                       </div>
                     </td>
                     <td className="bg-white group-hover:bg-slate-50/50 border-y border-slate-100 group-hover:border-[#6610f2]/20 px-10 py-6 transition-all duration-300">
-                      <span className="text-xl font-black text-slate-900 tracking-tighter">{job.price}</span>
+                      <span className="text-xl font-black text-slate-900 tracking-tighter">{job.price || 'Negotiable'}</span>
                       <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-1">Annual Range</p>
                     </td>
                     <td className="bg-white group-hover:bg-slate-50/50 border-y border-r border-slate-100 group-hover:border-[#6610f2]/20 rounded-r-[2rem] px-10 py-6 text-right transition-all duration-300 relative overflow-hidden">

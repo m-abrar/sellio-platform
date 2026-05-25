@@ -5,12 +5,15 @@ namespace App\Http\Controllers\Api\V1\Dashboard\Partner;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Partner\StorePropertyRequest;
 use App\Http\Requests\Partner\UpdatePropertyRequest;
-use App\Http\Resources\PropertyResource; // Assuming this exists
+use App\Http\Resources\PropertyResource;
+use App\Models\Amenity;
+use App\Models\Category;
+use App\Models\Location;
 use App\Models\Property;
+use App\Models\Type;
 use App\Services\Partner\PropertyService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Auth;
 
 /**
@@ -32,13 +35,27 @@ class PropertyController extends Controller
     /**
      * Display a listing of the partner's properties.
      */
-    public function index(Request $request): AnonymousResourceCollection
+    public function index(Request $request): JsonResponse
     {
         $properties = Property::where('user_id', Auth::id())
+            ->with(['media', 'category', 'type', 'location', 'amenities'])
             ->latest()
-            ->paginate($request->get('per_page', 10));
+            ->paginate($request->integer('per_page', 120));
 
-        return PropertyResource::collection($properties);
+        return $this->successResponse(
+            PropertyResource::collection($properties),
+            null,
+            200,
+            ['form' => $this->getFormData()]
+        );
+    }
+
+    /**
+     * Return form metadata for create/edit screens.
+     */
+    public function create(): JsonResponse
+    {
+        return $this->successResponse($this->getFormData());
     }
 
     /**
@@ -77,12 +94,14 @@ class PropertyController extends Controller
     /**
      * Display the specified property.
      */
-    public function show($id) {
-        $property = Property::where('user_id', Auth::id())
-            ->with(['amenities', 'media'])
-            ->findOrFail($id);
+    public function show($property): JsonResponse
+    {
+        $model = Property::where('user_id', Auth::id())
+            ->where(is_numeric($property) ? 'id' : 'slug', $property)
+            ->with(['amenities', 'media', 'category', 'type', 'location', 'user'])
+            ->firstOrFail();
 
-        return $this->successResponse(new PropertyResource($property));
+        return $this->successResponse(new PropertyResource($model));
     }
 
     /**
@@ -154,5 +173,15 @@ class PropertyController extends Controller
                 $property->addMedia($file)->toMediaCollection('gallery');
             }
         }
+    }
+
+    protected function getFormData(): array
+    {
+        return [
+            'categories' => Category::where('is_property', true)->active()->get(['id', 'title']),
+            'types'      => Type::where('is_property', true)->active()->get(['id', 'title']),
+            'locations'  => Location::where('is_property', true)->active()->get(['id', 'title']),
+            'amenities'  => Amenity::where('is_property', true)->active()->get(['id', 'title']),
+        ];
     }
 }

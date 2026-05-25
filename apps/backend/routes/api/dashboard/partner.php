@@ -27,7 +27,9 @@ use App\Http\Controllers\Api\V1\Dashboard\Partner\{
     PlanController,
     SubscriptionController,
     PaymentController,
-    WalletController
+    WalletController,
+    NotificationController,
+    CustomerController
 };
 
 /*
@@ -42,6 +44,18 @@ use App\Http\Controllers\Api\V1\Dashboard\Partner\{
 Route::get('welcome', [DashboardController::class, 'index']);
 Route::get('analytics', [AnalyticsController::class, 'index']);
 Route::get('activities', [ActivityController::class, 'index']);
+
+Route::prefix('notifications')->group(function () {
+    Route::get('/', [NotificationController::class, 'index']);
+    Route::post('read-all', [NotificationController::class, 'markAllAsRead']);
+    Route::patch('{notification}/read', [NotificationController::class, 'markAsRead']);
+    Route::delete('{notification}', [NotificationController::class, 'destroy']);
+});
+
+Route::prefix('customers')->group(function () {
+    Route::get('/', [CustomerController::class, 'index']);
+    Route::get('{customerKey}', [CustomerController::class, 'show']);
+});
 
 /**
  * 2. LEAD & INQUIRY MANAGEMENT
@@ -62,6 +76,9 @@ Route::prefix('leads')->group(function () {
     Route::get('services/quotes', [ServiceQuoteController::class, 'index']);
     Route::get('services/appointments', [ServiceAppointmentController::class, 'index']);
 
+    // Classifieds
+    Route::get('classifieds/inquiries', [ClassifiedInquiryController::class, 'index']);
+
     // Job Applications
     Route::get('joblistings/applications', [JobApplicationController::class, 'index']);
     Route::patch('joblistings/applications/{jobApplication}', [JobApplicationController::class, 'update']);
@@ -71,6 +88,18 @@ Route::prefix('leads')->group(function () {
  * 3. LISTING RESOURCES (CRUD)
  */
 Route::get('products/slug/{slug}', [ProductController::class, 'edit']);
+Route::get('properties/form-data', [PropertyController::class, 'create']);
+Route::get('properties/slug/{slug}', [PropertyController::class, 'show']);
+Route::get('autos/form-data', [AutoController::class, 'create']);
+Route::get('autos/slug/{slug}', [AutoController::class, 'show']);
+Route::get('events/form-data', [EventController::class, 'create']);
+Route::get('events/slug/{slug}', [EventController::class, 'show']);
+Route::get('services/form-data', [ServiceController::class, 'create']);
+Route::get('services/slug/{slug}', [ServiceController::class, 'show']);
+Route::get('joblistings/form-data', [JobListingController::class, 'create']);
+Route::get('joblistings/slug/{slug}', [JobListingController::class, 'show']);
+Route::get('classifieds/form-data', [ClassifiedController::class, 'create']);
+Route::get('classifieds/slug/{slug}', [ClassifiedController::class, 'show']);
 Route::apiResources([
     'products'    => ProductController::class,
     'properties'  => PropertyController::class,
@@ -91,6 +120,7 @@ Route::apiResource('subscriptions', SubscriptionController::class)->only(['index
 Route::prefix('wallet')->group(function () {
     Route::get('overview', [WalletController::class, 'overview']);
     Route::get('history', [WalletController::class, 'history']);
+    Route::get('withdrawals', [WalletController::class, 'withdrawals']);
     Route::post('withdraw', [WalletController::class, 'processWithdrawal']);
 });
 
@@ -116,7 +146,7 @@ Route::delete('media/{media}', [MediaController::class, 'delete']);
  * 6. PROFILE & SETTINGS
  */
 Route::prefix('profile')->group(function () {
-    Route::get('/', [ProfileController::class, 'show']); 
+    Route::get('/', [ProfileController::class, 'edit']);
     Route::patch('/', [ProfileController::class, 'update']);
     Route::delete('/', [ProfileController::class, 'destroy']);
 });

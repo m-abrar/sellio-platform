@@ -23,7 +23,8 @@ class JobApplicationResource extends JsonResource
             'viewed_at' => $this->viewed_at,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'job_listing' => $this->whenLoaded("jobListing"),
+            'job_listing' => $this->whenLoaded('job'),
+            'job' => $this->whenLoaded('job'),
         ];
     }
 }

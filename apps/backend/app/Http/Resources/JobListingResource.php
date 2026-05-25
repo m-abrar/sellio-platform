@@ -18,13 +18,15 @@ class JobListingResource extends JsonResource
             'title'       => $this->title,
             'slug'        => $this->slug,
             'description' => $this->description,
+            'category_id' => $this->category_id,
+            'location_id' => $this->location_id,
 
             // Employment & Workplace
             'employment' => [
-                'type'             => $this->employment_type, // e.g., Full-time, Part-time
-                'workplace'        => $this->workplace_label, // From model accessor
-                'workplace_id'     => $this->workplace_type,
-                'experience_level' => $this->experience_level,
+                'type'             => $this->resolveEmploymentTypeLabel(),
+                'workplace'        => $this->workplace_label,
+                'workplace_id'     => (int) $this->workplace_type,
+                'experience_level' => (int) $this->experience_level,
                 'education'        => $this->required_education,
                 'is_full_time'     => (bool) $this->is_full_time,
                 'is_contract'      => (bool) $this->is_contract,
@@ -41,7 +43,8 @@ class JobListingResource extends JsonResource
 
             // Company & Branding (Spatie Media)
             'company' => [
-                'name'      => $this->whenLoaded('brand', fn() => $this->brand->title, $this->employer->company_name ?? null),
+                'name'      => $this->meta_title
+                    ?: $this->whenLoaded('brand', fn () => $this->brand->title, $this->employer->company ?? null),
                 'logo'      => $this->primary_image_url,
                 'logo_card' => $this->whenLoaded('media', fn() => $this->getMedia(JobListing::PRIMARY_MEDIA)->first()?->getUrl('listing_card_logo')),
                 'photos'    => $this->whenLoaded('media', fn() => $this->getMedia(JobListing::GALLERY_MEDIA)->map(fn($media) => [
@@ -86,5 +89,18 @@ class JobListingResource extends JsonResource
             'created_at' => $this->created_at?->toIso8601String(),
             'updated_at' => $this->updated_at?->toIso8601String(),
         ];
+    }
+
+    protected function resolveEmploymentTypeLabel(): string
+    {
+        if ($this->is_contract) {
+            return __('Contract');
+        }
+
+        if ($this->is_full_time) {
+            return __('Full-time');
+        }
+
+        return __('Part-time');
     }
 }

@@ -19,6 +19,8 @@ class ServiceResource extends JsonResource
             'slug'              => $this->slug,
             'description'       => $this->description,
             'short_description' => $this->short_description,
+            'category_id'       => $this->category_id,
+            'location_id'       => $this->location_id,
 
             // Pricing & Billing
             'pricing' => [

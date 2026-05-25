@@ -78,6 +78,8 @@ class AutoRequest extends FormRequest
             'is_published'     => ['boolean'],
             'is_lease'         => ['boolean'],
             'is_selling'       => ['boolean'],
+            'main_image'       => ['nullable', 'image', 'max:5120'],
+            'gallery.*'        => ['nullable', 'image', 'max:5120'],
         ];
     }
 }

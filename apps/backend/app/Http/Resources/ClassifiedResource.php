@@ -19,6 +19,9 @@ class ClassifiedResource extends JsonResource
             'slug'              => $this->slug,
             'description'       => $this->description,
             'short_description' => $this->short_description,
+            'category_id'       => $this->category_id,
+            'type_id'           => $this->type_id,
+            'location_id'       => $this->location_id,
 
             // Pricing & Offers
             'pricing' => [

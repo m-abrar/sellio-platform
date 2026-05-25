@@ -10,72 +10,201 @@ import {
   HiOutlineAcademicCap,
   HiOutlineUserCircle
 } from 'react-icons/hi2';
-
-// Studio Components
 import MediaStudio from '../../components/studio/MediaStudio';
 import PageHeader from '../../components/layout/PageHeader';
 import ActionPill from '../../utils/ActionPill';
+import { createJob, getJobBySlug, getJobFormMeta, updateJob } from '../../api/jobs';
+import { ApiError } from '../../lib/apiError';
+import { mapExperienceToFormValue, mapJobTypeFlags, parseSalaryRange, resolveWorkplaceType } from '../../lib/jobAdapter';
+
+const containerClass = 'bg-white border border-slate-100 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.04)] p-8 md:p-12';
+const labelClass = 'text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3 block ml-2';
+const inputClass = 'w-full bg-slate-50 border-2 border-transparent focus:border-[#6610f2] focus:bg-white rounded-[1.5rem] px-6 py-5 text-slate-900 font-bold transition-all outline-none placeholder:text-slate-300';
+
+const defaultForm = {
+  title: '',
+  company: '',
+  category_id: '',
+  job_type: '',
+  salary_range: '',
+  location: '',
+  experience_level: '',
+  skills: '',
+  description: '',
+  is_published: true,
+};
 
 export default function CreateJob() {
   const { slug } = useParams();
   const navigate = useNavigate();
   const isEditMode = Boolean(slug);
 
-  const containerClass = "bg-white border border-slate-100 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.04)] p-8 md:p-12";
-  const labelClass = "text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3 block ml-2";
-  const inputClass = "w-full bg-slate-50 border-2 border-transparent focus:border-[#6610f2] focus:bg-white rounded-[1.5rem] px-6 py-5 text-slate-900 font-bold transition-all outline-none placeholder:text-slate-300";
-
-  const [isLoading, setIsLoading] = useState(false);
+  const [formMeta, setFormMeta] = useState<any>({ categories: [], types: [], locations: [] });
+  const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const [jobId, setJobId] = useState<number | null>(null);
   const [files, setFiles] = useState<any[]>([]);
+  const [form, setForm] = useState(defaultForm);
 
-  const [form, setForm] = useState<any>({
-    title: '',
-    company: '',
-    job_type: '',
-    salary_range: '',
-    location: '',
-    experience_level: '',
-    skills: '',
-    description: '',
-    is_published: true,
-  });
-
-  const updateForm = useCallback((field: string, value: any) => {
-    setForm((prev: any) => ({ ...prev, [field]: value }));
+  const updateForm = useCallback((field: string, value: unknown) => {
+    setForm((prev) => ({ ...prev, [field]: value }));
   }, []);
 
   const progress = useMemo(() => {
     let score = 0;
-    if (form.title.length > 5) score += 20;
-    if (form.company !== '') score += 20;
-    if (form.salary_range !== '') score += 20;
-    if (form.location !== '') score += 20;
-    if (form.description.length > 20) score += 20;
+    if (form.title.length > 5) score += 15;
+    if (form.company !== '') score += 10;
+    if (form.category_id !== '') score += 15;
+    if (form.salary_range !== '') score += 15;
+    if (form.location !== '') score += 15;
+    if (form.job_type !== '') score += 10;
+    if (form.experience_level !== '') score += 10;
+    if (form.description.length > 20) score += 10;
     return score;
   }, [form]);
 
+  useEffect(() => {
+    const initialize = async () => {
+      setIsLoading(true);
+      try {
+        const meta = await getJobFormMeta();
+        setFormMeta(meta);
+
+        if (isEditMode && slug) {
+          const { data: job } = await getJobBySlug(slug);
+          setJobId(job.id);
+          setForm({
+            title: job.title || '',
+            company: job.company || '',
+            category_id: job.category_id ? String(job.category_id) : '',
+            job_type: job.job_type || '',
+            salary_range:
+              job.salary_min != null && job.salary_max != null
+                ? `$${Number(job.salary_min).toLocaleString()} - $${Number(job.salary_max).toLocaleString()}`
+                : '',
+            location: job.location || '',
+            experience_level: mapExperienceToFormValue(
+              (job.employment?.experience_level ?? job.experience_level) as string | number | null | undefined
+            ),
+            skills: job.skills || '',
+            description: job.description || '',
+            is_published: job.is_published ?? true,
+          });
+
+          const initialMedia: any[] = [];
+          if (job.featured_image) {
+            initialMedia.push({
+              id: job.gallery[0]?.id,
+              url: job.featured_image,
+              preview: job.featured_image,
+              isMain: true,
+              existing: true,
+            });
+          }
+          job.gallery.forEach((item: any) => {
+            if (item.url !== job.featured_image) {
+              initialMedia.push({
+                id: item.id,
+                url: item.url,
+                preview: item.thumbnail || item.url,
+                isMain: false,
+                existing: true,
+              });
+            }
+          });
+          setFiles(initialMedia);
+        }
+      } catch (error) {
+        console.error('Failed to initialize job form', error);
+        toast.error('Failed to load job data.');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    initialize();
+  }, [isEditMode, slug]);
+
+  const buildFormData = () => {
+    const formData = new FormData();
+    const { min, max } = parseSalaryRange(form.salary_range);
+    const typeFlags = mapJobTypeFlags(form.job_type);
+    const workplaceType = resolveWorkplaceType(form.location);
+    const locationParts = form.location.split(',').map((part: string) => part.trim());
+    const city = locationParts[0] || 'Remote';
+    const country = locationParts.length > 1 ? locationParts[locationParts.length - 1] : 'Global';
+
+    formData.append('title', form.title);
+    formData.append('description', form.description);
+    formData.append('category_id', form.category_id);
+    formData.append('salary_min', String(min));
+    formData.append('salary_max', String(max));
+    formData.append('salary_frequency', 'yearly');
+    formData.append('experience_level', form.experience_level || 'mid');
+    formData.append('workplace_type', String(workplaceType));
+    formData.append('city', city);
+    formData.append('country', country);
+    formData.append('is_published', form.is_published ? '1' : '0');
+    formData.append('is_full_time', typeFlags.is_full_time ? '1' : '0');
+    formData.append('is_contract', typeFlags.is_contract ? '1' : '0');
+
+    if (form.company) formData.append('meta_title', form.company);
+    if (form.skills) formData.append('required_education', form.skills);
+
+    files.forEach((fileObj) => {
+      if (fileObj.file) {
+        if (fileObj.isMain) formData.append('main_image', fileObj.file);
+        else formData.append('gallery[]', fileObj.file);
+      } else if (fileObj.existing) {
+        formData.append('existing_media_ids[]', String(fileObj.id));
+      }
+    });
+
+    return formData;
+  };
+
   const handleSave = async () => {
+    if (!form.title || !form.description || !form.category_id || !form.job_type) {
+      toast.error('Please complete the required job fields.');
+      return;
+    }
+
     setIsSaving(true);
     const toastId = toast.loading('Posting job listing...');
-    
+
     try {
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      toast.success(`${form.title || 'Job'} posted successfully.`, { id: toastId });
-      setIsSaving(false);
+      const formData = buildFormData();
+
+      if (isEditMode && jobId) {
+        await updateJob(jobId, formData);
+      } else {
+        await createJob(formData);
+      }
+
+      toast.success(`${form.title || 'Job'} saved successfully.`, { id: toastId });
       await triggerCelebration();
-      setTimeout(() => navigate('/dashboard/joblistings'), 2000);
-    } catch (err) {
+      setTimeout(() => navigate('/dashboard/joblistings'), 1500);
+    } catch (error) {
+      const message = error instanceof ApiError ? error.message : 'Failed to post job.';
+      toast.error(message, { id: toastId });
+    } finally {
       setIsSaving(false);
-      toast.error("Failed to post job.", { id: toastId });
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="h-screen flex items-center justify-center">
+        <span className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-300 animate-pulse">Loading Job Studio...</span>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-10 md:space-y-16 pb-40 animate-in fade-in slide-in-from-bottom-6 duration-1000">
       <PageHeader
         badge="Human Capital Protocol"
-        title={isEditMode ? "Modify" : "Post"}
+        title={isEditMode ? 'Modify' : 'Post'}
         subtitle="Job"
       >
         <button
@@ -116,6 +245,19 @@ export default function CreateJob() {
                       placeholder="e.g. Sellio Studio"
                     />
                   </div>
+                </div>
+                <div>
+                  <label className={labelClass}>Category</label>
+                  <select
+                    value={form.category_id}
+                    onChange={(e) => updateForm('category_id', e.target.value)}
+                    className={inputClass}
+                  >
+                    <option value="">Select category...</option>
+                    {formMeta.categories.map((category: any) => (
+                      <option key={category.id} value={category.id}>{category.title}</option>
+                    ))}
+                  </select>
                 </div>
                 <div>
                   <label className={labelClass}>Job Type</label>

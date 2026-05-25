@@ -3,16 +3,14 @@
 namespace App\Http\Controllers\Api\V1\Dashboard\Partner;
 
 use App\Http\Controllers\Controller;
-use App\Models\Category;
-use App\Models\Service;
-use App\Models\Location;
-use App\Services\Partner\ServiceService;
 use App\Http\Requests\Partner\ServiceRequest;
-use Illuminate\Http\RedirectResponse;
+use App\Http\Resources\ServiceResource;
+use App\Models\Service;
+use App\Services\Partner\ServiceService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\View\View;
-use App\Http\Resources\ServiceResource;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * Class ServiceController
@@ -20,146 +18,115 @@ use App\Http\Resources\ServiceResource;
  */
 class ServiceController extends Controller
 {
-    /**
-     * @var ServiceService
-     */
-    protected $serviceService;
+    protected ServiceService $serviceService;
 
-    /**
-     * ServiceController constructor.
-     *
-     * @param ServiceService $serviceService
-     */
     public function __construct(ServiceService $serviceService)
     {
         $this->serviceService = $serviceService;
     }
 
-    /**
-     * Display a listing of the partner's services.
-     *
-     * @return View
-     */
-    public function index(Request $request)
+    public function index(Request $request): JsonResponse
     {
-        $services = Service::where('user_id', Auth::id())
-            ->latest()
-            ->paginate(10);
+        $services = $this->serviceService->getPartnerServices(
+            Auth::user(),
+            $request->integer('per_page', 120)
+        );
 
-        return $this->successResponse(ServiceResource::collection($services));
+        return $this->successResponse(
+            ServiceResource::collection($services),
+            null,
+            200,
+            ['form' => $this->serviceService->getFormData()]
+        );
     }
 
-    /**
-     * Show the form for creating a new service.
-     *
-     * @return View
-     */
-    public function create() {
-        return $this->successResponse($this->getFormData());
-    }
-
-    /**
-     * Store a newly created service in storage.
-     *
-     * @param ServiceRequest $request
-     * @return RedirectResponse
-     */
-    public function store(ServiceRequest $request)
+    public function create(): JsonResponse
     {
-        $service = $this->serviceService->saveService(Auth::user(), $request->validated());
-
-        if ($request->wantsJson()) {
-            return $this->successResponse(
-                new ServiceResource($service),
-                __('Service created successfully.'),
-                201
-            );
-        }
-
-        return $this->successResponse(null, __('Service created successfully! Now complete the remaining details.'));
+        return $this->successResponse($this->serviceService->getFormData());
     }
 
-    /**
-     * Show the form for editing the specified service.
-     *
-     * @param Service $service
-     * @return View
-     */
-    public function edit(Service $service) {
-        $this->authorizeOwner($service);
+    public function store(ServiceRequest $request): JsonResponse
+    {
+        $data = $request->safe()->except(['main_image', 'gallery', 'existing_media_ids']);
+        $service = $this->serviceService->saveService(Auth::user(), $data);
+        $this->handleMedia($service, $request);
 
-        return $this->successResponse(array_merge(
-            $this->getFormData(),
-            ['service' => $service]
-        ));
+        return $this->successResponse(
+            new ServiceResource($service->load(['media', 'category', 'location'])),
+            __('Service created successfully.'),
+            201
+        );
     }
 
-    /**
-     * Update the specified service in storage.
-     *
-     * @param ServiceRequest $request
-     * @param Service $service
-     * @return RedirectResponse
-     */
-    public function update(ServiceRequest $request, Service $service)
+    public function show($service): JsonResponse
+    {
+        $model = Service::where('user_id', Auth::id())
+            ->where(is_numeric($service) ? 'id' : 'slug', $service)
+            ->with(['media', 'category', 'location', 'features'])
+            ->firstOrFail();
+
+        return $this->successResponse(new ServiceResource($model));
+    }
+
+    public function edit(Service $service): JsonResponse
     {
         $this->authorizeOwner($service);
 
-        $this->serviceService->saveService(Auth::user(), $request->validated(), $service);
-
-        if ($request->wantsJson()) {
-            return $this->successResponse(
-                new ServiceResource($service->fresh()),
-                __('Service updated successfully.')
-            );
-        }
-
-        return $this->successResponse(null, __('Service updated successfully.'));
+        return $this->successResponse(
+            new ServiceResource($service->load(['media', 'category', 'location', 'features']))
+        );
     }
 
-    /**
-     * Remove the specified service from storage.
-     *
-     * @param Service $service
-     * @return RedirectResponse
-     */
-    public function destroy(Service $service)
+    public function update(ServiceRequest $request, Service $service): JsonResponse
     {
         $this->authorizeOwner($service);
 
-        $service->delete();
+        $data = $request->safe()->except(['main_image', 'gallery', 'existing_media_ids']);
+        $this->serviceService->saveService(Auth::user(), $data, $service);
+        $this->handleMedia($service, $request);
 
-        if (request()->wantsJson()) {
-            return $this->successResponse(null, __('Service deleted successfully.')
-            );
-        }
+        return $this->successResponse(
+            new ServiceResource($service->fresh(['media', 'category', 'location', 'features'])),
+            __('Service updated successfully.')
+        );
+    }
+
+    public function destroy(Service $service): JsonResponse
+    {
+        $this->authorizeOwner($service);
+        $this->serviceService->deleteService($service);
 
         return $this->successResponse(null, __('Service deleted successfully.'));
     }
 
-    /**
-     * Fetch categories and locations for forms.
-     *
-     * @return array
-     */
-    protected function getFormData(): array
-    {
-        return [
-            'categories' => Category::where('is_service', true)->get(),
-            'locations'  => Location::all(),
-        ];
-    }
-
-    /**
-     * Check if the authenticated user owns the resource.
-     *
-     * @param Service $service
-     * @return void
-     */
     protected function authorizeOwner(Service $service): void
     {
         if (Auth::id() !== $service->user_id) {
             abort(403, __('Unauthorized action. You do not own this service.'));
+        }
+    }
+
+    protected function handleMedia(Service $service, Request $request): void
+    {
+        if ($request->hasFile('main_image')) {
+            $service->clearMediaCollection(Service::PRIMARY_MEDIA);
+            $service->addMediaFromRequest('main_image')->toMediaCollection(Service::PRIMARY_MEDIA);
+        }
+
+        if ($request->has('existing_media_ids')) {
+            $keepIds = array_map('intval', (array) $request->input('existing_media_ids'));
+
+            $service->getMedia(Service::GALLERY_MEDIA)
+                ->reject(fn ($media) => in_array($media->id, $keepIds))
+                ->each(fn ($media) => $media->delete());
+
+            Media::setNewOrder($keepIds);
+        }
+
+        if ($request->hasFile('gallery')) {
+            foreach ($request->file('gallery') as $file) {
+                $service->addMedia($file)->toMediaCollection(Service::GALLERY_MEDIA);
+            }
         }
     }
 }

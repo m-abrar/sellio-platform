@@ -3,35 +3,45 @@ import { useNavigate } from 'react-router-dom';
 import PageHeader from '../../components/layout/PageHeader';
 import { HiOutlinePencilSquare, HiOutlineTrash, HiOutlinePlus } from 'react-icons/hi2';
 import { toast } from 'sonner';
-import { getClassifieds } from '../../api/classifieds';
+import { deleteClassified, getClassifieds } from '../../api/classifieds';
+import { triggerDeletion } from '../../utils/animations';
 
 export default function ClassifiedsPage() {
   const navigate = useNavigate();
   const [items, setItems] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  const fetchClassifieds = async () => {
+    setIsLoading(true);
+    try {
+      const response = await getClassifieds();
+      setItems(response.data);
+    } catch (error) {
+      console.error('Failed to fetch classifieds', error);
+      toast.error('Failed to synchronize listings.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchClassifieds = async () => {
-      try {
-        const response = await getClassifieds();
-        setItems(response.data.data);
-      } catch (error) {
-        console.error("Failed to fetch classifieds", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
     fetchClassifieds();
   }, []);
 
   const handleDelete = (id: number, title: string) => {
     toast(`Remove "${title}"?`, {
-      description: "This listing will be permanently deleted.",
+      description: 'This listing will be permanently deleted.',
       action: {
-        label: "Confirm",
-        onClick: () => {
-          setItems(prev => prev.filter(item => item.id !== id));
-          toast.success(`${title} removed successfully.`);
+        label: 'Confirm',
+        onClick: async () => {
+          try {
+            await deleteClassified(id);
+            triggerDeletion();
+            setItems((prev) => prev.filter((item) => item.id !== id));
+            toast.success(`${title} removed successfully.`);
+          } catch (err: any) {
+            toast.error(err.message || 'Failed to delete listing.');
+          }
         },
       },
     });

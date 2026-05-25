@@ -3,35 +3,45 @@ import { useNavigate } from 'react-router-dom';
 import PageHeader from '../../components/layout/PageHeader';
 import { HiOutlinePencilSquare, HiOutlineTrash, HiOutlinePlus } from 'react-icons/hi2';
 import { toast } from 'sonner';
-import { getProperties } from '../../api/properties';
+import { deleteProperty, getProperties } from '../../api/properties';
+import { triggerDeletion } from '../../utils/animations';
 
 export default function PropertiesPage() {
   const navigate = useNavigate();
   const [properties, setProperties] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  const fetchProperties = async () => {
+    setIsLoading(true);
+    try {
+      const response = await getProperties();
+      setProperties(response.data);
+    } catch (error) {
+      console.error('Failed to fetch properties', error);
+      toast.error('Failed to synchronize portfolio.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchProperties = async () => {
-      try {
-        const response = await getProperties();
-        setProperties(response.data.data);
-      } catch (error) {
-        console.error("Failed to fetch properties", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
     fetchProperties();
   }, []);
 
   const handleDelete = (id: number, title: string) => {
     toast(`Decommission "${title}"?`, {
-      description: "This action cannot be undone.",
+      description: 'This action cannot be undone.',
       action: {
-        label: "Confirm",
-        onClick: () => {
-          setProperties(prev => prev.filter(p => p.id !== id));
-          toast.success(`${title} decommissioned successfully.`);
+        label: 'Confirm',
+        onClick: async () => {
+          try {
+            await deleteProperty(id);
+            triggerDeletion();
+            setProperties((prev) => prev.filter((p) => p.id !== id));
+            toast.success(`${title} decommissioned successfully.`);
+          } catch (err: any) {
+            toast.error(err.message || 'Failed to delete property.');
+          }
         },
       },
     });
@@ -39,12 +49,8 @@ export default function PropertiesPage() {
 
   return (
     <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-      <PageHeader 
-        badge="Real Estate" 
-        title="Property" 
-        subtitle="Portfolio"
-      >
-        <button 
+      <PageHeader badge="Real Estate" title="Property" subtitle="Portfolio">
+        <button
           onClick={() => navigate('/dashboard/properties/create')}
           className="bg-[#6610f2] text-white px-8 py-4.5 rounded-[1.8rem] font-black text-[11px] uppercase tracking-[0.2em] shadow-xl hover:bg-[#7b2dfd] transition-all active:scale-95 flex items-center gap-2"
         >
@@ -56,14 +62,17 @@ export default function PropertiesPage() {
         <div className="h-64 flex items-center justify-center">
           <span className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-300 animate-pulse">Syncing Portfolio...</span>
         </div>
+      ) : properties.length === 0 ? (
+        <div className="text-center py-24 bg-white rounded-[2.5rem] border border-slate-100">
+          <p className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-300">No properties found</p>
+        </div>
       ) : (
         <>
-          {/* MOBILE VIEW */}
           <div className="lg:hidden grid grid-cols-1 md:grid-cols-2 gap-8">
             {properties.map((property) => (
               <div key={property.id} className="bg-white rounded-[2.5rem] border border-slate-100 shadow-premium overflow-hidden group">
                 <div className="relative h-48 overflow-hidden cursor-pointer" onClick={() => navigate(`/dashboard/properties/view/${property.slug}`)}>
-                  <img src={property.media[0].original_url} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt={property.title} />
+                  <img src={property.media[0]?.original_url} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt={property.title} />
                   <div className="absolute top-4 right-4">
                     <span className={`px-4 py-2 rounded-full text-[9px] font-black uppercase tracking-widest ${property.is_active ? 'bg-green-500 text-white' : 'bg-amber-400 text-white'}`}>
                       {property.is_active ? 'Live' : 'Draft'}
@@ -72,14 +81,14 @@ export default function PropertiesPage() {
                 </div>
                 <div className="p-8">
                   <span className="text-[10px] font-black text-[#6610f2] uppercase tracking-widest">{property.location}</span>
-                  <h3 
+                  <h3
                     className="text-xl font-black text-slate-900 mt-2 italic tracking-tight truncate cursor-pointer hover:text-[#6610f2] transition-colors"
                     onClick={() => navigate(`/dashboard/properties/view/${property.slug}`)}
                   >
                     {property.title}
                   </h3>
-                  <p className="text-2xl font-black text-slate-900 mt-4 tracking-tighter">{property.price}</p>
-                  
+                  <p className="text-2xl font-black text-slate-900 mt-4 tracking-tighter">{property.price || 'N/A'}</p>
+
                   <div className="flex gap-3 mt-8 pt-8 border-t border-slate-50">
                     <button onClick={() => navigate(`/dashboard/properties/edit/${property.slug}`)} className="flex-1 py-4 bg-slate-50 text-slate-400 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-[#6610f2] hover:text-white transition-all flex items-center justify-center gap-2">
                       <HiOutlinePencilSquare className="w-4 h-4" /> Edit
@@ -93,7 +102,6 @@ export default function PropertiesPage() {
             ))}
           </div>
 
-          {/* DESKTOP VIEW */}
           <div className="hidden lg:block">
             <table className="w-full border-separate border-spacing-y-4">
               <thead>
@@ -108,14 +116,14 @@ export default function PropertiesPage() {
                   <tr key={property.id} className="group">
                     <td className="bg-white group-hover:bg-slate-50/50 border-y border-l border-slate-100 group-hover:border-[#6610f2]/20 rounded-l-[2rem] px-10 py-6 transition-all duration-300">
                       <div className="flex items-center gap-6">
-                        <div 
+                        <div
                           className="w-20 h-16 rounded-[1.2rem] overflow-hidden bg-slate-100 border-2 border-white shadow-sm shrink-0 cursor-pointer"
                           onClick={() => navigate(`/dashboard/properties/view/${property.slug}`)}
                         >
-                          <img src={property.media[0].original_url} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="" />
+                          <img src={property.media[0]?.original_url} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="" />
                         </div>
                         <div className="min-w-0">
-                          <p 
+                          <p
                             className="text-lg font-black tracking-tighter mb-1 truncate text-slate-900 italic cursor-pointer hover:text-[#6610f2] transition-colors"
                             onClick={() => navigate(`/dashboard/properties/view/${property.slug}`)}
                           >
@@ -126,7 +134,7 @@ export default function PropertiesPage() {
                       </div>
                     </td>
                     <td className="bg-white group-hover:bg-slate-50/50 border-y border-slate-100 group-hover:border-[#6610f2]/20 px-10 py-6 transition-all duration-300">
-                      <span className="text-xl font-black text-slate-900 tracking-tighter">{property.price}</span>
+                      <span className="text-xl font-black text-slate-900 tracking-tighter">{property.price || 'N/A'}</span>
                       <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-1">Market Value</p>
                     </td>
                     <td className="bg-white group-hover:bg-slate-50/50 border-y border-r border-slate-100 group-hover:border-[#6610f2]/20 rounded-r-[2rem] px-10 py-6 text-right transition-all duration-300 relative overflow-hidden">

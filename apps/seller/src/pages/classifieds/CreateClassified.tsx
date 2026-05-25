@@ -8,91 +8,188 @@ import {
   HiOutlineMapPin,
   HiOutlineChevronLeft
 } from 'react-icons/hi2';
-
-// Studio Components
 import MediaStudio from '../../components/studio/MediaStudio';
 import PageHeader from '../../components/layout/PageHeader';
 import ActionPill from '../../utils/ActionPill';
+import { createClassified, getClassifiedBySlug, getClassifiedFormMeta, updateClassified } from '../../api/classifieds';
+import { ApiError } from '../../lib/apiError';
+import { mapConditionToRating, parseLocationParts } from '../../lib/classifiedAdapter';
+
+const containerClass = 'bg-white border border-slate-100 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.04)] p-8 md:p-12';
+const labelClass = 'text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3 block ml-2';
+const inputClass = 'w-full bg-slate-50 border-2 border-transparent focus:border-[#6610f2] focus:bg-white rounded-[1.5rem] px-6 py-5 text-slate-900 font-bold transition-all outline-none placeholder:text-slate-300';
+
+const defaultForm = {
+  title: '',
+  category_id: '',
+  price: '',
+  location: '',
+  description: '',
+  condition: 'Used - Good',
+  is_published: true,
+};
 
 export default function CreateClassified() {
   const { slug } = useParams();
   const navigate = useNavigate();
   const isEditMode = Boolean(slug);
 
-  const containerClass = "bg-white border border-slate-100 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.04)] p-8 md:p-12";
-  const labelClass = "text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3 block ml-2";
-  const inputClass = "w-full bg-slate-50 border-2 border-transparent focus:border-[#6610f2] focus:bg-white rounded-[1.5rem] px-6 py-5 text-slate-900 font-bold transition-all outline-none placeholder:text-slate-300";
-
-  const [isLoading, setIsLoading] = useState(false);
+  const [formMeta, setFormMeta] = useState<any>({ categories: [], types: [], locations: [] });
+  const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const [classifiedId, setClassifiedId] = useState<number | null>(null);
   const [files, setFiles] = useState<any[]>([]);
+  const [form, setForm] = useState(defaultForm);
 
-  const [form, setForm] = useState<any>({
-    title: '',
-    price: '',
-    location: '',
-    description: '',
-    condition: 'Used - Good',
-    is_published: true,
-  });
-
-  useEffect(() => {
-    if (isEditMode && slug) {
-      setIsLoading(true);
-      // Simulate fetching data
-      setTimeout(() => {
-        setForm({
-          title: 'Vintage Record Player',
-          price: '120',
-          location: 'Portland, OR',
-          description: 'A beautiful vintage record player in great condition.',
-          condition: 'Used - Excellent',
-          is_published: true,
-        });
-        setFiles([
-          { id: 1, url: 'https://images.unsplash.com/photo-1603048588665-791ca8aea617?w=400', preview: 'https://images.unsplash.com/photo-1603048588665-791ca8aea617?w=400', isMain: true, existing: true }
-        ]);
-        setIsLoading(false);
-      }, 1000);
-    }
-  }, [slug, isEditMode]);
-
-  const updateForm = useCallback((field: string, value: any) => {
-    setForm((prev: any) => ({ ...prev, [field]: value }));
+  const updateForm = useCallback((field: string, value: unknown) => {
+    setForm((prev) => ({ ...prev, [field]: value }));
   }, []);
 
   const progress = useMemo(() => {
     let score = 0;
-    if (form.title.length > 5) score += 25;
-    if (files.some(f => f.isMain)) score += 25;
-    if (Number(form.price) > 0) score += 25;
-    if (form.location.length > 3) score += 25;
+    if (form.title.length > 5) score += 20;
+    if (files.some((f) => f.isMain)) score += 20;
+    if (Number(form.price) > 0) score += 20;
+    if (form.category_id !== '') score += 20;
+    if (form.location.length > 3) score += 20;
     return score;
   }, [form, files]);
 
+  useEffect(() => {
+    const initialize = async () => {
+      setIsLoading(true);
+      try {
+        const meta = await getClassifiedFormMeta();
+        setFormMeta(meta);
+
+        if (isEditMode && slug) {
+          const { data: classified } = await getClassifiedBySlug(slug);
+          setClassifiedId(classified.id);
+          setForm({
+            title: classified.title || '',
+            category_id: classified.category_id ? String(classified.category_id) : '',
+            price: classified.base_price != null ? String(classified.base_price) : '',
+            location: classified.location || '',
+            description: classified.description || '',
+            condition: classified.condition || 'Used - Good',
+            is_published: classified.is_published ?? true,
+          });
+
+          const initialMedia: any[] = [];
+          if (classified.featured_image) {
+            initialMedia.push({
+              id: classified.gallery[0]?.id,
+              url: classified.featured_image,
+              preview: classified.featured_image,
+              isMain: true,
+              existing: true,
+            });
+          }
+          classified.gallery.forEach((item: any) => {
+            if (item.url !== classified.featured_image) {
+              initialMedia.push({
+                id: item.id,
+                url: item.url,
+                preview: item.thumbnail || item.url,
+                isMain: false,
+                existing: true,
+              });
+            }
+          });
+          setFiles(initialMedia);
+        }
+      } catch (error) {
+        console.error('Failed to initialize classified form', error);
+        toast.error('Failed to load listing data.');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    initialize();
+  }, [isEditMode, slug]);
+
+  const buildFormData = () => {
+    const formData = new FormData();
+    const { city, country } = parseLocationParts(form.location);
+    const defaultTypeId = formMeta.types[0]?.id;
+
+    formData.append('title', form.title);
+    formData.append('description', form.description);
+    formData.append('category_id', form.category_id);
+    formData.append('base_price', form.price || '0');
+    formData.append('item_condition', String(mapConditionToRating(form.condition)));
+    formData.append('city', city);
+    formData.append('country', country);
+    formData.append('is_for_sale', '1');
+    formData.append('is_for_rent', '0');
+    formData.append('is_published', form.is_published ? '1' : '0');
+
+    if (defaultTypeId) {
+      formData.append('type_id', String(defaultTypeId));
+    }
+
+    files.forEach((fileObj) => {
+      if (fileObj.file) {
+        if (fileObj.isMain) formData.append('main_image', fileObj.file);
+        else formData.append('gallery[]', fileObj.file);
+      } else if (fileObj.existing) {
+        formData.append('existing_media_ids[]', String(fileObj.id));
+      }
+    });
+
+    return formData;
+  };
+
   const handleSave = async () => {
+    if (!form.title || !form.description || !form.category_id) {
+      toast.error('Please complete the required listing fields.');
+      return;
+    }
+
     setIsSaving(true);
     const toastId = toast.loading('Publishing your listing...');
 
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
+      const formData = buildFormData();
+
+      if (isEditMode && classifiedId) {
+        await updateClassified(classifiedId, formData);
+      } else {
+        await createClassified(formData);
+      }
+
       toast.success(`${form.title || 'Classified'} saved successfully.`, { id: toastId });
-      setIsSaving(false);
       await triggerCelebration();
-      setTimeout(() => navigate('/dashboard/classifieds'), 3500);
-    } catch (err: any) {
+      setTimeout(() => navigate('/dashboard/classifieds'), 1500);
+    } catch (error) {
+      const message = error instanceof ApiError ? error.message : 'Failed to save listing.';
+      toast.error(message, { id: toastId });
+    } finally {
       setIsSaving(false);
-      toast.error('Failed to save listing.', { id: toastId });
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 opacity-60 p-10">
+        <div className="lg:col-span-8 space-y-10">
+          {[1, 2].map((i) => (
+            <div key={i} className={`${containerClass} h-[300px] animate-pulse`} />
+          ))}
+        </div>
+        <div className="lg:col-span-4 space-y-10">
+          <div className="bg-slate-900 rounded-[3rem] h-[200px] animate-pulse" />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-10 md:space-y-16 pb-40 animate-in fade-in slide-in-from-bottom-6 duration-1000">
       <PageHeader
         badge="Community Exchange"
-        title={isEditMode ? "Modify" : "Post"}
+        title={isEditMode ? 'Modify' : 'Post'}
         subtitle="Classified"
       >
         <button
@@ -103,19 +200,6 @@ export default function CreateClassified() {
         </button>
       </PageHeader>
 
-      {isLoading ? (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 opacity-60">
-          <div className="lg:col-span-8 space-y-10">
-            {[1, 2].map((i) => (
-              <div key={i} className={`${containerClass} h-[300px] animate-pulse`} />
-            ))}
-          </div>
-          <div className="lg:col-span-4 space-y-10">
-             <div className="bg-slate-900 rounded-[3rem] h-[200px] animate-pulse" />
-             <div className={`${containerClass} h-[400px] animate-pulse`} />
-          </div>
-        </div>
-      ) : (
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
         <div className="lg:col-span-8 space-y-10">
           <div className={containerClass}>
@@ -133,6 +217,19 @@ export default function CreateClassified() {
                     className={`${inputClass} text-2xl italic tracking-tighter`}
                     placeholder="e.g. Vintage Record Player"
                   />
+                </div>
+                <div>
+                  <label className={labelClass}>Category</label>
+                  <select
+                    value={form.category_id}
+                    onChange={(e) => updateForm('category_id', e.target.value)}
+                    className={inputClass}
+                  >
+                    <option value="">Select category...</option>
+                    {formMeta.categories.map((category: any) => (
+                      <option key={category.id} value={category.id}>{category.title}</option>
+                    ))}
+                  </select>
                 </div>
                 <div>
                   <label className={labelClass}>Price (USD)</label>
@@ -182,9 +279,7 @@ export default function CreateClassified() {
             <h3 className="text-2xl font-black text-slate-900 tracking-tight italic mb-8 flex items-center gap-3">
               <span className="w-2 h-8 bg-[#6610f2] rounded-full" /> Media Studio.
             </h3>
-            <div className="mt-4">
-              <MediaStudio files={files} setFiles={setFiles} />
-            </div>
+            <MediaStudio files={files} setFiles={setFiles} />
           </div>
 
           <div className={containerClass}>
@@ -225,23 +320,19 @@ export default function CreateClassified() {
 
           <div className={containerClass}>
             <h4 className={labelClass}>Visibility</h4>
-            <div className="space-y-4 mt-6">
-              <label className="flex items-center justify-between p-5 bg-slate-50 rounded-2xl cursor-pointer hover:bg-slate-100 transition-colors group">
-                <span className="text-sm font-bold text-slate-700 group-hover:text-[#6610f2] transition-colors">Public Listing</span>
-                <input
-                  type="checkbox"
-                  checked={form.is_published}
-                  onChange={(e) => updateForm('is_published', e.target.checked)}
-                  className="w-6 h-6 rounded-lg accent-[#6610f2] cursor-pointer"
-                />
-              </label>
-            </div>
+            <label className="flex items-center justify-between p-5 bg-slate-50 rounded-2xl cursor-pointer hover:bg-slate-100 transition-colors group mt-6">
+              <span className="text-sm font-bold text-slate-700 group-hover:text-[#6610f2] transition-colors">Public Listing</span>
+              <input
+                type="checkbox"
+                checked={form.is_published}
+                onChange={(e) => updateForm('is_published', e.target.checked)}
+                className="w-6 h-6 rounded-lg accent-[#6610f2] cursor-pointer"
+              />
+            </label>
           </div>
         </div>
       </div>
-      )}
 
-      {!isLoading && (
       <ActionPill
         isSaving={isSaving}
         isEditMode={isEditMode}
@@ -249,7 +340,6 @@ export default function CreateClassified() {
         label="Listing"
         variant="floating"
       />
-      )}
     </div>
   );
 }

@@ -1,26 +1,38 @@
 import React, { useState, useEffect } from 'react';
 import PageHeader from '../../components/layout/PageHeader';
 import { HiOutlineArrowUpRight, HiOutlineClock, HiOutlineCheckCircle } from 'react-icons/hi2';
-import { mockPayouts } from '../../api/mockData';
+import { getPayouts } from '../../api/payments';
 
 export default function PayoutsPage() {
   const [payouts, setPayouts] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setTimeout(() => {
-      setPayouts(mockPayouts);
-      setIsLoading(false);
-    }, 800);
+    const fetchPayouts = async () => {
+      try {
+        const response = await getPayouts();
+        setPayouts(response.data.data);
+      } catch (error) {
+        console.error('Failed to fetch payouts', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchPayouts();
   }, []);
 
   return (
     <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
       <PageHeader badge="Financials" title="Payout" subtitle="History" />
-      
+
       {isLoading ? (
         <div className="h-64 flex items-center justify-center">
           <span className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-300 animate-pulse">Syncing Transactions...</span>
+        </div>
+      ) : payouts.length === 0 ? (
+        <div className="h-64 flex items-center justify-center">
+          <span className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-300">No payout history yet</span>
         </div>
       ) : (
         <div className="hidden lg:block">

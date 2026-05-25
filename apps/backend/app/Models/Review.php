@@ -37,6 +37,10 @@ class Review extends Model
         'reviewable_type',
         'rating',
         'comment',
+        'partner_reply',
+        'partner_replied_at',
+        'partner_id',
+        'admin_note',
         'viewed_at', // Important for admin "New Review" badges
     ];
 
@@ -48,6 +52,7 @@ class Review extends Model
     protected $casts = [
         'rating'     => 'integer',
         'viewed_at'  => 'datetime',
+        'partner_replied_at' => 'datetime',
     ];
 
     // --- Relationships ---
@@ -66,6 +71,11 @@ class Review extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function partner(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'partner_id');
     }
 
     // --- Scopes ---

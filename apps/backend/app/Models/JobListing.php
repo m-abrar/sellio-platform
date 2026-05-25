@@ -66,7 +66,6 @@ class JobListing extends Model implements HasMedia
         'salary_min',
         'salary_max',
         'salary_frequency',
-        'employment_type',
         'experience_level',
         'workplace_type',
         'required_education',
@@ -79,8 +78,11 @@ class JobListing extends Model implements HasMedia
         'latitude',
         'longitude',
         'is_published',
+        'is_featured',
         'is_contract',
         'is_full_time',
+        'meta_title',
+        'meta_description',
         'expires_at',
     ];
 

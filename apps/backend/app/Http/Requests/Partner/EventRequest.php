@@ -11,21 +11,16 @@ use Illuminate\Support\Facades\Auth;
  */
 class EventRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
     public function authorize(): bool
     {
         if (!Auth::check()) {
             return false;
         }
 
-        // If updating, verify the user owns the event
         $event = $this->route('event');
         if ($event) {
             $eventId = $event instanceof \App\Models\Event ? $event->id : $event;
+
             return \App\Models\Event::where('id', $eventId)
                 ->where('user_id', Auth::id())
                 ->exists();
@@ -34,64 +29,62 @@ class EventRequest extends FormRequest
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, mixed>
-     */
     public function rules(): array
     {
         return [
-            // Base Event Data
             'title'             => ['required', 'string', 'max:255'],
-            'description'      => ['required', 'string'],
-            'category_id'      => ['required', 'exists:categories,id'],
-            'base_price'       => ['required', 'numeric', 'min:0'],
-            'sale_price'       => ['nullable', 'numeric', 'min:0', 'lt:base_price'],
-            'is_paid'          => ['boolean'],
-            'is_published'     => ['boolean'],
-            'is_virtual'       => ['boolean'],
+            'description'       => ['required', 'string'],
+            'category_id'       => ['required', 'exists:categories,id'],
+            'base_price'        => ['required', 'numeric', 'min:0'],
+            'sale_price'        => ['nullable', 'numeric', 'min:0', 'lt:base_price'],
+            'is_paid'           => ['boolean'],
+            'is_published'      => ['boolean'],
+            'is_virtual'        => ['boolean'],
+            'city'              => ['nullable', 'string', 'max:100'],
+            'state'             => ['nullable', 'string', 'max:100'],
+            'country'           => ['nullable', 'string', 'max:100'],
+            'address'           => ['nullable', 'string', 'max:255'],
+            'organizer_name'    => ['nullable', 'string', 'max:255'],
 
-            // Ticket Types Validation
-            'tickets'          => ['required', 'array', 'min:1'],
-            'tickets.*.id'     => ['required', 'string'], // Handles 'NEW_...' or numeric IDs
+            'tickets'           => ['required', 'array', 'min:1'],
+            'tickets.*.id'      => ['required', 'string'],
             'tickets.*.title'   => ['required', 'string', 'max:100'],
             'tickets.*.base_price' => ['required', 'numeric', 'min:0'],
 
-            // Occurrences Validation
-            'occurrences'      => ['required', 'array', 'min:1'],
-            'occurrences.*.id' => ['required', 'string'],
-            'occurrences.*.start_date_time' => ['required', 'date', 'after_or_equal:today'],
+            'occurrences'       => ['required', 'array', 'min:1'],
+            'occurrences.*.id'  => ['required', 'string'],
+            'occurrences.*.start_date_time' => ['required', 'date'],
             'occurrences.*.duration_hours'  => ['required', 'numeric', 'min:0.5'],
             'occurrences.*.max_attendees'   => ['nullable', 'integer', 'min:0'],
             'occurrences.*.venue_details'   => ['nullable', 'string', 'max:500'],
-
-            // Occurrence Inventory (Inventory is keyed by the Ticket ID)
             'occurrences.*.inventory' => ['required', 'array'],
             'occurrences.*.inventory.*.available_quantity' => ['required', 'integer', 'min:0'],
             'occurrences.*.inventory.*.override_price'     => ['nullable', 'numeric', 'min:0'],
+
+            'main_image'        => ['nullable', 'image', 'max:5120'],
+            'gallery.*'         => ['nullable', 'image', 'max:5120'],
+            'existing_media_ids' => ['nullable', 'array'],
+            'existing_media_ids.*' => ['integer'],
         ];
     }
 
-    /**
-     * Prepare the data for validation.
-     *
-     * @return void
-     */
     protected function prepareForValidation(): void
     {
+        if (is_string($this->input('tickets'))) {
+            $this->merge(['tickets' => json_decode($this->input('tickets'), true) ?? []]);
+        }
+
+        if (is_string($this->input('occurrences'))) {
+            $this->merge(['occurrences' => json_decode($this->input('occurrences'), true) ?? []]);
+        }
+
         $this->merge([
-            'is_paid'      => $this->has('is_paid'),
-            'is_published' => $this->has('is_published'),
-            'is_virtual'   => $this->has('is_virtual'),
+            'is_paid'      => filter_var($this->input('is_paid', false), FILTER_VALIDATE_BOOLEAN),
+            'is_published' => filter_var($this->input('is_published', false), FILTER_VALIDATE_BOOLEAN),
+            'is_virtual'   => filter_var($this->input('is_virtual', false), FILTER_VALIDATE_BOOLEAN),
         ]);
     }
 
-    /**
-     * Get custom attributes for validator errors.
-     *
-     * @return array<string, string>
-     */
     public function attributes(): array
     {
         return [

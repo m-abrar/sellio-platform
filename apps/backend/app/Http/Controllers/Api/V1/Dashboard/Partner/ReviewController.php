@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Review;
 use App\Http\Resources\ReviewResource;
 use App\Services\Partner\ReviewService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
@@ -38,7 +39,31 @@ class ReviewController extends Controller
     public function index() {
         $reviews = $this->reviewService->getReviewsForPartner(Auth::user());
 
-        return ReviewResource::collection($reviews);
+        return $this->successResponse(ReviewResource::collection($reviews));
+    }
+
+    /**
+     * Store a partner reply on the specified review.
+     */
+    public function reply(Request $request, Review $review)
+    {
+        $this->authorizeOwner($review);
+
+        $validated = $request->validate([
+            'reply' => ['required', 'string', 'max:2000'],
+        ]);
+
+        $review->update([
+            'partner_reply' => $validated['reply'],
+            'partner_replied_at' => now(),
+            'partner_id' => Auth::id(),
+            'viewed_at' => $review->viewed_at ?? now(),
+        ]);
+
+        return $this->successResponse(
+            new ReviewResource($review->fresh(['user', 'reviewable'])),
+            __('Reply posted successfully.')
+        );
     }
 
     /**
