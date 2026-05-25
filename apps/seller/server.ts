@@ -9,7 +9,9 @@ const __dirname = path.dirname(__filename);
 
 async function startServer() {
   const app = express();
-  const PORT = 3000;
+  const portArgIndex = process.argv.findIndex((arg) => arg === "--port" || arg === "-p");
+  const portArg = portArgIndex >= 0 ? process.argv[portArgIndex + 1] : undefined;
+  const PORT = Number(portArg || process.env.PORT || 3000);
 
   app.use(express.json());
 

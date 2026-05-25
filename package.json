@@ -4,8 +4,8 @@
   "private": true,
   "description": "Multi-platform e-commerce and vertical marketplace engine",
   "scripts": {
-    "dev:storefront": "cd apps/storefront && npm run dev",
-    "dev:seller": "cd apps/seller && npm run dev",
+    "dev:storefront": "cd apps/storefront && npm run dev -- -p 3001",
+    "dev:seller": "cd apps/seller && npm run dev -- --port 3002",
     "build:all": "echo 'Run build in each app directory'",
     "lint:all": "echo 'Run lint in each app directory'"
   },
