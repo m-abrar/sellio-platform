@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { api } from '@sellio/api-client';
 import type { Product } from '@sellio/types';
 import { ElectronicsHeader, ProductCard, SpecFeature, ElectronicsFooter } from './components';
+import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 
 const FALLBACK_TRENDING_PRODUCTS = [
   { title: "NVIDIA RTX 5090 Ti Founders Edition", category: "Graphics Cards", price: "$1,999.00", image: "/themes/ecommerce/electronics/21.webp", badge: "IN STOCK", slug: "nvidia-rtx-5090-ti" },
@@ -19,6 +20,20 @@ const FALLBACK_PERIPHERAL_PRODUCTS = [
 ];
 
 export default function Page() {
+  const heroBadge = useThemeContent('hero.badge', 'NEXT GEN RELEASE');
+  const heroTitle = useThemeContent('hero.title', 'QUANTUM\nPERFORMANCE');
+  const heroDescription = useThemeContent('hero.description', 'Experience untethered speed with the all-new line of RTX 50-Series Architecture. Built for the creators of tomorrow.');
+  const heroPrimaryCta = useThemeContent('hero.primary_cta_label', 'Shop Now');
+  const heroSecondaryCta = useThemeContent('hero.secondary_cta_label', 'View Specs');
+  const heroImage = useThemeContent('hero.image', '/themes/ecommerce/electronics/29.webp');
+  const diagnosticsTitle = useThemeContent('diagnostics.title', 'DATABASE CONNECTION WARNING');
+  const diagnosticsDescription = useThemeContent('diagnostics.description', 'The dynamic Laravel API database is currently offline. Activating premium local node resilience fallback.');
+  const trendingTitle = useThemeContent('trending.title', 'TRENDING HARDWARE');
+  const promoTitle = useThemeContent('promo.title', 'BUILD YOUR DREAM PC');
+  const promoDescription = useThemeContent('promo.description', 'Use our interactive 3D configurator to ensure 100% compatibility and visualize your custom rig before you buy.');
+  const promoCta = useThemeContent('promo.cta_label', 'Launch Configurator');
+  const promoImage = useThemeContent('promo.image', '/themes/ecommerce/electronics/30.webp');
+  const peripheralsTitle = useThemeContent('peripherals.title', 'PRO PERIPHERALS');
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [errorTrace, setErrorTrace] = useState<string | null>(null);
@@ -29,11 +44,11 @@ export default function Page() {
         setLoading(true);
         const res = await api.getProducts();
         setProducts(res || []);
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error("Laravel Database connection failure. Activating resilience fallback.", err);
         setErrorTrace(
           `DATABASE_OFFLINE_DIAGNOSTICS_TRACE\n` +
-          `STATUS: [OFFLINE] | LATENCY: [TIMEOUT] | REASON: [${err.message || 'axios connection refused'}]\n` +
+          `STATUS: [OFFLINE] | LATENCY: [TIMEOUT] | REASON: [${err instanceof Error ? err.message : 'axios connection refused'}]\n` +
           `ACTION: Gracefully activated premium offline node resilience. Loading high-fidelity local catalog backups...`
         );
       } finally {
@@ -180,18 +195,18 @@ export default function Page() {
       <section className="el-hero">
         <div className="el-hero-bg"></div>
         <div className="el-hero-content">
-            <div className="el-badge" style={{ position: 'relative', top: 0, left: 0, display: 'inline-block', marginBottom: '1.5rem' }}>NEXT GEN RELEASE</div>
-            <h1 className="el-hero-title">QUANTUM<br/>PERFORMANCE</h1>
+            <div className="el-badge" style={{ position: 'relative', top: 0, left: 0, display: 'inline-block', marginBottom: '1.5rem' }}>{heroBadge}</div>
+            <h1 className="el-hero-title">{heroTitle.split('\n').map((line, index, lines) => <React.Fragment key={`${line}-${index}`}>{line}{index < lines.length - 1 ? <br /> : null}</React.Fragment>)}</h1>
             <p style={{ fontSize: '1.25rem', color: 'var(--el-text-muted)', marginBottom: '2rem', lineHeight: 1.6 }}>
-                Experience untethered speed with the all-new line of RTX 50-Series Architecture. Built for the creators of tomorrow.
+                {heroDescription}
             </p>
             <div style={{ display: 'flex', gap: '1rem' }}>
-                <a href="#components" className="el-btn el-btn-primary">Shop Now</a>
-                <a href="#specs" className="el-btn el-btn-outline">View Specs</a>
+                <a href="#components" className="el-btn el-btn-primary">{heroPrimaryCta}</a>
+                <a href="#specs" className="el-btn el-btn-outline">{heroSecondaryCta}</a>
             </div>
         </div>
         <div style={{ position: 'absolute', right: '5%', top: '50%', transform: 'translateY(-50%)', zIndex: 2, width: '45%' }}>
-            <img src="/themes/ecommerce/electronics/29.webp" alt="Hero GPU" style={{ width: '100%', filter: 'drop-shadow(0 0 30px rgba(0, 229, 255, 0.3))' }} />
+            <img src={heroImage} alt="Hero GPU" style={{ width: '100%', filter: 'drop-shadow(0 0 30px rgba(0, 229, 255, 0.3))' }} />
         </div>
       </section>
 
@@ -211,10 +226,10 @@ export default function Page() {
               <line x1="12" y1="9" x2="12" y2="13"></line>
               <line x1="12" y1="17" x2="12.01" y2="17"></line>
             </svg>
-            <span>DATABASE CONNECTION WARNING</span>
+            <span>{diagnosticsTitle}</span>
           </div>
           <p style={{ fontWeight: 600, fontSize: '0.95rem' }}>
-            The dynamic Laravel API database is currently offline. Activating premium local node resilience fallback.
+            {diagnosticsDescription}
           </p>
           <pre className="el-diagnostics-trace">{errorTrace}</pre>
         </div>
@@ -222,7 +237,7 @@ export default function Page() {
 
       {/* Trending Products */}
       <section className="el-section" id="components">
-          <h2 className="el-section-title">TRENDING HARDWARE</h2>
+          <h2 className="el-section-title">{trendingTitle}</h2>
           <div className="el-grid">
               {loading ? (
                 Array.from({ length: 4 }).map((_, i) => (
@@ -245,16 +260,16 @@ export default function Page() {
       {/* Promo Banner */}
       <section style={{ margin: '2rem 5%', background: 'linear-gradient(90deg, #1a1d24, #0f1115)', border: '1px solid var(--el-primary)', borderRadius: '8px', padding: '3rem', position: 'relative', overflow: 'hidden' }}>
           <div style={{ position: 'relative', zIndex: 2, maxWidth: '500px' }}>
-              <h2 className="el-tech-font" style={{ fontSize: '2.5rem', marginBottom: '1rem', color: 'white' }}>BUILD YOUR DREAM PC</h2>
-              <p style={{ color: 'var(--el-text-muted)', marginBottom: '2rem', fontSize: '1.1rem' }}>Use our interactive 3D configurator to ensure 100% compatibility and visualize your custom rig before you buy.</p>
-              <button className="el-btn el-btn-primary">Launch Configurator</button>
+              <h2 className="el-tech-font" style={{ fontSize: '2.5rem', marginBottom: '1rem', color: 'white' }}>{promoTitle}</h2>
+              <p style={{ color: 'var(--el-text-muted)', marginBottom: '2rem', fontSize: '1.1rem' }}>{promoDescription}</p>
+              <button className="el-btn el-btn-primary">{promoCta}</button>
           </div>
-          <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: '50%', background: 'url(/themes/ecommerce/electronics/30.webp) center/cover', opacity: 0.4, maskImage: 'linear-gradient(to left, black, transparent)', WebkitMaskImage: 'linear-gradient(to left, black, transparent)' }}></div>
+          <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: '50%', background: `url(${promoImage}) center/cover`, opacity: 0.4, maskImage: 'linear-gradient(to left, black, transparent)', WebkitMaskImage: 'linear-gradient(to left, black, transparent)' }}></div>
       </section>
 
       {/* Peripherals */}
       <section className="el-section" id="peripherals">
-          <h2 className="el-section-title">PRO PERIPHERALS</h2>
+          <h2 className="el-section-title">{peripheralsTitle}</h2>
           <div className="el-grid">
               {loading ? (
                 Array.from({ length: 4 }).map((_, i) => (

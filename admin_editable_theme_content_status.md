@@ -1,6 +1,7 @@
 # Admin-Editable Theme Content Status
 
 Last updated: 2026-05-25
+Last reconciled: 2026-05-25 after converting `ecommerce_default`, `ecommerce_electronics`, and `ecommerce_luxury`.
 
 This tracks storefront themes converted to the structured theme-content slot system used by `/admin/content`.
 
@@ -10,9 +11,11 @@ Definition of complete: the theme has admin-editable homepage slots wired throug
 
 | Status | Count |
 | :--- | ---: |
-| Complete | 17 |
-| Pending | 35 |
+| Complete | 20 |
+| Pending | 32 |
 | Total seeded themes | 52 |
+
+Latest completed batch: Ecommerce Standard, Ecommerce Electronics, Ecommerce Luxury.
 
 ## Complete
 
@@ -24,7 +27,10 @@ Definition of complete: the theme has admin-editable homepage slots wired throug
 | Autos | `autos_modern` | Autos Modern / Showcase |
 | Autos | `autos_used` | Autos Used / Marketplace |
 | Classifieds | `classifieds_general` | Classifieds General / Marketplace |
+| Ecommerce | `ecommerce_default` | Ecommerce Standard |
+| Ecommerce | `ecommerce_electronics` | Ecommerce Electronics |
 | Ecommerce | `ecommerce_fashion` | Ecommerce Fashion |
+| Ecommerce | `ecommerce_luxury` | Ecommerce Luxury |
 | Events | `events_classic` | Events Classic |
 | Events | `events_corporate` | Events Corporate |
 | Events | `events_creative` | Events Creative |
@@ -45,9 +51,6 @@ Definition of complete: the theme has admin-editable homepage slots wired throug
 | Classifieds | `classifieds_local` | Classifieds Local / Community |
 | Classifieds | `classifieds_modern` | Classifieds Modern / Card Style |
 | Classifieds | `classifieds_premium` | Classifieds Premium |
-| Ecommerce | `ecommerce_default` | Ecommerce Standard |
-| Ecommerce | `ecommerce_electronics` | Ecommerce Electronics |
-| Ecommerce | `ecommerce_luxury` | Ecommerce Luxury |
 | Jobs | `jobs_blue_collar` | Jobs Blue-Collar / Local |
 | Jobs | `jobs_freelance` | Jobs Freelance / Gig Economy |
 | Jobs | `jobs_modern` | Jobs Modern |

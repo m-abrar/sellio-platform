@@ -4,13 +4,18 @@ import { MenuNav } from '@/components/menu/MenuNav';
 import { MenuUtilityNav } from '@/components/menu/MenuUtilityNav';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { defaultNavItemRenderer } from '@/components/menu/menu-renderers';
+import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 
 export const ShopHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const brandLabel = useThemeContent('header.brand_label', 'SELLIOShop');
+  const brandHighlight = useThemeContent('header.brand_highlight', 'Shop');
+  const brandPrefix = brandLabel.endsWith(brandHighlight) ? brandLabel.slice(0, -brandHighlight.length) : brandLabel;
+
   return (
     <header className="ed-header">
       <div className="ed-logo">
-        SELLIO<span style={{ color: 'var(--ed-blue)' }}>Shop</span>
+        {brandPrefix}<span style={{ color: 'var(--ed-blue)' }}>{brandHighlight}</span>
       </div>
       
       <button 
@@ -46,7 +51,14 @@ export const ShopHeader = () => {
   );
 };
 
-export const PremiumProductCard = ({ name, price, category, image }: any) => (
+type PremiumProductCardProps = {
+  name: string;
+  price: string;
+  category: string;
+  image: string;
+};
+
+export const PremiumProductCard = ({ name, price, category, image }: PremiumProductCardProps) => (
   <div className="ed-product-card">
     <div className="ed-img-frame">
       <img src={image} alt={name} className="ed-img" />
@@ -69,13 +81,19 @@ export const CategoryRibbon = ({ label, count }: { label: string, count: string 
     </div>
 );
 
-export const TransactionFooter = () => (
+export const TransactionFooter = () => {
+    const brandLabel = useThemeContent('header.brand_label', 'SELLIOShop');
+    const footerBrand = useThemeContent('footer.brand_label', 'SELLIO');
+    const description = useThemeContent('footer.description', "The world's most advanced transaction protocol for high-fidelity retail. Synchronizing refined essentials with global distribution nodes.");
+    const copyright = useThemeContent('footer.copyright', '© 2026 SELLIO_SHOP // TRANSACTION_SYNC_STABLE');
+
+    return (
     <footer className="ed-footer">
         <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: '8rem' }}>
             <div>
-                <div className="ed-logo" style={{ fontSize: '2.5rem', marginBottom: '3rem' }}>SELLIO</div>
+                <div className="ed-logo" style={{ fontSize: '2.5rem', marginBottom: '3rem' }}>{footerBrand || brandLabel}</div>
                 <p style={{ color: 'var(--ed-text-muted)', lineHeight: 2, fontSize: '1.1rem', maxWidth: '400px' }}>
-                    The world's most advanced transaction protocol for high-fidelity retail. Synchronizing refined essentials with global distribution nodes.
+                    {description}
                 </p>
             </div>
             <FooterMenuColumn
@@ -100,7 +118,7 @@ export const TransactionFooter = () => (
             />
         </div>
         <div style={{ marginTop: '12rem', paddingTop: '4rem', borderTop: '1px solid var(--ed-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <div className="ed-mono" style={{ color: 'var(--ed-text-muted)', fontSize: '0.65rem' }}>© 2026 SELLIO_SHOP // TRANSACTION_SYNC_STABLE</div>
+            <div className="ed-mono" style={{ color: 'var(--ed-text-muted)', fontSize: '0.65rem' }}>{copyright}</div>
             <MenuNav
                 location="social_footer"
                 flat
@@ -114,4 +132,5 @@ export const TransactionFooter = () => (
             />
         </div>
     </footer>
-);
+    );
+};

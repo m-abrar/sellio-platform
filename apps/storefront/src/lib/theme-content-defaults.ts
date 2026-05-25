@@ -541,6 +541,104 @@ const JOBS_CORPORATE_HOME: ThemeContentResponse = {
   config: {},
 };
 
+const ECOMMERCE_DEFAULT_HOME: ThemeContentResponse = {
+  theme_key: 'ecommerce_default',
+  page: 'home',
+  content: {
+    'header.brand_label': 'SELLIOShop',
+    'header.brand_highlight': 'Shop',
+    'hero.eyebrow': 'SUMMER_COLLECTION_2026_V8',
+    'hero.title': 'Refined\nEssentials for\nModern Life.',
+    'hero.highlight': 'Modern Life.',
+    'hero.description': 'Discover a curated selection of premium garments designed with a focus on silhouette, material, and enduring quality.',
+    'hero.primary_cta_label': 'Shop Collection',
+    'hero.feature_eyebrow': 'FEATURED_NODE',
+    'hero.feature_title': 'Technical_Shell_v4',
+    'collection.eyebrow': 'CURATED_PRODUCT_REGISTRY',
+    'collection.title': 'New\nArrivals.',
+    'collection.description': "Our unified protocol synchronizes product availability from the world's most significant garment nodes.",
+    'sync.offline_kicker': 'PRODUCT_SYNC_OFFLINE',
+    'sync.offline_title': 'Products could not be synchronized.',
+    'empty.kicker': 'EMPTY_PRODUCT_REGISTRY',
+    'empty.title': 'No live products are available yet.',
+    'empty.description': 'Add product records in the backend and this collection will hydrate automatically.',
+    'newsletter.eyebrow': 'JOIN_THE_COLLECTIVE',
+    'newsletter.title': 'Stay In\nThe Loop.',
+    'newsletter.description': 'Join our collective and be the first to know about new collection drops, exclusive events, and seasonal sales.',
+    'newsletter.placeholder': 'ENTER_EMAIL_NODE',
+    'newsletter.button_label': 'SUBSCRIBE',
+    'footer.brand_label': 'SELLIO',
+    'footer.description': "The world's most advanced transaction protocol for high-fidelity retail. Synchronizing refined essentials with global distribution nodes.",
+    'footer.copyright': '© 2026 SELLIO_SHOP // TRANSACTION_SYNC_STABLE',
+  },
+  media: {
+    'hero.image': '/themes/ecommerce/default/9.webp',
+  },
+  config: {},
+};
+
+const ECOMMERCE_ELECTRONICS_HOME: ThemeContentResponse = {
+  theme_key: 'ecommerce_electronics',
+  page: 'home',
+  content: {
+    'header.brand_label': 'NEURALGEAR',
+    'header.brand_highlight': 'GEAR',
+    'header.search_placeholder': 'Search components, devices...',
+    'hero.badge': 'NEXT GEN RELEASE',
+    'hero.title': 'QUANTUM\nPERFORMANCE',
+    'hero.description': 'Experience untethered speed with the all-new line of RTX 50-Series Architecture. Built for the creators of tomorrow.',
+    'hero.primary_cta_label': 'Shop Now',
+    'hero.secondary_cta_label': 'View Specs',
+    'diagnostics.title': 'DATABASE CONNECTION WARNING',
+    'diagnostics.description': 'The dynamic Laravel API database is currently offline. Activating premium local node resilience fallback.',
+    'trending.title': 'TRENDING HARDWARE',
+    'promo.title': 'BUILD YOUR DREAM PC',
+    'promo.description': 'Use our interactive 3D configurator to ensure 100% compatibility and visualize your custom rig before you buy.',
+    'promo.cta_label': 'Launch Configurator',
+    'peripherals.title': 'PRO PERIPHERALS',
+    'footer.description': 'Next-generation hardware for builders, gamers, and creators. Power your future.',
+    'footer.newsletter_title': 'Newsletter',
+    'footer.newsletter_description': 'Get updates on latest drops and tech news.',
+    'footer.email_placeholder': 'Email Address',
+    'footer.subscribe_label': '→',
+    'footer.copyright': '© 2026 NeuralGear Electronics. All rights reserved.',
+  },
+  media: {
+    'hero.image': '/themes/ecommerce/electronics/29.webp',
+    'promo.image': '/themes/ecommerce/electronics/30.webp',
+  },
+  config: {},
+};
+
+const ECOMMERCE_LUXURY_HOME: ThemeContentResponse = {
+  theme_key: 'ecommerce_luxury',
+  page: 'home',
+  content: {
+    'header.brand_label': 'AURELIA',
+    'hero.subtitle': 'The High Jewelry Collection',
+    'hero.title': 'CELESTIAL\nELEGANCE',
+    'hero.primary_cta_label': 'Discover the Collection',
+    'collection.title': 'Signature Creations',
+    'collection.description': 'Exquisite craftsmanship meets timeless design',
+    'collection.product_cta_label': 'View Piece',
+    'collection.view_all_label': 'View All Masterpieces',
+    'sync.offline_kicker': 'Collection Sync Offline',
+    'sync.offline_title': 'Signature creations could not be loaded.',
+    'empty.kicker': 'Private Catalog',
+    'empty.title': 'No live masterpieces are published yet.',
+    'empty.description': 'Add product records in the backend and this showcase will hydrate automatically.',
+    'story.title': 'Artistry in Every Detail',
+    'story.description': 'For over a century, our master artisans have poured their passion into every facet. We source only the rarest gems, setting them in designs that transcend time and trend. Experience the weight of true luxury.',
+    'story.cta_label': 'Explore Our Heritage',
+    'footer.description': 'Subscribe to receive updates on exclusive collections, private events, and our latest creations.',
+    'footer.email_placeholder': 'Email Address',
+    'footer.subscribe_label': 'Subscribe',
+    'footer.copyright': '© 2026 Aurelia Maison. All Rights Reserved.',
+  },
+  media: {},
+  config: {},
+};
+
 export function getThemeContentDefaults(themeKey?: string, page = 'home'): ThemeContentResponse {
   if (themeKey === 'properties_classic' && page === 'home') {
     return PROPERTIES_CLASSIC_HOME;
@@ -608,6 +706,18 @@ export function getThemeContentDefaults(themeKey?: string, page = 'home'): Theme
 
   if (themeKey === 'jobs_corporate' && page === 'home') {
     return JOBS_CORPORATE_HOME;
+  }
+
+  if (themeKey === 'ecommerce_default' && page === 'home') {
+    return ECOMMERCE_DEFAULT_HOME;
+  }
+
+  if (themeKey === 'ecommerce_electronics' && page === 'home') {
+    return ECOMMERCE_ELECTRONICS_HOME;
+  }
+
+  if (themeKey === 'ecommerce_luxury' && page === 'home') {
+    return ECOMMERCE_LUXURY_HOME;
   }
 
   return {

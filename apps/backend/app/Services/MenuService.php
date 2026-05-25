@@ -297,7 +297,7 @@ class MenuService
 
     protected function hydrateItemsFromStructure(array $items): Collection
     {
-        return collect($items)->map(function (array $item) {
+        $models = array_map(function (array $item) {
             $model = new MenuItem([
                 'id'    => $item['id'] ?? null,
                 'title' => $item['title'],
@@ -307,11 +307,13 @@ class MenuService
             if (! empty($item['children'])) {
                 $model->setRelation('children', $this->hydrateItemsFromStructure($item['children']));
             } else {
-                $model->setRelation('children', collect());
+                $model->setRelation('children', new Collection());
             }
 
             return $model;
-        });
+        }, $items);
+
+        return new Collection($models);
     }
 
     protected function setActiveStateRecursively(Collection $items): void
