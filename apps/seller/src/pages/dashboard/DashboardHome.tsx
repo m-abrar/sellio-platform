@@ -13,19 +13,23 @@ import {
   HiOutlineChevronRight 
 } from 'react-icons/hi2';
 import { getDashboardData } from '../../api/dashboard';
+import { ApiError } from '../../lib/apiError';
 
 export default function DashboardHome() {
   const navigate = useNavigate();
   const [data, setData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await getDashboardData();
         setData(response.data);
+        setLoadError(null);
       } catch (error) {
-        console.error("Failed to fetch dashboard data", error);
+        console.error('Failed to fetch dashboard data', error);
+        setLoadError(error instanceof ApiError ? error.message : 'Failed to load dashboard.');
       } finally {
         setIsLoading(false);
       }
@@ -43,7 +47,15 @@ export default function DashboardHome() {
     );
   }
 
-  const { stats, recentListings } = data || { stats: {}, recentListings: [] };
+  if (loadError) {
+    return (
+      <div className="h-screen flex items-center justify-center">
+        <p className="text-sm font-bold text-red-500">{loadError}</p>
+      </div>
+    );
+  }
+
+  const { stats, recentListings, healthScore, earningChange } = data || { stats: {}, recentListings: [] };
 
   return (
     <div className="space-y-10 md:space-y-16 pb-20">
@@ -146,8 +158,9 @@ export default function DashboardHome() {
             <div className="relative z-10">
                 <p className="text-[11px] font-black uppercase tracking-[0.3em] text-slate-500 mb-2">Available Payout</p>
                 <div className="flex items-baseline gap-1 text-white mb-12">
-                    <h4 className="text-5xl md:text-6xl font-black italic tracking-tighter">$2,140</h4>
-                    <span className="text-2xl font-bold text-slate-500">.50</span>
+                    <h4 className="text-5xl md:text-6xl font-black italic tracking-tighter">
+                      {earningChange?.currency_symbol ?? '$'}{Number(earningChange?.total ?? 0).toLocaleString()}
+                    </h4>
                 </div>
                 <button 
                   onClick={() => navigate('/dashboard/analytics')}
@@ -163,7 +176,7 @@ export default function DashboardHome() {
             <div className="absolute top-0 left-0 w-2 h-full bg-[#ffc107]" />
             <h4 className="text-[11px] font-black text-slate-900 uppercase tracking-widest mb-3">Trust Index</h4>
             <p className="text-sm text-slate-500 leading-relaxed font-medium">
-                Status: <span className="text-slate-900 font-bold underline decoration-[#ffc107] decoration-4 underline-offset-4">Verified</span>. Your account is eligible for 0% processing fees.
+                Listing Health: <span className="text-slate-900 font-bold underline decoration-[#ffc107] decoration-4 underline-offset-4">{healthScore?.statusText ?? 'N/A'}</span> ({healthScore?.score ?? 0}%).
             </p>
           </div>
         </div>

@@ -93,13 +93,14 @@ class DashboardService
     {
         $listing->type_label = class_basename($listing);
         $listing->formatted_date = $listing->created_at->diffForHumans();
-        
-        // Add vertical-specific routing metadata
+
         $vertical = Str::lower(Str::plural($listing->type_label));
-        if ($listing instanceof JobListing) $vertical = 'joblistings';
-        
-        $listing->edit_url = route("dashboard.partner.{$vertical}.edit", $listing->id);
-        
+        if ($listing instanceof JobListing) {
+            $vertical = 'joblistings';
+        }
+
+        $listing->edit_url = "/dashboard/{$vertical}/edit/{$listing->slug}";
+
         return $listing;
     }
 

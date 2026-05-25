@@ -15,7 +15,7 @@ export default function ProductsPage() {
     setIsLoading(true);
     try {
       const response = await getProducts();
-      setProducts(response.data.data);
+      setProducts(response.data);
     } catch (err) {
       console.error("Failed to fetch products", err);
       toast.error("Failed to synchronize inventory.");
@@ -38,7 +38,7 @@ export default function ProductsPage() {
             setProducts(prev => prev.filter(p => p.id !== id));
             toast.success(`${title} decommissioned successfully.`);
           } catch (err: any) {
-            toast.error(err.response?.data?.message || "Protocol failed: Asset locked.");
+            toast.error(err.message || "Protocol failed: Asset locked.");
           }
         },
       },

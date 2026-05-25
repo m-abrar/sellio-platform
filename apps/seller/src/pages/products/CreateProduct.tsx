@@ -11,7 +11,8 @@ import {
 
 // API Services
 import { getProductBySlug, createProduct, updateProduct } from '../../api/products';
-import { getCategories } from '../../api/categories';
+import { getCategories, getBrands } from '../../api/categories';
+import { ApiError } from '../../lib/apiError';
 
 // Studio Components
 import MediaStudio from '../../components/studio/MediaStudio';
@@ -29,6 +30,7 @@ export default function CreateProduct() {
   const inputClass = "w-full bg-slate-50 border-2 border-transparent focus:border-[#6610f2] focus:bg-white rounded-[1.5rem] px-6 py-5 text-slate-900 font-bold transition-all outline-none placeholder:text-slate-300";
 
   const [categories, setCategories] = useState<any[]>([]);
+  const [brands, setBrands] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [productId, setProductId] = useState<number | null>(null);
@@ -59,11 +61,12 @@ export default function CreateProduct() {
       try {
         // 1. Fetch Categories
         const flatCategories = await getCategories();
+        const flatBrands = await getBrands();
         setCategories(flatCategories);
+        setBrands(flatBrands);
 
-        // 2. Fetch Product if in Edit Mode
         if (isEditMode && slug) {
-          const { data: { data: p } } = await getProductBySlug(slug);
+          const { data: p } = await getProductBySlug(slug);
 
           setProductId(p.id);
 
@@ -86,8 +89,8 @@ export default function CreateProduct() {
             length: dims[0] || '',
             width: dims[1] || '',
             height: dims[2] || '',
-            is_published: true,
-            is_featured: p.is_featured ?? false,
+            is_published: p.status?.is_published ?? true,
+            is_featured: p.status?.is_featured ?? p.is_featured ?? false,
           });
 
           // Handle Spatie Media Integration
@@ -161,20 +164,21 @@ export default function CreateProduct() {
     });
 
     try {
-      const response = isEditMode && productId
-        ? await updateProduct(productId, formData)
-        : await createProduct(formData);
+      if (isEditMode && productId) {
+        await updateProduct(productId, formData);
+      } else {
+        await createProduct(formData);
+      }
 
       toast.success(`${form.title || 'Product'} saved successfully.`, { id: toastId });
       setIsSaving(false);
       await triggerCelebration();
       setTimeout(() => navigate('/dashboard/products'), 3500);
-      return response;
-    } catch (err: any) {
+    } catch (err: unknown) {
       setIsSaving(false);
-      const errorMessage = err.response?.data?.message || 'Validation failed.';
+      const errorMessage = err instanceof ApiError ? err.message : 'Validation failed.';
       toast.error(errorMessage, { id: toastId });
-      throw err; 
+      throw err;
     }
   };
 
@@ -263,13 +267,16 @@ export default function CreateProduct() {
                 </div>
                 <div>
                   <label className={labelClass}>Brand Identifier</label>
-                  <input
-                    type="text"
+                  <select
                     value={form.brand_id}
                     onChange={(e) => updateForm('brand_id', e.target.value)}
-                    className={inputClass}
-                    placeholder="Brand Reference"
-                  />
+                    className={`${inputClass} appearance-none cursor-pointer`}
+                  >
+                    <option value="">Select Brand...</option>
+                    {brands.map((brand: any) => (
+                      <option key={brand.id} value={brand.id}>{brand.title}</option>
+                    ))}
+                  </select>
                 </div>
               </div>
             </div>

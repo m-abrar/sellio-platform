@@ -9,7 +9,7 @@ class SaveProductRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        $productId = $this->route('id');
+        $productId = $this->route('product') ?? $this->route('id');
         if ($productId) {
             return \App\Models\Product::where('id', $productId)
                 ->where('user_id', auth()->id())
@@ -20,7 +20,7 @@ class SaveProductRequest extends FormRequest
 
     public function rules(): array
     {
-        $productId = $this->route('id'); // For update routes
+        $productId = $this->route('product') ?? $this->route('id'); // For update routes
 
         return [
             'title'             => ['required', 'string', 'max:255'],

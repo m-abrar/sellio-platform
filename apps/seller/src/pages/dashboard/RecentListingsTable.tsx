@@ -4,8 +4,10 @@ import { HiOutlinePencilSquare, HiOutlineTrash, HiOutlineEye } from 'react-icons
 
 interface Listing {
   id: number;
+  slug?: string;
   title: string;
   module_type: string;
+  module_slug?: string;
   is_active: boolean;
   media?: Array<{ original_url: string }>;
 }
@@ -32,9 +34,16 @@ const MobileActionBtn = ({ Icon, label, color, onClick }: any) => (
 export default function RecentListingsTable({ listings }: { listings: Listing[] }) {
   const navigate = useNavigate();
 
+  const handleView = (item: Listing) => {
+    const module = item.module_slug || `${item.module_type.toLowerCase()}s`;
+    const identifier = item.slug || item.id;
+    navigate(`/dashboard/${module}/view/${identifier}`);
+  };
+
   const handleEdit = (item: Listing) => {
-    const module = item.module_type.toLowerCase() + 's';
-    navigate(`/dashboard/${module}/edit/${item.id}`);
+    const module = item.module_slug || `${item.module_type.toLowerCase()}s`;
+    const identifier = item.slug || item.id;
+    navigate(`/dashboard/${module}/edit/${identifier}`);
   };
 
   return (
@@ -63,7 +72,7 @@ export default function RecentListingsTable({ listings }: { listings: Listing[] 
             </div>
 
             <div className="grid grid-cols-3 gap-3 mt-8 pt-8 border-t border-slate-200/50">
-              <MobileActionBtn Icon={HiOutlineEye} label="View" color="active:bg-blue-600" onClick={() => handleEdit(item)} />
+              <MobileActionBtn Icon={HiOutlineEye} label="View" color="active:bg-blue-600" onClick={() => handleView(item)} />
               <MobileActionBtn Icon={HiOutlinePencilSquare} label="Edit" color="active:bg-[#6610f2]" onClick={() => handleEdit(item)} />
               <MobileActionBtn Icon={HiOutlineTrash} label="Del" color="active:bg-red-500" />
             </div>
@@ -125,7 +134,7 @@ export default function RecentListingsTable({ listings }: { listings: Listing[] 
                     {/* ACTION BUTTONS: Hidden by default, visible on hover */}
                     <div className="absolute inset-y-0 right-0 flex items-center gap-3 opacity-0 translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
                       {[
-                        { Icon: HiOutlineEye, bg: 'hover:bg-blue-600', hoverText: 'hover:text-white', onClick: () => handleEdit(item) },
+                        { Icon: HiOutlineEye, bg: 'hover:bg-blue-600', hoverText: 'hover:text-white', onClick: () => handleView(item) },
                         { Icon: HiOutlinePencilSquare, bg: 'hover:bg-[#6610f2]', hoverText: 'hover:text-white', onClick: () => handleEdit(item) },
                         { Icon: HiOutlineTrash, bg: 'hover:bg-red-500', hoverText: 'hover:text-white', onClick: () => {} }
                       ].map((btn, idx) => (

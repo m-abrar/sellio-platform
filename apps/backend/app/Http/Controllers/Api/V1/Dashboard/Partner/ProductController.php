@@ -24,10 +24,17 @@ class ProductController extends Controller
 
     public function index(Request $request): JsonResponse
     {
-        $serviceData = $this->productService->getSearchPageData($request->all(), auth()->user());
+        $user = auth()->user();
+        $serviceData = $this->productService->getSearchPageData($request->all(), $user);
+
+        $products = Product::query()
+            ->where('user_id', $user->id)
+            ->with(['media', 'brand', 'category'])
+            ->latest()
+            ->paginate($request->integer('per_page', 120));
 
         return $this->successResponse(
-            ProductResource::collection($serviceData['products']),
+            ProductResource::collection($products),
             null,
             200,
             [
@@ -78,9 +85,31 @@ class ProductController extends Controller
         );
     }
 
+    public function show(string $product): JsonResponse
+    {
+        $model = Product::where('user_id', auth()->id())
+            ->where(is_numeric($product) ? 'id' : 'slug', $product)
+            ->with(['user', 'category', 'brand', 'tags', 'media', 'attributes', 'addons'])
+            ->firstOrFail();
+
+        $this->productService->logListingView($model);
+        $viewData = $this->productService->getProductDetailsData($model);
+
+        return $this->successResponse(
+            new ProductResource($model),
+            null,
+            200,
+            [
+                'related_products' => ProductResource::collection($viewData['related_products']),
+                'attributes'       => $viewData['attributes'],
+                'addons'           => $viewData['addons'],
+            ]
+        );
+    }
+
     public function edit(string $slug) {
-        $product = Product::where('slug', $slug)
-            // ->active()
+        $product = Product::where('user_id', auth()->id())
+            ->where('slug', $slug)
             ->with(['user', 'category', 'brand', 'tags', 'media', 'attributes', 'addons'])
             ->firstOrFail();
 

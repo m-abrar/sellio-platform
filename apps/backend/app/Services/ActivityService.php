@@ -56,25 +56,25 @@ class ActivityService
 
             $recentActivityLog = $activities->sortByDesc('created_at')->take(15)->map(function ($activity) {
                 if ($activity instanceof Review) {
-                    return ['type' => 'Review', 'title' => 'New Review', 'description' => 'Received a new ' . $activity->rating . '-star review on "' . ($activity->reviewable->title ?? 'N/A') . '".', 'user' => $activity->user->name ?? 'Anon', 'time' => Carbon::parse($activity->created_at)->diffForHumans(), 'route' => route('dashboard.partner.reviews.show', $activity->id)];
+                    return ['type' => 'Review', 'title' => 'New Review', 'description' => 'Received a new ' . $activity->rating . '-star review on "' . ($activity->reviewable->title ?? 'N/A') . '".', 'user' => $activity->user->name ?? 'Anon', 'time' => Carbon::parse($activity->created_at)->diffForHumans(), 'route' => '/dashboard/reviews'];
                 } elseif ($activity instanceof JobApplication) {
-                    return ['type' => 'Application', 'title' => 'New Job Application', 'description' => 'New application received for "' . ($activity->job->title ?? 'N/A') . '".', 'user' => $activity->user->name ?? 'Applicant', 'time' => Carbon::parse($activity->created_at)->diffForHumans(), 'route' => route('dashboard.partner.jobs.applications.show', $activity->id)];
+                    return ['type' => 'Application', 'title' => 'New Job Application', 'description' => 'New application received for "' . ($activity->job->title ?? 'N/A') . '".', 'user' => $activity->user->name ?? 'Applicant', 'time' => Carbon::parse($activity->created_at)->diffForHumans(), 'route' => '/dashboard/joblistings/Applications'];
                 } elseif ($activity instanceof PropertyBooking) {
-                    return ['type' => 'Booking', 'title' => 'New Property Booking', 'description' => 'New booking request for "' . ($activity->property->title ?? 'N/A') . '".', 'user' => $activity->user->name ?? 'Guest', 'time' => Carbon::parse($activity->created_at)->diffForHumans(), 'route' => route('dashboard.partner.properties.bookings.show', $activity->id)];
+                    return ['type' => 'Booking', 'title' => 'New Property Booking', 'description' => 'New booking request for "' . ($activity->property->title ?? 'N/A') . '".', 'user' => $activity->user->name ?? 'Guest', 'time' => Carbon::parse($activity->created_at)->diffForHumans(), 'route' => '/dashboard/properties/Bookings'];
                 } elseif ($activity instanceof EventBooking) {
-                    return ['type' => 'Booking', 'title' => 'New Event Booking', 'description' => 'New booking for "' . ($activity->event->title ?? 'N/A') . '".', 'user' => $activity->user->name ?? 'Guest', 'time' => Carbon::parse($activity->created_at)->diffForHumans(), 'route' => route('dashboard.partner.events.bookings.show', $activity->id)];
+                    return ['type' => 'Booking', 'title' => 'New Event Booking', 'description' => 'New booking for "' . ($activity->event->title ?? 'N/A') . '".', 'user' => $activity->user->name ?? 'Guest', 'time' => Carbon::parse($activity->created_at)->diffForHumans(), 'route' => '/dashboard/events/Bookings'];
                 } elseif ($activity instanceof ServiceQuote) {
-                    return ['type' => 'Quote', 'title' => 'New Service Quote Request', 'description' => 'New quote request for "' . ($activity->service->title ?? 'N/A') . '".', 'user' => $activity->user->name ?? 'Customer', 'time' => Carbon::parse($activity->created_at)->diffForHumans(), 'route' => route('dashboard.partner.services.quotes.show', $activity->id)];
+                    return ['type' => 'Quote', 'title' => 'New Service Quote Request', 'description' => 'New quote request for "' . ($activity->service->title ?? 'N/A') . '".', 'user' => $activity->user->name ?? 'Customer', 'time' => Carbon::parse($activity->created_at)->diffForHumans(), 'route' => '/dashboard/services/Inquiries'];
                 } elseif ($activity instanceof ServiceAppointment) {
-                    return ['type' => 'Appointment', 'title' => 'New Service Appointment', 'description' => 'New appointment for "' . ($activity->service->title ?? 'N/A') . '".', 'user' => $activity->user->name ?? 'Customer', 'time' => Carbon::parse($activity->created_at)->diffForHumans(), 'route' => route('dashboard.partner.services.appointments.show', $activity->id)];
+                    return ['type' => 'Appointment', 'title' => 'New Service Appointment', 'description' => 'New appointment for "' . ($activity->service->title ?? 'N/A') . '".', 'user' => $activity->user->name ?? 'Customer', 'time' => Carbon::parse($activity->created_at)->diffForHumans(), 'route' => '/dashboard/services/Inquiries'];
                 } elseif ($activity instanceof ClassifiedInquiry) {
                     $listingTitle = $activity->classifiedad->title ?? 'N/A';
-                    return ['type' => 'Inquiry', 'title' => 'New Listing Inquiry', 'description' => 'New inquiry for "' . $listingTitle . '".', 'user' => $activity->user->name ?? 'Buyer', 'time' => Carbon::parse($activity->created_at)->diffForHumans(), 'route' => route('dashboard.partner.classifieds.inquiries.show', $activity->id)];
+                    return ['type' => 'Inquiry', 'title' => 'New Listing Inquiry', 'description' => 'New inquiry for "' . $listingTitle . '".', 'user' => $activity->user->name ?? 'Buyer', 'time' => Carbon::parse($activity->created_at)->diffForHumans(), 'route' => '/dashboard/classifieds/Inquiries'];
                 } elseif ($activity instanceof AutoInquiry) {
                     $listingTitle = $activity->auto->title ?? 'N/A';
-                    return ['type' => 'Inquiry', 'title' => 'New Auto Inquiry', 'description' => 'New inquiry for "' . $listingTitle . '".', 'user' => $activity->user->name ?? 'Buyer', 'time' => Carbon::parse($activity->created_at)->diffForHumans(), 'route' => route('dashboard.partner.autos.inquiries.show', $activity->id)];
+                    return ['type' => 'Inquiry', 'title' => 'New Auto Inquiry', 'description' => 'New inquiry for "' . $listingTitle . '".', 'user' => $activity->user->name ?? 'Buyer', 'time' => Carbon::parse($activity->created_at)->diffForHumans(), 'route' => '/dashboard/autos/Inquiries'];
                 } elseif ($activity instanceof Message) {
-                    return ['type' => 'Message', 'title' => 'New Message', 'description' => 'New message from ' . ($activity->sender->name ?? 'Guest') . '.', 'user' => $activity->sender->name ?? 'Guest', 'time' => Carbon::parse($activity->created_at)->diffForHumans(), 'route' => route('dashboard.partner.messages.show', $activity->conversation_id)];
+                    return ['type' => 'Message', 'title' => 'New Message', 'description' => 'New message from ' . ($activity->sender->name ?? 'Guest') . '.', 'user' => $activity->sender->name ?? 'Guest', 'time' => Carbon::parse($activity->created_at)->diffForHumans(), 'route' => '/dashboard/messages'];
                 }
                 return null;
             })->filter()->values();
@@ -125,7 +125,12 @@ class ActivityService
                 if ($type === 'Message') {
                     $query->whereIn('conversation_id', $partnerConversationIds)->where('sender_id', '!=', $partnerId);
                 } else {
-                    $relation = ($type === 'Classified') ? 'classifiedad' : strtolower($type);
+                    $relationMap = [
+                        'Quote' => 'service',
+                        'Classified' => 'classifiedad',
+                        'Auto' => 'auto',
+                    ];
+                    $relation = $relationMap[$type] ?? strtolower($type);
                     $query->whereHas($relation, fn(Builder $q) => $q->where('user_id', $partnerId));
                 }
 
@@ -147,12 +152,12 @@ class ActivityService
 
             // --- 4. Breakdown Modules (Counts) ---
             $modules = collect([
-                ['name' => 'Properties', 'count' => $partner->propertiesBookingsNewCount, 'icon' => 'bi-house-fill', 'interaction_route' => route('dashboard.partner.properties.bookings.index')],
-                ['name' => 'Events', 'count' => $partner->eventsBookingsNewCount, 'icon' => 'bi-calendar-event-fill', 'interaction_route' => route('dashboard.partner.events.bookings.index')],
-                ['name' => 'Jobs', 'count' => $partner->jobsApplicationsNewCount, 'icon' => 'bi-briefcase-fill', 'interaction_route' => route('dashboard.partner.joblistings.applications.index')],
-                ['name' => 'Services', 'count' => $partner->servicesQuotesNewCount + $partner->servicesAppointmentsNewCount, 'icon' => 'bi-tools', 'interaction_route' => route('dashboard.partner.services.quotes.index')],
-                ['name' => 'Autos', 'count' => $partner->autosInquiriesNewCount, 'icon' => 'bi-truck', 'interaction_route' => route('dashboard.partner.autos.inquiries.index')],
-                ['name' => 'Classifieds', 'count' => $partner->classifiedsInquiriesNewCount, 'icon' => 'bi-tags-fill', 'interaction_route' => route('dashboard.partner.classifieds.inquiries.index')],
+                ['name' => 'Properties', 'count' => $partner->propertiesBookingsNewCount, 'icon' => 'bi-house-fill', 'interaction_route' => '/dashboard/properties/Bookings'],
+                ['name' => 'Events', 'count' => $partner->eventsBookingsNewCount, 'icon' => 'bi-calendar-event-fill', 'interaction_route' => '/dashboard/events/Bookings'],
+                ['name' => 'Jobs', 'count' => $partner->jobsApplicationsNewCount, 'icon' => 'bi-briefcase-fill', 'interaction_route' => '/dashboard/joblistings/Applications'],
+                ['name' => 'Services', 'count' => $partner->servicesQuotesNewCount + $partner->servicesAppointmentsNewCount, 'icon' => 'bi-tools', 'interaction_route' => '/dashboard/services/Inquiries'],
+                ['name' => 'Autos', 'count' => $partner->autosInquiriesNewCount, 'icon' => 'bi-truck', 'interaction_route' => '/dashboard/autos/Inquiries'],
+                ['name' => 'Classifieds', 'count' => $partner->classifiedsInquiriesNewCount, 'icon' => 'bi-tags-fill', 'interaction_route' => '/dashboard/classifieds/Inquiries'],
             ])->filter(fn($m) => $m['count'] > 0)->values();
 
             return [

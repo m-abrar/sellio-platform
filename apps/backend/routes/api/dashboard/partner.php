@@ -70,6 +70,7 @@ Route::prefix('leads')->group(function () {
 /**
  * 3. LISTING RESOURCES (CRUD)
  */
+Route::get('products/slug/{slug}', [ProductController::class, 'edit']);
 Route::apiResources([
     'products'    => ProductController::class,
     'properties'  => PropertyController::class,
