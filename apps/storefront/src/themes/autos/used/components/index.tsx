@@ -4,13 +4,21 @@ import { MenuNav } from '@/components/menu/MenuNav';
 import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { hashAwareNavItemRenderer } from '@/components/menu/menu-renderers';
+import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
+
+const SplitBrand = ({ label }: { label: string }) => {
+    const midpoint = Math.max(1, Math.ceil(label.length / 2));
+    return <><span className="us-text-orange">{label.slice(0, midpoint)}</span>{label.slice(midpoint)}</>;
+};
 
 export const UsedHeader = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const brandLabel = useThemeContent('header.brand_label', 'DriveHub');
+
     return (
         <header className="us-header">
             <a href="#" className="us-logo">
-                <span className="us-text-orange">Drive</span>Hub
+                <SplitBrand label={brandLabel} />
             </a>
             
             <button 
@@ -42,7 +50,17 @@ export const UsedHeader = () => {
     );
 };
 
-export const UsedCarCard = ({ title, price, mileage, location, dealer, image, onClick }: any) => (
+interface UsedCarCardProps {
+    title: string;
+    price: string;
+    mileage: string;
+    location: string;
+    dealer: string;
+    image: string;
+    onClick?: () => void;
+}
+
+export const UsedCarCard = ({ title, price, mileage, location, dealer, image, onClick }: UsedCarCardProps) => (
     <div className="us-car-card" onClick={onClick} style={{ cursor: onClick ? 'pointer' : 'default' }}>
         <div className="us-car-img-container">
             <img src={image} className="us-car-img" alt={title} style={{ height: '220px', width: '100%', objectFit: 'cover' }} />
@@ -64,8 +82,7 @@ export const UsedCarCard = ({ title, price, mileage, location, dealer, image, on
     </div>
 );
 
-
-export const DealerLogo = ({ name, rating }: any) => (
+export const DealerLogo = ({ name, rating }: { name: string; rating: number }) => (
     <div className="us-dealer-logo">
         <div style={{ height: '60px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem', fontWeight: 700, color: '#555', backgroundColor: '#f0f0f0', borderRadius: '4px' }}>
             {name}
@@ -76,7 +93,7 @@ export const DealerLogo = ({ name, rating }: any) => (
     </div>
 );
 
-export const StepCard = ({ icon, title, desc }: any) => (
+export const StepCard = ({ icon, title, desc }: { icon: string; title: string; desc: string }) => (
     <div className="us-step-card">
         <div className="us-step-icon">{icon}</div>
         <h4 className="us-text-blue us-fw-bold" style={{ marginBottom: '1rem' }}>{title}</h4>
@@ -84,53 +101,60 @@ export const StepCard = ({ icon, title, desc }: any) => (
     </div>
 );
 
-export const UsedFooter = () => (
-    <footer className="us-footer">
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '3rem', marginBottom: '3rem' }}>
-            <div>
-                <h4 className="us-fw-bold" style={{ fontSize: '2rem', marginBottom: '1rem' }}>
-                    <span className="us-text-orange">Drive</span>Hub
-                </h4>
-                <p style={{ color: 'rgba(255,255,255,0.7)', lineHeight: 1.6 }}>Your trusted marketplace for quality used vehicles.</p>
-            </div>
-            <FooterMenuColumn
-                location="footer_column_1"
-                titleTag="h6"
-                titleClassName="us-text-orange us-fw-bold"
-                titleStyle={{ marginBottom: '1.5rem', textTransform: 'uppercase' }}
-                linkClassName="us-footer-link"
-            />
-            <FooterMenuColumn
-                location="footer_column_2"
-                titleTag="h6"
-                titleClassName="us-text-orange us-fw-bold"
-                titleStyle={{ marginBottom: '1.5rem', textTransform: 'uppercase' }}
-                linkClassName="us-footer-link"
-            />
-            <div>
+export const UsedFooter = () => {
+    const brandLabel = useThemeContent('header.brand_label', 'DriveHub');
+    const footerDescription = useThemeContent('footer.description', 'Your trusted marketplace for quality used vehicles.');
+    const footerEmail = useThemeContent('footer.email', 'info@drivehub.com');
+    const footerCopyright = useThemeContent('footer.copyright', '2026 DriveHub Marketplace. All rights reserved.');
+
+    return (
+        <footer className="us-footer">
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '3rem', marginBottom: '3rem' }}>
+                <div>
+                    <h4 className="us-fw-bold" style={{ fontSize: '2rem', marginBottom: '1rem' }}>
+                        <SplitBrand label={brandLabel} />
+                    </h4>
+                    <p style={{ color: 'rgba(255,255,255,0.7)', lineHeight: 1.6 }}>{footerDescription}</p>
+                </div>
                 <FooterMenuColumn
-                    location="footer_column_3"
-                    renderTitle={() => (
-                        <h6 className="us-text-orange us-fw-bold" style={{ marginBottom: '1.5rem', textTransform: 'uppercase' }}>Connect With Us</h6>
-                    )}
+                    location="footer_column_1"
+                    titleTag="h6"
+                    titleClassName="us-text-orange us-fw-bold"
+                    titleStyle={{ marginBottom: '1.5rem', textTransform: 'uppercase' }}
                     linkClassName="us-footer-link"
                 />
-                <div style={{ marginBottom: '1.5rem' }}>
-                    <MenuNav
-                        location="social_footer"
-                        flat
-                        renderItem={(item, { href, onNavigate }) => (
-                            <a href={href} className="us-social" onClick={onNavigate}>
-                                {item.title.charAt(0)}
-                            </a>
+                <FooterMenuColumn
+                    location="footer_column_2"
+                    titleTag="h6"
+                    titleClassName="us-text-orange us-fw-bold"
+                    titleStyle={{ marginBottom: '1.5rem', textTransform: 'uppercase' }}
+                    linkClassName="us-footer-link"
+                />
+                <div>
+                    <FooterMenuColumn
+                        location="footer_column_3"
+                        renderTitle={() => (
+                            <h6 className="us-text-orange us-fw-bold" style={{ marginBottom: '1.5rem', textTransform: 'uppercase' }}>Connect With Us</h6>
                         )}
+                        linkClassName="us-footer-link"
                     />
+                    <div style={{ marginBottom: '1.5rem' }}>
+                        <MenuNav
+                            location="social_footer"
+                            flat
+                            renderItem={(item, { href, onNavigate }) => (
+                                <a href={href} className="us-social" onClick={onNavigate}>
+                                    {item.title.charAt(0)}
+                                </a>
+                            )}
+                        />
+                    </div>
+                    <p style={{ color: 'rgba(255,255,255,0.7)' }}>✉️ {footerEmail}</p>
                 </div>
-                <p style={{ color: 'rgba(255,255,255,0.7)' }}>✉️ info@drivehub.com</p>
             </div>
-        </div>
-        <div style={{ borderTop: '1px solid rgba(255,255,255,0.2)', paddingTop: '1.5rem', textAlign: 'center', color: 'rgba(255,255,255,0.5)', fontSize: '0.9rem' }}>
-            &copy; 2026 DriveHub Marketplace. All rights reserved.
-        </div>
-    </footer>
-);
+            <div style={{ borderTop: '1px solid rgba(255,255,255,0.2)', paddingTop: '1.5rem', textAlign: 'center', color: 'rgba(255,255,255,0.5)', fontSize: '0.9rem' }}>
+                &copy; {footerCopyright}
+            </div>
+        </footer>
+    );
+};

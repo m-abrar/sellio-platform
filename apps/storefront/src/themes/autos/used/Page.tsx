@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { api } from '@sellio/api-client';
 import type { Vehicle } from '@sellio/types';
 import { UsedCarCard, DealerLogo, StepCard } from './components';
+import { useThemeContent, useThemeMedia } from '@/components/theme-content/ThemeContentProvider';
 
 interface CarItem {
   id: number;
@@ -29,8 +30,18 @@ const FALLBACK_CARS: CarItem[] = [
   { id: 6, title: "2019 Jeep Grand Cherokee", price: "$24,500", numericPrice: 24500, mileage: "42,000 miles", numericMileage: 42000, location: "Houston", dealer: "Elite Drives", image: "https://images.unsplash.com/photo-1525609004556-c46c7d6cf0a3?q=80&w=600", slug: "2019-jeep-grand-cherokee", brand: "Jeep" },
 ];
 
+type VehicleRecord = Vehicle & {
+  city?: string;
+  mileage?: number | string;
+  location?: Vehicle['location'] & { title?: string };
+  dealer?: { name?: string };
+  dealer_name?: string;
+  company?: { title?: string };
+  image?: string;
+};
+
 const translateVehicle = (rawItem: Vehicle): CarItem => {
-  const item = rawItem as any;
+  const item = rawItem as VehicleRecord;
   const generatedSlug = item.slug || item.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 
   
@@ -86,6 +97,38 @@ const ShimmerCard = () => (
 
 export default function Page() {
   const router = useRouter();
+  const heroTitle = useThemeContent('hero.title', 'Find Your Perfect Used Car Today');
+  const heroDescription = useThemeContent('hero.description', 'Trusted listings, verified sellers, and transparent pricing. Your next drive starts here.');
+  const heroPrimaryCta = useThemeContent('hero.primary_cta_label', 'Browse Catalog');
+  const heroSecondaryCta = useThemeContent('hero.secondary_cta_label', 'How It Works');
+  const filtersTitle = useThemeContent('filters.title', 'Search Filters');
+  const clearFiltersLabel = useThemeContent('filters.clear_label', 'Clear All');
+  const makeLabel = useThemeContent('filters.make_label', 'Make / Brand');
+  const priceLabel = useThemeContent('filters.price_label', 'Price Budget');
+  const mileageLabel = useThemeContent('filters.mileage_label', 'Odometer Mileage');
+  const locationLabel = useThemeContent('filters.location_label', 'Location / City');
+  const collectionTitle = useThemeContent('collection.title', 'Featured Listings');
+  const collectionCountLabel = useThemeContent('collection.count_label', 'Vehicles');
+  const emptyTitle = useThemeContent('empty.title', 'No Vehicles Found');
+  const emptyDescription = useThemeContent('empty.description', "We couldn't find any used cars matching your current search parameters.");
+  const emptyButtonLabel = useThemeContent('empty.button_label', 'Reset Filters');
+  const dealTitle = useThemeContent('deal.title', 'Deal of the Week!');
+  const dealBadge = useThemeContent('deal.badge', 'SAVE $3,000!');
+  const dealVehicleTitle = useThemeContent('deal.vehicle_title', '2021 Hyundai Elantra Limited');
+  const dealDescription = useThemeContent('deal.description', 'Low Mileage, Single Owner, Full Service History.');
+  const dealPrice = useThemeContent('deal.price', '$21,995');
+  const dealOriginalPrice = useThemeContent('deal.original_price', '$24,995');
+  const dealCta = useThemeContent('deal.cta_label', 'Browse Available Showroom');
+  const dealImage = useThemeMedia('deal.image', 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?q=80&w=600');
+  const dealersTitle = useThemeContent('dealers.title', 'Trusted Dealers');
+  const dealersDescription = useThemeContent('dealers.description', 'We partner with top-rated, verified dealerships to ensure a safe transaction.');
+  const howTitle = useThemeContent('how_it_works.title', 'How It Works: 3 Simple Steps');
+  const stepOneTitle = useThemeContent('how_it_works.step_1_title', '1. Search & Filter');
+  const stepOneDescription = useThemeContent('how_it_works.step_1_description', 'Easily find your dream car with our powerful, intuitive search tools.');
+  const stepTwoTitle = useThemeContent('how_it_works.step_2_title', '2. Contact & Schedule');
+  const stepTwoDescription = useThemeContent('how_it_works.step_2_description', 'Pick your preferred dealer, schedule a dynamic test-drive with direct financing.');
+  const stepThreeTitle = useThemeContent('how_it_works.step_3_title', '3. Drive Away Happy');
+  const stepThreeDescription = useThemeContent('how_it_works.step_3_description', 'Take a test drive, finalize the digital deal, and hit the open road!');
 
   // Dynamic States
   const [cars, setCars] = useState<CarItem[]>([]);
@@ -133,9 +176,9 @@ export default function Page() {
           console.warn("Autos Used database query returned empty. Engaging high-fidelity simulated database.");
           loadFallbacks();
         }
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error("Autos Used Database Exception caught:", err);
-        setErrorTrace(err.stack || err.message || String(err));
+        setErrorTrace(err instanceof Error ? (err.stack || err.message) : String(err));
         loadFallbacks();
       } finally {
         setLoading(false);
@@ -184,31 +227,31 @@ export default function Page() {
     <div>
       {/* Hero */}
       <section className="us-hero" id="home">
-        <h1 className="us-hero-title">Find Your Perfect Used Car Today</h1>
-        <p className="us-hero-subtitle">Trusted listings, verified sellers, and transparent pricing. Your next drive starts here.</p>
+        <h1 className="us-hero-title">{heroTitle}</h1>
+        <p className="us-hero-subtitle">{heroDescription}</p>
         <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center' }}>
-            <a href="#featured-listings" className="us-btn us-btn-orange">Browse Catalog</a>
-            <a href="#how-it-works" className="us-btn us-btn-outline" style={{ color: 'white', borderColor: 'white' }}>How It Works</a>
+            <a href="#featured-listings" className="us-btn us-btn-orange">{heroPrimaryCta}</a>
+            <a href="#how-it-works" className="us-btn us-btn-outline" style={{ color: 'white', borderColor: 'white' }}>{heroSecondaryCta}</a>
         </div>
       </section>
 
       {/* Faceted Filter Card HUD */}
       <div className="us-filter-card">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-          <h5 className="us-text-blue us-fw-bold" style={{ margin: 0, fontSize: '1.25rem' }}>Search Filters</h5>
+          <h5 className="us-text-blue us-fw-bold" style={{ margin: 0, fontSize: '1.25rem' }}>{filtersTitle}</h5>
           {(selectedBrand || selectedPrice || selectedMileage || selectedLocation) && (
             <button 
               onClick={clearFilters}
               style={{ background: 'none', border: 'none', color: 'var(--us-orange)', cursor: 'pointer', fontWeight: 600, fontSize: '0.9rem' }}
             >
-              Clear All ↺
+              {clearFiltersLabel} ↺
             </button>
           )}
         </div>
         
         <div className="us-filter-grid">
             <div className="us-filter-group">
-              <label style={{ fontSize: '0.85rem', fontWeight: 600, color: '#666', display: 'block', marginBottom: '0.4rem' }}>Make / Brand</label>
+              <label style={{ fontSize: '0.85rem', fontWeight: 600, color: '#666', display: 'block', marginBottom: '0.4rem' }}>{makeLabel}</label>
               <select 
                 className="us-select" 
                 value={selectedBrand} 
@@ -222,7 +265,7 @@ export default function Page() {
             </div>
             
             <div className="us-filter-group">
-              <label style={{ fontSize: '0.85rem', fontWeight: 600, color: '#666', display: 'block', marginBottom: '0.4rem' }}>Price Budget</label>
+              <label style={{ fontSize: '0.85rem', fontWeight: 600, color: '#666', display: 'block', marginBottom: '0.4rem' }}>{priceLabel}</label>
               <select 
                 className="us-select"
                 value={selectedPrice}
@@ -237,7 +280,7 @@ export default function Page() {
             </div>
             
             <div className="us-filter-group">
-              <label style={{ fontSize: '0.85rem', fontWeight: 600, color: '#666', display: 'block', marginBottom: '0.4rem' }}>Odometer Mileage</label>
+              <label style={{ fontSize: '0.85rem', fontWeight: 600, color: '#666', display: 'block', marginBottom: '0.4rem' }}>{mileageLabel}</label>
               <select 
                 className="us-select"
                 value={selectedMileage}
@@ -251,7 +294,7 @@ export default function Page() {
             </div>
             
             <div className="us-filter-group">
-              <label style={{ fontSize: '0.85rem', fontWeight: 600, color: '#666', display: 'block', marginBottom: '0.4rem' }}>Location / City</label>
+              <label style={{ fontSize: '0.85rem', fontWeight: 600, color: '#666', display: 'block', marginBottom: '0.4rem' }}>{locationLabel}</label>
               <select 
                 className="us-select"
                 value={selectedLocation}
@@ -284,9 +327,9 @@ export default function Page() {
       {/* Listings Catalog */}
       <section className="us-section" id="featured-listings">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
-          <h2 className="us-section-title" style={{ margin: 0, textAlign: 'left' }}>Featured Listings</h2>
+          <h2 className="us-section-title" style={{ margin: 0, textAlign: 'left' }}>{collectionTitle}</h2>
           <span style={{ color: '#666', fontWeight: 600, fontSize: '1.05rem' }}>
-            Showing {filteredCars.length} of {cars.length} Vehicles
+            Showing {filteredCars.length} of {cars.length} {collectionCountLabel}
           </span>
         </div>
 
@@ -299,9 +342,9 @@ export default function Page() {
         ) : filteredCars.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '5rem 2rem', backgroundColor: 'white', borderRadius: '12px', boxShadow: '0 4px 15px rgba(0,0,0,0.05)' }}>
             <span style={{ fontSize: '3.5rem' }}>🚗</span>
-            <h3 style={{ color: 'var(--us-blue)', fontWeight: 700, marginTop: '1rem', marginBottom: '0.5rem' }}>No Vehicles Found</h3>
-            <p style={{ color: '#666', margin: '0 0 1.5rem 0' }}>We couldn't find any used cars matching your current search parameters.</p>
-            <button onClick={clearFilters} className="us-btn us-btn-orange">Reset Filters</button>
+            <h3 style={{ color: 'var(--us-blue)', fontWeight: 700, marginTop: '1rem', marginBottom: '0.5rem' }}>{emptyTitle}</h3>
+            <p style={{ color: '#666', margin: '0 0 1.5rem 0' }}>{emptyDescription}</p>
+            <button onClick={clearFilters} className="us-btn us-btn-orange">{emptyButtonLabel}</button>
           </div>
         ) : (
           <div className="us-grid">
@@ -318,37 +361,37 @@ export default function Page() {
 
       {/* Deal of the Week */}
       <section className="us-section" style={{ backgroundColor: 'white' }}>
-        <h2 className="us-section-title">⭐ Deal of the Week! ⭐</h2>
+        <h2 className="us-section-title">{dealTitle}</h2>
         <div className="us-deal-card">
-            <span className="us-badge-deal">SAVE $3,000!</span>
+            <span className="us-badge-deal">{dealBadge}</span>
             <div style={{ position: 'relative', minHeight: '300px' }}>
                 <img 
-                  src="https://images.unsplash.com/photo-1549399542-7e3f8b79c341?q=80&w=600" 
+                  src={dealImage} 
                   alt="Deal of the Week Car" 
                   style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', top: 0, left: 0 }} 
                 />
             </div>
             <div style={{ padding: '3rem 2rem', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                <h3 className="us-text-blue us-fw-bold" style={{ fontSize: '1.8rem', marginBottom: '1rem' }}>2021 Hyundai Elantra Limited</h3>
-                <p style={{ color: '#666', marginBottom: '1.5rem', fontSize: '1.1rem' }}>Low Mileage, Single Owner, Full Service History.</p>
+                <h3 className="us-text-blue us-fw-bold" style={{ fontSize: '1.8rem', marginBottom: '1rem' }}>{dealVehicleTitle}</h3>
+                <p style={{ color: '#666', marginBottom: '1.5rem', fontSize: '1.1rem' }}>{dealDescription}</p>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
-                    <span className="us-text-orange us-fw-bold" style={{ fontSize: '2.5rem' }}>$21,995</span>
-                    <span style={{ color: '#999', textDecoration: 'line-through', fontSize: '1.25rem' }}>$24,995</span>
+                    <span className="us-text-orange us-fw-bold" style={{ fontSize: '2.5rem' }}>{dealPrice}</span>
+                    <span style={{ color: '#999', textDecoration: 'line-through', fontSize: '1.25rem' }}>{dealOriginalPrice}</span>
                 </div>
                 <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 2rem 0', color: '#555', lineHeight: 2 }}>
                     <li>⏱️ Only 15,000 Miles</li>
                     <li>📅 Model Year 2021</li>
                     <li>⛽ Great MPG & Resilient Specs</li>
                 </ul>
-                <a href="#featured-listings" className="us-btn us-btn-orange" style={{ width: '100%' }}>Browse Available Showroom</a>
+                <a href="#featured-listings" className="us-btn us-btn-orange" style={{ width: '100%' }}>{dealCta}</a>
             </div>
         </div>
       </section>
 
       {/* Trusted Dealers */}
       <section className="us-section" id="trusted-dealers">
-        <h2 className="us-section-title">Trusted Dealers</h2>
-        <p style={{ textAlign: 'center', color: '#666', marginBottom: '3rem', fontSize: '1.1rem' }}>We partner with top-rated, verified dealerships to ensure a safe transaction.</p>
+        <h2 className="us-section-title">{dealersTitle}</h2>
+        <p style={{ textAlign: 'center', color: '#666', marginBottom: '3rem', fontSize: '1.1rem' }}>{dealersDescription}</p>
         <div className="us-dealer-grid">
             <DealerLogo name="AutoWorld" rating={4.8} />
             <DealerLogo name="City Motors" rating={4.1} />
@@ -361,22 +404,22 @@ export default function Page() {
 
       {/* How It Works */}
       <section className="us-section" id="how-it-works" style={{ backgroundColor: 'white' }}>
-        <h2 className="us-section-title">How It Works: 3 Simple Steps</h2>
+        <h2 className="us-section-title">{howTitle}</h2>
         <div className="us-step-grid">
             <StepCard 
                 icon="🔍" 
-                title="1. Search & Filter" 
-                desc="Easily find your dream car with our powerful, intuitive search tools." 
+                title={stepOneTitle}
+                desc={stepOneDescription}
             />
             <StepCard 
                 icon="💬" 
-                title="2. Contact & Schedule" 
-                desc="Pick your preferred dealer, schedule a dynamic test-drive with direct financing." 
+                title={stepTwoTitle}
+                desc={stepTwoDescription}
             />
             <StepCard 
                 icon="🛣️" 
-                title="3. Drive Away Happy" 
-                desc="Take a test drive, finalize the digital deal, and hit the open road!" 
+                title={stepThreeTitle}
+                desc={stepThreeDescription}
             />
         </div>
       </section>

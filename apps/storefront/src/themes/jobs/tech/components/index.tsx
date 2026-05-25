@@ -5,11 +5,16 @@ import { MenuUtilityNav } from '@/components/menu/MenuUtilityNav';
 import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { hashAwareNavItemRenderer } from '@/components/menu/menu-renderers';
+import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 
-export const TechHeader = () => (
+export const TechHeader = () => {
+  const brandLabel = useThemeContent('header.brand_label', 'dev_jobs_');
+  const brandPrefix = useThemeContent('header.brand_prefix', '>');
+
+  return (
     <header className="jt-header">
         <a href="#" className="jt-logo">
-            <span className="jt-text-accent">{'>'}</span>dev_jobs_
+            <span className="jt-text-accent">{brandPrefix}</span>{brandLabel}
         </a>
         <MenuNav
           location="main_header"
@@ -29,9 +34,22 @@ export const TechHeader = () => (
             />
         </div>
     </header>
-);
+  );
+};
 
-export const TechJobCard = ({ title, company, location, type, salary, time, logo, skills, onClick }: any) => (
+type TechJobCardProps = {
+  title: string;
+  company: string;
+  location: string;
+  type: string;
+  salary: string;
+  time: string;
+  logo: string;
+  skills: string[];
+  onClick?: () => void;
+};
+
+export const TechJobCard = ({ title, company, location, type, salary, time, logo, skills, onClick }: TechJobCardProps) => (
     <div className="jt-job-card" onClick={onClick} style={{ cursor: onClick ? 'pointer' : 'default' }}>
         <div className="jt-company-logo">
             <img src={logo} alt={company} />
@@ -57,14 +75,20 @@ export const TechJobCard = ({ title, company, location, type, salary, time, logo
     </div>
 );
 
-export const TechFooter = () => (
+export const TechFooter = () => {
+  const brandLabel = useThemeContent('header.brand_label', 'dev_jobs_');
+  const brandPrefix = useThemeContent('header.brand_prefix', '>');
+  const description = useThemeContent('footer.description', 'The #1 job board for software engineers, product managers, and data scientists.');
+  const copyright = useThemeContent('footer.copyright', '© 2026 DevJobs. All rights reserved.');
+
+  return (
     <footer className="jt-footer">
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '3rem', marginBottom: '3rem' }}>
             <div>
                 <a href="#" className="jt-logo" style={{ marginBottom: '1rem', display: 'block' }}>
-                    <span className="jt-text-accent">{'>'}</span>dev_jobs_
+                    <span className="jt-text-accent">{brandPrefix}</span>{brandLabel}
                 </a>
-                <p style={{ color: 'var(--jt-text-muted)', fontSize: '0.9rem', lineHeight: 1.6 }}>The #1 job board for software engineers, product managers, and data scientists.</p>
+                <p style={{ color: 'var(--jt-text-muted)', fontSize: '0.9rem', lineHeight: 1.6 }}>{description}</p>
             </div>
             <FooterMenuColumn
               location="footer_column_1"
@@ -82,7 +106,7 @@ export const TechFooter = () => (
             />
         </div>
         <div style={{ borderTop: '1px solid var(--jt-border)', paddingTop: '1.5rem', display: 'flex', justifyContent: 'space-between', color: 'var(--jt-text-muted)', fontSize: '0.85rem' }}>
-            <span>&copy; 2026 DevJobs. All rights reserved.</span>
+            <span>{copyright}</span>
             <MenuNav
               location="footer_bottom_bar"
               flat
@@ -93,4 +117,5 @@ export const TechFooter = () => (
             />
         </div>
     </footer>
-);
+  );
+};

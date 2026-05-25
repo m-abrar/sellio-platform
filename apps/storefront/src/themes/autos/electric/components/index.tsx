@@ -4,13 +4,16 @@ import { MenuNav } from '@/components/menu/MenuNav';
 import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { hashAwareNavItemRenderer } from '@/components/menu/menu-renderers';
+import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 
 export const ElectricHeader = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const brandLabel = useThemeContent('header.brand_label', 'EVOLVE');
+    const brandHighlight = useThemeContent('header.brand_highlight', 'OLVE');
     return (
         <header className="ev-header">
             <a href="#" className="ev-logo text-neon-green">
-                EV<span className="ev-text-blue">OLVE</span>
+                {brandLabel.split(brandHighlight)[0]}<span className="ev-text-blue">{brandHighlight}</span>
             </a>
             
             <button 
@@ -42,7 +45,17 @@ export const ElectricHeader = () => {
     );
 };
 
-export const EVCard = ({ title, price, range, battery, charge, image, onClick }: any) => (
+interface EVCardProps {
+    title: string;
+    price: string;
+    range: string;
+    battery: string;
+    charge: string;
+    image: string;
+    onClick?: () => void;
+}
+
+export const EVCard = ({ title, price, range, battery, charge, image, onClick }: EVCardProps) => (
     <div className="ev-card" onClick={onClick} style={{ cursor: 'pointer' }}>
         <img src={image} className="ev-card-img" alt={title} />
         <div className="ev-card-body">
@@ -64,7 +77,7 @@ export const EVCard = ({ title, price, range, battery, charge, image, onClick }:
     </div>
 );
 
-export const IconBox = ({ icon, title, desc }: any) => (
+export const IconBox = ({ icon, title, desc }: { icon: string; title: string; desc: string }) => (
     <div className="ev-icon-box">
         <div className="icon">{icon}</div>
         <h5 className="ev-text-green" style={{ marginBottom: '0.5rem', fontWeight: 600 }}>{title}</h5>
@@ -72,14 +85,20 @@ export const IconBox = ({ icon, title, desc }: any) => (
     </div>
 );
 
-export const ElectricFooter = () => (
+export const ElectricFooter = () => {
+    const brandLabel = useThemeContent('header.brand_label', 'EVOLVE');
+    const brandHighlight = useThemeContent('header.brand_highlight', 'OLVE');
+    const footerDescription = useThemeContent('footer.description', 'Driving the future of sustainable mobility, one electric vehicle at a time.');
+    const footerCopyright = useThemeContent('footer.copyright', '2026 EVOLVE Marketplace. All rights reserved. Powering the electric revolution.');
+
+    return (
     <footer className="ev-footer">
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '3rem', marginBottom: '3rem' }}>
             <div>
                 <a className="ev-logo text-neon-green" href="#" style={{ display: 'block', marginBottom: '1rem' }}>
-                    EV<span className="ev-text-blue">OLVE</span>
+                    {brandLabel.split(brandHighlight)[0]}<span className="ev-text-blue">{brandHighlight}</span>
                 </a>
-                <p style={{ fontSize: '0.9rem', opacity: 0.75, marginBottom: '1.5rem' }}>Driving the future of sustainable mobility, one electric vehicle at a time.</p>
+                <p style={{ fontSize: '0.9rem', opacity: 0.75, marginBottom: '1.5rem' }}>{footerDescription}</p>
                 <MenuNav
                     location="social_footer"
                     flat
@@ -113,7 +132,8 @@ export const ElectricFooter = () => (
             />
         </div>
         <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '1.5rem', textAlign: 'center', fontSize: '0.85rem', opacity: 0.5 }}>
-            &copy; 2026 EVOLVE Marketplace. All rights reserved. Powering the electric revolution.
+            &copy; {footerCopyright}
         </div>
     </footer>
-);
+    );
+};

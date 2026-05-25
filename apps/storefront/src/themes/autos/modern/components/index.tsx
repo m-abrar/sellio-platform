@@ -6,8 +6,8 @@ import { MenuNav } from '@/components/menu/MenuNav';
 import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { hashAwareNavItemRenderer } from '@/components/menu/menu-renderers';
+import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 
-// Utility helper to preserve active preview theme directories during routing transitions
 const getThemeLink = (path: string) => {
     if (typeof window !== 'undefined') {
         const isPreview = window.location.pathname.startsWith('/preview/');
@@ -18,12 +18,23 @@ const getThemeLink = (path: string) => {
     return path;
 };
 
+const BrandLogo = ({ label }: { label: string }) => {
+    const [firstWord, ...restWords] = label.split(' ');
+    return (
+        <>
+            <span style={{ color: 'var(--md-primary)' }}>⚡</span> {firstWord} <span style={{ color: 'var(--md-primary)' }}>{restWords.join(' ')}</span>
+        </>
+    );
+};
+
 export const ModernHeader = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const brandLabel = useThemeContent('header.brand_label', 'MODERN AUTOS');
+
     return (
         <header className="md-header">
             <Link href={getThemeLink('/')} className="md-logo">
-                <span style={{ color: 'var(--md-primary)' }}>⚡</span> MODERN <span style={{ color: 'var(--md-primary)' }}>AUTOS</span>
+                <BrandLogo label={brandLabel} />
             </Link>
             
             <button 
@@ -55,7 +66,15 @@ export const ModernHeader = () => {
     );
 };
 
-export const ModernCarCard = ({ title, desc, price, image, slug }: any) => {
+interface ModernCarCardProps {
+    title: string;
+    desc: string;
+    price: string;
+    image: string;
+    slug?: string;
+}
+
+export const ModernCarCard = ({ title, desc, price, image, slug }: ModernCarCardProps) => {
     const detailUrl = slug ? getThemeLink(`/product/${slug}`) : '#';
     return (
         <div className="md-car-card">
@@ -74,7 +93,16 @@ export const ModernCarCard = ({ title, desc, price, image, slug }: any) => {
     );
 };
 
-export const CompareItem = ({ title, stats, price, image, highlight, slug }: any) => {
+interface CompareItemProps {
+    title: string;
+    stats: string;
+    price: string;
+    image: string;
+    highlight?: boolean;
+    slug?: string;
+}
+
+export const CompareItem = ({ title, stats, price, image, highlight, slug }: CompareItemProps) => {
     const detailUrl = slug ? getThemeLink(`/product/${slug}`) : '#';
     return (
         <div className={`md-compare-item ${highlight ? 'highlight' : ''}`}>
@@ -94,45 +122,51 @@ export const CompareItem = ({ title, stats, price, image, highlight, slug }: any
     );
 };
 
-export const ModernFooter = () => (
-    <footer className="md-footer">
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '3rem', marginBottom: '3rem' }}>
-            <div>
-                <Link href={getThemeLink('/')} className="md-logo" style={{ marginBottom: '1rem' }}>
-                    <span style={{ color: 'var(--md-primary)' }}>⚡</span> MODERN <span style={{ color: 'var(--md-primary)' }}>AUTOS</span>
-                </Link>
-                <p style={{ fontSize: '0.9rem', lineHeight: 1.6 }}>The future of mobility is here. Driven by technology, fueled by vision.</p>
-            </div>
-            <FooterMenuColumn
-                location="footer_column_1"
-                titleTag="h5"
-                titleStyle={{ color: 'white', fontWeight: 700, marginBottom: '1.5rem' }}
-                linkClassName="md-footer-link"
-            />
-            <FooterMenuColumn
-                location="footer_column_2"
-                titleTag="h5"
-                titleStyle={{ color: 'white', fontWeight: 700, marginBottom: '1.5rem' }}
-                linkClassName="md-footer-link"
-            />
-            <div>
+export const ModernFooter = () => {
+    const brandLabel = useThemeContent('header.brand_label', 'MODERN AUTOS');
+    const footerDescription = useThemeContent('footer.description', 'The future of mobility is here. Driven by technology, fueled by vision.');
+    const footerCopyright = useThemeContent('footer.copyright', '2026 Modern Autos, Inc. All rights reserved.');
+
+    return (
+        <footer className="md-footer">
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '3rem', marginBottom: '3rem' }}>
+                <div>
+                    <Link href={getThemeLink('/')} className="md-logo" style={{ marginBottom: '1rem' }}>
+                        <BrandLogo label={brandLabel} />
+                    </Link>
+                    <p style={{ fontSize: '0.9rem', lineHeight: 1.6 }}>{footerDescription}</p>
+                </div>
                 <FooterMenuColumn
-                    location="footer_column_3"
+                    location="footer_column_1"
                     titleTag="h5"
                     titleStyle={{ color: 'white', fontWeight: 700, marginBottom: '1.5rem' }}
                     linkClassName="md-footer-link"
                 />
-                <MenuNav
-                    location="social_footer"
-                    flat
-                    renderItem={(item, { href, onNavigate }) => (
-                        <a href={href} className="md-social" onClick={onNavigate}>
-                            {item.title.charAt(0)}
-                        </a>
-                    )}
+                <FooterMenuColumn
+                    location="footer_column_2"
+                    titleTag="h5"
+                    titleStyle={{ color: 'white', fontWeight: 700, marginBottom: '1.5rem' }}
+                    linkClassName="md-footer-link"
                 />
-                <p style={{ fontSize: '0.85rem', marginTop: '1rem' }}>&copy; 2026 Modern Autos, Inc. All rights reserved.</p>
+                <div>
+                    <FooterMenuColumn
+                        location="footer_column_3"
+                        titleTag="h5"
+                        titleStyle={{ color: 'white', fontWeight: 700, marginBottom: '1.5rem' }}
+                        linkClassName="md-footer-link"
+                    />
+                    <MenuNav
+                        location="social_footer"
+                        flat
+                        renderItem={(item, { href, onNavigate }) => (
+                            <a href={href} className="md-social" onClick={onNavigate}>
+                                {item.title.charAt(0)}
+                            </a>
+                        )}
+                    />
+                    <p style={{ fontSize: '0.85rem', marginTop: '1rem' }}>&copy; {footerCopyright}</p>
+                </div>
             </div>
-        </div>
-    </footer>
-);
+        </footer>
+    );
+};

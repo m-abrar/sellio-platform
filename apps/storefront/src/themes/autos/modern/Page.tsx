@@ -5,9 +5,37 @@ import { api } from '@sellio/api-client';
 import type { Vehicle, Category } from '@sellio/types';
 import { useRouter } from 'next/navigation';
 import { ModernHeader, ModernCarCard, CompareItem, ModernFooter } from './components';
+import { useThemeContent, useThemeMedia } from '@/components/theme-content/ThemeContentProvider';
+
+type VehicleRecord = Vehicle & {
+  year?: number | string;
+  fuel_type?: string;
+  transmission?: string;
+  specs?: Vehicle['specs'] & {
+    drivetrain?: string;
+  };
+};
 
 export default function Page() {
   const router = useRouter();
+  const heroTitle = useThemeContent('hero.title', 'Drive the Future Today');
+  const heroDescription = useThemeContent('hero.description', 'Explore revolutionary vehicles and redefine your journey.');
+  const heroPrimaryCta = useThemeContent('hero.primary_cta_label', 'Browse Cars');
+  const heroSecondaryCta = useThemeContent('hero.secondary_cta_label', 'Compare Models');
+  const searchPlaceholder = useThemeContent('search.placeholder', 'Search by Keyword...');
+  const collectionTitle = useThemeContent('collection.title', 'Featured Electric & Modern Autos');
+  const compareTitle = useThemeContent('compare.title', 'Compare Top Models Head-to-Head');
+  const compareCta = useThemeContent('compare.cta_label', 'Start Your Custom Comparison');
+  const brandsTitle = useThemeContent('brands.title', 'Driving Innovation with Top Brands');
+  const techTitle = useThemeContent('tech.title', 'Experience Next-Generation Technology');
+  const techOneTitle = useThemeContent('tech.feature_1_title', 'Autonomous AI Driving');
+  const techOneDescription = useThemeContent('tech.feature_1_description', 'Our vehicles are equipped with cutting-edge Level 3+ Autonomy, allowing for supervised self-driving on major highways. Experience a safer, more relaxed commute.');
+  const techOneSecondary = useThemeContent('tech.feature_1_secondary', 'Advanced sensor fusion, real-time mapping, and predictive algorithms ensure unparalleled safety and performance in various conditions.');
+  const techOneImage = useThemeMedia('tech.feature_1_image', '/themes/autos/modern/16.webp');
+  const techTwoTitle = useThemeContent('tech.feature_2_title', 'Hybrid & Electric Powertrains');
+  const techTwoDescription = useThemeContent('tech.feature_2_description', 'Choose from a selection of the most efficient Electric and Hybrid engines. Maximum performance meets minimal environmental impact.');
+  const techTwoSecondary = useThemeContent('tech.feature_2_secondary', 'Innovative battery technology provides faster charging, longer range, and a dynamic driving feel, all backed by comprehensive warranties.');
+  const techTwoImage = useThemeMedia('tech.feature_2_image', '/themes/autos/modern/17.webp');
 
   // Dynamic States
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
@@ -57,9 +85,9 @@ export default function Page() {
           }
         }
         setError(null);
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error("Failed to load live catalog showroom data from API:", err);
-        const errorMsg = err.response?.data?.message || err.message || "AxiosError: Network Error - Server offline at http://127.0.0.1:8000/api";
+        const errorMsg = err instanceof Error ? err.message : "AxiosError: Network Error - Server offline at http://127.0.0.1:8000/api";
         setError(errorMsg);
       } finally {
         setLoading(false);
@@ -92,11 +120,11 @@ export default function Page() {
 
       {/* Hero Section */}
       <section className="md-hero" id="home">
-        <h1 className="md-hero-title">Drive the Future Today</h1>
-        <p className="md-hero-subtitle">Explore revolutionary vehicles and redefine your journey.</p>
+        <h1 className="md-hero-title">{heroTitle}</h1>
+        <p className="md-hero-subtitle">{heroDescription}</p>
         <div style={{ display: 'flex', gap: '1rem' }}>
-            <a href="#listings" className="md-btn md-btn-cta">Browse Cars</a>
-            <a href="#compare" className="md-btn md-btn-outline">Compare Models</a>
+            <a href="#listings" className="md-btn md-btn-cta">{heroPrimaryCta}</a>
+            <a href="#compare" className="md-btn md-btn-outline">{heroSecondaryCta}</a>
         </div>
       </section>
 
@@ -167,7 +195,7 @@ export default function Page() {
             <input 
               type="text" 
               className="md-search-input" 
-              placeholder="Search by Keyword..." 
+              placeholder={searchPlaceholder}
               value={selectedKeyword}
               onChange={(e) => setSelectedKeyword(e.target.value)}
               style={{ borderRight: 'none', borderTopRightRadius: 0, borderBottomRightRadius: 0 }} 
@@ -212,7 +240,7 @@ export default function Page() {
 
       {/* Listings */}
       <section className="md-section" id="listings">
-        <h2 className="md-section-title">Featured Electric & Modern Autos</h2>
+        <h2 className="md-section-title">{collectionTitle}</h2>
         
         {loading ? (
           <div className="md-grid">
@@ -233,7 +261,8 @@ export default function Page() {
           <div className="md-grid">
             {vehicles.length > 0 ? (
               vehicles.slice(0, 6).map((car) => {
-                const specLabel = `${car.specs?.year || (car as any).year || '2025'} | ${car.specs?.engine || (car as any).fuel_type || 'Electric'} | ${car.specs?.transmission || (car as any).transmission || 'Automatic'}`;
+                const vehicle = car as VehicleRecord;
+                const specLabel = `${vehicle.specs?.year || vehicle.year || '2025'} | ${vehicle.specs?.engine || vehicle.fuel_type || 'Electric'} | ${vehicle.specs?.transmission || vehicle.transmission || 'Automatic'}`;
                 return (
                   <ModernCarCard 
                     key={car.id} 
@@ -264,7 +293,7 @@ export default function Page() {
 
       {/* Compare Head-to-Head */}
       <section className="md-section" id="compare" style={{ backgroundColor: 'white' }}>
-        <h2 className="md-section-title">Compare Top Models Head-to-Head</h2>
+        <h2 className="md-section-title">{compareTitle}</h2>
         <div className="md-compare-grid" style={{ maxWidth: '1000px', margin: '0 auto' }}>
             {loading ? (
               [1, 2, 3].map(idx => (
@@ -278,7 +307,8 @@ export default function Page() {
             ) : (
               vehicles.length >= 3 ? (
                 vehicles.slice(0, 3).map((car, idx) => {
-                  const statsLabel = `Transmission: ${car.specs?.transmission || (car as any).transmission || 'Auto'} | Drivetrain: ${car.specs?.drivetrain || 'RWD'}`;
+                  const vehicle = car as VehicleRecord;
+                  const statsLabel = `Transmission: ${vehicle.specs?.transmission || vehicle.transmission || 'Auto'} | Drivetrain: ${vehicle.specs?.drivetrain || 'RWD'}`;
                   return (
                     <CompareItem 
                       key={car.id}
@@ -307,13 +337,13 @@ export default function Page() {
             )}
         </div>
         <div style={{ textAlign: 'center', marginTop: '3rem' }}>
-            <a href={getThemeLink('/explore')} className="md-btn md-btn-cta">Start Your Custom Comparison</a>
+            <a href={getThemeLink('/explore')} className="md-btn md-btn-cta">{compareCta}</a>
         </div>
       </section>
 
       {/* Brands */}
       <section className="md-section" id="brands">
-        <h2 className="md-section-title">Driving Innovation with Top Brands</h2>
+        <h2 className="md-section-title">{brandsTitle}</h2>
         <div className="md-brand-grid">
             <a href={getThemeLink('/explore?brand=Tesla')} className="md-brand-img" style={{ textDecoration: 'none' }}>Tesla</a>
             <a href={getThemeLink('/explore?brand=BMW')} className="md-brand-img" style={{ textDecoration: 'none' }}>BMW</a>
@@ -325,27 +355,27 @@ export default function Page() {
 
       {/* Tech Features */}
       <section className="md-section">
-        <h2 className="md-section-title">Experience Next-Generation Technology</h2>
+        <h2 className="md-section-title">{techTitle}</h2>
         
         <div className="md-feature-row">
             <div>
-                <h3 className="md-text-primary md-fw-bold" style={{ fontSize: '1.8rem', marginBottom: '1rem' }}>Autonomous AI Driving</h3>
-                <p style={{ fontSize: '1.1rem', marginBottom: '1rem', lineHeight: 1.6 }}>Our vehicles are equipped with cutting-edge <strong>Level 3+ Autonomy</strong>, allowing for supervised self-driving on major highways. Experience a safer, more relaxed commute.</p>
-                <p style={{ color: '#666', lineHeight: 1.6 }}>Advanced sensor fusion, real-time mapping, and predictive algorithms ensure unparalleled safety and performance in various conditions.</p>
+                <h3 className="md-text-primary md-fw-bold" style={{ fontSize: '1.8rem', marginBottom: '1rem' }}>{techOneTitle}</h3>
+                <p style={{ fontSize: '1.1rem', marginBottom: '1rem', lineHeight: 1.6 }}>{techOneDescription}</p>
+                <p style={{ color: '#666', lineHeight: 1.6 }}>{techOneSecondary}</p>
             </div>
             <div>
-                <img src="/themes/autos/modern/16.webp" alt="AI Driving" style={{ width: '100%', borderRadius: '12px', boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }} />
+                <img src={techOneImage} alt="AI Driving" style={{ width: '100%', borderRadius: '12px', boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }} />
             </div>
         </div>
 
         <div className="md-feature-row">
             <div style={{ order: 2 }}>
-                <h3 className="md-text-primary md-fw-bold" style={{ fontSize: '1.8rem', marginBottom: '1rem' }}>Hybrid & Electric Powertrains</h3>
-                <p style={{ fontSize: '1.1rem', marginBottom: '1rem', lineHeight: 1.6 }}>Choose from a selection of the most efficient <strong>Electric and Hybrid engines</strong>. Maximum performance meets minimal environmental impact.</p>
-                <p style={{ color: '#666', lineHeight: 1.6 }}>Innovative battery technology provides faster charging, longer range, and a dynamic driving feel, all backed by comprehensive warranties.</p>
+                <h3 className="md-text-primary md-fw-bold" style={{ fontSize: '1.8rem', marginBottom: '1rem' }}>{techTwoTitle}</h3>
+                <p style={{ fontSize: '1.1rem', marginBottom: '1rem', lineHeight: 1.6 }}>{techTwoDescription}</p>
+                <p style={{ color: '#666', lineHeight: 1.6 }}>{techTwoSecondary}</p>
             </div>
             <div style={{ order: 1 }}>
-                <img src="/themes/autos/modern/17.webp" alt="EV Tech" style={{ width: '100%', borderRadius: '12px', boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }} />
+                <img src={techTwoImage} alt="EV Tech" style={{ width: '100%', borderRadius: '12px', boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }} />
             </div>
         </div>
       </section>

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { api } from '@sellio/api-client';
 import type { Vehicle } from '@sellio/types';
 import { ElectricHeader, EVCard, IconBox, ElectricFooter } from './components';
+import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 
 interface EVItem {
   id: number;
@@ -35,7 +36,7 @@ const translateVehicleToEV = (car: Vehicle): EVItem => {
   let range = "310 Miles";
   let battery = "77.4 kWh";
   let charge = "250 kW";
-  let modelYear = car.specs?.year || 2025;
+  const modelYear = car.specs?.year || 2025;
   
   if (car.title.toLowerCase().includes('tesla')) {
     range = "330 Miles";
@@ -76,6 +77,25 @@ const translateVehicleToEV = (car: Vehicle): EVItem => {
 
 export default function Page() {
   const router = useRouter();
+  const heroTitle = useThemeContent('hero.title', 'The Future is Electric');
+  const heroHighlight = useThemeContent('hero.highlight', 'Electric');
+  const heroDescription = useThemeContent('hero.description', 'Explore revolutionary vehicles and sustainable living. Experience peak performance with zero emissions.');
+  const heroPrimaryCta = useThemeContent('hero.primary_cta_label', 'Browse EVs');
+  const heroSecondaryCta = useThemeContent('hero.secondary_cta_label', 'Locate Charging');
+  const filtersTitle = useThemeContent('filters.title', 'Quick Search');
+  const collectionTitle = useThemeContent('collection.title', 'Featured EV Models');
+  const collectionHighlight = useThemeContent('collection.highlight', 'EV Models');
+  const emptyTitle = useThemeContent('empty.title', 'No EV Models Match Search');
+  const emptyDescription = useThemeContent('empty.description', 'Adjust price filters or clear the brand search to return to our electric grid.');
+  const emptyButton = useThemeContent('empty.button_label', 'Reset Refinements');
+  const compareTitle = useThemeContent('compare.title', 'Compare The Top EVs');
+  const compareHighlight = useThemeContent('compare.highlight', 'Top EVs');
+  const chargingTitle = useThemeContent('charging.title', 'An Expansive Charging Network');
+  const chargingHighlight = useThemeContent('charging.highlight', 'Charging Network');
+  const chargingDescription = useThemeContent('charging.description', 'Never worry about range anxiety. Our marketplace integrates with thousands of Level 2 and DC Fast Charging stations globally. Find, reserve, and pay--all in one app.');
+  const chargingCta = useThemeContent('charging.cta_label', 'View Live Map');
+  const sustainabilityTitle = useThemeContent('sustainability.title', 'Sustainability Highlights');
+  const sustainabilityHighlight = useThemeContent('sustainability.highlight', 'Highlights');
 
   // Dynamic States
   const [vehicles, setVehicles] = useState<EVItem[]>([]);
@@ -117,9 +137,9 @@ export default function Page() {
           console.warn("Autos Electric database empty. Engaging fallback simulated showroom.");
           loadFallbackShowroom();
         }
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error("AxiosError: Connection failure fetching EV models:", err);
-        setErrorTrace(err?.stack || err?.message || String(err));
+        setErrorTrace(err instanceof Error ? (err.stack || err.message) : String(err));
         loadFallbackShowroom();
       } finally {
         setLoading(false);
@@ -176,13 +196,17 @@ export default function Page() {
       {/* Hero Section */}
       <section className="ev-hero">
         <div className="ev-hero-content">
-          <h1 className="ev-hero-title">The Future is <span className="ev-text-green">Electric</span></h1>
+          <h1 className="ev-hero-title">
+            {heroTitle.split(heroHighlight).map((part, index, parts) => (
+              <React.Fragment key={`${part}-${index}`}>{part}{index < parts.length - 1 && <span className="ev-text-green">{heroHighlight}</span>}</React.Fragment>
+            ))}
+          </h1>
           <p style={{ fontSize: '1.25rem', marginBottom: '2.5rem', opacity: 0.8, lineHeight: 1.6 }}>
-            Explore revolutionary vehicles and sustainable living. Experience peak performance with zero emissions.
+            {heroDescription}
           </p>
           <div style={{ display: 'flex', gap: '1rem' }}>
-            <a href="#featured-evs" className="ev-btn ev-btn-green" style={{ padding: '1rem 2.5rem', fontSize: '1.1rem' }}>Browse EVs</a>
-            <a href="#charging" className="ev-btn ev-btn-blue" style={{ padding: '1rem 2.5rem', fontSize: '1.1rem' }}>Locate Charging</a>
+            <a href="#featured-evs" className="ev-btn ev-btn-green" style={{ padding: '1rem 2.5rem', fontSize: '1.1rem' }}>{heroPrimaryCta}</a>
+            <a href="#charging" className="ev-btn ev-btn-blue" style={{ padding: '1rem 2.5rem', fontSize: '1.1rem' }}>{heroSecondaryCta}</a>
           </div>
         </div>
       </section>
@@ -213,7 +237,7 @@ export default function Page() {
       {/* Interactive Filters Bar */}
       <section className="ev-filter-section">
         <div style={{ width: '100%', marginBottom: '1rem' }}>
-          <h2 style={{ fontSize: '1.25rem', fontWeight: 600 }} className="ev-text-green">Quick Search</h2>
+          <h2 style={{ fontSize: '1.25rem', fontWeight: 600 }} className="ev-text-green">{filtersTitle}</h2>
         </div>
         
         <select 
@@ -261,7 +285,11 @@ export default function Page() {
 
       {/* Featured Models */}
       <section className="ev-section" id="featured-evs">
-        <h2 className="ev-section-title">Featured <span className="ev-text-blue">EV Models</span></h2>
+        <h2 className="ev-section-title">
+          {collectionTitle.split(collectionHighlight).map((part, index, parts) => (
+            <React.Fragment key={`${part}-${index}`}>{part}{index < parts.length - 1 && <span className="ev-text-blue">{collectionHighlight}</span>}</React.Fragment>
+          ))}
+        </h2>
         
         {loading ? (
           // Electric Pulsing Shimmer Grids Skeletons
@@ -281,9 +309,9 @@ export default function Page() {
         ) : filteredEvs.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '4rem 1rem', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: '15px', backgroundColor: 'var(--ev-card-bg)' }}>
             <span style={{ fontSize: '3rem', display: 'block', marginBottom: '1rem' }}>⚡</span>
-            <h4 style={{ color: 'var(--ev-accent-green)', fontWeight: 600, fontSize: '1.25rem', marginBottom: '0.5rem' }}>No EV Models Match Search</h4>
-            <p style={{ opacity: 0.7, fontSize: '0.9rem', maxWidth: '380px', margin: '0 auto 1.5rem' }}>Adjust price filters or clear the brand search to return to our electric grid.</p>
-            <button className="ev-btn ev-btn-green" onClick={() => { setSelectedBrand(''); setSelectedRange(''); setSelectedPrice(''); setSelectedCharge(''); }}>Reset Refinements</button>
+            <h4 style={{ color: 'var(--ev-accent-green)', fontWeight: 600, fontSize: '1.25rem', marginBottom: '0.5rem' }}>{emptyTitle}</h4>
+            <p style={{ opacity: 0.7, fontSize: '0.9rem', maxWidth: '380px', margin: '0 auto 1.5rem' }}>{emptyDescription}</p>
+            <button className="ev-btn ev-btn-green" onClick={() => { setSelectedBrand(''); setSelectedRange(''); setSelectedPrice(''); setSelectedCharge(''); }}>{emptyButton}</button>
           </div>
         ) : (
           <div className="ev-grid">
@@ -302,7 +330,11 @@ export default function Page() {
 
       {/* Compare EVs */}
       <section className="ev-section" id="compare-evs">
-        <h2 className="ev-section-title">Compare The <span className="ev-text-green">Top EVs</span></h2>
+        <h2 className="ev-section-title">
+          {compareTitle.split(compareHighlight).map((part, index, parts) => (
+            <React.Fragment key={`${part}-${index}`}>{part}{index < parts.length - 1 && <span className="ev-text-green">{compareHighlight}</span>}</React.Fragment>
+          ))}
+        </h2>
         <div className="ev-compare-container">
           <div className="ev-compare-table" style={{ gridTemplateColumns: `repeat(${compareList.length + 1}, minmax(180px, 1fr))` }}>
             {/* Feature Column */}
@@ -340,16 +372,20 @@ export default function Page() {
       <section className="ev-section" id="charging">
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem', alignItems: 'center' }}>
           <div>
-            <h2 className="ev-section-title" style={{ textAlign: 'left', marginBottom: '1.5rem' }}>An Expansive <span className="ev-text-blue">Charging Network</span></h2>
+            <h2 className="ev-section-title" style={{ textAlign: 'left', marginBottom: '1.5rem' }}>
+              {chargingTitle.split(chargingHighlight).map((part, index, parts) => (
+                <React.Fragment key={`${part}-${index}`}>{part}{index < parts.length - 1 && <span className="ev-text-blue">{chargingHighlight}</span>}</React.Fragment>
+              ))}
+            </h2>
             <p style={{ fontSize: '1.1rem', marginBottom: '2rem', lineHeight: 1.6, opacity: 0.8 }}>
-              Never worry about range anxiety. Our marketplace integrates with thousands of Level 2 and DC Fast Charging stations globally. Find, reserve, and pay—all in one app.
+              {chargingDescription}
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}><span className="ev-text-green">✓</span> Real-time availability updates</div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}><span className="ev-text-green">✓</span> Integrated payment solutions</div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}><span className="ev-text-green">✓</span> Filter by plug type (CCS, NACS, CHAdeMO)</div>
             </div>
-            <button className="ev-btn ev-btn-green" onClick={() => alert("🗺️ GPS Map Console: Scanning surrounding charging stations in real-time...")}>View Live Map</button>
+            <button className="ev-btn ev-btn-green" onClick={() => alert("GPS Map Console: Scanning surrounding charging stations in real-time...")}>{chargingCta}</button>
           </div>
           <div>
             <div style={{ aspectRatio: '16/9', background: 'var(--ev-card-bg)', border: '1px solid var(--ev-accent-blue)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 10px 30px rgba(0,255,255,0.2)' }}>
@@ -363,7 +399,11 @@ export default function Page() {
 
       {/* Sustainability */}
       <section className="ev-section" id="sustainability">
-        <h2 className="ev-section-title">Sustainability <span className="ev-text-green">Highlights</span></h2>
+        <h2 className="ev-section-title">
+          {sustainabilityTitle.split(sustainabilityHighlight).map((part, index, parts) => (
+            <React.Fragment key={`${part}-${index}`}>{part}{index < parts.length - 1 && <span className="ev-text-green">{sustainabilityHighlight}</span>}</React.Fragment>
+          ))}
+        </h2>
         <div className="ev-icon-grid">
           <IconBox icon="🌱" title="Zero Emissions" desc="Contribute to a cleaner planet with every mile driven." />
           <IconBox icon="💻" title="Smart Tech Integration" desc="Over-the-air updates and advanced driver-assistance systems." />

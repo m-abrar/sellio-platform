@@ -279,6 +279,268 @@ const AUTOS_CLASSIC_HOME: ThemeContentResponse = {
   config: {},
 };
 
+const AUTOS_MODERN_HOME: ThemeContentResponse = {
+  theme_key: 'autos_modern',
+  page: 'home',
+  content: {
+    'header.brand_label': 'MODERN AUTOS',
+    'hero.title': 'Drive the Future Today',
+    'hero.description': 'Explore revolutionary vehicles and redefine your journey.',
+    'hero.primary_cta_label': 'Browse Cars',
+    'hero.secondary_cta_label': 'Compare Models',
+    'search.placeholder': 'Search by Keyword...',
+    'collection.title': 'Featured Electric & Modern Autos',
+    'compare.title': 'Compare Top Models Head-to-Head',
+    'compare.cta_label': 'Start Your Custom Comparison',
+    'brands.title': 'Driving Innovation with Top Brands',
+    'tech.title': 'Experience Next-Generation Technology',
+    'tech.feature_1_title': 'Autonomous AI Driving',
+    'tech.feature_1_description': 'Our vehicles are equipped with cutting-edge Level 3+ Autonomy, allowing for supervised self-driving on major highways. Experience a safer, more relaxed commute.',
+    'tech.feature_1_secondary': 'Advanced sensor fusion, real-time mapping, and predictive algorithms ensure unparalleled safety and performance in various conditions.',
+    'tech.feature_2_title': 'Hybrid & Electric Powertrains',
+    'tech.feature_2_description': 'Choose from a selection of the most efficient Electric and Hybrid engines. Maximum performance meets minimal environmental impact.',
+    'tech.feature_2_secondary': 'Innovative battery technology provides faster charging, longer range, and a dynamic driving feel, all backed by comprehensive warranties.',
+    'footer.description': 'The future of mobility is here. Driven by technology, fueled by vision.',
+    'footer.copyright': '2026 Modern Autos, Inc. All rights reserved.',
+  },
+  media: {
+    'tech.feature_1_image': '/themes/autos/modern/16.webp',
+    'tech.feature_2_image': '/themes/autos/modern/17.webp',
+  },
+  config: {},
+};
+
+const AUTOS_USED_HOME: ThemeContentResponse = {
+  theme_key: 'autos_used',
+  page: 'home',
+  content: {
+    'header.brand_label': 'DriveHub',
+    'hero.title': 'Find Your Perfect Used Car Today',
+    'hero.description': 'Trusted listings, verified sellers, and transparent pricing. Your next drive starts here.',
+    'hero.primary_cta_label': 'Browse Catalog',
+    'hero.secondary_cta_label': 'How It Works',
+    'filters.title': 'Search Filters',
+    'filters.clear_label': 'Clear All',
+    'filters.make_label': 'Make / Brand',
+    'filters.price_label': 'Price Budget',
+    'filters.mileage_label': 'Odometer Mileage',
+    'filters.location_label': 'Location / City',
+    'collection.title': 'Featured Listings',
+    'collection.count_label': 'Vehicles',
+    'empty.title': 'No Vehicles Found',
+    'empty.description': "We couldn't find any used cars matching your current search parameters.",
+    'empty.button_label': 'Reset Filters',
+    'deal.title': 'Deal of the Week!',
+    'deal.badge': 'SAVE $3,000!',
+    'deal.vehicle_title': '2021 Hyundai Elantra Limited',
+    'deal.description': 'Low Mileage, Single Owner, Full Service History.',
+    'deal.price': '$21,995',
+    'deal.original_price': '$24,995',
+    'deal.cta_label': 'Browse Available Showroom',
+    'dealers.title': 'Trusted Dealers',
+    'dealers.description': 'We partner with top-rated, verified dealerships to ensure a safe transaction.',
+    'how_it_works.title': 'How It Works: 3 Simple Steps',
+    'how_it_works.step_1_title': '1. Search & Filter',
+    'how_it_works.step_1_description': 'Easily find your dream car with our powerful, intuitive search tools.',
+    'how_it_works.step_2_title': '2. Contact & Schedule',
+    'how_it_works.step_2_description': 'Pick your preferred dealer, schedule a dynamic test-drive with direct financing.',
+    'how_it_works.step_3_title': '3. Drive Away Happy',
+    'how_it_works.step_3_description': 'Take a test drive, finalize the digital deal, and hit the open road!',
+    'footer.description': 'Your trusted marketplace for quality used vehicles.',
+    'footer.email': 'info@drivehub.com',
+    'footer.copyright': '2026 DriveHub Marketplace. All rights reserved.',
+  },
+  media: {
+    'deal.image': 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?q=80&w=600',
+  },
+  config: {},
+};
+
+const EVENTS_CREATIVE_HOME: ThemeContentResponse = {
+  theme_key: 'events_creative',
+  page: 'home',
+  content: {
+    'header.brand_label': 'CREATIVENode',
+    'hero.eyebrow': 'SYNTHETIC_CULTURE_EXCHANGE // 2026',
+    'hero.title': 'Creative\nPulses.',
+    'hero.description': 'A curated decentralized architecture for experimental audio-visual modules and algorithmic community assemblies.',
+    'hero.primary_cta_label': 'Launch Labs',
+    'collection.eyebrow': 'EXPERIMENTAL_EVENT_REGISTRY',
+    'collection.title': 'Registry.',
+    'collection.description': "Our unified decentralized distribution node synchronizes experimental availability from the world's most vibrant hubs.",
+    'lab.eyebrow': 'LABORATORY_MANIFESTO',
+    'lab.title': 'Synthetic\nArtistry.',
+    'lab.description': 'We operate on the boundary of bio-digital synthesis. Elevating community interactions through raw algorithmic installations and real-time auditory sync.',
+    'lab.capabilities': 'Synthetizers|Generators|Decentralizers|Transmitters',
+    'sync.title': 'Node Sync Request',
+    'sync.description': 'Transmission pathways are currently active for the autumn cluster. Submit your digital signature for synchronized resonance.',
+    'sync.cta_label': 'Initiate Synchronous Wave',
+    'footer.brand_label': 'CREATIVE',
+    'footer.description': "The world's most vibrant distribution node for experimental event modules. Synchronizing creative pulses with global community nodes.",
+    'footer.copyright': '(c) 2026 SELLIO_CREATIVE_NODE // PULSE_STABLE',
+  },
+  media: {},
+  config: {},
+};
+
+const EVENTS_FESTIVAL_HOME: ThemeContentResponse = {
+  theme_key: 'events_festival',
+  page: 'home',
+  content: {
+    'header.brand_label': 'NEONPulse',
+    'hero.eyebrow': 'THE_GLOBAL_COLLECTIVE_V8',
+    'hero.title': 'Neon\nPulse.',
+    'hero.description': 'The most immersive festival experiences on the planet. Curated, authenticated, and distributed via the Sellio Neon network.',
+    'hero.primary_cta_label': 'Explore Lineup',
+    'hero.secondary_cta_label': 'Join_The_Pulse',
+    'collection.eyebrow': 'OFFICIAL_FESTIVAL_REGISTRY',
+    'collection.title': 'Neon\nStages.',
+    'collection.description': "Our unified protocol synchronizes high-vibe environments across the world's most significant neon nodes.",
+    'cta.eyebrow': 'READY_TO_LOSE_CONTROL',
+    'cta.title': 'The Season is Live.',
+    'cta.highlight': 'Season',
+    'cta.description': "The 2026/27 season is officially live. Secure your access to the world's most exclusive high-vibe environments before the node capacity is reached.",
+    'cta.button_label': 'Secure Tickets Now',
+    'footer.brand_label': 'NEON',
+    'footer.description': "The world's most immersive distribution node for high-vibe environments. Synchronizing collective pulses with global neon nodes.",
+    'footer.copyright': '(c) 2026 SELLIO_NEON_NODE // VIBE_STABLE',
+  },
+  media: {
+    'hero.image': '/themes/events/festival/10.webp',
+  },
+  config: {},
+};
+
+const AUTOS_ELECTRIC_HOME: ThemeContentResponse = {
+  theme_key: 'autos_electric',
+  page: 'home',
+  content: {
+    'header.brand_label': 'EVOLVE',
+    'header.brand_highlight': 'OLVE',
+    'hero.title': 'The Future is Electric',
+    'hero.highlight': 'Electric',
+    'hero.description': 'Explore revolutionary vehicles and sustainable living. Experience peak performance with zero emissions.',
+    'hero.primary_cta_label': 'Browse EVs',
+    'hero.secondary_cta_label': 'Locate Charging',
+    'filters.title': 'Quick Search',
+    'collection.title': 'Featured EV Models',
+    'collection.highlight': 'EV Models',
+    'empty.title': 'No EV Models Match Search',
+    'empty.description': 'Adjust price filters or clear the brand search to return to our electric grid.',
+    'empty.button_label': 'Reset Refinements',
+    'compare.title': 'Compare The Top EVs',
+    'compare.highlight': 'Top EVs',
+    'charging.title': 'An Expansive Charging Network',
+    'charging.highlight': 'Charging Network',
+    'charging.description': 'Never worry about range anxiety. Our marketplace integrates with thousands of Level 2 and DC Fast Charging stations globally. Find, reserve, and pay--all in one app.',
+    'charging.cta_label': 'View Live Map',
+    'sustainability.title': 'Sustainability Highlights',
+    'sustainability.highlight': 'Highlights',
+    'footer.description': 'Driving the future of sustainable mobility, one electric vehicle at a time.',
+    'footer.copyright': '2026 EVOLVE Marketplace. All rights reserved. Powering the electric revolution.',
+  },
+  media: {},
+  config: {},
+};
+
+const EVENTS_CORPORATE_HOME: ThemeContentResponse = {
+  theme_key: 'events_corporate',
+  page: 'home',
+  content: {
+    'header.brand_label': 'FORUM26',
+    'header.brand_highlight': '26',
+    'hero.eyebrow': 'WORLD_ENGINEERING_SUMMIT // 2026',
+    'hero.title': 'The Future of\nStructural Excellence.',
+    'hero.highlight': 'Structural',
+    'hero.primary_cta_label': 'GET DELEGATE PASS',
+    'hero.secondary_cta_label': 'VIEW FULL SCHEDULE',
+    'catalog.eyebrow': 'CONVENTIONS_CATALOG // DIRECTORY',
+    'catalog.title': 'Active Summits & Expos',
+    'speakers.eyebrow': 'FACULTY_SYNC // 2026',
+    'speakers.title': 'Distinguished Speakers',
+    'agenda.eyebrow': 'CURATED_SCHEDULE // DAY_01',
+    'agenda.title': 'The Agenda',
+    'agenda.description': 'Four tracks of intense technical exploration, ranging from core infrastructure to product design philosophy.',
+    'agenda.cta_label': 'DOWNLOAD FULL PROGRAM PDF',
+    'cta.title': 'Secure Your\nSeat in History.',
+    'cta.highlight': 'Seat in History.',
+    'cta.description': 'Registration closes September 30. Join 5,000+ industry leaders for the most influential engineering event of the year.',
+    'cta.button_label': 'RESERVE MY FORUM PASS',
+    'footer.description': 'The premier global assembly for architectural engineering and distributed systems. Shaping the future of technical infrastructure.',
+    'footer.email': 'support@forum26.com',
+    'footer.location': 'San Francisco, CA',
+    'footer.copyright': '© 2026 SELLIO_EVENTS_GRP',
+  },
+  media: {},
+  config: {},
+};
+
+const JOBS_TECH_HOME: ThemeContentResponse = {
+  theme_key: 'jobs_tech',
+  page: 'home',
+  content: {
+    'header.brand_label': 'dev_jobs_',
+    'header.brand_prefix': '>',
+    'hero.title': 'Find the best tech jobs\nfor your stack.',
+    'hero.highlight': 'best tech jobs',
+    'hero.description': 'Connecting world-class developers with top-tier tech companies. Skip the recruiters and apply directly to the engineering team.',
+    'search.placeholder': "grep -i 'React OR Go OR Rust'",
+    'search.button_label': 'Search',
+    'diagnostics.title': 'Recruiting Registry Offline // Engaging Local Backup',
+    'diagnostics.description': 'A network latency exception was encountered while querying the active recruiting databases. dev_jobs_ has activated localized mock seeds to guarantee uninterrupted professional routing.',
+    'filters.stack_title': 'Tech Stack',
+    'filters.type_title': 'Job Type',
+    'filters.location_title': 'Location',
+    'collection.count_label': 'developer opportunities',
+    'collection.refresh_label': './refresh_catalog.sh',
+    'empty.title': 'No Developer Jobs Found',
+    'empty.description': 'Adjust your grep filters or tags to search alternative developer channels.',
+    'footer.description': 'The #1 job board for software engineers, product managers, and data scientists.',
+    'footer.copyright': '© 2026 DevJobs. All rights reserved.',
+  },
+  media: {},
+  config: {},
+};
+
+const JOBS_CORPORATE_HOME: ThemeContentResponse = {
+  theme_key: 'jobs_corporate',
+  page: 'home',
+  content: {
+    'header.brand_label': 'TalentCorp',
+    'header.brand_highlight': 'Talent',
+    'hero.title': 'Advance Your Corporate Career',
+    'hero.description': 'Discover premium opportunities at Fortune 500 companies and high-growth enterprises worldwide.',
+    'search.keyword_placeholder': 'Job title, keywords, or company',
+    'search.location_placeholder': 'City, state, or Remote',
+    'search.button_label': 'Search Jobs',
+    'filters.job_type_title': 'Job Type',
+    'filters.experience_title': 'Experience Level',
+    'filters.work_model_title': 'Work Model',
+    'dashboard.title': 'Get Discovered by Top Employers',
+    'dashboard.description': 'Upload your resume and let recruiters come to you. Track applications in real-time.',
+    'dashboard.primary_cta_label': 'Upload Resume',
+    'dashboard.secondary_cta_label': 'View Tracker',
+    'collection.title': 'Recommended for You',
+    'collection.sort_relevant_label': 'Sort by: Most Relevant',
+    'collection.sort_recent_label': 'Sort by: Most Recent',
+    'collection.sort_salary_label': 'Sort by: Salary (High to Low)',
+    'collection.load_more_label': 'Load More Results',
+    'sync.offline_kicker': 'Job Sync Offline',
+    'sync.offline_title': 'Recommended jobs could not be loaded.',
+    'empty.kicker': 'Empty Job Registry',
+    'empty.title': 'No live jobs are published yet.',
+    'empty.description': 'Add job records in the backend and this corporate listing will hydrate automatically.',
+    'footer.description': 'Empowering professionals and leading enterprises to connect seamlessly.',
+    'footer.subscribe_title': 'Subscribe',
+    'footer.subscribe_description': 'Get daily job alerts.',
+    'footer.email_placeholder': 'Email',
+    'footer.subscribe_button_label': 'Subscribe',
+    'footer.copyright': '© 2026 TalentCorp Inc. All rights reserved.',
+  },
+  media: {},
+  config: {},
+};
+
 export function getThemeContentDefaults(themeKey?: string, page = 'home'): ThemeContentResponse {
   if (themeKey === 'properties_classic' && page === 'home') {
     return PROPERTIES_CLASSIC_HOME;
@@ -314,6 +576,38 @@ export function getThemeContentDefaults(themeKey?: string, page = 'home'): Theme
 
   if (themeKey === 'autos_classic' && page === 'home') {
     return AUTOS_CLASSIC_HOME;
+  }
+
+  if (themeKey === 'autos_modern' && page === 'home') {
+    return AUTOS_MODERN_HOME;
+  }
+
+  if (themeKey === 'autos_used' && page === 'home') {
+    return AUTOS_USED_HOME;
+  }
+
+  if (themeKey === 'events_creative' && page === 'home') {
+    return EVENTS_CREATIVE_HOME;
+  }
+
+  if (themeKey === 'events_festival' && page === 'home') {
+    return EVENTS_FESTIVAL_HOME;
+  }
+
+  if (themeKey === 'autos_electric' && page === 'home') {
+    return AUTOS_ELECTRIC_HOME;
+  }
+
+  if (themeKey === 'events_corporate' && page === 'home') {
+    return EVENTS_CORPORATE_HOME;
+  }
+
+  if (themeKey === 'jobs_tech' && page === 'home') {
+    return JOBS_TECH_HOME;
+  }
+
+  if (themeKey === 'jobs_corporate' && page === 'home') {
+    return JOBS_CORPORATE_HOME;
   }
 
   return {

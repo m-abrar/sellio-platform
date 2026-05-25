@@ -10,8 +10,8 @@ Definition of complete: the theme has admin-editable homepage slots wired throug
 
 | Status | Count |
 | :--- | ---: |
-| Complete | 9 |
-| Pending | 43 |
+| Complete | 17 |
+| Pending | 35 |
 | Total seeded themes | 52 |
 
 ## Complete
@@ -19,12 +19,20 @@ Definition of complete: the theme has admin-editable homepage slots wired throug
 | Vertical | Theme Key | Theme |
 | :--- | :--- | :--- |
 | Autos | `autos_classic` | Autos Classic / Dealer |
+| Autos | `autos_electric` | Autos Electric / Green Cars |
 | Autos | `autos_luxury` | Autos Luxury / Premium |
+| Autos | `autos_modern` | Autos Modern / Showcase |
+| Autos | `autos_used` | Autos Used / Marketplace |
 | Classifieds | `classifieds_general` | Classifieds General / Marketplace |
 | Ecommerce | `ecommerce_fashion` | Ecommerce Fashion |
 | Events | `events_classic` | Events Classic |
+| Events | `events_corporate` | Events Corporate |
+| Events | `events_creative` | Events Creative |
+| Events | `events_festival` | Events Festival / Outdoor |
 | Events | `events_music` | Events Music / Concert |
+| Jobs | `jobs_corporate` | Jobs Corporate / Professional |
 | Jobs | `jobs_startup` | Jobs Startup / Modern |
+| Jobs | `jobs_tech` | Jobs Tech / IT |
 | Properties | `properties_classic` | Properties Classic |
 | Services | `services_marketplace` | Services Marketplace / Freelance |
 
@@ -32,9 +40,6 @@ Definition of complete: the theme has admin-editable homepage slots wired throug
 
 | Vertical | Theme Key | Theme |
 | :--- | :--- | :--- |
-| Autos | `autos_electric` | Autos Electric / Green Cars |
-| Autos | `autos_modern` | Autos Modern / Showcase |
-| Autos | `autos_used` | Autos Used / Marketplace |
 | Classifieds | `classifieds_deals` | Classifieds Deals / Bargain |
 | Classifieds | `classifieds_elite` | Classifieds Elite |
 | Classifieds | `classifieds_local` | Classifieds Local / Community |
@@ -43,14 +48,9 @@ Definition of complete: the theme has admin-editable homepage slots wired throug
 | Ecommerce | `ecommerce_default` | Ecommerce Standard |
 | Ecommerce | `ecommerce_electronics` | Ecommerce Electronics |
 | Ecommerce | `ecommerce_luxury` | Ecommerce Luxury |
-| Events | `events_corporate` | Events Corporate |
-| Events | `events_creative` | Events Creative |
-| Events | `events_festival` | Events Festival / Outdoor |
 | Jobs | `jobs_blue_collar` | Jobs Blue-Collar / Local |
-| Jobs | `jobs_corporate` | Jobs Corporate / Professional |
 | Jobs | `jobs_freelance` | Jobs Freelance / Gig Economy |
 | Jobs | `jobs_modern` | Jobs Modern |
-| Jobs | `jobs_tech` | Jobs Tech / IT |
 | Properties | `properties_commercial` | Properties Commercial Real Estate |
 | Properties | `properties_investment` | Investment / ROI Focused |
 | Properties | `properties_luxury` | Properties Luxury |

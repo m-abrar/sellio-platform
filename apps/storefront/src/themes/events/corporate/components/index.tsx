@@ -6,16 +6,22 @@ import { MenuNav } from '@/components/menu/MenuNav';
 import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { hashAwareNavItemRenderer } from '@/components/menu/menu-renderers';
+import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 
 export const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const brandLabel = useThemeContent('header.brand_label', 'FORUM26');
+  const brandHighlight = useThemeContent('header.brand_highlight', '26');
+  const brandPrefix = brandLabel.endsWith(brandHighlight)
+    ? brandLabel.slice(0, -brandHighlight.length)
+    : brandLabel;
 
   return (
     <header className="ecc-header">
       <div className="ecc-header-container">
         <Link href="/preview/events_corporate" style={{ textDecoration: 'none' }}>
           <div className="ecc-logo">
-            FORUM<span>26</span>
+            {brandPrefix}<span>{brandHighlight}</span>
           </div>
         </Link>
         
@@ -70,13 +76,23 @@ export const Header = () => {
   );
 };
 
-export const Footer = () => (
+export const Footer = () => {
+  const brandLabel = useThemeContent('header.brand_label', 'FORUM26');
+  const description = useThemeContent(
+    'footer.description',
+    'The premier global assembly for architectural engineering and distributed systems. Shaping the future of technical infrastructure.'
+  );
+  const email = useThemeContent('footer.email', 'support@forum26.com');
+  const location = useThemeContent('footer.location', 'San Francisco, CA');
+  const copyright = useThemeContent('footer.copyright', '© 2026 SELLIO_EVENTS_GRP');
+
+  return (
   <footer className="ecc-footer">
     <div className="ecc-footer-grid">
       <div>
-        <div style={{ fontWeight: 800, fontSize: '1.5rem', marginBottom: '2rem', color: 'var(--ecc-obsidian)' }}>FORUM26</div>
+        <div style={{ fontWeight: 800, fontSize: '1.5rem', marginBottom: '2rem', color: 'var(--ecc-obsidian)' }}>{brandLabel}</div>
         <p style={{ color: 'var(--ecc-text-muted)', lineHeight: 1.8, maxWidth: '400px' }}>
-          The premier global assembly for architectural engineering and distributed systems. Shaping the future of technical infrastructure.
+          {description}
         </p>
       </div>
       
@@ -92,14 +108,14 @@ export const Footer = () => (
       <div>
           <div className="ecc-mono" style={{ marginBottom: '2rem', color: 'var(--ecc-text-main)' }}>CONTACT</div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              <span style={{ color: 'var(--ecc-text-muted)', fontSize: '0.95rem' }}>support@forum26.com</span>
-              <span style={{ color: 'var(--ecc-text-muted)', fontSize: '0.95rem' }}>San Francisco, CA</span>
+              <span style={{ color: 'var(--ecc-text-muted)', fontSize: '0.95rem' }}>{email}</span>
+              <span style={{ color: 'var(--ecc-text-muted)', fontSize: '0.95rem' }}>{location}</span>
           </div>
       </div>
     </div>
     
     <div className="ecc-footer-bottom">
-        <div style={{ color: 'var(--ecc-text-muted)', fontSize: '0.85rem' }}>© 2026 SELLIO_EVENTS_GRP</div>
+        <div style={{ color: 'var(--ecc-text-muted)', fontSize: '0.85rem' }}>{copyright}</div>
         <MenuNav
           location="footer_bottom_bar"
           flat
@@ -113,9 +129,17 @@ export const Footer = () => (
         />
     </div>
   </footer>
-);
+  );
+};
 
-export const SpeakerCard = ({ name, role, company, image }: any) => (
+type SpeakerCardProps = {
+  name: string;
+  role: string;
+  company: string;
+  image: string;
+};
+
+export const SpeakerCard = ({ name, role, company, image }: SpeakerCardProps) => (
   <div className="ecc-speaker-card" onClick={() => alert(`Speaker bio loaded: ${name}`)}>
     <img src={image} alt={name} className="ecc-speaker-image" />
     <h3 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '0.5rem', color: 'var(--ecc-obsidian)' }}>{name}</h3>
@@ -124,7 +148,14 @@ export const SpeakerCard = ({ name, role, company, image }: any) => (
   </div>
 );
 
-export const AgendaItem = ({ time, title, speaker, track }: any) => (
+type AgendaItemProps = {
+  time: string;
+  title: string;
+  speaker: string;
+  track: string;
+};
+
+export const AgendaItem = ({ time, title, speaker, track }: AgendaItemProps) => (
   <div className="ecc-agenda-item" onClick={() => alert(`Agenda Details for: ${title}`)}>
     <div className="ecc-mono" style={{ fontSize: '0.85rem' }}>{time}</div>
     <div>

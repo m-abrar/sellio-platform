@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { api } from '@sellio/api-client';
 import { EventListing } from '@sellio/types';
 import { SpeakerCard, AgendaItem, EventCard, ShimmerCard } from './components';
+import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 
 const FALLBACK_EVENTS: EventListing[] = [
   {
@@ -204,6 +205,23 @@ const FALLBACK_EVENTS: EventListing[] = [
 ];
 
 export default function Page() {
+  const heroEyebrow = useThemeContent('hero.eyebrow', 'WORLD_ENGINEERING_SUMMIT // 2026');
+  const heroTitle = useThemeContent('hero.title', 'The Future of\nStructural Excellence.');
+  const heroHighlight = useThemeContent('hero.highlight', 'Structural');
+  const heroPrimaryCta = useThemeContent('hero.primary_cta_label', 'GET DELEGATE PASS');
+  const heroSecondaryCta = useThemeContent('hero.secondary_cta_label', 'VIEW FULL SCHEDULE');
+  const catalogEyebrow = useThemeContent('catalog.eyebrow', 'CONVENTIONS_CATALOG // DIRECTORY');
+  const catalogTitle = useThemeContent('catalog.title', 'Active Summits & Expos');
+  const speakersEyebrow = useThemeContent('speakers.eyebrow', 'FACULTY_SYNC // 2026');
+  const speakersTitle = useThemeContent('speakers.title', 'Distinguished Speakers');
+  const agendaEyebrow = useThemeContent('agenda.eyebrow', 'CURATED_SCHEDULE // DAY_01');
+  const agendaTitle = useThemeContent('agenda.title', 'The Agenda');
+  const agendaDescription = useThemeContent('agenda.description', 'Four tracks of intense technical exploration, ranging from core infrastructure to product design philosophy.');
+  const agendaCta = useThemeContent('agenda.cta_label', 'DOWNLOAD FULL PROGRAM PDF');
+  const ctaTitle = useThemeContent('cta.title', 'Secure Your\nSeat in History.');
+  const ctaHighlight = useThemeContent('cta.highlight', 'Seat in History.');
+  const ctaDescription = useThemeContent('cta.description', 'Registration closes September 30. Join 5,000+ industry leaders for the most influential engineering event of the year.');
+  const ctaButton = useThemeContent('cta.button_label', 'RESERVE MY FORUM PASS');
   const [events, setEvents] = useState<EventListing[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [errorTrace, setErrorTrace] = useState<string | null>(null);
@@ -233,33 +251,6 @@ export default function Page() {
     { time: "03:30 PM", title: "Hardening the Digital Core", speaker: "James Wilson", track: "SECURITY" },
   ];
 
-  useEffect(() => {
-    async function loadData() {
-      try {
-        setLoading(true);
-        const res = await api.getEvents({ per_page: 20 });
-        if (res && res.data) {
-          setEvents(res.data);
-          extractUniqueFilters(res.data);
-        } else {
-          throw new Error("No data received from API");
-        }
-      } catch (err: any) {
-        console.error("Laravel Database connection failure. Activating resilience fallback.", err);
-        setErrorTrace(
-          `DATABASE_OFFLINE_DIAGNOSTICS_TRACE\n` +
-          `STATUS: [OFFLINE] | LATENCY: [TIMEOUT] | REASON: [${err.message || 'axios connection refused'}]\n` +
-          `ACTION: Gracefully activated premium offline node resilience. Loading high-fidelity local catalog backups...`
-        );
-        setEvents(FALLBACK_EVENTS);
-        extractUniqueFilters(FALLBACK_EVENTS);
-      } finally {
-        setLoading(false);
-      }
-    }
-    loadData();
-  }, []);
-
   function extractUniqueFilters(data: EventListing[]) {
     const cats = new Set<string>();
     const locs = new Set<string>();
@@ -276,6 +267,33 @@ export default function Page() {
     setGenres(Array.from(gens));
   }
 
+  useEffect(() => {
+    async function loadData() {
+      try {
+        setLoading(true);
+        const res = await api.getEvents({ per_page: 20 });
+        if (res && res.data) {
+          setEvents(res.data);
+          extractUniqueFilters(res.data);
+        } else {
+          throw new Error("No data received from API");
+        }
+      } catch (err: unknown) {
+        console.error("Laravel Database connection failure. Activating resilience fallback.", err);
+        setErrorTrace(
+          `DATABASE_OFFLINE_DIAGNOSTICS_TRACE\n` +
+          `STATUS: [OFFLINE] | LATENCY: [TIMEOUT] | REASON: [${err instanceof Error ? err.message : 'axios connection refused'}]\n` +
+          `ACTION: Gracefully activated premium offline node resilience. Loading high-fidelity local catalog backups...`
+        );
+        setEvents(FALLBACK_EVENTS);
+        extractUniqueFilters(FALLBACK_EVENTS);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadData();
+  }, []);
+
   // Frontend filter processing
   const filteredEvents = events.filter(e => {
     const matchesSearch = search ? e.title.toLowerCase().includes(search.toLowerCase()) || e.description.toLowerCase().includes(search.toLowerCase()) : true;
@@ -289,10 +307,11 @@ export default function Page() {
     <div>
       {/* Hero Section */}
       <section className="ec-hero" aria-labelledby="ecc-hero-title">
-        <div className="ecc-mono" style={{ marginBottom: '2rem' }}>WORLD_ENGINEERING_SUMMIT // 2026</div>
+        <div className="ecc-mono" style={{ marginBottom: '2rem' }}>{heroEyebrow}</div>
         <h1 className="ecc-heading-xl" id="ecc-hero-title">
-          The Future of <br/>
-          <span style={{ color: 'var(--ecc-blue)' }}>Structural</span> Excellence.
+          {heroTitle.split(heroHighlight).map((part, index, parts) => (
+            <React.Fragment key={`${part}-${index}`}>{part}{index < parts.length - 1 && <span style={{ color: 'var(--ecc-blue)' }}>{heroHighlight}</span>}</React.Fragment>
+          ))}
         </h1>
         
         <div className="ec-hero-meta">
@@ -312,10 +331,10 @@ export default function Page() {
 
         <div style={{ marginTop: '5rem', display: 'flex', gap: '2rem', justifyContent: 'center', flexWrap: 'wrap' }} className="ecc-hero-buttons">
             <button className="ec-btn-primary" id="ecc-btn-explore" onClick={() => document.getElementById('ecc-explore-section')?.scrollIntoView({ behavior: 'smooth' })}>
-              GET DELEGATE PASS
+              {heroPrimaryCta}
             </button>
             <button className="ec-btn-outline" id="ecc-btn-schedule" onClick={() => document.getElementById('ecc-agenda-section')?.scrollIntoView({ behavior: 'smooth' })}>
-              VIEW FULL SCHEDULE
+              {heroSecondaryCta}
             </button>
         </div>
       </section>
@@ -323,9 +342,9 @@ export default function Page() {
       {/* Dynamic Explore & Search Section */}
       <section className="ecc-section" id="ecc-explore-section" aria-labelledby="ecc-explore-title" style={{ paddingBottom: '4rem' }}>
         <div style={{ textAlign: 'center', marginBottom: '6rem' }}>
-            <div className="ecc-mono">CONVENTIONS_CATALOG // DIRECTORY</div>
+            <div className="ecc-mono">{catalogEyebrow}</div>
             <h2 style={{ fontSize: 'clamp(2.2rem, 6vw, 3.5rem)', fontWeight: 800, marginTop: '1.5rem', letterSpacing: '-2px', color: 'var(--ecc-obsidian)', lineHeight: 1.1 }} id="ecc-explore-title">
-              Active Summits & Expos
+              {catalogTitle}
             </h2>
         </div>
 
@@ -420,8 +439,8 @@ export default function Page() {
       {/* Speakers Section */}
       <section className="ecc-section" id="ecc-speakers-section" aria-labelledby="ecc-speakers-title">
         <div style={{ textAlign: 'center', marginBottom: '6rem' }}>
-            <div className="ecc-mono">FACULTY_SYNC // 2026</div>
-            <h2 style={{ fontSize: 'clamp(2.2rem, 6vw, 3.5rem)', fontWeight: 800, marginTop: '1.5rem', letterSpacing: '-2px', color: 'var(--ecc-obsidian)', lineHeight: 1.1 }} id="ecc-speakers-title">Distinguished Speakers</h2>
+            <div className="ecc-mono">{speakersEyebrow}</div>
+            <h2 style={{ fontSize: 'clamp(2.2rem, 6vw, 3.5rem)', fontWeight: 800, marginTop: '1.5rem', letterSpacing: '-2px', color: 'var(--ecc-obsidian)', lineHeight: 1.1 }} id="ecc-speakers-title">{speakersTitle}</h2>
         </div>
         
         <div className="ec-speaker-grid">
@@ -435,11 +454,11 @@ export default function Page() {
       <section className="ecc-section" style={{ background: 'var(--ecc-bone)', borderRadius: 'var(--ecc-radius-md)' }} id="ecc-agenda-section" aria-labelledby="ecc-agenda-title">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '6rem' }}>
             <div>
-                <div className="ecc-mono">CURATED_SCHEDULE // DAY_01</div>
-                <h2 style={{ fontSize: 'clamp(2.2rem, 6vw, 3.5rem)', fontWeight: 800, marginTop: '1.5rem', letterSpacing: '-2px', color: 'var(--ecc-obsidian)', lineHeight: 1.1 }} id="ecc-agenda-title">The Agenda</h2>
+                <div className="ecc-mono">{agendaEyebrow}</div>
+                <h2 style={{ fontSize: 'clamp(2.2rem, 6vw, 3.5rem)', fontWeight: 800, marginTop: '1.5rem', letterSpacing: '-2px', color: 'var(--ecc-obsidian)', lineHeight: 1.1 }} id="ecc-agenda-title">{agendaTitle}</h2>
             </div>
             <p style={{ maxWidth: '400px', color: 'var(--ecc-text-muted)', fontSize: '1.1rem', lineHeight: 1.8, fontWeight: 300 }} className="ecc-agenda-intro">
-                Four tracks of intense technical exploration, ranging from core infrastructure to product design philosophy.
+                {agendaDescription}
             </p>
         </div>
 
@@ -450,7 +469,7 @@ export default function Page() {
         </div>
         
         <div style={{ textAlign: 'center', marginTop: '6rem' }}>
-            <button className="ec-btn-outline" id="ecc-btn-agenda-pdf" onClick={() => alert('Downloading technical agenda program PDF.')}>DOWNLOAD FULL PROGRAM PDF</button>
+            <button className="ec-btn-outline" id="ecc-btn-agenda-pdf" onClick={() => alert('Downloading technical agenda program PDF.')}>{agendaCta}</button>
         </div>
       </section>
 
@@ -458,14 +477,15 @@ export default function Page() {
       <section className="ecc-section" style={{ textAlign: 'center' }} aria-labelledby="ecc-cta-title">
           <div style={{ maxWidth: '800px', margin: '0 auto' }}>
               <h2 style={{ fontSize: 'clamp(2.8rem, 8vw, 5rem)', fontWeight: 900, letterSpacing: '-3px', marginBottom: '3rem', color: 'var(--ecc-obsidian)', lineHeight: 1.1 }} id="ecc-cta-title">
-                  Secure Your <br/>
-                  <span style={{ color: 'var(--ecc-blue)' }}>Seat in History.</span>
+                  {ctaTitle.split(ctaHighlight).map((part, index, parts) => (
+                    <React.Fragment key={`${part}-${index}`}>{part}{index < parts.length - 1 && <span style={{ color: 'var(--ecc-blue)' }}>{ctaHighlight}</span>}</React.Fragment>
+                  ))}
               </h2>
               <p style={{ color: 'var(--ecc-text-muted)', fontSize: '1.5rem', lineHeight: 1.6, marginBottom: '5rem', fontWeight: 300 }}>
-                  Registration closes September 30. Join 5,000+ industry leaders for the most influential engineering event of the year.
+                  {ctaDescription}
               </p>
               <button className="ec-btn-primary" style={{ padding: '2rem 6rem', fontSize: '1.25rem' }} id="ecc-btn-cta-pass" onClick={() => document.getElementById('ecc-explore-section')?.scrollIntoView({ behavior: 'smooth' })}>
-                  RESERVE MY FORUM PASS
+                  {ctaButton}
               </button>
           </div>
       </section>
