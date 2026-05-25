@@ -1,27 +1,35 @@
-import axios from 'axios';
-import { API_BASE_URL } from '../config/api';
+import { apiClient, unwrapData } from '../lib/apiClient';
+import { clearAuth, setStoredUser, setToken } from '../lib/authStorage';
+import type { AuthUser, LoginResponseData } from '../types/api';
 
-const API_URL = API_BASE_URL;
+export const login = async (credentials: { email: string; password: string }) => {
+  const response = await apiClient.post(`/v1/auth/login`, credentials);
+  const data = unwrapData<LoginResponseData>(response);
 
-export const login = async (credentials: any) => {
+  setToken(data.access_token);
+
+  const user = await getMe();
+  return { ...data, user };
+};
+
+export const logout = async (): Promise<void> => {
   try {
-    const response = await axios.post(`${API_URL}/login`, credentials);
-    if (response.data.token) {
-      localStorage.setItem('token', response.data.token);
-    }
-    return response.data;
-  } catch (error) {
-    console.warn('Backend not reachable, falling back to mock login');
-    // Mocking login for now since we don't have a real backend yet
-    if (credentials.email === 'admin@example.com' && credentials.password === 'password') {
-      const mockToken = 'mock-jwt-token';
-      localStorage.setItem('token', mockToken);
-      return { data: { token: mockToken, user: { name: 'Admin User', email: credentials.email } } };
-    }
-    throw new Error('Invalid credentials');
+    await apiClient.post('/v1/auth/logout');
+  } finally {
+    clearAuth();
   }
 };
 
-export const logout = () => {
-  localStorage.removeItem('token');
+export const refreshToken = async (): Promise<string> => {
+  const response = await apiClient.post('/v1/auth/refresh-token');
+  const data = unwrapData<{ access_token: string }>(response);
+  setToken(data.access_token);
+  return data.access_token;
+};
+
+export const getMe = async (): Promise<AuthUser> => {
+  const response = await apiClient.get('/v1/auth/me');
+  const user = unwrapData<AuthUser>(response);
+  setStoredUser(user);
+  return user;
 };

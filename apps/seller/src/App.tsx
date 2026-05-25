@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import DashboardLayout from './components/layout/DashboardLayout';
 import { LayoutProvider } from './context/LayoutContext';
 import PropertiesPage from './pages/properties/PropertiesPage';
@@ -42,13 +42,8 @@ import DashboardHome from './pages/dashboard/DashboardHome';
 import NotificationsPage from './pages/notifications/NotificationsPage';
 import Login from './pages/Login';
 import Error404 from './pages/Error404';
+import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { Toaster } from 'sonner';
-
-// --- AUTH GUARD ---
-const ProtectedRoute = () => {
-  const isAuthenticated = !!localStorage.getItem('token');
-  return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />;
-};
 
 function App() {
   return (

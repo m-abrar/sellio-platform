@@ -1,7 +1,9 @@
 import { Outlet } from 'react-router-dom';
-import Sidebar from '../Sidebar'; // Assuming Sidebar is in the parent/sibling folder
+import Sidebar from '../Sidebar';
+import { useAuth } from '../../context/AuthContext';
 
-export default function DashboardLayout({ user }: { user?: any }) {
+export default function DashboardLayout() {
+  const { user } = useAuth();
   return (
     <div className="min-h-screen bg-[#fbfcfd] text-slate-900 selection:bg-purple-100 selection:text-[#6610f2]">
       <div id="wrapper" className="flex flex-col lg:flex-row max-w-[1640px] mx-auto min-h-screen relative">

@@ -12,10 +12,11 @@ import {
   HiOutlineTag
 } from 'react-icons/hi2';
 
-import { logout } from '../api/auth';
 import { getSidebarCounts } from '../api/sidebar';
+import { useAuth } from '../context/AuthContext';
 
 export default function Sidebar({ user }: any) {
+  const { logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
@@ -89,11 +90,9 @@ export default function Sidebar({ user }: any) {
     const toastId = toast.loading('Signing out...');
     try {
       await logout();
-      localStorage.clear();
       toast.dismiss(toastId);
       window.location.href = '/login';
     } catch (e) {
-      localStorage.clear();
       toast.dismiss(toastId);
       window.location.href = '/login';
     }
