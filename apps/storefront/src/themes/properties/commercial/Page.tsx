@@ -1,13 +1,14 @@
 'use client';
-
+ 
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { api } from '@sellio/api-client';
 import { AssetRegistryCard, IntelligenceHUD } from './components';
 import { getThemeLink, scrollToSection } from './utils';
-
+import { useThemeContent, useThemeMedia } from '@/components/theme-content/ThemeContentProvider';
+ 
 const HERO_IMAGE = 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80';
-
+ 
 const FALLBACK_ASSETS = [
   { id: 'ASSET-9921', rawId: 1, title: 'One Skyline Plaza', type: 'PRIME_OFFICE', area: '142,000 SQFT', status: 'AVAILABLE', slug: 'one-skyline-plaza', location: 'New York, NY', description: 'Authoritative architectural node in the Downtown Core. Features premium steel framing, high-density server vaults, and private rooftop logistics helipads.' },
   { id: 'ASSET-4412', rawId: 2, title: 'TechPark Hub', type: 'MIXED_USE', area: '85,000 SQFT', status: 'LEASING', slug: 'techpark-hub', location: 'San Francisco, CA', description: 'Bespoke engineering incubator configured with modular open floors, advanced fiber optical routing hubs, and collaborative courtyard specifications.' },
@@ -16,7 +17,7 @@ const FALLBACK_ASSETS = [
   { id: 'ASSET-7756', rawId: 5, title: 'Westside Retail Mall', type: 'RETAIL_CENTER', area: '200,000 SQFT', status: 'AVAILABLE', slug: 'westside-retail-mall', location: 'Los Angeles, CA', description: 'Premier lifestyle center with high foot-traffic indices, state-of-the-art visual staging arenas, and versatile commercial zoning permits.' },
   { id: 'ASSET-8821', rawId: 6, title: 'DataVault Station', type: 'DATA_CENTER', area: '45,000 SQFT', status: 'PRIVATE_SALE', slug: 'datavault-station', location: 'Ashburn, VA', description: 'Tier-IV mission-critical secure vault node configured with modular cooling towers, secondary generator backups, and biometric security boundaries.' },
 ];
-
+ 
 export default function Page() {
   const router = useRouter();
   const [assets, setAssets] = useState<any[]>([]);
@@ -27,11 +28,11 @@ export default function Page() {
   const [loading, setLoading] = useState(true);
   const [useFallback, setUseFallback] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
-
+ 
   const translateProperty = (p: any) => {
     const rawPrice = p.price || 14000000;
     const formattedPrice = p.price_formatted || `$${(rawPrice / 1000000).toFixed(1)}M`;
-
+ 
     let loc = 'Downtown Core';
     if (p.location) {
       if (typeof p.location === 'object') {
@@ -42,9 +43,9 @@ export default function Page() {
     } else if (p.city || p.address) {
       loc = p.city || p.address;
     }
-
+ 
     const area = p.specs?.area_formatted || (p.area_sq_ft ? `${p.area_sq_ft.toLocaleString()} SQFT` : `${142000 + (p.id % 5) * 20000} SQFT`);
-
+ 
     let status = 'AVAILABLE';
     if (p.status) {
       let rawStatus = '';
@@ -53,7 +54,7 @@ export default function Page() {
       } else {
         rawStatus = String(p.status).toUpperCase();
       }
-
+ 
       if (rawStatus.includes('RENT') || rawStatus.includes('LEAS') || rawStatus === 'RENTAL') {
         status = 'LEASING';
       } else if (rawStatus.includes('SALE') || rawStatus.includes('BUY') || rawStatus === 'AVAILABLE') {
@@ -66,9 +67,9 @@ export default function Page() {
     } else {
       status = p.id % 3 === 0 ? 'LEASING' : p.id % 3 === 1 ? 'OCCUPIED' : 'AVAILABLE';
     }
-
+ 
     const assetId = `ASSET-${p.id + 9900}`;
-
+ 
     let categoryTitle = 'Prime Office';
     if (p.category) {
       if (typeof p.category === 'object') {
@@ -77,13 +78,13 @@ export default function Page() {
         categoryTitle = String(p.category);
       }
     }
-
+ 
     let typeToken = categoryTitle.toUpperCase().replace(/\s+/g, '_');
     const allowedTypes = ['PRIME_OFFICE', 'MIXED_USE', 'INDUSTRIAL', 'OFFICE_CAMPUS', 'RETAIL_CENTER', 'DATA_CENTER'];
     if (!allowedTypes.includes(typeToken)) {
       typeToken = allowedTypes[p.id % allowedTypes.length];
     }
-
+ 
     const rawId = typeof p.id === 'number' ? p.id : (p.rawId || parseInt(String(p.id).replace(/[^\d]/g, '')) || 1);
     let img = p.featured_image || (p.media?.main_photo || p.image);
     if (!img) {
@@ -97,7 +98,7 @@ export default function Page() {
       ];
       img = unsplashImages[rawId % unsplashImages.length];
     }
-
+ 
     return {
       id: assetId,
       rawId: p.id,
@@ -113,12 +114,12 @@ export default function Page() {
       description: p.description || p.short_description || 'High-fidelity institutional-grade commercial asset with state-of-the-art HVAC systems and zoning compliance.',
     };
   };
-
+ 
   const fetchLiveAssets = async () => {
     setLoading(true);
     try {
       const response = await api.getProperties({ per_page: 20 });
-
+ 
       if (response && response.data && response.data.length > 0) {
         const translated = response.data.map((p: any) => translateProperty(p));
         setAssets(translated);
@@ -136,20 +137,20 @@ export default function Page() {
       setLoading(false);
     }
   };
-
+ 
   const triggerLocalFallbacks = () => {
     setUseFallback(true);
     setAssets(FALLBACK_ASSETS);
     setFilteredAssets(FALLBACK_ASSETS);
   };
-
+ 
   useEffect(() => {
     fetchLiveAssets();
   }, []);
-
+ 
   const applyFilters = (query: string, type: string, status: string) => {
     let result = [...assets];
-
+ 
     if (query) {
       const q = query.toLowerCase();
       result = result.filter((a) =>
@@ -158,123 +159,157 @@ export default function Page() {
         || a.type.toLowerCase().replace('_', ' ').includes(q),
       );
     }
-
+ 
     if (type !== 'ALL') {
       result = result.filter((a) => a.type === type);
     }
-
+ 
     if (status !== 'ALL') {
       result = result.filter((a) => a.status === status);
     }
-
+ 
     setFilteredAssets(result);
   };
-
+ 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
     applyFilters(e.target.value, activeType, activeStatus);
   };
-
+ 
   const handleTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setActiveType(e.target.value);
     applyFilters(searchQuery, e.target.value, activeStatus);
   };
-
+ 
   const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setActiveStatus(e.target.value);
     applyFilters(searchQuery, activeType, e.target.value);
   };
-
-  const heroImage = filteredAssets[0]?.image || assets[0]?.image || HERO_IMAGE;
-
+ 
+  const heroImage = useThemeMedia('hero.image', HERO_IMAGE);
+ 
   return (
     <div className="pc-page">
       <section className="pc-hero" id="pc-hero-section">
         <div className="pc-hero-copy">
-          <div className="pc-mono pc-hero-kicker">COMMERCIAL_REGISTRY_V8_DISTRIBUTION</div>
+          <div className="pc-mono pc-hero-kicker">{useThemeContent('hero.kicker', 'COMMERCIAL_REGISTRY_V8_DISTRIBUTION')}</div>
           <h1 className="pc-heading-xl">
-            Market <br />
-            Transparency <br />
-            <span className="pc-hero-accent">Engineered.</span>
+            {useThemeContent('hero.title', 'Market \nTransparency \nEngineered.').split('\n').map((line, i, arr) => {
+              const highlight = useThemeContent('hero.highlight', 'Engineered.');
+              const hasHighlight = line.includes(highlight);
+              return (
+                <React.Fragment key={i}>
+                  {hasHighlight ? (
+                    <>
+                      {line.split(highlight).map((part, pIdx, pArr) => (
+                        <React.Fragment key={pIdx}>
+                          {part}
+                          {pIdx < pArr.length - 1 && <span className="pc-hero-accent">{highlight}</span>}
+                        </React.Fragment>
+                      ))}
+                    </>
+                  ) : (
+                    line
+                  )}
+                  {i < arr.length - 1 && <br />}
+                </React.Fragment>
+              );
+            })}
           </h1>
           <p className="pc-hero-description">
-            The authoritative commercial registry providing verified yield data and direct access to institutional-grade real estate assets globally.
+            {useThemeContent('hero.description', 'The authoritative commercial registry providing verified yield data and direct access to institutional-grade real estate assets globally.')}
           </p>
-
+ 
           <div className="pc-hero-stats">
-            <div className="pc-hero-stat-value">$1.4B</div>
-            <div className="pc-mono pc-hero-stat-label">QUARTERLY_TURNOVER</div>
+            <div className="pc-hero-stat-value">{useThemeContent('hero.stat_value', '$1.4B')}</div>
+            <div className="pc-mono pc-hero-stat-label">{useThemeContent('hero.stat_label', 'QUARTERLY_TURNOVER')}</div>
           </div>
-
+ 
           <div className="pc-hero-actions">
             <button type="button" className="pc-btn-primary" onClick={() => scrollToSection('pc-inventory-section')}>
-              Explore_Inventory
+              {useThemeContent('hero.primary_cta_label', 'Explore_Inventory')}
             </button>
             <button type="button" className="pc-btn-secondary" onClick={() => scrollToSection('pc-cta-section')}>
-              Request_Appraisal
+              {useThemeContent('hero.secondary_cta_label', 'Request_Appraisal')}
             </button>
           </div>
         </div>
-
+ 
         <div className="pc-hero-visual">
           <div className="pc-hero-image-frame">
             <img src={heroImage} alt="Corporate architecture skyline" className="pc-hero-image" />
           </div>
         </div>
       </section>
-
+ 
       <div className="pc-section">
         <section className="pc-intelligence-section" id="pc-intelligence-section">
           <div className="pc-intelligence-copy">
-            <h2>The Intelligence <br />Behind the Asset.</h2>
+            <h2>
+              {useThemeContent('intelligence.title', 'The Intelligence \nBehind the Asset.').split('\n').map((line, i, arr) => (
+                <React.Fragment key={i}>
+                  {line}
+                  {i < arr.length - 1 && <br />}
+                </React.Fragment>
+              ))}
+            </h2>
             <p>
-              Every asset in our registry undergoes a multi-point verification protocol, including structural audits, zoning compliance checks, and high-fidelity market yield analysis.
+              {useThemeContent('intelligence.description', 'Every asset in our registry undergoes a multi-point verification protocol, including structural audits, zoning compliance checks, and high-fidelity market yield analysis.')}
             </p>
           </div>
           <div className="pc-intelligence-stats">
-            <IntelligenceHUD label="DUE_DILIGENCE_SPEED" value="48h" />
-            <IntelligenceHUD label="AVG_YIELD_v2026" value="12%" />
-            <IntelligenceHUD label="GLOBAL_NODES" value={loading ? '...' : String(assets.length || 142)} />
+            <IntelligenceHUD label={useThemeContent('hud.due_diligence_label', 'DUE_DILIGENCE_SPEED')} value={useThemeContent('hud.due_diligence_value', '48h')} />
+            <IntelligenceHUD label={useThemeContent('hud.avg_yield_label', 'AVG_YIELD_v2026')} value={useThemeContent('hud.avg_yield_value', '12%')} />
+            <IntelligenceHUD label={useThemeContent('hud.global_nodes_label', 'GLOBAL_NODES')} value={loading ? '...' : String(assets.length || 142)} />
           </div>
         </section>
-
+ 
         {useFallback && apiError && (
           <div className="pc-offline-panel">
             <div className="pc-offline-header">
               <span className="pc-offline-dot" />
-              <span className="pc-mono">CONNECTION_OFFLINE_DIAGNOSTICS</span>
+              <span className="pc-mono">{useThemeContent('diagnostics.kicker', 'CONNECTION_OFFLINE_DIAGNOSTICS')}</span>
             </div>
             <p>
-              The live Commercial registry API node threw a <code>{apiError}</code>. Successfully initialized high-fidelity mock blueprints.
+              {useThemeContent('diagnostics.text_before', 'The live Commercial registry API node threw a ')}
+              <code>{apiError}</code>
+              {useThemeContent('diagnostics.text_after', '. Successfully initialized high-fidelity mock blueprints.')}
             </p>
           </div>
         )}
-
+ 
         <section className="pc-inventory-section" id="pc-inventory-section">
           <div className="pc-inventory-header">
             <div>
-              <div className="pc-mono pc-inventory-kicker">INSTITUTIONAL_INVENTORY</div>
-              <h2>Asset <br />Registry.</h2>
+              <div className="pc-mono pc-inventory-kicker">{useThemeContent('inventory.kicker', 'INSTITUTIONAL_INVENTORY')}</div>
+              <h2>
+                {useThemeContent('inventory.title', 'Asset \nRegistry.').split('\n').map((line, i, arr) => (
+                  <React.Fragment key={i}>
+                    {line}
+                    {i < arr.length - 1 && <br />}
+                  </React.Fragment>
+                ))}
+              </h2>
             </div>
             <p className="pc-inventory-intro">
-              Our unified protocol synchronizes performance data from prime office, industrial, and retail assets into a single authoritative node.
+              {useThemeContent('inventory.description', 'Our unified protocol synchronizes performance data from prime office, industrial, and retail assets into a single authoritative node.')}
             </p>
           </div>
-
+ 
           <div className="pc-filter-panel">
             <div>
-              <label className="pc-mono pc-filter-label" htmlFor="pc-search">SEARCH_QUERY</label>
+              <label className="pc-mono pc-filter-label" htmlFor="pc-search">{useThemeContent('filters.search_label', 'SEARCH_QUERY')}</label>
               <input
                 id="pc-search"
                 type="text"
-                placeholder="Scan by keyword or location..."
+                placeholder={useThemeContent('filters.search_placeholder', 'Scan by keyword or location...')}
                 className="pc-search-input"
                 value={searchQuery}
                 onChange={handleSearchChange}
               />
             </div>
             <div>
-              <label className="pc-mono pc-filter-label" htmlFor="pc-type">ASSET_CLASSIFICATION</label>
+              <label className="pc-mono pc-filter-label" htmlFor="pc-type">{useThemeContent('filters.type_label', 'ASSET_CLASSIFICATION')}</label>
               <select id="pc-type" className="pc-search-input pc-select" value={activeType} onChange={handleTypeChange}>
                 <option value="ALL">ALL_CLASSIFICATIONS</option>
                 <option value="PRIME_OFFICE">PRIME_OFFICE</option>
@@ -286,7 +321,7 @@ export default function Page() {
               </select>
             </div>
             <div>
-              <label className="pc-mono pc-filter-label" htmlFor="pc-status">ACQUISITION_STATUS</label>
+              <label className="pc-mono pc-filter-label" htmlFor="pc-status">{useThemeContent('filters.status_label', 'ACQUISITION_STATUS')}</label>
               <select id="pc-status" className="pc-search-input pc-select" value={activeStatus} onChange={handleStatusChange}>
                 <option value="ALL">ALL_STATUSES</option>
                 <option value="AVAILABLE">AVAILABLE</option>
@@ -296,7 +331,7 @@ export default function Page() {
               </select>
             </div>
           </div>
-
+ 
           {loading ? (
             <div className="pc-asset-grid">
               {[1, 2, 3, 4, 5, 6].map((i) => (
@@ -315,28 +350,35 @@ export default function Page() {
             </div>
           ) : (
             <div className="pc-empty-state">
-              <div className="pc-mono pc-empty-kicker">REGISTRY_RESOLVE_NULL</div>
-              <h4>No Assets Resolved</h4>
-              <p>Adjust your classification or acquisition status to recheck active ledger items.</p>
+              <div className="pc-mono pc-empty-kicker">{useThemeContent('empty.kicker', 'REGISTRY_RESOLVE_NULL')}</div>
+              <h4>{useThemeContent('empty.title', 'No Assets Resolved')}</h4>
+              <p>{useThemeContent('empty.description', 'Adjust your classification or acquisition status to recheck active ledger items.')}</p>
             </div>
           )}
         </section>
-
+ 
         <div className="pc-trust-bar">
-          <span className="pc-mono pc-trust-label">AS_FEATURED_IN:</span>
+          <span className="pc-mono pc-trust-label">{useThemeContent('trust.label', 'AS_FEATURED_IN:')}</span>
           {['FINANCIAL_TIMES', 'BLOOMBERG', 'RE_JOURNAL', 'WALL_STREET_POST'].map((brand) => (
             <span key={brand} className="pc-mono pc-trust-brand">{brand}</span>
           ))}
         </div>
-
+ 
         <section className="pc-cta-section" id="pc-cta-section">
-          <div className="pc-mono pc-cta-kicker">INSTITUTIONAL_ACQUISITION</div>
-          <h2>Scale Your <br />Portfolio.</h2>
+          <div className="pc-mono pc-cta-kicker">{useThemeContent('cta.kicker', 'INSTITUTIONAL_ACQUISITION')}</div>
+          <h2>
+            {useThemeContent('cta.title', 'Scale Your \nPortfolio.').split('\n').map((line, i, arr) => (
+              <React.Fragment key={i}>
+                {line}
+                {i < arr.length - 1 && <br />}
+              </React.Fragment>
+            ))}
+          </h2>
           <p>
-            Join over 12,000 institutional investors and family offices currently acquiring on the Sellio Commercial Network.
+            {useThemeContent('cta.description', 'Join over 12,000 institutional investors and family offices currently acquiring on the Sellio Commercial Network.')}
           </p>
           <button type="button" className="pc-btn-primary pc-cta-btn" onClick={() => scrollToSection('pc-inventory-section')}>
-            Request_Institutional_Access
+            {useThemeContent('cta.button_label', 'Request_Institutional_Access')}
           </button>
         </section>
       </div>

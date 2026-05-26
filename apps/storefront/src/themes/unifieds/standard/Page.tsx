@@ -2,14 +2,47 @@
 import React, { useEffect, useState } from 'react';
 import { api } from '@sellio/api-client';
 import type { Product } from '@sellio/types';
-import { ProtocolGrid, EfficiencyBar } from './components';
+import { EfficiencyBar, ProtocolGrid } from './components';
+import { useThemeContent, useThemeMedia } from '@/components/theme-content/ThemeContentProvider';
 
 export default function Page() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loadingListings, setLoadingListings] = useState(true);
   const [listingError, setListingError] = useState<string | null>(null);
 
-  const placeholderImage = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='720' height='520' viewBox='0 0 720 520'><rect width='100%' height='100%' fill='%23f8fafc'/><g transform='translate(328,214)' stroke='%2394a3b8' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='2' width='60' height='60' rx='8'/><circle cx='20' cy='20' r='6'/><path d='M58 46L42 30 12 60'/></g><text x='50%' y='61%' dominant-baseline='middle' text-anchor='middle' font-family='Inter, sans-serif' font-size='13' font-weight='700' letter-spacing='2' fill='%2364758b'>SCALE LISTING</text></svg>";
+  const heroEyebrow = useThemeContent('hero.eyebrow', 'MODULAR_DISTRIBUTION_V1');
+  const heroTitle = useThemeContent('hero.title', 'The Scale\nProtocol.');
+  const heroHighlight = useThemeContent('hero.highlight', 'Scale');
+  const heroDescription = useThemeContent('hero.description', "The world's most efficient high-fidelity distribution node. Modular, precise, and engineered for global multi-vertical commerce.");
+  const heroPrimaryCtaLabel = useThemeContent('hero.primary_cta_label', 'INITIALIZE NODE');
+  const heroSecondaryCtaLabel = useThemeContent('hero.secondary_cta_label', 'VIEW DOCUMENTATION');
+
+  const layersTitle = useThemeContent('layers.title', 'Universal Logic Layers.');
+
+  const collectionEyebrow = useThemeContent('collection.eyebrow', 'LIVE_EXCHANGE');
+  const collectionTitle = useThemeContent('collection.title', 'Standard Listings Exchange.');
+  const collectionDescription = useThemeContent('collection.description', 'Live product records synchronized into the Scale Protocol for clean, modular marketplace discovery.');
+
+  const syncOfflineKicker = useThemeContent('sync.offline_kicker', 'PROTOCOL_OFFLINE');
+  const syncOfflineTitle = useThemeContent('sync.offline_title', 'Listings could not be synchronized.');
+  const emptyKicker = useThemeContent('empty.kicker', 'EMPTY_PROTOCOL_EXCHANGE');
+  const emptyTitle = useThemeContent('empty.title', 'No live listings are available yet.');
+  const emptyDescription = useThemeContent('empty.description', 'Add product records in the backend and this protocol feed will hydrate automatically.');
+
+  const midSectionEyebrow = useThemeContent('mid_section.eyebrow', 'GEOMETRIC_PRECISION');
+  const midSectionTitle = useThemeContent('mid_section.title', 'Modular\nEfficiency.');
+  const midSectionDescription = useThemeContent('mid_section.description', 'Every node in the Scale Protocol is designed for maximum efficiency. By isolating architectural layers and standardizing data mapping, we achieve a distribution latency that is unmatched in the multi-vertical market.');
+  const midSectionMetric1Value = useThemeContent('mid_section.metric_1_value', '6ms');
+  const midSectionMetric1Label = useThemeContent('mid_section.metric_1_label', 'AVERAGE_SYNC');
+  const midSectionMetric2Value = useThemeContent('mid_section.metric_2_value', '100%');
+  const midSectionMetric2Label = useThemeContent('mid_section.metric_2_label', 'ISO_COMPLIANCE');
+  const midSectionImage = useThemeMedia('mid_section.image', '/themes/unifieds/standard/1.webp');
+
+  const ctaTitle = useThemeContent('cta.title', 'Initialize the\nStandard.');
+  const ctaDescription = useThemeContent('cta.description', "Connect your professional node to the Scale Protocol and gain access to the world's most efficient high-fidelity distribution network.");
+  const ctaButtonLabel = useThemeContent('cta.button_label', 'CONNECT SCALE NODE');
+
+  const placeholderImage = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='720' height='520' viewBox='0 0 720 520'><rect width='100%' height='100%' fill='%23f4f4f5'/><g transform='translate(328,214)' stroke='%2318181b' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='2' width='60' height='60' rx='4'/><circle cx='20' cy='20' r='6'/><path d='M58 46L42 30 12 60'/></g><text x='50%' y='61%' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='12' font-weight='700' fill='%23a1a1aa'>SCALE RECORD</text></svg>";
 
   useEffect(() => {
     let isMounted = true;
@@ -49,7 +82,7 @@ export default function Page() {
   );
 
   const formatPrice = (product: Product) => (
-    product.pricing?.formatted || (product.price ? `$${Number(product.price).toLocaleString()}` : 'Contact for pricing')
+    product.pricing?.formatted || (product.price ? `$${Number(product.price).toLocaleString()}` : 'Scale quote')
   );
 
   return (
@@ -57,19 +90,33 @@ export default function Page() {
       {/* Hero Section */}
       <section className="scale-hero" aria-labelledby="usp-hero-title">
           <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
-              <div className="usp-mono" style={{ color: 'var(--usp-gray)', marginBottom: '2.5rem' }}>MODULAR_DISTRIBUTION_V1</div>
+              <div className="usp-mono" style={{ color: 'var(--usp-gray)', marginBottom: '2.5rem' }}>{heroEyebrow}</div>
               <h1 className="usp-heading-xl" id="usp-hero-title">
-                The <span>Scale</span> <br/>Protocol.
+                {heroTitle.split('\n').map((line, index, lines) => {
+                  const parts = heroHighlight ? line.split(new RegExp(`(${heroHighlight})`, 'g')) : [line];
+                  return (
+                    <React.Fragment key={`${line}-${index}`}>
+                      {parts.map((part, pIdx) => 
+                        part === heroHighlight ? (
+                          <span key={pIdx}>{part}</span>
+                        ) : (
+                          part
+                        )
+                      )}
+                      {index < lines.length - 1 ? <br /> : null}
+                    </React.Fragment>
+                  );
+                })}
               </h1>
               <p style={{ maxWidth: '600px', margin: '2rem auto 5rem', fontSize: '1.25rem', color: 'var(--usp-gray)', lineHeight: 1.8, fontWeight: 300 }}>
-                  The world&apos;s most efficient high-fidelity distribution node. Modular, precise, and engineered for global multi-vertical commerce.
+                {heroDescription}
               </p>
               <div style={{ display: 'flex', gap: '2rem', justifyContent: 'center', flexWrap: 'wrap' }} className="usp-hero-buttons">
                   <button className="scale-btn-primary" id="usp-btn-explore" onClick={() => document.getElementById('usp-exchange-section')?.scrollIntoView({ behavior: 'smooth' })}>
-                    INITIALIZE NODE
+                    {heroPrimaryCtaLabel}
                   </button>
                   <button style={{ background: 'transparent', border: '1px solid #ddd', padding: '1.5rem 4rem', borderRadius: '6px', fontWeight: 700, fontSize: '0.9rem', cursor: 'pointer', color: 'var(--usp-navy)' }} id="usp-btn-doc" onClick={() => alert('Scale Protocol documentation initialized.')}>
-                    VIEW DOCUMENTATION
+                    {heroSecondaryCtaLabel}
                   </button>
               </div>
           </div>
@@ -80,16 +127,16 @@ export default function Page() {
 
       {/* Protocol Grid Section */}
       <section style={{ padding: '8rem 6% 0', textAlign: 'center' }} aria-labelledby="usp-layers-title">
-          <h2 style={{ fontSize: 'clamp(2.2rem, 6vw, 3.5rem)', fontWeight: 800, letterSpacing: '-1.5px', color: 'var(--usp-navy)', lineHeight: 1.1 }} id="usp-layers-title">Universal Logic Layers.</h2>
+          <h2 style={{ fontSize: 'clamp(2.2rem, 6vw, 3.5rem)', fontWeight: 800, letterSpacing: '-1.5px', color: 'var(--usp-navy)', lineHeight: 1.1 }} id="usp-layers-title">{layersTitle}</h2>
       </section>
       <ProtocolGrid />
 
       {/* Live Listings */}
       <section className="usp-listings-section" id="usp-exchange-section" aria-labelledby="usp-exchange-title">
           <div className="usp-listings-header">
-              <div className="usp-mono" style={{ color: 'var(--usp-gray)', marginBottom: '1.5rem' }}>LIVE_EXCHANGE</div>
-              <h2 id="usp-exchange-title">Standard Listings Exchange.</h2>
-              <p>Live product records synchronized into the Scale Protocol for clean, modular marketplace discovery.</p>
+              <div className="usp-mono" style={{ color: 'var(--usp-gray)', marginBottom: '1.5rem' }}>{collectionEyebrow}</div>
+              <h2 id="usp-exchange-title">{collectionTitle}</h2>
+              <p>{collectionDescription}</p>
           </div>
 
           {loadingListings ? (
@@ -107,15 +154,15 @@ export default function Page() {
               </div>
           ) : listingError ? (
               <div className="usp-listing-state" role="status">
-                  <div className="usp-mono" style={{ color: 'var(--usp-gray)', marginBottom: '1rem' }}>EXCHANGE_OFFLINE</div>
-                  <h3>Listings could not be synchronized.</h3>
+                  <div className="usp-mono" style={{ color: 'var(--usp-gray)', marginBottom: '1rem' }}>{syncOfflineKicker}</div>
+                  <h3>{syncOfflineTitle}</h3>
                   <p>{listingError}</p>
               </div>
           ) : products.length === 0 ? (
               <div className="usp-listing-state" role="status">
-                  <div className="usp-mono" style={{ color: 'var(--usp-gray)', marginBottom: '1rem' }}>EMPTY_EXCHANGE</div>
-                  <h3>No live listings are available yet.</h3>
-                  <p>Add product records in the backend and this exchange will hydrate automatically.</p>
+                  <div className="usp-mono" style={{ color: 'var(--usp-gray)', marginBottom: '1rem' }}>{emptyKicker}</div>
+                  <h3>{emptyTitle}</h3>
+                  <p>{emptyDescription}</p>
               </div>
           ) : (
               <div className="usp-listings-grid">
@@ -125,7 +172,7 @@ export default function Page() {
                               <img src={getProductImage(product)} alt={product.title} />
                           </div>
                           <div className="usp-listing-body">
-                              <div className="usp-mono">NODE_{product.id}</div>
+                              <div className="usp-mono">SCALE_{product.id}</div>
                               <h3>{product.title}</h3>
                               <p>{product.description || 'Verified marketplace listing synchronized into the Scale Protocol.'}</p>
                               <div className="usp-listing-meta">
@@ -144,24 +191,31 @@ export default function Page() {
           <div className="usp-geometric-grid">
               <div style={{ position: 'relative' }}>
                   <div style={{ height: '500px', background: 'white', borderRadius: '12px', border: '1px solid var(--usp-border)', overflow: 'hidden' }}>
-                      <img src="/themes/unifieds/standard/1.webp" alt="Hardware Tech Precision Calibration" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.9 }} />
+                      <img src={midSectionImage} alt="Hardware Tech Precision Calibration" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.9 }} />
                   </div>
                   <div className="usp-geometric-badge" id="usp-badge-calibration"></div>
               </div>
               <div>
-                  <span className="usp-mono" style={{ color: 'var(--usp-navy)' }}>GEOMETRIC_PRECISION</span>
-                  <h2 style={{ fontSize: 'clamp(2.5rem, 7vw, 3.5rem)', fontWeight: 800, marginTop: '2rem', marginBottom: '3rem', letterSpacing: '-2px', color: 'var(--usp-navy)', lineHeight: 1.1 }} id="usp-mid-title">Modular <br/>Efficiency.</h2>
+                  <span className="usp-mono" style={{ color: 'var(--usp-navy)' }}>{midSectionEyebrow}</span>
+                  <h2 style={{ fontSize: 'clamp(2.5rem, 7vw, 3.5rem)', fontWeight: 800, marginTop: '2rem', marginBottom: '3rem', letterSpacing: '-2px', color: 'var(--usp-navy)', lineHeight: 1.1 }} id="usp-mid-title">
+                    {midSectionTitle.split('\n').map((line, index, lines) => (
+                      <React.Fragment key={`${line}-${index}`}>
+                        {line}
+                        {index < lines.length - 1 ? <br /> : null}
+                      </React.Fragment>
+                    ))}
+                  </h2>
                   <p style={{ fontSize: '1.1rem', color: 'var(--usp-gray)', lineHeight: 2, marginBottom: '4rem', fontWeight: 300 }}>
-                      Every node in the Scale Protocol is designed for maximum efficiency. By isolating architectural layers and standardizing data mapping, we achieve a distribution latency that is unmatched in the multi-vertical market.
+                    {midSectionDescription}
                   </p>
                   <div style={{ display: 'flex', gap: '4rem', flexWrap: 'wrap' }} className="usp-stats-row">
                       <div>
-                          <div style={{ fontSize: '2.5rem', fontWeight: 800, color: 'var(--usp-navy)' }}>6ms</div>
-                          <div className="usp-mono" style={{ color: 'var(--usp-gray)', fontSize: '0.65rem' }}>AVERAGE_SYNC</div>
+                          <div style={{ fontSize: '2.5rem', fontWeight: 800, color: 'var(--usp-navy)' }}>{midSectionMetric1Value}</div>
+                          <div className="usp-mono" style={{ color: 'var(--usp-gray)', fontSize: '0.65rem' }}>{midSectionMetric1Label}</div>
                       </div>
                       <div>
-                          <div style={{ fontSize: '2.5rem', fontWeight: 800, color: 'var(--usp-navy)' }}>100%</div>
-                          <div className="usp-mono" style={{ color: 'var(--usp-gray)', fontSize: '0.65rem' }}>ISO_COMPLIANCE</div>
+                          <div style={{ fontSize: '2.5rem', fontWeight: 800, color: 'var(--usp-navy)' }}>{midSectionMetric2Value}</div>
+                          <div className="usp-mono" style={{ color: 'var(--usp-gray)', fontSize: '0.65rem' }}>{midSectionMetric2Label}</div>
                       </div>
                   </div>
               </div>
@@ -170,11 +224,18 @@ export default function Page() {
 
       {/* Final CTA */}
       <section style={{ padding: '15rem 6%', textAlign: 'center' }} aria-labelledby="usp-cta-title">
-          <h2 style={{ fontSize: 'clamp(3rem, 8vw, 5rem)', fontWeight: 800, marginBottom: '4rem', letterSpacing: '-3px', color: 'var(--usp-navy)', lineHeight: 1.1 }} id="usp-cta-title">Initialize the <br/>Standard.</h2>
+          <h2 style={{ fontSize: 'clamp(3rem, 8vw, 5rem)', fontWeight: 800, marginBottom: '4rem', letterSpacing: '-3px', color: 'var(--usp-navy)', lineHeight: 1.1 }} id="usp-cta-title">
+            {ctaTitle.split('\n').map((line, index, lines) => (
+              <React.Fragment key={`${line}-${index}`}>
+                {line}
+                {index < lines.length - 1 ? <br /> : null}
+              </React.Fragment>
+            ))}
+          </h2>
           <p style={{ maxWidth: '600px', margin: '0 auto 6rem', fontSize: '1.25rem', color: 'var(--usp-gray)', fontWeight: 300 }}>
-              Connect your professional node to the Scale Protocol and gain access to the world&apos;s most efficient high-fidelity distribution network.
+            {ctaDescription}
           </p>
-          <button className="scale-btn-primary" id="usp-btn-cta-handshake" onClick={() => alert('Scale Protocol handshakes active.')}>CONNECT SCALE NODE</button>
+          <button className="scale-btn-primary" id="usp-btn-cta-handshake" onClick={() => alert('Scale Protocol handshakes active.')}>{ctaButtonLabel}</button>
       </section>
     </div>
   );

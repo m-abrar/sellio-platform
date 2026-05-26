@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { api } from '@sellio/api-client';
 import type { Property } from '@sellio/types';
 import { RetreatBentoCard, ExperienceStats } from './components';
+import { useThemeContent, useThemeMedia } from '@/components/theme-content/ThemeContentProvider';
 
 interface VacationItem {
   id: number;
@@ -174,14 +175,33 @@ export default function Page() {
       {/* Escape Hero */}
       <section className="pv-hero" aria-labelledby="pv-hero-title">
         <div className="pv-hero-tag">
-          <div className="pv-mono" style={{ marginBottom: '2.5rem' }}>GLOBAL_ESCAPE_REGISTRY_V8</div>
+          <div className="pv-mono" style={{ marginBottom: '2.5rem' }}>{useThemeContent('hero.kicker', 'GLOBAL_ESCAPE_REGISTRY_V8')}</div>
           <h1 className="pv-heading-xl" id="pv-hero-title">
-            Find Your <br/>
-            Infinite <span className="pv-italic" style={{ color: 'var(--pv-azure)' }}>Horizon.</span>
+            {useThemeContent('hero.title', 'Find Your \nInfinite \nHorizon.').split('\n').map((line, i, arr) => {
+              const highlight = useThemeContent('hero.highlight', 'Horizon.');
+              const hasHighlight = line.includes(highlight);
+              return (
+                <React.Fragment key={i}>
+                  {hasHighlight ? (
+                    <>
+                      {line.split(highlight).map((part, pIdx, pArr) => (
+                        <React.Fragment key={pIdx}>
+                          {part}
+                          {pIdx < pArr.length - 1 && <span className="pv-italic" style={{ color: 'var(--pv-azure)' }}>{highlight}</span>}
+                        </React.Fragment>
+                      ))}
+                    </>
+                  ) : (
+                    line
+                  )}
+                  {i < arr.length - 1 && <br />}
+                </React.Fragment>
+              );
+            })}
           </h1>
         </div>
         <p style={{ marginTop: '3rem', fontSize: '1.4rem', color: 'var(--pv-text-muted)', lineHeight: 1.8, maxWidth: '700px', margin: '3rem auto' }}>
-            A curated collection of the world's most significant vacation retreats. Authenticated by our local nodes, enjoyed by global travelers.
+            {useThemeContent('hero.description', "A curated collection of the world's most significant vacation retreats. Authenticated by our local nodes, enjoyed by global travelers.")}
         </p>
       </section>
 
@@ -244,7 +264,7 @@ export default function Page() {
 
       {/* Trust bar */}
       <section className="pv-trust-bar" aria-label="Trust and Protocol Indicators" style={{ marginTop: '5rem', marginBottom: '5rem' }}>
-          {['100%_AUTHENTICATED', 'NO_PROTOCOL_FEES', 'LOCAL_NODE_SUPPORT', 'CRYPTO_SYNC_ENABLED'].map(trust => (
+          {useThemeContent('trust.items', '100%_AUTHENTICATED|NO_PROTOCOL_FEES|LOCAL_NODE_SUPPORT|CRYPTO_SYNC_ENABLED').split('|').map(trust => (
               <div key={trust} className="pv-mono" style={{ fontSize: '0.65rem', color: 'var(--pv-ink)', opacity: 0.6 }}>{trust}</div>
           ))}
       </section>
@@ -268,11 +288,33 @@ export default function Page() {
       <section id="pv-registry-grid" aria-labelledby="pv-grid-title" style={{ marginTop: '5rem' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '4rem', flexWrap: 'wrap', gap: '3rem' }}>
               <div>
-                  <div className="pv-mono" style={{ marginBottom: '1.5rem' }}>CURATED_COLLECTION</div>
-                  <h2 style={{ fontFamily: 'var(--pv-font-serif)', fontSize: 'clamp(3rem, 6vw, 5rem)', fontWeight: 900, letterSpacing: '-2px', color: 'var(--pv-ink)', margin: 0 }} id="pv-grid-title">The <span className="pv-italic">Retreats.</span></h2>
+                  <div className="pv-mono" style={{ marginBottom: '1.5rem' }}>{useThemeContent('grid.kicker', 'CURATED_COLLECTION')}</div>
+                  <h2 style={{ fontFamily: 'var(--pv-font-serif)', fontSize: 'clamp(3rem, 6vw, 5rem)', fontWeight: 900, letterSpacing: '-2px', color: 'var(--pv-ink)', margin: 0 }} id="pv-grid-title">
+                    {useThemeContent('grid.title', 'The \nRetreats.').split('\n').map((line, i, arr) => {
+                      const highlight = useThemeContent('grid.highlight', 'Retreats.');
+                      const hasHighlight = line.includes(highlight);
+                      return (
+                        <React.Fragment key={i}>
+                          {hasHighlight ? (
+                            <>
+                              {line.split(highlight).map((part, pIdx, pArr) => (
+                                <React.Fragment key={pIdx}>
+                                  {part}
+                                  {pIdx < pArr.length - 1 && <span className="pv-italic">{highlight}</span>}
+                                </React.Fragment>
+                              ))}
+                            </>
+                          ) : (
+                            line
+                          )}
+                          {i < arr.length - 1 && <br />}
+                        </React.Fragment>
+                      );
+                    })}
+                  </h2>
               </div>
               <div style={{ maxWidth: '400px', fontSize: '1rem', color: 'var(--pv-text-muted)', lineHeight: 1.8 }}>
-                  Every property in our vacation vertical is manually verified by a local node expert to validate the vibe and view.
+                  {useThemeContent('grid.description', 'Every property in our vacation vertical is manually verified by a local node expert to validate the vibe and view.')}
               </div>
           </div>
 
@@ -326,20 +368,42 @@ export default function Page() {
       {/* Philosophy / Value Prop */}
       <section style={{ marginTop: '12rem', display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '8rem', alignItems: 'center' }} className="pv-philosophy-grid" aria-labelledby="pv-phil-title">
           <div>
-              <div className="pv-mono" style={{ marginBottom: '2.5rem' }}>THE_GETAWAY_PROTOCOL</div>
-              <h2 className="pv-heading-xl" style={{ fontSize: 'clamp(2.5rem, 5vw, 4.5rem)', marginBottom: '4rem', color: 'var(--pv-ink)' }} id="pv-phil-title">The Art of <br/>the <span className="pv-italic" style={{ color: 'var(--pv-coral)' }}>Escape.</span></h2>
+              <div className="pv-mono" style={{ marginBottom: '2.5rem' }}>{useThemeContent('philosophy.kicker', 'THE_GETAWAY_PROTOCOL')}</div>
+              <h2 className="pv-heading-xl" style={{ fontSize: 'clamp(2.5rem, 5vw, 4.5rem)', marginBottom: '4rem', color: 'var(--pv-ink)' }} id="pv-phil-title">
+                {useThemeContent('philosophy.title', 'The Art of \nthe \nEscape.').split('\n').map((line, i, arr) => {
+                  const highlight = useThemeContent('philosophy.highlight', 'Escape.');
+                  const hasHighlight = line.includes(highlight);
+                  return (
+                    <React.Fragment key={i}>
+                      {hasHighlight ? (
+                        <>
+                          {line.split(highlight).map((part, pIdx, pArr) => (
+                            <React.Fragment key={pIdx}>
+                              {part}
+                              {pIdx < pArr.length - 1 && <span className="pv-italic" style={{ color: 'var(--pv-coral)' }}>{highlight}</span>}
+                            </React.Fragment>
+                          ))}
+                        </>
+                      ) : (
+                        line
+                      )}
+                      {i < arr.length - 1 && <br />}
+                    </React.Fragment>
+                  );
+                })}
+              </h2>
               <p style={{ fontSize: '1.25rem', color: 'var(--pv-text-muted)', lineHeight: 2, marginBottom: '6rem' }}>
-                  We do not just check the amenities; we validate the architectural integrity and local significance of every vacation node.
+                  {useThemeContent('philosophy.description', 'We do not just check the amenities; we validate the architectural integrity and local significance of every vacation node.')}
               </p>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem' }} className="pv-stats-grid">
-                  <ExperienceStats value="1,200+" label="VERIFIED_NODES" />
-                  <ExperienceStats value="48h" label="AVG_RESPONSE" />
+                  <ExperienceStats value={useThemeContent('philosophy.stat_1_value', '1,200+')} label={useThemeContent('philosophy.stat_1_label', 'VERIFIED_NODES')} />
+                  <ExperienceStats value={useThemeContent('philosophy.stat_2_value', '48h')} label={useThemeContent('philosophy.stat_2_label', 'AVG_RESPONSE')} />
               </div>
           </div>
           <div style={{ position: 'relative' }} className="pv-phil-img-wrapper">
               <div style={{ height: '700px', background: 'var(--pv-cloud)', borderRadius: 'var(--pv-radius)', overflow: 'hidden', padding: '1.5rem', border: '1px solid var(--pv-border)' }} className="pv-phil-img-container">
                 <img 
-                  src="https://images.unsplash.com/photo-1525609004556-c46c7d6cf0a3?q=80&w=600" 
+                  src={useThemeMedia('philosophy.image', 'https://images.unsplash.com/photo-1525609004556-c46c7d6cf0a3?q=80&w=600')} 
                   alt="Coastal Getaway Horizon Framework" 
                   style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '24px' }} 
                 />
@@ -363,7 +427,7 @@ export default function Page() {
                   lineHeight: 1.3,
                   boxShadow: '0 15px 30px rgba(0, 119, 255, 0.2)'
               }} className="pv-floating-badge">
-                  AUTHENTICATED LOCAL RETREAT
+                  {useThemeContent('philosophy.badge_label', 'AUTHENTICATED LOCAL RETREAT')}
               </div>
           </div>
       </section>
@@ -371,11 +435,30 @@ export default function Page() {
       {/* Final CTA */}
       <section style={{ marginTop: '12rem', padding: '10rem 4rem', textAlign: 'center', background: 'linear-gradient(to top, #f0f7ff, #fff)', borderRadius: 'var(--pv-radius) var(--pv-radius) 0 0', border: '1px solid var(--pv-border)' }} className="pv-cta-box" aria-labelledby="pv-cta-title">
           <h2 style={{ fontFamily: 'var(--pv-font-serif)', fontSize: 'clamp(2.5rem, 6vw, 5rem)', fontWeight: 900, marginBottom: '5rem', letterSpacing: '-3px', lineHeight: 1.1, color: 'var(--pv-ink)' }} id="pv-cta-title">
-              Your Next Escape <br/>
-              is <span className="pv-italic" style={{ color: 'var(--pv-coral)' }}>One Click Away.</span>
+            {useThemeContent('cta.title', 'Your Next Escape \nis \nOne Click Away.').split('\n').map((line, i, arr) => {
+              const highlight = useThemeContent('cta.highlight', 'One Click Away.');
+              const hasHighlight = line.includes(highlight);
+              return (
+                <React.Fragment key={i}>
+                  {hasHighlight ? (
+                    <>
+                      {line.split(highlight).map((part, pIdx, pArr) => (
+                        <React.Fragment key={pIdx}>
+                          {part}
+                          {pIdx < pArr.length - 1 && <span className="pv-italic" style={{ color: 'var(--pv-coral)' }}>{highlight}</span>}
+                        </React.Fragment>
+                      ))}
+                    </>
+                  ) : (
+                    line
+                  )}
+                  {i < arr.length - 1 && <br />}
+                </React.Fragment>
+              );
+            })}
           </h2>
           <button className="pv-btn-primary" style={{ padding: '2.5rem 8rem', fontSize: '1.35rem' }} id="pv-btn-cta-auth" onClick={() => document.getElementById('pv-registry-grid')?.scrollIntoView({ behavior: 'smooth' })}>
-              SECURE YOUR RETREAT
+              {useThemeContent('cta.button_label', 'SECURE YOUR RETREAT')}
           </button>
       </section>
     </div>

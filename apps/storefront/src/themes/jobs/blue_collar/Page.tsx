@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { api } from '@sellio/api-client';
 import type { JobListing } from '@sellio/types';
 import { BlueCollarHeader, BlueCollarJobCard, BlueCollarFooter } from './components';
+import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 
 function formatTimeAgo(dateStr?: string | null) {
   if (!dateStr) {
@@ -38,6 +39,17 @@ function mapJobToCard(job: JobListing) {
 }
 
 export default function Page() {
+  const heroTitle = useThemeContent('hero.title', 'Hard Work \nPays Off.');
+  const heroDescription = useThemeContent('hero.description', 'Find high-paying jobs in construction, manufacturing, transportation, and skilled trades. No desk required.');
+
+  const tradesTitle = useThemeContent('trades.title', 'Browse By Trade');
+  const jobsTitle = useThemeContent('jobs.title', 'Latest Openings');
+  const jobsLoadMore = useThemeContent('jobs.load_more_label', 'Load More Jobs');
+
+  const ctaTitle = useThemeContent('cta.title', 'Need Workers Fast?');
+  const ctaDescription = useThemeContent('cta.description', 'Access our database of over 50,000 certified tradespeople ready to start tomorrow.');
+  const ctaButton = useThemeContent('cta.button_label', 'Post Your Job Now');
+
   const [jobs, setJobs] = useState<JobListing[]>([]);
   const [loadingJobs, setLoadingJobs] = useState(true);
   const [jobError, setJobError] = useState<string | null>(null);
@@ -83,8 +95,15 @@ export default function Page() {
       <section className="jbc-hero" id="jbc-hero-section" aria-labelledby="jbc-hero-title">
         <div className="jbc-hero-overlay"></div>
         <div className="jbc-hero-content">
-            <h1 className="jbc-hero-title" id="jbc-hero-title">Hard Work <span>Pays Off.</span></h1>
-            <p className="jbc-hero-subtitle">Find high-paying jobs in construction, manufacturing, transportation, and skilled trades. No desk required.</p>
+            <h1 className="jbc-hero-title" id="jbc-hero-title">
+              {heroTitle.includes('Pays Off.') ? (
+                <>
+                  {heroTitle.replace('Pays Off.', '')}
+                  <span>Pays Off.</span>
+                </>
+              ) : heroTitle}
+            </h1>
+            <p className="jbc-hero-subtitle">{heroDescription}</p>
 
             <div className="jbc-search-box" aria-label="Search Filter Bar">
                 <input type="text" className="jbc-search-input" placeholder="Job Title or Trade (e.g., Welder)" aria-label="Trade Search Input" />
@@ -97,14 +116,14 @@ export default function Page() {
 
       {/* Categories */}
       <section className="jbc-section" id="jbc-trades-section" style={{ backgroundColor: 'white' }} aria-labelledby="jbc-trades-title">
-          <h2 className="jbc-section-title" id="jbc-trades-title">Browse By Trade</h2>
+          <h2 className="jbc-section-title" id="jbc-trades-title">{tradesTitle}</h2>
           <div className="jbc-trades-grid">
               {['Construction', 'Manufacturing', 'Transportation', 'Maintenance', 'Warehousing', 'Energy'].map(trade => (
-                  <a href="#" key={trade} className="jbc-trade-link"
-                     onClick={(e) => { e.preventDefault(); alert(`Filtering jobs for ${trade}...`); }}
-                  >
-                      {trade}
-                  </a>
+                   <a href="#" key={trade} className="jbc-trade-link"
+                      onClick={(e) => { e.preventDefault(); alert(`Filtering jobs for ${trade}...`); }}
+                   >
+                       {trade}
+                   </a>
               ))}
           </div>
       </section>
@@ -112,7 +131,7 @@ export default function Page() {
       {/* Job Grid */}
       <section className="jbc-section" id="jobs" aria-labelledby="jbc-jobs-title">
           <div className="jbc-jobs-header">
-              <h2 className="jbc-section-title" id="jbc-jobs-title" style={{ marginBottom: 0 }}>Latest Openings</h2>
+              <h2 className="jbc-section-title" id="jbc-jobs-title" style={{ marginBottom: 0 }}>{jobsTitle}</h2>
               <select className="jbc-sort-select" aria-label="Sort Jobs Select">
                   <option>Most Recent</option>
                   <option>Highest Wage</option>
@@ -154,15 +173,15 @@ export default function Page() {
           </div>
 
           <div style={{ textAlign: 'center', marginTop: '3rem' }}>
-              <button className="jbc-btn jbc-btn-secondary" onClick={() => alert('Loading more blue-collar jobs...')}>Load More Jobs</button>
+              <button className="jbc-btn jbc-btn-secondary" onClick={() => alert('Loading more blue-collar jobs...')}>{jobsLoadMore}</button>
           </div>
       </section>
 
       {/* CTA */}
       <section className="jbc-cta" id="jbc-employers-section">
-          <h2>Need Workers Fast?</h2>
-          <p style={{ fontSize: '1.2rem', marginBottom: '2rem', fontWeight: 500 }}>Access our database of over 50,000 certified tradespeople ready to start tomorrow.</p>
-          <button className="jbc-btn jbc-btn-primary" style={{ fontSize: '1.25rem', padding: '1rem 3rem' }} onClick={() => alert('Employer onboarding portal...')}>Post Your Job Now</button>
+          <h2>{ctaTitle}</h2>
+          <p style={{ fontSize: '1.2rem', marginBottom: '2rem', fontWeight: 500 }}>{ctaDescription}</p>
+          <button className="jbc-btn jbc-btn-primary" style={{ fontSize: '1.25rem', padding: '1rem 3rem' }} onClick={() => alert('Employer onboarding portal...')}>{ctaButton}</button>
       </section>
 
       <BlueCollarFooter />

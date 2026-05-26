@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { api } from '@sellio/api-client';
 import type { Property } from '@sellio/types';
 import { UnifiedPropCard, MarketMetricsHUD } from './components';
+import { useThemeContent, useThemeMedia } from '@/components/theme-content/ThemeContentProvider';
 
 const fallbackImages = [
   '/themes/properties/unified/1.webp',
@@ -82,18 +83,36 @@ export default function Page() {
       {/* Universal Hero */}
       <section className="uh-hero" aria-labelledby="uh-hero-title">
         <div>
-          <div className="uh-mono" style={{ marginBottom: '2.5rem' }}>UNIVERSAL_PROPERTY_PROTOCOL_V8</div>
+          <div className="uh-mono" style={{ marginBottom: '2.5rem' }}>{useThemeContent('hero.kicker', 'UNIVERSAL_PROPERTY_PROTOCOL_V8')}</div>
           <h1 className="uh-heading-xl" id="uh-hero-title">
-            The Authoritative <br/>
-            Distribution <br/>
-            <span style={{ color: 'var(--uh-blue)' }}>Node.</span>
+            {useThemeContent('hero.title', 'The Authoritative \nDistribution \nNode.').split('\n').map((line, i, arr) => {
+              const highlight = useThemeContent('hero.highlight', 'Node.');
+              const hasHighlight = line.includes(highlight);
+              return (
+                <React.Fragment key={i}>
+                  {hasHighlight ? (
+                    <>
+                      {line.split(highlight).map((part, pIdx, pArr) => (
+                        <React.Fragment key={pIdx}>
+                          {part}
+                          {pIdx < pArr.length - 1 && <span style={{ color: 'var(--uh-blue)' }}>{highlight}</span>}
+                        </React.Fragment>
+                      ))}
+                    </>
+                  ) : (
+                    line
+                  )}
+                  {i < arr.length - 1 && <br />}
+                </React.Fragment>
+              );
+            })}
           </h1>
           <p style={{ marginTop: '3rem', fontSize: '1.25rem', color: 'var(--uh-slate)', lineHeight: 1.8, maxWidth: '600px' }}>
-            A unified platform for residential, commercial, and industrial property distribution. High-fidelity data, institutional-grade verification, and global accessibility.
+            {useThemeContent('hero.description', 'A unified platform for residential, commercial, and industrial property distribution. High-fidelity data, institutional-grade verification, and global accessibility.')}
           </p>
           <div style={{ marginTop: '4rem', display: 'flex', gap: '2.5rem', flexWrap: 'wrap' }} className="uh-hero-buttons">
             <button className="uh-btn-primary" id="uh-btn-explore" onClick={() => document.getElementById('uh-registry-grid')?.scrollIntoView({ behavior: 'smooth' })}>
-              Search All Assets
+              {useThemeContent('hero.primary_cta_label', 'Search All Assets')}
             </button>
             <button style={{
                 background: 'transparent',
@@ -105,12 +124,12 @@ export default function Page() {
                 cursor: 'pointer',
                 transition: 'all 0.3s ease'
             }} id="uh-btn-list" onClick={() => alert('Registering new properties node. Developer active.')}>
-                List Asset
+                {useThemeContent('hero.secondary_cta_label', 'List Asset')}
             </button>
           </div>
         </div>
         <div className="uh-hero-img-wrapper">
-          <img src="/themes/properties/unified/1.webp" alt="Universal Corporate Hub Property Layout" className="uh-hero-img" />
+          <img src={useThemeMedia('hero.image', '/themes/properties/unified/1.webp')} alt="Universal Corporate Hub Property Layout" className="uh-hero-img" />
         </div>
       </section>
 
@@ -123,11 +142,18 @@ export default function Page() {
       <section id="uh-registry-grid" aria-labelledby="uh-grid-title">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '6rem', flexWrap: 'wrap', gap: '3rem' }}>
               <div>
-                  <div className="uh-mono" style={{ marginBottom: '1.5rem' }}>MASTER_REGISTRY</div>
-                  <h2 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: 900, letterSpacing: '-2px', lineHeight: 1.1, color: 'var(--uh-indigo)' }} id="uh-grid-title">High-Fidelity <br/>Inventory.</h2>
+                  <div className="uh-mono" style={{ marginBottom: '1.5rem' }}>{useThemeContent('grid.kicker', 'MASTER_REGISTRY')}</div>
+                  <h2 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: 900, letterSpacing: '-2px', lineHeight: 1.1, color: 'var(--uh-indigo)' }} id="uh-grid-title">
+                    {useThemeContent('grid.title', 'High-Fidelity \nInventory.').split('\n').map((line, i, arr) => (
+                      <React.Fragment key={i}>
+                        {line}
+                        {i < arr.length - 1 && <br />}
+                      </React.Fragment>
+                    ))}
+                  </h2>
               </div>
               <div style={{ maxWidth: '400px', fontSize: '0.95rem', color: 'var(--uh-slate)', lineHeight: 1.8 }}>
-                  Our unified protocol synchronizes metadata from multiple property verticals into a single authoritative and searchable catalog registry node.
+                  {useThemeContent('grid.description', 'Our unified protocol synchronizes metadata from multiple property verticals into a single authoritative and searchable catalog registry node.')}
               </div>
           </div>
 
@@ -142,15 +168,15 @@ export default function Page() {
               ))
             ) : propertyError ? (
               <div className="prop-listing-state">
-                <div className="prop-listing-kicker">Property Sync Offline</div>
-                <h3>High-fidelity inventory could not be loaded.</h3>
+                <div className="prop-listing-kicker">{useThemeContent('offline.kicker', 'Property Sync Offline')}</div>
+                <h3>{useThemeContent('offline.title', 'High-fidelity inventory could not be loaded.')}</h3>
                 <p>{propertyError}</p>
               </div>
             ) : properties.length === 0 ? (
               <div className="prop-listing-state">
-                <div className="prop-listing-kicker">Empty Property Registry</div>
-                <h3>No live properties are published yet.</h3>
-                <p>Add property records in the backend and this unified grid will hydrate automatically.</p>
+                <div className="prop-listing-kicker">{useThemeContent('empty.kicker', 'Empty Property Registry')}</div>
+                <h3>{useThemeContent('empty.title', 'No live properties are published yet.')}</h3>
+                <p>{useThemeContent('empty.description', 'Add property records in the backend and this unified grid will hydrate automatically.')}</p>
               </div>
             ) : (
               properties.slice(0, 8).map((property, index) => {
@@ -168,16 +194,23 @@ export default function Page() {
       {/* Scale CTA */}
       <section style={{ marginTop: '12rem', padding: '8rem 4rem', background: 'var(--uh-indigo)', color: 'white', borderRadius: '8px', display: 'flex', flexDirection: 'column', gap: '3rem', position: 'relative', overflow: 'hidden' }} className="uh-cta-box" aria-labelledby="uh-cta-title">
           <div style={{ maxWidth: '800px', zIndex: 2 }}>
-              <div className="uh-mono" style={{ color: 'var(--uh-blue)', marginBottom: '2.5rem' }}>INSTITUTIONAL_SCALE</div>
-              <h2 style={{ fontSize: 'clamp(3rem, 7vw, 5rem)', fontWeight: 900, letterSpacing: '-3px', marginBottom: '3rem', lineHeight: 1 }} id="uh-cta-title">Scale Your <br/>Portfolio Globally.</h2>
+              <div className="uh-mono" style={{ color: 'var(--uh-blue)', marginBottom: '2.5rem' }}>{useThemeContent('cta.kicker', 'INSTITUTIONAL_SCALE')}</div>
+              <h2 style={{ fontSize: 'clamp(3rem, 7vw, 5rem)', fontWeight: 900, letterSpacing: '-3px', marginBottom: '3rem', lineHeight: 1 }} id="uh-cta-title">
+                {useThemeContent('cta.title', 'Scale Your \nPortfolio Globally.').split('\n').map((line, i, arr) => (
+                  <React.Fragment key={i}>
+                    {line}
+                    {i < arr.length - 1 && <br />}
+                  </React.Fragment>
+                ))}
+              </h2>
               <p style={{ fontSize: '1.25rem', opacity: 0.7, lineHeight: 1.8 }}>
-                  Our unified protocol allows for cross-vertical property management and distribution. Deploy your assets across the entire Sellio ecosystem with 100% nodal integrity.
+                  {useThemeContent('cta.description', 'Our unified protocol allows for cross-vertical property management and distribution. Deploy your assets across the entire Sellio ecosystem with 100% nodal integrity.')}
               </p>
           </div>
 
           <div style={{ zIndex: 2 }}>
             <button className="uh-btn-primary" style={{ padding: '2rem 7rem', fontSize: '1.15rem' }} id="uh-btn-cta-initialize" onClick={() => alert('Authentication and master node allocation protocol running.')}>
-                Initialize Master Node
+                {useThemeContent('cta.button_label', 'Initialize Master Node')}
             </button>
           </div>
 

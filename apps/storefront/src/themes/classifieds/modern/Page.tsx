@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { api } from '@sellio/api-client';
 import type { ClassifiedListing, Category } from '@sellio/types';
 import { ModernHeader, ModernCard, ModernFooter } from './components';
+import { useThemeContent, useThemeMedia } from '@/components/theme-content/ThemeContentProvider';
 
 
 // Premium high-fidelity Classifieds Modern fallback listings matching ClassifiedListing schema
@@ -349,6 +350,34 @@ const ClassifiedShimmerGrid = () => (
 
 export default function Page() {
   const router = useRouter();
+  const heroTitle = useThemeContent('hero.title', 'Discover the best things to buy, sell, and trade.');
+  const heroSearchPlaceholder = useThemeContent('hero.search_placeholder', 'What are you looking for today? (e.g. camera, table, jacket)');
+  const heroSearchButton = useThemeContent('hero.search_button', 'Search');
+  const diagnosticsTitle = useThemeContent('diagnostics.title', 'DATABASE OFFLINE: Resilient catalog backups activated');
+  const diagnosticsTrace = useThemeContent('diagnostics.trace', 'Axios connection timeout. Displaying live catalog backups.');
+  const feedTitle = useThemeContent('feed.title', 'Fresh Recommendations');
+  const emptyTitle = useThemeContent('empty.title', 'No Listings Matching Search');
+  const emptyDescription = useThemeContent('empty.description', "We couldn't find items that match your tags or keyword search query.");
+  const emptyButton = useThemeContent('empty.button_label', 'Reset Settings');
+  const loadMoreLabel = useThemeContent('collection.load_more_label', 'Load More Items');
+  const loadingMoreLabel = useThemeContent('collection.loading_more_label', 'Retrieving listings...');
+  const messageSellerLabel = useThemeContent('quickview.message_seller_label', 'Message Seller');
+  const viewDetailsLabel = useThemeContent('quickview.view_details_label', 'View Full Details');
+
+  // Split title to preserve spans
+  const renderHeroTitle = () => {
+    const parts = heroTitle.split(/(buy|sell)/i);
+    return parts.map((part, index) => {
+      const lowerPart = part.toLowerCase();
+      if (lowerPart === 'buy') {
+        return <span key={index} className="cm-text-orange">{part}</span>;
+      }
+      if (lowerPart === 'sell') {
+        return <span key={index} className="cm-text-cyan">{part}</span>;
+      }
+      return <React.Fragment key={index}>{part}</React.Fragment>;
+    });
+  };
 
   const getThemeLink = (path: string) => {
     if (typeof window !== 'undefined') {
@@ -540,10 +569,10 @@ export default function Page() {
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--cm-primary-orange)', fontWeight: 'bold', fontSize: '1rem', marginBottom: '0.5rem' }}>
             <span style={{ display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--cm-primary-orange)', animation: 'pulse 1.5s infinite' }}></span>
-            DATABASE OFFLINE: Resilient catalog backups activated
+            {diagnosticsTitle}
           </div>
           <div style={{ color: 'var(--cm-text-dark)', fontSize: '0.8rem', lineHeight: '1.6' }}>
-            <strong>DIAGNOSTICS:</strong> {errorTrace || 'Axios connection timeout. Displaying live catalog backups.'}
+            <strong>DIAGNOSTICS:</strong> {errorTrace || diagnosticsTrace}
           </div>
         </div>
       )}
@@ -552,7 +581,7 @@ export default function Page() {
       <section className="cm-hero">
         <div className="cm-hero-content">
           <h1 className="cm-hero-title">
-            Discover the best things to <span className="cm-text-orange">buy</span>, <span className="cm-text-cyan">sell</span>, and trade.
+            {renderHeroTitle()}
           </h1>
           
           {/* Custom Search Box inside Hero */}
@@ -560,7 +589,7 @@ export default function Page() {
             <input 
               type="text" 
               className="cm-search-input" 
-              placeholder="What are you looking for today? (e.g. camera, table, jacket)" 
+              placeholder={heroSearchPlaceholder} 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -568,7 +597,7 @@ export default function Page() {
               className="cm-btn cm-btn-primary" 
               style={{ margin: '0.25rem', padding: '0.65rem 2rem' }}
             >
-              Search
+              {heroSearchButton}
             </button>
           </div>
         </div>
@@ -592,7 +621,7 @@ export default function Page() {
         
         {/* Title and sorting controls */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
-          <h2 className="cm-section-title">Fresh Recommendations</h2>
+          <h2 className="cm-section-title">{feedTitle}</h2>
           
           <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
             <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--cm-text-muted)', textTransform: 'uppercase' }}>Sort by:</span>
@@ -614,9 +643,9 @@ export default function Page() {
         ) : filteredItems.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '5rem 1rem', background: '#ffffff', borderRadius: '16px', border: '1.5px solid var(--cm-border)' }}>
             <span style={{ fontSize: '3rem', display: 'block', marginBottom: '1rem' }}>🔍</span>
-            <h3 style={{ fontWeight: 800, marginBottom: '0.5rem' }}>No Listings Matching Search</h3>
-            <p style={{ color: 'var(--cm-text-muted)', maxWidth: '400px', margin: '0 auto 1.5rem', fontSize: '0.9rem' }}>We couldn't find items that match your tags or keyword search query.</p>
-            <button className="cm-btn cm-btn-primary" onClick={resetFilters}>Reset Settings</button>
+            <h3 style={{ fontWeight: 800, marginBottom: '0.5rem' }}>{emptyTitle}</h3>
+            <p style={{ color: 'var(--cm-text-muted)', maxWidth: '400px', margin: '0 auto 1.5rem', fontSize: '0.9rem' }}>{emptyDescription}</p>
+            <button className="cm-btn cm-btn-primary" onClick={resetFilters}>{emptyButton}</button>
           </div>
         ) : (
           <div className="cm-grid">
@@ -650,7 +679,7 @@ export default function Page() {
               disabled={loadingMore}
               style={{ backgroundColor: 'white', border: '2px solid var(--cm-border)', color: 'var(--cm-text-dark)', minWidth: '200px', justifyContent: 'center' }}
             >
-              {loadingMore ? 'Retrieving listings...' : 'Load More Items'}
+              {loadingMore ? loadingMoreLabel : loadMoreLabel}
             </button>
           </div>
         )}
@@ -685,14 +714,14 @@ export default function Page() {
                 style={{ backgroundColor: '#f1f5f9', color: 'var(--cm-text-dark)', fontSize: '0.8rem' }}
                 onClick={() => alert(`✉️ Messenger initiated: Secure chat launched with seller regarding "${quickViewItem.title}"`)}
               >
-                Message Seller
+                {messageSellerLabel}
               </button>
               <button 
                 className="cm-btn cm-btn-primary" 
                 style={{ fontSize: '0.8rem' }}
                 onClick={() => router.push(getThemeLink(`/product/${quickViewItem.slug}`))}
               >
-                View Full Details
+                {viewDetailsLabel}
               </button>
             </div>
 

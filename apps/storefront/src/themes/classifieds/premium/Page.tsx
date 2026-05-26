@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { api } from '@sellio/api-client';
 import type { ClassifiedListing, Category } from '@sellio/types';
 import { PremiumHeader, PremiumCard, PremiumFooter } from './components';
+import { useThemeContent, useThemeMedia } from '@/components/theme-content/ThemeContentProvider';
 
 interface OpportunityItem {
   id: number;
@@ -451,6 +452,19 @@ const translateOpportunity = (item: ClassifiedListing): OpportunityItem => {
 
 export default function Page() {
   const router = useRouter();
+  const diagnosticsTitle = useThemeContent('diagnostics.title', '🛰️ VETTED NETWORK DIAGNOSTICS & RESILIENCE PANEL');
+  const diagnosticsDescription = useThemeContent('diagnostics.description', 'Status: Local Database Node Offline. Activating Vetted sovereign proxy backup assets gracefully.');
+  const featuredHeaderTitle = useThemeContent('featured_header.title', '💎 Featured Investment Opportunities');
+  const featuredHeaderEmpty = useThemeContent('featured_header.empty', 'No featured opportunities match your refinements.');
+  const membershipTitle = useThemeContent('membership.title', 'UNLOCK PREMIUM PRIVATE OPPORTUNITIES');
+  const membershipSubtitle = useThemeContent('membership.subtitle', 'Gain verified access to institutional-grade M&A prospectuses, audit-vetted tax returns, and coordinate direct negotiations with certified investment brokers.');
+  const membershipButtonLabel = useThemeContent('membership.button_label', 'Explore Membership Tiers');
+  const toolbarTitleLabel = useThemeContent('toolbar.title_label', 'Available Listings');
+  const toolbarOpportunitiesSuffix = useThemeContent('toolbar.opportunities_suffix', 'opportunities');
+  const toolbarGridViewLabel = useThemeContent('toolbar.grid_view_label', 'Grid View');
+  const toolbarListViewLabel = useThemeContent('toolbar.list_view_label', 'List View');
+  const emptyTitle = useThemeContent('empty.title', 'No Private Listings Found');
+  const emptyDescription = useThemeContent('empty.description', 'Try clearing price ranges or location strings to expand search bounds.');
 
   // Stateful interactive variables
   const [opportunities, setOpportunities] = useState<OpportunityItem[]>([]);
@@ -712,10 +726,10 @@ export default function Page() {
           {useFallback && (
             <div className="cp-resilience-panel">
               <div className="cp-resilience-header">
-                🛰️ VETTED NETWORK DIAGNOSTICS & RESILIENCE PANEL
+                {diagnosticsTitle}
               </div>
               <div style={{ fontWeight: 600 }}>
-                Status: Local Database Node Offline. Activating Vetted sovereign proxy backup assets gracefully.
+                {diagnosticsDescription}
               </div>
               <div className="cp-resilience-trace">
                 {errorTrace || 'api.getClassifieds returned empty listings feed.'}
@@ -725,7 +739,7 @@ export default function Page() {
           
           {/* Featured Header with linear gradient and subtle shadow */}
           <div className="cp-featured-header">
-            💎 Featured Investment Opportunities
+            {featuredHeaderTitle}
           </div>
 
           {loading ? (
@@ -746,7 +760,7 @@ export default function Page() {
               ))}
             </div>
           ) : featuredItems.length === 0 ? (
-            <p style={{ color: '#64748b', fontStyle: 'italic', marginBottom: '3rem' }}>No featured opportunities match your refinements.</p>
+            <p style={{ color: '#64748b', fontStyle: 'italic', marginBottom: '3rem' }}>{featuredHeaderEmpty}</p>
           ) : (
             <div className="cp-grid-featured">
               {featuredItems.map((item) => (
@@ -766,22 +780,22 @@ export default function Page() {
 
           {/* Locked Premium Gold Frame Membership Banner */}
           <section className="cp-banner">
-            <h3 className="cp-banner-title">UNLOCK PREMIUM PRIVATE OPPORTUNITIES</h3>
+            <h3 className="cp-banner-title">{membershipTitle}</h3>
             <p className="cp-banner-subtitle">
-              Gain verified access to institutional-grade M&A prospectuses, audit-vetted tax returns, and coordinate direct negotiations with certified investment brokers.
+              {membershipSubtitle}
             </p>
             <button 
               className="cp-banner-btn"
               onClick={() => alert("🔑 Premium Concierge: Exploring premium advisory fee charts and corporate investor vetting tiers.")}
             >
-              Explore Membership Tiers
+              {membershipButtonLabel}
             </button>
           </section>
 
           {/* Grid / List Toolbar Header */}
           <div className="cp-toolbar">
             <h4 className="cp-toolbar-title">
-              Available Listings ({loading ? '...' : ordinaryItems.length} opportunities)
+              {toolbarTitleLabel} ({loading ? '...' : ordinaryItems.length} {toolbarOpportunitiesSuffix})
             </h4>
             
             <div className="cp-toggle-group">
@@ -789,13 +803,13 @@ export default function Page() {
                 className={`cp-toggle-btn ${viewMode === 'grid' ? 'cp-active' : ''}`}
                 onClick={() => setViewMode('grid')}
               >
-                Grid View
+                {toolbarGridViewLabel}
               </button>
               <button 
                 className={`cp-toggle-btn ${viewMode === 'list' ? 'cp-active' : ''}`}
                 onClick={() => setViewMode('list')}
               >
-                List View
+                {toolbarListViewLabel}
               </button>
             </div>
           </div>
@@ -822,8 +836,8 @@ export default function Page() {
           ) : ordinaryItems.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '4rem 1rem', background: '#f8fafc', borderRadius: '12px', border: '1px solid var(--cp-border)' }}>
               <span style={{ fontSize: '2.5rem', display: 'block', marginBottom: '0.8rem' }}>💼</span>
-              <h5 style={{ fontWeight: 800 }}>No Private Listings Found</h5>
-              <p style={{ color: '#64748b', fontSize: '0.85rem' }}>Try clearing price ranges or location strings to expand search bounds.</p>
+              <h5 style={{ fontWeight: 800 }}>{emptyTitle}</h5>
+              <p style={{ color: '#64748b', fontSize: '0.85rem' }}>{emptyDescription}</p>
             </div>
           ) : (
             <div className={viewMode === 'grid' ? 'cp-grid-all' : 'cp-list-view'}>

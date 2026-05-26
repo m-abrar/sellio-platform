@@ -5,6 +5,7 @@ import { api } from '@sellio/api-client';
 import type { Property } from '@sellio/types';
 import { StructureGrid, SkylineSyncBar } from './components';
 import { scrollToSection } from './utils';
+import { useThemeContent, useThemeMedia } from '@/components/theme-content/ThemeContentProvider';
 
 const icons = ['🏙️', '🏢', '🏗️', '🏬', '🏛️', '🏘️'];
 const fallbackImages = [
@@ -85,16 +86,38 @@ export default function Page() {
   }, []);
 
   const structureItems = properties.slice(0, 6).map(mapPropertyToStructure);
-  const heroImage = properties[0] ? getPropertyImage(properties[0], 0) : fallbackImages[0];
+  const heroImage = useThemeMedia('hero.image', properties[0] ? getPropertyImage(properties[0], 0) : fallbackImages[0]);
 
   return (
     <div>
       <section className="urban-hero" id="urban-hero-section">
           <div className="urban-hero-copy">
-              <div className="urban-hero-kicker">ARCHITECTURAL_DISTRIBUTION_V8</div>
-              <h1>The <span>Urban</span> <br/>Authority.</h1>
+              <div className="urban-hero-kicker">{useThemeContent('hero.kicker', 'ARCHITECTURAL_DISTRIBUTION_V8')}</div>
+              <h1>
+                {useThemeContent('hero.title', 'The \nAuthority.').split('\n').map((line, i, arr) => {
+                  const highlight = useThemeContent('hero.highlight', 'Urban');
+                  const hasHighlight = line.includes(highlight);
+                  return (
+                    <React.Fragment key={i}>
+                      {hasHighlight ? (
+                        <>
+                          {line.split(highlight).map((part, pIdx, pArr) => (
+                            <React.Fragment key={pIdx}>
+                              {part}
+                              {pIdx < pArr.length - 1 && <span>{highlight}</span>}
+                            </React.Fragment>
+                          ))}
+                        </>
+                      ) : (
+                        line
+                      )}
+                      {i < arr.length - 1 && <br />}
+                    </React.Fragment>
+                  );
+                })}
+              </h1>
               <p className="urban-hero-description">
-                  The world's most advanced high-fidelity urban distribution node. Precision architectural engineering for the modern global skyline.
+                  {useThemeContent('hero.description', "The world's most advanced high-fidelity urban distribution node. Precision architectural engineering for the modern global skyline.")}
               </p>
               <div className="urban-hero-actions">
                   <button
@@ -102,14 +125,14 @@ export default function Page() {
                     className="urban-btn-primary"
                     onClick={() => scrollToSection('urban-structure-grid')}
                   >
-                    EXPLORE_SKYLINE
+                    {useThemeContent('hero.primary_cta_label', 'EXPLORE_SKYLINE')}
                   </button>
                   <button
                     type="button"
                     className="urban-btn-secondary"
                     onClick={() => scrollToSection('urban-precision-section')}
                   >
-                    STRUCTURAL_SPEC
+                    {useThemeContent('hero.secondary_cta_label', 'STRUCTURAL_SPEC')}
                   </button>
               </div>
           </div>
@@ -119,7 +142,7 @@ export default function Page() {
               </div>
               <div className="urban-hero-stat-card">
                   <div className="urban-hero-stat-value">{loadingProperties ? '...' : properties.length || 0}</div>
-                  <div className="urban-hero-stat-label">DISTRICT_NODES</div>
+                  <div className="urban-hero-stat-label">{useThemeContent('hero.stat_label', 'DISTRICT_NODES')}</div>
               </div>
           </div>
       </section>
@@ -131,24 +154,31 @@ export default function Page() {
       <section className="urban-precision-section" id="urban-precision-section">
           <div className="urban-precision-visual">
               <div className="urban-precision-image-frame">
-                  <img src={fallbackImages[1]} alt="Modern architecture detail" className="urban-precision-image" />
+                  <img src={useThemeMedia('precision.image', fallbackImages[1])} alt="Modern architecture detail" className="urban-precision-image" />
               </div>
               <div className="urban-precision-accent" aria-hidden="true" />
           </div>
           <div className="urban-precision-copy">
-              <span className="urban-section-kicker">STRUCTURAL_PRECISION</span>
-              <h2>Skyline <br/>Engineering.</h2>
+              <span className="urban-section-kicker">{useThemeContent('precision.kicker', 'STRUCTURAL_PRECISION')}</span>
+              <h2>
+                {useThemeContent('precision.title', 'Skyline \nEngineering.').split('\n').map((line, i, arr) => (
+                  <React.Fragment key={i}>
+                    {line}
+                    {i < arr.length - 1 && <br />}
+                  </React.Fragment>
+                ))}
+              </h2>
               <p>
-                  The Urban Node protocol is built on a foundation of structural integrity. By synchronizing high-fidelity urban assets through a unified architectural registry, we ensure that every unit in the global skyline is represented with absolute precision.
+                  {useThemeContent('precision.description', 'The Urban Node protocol is built on a foundation of structural integrity. By synchronizing high-fidelity urban assets through a unified architectural registry, we ensure that every unit in the global skyline is represented with absolute precision.')}
               </p>
               <div className="urban-precision-stats">
                   <div>
-                      <div className="urban-stat-value">100%</div>
-                      <div className="urban-stat-label">INTEGRITY_SYNC</div>
+                      <div className="urban-stat-value">{useThemeContent('precision.stat_1_value', '100%')}</div>
+                      <div className="urban-stat-label">{useThemeContent('precision.stat_1_label', 'INTEGRITY_SYNC')}</div>
                   </div>
                   <div>
-                      <div className="urban-stat-value">Global</div>
-                      <div className="urban-stat-label">DISTRIBUTION_NODE</div>
+                      <div className="urban-stat-value">{useThemeContent('precision.stat_2_value', 'Global')}</div>
+                      <div className="urban-stat-label">{useThemeContent('precision.stat_2_label', 'DISTRIBUTION_NODE')}</div>
                   </div>
               </div>
           </div>
@@ -156,16 +186,23 @@ export default function Page() {
 
       <section className="urban-final-cta" id="urban-final-cta">
           <div className="urban-final-cta-inner">
-              <h2>Authorize Your <br/>Skyline.</h2>
+              <h2>
+                {useThemeContent('cta.title', 'Authorize Your \nSkyline.').split('\n').map((line, i, arr) => (
+                  <React.Fragment key={i}>
+                    {line}
+                    {i < arr.length - 1 && <br />}
+                  </React.Fragment>
+                ))}
+              </h2>
               <p>
-                  Connect your architectural node to the Urban Registry and join the world's most advanced high-fidelity distribution network.
+                  {useThemeContent('cta.description', "Connect your architectural node to the Urban Registry and join the world's most advanced high-fidelity distribution network.")}
               </p>
               <button
                 type="button"
                 className="urban-btn-primary urban-final-cta-btn"
                 onClick={() => scrollToSection('urban-structure-grid')}
               >
-                CONNECT_URBAN_NODE
+                {useThemeContent('cta.button_label', 'CONNECT_URBAN_NODE')}
               </button>
           </div>
       </section>

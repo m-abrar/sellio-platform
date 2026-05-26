@@ -5,6 +5,7 @@ import { api } from '@sellio/api-client';
 import type { ServiceListing } from '@sellio/types';
 import { CrtvHeader, CrtvCategoryCard, CrtvCreativeCard, CrtvPortfolioItem, CrtvFooter } from './components';
 import { DynamicTestimonials } from '@/components/testimonials/DynamicTestimonials';
+import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 
 const fallbackImages = [
   '/themes/services/creative/15.webp',
@@ -48,6 +49,17 @@ function mapServiceToCreative(service: ServiceListing, index: number) {
 }
 
 export default function Page() {
+  const heroTitle = useThemeContent('hero.title', 'Hire Creative Talent Worldwide');
+  const heroDescription = useThemeContent('hero.description', 'Discover exceptional freelancers for your projects, from design to development.');
+  const heroPrimaryCta = useThemeContent('hero.primary_cta_label', 'Browse Creatives');
+  const heroSecondaryCta = useThemeContent('hero.secondary_cta_label', 'Showcase Your Work');
+  const categoriesTitle = useThemeContent('categories.title', 'Featured Creative Categories');
+  const creativesTitle = useThemeContent('creatives.title', 'Meet Our Top Creatives');
+  const showcaseTitle = useThemeContent('showcase.title', 'Inspiring Portfolio Showcase');
+  const ctaTitle = useThemeContent('cta.title', 'Ready to Hire or Get Hired?');
+  const ctaDescription = useThemeContent('cta.description', 'Join the Creative Community Today and turn your vision into reality.');
+  const ctaPrimaryCta = useThemeContent('cta.primary_cta_label', 'Sign Up Now');
+
   const [services, setServices] = useState<ServiceListing[]>([]);
   const [loadingServices, setLoadingServices] = useState(true);
   const [serviceError, setServiceError] = useState<string | null>(null);
@@ -93,9 +105,9 @@ export default function Page() {
       <section className="crtv-hero" id="crtv-hero-section" aria-labelledby="crtv-hero-title">
         <div className="crtv-hero-overlay"></div>
         <div className="crtv-hero-content">
-          <h1 id="crtv-hero-title">Hire Creative Talent Worldwide</h1>
+          <h1 id="crtv-hero-title">{heroTitle}</h1>
           <p style={{ fontSize: '1.25rem', marginBottom: '2.5rem', opacity: 0.9 }}>
-            Discover exceptional freelancers for your projects, from design to development.
+            {heroDescription}
           </p>
           <div style={{ display: 'flex', gap: '1.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
             <button
@@ -103,14 +115,14 @@ export default function Page() {
               style={{ padding: '1rem 2.5rem', fontSize: '1.1rem' }}
               onClick={() => document.getElementById('categories')?.scrollIntoView({ behavior: 'smooth' })}
             >
-              Browse Creatives
+              {heroPrimaryCta}
             </button>
             <button
               className="crtv-btn crtv-btn-outline"
               style={{ padding: '1rem 2.5rem', fontSize: '1.1rem' }}
               onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
             >
-              Showcase Your Work
+              {heroSecondaryCta}
             </button>
           </div>
         </div>
@@ -127,7 +139,7 @@ export default function Page() {
 
       {/* Categories */}
       <section className="crtv-section" id="categories" aria-labelledby="crtv-cat-title">
-        <h2 className="crtv-section-title" id="crtv-cat-title"><span className="gradient-text">Featured Creative Categories</span></h2>
+        <h2 className="crtv-section-title" id="crtv-cat-title"><span className="gradient-text">{categoriesTitle}</span></h2>
         <div className="crtv-category-grid">
           {categories.map((c, i) => (
             <div key={i} onClick={() => alert(`Exploring Category: ${c.title}`)}>
@@ -139,7 +151,14 @@ export default function Page() {
 
       {/* Top Creatives */}
       <section className="crtv-section" style={{ background: 'white' }} id="pricing" aria-labelledby="crtv-creatives-title">
-        <h2 className="crtv-section-title" id="crtv-creatives-title">Meet Our <span className="gradient-text">Top Creatives</span></h2>
+        <h2 className="crtv-section-title" id="crtv-creatives-title">
+          {creativesTitle.includes('Top Creatives') ? (
+            <>
+              {creativesTitle.replace('Top Creatives', '')}
+              <span className="gradient-text">Top Creatives</span>
+            </>
+          ) : creativesTitle}
+        </h2>
         <div className="crtv-creative-grid">
           {loadingServices ? (
             [1, 2, 3].map((item) => (
@@ -177,7 +196,7 @@ export default function Page() {
 
       {/* Portfolio Showcase */}
       <section className="crtv-section" id="portfolios" aria-labelledby="crtv-showcase-title">
-        <h2 className="crtv-section-title" id="crtv-showcase-title"><span className="gradient-text">Inspiring Portfolio Showcase</span></h2>
+        <h2 className="crtv-section-title" id="crtv-showcase-title"><span className="gradient-text">{showcaseTitle}</span></h2>
         <div className="crtv-masonry">
           {portfolios.map((p, i) => (
             <CrtvPortfolioItem key={i} {...p} />
@@ -195,14 +214,14 @@ export default function Page() {
         titleClassName="crtv-section-title"
         layoutClassName="crtv-testimonials-layout"
         cardClassName="crtv-testimonial-container"
-        headingId="crtv-testimonial-title"
+        headingId="sc-testimonials-title"
       />
 
       {/* CTA Banner */}
       <section className="crtv-cta-banner" id="contact" aria-labelledby="crtv-cta-title">
-        <h2 id="crtv-cta-title" style={{ fontSize: '3rem', fontWeight: 900, marginBottom: '1rem' }}>Ready to Hire or Get Hired?</h2>
-        <p style={{ fontSize: '1.25rem', marginBottom: '2.5rem', opacity: 0.9 }}>Join the Creative Community Today and turn your vision into reality.</p>
-        <button className="crtv-btn" style={{ background: 'white', color: '#121212', padding: '1.2rem 3rem', fontSize: '1.1rem', fontWeight: 700 }} onClick={() => alert('Onboarding sequence started!')}>Sign Up Now</button>
+        <h2 id="crtv-cta-title" style={{ fontSize: '3rem', fontWeight: 900, marginBottom: '1rem' }}>{ctaTitle}</h2>
+        <p style={{ fontSize: '1.25rem', marginBottom: '2.5rem', opacity: 0.9 }}>{ctaDescription}</p>
+        <button className="crtv-btn" style={{ background: 'white', color: '#121212', padding: '1.2rem 3rem', fontSize: '1.1rem', fontWeight: 700 }} onClick={() => alert('Onboarding sequence started!')}>{ctaPrimaryCta}</button>
       </section>
 
       <CrtvFooter />

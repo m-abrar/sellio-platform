@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { api } from '@sellio/api-client';
 import type { JobListing } from '@sellio/types';
 import { FreelanceHeader, GigCard, FreelanceFooter } from './components';
+import { useThemeContent, useThemeMedia } from '@/components/theme-content/ThemeContentProvider';
 
 const fallbackAvatars = [
   '/themes/jobs/freelance/1.webp',
@@ -36,6 +37,14 @@ function mapJobToGig(job: JobListing, index: number) {
 }
 
 export default function Page() {
+  const heroTitle = useThemeContent('hero.title', 'Find the perfect freelance services\nfor your business');
+  
+  const gigsTitle = useThemeContent('gigs.title', 'Popular professional services');
+  
+  const promoTitle = useThemeContent('promo.title', 'A whole world of freelance talent at your fingertips');
+  const promoButton = useThemeContent('promo.button_label', 'Explore GigHive Pro');
+  const promoImage = useThemeMedia('promo.image', '/themes/jobs/freelance/14.webp');
+
   const [jobs, setJobs] = useState<JobListing[]>([]);
   const [loadingJobs, setLoadingJobs] = useState(true);
   const [jobError, setJobError] = useState<string | null>(null);
@@ -79,7 +88,26 @@ export default function Page() {
 
       {/* Hero */}
       <section className="jf-hero">
-        <h1 className="jf-hero-title">Find the perfect <span style={{ fontStyle: 'italic' }}>freelance</span> services<br/>for your business</h1>
+        <h1 className="jf-hero-title">
+          {heroTitle.split('\n').map((line, index) => {
+            const hasItalic = line.toLowerCase().includes('freelance');
+            if (hasItalic) {
+              const parts = line.split(/freelance/i);
+              return (
+                <React.Fragment key={`${line}-${index}`}>
+                  {index > 0 && <br />}
+                  {parts[0]}<span style={{ fontStyle: 'italic' }}>freelance</span>{parts[1]}
+                </React.Fragment>
+              );
+            }
+            return (
+              <React.Fragment key={`${line}-${index}`}>
+                {index > 0 && <br />}
+                {line}
+              </React.Fragment>
+            );
+          })}
+        </h1>
       </section>
 
       {/* Search Bar */}
@@ -104,7 +132,7 @@ export default function Page() {
       {/* Popular Gigs */}
       <section className="jf-section" id="explore">
           <h2 className="jf-section-title">
-              Popular professional services
+              {gigsTitle}
           </h2>
           <div className="jf-grid">
               {loadingJobs ? (
@@ -144,17 +172,17 @@ export default function Page() {
       {/* Promo Block */}
       <section className="jf-promo">
           <div>
-              <h2 style={{ fontSize: '3rem', fontWeight: 800, marginBottom: '1.5rem', lineHeight: 1.1 }}>A whole world of freelance talent at your fingertips</h2>
+              <h2 style={{ fontSize: '3rem', fontWeight: 800, marginBottom: '1.5rem', lineHeight: 1.1 }}>{promoTitle}</h2>
               <ul style={{ listStyle: 'none', padding: 0, marginBottom: '2rem', fontSize: '1.2rem', lineHeight: 1.8 }}>
                   <li>✓ The best for every budget</li>
                   <li>✓ Quality work done quickly</li>
                   <li>✓ Protected payments, every time</li>
                   <li>✓ 24/7 support</li>
               </ul>
-              <button className="jf-btn" style={{ backgroundColor: 'white', color: 'var(--jf-accent)' }}>Explore GigHive Pro</button>
+              <button className="jf-btn" style={{ backgroundColor: 'white', color: 'var(--jf-accent)' }}>{promoButton}</button>
           </div>
           <div className="d-none d-lg-block" style={{ width: '40%' }}>
-              <img src="/themes/jobs/freelance/14.webp" alt="Team" style={{ width: '100%', borderRadius: '16px', transform: 'rotate(5deg)', boxShadow: '0 20px 40px rgba(0,0,0,0.2)' }} />
+              <img src={promoImage} alt="Team" style={{ width: '100%', borderRadius: '16px', transform: 'rotate(5deg)', boxShadow: '0 20px 40px rgba(0,0,0,0.2)' }} />
           </div>
       </section>
 

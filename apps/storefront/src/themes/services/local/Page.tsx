@@ -5,6 +5,7 @@ import { api } from '@sellio/api-client';
 import type { ServiceListing } from '@sellio/types';
 import { LocalHeader, LocalServiceCard, ProviderCard, LocalFooter } from './components';
 import { DynamicTestimonials } from '@/components/testimonials/DynamicTestimonials';
+import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 
 const serviceIcons = ['🏠', '🔧', '⚡', '🌳', '🌡️', '🔨'];
 
@@ -33,6 +34,30 @@ function mapServiceToCard(service: ServiceListing, index: number) {
 }
 
 export default function Page() {
+  const heroTitle = useThemeContent('hero.title', 'Trusted Services for \nYour Home & Family');
+  const heroDescription = useThemeContent('hero.description', 'Find background-checked professionals for cleaning, repair, maintenance, and more—all in one place.');
+  const heroPrimaryCta = useThemeContent('hero.primary_cta_label', 'Explore Services');
+  const heroSecondaryCta = useThemeContent('hero.secondary_cta_label', 'Read Testimonials');
+
+  const servicesTitle = useThemeContent('services.title', 'Our Popular Services');
+  const providersTitle = useThemeContent('providers.title', 'Meet Our Top-Rated Providers');
+
+  const howWorksTitle = useThemeContent('how_it_works.title', 'How HomeFix Works in 3 Simple Steps');
+  const howWorksStep1Title = useThemeContent('how_it_works.step_1_title', '1. Search & Filter');
+  const howWorksStep1Desc = useThemeContent('how_it_works.step_1_description', 'Easily find the service you need by location, type, and availability using our smart filters.');
+  const howWorksStep2Title = useThemeContent('how_it_works.step_2_title', '2. Book & Confirm');
+  const howWorksStep2Desc = useThemeContent('how_it_works.step_2_description', 'Select a top-rated professional and instantly book a time slot that works for your schedule.');
+  const howWorksStep3Title = useThemeContent('how_it_works.step_3_title', '3. Relax & Enjoy');
+  const howWorksStep3Desc = useThemeContent('how_it_works.step_3_description', 'A trusted pro arrives, gets the job done right, and you rate your experience. Simple as that!');
+
+  const safetyTitle = useThemeContent('safety.title', 'Your Safety is Our Priority');
+  const safetyStep1Title = useThemeContent('safety.step_1_title', 'Background-Checked');
+  const safetyStep1Desc = useThemeContent('safety.step_1_description', 'Every professional is vetted for your peace of mind.');
+  const safetyStep2Title = useThemeContent('safety.step_2_title', 'Insured & Guaranteed');
+  const safetyStep2Desc = useThemeContent('safety.step_2_description', 'Workmanship is covered by our service guarantee.');
+  const safetyStep3Title = useThemeContent('safety.step_3_title', '24/7 Support');
+  const safetyStep3Desc = useThemeContent('safety.step_3_description', 'Help is always just a call or click away, day or night.');
+
   const [services, setServices] = useState<ServiceListing[]>([]);
   const [loadingServices, setLoadingServices] = useState(true);
   const [serviceError, setServiceError] = useState<string | null>(null);
@@ -77,20 +102,27 @@ export default function Page() {
       {/* Hero Section */}
       <section className="local-hero" id="local-hero-section" aria-labelledby="local-hero-title">
         <div style={{ position: 'relative', zIndex: 1 }}>
-          <h1 id="local-hero-title">Trusted Services for <br/>Your Home & Family</h1>
-          <p>Find background-checked professionals for cleaning, repair, maintenance, and more—all in one place.</p>
+          <h1 id="local-hero-title">
+            {heroTitle.split('\n').map((line, index) => (
+              <React.Fragment key={`${line}-${index}`}>
+                {index > 0 && <br />}
+                {line}
+              </React.Fragment>
+            ))}
+          </h1>
+          <p>{heroDescription}</p>
           <div style={{ display: 'flex', gap: '1.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
             <button
               className="local-btn local-btn-primary"
               onClick={() => document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })}
             >
-              Explore Services
+              {heroPrimaryCta}
             </button>
             <button
               className="local-btn local-btn-outline"
               onClick={() => document.getElementById('testimonials')?.scrollIntoView({ behavior: 'smooth' })}
             >
-              Read Testimonials
+              {heroSecondaryCta}
             </button>
           </div>
         </div>
@@ -108,7 +140,7 @@ export default function Page() {
 
       {/* Popular Services */}
       <section id="services" className="local-section" aria-labelledby="local-services-title">
-        <h2 id="local-services-title" style={{ textAlign: 'center', fontWeight: 800, marginBottom: '4rem', fontSize: '2.5rem' }}>Our Popular Services</h2>
+        <h2 id="local-services-title" style={{ textAlign: 'center', fontWeight: 800, marginBottom: '4rem', fontSize: '2.5rem' }}>{servicesTitle}</h2>
         <div className="local-grid">
           {loadingServices ? (
             [1, 2, 3, 4, 5, 6].map((item) => (
@@ -146,7 +178,7 @@ export default function Page() {
 
       {/* Top Providers */}
       <section id="providers" className="local-section" style={{ background: 'white' }} aria-labelledby="local-providers-title">
-        <h2 id="local-providers-title" style={{ textAlign: 'center', fontWeight: 800, marginBottom: '4rem', fontSize: '2.5rem' }}>Meet Our Top-Rated Providers</h2>
+        <h2 id="local-providers-title" style={{ textAlign: 'center', fontWeight: 800, marginBottom: '4rem', fontSize: '2.5rem' }}>{providersTitle}</h2>
         <div className="local-grid">
           {providers.map((p, i) => (
             <ProviderCard key={i} {...p} />
@@ -156,22 +188,22 @@ export default function Page() {
 
       {/* How It Works */}
       <section className="local-section text-center" aria-labelledby="local-how-title">
-        <h2 id="local-how-title" style={{ textAlign: 'center', fontWeight: 800, marginBottom: '4rem', fontSize: '2.5rem' }}>How HomeFix Works in 3 Simple Steps</h2>
+        <h2 id="local-how-title" style={{ textAlign: 'center', fontWeight: 800, marginBottom: '4rem', fontSize: '2.5rem' }}>{howWorksTitle}</h2>
         <div className="local-steps-grid">
             <div>
                 <div className="local-step-icon">🔍</div>
-                <h4 style={{ fontWeight: 700, marginBottom: '1rem' }}>1. Search & Filter</h4>
-                <p style={{ color: 'var(--local-text-muted)', lineHeight: 1.6 }}>Easily find the service you need by location, type, and availability using our smart filters.</p>
+                <h4 style={{ fontWeight: 700, marginBottom: '1rem' }}>{howWorksStep1Title}</h4>
+                <p style={{ color: 'var(--local-text-muted)', lineHeight: 1.6 }}>{howWorksStep1Desc}</p>
             </div>
             <div>
                 <div className="local-step-icon">📅</div>
-                <h4 style={{ fontWeight: 700, marginBottom: '1rem' }}>2. Book & Confirm</h4>
-                <p style={{ color: 'var(--local-text-muted)', lineHeight: 1.6 }}>Select a top-rated professional and instantly book a time slot that works for your schedule.</p>
+                <h4 style={{ fontWeight: 700, marginBottom: '1rem' }}>{howWorksStep2Title}</h4>
+                <p style={{ color: 'var(--local-text-muted)', lineHeight: 1.6 }}>{howWorksStep2Desc}</p>
             </div>
             <div>
                 <div className="local-step-icon">❤️</div>
-                <h4 style={{ fontWeight: 700, marginBottom: '1rem' }}>3. Relax & Enjoy</h4>
-                <p style={{ color: 'var(--local-text-muted)', lineHeight: 1.6 }}>A trusted pro arrives, gets the job done right, and you rate your experience. Simple as that!</p>
+                <h4 style={{ fontWeight: 700, marginBottom: '1rem' }}>{howWorksStep3Title}</h4>
+                <p style={{ color: 'var(--local-text-muted)', lineHeight: 1.6 }}>{howWorksStep3Desc}</p>
             </div>
         </div>
       </section>
@@ -187,27 +219,27 @@ export default function Page() {
         titleStyle={{ fontWeight: 800, marginBottom: '4rem', fontSize: '2.5rem' }}
         layoutClassName="local-testimonials-layout"
         cardClassName="local-testimonial-card"
-        headingId="local-testimonials-title"
+        headingId="sc-testimonials-title"
       />
 
       {/* Trust/Safety */}
       <section className="local-section text-center" aria-labelledby="local-safety-title">
-        <h2 id="local-safety-title" style={{ fontWeight: 800, marginBottom: '4rem', fontSize: '2.5rem' }}>Your Safety is Our Priority</h2>
+        <h2 id="local-safety-title" style={{ fontWeight: 800, marginBottom: '4rem', fontSize: '2.5rem' }}>{safetyTitle}</h2>
         <div className="local-safety-grid">
             <div className="local-safety-card">
                 <div style={{ fontSize: '3rem', color: 'var(--local-green)', marginBottom: '1rem' }}>🛡️</div>
-                <h5 style={{ fontWeight: 700, marginBottom: '0.5rem', fontSize: '1.2rem' }}>Background-Checked</h5>
-                <p style={{ color: 'var(--local-text-muted)' }}>Every professional is vetted for your peace of mind.</p>
+                <h5 style={{ fontWeight: 700, marginBottom: '0.5rem', fontSize: '1.2rem' }}>{safetyStep1Title}</h5>
+                <p style={{ color: 'var(--local-text-muted)' }}>{safetyStep1Desc}</p>
             </div>
             <div className="local-safety-card">
                 <div style={{ fontSize: '3rem', color: 'var(--local-green)', marginBottom: '1rem' }}>✅</div>
-                <h5 style={{ fontWeight: 700, marginBottom: '0.5rem', fontSize: '1.2rem' }}>Insured & Guaranteed</h5>
-                <p style={{ color: 'var(--local-text-muted)' }}>Workmanship is covered by our service guarantee.</p>
+                <h5 style={{ fontWeight: 700, marginBottom: '0.5rem', fontSize: '1.2rem' }}>{safetyStep2Title}</h5>
+                <p style={{ color: 'var(--local-text-muted)' }}>{safetyStep2Desc}</p>
             </div>
             <div className="local-safety-card">
                 <div style={{ fontSize: '3rem', color: 'var(--local-green)', marginBottom: '1rem' }}>📞</div>
-                <h5 style={{ fontWeight: 700, marginBottom: '0.5rem', fontSize: '1.2rem' }}>24/7 Support</h5>
-                <p style={{ color: 'var(--local-text-muted)' }}>Help is always just a call or click away, day or night.</p>
+                <h5 style={{ fontWeight: 700, marginBottom: '0.5rem', fontSize: '1.2rem' }}>{safetyStep3Title}</h5>
+                <p style={{ color: 'var(--local-text-muted)' }}>{safetyStep3Desc}</p>
             </div>
         </div>
       </section>

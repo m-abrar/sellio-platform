@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { api } from '@sellio/api-client';
 import type { ClassifiedListing, Category } from '@sellio/types';
 import { LocalHeader, LocalCard, LocalFooter } from './components';
+import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 
 interface LocalItem {
   id: number;
@@ -244,6 +245,15 @@ const translateListing = (item: ClassifiedListing): LocalItem => {
 
 export default function Page() {
   const router = useRouter();
+  const panelTitle = useThemeContent('panel.title', 'Nearby Classifieds');
+  const diagnosticsTitle = useThemeContent('diagnostics.title', '🛰️ VETTED NETWORK DIAGNOSTICS & RESILIENCE PANEL');
+  const diagnosticsDescription = useThemeContent('diagnostics.description', 'Status: Local Database Node Offline. Activating Vetted neighborhood backup feed.');
+  const alertsTitle = useThemeContent('alerts.title', 'Neighborhood Alerts');
+  const alertItem1 = useThemeContent('alerts.item_1', 'Featured Offer: Like-New Trek Mountain Bike in Bikes & Outdoor is trending near Capitol Hill!');
+  const alertItem2 = useThemeContent('alerts.item_2', "Lost Dog: Golden Retriever spotted near Cal Anderson Park. Collar says 'Max'. Contact Agent Sarah.");
+  const emptyTitle = useThemeContent('empty.title', 'No Neighbors Listing Here');
+  const emptyDescription = useThemeContent('empty.description', 'Expand your search radius in the header location tag to discover more items!');
+  const expandRadiusLabel = useThemeContent('radius.expand_label', 'Expand Search Radius');
 
   // Stateful dynamic catalog mappings
   const [localItems, setLocalItems] = useState<LocalItem[]>([]);
@@ -258,8 +268,8 @@ export default function Page() {
 
   // Neighborhood alerts matching legacy Megaphone details
   const neighborhoodAlerts = [
-    { id: 1, text: "Featured Offer: Like-New Trek Mountain Bike in Bikes & Outdoor is trending near Capitol Hill!" },
-    { id: 2, text: "Lost Dog: Golden Retriever spotted near Cal Anderson Park. Collar says 'Max'. Contact Agent Sarah." }
+    { id: 1, text: alertItem1 },
+    { id: 2, text: alertItem2 }
   ];
 
   // Stateful interactive filters
@@ -421,7 +431,7 @@ export default function Page() {
           
           {/* List panel sorting and title */}
           <div className="cl-panel-header">
-            <h4 className="cl-panel-title">Nearby Classifieds</h4>
+            <h4 className="cl-panel-title">{panelTitle}</h4>
             <select 
               className="cl-select"
               value={sortBy}
@@ -450,10 +460,10 @@ export default function Page() {
           {useFallback && (
             <div className="cl-resilience-panel">
               <div className="cl-resilience-header">
-                🛰️ VETTED NETWORK DIAGNOSTICS & RESILIENCE PANEL
+                {diagnosticsTitle}
               </div>
               <div style={{ fontWeight: 600 }}>
-                Status: Local Database Node Offline. Activating Vetted neighborhood backup feed.
+                {diagnosticsDescription}
               </div>
               <div className="cl-resilience-trace">
                 {errorTrace || 'api.getClassifieds returned empty listings feed.'}
@@ -463,7 +473,7 @@ export default function Page() {
 
           {/* Neighborhood Alerts Container */}
           <div className="cl-alerts-container">
-            <h5 style={{ fontWeight: 800, fontSize: '0.85rem', color: 'var(--cl-primary-blue)', margin: '0.5rem 0 0', textTransform: 'uppercase' }}>Neighborhood Alerts</h5>
+            <h5 style={{ fontWeight: 800, fontSize: '0.85rem', color: 'var(--cl-primary-blue)', margin: '0.5rem 0 0', textTransform: 'uppercase' }}>{alertsTitle}</h5>
             {neighborhoodAlerts.map((alertItem) => (
               <div key={alertItem.id} className="cl-alert-card">
                 <span className="cl-alert-icon">📣</span>
@@ -490,8 +500,8 @@ export default function Page() {
             ) : filteredItems.length === 0 ? (
               <div style={{ textAlign: 'center', padding: '3rem 1rem', color: 'var(--cl-text-muted)' }}>
                 <span style={{ fontSize: '2.5rem', display: 'block', marginBottom: '0.5rem' }}>📍</span>
-                <h6 style={{ fontWeight: 800 }}>No Neighbors Listing Here</h6>
-                <p style={{ fontSize: '0.8rem' }}>Expand your search radius in the header location tag to discover more items!</p>
+                <h6 style={{ fontWeight: 800 }}>{emptyTitle}</h6>
+                <p style={{ fontSize: '0.8rem' }}>{emptyDescription}</p>
               </div>
             ) : (
               filteredItems.map((item) => (
@@ -519,7 +529,7 @@ export default function Page() {
               style={{ backgroundColor: 'transparent', color: 'var(--cl-primary-blue)', border: '1.5px solid var(--cl-primary-blue)', boxShadow: 'none', justifyContent: 'center', marginTop: '1rem' }}
               onClick={handleLocationClick}
             >
-              Expand Search Radius (+{radiusMiles[radiusIndex + 1] - radiusMiles[radiusIndex]} mi)
+              {expandRadiusLabel} (+{radiusMiles[radiusIndex + 1] - radiusMiles[radiusIndex]} mi)
             </button>
           )}
 

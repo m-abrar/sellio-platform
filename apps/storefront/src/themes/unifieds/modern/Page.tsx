@@ -3,13 +3,44 @@ import React, { useEffect, useState } from 'react';
 import { api } from '@sellio/api-client';
 import type { Product } from '@sellio/types';
 import { NexusBentoGrid, NexusPricing } from './components';
+import { useThemeContent, useThemeMedia } from '@/components/theme-content/ThemeContentProvider';
 
 export default function Page() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loadingListings, setLoadingListings] = useState(true);
   const [listingError, setListingError] = useState<string | null>(null);
 
-  const placeholderImage = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='720' height='520' viewBox='0 0 720 520'><rect width='100%' height='100%' fill='%23020617'/><g transform='translate(328,214)' stroke='%2322d3ee' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='2' width='60' height='60' rx='8'/><circle cx='20' cy='20' r='6'/><path d='M58 46L42 30 12 60'/></g><text x='50%' y='61%' dominant-baseline='middle' text-anchor='middle' font-family='Inter, sans-serif' font-size='13' font-weight='700' letter-spacing='2' fill='%2394a3b8'>NEXUS LISTING</text></svg>";
+  const heroEyebrow = useThemeContent('hero.eyebrow', 'CORE_V4_PROTOCOL');
+  const heroTitle = useThemeContent('hero.title', 'Beyond\nStandard.');
+  const heroHighlight = useThemeContent('hero.highlight', 'Standard.');
+  const heroDescription = useThemeContent('hero.description', 'The high-fidelity distribution node for multi-vertical commerce. Standardize your presence across 50 industries with a single, unified engine.');
+  const heroPrimaryCtaLabel = useThemeContent('hero.primary_cta_label', 'INITIALIZE NODE');
+  const heroSecondaryCtaLabel = useThemeContent('hero.secondary_cta_label', 'VIEW ARCHITECTURE');
+
+  const trustMetric1 = useThemeContent('trust.metric_1', '1.4M_NODES_ACTIVE');
+  const trustMetric2 = useThemeContent('trust.metric_2', 'LATENCY: 8ms');
+  const trustMetric3 = useThemeContent('trust.metric_3', 'DISTRIBUTION_READY: TRUE');
+  const trustMetric4 = useThemeContent('trust.metric_4', 'ENCRYPTION: AES_256');
+
+  const collectionEyebrow = useThemeContent('collection.eyebrow', 'LIVE_NEXUS_FEED');
+  const collectionTitle = useThemeContent('collection.title', 'Synchronized Listings.');
+  const collectionDescription = useThemeContent('collection.description', 'Live product records streamed into the Nexus Prime catalog layer for high-fidelity marketplace discovery.');
+
+  const syncOfflineKicker = useThemeContent('sync.offline_kicker', 'NEXUS_OFFLINE');
+  const syncOfflineTitle = useThemeContent('sync.offline_title', 'Listings could not be synchronized.');
+  const emptyKicker = useThemeContent('empty.kicker', 'EMPTY_NEXUS_FEED');
+  const emptyTitle = useThemeContent('empty.title', 'No live listings are available yet.');
+  const emptyDescription = useThemeContent('empty.description', 'Add product records in the backend and this nexus feed will hydrate automatically.');
+
+  const midSectionTitle = useThemeContent('mid_section.title', 'The Power\nof Fifty.');
+  const midSectionDescription = useThemeContent('mid_section.description', 'Why build fifty themes when you can deploy one engine? Our vertical-specific DNA ensures that every storefront feels bespoke, while sharing the robust high-fidelity logic of the Nexus Prime core.');
+  const midSectionImage = useThemeMedia('mid_section.image', '/themes/unifieds/modern/1.webp');
+
+  const ctaTitle = useThemeContent('cta.title', 'Ready to\nsynchronize?');
+  const ctaDescription = useThemeContent('cta.description', "Initialize your high-fidelity storefront node and join the world's most advanced distribution network.");
+  const ctaButtonLabel = useThemeContent('cta.button_label', 'CONNECT CORE NODE');
+
+  const placeholderImage = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='720' height='520' viewBox='0 0 720 520'><rect width='100%' height='100%' fill='%230a0a0a'/><g transform='translate(328,214)' stroke='%2306b6d4' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='2' width='60' height='60' rx='6'/><circle cx='20' cy='20' r='6'/><path d='M58 46L42 30 12 60'/></g><text x='50%' y='61%' dominant-baseline='middle' text-anchor='middle' font-family='monospace' font-size='11' letter-spacing='2' fill='%23525252'>NEXUS RECORD</text></svg>";
 
   useEffect(() => {
     let isMounted = true;
@@ -49,7 +80,7 @@ export default function Page() {
   );
 
   const formatPrice = (product: Product) => (
-    product.pricing?.formatted || (product.price ? `$${Number(product.price).toLocaleString()}` : 'Contact for pricing')
+    product.pricing?.formatted || (product.price ? `$${Number(product.price).toLocaleString()}` : 'Sync quote')
   );
 
   return (
@@ -57,29 +88,43 @@ export default function Page() {
       {/* Hero Section */}
       <section className="nexus-hero" aria-labelledby="unp-hero-title">
           <div className="nexus-hero-glow"></div>
-          <div className="unp-mono" style={{ color: 'var(--unp-cyan)', marginBottom: '2rem' }}>CORE_V4_PROTOCOL</div>
+          <div className="unp-mono" style={{ color: 'var(--unp-cyan)', marginBottom: '2rem' }}>{heroEyebrow}</div>
           <h1 className="unp-heading-xl" id="unp-hero-title">
-            Beyond <br/><span>Standard.</span>
+            {heroTitle.split('\n').map((line, index, lines) => {
+              const parts = heroHighlight ? line.split(new RegExp(`(${heroHighlight})`, 'g')) : [line];
+              return (
+                <React.Fragment key={`${line}-${index}`}>
+                  {parts.map((part, pIdx) => 
+                    part === heroHighlight ? (
+                      <span key={pIdx}>{part}</span>
+                    ) : (
+                      part
+                    )
+                  )}
+                  {index < lines.length - 1 ? <br /> : null}
+                </React.Fragment>
+              );
+            })}
           </h1>
           <p style={{ maxWidth: '800px', fontSize: '1.25rem', color: 'var(--unp-dim)', lineHeight: 1.8, marginBottom: '4rem', marginTop: '2rem' }}>
-              The high-fidelity distribution node for multi-vertical commerce. Standardize your presence across 50 industries with a single, unified engine.
+            {heroDescription}
           </p>
           <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }} className="unp-hero-buttons">
               <button className="nexus-btn-primary" id="unp-btn-explore" onClick={() => document.getElementById('unp-exchange-section')?.scrollIntoView({ behavior: 'smooth' })}>
-                INITIALIZE NODE
+                {heroPrimaryCtaLabel}
               </button>
               <button className="nexus-btn-outline" id="unp-btn-spec" onClick={() => alert('Nexus Architecture Blueprint initialized.')}>
-                VIEW ARCHITECTURE
+                {heroSecondaryCtaLabel}
               </button>
           </div>
       </section>
 
       {/* Trust Bar */}
       <section className="unp-trust-bar" aria-label="Operational Status Metrics">
-          <span>1.4M_NODES_ACTIVE</span>
-          <span>LATENCY: 8ms</span>
-          <span>DISTRIBUTION_READY: TRUE</span>
-          <span>ENCRYPTION: AES_256</span>
+          <span>{trustMetric1}</span>
+          <span>{trustMetric2}</span>
+          <span>{trustMetric3}</span>
+          <span>{trustMetric4}</span>
       </section>
 
       {/* Bento Section */}
@@ -88,9 +133,9 @@ export default function Page() {
       {/* Live Listings */}
       <section className="unp-listings-section" id="unp-exchange-section" aria-labelledby="unp-exchange-title">
           <div className="unp-listings-header">
-              <div className="unp-mono" style={{ color: 'var(--unp-cyan)', marginBottom: '1.5rem' }}>LIVE_NEXUS_FEED</div>
-              <h2 id="unp-exchange-title">Synchronized Listings.</h2>
-              <p>Live product records streamed into the Nexus Prime catalog layer for high-fidelity marketplace discovery.</p>
+              <div className="unp-mono" style={{ color: 'var(--unp-cyan)', marginBottom: '1.5rem' }}>{collectionEyebrow}</div>
+              <h2 id="unp-exchange-title">{collectionTitle}</h2>
+              <p>{collectionDescription}</p>
           </div>
 
           {loadingListings ? (
@@ -108,15 +153,15 @@ export default function Page() {
               </div>
           ) : listingError ? (
               <div className="unp-listing-state" role="status">
-                  <div className="unp-mono" style={{ color: 'var(--unp-cyan)', marginBottom: '1rem' }}>NEXUS_OFFLINE</div>
-                  <h3>Listings could not be synchronized.</h3>
+                  <div className="unp-mono" style={{ color: 'var(--unp-cyan)', marginBottom: '1rem' }}>{syncOfflineKicker}</div>
+                  <h3>{syncOfflineTitle}</h3>
                   <p>{listingError}</p>
               </div>
           ) : products.length === 0 ? (
               <div className="unp-listing-state" role="status">
-                  <div className="unp-mono" style={{ color: 'var(--unp-cyan)', marginBottom: '1rem' }}>EMPTY_NEXUS</div>
-                  <h3>No live listings are available yet.</h3>
-                  <p>Add product records in the backend and this feed will hydrate automatically.</p>
+                  <div className="unp-mono" style={{ color: 'var(--unp-cyan)', marginBottom: '1rem' }}>{emptyKicker}</div>
+                  <h3>{emptyTitle}</h3>
+                  <p>{emptyDescription}</p>
               </div>
           ) : (
               <div className="unp-listings-grid">
@@ -126,7 +171,7 @@ export default function Page() {
                               <img src={getProductImage(product)} alt={product.title} />
                           </div>
                           <div className="unp-listing-body">
-                              <div className="unp-mono">NEXUS_ID_{product.id}</div>
+                              <div className="unp-mono">NEXUS_{product.id}</div>
                               <h3>{product.title}</h3>
                               <p>{product.description || 'Verified marketplace listing synchronized into the Nexus Prime catalog.'}</p>
                               <div className="unp-listing-meta">
@@ -144,9 +189,16 @@ export default function Page() {
       <section className="unp-showcase-section" aria-labelledby="unp-showcase-title">
           <div className="unp-showcase-grid">
               <div>
-                  <h2 style={{ fontSize: 'clamp(2.5rem, 6vw, 4rem)', fontWeight: 700, fontFamily: 'var(--unp-font-nexus)', marginBottom: '3rem', letterSpacing: '-2px', color: 'white', lineHeight: 1.1 }} id="unp-showcase-title">The Power <br/>of Fifty.</h2>
+                  <h2 style={{ fontSize: 'clamp(2.5rem, 6vw, 4.5rem)', fontWeight: 700, fontFamily: 'var(--unp-font-nexus)', marginBottom: '3rem', letterSpacing: '-2px', color: 'white', lineHeight: 1.1 }} id="unp-showcase-title">
+                    {midSectionTitle.split('\n').map((line, index, lines) => (
+                      <React.Fragment key={`${line}-${index}`}>
+                        {line}
+                        {index < lines.length - 1 ? <br /> : null}
+                      </React.Fragment>
+                    ))}
+                  </h2>
                   <p style={{ fontSize: '1.2rem', color: 'var(--unp-dim)', lineHeight: 2, marginBottom: '4rem' }}>
-                      Why build fifty themes when you can deploy one engine? Our vertical-specific DNA ensures that every storefront feels bespoke, while sharing the robust high-fidelity logic of the Nexus Prime core.
+                    {midSectionDescription}
                   </p>
                   <ul style={{ listStyle: 'none', padding: 0 }}>
                       {['Dynamic Schema Mapping', 'Real-time Global Sync', 'High-Fidelity UI DNA', 'Institutional Security Nodes'].map(item => (
@@ -159,7 +211,7 @@ export default function Page() {
               <div style={{ position: 'relative' }}>
                   <div className="unp-showcase-badge" id="unp-badge-nexus"></div>
                   <div style={{ height: '500px', background: 'var(--unp-card)', borderRadius: '24px', border: '1px solid var(--unp-border)', overflow: 'hidden' }}>
-                      <img src="/themes/unifieds/modern/1.webp" alt="Digital Nexus Prime Network Visualizer" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.6 }} />
+                      <img src={midSectionImage} alt="Digital Nexus Prime Network Visualizer" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.6 }} />
                   </div>
               </div>
           </div>
@@ -171,11 +223,18 @@ export default function Page() {
       {/* Final CTA */}
       <section style={{ padding: '15rem 6%', textAlign: 'center', position: 'relative', overflow: 'hidden' }} aria-labelledby="unp-cta-title">
           <div style={{ position: 'absolute', bottom: '-20%', left: '50%', transform: 'translateX(-50%)', width: '1000px', height: '600px', background: 'radial-gradient(circle, var(--unp-cyan) 0%, transparent 70%)', opacity: 0.1, filter: 'blur(100px)', zIndex: -1 }}></div>
-          <h2 style={{ fontSize: 'clamp(3rem, 8vw, 5rem)', fontWeight: 700, fontFamily: 'var(--unp-font-nexus)', marginBottom: '3.5rem', letterSpacing: '-3px', color: 'white', lineHeight: 1.1 }} id="unp-cta-title">Ready to <br/>synchronize?</h2>
+          <h2 style={{ fontSize: 'clamp(3rem, 8vw, 5rem)', fontWeight: 700, fontFamily: 'var(--unp-font-nexus)', marginBottom: '3.5rem', letterSpacing: '-3px', color: 'white', lineHeight: 1.1 }} id="unp-cta-title">
+            {ctaTitle.split('\n').map((line, index, lines) => (
+              <React.Fragment key={`${line}-${index}`}>
+                {line}
+                {index < lines.length - 1 ? <br /> : null}
+              </React.Fragment>
+            ))}
+          </h2>
           <p style={{ maxWidth: '600px', margin: '0 auto 5rem', fontSize: '1.25rem', color: 'var(--unp-dim)', fontWeight: 300 }}>
-              Initialize your high-fidelity storefront node and join the world&apos;s most advanced distribution network.
+            {ctaDescription}
           </p>
-          <button className="nexus-btn-primary" style={{ padding: '2rem 6rem', fontSize: '1.1rem' }} id="unp-btn-cta-handshake" onClick={() => alert('Nexus core node handshake synchronized.')}>CONNECT CORE NODE</button>
+          <button className="nexus-btn-primary" style={{ padding: '2rem 6rem', fontSize: '1.1rem' }} id="unp-btn-cta-handshake" onClick={() => alert('Nexus core node handshake synchronized.')}>{ctaButtonLabel}</button>
       </section>
     </div>
   );

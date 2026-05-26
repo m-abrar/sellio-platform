@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { api } from '@sellio/api-client';
 import type { ClassifiedListing, Category } from '@sellio/types';
 import { PremiumCard } from './components';
+import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 
 // Premium high-fidelity Classifieds Elite fallback listings matching ClassifiedListing schema
 const FALLBACK_CLASSIFIEDS: ClassifiedListing[] = [
@@ -252,6 +253,21 @@ const FALLBACK_CLASSIFIEDS: ClassifiedListing[] = [
 
 export default function Page() {
   const router = useRouter();
+  const heroSubtitle = useThemeContent('hero.subtitle', 'Vetted Global Advisory Node');
+  const heroTitle = useThemeContent('hero.title', 'Curating high-value vaults for serious collectors.');
+  const heroSearchPlaceholder = useThemeContent('hero.search_placeholder', 'Search by collection title, artist, country origin...');
+  const heroSearchButton = useThemeContent('hero.search_button', 'Search');
+  const diagnosticsTitle = useThemeContent('diagnostics.title', 'VAULT RESILIENCE LAYER: Private Catalog Backups Engaged');
+  const diagnosticsTrace = useThemeContent('diagnostics.trace', 'Axios connection refused. Sandboxed database unreachable. Displaying curated assets.');
+  const spotlightTag = useThemeContent('spotlight.tag', 'CURATED SPOTLIGHT OF THE WEEK');
+  const spotlightTitle = useThemeContent('spotlight.title', 'Featured High-Value Acquisitions');
+  const catalogEyebrow = useThemeContent('catalog.eyebrow', 'Browse Curated Catalog');
+  const catalogTitle = useThemeContent('catalog.title', 'Exclusive Acquisitions');
+  const emptyTitle = useThemeContent('empty.title', 'No Curated Assets Match Search');
+  const emptyDescription = useThemeContent('empty.description', 'Try clearing keywords or switching filter pills to display our private listings feed.');
+  const emptyButton = useThemeContent('empty.clear_button', 'Clear Refinements');
+  const prospectusButton = useThemeContent('quickview.prospectus_button', 'Request Prospectus memorandum');
+  const inquiryButton = useThemeContent('quickview.inquiry_button', 'Inquire Concierge Vault');
 
   const getThemeLink = (path: string) => {
     if (typeof window !== 'undefined') {
@@ -423,9 +439,9 @@ export default function Page() {
       {/* Corporate/Brokerage Hero Showcase (Static marketing template) */}
       <section className="elite-hero">
         <div className="elite-hero-content">
-          <span className="elite-hero-subtitle">Vetted Global Advisory Node</span>
+          <span className="elite-hero-subtitle">{heroSubtitle}</span>
           <h1 className="elite-hero-title">
-            Curating high-value vaults for serious collectors.
+            {heroTitle}
           </h1>
           
           {/* Custom Search Box inside Hero */}
@@ -433,14 +449,14 @@ export default function Page() {
             <input 
               type="text" 
               className="elite-search-input" 
-              placeholder="Search by collection title, artist, country origin..." 
+              placeholder={heroSearchPlaceholder} 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
             <button 
               className="elite-search-btn"
             >
-              Search
+              {heroSearchButton}
             </button>
           </div>
         </div>
@@ -460,10 +476,10 @@ export default function Page() {
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: 'var(--prem-accent)', fontWeight: '800', fontSize: '1.1rem', marginBottom: '0.6rem', fontFamily: 'var(--prem-serif)', letterSpacing: '1px' }}>
             <span style={{ display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--prem-accent)', animation: 'pulse 1.5s infinite' }}></span>
-            VAULT RESILIENCE LAYER: Private Catalog Backups Engaged
+            {diagnosticsTitle}
           </div>
           <div style={{ color: 'var(--prem-muted)', fontSize: '0.85rem', lineHeight: '1.6' }}>
-            <strong>DIAGNOSTICS TRACE:</strong> {errorTrace || 'Axios connection refused. Sandboxed database unreachable. Displaying curated assets.'}
+            <strong>DIAGNOSTICS TRACE:</strong> {errorTrace || diagnosticsTrace}
           </div>
         </div>
       )}
@@ -484,8 +500,8 @@ export default function Page() {
       {/* Spotlight Carousel Section (Asset of the Week) */}
       <section className="spotlight-section">
         <div className="spotlight-header">
-          <span className="spotlight-tag">CURATED SPOTLIGHT OF THE WEEK</span>
-          <h2 className="spotlight-title">Featured High-Value Acquisitions</h2>
+          <span className="spotlight-tag">{spotlightTag}</span>
+          <h2 className="spotlight-title">{spotlightTitle}</h2>
         </div>
 
         {loading ? (
@@ -533,7 +549,7 @@ export default function Page() {
                 style={{ width: 'fit-content', marginTop: '1rem' }}
                 onClick={() => setQuickViewAsset(activeSpotlight)}
               >
-                Request Prospectus memorandum
+                {prospectusButton}
               </button>
             </div>
           </div>
@@ -547,9 +563,9 @@ export default function Page() {
         <div className="section-head">
           <div>
             <span style={{ fontSize: '0.75rem', color: 'var(--prem-accent)', fontWeight: 800, letterSpacing: '3px', textTransform: 'uppercase', display: 'block', marginBottom: '0.5rem' }}>
-              Browse Curated Catalog
+              {catalogEyebrow}
             </span>
-            <h2 className="section-title">Exclusive Acquisitions</h2>
+            <h2 className="section-title">{catalogTitle}</h2>
           </div>
           
           <div style={{ color: 'var(--prem-muted)', fontSize: '0.85rem', fontWeight: 600 }}>
@@ -575,9 +591,9 @@ export default function Page() {
         ) : filteredAssets.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '6rem 1rem', border: '1px dashed var(--prem-border)', borderRadius: '12px' }}>
             <span style={{ fontSize: '2.5rem', display: 'block', marginBottom: '1rem' }}>💎</span>
-            <h4 style={{ fontFamily: 'var(--prem-serif)', fontWeight: 800, marginBottom: '0.5rem' }}>No Curated Assets Match Search</h4>
-            <p style={{ color: 'var(--prem-muted)', fontSize: '0.85rem', maxWidth: '380px', margin: '0 auto 1.5rem' }}>Try clearing keywords or switching filter pills to display our private listings feed.</p>
-            <button className="elite-modal-cta" onClick={() => { setSearchTerm(''); setSelectedCategory('all'); }}>Clear Refinements</button>
+            <h4 style={{ fontFamily: 'var(--prem-serif)', fontWeight: 800, marginBottom: '0.5rem' }}>{emptyTitle}</h4>
+            <p style={{ color: 'var(--prem-muted)', fontSize: '0.85rem', maxWidth: '380px', margin: '0 auto 1.5rem' }}>{emptyDescription}</p>
+            <button className="elite-modal-cta" onClick={() => { setSearchTerm(''); setSelectedCategory('all'); }}>{emptyButton}</button>
           </div>
         ) : (
           <div className="elite-grid">
@@ -642,7 +658,7 @@ export default function Page() {
               className="elite-modal-cta"
               onClick={() => alert(`🔒 SECURE CONCIERGE LINK:\nDirect live terminal communication initiated with key vault custodian at ${getAssetVaultId(quickViewAsset)} regarding acquisition of "${quickViewAsset.title}".`)}
             >
-              Inquire Concierge Vault
+              {inquiryButton}
             </button>
           </div>
         </div>

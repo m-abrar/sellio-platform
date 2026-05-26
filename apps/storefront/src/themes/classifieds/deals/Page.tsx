@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { api } from '@sellio/api-client';
 import type { ClassifiedListing } from '@sellio/types';
 import { DealsHeader, DealCard, DealsFooter, CountdownTimer } from './components';
+import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 
 const FALLBACK_DEALS: ClassifiedListing[] = [
   {
@@ -366,6 +367,26 @@ const DealCardSkeleton = () => (
 
 export default function Page() {
   const router = useRouter();
+  const diagnosticsTitle = useThemeContent('diagnostics.title', 'DATABASE CONNECTION WARNING: Local catalog resilience fallback active');
+  const trendingTagLabel = useThemeContent('trending.tag_label', 'Trending Deal Highlight');
+  const endsLabel = useThemeContent('trending.ends_label', '⏳ Ends:');
+  const hotBargainsTitle = useThemeContent('hot_bargains.title', 'HOT BARGAINS');
+  const hotBargainsSubtitle = useThemeContent('hot_bargains.subtitle', 'MAXIMUM DISCOUNTS EXCLUSIVES');
+  const limitedDealsTitle = useThemeContent('limited_deals.title', 'Limited-Time Deals');
+  const limitedDealsSubtitle = useThemeContent('limited_deals.subtitle', 'Active Drops');
+  const sortLabel = useThemeContent('limited_deals.sort_label', 'Sort by:');
+  const loadMoreLabel = useThemeContent('collection.load_more_label', 'Load More Deals');
+  const loadingMoreLabel = useThemeContent('collection.loading_more_label', 'Loading Price Drops...');
+  const flashSaleTitle = useThemeContent('sidebar.flash_sale.title', 'DAILY FLASH SALE!');
+  const flashSaleSubtitle = useThemeContent('sidebar.flash_sale.subtitle', 'Super bargain lockouts');
+  const flashSaleDescription = useThemeContent('sidebar.flash_sale.description', 'New extreme price drops will unlock once the countdown runs out!');
+  const flashSaleButtonLabel = useThemeContent('sidebar.flash_sale.button_label', 'Enter Flash Lounge ⚡');
+  const featuredSellersTitle = useThemeContent('sidebar.featured_sellers.title', 'Featured Sellers');
+  const adBadge = useThemeContent('sidebar.ad.badge', 'SPONSORED PROMOTION');
+  const adTitle = useThemeContent('sidebar.ad.title', 'Merchants Clearance Event');
+  const adDesc = useThemeContent('sidebar.ad.desc', 'Overstock warehouses listing directly to local neighborhoods. Absolute rock-bottom bulk prices with next day shipping.');
+  const adButtonLabel = useThemeContent('sidebar.ad.button_label', 'Browse Warehouse Deals');
+
   const [deals, setDeals] = useState<ClassifiedListing[]>([]);
   const [loading, setLoading] = useState(true);
   const [useFallback, setUseFallback] = useState(false);
@@ -430,31 +451,34 @@ export default function Page() {
   // Hero Carousel slides data (retaining premium high-impact static layouts for graphics)
   const heroSlides = [
     {
-      title: "MacBook Pro 14\" M3 Max",
-      desc: "Apple M3 Max Chip with 14-Core CPU, 30-Core GPU, 1TB SSD. Extreme speed, deal limited to stock on hand.",
-      discount: "35",
-      priceNow: "$1,299.00",
-      priceWas: "$1,999.00",
-      image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=600",
-      category: "electronics"
+      title: useThemeContent('hero.slide_1.title', 'MacBook Pro 14" M3 Max'),
+      desc: useThemeContent('hero.slide_1.desc', 'Apple M3 Max Chip with 14-Core CPU, 30-Core GPU, 1TB SSD. Extreme speed, deal limited to stock on hand.'),
+      discount: useThemeContent('hero.slide_1.discount', '35'),
+      priceNow: useThemeContent('hero.slide_1.priceNow', '$1,299.00'),
+      priceWas: useThemeContent('hero.slide_1.priceWas', '$1,999.00'),
+      image: useThemeContent('hero.slide_1.image', 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=600'),
+      category: "electronics",
+      buttonLabel: useThemeContent('hero.slide_1.button_label', 'Snag This Deal Now ⚡')
     },
     {
-      title: "PlayStation 5 Console Slim",
-      desc: "Includes Marvel's Spider-Man 2 Full Game Voucher. Experience lightning-fast loading and deeper immersion.",
-      discount: "33",
-      priceNow: "$349.00",
-      priceWas: "$499.00",
-      image: "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?q=80&w=600",
-      category: "gaming"
+      title: useThemeContent('hero.slide_2.title', 'PlayStation 5 Console Slim'),
+      desc: useThemeContent('hero.slide_2.desc', "Includes Marvel's Spider-Man 2 Full Game Voucher. Experience lightning-fast loading and deeper immersion."),
+      discount: useThemeContent('hero.slide_2.discount', '33'),
+      priceNow: useThemeContent('hero.slide_2.priceNow', '$349.00'),
+      priceWas: useThemeContent('hero.slide_2.priceWas', '$499.00'),
+      image: useThemeContent('hero.slide_2.image', 'https://images.unsplash.com/photo-1606813907291-d86efa9b94db?q=80&w=600'),
+      category: "gaming",
+      buttonLabel: useThemeContent('hero.slide_2.button_label', 'Snag This Deal Now ⚡')
     },
     {
-      title: "Sony WH-1000XM5 Headphones",
-      desc: "Industry-leading noise canceling wireless headphones with crystal-clear hands-free calling and sleek comfort.",
-      discount: "45",
-      priceNow: "$219.00",
-      priceWas: "$399.00",
-      image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=600",
-      category: "electronics"
+      title: useThemeContent('hero.slide_3.title', 'Sony WH-1000XM5 Headphones'),
+      desc: useThemeContent('hero.slide_3.desc', 'Industry-leading noise canceling wireless headphones with crystal-clear hands-free calling and sleek comfort.'),
+      discount: useThemeContent('hero.slide_3.discount', '45'),
+      priceNow: useThemeContent('hero.slide_3.priceNow', '$219.00'),
+      priceWas: useThemeContent('hero.slide_3.priceWas', '$399.00'),
+      image: useThemeContent('hero.slide_3.image', 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=600'),
+      category: "electronics",
+      buttonLabel: useThemeContent('hero.slide_3.button_label', 'Snag This Deal Now ⚡')
     }
   ];
 
@@ -545,7 +569,7 @@ export default function Page() {
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#e71d36', fontWeight: 'bold', fontSize: '1.1rem', marginBottom: '1rem' }}>
             <span className="cd-pulse-dot" style={{ backgroundColor: '#e71d36' }}></span>
-            DATABASE CONNECTION WARNING: Local catalog resilience fallback active
+            {diagnosticsTitle}
           </div>
           <div style={{ color: '#9ca3af', fontSize: '0.85rem', lineHeight: '1.6' }}>
             <strong>STATUS:</strong> [OFFLINE] | LATENCY: [TIMEOUT]
@@ -577,7 +601,7 @@ export default function Page() {
                 
                 <div className="cd-hero-info">
                   <div className="cd-pulse-dot" style={{ marginRight: '8px' }}></div>
-                  <span style={{ fontWeight: 800, textTransform: 'uppercase', color: 'var(--cd-primary-red)', fontSize: '0.9rem' }}>Trending Deal Highlight</span>
+                  <span style={{ fontWeight: 800, textTransform: 'uppercase', color: 'var(--cd-primary-red)', fontSize: '0.9rem' }}>{trendingTagLabel}</span>
                   
                   <h1 className="cd-hero-title">{slide.title}</h1>
                   <p className="cd-hero-desc">{slide.desc}</p>
@@ -588,7 +612,7 @@ export default function Page() {
                       <span className="cd-hero-price-was">{slide.priceWas}</span>
                     </div>
                     <div className="cd-hero-timer-container">
-                      <span>⏳ Ends:</span>
+                      <span>{endsLabel}</span>
                       <CountdownTimer hours={3} seconds={45} />
                     </div>
                   </div>
@@ -604,7 +628,7 @@ export default function Page() {
                       router.push(resolveProductUrl(matchingSlug));
                     }}
                   >
-                    Snag This Deal Now ⚡
+                    {slide.buttonLabel}
                   </button>
                 </div>
 
@@ -655,9 +679,9 @@ export default function Page() {
             <div className="cd-section-header">
               <div className="cd-section-title-wrap">
                 <span style={{ fontSize: '1.5rem' }}>🔥</span>
-                <h2 className="cd-section-title">HOT BARGAINS</h2>
+                <h2 className="cd-section-title">{hotBargainsTitle}</h2>
               </div>
-              <span style={{ color: 'var(--cd-primary-red)', fontWeight: 800, fontSize: '0.85rem' }}>MAXIMUM DISCOUNTS EXCLUSIVES</span>
+              <span style={{ color: 'var(--cd-primary-red)', fontWeight: 800, fontSize: '0.85rem' }}>{hotBargainsSubtitle}</span>
             </div>
             
             <div className="cd-deals-grid">
@@ -693,15 +717,15 @@ export default function Page() {
             <div className="cd-section-header">
               <div className="cd-section-title-wrap">
                 <span style={{ fontSize: '1.5rem' }}>⏰</span>
-                <h2 className="cd-section-title">Limited-Time Deals</h2>
+                <h2 className="cd-section-title">{limitedDealsTitle}</h2>
               </div>
-              <span className="cd-section-link">Active Drops</span>
+              <span className="cd-section-link">{limitedDealsSubtitle}</span>
             </div>
 
             {/* Filter and sorting console ribbon */}
             <div className="cd-filter-bar">
               <div className="cd-filter-group">
-                <span style={{ fontWeight: 700, fontSize: '0.85rem', textTransform: 'uppercase', color: 'var(--cd-text-muted)' }}>Sort by:</span>
+                <span style={{ fontWeight: 700, fontSize: '0.85rem', textTransform: 'uppercase', color: 'var(--cd-text-muted)' }}>{sortLabel}</span>
                 <select 
                   className="cd-select" 
                   value={sortBy} 
@@ -757,7 +781,7 @@ export default function Page() {
                   onClick={handleLoadMore}
                   disabled={loadingMore}
                 >
-                  {loadingMore ? 'Loading Price Drops...' : 'Load More Deals'}
+                  {loadingMore ? loadingMoreLabel : loadMoreLabel}
                 </button>
               </div>
             )}
@@ -769,25 +793,25 @@ export default function Page() {
           
           {/* Flash Sale Widget with huge timer clock */}
           <div className="cd-flash-widget">
-            <h3 className="cd-flash-title">DAILY FLASH SALE!</h3>
-            <p className="cd-flash-subtitle">Super bargain lockouts</p>
+            <h3 className="cd-flash-title">{flashSaleTitle}</h3>
+            <p className="cd-flash-subtitle">{flashSaleSubtitle}</p>
             
             <div className="cd-flash-timer-box">
               <CountdownTimer hours={7} seconds={12} />
             </div>
             
-            <p style={{ fontSize: '0.8rem', margin: '0 0 1rem', opacity: 0.9 }}>New extreme price drops will unlock once the countdown runs out!</p>
+            <p style={{ fontSize: '0.8rem', margin: '0 0 1rem', opacity: 0.9 }}>{flashSaleDescription}</p>
             <button 
               className="cd-flash-widget-btn"
               onClick={() => alert("🔑 Checking VIP status... Directing to Flash Lounge.")}
             >
-              Enter Flash Lounge ⚡
+              {flashSaleButtonLabel}
             </button>
           </div>
 
           {/* Featured Sellers Follow Board */}
           <div className="cd-sidebar-widget">
-            <h3 className="cd-widget-title">Featured Sellers</h3>
+            <h3 className="cd-widget-title">{featuredSellersTitle}</h3>
             <div className="cd-sellers-list">
               {[
                 { name: "Gadget Guru", rating: "⭐⭐⭐⭐⭐ (240 reviews)", initial: "G" },
@@ -820,14 +844,14 @@ export default function Page() {
 
           {/* Ad Clearance Sponsored Slot */}
           <div className="cd-ad-widget">
-            <span className="cd-ad-badge">SPONSORED PROMOTION</span>
-            <h3 className="cd-ad-title">Merchants Clearance Event</h3>
-            <p className="cd-ad-desc">Overstock warehouses listing directly to local neighborhoods. Absolute rock-bottom bulk prices with next day shipping.</p>
+            <span className="cd-ad-badge">{adBadge}</span>
+            <h3 className="cd-ad-title">{adTitle}</h3>
+            <p className="cd-ad-desc">{adDesc}</p>
             <button 
               className="cd-ad-btn"
               onClick={() => alert("📦 Connecting direct with overstock warehouses...")}
             >
-              Browse Warehouse Deals
+              {adButtonLabel}
             </button>
           </div>
 

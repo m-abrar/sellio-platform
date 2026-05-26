@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { api } from '@sellio/api-client';
 import type { Property } from '@sellio/types';
 import { BrutalistUnitCard, StructuralStat } from './components';
+import { useThemeContent, useThemeMedia } from '@/components/theme-content/ThemeContentProvider';
 
 const fallbackImages = [
   '/themes/properties/urban/9.webp',
@@ -82,17 +83,21 @@ export default function Page() {
       {/* Brutalist Hero */}
       <section className="pu-hero" aria-labelledby="pu-hero-title">
         <div>
-          <div className="pu-mono" style={{ color: 'var(--pu-cobalt)', marginBottom: '3rem' }}>URBAN_LIVING_V8_DISTRIBUTION</div>
+          <div className="pu-mono" style={{ color: 'var(--pu-cobalt)', marginBottom: '3rem' }}>{useThemeContent('hero.kicker', 'URBAN_LIVING_V8_DISTRIBUTION')}</div>
           <h1 className="pu-heading-xl" id="pu-hero-title">
-            Skyline <br/>
-            Registry.
+            {useThemeContent('hero.title', 'Skyline \nRegistry.').split('\n').map((line, i, arr) => (
+              <React.Fragment key={i}>
+                {line}
+                {i < arr.length - 1 && <br />}
+              </React.Fragment>
+            ))}
           </h1>
           <p style={{ marginTop: '3rem', fontSize: '1.25rem', color: 'var(--pu-text-muted)', lineHeight: 2, maxWidth: '500px' }}>
-            Modern sanctuaries in the heart of the high-fidelity city. Discover curated lofts, penthouses, and studios engineered for the vertical lifestyle.
+            {useThemeContent('hero.description', 'Modern sanctuaries in the heart of the high-fidelity city. Discover curated lofts, penthouses, and studios engineered for the vertical lifestyle.')}
           </p>
           <div style={{ marginTop: '4rem', display: 'flex', gap: '3rem', flexWrap: 'wrap' }}>
             <button className="pu-btn-primary" id="pu-btn-explore" onClick={() => document.getElementById('pu-registry-grid')?.scrollIntoView({ behavior: 'smooth' })}>
-              Explore Inventory
+              {useThemeContent('hero.primary_cta_label', 'Explore Inventory')}
             </button>
             <button style={{
                 background: 'transparent',
@@ -104,12 +109,12 @@ export default function Page() {
                 cursor: 'pointer',
                 transition: 'all 0.3s ease'
             }} id="pu-btn-list" onClick={() => alert('Registering new urban unit node.')}>
-              List Unit
+              {useThemeContent('hero.secondary_cta_label', 'List Unit')}
             </button>
           </div>
         </div>
         <div className="pu-hero-image-wrapper">
-          <img src="/themes/properties/urban/1.webp" alt="High-Rise Urban Skyline Architectural Framework" className="pu-hero-image" />
+          <img src={useThemeMedia('hero.image', '/themes/properties/urban/1.webp')} alt="High-Rise Urban Skyline Architectural Framework" className="pu-hero-image" />
         </div>
       </section>
 
@@ -118,17 +123,22 @@ export default function Page() {
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.5fr', gap: '6rem', alignItems: 'center' }} className="pu-hero">
               <div>
                   <h2 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: 700, lineHeight: 1.1, textTransform: 'uppercase', marginBottom: '3rem', color: 'var(--pu-steel)' }} id="pu-intel-title">
-                    Connected <br/>Intelligence.
+                    {useThemeContent('intel.title', 'Connected \nIntelligence.').split('\n').map((line, i, arr) => (
+                      <React.Fragment key={i}>
+                        {line}
+                        {i < arr.length - 1 && <br />}
+                      </React.Fragment>
+                    ))}
                   </h2>
                   <p style={{ color: 'var(--pu-text-muted)', lineHeight: 1.8, fontSize: '1.1rem' }}>
-                      Our urban nodes are equipped with high-fidelity smart-grid technologies, ensuring absolute connectivity and architectural precision for the modern dweller.
+                      {useThemeContent('intel.description', 'Our urban nodes are equipped with high-fidelity smart-grid technologies, ensuring absolute connectivity and architectural precision for the modern dweller.')}
                   </p>
               </div>
               <div className="pu-stats-grid">
-                  <StructuralStat value="10Gb" label="STANDARD_FIBER" />
-                  <StructuralStat value="A+" label="ENERGY_RATING" />
-                  <StructuralStat value="24h" label="CONCIERGE_NODE" />
-                  <StructuralStat value="EV" label="CHARGING_SYNC" />
+                  <StructuralStat value={useThemeContent('intel.stat_1_value', '10Gb')} label={useThemeContent('intel.stat_1_label', 'STANDARD_FIBER')} />
+                  <StructuralStat value={useThemeContent('intel.stat_2_value', 'A+')} label={useThemeContent('intel.stat_2_label', 'ENERGY_RATING')} />
+                  <StructuralStat value={useThemeContent('intel.stat_3_value', '24h')} label={useThemeContent('intel.stat_3_label', 'CONCIERGE_NODE')} />
+                  <StructuralStat value={useThemeContent('intel.stat_4_value', 'EV')} label={useThemeContent('intel.stat_4_label', 'CHARGING_SYNC')} />
               </div>
           </div>
       </section>
@@ -137,11 +147,11 @@ export default function Page() {
       <section id="pu-registry-grid" aria-labelledby="pu-grid-title">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '6rem', flexWrap: 'wrap', gap: '2rem' }}>
               <div>
-                <div className="pu-mono" style={{ marginBottom: '1rem' }}>REGISTRY_COLLECTION // 2026</div>
-                <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 700, textTransform: 'uppercase', margin: 0 }} id="pu-grid-title">Registry Node Units</h2>
+                <div className="pu-mono" style={{ marginBottom: '1rem' }}>{useThemeContent('grid.kicker', 'REGISTRY_COLLECTION // 2026')}</div>
+                <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 700, textTransform: 'uppercase', margin: 0 }} id="pu-grid-title">{useThemeContent('grid.title', 'Registry Node Units')}</h2>
               </div>
               <div style={{ maxWidth: '400px', fontSize: '0.95rem', color: 'var(--pu-text-muted)', lineHeight: 1.8 }}>
-                  Every architectural unit is synchronized with our global registry node, ensuring 100% data integrity and availability status.
+                  {useThemeContent('grid.description', 'Every architectural unit is synchronized with our global registry node, ensuring 100% data integrity and availability status.')}
               </div>
           </div>
 
@@ -156,15 +166,15 @@ export default function Page() {
               ))
             ) : propertyError ? (
               <div className="prop-listing-state">
-                <div className="prop-listing-kicker">Property Sync Offline</div>
-                <h3>Registry units could not be loaded.</h3>
+                <div className="prop-listing-kicker">{useThemeContent('offline.kicker', 'Property Sync Offline')}</div>
+                <h3>{useThemeContent('offline.title', 'Registry units could not be loaded.')}</h3>
                 <p>{propertyError}</p>
               </div>
             ) : properties.length === 0 ? (
               <div className="prop-listing-state">
-                <div className="prop-listing-kicker">Empty Property Registry</div>
-                <h3>No live properties are published yet.</h3>
-                <p>Add property records in the backend and this urban grid will hydrate automatically.</p>
+                <div className="prop-listing-kicker">{useThemeContent('empty.kicker', 'Empty Property Registry')}</div>
+                <h3>{useThemeContent('empty.title', 'No live properties are published yet.')}</h3>
+                <p>{useThemeContent('empty.description', 'Add property records in the backend and this urban grid will hydrate automatically.')}</p>
               </div>
             ) : (
               properties.slice(0, 6).map((property, index) => {
@@ -181,16 +191,20 @@ export default function Page() {
 
       {/* Neighborhood CTA */}
       <section style={{ marginTop: '10rem', padding: '10rem 10%', background: 'var(--pu-steel)', color: 'white', textAlign: 'center' }} className="pu-cta-box" aria-labelledby="pu-cta-title">
-          <div className="pu-mono" style={{ color: 'var(--pu-cobalt)', marginBottom: '3rem' }}>CITY_PULSE_PROTOCOL</div>
+          <div className="pu-mono" style={{ color: 'var(--pu-cobalt)', marginBottom: '3rem' }}>{useThemeContent('cta.kicker', 'CITY_PULSE_PROTOCOL')}</div>
           <h2 style={{ fontSize: 'clamp(3rem, 8vw, 5.5rem)', fontWeight: 700, letterSpacing: '-3px', textTransform: 'uppercase', marginBottom: '4rem', lineHeight: 1 }} id="pu-cta-title">
-              Live in the <br/>
-              Pulse of the City.
+            {useThemeContent('cta.title', 'Live in the \nPulse of the City.').split('\n').map((line, i, arr) => (
+              <React.Fragment key={i}>
+                {line}
+                {i < arr.length - 1 && <br />}
+              </React.Fragment>
+            ))}
           </h2>
           <p style={{ maxWidth: '700px', margin: '0 auto 6rem', opacity: 0.6, fontSize: '1.25rem', lineHeight: 1.8 }}>
-              From the industrial lofts of the Arts District to the high-energy penthouses of the Financial Center, find the urban node that matches your frequency.
+              {useThemeContent('cta.description', 'From the industrial lofts of the Arts District to the high-energy penthouses of the Financial Center, find the urban node that matches your frequency.')}
           </p>
           <button className="pu-btn-primary" style={{ padding: '2.5rem 8rem', fontSize: '1.2rem' }} id="pu-btn-cta-auth" onClick={() => alert('District sync authorization handshake initiated.')}>
-              Authorize District Sync
+              {useThemeContent('cta.button_label', 'Authorize District Sync')}
           </button>
       </section>
     </div>

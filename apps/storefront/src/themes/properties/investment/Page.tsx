@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { api } from '@sellio/api-client';
 import type { Property } from '@sellio/types';
 import { PortfolioAssetCard, YieldAnalyticsHUD } from './components';
+import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 
 const assetTypes = ['Residential', 'Commercial', 'Industrial', 'Retail', 'Specialty', 'Development', 'Infrastructure', 'Commercial'];
 const statusLabels = ['VERIFIED', 'ACTIVE', 'PREMIUM', 'INSTITUTIONAL'];
@@ -71,34 +72,52 @@ export default function Page() {
       {/* Financial Terminal Hero */}
       <section className="pi-hero">
         <div>
-          <div className="pi-mono" style={{ marginBottom: '2.5rem' }}>PORTFOLIO_SYNC_V8_ACTIVE</div>
+          <div className="pi-mono" style={{ marginBottom: '2.5rem' }}>{useThemeContent('hero.kicker', 'PORTFOLIO_SYNC_V8_ACTIVE')}</div>
           <h1 className="pi-heading-xl">
-            Capital <br/>
-            Distribution <br/>
-            <span style={{ color: 'var(--pi-emerald)' }}>Synchronized.</span>
+            {useThemeContent('hero.title', 'Capital \nDistribution \nSynchronized.').split('\n').map((line, i, arr) => {
+              const highlight = useThemeContent('hero.highlight', 'Synchronized.');
+              const hasHighlight = line.includes(highlight);
+              return (
+                <React.Fragment key={i}>
+                  {hasHighlight ? (
+                    <>
+                      {line.split(highlight).map((part, pIdx, pArr) => (
+                        <React.Fragment key={pIdx}>
+                          {part}
+                          {pIdx < pArr.length - 1 && <span style={{ color: 'var(--pi-emerald)' }}>{highlight}</span>}
+                        </React.Fragment>
+                      ))}
+                    </>
+                  ) : (
+                    line
+                  )}
+                  {i < arr.length - 1 && <br />}
+                </React.Fragment>
+              );
+            })}
           </h1>
           <p style={{ marginTop: '4rem', fontSize: '1.25rem', color: 'var(--pi-slate)', lineHeight: 1.8, maxWidth: '600px' }}>
-            The global high-fidelity terminal for institutional real estate investment. Deploy capital across verified asset nodes with performance-driven precision.
+            {useThemeContent('hero.description', 'The global high-fidelity terminal for institutional real estate investment. Deploy capital across verified asset nodes with performance-driven precision.')}
           </p>
           <div style={{ marginTop: '6rem', display: 'flex', gap: '3rem' }}>
-            <button className="pi-btn-primary">Execute_Investment</button>
-            <button style={{ background: 'transparent', border: '2px solid var(--pi-midnight)', color: 'var(--pi-midnight)', padding: '1.5rem 4rem', fontWeight: 800, textTransform: 'uppercase', cursor: 'pointer' }}>View_Reports</button>
+            <button className="pi-btn-primary">{useThemeContent('hero.primary_cta_label', 'Execute_Investment')}</button>
+            <button style={{ background: 'transparent', border: '2px solid var(--pi-midnight)', color: 'var(--pi-midnight)', padding: '1.5rem 4rem', fontWeight: 800, textTransform: 'uppercase', cursor: 'pointer' }}>{useThemeContent('hero.secondary_cta_label', 'View_Reports')}</button>
           </div>
         </div>
         <div className="pi-hero-terminal">
-          <div className="pi-mono" style={{ marginBottom: '3rem', borderBottom: '1px solid var(--pi-border)', paddingBottom: '1.5rem' }}>NETWORK_PERFORMANCE_METRICS</div>
+          <div className="pi-mono" style={{ marginBottom: '3rem', borderBottom: '1px solid var(--pi-border)', paddingBottom: '1.5rem' }}>{useThemeContent('terminal.metrics_label', 'NETWORK_PERFORMANCE_METRICS')}</div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem' }}>
-            <YieldAnalyticsHUD label="TOTAL_NETWORK_VOLUME" value="$4.2B+" color="var(--pi-emerald)" />
-            <YieldAnalyticsHUD label="AVERAGE_YIELD_ARR" value="8.4%" />
-            <YieldAnalyticsHUD label="LIQUIDITY_INDEX" value="0.82" />
-            <YieldAnalyticsHUD label="VOLATILITY_HEDGE" value="ACTIVE" color="var(--pi-gold)" />
+            <YieldAnalyticsHUD label={useThemeContent('hud.total_volume_label', 'TOTAL_NETWORK_VOLUME')} value={useThemeContent('hud.total_volume_value', '$4.2B+')} color="var(--pi-emerald)" />
+            <YieldAnalyticsHUD label={useThemeContent('hud.avg_yield_label', 'AVERAGE_YIELD_ARR')} value={useThemeContent('hud.avg_yield_value', '8.4%')} />
+            <YieldAnalyticsHUD label={useThemeContent('hud.liquidity_label', 'LIQUIDITY_INDEX')} value={useThemeContent('hud.liquidity_value', '0.82')} />
+            <YieldAnalyticsHUD label={useThemeContent('hud.volatility_label', 'VOLATILITY_HEDGE')} value={useThemeContent('hud.volatility_value', 'ACTIVE')} color="var(--pi-gold)" />
           </div>
         </div>
       </section>
 
       {/* Logic Bar */}
       <div style={{ padding: '3rem 6%', background: 'white', borderBottom: '1px solid var(--pi-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          {['MARKET_STATUS: STABLE', 'NODAL_VERIFICATION: 100%', 'INSTITUTIONAL_AUTH: VERIFIED', 'SETTLEMENT: INSTANT'].map(logic => (
+          {useThemeContent('logic.items', 'MARKET_STATUS: STABLE|NODAL_VERIFICATION: 100%|INSTITUTIONAL_AUTH: VERIFIED|SETTLEMENT: INSTANT').split('|').map(logic => (
               <div key={logic} className="pi-mono" style={{ fontSize: '0.65rem' }}>{logic}</div>
           ))}
       </div>
@@ -107,11 +126,18 @@ export default function Page() {
       <section style={{ marginTop: '10rem' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '8rem' }}>
               <div>
-                  <div className="pi-mono" style={{ marginBottom: '1.5rem' }}>YIELD_REGISTRY</div>
-                  <h2 style={{ fontSize: '5rem', fontWeight: 900, letterSpacing: '-2px', textTransform: 'uppercase' }}>Asset <br/>Performance.</h2>
+                  <div className="pi-mono" style={{ marginBottom: '1.5rem' }}>{useThemeContent('grid.kicker', 'YIELD_REGISTRY')}</div>
+                  <h2 style={{ fontSize: '5rem', fontWeight: 900, letterSpacing: '-2px', textTransform: 'uppercase' }}>
+                      {useThemeContent('grid.title', 'Asset \nPerformance.').split('\n').map((line, i, arr) => (
+                        <React.Fragment key={i}>
+                          {line}
+                          {i < arr.length - 1 && <br />}
+                        </React.Fragment>
+                      ))}
+                  </h2>
               </div>
               <div style={{ textAlign: 'right', maxWidth: '400px', fontSize: '1rem', color: 'var(--pi-slate)', lineHeight: 1.8 }}>
-                  Our unified protocol synchronizes real-time performance metadata from residential, commercial, and industrial yield nodes.
+                  {useThemeContent('grid.description', 'Our unified protocol synchronizes real-time performance metadata from residential, commercial, and industrial yield nodes.')}
               </div>
           </div>
 
@@ -126,15 +152,15 @@ export default function Page() {
               ))
             ) : propertyError ? (
               <div className="prop-listing-state">
-                <div className="prop-listing-kicker">Property Sync Offline</div>
-                <h3>Asset performance registry could not be loaded.</h3>
+                <div className="prop-listing-kicker">{useThemeContent('offline.kicker', 'Property Sync Offline')}</div>
+                <h3>{useThemeContent('offline.title', 'Asset performance registry could not be loaded.')}</h3>
                 <p>{propertyError}</p>
               </div>
             ) : properties.length === 0 ? (
               <div className="prop-listing-state">
-                <div className="prop-listing-kicker">Empty Property Registry</div>
-                <h3>No live properties are published yet.</h3>
-                <p>Add property records in the backend and this investment grid will hydrate automatically.</p>
+                <div className="prop-listing-kicker">{useThemeContent('empty.kicker', 'Empty Property Registry')}</div>
+                <h3>{useThemeContent('empty.title', 'No live properties are published yet.')}</h3>
+                <p>{useThemeContent('empty.description', 'Add property records in the backend and this investment grid will hydrate automatically.')}</p>
               </div>
             ) : (
               properties.slice(0, 9).map((property, index) => {
@@ -151,16 +177,20 @@ export default function Page() {
 
       {/* Institutional CTA */}
       <section style={{ marginTop: '15rem', padding: '12rem 8%', background: 'var(--pi-midnight)', color: 'white', borderRadius: '4px', textAlign: 'center' }}>
-          <div className="pi-mono" style={{ color: 'var(--pi-emerald)', marginBottom: '3rem' }}>INSTITUTIONAL_GRADE_LOGIC</div>
+          <div className="pi-mono" style={{ color: 'var(--pi-emerald)', marginBottom: '3rem' }}>{useThemeContent('cta.kicker', 'INSTITUTIONAL_GRADE_LOGIC')}</div>
           <h2 style={{ fontSize: '6rem', fontWeight: 900, letterSpacing: '-4px', textTransform: 'uppercase', marginBottom: '4rem', lineHeight: 1 }}>
-              Scale Your <br/>
-              Portfolio Yield.
+              {useThemeContent('cta.title', 'Scale Your \nPortfolio Yield.').split('\n').map((line, i, arr) => (
+                <React.Fragment key={i}>
+                  {line}
+                  {i < arr.length - 1 && <br />}
+                </React.Fragment>
+              ))}
           </h2>
           <p style={{ maxWidth: '800px', margin: '0 auto 8rem', opacity: 0.5, fontSize: '1.25rem', lineHeight: 1.8 }}>
-              Our investment nodes are built on a foundation of verified financial metadata. Connect your capital node to the Sellio network for high-fidelity asset distribution.
+              {useThemeContent('cta.description', 'Our investment nodes are built on a foundation of verified financial metadata. Connect your capital node to the Sellio network for high-fidelity asset distribution.')}
           </p>
           <button className="pi-btn-primary" style={{ background: 'var(--pi-emerald)', padding: '2.5rem 8rem', fontSize: '1.25rem' }}>
-              Connect_Capital_Node
+              {useThemeContent('cta.button_label', 'Connect_Capital_Node')}
           </button>
       </section>
 

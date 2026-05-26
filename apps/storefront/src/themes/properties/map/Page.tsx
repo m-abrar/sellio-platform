@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { api } from '@sellio/api-client';
 import type { Property } from '@sellio/types';
 import { MapListCard, MapPriceMarker, MapHUD } from './components';
+import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 
 const fallbackImages = [
   '/themes/properties/map/1.webp',
@@ -80,13 +81,13 @@ export default function Page() {
       <aside className="pm-sidebar">
         <div className="pm-sidebar-header">
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <h2 style={{ fontSize: '1.25rem', fontWeight: 800 }}>Registry Nodes</h2>
+                <h2 style={{ fontSize: '1.25rem', fontWeight: 800 }}>{useThemeContent('sidebar.title', 'Registry Nodes')}</h2>
                 <span className="pm-marker" style={{ position: 'relative', top: 0, left: 0, padding: '0.25rem 0.75rem', fontSize: '0.65rem' }}>
-                  {loadingProperties ? '...' : `${listings.length} UNITS`}
+                  {loadingProperties ? '...' : `${listings.length} ${useThemeContent('sidebar.units_suffix', 'UNITS')}`}
                 </span>
             </div>
             <div style={{ marginTop: '1.5rem', display: 'flex', gap: '0.5rem' }}>
-                {['FILTER', 'PRICE', 'TYPE'].map(btn => (
+                {useThemeContent('sidebar.filters', 'FILTER|PRICE|TYPE').split('|').map(btn => (
                     <button key={btn} style={{
                         flex: 1,
                         background: 'rgba(255,255,255,0.05)',
@@ -115,15 +116,15 @@ export default function Page() {
             ))
           ) : propertyError ? (
             <div className="prop-listing-state pm-listing-state">
-              <div className="prop-listing-kicker">Property Sync Offline</div>
-              <h3>Registry nodes could not be loaded.</h3>
+              <div className="prop-listing-kicker">{useThemeContent('offline.kicker', 'Property Sync Offline')}</div>
+              <h3>{useThemeContent('offline.title', 'Registry nodes could not be loaded.')}</h3>
               <p>{propertyError}</p>
             </div>
           ) : listings.length === 0 ? (
             <div className="prop-listing-state pm-listing-state">
-              <div className="prop-listing-kicker">Empty Property Registry</div>
-              <h3>No live properties are published yet.</h3>
-              <p>Add property records in the backend and this map registry will hydrate automatically.</p>
+              <div className="prop-listing-kicker">{useThemeContent('empty.kicker', 'Empty Property Registry')}</div>
+              <h3>{useThemeContent('empty.title', 'No live properties are published yet.')}</h3>
+              <p>{useThemeContent('empty.description', 'Add property records in the backend and this map registry will hydrate automatically.')}</p>
             </div>
           ) : (
             listings.map((item) => (
@@ -135,7 +136,7 @@ export default function Page() {
           {!loadingProperties && !propertyError && listings.length > 0 && (
             <div style={{ textAlign: 'center', padding: '4rem 0', opacity: 0.2 }}>
                 <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>⌬</div>
-                <div className="pm-hud-label">END_OF_REGISTRY</div>
+                <div className="pm-hud-label">{useThemeContent('sidebar.end_label', 'END_OF_REGISTRY')}</div>
             </div>
           )}
         </div>

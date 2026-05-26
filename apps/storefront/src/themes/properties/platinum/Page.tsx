@@ -5,6 +5,7 @@ import { api } from '@sellio/api-client';
 import type { Property } from '@sellio/types';
 import { ShowcaseCard, StatisticsNode } from './components';
 import { getThemeLink, scrollToSection } from './utils';
+import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 
 const spans = ['span-8', 'span-4', 'span-4', 'span-8', 'span-4', 'span-8'];
 const fallbackImages = [
@@ -73,13 +74,17 @@ export default function Page() {
   return (
     <div className="pl-page">
       <section className="pl-hero" id="pl-hero-section">
-        <div className="pl-hero-kicker pl-mono">ARCHITECTURAL_SUBLIMITY_V8</div>
+        <div className="pl-hero-kicker pl-mono">{useThemeContent('hero.kicker', 'ARCHITECTURAL_SUBLIMITY_V8')}</div>
         <h1 className="pl-heading-xl">
-          Structural <br />
-          Refinement.
+          {useThemeContent('hero.title', 'Structural \nRefinement.').split('\n').map((line, i, arr) => (
+            <React.Fragment key={i}>
+              {line}
+              {i < arr.length - 1 && <br />}
+            </React.Fragment>
+          ))}
         </h1>
         <p className="pl-hero-description">
-          A curated collection of the world's most significant private estates. Where raw materials meet refined billionaire-minimalist vision.
+          {useThemeContent('hero.description', "A curated collection of the world's most significant private estates. Where raw materials meet refined billionaire-minimalist vision.")}
         </p>
 
         <button
@@ -88,7 +93,7 @@ export default function Page() {
           onClick={() => scrollToSection('pl-showcase-section')}
           aria-label="Scroll to property showcase"
         >
-          <span className="pl-mono">DISCOVER</span>
+          <span className="pl-mono">{useThemeContent('hero.scroll_label', 'DISCOVER')}</span>
           <div className="pl-scroll-line" />
         </button>
       </section>
@@ -96,24 +101,31 @@ export default function Page() {
       <section className="pl-section pl-protocol-section" id="pl-protocol-section">
         <div className="pl-protocol-grid">
           <div className="pl-protocol-copy">
-            <h2>The Protocol <br />of Acquisition.</h2>
+            <h2>
+              {useThemeContent('protocol.title', 'The Protocol \nof Acquisition.').split('\n').map((line, i, arr) => (
+                <React.Fragment key={i}>
+                  {line}
+                  {i < arr.length - 1 && <br />}
+                </React.Fragment>
+              ))}
+            </h2>
             <p>
-              We do not merely list properties. We validate the architectural integrity, historical significance, and future appreciation of every node in our network. Each acquisition is handled via our private concierge protocol.
+              {useThemeContent('protocol.description', 'We do not merely list properties. We validate the architectural integrity, historical significance, and future appreciation of every node in our network. Each acquisition is handled via our private concierge protocol.')}
             </p>
           </div>
           <div className="pl-protocol-stats">
-            <StatisticsNode label="OFF_MARKET_NODES" value="92%" />
-            <StatisticsNode label="ASSETS_UNDER_SYNC" value="$4.2B" />
-            <StatisticsNode label="GLOBAL_CONCIERGE" value="24/7" />
+            <StatisticsNode label={useThemeContent('protocol.stat_1_label', 'OFF_MARKET_NODES')} value={useThemeContent('protocol.stat_1_value', '92%')} />
+            <StatisticsNode label={useThemeContent('protocol.stat_2_label', 'ASSETS_UNDER_SYNC')} value={useThemeContent('protocol.stat_2_value', '$4.2B')} />
+            <StatisticsNode label={useThemeContent('protocol.stat_3_label', 'GLOBAL_CONCIERGE')} value={useThemeContent('protocol.stat_3_value', '24/7')} />
           </div>
         </div>
       </section>
 
       <section className="pl-section pl-showcase-section" id="pl-showcase-section">
         <div className="pl-showcase-header">
-          <div className="pl-mono">CINEMATIC_SHOWCASE</div>
+          <div className="pl-mono">{useThemeContent('showcase.kicker', 'CINEMATIC_SHOWCASE')}</div>
           <div className="pl-showcase-filter">
-            FILTER: LUXURY_TIER == &quot;PLATINUM&quot; · {loadingProperties ? '...' : properties.length} NODES
+            {useThemeContent('showcase.filter_label', 'FILTER: LUXURY_TIER == "PLATINUM"')} · {loadingProperties ? '...' : properties.length} {useThemeContent('showcase.nodes_suffix', 'NODES')}
           </div>
         </div>
 
@@ -128,15 +140,15 @@ export default function Page() {
             ))
           ) : propertyError ? (
             <div className="prop-listing-state pl-listing-state">
-              <div className="prop-listing-kicker">Property Sync Offline</div>
-              <h3>Cinematic showcase could not be loaded.</h3>
+              <div className="prop-listing-kicker">{useThemeContent('offline.kicker', 'Property Sync Offline')}</div>
+              <h3>{useThemeContent('offline.title', 'Cinematic showcase could not be loaded.')}</h3>
               <p>{propertyError}</p>
             </div>
           ) : properties.length === 0 ? (
             <div className="prop-listing-state pl-listing-state">
-              <div className="prop-listing-kicker">Empty Property Registry</div>
-              <h3>No live properties are published yet.</h3>
-              <p>Add property records in the backend and this platinum grid will hydrate automatically.</p>
+              <div className="prop-listing-kicker">{useThemeContent('empty.kicker', 'Empty Property Registry')}</div>
+              <h3>{useThemeContent('empty.title', 'No live properties are published yet.')}</h3>
+              <p>{useThemeContent('empty.description', 'Add property records in the backend and this platinum grid will hydrate automatically.')}</p>
             </div>
           ) : (
             properties.slice(0, 6).map((property, index) => {
@@ -157,14 +169,21 @@ export default function Page() {
 
       <section className="pl-cta-section" id="pl-cta-section">
         <div className="pl-cta-inner">
-          <div className="pl-mono pl-cta-kicker">PRIVATE_CONSULTATION</div>
-          <h2>Acquire Your <br />Legacy.</h2>
+          <div className="pl-mono pl-cta-kicker">{useThemeContent('cta.kicker', 'PRIVATE_CONSULTATION')}</div>
+          <h2>
+            {useThemeContent('cta.title', 'Acquire Your \nLegacy.').split('\n').map((line, i, arr) => (
+              <React.Fragment key={i}>
+                {line}
+                {i < arr.length - 1 && <br />}
+              </React.Fragment>
+            ))}
+          </h2>
           <button
             type="button"
             className="pl-cta-btn"
             onClick={() => scrollToSection('pl-showcase-section')}
           >
-            REQUEST_INVITATION
+            {useThemeContent('cta.button_label', 'REQUEST_INVITATION')}
           </button>
         </div>
       </section>

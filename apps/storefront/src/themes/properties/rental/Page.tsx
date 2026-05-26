@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { LeaseUnitCard, TrustMetrics } from './components';
 import { api } from '@sellio/api-client';
 import type { Property } from '@sellio/types';
+import { useThemeContent, useThemeMedia } from '@/components/theme-content/ThemeContentProvider';
 
 // Fallback high-fidelity local rental units
 const FALLBACK_RENTALS = [
@@ -180,14 +181,32 @@ export default function Page() {
       {/* Lease Hero */}
       <section className="pr-hero">
         <div>
-          <div className="pr-mono" style={{ marginBottom: '2.5rem' }}>EASY_LEASING_PROTOCOL_V8</div>
+          <div className="pr-mono" style={{ marginBottom: '2.5rem' }}>{useThemeContent('hero.kicker', 'EASY_LEASING_PROTOCOL_V8')}</div>
           <h1 className="pr-heading-xl">
-            Rent Your <br/>
-            Next Home <br/>
-            <span style={{ color: 'var(--pr-mint)' }}>with Ease.</span>
+            {useThemeContent('hero.title', 'Rent Your \nNext Home \nwith Ease.').split('\n').map((line, i, arr) => {
+              const highlight = useThemeContent('hero.highlight', 'with Ease.');
+              const hasHighlight = line.includes(highlight);
+              return (
+                <React.Fragment key={i}>
+                  {hasHighlight ? (
+                    <>
+                      {line.split(highlight).map((part, pIdx, pArr) => (
+                        <React.Fragment key={pIdx}>
+                          {part}
+                          {pIdx < pArr.length - 1 && <span style={{ color: 'var(--pr-mint)' }}>{highlight}</span>}
+                        </React.Fragment>
+                      ))}
+                    </>
+                  ) : (
+                    line
+                  )}
+                  {i < arr.length - 1 && <br />}
+                </React.Fragment>
+              );
+            })}
           </h1>
           <p style={{ marginTop: '3rem', fontSize: '1.2rem', color: 'var(--pr-text-muted)', lineHeight: 1.8, maxWidth: '540px' }}>
-            A high-fidelity rental protocol designed for modern residential nodes. Certified properties, digital instant leases, and automated utility routing nodes.
+            {useThemeContent('hero.description', 'A high-fidelity rental protocol designed for modern residential nodes. Certified properties, digital instant leases, and automated utility routing nodes.')}
           </p>
           
           <div style={{ marginTop: '4rem', display: 'flex', gap: '2rem' }} className="pr-hero-buttons">
@@ -196,7 +215,7 @@ export default function Page() {
               id="pr-btn-discover" 
               onClick={() => document.getElementById('pr-discovery-grid')?.scrollIntoView({ behavior: 'smooth' })}
             >
-              Find a Rental
+              {useThemeContent('hero.primary_cta_label', 'Find a Rental')}
             </button>
             <button style={{ 
                 background: 'transparent', 
@@ -208,19 +227,19 @@ export default function Page() {
                 cursor: 'pointer',
                 transition: 'all 0.3s ease'
             }} id="pr-btn-list" onClick={() => alert('List your residential node pipeline. Developer console active.')}>
-                List Unit
+                {useThemeContent('hero.secondary_cta_label', 'List Unit')}
             </button>
           </div>
         </div>
         
         <div className="pr-hero-image-wrapper">
-          <img src="/themes/properties/rental/7.webp" alt="High Fidelity Modern Living Concept" className="pr-hero-image" />
+          <img src={useThemeMedia('hero.image', '/themes/properties/rental/7.webp')} alt="High Fidelity Modern Living Concept" className="pr-hero-image" />
           
           <div style={{ position: 'absolute', bottom: '-2rem', left: '-2rem', background: 'white', padding: '2rem', borderRadius: '24px', boxShadow: '0 20px 40px rgba(0,0,0,0.05)', border: '1px solid var(--pr-border)' }} className="pr-badge-floater">
               <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
                   <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#00d1ff', animation: 'pulse 2s infinite' }}></div>
                   <div className="pr-mono" style={{ fontSize: '0.65rem', color: 'var(--pr-slate)' }}>
-                    {loading ? "SEARCHING NODE REGISTRY..." : `${filteredRentals.length} RENTALS ACTIVE`}
+                    {loading ? "SEARCHING NODE REGISTRY..." : `${filteredRentals.length} ${useThemeContent('hero.active_units_suffix', 'RENTALS ACTIVE')}`}
                   </div>
               </div>
           </div>
@@ -351,16 +370,23 @@ export default function Page() {
       {/* Trust Metrics Section */}
       <section style={{ padding: '8rem 0', display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '8rem', alignItems: 'center' }} className="pr-hero">
           <div style={{ textAlign: 'left' }}>
-              <h2 style={{ fontSize: '3.5rem', fontWeight: 900, letterSpacing: '-2px', marginBottom: '2.5rem', lineHeight: 1.1, color: 'var(--pr-slate)' }}>Digital First <br/>Lease Protocols.</h2>
+              <h2 style={{ fontSize: '3.5rem', fontWeight: 900, letterSpacing: '-2px', marginBottom: '2.5rem', lineHeight: 1.1, color: 'var(--pr-slate)' }}>
+                {useThemeContent('protocol.title', 'Digital First \nLease Protocols.').split('\n').map((line, i, arr) => (
+                  <React.Fragment key={i}>
+                    {line}
+                    {i < arr.length - 1 && <br />}
+                  </React.Fragment>
+                ))}
+              </h2>
               <p style={{ fontSize: '1.15rem', color: 'var(--pr-text-muted)', lineHeight: 1.8 }}>
-                  Our property leasing vertical is engineered from scratch for high-fidelity compliance. From immersive virtual galleries to automated cryptographic lease signing nodes, we have removed the friction from securing residential nodes.
+                  {useThemeContent('protocol.description', 'Our property leasing vertical is engineered from scratch for high-fidelity compliance. From immersive virtual galleries to automated cryptographic lease signing nodes, we have removed the friction from securing residential nodes.')}
               </p>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }} className="pr-stats-grid">
-              <TrustMetrics value="100%" label="DIGITAL_LEASES" />
-              <TrustMetrics value="24h" label="MAINTENANCE_SLA" />
-              <TrustMetrics value="Instant" label="APPROVAL_SYNC" />
-              <TrustMetrics value="Verified" label="NODE_STATUS" />
+              <TrustMetrics value={useThemeContent('protocol.stat_1_value', '100%')} label={useThemeContent('protocol.stat_1_label', 'DIGITAL_LEASES')} />
+              <TrustMetrics value={useThemeContent('protocol.stat_2_value', '24h')} label={useThemeContent('protocol.stat_2_label', 'MAINTENANCE_SLA')} />
+              <TrustMetrics value={useThemeContent('protocol.stat_3_value', 'Instant')} label={useThemeContent('protocol.stat_3_label', 'APPROVAL_SYNC')} />
+              <TrustMetrics value={useThemeContent('protocol.stat_4_value', 'Verified')} label={useThemeContent('protocol.stat_4_label', 'NODE_STATUS')} />
           </div>
       </section>
 
@@ -396,8 +422,8 @@ export default function Page() {
 
       {/* Rent Grid */}
       <section id="pr-discovery-grid">
-        <h2 style={{ fontSize: '2.5rem', fontWeight: 900, marginBottom: '1rem', letterSpacing: '-1px' }}>Featured Certified Properties</h2>
-        <p style={{ color: 'var(--pr-text-muted)', marginBottom: '3rem', fontSize: '1rem' }}>Siloed verified residential units matching active Elite standards.</p>
+        <h2 style={{ fontSize: '2.5rem', fontWeight: 900, marginBottom: '1rem', letterSpacing: '-1px' }}>{useThemeContent('grid.title', 'Featured Certified Properties')}</h2>
+        <p style={{ color: 'var(--pr-text-muted)', marginBottom: '3rem', fontSize: '1rem' }}>{useThemeContent('grid.description', 'Siloed verified residential units matching active Elite standards.')}</p>
         
         {loading ? (
           <div className="pr-rent-grid">
@@ -434,13 +460,17 @@ export default function Page() {
 
       {/* Final CTA */}
       <section style={{ marginTop: '12rem', padding: '8rem 4rem', background: 'linear-gradient(135deg, #f0fdfa 0%, #fff 100%)', borderRadius: '48px', border: '1px solid var(--pr-border)', textAlign: 'center', boxShadow: 'var(--pr-shadow-lg)' }} className="pr-cta-box">
-          <div className="pr-mono" style={{ marginBottom: '2.5rem' }}>AUTHORIZE_NEW_RESIDENCE</div>
+          <div className="pr-mono" style={{ marginBottom: '2.5rem' }}>{useThemeContent('cta.kicker', 'AUTHORIZE_NEW_RESIDENCE')}</div>
           <h2 style={{ fontSize: '4.5rem', fontWeight: 900, letterSpacing: '-3px', marginBottom: '3rem', color: 'var(--pr-slate)', lineHeight: 1.1 }}>
-              Ready to <br/>
-              Move In?
+            {useThemeContent('cta.title', 'Ready to \nMove In?').split('\n').map((line, i, arr) => (
+              <React.Fragment key={i}>
+                {line}
+                {i < arr.length - 1 && <br />}
+              </React.Fragment>
+            ))}
           </h2>
           <p style={{ maxWidth: '580px', margin: '0 auto 5rem', color: 'var(--pr-text-muted)', fontSize: '1.2rem', lineHeight: 1.8 }}>
-              Join thousands of verified tenants utilizing the Sellio platform for securing residential properties with absolute transparency.
+              {useThemeContent('cta.description', 'Join thousands of verified tenants utilizing the Sellio platform for securing residential properties with absolute transparency.')}
           </p>
           <button 
             className="pr-btn-primary" 
@@ -448,7 +478,7 @@ export default function Page() {
             id="pr-btn-cta-auth" 
             onClick={() => document.getElementById('pr-discovery-grid')?.scrollIntoView({ behavior: 'smooth' })}
           >
-              EXPLORE AVAILABLE UNITS
+              {useThemeContent('cta.button_label', 'EXPLORE AVAILABLE UNITS')}
           </button>
       </section>
       

@@ -215,6 +215,142 @@ const CLASSIFIEDS_GENERAL_HOME: ThemeContentResponse = {
   config: {},
 };
 
+const CLASSIFIEDS_DEALS_HOME: ThemeContentResponse = {
+  theme_key: 'classifieds_deals',
+  page: 'home',
+  content: {
+    'diagnostics.title': 'DATABASE CONNECTION WARNING: Local catalog resilience fallback active',
+    'trending.tag_label': 'Trending Deal Highlight',
+    'trending.ends_label': '⏳ Ends:',
+    'hot_bargains.title': 'HOT BARGAINS',
+    'hot_bargains.subtitle': 'MAXIMUM DISCOUNTS EXCLUSIVES',
+    'limited_deals.title': 'Limited-Time Deals',
+    'limited_deals.subtitle': 'Active Drops',
+    'limited_deals.sort_label': 'Sort by:',
+    'collection.load_more_label': 'Load More Deals',
+    'collection.loading_more_label': 'Loading Price Drops...',
+    'sidebar.flash_sale.title': 'DAILY FLASH SALE!',
+    'sidebar.flash_sale.subtitle': 'Super bargain lockouts',
+    'sidebar.flash_sale.description': 'New extreme price drops will unlock once the countdown runs out!',
+    'sidebar.flash_sale.button_label': 'Enter Flash Lounge ⚡',
+    'sidebar.featured_sellers.title': 'Featured Sellers',
+    'sidebar.ad.badge': 'SPONSORED PROMOTION',
+    'sidebar.ad.title': 'Merchants Clearance Event',
+    'sidebar.ad.desc': 'Overstock warehouses listing directly to local neighborhoods. Absolute rock-bottom bulk prices with next day shipping.',
+    'sidebar.ad.button_label': 'Browse Warehouse Deals',
+    'hero.slide_1.title': 'MacBook Pro 14" M3 Max',
+    'hero.slide_1.desc': 'Apple M3 Max Chip with 14-Core CPU, 30-Core GPU, 1TB SSD. Extreme speed, deal limited to stock on hand.',
+    'hero.slide_1.discount': '35',
+    'hero.slide_1.priceNow': '$1,299.00',
+    'hero.slide_1.priceWas': '$1,999.00',
+    'hero.slide_1.button_label': 'Snag This Deal Now ⚡',
+    'hero.slide_2.title': 'PlayStation 5 Console Slim',
+    'hero.slide_2.desc': "Includes Marvel's Spider-Man 2 Full Game Voucher. Experience lightning-fast loading and deeper immersion.",
+    'hero.slide_2.discount': '33',
+    'hero.slide_2.priceNow': '$349.00',
+    'hero.slide_2.priceWas': '$499.00',
+    'hero.slide_2.button_label': 'Snag This Deal Now ⚡',
+    'hero.slide_3.title': 'Sony WH-1000XM5 Headphones',
+    'hero.slide_3.desc': 'Industry-leading noise canceling wireless headphones with crystal-clear hands-free calling and sleek comfort.',
+    'hero.slide_3.discount': '45',
+    'hero.slide_3.priceNow': '$219.00',
+    'hero.slide_3.priceWas': '$399.00',
+    'hero.slide_3.button_label': 'Snag This Deal Now ⚡',
+  },
+  media: {
+    'hero.slide_1.image': 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=600',
+    'hero.slide_2.image': 'https://images.unsplash.com/photo-1606813907291-d86efa9b94db?q=80&w=600',
+    'hero.slide_3.image': 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=600',
+  },
+  config: {},
+};
+
+const CLASSIFIEDS_ELITE_HOME: ThemeContentResponse = {
+  theme_key: 'classifieds_elite',
+  page: 'home',
+  content: {
+    'hero.subtitle': 'Vetted Global Advisory Node',
+    'hero.title': 'Curating high-value vaults for serious collectors.',
+    'hero.search_placeholder': 'Search by collection title, artist, country origin...',
+    'hero.search_button': 'Search',
+    'diagnostics.title': 'VAULT RESILIENCE LAYER: Private Catalog Backups Engaged',
+    'diagnostics.trace': 'Axios connection refused. Sandboxed database unreachable. Displaying curated assets.',
+    'spotlight.tag': 'CURATED SPOTLIGHT OF THE WEEK',
+    'spotlight.title': 'Featured High-Value Acquisitions',
+    'catalog.eyebrow': 'Browse Curated Catalog',
+    'catalog.title': 'Exclusive Acquisitions',
+    'empty.title': 'No Curated Assets Match Search',
+    'empty.description': 'Try clearing keywords or switching filter pills to display our private listings feed.',
+    'empty.clear_button': 'Clear Refinements',
+    'quickview.prospectus_button': 'Request Prospectus memorandum',
+    'quickview.inquiry_button': 'Inquire Concierge Vault',
+  },
+  media: {},
+  config: {},
+};
+
+const CLASSIFIEDS_LOCAL_HOME: ThemeContentResponse = {
+  theme_key: 'classifieds_local',
+  page: 'home',
+  content: {
+    'panel.title': 'Nearby Classifieds',
+    'diagnostics.title': '🛰️ VETTED NETWORK DIAGNOSTICS & RESILIENCE PANEL',
+    'diagnostics.description': 'Status: Local Database Node Offline. Activating Vetted neighborhood backup feed.',
+    'alerts.title': 'Neighborhood Alerts',
+    'alerts.item_1': 'Featured Offer: Like-New Trek Mountain Bike in Bikes & Outdoor is trending near Capitol Hill!',
+    'alerts.item_2': "Lost Dog: Golden Retriever spotted near Cal Anderson Park. Collar says 'Max'. Contact Agent Sarah.",
+    'empty.title': 'No Neighbors Listing Here',
+    'empty.description': 'Expand your search radius in the header location tag to discover more items!',
+    'radius.expand_label': 'Expand Search Radius',
+  },
+  media: {},
+  config: {},
+};
+
+const CLASSIFIEDS_MODERN_HOME: ThemeContentResponse = {
+  theme_key: 'classifieds_modern',
+  page: 'home',
+  content: {
+    'hero.title': 'Discover the best things to buy, sell, and trade.',
+    'hero.search_placeholder': 'What are you looking for today? (e.g. camera, table, jacket)',
+    'hero.search_button': 'Search',
+    'diagnostics.title': 'DATABASE OFFLINE: Resilient catalog backups activated',
+    'diagnostics.trace': 'Axios connection timeout. Displaying live catalog backups.',
+    'feed.title': 'Fresh Recommendations',
+    'empty.title': 'No Listings Matching Search',
+    'empty.description': "We couldn't find items that match your tags or keyword search query.",
+    'empty.button_label': 'Reset Settings',
+    'collection.load_more_label': 'Load More Items',
+    'collection.loading_more_label': 'Retrieving listings...',
+    'quickview.message_seller_label': 'Message Seller',
+    'quickview.view_details_label': 'View Full Details',
+  },
+  media: {},
+  config: {},
+};
+
+const CLASSIFIEDS_PREMIUM_HOME: ThemeContentResponse = {
+  theme_key: 'classifieds_premium',
+  page: 'home',
+  content: {
+    'diagnostics.title': '🛰️ VETTED NETWORK DIAGNOSTICS & RESILIENCE PANEL',
+    'diagnostics.description': 'Status: Local Database Node Offline. Activating Vetted sovereign proxy backup assets gracefully.',
+    'featured_header.title': '💎 Featured Investment Opportunities',
+    'featured_header.empty': 'No featured opportunities match your refinements.',
+    'membership.title': 'UNLOCK PREMIUM PRIVATE OPPORTUNITIES',
+    'membership.subtitle': 'Gain verified access to institutional-grade M&A prospectuses, audit-vetted tax returns, and coordinate direct negotiations with certified investment brokers.',
+    'membership.button_label': 'Explore Membership Tiers',
+    'toolbar.title_label': 'Available Listings',
+    'toolbar.opportunities_suffix': 'opportunities',
+    'toolbar.grid_view_label': 'Grid View',
+    'toolbar.list_view_label': 'List View',
+    'empty.title': 'No Private Listings Found',
+    'empty.description': 'Try clearing price ranges or location strings to expand search bounds.',
+  },
+  media: {},
+  config: {},
+};
+
 const EVENTS_CLASSIC_HOME: ThemeContentResponse = {
   theme_key: 'events_classic',
   page: 'home',
@@ -639,7 +775,888 @@ const ECOMMERCE_LUXURY_HOME: ThemeContentResponse = {
   config: {},
 };
 
+const SERVICES_CORPORATE_HOME: ThemeContentResponse = {
+  theme_key: 'services_corporate',
+  page: 'home',
+  content: {
+    'header.brand_label': 'CorporateServices',
+    'hero.title': 'Empowering Businesses\nfor Growth',
+    'hero.description': 'Strategic insights and innovative solutions to drive your success forward.',
+    'hero.primary_cta_label': 'Explore Services',
+    'hero.secondary_cta_label': 'Get in Touch',
+    'services.title': 'Our Core Services',
+    'services.description': 'Solutions designed to meet your unique business challenges.',
+    'about.title': 'Why Partner with Us?',
+    'about.description': 'We are committed to delivering exceptional value through our deep expertise and client-centric approach.',
+    'case_studies.title': 'Our Success Stories',
+    'case_studies.description': 'Real-world impact of our strategic partnerships.',
+    'cta.title': 'Ready to Transform Your Business?',
+    'cta.description': 'Connect with our experts today to discuss your specific needs and goals.',
+    'cta.primary_cta_label': 'Request a Consultation',
+    'footer.description': 'Providing strategic consulting and innovative solutions to drive business growth and success.',
+  },
+  media: {
+    'about.image': '/themes/services/corporate/11.webp',
+  },
+  config: {},
+};
+
+const SERVICES_CREATIVE_HOME: ThemeContentResponse = {
+  theme_key: 'services_creative',
+  page: 'home',
+  content: {
+    'header.brand_label': 'CRTV',
+    'hero.title': 'Hire Creative Talent Worldwide',
+    'hero.description': 'Discover exceptional freelancers for your projects, from design to development.',
+    'hero.primary_cta_label': 'Browse Creatives',
+    'hero.secondary_cta_label': 'Showcase Your Work',
+    'categories.title': 'Featured Creative Categories',
+    'creatives.title': 'Meet Our Top Creatives',
+    'showcase.title': 'Inspiring Portfolio Showcase',
+    'cta.title': 'Ready to Hire or Get Hired?',
+    'cta.description': 'Join the Creative Community Today and turn your vision into reality.',
+    'cta.primary_cta_label': 'Sign Up Now',
+    'footer.description': "Connecting visionary clients with the world's finest creative talent.",
+  },
+  media: {},
+  config: {},
+};
+
+const SERVICES_HEALTH_HOME: ThemeContentResponse = {
+  theme_key: 'services_health',
+  page: 'home',
+  content: {
+    'hero.kicker': 'VITALITY PROTOCOL',
+    'hero.title': 'Precision\nMedicine,\nDelivered.',
+    'hero.description': 'Connect with an elite network of specialists and diagnosticians. We engineer personalized physiological protocols for peak human performance.',
+    'hero.primary_cta_label': 'INITIALIZE CONSULTATION',
+    'hero.secondary_cta_label': 'VIEW CLINICIANS',
+    'hud.practitioners_label': 'PRACTITIONERS',
+    'hud.practitioners_sub': 'Vetted specialists active across our global clinical network.',
+    'hud.accuracy_label': 'ACCURACY',
+    'hud.accuracy_sub': 'High-fidelity data synchronization for real-time monitoring.',
+    'hud.response_label': 'RESPONSE RATE',
+    'hud.response_sub': 'Instant consultation availability for critical wellness nodes.',
+    'registry.kicker': 'OFFICIAL REGISTRY',
+    'registry.title': 'Top Rated\nPractitioners.',
+    'registry.description': 'Our unified protocol vetting process ensures that every specialist on the node meets our high-fidelity clinical standards.',
+    'protocols.kicker': 'CLINICAL TIERS',
+    'protocols.title': 'Optimized\nPhysiology.',
+    'protocols.description': 'Move beyond reactive care. Our elite protocols integrate preventive diagnostics, continuous biomarker tracking, and personalized nutritional algorithms.',
+  },
+  media: {},
+  config: {},
+};
+
+const SERVICES_LOCAL_HOME: ThemeContentResponse = {
+  theme_key: 'services_local',
+  page: 'home',
+  content: {
+    'hero.title': 'Trusted Services for\nYour Home & Family',
+    'hero.description': 'Find background-checked professionals for cleaning, repair, maintenance, and more—all in one place.',
+    'hero.primary_cta_label': 'Explore Services',
+    'hero.secondary_cta_label': 'Read Testimonials',
+    'services.title': 'Our Popular Services',
+    'providers.title': 'Meet Our Top-Rated Providers',
+    'how_it_works.title': 'How HomeFix Works in 3 Simple Steps',
+    'how_it_works.step_1_title': '1. Search & Filter',
+    'how_it_works.step_1_description': 'Easily find the service you need by location, type, and availability using our smart filters.',
+    'how_it_works.step_2_title': '2. Book & Confirm',
+    'how_it_works.step_2_description': 'Select a top-rated professional and instantly book a time slot that works for your schedule.',
+    'how_it_works.step_3_title': '3. Relax & Enjoy',
+    'how_it_works.step_3_description': 'A trusted pro arrives, gets the job done right, and you rate your experience. Simple as that!',
+    'safety.title': 'Your Safety is Our Priority',
+    'safety.step_1_title': 'Background-Checked',
+    'safety.step_1_description': 'Every professional is vetted for your peace of mind.',
+    'safety.step_2_title': 'Insured & Guaranteed',
+    'safety.step_2_description': 'Workmanship is covered by our service guarantee.',
+    'safety.step_3_title': '24/7 Support',
+    'safety.step_3_description': 'Help is always just a call or click away, day or night.',
+  },
+  media: {},
+  config: {},
+};
+
+const JOBS_BLUE_COLLAR_HOME: ThemeContentResponse = {
+  theme_key: 'jobs_blue_collar',
+  page: 'home',
+  content: {
+    'hero.title': 'Hard Work\nPays Off.',
+    'hero.description': 'Find high-paying jobs in construction, manufacturing, transportation, and skilled trades. No desk required.',
+    'trades.title': 'Browse By Trade',
+    'jobs.title': 'Latest Openings',
+    'jobs.load_more_label': 'Load More Jobs',
+    'cta.title': 'Need Workers Fast?',
+    'cta.description': 'Access our database of over 50,000 certified tradespeople ready to start tomorrow.',
+    'cta.button_label': 'Post Your Job Now',
+  },
+  media: {},
+  config: {},
+};
+
+const JOBS_FREELANCE_HOME: ThemeContentResponse = {
+  theme_key: 'jobs_freelance',
+  page: 'home',
+  content: {
+    'hero.title': 'Find the perfect freelance services\nfor your business',
+    'gigs.title': 'Popular professional services',
+    'promo.title': 'A whole world of freelance talent at your fingertips',
+    'promo.button_label': 'Explore GigHive Pro',
+  },
+  media: {
+    'promo.image': '/themes/jobs/freelance/14.webp',
+  },
+  config: {},
+};
+
+const JOBS_MODERN_HOME: ThemeContentResponse = {
+  theme_key: 'jobs_modern',
+  page: 'home',
+  content: {
+    'hero.badge': '🚀 Over 10,000+ new roles added this week',
+    'hero.title': 'Find work that\nmatches your ambition.',
+    'hero.description': 'The modern way to discover roles at innovative startups and world-class tech companies.',
+    'stats.users_value': '2M+',
+    'stats.users_label': 'Active Users',
+    'stats.companies_value': '50k',
+    'stats.companies_label': 'Companies',
+    'stats.salary_value': '$120k',
+    'stats.salary_label': 'Avg Salary',
+    'jobs.title': 'Curated for you',
+    'jobs.view_all_label': 'View All Roles',
+  },
+  media: {},
+  config: {},
+};
+
+const UNIFIEDS_CLASSIC_HOME: ThemeContentResponse = {
+  theme_key: 'unifieds_classic',
+  page: 'home',
+  content: {
+    'hero.eyebrow': 'TRADITION_OF_EXCELLENCE',
+    'hero.title': 'The Heritage of\nDistribution.',
+    'hero.highlight': 'Heritage',
+    'hero.description': 'A high-fidelity foundational node for multi-vertical commerce. Established on the principles of structural integrity and global reliability.',
+    'hero.primary_cta_label': 'ENTER THE ARCHIVE',
+    'hero.secondary_cta_label': 'READ THE CHRONICLES',
+    'collection.eyebrow': 'LIVE_HERITAGE_REGISTRY',
+    'collection.title': 'The Catalog Archive.',
+    'collection.description': 'Live product records preserved inside the Legacy Registry for dignified marketplace discovery.',
+    'sync.offline_kicker': 'ARCHIVE_OFFLINE',
+    'sync.offline_title': 'Listings could not be synchronized.',
+    'empty.kicker': 'EMPTY_ARCHIVE',
+    'empty.title': 'No live listings are available yet.',
+    'empty.description': 'Add product records in the backend and this archive will hydrate automatically.',
+    'mid_section.eyebrow': 'TIME_HONORED_PRECISION',
+    'mid_section.title': 'Structural\nElegance.',
+    'mid_section.description': 'The Legacy Node protocol is built on a foundation of reliability. By blending traditional structural integrity with modern distribution logic, we ensure that your high-fidelity assets remain secure and accessible across the global network.',
+    'mid_section.metric_1_value': '30yr+',
+    'mid_section.metric_1_label': 'CORE_LOGIC_AGE',
+    'mid_section.metric_2_value': '100%',
+    'mid_section.metric_2_label': 'ASSET_PROVENANCE',
+    'cta.title': 'Establish Your\nLegacy.',
+    'cta.description': "Connect your core node to the Legacy Registry and join the world's most trusted high-fidelity distribution network. Institutional authority, guaranteed.",
+    'cta.button_label': 'CONNECT LEGACY NODE',
+  },
+  media: {
+    'mid_section.image': '/themes/unifieds/classic/1.webp',
+  },
+  config: {},
+};
+
+const UNIFIEDS_DEFAULT_HOME: ThemeContentResponse = {
+  theme_key: 'unifieds_default',
+  page: 'home',
+  content: {
+    'hero.eyebrow': 'FOUNDATIONAL_DISTRIBUTION_V1',
+    'hero.title': 'The Core of\nDistribution.',
+    'hero.highlight': 'Distribution.',
+    'hero.description': "A high-fidelity foundational node for multi-vertical commerce. Standardize your global presence with Sellio's most trusted high-performance engine.",
+    'hero.primary_cta_label': 'GET STARTED CORE',
+    'hero.secondary_cta_label': 'READ THE SPEC',
+    'hero.badge_value': '50/50',
+    'hero.badge_label': 'VERTICALLY_READY',
+    'stats.metric_1_value': '99.9%',
+    'stats.metric_1_label': 'UPTIME_GUARANTEE',
+    'stats.metric_2_value': '1.4M+',
+    'stats.metric_2_label': 'GLOBAL_NODES',
+    'stats.metric_3_value': '8ms',
+    'stats.metric_3_label': 'AVERAGE_LATENCY',
+    'collection.eyebrow': 'LIVE_REGISTRY',
+    'collection.title': 'Core Listings Feed.',
+    'collection.description': 'Live marketplace records synchronized from the Sellio product catalog and curated for enterprise-grade discovery.',
+    'sync.offline_kicker': 'REGISTRY_OFFLINE',
+    'sync.offline_title': 'Listings could not be synchronized.',
+    'empty.kicker': 'EMPTY_REGISTRY',
+    'empty.title': 'No live listings are available yet.',
+    'empty.description': 'Add product records in the backend and this feed will hydrate automatically.',
+    'cta.title': 'Scale with the\nFoundation.',
+    'cta.description': "Initialize your core node and join the world's most stable high-fidelity distribution network. Institutional grade performance, guaranteed.",
+    'cta.button_label': 'INITIALIZE CORE NODE',
+  },
+  media: {
+    'hero.image': '/themes/unifieds/default/1.webp',
+  },
+  config: {},
+};
+
+const UNIFIEDS_INTERACTIVE_HOME: ThemeContentResponse = {
+  theme_key: 'unifieds_interactive',
+  page: 'home',
+  content: {
+    'hero.eyebrow': 'KINETIC_TRANSMISSION_V4',
+    'hero.title': 'Fluid\nDynamics.',
+    'hero.highlight': 'Dynamics.',
+    'hero.description': 'The high-fidelity interaction node for multi-vertical commerce. Synchronize your digital distribution through fluid logic and kinetic transitions.',
+    'hero.primary_cta_label': 'INITIALIZE SYNC',
+    'hero.secondary_cta_label': 'READ THE DYNAMICS',
+    'collection.eyebrow': 'LIVE_MOTION_FEED',
+    'collection.title': 'Kinetic Listings.',
+    'collection.description': 'Live product records synchronized into the Motion Node catalog for fast, fluid marketplace discovery.',
+    'sync.offline_kicker': 'MOTION_OFFLINE',
+    'sync.offline_title': 'Listings could not be synchronized.',
+    'empty.kicker': 'EMPTY_MOTION_FEED',
+    'empty.title': 'No live listings are available yet.',
+    'empty.description': 'Add product records in the backend and this motion feed will hydrate automatically.',
+    'mid_section.title': 'The Speed\nof Logic.',
+    'mid_section.description': 'Every interaction is a node. Every motion is a transition. Our high-fidelity protocol ensures that your digital distribution is as fluid as it is performant.',
+    'cta.title': 'Ready to\nTransition?',
+    'cta.description': "Connect your interaction node to the world's most advanced high-fidelity distribution network. Precision motion, guaranteed.",
+    'cta.button_label': 'CONNECT MOTION NODE',
+  },
+  media: {
+    'mid_section.image': '/themes/unifieds/interactive/1.webp',
+  },
+  config: {},
+};
+
+const UNIFIEDS_MARKETPLACE_HOME: ThemeContentResponse = {
+  theme_key: 'unifieds_marketplace',
+  page: 'home',
+  content: {
+    'hero.eyebrow': 'LIQUID_EXCHANGE_V5',
+    'hero.title': 'Trade the\nFuture.',
+    'hero.highlight': 'Future.',
+    'hero.description': "The world's most advanced high-fidelity marketplace node. Precision transactional engineering for the modern global economy.",
+    'hero.primary_cta_label': 'START TRADING',
+    'hero.secondary_cta_label': 'MARKET DATA',
+    'collection.eyebrow': 'LIVE_TRADE_EXCHANGE',
+    'collection.title': 'Marketplace Listings.',
+    'collection.description': 'Live product records synchronized into the Trade Node exchange for liquid marketplace discovery.',
+    'sync.offline_kicker': 'EXCHANGE_OFFLINE',
+    'sync.offline_title': 'Listings could not be synchronized.',
+    'empty.kicker': 'EMPTY_EXCHANGE',
+    'empty.title': 'No live listings are available yet.',
+    'empty.description': 'Add product records in the backend and this marketplace will hydrate automatically.',
+    'mid_section.eyebrow': 'TRANSACTIONAL_AUTHORITY',
+    'mid_section.title': 'Liquid\nLogistics.',
+    'mid_section.description': 'The Trade Node protocol is designed for high-velocity peer-to-peer commerce. Every transaction is a node in the global Sellio registry, ensuring that your digital and physical assets are distributed with absolute precision.',
+    'mid_section.metric_1_value': '1.4B+',
+    'mid_section.metric_1_label': 'ANNUAL_VOLUME',
+    'mid_section.metric_2_value': '24/7',
+    'mid_section.metric_2_label': 'MARKET_UPTIME',
+    'cta.title': 'Liquidate the\nFuture.',
+    'cta.description': "Connect your trade node to the global exchange and join the world's most liquid high-fidelity distribution network.",
+    'cta.button_label': 'INITIALIZE TRADE NODE',
+  },
+  media: {
+    'mid_section.image': '/themes/unifieds/marketplace/1.webp',
+  },
+  config: {},
+};
+
+const UNIFIEDS_MEGA_HOME: ThemeContentResponse = {
+  theme_key: 'unifieds_mega',
+  page: 'home',
+  content: {
+    'hero.eyebrow': 'HEAVYWEIGHT_LOGIC_ACTIVE',
+    'hero.title': 'The Heavyweight\nGrid.',
+    'hero.highlight': 'Heavyweight',
+    'hero.description': "The world's most powerful high-fidelity distribution node. Precision structural engineering for multi-vertical commerce at massive scale.",
+    'hero.primary_cta_label': 'INITIALIZE MEGA SYNC',
+    'hero.secondary_cta_label': 'INFRASTRUCTURE SPEC',
+    'collection.eyebrow': 'LIVE_MEGA_EXCHANGE',
+    'collection.title': 'Heavyweight Listings.',
+    'collection.description': 'Live product records reinforced inside the Mega Grid catalog layer for high-volume marketplace distribution.',
+    'sync.offline_kicker': 'GRID_OFFLINE',
+    'sync.offline_title': 'Listings could not be synchronized.',
+    'empty.kicker': 'EMPTY_GRID',
+    'empty.title': 'No live listings are available yet.',
+    'empty.description': 'Add product records in the backend and this grid will hydrate automatically.',
+    'mid_section.eyebrow': 'INDUSTRIAL_STRENGTH',
+    'mid_section.title': 'Structural\nAuthority.',
+    'mid_section.description': 'The Mega Grid protocol is built for high-density data distribution. Every node is reinforced with multi-layer redundancy, ensuring that your storefront remains stable under any operational volume.',
+    'mid_section.metric_1_value': '8ms',
+    'mid_section.metric_1_label': 'CORE_LATENCY',
+    'mid_section.metric_2_value': '99.9%',
+    'mid_section.metric_2_label': 'NODAL_UPTIME',
+    'cta.title': 'Authorize\nDistribution.',
+    'cta.description': "Connect your core node to the Mega Grid and join the world's most robust high-fidelity distribution network. Institutional performance, guaranteed.",
+    'cta.button_label': 'INITIALIZE HEAVYWEIGHT NODE',
+  },
+  media: {
+    'mid_section.image': '/themes/unifieds/mega/1.webp',
+  },
+  config: {},
+};
+
+const UNIFIEDS_MINIMAL_HOME: ThemeContentResponse = {
+  theme_key: 'unifieds_minimal',
+  page: 'home',
+  content: {
+    'hero.eyebrow': 'UNIVERSAL MINIMALISM',
+    'hero.title': 'Discover the Art\nof Simplicity.',
+    'hero.highlight': 'Simplicity.',
+    'hero.description': 'Your marketplace, meticulously curated and thoughtfully designed for elegance, clarity, and focus.',
+    'hero.primary_cta_label': 'Explore Listings',
+    'hero.secondary_cta_label': 'Start Exploring',
+    'curated.title': 'Curated Highlights',
+    'curated.description': 'A selection of premium listings that embody quality and minimalist elegance.',
+    'explore.title': 'Explore with Focus',
+    'explore.description': 'Navigate our marketplace using clear, icon-driven categories.',
+    'journal.quote': '"The marketplace we needed—calm, confident, and focused purely on quality."',
+    'journal.author': '— A Leading Design Journal',
+    'cta.title': 'Ready for the Universal Experience?',
+    'cta.description': 'List your first item or find your next essential.',
+    'cta.button_label': 'Get Started Today',
+  },
+  media: {},
+  config: {},
+};
+
+const UNIFIEDS_MODERN_HOME: ThemeContentResponse = {
+  theme_key: 'unifieds_modern',
+  page: 'home',
+  content: {
+    'hero.eyebrow': 'CORE_V4_PROTOCOL',
+    'hero.title': 'Beyond\nStandard.',
+    'hero.highlight': 'Standard.',
+    'hero.description': 'The high-fidelity distribution node for multi-vertical commerce. Standardize your presence across 50 industries with a single, unified engine.',
+    'hero.primary_cta_label': 'INITIALIZE NODE',
+    'hero.secondary_cta_label': 'VIEW ARCHITECTURE',
+    'collection.eyebrow': 'LIVE_NEXUS_FEED',
+    'collection.title': 'Synchronized Listings.',
+    'collection.description': 'Live product records streamed into the Nexus Prime catalog layer for high-fidelity marketplace discovery.',
+    'sync.offline_kicker': 'NEXUS_OFFLINE',
+    'sync.offline_title': 'Listings could not be synchronized.',
+    'empty.kicker': 'EMPTY_NEXUS',
+    'empty.title': 'No live listings are available yet.',
+    'empty.description': 'Add product records in the backend and this feed will hydrate automatically.',
+    'mid_section.title': 'The Power\nof Fifty.',
+    'mid_section.description': 'Why build fifty themes when you can deploy one engine? Our vertical-specific DNA ensures that every storefront feels bespoke, while sharing the robust high-fidelity logic of the Nexus Prime core.',
+    'cta.title': 'Ready to\nsynchronize?',
+    'cta.description': "Initialize your high-fidelity storefront node and join the world's most advanced distribution network.",
+    'cta.button_label': 'CONNECT CORE NODE',
+  },
+  media: {
+    'mid_section.image': '/themes/unifieds/modern/1.webp',
+  },
+  config: {},
+};
+
+const UNIFIEDS_STANDARD_HOME: ThemeContentResponse = {
+  theme_key: 'unifieds_standard',
+  page: 'home',
+  content: {
+    'hero.eyebrow': 'MODULAR_DISTRIBUTION_V1',
+    'hero.title': 'The Scale\nProtocol.',
+    'hero.highlight': 'Scale',
+    'hero.description': "The world's most efficient high-fidelity distribution node. Modular, precise, and engineered for global multi-vertical commerce.",
+    'hero.primary_cta_label': 'INITIALIZE NODE',
+    'hero.secondary_cta_label': 'VIEW DOCUMENTATION',
+    'layers.title': 'Universal Logic Layers.',
+    'collection.eyebrow': 'LIVE_EXCHANGE',
+    'collection.title': 'Standard Listings Exchange.',
+    'collection.description': 'Live product records synchronized into the Scale Protocol for clean, modular marketplace discovery.',
+    'sync.offline_kicker': 'EXCHANGE_OFFLINE',
+    'sync.offline_title': 'Listings could not be synchronized.',
+    'empty.kicker': 'EMPTY_EXCHANGE',
+    'empty.title': 'No live listings are available yet.',
+    'empty.description': 'Add product records in the backend and this exchange will hydrate automatically.',
+    'mid_section.eyebrow': 'GEOMETRIC_PRECISION',
+    'mid_section.title': 'Modular\nEfficiency.',
+    'mid_section.description': 'Every node in the Scale Protocol is designed for maximum efficiency. By isolating architectural layers and standardizing data mapping, we achieve a distribution latency that is unmatched in the multi-vertical market.',
+    'mid_section.metric_1_value': '6ms',
+    'mid_section.metric_1_label': 'AVERAGE_SYNC',
+    'mid_section.metric_2_value': '100%',
+    'mid_section.metric_2_label': 'ISO_COMPLIANCE',
+    'cta.title': 'Initialize the\nStandard.',
+    'cta.description': "Connect your professional node to the Scale Protocol and gain access to the world's most efficient high-fidelity distribution network.",
+    'cta.button_label': 'CONNECT SCALE NODE',
+  },
+  media: {
+    'mid_section.image': '/themes/unifieds/standard/1.webp',
+  },
+  config: {},
+};
+
+const PROPERTIES_COMMERCIAL_HOME: ThemeContentResponse = {
+  theme_key: 'properties_commercial',
+  page: 'home',
+  content: {
+    'hero.kicker': 'COMMERCIAL_REGISTRY_V8_DISTRIBUTION',
+    'hero.title': 'Market \nTransparency \nEngineered.',
+    'hero.highlight': 'Engineered.',
+    'hero.description': 'The authoritative commercial registry providing verified yield data and direct access to institutional-grade real estate assets globally.',
+    'hero.stat_value': '$1.4B',
+    'hero.stat_label': 'QUARTERLY_TURNOVER',
+    'hero.primary_cta_label': 'Explore_Inventory',
+    'hero.secondary_cta_label': 'Request_Appraisal',
+    'intelligence.title': 'The Intelligence \nBehind the Asset.',
+    'intelligence.description': 'Every asset in our registry undergoes a multi-point verification protocol, including structural audits, zoning compliance checks, and high-fidelity market yield analysis.',
+    'hud.due_diligence_label': 'DUE_DILIGENCE_SPEED',
+    'hud.due_diligence_value': '48h',
+    'hud.avg_yield_label': 'AVG_YIELD_v2026',
+    'hud.avg_yield_value': '12%',
+    'hud.global_nodes_label': 'GLOBAL_NODES',
+    'diagnostics.kicker': 'CONNECTION_OFFLINE_DIAGNOSTICS',
+    'diagnostics.text_before': 'The live Commercial registry API node threw a ',
+    'diagnostics.text_after': '. Successfully initialized high-fidelity mock blueprints.',
+    'inventory.kicker': 'INSTITUTIONAL_INVENTORY',
+    'inventory.title': 'Asset \nRegistry.',
+    'inventory.description': 'Our unified protocol synchronizes performance data from prime office, industrial, and retail assets into a single authoritative node.',
+    'filters.search_label': 'SEARCH_QUERY',
+    'filters.search_placeholder': 'Scan by keyword or location...',
+    'filters.type_label': 'ASSET_CLASSIFICATION',
+    'filters.status_label': 'ACQUISITION_STATUS',
+    'empty.kicker': 'REGISTRY_RESOLVE_NULL',
+    'empty.title': 'No Assets Resolved',
+    'empty.description': 'Adjust your classification or acquisition status to recheck active ledger items.',
+    'trust.label': 'AS_FEATURED_IN:',
+    'cta.kicker': 'INSTITUTIONAL_ACQUISITION',
+    'cta.title': 'Scale Your \nPortfolio.',
+    'cta.description': 'Join over 12,000 institutional investors and family offices currently acquiring on the Sellio Commercial Network.',
+    'cta.button_label': 'Request_Institutional_Access',
+  },
+  media: {
+    'hero.image': 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80',
+  },
+  config: {},
+};
+
+const PROPERTIES_INVESTMENT_HOME: ThemeContentResponse = {
+  theme_key: 'properties_investment',
+  page: 'home',
+  content: {
+    'hero.kicker': 'PORTFOLIO_SYNC_V8_ACTIVE',
+    'hero.title': 'Capital \nDistribution \nSynchronized.',
+    'hero.highlight': 'Synchronized.',
+    'hero.description': 'The global high-fidelity terminal for institutional real estate investment. Deploy capital across verified asset nodes with performance-driven precision.',
+    'hero.primary_cta_label': 'Execute_Investment',
+    'hero.secondary_cta_label': 'View_Reports',
+    'terminal.metrics_label': 'NETWORK_PERFORMANCE_METRICS',
+    'hud.total_volume_label': 'TOTAL_NETWORK_VOLUME',
+    'hud.total_volume_value': '$4.2B+',
+    'hud.avg_yield_label': 'AVERAGE_YIELD_ARR',
+    'hud.avg_yield_value': '8.4%',
+    'hud.liquidity_label': 'LIQUIDITY_INDEX',
+    'hud.liquidity_value': '0.82',
+    'hud.volatility_label': 'VOLATILITY_HEDGE',
+    'hud.volatility_value': 'ACTIVE',
+    'logic.items': 'MARKET_STATUS: STABLE|NODAL_VERIFICATION: 100%|INSTITUTIONAL_AUTH: VERIFIED|SETTLEMENT: INSTANT',
+    'grid.kicker': 'YIELD_REGISTRY',
+    'grid.title': 'Asset \nPerformance.',
+    'grid.description': 'Our unified protocol synchronizes real-time performance metadata from residential, commercial, and industrial yield nodes.',
+    'offline.kicker': 'Property Sync Offline',
+    'offline.title': 'Asset performance registry could not be loaded.',
+    'empty.kicker': 'Empty Property Registry',
+    'empty.title': 'No live properties are published yet.',
+    'empty.description': 'Add property records in the backend and this investment grid will hydrate automatically.',
+    'cta.kicker': 'INSTITUTIONAL_GRADE_LOGIC',
+    'cta.title': 'Scale Your \nPortfolio Yield.',
+    'cta.description': 'Our investment nodes are built on a foundation of verified financial metadata. Connect your capital node to the Sellio network for high-fidelity asset distribution.',
+    'cta.button_label': 'Connect_Capital_Node',
+  },
+  media: {},
+  config: {},
+};
+
+const PROPERTIES_LUXURY_HOME: ThemeContentResponse = {
+  theme_key: 'properties_luxury',
+  page: 'home',
+  content: {
+    'hero.kicker': 'ESTABLISHED_REPRESENTATION',
+    'hero.title': 'The \nCollection.',
+    'hero.highlight': 'Platinum',
+    'hero.description': "A curated distribution of the world's most significant luxury estates. Immersive, high-fidelity representation for the discerning asset holder.",
+    'hero.primary_cta_label': 'EXPLORE_COLLECTION',
+    'logic.items': 'ASSETS_UNDER_MANAGEMENT: $18.4B|NODAL_VERIFICATION: ELITE|GLOBAL_DISTRIBUTION: ACTIVE|PRIVATE_ACCESS: GRANTED',
+    'editorial.badge_value': '50+',
+    'editorial.badge_label': 'OFF_MARKET_NODES',
+    'editorial.kicker': 'EDITORIAL_INSIGHT',
+    'editorial.title': 'Bespoke Architecture. \nGlobal Context.',
+    'editorial.description': 'Every property in our Platinum Collection is more than an asset; it is a architectural statement. Our high-fidelity platform ensures that the narrative of each estate is preserved and communicated with surgical precision.',
+    'editorial.cta_label': 'READ_THE_JOURNAL',
+    'cta.title': 'Define your \nLegacy.',
+    'cta.description': "Our concierge team is standing by to facilitate your next high-fidelity acquisition. Connect with the world's most exclusive distribution network.",
+    'cta.button_label': 'CONNECT_WITH_CONCIERGE',
+  },
+  media: {
+    'hero.image': '/themes/properties/luxury/1.webp',
+    'editorial.image': '/themes/properties/luxury/2.webp',
+  },
+  config: {},
+};
+
+const PROPERTIES_MAP_HOME: ThemeContentResponse = {
+  theme_key: 'properties_map',
+  page: 'home',
+  content: {
+    'sidebar.title': 'Registry Nodes',
+    'sidebar.units_suffix': 'UNITS',
+    'sidebar.filters': 'FILTER|PRICE|TYPE',
+    'offline.kicker': 'Property Sync Offline',
+    'offline.title': 'Registry nodes could not be loaded.',
+    'empty.kicker': 'Empty Property Registry',
+    'empty.title': 'No live properties are published yet.',
+    'empty.description': 'Add property records in the backend and this map registry will hydrate automatically.',
+    'sidebar.end_label': 'END_OF_REGISTRY',
+  },
+  media: {},
+  config: {},
+};
+
+const PROPERTIES_MODERN_HOME: ThemeContentResponse = {
+  theme_key: 'properties_modern',
+  page: 'home',
+  content: {
+    'hero.kicker': 'ARCHITECTURAL_DISTRIBUTION_V8',
+    'hero.title': 'The \nAuthority.',
+    'hero.highlight': 'Urban',
+    'hero.description': "The world's most advanced high-fidelity urban distribution node. Precision architectural engineering for the modern global skyline.",
+    'hero.primary_cta_label': 'EXPLORE_SKYLINE',
+    'hero.secondary_cta_label': 'STRUCTURAL_SPEC',
+    'hero.stat_label': 'DISTRICT_NODES',
+    'precision.kicker': 'STRUCTURAL_PRECISION',
+    'precision.title': 'Skyline \nEngineering.',
+    'precision.description': 'The Urban Node protocol is built on a foundation of structural integrity. By synchronizing high-fidelity urban assets through a unified architectural registry, we ensure that every unit in the global skyline is represented with absolute precision.',
+    'precision.stat_1_value': '100%',
+    'precision.stat_1_label': 'INTEGRITY_SYNC',
+    'precision.stat_2_value': 'Global',
+    'precision.stat_2_label': 'DISTRIBUTION_NODE',
+    'cta.title': 'Authorize Your \nSkyline.',
+    'cta.description': "Connect your architectural node to the Urban Registry and join the world's most advanced high-fidelity distribution network.",
+    'cta.button_label': 'CONNECT_URBAN_NODE',
+  },
+  media: {
+    'hero.image': '/themes/properties/modern/1.webp',
+    'precision.image': '/themes/properties/modern/2.webp',
+  },
+  config: {},
+};
+
+const PROPERTIES_NEIGHBORHOOD_HOME: ThemeContentResponse = {
+  theme_key: 'properties_neighborhood',
+  page: 'home',
+  content: {
+    'hero.kicker': 'COMMUNITY_RESIDENTIAL_PROTOCOL_V8',
+    'hero.title': 'Find Your \nPlace in the \nCommunity.',
+    'hero.highlight': 'Community.',
+    'hero.description': 'A warm, neighborly approach to property distribution. Verified family homes in high-trust neighborhood nodes with integrated local insights.',
+    'hero.primary_cta_label': 'Search_Homes',
+    'hero.secondary_cta_label': 'Local_Guides',
+    'hero.safety_label': 'NEIGHBORHOOD_SAFETY_INDEX',
+    'hero.safety_value': '98%',
+    'hud.school_rating_label': 'SCHOOL_NODE_RATING',
+    'hud.school_rating_value': 'A+ SUPERIOR',
+    'hud.top_schools_label': 'TOP_RATED_SCHOOLS',
+    'hud.top_schools_value': '12',
+    'hud.avg_commute_label': 'AVG_COMMUTE',
+    'hud.avg_commute_value': '18 MIN',
+    'hud.events_label': 'COMMUNITY_EVENTS',
+    'hud.events_value': '42 ACTIVE',
+    'grid.kicker': 'RESIDENTIAL_INVENTORY',
+    'grid.title': 'Neighborly \nHomes.',
+    'grid.description': 'Our neighborhood protocol ensures every family home is verified and synchronized with local lifestyle metadata.',
+    'philosophy.title': 'Better \nTogether.',
+    'philosophy.description': 'Our neighborhood vertical is designed to help you find more than just a house. We help you find a community that synchronizes with your lifestyle.',
+    'philosophy.metric_1_value': '100%',
+    'philosophy.metric_1_label': 'VERIFIED_LISTINGS',
+    'philosophy.metric_2_value': '24/7',
+    'philosophy.metric_2_label': 'HOOD_SUPPORT',
+    'join.kicker': 'JOIN_THE_NEIGHBORHOOD',
+    'join.title': 'Synchronize with \nYour Community.',
+    'join.description': 'Receive local alerts, school updates, and community event news directly through your Sellio Hood node.',
+    'join.button_label': 'CREATE_COMMUNITY_PROFILE',
+  },
+  media: {
+    'hero.image': '/themes/properties/neighborhood/7.webp',
+  },
+  config: {},
+};
+
+const PROPERTIES_PLATINUM_HOME: ThemeContentResponse = {
+  theme_key: 'properties_platinum',
+  page: 'home',
+  content: {
+    'hero.kicker': 'ARCHITECTURAL_SUBLIMITY_V8',
+    'hero.title': 'Structural \nRefinement.',
+    'hero.description': "A curated collection of the world's most significant private estates. Where raw materials meet refined billionaire-minimalist vision.",
+    'hero.scroll_label': 'DISCOVER',
+    'protocol.title': 'The Protocol \nof Acquisition.',
+    'protocol.description': 'We do not merely list properties. We validate the architectural integrity, historical significance, and future appreciation of every node in our network. Each acquisition is handled via our private concierge protocol.',
+    'stats.metric_1_label': 'OFF_MARKET_NODES',
+    'stats.metric_1_value': '92%',
+    'stats.metric_2_label': 'ASSETS_UNDER_SYNC',
+    'stats.metric_2_value': '$4.2B',
+    'stats.metric_3_label': 'GLOBAL_CONCIERGE',
+    'stats.metric_3_value': '24/7',
+    'showcase.kicker': 'CINEMATIC_SHOWCASE',
+    'showcase.filter_prefix': 'FILTER: LUXURY_TIER == "PLATINUM" · ',
+    'showcase.filter_suffix': ' NODES',
+    'offline.kicker': 'Property Sync Offline',
+    'offline.title': 'Cinematic showcase could not be loaded.',
+    'empty.kicker': 'Empty Property Registry',
+    'empty.title': 'No live properties are published yet.',
+    'empty.description': 'Add property records in the backend and this platinum grid will hydrate automatically.',
+    'cta.kicker': 'PRIVATE_CONSULTATION',
+    'cta.title': 'Acquire Your \nLegacy.',
+    'cta.button_label': 'REQUEST_INVITATION',
+  },
+  media: {},
+  config: {},
+};
+
+const PROPERTIES_RENTAL_HOME: ThemeContentResponse = {
+  theme_key: 'properties_rental',
+  page: 'home',
+  content: {
+    'hero.kicker': 'EASY_LEASING_PROTOCOL_V8',
+    'hero.title': 'Rent Your \nNext Home \nwith Ease.',
+    'hero.highlight': 'with Ease.',
+    'hero.description': 'A high-fidelity rental protocol designed for modern residential nodes. Certified properties, digital instant leases, and automated utility routing nodes.',
+    'hero.primary_cta_label': 'Find a Rental',
+    'hero.secondary_cta_label': 'List Unit',
+    'search.location_label': 'Destination Location',
+    'search.location_placeholder': 'e.g. Downtown Core, West End',
+    'search.checkin_label': 'Check In Date',
+    'search.checkout_label': 'Check Out Date',
+    'search.terms_label': 'Lease Terms',
+    'search.terms_all_label': 'All Lease Profiles',
+    'search.button_label': '⚡ Synchronize Rental Search',
+    'diagnostics.kicker': 'DATABASE_OFFLINE_DIAGNOSTICS_TRACE',
+    'diagnostics.title': 'Rental Registry Offline // Engaging Local Backup',
+    'diagnostics.description': 'A connection exception was encountered while querying the live Sellio database server node. We have loaded high-fidelity local catalog backups to guarantee uninterrupted residential discovery.',
+    'diagnostics.traceback_label': 'Traceback Exception details: ',
+    'trust.title': 'Digital First \nLease Protocols.',
+    'trust.description': 'Our property leasing vertical is engineered from scratch for high-fidelity compliance. From immersive virtual galleries to automated cryptographic lease signing nodes, we have removed the friction from securing residential nodes.',
+    'trust.metric_1_label': 'DIGITAL_LEASES',
+    'trust.metric_1_value': '100%',
+    'trust.metric_2_label': 'MAINTENANCE_SLA',
+    'trust.metric_2_value': '24h',
+    'trust.metric_3_label': 'APPROVAL_SYNC',
+    'trust.metric_3_value': 'Instant',
+    'trust.metric_4_label': 'NODE_STATUS',
+    'trust.metric_4_value': 'Verified',
+    'filter.reset_label': 'RESET_FILTERS ⌄',
+    'grid.title': 'Featured Certified Properties',
+    'grid.description': 'Siloed verified residential units matching active Elite standards.',
+    'empty.title': 'No Rental Nodes Found',
+    'empty.description': 'Adjust your parameters or reset filters to sync fresh residential nodes.',
+    'cta.kicker': 'AUTHORIZE_NEW_RESIDENCE',
+    'cta.title': 'Ready to \nMove In?',
+    'cta.description': 'Join thousands of verified tenants utilizing the Sellio platform for securing residential properties with absolute transparency.',
+    'cta.button_label': 'EXPLORE AVAILABLE UNITS',
+  },
+  media: {
+    'hero.image': '/themes/properties/rental/7.webp',
+  },
+  config: {},
+};
+
+const PROPERTIES_SHOWCASE_HOME: ThemeContentResponse = {
+  theme_key: 'properties_showcase',
+  page: 'home',
+  content: {
+    'hero.kicker': 'CURATED_ATELIER_COLLECTION_V8',
+    'hero.title': 'Living \nAs Art.',
+    'hero.description': "A curated distribution of the world's most significant architectural achievements. Synchronizing institutional curation with museum-grade provenance.",
+    'hero.primary_cta_label': 'Explore Curation',
+    'hero.secondary_cta_label': 'READ_MANIFESTO',
+    'story.title': 'The Architecture \nof Provenance.',
+    'story.highlight': 'Provenance.',
+    'story.description': 'Every property in the Atelier registry is hand-selected by our board of curators. We validate not just the integrity, but the historical and cultural significance of each node.',
+    'stats.metric_1_label': 'CURATION_TIER',
+    'stats.metric_1_value': 'INSTITUTIONAL',
+    'stats.metric_2_label': 'GRADE_PROVENANCE',
+    'stats.metric_2_value': 'MUSEUM',
+    'stats.metric_3_label': 'DISTRIBUTION_SYNC',
+    'stats.metric_3_value': 'GLOBAL',
+    'philosophy.items': 'INSTITUTIONAL_CURATION|ARCHITECTURAL_INTEGRITY|HISTORIC_PRESERVATION|EDITORIAL_SYNC',
+    'cta.kicker': 'BEGIN_YOUR_CURATION',
+    'cta.title': 'Authorize Your \nCollection.',
+    'cta.highlight': 'Collection.',
+    'cta.description': 'Our institutional nodes are currently accepting select inquiries for the 2026/27 global collection. Submit your provenance for review.',
+    'cta.button_label': 'Request Private Access',
+  },
+  media: {},
+  config: {},
+};
+
+const PROPERTIES_UNIFIED_HOME: ThemeContentResponse = {
+  theme_key: 'properties_unified',
+  page: 'home',
+  content: {
+    'hero.kicker': 'UNIVERSAL_PROPERTY_PROTOCOL_V8',
+    'hero.title': 'The Authoritative \nDistribution \nNode.',
+    'hero.highlight': 'Node.',
+    'hero.description': 'A unified platform for residential, commercial, and industrial property distribution. High-fidelity data, institutional-grade verification, and global accessibility.',
+    'hero.primary_cta_label': 'Search All Assets',
+    'hero.secondary_cta_label': 'List Asset',
+    'grid.kicker': 'MASTER_REGISTRY',
+    'grid.title': 'High-Fidelity \nInventory.',
+    'grid.description': 'Our unified protocol synchronizes metadata from multiple property verticals into a single authoritative and searchable catalog registry node.',
+    'offline.kicker': 'Property Sync Offline',
+    'offline.title': 'High-fidelity inventory could not be loaded.',
+    'empty.kicker': 'Empty Property Registry',
+    'empty.title': 'No live properties are published yet.',
+    'empty.description': 'Add property records in the backend and this unified grid will hydrate automatically.',
+    'cta.kicker': 'INSTITUTIONAL_SCALE',
+    'cta.title': 'Scale Your \nPortfolio Globally.',
+    'cta.description': 'Our unified protocol allows for cross-vertical property management and distribution. Deploy your assets across the entire Sellio ecosystem with 100% nodal integrity.',
+    'cta.button_label': 'Initialize Master Node',
+  },
+  media: {
+    'hero.image': '/themes/properties/unified/1.webp',
+  },
+  config: {},
+};
+
+const PROPERTIES_URBAN_HOME: ThemeContentResponse = {
+  theme_key: 'properties_urban',
+  page: 'home',
+  content: {
+    'hero.kicker': 'URBAN_LIVING_V8_DISTRIBUTION',
+    'hero.title': 'Skyline \nRegistry.',
+    'hero.description': 'Modern sanctuaries in the heart of the high-fidelity city. Discover curated lofts, penthouses, and studios engineered for the vertical lifestyle.',
+    'hero.primary_cta_label': 'Explore Inventory',
+    'hero.secondary_cta_label': 'List Unit',
+    'intel.title': 'Connected \nIntelligence.',
+    'intel.description': 'Our urban lofts and penthouses are equipped with high-fidelity smart-grid technologies, ensuring absolute connectivity and architectural precision for the modern dweller.',
+    'intel.stat_1_value': '10Gb',
+    'intel.stat_1_label': 'STANDARD_FIBER',
+    'intel.stat_2_value': 'A+',
+    'intel.stat_2_label': 'ENERGY_RATING',
+    'intel.stat_3_value': '24h',
+    'intel.stat_3_label': 'CONCIERGE_NODE',
+    'intel.stat_4_value': 'EV',
+    'intel.stat_4_label': 'CHARGING_SYNC',
+    'grid.kicker': 'REGISTRY_COLLECTION // 2026',
+    'grid.title': 'Registry Node Units',
+    'grid.description': 'Every architectural unit is synchronized with our global registry node, ensuring 100% data integrity and availability status.',
+    'offline.kicker': 'Property Sync Offline',
+    'offline.title': 'Registry units could not be loaded.',
+    'empty.kicker': 'Empty Property Registry',
+    'empty.title': 'No live properties are published yet.',
+    'empty.description': 'Add property records in the backend and this urban grid will hydrate automatically.',
+    'cta.kicker': 'CITY_PULSE_PROTOCOL',
+    'cta.title': 'Live in the \nPulse of the City.',
+    'cta.description': 'From the industrial lofts of the Arts District to the high-energy penthouses of the Financial Center, find the urban node that matches your frequency.',
+    'cta.button_label': 'Authorize District Sync',
+  },
+  media: {
+    'hero.image': '/themes/properties/urban/1.webp',
+  },
+  config: {},
+};
+
+const PROPERTIES_VACATION_HOME: ThemeContentResponse = {
+  theme_key: 'properties_vacation',
+  page: 'home',
+  content: {
+    'hero.kicker': 'GLOBAL_ESCAPE_REGISTRY_V8',
+    'hero.title': 'Find Your \nInfinite Horizon.',
+    'hero.highlight': 'Infinite Horizon.',
+    'hero.description': "A curated collection of the world's most significant vacation retreats. Authenticated by our local nodes, enjoyed by global travelers.",
+    'search.where_label': 'Where to?',
+    'search.where_placeholder': 'Search Amalfi, Lofoten, Zermatt...',
+    'search.checkin_label': 'Check In',
+    'search.checkout_label': 'Check Out',
+    'search.budget_label': 'Budget / Night',
+    'search.budget_all_label': 'All Budgets',
+    'search.budget_under_500': 'Under $500/night',
+    'search.budget_500_1000': '$500 - $1,000/night',
+    'search.budget_1000_plus': '$1,000+/night',
+    'search.reset_label': 'Reset',
+    'trust.items': '100%_AUTHENTICATED|NO_PROTOCOL_FEES|LOCAL_NODE_SUPPORT|CRYPTO_SYNC_ENABLED',
+    'diagnostics.title': '⚠️ Escapes Node Offline - Diagnostics Trace Active',
+    'diagnostics.description': 'API exception caught on getaway server node query. Access local diagnostics log traceback:',
+    'grid.kicker': 'CURATED_COLLECTION',
+    'grid.title': 'The \nRetreats.',
+    'grid.highlight': 'Retreats.',
+    'grid.description': 'Every property in our vacation vertical is manually verified by a local node expert to validate the vibe and view.',
+    'ribbon.all_label': 'All Nearby Retreats',
+    'empty.title': 'No Retreats Found',
+    'empty.description': "We couldn't find any premium getaway retreats matching your filters.",
+    'empty.clear_label': 'Clear Filter refinement',
+    'philosophy.kicker': 'THE_GETAWAY_PROTOCOL',
+    'philosophy.title': 'The Art of \nthe Escape.',
+    'philosophy.highlight': 'Escape.',
+    'philosophy.description': 'We do not just check the amenities; we validate the architectural integrity and local significance of every vacation node.',
+    'philosophy.stat_1_value': '1,200+',
+    'philosophy.stat_1_label': 'VERIFIED_NODES',
+    'philosophy.stat_2_value': '48h',
+    'philosophy.stat_2_label': 'AVG_RESPONSE',
+    'philosophy.badge_label': 'AUTHENTICATED LOCAL RETREAT',
+    'cta.title': 'Your Next Escape \nis One Click Away.',
+    'cta.highlight': 'One Click Away.',
+    'cta.button_label': 'SECURE YOUR RETREAT',
+  },
+  media: {
+    'philosophy.image': 'https://images.unsplash.com/photo-1525609004556-c46c7d6cf0a3?q=80&w=600',
+  },
+  config: {},
+};
+
 export function getThemeContentDefaults(themeKey?: string, page = 'home'): ThemeContentResponse {
+  if (themeKey === 'properties_commercial' && page === 'home') {
+    return PROPERTIES_COMMERCIAL_HOME;
+  }
+
+  if (themeKey === 'properties_investment' && page === 'home') {
+    return PROPERTIES_INVESTMENT_HOME;
+  }
+
+  if (themeKey === 'properties_luxury' && page === 'home') {
+    return PROPERTIES_LUXURY_HOME;
+  }
+
+  if (themeKey === 'properties_map' && page === 'home') {
+    return PROPERTIES_MAP_HOME;
+  }
+
+  if (themeKey === 'properties_modern' && page === 'home') {
+    return PROPERTIES_MODERN_HOME;
+  }
+
+  if (themeKey === 'properties_neighborhood' && page === 'home') {
+    return PROPERTIES_NEIGHBORHOOD_HOME;
+  }
+
+  if (themeKey === 'properties_platinum' && page === 'home') {
+    return PROPERTIES_PLATINUM_HOME;
+  }
+
+  if (themeKey === 'properties_rental' && page === 'home') {
+    return PROPERTIES_RENTAL_HOME;
+  }
+
+  if (themeKey === 'properties_showcase' && page === 'home') {
+    return PROPERTIES_SHOWCASE_HOME;
+  }
+
+  if (themeKey === 'properties_unified' && page === 'home') {
+    return PROPERTIES_UNIFIED_HOME;
+  }
+
+  if (themeKey === 'properties_urban' && page === 'home') {
+    return PROPERTIES_URBAN_HOME;
+  }
+
+  if (themeKey === 'properties_vacation' && page === 'home') {
+    return PROPERTIES_VACATION_HOME;
+  }
+
   if (themeKey === 'properties_classic' && page === 'home') {
     return PROPERTIES_CLASSIC_HOME;
   }
@@ -656,6 +1673,34 @@ export function getThemeContentDefaults(themeKey?: string, page = 'home'): Theme
     return SERVICES_MARKETPLACE_HOME;
   }
 
+  if (themeKey === 'services_corporate' && page === 'home') {
+    return SERVICES_CORPORATE_HOME;
+  }
+
+  if (themeKey === 'services_creative' && page === 'home') {
+    return SERVICES_CREATIVE_HOME;
+  }
+
+  if (themeKey === 'services_health' && page === 'home') {
+    return SERVICES_HEALTH_HOME;
+  }
+
+  if (themeKey === 'services_local' && page === 'home') {
+    return SERVICES_LOCAL_HOME;
+  }
+
+  if (themeKey === 'jobs_blue_collar' && page === 'home') {
+    return JOBS_BLUE_COLLAR_HOME;
+  }
+
+  if (themeKey === 'jobs_freelance' && page === 'home') {
+    return JOBS_FREELANCE_HOME;
+  }
+
+  if (themeKey === 'jobs_modern' && page === 'home') {
+    return JOBS_MODERN_HOME;
+  }
+
   if (themeKey === 'autos_luxury' && page === 'home') {
     return AUTOS_LUXURY_HOME;
   }
@@ -666,6 +1711,26 @@ export function getThemeContentDefaults(themeKey?: string, page = 'home'): Theme
 
   if (themeKey === 'classifieds_general' && page === 'home') {
     return CLASSIFIEDS_GENERAL_HOME;
+  }
+
+  if (themeKey === 'classifieds_deals' && page === 'home') {
+    return CLASSIFIEDS_DEALS_HOME;
+  }
+
+  if (themeKey === 'classifieds_elite' && page === 'home') {
+    return CLASSIFIEDS_ELITE_HOME;
+  }
+
+  if (themeKey === 'classifieds_local' && page === 'home') {
+    return CLASSIFIEDS_LOCAL_HOME;
+  }
+
+  if (themeKey === 'classifieds_modern' && page === 'home') {
+    return CLASSIFIEDS_MODERN_HOME;
+  }
+
+  if (themeKey === 'classifieds_premium' && page === 'home') {
+    return CLASSIFIEDS_PREMIUM_HOME;
   }
 
   if (themeKey === 'events_classic' && page === 'home') {
@@ -718,6 +1783,38 @@ export function getThemeContentDefaults(themeKey?: string, page = 'home'): Theme
 
   if (themeKey === 'ecommerce_luxury' && page === 'home') {
     return ECOMMERCE_LUXURY_HOME;
+  }
+
+  if (themeKey === 'unifieds_classic' && page === 'home') {
+    return UNIFIEDS_CLASSIC_HOME;
+  }
+
+  if (themeKey === 'unifieds_default' && page === 'home') {
+    return UNIFIEDS_DEFAULT_HOME;
+  }
+
+  if (themeKey === 'unifieds_interactive' && page === 'home') {
+    return UNIFIEDS_INTERACTIVE_HOME;
+  }
+
+  if (themeKey === 'unifieds_marketplace' && page === 'home') {
+    return UNIFIEDS_MARKETPLACE_HOME;
+  }
+
+  if (themeKey === 'unifieds_mega' && page === 'home') {
+    return UNIFIEDS_MEGA_HOME;
+  }
+
+  if (themeKey === 'unifieds_minimal' && page === 'home') {
+    return UNIFIEDS_MINIMAL_HOME;
+  }
+
+  if (themeKey === 'unifieds_modern' && page === 'home') {
+    return UNIFIEDS_MODERN_HOME;
+  }
+
+  if (themeKey === 'unifieds_standard' && page === 'home') {
+    return UNIFIEDS_STANDARD_HOME;
   }
 
   return {
