@@ -6,6 +6,7 @@ use App\Models\Service;
 use App\Models\ServicePackage;
 use App\Models\ServiceAppointment;
 use App\Models\ServiceQuote;
+use App\Events\Partner\PartnerLeadCreated;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Carbon;
 use App\Models\User;
@@ -141,7 +142,7 @@ class ServiceManagementService
             'notes'   => $data['notes'] ?? null,
             'status'  => 'pending',
             'price'   => $service->sale_price ?? $service->base_price,
-        ]);
+        ])->tap(fn ($appointment) => PartnerLeadCreated::dispatch($appointment));
     }
 
     /**
@@ -160,7 +161,7 @@ class ServiceManagementService
         $scheduledAt = Carbon::parse($data['booking_date'] . ' ' . $data['time_slot']);
 
         // 3. Create the appointment record
-        return $service->appointments()->create([
+        $appointment = $service->appointments()->create([
             'user_id'            => auth()->id(),
             'service_package_id' => $package->id,
             'name'               => auth()->user()->name,
@@ -172,6 +173,10 @@ class ServiceManagementService
             'notes'              => $data['notes'] ?? null,
             'status'             => 'pending',
         ]);
+
+        PartnerLeadCreated::dispatch($appointment);
+
+        return $appointment;
     }
 
     /**
@@ -195,14 +200,18 @@ class ServiceManagementService
         $detailsText .= __("Client Notes: :notes", ['notes' => $clientNotes]);
 
         // 3. Create the Quote record
-        return $service->quotes()->create([
+        $quote = $service->quotes()->create([
             'user_id'            => auth()->id(),
             'service_package_id' => $data['service_package_id'],
             'scope_size'         => $data['scope_size'],
             'requested_date'     => $data['target_date'],
-            'details'            => $detailsText, // Storing the formatted string we built above
+            'details'            => $detailsText,
             'status'             => 'pending',
         ]);
+
+        PartnerLeadCreated::dispatch($quote);
+
+        return $quote;
     }
 
     /**

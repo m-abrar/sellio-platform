@@ -3,6 +3,7 @@
 namespace App\Services\Admin;
 
 use App\Models\ClassifiedInquiry;
+use App\Events\Partner\PartnerLeadCreated;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 /**
@@ -55,7 +56,11 @@ class ClassifiedInquiryManagementService
      */
     public function createInquiry(array $data): ClassifiedInquiry
     {
-        return ClassifiedInquiry::create($data);
+        $inquiry = ClassifiedInquiry::create($data);
+
+        PartnerLeadCreated::dispatch($inquiry);
+
+        return $inquiry;
     }
 
     /**

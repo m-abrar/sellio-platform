@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Property;
 use App\Models\PropertyVisit;
+use App\Events\Partner\PartnerLeadCreated;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
@@ -25,7 +26,7 @@ class PropertyVisitService
                 ->by(Auth::user())
                 ->log('submitted_lead');
 
-            return PropertyVisit::create([
+            $visit = PropertyVisit::create([
                 'user_id'      => Auth::id(),
                 'property_id'  => $property->id,
                 'scheduled_at' => $data['scheduled_at'],
@@ -35,6 +36,10 @@ class PropertyVisitService
                 'email'        => $data['email'],
                 'phone'        => $data['phone'] ?? null,
             ]);
+
+            PartnerLeadCreated::dispatch($visit);
+
+            return $visit;
         });
     }
 

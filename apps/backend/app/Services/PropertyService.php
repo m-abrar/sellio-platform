@@ -11,6 +11,7 @@ use App\Models\PropertyBooking;
 use App\Models\Tag;
 use App\Models\User;
 use App\Models\TransactionLine;
+use App\Events\Partner\PartnerLeadCreated;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Collection;
@@ -300,7 +301,12 @@ class PropertyService
             ]);
             
             $booking->total_price = $totalPrice;
+            $wasRecentlyCreated = !$booking->exists || $booking->wasRecentlyCreated;
             $booking->save();
+
+            if ($wasRecentlyCreated) {
+                PartnerLeadCreated::dispatch($booking);
+            }
 
             // Clear old transaction lines for idempotent updates
             $booking->transactionLines()->delete();

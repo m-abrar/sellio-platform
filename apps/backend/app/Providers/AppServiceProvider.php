@@ -4,6 +4,11 @@ namespace App\Providers;
 
 use App\Services\CartService;
 use App\DTOs\ContentResult; // Import the DTO
+use App\Events\JobApplicationReceived;
+use App\Events\NewMessageSent;
+use App\Events\Partner\PartnerLeadCreated;
+use App\Events\ReviewReceived;
+use App\Listeners\Partner\SendPartnerDatabaseNotification;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\{View, Auth, Gate, Event, Session, Storage, Cache, Blade};
 use Illuminate\Auth\Events\Authenticated;
@@ -56,6 +61,13 @@ class AppServiceProvider extends ServiceProvider
                 Session::put('cart_merging_processed', true);
             }
         });
+
+        Event::listen([
+            PartnerLeadCreated::class,
+            ReviewReceived::class,
+            JobApplicationReceived::class,
+            NewMessageSent::class,
+        ], SendPartnerDatabaseNotification::class);
 
         // 3. Global View Composer (Common Branding)
         View::composer(['frontend._layouts._app', 'frontend._layouts._guest'], function ($view) use ($cartService) {

@@ -20,7 +20,6 @@ use App\Models\ServiceAppointment;
 use App\Models\ServiceQuote;
 use App\Models\User;
 use App\Notifications\Partner\PartnerAlertNotification;
-use Carbon\Carbon;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -34,219 +33,135 @@ class NotificationService
         $partnerId = $partner->id;
         $listingIds = $this->partnerListingIds($partner);
 
-        $this->syncModelNotifications(
-            $partner,
-            Review::query()
-                ->whereIn('reviewable_id', $listingIds['flat'])
-                ->whereIn('reviewable_type', $listingIds['types'])
-                ->whereNull('viewed_at')
-                ->with(['reviewable', 'user'])
-                ->latest()
-                ->limit(25)
-                ->get(),
-            fn (Review $review) => [
-                'type' => 'review',
-                'title' => __('New Review'),
-                'message' => __('Received a new :rating-star review on ":title".', [
-                    'rating' => $review->rating,
-                    'title' => $review->reviewable->title ?? __('Listing'),
-                ]),
-                'route' => '/dashboard/reviews',
-                'source_type' => Review::class,
-                'source_id' => $review->id,
-            ]
-        );
+        Review::query()
+            ->whereIn('reviewable_id', $listingIds['flat'])
+            ->whereIn('reviewable_type', $listingIds['types'])
+            ->whereNull('viewed_at')
+            ->latest()
+            ->limit(25)
+            ->get()
+            ->each(fn (Review $review) => $this->notifyForRecord($review));
 
-        $this->syncModelNotifications(
-            $partner,
-            PropertyBooking::query()
-                ->whereHas('property', fn (Builder $q) => $q->where('user_id', $partnerId))
-                ->whereNull('viewed_at')
-                ->with(['property', 'user'])
-                ->latest()
-                ->limit(25)
-                ->get(),
-            fn (PropertyBooking $booking) => [
-                'type' => 'booking',
-                'title' => __('New Property Booking'),
-                'message' => __('New booking request for ":title".', [
-                    'title' => $booking->property->title ?? __('Property'),
-                ]),
-                'route' => '/dashboard/properties/bookings',
-                'source_type' => PropertyBooking::class,
-                'source_id' => $booking->id,
-            ]
-        );
+        PropertyBooking::query()
+            ->whereHas('property', fn (Builder $q) => $q->where('user_id', $partnerId))
+            ->whereNull('viewed_at')
+            ->latest()
+            ->limit(25)
+            ->get()
+            ->each(fn (PropertyBooking $booking) => $this->notifyForRecord($booking));
 
-        $this->syncModelNotifications(
-            $partner,
-            EventBooking::query()
-                ->whereHas('event', fn (Builder $q) => $q->where('user_id', $partnerId))
-                ->whereNull('viewed_at')
-                ->with(['event', 'user'])
-                ->latest()
-                ->limit(25)
-                ->get(),
-            fn (EventBooking $booking) => [
-                'type' => 'booking',
-                'title' => __('New Event Booking'),
-                'message' => __('New booking for ":title".', [
-                    'title' => $booking->event->title ?? __('Event'),
-                ]),
-                'route' => '/dashboard/events/bookings',
-                'source_type' => EventBooking::class,
-                'source_id' => $booking->id,
-            ]
-        );
+        EventBooking::query()
+            ->whereHas('event', fn (Builder $q) => $q->where('user_id', $partnerId))
+            ->whereNull('viewed_at')
+            ->latest()
+            ->limit(25)
+            ->get()
+            ->each(fn (EventBooking $booking) => $this->notifyForRecord($booking));
 
-        $this->syncModelNotifications(
-            $partner,
-            JobApplication::query()
-                ->whereHas('job', fn (Builder $q) => $q->where('user_id', $partnerId))
-                ->whereNull('viewed_at')
-                ->with(['job', 'user'])
-                ->latest()
-                ->limit(25)
-                ->get(),
-            fn (JobApplication $application) => [
-                'type' => 'inquiry',
-                'title' => __('New Job Application'),
-                'message' => __('New application received for ":title".', [
-                    'title' => $application->job->title ?? __('Job'),
-                ]),
-                'route' => '/dashboard/joblistings/applications',
-                'source_type' => JobApplication::class,
-                'source_id' => $application->id,
-            ]
-        );
+        JobApplication::query()
+            ->whereHas('job', fn (Builder $q) => $q->where('user_id', $partnerId))
+            ->whereNull('viewed_at')
+            ->latest()
+            ->limit(25)
+            ->get()
+            ->each(fn (JobApplication $application) => $this->notifyForRecord($application));
 
-        $this->syncModelNotifications(
-            $partner,
-            ServiceQuote::query()
-                ->whereHas('service', fn (Builder $q) => $q->where('user_id', $partnerId))
-                ->whereNull('viewed_at')
-                ->with(['service', 'user'])
-                ->latest()
-                ->limit(25)
-                ->get(),
-            fn (ServiceQuote $quote) => [
-                'type' => 'inquiry',
-                'title' => __('New Service Quote Request'),
-                'message' => __('New quote request for ":title".', [
-                    'title' => $quote->service->title ?? __('Service'),
-                ]),
-                'route' => '/dashboard/services/quotes',
-                'source_type' => ServiceQuote::class,
-                'source_id' => $quote->id,
-            ]
-        );
+        ServiceQuote::query()
+            ->whereHas('service', fn (Builder $q) => $q->where('user_id', $partnerId))
+            ->whereNull('viewed_at')
+            ->latest()
+            ->limit(25)
+            ->get()
+            ->each(fn (ServiceQuote $quote) => $this->notifyForRecord($quote));
 
-        $this->syncModelNotifications(
-            $partner,
-            ServiceAppointment::query()
-                ->whereHas('service', fn (Builder $q) => $q->where('user_id', $partnerId))
-                ->whereNull('viewed_at')
-                ->with(['service', 'user'])
-                ->latest()
-                ->limit(25)
-                ->get(),
-            fn (ServiceAppointment $appointment) => [
-                'type' => 'booking',
-                'title' => __('New Service Appointment'),
-                'message' => __('New appointment for ":title".', [
-                    'title' => $appointment->service->title ?? __('Service'),
-                ]),
-                'route' => '/dashboard/services/appointments',
-                'source_type' => ServiceAppointment::class,
-                'source_id' => $appointment->id,
-            ]
-        );
+        ServiceAppointment::query()
+            ->whereHas('service', fn (Builder $q) => $q->where('user_id', $partnerId))
+            ->whereNull('viewed_at')
+            ->latest()
+            ->limit(25)
+            ->get()
+            ->each(fn (ServiceAppointment $appointment) => $this->notifyForRecord($appointment));
 
-        $this->syncModelNotifications(
-            $partner,
-            AutoInquiry::query()
-                ->whereHas('auto', fn (Builder $q) => $q->where('user_id', $partnerId))
-                ->whereNull('viewed_at')
-                ->with(['auto', 'user'])
-                ->latest()
-                ->limit(25)
-                ->get(),
-            fn (AutoInquiry $inquiry) => [
-                'type' => 'inquiry',
-                'title' => __('New Auto Inquiry'),
-                'message' => __('New inquiry for ":title".', [
-                    'title' => $inquiry->auto->title ?? __('Auto'),
-                ]),
-                'route' => '/dashboard/autos/inquiries',
-                'source_type' => AutoInquiry::class,
-                'source_id' => $inquiry->id,
-            ]
-        );
+        AutoInquiry::query()
+            ->whereHas('auto', fn (Builder $q) => $q->where('user_id', $partnerId))
+            ->whereNull('viewed_at')
+            ->latest()
+            ->limit(25)
+            ->get()
+            ->each(fn (AutoInquiry $inquiry) => $this->notifyForRecord($inquiry));
 
-        $this->syncModelNotifications(
-            $partner,
-            ClassifiedInquiry::query()
-                ->whereHas('classifiedad', fn (Builder $q) => $q->where('user_id', $partnerId))
-                ->whereNull('viewed_at')
-                ->with(['classifiedad', 'user'])
-                ->latest()
-                ->limit(25)
-                ->get(),
-            fn (ClassifiedInquiry $inquiry) => [
-                'type' => 'inquiry',
-                'title' => __('New Listing Inquiry'),
-                'message' => __('New inquiry for ":title".', [
-                    'title' => $inquiry->classifiedad->title ?? __('Classified'),
-                ]),
-                'route' => '/dashboard/classifieds/inquiries',
-                'source_type' => ClassifiedInquiry::class,
-                'source_id' => $inquiry->id,
-            ]
-        );
+        ClassifiedInquiry::query()
+            ->whereHas('classifiedad', fn (Builder $q) => $q->where('user_id', $partnerId))
+            ->whereNull('viewed_at')
+            ->latest()
+            ->limit(25)
+            ->get()
+            ->each(fn (ClassifiedInquiry $inquiry) => $this->notifyForRecord($inquiry));
 
-        $this->syncModelNotifications(
-            $partner,
-            PropertyVisit::query()
-                ->whereHas('property', fn (Builder $q) => $q->where('user_id', $partnerId))
-                ->whereNull('viewed_at')
-                ->with(['property'])
-                ->latest()
-                ->limit(25)
-                ->get(),
-            fn (PropertyVisit $visit) => [
-                'type' => 'booking',
-                'title' => __('New Property Visit Request'),
-                'message' => __('New visit request for ":title".', [
-                    'title' => $visit->property->title ?? __('Property'),
-                ]),
-                'route' => '/dashboard/properties/visits',
-                'source_type' => PropertyVisit::class,
-                'source_id' => $visit->id,
-            ]
-        );
+        PropertyVisit::query()
+            ->whereHas('property', fn (Builder $q) => $q->where('user_id', $partnerId))
+            ->whereNull('viewed_at')
+            ->latest()
+            ->limit(25)
+            ->get()
+            ->each(fn (PropertyVisit $visit) => $this->notifyForRecord($visit));
 
         $conversationIds = $partner->allConversations()->pluck('id');
-        $this->syncModelNotifications(
-            $partner,
-            Message::query()
-                ->whereIn('conversation_id', $conversationIds)
-                ->where('sender_id', '!=', $partnerId)
-                ->whereNull('read_at')
-                ->with(['sender'])
-                ->latest()
-                ->limit(25)
-                ->get(),
-            fn (Message $message) => [
-                'type' => 'inquiry',
-                'title' => __('New Message'),
-                'message' => __('New message from :name.', [
-                    'name' => $message->sender->name ?? __('Customer'),
-                ]),
-                'route' => '/dashboard/messages',
-                'source_type' => Message::class,
-                'source_id' => $message->id,
-            ]
-        );
+
+        Message::query()
+            ->whereIn('conversation_id', $conversationIds)
+            ->where('sender_id', '!=', $partnerId)
+            ->whereNull('read_at')
+            ->latest()
+            ->limit(25)
+            ->get()
+            ->each(fn (Message $message) => $this->notifyForMessage($message, $partner));
+    }
+
+    public function notifyForRecord(Model $record): void
+    {
+        $this->loadRecordRelations($record);
+
+        $partner = $this->resolvePartnerForRecord($record);
+        $payload = $this->buildPayloadForRecord($record);
+
+        if (!$partner || !$payload) {
+            return;
+        }
+
+        $this->notifyPartner($partner, $payload);
+    }
+
+    public function notifyForMessage(Message $message, User $partner): void
+    {
+        $message->loadMissing('sender');
+
+        $this->notifyPartner($partner, [
+            'type' => 'inquiry',
+            'title' => __('New Message'),
+            'message' => __('New message from :name.', [
+                'name' => $message->sender->name ?? __('Customer'),
+            ]),
+            'route' => '/dashboard/messages',
+            'source_type' => Message::class,
+            'source_id' => $message->id,
+        ]);
+    }
+
+    public function notifyPartner(User $partner, array $payload): void
+    {
+        if ($this->notificationExists($partner, $payload['source_type'], $payload['source_id'])) {
+            return;
+        }
+
+        $partner->notify(new PartnerAlertNotification(
+            type: $payload['type'],
+            title: $payload['title'],
+            message: $payload['message'],
+            route: $payload['route'],
+            sourceType: $payload['source_type'],
+            sourceId: $payload['source_id'],
+        ));
     }
 
     public function paginate(User $partner, ?bool $unreadOnly = null, int $perPage = 20): LengthAwarePaginator
@@ -282,24 +197,130 @@ class NotificationService
         $partner->notifications()->where('id', $notificationId)->delete();
     }
 
-    protected function syncModelNotifications(User $partner, Collection $records, callable $mapper): void
+    protected function buildPayloadForRecord(Model $record): ?array
     {
-        foreach ($records as $record) {
-            $payload = $mapper($record);
+        return match ($record::class) {
+            Review::class => [
+                'type' => 'review',
+                'title' => __('New Review'),
+                'message' => __('Received a new :rating-star review on ":title".', [
+                    'rating' => $record->rating,
+                    'title' => $record->reviewable->title ?? __('Listing'),
+                ]),
+                'route' => '/dashboard/reviews',
+                'source_type' => Review::class,
+                'source_id' => $record->id,
+            ],
+            PropertyBooking::class => [
+                'type' => 'booking',
+                'title' => __('New Property Booking'),
+                'message' => __('New booking request for ":title".', [
+                    'title' => $record->property->title ?? __('Property'),
+                ]),
+                'route' => '/dashboard/properties/bookings',
+                'source_type' => PropertyBooking::class,
+                'source_id' => $record->id,
+            ],
+            PropertyVisit::class => [
+                'type' => 'booking',
+                'title' => __('New Property Visit Request'),
+                'message' => __('New visit request for ":title".', [
+                    'title' => $record->property->title ?? __('Property'),
+                ]),
+                'route' => '/dashboard/properties/visits',
+                'source_type' => PropertyVisit::class,
+                'source_id' => $record->id,
+            ],
+            AutoInquiry::class => [
+                'type' => 'inquiry',
+                'title' => __('New Auto Inquiry'),
+                'message' => __('New inquiry for ":title".', [
+                    'title' => $record->auto->title ?? __('Auto'),
+                ]),
+                'route' => '/dashboard/autos/inquiries',
+                'source_type' => AutoInquiry::class,
+                'source_id' => $record->id,
+            ],
+            EventBooking::class => [
+                'type' => 'booking',
+                'title' => __('New Event Booking'),
+                'message' => __('New booking for ":title".', [
+                    'title' => $record->event->title ?? __('Event'),
+                ]),
+                'route' => '/dashboard/events/bookings',
+                'source_type' => EventBooking::class,
+                'source_id' => $record->id,
+            ],
+            JobApplication::class => [
+                'type' => 'inquiry',
+                'title' => __('New Job Application'),
+                'message' => __('New application received for ":title".', [
+                    'title' => $record->job->title ?? __('Job'),
+                ]),
+                'route' => '/dashboard/joblistings/applications',
+                'source_type' => JobApplication::class,
+                'source_id' => $record->id,
+            ],
+            ServiceQuote::class => [
+                'type' => 'inquiry',
+                'title' => __('New Service Quote Request'),
+                'message' => __('New quote request for ":title".', [
+                    'title' => $record->service->title ?? __('Service'),
+                ]),
+                'route' => '/dashboard/services/quotes',
+                'source_type' => ServiceQuote::class,
+                'source_id' => $record->id,
+            ],
+            ServiceAppointment::class => [
+                'type' => 'booking',
+                'title' => __('New Service Appointment'),
+                'message' => __('New appointment for ":title".', [
+                    'title' => $record->service->title ?? __('Service'),
+                ]),
+                'route' => '/dashboard/services/appointments',
+                'source_type' => ServiceAppointment::class,
+                'source_id' => $record->id,
+            ],
+            ClassifiedInquiry::class => [
+                'type' => 'inquiry',
+                'title' => __('New Listing Inquiry'),
+                'message' => __('New inquiry for ":title".', [
+                    'title' => $record->classifiedad->title ?? __('Classified'),
+                ]),
+                'route' => '/dashboard/classifieds/inquiries',
+                'source_type' => ClassifiedInquiry::class,
+                'source_id' => $record->id,
+            ],
+            default => null,
+        };
+    }
 
-            if ($this->notificationExists($partner, $payload['source_type'], $payload['source_id'])) {
-                continue;
-            }
+    protected function resolvePartnerForRecord(Model $record): ?User
+    {
+        return match ($record::class) {
+            Review::class => $record->reviewable?->user,
+            PropertyBooking::class, PropertyVisit::class => $record->property?->user,
+            AutoInquiry::class => $record->auto?->user,
+            EventBooking::class => $record->event?->user,
+            JobApplication::class => $record->job?->user,
+            ServiceQuote::class, ServiceAppointment::class => $record->service?->user,
+            ClassifiedInquiry::class => $record->classifiedad?->user,
+            default => null,
+        };
+    }
 
-            $partner->notify(new PartnerAlertNotification(
-                type: $payload['type'],
-                title: $payload['title'],
-                message: $payload['message'],
-                route: $payload['route'],
-                sourceType: $payload['source_type'],
-                sourceId: $payload['source_id'],
-            ));
-        }
+    protected function loadRecordRelations(Model $record): void
+    {
+        $record->loadMissing(match ($record::class) {
+            Review::class => ['reviewable', 'user'],
+            PropertyBooking::class, PropertyVisit::class => ['property'],
+            AutoInquiry::class => ['auto', 'user'],
+            EventBooking::class => ['event', 'user'],
+            JobApplication::class => ['job', 'user'],
+            ServiceQuote::class, ServiceAppointment::class => ['service', 'user'],
+            ClassifiedInquiry::class => ['classifiedad', 'user'],
+            default => [],
+        });
     }
 
     protected function notificationExists(User $partner, string $sourceType, int|string|null $sourceId): bool

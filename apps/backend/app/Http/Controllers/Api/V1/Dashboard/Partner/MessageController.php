@@ -4,11 +4,11 @@ namespace App\Http\Controllers\Api\V1\Dashboard\Partner;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Http\Requests\SendMessageRequest;
-use App\Models\Conversation; 
-use App\Models\Message; 
-use Illuminate\Support\Facades\Auth;
 use App\Events\NewMessageSent;
+use App\Http\Requests\SendMessageRequest;
+use App\Models\Conversation;
+use App\Models\Message;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Class MessageController
@@ -91,7 +91,7 @@ class MessageController extends Controller
 
         $recipient = $conversation->user; 
         if ($recipient) {
-            // NewMessageSent::dispatch($message, $recipient);
+            event(new NewMessageSent($message, $recipient));
             broadcast(new NewMessageSent($message, $recipient))->toOthers();
         }
 

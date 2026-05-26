@@ -8,6 +8,7 @@ use App\Models\EventOccurrence;
 use App\Models\EventOccurrenceTicket;
 use App\Models\EventTicketType;
 use App\Services\EventBookingService;
+use App\Events\Partner\PartnerLeadCreated;
 use App\Http\Requests\StoreEventBookingRequest;
 use App\Http\Requests\UpdateBookingDetailsRequest;
 use Illuminate\Http\Request;
@@ -95,6 +96,8 @@ class EventBookingController extends Controller
                 $booking->total_price = $totalAmount;
                 $booking->status = 'pending';
                 $booking->save();
+
+                PartnerLeadCreated::dispatch($booking);
             } catch (QueryException $e) {
                 return $this->handleDuplicateBooking($e, $event, $occurrence, $ticket);
             }

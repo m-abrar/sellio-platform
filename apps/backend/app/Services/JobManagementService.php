@@ -8,6 +8,7 @@ use App\Models\Location;
 use App\Models\Type;
 use App\Models\Tag;
 use App\Models\JobApplication;
+use App\Events\JobApplicationReceived;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -132,6 +133,8 @@ class JobManagementService
                 ->causedBy(Auth::user())
                 ->log(__('Submitted application for job listing: :title', ['title' => $job->title]));
         }
+
+        JobApplicationReceived::dispatch($application);
 
         return $application;
     }

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Auto;
 use App\Models\AutoInquiry;
+use App\Events\Partner\PartnerLeadCreated;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -24,7 +25,7 @@ class AutoInquiryService
     public function createInquiry(Auto $auto, array $data): AutoInquiry
     {
         return DB::transaction(function () use ($auto, $data) {
-            return AutoInquiry::create([
+            $inquiry = AutoInquiry::create([
                 'user_id'        => Auth::id(),
                 'auto_id'        => $auto->id,
                 'full_name'      => $data['full_name'],
@@ -35,6 +36,10 @@ class AutoInquiryService
                 'message'        => $data['message'] ?? null,
                 'status'         => 'pending',
             ]);
+
+            PartnerLeadCreated::dispatch($inquiry);
+
+            return $inquiry;
         });
     }
 }

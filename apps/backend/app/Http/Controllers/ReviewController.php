@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreReviewRequest;
 use App\Services\ReviewManagementService;
+use App\Events\ReviewReceived;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Log;
@@ -48,7 +49,13 @@ class ReviewController extends Controller
         }
 
         try {
-            $this->reviewService->createReview($reviewable, $request->validated());
+            $review = $this->reviewService->createReview($reviewable, $request->validated());
+            $reviewable->loadMissing('user');
+
+            if ($reviewable->user) {
+                ReviewReceived::dispatch($reviewable->user, $reviewable, $review);
+            }
+
             return back()->with('success', __('Review submitted successfully.'));
         } catch (\Exception $e) {
             Log::error("Review Submission Error: " . $e->getMessage());
