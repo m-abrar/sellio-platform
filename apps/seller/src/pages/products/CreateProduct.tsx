@@ -49,13 +49,18 @@ export default function CreateProduct() {
     sale_price: '',
     on_sale: false,
     stock_quantity: 0,
+    low_stock_threshold: '',
     manage_stock: true,
     weight: '',
     length: '',
     width: '',
     height: '',
+    video: '',
     is_published: false,
     is_featured: false,
+    is_digital: false,
+    meta_title: '',
+    meta_description: '',
   });
 
   useEffect(() => {
@@ -91,13 +96,18 @@ export default function CreateProduct() {
             sale_price: p.pricing?.sale_price || '',
             on_sale: p.pricing?.on_sale ?? Boolean(p.pricing?.sale_price),
             stock_quantity: p.inventory?.stock_quantity || 0,
+            low_stock_threshold: p.inventory?.low_stock_threshold ?? '',
             manage_stock: p.inventory?.manage_stock ?? true,
-            weight: String(p.specs?.weight || '').replace(' kg', ''),
-            length: dims[0] || '',
-            width: dims[1] || '',
-            height: dims[2] || '',
+            weight: p.specs?.weight_value ?? String(p.specs?.weight || '').replace(' kg', ''),
+            length: p.specs?.length ?? dims[0] ?? '',
+            width: p.specs?.width ?? dims[1] ?? '',
+            height: p.specs?.height ?? dims[2] ?? '',
+            video: p.video_url || '',
             is_published: p.status?.is_published ?? true,
             is_featured: p.status?.is_featured ?? p.is_featured ?? false,
+            is_digital: p.inventory?.is_digital ?? false,
+            meta_title: p.meta?.title || '',
+            meta_description: p.meta?.description || '',
           });
 
           // Handle Spatie Media Integration
@@ -350,12 +360,34 @@ export default function CreateProduct() {
                     />
                   </div>
                 </div>
+                <div>
+                  <label className={labelClass}>Low Stock Alert</label>
+                  <div className="relative">
+                    <HiOutlineCube className="absolute left-6 top-1/2 -translate-y-1/2 text-amber-500 w-5 h-5" />
+                    <input
+                      type="number"
+                      value={form.low_stock_threshold}
+                      onChange={(e) => updateForm('low_stock_threshold', e.target.value)}
+                      className={`${inputClass} pl-14 bg-white`}
+                      placeholder="Optional"
+                    />
+                  </div>
+                </div>
                 <label className="flex items-center justify-between p-4 bg-white rounded-xl cursor-pointer hover:shadow-sm transition-all group">
                   <span className="text-[10px] font-black uppercase tracking-widest text-slate-500 group-hover:text-[#6610f2]">Track Inventory</span>
                   <input
                     type="checkbox"
                     checked={form.manage_stock}
                     onChange={(e) => updateForm('manage_stock', e.target.checked)}
+                    className="w-5 h-5 rounded accent-[#6610f2]"
+                  />
+                </label>
+                <label className="flex items-center justify-between p-4 bg-white rounded-xl cursor-pointer hover:shadow-sm transition-all group">
+                  <span className="text-[10px] font-black uppercase tracking-widest text-slate-500 group-hover:text-[#6610f2]">Digital Product</span>
+                  <input
+                    type="checkbox"
+                    checked={form.is_digital}
+                    onChange={(e) => updateForm('is_digital', e.target.checked)}
                     className="w-5 h-5 rounded accent-[#6610f2]"
                   />
                 </label>
@@ -407,6 +439,42 @@ export default function CreateProduct() {
               placeholder="Describe the unique value proposition..."
             />
           </div>
+
+          <div className={containerClass}>
+            <h3 className="text-2xl font-black text-slate-900 tracking-tight italic mb-8">Discovery Details.</h3>
+            <div className="space-y-6">
+              <div>
+                <label className={labelClass}>Demo Video URL</label>
+                <input
+                  type="url"
+                  value={form.video}
+                  onChange={(e) => updateForm('video', e.target.value)}
+                  className={inputClass}
+                  placeholder="https://..."
+                />
+              </div>
+              <div>
+                <label className={labelClass}>Meta Title</label>
+                <input
+                  type="text"
+                  value={form.meta_title}
+                  onChange={(e) => updateForm('meta_title', e.target.value)}
+                  className={inputClass}
+                  placeholder="Search result title"
+                />
+              </div>
+              <div>
+                <label className={labelClass}>Meta Description</label>
+                <textarea
+                  value={form.meta_description}
+                  onChange={(e) => updateForm('meta_description', e.target.value)}
+                  rows={3}
+                  className={`${inputClass} resize-none`}
+                  placeholder="Short search result description"
+                />
+              </div>
+            </div>
+          </div>
         </div>
 
         <div className="lg:col-span-4 space-y-10">
@@ -421,16 +489,6 @@ export default function CreateProduct() {
             <div className="absolute -right-4 -bottom-4 opacity-10">
               <HiOutlineCube className="w-32 h-32" />
             </div>
-          </div>
-
-          <div className="hidden lg:block">
-            <ActionPill
-              isSaving={isSaving}
-              isEditMode={isEditMode}
-              onSave={handleSave}
-              label="Product"
-              variant="docked"
-            />
           </div>
 
           <div className={containerClass}>
@@ -469,6 +527,7 @@ export default function CreateProduct() {
         onSave={handleSave}
         label="Product"
         variant="floating"
+        showOnDesktop
       />
       )}
     </div>

@@ -7,9 +7,10 @@ interface ActionPillProps {
   onSave: () => void;
   label: string;
   variant?: 'floating' | 'docked';
+  showOnDesktop?: boolean;
 }
 
-export default function ActionPill({ isSaving, isEditMode, onSave, label, variant = 'floating' }: ActionPillProps) {
+export default function ActionPill({ isSaving, isEditMode, onSave, label, variant = 'floating', showOnDesktop = false }: ActionPillProps) {
   if (variant === 'docked') {
     return (
       <button
@@ -28,11 +29,11 @@ export default function ActionPill({ isSaving, isEditMode, onSave, label, varian
   }
 
   return (
-    <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-50 lg:hidden">
+    <div className={`fixed bottom-[calc(105px+env(safe-area-inset-bottom))] left-1/2 -translate-x-1/2 z-[3050] ${showOnDesktop ? 'lg:left-auto lg:right-10 lg:bottom-10 lg:translate-x-0' : 'lg:hidden'}`}>
       <button
         onClick={onSave}
         disabled={isSaving}
-        className="bg-[#6610f2] text-white px-12 py-6 rounded-full font-black text-xs uppercase tracking-[0.3em] shadow-2xl shadow-[#6610f2]/40 flex items-center gap-4 active:scale-90 transition-all disabled:opacity-50"
+        className="bg-[#6610f2] text-white px-10 py-5 md:px-12 md:py-6 rounded-full font-black text-xs uppercase tracking-[0.3em] shadow-2xl shadow-[#6610f2]/40 flex items-center gap-4 active:scale-90 transition-all disabled:opacity-50 hover:scale-[1.02]"
       >
         {isSaving ? (
           <HiOutlineArrowPath className="w-5 h-5 animate-spin" />

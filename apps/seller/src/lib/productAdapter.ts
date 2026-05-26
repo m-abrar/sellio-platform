@@ -8,6 +8,7 @@ export interface NormalizedProduct {
   featured_image?: string | null;
   featured_image_id?: number | null;
   gallery: Array<{ id: number; url: string; thumbnail?: string }>;
+  video_url?: string | null;
   pricing: {
     base_price?: number;
     sale_price?: number | null;
@@ -16,14 +17,20 @@ export interface NormalizedProduct {
   };
   inventory: {
     stock_quantity?: number;
+    low_stock_threshold?: number;
     in_stock?: boolean;
     manage_stock?: boolean;
+    is_digital?: boolean;
   };
   category?: { id: number; title: string };
   brand?: { id: number; title: string };
   type?: { id: number; title: string };
   specs?: {
     weight?: string | null;
+    weight_value?: number | null;
+    length?: number | null;
+    width?: number | null;
+    height?: number | null;
     dimensions?: string | null;
     features?: unknown[];
   };
@@ -33,6 +40,10 @@ export interface NormalizedProduct {
     approved_at?: string | null;
   };
   is_featured?: boolean;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+  };
 }
 
 const toNumber = (value: unknown): number | undefined => {
@@ -60,11 +71,14 @@ export const normalizeProduct = (product: any): NormalizedProduct => {
           thumbnail: item.thumbnail ?? item.url,
         }))
       : [],
+    video_url: product.media?.video_url ?? product.video_url ?? null,
     pricing: product.pricing ?? {},
     inventory: {
       stock_quantity: toNumber(product.inventory?.stock_quantity),
+      low_stock_threshold: toNumber(product.inventory?.low_stock_threshold),
       in_stock: product.inventory?.in_stock,
       manage_stock: product.inventory?.manage_stock,
+      is_digital: product.inventory?.is_digital,
     },
     category: product.taxonomy?.category ?? product.category,
     brand: product.taxonomy?.brand ?? product.brand,
@@ -72,6 +86,7 @@ export const normalizeProduct = (product: any): NormalizedProduct => {
     specs: product.specs ?? {},
     status: product.status ?? {},
     is_featured: product.status?.is_featured ?? product.is_featured ?? false,
+    meta: product.meta ?? {},
   };
 };
 

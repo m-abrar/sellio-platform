@@ -42,7 +42,7 @@ class ProductResource extends JsonResource
                 'manage_stock'         => (bool) $this->manage_stock,
                 'low_stock_threshold'  => $this->when(
                     auth()->id() === $this->user_id || (auth()->check() && auth()->user()->hasRole('admin')),
-                    (int) $this->low_stock_threshold
+                    $this->low_stock_threshold !== null ? (int) $this->low_stock_threshold : null
                 ),
                 'is_digital'           => (bool) $this->is_digital,
             ],
@@ -50,6 +50,10 @@ class ProductResource extends JsonResource
             // Physical Attributes & Specs
             'specs' => [
                 'weight'               => $this->weight ? $this->weight . ' kg' : null,
+                'weight_value'         => $this->weight !== null ? (float) $this->weight : null,
+                'length'               => $this->length !== null ? (float) $this->length : null,
+                'width'                => $this->width !== null ? (float) $this->width : null,
+                'height'               => $this->height !== null ? (float) $this->height : null,
                 'dimensions'           => $this->dimensions_formatted, // From custom accessor
                 'type'                 => $this->whenLoaded('type', fn() => $this->type->title),
                 'features'             => $this->whenLoaded('features', fn() => $this->features->map(fn($f) => [

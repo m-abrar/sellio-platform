@@ -45,7 +45,7 @@ class Product extends Model implements HasMedia
         'stock_quantity', 'low_stock_threshold', 'manage_stock', 'in_stock',
         'weight', 'length', 'width', 'height', 
         'video', 'main_image',
-        'is_published', 'on_sale', 'is_digital',
+        'is_published', 'is_featured', 'on_sale', 'is_digital',
         'meta_title', 'meta_description'
     ];
 
@@ -63,7 +63,11 @@ class Product extends Model implements HasMedia
         'sale_price'        => 'decimal:2',
         'cost_price'        => 'decimal:2',
         'weight'            => 'decimal:2',
+        'length'            => 'decimal:2',
+        'width'             => 'decimal:2',
+        'height'            => 'decimal:2',
         'stock_quantity'    => 'integer',
+        'low_stock_threshold' => 'integer',
         'approved_at' => 'datetime',
     ];
 
