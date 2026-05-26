@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { api } from '@sellio/api-client';
 import type { ServiceListing } from '@sellio/types';
+import { getServiceCategoryLabel } from './components';
 
 interface ProductPageProps {
   slug: string;
@@ -148,7 +149,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
         </div>
 
         <article className="sm-detail-panel">
-          <div className="sm-detail-kicker">{service.professional?.category || 'Professional Service'}</div>
+          <div className="sm-detail-kicker">{getServiceCategoryLabel(service.professional?.category)}</div>
           <h1 id="sm-detail-title">{service.title}</h1>
           <div className="sm-detail-price">
             {getServicePrice(service)}

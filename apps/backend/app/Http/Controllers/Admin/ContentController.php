@@ -47,11 +47,13 @@ class ContentController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function index(): View
+    public function index(Request $request): View
     {
         foreach (['properties_classic', 'events_music', 'ecommerce_fashion', 'services_marketplace', 'autos_luxury', 'jobs_startup', 'classifieds_general', 'events_classic', 'autos_classic', 'autos_modern', 'autos_used', 'events_creative', 'events_festival', 'autos_electric', 'events_corporate', 'jobs_tech', 'jobs_corporate', 'ecommerce_default', 'ecommerce_electronics', 'ecommerce_luxury'] as $themeKey) {
             $this->ensureStructuredSlots($themeKey, 'home');
         }
+
+        $selectedThemeKey = $request->query('theme_key');
 
         $contentPages = PageContent::select('page', 'theme_key')
             ->selectRaw('COUNT(*) as slots_count')
@@ -62,13 +64,18 @@ class ContentController extends Controller
             ->orderBy('theme_key')
             ->get();
 
-        $themeKeys = PageContent::select('theme_key')->distinct()->pluck('theme_key');
+        if (is_string($selectedThemeKey) && $selectedThemeKey !== '') {
+            $contentPages = $contentPages->where('theme_key', $selectedThemeKey)->values();
+        }
+
+        $themeKeys = $contentPages->pluck('theme_key')->unique()->values();
         $themes = Theme::whereIn('theme_key', $themeKeys)->get()->keyBy('theme_key');
 
         return view('admin.content.index', [
             'contentPages' => $contentPages,
             'themeKeys'    => $themeKeys,
             'themes'       => $themes,
+            'selectedThemeKey' => $selectedThemeKey,
         ]);
     }
     

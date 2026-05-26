@@ -59,7 +59,7 @@ export default async function RootLayout({
         )}
       </head>
       <body suppressHydrationWarning>
-        <AdminBar theme={theme} menus={menus} />
+        <AdminBar theme={theme} />
         <MenuProvider menus={menus} themeKey={theme.theme_key} isPreview={isPreview}>
           <ThemeContentProvider content={themeContent}>
             <IndustryLayout>

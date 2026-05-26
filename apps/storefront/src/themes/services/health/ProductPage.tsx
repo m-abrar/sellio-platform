@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { api } from '@sellio/api-client';
 import type { ServiceListing } from '@sellio/types';
+import { getServiceTaxonomyLabel } from './components';
 
 interface ProductPageProps {
   slug: string;
@@ -140,7 +141,9 @@ export default function ProductPage({ slug }: ProductPageProps) {
         </div>
 
         <article className="sh-detail-panel">
-          <div className="sh-detail-kicker">{service.professional?.category || 'Healthcare Specialist'}</div>
+          <div className="sh-detail-kicker">
+            {getServiceTaxonomyLabel(service.professional?.category, 'Healthcare Specialist')}
+          </div>
           <h1 id="sh-detail-title">{service.title}</h1>
           <div className="sh-detail-price">{getServicePrice(service)}</div>
 
@@ -159,7 +162,10 @@ export default function ProductPage({ slug }: ProductPageProps) {
             </div>
             <div>
               <span>Specialist</span>
-              <strong>{service.provider?.name || service.professional?.type || 'Licensed Practitioner'}</strong>
+              <strong>
+                {service.provider?.name ||
+                  getServiceTaxonomyLabel(service.professional?.type, 'Licensed Practitioner')}
+              </strong>
             </div>
           </div>
 

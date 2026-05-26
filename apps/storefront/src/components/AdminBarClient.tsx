@@ -1,15 +1,18 @@
 'use client';
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import type { Theme } from '@sellio/types';
 import {
   buildAdminUrls,
+  getAdminBaseUrl,
   type AdminUrls,
   type ThemePageLink,
 } from '@/lib/admin-urls';
 import './admin-bar.css';
 
 export interface AdminMenuLink {
+  id: number | null;
   title: string;
   locationKey: string;
 }
@@ -19,9 +22,15 @@ interface AdminBarClientProps {
   theme: Theme;
   themePages: ThemePageLink[];
   adminMenus: AdminMenuLink[];
+  requestHostname?: string;
 }
 
 type DropdownKey = 'addNew' | 'editContent' | 'menus' | null;
+
+const ADMIN_LINK_PROPS = {
+  target: '_blank',
+  rel: 'noopener noreferrer',
+} as const;
 
 function Icon({ children }: { children: React.ReactNode }) {
   return (
@@ -53,9 +62,41 @@ function Dropdown({
   onToggle: () => void;
   children: React.ReactNode;
 }) {
+  const toggleRef = useRef<HTMLButtonElement>(null);
+  const [menuStyle, setMenuStyle] = useState<React.CSSProperties>({});
+
+  useEffect(() => {
+    if (!isOpen || !toggleRef.current) {
+      return;
+    }
+
+    const updatePosition = () => {
+      if (!toggleRef.current) {
+        return;
+      }
+
+      const rect = toggleRef.current.getBoundingClientRect();
+      setMenuStyle({
+        position: 'fixed',
+        top: rect.bottom + 4,
+        left: rect.left,
+      });
+    };
+
+    updatePosition();
+    window.addEventListener('resize', updatePosition);
+    window.addEventListener('scroll', updatePosition, true);
+
+    return () => {
+      window.removeEventListener('resize', updatePosition);
+      window.removeEventListener('scroll', updatePosition, true);
+    };
+  }, [isOpen]);
+
   return (
     <div className="admin-bar-dropdown">
       <button
+        ref={toggleRef}
         type="button"
         className="admin-bar-link admin-bar-dropdown-toggle"
         aria-expanded={isOpen}
@@ -64,7 +105,17 @@ function Dropdown({
         {icon}
         {label}
       </button>
-      {isOpen ? <div className="admin-bar-dropdown-menu">{children}</div> : null}
+      {isOpen && typeof document !== 'undefined'
+        ? createPortal(
+            <div
+              className="admin-bar-dropdown-menu admin-bar-dropdown-menu-portal"
+              style={menuStyle}
+            >
+              {children}
+            </div>,
+            document.body,
+          )
+        : null}
     </div>
   );
 }
@@ -74,11 +125,15 @@ export function AdminBarClient({
   theme,
   themePages,
   adminMenus,
+  requestHostname,
 }: AdminBarClientProps) {
   const [visible, setVisible] = useState(initialAuthenticated);
   const [openDropdown, setOpenDropdown] = useState<DropdownKey>(null);
   const barRef = useRef<HTMLDivElement>(null);
-  const urls: AdminUrls = buildAdminUrls(theme);
+  const hostname =
+    requestHostname ||
+    (typeof window !== 'undefined' ? window.location.hostname : '127.0.0.1');
+  const urls: AdminUrls = buildAdminUrls(theme, hostname);
 
   const verifyAuth = useCallback(async () => {
     if (initialAuthenticated) {
@@ -86,23 +141,32 @@ export function AdminBarClient({
       return;
     }
 
-    try {
-      const response = await fetch('/api/admin-bar/session', {
-        credentials: 'include',
+    const readSession = async (url: string, credentials: RequestCredentials = 'same-origin') => {
+      const response = await fetch(url, {
+        credentials,
         headers: { Accept: 'application/json' },
       });
 
       if (!response.ok) {
-        setVisible(false);
-        return;
+        return false;
       }
 
       const payload = await response.json();
-      setVisible(Boolean(payload?.authenticated));
+      return Boolean(payload?.authenticated);
+    };
+
+    try {
+      if (await readSession('/api/admin-bar/session')) {
+        setVisible(true);
+        return;
+      }
+
+      const directUrl = `${getAdminBaseUrl(hostname)}/admin-bar/status`;
+      setVisible(await readSession(directUrl, 'include'));
     } catch {
       setVisible(false);
     }
-  }, [initialAuthenticated]);
+  }, [hostname, initialAuthenticated]);
 
   useEffect(() => {
     void verifyAuth();
@@ -121,7 +185,11 @@ export function AdminBarClient({
     }
 
     const handlePointerDown = (event: MouseEvent) => {
-      if (!barRef.current?.contains(event.target as Node)) {
+      const target = event.target as Node;
+      const clickedInsideBar = barRef.current?.contains(target);
+      const clickedInsideMenu = (target as Element).closest?.('.admin-bar-dropdown-menu-portal');
+
+      if (!clickedInsideBar && !clickedInsideMenu) {
         setOpenDropdown(null);
       }
     };
@@ -142,7 +210,7 @@ export function AdminBarClient({
     <div id="admin-bar" ref={barRef} role="navigation" aria-label="Admin Quick Bar">
       <div className="admin-bar-container">
         <div className="admin-bar-left">
-          <a href={urls.dashboard}>
+          <a href={urls.dashboard} {...ADMIN_LINK_PROPS}>
             <Icon>
               <rect x="3" y="3" width="7" height="7" />
               <rect x="14" y="3" width="7" height="7" />
@@ -201,7 +269,7 @@ export function AdminBarClient({
 
           <span className="separator">|</span>
 
-          <a href={urls.themeEdit}>
+          <a href={urls.themeEdit} {...ADMIN_LINK_PROPS}>
             <Icon>
               <circle cx="13.5" cy="6.5" r="2.5" />
               <circle cx="19" cy="17" r="2.5" />
@@ -230,6 +298,7 @@ export function AdminBarClient({
                   className="admin-bar-dropdown-item"
                   href={urls.contentEdit(page)}
                   style={{ textTransform: 'capitalize' }}
+                  {...ADMIN_LINK_PROPS}
                 >
                   <Icon>
                     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
@@ -249,7 +318,7 @@ export function AdminBarClient({
               </span>
             )}
             <div className="admin-bar-dropdown-divider" />
-            <a className="admin-bar-dropdown-item" href={urls.pagesIndex}>
+            <a className="admin-bar-dropdown-item" href={urls.pagesIndex} {...ADMIN_LINK_PROPS}>
               <Icon>
                 <line x1="8" y1="6" x2="21" y2="6" />
                 <line x1="8" y1="12" x2="21" y2="12" />
@@ -258,7 +327,7 @@ export function AdminBarClient({
                 <line x1="3" y1="12" x2="3.01" y2="12" />
                 <line x1="3" y1="18" x2="3.01" y2="18" />
               </Icon>
-              Manage Pages
+              Manage Theme Pages
             </a>
           </Dropdown>
 
@@ -280,10 +349,11 @@ export function AdminBarClient({
             {adminMenus.length > 0 ? (
               adminMenus.map((menu) => (
                 <a
-                  key={menu.locationKey}
+                  key={menu.id ?? menu.locationKey}
                   className="admin-bar-dropdown-item"
-                  href={urls.menuIndex}
+                  href={menu.id ? urls.menuEdit(menu.id) : urls.menuIndex}
                   title={menu.locationKey}
+                  {...ADMIN_LINK_PROPS}
                 >
                   <Icon>
                     <polyline points="9 18 15 12 9 6" />
@@ -295,7 +365,7 @@ export function AdminBarClient({
               <span className="admin-bar-dropdown-item is-disabled">No menus defined</span>
             )}
             <div className="admin-bar-dropdown-divider" />
-            <a className="admin-bar-dropdown-item" href={urls.menuIndex}>
+            <a className="admin-bar-dropdown-item" href={urls.menuIndex} {...ADMIN_LINK_PROPS}>
               <Icon>
                 <line x1="8" y1="6" x2="21" y2="6" />
                 <line x1="8" y1="12" x2="21" y2="12" />
@@ -304,13 +374,13 @@ export function AdminBarClient({
                 <line x1="3" y1="12" x2="3.01" y2="12" />
                 <line x1="3" y1="18" x2="3.01" y2="18" />
               </Icon>
-              Manage All Menus
+              Manage Theme Menus
             </a>
           </Dropdown>
         </div>
 
         <div className="admin-bar-right">
-          <a href={urls.settings} className="admin-bar-hide-mobile">
+          <a href={urls.settings} className="admin-bar-hide-mobile" {...ADMIN_LINK_PROPS}>
             <Icon>
               <circle cx="12" cy="12" r="3" />
               <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />

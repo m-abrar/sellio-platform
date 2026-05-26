@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { EstateShowcase, LuxuryAmenities } from './components';
 import { useThemeContent, useThemeMedia } from '@/components/theme-content/ThemeContentProvider';

@@ -34,6 +34,7 @@ class MenuController extends Controller
                 'items',
                 'items as top_level_items_count' => fn ($query) => $query->whereNull('parent_id'),
             ])
+            ->when($selectedTheme, fn ($query) => $query->where('theme_key', $selectedTheme))
             ->orderBy('theme_key')
             ->orderBy('location_key')
             ->get();

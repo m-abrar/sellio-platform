@@ -14,14 +14,22 @@ export function getApiBaseUrl(): string {
   return 'http://127.0.0.1:8000/api';
 }
 
-export function getAdminBaseUrl(): string {
+export function getAdminBaseUrl(hostname?: string): string {
   const configured = process.env.NEXT_PUBLIC_ADMIN_URL;
 
   if (configured) {
     return stripTrailingSlash(configured);
   }
 
-  return stripTrailingSlash(getApiBaseUrl().replace(/\/api$/, ''));
+  const configuredApi = process.env.NEXT_PUBLIC_API_URL;
+
+  if (configuredApi) {
+    return stripTrailingSlash(configuredApi.replace(/\/api$/, ''));
+  }
+
+  const host = hostname || '127.0.0.1';
+
+  return `http://${host}:8000`;
 }
 
 export interface AdminUrls {
@@ -30,20 +38,23 @@ export interface AdminUrls {
   contentEdit: (page: string) => string;
   pagesIndex: string;
   menuIndex: string;
+  menuEdit: (menuId: number) => string;
   settings: string;
   logout: string;
 }
 
-export function buildAdminUrls(theme: Theme): AdminUrls {
-  const base = getAdminBaseUrl();
+export function buildAdminUrls(theme: Theme, hostname?: string): AdminUrls {
+  const base = getAdminBaseUrl(hostname);
+  const themeKey = encodeURIComponent(theme.theme_key);
 
   return {
     dashboard: `${base}/admin/welcome`,
     themeEdit: `${base}/admin/themes/${theme.id}/edit`,
     contentEdit: (page: string) =>
-      `${base}/admin/content/${encodeURIComponent(page)}/${encodeURIComponent(theme.theme_key)}`,
-    pagesIndex: `${base}/admin/content`,
-    menuIndex: `${base}/admin/menu/${encodeURIComponent(theme.theme_key)}`,
+      `${base}/admin/content/${encodeURIComponent(page)}/${themeKey}`,
+    pagesIndex: `${base}/admin/content?theme_key=${themeKey}`,
+    menuIndex: `${base}/admin/menu/${themeKey}`,
+    menuEdit: (menuId: number) => `${base}/admin/menu/${menuId}/edit`,
     settings: `${base}/admin/settings`,
     logout: `${base}/logout`,
   };
@@ -51,10 +62,4 @@ export function buildAdminUrls(theme: Theme): AdminUrls {
 
 export interface ThemePageLink {
   page: string;
-}
-
-export function getThemePages(_themeKey: string): ThemePageLink[] {
-  const pages = ['home', 'explore', 'product', 'cart'];
-
-  return pages.map((page) => ({ page }));
 }

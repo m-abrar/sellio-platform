@@ -15,6 +15,43 @@ function getThemeLink(path: string) {
   return path || '/';
 }
 
+type ServiceCategoryRef =
+  | string
+  | {
+      id?: number;
+      title?: string;
+      slug?: string;
+    }
+  | null
+  | undefined;
+
+export function getServiceCategoryLabel(
+  category: ServiceCategoryRef,
+  fallback = 'Professional Service',
+): string {
+  if (!category) {
+    return fallback;
+  }
+
+  if (typeof category === 'string') {
+    return category;
+  }
+
+  if (category.title) {
+    return category.title;
+  }
+
+  if (category.slug) {
+    return category.slug;
+  }
+
+  if (category.id != null) {
+    return String(category.id);
+  }
+
+  return fallback;
+}
+
 export const MarketplaceHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
   const brandLabel = useThemeContent('header.brand_label', 'ServiceConnect');
@@ -92,7 +129,9 @@ interface SmProviderCardProps {
 export const SmProviderCard = ({ name, title, rating, image, service, onHire }: SmProviderCardProps) => {
   const isDynamic = !!service;
   const displayName = isDynamic ? service.title : name;
-  const displayTitle = isDynamic ? (service.professional?.category || 'Professional Service') : title;
+  const displayTitle = isDynamic
+    ? getServiceCategoryLabel(service.professional?.category)
+    : title;
   const displayRating = isDynamic ? (4.6 + (service.id % 5) * 0.1).toFixed(1) : rating;
   const displayImage = isDynamic ? (service.media?.main_photo || '/themes/services/marketplace/15.webp') : image;
   const isTopPro = isDynamic ? service.status?.is_featured : true;

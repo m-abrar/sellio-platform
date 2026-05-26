@@ -510,11 +510,51 @@ export default function Page() {
     return item.media?.thumbnail || item.media?.main_photo || 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?q=80&w=400';
   };
 
+  const getListingCategoryKey = (
+    category: ClassifiedListing['taxonomy']['category'],
+  ): string => {
+    if (!category) {
+      return '';
+    }
+
+    if (typeof category === 'string') {
+      return category.toLowerCase();
+    }
+
+    if (typeof category === 'object') {
+      const { id, title, slug } = category as { id?: number; title?: string; slug?: string };
+
+      if (slug) {
+        return slug.toLowerCase();
+      }
+
+      if (title) {
+        return title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+      }
+
+      if (id != null) {
+        return String(id);
+      }
+    }
+
+    return '';
+  };
+
+  const listingMatchesCategory = (item: ClassifiedListing, categoryId: string): boolean => {
+    if (categoryId === 'all') {
+      return true;
+    }
+
+    const selected = categoryId.toLowerCase();
+    const itemKey = getListingCategoryKey(item.taxonomy?.category);
+
+    return itemKey === selected;
+  };
+
   // Filter listings based on categories pill and search keyword
   const filteredItems = items
     .filter((item) => {
-      const itemCategory = item.taxonomy?.category || '';
-      const matchesCategory = selectedCategory === 'all' || itemCategory.toLowerCase() === selectedCategory.toLowerCase();
+      const matchesCategory = listingMatchesCategory(item, selectedCategory);
       const matchesSearch = item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                             getListingLocation(item).toLowerCase().includes(searchTerm.toLowerCase());
       return matchesCategory && matchesSearch;

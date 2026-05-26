@@ -5,6 +5,43 @@ import { MenuActionButtons } from '@/components/menu/MenuActionButtons';
 import { FooterMenuColumn } from '@/components/menu/FooterMenuColumn';
 import { hashAwareNavItemRenderer } from '@/components/menu/menu-renderers';
 
+type ServiceTaxonomyRef =
+  | string
+  | {
+      id?: number;
+      title?: string;
+      slug?: string;
+    }
+  | null
+  | undefined;
+
+export function getServiceTaxonomyLabel(
+  value: ServiceTaxonomyRef,
+  fallback = 'Specialist',
+): string {
+  if (!value) {
+    return fallback;
+  }
+
+  if (typeof value === 'string') {
+    return value;
+  }
+
+  if (value.title) {
+    return value.title;
+  }
+
+  if (value.slug) {
+    return value.slug;
+  }
+
+  if (value.id != null) {
+    return String(value.id);
+  }
+
+  return fallback;
+}
+
 export const WellnessHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
 

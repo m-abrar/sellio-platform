@@ -17,30 +17,37 @@ export function canShowAdminBar(user: AdminUser | null | undefined): boolean {
   return user.roles.some((role) => ADMIN_BAR_ROLES.has(role));
 }
 
-export async function fetchAdminUser(cookieHeader = ''): Promise<AdminUser | null> {
-  const response = await fetch(`${getAdminBaseUrl()}/admin-bar/status`, {
-    headers: {
-      Accept: 'application/json',
-      ...(cookieHeader ? { Cookie: cookieHeader } : {}),
-    },
-    cache: 'no-store',
-  });
+export async function fetchAdminUser(
+  cookieHeader = '',
+  hostname?: string,
+): Promise<AdminUser | null> {
+  try {
+    const response = await fetch(`${getAdminBaseUrl(hostname)}/admin-bar/status`, {
+      headers: {
+        Accept: 'application/json',
+        ...(cookieHeader ? { Cookie: cookieHeader } : {}),
+      },
+      cache: 'no-store',
+    });
 
-  if (!response.ok) {
+    if (!response.ok) {
+      return null;
+    }
+
+    const payload = await response.json();
+
+    if (!payload?.authenticated || !payload?.user) {
+      return null;
+    }
+
+    const user = payload.user as AdminUser;
+
+    if (!canShowAdminBar(user)) {
+      return null;
+    }
+
+    return user;
+  } catch {
     return null;
   }
-
-  const payload = await response.json();
-
-  if (!payload?.authenticated || !payload?.user) {
-    return null;
-  }
-
-  const user = payload.user as AdminUser;
-
-  if (!canShowAdminBar(user)) {
-    return null;
-  }
-
-  return user;
 }

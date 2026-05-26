@@ -7,7 +7,8 @@ import {
   SmProviderCard, 
   MarketplaceFooter,
   SmCategorySkeleton,
-  SmProviderSkeleton
+  SmProviderSkeleton,
+  getServiceCategoryLabel,
 } from './components';
 import { api } from '@sellio/api-client';
 import type { ServiceListing, Category, Location } from '@sellio/types';
@@ -192,7 +193,10 @@ export default function Page() {
         id: `book_${Date.now()}`,
         serviceId: bookingService.id,
         serviceTitle: bookingService.title,
-        serviceProvider: bookingService.professional?.category || 'Professional Provider',
+        serviceProvider: getServiceCategoryLabel(
+          bookingService.professional?.category,
+          'Professional Provider',
+        ),
         candidateName: bookingForm.candidateName,
         serviceDate: bookingForm.serviceDate,
         requirements: bookingForm.requirements,
@@ -460,7 +464,7 @@ export default function Page() {
                         {bookingService.title}
                       </div>
                       <div style={{ fontSize: '0.8rem', color: 'var(--sm-text-muted)', marginTop: '0.25rem' }}>
-                        Category: {bookingService.professional?.category || 'Professional Service'}
+                        Category: {getServiceCategoryLabel(bookingService.professional?.category)}
                       </div>
                     </div>
 

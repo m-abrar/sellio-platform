@@ -10,7 +10,7 @@
 use Illuminate\Support\Facades\Route;
 
 // --- CORE & AUTH ---
-use App\Http\Controllers\{HomeController, PageController, BlogController, PartnerController, ReviewController, ConversationController, CheckoutController, WebhookController, AdminBarStatusController};
+use App\Http\Controllers\{HomeController, PageController, BlogController, PartnerController, ReviewController, ConversationController, CheckoutController, WebhookController, AdminBarStatusController, AdminBarContextController};
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Dashboard\DashboardRedirectController;
 
@@ -31,6 +31,7 @@ use App\Http\Controllers\{CategoryController, BrandController, TagController, Ty
 */
 
 Route::get('/admin-bar/status', AdminBarStatusController::class)->name('admin-bar.status');
+Route::get('/admin-bar/context', AdminBarContextController::class)->name('admin-bar.context');
 
 Route::middleware(['built_in_website'])->group(function () {
     Route::get('/', HomeController::class)->name('index');

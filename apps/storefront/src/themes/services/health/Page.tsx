@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { api } from '@sellio/api-client';
 import type { ServiceListing } from '@sellio/types';
-import { PractitionerCard, VitalityHUD } from './components';
+import { PractitionerCard, VitalityHUD, getServiceTaxonomyLabel } from './components';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 
 const fallbackImages = [
@@ -14,7 +14,10 @@ const fallbackImages = [
 ];
 
 function mapServiceToPractitioner(service: ServiceListing, index: number) {
-  const specialty = service.professional?.category || service.professional?.type || 'SPECIALIST';
+  const specialty = getServiceTaxonomyLabel(
+    service.professional?.category || service.professional?.type,
+    'SPECIALIST',
+  );
 
   return {
     name: service.provider?.name || service.title,

@@ -57,7 +57,9 @@
         ->groupBy(fn ($entry) => $resolveVertical($entry->theme_key)['key'])
         ->sortBy(fn ($entries) => $resolveVertical($entries->first()->theme_key)['order']);
 
-    $activeVerticalKey = $contentByVertical->keys()->first() ?: 'general';
+    $activeVerticalKey = ! empty($selectedThemeKey)
+        ? $resolveVertical($selectedThemeKey)['key']
+        : ($contentByVertical->keys()->first() ?: 'general');
     $totalSlots = $contentPages->sum('slots_count');
     $totalPages = $contentPages->pluck('page')->unique()->count();
 @endphp

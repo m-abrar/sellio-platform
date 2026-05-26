@@ -4,6 +4,11 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { api } from '@sellio/api-client';
 import type { ClassifiedListing } from '@sellio/types';
+import {
+  classifiedCategoriesMatch,
+  getClassifiedCategoryKey,
+  getClassifiedCategoryTitle,
+} from '@/lib/classified-category';
 
 // Premium high-fidelity Classifieds Elite fallback listings matching Page.tsx
 const FALLBACK_CLASSIFIEDS: ClassifiedListing[] = [
@@ -255,13 +260,13 @@ const getAssetPrice = (item: ClassifiedListing): string => {
 };
 
 const getAssetCategoryLabel = (item: ClassifiedListing): string => {
-  const category = item.taxonomy?.category;
-  if (!category) return 'Elite Asset';
-  if (category === 'motors') return 'Exotic Motors';
-  if (category === 'art') return 'Fine Art Portfolio';
-  if (category === 'spirits') return 'Rare Vintages';
-  if (category === 'horology') return 'Luxury Horology';
-  return category.charAt(0).toUpperCase() + category.slice(1);
+  const categoryKey = getClassifiedCategoryKey(item.taxonomy?.category);
+  if (!categoryKey) return 'Elite Asset';
+  if (categoryKey === 'motors') return 'Exotic Motors';
+  if (categoryKey === 'art') return 'Fine Art Portfolio';
+  if (categoryKey === 'spirits') return 'Rare Vintages';
+  if (categoryKey === 'horology') return 'Luxury Horology';
+  return getClassifiedCategoryTitle(item.taxonomy?.category, categoryKey);
 };
 
 const getAssetLocation = (item: ClassifiedListing): string => {
@@ -321,7 +326,7 @@ export default function ProductPage({ slug }: { slug: string }) {
             const listRes = await api.getClassifieds();
             if (listRes && listRes.data) {
               const matched = listRes.data
-                .filter(c => c.taxonomy?.category === response.data.taxonomy?.category && c.slug !== slug)
+                .filter(c => classifiedCategoriesMatch(c.taxonomy?.category, response.data.taxonomy?.category) && c.slug !== slug)
                 .slice(0, 3);
               setRelated(matched);
             }
@@ -345,7 +350,7 @@ export default function ProductPage({ slug }: { slug: string }) {
       setUseFallback(true);
 
       const relatedMatched = FALLBACK_CLASSIFIEDS
-        .filter(c => c.taxonomy?.category === matched.taxonomy?.category && c.slug !== slug)
+        .filter(c => classifiedCategoriesMatch(c.taxonomy?.category, matched.taxonomy?.category) && c.slug !== slug)
         .slice(0, 3);
       setRelated(relatedMatched);
     };

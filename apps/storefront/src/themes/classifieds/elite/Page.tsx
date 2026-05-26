@@ -4,6 +4,10 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { api } from '@sellio/api-client';
 import type { ClassifiedListing, Category } from '@sellio/types';
+import {
+  getClassifiedCategoryKey,
+  getClassifiedCategoryTitle,
+} from '@/lib/classified-category';
 import { PremiumCard } from './components';
 import { useThemeContent } from '@/components/theme-content/ThemeContentProvider';
 
@@ -327,11 +331,11 @@ export default function Page() {
             // Deduplicate from data taxonomy categories if sidebar categories aren't present
             const dynamicCategories = [{ id: "all", name: "All Vaults" }];
             response.data.forEach((item) => {
-              const catSlug = item.taxonomy?.category;
+              const catSlug = getClassifiedCategoryKey(item.taxonomy?.category);
               if (catSlug && !dynamicCategories.some(d => d.id === catSlug)) {
                 dynamicCategories.push({
                   id: catSlug,
-                  name: catSlug.charAt(0).toUpperCase() + catSlug.slice(1)
+                  name: getClassifiedCategoryTitle(item.taxonomy?.category, catSlug),
                 });
               }
             });
@@ -368,7 +372,9 @@ export default function Page() {
 
   // Filter listings based on category pills and search inputs
   const filteredAssets = items.filter((item) => {
-    const matchesCategory = selectedCategory === 'all' || item.taxonomy?.category === selectedCategory;
+    const matchesCategory =
+      selectedCategory === 'all' ||
+      getClassifiedCategoryKey(item.taxonomy?.category) === selectedCategory.toLowerCase();
     const matchesSearch = item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                           (item.description && item.description.toLowerCase().includes(searchTerm.toLowerCase())) ||
                           (item.location?.city && item.location.city.toLowerCase().includes(searchTerm.toLowerCase())) ||
@@ -412,13 +418,13 @@ export default function Page() {
   };
 
   const getAssetCategoryLabel = (item: ClassifiedListing): string => {
-    const category = item.taxonomy?.category;
-    if (!category) return 'Elite Asset';
-    if (category === 'motors') return 'Exotic Motors';
-    if (category === 'art') return 'Fine Art Portfolio';
-    if (category === 'spirits') return 'Rare Vintages';
-    if (category === 'horology') return 'Luxury Horology';
-    return category.charAt(0).toUpperCase() + category.slice(1);
+    const categoryKey = getClassifiedCategoryKey(item.taxonomy?.category);
+    if (!categoryKey) return 'Elite Asset';
+    if (categoryKey === 'motors') return 'Exotic Motors';
+    if (categoryKey === 'art') return 'Fine Art Portfolio';
+    if (categoryKey === 'spirits') return 'Rare Vintages';
+    if (categoryKey === 'horology') return 'Luxury Horology';
+    return getClassifiedCategoryTitle(item.taxonomy?.category, categoryKey);
   };
 
   const getAssetLocation = (item: ClassifiedListing): string => {
