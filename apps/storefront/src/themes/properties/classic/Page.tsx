@@ -243,7 +243,7 @@ export default function Page() {
             </div>
             <button 
               className="pc-btn-primary" 
-              style={{ background: 'var(--pc-teal)', color: 'white' }}
+              style={{ background: 'var(--pc-accent)', color: 'white' }}
               onClick={handleRefineSearch}
             >
                 {heroCtaLabel}
@@ -279,7 +279,7 @@ export default function Page() {
                         {collectionHeading}
                     </h2>
                 </div>
-                <div style={{ textAlign: 'right', maxWidth: '350px', fontSize: '0.9rem', color: 'var(--pc-text-muted)', lineHeight: 1.8 }}>
+                <div style={{ textAlign: 'right', maxWidth: '350px', width: '100%', fontSize: '0.9rem', color: 'var(--pc-text-muted)', lineHeight: 1.8 }} className="pc-collection-desc">
                     {collectionDescription}
                 </div>
             </div>

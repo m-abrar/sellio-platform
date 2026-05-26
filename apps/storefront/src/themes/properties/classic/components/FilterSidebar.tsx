@@ -51,9 +51,9 @@ export const FilterSidebar = ({
                   ))
                 ) : (
                   <>
-                    <option value="Hertfordshire, UK">Hertfordshire, UK</option>
-                    <option value="Florence, Italy">Florence, Italy</option>
-                    <option value="Loire Valley, France">Loire Valley, France</option>
+                    <option value="hertfordshire">Hertfordshire, UK</option>
+                    <option value="florence">Florence, Italy</option>
+                    <option value="loire">Loire Valley, France</option>
                   </>
                 )}
             </select>
@@ -75,10 +75,20 @@ export const FilterSidebar = ({
                     </label>
                   ))
                 ) : (
-                  ['Country Manors', 'Historic Chateaus', 'Colonial Estates', 'Royal Castles'].map(t => (
-                    <label key={t} style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', cursor: 'pointer', color: 'var(--pc-text-muted)' }}>
-                        <input type="checkbox" style={{ accentColor: 'var(--pc-teal)', width: '16px', height: '16px' }} /> 
-                        <span style={{ fontWeight: 600, letterSpacing: '1px' }}>{t.toUpperCase()}</span>
+                  [
+                    { id: 1, title: 'Country Manors' },
+                    { id: 2, title: 'Historic Chateaus' },
+                    { id: 3, title: 'Colonial Estates' },
+                    { id: 4, title: 'Royal Castles' }
+                  ].map(c => (
+                    <label key={c.id} style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', cursor: 'pointer', color: 'var(--pc-text-muted)' }}>
+                        <input 
+                          type="checkbox" 
+                          checked={String(selectedCategory) === String(c.id)}
+                          onChange={() => onCategoryChange?.(String(selectedCategory) === String(c.id) ? '' : c.id)}
+                          style={{ accentColor: 'var(--pc-teal)', width: '16px', height: '16px' }} 
+                        /> 
+                        <span style={{ fontWeight: 600, letterSpacing: '1px' }}>{c.title.toUpperCase()}</span>
                     </label>
                   ))
                 )}

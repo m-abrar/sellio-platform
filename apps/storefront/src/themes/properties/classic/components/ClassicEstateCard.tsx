@@ -47,7 +47,7 @@ export const EstateCard = ({ title, price, location, year, image, isFeatured, pr
   return (
     <a href={cardLink} style={{ textDecoration: 'none', color: 'inherit' }} className="pc-estate-card-link">
       <div className="pc-estate-card" style={{ cursor: 'pointer' }}>
-        <div className="pc-image-container">
+        <div className="pc-image-container" style={{ position: 'relative', overflow: 'hidden' }}>
           <img src={displayImage} alt={displayTitle} style={{ width: '100%', height: '450px', objectFit: 'cover' }} />
           
           {displayFeatured && (

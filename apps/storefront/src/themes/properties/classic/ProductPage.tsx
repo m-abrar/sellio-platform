@@ -204,13 +204,13 @@ export default function ProductPage({ slug }: ProductPageProps) {
     <div style={{ background: 'var(--pc-bone)', minHeight: '100vh' }}>
       
       {/* Dynamic Parallax Hero */}
-      <section style={{ height: '70vh', position: 'relative', overflow: 'hidden', background: 'var(--pc-teal)' }}>
+      <section className="pc-product-hero-container" style={{ height: '70vh', position: 'relative', overflow: 'hidden', background: 'var(--pc-teal)' }}>
         <div style={{ position: 'absolute', inset: 0, opacity: 0.6 }}>
           <img src={displayImage} alt={displayTitle} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
         </div>
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.6))' }} />
         
-        <div style={{ position: 'absolute', bottom: '6rem', left: '6%', right: '6%', zIndex: 10, display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'flex-end', gap: '2rem' }}>
+        <div className="pc-product-hero-overlay" style={{ position: 'absolute', bottom: '6rem', left: '6%', right: '6%', zIndex: 10, display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'flex-end', gap: '2rem' }}>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
               <span className="pc-caps" style={{ color: 'var(--pc-beige)', fontSize: '0.75rem', opacity: 0.8 }}>{categoryName}</span>
@@ -350,9 +350,9 @@ export default function ProductPage({ slug }: ProductPageProps) {
                   width: '100%', 
                   padding: '1.5rem', 
                   marginBottom: '2rem', 
-                  background: inquiryAdded ? 'transparent' : 'var(--pc-teal)',
-                  border: inquiryAdded ? '1px solid var(--pc-teal)' : 'none',
-                  color: inquiryAdded ? 'var(--pc-teal)' : 'var(--pc-white)'
+                  background: inquiryAdded ? 'transparent' : 'var(--pc-accent)',
+                  border: inquiryAdded ? '1px solid var(--pc-accent)' : 'none',
+                  color: inquiryAdded ? 'var(--pc-accent)' : 'var(--pc-white)'
                 }}
               >
                 {inquiryAdded ? '✓ ADDED TO HERITAGE COLLECTION' : '❦ COLLECT FOR INQUIRY'}

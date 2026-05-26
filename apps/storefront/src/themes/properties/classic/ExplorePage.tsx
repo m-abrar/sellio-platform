@@ -242,7 +242,7 @@ export default function ExplorePage({ initialCategorySlug }: ExplorePageProps) {
               The <span className="pc-italic" style={{ fontWeight: 400 }}>Catalogue.</span>
             </h1>
           </div>
-          <div style={{ maxWidth: '400px' }}>
+          <div style={{ maxWidth: '400px', width: '100%' }}>
             <div style={{ background: 'var(--pc-border)', padding: '1px' }} className="pc-search-bar">
               <div className="pc-search-inner" style={{ flex: 1, background: 'white', padding: '1rem', gap: '0.5rem' }}>
                 <input
@@ -256,7 +256,7 @@ export default function ExplorePage({ initialCategorySlug }: ExplorePageProps) {
               </div>
               <button
                 className="pc-btn-primary"
-                style={{ background: 'var(--pc-teal)', color: 'white', padding: '1rem 2rem' }}
+                style={{ background: 'var(--pc-accent)', color: 'white', padding: '1rem 2rem' }}
                 onClick={handleRefineSearch}
               >
                 FIND

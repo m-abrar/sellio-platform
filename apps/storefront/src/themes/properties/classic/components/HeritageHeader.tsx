@@ -45,16 +45,16 @@ export const Header = () => {
                 <span className="pc-hamburger-bar"></span>
             </button>
 
-            <MenuNav
-                location="main_header"
-                flat
-                className={`pc-nav ${isOpen ? 'pc-nav-open' : ''}`}
-                linkClassName="pc-nav-link"
-                onNavigate={() => setIsOpen(false)}
-                renderItem={defaultNavItemRenderer}
-            />
+            <div className={`pc-nav ${isOpen ? 'pc-nav-open' : ''}`}>
+                <MenuNav
+                    location="main_header"
+                    flat
+                    className="pc-nav-links"
+                    linkClassName="pc-nav-link"
+                    onNavigate={() => setIsOpen(false)}
+                    renderItem={defaultNavItemRenderer}
+                />
 
-            {isOpen && (
                 <div className="pc-mobile-header-right" style={{ marginTop: '2rem' }}>
                     <MenuUtilityNav
                         linkClassName="pc-nav-link"
@@ -69,7 +69,7 @@ export const Header = () => {
                         )}
                     />
                 </div>
-            )}
+            </div>
 
             <div className="pc-header-right">
                 <MenuUtilityNav
