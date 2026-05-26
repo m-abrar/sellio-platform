@@ -42,12 +42,12 @@ class AutoController extends Controller
 
     public function store(AutoRequest $request): JsonResponse
     {
-        $data = $request->safe()->except(['main_image', 'gallery', 'existing_media_ids']);
+        $data = $request->safe()->except(['main_image', 'gallery', 'existing_main_media_id', 'existing_media_ids', 'sync_existing_media']);
         $auto = $this->autoService->saveAuto(Auth::user(), $data);
         $this->handleMedia($auto, $request);
 
         return $this->successResponse(
-            new AutoResource($auto->load(['media', 'category', 'brand', 'location'])),
+            new AutoResource($auto->load(['media', 'category', 'brand', 'type', 'location'])),
             __('Vehicle listing created successfully.'),
             201
         );
@@ -57,7 +57,7 @@ class AutoController extends Controller
     {
         $model = Auto::where('user_id', Auth::id())
             ->where(is_numeric($auto) ? 'id' : 'slug', $auto)
-            ->with(['media', 'category', 'brand', 'location', 'user', 'features'])
+            ->with(['media', 'category', 'brand', 'type', 'location', 'user', 'features'])
             ->firstOrFail();
 
         return $this->successResponse(new AutoResource($model));
@@ -67,12 +67,12 @@ class AutoController extends Controller
     {
         $this->authorizeOwner($auto);
 
-        $data = $request->safe()->except(['main_image', 'gallery', 'existing_media_ids']);
+        $data = $request->safe()->except(['main_image', 'gallery', 'existing_main_media_id', 'existing_media_ids', 'sync_existing_media']);
         $this->autoService->saveAuto(Auth::user(), $data, $auto);
         $this->handleMedia($auto, $request);
 
         return $this->successResponse(
-            new AutoResource($auto->fresh(['media', 'category', 'brand', 'location'])),
+            new AutoResource($auto->fresh(['media', 'category', 'brand', 'type', 'location'])),
             __('Vehicle updated successfully.')
         );
     }
@@ -97,16 +97,28 @@ class AutoController extends Controller
         if ($request->hasFile('main_image')) {
             $auto->clearMediaCollection(Auto::PRIMARY_MEDIA);
             $auto->addMediaFromRequest('main_image')->toMediaCollection(Auto::PRIMARY_MEDIA);
+        } elseif ($request->filled('existing_main_media_id')) {
+            $media = $auto->media()
+                ->whereKey((int) $request->input('existing_main_media_id'))
+                ->first();
+
+            if ($media && $media->collection_name !== Auto::PRIMARY_MEDIA) {
+                $auto->clearMediaCollection(Auto::PRIMARY_MEDIA);
+                $media->collection_name = Auto::PRIMARY_MEDIA;
+                $media->save();
+            }
         }
 
-        if ($request->has('existing_media_ids')) {
+        if ($request->has('sync_existing_media')) {
             $keepIds = array_map('intval', (array) $request->input('existing_media_ids'));
 
             $auto->getMedia(Auto::GALLERY_MEDIA)
                 ->reject(fn ($media) => in_array($media->id, $keepIds))
                 ->each(fn ($media) => $media->delete());
 
-            \Spatie\MediaLibrary\MediaCollections\Models\Media::setNewOrder($keepIds);
+            if ($keepIds !== []) {
+                \Spatie\MediaLibrary\MediaCollections\Models\Media::setNewOrder($keepIds);
+            }
         }
 
         if ($request->hasFile('gallery')) {

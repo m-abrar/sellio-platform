@@ -57,9 +57,9 @@ class AutoRequest extends FormRequest
             'model'            => ['required', 'string', 'max:255'],
             'engine_type'      => ['required', 'string'],
             'transmission'     => ['required', 'string'],
-            'fuel_economy'     => ['required', 'string'],
+            'fuel_economy'     => ['nullable', 'string', 'max:100'],
             'drivetrain'       => ['required', 'string'],
-            'exterior_color'   => ['required', 'string'],
+            'exterior_color'   => ['nullable', 'string', 'max:255'],
             'mileage_value'    => ['required', 'integer', 'min:0'],
             'mileage_units'    => ['required', 'string', 'in:km,mi'],
             'condition_rating' => ['nullable', 'integer', 'min:1', 'max:10'],
@@ -76,10 +76,15 @@ class AutoRequest extends FormRequest
 
             // Status
             'is_published'     => ['boolean'],
+            'is_featured'      => ['boolean'],
             'is_lease'         => ['boolean'],
             'is_selling'       => ['boolean'],
             'main_image'       => ['nullable', 'image', 'max:5120'],
             'gallery.*'        => ['nullable', 'image', 'max:5120'],
+            'existing_main_media_id' => ['nullable', 'integer'],
+            'existing_media_ids'     => ['array'],
+            'existing_media_ids.*'   => ['integer'],
+            'sync_existing_media'    => ['boolean'],
         ];
     }
 }

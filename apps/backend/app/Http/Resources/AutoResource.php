@@ -13,12 +13,24 @@ class AutoResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $canViewSensitiveVin = auth()->id() === $this->user_id
+            || (auth()->check() && auth()->user()->hasRole('admin'));
+
         return [
             'id'                => $this->id,
             'title'             => $this->title,
             'slug'              => $this->slug,
             'description'       => $this->description,
             'short_description' => $this->short_description,
+            'category_id'       => $this->category_id,
+            'brand_id'          => $this->brand_id,
+            'type_id'           => $this->type_id,
+            'location_id'       => $this->location_id,
+            'stock_quantity'    => $this->stock_quantity !== null ? (int) $this->stock_quantity : null,
+            'is_published'      => (bool) $this->is_published,
+            'is_featured'       => (bool) $this->is_featured,
+            'is_lease'          => (bool) $this->is_lease,
+            'is_selling'        => (bool) $this->is_selling,
 
             // Pricing details
             'pricing' => [
@@ -36,11 +48,12 @@ class AutoResource extends JsonResource
                 'make'           => $this->make,
                 'model'          => $this->model,
                 'vin'            => $this->when(
-                    auth()->id() === $this->user_id || (auth()->check() && auth()->user()->hasRole('admin')),
+                    $canViewSensitiveVin,
                     $this->vin_number,
                     $this->vin_number ? substr($this->vin_number, 0, 4) . '***********' : null
                 ),
-                'condition'      => $this->condition_rating . '/10',
+                'raw_vin'        => $this->when($canViewSensitiveVin, $this->vin_number),
+                'condition'      => $this->condition_rating !== null ? (int) $this->condition_rating : null,
                 'mileage'        => $this->mileage_formatted, // Uses session-aware conversion
                 'raw_mileage'    => (int) $this->mileage_value,
                 'mileage_units'  => $this->mileage_units,
@@ -49,13 +62,15 @@ class AutoResource extends JsonResource
                 'fuel_economy'   => $this->fuel_economy,
                 'drivetrain'     => $this->drivetrain,
                 'exterior_color' => $this->exterior_color,
-                'warranty'       => $this->warranty_months ? "{$this->warranty_months} Months" : null,
+                'warranty_months'=> $this->warranty_months !== null ? (int) $this->warranty_months : null,
+                'stock_quantity' => $this->stock_quantity !== null ? (int) $this->stock_quantity : null,
             ],
 
             // Media (Spatie Media Library)
             'media' => [
-                'main_photo' => $this->primary_image_url,
-                'preview'    => $this->whenLoaded('media', fn() => $this->getMedia(Auto::PRIMARY_MEDIA)->first()?->getUrl('auto_listing_preview')),
+                'main_photo'    => $this->primary_image_url,
+                'main_photo_id' => $this->relationLoaded('media') ? $this->getFirstMedia(Auto::PRIMARY_MEDIA)?->id : null,
+                'preview'       => $this->whenLoaded('media', fn() => $this->getMedia(Auto::PRIMARY_MEDIA)->first()?->getUrl('auto_listing_preview')),
                 'gallery'    => $this->whenLoaded('media', fn() => $this->getMedia(Auto::GALLERY_MEDIA)->map(fn($media) => [
                     'id'        => $media->id,
                     'url'       => $media->getUrl(),
@@ -67,12 +82,16 @@ class AutoResource extends JsonResource
             // Relationships & Taxonomy
             'taxonomy' => [
                 'category' => $this->whenLoaded('category', fn() => [
-                    'id'    => $this->category->id,
-                    'title' => $this->category->title,
+                    'id'    => $this->category?->id,
+                    'title' => $this->category?->title,
                 ]),
                 'brand' => $this->whenLoaded('brand', fn() => [
-                    'id'    => $this->brand->id,
-                    'title' => $this->brand->title,
+                    'id'    => $this->brand?->id,
+                    'title' => $this->brand?->title,
+                ]),
+                'type' => $this->whenLoaded('type', fn() => [
+                    'id'    => $this->type?->id,
+                    'title' => $this->type?->title,
                 ]),
                 'features' => $this->whenLoaded('features', fn() => $this->features->map(fn($f) => [
                     'title' => $f->title,

@@ -18,7 +18,7 @@ class AutoService
     public function getPartnerAutos(User $partner, int $perPage = 10)
     {
         return $partner->autos()
-            ->with(['category', 'brand', 'location', 'media'])
+            ->with(['category', 'brand', 'type', 'location', 'media'])
             ->latest()
             ->paginate($perPage);
     }

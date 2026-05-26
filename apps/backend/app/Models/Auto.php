@@ -53,13 +53,34 @@ class Auto extends Model implements HasMedia
         'user_id',
         'category_id',
         'brand_id',
+        'type_id',
         'location_id',
+        'title',
+        'slug',
         'description',
         'short_description',
         'base_price',
         'sale_price',
+        'year',
+        'make',
+        'model',
+        'vin_number',
+        'engine_type',
+        'transmission',
+        'fuel_economy',
+        'drivetrain',
+        'exterior_color',
         'mileage_value',
         'mileage_units',
+        'condition_rating',
+        'warranty_months',
+        'stock_quantity',
+        'address',
+        'city',
+        'state',
+        'country',
+        'zip_code',
+        'is_featured',
         'is_lease',
         'is_selling',
         'is_published',
@@ -67,6 +88,11 @@ class Auto extends Model implements HasMedia
     ];
 
     protected $casts = [
+        'year'             => 'integer',
+        'mileage_value'    => 'integer',
+        'condition_rating' => 'integer',
+        'warranty_months'  => 'integer',
+        'stock_quantity'   => 'integer',
         'is_published' => 'boolean',
         'is_featured'  => 'boolean',
         'is_lease'     => 'boolean',
@@ -125,6 +151,11 @@ class Auto extends Model implements HasMedia
     public function brand(): BelongsTo
     {
         return $this->belongsTo(Brand::class);
+    }
+
+    public function type(): BelongsTo
+    {
+        return $this->belongsTo(Type::class);
     }
 
     public function location(): BelongsTo

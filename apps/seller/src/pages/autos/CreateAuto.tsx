@@ -16,9 +16,10 @@ import ActionPill from '../../utils/ActionPill';
 import { createAuto, getAutoBySlug, getAutoFormMeta, updateAuto } from '../../api/autos';
 import { ApiError } from '../../lib/apiError';
 
-const containerClass = 'bg-white border border-slate-100 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.04)] p-8 md:p-12';
+const containerClass = 'bg-white border border-slate-100 rounded-[2rem] shadow-[0_18px_44px_rgba(0,0,0,0.035)] p-6 md:p-10';
 const labelClass = 'text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3 block ml-2';
 const inputClass = 'w-full bg-slate-50 border-2 border-transparent focus:border-[#6610f2] focus:bg-white rounded-[1.5rem] px-6 py-5 text-slate-900 font-bold transition-all outline-none placeholder:text-slate-300';
+const fieldHintClass = 'mt-2 ml-2 text-[9px] font-bold uppercase tracking-[0.18em] text-slate-300';
 
 const defaultForm = {
   title: '',
@@ -129,14 +130,14 @@ export default function CreateAuto() {
           const initialMedia: any[] = [];
           if (auto.featured_image) {
             initialMedia.push({
-              id: auto.gallery[0]?.id,
+              id: auto.main_photo_id,
               url: auto.featured_image,
               preview: auto.featured_image,
               isMain: true,
               existing: true,
             });
           }
-          auto.gallery.forEach((item: any) => {
+          (auto.gallery ?? []).forEach((item: any) => {
             if (item.url !== auto.featured_image) {
               initialMedia.push({
                 id: item.id,
@@ -168,17 +169,20 @@ export default function CreateAuto() {
     Object.entries(form).forEach(([key, value]) => {
       if (typeof value === 'boolean') {
         formData.append(key, value ? '1' : '0');
-      } else if (value !== '') {
+      } else {
         formData.append(key, String(value));
       }
     });
 
+    formData.append('sync_existing_media', '1');
     files.forEach((fileObj) => {
       if (fileObj.file) {
         if (fileObj.isMain) formData.append('main_image', fileObj.file);
         else formData.append('gallery[]', fileObj.file);
       } else if (fileObj.existing) {
-        formData.append('existing_media_ids[]', String(fileObj.id));
+        if (fileObj.id == null) return;
+        if (fileObj.isMain) formData.append('existing_main_media_id', String(fileObj.id));
+        else formData.append('existing_media_ids[]', String(fileObj.id));
       }
     });
 
@@ -191,7 +195,7 @@ export default function CreateAuto() {
 
       toast.success(`${form.title || 'Vehicle'} saved successfully.`, { id: toastId });
       await triggerCelebration();
-      setTimeout(() => navigate('/dashboard/autos'), 1500);
+      navigate('/dashboard/autos');
     } catch (error) {
       const message = error instanceof ApiError ? error.message : 'Failed to save vehicle.';
       toast.error(message, { id: toastId });
@@ -201,7 +205,7 @@ export default function CreateAuto() {
   };
 
   return (
-    <div className="space-y-10 md:space-y-16 pb-40 animate-in fade-in slide-in-from-bottom-6 duration-1000">
+    <div className="space-y-10 md:space-y-14 pb-64 lg:pb-48 animate-in fade-in slide-in-from-bottom-6 duration-1000">
       <PageHeader badge="Automotive Protocol" title={isEditMode ? 'Modify' : 'Register'} subtitle="Vehicle">
         <button onClick={() => navigate(-1)} className="bg-white border border-slate-100 text-slate-900 px-8 py-4.5 rounded-[1.8rem] font-black text-[11px] uppercase tracking-[0.2em] hover:bg-slate-50 transition-all flex items-center gap-2">
           <HiOutlineChevronLeft className="w-4 h-4" /> Back
@@ -213,25 +217,28 @@ export default function CreateAuto() {
           <span className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-300 animate-pulse">Loading Vehicle Form...</span>
         </div>
       ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-          <div className="lg:col-span-8 space-y-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 xl:gap-10">
+          <div className="lg:col-span-8 space-y-8 md:space-y-10">
             <div className={containerClass}>
-              <h3 className="text-2xl font-black text-slate-900 tracking-tight italic mb-10 flex items-center gap-3">
+              <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8 flex items-center gap-3">
                 <span className="w-2 h-8 bg-[#6610f2] rounded-full" /> Vehicle Identity.
               </h3>
-              <div className="space-y-8">
+              <div className="space-y-7">
                 <div>
                   <label className={labelClass}>Listing Title</label>
                   <input type="text" value={form.title} onChange={(e) => updateForm('title', e.target.value)} className={`${inputClass} text-2xl italic tracking-tighter`} placeholder="e.g. 2024 Mercedes-Benz G-Class AMG" />
+                  <p className={fieldHintClass}>Required</p>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label className={labelClass}>Make</label>
                     <input type="text" value={form.make} onChange={(e) => updateForm('make', e.target.value)} className={inputClass} placeholder="Mercedes-Benz" />
+                    <p className={fieldHintClass}>Required</p>
                   </div>
                   <div>
                     <label className={labelClass}>Model</label>
                     <input type="text" value={form.model} onChange={(e) => updateForm('model', e.target.value)} className={inputClass} placeholder="G-Class" />
+                    <p className={fieldHintClass}>Required</p>
                   </div>
                   <div>
                     <label className={labelClass}>Year</label>
@@ -239,6 +246,7 @@ export default function CreateAuto() {
                       <HiOutlineCalendar className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
                       <input type="number" value={form.year} onChange={(e) => updateForm('year', e.target.value)} className={`${inputClass} pl-14`} placeholder="2024" />
                     </div>
+                    <p className={fieldHintClass}>Required</p>
                   </div>
                   <div>
                     <label className={labelClass}>VIN</label>
@@ -246,14 +254,15 @@ export default function CreateAuto() {
                       <HiOutlineHashtag className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
                       <input type="text" value={form.vin_number} onChange={(e) => updateForm('vin_number', e.target.value)} className={`${inputClass} pl-14 uppercase tracking-widest`} placeholder="VIN Number" />
                     </div>
+                    <p className={fieldHintClass}>Optional</p>
                   </div>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {[
-                    { key: 'category_id', label: 'Category', options: formMeta.categories },
-                    { key: 'brand_id', label: 'Brand', options: formMeta.brands },
-                    { key: 'type_id', label: 'Type', options: formMeta.types },
-                    { key: 'location_id', label: 'Location Zone', options: formMeta.locations },
+                    { key: 'category_id', label: 'Category', options: formMeta.categories, hint: 'Required' },
+                    { key: 'brand_id', label: 'Brand', options: formMeta.brands, hint: 'Optional' },
+                    { key: 'type_id', label: 'Type', options: formMeta.types, hint: 'Optional' },
+                    { key: 'location_id', label: 'Location Zone', options: formMeta.locations, hint: 'Optional' },
                   ].map((field) => (
                     <div key={field.key}>
                       <label className={labelClass}>{field.label}</label>
@@ -263,6 +272,7 @@ export default function CreateAuto() {
                           <option key={option.id} value={option.id}>{option.title}</option>
                         ))}
                       </select>
+                      <p className={fieldHintClass}>{field.hint}</p>
                     </div>
                   ))}
                 </div>
@@ -270,13 +280,14 @@ export default function CreateAuto() {
             </div>
 
             <div className={containerClass}>
-              <h3 className="text-2xl font-black text-slate-900 tracking-tight italic mb-10 flex items-center gap-3">
+              <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8 flex items-center gap-3">
                 <span className="w-2 h-8 bg-blue-500 rounded-full" /> Technical Specs.
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className={labelClass}>Mileage</label>
                   <input type="number" value={form.mileage_value} onChange={(e) => updateForm('mileage_value', e.target.value)} className={inputClass} placeholder="5000" />
+                  <p className={fieldHintClass}>Required</p>
                 </div>
                 <div>
                   <label className={labelClass}>Mileage Units</label>
@@ -284,16 +295,20 @@ export default function CreateAuto() {
                     <option value="mi">Miles</option>
                     <option value="km">Kilometers</option>
                   </select>
+                  <p className={fieldHintClass}>Required</p>
                 </div>
                 <div>
                   <label className={labelClass}>Engine Type</label>
                   <select value={form.engine_type} onChange={(e) => updateForm('engine_type', e.target.value)} className={inputClass}>
                     <option value="">Select...</option>
-                    <option value="Petrol">Petrol</option>
+                    <option value="Gasoline">Gasoline</option>
                     <option value="Diesel">Diesel</option>
                     <option value="Electric">Electric</option>
                     <option value="Hybrid">Hybrid</option>
+                    <option value="LPG">LPG</option>
+                    <option value="Other">Other</option>
                   </select>
+                  <p className={fieldHintClass}>Required</p>
                 </div>
                 <div>
                   <label className={labelClass}>Transmission</label>
@@ -302,7 +317,10 @@ export default function CreateAuto() {
                     <option value="Automatic">Automatic</option>
                     <option value="Manual">Manual</option>
                     <option value="CVT">CVT</option>
+                    <option value="Semi-Automatic">Semi-Automatic</option>
+                    <option value="Other">Other</option>
                   </select>
+                  <p className={fieldHintClass}>Required</p>
                 </div>
                 <div>
                   <label className={labelClass}>Drivetrain</label>
@@ -312,53 +330,63 @@ export default function CreateAuto() {
                     <option value="RWD">RWD</option>
                     <option value="AWD">AWD</option>
                     <option value="4WD">4WD</option>
+                    <option value="Other">Other</option>
                   </select>
+                  <p className={fieldHintClass}>Required</p>
                 </div>
                 <div>
                   <label className={labelClass}>Exterior Color</label>
                   <input type="text" value={form.exterior_color} onChange={(e) => updateForm('exterior_color', e.target.value)} className={inputClass} placeholder="Obsidian Black" />
+                  <p className={fieldHintClass}>Optional</p>
                 </div>
                 <div>
                   <label className={labelClass}>Fuel Economy</label>
                   <input type="text" value={form.fuel_economy} onChange={(e) => updateForm('fuel_economy', e.target.value)} className={inputClass} placeholder="25 mpg city / 32 mpg highway" />
+                  <p className={fieldHintClass}>Optional</p>
                 </div>
                 <div>
                   <label className={labelClass}>Condition (1-10)</label>
                   <input type="number" min="1" max="10" value={form.condition_rating} onChange={(e) => updateForm('condition_rating', e.target.value)} className={inputClass} />
+                  <p className={fieldHintClass}>Optional</p>
                 </div>
               </div>
             </div>
 
             <div className={containerClass}>
-              <h3 className="text-2xl font-black text-slate-900 tracking-tight italic mb-8 flex items-center gap-3">
+              <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8 flex items-center gap-3">
                 <HiOutlineMapPin className="w-6 h-6 text-slate-300" /> Location.
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="md:col-span-2">
                   <label className={labelClass}>Address</label>
                   <input type="text" value={form.address} onChange={(e) => updateForm('address', e.target.value)} className={inputClass} placeholder="Street address" />
+                  <p className={fieldHintClass}>Optional</p>
                 </div>
                 <div>
                   <label className={labelClass}>City</label>
                   <input type="text" value={form.city} onChange={(e) => updateForm('city', e.target.value)} className={inputClass} />
+                  <p className={fieldHintClass}>Required</p>
                 </div>
                 <div>
                   <label className={labelClass}>State</label>
                   <input type="text" value={form.state} onChange={(e) => updateForm('state', e.target.value)} className={inputClass} />
+                  <p className={fieldHintClass}>Optional</p>
                 </div>
                 <div>
                   <label className={labelClass}>Country</label>
                   <input type="text" value={form.country} onChange={(e) => updateForm('country', e.target.value)} className={inputClass} />
+                  <p className={fieldHintClass}>Required</p>
                 </div>
                 <div>
                   <label className={labelClass}>Zip Code</label>
                   <input type="text" value={form.zip_code} onChange={(e) => updateForm('zip_code', e.target.value)} className={inputClass} />
+                  <p className={fieldHintClass}>Optional</p>
                 </div>
               </div>
             </div>
 
             <div className={containerClass}>
-              <h3 className="text-2xl font-black text-slate-900 tracking-tight italic mb-10 flex items-center gap-3">
+              <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8 flex items-center gap-3">
                 <span className="w-2 h-8 bg-green-500 rounded-full" /> Valuation.
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -368,55 +396,64 @@ export default function CreateAuto() {
                     <HiOutlineCurrencyDollar className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
                     <input type="number" value={form.base_price} onChange={(e) => updateForm('base_price', e.target.value)} className={`${inputClass} pl-14`} placeholder="0.00" />
                   </div>
+                  <p className={fieldHintClass}>Required</p>
                 </div>
                 <div>
                   <label className={labelClass}>Sale Price</label>
                   <input type="number" value={form.sale_price} onChange={(e) => updateForm('sale_price', e.target.value)} className={inputClass} placeholder="Optional" />
+                  <p className={fieldHintClass}>Optional</p>
                 </div>
                 <div>
                   <label className={labelClass}>Stock Quantity</label>
                   <input type="number" min="1" value={form.stock_quantity} onChange={(e) => updateForm('stock_quantity', e.target.value)} className={inputClass} />
+                  <p className={fieldHintClass}>Required</p>
                 </div>
               </div>
             </div>
 
             <div className={containerClass}>
-              <h3 className="text-2xl font-black text-slate-900 tracking-tight italic mb-8 flex items-center gap-3">
+              <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8 flex items-center gap-3">
                 <span className="w-2 h-8 bg-[#6610f2] rounded-full" /> Media Studio.
               </h3>
               <MediaStudio files={files} setFiles={setFiles} />
             </div>
 
             <div className={containerClass}>
-              <h3 className="text-2xl font-black text-slate-900 tracking-tight italic mb-8">Vehicle Narrative.</h3>
+              <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight italic mb-8">Vehicle Narrative.</h3>
               <textarea value={form.description} onChange={(e) => updateForm('description', e.target.value)} rows={6} className={`${inputClass} resize-none`} placeholder="Describe the condition, history, and features..." />
+              <p className={fieldHintClass}>Required</p>
             </div>
           </div>
 
-          <div className="lg:col-span-4 space-y-10">
-            <div className="bg-slate-900 rounded-[3rem] p-10 text-white shadow-2xl relative overflow-hidden">
-              <div className="relative z-10">
-                <p className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-6">Asset Readiness</p>
-                <span className="text-7xl font-black italic tracking-tighter">{progress}%</span>
-                <div className="w-full h-1.5 bg-white/10 rounded-full mt-6 overflow-hidden">
-                  <div className="h-full bg-[#6610f2] transition-all duration-1000 shadow-[0_0_15px_#6610f2]" style={{ width: `${progress}%` }} />
+          <div className="lg:col-span-4">
+            <div className="lg:sticky lg:top-10 space-y-8">
+              <div className="bg-slate-900 rounded-[2rem] p-8 md:p-10 text-white shadow-2xl relative overflow-hidden">
+                <div className="relative z-10">
+                  <p className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-6">Asset Readiness</p>
+                  <span className="text-5xl font-black italic tracking-tighter">{progress}%</span>
+                  <div className="w-full h-1.5 bg-white/10 rounded-full mt-6 overflow-hidden">
+                    <div className="h-full bg-[#6610f2] transition-all duration-1000 shadow-[0_0_15px_#6610f2]" style={{ width: `${progress}%` }} />
+                  </div>
+                  <div className="space-y-4 mt-8">
+                    <label className="flex items-center justify-between p-4 bg-white/5 rounded-2xl cursor-pointer">
+                      <span className="text-sm font-bold">Published</span>
+                      <input type="checkbox" checked={form.is_published} onChange={(e) => updateForm('is_published', e.target.checked)} className="w-5 h-5 accent-[#6610f2]" />
+                    </label>
+                    <label className="flex items-center justify-between p-4 bg-white/5 rounded-2xl cursor-pointer">
+                      <span className="text-sm font-bold">Featured</span>
+                      <input type="checkbox" checked={form.is_featured} onChange={(e) => updateForm('is_featured', e.target.checked)} className="w-5 h-5 accent-[#6610f2]" />
+                    </label>
+                  </div>
+                </div>
+                <div className="absolute -right-4 -bottom-4 opacity-10">
+                  <HiOutlineTruck className="w-32 h-32" />
                 </div>
               </div>
-              <div className="absolute -right-4 -bottom-4 opacity-10">
-                <HiOutlineTruck className="w-32 h-32" />
-              </div>
-            </div>
 
-            <div className="hidden lg:block">
-              <ActionPill isSaving={isSaving} isEditMode={isEditMode} onSave={handleSave} label="Vehicle" variant="docked" />
-            </div>
-
-            <div className={containerClass}>
-              <h4 className={labelClass}>Listing Options</h4>
-              <div className="space-y-4 mt-6">
+              <div className={containerClass}>
+                <h4 className={labelClass}>Listing Options</h4>
+                <div className="space-y-4 mt-6">
                 {[
-                  { key: 'is_published', label: 'Published' },
-                  { key: 'is_featured', label: 'Featured' },
                   { key: 'is_selling', label: 'For Sale' },
                   { key: 'is_lease', label: 'For Lease' },
                 ].map((item) => (
@@ -425,6 +462,31 @@ export default function CreateAuto() {
                     <input type="checkbox" checked={form[item.key as keyof typeof form] as boolean} onChange={(e) => updateForm(item.key, e.target.checked)} className="w-6 h-6 rounded-lg accent-[#6610f2] cursor-pointer" />
                   </label>
                 ))}
+                </div>
+              </div>
+
+              <div className="p-6 border-2 border-dashed border-slate-100 rounded-[2rem] bg-white/60">
+                <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4">
+                  Listing Checklist
+                </p>
+                <div className="space-y-3">
+                  {[
+                    { label: 'Identity', done: Boolean(form.title.length > 5 && form.make && form.model && form.year) },
+                    { label: 'Taxonomy', done: Boolean(form.category_id) },
+                    { label: 'Specs', done: Boolean(form.mileage_value && form.engine_type && form.transmission && form.drivetrain) },
+                    { label: 'Location', done: Boolean(form.city && form.country) },
+                    { label: 'Primary media', done: files.some((f) => f.isMain) },
+                    { label: 'Narrative', done: form.description.length > 20 },
+                  ].map((item) => (
+                    <div key={item.label} className="flex items-center justify-between gap-4 text-[10px] font-black uppercase tracking-widest">
+                      <span className="text-slate-500">{item.label}</span>
+                      <span className={item.done ? 'text-green-500' : 'text-slate-300'}>{item.done ? 'Ready' : 'Missing'}</span>
+                    </div>
+                  ))}
+                </div>
+                <p className="mt-6 text-[9px] font-bold text-slate-400 uppercase leading-relaxed tracking-widest">
+                  Complete identity, specs, location, media, and narrative before publishing.
+                </p>
               </div>
             </div>
           </div>
@@ -432,7 +494,7 @@ export default function CreateAuto() {
       )}
 
       {!isLoading && (
-        <ActionPill isSaving={isSaving} isEditMode={isEditMode} onSave={handleSave} label="Vehicle" variant="floating" />
+        <ActionPill isSaving={isSaving} isEditMode={isEditMode} onSave={handleSave} label="Vehicle" variant="floating" showOnDesktop />
       )}
     </div>
   );
