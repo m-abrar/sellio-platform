@@ -20,19 +20,25 @@ class ServiceResource extends JsonResource
             'description'       => $this->description,
             'short_description' => $this->short_description,
             'category_id'       => $this->category_id,
+            'brand_id'          => $this->brand_id,
+            'type_id'           => $this->type_id,
             'location_id'       => $this->location_id,
+            'is_published'      => (bool) $this->is_published,
+            'is_featured'       => (bool) $this->is_featured,
+            'is_subscription'   => (bool) $this->is_subscription,
+            'is_project_based'  => (bool) $this->is_project_based,
 
             // Pricing & Billing
             'pricing' => [
-                'base_price'      => (float) $this->base_price,
-                'sale_price'      => (float) $this->sale_price, // Min/Deposit Fee
+                'base_price'      => $this->base_price !== null ? (float) $this->base_price : null,
+                'sale_price'      => $this->sale_price !== null ? (float) $this->sale_price : null, // Min/Deposit Fee
                 'formatted'       => $this->price_formatted,
                 'formatted_short' => $this->price_formatted_k,
                 'billing_type'    => [
                     'is_subscription'  => (bool) $this->is_subscription,
                     'is_project_based' => (bool) $this->is_project_based,
                 ],
-                'min_contract'    => $this->min_contract_months ? "{$this->min_contract_months} Months" : null,
+                'min_contract_months' => $this->min_contract_months !== null ? (int) $this->min_contract_months : null,
             ],
 
             // Operations & Availability
@@ -40,9 +46,9 @@ class ServiceResource extends JsonResource
                 'is_open'        => (bool) $this->is_open, // Dynamic accessor logic
                 'hours_label'    => $this->operating_hours,
                 'days_label'     => $this->operating_days_label,
-                'radius'         => $this->service_radius ? $this->service_radius . ' km' : null,
+                'radius'         => $this->service_radius !== null ? (float) $this->service_radius : null,
                 'client_slots'   => [
-                    'max'        => $this->max_client_slots,
+                    'max'        => $this->max_client_slots !== null ? (int) $this->max_client_slots : null,
                     'available'  => (bool) ($this->max_client_slots > 0), // Logic could be expanded
                 ],
             ],
@@ -52,14 +58,25 @@ class ServiceResource extends JsonResource
                 'expertise_id'   => $this->expertise_level,
                 'schedule_id'    => $this->availability_schedule,
                 'certifications' => $this->licenses_certs,
-                'category'       => $this->whenLoaded('category', fn() => $this->category->title),
-                'type'           => $this->whenLoaded('type', fn() => $this->type->title),
+                'category'       => $this->whenLoaded('category', fn() => [
+                    'id' => $this->category?->id,
+                    'title' => $this->category?->title,
+                ]),
+                'brand'          => $this->whenLoaded('brand', fn() => [
+                    'id' => $this->brand?->id,
+                    'title' => $this->brand?->title,
+                ]),
+                'type'           => $this->whenLoaded('type', fn() => [
+                    'id' => $this->type?->id,
+                    'title' => $this->type?->title,
+                ]),
             ],
 
             // Spatie Media Library
             'media' => [
-                'main_photo' => $this->primary_image_url,
-                'gallery'    => $this->whenLoaded('media', fn() => $this->getMedia(Service::GALLERY_MEDIA)->map(fn($media) => [
+                'main_photo'    => $this->primary_image_url,
+                'main_photo_id' => $this->relationLoaded('media') ? $this->getFirstMedia(Service::PRIMARY_MEDIA)?->id : null,
+                'gallery'       => $this->whenLoaded('media', fn() => $this->getMedia(Service::GALLERY_MEDIA)->map(fn($media) => [
                     'id'        => $media->id,
                     'url'       => $media->getUrl(),
                     'thumbnail' => $media->getUrl('thumb'),
@@ -73,6 +90,7 @@ class ServiceResource extends JsonResource
                 'city'      => $this->city,
                 'state'     => $this->state,
                 'country'   => $this->country,
+                'zip_code'  => $this->zip_code,
                 'latitude'  => (float) $this->latitude,
                 'longitude' => (float) $this->longitude,
                 'meta'      => $this->whenLoaded('location', fn() => $this->location->title),

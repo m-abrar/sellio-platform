@@ -19,7 +19,7 @@ class ServiceService
     public function getPartnerServices(User $partner, int $perPage = 120)
     {
         return $partner->services()
-            ->with(['category', 'location', 'media'])
+            ->with(['category', 'brand', 'type', 'location', 'media'])
             ->latest()
             ->paginate($perPage);
     }
@@ -35,6 +35,8 @@ class ServiceService
 
     public function saveService(User $user, array $data, ?Service $service = null): Service
     {
+        unset($data['main_image'], $data['gallery'], $data['existing_main_media_id'], $data['existing_media_ids'], $data['sync_existing_media']);
+
         $data['slug'] = $this->generateUniqueSlug($data['title'], $service?->id);
         $data['is_subscription'] = (bool) ($data['is_subscription'] ?? false);
         $data['is_project_based'] = (bool) ($data['is_project_based'] ?? false);

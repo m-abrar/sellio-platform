@@ -33,6 +33,7 @@ class ServiceRequest extends FormRequest
 
         return [
             'category_id'          => ['required', 'exists:categories,id'],
+            'brand_id'             => ['nullable', 'exists:brands,id'],
             'location_id'          => ['nullable', 'exists:locations,id'],
             'type_id'              => ['nullable', 'exists:types,id'],
             'title'                => ['required', 'string', 'max:255'],
@@ -59,8 +60,10 @@ class ServiceRequest extends FormRequest
             'zip_code'             => ['nullable', 'string', 'max:20'],
             'main_image'           => ['nullable', 'image', 'max:5120'],
             'gallery.*'            => ['nullable', 'image', 'max:5120'],
-            'existing_media_ids'   => ['nullable', 'array'],
+            'existing_main_media_id' => ['nullable', 'integer'],
+            'existing_media_ids'   => ['array'],
             'existing_media_ids.*' => ['integer'],
+            'sync_existing_media'  => ['boolean'],
         ];
     }
 

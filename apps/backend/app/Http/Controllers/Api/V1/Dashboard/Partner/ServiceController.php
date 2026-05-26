@@ -47,12 +47,12 @@ class ServiceController extends Controller
 
     public function store(ServiceRequest $request): JsonResponse
     {
-        $data = $request->safe()->except(['main_image', 'gallery', 'existing_media_ids']);
+        $data = $request->safe()->except(['main_image', 'gallery', 'existing_main_media_id', 'existing_media_ids', 'sync_existing_media']);
         $service = $this->serviceService->saveService(Auth::user(), $data);
         $this->handleMedia($service, $request);
 
         return $this->successResponse(
-            new ServiceResource($service->load(['media', 'category', 'location'])),
+            new ServiceResource($service->load(['media', 'category', 'brand', 'type', 'location'])),
             __('Service created successfully.'),
             201
         );
@@ -62,7 +62,7 @@ class ServiceController extends Controller
     {
         $model = Service::where('user_id', Auth::id())
             ->where(is_numeric($service) ? 'id' : 'slug', $service)
-            ->with(['media', 'category', 'location', 'features'])
+            ->with(['media', 'category', 'brand', 'type', 'location', 'features'])
             ->firstOrFail();
 
         return $this->successResponse(new ServiceResource($model));
@@ -73,7 +73,7 @@ class ServiceController extends Controller
         $this->authorizeOwner($service);
 
         return $this->successResponse(
-            new ServiceResource($service->load(['media', 'category', 'location', 'features']))
+            new ServiceResource($service->load(['media', 'category', 'brand', 'type', 'location', 'features']))
         );
     }
 
@@ -81,12 +81,12 @@ class ServiceController extends Controller
     {
         $this->authorizeOwner($service);
 
-        $data = $request->safe()->except(['main_image', 'gallery', 'existing_media_ids']);
+        $data = $request->safe()->except(['main_image', 'gallery', 'existing_main_media_id', 'existing_media_ids', 'sync_existing_media']);
         $this->serviceService->saveService(Auth::user(), $data, $service);
         $this->handleMedia($service, $request);
 
         return $this->successResponse(
-            new ServiceResource($service->fresh(['media', 'category', 'location', 'features'])),
+            new ServiceResource($service->fresh(['media', 'category', 'brand', 'type', 'location', 'features'])),
             __('Service updated successfully.')
         );
     }
@@ -111,16 +111,28 @@ class ServiceController extends Controller
         if ($request->hasFile('main_image')) {
             $service->clearMediaCollection(Service::PRIMARY_MEDIA);
             $service->addMediaFromRequest('main_image')->toMediaCollection(Service::PRIMARY_MEDIA);
+        } elseif ($request->filled('existing_main_media_id')) {
+            $media = $service->media()
+                ->whereKey((int) $request->input('existing_main_media_id'))
+                ->first();
+
+            if ($media && $media->collection_name !== Service::PRIMARY_MEDIA) {
+                $service->clearMediaCollection(Service::PRIMARY_MEDIA);
+                $media->collection_name = Service::PRIMARY_MEDIA;
+                $media->save();
+            }
         }
 
-        if ($request->has('existing_media_ids')) {
+        if ($request->has('sync_existing_media')) {
             $keepIds = array_map('intval', (array) $request->input('existing_media_ids'));
 
             $service->getMedia(Service::GALLERY_MEDIA)
                 ->reject(fn ($media) => in_array($media->id, $keepIds))
                 ->each(fn ($media) => $media->delete());
 
-            Media::setNewOrder($keepIds);
+            if ($keepIds !== []) {
+                Media::setNewOrder($keepIds);
+            }
         }
 
         if ($request->hasFile('gallery')) {
