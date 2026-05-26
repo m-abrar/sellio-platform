@@ -34,6 +34,7 @@ class ClassifiedRequest extends FormRequest
         return [
             'category_id'    => ['required', 'exists:categories,id'],
             'type_id'        => ['nullable', 'exists:types,id'],
+            'brand_id'       => ['nullable', 'exists:brands,id'],
             'location_id'    => ['nullable', 'exists:locations,id'],
             'title'          => ['required', 'string', 'max:255', Rule::unique('classified_ads', 'title')->ignore($classifiedId)],
             'slug'           => ['nullable', 'string', 'max:255', 'alpha_dash', Rule::unique('classified_ads', 'slug')->ignore($classifiedId)],
@@ -45,16 +46,22 @@ class ClassifiedRequest extends FormRequest
             'item_condition' => ['nullable', 'integer', 'min:1', 'max:10'],
             'item_year_age'  => ['nullable', 'integer', 'min:1900', 'max:' . date('Y')],
             'item_quantity'  => ['nullable', 'integer', 'min:1'],
+            'item_dimensions'=> ['nullable', 'numeric', 'min:0'],
+            'warranty_months'=> ['nullable', 'integer', 'min:0'],
+            'min_ad_duration'=> ['nullable', 'integer', 'min:1'],
             'city'           => ['nullable', 'string', 'max:100'],
             'state'          => ['nullable', 'string', 'max:100'],
             'country'        => ['nullable', 'string', 'max:100'],
             'address'        => ['nullable', 'string', 'max:255'],
+            'zip_code'       => ['nullable', 'string', 'max:20'],
             'is_published'   => ['boolean'],
             'is_featured'    => ['boolean'],
             'main_image'     => ['nullable', 'image', 'max:5120'],
             'gallery.*'      => ['nullable', 'image', 'max:5120'],
-            'existing_media_ids' => ['nullable', 'array'],
+            'existing_main_media_id' => ['nullable', 'integer'],
+            'existing_media_ids' => ['array'],
             'existing_media_ids.*' => ['integer'],
+            'sync_existing_media' => ['boolean'],
         ];
     }
 

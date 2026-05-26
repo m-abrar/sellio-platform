@@ -8,15 +8,30 @@ export interface NormalizedClassified {
   location?: string;
   is_active: boolean;
   featured_image?: string | null;
+  main_photo_id?: number | null;
   gallery: Array<{ id: number; url: string; thumbnail?: string }>;
   media: Array<{ original_url: string }>;
   category_id?: number;
   type_id?: number;
   location_id?: number;
   base_price?: number | string | null;
+  sale_price?: number | string | null;
+  city?: string;
+  state?: string;
+  country?: string;
+  address?: string;
+  zip_code?: string;
   condition?: string;
   condition_rating?: number;
+  item_year_age?: number | string | null;
+  item_quantity?: number | string | null;
+  item_dimensions?: number | string | null;
+  warranty_months?: number | string | null;
+  min_ad_duration?: number | string | null;
   is_published?: boolean;
+  is_featured?: boolean;
+  is_for_sale?: boolean;
+  is_for_rent?: boolean;
   pricing?: Record<string, unknown>;
   item_specs?: Record<string, unknown>;
   status?: Record<string, unknown>;
@@ -75,15 +90,30 @@ export const normalizeClassified = (classified: any): NormalizedClassified => {
     location: buildLocationLabel(classified),
     is_active: classified.status?.is_published ?? false,
     featured_image: featuredImage,
+    main_photo_id: classified.media?.main_photo_id ?? null,
     gallery,
     media: media.length ? media : [{ original_url: 'https://via.placeholder.com/400x300?text=Listing' }],
-    category_id: classified.category_id,
-    type_id: classified.type_id,
+    category_id: classified.taxonomy?.category?.id ?? classified.category_id,
+    type_id: classified.taxonomy?.type?.id ?? classified.type_id,
     location_id: classified.location_id,
     base_price: classified.pricing?.base_price,
+    sale_price: classified.pricing?.sale_price,
+    city: classified.location?.city,
+    state: classified.location?.state,
+    country: classified.location?.country,
+    address: classified.location?.address,
+    zip_code: classified.location?.zip_code,
     condition: mapRatingToCondition(conditionRating),
     condition_rating: conditionRating ?? undefined,
-    is_published: classified.status?.is_published ?? false,
+    item_year_age: classified.item_specs?.age_years,
+    item_quantity: classified.item_specs?.quantity,
+    item_dimensions: classified.item_specs?.dimensions,
+    warranty_months: classified.item_specs?.warranty_months,
+    min_ad_duration: classified.item_specs?.min_ad_duration,
+    is_published: classified.status?.is_published ?? classified.is_published ?? false,
+    is_featured: classified.status?.is_featured ?? classified.is_featured ?? false,
+    is_for_sale: classified.pricing?.transaction_type?.for_sale ?? classified.is_for_sale ?? true,
+    is_for_rent: classified.pricing?.transaction_type?.for_rent ?? classified.is_for_rent ?? false,
     pricing: classified.pricing ?? {},
     item_specs: classified.item_specs ?? {},
     status: classified.status ?? {},

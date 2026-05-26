@@ -19,7 +19,7 @@ class ClassifiedService
     public function getPartnerClassifieds(User $partner, int $perPage = 120)
     {
         return $partner->classifieds()
-            ->with(['category', 'type', 'location', 'media'])
+            ->with(['category', 'brand', 'type', 'location', 'media'])
             ->latest()
             ->paginate($perPage);
     }
@@ -35,7 +35,7 @@ class ClassifiedService
 
     public function saveClassified(User $user, array $data, ?Classified $classified = null): Classified
     {
-        unset($data['main_image'], $data['gallery'], $data['existing_media_ids']);
+        unset($data['main_image'], $data['gallery'], $data['existing_main_media_id'], $data['existing_media_ids'], $data['sync_existing_media']);
 
         $data['slug'] = $this->generateUniqueSlug($data['title'], $classified?->id);
         $data['is_for_rent'] = (bool) ($data['is_for_rent'] ?? false);

@@ -52,7 +52,7 @@ class ClassifiedController extends Controller
         $this->handleMedia($classified, $request);
 
         return $this->successResponse(
-            new ClassifiedResource($classified->load(['media', 'category', 'type', 'location'])),
+            new ClassifiedResource($classified->load(['media', 'category', 'brand', 'type', 'location'])),
             __('Classified created successfully!'),
             201
         );
@@ -62,7 +62,7 @@ class ClassifiedController extends Controller
     {
         $model = Classified::where('user_id', Auth::id())
             ->where(is_numeric($classified) ? 'id' : 'slug', $classified)
-            ->with(['media', 'category', 'type', 'location', 'tags'])
+            ->with(['media', 'category', 'brand', 'type', 'location', 'tags'])
             ->firstOrFail();
 
         return $this->successResponse(new ClassifiedResource($model));
@@ -73,7 +73,7 @@ class ClassifiedController extends Controller
         $this->authorizeOwner($classified);
 
         return $this->successResponse(
-            new ClassifiedResource($classified->load(['media', 'category', 'type', 'location', 'tags']))
+            new ClassifiedResource($classified->load(['media', 'category', 'brand', 'type', 'location', 'tags']))
         );
     }
 
@@ -84,7 +84,7 @@ class ClassifiedController extends Controller
         $this->handleMedia($classified, $request);
 
         return $this->successResponse(
-            new ClassifiedResource($classified->fresh(['media', 'category', 'type', 'location', 'tags'])),
+            new ClassifiedResource($classified->fresh(['media', 'category', 'brand', 'type', 'location', 'tags'])),
             __('Classified updated successfully.')
         );
     }
@@ -109,16 +109,28 @@ class ClassifiedController extends Controller
         if ($request->hasFile('main_image')) {
             $classified->clearMediaCollection(Classified::PRIMARY_MEDIA);
             $classified->addMediaFromRequest('main_image')->toMediaCollection(Classified::PRIMARY_MEDIA);
+        } elseif ($request->filled('existing_main_media_id')) {
+            $media = $classified->media()
+                ->whereKey((int) $request->input('existing_main_media_id'))
+                ->first();
+
+            if ($media && $media->collection_name !== Classified::PRIMARY_MEDIA) {
+                $classified->clearMediaCollection(Classified::PRIMARY_MEDIA);
+                $media->collection_name = Classified::PRIMARY_MEDIA;
+                $media->save();
+            }
         }
 
-        if ($request->has('existing_media_ids')) {
+        if ($request->has('sync_existing_media')) {
             $keepIds = array_map('intval', (array) $request->input('existing_media_ids'));
 
             $classified->getMedia(Classified::GALLERY_MEDIA)
                 ->reject(fn ($media) => in_array($media->id, $keepIds))
                 ->each(fn ($media) => $media->delete());
 
-            Media::setNewOrder($keepIds);
+            if ($keepIds !== []) {
+                Media::setNewOrder($keepIds);
+            }
         }
 
         if ($request->hasFile('gallery')) {

@@ -20,13 +20,18 @@ class ClassifiedResource extends JsonResource
             'description'       => $this->description,
             'short_description' => $this->short_description,
             'category_id'       => $this->category_id,
+            'brand_id'          => $this->brand_id,
             'type_id'           => $this->type_id,
             'location_id'       => $this->location_id,
+            'is_published'      => (bool) $this->is_published,
+            'is_featured'       => (bool) $this->is_featured,
+            'is_for_sale'       => (bool) $this->is_for_sale,
+            'is_for_rent'       => (bool) $this->is_for_rent,
 
             // Pricing & Offers
             'pricing' => [
-                'base_price'      => (float) $this->base_price,
-                'sale_price'      => (float) $this->sale_price,
+                'base_price'      => $this->base_price !== null ? (float) $this->base_price : null,
+                'sale_price'      => $this->sale_price !== null ? (float) $this->sale_price : null,
                 'is_on_sale'      => (bool) $this->is_sale,
                 'discount'        => $this->discount_percentage > 0 ? "{$this->discount_percentage}%" : null,
                 'formatted'       => $this->price_formatted,
@@ -39,19 +44,21 @@ class ClassifiedResource extends JsonResource
 
             // Item Details
             'item_specs' => [
-                'condition_rating' => (int) $this->item_condition,
+                'condition_rating' => $this->item_condition !== null ? (int) $this->item_condition : null,
                 'condition_label'  => $this->condition_label, // From model match logic
                 'badge_class'      => $this->condition_badge_class, // bg-success, etc.
-                'age_years'        => $this->item_year_age,
-                'quantity'         => (int) $this->item_quantity,
+                'age_years'        => $this->item_year_age !== null ? (int) $this->item_year_age : null,
+                'quantity'         => $this->item_quantity !== null ? (int) $this->item_quantity : null,
                 'dimensions'       => $this->item_dimensions,
-                'warranty'         => $this->warranty_months ? "{$this->warranty_months} Months" : null,
+                'warranty_months'  => $this->warranty_months !== null ? (int) $this->warranty_months : null,
+                'min_ad_duration'  => $this->min_ad_duration !== null ? (int) $this->min_ad_duration : null,
             ],
 
             // Media (Spatie Media Library)
             'media' => [
-                'main_photo' => $this->primary_image_url,
-                'thumbnail'  => $this->whenLoaded('media', fn() => $this->getMedia(Classified::PRIMARY_MEDIA)->first()?->getUrl('classified_thumb')),
+                'main_photo'    => $this->primary_image_url,
+                'main_photo_id' => $this->relationLoaded('media') ? $this->getFirstMedia(Classified::PRIMARY_MEDIA)?->id : null,
+                'thumbnail'     => $this->whenLoaded('media', fn() => $this->getMedia(Classified::PRIMARY_MEDIA)->first()?->getUrl('classified_thumb')),
                 'gallery'    => $this->whenLoaded('media', fn() => $this->getMedia(Classified::GALLERY_MEDIA)->map(fn($media) => [
                     'id'    => $media->id,
                     'url'   => $media->getUrl(),
@@ -63,9 +70,18 @@ class ClassifiedResource extends JsonResource
 
             // Taxonomy & Location
             'taxonomy' => [
-                'category' => $this->whenLoaded('category', fn() => $this->category->title),
-                'type'     => $this->whenLoaded('type', fn() => $this->type->title),
-                'brand'    => $this->whenLoaded('brand', fn() => $this->brand->title),
+                'category' => $this->whenLoaded('category', fn() => [
+                    'id' => $this->category?->id,
+                    'title' => $this->category?->title,
+                ]),
+                'type' => $this->whenLoaded('type', fn() => [
+                    'id' => $this->type?->id,
+                    'title' => $this->type?->title,
+                ]),
+                'brand' => $this->whenLoaded('brand', fn() => [
+                    'id' => $this->brand?->id,
+                    'title' => $this->brand?->title,
+                ]),
                 'tags'     => $this->whenLoaded('tags', fn() => $this->tags->pluck('title')),
             ],
 
