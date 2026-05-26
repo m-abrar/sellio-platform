@@ -7,6 +7,7 @@ import { MenuProvider } from "@/components/menu/MenuProvider";
 import { ThemeContentProvider } from "@/components/theme-content/ThemeContentProvider";
 import UnifiedDefaultLayout from "@/themes/unifieds/default/Layout";
 import { ThemeSwitcher } from "@/components/ThemeSwitcher";
+import { AdminBar } from "@/components/AdminBar";
 import DatabaseOfflineResilience from "@/components/DatabaseOfflineResilience";
 import { MENU_LOCATIONS } from "@sellio/types";
 import "./globals.css";
@@ -58,6 +59,7 @@ export default async function RootLayout({
         )}
       </head>
       <body suppressHydrationWarning>
+        <AdminBar theme={theme} menus={menus} />
         <MenuProvider menus={menus} themeKey={theme.theme_key} isPreview={isPreview}>
           <ThemeContentProvider content={themeContent}>
             <IndustryLayout>

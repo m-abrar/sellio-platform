@@ -10,7 +10,7 @@
 use Illuminate\Support\Facades\Route;
 
 // --- CORE & AUTH ---
-use App\Http\Controllers\{HomeController, PageController, BlogController, PartnerController, ReviewController, ConversationController, CheckoutController, WebhookController};
+use App\Http\Controllers\{HomeController, PageController, BlogController, PartnerController, ReviewController, ConversationController, CheckoutController, WebhookController, AdminBarStatusController};
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Dashboard\DashboardRedirectController;
 
@@ -29,6 +29,8 @@ use App\Http\Controllers\{CategoryController, BrandController, TagController, Ty
 | 1. CORE SYSTEM ROUTES
 |--------------------------------------------------------------------------
 */
+
+Route::get('/admin-bar/status', AdminBarStatusController::class)->name('admin-bar.status');
 
 Route::middleware(['built_in_website'])->group(function () {
     Route::get('/', HomeController::class)->name('index');
