@@ -1,0 +1,99 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+:root {
+    /* Primary Color Palette (Purple/Indigo Focus) */
+    --primary-hue: 240; 
+    --primary-color: hsl(var(--primary-hue), 75%, 60%);
+    --primary-dark: hsl(var(--primary-hue), 70%, 50%);
+    --primary-light: hsl(var(--primary-hue), 85%, 95%);
+
+    /* Backgrounds & Surfaces (Glassmorphism) */
+    --bg-body: linear-gradient(135deg, #e0e6f0 0%, #f7f9fc 100%);
+    --bg-glass: rgba(255, 255, 255, 0.7);
+    --bg-surface: #ffffff; 
+    --bg-glass-heavy: rgba(255, 255, 255, 0.9);
+    
+    /* Text & Borders */
+    --text-dark: #1f2937;
+    --text-muted: #6b7280;
+    --border-color: rgba(255, 255, 255, 0.5);
+    
+    /* Dimensions & Shadow */
+    --card-radius: 20px; 
+    --shadow-subtle: 0 10px 30px rgba(0, 0, 0, 0.1); 
+    --shadow-deep: 0 15px 40px rgba(0, 0, 0, 0.15); 
+}
+
+@layer base {
+  body {
+    @apply antialiased bg-zinc-50;
+    background: var(--bg-body);
+    color: var(--text-dark);
+    min-height: 100vh;
+  }
+}
+
+@layer components {
+  .glass-surface {
+    background-color: var(--bg-glass);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-subtle);
+    border-radius: var(--card-radius);
+    backdrop-filter: blur(12px); 
+    -webkit-backdrop-filter: blur(12px);
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .glass-surface:hover {
+    box-shadow: var(--shadow-deep); 
+  }
+
+  .btn-primary-custom {
+    background-color: var(--primary-color);
+    color: white;
+    font-weight: 600;
+    transition: all 0.2s;
+  }
+
+  .btn-primary-custom:hover {
+    background-color: var(--primary-dark);
+    box-shadow: 0 5px 15px hsla(var(--primary-hue), 75%, 60%, 0.4);
+  }
+
+  .stat-icon-wrapper {
+    width: 55px; 
+    height: 55px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    border-radius: 12px; 
+    font-size: 1.6rem;
+    background-color: var(--primary-light); 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  }
+
+  .text-lead-stat {
+    font-size: 2.2rem;
+    font-weight: 800;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-zinc-300 rounded-full hover:bg-zinc-400 transition-colors;
+}

@@ -1,0 +1,5 @@
+{
+  "name": "Sellio Buyer Dashboard",
+  "description": "A multi-module dashboard for managing rentals, bookings, and listings across properties, autos, events, services, and more.",
+  "requestFramePermissions": []
+}
