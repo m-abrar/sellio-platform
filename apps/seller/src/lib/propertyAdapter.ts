@@ -7,6 +7,7 @@ export interface NormalizedProperty {
   location?: string;
   is_active: boolean;
   featured_image?: string | null;
+  featured_image_id?: number | null;
   gallery: Array<{ id: number; url: string; thumbnail?: string }>;
   media: Array<{ original_url: string }>;
   category_id?: number;
@@ -75,6 +76,7 @@ export const normalizeProperty = (property: any): NormalizedProperty => {
     location: buildLocationLabel(property),
     is_active: property.status?.is_published ?? property.is_published ?? false,
     featured_image: featuredImage,
+    featured_image_id: property.featured_image_id ?? null,
     gallery,
     media: media.length ? media : [{ original_url: 'https://via.placeholder.com/400x300?text=Property' }],
     category_id: property.category_id,

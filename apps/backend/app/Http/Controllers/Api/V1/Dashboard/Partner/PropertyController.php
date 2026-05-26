@@ -69,6 +69,7 @@ class PropertyController extends Controller
         }
 
         $data = $request->validated();
+        $data['amenities'] = $request->input('amenities', []);
 
         // Handle Feature limit fallback
         if ($request->input('is_featured') && !$this->propertyService->canFeatureProperty($user)) {
@@ -112,6 +113,7 @@ class PropertyController extends Controller
         $user = Auth::user();
 
         $data = $request->validated();
+        $data['amenities'] = $request->input('amenities', []);
 
         // Check feature limit if trying to upgrade to featured
         if ($request->input('is_featured') && !$property->is_featured) {
@@ -152,25 +154,37 @@ class PropertyController extends Controller
     {
         // 1. Handle Primary Image (Main Image)
         if ($request->hasFile('main_image')) {
-            $property->clearMediaCollection('main_image'); // Or Property::PRIMARY_MEDIA
-            $property->addMediaFromRequest('main_image')->toMediaCollection('main_image');
+            $property->clearMediaCollection(Property::PRIMARY_MEDIA);
+            $property->addMediaFromRequest('main_image')->toMediaCollection(Property::PRIMARY_MEDIA);
+        } elseif ($request->filled('existing_main_media_id')) {
+            $media = $property->media()
+                ->whereKey((int) $request->input('existing_main_media_id'))
+                ->first();
+
+            if ($media && $media->collection_name !== Property::PRIMARY_MEDIA) {
+                $property->clearMediaCollection(Property::PRIMARY_MEDIA);
+                $media->collection_name = Property::PRIMARY_MEDIA;
+                $media->save();
+            }
         }
 
         // 2. Sync Existing Gallery Images & Order
-        if ($request->has('existing_media_ids')) {
+        if ($request->has('sync_existing_media')) {
             $keepIds = array_map('intval', (array)$request->input('existing_media_ids'));
             
-            $property->getMedia('gallery')
+            $property->getMedia(Property::GALLERY_MEDIA)
                 ->reject(fn($media) => in_array($media->id, $keepIds))
                 ->each(fn($media) => $media->delete());
 
-            \Spatie\MediaLibrary\MediaCollections\Models\Media::setNewOrder($keepIds);
+            if ($keepIds !== []) {
+                \Spatie\MediaLibrary\MediaCollections\Models\Media::setNewOrder($keepIds);
+            }
         }
 
         // 3. Add New Gallery Images
         if ($request->hasFile('gallery')) {
             foreach ($request->file('gallery') as $file) {
-                $property->addMedia($file)->toMediaCollection('gallery');
+                $property->addMedia($file)->toMediaCollection(Property::GALLERY_MEDIA);
             }
         }
     }

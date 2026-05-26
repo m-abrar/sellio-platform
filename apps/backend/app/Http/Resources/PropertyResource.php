@@ -56,6 +56,7 @@ class PropertyResource extends JsonResource
             // Spatie Media (N+1 Hardened)
             'thumbnail_image' => $this->relationLoaded('media') ? $this->thumbnail_url : $this->getFallbackImage('thumb'), 
             'featured_image'  => $this->relationLoaded('media') ? $this->primary_image_url : $this->getFallbackImage('card'), 
+            'featured_image_id' => $this->relationLoaded('media') ? $this->getFirstMedia(Property::PRIMARY_MEDIA)?->id : null,
             'gallery'         => $this->whenLoaded('media', fn() => $this->getMedia(Property::GALLERY_MEDIA)->map(fn($media) => [
                 'id'        => $media->id,
                 'url'       => $media->getUrl(),
