@@ -31,4 +31,21 @@ class ServiceQuoteController extends Controller
 
         return $this->successResponse(ServiceQuoteResource::collection($quotes));
     }
+
+    /**
+     * Cancel a service quote.
+     */
+    public function destroy($id)
+    {
+        $user = Auth::user();
+        $quote = ServiceQuote::where('user_id', $user->id)->where('id', $id)->first();
+
+        if (!$quote) {
+            return $this->errorResponse(__('Service quote not found or unauthorized.'), 404);
+        }
+
+        $quote->update(['status' => 'cancelled']);
+
+        return $this->successResponse(null, __('Service quote successfully cancelled.'));
+    }
 }

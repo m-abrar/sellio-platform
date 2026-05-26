@@ -231,6 +231,7 @@ Route::prefix('auth')->group(function () {
 
         // Profile Routes (api/v1/auth/me)
         Route::get('/me', [\App\Http\Controllers\Api\V1\Auth\ProfileController::class, 'show']);
+        Route::put('/profile/password', [\App\Http\Controllers\Api\V1\Auth\ProfileController::class, 'updatePassword']);
     });
 });
 });

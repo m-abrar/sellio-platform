@@ -31,4 +31,21 @@ class ServiceAppointmentController extends Controller
 
         return $this->successResponse(ServiceAppointmentResource::collection($appointments));
     }
+
+    /**
+     * Cancel a service appointment.
+     */
+    public function destroy($id)
+    {
+        $user = Auth::user();
+        $appointment = ServiceAppointment::where('user_id', $user->id)->where('id', $id)->first();
+
+        if (!$appointment) {
+            return $this->errorResponse(__('Service appointment not found or unauthorized.'), 404);
+        }
+
+        $appointment->update(['status' => 'cancelled']);
+
+        return $this->successResponse(null, __('Service appointment successfully cancelled.'));
+    }
 }

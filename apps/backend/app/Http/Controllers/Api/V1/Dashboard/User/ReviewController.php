@@ -94,4 +94,49 @@ class ReviewController extends Controller
 
         return $this->successResponse(null, 'Successfully removed from your reviews.');
     }
+
+    /**
+     * Store a newly created review in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function store(Request $request) {
+        $validated = $request->validate([
+            'rating'          => 'required|integer|between:1,5',
+            'comment'         => 'required|string',
+            'reviewable_id'   => 'required|integer',
+            'reviewable_type' => 'required|string',
+        ]);
+
+        // Standardize reviewable type names if they are short names
+        $typeMap = [
+            'properties'   => \App\Models\Property::class,
+            'property'     => \App\Models\Property::class,
+            'autos'        => \App\Models\Auto::class,
+            'auto'         => \App\Models\Auto::class,
+            'events'       => \App\Models\Event::class,
+            'event'        => \App\Models\Event::class,
+            'services'     => \App\Models\Service::class,
+            'service'      => \App\Models\Service::class,
+            'jobs'         => \App\Models\JobListing::class,
+            'job'          => \App\Models\JobListing::class,
+            'products'     => \App\Models\Product::class,
+            'product'      => \App\Models\Product::class,
+            'classifieds'  => \App\Models\Classified::class,
+            'classified'   => \App\Models\Classified::class,
+        ];
+
+        $lowerType = strtolower($validated['reviewable_type']);
+        if (isset($typeMap[$lowerType])) {
+            $validated['reviewable_type'] = $typeMap[$lowerType];
+        }
+
+        $review = new Review($validated);
+        $review->user_id = Auth::id();
+        $review->status = Review::STATUS_APPROVED; // Default to approved
+        $review->save();
+
+        return $this->successResponse(new ReviewResource($review), __('Review successfully submitted.'), 201);
+    }
 }

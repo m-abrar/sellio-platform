@@ -37,4 +37,53 @@ class BookingController extends Controller
 
         return $this->successResponse($data);
     }
+
+    /**
+     * Cancel a specific booking by ID (supporting multiple polymorphic booking models).
+     */
+    public function cancel(Request $request, $id)
+    {
+        $user = Auth::user();
+        $type = $request->input('type'); // optional type parameter: 'property_booking', 'property_visit', 'event_booking', 'service_appointment'
+        
+        $cancelled = false;
+        
+        if ($type === 'property_visit' || !$type) {
+            $visit = \App\Models\PropertyVisit::where('user_id', $user->id)->where('id', $id)->first();
+            if ($visit) {
+                $visit->update(['status' => 'cancelled']);
+                $cancelled = true;
+            }
+        }
+        
+        if (!$cancelled && ($type === 'property_booking' || !$type)) {
+            $booking = \App\Models\PropertyBooking::where('user_id', $user->id)->where('id', $id)->first();
+            if ($booking) {
+                $booking->update(['status' => 'cancelled']);
+                $cancelled = true;
+            }
+        }
+        
+        if (!$cancelled && ($type === 'event_booking' || !$type)) {
+            $booking = \App\Models\EventBooking::where('user_id', $user->id)->where('id', $id)->first();
+            if ($booking) {
+                $booking->update(['status' => 'cancelled']);
+                $cancelled = true;
+            }
+        }
+        
+        if (!$cancelled && ($type === 'service_appointment' || !$type)) {
+            $appointment = \App\Models\ServiceAppointment::where('user_id', $user->id)->where('id', $id)->first();
+            if ($appointment) {
+                $appointment->update(['status' => 'cancelled']);
+                $cancelled = true;
+            }
+        }
+        
+        if ($cancelled) {
+            return $this->successResponse(null, __('Booking successfully cancelled.'));
+        }
+        
+        return $this->errorResponse(__('Booking not found or unauthorized.'), 404);
+    }
 }

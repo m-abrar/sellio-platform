@@ -31,4 +31,21 @@ class AutoInquiryController extends Controller
 
         return $this->successResponse(AutoInquiryResource::collection($userInquiries));
     }
+
+    /**
+     * Cancel an auto inquiry.
+     */
+    public function destroy($id)
+    {
+        $user = Auth::user();
+        $inquiry = AutoInquiry::where('user_id', $user->id)->where('id', $id)->first();
+
+        if (!$inquiry) {
+            return $this->errorResponse(__('Auto inquiry not found or unauthorized.'), 404);
+        }
+
+        $inquiry->update(['status' => 'cancelled']);
+
+        return $this->successResponse(null, __('Auto inquiry successfully cancelled.'));
+    }
 }

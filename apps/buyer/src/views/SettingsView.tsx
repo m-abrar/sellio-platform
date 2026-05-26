@@ -23,7 +23,7 @@ import { Button } from '../components/Button';
 import { PageHeader } from '../components/PageHeader';
 import { LoadingSpinner } from '../components/LoadingSpinner';
 import { API_BASE_URL, IS_EXTERNAL_BACKEND, STOREFRONT_BASE_URL } from '../config/api';
-import { fetchUserProfile, updateUserProfile, UserProfile } from '../api/userApi';
+import { fetchUserProfile, updateUserProfile, updatePassword, UserProfile } from '../api/userApi';
 
 const API_ORIGIN = (() => {
   try {
@@ -41,6 +41,14 @@ export default function SettingsView() {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Password Change States
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
+  const [passwordSuccess, setPasswordSuccess] = useState<string | null>(null);
+  const [passwordError, setPasswordError] = useState<string | null>(null);
 
   useEffect(() => {
     loadProfile();
@@ -76,6 +84,34 @@ export default function SettingsView() {
       setError('Failed to update profile');
     } finally {
       setIsSaving(false);
+    }
+  };
+
+  const handlePasswordUpdate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setPasswordError(null);
+    setPasswordSuccess(null);
+
+    if (newPassword !== confirmPassword) {
+      setPasswordError('New passwords do not match');
+      return;
+    }
+
+    setIsUpdatingPassword(true);
+    try {
+      await updatePassword({
+        current_password: currentPassword,
+        password: newPassword,
+        password_confirmation: confirmPassword
+      });
+      setPasswordSuccess('Password updated successfully');
+      setCurrentPassword('');
+      setNewPassword('');
+      setConfirmPassword('');
+    } catch (err: any) {
+      setPasswordError(err?.message || 'Failed to update password');
+    } finally {
+      setIsUpdatingPassword(false);
     }
   };
 
@@ -222,17 +258,29 @@ export default function SettingsView() {
               )}
 
             {activeTab === 'security' && (
-              <div className="space-y-8">
+              <form onSubmit={handlePasswordUpdate} className="space-y-8">
                 <div className="flex items-center gap-4 p-4 bg-amber-50 rounded-2xl border border-amber-100">
                   <Shield className="text-amber-500" size={24} />
                   <div>
                     <p className="text-sm font-bold text-amber-900">Two-Factor Authentication is Off</p>
                     <p className="text-xs text-amber-700">Add an extra layer of security to your account.</p>
                   </div>
-                  <Button variant="outline" size="sm" className="ml-auto bg-amber-500 text-white border-none hover:bg-amber-600">
+                  <Button type="button" variant="outline" size="sm" className="ml-auto bg-amber-500 text-white border-none hover:bg-amber-600">
                     Enable
                   </Button>
                 </div>
+
+                {passwordSuccess && (
+                  <div className="rounded-2xl border border-emerald-100 bg-emerald-50 px-4 py-3 text-sm font-bold text-emerald-600">
+                    {passwordSuccess}
+                  </div>
+                )}
+
+                {passwordError && (
+                  <div className="rounded-2xl border border-red-100 bg-red-50 px-4 py-3 text-sm font-bold text-red-600">
+                    {passwordError}
+                  </div>
+                )}
 
                 <div className="space-y-6">
                   <h4 className="text-sm font-bold text-zinc-900 uppercase tracking-wider">Change Password</h4>
@@ -241,6 +289,9 @@ export default function SettingsView() {
                       <label className="text-xs font-bold text-zinc-400 uppercase tracking-widest px-1">Current Password</label>
                       <input 
                         type="password" 
+                        required
+                        value={currentPassword}
+                        onChange={(e) => setCurrentPassword(e.target.value)}
                         className="w-full px-4 py-3 bg-zinc-50 border-none rounded-2xl text-sm focus:ring-2 focus:ring-zinc-900 transition-all"
                       />
                     </div>
@@ -249,6 +300,9 @@ export default function SettingsView() {
                         <label className="text-xs font-bold text-zinc-400 uppercase tracking-widest px-1">New Password</label>
                         <input 
                           type="password" 
+                          required
+                          value={newPassword}
+                          onChange={(e) => setNewPassword(e.target.value)}
                           className="w-full px-4 py-3 bg-zinc-50 border-none rounded-2xl text-sm focus:ring-2 focus:ring-zinc-900 transition-all"
                         />
                       </div>
@@ -256,6 +310,9 @@ export default function SettingsView() {
                         <label className="text-xs font-bold text-zinc-400 uppercase tracking-widest px-1">Confirm New Password</label>
                         <input 
                           type="password" 
+                          required
+                          value={confirmPassword}
+                          onChange={(e) => setConfirmPassword(e.target.value)}
                           className="w-full px-4 py-3 bg-zinc-50 border-none rounded-2xl text-sm focus:ring-2 focus:ring-zinc-900 transition-all"
                         />
                       </div>
@@ -264,9 +321,9 @@ export default function SettingsView() {
                 </div>
 
                 <div className="pt-4 flex justify-end">
-                  <Button>Update Password</Button>
+                  <Button type="submit" isLoading={isUpdatingPassword}>Update Password</Button>
                 </div>
-              </div>
+              </form>
             )}
 
             {activeTab === 'notifications' && profile && (

@@ -1,5 +1,5 @@
 import { toUserProfile } from './adapters';
-import { apiRequest, buyerUrl } from './apiClient';
+import { apiRequest, buyerUrl, authUrl } from './apiClient';
 
 export interface UserProfile {
   id: number;
@@ -28,4 +28,16 @@ export async function updateUserProfile(data: Partial<UserProfile>): Promise<Use
     }),
   });
   return toUserProfile(payload?.user || payload);
+}
+
+export async function updatePassword(data: {
+  current_password: string;
+  password:  string;
+  password_confirmation: string;
+}): Promise<void> {
+  await apiRequest<any>(authUrl('/profile/password'), {
+    method: 'PUT',
+    authenticated: true,
+    body: JSON.stringify(data),
+  });
 }

@@ -7,12 +7,17 @@ export const fetchReviews = async () => {
 };
 
 export const createReview = async (data: {
-  item_id: string;
-  booking_id?: number;
   rating: number;
   comment: string;
+  reviewable_id: number | string;
+  reviewable_type: string;
 }) => {
-  throw new Error('Review creation must be submitted from an eligible Laravel booking context.');
+  const payload = await apiRequest<any>(buyerUrl('/reviews'), {
+    method: 'POST',
+    authenticated: true,
+    body: JSON.stringify(data),
+  });
+  return toReview(payload?.review || payload);
 };
 
 export const updateReview = async (

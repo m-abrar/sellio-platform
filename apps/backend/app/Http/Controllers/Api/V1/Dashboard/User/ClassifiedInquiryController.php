@@ -46,4 +46,21 @@ class ClassifiedInquiryController extends Controller
             'favorites' => FavoriteResource::collection($favorites),
         ]);
     }
+
+    /**
+     * Cancel a classified inquiry.
+     */
+    public function destroy($id)
+    {
+        $user = Auth::user();
+        $inquiry = ClassifiedInquiry::where('user_id', $user->id)->where('id', $id)->first();
+
+        if (!$inquiry) {
+            return $this->errorResponse(__('Classified inquiry not found or unauthorized.'), 404);
+        }
+
+        $inquiry->update(['status' => 'cancelled']);
+
+        return $this->successResponse(null, __('Classified inquiry successfully cancelled.'));
+    }
 }

@@ -1,3 +1,4 @@
+import { STOREFRONT_BASE_URL } from '../config/api';
 import { toActivity } from './adapters';
 import { apiRequest, buyerUrl, collectionData } from './apiClient';
 
@@ -32,17 +33,33 @@ export const createBuyerActivity = async ({
   bookingDate?: string;
   status?: 'pending' | 'confirmed';
 }) => {
-  void itemId;
   void type;
   void bookingDate;
-  void status;
-
-  throw new Error(
-    'Buyer transaction creation needs the matching Laravel endpoint payload before it can be submitted.',
-  );
+  // Redirect to Storefront product page for actual checkout
+  window.location.assign(`${STOREFRONT_BASE_URL}/product/${encodeURIComponent(itemId)}`);
+  return { id: 0, item_id: itemId, status };
 };
 
-export const cancelBooking = async (id: number) => {
-  void id;
-  throw new Error('Buyer activity cancellation is not exposed by the Laravel buyer API yet.');
+export const cancelBooking = async (id: number, module?: string, type?: string) => {
+  let endpoint = '';
+  const cleanModule = module?.toLowerCase();
+
+  if (cleanModule === 'jobs') {
+    endpoint = `/inquiries/applications/${id}`;
+  } else if (cleanModule === 'autos') {
+    endpoint = `/inquiries/auto-inquiries/${id}`;
+  } else if (cleanModule === 'classifieds') {
+    endpoint = `/inquiries/classified-inquiries/${id}`;
+  } else if (cleanModule === 'services' && type === 'quote') {
+    endpoint = `/inquiries/service-quotes/${id}`;
+  } else if (cleanModule === 'services') {
+    endpoint = `/inquiries/service-appointments/${id}`;
+  } else {
+    endpoint = `/bookings/${id}`;
+  }
+
+  await apiRequest<any>(buyerUrl(endpoint), {
+    method: 'DELETE',
+    authenticated: true,
+  });
 };

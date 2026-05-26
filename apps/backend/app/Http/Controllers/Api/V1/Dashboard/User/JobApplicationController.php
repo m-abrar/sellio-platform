@@ -32,4 +32,21 @@ class JobApplicationController extends Controller
 
         return $this->successResponse(JobApplicationResource::collection($applications));
     }
+
+    /**
+     * Cancel a job application.
+     */
+    public function destroy($id)
+    {
+        $user = Auth::user();
+        $application = JobApplication::where('user_id', $user->id)->where('id', $id)->first();
+
+        if (!$application) {
+            return $this->errorResponse(__('Job application not found or unauthorized.'), 404);
+        }
+
+        $application->update(['status' => 'cancelled']);
+
+        return $this->successResponse(null, __('Job application successfully cancelled.'));
+    }
 }

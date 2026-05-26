@@ -10,7 +10,7 @@ import {
   Search,
 } from 'lucide-react';
 import { cn } from '../lib/utils';
-import { fetchBookings } from '../api/bookingApi';
+import { fetchBookings, cancelBooking } from '../api/bookingApi';
 import { Badge } from '../components/Badge';
 import { Button } from '../components/Button';
 import { EmptyState } from '../components/EmptyState';
@@ -40,6 +40,7 @@ export default function UserActivityView({ module, type = 'booking', title }: Us
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [filter, setFilter] = useState<'all' | 'pending' | 'confirmed' | 'completed'>('all');
+  const [cancellingId, setCancellingId] = useState<number | null>(null);
 
   useEffect(() => {
     fetchBookings(type, module)
@@ -47,6 +48,21 @@ export default function UserActivityView({ module, type = 'booking', title }: Us
       .catch(() => setError('Activity could not be loaded.'))
       .finally(() => setLoading(false));
   }, [module, type]);
+
+  const handleCancel = async (id: number, moduleName: string) => {
+    if (!window.confirm('Are you sure you want to cancel this activity?')) return;
+
+    setCancellingId(id);
+    try {
+      await cancelBooking(id, moduleName, type);
+      // Update state locally
+      setActivities(prev => prev.map(act => act.id === id ? { ...act, status: 'cancelled' } : act));
+    } catch (err: any) {
+      alert(err?.message || 'Failed to cancel activity');
+    } finally {
+      setCancellingId(null);
+    }
+  };
 
   const filteredActivities = activities.filter(a => {
     const matchesStatus = filter === 'all' || a.status === filter;
@@ -144,6 +160,17 @@ export default function UserActivityView({ module, type = 'booking', title }: Us
               </div>
 
               <div className="flex items-center gap-3">
+                {(activity.status === 'pending' || activity.status === 'confirmed') && (
+                  <Button 
+                    size="sm" 
+                    variant="outline"
+                    className="border-red-200 text-red-500 hover:bg-red-50 hover:text-red-600"
+                    isLoading={cancellingId === activity.id}
+                    onClick={() => handleCancel(activity.id, activity.module)}
+                  >
+                    Cancel
+                  </Button>
+                )}
                 {activity.status === 'completed' && !activity.review_id && (
                   <Button 
                     size="sm" 

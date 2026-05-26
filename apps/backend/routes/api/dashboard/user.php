@@ -52,9 +52,10 @@ Route::group([], function () {
 
     // Bookings & Orders
     Route::get('bookings', [BookingController::class, 'index'])->name('bookings.index');
+    Route::delete('bookings/{id}', [BookingController::class, 'cancel'])->name('bookings.cancel');
 
     // Reviews
-    Route::resource('reviews', ReviewController::class)->only(['index', 'show', 'edit', 'update', 'destroy']);
+    Route::resource('reviews', ReviewController::class)->only(['index', 'show', 'store', 'edit', 'update', 'destroy']);
 
     /**
      * 3. LEAD & INQUIRY TRACKING
