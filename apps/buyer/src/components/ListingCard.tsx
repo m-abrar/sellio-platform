@@ -10,6 +10,7 @@ interface ListingCardProps {
   module: string;
   viewMode?: 'grid' | 'list';
   onToggleFavorite?: (id: string) => void;
+  onAction?: (item: any) => void;
   index?: number;
   actionLabel?: string;
 }
@@ -19,6 +20,7 @@ export const ListingCard = ({
   module, 
   viewMode = 'grid', 
   onToggleFavorite, 
+  onAction,
   index = 0,
   actionLabel = 'View Details'
 }: ListingCardProps) => {
@@ -50,7 +52,7 @@ export const ListingCard = ({
           </Badge>
         </div>
         <button 
-          onClick={() => onToggleFavorite?.(item.id)}
+          onClick={() => onToggleFavorite?.(item.favoriteId || item.id)}
           className="absolute top-4 right-4 p-2 bg-white/90 backdrop-blur-md rounded-full text-zinc-400 hover:text-rose-500 transition-colors shadow-sm"
         >
           <Heart size={16} />
@@ -106,6 +108,7 @@ export const ListingCard = ({
           variant="outline" 
           className="w-full hover:bg-zinc-900 hover:text-white"
           rightIcon={<ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />}
+          onClick={() => onAction?.(item)}
         >
           {actionLabel}
         </Button>

@@ -10,12 +10,13 @@ import {
   Search,
 } from 'lucide-react';
 import { cn } from '../lib/utils';
-import { fetchBookings } from '../api/bookingApi';
+import { cancelBooking, fetchBookings } from '../api/bookingApi';
 import { Badge } from '../components/Badge';
 import { Button } from '../components/Button';
 import { EmptyState } from '../components/EmptyState';
 import { LoadingSpinner } from '../components/LoadingSpinner';
 import { PageHeader } from '../components/PageHeader';
+import { storefrontListingUrl } from '../config/api';
 
 interface ActivityItem {
   id: number;
@@ -37,14 +38,30 @@ interface UserActivityViewProps {
 export default function UserActivityView({ module, type = 'booking', title }: UserActivityViewProps) {
   const [activities, setActivities] = useState<ActivityItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [filter, setFilter] = useState<'all' | 'pending' | 'confirmed' | 'completed'>('all');
 
   useEffect(() => {
     fetchBookings(type)
       .then(setActivities)
-      .catch(console.error)
+      .catch(() => setError('Activity could not be loaded.'))
       .finally(() => setLoading(false));
   }, [type]);
+
+  const handleCancel = async (id: number) => {
+    setError(null);
+
+    try {
+      await cancelBooking(id);
+      setActivities((current) =>
+        current.map((activity) =>
+          activity.id === id ? { ...activity, status: 'cancelled' } : activity,
+        ),
+      );
+    } catch {
+      setError('Only pending activity can be cancelled.');
+    }
+  };
 
   const filteredActivities = activities.filter(a => {
     const matchesStatus = filter === 'all' || a.status === filter;
@@ -98,6 +115,12 @@ export default function UserActivityView({ module, type = 'booking', title }: Us
         }
       />
 
+      {error && (
+        <div className="mx-3 rounded-2xl border border-red-100 bg-red-50 px-4 py-3 text-sm font-bold text-red-600">
+          {error}
+        </div>
+      )}
+
       <div className="px-3 space-y-4">
         <AnimatePresence mode="popLayout">
           {filteredActivities.map((activity, i) => (
@@ -146,11 +169,16 @@ export default function UserActivityView({ module, type = 'booking', title }: Us
                   </Button>
                 )}
                 {activity.status === 'pending' && (
-                  <Button variant="outline" size="sm">
+                  <Button variant="outline" size="sm" onClick={() => handleCancel(activity.id)}>
                     Cancel
                   </Button>
                 )}
-                <Button size="sm" variant="outline" rightIcon={<ChevronRight size={14} />}>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  rightIcon={<ChevronRight size={14} />}
+                  onClick={() => window.location.assign(storefrontListingUrl(activity.item_id))}
+                >
                   View Details
                 </Button>
               </div>

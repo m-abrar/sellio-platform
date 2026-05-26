@@ -1,19 +1,29 @@
 // API Configuration
-// To switch backends, update VITE_API_URL in your .env file
-// - For Node.js (server.ts): Use "/api" (relative) or "http://localhost:3000/api"
-// - For Laravel: Use your Laravel URL, e.g., "http://localhost:8000/api"
+// Buyer panel talks directly to the Laravel API.
+// Default local backend: http://127.0.0.1:8000/api
 
 const getApiBaseUrl = () => {
   const envUrl = import.meta.env.VITE_API_URL;
-  
-  // If VITE_API_URL is defined, use it. 
-  // Otherwise, default to the local Node.js server path
-  if (envUrl) return envUrl;
-  
-  return "/api";
+
+  if (envUrl) return envUrl.replace(/\/+$/, '');
+
+  return 'http://127.0.0.1:8000/api';
 };
 
 export const API_BASE_URL = getApiBaseUrl();
+export const PUBLIC_API_BASE_URL = `${API_BASE_URL}/v1`;
+export const BUYER_API_BASE_URL = `${API_BASE_URL}/dashboard/user`;
+export const AUTH_API_BASE_URL = `${PUBLIC_API_BASE_URL}/auth`;
 
-// Helper to check which backend is active (useful for debugging)
-export const IS_EXTERNAL_BACKEND = API_BASE_URL.startsWith('http');
+export const IS_EXTERNAL_BACKEND = true;
+
+export const STOREFRONT_BASE_URL = (
+  import.meta.env.VITE_STOREFRONT_URL || 'http://localhost:3000'
+).replace(/\/+$/, '');
+
+export const storefrontExploreUrl = () => `${STOREFRONT_BASE_URL}/explore`;
+
+export const storefrontListingUrl = (slugOrId?: string | number | null) => {
+  if (!slugOrId) return storefrontExploreUrl();
+  return `${STOREFRONT_BASE_URL}/product/${encodeURIComponent(String(slugOrId))}`;
+};

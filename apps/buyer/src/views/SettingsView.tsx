@@ -22,7 +22,7 @@ import { Badge } from '../components/Badge';
 import { Button } from '../components/Button';
 import { PageHeader } from '../components/PageHeader';
 import { LoadingSpinner } from '../components/LoadingSpinner';
-import { API_BASE_URL, IS_EXTERNAL_BACKEND } from '../config/api';
+import { API_BASE_URL, IS_EXTERNAL_BACKEND, STOREFRONT_BASE_URL } from '../config/api';
 import { fetchUserProfile, updateUserProfile, UserProfile } from '../api/userApi';
 
 export default function SettingsView() {
@@ -356,10 +356,16 @@ export default function SettingsView() {
                         </code>
                       </div>
                       <div className="flex items-center justify-between text-xs">
-                        <span className="text-zinc-500">Database Type:</span>
+                        <span className="text-zinc-500">Data Source:</span>
                         <span className="font-bold text-zinc-900">
-                          {IS_EXTERNAL_BACKEND ? 'Remote (Laravel)' : 'SQLite (Local)'}
+                          {IS_EXTERNAL_BACKEND ? 'Laravel API' : 'Local development host'}
                         </span>
+                      </div>
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="text-zinc-500">Storefront URL:</span>
+                        <code className="bg-white px-2 py-1 rounded border border-zinc-100 font-mono text-[10px]">
+                          {STOREFRONT_BASE_URL}
+                        </code>
                       </div>
                     </div>
                   </div>
@@ -375,14 +381,13 @@ export default function SettingsView() {
                       </div>
                     </div>
                     <p className="text-xs text-zinc-400 mb-4 leading-relaxed">
-                      To switch between Node.js and Laravel, update your <strong>.env</strong> file:
+                      The buyer panel now talks directly to Laravel. Configure your <strong>.env</strong> file:
                     </p>
                     <div className="bg-black/30 rounded-xl p-3 font-mono text-[10px] space-y-1">
-                      <p className="text-emerald-400"># For Node.js (server.ts)</p>
-                      <p className="text-zinc-300">VITE_API_URL=/api</p>
-                      <div className="h-2" />
-                      <p className="text-amber-400"># For Laravel</p>
-                      <p className="text-zinc-300">VITE_API_URL=https://api.example.com/api</p>
+                      <p className="text-amber-400"># Local Laravel</p>
+                      <p className="text-zinc-300">VITE_API_URL=http://127.0.0.1:8000/api</p>
+                      <p className="text-amber-400"># Storefront browsing</p>
+                      <p className="text-zinc-300">VITE_STOREFRONT_URL=http://localhost:3000</p>
                     </div>
                   </div>
                 </div>

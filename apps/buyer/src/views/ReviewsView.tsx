@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
 import { Star, MessageSquare, ThumbsUp, Calendar } from 'lucide-react';
 import { cn } from '../lib/utils';
-import { fetchReviews } from '../api/reviewApi';
+import { deleteReview, fetchReviews, updateReview } from '../api/reviewApi';
 import { LoadingSpinner } from '../components/LoadingSpinner';
 import { PageHeader } from '../components/PageHeader';
 import { EmptyState } from '../components/EmptyState';
@@ -23,6 +23,7 @@ interface Review {
 export default function ReviewsView() {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     fetchReviews()
@@ -30,6 +31,37 @@ export default function ReviewsView() {
       .catch(console.error)
       .finally(() => setLoading(false));
   }, []);
+
+  const handleEdit = async (review: Review) => {
+    const comment = window.prompt('Update your feedback:', review.comment);
+    if (comment === null) return;
+
+    const ratingInput = window.prompt('Rating from 1 to 5:', String(review.rating));
+    if (ratingInput === null) return;
+
+    const rating = Math.min(5, Math.max(1, Number(ratingInput) || review.rating));
+    setError(null);
+
+    try {
+      const updated = await updateReview(review.id, { rating, comment });
+      setReviews((current) =>
+        current.map((item) => (item.id === review.id ? { ...item, ...updated } : item)),
+      );
+    } catch {
+      setError('Review could not be updated.');
+    }
+  };
+
+  const handleDelete = async (reviewId: number) => {
+    setError(null);
+
+    try {
+      await deleteReview(reviewId);
+      setReviews((current) => current.filter((review) => review.id !== reviewId));
+    } catch {
+      setError('Review could not be deleted.');
+    }
+  };
 
   if (loading) return <LoadingSpinner />;
 
@@ -40,6 +72,12 @@ export default function ReviewsView() {
         title="Reviews I've Written"
         description="View and manage the feedback you've shared about your experiences."
       />
+
+      {error && (
+        <div className="mx-3 rounded-2xl border border-red-100 bg-red-50 px-4 py-3 text-sm font-bold text-red-600">
+          {error}
+        </div>
+      )}
 
       <div className="grid grid-cols-1 gap-6 px-3">
         {reviews.map((review, i) => (
@@ -108,10 +146,16 @@ export default function ReviewsView() {
                     <span className="text-xs font-medium text-zinc-500">Posted by you</span>
                   </div>
                   <div className="flex items-center gap-4">
-                    <button className="text-xs font-bold text-zinc-400 hover:text-zinc-900 transition-colors">
+                    <button
+                      className="text-xs font-bold text-zinc-400 hover:text-zinc-900 transition-colors"
+                      onClick={() => handleEdit(review)}
+                    >
                       Edit Review
                     </button>
-                    <button className="text-xs font-bold text-rose-500 hover:text-rose-600 transition-colors">
+                    <button
+                      className="text-xs font-bold text-rose-500 hover:text-rose-600 transition-colors"
+                      onClick={() => handleDelete(review.id)}
+                    >
                       Delete
                     </button>
                   </div>

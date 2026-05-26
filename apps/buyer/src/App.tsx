@@ -27,17 +27,17 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from './lib/utils';
-import { fetchUserStats } from './api/statsApi';
 
 // Views
 import DashboardOverview from './views/DashboardOverview';
-import ModuleView from './views/ModuleView';
 import FavoritesView from './views/FavoritesView';
 import MessagesView from './views/MessagesView';
 import SettingsView from './views/SettingsView';
 import UserActivityView from './views/UserActivityView';
 import PartnerView from './views/PartnerView';
 import ReviewsView from './views/ReviewsView';
+import LoginView from './views/LoginView';
+import StorefrontRedirectView from './views/StorefrontRedirectView';
 import { StatsProvider, useStats } from './context/StatsContext';
 import { UserProvider, useUser } from './context/UserContext';
 
@@ -46,15 +46,6 @@ const MAIN_NAV = [
   { name: 'My Favorites', path: '/favorites', icon: Heart, badge: 'favoritesCount' },
   { name: 'My Bookings', path: '/bookings', icon: CalendarCheck, badge: 'bookingsCount' },
   { name: 'Messages', path: '/messages', icon: MessageSquare, badge: 'messagesCount' },
-];
-
-const BROWSE_NAV = [
-  { name: 'Properties', path: '/properties', icon: Rocket, badge: 'propertiesCount' },
-  { name: 'Events', path: '/events', icon: CalendarCheck, badge: 'eventsCount' },
-  { name: 'Autos', path: '/autos', icon: Car, badge: 'autosCount' },
-  { name: 'Services', path: '/services', icon: Wrench, badge: 'servicesCount' },
-  { name: 'Jobs', path: '/jobs', icon: Briefcase, badge: 'jobsCount' },
-  { name: 'Classifieds', path: '/classifieds', icon: Megaphone, badge: 'classifiedsCount' },
 ];
 
 const ACTIVITY_NAV = [
@@ -174,7 +165,7 @@ function Sidebar({ isOpen, setIsOpen, stats }: { isOpen: boolean; setIsOpen: (v:
 }
 
 function Header({ setIsSidebarOpen, stats }: { setIsSidebarOpen: (v: boolean) => void; stats: any }) {
-  const { user } = useUser();
+  const { user, logout } = useUser();
 
   return (
     <header className="h-16 bg-white/70 backdrop-blur-md border-b border-white/50 sticky top-0 z-30 px-4 lg:px-8 flex items-center justify-between">
@@ -239,7 +230,10 @@ function Header({ setIsSidebarOpen, stats }: { setIsSidebarOpen: (v: boolean) =>
               <SettingsIcon size={16} /> Settings
             </Link>
             <hr className="my-1 border-zinc-50" />
-            <button className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-500 hover:bg-red-50">
+            <button
+              className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-500 hover:bg-red-50"
+              onClick={() => void logout()}
+            >
               <LogOut size={16} /> Logout
             </button>
           </div>
@@ -261,6 +255,7 @@ export default function App() {
 
 function AppContent() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const { isAuthenticated, isLoading } = useUser();
   const { stats } = useStats();
 
   React.useEffect(() => {
@@ -273,6 +268,18 @@ function AppContent() {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#f7f8f5] text-sm font-bold text-zinc-500">
+        Loading buyer panel...
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return <LoginView />;
+  }
 
   return (
     <Router>
@@ -289,14 +296,14 @@ function AppContent() {
               <Route path="/messages" element={<MessagesView />} />
               <Route path="/settings" element={<SettingsView />} />
               
-              {/* Module routes */}
-              <Route path="/properties" element={<ModuleView module="properties" />} />
-              <Route path="/events" element={<ModuleView module="events" />} />
-              <Route path="/autos" element={<ModuleView module="autos" />} />
-              <Route path="/services" element={<ModuleView module="services" />} />
-              <Route path="/jobs" element={<ModuleView module="jobs" />} />
-              <Route path="/classifieds" element={<ModuleView module="classifieds" />} />
-              <Route path="/products" element={<ModuleView module="products" />} />
+              {/* Discovery belongs in the storefront; buyer routes stay activity-focused. */}
+              <Route path="/properties" element={<StorefrontRedirectView module="properties" />} />
+              <Route path="/events" element={<StorefrontRedirectView module="events" />} />
+              <Route path="/autos" element={<StorefrontRedirectView module="autos" />} />
+              <Route path="/services" element={<StorefrontRedirectView module="services" />} />
+              <Route path="/jobs" element={<StorefrontRedirectView module="jobs" />} />
+              <Route path="/classifieds" element={<StorefrontRedirectView module="classifieds" />} />
+              <Route path="/products" element={<StorefrontRedirectView module="products" />} />
 
               {/* Activity routes */}
               <Route path="/bookings" element={<UserActivityView title="My Bookings" />} />

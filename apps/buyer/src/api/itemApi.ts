@@ -1,23 +1,15 @@
-import { API_BASE_URL } from "../config/api";
-
-export const fetchItems = async (module: string) => {
-  const response = await fetch(`${API_BASE_URL}/items?module=${module}`);
-  if (!response.ok) throw new Error('Failed to fetch items');
-  return response.json();
-};
+import { toFavoriteItem } from './adapters';
+import { apiRequest, buyerUrl, collectionData } from './apiClient';
 
 export const toggleFavorite = async (itemId: string) => {
-  const response = await fetch(`${API_BASE_URL}/favorites/toggle`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ itemId }),
+  await apiRequest(buyerUrl(`/favorites/${itemId}`), {
+    method: 'DELETE',
+    authenticated: true,
   });
-  if (!response.ok) throw new Error('Failed to toggle favorite');
-  return response.json();
+  return { status: 'removed' };
 };
 
 export const fetchFavorites = async () => {
-  const response = await fetch(`${API_BASE_URL}/favorites`);
-  if (!response.ok) throw new Error('Failed to fetch favorites');
-  return response.json();
+  const payload = await apiRequest<any>(buyerUrl('/favorites'), { authenticated: true });
+  return collectionData(payload).map(toFavoriteItem);
 };

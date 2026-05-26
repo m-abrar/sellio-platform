@@ -18,16 +18,18 @@ import { cn } from '../lib/utils';
 import { useStats } from '../context/StatsContext';
 import { LoadingSpinner } from '../components/LoadingSpinner';
 import { PageHeader } from '../components/PageHeader';
-import { API_BASE_URL } from '../config/api';
+import { fetchBookings } from '../api/bookingApi';
 
 export default function DashboardOverview() {
   const { stats } = useStats();
   const [nextEvent, setNextEvent] = useState<any>(null);
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/user/next-booking`)
-      .then(res => res.json())
-      .then(setNextEvent)
+    fetchBookings()
+      .then((items) => {
+        const next = items.find((item: any) => item.status === 'confirmed') || items[0] || null;
+        setNextEvent(next);
+      })
       .catch(console.error);
   }, []);
 

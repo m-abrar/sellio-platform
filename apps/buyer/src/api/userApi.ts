@@ -1,4 +1,5 @@
-import { API_BASE_URL } from '../config/api';
+import { toUserProfile } from './adapters';
+import { apiRequest, buyerUrl } from './apiClient';
 
 export interface UserProfile {
   id: number;
@@ -12,17 +13,18 @@ export interface UserProfile {
 }
 
 export async function fetchUserProfile(): Promise<UserProfile> {
-  const response = await fetch(`${API_BASE_URL}/user/profile`);
-  if (!response.ok) throw new Error('Failed to fetch user profile');
-  return response.json();
+  const payload = await apiRequest<any>(buyerUrl('/settings'), { authenticated: true });
+  return toUserProfile(payload?.user || payload);
 }
 
 export async function updateUserProfile(data: Partial<UserProfile>): Promise<UserProfile> {
-  const response = await fetch(`${API_BASE_URL}/user/profile`, {
+  // Laravel currently exposes buyer settings/profile read routes in the scanned API.
+  // Keep this call pointed at the expected update route so the frontend is ready
+  // when the backend route is enabled.
+  const payload = await apiRequest<any>(buyerUrl('/profile'), {
     method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
+    authenticated: true,
     body: JSON.stringify(data),
   });
-  if (!response.ok) throw new Error('Failed to update user profile');
-  return response.json();
+  return toUserProfile(payload?.user || payload);
 }

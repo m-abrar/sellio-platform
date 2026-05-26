@@ -1,23 +1,43 @@
-import { API_BASE_URL } from "../config/api";
+import { apiRequest, buyerUrl } from './apiClient';
 
 export const fetchMessages = async () => {
-  const response = await fetch(`${API_BASE_URL}/messages`);
-  if (!response.ok) throw new Error('Failed to fetch messages');
-  return response.json();
+  const payload = await apiRequest<any>(buyerUrl('/messages'), { authenticated: true });
+  return (payload?.messages || []).map((message: any) => ({
+    id: message.id,
+    sender_id: message.sender_id,
+    receiver_id: message.receiver_id,
+    content: message.content || message.body,
+    created_at: message.created_at,
+  }));
 };
 
 export const fetchConversations = async () => {
-  const response = await fetch(`${API_BASE_URL}/conversations`);
-  if (!response.ok) throw new Error('Failed to fetch conversations');
-  return response.json();
+  const payload = await apiRequest<any>(buyerUrl('/messages'), { authenticated: true });
+  return (payload?.conversations || []).map((conversation: any) => {
+    const participant = conversation.partner || conversation.user || {};
+    return {
+      id: conversation.id,
+      name: participant.name || `Conversation #${conversation.id}`,
+      avatar: participant.avatar_url || participant.avatar,
+      lastMessage: conversation.last_message?.body || conversation.lastMessage?.content || '',
+      time: conversation.updated_at,
+      unread: conversation.unread_count || 0,
+    };
+  });
 };
 
 export const sendMessage = async (content: string, receiverId: number) => {
-  const response = await fetch(`${API_BASE_URL}/messages`, {
+  const payload = await apiRequest<any>(buyerUrl(`/messages/${receiverId}`), {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ content, receiver_id: receiverId }),
+    authenticated: true,
+    body: JSON.stringify({ body: content }),
   });
-  if (!response.ok) throw new Error('Failed to send message');
-  return response.json();
+  const message = payload?.message || payload;
+  return {
+    id: message?.id || Date.now(),
+    sender_id: message?.sender_id,
+    receiver_id: message?.receiver_id,
+    content: message?.body || content,
+    created_at: message?.created_at || new Date().toISOString(),
+  };
 };

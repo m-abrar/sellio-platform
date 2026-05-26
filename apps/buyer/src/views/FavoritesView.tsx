@@ -7,13 +7,12 @@ import { ListingCard } from '../components/ListingCard';
 import { EmptyState } from '../components/EmptyState';
 import { LoadingSpinner } from '../components/LoadingSpinner';
 import { PageHeader } from '../components/PageHeader';
-import { useNavigate } from 'react-router-dom';
+import { storefrontExploreUrl, storefrontListingUrl } from '../config/api';
 
 export default function FavoritesView() {
   const [favorites, setFavorites] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const { refreshStats } = useStats();
-  const navigate = useNavigate();
 
   useEffect(() => {
     loadFavorites();
@@ -58,6 +57,7 @@ export default function FavoritesView() {
               module={fav.module}
               index={i}
               onToggleFavorite={handleRemove}
+              onAction={(item) => window.location.assign(storefrontListingUrl(item.id))}
             />
           ))}
         </AnimatePresence>
@@ -69,7 +69,7 @@ export default function FavoritesView() {
               title="Your wish list is empty"
               description="Click the heart icon on any listing to save it for quick access later."
               actionLabel="Browse Listings"
-              onAction={() => navigate('/properties')}
+              onAction={() => window.location.assign(storefrontExploreUrl())}
             />
           </div>
         )}
