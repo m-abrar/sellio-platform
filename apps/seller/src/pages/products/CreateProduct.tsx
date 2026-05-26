@@ -11,7 +11,7 @@ import {
 
 // API Services
 import { getProductBySlug, createProduct, updateProduct } from '../../api/products';
-import { getCategories, getBrands } from '../../api/categories';
+import { getCategories, getBrands, getProductTypes } from '../../api/categories';
 import { ApiError } from '../../lib/apiError';
 
 // Studio Components
@@ -31,6 +31,7 @@ export default function CreateProduct() {
 
   const [categories, setCategories] = useState<any[]>([]);
   const [brands, setBrands] = useState<any[]>([]);
+  const [types, setTypes] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [productId, setProductId] = useState<number | null>(null);
@@ -41,10 +42,12 @@ export default function CreateProduct() {
     sku: '',
     category_id: '',
     brand_id: '',
+    type_id: '',
     description: '',
     short_description: '',
     base_price: '',
     sale_price: '',
+    on_sale: false,
     stock_quantity: 0,
     manage_stock: true,
     weight: '',
@@ -62,8 +65,10 @@ export default function CreateProduct() {
         // 1. Fetch Categories
         const flatCategories = await getCategories();
         const flatBrands = await getBrands();
+        const flatTypes = await getProductTypes();
         setCategories(flatCategories);
         setBrands(flatBrands);
+        setTypes(flatTypes);
 
         if (isEditMode && slug) {
           const { data: p } = await getProductBySlug(slug);
@@ -79,13 +84,15 @@ export default function CreateProduct() {
             sku: p.sku || '',
             category_id: p.category?.id || '',
             brand_id: p.brand?.id || '',
+            type_id: p.type?.id || '',
             description: p.description || '',
             short_description: p.short_description || '',
             base_price: p.pricing?.base_price || '',
             sale_price: p.pricing?.sale_price || '',
+            on_sale: p.pricing?.on_sale ?? Boolean(p.pricing?.sale_price),
             stock_quantity: p.inventory?.stock_quantity || 0,
             manage_stock: p.inventory?.manage_stock ?? true,
-            weight: p.specs?.weight || '',
+            weight: String(p.specs?.weight || '').replace(' kg', ''),
             length: dims[0] || '',
             width: dims[1] || '',
             height: dims[2] || '',
@@ -153,6 +160,7 @@ export default function CreateProduct() {
     Object.keys(form).forEach(key =>
       formData.append(key, String(form[key as keyof typeof form]))
     );
+    formData.set('on_sale', String(Boolean(form.sale_price) && Number(form.sale_price) > 0));
 
     files.forEach((fileObj) => {
       if (fileObj.file) {
@@ -275,6 +283,19 @@ export default function CreateProduct() {
                     <option value="">Select Brand...</option>
                     {brands.map((brand: any) => (
                       <option key={brand.id} value={brand.id}>{brand.title}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className={labelClass}>Product Type</label>
+                  <select
+                    value={form.type_id}
+                    onChange={(e) => updateForm('type_id', e.target.value)}
+                    className={`${inputClass} appearance-none cursor-pointer`}
+                  >
+                    <option value="">Select Type...</option>
+                    {types.map((type: any) => (
+                      <option key={type.id} value={type.id}>{type.title}</option>
                     ))}
                   </select>
                 </div>

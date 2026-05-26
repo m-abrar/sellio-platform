@@ -29,7 +29,7 @@ class ProductController extends Controller
 
         $products = Product::query()
             ->where('user_id', $user->id)
-            ->with(['media', 'brand', 'category'])
+            ->with(['media', 'brand', 'category', 'type'])
             ->latest()
             ->paginate($request->integer('per_page', 120));
 
@@ -89,7 +89,7 @@ class ProductController extends Controller
     {
         $model = Product::where('user_id', auth()->id())
             ->where(is_numeric($product) ? 'id' : 'slug', $product)
-            ->with(['user', 'category', 'brand', 'tags', 'media', 'attributes', 'addons'])
+            ->with(['user', 'category', 'brand', 'type', 'tags', 'media', 'attributes', 'addons'])
             ->firstOrFail();
 
         $this->productService->logListingView($model);
@@ -110,7 +110,7 @@ class ProductController extends Controller
     public function edit(string $slug) {
         $product = Product::where('user_id', auth()->id())
             ->where('slug', $slug)
-            ->with(['user', 'category', 'brand', 'tags', 'media', 'attributes', 'addons'])
+            ->with(['user', 'category', 'brand', 'type', 'tags', 'media', 'attributes', 'addons'])
             ->firstOrFail();
 
         $this->productService->logListingView($product);

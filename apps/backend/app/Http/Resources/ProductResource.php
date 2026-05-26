@@ -84,6 +84,11 @@ class ProductResource extends JsonResource
                     'title' => $this->brand->title,
                     'logo'  => $this->brand->logo_url ?? null,
                 ]),
+                'type' => $this->whenLoaded('type', fn() => $this->type ? [
+                    'id'    => $this->type->id,
+                    'title' => $this->type->title,
+                    'slug'  => $this->type->slug,
+                ] : null),
                 'tags' => $this->whenLoaded('tags', fn() => $this->tags->pluck('title')),
             ],
 

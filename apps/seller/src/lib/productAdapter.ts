@@ -11,6 +11,7 @@ export interface NormalizedProduct {
   pricing: {
     base_price?: number;
     sale_price?: number | null;
+    on_sale?: boolean;
     formatted?: string;
   };
   inventory: {
@@ -20,6 +21,7 @@ export interface NormalizedProduct {
   };
   category?: { id: number; title: string };
   brand?: { id: number; title: string };
+  type?: { id: number; title: string };
   specs?: {
     weight?: string | null;
     dimensions?: string | null;
@@ -66,6 +68,7 @@ export const normalizeProduct = (product: any): NormalizedProduct => {
     },
     category: product.taxonomy?.category ?? product.category,
     brand: product.taxonomy?.brand ?? product.brand,
+    type: product.taxonomy?.type ?? product.type,
     specs: product.specs ?? {},
     status: product.status ?? {},
     is_featured: product.status?.is_featured ?? product.is_featured ?? false,

@@ -9,3 +9,8 @@ export const getBrands = async () => {
   const meta = await getProductFormMeta();
   return meta.brands;
 };
+
+export const getProductTypes = async () => {
+  const meta = await getProductFormMeta();
+  return meta.types;
+};

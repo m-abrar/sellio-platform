@@ -37,8 +37,19 @@ class SaveProductRequest extends FormRequest
             'on_sale'           => ['boolean'],
             
             'stock_quantity'    => ['required_if:manage_stock,true', 'integer'],
-            // 'manage_stock'      => ['boolean'],
-            // 'in_stock'          => ['boolean'],
+            'low_stock_threshold' => ['nullable', 'integer', 'min:0'],
+            'manage_stock'      => ['boolean'],
+            'in_stock'          => ['boolean'],
+            'weight'            => ['nullable', 'numeric', 'min:0'],
+            'length'            => ['nullable', 'numeric', 'min:0'],
+            'width'             => ['nullable', 'numeric', 'min:0'],
+            'height'            => ['nullable', 'numeric', 'min:0'],
+            'is_published'      => ['boolean'],
+            'is_featured'       => ['boolean'],
+            'is_digital'        => ['boolean'],
+            'video'             => ['nullable', 'url', 'max:2048'],
+            'meta_title'        => ['nullable', 'string', 'max:255'],
+            'meta_description'  => ['nullable', 'string'],
             
             'main_image'        => [$productId ? 'nullable' : 'required', 'image', 'max:2048'],
             'gallery.*'         => ['nullable', 'image', 'max:2048'],
@@ -49,6 +60,34 @@ class SaveProductRequest extends FormRequest
     {
         if ($this->has('title') && !$this->has('slug')) {
             $this->merge(['slug' => \Illuminate\Support\Str::slug($this->title)]);
+        }
+
+        $booleanFields = [
+            'on_sale',
+            'manage_stock',
+            'in_stock',
+            'is_published',
+            'is_featured',
+            'is_digital',
+        ];
+
+        $normalized = [];
+        foreach ($booleanFields as $field) {
+            if ($this->has($field)) {
+                $normalized[$field] = filter_var($this->input($field), FILTER_VALIDATE_BOOLEAN);
+            }
+        }
+
+        if ($this->has('sale_price')) {
+            $normalized['on_sale'] = filled($this->input('sale_price')) && (float) $this->input('sale_price') > 0;
+        }
+
+        if ($this->has('stock_quantity')) {
+            $normalized['in_stock'] = (int) $this->input('stock_quantity') > 0;
+        }
+
+        if ($normalized !== []) {
+            $this->merge($normalized);
         }
     }
 }
