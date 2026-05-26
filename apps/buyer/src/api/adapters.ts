@@ -1,6 +1,15 @@
 import { ModuleType } from '../types';
+import { API_BASE_URL } from '../config/api';
 
-const FALLBACK_IMAGE = 'https://picsum.photos/seed/sellio-listing/800/600';
+const API_ORIGIN = (() => {
+  try {
+    return new URL(API_BASE_URL).origin;
+  } catch {
+    return '';
+  }
+})();
+
+const FALLBACK_IMAGE = `${API_ORIGIN}/images/fallbacks/default-card.jpg`;
 
 function text(value: any, fallback = '') {
   return value === null || value === undefined || value === '' ? fallback : String(value);
@@ -13,6 +22,49 @@ function number(value: any, fallback = 0) {
 
 function firstDefined(...values: any[]) {
   return values.find((value) => value !== null && value !== undefined && value !== '');
+}
+
+function absolutizeAssetUrl(value: any) {
+  if (!value || typeof value !== 'string') return value;
+  if (/^(https?:|data:|blob:)/i.test(value)) return value;
+  if (value.startsWith('//')) return `${globalThis.location?.protocol || 'https:'}${value}`;
+
+  const normalized = value.startsWith('/') ? value : `/${value}`;
+  return API_ORIGIN ? `${API_ORIGIN}${normalized}` : normalized;
+}
+
+function mediaItemUrl(media: any) {
+  if (!media) return null;
+  if (typeof media === 'string') return media;
+
+  return firstDefined(
+    media.url,
+    media.original_url,
+    media.preview_url,
+    media.thumbnail,
+    media.thumb_url,
+    media.conversions?.card,
+    media.conversions?.thumb,
+  );
+}
+
+function galleryUrl(gallery: any) {
+  if (!gallery) return null;
+  const items = Array.isArray(gallery) ? gallery : gallery.data;
+  if (!Array.isArray(items)) return mediaItemUrl(gallery);
+  return mediaItemUrl(items[0]);
+}
+
+function spatieMediaUrl(media: any) {
+  const items = Array.isArray(media) ? media : media?.data;
+  if (!Array.isArray(items)) return null;
+
+  const primary =
+    items.find((item) =>
+      ['featured_image', 'main_image', 'main_photo', 'image', 'cover', 'images'].includes(item?.collection_name),
+    ) || items[0];
+
+  return mediaItemUrl(primary);
 }
 
 function categoryTitle(resource: any) {
@@ -30,19 +82,35 @@ function categoryTitle(resource: any) {
 }
 
 function imageUrl(module: ModuleType, resource: any) {
-  return (
+  const selected = firstDefined(
+    resource?.primary_image_url,
+    resource?.thumbnail_url,
+    resource?.image_url,
+    resource?.cover_url,
     firstDefined(
       resource?.image,
       resource?.featured_image,
       resource?.thumbnail_image,
+      resource?.thumbnail,
       resource?.media?.featured_image,
       resource?.media?.main_photo,
       resource?.media?.poster,
       resource?.media?.preview,
+      resource?.media?.image_url,
+      resource?.media?.cover_url,
+      resource?.media?.thumbnail_url,
       resource?.company?.logo,
-      resource?.gallery?.[0]?.url,
-    ) || `${FALLBACK_IMAGE}-${module}-${resource?.id || resource?.slug || 'item'}`
+      resource?.employer?.avatar,
+      resource?.vendor?.avatar,
+      resource?.owner?.avatar,
+      galleryUrl(resource?.media?.gallery),
+      galleryUrl(resource?.gallery),
+      galleryUrl(resource?.images),
+      spatieMediaUrl(resource?.media),
+    ),
   );
+
+  return absolutizeAssetUrl(selected || `${FALLBACK_IMAGE}?module=${module}&item=${resource?.id || resource?.slug || 'item'}`);
 }
 
 function price(module: ModuleType, resource: any) {
@@ -162,9 +230,21 @@ export function toReview(resource: any) {
   };
 }
 
-export function toActivity(resource: any, index = 0) {
-  const item = resource?.item || resource?.property || resource?.event || resource?.service || resource?.job || resource?.classified || resource?.listing || {};
-  const module = text(resource?.module || item?.module || inferModuleFromType(text(resource?.type)), 'products');
+export function toActivity(resource: any, index = 0, fallbackModule = 'products') {
+  const item =
+    resource?.item ||
+    resource?.property ||
+    resource?.event ||
+    resource?.service ||
+    resource?.job ||
+    resource?.job_listing ||
+    resource?.auto ||
+    resource?.classifiedAd ||
+    resource?.classifiedad ||
+    resource?.classified ||
+    resource?.listing ||
+    {};
+  const module = text(resource?.module || item?.module || inferModuleFromType(text(resource?.type)), fallbackModule);
 
   const status = text(resource?.status, 'pending').toLowerCase();
   const normalizedStatus = ['pending', 'confirmed', 'completed', 'cancelled'].includes(status)
@@ -177,7 +257,13 @@ export function toActivity(resource: any, index = 0) {
     itemTitle: text(resource?.itemTitle || resource?.item_title || item?.title || resource?.title, 'Activity'),
     module,
     status: normalizedStatus,
-    booking_date: resource?.booking_date || resource?.date || resource?.created_at,
+    booking_date:
+      resource?.booking_date ||
+      resource?.scheduled_at ||
+      resource?.preferred_date ||
+      resource?.requested_date ||
+      resource?.date ||
+      resource?.created_at,
     created_at: resource?.created_at || resource?.updated_at || new Date().toISOString(),
     review_id: resource?.review_id || null,
   };

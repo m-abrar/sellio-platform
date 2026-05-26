@@ -10,7 +10,7 @@ import {
   Search,
 } from 'lucide-react';
 import { cn } from '../lib/utils';
-import { cancelBooking, fetchBookings } from '../api/bookingApi';
+import { fetchBookings } from '../api/bookingApi';
 import { Badge } from '../components/Badge';
 import { Button } from '../components/Button';
 import { EmptyState } from '../components/EmptyState';
@@ -42,26 +42,11 @@ export default function UserActivityView({ module, type = 'booking', title }: Us
   const [filter, setFilter] = useState<'all' | 'pending' | 'confirmed' | 'completed'>('all');
 
   useEffect(() => {
-    fetchBookings(type)
+    fetchBookings(type, module)
       .then(setActivities)
       .catch(() => setError('Activity could not be loaded.'))
       .finally(() => setLoading(false));
-  }, [type]);
-
-  const handleCancel = async (id: number) => {
-    setError(null);
-
-    try {
-      await cancelBooking(id);
-      setActivities((current) =>
-        current.map((activity) =>
-          activity.id === id ? { ...activity, status: 'cancelled' } : activity,
-        ),
-      );
-    } catch {
-      setError('Only pending activity can be cancelled.');
-    }
-  };
+  }, [module, type]);
 
   const filteredActivities = activities.filter(a => {
     const matchesStatus = filter === 'all' || a.status === filter;
@@ -166,11 +151,6 @@ export default function UserActivityView({ module, type = 'booking', title }: Us
                     onClick={() => window.location.href = '/reviews'}
                   >
                     Leave Review
-                  </Button>
-                )}
-                {activity.status === 'pending' && (
-                  <Button variant="outline" size="sm" onClick={() => handleCancel(activity.id)}>
-                    Cancel
                   </Button>
                 )}
                 <Button

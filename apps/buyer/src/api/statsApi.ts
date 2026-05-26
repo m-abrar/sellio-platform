@@ -8,6 +8,7 @@ export const fetchUserStats = async () => {
     favoritesCount: Number(stats.favoritesCount ?? stats.totalFavorites ?? 0),
     bookingsCount: Number(stats.bookingsCount ?? stats.totalBookings ?? 0),
     messagesCount: Number(stats.messagesCount ?? stats.totalMessages ?? 0),
+    notificationCount: Number(payload?.notification_count ?? stats.notificationCount ?? 0),
     appsCount: Number(stats.appsCount ?? stats.applicationsCount ?? 0),
     appointmentsCount: Number(stats.appointmentsCount ?? 0),
     quotesCount: Number(stats.quotesCount ?? 0),

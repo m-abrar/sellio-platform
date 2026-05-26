@@ -25,6 +25,16 @@ import { LoadingSpinner } from '../components/LoadingSpinner';
 import { API_BASE_URL, IS_EXTERNAL_BACKEND, STOREFRONT_BASE_URL } from '../config/api';
 import { fetchUserProfile, updateUserProfile, UserProfile } from '../api/userApi';
 
+const API_ORIGIN = (() => {
+  try {
+    return new URL(API_BASE_URL).origin;
+  } catch {
+    return '';
+  }
+})();
+
+const FALLBACK_AVATAR = `${API_ORIGIN}/images/fallbacks/default-avatar.png`;
+
 export default function SettingsView() {
   const [activeTab, setActiveTab] = useState<'profile' | 'security' | 'notifications' | 'billing' | 'developer'>('profile');
   const [isSaving, setIsSaving] = useState(false);
@@ -129,7 +139,7 @@ export default function SettingsView() {
                   <div className="flex flex-col sm:flex-row items-center gap-8 pb-8 border-b border-zinc-100">
                     <div className="relative group">
                       <img 
-                        src={profile.avatar || "https://picsum.photos/seed/user/200/200"} 
+                        src={profile.avatar || FALLBACK_AVATAR} 
                         alt="Avatar" 
                         className="w-32 h-32 rounded-full border-4 border-white shadow-xl object-cover"
                         referrerPolicy="no-referrer"
@@ -281,7 +291,6 @@ export default function SettingsView() {
                           onChange={(e) => {
                             const newSettings = { ...profile.settings, [item.id]: e.target.checked };
                             setProfile({ ...profile, settings: newSettings });
-                            updateUserProfile({ settings: newSettings });
                           }}
                         />
                         <div className="w-11 h-6 bg-zinc-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-zinc-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[var(--primary-color)]"></div>

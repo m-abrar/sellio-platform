@@ -37,6 +37,8 @@ Route::group([], function () {
      * 1. CORE DASHBOARD
      */
     Route::get('welcome', [DashboardController::class, 'welcome'])->name('welcome');
+    Route::get('profile', [DashboardController::class, 'profile'])->name('profile');
+    Route::put('profile', [DashboardController::class, 'updateProfile'])->name('profile.update');
     Route::get('settings', [DashboardController::class, 'settings'])->name('settings');
 
     /**

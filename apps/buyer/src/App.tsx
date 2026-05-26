@@ -27,6 +27,8 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from './lib/utils';
+import { API_BASE_URL } from './config/api';
+import { ErrorBoundary } from './components/ErrorBoundary';
 
 // Views
 import DashboardOverview from './views/DashboardOverview';
@@ -38,6 +40,7 @@ import PartnerView from './views/PartnerView';
 import ReviewsView from './views/ReviewsView';
 import LoginView from './views/LoginView';
 import StorefrontRedirectView from './views/StorefrontRedirectView';
+import NotFoundView from './views/NotFoundView';
 import { StatsProvider, useStats } from './context/StatsContext';
 import { UserProvider, useUser } from './context/UserContext';
 
@@ -60,6 +63,16 @@ const FOOTER_NAV = [
   { name: 'Reviews', path: '/reviews', icon: Star, badge: 'reviewsCount' },
   { name: 'Settings', path: '/settings', icon: SettingsIcon },
 ];
+
+const API_ORIGIN = (() => {
+  try {
+    return new URL(API_BASE_URL).origin;
+  } catch {
+    return '';
+  }
+})();
+
+const FALLBACK_AVATAR = `${API_ORIGIN}/images/fallbacks/default-avatar.png`;
 
 function Sidebar({ isOpen, setIsOpen, stats }: { isOpen: boolean; setIsOpen: (v: boolean) => void; stats: any }) {
   const location = useLocation();
@@ -194,9 +207,11 @@ function Header({ setIsSidebarOpen, stats }: { setIsSidebarOpen: (v: boolean) =>
         <div className="flex items-center gap-1">
           <button className="p-2 text-zinc-500 hover:bg-zinc-100 rounded-xl relative">
             <Bell size={20} />
-            <span className="absolute top-2 right-2 w-4 h-4 bg-red-500 text-white text-[8px] font-bold flex items-center justify-center rounded-full border-2 border-white">
-              9+
-            </span>
+            {stats.notificationCount > 0 && (
+              <span className="absolute top-2 right-2 min-w-4 h-4 px-1 bg-red-500 text-white text-[8px] font-bold flex items-center justify-center rounded-full border-2 border-white">
+                {stats.notificationCount > 9 ? '9+' : stats.notificationCount}
+              </span>
+            )}
           </button>
           <Link to="/messages" className="p-2 text-zinc-500 hover:bg-zinc-100 rounded-xl relative">
             <MessageSquare size={20} />
@@ -211,7 +226,7 @@ function Header({ setIsSidebarOpen, stats }: { setIsSidebarOpen: (v: boolean) =>
         <div className="group relative">
           <button className="flex items-center gap-2 p-1 hover:bg-zinc-100 rounded-xl transition-colors">
             <img 
-              src={user?.avatar || "https://picsum.photos/seed/user/100/100"} 
+              src={user?.avatar || FALLBACK_AVATAR} 
               alt="User" 
               className="w-8 h-8 rounded-full border-2 border-[var(--primary-color)]"
               referrerPolicy="no-referrer"
@@ -290,31 +305,34 @@ function AppContent() {
           <Header setIsSidebarOpen={setIsSidebarOpen} stats={stats} />
           
           <main className="flex-1 p-4 lg:p-8 max-w-7xl mx-auto w-full">
-            <Routes>
-              <Route path="/" element={<DashboardOverview />} />
-              <Route path="/favorites" element={<FavoritesView />} />
-              <Route path="/messages" element={<MessagesView />} />
-              <Route path="/settings" element={<SettingsView />} />
-              
-              {/* Discovery belongs in the storefront; buyer routes stay activity-focused. */}
-              <Route path="/properties" element={<StorefrontRedirectView module="properties" />} />
-              <Route path="/events" element={<StorefrontRedirectView module="events" />} />
-              <Route path="/autos" element={<StorefrontRedirectView module="autos" />} />
-              <Route path="/services" element={<StorefrontRedirectView module="services" />} />
-              <Route path="/jobs" element={<StorefrontRedirectView module="jobs" />} />
-              <Route path="/classifieds" element={<StorefrontRedirectView module="classifieds" />} />
-              <Route path="/products" element={<StorefrontRedirectView module="products" />} />
+            <ErrorBoundary>
+              <Routes>
+                <Route path="/" element={<DashboardOverview />} />
+                <Route path="/favorites" element={<FavoritesView />} />
+                <Route path="/messages" element={<MessagesView />} />
+                <Route path="/settings" element={<SettingsView />} />
+                
+                {/* Discovery belongs in the storefront; buyer routes stay activity-focused. */}
+                <Route path="/properties" element={<StorefrontRedirectView module="properties" />} />
+                <Route path="/events" element={<StorefrontRedirectView module="events" />} />
+                <Route path="/autos" element={<StorefrontRedirectView module="autos" />} />
+                <Route path="/services" element={<StorefrontRedirectView module="services" />} />
+                <Route path="/jobs" element={<StorefrontRedirectView module="jobs" />} />
+                <Route path="/classifieds" element={<StorefrontRedirectView module="classifieds" />} />
+                <Route path="/products" element={<StorefrontRedirectView module="products" />} />
 
-              {/* Activity routes */}
-              <Route path="/bookings" element={<UserActivityView title="My Bookings" />} />
-              <Route path="/applications" element={<UserActivityView module="jobs" title="Job Applications" />} />
-              <Route path="/auto-inquiries" element={<UserActivityView module="autos" title="Auto Inquiries" />} />
-              <Route path="/appointments" element={<UserActivityView module="services" title="Service Appointments" />} />
-              <Route path="/quotes" element={<UserActivityView module="services" title="Service Quotes" type="quote" />} />
-              <Route path="/classifieds-activity" element={<UserActivityView module="classifieds" title="Classified Ads" />} />
-              <Route path="/reviews" element={<ReviewsView />} />
-              <Route path="/partner" element={<PartnerView />} />
-            </Routes>
+                {/* Activity routes */}
+                <Route path="/bookings" element={<UserActivityView title="My Bookings" />} />
+                <Route path="/applications" element={<UserActivityView module="jobs" title="Job Applications" />} />
+                <Route path="/auto-inquiries" element={<UserActivityView module="autos" title="Auto Inquiries" />} />
+                <Route path="/appointments" element={<UserActivityView module="services" title="Service Appointments" />} />
+                <Route path="/quotes" element={<UserActivityView module="services" title="Service Quotes" type="quote" />} />
+                <Route path="/classifieds-activity" element={<UserActivityView module="classifieds" title="Classified Ads" />} />
+                <Route path="/reviews" element={<ReviewsView />} />
+                <Route path="/partner" element={<PartnerView />} />
+                <Route path="*" element={<NotFoundView />} />
+              </Routes>
+            </ErrorBoundary>
           </main>
         </div>
       </div>

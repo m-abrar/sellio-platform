@@ -95,9 +95,13 @@ class MessageController extends Controller
         }
 
         if ($request->wantsJson()) {
-            return $this->successResponse(null, $message, 201);
+            return $this->successResponse([
+                'message' => $message->load('sender'),
+            ], 'Message sent successfully.', 201);
         }
 
-        return $this->successResponse(null, 'Message sent successfully.');
+        return $this->successResponse([
+            'message' => $message->load('sender'),
+        ], 'Message sent successfully.');
     }
 }

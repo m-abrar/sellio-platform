@@ -18,13 +18,14 @@ export async function fetchUserProfile(): Promise<UserProfile> {
 }
 
 export async function updateUserProfile(data: Partial<UserProfile>): Promise<UserProfile> {
-  // Laravel currently exposes buyer settings/profile read routes in the scanned API.
-  // Keep this call pointed at the expected update route so the frontend is ready
-  // when the backend route is enabled.
   const payload = await apiRequest<any>(buyerUrl('/profile'), {
     method: 'PUT',
     authenticated: true,
-    body: JSON.stringify(data),
+    body: JSON.stringify({
+      name: data.name,
+      email: data.email,
+      phone: data.phone,
+    }),
   });
   return toUserProfile(payload?.user || payload);
 }

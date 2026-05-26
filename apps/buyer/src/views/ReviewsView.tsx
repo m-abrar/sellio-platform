@@ -7,6 +7,18 @@ import { LoadingSpinner } from '../components/LoadingSpinner';
 import { PageHeader } from '../components/PageHeader';
 import { EmptyState } from '../components/EmptyState';
 import { Badge } from '../components/Badge';
+import { API_BASE_URL } from '../config/api';
+
+const API_ORIGIN = (() => {
+  try {
+    return new URL(API_BASE_URL).origin;
+  } catch {
+    return '';
+  }
+})();
+
+const FALLBACK_CARD_IMAGE = `${API_ORIGIN}/images/fallbacks/default-card.jpg`;
+const FALLBACK_AVATAR = `${API_ORIGIN}/images/fallbacks/default-avatar.png`;
 
 interface Review {
   id: number;
@@ -91,7 +103,7 @@ export default function ReviewsView() {
             <div className="flex flex-col lg:flex-row gap-8">
               <div className="flex-shrink-0 w-full lg:w-48 h-48 lg:h-auto relative rounded-2xl overflow-hidden group">
                 <img 
-                  src={review.itemImage || `https://picsum.photos/seed/${review.itemTitle}/400/300`} 
+                  src={review.itemImage || FALLBACK_CARD_IMAGE} 
                   alt={review.itemTitle} 
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   referrerPolicy="no-referrer"
@@ -138,7 +150,7 @@ export default function ReviewsView() {
                 <div className="flex items-center justify-between pt-4 border-t border-zinc-100">
                   <div className="flex items-center gap-3">
                     <img 
-                      src={review.userAvatar} 
+                      src={review.userAvatar || FALLBACK_AVATAR} 
                       alt={review.userName} 
                       className="w-6 h-6 rounded-full border border-zinc-200"
                       referrerPolicy="no-referrer"

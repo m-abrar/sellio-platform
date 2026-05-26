@@ -5,6 +5,7 @@ interface Stats {
   favoritesCount: number;
   bookingsCount: number;
   messagesCount: number;
+  notificationCount: number;
   appsCount: number;
   appointmentsCount: number;
   quotesCount: number;
@@ -33,6 +34,7 @@ export function StatsProvider({ children }: { children: React.ReactNode }) {
     favoritesCount: 0,
     bookingsCount: 0,
     messagesCount: 0,
+    notificationCount: 0,
     appsCount: 0,
     appointmentsCount: 0,
     quotesCount: 0,

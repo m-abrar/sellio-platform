@@ -1,10 +1,23 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'motion/react';
-import { Search, Send, Circle } from 'lucide-react';
+import { Send, Circle } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { fetchMessages, sendMessage, fetchConversations } from '../api/messageApi';
+import { useUser } from '../context/UserContext';
+import { API_BASE_URL } from '../config/api';
+
+const apiOrigin = (() => {
+  try {
+    return new URL(API_BASE_URL).origin;
+  } catch {
+    return '';
+  }
+})();
+
+const fallbackAvatar = `${apiOrigin}/images/fallbacks/default-avatar.png`;
 
 export default function MessagesView() {
+  const { user } = useUser();
   const [conversations, setConversations] = useState<any[]>([]);
   const [activeConvo, setActiveConvo] = useState<any>(null);
   const [messages, setMessages] = useState<any[]>([]);
@@ -14,9 +27,16 @@ export default function MessagesView() {
 
   useEffect(() => {
     loadInitialData();
-    const interval = setInterval(loadMessages, 5000); // Poll for new messages
-    return () => clearInterval(interval);
   }, []);
+
+  useEffect(() => {
+    if (!activeConvo) return;
+
+    loadMessages(activeConvo.id);
+    const interval = window.setInterval(() => loadMessages(activeConvo.id), 5000);
+
+    return () => window.clearInterval(interval);
+  }, [activeConvo?.id]);
 
   const loadInitialData = async () => {
     try {
@@ -26,7 +46,6 @@ export default function MessagesView() {
       if (convos.length > 0) {
         setActiveConvo(convos[0]);
       }
-      await loadMessages();
     } catch (error) {
       console.error(error);
     } finally {
@@ -40,14 +59,14 @@ export default function MessagesView() {
     }
   }, [messages]);
 
-  const loadMessages = async () => {
+  const loadMessages = async (conversationId = activeConvo?.id) => {
+    if (!conversationId) return;
+
     try {
-      const data = await fetchMessages();
+      const data = await fetchMessages(conversationId);
       setMessages(data);
     } catch (error) {
       console.error(error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -60,11 +79,13 @@ export default function MessagesView() {
 
     try {
       const sent = await sendMessage(content, activeConvo.id);
-      setMessages([...messages, sent]);
+      setMessages((current) => [...current, sent]);
     } catch (error) {
       console.error(error);
     }
   };
+
+  const currentMessages = activeConvo ? messages : [];
 
   return (
     <div className="h-[calc(100vh-140px)] flex flex-col lg:flex-row gap-6 px-3">
@@ -85,7 +106,7 @@ export default function MessagesView() {
                   : "border-transparent hover:bg-white/50"
               )}
             >
-              <img src={convo.avatar || `https://picsum.photos/seed/${convo.name}/100/100`} alt={convo.name} className="w-10 h-10 rounded-full" referrerPolicy="no-referrer" />
+              <img src={convo.avatar || fallbackAvatar} alt={convo.name} className="w-10 h-10 rounded-full" referrerPolicy="no-referrer" />
               <div className="flex-1 text-left min-w-0">
                 <h6 className="font-bold text-sm text-zinc-900 truncate">{convo.name}</h6>
                 <p className="text-xs text-zinc-500 truncate">{convo.lastMessage}</p>
@@ -122,17 +143,17 @@ export default function MessagesView() {
 
             {/* Messages */}
             <div ref={scrollRef} className="flex-1 overflow-y-auto p-6 space-y-4">
-              {messages.filter(m => (m.sender_id === 1 && m.receiver_id === activeConvo.id) || (m.sender_id === activeConvo.id && m.receiver_id === 1)).map((msg) => (
+              {currentMessages.map((msg) => (
                 <div 
                   key={msg.id}
                   className={cn(
                     "flex flex-col max-w-[70%]",
-                    msg.sender_id === 1 ? "ml-auto items-end" : "items-start"
+                    msg.sender_id === user?.id ? "ml-auto items-end" : "items-start"
                   )}
                 >
                   <div className={cn(
                     "px-4 py-2 rounded-2xl text-sm",
-                    msg.sender_id === 1 
+                    msg.sender_id === user?.id
                       ? "bg-[var(--primary-color)] text-white rounded-br-none" 
                       : "bg-[var(--primary-light)] text-zinc-900 rounded-bl-none"
                   )}>
@@ -143,7 +164,7 @@ export default function MessagesView() {
                   </span>
                 </div>
               ))}
-              {messages.filter(m => (m.sender_id === 1 && m.receiver_id === activeConvo.id) || (m.sender_id === activeConvo.id && m.receiver_id === 1)).length === 0 && !loading && (
+              {currentMessages.length === 0 && !loading && (
                 <div className="text-center py-20 text-zinc-400 text-sm italic">
                   No messages yet. Start the conversation!
                 </div>

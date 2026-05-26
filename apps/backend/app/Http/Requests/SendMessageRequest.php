@@ -8,15 +8,20 @@ class SendMessageRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        $conversation = $this->route('conversation');
+        $conversation = $this->route('conversation') ?? $this->route('conversationId');
+
         if ($conversation) {
-            $conversationId = $conversation instanceof \App\Models\Conversation ? $conversation->id : $conversation;
+            $conversationId = $conversation instanceof \App\Models\Conversation
+                ? $conversation->id
+                : $conversation;
+
             return \App\Models\Conversation::where('id', $conversationId)
                 ->where(function ($query) {
-                    $query->where('sender_id', auth()->id())
-                          ->orWhere('receiver_id', auth()->id());
+                    $query->where('user_id', auth()->id())
+                          ->orWhere('partner_id', auth()->id());
                 })->exists();
         }
+
         return auth()->check();
     }
 

@@ -1,10 +1,24 @@
 import { toActivity } from './adapters';
 import { apiRequest, buyerUrl, collectionData } from './apiClient';
 
-export const fetchBookings = async (type: string = 'booking') => {
-  const payload = await apiRequest<any>(buyerUrl('/bookings'), { authenticated: true });
-  const items = collectionData(payload?.bookings || payload);
-  return items.map(toActivity);
+function activityEndpoint(type = 'booking', module?: string) {
+  if (module === 'jobs') return '/inquiries/applications';
+  if (module === 'autos') return '/inquiries/auto-inquiries';
+  if (module === 'classifieds') return '/inquiries/classified-inquiries';
+  if (module === 'services' && type === 'quote') return '/inquiries/service-quotes';
+  if (module === 'services') return '/inquiries/service-appointments';
+  return '/bookings';
+}
+
+function activityItems(payload: any, module?: string) {
+  if (module === 'classifieds') return collectionData(payload?.inquiries || payload);
+  return collectionData(payload?.bookings || payload);
+}
+
+export const fetchBookings = async (type: string = 'booking', module?: string) => {
+  const payload = await apiRequest<any>(buyerUrl(activityEndpoint(type, module)), { authenticated: true });
+  const items = activityItems(payload, module);
+  return items.map((item, index) => toActivity(item, index, module || 'products'));
 };
 
 export const createBuyerActivity = async ({
